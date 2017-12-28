@@ -571,7 +571,7 @@ void OutlinerView::AdjustHeight( long nDY )
     pEditView->MoveParagraphs( nDY );
 }
 
-tools::Rectangle OutlinerView::GetVisArea() const
+tools::Rectangle const & OutlinerView::GetVisArea() const
 {
     return pEditView->GetVisArea();
 }
@@ -1244,7 +1244,7 @@ void OutlinerView::SetOutputArea( const tools::Rectangle& rRect )
     pEditView->SetOutputArea( rRect );
 }
 
-tools::Rectangle OutlinerView::GetOutputArea() const
+tools::Rectangle const & OutlinerView::GetOutputArea() const
 {
     return pEditView->GetOutputArea();
 }
@@ -1403,7 +1403,7 @@ void OutlinerView::RegisterViewShell(OutlinerViewShell* pViewShell)
     pEditView->RegisterViewShell(pViewShell);
 }
 
-Color OutlinerView::GetBackgroundColor()
+Color const & OutlinerView::GetBackgroundColor()
 {
     return pEditView->GetBackgroundColor();
 }

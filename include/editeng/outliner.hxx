@@ -242,9 +242,9 @@ public:
     bool        IsReadOnly() const;
 
     void        SetOutputArea( const tools::Rectangle& rRect );
-    tools::Rectangle   GetOutputArea() const;
+    tools::Rectangle const & GetOutputArea() const;
 
-    tools::Rectangle   GetVisArea() const;
+    tools::Rectangle const & GetVisArea() const;
 
     void        CreateSelectionList (std::vector<Paragraph*> &aSelList) ;
 
@@ -269,7 +269,7 @@ public:
     void        CollapseAll();
 
     void        SetBackgroundColor( const Color& rColor );
-    Color       GetBackgroundColor();
+    Color const & GetBackgroundColor();
 
     /// Informs this edit view about which view shell contains it.
     void RegisterViewShell(OutlinerViewShell* pViewShell);
@@ -717,10 +717,10 @@ public:
     const SfxItemSet& GetEmptyItemSet() const;
 
     void            SetRefMapMode( const MapMode& );
-    MapMode         GetRefMapMode() const;
+    MapMode const & GetRefMapMode() const;
 
     void            SetBackgroundColor( const Color& rColor );
-    Color           GetBackgroundColor() const;
+    Color const &   GetBackgroundColor() const;
 
     void            SetMaxDepth( sal_Int16 nDepth );
     sal_Int16       GetMaxDepth() const { return nMaxDepth; }
@@ -791,12 +791,12 @@ public:
     void            SetPaintFirstLineHdl(const Link<PaintFirstLineInfo*,void>& rLink) { maPaintFirstLineHdl = rLink; }
 
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink );
-    Link<LinkParamNone*,void> GetModifyHdl() const;
+    Link<LinkParamNone*,void> const & GetModifyHdl() const;
 
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
 
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink );
-    Link<EditStatus&, void> GetStatusEventHdl() const;
+    Link<EditStatus&, void> const & GetStatusEventHdl() const;
 
     void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos );
@@ -827,7 +827,7 @@ public:
     EBulletInfo     GetBulletInfo( sal_Int32 nPara );
 
     void            SetWordDelimiters( const OUString& rDelimiters );
-    OUString        GetWordDelimiters() const;
+    OUString const & GetWordDelimiters() const;
     OUString        GetWord( sal_Int32 nPara, sal_Int32 nIndex );
 
     void            StripPortions();
@@ -907,7 +907,7 @@ public:
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpeller );
-    css::uno::Reference< css::linguistic2::XSpellChecker1 >
+    css::uno::Reference< css::linguistic2::XSpellChecker1 > const &
                     GetSpeller();
     void            SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator > const & xHyph );
 

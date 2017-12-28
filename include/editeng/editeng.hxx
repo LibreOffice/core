@@ -212,13 +212,13 @@ public:
     OutputDevice*   GetRefDevice() const;
 
     void            SetRefMapMode( const MapMode& rMapMode );
-    MapMode         GetRefMapMode();
+    MapMode const & GetRefMapMode();
 
     void            SetUpdateMode( bool bUpdate );
     bool            GetUpdateMode() const;
 
     void            SetBackgroundColor( const Color& rColor );
-    Color           GetBackgroundColor() const;
+    Color const &   GetBackgroundColor() const;
     Color           GetAutoColor() const;
     void            EnableAutoColor( bool b );
     void            ForceAutoColor( bool b );
@@ -353,7 +353,7 @@ public:
     bool            IsModified() const;
 
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink );
-    Link<LinkParamNone*,void> GetModifyHdl() const;
+    Link<LinkParamNone*,void> const & GetModifyHdl() const;
 
     bool            IsInSelectionMode() const;
 
@@ -375,10 +375,10 @@ public:
     void            Write( SvStream& rOutput, EETextFormat );
 
     void            SetStatusEventHdl( const Link<EditStatus&,void>& rLink );
-    Link<EditStatus&,void> GetStatusEventHdl() const;
+    Link<EditStatus&,void> const & GetStatusEventHdl() const;
 
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
-    Link<EENotify&,void>  GetNotifyHdl() const;
+    Link<EENotify&,void> const & GetNotifyHdl() const;
 
     void            SetRtfImportHdl( const Link<RtfImportInfo&,void>& rLink );
     const Link<RtfImportInfo&,void>& GetRtfImportHdl() const;
@@ -424,7 +424,7 @@ public:
     void            SetSpeller( css::uno::Reference<
                             css::linguistic2::XSpellChecker1 > const &xSpeller );
     css::uno::Reference<
-        css::linguistic2::XSpellChecker1 >
+        css::linguistic2::XSpellChecker1 > const &
                     GetSpeller();
     void            SetHyphenator( css::uno::Reference<
                             css::linguistic2::XHyphenator > const & xHyph );
@@ -525,11 +525,11 @@ public:
     static bool     HasValidData( const css::uno::Reference< css::datatransfer::XTransferable >& rTransferable );
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link<EditView*,void>& rLink );
-    Link<EditView*,void> GetBeginDropHdl() const;
+    Link<EditView*,void> const & GetBeginDropHdl() const;
 
     /** sets a link that is called at the end of a drag operation at an edit view */
     void            SetEndDropHdl( const Link<EditView*,void>& rLink );
-    Link<EditView*,void> GetEndDropHdl() const;
+    Link<EditView*,void> const & GetEndDropHdl() const;
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( bool bCapitalize );

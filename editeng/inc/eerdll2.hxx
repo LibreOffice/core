@@ -36,7 +36,7 @@ namespace editeng
         public:
             SharedVclResources();
             ~SharedVclResources();
-            VclPtr<VirtualDevice> GetVirtualDevice();
+            VclPtr<VirtualDevice> const & GetVirtualDevice();
     };
 }
 

@@ -167,7 +167,7 @@ void EditEngine::SetRefMapMode( const MapMode& rMapMode )
     pImpEditEngine->SetRefMapMode( rMapMode );
 }
 
-MapMode EditEngine::GetRefMapMode()
+MapMode const & EditEngine::GetRefMapMode()
 {
     return pImpEditEngine->GetRefMapMode();
 }
@@ -177,7 +177,7 @@ void EditEngine::SetBackgroundColor( const Color& rColor )
     pImpEditEngine->SetBackgroundColor( rColor );
 }
 
-Color EditEngine::GetBackgroundColor() const
+Color const & EditEngine::GetBackgroundColor() const
 {
     return pImpEditEngine->GetBackgroundColor();
 }
@@ -1519,7 +1519,7 @@ void EditEngine::SetNotifyHdl( const Link<EENotify&,void>& rLink )
     pImpEditEngine->SetNotifyHdl( rLink );
 }
 
-Link<EENotify&,void> EditEngine::GetNotifyHdl() const
+Link<EENotify&,void> const & EditEngine::GetNotifyHdl() const
 {
     return pImpEditEngine->GetNotifyHdl();
 }
@@ -1529,7 +1529,7 @@ void EditEngine::SetStatusEventHdl( const Link<EditStatus&, void>& rLink )
     pImpEditEngine->SetStatusEventHdl( rLink );
 }
 
-Link<EditStatus&, void> EditEngine::GetStatusEventHdl() const
+Link<EditStatus&, void> const & EditEngine::GetStatusEventHdl() const
 {
     return pImpEditEngine->GetStatusEventHdl();
 }
@@ -1636,7 +1636,7 @@ void EditEngine::SetModifyHdl( const Link<LinkParamNone*,void>& rLink )
     pImpEditEngine->SetModifyHdl( rLink );
 }
 
-Link<LinkParamNone*,void> EditEngine::GetModifyHdl() const
+Link<LinkParamNone*,void> const & EditEngine::GetModifyHdl() const
 {
     return pImpEditEngine->GetModifyHdl();
 }
@@ -2154,7 +2154,7 @@ void EditEngine::SetSpeller( Reference< XSpellChecker1 > const &xSpeller )
     pImpEditEngine->SetSpeller( xSpeller );
 }
 
-Reference< XSpellChecker1 >  EditEngine::GetSpeller()
+Reference< XSpellChecker1 > const & EditEngine::GetSpeller()
 {
     return pImpEditEngine->GetSpeller();
 }
@@ -2719,7 +2719,7 @@ void EditEngine::SetBeginDropHdl( const Link<EditView*,void>& rLink )
     pImpEditEngine->SetBeginDropHdl( rLink );
 }
 
-Link<EditView*,void> EditEngine::GetBeginDropHdl() const
+Link<EditView*,void> const & EditEngine::GetBeginDropHdl() const
 {
     return pImpEditEngine->GetBeginDropHdl();
 }
@@ -2730,7 +2730,7 @@ void EditEngine::SetEndDropHdl( const Link<EditView*,void>& rLink )
     pImpEditEngine->SetEndDropHdl( rLink );
 }
 
-Link<EditView*,void> EditEngine::GetEndDropHdl() const
+Link<EditView*,void> const & EditEngine::GetEndDropHdl() const
 {
     return pImpEditEngine->GetEndDropHdl();
 }

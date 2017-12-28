@@ -43,12 +43,12 @@ public:
 
     OUString GetFormatted(css::uno::Reference<css::document::XDocumentProperties> const & xDocumentProperties);
 
-    OUString GetName() const
+    OUString const & GetName() const
     {
         return msName;
     }
 
-    OUString GetCurrentPresentation() const
+    OUString const & GetCurrentPresentation() const
     {
         return msCurrentPresentation;
     }

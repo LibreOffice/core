@@ -220,7 +220,7 @@ public:
     ErrCode             Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
 
     void            SetBackgroundColor( const Color& rColor );
-    Color           GetBackgroundColor() const;
+    Color const &   GetBackgroundColor() const;
 
     /// Informs this edit view about which view shell contains it.
     void RegisterViewShell(OutlinerViewShell* pViewShell);
