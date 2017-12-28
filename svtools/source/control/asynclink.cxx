@@ -35,7 +35,7 @@ void AsynchronLink::CreateMutex()
 
 void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
 {
-    SAL_INFO_IF( !_bInCall, "svtools", "Recursives Call. Eher ueber Timer. TLX Fragen" ); // Do NOT translate. This is a valuable historical artefact.
+    SAL_INFO_IF( !_bInCall, "svtools", "Recursives Call. Eher ueber Timer. TLX Fragen" ); // Do NOT translate. This is a valuable historical artifact.
     if( _aLink.IsSet() )
     {
         _pArg = pObj;

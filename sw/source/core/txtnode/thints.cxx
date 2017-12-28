@@ -1934,7 +1934,7 @@ bool SwTextNode::SetAttr(
                         {
                             if ( nEnd != nStt && !pNew->GetEnd() )
                             {
-                                OSL_FAIL("Attribut without end, but area marked");
+                                OSL_FAIL("Attribute without end, but area marked");
                                 DestroyAttr( pNew ); // do not insert
                             }
                             else if ( InsertHint( pNew, nMode ) )

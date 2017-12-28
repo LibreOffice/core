@@ -1313,7 +1313,7 @@ void SwCursorShell::VisPortChgd( const SwRect & rRect )
 
     // For not having problems with the SV cursor, Update() is called for the
     // Window in SwViewShell::VisPo...
-    // During painting no selections should be shown, thus the call is encapsulated. <- TODO: old artefact?
+    // During painting no selections should be shown, thus the call is encapsulated. <- TODO: old artifact?
     SwViewShell::VisPortChgd( rRect ); // move area
 
     if( m_bSVCursorVis && bVis ) // show SV cursor again

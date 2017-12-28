@@ -1522,12 +1522,12 @@
                         <xsl:when test="string-length($typeid_adj) = 0">
                             <xsl:if test="contains(@adj,',')">
                                 <!--Please Note that the modifier can be more than 2 , so use a translate can be more efficient.
-                                -####Note that comma cann't be recognized by OOo's modifiers
+                                -####Note that comma can't be recognized by OOo's modifiers
                                 <xsl:variable name="adjust-x" select="substring-before(@adj,',')"/>
                                 <xsl:variable name="adjust-y" select="substring-after(@adj,',')"/>
                                 <xsl:variable name="adjuststr">
                                     <xsl:if test="$adjust-x and $adjust-y">
-                                        -####Note that comma cann't be recognized by OOo's modifiers->
+                                        -####Note that comma can't be recognized by OOo's modifiers->
                                         <xsl:value-of select="concat( $adjust-x , '  ' ,$adjust-y )"/>
                                     </xsl:if>
                                 </xsl:variable>-->
@@ -1536,7 +1536,7 @@
                                 </xsl:attribute>
                             </xsl:if>
                             <xsl:if test="@adj and not(contains(@adj,','))">
-                                <!--####Note that comma cann't be recognized by OOo's modifiers.-->
+                                <!--####Note that comma can't be recognized by OOo's modifiers.-->
                                 <xsl:attribute name="draw:modifiers">
                                     <xsl:value-of select="@adj"/>
                                 </xsl:attribute>
@@ -1742,12 +1742,12 @@
         <xsl:if test="not($instance/@adj)">
             <xsl:if test="contains(@adj,',')">-->
         <!--Please Note that the modifier can be more than 2 , so use a translate can be more efficient.
-                        -####Note that comma cann't be recognized by OOo's modifiers
+                        -####Note that comma can't be recognized by OOo's modifiers
                 <xsl:variable name="adjust-x" select="substring-before(@adj,',')"/>
                 <xsl:variable name="adjust-y" select="substring-after(@adj,',')"/>
                 <xsl:variable name="adjuststr">
                     <xsl:if test="$adjust-x and $adjust-y">
-                        < -####Note that comma cann't be recognized by OOo's modifiers.->
+                        < -####Note that comma can't be recognized by OOo's modifiers.->
                         <xsl:value-of select="concat( $adjust-x , '  ' ,$adjust-y )"/>
                     </xsl:if>
                 </xsl:variable>-->
@@ -1756,7 +1756,7 @@
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="@adj and not(contains(@adj,','))">-->
-        <!--####Note that comma cann't be recognized by OOo's modifiers.-->
+        <!--####Note that comma can't be recognized by OOo's modifiers.-->
         <!--Dummy after version 1.63    <xsl:attribute name="draw:modifiers">
                     <xsl:value-of select="@adj"/>
                 </xsl:attribute>

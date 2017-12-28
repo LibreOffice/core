@@ -181,7 +181,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                     bFemale = xColumn->getString() == sFemaleValue;
                     if( !bNoValue )
                     {
-                        //no last name value marks the greeting also als neutral
+                        //no last name value marks the greeting also as neutral
                         const OUString sLastNameColumn =
                             m_rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
                         if ( xColAccess->hasByName(sLastNameColumn) )

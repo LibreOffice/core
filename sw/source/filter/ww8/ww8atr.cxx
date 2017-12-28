@@ -4654,10 +4654,10 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             nAdj = nAdjBiDi = 1;
             break;
         default:
-            return;    // not a supported Attribut
+            return;    // not a supported Attribute
     }
 
-    if ( 255 != nAdj )        // supported Attribut?
+    if ( 255 != nAdj )        // supported Attribute?
     {
         m_rWW8Export.InsUInt16( NS_sprm::sprmPJc80 );
         m_rWW8Export.pO->push_back( nAdj );

@@ -114,7 +114,7 @@ public class _XPrintable extends MultiMethodTest {
      * exists. <p>
      *
      * @throws StatusException if service
-     * <code>com.sun.star.ucb.SimpleFileAccess</code> cann't be
+     * <code>com.sun.star.ucb.SimpleFileAccess</code> can't be
      * created.
      */
     public void _print() throws Exception {

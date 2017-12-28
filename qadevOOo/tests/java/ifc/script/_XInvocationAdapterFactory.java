@@ -80,7 +80,7 @@ public class _XInvocationAdapterFactory extends MultiMethodTest {
 
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
-            throw new StatusException("Cann't create invocation for object", e) ;
+            throw new StatusException("Can't create invocation for object", e) ;
         }
 
         XInterface xInStr = null ;

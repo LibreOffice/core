@@ -55,7 +55,7 @@ import com.sun.star.uno.UnoRuntime;
 *
 * <b>Prerequisites:</b> component must implement <code>XTextComponent</code>
 * interface for changing component's text which must cause listener call.
-* If the component cann't support the interface, then the relation
+* If the component can't support the interface, then the relation
 * <code>'XChangeBroadcaster.Changer'</code> must be passed. <p>
 *
 * Test is <b> NOT </b> multithread compliant. <p>

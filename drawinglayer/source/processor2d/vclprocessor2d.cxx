@@ -108,7 +108,7 @@ namespace drawinglayer
             aLocalTransform.decompose(aFontScaling, aTranslate, fRotate, fShearX);
             bool bPrimitiveAccepted(false);
 
-            // tdf#95581: Assume tiny shears are rounding artefacts or whatever and can be ignored,
+            // tdf#95581: Assume tiny shears are rounding artifacts or whatever and can be ignored,
             // especially if the effect is less than a pixel.
             if(std::abs(aFontScaling.getY() * fShearX) < 1)
             {
