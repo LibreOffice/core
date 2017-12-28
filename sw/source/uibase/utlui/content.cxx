@@ -2082,6 +2082,7 @@ bool SwContentTree::HasContentChanged()
             const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
             SvTreeListEntry* pFirstEntry = First();
 
+            SelectAll(false);
             while( nullptr != (pFirstEntry = Next(pFirstEntry)) )
             {
                 assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirstEntry->GetUserData())));
