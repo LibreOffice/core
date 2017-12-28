@@ -33,26 +33,6 @@ extern "C" {
 void SAL_CALL sal_detail_initialize(int argc, char ** argv);
 void SAL_CALL sal_detail_deinitialize();
 
-#ifdef SAL_OS2
-#include <string.h>
-
-#define INCL_DOSPROCESS
-#define INCL_DOSEXCEPTIONS
-#define INCL_DOSMODULEMGR
-#include <os2.h>
-#define INCL_LOADEXCEPTQ
-#include <exceptq.h>
-
-#include <osl/process.h>
-
-#define sal_detail_initialize(a,b) \
-    EXCEPTIONREGISTRATIONRECORD exRegRec = {0}; \
-    LoadExceptq(&exRegRec, NULL, NULL); \
-    osl_setCommandArgs(argc, argv);
-#define sal_detail_deinitialize() \
-    UninstallExceptq(&exRegRec);
-#endif // SAL_OS2
-
 #define SAL_MAIN_WITH_ARGS_IMPL \
 int SAL_CALL main(int argc, char ** argv) \
 { \

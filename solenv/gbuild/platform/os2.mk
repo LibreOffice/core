@@ -130,6 +130,7 @@ gb_LinkTarget_LDFLAGS := \
 	-Zhigh-mem \
 	-Zlinker "DISABLE 1121" \
 	-Zmap \
+	-lcx \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 

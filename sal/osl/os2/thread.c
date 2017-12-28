@@ -34,8 +34,6 @@
 #define INCL_DOSEXCEPTIONS
 #define INCL_DOSMODULEMGR
 #include <os2.h>
-#define INCL_LOADEXCEPTQ
-#include <exceptq.h>
 
 /*
     Thread-data structure hidden behind oslThread:
@@ -100,8 +98,6 @@ static void oslWorkerWrapperFunction(void* pData)
 {
     BOOL rc;
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)pData;
-    EXCEPTIONREGISTRATIONRECORD exRegRec = {0};
-    LoadExceptq(&exRegRec, NULL, NULL);
 
 #if OSL_DEBUG_LEVEL>0
 printf("oslWorkerWrapperFunction pThreadImpl %x, pThreadImpl->m_ThreadId %d\n", pThreadImpl, pThreadImpl->m_ThreadId);
@@ -131,8 +127,6 @@ printf("pThreadImpl->m_ThreadId %d, about to terminate hab\n", pThreadImpl->m_Th
     rc = WinTerminate( pThreadImpl->m_hab );
 #if OSL_DEBUG_LEVEL>0
 printf("pThreadImpl->m_ThreadId %d, WinTerminate rc=%d (should be 1)\n", pThreadImpl->m_ThreadId, rc);
-
-    UninstallExceptq(&exRegRec);
 
 #endif
 }

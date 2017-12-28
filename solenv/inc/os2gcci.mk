@@ -187,6 +187,7 @@ LINK*=gcc
 LINKFLAGS= -Zbin-files -Zmap 
 #27/01/06 bin-files confuses transex/rsc work, removed.
 LINKFLAGS= -Zno-fork -Zhigh-mem -Zmap
+LINKFLAGS+=-lcx
 .IF "$(OS2_ARGS_WILD)" != ""
 LINKFLAGS+=-Zargs-wild -Zargs-resp
 .ENDIF

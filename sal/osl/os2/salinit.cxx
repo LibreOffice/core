@@ -19,8 +19,11 @@
  *
  *************************************************************/
 
-#include <stdio.h>
+#include "precompiled_sal.hxx"
+#include "sal/config.h"
 
+#include "osl/process.h"
+#include "sal/main.h"
 #include "sal/types.h"
 
 #ifdef __cplusplus
@@ -32,14 +35,11 @@ extern "C" {
 // replaced by macros in sal/main.h
 void SAL_CALL sal_detail_initialize(int argc, char ** argv)
 {
-    printf("Dead code\n");
-    exit(1);
+    osl_setCommandArgs(argc, argv);
 }
 
 void SAL_CALL sal_detail_deinitialize()
 {
-    printf("Dead code\n");
-    exit(1);
 }
 
 #ifdef __cplusplus
