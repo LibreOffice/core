@@ -3500,7 +3500,7 @@ void FmXFormShell::CreateExternalView_Lock()
 
             m_xExternalDisplayedForm = xForm;
                 // do this before dispatching the "attach" command, as the attach may result in a call to our queryDispatch (for the FormSlots)
-                // whichs needs the m_xExternalDisplayedForm
+                // which needs the m_xExternalDisplayedForm
 
             xAttachDispatch->dispatch(aAttachURL, Sequence< PropertyValue>(&aArg, 1));
 
