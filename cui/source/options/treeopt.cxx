@@ -1863,12 +1863,10 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             OUString sTemp = getGroupName( sLabel, !rExtensionId.isEmpty() );
             if ( !sTemp.isEmpty() )
                 sLabel = sTemp;
-            OptionsNode* pNode =
-                new OptionsNode( sNodeId, sLabel, sPageURL, bAllModules );
+            std::unique_ptr<OptionsNode> pNode(new OptionsNode(sNodeId, sLabel, sPageURL, bAllModules));
 
-            if ( rExtensionId.isEmpty() && !isNodeActive( pNode, pModule ) )
+            if ( rExtensionId.isEmpty() && !isNodeActive( pNode.get(), pModule ) )
             {
-                delete pNode;
                 continue;
             }
 
@@ -1938,10 +1936,8 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             // do not insert nodes without leaves
             if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
             {
-                pModule ? aNodeList.push_back( pNode ) : aOutNodeList.push_back( pNode );
+                pModule ? aNodeList.push_back( std::move(pNode) ) : aOutNodeList.push_back( std::move(pNode) );
             }
-            else
-                delete pNode;
         }
     }
 
@@ -1952,18 +1948,17 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             OUString sNodeId = i->m_sId;
             for ( auto j = aNodeList.begin(); j != aNodeList.end(); ++j )
             {
-                OptionsNode* pNode = *j;
-                if ( pNode->m_sId == sNodeId )
+                if ( (*j)->m_sId == sNodeId )
                 {
-                    aOutNodeList.push_back( pNode );
+                    aOutNodeList.push_back( std::move(*j) );
                     aNodeList.erase( j );
                     break;
                 }
             }
         }
 
-        for ( auto const & i: aNodeList )
-            aOutNodeList.push_back( i );
+        for ( auto & i: aNodeList )
+            aOutNodeList.push_back( std::move(i) );
     }
     return aOutNodeList;
 }
@@ -2014,21 +2009,21 @@ static void lcl_insertLeaf(
 
 void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
 {
-    for (OptionsNode* pNode : rNodeList)
+    for (auto const& node : rNodeList)
     {
-        if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
+        if ( node->m_aLeaves.size() > 0 || node->m_aGroupedLeaves.size() > 0 )
         {
-            for ( auto const & j: pNode->m_aGroupedLeaves )
+            for ( auto const & j: node->m_aGroupedLeaves )
             {
                 for ( size_t k = 0; k < j.size(); ++k )
                 {
-                    lcl_insertLeaf( this, pNode, j[k].get(), *pTreeLB );
+                    lcl_insertLeaf( this, node.get(), j[k].get(), *pTreeLB );
                 }
             }
 
-            for ( auto const & j: pNode->m_aLeaves )
+            for ( auto const & j: node->m_aLeaves )
             {
-                lcl_insertLeaf( this, pNode, j.get(), *pTreeLB );
+                lcl_insertLeaf( this, node.get(), j.get(), *pTreeLB );
             }
         }
     }

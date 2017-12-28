@@ -95,7 +95,7 @@ struct OptionsNode
         m_bAllModules( bAllModules ) {}
 };
 
-typedef std::vector< OptionsNode* > VectorOfNodes;
+typedef std::vector< std::unique_ptr<OptionsNode> > VectorOfNodes;
 
 struct LastPageSaver
 {
