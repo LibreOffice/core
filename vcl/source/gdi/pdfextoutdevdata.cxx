@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 
 #include <set>
 #include <memory>
@@ -404,13 +405,13 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                             GfxLinkType eType = rGraphic.GetLink().GetType();
                             if ( eType == GfxLinkType::NativeJpg )
                             {
-                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic);
+                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic, mParaRects.front());
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
                             else if ( eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf )
                             {
-                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic) )
+                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic, mParaRects.front()) )
                                     mCurrentGraphic = rGraphic;
                             }
                         }
@@ -797,7 +798,7 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 }
 
 // Avoids expensive de-compression and re-compression of large images.
-bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
+bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic, const tools::Rectangle &rOutputRect ) const
 {
     assert(rGraphic.IsLink() &&
            (rGraphic.GetLink().GetType() == GfxLinkType::NativeJpg ||
@@ -817,7 +818,13 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
     if (GetIsLosslessCompression())
         return !GetIsReduceImageResolution();
 
-    // FIXME: ideally we'd also pre-empt the DPI related scaling too.
+    assert(rOutputRect.Right() - rOutputRect.Left() != 0);
+    // TEMPORARY!!
+    const long nTargetDPI = 300;
+    const long nActualDPI = aSize.Width() * 1440 / (rOutputRect.Right() - rOutputRect.Left());
+    if (nTargetDPI < nActualDPI)
+        return false;
+
     sal_Int32 nCurrentRatio = (100 * aSize.Width() * aSize.Height() * 4) /
                                rGraphic.GetLink().GetDataSize();
 
