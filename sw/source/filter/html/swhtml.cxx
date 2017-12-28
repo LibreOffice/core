@@ -298,6 +298,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bInFootEndNoteSymbol( false ),
     m_bIgnoreHTMLComments( bNoHTMLComments ),
     m_bRemoveHidden( false ),
+    m_bBodySeen( false ),
     m_pTempViewFrame(nullptr)
 {
     m_nEventId = nullptr;
@@ -1257,25 +1258,31 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     switch( nToken )
     {
     case HtmlTokenId::BODY_ON:
-        if( !m_aStyleSource.isEmpty() )
+        if (m_bBodySeen)
+            eState = SvParserState::Error;
+        else
         {
-            m_pCSS1Parser->ParseStyleSheet( m_aStyleSource );
-            m_aStyleSource.clear();
-        }
-        if( IsNewDoc() )
-        {
-            InsertBodyOptions();
-            // If there is a template for the first or the right page,
-            // it is set here.
-            const SwPageDesc *pPageDesc = nullptr;
-            if( m_pCSS1Parser->IsSetFirstPageDesc() )
-                pPageDesc = m_pCSS1Parser->GetFirstPageDesc();
-            else if( m_pCSS1Parser->IsSetRightPageDesc() )
-                pPageDesc = m_pCSS1Parser->GetRightPageDesc();
-
-            if( pPageDesc )
+            m_bBodySeen = true;
+            if( !m_aStyleSource.isEmpty() )
             {
-                m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatPageDesc( pPageDesc ) );
+                m_pCSS1Parser->ParseStyleSheet( m_aStyleSource );
+                m_aStyleSource.clear();
+            }
+            if( IsNewDoc() )
+            {
+                InsertBodyOptions();
+                // If there is a template for the first or the right page,
+                // it is set here.
+                const SwPageDesc *pPageDesc = nullptr;
+                if( m_pCSS1Parser->IsSetFirstPageDesc() )
+                    pPageDesc = m_pCSS1Parser->GetFirstPageDesc();
+                else if( m_pCSS1Parser->IsSetRightPageDesc() )
+                    pPageDesc = m_pCSS1Parser->GetRightPageDesc();
+
+                if( pPageDesc )
+                {
+                    m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatPageDesc( pPageDesc ) );
+                }
             }
         }
         break;

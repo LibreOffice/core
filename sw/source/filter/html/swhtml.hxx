@@ -483,6 +483,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool m_bIgnoreHTMLComments : 1;
     bool m_bRemoveHidden : 1; // the filter implementation might set the hidden flag
 
+    bool m_bBodySeen : 1;
+
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
     OUString m_InfoNames[4];
 
