@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f3802249",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1870,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-28T18:56:38Z",
+      "side": 1,
+      "message": "the reset is unnecessary",
+      "revId": "12f468617a2f26855662df3b2489b304300d8d94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_13969694",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1943,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-28T18:56:38Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "12f468617a2f26855662df3b2489b304300d8d94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
