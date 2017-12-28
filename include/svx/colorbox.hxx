@@ -46,7 +46,7 @@ private:
     void Selected(const NamedColor& rNamedColor);
     void createColorWindow();
     void LockWidthRequest();
-    VclPtr<SvxColorWindow> getColorWindow() const;
+    VclPtr<SvxColorWindow> const & getColorWindow() const;
 public:
     SvxColorListBox(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~SvxColorListBox() override;
@@ -59,8 +59,8 @@ public:
 
     void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
 
-    Color GetSelectEntryColor() const { return m_aSelectedColor.first; }
-    NamedColor GetSelectedEntry() const { return m_aSelectedColor; }
+    Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
+    NamedColor const & GetSelectedEntry() const { return m_aSelectedColor; }
 
     void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);

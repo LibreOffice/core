@@ -149,7 +149,7 @@ namespace
             mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence();
+        drawinglayer::primitive2d::Primitive2DContainer const & getPrimitive2DSequence();
     };
 
     bool impTextBreakupHandler::impIsUnderlineAbove(const vcl::Font& rFont)
@@ -643,7 +643,7 @@ namespace
         }
     }
 
-    drawinglayer::primitive2d::Primitive2DContainer impTextBreakupHandler::getPrimitive2DSequence()
+    drawinglayer::primitive2d::Primitive2DContainer const & impTextBreakupHandler::getPrimitive2DSequence()
     {
         if(!maTextPortionPrimitives.empty())
         {

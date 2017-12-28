@@ -105,9 +105,9 @@ public:
     bool IsEmpty() const;
 
     void SetObjRef(const css::uno::Reference < css::embed::XEmbeddedObject >& rNewObjRef);
-    css::uno::Reference < css::embed::XEmbeddedObject > GetObjRef() const;
+    css::uno::Reference < css::embed::XEmbeddedObject > const & GetObjRef() const;
 
-    SVX_DLLPRIVATE css::uno::Reference < css::embed::XEmbeddedObject > GetObjRef_NoInit() const;
+    SVX_DLLPRIVATE css::uno::Reference < css::embed::XEmbeddedObject > const & GetObjRef_NoInit() const;
 
     void AbandonObject();
 

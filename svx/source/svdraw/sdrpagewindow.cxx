@@ -65,7 +65,7 @@ struct SdrPageWindow::Impl
 };
 
 
-uno::Reference<awt::XControlContainer> SdrPageWindow::GetControlContainer( bool _bCreateIfNecessary ) const
+uno::Reference<awt::XControlContainer> const & SdrPageWindow::GetControlContainer( bool _bCreateIfNecessary ) const
 {
     if (!mpImpl->mxControlContainer.is() && _bCreateIfNecessary)
     {
@@ -162,7 +162,7 @@ const SdrPaintWindow* SdrPageWindow::GetOriginalPaintWindow() const
 }
 
 // OVERLAY MANAGER
-rtl::Reference< sdr::overlay::OverlayManager > SdrPageWindow::GetOverlayManager() const
+rtl::Reference< sdr::overlay::OverlayManager > const & SdrPageWindow::GetOverlayManager() const
 {
     return GetPaintWindow().GetOverlayManager();
 }

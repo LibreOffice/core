@@ -61,10 +61,10 @@ public:
     SdrPageView& GetPageView() const;
     SdrPaintWindow& GetPaintWindow() const;
     const SdrPaintWindow* GetOriginalPaintWindow() const;
-    css::uno::Reference<css::awt::XControlContainer> GetControlContainer( bool _bCreateIfNecessary = true ) const;
+    css::uno::Reference<css::awt::XControlContainer> const & GetControlContainer( bool _bCreateIfNecessary = true ) const;
 
     // OVERLAYMANAGER
-    rtl::Reference< sdr::overlay::OverlayManager > GetOverlayManager() const;
+    rtl::Reference< sdr::overlay::OverlayManager > const & GetOverlayManager() const;
 
     // #i72752# allow patcing SdrPaintWindow from SdrPageView::DrawLayer if needed
     void patchPaintWindow(SdrPaintWindow& rPaintWindow);

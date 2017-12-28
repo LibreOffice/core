@@ -1820,13 +1820,13 @@ void SdrOle2Obj::GetObjRef_Impl()
         GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
 }
 
-uno::Reference < embed::XEmbeddedObject > SdrOle2Obj::GetObjRef() const
+uno::Reference < embed::XEmbeddedObject > const & SdrOle2Obj::GetObjRef() const
 {
     const_cast<SdrOle2Obj*>(this)->GetObjRef_Impl();
     return mpImpl->mxObjRef.GetObject();
 }
 
-uno::Reference < embed::XEmbeddedObject > SdrOle2Obj::GetObjRef_NoInit() const
+uno::Reference < embed::XEmbeddedObject > const & SdrOle2Obj::GetObjRef_NoInit() const
 {
     return mpImpl->mxObjRef.GetObject();
 }

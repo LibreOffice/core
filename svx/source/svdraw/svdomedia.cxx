@@ -158,7 +158,7 @@ SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
     return *this;
 }
 
-const uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot() const
+uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const
 {
 #if HAVE_FEATURE_AVMEDIA
     if( !m_xImpl->m_xCachedSnapshot.is() )

@@ -239,9 +239,9 @@ public:
     size_t GetMarkedObjectCount() const { return GetMarkedObjectList().GetMarkCount(); }
     void SortMarkedObjects() const { GetMarkedObjectList().ForceSort(); }
     bool AreObjectsMarked() const { return 0 != GetMarkedObjectList().GetMarkCount(); }
-    OUString GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }
-    OUString GetDescriptionOfMarkedPoints() const { return GetMarkedObjectList().GetPointMarkDescription(); }
-    OUString GetDescriptionOfMarkedGluePoints() const { return GetMarkedObjectList().GetGluePointMarkDescription(); }
+    OUString const & GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }
+    OUString const & GetDescriptionOfMarkedPoints() const { return GetMarkedObjectList().GetPointMarkDescription(); }
+    OUString const & GetDescriptionOfMarkedGluePoints() const { return GetMarkedObjectList().GetGluePointMarkDescription(); }
 
     // Get a list of all those links which are connected to marked nodes,
     // but which are not marked themselves.
