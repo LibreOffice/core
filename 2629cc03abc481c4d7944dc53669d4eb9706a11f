@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f3a902e1",
+        "filename": "cui/source/inc/acccfg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-28T18:38:38Z",
+      "side": 1,
+      "message": "Not a typo per se but now it should be \"true\" instead of \"sal_True\"",
+      "range": {
+        "startLine": 83,
+        "startChar": 66,
+        "endLine": 83,
+        "endChar": 74
+      },
+      "revId": "2629cc03abc481c4d7944dc53669d4eb9706a11f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_53b9ee2d",
+        "filename": "odk/examples/cpp/complextoolbarcontrols/MyProtocolHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-28T18:38:38Z",
+      "side": 1,
+      "message": "\"finishes\"?",
+      "range": {
+        "startLine": 208,
+        "startChar": 66,
+        "endLine": 208,
+        "endChar": 72
+      },
+      "revId": "2629cc03abc481c4d7944dc53669d4eb9706a11f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
