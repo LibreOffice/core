@@ -70,8 +70,10 @@ struct TargetData
 SvxHlmarkTreeLBox::SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
     , mpParentWnd(nullptr)
+    , m_nOutlineLevel( MAXLEVEL )
 {
     SetNodeDefaultImages();
+    EnableContextMenuHandling();
 }
 
 SvxHlmarkTreeLBox::~SvxHlmarkTreeLBox()
@@ -120,6 +122,33 @@ void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     }
 }
 
+// Create popup menu for Target to Document window
+VclPtr<PopupMenu> SvxHlmarkTreeLBox::CreateContextMenu()
+{
+    VclPtrInstance<PopupMenu> pPop;
+    VclPtrInstance<PopupMenu> pSubPop1;
+
+    for( int i = 1; i <= MAXLEVEL; ++i )
+    {
+        pSubPop1->InsertItem( i, OUString::number(i), MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK );
+    }
+    pSubPop1->CheckItem( m_nOutlineLevel );
+
+    pPop->InsertItem( 1, CuiResId( RID_SVXSTR_POPUP_MENU_OUTLINE_LEVEL ));
+    pPop->SetPopupMenu( 1, pSubPop1 );
+
+    return pPop;
+}
+
+void SvxHlmarkTreeLBox::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
+{
+    if( m_nOutlineLevel != nSelectedPopupEntry )
+    {
+        m_nOutlineLevel = nSelectedPopupEntry;
+        mpParentWnd->SetOutlineLevel( m_nOutlineLevel );
+        mpParentWnd->RefreshTree( " " );
+    }
+}
 
 //#                                                                      #
 //# Window-Class                                                         #
@@ -136,15 +165,16 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
     , mbUserMoved(false)
     , mpParent(pParent)
     , mnError(LERR_NOERROR)
+    , mnOutlineLevel(MAXLEVEL)
 {
     get(mpBtApply, "apply");
     get(mpBtClose, "close");
     get(mpLbTree, "TreeListBox");
     mpLbTree->SetParentWnd(this);
 
-    mpBtApply->SetClickHdl          ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
-    mpBtClose->SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
-    mpLbTree->SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl ) );
+    mpBtApply->SetClickHdl      ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    mpBtClose->SetClickHdl      ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
+    mpLbTree->SetDoubleClickHdl ( LINK ( this, SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl ) );
 
     // add lines to the Tree-ListBox
     mpLbTree->SetStyle( mpLbTree->GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -282,6 +312,11 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
     }
 }
 
+void SvxHlinkDlgMarkWnd::SetOutlineLevel(const sal_uInt16& nOutlineLevel)
+{
+    mnOutlineLevel = nOutlineLevel;
+}
+
 /*************************************************************************
 |*
 |* Interface to refresh tree
@@ -291,15 +326,26 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
 void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
 {
     OUString aUStrURL;
+    sal_Int32 nPos;
 
     EnterWait();
 
     ClearTree();
 
-    sal_Int32 nPos = aStrURL.indexOf('#');
+    if( aStrURL == " ")
+    {
+        nPos = maUStrURL.indexOf('#');
 
-    if (nPos != 0)
-        aUStrURL = aStrURL;
+        if (nPos != 0)
+            aUStrURL == maUStrURL;
+    }
+    else
+    {
+        nPos = aStrURL.indexOf('#');
+
+        if (nPos != 0)
+            aUStrURL = aStrURL;
+    }
 
     if (!RefreshFromDoc(aUStrURL))
         mpLbTree->Invalidate();
@@ -317,7 +363,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
 
     LeaveWait();
 
-    maStrLastURL = aStrURL;
+    maUStrURL = aUStrURL;
 }
 
 /*************************************************************************
@@ -477,8 +523,12 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                 }
 
                 uno::Reference< document::XLinkTargetSupplier > xLTS( xTarget, uno::UNO_QUERY );
-                if( xLTS.is() )
+                if( xLTS.is() && ( mnOutlineLevel > 0 ))
+                {
+                    mnOutlineLevel -= 1;
                     nEntries += FillTree( xLTS->getLinks(), pEntry );
+                }
+
             }
             catch(const css::uno::Exception&)
             {

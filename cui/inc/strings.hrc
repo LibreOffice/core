@@ -383,6 +383,7 @@
 #define RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT          NC_("RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT", "Cast Shadow to Bottom Left")
 #define RID_SVXSTR_SHADOW_STYLE_TOPLEFT             NC_("RID_SVXSTR_SHADOW_STYLE_TOPLEFT", "Cast Shadow to Top Left")
 
+#define RID_SVXSTR_POPUP_MENU_OUTLINE_LEVEL         NC_("RID_SVXSTR_POPUP_MENU_OUTLINE_LEVELS", "Outline level")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
