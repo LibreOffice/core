@@ -1723,19 +1723,14 @@ void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_
 {
     if ( o_ChangedColumns.size() > 1 )
     {
-        ORowSetMatrix::const_iterator aIter = m_pMatrix->begin();
-        for(;aIter != m_pMatrix->end();++aIter)
+        for (auto const& elem : *m_pMatrix)
         {
-            if ( aIter->is() && m_xCacheSet->updateColumnValues((*aIter)->get(),io_aRow,o_ChangedColumns))
+            if ( elem.is() && m_xCacheSet->updateColumnValues(elem->get(),io_aRow,o_ChangedColumns))
             {
-                break;
+                return;
             }
         }
-
-        if ( aIter == m_pMatrix->end() )
-        {
-            m_xCacheSet->fillMissingValues(io_aRow);
-        }
+        m_xCacheSet->fillMissingValues(io_aRow);
     }
 }
 

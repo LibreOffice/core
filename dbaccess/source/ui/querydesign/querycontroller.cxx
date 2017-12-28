@@ -1643,8 +1643,8 @@ static OUString concatComment( const OUString& rQuery, const std::vector< Commen
     // Obtaining the needed size once should be faster than reallocating.
     // Also add a blank or linefeed for each comment.
     sal_Int32 nBufSize = nLen + nComments;
-    for (std::vector< CommentStrip >::const_iterator it( rComments.begin()); it != rComments.end(); ++it)
-        nBufSize += (*it).maComment.getLength();
+    for (auto const& comment : rComments)
+        nBufSize += comment.maComment.getLength();
     OUStringBuffer aBuf( nBufSize );
     sal_Int32 nIndBeg = 0;
     sal_Int32 nIndLF = rQuery.indexOf('\n');

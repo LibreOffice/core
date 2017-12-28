@@ -1087,20 +1087,17 @@ void SAL_CALL SbaXFormAdapter::dispose()
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // dispose all children
-    for (   std::vector< Reference< css::form::XFormComponent > >::const_iterator aIter = m_aChildren.begin();
-            aIter != m_aChildren.end();
-            ++aIter
-        )
+    for (auto const& child : m_aChildren)
     {
-        Reference< css::beans::XPropertySet >  xSet(*aIter, UNO_QUERY);
+        Reference< css::beans::XPropertySet >  xSet(child, UNO_QUERY);
         if (xSet.is())
             xSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<css::beans::XPropertyChangeListener*>(this));
 
-        Reference< css::container::XChild >  xChild(*aIter, UNO_QUERY);
+        Reference< css::container::XChild >  xChild(child, UNO_QUERY);
         if (xChild.is())
             xChild->setParent(Reference< XInterface > ());
 
-        Reference< css::lang::XComponent >  xComp(*aIter, UNO_QUERY);
+        Reference< css::lang::XComponent >  xComp(child, UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }
