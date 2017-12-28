@@ -32,7 +32,7 @@ class SVX_DLLPUBLIC SvxFmDrawPage   :public SvxDrawPage
 {
 protected:
 
-    // Creating a SdrObject based on a Description. Cann be used by derived classes to
+    // Creating a SdrObject based on a Description. Can be used by derived classes to
     // support own css::drawing::Shapes (for example Controls)
     virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xShape ) override;
 

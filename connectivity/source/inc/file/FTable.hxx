@@ -44,7 +44,7 @@ namespace connectivity
             sal_Int32                                           m_nFilePos;                 // current IResultSetHelper::Movement
             sal_uInt8*                                          m_pBuffer;
             sal_uInt16                                          m_nBufferSize;  // size of the ReadBuffer, if pBuffer != NULL
-            bool                                            m_bWriteable;   // svstream cann't say if we are writeable
+            bool                                            m_bWriteable;   // svstream can't say if we are writeable
                                                                                 // so we have to
 
             virtual void FileClose();

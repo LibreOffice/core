@@ -99,7 +99,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
     {
         // #i123539# allow buffering and reuse of local chart data to not need to rebuild it
         // on every ViewObjectContact::getPrimitive2DSequence call. TTTT: Not needed for
-        // aw080, there this mechanism alraedy works differently
+        // aw080, there this mechanism already works differently
         if(mxChartContent.is()
                 // check if we need to update the transformation primitive wrapping the chart
                 && maGridOffset == GetOle2Obj().GetGridOffset())

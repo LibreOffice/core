@@ -295,7 +295,7 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
     SCSIZE nCols, nRows;
     pMat->GetDimensions( nCols, nRows);
     if ( nCols != nC || nRows != nR )
-    {   // arbitray limit of elements exceeded
+    {   // arbitrary limit of elements exceeded
         SetError( FormulaError::MatrixSize);
         pMat.reset();
     }
