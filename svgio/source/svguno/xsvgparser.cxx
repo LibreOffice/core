@@ -165,7 +165,7 @@ namespace svgio
 
         OUString SAL_CALL XSvgParser::getImplementationName()
         {
-            return(XSvgParser_getImplementationName());
+            return XSvgParser_getImplementationName();
         }
 
         sal_Bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName)

@@ -1137,7 +1137,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
         while( aIter != aEnd )
         {
             aEffects.push_back( *(*aIter) );
-            rSequence.erase( (*aIter++) );
+            rSequence.erase( *aIter++ );
         }
 
         if( nNewPos > nCurrentPos )

@@ -215,7 +215,7 @@ namespace emfio
 
         OUString SAL_CALL XEmfParser::getImplementationName()
         {
-            return(XEmfParser_getImplementationName());
+            return XEmfParser_getImplementationName();
         }
 
         sal_Bool SAL_CALL XEmfParser::supportsService(const OUString& rServiceName)

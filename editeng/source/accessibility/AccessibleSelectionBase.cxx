@@ -77,7 +77,7 @@ namespace accessibility
     uno::Reference< XAccessible > SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         ::osl::MutexGuard aGuard( implGetMutex() );
-        return( OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex ) );
+        return OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex );
     }
 
 

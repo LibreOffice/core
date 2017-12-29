@@ -1986,7 +1986,7 @@ class DemoPopup : public FloatingWindow
         aSize.Width() -= 2;
         aSize.Height() -= 2;
         Color aColor( GetLineColor() );
-        SetLineColor( ( COL_GRAY ) );
+        SetLineColor( COL_GRAY );
         DrawRect( tools::Rectangle( Point( 1, 1 ), aSize ) );
         SetLineColor( aColor );
     }

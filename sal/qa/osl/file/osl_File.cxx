@@ -5145,7 +5145,7 @@ inline OUString getCurrentPID()
 #else
     nPID = getpid();
 #endif
-    return (OUString::number(nPID));
+    return OUString::number(nPID);
 }
 
 //~ do some clean up work after all test completed.
