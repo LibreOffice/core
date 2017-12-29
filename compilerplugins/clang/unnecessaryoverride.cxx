@@ -391,7 +391,7 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
 
     std::vector<const CXXMethodDecl*> maSimilarMethods;
 
-    auto BaseMatchesCallback = [&](const CXXBaseSpecifier *cxxBaseSpecifier, CXXBasePath& )
+    auto BaseMatchesCallback = [&](const CXXBaseSpecifier *cxxBaseSpecifier, CXXBasePath& path)
     {
         if (cxxBaseSpecifier->getAccessSpecifier() != AS_public && cxxBaseSpecifier->getAccessSpecifier() != AS_protected)
             return false;
@@ -404,6 +404,11 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
             return false;
         for (const CXXMethodDecl* baseMethod : baseCXXRecordDecl->methods())
         {
+            auto effectiveBaseMethodAccess = baseMethod->getAccess();
+            if (effectiveBaseMethodAccess == AS_public && path.Access == AS_protected)
+                effectiveBaseMethodAccess = AS_protected;
+            if (effectiveBaseMethodAccess != methodDecl->getAccess())
+                continue;
             if (!baseMethod->getDeclName().isIdentifier() || methodDecl->getName() != baseMethod->getName()) {
                 continue;
             }

@@ -135,4 +135,17 @@ struct Derived2 : Base2
     }
 };
 
+class Base3
+{
+public:
+    void f1();
+};
+
+class Derived3 : protected Base3
+{
+public:
+    // effectively changing access from protected to public
+    void f1() { Base3::f1(); }
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
