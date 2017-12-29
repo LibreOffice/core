@@ -182,7 +182,7 @@ namespace drawinglayer
 
         OUString SAL_CALL XPrimitive2DRenderer::getImplementationName()
         {
-            return(XPrimitive2DRenderer_getImplementationName());
+            return XPrimitive2DRenderer_getImplementationName();
         }
 
         sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName)

@@ -27,27 +27,33 @@ namespace {
 // Like clang::Stmt::IgnoreImplicit (lib/AST/Stmt.cpp), but also ignoring CXXConstructExpr and
 // looking through implicit UserDefinedConversion's member function call:
 Expr const * ignoreAllImplicit(Expr const * expr) {
-    if (auto const e = dyn_cast<ExprWithCleanups>(expr)) {
-        expr = e->getSubExpr();
-    }
-    if (auto const e = dyn_cast<CXXConstructExpr>(expr)) {
-        if (e->getNumArgs() == 1) {
-            expr = e->getArg(0);
+    while (true)
+    {
+        auto oldExpr = expr;
+        if (auto const e = dyn_cast<ExprWithCleanups>(expr)) {
+            expr = e->getSubExpr();
         }
-    }
-    if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-        expr = e->GetTemporaryExpr();
-    }
-    if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
-        expr = e->getSubExpr();
-    }
-    while (auto const e = dyn_cast<ImplicitCastExpr>(expr)) {
-        expr = e->getSubExpr();
-        if (e->getCastKind() == CK_UserDefinedConversion) {
-            auto const ce = cast<CXXMemberCallExpr>(expr);
-            assert(ce->getNumArgs() == 0);
-            expr = ce->getImplicitObjectArgument();
+        else if (auto const e = dyn_cast<CXXConstructExpr>(expr)) {
+            if (e->getNumArgs() == 1) {
+                expr = e->getArg(0);
+            }
         }
+        else if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
+            expr = e->GetTemporaryExpr();
+        }
+        else if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
+            expr = e->getSubExpr();
+        }
+        else if (auto const e = dyn_cast<ImplicitCastExpr>(expr)) {
+            expr = e->getSubExpr();
+            if (e->getCastKind() == CK_UserDefinedConversion) {
+                auto const ce = cast<CXXMemberCallExpr>(expr);
+                assert(ce->getNumArgs() == 0);
+                expr = ce->getImplicitObjectArgument();
+            }
+        }
+        if (expr == oldExpr)
+            return expr;
     }
     return expr;
 }
@@ -261,7 +267,7 @@ bool UnnecessaryParen::VisitReturnStmt(const ReturnStmt* returnStmt)
         return true;
 
     // only non-operator-calls for now
-    auto subExpr = parenExpr->getSubExpr();
+    auto subExpr = ignoreAllImplicit(parenExpr->getSubExpr());
     if (isa<CallExpr>(subExpr) && !isa<CXXOperatorCallExpr>(subExpr))
     {
         report(
