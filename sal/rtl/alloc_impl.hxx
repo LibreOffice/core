@@ -51,17 +51,6 @@
 #define RTL_MEMORY_P2END(value, align) \
     (-(~(sal_IntPtr)(value) & -(sal_IntPtr)(align)))
 
-/** printf() format specifier(s)
- *  (from C90 <sys/int_fmtio.h>)
- */
-#ifndef PRIu64
-#if defined(_MSC_VER)
-#define PRIu64 "I64u"
-#else  /* !_MSC_VER */
-#define PRIu64 "llu"
-#endif /* !_MSC_VER */
-#endif /* PRIu64 */
-
 /** highbit(): log2() + 1
     (complexity O(1))
 */
