@@ -1548,7 +1548,7 @@ namespace basegfx
             mpPolygon->clearBColors();
     }
 
-    B3DVector B3DPolygon::getNormal() const
+    B3DVector const & B3DPolygon::getNormal() const
     {
         return mpPolygon->getNormal();
     }

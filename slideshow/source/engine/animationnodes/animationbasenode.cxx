@@ -465,7 +465,7 @@ AnimationBaseNode::fillCommonParameters() const
         getSlideSize());
 }
 
-AttributableShapeSharedPtr AnimationBaseNode::getShape() const
+AttributableShapeSharedPtr const & AnimationBaseNode::getShape() const
 {
     // any subsetting at all?
     if (mpShapeSubset)

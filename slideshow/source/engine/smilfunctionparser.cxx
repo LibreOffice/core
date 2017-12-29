@@ -525,7 +525,7 @@ namespace slideshow
             }
         }
 
-        std::shared_ptr<ExpressionNode> SmilFunctionParser::parseSmilValue( const OUString&          rSmilValue,
+        std::shared_ptr<ExpressionNode> const & SmilFunctionParser::parseSmilValue( const OUString&          rSmilValue,
                                                                     const ::basegfx::B2DRectangle&  rRelativeShapeBounds )
         {
             // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
@@ -570,7 +570,7 @@ namespace slideshow
             return pContext->maOperandStack.top();
         }
 
-        std::shared_ptr<ExpressionNode> SmilFunctionParser::parseSmilFunction( const OUString&           rSmilFunction,
+        std::shared_ptr<ExpressionNode> const & SmilFunctionParser::parseSmilFunction( const OUString&           rSmilFunction,
                                                                        const ::basegfx::B2DRectangle&   rRelativeShapeBounds )
         {
             // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*

@@ -198,7 +198,7 @@ OUString URLParameter::get_the_tag()
 }
 
 
-OUString URLParameter::get_path()
+OUString const & URLParameter::get_path()
 {
     if(m_bUseDB) {
         if( ! m_bHelpDataFileRead )

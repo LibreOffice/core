@@ -468,7 +468,7 @@ namespace slideshow
             mrMultiplexer.addUserPaintHandler(mpHandler);
         }
 
-        PolyPolygonVector UserPaintOverlay::getPolygons()
+        PolyPolygonVector const & UserPaintOverlay::getPolygons()
         {
             return mpHandler->getPolygons();
         }

@@ -79,7 +79,7 @@ namespace basegfx
         void clearBColors();
 
         // Normals interface
-        B3DVector getNormal() const; // plane normal
+        B3DVector const & getNormal() const; // plane normal
         B3DVector getNormal(sal_uInt32 nIndex) const; // normal in each point
         void setNormal(sal_uInt32 nIndex, const B3DVector& rValue);
         void transformNormals(const B3DHomMatrix& rMatrix);
