@@ -66,7 +66,7 @@ public:
     virtual ~ImpSVGDialog() override;
     virtual void dispose() override;
 
-    css::uno::Sequence< css::beans::PropertyValue > GetFilterData();
+    css::uno::Sequence< css::beans::PropertyValue > const & GetFilterData();
 };
 
 #endif // INCLUDED_FILTER_SOURCE_SVG_IMPSVGDIALOG_HXX

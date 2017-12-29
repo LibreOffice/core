@@ -65,12 +65,12 @@ bool Selection::hasSelection()
     return m_aSelectedOID.isValid();
 }
 
-OUString Selection::getSelectedCID()
+OUString const & Selection::getSelectedCID()
 {
     return m_aSelectedOID.getObjectCID();
 }
 
-uno::Reference< drawing::XShape > Selection::getSelectedAdditionalShape()
+uno::Reference< drawing::XShape > const & Selection::getSelectedAdditionalShape()
 {
     return m_aSelectedOID.getAdditionalShape();
 }

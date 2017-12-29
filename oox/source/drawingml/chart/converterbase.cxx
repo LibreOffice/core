@@ -229,7 +229,7 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
     return xInt;
 }
 
-Reference< XComponentContext > ConverterRoot::getComponentContext() const
+Reference< XComponentContext > const & ConverterRoot::getComponentContext() const
 {
     return mxData->mrFilter.getComponentContext();
 }
@@ -244,7 +244,7 @@ ChartConverter& ConverterRoot::getChartConverter() const
     return mxData->mrConverter;
 }
 
-Reference< XChartDocument > ConverterRoot::getChartDocument() const
+Reference< XChartDocument > const & ConverterRoot::getChartDocument() const
 {
     return mxData->mxDoc;
 }

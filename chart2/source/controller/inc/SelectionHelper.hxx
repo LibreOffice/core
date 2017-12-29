@@ -36,8 +36,8 @@ class Selection
 public: //methods
     bool hasSelection();
 
-    OUString getSelectedCID();
-    css::uno::Reference< css::drawing::XShape > getSelectedAdditionalShape();
+    OUString const & getSelectedCID();
+    css::uno::Reference< css::drawing::XShape > const & getSelectedAdditionalShape();
     const ObjectIdentifier& getSelectedOID() const { return m_aSelectedOID;}
 
     bool isResizeableObjectSelected();

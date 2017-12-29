@@ -1397,7 +1397,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-OString VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const bool bOOxmlExport )
+OString const & VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;
@@ -1409,7 +1409,7 @@ OString VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int
     return m_sShapeId;
 }
 
-OString VMLExport::AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport )
+OString const & VMLExport::AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
     m_eHOri = -1;

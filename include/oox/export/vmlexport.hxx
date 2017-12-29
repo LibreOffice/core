@@ -134,10 +134,10 @@ public:
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.
-    OString AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
+    OString const & AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1, const bool bOOxmlExport = false );
-    OString AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport );
+    OString const & AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(const OUString& rStr);
 

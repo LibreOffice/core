@@ -84,7 +84,7 @@ public:
     virtual void        ExecuteCommand( SfxRequest& rReq ) override;
     virtual void        GetState( SfxItemSet& ) override;
     DlgEditor&          GetEditor() const   { return *m_pEditor; }
-    css::uno::Reference< css::container::XNameContainer > GetDialog() const;
+    css::uno::Reference< css::container::XNameContainer > const & GetDialog() const;
     DlgEdModel&         GetModel() const;
     DlgEdPage&          GetPage() const;
     DlgEdView&          GetView() const;

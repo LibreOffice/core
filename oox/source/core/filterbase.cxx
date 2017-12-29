@@ -329,7 +329,7 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
     return aUrl;
 }
 
-StorageRef FilterBase::getStorage() const
+StorageRef const & FilterBase::getStorage() const
 {
     return mxImpl->mxStorage;
 }
@@ -522,7 +522,7 @@ bool FilterBase::implFinalizeExport( MediaDescriptor& /*rMediaDescriptor*/ )
     return true;
 }
 
-Reference< XStream > FilterBase::getMainDocumentStream( ) const
+Reference< XStream > const & FilterBase::getMainDocumentStream( ) const
 {
     return mxImpl->mxOutStream;
 }

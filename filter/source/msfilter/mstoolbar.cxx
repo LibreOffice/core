@@ -423,7 +423,7 @@ TBCExtraInfo::Print( FILE* fp )
 }
 #endif
 
-OUString
+OUString const &
 TBCExtraInfo::getOnAction()
 {
     return wstrOnAction.getString();
