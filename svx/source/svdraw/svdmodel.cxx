@@ -1212,7 +1212,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
             aBuf.insert(0, '0');
     }
 
-    sal_Unicode cDec( rLoc.getNumDecimalSep()[0] );
+    const sal_Unicode cDec( rLoc.getNumDecimalSep()[0] );
 
     // insert the decimal mark character
     sal_Int32 nBeforeDecimalMark = aBuf.getLength() - nDecimalMark;
@@ -1222,13 +1222,19 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
 
     if(!LocaleDataWrapper::isNumTrailingZeros())
     {
+        sal_Int32 aPos=aBuf.getLength()-1;
+
         // Remove all trailing zeros.
-        while (!aBuf.isEmpty() && aBuf[aBuf.getLength()-1] == '0')
-            aBuf.remove(aBuf.getLength()-1, 1);
+        while (aPos>=0 && aBuf[aPos]=='0')
+            --aPos;
 
         // Remove decimal if it's the last character.
-        if (!aBuf.isEmpty() && aBuf[aBuf.getLength()-1] == cDec)
-            aBuf.remove(aBuf.getLength()-1, 1);
+        if (aPos>=0 && aBuf[aPos]==cDec)
+            --aPos;
+
+        // Adjust aPos to index first char to be truncated, if any
+        if (++aPos<aBuf.getLength())
+            aBuf.truncate(aPos);
     }
 
     // if necessary, add separators before every third digit
