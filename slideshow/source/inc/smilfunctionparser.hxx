@@ -95,7 +95,7 @@ namespace slideshow
 
                 @return the generated function object.
              */
-            static std::shared_ptr<ExpressionNode> parseSmilValue( const OUString&           rSmilValue,
+            static std::shared_ptr<ExpressionNode> const & parseSmilValue( const OUString&           rSmilValue,
                                                            const ::basegfx::B2DRectangle&   rRelativeShapeBounds ); // throw ParseError
 
             /** Parse a string containing a SMIL function.
@@ -143,7 +143,7 @@ namespace slideshow
 
                 @return the generated function object.
              */
-            static std::shared_ptr<ExpressionNode> parseSmilFunction( const OUString&            rSmilFunction,
+            static std::shared_ptr<ExpressionNode> const & parseSmilFunction( const OUString&            rSmilFunction,
                                                               const ::basegfx::B2DRectangle&    rRelativeShapeBounds ); // throw ParseError
 
         };

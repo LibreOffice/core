@@ -65,7 +65,7 @@ namespace slideshow
             ~UserPaintOverlay();
             UserPaintOverlay(const UserPaintOverlay&) = delete;
             UserPaintOverlay& operator=(const UserPaintOverlay&) = delete;
-            PolyPolygonVector getPolygons();
+            PolyPolygonVector const & getPolygons();
             void drawPolygons();
 
         private:

@@ -808,7 +808,7 @@ namespace
         }
     };
 
-    uno::Reference<rendering::XIntegerBitmapColorSpace>
+    uno::Reference<rendering::XIntegerBitmapColorSpace> const &
     getOGLColorSpace()
     {
         return OGLColorSpaceHolder::get();

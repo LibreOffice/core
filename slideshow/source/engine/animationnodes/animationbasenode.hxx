@@ -56,7 +56,7 @@ protected:
     /// Create parameter struct for ActivitiesFactory
     ActivitiesFactory::CommonParameters fillCommonParameters() const;
     ::basegfx::B2DVector const&         getSlideSize() const { return maSlideSize; }
-    AttributableShapeSharedPtr          getShape() const;
+    AttributableShapeSharedPtr const &  getShape() const;
 
 private:
     virtual bool hasPendingAnimation() const override;

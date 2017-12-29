@@ -124,7 +124,7 @@ namespace chelp {
 
         //  Not called for an directory
 
-        OUString get_path();
+        OUString const & get_path();
 
         const OUString& get_eid() const   { return m_aEid; }
 
