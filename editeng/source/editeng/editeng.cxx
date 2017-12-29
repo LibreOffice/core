@@ -1121,28 +1121,29 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     if (pFmt && nCode == KEY_BACKSPACE &&
                         !aCurSel.HasRange() && aCurSel.Min().GetIndex() == 0)
                     {
-                        // if the bullet is still visible just do not paint it from
-                        // now on and that will be all. Otherwise continue as usual.
+                        // if the bullet is still visible, just make it invisible.
+                        // Otherwise continue as usual.
 
 
                         sal_Int32 nPara = pImpEditEngine->GetEditDoc().GetPos( pNode );
                         SfxBoolItem aBulletState( pImpEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) );
-                        bool bBulletIsVisible = aBulletState.GetValue();
 
-                        // just toggling EE_PARA_BULLETSTATE should be fine for both cases...
-                        aBulletState.SetValue( !bBulletIsVisible );
-                        SfxItemSet aSet( pImpEditEngine->GetParaAttribs( nPara ) );
-                        aSet.Put( aBulletState );
-                        pImpEditEngine->SetParaAttribs( nPara, aSet );
+                        if ( aBulletState.GetValue() )
+                        {
 
-                        // have this and the following paragraphs formatted and repainted.
-                        // (not painting a numbering in the list may cause the following
-                        // numberings to have different numbers than before and thus the
-                        // length may have changed as well )
-                        pImpEditEngine->FormatAndUpdate( pImpEditEngine->GetActiveView() );
+                            aBulletState.SetValue( false );
+                            SfxItemSet aSet( pImpEditEngine->GetParaAttribs( nPara ) );
+                            aSet.Put( aBulletState );
+                            pImpEditEngine->SetParaAttribs( nPara, aSet );
 
-                        if (bBulletIsVisible)   // bullet just turned invisible...
+                            // have this and the following paragraphs formatted and repainted.
+                            // (not painting a numbering in the list may cause the following
+                            // numberings to have different numbers than before and thus the
+                            // length may have changed as well )
+                            pImpEditEngine->FormatAndUpdate( pImpEditEngine->GetActiveView() );
+
                             break;
+                        }
                     }
 
                     sal_uInt8 nDel = 0;
