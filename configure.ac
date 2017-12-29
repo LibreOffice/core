@@ -2103,8 +2103,7 @@ with_build_version=$withval,
 
 AC_ARG_WITH(alloc,
     AS_HELP_STRING([--with-alloc],
-        [Define which allocator to build with (choices are oo, system, tcmalloc, jemalloc).
-         Note that on FreeBSD/NetBSD system==jemalloc]),
+        [Define which allocator to build with (choices are internal, system).]),
 ,)
 
 AC_ARG_WITH(parallelism,
@@ -6475,29 +6474,6 @@ AC_MSG_CHECKING([which memory allocator to use])
 if test "$with_alloc" = "system"; then
     AC_MSG_RESULT([system])
     ALLOC="SYS_ALLOC"
-fi
-if test "$with_alloc" = "tcmalloc"; then
-    AC_MSG_RESULT(tcmalloc)
-    if ! echo $host_cpu | $GREP -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
-        AC_MSG_ERROR([tcmalloc only available/usable on ix86])
-    fi
-    AC_CHECK_LIB([tcmalloc], [malloc], [:],
-        [AC_MSG_ERROR(tcmalloc not found or functional. Install the Google Profiling Tools)], [])
-    ALLOC="TCMALLOC"
-fi
-if test "$with_alloc" = "jemalloc"; then
-    if test "$_os" != "FreeBSD" -o "$_os" != "NetBSD"; then
-        AC_MSG_RESULT(jemalloc)
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -pthread"
-        AC_CHECK_LIB([jemalloc], [malloc], [:],
-            [AC_MSG_ERROR(jemalloc not found or functional. Install the jemalloc allocator.)], [])
-        ALLOC="JEMALLOC"
-        CFLAGS=$save_CFLAGS
-    else
-        AC_MSG_RESULT([system])
-        ALLOC="SYS_ALLOC"
-    fi
 fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
     AC_MSG_RESULT([internal])
