@@ -964,10 +964,15 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             // width of the affected columns.
             // For the maximum widths we also take the fixed-width columns
             // into account.  Is that correct?
+            sal_uLong nFixMax = 0;
             if( nRel < 100 && nRelCols < m_nCols )
             {
+                nFixMax = m_nMax - nRelMax;
+                SAL_WARN_IF(!nFixMax, "sw.core", "bad fixed width max");
+            }
+            if (nFixMax)
+            {
                 sal_uInt16 nRelLeft = 100 - nRel;
-                sal_uLong nFixMax = m_nMax - nRelMax;
                 for( i=0; i<m_nCols; i++ )
                 {
                     SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
