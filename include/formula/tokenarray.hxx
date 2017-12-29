@@ -182,7 +182,7 @@ public:
         return result;
     }
 
-    FormulaTokenArrayReferencesIterator operator++()
+    FormulaTokenArrayReferencesIterator const & operator++()
     {
         assert(maIter != maEnd);
         ++maIter;

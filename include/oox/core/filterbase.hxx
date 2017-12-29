@@ -152,7 +152,7 @@ public:
     OUString     getAbsoluteUrl( const OUString& rUrl ) const;
 
     /** Returns the base storage of the imported/exported file. */
-    StorageRef          getStorage() const;
+    StorageRef const & getStorage() const;
 
     /** Opens and returns the specified input stream from the base storage.
 
@@ -248,7 +248,7 @@ protected:
 
     virtual bool        implFinalizeExport( utl::MediaDescriptor& rMediaDescriptor );
 
-    css::uno::Reference< css::io::XStream >
+    css::uno::Reference< css::io::XStream > const &
                         getMainDocumentStream( ) const;
 
 private:

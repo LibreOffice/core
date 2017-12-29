@@ -109,7 +109,7 @@ void ImpSVGDialog::dispose()
 }
 
 
-Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
+Sequence< PropertyValue > const & ImpSVGDialog::GetFilterData()
 {
     maConfigItem.WriteBool( SVG_PROP_TINYPROFILE, maCBTinyProfile->IsChecked() );
     maConfigItem.WriteBool( SVG_PROP_EMBEDFONTS, maCBEmbedFonts->IsChecked() );

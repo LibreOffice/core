@@ -66,7 +66,7 @@ public:
             short getType() const { return m_aType; }
             short getSubType() const { return m_aSubType; }
             short getScale() const { return m_nScale; }
-            OUString getCharacterSet() const { return m_sCharsetName; }
+            OUString const & getCharacterSet() const { return m_sCharsetName; }
 
             sal_Int32 getSdbcType() const;
             ::rtl::OUString getColumnTypeName() const;

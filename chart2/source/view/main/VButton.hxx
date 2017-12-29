@@ -66,7 +66,7 @@ public:
     {
         m_aPosition = rPosition;
     }
-    css::awt::Size getSize()
+    css::awt::Size const & getSize()
     {
         return m_aSize;
     }

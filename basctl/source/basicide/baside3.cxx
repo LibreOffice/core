@@ -564,7 +564,7 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
     rReq.Done();
 }
 
-Reference< container::XNameContainer > DialogWindow::GetDialog() const
+Reference< container::XNameContainer > const & DialogWindow::GetDialog() const
 {
     return m_pEditor->GetDialog();
 }

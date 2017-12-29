@@ -420,8 +420,8 @@ public:
 public:
     void BasicAddWatch (OUString const&);
     void BasicRemoveWatch ();
-    Color GetBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
-    Color GetFontColor () const { return aSyntaxColors.GetFontColor(); }
+    Color const & GetBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
+    Color const & GetFontColor () const { return aSyntaxColors.GetFontColor(); }
     Color GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
 
 protected:
@@ -447,8 +447,8 @@ private:
     public:
         void SetActiveEditor (EditorWindow* pEditor_) { pEditor = pEditor_; }
     public:
-        Color GetBackgroundColor () const { return m_aBackgroundColor; };
-        Color GetFontColor () const { return m_aFontColor; }
+        Color const & GetBackgroundColor () const { return m_aBackgroundColor; };
+        Color const & GetFontColor () const { return m_aFontColor; }
         Color GetColor (TokenType eType) const { return aColors[eType]; }
 
     private:

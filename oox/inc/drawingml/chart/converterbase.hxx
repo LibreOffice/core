@@ -67,7 +67,7 @@ public:
     /** Creates an instance for the passed service name, using the process service factory. */
     css::uno::Reference< css::uno::XInterface >
                         createInstance( const OUString& rServiceName ) const;
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext > const &
                         getComponentContext() const;
 
 protected:
@@ -76,7 +76,7 @@ protected:
     /** Returns the chart converter. */
     ChartConverter&     getChartConverter() const;
     /** Returns the API chart document model. */
-    css::uno::Reference< css::chart2::XChartDocument >
+    css::uno::Reference< css::chart2::XChartDocument > const &
                         getChartDocument() const;
     /** Returns the position and size of the chart shape in 1/100 mm. */
     const css::awt::Size& getChartSize() const;

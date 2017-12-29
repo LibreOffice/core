@@ -68,7 +68,7 @@ class ShapeTemplateVisitor : public LayoutAtomVisitor
 
 public:
     void defaultVisit(LayoutAtom const & rAtom);
-    ShapePtr getShapeCopy() const
+    ShapePtr const & getShapeCopy() const
         { return mpShape; }
 };
 

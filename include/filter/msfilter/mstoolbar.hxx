@@ -134,7 +134,7 @@ public:
 #ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
-    OUString getOnAction();
+    OUString const & getOnAction();
 };
 
 class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
@@ -152,7 +152,7 @@ public:
     virtual void Print( FILE* ) override;
 #endif
     void ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
-    OUString CustomText() { return customText.getString(); }
+    OUString const & CustomText() { return customText.getString(); }
 };
 
 class MSFILTER_DLLPUBLIC TBCBitMap : public TBBase
