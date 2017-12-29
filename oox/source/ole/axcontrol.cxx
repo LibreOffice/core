@@ -1585,6 +1585,7 @@ void AxToggleButtonModel::convertFromProperties( PropertySet& rPropSet, const Co
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
 
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     // need to process the image if one exists
     ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
@@ -1660,6 +1661,7 @@ void AxCheckBoxModel::convertFromProperties( PropertySet& rPropSet, const Contro
 
     ControlConverter::convertToAxVisualEffect( rPropSet, mnSpecialEffect );
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     // need to process the image if one exists
     ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
@@ -1722,6 +1724,7 @@ void AxOptionButtonModel::convertFromProperties( PropertySet& rPropSet, const Co
 
     ControlConverter::convertToAxVisualEffect( rPropSet, mnSpecialEffect );
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     // need to process the image if one exists
     ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
@@ -1800,6 +1803,7 @@ void AxTextBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
         setFlag( mnScrollBars, AX_SCROLLBAR_VERTICAL, bRes );
 
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor, 0x80000005L );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
 
     ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
@@ -1862,6 +1866,7 @@ void AxNumericFieldModel::convertFromProperties( PropertySet& rPropSet, const Co
         setFlag( mnScrollBars, AX_SCROLLBAR_VERTICAL, bRes );
 
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
 
     ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
@@ -1919,6 +1924,7 @@ void AxListBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
         ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
     ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -2004,6 +2010,7 @@ void AxComboBoxModel::convertFromProperties( PropertySet& rPropSet, const Contro
             mnListRows = 1;
     }
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
 
     ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
