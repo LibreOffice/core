@@ -1898,7 +1898,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == static_cast<sal_Int32>(NMSP_dml) &&
         !((oox::getBaseToken(Element) == XML_linkedTxbx) || (oox::getBaseToken(Element) == XML_txbx));
 
-    if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine) || static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent()) )
+    if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine) || dynamic_cast<OOXMLFastContextHandlerShape&>(*mpParent).isShapeSent()) )
         xResult.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
     else if (mxContext.is()  && !bSkipImages)
     {
