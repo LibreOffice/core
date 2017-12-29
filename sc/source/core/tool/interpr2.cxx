@@ -975,17 +975,20 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        double fVal = 0.0;
+        sal_Int16 nDec;
         if (nParamCount == 1)
-            fVal = ::rtl::math::round( GetDouble(), 0, eMode );
+            nDec = 0;
         else
         {
-            sal_Int16 nDec = GetInt16();
+            nDec = GetInt16();
             if ( nGlobalError != FormulaError::NONE || nDec < -20 || nDec > 20 )
                 PushIllegalArgument();
-            else
-                fVal = ::rtl::math::round( GetDouble(), nDec, eMode );
         }
+        double fVal = 0.0;
+        if ( nDec == 0  && eMode == rtl_math_RoundingMode_Corrected )
+            fVal = round( GetDouble() );
+        else
+            fVal = ::rtl::math::round( GetDouble(), nDec, eMode );
         PushDouble(fVal);
     }
 }

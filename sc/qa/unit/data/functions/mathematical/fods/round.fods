@@ -2117,20 +2117,43 @@
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce26"/>
-     <table:table-cell table:style-name="ce11" table:content-validation-name="val1"/>
+     <table:table-cell table:formula="of:=ROUND(2^52+1;0)" office:value-type="float" office:value="4503599627370497" calcext:value-type="float">
+      <text:p>4503599627370497</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4503599627370497" calcext:value-type="float">
+      <text:p>4503599627370497</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce44" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=ROUND(2^52+1;0)" calcext:value-type="string">
+      <text:p>=ROUND(2^52+1,0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
+      <text:p>limit of resolution</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce42" table:content-validation-name="val1"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce22"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ROUND(2^52+1)" office:value-type="float" office:value="4503599627370497" calcext:value-type="float">
+      <text:p>4503599627370497</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4503599627370497" calcext:value-type="float">
+      <text:p>4503599627370497</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce44" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=ROUND(2^52+1)" calcext:value-type="string">
+      <text:p>=ROUND(2^52+1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
+      <text:p>limit of resolution</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce32" table:number-columns-repeated="4"/>
      <table:table-cell/>
     </table:table-row>
