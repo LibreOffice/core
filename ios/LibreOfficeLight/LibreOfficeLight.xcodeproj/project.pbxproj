@@ -357,7 +357,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = /Users/jani/LO/core/ios/generated/;
+				LIBRARY_SEARCH_PATHS = $PROJECT_DIR/../generated/;
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -420,7 +420,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = /Users/jani/LO/core/ios/generated/;
+				LIBRARY_SEARCH_PATHS = $PROJECT_DIR/../generated/;
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
@@ -547,7 +547,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = /Users/jani/LO/core/ios/generated/;
+				LIBRARY_SEARCH_PATHS = $PROJECT_DIR/../generated/;
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
