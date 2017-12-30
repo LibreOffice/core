@@ -46,7 +46,7 @@ struct OrderedEntry
 struct Module
 {
     bool                          m_bActive;
-    std::vector< OrderedEntry* >  m_aNodeList;
+    std::vector< std::unique_ptr<OrderedEntry> >  m_aNodeList;
 
     Module() : m_bActive( false ) {}
 };
@@ -150,7 +150,7 @@ private:
     void            LoadExtensionOptions( const OUString& rExtensionId );
     static OUString GetModuleIdentifier( const css::uno::Reference<
                                             css::frame::XFrame >& xFrame );
-    static Module*  LoadModule( const OUString& rModuleIdentifier );
+    static std::unique_ptr<Module>  LoadModule( const OUString& rModuleIdentifier );
     static VectorOfNodes LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 

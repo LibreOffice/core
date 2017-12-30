@@ -1710,7 +1710,7 @@ bool isNodeActive( OptionsNode const * pNode, Module* pModule )
         // search node in active module
         if ( pModule->m_bActive )
         {
-            for (OrderedEntry* j : pModule->m_aNodeList)
+            for (auto const& j : pModule->m_aNodeList)
                 if ( j->m_sId == pNode->m_sId )
                     return true;
         }
@@ -1720,7 +1720,7 @@ bool isNodeActive( OptionsNode const * pNode, Module* pModule )
 
 void OfaTreeOptionsDialog::LoadExtensionOptions( const OUString& rExtensionId )
 {
-    Module* pModule = nullptr;
+    std::unique_ptr<Module> pModule;
 
     // when called by Tools - Options then load nodes of active module
     if ( rExtensionId.isEmpty() )
@@ -1728,10 +1728,8 @@ void OfaTreeOptionsDialog::LoadExtensionOptions( const OUString& rExtensionId )
         pModule = LoadModule( GetModuleIdentifier( Reference< XFrame >() ) );
     }
 
-    VectorOfNodes aNodeList = LoadNodes( pModule, rExtensionId );
+    VectorOfNodes aNodeList = LoadNodes( pModule.get(), rExtensionId );
     InsertNodes( aNodeList );
-
-    delete pModule;
 }
 
 OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& rFrame )
@@ -1765,10 +1763,10 @@ OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& r
     return sModule;
 }
 
-Module* OfaTreeOptionsDialog::LoadModule(
+std::unique_ptr<Module> OfaTreeOptionsDialog::LoadModule(
     const OUString& rModuleIdentifier )
 {
-    Module* pModule = nullptr;
+    std::unique_ptr<Module> pModule;
     Reference< XNameAccess > xSet(
         officecfg::Office::OptionsDialog::Modules::get());
 
@@ -1779,7 +1777,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
         if ( rModuleIdentifier == sModule )
         {
             // current active module found
-            pModule = new Module;
+            pModule.reset(new Module);
             pModule->m_bActive = true;
 
             Reference< XNameAccess > xModAccess;
@@ -1803,7 +1801,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
                             if ( nIndex < 0 )
                                 // append nodes with index < 0
                                 pModule->m_aNodeList.push_back(
-                                    new OrderedEntry( nIndex, xTemp[x] ) );
+                                 std::unique_ptr<OrderedEntry>(new OrderedEntry(nIndex, xTemp[x])));
                             else
                             {
                                 // search position of the node
@@ -1817,7 +1815,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
                                 // and insert the node on this position
                                 pModule->m_aNodeList.insert(
                                     pModule->m_aNodeList.begin() + y,
-                                    new OrderedEntry( nIndex, xTemp[x] ) );
+                                    std::unique_ptr<OrderedEntry>(new OrderedEntry( nIndex, xTemp[x] )) );
                             }
                         }
                     }
