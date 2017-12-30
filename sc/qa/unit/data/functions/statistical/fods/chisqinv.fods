@@ -3799,7 +3799,7 @@
      <table:table-cell table:style-name="ce75" office:value-type="float" office:value="3.28302028675954" calcext:value-type="float">
       <text:p>3.28302028675954</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A2];14)=ORG.LIBREOFFICE.ROUNDSIG([.B2];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A2];15)=ORG.LIBREOFFICE.ROUNDSIG([.B2];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=CHISQINV(0.93,1)" calcext:value-type="string">
@@ -3858,7 +3858,7 @@
      <table:table-cell table:style-name="ce75" office:value-type="float" office:value="1.83258146374831" calcext:value-type="float">
       <text:p>1.83258146374831</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A3];14)=ORG.LIBREOFFICE.ROUNDSIG([.B3];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A3];15)=ORG.LIBREOFFICE.ROUNDSIG([.B3];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=CHISQINV(0.6,2)" calcext:value-type="string">
@@ -3922,7 +3922,7 @@
      <table:table-cell office:value-type="float" office:value="4.53504966643008" calcext:value-type="float">
       <text:p>4.53504966643008</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A4];14)=ORG.LIBREOFFICE.ROUNDSIG([.B4];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A4];15)=ORG.LIBREOFFICE.ROUNDSIG([.B4];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -3984,7 +3984,7 @@
      <table:table-cell office:value-type="float" office:value="5.40462670205885" calcext:value-type="float">
       <text:p>5.40462670205885</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A5];14)=ORG.LIBREOFFICE.ROUNDSIG([.B5];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A5];15)=ORG.LIBREOFFICE.ROUNDSIG([.B5];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4042,7 +4042,7 @@
      <table:table-cell office:value-type="float" office:value="6.30379605958432" calcext:value-type="float">
       <text:p>6.30379605958432</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A6];14)=ORG.LIBREOFFICE.ROUNDSIG([.B6];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A6];15)=ORG.LIBREOFFICE.ROUNDSIG([.B6];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4101,7 +4101,7 @@
      <table:table-cell office:value-type="float" office:value="7.22840922887967" calcext:value-type="float">
       <text:p>7.22840922887967</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A7];14)=ORG.LIBREOFFICE.ROUNDSIG([.B7];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A7];15)=ORG.LIBREOFFICE.ROUNDSIG([.B7];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4160,7 +4160,7 @@
      <table:table-cell office:value-type="float" office:value="8.17520208558841" calcext:value-type="float">
       <text:p>8.17520208558841</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A8];14)=ORG.LIBREOFFICE.ROUNDSIG([.B8];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A8];15)=ORG.LIBREOFFICE.ROUNDSIG([.B8];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4218,7 +4218,7 @@
      <table:table-cell office:value-type="float" office:value="9.14156135907027" calcext:value-type="float">
       <text:p>9.14156135907027</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A9];14)=ORG.LIBREOFFICE.ROUNDSIG([.B9];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A9];15)=ORG.LIBREOFFICE.ROUNDSIG([.B9];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4276,7 +4276,7 @@
      <table:table-cell office:value-type="float" office:value="10.1253633400196" calcext:value-type="float">
       <text:p>10.1253633400196</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A10];14)=ORG.LIBREOFFICE.ROUNDSIG([.B10];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A10];15)=ORG.LIBREOFFICE.ROUNDSIG([.B10];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4328,7 +4328,7 @@
      <table:table-cell office:value-type="float" office:value="11.1248597059224" calcext:value-type="float">
       <text:p>11.1248597059224</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A11];14)=ORG.LIBREOFFICE.ROUNDSIG([.B11];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A11];15)=ORG.LIBREOFFICE.ROUNDSIG([.B11];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4373,7 +4373,7 @@
      <table:table-cell office:value-type="float" office:value="12.1385949123142" calcext:value-type="float">
       <text:p>12.1385949123142</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A12];14)=ORG.LIBREOFFICE.ROUNDSIG([.B12];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A12];15)=ORG.LIBREOFFICE.ROUNDSIG([.B12];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4405,7 +4405,7 @@
      <table:table-cell office:value-type="float" office:value="13.1653452479781" calcext:value-type="float">
       <text:p>13.1653452479781</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A13];14)=ORG.LIBREOFFICE.ROUNDSIG([.B13];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A13];15)=ORG.LIBREOFFICE.ROUNDSIG([.B13];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4436,7 +4436,7 @@
      <table:table-cell office:value-type="float" office:value="14.2040730851385" calcext:value-type="float">
       <text:p>14.2040730851385</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A14];14)=ORG.LIBREOFFICE.ROUNDSIG([.B14];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A14];15)=ORG.LIBREOFFICE.ROUNDSIG([.B14];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4467,7 +4467,7 @@
      <table:table-cell office:value-type="float" office:value="3.07008840528929" calcext:value-type="float">
       <text:p>3.07008840528929</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A15];14)=ORG.LIBREOFFICE.ROUNDSIG([.B15];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A15];15)=ORG.LIBREOFFICE.ROUNDSIG([.B15];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="{=CHISQINV(L3:L9,M3:M9)}" calcext:value-type="string">
@@ -4501,7 +4501,7 @@
      <table:table-cell office:value-type="float" office:value="2.99990813275991" calcext:value-type="float">
       <text:p>2.99990813275991</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A16];14)=ORG.LIBREOFFICE.ROUNDSIG([.B16];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A16];15)=ORG.LIBREOFFICE.ROUNDSIG([.B16];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="{=CHISQINV(L3:L9,M3:M9)}" calcext:value-type="string">
@@ -4527,7 +4527,7 @@
      <table:table-cell office:value-type="float" office:value="9.23728542384152" calcext:value-type="float">
       <text:p>9.23728542384152</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A17];14)=ORG.LIBREOFFICE.ROUNDSIG([.B17];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A17];15)=ORG.LIBREOFFICE.ROUNDSIG([.B17];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="{=CHISQINV(L3:L9,M3:M9)}" calcext:value-type="string">
@@ -4553,7 +4553,7 @@
      <table:table-cell office:value-type="float" office:value="6.34581119552152" calcext:value-type="float">
       <text:p>6.34581119552152</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A18];14)=ORG.LIBREOFFICE.ROUNDSIG([.B18];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A18];15)=ORG.LIBREOFFICE.ROUNDSIG([.B18];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="{=CHISQINV(L3:L9,M3:M9)}" calcext:value-type="string">
@@ -4581,7 +4581,7 @@
      <table:table-cell office:value-type="float" office:value="5.13186707440182" calcext:value-type="float">
       <text:p>5.13186707440182</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A19];14)=ORG.LIBREOFFICE.ROUNDSIG([.B19];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A19];15)=ORG.LIBREOFFICE.ROUNDSIG([.B19];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="{=CHISQINV(L3:L9,M3:M9)}" calcext:value-type="string">
@@ -4607,7 +4607,7 @@
      <table:table-cell office:value-type="float" office:value="4.87843296656041" calcext:value-type="float">
       <text:p>4.87843296656041</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A20];14)=ORG.LIBREOFFICE.ROUNDSIG([.B20];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A20];15)=ORG.LIBREOFFICE.ROUNDSIG([.B20];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="{=CHISQINV(L3:L9,M3:M9)}" calcext:value-type="string">
@@ -4633,7 +4633,7 @@
      <table:table-cell office:value-type="float" office:value="5.98861669400425" calcext:value-type="float">
       <text:p>5.98861669400425</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A21];14)=ORG.LIBREOFFICE.ROUNDSIG([.B21];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A21];15)=ORG.LIBREOFFICE.ROUNDSIG([.B21];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="{=CHISQINV(L3:L9,M3:M9)}" calcext:value-type="string">
@@ -4659,7 +4659,7 @@
      <table:table-cell office:value-type="float" office:value="0.981793008255829" calcext:value-type="float">
       <text:p>0.981793008255829</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A22];14)=ORG.LIBREOFFICE.ROUNDSIG([.B22];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A22];15)=ORG.LIBREOFFICE.ROUNDSIG([.B22];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4685,7 +4685,7 @@
      <table:table-cell office:value-type="float" office:value="2.75660369088146" calcext:value-type="float">
       <text:p>2.75660369088146</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A23];14)=ORG.LIBREOFFICE.ROUNDSIG([.B23];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A23];15)=ORG.LIBREOFFICE.ROUNDSIG([.B23];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A23])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4711,7 +4711,7 @@
      <table:table-cell office:value-type="float" office:value="2.1113261237018" calcext:value-type="float">
       <text:p>2.1113261237018</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A24];14)=ORG.LIBREOFFICE.ROUNDSIG([.B24];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A24];15)=ORG.LIBREOFFICE.ROUNDSIG([.B24];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A24])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4737,7 +4737,7 @@
      <table:table-cell office:value-type="float" office:value="2.0764999935322" calcext:value-type="float">
       <text:p>2.0764999935322</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A25];14)=ORG.LIBREOFFICE.ROUNDSIG([.B25];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A25];15)=ORG.LIBREOFFICE.ROUNDSIG([.B25];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A25])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4763,7 +4763,7 @@
      <table:table-cell office:value-type="float" office:value="5.01515445024952" calcext:value-type="float">
       <text:p>5.01515445024952</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A26];14)=ORG.LIBREOFFICE.ROUNDSIG([.B26];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A26];15)=ORG.LIBREOFFICE.ROUNDSIG([.B26];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4789,7 +4789,7 @@
      <table:table-cell office:value-type="float" office:value="15.2911628705065" calcext:value-type="float">
       <text:p>15.2911628705065</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A27];14)=ORG.LIBREOFFICE.ROUNDSIG([.B27];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A27];15)=ORG.LIBREOFFICE.ROUNDSIG([.B27];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4815,7 +4815,7 @@
      <table:table-cell office:value-type="float" office:value="20.4461298047275" calcext:value-type="float">
       <text:p>20.4461298047275</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A28];14)=ORG.LIBREOFFICE.ROUNDSIG([.B28];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A28];15)=ORG.LIBREOFFICE.ROUNDSIG([.B28];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A28])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4841,7 +4841,7 @@
      <table:table-cell office:value-type="float" office:value="16.3884014923503" calcext:value-type="float">
       <text:p>16.3884014923503</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A29];14)=ORG.LIBREOFFICE.ROUNDSIG([.B29];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A29];15)=ORG.LIBREOFFICE.ROUNDSIG([.B29];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4867,7 +4867,7 @@
      <table:table-cell office:value-type="float" office:value="13.3824533053927" calcext:value-type="float">
       <text:p>13.3824533053927</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A30];14)=ORG.LIBREOFFICE.ROUNDSIG([.B30];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A30];15)=ORG.LIBREOFFICE.ROUNDSIG([.B30];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4893,7 +4893,7 @@
      <table:table-cell office:value-type="float" office:value="7.91959455051006" calcext:value-type="float">
       <text:p>7.91959455051006</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A31];14)=ORG.LIBREOFFICE.ROUNDSIG([.B31];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A31];15)=ORG.LIBREOFFICE.ROUNDSIG([.B31];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A31])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4919,7 +4919,7 @@
      <table:table-cell office:value-type="float" office:value="15.6557151216055" calcext:value-type="float">
       <text:p>15.6557151216055</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A32];14)=ORG.LIBREOFFICE.ROUNDSIG([.B32];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A32];15)=ORG.LIBREOFFICE.ROUNDSIG([.B32];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A32])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4945,7 +4945,7 @@
      <table:table-cell office:value-type="float" office:value="24.5318147689017" calcext:value-type="float">
       <text:p>24.5318147689017</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A33];14)=ORG.LIBREOFFICE.ROUNDSIG([.B33];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A33];15)=ORG.LIBREOFFICE.ROUNDSIG([.B33];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A33])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4971,7 +4971,7 @@
      <table:table-cell office:value-type="float" office:value="9.94221245771641" calcext:value-type="float">
       <text:p>9.94221245771641</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A34];14)=ORG.LIBREOFFICE.ROUNDSIG([.B34];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A34];15)=ORG.LIBREOFFICE.ROUNDSIG([.B34];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A34])" office:value-type="string" office:string-value="{=CHISQINV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4997,7 +4997,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0.000000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A35];14)=ORG.LIBREOFFICE.ROUNDSIG([.B35];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A35];15)=ORG.LIBREOFFICE.ROUNDSIG([.B35];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A35])" office:value-type="string" office:string-value="=CHISQINV(0,1)" calcext:value-type="string">
@@ -5049,7 +5049,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.454936423119572" calcext:value-type="float">
       <text:p>0.454936</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A37];14)=ORG.LIBREOFFICE.ROUNDSIG([.B37];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A37];15)=ORG.LIBREOFFICE.ROUNDSIG([.B37];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A37])" office:value-type="string" office:string-value="=CHISQINV(0.5,1)" calcext:value-type="string">
@@ -5075,7 +5075,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.0157907740934312" calcext:value-type="float">
       <text:p>0.015791</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A38];14)=ORG.LIBREOFFICE.ROUNDSIG([.B38];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A38];15)=ORG.LIBREOFFICE.ROUNDSIG([.B38];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=CHISQINV(0.1,1.1)" calcext:value-type="string">
@@ -5129,7 +5129,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.010086932215776" calcext:value-type="float">
       <text:p>0.010087</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A40];14)=ORG.LIBREOFFICE.ROUNDSIG([.B40];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A40];15)=ORG.LIBREOFFICE.ROUNDSIG([.B40];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A40])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5155,7 +5155,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.188621358942483" calcext:value-type="float">
       <text:p>0.188621</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A41];14)=ORG.LIBREOFFICE.ROUNDSIG([.B41];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A41];15)=ORG.LIBREOFFICE.ROUNDSIG([.B41];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A41])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5181,7 +5181,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.584374374155183" calcext:value-type="float">
       <text:p>0.584374</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A42];14)=ORG.LIBREOFFICE.ROUNDSIG([.B42];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A42];15)=ORG.LIBREOFFICE.ROUNDSIG([.B42];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A42])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5207,7 +5207,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="1.1267819797945" calcext:value-type="float">
       <text:p>1.126782</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A43];14)=ORG.LIBREOFFICE.ROUNDSIG([.B43];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A43];15)=ORG.LIBREOFFICE.ROUNDSIG([.B43];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A43])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5233,7 +5233,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="1.76973389560269" calcext:value-type="float">
       <text:p>1.769734</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A44];14)=ORG.LIBREOFFICE.ROUNDSIG([.B44];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A44];15)=ORG.LIBREOFFICE.ROUNDSIG([.B44];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A44])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5259,7 +5259,7 @@
      <table:table-cell office:value-type="float" office:value="2.48627982968339" calcext:value-type="float">
       <text:p>2.48627982968339</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A45];14)=ORG.LIBREOFFICE.ROUNDSIG([.B45];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A45];15)=ORG.LIBREOFFICE.ROUNDSIG([.B45];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A45])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5285,7 +5285,7 @@
      <table:table-cell office:value-type="float" office:value="3.25953870534247" calcext:value-type="float">
       <text:p>3.25953870534247</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A46];14)=ORG.LIBREOFFICE.ROUNDSIG([.B46];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A46];15)=ORG.LIBREOFFICE.ROUNDSIG([.B46];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A46])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5311,7 +5311,7 @@
      <table:table-cell office:value-type="float" office:value="4.07819909611163" calcext:value-type="float">
       <text:p>4.07819909611163</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A47];14)=ORG.LIBREOFFICE.ROUNDSIG([.B47];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A47];15)=ORG.LIBREOFFICE.ROUNDSIG([.B47];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A47])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5337,7 +5337,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="4.93427041996151" calcext:value-type="float">
       <text:p>4.934270</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A48];14)=ORG.LIBREOFFICE.ROUNDSIG([.B48];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A48];15)=ORG.LIBREOFFICE.ROUNDSIG([.B48];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A48])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5363,7 +5363,7 @@
      <table:table-cell office:value-type="float" office:value="5.8218731997855" calcext:value-type="float">
       <text:p>5.8218731997855</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A49];14)=ORG.LIBREOFFICE.ROUNDSIG([.B49];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A49];15)=ORG.LIBREOFFICE.ROUNDSIG([.B49];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A49])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5389,7 +5389,7 @@
      <table:table-cell office:value-type="float" office:value="6.73654101450682" calcext:value-type="float">
       <text:p>6.73654101450682</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A50];14)=ORG.LIBREOFFICE.ROUNDSIG([.B50];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A50];15)=ORG.LIBREOFFICE.ROUNDSIG([.B50];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A50])" office:value-type="string" office:string-value="{=CHISQINV(F1:F11,I1:I11)}" calcext:value-type="string">
@@ -5441,7 +5441,7 @@
      <table:table-cell office:value-type="float" office:value="0.1" calcext:value-type="float">
       <text:p>0.1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A52];14)=ORG.LIBREOFFICE.ROUNDSIG([.B52];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A52];15)=ORG.LIBREOFFICE.ROUNDSIG([.B52];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A52])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.1,3),3,TRUE() )" calcext:value-type="string">
@@ -5465,7 +5465,7 @@
      <table:table-cell office:value-type="float" office:value="0.3" calcext:value-type="float">
       <text:p>0.3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A53];14)=ORG.LIBREOFFICE.ROUNDSIG([.B53];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A53];15)=ORG.LIBREOFFICE.ROUNDSIG([.B53];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A53])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.3,3),3,TRUE())" calcext:value-type="string">
@@ -5489,7 +5489,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.5" calcext:value-type="float">
       <text:p>0.500000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A54];14)=ORG.LIBREOFFICE.ROUNDSIG([.B54];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A54];15)=ORG.LIBREOFFICE.ROUNDSIG([.B54];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A54])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.5,3),3,TRUE())" calcext:value-type="string">
@@ -5513,7 +5513,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.7" calcext:value-type="float">
       <text:p>0.700000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A55];14)=ORG.LIBREOFFICE.ROUNDSIG([.B55];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A55];15)=ORG.LIBREOFFICE.ROUNDSIG([.B55];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A55])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.7,3),3,TRUE())" calcext:value-type="string">
@@ -5537,7 +5537,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.9" calcext:value-type="float">
       <text:p>0.900000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A56];14)=ORG.LIBREOFFICE.ROUNDSIG([.B56];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A56];15)=ORG.LIBREOFFICE.ROUNDSIG([.B56];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A56])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.9,3),3,TRUE())" calcext:value-type="string">
@@ -5561,7 +5561,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.0999999999999997" calcext:value-type="float">
       <text:p>0.100000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A57];14)=ORG.LIBREOFFICE.ROUNDSIG([.B57];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A57];15)=ORG.LIBREOFFICE.ROUNDSIG([.B57];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A57])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.1,20),20,TRUE())" calcext:value-type="string">
@@ -5585,7 +5585,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.299999999999999" calcext:value-type="float">
       <text:p>0.300000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A58];14)=ORG.LIBREOFFICE.ROUNDSIG([.B58];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A58];15)=ORG.LIBREOFFICE.ROUNDSIG([.B58];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A58])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.3,20),20,TRUE())" calcext:value-type="string">
@@ -5607,7 +5607,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.500000000000001" calcext:value-type="float">
       <text:p>0.500000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A59];14)=ORG.LIBREOFFICE.ROUNDSIG([.B59];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A59];15)=ORG.LIBREOFFICE.ROUNDSIG([.B59];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A59])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.5,20),20,TRUE())" calcext:value-type="string">
@@ -5629,7 +5629,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.7" calcext:value-type="float">
       <text:p>0.700000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A60];14)=ORG.LIBREOFFICE.ROUNDSIG([.B60];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A60];15)=ORG.LIBREOFFICE.ROUNDSIG([.B60];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A60])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.7,20),20,TRUE())" calcext:value-type="string">
@@ -5651,7 +5651,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.9" calcext:value-type="float">
       <text:p>0.900000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A61];14)=ORG.LIBREOFFICE.ROUNDSIG([.B61];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A61];15)=ORG.LIBREOFFICE.ROUNDSIG([.B61];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A61])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.9,20),20,TRUE())" calcext:value-type="string">
@@ -5673,7 +5673,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0.000000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A62];14)=ORG.LIBREOFFICE.ROUNDSIG([.B62];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A62];15)=ORG.LIBREOFFICE.ROUNDSIG([.B62];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A62])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0,20),20,TRUE())" calcext:value-type="string">
