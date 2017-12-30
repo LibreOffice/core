@@ -413,6 +413,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SwNodeIndex     *m_pSttNdIdx;
 
     std::shared_ptr<HTMLTable> m_xTable; // current "outermost" table
+    std::vector<HTMLTable*> m_aTables;
     SwHTMLForm_Impl *m_pFormImpl;   // current form
     SdrObject       *m_pMarquee;    // current marquee
     SwField         *m_pField;      // current field
@@ -908,6 +909,18 @@ public:
 
     virtual bool ParseMetaOptions( const css::uno::Reference<css::document::XDocumentProperties>&,
             SvKeyValueIterator* ) override;
+
+
+    void RegisterHTMLTable(HTMLTable* pNew)
+    {
+        m_aTables.push_back(pNew);
+    }
+
+    void DeregisterHTMLTable(HTMLTable* pOld)
+    {
+        m_aTables.erase(std::remove(m_aTables.begin(), m_aTables.end(), pOld));
+    }
+
 };
 
 struct SwPendingStackData
