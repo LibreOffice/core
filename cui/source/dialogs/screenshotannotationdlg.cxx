@@ -116,7 +116,7 @@ public:
         return maB2IRange;
     }
 
-    const OString GetHelpId() const { return mrControl.GetHelpId(); }
+    OString const & GetHelpId() const { return mrControl.GetHelpId(); }
 
 private:
     const vcl::Window&  mrControl;

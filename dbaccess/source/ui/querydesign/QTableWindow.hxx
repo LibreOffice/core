@@ -32,7 +32,7 @@ namespace dbaui
     public:
         OQueryTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData );
 
-        OUString GetAliasName() const
+        OUString const & GetAliasName() const
         {
             return static_cast<OQueryTableWindowData*>(GetData().get())->GetAliasName();
         }

@@ -146,9 +146,9 @@ namespace dbaui
 
         void                        Remove();
 
-        OUString             GetTableName() const { return m_pData->GetTableName(); }
-        OUString             GetWinName() const { return m_pData->GetWinName(); }
-        OUString             GetComposedName() const { return m_pData->GetComposedName(); }
+        OUString const &    GetTableName() const { return m_pData->GetTableName(); }
+        OUString const &    GetWinName() const { return m_pData->GetWinName(); }
+        OUString const &    GetComposedName() const { return m_pData->GetComposedName(); }
         const VclPtr<OTableWindowListBox>&  GetListBox() const { return m_xListBox; }
         const TTableWindowData::value_type& GetData() const { return m_pData; }
         const VclPtr<OTableWindowTitle>&    GetTitleCtrl() { return m_xTitle; }

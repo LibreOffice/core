@@ -33,7 +33,7 @@ namespace dbaui
         explicit OQueryTableWindowData(const OUString& _rComposedName, const OUString& rTableName, const OUString& rTableAlias);
         virtual ~OQueryTableWindowData() override;
 
-        OUString GetAliasName() { return GetWinName(); }
+        OUString const & GetAliasName() { return GetWinName(); }
         void SetAliasName(const OUString& rNewAlias) { SetWinName(rNewAlias); }
     };
 }

@@ -105,7 +105,7 @@ OUString OTableSubscriptionDialog::getConnectionURL() const
     return m_pImpl->getConnectionURL();
 }
 
-Reference< XPropertySet > OTableSubscriptionDialog::getCurrentDataSource()
+Reference< XPropertySet > const & OTableSubscriptionDialog::getCurrentDataSource()
 {
     return m_pImpl->getCurrentDataSource();
 }

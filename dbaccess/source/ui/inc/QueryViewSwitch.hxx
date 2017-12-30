@@ -82,7 +82,7 @@ namespace dbaui
         OQueryContainerWindow*  getContainer() const;
 
         void SetPosSizePixel( Point _rPt,Size _rSize);
-        css::uno::Reference< css::uno::XComponentContext > getORB() const;
+        css::uno::Reference< css::uno::XComponentContext > const & getORB() const;
 
     private:
         void    impl_forceSQLView();

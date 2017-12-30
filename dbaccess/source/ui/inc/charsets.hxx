@@ -70,7 +70,7 @@ namespace dbaui
     public:
         CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource);
 
-        OUString        getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
+        OUString const & getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
         const OUString& getDisplayName() const      { return m_sDisplayName; }
 
     private:

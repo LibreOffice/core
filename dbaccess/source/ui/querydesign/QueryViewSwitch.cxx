@@ -272,7 +272,7 @@ void OQueryViewSwitch::SetPosSizePixel( Point _rPt,Size _rSize)
     m_pTextView->SetPosSizePixel( _rPt,_rSize);
 }
 
-Reference< XComponentContext > OQueryViewSwitch::getORB() const
+Reference< XComponentContext > const & OQueryViewSwitch::getORB() const
 {
     return m_pDesignView->getORB();
 }
