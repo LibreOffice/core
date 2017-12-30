@@ -40,10 +40,8 @@ namespace dbaui
             if(pRows)
             {
                 (*rxOStm).WriteInt32( pRows->size() ); // first stream the size
-                std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = pRows->begin();
-                std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = pRows->end();
-                for(;aIter != aEnd;++aIter)
-                    WriteOTableRow(*rxOStm, **aIter);
+                for (auto const& row : *pRows)
+                    WriteOTableRow(*rxOStm, *row);
                 return true;
             }
         }

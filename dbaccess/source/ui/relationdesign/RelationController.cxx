@@ -442,17 +442,15 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
 
     std::copy( _aConnectionData.begin(), _aConnectionData.end(), std::back_inserter( m_vTableConnectionData ));
     // here we are finished, so we can collect the table from connection data
-    TTableConnectionData::const_iterator aConnDataIter = m_vTableConnectionData.begin();
-    TTableConnectionData::const_iterator aConnDataEnd = m_vTableConnectionData.end();
-    for(;aConnDataIter != aConnDataEnd;++aConnDataIter)
+    for (auto const& elem : m_vTableConnectionData)
     {
-        if ( !existsTable((*aConnDataIter)->getReferencingTable()->GetComposedName()) )
+        if ( !existsTable(elem->getReferencingTable()->GetComposedName()) )
         {
-            m_vTableData.push_back((*aConnDataIter)->getReferencingTable());
+            m_vTableData.push_back(elem->getReferencingTable());
         }
-        if ( !existsTable((*aConnDataIter)->getReferencedTable()->GetComposedName()) )
+        if ( !existsTable(elem->getReferencedTable()->GetComposedName()) )
         {
-            m_vTableData.push_back((*aConnDataIter)->getReferencedTable());
+            m_vTableData.push_back(elem->getReferencedTable());
         }
     }
     if ( m_nThreadEvent )
@@ -532,14 +530,12 @@ void ORelationController::loadData()
 TTableWindowData::value_type ORelationController::existsTable(const OUString& _rComposedTableName)  const
 {
     ::comphelper::UStringMixEqual bCase(true);
-    TTableWindowData::const_iterator aIter = m_vTableData.begin();
-    TTableWindowData::const_iterator aEnd = m_vTableData.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& elem : m_vTableData)
     {
-        if(bCase((*aIter)->GetComposedName(),_rComposedTableName))
-            break;
+        if(bCase(elem->GetComposedName(),_rComposedTableName))
+            return elem;
     }
-    return ( aIter != aEnd) ? *aIter : TTableWindowData::value_type();
+    return TTableWindowData::value_type();
 }
 
 void ORelationController::loadLayoutInformation()
