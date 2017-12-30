@@ -298,19 +298,8 @@ sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 
 bool DropTargetHelper::IsDropFormatSupported( SotClipboardFormatId nFormat )
 {
-    DataFlavorExVector::iterator    aIter( maFormats.begin() ), aEnd( maFormats.end() );
-    bool                            bRet = false;
-
-    while( aIter != aEnd )
-    {
-        if( nFormat == (*aIter++).mnSotId )
-        {
-            bRet = true;
-            aIter = aEnd;
-        }
-    }
-
-    return bRet;
+    return (std::find_if(maFormats.begin(), maFormats.end(),
+           [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; }) != maFormats.end());
 }
 
 

@@ -562,10 +562,9 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    std::vector<SvTreeListEntry*>::const_iterator it = aList.begin(), itEnd = aList.end();
-    for (; it != itEnd; ++it)
+    for (auto const& elem : aList)
     {
-        pSourceEntry = *it;
+        pSourceEntry = elem;
         SvTreeListEntry* pNewParent = nullptr;
         sal_uLong nInsertionPos = TREELIST_APPEND;
         TriState nOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
@@ -613,11 +612,9 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    std::vector<SvTreeListEntry*>::const_iterator it = aList.begin(), itEnd = aList.end();
-    for (; it != itEnd; ++it)
+    for (auto const& elem : aList)
     {
-        pSourceEntry = *it;
-
+        pSourceEntry = elem;
         SvTreeListEntry* pNewParent = nullptr;
         sal_uLong nInsertionPos = TREELIST_APPEND;
         TriState nOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
@@ -669,9 +666,8 @@ void SvTreeListBox::RemoveSelection()
         pEntry = NextSelected( pEntry );
     }
 
-    std::vector<const SvTreeListEntry*>::const_iterator it = aList.begin(), itEnd = aList.end();
-    for (; it != itEnd; ++it)
-        pModel->Remove(*it);
+    for (auto const& elem : aList)
+        pModel->Remove(elem);
 }
 
 void SvTreeListBox::RemoveEntry(SvTreeListEntry const * pEntry)
@@ -730,9 +726,9 @@ SvTreeListEntry* SvTreeListBox::GetEntryFromPath( const ::std::deque< sal_Int32 
 
     SvTreeListEntry* pEntry = nullptr;
     SvTreeListEntry* pParent = nullptr;
-    for( ::std::deque< sal_Int32 >::const_iterator pItem = _rPath.begin(); pItem != _rPath.end(); ++pItem )
+    for (auto const& elem : _rPath)
     {
-        pEntry = GetEntry( pParent, *pItem );
+        pEntry = GetEntry( pParent, elem );
         if ( !pEntry )
             break;
         pParent = pEntry;

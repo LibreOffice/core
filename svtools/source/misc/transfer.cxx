@@ -408,7 +408,6 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors()
 sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor )
 {
     const SolarMutexGuard aGuard;
-    bool bRet = false;
 
     try
     {
@@ -419,16 +418,15 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
     {
     }
 
-    for (DataFlavorExVector::const_iterator aIter(maFormats.begin() ), aEnd(maFormats.end()); aIter != aEnd ; ++aIter)
+    for (auto const& format : maFormats)
     {
-        if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
+        if( TransferableDataHelper::IsEqual( format, rFlavor ) )
         {
-            bRet = true;
-            break;
+            return true;
         }
     }
 
-    return bRet;
+    return false;
 }
 
 
@@ -543,18 +541,18 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 {
     bool bAdd = true;
 
-    for (DataFlavorExVector::iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd ; ++aIter)
+    for (auto & format : maFormats)
     {
-        if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
+        if( TransferableDataHelper::IsEqual( format, rFlavor ) )
         {
             // update MimeType for SotClipboardFormatId::OBJECTDESCRIPTOR in every case
-            if ((SotClipboardFormatId::OBJECTDESCRIPTOR == aIter->mnSotId) && mxObjDesc)
+            if ((SotClipboardFormatId::OBJECTDESCRIPTOR == format.mnSotId) && mxObjDesc)
             {
                 DataFlavor aObjDescFlavor;
 
                 SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDescFlavor );
-                aIter->MimeType = aObjDescFlavor.MimeType;
-                aIter->MimeType += ::ImplGetParameterString(*mxObjDesc);
+                format.MimeType = aObjDescFlavor.MimeType;
+                format.MimeType += ::ImplGetParameterString(*mxObjDesc);
             }
 
             bAdd = false;
@@ -615,18 +613,8 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
 bool TransferableHelper::HasFormat( SotClipboardFormatId nFormat )
 {
-    bool bRet = false;
-
-    for (DataFlavorExVector::const_iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd; ++aIter)
-    {
-        if( nFormat == (*aIter).mnSotId )
-        {
-            bRet = true;
-            break;
-        }
-    }
-
-    return bRet;
+    return (std::find_if(maFormats.begin(), maFormats.end(),
+              [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; }) != maFormats.end());
 }
 
 
@@ -1216,9 +1204,8 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
         const OUString                   aCharsetStr( "charset" );
 
 
-        for( sal_Int32 i = 0; i < rDataFlavorSeq.getLength(); i++ )
+        for (auto const& rFlavor : rDataFlavorSeq)
         {
-            const DataFlavor&               rFlavor = rDataFlavorSeq[ i ];
             Reference< XMimeContentType >   xMimeType;
 
             try
@@ -1314,11 +1301,11 @@ void TransferableDataHelper::InitFormats()
 
     TransferableDataHelper::FillDataFlavorExVector(mxTransfer->getTransferDataFlavors(), maFormats);
 
-    for (DataFlavorExVector::const_iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd; ++aIter)
+    for (auto const& format : maFormats)
     {
-        if( SotClipboardFormatId::OBJECTDESCRIPTOR == aIter->mnSotId )
+        if( SotClipboardFormatId::OBJECTDESCRIPTOR == format.mnSotId )
         {
-            ImplSetParameterString(*mxObjDesc, *aIter);
+            ImplSetParameterString(*mxObjDesc, format);
             break;
         }
     }
@@ -1328,39 +1315,20 @@ void TransferableDataHelper::InitFormats()
 bool TransferableDataHelper::HasFormat( SotClipboardFormatId nFormat ) const
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
-
-    DataFlavorExVector::const_iterator aIter(maFormats.cbegin()), aEnd(maFormats.cend());
-    bool                            bRet = false;
-
-    while( aIter != aEnd )
-    {
-        if( nFormat == (*aIter++).mnSotId )
-        {
-            aIter = aEnd;
-            bRet = true;
-        }
-    }
-
-    return bRet;
+    return (std::find_if(maFormats.begin(), maFormats.end(),
+              [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; }) != maFormats.end());
 }
 
 bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
-
-    DataFlavorExVector::const_iterator aIter(maFormats.cbegin()), aEnd(maFormats.cend());
-    bool                            bRet = false;
-
-    while( aIter != aEnd )
+    for (auto const& format : maFormats)
     {
-        if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
-        {
-            aIter = aEnd;
-            bRet = true;
-        }
+        if( TransferableDataHelper::IsEqual( rFlavor, format ) )
+            return true;
     }
 
-    return bRet;
+    return false;
 }
 
 sal_uInt32 TransferableDataHelper::GetFormatCount() const
@@ -1441,14 +1409,14 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
             if( nRequestFormat != SotClipboardFormatId::NONE )
             {
                 // try to get alien format first
-                for (DataFlavorExVector::const_iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd; ++aIter)
+                for (auto const& format : maFormats)
                 {
-                    if( ( nRequestFormat == (*aIter).mnSotId ) && !rFlavor.MimeType.equalsIgnoreAsciiCase( (*aIter).MimeType ) )
+                    if( ( nRequestFormat == format.mnSotId ) && !rFlavor.MimeType.equalsIgnoreAsciiCase( format.MimeType ) )
                     {
                         if (xTransfer2.is())
-                            aRet = xTransfer2->getTransferData2(*aIter, rDestDoc);
+                            aRet = xTransfer2->getTransferData2(format, rDestDoc);
                         else
-                            aRet = mxTransfer->getTransferData(*aIter);
+                            aRet = mxTransfer->getTransferData(format);
                     }
 
                     if( aRet.hasValue() )
