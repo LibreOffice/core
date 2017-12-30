@@ -559,6 +559,15 @@ public:
     }
 };
 
+namespace
+{
+    bool IsValidSel(const EditEngine& rEngine, const ESelection& rSel)
+    {
+        const auto nParaCount = rEngine.GetParagraphCount();
+        return rSel.nStartPara < nParaCount && rSel.nEndPara < nParaCount;
+    }
+}
+
 // InsertAttrsAsDrawingAttrs() sets attributes between StartCp and EndCp.
 // Style attributes are set as hard, paragraph and character attributes.
 void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
@@ -733,6 +742,8 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
     {
         ESelection aSel(GetESelection(*m_pDrawEditEngine, aIter->GetStartPos()-nStartCp,
             aIter->GetEndPos()-nStartCp));
+        if (!IsValidSel(*m_pDrawEditEngine, aSel))
+            continue;
         OUString aString(m_pDrawEditEngine->GetText(aSel));
         const sal_Int32 nOrigLen = aString.getLength();
         WW8_CP nDummy(0);
