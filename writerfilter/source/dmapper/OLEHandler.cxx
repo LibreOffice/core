@@ -253,7 +253,7 @@ OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xCom
     return aRet;
 }
 
-OUString OLEHandler::GetDrawAspect() const
+OUString const & OLEHandler::GetDrawAspect() const
 {
     return m_sDrawAspect;
 }

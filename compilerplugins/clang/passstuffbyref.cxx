@@ -250,7 +250,8 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         || (dc.MemberFunction().Class("Submission").Namespace("xforms")
             .GlobalNamespace())
         || (dc.Function("TopLeft").Class("SwRect").GlobalNamespace())
-        || (dc.Function("ConvDicList_CreateInstance").GlobalNamespace()))
+        || (dc.Function("ConvDicList_CreateInstance").GlobalNamespace())
+        || (dc.Function("Create").Class("OUnoAutoPilot").Namespace("dbp").GlobalNamespace()))
     {
         return;
     }
@@ -347,6 +348,9 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
             return true;
         }
         if (isa<CXXBindTemporaryExpr>(expr)) {
+            return true;
+        }
+        if (isa<InitListExpr>(expr)) {
             return true;
         }
         expr = expr->IgnoreParenCasts();

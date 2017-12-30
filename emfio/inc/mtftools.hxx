@@ -280,7 +280,7 @@ namespace emfio
 
         bool        isEmpty() const { return maClip.isCleared(); }
 
-        basegfx::B2DPolyPolygon getClipPath() const;
+        basegfx::B2DPolyPolygon const & getClipPath() const;
 
         bool        operator==(const WinMtfClipPath& rPath) const
         {

@@ -318,7 +318,7 @@ namespace pcr
             @return
                 the handler which is responsible for the given property
         */
-        PropertyHandlerRef
+        PropertyHandlerRef const &
             impl_getHandlerForProperty_throw( const OUString& _rPropertyName ) const;
 
         /** determines whether we have a handler for the given property

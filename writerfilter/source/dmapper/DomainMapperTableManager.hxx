@@ -94,9 +94,9 @@ public:
     virtual void endOfCellAction() override;
     virtual void endOfRowAction() override;
 
-    IntVectorPtr getCurrentGrid( );
-    IntVectorPtr getCurrentSpans( );
-    IntVectorPtr getCurrentCellWidths( );
+    IntVectorPtr const & getCurrentGrid( );
+    IntVectorPtr const & getCurrentSpans( );
+    IntVectorPtr const & getCurrentCellWidths( );
 
     /// Turn the attributes collected so far in m_aTableLook into a property and clear the container.
     void finishTableLook();

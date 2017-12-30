@@ -337,7 +337,7 @@ namespace pcr
         virtual ~EventHolder( ) override;
 
     private:
-        ScriptEventDescriptor impl_getDescriptor_throw( const OUString& _rEventName ) const;
+        ScriptEventDescriptor const & impl_getDescriptor_throw( const OUString& _rEventName ) const;
     };
 
 
@@ -364,7 +364,7 @@ namespace pcr
         return impl_getDescriptor_throw( _rEventName );
     }
 
-    ScriptEventDescriptor EventHolder::impl_getDescriptor_throw( const OUString& _rEventName ) const
+    ScriptEventDescriptor const & EventHolder::impl_getDescriptor_throw( const OUString& _rEventName ) const
     {
         EventMap::const_iterator pos = m_aEventNameAccess.find( _rEventName );
         if ( pos == m_aEventNameAccess.end() )

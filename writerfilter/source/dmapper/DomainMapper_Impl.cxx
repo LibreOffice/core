@@ -581,13 +581,13 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
 }
 
 
-uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
+uno::Reference< text::XTextAppend > const &  DomainMapper_Impl::GetTopTextAppend()
 {
     OSL_ENSURE(!m_aTextAppendStack.empty(), "text append stack is empty" );
     return m_aTextAppendStack.top().xTextAppend;
 }
 
-FieldContextPtr  DomainMapper_Impl::GetTopFieldContext()
+FieldContextPtr const &  DomainMapper_Impl::GetTopFieldContext()
 {
     SAL_WARN_IF(m_aFieldStack.empty(), "writerfilter.dmapper", "Field stack is empty");
     return m_aFieldStack.top();

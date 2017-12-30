@@ -115,7 +115,7 @@ class CommandLineArgs
         std::vector< OUString > GetConversionList() const;
         const OUString&         GetConversionParams() const { return m_conversionparams;}
         OUString                GetConversionOut() const;
-        OUString                GetImageConversionType() const { return m_convertimages; }
+        OUString const &        GetImageConversionType() const { return m_convertimages; }
         const OUString&         GetPidfileName() const { return m_pidfile;}
 
         // Special analyzed states (does not match directly to a command line parameter!)

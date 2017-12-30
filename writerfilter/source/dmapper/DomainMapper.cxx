@@ -3764,7 +3764,7 @@ bool DomainMapper::IsRTFImport() const
     return m_pImpl->IsRTFImport();
 }
 
-uno::Reference < lang::XMultiServiceFactory > DomainMapper::GetTextFactory() const
+uno::Reference < lang::XMultiServiceFactory > const & DomainMapper::GetTextFactory() const
 {
     return m_pImpl->GetTextFactory();
 }
@@ -3780,7 +3780,7 @@ OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharPropert
     return pStyleSheets->getOrCreateCharStyle( rCharProperties, bAlwaysCreate );
 }
 
-StyleSheetTablePtr DomainMapper::GetStyleSheetTable( )
+StyleSheetTablePtr const & DomainMapper::GetStyleSheetTable( )
 {
     return m_pImpl->GetStyleSheetTable( );
 }

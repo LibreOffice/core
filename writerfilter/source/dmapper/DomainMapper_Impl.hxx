@@ -167,7 +167,7 @@ public:
     const OUString&  GetCommand() const {return m_sCommand; }
 
     void SetFieldId(FieldId eFieldId ) { m_eFieldId = eFieldId; }
-    boost::optional<FieldId> GetFieldId() const { return m_eFieldId; }
+    boost::optional<FieldId> const & GetFieldId() const { return m_eFieldId; }
 
     void AppendResult(OUString const& rResult) { m_sResult += rResult; }
     const OUString&  GetResult() const { return m_sResult; }
@@ -635,8 +635,8 @@ public:
     }
     PropertyMapPtr GetTopContextOfType(ContextType eId);
 
-    css::uno::Reference<css::text::XTextAppend> GetTopTextAppend();
-    FieldContextPtr GetTopFieldContext();
+    css::uno::Reference<css::text::XTextAppend> const & GetTopTextAppend();
+    FieldContextPtr const & GetTopFieldContext();
 
     FontTablePtr const & GetFontTable()
     {

@@ -562,7 +562,7 @@ bool SettingsTable::GetProtectForm() const
 {
     return m_pImpl->m_bProtectForm;
 }
-uno::Sequence<beans::PropertyValue> SettingsTable::GetThemeFontLangProperties() const
+uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangProperties() const
 {
     return m_pImpl->m_pThemeFontLangProps;
 }

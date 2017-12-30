@@ -115,7 +115,7 @@ namespace emfio
         maClip = basegfx::utils::B2DClipState();
     }
 
-    basegfx::B2DPolyPolygon WinMtfClipPath::getClipPath() const
+    basegfx::B2DPolyPolygon const & WinMtfClipPath::getClipPath() const
     {
         return maClip.getClipPoly();
     }

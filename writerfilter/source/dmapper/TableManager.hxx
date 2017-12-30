@@ -196,13 +196,13 @@ class TableManager
     TableManagerState mState;
 
 protected:
-    TablePropertyMapPtr getCellProps()
+    TablePropertyMapPtr const & getCellProps()
     {
         return mState.getCellProps();
     }
 
 public:
-    TablePropertyMapPtr getRowProps()
+    TablePropertyMapPtr const & getRowProps()
     {
         return mState.getRowProps();
     }

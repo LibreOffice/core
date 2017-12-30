@@ -923,7 +923,7 @@ namespace pcr
     }
 
 
-    OPropertyBrowserController::PropertyHandlerRef OPropertyBrowserController::impl_getHandlerForProperty_throw( const OUString& _rPropertyName ) const
+    OPropertyBrowserController::PropertyHandlerRef const & OPropertyBrowserController::impl_getHandlerForProperty_throw( const OUString& _rPropertyName ) const
     {
         PropertyHandlerRepository::const_iterator handlerPos = m_aPropertyHandlers.find( _rPropertyName );
         if ( handlerPos == m_aPropertyHandlers.end() )
