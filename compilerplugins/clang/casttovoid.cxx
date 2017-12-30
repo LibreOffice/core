@@ -336,6 +336,9 @@ private:
     std::stack<QualType> returnTypes_;
 
     void run() override {
+        if (compiler.getPreprocessor().getIdentifierInfo("NDEBUG")->hasMacroDefinition()) {
+            return;
+        }
         if (!TraverseDecl(compiler.getASTContext().getTranslationUnitDecl())) {
             return;
         }
