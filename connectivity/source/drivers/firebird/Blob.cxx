@@ -43,6 +43,7 @@ Blob::Blob(isc_db_handle* pDatabaseHandle,
 #endif
     m_bBlobOpened(false),
     m_nBlobLength(0),
+    m_nMaxSegmentSize(0),
     m_nBlobPosition(0)
 {
 }
