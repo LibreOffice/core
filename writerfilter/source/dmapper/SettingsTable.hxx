@@ -75,7 +75,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     bool GetNoColumnBalance() const;
     bool GetProtectForm() const;
 
-    css::uno::Sequence<css::beans::PropertyValue> GetThemeFontLangProperties() const;
+    css::uno::Sequence<css::beans::PropertyValue> const & GetThemeFontLangProperties() const;
 
     css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
 

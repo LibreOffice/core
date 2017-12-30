@@ -90,7 +90,7 @@ public:
     /// Get the CLSID of the OLE object, in case we can find one based on m_sProgId.
     OUString getCLSID(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext) const;
 
-    OUString GetDrawAspect() const;
+    OUString const & GetDrawAspect() const;
 
     OUString copyOLEOStream(css::uno::Reference<css::text::XTextDocument> const& xTextDocument);
 

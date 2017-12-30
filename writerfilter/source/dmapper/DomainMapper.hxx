@@ -96,11 +96,11 @@ public:
 
     bool IsOOXMLImport() const;
     bool IsRTFImport() const;
-    css::uno::Reference<css::lang::XMultiServiceFactory> GetTextFactory() const;
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & GetTextFactory() const;
     css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
-    std::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
+    std::shared_ptr< StyleSheetTable > const & GetStyleSheetTable( );
     GraphicZOrderHelper* graphicZOrderHelper();
     GraphicNamingHelper& GetGraphicNamingHelper();
 

@@ -103,7 +103,7 @@ public:
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
 
     /// Returns the default character properties.
-    PropertyMapPtr GetDefaultCharProps();
+    PropertyMapPtr const & GetDefaultCharProps();
 
 private:
     // Properties

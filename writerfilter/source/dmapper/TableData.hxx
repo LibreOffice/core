@@ -218,7 +218,7 @@ public:
 
        @param i      index of the cell
      */
-    TablePropertyMapPtr getCellProperties(unsigned int i) const
+    TablePropertyMapPtr const & getCellProperties(unsigned int i) const
     {
         return mCells[i]->getProperties();
     }
