@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_be62f1ab",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2017-12-30T13:21:10Z",
+      "side": 1,
+      "message": "I\u0027d like \"思源黑體\" preceding \"Noto Sans\":\n1. If only one of them is installed, the order isn\u0027t relevant. The one installed gets selected.\n2. If both are installed, the one with localized name is preferred. \n\n* Note that \"Sans\" and \"Serif\" are not in the basic vocabulary for Taiwanese users. Those are knowledge of graphic designers. Also \"Noto\" is less friendly than \"思源\". Friendlyness is the major concern here.\n* Availability of the distribution isn\u0027t a concern since both are installed in the case.\n* Both fonts are open license, they are the same from the license perspective.",
+      "range": {
+        "startLine": 278,
+        "startChar": 15,
+        "endLine": 278,
+        "endChar": 44
+      },
+      "revId": "272fc597ad82c21ca20517897e308b78be945505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
