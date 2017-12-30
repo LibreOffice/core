@@ -305,8 +305,8 @@ public:
 
     void clearConnections();
 
-            css::uno::Reference< css::embed::XStorage > getOrCreateRootStorage();
-    css::uno::Reference< css::embed::XStorage > getRootStorage() const { return m_xDocumentStorage.getTyped(); }
+    css::uno::Reference< css::embed::XStorage > const & getOrCreateRootStorage();
+    css::uno::Reference< css::embed::XStorage > const & getRootStorage() const { return m_xDocumentStorage.getTyped(); }
     void resetRootStorage() { impl_switchToStorage_throw( nullptr ); }
 
     /** returns the data source. If it doesn't exist it will be created
@@ -452,7 +452,7 @@ public:
 
 private:
     void    impl_construct_nothrow();
-    css::uno::Reference< css::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage > const &
             impl_switchToStorage_throw( const css::uno::Reference< css::embed::XStorage >& _rxNewRootStorage );
 
     /** switches to the given document URL, which denotes the logical URL of the document, not necessarily the

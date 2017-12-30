@@ -79,7 +79,7 @@ namespace dbaui
 
         void SaveModified();
 
-        TTableWindowData::value_type getReferencingTable()  const;
+        TTableWindowData::value_type const & getReferencingTable()  const;
 
         /** getContainer returns the container interface
             @return the interface of the container

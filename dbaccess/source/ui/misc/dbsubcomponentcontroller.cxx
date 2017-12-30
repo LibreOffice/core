@@ -514,7 +514,7 @@ namespace dbaui
         return Reference< XModel >( m_pImpl->m_aDataSource.getDatabaseDocument(), UNO_QUERY );
     }
 
-    Reference< XNumberFormatter > DBSubComponentController::getNumberFormatter() const
+    Reference< XNumberFormatter > const & DBSubComponentController::getNumberFormatter() const
     {
         return m_pImpl->m_xFormatter;
     }

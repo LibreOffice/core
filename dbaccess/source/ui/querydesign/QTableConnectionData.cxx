@@ -83,7 +83,7 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
     return *this;
 }
 
-OUString OQueryTableConnectionData::GetAliasName(EConnectionSide nWhich) const
+OUString const & OQueryTableConnectionData::GetAliasName(EConnectionSide nWhich) const
 {
     return nWhich == JTCS_FROM ? m_pReferencingTable->GetWinName() : m_pReferencedTable->GetWinName();
 }

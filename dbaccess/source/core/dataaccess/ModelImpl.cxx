@@ -774,7 +774,7 @@ void ODatabaseModelImpl::commitRootStorage()
         "ODatabaseModelImpl::commitRootStorage: could not commit the storage!");
 }
 
-Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
+Reference< XStorage > const & ODatabaseModelImpl::getOrCreateRootStorage()
 {
     if ( !m_xDocumentStorage.is() )
     {
@@ -1171,7 +1171,7 @@ namespace
     }
 }
 
-Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Reference< XStorage >& _rxNewRootStorage )
+Reference< XStorage > const & ODatabaseModelImpl::impl_switchToStorage_throw( const Reference< XStorage >& _rxNewRootStorage )
 {
     // stop listening for modifications at the old storage
     lcl_modifyListening( *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, Application::GetSolarMutex(), false );

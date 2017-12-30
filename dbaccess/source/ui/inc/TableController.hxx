@@ -105,7 +105,7 @@ namespace dbaui
 
         const OTypeInfoMap&          getTypeInfo() const { return m_aTypeInfo; }
 
-        TOTypeInfoSP                 getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
+        TOTypeInfoSP const &                getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
         TOTypeInfoSP                        getTypeInfoByType(sal_Int32 _nDataType) const;
 
         const TOTypeInfoSP&                 getTypeInfoFallBack() const { return m_pTypeInfo; }

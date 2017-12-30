@@ -52,7 +52,7 @@ namespace dbaui
         */
         virtual bool Update() override;
 
-        OUString GetAliasName(EConnectionSide nWhich) const;
+        OUString const & GetAliasName(EConnectionSide nWhich) const;
 
         sal_Int32       GetFieldIndex(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_nDestEntryIndex : m_nFromEntryIndex; }
         void            SetFieldIndex(EConnectionSide nWhich, sal_Int32 nVal) { if (nWhich==JTCS_TO) m_nDestEntryIndex=nVal; else m_nFromEntryIndex=nVal; }

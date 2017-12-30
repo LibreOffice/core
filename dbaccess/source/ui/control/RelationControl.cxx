@@ -682,7 +682,7 @@ namespace dbaui
         m_pRC_Tables->SaveModified();
     }
 
-    TTableWindowData::value_type OTableListBoxControl::getReferencingTable()    const
+    TTableWindowData::value_type const & OTableListBoxControl::getReferencingTable()    const
     {
         return m_pRC_Tables->getData()->getReferencingTable();
     }

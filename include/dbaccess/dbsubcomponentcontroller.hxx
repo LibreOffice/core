@@ -149,7 +149,7 @@ namespace dbaui
 
         /** returns the number formatter
         */
-        css::uno::Reference< css::util::XNumberFormatter >    getNumberFormatter() const;
+        css::uno::Reference< css::util::XNumberFormatter > const & getNumberFormatter() const;
 
         // css::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) override;

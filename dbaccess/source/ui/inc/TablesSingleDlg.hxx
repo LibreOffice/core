@@ -61,7 +61,7 @@ class ODbDataSourceAdministrationHelper;
         bool        getCurrentSettings(css::uno::Sequence< css::beans::PropertyValue >& _rDriverParams);
         void        clearPassword();
         OUString    getConnectionURL() const;
-        css::uno::Reference< css::beans::XPropertySet >   getCurrentDataSource();
+        css::uno::Reference< css::beans::XPropertySet > const & getCurrentDataSource();
         void endExecution() { m_bStopExecution = true; }
 
         virtual const SfxItemSet* getOutputSet() const override;

@@ -368,7 +368,7 @@ namespace dbaui
 
         const OTypeInfoMap& getTypeInfo()                       const { return m_aTypeInfo; }
 
-        TOTypeInfoSP        getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
+        TOTypeInfoSP const & getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap& getDestTypeInfo()                   const { return m_aDestTypeInfo; }
 
         const css::lang::Locale&  GetLocale() const { return m_aLocale; }
