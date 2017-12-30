@@ -2296,8 +2296,8 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
             break;
         case CSS1_PIXLENGTH:
             {
-                auto fMargin = pExpr->GetNumber();
-                if (fMargin < SAL_MAX_INT32/2 && fMargin > SAL_MIN_INT32/2)
+                double fMargin = pExpr->GetNumber();
+                if (fMargin < SAL_MAX_INT32/2.0 && fMargin > SAL_MIN_INT32/2.0)
                 {
                     nMargin =  (long)fMargin;
                     long nPWidth = 0;
