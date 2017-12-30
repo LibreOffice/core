@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_7e9cf969",
+        "filename": "svtools/source/contnr/foldertree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-12-30T19:20:11Z",
+      "side": 1,
+      "message": "I\u0027m not a big fan of auto in for-range loops. Means that I have to look elsewhere to find out what we are iterating over",
+      "revId": "2d6cafa140e2c2ec65ba94f6c19024998afb9218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
