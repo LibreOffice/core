@@ -22,6 +22,29 @@
       "revId": "272fc597ad82c21ca20517897e308b78be945505",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_9ed28d33",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1001779
+      },
+      "writtenOn": "2017-12-30T16:16:55Z",
+      "side": 1,
+      "message": "Fonts with localized names should be selected first. The font design of Noto Sans CJK/Noto Serif CJK fonts is the same as 思源黑體/思源宋體. The only difference is the name, and we prefer fonts with localized names selected first.",
+      "range": {
+        "startLine": 281,
+        "startChar": 15,
+        "endLine": 281,
+        "endChar": 36
+      },
+      "revId": "272fc597ad82c21ca20517897e308b78be945505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
