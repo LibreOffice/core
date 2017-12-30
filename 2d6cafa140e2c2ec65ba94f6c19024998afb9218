@@ -16,6 +16,24 @@
       "revId": "2d6cafa140e2c2ec65ba94f6c19024998afb9218",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_be8cb136",
+        "filename": "svtools/source/contnr/foldertree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-12-30T19:30:05Z",
+      "side": 1,
+      "message": "I can understand that it can have disadvantages but it has also advantages like make refactoring easier.\nI like the fact that whatever rFolders contains, we just want to iterate over it.",
+      "parentUuid": "fa31d9ce_7e9cf969",
+      "revId": "2d6cafa140e2c2ec65ba94f6c19024998afb9218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
