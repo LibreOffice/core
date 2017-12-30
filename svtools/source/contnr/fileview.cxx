@@ -1337,9 +1337,9 @@ OUString SvtFileView::GetConfigString() const
 {
     ::std::vector< SvtContentEntry > aContent;
 
-    for(SortingData_Impl* i : mpImpl->maContent)
+    for(auto const& elem : mpImpl->maContent)
     {
-        SvtContentEntry aEntry( i->maTargetURL, i->mbIsFolder );
+        SvtContentEntry aEntry( elem->maTargetURL, elem->mbIsFolder );
         aContent.push_back( aEntry );
     }
 
@@ -1479,10 +1479,8 @@ void SvtFileView_Impl::Clear()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    std::vector< SortingData_Impl* >::iterator aIt;
-
-    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
-        delete (*aIt);
+    for (auto const& elem : maContent)
+        delete elem;
 
     maContent.clear();
 
@@ -1675,19 +1673,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
             {
                 // none of the filters did match
                 delete *aContentLoop;
-
-                if ( maContent.begin() == aContentLoop )
-                {
-                    maContent.erase( aContentLoop );
-                    aContentLoop = maContent.begin();
-                }
-                else
-                {
-                    std::vector< SortingData_Impl* >::iterator aDelete = aContentLoop;
-                    --aContentLoop; // move the iterator to a position which is not invalidated by the erase
-                    maContent.erase( aDelete );
-                    ++aContentLoop; // this is now the next one ....
-                }
+                aContentLoop = maContent.erase(aContentLoop);
             }
             else
                 ++aContentLoop;
@@ -1735,25 +1721,23 @@ void SvtFileView_Impl::OpenFolder_Impl()
     mpView->ClearAll();
     mpIconView->ClearAll();
 
-    std::vector< SortingData_Impl* >::iterator aIt;
-
-    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
+    for (auto const& elem : maContent)
     {
-        if ( mbOnlyFolder && ! (*aIt)->mbIsFolder )
+        if ( mbOnlyFolder && ! elem->mbIsFolder )
             continue;
 
         // insert entry and set user data
-        SvTreeListEntry* pEntry = mpView->InsertEntry( (*aIt)->maDisplayText,
-                                                   (*aIt)->maImage,
-                                                   (*aIt)->maImage );
+        SvTreeListEntry* pEntry = mpView->InsertEntry( elem->maDisplayText,
+                                                   elem->maImage,
+                                                   elem->maImage );
 
-        SvTreeListEntry* pEntry2 = mpIconView->InsertEntry( (*aIt)->maDisplayText.getToken( 0, '\t' ),
-                                                   (*aIt)->maImage, (*aIt)->maImage );
+        SvTreeListEntry* pEntry2 = mpIconView->InsertEntry( elem->maDisplayText.getToken( 0, '\t' ),
+                                                   elem->maImage, elem->maImage );
 
-        SvtContentEntry* pUserData = new SvtContentEntry( (*aIt)->maTargetURL,
-                                                          (*aIt)->mbIsFolder );
-        SvtContentEntry* pUserData2 = new SvtContentEntry( (*aIt)->maTargetURL,
-                                                          (*aIt)->mbIsFolder );
+        SvtContentEntry* pUserData = new SvtContentEntry( elem->maTargetURL,
+                                                          elem->mbIsFolder );
+        SvtContentEntry* pUserData2 = new SvtContentEntry( elem->maTargetURL,
+                                                          elem->mbIsFolder );
 
         pEntry->SetUserData( pUserData );
         pEntry2->SetUserData( pUserData2 );
@@ -1874,42 +1858,40 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
     ::osl::MutexGuard aGuard( maMutex );
 
     OUString aValue;
-    OUString aTab( "\t" );
+    OUString const aTab( "\t" );
     OUString const aDateSep( ", " );
 
-    std::vector< SortingData_Impl* >::iterator aIt;
-
-    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
+    for (auto const& elem : maContent)
     {
         // title, type, size, date
-        aValue = (*aIt)->GetTitle();
+        aValue = elem->GetTitle();
         ReplaceTabWithString( aValue );
-        aValue += aTab + (*aIt)->maType + aTab;
+        aValue += aTab + elem->maType + aTab;
         // folders don't have a size
-        if ( ! (*aIt)->mbIsFolder )
-            aValue += CreateExactSizeText( (*aIt)->maSize );
+        if ( ! elem->mbIsFolder )
+            aValue += CreateExactSizeText( elem->maSize );
         aValue += aTab;
         // set the date, but volumes have no date
-        if ( ! (*aIt)->mbIsFolder || ! (*aIt)->mbIsVolume )
+        if ( ! elem->mbIsFolder || ! elem->mbIsVolume )
         {
             SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-            aValue += rLocaleData.getDate( (*aIt)->maModDate )
+            aValue += rLocaleData.getDate( elem->maModDate )
                     + aDateSep
-                    + rLocaleData.getTime( (*aIt)->maModDate, false );
+                    + rLocaleData.getTime( elem->maModDate, false );
         }
-        (*aIt)->maDisplayText = aValue;
+        elem->maDisplayText = aValue;
 
         // detect image
-        if ( (*aIt)->mbIsFolder )
+        if ( elem->mbIsFolder )
         {
-            ::svtools::VolumeInfo aVolInfo( (*aIt)->mbIsVolume, (*aIt)->mbIsRemote,
-                                            (*aIt)->mbIsRemoveable, (*aIt)->mbIsFloppy,
-                                            (*aIt)->mbIsCompactDisc );
-            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo );
+            ::svtools::VolumeInfo aVolInfo( elem->mbIsVolume, elem->mbIsRemote,
+                                            elem->mbIsRemoveable, elem->mbIsFloppy,
+                                            elem->mbIsCompactDisc );
+            elem->maImage = SvFileInformationManager::GetFolderImage( aVolInfo );
         }
         else
-            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ) );
+            elem->maImage = SvFileInformationManager::GetFileImage( INetURLObject( elem->maTargetURL ) );
     }
 }
 
@@ -2037,9 +2019,7 @@ void SvtFileView_Impl::SortFolderContent_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    sal_uInt32 nSize = maContent.size();
-
-    if ( nSize > 1 )
+    if ( maContent.size() > 1 )
     {
         gbAscending = mbAscending;
         gnColumn = mnSortColumn;
@@ -2056,16 +2036,8 @@ void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    std::vector< SortingData_Impl* >::iterator aIt;
-
-    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
-    {
-        if ( (*aIt)->maTargetURL == rURL )
-        {
-            maContent.erase( aIt );
-            break;
-        }
-    }
+    maContent.erase(std::find_if(maContent.begin(), maContent.end(),
+                     [&](const SortingData_Impl* data) { return data->maTargetURL == rURL; }));
 }
 
 
@@ -2074,27 +2046,23 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    std::vector< SortingData_Impl* >::iterator aIt;
-
-    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
+    auto aFoundElem = std::find_if(maContent.begin(), maContent.end(),
+                     [&](const SortingData_Impl* data) { return data->maTargetURL == rURL; });
+    if (aFoundElem != maContent.end())
     {
-        if ( (*aIt)->maTargetURL == rURL )
-        {
-            (*aIt)->SetNewTitle( rTitle );
-            OUString aDisplayText = (*aIt)->maDisplayText;
-            sal_Int32 nIndex = aDisplayText.indexOf( '\t' );
+        (*aFoundElem)->SetNewTitle( rTitle );
+        OUString aDisplayText = (*aFoundElem)->maDisplayText;
+        sal_Int32 nIndex = aDisplayText.indexOf( '\t' );
 
-            if ( nIndex > 0 )
-                (*aIt)->maDisplayText = aDisplayText.replaceAt( 0, nIndex, rTitle );
+        if ( nIndex > 0 )
+            (*aFoundElem)->maDisplayText = aDisplayText.replaceAt( 0, nIndex, rTitle );
 
-            INetURLObject aURLObj( rURL );
-            aURLObj.SetName( rTitle, INetURLObject::EncodeMechanism::All );
+        INetURLObject aURLObj( rURL );
+        aURLObj.SetName( rTitle, INetURLObject::EncodeMechanism::All );
 
-            rURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        rURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-            (*aIt)->maTargetURL = rURL;
-            break;
-        }
+        (*aFoundElem)->maTargetURL = rURL;
     }
 }
 
@@ -2115,7 +2083,7 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
     pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo );
 
     OUString aValue;
-    OUString aTab( "\t" );
+    OUString const aTab( "\t" );
     OUString const aDateSep( ", " );
 
     // title, type, size, date
@@ -2142,17 +2110,9 @@ sal_uLong SvtFileView_Impl::GetEntryPos( const OUString& rURL )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    std::vector< SortingData_Impl* >::iterator aIt;
-    sal_uLong   nPos = 0;
-
-    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
-    {
-        if ( (*aIt)->maTargetURL == rURL )
-            return nPos;
-        nPos += 1;
-    }
-
-    return nPos;
+    auto aFoundElem = std::find_if(maContent.begin(), maContent.end(),
+          [&](const SortingData_Impl* data) { return data->maTargetURL == rURL; });
+    return aFoundElem != maContent.end()?std::distance(maContent.begin(), aFoundElem):0;
 }
 
 
@@ -2194,7 +2154,7 @@ bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTit
         SortingData_Impl* pData = maContent[ nIndex ];
         if ( pData->GetLowerTitle().startsWith( rTitle ) )
             return true;
-        nIndex += 1;
+        ++nIndex;
     }
 
     if ( bWrapAround )
@@ -2205,7 +2165,7 @@ bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTit
             SortingData_Impl* pData = maContent[ nIndex ];
             if ( pData->GetLowerTitle().startsWith( rTitle ) )
                 return true;
-            nIndex += 1;
+            ++nIndex;
         }
     }
 
