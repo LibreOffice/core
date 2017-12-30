@@ -233,7 +233,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     OUString sIsNull(" IS NULL");
     OUString sParam(" = ?");
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
-    ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end()+1;
+    ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end();
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)
     {
         aColumnName = m_xSetMetaData->getColumnName(i);
