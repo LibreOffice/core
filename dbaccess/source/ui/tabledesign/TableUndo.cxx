@@ -184,16 +184,14 @@ void OTableEditorDelUndoAct::Undo()
 {
     // Insert the deleted line
     sal_uLong nPos;
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_aDeletedRows.begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_aDeletedRows.end();
 
-     std::shared_ptr<OTableRow>  pNewOrigRow;
+    std::shared_ptr<OTableRow>  pNewOrigRow;
     std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
-    for(;aIter != aEnd;++aIter)
+    for (auto const& deletedRow : m_aDeletedRows)
     {
-        pNewOrigRow.reset(new OTableRow( **aIter ));
-        nPos = (*aIter)->GetPos();
+        pNewOrigRow.reset(new OTableRow( *deletedRow ));
+        nPos = deletedRow->GetPos();
         pOriginalRows->insert( pOriginalRows->begin()+nPos,pNewOrigRow);
     }
 
@@ -206,13 +204,11 @@ void OTableEditorDelUndoAct::Redo()
 {
     // delete line again
     sal_uLong nPos;
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_aDeletedRows.begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_aDeletedRows.end();
     std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
-    for(;aIter != aEnd;++aIter)
+    for (auto const& deletedRow : m_aDeletedRows)
     {
-        nPos = (*aIter)->GetPos();
+        nPos = deletedRow->GetPos();
         pOriginalRows->erase( pOriginalRows->begin()+nPos );
     }
 
@@ -255,13 +251,11 @@ void OTableEditorInsUndoAct::Redo()
 {
     // insert lines again
     long nInsertRow = m_nInsPos;
-     std::shared_ptr<OTableRow>  pRow;
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vInsertedRows.begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vInsertedRows.end();
+    std::shared_ptr<OTableRow>  pRow;
     std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& insertedRow : m_vInsertedRows)
     {
-        pRow.reset(new OTableRow( **aIter ));
+        pRow.reset(new OTableRow( *insertedRow ));
         pRowList->insert( pRowList->begin()+nInsertRow ,pRow );
         nInsertRow++;
     }

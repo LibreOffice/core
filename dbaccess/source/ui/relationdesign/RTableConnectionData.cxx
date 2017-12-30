@@ -109,13 +109,11 @@ void ORelationTableConnectionData::ChangeOrientation()
 {
     // exchange Source- and DestFieldName of the lines
     OUString sTempString;
-    OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-    OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& elem : m_vConnLineData)
     {
-        sTempString = (*aIter)->GetSourceFieldName();
-        (*aIter)->SetSourceFieldName( (*aIter)->GetDestFieldName() );
-        (*aIter)->SetDestFieldName( sTempString );
+        sTempString = elem->GetSourceFieldName();
+        elem->SetSourceFieldName( elem->GetDestFieldName() );
+        elem->SetDestFieldName( sTempString );
     }
 
     // adapt member
@@ -159,12 +157,10 @@ bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
 
         for(;pKeyIter != pKeyEnd;++pKeyIter)
         {
-            OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-            OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
-            for(;aIter != aEnd;++aIter)
+            for (auto const& elem : m_vConnLineData)
             {
                 ++nValidLinesCount;
-                if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyIter )
+                if ( elem->GetFieldName(_eEConnectionSide) == *pKeyIter )
                 {
                     ++nPrimKeysCount;
                     break;
@@ -226,14 +222,16 @@ bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableCon
 
     if ( bEqual )
     {
-        std::vector< OConnectionLineDataRef >::const_iterator aIter = lhs.m_vConnLineData.begin();
-        std::vector< OConnectionLineDataRef >::const_iterator aEnd = lhs.m_vConnLineData.end();
-        for (sal_Int32 i = 0; aIter != aEnd; ++aIter,++i)
+        sal_Int32 i = 0;
+        for (auto const& elem : lhs.m_vConnLineData)
         {
-            if ( *(rhs.m_vConnLineData[i]) != **aIter )
+            if ( *(rhs.m_vConnLineData[i]) != *elem )
+            {
+                bEqual = false;
                 break;
+            }
+            ++i;
         }
-        bEqual = aIter == aEnd;
     }
     return bEqual;
 }
@@ -286,18 +284,16 @@ bool ORelationTableConnectionData::Update()
         Reference<XAppend> xColumnAppend(xColumns,UNO_QUERY);
         if ( xColumnFactory.is() )
         {
-            OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-            OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
-            for(;aIter != aEnd;++aIter)
+            for (auto const& elem : m_vConnLineData)
             {
-                if(!((*aIter)->GetSourceFieldName().isEmpty() || (*aIter)->GetDestFieldName().isEmpty()))
+                if(!(elem->GetSourceFieldName().isEmpty() || elem->GetDestFieldName().isEmpty()))
                 {
                     Reference<XPropertySet> xColumn;
                     xColumn = xColumnFactory->createDataDescriptor();
                     if ( xColumn.is() )
                     {
-                        xColumn->setPropertyValue(PROPERTY_NAME,makeAny((*aIter)->GetSourceFieldName()));
-                        xColumn->setPropertyValue(PROPERTY_RELATEDCOLUMN,makeAny((*aIter)->GetDestFieldName()));
+                        xColumn->setPropertyValue(PROPERTY_NAME,makeAny(elem->GetSourceFieldName()));
+                        xColumn->setPropertyValue(PROPERTY_RELATEDCOLUMN,makeAny(elem->GetDestFieldName()));
                         xColumnAppend->appendByDescriptor(xColumn);
                     }
                 }

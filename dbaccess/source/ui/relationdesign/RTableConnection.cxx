@@ -61,19 +61,17 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const to
 
     const OConnectionLine* pTopLine = nullptr;
     const std::vector<OConnectionLine*>& rConnLineList = GetConnLineList();
-    std::vector<OConnectionLine*>::const_iterator aIter = rConnLineList.begin();
-    std::vector<OConnectionLine*>::const_iterator aEnd = rConnLineList.end();
 
-    for(;aIter != aEnd;++aIter)
+    for (auto const& elem : rConnLineList)
     {
-        if( (*aIter)->IsValid() )
+        if( elem->IsValid() )
         {
-            aBoundingRect = (*aIter)->GetBoundingRect();
+            aBoundingRect = elem->GetBoundingRect();
             nTemp = aBoundingRect.Top();
             if(nTemp < nTop)
             {
                 nTop = nTemp;
-                pTopLine = (*aIter);
+                pTopLine = elem;
             }
         }
     }

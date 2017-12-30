@@ -376,10 +376,8 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
                     break;
 
                 const OTypeInfoMap& rTypeInfo = GetView()->getController().getTypeInfo();
-                OTypeInfoMap::const_iterator aIter = rTypeInfo.begin();
-                OTypeInfoMap::const_iterator aEnd = rTypeInfo.end();
-                for(;aIter != aEnd;++aIter)
-                    pTypeCell->InsertEntry( aIter->second->aUIName );
+                for (auto const& elem : rTypeInfo)
+                    pTypeCell->InsertEntry( elem.second->aUIName );
                 pTypeCell->SelectEntry( aInitString );
             }
 
@@ -481,12 +479,10 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
 
     ::comphelper::UStringMixEqual bCase(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
 
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
     sal_Int32 nCount(0);
-    for(;aIter != aEnd;++aIter)
+    for (auto const& row : *m_pRowList)
     {
-        OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
+        OFieldDescription* pFieldDescr = row->GetActFieldDescr();
         if( pFieldDescr && bCase(rFieldName,pFieldDescr->GetName()))
             nCount++;
     }
@@ -1501,15 +1497,15 @@ void OTableEditorCtrl::SetPrimaryKey( bool bSet )
     MultiSelection aDeletedPrimKeys;
     aDeletedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
 
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
-    for(sal_Int32 nRow = 0;aIter != aEnd;++aIter,++nRow)
+    sal_Int32 nRow = 0;
+    for (auto const& row : *m_pRowList)
     {
-        OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
-        if( pFieldDescr && (*aIter)->IsPrimaryKey() && (!bSet || !IsRowSelected(nRow)) )
+        OFieldDescription* pFieldDescr = row->GetActFieldDescr();
+        if( pFieldDescr && row->IsPrimaryKey() && (!bSet || !IsRowSelected(nRow)) )
         {
             AdjustFieldDescription(pFieldDescr,aDeletedPrimKeys,nRow,bSet,false);
         }
+        ++nRow;
     }
 
     // Set the primary keys of the marked rows
@@ -1544,14 +1540,14 @@ bool OTableEditorCtrl::IsPrimaryKey()
 {
     // Are all marked fields part of the Primary Key ?
     long nPrimaryKeys = 0;
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
-    for(sal_Int32 nRow=0;aIter != aEnd;++aIter,++nRow)
+    sal_Int32 nRow=0;
+    for (auto const& row : *m_pRowList)
     {
-        if( IsRowSelected(nRow) && !(*aIter)->IsPrimaryKey() )
+        if( IsRowSelected(nRow) && !row->IsPrimaryKey() )
             return false;
-        if( (*aIter)->IsPrimaryKey() )
+        if( row->IsPrimaryKey() )
             ++nPrimaryKeys;
+        ++nRow;
     }
 
     // Are there any unselected fields that are part of the Key ?
@@ -1582,12 +1578,11 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
         {
             sal_Int32 nEntryPos = 0;
             const OTypeInfoMap& rTypeInfo = GetView()->getController().getTypeInfo();
-            OTypeInfoMap::const_iterator aIter = rTypeInfo.begin();
-            OTypeInfoMap::const_iterator aEnd = rTypeInfo.end();
-            for(;aIter != aEnd;++aIter,++nEntryPos)
+            for (auto const& elem : rTypeInfo)
             {
-                if(aIter->second == _pType)
+                if(elem.second == _pType)
                     break;
+                ++nEntryPos;
             }
             if (nEntryPos < pTypeCell->GetEntryCount())
                 pTypeCell->SelectEntryPos( nEntryPos );

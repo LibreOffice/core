@@ -674,13 +674,11 @@ void OTableController::appendColumns(Reference<XColumnsSupplier> const & _rxColS
         Reference<XAppend> xAppend(xColumns,UNO_QUERY);
         OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
-        std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
-        std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
-        for(;aIter != aEnd;++aIter)
+        for (auto const& row : m_vRowList)
         {
-            OSL_ENSURE(*aIter,"OTableRow is null!");
-            OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-            if ( !pField || (!_bNew && (*aIter)->IsReadOnly() && !_bKeyColumns) )
+            OSL_ENSURE(row,"OTableRow is null!");
+            OFieldDescription* pField = row->GetActFieldDescr();
+            if ( !pField || (!_bNew && row->IsReadOnly() && !_bKeyColumns) )
                 continue;
 
             Reference<XPropertySet> xColumn;
@@ -985,8 +983,7 @@ void OTableController::alterColumns()
     std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
     std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed
-    sal_Int32 nPos = 0;
-    for(;aIter != aEnd;++aIter,++nPos)
+    for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
@@ -1131,16 +1128,15 @@ void OTableController::alterColumns()
             bReload = true;
     }
     // alter column settings
-    aIter = m_vRowList.begin();
 
     // first look for columns where something other than the name changed
-    for(nPos = 0;aIter != aEnd;++aIter,++nPos)
+    for (auto const& row : m_vRowList)
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
-        OFieldDescription* pField = (*aIter)->GetActFieldDescr();
+        OFieldDescription* pField = row->GetActFieldDescr();
         if ( !pField )
             continue;
-        if ( (*aIter)->IsReadOnly() )
+        if ( row->IsReadOnly() )
         {
             aColumns.insert(pField->GetName());
             continue;
@@ -1423,16 +1419,14 @@ void OTableController::reSyncRows()
 {
     bool bAlterAllowed  = isAlterAllowed();
     bool bAddAllowed    = isAddAllowed();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& row : m_vRowList)
     {
-        OSL_ENSURE(*aIter,"OTableRow is null!");
-        OFieldDescription* pField = (*aIter)->GetActFieldDescr();
+        OSL_ENSURE(row,"OTableRow is null!");
+        OFieldDescription* pField = row->GetActFieldDescr();
         if ( pField )
-            (*aIter)->SetReadOnly(!bAlterAllowed);
+            row->SetReadOnly(!bAlterAllowed);
         else
-            (*aIter)->SetReadOnly(!bAddAllowed);
+            row->SetReadOnly(!bAddAllowed);
 
     }
     static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our information
