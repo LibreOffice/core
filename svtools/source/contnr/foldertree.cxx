@@ -100,11 +100,10 @@ void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std:
         GetModel()->Remove(pChild);
     }
 
-
-    for(::std::vector< std::pair< OUString, OUString > >::const_iterator it = rFolders.begin(); it != rFolders.end() ; ++it)
+    for (auto const& folder : rFolders)
     {
-        SvTreeListEntry* pNewEntry = InsertEntry( it->first, pParent, true  );
-        OUString* sData = new OUString( it->second );
+        SvTreeListEntry* pNewEntry = InsertEntry( folder.first, pParent, true  );
+        OUString* sData = new OUString( folder.second );
         pNewEntry->SetUserData( static_cast< void* >( sData ) );
     }
 

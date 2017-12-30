@@ -78,36 +78,29 @@ void SvTreeList::Broadcast(
     SvTreeListEntry* pEntry2,
     sal_uLong nPos
 ) {
-    sal_uLong nViewCount = aViewList.size();
-    for( sal_uLong nCurView = 0; nCurView < nViewCount; nCurView++ )
+    for (auto const& view : aViewList)
     {
-        SvListView* pView = aViewList[ nCurView ];
-        if( pView )
-            pView->ModelNotification( nActionId, pEntry1, pEntry2, nPos );
+        if(view)
+            view->ModelNotification(nActionId, pEntry1, pEntry2, nPos);
     }
 }
 
 void SvTreeList::InsertView( SvListView* pView )
 {
-    for (SvListView* i : aViewList) {
-        if ( i == pView ) {
-            return;
-        }
-    }
+    if (std::find(aViewList.begin(), aViewList.end(), pView) != aViewList.end())
+        return;
+
     aViewList.push_back( pView );
     nRefCount++;
 }
 
 void SvTreeList::RemoveView( SvListView const * pView )
 {
-    for ( ListViewsType::iterator it = aViewList.begin(); it != aViewList.end(); ++it )
+    auto viewFound = std::find(aViewList.begin(), aViewList.end(), pView);
+    if (viewFound != aViewList.end())
     {
-        if ( *it == pView )
-        {
-            aViewList.erase( it );
-            --nRefCount;
-            break;
-        }
+        aViewList.erase( viewFound );
+        --nRefCount;
     }
 }
 
@@ -407,10 +400,9 @@ void SvTreeList::CloneChildren(
         SvTreeListEntries& rDst, sal_uLong& rCloneCount, SvTreeListEntries& rSrc, SvTreeListEntry& rNewParent) const
 {
     SvTreeListEntries aClone;
-    SvTreeListEntries::iterator it = rSrc.begin(), itEnd = rSrc.end();
-    for (; it != itEnd; ++it)
+    for (auto const& elem : rSrc)
     {
-        SvTreeListEntry& rEntry = **it;
+        SvTreeListEntry& rEntry = *elem;
         std::unique_ptr<SvTreeListEntry> pNewEntry(CloneEntry(&rEntry));
         ++rCloneCount;
         pNewEntry->pParent = &rNewParent;
