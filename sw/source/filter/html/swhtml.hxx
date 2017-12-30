@@ -870,7 +870,7 @@ private:
     bool HasCurrentParaFlys( bool bNoSurroundOnly = false,
                              bool bSurroundOnly = false ) const;
 
-    bool CurrentTableInPaM(SwPaM& rPam) const;
+    bool PendingTableInPaM(SwPaM& rPam) const;
 
 public:         // used in tables
 

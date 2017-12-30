@@ -195,7 +195,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                 static_cast<const SwStartNode *>( &rContentStIdx.GetNode() );
             aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
 
-            if (!CurrentTableInPaM(aDelPam))
+            if (!PendingTableInPaM(aDelPam))
                 m_xDoc->getIDocumentContentOperations().DelFullPara(aDelPam);
 
             // update page style

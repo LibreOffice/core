@@ -5258,7 +5258,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
     return xRetTable;
 }
 
-bool SwHTMLParser::CurrentTableInPaM(SwPaM& rPam) const
+bool SwHTMLParser::PendingTableInPaM(SwPaM& rPam) const
 {
     bool bRet = false;
     for (const auto& a : m_aTables)
