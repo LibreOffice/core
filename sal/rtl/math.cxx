@@ -1076,6 +1076,9 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     if (fValue == 0.0)
         return fValue;
 
+    if ( nDecPlaces == 0 && eMode == rtl_math_RoundingMode_Corrected )
+        return std::round( fValue );
+
     // sign adjustment
     bool bSign = rtl::math::isSignBitSet( fValue );
     if (bSign)
