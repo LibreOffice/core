@@ -38,8 +38,6 @@ class  OStoreDirectoryPageObject;
 class OStorePageManager : public store::OStorePageBIOS
 {
 public:
-    /** Construction.
-     */
     OStorePageManager();
 
     /** Initialization (two-phase construction).
@@ -85,13 +83,9 @@ public:
     virtual bool isKindOf (sal_uInt32 nTypeId) override;
 
 protected:
-    /** Destruction.
-    */
     virtual ~OStorePageManager() override;
 
 private:
-    /** Implementation.
-    */
     typedef OStorePageBIOS            base;
     typedef OStorePageManager         self;
 
@@ -117,11 +111,11 @@ private:
 
     /** DirectoryPage I/O (managed).
      */
-    storeError load_dirpage_Impl ( // @@@ => private: iget() @@@
+    storeError load_dirpage_Impl(
         const OStorePageKey       &rKey,
         OStoreDirectoryPageObject &rPage);
 
-    storeError save_dirpage_Impl ( // @@@ => private: iget(), rebuild() @@@
+    storeError save_dirpage_Impl(
         const OStorePageKey       &rKey,
         OStoreDirectoryPageObject &rPage);
 
@@ -142,7 +136,7 @@ private:
 
 inline bool OStorePageManager::isValid() const
 {
-    return base::isValid() /* @@@ NYI && (m_aRoot.is()) */;
+    return base::isValid();
 }
 
 template<> inline OStorePageManager*
