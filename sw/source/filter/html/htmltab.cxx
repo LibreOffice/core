@@ -1043,10 +1043,14 @@ HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
 
     for( sal_uInt16 i=0; i<m_nCols; i++ )
         m_pColumns->push_back(o3tl::make_unique<HTMLTableColumn>());
+
+    m_pParser->RegisterHTMLTable(this);
 }
 
 HTMLTable::~HTMLTable()
 {
+    m_pParser->DeregisterHTMLTable(this);
+
     delete m_pResizeDrawObjects;
     delete m_pDrawObjectPrcWidths;
 
@@ -5256,16 +5260,21 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
 
 bool SwHTMLParser::CurrentTableInPaM(SwPaM& rPam) const
 {
-    if (!m_xTable)
-        return false;
-    const SwTable *pTable = m_xTable->GetSwTable();
-    if (!pTable)
-        return false;
-    const SwTableNode* pTableNode = pTable->GetTableNode();
-    if (!pTableNode)
-        return false;
-    SwNodeIndex aTableNodeIndex(*pTableNode);
-    return (aTableNodeIndex >= rPam.Start()->nNode && aTableNodeIndex <= rPam.End()->nNode);
+    bool bRet = false;
+    for (const auto& a : m_aTables)
+    {
+        const SwTable *pTable = a->GetSwTable();
+        if (!pTable)
+            continue;
+        const SwTableNode* pTableNode = pTable->GetTableNode();
+        if (!pTableNode)
+            continue;
+        SwNodeIndex aTableNodeIndex(*pTableNode);
+        bRet = (aTableNodeIndex >= rPam.Start()->nNode && aTableNodeIndex <= rPam.End()->nNode);
+        if (bRet)
+            break;
+    }
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
