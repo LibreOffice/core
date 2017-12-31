@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9edc4d1a",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1001779
+      },
+      "writtenOn": "2017-12-31T01:25:53Z",
+      "side": 1,
+      "message": "We don\u0027t have to keep the all free Chinese font listed here. Some of the projects died and rarely used nowadays. One freely available open source font in the list is enough.",
+      "range": {
+        "startLine": 278,
+        "startChar": 7,
+        "endLine": 280,
+        "endChar": 82
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_feeb89ae",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001779
+      },
+      "writtenOn": "2017-12-31T01:25:53Z",
+      "side": 1,
+      "message": "Better to list Mac fonts before Windows fonts to make sure all Mac users use the platforms\u0027 default fonts (some of them may install MS Office) if they don\u0027t have the first free font.",
+      "range": {
+        "startLine": 287,
+        "startChar": 81,
+        "endLine": 287,
+        "endChar": 154
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_1ed13dfc",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001779
+      },
+      "writtenOn": "2017-12-31T01:25:53Z",
+      "side": 1,
+      "message": "No need for more free fonts here. Only GNU/Linux users will match here. And most of the GNU/Linux distros do ship 思源黑體 (Source Han Sans) or Noto Sans CJK for traditional Chinese. They are also the most used freely available Chinese fonts in the last two year.",
+      "range": {
+        "startLine": 287,
+        "startChar": 154,
+        "endLine": 287,
+        "endChar": 185
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_bee111d3",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001779
+      },
+      "writtenOn": "2017-12-31T01:25:53Z",
+      "side": 1,
+      "message": "1. One free font with the same design is enough. 思源黑體 (Source Han Sans) and Noto Sans CJK TC sharing the same font design and metrics are accepted.\n2. 全字庫正宋體 is rarely known, even seldom used in GNU/Linux distros. No need to add it.\n3. TW-Kai and AR PL UKai TW are kai/cursive style font, not suitable here.",
+      "range": {
+        "startLine": 287,
+        "startChar": 53,
+        "endLine": 287,
+        "endChar": 80
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
