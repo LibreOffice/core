@@ -92,7 +92,7 @@ public:
     virtual ~LwpSection() override;
     inline LwpPageLayout* GetPageLayout();
     void Parse(IXFStream* pOutputStream) override;
-    OUString GetSectionName(){return m_AtomHolder.str();}
+    OUString const & GetSectionName(){return m_AtomHolder.str();}
 
 protected:
     void Read() override;

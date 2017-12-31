@@ -173,7 +173,7 @@ protected:
     void Read() override;
 public:
     bool IsRightMarker(LwpObjectID objMarker);
-    OUString GetName();
+    OUString const & GetName();
 private:
     enum {  BKMK_NOTESFX = 0x0001,
         BKMK_OLDNOTESFX = 0x0002
@@ -194,7 +194,7 @@ public:
     bool IsDateTimeField(sal_uInt8& type,OUString& formula);
     bool IsCrossRefField(sal_uInt8& nType, OUString& sMarkName);
     bool IsDocPowerField(sal_uInt8& nType,OUString& sFormula);
-    OUString GetFormula(){return m_Formula.str();}
+    OUString const & GetFormula(){return m_Formula.str();}
     void SetStyleFlag(bool bFalg){m_bHasStyle = bFalg;}
     bool GetStyleFlag(){return m_bHasStyle;}
     bool GetStart(){return m_bHasStart;}

@@ -104,7 +104,7 @@ public:
 
     const OUString& GetBulletStyleName() const;
 
-    OUString GetBulletChar();
+    OUString const & GetBulletChar();
 
     static OUString GetPrefix() { return OUString(); }
 

@@ -342,7 +342,7 @@ bool LwpBookMark::IsRightMarker(LwpObjectID objMarker)
     return objMarker == m_objMarker;
 }
 
-OUString LwpBookMark::GetName()
+OUString const & LwpBookMark::GetName()
 {
     return LwpDLNFVList::GetName().str();
 }

@@ -80,7 +80,7 @@ public:
     LwpFontTableEntry(){}
 public:
     void Read(LwpObjectStream *pStrm);
-    OUString GetFaceName();
+    OUString const & GetFaceName();
 private:
     LwpAtomHolder m_WindowsFaceName;    //font face name under windows
     LwpAtomHolder m_FaceName;           //font face name

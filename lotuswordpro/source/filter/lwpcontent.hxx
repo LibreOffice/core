@@ -108,7 +108,7 @@ public:
     rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout const * pStartLayout);
     inline bool IsActive();
     virtual bool IsTable();
-    inline OUString GetClassName();
+    inline OUString const & GetClassName();
     inline LwpContent* GetNextEnumerated();
     bool HasNonEmbeddedLayouts();
     bool IsStyleContent();
@@ -129,7 +129,7 @@ inline bool LwpContent::IsTable()
     return false;
 }
 
-inline OUString LwpContent::GetClassName()
+inline OUString const & LwpContent::GetClassName()
 {
     return m_ClassName.str();
 }

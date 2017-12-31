@@ -82,7 +82,7 @@ public:
     LwpCellList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     virtual void Parse(IXFStream* pOutputStream) override;
-    LwpObjectID GetNextID(){return GetNext();}
+    LwpObjectID const & GetNextID(){return GetNext();}
     sal_uInt8 GetColumnID(){return cColumn;}
 
     virtual void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr);
@@ -105,8 +105,8 @@ public:
     LwpRowList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
-    LwpObjectID GetChildHeadID(){return cChild.GetHead();}
-    LwpObjectID GetNextID(){return GetNext();}
+    LwpObjectID const & GetChildHeadID(){return cChild.GetHead();}
+    LwpObjectID const & GetNextID(){return GetNext();}
     sal_uInt16 GetRowID(){return cRowID;}
 private:
     void Read() override;
@@ -181,7 +181,7 @@ public:
     LwpFolder(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
-    LwpObjectID GetChildHeadID(){ return cChild.GetHead();}
+    LwpObjectID const & GetChildHeadID(){ return cChild.GetHead();}
 private:
     void Read() override;
     virtual ~LwpFolder() override;
