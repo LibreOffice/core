@@ -67,19 +67,14 @@ template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIn
         }
         else
         {
-            Iter aBegin( rVector.begin() );
-            while( nIndex-- )
-                aBegin++;
+            Iter aBegin( rVector.begin() + nIndex);
             if( nCount == 1 )
             {
                 rVector.erase( aBegin );
             }
             else
             {
-                Iter aEnd( aBegin );
-
-                while( nCount-- )
-                    aEnd++;
+                Iter aEnd( aBegin + nCount);
                 rVector.erase( aBegin, aEnd );
             }
         }
