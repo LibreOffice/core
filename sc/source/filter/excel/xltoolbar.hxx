@@ -62,7 +62,7 @@ public:
     bool IsMenuToolbar();
     bool ImportCustomToolBar( ScCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( ScCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
-    OUString GetName() { return tb.getName().getString(); }
+    const OUString& GetName() { return tb.getName().getString(); }
 
 };
 

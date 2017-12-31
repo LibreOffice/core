@@ -1995,7 +1995,7 @@ public:
 
     void            SetRangeOverflowType(ErrCode nType)  { nRangeOverflowType = nType; }
     bool            HasRangeOverflow() const             { return nRangeOverflowType != ERRCODE_NONE; }
-    SC_DLLPUBLIC ErrCode GetRangeOverflowType() const    { return nRangeOverflowType; }
+    SC_DLLPUBLIC const ErrCode& GetRangeOverflowType() const    { return nRangeOverflowType; }
 
     // for broadcasting/listening
     void            SetInsertingFromOtherDoc( bool bVal ) { bInsertingFromOtherDoc = bVal; }
@@ -2055,7 +2055,7 @@ public:
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
-    ScDocumentThreadSpecific CalculateInColumnInThread( ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+    const ScDocumentThreadSpecific& CalculateInColumnInThread( ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
     void HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen );
 
     /**

@@ -744,7 +744,7 @@ ScEditEngineDefaulter& WorkbookHelper::getEditEngine() const
     return mrBookGlob.getEditEngine();
 }
 
-Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
+const Reference< XSpreadsheetDocument > & WorkbookHelper::getDocument() const
 {
     return mrBookGlob.getDocument();
 }

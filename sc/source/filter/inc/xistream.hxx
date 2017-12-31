@@ -47,7 +47,7 @@ public:
     virtual             ~XclImpDecrypter() override;
 
     /** Returns the current error code of the decrypter. */
-    ErrCode      GetError() const { return mnError; }
+    const ErrCode&      GetError() const { return mnError; }
     /** Returns true, if the decoder has been initialized correctly. */
     bool         IsValid() const { return mnError == ERRCODE_NONE; }
 

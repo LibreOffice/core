@@ -268,7 +268,7 @@ public:
 
     /** Reads the FILEPASS record, queries a password and sets decryption algorithm.
         @return  Error code that may cause an error message after import. */
-    static ErrCode      ReadFilepass( XclImpStream& rStrm );
+    static const ErrCode&      ReadFilepass( XclImpStream& rStrm );
 };
 
 // Document protection ========================================================

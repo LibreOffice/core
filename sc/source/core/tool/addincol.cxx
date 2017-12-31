@@ -1118,7 +1118,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     }
 }
 
-OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bLocalFirst )
+const OUString & ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bLocalFirst )
 {
     if (!bInitialized)
         Initialize();

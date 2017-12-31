@@ -31,7 +31,7 @@
 
 #include <vcl/svapp.hxx>
 
-VclPtr<vcl::Window> ScCellShell::GetFrameWin()
+const VclPtr<vcl::Window>& ScCellShell::GetFrameWin()
 {
     return pFrameWin;
 }

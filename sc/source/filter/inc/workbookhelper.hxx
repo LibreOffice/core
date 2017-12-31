@@ -134,7 +134,7 @@ public:
 
     ScEditEngineDefaulter& getEditEngine() const;
     /** Returns a reference to the source/target spreadsheet document model. */
-    css::uno::Reference< css::sheet::XSpreadsheetDocument >
+    const css::uno::Reference< css::sheet::XSpreadsheetDocument >&
                         getDocument() const;
 
     /** Returns a reference to the specified spreadsheet in the document model. */

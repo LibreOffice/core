@@ -153,7 +153,7 @@ public:
                 ~ScUnoAddInCollection();
 
                         /// User entered name. rUpperName MUST already be upper case!
-    OUString     FindFunction( const OUString& rUpperName, bool bLocalFirst );
+    const OUString &    FindFunction( const OUString& rUpperName, bool bLocalFirst );
 
                         /** Only if bComplete is set, the function reference and argument types
                             are initialized (component may have to be loaded).

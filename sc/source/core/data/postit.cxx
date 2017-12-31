@@ -167,7 +167,7 @@ public:
     /** Returns the drawing layer page of the sheet contained in maPos. */
     SdrPage*            GetDrawPage();
     /** Returns the caption drawing object. */
-    ScCaptionPtr GetCaption() { return mxCaption; }
+    ScCaptionPtr &      GetCaption() { return mxCaption; }
 
     /** Moves the caption inside the passed rectangle. Uses page area if 0 is passed. */
     void                FitCaptionToRect( const tools::Rectangle* pVisRect = nullptr );

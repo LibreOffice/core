@@ -1227,7 +1227,7 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
 
 } // namespace
 
-ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
+const ErrCode& XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
 {
     XclImpDecrypterRef xDecr;
     rStrm.DisableDecryption();
