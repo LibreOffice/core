@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_bec031e2",
+        "filename": "cui/source/inc/cuicharmap.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001483
+      },
+      "writtenOn": "2017-12-31T08:44:30Z",
+      "side": 1,
+      "message": "Is it the write place to add this class or should I create a new file ?",
+      "revId": "c728b0d5702bee9330ff9306e382c8aa75f12bfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
