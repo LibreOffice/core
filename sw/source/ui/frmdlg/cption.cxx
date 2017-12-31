@@ -242,7 +242,15 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         m_pPosBox->InsertEntry(SwResId(STR_CAPTION_BEGINNING));
         m_pPosBox->InsertEntry(SwResId(STR_CAPTION_END     ));
     }
-    m_pPosBox->SelectEntryPos(1);
+
+    if (eType & SelectionType::Table)
+    {
+        m_pPosBox->SelectEntryPos(0);
+    }
+    else
+    {
+        m_pPosBox->SelectEntryPos(1);
+    }
 
     m_pCategoryBox->GetModifyHdl().Call(*m_pCategoryBox);
 
