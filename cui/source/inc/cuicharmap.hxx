@@ -39,6 +39,28 @@ namespace svx
     struct SvxShowCharSetItem;
 }
 
+class DrawingAreaOcr : public Control
+{
+public:
+    DrawingAreaOcr(vcl::Window* pParent) : Control(pParent, WB_BORDER), state(State::NONE) {}
+    void MouseButtonDown (const MouseEvent &rMEvt) override;
+    void MouseMove( const MouseEvent &rMEvt ) override;
+    void MouseButtonUp (const MouseEvent &rMEvt) override;
+    void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& ) override;
+
+private:
+    enum class State {DRAW, DELETE, NONE};
+    State state;
+    struct DrawPoint
+    {
+        int x;
+        int y;
+        State state;
+        DrawPoint(int x_, int y_, State state_) : x(x_), y(y_), state(state_) {};
+    };
+    std::vector<DrawPoint> data;
+};
+
 class SvxShowText : public Control
 {
 public:
@@ -79,7 +101,7 @@ private:
     VclPtr<ListBox>        m_pSubsetLB;
     VclPtr<SvxShowText>    m_pShowChar;
     VclPtr<CheckBox>       m_pDrawChk;
-    VclPtr<vcl::Window>    m_pDrawingArea;
+    VclPtr<DrawingAreaOcr> m_pDrawingArea;
     VclPtr<Edit>           m_pSearchText;
     VclPtr<Edit>           m_pHexCodeText;
     VclPtr<Edit>           m_pDecimalCodeText;
