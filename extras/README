@@ -26,3 +26,13 @@ How-to add a new autotext to an existing category
 		+ add all files of autotext in extras_AUTOTEXTSHARE_XMLFILES
 		+ if some files have different extension from .xml, .rdf, .svm and .png
 			+ add a CPY call at the end of the file
+
+How-to add a new Impress template
+	+ clean-up template file as indicated on wiki https://wiki.documentfoundation.org/Documentation/HowTo/Impress/Make_template_language_independent
+	+ unzip Foo.otp in extras/source/templates/presnt/Foo (no space allowed in any file names)
+	+ add Foo.otp in Package_tplpresnt.mk
+	+ in CustomTarget_tplpresnt.mk:
+		+ add Foo / in extras_TEMPLATES_PRESENTATIONS
+		+ add files names contained in Foo.otp (except mimetype) in extras_PRESENTATIONS_XMLFILES
+		+ if Foo.otp contains files with other extension than .xml, .svm, .svg, .png and .jpg
+			+ add a CPY call at the end of file

@@ -1,0 +1,1161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
+  <office:font-face-decls>
+    <style:font-face style:name="Source Sans Pro" svg:font-family="'Source Sans Pro'" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro2" svg:font-family="'Source Sans Pro'" style:font-adornments="Negrita" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro1" svg:font-family="'Source Sans Pro'" style:font-adornments="Normal" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro Black" svg:font-family="'Source Sans Pro Black'" style:font-adornments="Negra" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro Light1" svg:font-family="'Source Sans Pro Light'" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro Light" svg:font-family="'Source Sans Pro Light'" style:font-adornments="Ligera" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans Regular" svg:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable"/>
+  </office:font-face-decls>
+  <office:styles>
+    <draw:gradient draw:name="Gradient_20_15" draw:display-name="Gradient 15" draw:style="linear" draw:start-color="#808080" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
+    <draw:gradient draw:name="Gradient_20_9" draw:display-name="Gradient 9" draw:style="linear" draw:start-color="#3465af" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
+    <draw:hatch draw:name="Hatching_20_92" draw:display-name="Hatching 92" draw:style="single" draw:color="#3465af" draw:distance="0.02cm" draw:rotation="0"/>
+    <draw:hatch draw:name="Hatching_20_93" draw:display-name="Hatching 93" draw:style="single" draw:color="#808080" draw:distance="0.02cm" draw:rotation="0"/>
+    <draw:fill-image draw:name="Bitmap_20_1" draw:display-name="Bitmap 1" xlink:href="Pictures/10000000000004F900000322B6E66A5FF68F74A7.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    <draw:fill-image draw:name="Bitmap_20_2" draw:display-name="Bitmap 2" xlink:href="Pictures/10000000000004F900000322B6E66A5FF68F74A7.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    <draw:fill-image draw:name="Bitmape_20_11" draw:display-name="Bitmape 11" xlink:href="Pictures/10000000000004F900000322783ADE15FCCE3CBA.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    <draw:fill-image draw:name="Bitmape_20_2" draw:display-name="Bitmape 2" xlink:href="Pictures/1000000000000020000000204B249CA79A42C6D7.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    <draw:fill-image draw:name="background" xlink:href="Pictures/10000000000005550000035C66CD1AA3E88406D5.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="M10 0l-10 30h20z"/>
+    <draw:stroke-dash draw:name="Dashed_20__28_var_29__20_1" draw:display-name="Dashed (var) 1" draw:style="rect" draw:dots1="1" draw:dots1-length="0.02cm" draw:dots2="1" draw:dots2-length="0.02cm" draw:distance="0.02cm"/>
+    <style:default-style style:family="graphic">
+      <style:graphic-properties svg:stroke-color="#808080" draw:fill-color="#cfe7f5" fo:wrap-option="no-wrap"/>
+      <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Serif" fo:font-size="24pt"/>
+    </style:default-style>
+    <style:style style:name="standard" style:family="graphic">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0cm" svg:stroke-color="#808080" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="none" draw:fill-color="#cfe7f5" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" fo:padding-top="0.1cm" fo:padding-bottom="0.1cm" fo:padding-left="0.1cm" fo:padding-right="0.1cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080">
+        <text:list-style style:name="standard">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro1" fo:font-family="'Source Sans Pro'" style:font-style-name="Normal" style:font-pitch="variable" fo:font-size="22pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="objectwitharrow" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.15cm" svg:stroke-color="#000000" draw:marker-start="Arrow" draw:marker-start-width="0.7cm" draw:marker-start-center="true" draw:marker-end-width="0.3cm"/>
+    </style:style>
+    <style:style style:name="objectwithshadow" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:shadow="visible" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+    </style:style>
+    <style:style style:name="objectwithoutfill" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.1cm" svg:stroke-color="#04617b" draw:marker-start-width="0.36cm" draw:marker-end-width="0.36cm" draw:fill="none"/>
+    </style:style>
+    <style:style style:name="text" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+    </style:style>
+    <style:style style:name="textbody" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_1" draw:fill="none" draw:fill-gradient-name="Gradient_20_9" draw:fill-hatch-name="Hatching_20_92" draw:fill-image-name="Bitmape_20_2"/>
+      <style:text-properties style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="16pt"/>
+    </style:style>
+    <style:style style:name="textbodyjustfied" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-gradient-name="Gradient_20_9" draw:fill-hatch-name="Hatching_20_92" draw:fill-image-name="Bitmape_20_2"/>
+      <style:paragraph-properties fo:text-align="justify"/>
+      <style:text-properties fo:font-size="16pt"/>
+    </style:style>
+    <style:style style:name="textbodyindent" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0.6cm"/>
+    </style:style>
+    <style:style style:name="title" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+      <style:text-properties fo:color="#04617b" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="66pt" fo:font-weight="200"/>
+    </style:style>
+    <style:style style:name="title1" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#008080" draw:fill-gradient-name="Gradient_20_15" draw:fill-hatch-name="Hatching_20_93" draw:fill-image-name="Bitmape_20_2" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties fo:font-size="22pt" fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="title2" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties svg:stroke-width="0.05cm" draw:fill-color="#ffcc99" draw:shadow="visible" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0.2cm" fo:margin-top="0.1cm" fo:margin-bottom="0.1cm" fo:text-align="center" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="36pt"/>
+    </style:style>
+    <style:style style:name="headline" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+      <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="headline1" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+      <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm" fo:text-align="center"/>
+      <style:text-properties fo:font-size="18pt" fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="headline2" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+      <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
+      <style:text-properties fo:font-size="14pt" fo:font-style="italic" fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="measure" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#000000" draw:marker-start="Arrow" draw:marker-start-width="0.2cm" draw:marker-end="Arrow" draw:marker-end-width="0.2cm" draw:fill="none" draw:show-unit="true"/>
+      <style:text-properties fo:font-size="12pt"/>
+    </style:style>
+    <style:style style:name="Vivid-background" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="background" style:repeat="stretch"/>
+      <style:text-properties style:letter-kerning="true"/>
+    </style:style>
+    <style:style style:name="Vivid-backgroundobjects" style:family="presentation">
+      <style:graphic-properties draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:text-properties fo:color="#dbf5f9" style:font-name="Source Sans Pro1" fo:font-family="'Source Sans Pro'" style:font-style-name="Normal" style:font-pitch="variable" fo:font-size="24pt" style:letter-kerning="true"/>
+    </style:style>
+    <style:style style:name="Vivid-notes" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="110%" fo:text-indent="0cm"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid-outline1" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
+        <text:list-style style:name="Vivid-outline1">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="–">
+            <style:list-level-properties text:space-before="1.5cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.8cm" text:min-label-width="0.8cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="–">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="6.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="7.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="9cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="10.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="11.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#f49100" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.435cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:color="#dbf5f9" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro1" fo:font-family="'Source Sans Pro'" style:font-style-name="Normal" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid-outline2" style:family="presentation" style:parent-style-name="Vivid-outline1">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.396cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="22pt"/>
+    </style:style>
+    <style:style style:name="Vivid-outline3" style:family="presentation" style:parent-style-name="Vivid-outline2">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid-outline4" style:family="presentation" style:parent-style-name="Vivid-outline3">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="Vivid-outline5" style:family="presentation" style:parent-style-name="Vivid-outline4">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="Vivid-outline6" style:family="presentation" style:parent-style-name="Vivid-outline5">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="Vivid-outline7" style:family="presentation" style:parent-style-name="Vivid-outline6">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="Vivid-outline8" style:family="presentation" style:parent-style-name="Vivid-outline7">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="Vivid-outline9" style:family="presentation" style:parent-style-name="Vivid-outline8">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="Vivid-subtitle" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#808080" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" svg:stroke-opacity="100%" draw:stroke-linejoin="round" draw:fill="none" draw:fill-color="#ffffff" draw:secondary-fill-color="#99ccff" draw:gradient-step-count="0" draw:fill-hatch-solid="false" draw:opacity="100%" draw:fill-image-width="0cm" draw:fill-image-height="0cm" style:repeat="repeat" draw:fill-image-ref-point-x="0%" draw:fill-image-ref-point-y="0%" draw:fill-image-ref-point="center" draw:tile-repeat-offset="0% vertical" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" draw:auto-grow-height="true" draw:auto-grow-width="false" draw:fit-to-size="false" draw:fit-to-contour="false" fo:max-height="0cm" fo:max-width="0cm" fo:min-height="1.27cm" fo:min-width="0cm" fo:padding-top="0cm" fo:padding-bottom="0cm" fo:padding-left="0cm" fo:padding-right="0cm" fo:wrap-option="no-wrap" draw:shadow="hidden" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#000000" draw:shadow-opacity="100%" text:animation="none" text:animation-direction="left" text:animation-start-inside="false" text:animation-stop-inside="false" text:animation-repeat="0" text:animation-delay="P0D" text:animation-steps="0cm">
+        <text:list-style style:name="Vivid-subtitle">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#dbf5f9" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Source Sans Pro2" fo:font-family="'Source Sans Pro'" style:font-style-name="Negrita" style:font-pitch="variable" fo:font-size="36pt" fo:letter-spacing="normal" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false"/>
+    </style:style>
+    <style:style style:name="Vivid-title" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:min-height="3.306cm" fo:wrap-option="no-wrap">
+        <text:list-style style:name="Vivid-title">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="80pt" fo:letter-spacing="normal" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false"/>
+    </style:style>
+    <style:style style:name="Vivid1-background" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Bitmap_20_2" style:repeat="stretch"/>
+      <style:text-properties style:letter-kerning="true"/>
+    </style:style>
+    <style:style style:name="Vivid1-backgroundobjects" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:text-properties fo:color="#484848" style:font-name="Source Sans Pro1" fo:font-family="'Source Sans Pro'" style:font-style-name="Normal" style:font-pitch="variable" fo:font-size="24pt" style:letter-kerning="true"/>
+    </style:style>
+    <style:style style:name="Vivid1-notes" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="110%" fo:text-indent="0cm"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline1" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
+        <text:list-style style:name="Vivid1-outline1">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="–">
+            <style:list-level-properties text:space-before="1.5cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.8cm" text:min-label-width="0.8cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="–">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="6.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="7.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="9cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="10.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="11.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.497cm" fo:text-indent="0cm"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro1" fo:font-family="'Source Sans Pro'" style:font-style-name="Normal" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline2" style:family="presentation" style:parent-style-name="Vivid1-outline1">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.396cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="28pt"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline3" style:family="presentation" style:parent-style-name="Vivid1-outline2">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline4" style:family="presentation" style:parent-style-name="Vivid1-outline3">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline5" style:family="presentation" style:parent-style-name="Vivid1-outline4">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline6" style:family="presentation" style:parent-style-name="Vivid1-outline5">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline7" style:family="presentation" style:parent-style-name="Vivid1-outline6">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline8" style:family="presentation" style:parent-style-name="Vivid1-outline7">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="22pt"/>
+    </style:style>
+    <style:style style:name="Vivid1-outline9" style:family="presentation" style:parent-style-name="Vivid1-outline8">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="22pt"/>
+    </style:style>
+    <style:style style:name="Vivid1-subtitle" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+        <text:list-style style:name="Vivid1-subtitle">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
+      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro2" fo:font-family="'Source Sans Pro'" style:font-style-name="Negrita" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid1-title" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="no-wrap">
+        <text:list-style style:name="Vivid1-title">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:text-align="start">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="60pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid2-background" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Bitmape_20_11" style:repeat="stretch"/>
+      <style:text-properties style:letter-kerning="true"/>
+    </style:style>
+    <style:style style:name="Vivid2-backgroundobjects" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:text-properties fo:color="#484848" style:font-name="Source Sans Pro1" fo:font-family="'Source Sans Pro'" style:font-style-name="Normal" style:font-pitch="variable" fo:font-size="24pt" style:letter-kerning="true"/>
+    </style:style>
+    <style:style style:name="Vivid2-notes" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="110%" fo:text-indent="0cm"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline1" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
+        <text:list-style style:name="Vivid2-outline1">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="–">
+            <style:list-level-properties text:space-before="1.5cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.8cm" text:min-label-width="0.8cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="–">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="6.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="7.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="9cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="10.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="11.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" fo:color="#04617b" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.498cm" fo:text-indent="0cm"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline2" style:family="presentation" style:parent-style-name="Vivid2-outline1">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.396cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="28pt"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline3" style:family="presentation" style:parent-style-name="Vivid2-outline2">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline4" style:family="presentation" style:parent-style-name="Vivid2-outline3">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline5" style:family="presentation" style:parent-style-name="Vivid2-outline4">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline6" style:family="presentation" style:parent-style-name="Vivid2-outline5">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline7" style:family="presentation" style:parent-style-name="Vivid2-outline6">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="24pt"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline8" style:family="presentation" style:parent-style-name="Vivid2-outline7">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="Vivid2-outline9" style:family="presentation" style:parent-style-name="Vivid2-outline8">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="Vivid2-subtitle" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+        <text:list-style style:name="Vivid2-subtitle">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
+      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-style-name="Negra" style:font-pitch="variable" fo:font-size="40pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Vivid2-title" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="no-wrap">
+        <text:list-style style:name="Vivid2-title">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+            <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+            <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:text-align="start">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Light1" fo:font-family="'Source Sans Pro Light'" style:font-pitch="variable" fo:font-size="60pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:presentation-page-layout style:name="AL0T24">
+      <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="6.104cm" svg:height="3.507cm"/>
+      <presentation:placeholder presentation:object="handout" svg:x="10.962cm" svg:y="1.743cm" svg:width="6.104cm" svg:height="3.507cm"/>
+      <presentation:placeholder presentation:object="handout" svg:x="19.866cm" svg:y="1.743cm" svg:width="6.104cm" svg:height="3.507cm"/>
+    </style:presentation-page-layout>
+    <style:presentation-page-layout style:name="AL1T0">
+      <presentation:placeholder presentation:object="title" svg:x="2.058cm" svg:y="1.743cm" svg:width="23.912cm" svg:height="3.507cm"/>
+      <presentation:placeholder presentation:object="subtitle" svg:x="2.058cm" svg:y="5.838cm" svg:width="23.912cm" svg:height="13.23cm"/>
+    </style:presentation-page-layout>
+    <style:presentation-page-layout style:name="AL2T1">
+      <presentation:placeholder presentation:object="title" svg:x="2.058cm" svg:y="1.743cm" svg:width="23.912cm" svg:height="3.507cm"/>
+      <presentation:placeholder presentation:object="outline" svg:x="2.058cm" svg:y="5.838cm" svg:width="23.912cm" svg:height="13.23cm"/>
+    </style:presentation-page-layout>
+    <style:presentation-page-layout style:name="AL3T32">
+      <presentation:placeholder presentation:object="subtitle" svg:x="2.058cm" svg:y="1.743cm" svg:width="23.912cm" svg:height="17.325cm"/>
+    </style:presentation-page-layout>
+  </office:styles>
+  <office:automatic-styles>
+    <style:page-layout style:name="PM0">
+      <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="21.59cm" fo:page-height="27.94cm" style:print-orientation="portrait"/>
+    </style:page-layout>
+    <style:page-layout style:name="PM1">
+      <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="33.33cm" fo:page-height="21cm" style:print-orientation="landscape"/>
+    </style:page-layout>
+    <style:page-layout style:name="PM2">
+      <style:page-layout-properties fo:margin-top="1cm" fo:margin-bottom="1cm" fo:margin-left="1cm" fo:margin-right="1cm" fo:page-width="21cm" fo:page-height="29.7cm" style:print-orientation="portrait"/>
+    </style:page-layout>
+    <style:style style:name="Mdp1" style:family="drawing-page">
+      <style:drawing-page-properties draw:background-size="border" draw:fill="bitmap" draw:fill-image-name="background" style:repeat="stretch"/>
+    </style:style>
+    <style:style style:name="Mdp2" style:family="drawing-page">
+      <style:drawing-page-properties draw:background-size="border" draw:fill="bitmap" draw:fill-image-name="Bitmap_20_2" style:repeat="stretch"/>
+    </style:style>
+    <style:style style:name="Mdp3" style:family="drawing-page">
+      <style:drawing-page-properties draw:background-size="border" draw:fill="bitmap" draw:fill-image-name="Bitmape_20_11" style:repeat="stretch"/>
+    </style:style>
+    <style:style style:name="Mdp4" style:family="drawing-page">
+      <style:drawing-page-properties presentation:display-header="true" presentation:display-footer="true" presentation:display-page-number="true" presentation:display-date-time="true"/>
+    </style:style>
+    <style:style style:name="Mgr1" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+    </style:style>
+    <style:style style:name="Mgr2" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+    </style:style>
+    <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Vivid-backgroundobjects">
+      <style:graphic-properties draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+    </style:style>
+    <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Vivid-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+    </style:style>
+    <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="Vivid-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+    </style:style>
+    <style:style style:name="Mpr4" style:family="presentation" style:parent-style-name="Vivid1-backgroundobjects">
+      <style:graphic-properties draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+    </style:style>
+    <style:style style:name="Mpr5" style:family="presentation" style:parent-style-name="Vivid1-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+    </style:style>
+    <style:style style:name="Mpr6" style:family="presentation" style:parent-style-name="Vivid1-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+    </style:style>
+    <style:style style:name="Mpr7" style:family="presentation" style:parent-style-name="Vivid2-backgroundobjects">
+      <style:graphic-properties draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+    </style:style>
+    <style:style style:name="Mpr8" style:family="presentation" style:parent-style-name="Vivid2-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+    </style:style>
+    <style:style style:name="Mpr9" style:family="presentation" style:parent-style-name="Vivid2-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+    </style:style>
+    <style:style style:name="MP1" style:family="paragraph">
+      <style:text-properties fo:font-size="14pt"/>
+    </style:style>
+    <style:style style:name="MP2" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:text-properties fo:font-size="14pt"/>
+    </style:style>
+    <style:style style:name="MP3" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="end"/>
+      <style:text-properties fo:font-size="14pt"/>
+    </style:style>
+    <style:style style:name="MP4" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="end"/>
+      <style:text-properties fo:font-size="14pt"/>
+    </style:style>
+    <style:style style:name="MP5" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="MP6" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="end"/>
+    </style:style>
+    <style:style style:name="MT1" style:family="text">
+      <style:text-properties fo:font-size="14pt"/>
+    </style:style>
+    <text:list-style style:name="ML1">
+      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+        <style:list-level-properties text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+    </text:list-style>
+    <text:list-style style:name="ML2">
+      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+        <style:list-level-properties text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+    </text:list-style>
+  </office:automatic-styles>
+  <office:master-styles>
+    <draw:layer-set>
+      <draw:layer draw:name="layout"/>
+      <draw:layer draw:name="background"/>
+      <draw:layer draw:name="backgroundobjects"/>
+      <draw:layer draw:name="controls"/>
+      <draw:layer draw:name="measurelines"/>
+    </draw:layer-set>
+    <style:handout-master presentation:presentation-page-layout-name="AL0T24" style:page-layout-name="PM0" draw:style-name="Mdp4">
+      <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+        <draw:text-box>
+          <text:p text:style-name="MP1">
+            <text:span text:style-name="MT1">
+              <presentation:header/>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="0cm" presentation:class="date-time">
+        <draw:text-box>
+          <text:p text:style-name="MP3">
+            <text:span text:style-name="MT1">
+              <presentation:date-time/>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="26.543cm" presentation:class="footer">
+        <draw:text-box>
+          <text:p text:style-name="MP1">
+            <text:span text:style-name="MT1">
+              <presentation:footer/>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="26.543cm" presentation:class="page-number">
+        <draw:text-box>
+          <text:p text:style-name="MP3">
+            <text:span text:style-name="MT1">
+              <text:page-number/>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.855cm" svg:x="1cm" svg:y="2.993cm"/>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.855cm" svg:x="1cm" svg:y="11.041cm"/>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.855cm" svg:x="1cm" svg:y="19.089cm"/>
+    </style:handout-master>
+    <style:master-page style:name="Vivid" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+      <draw:frame presentation:style-name="Mpr1" draw:layer="backgroundobjects" svg:width="7.765cm" svg:height="1.449cm" svg:x="1.564cm" svg:y="19.131cm" presentation:class="date-time">
+        <draw:text-box>
+          <text:p>
+            <presentation:date-time/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr1" draw:layer="backgroundobjects" svg:width="10.564cm" svg:height="1.449cm" svg:x="11.296cm" svg:y="19.131cm" presentation:class="footer">
+        <draw:text-box>
+          <text:p text:style-name="MP5">
+            <presentation:footer/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr1" draw:layer="backgroundobjects" svg:width="7.765cm" svg:height="1.449cm" svg:x="23.795cm" svg:y="19.131cm" presentation:class="page-number">
+        <draw:text-box>
+          <text:p text:style-name="MP6">
+            <text:page-number/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Vivid-title" draw:layer="backgroundobjects" svg:width="29.996cm" svg:height="12.371cm" svg:x="1.524cm" svg:y="0.837cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Vivid-outline1" draw:layer="backgroundobjects" svg:width="29.972cm" svg:height="4.306cm" svg:x="1.536cm" svg:y="14.49cm" presentation:class="outline" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <presentation:notes style:page-layout-name="PM2">
+        <draw:page-thumbnail presentation:style-name="Vivid-title" draw:layer="backgroundobjects" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Vivid-notes" draw:layer="backgroundobjects" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="1cm" presentation:class="header">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:header/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="1cm" presentation:class="date-time">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <presentation:date-time/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="27.315cm" presentation:class="footer">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:footer/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="27.315cm" presentation:class="page-number">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <text:page-number/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+      </presentation:notes>
+    </style:master-page>
+    <style:master-page style:name="Vivid1" style:page-layout-name="PM1" draw:style-name="Mdp2">
+      <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+      <draw:frame presentation:style-name="Vivid1-title" draw:layer="backgroundobjects" svg:width="29.996cm" svg:height="3.506cm" svg:x="1.664cm" svg:y="0.337cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Vivid1-outline1" draw:layer="backgroundobjects" svg:width="29.832cm" svg:height="12.954cm" svg:x="1.664cm" svg:y="5.334cm" presentation:class="outline" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr4" draw:layer="backgroundobjects" svg:width="7.765cm" svg:height="1.449cm" svg:x="1.664cm" svg:y="19.131cm" presentation:class="date-time">
+        <draw:text-box>
+          <text:p>
+            <presentation:date-time/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr4" draw:layer="backgroundobjects" svg:width="10.564cm" svg:height="1.449cm" svg:x="11.396cm" svg:y="19.131cm" presentation:class="footer">
+        <draw:text-box>
+          <text:p text:style-name="MP5">
+            <presentation:footer/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr4" draw:layer="backgroundobjects" svg:width="7.765cm" svg:height="1.449cm" svg:x="23.895cm" svg:y="19.131cm" presentation:class="page-number">
+        <draw:text-box>
+          <text:p text:style-name="MP6">
+            <text:page-number/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <presentation:notes style:page-layout-name="PM2">
+        <draw:page-thumbnail presentation:style-name="Vivid1-title" draw:layer="backgroundobjects" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Vivid1-notes" draw:layer="backgroundobjects" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="1cm" presentation:class="header">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:header/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="1cm" presentation:class="date-time">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <presentation:date-time/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="27.315cm" presentation:class="footer">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:footer/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="27.315cm" presentation:class="page-number">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <text:page-number/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+      </presentation:notes>
+    </style:master-page>
+    <style:master-page style:name="Vivid2" style:page-layout-name="PM1" draw:style-name="Mdp3">
+      <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+      <draw:frame presentation:style-name="Vivid2-title" draw:layer="backgroundobjects" svg:width="29.996cm" svg:height="3.506cm" svg:x="1.664cm" svg:y="0.837cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Vivid2-outline1" draw:layer="backgroundobjects" svg:width="30.086cm" svg:height="14.986cm" svg:x="1.664cm" svg:y="5.08cm" presentation:class="outline" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr7" draw:layer="backgroundobjects" svg:width="7.765cm" svg:height="1.449cm" svg:x="1.664cm" svg:y="18.966cm" presentation:class="date-time">
+        <draw:text-box>
+          <text:p>
+            <presentation:date-time/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr7" draw:layer="backgroundobjects" svg:width="10.564cm" svg:height="1.449cm" svg:x="11.396cm" svg:y="18.966cm" presentation:class="footer">
+        <draw:text-box>
+          <text:p text:style-name="MP5">
+            <presentation:footer/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr7" draw:layer="backgroundobjects" svg:width="6.26cm" svg:height="1.449cm" svg:x="25.524cm" svg:y="18.966cm" presentation:class="page-number">
+        <draw:text-box>
+          <text:p text:style-name="MP6">
+            <text:page-number/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <presentation:notes style:page-layout-name="PM2">
+        <draw:page-thumbnail presentation:style-name="Vivid2-title" draw:layer="backgroundobjects" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Vivid2-notes" draw:layer="backgroundobjects" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="1cm" presentation:class="header">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:header/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="1cm" presentation:class="date-time">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <presentation:date-time/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr9" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="27.315cm" presentation:class="footer">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:footer/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr9" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="27.315cm" presentation:class="page-number">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <text:page-number/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+      </presentation:notes>
+    </style:master-page>
+  </office:master-styles>
+</office:document-styles>

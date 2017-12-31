@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
+  <office:scripts/>
+  <office:font-face-decls>
+    <style:font-face style:name="Source Sans Pro" svg:font-family="'Source Sans Pro'" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro2" svg:font-family="'Source Sans Pro'" style:font-adornments="Negrita" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro1" svg:font-family="'Source Sans Pro'" style:font-adornments="Normal" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro Black" svg:font-family="'Source Sans Pro Black'" style:font-adornments="Negra" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro Light1" svg:font-family="'Source Sans Pro Light'" style:font-pitch="variable"/>
+    <style:font-face style:name="Source Sans Pro Light" svg:font-family="'Source Sans Pro Light'" style:font-adornments="Ligera" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans Regular" svg:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable"/>
+  </office:font-face-decls>
+  <office:automatic-styles>
+    <style:style style:name="dp1" style:family="drawing-page">
+      <style:drawing-page-properties presentation:transition-speed="fast" presentation:background-visible="true" presentation:background-objects-visible="true" presentation:display-footer="false" presentation:display-page-number="false" presentation:display-date-time="false"/>
+    </style:style>
+    <style:style style:name="dp2" style:family="drawing-page">
+      <style:drawing-page-properties presentation:display-header="true" presentation:display-footer="true" presentation:display-page-number="true" presentation:display-date-time="true"/>
+    </style:style>
+    <style:style style:name="dp3" style:family="drawing-page">
+      <style:drawing-page-properties presentation:transition-speed="fast" presentation:background-visible="true" presentation:background-objects-visible="true" draw:fill="bitmap" draw:fill-image-name="Bitmap_20_1" style:repeat="stretch" presentation:display-footer="false" presentation:display-page-number="false" presentation:display-date-time="false"/>
+    </style:style>
+    <number:date-style style:name="D3">
+      <number:day number:style="long"/>
+      <number:text>.</number:text>
+      <number:month number:style="long"/>
+      <number:text>.</number:text>
+      <number:year/>
+    </number:date-style>
+    <style:style style:name="gr1" style:family="graphic">
+      <style:graphic-properties style:protect="size"/>
+    </style:style>
+    <style:style style:name="pr1" style:family="presentation" style:parent-style-name="Vivid-subtitle">
+      <style:graphic-properties fo:min-height="4.306cm"/>
+    </style:style>
+    <style:style style:name="pr2" style:family="presentation" style:parent-style-name="Vivid-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.476cm"/>
+    </style:style>
+    <style:style style:name="pr3" style:family="presentation" style:parent-style-name="Vivid1-title">
+      <style:graphic-properties fo:min-height="3.306cm"/>
+    </style:style>
+    <style:style style:name="pr4" style:family="presentation" style:parent-style-name="Vivid1-outline1">
+      <style:graphic-properties fo:min-height="13.174cm"/>
+    </style:style>
+    <style:style style:name="pr5" style:family="presentation" style:parent-style-name="Vivid1-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.464cm"/>
+    </style:style>
+    <style:style style:name="pr6" style:family="presentation" style:parent-style-name="Vivid2-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="16.255cm"/>
+    </style:style>
+    <style:style style:name="pr7" style:family="presentation" style:parent-style-name="Vivid2-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.464cm"/>
+    </style:style>
+    <style:style style:name="P1" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:text-properties fo:font-size="18pt"/>
+    </style:style>
+    <style:style style:name="P2" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:text-properties fo:font-size="19.7999992370605pt"/>
+    </style:style>
+    <style:style style:name="P3" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:presentation>
+      <presentation:date-time-decl presentation:name="dtd1" presentation:source="current-date" style:data-style-name="D3"/>
+      <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Vivid" presentation:presentation-page-layout-name="AL1T0" presentation:use-date-time-name="dtd1">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame presentation:style-name="Vivid-title" draw:layer="layout" svg:width="29.996cm" svg:height="12.371cm" svg:x="1.524cm" svg:y="0.837cm" presentation:class="title" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr1" draw:layer="layout" svg:width="29.972cm" svg:height="4.306cm" svg:x="1.536cm" svg:y="14.49cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2" presentation:use-date-time-name="dtd1">
+          <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" draw:page-number="1" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr2" draw:text-style-name="P1" draw:layer="layout" svg:width="18.959cm" svg:height="13.476cm" svg:x="1.041cm" svg:y="15.224cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page2" draw:style-name="dp3" draw:master-page-name="Vivid1" presentation:presentation-page-layout-name="AL2T1" presentation:use-date-time-name="dtd1">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame presentation:style-name="pr3" draw:layer="layout" svg:width="29.996cm" svg:height="3.506cm" svg:x="1.664cm" svg:y="0.337cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr4" draw:layer="layout" svg:width="29.832cm" svg:height="12.954cm" svg:x="1.664cm" svg:y="5.334cm" presentation:class="outline" presentation:placeholder="true" presentation:user-transformed="true">
+          <draw:text-box/>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2" presentation:use-date-time-name="dtd1">
+          <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" draw:page-number="2" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr5" draw:text-style-name="P2" draw:layer="layout" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page3" draw:style-name="dp1" draw:master-page-name="Vivid2" presentation:presentation-page-layout-name="AL3T32" presentation:use-date-time-name="dtd1">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame presentation:style-name="pr6" draw:text-style-name="P3" draw:layer="layout" svg:width="29.996cm" svg:height="16.255cm" svg:x="1.664cm" svg:y="2.337cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
+          <draw:text-box/>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2" presentation:use-date-time-name="dtd1">
+          <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" draw:page-number="3" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr7" draw:text-style-name="P2" draw:layer="layout" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <presentation:settings presentation:mouse-visible="false"/>
+    </office:presentation>
+  </office:body>
+</office:document-content>
