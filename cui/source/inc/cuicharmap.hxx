@@ -39,6 +39,24 @@ namespace svx
     struct SvxShowCharSetItem;
 }
 
+class Ocr
+{
+public:
+    Ocr(const Bitmap& b, long w, long h);
+
+    void ReadBitmap();
+    void CropBitmap();
+    void ScaleBitmap(long width, long height);
+
+    static const int SIZE = 25;
+
+private:
+    Bitmap m_bitmap;
+    long w_;
+    long h_;
+    std::vector<char> data;
+};
+
 class DrawingAreaOcr : public Control
 {
 public:
