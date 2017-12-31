@@ -52,9 +52,12 @@ public:
     ScCaptionPtr& operator=( const ScCaptionPtr& r );
     ScCaptionPtr& operator=( ScCaptionPtr&& r );
     explicit operator bool() const    { return mpCaption != nullptr; }
-    SdrCaptionObj* get() const        { return mpCaption; }
-    SdrCaptionObj* operator->() const { return mpCaption; }
-    SdrCaptionObj& operator*() const  { return *mpCaption; }
+    const SdrCaptionObj* get() const        { return mpCaption; }
+    SdrCaptionObj* get()        { return mpCaption; }
+    const SdrCaptionObj* operator->() const { return mpCaption; }
+    SdrCaptionObj* operator->() { return mpCaption; }
+    const SdrCaptionObj& operator*() const  { return *mpCaption; }
+    SdrCaptionObj& operator*()  { return *mpCaption; }
 
     // Does not default to nullptr to make it visually obvious where such is used.
     void reset( SdrCaptionObj* p );
