@@ -7724,6 +7724,12 @@ libo_CHECK_SYSTEM_MODULE([libstaroffice],[STAROFFICE],[libstaroffice-0.0])
 libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.4])
 
 dnl ===================================================================
+dnl Neuronal network fann
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([fann], [FANN], [fann >= 2.0])
+
+
+dnl ===================================================================
 dnl Check for system lcms2
 dnl ===================================================================
 if test "$with_system_lcms2" != "yes"; then

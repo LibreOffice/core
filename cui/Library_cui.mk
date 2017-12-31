@@ -66,6 +66,7 @@ $(eval $(call gb_Library_use_externals,cui,\
 	boost_headers \
 	$(call gb_Helper_optional,OPENCL,\
 		clew) \
+    fann \
     icuuc \
     icu_headers \
 ))
