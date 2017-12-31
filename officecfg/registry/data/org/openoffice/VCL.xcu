@@ -275,89 +275,89 @@
     </node>
     <node oor:name="zh-tw" oor:op="replace">
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>思源宋體;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;AR PL UMing TW;Ming;Song;Sung;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源宋體;Source Han Serif;Noto Serif CJK TC;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Andale Sans UI;Arial Unicode MS;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-mo" oor:op="replace">
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>思源宋體;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;AR PL UMing HK;Ming;Song;Sung;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源宋體;Source Han Serif;Noto Serif CJK TC;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Andale Sans UI;Arial Unicode MS;Ming;Sung;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-hk" oor:op="replace">
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Ming;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>思源宋體;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;AR PL UMing HK;Ming;Song;Sung;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源宋體;Source Han Serif;Noto Serif CJK TC;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體 HW;細明體;MingLiU;文泉驛等寬微米黑;Liberation Mono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>思源黑體;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;文泉驛微米黑;Hei;新細明體;PMingLiU;Andale Sans UI;Arial Unicode MS;Ming;Sung;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>思源黑體;Source Han Sans;Noto Sans CJK TC;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-sg" oor:op="replace">
