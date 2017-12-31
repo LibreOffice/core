@@ -1440,7 +1440,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
         }
     }
     const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::EComposeRule::InDataManipulation, true );
-    OUString sSql("INSERT INTO " + sComposedTableName + " ( " + sColumns.makeStringAndClear() + " ) ( " + m_pSourceObject->getSelectStatement() + " )");
+    OUString sSql("INSERT INTO " + sComposedTableName + " ( " + sColumns.makeStringAndClear() + " ) " + m_pSourceObject->getSelectStatement());
 
     return sSql;
 }
