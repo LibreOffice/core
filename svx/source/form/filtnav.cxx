@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include <memory>
 #include <filtnav.hxx>
 #include <fmexch.hxx>
@@ -811,7 +811,7 @@ void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 
 bool FmFilterModel::ValidateText(FmFilterItem const * pItem, OUString& rText, OUString& rErrorMsg) const
 {
-    FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( pItem->GetParent()->GetParent()  );
+    FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( pItem->GetParent() );
     try
     {
         Reference< XFormController > xFormController( pFormItem->GetController() );
@@ -1563,10 +1563,12 @@ void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
 void FmFilterNavigator::Command( const CommandEvent& rEvt )
 {
     bool bHandled = false;
+std::cerr << "TODO FmFilterNavigator::Command debut\n";
     switch (rEvt.GetCommand())
     {
         case CommandEventId::ContextMenu:
         {
+std::cerr << "TODO FmFilterNavigator::Command context\n";
             // the place where it was clicked
             Point aWhere;
             SvTreeListEntry* pClicked = nullptr;
@@ -1591,6 +1593,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                     break;
                 aWhere = GetEntryPosition( pClicked );
             }
+std::cerr << "TODO FmFilterNavigator::Command context 2\n";
 
             ::std::vector<FmFilterData*> aSelectList;
             for (SvTreeListEntry* pEntry = FirstSelected();
@@ -1628,6 +1631,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
             aContextMenu->RemoveDisabledEntries(true, true);
             aContextMenu->Execute(this, aWhere);
             OString sIdent = aContextMenu->GetCurItemIdent();
+std::cerr << "TODO FmFilterNavigator::Command context 3 sIdent = " << sIdent << "\n";
             if (sIdent == "edit")
                 EditEntry( pClicked );
             else if (sIdent == "isnull")
