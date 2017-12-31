@@ -192,31 +192,6 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
     return ret;
 }
 
-static BOOL WINAPI CheckTokenMembership_Stub( HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember )
-{
-    typedef BOOL (WINAPI *CheckTokenMembership_PROC)( HANDLE, PSID, PBOOL );
-
-    static HMODULE  hModule = nullptr;
-    static CheckTokenMembership_PROC    pCheckTokenMembership = nullptr;
-
-    if ( !hModule )
-    {
-        /* SAL is always linked against ADVAPI32 so we can rely on that it is already mapped */
-        hModule = GetModuleHandleW( L"ADVAPI32.DLL" );
-
-        pCheckTokenMembership = reinterpret_cast<CheckTokenMembership_PROC>(GetProcAddress( hModule, "CheckTokenMembership" ));
-    }
-
-    if ( pCheckTokenMembership )
-        return pCheckTokenMembership( TokenHandle, SidToCheck, IsMember );
-    else
-    {
-        SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
-        return FALSE;
-    }
-
-}
-
 sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     if (Security != nullptr)
@@ -245,21 +220,21 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 
         if (AllocateAndInitializeSid(&siaNtAuthority,
                                      2,
-                                      SECURITY_BUILTIN_DOMAIN_RID,
-                                      DOMAIN_ALIAS_RID_ADMINS,
-                                      0, 0, 0, 0, 0, 0,
-                                      &psidAdministrators))
+                                     SECURITY_BUILTIN_DOMAIN_RID,
+                                     DOMAIN_ALIAS_RID_ADMINS,
+                                     0, 0, 0, 0, 0, 0,
+                                     &psidAdministrators))
         {
-            BOOL    fSuccess = FALSE;
+            BOOL fSuccess = FALSE;
 
-            if ( CheckTokenMembership_Stub( hImpersonationToken, psidAdministrators, &fSuccess ) && fSuccess )
+            if (CheckTokenMembership(hImpersonationToken, psidAdministrators, &fSuccess) && fSuccess)
                 bSuccess = true;
 
             FreeSid(psidAdministrators);
         }
 
-        if ( hImpersonationToken )
-            CloseHandle( hImpersonationToken );
+        if (hImpersonationToken)
+            CloseHandle(hImpersonationToken);
 
         return bSuccess;
     }
