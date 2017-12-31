@@ -606,7 +606,7 @@ public:
     // store MailMerge data while "Back to Mail Merge Wizard" FloatingWindow is active
     // or to support printing
     void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem);
-    std::shared_ptr<SwMailMergeConfigItem> GetMailMergeConfigItem() const;
+    std::shared_ptr<SwMailMergeConfigItem> const & GetMailMergeConfigItem() const;
     std::shared_ptr<SwMailMergeConfigItem> EnsureMailMergeConfigItem(const SfxItemSet* pArgs = nullptr);
 
     void ExecFormatPaintbrush(SfxRequest const &);

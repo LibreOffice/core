@@ -196,13 +196,13 @@ public:
 
     inline SwSection* GetParent() const;
 
-    OUString GetCondition() const           { return m_Data.GetCondition(); }
+    OUString const & GetCondition() const           { return m_Data.GetCondition(); }
     void SetCondition(OUString const& rNew) { m_Data.SetCondition(rNew); }
 
-    OUString GetLinkFileName() const;
+    OUString const & GetLinkFileName() const;
     void SetLinkFileName(OUString const& rNew);
     // Password of linked file (only valid during runtime!)
-    OUString GetLinkFilePassword() const
+    OUString const & GetLinkFilePassword() const
         { return m_Data.GetLinkFilePassword(); }
     void SetLinkFilePassword(OUString const& rS)
         { m_Data.SetLinkFilePassword(rS); }

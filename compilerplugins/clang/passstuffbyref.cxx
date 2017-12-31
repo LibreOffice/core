@@ -251,7 +251,8 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
             .GlobalNamespace())
         || (dc.Function("TopLeft").Class("SwRect").GlobalNamespace())
         || (dc.Function("ConvDicList_CreateInstance").GlobalNamespace())
-        || (dc.Function("Create").Class("OUnoAutoPilot").Namespace("dbp").GlobalNamespace()))
+        || (dc.Function("Create").Class("OUnoAutoPilot").Namespace("dbp").GlobalNamespace())
+        || (dc.Function("Size_").Class("SwRect").GlobalNamespace()))
     {
         return;
     }

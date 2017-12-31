@@ -457,7 +457,7 @@ SwPageDescExt::~SwPageDescExt()
 {
 }
 
-OUString SwPageDescExt::GetName() const
+OUString const & SwPageDescExt::GetName() const
 {
     return m_PageDesc.GetName();
 }

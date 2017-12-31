@@ -451,7 +451,7 @@ public:
 
     const OUString&     GetTitle() const;           // Title
     const OUString&     GetBookmarkName() const;
-    OUString            GetTypeName() const;        // Name
+    OUString const &    GetTypeName() const;        // Name
     const SwForm&       GetTOXForm() const;         // description of the lines
 
     void                SetCreate(SwTOXElement);
@@ -688,7 +688,7 @@ inline const OUString& SwTOXBase::GetBookmarkName() const
 inline const OUString& SwTOXBase::GetEntryTypeName() const
     { return m_aEntryTypeName; }
 
-inline OUString SwTOXBase::GetTypeName() const
+inline OUString const & SwTOXBase::GetTypeName() const
     { return GetTOXType()->GetTypeName();  }
 
 inline const SwForm& SwTOXBase::GetTOXForm() const

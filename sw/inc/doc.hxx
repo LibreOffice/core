@@ -706,7 +706,7 @@ public:
                        const std::vector<OUString>* pAllDBNames = nullptr );
 
     void ChgDBData( const SwDBData& rNewData );
-    SwDBData GetDBData();
+    SwDBData const & GetDBData();
     const SwDBData& GetDBDesc();
 
     // Some helper functions

@@ -419,7 +419,7 @@ public:
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
 
     /// Database information.
-    SwDBData GetDBData() const;
+    SwDBData const & GetDBData() const;
     const SwDBData& GetDBDesc() const;
     void ChgDBData(const SwDBData& SwDBData);
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
@@ -487,7 +487,7 @@ public:
     void                InsertTOXType(const SwTOXType& rTyp);
 
     /// AutoMark file
-    OUString        GetTOIAutoMarkURL() const;
+    OUString const & GetTOIAutoMarkURL() const;
     void            SetTOIAutoMarkURL(const OUString& rSet);
     void            ApplyAutoMark();
 

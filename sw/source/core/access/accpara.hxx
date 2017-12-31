@@ -92,7 +92,7 @@ class SwAccessibleParagraph :
     const SwTextNode* GetTextNode() const;
 
     /// get the (accessible) text string (requires frame; check before)
-    OUString GetString();
+    OUString const & GetString();
 
     static OUString GetDescription();
 

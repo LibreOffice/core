@@ -210,7 +210,7 @@ public:
     sal_uInt16          GetPieceLen() const;
 
     // Return defined DocStat - WordDelimiter.
-    OUString            GetDocStatWordDelim() const;
+    OUString const & GetDocStatWordDelim() const;
 
     // Pass metric of ModuleConfig (for HTML-export).
     FieldUnit GetMetric( bool bWeb ) const;

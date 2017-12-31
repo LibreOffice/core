@@ -340,7 +340,7 @@ OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName )
     return OUString();
 }
 
-SwDBData SwDoc::GetDBData()
+SwDBData const & SwDoc::GetDBData()
 {
     return GetDBDesc();
 }

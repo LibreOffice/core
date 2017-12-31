@@ -62,7 +62,7 @@ bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputS
     return true;
 }
 
-SignatureInformations PDFSignatureHelper::GetSignatureInformations() const
+SignatureInformations const & PDFSignatureHelper::GetSignatureInformations() const
 {
     return m_aSignatureInfos;
 }

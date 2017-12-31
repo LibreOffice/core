@@ -107,11 +107,11 @@ private:
 
     void Initialize();
     void Update();
-    Color GetColorSetOrDefault();
-    XGradient GetGradientSetOrDefault();
-    const OUString GetHatchingSetOrDefault();
-    const OUString GetBitmapSetOrDefault();
-    const OUString GetPatternSetOrDefault();
+    Color const & GetColorSetOrDefault();
+    XGradient const & GetGradientSetOrDefault();
+    OUString const & GetHatchingSetOrDefault();
+    OUString const & GetBitmapSetOrDefault();
+    OUString const & GetPatternSetOrDefault();
 
     void ModifyFillColor();
 

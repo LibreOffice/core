@@ -273,7 +273,7 @@ void SwDDEFieldType::SetCmd( const OUString& _aStr )
     refLink->SetLinkSourceName( aStr );
 }
 
-OUString SwDDEFieldType::GetCmd() const
+OUString const & SwDDEFieldType::GetCmd() const
 {
     return refLink->GetLinkSourceName();
 }

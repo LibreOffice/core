@@ -252,7 +252,7 @@ void PageStylesPanel::Update()
     }
 }
 
-Color PageStylesPanel::GetColorSetOrDefault()
+Color const & PageStylesPanel::GetColorSetOrDefault()
 {
    if ( !mpBgColorItem )
         mpBgColorItem.reset( new XFillColorItem( OUString(), Color(0x72, 0x9f, 0xcf) ) );
@@ -260,7 +260,7 @@ Color PageStylesPanel::GetColorSetOrDefault()
    return mpBgColorItem->GetColorValue();
 }
 
-XGradient PageStylesPanel::GetGradientSetOrDefault()
+XGradient const & PageStylesPanel::GetGradientSetOrDefault()
 {
     if( !mpBgGradientItem )
     {
@@ -275,7 +275,7 @@ XGradient PageStylesPanel::GetGradientSetOrDefault()
     return mpBgGradientItem->GetGradientValue();
 }
 
-const OUString PageStylesPanel::GetHatchingSetOrDefault()
+OUString const & PageStylesPanel::GetHatchingSetOrDefault()
 {
     if( !mpBgHatchItem )
     {
@@ -290,7 +290,7 @@ const OUString PageStylesPanel::GetHatchingSetOrDefault()
     return mpBgHatchItem->GetName();
 }
 
-const OUString PageStylesPanel::GetBitmapSetOrDefault()
+OUString const & PageStylesPanel::GetBitmapSetOrDefault()
 {
     if( !mpBgBitmapItem || mpBgBitmapItem->isPattern() )
     {
@@ -305,7 +305,7 @@ const OUString PageStylesPanel::GetBitmapSetOrDefault()
     return mpBgBitmapItem->GetName();
 }
 
-const OUString PageStylesPanel::GetPatternSetOrDefault()
+OUString const & PageStylesPanel::GetPatternSetOrDefault()
 {
     if( !mpBgBitmapItem || !mpBgBitmapItem->isPattern() )
     {

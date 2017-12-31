@@ -368,7 +368,7 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
     }
 }
 
-ErrCode SwTextBlocks::CopyBlock( SwTextBlocks const & rSource, OUString& rSrcShort,
+ErrCode const & SwTextBlocks::CopyBlock( SwTextBlocks const & rSource, OUString& rSrcShort,
                                 const OUString& rLong )
 {
     bool bIsOld = false;
@@ -525,7 +525,7 @@ void SwTextBlocks::ClearDoc()
     }
 }
 
-OUString SwTextBlocks::GetFileName() const
+OUString const & SwTextBlocks::GetFileName() const
 {
     return pImp->GetFileName();
 }

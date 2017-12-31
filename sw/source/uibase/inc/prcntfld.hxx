@@ -60,7 +60,7 @@ public:
     void SetText(const OUString& rStr) { m_pField->SetText(rStr); }
     void SaveValue() { m_pField->SaveValue(); }
     void ClearModifyFlag() { m_pField->ClearModifyFlag(); }
-    OUString GetSavedValue() const { return m_pField->GetSavedValue(); }
+    OUString const & GetSavedValue() const { return m_pField->GetSavedValue(); }
     OUString GetText() const { return m_pField->GetText(); }
     void SetMetricFieldMin(sal_Int64 nNewMin) { m_pField->SetMin(nNewMin); }
     void SetMetricFieldMax(sal_Int64 nNewMax) { m_pField->SetMax(nNewMax); }

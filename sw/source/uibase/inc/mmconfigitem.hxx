@@ -85,13 +85,13 @@ public:
         css::uno::Reference< css::sdbcx::XColumnsSupplier> const & xColumnsSupplier,
         const SwDBData& rDBData);
 
-    css::uno::Reference< css::sdbc::XDataSource> GetSource();
+    css::uno::Reference< css::sdbc::XDataSource> const & GetSource();
 
-    SharedConnection GetConnection();
+    SharedConnection const & GetConnection();
 
-    css::uno::Reference< css::sdbcx::XColumnsSupplier> GetColumnsSupplier();
+    css::uno::Reference< css::sdbcx::XColumnsSupplier> const & GetColumnsSupplier();
 
-    css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const;
+    css::uno::Reference< css::sdbc::XResultSet> const & GetResultSet() const;
 
     void DisposeResultSet();
 
@@ -157,19 +157,19 @@ public:
     bool IsGreetingFieldsAssigned() const;
 
     //e-Mail settings:
-    OUString GetMailDisplayName() const;
+    OUString const & GetMailDisplayName() const;
     void SetMailDisplayName(const OUString& rName);
 
-    OUString GetMailAddress() const;
+    OUString const & GetMailAddress() const;
     void SetMailAddress(const OUString& rAddress);
 
     bool IsMailReplyTo() const;
     void SetMailReplyTo(bool bSet);
 
-    OUString GetMailReplyTo() const;
+    OUString const & GetMailReplyTo() const;
     void SetMailReplyTo(const OUString& rReplyTo);
 
-    OUString GetMailServer() const;
+    OUString const & GetMailServer() const;
     void SetMailServer(const OUString& rAddress);
 
     sal_Int16 GetMailPort() const;
@@ -181,16 +181,16 @@ public:
     bool IsAuthentication() const;
     void SetAuthentication(bool bSet);
 
-    OUString GetMailUserName() const;
+    OUString const & GetMailUserName() const;
     void SetMailUserName(const OUString& rName);
 
-    OUString GetMailPassword() const;
+    OUString const & GetMailPassword() const;
     void SetMailPassword(const OUString& rPassword);
 
     bool IsSMTPAfterPOP() const;
     void SetSMTPAfterPOP(bool bSet);
 
-    OUString GetInServerName() const;
+    OUString const & GetInServerName() const;
     void SetInServerName(const OUString& rServer);
 
     sal_Int16 GetInServerPort() const;
@@ -199,10 +199,10 @@ public:
     bool IsInServerPOP() const;
     void SetInServerPOP(bool bSet);
 
-    OUString GetInServerUserName() const;
+    OUString const & GetInServerUserName() const;
     void SetInServerUserName(const OUString& rName);
 
-    OUString GetInServerPassword() const;
+    OUString const & GetInServerPassword() const;
     void SetInServerPassword(const OUString& rPassword);
 
     //session information

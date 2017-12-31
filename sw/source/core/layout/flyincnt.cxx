@@ -191,7 +191,7 @@ void SwFlyInContentFrame::NotifyBackground( SwPageFrame *, const SwRect& rRect,
         AnchorFrame()->Prepare( eHint, static_cast<void const *>(&rRect) );
 }
 
-const Point SwFlyInContentFrame::GetRelPos() const
+Point const & SwFlyInContentFrame::GetRelPos() const
 {
     Calc(getRootFrame()->GetCurrShell()->GetOut());
     return GetCurrRelPos();

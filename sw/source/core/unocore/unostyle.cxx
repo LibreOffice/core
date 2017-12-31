@@ -3351,7 +3351,7 @@ class SwAutoStylesEnumImpl
 public:
     SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
     bool hasMoreElements() { return aIter != mAutoStyles.end(); }
-    std::shared_ptr<SfxItemSet> nextElement() { return *(aIter++); }
+    std::shared_ptr<SfxItemSet> const & nextElement() { return *(aIter++); }
     IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
     SwDoc* getDoc() const { return pDoc; }
 };

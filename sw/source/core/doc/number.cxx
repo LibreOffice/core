@@ -1257,7 +1257,7 @@ namespace numfunc
     {
     }
 
-    OUString GetDefBulletFontname()
+    OUString const & GetDefBulletFontname()
     {
         return SwDefBulletConfig::getInstance().GetFontname();
     }

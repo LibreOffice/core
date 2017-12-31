@@ -138,7 +138,7 @@ public:
     {
         xConfigItem = rItem;
     }
-    std::shared_ptr<SwMailMergeConfigItem>  GetMailMergeConfigItem() {return xConfigItem;}
+    std::shared_ptr<SwMailMergeConfigItem> const & GetMailMergeConfigItem() {return xConfigItem;}
 
     //#i33307# restore editing position
     void                    SetRestorePosition(const Point& rCursorPos, bool bSelectObj)

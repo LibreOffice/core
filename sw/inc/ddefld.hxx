@@ -55,7 +55,7 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
-    OUString GetCmd() const;
+    OUString const & GetCmd() const;
     void SetCmd( const OUString& aStr );
 
     SfxLinkUpdateMode GetType() const          { return refLink->GetUpdateMode();  }

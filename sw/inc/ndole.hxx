@@ -64,7 +64,7 @@ public:
 
     OUString GetDescription();
 
-    const css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef();
+    css::uno::Reference < css::embed::XEmbeddedObject > const & GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     const OUString& GetCurrentPersistName() const { return m_aName; }
     OUString GetStyleString();

@@ -48,7 +48,7 @@ class SwPosNotify
         explicit SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj );
         ~SwPosNotify() COVERITY_NOEXCEPT_FALSE;
         // #i32795#
-        Point LastObjPos() const;
+        Point const & LastObjPos() const;
 };
 
 SwPosNotify::SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj ) :
@@ -123,7 +123,7 @@ SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
 }
 
 // --> #i32795#
-Point SwPosNotify::LastObjPos() const
+Point const & SwPosNotify::LastObjPos() const
 {
     return maOldObjRect.Pos();
 }

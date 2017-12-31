@@ -76,7 +76,7 @@ public:
     void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { aNumRuleInfo.Set(rInf); }
     const SwHTMLNumRuleInfo& GetNumInfo() const { return aNumRuleInfo; }
 
-    std::shared_ptr<HTMLAttrTable> GetAttrTab(bool bCreate = false);
+    std::shared_ptr<HTMLAttrTable> const & GetAttrTab(bool bCreate = false);
 
     void SetContextStMin( size_t nMin ) { nContextStMin = nMin; }
     size_t GetContextStMin() const { return nContextStMin; }
@@ -97,7 +97,7 @@ public:
     bool GetFixFooterDist() const { return bFixFooterDist; }
 };
 
-std::shared_ptr<HTMLAttrTable> HTMLAttrContext_SaveDoc::GetAttrTab( bool bCreate )
+std::shared_ptr<HTMLAttrTable> const & HTMLAttrContext_SaveDoc::GetAttrTab( bool bCreate )
 {
     if (!xAttrTab && bCreate)
     {

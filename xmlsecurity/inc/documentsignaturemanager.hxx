@@ -81,8 +81,8 @@ public:
     /// Get the security environment.
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getGpgSecurityEnvironment();
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> getSecurityContext();
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> getGpgSecurityContext();
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const & getSecurityContext();
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const & getGpgSecurityContext();
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX

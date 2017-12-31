@@ -872,7 +872,7 @@ bool SwOLEObj::IsOleRef() const
     return m_xOLERef.is();
 }
 
-const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
+uno::Reference < embed::XEmbeddedObject > const & SwOLEObj::GetOleRef()
 {
     if( !m_xOLERef.is() )
     {

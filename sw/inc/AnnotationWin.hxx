@@ -99,7 +99,7 @@ class SwAnnotationWin : public vcl::Window
         void TranslateTopPosition(const long aAmount);
         void CheckMetaText();
 
-        Point GetAnchorPos() { return mAnchorRect.Pos(); }
+        Point const & GetAnchorPos() { return mAnchorRect.Pos(); }
         const SwRect& GetAnchorRect() { return mAnchorRect; }
         bool IsAnchorRectChanged() { return mbAnchorRectChanged; }
         void ResetAnchorRectChanged() { mbAnchorRectChanged = false; }

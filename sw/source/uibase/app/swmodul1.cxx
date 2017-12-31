@@ -584,7 +584,7 @@ const SwViewOption* SwModule::GetViewOption(bool bWeb)
     return GetUsrPref( bWeb );
 }
 
-OUString SwModule::GetDocStatWordDelim() const
+OUString const & SwModule::GetDocStatWordDelim() const
 {
     return m_pModuleConfig->GetWordDelimiter();
 }
