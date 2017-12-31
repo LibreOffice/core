@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include <iostream>
 
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
@@ -32,6 +33,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <svl/stritem.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
@@ -51,6 +54,154 @@
 #include <unicode/utypes.h>
 
 using namespace css;
+
+Ocr::Ocr(const Bitmap& b, long w, long h) : m_bitmap(b), w_(w), h_(h), data()
+{
+}
+
+void Ocr::ReadBitmap()
+{
+    BitmapReadAccess * r = m_bitmap.AcquireReadAccess ();
+    data.resize(h_*w_);
+
+    for (long j = 0; j < h_; j++)
+    {
+        for (long i = 0; i < w_; i++)
+        {
+            Color c = r->GetPixel (j, i);
+            if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
+            {
+                data[j*w_+i] = 1;
+            }
+            else if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
+            {
+                data[j*w_+i] = 0;
+            }
+            else
+            {
+                data[j*w_+i] = 2;
+            }
+        }
+    }
+}
+
+void Ocr::CropBitmap()
+{
+    // Remove useless bottom row.
+    long j;
+    for (j = h_ - 1; j >= 0; j--)
+    {
+        long i;
+        for (i = 0; i < w_; i++)
+        {
+            if (data[j*w_+i] != 0)
+            {
+                break;
+            }
+        }
+        if (i != w_)
+        {
+            break;
+        }
+    }
+
+    // All image is empty.
+    if (j == -1)
+    {
+        w_ = 1;
+        h_ = 1;
+        tools::Rectangle r(0, 0, 1, 1);
+        m_bitmap.Crop(r);
+        data.resize(1);
+        return;
+    }
+
+    long bottom = j;
+
+    // Remove useless top row.
+    for (j = 0; j < h_; j++)
+    {
+        long i;
+        for (i = 0; i < w_; i++)
+        {
+            if (data[j*w_+i] != 0)
+            {
+                break;
+            }
+        }
+        if (i != w_)
+        {
+            break;
+        }
+    }
+
+    long top = j;
+
+    // Remove useless left col.
+    for (j = 0; j < w_; j++)
+    {
+        long i;
+        for (i = 0; i < h_; i++)
+        {
+            if (data[i*w_+j] != 0)
+            {
+                break;
+            }
+        }
+        if (i != h_)
+        {
+            break;
+        }
+    }
+
+    long left = j;
+
+    // Remove useless right col.
+    for (j = w_-1; j >= 0; j--)
+    {
+        long i;
+        for (i = 0; i < h_; i++)
+        {
+            if (data[i*w_+j] != 0)
+            {
+                break;
+            }
+        }
+        if (i != h_)
+        {
+            break;
+        }
+    }
+
+    long right = j;
+
+    w_ = right-left+1;
+    h_ = bottom-top+1;
+    tools::Rectangle r_src(left, top, right, bottom);
+    tools::Rectangle r_dst(0, 0, w_, h_);
+    Size s(w_, h_);
+    Bitmap b_dst(s, 1);
+    b_dst.CopyPixel(r_dst, r_src, &m_bitmap);
+    m_bitmap = b_dst;
+}
+
+void Ocr::ScaleBitmap(long width, long height)
+{
+    double new_ratio = (double)width / height;
+    double ratio = (double)w_ / h_;
+
+    double new_size;
+    if (ratio > new_ratio)
+    {
+        new_size = (double)width / w_;
+    }
+    else
+    {
+        new_size = (double)height / h_;
+    }
+
+    m_bitmap.Scale(new_size, new_size, BmpScaleFlag::Fast);
+}
 
 // class SvxCharacterMap =================================================
 
@@ -956,6 +1107,73 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
     {
         m_pDrawingArea->Hide();
         m_pShowChar->Show();
+
+        Point p(0, 0);
+        long w = m_pDrawingArea->GetOutputWidthPixel ();
+        long h = m_pDrawingArea->GetOutputHeightPixel ();
+        Size s(w, h);
+        Bitmap b = m_pDrawingArea->GetBitmap (p, s);
+
+        Ocr o(b, w, h);
+        o.ReadBitmap();
+        o.CropBitmap();
+        o.ScaleBitmap(Ocr::SIZE, Ocr::SIZE);
+
+        m_pSearchSet->ClearPreviousData();
+
+        sal_UCS4 *range = new sal_UCS4[2];
+        range[0] = 0;
+        range[1] = 1114111;
+        CmapResult rCR (true, range, 1);
+        FontCharMapRef xFontCharMap(new FontCharMap(rCR));
+        m_pSearchSet->GetFontCharMap(xFontCharMap);
+
+        sal_UCS4 sChar = xFontCharMap->GetFirstChar();
+        while(sChar != xFontCharMap->GetLastChar())
+        {
+            VirtualDevice od;
+            OUString aOUStr( &sChar, 1 );
+            Size s50(Ocr::SIZE, Ocr::SIZE);
+            od.SetOutputSize( s50 );
+            vcl::Font aFontBis(aFont);
+            aFontBis.SetFontHeight(Ocr::SIZE);
+            od.SetFont( aFontBis );
+            od.DrawText( p, aOUStr );
+            w = od.GetOutputWidthPixel ();
+            h = od.GetOutputHeightPixel ();
+
+            Size s2(w, h);
+            b = od.GetBitmap (p, s2);
+
+            BitmapReadAccess* r = b.AcquireReadAccess ();
+
+            for (long j = 0; j < h; j++)
+            {
+                for (long i = 0; i < w; i++)
+                {
+                    Color c = r->GetPixel(j, i);
+                    if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
+                    {
+                        std::cout << "1";
+                    }
+                    else if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
+                    {
+                        std::cout << "0";
+                    }
+                    else
+                    {
+                        std::cout << "2";
+                    }
+                }
+                std::cout << std::endl;
+            }
+
+            sChar = xFontCharMap->GetNextChar(sChar);
+            m_pSearchSet->AppendCharToList(sChar);
+        }
+        m_pSearchSet->AppendCharToList(sChar);
+        m_pSearchSet->Resize();
+
     }
 }
 
