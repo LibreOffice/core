@@ -13,6 +13,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autocorr \
 	CustomTarget_autotextuser \
 	CustomTarget_glade \
+	CustomTarget_tplpresnt \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvnolang \
