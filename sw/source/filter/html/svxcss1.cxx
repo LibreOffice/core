@@ -2868,12 +2868,16 @@ static void ParseCSS1_length( const CSS1Expression *pExpr,
     case CSS1_PIXLENGTH:
     case CSS1_NUMBER:       // because of Netscape and IE
         {
-            long nWidthL = (long)pExpr->GetNumber();
-            long nPWidth = bHori ? 0 : nWidthL;
-            long nPHeight = bHori ? nWidthL : 0;
-            SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-            rLength = (bHori ? nPHeight : nPWidth);
-            rLengthType = SVX_CSS1_LTYPE_TWIP;
+            double fLength = pExpr->GetNumber();
+            if (fLength < SAL_MAX_INT32/2.0 && fLength > SAL_MIN_INT32/2.0)
+            {
+                long nWidthL = (long)fLength;
+                long nPWidth = bHori ? 0 : nWidthL;
+                long nPHeight = bHori ? nWidthL : 0;
+                SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
+                rLength = (bHori ? nPHeight : nPWidth);
+                rLengthType = SVX_CSS1_LTYPE_TWIP;
+            }
         }
         break;
 
