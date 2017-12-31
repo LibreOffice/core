@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# See cui-dailog-test.txt for explanations
+# See cui-dialogs-test.txt for explanations
 
 # covering p to z
 
