@@ -52,6 +52,9 @@
 #include <unicode/uchar.h>
 #include <unicode/utypes.h>
 
+#include <fann.h>
+#include <floatfann.h>
+
 using namespace css;
 
 Ocr::Ocr(const Bitmap& b, long w, long h) : m_bitmap(b), w_(w), h_(h), data()
@@ -67,18 +70,25 @@ void Ocr::ReadBitmap()
     {
         for (long i = 0; i < w_; i++)
         {
-            Color c = r->GetPixel (j, i);
-            if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
-            {
-                data[j*w_+i] = 1;
-            }
-            else if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
+            if (i >= r->Width () || j >= r->Height())
             {
                 data[j*w_+i] = 0;
             }
             else
             {
-                data[j*w_+i] = 2;
+                Color c = r->GetPixel (j, i);
+                if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
+                {
+                    data[j*w_+i] = 1;
+                }
+                else if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
+                {
+                    data[j*w_+i] = 0;
+                }
+                else
+                {
+                    data[j*w_+i] = 2;
+                }
             }
         }
     }
@@ -200,6 +210,88 @@ void Ocr::ScaleBitmap(long width, long height)
     }
 
     m_bitmap.Scale(new_size, new_size, BmpScaleFlag::Fast);
+
+    w_ = width;
+    h_ = height;
+}
+
+void Ocr::ToFile(std::ofstream &file)
+{
+    BitmapReadAccess * r = m_bitmap.AcquireReadAccess ();
+
+    std::cout << "2r->Width () != w_" << r->Width () << " vs " << w_ << std::endl;
+    std::cout << "2r->Height() != h_" << r->Height () << " vs " << h_ << std::endl;
+    for (long j = 0; j < h_; j++)
+    {
+        std::cout << j << std::endl;
+        for (long i = 0; i < w_; i++)
+        {
+            std::cout << i << std::endl;
+            if (i >= r->Width () || j >= r->Height())
+            {
+                file << "-1 ";
+            }
+            else
+            {
+                Color c = r->GetPixel(j, i);
+                if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
+                {
+                    file << "-1 ";
+                }
+                else if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
+                {
+                    file << "1 ";
+                }
+                else
+                {
+                    file << "1 ";
+                }
+            }
+        }
+    }
+    file << std::endl;
+}
+
+void Ocr::ToFann(fann_type *out_data)
+{
+    BitmapReadAccess * r = m_bitmap.AcquireReadAccess ();
+    long idata = 0;
+
+    std::cout << "3r->Width () != w_" << r->Width () << " vs " << w_ << std::endl;
+    std::cout << "3r->Height() != h_" << r->Height () << " vs " << h_ << std::endl;
+
+    for (long j = 0; j < h_; j++)
+    {
+        for (long i = 0; i < w_; i++)
+        {
+            if (i >= r->Width () || j >= r->Height())
+            {
+                out_data[idata] = -1;
+                std::cout << "-1 ";
+            }
+            else
+            {
+                Color c = r->GetPixel(j, i);
+                if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
+                {
+                    out_data[idata] = -1;
+                    std::cout << "-1 ";
+                }
+                else if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
+                {
+                    out_data[idata] = 1;
+                    std::cout << "1 ";
+                }
+                else
+                {
+                    out_data[idata] = 1;
+                    std::cout << "1 ";
+                }
+            }
+            idata++;
+        }
+    }
+    std::cout << std::endl;
 }
 
 // class SvxCharacterMap =================================================
@@ -1095,6 +1187,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, Button*, void)
    EndDialog(RET_OK);
 }
 
+#include <iostream>
+
 IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
 {
     if (m_pDrawChk->IsChecked())
@@ -1120,57 +1214,145 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
 
         m_pSearchSet->ClearPreviousData();
 
-        sal_UCS4 *range = new sal_UCS4[2];
-        range[0] = 0;
-        range[1] = 1114111;
-        CmapResult rCR (true, range, 1);
-        FontCharMapRef xFontCharMap(new FontCharMap(rCR));
-        m_pSearchSet->GetFontCharMap(xFontCharMap);
-
-        sal_UCS4 sChar = xFontCharMap->GetFirstChar();
-        while(sChar != xFontCharMap->GetLastChar())
+        // Deep learning. Take about 30-60 minutes
+        if (access( "/tmp/fann.net", F_OK ) == -1)
         {
-            VirtualDevice od;
-            OUString aOUStr( &sChar, 1 );
-            Size s50(Ocr::SIZE, Ocr::SIZE);
-            od.SetOutputSize( s50 );
-            vcl::Font aFontBis(aFont);
-            aFontBis.SetFontHeight(Ocr::SIZE);
-            od.SetFont( aFontBis );
-            od.DrawText( p, aOUStr );
-            w = od.GetOutputWidthPixel ();
-            h = od.GetOutputHeightPixel ();
+            FontCharMapRef xFontCharMap(new FontCharMap());
+            m_pSearchSet->GetFontCharMap(xFontCharMap);
 
-            Size s2(w, h);
-            b = od.GetBitmap (p, s2);
 
-            BitmapReadAccess* r = b.AcquireReadAccess ();
+            // One input for each pixel.
+            const unsigned int num_input = Ocr::SIZE*Ocr::SIZE;
+            // One ouput for each possible char.
+            const unsigned int num_output = xFontCharMap->GetCharCount()-1;
+            // 4 layers (one input, one output and two is recommended for OCR).
+            const unsigned int num_layers = 4;
+            // Number of neurons for each layer is usually between number of input and number on output.
+            const unsigned int num_neurons_hidden = std::max(num_input, num_output);
+            const float desired_error = (const float) 0.001;
+            const unsigned int max_epochs = 500000;
+            // To see progression. It's take time...
+            const unsigned int epochs_between_reports = 1;
 
-            for (long j = 0; j < h; j++)
+            struct fann *ann = fann_create_standard(num_layers, num_input, num_neurons_hidden, num_neurons_hidden, num_output);
+
+            // Default function. Usually works well.
+            fann_set_activation_function_hidden(ann, FANN_SIGMOID_SYMMETRIC);
+            fann_set_activation_function_output(ann, FANN_SIGMOID_SYMMETRIC);
+
+            std::ofstream file;
+            // Write in /tmp/xor.data all database of example.
+            // TODO: MUST be replace by the memory stream.
+            file.open("/tmp/xor.data");
+
+            // First line of the file.
+            file << num_output << " " << num_input << " " << num_output << std::endl;
+            // Then, the current char :
+            //     - For each pixel : -1 if blank, 1 if not blank.
+            //     - For each possible char : -1 if not the current char, 1 if it is the current char.
+
+            long i = 0;
+            sal_UCS4 sChar = xFontCharMap->GetFirstChar();
+            while(sChar != xFontCharMap->GetLastChar())
             {
-                for (long i = 0; i < w; i++)
+                // Draw the current char.
+                VirtualDevice od;
+                OUString aOUStr( &sChar, 1 );
+                Size s50(Ocr::SIZE, Ocr::SIZE);
+                od.SetOutputSize( s50 );
+                vcl::Font aFontBis(aFont);
+                aFontBis.SetFontHeight(Ocr::SIZE);
+                od.SetFont( aFontBis );
+                od.DrawText( p, aOUStr );
+
+                w = od.GetOutputWidthPixel ();
+                h = od.GetOutputHeightPixel ();
+                Size s2(w, h);
+                Bitmap b2 = od.GetBitmap (p, s2);
+
+                BitmapReadAccess* r = b2.AcquireReadAccess ();
+
+                // Show every pixel of the current char.
+                for (long j = 0; j < h; j++)
                 {
-                    Color c = r->GetPixel(j, i);
-                    if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
+                    for (long k = 0; k < w; k++)
                     {
-                        std::cout << "1";
+                        Color c = r->GetPixel(j, k);
+                        if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
+                        {
+                            std::cout << "1";
+                        }
+                        else if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
+                        {
+                            std::cout << "0";
+                        }
+                        else
+                        {
+                            std::cout << "2";
+                        }
                     }
-                    else if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
-                    {
-                        std::cout << "0";
-                    }
-                    else
-                    {
-                        std::cout << "2";
-                    }
+                    std::cout << std::endl;
                 }
-                std::cout << std::endl;
+
+                // Resize the bitmap of the current char.
+                Ocr o2(b2, w, h);
+                o2.ReadBitmap();
+                o2.CropBitmap();
+                o2.ScaleBitmap(Ocr::SIZE, Ocr::SIZE);
+                // Write the draw of the current char to the file.
+                o2.ToFile(file);
+
+                // Write that the current char is the only one good.
+                for (long j = 0; j < i; j++)
+                {
+                    file << "-1 ";
+                }
+
+                file << "1 ";
+
+                for (long j = i + 1; j < num_output; j++)
+                {
+                    file << "-1 ";
+                }
+                file << std::endl;
+
+                sChar = xFontCharMap->GetNextChar(sChar);
+                m_pSearchSet->AppendCharToList(sChar);
+                i++;
             }
 
-            sChar = xFontCharMap->GetNextChar(sChar);
-            m_pSearchSet->AppendCharToList(sChar);
+            file.close();
+            // Creating the database of example done.
+            std::cout << "DONE" << std::endl;
+
+
+            // Training the network. Take age !!!
+            fann_train_on_file(ann, "/tmp/xor.data", max_epochs, epochs_between_reports, desired_error);
+
+            // Save the result. Huge !!!
+            fann_save(ann, "/tmp/fann.net");
+
+            fann_destroy(ann);
         }
-        m_pSearchSet->AppendCharToList(sChar);
+
+        fann_type *calc_out;
+        fann_type input[Ocr::SIZE*Ocr::SIZE];
+
+        std::cout << "Starting loading fann" << std::endl;
+        struct fann *ann = fann_create_from_file("/tmp/fann.net");
+
+        o.ToFann(&input[0]);
+        std::cout << "Starting finding best result" << std::endl;
+        calc_out = fann_run(ann, input);
+        std::cout << "End of fann" << std::endl;
+
+        for (long i = 0; i < 2294; i++)
+            std::cout << calc_out[i] << " ";
+
+        fann_destroy(ann);
+
+        // TODO : sort the output and write the better char at first.
+//        m_pSearchSet->AppendCharToList(sChar);
         m_pSearchSet->Resize();
 
     }
@@ -1530,7 +1712,6 @@ void DrawingAreaOcr::MouseMove( const MouseEvent &rMEvt )
 
     Invalidate();
     Update();
-    std::cout << static_cast<int>(state) << std::endl;
 }
 
 void DrawingAreaOcr::MouseButtonUp (const MouseEvent &rMEvt)

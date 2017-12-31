@@ -28,6 +28,10 @@
 #include <svx/charmap.hxx>
 #include <svx/searchcharmap.hxx>
 #include <sfx2/charwin.hxx>
+#include <iostream>
+#include <fstream>
+
+#include <floatfann.h>
 
 using namespace ::com::sun::star;
 class SubsetMap;
@@ -47,8 +51,10 @@ public:
     void ReadBitmap();
     void CropBitmap();
     void ScaleBitmap(long width, long height);
+    void ToFile(std::ofstream &file);
+    void ToFann(fann_type *out_data);
 
-    static const int SIZE = 25;
+    static const int SIZE = 15;
 
 private:
     Bitmap m_bitmap;
