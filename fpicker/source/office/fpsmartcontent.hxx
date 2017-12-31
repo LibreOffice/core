@@ -131,7 +131,7 @@ namespace svt
 
         /** returns the URL of the content
         */
-        OUString  getURL() const { return m_pContent ? m_pContent->getURL() : m_sURL; }
+        OUString const & getURL() const { return m_pContent ? m_pContent->getURL() : m_sURL; }
 
         /** (re)creates the content for the given URL
 

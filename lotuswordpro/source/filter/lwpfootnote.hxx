@@ -185,8 +185,8 @@ public:
     };
 public:
     sal_uInt16 GetStartingNumber(){ return m_nStartingNumber;}
-    OUString GetLeadingText(){ return m_LeadingText.str();}
-    OUString GetTrailingText(){ return m_TrailingText.str();}
+    OUString const & GetLeadingText(){ return m_LeadingText.str();}
+    OUString const & GetTrailingText(){ return m_TrailingText.str();}
     sal_uInt16 GetReset(){ return static_cast<sal_uInt16>(m_nFlag & RESET_MASK);}
 };
 

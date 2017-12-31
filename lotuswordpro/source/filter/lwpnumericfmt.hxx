@@ -77,8 +77,8 @@ public:
     LwpNumericFormatSubset();
     ~LwpNumericFormatSubset();
     void QuickRead(LwpObjectStream* pStrm);
-    OUString GetPrefix(){ return cPrefix.str();}
-    OUString GetSuffix(){ return cSuffix.str();}
+    OUString const & GetPrefix(){ return cPrefix.str();}
+    OUString const & GetSuffix(){ return cSuffix.str();}
     bool IsDefaultPrefix(){ return !(cSubFlags&SF_OVER_PREFIX); }
     bool IsDefaultSuffix(){ return !(cSubFlags&SF_OVER_SUFFIX); }
     LwpColor GetColor();

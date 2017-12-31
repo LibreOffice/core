@@ -149,7 +149,7 @@ public:
     virtual void XFConvert(XFContentContainer* pCont) override;
     sal_uInt16 GetLevel(){return m_nLevel;}
     bool GetUseText(){   return (m_nFlags & USETEXT) != 0;}
-    OUString GetSearchStyle(){return m_SearchName.str();}
+    OUString const & GetSearchStyle(){return m_SearchName.str();}
     bool GetUseLeadingText(){    return (m_nFlags & USENUMBER) != 0;}
 private:
     virtual ~LwpTocLevelData() override;

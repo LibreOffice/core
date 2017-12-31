@@ -215,7 +215,7 @@ OUString LwpSilverBullet::GetBulletFontName()
  * @descr:
  * @return:  An UChar32 bullet character.
  */
-OUString LwpSilverBullet::GetBulletChar()
+OUString const & LwpSilverBullet::GetBulletChar()
 {
     return m_xBulletPara->GetBulletChar();
 }

@@ -76,9 +76,9 @@ public:
     LwpDivInfo(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     LwpObjectID& GetInitialLayoutID() { return m_InitialLayoutID; }
     LwpObjectID& GetFillerPageTextID() { return m_FillerPageTextID; }
-    OUString GetDivName() { return m_Name.str(); }
+    OUString const & GetDivName() { return m_Name.str(); }
 
-    OUString GetClassName() { return m_ClassName.str(); }
+    OUString const & GetClassName() { return m_ClassName.str(); }
     inline bool HasContents();
     inline bool IsOleDivision();
     inline bool IsScrollable();
