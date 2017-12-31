@@ -778,13 +778,13 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="svxlo-SvxShowCharSet" id="showcharset">
-                <property name="width_request">580</property>
-                <property name="height_request">250</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-              </object>
+                    <property name="width_request">580</property>
+                    <property name="height_request">250</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
@@ -793,13 +793,13 @@
                 </child>
                 <child>
                   <object class="svxlo-SvxSearchCharSet" id="searchcharset">
-                <property name="width_request">580</property>
-                <property name="height_request">250</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-              </object>
+                    <property name="width_request">580</property>
+                    <property name="height_request">250</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
