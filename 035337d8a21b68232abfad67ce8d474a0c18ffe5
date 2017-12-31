@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_be4e7194",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-12-31T12:29:47Z",
+      "side": 1,
+      "message": "The list is of all the free fonts used in the list below and all of them are available/used on linux.",
+      "parentUuid": "fa31d9ce_9edc4d1a",
+      "range": {
+        "startLine": 278,
+        "startChar": 7,
+        "endLine": 280,
+        "endChar": 82
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_feeb89ae",
         "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
         "patchSetId": 3
@@ -87,6 +111,78 @@
         "startChar": 53,
         "endLine": 287,
         "endChar": 80
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_fe48e989",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-12-31T12:29:47Z",
+      "side": 1,
+      "message": "2. See comment above.\n3. Then its fine to remove them.",
+      "parentUuid": "fa31d9ce_bee111d3",
+      "range": {
+        "startLine": 287,
+        "startChar": 53,
+        "endLine": 287,
+        "endChar": 80
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_1e5e9d45",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-12-31T12:29:47Z",
+      "side": 1,
+      "message": "Your argument falls short if a windows user installed mac fonts or windows and mac fonts are installed on linux, so it is better to list Windows fonts before Mac, especially as Windows fonts are more widespread/used.",
+      "parentUuid": "fa31d9ce_feeb89ae",
+      "range": {
+        "startLine": 287,
+        "startChar": 81,
+        "endLine": 287,
+        "endChar": 154
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_de43256b",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-12-31T12:29:47Z",
+      "side": 1,
+      "message": "If the users dont have Source Hans or Noto installed and have another font installed, its important to have them in the list as fallbacks.",
+      "parentUuid": "fa31d9ce_1ed13dfc",
+      "range": {
+        "startLine": 287,
+        "startChar": 154,
+        "endLine": 287,
+        "endChar": 185
       },
       "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
