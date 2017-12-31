@@ -1840,7 +1840,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
         // change our selection. So a "FirstSelected(); SeekCursor(); NextSelected();" may produce unpredictable results.
         // That's why we _first_ collect the indices of the selected rows and _then_ their bookmarks.
         long nIdx = FirstSelectedRow();
-        while (nIdx >= 0)
+        while (nIdx != BROWSER_ENDOFSELECTION)
         {
             // (we misuse the bookmarks array for this ...)
             pBookmarks[i++] <<= (sal_Int32)nIdx;
