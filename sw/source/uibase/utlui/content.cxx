@@ -1763,6 +1763,7 @@ void SwContentTree::Display( bool bActive )
                     {
                         MakeVisible(pEntry);
                         Select(pEntry);
+                        SetCurEntry(pEntry);
                     }
                 }
 
