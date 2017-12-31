@@ -2675,6 +2675,10 @@ void SmXMLTableContext_Impl::EndElement()
         nCols = std::max(nCols, pArray->GetNumSubNodes());
         aReverseStack.push_front(std::unique_ptr<SmNode>(pArray));
     }
+    if (nCols > SAL_MAX_UINT16)
+        throw std::range_error("column limit");
+    if (nRows > SAL_MAX_UINT16)
+        throw std::range_error("row limit");
     aExpressionArray.resize(nCols*nRows);
     size_t j=0;
     while ( !aReverseStack.empty() )
@@ -2691,7 +2695,7 @@ void SmXMLTableContext_Impl::EndElement()
     aToken.eType = TMATRIX;
     std::unique_ptr<SmMatrixNode> pSNode(new SmMatrixNode(aToken));
     pSNode->SetSubNodes(aExpressionArray);
-    pSNode->SetRowCol(static_cast<sal_uInt16>(nRows),nCols);
+    pSNode->SetRowCol(nRows, nCols);
     rNodeStack.push_front(std::move(pSNode));
 }
 
