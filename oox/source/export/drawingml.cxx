@@ -1991,7 +1991,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             {
                 Size aDestSize(64, 64);
                 float fBulletSizeRelX = fBulletSizeRel / aGraphicSize.Height * aGraphicSize.Width;
-                long nPaddingX = std::max(static_cast<long>(0), std::lround((aDestSize.Width() - fBulletSizeRelX * aDestSize.Width()) / 2.f));
+                long nPaddingX = std::max<long>(0, std::lround((aDestSize.Width() - fBulletSizeRelX * aDestSize.Width()) / 2.f));
                 long nPaddingY = std::lround((aDestSize.Height() - fBulletSizeRel * aDestSize.Height()) / 2.f);
                 tools::Rectangle aDestRect(nPaddingX, nPaddingY, aDestSize.Width() - nPaddingX, aDestSize.Height() - nPaddingY);
 
