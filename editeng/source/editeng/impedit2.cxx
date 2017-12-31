@@ -731,7 +731,7 @@ void ImpEditEngine::TextModified()
 }
 
 
-void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode )
+void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreUndoCheck )
 {
     assert(pNode && "ParaAttribsChanged: Which one?");
 
@@ -743,7 +743,8 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode )
     pPortion->MarkSelectionInvalid( 0 );
 
     sal_Int32 nPara = aEditDoc.GetPos( pNode );
-    pEditEngine->ParaAttribsChanged( nPara );
+    if ( bIgnoreUndoCheck || pEditEngine->IsInUndo() )
+        pEditEngine->ParaAttribsChanged( nPara );
 
     ParaPortion* pNextPortion = GetParaPortions().SafeGetObject( nPara+1 );
     // => is formatted again anyway, if Invalid.
@@ -2261,7 +2262,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
         pLeft->GetCharAttribs().GetDefFont() = pRight->GetCharAttribs().GetDefFont();
     }
 
-    ParaAttribsChanged( pLeft );
+    ParaAttribsChanged( pLeft, true );
 
     // First search for Portions since pRight is gone after ConnectParagraphs.
     ParaPortion* pLeftPortion = FindParaPortion( pLeft );
