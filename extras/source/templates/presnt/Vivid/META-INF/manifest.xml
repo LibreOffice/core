@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.2">
+  <manifest:file-entry manifest:full-path="/" manifest:version="1.2" manifest:media-type="application/vnd.oasis.opendocument.presentation-template"/>
+  <manifest:file-entry manifest:full-path="Thumbnails/thumbnail.png" manifest:media-type="image/png"/>
+  <manifest:file-entry manifest:full-path="meta.xml" manifest:media-type="text/xml"/>
+  <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>
+  <manifest:file-entry manifest:full-path="Pictures/10000000000005550000035C66CD1AA3E88406D5.png" manifest:media-type="image/png"/>
+  <manifest:file-entry manifest:full-path="Pictures/1000000000000020000000204B249CA79A42C6D7.png" manifest:media-type="image/png"/>
+  <manifest:file-entry manifest:full-path="Pictures/10000000000004F900000322783ADE15FCCE3CBA.png" manifest:media-type="image/png"/>
+  <manifest:file-entry manifest:full-path="Pictures/10000000000004F900000322B6E66A5FF68F74A7.png" manifest:media-type="image/png"/>
+  <manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>
+</manifest:manifest>
