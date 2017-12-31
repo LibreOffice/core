@@ -1389,7 +1389,7 @@ awt::Point WorksheetHelper::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) co
     return mrSheetGlob.getCellPosition( nCol, nRow );
 }
 
-awt::Size WorksheetHelper::getDrawPageSize() const
+const awt::Size& WorksheetHelper::getDrawPageSize() const
 {
     return mrSheetGlob.getDrawPageSize();
 }

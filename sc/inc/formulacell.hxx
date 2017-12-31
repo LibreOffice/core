@@ -376,7 +376,7 @@ public:
     void SetHybridFormula(
         const OUString& r, const formula::FormulaGrammar::Grammar eGrammar );
 
-    OUString GetHybridFormula() const;
+    const OUString& GetHybridFormula() const;
 
     void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
 

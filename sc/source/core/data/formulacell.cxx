@@ -2512,7 +2512,7 @@ void ScFormulaCell::SetHybridFormula( const OUString& r,
     aResult.SetHybridFormula( r); eTempGrammar = eGrammar;
 }
 
-OUString ScFormulaCell::GetHybridFormula() const
+const OUString& ScFormulaCell::GetHybridFormula() const
 {
     return aResult.GetHybridFormula();
 }
@@ -4406,7 +4406,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
             {
                 ScInterpreterContext aContext(*mpDocument, mpFormatter);
 
-                mpDocument->CalculateInColumnInThread(aContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal).MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
+                auto aNonThreadedData = mpDocument->CalculateInColumnInThread(aContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
+                aNonThreadedData.MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
             }
 
         };

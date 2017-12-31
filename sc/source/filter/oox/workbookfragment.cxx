@@ -294,7 +294,7 @@ public:
     {
         aSegments.clear();
     }
-    ISegmentProgressBarRef wrapProgress( const ISegmentProgressBarRef &xProgress )
+    const ISegmentProgressBarRef& wrapProgress( const ISegmentProgressBarRef &xProgress )
     {
         aSegments.push_back( ISegmentProgressBarRef( new ProgressWrapper( xProgress ) ) );
         return aSegments.back();

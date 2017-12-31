@@ -107,7 +107,7 @@ public:
     void        ExecutePageSel( SfxRequest& rReq );
     void        ExecuteMove( SfxRequest& rReq );
 
-    VclPtr<vcl::Window> GetFrameWin();
+    const VclPtr<vcl::Window>& GetFrameWin();
 
     static void GetStateCursor( SfxItemSet& rSet );
 };

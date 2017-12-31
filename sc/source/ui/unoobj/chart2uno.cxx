@@ -3090,7 +3090,7 @@ public:
         }
     }
 
-    Sequence<OUString> getLabels() const { return *mpLabels; }
+    const Sequence<OUString>& getLabels() const { return *mpLabels; }
 
 private:
     shared_ptr< Sequence<OUString> >    mpLabels;
