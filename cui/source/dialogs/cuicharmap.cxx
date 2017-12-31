@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include <iostream>
 
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
