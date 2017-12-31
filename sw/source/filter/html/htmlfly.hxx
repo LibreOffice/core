@@ -116,7 +116,7 @@ public:
     const SdrObject*     GetSdrObject() const    { return pSdrObject; }
     const SwNodeIndex&   GetNdIndex() const      { return *pNdIdx; }
     sal_Int32            GetContentIndex() const { return nContentIdx; }
-    AllHtmlFlags         GetOutMode() const      { return nAllFlags; }
+    AllHtmlFlags const & GetOutMode() const      { return nAllFlags; }
     HtmlOut              GetOutFn() const        { return nAllFlags.nOut; }
     HtmlPosition         GetOutPos() const       { return nAllFlags.nPosition; }
 };

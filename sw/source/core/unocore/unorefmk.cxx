@@ -681,7 +681,7 @@ void SwXMeta::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     m_EventListeners.disposeAndClear(ev);
 }
 
-uno::Reference<text::XText> SwXMeta::GetParentText() const
+uno::Reference<text::XText> const & SwXMeta::GetParentText() const
 {
     return m_pImpl->m_xParentText;
 }

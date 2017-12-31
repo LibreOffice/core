@@ -306,7 +306,7 @@ public:
     void Write( SvStream *pTableStram ) const;
     void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;
     void WriteRtf( const RtfAttributeOutput* rAttrOutput ) const;
-    OUString GetFamilyName() const { return msFamilyNm; }
+    OUString const & GetFamilyName() const { return msFamilyNm; }
     friend bool operator < (const wwFont &r1, const wwFont &r2);
 };
 

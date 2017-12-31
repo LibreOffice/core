@@ -33,7 +33,7 @@ public:
     PDFSignatureHelper();
     bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
     css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformations(const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
-    SignatureInformations GetSignatureInformations() const;
+    SignatureInformations const & GetSignatureInformations() const;
 
     /// Return the ID of the next created signature.
     sal_Int32 GetNewSecurityId() const;

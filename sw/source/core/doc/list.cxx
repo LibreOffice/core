@@ -220,12 +220,12 @@ SwList::~SwList()
 {
 }
 
-const OUString SwList::GetListId() const
+const OUString & SwList::GetListId() const
 {
     return mpListImpl->GetListId();
 }
 
-const OUString SwList::GetDefaultListStyleName() const
+const OUString & SwList::GetDefaultListStyleName() const
 {
     return mpListImpl->GetDefaultListStyleName();
 }

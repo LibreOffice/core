@@ -302,7 +302,7 @@ public:
     void   ClearDoc();                  // Delete Doc-contents.
     OUString GetName();
     void   SetName( const OUString& );
-    ErrCode GetError() const { return nErr; }
+    ErrCode const & GetError() const { return nErr; }
 
     OUString GetBaseURL() const;
     void   SetBaseURL( const OUString& rURL );
@@ -317,7 +317,7 @@ public:
 
     bool   Delete( sal_uInt16 );
     void   Rename( sal_uInt16, const OUString*, const OUString* );
-    ErrCode CopyBlock( SwTextBlocks const & rSource, OUString& rSrcShort,
+    ErrCode const & CopyBlock( SwTextBlocks const & rSource, OUString& rSrcShort,
                                     const OUString& rLong );
 
     bool   BeginGetDoc( sal_uInt16 );   // Read text modules.
@@ -331,7 +331,7 @@ public:
     bool IsOnlyTextBlock( sal_uInt16 ) const;
     bool IsOnlyTextBlock( const OUString& rShort ) const;
 
-    OUString GetFileName() const;           // Filename of pImp.
+    OUString const & GetFileName() const;           // Filename of pImp.
     bool IsReadOnly() const;            // ReadOnly-flag of pImp.
 
     bool GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTable );

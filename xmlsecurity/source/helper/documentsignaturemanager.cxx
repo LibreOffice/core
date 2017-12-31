@@ -571,12 +571,12 @@ uno::Reference<xml::crypto::XSecurityEnvironment> DocumentSignatureManager::getG
     return mxGpgSecurityContext.is() ? mxGpgSecurityContext->getSecurityEnvironment() : uno::Reference<xml::crypto::XSecurityEnvironment>();
 }
 
-uno::Reference<xml::crypto::XXMLSecurityContext> DocumentSignatureManager::getSecurityContext()
+uno::Reference<xml::crypto::XXMLSecurityContext> const & DocumentSignatureManager::getSecurityContext()
 {
     return mxSecurityContext;
 }
 
-uno::Reference<xml::crypto::XXMLSecurityContext> DocumentSignatureManager::getGpgSecurityContext()
+uno::Reference<xml::crypto::XXMLSecurityContext> const & DocumentSignatureManager::getGpgSecurityContext()
 {
     return mxGpgSecurityContext;
 }

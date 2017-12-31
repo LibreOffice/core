@@ -101,7 +101,7 @@ public:
 
     /// init params with position of the attribute content (w/out CH_TXTATR)
     bool SetContentRange( SwTextNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd) const;
-    css::uno::Reference< css::text::XText > GetParentText() const;
+    css::uno::Reference< css::text::XText > const & GetParentText() const;
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException

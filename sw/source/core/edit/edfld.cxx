@@ -295,7 +295,7 @@ void SwEditShell::UpdateFields( SwField &rField )
     EndAllAction();
 }
 
-SwDBData SwEditShell::GetDBData() const
+SwDBData const & SwEditShell::GetDBData() const
 {
     return GetDoc()->GetDBData();
 }

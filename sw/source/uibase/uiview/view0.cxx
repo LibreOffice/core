@@ -137,7 +137,7 @@ void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const
     UIFeatureChanged();
 }
 
-std::shared_ptr<SwMailMergeConfigItem> SwView::GetMailMergeConfigItem() const
+std::shared_ptr<SwMailMergeConfigItem> const & SwView::GetMailMergeConfigItem() const
 {
     return m_pViewImpl->GetMailMergeConfigItem();
 }

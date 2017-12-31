@@ -213,7 +213,7 @@ class FieldMarkParamsHelper
     const sw::mark::IFieldmark& mrFieldmark;
     public:
     explicit FieldMarkParamsHelper( const sw::mark::IFieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
-    OUString getName() { return mrFieldmark.GetName(); }
+    OUString const & getName() { return mrFieldmark.GetName(); }
     template < typename T >
     bool extractParam( const OUString& rKey, T& rResult )
     {

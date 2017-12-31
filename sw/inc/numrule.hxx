@@ -280,7 +280,7 @@ namespace numfunc
 
         @author OD
     */
-    OUString GetDefBulletFontname();
+    OUString const & GetDefBulletFontname();
 
     /** determine if default bullet font is user defined
 

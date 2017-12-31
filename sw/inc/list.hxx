@@ -38,9 +38,9 @@ class SwList
                 const SwNodes& rNodes );
         ~SwList();
 
-        const OUString GetListId() const;
+        const OUString & GetListId() const;
 
-        const OUString GetDefaultListStyleName() const;
+        const OUString & GetDefaultListStyleName() const;
         void SetDefaultListStyleName(OUString const&);
 
         void InsertListItem( SwNodeNum& rNodeNum,

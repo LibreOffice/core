@@ -72,7 +72,7 @@ public:
     bool IsMenuToolbar();
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
-    OUString GetName() { return tb.getName().getString(); }
+    OUString const & GetName() { return tb.getName().getString(); }
 };
 
 class TBDelta : public TBBase

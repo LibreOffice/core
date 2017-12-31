@@ -542,7 +542,7 @@ void SwSection::SetCondHidden(bool const bFlag)
 }
 
 // Set/remove the linked FileName
-OUString SwSection::GetLinkFileName() const
+OUString const & SwSection::GetLinkFileName() const
 {
     if (m_RefLink.is())
     {

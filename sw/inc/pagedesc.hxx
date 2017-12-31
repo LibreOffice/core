@@ -364,7 +364,7 @@ public:
     SwPageDescExt & operator = (const SwPageDescExt & rSrc);
     SwPageDescExt & operator = (const SwPageDesc & rSrc);
 
-    OUString GetName() const;
+    OUString const & GetName() const;
 
     operator SwPageDesc() const; // #i7983#
 };

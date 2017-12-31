@@ -263,7 +263,7 @@ bool SwEditShell::IsUpdateTOX() const
     return GetDoc()->IsUpdateTOX();
 }
 
-OUString SwEditShell::GetTOIAutoMarkURL() const
+OUString const & SwEditShell::GetTOIAutoMarkURL() const
 {
     return GetDoc()->GetTOIAutoMarkURL();
 }

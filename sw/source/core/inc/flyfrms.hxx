@@ -218,7 +218,7 @@ public:
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );
     const Point &GetRefPoint() const { return aRef; }
-    const Point GetRelPos() const;
+    Point const & GetRelPos() const;
 
     // (26.11.93, see tabfrm.hxx, but might also be valid for others)
     // For creation of a Fly after a FlyCnt was created _and_ inserted.

@@ -127,7 +127,7 @@ const SwTextNode* SwAccessibleParagraph::GetTextNode() const
     return pNode;
 }
 
-OUString SwAccessibleParagraph::GetString()
+OUString const & SwAccessibleParagraph::GetString()
 {
     return GetPortionData().GetAccessibleString();
 }

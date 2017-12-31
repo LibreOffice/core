@@ -822,17 +822,17 @@ void SwMailMergeConfigItem::SetCurrentConnection(
         m_pImpl->SetModified();
 }
 
-Reference< XDataSource>  SwMailMergeConfigItem::GetSource()
+Reference< XDataSource> const & SwMailMergeConfigItem::GetSource()
 {
     return m_pImpl->m_xSource;
 }
 
-SharedConnection SwMailMergeConfigItem::GetConnection()
+SharedConnection const & SwMailMergeConfigItem::GetConnection()
 {
     return m_pImpl->m_xConnection;
 }
 
-Reference< XColumnsSupplier> SwMailMergeConfigItem::GetColumnsSupplier()
+Reference< XColumnsSupplier> const & SwMailMergeConfigItem::GetColumnsSupplier()
 {
     if(!m_pImpl->m_xColumnsSupplier.is() && m_pImpl->m_xConnection.is())
     {
@@ -862,7 +862,7 @@ void SwMailMergeConfigItem::SetCurrentDBData( const SwDBData& rDBData)
     }
 }
 
-Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
+Reference< XResultSet> const & SwMailMergeConfigItem::GetResultSet() const
 {
     if(!m_pImpl->m_xConnection.is() && !m_pImpl->m_aDBData.sDataSource.isEmpty())
     {
@@ -1306,7 +1306,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
     return bResult;
 }
 
-OUString     SwMailMergeConfigItem::GetMailDisplayName() const
+OUString const & SwMailMergeConfigItem::GetMailDisplayName() const
 {
     return m_pImpl->m_sMailDisplayName;
 }
@@ -1320,7 +1320,7 @@ void SwMailMergeConfigItem::SetMailDisplayName(const OUString& rName)
     }
 }
 
-OUString     SwMailMergeConfigItem::GetMailAddress() const
+OUString const & SwMailMergeConfigItem::GetMailAddress() const
 {
     return m_pImpl->m_sMailAddress;
 }
@@ -1348,7 +1348,7 @@ void  SwMailMergeConfigItem::SetMailReplyTo(bool bSet)
     }
 }
 
-OUString     SwMailMergeConfigItem::GetMailReplyTo() const
+OUString const & SwMailMergeConfigItem::GetMailReplyTo() const
 {
     return m_pImpl->m_sMailReplyTo;
 }
@@ -1362,7 +1362,7 @@ void SwMailMergeConfigItem::SetMailReplyTo(const OUString& rReplyTo)
     }
 }
 
-OUString  SwMailMergeConfigItem::GetMailServer() const
+OUString const & SwMailMergeConfigItem::GetMailServer() const
 {
     return m_pImpl->m_sMailServer;
 }
@@ -1421,7 +1421,7 @@ void SwMailMergeConfigItem::SetAuthentication(bool bSet)
     }
 }
 
-OUString     SwMailMergeConfigItem::GetMailUserName() const
+OUString const & SwMailMergeConfigItem::GetMailUserName() const
 {
     return m_pImpl->m_sMailUserName;
 }
@@ -1435,7 +1435,7 @@ void SwMailMergeConfigItem::SetMailUserName(const OUString& rName)
     }
 }
 
-OUString     SwMailMergeConfigItem::GetMailPassword() const
+OUString const & SwMailMergeConfigItem::GetMailPassword() const
 {
     return m_pImpl->m_sMailPassword;
 }
@@ -1463,7 +1463,7 @@ void SwMailMergeConfigItem::SetSMTPAfterPOP(bool bSet)
     }
 }
 
-OUString     SwMailMergeConfigItem::GetInServerName() const
+OUString const & SwMailMergeConfigItem::GetInServerName() const
 {
     return m_pImpl->m_sInServerName;
 }
@@ -1505,7 +1505,7 @@ void SwMailMergeConfigItem::SetInServerPOP(bool bSet)
     }
 }
 
-OUString     SwMailMergeConfigItem::GetInServerUserName() const
+OUString const & SwMailMergeConfigItem::GetInServerUserName() const
 {
     return m_pImpl->m_sInServerUserName;
 }
@@ -1519,7 +1519,7 @@ void SwMailMergeConfigItem::SetInServerUserName(const OUString& rName)
     }
 }
 
-OUString     SwMailMergeConfigItem::GetInServerPassword() const
+OUString const & SwMailMergeConfigItem::GetInServerPassword() const
 {
     return m_pImpl->m_sInServerPassword;
 }
