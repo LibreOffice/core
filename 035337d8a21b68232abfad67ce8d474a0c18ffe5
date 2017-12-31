@@ -187,6 +187,54 @@
       "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_be3591f8",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001779
+      },
+      "writtenOn": "2017-12-31T13:33:37Z",
+      "side": 1,
+      "message": "We plan to make users on Mac and Windows platform use the system fonts by default.\nMS Office have a Mac version, while iWork does not.",
+      "parentUuid": "fa31d9ce_1e5e9d45",
+      "range": {
+        "startLine": 287,
+        "startChar": 81,
+        "endLine": 287,
+        "endChar": 154
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_de3a45e7",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001779
+      },
+      "writtenOn": "2017-12-31T13:33:37Z",
+      "side": 1,
+      "message": "Mac users and Windows users will get the system fonts according to the list. \nMajor GNU/Linux distros such as Fedora , Debian, Ubuntu are distributing Noto CJK or Source Han sans  for traditional Chinese support which are on the first place of the list.\nWenQuanYi font is not a genuine traditional Chinese style font. We don\u0027t tend to include it as a fallback.",
+      "parentUuid": "fa31d9ce_de43256b",
+      "range": {
+        "startLine": 287,
+        "startChar": 154,
+        "endLine": 287,
+        "endChar": 185
+      },
+      "revId": "035337d8a21b68232abfad67ce8d474a0c18ffe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
