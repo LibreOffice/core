@@ -1281,4 +1281,97 @@ void SvxShowText::SetText( const OUString& rText )
 }
 
 
+VCL_BUILDER_FACTORY(DrawingAreaOcr)
+
+void DrawingAreaOcr::MouseButtonDown (const MouseEvent &rMEvt)
+{
+    if (rMEvt.IsLeft())
+    {
+        state = State::DRAW;
+    }
+    else if (rMEvt.IsRight())
+    {
+        state = State::DELETE;
+    }
+
+    if (state != State::NONE)
+    {
+        const Point & mouse_pos = rMEvt.GetPosPixel();
+
+        data.emplace_back(mouse_pos.X(), mouse_pos.Y(), state);
+    }
+}
+
+void DrawingAreaOcr::MouseMove( const MouseEvent &rMEvt )
+{
+    const Point & mouse_pos = rMEvt.GetPosPixel();
+
+    if (state != State::NONE)
+    {
+        data.emplace_back(mouse_pos.X(), mouse_pos.Y(), state);
+    }
+
+    Invalidate();
+    Update();
+    std::cout << static_cast<int>(state) << std::endl;
+}
+
+void DrawingAreaOcr::MouseButtonUp (const MouseEvent &rMEvt)
+{
+    const Point & mouse_pos = rMEvt.GetPosPixel();
+    state = State::NONE;
+    data.emplace_back(mouse_pos.X(), mouse_pos.Y(), state);
+}
+
+void DrawingAreaOcr::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+{
+    Color aTextCol = rRenderContext.GetLineColor();
+
+    rRenderContext.SetLineColor(Color( COL_WHITE ));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), Size(GetOutputSizePixel().Width(), GetOutputSizePixel().Height())));
+
+    const auto * i_1 = &data.front();
+    basegfx::B2DPolygon aB2DPolyLine;
+    for (const auto & i : data)
+    {
+        if (i_1->state == i.state)
+        {
+            aB2DPolyLine.append(basegfx::B2DPoint(i.x, i.y));
+        }
+        else
+        {
+            if (i_1->state == State::DRAW)
+            {
+                rRenderContext.SetLineColor(Color( COL_BLACK ));
+                rRenderContext.DrawPolyLine(aB2DPolyLine, 10.0);
+            }
+            else if (i_1->state == State::DELETE)
+            {
+                rRenderContext.SetLineColor(Color( COL_WHITE ));
+                rRenderContext.DrawPolyLine(aB2DPolyLine, 10.0);
+            }
+            aB2DPolyLine.clear();
+        }
+        i_1 = &i;
+    }
+
+    size_t size = data.size();
+    if (size >= 2)
+    {
+        if (data[size-2].state == State::DRAW)
+        {
+            rRenderContext.SetLineColor(Color( COL_BLACK ));
+            rRenderContext.DrawPolyLine(aB2DPolyLine, 10.0);
+        }
+        else if (data[size-2].state == State::DELETE)
+        {
+            rRenderContext.SetLineColor(Color( COL_WHITE ));
+            rRenderContext.DrawPolyLine(aB2DPolyLine, 10.0);
+        }
+        aB2DPolyLine.clear();
+    }
+
+    rRenderContext.SetTextLineColor(aTextCol);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
