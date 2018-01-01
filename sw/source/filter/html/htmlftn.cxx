@@ -31,17 +31,6 @@
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
 
-struct SwHTMLFootEndNote_Impl
-{
-    SwHTMLTextFootnotes aTextFootnotes;
-    std::vector<OUString> aNames;
-
-    OUString sName;
-    OUString sContent;            // information for the last footnote
-    bool bEndNote;
-    bool bFixed;
-};
-
 sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
                              sal_Int32 nPos )
 {
@@ -209,11 +198,8 @@ void SwHTMLParser::FinishFootEndNote()
         m_pPam->GetNode().GetTextNode()->GetTextAttrForCharAt(
             m_pPam->GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_FTN ) );
     // In header and footer no footnotes can be inserted.
-    if( pTextFootnote )
-    {
-        m_pFootEndNoteImpl->aTextFootnotes.push_back( pTextFootnote );
-        m_pFootEndNoteImpl->aNames.push_back(m_pFootEndNoteImpl->sName);
-    }
+    if (pTextFootnote)
+        m_pFootEndNoteImpl->aTextFootnotes.push_back(SwHTMLTextFootnote(m_pFootEndNoteImpl->sName,pTextFootnote));
     m_pFootEndNoteImpl->sName = aEmptyOUStr;
     m_pFootEndNoteImpl->sContent = aEmptyOUStr;
     m_pFootEndNoteImpl->bFixed = false;
@@ -235,19 +221,18 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
 {
     SwNodeIndex *pStartNodeIdx = nullptr;
 
-    if( m_pFootEndNoteImpl )
+    if (m_pFootEndNoteImpl)
     {
         OUString aName(rName.toAsciiUpperCase());
 
-        size_t nCount = m_pFootEndNoteImpl->aNames.size();
+        size_t nCount = m_pFootEndNoteImpl->aTextFootnotes.size();
         for(size_t i = 0; i < nCount; ++i)
         {
-            if(m_pFootEndNoteImpl->aNames[i] == aName)
+            if (m_pFootEndNoteImpl->aTextFootnotes[i].sName == aName)
             {
-                pStartNodeIdx = m_pFootEndNoteImpl->aTextFootnotes[i]->GetStartNode();
-                m_pFootEndNoteImpl->aNames.erase(m_pFootEndNoteImpl->aNames.begin() + i);
+                pStartNodeIdx = m_pFootEndNoteImpl->aTextFootnotes[i].pTextFootnote->GetStartNode();
                 m_pFootEndNoteImpl->aTextFootnotes.erase( m_pFootEndNoteImpl->aTextFootnotes.begin() + i );
-                if(m_pFootEndNoteImpl->aNames.empty())
+                if (m_pFootEndNoteImpl->aTextFootnotes.empty())
                 {
                     delete m_pFootEndNoteImpl;
                     m_pFootEndNoteImpl = nullptr;
@@ -288,7 +273,7 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     if( !rHTMLWrt.m_pFootEndNotes )
-        rHTMLWrt.m_pFootEndNotes = new SwHTMLTextFootnotes;
+        rHTMLWrt.m_pFootEndNotes = new std::vector<SwTextFootnote*>;
     rHTMLWrt.m_pFootEndNotes->insert( rHTMLWrt.m_pFootEndNotes->begin() + nPos, pTextFootnote );
 
     OStringBuffer sOut;

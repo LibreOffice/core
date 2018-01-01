@@ -59,8 +59,6 @@ class SwHTMLPosFlyFrames;
 class SwTextFootnote;
 enum class HtmlPosition;
 
-typedef std::vector<SwTextFootnote*> SwHTMLTextFootnotes;
-
 extern SwAttrFnTab aHTMLAttrFnTab;
 
 #define HTML_PARSPACE (MM50)
@@ -286,7 +284,7 @@ public:
     SwHTMLFormatInfos m_CharFormatInfos;
     SwHTMLFormatInfos m_TextCollInfos;
     std::vector<SwFormatINetFormat*> m_aINetFormats; // the "open" INet attributes
-    SwHTMLTextFootnotes *m_pFootEndNotes;
+    std::vector<SwTextFootnote*> *m_pFootEndNotes;
 
     OUString m_aCSS1Selector;           // style selector
     OUString m_aNonConvertableCharacters;
