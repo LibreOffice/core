@@ -152,7 +152,7 @@ typedef struct SAL_DLLPUBLIC_RTTI rtl_arena_st rtl_arena_type;
 /**
  *  @param[in] pName             descriptive name; for debugging purposes.
  *  @param[in] quantum           resource allocation unit / granularity; rounded up to next power of 2.
- *  @param[in] quantum_cache_max max resources to cache; rounded up to next multiple of quantum; usually 0.
+ *  @param[in] quantum_cache_max no longer used, should be 0.
  *  @param[in] source_arena      passed as argument to source_alloc, source_free; usually NULL.
  *  @param[in] source_alloc      function to allocate resources; usually rtl_arena_alloc.
  *  @param[in] source_free       function to free resources; usually rtl_arena_free.
