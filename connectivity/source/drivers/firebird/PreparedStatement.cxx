@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include "Connection.hxx"
 #include "PreparedStatement.hxx"
 #include "ResultSet.hxx"
@@ -380,9 +379,11 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, const T& nValue, ISC_SHORT n
     memcpy(pVar->sqldata, &nValue, sizeof(nValue));
 }
 
-void SAL_CALL OPreparedStatement::setByte(sal_Int32 /*nIndex*/, sal_Int8 /*nValue*/)
+void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 nValue)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("XParameters::setByte", *this);
+    // there's no TINYINT or equivalent on Firebird,
+    // so do the same as setShort
+    setValue< sal_Int16 >(nIndex, nValue, SQL_SHORT);
 }
 
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 nValue)
