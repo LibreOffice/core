@@ -350,7 +350,7 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool bValue)
 }
 
 template <typename T>
-void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
+void OPreparedStatement::setValue(sal_Int32 nIndex, const T& nValue, ISC_SHORT nType)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
@@ -372,9 +372,11 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
     memcpy(pVar->sqldata, &nValue, sizeof(nValue));
 }
 
-void SAL_CALL OPreparedStatement::setByte(sal_Int32 /*nIndex*/, sal_Int8 /*nValue*/)
+void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 nValue)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("XParameters::setByte", *this);
+    // there's no TINYINT or equivalent on Firebird,
+    // so do the same as setShort
+    setValue< sal_Int16 >(nIndex, nValue, SQL_SHORT);
 }
 
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 nValue)
