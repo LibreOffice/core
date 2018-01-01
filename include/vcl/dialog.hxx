@@ -25,10 +25,19 @@
 #include <vcl/syswin.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <salhelper/thread.hxx>
 
 struct DialogImpl;
 class VclBox;
 class VclButtonBox;
+
+struct LOKDialogThreadData {
+    std::function<void(short)> mpPostExecuteFn;
+
+    LOKDialogThreadData(std::function<void(short)>& fn)
+        : mpPostExecuteFn(fn) {
+    }
+};
 
 class VCL_DLLPUBLIC Dialog : public SystemWindow
 {
@@ -111,6 +120,9 @@ public:
     Bitmap createScreenshot();
 
     virtual short   Execute();
+    bool            PreExecute();
+    short           ExecuteInner();
+    virtual void    ExecuteAsync(std::function<void(short)> rPostExecute);
     bool            IsInExecute() const { return mbInExecute; }
 
     virtual FactoryFunction GetUITestFactory() const override;
@@ -119,6 +131,8 @@ public:
 public:
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl );
     long            GetResult() const;
+    oslThread       maLOKThread;
+    std::unique_ptr<LOKDialogThreadData> mpLOKThreadData;
 private:
     bool            ImplStartExecuteModal();
     static void     ImplEndExecuteModal();

@@ -65,6 +65,7 @@ public:                                             \
                      {}                             \
     virtual         ~Class() override;                       \
     virtual short   Execute() override ;            \
+    virtual void ExecuteAsync(std::function<void(short)>) override;    \
     std::vector<OString> getAllPageUIXMLDescriptions() const override; \
     bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
     virtual Bitmap  createScreenshot() const override; \
@@ -88,6 +89,10 @@ short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
 }                                                   \
+void Class::ExecuteAsync(std::function<void(short)> aPostExecuteFn)                 \
+{                                                               \
+    pDlg->ExecuteAsync(aPostExecuteFn);                                       \
+}                                                               \
 std::vector<OString> Class::getAllPageUIXMLDescriptions() const \
 {                                                   \
     return pDlg->getAllPageUIXMLDescriptions();     \
@@ -264,6 +269,7 @@ public:
                               : pDlg(p) {}
     virtual                 ~AbstractScLinkedAreaDlg_Impl() override;
     virtual short           Execute() override;
+    virtual void            ExecuteAsync(std::function<void(short)>) override;
     virtual void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh ) override;

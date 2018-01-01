@@ -168,6 +168,7 @@ namespace vcl
             {
                 s_pOneInstance->m_aPtrToIndex[ reinterpret_cast<sal_IntPtr>(i_pObject) ] = s_pOneInstance->m_aObjects.size();
                 s_pOneInstance->m_aObjects.push_back( DeleteObjectEntry( i_pObject ) );
+                SAL_INFO("vcl.lazydelete", typeid(*i_pObject).name() << " marking as delete of type");
             }
         }
         /** unmark an object already marked for lazy deletion

@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclreferencebase.hxx>
 #include <vector>
+#include <functional>
 
 namespace vcl { class Window; }
 class Dialog;
@@ -40,6 +41,7 @@ protected:
     virtual             ~VclAbstractDialog() override;
 public:
     virtual short       Execute() = 0;
+    virtual void       ExecuteAsync(std::function<void(short)>) {};
 
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const;

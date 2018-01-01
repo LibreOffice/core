@@ -583,6 +583,7 @@ Dialog::~Dialog()
 
 void Dialog::dispose()
 {
+    mpLOKThreadData.reset();
     mpDialogImpl.reset();
     mpPrevExecuteDlg.clear();
     mpActionArea.clear();
@@ -907,28 +908,18 @@ Bitmap Dialog::createScreenshot()
     return GetBitmap(Point(), GetOutputSizePixel());
 }
 
-short Dialog::Execute()
+short Dialog::ExecuteInner()
 {
-#if HAVE_FEATURE_DESKTOP
-
-    setDeferredProperties();
-
-    if ( !ImplStartExecuteModal() )
-        return 0;
-
     VclPtr<vcl::Window> xWindow = this;
-
-    css::uno::Reference< css::uno::XComponentContext > xContext(
-        comphelper::getProcessComponentContext() );
-    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
-    css::document::DocumentEvent aObject;
-    aObject.EventName = "DialogExecute";
-    xEventBroadcaster->documentEventOccured(aObject);
-
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
     while ( !xWindow->IsDisposed() && mbInExecute )
-        Application::Yield();
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+            osl_yieldThread();
+        else
+            Application::Yield();
+    }
 
     ImplEndExecuteModal();
 
@@ -947,6 +938,49 @@ short Dialog::Execute()
     long nRet = mpDialogImpl->mnResult;
     mpDialogImpl->mnResult = -1;
     return (short)nRet;
+}
+
+static void lok_dialog_thread(void* pData)
+{
+    Dialog* pDialog = static_cast<Dialog*>(pData);
+    short nResult = pDialog->ExecuteInner();
+    assert(pDialog->mpLOKThreadData);
+    pDialog->mpLOKThreadData->mpPostExecuteFn(nResult);
+}
+
+void Dialog::ExecuteAsync(std::function<void(short)> rPostExecute)
+{
+    if (!PreExecute())
+        return;
+
+    mpLOKThreadData.reset(new LOKDialogThreadData(rPostExecute));
+    maLOKThread = osl_createThread(lok_dialog_thread, this);
+}
+
+bool Dialog::PreExecute()
+{
+    setDeferredProperties();
+
+    if ( !ImplStartExecuteModal() )
+        return false;
+
+    css::uno::Reference< css::uno::XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
+    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+    css::document::DocumentEvent aObject;
+    aObject.EventName = "DialogExecute";
+    xEventBroadcaster->documentEventOccured(aObject);
+
+    return true;
+}
+
+short Dialog::Execute()
+{
+#if HAVE_FEATURE_DESKTOP
+    if (!PreExecute())
+        return 0;
+
+    return ExecuteInner();
 
 #else
 
@@ -1022,6 +1056,14 @@ void Dialog::EndDialog( long nResult )
             mpDialogImpl->mnResult = -1;
         }
         mbInExecute = false;
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            SolarMutexReleaser aReleaser;
+            osl_joinWithThread(maLOKThread);
+            osl_destroyThread(maLOKThread);
+            //mpLOKThreadData.reset();
+        }
     }
 }
 

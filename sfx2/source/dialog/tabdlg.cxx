@@ -536,6 +536,24 @@ short SfxTabDialog::Execute()
     return TabDialog::Execute();
 }
 
+void SfxTabDialog::ExecuteAsync(std::function<void(short)> aPostFn)
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
+    {
+        SetLOKNotifier(pViewShell);
+        const Size aSize = GetOptimalSize();
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("type", "dialog");
+        aItems.emplace_back("size", aSize.toString());
+        if (!GetText().isEmpty())
+            aItems.emplace_back("title", GetText().toUtf8());
+        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+    }
+
+    TabDialog::ExecuteAsync(aPostFn);
+}
+
 
 void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {

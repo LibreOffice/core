@@ -116,7 +116,10 @@ short AbstractScLinkedAreaDlg_Impl::Execute()
 {
     return pDlg->Execute();
 }
-
+void AbstractScLinkedAreaDlg_Impl::ExecuteAsync(std::function<void(short)> aPostFn)
+{
+    pDlg->ExecuteAsync(aPostFn);
+}
 void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );

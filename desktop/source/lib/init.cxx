@@ -2474,6 +2474,11 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
     Point aPos(nX, nY);
     MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
+    if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
+    {
+        pDialog->EnableInput();
+    }
+
     switch (nType)
     {
         case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:

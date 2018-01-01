@@ -367,7 +367,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
+                    SAL_DEBUG("sccellshell :: executecellformatdlg: before");
                     pTabViewShell->ExecuteCellFormatDlg( rReq, "" );
+                    SAL_DEBUG("sccellshell :: executecellformatdlg: after");
                 }
             }
             break;

@@ -33,6 +33,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>
+#include <comphelper/lok.hxx>
 
 #include "global.hxx"
 #include "attrib.hxx"
@@ -478,7 +479,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
 
-    std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
+    std::shared_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
     std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
     pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_DEFAULT_WIDTH);
@@ -537,27 +538,37 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScAttrDlg(GetDialogParent(), pOldSet.get()));
-
+    VclPtr<SfxAbstractTabDialog> pDlg = pFact->CreateScAttrDlg(GetDialogParent(), pOldSet.get());
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);
-    short nResult = pDlg->Execute();
-    bInFormatDialog = false;
 
-    if ( nResult == RET_OK )
-    {
-        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-
-        const SfxPoolItem* pItem=nullptr;
-        if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
+    std::function<void(short)> aPostExecute = [this, pDlg, &rReq, pOldSet](short nResult) {
+        bInFormatDialog = false;
+        if ( nResult == RET_OK )
         {
+            const SfxPoolItem* pItem=nullptr;
+            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+            if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
+            {
+                UpdateNumberFormatter(static_cast<const SvxNumberInfoItem&>(*pItem));
+            }
 
-            UpdateNumberFormatter(static_cast<const SvxNumberInfoItem&>(*pItem));
+            ApplyAttributes(pOutSet, pOldSet.get());
+
+            if (!comphelper::LibreOfficeKit::isActive())
+                rReq.Done( *pOutSet );
         }
+    };
 
-        ApplyAttributes(pOutSet, pOldSet.get());
-
-        rReq.Done( *pOutSet );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        pDlg->ExecuteAsync(aPostExecute);
+    }
+    else
+    {
+        short nResult = pDlg->Execute();
+        bInFormatDialog = false;
+        aPostExecute(nResult);
     }
 }
 

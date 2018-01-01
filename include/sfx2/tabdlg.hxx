@@ -189,6 +189,7 @@ public:
     void                RemoveStandardButton();
 
     short               Execute() override;
+    void                ExecuteAsync(std::function<void(short)>) override;
     void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     void                Start();
 

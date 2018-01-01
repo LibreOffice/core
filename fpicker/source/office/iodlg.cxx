@@ -1883,8 +1883,9 @@ short SvtFileDialog::PrepareExecute()
             _aPath += aFileNameOnly;
     }
 
-
+    SAL_DEBUG("GetStandardDir(): " << GetStandardDir() << ", aPath: " << _aPath);
     _aPath = implGetInitialURL( _aPath, GetStandardDir() );
+    SAL_DEBUG("_aPath: " << _aPath);
 
     if ( pImpl->_nStyle & PickerFlags::SaveAs && !m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages

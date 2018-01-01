@@ -263,6 +263,7 @@ OUString SubstitutePathVariables::GetWorkPath() const
         // fallback in case config layer does not return an useable work dir value.
         aWorkPath = GetWorkVariableValue();
 
+    SAL_DEBUG("subst: get workpath: " << aWorkPath);
     return aWorkPath;
 }
 
@@ -270,8 +271,10 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
     OUString aWorkPath;
     boost::optional<OUString> x(officecfg::Office::Paths::Variables::Work::get(m_xContext));
+
     if (!x)
     {
+        SAL_DEBUG("subst: security");
         // fallback to $HOME in case platform dependent config layer does not return
         // an usable work dir value.
         osl::Security aSecurity;
@@ -279,6 +282,8 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
     }
     else
         aWorkPath = x.get();
+
+    SAL_DEBUG("subst: " << aWorkPath);
     return aWorkPath;
 }
 
