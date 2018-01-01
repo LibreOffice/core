@@ -408,6 +408,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SwNodeIndex     *m_pSttNdIdx;
 
     HTMLTable       *m_pTable;      // current "outermost" table
+    std::vector<HTMLTable*> m_aTables;
     SwHTMLForm_Impl *m_pFormImpl;   // current form
     SdrObject       *m_pMarquee;    // current marquee
     SwField         *m_pField;      // current field
@@ -647,6 +648,10 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // tags realized via character styles
     void NewCharFormat( HtmlTokenId nToken );
 
+    void ClearFootnotesInRange(const SwNodeIndex& rSttIdx, const SwNodeIndex& rEndIdx);
+
+    void DeleteSection(SwStartNode* pSttNd);
+
     // <SDFIELD>
 public:
     static SvxNumType GetNumType( const OUString& rStr, SvxNumType eDfltType );
@@ -861,6 +866,8 @@ private:
     bool HasCurrentParaFlys( bool bNoSurroundOnly = false,
                              bool bSurroundOnly = false ) const;
 
+    bool PendingObjectsInPaM(SwPaM& rPam) const;
+
 public:         // used in tables
 
     // Create brush item (with new) or 0
@@ -898,6 +905,18 @@ public:
 
     virtual bool ParseMetaOptions( const css::uno::Reference<css::document::XDocumentProperties>&,
             SvKeyValueIterator* ) override;
+
+
+    void RegisterHTMLTable(HTMLTable* pNew)
+    {
+        m_aTables.push_back(pNew);
+    }
+
+    void DeregisterHTMLTable(HTMLTable* pOld)
+    {
+        m_aTables.erase(std::remove(m_aTables.begin(), m_aTables.end(), pOld));
+    }
+
 };
 
 struct SwPendingStackData
@@ -976,6 +995,29 @@ inline void SwHTMLParser::PushContext( HTMLAttrContext *pCntxt )
 {
     m_aContexts.push_back( pCntxt );
 }
+
+class SwTextFootnote;
+
+struct SwHTMLTextFootnote
+{
+    OUString sName;
+    SwTextFootnote* pTextFootnote;
+    SwHTMLTextFootnote(const OUString &rName, SwTextFootnote* pInTextFootnote)
+        : sName(rName)
+        , pTextFootnote(pInTextFootnote)
+    {
+    }
+};
+
+struct SwHTMLFootEndNote_Impl
+{
+    std::vector<SwHTMLTextFootnote> aTextFootnotes;
+
+    OUString sName;
+    OUString sContent;            // information for the last footnote
+    bool bEndNote;
+    bool bFixed;
+};
 
 #endif
 
