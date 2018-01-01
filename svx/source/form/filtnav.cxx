@@ -811,7 +811,7 @@ void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 
 bool FmFilterModel::ValidateText(FmFilterItem const * pItem, OUString& rText, OUString& rErrorMsg) const
 {
-    FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( pItem->GetParent()->GetParent()  );
+    FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( pItem->GetParent() );
     try
     {
         Reference< XFormController > xFormController( pFormItem->GetController() );
