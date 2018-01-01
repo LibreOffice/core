@@ -130,7 +130,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    // anonymus namespace for local helpers
+    // anonymous namespace for local helpers
     namespace
     {
         bool impIsSimpleEdge(const B2DCubicBezier& rCandidate, double fMaxCosQuad, double fMaxPartOfEdgeQuad)
@@ -775,7 +775,7 @@ namespace basegfx
 
             return aEdgePolygon;
         }
-    } // end of anonymus namespace
+    } // end of anonymous namespace
 
     namespace utils
     {
