@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="lc_insertrowsafter.svg"
+   inkscape:version="0.92.2 (unknown)"
+   inkscape:export-filename="/home/matthias/git/icons/sifr_svg/lc_insertrowsafter.png"
+   inkscape:export-xdpi="95.699997"
+   inkscape:export-ydpi="95.699997">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1404"
+     inkscape:window-height="1011"
+     id="namedview7"
+     showgrid="true"
+     inkscape:zoom="27.812867"
+     inkscape:cx="11.540712"
+     inkscape:cy="11.740687"
+     inkscape:window-x="-4"
+     inkscape:window-y="36"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg5">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4486" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:1.22474492;stroke-opacity:1"
+     id="rect826-3"
+     width="3"
+     height="6"
+     x="17"
+     y="9"
+     transform="matrix(0,1,1,0,0,0)" />
+  <rect
+     style="display:inline;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     id="rect5509-3-0-6-5"
+     width="6"
+     height="2"
+     x="9"
+     y="11"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertcolumnsafter.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     transform="matrix(0,1,1,0,0,0)" />
+  <rect
+     style="display:inline;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     id="rect5509-3-0-3-0-1"
+     width="2"
+     height="6"
+     x="11"
+     y="9"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertcolumnsafter.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     transform="matrix(0,1,1,0,0,0)" />
+  <path
+     style="display:inline;opacity:1;fill:#555753;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 2,14 H 1 l 0,5 h 1 l 2,-2 0,-1 z"
+     id="rect6094-2-0"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccc"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertcolumnsafter.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <path
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#555753;fill-opacity:1;stroke:none;stroke-width:2;marker:none;enable-background:new"
+     d="M 2,2 H 22 V 22 H 2 V 21 L 4,18.348711 V 20 H 8 V 17 H 5 L 5,16 H 20 V 8 L 4,8 v 6.611328 L 2,12 Z M 4,4 V 7 H 8 V 4 Z m 5,0 v 3 h 6 V 4 Z m 0,13 v 3 h 6 V 17 Z M 16,4 v 3 h 4 V 4 Z m 0,13 v 3 h 4 v -3 z"
+     id="path6321-9-2-5-0-9-4-6-1"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+     d="M 4,18.348711 V 20 H 8 V 17 H 5 Z"
+     id="rect826"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccc" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:1.22474492;stroke-opacity:1"
+     id="rect826-3-6"
+     width="3"
+     height="6"
+     x="4"
+     y="9"
+     transform="matrix(0,1,1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
+     id="rect826-3-7"
+     width="3"
+     height="4"
+     x="4"
+     y="4"
+     transform="matrix(0,1,1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
+     id="rect826-3-7-5"
+     width="3"
+     height="4"
+     x="4"
+     y="16"
+     transform="matrix(0,1,1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
+     id="rect826-3-7-3"
+     width="3"
+     height="4"
+     x="17"
+     y="16"
+     transform="matrix(0,1,1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.57735026;stroke-opacity:1"
+     id="rect826-3-7-56"
+     width="4"
+     height="1"
+     x="10"
+     y="15"
+     transform="matrix(0,1,1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.57735026;stroke-opacity:1"
+     id="rect826-3-7-56-2"
+     width="4"
+     height="1"
+     x="10"
+     y="8"
+     transform="matrix(0,1,1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.57735026;stroke-opacity:1"
+     id="rect826-3-7-56-9"
+     width="4"
+     height="1"
+     x="-14"
+     y="15"
+     transform="scale(-1,1)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.57735026;stroke-opacity:1"
+     id="rect826-3-7-56-9-1"
+     width="4"
+     height="1"
+     x="-14"
+     y="8"
+     transform="scale(-1,1)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-opacity:1"
+     id="rect826-3-7-56-9-2"
+     width="3"
+     height="1"
+     x="-11"
+     y="10"
+     transform="scale(-1,1)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-opacity:1"
+     id="rect826-3-7-56-9-2-7"
+     width="3"
+     height="1"
+     x="-11"
+     y="13"
+     transform="scale(-1,1)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-opacity:1"
+     id="rect826-3-7-56-9-2-0"
+     width="3"
+     height="1"
+     x="-16"
+     y="13"
+     transform="scale(-1,1)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-opacity:1"
+     id="rect826-3-7-56-9-2-9"
+     width="3"
+     height="1"
+     x="-16"
+     y="10"
+     transform="scale(-1,1)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-opacity:1"
+     id="rect826-3-7-56-9-2-9-6"
+     width="3"
+     height="1"
+     x="-11"
+     y="-14"
+     transform="matrix(0,-1,-1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-opacity:1"
+     id="rect826-3-7-56-9-2-9-6-0"
+     width="3"
+     height="1"
+     x="-11"
+     y="-11"
+     transform="matrix(0,-1,-1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-opacity:1"
+     id="rect826-3-7-56-9-2-9-6-6"
+     width="3"
+     height="1"
+     x="-16"
+     y="-11"
+     transform="matrix(0,-1,-1,0,0,0)" />
+  <rect
+     style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-opacity:1"
+     id="rect826-3-7-56-9-2-9-6-2"
+     width="3"
+     height="1"
+     x="-16"
+     y="-14"
+     transform="matrix(0,-1,-1,0,0,0)" />
+  <path
+     style="display:inline;opacity:1;fill:#c3c4c2;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     d="m 4,8 h 4 2 v 2 H 8 v 4 h 2 v 2 H 8 5 L 4,14.611712 Z"
+     id="rect5655-5-3-0"
+     inkscape:connector-curvature="0"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertcolumnsafter.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     sodipodi:nodetypes="cccccccccccc" />
+  <path
+     style="display:inline;opacity:1;fill:#c3c4c2;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     d="m 14,8 2,0 h 4 v 8 h -4 -2 v -2 l 2,0 v -4 l -2,0 z"
+     id="rect5655-9-5-3-3"
+     inkscape:connector-curvature="0"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertcolumnsafter.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     sodipodi:nodetypes="ccccccccccc" />
+</svg>
