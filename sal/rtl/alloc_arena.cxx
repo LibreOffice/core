@@ -609,7 +609,6 @@ rtl_arena_type * rtl_arena_activate(
     rtl_arena_type * arena,
     const char *     name,
     sal_Size         quantum,
-    sal_Size         quantum_cache_max,
     rtl_arena_type * source_arena,
     void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
     void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size)
@@ -625,38 +624,13 @@ rtl_arena_type * rtl_arena_activate(
             /* roundup to next power of 2 */
             quantum = ((sal_Size(1)) << highbit(quantum));
         }
-        quantum_cache_max = RTL_MEMORY_P2ROUNDUP(quantum_cache_max, quantum);
 
         arena->m_quantum = quantum;
         arena->m_quantum_shift = highbit(arena->m_quantum) - 1;
-        arena->m_qcache_max = quantum_cache_max;
 
         arena->m_source_arena = source_arena;
         arena->m_source_alloc = source_alloc;
         arena->m_source_free  = source_free;
-
-        if (arena->m_qcache_max > 0)
-        {
-            char namebuf[RTL_ARENA_NAME_LENGTH + 1];
-            int  i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
-
-            sal_Size size = n * sizeof(rtl_cache_type*);
-            arena->m_qcache_ptr = static_cast<rtl_cache_type**>(rtl_arena_alloc (gp_arena_arena, &size));
-            if (!(arena->m_qcache_ptr))
-            {
-                /* out of memory */
-                return nullptr;
-            }
-            for (i = 1; i <= n; i++)
-            {
-                size = i * arena->m_quantum;
-                (void) snprintf (namebuf, sizeof(namebuf), "%s_%" SAL_PRIuUINTPTR, arena->m_name, size);
-#if defined __GNUC__ && __GNUC__ >= 7
-#pragma GCC diagnostic pop
-#endif
-                arena->m_qcache_ptr[i - 1] = rtl_cache_create(namebuf, size, 0, nullptr, nullptr, nullptr, nullptr, arena, RTL_CACHE_FLAG_QUANTUMCACHE);
-            }
-        }
 
         /* insert into arena list */
         RTL_MEMORY_LOCK_ACQUIRE(&(g_arena_list.m_lock));
@@ -674,26 +648,6 @@ void rtl_arena_deactivate(rtl_arena_type * arena)
     RTL_MEMORY_LOCK_ACQUIRE(&(g_arena_list.m_lock));
     QUEUE_REMOVE_NAMED(arena, arena_);
     RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
-
-    /* cleanup quantum cache(s) */
-    if (arena->m_qcache_max > 0 && arena->m_qcache_ptr)
-    {
-        int  i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
-        for (i = 1; i <= n; i++)
-        {
-            if (arena->m_qcache_ptr[i-1])
-            {
-                rtl_cache_destroy (arena->m_qcache_ptr[i-1]);
-                arena->m_qcache_ptr[i-1] = nullptr;
-            }
-        }
-        rtl_arena_free (
-            gp_arena_arena,
-            arena->m_qcache_ptr,
-            n * sizeof(rtl_cache_type*));
-
-        arena->m_qcache_ptr = nullptr;
-    }
 
     /* check for leaked segments */
     if (arena->m_stats.m_alloc > arena->m_stats.m_free)
@@ -781,7 +735,7 @@ void rtl_arena_deactivate(rtl_arena_type * arena)
 rtl_arena_type * SAL_CALL rtl_arena_create(
     const char *       name,
     sal_Size           quantum,
-    sal_Size           quantum_cache_max,
+    sal_Size,
     rtl_arena_type *   source_arena,
     void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
     void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size),
@@ -808,7 +762,6 @@ try_alloc:
             arena,
             name,
             quantum,
-            quantum_cache_max,
             source_arena,
             source_alloc,
             source_free
@@ -855,7 +808,7 @@ void * SAL_CALL rtl_arena_alloc(
         sal_Size size;
 
         size = RTL_MEMORY_ALIGN(*pSize, arena->m_quantum);
-        if (size > arena->m_qcache_max)
+        if (size > 0)
         {
             /* allocate from segment list */
             rtl_arena_segment_type *segment = nullptr;
@@ -874,7 +827,7 @@ void * SAL_CALL rtl_arena_alloc(
                 /* resize */
                 assert(segment->m_size >= size);
                 oversize = segment->m_size - size;
-                if (oversize >= arena->m_quantum && oversize >= arena->m_qcache_max)
+                if (oversize >= arena->m_quantum)
                 {
                     rtl_arena_segment_type * remainder = nullptr;
                     rtl_arena_segment_get (arena, &remainder);
@@ -898,16 +851,6 @@ void * SAL_CALL rtl_arena_alloc(
             }
             RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
         }
-        else if (size > 0)
-        {
-            /* allocate from quantum cache(s) */
-            int index = (size >> arena->m_quantum_shift) - 1;
-            assert(arena->m_qcache_ptr[index]);
-
-            addr = rtl_cache_alloc (arena->m_qcache_ptr[index]);
-            if (addr)
-                (*pSize) = size;
-        }
     }
     return addr;
 }
@@ -921,7 +864,7 @@ void SAL_CALL rtl_arena_free (
     if (arena)
     {
         size = RTL_MEMORY_ALIGN(size, arena->m_quantum);
-        if (size > arena->m_qcache_max)
+        if (size > 0)
         {
             /* free to segment list */
             rtl_arena_segment_type * segment;
@@ -981,31 +924,11 @@ void SAL_CALL rtl_arena_free (
 
             RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
         }
-        else if (size > 0)
-        {
-            /* free to quantum cache(s) */
-            int index = (size >> arena->m_quantum_shift) - 1;
-            assert(arena->m_qcache_ptr[index]);
-
-            rtl_cache_free (arena->m_qcache_ptr[index], addr);
-        }
     }
 }
 
 void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn)
 {
-    // quantum caches
-    if ((arena->m_qcache_max > 0) && (arena->m_qcache_ptr != nullptr))
-    {
-        int i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
-        for (i = 1; i <= n; i++)
-        {
-            if (arena->m_qcache_ptr[i - 1] != nullptr)
-                rtl_cache_foreach (arena->m_qcache_ptr[i - 1],
-                                   foreachFn);
-        }
-    }
-
     /* used segments */
     for (int i = 0, n = arena->m_hash_size; i < n; i++)
     {
@@ -1131,7 +1054,6 @@ void rtl_arena_init()
             &g_machdep_arena,
             "rtl_machdep_arena",
             rtl_machdep_pagesize(),
-            0,       /* no quantum caching */
             nullptr, nullptr, nullptr  /* no source */
         );
         assert(gp_machdep_arena);
@@ -1147,7 +1069,6 @@ void rtl_arena_init()
             &g_default_arena,
             "rtl_default_arena",
             rtl_machdep_pagesize(),
-            0,                 /* no quantum caching */
             gp_machdep_arena,  /* source */
             rtl_machdep_alloc,
             rtl_machdep_free
@@ -1165,7 +1086,6 @@ void rtl_arena_init()
             &g_arena_arena,
             "rtl_arena_internal_arena",
             64,                /* quantum */
-            0,                 /* no quantum caching */
             gp_default_arena,  /* source */
             rtl_arena_alloc,
             rtl_arena_free

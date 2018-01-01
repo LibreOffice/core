@@ -101,7 +101,6 @@ struct rtl_arena_st
     sal_Size                  m_hash_size;  /* m_hash_mask + 1   */
     sal_Size                  m_hash_shift; /* log2(m_hash_size) */
 
-    sal_Size                  m_qcache_max;
     rtl_cache_type **         m_qcache_ptr;
 };
 
