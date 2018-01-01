@@ -34,6 +34,7 @@
 #include <svl/urihelper.hxx>
 #include <o3tl/make_unique.hxx>
 
+#include <dcontact.hxx>
 #include <fmtornt.hxx>
 #include <frmfmt.hxx>
 #include <fmtfsize.hxx>
@@ -5241,7 +5242,25 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
         {
             m_pPam->SetMark();
             m_pPam->DeleteMark();
-            m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
+
+            SwStartNode* pSttNd = const_cast<SwStartNode*>(pCapStNd);
+
+            //if section to be deleted contains a pending m_pMarquee, it will be deleted
+            //so clear m_pMarquee pointer if that's the case
+            SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee) : nullptr;
+            if (pObjectFormat)
+            {
+                const SwFormatAnchor& rAnch = pObjectFormat->GetAnchor();
+                if (const SwPosition* pPos = rAnch.GetContentAnchor())
+                {
+                    SwNodeIndex aMarqueeNodeIndex(pPos->nNode);
+                    SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
+                    if (aMarqueeNodeIndex >= aSttIdx && aMarqueeNodeIndex <= aEndIdx)
+                        m_pMarquee = nullptr;
+                }
+            }
+
+            m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
             xCurTable->SetCaption( nullptr, false );
         }
     }
