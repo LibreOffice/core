@@ -513,7 +513,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -987,7 +987,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -1379,7 +1379,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -1661,7 +1661,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -2152,7 +2152,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -2956,7 +2956,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -3158,7 +3158,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -3359,7 +3359,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
             <node oor:name="clientID" oor:op="replace">
@@ -3513,7 +3513,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
             <node oor:name="eventtypeID" oor:op="replace">
@@ -3710,7 +3710,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -3912,7 +3912,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -4052,7 +4052,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -4229,7 +4229,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -4649,7 +4649,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -4984,7 +4984,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
             <node oor:name="nextscheduledmaintenance" oor:op="replace">
@@ -5294,7 +5294,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -5338,7 +5338,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
             <node oor:name="startdate" oor:op="replace">
@@ -5383,7 +5383,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -5884,7 +5884,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
             <node oor:name="dateupdated" oor:op="replace">
@@ -6174,7 +6174,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -6345,7 +6345,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>4000</value>
               </prop>
             </node>
             <node oor:name="ingredients" oor:op="replace">
@@ -6362,7 +6362,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>4000</value>
               </prop>
             </node>
             <node oor:name="instructions" oor:op="replace">
@@ -6379,7 +6379,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>4000</value>
               </prop>
             </node>
             <node oor:name="utensils" oor:op="replace">
@@ -6413,7 +6413,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>2000</value>
               </prop>
             </node>
           </node>
@@ -6691,7 +6691,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -6893,7 +6893,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -7061,7 +7061,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -7306,7 +7306,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
             <node oor:name="notes" oor:op="replace">
@@ -7323,7 +7323,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -7562,7 +7562,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
             <node oor:name="notes" oor:op="replace">
@@ -7579,7 +7579,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -7849,7 +7849,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -8006,7 +8006,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
             <node oor:name="photo" oor:op="replace">
@@ -8037,7 +8037,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -8163,7 +8163,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -8286,7 +8286,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -8482,7 +8482,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
@@ -8675,7 +8675,7 @@
                 <value>-1</value>
               </prop>
               <prop oor:name="Precision">
-                <value>65000</value>
+                <value>8000</value>
               </prop>
             </node>
           </node>
