@@ -858,6 +858,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     , m_bViewHasChanged(false)
     , m_bIsKeySpace(false)
 {
+    SetSublistNotOpenWithDoubleClick();
     SetHelpId(HID_NAVIGATOR_TREELIST);
 
     SetNodeDefaultImages();

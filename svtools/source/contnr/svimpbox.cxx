@@ -2037,10 +2037,13 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
             }
             if( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() )
             {
-                if( pView->IsExpanded(pEntry) )
-                    pView->Collapse( pEntry );
-                else
-                    pView->Expand( pEntry );
+                if( bSubLstOpDblClick )
+                {
+                    if( pView->IsExpanded(pEntry) )
+                        pView->Collapse( pEntry );
+                    else
+                        pView->Expand( pEntry );
+                }
                 if( pEntry == pCursor )  // only if Entryitem was clicked
                                           // (Nodebutton is not an Entryitem!)
                     pView->Select( pCursor );
