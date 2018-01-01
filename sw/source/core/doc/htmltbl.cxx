@@ -561,10 +561,9 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                             nIdx++;
                         }
                     }
-                    else
+                    else if (SwHTMLTableLayout *pChild = pCnts->GetTable())
                     {
                         OSL_ENSURE( false, "Sub tables in HTML import?" );
-                        SwHTMLTableLayout *pChild = pCnts->GetTable();
                         pChild->AutoLayoutPass1();
                         sal_uLong nMaxTableCnts = pChild->m_nMax;
                         sal_uLong nAbsMinTableCnts = pChild->m_nMin;
@@ -1608,7 +1607,7 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
                 {
                     SetBoxWidth( pBox, j, pCell->GetColSpan() );
                 }
-                else
+                else if (SwHTMLTableLayout *pTable = pContents->GetTable())
                 {
                     sal_uInt16 nAbs = 0, nRel = 0, nLSpace = 0, nRSpace = 0,
                            nInhSpace = 0;
@@ -1620,7 +1619,7 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
                         nRSpace = GetRightCellSpace( j, nColSpan );
                         nInhSpace = GetInhCellSpace( j, nColSpan );
                     }
-                    pContents->GetTable()->SetWidths( bCallPass2, nAbs, nRel,
+                    pTable->SetWidths( bCallPass2, nAbs, nRel,
                                                     nLSpace, nRSpace,
                                                     nInhSpace );
                 }
