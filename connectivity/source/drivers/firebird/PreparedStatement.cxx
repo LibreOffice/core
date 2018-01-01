@@ -372,9 +372,11 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
     memcpy(pVar->sqldata, &nValue, sizeof(nValue));
 }
 
-void SAL_CALL OPreparedStatement::setByte(sal_Int32 /*nIndex*/, sal_Int8 /*nValue*/)
+void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 nValue)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("XParameters::setByte", *this);
+    // there's no TINYINT or equivalent on Firebird,
+    // so do the same as setShort
+    setValue< sal_Int16 >(nIndex, static_cast<sal_Int16>(nValue), SQL_SHORT);
 }
 
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 nValue)
