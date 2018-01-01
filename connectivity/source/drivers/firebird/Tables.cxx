@@ -191,7 +191,7 @@ ObjectType Tables::appendObject(const OUString& rName,
     else
     {
         if ( sSql.endsWith(",") )
-            sSql = sSql.replaceAt(aSqlBuffer.getLength()-1, 1, ")");
+            sSql = sSql.replaceAt(sSql.getLength()-1, 1, ")");
         else
             sSql += ")";
     }
