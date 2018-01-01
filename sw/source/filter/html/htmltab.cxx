@@ -610,6 +610,8 @@ public:
 
     void IncBoxCount() { m_nBoxes++; }
     bool IsOverflowing() const { return m_nBoxes > 64000; }
+
+    bool PendingDrawObjectsInPaM(SwPaM& rPam) const;
 };
 
 void HTMLTableCnts::InitCtor()
@@ -5277,11 +5279,39 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
     return xRetTable;
 }
 
-bool SwHTMLParser::PendingTableInPaM(SwPaM& rPam) const
+bool HTMLTable::PendingDrawObjectsInPaM(SwPaM& rPam) const
+{
+    if (!m_pResizeDrawObjects)
+        return false;
+
+    bool bRet = false;
+
+    sal_uInt16 nCount = m_pResizeDrawObjects->size();
+    for (sal_uInt16 i = 0; i < nCount && !bRet; ++i)
+    {
+        SdrObject *pObj = (*m_pResizeDrawObjects)[i];
+        SwFrameFormat* pObjectFormat = ::FindFrameFormat(pObj);
+        if (!pObjectFormat)
+            continue;
+        const SwFormatAnchor& rAnch = pObjectFormat->GetAnchor();
+        if (const SwPosition* pPos = rAnch.GetContentAnchor())
+        {
+            SwNodeIndex aObjNodeIndex(pPos->nNode);
+            bRet = (aObjNodeIndex >= rPam.Start()->nNode && aObjNodeIndex <= rPam.End()->nNode);
+        }
+    }
+
+    return bRet;
+}
+
+bool SwHTMLParser::PendingObjectsInPaM(SwPaM& rPam) const
 {
     bool bRet = false;
     for (const auto& a : m_aTables)
     {
+        bRet = a->PendingDrawObjectsInPaM(rPam);
+        if (bRet)
+            break;
         const SwTable *pTable = a->GetSwTable();
         if (!pTable)
             continue;
