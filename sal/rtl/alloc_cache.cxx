@@ -642,7 +642,7 @@ bool rtl_cache_depot_populate(rtl_cache_type * cache)
     return (empty != nullptr);
 }
 
-int rtl_cache_constructor(void * obj)
+void rtl_cache_constructor(void * obj)
 {
     rtl_cache_type * cache = static_cast<rtl_cache_type*>(obj);
 
@@ -663,8 +663,6 @@ int rtl_cache_constructor(void * obj)
 
     /* depot layer */
     RTL_MEMORY_LOCK_INIT(&(cache->m_depot_lock));
-
-    return 1;
 }
 
 void rtl_cache_destructor(void * obj)
@@ -945,7 +943,7 @@ try_alloc:
     if (result)
     {
         rtl_cache_type * cache = result;
-        (void) rtl_cache_constructor (cache);
+        rtl_cache_constructor (cache);
 
         if (!source)
         {
@@ -1368,7 +1366,7 @@ void rtl_cache_init()
     {
         /* list of caches */
         RTL_MEMORY_LOCK_INIT(&(g_cache_list.m_lock));
-        (void) rtl_cache_constructor (&(g_cache_list.m_cache_head));
+        rtl_cache_constructor (&(g_cache_list.m_cache_head));
     }
     {
         /* cache: internal arena */
@@ -1393,7 +1391,7 @@ void rtl_cache_init()
         static rtl_cache_type g_cache_magazine_cache;
 
         assert(!gp_cache_magazine_cache);
-        (void) rtl_cache_constructor (&g_cache_magazine_cache);
+        rtl_cache_constructor (&g_cache_magazine_cache);
 
         gp_cache_magazine_cache = rtl_cache_activate (
             &g_cache_magazine_cache,
@@ -1416,7 +1414,7 @@ void rtl_cache_init()
         static rtl_cache_type g_cache_slab_cache;
 
         assert(!gp_cache_slab_cache);
-        (void) rtl_cache_constructor (&g_cache_slab_cache);
+        rtl_cache_constructor (&g_cache_slab_cache);
 
         gp_cache_slab_cache = rtl_cache_activate (
             &g_cache_slab_cache,
@@ -1436,7 +1434,7 @@ void rtl_cache_init()
         static rtl_cache_type g_cache_bufctl_cache;
 
         assert(!gp_cache_bufctl_cache);
-        (void) rtl_cache_constructor (&g_cache_bufctl_cache);
+        rtl_cache_constructor (&g_cache_bufctl_cache);
 
         gp_cache_bufctl_cache = rtl_cache_activate (
             &g_cache_bufctl_cache,
