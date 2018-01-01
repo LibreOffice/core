@@ -135,6 +135,7 @@ private:
     bool                bAsyncBeginDrag : 1;
     bool                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with false
     bool                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
+    bool                bSubLstOpDblClick : 1; // open/close sublist with mouse double click, defaulted with true
     bool                bContextMenuHandling : 1;
     bool                bIsCellFocusEnabled : 1;
     bool                bAreChildrenTransient;

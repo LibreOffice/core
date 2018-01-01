@@ -649,6 +649,7 @@ public:
 
     void            SetSublistOpenWithReturn();      // open/close sublist with return/enter
     void            SetSublistOpenWithLeftRight();   // open/close sublist with cursor left/right
+    void            SetSublistNotOpenWithDoubleClick(); // do not open/close sublist with mouse double click on entry
 
     void            EnableInplaceEditing( bool bEnable );
     // Edits the Entry's first StringItem, 0 == Cursor
