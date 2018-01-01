@@ -121,13 +121,13 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                     nLen = BigMulDiv(nLen, aFact.GetNumerator(), aFact.GetDenominator());
                 }
 
-                OUString aTmp;
-                pModel->TakeMetricStr(nLen, aTmp, true, nNumDigits);
-                aStr = aTmp;
-
                 if(!aFact.IsValid())
                 {
                     aStr = "?";
+                }
+                else
+                {
+                    aStr = pModel->GetMetricString(nLen, true, nNumDigits);
                 }
 
                 SvtSysLocale aSysLocale;
@@ -175,7 +175,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                         eMeasureUnit = eModUIUnit;
 
                     if(bShowUnit)
-                        SdrModel::TakeUnitStr(eMeasureUnit, aStr);
+                        aStr = SdrModel::GetUnitString(eMeasureUnit);
                 }
             }
 

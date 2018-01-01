@@ -1005,7 +1005,7 @@ void SdrModel::ImpSetUIUnit()
 
     // end preparations, set member values
     aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
-    TakeUnitStr(eUIUnit, aUIUnitStr);
+    aUIUnitStr = GetUnitString(eUIUnit);
 }
 
 void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
@@ -1072,81 +1072,42 @@ void SdrModel::SetUIUnit(FieldUnit eUnit, const Fraction& rScale)
     }
 }
 
-void SdrModel::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
+OUString SdrModel::GetUnitString(FieldUnit eUnit)
 {
     switch(eUnit)
     {
         default:
         case FUNIT_NONE   :
         case FUNIT_CUSTOM :
-        {
-            rStr.clear();
-            break;
-        }
+            return OUString();
         case FUNIT_100TH_MM:
-        {
-            rStr = "/100mm";
-            break;
-        }
+            return OUString{"/100mm"};
         case FUNIT_MM     :
-        {
-            rStr = "mm";
-            break;
-        }
+            return OUString{"mm"};
         case FUNIT_CM     :
-        {
-            rStr = "cm";
-            break;
-        }
+            return OUString{"cm"};
         case FUNIT_M      :
-        {
-            rStr = "m";
-            break;
-        }
+            return OUString{"m"};
         case FUNIT_KM     :
-        {
-            rStr ="km";
-            break;
-        }
+            return OUString{"km"};
         case FUNIT_TWIP   :
-        {
-            rStr = "twip";
-            break;
-        }
+            return OUString{"twip"};
         case FUNIT_POINT  :
-        {
-            rStr = "pt";
-            break;
-        }
+            return OUString{"pt"};
         case FUNIT_PICA   :
-        {
-            rStr = "pica";
-            break;
-        }
+            return OUString{"pica"};
         case FUNIT_INCH   :
-        {
-            rStr = "\"";
-            break;
-        }
+            return OUString{"\""};
         case FUNIT_FOOT   :
-        {
-            rStr = "ft";
-            break;
-        }
+            return OUString{"ft"};
         case FUNIT_MILE   :
-        {
-            rStr = "mile(s)";
-            break;
-        }
+            return OUString{"mile(s)"};
         case FUNIT_PERCENT:
-        {
-            rStr = "%";
-            break;
-        }
+            return OUString{"%"};
     }
 }
 
-void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
+OUString SdrModel::GetMetricString(long nVal, bool bNoUnitChars, sal_Int32 nNumDigits) const
 {
     // #i22167#
     // change to double precision usage to not lose decimal places
@@ -1265,10 +1226,10 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     if(!bNoUnitChars)
         aBuf.append(aUIUnitStr);
 
-    rStr = aBuf.makeStringAndClear();
+    return aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakeAngleStr(long nAngle, OUString& rStr)
+OUString SdrModel::GetAngleString(long nAngle)
 {
     bool bNeg = nAngle < 0;
 
@@ -1295,10 +1256,10 @@ void SdrModel::TakeAngleStr(long nAngle, OUString& rStr)
 
     aBuf.append(DEGREE_CHAR);
 
-    rStr = aBuf.makeStringAndClear();
+    return aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr)
+OUString SdrModel::GetPercentString(const Fraction& rVal)
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());
@@ -1321,7 +1282,7 @@ void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr)
     if (bNeg)
         nPct = -nPct;
 
-    rStr = OUString::number(nPct) + "%";
+    return OUString::number(nPct) + "%";
 }
 
 void SdrModel::SetChanged(bool bFlg)

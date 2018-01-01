@@ -1042,20 +1042,17 @@ void SdrObject::ImpForcePlusData()
 
 OUString SdrObject::GetAngleStr(long nAngle) const
 {
-    OUString aStr;
-    if (pModel!=nullptr) {
-        SdrModel::TakeAngleStr(nAngle,aStr);
-    }
-    return aStr;
+    if (pModel!=nullptr)
+        return SdrModel::GetAngleString(nAngle);
+
+    return OUString();
 }
 
 OUString SdrObject::GetMetrStr(long nVal) const
 {
-    OUString aStr;
-    if (pModel!=nullptr) {
-        pModel->TakeMetricStr(nVal,aStr);
-    }
-    return aStr;
+    if (pModel!=nullptr)
+        return pModel->GetMetricString(nVal);
+    return OUString();
 }
 
 basegfx::B2DPolyPolygon SdrObject::TakeXorPoly() const

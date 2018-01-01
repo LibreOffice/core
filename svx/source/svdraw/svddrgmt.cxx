@@ -1482,14 +1482,12 @@ SdrDragMove::SdrDragMove(SdrDragView& rNewView)
 
 void SdrDragMove::TakeSdrDragComment(OUString& rStr) const
 {
-    OUString aStr;
-
     ImpTakeDescriptionStr(STR_DragMethMove, rStr);
-    rStr += " (x=";
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr + " y=";
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr + ")";
+    rStr += " (x="
+            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
+            + " y="
+            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
+            + ")";
 
     if(getSdrDragView().IsDragWithCopy())
     {
@@ -1753,8 +1751,6 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 
     if(bX || bY)
     {
-        OUString aStr;
-
         rStr += " (";
 
         bool bEqual(aXFact == aYFact);
@@ -1763,8 +1759,7 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
             if(!bEqual)
                 rStr += "x=";
 
-            SdrModel::TakePercentStr(aXFact, aStr);
-            rStr += aStr;
+            rStr += SdrModel::GetPercentString(aXFact);
         }
 
         if(bY && !bEqual)
@@ -1772,9 +1767,7 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
             if(bX)
                 rStr += " ";
 
-            rStr += "y=";
-            SdrModel::TakePercentStr(aYFact, aStr);
-            rStr += aStr;
+            rStr += "y=" + SdrModel::GetPercentString(aYFact);
         }
 
         rStr += ")";
@@ -2085,9 +2078,7 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
         nTmpAngle -= 36000;
     }
 
-    OUString aStr;
-    SdrModel::TakeAngleStr(nTmpAngle, aStr);
-    rStr += aStr + ")";
+    rStr += SdrModel::GetAngleString(nTmpAngle) + ")";
 
     if(getSdrDragView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);
@@ -2228,9 +2219,7 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
 
     nTmpAngle = NormAngle180(nTmpAngle);
 
-    OUString aStr;
-    SdrModel::TakeAngleStr(nTmpAngle, aStr);
-    rStr += aStr + ")";
+    rStr += SdrModel::GetAngleString(nTmpAngle) + ")";
 
     if(getSdrDragView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);
@@ -2804,9 +2793,7 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
             nVal *= 2;
 
         nVal = std::abs(nVal);
-        OUString aStr;
-        SdrModel::TakeAngleStr(nVal, aStr);
-        rStr += aStr + ")";
+        rStr += SdrModel::GetAngleString(nVal) + ")";
     }
 
     if(getSdrDragView().IsDragWithCopy())
@@ -3414,13 +3401,11 @@ void SdrDragDistort::TakeSdrDragComment(OUString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethDistort, rStr);
 
-    OUString aStr;
-
-    rStr += " (x=";
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr + " y=";
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr + ")";
+    rStr += " (x="
+            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
+            + " y="
+            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
+            + ")";
 
     if(getSdrDragView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);
@@ -3564,13 +3549,11 @@ void SdrDragCrop::TakeSdrDragComment(OUString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethCrop, rStr);
 
-    OUString aStr;
-
-    rStr += " (x=";
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr + " y=";
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr + ")";
+    rStr += " (x="
+            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
+            + " y="
+            + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
+            + ")";
 
     if(getSdrDragView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);

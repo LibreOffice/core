@@ -937,36 +937,26 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         aNow -= aPrev;
         aStr += " (";
 
-        OUString aMetr;
-
         if(pU->bCircle)
         {
-            SdrModel::TakeAngleStr(std::abs(pU->nCircRelAngle), aMetr);
-            aStr += aMetr;
-            aStr += " r=";
-            mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, true);
-            aStr += aMetr;
+            aStr += SdrModel::GetAngleString(std::abs(pU->nCircRelAngle))
+                    + " r="
+                    + mrSdrPathObject.GetModel()->GetMetricString(pU->nCircRadius, true);
         }
 
-        aStr += "dx=";
-        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X(), aMetr, true);
-        aStr += aMetr;
-
-        aStr += " dy=";
-        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y(), aMetr, true);
-        aStr += aMetr;
+        aStr += "dx="
+                + mrSdrPathObject.GetModel()->GetMetricString(aNow.X(), true)
+                + " dy="
+                + mrSdrPathObject.GetModel()->GetMetricString(aNow.Y(), true);
 
         if(!IsFreeHand(meObjectKind))
         {
             sal_Int32 nLen(GetLen(aNow));
-            aStr += "  l=";
-            mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
-            aStr += aMetr;
-
             sal_Int32 nAngle(GetAngle(aNow));
-            aStr += " ";
-            SdrModel::TakeAngleStr(nAngle, aMetr);
-            aStr += aMetr;
+            aStr += "  l="
+                    + mrSdrPathObject.GetModel()->GetMetricString(nLen, true)
+                    + " "
+                    + SdrModel::GetAngleString(nAngle);
         }
 
         aStr += ")";
@@ -1016,18 +1006,14 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         // dx=0.00 dy=0.00                -- both sides bezier
         // dx=0.00 dy=0.00  l=0.00 0.00\302\260  -- one bezier/lever on one side, a start, or an ending
         // dx=0.00 dy=0.00  l=0.00 0.00\302\260 / l=0.00 0.00\302\260 -- in between
-        OUString aMetr;
         Point aBeg(rDrag.GetStart());
         Point aNow(rDrag.GetNow());
 
         aStr.clear();
-        aStr += "dx=";
-        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X() - aBeg.X(), aMetr, true);
-        aStr += aMetr;
-
-        aStr += " dy=";
-        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y() - aBeg.Y(), aMetr, true);
-        aStr += aMetr;
+        aStr += "dx="
+                + mrSdrPathObject.GetModel()->GetMetricString(aNow.X() - aBeg.X(), true)
+                + " dy="
+                + mrSdrPathObject.GetModel()->GetMetricString(aNow.Y() - aBeg.Y(), true);
 
         if(!pDragData->IsMultiPointDrag())
         {
@@ -1052,14 +1038,11 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                 aNow -= rXPoly[nRef];
 
                 sal_Int32 nLen(GetLen(aNow));
-                aStr += "  l=";
-                mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
-                aStr += aMetr;
-
                 sal_Int32 nAngle(GetAngle(aNow));
-                aStr += " ";
-                SdrModel::TakeAngleStr(nAngle, aMetr);
-                aStr += aMetr;
+                aStr += "  l="
+                        + mrSdrPathObject.GetModel()->GetMetricString(nLen, true)
+                        + " "
+                        + SdrModel::GetAngleString(nAngle);
             }
             else if(nPointCount > 1)
             {
@@ -1098,14 +1081,11 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                     aPt -= rXPoly[nPt1];
 
                     sal_Int32 nLen(GetLen(aPt));
-                    aStr += "  l=";
-                    mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
-                    aStr += aMetr;
-
                     sal_Int32 nAngle(GetAngle(aPt));
-                    aStr += " ";
-                    SdrModel::TakeAngleStr(nAngle, aMetr);
-                    aStr += aMetr;
+                    aStr += "  l="
+                            + mrSdrPathObject.GetModel()->GetMetricString(nLen, true)
+                            + " "
+                            + SdrModel::GetAngleString(nAngle);
                 }
 
                 if(bPt2)
@@ -1119,14 +1099,11 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                     aPt -= rXPoly[nPt2];
 
                     sal_Int32 nLen(GetLen(aPt));
-                    aStr += "l=";
-                    mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
-                    aStr += aMetr;
-
                     sal_Int32 nAngle(GetAngle(aPt));
-                    aStr += " ";
-                    SdrModel::TakeAngleStr(nAngle, aMetr);
-                    aStr += aMetr;
+                    aStr += "l="
+                            + mrSdrPathObject.GetModel()->GetMetricString(nLen, true)
+                            + " "
+                            + SdrModel::GetAngleString(nAngle);
                 }
             }
         }
