@@ -35,6 +35,7 @@
 #include <svl/urihelper.hxx>
 #include <o3tl/make_unique.hxx>
 
+#include <dcontact.hxx>
 #include <fmtornt.hxx>
 #include <frmfmt.hxx>
 #include <fmtfsize.hxx>
@@ -58,6 +59,7 @@
 #include "swhtml.hxx"
 #include "swcss1.hxx"
 #include <numrule.hxx>
+#include <txtftn.hxx>
 
 #define NETSCAPE_DFLT_BORDER 1
 #define NETSCAPE_DFLT_CELLSPACING 2
@@ -617,6 +619,8 @@ public:
 
     void IncBoxCount() { m_nBoxes++; }
     bool IsOverflowing() const { return m_nBoxes > 64000; }
+
+    bool PendingDrawObjectsInPaM(SwPaM& rPam) const;
 };
 
 void HTMLTableCnts::InitCtor()
@@ -1075,10 +1079,14 @@ HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
 
     for( sal_uInt16 i=0; i<m_nCols; i++ )
         m_pColumns->push_back(o3tl::make_unique<HTMLTableColumn>());
+
+    m_pParser->RegisterHTMLTable(this);
 }
 
 HTMLTable::~HTMLTable()
 {
+    m_pParser->DeregisterHTMLTable(this);
+
     delete m_pResizeDrawObjects;
     delete m_pDrawObjectPrcWidths;
 
@@ -1714,9 +1722,9 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
             pBox = NewTableBox( pCnts->GetStartNode(), pUpper );
             pCnts->SetTableBox( pBox );
         }
-        else
+        else if (HTMLTable* pTable = pCnts->GetTable())
         {
-            pCnts->GetTable()->InheritVertBorders( this, nLeftCol,
+            pTable->InheritVertBorders( this, nLeftCol,
                                                    nRightCol-nLeftCol );
             // ... that's a table. We'll build a new box and put the rows of the table
             // in the rows of the box
@@ -1728,6 +1736,10 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
             sal_uInt16 nInhSpace = m_pLayoutInfo->GetInhCellSpace( nLeftCol, nColSpan );
             pCnts->GetTable()->MakeTable( pBox, nAbs, nRel, nLSpace, nRSpace,
                                           nInhSpace );
+        }
+        else
+        {
+            return nullptr;
         }
     }
     else
@@ -2403,6 +2415,12 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             // left-adjusted tables are only considerate of the left margin
             eHoriOri = m_nLeftMargin ? text::HoriOrientation::LEFT_AND_WIDTH : text::HoriOrientation::LEFT;
             break;
+        }
+
+        if (!m_pSwTable)
+        {
+            SAL_WARN("sw.html", "no table");
+            return;
         }
 
         // get the table format and adapt it
@@ -3594,6 +3612,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 const SwTable* pSwTable = m_xDoc->InsertTable(
                         SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
                         *m_pPam->GetPoint(), 1, 1, text::HoriOrientation::LEFT );
+                SwFrameFormat *pFrameFormat = pSwTable ? pSwTable->GetFrameFormat() : nullptr;
 
                 if( bForceFrame )
                 {
@@ -3603,22 +3622,20 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 }
                 else
                 {
-                    if( bStyleParsed )
+                    if (bStyleParsed && pFrameFormat)
                     {
                         m_pCSS1Parser->SetFormatBreak( aItemSet, aPropInfo );
-                        pSwTable->GetFrameFormat()->SetFormatAttr( aItemSet );
+                        pFrameFormat->SetFormatAttr( aItemSet );
                     }
                     m_pPam->Move( fnMoveBackward );
                 }
 
                 SwNode const*const pNd = & m_pPam->GetPoint()->nNode.GetNode();
-                if( !bAppended && !bForceFrame )
-                {
-                    SwTextNode *const pOldTextNd =
-                        pSavePos->nNode.GetNode().GetTextNode();
-                    OSL_ENSURE( pOldTextNd, "Why we aren't in a text node?" );
-                    SwFrameFormat *pFrameFormat = pSwTable->GetFrameFormat();
+                SwTextNode *const pOldTextNd = (!bAppended && !bForceFrame) ?
+                    pSavePos->nNode.GetNode().GetTextNode() : nullptr;
 
+                if (pFrameFormat && pOldTextNd)
+                {
                     const SfxPoolItem* pItem2;
                     if( SfxItemState::SET == pOldTextNd->GetSwAttrSet()
                             .GetItemState( RES_PAGEDESC, false, &pItem2 ) &&
@@ -3931,15 +3948,21 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             InsertTableSection( static_cast< sal_uInt16 >(pSaveStruct->IsHeaderCell()
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ));
-        const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
-        SwContentNode *pCNd = m_xDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetContentNode();
-        //Added defaults to CJK and CTL
-        SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
-        pCNd->SetAttr( aFontHeight );
-        SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
-        pCNd->SetAttr( aFontHeightCJK );
-        SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
-        pCNd->SetAttr( aFontHeightCTL );
+
+        if (!pStNd)
+            eState = SvParserState::Error;
+        else
+        {
+            const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
+            SwContentNode *pCNd = m_xDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetContentNode();
+            //Added defaults to CJK and CTL
+            SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
+            pCNd->SetAttr( aFontHeight );
+            SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
+            pCNd->SetAttr( aFontHeightCJK );
+            SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
+            pCNd->SetAttr( aFontHeightCTL );
+        }
 
         pSaveStruct->AddContents( new HTMLTableCnts(pStNd) );
         pSaveStruct->ClearIsInSection();
@@ -4972,6 +4995,134 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     }
 }
 
+namespace
+{
+    class FrameDeleteWatch : public SwClient
+    {
+        SwFrameFormat* m_pObjectFormat;
+        bool m_bDeleted;
+    public:
+        FrameDeleteWatch(SwFrameFormat* pObjectFormat)
+            : m_pObjectFormat(pObjectFormat)
+            , m_bDeleted(false)
+        {
+            if (m_pObjectFormat)
+                m_pObjectFormat->Add(this);
+
+        }
+
+        virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override
+        {
+            SwClient::SwClientNotify(rModify, rHint);
+            if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+            {
+                if (pDrawFrameFormatHint->m_eId == sw::DrawFrameFormatHintId::DYING)
+                {
+                    m_pObjectFormat->Remove(this);
+                    m_bDeleted = true;
+                }
+            }
+        }
+
+        bool WasDeleted() const
+        {
+            return m_bDeleted;
+        }
+
+        virtual ~FrameDeleteWatch() override
+        {
+            if (!m_bDeleted && m_pObjectFormat)
+                m_pObjectFormat->Remove(this);
+        }
+    };
+
+    class IndexInRange
+    {
+    private:
+        SwNodeIndex maStart;
+        SwNodeIndex maEnd;
+    public:
+        explicit IndexInRange(const SwNodeIndex& rStart, const SwNodeIndex& rEnd)
+            : maStart(rStart)
+            , maEnd(rEnd)
+        {
+        }
+        bool operator()(const SwHTMLTextFootnote& rTextFootnote) const
+        {
+            const SwNodeIndex aTextIdx(rTextFootnote.pTextFootnote->GetTextNode());
+            return aTextIdx >= maStart && aTextIdx <= maEnd;
+        }
+    };
+}
+
+void SwHTMLParser::ClearFootnotesInRange(const SwNodeIndex& rMkNdIdx, const SwNodeIndex& rPtNdIdx)
+{
+    //similarly for footnotes
+    if (m_pFootEndNoteImpl)
+    {
+        m_pFootEndNoteImpl->aTextFootnotes.erase(std::remove_if(m_pFootEndNoteImpl->aTextFootnotes.begin(),
+            m_pFootEndNoteImpl->aTextFootnotes.end(), IndexInRange(rMkNdIdx, rPtNdIdx)), m_pFootEndNoteImpl->aTextFootnotes.end());
+        if (m_pFootEndNoteImpl->aTextFootnotes.empty())
+        {
+            delete m_pFootEndNoteImpl;
+            m_pFootEndNoteImpl = nullptr;
+        }
+    }
+
+    //follow DelFlyInRange pattern here
+    const bool bDelFwrd = rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex();
+
+    SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
+    SwFrameFormats& rTable = *pDoc->GetSpzFrameFormats();
+    for ( auto i = rTable.size(); i; )
+    {
+        SwFrameFormat *pFormat = rTable[--i];
+        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
+        SwPosition const*const pAPos = rAnch.GetContentAnchor();
+        if (pAPos &&
+            ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
+             (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
+            ( bDelFwrd
+                ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
+                : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx ))
+        {
+            if( rPtNdIdx != pAPos->nNode )
+            {
+                // If the Fly is deleted, all Flys in its content have to be deleted too.
+                const SwFormatContent &rContent = pFormat->GetContent();
+                // But only fly formats own their content, not draw formats.
+                if (rContent.GetContentIdx() && pFormat->Which() == RES_FLYFRMFMT)
+                {
+                    ClearFootnotesInRange(*rContent.GetContentIdx(),
+                                          SwNodeIndex(*rContent.GetContentIdx()->GetNode().EndOfSectionNode()));
+                }
+            }
+        }
+    }
+}
+
+void SwHTMLParser::DeleteSection(SwStartNode* pSttNd)
+{
+    //if section to be deleted contains a pending m_pMarquee, it will be deleted
+    //so clear m_pMarquee pointer if that's the case
+    SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee) : nullptr;
+    FrameDeleteWatch aWatch(pObjectFormat);
+
+    //similarly for footnotes
+    SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
+    ClearFootnotesInRange(aSttIdx, aEndIdx);
+
+    m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
+
+    if (pObjectFormat)
+    {
+        if (aWatch.WasDeleted())
+            m_pMarquee = nullptr;
+        else
+            pObjectFormat->Remove(&aWatch);
+    }
+}
+
 HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                                      bool bIsParentHead,
                                      bool bHasParentSection,
@@ -5186,7 +5337,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 // The section isn't needed anymore
                 m_pPam->SetMark();
                 m_pPam->DeleteMark();
-                m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
+                DeleteSection(const_cast<SwStartNode*>(pCapStNd));
                 m_pTable->SetCaption( nullptr, false );
             }
 
@@ -5205,8 +5356,9 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             m_bUpperSpace = true;
             SetTextCollAttrs();
 
-            m_nParaCnt = m_nParaCnt - std::min(m_nParaCnt,
-                pTCntxt->GetTableNode()->GetTable().GetTabSortBoxes().size());
+            SwTableNode* pTableNode = pTCntxt->GetTableNode();
+            size_t nTableBoxSize = pTableNode ? pTableNode->GetTable().GetTabSortBoxes().size() : 0;
+            m_nParaCnt = m_nParaCnt - std::min(m_nParaCnt, nTableBoxSize);
 
             // Jump to a table if needed
             if( JUMPTO_TABLE == m_eJumpTo && m_pTable->GetSwTable() &&
@@ -5235,7 +5387,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         {
             m_pPam->SetMark();
             m_pPam->DeleteMark();
-            m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
+            DeleteSection(const_cast<SwStartNode*>(pCapStNd));
             pCurTable->SetCaption( nullptr, false );
         }
     }
@@ -5251,6 +5403,53 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
     delete pSaveStruct;
 
     return pRetTable;
+}
+
+bool HTMLTable::PendingDrawObjectsInPaM(SwPaM& rPam) const
+{
+    if (!m_pResizeDrawObjects)
+        return false;
+
+    bool bRet = false;
+
+    sal_uInt16 nCount = m_pResizeDrawObjects->size();
+    for (sal_uInt16 i = 0; i < nCount && !bRet; ++i)
+    {
+        SdrObject *pObj = (*m_pResizeDrawObjects)[i];
+        SwFrameFormat* pObjectFormat = ::FindFrameFormat(pObj);
+        if (!pObjectFormat)
+            continue;
+        const SwFormatAnchor& rAnch = pObjectFormat->GetAnchor();
+        if (const SwPosition* pPos = rAnch.GetContentAnchor())
+        {
+            SwNodeIndex aObjNodeIndex(pPos->nNode);
+            bRet = (aObjNodeIndex >= rPam.Start()->nNode && aObjNodeIndex <= rPam.End()->nNode);
+        }
+    }
+
+    return bRet;
+}
+
+bool SwHTMLParser::PendingObjectsInPaM(SwPaM& rPam) const
+{
+    bool bRet = false;
+    for (const auto& a : m_aTables)
+    {
+        bRet = a->PendingDrawObjectsInPaM(rPam);
+        if (bRet)
+            break;
+        const SwTable *pTable = a->GetSwTable();
+        if (!pTable)
+            continue;
+        const SwTableNode* pTableNode = pTable->GetTableNode();
+        if (!pTableNode)
+            continue;
+        SwNodeIndex aTableNodeIndex(*pTableNode);
+        bRet = (aTableNodeIndex >= rPam.Start()->nNode && aTableNodeIndex <= rPam.End()->nNode);
+        if (bRet)
+            break;
+    }
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

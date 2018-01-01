@@ -1446,10 +1446,10 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         if( !aToken.isEmpty() && ' '==aToken[0] && !IsReadPRE() )
         {
             sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
-            if( nPos )
+            const SwTextNode* pTextNode = nPos ? m_pPam->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
+            if (pTextNode)
             {
-                const OUString& rText =
-                    m_pPam->GetPoint()->nNode.GetNode().GetTextNode()->GetText();
+                const OUString& rText = pTextNode->GetText();
                 sal_Unicode cLast = rText[--nPos];
                 if( ' ' == cLast || '\x0a' == cLast)
                     aToken = aToken.copy(1);

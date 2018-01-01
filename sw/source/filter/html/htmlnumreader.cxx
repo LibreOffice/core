@@ -470,6 +470,13 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
         AppendTextNode( AM_NOSPACE, false );
     m_bNoParSpace = false;    // no space in <LI>!
 
+    SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
+    if (!pTextNode)
+    {
+        SAL_WARN("sw.html", "No Text-Node at PaM-Position");
+        return;
+    }
+
     const bool bCountedInList = nToken != HtmlTokenId::LISTHEADER_ON;
 
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
@@ -505,7 +512,6 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
         m_nOpenParaToken = nToken;
     }
 
-    SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
     static_cast<SwContentNode *>(pTextNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
     pTextNode->SetAttrListLevel(nLevel);
     // #i57656# - <IsCounted()> state of text node has to be adjusted accordingly.
@@ -599,7 +605,11 @@ void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl )
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
 {
     SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
-    OSL_ENSURE( pTextNode, "No Text-Node at PaM-Position" );
+    if (!pTextNode)
+    {
+        SAL_WARN("sw.html", "No Text-Node at PaM-Position");
+        return;
+    }
 
     OSL_ENSURE( GetNumInfo().GetNumRule(), "No numbering rule" );
     const OUString& rName = GetNumInfo().GetNumRule()->GetName();
