@@ -211,7 +211,6 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
     @internal
 */
 #define RTL_CACHE_FLAG_NOMAGAZINE   (1 << 13) /* w/o magazine layer */
-#define RTL_CACHE_FLAG_QUANTUMCACHE (2 << 13) /* used as arena quantum cache */
 
 enum class AllocMode { CUSTOM, SYSTEM, UNSET };
 
