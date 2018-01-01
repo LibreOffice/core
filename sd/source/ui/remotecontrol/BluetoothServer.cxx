@@ -166,7 +166,7 @@ isBluez5Available(DBusConnection *pConnection)
 {
     DBusMessage *pMsg;
 
-    // Simplest wasy to check whether we have Bluez 5+ is to check
+    // Simplest ways to check whether we have Bluez 5+ is to check
     // that we can obtain adapters using the new interfaces.
     // The first two error checks however don't tell us anything as they should
     // succeed as long as dbus is working correctly.
