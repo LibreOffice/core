@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c42a727e",
+        "filename": "svx/source/form/filtnav.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-02T12:15:23Z",
+      "side": 1,
+      "message": "huh?",
+      "revId": "a840ab637eaa7cee185d9d311a691b281f29c93a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_04256aaa",
+        "filename": "svx/source/table/tablemodel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-02T12:15:23Z",
+      "side": 1,
+      "message": "sorry, I should have been clearer: there is no need for the\n  if (nCount  \u003d\u003d 1)\ncheck either, both cases can be handled with the same erase(begin,end) call",
+      "revId": "a840ab637eaa7cee185d9d311a691b281f29c93a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
