@@ -1565,6 +1565,7 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
         (aEvent.EventName == EVENT_ON_SAVEASDONE)
        )
     {
+        SolarMutexGuard g;
         implts_markDocumentAsSaved(xDocument);
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_FINISHED);
     }
