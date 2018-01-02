@@ -1017,8 +1017,8 @@
 #define STR_VIEWLAYOUT_ONE                      NC_("STR_VIEWLAYOUT_ONE", "Single-page view")
 #define STR_VIEWLAYOUT_MULTI                    NC_("STR_VIEWLAYOUT_MULTI", "Multiple-page view")
 #define STR_VIEWLAYOUT_BOOK                     NC_("STR_VIEWLAYOUT_BOOK", "Book view")
-#define STR_BOOKCTRL_HINT                       NC_("STR_BOOKCTRL_HINT", "Page number in document. Click to open Navigator window or right-click for bookmark list.")
-#define STR_BOOKCTRL_HINT_EXTENDED              NC_("STR_BOOKCTRL_HINT_EXTENDED", "Page number in document (Page number on printed document). Click to open Navigator window.")
+#define STR_BOOKCTRL_HINT                       NC_("STR_BOOKCTRL_HINT", "Page number in document. Click to open Go to Page dialog or right-click for bookmark list.")
+#define STR_BOOKCTRL_HINT_EXTENDED              NC_("STR_BOOKCTRL_HINT_EXTENDED", "Page number in document (Page number on printed document). Click to open Go to Page dialog.")
 #define STR_TMPLCTRL_HINT                       NC_("STR_TMPLCTRL_HINT", "Page Style. Right-click to change style or click to open Style dialog.")
 
 // Strings for textual attributes.
