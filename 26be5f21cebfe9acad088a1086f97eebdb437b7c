@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_24726e7d",
+        "filename": "sal/qa/osl/file/osl_old_test_file.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-02T14:25:00Z",
+      "side": 1,
+      "message": "was there any specific reason to add this test for unotools functionality to sal instead of unotools?",
+      "revId": "26be5f21cebfe9acad088a1086f97eebdb437b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
