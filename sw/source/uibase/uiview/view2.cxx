@@ -1588,7 +1588,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
     {
         case FN_STAT_PAGE:
         {
-            GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR,
+            GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_PAGE,
                                       SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
         }
         break;
