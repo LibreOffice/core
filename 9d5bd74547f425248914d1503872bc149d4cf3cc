@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5993cffa",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-01-02T09:28:26Z",
+      "side": 1,
+      "message": "It fails because setValue takes a non-const reference.\nRemove the cast, change setValue\u0027s second (nValue) argument from \"T\u0026\" to \"const T\u0026\", it should work.\n\nThe reason: a reference can change the value, so the types have to match exactly (or the reference is a supertype in the class hierarchy). With a const reference, the compiler will automatically create a temporary variable, that is it will do something like:\n\nsal_Int16 nTemp \u003d nValue;\nsetValue\u003c sal_Int16 \u003e(nIndex, nTemp, SQL_SHORT);\n\n\"Supertype in the class hierarchy\" means that given:\n class A\n class B:public A\none can pass a B to a function that expects a A\u0026, but not an A to a function that expects a B\u0026 (nor a \"const B\u0026\").",
+      "revId": "9d5bd74547f425248914d1503872bc149d4cf3cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
