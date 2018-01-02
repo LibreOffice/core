@@ -6233,13 +6233,8 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
     xDocSh->DoInitNew();
     SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
-    SwNodeIndex aIdx(
-        *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
-    if( !aIdx.GetNode().IsTextNode() )
-    {
-        pD->GetNodes().GoNext( &aIdx );
-    }
-    SwPaM aPaM( aIdx );
+    SwNodeIndex aIdx(pD->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
     aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
     pD->SetInReading(true);
     bool bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
