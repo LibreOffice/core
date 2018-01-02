@@ -212,7 +212,7 @@ namespace vclcanvas
                            (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
                            (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
-                // copy right egde of polygon to left edge (and also
+                // copy right edge of polygon to left edge (and also
                 // copy the closing point)
                 aTempPoly[0] = aTempPoly[4] = aTempPoly[1];
                 aTempPoly[3] = aTempPoly[2];
@@ -241,7 +241,7 @@ namespace vclcanvas
             // diagonal to the 'right'
 
 
-            // copy right egde of polygon to left edge (and also
+            // copy right edge of polygon to left edge (and also
             // copy the closing point)
             aTempPoly[0] = aTempPoly[4] = aTempPoly[1];
             aTempPoly[3] = aTempPoly[2];
