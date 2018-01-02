@@ -69,7 +69,7 @@ public:
     SdStyleSheet* GetPseudoStyleSheet() const;
 
     void SetApiName( const OUString& rApiName );
-    OUString GetApiName() const;
+    OUString const & GetApiName() const;
 
     static OUString GetFamilyString( SfxStyleFamily eFamily );
 

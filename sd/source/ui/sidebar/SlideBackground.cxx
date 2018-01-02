@@ -676,7 +676,7 @@ void SlideBackground::ExecuteMarginULChange(const long mnPageTopMargin, const lo
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::RECORD, { mpPageULMarginItem.get() } );
 }
 
-Color SlideBackground::GetColorSetOrDefault()
+Color const & SlideBackground::GetColorSetOrDefault()
 {
    // Tango Sky Blue 1, to be consistent w/ area fill panel (b/c COL_AUTO for slides is transparent)
    if ( !mpColorItem )
@@ -685,7 +685,7 @@ Color SlideBackground::GetColorSetOrDefault()
    return mpColorItem->GetColorValue();
 }
 
-XGradient SlideBackground::GetGradientSetOrDefault()
+XGradient const & SlideBackground::GetGradientSetOrDefault()
 {
     if( !mpGradientItem )
     {
@@ -700,7 +700,7 @@ XGradient SlideBackground::GetGradientSetOrDefault()
     return mpGradientItem->GetGradientValue();
 }
 
-const OUString SlideBackground::GetHatchingSetOrDefault()
+OUString const & SlideBackground::GetHatchingSetOrDefault()
 {
     if( !mpHatchItem )
     {
@@ -715,7 +715,7 @@ const OUString SlideBackground::GetHatchingSetOrDefault()
     return mpHatchItem->GetName();
 }
 
-const OUString SlideBackground::GetBitmapSetOrDefault()
+OUString const & SlideBackground::GetBitmapSetOrDefault()
 {
     if( !mpBitmapItem || mpBitmapItem->isPattern())
     {
@@ -730,7 +730,7 @@ const OUString SlideBackground::GetBitmapSetOrDefault()
     return mpBitmapItem->GetName();
 }
 
-const OUString SlideBackground::GetPatternSetOrDefault()
+OUString const & SlideBackground::GetPatternSetOrDefault()
 {
     if( !mpBitmapItem || !(mpBitmapItem->isPattern()))
     {

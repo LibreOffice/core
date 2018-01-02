@@ -186,7 +186,7 @@ namespace dlgprov
     }
 
 
-    Reference< script::XScriptListener >
+    Reference< script::XScriptListener > const &
     DialogEventsAttacherImpl::getScriptListenerForKey( const OUString& sKey )
     {
         ListenerHash::iterator it = listenersForTypes.find( sKey );

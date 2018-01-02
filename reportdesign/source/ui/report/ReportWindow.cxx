@@ -102,7 +102,7 @@ void OReportWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
     m_aViewsWindow->SetInsertObj( eObj,_sShapeType);
 }
 
-OUString OReportWindow::GetInsertObjString() const
+OUString const & OReportWindow::GetInsertObjString() const
 {
     return m_aViewsWindow->GetInsertObjString();
 }

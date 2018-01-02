@@ -294,7 +294,7 @@ void ODesignView::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
     m_aScrollWindow->SetInsertObj( eObj,_sShapeType );
 }
 
-OUString ODesignView::GetInsertObjString() const
+OUString const & ODesignView::GetInsertObjString() const
 {
     return m_aScrollWindow->GetInsertObjString();
 }

@@ -2662,7 +2662,7 @@ namespace svgio
             return nullptr;
         }
 
-        OUString SvgStyleAttributes::getClipPathXLink() const
+        OUString const & SvgStyleAttributes::getClipPathXLink() const
         {
             return maClipPathXLink;
         }

@@ -373,7 +373,7 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
     mpImpl->SetUserWantsTabBar( bIsTabBarVisible );
 }
 
-std::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager() const
+std::shared_ptr<ViewShellManager> const & ViewShellBase::GetViewShellManager() const
 {
     return mpImpl->mpViewShellManager;
 }
@@ -920,7 +920,7 @@ OUString ViewShellBase::GetInitialViewShellType()
     return sRequestedView;
 }
 
-std::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer()
+std::shared_ptr<tools::EventMultiplexer> const & ViewShellBase::GetEventMultiplexer()
 {
     OSL_ASSERT(mpImpl.get()!=nullptr);
     OSL_ASSERT(mpImpl->mpEventMultiplexer.get()!=nullptr);
@@ -933,7 +933,7 @@ const ::tools::Rectangle& ViewShellBase::getClientRectangle() const
     return mpImpl->maClientArea;
 }
 
-std::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager() const
+std::shared_ptr<ToolBarManager> const & ViewShellBase::GetToolBarManager() const
 {
     OSL_ASSERT(mpImpl.get()!=nullptr);
     OSL_ASSERT(mpImpl->mpToolBarManager.get()!=nullptr);
@@ -941,7 +941,7 @@ std::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager() const
     return mpImpl->mpToolBarManager;
 }
 
-std::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager() const
+std::shared_ptr<FormShellManager> const & ViewShellBase::GetFormShellManager() const
 {
     OSL_ASSERT(mpImpl.get()!=nullptr);
     OSL_ASSERT(mpImpl->mpFormShellManager.get()!=nullptr);

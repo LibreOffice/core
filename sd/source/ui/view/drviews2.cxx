@@ -306,7 +306,7 @@ public:
         : ClassificationCommon(rDrawViewShell)
     {}
 
-    std::vector<svx::ClassificationResult> getResults()
+    std::vector<svx::ClassificationResult> const & getResults()
     {
         return m_aResults;
     }

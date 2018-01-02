@@ -107,7 +107,7 @@ namespace rptui
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
         sal_uInt16          GetInsertObj() const { return m_eActObj;}
-        OUString   GetInsertObjString() const;
+        OUString const &    GetInsertObjString() const;
         DlgEdMode       GetMode() const { return m_eMode; }
 
         /** cuts the current selection in this section

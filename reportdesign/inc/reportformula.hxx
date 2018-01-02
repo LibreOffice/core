@@ -77,7 +77,7 @@ namespace rptui
         const OUString& getUndecoratedContent() const { return m_sUndecoratedContent; }
 
         /// convenience alias for <code>getUndecoratedContent</code>, which asserts (in a non-product build) when used on an expression
-        inline OUString  getFieldName() const;
+        inline OUString const & getFieldName() const;
 
         /**
             @returns "=" + getFieldName()
@@ -85,7 +85,7 @@ namespace rptui
         OUString getEqualUndecoratedContent() const;
 
         /// convenience alias for <code>getUndecoratedContent</code>, which asserts (in a non-product build) when used on a field
-        inline OUString  getExpression() const;
+        inline OUString const & getExpression() const;
 
         /** returns a bracketed field name of the formula denotes a field reference,
             or the undecorated expression if the formula denotes an expression.
@@ -100,14 +100,14 @@ namespace rptui
     };
 
 
-    inline OUString ReportFormula::getFieldName() const
+    inline OUString const & ReportFormula::getFieldName() const
     {
         OSL_PRECOND( getType() == Field, "ReportFormula::getFieldName: not bound to a field!" );
         return getUndecoratedContent();
     }
 
 
-    inline OUString ReportFormula::getExpression() const
+    inline OUString const & ReportFormula::getExpression() const
     {
         OSL_PRECOND( getType() == Expression, "ReportFormula::getExpression: not bound to an expression!" );
         return getUndecoratedContent();
