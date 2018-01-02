@@ -1560,18 +1560,13 @@ void StarBASIC::SetErrorData( ErrCode nCode, sal_uInt16 nLine,
     aGlobals.nCol2 = nCol2;
 }
 
-const ErrMsgCode* getRID_BASIC_START()
-{
-    return RID_BASIC_START;
-}
-
 void StarBASIC::MakeErrorText( ErrCode nId, const OUString& aMsg )
 {
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
     const char* pErrorMsg = nullptr;
-    for (ErrMsgCode* pItem = RID_BASIC_START; pItem->second; ++pItem)
+    for (std::pair<const char *, ErrCode> const *pItem = RID_BASIC_START; pItem->second; ++pItem)
     {
         if (nId == pItem->second)
         {

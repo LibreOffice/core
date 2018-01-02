@@ -177,7 +177,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
         xNewDic = nullptr;
         // error: couldn't create new dictionary
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, OUString(),
-            this, getRID_SVXERRCTX(), SvxResLocale() );
+            this, RID_SVXERRCTX, SvxResLocale() );
         ErrorHandler::HandleError( *new StringErrorInfo(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
         EndDialog();

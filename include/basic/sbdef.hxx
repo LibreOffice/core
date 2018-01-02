@@ -68,7 +68,7 @@ enum class PropertyMode
     Set
 };
 
-BASIC_DLLPUBLIC const ErrMsgCode* getRID_BASIC_START();
+BASIC_DLLPUBLIC extern std::pair<const char*, ErrCode> const RID_BASIC_START[];
 BASIC_DLLPUBLIC std::locale BasResLocale();
 BASIC_DLLPUBLIC OUString BasResId(const char* pId);
 

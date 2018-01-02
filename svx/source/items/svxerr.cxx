@@ -25,7 +25,7 @@
 
 SvxErrorHandler::SvxErrorHandler() :
   SfxErrorHandler(
-      getRID_SVXERRCODE(), ErrCodeArea::Svx, ErrCodeArea::Svx, SvxResLocale())
+      RID_SVXERRCODE, ErrCodeArea::Svx, ErrCodeArea::Svx, SvxResLocale())
 {
 }
 
@@ -38,16 +38,6 @@ namespace
 void SvxErrorHandler::ensure()
 {
     theSvxErrorHandler::get();
-}
-
-const ErrMsgCode* getRID_SVXERRCODE()
-{
-    return RID_SVXERRCODE;
-}
-
-const ErrMsgCode* getRID_SVXERRCTX()
-{
-    return RID_SVXERRCTX;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,8 +35,8 @@
 // error contexts
 #define ERRCTX_SO_DOVERB        1
 
-SVT_DLLPUBLIC const ErrMsgCode* getRID_SO_ERROR_HANDLER();
-SVT_DLLPUBLIC const ErrMsgCode* getRID_SO_ERRCTX();
+SVT_DLLPUBLIC extern const ErrMsgCode RID_SO_ERROR_HANDLER[];
+SVT_DLLPUBLIC extern const ErrMsgCode RID_SO_ERRCTX[];
 
 #endif
 

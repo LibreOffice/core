@@ -26,8 +26,8 @@
 #include <vcl/errinf.hxx>
 
 typedef std::pair<const char*, ErrCode> ErrMsgCode;
-SVT_DLLPUBLIC const ErrMsgCode* getRID_ERRHDL();
-SVT_DLLPUBLIC const ErrMsgCode* getRID_ERRCTX();
+SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRHDL[];
+SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRCTX[];
 
 namespace vcl { class Window; }
 
