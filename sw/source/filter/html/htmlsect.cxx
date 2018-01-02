@@ -138,8 +138,11 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         }
     }
 
-    if( !bPositioned && (bHeader || bFooter) && IsNewDoc() )
+    if (!bPositioned && (bHeader || bFooter) && IsNewDoc() && !m_bReadingHeaderOrFooter)
     {
+        m_bReadingHeaderOrFooter = true;
+        pCntxt->SetHeaderOrFooter(true);
+
         SwPageDesc *pPageDesc = m_pCSS1Parser->GetMasterPageDesc();
         SwFrameFormat& rPageFormat = pPageDesc->GetMaster();
 
@@ -402,6 +405,8 @@ void SwHTMLParser::EndDivision()
         // close attribute
         EndContext( pCntxt );
         SetAttr();  // set paragraph attributes really fast because of JavaScript
+        if (pCntxt->IsHeaderOrFooter())
+            m_bReadingHeaderOrFooter = false;
 
         delete pCntxt;
     }
