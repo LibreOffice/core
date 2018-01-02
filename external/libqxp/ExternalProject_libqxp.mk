@@ -29,6 +29,7 @@ $(call gb_ExternalProject_get_state_target,libqxp,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
+			--disable-tests \
 			--disable-tools \
 			--disable-debug \
 			--disable-werror \
@@ -36,10 +37,8 @@ $(call gb_ExternalProject_get_state_target,libqxp,build) :
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
-			REVENGE_GENERATORS_CFLAGS=' ' REVENGE_GENERATORS_LIBS=' ' REVENGE_STREAM_CFLAGS=' ' REVENGE_STREAM_LIBS=' ' \
-			ax_cv_cxx_compile_cxx11=yes \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& $(MAKE) -C src/lib \
+		&& $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:
