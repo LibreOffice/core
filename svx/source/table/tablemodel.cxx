@@ -956,7 +956,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 }
 
 
-TableRowRef TableModel::getRow( sal_Int32 nRow ) const
+TableRowRef const & TableModel::getRow( sal_Int32 nRow ) const
 {
     if( (nRow >= 0) && (nRow < getRowCountImpl()) )
         return maRows[nRow];
@@ -965,7 +965,7 @@ TableRowRef TableModel::getRow( sal_Int32 nRow ) const
 }
 
 
-TableColumnRef TableModel::getColumn( sal_Int32 nColumn ) const
+TableColumnRef const & TableModel::getColumn( sal_Int32 nColumn ) const
 {
     if( (nColumn >= 0) && (nColumn < getColumnCountImpl()) )
         return maColumns[nColumn];

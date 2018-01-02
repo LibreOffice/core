@@ -132,7 +132,7 @@ bool SwGlossaries::FindGroupName(OUString& rGroup)
     return false;
 }
 
-OUString SwGlossaries::GetGroupName(size_t nGroupId)
+OUString const & SwGlossaries::GetGroupName(size_t nGroupId)
 {
     OSL_ENSURE(nGroupId < m_GlosArr.size(),
             "SwGlossaries::GetGroupName: index out of bounds");

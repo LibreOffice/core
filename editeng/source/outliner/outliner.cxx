@@ -1721,7 +1721,7 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 _nFi
     return RemovingPagesHdl( pCurView );
 }
 
-SfxItemSet Outliner::GetParaAttribs( sal_Int32 nPara )
+SfxItemSet const & Outliner::GetParaAttribs( sal_Int32 nPara )
 {
     return pEditEngine->GetParaAttribs( nPara );
 }

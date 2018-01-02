@@ -1571,7 +1571,7 @@ public:
     sal_uInt16 GetSlot( const SwFormat* pFormat ) const;
 
     /// Get styleId of the nId-th style (nId is its position in pFormatA).
-    OString GetStyleId(sal_uInt16 nId) const;
+    OString const & GetStyleId(sal_uInt16 nId) const;
 
     const SwFormat* GetSwFormat(sal_uInt16 nId) const { return m_pFormatA[nId]; }
     /// Get numbering rule of the nId-th style

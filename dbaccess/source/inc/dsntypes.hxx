@@ -201,8 +201,8 @@ public:
     TypeIterator(const TypeIterator& _rSource);
     ~TypeIterator();
 
-    OUString getURLPrefix() const;
-    OUString          getDisplayName() const;
+    OUString const & getURLPrefix() const;
+    OUString const & getDisplayName() const;
 
     /// prefix increment
     const TypeIterator& operator++();

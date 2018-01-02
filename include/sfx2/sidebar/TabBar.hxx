@@ -85,7 +85,7 @@ public:
         const ResourceManager::DeckContextDescriptorContainer& rDecks);
     void HighlightDeck (const OUString& rsDeckId);
     void RemoveDeckHighlight ();
-    const OUString GetDeckIdForIndex (const sal_Int32 nIndex) const;
+    OUString const & GetDeckIdForIndex (const sal_Int32 nIndex) const;
     void ToggleHideFlag (const sal_Int32 nIndex);
     void RestoreHideFlags();
 

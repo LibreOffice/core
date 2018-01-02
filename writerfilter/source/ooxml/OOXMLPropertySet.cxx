@@ -224,7 +224,7 @@ OOXMLValue::Pointer_t const & OOXMLBooleanValue::Create(bool bValue)
     return bValue ? True : False;
 }
 
-OOXMLValue::Pointer_t OOXMLBooleanValue::Create(const char *pValue)
+OOXMLValue::Pointer_t const & OOXMLBooleanValue::Create(const char *pValue)
 {
     return Create (GetBooleanValue(pValue));
 }

@@ -173,7 +173,7 @@ public:
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     virtual Size GetOptimalSize() const override;
 
-    TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
+    TEntry_Impl const & GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long            GetEntryCount() { return (long) m_vEntries.size(); }
     tools::Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }

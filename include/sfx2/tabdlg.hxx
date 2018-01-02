@@ -166,7 +166,7 @@ public:
 
     virtual OString GetScreenshotId() const override;
 
-    OUString            GetPageText( sal_uInt16 nPageId ) const
+    OUString const & GetPageText( sal_uInt16 nPageId ) const
     {
         return m_pTabCtrl->GetPageText(nPageId);
     }

@@ -100,7 +100,7 @@ namespace dbaui
         void                        DuplicateConditionLevel( const sal_uInt16 nLevel);
         void                        AddOrder(const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt32 _nCurrentPos);
         void                        ClearAll();
-        OTableFieldDescRef          AppendNewCol( sal_uInt16 nCnt=1 );
+        OTableFieldDescRef const &  AppendNewCol( sal_uInt16 nCnt=1 );
         bool                        Save();
         OQueryDesignView*           getDesignView();
         OQueryDesignView*           getDesignView() const;

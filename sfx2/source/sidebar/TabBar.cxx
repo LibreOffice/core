@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(TabBar::Item, HandleClick, Button*, void)
     {} // workaround for #i123198#
 }
 
-const ::rtl::OUString TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
+OUString const & TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
 {
     if (nIndex<0 || static_cast<size_t>(nIndex)>=maItems.size())
         throw RuntimeException();

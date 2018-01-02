@@ -67,8 +67,8 @@ namespace dbaui
 
         // member access (read)
         const OUString& GetFieldName(EConnectionSide nWhich) const { return (nWhich == JTCS_FROM) ? m_aSourceFieldName : m_aDestFieldName; }
-        OUString GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }
-        OUString GetDestFieldName() const { return GetFieldName(JTCS_TO); }
+        OUString const & GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }
+        OUString const & GetDestFieldName() const { return GetFieldName(JTCS_TO); }
 
         void Reset();
         OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );

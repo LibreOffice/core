@@ -105,7 +105,7 @@ public:
 namespace
 {
 
-OUString getCategoryType()
+OUString const & getCategoryType()
 {
     return SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
 }

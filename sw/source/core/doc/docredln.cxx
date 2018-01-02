@@ -1709,7 +1709,7 @@ std::size_t SwRangeRedline::GetAuthor( sal_uInt16 nPos ) const
     return GetRedlineData(nPos).nAuthor;
 }
 
-OUString SwRangeRedline::GetAuthorString( sal_uInt16 nPos ) const
+OUString const & SwRangeRedline::GetAuthorString( sal_uInt16 nPos ) const
 {
     return SW_MOD()->GetRedlineAuthor(GetRedlineData(nPos).nAuthor);
 }

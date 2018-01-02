@@ -138,7 +138,7 @@ SotClipboardFormatId SvxClipboardFormatItem::GetClipbrdFormatId( sal_uInt16 nPos
     return pImpl->aFmtIds[ nPos ];
 }
 
-const OUString SvxClipboardFormatItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
+OUString const & SvxClipboardFormatItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
     return pImpl->aFmtNms[nPos];
 }

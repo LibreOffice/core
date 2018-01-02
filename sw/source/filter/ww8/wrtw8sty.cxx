@@ -370,7 +370,7 @@ void MSWordStyles::BuildStyleIds()
     }
 }
 
-OString MSWordStyles::GetStyleId(sal_uInt16 nId) const
+OString const & MSWordStyles::GetStyleId(sal_uInt16 nId) const
 {
     return m_aStyleIds[nId];
 }

@@ -97,7 +97,7 @@ public:
                             );
 
     size_t          GetGroupCnt();
-    OUString        GetGroupName(size_t);
+    OUString const & GetGroupName(size_t);
     OUString        GetGroupTitle( const OUString& rGroupName );
 
     bool            FindGroupName(OUString& rGroup);

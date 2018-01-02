@@ -87,9 +87,9 @@ public:
 
     static XMLPropType GetPropType( const OUString& rLocalName );
 
-    static OUString MergeUnderline( XMLTokenEnum eUnderline,
+    static OUString const & MergeUnderline( XMLTokenEnum eUnderline,
                                            bool bBold, bool bDouble );
-    static OUString MergeLineThrough( XMLTokenEnum eLineThrough,
+    static OUString const & MergeLineThrough( XMLTokenEnum eLineThrough,
                                         bool bBold, bool bDouble,
                                            sal_Unicode c );
 };
@@ -635,7 +635,7 @@ XMLPropType XMLPropertiesTContext_Impl::GetPropType( const OUString& rLocalName 
     return eProp;
 }
 
-OUString XMLPropertiesTContext_Impl::MergeUnderline(
+OUString const & XMLPropertiesTContext_Impl::MergeUnderline(
             XMLTokenEnum eUnderline, bool bBold, bool bDouble )
 {
     if( bDouble )
@@ -700,7 +700,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
     return GetXMLToken( eUnderline );
 }
 
-OUString XMLPropertiesTContext_Impl::MergeLineThrough(
+OUString const & XMLPropertiesTContext_Impl::MergeLineThrough(
             XMLTokenEnum eLineThrough, bool bBold, bool bDouble,
                sal_Unicode c )
 {
