@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_a4365eb2",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-02T14:05:48Z",
+      "side": 1,
+      "message": "why are these calls necessary?  (isSamePathname was intended to be fast, avoiding heap object creations)",
+      "revId": "b39e627be45f847554f11fdac040b6f4da4054ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
