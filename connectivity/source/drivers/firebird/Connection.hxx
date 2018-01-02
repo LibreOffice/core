@@ -169,14 +169,6 @@ namespace connectivity
             void setupTransaction();
             void disposeStatements();
 
-        /** transform named parameters into unnamed parameters
-            @param  _sSQL
-                The SQL statement to transform.
-            @return
-                The new statement with unnamed parameters
-        */
-        OUString transformPreparedStatement(const OUString& _sSQL);
-
         public:
             explicit Connection(FirebirdDriver* _pDriver);
             virtual ~Connection() override;

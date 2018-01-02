@@ -135,6 +135,10 @@ namespace dbtools
         */
         bool shouldEscapeDateTime() const;
 
+        /** should named parameters (:foo, [foo]) be replaced by unnamed parameters (?)
+        */
+        bool shouldSubstituteParameterNames() const;
+
         /** auto increment columns should be automatically used as primary key.
         */
         bool isAutoIncrementPrimaryKey() const;

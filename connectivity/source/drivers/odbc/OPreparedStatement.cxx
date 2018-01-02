@@ -69,25 +69,6 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString
     ,m_bPrepared(false)
 {
     m_sSqlStatement = sql;
-    try
-    {
-        if(_pConnection->isParameterSubstitutionEnabled())
-        {
-            OSQLParser aParser( comphelper::getComponentContext(_pConnection->getDriver()->getORB()) );
-            OUString sErrorMessage;
-            OUString sNewSql;
-            std::unique_ptr<OSQLParseNode> pNode( aParser.parseTree(sErrorMessage,sql) );
-            if ( pNode.get() )
-            {   // special handling for parameters
-                OSQLParseNode::substituteParameterNames(pNode.get());
-                pNode->parseNodeToStr( sNewSql, _pConnection );
-                m_sSqlStatement = sNewSql;
-            }
-        }
-    }
-    catch(Exception&)
-    {
-    }
 }
 
 void SAL_CALL OPreparedStatement::acquire() throw()
