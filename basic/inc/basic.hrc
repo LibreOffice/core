@@ -22,7 +22,7 @@
 
 #define NC_(Context, String) (Context "\004" u8##String)
 
-std::pair<const char*, ErrCode> RID_BASIC_START[] =
+std::pair<const char*, ErrCode> const RID_BASIC_START[] =
 {
     { NC_("RID_BASIC_START", "Syntax error."), ERRCODE_BASIC_SYNTAX },
     { NC_("RID_BASIC_START", "Return without Gosub."), ERRCODE_BASIC_NO_GOSUB },

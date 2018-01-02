@@ -208,13 +208,13 @@ void SfxApplication::Initialize_Impl()
     Help::EnableExtHelp();
 
     pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
-        getRID_ERRHDL(), ErrCodeArea::Io, ErrCodeArea::Vcl);
+        RID_ERRHDL, ErrCodeArea::Io, ErrCodeArea::Vcl);
 
     pImpl->m_pSoErrorHdl = new SfxErrorHandler(
-        getRID_SO_ERROR_HANDLER(), ErrCodeArea::So, ErrCodeArea::So, SvtResLocale());
+        RID_SO_ERROR_HANDLER, ErrCodeArea::So, ErrCodeArea::So, SvtResLocale());
 #if HAVE_FEATURE_SCRIPTING
     pImpl->m_pSbxErrorHdl = new SfxErrorHandler(
-        getRID_BASIC_START(), ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale());
+        RID_BASIC_START, ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale());
 #endif
 
     if (!utl::ConfigManager::IsFuzzing())

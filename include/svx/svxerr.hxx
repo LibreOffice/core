@@ -54,8 +54,8 @@ public:
     static void ensure();
 };
 
-SVX_DLLPUBLIC const ErrMsgCode* getRID_SVXERRCODE();
-SVX_DLLPUBLIC const ErrMsgCode* getRID_SVXERRCTX();
+SVX_DLLPUBLIC extern const ErrMsgCode RID_SVXERRCODE[];
+SVX_DLLPUBLIC extern const ErrMsgCode RID_SVXERRCTX[];
 
 #endif
 

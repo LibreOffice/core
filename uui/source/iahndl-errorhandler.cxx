@@ -156,8 +156,8 @@ UUIInteractionHelper::handleErrorHandlerRequest(
         enum Source { SOURCE_DEFAULT, SOURCE_SVX, SOURCE_UUI };
         static char const * const aManager[3] = { "svt", "svx", "uui" };
         static const ErrMsgCode* const aId[3]
-            = { getRID_ERRHDL(),
-                getRID_SVXERRCODE(),
+            = { RID_ERRHDL,
+                RID_SVXERRCODE,
                 RID_UUI_ERRHDL };
         ErrCodeArea nErrorArea = nErrorCode.GetArea();
         Source eSource =

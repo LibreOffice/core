@@ -242,7 +242,7 @@ SfxErrorContext::SfxErrorContext(
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), aResLocale(rResLocaleP)
 {
     if (!pIds)
-        pIds = getRID_ERRCTX();
+        pIds = RID_ERRCTX;
 }
 
 
@@ -253,7 +253,7 @@ SfxErrorContext::SfxErrorContext(
     aArg1(aArg1P)
 {
     if (!pIds)
-        pIds = getRID_ERRCTX();
+        pIds = RID_ERRCTX;
 }
 
 bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
@@ -281,7 +281,7 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
     if ( bRet )
     {
         sal_uInt16 nId = nErrId.IsWarning() ? ERRCTX_WARNING : ERRCTX_ERROR;
-        for (const ErrMsgCode* pItem = getRID_ERRCTX(); pItem->second; ++pItem)
+        for (const ErrMsgCode* pItem = RID_ERRCTX; pItem->second; ++pItem)
         {
             if (sal_uInt32(pItem->second) == nId)
             {
@@ -292,26 +292,6 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
     }
 
     return bRet;
-}
-
-const ErrMsgCode* getRID_ERRHDL()
-{
-    return RID_ERRHDL;
-}
-
-const ErrMsgCode* getRID_ERRCTX()
-{
-    return RID_ERRCTX;
-}
-
-const ErrMsgCode* getRID_SO_ERROR_HANDLER()
-{
-    return RID_SO_ERROR_HANDLER;
-}
-
-const ErrMsgCode* getRID_SO_ERRCTX()
-{
-    return RID_SO_ERRCTX;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
