@@ -469,7 +469,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             findViewById(R.id.header_browser).setVisibility((View.GONE));
             findViewById(R.id.header_recents).setVisibility((View.GONE));
             actionBar.setTitle(dir.getName());
-
+            ((TextView)findViewById(R.id.text_directory_path)).setText(getString(R.string.current_path) +
+                    " " + dir.getUri().getPath());
         }
 
         new AsyncTask<IFile, Void, Void>() {

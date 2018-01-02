@@ -167,5 +167,6 @@
     <string name="compress_photo_max_quality">Max Quality</string>
     <string name="compress_photo_no_compress">Don\'t Compress</string>
     <string name="compress_photo_title">Do you want to compress the photo?</string>
+    <string name="current_path">You are in:</string>
 
 </resources>
