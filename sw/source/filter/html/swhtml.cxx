@@ -5544,14 +5544,8 @@ bool TestImportHTML(SvStream &rStream)
     xDocSh->DoInitNew();
     SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
-    SwNodeIndex aIdx(
-        *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
-    if( !aIdx.GetNode().IsTextNode() )
-    {
-        pD->GetNodes().GoNext( &aIdx );
-    }
-    SwPaM aPaM( aIdx );
-    aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
+    SwNodeIndex aIdx(pD->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
     pD->SetInReading(true);
     bool bRet = false;
     try
