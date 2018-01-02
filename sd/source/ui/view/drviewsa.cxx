@@ -751,7 +751,7 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
         mpAnnotationManager->GetAnnotationState( rItemSet );
 }
 
-::rtl::OUString DrawViewShell::GetSidebarContextName() const
+OUString const & DrawViewShell::GetSidebarContextName() const
 {
     svx::sidebar::SelectionAnalyzer::ViewType eViewType (svx::sidebar::SelectionAnalyzer::ViewType::Standard);
     switch (mePageKind)

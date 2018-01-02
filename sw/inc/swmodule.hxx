@@ -191,7 +191,7 @@ public:
 
     // Redlining.
     std::size_t         GetRedlineAuthor();
-    OUString            GetRedlineAuthor(std::size_t nPos);
+    OUString const &    GetRedlineAuthor(std::size_t nPos);
     /// See SwXTextDocument::getTrackedChangeAuthors().
     OUString GetRedlineAuthorInfo();
     std::size_t         InsertRedlineAuthor(const OUString& rAuthor);

@@ -54,7 +54,7 @@ void ZoomList::InsertZoomRect(const ::tools::Rectangle& rRect)
     rBindings.Invalidate( SID_ZOOM_PREV );
 }
 
-::tools::Rectangle ZoomList::GetNextZoomRect()
+::tools::Rectangle const & ZoomList::GetNextZoomRect()
 {
     mnCurPos++;
     size_t nRectCount = maRectangles.size();
@@ -69,7 +69,7 @@ void ZoomList::InsertZoomRect(const ::tools::Rectangle& rRect)
     return maRectangles[mnCurPos];
 }
 
-::tools::Rectangle ZoomList::GetPreviousZoomRect()
+::tools::Rectangle const & ZoomList::GetPreviousZoomRect()
 {
     if (mnCurPos > 0)
         mnCurPos--;

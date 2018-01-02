@@ -88,7 +88,7 @@ public:
     static bool AreAllObjectsOnLayer(SdrLayerID nLayerNo,const SdrMarkList& rMark);
 
     void GetDrawAttrStateForIFBX( SfxItemSet& rSet );
-    ::rtl::OUString GetSidebarContextName();
+    OUString const & GetSidebarContextName();
 };
 
 #endif

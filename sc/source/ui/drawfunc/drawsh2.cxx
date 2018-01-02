@@ -412,7 +412,7 @@ void ScDrawShell::Activate (const bool)
             GetSidebarContextName()));
 }
 
-::rtl::OUString ScDrawShell::GetSidebarContextName()
+const OUString & ScDrawShell::GetSidebarContextName()
 {
     return vcl::EnumContext::GetContextName(
         svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(

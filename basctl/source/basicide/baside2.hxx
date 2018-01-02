@@ -422,7 +422,7 @@ public:
     void BasicRemoveWatch ();
     Color const & GetBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
     Color const & GetFontColor () const { return aSyntaxColors.GetFontColor(); }
-    Color GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
+    Color const & GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
 
 protected:
     // Window:
@@ -449,7 +449,7 @@ private:
     public:
         Color const & GetBackgroundColor () const { return m_aBackgroundColor; };
         Color const & GetFontColor () const { return m_aFontColor; }
-        Color GetColor (TokenType eType) const { return aColors[eType]; }
+        Color const & GetColor(TokenType eType) const { return aColors[eType]; }
 
     private:
         virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, ConfigurationHints) override;

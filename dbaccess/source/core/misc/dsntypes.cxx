@@ -551,13 +551,13 @@ ODsnTypeCollection::TypeIterator::~TypeIterator()
 #endif
 }
 
-OUString ODsnTypeCollection::TypeIterator::getDisplayName() const
+OUString const & ODsnTypeCollection::TypeIterator::getDisplayName() const
 {
     OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnTypesDisplayNames[m_nPosition];
 }
 
-OUString ODsnTypeCollection::TypeIterator::getURLPrefix() const
+OUString const & ODsnTypeCollection::TypeIterator::getURLPrefix() const
 {
     OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnPrefixes[m_nPosition];

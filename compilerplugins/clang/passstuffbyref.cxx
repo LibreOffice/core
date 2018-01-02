@@ -275,7 +275,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         return;
     }
 
-    //functionDecl->dump();
+    // functionDecl->dump();
 
     mbInsideFunctionDecl = true;
     mbFoundReturnValueDisqualifier = false;
@@ -412,12 +412,14 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
             FunctionDecl const * calleeFunctionDecl = callExpr->getDirectCallee();
             if (!calleeFunctionDecl)
                 return true;
-            // TODO anything takes a param is suspect because it might return the param by ref.
+            // TODO anything takes a non-integral param is suspect because it might return the param by ref.
             // we could tighten this to only reject functions that have a param of the same type
             // as the return type. Or we could check for such functions and disallow them.
             // Or we could force such functions to be annotated somehow.
-            if (calleeFunctionDecl->getNumParams() > 0)
-                return true;
+            for (unsigned i = 0; i != calleeFunctionDecl->getNumParams(); ++i) {
+                if (!calleeFunctionDecl->getParamDecl(i)->getType()->isIntegralOrEnumerationType())
+                    return true;
+            }
             auto tc = loplugin::TypeCheck(calleeFunctionDecl->getReturnType());
             if (!tc.LvalueReference() && !tc.Pointer())
                 return true;

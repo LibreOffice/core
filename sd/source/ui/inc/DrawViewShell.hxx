@@ -362,7 +362,7 @@ public:
     */
     virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) override;
 
-    OUString GetSidebarContextName() const;
+    OUString const & GetSidebarContextName() const;
 
     bool IsInSwitchPage() { return mbIsInSwitchPage; }
 

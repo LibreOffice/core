@@ -329,7 +329,7 @@ namespace
     };
 }
 
-OUString SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
+OUString const & SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
 {
     if(!pAuthFieldNameList)
     {
@@ -367,7 +367,7 @@ static const char* STR_AUTH_TYPE_ARY[] =
     STR_AUTH_TYPE_CUSTOM5
 };
 
-OUString SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
+OUString const & SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 {
     if(!pAuthFieldTypeList)
     {

@@ -237,7 +237,7 @@ void MasterPageContainer::SetPreviewSize (PreviewSize eSize)
         NIL_TOKEN);
 }
 
-Size MasterPageContainer::GetPreviewSizePixel() const
+Size const & MasterPageContainer::GetPreviewSizePixel() const
 {
     return mpImpl->GetPreviewSizePixel(mePreviewSize);
 }

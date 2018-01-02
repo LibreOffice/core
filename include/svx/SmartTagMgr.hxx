@@ -198,7 +198,7 @@ public:
 
     /** Returns a recognizer.
     */
-    css::uno::Reference< css::smarttags::XSmartTagRecognizer >
+    css::uno::Reference< css::smarttags::XSmartTagRecognizer > const &
         GetRecognizer( sal_uInt32 i ) const  { return maRecognizerList[i]; }
 
     /** Is smart tag recognition active?

@@ -78,7 +78,7 @@ public:
 
     /** Return the preview size in pixels.
     */
-    Size GetPreviewSizePixel() const;
+    Size const & GetPreviewSizePixel() const;
 
     enum PreviewState { PS_AVAILABLE, PS_CREATABLE, PS_PREPARING, PS_NOT_AVAILABLE };
     PreviewState GetPreviewState (Token aToken);

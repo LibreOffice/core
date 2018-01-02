@@ -163,9 +163,9 @@ private:
     virtual void SAL_CALL disposing() override;
 
     /// @throws css::lang::IndexOutOfBoundsException
-    TableRowRef getRow( sal_Int32 nRow ) const;
+    TableRowRef const & getRow( sal_Int32 nRow ) const;
     /// @throws css::lang::IndexOutOfBoundsException
-    TableColumnRef getColumn( sal_Int32 nColumn ) const;
+    TableColumnRef const & getColumn( sal_Int32 nColumn ) const;
 
     void updateRows();
     void updateColumns();

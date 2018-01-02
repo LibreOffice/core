@@ -1396,7 +1396,7 @@ sal_Int8 OSelectionBrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& _rEvt 
     return DND_ACTION_LINK;
 }
 
-OTableFieldDescRef OSelectionBrowseBox::AppendNewCol( sal_uInt16 nCnt)
+OTableFieldDescRef const & OSelectionBrowseBox::AppendNewCol( sal_uInt16 nCnt)
 {
     // one or more can be created, but the first one will is not returned
     sal_uInt32 nCount = getFields().size();

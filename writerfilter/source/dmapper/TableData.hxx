@@ -352,7 +352,7 @@ public:
 
        @param i     index of the row
     */
-    const RowPointer_t getRow(unsigned int i) const
+    RowPointer_t const & getRow(unsigned int i) const
     {
         return mRows[i];
     }

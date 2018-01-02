@@ -137,7 +137,7 @@ public:
     Size GetOptimalSize() const override;
     bool EventNotify( NotifyEvent& rNEvt ) override;
 
-    TClientBoxEntry GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
+    TClientBoxEntry const & GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long GetActiveEntryIndex();
     ::tools::Rectangle GetEntryRect( const long nPos ) const;
     long PointToPos( const Point& rPos );

@@ -864,7 +864,7 @@ public:
     SfxStyleSheet*  GetStyleSheet( sal_Int32 nPara );
 
     void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& );
-    SfxItemSet      GetParaAttribs( sal_Int32 nPara );
+    SfxItemSet const & GetParaAttribs( sal_Int32 nPara );
 
     void            Remove( Paragraph const * pPara, sal_Int32 nParaCount );
     bool            Expand( Paragraph const * );

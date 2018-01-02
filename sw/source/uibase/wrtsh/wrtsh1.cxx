@@ -1504,7 +1504,7 @@ void SwWrtShell::SetPageStyle(const OUString &rCollName)
 
 // Access templates
 
-OUString SwWrtShell::GetCurPageStyle() const
+OUString const & SwWrtShell::GetCurPageStyle() const
 {
     return GetPageDesc(GetCurPageDesc( false/*bCalcFrame*/ )).GetName();
 }

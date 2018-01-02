@@ -35,8 +35,8 @@ public:
     ZoomList(ViewShell* pViewShell);
 
     void        InsertZoomRect(const ::tools::Rectangle& rRect);
-    ::tools::Rectangle   GetNextZoomRect();
-    ::tools::Rectangle   GetPreviousZoomRect();
+    ::tools::Rectangle const & GetNextZoomRect();
+    ::tools::Rectangle const & GetPreviousZoomRect();
     bool        IsNextPossible() const;
     bool        IsPreviousPossible() const;
 

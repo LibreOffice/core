@@ -132,8 +132,8 @@ public:
     void                SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey const nKeys[]);
 
     //initui.cxx
-    static OUString     GetAuthFieldName(ToxAuthorityField eType);
-    static OUString     GetAuthTypeName(ToxAuthorityType eType);
+    static OUString const & GetAuthFieldName(ToxAuthorityField eType);
+    static OUString const & GetAuthTypeName(ToxAuthorityType eType);
 
     LanguageType    GetLanguage() const {return m_eLanguage;}
     void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}

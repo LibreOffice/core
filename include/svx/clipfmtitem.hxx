@@ -53,7 +53,7 @@ public:
     sal_uInt16 Count() const;
 
     SotClipboardFormatId GetClipbrdFormatId( sal_uInt16 nPos ) const;
-    const OUString GetClipbrdFormatName( sal_uInt16 nPos ) const;
+    OUString const & GetClipbrdFormatName( sal_uInt16 nPos ) const;
 
 private:
     std::unique_ptr<SvxClipboardFormatItem_Impl> pImpl;
