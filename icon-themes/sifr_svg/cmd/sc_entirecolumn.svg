@@ -1,0 +1,10 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <rect fill="#c3c4c2" height="13" ry="0" width="4" x="6" y="2"/>
+ <path d="m 11 3 v 11 h 3 V 3 Z" fill="#fdfdfd"/>
+ <path d="M 2 3 V 14 H 5 V 3 Z" fill="#fdfdfd"/>
+ <g fill="#555753">
+  <path d="m 1 2 v 13 h 4 v 1 h 6.03125 l -.0312 -1 h 4 V 2 h -4 l .00005 -1 H 4.96885 l .0312 1 z m 5.00005 0 h 4 L 10 7 v 3 v 5 H 6 V 10 V 7 Z M 2 3 H 5 V 6 H 2 Z m 8.99995 0 h 3 L 14 6 H 11 Z M 2 7 h 3 v 3 H 2 Z m 9 0 h 3 v 3 h -3 z m -9 4 h 3 v 3 H 2 Z m 9 0 h 3 l -.00005 3 h -3 z"/>
+  <rect height="1" width="6" x="5" y="5"/>
+  <rect height="1" width="6" x="5" y="11"/>
+ </g>
+</svg>
