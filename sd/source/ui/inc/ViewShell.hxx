@@ -300,8 +300,8 @@ public:
     void    NotifyAccUpdate();
     void    fireSwitchCurrentPage(sal_Int32 pageIndex);
     void SetWinViewPos(const Point& rWinPos);
-    Point GetWinViewPos() const;
-    Point GetViewOrigin() const;
+    Point const & GetWinViewPos() const;
+    Point const & GetViewOrigin() const;
 
     /** Return the window updater of this view shell.
         @return

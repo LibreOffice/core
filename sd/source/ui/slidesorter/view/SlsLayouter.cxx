@@ -298,7 +298,7 @@ Layouter::~Layouter()
 {
 }
 
-std::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter() const
+std::shared_ptr<PageObjectLayouter> const & Layouter::GetPageObjectLayouter() const
 {
     return mpImplementation->mpPageObjectLayouter;
 }
@@ -338,7 +338,7 @@ sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) con
     return mpImplementation->GetIndex(nRow,nColumn,true);
 }
 
-Size Layouter::GetPageObjectSize() const
+Size const & Layouter::GetPageObjectSize() const
 {
     return mpImplementation->maPageObjectSize;
 }

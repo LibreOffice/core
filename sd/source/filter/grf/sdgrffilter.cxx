@@ -96,7 +96,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task:
         nFilterError( ERRCODE_NONE )
         {}
 
-    ErrCode GetErrorCode() const { return nFilterError; };
+    ErrCode const & GetErrorCode() const { return nFilterError; };
 
     virtual void SAL_CALL   handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
 };

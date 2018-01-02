@@ -380,6 +380,10 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
             return isReturnExprDisqualified(condOper->getTrueExpr())
                 || isReturnExprDisqualified(condOper->getFalseExpr());
         }
+        if (auto unaryOp = dyn_cast<UnaryOperator>(expr)) {
+            expr = unaryOp->getSubExpr();
+            continue;
+        }
         if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(expr)) {
             // TODO could improve this, but sometimes it means we're returning a copy of a temporary.
             // Same logic as CXXOperatorCallExpr::isAssignmentOp(), which our supported clang

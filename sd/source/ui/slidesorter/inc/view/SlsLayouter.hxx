@@ -69,7 +69,7 @@ public:
         const std::shared_ptr<Theme>& rpTheme);
     ~Layouter();
 
-    std::shared_ptr<PageObjectLayouter> GetPageObjectLayouter() const;
+    std::shared_ptr<PageObjectLayouter> const & GetPageObjectLayouter() const;
     /** Set the interval of valid column counts.  When nMinimalColumnCount
         <= nMaximalColumnCount is not fulfilled then the call is ignored.
         @param nMinimalColumnCount
@@ -112,7 +112,7 @@ public:
 
     sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
 
-    Size GetPageObjectSize() const;
+    Size const & GetPageObjectSize() const;
 
     /** Return the bounding box in window coordinates of the nIndex-th page
         object.

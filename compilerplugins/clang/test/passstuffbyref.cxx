@@ -52,6 +52,7 @@ struct S2 {
     OUString set5(OUString const & s) { return s; }
     OUString set6() { std::vector<OUString> v1(1); return v1[0]; }
     OUString set7(S1 const & s) { return s.get(); }
+    OUString set8() { OUString * p = nullptr; return *p; }
 };
 
 

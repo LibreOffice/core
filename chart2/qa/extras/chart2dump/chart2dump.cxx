@@ -108,7 +108,7 @@ protected:
     bool isInDumpMode () const {return m_bDumpMode;}
 
     virtual OUString getTestName() { return OUString(); }
-    OUString getTestFileName() { return m_sTestFileName; }
+    OUString const & getTestFileName() { return m_sTestFileName; }
     OUString getTestFileDirName() { return OUString("/chart2/qa/extras/chart2dump/data/"); }
     OUString getReferenceDirName()
     {

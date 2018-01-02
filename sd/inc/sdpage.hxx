@@ -271,7 +271,7 @@ public:
                          bool bScaleAllObj);
 
     const OUString& GetName() const;
-    OUString        GetRealName() const { return FmFormPage::GetName(); };
+    OUString const & GetRealName() const { return FmFormPage::GetName(); };
 
     void            SetPresentationLayout(const OUString& rLayoutName,
                                   bool bReplaceStyleSheets = true,

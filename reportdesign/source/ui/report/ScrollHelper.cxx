@@ -224,7 +224,7 @@ void OScrollWindowHelper::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeT
     m_aReportWindow->SetInsertObj(eObj,_sShapeType);
 }
 
-OUString OScrollWindowHelper::GetInsertObjString() const
+OUString const & OScrollWindowHelper::GetInsertObjString() const
 {
     return m_aReportWindow->GetInsertObjString();
 }

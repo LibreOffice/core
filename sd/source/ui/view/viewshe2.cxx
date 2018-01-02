@@ -1019,12 +1019,12 @@ void ViewShell::SetWinViewPos(const Point& rWinPos)
     }
 }
 
-Point ViewShell::GetWinViewPos() const
+Point const & ViewShell::GetWinViewPos() const
 {
     return mpContentWindow->GetWinViewPos();
 }
 
-Point ViewShell::GetViewOrigin() const
+Point const & ViewShell::GetViewOrigin() const
 {
     return mpContentWindow->GetViewOrigin();
 }
