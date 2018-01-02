@@ -3,9 +3,19 @@
     "runtime": "org.gnome.Platform",
     "runtime-version": "3.24",
     "sdk": "org.gnome.Sdk",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.openjdk9"
+    ],
     "command": "/app/libreoffice/program/soffice",
     "separate-locales": false,
     "modules": [
+        {
+            "name": "openjdk",
+            "buildsystem": "simple",
+            "build-commands": [
+                "/usr/lib/sdk/openjdk9/install.sh"
+            ]
+        },
         {
             "name": "libreoffice",
             "sources": [
@@ -14,6 +24,12 @@
                     "url": "git://gerrit.libreoffice.org/core",
                     "branch": "@BRANCH@",
                     "disable-fsckobjects": true
+                },
+                {
+                    "type": "archive",
+                    "url": "http://www-us.apache.org/dist/ant/binaries/apache-ant-1.10.1-bin.tar.xz",
+                    "sha512": "8732ecfd96bcfde626260939f17fdb7e85700092ef69932b250e3572810cd53eaac24e1c72921d89900170804d27cc3100bee7c8b5159d0e5b64c3d79e07bec6",
+                    "dest": "ant"
                 },
                 {
                     "commands": [
@@ -416,6 +432,102 @@
                     "sha256": "dca00f5e655f2f217a766faa73a81f542c5c204aa3a47017c3c2be0b31d00a56",
                     "type": "file",
                     "dest-filename": "external/tarballs/ttf-kacst_2.01+mry.tar.gz"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/beeca87be45ec87d241ddd0e1bad80c1-bsh-2.0b6-src.zip",
+                    "sha256": "9e93c73e23aff644b17dfff656444474c14150e7f3b38b19635e622235e01c96",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/beeca87be45ec87d241ddd0e1bad80c1-bsh-2.0b6-src.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/commons-logging-1.2-src.tar.gz",
+                    "sha256": "49665da5a60d033e6dff40fe0a7f9173e886ae859ce6096c1afe34c48b677c81",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/commons-logging-1.2-src.tar.gz"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip",
+                    "sha256": "233f66e8d25c5dd971716d4200203a612a407649686ef3b52075d04b4c9df0dd",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/d8bd5eed178db6e2b18eeed243f85aa8-flute-1.1.6.zip",
+                    "sha256": "1b5b24f7bc543c0362b667692f78db8bab4ed6dafc6172f104d0bd3757d8a133",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/d8bd5eed178db6e2b18eeed243f85aa8-flute-1.1.6.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip",
+                    "sha256": "d30b13f4ba2e3b6a2d4f020c0dee0a9fb9fc6fbcc2d561f36b78da4bf3802370",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/eeb2c7ddf0d302fba4bfc6e97eac9624-libbase-1.1.6.zip",
+                    "sha256": "75c80359c9ce343c20aab8a36a45cb3b9ee7c61cf92c13ae45399d854423a9ba",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/eeb2c7ddf0d302fba4bfc6e97eac9624-libbase-1.1.6.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/3bdf40c0d199af31923e900d082ca2dd-libfonts-1.1.6.zip",
+                    "sha256": "e0531091787c0f16c83965fdcbc49162c059d7f0c64669e7f119699321549743",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/3bdf40c0d199af31923e900d082ca2dd-libfonts-1.1.6.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/3404ab6b1792ae5f16bbd603bd1e1d03-libformula-1.1.7.zip",
+                    "sha256": "5826d1551bf599b85742545f6e01a0079b93c1b2c8434bf409eddb3a29e4726b",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/3404ab6b1792ae5f16bbd603bd1e1d03-libformula-1.1.7.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/db60e4fde8dd6d6807523deb71ee34dc-liblayout-0.2.10.zip",
+                    "sha256": "e1fb87f3f7b980d33414473279615c4644027e013012d156efa538bc2b031772",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/db60e4fde8dd6d6807523deb71ee34dc-liblayout-0.2.10.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/97b2d4dba862397f446b217e2b623e71-libloader-1.1.6.zip",
+                    "sha256": "3d853b19b1d94a6efa69e7af90f7f2b09ecf302913bee3da796c15ecfebcfac8",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/97b2d4dba862397f446b217e2b623e71-libloader-1.1.6.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/8ce2fcd72becf06c41f7201d15373ed9-librepository-1.1.6.zip",
+                    "sha256": "abe2c57ac12ba45d83563b02e240fa95d973376de2f720aab8fe11f2e621c095",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/8ce2fcd72becf06c41f7201d15373ed9-librepository-1.1.6.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/f94d9870737518e3b597f9265f4e9803-libserializer-1.1.6.zip",
+                    "sha256": "05640a1f6805b2b2d7e2cb9c50db9a5cb084e3c52ab1a71ce015239b4a1d4343",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/f94d9870737518e3b597f9265f4e9803-libserializer-1.1.6.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/ace6ab49184e329db254e454a010f56d-libxml-1.1.7.zip",
+                    "sha256": "7d2797fe9f79a77009721e3f14fa4a1dec17a6d706bdc93f85f1f01d124fab66",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/ace6ab49184e329db254e454a010f56d-libxml-1.1.7.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip",
+                    "sha256": "1fb458d6aab06932693cc8a9b6e4e70944ee1ff052fa63606e3131df34e21753",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/39bb3fcea1514f1369fcfc87542390fd-sacjava-1.3.zip",
+                    "sha256": "085f2112c51fa8c1783fac12fbd452650596415121348393bb51f0f7e85a9045",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/39bb3fcea1514f1369fcfc87542390fd-sacjava-1.3.zip"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/35c94d2df8893241173de1d16b6034c0-swingExSrc.zip",
+                    "sha256": "64585ac36a81291a58269ec5347e7e3e2e8596dbacb9221015c208191333c6e1",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/35c94d2df8893241173de1d16b6034c0-swingExSrc.zip"
                 }
             ],
             "buildsystem": "simple",
@@ -436,6 +548,7 @@
         "--filesystem=host",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--env=LIBO_FLATPAK=1",
+        "--env=PATH=/usr/bin:/app/jre/bin",
         "--own-name=org.libreoffice.LibreOfficeIpc0",
         "--talk-name=ca.desrt.dconf",
         "--talk-name=org.gtk.vfs.*"
