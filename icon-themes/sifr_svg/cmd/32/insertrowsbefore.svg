@@ -1,0 +1,29 @@
+<svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg">
+ <rect fill="#555753" height="2" transform="matrix(0 -1 1 0 0 0)" width="8" x="-20" y="15"/>
+ <path d="m 5 21 h 6 h 3 v -3 h -3 v -4 h 3 V 11 H 8 l -3 3 z" fill="#c3c4c2"/>
+ <path d="m 18 21 h 3 h 6 V 11 h -6 h -3 v 3 h 3 v 4 h -3 z" fill="#c3c4c2"/>
+ <rect fill="#555753" height="8" transform="matrix(0 -1 1 0 0 0)" width="2" x="-17" y="12"/>
+ <path d="M 3 14 H 1 V 7 h 2 l 3 3 v 1 z" fill="#555753"/>
+ <rect fill="#ffffff" fill-opacity=".992308" height="6" transform="matrix(0 -1 1 0 0 0)" width="5" x="-27" y="5"/>
+ <path d="M 3 29 H 29 V 3 H 27 V 21 H 5 V 14 L 4 15 L 3 16 Z M 3 5 L 4 6 L 5 7 V 5 h 6 v 5 H 8 v 1 H 28 V 10 H 12 V 5 H 28 V 3 H 3 Z m 2 22 v -5 h 6 v 5 z m 7 0 v -5 h 8 v 5 z m 9 0 v -5 h 6 v 5 z" fill="#555753"/>
+ <path d="M 20 11 V 3 h 1 v 8 z" fill="#555753" fill-rule="evenodd"/>
+ <g fill="#ffffff" fill-opacity=".992308">
+  <rect height="8" transform="matrix(0 -1 1 0 0 0)" width="5" x="-27" y="12"/>
+  <rect height="6" transform="matrix(0 -1 1 0 0 0)" width="5" x="-27" y="21"/>
+  <rect height="6" transform="matrix(0 -1 1 0 0 0)" width="5" x="-10" y="21"/>
+  <path d="M 5 7 V 5 h 6 v 5 H 8 Z"/>
+  <rect height="8" transform="matrix(0 -1 1 0 0 0)" width="5" x="-10" y="12"/>
+  <rect height="1" transform="matrix(0 -1 1 0 0 0)" width="4" x="-18" y="11"/>
+  <rect height="1" transform="matrix(0 -1 1 0 0 0)" width="4" x="-18" y="20"/>
+  <rect height="1" transform="matrix(0 -1 1 0 0 0)" width="4" x="-15" y="17"/>
+  <rect height="1" transform="matrix(0 -1 1 0 0 0)" width="4" x="-21" y="17"/>
+  <rect height="1" transform="matrix(0 -1 1 0 0 0)" width="4" x="-21" y="14"/>
+  <rect height="1" transform="matrix(0 -1 1 0 0 0)" width="4" x="-15" y="14"/>
+  <rect height="4" transform="matrix(0 -1 1 0 0 0)" width="1" x="-18" y="11"/>
+  <rect height="4" transform="matrix(0 -1 1 0 0 0)" width="1" x="-15" y="11"/>
+  <rect height="4" transform="matrix(0 -1 1 0 0 0)" width="1" x="-12" y="14"/>
+  <rect height="4" transform="matrix(0 -1 1 0 0 0)" width="1" x="-15" y="17"/>
+  <rect height="4" transform="matrix(0 -1 1 0 0 0)" width="1" x="-18" y="17"/>
+  <rect height="4" transform="matrix(0 -1 1 0 0 0)" width="1" x="-21" y="14"/>
+ </g>
+</svg>
