@@ -890,7 +890,7 @@ struct XclChMarkerFormat
 struct XclCh3dDataFormat
 {
     sal_uInt8           mnBase;             /// Base form.
-    sal_uInt8           mnTop;              /// Top egde mode.
+    sal_uInt8           mnTop;              /// Top edge mode.
 
     explicit            XclCh3dDataFormat();
 };

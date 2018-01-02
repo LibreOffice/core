@@ -44,7 +44,7 @@ struct PageSettingsModel
     OUString     maFirstFooter;          /// Footer string for first page of the sheet.
     double              mfLeftMargin;           /// Margin between left edge of page and begin of sheet area.
     double              mfRightMargin;          /// Margin between end of sheet area and right edge of page.
-    double              mfTopMargin;            /// Margin between top egde of page and begin of sheet area.
+    double              mfTopMargin;            /// Margin between top edge of page and begin of sheet area.
     double              mfBottomMargin;         /// Margin between end of sheet area and bottom edge of page.
     double              mfHeaderMargin;         /// Margin between top edge of page and begin of header.
     double              mfFooterMargin;         /// Margin between end of footer and bottom edge of page.
