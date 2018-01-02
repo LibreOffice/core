@@ -299,6 +299,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bIgnoreHTMLComments( bNoHTMLComments ),
     m_bRemoveHidden( false ),
     m_bBodySeen( false ),
+    m_bReadingHeaderOrFooter( false ),
     m_pTempViewFrame(nullptr)
 {
     m_nEventId = nullptr;
