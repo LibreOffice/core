@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	icu_headers \
 	icui18n \
 	icuuc \
+	liblangtag \
 	libxml2 \
 	mwaw \
 	odfgen \
