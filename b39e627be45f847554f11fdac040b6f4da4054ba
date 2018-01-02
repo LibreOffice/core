@@ -16,6 +16,24 @@
       "revId": "b39e627be45f847554f11fdac040b6f4da4054ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_04b00af4",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2018-01-02T15:17:59Z",
+      "side": 1,
+      "message": "When compiling files in core.git, the file names passed to the compiler (including the include, library directories) are  absolute. But this is not the case for online where the file names passed to the compiler are relative. isSamePathname, hence, was not able to correctly tell if two files are actually in the same path. Using getAbsolutePath() fixed the problem for online while not changing any behavior for core.git code.\n\nIf there is significant performance benefit of using isSamePathname over getAbsolutePath, happy to make it conditional (i.e. check if isLOOLMode() is true).\n\nOther than that, by using SmallString we are already avoiding any heap allocation anyways, no? (Though I agree using 1024 is bit too much and we can probably reduce it to some sensible number).",
+      "parentUuid": "fa31d9ce_a4365eb2",
+      "revId": "b39e627be45f847554f11fdac040b6f4da4054ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
