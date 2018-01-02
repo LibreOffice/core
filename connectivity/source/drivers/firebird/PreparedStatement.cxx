@@ -345,6 +345,7 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ensurePrepared();
 
+    checkParameterIndex(nIndex);
     setParameterNull(nIndex);
 }
 
@@ -514,11 +515,12 @@ void OPreparedStatement::closeBlobAfterWriting(isc_blob_handle& rBlobHandle)
     }
 }
 
-void SAL_CALL OPreparedStatement::setClob( sal_Int32, const Reference< XClob >& )
+void SAL_CALL OPreparedStatement::setClob( sal_Int32 nIndex, const Reference< XClob >& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    checkParameterIndex(nIndex);
 }
 
 void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
@@ -526,6 +528,8 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+
+    checkParameterIndex(nParameterIndex);
 
 #if SAL_TYPES_SIZEOFPOINTER == 8
     isc_blob_handle aBlobHandle = 0;
@@ -572,19 +576,21 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
 }
 
 
-void SAL_CALL OPreparedStatement::setArray( sal_Int32, const Reference< XArray >& )
+void SAL_CALL OPreparedStatement::setArray( sal_Int32 nIndex, const Reference< XArray >& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    checkParameterIndex(nIndex);
 }
 
 
-void SAL_CALL OPreparedStatement::setRef( sal_Int32, const Reference< XRef >& )
+void SAL_CALL OPreparedStatement::setRef( sal_Int32 nIndex, const Reference< XRef >& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    checkParameterIndex(nIndex);
 }
 
 
@@ -666,19 +672,21 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 }
 
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32, sal_Int32, const ::rtl::OUString& )
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 nIndex, sal_Int32, const ::rtl::OUString& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    checkParameterIndex(nIndex);
 }
 
 
-void SAL_CALL OPreparedStatement::setObject( sal_Int32, const Any& )
+void SAL_CALL OPreparedStatement::setObject( sal_Int32 nIndex, const Any& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    checkParameterIndex(nIndex);
 }
 
 void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
@@ -686,6 +694,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    checkParameterIndex(nParameterIndex);
 
 #if SAL_TYPES_SIZEOFPOINTER == 8
     isc_blob_handle aBlobHandle = 0;
@@ -729,19 +738,21 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 }
 
 
-void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32 )
+void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 nIndex, const Reference< css::io::XInputStream >&, sal_Int32 )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    checkParameterIndex(nIndex);
 }
 
 
-void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32 )
+void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 nIndex, const Reference< css::io::XInputStream >&, sal_Int32 )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    checkParameterIndex(nIndex);
 }
 
 
