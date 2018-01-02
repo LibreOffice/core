@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -526,9 +526,12 @@ Time OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*n
         struct tm aCTime;
         isc_decode_sql_time(&aISCTime, &aCTime);
 
-        // first field is nanoseconds -- not supported in firebird or struct tm.
+        // First field is nanoseconds.
         // last field denotes UTC (true) or unknown (false)
-        return Time(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, false);
+        // Here we "know" that ISC_TIME is simply in units of seconds/ISC_TIME_SECONDS_PRECISION
+        // with no other funkiness, so we can get the fractional seconds easily.
+        return Time((aISCTime % ISC_TIME_SECONDS_PRECISION) * (1000000000 / ISC_TIME_SECONDS_PRECISION),
+                    aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, false);
     }
     else
     {
@@ -546,7 +549,8 @@ DateTime OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
         struct tm aCTime;
         isc_decode_timestamp(&aISCTimestamp, &aCTime);
 
-        return DateTime(0, //nanoseconds, not supported
+        // Ditto here, see comment in previous function about ISC_TIME and ISC_TIME_SECONDS_PRECISION.
+        return DateTime((aISCTimestamp.timestamp_time % ISC_TIME_SECONDS_PRECISION) * (1000000000 / ISC_TIME_SECONDS_PRECISION), //nanoseconds
                         aCTime.tm_sec,
                         aCTime.tm_min,
                         aCTime.tm_hour,

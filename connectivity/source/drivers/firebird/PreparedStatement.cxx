@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -462,6 +462,10 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 nIndex, const css::util::Ti
     ISC_TIME aISCTime;
     isc_encode_sql_time(&aCTime, &aISCTime);
 
+    // Here we "know" that ISC_TIME is simply in units of seconds/ISC_TIME_SECONDS_PRECISION with no
+    // other funkiness, so we can simply add the fraction of a second.
+    aISCTime += rTime.NanoSeconds / (1000000000 / ISC_TIME_SECONDS_PRECISION);
+
     setValue< ISC_TIME >(nIndex, aISCTime, SQL_TYPE_TIME);
 }
 
@@ -477,6 +481,9 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 nIndex, const DateTime&
 
     ISC_TIMESTAMP aISCTimestamp;
     isc_encode_timestamp(&aCTime, &aISCTimestamp);
+
+    // As in previous function
+    aISCTimestamp.timestamp_time += rTimestamp.NanoSeconds / (1000000000 / ISC_TIME_SECONDS_PRECISION);
 
     setValue< ISC_TIMESTAMP >(nIndex, aISCTimestamp, SQL_TIMESTAMP);
 }
