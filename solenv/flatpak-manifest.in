@@ -182,10 +182,10 @@
                     "dest-filename": "external/tarballs/libgpg-error-1.27.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libabw-0.1.1.tar.bz2",
-                    "sha256": "7a3d3415cf82ab9894f601d1b3057c4615060304d5279efdec6275e01b96a199",
+                    "url": "https://dev-www.libreoffice.org/src/libabw-0.1.2.tar.xz",
+                    "sha256": "0b72944d5af81dda0a5c5803ee84cbac4b81441a4d767aa57029adc6744c2485",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libabw-0.1.1.tar.bz2"
+                    "dest-filename": "external/tarballs/libabw-0.1.2.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libcdr-0.1.4.tar.xz",
