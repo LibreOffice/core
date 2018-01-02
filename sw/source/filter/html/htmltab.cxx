@@ -4981,6 +4981,48 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     }
 }
 
+namespace
+{
+    class FrameDeleteWatch : public SwClient
+    {
+        SwFrameFormat* m_pObjectFormat;
+        bool m_bDeleted;
+    public:
+        FrameDeleteWatch(SwFrameFormat* pObjectFormat)
+            : m_pObjectFormat(pObjectFormat)
+            , m_bDeleted(false)
+        {
+            if (m_pObjectFormat)
+                m_pObjectFormat->Add(this);
+
+        }
+
+        virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override
+        {
+            SwClient::SwClientNotify(rModify, rHint);
+            if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+            {
+                if (pDrawFrameFormatHint->m_eId == sw::DrawFrameFormatHintId::DYING)
+                {
+                    m_pObjectFormat->Remove(this);
+                    m_bDeleted = true;
+                }
+            }
+        }
+
+        bool WasDeleted() const
+        {
+            return m_bDeleted;
+        }
+
+        virtual ~FrameDeleteWatch() override
+        {
+            if (!m_bDeleted && m_pObjectFormat)
+                m_pObjectFormat->Remove(this);
+        }
+    };
+}
+
 std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                                                     bool bIsParentHead,
                                                     bool bHasParentSection,
@@ -5250,20 +5292,18 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
             //if section to be deleted contains a pending m_pMarquee, it will be deleted
             //so clear m_pMarquee pointer if that's the case
             SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee) : nullptr;
-            if (pObjectFormat)
-            {
-                const SwFormatAnchor& rAnch = pObjectFormat->GetAnchor();
-                if (const SwPosition* pPos = rAnch.GetContentAnchor())
-                {
-                    SwNodeIndex aMarqueeNodeIndex(pPos->nNode);
-                    SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
-                    if (aMarqueeNodeIndex >= aSttIdx && aMarqueeNodeIndex <= aEndIdx)
-                        m_pMarquee = nullptr;
-                }
-            }
+            FrameDeleteWatch aWatch(pObjectFormat);
 
             m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
             xCurTable->SetCaption( nullptr, false );
+
+            if (pObjectFormat)
+            {
+                if (aWatch.WasDeleted())
+                    m_pMarquee = nullptr;
+                else
+                    pObjectFormat->Remove(&aWatch);
+            }
         }
     }
 
