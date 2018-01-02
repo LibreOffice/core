@@ -69,7 +69,6 @@ namespace connectivity
             bool            m_bClosed;
             bool            m_bUseCatalog;  // should we use the catalog on filebased databases
             bool            m_bUseOldDateFormat;
-            bool            m_bParameterSubstitution;
             bool            m_bIgnoreDriverPrivileges;
             bool            m_bPreventGetVersionColumns;    // #i60273#
             bool            m_bReadOnly;
@@ -122,7 +121,6 @@ namespace connectivity
 
             // should we use the catalog on filebased databases
             bool     isCatalogUsed()                     const { return m_bUseCatalog; }
-            bool     isParameterSubstitutionEnabled()    const { return m_bParameterSubstitution; }
             bool     isIgnoreDriverPrivilegesEnabled()   const { return m_bIgnoreDriverPrivileges; }
             bool     preventGetVersionColumns()          const { return m_bPreventGetVersionColumns; }
             bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }

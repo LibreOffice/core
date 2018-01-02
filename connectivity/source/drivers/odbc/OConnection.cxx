@@ -53,7 +53,6 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          ,m_bClosed(false)
                          ,m_bUseCatalog(false)
                          ,m_bUseOldDateFormat(false)
-                         ,m_bParameterSubstitution(false)
                          ,m_bIgnoreDriverPrivileges(false)
                          ,m_bPreventGetVersionColumns(false)
                          ,m_bReadOnly(true)
@@ -200,8 +199,6 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
             OSL_VERIFY( pBegin->Value >>= m_bIgnoreDriverPrivileges );
         else if( pBegin->Name == "PreventGetVersionColumns")
             OSL_VERIFY( pBegin->Value >>= m_bPreventGetVersionColumns );
-        else if( pBegin->Name == "ParameterNameSubstitution")
-            OSL_VERIFY( pBegin->Value >>= m_bParameterSubstitution );
         else if( pBegin->Name == "IsAutoRetrievingEnabled")
         {
             bool bAutoRetrievingEnabled = false;

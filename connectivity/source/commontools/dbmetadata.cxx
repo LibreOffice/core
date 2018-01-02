@@ -301,6 +301,15 @@ namespace dbtools
         return doGenerate;
     }
 
+    bool DatabaseMetaData::shouldSubstituteParameterNames() const
+    {
+        bool doSubstitute( true );
+        Any setting;
+        if ( lcl_getConnectionSetting( "ParameterNameSubstitution", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= doSubstitute );
+        return doSubstitute;
+    }
+
     bool DatabaseMetaData::isAutoIncrementPrimaryKey() const
     {
         bool is( true );

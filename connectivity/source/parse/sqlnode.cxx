@@ -397,6 +397,10 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             rString.append(" ");
         if (nCount == 1)    // ?
             m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam, false );
+        else if (rParam.bParseToSDBCLevel && rParam.aMetaData.shouldSubstituteParameterNames())
+        {
+            rString.append("?");
+        }
         else if (nCount == 2)   // :Name
         {
             m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam, false );
@@ -404,6 +408,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
         }                   // [Name]
         else
         {
+            assert (nCount == 3);
             m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam, false );
             rString.append(m_aChildren[1]->m_aNodeValue);
             rString.append(m_aChildren[2]->m_aNodeValue);

@@ -393,30 +393,6 @@ Reference< XStatement > SAL_CALL Connection::createStatement( )
     return xReturn;
 }
 
-OUString Connection::transformPreparedStatement(const OUString& _sSQL)
-{
-    OUString sSqlStatement (_sSQL);
-    try
-    {
-        OSQLParser aParser( m_xDriver->getContext() );
-        OUString sErrorMessage;
-        OUString sNewSql;
-        OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
-        if(pNode)
-        {   // special handling for parameters
-            OSQLParseNode::substituteParameterNames(pNode);
-            pNode->parseNodeToStr( sNewSql, this );
-            delete pNode;
-            sSqlStatement = sNewSql;
-        }
-    }
-    catch(const Exception&)
-    {
-        SAL_WARN("connectivity.firebird", "failed to remove named parameters from '" << _sSQL << "'");
-    }
-    return sSqlStatement;
-}
-
 Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
             const OUString& _sSql)
 {
@@ -428,10 +404,7 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
     if(m_aTypeInfo.empty())
         buildTypeInfo();
 
-    OUString sSqlStatement (transformPreparedStatement( _sSql ));
-
-    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,
-                                                                     sSqlStatement);
+    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this, _sSql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 
     return xReturn;

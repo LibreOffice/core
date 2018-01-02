@@ -61,6 +61,11 @@
             <value>false</value>
           </prop>
         </node>
+        <node oor:name="ParameterNameSubstitution" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
       </node><!--Properties-->
       <node oor:name="Features">
       </node><!--Features-->
@@ -93,6 +98,11 @@
         <node oor:name="UseCatalog" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>false</value>
+          </prop>
+        </node>
+        <node oor:name="ParameterNameSubstitution" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
           </prop>
         </node>
       </node>

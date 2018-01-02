@@ -266,7 +266,6 @@ java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     ,m_pDriverClassLoader()
     ,m_Driver_theClass(nullptr)
     ,m_aLogger( _rDriver.getLogger() )
-    ,m_bParameterSubstitution(false)
     ,m_bIgnoreDriverPrivileges(true)
     ,m_bIgnoreCurrency(false)
 {
@@ -464,32 +463,6 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  )
     return xStmt;
 }
 
-OUString java_sql_Connection::transFormPreparedStatement(const OUString& _sSQL)
-{
-    OUString sSqlStatement = _sSQL;
-    if ( m_bParameterSubstitution )
-    {
-        try
-        {
-            OSQLParser aParser( m_pDriver->getContext() );
-            OUString sErrorMessage;
-            OUString sNewSql;
-            OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
-            if(pNode)
-            {   // special handling for parameters
-                OSQLParseNode::substituteParameterNames(pNode);
-                pNode->parseNodeToStr( sNewSql, this );
-                delete pNode;
-                sSqlStatement = sNewSql;
-            }
-        }
-        catch(const Exception&)
-        {
-        }
-    }
-    return sSqlStatement;
-}
-
 Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -497,10 +470,8 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARE_STATEMENT, sql );
 
     SDBThreadAttach t;
-    OUString sSqlStatement = sql;
-    sSqlStatement = transFormPreparedStatement( sSqlStatement );
 
-    java_sql_PreparedStatement* pStatement = new java_sql_PreparedStatement( t.pEnv, *this, sSqlStatement );
+    java_sql_PreparedStatement* pStatement = new java_sql_PreparedStatement( t.pEnv, *this, sql );
     Reference< XPreparedStatement > xReturn( pStatement );
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 
@@ -515,10 +486,8 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARE_CALL, sql );
 
     SDBThreadAttach t;
-    OUString sSqlStatement = sql;
-    sSqlStatement = transFormPreparedStatement( sSqlStatement );
 
-    java_sql_CallableStatement* pStatement = new java_sql_CallableStatement( t.pEnv, *this, sSqlStatement );
+    java_sql_CallableStatement* pStatement = new java_sql_CallableStatement( t.pEnv, *this, sql );
     Reference< XPreparedStatement > xStmt( pStatement );
     m_aStatements.push_back(WeakReferenceHelper(xStmt));
 
@@ -784,7 +753,6 @@ bool java_sql_Connection::construct(const OUString& url,
         sDriverClassPath = impl_getJavaDriverClassPath_nothrow(sDriverClass);
     bAutoRetrievingEnabled = aSettings.getOrDefault( "IsAutoRetrievingEnabled", bAutoRetrievingEnabled );
     sGeneratedValueStatement = aSettings.getOrDefault( "AutoRetrievingStatement", sGeneratedValueStatement );
-    m_bParameterSubstitution = aSettings.getOrDefault( "ParameterNameSubstitution", m_bParameterSubstitution );
     m_bIgnoreDriverPrivileges = aSettings.getOrDefault( "IgnoreDriverPrivileges", m_bIgnoreDriverPrivileges );
     m_bIgnoreCurrency = aSettings.getOrDefault( "IgnoreCurrency", m_bIgnoreCurrency );
     aSystemProperties = aSettings.getOrDefault( "SystemProperties", aSystemProperties );
