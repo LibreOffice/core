@@ -1,0 +1,46 @@
+From 49f6461d4751d3b16e32ab8f9c93a3856b33be49 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 2 Aug 2017 14:53:36 +0200
+Subject: [PATCH] m4: MSVC defines __cplusplus as 199711L still
+
+See e.g.
+<https://stackoverflow.com/questions/37503029/cplusplus-is-equal-to-199711-in-msvc-does-it-support-c11>,
+on MSVC we can't depend on the value of __cplusplus, since that one is a
+too low value, even if everything else works fine.
+---
+ m4/ax_cxx_compile_stdcxx.m4 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff -Naur a/configure b/configure
+--- a/configure	2017-08-02 14:50:09.000000000 +0200
++++ b/configure	2017-08-02 14:50:57.000000000 +0200
+@@ -16001,7 +16001,7 @@
+ 
+ #error "This is not a C++ compiler"
+ 
+-#elif __cplusplus < 201103L
++#elif __cplusplus < 201103L && !(defined _MSC_VER)
+ 
+ #error "This is not a C++11 compiler"
+ 
+@@ -16314,7 +16314,7 @@
+ 
+ #error "This is not a C++ compiler"
+ 
+-#elif __cplusplus < 201103L
++#elif __cplusplus < 201103L && !(defined _MSC_VER)
+ 
+ #error "This is not a C++11 compiler"
+ 
+@@ -16636,7 +16636,7 @@
+ 
+ #error "This is not a C++ compiler"
+ 
+-#elif __cplusplus < 201103L
++#elif __cplusplus < 201103L && !(defined _MSC_VER)
+ 
+ #error "This is not a C++11 compiler"
+ 
+-- 
+2.12.3
+
