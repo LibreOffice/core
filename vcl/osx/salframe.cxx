@@ -1415,7 +1415,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         // Cocoa does not have an equivalent for GetCurrentEventButtonState
         // and GetCurrentEventKeyModifiers.
         // we could try to get away with tracking all events for modifierKeys
-        // and all mouse events for button state in VCL_NSApllication::sendEvent,
+        // and all mouse events for button state in VCL_NSApplication::sendEvent,
         // but it is unclear whether this will get us the same result.
         // leave in GetCurrentEventButtonState and GetCurrentEventKeyModifiers for now
 
