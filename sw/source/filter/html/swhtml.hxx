@@ -231,6 +231,7 @@ class HTMLAttrContext
     bool    bRestartPRE : 1;
     bool    bRestartXMP : 1;
     bool    bRestartListing : 1;
+    bool    bHeaderOrFooter : 1;
 
 public:
     void ClearSaveDocContext();
@@ -255,7 +256,8 @@ public:
         bFinishPREListingXMP( false ),
         bRestartPRE( false ),
         bRestartXMP( false ),
-        bRestartListing( false )
+        bRestartListing( false ),
+        bHeaderOrFooter( false )
     {}
 
     explicit HTMLAttrContext( HtmlTokenId nTokn ) :
@@ -276,7 +278,8 @@ public:
         bFinishPREListingXMP( false ),
         bRestartPRE( false ),
         bRestartXMP( false ),
-        bRestartListing( false )
+        bRestartListing( false ),
+        bHeaderOrFooter( false )
     {}
 
     ~HTMLAttrContext() { ClearSaveDocContext(); }
@@ -325,6 +328,9 @@ public:
 
     void SetRestartListing( bool bSet ) { bRestartListing = bSet; }
     bool IsRestartListing() const { return bRestartListing; }
+
+    void SetHeaderOrFooter( bool bSet ) { bHeaderOrFooter = bSet; }
+    bool IsHeaderOrFooter() const { return bHeaderOrFooter; }
 
     void SetAppendMode( SwHTMLAppendMode eMode ) { eAppend = eMode; }
     SwHTMLAppendMode GetAppendMode() const { return eAppend; }
@@ -485,6 +491,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool m_bRemoveHidden : 1; // the filter implementation might set the hidden flag
 
     bool m_bBodySeen : 1;
+    bool m_bReadingHeaderOrFooter : 1;
 
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
     OUString m_InfoNames[4];
