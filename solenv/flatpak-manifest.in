@@ -200,10 +200,10 @@
                     "dest-filename": "external/tarballs/libcmis-0.5.1.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libe-book-0.1.2.tar.bz2",
-                    "sha256": "b710a57c633205b933015474d0ac0862253d1c52114d535dd09b20939a0d1850",
+                    "url": "https://dev-www.libreoffice.org/src/libe-book-0.1.3.tar.xz",
+                    "sha256": "7e8d8ff34f27831aca3bc6f9cc532c2f90d2057c778963b884ff3d1e34dfe1f9",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libe-book-0.1.2.tar.bz2"
+                    "dest-filename": "external/tarballs/libe-book-0.1.3.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libetonyek-0.1.7.tar.xz",
