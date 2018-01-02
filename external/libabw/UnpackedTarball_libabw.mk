@@ -15,6 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libabw,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libabw))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libabw, \
+    external/libabw/libabw-msvc.patch.1 \
+))
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libabw, \
