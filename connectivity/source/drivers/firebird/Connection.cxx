@@ -393,28 +393,96 @@ Reference< XStatement > SAL_CALL Connection::createStatement( )
     return xReturn;
 }
 
+namespace
+{
+    // TODO: there is surely such a utility function in LibreOffice already.
+    bool isWhitespace( sal_Unicode c )
+    {
+        return ' ' == c || 9 == c || 10 == c || 13 == c;
+    }
+
+    // TODO: this could advantageously be factored into a utility function
+    //       to be shared by the several drivers that need it.
+    //       This relies on the fact that LibreOffice will insert a whitespace
+    //       in front of named parameters even if the user didn't type any.
+    //       It is also incompatible with e.g. PostgreSQL's value::type casts,
+    //       which are not SQL standard and not supported by Firebird. But could
+    //       be a problem for a general utility function.
+    OUString substituteNamedParameters( const OUString & sql )
+    {
+        OUString result;
+
+        int length = sql.getLength();
+
+        int i = 0;
+        bool singleQuote = false;
+        bool doubleQuote = false;
+        bool namedParam = false;
+        bool newToken = false;
+
+        for( ; i < length ; i ++ )
+        {
+            sal_Unicode c = sql[i];
+            if ( namedParam )
+            {
+                if(isWhitespace(c))
+                {
+                    result += OUString(c);
+                    namedParam = false;
+                    newToken = true;
+                }
+            }
+            else if( doubleQuote  )
+            {
+                result += OUString(c);
+                if( '"' == c )
+                {
+                    doubleQuote = false;
+                    newToken = true;
+                }
+            }
+            else if( singleQuote )
+            {
+                result += OUString(c);
+                if( '\'' == c )
+                {
+                    singleQuote = false;
+                    newToken = true;
+                }
+            }
+            else if( newToken && ':' == c )
+            {
+                result += OUString("?");
+                namedParam = true;
+            }
+            else
+            {
+                result += OUString(c);
+                if( '"' == c )
+                {
+                    doubleQuote = true;
+                }
+                else if( '\'' == c )
+                {
+                    singleQuote = true;
+                }
+                else if(isWhitespace(c))
+                {
+                    newToken=true;
+                }
+                else
+                {
+                    newToken=false;
+                }
+            }
+        }
+        return result;
+    }
+}
+
 OUString Connection::transformPreparedStatement(const OUString& _sSQL)
 {
-    OUString sSqlStatement (_sSQL);
-    try
-    {
-        OSQLParser aParser( m_xDriver->getContext() );
-        OUString sErrorMessage;
-        OUString sNewSql;
-        OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
-        if(pNode)
-        {   // special handling for parameters
-            OSQLParseNode::substituteParameterNames(pNode);
-            pNode->parseNodeToStr( sNewSql, this );
-            delete pNode;
-            sSqlStatement = sNewSql;
-        }
-    }
-    catch(const Exception&)
-    {
-        SAL_WARN("connectivity.firebird", "failed to remove named parameters from '" << _sSQL << "'");
-    }
-    return sSqlStatement;
+    return substituteNamedParameters(_sSQL);
 }
 
 Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
