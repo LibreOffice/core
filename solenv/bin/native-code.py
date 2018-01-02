@@ -62,6 +62,7 @@ core_factory_list = [
     ("libmcnttype.a", "mcnttype_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory")
+    ("libsvgiolo.a", "svgio_component_getFactory"),
     ]
 
 core_constructor_list = [
@@ -304,7 +305,6 @@ calc_constructor_list = [
 
 draw_factory_list = [
     ("libsdlo.a", "sd_component_getFactory"),
-    ("libsvgiolo.a", "svgio_component_getFactory"),
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
     ("libdeployment.a", "deployment_component_getFactory"),
     ("libemboleobj.a", "emboleobj_component_getFactory"),
