@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -91,6 +91,24 @@ namespace
             }
         }
         return bSupportsCoreGrammar;
+    }
+
+    OUString lcl_GetDriverName(const Reference< XConnection>& _xConnection)
+    {
+        OUString sDriverName;
+        if ( _xConnection.is() )
+        {
+            try
+            {
+                Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
+                if ( xMetaData.is() )
+                    sDriverName = xMetaData->getDriverName();
+            }
+            catch(Exception&)
+            {
+            }
+        }
+        return sDriverName;
     }
 }
 
@@ -190,11 +208,23 @@ void OSelectionBrowseBox::initialize()
         OUString sGroup = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';') - 1, ';');
         m_aFunctionStrings = m_aFunctionStrings.getToken(0, ';');
 
+        bool bIsFirebird = lcl_GetDriverName(xConnection) == "firebird";
         for (IParseContext::InternationalKeyCode eFunction : eFunctions)
         {
-            m_aFunctionStrings += ";";
-            m_aFunctionStrings += OStringToOUString(rContext.getIntlKeywordAscii(eFunction),
-                RTL_TEXTENCODING_UTF8);
+            // Horrible hack. The Firebird driver returns true for supportsCoreSQLGrammar() but
+            // still it doesn't support all those that we mean with that.
+            if (!bIsFirebird ||
+                (eFunction != IParseContext::InternationalKeyCode::Every &&
+                 eFunction != IParseContext::InternationalKeyCode::Any &&
+                 eFunction != IParseContext::InternationalKeyCode::Some &&
+                 eFunction != IParseContext::InternationalKeyCode::Collect &&
+                 eFunction != IParseContext::InternationalKeyCode::Fusion &&
+                 eFunction != IParseContext::InternationalKeyCode::Intersection))
+            {
+                m_aFunctionStrings += ";";
+                m_aFunctionStrings += OStringToOUString(rContext.getIntlKeywordAscii(eFunction),
+                    RTL_TEXTENCODING_UTF8);
+            }
         }
         m_aFunctionStrings += ";";
         m_aFunctionStrings += sGroup;

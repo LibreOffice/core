@@ -587,7 +587,7 @@ OUString SAL_CALL ODatabaseMetaData::getUserName(  )
 
 OUString SAL_CALL ODatabaseMetaData::getDriverName(  )
 {
-    return OUString();
+    return OUString("firebird");
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
