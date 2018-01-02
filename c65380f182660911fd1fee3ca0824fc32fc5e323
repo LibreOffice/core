@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f9164354",
+        "filename": "svx/source/table/tablemodel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-02T11:28:13Z",
+      "side": 1,
+      "message": "this block can be replaced with\n\nrVector.erase( rVector.begin() + nIndex, rVector.begin() + nIndex + nCount);",
+      "revId": "c65380f182660911fd1fee3ca0824fc32fc5e323",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
