@@ -581,7 +581,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_SubTotalDescriptor \
     qadevOOo/tests/java/ifc/sheet/_TableAutoFormat \
     qadevOOo/tests/java/ifc/sheet/_TableAutoFormatField \
-    qadevOOo/tests/java/ifc/sheet/_TableValidation \
     qadevOOo/tests/java/ifc/sheet/_XActivationBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_XArrayFormulaRange \
     qadevOOo/tests/java/ifc/sheet/_XCalculatable \
