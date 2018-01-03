@@ -236,7 +236,7 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
     AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_HYPHENATION, *m_pBtnHyphen, ItemConnFlags::HideUnknown ) );
     AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_SHRINKTOFIT, *m_pBtnShrink, ItemConnFlags::HideUnknown ) );
     AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_FRAMEDIRECTION, *m_pBoxDirection, ItemConnFlags::HideUnknown ) );
-    AddItemConnection( new FrameDirListBoxConnection( SID_ATTR_FRAMEDIRECTION, *m_pLbFrameDir, ItemConnFlags::HideUnknown ) );
+    AddItemConnection( new FrameDirectionListBoxConnection( SID_ATTR_FRAMEDIRECTION, *m_pLbFrameDir, ItemConnFlags::HideUnknown ) );
 
 }
 
