@@ -53,14 +53,12 @@ public:
     SvxFrameDirection   GetSelectEntryValue() const;
 };
 
-typedef FrameDirectionListBox FrameDirListBox;
-
 
 /** Wrapper for usage of a FrameDirectionListBox in item connections. */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameDirListBoxWrapper : public sfx::SingleControlWrapper< FrameDirListBox, SvxFrameDirection >
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameDirectionListBoxWrapper : public sfx::SingleControlWrapper< FrameDirectionListBox, SvxFrameDirection >
 {
 public:
-    explicit            FrameDirListBoxWrapper( FrameDirListBox& rListBox );
+    explicit            FrameDirectionListBoxWrapper( FrameDirectionListBox& rListBox );
 
     virtual bool        IsControlDontKnow() const override;
     virtual void        SetControlDontKnow( bool bSet ) override;
@@ -73,7 +71,7 @@ public:
 typedef sfx::ValueItemWrapper< SvxFrameDirectionItem, SvxFrameDirection > FrameDirItemWrapper;
 
 /** An item<->control connection for a FrameDirectionListBox. */
-typedef sfx::ItemControlConnection< FrameDirItemWrapper, FrameDirListBoxWrapper > FrameDirListBoxConnection;
+typedef sfx::ItemControlConnection< FrameDirItemWrapper, FrameDirectionListBoxWrapper > FrameDirectionListBoxConnection;
 
 
 }

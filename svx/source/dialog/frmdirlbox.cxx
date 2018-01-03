@@ -79,28 +79,28 @@ SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
 }
 
 
-FrameDirListBoxWrapper::FrameDirListBoxWrapper( FrameDirListBox& rListBox ) :
+FrameDirectionListBoxWrapper::FrameDirectionListBoxWrapper( FrameDirectionListBox& rListBox ) :
     SingleControlWrapperType( rListBox )
 {
 }
 
-bool FrameDirListBoxWrapper::IsControlDontKnow() const
+bool FrameDirectionListBoxWrapper::IsControlDontKnow() const
 {
     return GetControl().GetSelectedEntryCount() == 0;
 }
 
-void FrameDirListBoxWrapper::SetControlDontKnow( bool bSet )
+void FrameDirectionListBoxWrapper::SetControlDontKnow( bool bSet )
 {
     if( bSet )
         GetControl().SetNoSelection();
 }
 
-SvxFrameDirection FrameDirListBoxWrapper::GetControlValue() const
+SvxFrameDirection FrameDirectionListBoxWrapper::GetControlValue() const
 {
     return GetControl().GetSelectEntryValue();
 }
 
-void FrameDirListBoxWrapper::SetControlValue( SvxFrameDirection eValue )
+void FrameDirectionListBoxWrapper::SetControlValue( SvxFrameDirection eValue )
 {
     GetControl().SelectEntryValue( eValue );
 }

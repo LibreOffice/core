@@ -99,7 +99,7 @@ private:
     VclPtr<TriStateBox>         m_pBtnWrap;
     VclPtr<TriStateBox>         m_pBtnHyphen;
     VclPtr<TriStateBox>         m_pBtnShrink;
-    VclPtr<FrameDirListBox>     m_pLbFrameDir;
+    VclPtr<FrameDirectionListBox> m_pLbFrameDir;
 
     // hidden labels/string
     VclPtr<FixedText>           m_pFtBotLock;
