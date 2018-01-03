@@ -40,7 +40,6 @@ class BitmapCache;
 class PageCacheManager
 {
 public:
-    typedef BitmapCache Cache;
     typedef std::vector< std::pair<Size, std::shared_ptr<BitmapCache> > > BestFittingPageCaches;
     typedef css::uno::Reference<css::uno::XInterface> DocumentKey;
 
@@ -57,7 +56,7 @@ public:
             The returned cache lives as long as somebody keeps a shared
             pointer and the ReleaseCache() method has not been called.
     */
-    std::shared_ptr<Cache> GetCache (
+    std::shared_ptr<BitmapCache> GetCache (
         const  DocumentKey& pDocument,
         const Size& rPreviewSize);
 
@@ -65,14 +64,14 @@ public:
         cache.  After that the cache will live as long as the caller (and
         maybe others) holds its reference.
     */
-    void ReleaseCache (const std::shared_ptr<Cache>& rpCache);
+    void ReleaseCache (const std::shared_ptr<BitmapCache>& rpCache);
 
     /** This is an information to the cache manager that the size of preview
         bitmaps in the specified cache has changed.
 
     */
-    std::shared_ptr<Cache> ChangeSize (
-        const std::shared_ptr<Cache>& rpCache,
+    std::shared_ptr<BitmapCache> ChangeSize (
+        const std::shared_ptr<BitmapCache>& rpCache,
         const Size& rOldPreviewSize,
         const Size& rNewPreviewSize);
 
@@ -130,7 +129,7 @@ private:
     class Deleter;
     friend class Deleter;
 
-    std::shared_ptr<Cache> GetRecentlyUsedCache(
+    std::shared_ptr<BitmapCache> GetRecentlyUsedCache(
         const DocumentKey& pDocument,
         const Size& rSize);
 
@@ -141,13 +140,13 @@ private:
     void PutRecentlyUsedCache(
         DocumentKey const & pDocument,
         const Size& rPreviewSize,
-        const std::shared_ptr<Cache>& rpCache);
+        const std::shared_ptr<BitmapCache>& rpCache);
 
     /** This method is used internally to initialize a newly created
         BitmapCache with already exisiting previews.
     */
     void Recycle (
-        const std::shared_ptr<Cache>& rpCache,
+        const std::shared_ptr<BitmapCache>& rpCache,
         const DocumentKey& pDocument,
         const Size& rPreviewSize);
 };
