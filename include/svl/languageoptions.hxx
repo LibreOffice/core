@@ -133,7 +133,7 @@ public:
 };
 
 OUString SVL_DLLPUBLIC getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & installed, OUString const & locale);
-OUString SVL_DLLPUBLIC getInstalledLocaleForSystemUILanguage(css::uno::Sequence<OUString> const & installed);
+OUString SVL_DLLPUBLIC getInstalledLocaleForSystemUILanguage(css::uno::Sequence<OUString> const & installed, const OUString& rPreferredLocale = OUString());
 
 #endif // INCLUDED_SVL_LANGUAGEOPTIONS_HXX
 
