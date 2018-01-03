@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basegfx,\
 
 $(eval $(call gb_CppunitTest_add_exception_objects,basegfx,\
     basegfx/test/basegfx2d \
+    basegfx/test/SvgPathImportExport \
     basegfx/test/basegfx3d \
     basegfx/test/boxclipper \
     basegfx/test/basegfxtools \
