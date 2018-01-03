@@ -1407,6 +1407,7 @@ void Chart2ExportTest::testTitleManualLayoutXLSX()
     load("/chart2/qa/extras/data/xlsx/", "title_manual_layout.xlsx");
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:layoutTarget", 0);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:xMode", "val", "edge");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:yMode", "val", "edge");
 
@@ -1428,6 +1429,7 @@ void Chart2ExportTest::testPlotAreaManualLayoutXLSX()
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
 
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:layoutTarget", "val", "inner");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:xMode", "val", "edge");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:yMode", "val", "edge");
 
@@ -1456,6 +1458,7 @@ void Chart2ExportTest::testLegendManualLayoutXLSX()
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
 
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:layoutTarget", 0);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:xMode", "val", "edge");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:yMode", "val", "edge");
 
@@ -1467,6 +1470,18 @@ void Chart2ExportTest::testLegendManualLayoutXLSX()
     double nY = aYVal.toDouble();
     CPPUNIT_ASSERT(nY > 0 && nY < 1);
     CPPUNIT_ASSERT(nX != nY);
+
+    OUString aWVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:w", "val");
+    double nW = aWVal.toDouble();
+    CPPUNIT_ASSERT(nW > 0 && nW < 1);
+
+    OUString aHVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:h", "val");
+    double nH = aHVal.toDouble();
+    CPPUNIT_ASSERT(nH > 0 && nH < 1);
+    CPPUNIT_ASSERT(nH != nW);
+
+    // Make sure that default text font size is preserved after export
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:txPr/a:p/a:pPr/a:defRPr", "sz", "900");
 }
 
 void Chart2ExportTest::testAxisCharacterPropertiesXLSX()
