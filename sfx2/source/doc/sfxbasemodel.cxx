@@ -3013,8 +3013,10 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDocFailed : SfxEventHintId::SaveAsDocFailed, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
                                                     m_pData->m_pObjectShell.get() ) );
 
+            std::stringstream aErrCode;
+            aErrCode << nErrCode;
             throw task::ErrorCodeIOException(
-                "SfxBaseModel::impl_store <" + sURL + "> failed: " + nErrCode.toHexString(),
+                "SfxBaseModel::impl_store <" + sURL + "> failed: " + OUString::fromUtf8(aErrCode.str().c_str()),
                 Reference< XInterface >(), sal_uInt32(nErrCode));
         }
     }
