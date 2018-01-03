@@ -16,7 +16,6 @@
 #include <com/sun/star/beans/StringPair.hpp>
 
 #include <comphelper/ofopxmlhelper.hxx>
-#include <config_global.h>
 #include <o3tl/make_unique.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/datetime.hxx>

@@ -11,8 +11,8 @@
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
 
 #include <memory>
+#include <sal/types.h>
 #include "rtflistener.hxx"
-#include "rtftokenizer.hxx"
 
 class SvStream;
 
@@ -20,6 +20,7 @@ namespace writerfilter
 {
 namespace rtftok
 {
+class RTFTokenizer;
 /**
  * This acts like an importer, but used for looking ahead, e.g. to
  * determine if the current group contains a table, etc.

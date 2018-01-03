@@ -30,8 +30,6 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 
-#include <vcl/svapp.hxx>
-
 class Test : public SwModelTestBase
 {
 public:

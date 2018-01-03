@@ -7,9 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "rtflistener.hxx"
+#include "rtfcontrolwords.hxx"
 #include <oox/token/namespaces.hxx>
-#include <oox/token/tokens.hxx>
 #include <cstring>
 
 namespace writerfilter

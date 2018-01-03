@@ -10,6 +10,8 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLFOOTNOTEIMPORTCONTEXT_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLFOOTNOTEIMPORTCONTEXT_HXX
 
+#include <librevenge/librevenge.h>
+
 #include <rtl/ref.hxx>
 
 #include "xmlictxt.hxx"

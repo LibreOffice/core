@@ -33,6 +33,7 @@
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
 #include <algorithm>
+#include "rtfexport.hxx"
 
 using namespace css;
 

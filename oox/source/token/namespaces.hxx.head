@@ -20,5 +20,6 @@
 #define OOX_TOKEN_NAMESPACES_HXX
 
 #include <sal/types.h>
+#include <oox/token/tokens.hxx>
 
 namespace oox {

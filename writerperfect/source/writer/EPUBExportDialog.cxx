@@ -13,6 +13,7 @@
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/opengrf.hxx>
 
 #include "EPUBExportFilter.hxx"

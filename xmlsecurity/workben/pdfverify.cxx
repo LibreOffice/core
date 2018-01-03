@@ -20,6 +20,7 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 
 #include <pdfio/pdfdocument.hxx>
 

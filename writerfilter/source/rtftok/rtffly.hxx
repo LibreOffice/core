@@ -14,6 +14,8 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
+#include <osl/endian.h>
+
 namespace writerfilter
 {
 namespace rtftok

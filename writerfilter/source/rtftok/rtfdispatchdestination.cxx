@@ -24,6 +24,7 @@
 #include "rtfreferenceproperties.hxx"
 #include "rtfsdrimport.hxx"
 #include "rtfskipdestination.hxx"
+#include "rtftokenizer.hxx"
 
 using namespace com::sun::star;
 

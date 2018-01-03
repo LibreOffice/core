@@ -18,27 +18,20 @@
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
 
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
-#include <com/sun/star/io/TempFile.hpp>
-#include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <sax/tools/converter.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <tools/date.hxx>
-#include <tools/time.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <osl/file.hxx>

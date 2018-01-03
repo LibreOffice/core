@@ -11,16 +11,21 @@
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSDRIMPORT_HXX
 
 #include <stack>
-
-#include <com/sun/star/drawing/XShapes.hpp>
+#include <vector>
 
 #include <dmapper/GraphicZOrderHelper.hxx>
-#include "rtfdocumentimpl.hxx"
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace writerfilter
 {
 namespace rtftok
 {
+class RTFDocumentImpl;
+class RTFShape;
+
 /// Handles the import of drawings using RTF markup.
 class RTFSdrImport final
 {

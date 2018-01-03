@@ -7,24 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "rtfdocumentimpl.hxx"
 #include <memory>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/document/DocumentProperties.hpp>
-#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <svl/lngmisc.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <vcl/wmf.hxx>
-#include <vcl/layout.hxx>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/grfmgr.hxx>
@@ -32,23 +25,19 @@
 #include <tools/datetimeutils.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/classificationhelper.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <oox/mathml/import.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <rtl/uri.hxx>
-#include <dmapper/DomainMapperFactory.hxx>
+#include <rtl/tencinfo.h>
+#include <oox/helper/graphichelper.hxx>
 #include "rtfsdrimport.hxx"
-#include "rtflookahead.hxx"
-#include "rtfcharsets.hxx"
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"
-#include "rtffly.hxx"
+#include "rtftokenizer.hxx"
 
 using namespace com::sun::star;
 

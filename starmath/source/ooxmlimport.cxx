@@ -24,7 +24,6 @@ The primary internal data structure for the formula is the text representation
 (the SmNode tree is built from it), so read data must be converted into this format.
 */
 
-#define M_TOKEN( token ) OOX_TOKEN( officeMath, token )
 #define OPENING( token ) XML_STREAM_OPENING( token )
 #define CLOSING( token ) XML_STREAM_CLOSING( token )
 
