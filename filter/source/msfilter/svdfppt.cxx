@@ -288,8 +288,9 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
        .ReadSChar( nShowComments );
     rAtom.aSlidesPageSize.Width() = nSlideX;
     rAtom.aSlidesPageSize.Height() = nSlideY;
-    rAtom.aNotesPageSize.Width() = nNoticeX;
-    rAtom.aNotesPageSize.Height() = nNoticeY;
+    // clamp dodgy data to avoid overflow in later calculations
+    rAtom.aNotesPageSize.Width() = std::min(nNoticeX, 16384);
+    rAtom.aNotesPageSize.Height() = std::min(nNoticeY, 16384);
     rAtom.eSlidesPageFormat = (PptPageFormat)nSlidePageFormat;
     rAtom.bEmbeddedTrueType = nEmbeddedTrueType;
     rAtom.bTitlePlaceholdersOmitted = nTitlePlaceHoldersOmitted;
