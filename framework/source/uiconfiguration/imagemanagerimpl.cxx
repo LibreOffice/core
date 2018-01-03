@@ -92,8 +92,6 @@ namespace framework
 
 static GlobalImageList*     pGlobalImageList = nullptr;
 
-typedef GraphicNameAccess CmdToXGraphicNameAccess;
-
 namespace
 {
     class theGlobalImageListMutex
@@ -778,8 +776,8 @@ void ImageManagerImpl::replaceImages(
     const Sequence< OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
 {
-    CmdToXGraphicNameAccess* pInsertedImages( nullptr );
-    CmdToXGraphicNameAccess* pReplacedImages( nullptr );
+    GraphicNameAccess* pInsertedImages( nullptr );
+    GraphicNameAccess* pReplacedImages( nullptr );
 
     {
         SolarMutexGuard g;
@@ -810,14 +808,14 @@ void ImageManagerImpl::replaceImages(
             {
                 pImageList->AddImage(aCommandURLSequence[i], Image(xGraphic));
                 if ( !pInsertedImages )
-                    pInsertedImages = new CmdToXGraphicNameAccess();
+                    pInsertedImages = new GraphicNameAccess();
                 pInsertedImages->addElement( aCommandURLSequence[i], xGraphic );
             }
             else
             {
                 pImageList->ReplaceImage(aCommandURLSequence[i], Image(xGraphic));
                 if ( !pReplacedImages )
-                    pReplacedImages = new CmdToXGraphicNameAccess();
+                    pReplacedImages = new GraphicNameAccess();
                 pReplacedImages->addElement( aCommandURLSequence[i], xGraphic );
             }
         }
@@ -858,8 +856,8 @@ void ImageManagerImpl::replaceImages(
 
 void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
 {
-    CmdToXGraphicNameAccess* pRemovedImages( nullptr );
-    CmdToXGraphicNameAccess* pReplacedImages( nullptr );
+    GraphicNameAccess* pRemovedImages( nullptr );
+    GraphicNameAccess* pReplacedImages( nullptr );
 
     {
         SolarMutexGuard g;
@@ -903,20 +901,20 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
                     if ( !aNewImage )
                     {
                         if ( !pRemovedImages )
-                            pRemovedImages = new CmdToXGraphicNameAccess();
+                            pRemovedImages = new GraphicNameAccess();
                         pRemovedImages->addElement( aCommandURLSequence[i], xEmptyGraphic );
                     }
                     else
                     {
                         if ( !pReplacedImages )
-                            pReplacedImages = new CmdToXGraphicNameAccess();
+                            pReplacedImages = new GraphicNameAccess();
                         pReplacedImages->addElement(aCommandURLSequence[i], GetXGraphic(aNewImage));
                     }
                 } // if ( m_bUseGlobal )
                 else
                 {
                     if ( !pRemovedImages )
-                        pRemovedImages = new CmdToXGraphicNameAccess();
+                        pRemovedImages = new GraphicNameAccess();
                     pRemovedImages->addElement( aCommandURLSequence[i], xEmptyGraphic );
                 }
             }
@@ -993,9 +991,9 @@ void ImageManagerImpl::reload()
                 pImageList = implts_getUserImageList(i);
                 pImageList->GetImageNames( aNewUserCmdImageSet );
 
-                CmdToXGraphicNameAccess* pInsertedImages( nullptr );
-                CmdToXGraphicNameAccess* pReplacedImages( nullptr );
-                CmdToXGraphicNameAccess* pRemovedImages( nullptr );
+                GraphicNameAccess* pInsertedImages( nullptr );
+                GraphicNameAccess* pReplacedImages( nullptr );
+                GraphicNameAccess* pRemovedImages( nullptr );
 
                 const sal_uInt32 nNewCount = aNewUserCmdImageSet.size();
                 for ( j = 0; j < nNewCount; j++ )
@@ -1005,14 +1003,14 @@ void ImageManagerImpl::reload()
                     {
                         pIter->second = true; // mark entry as replaced
                         if ( !pReplacedImages )
-                            pReplacedImages = new CmdToXGraphicNameAccess();
+                            pReplacedImages = new GraphicNameAccess();
                         pReplacedImages->addElement( aNewUserCmdImageSet[j],
                                                      GetXGraphic(pImageList->GetImage(aNewUserCmdImageSet[j])) );
                     }
                     else
                     {
                         if ( !pInsertedImages )
-                            pInsertedImages = new CmdToXGraphicNameAccess();
+                            pInsertedImages = new GraphicNameAccess();
                         pInsertedImages->addElement( aNewUserCmdImageSet[j],
                                                      GetXGraphic(pImageList->GetImage(aNewUserCmdImageSet[j])) );
                     }
@@ -1044,14 +1042,14 @@ void ImageManagerImpl::reload()
                             {
                                 // No image in the module/global image list => remove user image
                                 if ( !pRemovedImages )
-                                    pRemovedImages = new CmdToXGraphicNameAccess();
+                                    pRemovedImages = new GraphicNameAccess();
                                 pRemovedImages->addElement( pIter->first, xEmptyGraphic );
                             }
                             else
                             {
                                 // Image has been found in the module/global image list => replace user image
                                 if ( !pReplacedImages )
-                                    pReplacedImages = new CmdToXGraphicNameAccess();
+                                    pReplacedImages = new GraphicNameAccess();
                                 pReplacedImages->addElement(pIter->first, GetXGraphic(aImage));
                             }
                         } // if ( m_bUseGlobal )
@@ -1059,7 +1057,7 @@ void ImageManagerImpl::reload()
                         {
                             // No image in the user image list => remove user image
                             if ( !pRemovedImages )
-                                pRemovedImages = new CmdToXGraphicNameAccess();
+                                pRemovedImages = new GraphicNameAccess();
                             pRemovedImages->addElement( pIter->first, xEmptyGraphic );
                         }
                     }
