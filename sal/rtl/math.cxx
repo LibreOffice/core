@@ -1103,12 +1103,14 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
             else
                 nExp = 0;
 
-            int nIndex = 15 - nExp;
+            int nIndex;
 
-            if ( nIndex > 15 )
+            if (nExp < 0)
                 nIndex = 15;
-            else if ( nIndex <= 1 )
+            else if (nExp >= 14)
                 nIndex = 0;
+            else
+                nIndex = 15 - nExp;
 
             fValue = floor(fValue + 0.5 + nKorrVal[nIndex]);
         }
