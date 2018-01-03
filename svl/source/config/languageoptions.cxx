@@ -286,9 +286,13 @@ OUString getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & inst
     return OUString();
 }
 
-OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString>& rLocaleElementNames)
+OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString>& rLocaleElementNames, const OUString& rPreferredLocale)
 {
-    OUString locale = getInstalledLocaleForLanguage(rLocaleElementNames, officecfg::System::L10N::UILocale::get());
+    OUString aPreferredLocale(rPreferredLocale);
+    if (aPreferredLocale.isEmpty())
+        aPreferredLocale = officecfg::System::L10N::UILocale::get();
+
+    OUString locale = getInstalledLocaleForLanguage(rLocaleElementNames, aPreferredLocale);
     if (locale.isEmpty())
         locale = getInstalledLocaleForLanguage(rLocaleElementNames, "en-US");
     if (locale.isEmpty() && rLocaleElementNames.hasElements())
