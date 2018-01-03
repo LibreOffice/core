@@ -29,8 +29,6 @@
 
 using namespace ftp;
 
-typedef sal_uInt32 ULONG;
-
 inline bool ascii_isWhitespace( sal_Unicode ch )
 {
     return ((ch <= 0x20) && ch);
@@ -552,7 +550,7 @@ bool FTPDirectoryParser::parseDOS (
  * The READ, WRITE, and ISLINK mode bits are not supported.
  *
  * The returned size is the <size> part, multiplied by 512, and with the high
- * order bits truncated to fit into a ULONG.
+ * order bits truncated to fit into a sal_uInt32.
  *
  */
 bool FTPDirectoryParser::parseVMS (
@@ -680,7 +678,7 @@ bool FTPDirectoryParser::parseVMS (
         // Parse <size> part and set entry's size:
         if (*p < '0' || *p > '9')
             return false;
-        ULONG nSize = *p - '0';
+        sal_uInt32 nSize = *p - '0';
         if (*p++ != '0')
             while (*p >= '0' && *p <= '9')
                 nSize = 10 * rEntry.m_nSize + (*p++ - '0');
