@@ -161,6 +161,17 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
             else if( aName.isEmpty() )
                 aName = SvPasteObjectHelper::GetSotFormatUIName( nFormat );
 
+            // Show RICHTEXT only in case RTF is not present.
+            if (nFormat == SotClipboardFormatId::RICHTEXT)
+            {
+                auto it = std::find_if(pFormats->begin(), pFormats->end(),
+                                       [](const DataFlavorEx& rFlavor) {
+                                           return rFlavor.mnSotId == SotClipboardFormatId::RTF;
+                                       });
+                if (it != pFormats->end())
+                    continue;
+            }
+
             if( LISTBOX_ENTRY_NOTFOUND == ObjectLB().GetEntryPos( aName ) )
                 ObjectLB().SetEntryData(
                     ObjectLB().InsertEntry( aName ), reinterpret_cast<void*>(nFormat) );
