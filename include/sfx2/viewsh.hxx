@@ -344,7 +344,7 @@ public:
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const override;
 
     /// Set the LibreOfficeKit language of this view.
-    void SetLOKLanguageTag(const OUString& rBcp47LanguageTag) { maLOKLanguageTag = LanguageTag(rBcp47LanguageTag, true); }
+    void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
     /// Get the LibreOfficeKit language of this view.
     const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
 };
