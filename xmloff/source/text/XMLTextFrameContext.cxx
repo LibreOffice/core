@@ -55,6 +55,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <map>
 
 using namespace ::com::sun::star;
@@ -982,23 +983,41 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             break;
         case XML_TOK_TEXT_FRAME_TRANSFORM:
             {
-                OUString sValue( rValue );
-                sValue = sValue.trim();
-                const OUString& aRotate(GetXMLToken(XML_ROTATE));
-                const sal_Int32 nRotateLen(aRotate.getLength());
-                sal_Int32 nLen = sValue.getLength();
-                if( nLen >= nRotateLen+3 &&
-                    sValue.startsWith(aRotate) &&
-                    '(' == sValue[nRotateLen] &&
-                    ')' == sValue[nLen-1] )
+                // RotateFlyFrameFix: im/export full 'draw:transform' using existing tooling
+                // Currently only rotation is used, but combinations with 'draw:transform'
+                // may be necessary in the future, so that svg:x/svg:y/svg:width/svg:height
+                // may be extended/replaced with 'draw:transform' (see draw objects)
+                SdXMLImExTransform2D aSdXMLImExTransform2D;
+                basegfx::B2DHomMatrix aFullTransform;
+
+                // use SdXMLImExTransform2D to conert to transformation
+                // Note: using GetTwipUnitConverter instead of GetMM100UnitConverter may be needed,
+                // but is not generally available (as it should be, a 'current' UnitConverter should
+                // be available at GetExport() - and maybe was once). May have to be adressed as soon
+                // as translate transformations are used here.
+                aSdXMLImExTransform2D.SetString(rValue, GetImport().GetMM100UnitConverter());
+                aSdXMLImExTransform2D.GetFullTransform(aFullTransform);
+
+                if(!aFullTransform.isIdentity())
                 {
-                    sValue = sValue.copy( nRotateLen+1, nLen-(nRotateLen+2) );
-                    sValue = sValue.trim();
-                    sal_Int32 nVal;
-                    if (::sax::Converter::convertNumber( nVal, sValue ))
+                    const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(aFullTransform);
+
+                    // currently we *only* use rotation, so warn if *any* of the other transform parts is used
+                    SAL_WARN_IF(!basegfx::fTools::equal(1.0, aDecomposedTransform.getScale().getX()), "xmloff.text", "draw:transform uses scaleX" );
+                    SAL_WARN_IF(!basegfx::fTools::equal(1.0, aDecomposedTransform.getScale().getY()), "xmloff.text", "draw:transform uses scaleY" );
+                    SAL_WARN_IF(!basegfx::fTools::equalZero(aDecomposedTransform.getTranslate().getX()), "xmloff.text", "draw:transform uses translateX" );
+                    SAL_WARN_IF(!basegfx::fTools::equalZero(aDecomposedTransform.getTranslate().getY()), "xmloff.text", "draw:transform uses translateY" );
+                    SAL_WARN_IF(!basegfx::fTools::equalZero(aDecomposedTransform.getShearX()), "xmloff.text", "draw:transform uses shearX" );
+
+                    if(!basegfx::fTools::equalZero(aDecomposedTransform.getRotate()))
                     {
-                        // RotGrfFlyFrame: is in 10th degrees
-                        nRotation = (sal_Int16)(nVal % 3600 );
+                        // rotation is used, set it. Convert from deg to 10th degree integer
+                        // CAUTION: due to #i78696# (rotation mirrored using API) the rotate
+                        // value is already mirrored, so do not do it again here (to be in sync
+                        // with XMLTextParagraphExport::_exportTextGraphic normally it would need
+                        // to me mirrored using * -1.0, see converion there)
+                        const double fRotate(aDecomposedTransform.getRotate() * (1800.0/M_PI));
+                        nRotation = static_cast< sal_Int16 >(fRotate) % 3600;
                     }
                 }
             }
