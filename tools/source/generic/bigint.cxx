@@ -27,10 +27,11 @@
 
 #include <string.h>
 
-static const long MY_MAXLONG  = 0x3fffffff;
-static const long MY_MINLONG  = -MY_MAXLONG;
-static const long MY_MAXSHORT = 0x00007fff;
-static const long MY_MINSHORT = -MY_MAXSHORT;
+/**
+ * The range in which we can perform add/sub without fear of overflow
+ */
+static const sal_Int32 MY_MAXLONG  = 0x3fffffff;
+static const sal_Int32 MY_MINLONG  = -MY_MAXLONG;
 
 /*
  * The algorithms for Addition, Subtraction, Multiplication and Division
@@ -50,7 +51,7 @@ void BigInt::MakeBigInt( const BigInt& rVal )
     }
     else
     {
-        long nTmp = rVal.nVal;
+        sal_Int32 nTmp = rVal.nVal;
 
         nVal   = rVal.nVal;
         bIsBig = true;
@@ -85,7 +86,7 @@ void BigInt::Normalize()
             else if ( nNum[1] & 0x8000 )
                 return;
             else
-                nVal = ((long)nNum[1] << 16) + nNum[0];
+                nVal = ((sal_Int32)nNum[1] << 16) + nNum[0];
 
             bIsBig = false;
 
@@ -175,10 +176,10 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
         }
 
         // Add numerals, starting from the back
-        long k;
-        long nZ = 0;
+        sal_Int32 k;
+        sal_Int32 nZ = 0;
         for (i = 0, k = 0; i < len; i++) {
-            nZ = (long)nNum[i] + (long)rB.nNum[i] + k;
+            nZ = (sal_Int32)nNum[i] + (sal_Int32)rB.nNum[i] + k;
             if (nZ & 0xff0000L)
                 k = 1;
             else
@@ -217,7 +218,7 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
     {
         int  i;
         char len;
-        long nZ, k;
+        sal_Int32 nZ, k;
 
         // if length of the two values differ, fill remaining positions
         // of the smaller value with zeros.
@@ -238,7 +239,7 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
         {
             for (i = 0, k = 0; i < len; i++)
             {
-                nZ = (long)nNum[i] - (long)rB.nNum[i] + k;
+                nZ = (sal_Int32)nNum[i] - (sal_Int32)rB.nNum[i] + k;
                 if (nZ < 0)
                     k = -1;
                 else
@@ -251,7 +252,7 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
         {
             for (i = 0, k = 0; i < len; i++)
             {
-                nZ = (long)rB.nNum[i] - (long)nNum[i] + k;
+                nZ = (sal_Int32)rB.nNum[i] - (sal_Int32)nNum[i] + k;
                 if (nZ < 0)
                     k = -1;
                 else
@@ -283,8 +284,8 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
 
 void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
 {
-    int    i, j;
-    sal_uInt32  nZ, k;
+    int        i, j;
+    sal_uInt32 nZ, k;
 
     rErg.bIsNeg = bIsNeg != rB.bIsNeg;
     rErg.bIsBig = true;
@@ -310,11 +311,11 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
 {
     int    i, j;
     sal_uInt16 nK, nQ, nMult;
-    short  nLenB  = rB.nLen;
-    short  nLenB1 = rB.nLen - 1;
+    sal_uInt16  nLenB  = rB.nLen;
+    sal_uInt16  nLenB1 = rB.nLen - 1;
     BigInt aTmpA, aTmpB;
 
-    nMult = (sal_uInt16)(0x10000L / ((long)rB.nNum[nLenB1] + 1));
+    nMult = (sal_uInt16)(0x10000L / ((sal_Int32)rB.nNum[nLenB1] + 1));
 
     aTmpA.Mult( *this, nMult );
     if ( aTmpA.nLen == nLen )
@@ -327,7 +328,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
     { // guess divisor
-        long nTmp = ( (long)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
+        sal_Int32 nTmp = ( (sal_Int32)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
         else
@@ -340,15 +341,15 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
         nK = 0;
         for (i = 0; i < nLenB; i++)
         {
-            nTmp = (long)aTmpA.nNum[j - nLenB + i]
-                   - ((long)aTmpB.nNum[i] * nQ)
+            nTmp = (sal_Int32)aTmpA.nNum[j - nLenB + i]
+                   - ((sal_Int32)aTmpB.nNum[i] * nQ)
                    - nK;
             aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
             nK = (sal_uInt16) (nTmp >> 16);
             if ( nK )
                 nK = (sal_uInt16)(0x10000UL - nK);
         }
-        unsigned short& rNum( aTmpA.nNum[j - nLenB + i] );
+        sal_uInt16& rNum( aTmpA.nNum[j - nLenB + i] );
         rNum -= nK;
         if (aTmpA.nNum[j - nLenB + i] == 0)
             rErg.nNum[j - nLenB] = nQ;
@@ -375,13 +376,13 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
 
 void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
 {
-    short  i, j;
+    sal_uInt16 i, j;
     sal_uInt16 nK, nQ, nMult;
-    short  nLenB  = rB.nLen;
-    short  nLenB1 = rB.nLen - 1;
+    sal_Int16  nLenB  = rB.nLen;
+    sal_Int16  nLenB1 = rB.nLen - 1;
     BigInt aTmpA, aTmpB;
 
-    nMult = (sal_uInt16)(0x10000L / ((long)rB.nNum[nLenB1] + 1));
+    nMult = (sal_uInt16)(0x10000L / ((sal_Int32)rB.nNum[nLenB1] + 1));
 
     aTmpA.Mult( *this, nMult);
     if ( aTmpA.nLen == nLen )
@@ -394,7 +395,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
     { // Guess divisor
-        long nTmp = ( (long)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
+        sal_Int32 nTmp = ( (sal_Int32)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
         else
@@ -407,15 +408,15 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
         nK = 0;
         for (i = 0; i < nLenB; i++)
         {
-            nTmp = (long)aTmpA.nNum[j - nLenB + i]
-                   - ((long)aTmpB.nNum[i] * nQ)
+            nTmp = (sal_Int32)aTmpA.nNum[j - nLenB + i]
+                   - ((sal_Int32)aTmpB.nNum[i] * nQ)
                    - nK;
             aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
             nK = (sal_uInt16) (nTmp >> 16);
             if ( nK )
                 nK = (sal_uInt16)(0x10000UL - nK);
         }
-        unsigned short& rNum( aTmpA.nNum[j - nLenB + i] );
+        sal_uInt16& rNum( aTmpA.nNum[j - nLenB + i] );
         rNum = rNum - nK;
         if (aTmpA.nNum[j - nLenB + i] == 0)
             rErg.nNum[j - nLenB] = nQ;
@@ -574,45 +575,29 @@ BigInt::BigInt( sal_uInt32 nValue )
     }
 }
 
-#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
-BigInt::BigInt( long long nValue )
+BigInt::BigInt( sal_Int64 nValue )
     : nVal(0)
 {
     bIsSet = true;
     bIsNeg = nValue < 0;
     nLen = 0;
 
-    if ((nValue >= std::numeric_limits<long>::min()) && (nValue <= std::numeric_limits<long>::max()))
+    if ((nValue >= SAL_MIN_INT32) && (nValue <= SAL_MAX_INT32))
     {
         bIsBig = false;
-        nVal   = static_cast<long>(nValue);
+        nVal   = static_cast<sal_Int32>(nValue);
     }
     else
     {
         bIsBig  = true;
-        unsigned long long nUValue = static_cast<unsigned long long>(bIsNeg ? -nValue : nValue);
-        for (int i = 0; (i != sizeof(unsigned long long) / 2) && (nUValue != 0); ++i)
+        sal_uInt64 nUValue = static_cast<sal_uInt64>(bIsNeg ? -nValue : nValue);
+        for (int i = 0; (i != sizeof(sal_uInt64) / 2) && (nUValue != 0); ++i)
         {
             nNum[i] = static_cast<sal_uInt16>(nUValue & 0xffffUL);
             nUValue = nUValue >> 16;
             ++nLen;
         }
     }
-}
-#endif
-
-BigInt::operator sal_uIntPtr() const
-{
-    if ( !bIsBig )
-        return (sal_uInt32)nVal;
-    else if ( nLen == 2 )
-    {
-        sal_uInt32 nRet;
-        nRet  = ((sal_uInt32)nNum[1]) << 16;
-        nRet += nNum[0];
-        return nRet;
-    }
-    return 0;
 }
 
 BigInt::operator double() const
@@ -708,6 +693,9 @@ BigInt& BigInt::operator-=( const BigInt& rVal )
 
 BigInt& BigInt::operator*=( const BigInt& rVal )
 {
+    static const sal_Int32 MY_MAXSHORT = 0x00007fff;
+    static const sal_Int32 MY_MINSHORT = -MY_MAXSHORT;
+
     if ( !bIsBig && !rVal.bIsBig
          && nVal <= MY_MAXSHORT && rVal.nVal <= MY_MAXSHORT
          && nVal >= MY_MINSHORT && rVal.nVal >= MY_MINSHORT )
@@ -752,7 +740,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
             return *this;
         }
 
-        if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
+        if ( rVal.nVal <= 0xFFFF && rVal.nVal >= -0xFFFF )
         {
             // Divide BigInt with an sal_uInt16
             sal_uInt16 nTmp;
@@ -772,7 +760,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
 
     if ( ABS_IsLess( rVal ) )
     {
-        *this = BigInt( (long)0 );
+        *this = BigInt( 0 );
         return *this;
     }
 
@@ -802,9 +790,9 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
             return *this;
         }
 
-        if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
+        if ( rVal.nVal <= 0xFFFF && rVal.nVal >= -0xFFFF )
         {
-            // Divide Bigint by short
+            // Divide Bigint by int16
             sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
@@ -815,7 +803,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
                 nTmp = (sal_uInt16) rVal.nVal;
 
             Div( nTmp, nTmp );
-            *this = BigInt( (long)nTmp );
+            *this = BigInt( nTmp );
             return *this;
         }
     }
