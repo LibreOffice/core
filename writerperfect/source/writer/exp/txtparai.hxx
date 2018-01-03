@@ -12,6 +12,8 @@
 
 #include <map>
 
+#include <librevenge/librevenge.h>
+
 #include "xmlictxt.hxx"
 
 namespace writerperfect

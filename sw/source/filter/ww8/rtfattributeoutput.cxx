@@ -83,6 +83,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <o3tl/make_unique.hxx>
 #include <svl/grabbagitem.hxx>
+#include "rtfexport.hxx"
 
 using namespace ::com::sun::star;
 using namespace sw::util;

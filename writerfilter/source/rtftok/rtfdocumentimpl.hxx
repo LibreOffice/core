@@ -10,7 +10,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFDOCUMENTIMPL_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFDOCUMENTIMPL_HXX
 
-#include <stack>
 #include <queue>
 #include <tuple>
 #include <vector>
@@ -20,9 +19,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <oox/helper/graphichelper.hxx>
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <rtftok/RTFDocument.hxx>
 #include "rtfreferencetable.hxx"
@@ -30,6 +29,10 @@
 #include "rtflistener.hxx"
 
 class SvStream;
+namespace oox
+{
+class GraphicHelper;
+}
 
 namespace writerfilter
 {

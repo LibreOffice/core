@@ -10,8 +10,6 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLICTXT_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLICTXT_HXX
 
-#include <librevenge/librevenge.h>
-
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <cppuhelper/implbase.hxx>

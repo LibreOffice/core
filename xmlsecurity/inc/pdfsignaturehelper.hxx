@@ -15,9 +15,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 
 #include <svl/sigstruct.hxx>
 

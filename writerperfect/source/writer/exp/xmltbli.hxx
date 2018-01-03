@@ -10,6 +10,8 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLTBLI_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLTBLI_HXX
 
+#include <librevenge/librevenge.h>
+
 #include "xmlictxt.hxx"
 
 namespace writerperfect

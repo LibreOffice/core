@@ -10,8 +10,6 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTUICOMPONENT_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTUICOMPONENT_HXX
 
-#include <vector>
-
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

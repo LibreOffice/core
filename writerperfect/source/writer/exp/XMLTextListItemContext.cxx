@@ -11,7 +11,6 @@
 
 #include "XMLTextListContext.hxx"
 #include "txtparai.hxx"
-#include "xmlimp.hxx"
 
 using namespace com::sun::star;
 

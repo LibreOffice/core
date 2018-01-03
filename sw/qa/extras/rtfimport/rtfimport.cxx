@@ -42,8 +42,6 @@
 #include <com/sun/star/text/XFormField.hpp>
 
 #include <rtl/ustring.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>

@@ -13,14 +13,21 @@
 #include <stack>
 
 #include <com/sun/star/drawing/XShapes.hpp>
-
-#include <dmapper/GraphicZOrderHelper.hxx>
-#include "rtfdocumentimpl.hxx"
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace writerfilter
 {
+namespace dmapper
+{
+class GraphicZOrderHelper;
+}
 namespace rtftok
 {
+class RTFDocumentImpl;
+class RTFShape;
+
 /// Handles the import of drawings using RTF markup.
 class RTFSdrImport final
 {

@@ -8,6 +8,7 @@
 
 #include "rtfstringbuffer.hxx"
 #include "rtfattributeoutput.hxx"
+#include "rtfexport.hxx"
 
 RtfStringBufferValue::RtfStringBufferValue() = default;
 

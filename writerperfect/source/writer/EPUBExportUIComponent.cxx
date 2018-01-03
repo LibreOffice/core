@@ -11,7 +11,6 @@
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclptr.hxx>

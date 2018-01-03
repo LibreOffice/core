@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "rtfexport.hxx"
+
 #include "rtfexportfilter.hxx"
 #include "rtfsdrexport.hxx"
 #include "rtfattributeoutput.hxx"
@@ -36,7 +38,6 @@
 #include <swmodule.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include "ww8par.hxx"
 #include <comphelper/string.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
@@ -49,6 +50,8 @@
 #include <fmtmeta.hxx>
 #include <o3tl/make_unique.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <fmtfsize.hxx>
+#include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
 

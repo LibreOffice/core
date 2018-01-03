@@ -9,46 +9,17 @@
 
 #include <pdfio/pdfdocument.hxx>
 
-#include <map>
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Sequence.hxx>
-
-#include <comphelper/processfactory.hxx>
-#include <comphelper/scopeguard.hxx>
-#include <comphelper/string.hxx>
-#include <filter/msfilter/mscodec.hxx>
-#include <rtl/character.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <sax/tools/converter.hxx>
-#include <tools/zcodec.hxx>
-#include <unotools/calendarwrapper.hxx>
-#include <unotools/datetime.hxx>
-#include <vcl/pdfwriter.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <svl/sigstruct.hxx>
 #include <svl/cryptosign.hxx>
-
-#ifdef XMLSEC_CRYPTO_NSS
-#include <cert.h>
-#include <cms.h>
-#include <nss.h>
-#include <secerr.h>
-#include <sechash.h>
-#endif
-
-#ifdef XMLSEC_CRYPTO_MSCRYPTO
-#include <prewin.h>
-#include <wincrypt.h>
-#include <postwin.h>
-#include <comphelper/windowserrorstring.hxx>
-#endif
+#include <vcl/filter/pdfdocument.hxx>
 
 using namespace com::sun::star;
 

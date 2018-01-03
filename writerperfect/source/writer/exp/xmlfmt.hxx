@@ -12,9 +12,12 @@
 
 #include <map>
 
-#include <librevenge/librevenge.h>
-
 #include "xmlictxt.hxx"
+
+namespace librevenge
+{
+class RVNGPropertyList;
+}
 
 namespace writerperfect
 {
