@@ -116,27 +116,6 @@ struct FileHandle_Impl
 
     oslFileError syncFile();
 
-    /** Buffer cache / allocator.
-     */
-    class Allocator
-    {
-        rtl_cache_type * m_cache;
-        SIZE_T           m_bufsiz;
-
-        Allocator(Allocator const &) = delete;
-        Allocator & operator= (Allocator const &) = delete;
-
-    public:
-        static Allocator & get();
-
-        void allocate(sal_uInt8 ** ppBuffer, SIZE_T * pnSize);
-        void deallocate(sal_uInt8 * pBuffer);
-
-    protected:
-        Allocator();
-        ~Allocator();
-    };
-
     /** Guard.
      */
     class Guard
@@ -148,44 +127,6 @@ struct FileHandle_Impl
         ~Guard();
     };
 };
-
-FileHandle_Impl::Allocator& FileHandle_Impl::Allocator::get()
-{
-    static Allocator g_aBufferAllocator;
-    return g_aBufferAllocator;
-}
-
-FileHandle_Impl::Allocator::Allocator()
-    : m_cache  (nullptr),
-      m_bufsiz (0)
-{
-    SIZE_T const pagesize = FileHandle_Impl::getpagesize();
-    m_cache = rtl_cache_create(
-        "osl_file_buffer_cache", pagesize, 0, nullptr, nullptr, nullptr,
-        nullptr, nullptr, 0);
-    if (m_cache)
-        m_bufsiz = pagesize;
-}
-
-FileHandle_Impl::Allocator::~Allocator()
-{
-    rtl_cache_destroy(m_cache);
-    m_cache = nullptr;
-}
-
-void FileHandle_Impl::Allocator::allocate (sal_uInt8 **ppBuffer, SIZE_T * pnSize)
-{
-    assert(ppBuffer);
-    assert(pnSize);
-    *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
-    *pnSize = m_bufsiz;
-}
-
-void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
-{
-    if (pBuffer)
-        rtl_cache_free (m_cache, pBuffer);
-}
 
 FileHandle_Impl::Guard::Guard(LPCRITICAL_SECTION pMutex)
     : m_mutex (pMutex)
@@ -207,18 +148,18 @@ FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
       m_filepos (0),
       m_bufptr  (-1),
       m_buflen  (0),
-      m_bufsiz  (0),
+      m_bufsiz  (getpagesize()),
       m_buffer  (nullptr)
 {
     ::InitializeCriticalSection (&m_mutex);
-    Allocator::get().allocate (&m_buffer, &m_bufsiz);
+    m_buffer = static_cast<sal_uInt8 *>(rtl_allocateMemory(m_bufsiz));
     if (m_buffer)
         memset (m_buffer, 0, m_bufsiz);
 }
 
 FileHandle_Impl::~FileHandle_Impl()
 {
-    Allocator::get().deallocate(m_buffer);
+    rtl_freeMemory(m_buffer);
     m_buffer = nullptr;
     ::DeleteCriticalSection (&m_mutex);
 }
