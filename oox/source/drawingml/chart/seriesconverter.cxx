@@ -63,13 +63,30 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-/** nested-up sgn function - employs some gratuity around 0 - values
-   smaller than 0.33 are clamped to 0
+/** Function to get vertical position of label from chart height factor.
+    Value can be negative, prefer top placement.
  */
-int lclSgn( double nVal )
+int lclGetPositionY( double nVal )
 {
-    const int intVal=nVal*3;
-    return intVal == 0 ? 0 : (intVal < 0 ? -1 : 1);
+    if( nVal <= 0.1 )
+        return -1;
+    else if( nVal <= 0.6 )
+        return 0;
+    else
+        return 1;
+}
+
+/** Function to get horizontal position of label from chart width factor.
+    Value can be negative, prefer center placement.
+*/
+int lclGetPositionX( double nVal )
+{
+    if( nVal <= -0.2 )
+        return -1;
+    else if( nVal <= 0.2 )
+        return 0;
+    else
+        return 1;
 }
 
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
@@ -259,11 +276,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     csscd::LEFT,        csscd::CENTER, csscd::RIGHT,
                     csscd::BOTTOM_LEFT, csscd::BOTTOM, csscd::BOTTOM_RIGHT
                 };
-            const double nMax=std::max(
-                fabs(mrModel.mxLayout->mfX),
-                fabs(mrModel.mxLayout->mfY));
-            const int simplifiedX=lclSgn(mrModel.mxLayout->mfX/nMax);
-            const int simplifiedY=lclSgn(mrModel.mxLayout->mfY/nMax);
+            const int simplifiedX = lclGetPositionX(mrModel.mxLayout->mfX);
+            const int simplifiedY = lclGetPositionY(mrModel.mxLayout->mfY);
             aPropSet.setProperty( PROP_LabelPlacement,
                                   aPositionsLookupTable[ simplifiedX+1 + 3*(simplifiedY+1) ] );
         }
