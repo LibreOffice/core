@@ -1926,24 +1926,26 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 uno::Reference< embed::XStorage > xLibraryStor;
                 if( bStorage )
                 {
+#if OSL_DEBUG_LEVEL > 0
                     try
                     {
+#endif
                         xLibraryStor = xTargetLibrariesStor->openStorageElement(
                                                                         rLib.aName,
                                                                         embed::ElementModes::READWRITE );
+#if OSL_DEBUG_LEVEL > 0
                     }
                     catch(const uno::Exception& )
                     {
-                        #if OSL_DEBUG_LEVEL > 0
                         Any aError( ::cppu::getCaughtException() );
                         SAL_WARN(
                             "basic",
                             "couldn't create sub storage for library \""
                                 << rLib.aName << "\". Exception: "
                                 << comphelper::anyToString(aError));
-                        #endif
                         throw;
                     }
+#endif
                 }
 
                 // Maybe lib is not loaded?!
@@ -2319,8 +2321,10 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
         uno::Reference< embed::XStorage > xLibraryStor;
         if( bStorage )
         {
+#if OSL_DEBUG_LEVEL > 0
             try
             {
+#endif
                 xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
                 SAL_WARN_IF(
                     !xLibrariesStor.is(), "basic",
@@ -2340,19 +2344,19 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 {
                     throw uno::RuntimeException("null returned from openStorageElement");
                 }
+#if OSL_DEBUG_LEVEL > 0
             }
             catch(const uno::Exception& )
             {
-            #if OSL_DEBUG_LEVEL > 0
                 Any aError( ::cppu::getCaughtException() );
                 SAL_WARN(
                     "basic",
                     "couldn't open sub storage for library \"" << Name
                         << "\". Exception: "
                         << comphelper::anyToString(aError));
-            #endif
                 throw;
             }
+#endif
         }
 
         Sequence< OUString > aNames = pImplLib->getElementNames();
