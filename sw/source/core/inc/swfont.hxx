@@ -167,7 +167,6 @@ class SW_DLLPUBLIC SwFont
     bool m_bPaintBlank    :1;  // blanks not with DrawRect
     bool m_bFontChg       :1;
     bool m_bOrgChg        :1;  // nOrgHeight/Ascent are invalid
-    bool m_bURL           :1;
     bool m_bGreyWave      :1;  // for the extended TextInput: gray waveline
 
 public:
@@ -255,7 +254,6 @@ public:
     bool IsMeta() const { return (0 != m_nMetaCount); }
     sal_uInt8 &GetInputField() { return m_nInputFieldCount; }
     bool IsInputField() const { return (0 != m_nInputFieldCount); }
-    bool IsURL() const { return m_bURL; }
     inline void SetGreyWave( const bool bNew );
     bool IsGreyWave() const { return m_bGreyWave; }
     bool IsPaintBlank() const { return m_bPaintBlank; }

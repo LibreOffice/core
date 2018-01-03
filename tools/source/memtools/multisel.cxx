@@ -66,7 +66,6 @@ MultiSelection::MultiSelection():
     nCurSubSel(0),
     nCurIndex(0),
     nSelCount(0),
-    bInverseCur(false),
     bCurValid(false)
 {
 }
@@ -88,13 +87,11 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     {
         nCurSubSel = rOrig.nCurSubSel;
         nCurIndex = rOrig.nCurIndex;
-        bInverseCur = rOrig.bInverseCur;
     }
     else
     {
         nCurSubSel = 0;
         nCurIndex = 0;
-        bInverseCur = false;
     }
 
     // copy the sub selections
@@ -107,7 +104,6 @@ MultiSelection::MultiSelection( const Range& rRange ):
     nCurSubSel(0),
     nCurIndex(0),
     nSelCount(0),
-    bInverseCur(false),
     bCurValid(false)
 {
 }
@@ -421,7 +417,6 @@ sal_Int32 MultiSelection::ImplFwdUnselected()
 
 sal_Int32 MultiSelection::FirstSelected()
 {
-    bInverseCur = false;
     nCurSubSel = 0;
 
     bCurValid = !aSels.empty();
@@ -447,24 +442,16 @@ sal_Int32 MultiSelection::NextSelected()
     if ( !bCurValid )
         return SFX_ENDOFSELECTION;
 
-    if ( bInverseCur )
-    {
-        ++nCurIndex;
-        return ImplFwdUnselected();
-    }
-    else
-    {
-        // is the next index in the current sub selection too?
-        if ( nCurIndex < aSels[ nCurSubSel ]->Max() )
-            return ++nCurIndex;
+    // is the next index in the current sub selection too?
+    if ( nCurIndex < aSels[ nCurSubSel ]->Max() )
+        return ++nCurIndex;
 
-        // are there further sub selections?
-        if ( ++nCurSubSel < sal_Int32(aSels.size()) )
-            return nCurIndex = aSels[ nCurSubSel ]->Min();
+    // are there further sub selections?
+    if ( ++nCurSubSel < sal_Int32(aSels.size()) )
+        return nCurIndex = aSels[ nCurSubSel ]->Min();
 
-        // we are at the end!
-        return SFX_ENDOFSELECTION;
-    }
+    // we are at the end!
+    return SFX_ENDOFSELECTION;
 }
 
 void MultiSelection::SetTotalRange( const Range& rTotRange )

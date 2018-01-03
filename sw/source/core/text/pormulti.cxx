@@ -1489,9 +1489,6 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         else
             pPor->Paint( GetInfo() );
 
-        if( GetFnt()->IsURL() && pPor->InTextGrp() )
-            GetInfo().NotifyURL( *pPor );
-
         bFirst &= !pPor->GetLen();
         if( pNext || !pPor->IsMarginPortion() )
             pPor->Move( GetInfo() );

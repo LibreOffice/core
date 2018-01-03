@@ -142,7 +142,7 @@ bool SingleValFields::VisitCXXConstructorDecl( const CXXConstructorDecl* decl )
 
     // doesn't count as a write to fields because it's self->self
     if (decl->isCopyOrMoveConstructor())
-            return true;
+        return true;
 
     for(auto it = decl->init_begin(); it != decl->init_end(); ++it)
     {
@@ -246,9 +246,15 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         return true;
 
     const FunctionDecl* parentFunction = getParentFunctionDecl(memberExpr);
-    const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(parentFunction);
-    if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()))
-       return true;
+    if (parentFunction)
+    {
+        auto methodDecl = dyn_cast<CXXMethodDecl>(parentFunction);
+        if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()))
+           return true;
+        auto cxxConstructorDecl = dyn_cast<CXXConstructorDecl>(parentFunction);
+        if (cxxConstructorDecl && cxxConstructorDecl->isCopyOrMoveConstructor())
+           return true;
+    }
 
     // walk up the tree until we find something interesting
     const Stmt* child = memberExpr;

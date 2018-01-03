@@ -38,7 +38,6 @@ private:
     sal_Int32       nCurSubSel; // index in aSels of current selected index
     sal_Int32       nCurIndex;  // current selected entry
     sal_Int32       nSelCount;  // number of selected indexes
-    bool            bInverseCur;// inverse cursor
     bool            bCurValid;  // are nCurIndex and nCurSubSel valid
 
     TOOLS_DLLPRIVATE void           ImplClear();

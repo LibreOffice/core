@@ -101,13 +101,8 @@ private:
 
     sal_uInt32 m_cWildEscChar;      // wildcard escape character
 
-    bool m_bWordOnly   : 1;        // used by normal search
-    bool m_bSrchInSel  : 1;        // search only in the selection
     bool m_bCaseSense  : 1;
     bool m_bWildMatchSel : 1;       // wildcard pattern must match entire selection
-
-    // asian flags - used for the transliteration
-    TransliterationFlags nTransliterationFlags;
 
 public:
     SearchParam( const OUString &rText,
@@ -125,14 +120,10 @@ public:
     SearchType      GetSrchType() const         { return m_eSrchType; }
 
     bool            IsCaseSensitive() const     { return m_bCaseSense; }
-    bool            IsSrchInSelection() const   { return m_bSrchInSel; }
-    bool            IsSrchWordOnly() const      { return m_bWordOnly; }
     bool            IsWildMatchSel() const      { return m_bWildMatchSel; }
 
     // signed return for API use
     sal_Int32       GetWildEscChar() const      { return static_cast<sal_Int32>(m_cWildEscChar); }
-
-    TransliterationFlags GetTransliterationFlags() const        { return nTransliterationFlags; }
 };
 
 // For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
