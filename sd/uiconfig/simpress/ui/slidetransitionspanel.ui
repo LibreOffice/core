@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.18.3 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -30,7 +31,12 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <child/>
+                <property name="top_padding">6</property>
+                <property name="left_padding">6</property>
+                <property name="right_padding">6</property>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -69,6 +75,8 @@
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes" context="slidetransitionspanel|duration_label">Duration:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">transition_duration:0.00sec</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -83,7 +91,6 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="slidetransitionspanel|transition_duration|tooltip_text">Select the speed of Slide Transition.</property>
                         <property name="hexpand">True</property>
-                        <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -96,6 +103,8 @@
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes" context="slidetransitionspanel|sound_label">Sound:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">sound_list</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -136,7 +145,10 @@
                       <object class="GtkLabel" id="variant_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes" context="slidetransitionspanel|variant_label">Variant:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">variant_list</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
