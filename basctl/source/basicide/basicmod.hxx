@@ -29,8 +29,8 @@ namespace basctl
 class Module : public SfxModule
 {
 public:
-    Module ( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
-        SfxModule( pMgr, {pObjFact} )
+    Module(const OString& rMgrName, SfxObjectFactory *pObjFact) :
+        SfxModule(rMgrName, {pObjFact})
     { }
 };
 

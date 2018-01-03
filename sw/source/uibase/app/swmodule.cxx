@@ -145,7 +145,7 @@ using namespace ::com::sun::star::uno;
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
-    : SfxModule( ResMgr::CreateResMgr( "sw" ), {pWebFact, pFact, pGlobalFact} ),
+    : SfxModule("sw", {pWebFact, pFact, pGlobalFact}),
     m_pModuleConfig(nullptr),
     m_pUsrPref(nullptr),
     m_pWebUsrPref(nullptr),
