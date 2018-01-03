@@ -463,10 +463,6 @@ namespace svxform
         Reference< XPropertySet > xSet( pFormData->GetPropertySet() );
         if ( xSet.is() )
             xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList.get() );
-
-        Reference< XContainer >  xContainer( pFormData->GetContainer() );
-        if (xContainer.is())
-            xContainer->removeContainerListener(m_pPropChangeList.get());
     }
 
 

@@ -74,7 +74,6 @@ public:
     void SetTitle (const OUString& rsTitle);
     const OUString& GetTitle() const;
     const css::uno::Reference<css::drawing::framework::XPaneBorderPainter>& GetPaneBorderPainter() const;
-    const css::awt::Point& GetCalloutAnchor() const;
 
     // XInitialization
 
@@ -113,7 +112,6 @@ protected:
     OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     SharedBitmapDescriptor mpViewBackground;
-    css::awt::Point maCalloutAnchor;
 
     virtual void CreateCanvases (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,

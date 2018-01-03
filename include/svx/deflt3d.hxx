@@ -34,9 +34,6 @@
 class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dDefaultAttributes
 {
 private:
-    // Compound object
-    Color               aDefaultAmbientColor;
-
     // Cube object
     basegfx::B3DPoint   aDefaultCubePos;
     basegfx::B3DVector  aDefaultCubeSize;
@@ -66,10 +63,6 @@ public:
 
     // Reset to defaults
     void Reset();
-
-    // Getter/Setter for default values of all 3D objects
-    // Compound object
-    const Color& GetDefaultAmbientColor() { return aDefaultAmbientColor; }
 
     // Cube object
     const basegfx::B3DPoint& GetDefaultCubePos() { return aDefaultCubePos; }

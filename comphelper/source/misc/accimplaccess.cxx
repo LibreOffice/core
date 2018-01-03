@@ -35,13 +35,7 @@ namespace comphelper
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::accessibility::XAccessible;
 
-    struct OAccImpl_Impl
-    {
-        Reference< XAccessible >    m_xAccParent;
-    };
-
     OAccessibleImplementationAccess::OAccessibleImplementationAccess( )
-        :m_pImpl( new OAccImpl_Impl )
     {
     }
 
@@ -49,13 +43,6 @@ namespace comphelper
     OAccessibleImplementationAccess::~OAccessibleImplementationAccess( )
     {
     }
-
-
-    const Reference< XAccessible >& OAccessibleImplementationAccess::implGetForeignControlledParent( ) const
-    {
-        return m_pImpl->m_xAccParent;
-    }
-
 
     const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {

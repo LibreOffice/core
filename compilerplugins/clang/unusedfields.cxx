@@ -13,6 +13,8 @@
 #include <fstream>
 #include <set>
 #include <algorithm>
+#include <sys/file.h>
+#include <unistd.h>
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
@@ -769,7 +771,7 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
             {
                 if (binaryOp->getLHS() == child)
                     bPotentiallyWrittenTo = true;
-                else if (loplugin::TypeCheck(binaryOp->getLHS()->getType()).LvalueReference().NonConstVolatile())
+                else if (loplugin::TypeCheck(binaryOp->getLHS()->getType()).LvalueReference().NonConst())
                     // if the LHS is a non-const reference, we could write to the field later on
                     bPotentiallyWrittenTo = true;
             }
@@ -777,8 +779,11 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         }
         else if (isa<ReturnStmt>(parent))
         {
-            if (insideFunctionDecl && loplugin::TypeCheck(insideFunctionDecl->getReturnType()).NonConst().LvalueReference()) {
-                bPotentiallyWrittenTo = true;
+            if (insideFunctionDecl)
+            {
+                auto tc = loplugin::TypeCheck(insideFunctionDecl->getReturnType());
+                if (tc.LvalueReference().NonConst())
+                    bPotentiallyWrittenTo = true;
             }
             break;
         }

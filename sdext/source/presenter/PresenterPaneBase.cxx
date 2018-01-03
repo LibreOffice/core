@@ -54,8 +54,7 @@ PresenterPaneBase::PresenterPaneBase (
       mxPresenterHelper(),
       msTitle(),
       mxComponentContext(rxContext),
-      mpViewBackground(),
-      maCalloutAnchor()
+      mpViewBackground()
 {
     if (mpPresenterController.get() != nullptr)
         mxPresenterHelper = mpPresenterController->GetPresenterHelper();
@@ -123,11 +122,6 @@ const Reference<drawing::framework::XPaneBorderPainter>&
     PresenterPaneBase::GetPaneBorderPainter() const
 {
     return mxBorderPainter;
-}
-
-const awt::Point& PresenterPaneBase::GetCalloutAnchor() const
-{
-    return maCalloutAnchor;
 }
 
 //----- XInitialization -------------------------------------------------------

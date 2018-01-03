@@ -205,20 +205,15 @@ sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
                     pClrMapPtr->getColorMap( nToken );
             }
         }
-        oox::drawingml::ClrSchemePtr pClrSchemePtr( mpActualSlidePersist->getClrScheme() );
-        if ( pClrSchemePtr )
-            pClrSchemePtr->getColor( nToken, nColor );
+
+        ::oox::drawingml::ThemePtr pTheme = mpActualSlidePersist->getTheme();
+        if( pTheme )
+        {
+            pTheme->getClrScheme().getColor( nToken, nColor );
+        }
         else
         {
-            ::oox::drawingml::ThemePtr pTheme = mpActualSlidePersist->getTheme();
-            if( pTheme )
-            {
-                pTheme->getClrScheme().getColor( nToken, nColor );
-            }
-            else
-            {
-                SAL_WARN("oox", "OOX: PowerPointImport::mpThemePtr is NULL");
-            }
+            SAL_WARN("oox", "OOX: PowerPointImport::mpThemePtr is NULL");
         }
     }
     return nColor;

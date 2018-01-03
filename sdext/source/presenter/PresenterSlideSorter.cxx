@@ -759,7 +759,7 @@ void PresenterSlideSorter::PlaceCloseButton (
     sal_Int32 nCloseButtonCenter (rCenterBox.Width/2);
     if (rpPane.get() != nullptr && rpPane->mxPane.is())
     {
-        const sal_Int32 nCalloutCenter (rpPane->mxPane->GetCalloutAnchor().X - nLeftBorderWidth);
+        const sal_Int32 nCalloutCenter (-nLeftBorderWidth);
         const sal_Int32 nDistanceFromWindowCenter (abs(nCalloutCenter - rCenterBox.Width/2));
         const sal_Int32 nButtonWidth (mpCloseButton->GetSize().Width);
         const static sal_Int32 nMaxDistanceForCalloutCentering (nButtonWidth * 2);

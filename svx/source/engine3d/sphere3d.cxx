@@ -51,7 +51,7 @@ sdr::properties::BaseProperties* E3dSphereObj::CreateObjectSpecificProperties()
 // Build Sphere from polygon facets in latitude and longitude
 
 E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize)
-:   E3dCompoundObject(rDefault)
+:   E3dCompoundObject()
 {
     // Set defaults
     SetDefaultAttributes(rDefault);

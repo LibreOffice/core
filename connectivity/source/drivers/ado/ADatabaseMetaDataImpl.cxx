@@ -269,10 +269,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32
     return false;
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 column )
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
 {
-    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-        return (*m_mColumnsIter).second.getColumnServiceName();
     return OUString();
 }
 
@@ -283,17 +281,13 @@ OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 co
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 column )
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 {
-    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-        return (*m_mColumnsIter).second.getCatalogName();
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 column )
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
 {
-    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-        return (*m_mColumnsIter).second.getColumnTypeName();
     return OUString();
 }
 
@@ -306,10 +300,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32
 }
 
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 column )
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
 {
-    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-        return (*m_mColumnsIter).second.getSchemaName();
     return OUString();
 }
 

@@ -102,7 +102,6 @@ private:
     sal_Int32 m_nStart;
     sal_Int32 m_nEnd;
     sal_uInt16 m_nWhichAttr;
-    std::vector<sal_uInt16> m_aWhichFormatAttr; // attributes changed inside RES_TXTATR_AUTOFMT
 
 public:
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
@@ -120,11 +119,6 @@ public:
     sal_uInt16 getWhichAttr() const
     {
         return m_nWhichAttr;
-    }
-
-    const std::vector<sal_uInt16>& getFormatAttr() const
-    {
-        return m_aWhichFormatAttr;
     }
 };
 

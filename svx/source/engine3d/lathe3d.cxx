@@ -53,7 +53,7 @@ sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
 // Constructor from 3D polygon, scale is the conversion factor for the coordinates
 
 E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPoly2D)
-:   E3dCompoundObject(rDefault),
+:   E3dCompoundObject(),
     maPolyPoly2D(rPoly2D)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
