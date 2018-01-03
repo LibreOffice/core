@@ -9,15 +9,14 @@
 
 #include "rtftokenizer.hxx"
 #include <tools/stream.hxx>
-#include <unotools/resmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <rtl/strbuf.hxx>
-#include "rtfskipdestination.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <rtl/character.hxx>
+#include "rtfskipdestination.hxx"
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

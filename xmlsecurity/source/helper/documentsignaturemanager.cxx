@@ -42,6 +42,8 @@
 
 #include <xmlsec/xmlsec_init.hxx>
 
+#include <pdfsignaturehelper.hxx>
+
 using namespace css;
 
 DocumentSignatureManager::DocumentSignatureManager(

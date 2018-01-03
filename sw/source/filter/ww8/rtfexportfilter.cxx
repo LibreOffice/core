@@ -22,8 +22,8 @@
 
 #include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <editsh.hxx>
 #include <unotxdoc.hxx>
+#include <viewsh.hxx>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>

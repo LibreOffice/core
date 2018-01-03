@@ -15,7 +15,6 @@
 #include <vector>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 class SvStream;
 

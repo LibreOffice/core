@@ -2013,8 +2013,6 @@ struct RTFMathSymbol
     bool operator<(const RTFMathSymbol& rOther) const;
 };
 
-#define M_TOKEN(token) OOX_TOKEN(officeMath, token)
-
 extern RTFMathSymbol aRTFMathControlWords[];
 extern int nRTFMathControlWords;
 

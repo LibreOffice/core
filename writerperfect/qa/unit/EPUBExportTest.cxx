@@ -18,7 +18,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <unotest/macros_test.hxx>

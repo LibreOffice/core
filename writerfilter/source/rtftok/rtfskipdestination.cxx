@@ -10,6 +10,7 @@
 #include "rtfskipdestination.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include "rtflistener.hxx"
 
 namespace writerfilter
 {

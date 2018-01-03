@@ -10,7 +10,6 @@
 #include "txtstyli.hxx"
 
 #include "xmlfmt.hxx"
-#include "xmlimp.hxx"
 
 using namespace com::sun::star;
 

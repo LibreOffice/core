@@ -23,7 +23,8 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-#include <tools/gen.hxx>
+
+class Size;
 
 namespace writerperfect
 {

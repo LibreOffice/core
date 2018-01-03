@@ -10,11 +10,15 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTDIALOG_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTDIALOG_HXX
 
-#include <comphelper/sequenceashashmap.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
+
+namespace comphelper
+{
+class SequenceAsHashMap;
+}
 
 namespace writerperfect
 {

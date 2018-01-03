@@ -26,7 +26,6 @@
 
 #include <map>
 #include <memory>
-#include <set>
 
 #include "wrtww8.hxx"
 

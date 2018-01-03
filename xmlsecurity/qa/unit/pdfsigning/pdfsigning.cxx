@@ -15,9 +15,11 @@
 #include <tools/datetime.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 
 #include <documentsignaturemanager.hxx>
 #include <pdfio/pdfdocument.hxx>
+#include <pdfsignaturehelper.hxx>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN

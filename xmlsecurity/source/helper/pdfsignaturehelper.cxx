@@ -14,11 +14,10 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
-#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
-#include <comphelper/sequence.hxx>
 #include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 
 #include <pdfio/pdfdocument.hxx>
 

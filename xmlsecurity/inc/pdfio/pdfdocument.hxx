@@ -11,13 +11,17 @@
 #ifndef INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
 #define INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
 
-#include <vcl/filter/pdfdocument.hxx>
-
-#include <tools/stream.hxx>
-
 #include <xmlsecuritydllapi.h>
 
+namespace vcl
+{
+namespace filter
+{
+class PDFObjectElement;
+}
+}
 struct SignatureInformation;
+class SvStream;
 
 namespace xmlsecurity
 {

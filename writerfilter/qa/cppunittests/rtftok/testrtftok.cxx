@@ -13,9 +13,6 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
-#include <osl/file.hxx>
-#include <osl/process.h>
-
 using namespace ::com::sun::star;
 
 /**

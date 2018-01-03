@@ -19,6 +19,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/uri.hxx>
+#include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>

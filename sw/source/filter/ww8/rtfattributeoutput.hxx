@@ -24,17 +24,16 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include "attributeoutputbase.hxx"
-#include "rtfexport.hxx"
 #include "rtfstringbuffer.hxx"
 
 #include <rtl/strbuf.hxx>
-#include <svx/xenum.hxx>
 
 #include <boost/optional.hpp>
 
 class SwGrfNode;
 class SwOLENode;
 class SwFlyFrameFormat;
+class RtfExport;
 
 /// The class that has handlers for various resource types when exporting as RTF
 class RtfAttributeOutput : public AttributeOutputBase
