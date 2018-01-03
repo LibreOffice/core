@@ -1022,11 +1022,11 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
                 /* TODO
                     Creation not supported yet!
                     Wait for new layout manager service because we can't plug it
-                    inside already opened document of this frame ...
+                    inside already opened document of this frame...
                 */
             }
         }
-        // We arent a task => forward request to our parent or ignore it.
+        // We aren't a task => forward request to our parent or ignore it.
         else if (xParent.is())
             xTarget = xParent->findFrame(SPECIALTARGET_BEAMER,0);
     }
