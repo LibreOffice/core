@@ -181,7 +181,6 @@ namespace chelp {
         OUString  m_aEid;
         OUString  m_aDbPar;
 
-        OUString  m_aDefaultLanguage;
         OUString  m_aLanguage;
 
         OUString  m_aPrefix;

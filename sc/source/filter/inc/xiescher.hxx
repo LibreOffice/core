@@ -813,9 +813,6 @@ public:
     /** Returns the graphic imported from the IMGDATA record. */
     const Graphic& GetGraphic() const { return maGraphic; }
 
-    /** Returns the visible area of the imported graphic. */
-    const tools::Rectangle& GetVisArea() const { return maVisArea; }
-
     /** Returns true, if the OLE object will be shown as symbol. */
     bool         IsSymbol() const { return mbSymbol; }
     /** Returns the storage name for the OLE object. */
@@ -852,7 +849,6 @@ private:
 
 private:
     Graphic             maGraphic;      /// Picture or OLE placeholder graphic.
-    tools::Rectangle           maVisArea;      /// Size of graphic.
     OUString            maClassName;    /// Class name of embedded OLE object.
     sal_uInt32          mnStorageId;    /// Identifier of the storage for this object.
     std::size_t         mnCtlsStrmPos;  /// Position in 'Ctls' stream for this control.

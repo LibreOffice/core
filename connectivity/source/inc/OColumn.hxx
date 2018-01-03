@@ -28,13 +28,9 @@ namespace connectivity
 {
     class OOO_DLLPUBLIC_DBTOOLS OColumn
     {
-        OUString m_CatalogName;
-        OUString m_SchemaName;
         OUString m_TableName;
         OUString m_ColumnName;
         OUString m_ColumnLabel;
-        OUString m_ColumnTypeName;
-        OUString m_ColumnServiceName;
 
         sal_Int32       m_Nullable;
         sal_Int32       m_ColumnDisplaySize;
@@ -79,8 +75,6 @@ namespace connectivity
         :   m_TableName(_aTableName),
             m_ColumnName(_aColumnName),
             m_ColumnLabel(),
-            m_ColumnTypeName(),
-            m_ColumnServiceName(),
 
             m_Nullable(_aNullable),
             m_ColumnDisplaySize(_aColumnDisplaySize),
@@ -127,12 +121,7 @@ namespace connectivity
 
         const OUString& getColumnLabel()         const { return m_ColumnLabel; }
         const OUString& getColumnName()          const { return m_ColumnName; }
-        const OUString& getSchemaName()          const { return m_SchemaName; }
         const OUString& getTableName()           const { return m_TableName; }
-        const OUString& getCatalogName()         const { return m_CatalogName; }
-        const OUString& getColumnTypeName()      const { return m_ColumnTypeName; }
-        const OUString& getColumnServiceName()   const { return m_ColumnServiceName; }
-
     };
 }
 

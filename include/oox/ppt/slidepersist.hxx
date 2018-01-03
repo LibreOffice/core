@@ -85,8 +85,6 @@ public:
     void setTheme( const oox::drawingml::ThemePtr& rThemePtr ){ mpThemePtr = rThemePtr; }
     const oox::drawingml::ThemePtr& getTheme() const { return mpThemePtr; }
 
-    const oox::drawingml::ClrSchemePtr& getClrScheme() const { return mpClrSchemePtr; }
-
     void setClrMap( const oox::drawingml::ClrMapPtr pClrMapPtr ){ mpClrMapPtr = pClrMapPtr; }
     const oox::drawingml::ClrMapPtr& getClrMap() const { return mpClrMapPtr; }
 
@@ -131,7 +129,6 @@ private:
     std::shared_ptr< oox::vml::Drawing >                                    mpDrawingPtr;
     css::uno::Reference< css::drawing::XDrawPage >                          mxPage;
     oox::drawingml::ThemePtr                                                mpThemePtr;         // the theme that is used
-    oox::drawingml::ClrSchemePtr                                            mpClrSchemePtr;     // the local color scheme (if any)
     oox::drawingml::ClrMapPtr                                               mpClrMapPtr;        // color mapping (if any)
     SlidePersistPtr                                                         mpMasterPagePtr;
 

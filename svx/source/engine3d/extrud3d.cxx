@@ -56,7 +56,7 @@ sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 // surfaces rectangles from the passed PolyPolygon
 
 E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth)
-:   E3dCompoundObject(rDefault),
+:   E3dCompoundObject(),
     maExtrudePolygon(rPP)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here

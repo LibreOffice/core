@@ -29,13 +29,11 @@ namespace connectivity
         private:
             const char* m_pErrorResourceId;
             sal_Int32       m_nErrorCondition;
-            OUString m_sParameter;
 
         public:
             ErrorDescriptor()
                 :m_pErrorResourceId(nullptr)
                 ,m_nErrorCondition(0)
-                ,m_sParameter()
             {
             }
 
@@ -51,7 +49,6 @@ namespace connectivity
 
             const char* getResId() const                  { return m_pErrorResourceId; }
             sal_Int32  getErrorCondition() const         { return m_nErrorCondition; }
-            const OUString& getParameter() const  { return m_sParameter; }
 
             bool is() const { return ( m_pErrorResourceId != nullptr ) || ( m_nErrorCondition != 0 ); }
         };

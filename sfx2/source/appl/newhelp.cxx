@@ -2897,7 +2897,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
                 OUString sProperty( "IsExecuteHyperlinks" );
                 if ( xInfo->hasPropertyByName( sProperty ) )
                     xViewProps->setPropertyValue( sProperty, makeAny( true ) );
-                xController->restoreViewData(pHelpInterceptor->GetViewData());
+                xController->restoreViewData(Any());
             }
         }
         catch( Exception& )

@@ -60,7 +60,6 @@ SearchParam::SearchParam( const OUString &rText,
 SearchParam::SearchParam( const SearchParam& rParam )
 {
     sSrchStr        = rParam.sSrchStr;
-    sReplaceStr     = rParam.sReplaceStr;
     m_eSrchType     = rParam.m_eSrchType;
 
     m_cWildEscChar  = rParam.m_cWildEscChar;
@@ -203,7 +202,7 @@ void TextSearch::Init( const SearchParam & rParam,
         for (;;) std::abort();
     }
     aSOpt.searchString = rParam.GetSrchStr();
-    aSOpt.replaceString = rParam.GetReplaceStr();
+    aSOpt.replaceString = "";
     aSOpt.Locale = rLocale;
     aSOpt.transliterateFlags = TransliterationFlags::NONE;
     if( !rParam.IsCaseSensitive() )

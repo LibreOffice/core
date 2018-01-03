@@ -527,10 +527,9 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
 {
     OExternalLockGuard aGuard( this );
 
-    uno::Reference< accessibility::XAccessible > xAcc( implGetForeignControlledParent() );
-    if ( !xAcc.is() )
-        // we do _not_ have a foreign-controlled parent -> default to our VCL parent
-        xAcc = getVclParent();
+    uno::Reference< accessibility::XAccessible > xAcc;
+    // we do _not_ have a foreign-controlled parent -> default to our VCL parent
+    xAcc = getVclParent();
 
     return xAcc;
 }
@@ -541,39 +540,30 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  )
 
     sal_Int32 nIndex = -1;
 
-    uno::Reference< accessibility::XAccessible > xAcc( implGetForeignControlledParent() );
-    if ( xAcc.is() )
-    {   // we _do_ have a foreign-controlled parent -> use the base class' implementation,
-        // which goes the UNO way
-        nIndex = OAccessibleExtendedComponentHelper::getAccessibleIndexInParent( );
-    }
-    else
+    if ( GetWindow() )
     {
-        if ( GetWindow() )
+        vcl::Window* pParent = GetWindow()->GetAccessibleParentWindow();
+        if ( pParent )
         {
-            vcl::Window* pParent = GetWindow()->GetAccessibleParentWindow();
-            if ( pParent )
+            //  Iterate over all the parent's children and search for this object.
+            // this should be compatible with the code in SVX
+            uno::Reference< accessibility::XAccessible > xParentAcc( pParent->GetAccessible() );
+            if ( xParentAcc.is() )
             {
-                //  Iterate over all the parent's children and search for this object.
-                // this should be compatible with the code in SVX
-                uno::Reference< accessibility::XAccessible > xParentAcc( pParent->GetAccessible() );
-                if ( xParentAcc.is() )
+                uno::Reference< accessibility::XAccessibleContext > xParentContext ( xParentAcc->getAccessibleContext() );
+                if ( xParentContext.is() )
                 {
-                    uno::Reference< accessibility::XAccessibleContext > xParentContext ( xParentAcc->getAccessibleContext() );
-                    if ( xParentContext.is() )
+                    sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
+                    for ( sal_Int32 i=0; i<nChildCount; i++ )
                     {
-                        sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-                        for ( sal_Int32 i=0; i<nChildCount; i++ )
+                        uno::Reference< accessibility::XAccessible > xChild( xParentContext->getAccessibleChild(i) );
+                        if ( xChild.is() )
                         {
-                            uno::Reference< accessibility::XAccessible > xChild( xParentContext->getAccessibleChild(i) );
-                            if ( xChild.is() )
+                            uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
+                            if ( xChildContext == static_cast<accessibility::XAccessibleContext*>(this) )
                             {
-                                uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                                if ( xChildContext == static_cast<accessibility::XAccessibleContext*>(this) )
-                                {
-                                    nIndex = i;
-                                    break;
-                                }
+                                nIndex = i;
+                                break;
                             }
                         }
                     }
@@ -697,36 +687,6 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds()
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
         }
-    }
-
-    uno::Reference< accessibility::XAccessible > xParent( implGetForeignControlledParent() );
-    if ( xParent.is() )
-    {   // hmm, we can't rely on our VCL coordinates, as in the Accessibility Hierarchy, somebody gave
-        // us a parent which is different from our VCL parent
-        // (actually, we did not check if it's really different ...)
-
-        // the screen location of the foreign parent
-        uno::Reference< accessibility::XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), uno::UNO_QUERY );
-        DBG_ASSERT( xParentComponent.is(), "VCLXAccessibleComponent::implGetBounds: invalid (foreign) parent component!" );
-
-        awt::Point aScreenLocForeign( 0, 0 );
-        if ( xParentComponent.is() )
-            aScreenLocForeign = xParentComponent->getLocationOnScreen();
-
-        // the screen location of the VCL parent
-        xParent = getVclParent();
-        if ( xParent.is() )
-            xParentComponent.set(xParent->getAccessibleContext(), css::uno::UNO_QUERY);
-
-        awt::Point aScreenLocVCL( 0, 0 );
-        if ( xParentComponent.is() )
-            aScreenLocVCL = xParentComponent->getLocationOnScreen();
-
-        // the difference between them
-        awt::Size aOffset( aScreenLocVCL.X - aScreenLocForeign.X, aScreenLocVCL.Y - aScreenLocForeign.Y );
-        // move the bounds
-        aBounds.X += aOffset.Width;
-        aBounds.Y += aOffset.Height;
     }
 
     return aBounds;

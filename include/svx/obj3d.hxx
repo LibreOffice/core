@@ -227,7 +227,7 @@ protected:
     Color                   aMaterialAmbientColor;
 
 protected:
-    void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
+    void SetDefaultAttributes();
 
     // convert given basegfx::B3DPolyPolygon to screen coor
     basegfx::B2DPolyPolygon TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate);
@@ -235,7 +235,6 @@ protected:
 public:
 
     E3dCompoundObject();
-    E3dCompoundObject(E3dDefaultAttributes& rDefault);
     virtual ~E3dCompoundObject() override;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;

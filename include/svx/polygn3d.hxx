@@ -44,9 +44,7 @@ public:
     void SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyPoly2D);
 
 
-    E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
-        const basegfx::B3DPolyPolygon& rPolyPoly3D);
+    E3dPolygonObj(const basegfx::B3DPolyPolygon& rPolyPoly3D);
 
     E3dPolygonObj();
     virtual ~E3dPolygonObj() override;

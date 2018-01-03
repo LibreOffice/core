@@ -63,7 +63,6 @@ class IconChoicePage : public TabPage
 {
 private:
     const SfxItemSet*   pSet;
-    OUString            aUserString;
     bool                bHasExchangeSupport;
 
     void                ImplInitSettings();
@@ -87,7 +86,6 @@ public:
 
     virtual void        ActivatePage( const SfxItemSet& );
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet );
-    const OUString&     GetUserData() { return aUserString; }
     virtual bool        QueryClose();
 
     void                StateChanged( StateChangedType nType ) override;

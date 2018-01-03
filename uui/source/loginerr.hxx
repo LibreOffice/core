@@ -40,7 +40,6 @@ private:
     OUString m_aUserName;
     OUString m_aPassword;
     OUString m_aPasswordToModify;
-    OUString m_aPath;
     OUString m_aErrorText;
     sal_uInt8   m_nFlags;
     DialogMask m_nRet;
@@ -60,7 +59,6 @@ public:
     const OUString&   GetPassword() const                 { return m_aPassword; }
     const OUString&   GetPasswordToModify() const         { return m_aPasswordToModify; }
     bool              IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
-    const OUString&   GetPath() const                     { return m_aPath; }
     const OUString&   GetErrorText() const                { return m_aErrorText; }
     bool            GetCanRememberPassword() const      { return ( m_nFlags & LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD ); }
     bool            GetIsRememberPersistent() const     { return ( m_nFlags & LOGINERROR_FLAG_REMEMBER_PERSISTENT ); }

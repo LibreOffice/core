@@ -233,7 +233,6 @@ public:
 class FmFormData : public FmEntryData
 {
     css::uno::Reference< css::form::XForm >           m_xForm;
-    css::uno::Reference< css::container::XContainer > m_xContainer;
 
 public:
     FmFormData(const css::uno::Reference< css::form::XForm >& _rxForm, FmFormData* _pParent);
@@ -241,7 +240,6 @@ public:
     virtual ~FmFormData() override;
 
     const css::uno::Reference< css::form::XForm >& GetFormIface() const { return m_xForm; }
-    const css::uno::Reference< css::container::XContainer >& GetContainer() const { return m_xContainer; }
 
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
     virtual FmEntryData* Clone() override;

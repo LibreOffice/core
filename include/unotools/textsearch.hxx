@@ -95,7 +95,6 @@ public:
 
 private:
     OUString sSrchStr;            // the search string
-    OUString sReplaceStr;         // the replace string
 
     SearchType m_eSrchType;       // search normal/regular/LevDist
 
@@ -116,7 +115,6 @@ public:
     ~SearchParam();
 
     const OUString& GetSrchStr() const          { return sSrchStr; }
-    const OUString& GetReplaceStr() const       { return sReplaceStr; }
     SearchType      GetSrchType() const         { return m_eSrchType; }
 
     bool            IsCaseSensitive() const     { return m_bCaseSense; }

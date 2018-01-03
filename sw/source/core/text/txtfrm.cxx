@@ -926,16 +926,6 @@ static bool isA11yRelevantAttribute(sal_uInt16 nWhich)
     return nWhich != RES_CHRATR_RSID;
 }
 
-static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& nWhich )
-{
-    for( std::vector<sal_uInt16>::const_iterator nItr = nWhich.begin();
-            nItr < nWhich.end(); ++nItr )
-        if ( isA11yRelevantAttribute( *nItr ) )
-            return true;
-
-    return false;
-}
-
 void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -1054,16 +1044,6 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 {
                     lcl_SetWrong( *this, nPos, nPos + nLen, false );
                     lcl_SetScriptInval( *this, nPos );
-                }
-            }
-
-            if( isA11yRelevantAttribute( static_cast<const SwUpdateAttr*>(pNew)->getWhichAttr() ) &&
-                    hasA11yRelevantAttribute( static_cast<const SwUpdateAttr*>(pNew)->getFormatAttr() ) )
-            {
-                SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
-                if ( pViewSh  )
-                {
-                    pViewSh->InvalidateAccessibleParaAttrs( *this );
                 }
             }
         }
