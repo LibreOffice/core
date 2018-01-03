@@ -224,7 +224,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc, &rSeriesPropSet );
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
-        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie )
+        bool bIsBar = rTypeInfo.meTypeCategory == TYPECATEGORY_BAR;
+        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie && !bIsBar )
         {
             // bnc#694340 - nasty hack - chart2 cannot individually
             // place data labels, let's try to find a useful
