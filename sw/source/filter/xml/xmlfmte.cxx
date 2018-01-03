@@ -71,8 +71,8 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
     // Only adopt parent name, if it's not the default
     OSL_ENSURE( !pParent || pParent->IsDefault(), "unexpected parent" );
 
-    OSL_ENSURE( USHRT_MAX == rFormat.GetPoolFormatId(), "pool ids arent'supported" );
-    OSL_ENSURE( USHRT_MAX == rFormat.GetPoolHelpId(), "help ids arent'supported" );
+    OSL_ENSURE( USHRT_MAX == rFormat.GetPoolFormatId(), "pool ids aren't supported" );
+    OSL_ENSURE( USHRT_MAX == rFormat.GetPoolHelpId(), "help ids aren't supported" );
     OSL_ENSURE( USHRT_MAX == rFormat.GetPoolHelpId() ||
             UCHAR_MAX == rFormat.GetPoolHlpFileId(), "help file ids aren't supported" );
 #endif
