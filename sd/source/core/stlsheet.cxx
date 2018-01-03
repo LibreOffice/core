@@ -1045,11 +1045,11 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
         {
             const SdStyleSheet* pStyleSheet = GetPseudoStyleSheet();
             if (pStyleSheet != nullptr)
-                aDisplayName = pStyleSheet->GetDisplayName();
+                aDisplayName = pStyleSheet->GetName();
         }
 
         if (aDisplayName.isEmpty())
-            aDisplayName = GetDisplayName();
+            aDisplayName = GetName();
 
         aAny <<= aDisplayName;
     }

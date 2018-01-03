@@ -36,7 +36,6 @@ namespace comphelper
 
     typedef ::cppu::ImplHelper1 <   css::lang::XUnoTunnel
                                 >   OAccImpl_Base;
-    struct OAccImpl_Impl;
 
     /** This is a helper class which allows accessing several aspects of the implementation
         of an AccessibleContext.
@@ -62,14 +61,6 @@ namespace comphelper
     */
     class COMPHELPER_DLLPUBLIC OAccessibleImplementationAccess : public OAccImpl_Base
     {
-    private:
-        std::unique_ptr<OAccImpl_Impl>  m_pImpl;
-
-    protected:
-        /// retrieves the parent previously set via <method>setAccessibleParent</method>
-        const css::uno::Reference< css::accessibility::XAccessible >&
-                implGetForeignControlledParent( ) const;
-
     protected:
         OAccessibleImplementationAccess( );
         virtual ~OAccessibleImplementationAccess( );

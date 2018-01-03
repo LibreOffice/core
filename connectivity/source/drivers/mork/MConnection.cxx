@@ -373,17 +373,6 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
         OSL_ENSURE( ( _rError.getErrorCondition() == 0 ),
             "OConnection::throwSQLException: unsupported error code combination!" );
 
-        const OUString& sParameter( _rError.getParameter() );
-        if ( !sParameter.isEmpty() )
-        {
-            const OUString sError( getResources().getResourceStringWithSubstitution(
-                _rError.getResId(),
-                "$1$", sParameter
-             ) );
-            ::dbtools::throwGenericSQLException( sError, _rxContext );
-            OSL_FAIL( "OConnection::throwSQLException: unreachable (1)!" );
-        }
-
         throwGenericSQLException( _rError.getResId(), _rxContext );
         OSL_FAIL( "OConnection::throwSQLException: unreachable (2)!" );
     }
@@ -391,11 +380,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
     if ( _rError.getErrorCondition() != 0 )
     {
         SQLError aErrorHelper;
-        const OUString& sParameter( _rError.getParameter() );
-        if ( !sParameter.isEmpty() )
-            aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
-        else
-            aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);
+        aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);
         OSL_FAIL( "OConnection::throwSQLException: unreachable (3)!" );
     }
 

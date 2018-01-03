@@ -65,7 +65,6 @@ friend class SfxHelpWindow_Impl;
     VclPtr<SfxHelpWindow_Impl>  m_pWindow;
     sal_uIntPtr                 m_nCurPos;
     OUString                    m_aCurrentURL;
-    css::uno::Any               m_aViewData;
 
     void                        addURL( const OUString& rURL );
 
@@ -75,9 +74,6 @@ public:
 
     void                    setInterception( const css::uno::Reference< css::frame::XFrame >& xFrame );
     const OUString&         GetCurrentURL() const { return m_aCurrentURL; }
-
-
-    const css::uno::Any&     GetViewData()const {return m_aViewData;}
 
     bool                HasHistoryPred() const;     // is there a predecessor for the current in the history
     bool                HasHistorySucc() const;     // is there a successor for the current in the history

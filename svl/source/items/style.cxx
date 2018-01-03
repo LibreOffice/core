@@ -190,18 +190,6 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
     return true;
 }
 
-OUString const & SfxStyleSheetBase::GetDisplayName() const
-{
-    if( maDisplayName.isEmpty() )
-    {
-        return aName;
-    }
-    else
-    {
-        return maDisplayName;
-    }
-}
-
 // Change Parent
 const OUString& SfxStyleSheetBase::GetParent() const
 {

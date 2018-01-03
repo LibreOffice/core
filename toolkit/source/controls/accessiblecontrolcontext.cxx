@@ -133,11 +133,7 @@ namespace toolkit
 
     Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleParent(  )
     {
-        OContextEntryGuard aGuard( this );
-        OSL_ENSURE( implGetForeignControlledParent().is(), "OAccessibleControlContext::getAccessibleParent: somebody forgot to set a parent!" );
-            // this parent of us is foreign controlled - somebody has to set it using the OAccessibleImplementationAccess
-            // class, before integrating our instance into an AccessibleDocumentModel
-        return implGetForeignControlledParent();
+        return Reference< XAccessible >();
     }
 
 
@@ -275,21 +271,12 @@ namespace toolkit
             if ( pVCLParent )
                 aVCLParentScreenPos = pVCLParent->GetPosPixel();
 
-            // the screen position of the "accessible parent" of the control
-            Reference< XAccessible > xParentAcc( implGetForeignControlledParent() );
-            Reference< XAccessibleComponent > xParentAccComponent;
-            if ( xParentAcc.is() )
-                xParentAccComponent.set(xParentAcc->getAccessibleContext(), css::uno::UNO_QUERY);
-            awt::Point aAccParentScreenPos( 0, 0 );
-            if ( xParentAccComponent.is() )
-                aAccParentScreenPos = xParentAccComponent->getLocationOnScreen();
-
             // now the size of the control
             aBounds = xWindow->getPosSize();
 
             // correct the pos
-            aBounds.X = aWindowRelativePos.X() + aVCLParentScreenPos.X() - aAccParentScreenPos.X;
-            aBounds.Y = aWindowRelativePos.Y() + aVCLParentScreenPos.Y() - aAccParentScreenPos.Y;
+            aBounds.X = aWindowRelativePos.X() + aVCLParentScreenPos.X();
+            aBounds.Y = aWindowRelativePos.Y() + aVCLParentScreenPos.Y();
         }
 
         return aBounds;

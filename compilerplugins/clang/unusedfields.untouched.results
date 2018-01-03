@@ -1,33 +1,15 @@
-avmedia/source/vlc/vlcmanager.hxx:47
-    avmedia::vlc::Manager mxMgr css::uno::Reference<css::lang::XMultiServiceFactory>
-avmedia/source/vlc/wrapper/Types.hxx:36
-    libvlc_event_t p_obj void *
-avmedia/source/vlc/wrapper/Types.hxx:41
-    libvlc_event_t::(anonymous union)::(anonymous) dummy1 const char *
-avmedia/source/vlc/wrapper/Types.hxx:42
-    libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
-avmedia/source/vlc/wrapper/Types.hxx:43
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo3/avmedia/source/vlc/wrapper/Types.hxx:40:7)
-avmedia/source/vlc/wrapper/Types.hxx:44
-    libvlc_event_t u union (anonymous union at /home/noel/libo3/avmedia/source/vlc/wrapper/Types.hxx:38:5)
-avmedia/source/vlc/wrapper/Types.hxx:50
-    libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 basic/qa/cppunit/basictest.hxx:27
     MacroSnippet maDll class BasicDLL
 basic/source/runtime/dllmgr.hxx:48
     SbiDllMgr impl_ std::unique_ptr<Impl>
-canvas/source/opengl/ogl_canvasbitmap.hxx:71
-    oglcanvas::CanvasBitmap mbHasAlpha _Bool
 canvas/source/vcl/canvasbitmap.hxx:117
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 chart2/source/controller/inc/RangeSelectionListener.hxx:62
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-chart2/source/model/inc/BaseCoordinateSystem.hxx:118
-    chart::BaseCoordinateSystem m_xContext css::uno::Reference<css::uno::XComponentContext>
 chart2/source/view/inc/GL3DRenderer.hxx:54
     chart::opengl3D::MaterialParameters pad float
 chart2/source/view/inc/GL3DRenderer.hxx:55
@@ -156,12 +138,14 @@ sc/inc/interpretercontext.hxx:23
     ScInterpreterContext mrDoc const class ScDocument &
 sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
-sc/source/core/data/document.cxx:1269
+sc/source/core/data/document.cxx:1260
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1270
+sc/source/core/data/document.cxx:1261
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
-sc/source/core/data/formulacell.cxx:1741
+sc/source/core/data/formulacell.cxx:1742
     (anonymous namespace)::StackCleaner pInt std::unique_ptr<ScInterpreter>
+sc/source/filter/inc/orcusinterface.hxx:557
+    ScOrcusFactory maRefResolver class ScOrcusRefResolver
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
 sc/source/ui/inc/docsh.hxx:439
@@ -203,11 +187,13 @@ svl/source/crypto/cryptosign.cxx:281
 svl/source/crypto/cryptosign.cxx:282
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
     HTML_OptionEntry::(anonymous) pUToken const class rtl::OUString *
+svx/source/dialog/crashreportui.cxx:42
+    (anonymous namespace)::CrashReportUI mxContext css::uno::Reference<css::uno::XComponentContext>
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:90
@@ -234,6 +220,8 @@ vcl/inc/unx/cpdmgr.hxx:62
     psp::CPDPrinterOption num_supported_values int
 vcl/inc/unx/cpdmgr.hxx:63
     psp::CPDPrinterOption supported_values std::vector<OUString>
+vcl/qt5/Qt5Object.hxx:34
+    Qt5Object m_aSystemData struct SystemEnvData
 vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:35

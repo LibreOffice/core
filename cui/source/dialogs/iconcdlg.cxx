@@ -209,17 +209,7 @@ void IconChoiceDialog::dispose()
     for (IconChoicePageData* pData : maPageList)
     {
         if ( pData->pPage )
-        {
-            OUString aPageData(pData->pPage->GetUserData());
-            if ( !aPageData.isEmpty() )
-            {
-                //SvtViewOptions aTabPageOpt( EViewType::TabPage, OUString::number(pData->nId) );
-
-                //SetViewOptUserItem( aTabPageOpt, aPageData );
-            }
-
             pData->pPage.disposeAndClear();
-        }
         delete pData;
     }
     maPageList.clear();

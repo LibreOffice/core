@@ -154,9 +154,9 @@ cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:81
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
-cui/source/inc/cuihyperdlg.hxx:56
+cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
-cui/source/inc/cuihyperdlg.hxx:76
+cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:290
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
@@ -332,7 +332,7 @@ sc/inc/pivot.hxx:77
     ScDPLabelData mbIsValue _Bool
 sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
-sc/source/core/data/column4.cxx:1290
+sc/source/core/data/column4.cxx:1293
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
 sc/source/filter/excel/xltoolbar.hxx:23
     TBCCmd cmdID sal_uInt16
@@ -366,9 +366,9 @@ sc/source/filter/inc/exp_op.hxx:52
     ExportBiff5 pExcRoot struct RootData *
 sc/source/filter/inc/imp_op.hxx:88
     ImportExcel::LastFormula mpCell class ScFormulaCell *
-sc/source/filter/inc/orcusinterface.hxx:353
+sc/source/filter/inc/orcusinterface.hxx:387
     ScOrcusStyles::xf mnStyleXf size_t
-sc/source/filter/inc/orcusinterface.hxx:371
+sc/source/filter/inc/orcusinterface.hxx:405
     ScOrcusStyles::cell_style mnBuiltInId size_t
 sc/source/filter/inc/root.hxx:95
     LOTUS_ROOT eActType enum Lotus123Typ
@@ -392,7 +392,7 @@ sc/source/ui/inc/filtdlg.hxx:198
     ScSpecialFilterDlg pOptionsMgr class ScFilterOptionsMgr *
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
-sc/source/ui/inc/tabvwsh.hxx:136
+sc/source/ui/inc/tabvwsh.hxx:129
     ScTabViewShell pPivotSource class ScArea *
 sd/source/filter/eppt/eppt.hxx:176
     PPTWriter mnTxId sal_uInt32
@@ -495,7 +495,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo3/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -546,10 +546,14 @@ vcl/inc/salwtype.hxx:242
     SalInputContext mpFont class FontSelectPattern *
 vcl/inc/salwtype.hxx:250
     SalSwipeEvent mnVelocityY double
-vcl/inc/sft.hxx:486
+vcl/inc/sft.hxx:485
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/opengl/salbmp.cxx:426
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
+vcl/qt5/Qt5Graphics.hxx:50
+    Qt5Graphics m_pFontCollection class PhysicalFontCollection *
+vcl/qt5/Qt5Graphics.hxx:53
+    Qt5Graphics m_aTextColor SalColor
 vcl/source/filter/graphicfilter.cxx:1010
     ImpFilterLibCache mpLast struct ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:56

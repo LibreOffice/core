@@ -3432,7 +3432,6 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicOb
                 {
                     // if not found, use graphic from object (imported from IMGDATA record)
                     aGraphic = rPicObj.GetGraphic();
-                    aVisArea = rPicObj.GetVisArea();
                 }
                 if( aGraphic.GetType() != GraphicType::NONE )
                 {

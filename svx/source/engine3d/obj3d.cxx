@@ -749,22 +749,13 @@ E3dCompoundObject::E3dCompoundObject()
     aMaterialAmbientColor()
 {
     // Set defaults
-    E3dDefaultAttributes aDefault;
-    SetDefaultAttributes(aDefault);
+    SetDefaultAttributes();
 }
 
-E3dCompoundObject::E3dCompoundObject(E3dDefaultAttributes& rDefault)
-:   E3dObject(),
-    aMaterialAmbientColor()
+void E3dCompoundObject::SetDefaultAttributes()
 {
     // Set defaults
-    SetDefaultAttributes(rDefault);
-}
-
-void E3dCompoundObject::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
-{
-    // Set defaults
-    aMaterialAmbientColor = rDefault.GetDefaultAmbientColor();
+    aMaterialAmbientColor = COL_BLACK;
 }
 
 E3dCompoundObject::~E3dCompoundObject ()

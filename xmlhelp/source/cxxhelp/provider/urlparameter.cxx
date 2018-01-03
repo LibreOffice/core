@@ -154,9 +154,6 @@ OUString URLParameter::get_title()
 
 OUString const & URLParameter::get_language()
 {
-    if( m_aLanguage.isEmpty() )
-        return m_aDefaultLanguage;
-
     return m_aLanguage;
 }
 

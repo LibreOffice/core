@@ -102,7 +102,6 @@ protected:
     SfxStyleFamily          nFamily;
 
     OUString                aName, aParent, aFollow;
-    OUString                maDisplayName;
     OUString                aHelpFile;      // name of the help file
     SfxItemSet*             pSet;           // ItemSet
     sal_uInt16              nMask;          // Flags
@@ -129,10 +128,6 @@ public:
     // defer that indexing, then you must call the Reindex manually on the
     // SfxStyleSheetBasePool parent.
     virtual bool SetName(const OUString& rNewName, bool bReindexNow = true);
-
-    /** returns the display name of this style, it is used at the user interface.
-        If the display name is empty, this method returns the internal name. */
-    OUString const & GetDisplayName() const;
 
     virtual const OUString& GetParent() const;
     virtual bool SetParent( const OUString& );
