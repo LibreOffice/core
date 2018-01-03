@@ -905,7 +905,7 @@ static bool lcl_SaveDoc(
             pDstMed->GetItemSet()->Put( SfxStringItem(SID_FILE_FILTEROPTIONS,
                                         *pStoreToFilterOptions));
         if( pSaveToFilterData->getLength() )
-            pDstMed->GetItemSet()->Put( SfxUsrAnyItem(SID_FILTER_DATA,
+            pDstMed->GetItemSet()->Put( SfxUnoAnyItem(SID_FILTER_DATA,
                                         uno::makeAny(*pSaveToFilterData)));
     }
 

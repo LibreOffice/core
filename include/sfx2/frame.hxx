@@ -193,12 +193,12 @@ public:
     SfxFrame*               GetFrame() const { return wFrame; }
 };
 
-class SFX2_DLLPUBLIC SfxUsrAnyItem : public SfxPoolItem
+class SFX2_DLLPUBLIC SfxUnoAnyItem : public SfxPoolItem
 {
     css::uno::Any  aValue;
 public:
                                 static SfxPoolItem* CreateDefault();
-                                SfxUsrAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
+                                SfxUnoAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
     const css::uno::Any&        GetValue() const
                                 { return aValue; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
@@ -224,8 +224,6 @@ public:
     virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
-
-typedef SfxUsrAnyItem SfxUnoAnyItem;
 
 #endif
 

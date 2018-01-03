@@ -2649,14 +2649,14 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
         }
         else if( nWh )
         {
-            std::unique_ptr<SfxUsrAnyItem> pConnectionItem;
-            std::unique_ptr<SfxUsrAnyItem> pCursorItem;
-            std::unique_ptr<SfxUsrAnyItem> pColumnItem;
-            std::unique_ptr<SfxUsrAnyItem> pSourceItem;
-            std::unique_ptr<SfxUsrAnyItem> pCommandItem;
-            std::unique_ptr<SfxUsrAnyItem> pCommandTypeItem;
-            std::unique_ptr<SfxUsrAnyItem> pColumnNameItem;
-            std::unique_ptr<SfxUsrAnyItem> pSelectionItem;
+            std::unique_ptr<SfxUnoAnyItem> pConnectionItem;
+            std::unique_ptr<SfxUnoAnyItem> pCursorItem;
+            std::unique_ptr<SfxUnoAnyItem> pColumnItem;
+            std::unique_ptr<SfxUnoAnyItem> pSourceItem;
+            std::unique_ptr<SfxUnoAnyItem> pCommandItem;
+            std::unique_ptr<SfxUnoAnyItem> pCommandTypeItem;
+            std::unique_ptr<SfxUnoAnyItem> pColumnNameItem;
+            std::unique_ptr<SfxUnoAnyItem> pSelectionItem;
 
             bool bDataAvailable = true;
             ODataAccessDescriptor aDesc;
@@ -2669,14 +2669,14 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
 
             if ( bDataAvailable )
             {
-                pConnectionItem.reset(new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aDesc[DataAccessDescriptorProperty::Connection]));
-                pColumnItem.reset(new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aDesc[DataAccessDescriptorProperty::ColumnObject]));
-                pSourceItem.reset(new SfxUsrAnyItem(FN_DB_DATA_SOURCE_ANY, makeAny(aDesc.getDataSource())));
-                pCommandItem.reset(new SfxUsrAnyItem(FN_DB_DATA_COMMAND_ANY, aDesc[DataAccessDescriptorProperty::Command]));
-                pCommandTypeItem.reset(new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aDesc[DataAccessDescriptorProperty::CommandType]));
-                pColumnNameItem.reset(new SfxUsrAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aDesc[DataAccessDescriptorProperty::ColumnName]));
-                pSelectionItem.reset(new SfxUsrAnyItem(FN_DB_DATA_SELECTION_ANY, aDesc[DataAccessDescriptorProperty::Selection]));
-                pCursorItem.reset(new SfxUsrAnyItem(FN_DB_DATA_CURSOR_ANY, aDesc[DataAccessDescriptorProperty::Cursor]));
+                pConnectionItem.reset(new SfxUnoAnyItem(FN_DB_CONNECTION_ANY, aDesc[DataAccessDescriptorProperty::Connection]));
+                pColumnItem.reset(new SfxUnoAnyItem(FN_DB_COLUMN_ANY, aDesc[DataAccessDescriptorProperty::ColumnObject]));
+                pSourceItem.reset(new SfxUnoAnyItem(FN_DB_DATA_SOURCE_ANY, makeAny(aDesc.getDataSource())));
+                pCommandItem.reset(new SfxUnoAnyItem(FN_DB_DATA_COMMAND_ANY, aDesc[DataAccessDescriptorProperty::Command]));
+                pCommandTypeItem.reset(new SfxUnoAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aDesc[DataAccessDescriptorProperty::CommandType]));
+                pColumnNameItem.reset(new SfxUnoAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aDesc[DataAccessDescriptorProperty::ColumnName]));
+                pSelectionItem.reset(new SfxUnoAnyItem(FN_DB_DATA_SELECTION_ANY, aDesc[DataAccessDescriptorProperty::Selection]));
+                pCursorItem.reset(new SfxUnoAnyItem(FN_DB_DATA_CURSOR_ANY, aDesc[DataAccessDescriptorProperty::Cursor]));
             }
 
             SwView& rView = rSh.GetView();
