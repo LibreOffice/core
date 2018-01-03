@@ -618,7 +618,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton, void )
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, aArgs );
         SfxGetpApp()->ExecuteSlot( aRequest );
 
-        SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
+        SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
         SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
         OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
@@ -1340,7 +1340,7 @@ void LibPage::DeleteCurrent()
     if ( QueryDelLib( aLibName, bIsLibraryLink, this ) )
     {
         // inform BasicIDE
-        SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
+        SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->ExecuteList(SID_BASICIDE_LIBREMOVED,

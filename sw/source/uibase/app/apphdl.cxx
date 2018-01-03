@@ -261,7 +261,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
         {
             //mailmerge has been called from the database beamer
             uno::Sequence< beans::PropertyValue> aDBValues;
-            if (static_cast<const SfxUsrAnyItem*>(pItem)->GetValue() >>= aDBValues)
+            if (static_cast<const SfxUnoAnyItem*>(pItem)->GetValue() >>= aDBValues)
             {
                 SwDBData aDBData;
                 svx::ODataAccessDescriptor aDescriptor(aDBValues);

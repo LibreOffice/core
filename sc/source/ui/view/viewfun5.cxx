@@ -383,7 +383,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             uno::Any aDescAny;
             uno::Sequence<beans::PropertyValue> aProperties = aDesc.createPropertyValueSequence();
             aDescAny <<= aProperties;
-            SfxUsrAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
+            SfxUnoAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
 
             ScDocShell* pDocSh = GetViewData().GetDocShell();
             SCTAB nTab = GetViewData().GetTabNo();
@@ -540,7 +540,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             pInsDoc->ResetClip( pDoc, nSrcTab );
 
             SfxMedium aMed;
-            aMed.GetItemSet()->Put( SfxUsrAnyItem( SID_INPUTSTREAM, uno::makeAny( xStm ) ) );
+            aMed.GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, uno::makeAny( xStm ) ) );
             ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, pInsDoc, EIF_AUTO );
             if ( eErr == ERRCODE_NONE )
             {

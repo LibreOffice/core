@@ -1400,9 +1400,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_FILLFRAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sFrame;
-            if ( auto pUsrAnyItem = dynamic_cast< const SfxUsrAnyItem *>( pItem ) )
+            if ( auto pUsrAnyItem = dynamic_cast< const SfxUnoAnyItem *>( pItem ) )
             {
-                OSL_FAIL( "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
+                OSL_FAIL( "TransformItems: transporting an XFrame via an SfxUnoAnyItem is not deprecated!" );
                 pValue[nActProp++].Value = pUsrAnyItem->GetValue();
             }
             else if ( auto pUnoFrameItem = dynamic_cast< const SfxUnoFrameItem *>( pItem ) )

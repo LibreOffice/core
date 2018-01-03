@@ -2066,7 +2066,7 @@ SfxStringItem Keywords SID_DOCINFO_KEYWORDS
 
 
 SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
-(SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
+(SfxUnoAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -2084,7 +2084,7 @@ SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
 
 
 SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
-(SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
+(SfxUnoAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -2102,7 +2102,7 @@ SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
 
 
 SfxStringItem LibSelect SID_BASICIDE_LIBSELECTED
-(SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
+(SfxUnoAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
