@@ -816,29 +816,29 @@ void LwpFrameLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
 {
     if(m_pFrame)
     {
-        XFFrame* pXFFrame = nullptr;
+        rtl::Reference<XFFrame> xXFFrame;
         if(nEnd < nStart)
         {
-            pXFFrame = new XFFrame();
+            xXFFrame.set(new XFFrame);
         }
         else
         {
-            pXFFrame = new XFFloatFrame(nStart, nEnd, bAll);
+            xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
         }
 
-        m_pFrame->Parse(pXFFrame, nStart);
+        m_pFrame->Parse(xXFFrame.get(), nStart);
         //if it is a link frame, parse contents only once
         if(!HasPreviousLinkLayout())
         {
             rtl::Reference<LwpObject> content = m_Content.obj();
             if (content.is())
             {
-                content->DoXFConvert(pXFFrame);
+                content->DoXFConvert(xXFFrame.get());
                 //set frame size according to ole size
-                ApplyGraphicSize(pXFFrame);
+                ApplyGraphicSize(xXFFrame.get());
             }
         }
-        pCont ->Add(pXFFrame);
+        pCont->Add(xXFFrame.get());
     }
 }
 /**
