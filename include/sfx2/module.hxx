@@ -52,13 +52,11 @@ namespace com { namespace sun { namespace star { namespace frame {
 class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
 private:
-    std::locale                 m_aResLocale;
-
     // Warning this cannot be turned into a unique_ptr.
     // SfxInterface destruction in the SfxSlotPool refers again to pImpl after deletion of pImpl has commenced. See tdf#100270
     SfxModule_Impl*             pImpl;
 
-    SAL_DLLPRIVATE void Construct_Impl();
+    SAL_DLLPRIVATE void Construct_Impl(const OString& rResName);
 
 public:
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
@@ -69,10 +67,10 @@ private:
 
 public:
 
-    SfxModule(const std::locale& rResLocale, std::initializer_list<SfxObjectFactory*> pFactoryList);
+    SfxModule(const OString& rResName, std::initializer_list<SfxObjectFactory*> pFactoryList);
     virtual ~SfxModule() override;
 
-    const std::locale&          GetResLocale() const { return m_aResLocale; }
+    std::locale                 GetResLocale() const;
     SfxSlotPool*                GetSlotPool() const;
 
     void                        RegisterToolBoxControl(const SfxTbxCtrlFactory&);
