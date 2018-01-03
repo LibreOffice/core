@@ -142,26 +142,6 @@ struct FileHandle_Impl
 
     oslFileError syncFile();
 
-    /** Buffer cache / allocator.
-     */
-    class Allocator
-    {
-        rtl_cache_type*  m_cache;
-        size_t           m_bufsiz;
-
-    public:
-        Allocator(const Allocator&) = delete;
-        Allocator& operator=(const Allocator&) = delete;
-        static Allocator& get();
-
-        void allocate(sal_uInt8 **ppBuffer, size_t *pnSize);
-        void deallocate(sal_uInt8 *pBuffer);
-
-    protected:
-        Allocator();
-        ~Allocator();
-    };
-
     class Guard
     {
         pthread_mutex_t *m_mutex;
@@ -171,47 +151,6 @@ struct FileHandle_Impl
         ~Guard();
     };
 };
-
-FileHandle_Impl::Allocator& FileHandle_Impl::Allocator::get()
-{
-    static Allocator g_aBufferAllocator;
-    return g_aBufferAllocator;
-}
-
-FileHandle_Impl::Allocator::Allocator()
-    : m_cache(nullptr),
-      m_bufsiz(0)
-{
-    size_t const pagesize = FileHandle_Impl::getpagesize();
-    if (pagesize != size_t(-1))
-    {
-        m_cache  = rtl_cache_create(
-            "osl_file_buffer_cache", pagesize, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0);
-
-        if (m_cache)
-            m_bufsiz = pagesize;
-    }
-}
-
-FileHandle_Impl::Allocator::~Allocator()
-{
-    rtl_cache_destroy(m_cache);
-    m_cache = nullptr;
-}
-
-void FileHandle_Impl::Allocator::allocate(sal_uInt8 **ppBuffer, size_t *pnSize)
-{
-    assert(ppBuffer);
-    assert(pnSize);
-    *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
-    *pnSize = m_bufsiz;
-}
-
-void FileHandle_Impl::Allocator::deallocate(sal_uInt8 * pBuffer)
-{
-    if (pBuffer)
-        rtl_cache_free(m_cache, pBuffer);
-}
 
 FileHandle_Impl::Guard::Guard(pthread_mutex_t * pMutex)
     : m_mutex(pMutex)
@@ -243,9 +182,14 @@ FileHandle_Impl::FileHandle_Impl(int fd, enum Kind kind, char const * path)
     rtl_string_newFromStr(&m_strFilePath, path);
     if (m_kind == KIND_FD)
     {
-        Allocator::get().allocate (&m_buffer, &m_bufsiz);
-        if (m_buffer)
-            memset(m_buffer, 0, m_bufsiz);
+        size_t const pagesize = getpagesize();
+        if (pagesize != size_t(-1))
+        {
+            m_bufsiz = pagesize;
+            m_buffer = static_cast<sal_uInt8 *>(rtl_allocateMemory(m_bufsiz));
+            if (m_buffer)
+                memset(m_buffer, 0, m_bufsiz);
+        }
     }
 }
 
@@ -253,7 +197,7 @@ FileHandle_Impl::~FileHandle_Impl()
 {
     if (m_kind == KIND_FD)
     {
-        Allocator::get().deallocate(m_buffer);
+        rtl_freeMemory(m_buffer);
         m_buffer = nullptr;
     }
 
