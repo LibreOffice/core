@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <array>
 #include <test/sheet/tablevalidation.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
