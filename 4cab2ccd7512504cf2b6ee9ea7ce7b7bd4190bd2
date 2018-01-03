@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5f348fdd",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-03T07:11:54Z",
+      "side": 1,
+      "message": "isAsciiWhiteSpace in include/rtl/character.hxx",
+      "revId": "4cab2ccd7512504cf2b6ee9ea7ce7b7bd4190bd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
