@@ -187,23 +187,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
+        case SID_ATTR_INSERT:
         case FID_INS_CELL_CONTENTS: // Insert taste, while defined as Acc
             bIsInsertMode = !pTableView->IsInsertMode();
             pTableView->SetInsertMode( bIsInsertMode );
             if (pTopView)
                 pTopView->SetInsertMode( bIsInsertMode );
             rBindings.Invalidate( SID_ATTR_INSERT );
-            break;
-
-        case SID_ATTR_INSERT:
-            if ( pReqArgs )
-            {
-                bIsInsertMode = static_cast<const SfxBoolItem&>(pReqArgs->Get(nSlot)).GetValue();
-                pTableView->SetInsertMode( bIsInsertMode );
-                if (pTopView)
-                    pTopView->SetInsertMode( bIsInsertMode );
-                rBindings.Invalidate( SID_ATTR_INSERT );
-            }
             break;
 
         case SID_THES:
