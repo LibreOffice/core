@@ -2970,7 +2970,7 @@ bool WW8TabDesc::InFirstParaInCell() const
 void WW8TabDesc::StartMiserableHackForUnsupportedDirection(short nWwCol)
 {
     OSL_ENSURE(m_pActBand, "Impossible");
-    if (m_pActBand && m_pActBand->maDirections[nWwCol] == 3)
+    if (m_pActBand && nWwCol <= MAX_COL && m_pActBand->maDirections[nWwCol] == 3)
     {
         m_pIo->m_xCtrlStck->NewAttr(*m_pIo->m_pPaM->GetPoint(),
             SvxCharRotateItem(900, false, RES_CHRATR_ROTATE));
@@ -2980,7 +2980,7 @@ void WW8TabDesc::StartMiserableHackForUnsupportedDirection(short nWwCol)
 void WW8TabDesc::EndMiserableHackForUnsupportedDirection(short nWwCol)
 {
     OSL_ENSURE(m_pActBand, "Impossible");
-    if (m_pActBand && m_pActBand->maDirections[nWwCol] == 3)
+    if (m_pActBand && nWwCol <= MAX_COL && m_pActBand->maDirections[nWwCol] == 3)
         m_pIo->m_xCtrlStck->SetAttr(*m_pIo->m_pPaM->GetPoint(), RES_CHRATR_ROTATE);
 }
 
