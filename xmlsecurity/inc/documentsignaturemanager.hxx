@@ -42,7 +42,7 @@ public:
     std::unique_ptr<PDFSignatureHelper> mpPDFSignatureHelper;
     SignatureInformations maCurrentSignatureInformations;
     DocumentSignatureMode meSignatureMode;
-    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > m_manifest;
+    css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> m_manifest;
     css::uno::Reference<css::io::XStream> mxSignatureStream;
     css::uno::Reference<css::io::XStream> mxTempSignatureStream;
     /// Storage containing all OOXML signatures, unused for ODF.
@@ -52,7 +52,8 @@ public:
     css::uno::Reference<css::xml::crypto::XSEInitializer> mxGpgSEInitializer;
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxGpgSecurityContext;
 
-    DocumentSignatureManager(const css::uno::Reference<css::uno::XComponentContext>& xContext, DocumentSignatureMode eMode);
+    DocumentSignatureManager(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                             DocumentSignatureMode eMode);
     ~DocumentSignatureManager();
     /**
      * Checks if a particular stream is a valid xml stream. Those are treated
@@ -81,8 +82,8 @@ public:
     /// Get the security environment.
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getGpgSecurityEnvironment();
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const & getSecurityContext();
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const & getGpgSecurityContext();
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getSecurityContext();
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getGpgSecurityContext();
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX

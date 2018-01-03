@@ -15947,7 +15947,6 @@ sw/source/filter/ww8/docxexportfilter.cxx
 sw/source/filter/ww8/docxexportfilter.hxx
 sw/source/filter/ww8/docxfootnotes.hxx
 sw/source/filter/ww8/docxhelper.hxx
-sw/source/filter/ww8/docxsdrexport.cxx
 sw/source/filter/ww8/docxsdrexport.hxx
 sw/source/filter/ww8/docxtablestyleexport.cxx
 sw/source/filter/ww8/docxtablestyleexport.hxx
@@ -19710,7 +19709,6 @@ xmlsecurity/inc/certificatechooser.hxx
 xmlsecurity/inc/certificateviewer.hxx
 xmlsecurity/inc/digitalsignaturesdialog.hxx
 xmlsecurity/inc/documentsignaturehelper.hxx
-xmlsecurity/inc/documentsignaturemanager.hxx
 xmlsecurity/inc/framework/saxeventkeeperimpl.hxx
 xmlsecurity/inc/framework/securityengine.hxx
 xmlsecurity/inc/framework/signaturecreatorimpl.hxx
@@ -19729,7 +19727,6 @@ xmlsecurity/inc/pch/precompiled_xsec_gpg.hxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.cxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx
 xmlsecurity/inc/pdfio/pdfdocument.hxx
-xmlsecurity/inc/pdfsignaturehelper.hxx
 xmlsecurity/inc/resourcemanager.hxx
 xmlsecurity/inc/xmlsec-wrapper.h
 xmlsecurity/inc/xmlsec/errorcallback.hxx
@@ -19787,12 +19784,10 @@ xmlsecurity/source/gpg/XMLSecurityContext.cxx
 xmlsecurity/source/gpg/XMLSecurityContext.hxx
 xmlsecurity/source/gpg/xmlsignature_gpgimpl.cxx
 xmlsecurity/source/helper/documentsignaturehelper.cxx
-xmlsecurity/source/helper/documentsignaturemanager.cxx
 xmlsecurity/source/helper/ooxmlsecexporter.cxx
 xmlsecurity/source/helper/ooxmlsecexporter.hxx
 xmlsecurity/source/helper/ooxmlsecparser.cxx
 xmlsecurity/source/helper/ooxmlsecparser.hxx
-xmlsecurity/source/helper/pdfsignaturehelper.cxx
 xmlsecurity/source/helper/xmlsignaturehelper.cxx
 xmlsecurity/source/helper/xmlsignaturehelper2.cxx
 xmlsecurity/source/helper/xsecctl.cxx
