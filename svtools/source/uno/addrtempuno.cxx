@@ -40,9 +40,8 @@ namespace {
     using namespace css::beans;
     using namespace css::sdbc;
 
-    typedef OGenericUnoDialog OAddressBookSourceDialogUnoBase;
     class OAddressBookSourceDialogUno
-            :public OAddressBookSourceDialogUnoBase
+            :public OGenericUnoDialog
             ,public ::comphelper::OPropertyArrayUsageHelper< OAddressBookSourceDialogUno >
     {
     private:
@@ -130,7 +129,7 @@ namespace {
 
     void OAddressBookSourceDialogUno::executedDialog(sal_Int16 _nExecutionResult)
     {
-        OAddressBookSourceDialogUnoBase::executedDialog(_nExecutionResult);
+        OGenericUnoDialog::executedDialog(_nExecutionResult);
 
         if ( _nExecutionResult )
             if ( m_pDialog )
@@ -196,7 +195,7 @@ namespace {
             }
         }
 
-        OAddressBookSourceDialogUnoBase::implInitialize( _rValue );
+        OGenericUnoDialog::implInitialize( _rValue );
     }
 
 
