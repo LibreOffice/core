@@ -30,7 +30,7 @@ $(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT)
 FORCE:
 
 $(IOSKIT): $(call gb_StaticLibrary_get_target,iOS_kitBridge) FORCE
-	$(IOSLD) -r -ios_version_min 11.1 \
+	$(IOSLD) -r -ios_version_min 11.2 \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
 	    -o $(IOSOBJ) \
