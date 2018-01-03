@@ -137,7 +137,7 @@ void ScModule::InitInterface_Impl()
 }
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    SfxModule( Translate::Create("sc"), {pFact} ),
+    SfxModule("sc", {pFact}),
     aIdleTimer("sc ScModule IdleTimer"),
     aSpellIdle("sc ScModule SpellIdle"),
     mpDragData(new ScDragData),

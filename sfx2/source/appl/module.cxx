@@ -48,6 +48,7 @@ public:
     SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
     SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
     SfxChildWinFactArr_Impl*    pFactArr;
+    OString                     maResName;
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
@@ -68,11 +69,10 @@ SfxModule_Impl::~SfxModule_Impl()
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
 
-SfxModule::SfxModule(const std::locale& rLocale, std::initializer_list<SfxObjectFactory*> pFactoryList)
-    : m_aResLocale(rLocale)
-    , pImpl(nullptr)
+SfxModule::SfxModule(const OString& rResName, std::initializer_list<SfxObjectFactory*> pFactoryList)
+    : pImpl(nullptr)
 {
-    Construct_Impl();
+    Construct_Impl(rResName);
     for (auto pFactory : pFactoryList)
     {
         if (pFactory)
@@ -80,7 +80,7 @@ SfxModule::SfxModule(const std::locale& rLocale, std::initializer_list<SfxObject
     }
 }
 
-void SfxModule::Construct_Impl()
+void SfxModule::Construct_Impl(const OString& rResName)
 {
     SfxApplication *pApp = SfxApplication::GetOrCreate();
     pImpl = new SfxModule_Impl;
@@ -89,6 +89,7 @@ void SfxModule::Construct_Impl()
     pImpl->pTbxCtrlFac=nullptr;
     pImpl->pStbCtrlFac=nullptr;
     pImpl->pFactArr=nullptr;
+    pImpl->maResName = rResName;
 
     SetPool( &pApp->GetPool() );
 }
@@ -100,6 +101,11 @@ SfxModule::~SfxModule()
     {
         delete pImpl;
     }
+}
+
+std::locale SfxModule::GetResLocale() const
+{
+    return Translate::Create(pImpl->maResName.getStr());
 }
 
 SfxSlotPool* SfxModule::GetSlotPool() const

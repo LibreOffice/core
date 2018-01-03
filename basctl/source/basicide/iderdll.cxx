@@ -118,9 +118,7 @@ Dll::Dll () :
 {
     SfxObjectFactory& rFactory = DocShell::Factory();
 
-    std::locale loc = Translate::Create("basctl");
-
-    auto pModule = o3tl::make_unique<Module>(loc, &rFactory);
+    auto pModule = o3tl::make_unique<Module>("basctl", &rFactory);
     SfxModule* pMod = pModule.get();
     SfxApplication::SetModule(SfxToolsModule::Basic, std::move(pModule));
 
