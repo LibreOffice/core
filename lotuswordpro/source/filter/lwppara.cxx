@@ -727,13 +727,13 @@ void LwpPara::RegisterStyle()
     //register tab style
     if(m_Fribs.HasFrib(FRIB_TAG_TAB))
     {
-        XFParaStyle* pNewParaStyle = new XFParaStyle;
-        *pNewParaStyle = *GetXFParaStyle();
+        std::unique_ptr<XFParaStyle> xNewParaStyle(new XFParaStyle);
+        *xNewParaStyle = *GetXFParaStyle();
         //pOverStyle->SetStyleName("");
-        RegisterTabStyle(pNewParaStyle);
+        RegisterTabStyle(xNewParaStyle.get());
         if (!m_ParentStyleName.isEmpty())
-                    pNewParaStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(pNewParaStyle).m_pStyle->GetStyleName();
+            xNewParaStyle->SetParentStyleName(m_ParentStyleName);
+        m_StyleName = pXFStyleManager->AddStyle(xNewParaStyle.release()).m_pStyle->GetStyleName();
     }
 
     //register master page;
