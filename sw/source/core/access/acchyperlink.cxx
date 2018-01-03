@@ -35,23 +35,23 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 SwAccessibleHyperlink::SwAccessibleHyperlink( size_t nHPos,
     SwAccessibleParagraph *p, sal_Int32 nStt, sal_Int32 nEnd ) :
-    nHintPos( nHPos ),
-    xPara( p ),
-    nStartIdx( nStt ),
-    nEndIdx( nEnd )
+    m_nHintPosition( nHPos ),
+    m_xParagraph( p ),
+    m_nStartIndex( nStt ),
+    m_nEndIndex( nEnd )
 {
 }
 
 const SwTextAttr *SwAccessibleHyperlink::GetTextAttr() const
 {
     const SwTextAttr *pTextAttr = nullptr;
-    if( xPara.is() && xPara->GetMap() )
+    if( m_xParagraph.is() && m_xParagraph->GetMap() )
     {
-        const SwTextNode *pTextNd = xPara->GetTextNode();
+        const SwTextNode *pTextNd = m_xParagraph->GetTextNode();
         const SwpHints *pHints = pTextNd->GetpSwpHints();
-        if( pHints && nHintPos < pHints->Count() )
+        if( pHints && m_nHintPosition < pHints->Count() )
         {
-            const SwTextAttr *pHt = pHints->Get(nHintPos);
+            const SwTextAttr *pHt = pHints->Get(m_nHintPosition);
             if( RES_TXTATR_INETFMT == pHt->Which() )
                 pTextAttr = pHt;
         }
@@ -80,7 +80,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
         const SwFormatINetFormat& rINetFormat = pTextAttr->GetINetFormat();
         if( !rINetFormat.GetValue().isEmpty() )
         {
-            SwViewShell *pVSh = xPara->GetShell();
+            SwViewShell *pVSh = m_xParagraph->GetShell();
             if( pVSh )
             {
                 LoadURL(*pVSh, rINetFormat.GetValue(), LoadUrlFlags::NONE,
@@ -148,8 +148,8 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionAnchor(
     uno::Any aRet;
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
-    OUString text( xPara->GetString() );
-    OUString retText =  text.copy(nStartIdx, nEndIdx - nStartIdx);
+    OUString text( m_xParagraph->GetString() );
+    OUString retText =  text.copy(m_nStartIndex, m_nEndIndex - m_nStartIndex);
     aRet <<= retText;
     return aRet;
 }
@@ -175,18 +175,18 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
 
 sal_Int32 SAL_CALL SwAccessibleHyperlink::getStartIndex()
 {
-    return nStartIdx;
+    return m_nStartIndex;
 }
 
 sal_Int32 SAL_CALL SwAccessibleHyperlink::getEndIndex()
 {
-    return nEndIdx;
+    return m_nEndIndex;
 }
 
 sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
 {
     SolarMutexGuard aGuard;
-    if (xPara.is())
+    if (m_xParagraph.is())
     {
         const SwTextAttr *pTextAttr = GetTextAttr();
         OUString sText;
@@ -239,7 +239,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
 void SwAccessibleHyperlink::Invalidate()
 {
     SolarMutexGuard aGuard;
-    xPara = nullptr;
+    m_xParagraph = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

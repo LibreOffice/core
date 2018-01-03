@@ -513,19 +513,19 @@ bool SwFormatURL::GetPresentation
 )   const
 {
     rText.clear();
-    if ( pMap )
+    if ( m_pMap )
         rText += "Client-Map";
-    if ( !sURL.isEmpty() )
+    if ( !m_sURL.isEmpty() )
     {
-        if ( pMap )
+        if ( m_pMap )
             rText += " - ";
-        rText = rText + "URL: " + sURL;
-        if ( bIsServerMap )
+        rText = rText + "URL: " + m_sURL;
+        if ( m_bIsServerMap )
             rText += " (Server-Map)";
     }
-    if ( !sTargetFrameName.isEmpty() )
+    if ( !m_sTargetFrameName.isEmpty() )
     {
-        rText = rText + ", Target: " + sTargetFrameName;
+        rText = rText + ", Target: " + m_sTargetFrameName;
     }
     return true;
 }
