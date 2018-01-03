@@ -442,18 +442,18 @@ void LwpGraphicObject::CreateGrafObject()
     rtl::Reference<XFImage> pImage = new XFImage();
 
     // set image processing styles
-    XFImageStyle* pImageStyle = new XFImageStyle();
+    std::unique_ptr<XFImageStyle> xImageStyle(new XFImageStyle);
     if (m_sServerContextFormat[1]!='w' || m_sServerContextFormat[2]!='m' || m_sServerContextFormat[3]!='f')
     {
         if (m_aIPData.nBrightness != 50)
         {
             sal_Int32 nSODCBrightness = (sal_Int32)m_aIPData.nBrightness*2 - 100;
-            pImageStyle->SetBrightness(nSODCBrightness);
+            xImageStyle->SetBrightness(nSODCBrightness);
         }
         if (m_aIPData.nContrast != 50)
         {
             sal_Int32 nSODCContrast = (sal_Int32)(80 - (double)m_aIPData.nContrast*1.6);
-            pImageStyle->SetContrast(nSODCContrast);
+            xImageStyle->SetContrast(nSODCContrast);
         }
     }
 
@@ -542,8 +542,8 @@ void LwpGraphicObject::CreateGrafObject()
             if (pMyFrameLayout->GetScaleCenter() || pMyFrameLayout->GetScaleTile())
             {
                 // set center alignment
-                pImageStyle->SetXPosType(enumXFFrameXPosCenter, enumXFFrameXRelFrame);
-                pImageStyle->SetYPosType(enumXFFrameYPosMiddle, enumXFFrameYRelFrame);
+                xImageStyle->SetXPosType(enumXFFrameXPosCenter, enumXFFrameXRelFrame);
+                xImageStyle->SetYPosType(enumXFFrameYPosMiddle, enumXFFrameYRelFrame);
 
                 // need horizontal crop?
                 double fClipWidth = 0;
@@ -564,7 +564,7 @@ void LwpGraphicObject::CreateGrafObject()
 
                 if (sal_bCropped)
                 {
-                    pImageStyle->SetClip(fClipWidth, fClipWidth, fClipHeight, fClipHeight);
+                    xImageStyle->SetClip(fClipWidth, fClipWidth, fClipHeight, fClipHeight);
                     pImage->SetWidth(fDisFrameWidth);
                     pImage->SetHeight(fDisFrameHeight);
                 }
@@ -573,8 +573,8 @@ void LwpGraphicObject::CreateGrafObject()
             else
             {
                 // set left-top alignment
-                pImageStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelFrame);
-                pImageStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
+                xImageStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelFrame);
+                xImageStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
 
                 // get image position offset
                 LwpPoint& rOffset = pMyScale->GetOffset();
@@ -635,7 +635,7 @@ void LwpGraphicObject::CreateGrafObject()
                         aCropRect.fBottom = (aImageRect.fBottom - aFrameRect.fBottom) / fYRatio;
                     }
 
-                    pImageStyle->SetClip(aCropRect.fLeft, aCropRect.fRight, aCropRect.fTop, aCropRect.fBottom);
+                    xImageStyle->SetClip(aCropRect.fLeft, aCropRect.fRight, aCropRect.fTop, aCropRect.fBottom);
                     double fPicWidth = fSclGrafWidth - (aCropRect.fLeft+aCropRect.fRight)*fXRatio;
                     double fPicHeight = fSclGrafHeight- (aCropRect.fTop+aCropRect.fBottom)*fYRatio;
                     double fX = fOffsetX > 0 ? fOffsetX : 0.00;
@@ -648,7 +648,7 @@ void LwpGraphicObject::CreateGrafObject()
 
     // set style for the image
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pImage->SetStyleName(pXFStyleManager->AddStyle(pImageStyle).m_pStyle->GetStyleName());
+    pImage->SetStyleName(pXFStyleManager->AddStyle(xImageStyle.release()).m_pStyle->GetStyleName());
 
     // set anchor to frame
     pImage->SetAnchorType(enumXFAnchorFrame);
