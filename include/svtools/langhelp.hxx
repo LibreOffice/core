@@ -23,7 +23,7 @@
 SVT_DLLPUBLIC void localizeWebserviceURI( OUString& io_rURI );
 
 OUString SVT_DLLPUBLIC getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & installed, OUString const & locale);
-OUString SVT_DLLPUBLIC getInstalledLocaleForSystemUILanguage(css::uno::Sequence<OUString> const & installed, bool bRequestInstallIfMissing);
+OUString SVT_DLLPUBLIC getInstalledLocaleForSystemUILanguage(css::uno::Sequence<OUString> const & installed, bool bRequestInstallIfMissing, const OUString& rPreferredLocale = OUString());
 
 #endif
 

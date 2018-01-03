@@ -102,9 +102,12 @@ public:
     }
 };
 
-OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString>& rLocaleElementNames, bool bRequestInstallIfMissing)
+OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString>& rLocaleElementNames, bool bRequestInstallIfMissing, const OUString& rPreferredLocale)
 {
-    OUString wantedLocale = officecfg::System::L10N::UILocale::get();
+    OUString wantedLocale(rPreferredLocale);
+    if (wantedLocale.isEmpty())
+        wantedLocale = officecfg::System::L10N::UILocale::get();
+
     OUString locale = getInstalledLocaleForLanguage(rLocaleElementNames, wantedLocale);
     if (bRequestInstallIfMissing && locale.isEmpty() && !wantedLocale.isEmpty() && !Application::IsHeadlessModeEnabled() &&
         officecfg::Office::Common::PackageKit::EnableLangpackInstallation::get())

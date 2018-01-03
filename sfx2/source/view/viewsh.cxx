@@ -26,6 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <svl/intitem.hxx>
+#include <svtools/langhelp.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -57,6 +58,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <officecfg/Setup.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
 #include "viewimp.hxx"
@@ -1486,6 +1488,12 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
         pEditWin = pIPClient->GetEditWin();
     }
     return pEditWin;
+}
+
+void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
+{
+    css::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
+    maLOKLanguageTag = LanguageTag(getInstalledLocaleForSystemUILanguage(inst, /* bRequestInstallIfMissing */ false, rBcp47LanguageTag), true).makeFallback();
 }
 
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
