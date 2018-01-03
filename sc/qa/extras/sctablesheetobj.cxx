@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/scenario.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellseries.hxx>
@@ -41,9 +42,10 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 34
+#define NUMBER_OF_TESTS 35
 
-class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellFormatRangesSupplier,
+class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
+                                               public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
                                                public apitest::XCellSeries,
                                                public apitest::XDataPilotTablesSupplier,
@@ -78,6 +80,9 @@ public:
     virtual uno::Reference< uno::XInterface > getScenarioSpreadsheet() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
+
+    // Scenario
+    CPPUNIT_TEST(testScenarioProperties);
 
     // XCellFormatRangesSupplier
     CPPUNIT_TEST(testGetCellFormatRanges);

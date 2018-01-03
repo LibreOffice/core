@@ -567,7 +567,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_DocumentSettings \
     qadevOOo/tests/java/ifc/sheet/_FunctionDescription \
     qadevOOo/tests/java/ifc/sheet/_GlobalSheetSettings \
-    qadevOOo/tests/java/ifc/sheet/_Scenario \
     qadevOOo/tests/java/ifc/sheet/_Shape \
     qadevOOo/tests/java/ifc/sheet/_SheetCell \
     qadevOOo/tests/java/ifc/sheet/_SheetCellRange \
