@@ -2785,11 +2785,17 @@ void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLe
     if (m_pAktColl != nullptr)
     {
         SwWW8StyInf* pSI = GetStyle(m_nAktColl);
-        if (pSI != nullptr)
+        if (pSI && pSI->m_bColl && pSI->m_pFormat)
         {
             pSI->mnWW8OutlineLevel =
                     static_cast< sal_uInt8 >( ( (pData && nLen >= 1) ? *pData : 0 ) );
-            NewAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL, SwWW8StyInf::WW8OutlineLevelToOutlinelevel( pSI->mnWW8OutlineLevel ) ) );
+            auto nLevel = SwWW8StyInf::WW8OutlineLevelToOutlinelevel(pSI->mnWW8OutlineLevel);
+            if (nLevel == 0)
+            {
+                SwTextFormatColl* pTextFormatColl = static_cast<SwTextFormatColl*>(pSI->m_pFormat);
+                pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle();
+            }
+            NewAttr(SfxUInt16Item(RES_PARATR_OUTLINELEVEL, nLevel));
         }
     }
     else if (m_pPaM != nullptr)
