@@ -53,6 +53,8 @@ public:
     SfxChildWinFactArr_Impl*    pFactArr;
     ImageList*                  pImgListSmall;
     ImageList*                  pImgListBig;
+    OString                     maResName;
+    std::unique_ptr<ResMgr>     mpResMgr;
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
@@ -94,18 +96,23 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
     return rpList;
 }
 
-
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
 
 ResMgr* SfxModule::GetResMgr()
 {
-    return pResMgr;
+    assert(pImpl);
+
+    const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
+
+    if (!pImpl->mpResMgr || pImpl->mpResMgr->GetLocale() != rLocale)
+        pImpl->mpResMgr.reset(ResMgr::CreateResMgr(pImpl->maResName.getStr(), rLocale));
+    return pImpl->mpResMgr.get();
 }
 
-SfxModule::SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pFactoryList )
-    : pResMgr( pMgrP ), pImpl(nullptr)
+SfxModule::SfxModule(const OString& rResName, std::initializer_list<SfxObjectFactory*> pFactoryList )
+    : pImpl(nullptr)
 {
-    Construct_Impl();
+    Construct_Impl(rResName);
     for (auto pFactory : pFactoryList)
     {
         if (pFactory)
@@ -113,7 +120,7 @@ SfxModule::SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pF
     }
 }
 
-void SfxModule::Construct_Impl()
+void SfxModule::Construct_Impl(const OString& rResName)
 {
     SfxApplication *pApp = SfxApplication::GetOrCreate();
     pImpl = new SfxModule_Impl;
@@ -124,6 +131,7 @@ void SfxModule::Construct_Impl()
     pImpl->pFactArr=nullptr;
     pImpl->pImgListSmall=nullptr;
     pImpl->pImgListBig=nullptr;
+    pImpl->maResName = rResName;
 
     SetPool( &pApp->GetPool() );
 }
@@ -132,7 +140,6 @@ void SfxModule::Construct_Impl()
 SfxModule::~SfxModule()
 {
     delete pImpl;
-    delete pResMgr;
 }
 
 
@@ -223,7 +230,7 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 
 ImageList* SfxModule::GetImageList_Impl( bool bBig )
 {
-    return pImpl->GetImageList( pResMgr, bBig );
+    return pImpl->GetImageList(GetResMgr(), bBig);
 }
 
 VclPtr<SfxTabPage> SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const SfxItemSet& )

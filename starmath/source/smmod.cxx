@@ -142,7 +142,7 @@ void SmModule::InitInterface_Impl()
 }
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
-    SfxModule(ResMgr::CreateResMgr("sm"), {pObjFact})
+    SfxModule("sm", {pObjFact})
 {
     SetName("StarMath");
 

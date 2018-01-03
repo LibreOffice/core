@@ -116,10 +116,7 @@ Dll::Dll () :
     SfxObjectFactory* pFact = &DocShell::Factory();
     (void)pFact;
 
-    ResMgr* pMgr = ResMgr::CreateResMgr(
-        "basctl", Application::GetSettings().GetUILanguageTag());
-
-    auto pModule = o3tl::make_unique<Module>( pMgr, &DocShell::Factory() );
+    auto pModule = o3tl::make_unique<Module>("basctl", &DocShell::Factory());
     SfxModule* pMod = pModule.get();
     SfxApplication::SetModule(SfxToolsModule::Basic, std::move(pModule));
 

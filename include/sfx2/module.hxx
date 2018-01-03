@@ -53,13 +53,11 @@ namespace com { namespace sun { namespace star { namespace frame {
 class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
 private:
-    ResMgr*                     pResMgr;
-
     // Warning this cannot be turned into a unique_ptr.
     // SfxInterface destruction in the SfxSlotPool refers again to pImpl after deletion of pImpl has commenced. See tdf#100270
     SfxModule_Impl*             pImpl;
 
-    SAL_DLLPRIVATE void Construct_Impl();
+    SAL_DLLPRIVATE void Construct_Impl(const OString& rResName);
 
 public:
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
@@ -70,7 +68,7 @@ private:
 
 public:
 
-                                SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pFactoryList);
+                                SfxModule(const OString& rResName, std::initializer_list<SfxObjectFactory*> pFactoryList);
                                 virtual ~SfxModule() override;
 
     ResMgr*                     GetResMgr();
