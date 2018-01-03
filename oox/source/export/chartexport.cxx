@@ -48,6 +48,7 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -748,7 +749,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
 
     }
     // plot area
-    exportPlotArea( );
+    exportPlotArea( xChartDoc );
     // legend
     if( bHasLegend )
         exportLegend( xChartDoc );
@@ -851,7 +852,6 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         uno::Any aRelativePos = xProp->getPropertyValue("RelativePosition");
         if (aRelativePos.hasValue())
         {
-            chart2::RelativePosition aPos = aRelativePos.get<chart2::RelativePosition>();
             pFS->startElement(FSNS(XML_c, XML_layout), FSEND);
             pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
 
@@ -861,15 +861,28 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
             pFS->singleElement(FSNS(XML_c, XML_yMode),
                     XML_val, "edge",
                     FSEND);
+            chart2::RelativePosition aPos = aRelativePos.get<chart2::RelativePosition>();
+            uno::Any aRelativeSize = xProp->getPropertyValue("RelativeSize");
+            chart2::RelativeSize aSize = aRelativeSize.get<chart2::RelativeSize>();
 
-            double x = aPos.Primary;
-            double y = aPos.Secondary;
+            const double x = aPos.Primary;
+            const double y = aPos.Secondary;
+            const double w = aSize.Primary;
+            const double h = aSize.Secondary;
 
             pFS->singleElement(FSNS(XML_c, XML_x),
                     XML_val, IS(x),
                     FSEND);
             pFS->singleElement(FSNS(XML_c, XML_y),
                     XML_val, IS(y),
+                    FSEND);
+
+            pFS->singleElement(FSNS(XML_c, XML_w),
+                    XML_val, IS(w),
+                    FSEND);
+
+            pFS->singleElement(FSNS(XML_c, XML_h),
+                    XML_val, IS(h),
                     FSEND);
             SAL_WARN_IF(aPos.Anchor != css::drawing::Alignment_TOP_LEFT, "oox", "unsupported anchor position");
 
@@ -886,6 +899,9 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
 
         // shape properties
         exportShapeProps( xProp );
+
+        // draw-chart:txPr text properties
+        exportTextProps( xProp );
     }
 
     // legendEntry
@@ -1010,7 +1026,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
     pFS->endElement( FSNS( XML_c, XML_title ) );
 }
 
-void ChartExport::exportPlotArea( )
+void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >& xChartDoc )
 {
     Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( mxNewDiagram, uno::UNO_QUERY );
     if( ! xBCooSysCnt.is())
@@ -1031,7 +1047,8 @@ void ChartExport::exportPlotArea( )
             chart2::RelativePosition aPos = aAny.get<chart2::RelativePosition>();
             aAny = xWall->getPropertyValue("RelativeSize");
             chart2::RelativeSize aSize = aAny.get<chart2::RelativeSize>();
-            exportManualLayout(aPos, aSize);
+            uno::Reference< css::chart::XDiagramPositioning > xDiagramPositioning( xChartDoc->getDiagram(), uno::UNO_QUERY );
+            exportManualLayout(aPos, aSize, xDiagramPositioning->isExcludingDiagramPositioning() );
         }
     }
 
@@ -1143,14 +1160,21 @@ void ChartExport::exportPlotArea( )
 
 }
 
-void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos, const css::chart2::RelativeSize& rSize)
+void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos,
+                                     const css::chart2::RelativeSize& rSize,
+                                     const bool bIsExcludingDiagramPositioning)
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_layout), FSEND);
     pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_layoutTarget),
-            XML_val, "inner",
-            FSEND);
+
+    // By default layoutTarget is set to "outer" and we shouldn't save it in that case
+    if ( bIsExcludingDiagramPositioning )
+    {
+        pFS->singleElement(FSNS(XML_c, XML_layoutTarget),
+                XML_val, "inner",
+                FSEND);
+    }
     pFS->singleElement(FSNS(XML_c, XML_xMode),
             XML_val, "edge",
             FSEND);
@@ -1160,8 +1184,8 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos, 
 
     double x = rPos.Primary;
     double y = rPos.Secondary;
-    double w = rSize.Primary;
-    double h = rSize.Secondary;
+    const double w = rSize.Primary;
+    const double h = rSize.Secondary;
     switch (rPos.Anchor)
     {
         case drawing::Alignment_LEFT:
@@ -2278,20 +2302,18 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_txPr), FSEND);
-
-    pFS->startElement(FSNS(XML_a, XML_bodyPr), FSEND);
-    pFS->endElement(FSNS(XML_a, XML_bodyPr));
+    pFS->singleElement( FSNS( XML_a, XML_bodyPr ), FSEND );
+    pFS->singleElement( FSNS( XML_a, XML_lstStyle ), FSEND );
 
     pFS->startElement(FSNS(XML_a, XML_p), FSEND);
     pFS->startElement(FSNS(XML_a, XML_pPr), FSEND);
 
-    bool bDummy = false;
-    sal_Int32 nDummy;
-    WriteRunProperties(xPropSet, false, XML_defRPr, true, bDummy, nDummy);
+    bool bOverrideCharHeight = false;
+    sal_Int32 nCharHeight;
+    WriteRunProperties(xPropSet, false, XML_defRPr, true, bOverrideCharHeight, nCharHeight);
 
     pFS->endElement(FSNS(XML_a, XML_pPr));
     pFS->endElement(FSNS(XML_a, XML_p));
-
     pFS->endElement(FSNS(XML_c, XML_txPr));
 }
 

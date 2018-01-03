@@ -134,7 +134,8 @@ private:
                           css::chart::XChartDocument >& rChartDoc );
     void exportTitle( const css::uno::Reference<
                           css::drawing::XShape >& xShape );
-    void exportPlotArea( );
+    void exportPlotArea( const css::uno::Reference<
+                             css::chart::XChartDocument >& rChartDoc );
     void exportPlotAreaShapeProps( const css::uno::Reference< css::beans::XPropertySet >& xPropSet  );
     void exportFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void exportGradientFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
@@ -188,7 +189,7 @@ private:
     void exportErrorBar(const css::uno::Reference< css::beans::XPropertySet >& xErrorBarProps,
             bool bYError);
 
-    void exportManualLayout(const css::chart2::RelativePosition& rPos, const css::chart2::RelativeSize& rSize);
+    void exportManualLayout(const css::chart2::RelativePosition& rPos, const css::chart2::RelativeSize& rSize, const bool bIsExcludingDiagramPositioning);
 
     void exportAxes( );
     void exportAxis(const AxisIdPair& rAxisIdPair);
