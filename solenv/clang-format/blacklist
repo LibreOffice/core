@@ -386,6 +386,7 @@ basegfx/source/workbench/bezierclip.cxx
 basegfx/source/workbench/bezierclip.hxx
 basegfx/source/workbench/convexhull.cxx
 basegfx/source/workbench/gauss.hxx
+basegfx/test/SvgPathImportExport.cxx
 basegfx/test/basegfx2d.cxx
 basegfx/test/basegfx3d.cxx
 basegfx/test/basegfxtools.cxx
