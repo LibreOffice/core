@@ -128,10 +128,20 @@ Decrypt::Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto
 
     const EVP_CIPHER* cipher = getCipher(type);
 
+    const size_t nMinKeySize = EVP_CIPHER_key_length(cipher);
+    if (key.size() < nMinKeySize)
+        key.resize(nMinKeySize, 0);
+
     if (iv.empty())
         EVP_DecryptInit_ex(&mContext, cipher, nullptr, key.data(), 0);
     else
+    {
+        const size_t nMinIVSize = EVP_CIPHER_iv_length(cipher);
+        if (iv.size() < nMinIVSize)
+            iv.resize(nMinIVSize, 0);
+
         EVP_DecryptInit_ex(&mContext, cipher, nullptr, key.data(), iv.data());
+    }
     EVP_CIPHER_CTX_set_padding(&mContext, 0);
 #endif
 
