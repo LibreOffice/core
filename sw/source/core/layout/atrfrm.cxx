@@ -532,14 +532,14 @@ SfxPoolItem*  SwFormatFooter::Clone( SfxItemPool* ) const
 SwFormatContent::SwFormatContent( const SwFormatContent &rCpy )
     : SfxPoolItem( RES_CNTNT )
 {
-    pStartNode.reset( rCpy.GetContentIdx() ?
+    m_pStartNode.reset( rCpy.GetContentIdx() ?
                       new SwNodeIndex( *rCpy.GetContentIdx() ) : nullptr);
 }
 
 SwFormatContent::SwFormatContent( const SwStartNode *pStartNd )
     : SfxPoolItem( RES_CNTNT )
 {
-    pStartNode.reset( pStartNd ? new SwNodeIndex( *pStartNd ) : nullptr);
+    m_pStartNode.reset( pStartNd ? new SwNodeIndex( *pStartNd ) : nullptr);
 }
 
 SwFormatContent::~SwFormatContent()
@@ -548,16 +548,16 @@ SwFormatContent::~SwFormatContent()
 
 void SwFormatContent::SetNewContentIdx( const SwNodeIndex *pIdx )
 {
-    pStartNode.reset( pIdx ? new SwNodeIndex( *pIdx ) : nullptr );
+    m_pStartNode.reset( pIdx ? new SwNodeIndex( *pIdx ) : nullptr );
 }
 
 bool SwFormatContent::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    if( (bool)pStartNode != (bool)static_cast<const SwFormatContent&>(rAttr).pStartNode )
+    if( (bool)m_pStartNode != (bool)static_cast<const SwFormatContent&>(rAttr).m_pStartNode )
         return false;
-    if( pStartNode )
-        return ( *pStartNode == *static_cast<const SwFormatContent&>(rAttr).GetContentIdx() );
+    if( m_pStartNode )
+        return ( *m_pStartNode == *static_cast<const SwFormatContent&>(rAttr).GetContentIdx() );
     return true;
 }
 
@@ -570,7 +570,7 @@ void SwFormatContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatContent"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pStartNode->GetNode().GetIndex()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(m_pStartNode->GetNode().GetIndex()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
@@ -1711,20 +1711,20 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
 // Partially implemented inline in hxx
 SwFormatURL::SwFormatURL() :
     SfxPoolItem( RES_URL ),
-    pMap( nullptr ),
-    bIsServerMap( false )
+    m_pMap( nullptr ),
+    m_bIsServerMap( false )
 {
 }
 
 SwFormatURL::SwFormatURL( const SwFormatURL &rURL) :
     SfxPoolItem( RES_URL ),
-    sTargetFrameName( rURL.GetTargetFrameName() ),
-    sURL( rURL.GetURL() ),
-    sName( rURL.GetName() ),
-    bIsServerMap( rURL.IsServerMap() )
+    m_sTargetFrameName( rURL.GetTargetFrameName() ),
+    m_sURL( rURL.GetURL() ),
+    m_sName( rURL.GetName() ),
+    m_bIsServerMap( rURL.IsServerMap() )
 {
     if (rURL.GetMap())
-        pMap.reset( new ImageMap( *rURL.GetMap() ) );
+        m_pMap.reset( new ImageMap( *rURL.GetMap() ) );
 }
 
 SwFormatURL::~SwFormatURL()
@@ -1735,16 +1735,16 @@ bool SwFormatURL::operator==( const SfxPoolItem &rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     const SwFormatURL &rCmp = static_cast<const SwFormatURL&>(rAttr);
-    bool bRet = bIsServerMap     == rCmp.IsServerMap() &&
-                sURL             == rCmp.GetURL() &&
-                sTargetFrameName == rCmp.GetTargetFrameName() &&
-                sName            == rCmp.GetName();
+    bool bRet = m_bIsServerMap     == rCmp.IsServerMap() &&
+                m_sURL             == rCmp.GetURL() &&
+                m_sTargetFrameName == rCmp.GetTargetFrameName() &&
+                m_sName            == rCmp.GetName();
     if ( bRet )
     {
-        if ( pMap && rCmp.GetMap() )
-            bRet = *pMap == *rCmp.GetMap();
+        if ( m_pMap && rCmp.GetMap() )
+            bRet = *m_pMap == *rCmp.GetMap();
         else
-            bRet = pMap.get() == rCmp.GetMap();
+            bRet = m_pMap.get() == rCmp.GetMap();
     }
     return bRet;
 }
@@ -1756,13 +1756,13 @@ SfxPoolItem* SwFormatURL::Clone( SfxItemPool* ) const
 
 void SwFormatURL::SetURL(const OUString &rURL, bool bServerMap)
 {
-    sURL = rURL;
-    bIsServerMap = bServerMap;
+    m_sURL = rURL;
+    m_bIsServerMap = bServerMap;
 }
 
 void SwFormatURL::SetMap( const ImageMap *pM )
 {
-    pMap.reset( pM ? new ImageMap( *pM ) : nullptr);
+    m_pMap.reset( pM ? new ImageMap( *pM ) : nullptr);
 }
 
 bool SwFormatURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1784,9 +1784,9 @@ bool SwFormatURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_URL_CLIENTMAP:
         {
             uno::Reference< uno::XInterface > xInt;
-            if(pMap)
+            if(m_pMap)
             {
-                xInt = SvUnoImageMap_createInstance( *pMap, sw_GetSupportedMacroItems() );
+                xInt = SvUnoImageMap_createInstance( *m_pMap, sw_GetSupportedMacroItems() );
             }
             else
             {
@@ -1818,7 +1818,7 @@ bool SwFormatURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             OUString sTmp;
             rVal >>= sTmp;
-            SetURL( sTmp, bIsServerMap );
+            SetURL( sTmp, m_bIsServerMap );
         }
         break;
         case MID_URL_TARGET:
@@ -1839,19 +1839,19 @@ bool SwFormatURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             uno::Reference<container::XIndexContainer> xCont;
             if(!rVal.hasValue())
-                pMap.reset();
+                m_pMap.reset();
             else if(rVal >>= xCont)
             {
-                if(!pMap)
-                    pMap.reset(new ImageMap);
-                bRet = SvUnoImageMap_fillImageMap( xCont, *pMap );
+                if(!m_pMap)
+                    m_pMap.reset(new ImageMap);
+                bRet = SvUnoImageMap_fillImageMap( xCont, *m_pMap );
             }
             else
                 bRet = false;
         }
         break;
         case MID_URL_SERVERMAP:
-            bIsServerMap = *o3tl::doAccess<bool>(rVal);
+            m_bIsServerMap = *o3tl::doAccess<bool>(rVal);
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );

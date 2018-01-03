@@ -32,13 +32,13 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatURL: public SfxPoolItem
 {
-    OUString  sTargetFrameName; ///< Target frame for URL.
-    OUString  sURL;             ///< Simple URL.
-    OUString  sName;            ///< Name of the anchor.
+    OUString  m_sTargetFrameName; ///< Target frame for URL.
+    OUString  m_sURL;             ///< Simple URL.
+    OUString  m_sName;            ///< Name of the anchor.
     std::unique_ptr<ImageMap>
-              pMap;             ///< ClientSide images.
+              m_pMap;             ///< ClientSide images.
 
-    bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
+    bool      m_bIsServerMap;     ///< A ServerSideImageMap with the URL.
 
 public:
     SwFormatURL();
@@ -58,18 +58,18 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    void SetTargetFrameName( const OUString& rStr ) { sTargetFrameName = rStr; }
+    void SetTargetFrameName( const OUString& rStr ) { m_sTargetFrameName = rStr; }
     void SetURL(const OUString &rURL, bool bServerMap);
     void SetMap( const ImageMap *pM );  ///< Pointer will be copied.
 
-    const OUString& GetTargetFrameName()const { return sTargetFrameName; }
-    const OUString& GetURL()            const { return sURL; }
-          bool      IsServerMap()       const { return bIsServerMap; }
-    const ImageMap *GetMap()            const { return pMap.get(); }
-          ImageMap *GetMap()                  { return pMap.get(); }
+    const OUString& GetTargetFrameName()const { return m_sTargetFrameName; }
+    const OUString& GetURL()            const { return m_sURL; }
+          bool      IsServerMap()       const { return m_bIsServerMap; }
+    const ImageMap *GetMap()            const { return m_pMap.get(); }
+          ImageMap *GetMap()                  { return m_pMap.get(); }
 
-    const OUString& GetName() const                { return sName; }
-    void SetName( const OUString& rNm )     { sName = rNm; }
+    const OUString& GetName() const                { return m_sName; }
+    void SetName( const OUString& rNm )     { m_sName = rNm; }
 };
 
 inline const SwFormatURL &SwAttrSet::GetURL(bool bInP) const

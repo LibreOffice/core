@@ -34,10 +34,10 @@ class SwAccessibleHyperlink :
 {
     friend class SwAccessibleParagraph;
     friend class SwAccessibleHyperTextData;
-    size_t nHintPos;
-    ::rtl::Reference< SwAccessibleParagraph > xPara;
-    sal_Int32 nStartIdx;
-    sal_Int32 nEndIdx;
+    size_t m_nHintPosition;
+    ::rtl::Reference< SwAccessibleParagraph > m_xParagraph;
+    sal_Int32 m_nStartIndex;
+    sal_Int32 m_nEndIndex;
 
     SwAccessibleHyperlink( size_t nHintPos,
                            SwAccessibleParagraph *p,

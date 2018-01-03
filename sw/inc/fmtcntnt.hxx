@@ -30,7 +30,7 @@ class SwStartNode;
 /// Content, content of frame (header, footer, fly).
 class SW_DLLPUBLIC SwFormatContent: public SfxPoolItem
 {
-    std::unique_ptr<SwNodeIndex> pStartNode;
+    std::unique_ptr<SwNodeIndex> m_pStartNode;
 
     SwFormatContent &operator=( const SwFormatContent & ) = delete;
 
@@ -43,7 +43,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    const SwNodeIndex *GetContentIdx() const { return pStartNode.get(); }
+    const SwNodeIndex *GetContentIdx() const { return m_pStartNode.get(); }
     void SetNewContentIdx( const SwNodeIndex *pIdx );
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
