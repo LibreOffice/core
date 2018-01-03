@@ -510,7 +510,7 @@ void LwpGraphicObject::CreateGrafObject()
                     fSclGrafWidth = fOrgGrafWidth;
                     fSclGrafHeight = fOrgGrafHeight;
                 }
-                else if (nScalemode & LwpLayoutScale::MAINTAIN_ASPECT_RATIO)
+                else if (nScalemode & LwpLayoutScale::MAINTAIN_ASPECT_RATIO && fOrgGrafHeight != 0.0 && fDisFrameHeight != 0.0)
                 {
                     if (fOrgGrafWidth/fOrgGrafHeight >= fDisFrameWidth/fDisFrameHeight)
                     {
