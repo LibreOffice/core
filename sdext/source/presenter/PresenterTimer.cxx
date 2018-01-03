@@ -96,7 +96,9 @@ public:
         const TimeValue& rTimeValue);
 
     static void NotifyTermination();
+#if !defined NDEBUG
     static bool HasInstance() { return mpInstance != nullptr; }
+#endif
 
 private:
     static std::shared_ptr<TimerScheduler> mpInstance;
