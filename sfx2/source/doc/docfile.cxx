@@ -2455,9 +2455,9 @@ void SfxMedium::GetMedium_Impl()
             {
                 //TODO/MBA: need support for SID_STREAM
                 if ( pImpl->xStream.is() )
-                    GetItemSet()->Put( SfxUsrAnyItem( SID_STREAM, makeAny( pImpl->xStream ) ) );
+                    GetItemSet()->Put( SfxUnoAnyItem( SID_STREAM, makeAny( pImpl->xStream ) ) );
 
-                GetItemSet()->Put( SfxUsrAnyItem( SID_INPUTSTREAM, makeAny( pImpl->xInputStream ) ) );
+                GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, makeAny( pImpl->xInputStream ) ) );
             }
         }
 

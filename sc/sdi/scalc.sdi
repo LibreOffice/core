@@ -4240,7 +4240,7 @@ SfxUInt16Item RowHeight FID_ROW_HEIGHT
 
 
 SfxVoidItem SbaImport SID_SBA_IMPORT
-(SfxUsrAnyItem Query SID_SBA_IMPORT,SfxStringItem Target FN_PARAM_1)
+(SfxUnoAnyItem Query SID_SBA_IMPORT,SfxStringItem Target FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
