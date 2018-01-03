@@ -263,6 +263,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.style.CellStyle",                   Type::CELLSTYLE },
     { "com.sun.star.style.PageStyle",                   Type::PAGESTYLE },
     { "com.sun.star.sheet.TableAutoFormat",             Type::AUTOFORMAT },
+    { "com.sun.star.sheet.TableAutoFormats",            Type::AUTOFORMATS },
     { "com.sun.star.sheet.SheetCellRanges",             Type::CELLRANGES },
     { "com.sun.star.sheet.FunctionDescriptions",        Type::FUNCTIONDESCRIPTIONS },
     { "com.sun.star.sheet.RecentFunctions",             Type::RECENTFUNCTIONS },
@@ -422,6 +423,9 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
         case Type::AUTOFORMAT:
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));
+            break;
+        case Type::AUTOFORMATS:
+            xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatsObj()));
             break;
         case Type::CELLRANGES:
             //  isn't inserted, rather filled
