@@ -38,8 +38,6 @@ class VCL_PLUGIN_PUBLIC SalBitmap
 {
 public:
 
-    typedef BitmapChecksum  ChecksumType;
-
     SalBitmap()
         : mnChecksum(0)
         , mbChecksumValid(false)
@@ -76,7 +74,7 @@ public:
         return false;
     }
 
-    void GetChecksum(ChecksumType& rChecksum) const
+    void GetChecksum(BitmapChecksum& rChecksum) const
     {
         updateChecksum();
         if (!mbChecksumValid)
@@ -91,8 +89,8 @@ public:
     }
 
 protected:
-    ChecksumType mnChecksum;
-    bool         mbChecksumValid;
+    BitmapChecksum mnChecksum;
+    bool           mbChecksumValid;
 
 protected:
     virtual void updateChecksum() const
@@ -100,7 +98,7 @@ protected:
         if (mbChecksumValid)
             return;
 
-        ChecksumType nCrc = 0;
+        BitmapChecksum nCrc = 0;
         SalBitmap* pThis = const_cast<SalBitmap*>(this);
         BitmapBuffer* pBuf = pThis->AcquireBuffer(BitmapAccessMode::Read);
         if (pBuf)

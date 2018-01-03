@@ -47,7 +47,7 @@ private:
 
     virtual void updateChecksum() const override;
 
-    bool calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType& rChecksum) const;
+    bool calcChecksumGL(OpenGLTexture& rInputTexture, BitmapChecksum& rChecksum) const;
 
 public:
     OpenGLSalBitmap();

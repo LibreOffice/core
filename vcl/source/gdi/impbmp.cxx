@@ -92,7 +92,7 @@ void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode
 
 BitmapChecksum ImpBitmap::ImplGetChecksum() const
 {
-    SalBitmap::ChecksumType aChecksum;
+    BitmapChecksum aChecksum;
     mpSalBitmap->GetChecksum(aChecksum);
     return aChecksum;
 }
