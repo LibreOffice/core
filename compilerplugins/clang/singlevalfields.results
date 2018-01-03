@@ -25,6 +25,18 @@ include/svtools/svparser.hxx:74
 include/svtools/svparser.hxx:75
     SvParser::TokenStackType bTokenHasValue
     0
+include/tools/multisel.hxx:41
+    MultiSelection bInverseCur
+    0
+include/unotools/textsearch.hxx:104
+    utl::SearchParam m_bWordOnly
+    0
+include/unotools/textsearch.hxx:105
+    utl::SearchParam m_bSrchInSel
+    0
+include/unotools/textsearch.hxx:110
+    utl::SearchParam nTransliterationFlags
+    0
 include/vcl/filter/pdfdocument.hxx:173
     vcl::filter::PDFNameElement m_nLength
     0
@@ -67,9 +79,6 @@ sc/inc/compiler.hxx:108
 sc/qa/unit/ucalc.hxx:41
     Test::RangeNameDef mnIndex
     1
-sc/source/ui/inc/undodat.hxx:447
-    ScUndoDataForm nStartChangeAction
-    0
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
     0
@@ -109,6 +118,9 @@ sw/inc/pagepreviewlayout.hxx:49
 sw/source/core/inc/frmtool.hxx:260
     SwBorderAttrs m_bBorderDist
     1
+sw/source/core/inc/swfont.hxx:170
+    SwFont m_bURL
+    0
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nKenn
     4294967295
@@ -133,9 +145,6 @@ sw/source/filter/ww8/ww8par.hxx:651
 sw/source/filter/ww8/ww8par.hxx:660
     WW8FormulaControl mhpsCheckBox
     20
-sw/source/uibase/lingu/sdrhhcwrap.hxx:33
-    SdrHHCWrapper pTextObj
-    0
 vcl/inc/salprn.hxx:41
     SalPrinterQueueInfo mnStatus
     0
@@ -169,10 +178,10 @@ vcl/source/filter/jpeg/transupp.h:131
 vcl/source/font/font.cxx:539
     (anonymous namespace)::WeightSearchEntry weight
     5
-vcl/source/gdi/pdfwriter_impl.hxx:706
+vcl/source/gdi/pdfwriter_impl.hxx:705
     vcl::PDFWriterImpl m_nInheritedPageWidth
     595
-vcl/source/gdi/pdfwriter_impl.hxx:707
+vcl/source/gdi/pdfwriter_impl.hxx:706
     vcl::PDFWriterImpl m_nInheritedPageHeight
     842
 writerfilter/source/dmapper/GraphicImport.cxx:223

@@ -722,7 +722,6 @@ SwFont::SwFont( const SwFont &rFont )
     m_bFontChg = rFont.m_bFontChg;
     m_bOrgChg = rFont.m_bOrgChg;
     m_bPaintBlank = rFont.m_bPaintBlank;
-    m_bURL = rFont.m_bURL;
     m_bGreyWave = rFont.m_bGreyWave;
     m_bBlink = rFont.m_bBlink;
 }
@@ -737,7 +736,6 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     m_nMetaCount = 0;
     m_nInputFieldCount = 0;
     m_bPaintBlank = false;
-    m_bURL = false;
     m_bGreyWave = false;
     m_bBlink = pAttrSet->GetBlink().GetValue();
     m_bOrgChg = true;
@@ -920,7 +918,6 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     m_bFontChg = rFont.m_bFontChg;
     m_bOrgChg = rFont.m_bOrgChg;
     m_bPaintBlank = rFont.m_bPaintBlank;
-    m_bURL = rFont.m_bURL;
     m_bGreyWave = rFont.m_bGreyWave;
     m_bBlink = rFont.m_bBlink;
     return *this;

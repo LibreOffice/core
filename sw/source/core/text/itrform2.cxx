@@ -907,16 +907,10 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             }
             if( !pPor )
             {
-                if( !rInf.X() && !m_pCurr->GetPortion() && !m_pCurr->GetLen() && !GetFnt()->IsURL() )
+                if( !rInf.X() && !m_pCurr->GetPortion() && !m_pCurr->GetLen() )
                     pPor = m_pCurr;
                 else
-                {
                     pPor = new SwTextPortion;
-                    if ( GetFnt()->IsURL() )
-                    {
-                        pPor->SetWhichPor( POR_URL );
-                    }
-                }
             }
         }
     }

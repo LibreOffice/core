@@ -53,12 +53,8 @@ SearchParam::SearchParam( const OUString &rText,
 
     m_cWildEscChar  = cWildEscChar;
 
-    m_bWordOnly     = false;
-    m_bSrchInSel    = false;
     m_bCaseSense    = bCaseSensitive;
     m_bWildMatchSel = bWildMatchSel;
-
-    nTransliterationFlags = TransliterationFlags::NONE;
 }
 
 SearchParam::SearchParam( const SearchParam& rParam )
@@ -69,12 +65,8 @@ SearchParam::SearchParam( const SearchParam& rParam )
 
     m_cWildEscChar  = rParam.m_cWildEscChar;
 
-    m_bWordOnly     = rParam.m_bWordOnly;
-    m_bSrchInSel    = rParam.m_bSrchInSel;
     m_bCaseSense    = rParam.m_bCaseSense;
     m_bWildMatchSel = rParam.m_bWildMatchSel;
-
-    nTransliterationFlags = rParam.nTransliterationFlags;
 }
 
 SearchParam::~SearchParam() {}
@@ -200,16 +192,11 @@ void TextSearch::Init( const SearchParam & rParam,
     case SearchParam::SearchType::Regexp:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
         aSOpt.algorithmType = SearchAlgorithms_REGEXP;
-        if( rParam.IsSrchInSelection() )
-            aSOpt.searchFlag |= SearchFlags::REG_NOT_BEGINOFLINE |
-                                SearchFlags::REG_NOT_ENDOFLINE;
         break;
 
     case SearchParam::SearchType::Normal:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
         aSOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
-        if( rParam.IsSrchWordOnly() )
-            aSOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
         break;
 
     default:
@@ -218,7 +205,7 @@ void TextSearch::Init( const SearchParam & rParam,
     aSOpt.searchString = rParam.GetSrchStr();
     aSOpt.replaceString = rParam.GetReplaceStr();
     aSOpt.Locale = rLocale;
-    aSOpt.transliterateFlags = rParam.GetTransliterationFlags();
+    aSOpt.transliterateFlags = TransliterationFlags::NONE;
     if( !rParam.IsCaseSensitive() )
     {
         aSOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
