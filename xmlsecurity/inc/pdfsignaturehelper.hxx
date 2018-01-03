@@ -32,8 +32,10 @@ class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
 public:
     PDFSignatureHelper();
     bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
-    css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformations(const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
-    SignatureInformations const & GetSignatureInformations() const;
+    css::uno::Sequence<css::security::DocumentSignatureInformation>
+    GetDocumentSignatureInformations(
+        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
+    SignatureInformations const& GetSignatureInformations() const;
 
     /// Return the ID of the next created signature.
     sal_Int32 GetNewSecurityId() const;
@@ -44,7 +46,8 @@ public:
     /// Append a new signature at the end of xInputStream.
     bool Sign(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bAdES);
     /// Remove the signature at nPosition (and all dependent signatures) from xInputStream.
-    static bool RemoveSignature(const css::uno::Reference<css::io::XInputStream>& xInputStream, sal_uInt16 nPosition);
+    static bool RemoveSignature(const css::uno::Reference<css::io::XInputStream>& xInputStream,
+                                sal_uInt16 nPosition);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX

@@ -26,7 +26,8 @@ using namespace ::com::sun::star;
 
 PDFSignatureHelper::PDFSignatureHelper() = default;
 
-bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputStream>& xInputStream)
+bool PDFSignatureHelper::ReadAndVerifySignature(
+    const uno::Reference<io::XInputStream>& xInputStream)
 {
     if (!xInputStream.is())
     {
@@ -62,12 +63,14 @@ bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputS
     return true;
 }
 
-SignatureInformations const & PDFSignatureHelper::GetSignatureInformations() const
+SignatureInformations const& PDFSignatureHelper::GetSignatureInformations() const
 {
     return m_aSignatureInfos;
 }
 
-uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDocumentSignatureInformations(const uno::Reference<xml::crypto::XSecurityEnvironment>& xSecEnv) const
+uno::Sequence<security::DocumentSignatureInformation>
+PDFSignatureHelper::GetDocumentSignatureInformations(
+    const uno::Reference<xml::crypto::XSecurityEnvironment>& xSecEnv) const
 {
     uno::Sequence<security::DocumentSignatureInformation> aRet(m_aSignatureInfos.size());
 
@@ -75,7 +78,8 @@ uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDoc
     {
         const SignatureInformation& rInternal = m_aSignatureInfos[i];
         security::DocumentSignatureInformation& rExternal = aRet[i];
-        rExternal.SignatureIsValid = rInternal.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+        rExternal.SignatureIsValid
+            = rInternal.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
         if (!rInternal.ouX509Certificate.isEmpty())
             rExternal.Signer = xSecEnv->createCertificateFromAscii(rInternal.ouX509Certificate);
         rExternal.PartialDocumentSignature = rInternal.bPartialDocumentSignature;
@@ -100,12 +104,10 @@ uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDoc
     return aRet;
 }
 
-sal_Int32 PDFSignatureHelper::GetNewSecurityId() const
-{
-    return m_aSignatureInfos.size();
-}
+sal_Int32 PDFSignatureHelper::GetNewSecurityId() const { return m_aSignatureInfos.size(); }
 
-void PDFSignatureHelper::SetX509Certificate(const uno::Reference<security::XCertificate>& xCertificate)
+void PDFSignatureHelper::SetX509Certificate(
+    const uno::Reference<security::XCertificate>& xCertificate)
 {
     m_xCertificate = xCertificate;
 }
@@ -142,7 +144,8 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
     return true;
 }
 
-bool PDFSignatureHelper::RemoveSignature(const uno::Reference<io::XInputStream>& xInputStream, sal_uInt16 nPosition)
+bool PDFSignatureHelper::RemoveSignature(const uno::Reference<io::XInputStream>& xInputStream,
+                                         sal_uInt16 nPosition)
 {
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     vcl::filter::PDFDocument aDocument;
