@@ -231,7 +231,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     }
     else if(aURL.Complete == cURLFormLetter)
     {
-        SfxUsrAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, uno::makeAny(aArgs));
+        SfxUnoAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, uno::makeAny(aArgs));
         m_pView->GetViewFrame()->GetDispatcher()->ExecuteList(
             FN_MAILMERGE_WIZARD,
             SfxCallMode::ASYNCHRON,

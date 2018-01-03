@@ -174,7 +174,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 svx::ODataAccessDescriptor aDesc;
                 if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                 {
-                    uno::Any aAny = static_cast<const SfxUsrAnyItem*>(pItem)->GetValue();
+                    uno::Any aAny = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
                     uno::Sequence<beans::PropertyValue> aProperties;
                     if ( aAny >>= aProperties )
                         aDesc.initializeFrom( aProperties );

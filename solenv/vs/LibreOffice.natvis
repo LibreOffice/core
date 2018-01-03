@@ -278,7 +278,7 @@
   <Type Name="CntUnencodedStringItem">
     <DisplayString>{{which={m_nWhich,x}}} {m_aValue}</DisplayString>
   </Type>
-  <Type Name="SfxUsrAnyItem">
+  <Type Name="SfxUnoAnyItem">
     <DisplayString>{{which={m_nWhich,x}}} {aValue}</DisplayString>
   </Type>
   <Type Name="SvxFontItem">

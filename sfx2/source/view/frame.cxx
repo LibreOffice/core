@@ -76,7 +76,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-SfxPoolItem* SfxUsrAnyItem::CreateDefault() { SAL_WARN( "sfx", "No SfxUsrAnyItem factory available"); return nullptr; }
+SfxPoolItem* SfxUnoAnyItem::CreateDefault() { SAL_WARN( "sfx", "No SfxUnoAnyItem factory available"); return nullptr; }
 
 SfxPoolItem* SfxUnoFrameItem::CreateDefault()
 {
@@ -300,7 +300,7 @@ void SfxFrame::GetViewData_Impl()
         if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SfxItemState::SET )
         {
             css::uno::Any aData = GetController()->getViewData();
-            pSet->Put( SfxUsrAnyItem( SID_VIEW_DATA, aData ) );
+            pSet->Put( SfxUnoAnyItem( SID_VIEW_DATA, aData ) );
         }
 
         if ( pViewFrame->GetCurViewId() )
@@ -460,29 +460,29 @@ bool SfxFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 }
 
 
-SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const css::uno::Any& rAny )
+SfxUnoAnyItem::SfxUnoAnyItem( sal_uInt16 nWhichId, const css::uno::Any& rAny )
     : SfxPoolItem( nWhichId )
 {
     aValue = rAny;
 }
 
-bool SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
+bool SfxUnoAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
 {
     return false;
 }
 
-SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
+SfxPoolItem* SfxUnoAnyItem::Clone( SfxItemPool *) const
 {
-    return new SfxUsrAnyItem( *this );
+    return new SfxUnoAnyItem( *this );
 }
 
-bool SfxUsrAnyItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxUnoAnyItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal = aValue;
     return true;
 }
 
-bool SfxUsrAnyItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxUnoAnyItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     aValue = rVal;
     return true;

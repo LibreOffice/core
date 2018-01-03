@@ -32,7 +32,7 @@
     item String     SfxMacroInfoItem;       //! Dummy
     item String     SfxImageItem;           //! Dummy
     item String     SfxObjectShellItem      //! Dummy
-    item String     SfxUsrAnyItem           //! Dummy
+    item String     SfxUnoAnyItem           //! Dummy
     item String     SfxUnoFrameItem         //! Dummy
     item String     SfxWatermarkItem        //! Dummy
 

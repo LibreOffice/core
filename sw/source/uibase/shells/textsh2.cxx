@@ -94,27 +94,27 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
 
     Sequence<Any> aSelection;
     if(pSelectionItem)
-        static_cast<const SfxUsrAnyItem*>(pSelectionItem)->GetValue() >>= aSelection;
+        static_cast<const SfxUnoAnyItem*>(pSelectionItem)->GetValue() >>= aSelection;
 
     // get the data source name
     pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, false, &pSourceItem);
     if(pSourceItem)
-        static_cast<const SfxUsrAnyItem*>(pSourceItem)->GetValue() >>= sSourceArg;
+        static_cast<const SfxUnoAnyItem*>(pSourceItem)->GetValue() >>= sSourceArg;
 
     // get the command
     pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, false, &pCommandItem);
     if(pCommandItem)
-        static_cast<const SfxUsrAnyItem*>(pCommandItem)->GetValue() >>= sCommandArg;
+        static_cast<const SfxUnoAnyItem*>(pCommandItem)->GetValue() >>= sCommandArg;
 
     // get the command type
     pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, false, &pCommandTypeItem);
     if(pCommandTypeItem)
-        static_cast<const SfxUsrAnyItem*>(pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
+        static_cast<const SfxUnoAnyItem*>(pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
 
     Reference<XConnection> xConnection;
     pArgs->GetItemState(FN_DB_CONNECTION_ANY, false, &pConnectionItem);
     if ( pConnectionItem )
-        static_cast<const SfxUsrAnyItem*>(pConnectionItem)->GetValue() >>= xConnection;
+        static_cast<const SfxUnoAnyItem*>(pConnectionItem)->GetValue() >>= xConnection;
     // may be we even get no connection
     if ( !xConnection.is() )
     {
@@ -128,7 +128,7 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
     Reference<XResultSet> xCursor;
     pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, false, &pCursorItem);
     if ( pCursorItem )
-        static_cast<const SfxUsrAnyItem*>(pCursorItem)->GetValue() >>= xCursor;
+        static_cast<const SfxUnoAnyItem*>(pCursorItem)->GetValue() >>= xCursor;
 
     switch (rReq.GetSlot())
     {
@@ -187,7 +187,7 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
 
                 OUString sColumnName;
                 if(pColumnNameItem)
-                    static_cast<const SfxUsrAnyItem*>(pColumnNameItem)->GetValue() >>= sColumnName;
+                    static_cast<const SfxUnoAnyItem*>(pColumnNameItem)->GetValue() >>= sColumnName;
                 OUString sDBName = sSourceArg + OUStringLiteral1(DB_DELIM)
                     + sCommandArg + OUStringLiteral1(DB_DELIM)
                     + OUString::number(nCommandTypeArg)
@@ -196,9 +196,9 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
                 SwFieldMgr aFieldMgr(GetShellPtr());
                 SwInsertField_Data aData(TYP_DBFLD, 0, sDBName, OUString(), 0);
                 if(pConnectionItem)
-                    aData.m_aDBConnection = static_cast<const SfxUsrAnyItem*>(pConnectionItem)->GetValue();
+                    aData.m_aDBConnection = static_cast<const SfxUnoAnyItem*>(pConnectionItem)->GetValue();
                 if(pColumnItem)
-                    aData.m_aDBColumn = static_cast<const SfxUsrAnyItem*>(pColumnItem)->GetValue();
+                    aData.m_aDBColumn = static_cast<const SfxUnoAnyItem*>(pColumnItem)->GetValue();
                 aFieldMgr.InsertField(aData);
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
                 uno::Reference< XDispatchRecorder > xRecorder =

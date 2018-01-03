@@ -252,7 +252,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
     ScDLL::Init();
     SfxMedium aMedium;
     css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
-    aMedium.GetItemSet()->Put(SfxUsrAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
+    aMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
 
     ScDocShellRef xDocShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT |
                                              SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
@@ -286,7 +286,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
     ScDLL::Init();
     SfxMedium aMedium;
     css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
-    aMedium.GetItemSet()->Put(SfxUsrAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
+    aMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
     ScDocument aDocument;
     ScDocOptions aDocOpt = aDocument.GetDocOptions();
     aDocOpt.SetLookUpColRowNames(false);

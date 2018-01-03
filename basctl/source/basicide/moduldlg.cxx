@@ -724,7 +724,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
                 if (pDocumentEntry)
                     aDocument = pDocumentEntry->GetDocument();
             }
-            SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( aDocument.getDocumentOrNull() ) );
+            SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( aDocument.getDocumentOrNull() ) );
             OUString aLibName( m_pBasicBox->GetEntryText( pCurEntry ) );
             SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
             if ( pDispatcher )
