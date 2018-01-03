@@ -47,7 +47,7 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(42L, static_cast<long>(bi));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(42), static_cast<sal_Int32>(bi));
     }
 
     // small negative number
@@ -57,7 +57,7 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(-42L, static_cast<long>(bi));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-42), static_cast<sal_Int32>(bi));
     }
 
 #if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG

@@ -33,8 +33,8 @@ class Fraction;
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC BigInt
 {
 private:
-    long            nVal;
-    unsigned short  nNum[MAX_DIGITS];
+    sal_Int32       nVal;
+    sal_uInt16      nNum[MAX_DIGITS];
     sal_uInt8       nLen        : 5;    // current length
     bool            bIsNeg      : 1,    // Is Sign negative?
                     bIsBig      : 1,    // sal_True == BigInt
@@ -62,7 +62,7 @@ public:
     {
     }
 
-    BigInt(short nValue)
+    BigInt(sal_Int32 nValue)
         : nVal(nValue)
         , nLen(0)
         , bIsNeg(false)
@@ -71,15 +71,8 @@ public:
     {
     }
 
-    BigInt(long nValue)
-        : nVal(nValue)
-        , nLen(0)
-        , bIsNeg(false)
-        , bIsBig(false)
-        , bIsSet(true)
-    {
-    }
-
+    // despite sal_Int32 being a typedef for int, MSVC won't automatically use the BigInt(sal_Int32) constructor
+#ifdef _WIN32
     BigInt(int nValue)
         : nVal(nValue)
         , nLen(0)
@@ -88,31 +81,22 @@ public:
         , bIsSet(true)
     {
     }
+#endif
 
     BigInt( double nVal );
-
-    BigInt(sal_uInt16 nValue)
-        : nVal(nValue)
-        , nLen(0)
-        , bIsNeg(false)
-        , bIsBig(false)
-        , bIsSet(true)
-    {
-    }
-
     BigInt( sal_uInt32 nVal );
-#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
-    BigInt( long long nVal );
-#endif
+    BigInt( sal_Int64 nVal );
     BigInt( const BigInt& rBigInt );
     BigInt( const OUString& rString );
 
-    operator        short() const;
-    operator        long()  const;
-    operator        int()   const;
-    operator        double() const;
+    operator        sal_Int16() const;
     operator        sal_uInt16() const;
-    operator        sal_uIntPtr() const;
+    operator        sal_Int32() const;
+    operator        sal_uInt32() const;
+    operator        double() const;
+#if SAL_TYPES_SIZEOFLONG == 8
+    operator        long() const;
+#endif
 
     bool            IsSet() const { return bIsSet; }
     bool            IsNeg() const;
@@ -128,10 +112,7 @@ public:
     BigInt&         operator /=( const BigInt& rVal );
     BigInt&         operator %=( const BigInt& rVal );
 
-    BigInt&         operator  =( const short      nValue );
-    BigInt&         operator  =( const long       nValue );
-    BigInt&         operator  =( const int        nValue );
-    BigInt&         operator  =( const sal_uInt16 nValue );
+    BigInt&         operator  =( sal_Int32 nValue );
 
     friend inline   BigInt operator +( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   BigInt operator -( const BigInt& rVal1, const BigInt& rVal2 );
@@ -149,66 +130,50 @@ public:
     friend class Fraction;
 };
 
-inline BigInt::operator short() const
+inline BigInt::operator sal_Int16() const
 {
-    if ( !bIsBig && nVal >= SHRT_MIN && nVal <= SHRT_MAX )
-        return (short)nVal;
-    else
-        return 0;
-}
-
-inline BigInt::operator long() const
-{
-    if ( !bIsBig )
-        return nVal;
-    else
-        return 0;
-}
-
-inline BigInt::operator int() const
-{
-    if ( !bIsBig && (nVal == (long)(int)nVal) )
-        return (int)nVal;
-    else
-        return 0;
+    if ( !bIsBig && nVal >= SAL_MIN_INT16 && nVal <= SAL_MAX_INT16 )
+        return (sal_Int16)nVal;
+    assert(false && "out of range");
+    return 0;
 }
 
 inline BigInt::operator sal_uInt16() const
 {
-    if ( !bIsBig && nVal >= 0 && nVal <= (long)USHRT_MAX )
+    if ( !bIsBig && nVal >= 0 && nVal <= SAL_MAX_UINT16 )
         return (sal_uInt16)nVal;
-    else
-        return 0;
+    assert(false && "out of range");
+    return 0;
 }
 
-inline BigInt& BigInt::operator =( const short nValue )
+inline BigInt::operator sal_Int32() const
 {
-    bIsSet = true;
-    bIsBig = false;
-    nVal   = nValue;
-
-    return *this;
+    if ( !bIsBig && nVal >= SAL_MIN_INT32 && nVal <= SAL_MAX_INT32 )
+        return (sal_Int32)nVal;
+    assert(false && "out of range");
+    return 0;
 }
 
-inline BigInt& BigInt::operator =( const long nValue )
+inline BigInt::operator sal_uInt32() const
 {
-    bIsSet = true;
-    bIsBig = false;
-    nVal   = nValue;
-
-    return *this;
+    if ( !bIsBig && nVal >= 0 )
+        return (sal_uInt32)nVal;
+    assert(false && "out of range");
+    return 0;
 }
 
-inline BigInt& BigInt::operator =( const int nValue )
+#if SAL_TYPES_SIZEOFLONG == 8
+inline BigInt::operator long() const
 {
-    bIsSet = true;
-    bIsBig = false;
-    nVal   = nValue;
-
-    return *this;
+    // Clamp to int32 since long is int32 on Windows.
+    if ( !bIsBig && nVal >= SAL_MIN_INT32 && nVal <= SAL_MAX_INT32 )
+        return (long)nVal;
+    assert(false && "out of range");
+    return 0;
 }
+#endif
 
-inline BigInt& BigInt::operator =( const sal_uInt16 nValue )
+inline BigInt& BigInt::operator =( sal_Int32 nValue )
 {
     bIsSet = true;
     bIsBig = false;
