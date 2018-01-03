@@ -154,7 +154,7 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
                     fSclGrafWidth = fWidth;
                     fSclGrafHeight = fHeight;
                 }
-                else if (nScalemode & LwpLayoutScale::MAINTAIN_ASPECT_RATIO)
+                else if (nScalemode & LwpLayoutScale::MAINTAIN_ASPECT_RATIO && fHeight != 0.0 && fDisFrameHeight != 0.0)
                 {
                     if (fWidth/fHeight >= fDisFrameWidth/fDisFrameHeight)
                     {
