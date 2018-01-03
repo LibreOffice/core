@@ -76,7 +76,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
     }
     /**
     * call <code>setQuery()</code> once with valid query, once with invalid
-    * query. Has ok if only on sceond call <code>SQLException</code> was thrown
+    * query. Has ok if only on second call <code>SQLException</code> was thrown
     */
     public void _setQuery() {
 

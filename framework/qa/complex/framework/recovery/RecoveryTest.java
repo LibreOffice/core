@@ -78,7 +78,7 @@ public class RecoveryTest extends ComplexTestCase {
      * @todo: hidden documents
      * @todo: running presentation
      * @todo: modular dialogs like Hpyerlink-Dialog
-     * @todo: sceond view of a document
+     * @todo: second view of a document
      * @todo: remove recovery data before start test
      * @todo: after a second start after the crash there should no documents recovered anymore
      * @todo: enable remove of recovery files

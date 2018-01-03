@@ -142,12 +142,12 @@ void TableValidation::testTableValidationProperties()
     propName = "ShowList";
     sal_Int16 aShowList = 0;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aShowList);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unabel to get property value ShowList", sal_Int16(1), aShowList);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ShowList", sal_Int16(1), aShowList);
 
     aNewValue <<= sal_Int16(42);
     xTableValidation->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aShowList);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unabel to set property value ShowList", sal_Int16(42), aShowList);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set property value ShowList", sal_Int16(42), aShowList);
 }
 }
 
