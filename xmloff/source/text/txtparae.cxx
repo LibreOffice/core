@@ -3036,13 +3036,29 @@ void XMLTextParagraphExport::_exportTextGraphic(
     rPropSet->getPropertyValue( sGraphicRotation ) >>= nVal;
     if( nVal != 0 )
     {
-        OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
-        sRet.append( GetXMLToken(XML_ROTATE));
-        sRet.append( '(' );
-        sRet.append( (sal_Int32)nVal );
-        sRet.append( ')' );
-        GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_TRANSFORM,
-                                  sRet.makeStringAndClear() );
+        // RotateFlyFrameFix: im/export full 'draw:transform' using existing tooling.
+        // Currently only rotation is used, but combinations with 'draw:transform'
+        // may be necessary in the future, so that svg:x/svg:y/svg:width/svg:height
+        // may be extended/replaced with 'draw:transform' (see draw objects)
+        SdXMLImExTransform2D aSdXMLImExTransform2D;
+
+        // Convert from 10th degree integer to deg.
+        // CAUTION: Internal rotation is classically mathematically 'wrong' defined by ignoring that
+        // we have a right-handed coordinate system, so need to correct this by mirroring
+        // the rotation to get the correct transformation. See also case XML_TOK_TEXT_FRAME_TRANSFORM
+        // in XMLTextFrameContext_Impl::XMLTextFrameContext_Impl and #i78696#
+        const double fRotate(static_cast< double >(-nVal) * (M_PI/1800.0));
+
+        aSdXMLImExTransform2D.AddRotate(fRotate);
+
+        // Note: using GetTwipUnitConverter instead of GetMM100UnitConverter may be needed,
+        // but is not generally available (as it should be, a 'current' UnitConverter should
+        // be available at GetExport() - and maybe was once). May have to be adressed as soon
+        // as translate transformations are used here.
+        GetExport().AddAttribute(
+            XML_NAMESPACE_DRAW,
+            XML_TRANSFORM,
+            aSdXMLImExTransform2D.GetExportString(GetExport().GetMM100UnitConverter()));
     }
 
     // original content
