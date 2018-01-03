@@ -1144,7 +1144,7 @@ bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelec
     if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
         return false;
 
-    return pEntry && dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) == nullptr;
+    return pEntry && dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr;
 }
 
 
