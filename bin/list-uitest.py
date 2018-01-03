@@ -51,7 +51,8 @@ def main():
             'Calc' : ['../uitest/calc_tests', '../sc/qa/uitest/'],
             'Impress' : ['../uitest/impress_tests/'],
             'Math': ['../uitest/math_tests/'],
-            'Draw': ['']}
+            'Draw': [''],
+            'Manual_tests': ['../uitest/manual_tests/']}
 
     print('Generated on ' + str(datetime.datetime.now()))
     for k,v in uitest_dirs.items():
