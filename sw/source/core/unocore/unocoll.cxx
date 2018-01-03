@@ -994,8 +994,6 @@ namespace
     template<>
     struct UnoFrameWrap_traits<FLYCNTTYPE_FRM>
     {
-        typedef SwXTextFrame core_frame_t;
-        typedef XTextFrame uno_frame_t;
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             uno::Reference<text::XTextFrame> const xRet(
@@ -1008,8 +1006,6 @@ namespace
     template<>
     struct UnoFrameWrap_traits<FLYCNTTYPE_GRF>
     {
-        typedef SwXTextGraphicObject core_frame_t;
-        typedef XTextContent uno_frame_t;
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             uno::Reference<text::XTextContent> const xRet(
@@ -1022,8 +1018,6 @@ namespace
     template<>
     struct UnoFrameWrap_traits<FLYCNTTYPE_OLE>
     {
-        typedef SwXTextEmbeddedObject core_frame_t;
-        typedef XEmbeddedObjectSupplier uno_frame_t;
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             uno::Reference<text::XTextContent> const xRet(
