@@ -12,7 +12,7 @@ import datetime
 def analyze_file(filename):
     class_name = ""
     method_list = []
-    with open(filename) as fh:
+    with open(filename, encoding='utf-8') as fh:
         for line in fh:
             if line.lstrip().startswith('class '):
                 class_name = line.lstrip().split(" ")[1].split("(")[0]
@@ -51,7 +51,8 @@ def main():
             'Calc' : ['../uitest/calc_tests', '../sc/qa/uitest/'],
             'Impress' : ['../uitest/impress_tests/'],
             'Math': ['../uitest/math_tests/'],
-            'Draw': ['']}
+            'Draw': [''],
+            'Manual_tests': ['../uitest/manual_tests/']}
 
     print('{{TopMenu}}')
     print('{{Menu}}')
