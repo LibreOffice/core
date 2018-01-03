@@ -1569,18 +1569,18 @@ XFColumns* LwpLayout::GetXFColumns()
         return nullptr;
     }
 
-    XFColumns* pColumns = new XFColumns();
+    std::unique_ptr<XFColumns> xColumns(new XFColumns);
     //set XFColumnSep
-    std::unique_ptr<XFColumnSep> pColumnSep(GetColumnSep());
-    if(pColumnSep)
+    std::unique_ptr<XFColumnSep> xColumnSep(GetColumnSep());
+    if (xColumnSep)
     {
-        pColumns->SetSeparator(*pColumnSep);
+        xColumns->SetSeparator(*xColumnSep);
     }
 
     //set column count and column gap
-    pColumns->SetCount(nCols);
+    xColumns->SetCount(nCols);
     double fGap = GetColGap(0);
-    pColumns->SetGap(fGap);
+    xColumns->SetGap(fGap);
 
     //set xfcolumn
     for(sal_uInt16 nIndex = 0; nIndex<nCols; nIndex++)
@@ -1600,10 +1600,10 @@ XFColumns* LwpLayout::GetXFColumns()
         {
             aColumn.SetMargins(nGap,0);
         }
-        pColumns->AddColumn(aColumn);
+        xColumns->AddColumn(aColumn);
     }
 
-    return pColumns;
+    return xColumns.release();
 }
 
 /**
