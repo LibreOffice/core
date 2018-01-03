@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/tablevalidation.hxx>
 #include <test/sheet/xsheetcondition.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -28,9 +29,11 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-#define NUMBER_OF_TESTS 4
+#define NUMBER_OF_TESTS 5
 
-class ScTableValidationObj : public CalcUnoApiTest, public apitest::XSheetCondition
+class ScTableValidationObj : public CalcUnoApiTest,
+                             public apitest::TableValidation,
+                             public apitest::XSheetCondition
 {
 public:
     ScTableValidationObj();
@@ -40,6 +43,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableValidationObj);
+
+    // TableValidation
+    CPPUNIT_TEST(testTableValidationProperties);
 
     // XSheetCondition
     CPPUNIT_TEST(testGetSetFormula1);

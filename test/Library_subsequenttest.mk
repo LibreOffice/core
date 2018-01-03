@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/datapilotfield \
 	test/source/sheet/datapilotitem \
 	test/source/sheet/scenario \
+	test/source/sheet/tablevalidation \
 	test/source/sheet/xarealink \
 	test/source/sheet/xarealinks \
 	test/source/sheet/xcelladdressable \
