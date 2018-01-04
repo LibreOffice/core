@@ -132,7 +132,7 @@ namespace DOM
                                                                 RTL_TEXTENCODING_UTF8));
         }
 
-        const xmlChar* pPrefix = m_aNodePtr->ns ? m_aNodePtr->ns->prefix : reinterpret_cast<const xmlChar*>("");
+        const xmlChar* pPrefix = (m_aNodePtr->ns && m_aNodePtr->ns->prefix) ? m_aNodePtr->ns->prefix : reinterpret_cast<const xmlChar*>("");
         const xmlChar* pName = m_aNodePtr->name;
         sal_Int32 nElementToken=FastToken::DONTKNOW;
         if( strlen(reinterpret_cast<char const *>(pPrefix)) )
