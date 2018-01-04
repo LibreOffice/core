@@ -42,7 +42,7 @@ class SwPageFrame: public SwFootnoteBossFrame
 {
     friend class SwFrame;
 
-    SwSortedObjs *m_pSortedObjs;
+    std::unique_ptr<SwSortedObjs> m_pSortedObjs;
 
     SwPageDesc *m_pDesc; //PageDesc that describes the Page
 
@@ -117,8 +117,8 @@ public:
     void PrepareHeader();
     void PrepareFooter();
 
-    const SwSortedObjs  *GetSortedObjs() const  { return m_pSortedObjs; }
-          SwSortedObjs  *GetSortedObjs()          { return m_pSortedObjs; }
+    const SwSortedObjs *GetSortedObjs() const { return m_pSortedObjs.get(); }
+          SwSortedObjs *GetSortedObjs()       { return m_pSortedObjs.get(); }
 
     void AppendDrawObjToPage( SwAnchoredObject& _rNewObj );
     void RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj );

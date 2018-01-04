@@ -169,7 +169,6 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
 
 SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPgDsc ) :
     SwFootnoteBossFrame( pFormat, pSib ),
-    m_pSortedObjs( nullptr ),
     m_pDesc( pPgDsc ),
     m_nPhyPageNum( 0 )
 {
@@ -261,7 +260,7 @@ void SwPageFrame::DestroyImpl()
     }
 
     // empty FlyContainer, deletion of the Flys is done by the anchor (in base class SwFrame)
-    if ( m_pSortedObjs )
+    if (m_pSortedObjs)
     {
         // Objects can be anchored at pages that are before their anchors (why ever...).
         // In such cases, we would access already freed memory.
@@ -269,8 +268,7 @@ void SwPageFrame::DestroyImpl()
         {
             pAnchoredObj->SetPageFrame( nullptr );
         }
-        delete m_pSortedObjs;
-        m_pSortedObjs = nullptr; // reset to zero to prevent problems when detaching the Flys
+        m_pSortedObjs.reset(); // reset to zero to prevent problems when detaching the Flys
     }
 
     if ( !IsEmptyPage() ) //#59184# unnecessary for empty pages

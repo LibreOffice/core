@@ -826,7 +826,9 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
         InvalidateFlyContent();
 
         if ( !m_pSortedObjs )
-            m_pSortedObjs = new SwSortedObjs();
+        {
+            m_pSortedObjs.reset(new SwSortedObjs());
+        }
 
         const bool bSuccessInserted = m_pSortedObjs->Insert( *pNew );
         OSL_ENSURE( bSuccessInserted, "Fly not inserted in Sorted." );
@@ -910,8 +912,7 @@ void SwPageFrame::RemoveFlyFromPage( SwFlyFrame *pToRemove )
         m_pSortedObjs->Remove(*pToRemove);
         if (!m_pSortedObjs->size())
         {
-            delete m_pSortedObjs;
-            m_pSortedObjs = nullptr;
+            m_pSortedObjs.reset();
         }
     }
 
@@ -968,13 +969,13 @@ void SwPageFrame::MoveFly( SwFlyFrame *pToMove, SwPageFrame *pDest )
         m_pSortedObjs->Remove( *pToMove );
         if ( !m_pSortedObjs->size() )
         {
-            DELETEZ( m_pSortedObjs );
+            m_pSortedObjs.reset();
         }
     }
 
     // Register
     if ( !pDest->GetSortedObjs() )
-        pDest->m_pSortedObjs = new SwSortedObjs();
+        pDest->m_pSortedObjs.reset(new SwSortedObjs());
 
     const bool bSuccessInserted = pDest->GetSortedObjs()->Insert( *pToMove );
     OSL_ENSURE( bSuccessInserted, "Fly not inserted in Sorted." );
@@ -1059,7 +1060,7 @@ void SwPageFrame::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 
     if ( !m_pSortedObjs )
     {
-        m_pSortedObjs = new SwSortedObjs();
+        m_pSortedObjs.reset(new SwSortedObjs());
     }
     if ( !m_pSortedObjs->Insert( _rNewObj ) )
     {
@@ -1088,7 +1089,7 @@ void SwPageFrame::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
         m_pSortedObjs->Remove( _rToRemoveObj );
         if ( !m_pSortedObjs->size() )
         {
-            DELETEZ( m_pSortedObjs );
+            m_pSortedObjs.reset();
         }
         if ( GetUpper() )
         {

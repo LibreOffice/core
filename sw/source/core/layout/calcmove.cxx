@@ -644,11 +644,11 @@ void SwFrame::MakePos()
 }
 
 // #i28701# - new type <SwSortedObjs>
-static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, const SwFrame* pFrame, long& rBot )
+static void lcl_CheckObjects(SwSortedObjs& rSortedObjs, const SwFrame* pFrame, long& rBot)
 {
     // And then there can be paragraph anchored frames that sit below their paragraph.
     long nMax = 0;
-    for (SwAnchoredObject* pObj : *pSortedObjs)
+    for (SwAnchoredObject* pObj : rSortedObjs)
     {
         // #i28701# - consider changed type of <SwSortedObjs>
         // entries.
@@ -729,13 +729,13 @@ size_t SwPageFrame::GetContentHeight(const long nTop, const long nBottom) const
         // protrude outside the Body/FootnoteCont.
         if (m_pSortedObjs && !pFrame->IsHeaderFrame() &&
             !pFrame->IsFooterFrame())
-            lcl_CheckObjects(m_pSortedObjs, pFrame, nBot);
+            lcl_CheckObjects(*m_pSortedObjs, pFrame, nBot);
         pFrame = pFrame->GetNext();
     }
     nBot += nBottom;
     // And the page anchored ones
     if (m_pSortedObjs)
-        lcl_CheckObjects(m_pSortedObjs, this, nBot);
+        lcl_CheckObjects(*m_pSortedObjs, this, nBot);
     nBot -= getFrameArea().Top();
 
     return nBot;
