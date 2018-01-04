@@ -223,7 +223,7 @@ class SmViewShell: public SfxViewShell
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    /** Used to determine whether insertions using SID_INSERTSYMBOL and SID_INSERTCOMMANDTEXT
+    /** Used to determine whether insertions using SID_INSERTSPECIAL and SID_INSERTCOMMANDTEXT
      * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
      * visual editor was last to have focus.
      */

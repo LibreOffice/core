@@ -235,7 +235,7 @@ SfxVoidItem InsertCommandText SID_INSERTCOMMANDTEXT
 ]
 
 
-SfxVoidItem InsertConfigName SID_INSERTSYMBOL
+SfxVoidItem InsertConfigName SID_INSERTSPECIAL
 ()
 [
     AutoUpdate = FALSE,

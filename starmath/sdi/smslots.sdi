@@ -222,7 +222,7 @@ interface FormulaView
         StateMethod = GetState ;
     ]
     //idlpp no menu entry, so no texts
-    SID_INSERTSYMBOL //idlpp ole : no , status : no
+    SID_INSERTSPECIAL //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

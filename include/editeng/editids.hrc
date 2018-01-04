@@ -138,8 +138,6 @@
 #error Resource-Overflow in #line, #file
 #endif
 
-#define SID_DRAW_TEXT_VERTICAL                            SID_ATTR_CHAR_VERTICAL
-
 #endif
 
 // ******************************************************************* EOF
