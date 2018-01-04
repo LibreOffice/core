@@ -66,6 +66,7 @@
 #include "lwp9reader.hxx"
 #include <xfilter/xfparagraph.hxx>
 #include "lwpframelayout.hxx"
+#include <o3tl/numeric.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include "bento.hxx"
 
@@ -154,8 +155,10 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
                     fSclGrafWidth = fWidth;
                     fSclGrafHeight = fHeight;
                 }
-                else if (nScalemode & LwpLayoutScale::MAINTAIN_ASPECT_RATIO && fHeight != 0.0 && fDisFrameHeight != 0.0)
+                else if (nScalemode & LwpLayoutScale::MAINTAIN_ASPECT_RATIO)
                 {
+                    if (fHeight == 0.0 || fDisFrameHeight == 0.0)
+                        throw o3tl::divide_by_zero();
                     if (fWidth/fHeight >= fDisFrameWidth/fDisFrameHeight)
                     {
                         fSclGrafWidth = fDisFrameWidth;
@@ -177,7 +180,6 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
     }
     fWidth = fSclGrafWidth ;
     fHeight =  fSclGrafHeight ;
-
 }
 
 /**

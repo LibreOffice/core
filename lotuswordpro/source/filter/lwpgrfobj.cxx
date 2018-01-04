@@ -68,6 +68,7 @@
 #include "bento.hxx"
 
 #include <lwpglobalmgr.hxx>
+#include <o3tl/numeric.hxx>
 #include "lwpframelayout.hxx"
 
 #include <xfilter/xfframe.hxx>
@@ -478,6 +479,9 @@ void LwpGraphicObject::CreateGrafObject()
 
         if (pMyScale && pFrameGeo)
         {
+            if (fOrgGrafHeight == 0.0 || fOrgGrafWidth == 0.0)
+                throw o3tl::divide_by_zero();
+
             // frame size
             double fFrameWidth = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetWidth());
             double fFrameHeight = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetHeight());
@@ -510,8 +514,10 @@ void LwpGraphicObject::CreateGrafObject()
                     fSclGrafWidth = fOrgGrafWidth;
                     fSclGrafHeight = fOrgGrafHeight;
                 }
-                else if (nScalemode & LwpLayoutScale::MAINTAIN_ASPECT_RATIO && fOrgGrafHeight != 0.0 && fDisFrameHeight != 0.0)
+                else if (nScalemode & LwpLayoutScale::MAINTAIN_ASPECT_RATIO)
                 {
+                    if (fDisFrameHeight == 0.0)
+                        throw o3tl::divide_by_zero();
                     if (fOrgGrafWidth/fOrgGrafHeight >= fDisFrameWidth/fDisFrameHeight)
                     {
                         fSclGrafWidth = fDisFrameWidth;
