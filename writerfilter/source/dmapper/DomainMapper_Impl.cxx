@@ -1857,7 +1857,6 @@ void DomainMapper_Impl::PushAnnotation()
 {
     try
     {
-        PropertyMapPtr pTopContext = GetTopContext();
         m_bIsInComments = true;
         if (!GetTextFactory().is())
             return;
