@@ -3053,7 +3053,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
         // Note: using GetTwipUnitConverter instead of GetMM100UnitConverter may be needed,
         // but is not generally available (as it should be, a 'current' UnitConverter should
-        // be available at GetExport() - and maybe was once). May have to be adressed as soon
+        // be available at GetExport() - and maybe was once). May have to be addressed as soon
         // as translate transformations are used here.
         GetExport().AddAttribute(
             XML_NAMESPACE_DRAW,

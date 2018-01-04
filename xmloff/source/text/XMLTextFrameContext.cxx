@@ -990,10 +990,10 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 SdXMLImExTransform2D aSdXMLImExTransform2D;
                 basegfx::B2DHomMatrix aFullTransform;
 
-                // use SdXMLImExTransform2D to conert to transformation
+                // use SdXMLImExTransform2D to convert to transformation
                 // Note: using GetTwipUnitConverter instead of GetMM100UnitConverter may be needed,
                 // but is not generally available (as it should be, a 'current' UnitConverter should
-                // be available at GetExport() - and maybe was once). May have to be adressed as soon
+                // be available at GetExport() - and maybe was once). May have to be addressed as soon
                 // as translate transformations are used here.
                 aSdXMLImExTransform2D.SetString(rValue, GetImport().GetMM100UnitConverter());
                 aSdXMLImExTransform2D.GetFullTransform(aFullTransform);
@@ -1015,7 +1015,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         // CAUTION: due to #i78696# (rotation mirrored using API) the rotate
                         // value is already mirrored, so do not do it again here (to be in sync
                         // with XMLTextParagraphExport::_exportTextGraphic normally it would need
-                        // to me mirrored using * -1.0, see converion there)
+                        // to me mirrored using * -1.0, see conversion there)
                         const double fRotate(aDecomposedTransform.getRotate() * (1800.0/M_PI));
                         nRotation = static_cast< sal_Int16 >(fRotate) % 3600;
                     }
