@@ -31,7 +31,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
-
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -464,6 +464,13 @@ void DataPointProperties::AddPropertiesToVector(
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_CUSTOM_LABEL_FIELDS,
+                  PROP_DATAPOINT_CUSTOM_LABEL_FIELDS,
+                  cppu::UnoType<uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>>>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void DataPointProperties::AddDefaultsToMap(
@@ -544,6 +551,9 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH, drawing::LineDash());
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH_NAME);
     PropertyHelper::setPropertyValueDefault<sal_Int16>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_TRANS, 0);
+
+    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields(0);
+    PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_CUSTOM_LABEL_FIELDS, aFields);
 }
 
 } //  namespace chart

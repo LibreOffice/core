@@ -158,6 +158,7 @@
     constructor="com_sun_star_comp_chart_FormattedString_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.FormattedString"/>
+    <service name="com.sun.star.chart2.DataPointCustomLabelField"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart.LineChartType"
     constructor="com_sun_star_comp_chart_LineChartType_get_implementation">
