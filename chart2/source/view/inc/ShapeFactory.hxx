@@ -189,6 +189,13 @@ public:
                     , const css::uno::Any& rATransformation ) override;
 
     virtual css::uno::Reference< css::drawing::XShape >
+        createText(const css::uno::Reference< css::drawing::XShapes >& xTarget
+            , css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
+            , const tNameSequence& rPropNames
+            , const tAnySequence& rPropValues
+            , const css::uno::Any& rATransformation) override;
+
+    virtual css::uno::Reference< css::drawing::XShape >
         createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D,
                 const css::awt::Size& rSize,
                 const css::awt::Point& rPosition,
