@@ -165,8 +165,8 @@
   </menu:menu>
   <menu:menu menu:id=".uno:ViewMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:PrintLayout" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:BrowseView" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:PrintLayout"/>
+      <menu:menuitem menu:id=".uno:BrowseView"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ToolbarMode"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
