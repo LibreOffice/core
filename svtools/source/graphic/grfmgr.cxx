@@ -1039,11 +1039,18 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl, Timer *, void)
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
-GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
+bool GraphicObject::isGraphicObjectUniqueIdURL(OUString const & rURL)
 {
-    const OUString aPrefix( UNO_NAME_GRAPHOBJ_URLPREFIX );
-    if( rURL.startsWith( aPrefix ) )
+    const OUString aPrefix(UNO_NAME_GRAPHOBJ_URLPREFIX);
+    return rURL.startsWith(aPrefix);
+}
+
+GraphicObject GraphicObject::CreateGraphicObjectFromURL(OUString const & rURL)
+{
+    if (GraphicObject::isGraphicObjectUniqueIdURL(rURL))
     {
+        SAL_WARN("vcl", "Deprecated URL '" << rURL << "' was used to create a GraphicObject");
+
         // graphic manager url
         OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
         return GraphicObject( aUniqueID );
