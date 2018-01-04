@@ -44,6 +44,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/container/xnamed \
 	test/source/sheet/cellarealink \
 	test/source/sheet/cellproperties \
+	test/source/sheet/databaseimportdescriptor \
 	test/source/sheet/databaserange \
 	test/source/sheet/datapilotfield \
 	test/source/sheet/datapilotitem \

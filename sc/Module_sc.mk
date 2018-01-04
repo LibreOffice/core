@@ -149,6 +149,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_consolidationdescriptorobj \
 	CppunitTest_sc_chart2dataprovider \
 	CppunitTest_sc_autoformatobj \
+	CppunitTest_sc_importdescriptorbaseobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
