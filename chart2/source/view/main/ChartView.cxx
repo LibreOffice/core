@@ -533,7 +533,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 m_bChartTypeUsesShiftedCategoryPositionPerDefault = ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( xChartType );
 
             bool bExcludingPositioning = DiagramHelper::getDiagramPositioningMode( xDiagram ) == DiagramPositioningMode_EXCLUDING;
-            VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount, bExcludingPositioning );
+            VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, xCooSys, nDimensionCount, bExcludingPositioning );
             if( !pPlotter )
                 continue;
 
