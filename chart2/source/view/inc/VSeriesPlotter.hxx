@@ -27,6 +27,7 @@
 #include "LegendEntryProvider.hxx"
 #include <ExplicitCategoriesProvider.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 
 namespace com { namespace sun { namespace star {
@@ -228,6 +229,11 @@ public:
                                 , sal_Int32 nDimensionCount
                                 , bool bExcludingPositioning /*for pie and donut charts labels and exploded segments are excluded from the given size*/);
 
+    static VSeriesPlotter* createSeriesPlotter(const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+        , css::uno::Reference< css::chart2::XCoordinateSystem > xCooSys
+        , sal_Int32 nDimensionCount
+        , bool bExcludingPositioning);
+
     sal_Int32 getPointCount() const;
 
     // Methods for number formats and color schemes
@@ -262,6 +268,11 @@ protected:
     VSeriesPlotter( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
                 , sal_Int32 nDimensionCount
                 , bool bCategoryXAxis=true );
+
+    VSeriesPlotter(const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+        , css::uno::Reference< css::chart2::XCoordinateSystem > xCooSys
+        , sal_Int32 nDimensionCount
+        , bool bCategoryXAxis = true);
 
     // Methods for group shapes.
 
@@ -389,9 +400,12 @@ protected:
 
     VDataSeries* getFirstSeries() const;
 
+    OUString getCategoryName( sal_Int32 nPointIndex ) const;
+
 protected:
     PlottingPositionHelper*    m_pMainPosHelper;
 
+    css::uno::Reference< css::chart2::XCoordinateSystem >          m_xCooSys;
     css::uno::Reference< css::chart2::XChartType >    m_xChartTypeModel;
     css::uno::Reference< css::beans::XPropertySet >   m_xChartTypeModelProps;
 
