@@ -338,11 +338,11 @@ void SwFrame::DestroyImpl()
         }
     }
 
-    if( mpDrawObjs )
+    if (m_pDrawObjs)
     {
-        for ( size_t i = mpDrawObjs->size(); i; )
+        for (size_t i = m_pDrawObjs->size(); i; )
         {
-            SwAnchoredObject* pAnchoredObj = (*mpDrawObjs)[--i];
+            SwAnchoredObject* pAnchoredObj = (*m_pDrawObjs)[--i];
             if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
             {
                 SwFrame::DestroyFrame(static_cast<SwFlyFrame*>(pAnchoredObj));
@@ -360,8 +360,7 @@ void SwFrame::DestroyImpl()
                 }
             }
         }
-        delete mpDrawObjs;
-        mpDrawObjs = nullptr;
+        m_pDrawObjs.reset();
     }
 }
 
@@ -371,7 +370,7 @@ SwFrame::~SwFrame()
     assert(!IsDeleteForbidden()); // check that it's not deleted while deletes are forbidden
 #if OSL_DEBUG_LEVEL > 0
     // JP 15.10.2001: for detection of access to deleted frames
-    mpDrawObjs = reinterpret_cast<SwSortedObjs*>(0x33333333);
+    mpRoot = reinterpret_cast<SwRootFrame*>(0x33333333);
 #endif
 }
 

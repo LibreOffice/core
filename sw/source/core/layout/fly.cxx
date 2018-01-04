@@ -2007,9 +2007,11 @@ void SwFlyFrame::Cut()
 
 void SwFrame::AppendFly( SwFlyFrame *pNew )
 {
-    if ( !mpDrawObjs )
-        mpDrawObjs = new SwSortedObjs();
-    mpDrawObjs->Insert( *pNew );
+    if (!m_pDrawObjs)
+    {
+        m_pDrawObjs.reset(new SwSortedObjs());
+    }
+    m_pDrawObjs->Insert( *pNew );
     pNew->ChgAnchorFrame( this );
 
     // Register at the page
@@ -2049,9 +2051,11 @@ void SwFrame::RemoveFly( SwFlyFrame *pToRemove )
         }
     }
 
-    mpDrawObjs->Remove( *pToRemove );
-    if ( !mpDrawObjs->size() )
-        DELETEZ( mpDrawObjs );
+    m_pDrawObjs->Remove(*pToRemove);
+    if (!m_pDrawObjs->size())
+    {
+        m_pDrawObjs.reset();
+    }
 
     pToRemove->ChgAnchorFrame( nullptr );
 
@@ -2061,7 +2065,7 @@ void SwFrame::RemoveFly( SwFlyFrame *pToRemove )
 
 void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
 {
-    assert(!mpDrawObjs || mpDrawObjs->is_sorted());
+    assert(!m_pDrawObjs || m_pDrawObjs->is_sorted());
 
     if ( dynamic_cast<const SwAnchoredDrawObject*>( &_rNewObj) ==  nullptr )
     {
@@ -2072,19 +2076,21 @@ void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
     if ( dynamic_cast<const SwDrawVirtObj*>(_rNewObj.GetDrawObj()) ==  nullptr &&
          _rNewObj.GetAnchorFrame() && _rNewObj.GetAnchorFrame() != this )
     {
-        assert(!mpDrawObjs || mpDrawObjs->is_sorted());
+        assert(!m_pDrawObjs || m_pDrawObjs->is_sorted());
         // perform disconnect from layout, if 'master' drawing object is appended
         // to a new frame.
         static_cast<SwDrawContact*>(::GetUserCall( _rNewObj.GetDrawObj() ))->
                                                 DisconnectFromLayout( false );
-        assert(!mpDrawObjs || mpDrawObjs->is_sorted());
+        assert(!m_pDrawObjs || m_pDrawObjs->is_sorted());
     }
 
     if ( _rNewObj.GetAnchorFrame() != this )
     {
-        if ( !mpDrawObjs )
-            mpDrawObjs = new SwSortedObjs();
-        mpDrawObjs->Insert( _rNewObj );
+        if (!m_pDrawObjs)
+        {
+            m_pDrawObjs.reset(new SwSortedObjs());
+        }
+        m_pDrawObjs->Insert(_rNewObj);
         _rNewObj.ChgAnchorFrame( this );
     }
 
@@ -2110,7 +2116,7 @@ void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
             }
             //The layer is part of the key used to sort the obj, so update
             //its position if the layer changed.
-            mpDrawObjs->Update(_rNewObj);
+            m_pDrawObjs->Update(_rNewObj);
         }
     }
 
@@ -2135,7 +2141,7 @@ void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
         }
     }
 
-    assert(!mpDrawObjs || mpDrawObjs->is_sorted());
+    assert(!m_pDrawObjs || m_pDrawObjs->is_sorted());
 }
 
 void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
@@ -2154,13 +2160,14 @@ void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
     if ( pPage && pPage->GetSortedObjs() )
         pPage->RemoveDrawObjFromPage( _rToRemoveObj );
 
-    mpDrawObjs->Remove( _rToRemoveObj );
-    if ( !mpDrawObjs->size() )
-        DELETEZ( mpDrawObjs );
-
+    m_pDrawObjs->Remove(_rToRemoveObj);
+    if (!m_pDrawObjs->size())
+    {
+        m_pDrawObjs.reset();
+    }
     _rToRemoveObj.ChgAnchorFrame( nullptr );
 
-    assert(!mpDrawObjs || mpDrawObjs->is_sorted());
+    assert(!m_pDrawObjs || m_pDrawObjs->is_sorted());
 }
 
 void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )

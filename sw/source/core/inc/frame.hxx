@@ -32,6 +32,8 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <memory>
+
 class SwLayoutFrame;
 class SwRootFrame;
 class SwPageFrame;
@@ -378,7 +380,7 @@ class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, publ
     SwPageFrame* ImplFindPageFrame();
 
 protected:
-    SwSortedObjs* mpDrawObjs;    // draw objects, can be 0
+    std::unique_ptr<SwSortedObjs> m_pDrawObjs; // draw objects, can be null
     SwFrameType mnFrameType;  //Who am I?
 
     bool mbInDtor      : 1;
@@ -524,8 +526,8 @@ public:
     // work with chain of FlyFrames
     void  AppendFly( SwFlyFrame *pNew );
     void  RemoveFly( SwFlyFrame *pToRemove );
-    const SwSortedObjs *GetDrawObjs() const { return mpDrawObjs; }
-          SwSortedObjs *GetDrawObjs()         { return mpDrawObjs; }
+    const SwSortedObjs *GetDrawObjs() const { return m_pDrawObjs.get(); }
+          SwSortedObjs *GetDrawObjs()       { return m_pDrawObjs.get(); }
     // #i28701# - change purpose of method and adjust its name
     void InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs = true );
 

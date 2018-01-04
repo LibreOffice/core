@@ -297,7 +297,6 @@ SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
     mpUpper(nullptr),
     mpNext(nullptr),
     mpPrev(nullptr),
-    mpDrawObjs(nullptr),
     mnFrameType(SwFrameType::None),
     mbInDtor(false),
     mbInvalidR2L(true),
