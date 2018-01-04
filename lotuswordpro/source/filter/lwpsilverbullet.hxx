@@ -153,7 +153,9 @@ inline const OUString& LwpSilverBullet::GetBulletStyleName() const
 }
 inline bool LwpSilverBullet::IsLesserLevel(sal_uInt16 nPos)
 {
-    return ((m_pResetPositionFlags[nPos] & LESSERLEVEL) != 0);
+    if (nPos < SAL_N_ELEMENTS(m_pResetPositionFlags))
+        return ((m_pResetPositionFlags[nPos] & LESSERLEVEL) != 0);
+    return false;
 }
 
 #endif
