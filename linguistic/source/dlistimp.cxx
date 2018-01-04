@@ -52,7 +52,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& bNeg );
+static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& bNeg, OUString& aDicName );
 
 static void AddInternal( const uno::Reference< XDictionary > &rDic,
                          const OUString& rNew );
@@ -294,8 +294,9 @@ void DicList::SearchForDictionaries(
         OUString     aURL( pDirCnt[i] );
         LanguageType nLang = LANGUAGE_NONE;
         bool         bNeg  = false;
+        OUString     aDicTitle = "";
 
-        if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
+        if(!::IsVers2OrNewer( aURL, nLang, bNeg, aDicTitle ))
         {
             // When not
             sal_Int32 nPos  = aURL.indexOf('.');
@@ -335,7 +336,7 @@ void DicList::SearchForDictionaries(
 
             DictionaryType eType = bNeg ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
             uno::Reference< XDictionary > xDic =
-                        new DictionaryNeo( aDicName, nLang, eType, aURL, bIsWriteablePath );
+                        new DictionaryNeo( aDicTitle.isEmpty() ? aDicName : aDicTitle, nLang, eType, aURL, bIsWriteablePath );
 
             addDictionary( xDic );
             nCount++;
@@ -794,7 +795,7 @@ static void AddUserData( const uno::Reference< XDictionary > &rDic )
     }
 }
 
-static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& bNeg )
+static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& bNeg, OUString& aDicName )
 {
     if (rFileURL.isEmpty())
         return false;
@@ -826,7 +827,7 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
-    int nDicVersion = ReadDicVersion(pStream, nLng, bNeg);
+    int nDicVersion = ReadDicVersion(pStream, nLng, bNeg, aDicName);
     return 2 == nDicVersion || nDicVersion >= 5;
 }
 

@@ -34,7 +34,7 @@
 
 #define DIC_MAX_ENTRIES     30000
 
-sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool &bNeg );
+sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool &bNeg, OUString &aDicName );
 
 class DictionaryNeo :
     public ::cppu::WeakImplHelper
