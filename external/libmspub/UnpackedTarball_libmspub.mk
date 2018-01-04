@@ -17,6 +17,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmspub,\
     external/libmspub/ubsan.patch \
 ))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmspub))
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libmspub, \
