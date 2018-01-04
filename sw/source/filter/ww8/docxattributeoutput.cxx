@@ -1291,6 +1291,12 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     }
     m_pSerializer->mergeTopMarks(Tag_EndRun_1, sax_fastparser::MergeMarks::PREPEND); // merges with "postponed run start", see above
 
+    if ( !m_sRawText.isEmpty() )
+    {
+        RunText( m_sRawText );
+        m_sRawText.clear();
+    }
+
     // write the run start + the run content
     m_pSerializer->mergeTopMarks(Tag_StartRun_2); // merges the "actual run start"
     // append the actual run end
@@ -2486,9 +2492,11 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pEnd, false );
 }
 
-void DocxAttributeOutput::RawText(const OUString& /*rText*/, rtl_TextEncoding /*eCharSet*/)
+void DocxAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
 {
-    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )" );
+    assert (m_pHyperlinkAttrList.is() && "jluth is at mail dot comand wants example documents that use RawText/EEField");
+    if ( m_pHyperlinkAttrList.is() )
+        m_sRawText = rText;
 }
 
 void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby )

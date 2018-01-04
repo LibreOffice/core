@@ -788,6 +788,8 @@ private:
     sal_Int32 m_nNextBookmarkId;
     sal_Int32 m_nNextAnnotationMarkId;
 
+    OUString m_sRawText;
+
     /// Bookmarks to output
     std::vector<OUString> m_rBookmarksStart;
     std::vector<OUString> m_rBookmarksEnd;
