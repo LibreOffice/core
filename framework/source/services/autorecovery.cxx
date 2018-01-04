@@ -1081,11 +1081,11 @@ class CacheLockGuard
 {
     private:
 
-        // holds the outside calli alive, so it's shared resources
+        // holds the outside caller alive, so it's shared resources
         // are valid every time
         css::uno::Reference< css::uno::XInterface > m_xOwner;
 
-        // mutex shared with outside calli !
+        // mutex shared with outside caller!
         osl::Mutex& m_rSharedMutex;
 
         // this variable knows the state of the "cache lock"
@@ -2852,7 +2852,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
     if (xActiveController.is())
         xActiveModel = xActiveController->getModel();
 
-    // Set the default timer action for our calli.
+    // Set the default timer action for our call.
     // Default = NORMAL_AUTOSAVE
     // We return a suggestion for an active timer only.
     // It will be ignored if the timer was disabled by the user ...
