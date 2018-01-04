@@ -500,7 +500,6 @@ SvStream& ReadPptOEPlaceholderAtom( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
 
 PptSlidePersistEntry::PptSlidePersistEntry() :
     pStyleSheet             ( nullptr ),
-    pHeaderFooterEntry      ( nullptr ),
     pSolverContainer        ( nullptr ),
     nSlidePersistStartOffset( 0 ),
     nSlidePersistEndOffset  ( 0 ),
@@ -520,7 +519,6 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
 PptSlidePersistEntry::~PptSlidePersistEntry()
 {
     delete pStyleSheet;
-    delete pHeaderFooterEntry;
     delete pSolverContainer;
 };
 
@@ -1634,9 +1632,9 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                 for (size_t i = 0; i < m_pMasterPages->size(); i++)
                 {
                     if ((*m_pMasterPages)[ i ].bNotesMaster)
-                        (*m_pMasterPages)[ i ].pHeaderFooterEntry = new HeaderFooterEntry( aNotesMaster );
+                        (*m_pMasterPages)[ i ].xHeaderFooterEntry.reset(new HeaderFooterEntry(aNotesMaster));
                     else
-                        (*m_pMasterPages)[ i ].pHeaderFooterEntry = new HeaderFooterEntry( aNormalMaster );
+                        (*m_pMasterPages)[ i ].xHeaderFooterEntry.reset(new HeaderFooterEntry(aNormalMaster));
                 }
             }
         }
@@ -2744,7 +2742,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )
     {
-        rSlidePersist.pHeaderFooterEntry = new HeaderFooterEntry( pMasterPersist );
+        rSlidePersist.xHeaderFooterEntry.reset(new HeaderFooterEntry(pMasterPersist));
         ProcessData aProcessData( rSlidePersist, SdPageCapsule(pRet) );
         auto nEndRecPos = SanitizeEndPos(rStCtrl, aPageHd.GetRecEndFilePos());
         while ( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nEndRecPos ) )
@@ -2755,7 +2753,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
             {
                 case PPT_PST_HeadersFooters :
                 {
-                    ImportHeaderFooterContainer( aHd, *rSlidePersist.pHeaderFooterEntry );
+                    ImportHeaderFooterContainer(aHd, *rSlidePersist.xHeaderFooterEntry);
                 }
                 break;
 
@@ -3079,10 +3077,10 @@ HeaderFooterEntry::HeaderFooterEntry( const PptSlidePersistEntry* pMPE ) :
 {
     if ( pMPE )
     {
-        HeaderFooterEntry* pMHFE = pMPE->pHeaderFooterEntry;
+        HeaderFooterEntry* pMHFE = pMPE->xHeaderFooterEntry.get();
         if ( pMHFE )
         {
-            nAtom = pMPE->pHeaderFooterEntry->nAtom;
+            nAtom = pMPE->xHeaderFooterEntry->nAtom;
             pPlaceholder[ 0 ] = pMHFE->pPlaceholder[ 0 ];
             pPlaceholder[ 1 ] = pMHFE->pPlaceholder[ 1 ];
             pPlaceholder[ 2 ] = pMHFE->pPlaceholder[ 2 ];
@@ -6783,12 +6781,12 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         xEntry.reset(new PPTFieldEntry);
                                         rIn.ReadUInt16(xEntry->nPos);
                                         xEntry->xField1.reset(new SvxFieldItem(SvxDateTimeField(), EE_FEATURE_FIELD));
-                                        if ( rPersistEntry.pHeaderFooterEntry ) // sj: #i34111# on master pages it is possible
-                                        {                                       // that there is no HeaderFooterEntry available
-                                            if ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 )    // auto date time
-                                                xEntry->SetDateTime( rPersistEntry.pHeaderFooterEntry->nAtom & 0xff );
+                                        if (rPersistEntry.xHeaderFooterEntry) // sj: #i34111# on master pages it is possible
+                                        {                                     // that there is no HeaderFooterEntry available
+                                            if (rPersistEntry.xHeaderFooterEntry->nAtom & 0x20000)    // auto date time
+                                                xEntry->SetDateTime(rPersistEntry.xHeaderFooterEntry->nAtom & 0xff);
                                             else
-                                                xEntry->xString.reset(new OUString( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] ));
+                                                xEntry->xString.reset(new OUString(rPersistEntry.xHeaderFooterEntry->pPlaceholder[nVal]));
                                         }
                                     }
                                     break;
