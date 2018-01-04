@@ -336,7 +336,7 @@ ErrCode SwXMLTextBlocks::PutBlock()
 
         if ( xRoot.is() )
         {
-            SfxMedium* pTmpMedium = nullptr;
+            std::unique_ptr<SfxMedium> pTmpMedium;
             try
             {
                 uno::Reference< embed::XStorage > xTempStorage =
@@ -346,7 +346,7 @@ ErrCode SwXMLTextBlocks::PutBlock()
 
                 // TODO/LATER: no progress bar?!
                 // TODO/MBA: strange construct
-                pTmpMedium = new SfxMedium( xTempStorage, GetBaseURL() );
+                pTmpMedium.reset(new SfxMedium(xTempStorage, GetBaseURL()));
                 bool bTmpOK = pDocSh->SaveAsChildren( *pTmpMedium );
                 if( bTmpOK )
                     bTmpOK = pDocSh->SaveCompletedChildren();
@@ -357,9 +357,6 @@ ErrCode SwXMLTextBlocks::PutBlock()
             catch(const uno::Exception&)
             {
             }
-
-            if ( pTmpMedium )
-                DELETEZ( pTmpMedium );
         }
 
         if( !bOK )
