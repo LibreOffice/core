@@ -433,6 +433,7 @@ OUString WarningBox::GetStandardText()
 ErrorBox::ErrorBox( vcl::Window* pParent, const OUString& rMessage ) :
     MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, 0, OUString(), rMessage )
 {
+    DBG_TESTSOLARMUTEX();
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
         SetText( GetStandardText() );
@@ -450,6 +451,7 @@ ErrorBox::ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits,
                     const OUString& rMessage ) :
     MessBox( pParent, nStyle, nWinBits, OUString(), rMessage )
 {
+    DBG_TESTSOLARMUTEX();
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
         SetText( GetStandardText() );
