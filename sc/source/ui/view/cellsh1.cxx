@@ -1948,7 +1948,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 if(pDoc->IsTabProtected(pData->GetTabNo()))
                 {
-                    //ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
+                    pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
                     break;
                 }
 
