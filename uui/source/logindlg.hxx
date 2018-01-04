@@ -29,7 +29,6 @@
 
 enum class LoginFlags {
     NONE                = 0x0000,
-    NoPath              = 0x0001,  // hide "path"
     NoUsername          = 0x0002,  // hide "name"
     NoPassword          = 0x0004,  // hide "password"
     NoSavePassword      = 0x0008,  // hide "save password"
@@ -40,7 +39,7 @@ enum class LoginFlags {
     NoUseSysCreds       = 0x0100,  // hide "use system credentials"
 };
 namespace o3tl {
-    template<> struct typed_flags<LoginFlags> : is_typed_flags<LoginFlags, 0x01ff> {};
+    template<> struct typed_flags<LoginFlags> : is_typed_flags<LoginFlags, 0x01fe> {};
 }
 
 
@@ -49,9 +48,6 @@ class LoginDialog : public ModalDialog
     VclPtr<FixedText>      m_pErrorFT;
     VclPtr<FixedText>      m_pErrorInfo;
     VclPtr<FixedText>      m_pRequestInfo;
-    VclPtr<FixedText>      m_pPathFT;
-    VclPtr<Edit>           m_pPathED;
-    VclPtr<PushButton>     m_pPathBtn;
     VclPtr<FixedText>      m_pNameFT;
     VclPtr<Edit>           m_pNameED;
     VclPtr<FixedText>      m_pPasswordFT;
@@ -69,7 +65,6 @@ class LoginDialog : public ModalDialog
     void            SetRequest();
 
     DECL_LINK(OKHdl_Impl, Button*, void);
-    DECL_LINK(PathHdl_Impl, Button*, void);
     DECL_LINK(UseSysCredsHdl_Impl, Button*, void);
 
 public:
