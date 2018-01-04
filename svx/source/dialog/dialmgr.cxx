@@ -21,14 +21,15 @@
 #include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/lazydelete.hxx>
 
-static std::unique_ptr<ResMgr> pResMgr;
+static vcl::DeleteOnDeinit<ResMgr> pResMgr(nullptr);
 
 ResMgr* DialogsResMgr::GetResMgr()
 {
     const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
 
-    if (!pResMgr || pResMgr->GetLocale() != rLocale)
+    if (!pResMgr.get() || pResMgr.get()->GetLocale() != rLocale)
         pResMgr.reset(ResMgr::CreateResMgr("svx", rLocale));
     return pResMgr.get();
 }
