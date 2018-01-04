@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 #include <sfx2/sfxhelp.hxx>
 
 #include <set>
@@ -46,9 +47,11 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/layout.hxx>
@@ -98,7 +101,54 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
     // do nothing, because no help available
 }
 
-static bool impl_hasHelpInstalled( const OUString &rLang );
+namespace {
+
+/// Root path of the help.
+OUString getHelpRootURL()
+{
+    static OUString s_instURL;
+    if (!s_instURL.isEmpty())
+        return s_instURL;
+
+    s_instURL = officecfg::Office::Common::Path::Current::Help::get(comphelper::getProcessComponentContext());
+    if (s_instURL.isEmpty())
+    {
+        // try to determine path from default
+        s_instURL = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
+    }
+
+    // replace anything like $(instpath);
+    SvtPathOptions aOptions;
+    s_instURL = aOptions.SubstituteVariable(s_instURL);
+
+    OUString url;
+    if (osl::FileBase::getFileURLFromSystemPath(s_instURL, url) == osl::FileBase::E_None)
+        s_instURL = url;
+
+    return s_instURL;
+}
+
+/// Check for built-in help
+bool impl_hasHelpInstalled(const OUString &rLang = OUString("en-US"))
+{
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
+
+    OUString helpRootURL = getHelpRootURL() + "/" + rLang;
+
+    osl::DirectoryItem directoryItem;
+    osl::FileStatus fileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
+    if (osl::DirectoryItem::get(helpRootURL, directoryItem) == osl::FileBase::E_None &&
+            directoryItem.getFileStatus(fileStatus) == osl::FileBase::E_None &&
+            fileStatus.isDirectory())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+}
 
 /// Return the locale we prefer for displaying help
 static OUString const & HelpLocaleString()
@@ -106,31 +156,29 @@ static OUString const & HelpLocaleString()
     static OUString aLocaleStr;
     if (aLocaleStr.isEmpty())
     {
-        const OUString aEnglish( "en"  );
-        // obtain selected UI language (/org.openoffice.Setup/L10N/ooLocale)
+        const OUString aEnglish("en-US");
+        // detect installed locale
         aLocaleStr = utl::ConfigManager::getLocale();
         bool bOk = !aLocaleStr.isEmpty();
         if ( !bOk )
             aLocaleStr = aEnglish;
         else
         {
-            OUString aBaseInstallPath;
-            utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
-            static const char szHelpPath[] = "/help/";
+            OUString sHelpPath = getHelpRootURL() + "/" + aLocaleStr;
+            osl::DirectoryItem aDirItem;
 
-            // Use a fallback chain starting from full tag, which here usually
-            // is only the language hence only one value, but can also be en-US
-            // or ca-valencia or include script tags.
-            std::vector< OUString > aFallbacks( LanguageTag( aLocaleStr).getFallbackStrings( true));
-            for (auto const& rTag : aFallbacks)
+            if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
             {
-                OUString sHelpPath( aBaseInstallPath + szHelpPath + rTag);
-                osl::DirectoryItem aDirItem;
-                if (osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
+                bOk = false;
+                OUString sLang(aLocaleStr);
+                sal_Int32 nSepPos = sLang.indexOf( '-' );
+                if (nSepPos != -1)
                 {
-                    aLocaleStr = rTag;
                     bOk = true;
-                    break;
+                    sLang = sLang.copy( 0, nSepPos );
+                    sHelpPath = getHelpRootURL() + "/" + sLang;
+                    if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
+                        bOk = false;
                 }
             }
         }
@@ -505,19 +553,6 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
     return sHelpText;
 }
 
-/// Check for built-in help
-static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
-{
-    if (comphelper::LibreOfficeKit::isActive())
-        return false;
-
-    OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
-    AppendConfigToken(aHelpRootURL, true, rLang);
-    std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
-
-    return !aFactories.empty();
-}
-
 bool SfxHelp::SearchKeyword( const OUString& rKeyword )
 {
     return Start_Impl( OUString(), nullptr, rKeyword );
@@ -563,6 +598,49 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     return false;
 }
 
+#define SHTML1 "<!DOCTYPE HTML><html lang=\"en-US\"><head><meta charset=\"UTF-8\">"
+#define SHTML2 "<meta http-equiv=\"refresh\" content=\"1\" url=\""
+#define SHTML3 "\"><script type=\"text/javascript\"> window.location.href = \""
+#define SHTML4 "\";</script><title>Help Page Redirection</title></head><body></body></html>"
+
+static bool impl_showOfflineHelp( const OUString& rURL )
+{
+    OUString aBaseInstallPath;
+    utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
+    OUString aInternal( "vnd.sun.star.help://"  );
+
+    OUString aHelpLink( aBaseInstallPath + "/help/help.html?"  );
+    aHelpLink += rURL.copy( aInternal.getLength() );
+    aHelpLink = aHelpLink.replaceAll("%2F","/");
+
+    // get a html tempfile
+    OUString const aExtension(".html");
+    ::utl::TempFile aTempFile("NewHelp", true, &aExtension, nullptr, false );
+
+    SvStream* pStream = aTempFile.GetStream(StreamMode::WRITE);
+    pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+
+    OUString aTempStr(SHTML1 SHTML2);
+    aTempStr += aHelpLink + SHTML3;
+    aTempStr += aHelpLink + SHTML4;
+
+    pStream->WriteUnicodeOrByteText(aTempStr);
+
+    aTempFile.CloseStream();
+
+    try
+    {
+        sfx2::openUriExternally(aTempFile.GetURL(), false);
+        return true;
+    }
+    catch (const Exception&)
+    {
+    }
+    aTempFile.EnableKillingFile();
+    return false;
+}
+
+
 bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
@@ -570,16 +648,16 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
 
     /* rURL may be
-        - a "real" URL
-        - a HelpID (formerly a long, now a string)
-       If rURL is a URL, CreateHelpURL should be called for this URL
-       If rURL is an arbitrary string, the same should happen, but the URL should be tried out
-       if it delivers real help content. In case only the Help Error Document is returned, the
-       parent of the window for that help was called, is asked for its HelpID.
-       For compatibility reasons this upward search is not implemented for "real" URLs.
-       Help keyword search now is implemented as own method; in former versions it
-       was done via Help::Start, but this implementation conflicted with the upward search.
-    */
+     *       - a "real" URL
+     *       - a HelpID (formerly a long, now a string)
+     *      If rURL is a URL, CreateHelpURL should be called for this URL
+     *      If rURL is an arbitrary string, the same should happen, but the URL should be tried out
+     *      if it delivers real help content. In case only the Help Error Document is returned, the
+     *      parent of the window for that help was called, is asked for its HelpID.
+     *      For compatibility reasons this upward search is not implemented for "real" URLs.
+     *      Help keyword search now is implemented as own method; in former versions it
+     *      was done via Help::Start, but this implementation conflicted with the upward search.
+     */
     OUString aHelpURL;
     INetURLObject aParser( rURL );
     INetProtocol nProtocol = aParser.GetProtocol();
@@ -652,7 +730,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     if ( !impl_hasHelpInstalled() )
     {
         ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),
-            "onlinehelpmanual", "sfx/ui/helpmanual.ui");
+                                                        "onlinehelpmanual", "sfx/ui/helpmanual.ui");
 
         LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
         OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
@@ -677,39 +755,49 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         }
 
     }
-
-    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-
-    // check if help window is still open
-    // If not, create a new one and return access directly to the internal sub frame showing the help content
-    // search must be done here; search one desktop level could return an arbitrary frame
-    Reference< XFrame2 > xHelp(
-        xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
-        UNO_QUERY);
-    Reference< XFrame > xHelpContent = xDesktop->findFrame(
-        "OFFICE_HELP",
-        FrameSearchFlag::CHILDREN);
-
-    SfxHelpWindow_Impl* pHelpWindow = nullptr;
-    if (!xHelp.is())
-        pHelpWindow = impl_createHelp(xHelp, xHelpContent);
     else
-        pHelpWindow = static_cast<SfxHelpWindow_Impl*>(VCLUnoHelper::GetWindow(xHelp->getComponentWindow()).get());
-    if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
-        return false;
+    {
+        if(!impl_showOfflineHelp(aHelpURL))
+        {
+            // html help returned false, open old help
+            Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
-    SAL_INFO("sfx.appl", "HelpId = " << aHelpURL);
+            // check if help window is still open
+            // If not, create a new one and return access directly to the internal sub frame showing the help content
+            // search must be done here; search one desktop level could return an arbitrary frame
+            Reference< XFrame2 > xHelp(
+                xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
+                                       UNO_QUERY);
+            Reference< XFrame > xHelpContent = xDesktop->findFrame(
+                "OFFICE_HELP",
+                FrameSearchFlag::CHILDREN);
 
-    pHelpWindow->SetHelpURL( aHelpURL );
-    pHelpWindow->loadHelpContent(aHelpURL);
-    if (!rKeyword.isEmpty())
-        pHelpWindow->OpenKeyword( rKeyword );
+            SfxHelpWindow_Impl* pHelpWindow = nullptr;
+            if (!xHelp.is())
+                pHelpWindow = impl_createHelp(xHelp, xHelpContent);
+            else
+                pHelpWindow = static_cast<SfxHelpWindow_Impl*>(VCLUnoHelper::GetWindow(xHelp->getComponentWindow()).get());
+            if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
+                return false;
 
-    Reference < css::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
-    if ( xTopWindow.is() )
-        xTopWindow->toFront();
+            SAL_INFO("sfx.appl", "HelpId = " << aHelpURL);
 
-    return true;
+            pHelpWindow->SetHelpURL( aHelpURL );
+            pHelpWindow->loadHelpContent(aHelpURL);
+            if (!rKeyword.isEmpty())
+                pHelpWindow->OpenKeyword( rKeyword );
+
+            Reference < css::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
+            if ( xTopWindow.is() )
+                xTopWindow->toFront();
+
+            return true;
+
+        }
+        //html-help returned true, help displayed
+        return true;
+    }
+
 }
 
 OUString SfxHelp::CreateHelpURL(const OUString& aCommandURL, const OUString& rModuleName)
