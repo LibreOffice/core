@@ -86,6 +86,29 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
     }
 }
 
+BarChart::BarChart(const uno::Reference<XChartType>& xChartTypeModel
+    , css::uno::Reference< css::chart2::XCoordinateSystem > xCooSys
+    , sal_Int32 nDimensionCount)
+    : VSeriesPlotter(xChartTypeModel, xCooSys, nDimensionCount)
+    , m_pMainPosHelper(new BarPositionHelper())
+{
+    PlotterBase::m_pPosHelper = m_pMainPosHelper.get();
+    VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper.get();
+
+    try
+    {
+        if (m_xChartTypeModelProps.is())
+        {
+            m_xChartTypeModelProps->getPropertyValue("OverlapSequence") >>= m_aOverlapSequence;
+            m_xChartTypeModelProps->getPropertyValue("GapwidthSequence") >>= m_aGapwidthSequence;
+        }
+    }
+    catch (const uno::Exception& e)
+    {
+        SAL_WARN("chart2", "Exception caught. " << e);
+    }
+}
+
 BarChart::~BarChart()
 {
 }
