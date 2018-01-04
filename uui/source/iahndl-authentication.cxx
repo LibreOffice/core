@@ -74,7 +74,6 @@ executeLoginDialog(
         bool bCanUseSysCreds = rInfo.GetCanUseSystemCredentials();
 
         LoginFlags nFlags = LoginFlags::NONE;
-        nFlags |= LoginFlags::NoPath;
         if (rInfo.GetErrorText().isEmpty())
             nFlags |= LoginFlags::NoErrorText;
         if (!bAccount)
