@@ -208,10 +208,10 @@
                     "dest-filename": "external/tarballs/libfreehand-0.1.2.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2017-08-15.tar.bz2",
-                    "sha256": "d6a97fc8da5ae54d867e7f1b65ffb51e816cadd11714e45fc23ee0abf81a51ab",
+                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2017-12-14.tar.bz2",
+                    "sha256": "0f87b9428cbc2d96d8e4f54a07e3858b4a428e5fec9396bc3b52fb9f248be362",
                     "type": "file",
-                    "dest-filename": "external/tarballs/language-subtag-registry-2017-08-15.tar.bz2"
+                    "dest-filename": "external/tarballs/language-subtag-registry-2017-12-14.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2",
@@ -226,10 +226,10 @@
                     "dest-filename": "external/tarballs/libmspub-0.1.2.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.12.tar.xz",
-                    "sha256": "7691a6e6e7221d61c40e3f630a8907e3e516b99a587e47d09ec53f8ac60ed1e7",
+                    "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.13.tar.xz",
+                    "sha256": "db55c728448f9c795cd71a0bb6043f6d4744e3e001b955a018a2c634981d5aea",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libmwaw-0.3.12.tar.xz"
+                    "dest-filename": "external/tarballs/libmwaw-0.3.13.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libodfgen-0.1.6.tar.bz2",
@@ -316,10 +316,10 @@
                     "dest-filename": "external/tarballs/neon-0.30.2.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/noto-fonts-20170306.tar.gz",
-                    "sha256": "8a269926a3c88dd14b124b19138b54408938a45ea6e60db65073469f45ae6ac8",
+                    "url": "https://dev-www.libreoffice.org/src/noto-fonts-20171024.tar.gz",
+                    "sha256": "29acc15a4c4d6b51201ba5d60f303dfbc2e5acbfdb70413c9ae1ed34fa259994",
                     "type": "file",
-                    "dest-filename": "external/tarballs/noto-fonts-20170306.tar.gz"
+                    "dest-filename": "external/tarballs/noto-fonts-20171024.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/openldap-2.4.45.tgz",
@@ -328,10 +328,10 @@
                     "dest-filename": "external/tarballs/openldap-2.4.45.tgz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.12.1.tar.gz",
-                    "sha256": "676b1fedd721f64489650f5e76d7f98b750439914d87cae505b8163d08447908",
+                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.13.1.tar.gz",
+                    "sha256": "d7041ef455bb78db66b4ba7876af1b3d0fa377b9444e3ef72ceaccd2e8400937",
                     "type": "file",
-                    "dest-filename": "external/tarballs/liborcus-0.12.1.tar.gz"
+                    "dest-filename": "external/tarballs/liborcus-0.13.1.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/poppler-0.59.0.tar.xz",
@@ -364,16 +364,34 @@
                     "dest-filename": "external/tarballs/e5be03eda13ef68aabab6e42aa67715e-redland-1.0.17.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libepubgen-0.0.1.tar.bz2",
-                    "sha256": "eea910b042526ed52f7ab9292b7fa31fca32f9e042285818074ff33664db4fa2",
+                    "url": "https://dev-www.libreoffice.org/src/libepubgen-0.1.0.tar.bz2",
+                    "sha256": "730bd1cbeee166334faadbc06c953a67b145c3c4754a3b503482066dae4cd633",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libepubgen-0.0.1.tar.bz2"
+                    "dest-filename": "external/tarballs/libepubgen-0.1.0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libqxp-0.0.0.tar.xz",
                     "sha256": "0dd32afbf1c889debc28848b260c1bdc0eba5f57504476b787e164f7c59776d5",
                     "type": "file",
                     "dest-filename": "external/tarballs/libqxp-0.0.0.tar.xz"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/alef-1.001.tar.gz",
+                    "sha256": "b98b67602a2c8880a1770f0b9e37c190f29a7e2ade5616784f0b89fbdb75bf52",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/alef-1.001.tar.gz"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/culmus-0.131.tar.gz",
+                    "sha256": "dcf112cfcccb76328dcfc095f4d7c7f4d2f7e48d0eed5e78b100d1d77ce2ed1b",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/culmus-0.131.tar.gz"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/libre-hebrew-1.0.tar.gz",
+                    "sha256": "f596257c1db706ce35795b18d7f66a4db99d427725f20e9384914b534142579a",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/libre-hebrew-1.0.tar.gz"
                 }
             ],
             "buildsystem": "simple",
