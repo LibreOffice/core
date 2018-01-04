@@ -142,4 +142,15 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell* pThisView, const OString& rP
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aPayload.getStr());
 }
 
+void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
+{
+    const auto payload = rPayload.getStr();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        pViewShell->libreOfficeKitViewCallback(nType, payload);
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
