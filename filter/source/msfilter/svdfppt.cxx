@@ -499,8 +499,6 @@ SvStream& ReadPptOEPlaceholderAtom( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
 }
 
 PptSlidePersistEntry::PptSlidePersistEntry() :
-    pStyleSheet             ( nullptr ),
-    pSolverContainer        ( nullptr ),
     nSlidePersistStartOffset( 0 ),
     nSlidePersistEndOffset  ( 0 ),
     nBackgroundOffset       ( 0 ),
@@ -515,12 +513,9 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
     HeaderFooterOfs[ 0 ] =  HeaderFooterOfs[ 1 ] = HeaderFooterOfs[ 2 ] = HeaderFooterOfs[ 3 ] = 0;
 }
 
-
 PptSlidePersistEntry::~PptSlidePersistEntry()
 {
-    delete pStyleSheet;
-    delete pSolverContainer;
-};
+}
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
     SvxMSDffManager         ( rParam.rDocStream, rBaseURL ),
@@ -1242,9 +1237,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         {
             pRet->NbcSetSnapRect( tools::Rectangle( Point(), rData.pPage.page->GetSize() ) );   // set size
         }
-        if ( rPersistEntry.pSolverContainer )
+        if (rPersistEntry.xSolverContainer)
         {
-            for (SvxMSDffConnectorRule* pPtr : rPersistEntry.pSolverContainer->aCList)
+            for (SvxMSDffConnectorRule* pPtr : rPersistEntry.xSolverContainer->aCList)
             {
                 if ( rObjData.nShapeId == pPtr->nShapeC )
                     pPtr->pCObj = pRet;
@@ -1587,8 +1582,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                     }
                                     if ( SeekToRec( rStCtrl, DFF_msofbtSolverContainer, aPPTDgContainer.GetRecEndFilePos() ) )
                                     {
-                                        rE2.pSolverContainer = new SvxMSDffSolverContainer;
-                                        ReadSvxMSDffSolverContainer( rStCtrl, *( rE2.pSolverContainer ) );
+                                        rE2.xSolverContainer.reset(new SvxMSDffSolverContainer);
+                                        ReadSvxMSDffSolverContainer(rStCtrl, *rE2.xSolverContainer);
                                     }
                                     aPPTDgContainer.SeekToBegOfRecord( rStCtrl );
                                     SetDgContainer( rStCtrl );  // set this, so that the escherimport is knowing of our drawings
@@ -1601,8 +1596,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                 if ( aTxSIStyle.bValid && !aTxSIStyle.aList.empty() )
                                     aTxSI = *( aTxSIStyle.aList[ 0 ] );
 
-                                rE2.pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI );
-                                pDefaultSheet = rE2.pStyleSheet;
+                                rE2.xStyleSheet.reset(new PPTStyleSheet(aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI));
+                                pDefaultSheet = rE2.xStyleSheet.get();
                             }
                             if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
                                 ReadPptColorSchemeAtom( rStCtrl, rE2.aColorScheme );
@@ -2216,7 +2211,6 @@ SdrObject* SdrPowerPointImport::ReadObjText( PPTTextObj* pTextObj, SdrObject* pS
     return pSdrObj;
 }
 
-
 SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pSdrText, SdPageCapsule /*pPage*/,
                                                 SfxStyleSheet* pSheet, SfxStyleSheet** ppStyleSheetAry ) const
 {
@@ -2479,13 +2473,13 @@ void SdrPowerPointImport::SetPageNum( sal_uInt16 nPageNum, PptPageKind eKind )
         if ( pPageList && nMasterIndex < pPageList->size() )
         {
             PptSlidePersistEntry* pMasterPersist = &(*pPageList)[ nMasterIndex ];
-            if ( ( pMasterPersist->pStyleSheet == nullptr ) && pMasterPersist->aSlideAtom.nMasterId )
+            if (!pMasterPersist->xStyleSheet && pMasterPersist->aSlideAtom.nMasterId)
             {
                 nMasterIndex = m_pMasterPages->FindPage( pMasterPersist->aSlideAtom.nMasterId );
                 if ( nMasterIndex != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                     pMasterPersist = &(*pPageList)[ nMasterIndex ];
             }
-            pPPTStyleSheet = pMasterPersist->pStyleSheet;
+            pPPTStyleSheet = pMasterPersist->xStyleSheet.get();
          }
     }
     if ( !pPPTStyleSheet )
@@ -2878,7 +2872,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 if ( pObj )
                                                 {
                                                     if ( aProcessData.pTableRowProperties )
-                                                        pObj = CreateTable( pObj, aProcessData.pTableRowProperties.get(), aProcessData.rPersistEntry.pSolverContainer );
+                                                        pObj = CreateTable(pObj, aProcessData.pTableRowProperties.get(), aProcessData.rPersistEntry.xSolverContainer.get());
 
                                                     pRet->NbcInsertObject( pObj );
 
@@ -2927,9 +2921,9 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             // to the Page and delete it.
                             pRet->getSdrPageProperties().ClearItem();
                             pRet->getSdrPageProperties().PutItemSet(rSlidePersist.pBObj->GetMergedItemSet());
-                            if (rSlidePersist.pSolverContainer)
+                            if (rSlidePersist.xSolverContainer)
                             {
-                                for (SvxMSDffConnectorRule* pPtr : rSlidePersist.pSolverContainer->aCList)
+                                for (SvxMSDffConnectorRule* pPtr : rSlidePersist.xSolverContainer->aCList)
                                 {
                                     // check connections to the group object
                                     if (pPtr->pAObj == rSlidePersist.pBObj)
@@ -2949,8 +2943,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
             if (!aHd.SeekToEndOfRecord(rStCtrl))
                 break;
         }
-        if ( rSlidePersist.pSolverContainer )
-            SolveSolver( *rSlidePersist.pSolverContainer );
+        if (rSlidePersist.xSolverContainer)
+            SolveSolver(*rSlidePersist.xSolverContainer);
     }
     rStCtrl.Seek( nMerk );
 }
