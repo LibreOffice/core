@@ -1487,8 +1487,8 @@ IMPL_LINK_NOARG( SmSymbolDialog, GetClickHdl, Button*, void )
         OUString aText = "%" + pSym->GetName() + " ";
 
         rViewSh.GetViewFrame()->GetDispatcher()->ExecuteList(
-                SID_INSERTSYMBOL, SfxCallMode::RECORD,
-                { new SfxStringItem(SID_INSERTSYMBOL, aText) });
+                SID_INSERTSPECIAL, SfxCallMode::RECORD,
+                { new SfxStringItem(SID_INSERTSPECIAL, aText) });
     }
 }
 

@@ -1561,10 +1561,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         }
 
-        case SID_INSERTSYMBOL:
+        case SID_INSERTSPECIAL:
         {
             const SfxStringItem& rItem =
-                static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_INSERTSYMBOL));
+                static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_INSERTSPECIAL));
 
             if (pWin && (mbInsertIntoEditWindow || !IsInlineEditEnabled()))
                 pWin->InsertText(rItem.GetValue());
