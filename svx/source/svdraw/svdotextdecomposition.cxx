@@ -39,7 +39,6 @@
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/eeitemid.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/flditem.hxx>

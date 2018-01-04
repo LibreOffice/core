@@ -28,9 +28,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #include <editeng/flditem.hxx>
-#undef ITEMID_FIELD
 #include <filter/msfilter/dffrecordheader.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msfilterdllapi.h>

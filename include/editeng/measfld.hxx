@@ -21,16 +21,8 @@
 #define INCLUDED_EDITENG_MEASFLD_HXX
 
 #include <editeng/eeitem.hxx>
-
-#ifndef _FLDITEM_HXX
-#ifndef ITEMID_FIELD
-#include <editeng/editdata.hxx>  /* this include is needed due to EE_FEATURE_FIELD */
-#define ITEMID_FIELD EE_FEATURE_FIELD  /* is needed for #include <editeng/flditem.hxx> */
-#endif
 #include <editeng/flditem.hxx>
-#endif
 #include <editeng/editengdllapi.h>
-
 #include <com/sun/star/text/textfield/Type.hpp>
 
 class SdrMeasureObj;

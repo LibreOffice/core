@@ -30,7 +30,6 @@
 #include <ViewsWindow.hxx>
 
 #include <svx/svdpagv.hxx>
-#include <editeng/eeitemid.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/unoshape.hxx>
@@ -639,7 +638,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
     }
     if ( !bAttributesAppliedFromGallery )
     {
-        _pObj->SetMergedItem( SvxAdjustItem( SvxAdjust::Center ,ITEMID_ADJUST) );
+        _pObj->SetMergedItem( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST) );
         _pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         _pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         _pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
