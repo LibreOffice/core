@@ -702,6 +702,7 @@ void SearchAndParseThread::execute()
                 {
                     // in case of a returned CommandFailedException
                     // SimpleFileAccess serves it, returning an empty stream
+                    SolarMutexGuard aGuard;
                     sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                     sError = sError.replaceAll("%1", m_aURL);
                     m_pPersonaDialog->SetProgress( OUString() );
@@ -714,6 +715,7 @@ void SearchAndParseThread::execute()
             {
                 // a catch all clause, in case the exception is not
                 // served elsewhere
+                SolarMutexGuard aGuard;
                 sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                 sError = sError.replaceAll("%1", m_aURL);
                 m_pPersonaDialog->SetProgress( OUString() );
@@ -754,6 +756,7 @@ void SearchAndParseThread::execute()
             {
                 if( m_bDirectURL )
                 {
+                    SolarMutexGuard aGuard;
                     sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                     sError = sError.replaceAll("%1", m_aURL);
                     m_pPersonaDialog->SetProgress( OUString() );
@@ -837,6 +840,7 @@ void SearchAndParseThread::execute()
         }
         catch ( const uno::Exception & )
         {
+            SolarMutexGuard aGuard;
             sError = CuiResId( RID_SVXSTR_SEARCHERROR );
             sError = sError.replaceAll("%1", m_aURL);
             m_pPersonaDialog->SetProgress( OUString() );
