@@ -401,13 +401,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
     case SID_BROWSER_MODE:
+        bBrowseModeChanged = !pOpt->getBrowseMode();
+        pOpt->setBrowseMode(true );
+        break;
+
     case FN_PRINT_LAYOUT:
-        if( STATE_TOGGLE == eState )
-            bFlag = !pOpt->getBrowseMode();
-        else if( nSlot == FN_PRINT_LAYOUT )
-            bFlag = !bFlag;
-        bBrowseModeChanged = bFlag != pOpt->getBrowseMode();
-        pOpt->setBrowseMode( bFlag );
+        bBrowseModeChanged = pOpt->getBrowseMode();
+        pOpt->setBrowseMode( false );
         break;
 
     case SID_TOGGLE_NOTES:
