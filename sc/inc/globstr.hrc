@@ -465,7 +465,7 @@
 #define STR_COND_LASTYEAR                       NC_("STR_COND_LASTYEAR", "last year")
 #define STR_COND_NEXTYEAR                       NC_("STR_COND_NEXTYEAR", "next year")
 #define STR_COND_AND                            NC_("STR_COND_AND", "and")
-#define STR_ERR_CONDFORMAT_PROTECTED            NC_("STR_ERR_CONDFORMAT_PROTECTED", "Conditional Formats can not be created, deleted or changed in protected sheets!")
+#define STR_ERR_CONDFORMAT_PROTECTED            NC_("STR_ERR_CONDFORMAT_PROTECTED", "Conditional Formats can not be created, deleted or changed in protected sheets.")
 #define STR_EDIT_EXISTING_COND_FORMATS          NC_("STR_EDIT_EXISTING_COND_FORMATS", "The selected cell already contains conditional formatting. You can either edit the existing conditional format or you define a new overlapping conditional format.\n\n Do you want to edit the existing conditional format?")
 #define STR_QUERY_FORMULA_RECALC_ONLOAD_ODS     NC_("STR_QUERY_FORMULA_RECALC_ONLOAD_ODS", "This document was last saved by an application other than %PRODUCTNAME.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells in this document now?")
 #define STR_QUERY_FORMULA_RECALC_ONLOAD_XLS     NC_("STR_QUERY_FORMULA_RECALC_ONLOAD_XLS", "This document was last saved by Excel.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells now?")
