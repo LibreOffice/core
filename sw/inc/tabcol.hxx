@@ -22,6 +22,8 @@
 #include <tools/solar.h>
 
 #include <vector>
+#include <memory>
+
 #include "swdllapi.h"
 
 struct SwTabColsEntry
@@ -85,6 +87,17 @@ public:
 
     bool IsLastRowAllowedToChange() const { return bLastRowAllowedToChange; }
     void SetLastRowAllowedToChange( bool bNew ) { bLastRowAllowedToChange = bNew; }
+};
+
+class SwTable;
+class SwTabFrame;
+class SwFrame;
+
+struct SwColCache {
+    std::unique_ptr<SwTabCols> pLastCols;
+    SwTable const* pLastTable  = nullptr;
+    SwTabFrame const* pLastTabFrame = nullptr;
+    SwFrame const* pLastCellFrame = nullptr;
 };
 
 #endif // INCLUDED_SW_INC_TABCOL_HXX

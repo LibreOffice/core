@@ -735,8 +735,6 @@ void FinitCore()
         delete pHt;
     }
 
-    ::ClearFEShellTabCols();
-
     for (SvGlobalName* p : *pGlobalOLEExcludeList)
         delete p;
     delete pGlobalOLEExcludeList;

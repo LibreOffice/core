@@ -15567,7 +15567,6 @@ sw/source/core/inc/dumpfilter.hxx
 sw/source/core/inc/dview.hxx
 sw/source/core/inc/environmentofanchoredobject.hxx
 sw/source/core/inc/fefly.hxx
-sw/source/core/inc/fetab.hxx
 sw/source/core/inc/fieldhint.hxx
 sw/source/core/inc/flowfrm.hxx
 sw/source/core/inc/flyfrm.hxx

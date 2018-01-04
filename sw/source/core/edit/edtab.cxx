@@ -436,7 +436,7 @@ bool SwEditShell::SplitTable( SplitTable_HeadlineOption eMode )
         bRet = GetDoc()->SplitTable( *pCursor->GetPoint(), eMode, true );
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
-        ClearFEShellTabCols();
+        ClearFEShellTabCols(*GetDoc(), nullptr);
         EndAllAction();
     }
     return bRet;
@@ -454,7 +454,7 @@ bool SwEditShell::MergeTable( bool bWithPrev )
         bRet = GetDoc()->MergeTable( *pCursor->GetPoint(), bWithPrev );
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
-        ClearFEShellTabCols();
+        ClearFEShellTabCols(*GetDoc(), nullptr);
         EndAllAction();
     }
     return bRet;

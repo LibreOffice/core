@@ -168,10 +168,6 @@ public:
                 || name == "s_pVout" // FrameFinit()
                 || name == "s_pPaintQueue" // SwPaintQueue::Remove()
                 || name == "gProp" // only owned (VclPtr) member cleared again
-                || name == "g_pColumnCacheLastTabFrame" // not owning
-                || name == "g_pColumnCacheLastCellFrame" // not owning
-                || name == "g_pRowCacheLastTabFrame" // not owning
-                || name == "g_pRowCacheLastCellFrame" // not owning
                 || name == "g_OszCtrl" // SwCrsrOszControl::Exit()
                 || name == "g_pSpellIter" // SwEditShell::SpellEnd()
                 || name == "g_pConvIter" // SwEditShell::SpellEnd()

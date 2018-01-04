@@ -808,9 +808,8 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             pTableLayout->GetBrowseWidthByTabFrame( *pTabFrame ) );
     }
     SwTableFormatCmp::Delete( aFormatCmp );
-    ::ClearFEShellTabCols();
+    ::ClearFEShellTabCols(*this, nullptr);
     getIDocumentState().SetModified();
-
 }
 
 static void lcl_SetLineStyle( SvxBorderLine *pToSet,
@@ -902,7 +901,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
             pTableLayout->BordersChanged(
                 pTableLayout->GetBrowseWidthByTabFrame( *pTabFrame ) );
         }
-        ::ClearFEShellTabCols();
+        ::ClearFEShellTabCols(*this, nullptr);
         getIDocumentState().SetModified();
     }
 }

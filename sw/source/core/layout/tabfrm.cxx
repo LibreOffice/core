@@ -21,10 +21,10 @@
 #include <rootfrm.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <viewimp.hxx>
+#include <fesh.hxx>
 #include <swtable.hxx>
 #include <dflyobj.hxx>
 #include <anchoreddrawobject.hxx>
-#include <fetab.hxx>
 #include <fmtanchr.hxx>
 #include <viewopt.hxx>
 #include <hints.hxx>
@@ -126,18 +126,8 @@ SwTabFrame::SwTabFrame( SwTabFrame &rTab )
 void SwTabFrame::DestroyImpl()
 {
     // There is some terrible code in fetab.cxx, that
-    // makes use of these global pointers. Obviously
-    // this code did not consider that a TabFrame can be
-    // deleted.
-    if (this == g_pColumnCacheLastTabFrame)
-    {
-        g_pColumnCacheLastTable  = nullptr;
-        g_pColumnCacheLastTabFrame = nullptr;
-        g_pColumnCacheLastCellFrame = nullptr;
-        g_pRowCacheLastTable  = nullptr;
-        g_pRowCacheLastTabFrame = nullptr;
-        g_pRowCacheLastCellFrame = nullptr;
-    }
+    // caches pointers to SwTabFrames.
+    ::ClearFEShellTabCols(*GetFormat()->GetDoc(), this);
 
     SwLayoutFrame::DestroyImpl();
 }

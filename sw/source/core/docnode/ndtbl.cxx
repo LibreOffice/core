@@ -1740,7 +1740,7 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         if (bRet)
         {
             getIDocumentState().SetModified();
-            ::ClearFEShellTabCols();
+            ::ClearFEShellTabCols(*this, nullptr);
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
         }
     }
@@ -1802,7 +1802,7 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         if (bRet)
         {
             getIDocumentState().SetModified();
-            ::ClearFEShellTabCols();
+            ::ClearFEShellTabCols(*this, nullptr);
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
         }
     }
@@ -1965,7 +1965,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     if( dynamic_cast<const SwDDETable*>( &pTableNd->GetTable() ) !=  nullptr)
         return false;
 
-    ::ClearFEShellTabCols();
+    ::ClearFEShellTabCols(*this, nullptr);
     SwSelBoxes aSelBoxes( rBoxes );
     SwTable &rTable = pTableNd->GetTable();
     long nMin = 0;
@@ -2333,7 +2333,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
         rPam.GetPoint()->nNode = *pMergeBox->GetSttNd();
         rPam.Move();
 
-        ::ClearFEShellTabCols();
+        ::ClearFEShellTabCols(*this, nullptr);
         getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
     GetIDocumentUndoRedo().EndUndo( SwUndoId::TABLE_MERGE, nullptr );
@@ -2864,7 +2864,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
 
     GetIDocumentUndoRedo().EndUndo( SwUndoId::TABLE_ATTR, nullptr );
 
-    ::ClearFEShellTabCols();
+    ::ClearFEShellTabCols(*this, nullptr);
 }
 
 /**
@@ -2879,7 +2879,7 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
             new SwUndoAttrTable( *rTab.GetTableNode(), true ));
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
-      ::ClearFEShellTabCols();
+      ::ClearFEShellTabCols(*this, nullptr);
     getIDocumentState().SetModified();
 }
 

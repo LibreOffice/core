@@ -22,6 +22,7 @@
 #include <editeng/charhiddenitem.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
+#include <tabcol.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>

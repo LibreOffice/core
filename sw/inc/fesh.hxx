@@ -198,10 +198,13 @@ enum class SwTab
 };
 
 class SdrDropMarkerOverlay;
+struct SwColCache;
 
 class SW_DLLPUBLIC SwFEShell : public SwEditShell
 {
 private:
+    mutable std::unique_ptr<SwColCache> m_pColumnCache;
+    mutable std::unique_ptr<SwColCache> m_pRowCache;
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainTo;
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainFrom;
     bool m_bCheckForOLEInCaption;
@@ -223,8 +226,8 @@ private:
     SAL_DLLPRIVATE static sal_uInt16 GetCurColNum_( const SwFrame *pFrame,
                           SwGetCurColNumPara* pPara );
 
-    SAL_DLLPRIVATE static void GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox );
-    SAL_DLLPRIVATE static void GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox );
+    SAL_DLLPRIVATE void GetTabCols_(SwTabCols &rToFill, const SwFrame *pBox) const;
+    SAL_DLLPRIVATE void GetTabRows_(SwTabCols &rToFill, const SwFrame *pBox) const;
 
     SAL_DLLPRIVATE bool ImpEndCreate();
 
@@ -809,9 +812,11 @@ public:
 
     void ToggleHeaderFooterEdit( );
     static void SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt16 nSlotId);
+
+    SAL_DLLPRIVATE void ClearColumnRowCache(SwTabFrame const*);
 };
 
-void ClearFEShellTabCols();
+void ClearFEShellTabCols(SwDoc & rDoc, SwTabFrame const*const pFrame);
 
 #endif
 

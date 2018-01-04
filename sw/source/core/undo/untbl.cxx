@@ -510,7 +510,7 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
     pPam->Exchange();
     pPam->Move( fnMoveBackward, GoInContent );
 
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(rDoc, nullptr);
 }
 
 // located in untbl.cxx and only an Undo object is allowed to call it
@@ -1383,7 +1383,9 @@ void SwUndoAttrTable::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     if( bClearTabCol )
-        ClearFEShellTabCols();
+    {
+        ClearFEShellTabCols(rDoc, nullptr);
+    }
 }
 
 void SwUndoAttrTable::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -1800,7 +1802,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( IsDelBox() )
         nSttNode = pTableNd->GetIndex();
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(rDoc, nullptr);
     CHECK_TABLE( pTableNd->GetTable() )
 }
 
@@ -1918,7 +1920,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     default:
         ;
     }
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(rDoc, nullptr);
     CHECK_TABLE( pTableNd->GetTable() )
 }
 
@@ -2081,7 +2083,7 @@ CHECKTABLE(pTableNd->GetTable())
     pPam->DeleteMark();
 
 CHECKTABLE(pTableNd->GetTable())
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(rDoc, nullptr);
 }
 
 void SwUndoTableMerge::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -2956,7 +2958,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pTableNd )
             pTableNd->GetTable().RestoreRowSpan( *mpSaveRowSpan );
     }
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(*pDoc, nullptr);
 }
 
 void SwUndoSplitTable::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -2968,7 +2970,7 @@ void SwUndoSplitTable::RedoImpl(::sw::UndoRedoContext & rContext)
     pPam->GetPoint()->nNode = nTableNode;
     pDoc->SplitTable( *pPam->GetPoint(), nMode, bCalcNewSize );
 
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(*pDoc, nullptr);
 }
 
 void SwUndoSplitTable::RepeatImpl(::sw::RepeatContext & rContext)
@@ -2977,7 +2979,7 @@ void SwUndoSplitTable::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
 
     pDoc->SplitTable( *pPam->GetPoint(), nMode, bCalcNewSize );
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(*pDoc, nullptr);
 }
 
 void SwUndoSplitTable::SaveFormula( SwHistory& rHistory )
@@ -3068,7 +3070,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
     SwContentNode* pCNd = pDoc->GetNodes().GoNext( &rIdx );
     pPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(*pDoc, nullptr);
 
     // TL_CHART2: need to inform chart of probably changed cell names
     SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
@@ -3093,7 +3095,7 @@ void SwUndoMergeTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
     pDoc->MergeTable( *pPam->GetPoint(), bWithPrev, nMode );
 
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(*pDoc, nullptr);
 }
 
 void SwUndoMergeTable::RepeatImpl(::sw::RepeatContext & rContext)
@@ -3102,7 +3104,7 @@ void SwUndoMergeTable::RepeatImpl(::sw::RepeatContext & rContext)
     SwPaM *const pPam = & rContext.GetRepeatPaM();
 
     pDoc->MergeTable( *pPam->GetPoint(), bWithPrev, nMode );
-    ClearFEShellTabCols();
+    ClearFEShellTabCols(*pDoc, nullptr);
 }
 
 void SwUndoMergeTable::SaveFormula( SwHistory& rHistory )

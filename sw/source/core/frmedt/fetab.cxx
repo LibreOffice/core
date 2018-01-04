@@ -29,7 +29,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svtools/ruler.hxx>
-#include <fetab.hxx>
 #include <swwait.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -72,18 +71,6 @@ using namespace ::com::sun::star;
 #define COLFUZZY 20L
 
 inline bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
-
-// table column cache
-static SwTabCols *pLastCols   = nullptr;
-const SwTable   *g_pColumnCacheLastTable  = nullptr;
-const SwTabFrame  *g_pColumnCacheLastTabFrame = nullptr;
-const SwFrame     *g_pColumnCacheLastCellFrame = nullptr;
-
-// table row cache
-static SwTabCols *pLastRows   = nullptr;
-const SwTable   *g_pRowCacheLastTable  = nullptr;
-const SwTabFrame  *g_pRowCacheLastTabFrame = nullptr;
-const SwFrame     *g_pRowCacheLastCellFrame = nullptr;
 
 class TableWait
 {
@@ -511,8 +498,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
         // now delete the columns
         bRet = GetDoc()->SplitTable( aBoxes, bVert, nCnt, bSameHeight );
 
-        DELETEZ( pLastCols );
-        DELETEZ( pLastRows );
+        ClearFEShellTabCols(*GetDoc(), nullptr);
     }
     else
         bRet = false;
@@ -520,13 +506,13 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
     return bRet;
 }
 
-void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox )
+void SwFEShell::GetTabCols_(SwTabCols &rToFill, const SwFrame *pBox) const
 {
     const SwTabFrame *pTab = pBox->FindTabFrame();
-    if ( pLastCols )
+    if (m_pColumnCache)
     {
         bool bDel = true;
-        if (g_pColumnCacheLastTable == pTab->GetTable())
+        if (m_pColumnCache->pLastTable == pTab->GetTable())
         {
             bDel = false;
             SwRectFnSet aRectFnSet(pTab);
@@ -537,60 +523,61 @@ void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox )
             const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->getFrameArea()) -
                                     aRectFnSet.GetLeft(pPage->getFrameArea());
 
-            if (g_pColumnCacheLastTabFrame != pTab)
+            if (m_pColumnCache->pLastTabFrame != pTab)
             {
                 // if TabFrame was changed, we only shift a little bit
                 // as the width is the same
-                SwRectFnSet fnRectX(g_pColumnCacheLastTabFrame);
-                if (fnRectX.GetWidth(g_pColumnCacheLastTabFrame->getFrameArea()) ==
+                SwRectFnSet fnRectX(m_pColumnCache->pLastTabFrame);
+                if (fnRectX.GetWidth(m_pColumnCache->pLastTabFrame->getFrameArea()) ==
                     aRectFnSet.GetWidth(pTab->getFrameArea()) )
                 {
-                    pLastCols->SetLeftMin( nLeftMin );
+                    m_pColumnCache->pLastCols->SetLeftMin( nLeftMin );
 
-                    g_pColumnCacheLastTabFrame = pTab;
+                    m_pColumnCache->pLastTabFrame = pTab;
                 }
                 else
                     bDel = true;
             }
 
             if ( !bDel &&
-                 pLastCols->GetLeftMin () == (sal_uInt16)nLeftMin &&
-                 pLastCols->GetLeft    () == (sal_uInt16)aRectFnSet.GetLeft(pTab->getFramePrintArea()) &&
-                 pLastCols->GetRight   () == (sal_uInt16)aRectFnSet.GetRight(pTab->getFramePrintArea())&&
-                 pLastCols->GetRightMax() == (sal_uInt16)nRightMax - pLastCols->GetLeftMin() )
+                 m_pColumnCache->pLastCols->GetLeftMin () == (sal_uInt16)nLeftMin &&
+                 m_pColumnCache->pLastCols->GetLeft    () == (sal_uInt16)aRectFnSet.GetLeft(pTab->getFramePrintArea()) &&
+                 m_pColumnCache->pLastCols->GetRight   () == (sal_uInt16)aRectFnSet.GetRight(pTab->getFramePrintArea())&&
+                 m_pColumnCache->pLastCols->GetRightMax() == (sal_uInt16)nRightMax - m_pColumnCache->pLastCols->GetLeftMin() )
             {
-                if (g_pColumnCacheLastCellFrame != pBox)
+                if (m_pColumnCache->pLastCellFrame != pBox)
                 {
-                    pTab->GetTable()->GetTabCols( *pLastCols,
+                    pTab->GetTable()->GetTabCols( *m_pColumnCache->pLastCols,
                                         static_cast<const SwCellFrame*>(pBox)->GetTabBox(), true);
-                    g_pColumnCacheLastCellFrame = pBox;
+                    m_pColumnCache->pLastCellFrame = pBox;
                 }
-                rToFill = *pLastCols;
+                rToFill = *m_pColumnCache->pLastCols;
             }
             else
                 bDel = true;
         }
         if ( bDel )
-            DELETEZ(pLastCols);
+            m_pColumnCache.reset();
     }
-    if ( !pLastCols )
+    if (!m_pColumnCache)
     {
         SwDoc::GetTabCols( rToFill, static_cast<const SwCellFrame*>(pBox) );
 
-        pLastCols   = new SwTabCols( rToFill );
-        g_pColumnCacheLastTable  = pTab->GetTable();
-        g_pColumnCacheLastTabFrame = pTab;
-        g_pColumnCacheLastCellFrame= pBox;
+        m_pColumnCache.reset(new SwColCache);
+        m_pColumnCache->pLastCols.reset(new SwTabCols(rToFill));
+        m_pColumnCache->pLastTable = pTab->GetTable();
+        m_pColumnCache->pLastTabFrame = pTab;
+        m_pColumnCache->pLastCellFrame = pBox;
     }
 }
 
-void SwFEShell::GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox )
+void SwFEShell::GetTabRows_(SwTabCols &rToFill, const SwFrame *pBox) const
 {
     const SwTabFrame *pTab = pBox->FindTabFrame();
-    if ( pLastRows )
+    if (m_pRowCache)
     {
         bool bDel = true;
-        if (g_pRowCacheLastTable == pTab->GetTable())
+        if (m_pRowCache->pLastTable == pTab->GetTable())
         {
             bDel = false;
             SwRectFnSet aRectFnSet(pTab);
@@ -602,31 +589,32 @@ void SwFEShell::GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox )
             const long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
             const long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
 
-            if (g_pRowCacheLastTabFrame != pTab || g_pRowCacheLastCellFrame != pBox)
+            if (m_pRowCache->pLastTabFrame != pTab || m_pRowCache->pLastCellFrame != pBox)
                 bDel = true;
 
             if ( !bDel &&
-                 pLastRows->GetLeftMin () == nLeftMin &&
-                 pLastRows->GetLeft    () == nLeft &&
-                 pLastRows->GetRight   () == nRight &&
-                 pLastRows->GetRightMax() == nRightMax )
+                 m_pRowCache->pLastCols->GetLeftMin () == nLeftMin &&
+                 m_pRowCache->pLastCols->GetLeft    () == nLeft &&
+                 m_pRowCache->pLastCols->GetRight   () == nRight &&
+                 m_pRowCache->pLastCols->GetRightMax() == nRightMax )
             {
-                rToFill = *pLastRows;
+                rToFill = *m_pRowCache->pLastCols;
             }
             else
                 bDel = true;
         }
         if ( bDel )
-            DELETEZ(pLastRows);
+            m_pRowCache.reset();
     }
-    if ( !pLastRows )
+    if (!m_pRowCache)
     {
         SwDoc::GetTabRows( rToFill, static_cast<const SwCellFrame*>(pBox) );
 
-        pLastRows   = new SwTabCols( rToFill );
-        g_pRowCacheLastTable = pTab->GetTable();
-        g_pRowCacheLastTabFrame = pTab;
-        g_pRowCacheLastCellFrame = pBox;
+        m_pRowCache.reset(new SwColCache);
+        m_pRowCache->pLastCols.reset(new SwTabCols(rToFill));
+        m_pRowCache->pLastTable = pTab->GetTable();
+        m_pRowCache->pLastTabFrame = pTab;
+        m_pRowCache->pLastCellFrame = pBox;
     }
 }
 
@@ -1250,8 +1238,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
         StartAllAction();
         bRet = GetDoc()->SetTableAutoFormat(
                 aBoxes, *pTableStyle, bResetDirect, pStyleName != nullptr);
-        DELETEZ( pLastCols );
-        DELETEZ( pLastRows );
+        ClearFEShellTabCols(*GetDoc(), nullptr);
         EndAllActionAndCall();
     }
     else
@@ -1320,8 +1307,7 @@ bool SwFEShell::DeleteTableSel()
 
         bRet = GetDoc()->DeleteRowCol( aBoxes );
 
-        DELETEZ( pLastCols );
-        DELETEZ( pLastRows );
+        ClearFEShellTabCols(*GetDoc(), nullptr);
     }
     else
         bRet = false;
@@ -2097,10 +2083,33 @@ size_t SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
     return nRet;
 }
 
-void ClearFEShellTabCols()
+void ClearFEShellTabCols(SwDoc & rDoc, SwTabFrame const*const pFrame)
 {
-    DELETEZ( pLastCols );
-    DELETEZ( pLastRows );
+    for (SwViewShell& rCurrentShell : rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetRingContainer())
+    {
+        if (auto pFE = dynamic_cast<SwFEShell *>(&rCurrentShell))
+        {
+            pFE->ClearColumnRowCache(pFrame);
+        }
+    }
+}
+
+void SwFEShell::ClearColumnRowCache(SwTabFrame const*const pFrame)
+{
+    if (m_pColumnCache)
+    {
+        if (pFrame == nullptr || pFrame == m_pColumnCache->pLastTabFrame)
+        {
+            m_pColumnCache.reset();
+        }
+    }
+    if (m_pRowCache)
+    {
+        if (pFrame == nullptr || pFrame == m_pRowCache->pLastTabFrame)
+        {
+            m_pRowCache.reset();
+        }
+    }
 }
 
 void SwFEShell::GetTableAttr( SfxItemSet &rSet ) const
@@ -2225,8 +2234,7 @@ bool SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
                     *const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()),
                     eType, nDiff, nLogDiff );
 
-    delete pLastCols;
-    pLastCols = nullptr;
+    ClearFEShellTabCols(*GetDoc(), nullptr);
     EndAllActionAndCall();
 
     if( bRet && (eType & (TableChgWidthHeightType::BiggerMode | TableChgWidthHeightType::InsertDeleteMode)) == TableChgWidthHeightType::InsertDeleteMode )
