@@ -61,6 +61,8 @@
   <block-list:block block-list:abbreviated-name="B vitamin.*" block-list:name="B-vitamin"/>
   <block-list:block block-list:abbreviated-name="B. ú. é. k." block-list:name="BÚÉK"/>
   <block-list:block block-list:abbreviated-name="B. Ú. É. K." block-list:name="BÚÉK"/>
+  <block-list:block block-list:abbreviated-name="Babes-Bolyai.*" block-list:name="Babeș–Bolyai"/>
+  <block-list:block block-list:abbreviated-name="Babes–Bolyai.*" block-list:name="Babeș–Bolyai"/>
   <block-list:block block-list:abbreviated-name="Babettá" block-list:name="Babett-tá"/>
   <block-list:block block-list:abbreviated-name="Babettal" block-list:name="Babett-tal"/>
   <block-list:block block-list:abbreviated-name="Babettel" block-list:name="Babett-tel"/>
@@ -89,6 +91,8 @@
   <block-list:block block-list:abbreviated-name="célratörés.*" block-list:name="célra törés"/>
   <block-list:block block-list:abbreviated-name="centirozás.*" block-list:name="centrírozás"/>
   <block-list:block block-list:abbreviated-name="centírozás.*" block-list:name="centrírozás"/>
+  <block-list:block block-list:abbreviated-name="charme" block-list:name="sárm"/>
+  <block-list:block block-list:abbreviated-name="charme-.*" block-list:name="sárm"/>
   <block-list:block block-list:abbreviated-name="cigányasszony.*" block-list:name="cigány asszony"/>
   <block-list:block block-list:abbreviated-name="cim" block-list:name="cím"/>
   <block-list:block block-list:abbreviated-name="cimke" block-list:name="címke"/>
@@ -743,7 +747,7 @@
   <block-list:block block-list:abbreviated-name="vendéglátó-ipari.*" block-list:name="vendéglátóipari"/>
   <block-list:block block-list:abbreviated-name="ventillátor.*" block-list:name="ventilátor"/>
   <block-list:block block-list:abbreviated-name="vérszerinti.*" block-list:name="vér szerinti"/>
-  <block-list:block block-list:abbreviated-name="Vietnám.*" block-list:name="Vietnam"/>
+  <block-list:block block-list:abbreviated-name="Vietnam.*" block-list:name="Vietnám"/>
   <block-list:block block-list:abbreviated-name="villamosenergia" block-list:name="villamos energia"/>
   <block-list:block block-list:abbreviated-name="villamosenergiá.*" block-list:name="villamos energiá"/>
   <block-list:block block-list:abbreviated-name="vízbefúlás.*" block-list:name="vízbe fúlás"/>
