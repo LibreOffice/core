@@ -356,11 +356,11 @@ struct PptSlidePersistEntry
     PptSlideAtom        aSlideAtom;
     PptNotesAtom        aNotesAtom;
     PptColorSchemeAtom  aColorScheme;           // each slide includes this colorscheme atom
-    PPTStyleSheet*      pStyleSheet;            // stylesheet of this page (only in masterpages), since XP supports more than one masterpage
+    std::unique_ptr<PPTStyleSheet> xStyleSheet; // stylesheet of this page (only in masterpages), since XP supports more than one masterpage
 
     sal_uInt32          HeaderFooterOfs[ 4 ];   // containing the ofs to the placeholder (only masterpage)
     std::unique_ptr<HeaderFooterEntry> xHeaderFooterEntry;
-    SvxMSDffSolverContainer* pSolverContainer;
+    std::unique_ptr<SvxMSDffSolverContainer> xSolverContainer;
     sal_uInt32          nSlidePersistStartOffset;// is an array to the end of the SlidePersistAtom of this page, TextHeaderAtom is following
     sal_uInt32          nSlidePersistEndOffset;
     sal_uInt32          nBackgroundOffset;      // fileoffset
