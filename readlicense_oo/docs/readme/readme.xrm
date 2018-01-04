@@ -37,20 +37,20 @@
 	<body>
 		<div id="Intro">
 			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
-			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="http://www.openoffice.org/welcome/readme.html">http://www.openoffice.org/welcome/readme.html</a></p>
+			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="https://www.openoffice.org/welcome/readme.html">https://www.openoffice.org/welcome/readme.html</a></p>
 			<p id="A6" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</p>
-			<p id="A7" xml:lang="en-US">The Apache OpenOffice Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} community site with helpful information at <a href="http://openoffice.apache.org">http://openoffice.apache.org</a></p>
+			<p id="A7" xml:lang="en-US">The Apache OpenOffice Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} community site with helpful information at <a href="https://openoffice.apache.org">https://openoffice.apache.org</a></p>
 			<p id="A9" xml:lang="en-US">Also read the sections below about getting involved in the Apache OpenOffice project.</p>
 			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} really free for any user? </h3>
-			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text delivered together with ${PRODUCTNAME} or <a href="http://www.openoffice.org/license.html">http://www.openoffice.org/license.html</a></p>
+			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text delivered together with ${PRODUCTNAME} or <a href="https://www.openoffice.org/license.html">https://www.openoffice.org/license.html</a></p>
 			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} free for any user?</h3>
 			<p id="A13" xml:lang="en-US">You can use this copy of ${PRODUCTNAME} today free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading open-source office software.</p>
-			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure Apache OpenOffice continues into the future, please consider contributing to the project - see <a href="http://openoffice.apache.org/get-involved.html">http://openoffice.apache.org/get-involved.html</a> for details on contributing time and <a href="http://www.apache.org/foundation/contributing.html">http://www.apache.org/foundation/contributing.html</a> for details on donations. Everyone has a contribution to make.</p>
+			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure Apache OpenOffice continues into the future, please consider contributing to the project - see <a href="https://openoffice.apache.org/get-involved.html">https://openoffice.apache.org/get-involved.html</a> for details on contributing time and <a href="https://www.apache.org/foundation/contributing.html">https://www.apache.org/foundation/contributing.html</a> for details on donations. Everyone has a contribution to make.</p>
 		</div>
 
 		<div id="Installation">
 			<h2 id="rr3fgf42r" xml:lang="en-US">Notes on Installation</h2>
-			<p class="note" id="javaneeded" xml:lang="en-US">${PRODUCTNAME} requires a recent version of JAVA for full functionality; JAVA can be downloaded from <a href="http://java.com">http://java.com</a>.</p>
+			<p class="note" id="javaneeded" xml:lang="en-US">${PRODUCTNAME} requires a recent version of JAVA for full functionality; JAVA can be downloaded from <a href="https://java.com">https://java.com</a>.</p>
 			<h3 id="sdfsdfgf42r" xml:lang="en-US">System Requirements</h3>
 			<div class="MAC" id="SystemRequirements_OSX">
 				<ul>
@@ -108,7 +108,7 @@
 						<p id="MSOReg3" xml:lang="en-US"><tt>/msoreg=0</tt> will suppress registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</p>
 					</li>
 				</ul>
-				<p id="DLLA1" xml:lang="en-US">If you perform an administrative installation using setup /a, you need to make sure that the file msvcr100.dll is installed on the system. This file is required for ${PRODUCTNAME} to start after an administrative installation. You can get the file from <a href="http://www.microsoft.com/en-us/download/details.aspx?id=5555">http://www.microsoft.com/en-us/download/details.aspx?id=5555</a></p>
+				<p id="DLLA1" xml:lang="en-US">If you perform an administrative installation using setup /a, you need to make sure that the file msvcr100.dll is installed on the system. This file is required for ${PRODUCTNAME} to start after an administrative installation. You can get the file from <a href="https://www.microsoft.com/en-US/download/details.aspx?id=26999">https://www.microsoft.com/en-US/download/details.aspx?id=26999</a></p>
 				<p class="note" id="AdminNeeded" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
 			</div>
 			<div class="SOLSPARC" id="Sols2">
@@ -249,33 +249,33 @@
 
 		<div class="WIN" id="Mapi">
 			<h2 id="gfh6w1" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</h2>
-			<p id="pji76w1" xml:lang="en-US">When sending a document via 'File - Send - Document as E-mail' or 'Document as PDF Attachment' problems might occur (program crashes or hangs). This is due to the Windows system file "Mapi" (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit <a href="http://www.microsoft.com">http://www.microsoft.com</a> to search the Microsoft Knowledge Base for "mapi dll".</p>
+			<p id="pji76w1" xml:lang="en-US">When sending a document via 'File - Send - Document as E-mail' or 'Document as PDF Attachment' problems might occur (program crashes or hangs). This is due to the Windows system file "Mapi" (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit <a href="https://www.microsoft.com">https://www.microsoft.com</a> to search the Microsoft Knowledge Base for "mapi dll".</p>
 		</div>
 
 		<div id="A11y">
 			<h2 id="aw22" xml:lang="en-US">Important Accessibility Notes</h2>
-			<p id="access7" xml:lang="en-US">For more information on the accessibility features in ${PRODUCTNAME}, see <a href="http://www.openoffice.org/access/">http://www.openoffice.org/access/</a></p>
+			<p id="access7" xml:lang="en-US">For more information on the accessibility features in ${PRODUCTNAME}, see <a href="https://www.openoffice.org/access/">https://www.openoffice.org/access/</a></p>
 		</div>
 
 		<div id="UserSupport">
 			<h2 id="support" xml:lang="en-US">User Support</h2>
-			<p id="support1" xml:lang="en-US">The main support page <a href="http://support.openoffice.org/">http://support.openoffice.org/</a> offers various possibilities for help with ${PRODUCTNAME}. Your question may have already been answered - check the Community Forum at <a href="http://forum.openoffice.org">http://forum.openoffice.org</a> or search the archives of the 'users@openoffice.apache.org' mailing list at <a href="http://openoffice.apache.org/mailing-lists.html">http://openoffice.apache.org/mailing-lists.html</a>. Alternatively, you can send in your questions to <a href="mailto:users@openoffice.apache.org">users@openoffice.apache.org</a>. How to subscribe to the list (to get an email response) is explained on this page: <a href="http://openoffice.apache.org/mailing-lists.html">http://openoffice.apache.org/mailing-lists.html</a>.</p>
-			<p id="faq" url="ahead" xml:lang="en-US">Also check the FAQ section at <a href="http://wiki.openoffice.org/wiki/Documentation/FAQ">http://wiki.openoffice.org/wiki/Documentation/FAQ</a>.</p>
+			<p id="support1" xml:lang="en-US">The main support page <a href="https://support.openoffice.org/">https://support.openoffice.org/</a> offers various possibilities for help with ${PRODUCTNAME}. Your question may have already been answered - check the Community Forum at <a href="https://forum.openoffice.org">https://forum.openoffice.org</a> or search the archives of the 'users@openoffice.apache.org' mailing list at <a href="https://openoffice.apache.org/mailing-lists.html">https://openoffice.apache.org/mailing-lists.html</a>. Alternatively, you can send in your questions to <a href="mailto:users@openoffice.apache.org">users@openoffice.apache.org</a>. How to subscribe to the list (to get an email response) is explained on this page: <a href="https://openoffice.apache.org/mailing-lists.html">https://openoffice.apache.org/mailing-lists.html</a>.</p>
+			<p id="faq" url="ahead" xml:lang="en-US">Also check the FAQ section at <a href="https://wiki.openoffice.org/wiki/Documentation/FAQ">https://wiki.openoffice.org/wiki/Documentation/FAQ</a>.</p>
 		</div>
 
 		<div id="ReportBugsIssues">
 			<h2 id="reportbugs" xml:lang="en-US">Reporting Bugs &amp; Issues</h2>
-			<p id="reportbugs1" xml:lang="en-US">The ${PRODUCTNAME} Web site hosts <a href="https://issues.apache.org/ooo/">BugZilla</a>, our mechanism for reporting, tracking and solving bugs and issues. We encourage all users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the user community can make to the ongoing development and improvement of the suite.</p>
+			<p id="reportbugs1" xml:lang="en-US">The ${PRODUCTNAME} Web site hosts <a href="https://bz.apache.org/ooo/">BugZilla</a>, our mechanism for reporting, tracking and solving bugs and issues. We encourage all users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the user community can make to the ongoing development and improvement of the suite.</p>
 		</div>
 
 		<div id="GettingInvolved">
 			<h2 id="gettinginvolved1" xml:lang="en-US">Getting Involved</h2>
 			<p id="gettinginvolved2" xml:lang="en-US">The ${PRODUCTNAME} Community would very much benefit from your active participation in the development of this important open source project.</p>
-			<p id="gettingimvolved3" xml:lang="en-US">As a user, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at <a href="http://openoffice.apache.org/get-involved.html">http://openoffice.apache.org/get-involved.html</a></p>
+			<p id="gettingimvolved3" xml:lang="en-US">As a user, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at <a href="https://openoffice.apache.org/get-involved.html">https://openoffice.apache.org/get-involved.html</a></p>
 			<h3 id="howtostart" xml:lang="en-US">How to Start</h3>
 			<p id="howtostart1" xml:lang="en-US">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you're comfortable, all you need to do is send an email self-introduction and jump right in.</p>
 			<h3 id="subscribe" xml:lang="en-US">Subscribe</h3>
-			<p id="subscribe1" xml:lang="en-US">Here are a few of the ${PRODUCTNAME} mailing lists to which you can subscribe at <a href="http://openoffice.apache.org/mailing-lists.html">http://openoffice.apache.org/mailing-lists.html</a></p>
+			<p id="subscribe1" xml:lang="en-US">Here are a few of the ${PRODUCTNAME} mailing lists to which you can subscribe at <a href="https://openoffice.apache.org/mailing-lists.html">https://openoffice.apache.org/mailing-lists.html</a></p>
 			<ul>
 				<li>
 					<p id="subscribelist1" xml:lang="en-US">News: announce@openoffice.apache.org *recommended to all users* (light traffic)</p>
@@ -291,7 +291,7 @@
 			</ul>
 			<h3 xml:lang="en-US">Joining the Project</h3>
 			<p id="joining" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</p>
-			<p id="joining1" url="ahead" xml:lang="en-US">At <a href="http://openoffice.apache.org/get-involved.html">http://openoffice.apache.org/get-involved.html</a> you will find a first overview where you can start with, ranging from Localization, QA, user support to some real core coding projects. If you are not a developer, you can help with Documentation or Marketing, for example. The ${PRODUCTNAME} marketing is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</p>
+			<p id="joining1" url="ahead" xml:lang="en-US">At <a href="https://openoffice.apache.org/get-involved.html">https://openoffice.apache.org/get-involved.html</a> you will find a first overview where you can start with, ranging from Localization, QA, user support to some real core coding projects. If you are not a developer, you can help with Documentation or Marketing, for example. The ${PRODUCTNAME} marketing is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</p>
 			<p id="joining3" xml:lang="en-US">You can help by joining the marketing mailing list marketing@openoffice.apache.org where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</p>
 		</div>
 
@@ -302,7 +302,7 @@
 
 		<div id="ModifiedSourceCode">
 			<h2 id="ModifiedSourceCodeHeading" xml:lang="en-US">Used / Modified Source Code</h2>
-            <p id="ModifiedSourceCodePara" xml:lang="en-US">For detailed information about used and/or modified source code, see the NOTICE file which is part of the installation.</p>
+			<p id="ModifiedSourceCodePara" xml:lang="en-US">For detailed information about used and/or modified source code, see the NOTICE file which is part of the installation.</p>
 		</div>
 	</body>
 </html>
