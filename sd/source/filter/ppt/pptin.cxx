@@ -1421,8 +1421,8 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
     if ( ( !pList ) || ( pList->size() <= nAktPageNum ) )
         return;
     PptSlidePersistEntry& rSlidePersist = (*pList)[ nAktPageNum ];
-    HeaderFooterEntry* pHFE = rSlidePersist.pHeaderFooterEntry;
-    if ( pHFE )
+    HeaderFooterEntry* pHFE = rSlidePersist.xHeaderFooterEntry.get();
+    if (pHFE)
     {
         for ( i = 0; i < 4; i++ )
         {
