@@ -801,6 +801,12 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx"
     CPPUNIT_ASSERT_EQUAL( idInDocXml, idInCommentXml );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104707_urlComment, "tdf104707_urlComment.odt")
+{
+    xmlDocPtr pXmlComm = parseExport("word/comments.xml");
+    CPPUNIT_ASSERT_EQUAL( OUString("https://bugs.documentfoundation.org/show_bug.cgi?id=104707"), getXPathContent(pXmlComm,"/w:comments/w:comment/w:p/w:hyperlink/w:r/w:t") );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
 {
     // fdo#76015 : Document contains oleobject in header xml.
