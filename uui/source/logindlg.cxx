@@ -45,9 +45,6 @@ void LoginDialog::dispose()
     m_pErrorFT.clear();
     m_pErrorInfo.clear();
     m_pRequestInfo.clear();
-    m_pPathFT.clear();
-    m_pPathED.clear();
-    m_pPathBtn.clear();
     m_pNameFT.clear();
     m_pNameED.clear();
     m_pPasswordFT.clear();
@@ -68,18 +65,6 @@ void LoginDialog::SetPassword( const OUString& rNew )
 
 void LoginDialog::HideControls_Impl( LoginFlags nFlags )
 {
-    if ( nFlags & LoginFlags::NoPath )
-    {
-        m_pPathFT->Hide();
-        m_pPathED->Hide();
-        m_pPathBtn->Hide();
-    }
-    else if ( nFlags & LoginFlags::PathReadonly )
-    {
-        m_pPathED->Enable( false );
-        m_pPathBtn->Enable( false );
-    }
-
     if ( nFlags & LoginFlags::NoUsername )
     {
         m_pNameFT->Hide();
@@ -122,9 +107,6 @@ void LoginDialog::EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled )
     m_pErrorInfo->Enable( !bUseSysCredsEnabled );
     m_pErrorFT->Enable( !bUseSysCredsEnabled );
     m_pRequestInfo->Enable( !bUseSysCredsEnabled );
-    m_pPathFT->Enable( !bUseSysCredsEnabled );
-    m_pPathED->Enable( !bUseSysCredsEnabled );
-    m_pPathBtn->Enable( !bUseSysCredsEnabled );
     m_pNameFT->Enable( !bUseSysCredsEnabled );
     m_pNameED->Enable( !bUseSysCredsEnabled );
     m_pPasswordFT->Enable( !bUseSysCredsEnabled );
@@ -158,28 +140,6 @@ IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl, Button*, void)
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_NOARG(LoginDialog, PathHdl_Impl, Button*, void)
-{
-    try
-    {
-        uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
-
-        OUString aPath( m_pPathED->GetText() );
-        osl::FileBase::getFileURLFromSystemPath( aPath, aPath );
-        xFolderPicker->setDisplayDirectory( aPath );
-
-        if (xFolderPicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
-        {
-            osl::FileBase::getSystemPathFromFileURL( xFolderPicker->getDirectory(), aPath );
-            m_pPathED->SetText( aPath );
-        }
-    }
-    catch (uno::Exception & e)
-    {
-        SAL_WARN("uui", "LoginDialog::PathHdl_Impl: caught " << e);
-    }
-}
-
 IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl, Button*, void)
 {
     EnableUseSysCredsControls_Impl( m_pUseSysCredsCB->IsChecked() );
@@ -193,9 +153,6 @@ LoginDialog::LoginDialog(vcl::Window* pParent, LoginFlags nFlags,
     get(m_pErrorFT, "errorft");
     get(m_pErrorInfo, "errorinfo");
     get(m_pRequestInfo, "requestinfo");
-    get(m_pPathFT, "pathft");
-    get(m_pPathED, "pathed");
-    get(m_pPathBtn, "pathbtn");
     get(m_pNameFT, "nameft");
     get(m_pNameED, "nameed");
     get(m_pPasswordFT, "passwordft");
@@ -211,11 +168,9 @@ LoginDialog::LoginDialog(vcl::Window* pParent, LoginFlags nFlags,
 
     SetRequest();
 
-    m_pPathED->SetMaxTextLen( _MAX_PATH );
     m_pNameED->SetMaxTextLen( _MAX_PATH );
 
     m_pOKBtn->SetClickHdl( LINK( this, LoginDialog, OKHdl_Impl ) );
-    m_pPathBtn->SetClickHdl( LINK( this, LoginDialog, PathHdl_Impl ) );
     m_pUseSysCredsCB->SetClickHdl( LINK( this, LoginDialog, UseSysCredsHdl_Impl ) );
 
     HideControls_Impl( nFlags );
