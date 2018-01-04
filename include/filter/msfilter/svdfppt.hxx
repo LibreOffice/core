@@ -359,7 +359,7 @@ struct PptSlidePersistEntry
     PPTStyleSheet*      pStyleSheet;            // stylesheet of this page (only in masterpages), since XP supports more than one masterpage
 
     sal_uInt32          HeaderFooterOfs[ 4 ];   // containing the ofs to the placeholder (only masterpage)
-    HeaderFooterEntry*  pHeaderFooterEntry;
+    std::unique_ptr<HeaderFooterEntry> xHeaderFooterEntry;
     SvxMSDffSolverContainer* pSolverContainer;
     sal_uInt32          nSlidePersistStartOffset;// is an array to the end of the SlidePersistAtom of this page, TextHeaderAtom is following
     sal_uInt32          nSlidePersistEndOffset;
