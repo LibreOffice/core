@@ -78,3 +78,10 @@ File gid_File_Extra_Wordbook_sl
     Styles = (PACKED, FORCELANGUAGEPACK);
     Name = "sl.dic";
 End
+
+File gid_File_Extra_Wordbook_hu_AkH11
+    Dir = gid_Dir_Wordbook;
+    TXT_FILE_BODY;
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    Name = "hu_AkH11.dic";
+End

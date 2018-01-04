@@ -14,6 +14,7 @@ $(eval $(call gb_Package_add_files,extras_wordbook,$(LIBO_SHARE_FOLDER)/wordbook
 	en-US.dic \
 	sl.dic \
 	technical.dic \
+	hu_AkH11.dic \
 ))
 
 # vim: set noet sw=4 ts=4:
