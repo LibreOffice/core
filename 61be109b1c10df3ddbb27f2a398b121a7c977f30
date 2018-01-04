@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_546ab11b",
+        "filename": "filter/source/config/cache/filtercache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-04T20:04:12Z",
+      "side": 0,
+      "message": "exceptions are typically forwarded to the \"caller\"",
+      "revId": "61be109b1c10df3ddbb27f2a398b121a7c977f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_346d3d33",
+        "filename": "framework/source/accelerators/storageholder.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-04T20:04:12Z",
+      "side": 0,
+      "message": "hmm, not sure in which direction this could be delegated, could be either caller or callee...",
+      "revId": "61be109b1c10df3ddbb27f2a398b121a7c977f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_34d1bdfc",
+        "filename": "framework/source/dispatch/dispatchprovider.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-04T20:04:12Z",
+      "side": 0,
+      "message": "no idea what that even means",
+      "revId": "61be109b1c10df3ddbb27f2a398b121a7c977f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_14ecb9c6",
+        "filename": "framework/source/inc/accelerators/presethandler.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-04T20:04:12Z",
+      "side": 0,
+      "message": "same here, ... just remove \"to the caller\" as it\u0027s redundant, everything that is returned goes to the caller.",
+      "revId": "61be109b1c10df3ddbb27f2a398b121a7c977f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_d4e141d2",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-04T20:04:12Z",
+      "side": 0,
+      "message": "again this is spelled \"callee\" but really should be \"caller\"",
+      "revId": "61be109b1c10df3ddbb27f2a398b121a7c977f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_f4e645e7",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-04T20:04:12Z",
+      "side": 0,
+      "message": "here too",
+      "revId": "61be109b1c10df3ddbb27f2a398b121a7c977f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_b4dccd19",
+        "filename": "sfx2/source/dialog/backingcomp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-04T20:04:12Z",
+      "side": 0,
+      "message": "i think the is supposed to be \"callee\" - but that doesn\u0027t make sense, it should be \"caller\".",
+      "revId": "61be109b1c10df3ddbb27f2a398b121a7c977f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
