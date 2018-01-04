@@ -148,6 +148,12 @@
     <service name="com.sun.star.chart2.DataPointProperties"/>
     <service name="com.sun.star.chart2.DataSeries"/>
   </implementation>
+  <implementation name="com.sun.star.comp.chart.DataPointCustomLabelField"
+    constructor="com_sun_star_comp_chart_DataPointCustomLabelField_get_implementation">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.FormattedString"/>
+    <service name="com.sun.star.chart2.DataPointCustomLabelField"/>
+  </implementation>
   <implementation name="com.sun.star.comp.chart.FilledNetChartType"
     constructor="com_sun_star_comp_chart_FilledNetChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>

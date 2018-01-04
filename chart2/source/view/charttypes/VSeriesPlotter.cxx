@@ -56,6 +56,9 @@
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -151,6 +154,25 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_bPointsWereSkipped(false)
 {
     SAL_WARN_IF(!m_xChartTypeModel.is(),"chart2","no XChartType available in view, fallback to default values may be wrong");
+}
+
+VSeriesPlotter::VSeriesPlotter(const uno::Reference<XChartType>& xChartTypeModel
+    , uno::Reference< XCoordinateSystem > xCooSys
+    , sal_Int32 nDimensionCount, bool bCategoryXAxis)
+    : PlotterBase(nDimensionCount)
+    , m_pMainPosHelper(nullptr)
+    , m_xCooSys(xCooSys)
+    , m_xChartTypeModel(xChartTypeModel)
+    , m_xChartTypeModelProps(uno::Reference< beans::XPropertySet >::query(xChartTypeModel))
+    , m_aZSlots()
+    , m_bCategoryXAxis(bCategoryXAxis)
+    , m_nTimeResolution(css::chart::TimeUnit::DAY)
+    , m_aNullDate(30, 12, 1899)
+    , m_xColorScheme()
+    , m_pExplicitCategoriesProvider(nullptr)
+    , m_bPointsWereSkipped(false)
+{
+    SAL_WARN_IF(!m_xChartTypeModel.is(), "chart2", "no XChartType available in view, fallback to default values may be wrong");
 }
 
 VSeriesPlotter::~VSeriesPlotter()
@@ -413,9 +435,30 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     , sal_Int32 nTextWidth )
 {
     uno::Reference< drawing::XShape > xTextShape;
+    Sequence<uno::Reference<XDataPointCustomLabelField>> aCustomLabels;
 
     try
     {
+        // find XDataSeries
+        if( m_xCooSys.is() )
+        {
+            uno::Reference< chart2::XChartTypeContainer > xCTCnt( m_xCooSys, uno::UNO_QUERY );
+            uno::Reference< chart2::XDataSeriesContainer > xDSCnt( xCTCnt->getChartTypes()[0], uno::UNO_QUERY );
+            if( xDSCnt.is() )
+            {
+                uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
+                const uno::Reference< css::beans::XPropertySet >& xPropertySet( aSeriesSeq[0]->getDataPointByIndex( nPointIndex ) );
+                if( xPropertySet.is() )
+                {
+                    uno::Any aAny = xPropertySet->getPropertyValue( CHART_UNONAME_CUSTOM_LABEL_FIELDS );
+                    if( aAny.hasValue() )
+                    {
+                        aAny >>= aCustomLabels;
+                    }
+                }
+            }
+        }
+
         awt::Point aScreenPosition2D(rScreenPosition2D);
         if(eAlignment==LABEL_ALIGN_LEFT)
             aScreenPosition2D.X -= nOffset;
@@ -495,26 +538,74 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         }
 
         sal_Int32 nLineCountForSymbolsize = 0;
-        Sequence< OUString > aTextList(3);
+        sal_uInt32 nTextListLength = 3;
+        sal_uInt32 nCustomLabelsCount = aCustomLabels.getLength();
+        bool bUseCustomLabel = false;
+        Sequence< OUString > aTextList( nTextListLength );
         {
-            if(pLabel->ShowCategoryName)
+            bUseCustomLabel = nCustomLabelsCount > 0;
+            if( bUseCustomLabel )
             {
-                if( m_pExplicitCategoriesProvider )
+                nTextListLength = ( nCustomLabelsCount > 3 ) ? nCustomLabelsCount : 3;
+                aSeparator = "";
+                aTextList = Sequence< OUString >( nTextListLength );
+                for( sal_uInt32 i = 0; i < nCustomLabelsCount; ++i )
                 {
-                    Sequence< OUString > aCategories( m_pExplicitCategoriesProvider->getSimpleCategories() );
-                    if( nPointIndex >= 0 && nPointIndex < aCategories.getLength() )
+                    switch( aCustomLabels[i]->getFieldType() )
                     {
-                        aTextList[0] = aCategories[nPointIndex];
+                        case DataPointCustomLabelFieldType_VALUE:
+                        {
+                            aTextList[i] = getLabelTextForValue( rDataSeries, nPointIndex, fValue, false );
+                            break;
+                        }
+                        case DataPointCustomLabelFieldType_CATEGORYNAME:
+                        {
+                            aTextList[i] = getCategoryName( nPointIndex );
+                            break;
+                        }
+                        case DataPointCustomLabelFieldType_SERIESNAME:
+                        {
+                            OUString aRole;
+                            if ( m_xChartTypeModel )
+                                aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
+                            uno::Reference< XDataSeries > xSeries( rDataSeries.getModel() );
+                            aTextList[i] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
+                            break;
+                        }
+                        case DataPointCustomLabelFieldType_CELLREF:
+                        {
+                            // TODO: for now doesn't show placeholder
+                            aTextList[i] = OUString();
+                            break;
+                        }
+                        case DataPointCustomLabelFieldType_TEXT:
+                        {
+                            aTextList[i] = aCustomLabels[i]->getString();
+                            break;
+                        }
+                        case DataPointCustomLabelFieldType_NEWLINE:
+                        {
+                            aTextList[i] = "\n";
+                            break;
+                        }
+                        default:
+                        break;
                     }
+                    aCustomLabels[i]->setString( aTextList[i] );
                 }
             }
 
-            if(pLabel->ShowNumber)
+            if( !bUseCustomLabel && pLabel->ShowCategoryName )
+            {
+                aTextList[0] = getCategoryName( nPointIndex );
+            }
+
+            if( !bUseCustomLabel && pLabel->ShowNumber )
             {
                 aTextList[1] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, false);
             }
 
-            if(pLabel->ShowNumberInPercent)
+            if( !bUseCustomLabel && pLabel->ShowNumberInPercent )
             {
                 if(fSumValue==0.0)
                     fSumValue=1.0;
@@ -525,7 +616,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 aTextList[2] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
             }
 
-            for( sal_Int32 nN = 0; nN < 3; ++nN)
+            for( sal_Int32 nN = 0; nN < aTextList.getLength(); ++nN )
             {
                 if( !aTextList[nN].isEmpty() )
                 {
@@ -549,7 +640,28 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         // a multi-line label.
         bool bMultiLineLabel = ( aSeparator == "\n" );
 
-        if( bMultiLineLabel )
+        if( bUseCustomLabel )
+        {
+            Sequence< uno::Reference< XFormattedString > > aFormattedLabels( aCustomLabels.getLength() );
+            for( int i = 0; i < aFormattedLabels.getLength(); i++ )
+            {
+                uno::Reference< XFormattedString > xString( aCustomLabels[i], uno::UNO_QUERY );
+                aFormattedLabels[i] = xString;
+            }
+
+            // center the text
+            sal_uInt32 nProperties = pPropNames->getLength();
+            pPropNames->realloc( nProperties + 1 );
+            pPropValues->realloc( nProperties + 1 );
+            (*pPropNames)[ nProperties ] = UNO_NAME_EDIT_PARA_ADJUST;
+            (*pPropValues)[ nProperties ] <<= style::ParagraphAdjust_CENTER;
+
+            // create text shape
+            xTextShape = AbstractShapeFactory::getOrCreateShapeFactory( m_xShapeFactory )->
+                createText( xTarget_, aFormattedLabels, *pPropNames, *pPropValues,
+                    AbstractShapeFactory::makeTransformation( aScreenPosition2D ) );
+        }
+        else if( bMultiLineLabel )
         {
             // prepare properties for each paragraph
             // we want to have the value and percent value centered respect
@@ -575,7 +687,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         {
             // join text list elements
             OUStringBuffer aText;
-            for( sal_Int32 nN = 0; nN < 3; ++nN)
+            for( sal_uInt32 nN = 0; nN < nTextListLength; ++nN)
             {
                 if( !aTextList[nN].isEmpty() )
                 {
@@ -2050,6 +2162,19 @@ VDataSeries* VSeriesPlotter::getFirstSeries() const
     return nullptr;
 }
 
+OUString VSeriesPlotter::getCategoryName( sal_Int32 nPointIndex ) const
+{
+    if (m_pExplicitCategoriesProvider)
+    {
+        Sequence< OUString > aCategories(m_pExplicitCategoriesProvider->getSimpleCategories());
+        if (nPointIndex >= 0 && nPointIndex < aCategories.getLength())
+        {
+            return aCategories[nPointIndex];
+        }
+    }
+    return OUString();
+}
+
 uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
 {
     std::vector<OUString> aRetVector;
@@ -2536,6 +2661,43 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new CandleStickChart(xChartTypeModel,nDimensionCount);
     else
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,false,true);
+    return pRet;
+}
+
+VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
+    const uno::Reference<XChartType>& xChartTypeModel
+    , css::uno::Reference< css::chart2::XCoordinateSystem > xCooSys
+    , sal_Int32 nDimensionCount
+    , bool bExcludingPositioning)
+{
+    if (!xChartTypeModel.is())
+        return nullptr;
+
+    OUString aChartType = xChartTypeModel->getChartType();
+
+    VSeriesPlotter* pRet = nullptr;
+    if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN))
+        pRet = new BarChart(xChartTypeModel, xCooSys, nDimensionCount);
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_BAR))
+        pRet = new BarChart(xChartTypeModel, xCooSys, nDimensionCount);
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_AREA))
+        pRet = new AreaChart(xChartTypeModel, nDimensionCount, true);
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_LINE))
+        pRet = new AreaChart(xChartTypeModel, nDimensionCount, true, true);
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER))
+        pRet = new AreaChart(xChartTypeModel, nDimensionCount, false, true);
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE))
+        pRet = new BubbleChart(xChartTypeModel, nDimensionCount);
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+        pRet = new PieChart(xChartTypeModel, nDimensionCount, bExcludingPositioning);
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+        pRet = new NetChart(xChartTypeModel, nDimensionCount, true, new PolarPlottingPositionHelper());
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET))
+        pRet = new NetChart(xChartTypeModel, nDimensionCount, false, new PolarPlottingPositionHelper());
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK))
+        pRet = new CandleStickChart(xChartTypeModel, nDimensionCount);
+    else
+        pRet = new AreaChart(xChartTypeModel, nDimensionCount, false, true);
     return pRet;
 }
 
