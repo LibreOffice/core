@@ -633,6 +633,7 @@ darwin*) # Mac OS X or iOS
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
     fi
     if test "$host_cpu" = "arm64" -o "$enable_ios_simulator" = "yes"; then
+        build_for_ios=YES
         _os=iOS
         test_gtk=no
         test_cups=no
@@ -4379,6 +4380,7 @@ if test "$cross_compiling" = "yes"; then
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
+    test "$build_for_ios" = "YES" && sub_conf_opts="$sub_conf_opts build_for_ios=YES"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
@@ -10120,7 +10122,10 @@ fi
 AC_SUBST(ENABLE_PDFIUM)
 
 SYSTEM_GPGMEPP=
-if test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
+
+if test "$build_for_ios" = "YES"; then
+    AC_MSG_CHECKING([gpgmepp disabled due to iOS])
+elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
     dnl ===================================================================
     dnl Check for system gpgme
     dnl ===================================================================
