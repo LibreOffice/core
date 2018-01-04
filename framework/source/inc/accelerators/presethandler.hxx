@@ -371,7 +371,7 @@ class PresetHandler
             @param  sPath
                     the configuration path, which should be opened.
                     Its further used as out parameter too, so we can return the localized
-                    path to the calli!
+                    path!
 
             @param  eMode
                     the open mode (READ/READWRITE)

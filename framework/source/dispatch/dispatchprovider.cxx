@@ -494,7 +494,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                 That's why we implement this method. It return an already existing helper or create a new one otherwise.
 
     @attention  The parameter sTarget and nSearchFlags are defaulted to "" and 0!
-                Please use it only, if you can be sure, that the really given by the outside calli!
                 Mostly it depends from the parameter eHelper is they are required or not.
 
     @param      eHelper
