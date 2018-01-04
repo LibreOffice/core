@@ -186,7 +186,6 @@ public:
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
-    sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich ) const;
 
     static bool                     IsWhich(sal_uInt16 nId) {
                                         return nId && nId <= SFX_WHICH_MAX; }
