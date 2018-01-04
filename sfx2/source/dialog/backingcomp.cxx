@@ -556,9 +556,9 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
 /** kill this instance.
 
-    It can be called from our owner frame only. But there is no possibility to check the calli.
+    It can be called from our owner frame only. But there is no possibility to check the caller.
     We have to release all our internal used resources and die. From this point we can throw
-    DisposedExceptions for every further interface request ... but current implementation doesn`t do so ...
+    DisposedExceptions for every further interface request... but current implementation doesn't do so...
 
 */
 

@@ -1285,7 +1285,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     {
         // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
-        // to our calli ...
+        // to our caller...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load std");
@@ -1302,7 +1302,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     {
         // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
-        // to our calli ...
+        // to our call...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load all types");
@@ -1319,7 +1319,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     {
         // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
-        // to our calli ...
+        // to our call...
         css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load all filters");
@@ -1336,7 +1336,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     {
         // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
-        // to our calli ...
+        // to our call...
         css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load all frame loader");
@@ -1345,7 +1345,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     }
 
 
-    // d) We need all content handler information ...
+    // d) We need all content handler information...
     if (
         ((eRequiredState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS) &&
         ((m_eFillState   & E_CONTAINS_CONTENTHANDLERS) != E_CONTAINS_CONTENTHANDLERS)
@@ -1353,7 +1353,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     {
         // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
-        // to our calli ...
+        // to our call...
         css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load all content handler");
