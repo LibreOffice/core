@@ -46,35 +46,42 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	cp -R $(INSTDIR)/share/registry $(IOSRES)/share
 
 	# Set up rc, the "inifile". See getIniFileName_Impl().
-	echo '[Bootstrap]' > $(IOSRES)/rc
-	echo 'URE_BOOTSTRAP=file://$$APP_DATA_DIR/fundamentalrc' >> $(IOSRES)/rc
-	echo 'HOME=$$SYSUSERHOME' >> $(IOSRES)/rc
+	(echo '[Bootstrap]' \
+	&& echo 'URE_BOOTSTRAP=file://$$APP_DATA_DIR/fundamentalrc' \
+	&& echo 'HOME=$$SYSUSERHOME'  \
+	&& echo '[Bootstrap]' \
+	    ) > $(IOSRES)/rc
 
 	# Set up fundamentalrc, unorc, bootstraprc and versionrc.
-	file=$(IOSRES)/fundamentalrc; \
-	echo '[Bootstrap]'                                      >  $(IOSRES)/fundamentalrc
-	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/'            >> $(IOSRES)/fundamentalrc
-	echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR'             >> $(IOSRES)/fundamentalrc
-	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry ' \
-	     'res:$${BRAND_BASE_DIR}/registry' >> $(IOSRES)/fundamentalrc
-	echo 'UNO_TYPES=file://$$APP_DATA_DIR/udkapi.rdb ' \
-	     'file://$$APP_DATA_DIR/offapi.rdb' >> $(IOSRES)/fundamentalrc
-	echo 'UNO_SERVICES=file://$$APP_DATA_DIR/services.rdb ' \
-	     'file://$$APP_DATA_DIR/services/services.rdb' >> $(IOSRES)/fundamentalrc
-	echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' >> $(IOSRES)/fundamentalrc
+	(echo '[Bootstrap]' \
+        && echo 'BRAND_BASE_DIR=$${ORIGIN}/..' \
+        && echo 'BRAND_INI_DIR=$${ORIGIN}' \
+        && echo 'BRAND_SHARE_SUBDIR=$(LIBO_SHARE_FOLDER)' \
+        && echo 'BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)' \
+        && echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry ' \
+	        'res:$${BRAND_BASE_DIR}/registry' \
+	&& echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/' \
+	&& echo 'UNO_TYPES=file://$$APP_DATA_DIR/udkapi.rdb ' \
+	        'file://$$APP_DATA_DIR/offapi.rdb' \
+	&& echo 'UNO_SERVICES=file://$$APP_DATA_DIR/services.rdb ' \
+	        'file://$$APP_DATA_DIR/services/services.rdb' \
+	&& echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' \
+	    ) > $(IOSRES)/fundamentalrc;
 
 	echo '[Bootstrap]' > $(IOSRES)/unorc
 
 	# bootstraprc must be in $BRAND_BASE_DIR/program
-	echo '[Bootstrap]'                                     >  $(IOSRES)/program/bootstraprc
-	echo 'InstallMode=<installmode>'                       >> $(IOSRES)/program/bootstraprc
-	echo "ProductKey=LibreOffice $(PRODUCTVERSION)"        >> $(IOSRES)/program/bootstraprc
-	echo 'UserInstallation=$$SYSUSERHOME/userinstallation' >> $(IOSRES)/program/bootstraprc
+	(echo '[Bootstrap]' \
+	&& echo 'InstallMode=<installmode>' \
+	&& echo "ProductKey=LibreOffice $(PRODUCTVERSION)" \
+	&& echo 'UserInstallation=$$SYSUSERHOME/userinstallation' \
+	    ) > $(IOSRES)/program/bootstraprc
 
-	echo '[Version]'            >  $(IOSRES)/program/versionrc
-	echo 'AllLanguages=en-US'   >> $(IOSRES)/program/versionrc
-	echo 'BuildVersion='        >> $(IOSRES)/program/versionrc
-	echo "buildid=$(BUILDID)"   >> $(IOSRES)/program/versionrc
+	(echo '[Version]' \
+	&& echo 'AllLanguages=en-US' \
+	&& echo 'BuildVersion=' \
+	&& echo "buildid=$(BUILDID)" \
+	    ) > $(IOSRES)/program/versionrc
 
 
 
