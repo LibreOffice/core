@@ -22,7 +22,6 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include "serialnumberadapter.hxx"
 #include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #include "xsec_xmlsec.hxx"
@@ -70,13 +69,6 @@ SAL_DLLPUBLIC_EXPORT void* xsec_xmlsec_component_getFactory( const sal_Char* pIm
                 XMLDocumentWrapper_XmlSecImpl_createInstance,
                 OUString::createFromAscii( pImplName ),
                 XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames() );
-        }
-        else if( xml_security::serial_number_adapter::implementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = ::cppu::createSingleComponentFactory(
-              xml_security::serial_number_adapter::create,
-              OUString::createFromAscii( pImplName ),
-              xml_security::serial_number_adapter::serviceNames() );
         }
     }
 
