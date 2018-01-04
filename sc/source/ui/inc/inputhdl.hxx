@@ -224,6 +224,7 @@ public:
 
     bool            TakesReturn() const     { return ( nTipVisible != 0 ); }
 
+    bool            GetModified() const { return bModified; }
     void            SetModified()       { bModified = true; }
 
     bool            GetSelIsRef() const     { return bSelIsRef; }
