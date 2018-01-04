@@ -563,7 +563,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sdb/_XSingleSelectQueryAnalyzer \
     qadevOOo/tests/java/ifc/sdb/_XSingleSelectQueryComposer \
     qadevOOo/tests/java/ifc/sdb/_XSQLErrorBroadcaster \
-    qadevOOo/tests/java/ifc/sheet/_DatabaseImportDescriptor \
     qadevOOo/tests/java/ifc/sheet/_DocumentSettings \
     qadevOOo/tests/java/ifc/sheet/_FunctionDescription \
     qadevOOo/tests/java/ifc/sheet/_GlobalSheetSettings \
@@ -1029,7 +1028,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScHeaderFieldsObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextCursor \
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextObj \
-    qadevOOo/tests/java/mod/_sc/ScImportDescriptorBase \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_CellAnnotationsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_CellAreaLinksEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_DatabaseRangesEnumeration \
