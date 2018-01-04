@@ -1086,28 +1086,28 @@ void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
 {
     if(m_pFrame)
     {
-        XFFrame* pXFFrame = nullptr;
+        rtl::Reference<XFFrame> xXFFrame;
         if(nEnd < nStart)
         {
-            pXFFrame = new XFFrame();
+            xXFFrame.set(new XFFrame);
         }
         else
         {
-            pXFFrame = new XFFloatFrame(nStart, nEnd, bAll);
+            xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
         }
 
-        m_pFrame->Parse(pXFFrame, nStart);
+        m_pFrame->Parse(xXFFrame.get(), nStart);
 
         //add child frame into group
         LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
 
         while (pLayout && pLayout != this)
         {
-            pLayout->DoXFConvert(pXFFrame);
+            pLayout->DoXFConvert(xXFFrame.get());
             pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
         }
 
-        pCont ->Add(pXFFrame);
+        pCont->Add(xXFFrame.get());
     }
 }
 
