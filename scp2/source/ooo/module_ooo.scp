@@ -381,7 +381,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Hu
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_HU );
-    Files = (gid_File_Extension_Dictionary_Hu);
+    Files = (gid_File_Extension_Dictionary_Hu, gid_File_Extra_Wordbook_hu_AkH11);
     InstallOrder = "2000";
     Sortkey = "600";
     Spellcheckerlanguage = "hu";
