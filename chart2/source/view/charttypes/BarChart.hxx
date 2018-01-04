@@ -35,6 +35,9 @@ public:
 
     BarChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
             , sal_Int32 nDimensionCount );
+    BarChart(const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+            , css::uno::Reference< css::chart2::XCoordinateSystem > xCooSys
+            , sal_Int32 nDimensionCount);
     virtual ~BarChart() override;
 
     virtual void createShapes() override;
