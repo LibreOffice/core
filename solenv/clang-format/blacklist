@@ -6382,7 +6382,6 @@ include/editeng/editview.hxx
 include/editeng/edtdlg.hxx
 include/editeng/eedata.hxx
 include/editeng/eeitem.hxx
-include/editeng/eeitemid.hxx
 include/editeng/eerdll.hxx
 include/editeng/emphasismarkitem.hxx
 include/editeng/escapementitem.hxx

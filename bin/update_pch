@@ -366,10 +366,6 @@ def filter_ignore(line, module):
             'com/sun/star/beans/PropertyAttribute.hpp', # OPTIONAL defined via objbase.h
             'com/sun/star/sdbcx/Privilege.hpp', # DELETE defined via objbase.h
             ]
-    if module == 'reportdesign':
-        ignore_list += [
-            'editeng/eeitemid.hxx', # macro redefined in ui/misc/UITools.cxx
-            ]
     if module == 'sc':
         ignore_list += [
             'progress.hxx', # special directives
