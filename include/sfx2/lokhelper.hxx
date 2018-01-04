@@ -50,6 +50,8 @@ public:
                              const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>());
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload);
+    /// Notifies all views with the given type and payload.
+    static void notifyAllViews(int nType, const OString& rPayload);
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
     static const long MaxTwips = 1e9;

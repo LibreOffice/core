@@ -56,6 +56,9 @@
 #include <markdata.hxx>
 #include <cellvalue.hxx>
 #include <tokenarray.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
@@ -718,7 +721,22 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 
     // Finish entering unless 'DontTerminateEdit' is specified, even if a formula is being processed
     if (bCommitChanges)
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Normally this isn't needed, but in Calc when editing a cell formula
+            // and manually saving (without changing cells or hitting enter), while
+            // InputEnterHandler will mark the doc as modified (when it is), because
+            // we will save the doc immediately afterwards, the modified state event
+            // is clobbered. To avoid that, we notify all views immediately of the
+            // modified state, apply the modification, then save the document.
+            ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+            if (pHdl != nullptr && pHdl->GetModified())
+                SfxLokHelper::notifyAllViews(LOK_CALLBACK_STATE_CHANGED, ".uno:ModifiedStatus=true");
+        }
+
         SC_MOD()->InputEnterHandler();
+    }
 
     if ( GetViewData().GetDocShell()->IsDocShared() )
     {
