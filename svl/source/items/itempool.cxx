@@ -939,21 +939,6 @@ sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
 }
 
 
-sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
-{
-    if ( !IsWhich(nWhich) )
-        return 0;
-
-    if ( !IsInRange( nWhich ) )
-    {
-        if ( pImpl->mpSecondary )
-            return pImpl->mpSecondary->GetTrueSlotId(nWhich);
-        assert(false && "unknown WhichId - cannot get slot-id");
-        return 0;
-    }
-    return pItemInfos[nWhich - pImpl->mnStart]._nSID;
-}
-
 void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxItemPool"));
