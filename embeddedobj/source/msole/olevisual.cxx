@@ -345,12 +345,8 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
         SetVisReplInStream( m_xCachedVisualRepresentation.is() );
     }
 
-    if ( m_xCachedVisualRepresentation.is() )
-    {
-        return GetVisualRepresentationInNativeFormat_Impl( m_xCachedVisualRepresentation );
-    }
 #ifdef _WIN32
-    else if ( m_pOleComponent )
+    if ( !m_xCachedVisualRepresentation.is() && m_pOleComponent )
     {
         try
         {
