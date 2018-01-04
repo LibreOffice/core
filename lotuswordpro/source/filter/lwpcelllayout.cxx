@@ -576,18 +576,18 @@ void LwpCellLayout::RegisterStyle()
     }
 
     // register cell style
-    XFCellStyle *pCellStyle = new XFCellStyle();
+    std::unique_ptr<XFCellStyle> xCellStyle(new XFCellStyle);
 
-    ApplyPadding(pCellStyle);
-    ApplyBackGround(pCellStyle);
-    ApplyWatermark(pCellStyle);
-    ApplyFmtStyle(pCellStyle);
-    ApplyBorders(pCellStyle);
+    ApplyPadding(xCellStyle.get());
+    ApplyBackGround(xCellStyle.get());
+    ApplyWatermark(xCellStyle.get());
+    ApplyFmtStyle(xCellStyle.get());
+    ApplyBorders(xCellStyle.get());
 
-    pCellStyle->SetAlignType(enumXFAlignNone, GetVerticalAlignmentType());
+    xCellStyle->SetAlignType(enumXFAlignNone, GetVerticalAlignmentType());
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pCellStyle).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(xCellStyle.release()).m_pStyle->GetStyleName();
 
     // content object register styles
     rtl::Reference<LwpObject> pObj = m_Content.obj();
