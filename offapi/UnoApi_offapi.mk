@@ -69,6 +69,8 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/awt/tree,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/chart2,\
 	CartesianCoordinateSystem2d \
 	CartesianCoordinateSystem3d \
+	DataPointCustomLabelField \
+	DataPointCustomLabelFieldType \
 	ExponentialRegressionCurve \
 	ExponentialScaling \
 	FormattedString \
@@ -2024,6 +2026,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XCoordinateSystem \
 	XCoordinateSystemContainer \
 	XDataInterpreter \
+	XDataPointCustomLabelField \
 	XDataSeries \
 	XDataSeriesContainer \
 	XDefaultSizeTransmitter \
