@@ -28,6 +28,10 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 using namespace ::com::sun::star;
 
 namespace
@@ -96,6 +100,24 @@ void checkSize(uno::Reference<awt::XUnitConversion> const& xConv, awt::Size cons
  */
 void ToolkitTest::testXUnitConversion()
 {
+#ifdef _WIN32
+    HKEY hkey;
+    DWORD type;
+    DWORD data;
+    DWORD size(sizeof(data));
+    LONG ret = ::RegOpenKeyW(HKEY_CURRENT_USER, L"Control Panel\\Desktop", &hkey);
+    if (ret == ERROR_SUCCESS)
+    {
+        ret = ::RegQueryValueExW(hkey, L"LogPixels", nullptr, &type,
+                                 reinterpret_cast<LPBYTE>(&data), &size);
+        if (ret == ERROR_SUCCESS && type == REG_DWORD && data != 96)
+        {
+            std::cerr << "non-default resolution, skipping textXUnitConversion\n";
+            return;
+        }
+    }
+#endif
+
     // create a window
     sal_Int32 x = 100;
     sal_Int32 y = 100;
