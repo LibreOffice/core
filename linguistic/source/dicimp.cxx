@@ -63,7 +63,25 @@ using namespace linguistic;
 #define MAX_HEADER_LENGTH 16
 
 // XML-header to query SPELLML support
+// to handle user words with "Grammar By" model words
 #define SPELLML_SUPPORT "<?xml?>"
+
+// User dictionaries can contain optional "title:" tags
+// to support custom titles with space and other characters.
+// (old mechanism stores the title of the user dictionary
+// only in its file name, but special characters are
+// problem for user dictionaries shipped with LibreOffice).
+//
+// The following fake file name extension will be
+// added to the text of the title: field for correct
+// text stripping and dictionary saving.
+//
+// TODO: add translation support?
+//   tdf#50827 language dependent wordlists are already in
+//   the appropriate dict packages.
+//   Note: Also name of the special run-time dictionary
+//   "IgnoreAllList" hasn't been localized yet.
+#define EXTENSION_FOR_TITLE_TEXT "."
 
 static const sal_Char* const pVerStr2    = "WBSWG2";
 static const sal_Char* const pVerStr5    = "WBSWG5";
@@ -96,7 +114,7 @@ static bool getTag(const OString &rLine, const sal_Char *pTagName,
 }
 
 
-sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool &bNeg )
+sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool &bNeg, OUString &aDicName )
 {
     // Sniff the header
     sal_Int16 nDicVersion = DIC_VERSION_DONTKNOW;
@@ -144,6 +162,16 @@ sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool 
             if (getTag(aLine, "type: ", aTagValue))
             {
                 bNeg = aTagValue == "negative";
+            }
+
+            // lang: title
+            if (getTag(aLine, "title: ", aTagValue))
+            {
+                aDicName = OStringToOUString( aTagValue, RTL_TEXTENCODING_UTF8) +
+                    // recent title text preparation in GetDicInfoStr() waits for an
+                    // extension, so we add it to avoid bad stripping at final dot
+                    // of the title text
+                    EXTENSION_FOR_TITLE_TEXT;
             }
 
             if (aLine.indexOf("---") != -1) // end of header
@@ -274,7 +302,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
     // read header
     bool bNegativ;
     LanguageType nLang;
-    nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
+    nDicVersion = ReadDicVersion(pStream, nLang, bNegativ, aDicName);
     ErrCode nErr = pStream->GetError();
     if (nErr != ERRCODE_NONE)
         return nErr;
@@ -429,6 +457,12 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
         pStream->WriteLine(OString("type: positive"));
     else
         pStream->WriteLine(OString("type: negative"));
+    if (aDicName.endsWith(EXTENSION_FOR_TITLE_TEXT))
+    {
+        pStream->WriteLine(OUStringToOString("title: " +
+            // strip EXTENSION_FOR_TITLE_TEXT
+            aDicName.copy(0, aDicName.lastIndexOf(EXTENSION_FOR_TITLE_TEXT)), eEnc));
+    }
     if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;
     pStream->WriteLine(OString("---"));
