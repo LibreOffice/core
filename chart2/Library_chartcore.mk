@@ -137,6 +137,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/main/ChartModel \
     chart2/source/model/main/ChartModel_Persistence \
     chart2/source/model/main/DataPoint \
+    chart2/source/model/main/DataPointCustomLabelField \
     chart2/source/model/main/DataPointProperties \
     chart2/source/model/main/DataSeries \
     chart2/source/model/main/DataSeriesProperties \
