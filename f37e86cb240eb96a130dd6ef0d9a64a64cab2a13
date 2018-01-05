@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_ea0e5ce4",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-05T19:23:13Z",
+      "side": 1,
+      "message": "since maSavedException is already an Any, surely this line can just be:\n\n   savedException \u003d maSavedException;\n\n?",
+      "revId": "f37e86cb240eb96a130dd6ef0d9a64a64cab2a13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
