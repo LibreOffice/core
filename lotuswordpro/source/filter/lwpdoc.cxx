@@ -237,6 +237,8 @@ void LwpDocument::RegisterTextStyles()
         LwpTextStyle* pParaStyle = dynamic_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID().obj().get());
         while(pParaStyle)
         {
+            if (pParaStyle->GetFoundry())
+                throw std::runtime_error("loop in register text style");
             pParaStyle->SetFoundry(m_pFoundry);
             pParaStyle->RegisterStyle();
             pParaStyle = dynamic_cast<LwpParaStyle*>(pParaStyle->GetNext().obj().get());
