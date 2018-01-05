@@ -1112,7 +1112,7 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
     return bRet;
 }
 
-Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
+Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
 {
     ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
 
@@ -1244,12 +1244,14 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
         }
         else
         {
-            const sal_uInt8 nMinR = MinMax<sal_uInt8>(rTransColor.GetRed() - nTol, 0, 255);
-            const sal_uInt8 nMaxR = MinMax<sal_uInt8>(rTransColor.GetRed() + nTol, 0, 255);
-            const sal_uInt8 nMinG = MinMax<sal_uInt8>(rTransColor.GetGreen() - nTol, 0, 255);
-            const sal_uInt8 nMaxG = MinMax<sal_uInt8>(rTransColor.GetGreen() + nTol, 0, 255);
-            const sal_uInt8 nMinB = MinMax<sal_uInt8>(rTransColor.GetBlue() - nTol, 0, 255);
-            const sal_uInt8 nMaxB = MinMax<sal_uInt8>(rTransColor.GetBlue() + nTol, 0, 255);
+            BitmapColor aCol;
+            long        nR, nG, nB;
+            const long  nMinR = MinMax<long>(rTransColor.GetRed() - nTol, 0, 255);
+            const long  nMaxR = MinMax<long>(rTransColor.GetRed() + nTol, 0, 255);
+            const long  nMinG = MinMax<long>(rTransColor.GetGreen() - nTol, 0, 255);
+            const long  nMaxG = MinMax<long>(rTransColor.GetGreen() + nTol, 0, 255);
+            const long  nMinB = MinMax<long>(rTransColor.GetBlue() - nTol, 0, 255);
+            const long  nMaxB = MinMax<long>(rTransColor.GetBlue() + nTol, 0, 255);
 
             if( pReadAcc->HasPalette() )
             {
@@ -1257,10 +1259,10 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
                 {
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        BitmapColor aCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
-                        sal_uInt8 nR = aCol.GetRed();
-                        sal_uInt8 nG = aCol.GetGreen();
-                        sal_uInt8 nB = aCol.GetBlue();
+                        aCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
+                        nR = aCol.GetRed();
+                        nG = aCol.GetGreen();
+                        nB = aCol.GetBlue();
 
                         if( nMinR <= nR && nMaxR >= nR &&
                             nMinG <= nG && nMaxG >= nG &&
@@ -1279,10 +1281,10 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
                 {
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        BitmapColor aCol = pReadAcc->GetPixel( nY, nX );
-                        sal_uInt8 nR = aCol.GetRed();
-                        sal_uInt8 nG = aCol.GetGreen();
-                        sal_uInt8 nB = aCol.GetBlue();
+                        aCol = pReadAcc->GetPixel( nY, nX );
+                        nR = aCol.GetRed();
+                        nG = aCol.GetGreen();
+                        nB = aCol.GetBlue();
 
                         if( nMinR <= nR && nMaxR >= nR &&
                             nMinG <= nG && nMaxG >= nG &&
@@ -1532,7 +1534,7 @@ bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
     return bRet;
 }
 
-bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol )
+bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
     if( mxImpBmp )
     {
@@ -1557,12 +1559,12 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
 
     if( pAcc )
     {
-        const sal_uInt8 nMinR = MinMax<sal_uInt8>(rSearchColor.GetRed() - nTol, 0, 255);
-        const sal_uInt8 nMaxR = MinMax<sal_uInt8>(rSearchColor.GetRed() + nTol, 0, 255);
-        const sal_uInt8 nMinG = MinMax<sal_uInt8>(rSearchColor.GetGreen() - nTol, 0, 255);
-        const sal_uInt8 nMaxG = MinMax<sal_uInt8>(rSearchColor.GetGreen() + nTol, 0, 255);
-        const sal_uInt8 nMinB = MinMax<sal_uInt8>(rSearchColor.GetBlue() - nTol, 0, 255);
-        const sal_uInt8 nMaxB = MinMax<sal_uInt8>(rSearchColor.GetBlue() + nTol, 0, 255);
+        const long  nMinR = MinMax<long>(rSearchColor.GetRed() - nTol, 0, 255);
+        const long  nMaxR = MinMax<long>(rSearchColor.GetRed() + nTol, 0, 255);
+        const long  nMinG = MinMax<long>(rSearchColor.GetGreen() - nTol, 0, 255);
+        const long  nMaxG = MinMax<long>(rSearchColor.GetGreen() + nTol, 0, 255);
+        const long  nMinB = MinMax<long>(rSearchColor.GetBlue() - nTol, 0, 255);
+        const long  nMaxB = MinMax<long>(rSearchColor.GetBlue() + nTol, 0, 255);
 
         if( pAcc->HasPalette() )
         {
@@ -1607,7 +1609,7 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
 }
 
 bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
-                      sal_uLong nColorCount, const sal_uInt8* _pTols )
+                      sal_uLong nColorCount, sal_uLong* _pTols )
 {
     // Bitmaps with 1 bit color depth can cause problems
     // if they have other entries than black/white in their palette
@@ -1619,35 +1621,34 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
 
     if( pAcc )
     {
-        std::unique_ptr<sal_uInt8[]> pMinR(new sal_uInt8[ nColorCount ]);
-        std::unique_ptr<sal_uInt8[]> pMaxR(new sal_uInt8[ nColorCount ]);
-        std::unique_ptr<sal_uInt8[]> pMinG(new sal_uInt8[ nColorCount ]);
-        std::unique_ptr<sal_uInt8[]> pMaxG(new sal_uInt8[ nColorCount ]);
-        std::unique_ptr<sal_uInt8[]> pMinB(new sal_uInt8[ nColorCount ]);
-        std::unique_ptr<sal_uInt8[]> pMaxB(new sal_uInt8[ nColorCount ]);
-        sal_uInt8 const * pTols;
+        std::unique_ptr<long[]> pMinR(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMaxR(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMinG(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMaxG(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMinB(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMaxB(new long[ nColorCount ]);
+        long*   pTols;
         sal_uLong   i;
 
         if( !_pTols )
         {
-            auto p = new sal_uInt8[ nColorCount ];
-            memset( p, 0, nColorCount * sizeof( sal_uInt8 ) );
-            pTols = p;
+            pTols = new long[ nColorCount ];
+            memset( pTols, 0, nColorCount * sizeof( long ) );
         }
         else
-            pTols = _pTols;
+            pTols = reinterpret_cast<long*>(_pTols);
 
         for( i = 0; i < nColorCount; i++ )
         {
             const Color&    rCol = pSearchColors[ i ];
-            const sal_uInt8 nTol = pTols[ i ];
+            const long      nTol = pTols[ i ];
 
-            pMinR[ i ] = MinMax<sal_uInt8>(rCol.GetRed() - nTol, 0, 255);
-            pMaxR[ i ] = MinMax<sal_uInt8>(rCol.GetRed() + nTol, 0, 255);
-            pMinG[ i ] = MinMax<sal_uInt8>(rCol.GetGreen() - nTol, 0, 255);
-            pMaxG[ i ] = MinMax<sal_uInt8>(rCol.GetGreen() + nTol, 0, 255);
-            pMinB[ i ] = MinMax<sal_uInt8>(rCol.GetBlue() - nTol, 0, 255);
-            pMaxB[ i ] = MinMax<sal_uInt8>(rCol.GetBlue() + nTol, 0, 255);
+            pMinR[ i ] = MinMax<long>(rCol.GetRed() - nTol, 0, 255);
+            pMaxR[ i ] = MinMax<long>(rCol.GetRed() + nTol, 0, 255);
+            pMinG[ i ] = MinMax<long>(rCol.GetGreen() - nTol, 0, 255);
+            pMaxG[ i ] = MinMax<long>(rCol.GetGreen() + nTol, 0, 255);
+            pMinB[ i ] = MinMax<long>(rCol.GetBlue() - nTol, 0, 255);
+            pMaxB[ i ] = MinMax<long>(rCol.GetBlue() + nTol, 0, 255);
         }
 
         if( pAcc->HasPalette() )
