@@ -1116,7 +1116,7 @@ public:
     {
     }
 
-    void         IncreaseBy(const SmToken &rToken);
+    void         IncreaseBy(const SmToken &rToken, sal_uInt32 nMultiplyBy = 1);
     void         Clear() { mnNum = 0; }
     sal_uInt16   GetBlankNum() const { return mnNum; }
     void         SetBlankNum(sal_uInt16 nNumber) { mnNum = nNumber; }

@@ -1547,13 +1547,12 @@ void SmXMLSpaceContext_Impl::StartElement(
     aToken.nGroup = TG::Blank;
     aToken.nLevel = 5;
     std::unique_ptr<SmBlankNode> pBlank(new SmBlankNode(aToken));
-    for (sal_Int32 i = 0; i < nWide; i++)
-        pBlank->IncreaseBy(aToken);
+    if (nWide > 0)
+        pBlank->IncreaseBy(aToken, nWide);
     if (nNarrow > 0)
     {
         aToken.eType = TSBLANK;
-        for (sal_Int32 i = 0; i < nNarrow; i++)
-            pBlank->IncreaseBy(aToken);
+        pBlank->IncreaseBy(aToken, nNarrow);
     }
     GetSmImport().GetNodeStack().push_front(std::move(pBlank));
 }
