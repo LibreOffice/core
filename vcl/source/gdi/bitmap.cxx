@@ -1112,7 +1112,7 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
     return bRet;
 }
 
-Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
+Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
 {
     ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
 
@@ -1534,7 +1534,7 @@ bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
     return bRet;
 }
 
-bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
+bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol )
 {
     if( mxImpBmp )
     {
@@ -1609,7 +1609,7 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
 }
 
 bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
-                      sal_uLong nColorCount, sal_uLong* _pTols )
+                      sal_uLong nColorCount, sal_uInt8 const * pTols )
 {
     // Bitmaps with 1 bit color depth can cause problems
     // if they have other entries than black/white in their palette
@@ -1627,28 +1627,35 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
         std::unique_ptr<long[]> pMaxG(new long[ nColorCount ]);
         std::unique_ptr<long[]> pMinB(new long[ nColorCount ]);
         std::unique_ptr<long[]> pMaxB(new long[ nColorCount ]);
-        long*   pTols;
-        sal_uLong   i;
 
-        if( !_pTols )
+        if( pTols )
         {
-            pTols = new long[ nColorCount ];
-            memset( pTols, 0, nColorCount * sizeof( long ) );
+            for( sal_uLong i = 0; i < nColorCount; i++ )
+            {
+                const Color&    rCol = pSearchColors[ i ];
+                const sal_uInt8 nTol = pTols[ i ];
+
+                pMinR[ i ] = MinMax<long>(rCol.GetRed() - nTol, 0, 255);
+                pMaxR[ i ] = MinMax<long>(rCol.GetRed() + nTol, 0, 255);
+                pMinG[ i ] = MinMax<long>(rCol.GetGreen() - nTol, 0, 255);
+                pMaxG[ i ] = MinMax<long>(rCol.GetGreen() + nTol, 0, 255);
+                pMinB[ i ] = MinMax<long>(rCol.GetBlue() - nTol, 0, 255);
+                pMaxB[ i ] = MinMax<long>(rCol.GetBlue() + nTol, 0, 255);
+            }
         }
         else
-            pTols = reinterpret_cast<long*>(_pTols);
-
-        for( i = 0; i < nColorCount; i++ )
         {
-            const Color&    rCol = pSearchColors[ i ];
-            const long      nTol = pTols[ i ];
+            for( sal_uLong i = 0; i < nColorCount; i++ )
+            {
+                const Color&    rCol = pSearchColors[ i ];
 
-            pMinR[ i ] = MinMax<long>(rCol.GetRed() - nTol, 0, 255);
-            pMaxR[ i ] = MinMax<long>(rCol.GetRed() + nTol, 0, 255);
-            pMinG[ i ] = MinMax<long>(rCol.GetGreen() - nTol, 0, 255);
-            pMaxG[ i ] = MinMax<long>(rCol.GetGreen() + nTol, 0, 255);
-            pMinB[ i ] = MinMax<long>(rCol.GetBlue() - nTol, 0, 255);
-            pMaxB[ i ] = MinMax<long>(rCol.GetBlue() + nTol, 0, 255);
+                pMinR[ i ] = rCol.GetRed();
+                pMaxR[ i ] = rCol.GetRed();
+                pMinG[ i ] = rCol.GetGreen();
+                pMaxG[ i ] = rCol.GetGreen();
+                pMinB[ i ] = rCol.GetBlue();
+                pMaxB[ i ] = rCol.GetBlue();
+            }
         }
 
         if( pAcc->HasPalette() )
@@ -1657,7 +1664,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
             {
                 const BitmapColor& rCol = pAcc->GetPaletteColor( nEntry );
 
-                for( i = 0; i < nColorCount; i++ )
+                for( sal_uLong i = 0; i < nColorCount; i++ )
                 {
                     if( pMinR[ i ] <= rCol.GetRed() && pMaxR[ i ] >= rCol.GetRed() &&
                         pMinG[ i ] <= rCol.GetGreen() && pMaxG[ i ] >= rCol.GetGreen() &&
@@ -1674,7 +1681,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
             BitmapColor     aCol;
             std::unique_ptr<BitmapColor[]> pReplaces(new BitmapColor[ nColorCount ]);
 
-            for( i = 0; i < nColorCount; i++ )
+            for( sal_uLong i = 0; i < nColorCount; i++ )
                 pReplaces[ i ] = pAcc->GetBestMatchingColor( pReplaceColors[ i ] );
 
             for( long nY = 0, nHeight = pAcc->Height(); nY < nHeight; nY++ )
@@ -1683,7 +1690,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
                 {
                     aCol = pAcc->GetPixel( nY, nX );
 
-                    for( i = 0; i < nColorCount; i++ )
+                    for( sal_uLong i = 0; i < nColorCount; i++ )
                     {
                         if( pMinR[ i ] <= aCol.GetRed() && pMaxR[ i ] >= aCol.GetRed() &&
                             pMinG[ i ] <= aCol.GetGreen() && pMaxG[ i ] >= aCol.GetGreen() &&
@@ -1696,9 +1703,6 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
                 }
             }
         }
-
-        if( !_pTols )
-            delete[] pTols;
 
         pAcc.reset();
         bRet = true;
