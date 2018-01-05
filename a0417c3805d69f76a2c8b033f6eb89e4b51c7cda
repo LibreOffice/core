@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_aa2544af",
+        "filename": "bridges/source/cpp_uno/gcc3_aix_powerpc/except.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-05T14:55:34Z",
+      "side": 1,
+      "message": "I don\u0027t think this will compile (note that this file is only built on the AIX PowerPC platform, so the error goes undetected by Jenkins)",
+      "revId": "a0417c3805d69f76a2c8b033f6eb89e4b51c7cda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
