@@ -886,7 +886,14 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
     {
         // If possible go through SlotID ...
 
-        sal_uInt16 const nSourceWhich = nWhich;
+        sal_uInt16 nSourceWhich = nWhich;
+        sal_uInt16 nSlot = pDestPool->GetTrueSlotId( nWhich );
+        if ( nSlot )
+        {
+            sal_uInt16 nW = pSourcePool->GetTrueWhich( nSlot );
+            if ( nW )
+                nSourceWhich = nW;
+        }
 
         if ( rSource.GetItemState( nSourceWhich, false ) == SfxItemState::SET )
         {
