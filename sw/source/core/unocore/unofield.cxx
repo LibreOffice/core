@@ -2990,10 +2990,6 @@ uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
             "SwXFieldEnumeration::nextElement",
             css::uno::Reference<css::uno::XInterface>());
 
-#if OSL_DEBUG_LEVEL > 1
-    uno::Reference< text::XTextField > *pItems = m_pImpl->m_Items.getArray();
-    (void)pItems;
-#endif
     uno::Reference< text::XTextField >  &rxField =
         m_pImpl->m_Items[ m_pImpl->m_nNextIndex++ ];
     uno::Any aRet;

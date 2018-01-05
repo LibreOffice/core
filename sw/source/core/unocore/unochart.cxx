@@ -654,17 +654,6 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
 
     SortSubranges( aSubRanges, bDtaSrcIsColumns );
     const OUString *pSubRanges = aSubRanges.getConstArray();
-#if OSL_DEBUG_LEVEL > 1
-    {
-        sal_Int32 nSR = aSubRanges.getLength();
-        OUString *pSR = aSubRanges.getArray();
-        OUString aRg;
-        for (sal_Int32 i = 0;  i < nSR;  ++i)
-        {
-            aRg = pSR[i];
-        }
-    }
-#endif
 
     // get table format for that single table from above
     SwFrameFormat    *pTableFormat  = nullptr;      // pointer to table format
@@ -933,10 +922,6 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 // add not yet used 'old' sequences to new one
                 for (sal_Int32 i = 0;  i < nNumLDS;  ++i)
                 {
-#if OSL_DEBUG_LEVEL > 1
-                        if (!pOld_LDS[i].is())
-                            i = i;
-#endif
                     if (pOld_LDS[i].is())
                         pLDS[nNewCnt++] = pOld_LDS[i];
                 }

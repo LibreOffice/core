@@ -57,10 +57,6 @@ struct SwUndoGroupObjImpl
 
 IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo, void )
 {
-#if OSL_DEBUG_LEVEL > 1
-    SAL_INFO("sw.core", "Id: " << pUndo->GetId() << "Comment: " << pUndo->GetComment());
-#endif
-
     if (GetIDocumentUndoRedo().DoesUndo() &&
         GetIDocumentUndoRedo().DoesDrawUndo())
     {
