@@ -102,6 +102,7 @@ XUnbufferedStream::XUnbufferedStream(
         sal_Int8 * pHeader = maHeader.getArray();
         ZipFile::StaticFillHeader( rData, rEntry.nSize, aMediaType, pHeader );
         mnHeaderToRead = static_cast < sal_Int16 > ( maHeader.getLength() );
+        mnZipSize += mnHeaderToRead;
     }
 }
 
