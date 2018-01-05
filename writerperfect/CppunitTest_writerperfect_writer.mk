@@ -30,6 +30,10 @@ $(eval $(call gb_CppunitTest_use_rdb,writerperfect_writer,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,writerperfect_writer))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,writerperfect_writer,\
+	modules/swriter \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_writer,\
 	writerperfect/qa/unit/WpftWriterFilterTest \
 ))
