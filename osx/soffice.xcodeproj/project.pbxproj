@@ -256,6 +256,11 @@
 		BE82C42418C86E010050EB79 /* spinfld.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinfld.cxx; path = ../vcl/source/control/spinfld.cxx; sourceTree = "<group>"; };
 		BE82C42518C86E010050EB79 /* tabctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabctrl.cxx; path = ../vcl/source/control/tabctrl.cxx; sourceTree = "<group>"; };
 		BE82C42618C86E010050EB79 /* throbber.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = throbber.cxx; path = ../vcl/source/control/throbber.cxx; sourceTree = "<group>"; };
+		BEB6E30D1FFF988700B0BDB0 /* framegrabber.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = framegrabber.mm; path = ../../../avmedia/source/macavf/framegrabber.mm; sourceTree = "<group>"; };
+		BEB6E30E1FFF988700B0BDB0 /* manager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = manager.mm; path = ../../../avmedia/source/macavf/manager.mm; sourceTree = "<group>"; };
+		BEB6E30F1FFF988700B0BDB0 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = ../../../avmedia/source/macavf/window.mm; sourceTree = "<group>"; };
+		BEB6E3101FFF988700B0BDB0 /* player.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = player.mm; path = ../../../avmedia/source/macavf/player.mm; sourceTree = "<group>"; };
+		BEB6E3111FFF988800B0BDB0 /* macavfuno.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = macavfuno.mm; path = ../../../avmedia/source/macavf/macavfuno.mm; sourceTree = "<group>"; };
 		BEC676DE17461A720069E01D /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
 		BECB749D17189A3B001BEB85 /* crsrsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crsrsh.cxx; path = ../sw/source/core/crsr/crsrsh.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -595,9 +600,30 @@
 			name = control;
 			sourceTree = "<group>";
 		};
+		BEB6E30B1FFF984200B0BDB0 /* avmedia */ = {
+			isa = PBXGroup;
+			children = (
+				BEB6E30C1FFF985300B0BDB0 /* macavf */,
+			);
+			path = avmedia;
+			sourceTree = "<group>";
+		};
+		BEB6E30C1FFF985300B0BDB0 /* macavf */ = {
+			isa = PBXGroup;
+			children = (
+				BEB6E30D1FFF988700B0BDB0 /* framegrabber.mm */,
+				BEB6E3111FFF988800B0BDB0 /* macavfuno.mm */,
+				BEB6E30E1FFF988700B0BDB0 /* manager.mm */,
+				BEB6E3101FFF988700B0BDB0 /* player.mm */,
+				BEB6E30F1FFF988700B0BDB0 /* window.mm */,
+			);
+			path = macavf;
+			sourceTree = "<group>";
+		};
 		BEC3D9171710B0390030AD56 = {
 			isa = PBXGroup;
 			children = (
+				BEB6E30B1FFF984200B0BDB0 /* avmedia */,
 				BE2DAD2B183148BE00A4D2F7 /* formula */,
 				BE2DAD28182FAB7900A4D2F7 /* sw */,
 				BE82BE5A18298E2E00A447B5 /* vcl */,
