@@ -24,6 +24,7 @@
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 /*************************************************************************
 
@@ -173,8 +174,6 @@ HeaderBarItemBits::CLICKABLE, but HeaderBarItemBits::FIXEDPOS.
 class Accelerator;
 class ImplHeadItem;
 
-typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
-
 #define WB_BOTTOMBORDER         ((WinBits)0x0400)
 #define WB_BUTTONSTYLE          ((WinBits)0x0800)
 #define WB_STDHEADERBAR         (WB_BUTTONSTYLE | WB_BOTTOMBORDER)
@@ -216,7 +215,7 @@ class VCLXHeaderBar;
 class SVT_DLLPUBLIC HeaderBar : public vcl::Window
 {
 private:
-    ImplHeadItemList*   mpItemList;
+    std::vector<std::unique_ptr<ImplHeadItem>> mvItemList;
     long                mnBorderOff1;
     long                mnBorderOff2;
     long                mnOffset;
@@ -266,7 +265,6 @@ private:
 public:
     HeaderBar( vcl::Window* pParent, WinBits nWinBits );
     virtual ~HeaderBar() override;
-    virtual void dispose() override;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
