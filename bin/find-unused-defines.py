@@ -119,6 +119,12 @@ with a.stdout as txt:
             cnt = 0
             for line2 in txt2:
                 line2 = line2.strip() # otherwise the comparisons below will not work
+                # ignore if/undef magic, does not indicate an actual use (most of the time)
+                if "ifdef" in line2: continue
+                if "undef" in line2: continue
+                # ignore commented out code
+                if line2.startswith("//"): continue
+                if line2.startswith("/*"): continue
                 # check if we found one in actual code
                 if idName.startswith("SID_"):
                     if not ".hrc:" in line2 and not ".src:" in line2 and not ".sdi:" in line2: found_reason_to_exclude = True
@@ -143,8 +149,6 @@ with a.stdout as txt:
                 if "sw/source/uibase/inc/ribbar.hrc:" in line2 and "STR_IMGBTN_" in idName: found_reason_to_exclude = True
                 if "sw/source/core/undo/undo.hrc:" in line2: found_reason_to_exclude = True
                 if "sw/inc/poolfmt.hrc:" in line2: found_reason_to_exclude = True
-                # not sure about these, looks suspicious
-                if "sd/source/ui/app/strings.src:" in line2 and idName.endswith("_TOOLBOX"): found_reason_to_exclude = True
                 # used via a macro that hides them from search
                 if "dbaccess/" in line2 and idName.startswith("PROPERTY_ID_"): found_reason_to_exclude = True
                 if "reportdesign/" in line2 and idName.startswith("HID_RPT_PROP_"): found_reason_to_exclude = True

@@ -52,7 +52,6 @@ const std::pair<const char*, sal_uInt16> RID_ATTR_NAMES[] =
     { NC_("RID_ATTR_NAMES", "Character blinking")    ,     SID_ATTR_CHAR_AUTOKERN },
     { NC_("RID_ATTR_NAMES", "Character set color")       , SID_ATTR_CHAR_CHARSETCOLOR },
     { NC_("RID_ATTR_NAMES", "Overline")      ,             SID_ATTR_CHAR_OVERLINE },
-    { NC_("RID_ATTR_NAMES", "Paragraph")       ,           SID_ATTR_PARA },
     { NC_("RID_ATTR_NAMES", "Alignment")       ,           SID_ATTR_PARA_ADJUST },
     { NC_("RID_ATTR_NAMES", "Line spacing")        ,       SID_ATTR_PARA_LINESPACE },
     { NC_("RID_ATTR_NAMES", "Page Break")      ,           SID_ATTR_PARA_PAGEBREAK },
