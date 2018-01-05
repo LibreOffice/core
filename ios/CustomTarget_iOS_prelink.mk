@@ -6,11 +6,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #- Env ------------------------------------------------------------------------
-IOSLD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+IOSDEV = /Applications/Xcode.app/Contents/Developer/
+IOSLD = $(IOSDEV)Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
 IOSOBJ = $(WORKDIR)/CObject/ios/Kit.o
 
 ifeq ($(ENABLE_DEBUG),TRUE)
-IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.dylib
+IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.a
 else
 IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME).a
 endif
@@ -29,24 +30,14 @@ $(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT)
 FORCE:
 
 $(IOSKIT): $(call gb_StaticLibrary_get_target,iOS_kitBridge) FORCE
-#ifeq ($(ENABLE_DEBUG),TRUE)
-	$(IOSLD) -dylib -ios_version_min 11.2 \
+	$(IOSLD) -r -ios_version_min 11.2 \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
-	    -o $(IOSKIT) \
+	    -o $(IOSOBJ) \
 	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
 	    `$(SRCDIR)/bin/lo-all-static-libs` \
 	    $(call gb_StaticLibrary_get_target,iOS_kitBridge)
-#else
-#	$(IOSLD) -r -ios_version_min 11.2 \
-#	    -syslibroot $(MACOSX_SDK_PATH) \
-#	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
-#	    -o $(IOSOBJ) \
-#	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
-#	    `$(SRCDIR)/bin/lo-all-static-libs` \
-#	    $(call gb_StaticLibrary_get_target,iOS_kitBridge)
-#	$(AR) -r $(IOSKIT) $(IOSOBJ)
-#endif
+	$(AR) -r $(IOSKIT) $(IOSOBJ)
 
 
 
