@@ -2935,21 +2935,8 @@ void SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     case ContentTypeId::GRAPHIC:
                         assert(dynamic_cast<SwGraphicContent*>(static_cast<SwTypeNumber*>(pUserData)));
                         sEntry = static_cast<SwGraphicContent*>(pUserData)->GetLink();
-#if OSL_DEBUG_LEVEL > 1
-                        sEntry += " ";
-                        sEntry += OUString::number(
-                                    ((SwGraphicContent*)pUserData)->GetYPos());
-#endif
                         bRet = true;
                     break;
-#if OSL_DEBUG_LEVEL > 1
-                    case ContentTypeId::TABLE:
-                    case ContentTypeId::FRAME:
-                        sEntry = OUString::number(
-                                        ((SwContent*)pUserData)->GetYPos() );
-                        bRet = true;
-                    break;
-#endif
                     default: break;
                 }
                 if(static_cast<SwContent*>(pUserData)->IsInvisible())
