@@ -1002,6 +1002,29 @@ inline bool SwHTMLParser::HasStyleOptions( const OUString &rStyle,
            (pLang && !pLang->isEmpty()) || (pDir && !pDir->isEmpty());
 }
 
+class SwTextFootnote;
+
+struct SwHTMLTextFootnote
+{
+    OUString sName;
+    SwTextFootnote* pTextFootnote;
+    SwHTMLTextFootnote(const OUString &rName, SwTextFootnote* pInTextFootnote)
+        : sName(rName)
+        , pTextFootnote(pInTextFootnote)
+    {
+    }
+};
+
+struct SwHTMLFootEndNote_Impl
+{
+    std::vector<SwHTMLTextFootnote> aTextFootnotes;
+
+    OUString sName;
+    OUString sContent;            // information for the last footnote
+    bool bEndNote;
+    bool bFixed;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

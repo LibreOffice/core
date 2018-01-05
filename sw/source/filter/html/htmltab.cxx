@@ -58,6 +58,7 @@
 #include "swhtml.hxx"
 #include "swcss1.hxx"
 #include <numrule.hxx>
+#include <txtftn.hxx>
 
 #define NETSCAPE_DFLT_BORDER 1
 #define NETSCAPE_DFLT_CELLSPACING 2
@@ -5021,6 +5022,24 @@ namespace
                 m_pObjectFormat->Remove(this);
         }
     };
+
+    class IndexInRange
+    {
+    private:
+        SwNodeIndex maStart;
+        SwNodeIndex maEnd;
+    public:
+        explicit IndexInRange(const SwNodeIndex& rStart, const SwNodeIndex& rEnd)
+            : maStart(rStart)
+            , maEnd(rEnd)
+        {
+        }
+        bool operator()(const SwHTMLTextFootnote& rTextFootnote) const
+        {
+            const SwNodeIndex aTextIdx(rTextFootnote.pTextFootnote->GetTextNode());
+            return aTextIdx >= maStart && aTextIdx <= maEnd;
+        }
+    };
 }
 
 std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
@@ -5293,6 +5312,19 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
             //so clear m_pMarquee pointer if that's the case
             SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee) : nullptr;
             FrameDeleteWatch aWatch(pObjectFormat);
+
+            //similarly for footnotes
+            if (m_pFootEndNoteImpl)
+            {
+                SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
+                m_pFootEndNoteImpl->aTextFootnotes.erase(std::remove_if(m_pFootEndNoteImpl->aTextFootnotes.begin(),
+                    m_pFootEndNoteImpl->aTextFootnotes.end(), IndexInRange(aSttIdx, aEndIdx)), m_pFootEndNoteImpl->aTextFootnotes.end());
+                if (m_pFootEndNoteImpl->aTextFootnotes.empty())
+                {
+                    delete m_pFootEndNoteImpl;
+                    m_pFootEndNoteImpl = nullptr;
+                }
+            }
 
             m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
             xCurTable->SetCaption( nullptr, false );
