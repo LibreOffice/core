@@ -65,7 +65,7 @@ public:
 
     /** @descr this function corresponds to the function splint in [1].
 
-        [1] Numerical Recipies in C, 2nd edition
+        [1] Numerical Recipes in C, 2nd edition
             William H. Press, et al.,
             Section 3.3, page 116
     */
@@ -88,7 +88,7 @@ private:
 
     /** @descr this function corresponds to the function spline in [1].
 
-        [1] Numerical Recipies in C, 2nd edition
+        [1] Numerical Recipes in C, 2nd edition
             William H. Press, et al.,
             Section 3.3, page 115
     */

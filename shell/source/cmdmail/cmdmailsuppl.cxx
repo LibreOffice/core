@@ -234,7 +234,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         appendShellWord(aBuffer, xSimpleMailMessage->getRecipient(), false);
     }
 
-    // Append carbon copy receipients set in the message
+    // Append carbon copy recipients set in the message
     Sequence< OUString > aStringList = xSimpleMailMessage->getCcRecipient();
     sal_Int32 n, nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
@@ -243,7 +243,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         appendShellWord(aBuffer, aStringList[n], false);
     }
 
-    // Append blind carbon copy receipients set in the message
+    // Append blind carbon copy recipients set in the message
     aStringList = xSimpleMailMessage->getBccRecipient();
     nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
