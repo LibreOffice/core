@@ -6563,13 +6563,23 @@ if test "$ENABLE_JAVA" != ""; then
         fi
 
         if test -z "$with_jdk_home"; then
-            for ver in 1.8 1.7 1.6; do
-                reg_get_value "$bitness" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
-                if test -n "$regvalue"; then
-                    _jdk_home=$regvalue
-                    break
-                fi
-            done
+            dnl See <https://docs.oracle.com/javase/9/migrate/toc.htm#JSMIG-GUID-EEED398E-AE37-4D12-
+            dnl AB10-49F82F720027> section "Windows Registry Key Changes":
+            reg_get_value "$bitness" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/CurrentVersion"
+            if test -n "$regvalue"; then
+                ver=$regvalue
+                reg_get_value "$bitness" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/$ver/JavaHome"
+                _jdk_home=$regvalue
+            fi
+            if test -z "$with_jdk_home"; then
+                for ver in 1.8 1.7 1.6; do
+                    reg_get_value "$bitness" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
+                    if test -n "$regvalue"; then
+                        _jdk_home=$regvalue
+                        break
+                    fi
+                done
+            fi
             if test -f "$_jdk_home/lib/jvm.lib" -a -f "$_jdk_home/bin/java.exe"; then
                 with_jdk_home="$_jdk_home"
                 howfound="found automatically"
