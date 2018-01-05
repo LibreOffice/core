@@ -68,6 +68,7 @@
 #include "lwpnumberingoverride.hxx"
 #include "lwptaboverride.hxx"
 #include "lwpbackgroundoverride.hxx"
+#include <o3tl/safeint.hxx>
 #include <xfilter/xfdefs.hxx>
 #include <xfilter/xfparastyle.hxx>
 #include <xfilter/xfborders.hxx>
@@ -455,7 +456,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
             Amount += pParentIndent->GetMFirst();
         else if (relative == LwpIndentOverride::RELATIVE_REST)
             Amount += pParentIndent->GetMRest();
-        pTotalIndent->SetMAll(Amount + pTotalIndent->GetMAll());
+        pTotalIndent->SetMAll(o3tl::saturating_add(Amount, pTotalIndent->GetMAll()));
         pTotalIndent->SetMRight(pParentIndent->GetMRight()+ pTotalIndent->GetMRight());
 
         pParaStyle->SetIndent(pTotalIndent->GetFirst());
