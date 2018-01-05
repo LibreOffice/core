@@ -43,11 +43,9 @@ class ScMessagePool: public SfxItemPool
     ScPivotItem         aGlobalPivotItem;
     ScSolveItem         aGlobalSolveItem;
     ScUserListItem      aGlobalUserListItem;
-
-    SfxBoolItem         aPrintWarnItem;
     ScCondFormatDlgItem aCondFormatDlgItem;
 
-    std::vector<SfxPoolItem*>*   mpPoolDefaults;
+    std::vector<SfxPoolItem*>    mvPoolDefaults;
     ScDocumentPool*              pDocPool;
 
 public:
