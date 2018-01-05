@@ -554,9 +554,14 @@ SvStream* SfxMedium::GetOutStream()
 {
     if ( !pImpl->m_pOutStream )
     {
-        // Create a temp. file if there is none because we always
-        // need one.
-        CreateTempFile( false );
+        static bool bReuse = getenv("SFX_MEDIUM_REUSE_STREAM");
+        if (!bReuse && comphelper::isFileUrl(pImpl->m_aLogicName))
+            // Avoid going via a temp. file for local files.
+            pImpl->m_pOutStream = new SvFileStream(pImpl->m_aName, StreamMode::STD_READWRITE);
+        else
+            // Create a temp. file if there is none because we always
+            // need one.
+            CreateTempFile(false);
 
         if ( pImpl->pTempFile )
         {
@@ -564,7 +569,7 @@ SvStream* SfxMedium::GetOutStream()
             // because opening new SvFileStream in this situation may fail with ERROR_SHARING_VIOLATION
             // TODO: this is a horrible hack that should probably be removed,
             // somebody needs to investigate this more thoroughly...
-            if (getenv("SFX_MEDIUM_REUSE_STREAM") && pImpl->xStream.is())
+            if (bReuse && pImpl->xStream.is())
             {
                 assert(pImpl->xStream->getOutputStream().is()); // need that...
                 pImpl->m_pOutStream = utl::UcbStreamHelper::CreateStream(
@@ -655,7 +660,14 @@ bool SfxMedium::Commit()
     if( pImpl->xStorage.is() )
         StorageCommit_Impl();
     else if( pImpl->m_pOutStream  )
+    {
         pImpl->m_pOutStream->Flush();
+
+        // When not going via a temp. file, close the output stream explicitly
+        // here, the above Flush() may or may not write the data on disk.
+        if (!pImpl->pTempFile)
+            CloseOutStream();
+    }
     else if( pImpl->m_pInStream  )
         pImpl->m_pInStream->Flush();
 
@@ -694,6 +706,15 @@ bool SfxMedium::IsStorage()
         }
         pImpl->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
         if ( !pImpl->bIsStorage )
+            pImpl->m_bTriedStorage = true;
+    }
+    else if (pImpl->m_pOutStream)
+    {
+        // Make sure we check if the out stream is a storage before attemping
+        // to create an input stream.
+        pImpl->bIsStorage = SotStorage::IsStorageFile(pImpl->m_pOutStream)
+                            && !SotStorage::IsOLEStorage(pImpl->m_pOutStream);
+        if (!pImpl->m_pOutStream->GetError() && !pImpl->bIsStorage)
             pImpl->m_bTriedStorage = true;
     }
     else if ( GetInStream() )
