@@ -2085,11 +2085,15 @@ size_t SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
 
 void ClearFEShellTabCols(SwDoc & rDoc, SwTabFrame const*const pFrame)
 {
-    for (SwViewShell& rCurrentShell : rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetRingContainer())
+    auto const pShell(rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
+    if (pShell)
     {
-        if (auto pFE = dynamic_cast<SwFEShell *>(&rCurrentShell))
+        for (SwViewShell& rCurrentShell : pShell->GetRingContainer())
         {
-            pFE->ClearColumnRowCache(pFrame);
+            if (auto const pFE = dynamic_cast<SwFEShell *>(&rCurrentShell))
+            {
+                pFE->ClearColumnRowCache(pFrame);
+            }
         }
     }
 }
