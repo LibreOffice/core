@@ -16,6 +16,24 @@
       "revId": "f37e86cb240eb96a130dd6ef0d9a64a64cab2a13",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_2a207449",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-05T19:29:32Z",
+      "side": 1,
+      "message": "i have no idea why the old code didn\u0027t use the Any copy-ctor, i just cargo-culted it to the corresponding assignment",
+      "parentUuid": "fa31d9ce_ea0e5ce4",
+      "revId": "f37e86cb240eb96a130dd6ef0d9a64a64cab2a13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
