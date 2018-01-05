@@ -63,6 +63,7 @@
 #include "lwppagehint.hxx"
 #include "lwpdivinfo.hxx"
 #include "lwpstory.hxx"
+#include <o3tl/numeric.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfmasterpage.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
@@ -273,8 +274,12 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
             }
             if(rFootnoteSep.HasCustomLength())
             {
-                nLengthPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetLength())/GetMarginWidth());
-                if(nLengthPercent > 100)
+                const double fMarginWidth = GetMarginWidth();
+                if (fMarginWidth == 0.0)
+                    throw o3tl::divide_by_zero();
+
+                nLengthPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetLength()) / fMarginWidth);
+                if (nLengthPercent > 100)
                     nLengthPercent = 100;
             }
             double fAbove = LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetAbove());
