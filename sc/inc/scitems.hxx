@@ -41,10 +41,9 @@
 #define SCITEM_PIVOTDATA            1106
 #define SCITEM_SOLVEDATA            1107
 #define SCITEM_USERLIST             1108
-#define SCITEM_PRINTWARN            1109
-#define SCITEM_CONDFORMATDLGDATA    1110
+#define SCITEM_CONDFORMATDLGDATA    1109
 
-#define MSGPOOL_END                 1110
+#define MSGPOOL_END                 1109
 
 // Item-IDs for attributes:
 
