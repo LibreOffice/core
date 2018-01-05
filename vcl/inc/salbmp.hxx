@@ -23,7 +23,6 @@
 #include <tools/gen.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/salbtype.hxx>
-#include <vcl/bitmap.hxx>
 
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
@@ -67,7 +66,7 @@ public:
 
     virtual bool            ScalingSupported() const = 0;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) = 0;
-    virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) = 0;
+    virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) = 0;
 
     virtual bool            ConvertToGreyscale()
     {

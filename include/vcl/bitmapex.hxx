@@ -293,7 +293,7 @@ public:
                             const Color* pSearchColors,
                             const Color* pReplaceColors,
                             sal_uLong nColorCount,
-                            const sal_uInt8* pTols = nullptr );
+                            const sal_uLong* pTols = nullptr );
 
     /** Change various global color characteristics
 

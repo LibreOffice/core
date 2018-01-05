@@ -112,7 +112,7 @@ bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, BmpScal
     return mpSalBitmap->Scale( rScaleX, rScaleY, nScaleFlag );
 }
 
-bool ImpBitmap::ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol )
+bool ImpBitmap::ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
     return mpSalBitmap->Replace( rSearchColor, rReplaceColor, nTol );
 }

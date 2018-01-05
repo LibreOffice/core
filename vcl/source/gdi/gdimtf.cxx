@@ -96,12 +96,12 @@ struct ImplBmpMonoParam
 
 struct ImplColReplaceParam
 {
-    sal_uInt8*          pMinR;
-    sal_uInt8*          pMaxR;
-    sal_uInt8*          pMinG;
-    sal_uInt8*          pMaxG;
-    sal_uInt8*          pMinB;
-    sal_uInt8*          pMaxB;
+    sal_uLong*          pMinR;
+    sal_uLong*          pMaxR;
+    sal_uLong*          pMinG;
+    sal_uLong*          pMaxG;
+    sal_uLong*          pMinB;
+    sal_uLong*          pMaxB;
     const Color*    pDstCols;
     sal_uLong           nCount;
 };
@@ -110,7 +110,8 @@ struct ImplBmpReplaceParam
 {
     const Color*    pSrcCols;
     const Color*    pDstCols;
-    sal_uLong       nCount;
+    sal_uLong           nCount;
+    const sal_uLong*    pTols;
 };
 
 GDIMetaFile::GDIMetaFile() :
@@ -1797,7 +1798,7 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
 
 Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam )
 {
-    const sal_uInt8 nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
+    const sal_uLong nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
 
     for( sal_uLong i = 0; i < static_cast<const ImplColReplaceParam*>(pColParam)->nCount; i++ )
     {
@@ -1820,7 +1821,7 @@ BitmapEx GDIMetaFile::ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBm
     const ImplBmpReplaceParam*  p = static_cast<const ImplBmpReplaceParam*>(pBmpParam);
     BitmapEx                    aRet( rBmpEx );
 
-    aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount, nullptr );
+    aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount, p->pTols );
 
     return aRet;
 }
@@ -2191,28 +2192,28 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
     ImplColReplaceParam aColParam;
     ImplBmpReplaceParam aBmpParam;
 
-    aColParam.pMinR = new sal_uInt8[ nColorCount ];
-    aColParam.pMaxR = new sal_uInt8[ nColorCount ];
-    aColParam.pMinG = new sal_uInt8[ nColorCount ];
-    aColParam.pMaxG = new sal_uInt8[ nColorCount ];
-    aColParam.pMinB = new sal_uInt8[ nColorCount ];
-    aColParam.pMaxB = new sal_uInt8[ nColorCount ];
+    aColParam.pMinR = new sal_uLong[ nColorCount ];
+    aColParam.pMaxR = new sal_uLong[ nColorCount ];
+    aColParam.pMinG = new sal_uLong[ nColorCount ];
+    aColParam.pMaxG = new sal_uLong[ nColorCount ];
+    aColParam.pMinB = new sal_uLong[ nColorCount ];
+    aColParam.pMaxB = new sal_uLong[ nColorCount ];
 
     for( sal_uLong i = 0; i < nColorCount; i++ )
     {
-        sal_uInt8        nVal;
+        long        nVal;
 
         nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = std::max<sal_uInt8>( nVal, 0L );
-        aColParam.pMaxR[ i ] = std::min<sal_uInt8>( nVal, 255L );
+        aColParam.pMinR[ i ] = (sal_uLong) std::max( nVal, 0L );
+        aColParam.pMaxR[ i ] = (sal_uLong) std::min( nVal, 255L );
 
         nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = std::max<sal_uInt8>( nVal, 0L );
-        aColParam.pMaxG[ i ] = std::min<sal_uInt8>( nVal, 255L );
+        aColParam.pMinG[ i ] = (sal_uLong) std::max( nVal, 0L );
+        aColParam.pMaxG[ i ] = (sal_uLong) std::min( nVal, 255L );
 
         nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = std::max<sal_uInt8>( nVal, 0L );
-        aColParam.pMaxB[ i ] = std::min<sal_uInt8>( nVal, 255L );
+        aColParam.pMinB[ i ] = (sal_uLong) std::max( nVal, 0L );
+        aColParam.pMaxB[ i ] = (sal_uLong) std::min( nVal, 255L );
     }
 
     aColParam.pDstCols = pReplaceColors;
@@ -2221,6 +2222,7 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
     aBmpParam.pSrcCols = pSearchColors;
     aBmpParam.pDstCols = pReplaceColors;
     aBmpParam.nCount = nColorCount;
+    aBmpParam.pTols = nullptr;
 
     ImplExchangeColors( ImplColReplaceFnc, &aColParam, ImplBmpReplaceFnc, &aBmpParam );
 

@@ -112,7 +112,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             if ( ( nAlphaTo == 0 ) || ( nAlphaTo == sal::static_int_cast<sal_Int8>(0xff) ) )
             {
                 Bitmap aMask( aBitmap.CreateMask( aColorFrom, nTolerance ) );
-                aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
+                    aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
                 aGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
             }
             else
