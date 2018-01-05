@@ -239,7 +239,7 @@ bool Qt5Bitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag
     return false;
 }
 
-bool Qt5Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol)
+bool Qt5Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol)
 {
     return false;
 }

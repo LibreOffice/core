@@ -61,7 +61,7 @@ public:
     virtual bool Scale(const double& rScaleX, const double& rScaleY,
                        BmpScaleFlag nScaleFlag) override;
     virtual bool Replace(const Color& rSearchColor, const Color& rReplaceColor,
-                         sal_uInt8 nTol) override;
+                         sal_uLong nTol) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
