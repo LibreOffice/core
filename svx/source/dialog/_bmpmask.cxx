@@ -574,7 +574,7 @@ void SvxBmpMask::SetExecState( bool bEnable )
 }
 
 
-sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uIntPtr* pTols )
+sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uInt8* pTols )
 {
     sal_uInt16  nCount = 0;
 
@@ -614,8 +614,8 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
     Bitmap          aBitmap( rBitmap );
     Color           pSrcCols[4];
     Color           pDstCols[4];
-    sal_uIntPtr         pTols[4];
-    const sal_uInt16    nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
+    sal_uInt8       pTols[4];
+    const sal_uInt16 nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
     EnterWait();
     aBitmap.Replace( pSrcCols, pDstCols, nCount, pTols );
@@ -624,7 +624,7 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
     return aBitmap;
 }
 
-BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const long nTol )
+BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const sal_uInt8 nTol )
 {
     EnterWait();
 
@@ -646,9 +646,9 @@ Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
     Animation   aAnimation( rAnimation );
     Color       pSrcCols[4];
     Color       pDstCols[4];
-    sal_uIntPtr     pTols[4];
+    sal_uInt8   pTols[4];
     InitColorArrays( pSrcCols, pDstCols, pTols );
-    sal_uInt16      nAnimationCount = aAnimation.Count();
+    sal_uInt16  nAnimationCount = aAnimation.Count();
 
     for( sal_uInt16 i = 0; i < nAnimationCount; i++ )
     {
@@ -666,8 +666,8 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     GDIMetaFile aMtf;
     Color       pSrcCols[4];
     Color       pDstCols[4];
-    sal_uIntPtr     pTols[4];
-    sal_uInt16      nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
+    sal_uInt8   pTols[4];
+    sal_uInt16  nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
     // If no color is selected, we copy only the Mtf
     if( !nCount )
@@ -1021,7 +1021,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                 {
                     Color   pSrcCols[4];
                     Color   pDstCols[4];
-                    sal_uIntPtr pTols[4];
+                    sal_uInt8   pTols[4];
                     sal_uInt16  nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
                     if( nCount )
