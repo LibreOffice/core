@@ -873,7 +873,7 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
 #endif
 }
 
-bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
+bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol )
 {
     VCL_GL_INFO("::Replace");
 
