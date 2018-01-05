@@ -91,7 +91,6 @@ namespace gb
     static const Path SDKDIR;
 };
 
-// GXX_INCLUDE_PATH (Linux)
 // PTHREAD_CFLAGS (Linux)
 // SYSTEM_ICU (Linux)
 // SYSTEM_JPEG (Linux)

@@ -55,15 +55,10 @@ gb_OSDEFS := \
 	-DOS2 \
 	$(PTHREAD_CFLAGS) \
 
-ifeq ($(GXX_INCLUDE_PATH),)
-GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
-endif
-
 gb_COMPILERDEFS := \
 	-D$(COM) \
 	-DHAVE_GCC_VISIBILITY_FEATURE \
 	-DCPPU_ENV=gcc3 \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
 gb_CPUDEFS := -DINTEL -D_X86_=1 -DX86
 

@@ -72,16 +72,11 @@ gb_OSDEFS := \
 	-DWIN32 \
 	-DWNT \
 
-ifeq ($(GXX_INCLUDE_PATH),)
-GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
-endif
-
 gb_COMPILERDEFS := \
 	-DGCC \
 	-D$(CVER) \
 	-DCVER=$(CVER) \
 	-DGLIBC=2 \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 	-DCPPU_ENV=gcc3 \
 	-D_MT \
 	-D_NATIVE_WCHAR_T_DEFINED \

@@ -53,15 +53,10 @@ gb_OSDEFS := \
 	-DUNX \
 	$(PTHREAD_CFLAGS) \
 
-ifeq ($(GXX_INCLUDE_PATH),)
-GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
-endif
-
 gb_COMPILERDEFS := \
 	-D$(COM) \
 	-DHAVE_GCC_VISIBILITY_FEATURE \
 	-DCPPU_ENV=gcc3 \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
 ifeq ($(CPUNAME),X86_64)
 gb_CPUDEFS := -D$(CPUNAME)

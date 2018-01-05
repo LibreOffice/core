@@ -36,7 +36,6 @@
 # SOLARLIB
 # UPD
 
-# GXX_INCLUDE_PATH (Linux)
 # PTHREAD_CFLAGS (Linux)
 # SYSTEM_ICU (Linux)
 # SYSTEM_JPEG (Linux)
