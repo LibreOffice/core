@@ -89,6 +89,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
     private int viewMode;
+    private boolean showHiddenFiles;
     private int sortMode;
 
     FileFilter fileFilter;
@@ -107,6 +108,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
     public static final String SORT_MODE_KEY = "SORT_MODE";
     private static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENTS";
+    private static final String ENABLE_SHOW_HIDDEN_FILES_KEY = "ENABLE_SHOW_HIDDEN_FILES";
 
     public static final String NEW_FILE_PATH_KEY = "NEW_FILE_PATH_KEY";
     public static final String NEW_DOC_TYPE_KEY = "NEW_DOC_TYPE_KEY";
@@ -464,11 +466,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             findViewById(R.id.header_browser).setVisibility((View.VISIBLE));
             findViewById(R.id.header_recents).setVisibility((View.VISIBLE));
             actionBar.setTitle(R.string.app_name);
+            ((TextView)findViewById(R.id.text_directory_path)).setVisibility(View.GONE);
         } else {
             recentRecyclerView.setVisibility(View.GONE);
             findViewById(R.id.header_browser).setVisibility((View.GONE));
             findViewById(R.id.header_recents).setVisibility((View.GONE));
             actionBar.setTitle(dir.getName());
+            ((TextView)findViewById(R.id.text_directory_path)).setVisibility(View.VISIBLE);
             ((TextView)findViewById(R.id.text_directory_path)).setText(getString(R.string.current_path) +
                     " " + dir.getUri().getPath());
         }
@@ -481,8 +485,18 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 // a different thread
                 currentDirectory = dir[0];
                 try {
-                    filePaths = currentDirectory.listFiles(FileUtilities
+                    List<IFile> paths = currentDirectory.listFiles(FileUtilities
                             .getFileFilter(filterMode));
+                    filePaths = new ArrayList<IFile>();
+                    for(IFile file: paths) {
+                        if(showHiddenFiles){
+                            filePaths.add(file);
+                        } else {
+                            if(!file.getName().startsWith(".")){
+                                filePaths.add(file);
+                            }
+                        }
+                    }
                 }
                 catch (final RuntimeException e) {
                     final Activity activity = LibreOfficeUIActivity.this;
@@ -810,6 +824,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         sortMode = prefs.getInt(SORT_MODE_KEY, FileUtilities.SORT_AZ);
         SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         viewMode = Integer.valueOf(defaultPrefs.getString(EXPLORER_VIEW_TYPE_KEY, ""+ GRID_VIEW));
+        showHiddenFiles = Boolean.valueOf(defaultPrefs.getBoolean(ENABLE_SHOW_HIDDEN_FILES_KEY, false));
         filterMode = Integer.valueOf(defaultPrefs.getString(FILTER_MODE_KEY , "-1"));
 
         Intent i = this.getIntent();
@@ -847,6 +862,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         outState.putString(CURRENT_DIRECTORY_KEY, currentDirectory.getUri().toString());
         outState.putInt(FILTER_MODE_KEY, filterMode);
         outState.putInt(EXPLORER_VIEW_TYPE_KEY , viewMode);
+        outState.putBoolean(ENABLE_SHOW_HIDDEN_FILES_KEY , showHiddenFiles);
         outState.putInt(DOC_PROVIDER_KEY, documentProvider.getId());
 
         Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
@@ -874,6 +890,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         }
         filterMode = savedInstanceState.getInt(FILTER_MODE_KEY, FileUtilities.ALL);
         viewMode = savedInstanceState.getInt(EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+        showHiddenFiles = savedInstanceState.getBoolean(ENABLE_SHOW_HIDDEN_FILES_KEY, false);
         //openDirectory(currentDirectory);
         Log.d(LOGTAG, "onRestoreInstanceState");
         Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
