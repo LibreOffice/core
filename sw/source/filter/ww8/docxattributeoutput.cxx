@@ -2494,7 +2494,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
 
 void DocxAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
 {
-    assert (m_pHyperlinkAttrList.is() && "jluth is at mail dot comand wants example documents that use RawText/EEField");
+    assert (m_pHyperlinkAttrList.is() && "jluth is at mail dot com and wants example documents that use RawText/EEField");
     if ( m_pHyperlinkAttrList.is() )
         m_sRawText = rText;
 }
