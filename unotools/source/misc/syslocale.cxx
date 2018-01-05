@@ -23,12 +23,14 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
+
 #include <vector>
 
 using namespace osl;
@@ -169,11 +171,17 @@ SvtSysLocaleOptions& SvtSysLocale::GetOptions() const
 
 const LanguageTag& SvtSysLocale::GetLanguageTag() const
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return comphelper::LibreOfficeKit::getLanguageTag();
+
     return pImpl->aSysLocaleOptions.GetRealLanguageTag();
 }
 
 const LanguageTag& SvtSysLocale::GetUILanguageTag() const
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return comphelper::LibreOfficeKit::getLanguageTag();
+
     return pImpl->aSysLocaleOptions.GetRealUILanguageTag();
 }
 

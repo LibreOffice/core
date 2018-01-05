@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/process.h>
@@ -165,7 +166,7 @@ vcl::Window *ImplGetDefaultContextWindow()
 const std::locale& ImplGetResLocale()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if (!pSVData->mbResLocaleSet)
+    if (!pSVData->mbResLocaleSet || comphelper::LibreOfficeKit::isActive())
     {
         pSVData->maResLocale = Translate::Create("vcl");
         pSVData->mbResLocaleSet = true;
