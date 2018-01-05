@@ -121,8 +121,7 @@ class SvxLineItem;
 #define SID_GRID_USE                        (SID_SD_START+154)
 #define ID_VAL_MOUSESTART_X                 (SID_SD_START+200)
 #define ID_VAL_MOUSESTART_Y                 (SID_SD_START+201)
-#define ID_VAL_LENGTH_X                     (SID_SD_START+202)
-#define ID_VAL_LENGTH_Y                     (SID_SD_START+203)
+  // free
 #define ID_VAL_MOUSEEND_X                   (SID_SD_START+204)
 #define ID_VAL_MOUSEEND_Y                   (SID_SD_START+205)
 #define ID_VAL_AXIS_X                       (SID_SD_START+206)

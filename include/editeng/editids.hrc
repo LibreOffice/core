@@ -51,7 +51,7 @@
 #define SID_ATTR_CHAR_FONTLIST                          ( SID_SVX_START + 22 )
 #define SID_ATTR_BORDER_OUTER                           ( SID_SVX_START + 24 )
 #define SID_ATTR_BORDER_SHADOW                          ( SID_SVX_START + 25 )
-#define SID_ATTR_PARA                                   ( SID_SVX_START + 26 )
+  // free
 #define SID_ATTR_PARA_ADJUST                            ( SID_SVX_START + 27 )
 #define SID_ATTR_PARA_ADJUST_LEFT                       ( SID_SVX_START + 28 )
 #define SID_ATTR_PARA_ADJUST_RIGHT                      ( SID_SVX_START + 29 )

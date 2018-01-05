@@ -191,7 +191,6 @@
 
 // values for SCHATTR_STYLE_SHAPE items
 #define CHART_SHAPE3D_IGNORE  -2 //internal! (GetChartShapeStyle()!)
-#define CHART_SHAPE3D_ANY     -1 //undefined type (GetChartShapeStyle()!)
 #define CHART_SHAPE3D_SQUARE   0
 #define CHART_SHAPE3D_CYLINDER 1
 #define CHART_SHAPE3D_CONE     2

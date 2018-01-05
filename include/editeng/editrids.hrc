@@ -39,7 +39,6 @@
 #define RID_SVXITEMS_SHADOW_BOTTOMRIGHT         NC_("RID_SVXITEMS_SHADOW_BOTTOMRIGHT", "Shadow bottom right")
 
 // enum ColorName -----------------------------------------------------------
-#define RID_SVXITEMS_COLOR                      NC_("RID_SVXITEMS_COLOR", "Color ")
 #define RID_SVXITEMS_COLOR_BLACK                NC_("RID_SVXITEMS_COLOR_BLACK", "Black")
 #define RID_SVXITEMS_COLOR_BLUE                 NC_("RID_SVXITEMS_COLOR_BLUE", "Blue")
 #define RID_SVXITEMS_COLOR_GREEN                NC_("RID_SVXITEMS_COLOR_GREEN", "Green")
