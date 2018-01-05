@@ -71,8 +71,7 @@ public:
     {
     }
 
-    // despite sal_Int32 being a typedef for int, MSVC won't automatically use the BigInt(sal_Int32) constructor
-#ifdef _WIN32
+#if SAL_TYPES_SIZEOFLONG == 4
     BigInt(int nValue)
         : nVal(nValue)
         , nLen(0)
