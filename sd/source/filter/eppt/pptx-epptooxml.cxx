@@ -2224,6 +2224,9 @@ bool PowerPointExport::WriteColorSchemes(FSHelperPtr pFS, const OUString& rTheme
 
                 aGrabBag.getValue(rThemePath) >>= aCurrentTheme;
 
+                if (!aCurrentTheme.getLength())
+                    return false;
+
                 // Order is important
                 for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
                 {
