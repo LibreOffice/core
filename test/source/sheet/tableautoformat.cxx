@@ -28,8 +28,8 @@ void TableAutoFormat::testTableAutoFormatProperties()
 
     propName = "IncludeFont";
     bool aIncludeFont = false;
-    CPPUNIT_ASSERT(xTableAutoFormat->getPropertyValue(propName) >>= aIncludeFont);
-    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeFont", aIncludeFont);
+    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeFont",
+                           xTableAutoFormat->getPropertyValue(propName) >>= aIncludeFont);
 
     aNewValue <<= false;
     xTableAutoFormat->setPropertyValue(propName, aNewValue);
@@ -38,8 +38,8 @@ void TableAutoFormat::testTableAutoFormatProperties()
 
     propName = "IncludeJustify";
     bool aIncludeJustify = false;
-    CPPUNIT_ASSERT(xTableAutoFormat->getPropertyValue(propName) >>= aIncludeJustify);
-    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeJustify", aIncludeJustify);
+    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeJustify",
+                           xTableAutoFormat->getPropertyValue(propName) >>= aIncludeJustify);
 
     aNewValue <<= false;
     xTableAutoFormat->setPropertyValue(propName, aNewValue);
@@ -48,8 +48,8 @@ void TableAutoFormat::testTableAutoFormatProperties()
 
     propName = "IncludeBorder";
     bool aIncludeBorder = false;
-    CPPUNIT_ASSERT(xTableAutoFormat->getPropertyValue(propName) >>= aIncludeBorder);
-    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeBorder", aIncludeBorder);
+    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeBorder",
+                           xTableAutoFormat->getPropertyValue(propName) >>= aIncludeBorder);
 
     aNewValue <<= false;
     xTableAutoFormat->setPropertyValue(propName, aNewValue);
@@ -58,8 +58,8 @@ void TableAutoFormat::testTableAutoFormatProperties()
 
     propName = "IncludeBackground";
     bool aIncludeBackground = false;
-    CPPUNIT_ASSERT(xTableAutoFormat->getPropertyValue(propName) >>= aIncludeBackground);
-    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeBackground", aIncludeBackground);
+    CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeBackground",
+                           xTableAutoFormat->getPropertyValue(propName) >>= aIncludeBackground);
 
     aNewValue <<= false;
     xTableAutoFormat->setPropertyValue(propName, aNewValue);
@@ -68,9 +68,8 @@ void TableAutoFormat::testTableAutoFormatProperties()
 
     propName = "IncludeNumberFormat";
     bool aIncludeNumberFormat = false;
-    CPPUNIT_ASSERT(xTableAutoFormat->getPropertyValue(propName) >>= aIncludeNumberFormat);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value IncludeNumberFormat",
-                           aIncludeNumberFormat);
+                           xTableAutoFormat->getPropertyValue(propName) >>= aIncludeNumberFormat);
 
     aNewValue <<= false;
     xTableAutoFormat->setPropertyValue(propName, aNewValue);
