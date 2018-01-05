@@ -528,6 +528,9 @@ public:
     /** @ATTENTION: _ONLY_ to be called by the application's configuration! */
     static void setConfiguredSystemLanguage( LanguageType nLang );
 
+    /** @ATTENTION: _ONLY_ to be called by fuzzing setup */
+    static void disable_lt_tag_parse();
+
     typedef std::shared_ptr< LanguageTagImpl > ImplPtr;
 
 private:

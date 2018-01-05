@@ -702,6 +702,14 @@ void LanguageTag::setConfiguredSystemLanguage( LanguageType nLang )
     aLanguageTag.registerImpl();
 }
 
+static bool lt_tag_parse_disabled = false;
+
+// static
+void LanguageTag::disable_lt_tag_parse()
+{
+    lt_tag_parse_disabled = true;
+}
+
 static bool lcl_isKnownOnTheFlyID( LanguageType nLang )
 {
     return nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM &&
@@ -1197,7 +1205,7 @@ bool LanguageTagImpl::canonicalize()
 
     myLtError aError;
 
-    if (lt_tag_parse( mpImplLangtag, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
+    if (!lt_tag_parse_disabled && lt_tag_parse(mpImplLangtag, OUStringToOString(maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
         char* pTag = lt_tag_canonicalize( mpImplLangtag, &aError.p);
         SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTagImpl::canonicalize: could not canonicalize '" << maBcp47 << "'");
@@ -2809,7 +2817,7 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
 
     myLtError aError;
 
-    if (lt_tag_parse( aVar.mpLangtag, OUStringToOString( rString, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
+    if (!lt_tag_parse_disabled && lt_tag_parse(aVar.mpLangtag, OUStringToOString(rString, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
         char* pTag = lt_tag_canonicalize( aVar.mpLangtag, &aError.p);
         SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTag:isValidBcp47: could not canonicalize '" << rString << "'");

@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -205,6 +206,7 @@ bool utl::ConfigManager::IsFuzzing()
 void utl::ConfigManager::EnableFuzzing()
 {
     bIsFuzzing = true;
+    LanguageTag::disable_lt_tag_parse();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
