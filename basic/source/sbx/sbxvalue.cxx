@@ -313,18 +313,10 @@ bool SbxValue::Get( SbxValues& rRes ) const
                 case SbxCoreSTRING: p->aPic = ImpGetCoreString( &p->aData );
                                     rRes.pOUString = &p->aPic; break;
                 case SbxINT:
-#if SAL_TYPES_SIZEOFINT == 2
-                    rRes.nInt = (int) ImpGetInteger( &p->aData );
-#else
                     rRes.nInt = (int) ImpGetLong( &p->aData );
-#endif
                     break;
                 case SbxUINT:
-#if SAL_TYPES_SIZEOFINT == 2
-                    rRes.nUInt = (int) ImpGetUShort( &p->aData );
-#else
                     rRes.nUInt = (int) ImpGetULong( &p->aData );
-#endif
                     break;
                 case SbxOBJECT:
                     if( p->aData.eType == SbxOBJECT )
@@ -461,18 +453,10 @@ bool SbxValue::Put( const SbxValues& rVal )
                 case SbxLPSTR:
                 case SbxSTRING:     ImpPutString( &p->aData, rVal.pOUString ); break;
                 case SbxINT:
-#if SAL_TYPES_SIZEOFINT == 2
-                    ImpPutInteger( &p->aData, (sal_Int16) rVal.nInt );
-#else
                     ImpPutLong( &p->aData, (sal_Int32) rVal.nInt );
-#endif
                     break;
                 case SbxUINT:
-#if SAL_TYPES_SIZEOFINT == 2
-                    ImpPutUShort( &p->aData, (sal_uInt16) rVal.nUInt );
-#else
                     ImpPutULong( &p->aData, (sal_uInt32) rVal.nUInt );
-#endif
                     break;
                 case SbxOBJECT:
                     if( !p->IsFixed() || p->aData.eType == SbxOBJECT )
