@@ -188,7 +188,8 @@ struct Entity : public ParserData
                                           maNamespaceDefines;
 
     explicit Entity( const ParserData& rData );
-    Entity( const Entity& rEntity );
+    Entity( const Entity& rEntity ) = delete;
+    Entity& operator=( const Entity& rEntity ) = delete;
     void startElement( Event const *pEvent );
     void characters( const OUString& sChars );
     void endElement();
@@ -238,7 +239,7 @@ public:
     void callbackCharacters( const xmlChar* s, int nLen );
     void callbackProcessingInstruction( const xmlChar *target, const xmlChar *data );
 
-    void pushEntity( const Entity& rEntity );
+    void pushEntity(const ParserData&, xml::sax::InputSource const&);
     void popEntity();
     Entity& getEntity()             { return *mpTop; }
     void parse();
@@ -379,22 +380,6 @@ Entity::Entity(const ParserData& rData)
     , mxProducedEvents()
     , mbEnableThreads(false)
     , mpParser(nullptr)
-{
-}
-
-Entity::Entity(const Entity& e)
-    : ParserData(e)
-    , mnProducedEventsSize(0)
-    , mxProducedEvents()
-    , mbEnableThreads(e.mbEnableThreads)
-    , maStructSource(e.maStructSource)
-    , mpParser(e.mpParser)
-    , maConverter(e.maConverter)
-    , maSavedException(e.maSavedException)
-    , maNamespaceStack(e.maNamespaceStack)
-    , maContextStack(e.maContextStack)
-    , maNamespaceCount(e.maNamespaceCount)
-    , maNamespaceDefines(e.maNamespaceDefines)
 {
 }
 
@@ -758,24 +743,14 @@ namespace
 * the file-specific initialization work. (During a parser run, external files may be opened)
 *
 ****************/
-void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
+void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
 {
     xmlInitParser();
 
     // Only one text at one time
     MutexGuard guard( maMutex );
 
-    Entity entity( maData );
-    entity.maStructSource = maStructSource;
-
-    if( !entity.maStructSource.aInputStream.is() )
-        throw SAXException("No input source", Reference< XInterface >(), Any() );
-
-    entity.maConverter.setInputStream( entity.maStructSource.aInputStream );
-    if( !entity.maStructSource.sEncoding.isEmpty() )
-        entity.maConverter.setEncoding( OUStringToOString( entity.maStructSource.sEncoding, RTL_TEXTENCODING_ASCII_US ) );
-
-    pushEntity( entity );
+    pushEntity(maData, rStructSource);
     Entity& rEntity = getEntity();
     ParserCleanup aEnsureFree(*this, rEntity);
 
@@ -988,10 +963,22 @@ bool FastSaxParserImpl::consume(EventList& rEventList)
     return true;
 }
 
-void FastSaxParserImpl::pushEntity( const Entity& rEntity )
+void FastSaxParserImpl::pushEntity(const ParserData& rEntityData,
+        xml::sax::InputSource const& rSource)
 {
-    maEntities.push( rEntity );
+    if (!rSource.aInputStream.is())
+        throw SAXException("No input source", Reference<XInterface>(), Any());
+
+    maEntities.emplace(rEntityData);
     mpTop = &maEntities.top();
+
+    mpTop->maStructSource = rSource;
+
+    mpTop->maConverter.setInputStream(mpTop->maStructSource.aInputStream);
+    if (!mpTop->maStructSource.sEncoding.isEmpty())
+    {
+        mpTop->maConverter.setEncoding(OUStringToOString(mpTop->maStructSource.sEncoding, RTL_TEXTENCODING_ASCII_US));
+    }
 }
 
 void FastSaxParserImpl::popEntity()
