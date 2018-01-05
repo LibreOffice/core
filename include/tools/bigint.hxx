@@ -62,26 +62,13 @@ public:
     {
     }
 
-    BigInt(sal_Int32 nValue)
-        : nVal(nValue)
-        , nLen(0)
-        , bIsNeg(false)
-        , bIsBig(false)
-        , bIsSet(true)
-    {
-    }
-
-    // despite sal_Int32 being a typedef for int, MSVC won't automatically use the BigInt(sal_Int32) constructor
-#ifdef _WIN32
     BigInt(int nValue)
         : nVal(nValue)
         , nLen(0)
         , bIsNeg(false)
         , bIsBig(false)
         , bIsSet(true)
-    {
-    }
-#endif
+    {}
 
     BigInt( double nVal );
     BigInt( sal_uInt32 nVal );
