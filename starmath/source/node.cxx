@@ -2725,21 +2725,18 @@ void SmErrorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
 
-
 /**************************************************************************/
 
-
-void SmBlankNode::IncreaseBy(const SmToken &rToken)
+void SmBlankNode::IncreaseBy(const SmToken &rToken, sal_uInt32 nMultiplyBy)
 {
     switch(rToken.eType)
     {
-        case TBLANK:  mnNum += 4; break;
-        case TSBLANK: mnNum += 1; break;
+        case TBLANK:  mnNum += (4 * nMultiplyBy); break;
+        case TSBLANK: mnNum += (1 * nMultiplyBy); break;
         default:
             break;
     }
 }
-
 
 void SmBlankNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
