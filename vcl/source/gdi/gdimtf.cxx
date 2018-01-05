@@ -58,9 +58,9 @@ using namespace com::sun::star;
 
 struct ImplColAdjustParam
 {
-    sal_uInt8*  pMapR;
-    sal_uInt8*  pMapG;
-    sal_uInt8*  pMapB;
+    std::unique_ptr<sal_uInt8[]>  pMapR;
+    std::unique_ptr<sal_uInt8[]>  pMapG;
+    std::unique_ptr<sal_uInt8[]>  pMapB;
 };
 
 struct ImplBmpAdjustParam
@@ -96,14 +96,14 @@ struct ImplBmpMonoParam
 
 struct ImplColReplaceParam
 {
-    sal_uLong*          pMinR;
-    sal_uLong*          pMaxR;
-    sal_uLong*          pMinG;
-    sal_uLong*          pMaxG;
-    sal_uLong*          pMinB;
-    sal_uLong*          pMaxB;
-    const Color*    pDstCols;
-    sal_uLong           nCount;
+    std::unique_ptr<sal_uLong[]>     pMinR;
+    std::unique_ptr<sal_uLong[]>     pMaxR;
+    std::unique_ptr<sal_uLong[]>     pMinG;
+    std::unique_ptr<sal_uLong[]>     pMaxG;
+    std::unique_ptr<sal_uLong[]>     pMinB;
+    std::unique_ptr<sal_uLong[]>     pMaxB;
+    const Color *                  pDstCols;
+    sal_uLong                      nCount;
 };
 
 struct ImplBmpReplaceParam
@@ -2103,9 +2103,9 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
     ImplColAdjustParam  aColParam;
     ImplBmpAdjustParam  aBmpParam;
 
-    aColParam.pMapR = new sal_uInt8[ 256 ];
-    aColParam.pMapG = new sal_uInt8[ 256 ];
-    aColParam.pMapB = new sal_uInt8[ 256 ];
+    aColParam.pMapR.reset(new sal_uInt8[ 256 ]);
+    aColParam.pMapG.reset(new sal_uInt8[ 256 ]);
+    aColParam.pMapB.reset(new sal_uInt8[ 256 ]);
 
     // calculate slope
     if( nContrastPercent >= 0 )
@@ -2168,11 +2168,6 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
 
     // do color adjustment
     ImplExchangeColors( ImplColAdjustFnc, &aColParam, ImplBmpAdjustFnc, &aBmpParam );
-
-    delete[] aColParam.pMapR;
-    delete[] aColParam.pMapG;
-    delete[] aColParam.pMapB;
-
 }
 
 void GDIMetaFile::Convert( MtfConversion eConversion )
@@ -2191,12 +2186,12 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
     ImplColReplaceParam aColParam;
     ImplBmpReplaceParam aBmpParam;
 
-    aColParam.pMinR = new sal_uLong[ nColorCount ];
-    aColParam.pMaxR = new sal_uLong[ nColorCount ];
-    aColParam.pMinG = new sal_uLong[ nColorCount ];
-    aColParam.pMaxG = new sal_uLong[ nColorCount ];
-    aColParam.pMinB = new sal_uLong[ nColorCount ];
-    aColParam.pMaxB = new sal_uLong[ nColorCount ];
+    aColParam.pMinR.reset(new sal_uLong[ nColorCount ]);
+    aColParam.pMaxR.reset(new sal_uLong[ nColorCount ]);
+    aColParam.pMinG.reset(new sal_uLong[ nColorCount ]);
+    aColParam.pMaxG.reset(new sal_uLong[ nColorCount ]);
+    aColParam.pMinB.reset(new sal_uLong[ nColorCount ]);
+    aColParam.pMaxB.reset(new sal_uLong[ nColorCount ]);
 
     for( sal_uLong i = 0; i < nColorCount; i++ )
     {
@@ -2223,13 +2218,6 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
     aBmpParam.nCount = nColorCount;
 
     ImplExchangeColors( ImplColReplaceFnc, &aColParam, ImplBmpReplaceFnc, &aBmpParam );
-
-    delete[] aColParam.pMinR;
-    delete[] aColParam.pMaxR;
-    delete[] aColParam.pMinG;
-    delete[] aColParam.pMaxG;
-    delete[] aColParam.pMinB;
-    delete[] aColParam.pMaxB;
 };
 
 GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
