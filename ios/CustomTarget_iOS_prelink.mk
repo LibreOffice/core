@@ -6,8 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #- Env ------------------------------------------------------------------------
-IOSDEV = /Applications/Xcode.app/Contents/Developer/
-IOSLD = $(IOSDEV)Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+IOSLD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
 IOSOBJ = $(WORKDIR)/CObject/ios/Kit.o
 
 ifeq ($(ENABLE_DEBUG),TRUE)
@@ -35,8 +34,7 @@ $(IOSKIT): $(call gb_StaticLibrary_get_target,iOS_kitBridge) FORCE
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
 	    -o $(IOSOBJ) \
 	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
-	    `$(SRCDIR)/bin/lo-all-static-libs` \
-	    $(call gb_StaticLibrary_get_target,iOS_kitBridge)
+	    `$(SRCDIR)/bin/lo-all-static-libs`
 	$(AR) -r $(IOSKIT) $(IOSOBJ)
 
 

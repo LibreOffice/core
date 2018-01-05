@@ -18,3 +18,17 @@ int BridgeLOkit_open(const char *path);
 int BridgeLOkit_ClientCommand(const char *input);
 int BridgeLOkit_Hipernate(void);
 int BridgeLOkit_LeaveHipernate(void);
+
+
+// Use LOK_USE_UNSTABLE_API to get access to the low level
+// LibreOfficeKit.
+// REMARK: There are no guarantee these functions will work !!
+// REMARK: BridgeLOkit_Init MUST be called, NOT the original init()
+
+#ifdef LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
+extern LibreOfficeKit* kit;
+#endif
+
