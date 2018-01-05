@@ -32,10 +32,12 @@
 #pragma warning(push, 1)
 #endif
 
-// sigh, UTF8.h was removed in poppler-0.21.0 and put back in 0.21.1
+// sigh, UTF8.h was removed in poppler-0.21.0 and put back in 0.21.1, then renamed to UnicodeMapFuncs.h in 0.62.0
 // FIXME: we can't use #if POPPLER_CHECK_VERSION(0, 21, 0) && !POPPLER_CHECK_VERSION(0, 21, 1)
 //        because the internal poppler does not provide poppler-version.h and the macro always returns 0
-#if POPPLER_CHECK_VERSION(0, 21, 1)
+#if POPPLER_CHECK_VERSION(0, 62, 0)
+#include <UnicodeMapFuncs.h>
+#elif POPPLER_CHECK_VERSION(0, 21, 1)
 #include <UTF8.h>
 #elif POPPLER_CHECK_VERSION(0, 21, 0)
 #include "UTF.h"
@@ -913,7 +915,11 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
             );
 
     // silence spurious warning
+#if POPPLER_CHECK_VERSION(0, 62, 0)
+    (void)&mapUTF16;
+#else
     (void)&mapUCS2;
+#endif
 
     char buf[9];
     for( int i=0; i<uLen; ++i )
