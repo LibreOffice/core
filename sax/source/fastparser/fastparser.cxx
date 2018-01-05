@@ -173,6 +173,7 @@ struct Entity : public ParserData
     // resource leaks), therefore any exception thrown by a UNO callback
     // must be saved somewhere until the C-XmlParser is stopped.
     css::uno::Any                           maSavedException;
+    osl::Mutex maSavedExceptionMutex;
     void saveException( const Any & e );
     void throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
                          bool mbDuringParse );
@@ -570,12 +571,20 @@ void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumen
                              bool mbDuringParse )
 {
     // Error during parsing !
+    Any savedException;
+    {
+        osl::MutexGuard g(maSavedExceptionMutex);
+        if (maSavedException.hasValue())
+        {
+            savedException.setValue(&maSavedException, cppu::UnoType<decltype(maSavedException)>::get());
+        }
+    }
     SAXParseException aExcept(
         lclGetErrorMessage( mpParser,
                             xDocumentLocator->getSystemId(),
                             xDocumentLocator->getLineNumber() ),
         Reference< XInterface >(),
-        Any( &maSavedException, cppu::UnoType<decltype(maSavedException)>::get() ),
+        savedException,
         xDocumentLocator->getPublicId(),
         xDocumentLocator->getSystemId(),
         xDocumentLocator->getLineNumber(),
@@ -607,7 +616,15 @@ void Entity::saveException( const Any & e )
     // for XComponent; and yet expect to continue parsing.
     SAL_WARN("sax", "Unexpected exception from XML parser "
             << e.get<Exception>());
-    maSavedException = e;
+    osl::MutexGuard g(maSavedExceptionMutex);
+    if (maSavedException.hasValue())
+    {
+        SAL_INFO("sax.fastparser", "discarding exception, already have one");
+    }
+    else
+    {
+        maSavedException = e;
+    }
 }
 
 } // namespace
@@ -814,6 +831,8 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
         deleteUsedEvents();
 
         // callbacks used inside XML_Parse may have caught an exception
+        // No need to lock maSavedExceptionMutex here because parser
+        // thread is joined.
         if( rEntity.maSavedException.hasValue() )
             rEntity.throwException( mxDocumentLocator, true );
     }
@@ -1035,8 +1054,16 @@ void FastSaxParserImpl::parse()
         }
 
         // callbacks used inside XML_Parse may have caught an exception
-        if( !bContinue || rEntity.maSavedException.hasValue() )
+        if (!bContinue)
+        {
             rEntity.throwException( mxDocumentLocator, true );
+        }
+        osl::ClearableMutexGuard g(rEntity.maSavedExceptionMutex);
+        if (rEntity.maSavedException.hasValue())
+        {
+            g.clear();
+            rEntity.throwException( mxDocumentLocator, true );
+        }
     } while( nRead > 0 );
     rEntity.getEvent( DONE );
     if( rEntity.mbEnableThreads )
