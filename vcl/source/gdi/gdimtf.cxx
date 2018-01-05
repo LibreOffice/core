@@ -108,10 +108,9 @@ struct ImplColReplaceParam
 
 struct ImplBmpReplaceParam
 {
-    const Color*    pSrcCols;
-    const Color*    pDstCols;
+    const Color*        pSrcCols;
+    const Color*        pDstCols;
     sal_uLong           nCount;
-    const sal_uLong*    pTols;
 };
 
 GDIMetaFile::GDIMetaFile() :
@@ -1821,7 +1820,7 @@ BitmapEx GDIMetaFile::ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBm
     const ImplBmpReplaceParam*  p = static_cast<const ImplBmpReplaceParam*>(pBmpParam);
     BitmapEx                    aRet( rBmpEx );
 
-    aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount, p->pTols );
+    aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount, nullptr );
 
     return aRet;
 }
@@ -2222,7 +2221,6 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
     aBmpParam.pSrcCols = pSearchColors;
     aBmpParam.pDstCols = pReplaceColors;
     aBmpParam.nCount = nColorCount;
-    aBmpParam.pTols = nullptr;
 
     ImplExchangeColors( ImplColReplaceFnc, &aColParam, ImplBmpReplaceFnc, &aBmpParam );
 
