@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_45f919c8",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-01-06T22:05:17Z",
+      "side": 1,
+      "message": "label was added so this inline text should be removed.",
+      "range": {
+        "startLine": 164,
+        "startChar": 12,
+        "endLine": 164,
+        "endChar": 127
+      },
+      "revId": "330aabd6244943195346f82479c11c2d2eb0ba45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
