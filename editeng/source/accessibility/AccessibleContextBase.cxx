@@ -317,18 +317,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         // Create a copy of the state set and return it.
         pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
 
-        // Merge current focused state from edit engine.
-#if 0
-        if (aState == AccessibleStateType::FOCUSED
-            && pStateSet != NULL
-            && mpText != NULL)
-        {
-            if (mpText->GetFocusedState ())
-                pStateSet->AddState (aState);
-            else
-                pStateSet->RemoveState (aState);
-        }
-#endif
         if (pStateSet != nullptr)
             pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
     }
