@@ -67,13 +67,10 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
 
     uno::Sequence<beans::PropertyValue> aViewParameters;
 
-    const sal_Int32 nCount(aPrimitiveSequence.getLength());
     geometry::RealRectangle2D aRealRect;
     basegfx::B2DRange aRange;
-    for (sal_Int32 a = 0; a < nCount; ++a)
+    for (Primitive2DReference const & xReference : aPrimitiveSequence)
     {
-        const Primitive2DReference xReference(aPrimitiveSequence[a]);
-
         if (xReference.is())
         {
             aRealRect = xReference->getRange(aViewParameters);
@@ -81,10 +78,10 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
         }
     }
 
-    aRealRect.X1 = 0;
-    aRealRect.Y1 = 0;
-    aRealRect.X2 = aRange.getMaxX() - aRange.getMinX();
-    aRealRect.Y2 = aRange.getMaxY() - aRange.getMinY();
+    aRealRect.X1 = aRange.getMinX();
+    aRealRect.Y1 = aRange.getMinY();
+    aRealRect.X2 = aRange.getMaxX();
+    aRealRect.Y2 = aRange.getMaxY();
 
     double nDPI = 96 * fScalingFactor;
 
