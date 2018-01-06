@@ -25,6 +25,7 @@
 #include <rangeutl.hxx>
 #include <unonames.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/families.hxx>
@@ -1530,9 +1531,8 @@ bool XmlScPropHdl_RotateAngle::importXML(
     bool bRetval(false);
 
     sal_Int32 nValue;
-    if (::sax::Converter::convertNumber(nValue, rStrImpValue))
+    if (::sax::Converter::convertNumber(nValue, rStrImpValue) && !o3tl::checked_multiply<sal_Int32>(nValue, 100, nValue))
     {
-        nValue *= 100;
         rValue <<= nValue;
         bRetval = true;
     }
