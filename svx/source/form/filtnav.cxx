@@ -470,7 +470,8 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event )
 
     const ::std::vector< FmFilterData* >::iterator insertPos = pFormItem->GetChildren().begin() + nInsertPos;
 
-    FmFilterItems* pFilterItems = new FmFilterItems(pFormItem, SvxResId(RID_STR_FILTER_FILTER_OR));
+    // "Filter for" for first position, "Or" for the other positions
+    FmFilterItems* pFilterItems = new FmFilterItems(pFormItem, (nInsertPos?SvxResId(RID_STR_FILTER_FILTER_OR):SvxResId(RID_STR_FILTER_FILTER_FOR)));
     m_pModel->Insert( insertPos, pFilterItems );
 }
 
