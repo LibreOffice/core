@@ -352,16 +352,16 @@ void LwpPara::RegisterStyle()
         m_pIndentOverride = pIndentOverride.release();
     }
 
-    XFParaStyle* pOverStyle = nullptr;
+    std::unique_ptr<XFParaStyle> xOverStyle;
     bool noSpacing = true;
     LwpParaProperty* pBulletProps = nullptr, *pNumberingProps = nullptr;
 
     if (m_pProps != nullptr)
     {
         bool noIndent = true;
-        pOverStyle = new XFParaStyle;
-        *pOverStyle = *pBaseStyle;
-        pOverStyle->SetStyleName("");
+        xOverStyle.reset(new XFParaStyle);
+        *xOverStyle = *pBaseStyle;
+        xOverStyle->SetStyleName("");
         LwpParaProperty* pProps = m_pProps;
         sal_uInt32 PropType;
         LwpParaStyle& rParaStyle = dynamic_cast<LwpParaStyle&>(*m_ParaStyle.obj());
@@ -376,14 +376,14 @@ void LwpPara::RegisterStyle()
                 if (pAlignment)
                 {
                     if (!rParaStyle.GetAlignment())
-                        OverrideAlignment(nullptr, pAlignment, pOverStyle);
+                        OverrideAlignment(nullptr, pAlignment, xOverStyle.get());
                     else
                     {
                         std::unique_ptr<LwpAlignmentOverride> const pAlign(
                                 rParaStyle.GetAlignment()->clone());
                         OverrideAlignment(pAlign.get(),
                                 pAlignment,
-                                pOverStyle);
+                                xOverStyle.get());
                     }
                 }
                 break;
@@ -395,9 +395,9 @@ void LwpPara::RegisterStyle()
                 if (pIndent)
                 {
                     if (!rParaStyle.GetIndent())
-                        OverrideIndent(nullptr, pIndent, pOverStyle);
+                        OverrideIndent(nullptr, pIndent, xOverStyle.get());
                     else
-                        OverrideIndent(m_pIndentOverride, pIndent, pOverStyle);
+                        OverrideIndent(m_pIndentOverride, pIndent, xOverStyle.get());
                 }
                 break;
             }
@@ -408,24 +408,24 @@ void LwpPara::RegisterStyle()
                 if (pSpacing)
                 {
                     if (!rParaStyle.GetSpacing())
-                        OverrideSpacing(nullptr, pSpacing, pOverStyle);
+                        OverrideSpacing(nullptr, pSpacing, xOverStyle.get());
                     else
                     {
                         std::unique_ptr<LwpSpacingOverride> const
                             pNewSpacing(rParaStyle.GetSpacing()->clone());
-                        OverrideSpacing(pNewSpacing.get(), pSpacing, pOverStyle);
+                        OverrideSpacing(pNewSpacing.get(), pSpacing, xOverStyle.get());
                     }
                 }
                 break;
             }
             case PP_LOCAL_BORDER:
             {
-                OverrideParaBorder(pProps, pOverStyle);
+                OverrideParaBorder(pProps, xOverStyle.get());
                 break;
             }
             case PP_LOCAL_BREAKS:
             {
-                OverrideParaBreaks(pProps, pOverStyle);
+                OverrideParaBreaks(pProps, xOverStyle.get());
                 break;
             }
             case PP_LOCAL_BULLET:
@@ -453,7 +453,7 @@ void LwpPara::RegisterStyle()
                         if (rBGStuff.IsPatternFill())
                         {
                             XFBGImage* pXFBGImage = rBGStuff.GetFillPattern();
-                            pOverStyle->SetBackImage(pXFBGImage);
+                            xOverStyle->SetBackImage(pXFBGImage);
                         }
                         else
                         {
@@ -461,7 +461,7 @@ void LwpPara::RegisterStyle()
                             if (pColor && pColor->IsValidColor())
                             {
                                 XFColor aXFColor( pColor->To24Color());
-                                pOverStyle->SetBackColor( aXFColor );
+                                xOverStyle->SetBackColor( aXFColor );
                             }
                         }
                     }
@@ -478,12 +478,12 @@ void LwpPara::RegisterStyle()
         {
             if (m_pIndentOverride->IsUseRelative() && GetParent())
             {
-                OverrideIndent(nullptr,m_pIndentOverride,pOverStyle);
+                OverrideIndent(nullptr,m_pIndentOverride,xOverStyle.get());
             }
         }
         if (!m_ParentStyleName.isEmpty())
-            pOverStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
+            xOverStyle->SetParentStyleName(m_ParentStyleName);
+        m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
 
     }
     else //use named style
@@ -492,12 +492,12 @@ void LwpPara::RegisterStyle()
             {
                 if (m_pIndentOverride->IsUseRelative() && GetParent())
                 {
-                    pOverStyle = new XFParaStyle;
-                    *pOverStyle = *pBaseStyle;
-                    OverrideIndent(nullptr,m_pIndentOverride,pOverStyle);
+                    xOverStyle.reset(new XFParaStyle);
+                    *xOverStyle = *pBaseStyle;
+                    OverrideIndent(nullptr,m_pIndentOverride,xOverStyle.get());
                     if (!m_ParentStyleName.isEmpty())
-                        pOverStyle->SetParentStyleName(m_ParentStyleName);
-                    m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
+                        xOverStyle->SetParentStyleName(m_ParentStyleName);
+                    m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
                 }
             }
     }
@@ -507,12 +507,12 @@ void LwpPara::RegisterStyle()
         XFParaStyle* pOldStyle = pXFStyleManager->FindParaStyle(m_StyleName);
         if (pOldStyle->GetNumberRight())
         {
-            pOverStyle = new XFParaStyle;
-            *pOverStyle = *pOldStyle;
-            pOverStyle->SetAlignType(enumXFAlignStart);
+            xOverStyle.reset(new XFParaStyle);
+            *xOverStyle = *pOldStyle;
+            xOverStyle->SetAlignType(enumXFAlignStart);
             if (!m_ParentStyleName.isEmpty())
-                pOverStyle->SetParentStyleName(m_ParentStyleName);
-            m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
+                xOverStyle->SetParentStyleName(m_ParentStyleName);
+            m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
         }
     }
 
@@ -714,13 +714,13 @@ void LwpPara::RegisterStyle()
         LwpPara* pPrePara = dynamic_cast<LwpPara*>(GetPrevious().obj().get());
         if (pPrePara && pPrePara->GetBelowSpacing()!=0)
         {
-            pOverStyle = new XFParaStyle;
-            *pOverStyle = *GetXFParaStyle();
-            XFMargins* pMargin = &pOverStyle->GetMargins();
+            xOverStyle.reset(new XFParaStyle);
+            *xOverStyle = *GetXFParaStyle();
+            XFMargins* pMargin = &xOverStyle->GetMargins();
             pMargin->SetTop(pMargin->GetTop()+pPrePara->GetBelowSpacing());
             if (!m_ParentStyleName.isEmpty())
-                    pOverStyle->SetParentStyleName(m_ParentStyleName);
-            m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
+                    xOverStyle->SetParentStyleName(m_ParentStyleName);
+            m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
         }
     }
 
@@ -729,7 +729,7 @@ void LwpPara::RegisterStyle()
     {
         std::unique_ptr<XFParaStyle> xNewParaStyle(new XFParaStyle);
         *xNewParaStyle = *GetXFParaStyle();
-        //pOverStyle->SetStyleName("");
+        //xOverStyle->SetStyleName("");
         RegisterTabStyle(xNewParaStyle.get());
         if (!m_ParentStyleName.isEmpty())
             xNewParaStyle->SetParentStyleName(m_ParentStyleName);
