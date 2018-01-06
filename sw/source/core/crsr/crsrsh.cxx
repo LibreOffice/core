@@ -1829,7 +1829,10 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     if( m_pBlockCursor )
         RefreshBlockCursor();
 
-    if( !bIdleEnd && m_bHasFocus && !m_bBasicHideCursor )
+    // We should not restrict cursor update to the active view when using LOK
+    bool bCheckFocus = m_bHasFocus || comphelper::LibreOfficeKit::isActive();
+
+    if( !bIdleEnd && bCheckFocus && !m_bBasicHideCursor )
     {
         if( m_pTableCursor )
             m_pTableCursor->SwSelPaintRects::Show();
