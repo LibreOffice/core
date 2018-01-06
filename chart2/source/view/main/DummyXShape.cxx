@@ -1088,11 +1088,7 @@ void DummyChart::render()
 
     SAL_INFO("chart2.opengl", "render chart");
     m_GLRender.prepareToRender();
-#if 0
-    m_GLRender.renderDebug();
-#else
     DummyXShapes::render();
-#endif
 }
 
 void DummyChart::clear()
