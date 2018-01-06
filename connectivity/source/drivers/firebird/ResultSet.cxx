@@ -841,22 +841,6 @@ void SAL_CALL OResultSet::cancel(  )
 
 }
 
-//----- XWarningsSupplier UNSUPPORTED -----------------------------------------
-#if 0
-void SAL_CALL OResultSet::clearWarnings() throw(SQLException, RuntimeException, std::exception)
-{
-    ::dbtools::throwFunctionNotSupportedSQLException("clearWarnings not supported in firebird",
-                                                  *this);
-}
-
-Any SAL_CALL OResultSet::getWarnings() throw(SQLException, RuntimeException, std::exception)
-{
-    ::dbtools::throwFunctionNotSupportedSQLException("getWarnings not supported in firebird",
-                                                  *this);
-    return Any();
-}
-#endif
-
 //----- OIdPropertyArrayUsageHelper ------------------------------------------
 IPropertyArrayHelper* OResultSet::createArrayHelper() const
 {
