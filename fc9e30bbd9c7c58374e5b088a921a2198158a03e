@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4a092831",
+        "filename": "svtools/source/graphic/grfmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-06T17:59:54Z",
+      "side": 1,
+      "message": "can\u0027t we just assert and fix these places?",
+      "revId": "fc9e30bbd9c7c58374e5b088a921a2198158a03e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
