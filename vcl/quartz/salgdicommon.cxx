@@ -1542,7 +1542,7 @@ void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = mnRealDPIX;
     rDPIY = mnRealDPIY;
 #else
-    rDPIX = rDPIY = 200; // FIXME
+    rDPIX = rDPIY = 96;
 #endif
 }
 
