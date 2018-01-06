@@ -51,11 +51,10 @@ void BigInt::MakeBigInt( const BigInt& rVal )
     }
     else
     {
-        sal_Int32 nTmp = rVal.nVal;
-
-        nVal   = rVal.nVal;
+        nVal = rVal.nVal;
         bIsBig = true;
-        if ( nTmp < 0 )
+        sal_uInt32 nTmp = nVal;
+        if (nVal < 0)
         {
             bIsNeg = true;
             nTmp = -nTmp;
