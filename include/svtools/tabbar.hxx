@@ -25,7 +25,6 @@
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
-#include <vector>
 
 /*
 
@@ -308,7 +307,6 @@ class TabBarEdit;
 
 struct ImplTabBarItem;
 struct TabBar_Impl;
-typedef std::vector<ImplTabBarItem*> ImplTabBarList;
 
 
 class SVT_DLLPUBLIC TabBar : public vcl::Window
