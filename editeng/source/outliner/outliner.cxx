@@ -1368,15 +1368,6 @@ bool Outliner::HasChildren( Paragraph const * pParagraph ) const
 bool Outliner::ImplHasNumberFormat( sal_Int32 nPara ) const
 {
     return GetNumberFormat(nPara) != nullptr;
-#if 0 // The below code is obviously unreachable
-    if ( GetNumberFormat(nPara) )
-    {
-        const SfxBoolItem& rBulletState = (const SfxBoolItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE );
-        return rBulletState.GetValue();
-    }
-    else
-        return false;
-#endif
 }
 
 const SvxNumberFormat* Outliner::GetNumberFormat( sal_Int32 nPara ) const
