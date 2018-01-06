@@ -45,6 +45,7 @@ struct ImageRequestParameters
     BitmapEx& mrBitmap;
     bool mbLocalized;
     ImageLoadFlags meFlags;
+    bool mbWriteImageToCache;
 
     ImageRequestParameters(const OUString & rName, const OUString & rStyle, BitmapEx& rBitmap, bool bLocalized, ImageLoadFlags eFlags)
         : msName(rName)
@@ -52,6 +53,7 @@ struct ImageRequestParameters
         , mrBitmap(rBitmap)
         , mbLocalized(bLocalized)
         , meFlags(eFlags)
+        , mbWriteImageToCache(false)
     {}
 
     bool convertToDarkTheme();
