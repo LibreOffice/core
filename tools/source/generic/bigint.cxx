@@ -51,17 +51,19 @@ void BigInt::MakeBigInt( const BigInt& rVal )
     }
     else
     {
-        sal_Int32 nTmp = rVal.nVal;
-
-        nVal   = rVal.nVal;
+        nVal = rVal.nVal;
         bIsBig = true;
-        if ( nTmp < 0 )
+        sal_uInt32 nTmp;
+        if (nVal < 0)
         {
             bIsNeg = true;
-            nTmp = -nTmp;
+            nTmp = -static_cast<sal_Int64>(nVal);
         }
         else
+        {
             bIsNeg = false;
+            nTmp = nVal;
+        }
 
         nNum[0] = (sal_uInt16)(nTmp & 0xffffL);
         nNum[1] = (sal_uInt16)(nTmp >> 16);
