@@ -494,7 +494,7 @@ namespace emfio
     {
         bool bRecordOk = nPoints <= SAL_MAX_UINT16;
         SAL_WARN_IF(!bRecordOk, "emfio", "polygon record has more polygons than we can handle");
-        if (!bRecordOk)
+        if (!bRecordOk || !nPoints)
             return tools::Polygon();
 
         auto nRemainingSize = std::min(nNextPos - mpInputStream->Tell(), mpInputStream->remainingSize());
