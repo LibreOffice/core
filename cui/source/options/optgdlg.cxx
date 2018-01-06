@@ -1706,15 +1706,6 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     m_pWesternLanguageFT->Enable( bEnable );
     m_pWesternLanguageLB->Enable( bEnable );
 
-
-    // #i15812# controls for CJK/CTL already enabled/disabled from LocaleSettingHdl
-#if 0
-    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CJK" ) && m_pAsianSupportCB->IsChecked() );
-    m_pAsianLanguageLB->Enable( bEnable );
-
-    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CTL" ) && m_pCTLSupportCB->IsChecked() );
-    m_pComplexLanguageLB->Enable( bEnable );
-#endif
     // check the box "For the current document only"
     // set the focus to the Western Language box
     const SfxPoolItem* pLang = nullptr;
@@ -1912,13 +1903,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit&, rEd, void )
     }
     else
     {
-#if 0
-        //! Gives white on white!?! instead of white on reddish.
-        rEd.SetControlBackground( ::Color( RGB_COLORDATA( 0xff, 0x65, 0x63)));
-        rEd.SetControlForeground( ::Color( COL_WHITE));
-#else
         rEd.SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
-#endif
     }
     m_bDatePatternsValid = bValid;
 }
