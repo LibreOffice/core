@@ -109,10 +109,6 @@ public:
     void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, css::drawing::FillStyle fillstyle);
 
 private:
-#if 0
-        //for performance
-    double m_dFreq;
-#endif
     int m_iWidth;
 
     int m_iHeight;
@@ -128,22 +124,13 @@ private:
     glm::mat4 m_Model;
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
-#if 0
-    GLint m_RenderProID;
-#endif
 
     GLuint m_VertexBuffer;
 
     GLuint m_ColorBuffer;
 
     GLint m_MatrixID;
-#if 0
-    GLint m_RenderVertexID;
 
-    GLint m_RenderTexCoordID;
-
-    GLint m_RenderTexID;
-#endif
     GLuint m_RenderVertexBuf;
 
     GLuint m_RenderTexCoordBuf;
