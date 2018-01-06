@@ -3448,7 +3448,11 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             rNumberFormat.SetGraphicBrush( &aBrush );
             sal_uInt32 nHeight = (sal_uInt32)( (double)nFontHeight * 0.2540 * nBulletHeight + 0.5 );
             Size aPrefSize( aGraphic.GetPrefSize() );
-            sal_uInt32 nWidth = ( nHeight * aPrefSize.Width() ) / aPrefSize.Height();
+            sal_uInt32 nWidth;
+            if (aPrefSize.Height())
+                nWidth = ( nHeight * aPrefSize.Width() ) / aPrefSize.Height();
+            else
+                nWidth = 0;
             rNumberFormat.SetGraphicSize( Size( nWidth, nHeight ) );
             rNumberFormat.SetNumberingType ( SVX_NUM_BITMAP );
         }
