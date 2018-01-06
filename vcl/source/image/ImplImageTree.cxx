@@ -158,6 +158,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     }
     else if (rPath.endsWith(".svg"))
     {
+        rParameters.mbWriteImageToCache = true; // We always want to cache a SVG image
         vcl::bitmap::loadFromSvg(*xStream.get(), rPath, rParameters.mrBitmap, aScalePercentage / 100.0);
         if (bConvertToDarkTheme)
             rParameters.mrBitmap = BitmapProcessor::createLightImage(rParameters.mrBitmap);
@@ -169,10 +170,14 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     }
 
     if (bConvertToDarkTheme)
+    {
+        rParameters.mbWriteImageToCache = true; // Cache the dark variant
         rParameters.mrBitmap = BitmapProcessor::createLightImage(rParameters.mrBitmap);
+    }
 
     if (aScalePercentage > 100)
     {
+        rParameters.mbWriteImageToCache = true; // Cache the scaled variant
         double aScaleFactor(aScalePercentage / 100.0);
         rParameters.mrBitmap.Scale(aScaleFactor, aScaleFactor, BmpScaleFlag::Fast);
     }
@@ -269,21 +274,21 @@ OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
     return sResult;
 }
 
-bool ImplImageTree::loadImage(OUString const & name, OUString const & style, BitmapEx & rBitmap, bool localized, const ImageLoadFlags eFlags)
+bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, BitmapEx & rBitmap, bool localized, const ImageLoadFlags eFlags)
 {
-    OUString aStyle(style);
-    while (!aStyle.isEmpty())
+    OUString aCurrentStyle(rStyle);
+    while (!aCurrentStyle.isEmpty())
     {
         try
         {
-            ImageRequestParameters aParameters(name, aStyle, rBitmap, localized, eFlags);
+            ImageRequestParameters aParameters(rName, aCurrentStyle, rBitmap, localized, eFlags);
             if (doLoadImage(aParameters))
                 return true;
         }
         catch (css::uno::RuntimeException &)
         {}
 
-        aStyle = fallbackStyle(aStyle);
+        aCurrentStyle = fallbackStyle(aCurrentStyle);
     }
     return false;
 }
@@ -293,11 +298,7 @@ OUString createVariant(ImageRequestParameters& rParameters)
     bool bConvertToDarkTheme = rParameters.convertToDarkTheme();
     sal_Int32 aScalePercentage = rParameters.scalePercentage();
 
-    OUString aVariant;
-    if (aScalePercentage == 100 && !bConvertToDarkTheme)
-        return aVariant;
-
-    aVariant = OUString::number(aScalePercentage);
+    OUString aVariant = OUString::number(aScalePercentage);
 
     if (bConvertToDarkTheme)
         aVariant += "-dark";
@@ -312,7 +313,7 @@ bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rP
         return false;
     SvFileStream aFileStream(sUrl, StreamMode::READ);
     vcl::PNGReader aPNGReader(aFileStream);
-    aPNGReader.SetIgnoreGammaChunk( true );
+    aPNGReader.SetIgnoreGammaChunk(true);
     rParameters.mrBitmap = aPNGReader.Read();
     return true;
 }
@@ -338,18 +339,24 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
     if (iconCacheLookup(rParameters))
         return true;
 
+    OUString aVariant = createVariant(rParameters);
+    if (loadDiskCachedVersion(aVariant, rParameters))
+    {
+        return true;
+    }
+
     if (!rParameters.mrBitmap.IsEmpty())
         rParameters.mrBitmap.SetEmpty();
 
     LanguageTag aLanguageTag = Application::GetSettings().GetUILanguageTag();
 
-    std::vector<OUString> paths = getPaths(rParameters.msName, aLanguageTag);
+    std::vector<OUString> aPaths = getPaths(rParameters.msName, aLanguageTag);
 
     bool bFound = false;
 
     try
     {
-        bFound = findImage(paths, rParameters);
+        bFound = findImage(aPaths, rParameters);
     }
     catch (css::uno::RuntimeException&)
     {
@@ -357,14 +364,15 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
     }
     catch (const css::uno::Exception& e)
     {
-        SAL_INFO("vcl", "ImplImageTree::doLoadImage " << e);
+        SAL_INFO("vcl", "ImplImageTree::doLoadImage exception: " << e);
     }
 
     if (bFound)
     {
-        OUString aVariant = createVariant(rParameters);
-        if (!aVariant.isEmpty())
+        if (rParameters.mbWriteImageToCache)
+        {
             cacheBitmapToDisk(aVariant, rParameters);
+        }
         getCurrentIconSet().maIconCache[rParameters.msName] = std::make_pair(rParameters.mbLocalized, rParameters.mrBitmap);
     }
 
@@ -444,18 +452,17 @@ bool ImplImageTree::iconCacheLookup(ImageRequestParameters& rParameters)
         return true;
     }
 
-    OUString aVariant = createVariant(rParameters);
-    return !aVariant.isEmpty() && loadDiskCachedVersion(aVariant, rParameters);
+    return false;
 }
 
-bool ImplImageTree::findImage(std::vector<OUString> const & paths, ImageRequestParameters& rParameters)
+bool ImplImageTree::findImage(std::vector<OUString> const & rPaths, ImageRequestParameters& rParameters)
 {
     if (!checkPathAccess())
         return false;
 
-    const css::uno::Reference<css::container::XNameAccess>& rNameAccess = getCurrentIconSet().maNameAccess;
+    css::uno::Reference<css::container::XNameAccess> const & rNameAccess = getCurrentIconSet().maNameAccess;
 
-    for (const OUString& rPath : paths)
+    for (OUString const & rPath : rPaths)
     {
         if (rNameAccess->hasByName(rPath))
         {
