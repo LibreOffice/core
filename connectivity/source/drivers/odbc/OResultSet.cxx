@@ -165,7 +165,6 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
 
 OResultSet::~OResultSet()
 {
-    setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, nullptr);
     delete [] m_pRowStatusArray;
     delete m_pSkipDeletedSet;
 }
@@ -185,6 +184,7 @@ void OResultSet::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     releaseBuffer();
 
+    setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, nullptr);
     m_xStatement.clear();
     m_xMetaData.clear();
 }
