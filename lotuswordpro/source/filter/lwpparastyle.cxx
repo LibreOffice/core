@@ -457,7 +457,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
         else if (relative == LwpIndentOverride::RELATIVE_REST)
             Amount += pParentIndent->GetMRest();
         pTotalIndent->SetMAll(o3tl::saturating_add(Amount, pTotalIndent->GetMAll()));
-        pTotalIndent->SetMRight(pParentIndent->GetMRight()+ pTotalIndent->GetMRight());
+        pTotalIndent->SetMRight(o3tl::saturating_add(pParentIndent->GetMRight(), pTotalIndent->GetMRight()));
 
         pParaStyle->SetIndent(pTotalIndent->GetFirst());
         pParaStyle->SetMargins(pTotalIndent->GetLeft(), pTotalIndent->GetRight());

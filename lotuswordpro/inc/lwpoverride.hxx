@@ -63,6 +63,7 @@
 
 #include "lwpobjid.hxx"
 #include "lwptools.hxx"
+#include <o3tl/safeint.hxx>
 #include <memory>
 
 class LwpObjectStream;
@@ -434,11 +435,17 @@ private:
 
 inline double LwpIndentOverride::GetFirst() const
 {
-        return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nFirst-m_nRest));
+    sal_Int32 nRes;
+    if (o3tl::checked_sub(m_nFirst, m_nRest, nRes))
+        throw std::range_error("bad len");
+    return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(nRes));
 }
 inline double LwpIndentOverride::GetLeft() const
 {
-        return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nAll+m_nRest));
+    sal_Int32 nRes;
+    if (o3tl::checked_add(m_nAll, m_nRest, nRes))
+        throw std::range_error("bad len");
+    return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(nRes));
 }
 inline double LwpIndentOverride::GetRight() const
 {
