@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_255c2525",
+        "filename": "connectivity/source/drivers/odbc/OResultSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-01-06T19:11:32Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this rather be moved to the disposing method?",
+      "revId": "b0038094635c2e57d80ffe217f06944569f0ff27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
