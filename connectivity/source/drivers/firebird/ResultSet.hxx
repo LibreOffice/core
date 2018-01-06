@@ -39,9 +39,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#if 0
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
 
 namespace connectivity
 {
@@ -54,9 +51,6 @@ namespace connectivity
                                                        css::sdbc::XRow,
                                                        css::sdbc::XResultSetMetaDataSupplier,
                                                        css::util::XCancellable,
-#if 0
-                                                       css::sdbc::XWarningsSupplier,
-#endif
                                                        css::sdbc::XCloseable,
                                                        css::sdbc::XColumnLocate,
                                                        css::lang::XServiceInfo> OResultSet_BASE;
@@ -188,10 +182,6 @@ namespace connectivity
             // XCloseable
             virtual void SAL_CALL close(  ) override;
             // XWarningsSupplier
-#if 0
-            virtual css::uno::Any SAL_CALL getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-#endif
 
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn(const ::rtl::OUString& columnName) override;
