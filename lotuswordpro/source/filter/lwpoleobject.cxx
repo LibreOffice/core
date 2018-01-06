@@ -162,6 +162,8 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
                     if (fWidth/fHeight >= fDisFrameWidth/fDisFrameHeight)
                     {
                         fSclGrafWidth = fDisFrameWidth;
+                        if (fWidth == 0.0)
+                            throw o3tl::divide_by_zero();
                         fSclGrafHeight = (fDisFrameWidth/fWidth) * fHeight;
                     }
                     else
