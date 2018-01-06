@@ -513,7 +513,7 @@ tools::Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoi
 {
     bool bRecordOk = nPoints <= SAL_MAX_UINT16;
     SAL_WARN_IF(!bRecordOk, "vcl.emf", "polygon record has more polygons than we can handle");
-    if (!bRecordOk)
+    if (!bRecordOk || !nPoints)
         return tools::Polygon();
 
     tools::Polygon aPolygon(nPoints);
