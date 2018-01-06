@@ -406,11 +406,7 @@ private:
     glm::mat4 m_3DMVP;
 
     GLuint m_3DUBOBuffer;
-#if 0
-    GLint m_3DLightBlockIndex;
 
-    GLint m_3DMaterialBlockIndex;
-#endif
     GLint m_3DActualSizeLight;
 
     GLuint m_NormalBuffer;
