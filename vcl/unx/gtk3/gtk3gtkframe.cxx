@@ -381,30 +381,34 @@ bool GtkSalFrame::doKeyCallback( guint state,
 
     vcl::DeletionListener aDel( this );
 
-#if 0
-    if (bDown)
+    const char *pKeyDebug = nullptr;
+    pKeyDebug = getenv("VCLSALFRAME_KEYDEBUG");
+
+    if (strlen(pKeyDebug) == 1 && pKeyDebug[0] == '1')
     {
-        // shift-zero forces a re-draw and event is swallowed
-        if (keyval == GDK_KEY_0)
+        if (bDown)
         {
-            fprintf( stderr, "force widget_queue_draw\n");
-            gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
-            return false;
-        }
-        else if (keyval == GDK_KEY_1)
-        {
-            fprintf( stderr, "force repaint all\n");
-            TriggerPaintEvent();
-            return false;
-        }
-        else if (keyval == GDK_KEY_2)
-        {
-            dumpframes = !dumpframes;
-            fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
-            return false;
+            // shift-zero forces a re-draw and event is swallowed
+            if (keyval == GDK_KEY_0)
+            {
+                fprintf( stderr, "force widget_queue_draw\n");
+                gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
+                return false;
+            }
+            else if (keyval == GDK_KEY_1)
+            {
+                fprintf( stderr, "force repaint all\n");
+                TriggerPaintEvent();
+                return false;
+            }
+            else if (keyval == GDK_KEY_2)
+            {
+                dumpframes = !dumpframes;
+                fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
+                return false;
+            }
         }
     }
-#endif
 
     /*
      *  #i42122# translate all keys with Ctrl and/or Alt to group 0 else
@@ -3556,12 +3560,6 @@ void GtkSalFrame::signalDragLeave(GtkWidget *pWidget, GdkDragContext * /*context
         return;
     pThis->m_bInDrag = false;
     gtk_drag_unhighlight(pWidget);
-
-#if 0
-    css::datatransfer::dnd::DropTargetEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis->m_pDropTarget);
-    pThis->m_pDropTarget->fire_dragExit(aEvent);
-#endif
 }
 
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )

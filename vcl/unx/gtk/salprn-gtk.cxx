@@ -228,20 +228,6 @@ GtkSalPrinter::StartJob(
     m_xImpl->m_pPrinter = aDialog.getPrinter();
     m_xImpl->m_pSettings = aDialog.getSettings();
 
-#if 0
-    if (const gchar *uri = gtk_print_settings_get(m_xImpl->m_pSettings, GTK_PRINT_SETTINGS_OUTPUT_URI))
-    {
-        const gchar *pStr = gtk_print_settings_get(m_xImpl->m_pSettings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
-        if (pStr && !strcmp(pStr, "pdf"))
-        {
-            aDialog.ExportAsPDF(OUString((const sal_Char *)uri, strlen((const sal_Char *)uri), RTL_TEXTENCODING_UTF8), m_xImpl->m_pSettings);
-            bDoJob = false;
-        }
-    }
-
-    if (!bDoJob)
-        return false;
-#endif
     bool bCollate = false;
 
     //To-Do proper name, watch for encodings
