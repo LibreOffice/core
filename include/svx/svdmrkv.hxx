@@ -79,8 +79,8 @@ enum class SdrViewEditMode {
     GluePointEdit   // Glue point editing mode
 };
 
-/** options for ImpTakeDescriptionStr() */
-enum class ImpTakeDescriptionOptions
+/** options for ImpGetDescriptionString() */
+enum class ImpGetDescriptionOptions
 {
     NONE       = 0,
     POINTS     = 1,
@@ -154,7 +154,7 @@ protected:
     SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj) const;
     SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
     bool ImpIsFrameHandles() const;
-    void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE) const;
+    OUString ImpGetDescriptionString(const char* pStrCacheID, ImpGetDescriptionOptions nOpt=ImpGetDescriptionOptions::NONE) const;
 
     // Generates a string including degrees symbol, from an angel specification in 1/100deg
     bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);

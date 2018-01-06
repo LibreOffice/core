@@ -83,12 +83,10 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
     long y1=rRect.Top();
     long w1=rRect.Right()-x1;
     long h1=rRect.Bottom()-y1;
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_EditPosSize,aStr);
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
-        BegUndo(aStr);
+        BegUndo(ImpGetDescriptionString(STR_EditPosSize));
 
     for (size_t nm=0; nm<nCount; ++nm)
     {
@@ -211,8 +209,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(STR_EditResize,aStr);
+        OUString aStr {ImpGetDescriptionString(STR_EditResize)};
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);
@@ -247,9 +244,7 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(STR_EditResize,aStr);
-        BegUndo(aStr);
+        BegUndo(ImpGetDescriptionString(STR_EditResize));
     }
 
     const size_t nMarkCount=GetMarkedObjectCount();
@@ -310,8 +305,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(STR_EditRotate,aStr);
+        OUString aStr {ImpGetDescriptionString(STR_EditRotate)};
         if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);
     }
@@ -370,10 +364,14 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
     {
         OUString aStr;
         Point aDif(rRef2-rRef1);
-        if (aDif.X()==0) ImpTakeDescriptionStr(STR_EditMirrorHori,aStr);
-        else if (aDif.Y()==0) ImpTakeDescriptionStr(STR_EditMirrorVert,aStr);
-        else if (std::abs(aDif.X()) == std::abs(aDif.Y())) ImpTakeDescriptionStr(STR_EditMirrorDiag,aStr);
-        else ImpTakeDescriptionStr(STR_EditMirrorFree,aStr);
+        if (aDif.X()==0)
+            aStr = ImpGetDescriptionString(STR_EditMirrorHori);
+        else if (aDif.Y()==0)
+            aStr = ImpGetDescriptionString(STR_EditMirrorVert);
+        else if (std::abs(aDif.X()) == std::abs(aDif.Y()))
+            aStr = ImpGetDescriptionString(STR_EditMirrorDiag);
+        else
+            aStr = ImpGetDescriptionString(STR_EditMirrorFree);
         if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);
     }
@@ -464,8 +462,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, b
 
     if( bUndo )
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(STR_EditShear,aStr);
+        OUString aStr {ImpGetDescriptionString(STR_EditShear)};
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);
@@ -581,8 +578,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
 
     if( bUndo )
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(bNoContortion?STR_EditCrook:STR_EditCrookContortion,aStr);
+        OUString aStr {ImpGetDescriptionString(bNoContortion ? STR_EditCrook : STR_EditCrookContortion)};
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);
@@ -655,8 +651,7 @@ void SdrEditView::DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon&
 
     if( bUndo )
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(STR_EditDistort,aStr);
+        OUString aStr {ImpGetDescriptionString(STR_EditDistort)};
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);
@@ -1009,9 +1004,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
-        BegUndo(aStr);
+        BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
     }
 
     const size_t nMarkCount(GetMarkedObjectCount());
@@ -1190,9 +1183,9 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRe
         {
             OUString aStr;
             if (pStyleSheet!=nullptr)
-                ImpTakeDescriptionStr(STR_EditSetStylesheet,aStr);
+                aStr = ImpGetDescriptionString(STR_EditSetStylesheet);
             else
-                ImpTakeDescriptionStr(STR_EditDelStylesheet,aStr);
+                aStr = ImpGetDescriptionString(STR_EditDelStylesheet);
             BegUndo(aStr);
         }
 
@@ -1748,9 +1741,15 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         {
             switch (eVert)
             {
-                case SdrVertAlign::Top   : ImpTakeDescriptionStr(STR_EditAlignVTop   ,aStr); break;
-                case SdrVertAlign::Bottom: ImpTakeDescriptionStr(STR_EditAlignVBottom,aStr); break;
-                case SdrVertAlign::Center: ImpTakeDescriptionStr(STR_EditAlignVCenter,aStr); break;
+                case SdrVertAlign::Top:
+                    aStr = ImpGetDescriptionString(STR_EditAlignVTop);
+                    break;
+                case SdrVertAlign::Bottom:
+                    aStr = ImpGetDescriptionString(STR_EditAlignVBottom);
+                    break;
+                case SdrVertAlign::Center:
+                    aStr = ImpGetDescriptionString(STR_EditAlignVCenter);
+                    break;
                 default: break;
             }
         }
@@ -1758,19 +1757,25 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         {
             switch (eHor)
             {
-                case SdrHorAlign::Left  : ImpTakeDescriptionStr(STR_EditAlignHLeft  ,aStr); break;
-                case SdrHorAlign::Right : ImpTakeDescriptionStr(STR_EditAlignHRight ,aStr); break;
-                case SdrHorAlign::Center: ImpTakeDescriptionStr(STR_EditAlignHCenter,aStr); break;
+                case SdrHorAlign::Left:
+                    aStr = ImpGetDescriptionString(STR_EditAlignHLeft);
+                    break;
+                case SdrHorAlign::Right:
+                    aStr = ImpGetDescriptionString(STR_EditAlignHRight);
+                    break;
+                case SdrHorAlign::Center:
+                    aStr = ImpGetDescriptionString(STR_EditAlignHCenter);
+                    break;
                 default: break;
             }
         }
         else if (eHor==SdrHorAlign::Center && eVert==SdrVertAlign::Center)
         {
-            ImpTakeDescriptionStr(STR_EditAlignCenter,aStr);
+            aStr = ImpGetDescriptionString(STR_EditAlignCenter);
         }
         else
         {
-            ImpTakeDescriptionStr(STR_EditAlign,aStr);
+            aStr = ImpGetDescriptionString(STR_EditAlign);
         }
         BegUndo(aStr);
     }

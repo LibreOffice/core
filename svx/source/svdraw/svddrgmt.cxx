@@ -552,13 +552,13 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
 void SdrDragMethod::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) const
 {
-    ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE;
+    ImpGetDescriptionOptions nOpt=ImpGetDescriptionOptions::NONE;
     if (IsDraggingPoints()) {
-        nOpt=ImpTakeDescriptionOptions::POINTS;
+        nOpt=ImpGetDescriptionOptions::POINTS;
     } else if (IsDraggingGluePoints()) {
-        nOpt=ImpTakeDescriptionOptions::GLUEPOINTS;
+        nOpt=ImpGetDescriptionOptions::GLUEPOINTS;
     }
-    getSdrDragView().ImpTakeDescriptionStr(pStrCacheID,rStr,nOpt);
+    rStr = getSdrDragView().ImpGetDescriptionString(pStrCacheID, nOpt);
 }
 
 SdrObject* SdrDragMethod::GetDragObj() const

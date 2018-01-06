@@ -2075,28 +2075,28 @@ const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
 }
 
 
-void SdrMarkView::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt) const
+OUString SdrMarkView::ImpGetDescriptionString(const char* pStrCacheID, ImpGetDescriptionOptions nOpt) const
 {
-    rStr = ImpGetResStr(pStrCacheID);
-    sal_Int32 nPos = rStr.indexOf("%1");
+    OUString sStr = ImpGetResStr(pStrCacheID);
+    const sal_Int32 nPos = sStr.indexOf("%1");
 
     if(nPos != -1)
     {
-        if(nOpt == ImpTakeDescriptionOptions::POINTS)
+        if(nOpt == ImpGetDescriptionOptions::POINTS)
         {
-            rStr = rStr.replaceAt(nPos, 2, GetDescriptionOfMarkedPoints());
+            sStr = sStr.replaceAt(nPos, 2, GetDescriptionOfMarkedPoints());
         }
-        else if(nOpt == ImpTakeDescriptionOptions::GLUEPOINTS)
+        else if(nOpt == ImpGetDescriptionOptions::GLUEPOINTS)
         {
-            rStr = rStr.replaceAt(nPos, 2, GetDescriptionOfMarkedGluePoints());
+            sStr = sStr.replaceAt(nPos, 2, GetDescriptionOfMarkedGluePoints());
         }
         else
         {
-            rStr = rStr.replaceAt(nPos, 2, GetDescriptionOfMarkedObjects());
+            sStr = sStr.replaceAt(nPos, 2, GetDescriptionOfMarkedObjects());
         }
     }
 
-    rStr = rStr.replaceFirst("%2", "0");
+    return sStr.replaceFirst("%2", "0");
 }
 
 

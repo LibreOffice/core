@@ -2096,9 +2096,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 
                 if( bUndo )
                 {
-                    OUString aStr;
-                    ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
-                    BegUndo(aStr);
+                    BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
 
                     // If this is a text object also rescue the OutlinerParaObject since
@@ -2143,9 +2141,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             {
                 if( IsUndoEnabled() )
                 {
-                    OUString aStr;
-                    ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
-                    BegUndo(aStr);
+                    BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get()));
                     EndUndo();

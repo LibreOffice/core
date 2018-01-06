@@ -1269,14 +1269,14 @@ OUString SdrView::GetStatusText()
     if(aStr == STR_NOTHING)
     {
         if (AreObjectsMarked()) {
-            ImpTakeDescriptionStr(STR_ViewMarked,aStr);
+            aStr = ImpGetDescriptionString(STR_ViewMarked);
             if (IsGluePointEditMode()) {
                 if (HasMarkedGluePoints()) {
-                    ImpTakeDescriptionStr(STR_ViewMarked,aStr,ImpTakeDescriptionOptions::GLUEPOINTS);
+                    aStr = ImpGetDescriptionString(STR_ViewMarked, ImpGetDescriptionOptions::GLUEPOINTS);
                 }
             } else {
                 if (HasMarkedPoints()) {
-                    ImpTakeDescriptionStr(STR_ViewMarked,aStr,ImpTakeDescriptionOptions::POINTS);
+                    aStr = ImpGetDescriptionString(STR_ViewMarked, ImpGetDescriptionOptions::POINTS);
                 }
             }
         } else {
