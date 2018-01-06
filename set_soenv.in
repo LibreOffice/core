@@ -1432,7 +1432,9 @@ if ($platform =~ m/linux/)
 	}
     #The tail, if needed
     if ($platform =~ m/linux|freebsd|netbsd/)
-    {  $SOLARINC  .= $I.$XINC;
+    {  if ($XINC ne $USR.$INCLUDE)
+       { $SOLARINC  .= $I.$XINC;
+       }
     }
     elsif ($platform =~ m/osf1/)
     {  $SOLARINC  .= $I.$XINC.
