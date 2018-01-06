@@ -363,7 +363,9 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
     return aAlternate;
 }
 
+#if OSL_DEBUG_LEVEL > 0
 static bool dumpframes = false;
+#endif
 
 bool GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
@@ -381,29 +383,37 @@ bool GtkSalFrame::doKeyCallback( guint state,
 
     vcl::DeletionListener aDel( this );
 
-#if 0
-    if (bDown)
+#if OSL_DEBUG_LEVEL > 0
+    char* pKeyDebug = nullptr;
+    pKeyDebug = getenv("VCL_GTK3_PAINTDEBUG");
+
+    if (strlen(pKeyDebug) == 1 && pKeyDebug[0] == '1')
     {
-        // shift-zero forces a re-draw and event is swallowed
-        if (keyval == GDK_KEY_0)
+        if (bDown)
         {
-            fprintf( stderr, "force widget_queue_draw\n");
-            gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
-            return false;
-        }
-        else if (keyval == GDK_KEY_1)
-        {
-            fprintf( stderr, "force repaint all\n");
-            TriggerPaintEvent();
-            return false;
-        }
-        else if (keyval == GDK_KEY_2)
-        {
-            dumpframes = !dumpframes;
-            fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
-            return false;
+            // shift-zero forces a re-draw and event is swallowed
+            if (keyval == GDK_KEY_0)
+            {
+                fprintf( stderr, "force widget_queue_draw\n");
+                gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
+                return false;
+            }
+            else if (keyval == GDK_KEY_1)
+            {
+                fprintf( stderr, "force repaint all\n");
+                TriggerPaintEvent();
+                return false;
+            }
+            else if (keyval == GDK_KEY_2)
+            {
+                dumpframes = !dumpframes;
+                fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
+                return false;
+            }
         }
     }
+
+    free(pKeyDebug);
 #endif
 
     /*
@@ -2885,6 +2895,7 @@ cairo_t* GtkSalFrame::getCairoContext() const
 void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                           sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight) const
 {
+#if OSL_DEBUG_LEVEL > 0
     if (dumpframes)
     {
         static int frame;
@@ -2893,6 +2904,7 @@ void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
         cairo_surface_write_to_png(cairo_get_target(cr), tmp.getStr());
         cairo_destroy(cr);
     }
+#endif
 
     gtk_widget_queue_draw_area(GTK_WIDGET(m_pFixedContainer),
                                nExtentsX, nExtentsY,
@@ -3556,12 +3568,6 @@ void GtkSalFrame::signalDragLeave(GtkWidget *pWidget, GdkDragContext * /*context
         return;
     pThis->m_bInDrag = false;
     gtk_drag_unhighlight(pWidget);
-
-#if 0
-    css::datatransfer::dnd::DropTargetEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis->m_pDropTarget);
-    pThis->m_pDropTarget->fire_dragExit(aEvent);
-#endif
 }
 
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )

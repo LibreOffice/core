@@ -603,67 +603,6 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         returnVal = false;
     }
 
-    if (returnVal)
-    {
-#if 0
-#ifdef IMAGE_BASED_PAINTING
-        // Create a wrapper QPixmap around the destination pixmap, allowing the use of QPainter.
-        // Using X11SalGraphics::CopyScreenArea() would require using QPixmap and if Qt uses
-        // other graphics system than native, QPixmap::handle() would be 0 (i.e. it wouldn't work),
-        // I have no idea how to create QPixmap with non-null handle() in such case, so go this way.
-        // See XRegionToQRegion() comment for a small catch (although not real hopefully).
-        QPixmap destPixmap = QPixmap::fromX11Pixmap( GetDrawable(), QPixmap::ExplicitlyShared );
-        QPainter paint( &destPixmap );
-        if (localClipRegion && mpClipRegion)
-            paint.setClipRegion(localClipRegion->intersected(XRegionToQRegion(mpClipRegion)));
-        else if (localClipRegion)
-            paint.setClipRegion(*localClipRegion);
-        else if( mpClipRegion )
-            paint.setClipRegion( XRegionToQRegion( mpClipRegion ));
-        paint.drawImage( widgetRect.left(), widgetRect.top(), *m_image,
-            0, 0, widgetRect.width(), widgetRect.height(),
-            Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither );
-#else
-        GC gc = GetFontGC();
-        if( gc )
-        {
-            Region pTempClipRegion = NULL;
-            if (localClipRegion)
-            {
-                pTempClipRegion = XCreateRegion();
-                foreach(const QRect& r, localClipRegion->rects())
-                {
-                    XRectangle xr;
-                    xr.x = r.x();
-                    xr.y = r.y();
-                    xr.width = r.width();
-                    xr.height = r.height();
-                    XUnionRectWithRegion( &xr, pTempClipRegion, pTempClipRegion );
-                }
-                if( mpClipRegion )
-                    XIntersectRegion( pTempClipRegion, mpClipRegion, pTempClipRegion );
-                XSetRegion( GetXDisplay(), gc, pTempClipRegion );
-            }
-            QPixmap pixmap = QPixmap::fromImage(*m_image, Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither);
-            X11SalGraphics::CopyScreenArea( GetXDisplay(),
-                pixmap.handle(), pixmap.x11Info().screen(), pixmap.x11Info().depth(),
-                GetDrawable(), GetScreenNumber(), GetVisual().GetDepth(),
-                gc, 0, 0, widgetRect.width(), widgetRect.height(), widgetRect.left(), widgetRect.top());
-
-            if( pTempClipRegion )
-            {
-                if( mpClipRegion )
-                    XSetRegion( GetXDisplay(), gc, mpClipRegion );
-                else
-                    XSetClipMask( GetXDisplay(), gc, None );
-                XDestroyRegion( pTempClipRegion );
-            }
-        }
-        else
-            returnVal = false;
-#endif
-#endif
-    }
     delete localClipRegion;
     return returnVal;
 }
