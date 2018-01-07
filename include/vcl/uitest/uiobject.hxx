@@ -192,6 +192,27 @@ protected:
     virtual OUString get_name() const override;
 };
 
+class UITEST_DLLPUBLIC MultiLineEditUIObject : public WindowUIObject
+{
+    VclPtr<VclMultiLineEdit> mxEdit;
+
+public:
+
+    MultiLineEditUIObject(const VclPtr<VclMultiLineEdit>& xEdit);
+    virtual ~MultiLineEditUIObject() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
 // TODO: moggi: maybe let it inherit from the button case
 class UITEST_DLLPUBLIC CheckBoxUIObject : public WindowUIObject
 {

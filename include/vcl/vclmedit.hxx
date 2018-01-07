@@ -31,6 +31,47 @@ class Timer;
 class ExtTextEngine;
 class TextView;
 
+class TextWindow : public vcl::Window
+{
+private:
+    VclPtr<Edit>    mxParent;
+    ExtTextEngine*  mpExtTextEngine;
+    TextView*       mpExtTextView;
+
+    bool            mbInMBDown;
+    bool            mbFocusSelectionHide;
+    bool            mbIgnoreTab;
+    bool            mbActivePopup;
+    bool            mbSelectOnTab;
+
+public:
+    explicit        TextWindow(Edit* pParent);
+    virtual         ~TextWindow() override;
+    virtual void    dispose() override;
+
+    ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
+    TextView*       GetTextView() const { return mpExtTextView; }
+
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rKEvent ) override;
+
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    Resize() override;
+
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
+
+    void            SetAutoFocusHide( bool bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
+
+    void            SetIgnoreTab( bool bIgnore ) { mbIgnoreTab = bIgnore; }
+
+    void            DisableSelectionOnFocus() { mbSelectOnTab = false; }
+};
+
 class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
 {
     friend class VCLXAccessibleEdit;
@@ -55,8 +96,8 @@ protected:
     void            ImplInitSettings( bool bBackground );
     static WinBits  ImplInitStyle( WinBits nStyle );
 
-    ExtTextEngine*  GetTextEngine() const;
     TextView*       GetTextView() const;
+    ExtTextEngine*  GetTextEngine() const;
     ScrollBar*      GetVScrollBar() const;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
@@ -132,6 +173,9 @@ public:
     void            DisableSelectionOnFocus();
 
     void            EnableCursor( bool bEnable );
+
+    TextWindow*     GetTextWindow();
+    virtual FactoryFunction GetUITestFactory() const override;
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 };

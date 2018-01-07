@@ -18,6 +18,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/vclmedit.hxx>
 
 #include <comphelper/string.hxx>
 
@@ -668,6 +669,63 @@ std::unique_ptr<UIObject> EditUIObject::create(vcl::Window* pWindow)
     Edit* pEdit = dynamic_cast<Edit*>(pWindow);
     assert(pEdit);
     return std::unique_ptr<UIObject>(new EditUIObject(pEdit));
+}
+
+MultiLineEditUIObject::MultiLineEditUIObject(const VclPtr<VclMultiLineEdit>& xEdit):
+    WindowUIObject(xEdit),
+    mxEdit(xEdit)
+{
+}
+
+MultiLineEditUIObject::~MultiLineEditUIObject()
+{
+}
+
+void MultiLineEditUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    bool bHandled = true;
+    if (rAction == "TYPE")
+    {
+        WindowUIObject aChildObj(mxEdit->GetTextWindow());
+        aChildObj.execute(rAction, rParameters);
+    }
+    else if (rAction == "SELECT")
+    {
+        if (rParameters.find("FROM") != rParameters.end() &&
+                rParameters.find("TO") != rParameters.end())
+        {
+            long nMin = rParameters.find("FROM")->second.toInt32();
+            long nMax = rParameters.find("TO")->second.toInt32();
+            Selection aSelection(nMin, nMax);
+            mxEdit->SetSelection(aSelection);
+        }
+    }
+
+    if (!bHandled)
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+StringMap MultiLineEditUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["MaxTextLength"] = OUString::number(mxEdit->GetMaxTextLen());
+    aMap["SelectedText"] = mxEdit->GetSelected();
+    aMap["Text"] = mxEdit->GetText();
+
+    return aMap;
+}
+
+OUString MultiLineEditUIObject::get_name() const
+{
+    return OUString("MultiLineEditUIObject");
+}
+
+std::unique_ptr<UIObject> MultiLineEditUIObject::create(vcl::Window* pWindow)
+{
+    VclMultiLineEdit* pEdit = dynamic_cast<VclMultiLineEdit*>(pWindow);
+    assert(pEdit);
+    return std::unique_ptr<UIObject>(new MultiLineEditUIObject(pEdit));
 }
 
 CheckBoxUIObject::CheckBoxUIObject(const VclPtr<CheckBox>& xCheckbox):

@@ -26,51 +26,11 @@
 #include <vcl/xtextedt.hxx>
 #include <svl/undo.hxx>
 #include <svl/lstner.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <strings.hrc>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-
-class TextWindow : public vcl::Window
-{
-private:
-    VclPtr<Edit>    mxParent;
-    ExtTextEngine*  mpExtTextEngine;
-    TextView*       mpExtTextView;
-
-    bool            mbInMBDown;
-    bool            mbFocusSelectionHide;
-    bool            mbIgnoreTab;
-    bool            mbActivePopup;
-    bool            mbSelectOnTab;
-
-public:
-    explicit        TextWindow(Edit* pParent);
-    virtual         ~TextWindow() override;
-    virtual void    dispose() override;
-
-    ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
-    TextView*       GetTextView() const { return mpExtTextView; }
-
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    KeyInput( const KeyEvent& rKEvent ) override;
-
-    virtual void    Command( const CommandEvent& rCEvt ) override;
-
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void    Resize() override;
-
-    virtual void    GetFocus() override;
-    virtual void    LoseFocus() override;
-
-    void            SetAutoFocusHide( bool bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
-
-    void            SetIgnoreTab( bool bIgnore ) { mbIgnoreTab = bIgnore; }
-
-    void            DisableSelectionOnFocus() { mbSelectOnTab = false; }
-};
 
 class ImpVclMEdit : public SfxListener
 {
@@ -1588,6 +1548,16 @@ void VclMultiLineEdit::DisableSelectionOnFocus()
 void VclMultiLineEdit::EnableCursor( bool bEnable )
 {
     GetTextView()->EnableCursor( bEnable );
+}
+
+TextWindow* VclMultiLineEdit::GetTextWindow()
+{
+    return pImpVclMEdit->GetTextWindow();
+}
+
+FactoryFunction VclMultiLineEdit::GetUITestFactory() const
+{
+    return MultiLineEditUIObject::create;
 }
 
 bool VclMultiLineEdit::set_property(const OString &rKey, const OUString &rValue)
