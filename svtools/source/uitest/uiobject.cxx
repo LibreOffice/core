@@ -179,7 +179,11 @@ StringMap SimpleTableUIObject::get_state()
 {
     StringMap aMap = TreeListUIObject::get_state();
 
-    aMap["ColumnCount"] = OUString::number(mxTable->TabCount());
+    aMap["ColumnCount"] = OUString::number(mxTable->GetColumnCount());
+    aMap["RowCount"] = OUString::number(mxTable->GetRowCount());
+    aMap["SelectedRowCount"] = OUString::number(mxTable->GetSelectedRowCount());
+    aMap["SelectedColumnCount"] = OUString::number(mxTable->GetSelectedColumnCount());
+    aMap["EntryCount"] = OUString::number(mxTable->GetEntryCount());
 
     return aMap;
 }
