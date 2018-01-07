@@ -5042,6 +5042,37 @@ namespace
     };
 }
 
+void SwHTMLParser::DeleteSection(SwStartNode* pSttNd)
+{
+    //if section to be deleted contains a pending m_pMarquee, it will be deleted
+    //so clear m_pMarquee pointer if that's the case
+    SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee) : nullptr;
+    FrameDeleteWatch aWatch(pObjectFormat);
+
+    //similarly for footnotes
+    if (m_pFootEndNoteImpl)
+    {
+        SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
+        m_pFootEndNoteImpl->aTextFootnotes.erase(std::remove_if(m_pFootEndNoteImpl->aTextFootnotes.begin(),
+            m_pFootEndNoteImpl->aTextFootnotes.end(), IndexInRange(aSttIdx, aEndIdx)), m_pFootEndNoteImpl->aTextFootnotes.end());
+        if (m_pFootEndNoteImpl->aTextFootnotes.empty())
+        {
+            delete m_pFootEndNoteImpl;
+            m_pFootEndNoteImpl = nullptr;
+        }
+    }
+
+    m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
+
+    if (pObjectFormat)
+    {
+        if (aWatch.WasDeleted())
+            m_pMarquee = nullptr;
+        else
+            pObjectFormat->Remove(&aWatch);
+    }
+}
+
 std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                                                     bool bIsParentHead,
                                                     bool bHasParentSection,
@@ -5256,7 +5287,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                 // The section isn't needed anymore
                 m_pPam->SetMark();
                 m_pPam->DeleteMark();
-                m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
+                DeleteSection(const_cast<SwStartNode*>(pCapStNd));
                 m_xTable->SetCaption( nullptr, false );
             }
 
@@ -5305,37 +5336,8 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
         {
             m_pPam->SetMark();
             m_pPam->DeleteMark();
-
-            SwStartNode* pSttNd = const_cast<SwStartNode*>(pCapStNd);
-
-            //if section to be deleted contains a pending m_pMarquee, it will be deleted
-            //so clear m_pMarquee pointer if that's the case
-            SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee) : nullptr;
-            FrameDeleteWatch aWatch(pObjectFormat);
-
-            //similarly for footnotes
-            if (m_pFootEndNoteImpl)
-            {
-                SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
-                m_pFootEndNoteImpl->aTextFootnotes.erase(std::remove_if(m_pFootEndNoteImpl->aTextFootnotes.begin(),
-                    m_pFootEndNoteImpl->aTextFootnotes.end(), IndexInRange(aSttIdx, aEndIdx)), m_pFootEndNoteImpl->aTextFootnotes.end());
-                if (m_pFootEndNoteImpl->aTextFootnotes.empty())
-                {
-                    delete m_pFootEndNoteImpl;
-                    m_pFootEndNoteImpl = nullptr;
-                }
-            }
-
-            m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
+            DeleteSection(const_cast<SwStartNode*>(pCapStNd));
             xCurTable->SetCaption( nullptr, false );
-
-            if (pObjectFormat)
-            {
-                if (aWatch.WasDeleted())
-                    m_pMarquee = nullptr;
-                else
-                    pObjectFormat->Remove(&aWatch);
-            }
         }
     }
 
