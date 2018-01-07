@@ -490,11 +490,11 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 
 void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
 {
-    sal_uIntPtr nCount = rNewSymbols.size();
+    auto nCount = sal::static_int_cast<sal_Int32>(rNewSymbols.size());
 
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
     const OUString *pNames = aNames.getConstArray();
-    sal_uIntPtr nSymbolProps = sal::static_int_cast< sal_uInt32 >(aNames.getLength());
+    sal_Int32 nSymbolProps = aNames.getLength();
 
     Sequence< PropertyValue > aValues( nCount * nSymbolProps );
     PropertyValue *pValues = aValues.getArray();
