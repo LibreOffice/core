@@ -52,7 +52,6 @@ namespace connectivity
         jclass                  m_Driver_theClass;
         java::sql::ConnectionLog
                                 m_aLogger;
-        bool                    m_bParameterSubstitution;
         bool                    m_bIgnoreDriverPrivileges;
         bool                    m_bIgnoreCurrency;
         css::uno::Any           m_aCatalogRestriction;
