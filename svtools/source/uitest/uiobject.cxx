@@ -117,6 +117,14 @@ void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& /*
     {
         mxTreeList->Expand(mpEntry);
     }
+    else if (rAction == "SELECT")
+    {
+        mxTreeList->Select(mpEntry);
+    }
+    else if (rAction == "DESELECT")
+    {
+        mxTreeList->Select(mpEntry, false);
+    }
     else if (rAction == "CLICK")
     {
         if (!isCheckBoxList(mxTreeList))
