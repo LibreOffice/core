@@ -494,10 +494,10 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                        otherwise the StartParagraph function will use the previous existing
                        table reference attributes since the variable is being shared.
                 */
-                DocxTableExportContext aDMLTableExportContext;
-                pushToTableExportContext(aDMLTableExportContext);
-                m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
-                popFromTableExportContext(aDMLTableExportContext);
+                {
+                    DocxTableExportContext aDMLTableExportContext(*this);
+                    m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
+                }
                 m_pSerializer->endElementNS(XML_mc, XML_Choice);
                 SetAlternateContentChoiceOpen( false );
 
@@ -508,10 +508,10 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 //reset the tableReference.
 
                 m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
-                DocxTableExportContext aVMLTableExportContext;
-                pushToTableExportContext(aVMLTableExportContext);
-                m_rExport.SdrExporter().writeVMLTextFrame(&aFrame);
-                popFromTableExportContext(aVMLTableExportContext);
+                {
+                    DocxTableExportContext aVMLTableExportContext(*this);
+                    m_rExport.SdrExporter().writeVMLTextFrame(&aFrame);
+                }
                 m_rExport.m_pTableInfo = pOldTableInfo;
 
                 m_pSerializer->endElementNS(XML_mc, XML_Fallback);
@@ -579,12 +579,10 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     {
         for ( const auto & pFrame : aFramePrTextbox )
         {
-            DocxTableExportContext aTableExportContext;
-            pushToTableExportContext(aTableExportContext);
+            DocxTableExportContext aTableExportContext(*this);
             m_pCurrentFrame = pFrame.get();
             m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
             m_pCurrentFrame = nullptr;
-            popFromTableExportContext(aTableExportContext);
         }
         aFramePrTextbox.clear();
     }
@@ -5310,7 +5308,6 @@ void DocxAttributeOutput::WritePostponedCustomShape()
     if (!m_pPostponedCustomShape)
         return;
 
-    bool bStartedParaSdt = m_bStartedParaSdt;
     for( const auto & rPostponedDrawing : *m_pPostponedCustomShape)
     {
         if ( IsAlternateContentChoiceOpen() )
@@ -5318,7 +5315,6 @@ void DocxAttributeOutput::WritePostponedCustomShape()
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
     }
-    m_bStartedParaSdt = bStartedParaSdt;
     m_pPostponedCustomShape.reset(nullptr);
 }
 
@@ -5331,7 +5327,6 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     std::unique_ptr< std::vector<PostponedDrawing> > pPostponedDMLDrawings(m_pPostponedDMLDrawings.release());
     std::unique_ptr< std::vector<PostponedOLE> > pPostponedOLEs(m_pPostponedOLEs.release());
 
-    bool bStartedParaSdt = m_bStartedParaSdt;
     for( const auto & rPostponedDrawing : *pPostponedDMLDrawings )
     {
         // Avoid w:drawing within another w:drawing.
@@ -5340,7 +5335,6 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
     }
-    m_bStartedParaSdt = bStartedParaSdt;
 
     m_pPostponedOLEs = std::move(pPostponedOLEs);
 }
@@ -5393,7 +5387,6 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                     {
                         if (!m_pPostponedDMLDrawings)
                         {
-                            bool bStartedParaSdt = m_bStartedParaSdt;
                             if ( IsAlternateContentChoiceOpen() )
                             {
                                 // Do not write w:drawing inside w:drawing. Instead Postpone the Inner Drawing.
@@ -5404,7 +5397,6 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                             }
                             else
                                 m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
-                            m_bStartedParaSdt = bStartedParaSdt;
 
                             m_bPostponedProcessingFly = false ;
                         }
@@ -5579,6 +5571,9 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
 
     rContext.m_nTableDepth = m_tableReference->m_nTableDepth;
     m_tableReference->m_nTableDepth = 0;
+
+    rContext.m_bStartedParaSdt = m_bStartedParaSdt;
+    m_bStartedParaSdt = false;
 }
 
 void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const & rContext)
@@ -5586,32 +5581,27 @@ void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const
     m_rExport.m_pTableInfo = rContext.m_pTableInfo;
     m_tableReference->m_bTableCellOpen = rContext.m_bTableCellOpen;
     m_tableReference->m_nTableDepth = rContext.m_nTableDepth;
+    m_bStartedParaSdt = rContext.m_bStartedParaSdt;
 }
 
 void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
 {
-    DocxTableExportContext aTableExportContext;
-    pushToTableExportContext(aTableExportContext);
+    DocxTableExportContext aTableExportContext(*this);
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
     ww8::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
-
-    popFromTableExportContext(aTableExportContext);
 }
 
 void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape)
 {
-    DocxTableExportContext aTableExportContext;
-    pushToTableExportContext(aTableExportContext);
+    DocxTableExportContext aTableExportContext(*this);
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
     ww8::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
-
-    popFromTableExportContext(aTableExportContext);
 }
 
 oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()

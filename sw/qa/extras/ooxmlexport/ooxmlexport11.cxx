@@ -197,6 +197,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113399, "tdf113399.doc")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf114882, "tdf114882.docx")
+{
+    // fastserializer must not fail assertion because of mismatching elements
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

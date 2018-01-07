@@ -104,16 +104,7 @@ struct PageMargins
     PageMargins() : nPageMarginLeft(0), nPageMarginRight(0), nPageMarginTop(0), nPageMarginBottom(0) {}
 };
 
-/**
- * All the information that should be stashed away when we're in the middle of
- * of a table export and still have to do something else, e.g. export a shape.
- */
-struct DocxTableExportContext
-{
-    ww8::WW8TableInfo::Pointer_t m_pTableInfo;
-    bool m_bTableCellOpen;
-    sal_uInt32 m_nTableDepth;
-};
+struct DocxTableExportContext;
 
 /**
  * A structure that holds flags for the table export.
@@ -1027,6 +1018,21 @@ public:
     void pushToTableExportContext(DocxTableExportContext& rContext);
     /// Restores from the remembered state.
     void popFromTableExportContext(DocxTableExportContext const & rContext);
+};
+
+/**
+* All the information that should be stashed away when we're in the middle of
+* of a table export and still have to do something else, e.g. export a shape.
+*/
+struct DocxTableExportContext
+{
+    DocxAttributeOutput& m_rOutput;
+    ww8::WW8TableInfo::Pointer_t m_pTableInfo;
+    bool m_bTableCellOpen;
+    bool m_bStartedParaSdt;
+    sal_uInt32 m_nTableDepth;
+    DocxTableExportContext(DocxAttributeOutput& rOutput) : m_rOutput(rOutput) { m_rOutput.pushToTableExportContext(*this); }
+    ~DocxTableExportContext() { m_rOutput.popFromTableExportContext(*this); }
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX
