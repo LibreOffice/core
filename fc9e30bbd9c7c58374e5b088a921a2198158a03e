@@ -16,6 +16,24 @@
       "revId": "fc9e30bbd9c7c58374e5b088a921a2198158a03e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a5c5755c",
+        "filename": "svtools/source/graphic/grfmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-01-07T02:24:06Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s what I\u0027ll do eventually but we want to get rid of uniqueID in general, which is far from trivial. I\u0027ll remove this in process eventually, but for now this helps me find the cases when testing.",
+      "parentUuid": "fa31d9ce_4a092831",
+      "revId": "fc9e30bbd9c7c58374e5b088a921a2198158a03e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
