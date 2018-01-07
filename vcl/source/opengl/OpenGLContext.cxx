@@ -32,6 +32,8 @@
 
 #include <opengl/RenderState.hxx>
 
+#include <config_features.h>
+
 using namespace com::sun::star;
 
 #define MAX_FRAMEBUFFER_COUNT 30
@@ -505,8 +507,10 @@ rtl::Reference<OpenGLContext> OpenGLContext::getVCLContext(bool bMakeIfNecessary
     if (pDefWindow)
     {
         // create our magic fallback window context.
+#if HAVE_FEATURE_OPENGL
         xContext = pDefWindow->GetGraphics()->GetOpenGLContext();
         assert(xContext.is());
+#endif
     }
     else
         xContext = pContext;
