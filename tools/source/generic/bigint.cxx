@@ -302,7 +302,7 @@ void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
         {
             nZ = (sal_uInt32)nNum[i] * (sal_uInt32)rB.nNum[j] +
                  (sal_uInt32)rErg.nNum[i + j] + k;
-            rErg.nNum[i + j] = (sal_uInt16)(nZ & 0xffffUL);
+            rErg.nNum[i + j] = (sal_uInt16)(nZ & 0xffffU);
             k = nZ >> 16;
         }
         rErg.nNum[i + j] = (sal_uInt16)k;
@@ -349,7 +349,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
             aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
             nK = (sal_uInt16) (nTmp >> 16);
             if ( nK )
-                nK = (sal_uInt16)(0x10000UL - nK);
+                nK = (sal_uInt16)(0x10000U - nK);
         }
         sal_uInt16& rNum( aTmpA.nNum[j - nLenB + i] );
         rNum -= nK;
@@ -416,7 +416,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
             aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
             nK = (sal_uInt16) (nTmp >> 16);
             if ( nK )
-                nK = (sal_uInt16)(0x10000UL - nK);
+                nK = (sal_uInt16)(0x10000U - nK);
         }
         sal_uInt16& rNum( aTmpA.nNum[j - nLenB + i] );
         rNum = rNum - nK;
@@ -560,11 +560,11 @@ BigInt::BigInt( sal_uInt32 nValue )
     : nVal(0)
 {
     bIsSet  = true;
-    if ( nValue & 0x80000000UL )
+    if ( nValue & 0x80000000U )
     {
         bIsBig  = true;
         bIsNeg  = false;
-        nNum[0] = (sal_uInt16)(nValue & 0xffffUL);
+        nNum[0] = (sal_uInt16)(nValue & 0xffffU);
         nNum[1] = (sal_uInt16)(nValue >> 16);
         nLen    = 2;
     }
