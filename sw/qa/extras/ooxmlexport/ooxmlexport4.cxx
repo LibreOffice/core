@@ -804,6 +804,7 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx"
 DECLARE_OOXMLEXPORT_TEST(testTdf104707_urlComment, "tdf104707_urlComment.odt")
 {
     xmlDocPtr pXmlComm = parseExport("word/comments.xml");
+    CPPUNIT_ASSERT(pXmlComm);
     CPPUNIT_ASSERT_EQUAL( OUString("https://bugs.documentfoundation.org/show_bug.cgi?id=104707"), getXPathContent(pXmlComm,"/w:comments/w:comment/w:p/w:hyperlink/w:r/w:t") );
 }
 
