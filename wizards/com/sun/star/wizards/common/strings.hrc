@@ -23,7 +23,10 @@ def NC_(context, string):
     # Contextual strings are stored with the concatenation of
     # the context, a EOT byte, and the original string, instead of the original string
     # see https://www.gnu.org/software/gettext/manual/html_node/MO-Files.html
-    return gettext.gettext(context + chr(4) + string)
+    ret = gettext.gettext(context + chr(4) + string)
+    if ret.find(chr(4)) == -1:
+        return ret
+    return string
 
 # common section
 RID_COMMON_START_0                      = NC_("RID_COMMON_START_0", "The directory '%1' could not be created.<BR>There may not be enough space left on your hard disk.")
