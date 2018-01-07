@@ -1,31 +1,6 @@
 <svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg">
- <rect fill="#ffffff" fill-opacity=".992308" height="9" transform="matrix(0 -1 1 0 0 0)" width="9" x="-29" y="20"/>
- <path d="M 5 10 L 5 27 L 17 27 L 17 21 C 17 18.818594 18.818594 17 21 17 L 27 17 L 27 10 L 5 10 z" fill="#ffffff" fill-opacity=".992308"/>
- <path d="M 20 11 V 3 h 1 v 8 z" fill="#555753" fill-rule="evenodd"/>
- <rect fill="#555753" height="12.999998" width="1" x="11" y="9"/>
- <path d="M 3 3 L 3 29 L 17.146484 29 C 17.060657 28.677832 17 28.346275 17 28 L 17 27 L 12 27 L 12 22 L 17 22 L 17 21 L 5 21 L 5 16 L 20.048828 16 L 20.048828 17.130859 C 20.355827 17.053388 20.671587 17 21 17 L 21 16 L 27 16 L 27 17 L 28 17 C 28.346275 17 28.677832 17.060657 29 17.146484 L 29 3 L 28 3 L 3 3 z M 5 5 L 11 5 L 11 9 L 5 9 L 5 5 z M 12 5 L 27 5 L 27 9 L 12 9 L 12 5 z M 5 10 L 20.048828 10 L 20.048828 15 L 5 15 L 5 10 z M 21 10 L 27 10 L 27 15 L 21 15 L 21 10 z M 5 22 L 11 22 L 11 27 L 5 27 L 5 22 z" fill="#555753"/>
- <path d="m 20.865222 18.999999 c -1.041388 0 -1.865231 .863539 -1.865231 1.91602 v 7.167961 c 0 1.052478 .823843 1.91602 1.865231 1.91602 h 7.562502 c 1.0414 0 1.572268 -.863542 1.572268 -1.91602 v -7.167961 c 0 -1.052481 -.53088 -1.91602 -1.572268 -1.91602 z M 21 21 h 2.000001 l 1.5 1.800779 l 1.5 -1.800779 h 1.999998 v .999999 L 25.91602 24.499998 L 27.999999 27 v .999999 h -1.999998 l -1.5 -1.800779 l -1.5 1.800779 H 21 V 27 L 23.083982 24.499998 L 21 21.999999 Z" fill="#555753"/>
- <rect fill="#555753" height="4" opacity=".35" width="22" x="5" y="5"/>
- <rect fill="#ffffff" fill-opacity=".992308" height="6" transform="matrix(0 -1 1 0 0 0)" width="6" x="-59" y="-42"/>
- <path d="m -44 35 v 26 h 14.146484 C -29.939343 60.677832 -30 60.346275 -30 60 v -1 h -5 v -6 h 5 c 0 -.346275 .06066 -.677832 .146484 -1 H -42 v -8 h 15.048828 v 5.130859 C -26.644173 49.053388 -26.328413 49 -26 49 v -5 h 6 v 5 h 1 c .346275 0 .677832 .06066 1 .146484 V 35 h -1 z m 2 2 h 6 v 6 h -6 z m 7 0 h 15 v 6 h -6 v -1 h -.951172 v 1 H -35 Z m -7 16 h 6 v 6 h -6 z" fill="#555753"/>
- <path d="m -27 43 v -8 h 1 v 8 z" fill="#555753" fill-rule="evenodd"/>
- <rect fill="#ffffff" fill-opacity=".992308" height="9" transform="matrix(0 -1 1 0 0 0)" width="9" x="-61" y="-27"/>
- <rect fill="#ffffff" fill-opacity=".992308" height="6" transform="matrix(0 -1 1 0 0 0)" width="6" x="-43" y="-26"/>
- <rect fill="#ffffff" fill-opacity=".992308" height="8" transform="matrix(0 -1 1 0 0 0)" width="6" x="-43" y="-35"/>
- <rect fill="#555753" height="11.999998" width=".950886" x="-35.950886" y="42"/>
- <g fill="#ffffff" fill-opacity=".992308">
-  <rect height="6" transform="matrix(0 -1 1 0 0 0)" width="6" x="-43" y="-42"/>
-  <rect height="5" transform="matrix(0 -1 1 0 0 0)" width="6" x="-59" y="-35"/>
-  <path d="m -35 44 v 8 h 5.146484 C -29.484489 50.614798 -28.385202 49.515511 -27 49.146484 V 44 Z"/>
-  <rect height="6" transform="matrix(0 -1 1 0 0 0)" width="8" x="-52" y="-42"/>
-  <rect height="6" transform="matrix(0 -1 1 0 0 0)" width="5" x="-49" y="-26"/>
- </g>
- <path d="m -26.134777 51 c -1.041388 0 -1.865231 .863539 -1.865231 1.91602 v 7.167961 c 0 1.052478 .823843 1.91602 1.865231 1.91602 h 7.562502 c 1.0414 0 1.572268 -.863542 1.572268 -1.91602 V 52.91602 c 0 -1.052481 -.53088 -1.91602 -1.572268 -1.91602 z m .134778 2.000001 h 2.000001 l 1.5 1.800779 l 1.5 -1.800779 H -19 V 54 L -21.083979 56.499999 L -19 59.000001 V 60 h -1.999998 l -1.5 -1.800779 l -1.5 1.800779 h -2.000001 V 59.000001 L -23.916017 56.499999 L -25.999999 54 Z" fill="#555753"/>
- <rect fill="#555753" height="6" opacity=".35" width="22" x="-42" y="37"/>
- <rect fill="#ffffff" fill-opacity=".992308" height="22" transform="matrix(0 -1 1 0 0 0)" width="17" x="-19" y="-41"/>
- <path d="m -26 3 v -8 h 1 v 8 z" fill="#555753" fill-rule="evenodd"/>
- <rect fill="#555753" height="12.999998" width="1" x="-35" y="1"/>
- <rect fill="#555753" height="11.999998" width=".950886" x="-25.950886" y="2"/>
- <path d="m -43 -5 v 26 h 26 V -5 h -1 z m 2 2 h 6 v 4 h -6 z m 7 0 h 15 v 4 h -15 z m -7 5 h 22 v 5 h -22 z m 0 6 h 22 v 5 h -22 z m 0 6 h 6 v 5 h -6 z m 7 0 h 8 v 5 h -8 z m 9 0 h 6 v 5 h -6 z" fill="#555753"/>
- <rect fill="#555753" height="4" opacity=".35" width="22" x="-41" y="-3"/>
+ <rect fill="#fcfcfc" height="18" ry="0" width="23" x="5" y="7"/>
+ <path d="M 3 5 V 27 H 30 V 5 Z m 2 2 h 7 v 5 H 5 Z m 8 0 h 7 v 5 h -7 z m 8 0 h 7 v 5 H 21 Z M 5 13 h 7 v 6 H 5 Z m 8 0 h 7 v 6 h -7 z m 8 0 h 7 v 6 H 21 Z M 5 20 h 7 v 5 H 5 Z m 8 0 h 7 v 5 h -7 z m 8 0 h 7 v 5 h -7 z" fill="#555753"/>
+ <rect fill="#555753" height="10" width="12" x="2" y="4"/>
+ <rect fill="#c3c4c2" height="8" width="10" x="3" y="5"/>
 </svg>
