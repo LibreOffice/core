@@ -12,20 +12,20 @@
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
-
 #include <libxml/tree.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <o3tl/enumarray.hxx>
 
-class XmlWriter;
+namespace tools { class XmlWriter; }
+
 enum class MetaActionType;
 
 class OOO_DLLPUBLIC_TEST MetafileXmlDump final
 {
     o3tl::enumarray<MetaActionType, bool> maFilter;
 
-    void writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter);
+    void writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter);
 
 public:
     MetafileXmlDump();

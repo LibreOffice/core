@@ -9,6 +9,7 @@
 
 #include <test/primitive2dxmldump.hxx>
 #include <test/xmltesttools.hxx>
+#include <tools/XmlWriter.hxx>
 
 #include <vcl/metaact.hxx>
 #include <rtl/string.hxx>
@@ -28,8 +29,6 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-
-
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 
@@ -70,7 +69,7 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(
     else
         pStream.reset(new SvFileStream(rTempStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC));
 
-    XmlWriter aWriter(pStream.get());
+    tools::XmlWriter aWriter(pStream.get());
     aWriter.startDocument();
     aWriter.startElement("primitive2D");
 
@@ -88,7 +87,7 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(
 
 void Primitive2dXmlDump::decomposeAndWrite(
     const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
-    XmlWriter& rWriter)
+    tools::XmlWriter& rWriter)
 {
     for (size_t i = 0; i < rPrimitive2DSequence.size(); i++)
     {

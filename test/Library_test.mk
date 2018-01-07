@@ -45,7 +45,6 @@ $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/xmltesttools \
     test/source/htmltesttools \
     test/source/mtfxmldump \
-    test/source/xmlwriter \
     test/source/primitive2dxmldump \
     test/source/screenshot_test \
 ))
