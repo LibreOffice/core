@@ -631,13 +631,20 @@ void EditUIObject::execute(const OUString& rAction,
                 mxEdit->KeyInput(*itr);
             }
         }
-        else if (rParameters.find("SELECTION") != rParameters.end())
-        {
-            // TODO: moggi: add code
-        }
         else
         {
             bHandled = false;
+        }
+    }
+    else if (rAction == "SELECT")
+    {
+        if (rParameters.find("FROM") != rParameters.end() &&
+                rParameters.find("TO") != rParameters.end())
+        {
+            long nMin = rParameters.find("FROM")->second.toInt32();
+            long nMax = rParameters.find("TO")->second.toInt32();
+            Selection aSelection(nMin, nMax);
+            mxEdit->SetSelection(aSelection);
         }
     }
     else
