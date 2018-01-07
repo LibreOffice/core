@@ -261,25 +261,25 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
  */
 void  LwpTocSuperLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart, sal_Int32 nEnd, bool bAll)
 {
-    if(m_pFrame)
+    if (m_pFrame)
     {
-        XFFrame* pXFFrame = nullptr;
+        rtl::Reference<XFFrame> xXFFrame;
         if(nEnd < nStart)
         {
-            pXFFrame = new XFFrame();
+            xXFFrame.set(new XFFrame);
         }
         else
         {
-            pXFFrame = new XFFloatFrame(nStart, nEnd, bAll);
+            xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
         }
 
-        m_pFrame->Parse(pXFFrame, static_cast<sal_uInt16>(nStart));
+        m_pFrame->Parse(xXFFrame.get(), static_cast<sal_uInt16>(nStart));
 
         //parse table, and add table to frame or TOC
         LwpTableLayout * pTableLayout = GetTableLayout();
         if (pTableLayout)
         {
-            XFContentContainer * pTableContainer = pXFFrame;
+            XFContentContainer* pTableContainer = xXFFrame.get();
             // if *this is a TOCSuperTableLayout and it's located in a cell
             // add the frame to upper level and add TOCSuperTableLayout into the frame
             rtl::Reference<LwpVirtualLayout> xContainer(GetContainerLayout());
@@ -288,13 +288,13 @@ void  LwpTocSuperLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nSt
             if (xContainer->IsCell())
             {
                 pTableContainer = pCont; // TOC contain table directly
-                pXFFrame->Add(pCont);
-                m_pCont->Add(pXFFrame);
+                xXFFrame->Add(pCont);
+                m_pCont->Add(xXFFrame.get());
             }
             else
             {
                 //add frame to the container
-                pCont->Add(pXFFrame);
+                pCont->Add(xXFFrame.get());
             }
             pTableLayout->XFConvert(pTableContainer);
         }
