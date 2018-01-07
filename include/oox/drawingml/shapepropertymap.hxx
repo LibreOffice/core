@@ -81,31 +81,32 @@ typedef o3tl::enumarray<ShapeProperty, sal_Int32> ShapePropertyIds;
 struct OOX_DLLPUBLIC ShapePropertyInfo
 {
     const ShapePropertyIds& mrPropertyIds;
-    bool                mbNamedLineMarker;      /// True = use named line marker instead of explicit line marker.
-    bool                mbNamedLineDash;        /// True = use named line dash instead of explicit line dash.
-    bool                mbNamedFillGradient;    /// True = use named fill gradient instead of explicit fill gradient.
-    bool                mbNamedFillBitmapUrl;   /// True = use named fill bitmap URL instead of explicit fill bitmap URL.
+    bool mbNamedLineMarker;      /// True = use named line marker instead of explicit line marker.
+    bool mbNamedLineDash;        /// True = use named line dash instead of explicit line dash.
+    bool mbNamedFillGradient;    /// True = use named fill gradient instead of explicit fill gradient.
+    bool mbNamedFillBitmapUrl;   /// True = use named fill bitmap URL instead of explicit fill bitmap URL.
 
     static ShapePropertyInfo DEFAULT;           /// Default property info (used as default parameter of other methods).
 
-    explicit            ShapePropertyInfo(
-                            const ShapePropertyIds& rnPropertyIds,
-                            bool bNamedLineMarker,
-                            bool bNamedLineDash,
-                            bool bNamedFillGradient,
-                            bool bNamedFillBitmapUrl );
+    explicit ShapePropertyInfo(const ShapePropertyIds& rnPropertyIds,
+                               bool bNamedLineMarker, bool bNamedLineDash,
+                               bool bNamedFillGradient, bool bNamedFillBitmapUrl);
 
-    bool         has( ShapeProperty ePropId ) const { return mrPropertyIds[ ePropId ] >= 0; }
-    sal_Int32    operator[]( ShapeProperty ePropId ) const { return mrPropertyIds[ ePropId ]; }
+    bool has(ShapeProperty ePropId) const
+    {
+        return mrPropertyIds[ePropId] >= 0;
+    }
+    sal_Int32 operator[](ShapeProperty ePropId) const
+    {
+        return mrPropertyIds[ePropId];
+    }
 };
-
 
 class OOX_DLLPUBLIC ShapePropertyMap : public PropertyMap
 {
 public:
-    explicit            ShapePropertyMap(
-                            ModelObjectHelper& rModelObjHelper,
-                            const ShapePropertyInfo& rShapePropInfo = ShapePropertyInfo::DEFAULT );
+    explicit ShapePropertyMap(ModelObjectHelper& rModelObjHelper,
+        const ShapePropertyInfo& rShapePropInfo = ShapePropertyInfo::DEFAULT );
 
     /** Returns true, if the specified property is supported. */
     bool                supportsProperty( ShapeProperty ePropId ) const;
@@ -118,26 +119,28 @@ public:
     bool                setAnyProperty( ShapeProperty ePropId, const css::uno::Any& rValue );
 
     /** Sets the specified shape property to the passed value. */
-    template< typename Type >
-    bool         setProperty( ShapeProperty ePropId, const Type& rValue )
-                            { return setAnyProperty( ePropId, css::uno::Any( rValue ) ); }
+    template<typename Type>
+    bool setProperty(ShapeProperty ePropId, const Type& rValue)
+    {
+        return setAnyProperty(ePropId, css::uno::Any(rValue));
+    }
 
     using PropertyMap::setAnyProperty;
     using PropertyMap::setProperty;
 
 private:
     /** Sets an explicit line marker, or creates a named line marker. */
-    bool                setLineMarker( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setLineMarker( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit line dash, or creates a named line dash. */
-    bool                setLineDash( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setLineDash( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit fill gradient, or creates a named fill gradient. */
-    bool                setFillGradient( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setFillGradient( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Creates a named transparency gradient. */
-    bool                setGradientTrans( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setGradientTrans( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit fill bitmap URL, or creates a named fill bitmap URL. */
-    bool                setFillBitmapUrl( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setFillBitmapUrl( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit fill bitmap URL and pushes the name to FillBitmapName */
-    bool                setFillBitmapNameFromUrl( const css::uno::Any& rValue );
+    bool setFillBitmapNameFromUrl( const css::uno::Any& rValue );
 
     // not implemented, to prevent implicit conversion from enum to int
     css::uno::Any& operator[]( ShapeProperty ePropId ) = delete;
