@@ -8,7 +8,9 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import type_text
+from uitest.uihelper.common import type_text, get_state_as_dict
+
+import time
 
 class EditTest(UITestCase):
 
@@ -22,6 +24,28 @@ class EditTest(UITestCase):
         xEdit = xAddNameDlg.getChild("edit")
 
         type_text(xEdit, "simpleRangeName")
+
+        xAddBtn = xAddNameDlg.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xAddBtn)
+
+        self.ui_test.close_doc()
+
+    def test_select_text(self):
+
+        self.ui_test.create_doc_in_start_center("calc")
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
+        xAddNameDlg = self.xUITest.getTopFocusWindow()
+
+        xEdit = xAddNameDlg.getChild("edit")
+
+        type_text(xEdit, "simpleRangeName")
+        xEdit.executeAction("SELECT", mkPropertyValues({"FROM": "2", "TO": "9"}))
+        type_text(xEdit, "otherChars")
+        self.assertEqual("siotherCharsgeName", get_state_as_dict(xEdit)["Text"])
+
+        xEdit.executeAction("SELECT", mkPropertyValues({"FROM": "2", "TO": "12"}))
+        self.assertEqual("otherChars", get_state_as_dict(xEdit)["SelectedText"])
 
         xAddBtn = xAddNameDlg.getChild("cancel")
         self.ui_test.close_dialog_through_button(xAddBtn)
