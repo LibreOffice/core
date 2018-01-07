@@ -308,8 +308,10 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
     if (bSuccess)
     {
         m_xImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
+#if HAVE_FEATURE_AVMEDIA
         m_xImpl->m_MediaProperties.setURL(
             m_xImpl->m_LastFailedPkgURL, tempFileURL, "");
+#endif
     }
     m_xImpl->m_LastFailedPkgURL.clear(); // once only
 }
@@ -378,12 +380,16 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 {
                     m_xImpl->m_pTempFile.reset(
                             new MediaTempFile(tempFileURL));
+#if HAVE_FEATURE_AVMEDIA
                     m_xImpl->m_MediaProperties.setURL(url, tempFileURL, "");
+#endif
                 }
                 else // this case is for Clone via operator=
                 {
                     m_xImpl->m_pTempFile.reset();
+#if HAVE_FEATURE_AVMEDIA
                     m_xImpl->m_MediaProperties.setURL("", "", "");
+#endif
                     // UGLY: oox import also gets here, because unlike ODF
                     // getDocumentStorage() is not the imported file...
                     m_xImpl->m_LastFailedPkgURL = url;
@@ -391,14 +397,18 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
             }
             else
             {
+#if HAVE_FEATURE_AVMEDIA
                 m_xImpl->m_MediaProperties.setURL(url,
                         rNewProperties.getTempURL(), "");
+#endif
             }
         }
         else
         {
             m_xImpl->m_pTempFile.reset();
+#if HAVE_FEATURE_AVMEDIA
             m_xImpl->m_MediaProperties.setURL(url, "", rNewProperties.getReferer());
+#endif
         }
         bBroadcastChanged = true;
     }

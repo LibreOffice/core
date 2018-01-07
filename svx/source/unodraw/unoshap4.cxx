@@ -54,6 +54,8 @@
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
 
+#include <config_features.h>
+
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -797,6 +799,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
         switch( pProperty->nWID )
         {
         case OWN_ATTR_MEDIA_URL:
+#if HAVE_FEATURE_AVMEDIA
         {
             OUString aURL;
             if( rValue >>= aURL )
@@ -805,9 +808,11 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 aItem.setURL( aURL, "", referer_ );
             }
         }
+#endif
         break;
 
         case OWN_ATTR_MEDIA_LOOP:
+#if HAVE_FEATURE_AVMEDIA
         {
             bool bLoop;
 
@@ -817,9 +822,11 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 aItem.setLoop( bLoop );
             }
         }
+#endif
         break;
 
         case OWN_ATTR_MEDIA_MUTE:
+#if HAVE_FEATURE_AVMEDIA
         {
             bool bMute;
 
@@ -829,9 +836,11 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 aItem.setMute( bMute );
             }
         }
+#endif
         break;
 
         case OWN_ATTR_MEDIA_VOLUMEDB:
+#if HAVE_FEATURE_AVMEDIA
         {
             sal_Int16 nVolumeDB = sal_Int16();
 
@@ -841,9 +850,11 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 aItem.setVolumeDB( nVolumeDB );
             }
         }
+#endif
         break;
 
         case OWN_ATTR_MEDIA_ZOOM:
+#if HAVE_FEATURE_AVMEDIA
         {
             css::media::ZoomLevel eLevel;
 
@@ -853,9 +864,11 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 aItem.setZoom( eLevel );
             }
         }
+#endif
         break;
 
         case OWN_ATTR_MEDIA_MIMETYPE:
+#if HAVE_FEATURE_AVMEDIA
         {
             OUString sMimeType;
             if( rValue >>= sMimeType )
@@ -864,9 +877,11 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 aItem.setMimeType( sMimeType );
             }
         }
+#endif
         break;
 
         case OWN_ATTR_MEDIA_STREAM:
+#if HAVE_FEATURE_AVMEDIA
             try
             {
                 uno::Reference<io::XInputStream> xStream;
@@ -889,6 +904,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                         static_cast<OWeakObject *>(this),
                         makeAny(e));
             }
+#endif
         break;
 
         default:
@@ -925,23 +941,33 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
         switch( pProperty->nWID )
         {
             case OWN_ATTR_MEDIA_URL:
+#if HAVE_FEATURE_AVMEDIA
                 rValue <<= aItem.getURL();
+#endif
                 break;
 
             case OWN_ATTR_MEDIA_LOOP:
+#if HAVE_FEATURE_AVMEDIA
                 rValue <<= aItem.isLoop();
+#endif
                 break;
 
             case OWN_ATTR_MEDIA_MUTE:
+#if HAVE_FEATURE_AVMEDIA
                 rValue <<= aItem.isMute();
+#endif
                 break;
 
             case OWN_ATTR_MEDIA_VOLUMEDB:
+#if HAVE_FEATURE_AVMEDIA
                 rValue <<= aItem.getVolumeDB();
+#endif
                 break;
 
             case OWN_ATTR_MEDIA_ZOOM:
+#if HAVE_FEATURE_AVMEDIA
                 rValue <<= aItem.getZoom();
+#endif
                 break;
 
             case OWN_ATTR_MEDIA_STREAM:
@@ -967,11 +993,15 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 break;
 
             case OWN_ATTR_MEDIA_TEMPFILEURL:
+#if HAVE_FEATURE_AVMEDIA
                 rValue <<= aItem.getTempURL();
+#endif
                 break;
 
             case OWN_ATTR_MEDIA_MIMETYPE:
+#if HAVE_FEATURE_AVMEDIA
                 rValue <<= aItem.getMimeType();
+#endif
                 break;
 
             case OWN_ATTR_FALLBACK_GRAPHIC:
