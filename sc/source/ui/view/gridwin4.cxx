@@ -1052,41 +1052,41 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         mpNoteMarker->Draw(); // Above the cursor, in drawing map mode
 }
 
-namespace {
-    // Find the row/col just -before- the nPosition in pixels and its offset
-    inline void mapConservativeToRowCol(const ScDocument *pDoc,
-                                        sal_Int32  *nIndex,
-                                        sal_Int32  *nOffset,
-                                        sal_Int32  *nOrigin,
-                                        sal_Int32   nTabNo,
-                                        sal_Int32   nPosition,
-                                        bool        bRowNotCol,
-                                        double      nPPTX,
-                                        double      nPPTY)
+namespace
+{
+    template<typename IndexType>
+    inline
+    void lcl_getBoundingRowColumnforTile(ScViewData* pViewData,
+            long nTileStartPosPx, long nTileEndPosPx,
+            sal_Int32& nTopLeftTileOffset, sal_Int32& nTopLeftTileOrigin,
+            sal_Int32& nTopLeftTileIndex, sal_Int32& nBottomRightTileIndex)
     {
-        long nTmp = 0; // row/col to render for nPosition
-        long nLastScrPos = 0, nScrPos = 0;
-        const long nMaxIndex = bRowNotCol ? MAXROW : MAXCOL;
-        while (nScrPos <= nPosition && nTmp < nMaxIndex)
-        {
-            long nSize = bRowNotCol ? pDoc->GetRowHeight( nTmp, nTabNo )
-                                    : pDoc->GetColWidth( nTmp, nTabNo );
-            if (nSize)
-            {
-                nLastScrPos = nScrPos;
-                nScrPos += ScViewData::ToPixel( nSize, bRowNotCol ? nPPTY : nPPTX );
-            } // else - FIXME 'skip multiple hidden rows'
+        const bool bColumnHeader = std::is_same<IndexType, SCCOL>::value;
 
-            *nIndex = nTmp;
-            nTmp++;
-        }
+        SCTAB nTab = pViewData->GetTabNo();
+        ScDocument* pDoc = pViewData->GetDocument();
 
-        // offset into that row/col for nPosition
-        assert (nPosition >= nLastScrPos);
-        *nOffset = (nScrPos == nPosition ? 0 : nPosition - nLastScrPos);
-        *nOrigin = nLastScrPos;
+        IndexType nStartIndex = -1;
+        IndexType nEndIndex = -1;
+        long nStartPosPx = 0;
+        long nEndPosPx = 0;
+
+        ScPositionHelper& rPositionHelper =
+                bColumnHeader ? pViewData->GetLOKWidthHelper() : pViewData->GetLOKHeightHelper();
+        const auto& rStartNearest = rPositionHelper.getNearestByPosition(nTileStartPosPx);
+        const auto& rEndNearest = rPositionHelper.getNearestByPosition(nTileEndPosPx);
+
+        ScBoundsProvider aBoundsProvider(pDoc, nTab, bColumnHeader);
+        aBoundsProvider.Compute(rStartNearest, rEndNearest, nTileStartPosPx, nTileEndPosPx);
+        aBoundsProvider.GetStartIndexAndPosition(nStartIndex, nStartPosPx); ++nStartIndex;
+        aBoundsProvider.GetEndIndexAndPosition(nEndIndex, nEndPosPx);
+
+        nTopLeftTileOffset = nTileStartPosPx - nStartPosPx;
+        nTopLeftTileOrigin = nStartPosPx;
+        nTopLeftTileIndex = nStartIndex;
+        nBottomRightTileIndex = nEndIndex;
     }
-}
+} // anonymous namespace
 
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nOutputWidth, int nOutputHeight,
@@ -1125,30 +1125,36 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     const double fPPTX = pViewData->GetPPTX();
     const double fPPTY = pViewData->GetPPTY();
 
+    // find approximate col/row offsets of nearby.
     sal_Int32 nTopLeftTileRowOffset = 0;
     sal_Int32 nTopLeftTileColOffset = 0;
     sal_Int32 nTopLeftTileRowOrigin = 0;
     sal_Int32 nTopLeftTileColOrigin = 0;
 
-    // find approximate col/row offsets of nearby.
     sal_Int32 nTopLeftTileRow = 0;
     sal_Int32 nTopLeftTileCol = 0;
     sal_Int32 nBottomRightTileRow = 0;
     sal_Int32 nBottomRightTileCol = 0;
-    sal_Int32 nDummy;
-    mapConservativeToRowCol(pDoc, &nTopLeftTileCol, &nTopLeftTileColOffset,
-                            &nTopLeftTileColOrigin,
-                            nTab, fTilePosXPixel, false, fPPTX, fPPTY);
-    mapConservativeToRowCol(pDoc, &nBottomRightTileCol, &nDummy, &nDummy, nTab,
-                            fTileRightPixel, false, fPPTX, fPPTY);
-    mapConservativeToRowCol(pDoc, &nTopLeftTileRow, &nTopLeftTileRowOffset,
-                            &nTopLeftTileRowOrigin,
-                            nTab, fTilePosYPixel, true, fPPTX, fPPTY);
-    mapConservativeToRowCol(pDoc, &nBottomRightTileRow, &nDummy, &nDummy, nTab,
-                            fTileBottomPixel, true, fPPTX, fPPTY);
+
+    lcl_getBoundingRowColumnforTile<SCROW>(pViewData,
+            fTilePosYPixel, fTileBottomPixel,
+            nTopLeftTileRowOffset, nTopLeftTileRowOrigin,
+            nTopLeftTileRow, nBottomRightTileRow);
+
+    lcl_getBoundingRowColumnforTile<SCCOL>(pViewData,
+            fTilePosXPixel, fTileRightPixel,
+            nTopLeftTileColOffset, nTopLeftTileColOrigin,
+            nTopLeftTileCol, nBottomRightTileCol);
+
     // Enlarge
     nBottomRightTileCol++;
     nBottomRightTileRow++;
+
+    if (nBottomRightTileCol > MAXCOL)
+        nBottomRightTileCol = MAXCOL;
+
+    if (nBottomRightTileRow > MAXTILEDROW)
+        nBottomRightTileRow = MAXTILEDROW;
 
     // size of the document including drawings, charts, etc.
     SCCOL nEndCol = 0;
