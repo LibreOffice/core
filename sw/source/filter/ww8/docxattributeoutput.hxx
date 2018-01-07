@@ -112,6 +112,7 @@ struct DocxTableExportContext
 {
     ww8::WW8TableInfo::Pointer_t m_pTableInfo;
     bool m_bTableCellOpen;
+    bool m_bStartedParaSdt;
     sal_uInt32 m_nTableDepth;
 };
 

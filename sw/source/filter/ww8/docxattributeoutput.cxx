@@ -5571,6 +5571,9 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
 
     rContext.m_nTableDepth = m_tableReference->m_nTableDepth;
     m_tableReference->m_nTableDepth = 0;
+
+    rContext.m_bStartedParaSdt = m_bStartedParaSdt;
+    m_bStartedParaSdt = false;
 }
 
 void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const & rContext)
@@ -5578,6 +5581,7 @@ void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const
     m_rExport.m_pTableInfo = rContext.m_pTableInfo;
     m_tableReference->m_bTableCellOpen = rContext.m_bTableCellOpen;
     m_tableReference->m_nTableDepth = rContext.m_nTableDepth;
+    m_bStartedParaSdt = rContext.m_bStartedParaSdt;
 }
 
 void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
