@@ -231,6 +231,204 @@ long ScPositionHelper::getPosition(index_type nIndex) const
     return it->second;
 }
 
+ScBoundsProvider::ScBoundsProvider(ScDocument* pD, SCTAB nT, bool bColHeader)
+    : pDoc(pD)
+    , nTab(nT)
+    , bColumnHeader(bColHeader)
+    , MAX_INDEX(bColHeader ? MAXCOL : MAXTILEDROW)
+    , nFirstIndex(-1)
+    , nSecondIndex(-1)
+    , nFirstPositionPx(-1)
+    , nSecondPositionPx(-1)
+{}
+
+void ScBoundsProvider::GetStartIndexAndPosition(SCCOL& nIndex, long& nPosition) const
+{
+    assert(bColumnHeader);
+    nIndex = nFirstIndex;
+    nPosition = nFirstPositionPx;
+}
+
+void ScBoundsProvider::GetEndIndexAndPosition(SCCOL& nIndex, long& nPosition) const
+{
+    assert(bColumnHeader);
+    nIndex = nSecondIndex;
+    nPosition = nSecondPositionPx;
+}
+
+void ScBoundsProvider::GetStartIndexAndPosition(SCROW& nIndex, long& nPosition) const
+{
+    assert(!bColumnHeader);
+    nIndex = nFirstIndex;
+    nPosition = nFirstPositionPx;
+}
+
+void ScBoundsProvider::GetEndIndexAndPosition(SCROW& nIndex, long& nPosition) const
+{
+    assert(!bColumnHeader);
+    nIndex = nSecondIndex;
+    nPosition = nSecondPositionPx;
+}
+
+long ScBoundsProvider::GetSize(index_type nIndex) const
+{
+    const sal_uInt16 nSize = bColumnHeader ? pDoc->GetColWidth(nIndex, nTab) : pDoc->GetRowHeight(nIndex, nTab);
+    return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+}
+
+void ScBoundsProvider::GetIndexAndPos(index_type nNearestIndex, long nNearestPosition,
+                    long nBound, index_type& nFoundIndex, long& nPosition,
+                    bool bTowards, long nDiff)
+{
+    if (nDiff > 0) // nBound < nNearestPosition
+        GeIndexBackwards(nNearestIndex, nNearestPosition, nBound,
+                         nFoundIndex, nPosition, bTowards);
+    else
+        GetIndexTowards(nNearestIndex, nNearestPosition, nBound,
+                        nFoundIndex, nPosition, bTowards);
+}
+
+void ScBoundsProvider::Compute(
+            value_type aFirstNearest, value_type aSecondNearest,
+            long nFirstBound, long nSecondBound)
+{
+    SAL_INFO("sc.lok.header", "BoundsProvider: nFirstBound: " << nFirstBound
+            << ", nSecondBound: " << nSecondBound);
+
+    long nFirstDiff = aFirstNearest.second - nFirstBound;
+    long nSecondDiff = aSecondNearest.second - nSecondBound;
+    SAL_INFO("sc.lok.header", "BoundsProvider: rTopNearest: index: " << aFirstNearest.first
+            << ", pos: " << aFirstNearest.second << ", diff: " << nFirstDiff);
+    SAL_INFO("sc.lok.header", "BoundsProvider: rBottomNearest: index: " << aSecondNearest.first
+            << ", pos: " << aSecondNearest.second << ", diff: " << nSecondDiff);
+
+    bool bReverse = (std::abs(nFirstDiff) >= std::abs(nSecondDiff));
+
+    if(bReverse)
+    {
+        std::swap(aFirstNearest, aSecondNearest);
+        std::swap(nFirstBound, nSecondBound);
+        std::swap(nFirstDiff, nSecondDiff);
+    }
+
+    index_type nNearestIndex = aFirstNearest.first;
+    long nNearestPosition = aFirstNearest.second;
+    SAL_INFO("sc.lok.header", "BoundsProvider: nearest to first bound:  nNearestIndex: "
+            << nNearestIndex << ", nNearestPosition: " << nNearestPosition);
+
+    GetIndexAndPos(nNearestIndex, nNearestPosition, nFirstBound,
+                   nFirstIndex, nFirstPositionPx, !bReverse, nFirstDiff);
+    SAL_INFO("sc.lok.header", "BoundsProvider: nFirstIndex: " << nFirstIndex
+            << ", nFirstPositionPx: " << nFirstPositionPx);
+
+    if (std::abs(nSecondDiff) < std::abs(nSecondBound - nFirstPositionPx))
+    {
+        nNearestIndex = aSecondNearest.first;
+        nNearestPosition = aSecondNearest.second;
+    }
+    else
+    {
+        nNearestPosition = nFirstPositionPx;
+        nNearestIndex = nFirstIndex;
+        nSecondDiff = !bReverse ? -1 : 1;
+    }
+    SAL_INFO("sc.lok.header", "BoundsProvider: nearest to second bound: nNearestIndex: "
+            << nNearestIndex << ", nNearestPosition: " << nNearestPosition
+            << ", diff: " << nSecondDiff);
+
+    GetIndexAndPos(nNearestIndex, nNearestPosition, nSecondBound,
+                   nSecondIndex, nSecondPositionPx, bReverse, nSecondDiff);
+    SAL_INFO("sc.lok.header", "BoundsProvider: nSecondIndex: " << nSecondIndex
+            << ", nSecondPositionPx: " << nSecondPositionPx);
+
+    if (bReverse)
+    {
+        std::swap(nFirstIndex, nSecondIndex);
+        std::swap(nFirstPositionPx, nSecondPositionPx);
+    }
+}
+
+void ScBoundsProvider::EnlargeStartBy(long nOffset)
+{
+    const index_type nNewFirstIndex =
+            std::max(static_cast<index_type>(-1),
+                     static_cast<index_type>(nFirstIndex - nOffset));
+    for (index_type nIndex = nFirstIndex; nIndex > nNewFirstIndex; --nIndex)
+    {
+        const long nSizePx = GetSize(nIndex);
+        nFirstPositionPx -= nSizePx;
+    }
+    nFirstIndex = nNewFirstIndex;
+    SAL_INFO("sc.lok.header", "BoundsProvider: added offset: nFirstIndex: " << nFirstIndex
+            << ", nFirstPositionPx: " << nFirstPositionPx);
+}
+
+void ScBoundsProvider::EnlargeEndBy(long nOffset)
+{
+    const index_type nNewSecondIndex = std::min(MAX_INDEX, static_cast<index_type>(nSecondIndex + nOffset));
+    for (index_type nIndex = nSecondIndex + 1; nIndex <= nNewSecondIndex; ++nIndex)
+    {
+        const long nSizePx = GetSize(nIndex);
+        nSecondPositionPx += nSizePx;
+    }
+    nSecondIndex = nNewSecondIndex;
+    SAL_INFO("sc.lok.header", "BoundsProvider: added offset: nSecondIndex: " << nSecondIndex
+            << ", nSecondPositionPx: " << nSecondPositionPx);
+}
+
+void ScBoundsProvider::GeIndexBackwards(
+            index_type nNearestIndex, long nNearestPosition,
+            long nBound, index_type& nFoundIndex, long& nPosition, bool bTowards)
+{
+    nFoundIndex = -1;
+    for (index_type nIndex = nNearestIndex; nIndex >= 0; --nIndex)
+    {
+        if (nBound >= nNearestPosition)
+        {
+            nFoundIndex = nIndex; // last index whose nPosition is less than nBound
+            nPosition = nNearestPosition;
+            break;
+        }
+
+        const long nSizePx = GetSize(nIndex);
+        nNearestPosition -= nSizePx;
+    }
+    if (!bTowards && nFoundIndex != -1)
+    {
+        nFoundIndex += 1;
+        nPosition += GetSize(nFoundIndex);
+    }
+}
+
+void ScBoundsProvider::GetIndexTowards(
+            index_type nNearestIndex, long nNearestPosition,
+            long nBound, index_type& nFoundIndex, long& nPosition, bool bTowards)
+{
+    nFoundIndex = -2;
+    for (index_type nIndex = nNearestIndex + 1; nIndex <= MAX_INDEX; ++nIndex)
+    {
+        const long nSizePx = GetSize(nIndex);
+        nNearestPosition += nSizePx;
+
+        if (nNearestPosition > nBound)
+        {
+            nFoundIndex = nIndex; // first index whose nPosition is greater than nBound
+            nPosition = nNearestPosition;
+            break;
+        }
+    }
+    if (nFoundIndex == -2)
+    {
+        nFoundIndex = MAX_INDEX;
+        nPosition = nNearestPosition;
+    }
+    else if (bTowards)
+    {
+        nPosition -= GetSize(nFoundIndex);
+        nFoundIndex -= 1;
+    }
+}
+
 ScViewDataTable::ScViewDataTable() :
                 eZoomType( SvxZoomType::PERCENT ),
                 aZoomX( 1,1 ),

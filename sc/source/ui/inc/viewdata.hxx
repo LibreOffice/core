@@ -148,6 +148,58 @@ public:
     long getPosition(index_type nIndex) const;
 };
 
+class ScBoundsProvider
+{
+    typedef ScPositionHelper::value_type value_type;
+    typedef SCCOLROW index_type;
+
+    ScDocument* pDoc;
+    const SCTAB nTab;
+    const bool bColumnHeader;
+    const index_type MAX_INDEX;
+
+    index_type nFirstIndex;
+    index_type nSecondIndex;
+    long nFirstPositionPx;
+    long nSecondPositionPx;
+
+public:
+    ScBoundsProvider(ScDocument* pD, SCTAB nT, bool bColumnHeader);
+
+    void GetStartIndexAndPosition(SCCOL& nIndex, long& nPosition) const;
+    void GetEndIndexAndPosition(SCCOL& nIndex, long& nPosition) const;
+    void GetStartIndexAndPosition(SCROW& nIndex, long& nPosition) const;
+    void GetEndIndexAndPosition(SCROW& nIndex, long& nPosition) const;
+
+    void Compute(value_type aFirstNearest, value_type aSecondNearest,
+                 long nFirstBound, long nSecondBound);
+
+    void EnlargeStartBy(long nOffset);
+
+    void EnlargeEndBy(long nOffset);
+
+    void EnlargeBy(long nOffset)
+    {
+        EnlargeStartBy(nOffset);
+        EnlargeEndBy(nOffset);
+    }
+
+private:
+    long GetSize(index_type nIndex) const;
+
+    void GetIndexAndPos(index_type nNearestIndex, long nNearestPosition,
+                        long nBound, index_type& nFoundIndex, long& nPosition,
+                        bool bTowards, long nDiff);
+
+    void GeIndexBackwards(index_type nNearestIndex, long nNearestPosition,
+                          long nBound, index_type& nFoundIndex, long& nPosition,
+                          bool bTowards);
+
+    void GetIndexTowards(index_type nNearestIndex, long nNearestPosition,
+                         long nBound, index_type& nFoundIndex, long& nPosition,
+                         bool bTowards);
+};
+
 class ScViewDataTable                           // per-sheet data
 {
 friend class ScViewData;
