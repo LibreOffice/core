@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.1 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.4"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -78,9 +78,14 @@
             <property name="column_spacing">12</property>
             <child>
               <object class="svxlo-ClassificationEditView" id="classificationEditWindow">
+                <property name="width_request">380</property>
+                <property name="height_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">start</property>
+                <property name="margin_left">1</property>
                 <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -104,7 +109,7 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">12</property>
+                <property name="row_spacing">8</property>
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel">
@@ -123,7 +128,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="classificationdialog|label-InternationalClassification">International:</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">2.2351741291171123e-10</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -182,34 +187,6 @@
                     <property name="spacing">6</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkButton" id="signButton">
-                        <property name="label" translatable="yes" context="classificationdialog|signButton">Sign Paragraph</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">end</property>
-                    <property name="vexpand">True</property>
-                    <property name="spacing">6</property>
-                    <property name="homogeneous">True</property>
-                    <child>
                       <object class="GtkToolbar" id="toolbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -237,7 +214,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
+                    <property name="top_attach">4</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -264,6 +241,33 @@
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">end</property>
+                    <property name="vexpand">True</property>
+                    <property name="spacing">6</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkButton" id="signButton">
+                        <property name="label" translatable="yes" context="classificationdialog|signButton">Sign Paragraph</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -280,7 +284,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column_spacing">10</property>
+                    <property name="column_homogeneous">True</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -289,9 +294,8 @@
                         <property name="xalign">0</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
+                        <property name="left_attach">3</property>
                         <property name="top_attach">0</property>
-                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -302,7 +306,7 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">2</property>
+                        <property name="width">4</property>
                       </packing>
                     </child>
                     <child>
@@ -311,11 +315,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="halign">center</property>
+                        <property name="halign">start</property>
                         <property name="valign">center</property>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
+                        <property name="left_attach">4</property>
                         <property name="top_attach">2</property>
                       </packing>
                     </child>
@@ -323,12 +327,13 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="classificationdialog|label-PartNumber">Part:</property>
+                        <property name="label" translatable="yes" context="classificationdialog|label-ListIP">IP:</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
+                        <property name="width">3</property>
                       </packing>
                     </child>
                     <child>
@@ -342,7 +347,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
+                        <property name="left_attach">3</property>
                         <property name="top_attach">1</property>
                       </packing>
                     </child>
@@ -350,6 +355,7 @@
                       <object class="GtkTreeView" id="intellectualPropertyPartLB">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_left">1</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <child internal-child="selection">
@@ -359,7 +365,11 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
+                        <property name="width">3</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
@@ -381,19 +391,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>
@@ -409,8 +407,5 @@
       <action-widget response="0">cancel</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
 </interface>
