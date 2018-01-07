@@ -808,29 +808,25 @@ void DocxExport::WriteHeaderFooter( const SwFormat* pFormat, bool bHeader, const
     m_pVMLExport->SetFS( pFS );
     m_pSdrExport->setSerializer(pFS);
     SetFS( pFS );
-    bool bStartedParaSdt = m_pAttrOutput->IsStartedParaSdt();
-    m_pAttrOutput->SetStartedParaSdt(false);
-
-    DocxTableExportContext aTableExportContext;
-    m_pAttrOutput->pushToTableExportContext(aTableExportContext);
-    //When the stream changes the cache which is maintained for the graphics in case of alternate content is not cleared.
-    //So clearing the alternate content graphic cache.
-    m_pAttrOutput->PushRelIdCache();
-    // do the work
-    if( pFormat == nullptr )
-        AttrOutput().EmptyParagraph();
-    else
-        WriteHeaderFooterText( *pFormat, bHeader );
-    m_pAttrOutput->PopRelIdCache();
-    m_pAttrOutput->popFromTableExportContext(aTableExportContext);
-    m_pAttrOutput->EndParaSdtBlock();
+    {
+        DocxTableExportContext aTableExportContext(*m_pAttrOutput);
+        //When the stream changes the cache which is maintained for the graphics in case of alternate content is not cleared.
+        //So clearing the alternate content graphic cache.
+        m_pAttrOutput->PushRelIdCache();
+        // do the work
+        if (pFormat == nullptr)
+            AttrOutput().EmptyParagraph();
+        else
+            WriteHeaderFooterText(*pFormat, bHeader);
+        m_pAttrOutput->PopRelIdCache();
+        m_pAttrOutput->EndParaSdtBlock();
+    }
 
     // switch the serializer back
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
     m_pVMLExport->SetFS( m_pDocumentFS );
     m_pSdrExport->setSerializer(m_pDocumentFS);
     SetFS( m_pDocumentFS );
-    m_pAttrOutput->SetStartedParaSdt(bStartedParaSdt);
 
     // close the tag
     sal_Int32 nReference;
