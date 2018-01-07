@@ -288,9 +288,13 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
             enumXFAlignType eAlignType = enumXFAlignStart;
             if(rFootnoteSep.GetIndent() > 0)
             {
+                const double fMarginWidth = GetMarginWidth();
+                if (fMarginWidth == 0.0)
+                    throw o3tl::divide_by_zero();
+
                 //SODC don't support indent
-                sal_uInt32 nIndentPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetIndent())/GetMarginWidth());
-                if(nIndentPercent + nLengthPercent >= 100)
+                sal_uInt32 nIndentPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetIndent()) / fMarginWidth);
+                if (nIndentPercent + nLengthPercent >= 100)
                     eAlignType = enumXFAlignEnd;
             }
             if(aColor.IsValidColor())
