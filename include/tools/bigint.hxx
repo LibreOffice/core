@@ -147,8 +147,8 @@ inline BigInt::operator sal_uInt16() const
 
 inline BigInt::operator sal_Int32() const
 {
-    if ( !bIsBig && nVal >= SAL_MIN_INT32 && nVal <= SAL_MAX_INT32 )
-        return (sal_Int32)nVal;
+    if (!bIsBig)
+        return nVal;
     assert(false && "out of range");
     return 0;
 }
@@ -165,8 +165,8 @@ inline BigInt::operator sal_uInt32() const
 inline BigInt::operator long() const
 {
     // Clamp to int32 since long is int32 on Windows.
-    if ( !bIsBig && nVal >= SAL_MIN_INT32 && nVal <= SAL_MAX_INT32 )
-        return (long)nVal;
+    if (!bIsBig)
+        return nVal;
     assert(false && "out of range");
     return 0;
 }
