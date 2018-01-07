@@ -11,8 +11,10 @@ IOSOBJ = $(WORKDIR)/CObject/ios/Kit.o
 
 ifeq ($(ENABLE_DEBUG),TRUE)
 IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.dylib
+IOSKIT2 = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.a
 else
-IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME).a
+IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME).dylib
+IOSKIT2 = $(SRCDIR)/ios/generated/libKit_$(CPUNAME).a
 endif
 
 
@@ -29,9 +31,15 @@ $(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT)
 FORCE:
 
 
-$(IOSKIT): $(IOSOBJ)
-	$(SRCDIR)/bin/lo-all-static-libs > $(SRCDIR)/ios/generated/lib.list
-ifeq ($(ENABLE_DEBUG),TRUE)
+$(IOSKIT):
+	$(IOSLD) -r -ios_version_min 11.2 \
+	    -syslibroot $(MACOSX_SDK_PATH) \
+	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
+	    -o $(IOSOBJ) \
+	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
+	    `$(SRCDIR)/bin/lo-all-static-libs`
+	$(AR) -r $(IOSKIT2) $(IOSOBJ)
+
 	$(IOSLD) -dylib -ios_version_min $(IOS_DEPLOYMENT_VERSION) \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
@@ -51,21 +59,12 @@ ifeq ($(ENABLE_DEBUG),TRUE)
 	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
 	    `$(SRCDIR)/bin/lo-all-static-libs` \
 	    -o $(IOSKIT)
-else
-	$(IOSLD) -r -ios_version_min 11.2 \
-	    -syslibroot $(MACOSX_SDK_PATH) \
-	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
-	    -o $(IOSOBJ) \
-	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
-	    `$(SRCDIR)/bin/lo-all-static-libs`
-	$(AR) -r $(IOSKIT) $(IOSOBJ)
-endif
 
 
 
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/iOS_prelink):
-	rm $(IOSKIT)
+	rm -f $(IOSKIT) $(IOSKIT2)
 
 
 
