@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#  -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -10,7 +10,7 @@ IOSLD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoo
 IOSOBJ = $(WORKDIR)/CObject/ios/Kit.o
 
 ifeq ($(ENABLE_DEBUG),TRUE)
-IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.a
+IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.dylib
 else
 IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME).a
 endif
@@ -28,7 +28,30 @@ $(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT)
 .PHONY: FORCE
 FORCE:
 
-$(IOSKIT): $(call gb_StaticLibrary_get_target,iOS_kitBridge) FORCE
+
+$(IOSKIT): $(IOSOBJ)
+	$(SRCDIR)/bin/lo-all-static-libs > $(SRCDIR)/ios/generated/lib.list
+ifeq ($(ENABLE_DEBUG),TRUE)
+	$(IOSLD) -dylib -ios_version_min $(IOS_DEPLOYMENT_VERSION) \
+	    -syslibroot $(MACOSX_SDK_PATH) \
+	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
+	    -framework CoreFoundation \
+	    -framework CoreGraphics \
+	    -framework CoreText \
+	    -lc++ \
+	    -lobjc \
+	    -lz \
+	    -liconv \
+	    -lpthread \
+	    -objc_abi_version 2 \
+	    -rpath  @executable_path/Frameworks \
+	    -rpath  @loader_path/Frameworks \
+	    -export_dynamic \
+	    -no_deduplicate \
+	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
+	    `$(SRCDIR)/bin/lo-all-static-libs` \
+	    -o $(IOSKIT)
+else
 	$(IOSLD) -r -ios_version_min 11.2 \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
@@ -36,6 +59,7 @@ $(IOSKIT): $(call gb_StaticLibrary_get_target,iOS_kitBridge) FORCE
 	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
 	    `$(SRCDIR)/bin/lo-all-static-libs`
 	$(AR) -r $(IOSKIT) $(IOSOBJ)
+endif
 
 
 
