@@ -2592,11 +2592,11 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
                 bool bHori = nWhichLine == SvxBoxItemLine::TOP ||
                              nWhichLine == SvxBoxItemLine::BOTTOM;
                 // One Pixel becomes a hairline (is prettier)
-                long nWidthL = (long)pExpr->GetNumber();
-                if( nWidthL > 1 )
+                double fWidth = pExpr->GetNumber();
+                if (fWidth > 1.0 && fWidth < SAL_MAX_INT32/2.0)
                 {
-                    long nPWidth = bHori ? 0 : nWidthL;
-                    long nPHeight = bHori ? nWidthL : 0;
+                    long nPWidth = bHori ? 0 : fWidth;
+                    long nPHeight = bHori ? fWidth : 0;
                     SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
                     nWidth = (sal_uInt16)(bHori ? nPHeight : nPWidth);
                 }
