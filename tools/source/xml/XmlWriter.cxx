@@ -113,6 +113,12 @@ void XmlWriter::content(const OUString& sValue)
     content(OUStringToOString(sValue, RTL_TEXTENCODING_UTF8));
 }
 
+void XmlWriter::element(const OString& sName)
+{
+    startElement(sName);
+    endElement();
+}
+
 } // end tools namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

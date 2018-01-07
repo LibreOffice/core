@@ -12,18 +12,17 @@
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
-#include <test/xmlwriter.hxx>
-
 #include <libxml/tree.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-
 #include <vector>
+
+namespace tools { class XmlWriter; }
 
 class OOO_DLLPUBLIC_TEST Primitive2dXmlDump final
 {
 private:
     std::vector<bool> maFilter;
-    void decomposeAndWrite(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, XmlWriter& rWriter);
+    void decomposeAndWrite(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, tools::XmlWriter& rWriter);
 
 public:
     Primitive2dXmlDump();

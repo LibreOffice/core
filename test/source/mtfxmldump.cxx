@@ -9,7 +9,7 @@
 
 #include <test/mtfxmldump.hxx>
 #include <test/xmltesttools.hxx>
-#include <test/xmlwriter.hxx>
+#include <tools/XmlWriter.hxx>
 
 #include <vcl/metaact.hxx>
 #include <rtl/string.hxx>
@@ -350,31 +350,31 @@ OUString hex32(sal_uInt32 nNumber)
     return OUString::createFromAscii(ss.str().c_str());
 }
 
-void writePoint(XmlWriter& rWriter, Point const& rPoint)
+void writePoint(tools::XmlWriter& rWriter, Point const& rPoint)
 {
     rWriter.attribute("x", rPoint.X());
     rWriter.attribute("y", rPoint.Y());
 }
 
-void writeStartPoint(XmlWriter& rWriter, Point const& rPoint)
+void writeStartPoint(tools::XmlWriter& rWriter, Point const& rPoint)
 {
     rWriter.attribute("startx", rPoint.X());
     rWriter.attribute("starty", rPoint.Y());
 }
 
-void writeEndPoint(XmlWriter& rWriter, Point const& rPoint)
+void writeEndPoint(tools::XmlWriter& rWriter, Point const& rPoint)
 {
     rWriter.attribute("endx", rPoint.X());
     rWriter.attribute("endy", rPoint.Y());
 }
 
-void writeSize(XmlWriter& rWriter, Size const& rSize)
+void writeSize(tools::XmlWriter& rWriter, Size const& rSize)
 {
     rWriter.attribute("width", rSize.Width());
     rWriter.attribute("height", rSize.Height());
 }
 
-void writeRectangle(XmlWriter& rWriter, tools::Rectangle const& rRectangle)
+void writeRectangle(tools::XmlWriter& rWriter, tools::Rectangle const& rRectangle)
 {
     rWriter.attribute("left", rRectangle.Left());
     rWriter.attribute("top", rRectangle.Top());
@@ -382,7 +382,7 @@ void writeRectangle(XmlWriter& rWriter, tools::Rectangle const& rRectangle)
     rWriter.attribute("bottom", rRectangle.Bottom());
 }
 
-void writeLineInfo(XmlWriter& rWriter, LineInfo const& rLineInfo)
+void writeLineInfo(tools::XmlWriter& rWriter, LineInfo const& rLineInfo)
 {
     rWriter.attribute("style", convertLineStyleToString(rLineInfo.GetStyle()));
     rWriter.attribute("width", rLineInfo.GetWidth());
@@ -424,7 +424,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(const GDIMetaFile& rMetaFile, const OUSt
     else
         pStream.reset(new SvFileStream(rTempStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC));
 
-    XmlWriter aWriter(pStream.get());
+    tools::XmlWriter aWriter(pStream.get());
     aWriter.startDocument();
     aWriter.startElement("metafile");
 
@@ -440,7 +440,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(const GDIMetaFile& rMetaFile, const OUSt
     return pDoc;
 }
 
-void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
+void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter)
 {
     for(size_t nAction = 0; nAction < rMetaFile.GetActionSize(); ++nAction)
     {

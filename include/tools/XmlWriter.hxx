@@ -49,6 +49,8 @@ public:
 
     void content(const OString& sValue);
     void content(const OUString& sValue);
+
+    void element(const OString& sName);
 };
 
 } // end tools namespace
