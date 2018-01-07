@@ -887,6 +887,8 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
         if (bCoord32) nOrderLen-=8; else nOrderLen-=4;
     }
     else aP0=aAttr.aCurPos;
+    if (nOrderLen > pOS2MET->remainingSize())
+        throw css::uno::Exception("attempt to read past end of input", nullptr);
     nPolySize=nOrderLen/2;
     if (nPolySize==0) return;
     tools::Polygon aPolygon(nPolySize);
