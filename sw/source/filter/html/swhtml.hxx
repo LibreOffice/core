@@ -661,6 +661,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // tags realized via character styles
     void NewCharFormat( HtmlTokenId nToken );
 
+    void DeleteSection(SwStartNode* pSttNd);
+
     // <SDFIELD>
 public:
     static SvxNumType GetNumType( const OUString& rStr, SvxNumType eDfltType );
