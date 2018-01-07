@@ -16,4 +16,7 @@ def type_text(ui_object, text):
 def select_pos(ui_object, pos):
     ui_object.executeAction("SELECT", mkPropertyValues({"POS": pos}))
 
+def select_text(ui_object, from_pos, to):
+    ui_object.executeAction("SELECT", mkPropertyValues({"FROM": from_pos, "TO": to}))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

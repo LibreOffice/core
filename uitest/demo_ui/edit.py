@@ -8,7 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import type_text, get_state_as_dict
+from uitest.uihelper.common import type_text, get_state_as_dict, select_text
 
 import time
 
@@ -44,7 +44,7 @@ class EditTest(UITestCase):
         type_text(xEdit, "otherChars")
         self.assertEqual("siotherCharsgeName", get_state_as_dict(xEdit)["Text"])
 
-        xEdit.executeAction("SELECT", mkPropertyValues({"FROM": "2", "TO": "12"}))
+        select_text(xEdit, from_pos="2", to="12")
         self.assertEqual("otherChars", get_state_as_dict(xEdit)["SelectedText"])
 
         xAddBtn = xAddNameDlg.getChild("cancel")
