@@ -177,8 +177,8 @@ void LwpCellLayout::ApplyBorders(XFCellStyle *pCellStyle)
     LwpCellBorderType eType = GetCellBorderType(crowid, ccolid, GetTableLayout());
 
     // get left cell and judge if neighbour border is different
-    XFBorders * pBorders = GetXFBorders();
-    if(!pBorders)
+    std::unique_ptr<XFBorders> xBorders(GetXFBorders());
+    if (!xBorders)
     {
         return;
     }
@@ -186,21 +186,21 @@ void LwpCellLayout::ApplyBorders(XFCellStyle *pCellStyle)
     switch (eType)
     {
     case enumNoBottomBorder:
-        pBorders->SetWidth(enumXFBorderBottom, 0);
+        xBorders->SetWidth(enumXFBorderBottom, 0);
         break;
     case enumNoLeftBorder:
-        pBorders->SetWidth(enumXFBorderLeft, 0);
+        xBorders->SetWidth(enumXFBorderLeft, 0);
         break;
     case enumNoLeftNoBottomBorder:
-        pBorders->SetWidth(enumXFBorderBottom, 0);
-        pBorders->SetWidth(enumXFBorderLeft, 0);
+        xBorders->SetWidth(enumXFBorderBottom, 0);
+        xBorders->SetWidth(enumXFBorderLeft, 0);
         break;
     case enumWholeBorder:
         break;
     default:
         assert(false);
     }
-    pCellStyle->SetBorders(pBorders);
+    pCellStyle->SetBorders(xBorders.release());
 }
 /**
  * @short   Apply watermark to cell style
@@ -424,13 +424,13 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
         return enumWholeBorder;
 
     // get left cell and judge if neighbour border is different
-    XFBorders * pBorders = GetXFBorders();
-    if(!pBorders)
+    std::unique_ptr<XFBorders> xBorders(GetXFBorders());
+    if (!xBorders)
     {
         return enumWholeBorder;
     }
-    XFBorder& rLeftBorder = pBorders->GetLeft();
-    XFBorder& rBottomBorder = pBorders->GetBottom();
+    XFBorder& rLeftBorder = xBorders->GetLeft();
+    XFBorder& rBottomBorder = xBorders->GetBottom();
     bool bNoLeftBorder = false;
     bool bNoBottomBorder = false;
 
@@ -471,7 +471,7 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
         }
     }
 
-    delete pBorders;
+    xBorders.reset();
 
     if (bNoBottomBorder)
     {
@@ -517,8 +517,8 @@ void LwpCellLayout::RegisterDefaultCell()
         ApplyFmtStyle(xCellStyle.get());
         xCellStyle->SetAlignType(enumXFAlignNone, GetVerticalAlignmentType());
 
-        XFBorders * pBorders = GetXFBorders();
-        if (pBorders)
+        std::unique_ptr<XFBorders> xBorders(GetXFBorders());
+        if (xBorders)
         {
             switch(eLoop)
             {
@@ -527,15 +527,15 @@ void LwpCellLayout::RegisterDefaultCell()
                 //| |
 
                 // remove bottom line
-                pBorders->SetWidth(enumXFBorderBottom, 0);
+                xBorders->SetWidth(enumXFBorderBottom, 0);
                 break;
             case enumNoLeftNoBottomBorder:
 
                 //  |
 
                 // remove left and bottom
-                pBorders->SetWidth(enumXFBorderLeft, 0);
-                pBorders->SetWidth(enumXFBorderBottom, 0);
+                xBorders->SetWidth(enumXFBorderLeft, 0);
+                xBorders->SetWidth(enumXFBorderBottom, 0);
                 break;
             case enumWholeBorder:
 
@@ -548,12 +548,12 @@ void LwpCellLayout::RegisterDefaultCell()
                 //| |
 
                 // remove left line
-                pBorders->SetWidth(enumXFBorderLeft, 0);
+                xBorders->SetWidth(enumXFBorderLeft, 0);
                 break;
             default:
                 assert(false);
             }
-            xCellStyle->SetBorders(pBorders);
+            xCellStyle->SetBorders(xBorders.release());
         }
         m_CellStyleNames[eLoop] = pXFStyleManager->AddStyle(xCellStyle.release()).m_pStyle->GetStyleName();
     }
@@ -721,13 +721,13 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
     sal_uInt16 nRowSpan = m_nRealrowspan;
 
     // get left cell and judge if neighbour border is different
-    XFBorders * pBorders = GetXFBorders();
-    if(!pBorders)
+    std::unique_ptr<XFBorders> xBorders(GetXFBorders());
+    if( !xBorders)
     {
         return enumWholeBorder;
     }
-    XFBorder& rLeftBorder = pBorders->GetLeft();
-    XFBorder& rBottomBorder = pBorders->GetBottom();
+    XFBorder& rLeftBorder = xBorders->GetLeft();
+    XFBorder& rBottomBorder = xBorders->GetBottom();
     bool bNoLeftBorder = true;
     bool bNoBottomBorder = true;
 
@@ -788,7 +788,8 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
             }
         }
     }
-    delete pBorders;
+
+    xBorders.reset();
 
     if (bNoBottomBorder)
     {
