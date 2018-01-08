@@ -20,6 +20,11 @@
             android:title="File explorer layout"
             android:key="EXPLORER_VIEW_TYPE"
             android:summary="View files as a grid or in a list." />
+        <CheckBoxPreference
+            android:title="@string/pref_show_hidden_files"
+            android:key="ENABLE_SHOW_HIDDEN_FILES"
+            android:summary="@string/pref_show_hidden_files_summary"
+            android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_general"
