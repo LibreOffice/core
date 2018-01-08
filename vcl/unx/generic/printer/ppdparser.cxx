@@ -1979,7 +1979,7 @@ int PPDContext::getRenderResolution() const
         else
             m_pParser->getDefaultResolution( nDPIx, nDPIy );
 
-        nDPI = (nDPIx > nDPIy) ? nDPIx : nDPIy;
+        nDPI = std::max(nDPIx, nDPIy);
     }
     return  nDPI;
 }

@@ -973,7 +973,7 @@ void ToolBox::ImplLineSizing( const Point& rPos, tools::Rectangle& rRect, sal_uI
     }
 
     Size    aWinSize = GetSizePixel();
-    ImplToolItems::size_type nMaxLines = (mnLines > mnCurLines) ? mnLines : mnCurLines;
+    ImplToolItems::size_type nMaxLines = std::max(mnLines, mnCurLines);
     if ( nMaxLines > TB_MAXLINES )
         nMaxLines = TB_MAXLINES;
     if ( bHorz )
@@ -1881,7 +1881,7 @@ Size ToolBox::ImplGetOptimalFloatingSize()
 
     // try to preserve current width
 
-    long nLineHeight = ( mnWinHeight > mnMaxItemHeight ) ? mnWinHeight : mnMaxItemHeight;
+    long nLineHeight = std::max( mnWinHeight, mnMaxItemHeight );
     int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder;
     int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder;
     Size aSz( aCurrentSize );

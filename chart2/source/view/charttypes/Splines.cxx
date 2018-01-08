@@ -420,7 +420,7 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
         dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
         dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
         // scaling to avoid underflow or overflow
-        fDiffMax = (fabs(dx)>fabs(dy)) ? fabs(dx) : fabs(dy);
+        fDiffMax = std::max(fabs(dx), fabs(dy));
         if (fDiffMax == 0.0)
         {
             bIsSuccessful = false;
@@ -446,7 +446,7 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
             {
                 dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
                 dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
-                fDiffMax = (fabs(dx)>fabs(dy)) ? fabs(dx) : fabs(dy);
+                fDiffMax = std::max(fabs(dx), fabs(dy));
                 // same as above, so should not be zero
                 dx /= fDiffMax;
                 dy /= fDiffMax;

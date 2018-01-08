@@ -57,7 +57,7 @@ Point GetAnglePnt(const tools::Rectangle& rR, long nAngle)
     Point aCenter(rR.Center());
     long nWdt=rR.Right()-rR.Left();
     long nHgt=rR.Bottom()-rR.Top();
-    long nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
+    long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
     double a;
     a=nAngle*nPi180;
     Point aRetval(svx::Round(cos(a)*nMaxRad),-svx::Round(sin(a)*nMaxRad));
@@ -863,7 +863,7 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         Point aCenter(maRect.Center());
         long nWdt=maRect.GetWidth()-1;
         long nHgt=maRect.GetHeight()-1;
-        long nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
+        long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
         double a;
         // starting point
         a=nStartAngle*nPi180;

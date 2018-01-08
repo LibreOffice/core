@@ -2732,7 +2732,7 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo )
     }
     // finally add remaining days in this month
     nDiff += aTo.nDay - aFrom.nDay;
-    return nDiff > 0 ? nDiff : 0;
+    return std::max<sal_Int32>(nDiff, 0);
 }
 
 bool ScaDate::operator<( const ScaDate& rCmp ) const

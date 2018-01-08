@@ -595,14 +595,14 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
         abs1 = (a < 0) ? -a : a;
         abs2 = (b < 0) ? -b : b;
-        m    = (abs1 > abs2) ? abs1 : abs2;
+        m    = std::max(abs1, abs2);
         abs3 = abs1 - abs2;
         if (abs3 < 0) abs3 = -abs3;
         if (abs3 <= 33) m *= 2;
 
         abs1 = (c < 0) ? -c : c;
         abs2 = (d < 0) ? -d : d;
-        n    = (abs1 > abs2) ? abs1 : abs2;
+        n    = std::max(abs1, abs2);
         abs3 = abs1 - abs2;
         if (abs3 < 0) abs3 = -abs3;
         if (abs3 <= 33) n *= 2;
