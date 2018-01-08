@@ -276,14 +276,14 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_CHAR_KERNING, true },       // RES_CHRATR_KERNING
     { SID_ATTR_CHAR_LANGUAGE, true },      // RES_CHRATR_LANGUAGE
     { SID_ATTR_CHAR_POSTURE, true },       // RES_CHRATR_POSTURE
-    { SID_ATTR_CHAR_PROPSIZE, true },      // RES_CHRATR_PROPORTIONALFONTSIZE
+    { 0, true },                           // RES_CHRATR_UNUSED1
     { SID_ATTR_CHAR_SHADOWED, true },      // RES_CHRATR_SHADOWED
     { SID_ATTR_CHAR_UNDERLINE, true },     // RES_CHRATR_UNDERLINE
     { SID_ATTR_CHAR_WEIGHT, true },        // RES_CHRATR_WEIGHT
     { SID_ATTR_CHAR_WORDLINEMODE, true },  // RES_CHRATR_WORDLINEMODE
     { SID_ATTR_CHAR_AUTOKERN, true },      // RES_CHRATR_AUTOKERN
     { SID_ATTR_FLASH, true },              // RES_CHRATR_BLINK
-    { 0, true },                           // RES_CHRATR_NOLINEBREAK
+    { 0, true },                           // RES_CHRATR_UNUSED2
     { 0, true },                           // RES_CHRATR_NOHYPHEN
     { SID_ATTR_BRUSH_CHAR, true },         // RES_CHRATR_BACKGROUND
     { SID_ATTR_CHAR_CJK_FONT, true },      // RES_CHRATR_CJK_FONT
@@ -464,7 +464,7 @@ void InitCore()
     aAttrTab[ RES_CHRATR_KERNING- POOLATTR_BEGIN ] =        new SvxKerningItem( 0, RES_CHRATR_KERNING );
     aAttrTab[ RES_CHRATR_LANGUAGE- POOLATTR_BEGIN ] =       new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_LANGUAGE );
     aAttrTab[ RES_CHRATR_POSTURE- POOLATTR_BEGIN ] =        new SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
-    aAttrTab[ RES_CHRATR_PROPORTIONALFONTSIZE- POOLATTR_BEGIN ] = new SvxPropSizeItem( 100, RES_CHRATR_PROPORTIONALFONTSIZE );
+    aAttrTab[ RES_CHRATR_UNUSED1- POOLATTR_BEGIN ] =        new SfxVoidItem( RES_CHRATR_UNUSED1 );
     aAttrTab[ RES_CHRATR_SHADOWED- POOLATTR_BEGIN ] =       new SvxShadowedItem( false, RES_CHRATR_SHADOWED );
     aAttrTab[ RES_CHRATR_UNDERLINE- POOLATTR_BEGIN ] =      new SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE );
     aAttrTab[ RES_CHRATR_WEIGHT- POOLATTR_BEGIN ] =         new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
@@ -473,7 +473,7 @@ void InitCore()
     aAttrTab[ RES_CHRATR_AUTOKERN- POOLATTR_BEGIN ] =       new SvxAutoKernItem( false, RES_CHRATR_AUTOKERN );
     aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ] =         new SvxBlinkItem( false, RES_CHRATR_BLINK );
     aAttrTab[ RES_CHRATR_NOHYPHEN - POOLATTR_BEGIN ] =      new SvxNoHyphenItem( true, RES_CHRATR_NOHYPHEN );
-    aAttrTab[ RES_CHRATR_NOLINEBREAK- POOLATTR_BEGIN ] =    new SvxNoLinebreakItem( true, RES_CHRATR_NOLINEBREAK );
+    aAttrTab[ RES_CHRATR_UNUSED2- POOLATTR_BEGIN ] =        new SfxVoidItem( RES_CHRATR_UNUSED2 );
     aAttrTab[ RES_CHRATR_BACKGROUND - POOLATTR_BEGIN ] =    new SvxBrushItem( RES_CHRATR_BACKGROUND );
 
     // CJK-Attributes

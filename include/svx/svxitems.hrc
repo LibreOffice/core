@@ -43,7 +43,6 @@ const std::pair<const char*, sal_uInt16> RID_ATTR_NAMES[] =
     { NC_("RID_ATTR_NAMES", "Strikethrough")           ,   SID_ATTR_CHAR_STRIKEOUT },
     { NC_("RID_ATTR_NAMES", "Underline")           ,       SID_ATTR_CHAR_UNDERLINE },
     { NC_("RID_ATTR_NAMES", "Font size")               ,   SID_ATTR_CHAR_FONTHEIGHT },
-    { NC_("RID_ATTR_NAMES", "Rel. Font size")      ,       SID_ATTR_CHAR_PROPSIZE },
     { NC_("RID_ATTR_NAMES", "Font color")          ,       SID_ATTR_CHAR_COLOR },
     { NC_("RID_ATTR_NAMES", "Kerning")     ,               SID_ATTR_CHAR_KERNING },
     { NC_("RID_ATTR_NAMES", "Effects")     ,               SID_ATTR_CHAR_CASEMAP },

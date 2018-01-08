@@ -82,7 +82,7 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
      8, // RES_CHRATR_KERNING,                   //  9
      9, // RES_CHRATR_LANGUAGE,                  // 10
     10, // RES_CHRATR_POSTURE,                   // 11
-     0, // RES_CHRATR_PROPORTIONALFONTSIZE,      // 12
+     0, // RES_CHRATR_UNUSED1,                   // 12
     11, // RES_CHRATR_SHADOWED,                  // 13
     12, // RES_CHRATR_UNDERLINE,                 // 14
     13, // RES_CHRATR_WEIGHT,                    // 15
@@ -90,7 +90,7 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
     15, // RES_CHRATR_AUTOKERN,                  // 17
     16, // RES_CHRATR_BLINK,                     // 18
     17, // RES_CHRATR_NOHYPHEN,                  // 19
-     0, // RES_CHRATR_NOLINEBREAK,               // 20
+     0, // RES_CHRATR_UNUSED2,                   // 20
     18, // RES_CHRATR_BACKGROUND,                // 21
     19, // RES_CHRATR_CJK_FONT,                  // 22
     20, // RES_CHRATR_CJK_FONTSIZE,              // 23
