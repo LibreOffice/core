@@ -3207,7 +3207,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
     /**
      * LOKDocView::ruler:
      * @pDocView: the #LOKDocView on which the signal is emitted
-     * @pPayload: the JSON string contaning the information about ruler properties
+     * @pPayload: the JSON string containing the information about ruler properties
      *
      * The payload format is:
      *
