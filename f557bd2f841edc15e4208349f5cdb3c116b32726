@@ -16,6 +16,24 @@
       "revId": "f557bd2f841edc15e4208349f5cdb3c116b32726",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_c0c6d715",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-01-08T10:36:08Z",
+      "side": 1,
+      "message": "See https://opengrok.libreoffice.org/xref/core/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu#112 lines 112 and 119 for how to add os specific settings.",
+      "parentUuid": "fa31d9ce_804e9fbf",
+      "revId": "f557bd2f841edc15e4208349f5cdb3c116b32726",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
