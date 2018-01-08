@@ -64,6 +64,13 @@ $(IOSKIT): $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o
 	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
 	    `$(SRCDIR)/bin/lo-all-static-libs` \
 	    -o $(IOSKIT)
+ifeq ($(origin IOS_CODEID),undefined)
+	@echo "please define environment variable IOS_CODEID as\n" \
+	      "export IOS_CODEID=<your apple code identifier>"
+	@exit -1
+else
+	codesign -s "$(IOS_CODEID)" $(IOSKIT) 
+endif
 
 
 
