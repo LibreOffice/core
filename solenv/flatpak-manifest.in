@@ -254,10 +254,10 @@
                     "dest-filename": "external/tarballs/libodfgen-0.1.6.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libpagemaker-0.0.3.tar.bz2",
-                    "sha256": "3b5de037692f8e156777a75e162f6b110fa24c01749e4a66d7eb83f364e52a33",
+                    "url": "https://dev-www.libreoffice.org/src/libpagemaker-0.0.4.tar.xz",
+                    "sha256": "66adacd705a7d19895e08eac46d1e851332adf2e736c566bef1164e7a442519d",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libpagemaker-0.0.3.tar.bz2"
+                    "dest-filename": "external/tarballs/libpagemaker-0.0.4.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/librevenge-0.0.4.tar.bz2",
