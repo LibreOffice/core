@@ -79,15 +79,26 @@ diff -ru openssl.orig/util/mk1mf.pl openssl/util/mk1mf.pl
  APP_CFLAG=$app_cflag
  LIB_CFLAG=$lib_cflag
  SHLIB_CFLAG=$shl_cflag
-@@ -488,7 +493,7 @@
+@@ -488,8 +493,8 @@
+ SRC_D=$src_dir
  
  LINK_CMD=$link
- LFLAGS=$lflags
+-LFLAGS=$lflags
++LFLAGS=$lflags /SAFESEH
 -RSC=$rsc
 +RSC=$rsc \$(SOLARINC)
  
  # The output directory for everything interesting
  OUT_D=$out_dir
+@@ -511,7 +516,7 @@
+ MKDIR=$mkdir
+ MKLIB=$bin_dir$mklib
+ MLFLAGS=$mlflags
+-ASM=$bin_dir$asm
++ASM=$bin_dir$asm /safeseh
+ 
+ # FIPS validated module and support file locations
+ 
 @@ -669,7 +674,7 @@
  printf OUT <<EOF;
  #ifdef $platform_cpp_symbol
