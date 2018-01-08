@@ -86,6 +86,15 @@
                     android:padding="16dp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:padding="7dp"
+                    android:id="@+id/text_directory_path"
+                    android:background="@color/background_normal"
+                    />
+
 
                 <!--Document browser-->
                 <android.support.v7.widget.RecyclerView
