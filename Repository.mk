@@ -353,7 +353,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		dba \
 		dbase \
 		dbmm \
-		dbaxml) \
+		dbaxml \
+		dbahsql) \
 	dbtools \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \

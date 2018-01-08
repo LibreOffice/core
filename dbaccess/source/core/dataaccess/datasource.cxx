@@ -28,6 +28,8 @@
 #include "databasedocument.hxx"
 #include <OAuthenticationContinuation.hxx>
 
+#include <hsqlimport.hxx>
+
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -61,6 +63,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <osl/process.h>
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>
@@ -595,6 +598,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     }
 
     const char* pExceptionMessageId = RID_STR_COULDNOTCONNECT_UNSPECIFIED;
+    bool bNeedMigration = false;
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);
@@ -617,6 +621,19 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         Reference< XDriver > xDriver;
         try
         {
+            // check if migration is needed
+            OUString sMigrEnvValue;
+            osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
+                    &sMigrEnvValue.pData);
+            if( m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb" &&
+                    !sMigrEnvValue.isEmpty() )
+            {
+                // TODO target could be anything else
+                m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
+                bNeedMigration = true;
+            }
+
+            // choose driver
             Reference< XDriverAccess > xAccessDrivers( xManager, UNO_QUERY );
             if ( xAccessDrivers.is() )
                 xDriver = xAccessDrivers->getDriverByURL( m_pImpl->m_sConnectURL );
@@ -684,6 +701,15 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             replaceFirst("$name$", m_pImpl->m_sConnectURL);
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
+    }
+
+    if( bNeedMigration )
+    {
+        Reference< css::document::XDocumentSubStorageSupplier> xDocSup(
+                m_pImpl->getDocumentSubStorageSupplier() );
+        dbahsql::HsqlImporter importer(xReturn,
+                xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE) );
+        importer.importHsqlDatabase();
     }
 
     return xReturn;
