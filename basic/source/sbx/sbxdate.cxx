@@ -31,6 +31,7 @@
 #include <math.h>
 #include <comphelper/processfactory.hxx>
 #include <memory>
+#include <config_features.h>
 
 
 double ImpGetDate( const SbxValues* p )
@@ -96,6 +97,7 @@ double ImpGetDate( const SbxValues* p )
     case SbxBYREF | SbxSTRING:
     case SbxSTRING:
     case SbxLPSTR:
+#if HAVE_FEATURE_SCRIPTING
         if( !p->pOUString )
         {
             nRes = 0;
@@ -158,6 +160,9 @@ double ImpGetDate( const SbxValues* p )
                 SbxBase::SetError( ERRCODE_BASIC_CONVERSION ); nRes = 0;
             }
         }
+#else
+        nRes = 0;
+#endif
         break;
     case SbxOBJECT:
         pVal = dynamic_cast<SbxValue*>( p->pObj );
@@ -273,6 +278,7 @@ start:
     case SbxSTRING:
     case SbxLPSTR:
         {
+#if HAVE_FEATURE_SCRIPTING
             if( !p->pOUString )
             {
                 p->pOUString = new OUString;
@@ -334,6 +340,7 @@ start:
                                             LANGUAGE_ENGLISH_US,
                                             eLangType );
             pFormatter->GetOutputString( n, nIndex, *p->pOUString, &pColor );
+#endif
             break;
         }
     case SbxOBJECT:

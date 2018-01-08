@@ -29,6 +29,7 @@
 #include <unotools/resmgr.hxx>
 #include <strings.hrc>
 #include <sbxbase.hxx>
+#include <config_features.h>
 
 struct BasicDLL::Impl
 {
@@ -85,6 +86,7 @@ void BasicDLL::BasicBreak()
 {
     BasicDLL* pThis = BASIC_DLL;
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
+#if HAVE_FEATURE_SCRIPTING
     if ( pThis )
     {
         // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
@@ -99,6 +101,7 @@ void BasicDLL::BasicBreak()
             bJustStopping = false;
         }
     }
+#endif
 }
 
 SbxAppData& GetSbxData_Impl()

@@ -97,15 +97,15 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/props \
 	basic/source/runtime/stdobj \
 	basic/source/runtime/stdobj1 \
+	basic/source/runtime/runtime \
+	basic/source/classes/errobject \
 ))
 endif
 
 $(eval $(call gb_Library_add_exception_objects,sb,\
-	basic/source/classes/errobject \
 	basic/source/runtime/basrdll \
 	basic/source/runtime/methods \
 	basic/source/runtime/methods1 \
-	basic/source/runtime/runtime \
 	basic/source/classes/sbintern \
 	basic/source/sbx/sbxarray \
 	basic/source/sbx/sbxbool \

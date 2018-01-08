@@ -629,6 +629,7 @@ const VbaFormatInfo pFormatInfoTable[] =
     { VbaFormatType::Null,        OUStringLiteral(""),            NF_INDEX_TABLE_ENTRIES, nullptr }
 };
 
+#if HAVE_FEATURE_SCRIPTING
 const VbaFormatInfo* getFormatInfo( const OUString& rFmt )
 {
     const VbaFormatInfo* pInfo = pFormatInfoTable;
@@ -640,9 +641,11 @@ const VbaFormatInfo* getFormatInfo( const OUString& rFmt )
     }
     return pInfo;
 }
+#endif
 
 } // namespace
 
+#if HAVE_FEATURE_SCRIPTING
 #define VBAFORMAT_GENERALDATE       "General Date"
 #define VBAFORMAT_C                 "c"
 #define VBAFORMAT_N                 "n"
@@ -651,6 +654,7 @@ const VbaFormatInfo* getFormatInfo( const OUString& rFmt )
 #define VBAFORMAT_Y                 "y"
 #define VBAFORMAT_LOWERCASE         "<"
 #define VBAFORMAT_UPPERCASE         ">"
+#endif
 
 void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
 {
@@ -660,6 +664,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
     // pflin, It is better to use SvNumberFormatter to handle the date/time/number format.
     // the SvNumberFormatter output is mostly compatible with
     // VBA output besides the OOo-basic output
+#if HAVE_FEATURE_SCRIPTING
     if( pFmt && !SbxBasicFormater::isBasicFormat( *pFmt ) )
     {
         OUString aStr = GetOUString();
@@ -784,6 +789,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             return;
         }
     }
+#endif
 
     SbxDataType eType = GetType();
     switch( eType )
