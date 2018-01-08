@@ -40,6 +40,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int UPDATE_ZOOM_CONSTRAINTS = 19;
     public static final int UPDATE_CALC_HEADERS = 20;
     public static final int REFRESH = 21;
+    public static final int PAGE_SIZE_CHANGED = 22;
 
     public final int mType;
     public int mPriority = 0;
@@ -57,6 +58,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public RectF mInvalidationRect;
     public SelectionHandle.HandleType mHandleType;
     public String mValue;
+    public int mPageWidth;
+    public int mPageHeight;
 
     public LOEvent(int type) {
         mType = type;
@@ -137,6 +140,12 @@ public class LOEvent implements Comparable<LOEvent> {
         mType = type;
         mHandleType = handleType;
         mDocumentCoordinate = documentCoordinate;
+    }
+
+    public LOEvent(int type, int pageWidth, int pageHeight){
+        mType = type;
+        mPageWidth = pageWidth;
+        mPageHeight = pageHeight;
     }
 
     public String getTypeString() {
