@@ -19,11 +19,11 @@
 
 
 // Force reference to libreofficekit_hook
-extern __attribute__((used)) void *libreofficekit_hook(const char *);
-static __attribute__((used)) void *(*foop)(const char *) = libreofficekit_hook;
+extern __attribute__((used)) void *libreofficekit_hook_2(const char *);
+static __attribute__((used)) void *(*foop)(const char *) = libreofficekit_hook_2;
 
 // pointers to our instance
-LibreOfficeKit* kit;
+static LibreOfficeKit* kit;
 static LibreOfficeKitDocument* document;
 
 
@@ -119,3 +119,8 @@ int BridgeLOkit_LeaveHipernate()
     return 0;
 }
 
+__attribute__((visibility("default")))
+LibreOfficeKit* BridgeLOkit_getLOK()
+{
+    return kit;
+}

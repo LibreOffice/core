@@ -29,6 +29,6 @@ int BridgeLOkit_LeaveHipernate(void);
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-extern LibreOfficeKit* kit;
+LibreOfficeKit* BridgeLOkit_getLOK(void);
 #endif
 
