@@ -57,7 +57,7 @@ ALLTAR : $(DEBFILES)
 %/DEBIAN/control : $$(@:f)
     @$(MKDIRHIER) $(@:d) $*$/etc $*$/usr/share/applnk/Office $*$/usr/lib/menu
     ln -sf /opt/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/4.2//)) $*$/etc$/
-    /bin/sh -c -x "cd $(COMMONMISC)$/$(*:f:s/-/ /:1:s/4.2//) && DESTDIR=$(shell @cd $*; pwd) ICON_PREFIX=$(ICONPREFIX) KDEMAINDIR=/usr GNOMEDIR=/usr create_tree.sh"
+    /bin/sh -c -x "cd $(COMMONMISC)$/$(*:f:s/-/ /:1:s/4.2//) && DESTDIR=$(shell @cd $*; pwd) ICON_PREFIX=$(ICONPREFIX) KDEMAINDIR=/usr GNOMEDIR=/usr ./create_tree.sh"
         @cat openoffice.org-debian-menus | sed -e 's/%PRODUCTNAME/$(PRODUCTNAME.$(*:f:s/-/ /:1:s/4.2//)) $(PRODUCTVERSION.$(*:f:s/-/ /:1:s/4.2//))/' -e 's/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/4.2//))/' -e 's/%ICONPREFIX/$(ICONPREFIX.$(*:f:s/-/ /:1:s/4.2//))/' > $*$/usr/lib/menu/$(*:f:s/_/ /:1:s/4.2//)
     echo "Package: $(*:f:s/_/ /:1:s/4.2//)" > $@
     cat $(@:f) | tr -d "\015" | sed "s/%productname/$(PRODUCTNAME.$(*:f:s/-/ /:1:s/4.2//))/" >> $@

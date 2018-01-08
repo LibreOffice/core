@@ -1118,8 +1118,7 @@ if ($platform =~ m/cygwin|os2/)
      
 # The general environment path.
 if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris/)
-{  $PATH              = $cur_dir.
-                        $ps.'$SOLARENV'.$ds.'$INPATH'.$BIN.
+{  $PATH              = '$SOLARENV'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
    if ($platform =~ m/solaris/) {
@@ -1149,8 +1148,7 @@ elsif ($platform =~ m/cygwin/)
 
    my ( $tmppath );
 
-   $PATH              = $cur_dir.
-                        $ps.CygFormat($SOLARENV).$ds."bin".
+   $PATH              = CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$INPATH.$BIN;
 
    if ( $JAVA_HOME ne "" )
@@ -1283,8 +1281,7 @@ elsif ($platform =~ m/os2/)
 {  # The PATH variable is completely created from scratch. Everything that is not
    # needed is appended to the end.
 
-   $PATH              = $cur_dir.
-                        $ps.'$SOLARENV'.$ds."bin".
+   $PATH              = '$SOLARENV'.$ds."bin".
                         $ps.'$SOLARENV'.$ds.'$INPATH'.$BIN;
 
    if ( $JAVA_HOME ne "" )
@@ -1315,8 +1312,7 @@ elsif ($platform =~ m/os2/)
 }
 
 elsif ($platform =~ m/darwin/)
-{  $PATH              = $cur_dir.
-                        $ps.'$SOLARENV'.$ds.'$INPATH'.$BIN.
+{  $PATH              = '$SOLARENV'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
   # Append old PATH
