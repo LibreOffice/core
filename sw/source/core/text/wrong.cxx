@@ -173,7 +173,7 @@ sal_Int32 SwWrongList::NextWrong( sal_Int32 nChk ) const
         }
     }
     if( nRet > GetBeginInv() && nChk < GetEndInv() )
-        nRet = nChk > GetBeginInv() ? nChk : GetBeginInv();
+        nRet = std::max(nChk, GetBeginInv());
     return nRet;
 }
 

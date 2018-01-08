@@ -2574,7 +2574,7 @@ tools::Rectangle GetWidgetSize(const tools::Rectangle& rControlRegion, GtkWidget
 {
     GtkRequisition aReq;
     gtk_widget_get_preferred_size(widget, nullptr, &aReq);
-    long nHeight = (rControlRegion.GetHeight() > aReq.height) ? rControlRegion.GetHeight() : aReq.height;
+    long nHeight = std::max<long>(rControlRegion.GetHeight(), aReq.height);
     return tools::Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
 }
 

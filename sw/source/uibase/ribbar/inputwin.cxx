@@ -111,7 +111,7 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     Size    aSizeTbx = CalcWindowSizePixel();
     Size    aEditSize = aEdit->GetSizePixel();
     tools::Rectangle aItemRect( GetItemRect(FN_FORMULA_CALC) );
-    long nMaxHeight = (aEditSize.Height() > aItemRect.GetHeight()) ? aEditSize.Height() : aItemRect.GetHeight();
+    long nMaxHeight = std::max(aEditSize.Height(), aItemRect.GetHeight());
     if( nMaxHeight+2 > aSizeTbx.Height() )
         aSizeTbx.Height() = nMaxHeight+2;
     Size aSize = GetSizePixel();

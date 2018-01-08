@@ -297,7 +297,7 @@ void SeriesHeader::SetSeriesName( const OUString & rName )
 void SeriesHeader::SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol )
 {
     m_nStartCol = nStartCol;
-    m_nEndCol = (nEndCol > nStartCol) ? nEndCol : nStartCol;
+    m_nEndCol = std::max(nEndCol, nStartCol);
     m_spSeriesName->setStartColumn( nStartCol );
 }
 
