@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_804e9fbf",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-01-08T10:34:06Z",
+      "side": 1,
+      "message": "Hm there is no \"Ctrl\" on Mac. You might want to add another mac specific tooltip then.",
+      "revId": "f557bd2f841edc15e4208349f5cdb3c116b32726",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
