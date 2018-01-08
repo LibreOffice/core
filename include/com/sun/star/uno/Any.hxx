@@ -135,7 +135,7 @@ inline void moveAnyInternals(Any & from, Any & to) {
     if (to.pData == &from.pReserved) {
         to.pData = &to.pReserved;
     }
-    // This leaves to.pData (where "to" is now VOID) dangling to somewhere (cf.
+    // This leaves from.pData (where "from" is now VOID) dangling to somewhere (cf.
     // CONSTRUCT_EMPTY_ANY, cppu/source/uno/prim.hxx), but what's relevant is
     // only that it isn't a nullptr (as e.g. >>= -> uno_type_assignData ->
     // _assignData takes a null pSource to mean "construct a default value").
