@@ -8,6 +8,7 @@ package ClangFormat;
 
 use strict;
 use warnings;
+use version;
 
 our @EXPORT_OK = qw(get_blacklist set_blacklist get_wanted_version get_own_directory get_extension_regex find check_style);
 
@@ -120,7 +121,17 @@ sub is_matching_clang_format_version($$)
         return 0;
     }
 
-    return `'$clang_format' -version` =~ /^clang-format version $version(-\d+)? \(tags/;
+    my $output = qx/$clang_format -version/;
+    $output =~ /clang-format version ([0-9.]*)?[+]* \(tags/;
+    if (defined($1))
+    {
+        if (version->parse($1) >= version->parse($version))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 1;
