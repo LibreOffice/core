@@ -49,8 +49,13 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
     @Override
     public void messageRetrieved(int messageID, String payload) {
         if (!LOKitShell.isEditingEnabled()) {
-            // enable handling of hyperlinks even in the Viewer
-            if (messageID != Document.CALLBACK_INVALIDATE_TILES && messageID != Document.CALLBACK_HYPERLINK_CLICKED)
+            // enable handling of hyperlinks and search result even in the Viewer
+            if (messageID != Document.CALLBACK_INVALIDATE_TILES
+                    && messageID != Document.CALLBACK_HYPERLINK_CLICKED
+                    && messageID != Document.CALLBACK_SEARCH_RESULT_SELECTION
+                    && messageID != Document.CALLBACK_TEXT_SELECTION
+                    && messageID != Document.CALLBACK_TEXT_SELECTION_START
+                    && messageID != Document.CALLBACK_TEXT_SELECTION_END)
                 return;
         }
         switch (messageID) {
