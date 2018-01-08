@@ -136,6 +136,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113399, "tdf113399.doc")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf114703, "tdf114703.docx")
+{
+    uno::Reference<container::XIndexAccess> xRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(
+            getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+    // This was 0, level override "default" replaced the non-default value from
+    // the abstract level.
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(-1000),
+        comphelper::SequenceAsHashMap(xRules->getByIndex(0))["FirstLineIndent"].get<sal_Int32>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
