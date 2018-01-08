@@ -84,7 +84,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             aWinFlags |= Qt::Dialog;
         else if (nStyle & SalFrameStyleFlags::TOOLWINDOW)
             aWinFlags |= Qt::Tool;
-        else if ((nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION))
+        else if (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
             aWinFlags |= Qt::Window | Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus;
         else
             aWinFlags |= Qt::Window;
