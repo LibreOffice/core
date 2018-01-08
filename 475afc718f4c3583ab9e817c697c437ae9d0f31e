@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_dbedec26",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-01-08T14:44:49Z",
+      "side": 1,
+      "message": "is this intentional?",
+      "range": {
+        "startLine": 3939,
+        "startChar": 128,
+        "endLine": 3939,
+        "endChar": 129
+      },
+      "revId": "475afc718f4c3583ab9e817c697c437ae9d0f31e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_fbf2b005",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-01-08T14:44:49Z",
+      "side": 1,
+      "message": "text is identical to the non-mac string",
+      "range": {
+        "startLine": 3940,
+        "startChar": 58,
+        "endLine": 3940,
+        "endChar": 154
+      },
+      "revId": "475afc718f4c3583ab9e817c697c437ae9d0f31e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
