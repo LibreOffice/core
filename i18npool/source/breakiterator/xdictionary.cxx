@@ -350,7 +350,7 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary const & 
             rCache.size = len;
         }
         else
-            rCache.size = len > DEFAULT_SIZE ? len : DEFAULT_SIZE;
+            rCache.size = std::max<sal_Int32>(len, DEFAULT_SIZE);
         rCache.contents = new sal_Unicode[rCache.size + 1];
         rCache.wordboundary = new sal_Int32[rCache.size + 2];
     }

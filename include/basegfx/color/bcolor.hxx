@@ -151,8 +151,8 @@ namespace basegfx
             const double fDistG(getDistanceGreen(rColor));
             const double fDistB(getDistanceBlue(rColor));
 
-            double fRetval(fDistR > fDistG ? fDistR : fDistG);
-            return (fRetval > fDistB ? fRetval : fDistB);
+            double fRetval(std::max(fDistR, fDistG));
+            return std::max(fRetval, fDistB);
         }
 
         // clamp color to [0.0..1.0] values in all three intensity components

@@ -453,7 +453,7 @@ namespace drawinglayer
             // TODO: eKerning
 
             // set FontHeight and init to no FontScaling
-            o_rSize.setY(rFont.GetFontSize().getHeight() > 0 ? rFont.GetFontSize().getHeight() : 0);
+            o_rSize.setY(std::max<long>(rFont.GetFontSize().getHeight(), 0));
             o_rSize.setX(o_rSize.getY());
 
 #ifdef _WIN32

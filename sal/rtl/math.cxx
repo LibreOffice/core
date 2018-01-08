@@ -213,7 +213,7 @@ int getBitsInFracPart(double fAbsValue)
     int nFracSignificant = 53 - nLeastSignificant;
     int nBitsInFracPart = nFracSignificant - nExponent;
 
-    return nBitsInFracPart > 0 ? nBitsInFracPart : 0;
+    return std::max(nBitsInFracPart, 0);
 }
 
 template< typename T >

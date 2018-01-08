@@ -303,7 +303,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 else
                 {
                     const sal_Int32 nLoop = rOption.GetSNumber();
-                    nCount = static_cast<sal_uInt16>(nLoop>0 ? nLoop : 0);
+                    nCount = std::max<sal_Int32>(nLoop, 0);
                 }
                 break;
 

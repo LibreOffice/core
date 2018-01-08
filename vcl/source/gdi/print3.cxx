@@ -414,8 +414,8 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     if( nRows > 1 || nCols > 1 )
     {
         PrinterController::MultiPageSetup aMPS;
-        aMPS.nRows         = nRows > 1 ? nRows : 1;
-        aMPS.nColumns      = nCols > 1 ? nCols : 1;
+        aMPS.nRows         = std::max<sal_Int32>(nRows, 1);
+        aMPS.nColumns      = std::max<sal_Int32>(nCols, 1);
         sal_Int32 nValue = xController->getIntProperty("NUpPageMarginLeft", aMPS.nLeftMargin);
         if( nValue >= 0 )
             aMPS.nLeftMargin = nValue;

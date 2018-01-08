@@ -550,12 +550,12 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                     if ( nBlockStartX <= nCurX + nColSpan - 1 )
                     {
                         SCCOL nCurXOffsetTemp = (nCurX < nCurX + nColSpan - 1) ? nColSpan - 1 : 0;
-                        nCurXOffset = nCurXOffset > nCurXOffsetTemp ? nCurXOffset : nCurXOffsetTemp;
+                        nCurXOffset = std::max(nCurXOffset, nCurXOffsetTemp);
                     }
                     if ( nBlockStartY <= nCurY + nRowSpan - 1 )
                     {
                         SCROW nCurYOffsetTemp = (nCurY < nCurY + nRowSpan - 1) ? nRowSpan - 1 : 0;
-                        nCurYOffset = nCurYOffset > nCurYOffsetTemp ? nCurYOffset : nCurYOffsetTemp;
+                        nCurYOffset = std::max(nCurYOffset, nCurYOffsetTemp);
                     }
                     if ( !( nBlockStartX <= nCurX && nBlockStartY <= nCurY ) &&
                          !( nBlockStartX > nCurX + nColSpan - 1 && nBlockStartY > nCurY + nRowSpan - 1 ) )
