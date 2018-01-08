@@ -27,20 +27,13 @@
 Qt5Data::Qt5Data(SalInstance* pInstance)
     : GenericUnixSalData(SAL_DATA_QT5, pInstance)
 {
-    for (QCursor*& rpCsr : m_aCursors)
-        rpCsr = nullptr;
-
     ImplSVData* pSVData = ImplGetSVData();
 
     // draw toolbars on separate lines
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
 }
 
-Qt5Data::~Qt5Data()
-{
-    for (QCursor*& rpCsr : m_aCursors)
-        delete rpCsr;
-}
+Qt5Data::~Qt5Data() {}
 
 static QCursor* getQCursorFromXBM(const unsigned char* pBitmap, const unsigned char* pMask,
                                   int nWidth, int nHeight, int nXHot, int nYHot)
@@ -184,7 +177,7 @@ QCursor& Qt5Data::getCursor(PointerStyle ePointerStyle)
             SAL_WARN("vcl.qt5", "pointer " << static_cast<int>(ePointerStyle) << "not implemented");
         }
 
-        m_aCursors[ePointerStyle] = pCursor;
+        m_aCursors[ePointerStyle].reset(pCursor);
     }
 
     return *m_aCursors[ePointerStyle];

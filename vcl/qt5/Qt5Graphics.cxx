@@ -44,12 +44,7 @@ Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
     ResetClipRegion();
 }
 
-Qt5Graphics::~Qt5Graphics()
-{
-    // release the text styles
-    for (int i = 0; i < MAX_FALLBACK; ++i)
-        delete m_pTextStyle[i];
-}
+Qt5Graphics::~Qt5Graphics() {}
 
 void Qt5Graphics::ChangeQImage(QImage* pQImage)
 {

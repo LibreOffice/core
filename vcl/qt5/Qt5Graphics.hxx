@@ -49,7 +49,7 @@ class Qt5Graphics : public SalGraphics
 
     PhysicalFontCollection* m_pFontCollection;
     const Qt5FontFace* m_pFontData[MAX_FALLBACK];
-    Qt5Font* m_pTextStyle[MAX_FALLBACK];
+    std::unique_ptr<Qt5Font> m_pTextStyle[MAX_FALLBACK];
     SalColor m_aTextColor;
 
     Qt5Graphics(Qt5Frame* pFrame, QImage* pQImage);

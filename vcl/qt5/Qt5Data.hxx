@@ -23,12 +23,13 @@
 
 #include <o3tl/enumarray.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <memory>
 
 class QCursor;
 
 class Qt5Data : public GenericUnixSalData
 {
-    o3tl::enumarray<PointerStyle, QCursor*> m_aCursors;
+    o3tl::enumarray<PointerStyle, std::unique_ptr<QCursor>> m_aCursors;
 
 public:
     explicit Qt5Data(SalInstance* pInstance);
