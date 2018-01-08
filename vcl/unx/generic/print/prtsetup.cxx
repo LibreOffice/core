@@ -132,8 +132,8 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton, void )
                 orientation::Portrait : orientation::Landscape;
             // assume use of paper size from printer setup if the user
             // got here via File > Printer Settings ...
-            m_aJobData.m_bPapersizeFromSetup =
-                ( m_aJobData.meSetupMode == PrinterSetupMode::DocumentGlobal );
+            if ( m_aJobData.meSetupMode == PrinterSetupMode::DocumentGlobal )
+               m_aJobData.m_bPapersizeFromSetup = true;
         }
         if( m_pDevicePage )
         {
@@ -306,7 +306,9 @@ IMPL_LINK( RTSPaperPage, CheckBoxHdl, CheckBox&, /*cBox*/, void )
 {
     bool bFromSetup = m_pCbFromSetup->IsChecked();
     m_pParent->m_aJobData.m_bPapersizeFromSetup = bFromSetup;
+    m_pPaperText->Enable( bFromSetup );
     m_pPaperBox->Enable( bFromSetup );
+    m_pOrientText->Enable( bFromSetup );
     m_pOrientBox->Enable( bFromSetup );
     m_pParent->SetDataModified( true );
 }
