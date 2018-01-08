@@ -90,12 +90,12 @@ public:
     static sal_Int16 GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
         OUString& rPrefix, OUString& rSuffix );
 
-    css::uno::Sequence<css::beans::PropertyValue> GetProperties();
+    css::uno::Sequence<css::beans::PropertyValue> GetProperties(bool bDefaults);
 
     css::uno::Sequence<css::beans::PropertyValue> GetCharStyleProperties();
 private:
 
-    css::uno::Sequence<css::beans::PropertyValue> GetLevelProperties();
+    css::uno::Sequence<css::beans::PropertyValue> GetLevelProperties(bool bDefaults);
 
     void AddParaProperties(css::uno::Sequence<css::beans::PropertyValue>* pProps);
 };
@@ -153,7 +153,7 @@ public:
 
     const ListLevel::Pointer&  GetCurrentLevel( ) { return m_pCurrentLevel; };
 
-    virtual css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues();
+    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues(bool bDefaults);
 
     void                  SetNumStyleLink(const OUString& sValue) { m_sNumStyleLink = sValue; };
     const OUString&       GetNumStyleLink() { return m_sNumStyleLink; };
@@ -181,7 +181,7 @@ public:
     // Mapping functions
     static OUString GetStyleName( sal_Int32 nId );
 
-    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues() override;
+    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 
     void CreateNumberingRules(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> const& xFactory);
 
