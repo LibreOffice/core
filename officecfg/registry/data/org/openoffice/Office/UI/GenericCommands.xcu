@@ -3936,7 +3936,7 @@
           <value xml:lang="en-US">Clone Formatting</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Clone Formatting (double click for multi-selection)</value>
+          <value xml:lang="en-US">Clone Formatting (double click for multi-selection, press Ctrl to include paragraph formatting')</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
