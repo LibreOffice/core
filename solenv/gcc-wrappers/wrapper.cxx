@@ -127,7 +127,7 @@ string processccargs(vector<string> rawargs) {
                 exit(1);
             }
         }
-        else if(*i == "-g") {
+        else if(*i == "-g" || !(*i).compare(0,5,"-ggdb")) {
             args.append("-Zi");
             args.append(" -FS");
         }
