@@ -322,6 +322,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         VclPtrInstance<Printer> xPrinter( aPrinterName );
         xPrinter->SetJobSetup(i_rInitSetup);
         xController->setPrinter(xPrinter);
+        xController->setPapersizeFromSetup(xPrinter->GetPrinterSettingsPreferred());
     }
 
     // reset last page property
@@ -822,6 +823,7 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         if (bRet)
         {
             bool bInvalidateCache = false;
+            setPapersizeFromSetup(xPrinter->GetPrinterSettingsPreferred());
 
             // was papersize overridden ? if so we need to take action if we're
             // configured to use the driver papersize
@@ -1354,6 +1356,7 @@ bool PrinterController::getReversePrint() const
 void PrinterController::setPapersizeFromSetup( bool i_bPapersizeFromSetup )
 {
     mpImplData->mbPapersizeFromSetup = i_bPapersizeFromSetup;
+    mpImplData->mxPrinter->SetPrinterSettingsPreferred( i_bPapersizeFromSetup );
 }
 
 bool PrinterController::getPapersizeFromSetup() const

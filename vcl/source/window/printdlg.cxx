@@ -674,6 +674,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     maJobPage.mpSetupButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.mpBorderCB->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.mpPapersizeFromSetup->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
+    maOptionsPage.mpPapersizeFromSetup->Check( maPController->getPapersizeFromSetup() );
     maJobPage.mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maOptionsPage.mpCollateSingleJobsBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maNUpPage.mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleRadioHdl ) );
