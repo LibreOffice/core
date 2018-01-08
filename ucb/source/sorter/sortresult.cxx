@@ -877,7 +877,7 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
     Reference < XRow > xRowTwo( xResultTwo, UNO_QUERY );
 
     sal_IntPtr nCompare = 0;
-    sal_IntPtr nColumn = pSortInfo->mnColumn;
+    sal_Int32 nColumn = pSortInfo->mnColumn;
 
     switch ( pSortInfo->mnType )
     {
@@ -1535,7 +1535,7 @@ void SortedResultSet::BuildSortInfo(
     OUString    aPropName;
     SortInfo    *pInfo;
 
-    for ( sal_IntPtr i=xSortInfo.getLength(); i > 0; )
+    for ( sal_Int32 i=xSortInfo.getLength(); i > 0; )
     {
         --i;
         nColumn = pSortInfo[ i ].ColumnIndex;

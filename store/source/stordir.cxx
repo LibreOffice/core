@@ -179,8 +179,8 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
 
                 // Setup FindData.
                 sal_Char *p = xNode->m_aNameBlock.m_pData;
-                sal_Size  n = rtl_str_getLength (p);
-                sal_Size  k = rFindData.m_nLength;
+                sal_Int32 n = rtl_str_getLength (p);
+                sal_Int32 k = rFindData.m_nLength;
 
                 n = convertTextToUnicode (
                     m_hTextCvt, p, n,
@@ -191,7 +191,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
                     memset (&rFindData.m_pszName[n], 0, k);
                 }
 
-                rFindData.m_nLength  = static_cast<sal_Int32>(n);
+                rFindData.m_nLength  = n;
                 rFindData.m_nAttrib |= aPage.attrib();
 
                 // Leave.

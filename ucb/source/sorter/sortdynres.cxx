@@ -380,14 +380,14 @@ void SortedDynamicResultSet::impl_disposing()
 
 void SortedDynamicResultSet::SendNotify()
 {
-    long nCount = maActions.Count();
+    sal_Int32 nCount = maActions.Count();
 
     if ( nCount && mxListener.is() )
     {
         Sequence< ListAction > aActionList( maActions.Count() );
         ListAction *pActionList = aActionList.getArray();
 
-        for ( long i=0; i<nCount; i++ )
+        for ( sal_Int32 i=0; i<nCount; i++ )
         {
             pActionList[ i ] = *(maActions.GetAction( i ));
         }

@@ -195,10 +195,10 @@ void SfxStringListItem::SetStringList( const css::uno::Sequence< OUString >& rLi
 
 void SfxStringListItem::GetStringList( css::uno::Sequence< OUString >& rList ) const
 {
-    long nCount = mpList->size();
+    size_t nCount = mpList->size();
 
     rList.realloc( nCount );
-    for( long i=0; i < nCount; i++ )
+    for( size_t i=0; i < nCount; i++ )
         rList[i] = (*mpList)[i];
 }
 

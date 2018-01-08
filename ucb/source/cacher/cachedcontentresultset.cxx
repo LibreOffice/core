@@ -151,8 +151,8 @@ bool CachedContentResultSet::CCRS_Cache
 {
     if( !m_pResult )
         return false;
-    long nStart = m_pResult->StartIndex;
-    long nEnd = nStart;
+    sal_Int32 nStart = m_pResult->StartIndex;
+    sal_Int32 nEnd = nStart;
     if( m_pResult->Orientation )
         nEnd += m_pResult->Rows.getLength() - 1;
     else
@@ -166,7 +166,7 @@ sal_Int32 CachedContentResultSet::CCRS_Cache
 {
     if( !m_pResult )
         return 0;
-    long nEnd = m_pResult->StartIndex;
+    sal_Int32 nEnd = m_pResult->StartIndex;
     if( m_pResult->Orientation )
         return nEnd += m_pResult->Rows.getLength() - 1;
     else
@@ -192,7 +192,7 @@ bool CachedContentResultSet::CCRS_Cache
     if( !( m_pResult->FetchError & FetchError::EXCEPTION ) )
         return false;
 
-    long nEnd = m_pResult->StartIndex;
+    sal_Int32 nEnd = m_pResult->StartIndex;
     if( m_pResult->Orientation )
         nEnd += m_pResult->Rows.getLength();
 
@@ -209,7 +209,7 @@ Any& CachedContentResultSet::CCRS_Cache
     if( !hasRow( nRow ) )
         throw SQLException();
 
-    long nDiff = nRow - m_pResult->StartIndex;
+    sal_Int32 nDiff = nRow - m_pResult->StartIndex;
     if( nDiff < 0 )
         nDiff *= -1;
 
@@ -222,7 +222,7 @@ void CachedContentResultSet::CCRS_Cache
     //remind that this row was mapped
     if( !m_pResult )
         return;
-    long nDiff = nRow - m_pResult->StartIndex;
+    sal_Int32 nDiff = nRow - m_pResult->StartIndex;
     if( nDiff < 0 )
         nDiff *= -1;
     Sequence< sal_Bool >* pMappedReminder = getMappedReminder();
@@ -235,7 +235,7 @@ bool CachedContentResultSet::CCRS_Cache
 {
     if( !m_pMappedReminder || !m_pResult )
         return false;
-    long nDiff = nRow - m_pResult->StartIndex;
+    sal_Int32 nDiff = nRow - m_pResult->StartIndex;
     if( nDiff < 0 )
         nDiff *= -1;
     if( nDiff < m_pMappedReminder->getLength() )
