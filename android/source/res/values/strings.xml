@@ -120,6 +120,7 @@
     <string name="search_label">Go</string>
     <string name="directory_browser_label">Choose Directory</string>
     <string name="bad_directory">Invalid directory path</string>
+    <string name="current_dir">Current Directory:</string>
 
     <!-- Save Alert dialog strings -->
     <string name="save_alert_dialog_title">Save the document before closing?</string>
