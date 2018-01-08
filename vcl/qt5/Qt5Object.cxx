@@ -56,7 +56,7 @@ void Qt5Object::EndSetClipRegion()
         m_pRegion = m_pRegion.intersected(m_pQWidget->geometry());
 }
 
-void Qt5Object::SetPosSize(long nX, long nY, long nWidth, long nHeight) {}
+void Qt5Object::SetPosSize(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/) {}
 
 void Qt5Object::Show(bool bVisible)
 {
@@ -64,7 +64,7 @@ void Qt5Object::Show(bool bVisible)
         m_pQWidget->setVisible(bVisible);
 }
 
-void Qt5Object::SetForwardKey(bool bEnable) {}
+void Qt5Object::SetForwardKey(bool /*bEnable*/) {}
 
 const SystemEnvData* Qt5Object::GetSystemData() const { return nullptr; }
 

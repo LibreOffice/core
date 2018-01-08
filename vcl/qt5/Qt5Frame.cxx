@@ -227,13 +227,13 @@ void Qt5Frame::SetIcon(sal_uInt16 nIcon)
     m_pQWidget->window()->setWindowIcon(aIcon);
 }
 
-void Qt5Frame::SetMenu(SalMenu* pMenu) {}
+void Qt5Frame::SetMenu(SalMenu* /*pMenu*/) {}
 
 void Qt5Frame::DrawMenuBar() {}
 
-void Qt5Frame::SetExtendedFrameStyle(SalExtStyle nExtStyle) {}
+void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) {}
 
-void Qt5Frame::Show(bool bVisible, bool bNoActivate)
+void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 {
     assert(m_pQWidget.get());
     m_pQWidget->setVisible(bVisible);
@@ -409,13 +409,13 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     return true;
 }
 
-void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nDisplay) {}
+void Qt5Frame::ShowFullScreen(bool /*bFullScreen*/, sal_Int32 /*nDisplay*/) {}
 
-void Qt5Frame::StartPresentation(bool bStart) {}
+void Qt5Frame::StartPresentation(bool /*bStart*/) {}
 
-void Qt5Frame::SetAlwaysOnTop(bool bOnTop) {}
+void Qt5Frame::SetAlwaysOnTop(bool /*bOnTop*/) {}
 
-void Qt5Frame::ToTop(SalFrameToTop nFlags) {}
+void Qt5Frame::ToTop(SalFrameToTop /*nFlags*/) {}
 
 void Qt5Frame::SetPointer(PointerStyle ePointerStyle)
 {
@@ -429,22 +429,22 @@ void Qt5Frame::SetPointer(PointerStyle ePointerStyle)
     pWindow->setCursor(static_cast<Qt5Data*>(GetSalData())->getCursor(ePointerStyle));
 }
 
-void Qt5Frame::CaptureMouse(bool bMouse) {}
+void Qt5Frame::CaptureMouse(bool /*bMouse*/) {}
 
-void Qt5Frame::SetPointerPos(long nX, long nY) {}
+void Qt5Frame::SetPointerPos(long /*nX*/, long /*nY*/) {}
 
 void Qt5Frame::Flush() {}
 
-void Qt5Frame::Flush(const tools::Rectangle& rRect) {}
+void Qt5Frame::Flush(const tools::Rectangle& /*rRect*/) {}
 
-void Qt5Frame::SetInputContext(SalInputContext* pContext) {}
+void Qt5Frame::SetInputContext(SalInputContext* /*pContext*/) {}
 
-void Qt5Frame::EndExtTextInput(EndExtTextInputFlags nFlags) {}
+void Qt5Frame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/) {}
 
-OUString Qt5Frame::GetKeyName(sal_uInt16 nKeyCode) { return OUString(); }
+OUString Qt5Frame::GetKeyName(sal_uInt16 /*nKeyCode*/) { return OUString(); }
 
-bool Qt5Frame::MapUnicodeToKeyCode(sal_Unicode aUnicode, LanguageType aLangType,
-                                   vcl::KeyCode& rKeyCode)
+bool Qt5Frame::MapUnicodeToKeyCode(sal_Unicode /*aUnicode*/, LanguageType /*aLangType*/,
+                                   vcl::KeyCode& /*rKeyCode*/)
 {
     return false;
 }
@@ -477,17 +477,17 @@ SalFrame::SalPointerState Qt5Frame::GetPointerState()
 
 KeyIndicatorState Qt5Frame::GetIndicatorState() { return KeyIndicatorState(); }
 
-void Qt5Frame::SimulateKeyPress(sal_uInt16 nKeyCode) {}
+void Qt5Frame::SimulateKeyPress(sal_uInt16 /*nKeyCode*/) {}
 
 void Qt5Frame::SetParent(SalFrame* pNewParent) { m_pParent = static_cast<Qt5Frame*>(pNewParent); }
 
-bool Qt5Frame::SetPluginParent(SystemParentData* pNewParent) { return false; }
+bool Qt5Frame::SetPluginParent(SystemParentData* /*pNewParent*/) { return false; }
 
 void Qt5Frame::ResetClipRegion() {}
 
-void Qt5Frame::BeginSetClipRegion(sal_uLong nRects) {}
+void Qt5Frame::BeginSetClipRegion(sal_uLong /*nRects*/) {}
 
-void Qt5Frame::UnionClipRegion(long nX, long nY, long nWidth, long nHeight) {}
+void Qt5Frame::UnionClipRegion(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/) {}
 
 void Qt5Frame::EndSetClipRegion() {}
 

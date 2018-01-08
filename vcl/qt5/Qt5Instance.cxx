@@ -158,7 +158,7 @@ bool Qt5Instance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     return bWasEvent;
 }
 
-bool Qt5Instance::AnyInput(VclInputFlags nType) { return false; }
+bool Qt5Instance::AnyInput(VclInputFlags /*nType*/) { return false; }
 
 SalSession* Qt5Instance::CreateSalSession() { return nullptr; }
 

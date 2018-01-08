@@ -108,28 +108,29 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
 void Qt5Graphics::ClearDevFontCache() {}
 
-bool Qt5Graphics::AddTempDevFont(PhysicalFontCollection*, const OUString& rFileURL,
-                                 const OUString& rFontName)
+bool Qt5Graphics::AddTempDevFont(PhysicalFontCollection*, const OUString& /*rFileURL*/,
+                                 const OUString& /*rFontName*/)
 {
     return false;
 }
 
-bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFace* pFont,
-                                   const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                   sal_Int32* pWidths, int nGlyphs, FontSubsetInfo& rInfo)
+bool Qt5Graphics::CreateFontSubset(const OUString& /*rToFile*/, const PhysicalFontFace* /*pFont*/,
+                                   const sal_GlyphId* /*pGlyphIds*/, const sal_uInt8* /*pEncoding*/,
+                                   sal_Int32* /*pWidths*/, int /*nGlyphs*/,
+                                   FontSubsetInfo& /*rInfo*/)
 {
     return false;
 }
 
-const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, long* pDataLen)
+const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, long* /*pDataLen*/)
 {
     return nullptr;
 }
 
-void Qt5Graphics::FreeEmbedFontData(const void* pData, long nDataLen) {}
+void Qt5Graphics::FreeEmbedFontData(const void* /*pData*/, long /*nDataLen*/) {}
 
-void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* pPFF, bool bVertical,
-                                 std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
+void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVertical*/,
+                                 std::vector<sal_Int32>& /*rWidths*/, Ucs2UIntMap& /*rUnicodeEnc*/)
 {
 }
 

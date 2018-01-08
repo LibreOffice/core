@@ -19,28 +19,30 @@
 
 #include "Qt5Graphics.hxx"
 
-bool Qt5Graphics::IsNativeControlSupported(ControlType nType, ControlPart nPart) { return false; }
-
-bool Qt5Graphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
-                                       const tools::Rectangle& rControlRegion, const Point& aPos,
-                                       bool& rIsInside)
+bool Qt5Graphics::IsNativeControlSupported(ControlType /*nType*/, ControlPart /*nPart*/)
 {
     return false;
 }
 
-bool Qt5Graphics::drawNativeControl(ControlType nType, ControlPart nPart,
-                                    const tools::Rectangle& rControlRegion, ControlState nState,
-                                    const ImplControlValue& aValue, const OUString& aCaption)
+bool Qt5Graphics::hitTestNativeControl(ControlType /*nType*/, ControlPart /*nPart*/,
+                                       const tools::Rectangle& /*rControlRegion*/,
+                                       const Point& /*aPos*/, bool& /*rIsInside*/)
 {
     return false;
 }
 
-bool Qt5Graphics::getNativeControlRegion(ControlType nType, ControlPart nPart,
-                                         const tools::Rectangle& rControlRegion,
-                                         ControlState nState, const ImplControlValue& aValue,
-                                         const OUString& aCaption,
-                                         tools::Rectangle& rNativeBoundingRegion,
-                                         tools::Rectangle& rNativeContentRegion)
+bool Qt5Graphics::drawNativeControl(ControlType /*nType*/, ControlPart /*nPart*/,
+                                    const tools::Rectangle& /*rControlRegion*/,
+                                    ControlState /*nState*/, const ImplControlValue& /*aValue*/,
+                                    const OUString& /*aCaption*/)
+{
+    return false;
+}
+
+bool Qt5Graphics::getNativeControlRegion(
+    ControlType /*nType*/, ControlPart /*nPart*/, const tools::Rectangle& /*rControlRegion*/,
+    ControlState /*nState*/, const ImplControlValue& /*aValue*/, const OUString& /*aCaption*/,
+    tools::Rectangle& /*rNativeBoundingRegion*/, tools::Rectangle& /*rNativeContentRegion*/)
 {
     return false;
 }

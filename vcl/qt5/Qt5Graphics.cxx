@@ -78,31 +78,34 @@ bool Qt5Graphics::supportsOperation(OutDevSupportType eType) const
 bool Qt5Graphics::SupportsCairo() const { return false; }
 
 cairo::SurfaceSharedPtr
-Qt5Graphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+Qt5Graphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& /*rSurface*/) const
 {
     return nullptr;
 }
 
-cairo::SurfaceSharedPtr Qt5Graphics::CreateSurface(const OutputDevice& rRefDevice, int x, int y,
-                                                   int width, int height) const
+cairo::SurfaceSharedPtr Qt5Graphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int /*x*/,
+                                                   int /*y*/, int /*width*/, int /*height*/) const
 {
     return nullptr;
 }
 
-cairo::SurfaceSharedPtr Qt5Graphics::CreateBitmapSurface(const OutputDevice& rRefDevice,
-                                                         const BitmapSystemData& rData,
-                                                         const Size& rSize) const
+cairo::SurfaceSharedPtr Qt5Graphics::CreateBitmapSurface(const OutputDevice& /*rRefDevice*/,
+                                                         const BitmapSystemData& /*rData*/,
+                                                         const Size& /*rSize*/) const
 {
     return nullptr;
 }
 
-css::uno::Any Qt5Graphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface,
-                                                  const basegfx::B2ISize& rSize) const
+css::uno::Any Qt5Graphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/,
+                                                  const basegfx::B2ISize& /*rSize*/) const
 {
     return css::uno::Any();
 }
 
-SystemFontData Qt5Graphics::GetSysFontData(int nFallbacklevel) const { return SystemFontData(); }
+SystemFontData Qt5Graphics::GetSysFontData(int /*nFallbacklevel*/) const
+{
+    return SystemFontData();
+}
 
 #endif
 

@@ -113,8 +113,8 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     return true;
 }
 
-bool Qt5Bitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
-                       Size& rSize, bool bMask)
+bool Qt5Bitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& /*rBitmapCanvas*/,
+                       Size& /*rSize*/, bool /*bMask*/)
 {
     return false;
 }
@@ -143,7 +143,7 @@ sal_uInt16 Qt5Bitmap::GetBitCount() const
     return 0;
 }
 
-BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode nMode)
+BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
 {
     static const BitmapPalette aEmptyPalette;
 
@@ -215,7 +215,7 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode nMode)
     return pBuffer;
 }
 
-void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
+void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode /*nMode*/)
 {
     m_aPalette = pBuffer->maPalette;
     auto count = m_aPalette.GetEntryCount();
@@ -230,16 +230,18 @@ void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
     delete pBuffer;
 }
 
-bool Qt5Bitmap::GetSystemData(BitmapSystemData& rData) { return false; }
+bool Qt5Bitmap::GetSystemData(BitmapSystemData& /*rData*/) { return false; }
 
 bool Qt5Bitmap::ScalingSupported() const { return false; }
 
-bool Qt5Bitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag)
+bool Qt5Bitmap::Scale(const double& /*rScaleX*/, const double& /*rScaleY*/,
+                      BmpScaleFlag /*nScaleFlag*/)
 {
     return false;
 }
 
-bool Qt5Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol)
+bool Qt5Bitmap::Replace(const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/,
+                        sal_uInt8 /*nTol*/)
 {
     return false;
 }

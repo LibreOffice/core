@@ -192,6 +192,6 @@ QCursor& Qt5Data::getCursor(PointerStyle ePointerStyle)
 
 void Qt5Data::ErrorTrapPush() {}
 
-bool Qt5Data::ErrorTrapPop(bool bIgnoreError) { return false; }
+bool Qt5Data::ErrorTrapPop(bool /*bIgnoreError*/) { return false; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
