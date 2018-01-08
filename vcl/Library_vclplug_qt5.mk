@@ -19,8 +19,6 @@
 
 $(eval $(call gb_Library_Library,vclplug_qt5))
 
-$(eval $(call gb_Library_set_warnings_not_errors,vclplug_qt5))
-
 $(eval $(call gb_Library_use_custom_headers,vclplug_qt5,vcl/qt5))
 
 $(eval $(call gb_Library_set_include,vclplug_qt5,\
