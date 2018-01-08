@@ -813,7 +813,7 @@ XFBorders* LwpMiddleLayout::GetXFBorders()
     if(pBorderStuff&&pBorderStuff->GetSide() != 0)
     {
         //copy from lwpparastyle.
-        XFBorders   *pXFBorders = new XFBorders();
+        std::unique_ptr<XFBorders> xXFBorders(new XFBorders);
         // apply 4 borders respectively
         LwpBorderStuff::BorderType const pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
             LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
@@ -822,10 +822,10 @@ XFBorders* LwpMiddleLayout::GetXFBorders()
         {
             if (pBorderStuff->HasSide(nC))
             {
-                LwpParaStyle::ApplySubBorder(pBorderStuff, nC, pXFBorders);
+                LwpParaStyle::ApplySubBorder(pBorderStuff, nC, xXFBorders.get());
             }
         }
-        return pXFBorders;
+        return xXFBorders.release();
     }
     return nullptr;
 }
