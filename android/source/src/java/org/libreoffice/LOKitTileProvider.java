@@ -611,6 +611,11 @@ class LOKitTileProvider implements TileProvider {
         return mDocument.getPart();
     }
 
+    @Override
+    public void updatePageCount() {
+        resetDocumentSize();
+    }
+
     public void setDocumentPassword(String url, String password) {
         mOffice.setDocumentPassword(url, password);
     }
