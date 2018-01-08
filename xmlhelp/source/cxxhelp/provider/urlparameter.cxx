@@ -904,7 +904,7 @@ sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aDat
     for( int k = 0; k < curr; ++k )
         aData[k] = buffer[pos++];
 
-    return curr > 0 ? curr : 0;
+    return std::max(curr, 0);
 }
 
 
@@ -924,7 +924,7 @@ void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL InputStreamTransformer::available()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    return buffer.getLength() - pos > 0 ? buffer.getLength() - pos : 0 ;
+    return std::max<sal_Int32>(buffer.getLength() - pos, 0);
 }
 
 

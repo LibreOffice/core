@@ -2048,7 +2048,7 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
         nWidth = MINFLY;
         break;
     case SVX_CSS1_LTYPE_TWIP:
-        nWidth = rPropInfo.m_nWidth > MINFLY ? rPropInfo.m_nWidth : MINFLY;
+        nWidth = std::max<long>(rPropInfo.m_nWidth, MINFLY);
         nPrcWidth = 0;
         break;
     default:
@@ -2062,7 +2062,7 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
     case SVX_CSS1_LTYPE_TWIP:
         // Netscape and MS-IE interpreting the height incorrectly as minimum height,
         // therefore we are doing the same.
-        nHeight = rPropInfo.m_nHeight > MINFLY ? rPropInfo.m_nHeight : MINFLY;
+        nHeight = std::max<long>(rPropInfo.m_nHeight, MINFLY);
         break;
     default:
         ;

@@ -192,7 +192,7 @@ ConvertBorderWidthFromWord(SvxBorderLineStyle const eStyle, double const i_fWidt
                 case 2:
                     return (fWidth * 2.0); // thick
                 case 5: // fdo#55526: map 0 hairline width to > 0
-                    return (fWidth > 1.0) ? fWidth : 1.0;
+                    return std::max(fWidth, 1.0);
                 default:
                     return fWidth;
             }

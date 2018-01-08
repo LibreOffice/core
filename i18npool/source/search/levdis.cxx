@@ -56,16 +56,13 @@
 */
 
 #include <string.h>
+#include <algorithm>
 
 #if defined( _MSC_VER )
 #pragma warning(once: 4068)
 #endif
 
 #include "levdis.hxx"
-
-#ifdef __sun
-#undef min
-#endif
 
 #define LEVDISBIG   (nLimit + 1)    // Return value if distance > nLimit
 #define LEVDISDOUBLEBUF 2048        // no doubling atop this border
@@ -340,9 +337,9 @@ int WLevDistance::Mid3( int x, int y, int z )
 int WLevDistance::Max3( int x, int y, int z )
 {
     if ( x > y )
-        return( x > z ? x : z );
+        return std::max(x, z);
     else
-        return( y > z ? y : z );
+        return std::max(y, z);
 }
 
 // initialize data from CTOR

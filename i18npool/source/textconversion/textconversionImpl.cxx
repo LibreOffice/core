@@ -37,7 +37,7 @@ TextConversionImpl::getConversions( const OUString& aText, sal_Int32 nStartPos, 
 
     sal_Int32 len = aText.getLength() - nStartPos;
     if (nLength > len)
-        nLength = len > 0 ? len : 0;
+        nLength = std::max<sal_Int32>(len, 0);
     return xTC->getConversions(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
@@ -49,7 +49,7 @@ TextConversionImpl::getConversion( const OUString& aText, sal_Int32 nStartPos, s
 
     sal_Int32 len = aText.getLength() - nStartPos;
     if (nLength > len)
-        nLength = len > 0 ? len : 0;
+        nLength = std::max<sal_Int32>(len, 0);
     return xTC->getConversion(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
@@ -61,7 +61,7 @@ TextConversionImpl::getConversionWithOffset( const OUString& aText, sal_Int32 nS
 
     sal_Int32 len = aText.getLength() - nStartPos;
     if (nLength > len)
-        nLength = len > 0 ? len : 0;
+        nLength = std::max<sal_Int32>(len, 0);
     return xTC->getConversionWithOffset(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions, offset);
 }
 
