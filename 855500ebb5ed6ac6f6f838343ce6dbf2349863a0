@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_402587c0",
+        "filename": "sc/source/ui/view/tabvwsha.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-08T11:59:37Z",
+      "side": 1,
+      "message": "this call site looks great though \u003d) Love it.",
+      "revId": "855500ebb5ed6ac6f6f838343ce6dbf2349863a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a02c83ac",
+        "filename": "sc/source/ui/view/tabvwsha.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-08T11:59:37Z",
+      "side": 1,
+      "message": "We should collapse both cases into this - so whatever is called after the dialog runs (below) can be run synchronously by \u0027ExecuteAsync\u0027; so the \u0027Check if we run the kit\u0027 thing can happen inside the ExecuteAsync - and do it synchronously there (I hope) ? \u003d)",
+      "revId": "855500ebb5ed6ac6f6f838343ce6dbf2349863a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_605b6b55",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-08T11:59:37Z",
+      "side": 1,
+      "message": "Soo ... this code should not yield at all in the async execute case -- and we should swap all callers to use async execute.\n\nAll the rest of the code \u0027ImplEndExecuteModal\u0027 etc. - should be called as/when the window is closed by wahtever means - after the std::function() is called.\n\nThis also means that we can\u0027t use ScopedVclPtrs at the call sites or else the dialog will be destroyed before it really runs \u003d)",
+      "revId": "855500ebb5ed6ac6f6f838343ce6dbf2349863a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_80585f58",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-08T11:59:37Z",
+      "side": 1,
+      "message": "we shouldn\u0027t have a thread here - we should just return to the parent caller - so the stack of the main thread only, always has a single main-loop running - without nesting of these.",
+      "revId": "855500ebb5ed6ac6f6f838343ce6dbf2349863a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_c030970a",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-08T11:59:37Z",
+      "side": 1,
+      "message": "again - urk; threads - lets bin those \u003d)",
+      "revId": "855500ebb5ed6ac6f6f838343ce6dbf2349863a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
