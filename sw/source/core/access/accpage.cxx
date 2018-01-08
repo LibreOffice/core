@@ -53,7 +53,7 @@ void SwAccessiblePage::GetStates(
     // FOCUSED
     if( IsSelected() )
     {
-        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
+        OSL_ENSURE( m_bIsSelected, "bSelected out of sync" );
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
@@ -70,8 +70,8 @@ void SwAccessiblePage::InvalidateCursorPos_()
 
     {
         osl::MutexGuard aGuard( m_Mutex );
-        bOldSelected = bIsSelected;
-        bIsSelected = bNewSelected;
+        bOldSelected = m_bIsSelected;
+        m_bIsSelected = bNewSelected;
     }
 
     if( bNewSelected )
@@ -99,7 +99,7 @@ void SwAccessiblePage::InvalidateFocus_()
 
         {
             osl::MutexGuard aGuard( m_Mutex );
-            bSelected = bIsSelected;
+            bSelected = m_bIsSelected;
         }
         OSL_ENSURE( bSelected, "focus object should be selected" );
 
@@ -111,7 +111,7 @@ void SwAccessiblePage::InvalidateFocus_()
 SwAccessiblePage::SwAccessiblePage(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                                     const SwFrame* pFrame )
     : SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
-    , bIsSelected( false )
+    , m_bIsSelected( false )
 {
     assert(pFrame != nullptr);
     assert(pInitMap != nullptr);
@@ -129,7 +129,7 @@ SwAccessiblePage::~SwAccessiblePage()
 bool SwAccessiblePage::HasCursor()
 {
     osl::MutexGuard aGuard( m_Mutex );
-    return bIsSelected;
+    return m_bIsSelected;
 }
 
 OUString SwAccessiblePage::getImplementationName( )

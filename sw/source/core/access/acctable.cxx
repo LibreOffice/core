@@ -505,13 +505,13 @@ void SwAccSingleTableSelHander_Impl::Unselect( sal_Int32, sal_Int32 )
 class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
 
 {
-    std::vector< bool > aSelected;
-    sal_Int32 nCount;
+    std::vector< bool > m_aSelected;
+    sal_Int32 m_nCount;
 
 public:
     explicit SwAccAllTableSelHander_Impl(sal_Int32 nSize)
-        : aSelected(nSize, true)
-        , nCount(nSize)
+        : m_aSelected(nSize, true)
+        , m_nCount(nSize)
     {
     }
 
@@ -527,21 +527,21 @@ SwAccAllTableSelHander_Impl::~SwAccAllTableSelHander_Impl()
 
 uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
 {
-    OSL_ENSURE( nCount >= 0, "underflow" );
-    uno::Sequence < sal_Int32 > aRet( nCount );
+    OSL_ENSURE( m_nCount >= 0, "underflow" );
+    uno::Sequence < sal_Int32 > aRet( m_nCount );
     sal_Int32 *pRet = aRet.getArray();
     sal_Int32 nPos = 0;
-    size_t nSize = aSelected.size();
-    for( size_t i=0; i < nSize && nPos < nCount; i++ )
+    size_t nSize = m_aSelected.size();
+    for( size_t i=0; i < nSize && nPos < m_nCount; i++ )
     {
-        if( aSelected[i] )
+        if( m_aSelected[i] )
         {
             *pRet++ = i;
             nPos++;
         }
     }
 
-    OSL_ENSURE( nPos == nCount, "count is wrong" );
+    OSL_ENSURE( nPos == m_nCount, "count is wrong" );
 
     return aRet;
 }
@@ -549,16 +549,16 @@ uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
 void SwAccAllTableSelHander_Impl::Unselect( sal_Int32 nRowOrCol,
                                             sal_Int32 nExt )
 {
-    OSL_ENSURE( static_cast< size_t >( nRowOrCol ) < aSelected.size(),
+    OSL_ENSURE( static_cast< size_t >( nRowOrCol ) < m_aSelected.size(),
              "index to large" );
-    OSL_ENSURE( static_cast< size_t >( nRowOrCol+nExt ) <= aSelected.size(),
+    OSL_ENSURE( static_cast< size_t >( nRowOrCol+nExt ) <= m_aSelected.size(),
              "extent to large" );
     while( nExt )
     {
-        if( aSelected[static_cast< size_t >( nRowOrCol )] )
+        if( m_aSelected[static_cast< size_t >( nRowOrCol )] )
         {
-            aSelected[static_cast< size_t >( nRowOrCol )] = false;
-            nCount--;
+            m_aSelected[static_cast< size_t >( nRowOrCol )] = false;
+            m_nCount--;
         }
         nExt--;
         nRowOrCol++;
