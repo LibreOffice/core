@@ -14,6 +14,7 @@ $(eval $(call gb_Library_set_include,dba,\
 	-I$(SRCDIR)/dbaccess/inc \
 	-I$(SRCDIR)/dbaccess/source/inc \
 	-I$(SRCDIR)/dbaccess/source/core/inc \
+	-I$(SRCDIR)/dbaccess/source/filter/hsqldb \
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
@@ -31,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,dba,\
     comphelper \
     cppu \
     cppuhelper \
+	dbahsql \
     dbtools \
     fwe \
     i18nlangtag \
