@@ -675,7 +675,7 @@ void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
     pNode->SetSelected(true);
     if( i1 != -1 && i2 != -1 ) {
         start = i1 < i2 ? i1 : i2; //MIN
-        end   = i1 > i2 ? i1 : i2; //MAX
+        end   = std::max(i1, i2);
     } else if( mbSelecting && i1 != -1 ) {
         start = 0;
         end = i1;

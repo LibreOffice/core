@@ -3038,7 +3038,7 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         if ( nReal < nDist )
         {
-            long nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
+            long nTmp = GetUpper()->Grow( nDist - std::max<long>(nReal, 0), bTst, bInfo );
 
             if ( IsRestrictTableGrowth() )
             {

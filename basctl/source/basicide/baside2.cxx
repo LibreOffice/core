@@ -817,7 +817,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     sal_Int32 nLinespPage = aPaperSz.Height()/nLineHeight;
     long nXTextWidth = pPrinter->approximate_char_width();
 
-    sal_Int32 nCharspLine = aPaperSz.Width() / (nXTextWidth > 1 ? nXTextWidth : 1);
+    sal_Int32 nCharspLine = aPaperSz.Width() / std::max<long>(nXTextWidth, 1);
     const sal_uInt32 nParas = GetEditEngine()->GetParagraphCount();
 
     sal_Int32 nPages = nParas/nLinespPage+1;

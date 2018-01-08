@@ -340,9 +340,9 @@ int WLevDistance::Mid3( int x, int y, int z )
 int WLevDistance::Max3( int x, int y, int z )
 {
     if ( x > y )
-        return( x > z ? x : z );
+        return std::max(x, z);
     else
-        return( y > z ? y : z );
+        return std::max(y, z);
 }
 
 // initialize data from CTOR

@@ -101,7 +101,7 @@ namespace basegfx
         if(fVal < 0.0)
             return (fVal < -0.00001 ? fVal : -0.00001);
         else
-            return (fVal > 0.00001 ? fVal : 0.00001);
+            return std::max(fVal, 0.00001);
     }
 
     /** clamp given value against given minimum and maximum values

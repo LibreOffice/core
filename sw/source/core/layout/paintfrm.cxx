@@ -2782,7 +2782,7 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
 
         const svx::frame::Style& rOldAttr = rOld.maAttribute;
         const svx::frame::Style& rNewAttr = rNew.maAttribute;
-        const svx::frame::Style& rCmpAttr = rNewAttr > rOldAttr ? rNewAttr : rOldAttr;
+        const svx::frame::Style& rCmpAttr = std::max(rNewAttr, rOldAttr);
 
         if ( SwLineEntry::OVERLAP1 == nOverlapType )
         {
