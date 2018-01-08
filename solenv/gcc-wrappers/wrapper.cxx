@@ -97,7 +97,8 @@ string processccargs(vector<string> rawargs) {
 
     // apparently these must be at the end
     // otherwise configure tests may fail
-    string linkargs(" -link");
+    // note: always use -debug so a PDB file is created
+    string linkargs(" -link -debug");
 
     for(vector<string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         args.append(" ");
