@@ -3385,7 +3385,18 @@ void SfxMedium::CreateTempFile( bool bReplace )
         pImpl->m_aName.clear();
     }
 
-    pImpl->pTempFile = new ::utl::TempFile();
+    OUString aLogicBase;
+    if (comphelper::isFileUrl(pImpl->m_aLogicName))
+    {
+        // Try to create the temp file in the same directory.
+        sal_Int32 nOffset = pImpl->m_aLogicName.lastIndexOf("/");
+        if (nOffset != -1)
+            aLogicBase = pImpl->m_aLogicName.copy(0, nOffset);
+        if (aLogicBase == "file://")
+            // Doesn't make sense.
+            aLogicBase.clear();
+    }
+    pImpl->pTempFile = new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase);
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     OUString aTmpURL = pImpl->pTempFile->GetURL();
