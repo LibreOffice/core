@@ -367,6 +367,12 @@ class LOKitTileProvider implements TileProvider {
         return true;
     }
 
+    @Override
+    public void setDocumentSize(int pageWidth, int pageHeight){
+        mWidthTwip = pageWidth;
+        mHeightTwip = pageHeight;
+    }
+
     /**
      * @see TileProvider#getPageWidth()
      */

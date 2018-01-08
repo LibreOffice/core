@@ -113,6 +113,8 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
             case Document.CALLBACK_DOCUMENT_PASSWORD:
                 documentPassword();
                 break;
+            case Document.CALLBACK_DOCUMENT_SIZE_CHANGED:
+                pageSizeChanged(payload);
             default:
                 Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
         }
@@ -229,6 +231,13 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
         }
 
         LOKitShell.moveViewportTo(mContext, new PointF(newLeft, newTop), newZoom);
+    }
+
+    private void pageSizeChanged(String payload){
+        String[] bounds = payload.split(",");
+        int pageWidth = Integer.parseInt(bounds[0]);
+        int pageHeight = Integer.parseInt(bounds[1].trim());
+        LOKitShell.sendEvent(new LOEvent(LOEvent.PAGE_SIZE_CHANGED, pageWidth, pageHeight));
     }
 
     private void stateChanged(String payload) {

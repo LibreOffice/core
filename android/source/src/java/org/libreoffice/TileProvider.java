@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.view.KeyEvent;
 
+import org.libreoffice.kit.Document;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
 
@@ -162,6 +163,11 @@ public interface TileProvider {
      * Send a request to change end the change of graphic selection..
      */
     void setGraphicSelectionEnd(PointF documentCoordinate);
+
+    /**
+     * Set the new page size of the document when changed
+     */
+    void setDocumentSize(int pageWidth, int pageHeight);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
