@@ -382,7 +382,7 @@ long SwWriteTable::GetAbsHeight(long nRawHeight, size_t const nRow,
     }
 
     OSL_ENSURE( nRawHeight > 0, "Row Height <= 0. OK?" );
-    return nRawHeight > 0 ? nRawHeight : 0;
+    return std::max<long>(nRawHeight, 0);
 }
 
 bool SwWriteTable::ShouldExpandSub(const SwTableBox *pBox, bool /*bExpandedBefore*/,

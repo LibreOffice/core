@@ -2726,8 +2726,8 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
 
         resultAddress.StartColumn = ( cell1.StartColumn <  cell2.StartColumn ) ? cell1.StartColumn : cell2.StartColumn;
         resultAddress.StartRow = ( cell1.StartRow <  cell2.StartRow ) ? cell1.StartRow : cell2.StartRow;
-        resultAddress.EndColumn = ( cell1.EndColumn >  cell2.EndColumn ) ? cell1.EndColumn : cell2.EndColumn;
-        resultAddress.EndRow = ( cell1.EndRow >  cell2.EndRow ) ? cell1.EndRow : cell2.EndRow;
+        resultAddress.EndColumn = std::max( cell1.EndColumn, cell2.EndColumn );
+        resultAddress.EndRow = std::max( cell1.EndRow, cell2.EndRow );
         if ( bForceUseInpuRangeTab )
         {
             // this is a call from Application.Range( x,y )

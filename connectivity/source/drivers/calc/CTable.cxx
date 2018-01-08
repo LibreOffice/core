@@ -83,8 +83,8 @@ static void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& 
         const CellRangeAddress* pData = aAddresses.getConstArray();
         for ( sal_Int32 i=0; i<nCount; i++ )
         {
-            rEndCol = pData[i].EndColumn > rEndCol ? pData[i].EndColumn : rEndCol;
-            rEndRow = pData[i].EndRow    > rEndRow ? pData[i].EndRow    : rEndRow;
+            rEndCol = std::max(pData[i].EndColumn, rEndCol);
+            rEndRow = std::max(pData[i].EndRow, rEndRow);
         }
     }
 }

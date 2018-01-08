@@ -234,7 +234,7 @@ namespace drawinglayer
                 // calculate logic pixel size in texture coordinates
                 const double fLogicTexSizeX(fLogicPixelSizeWorld / rPrimitive.getTextureSize().getX());
                 const double fLogicTexSizeY(fLogicPixelSizeWorld / rPrimitive.getTextureSize().getY());
-                const double fLogicTexSize(fLogicTexSizeX > fLogicTexSizeY ? fLogicTexSizeX : fLogicTexSizeY);
+                const double fLogicTexSize(std::max(fLogicTexSizeX, fLogicTexSizeY));
 
                 // create texture and set
                 mpGeoTexSvx.reset(new texture::GeoTexSvxMultiHatch(rPrimitive, fLogicTexSize));

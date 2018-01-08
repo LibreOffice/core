@@ -56,7 +56,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
             sal_Int32 nStartPos = 0;
             sal_Int32 nEndPos = mrText.GetEditSource()->GetTextForwarder()->GetTextLen( currentPara );
             if( currentPara == maSelection.nStartPara )
-                nStartPos = nStartPos>maSelection.nStartPos ? nStartPos : maSelection.nStartPos;
+                nStartPos = std::max(nStartPos, maSelection.nStartPos);
             if( currentPara == maSelection.nEndPara )
                 nEndPos = nEndPos<maSelection.nEndPos ? nEndPos : maSelection.nEndPos;
             ESelection aCurrentParaSel = ESelection( currentPara, nStartPos, currentPara, nEndPos );
@@ -399,7 +399,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rTe
             if( nEndPos < mnSel.nStartPos )
                 continue;
 
-            nStartPos = nStartPos>mnSel.nStartPos ? nStartPos : mnSel.nStartPos;
+            nStartPos = std::max<int>(nStartPos, mnSel.nStartPos);
             nEndPos = nEndPos<mnSel.nEndPos ? nEndPos : mnSel.nEndPos;
             ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
 

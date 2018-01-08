@@ -1237,7 +1237,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         GtkRequisition aReq;
         gtk_widget_size_request( widget, &aReq );
         tools::Rectangle aEditRect = rControlRegion;
-        long nHeight = (aEditRect.GetHeight() > aReq.height) ? aEditRect.GetHeight() : aReq.height;
+        long nHeight = std::max<long>(aEditRect.GetHeight(), aReq.height);
         aEditRect = tools::Rectangle( aEditRect.TopLeft(),
                                Size( aEditRect.GetWidth(), nHeight ) );
         rNativeBoundingRegion = aEditRect;

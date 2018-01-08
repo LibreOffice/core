@@ -259,8 +259,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
         // Set page size
         long lPgWidth, lPgHeight;
-        lPgWidth  = (rItem.m_lPWidth > MINLAY ? rItem.m_lPWidth : MINLAY);
-        lPgHeight = (rItem.m_lPHeight > MINLAY ? rItem.m_lPHeight : MINLAY);
+        lPgWidth  = std::max(rItem.m_lPWidth, MINLAY);
+        lPgHeight = std::max(rItem.m_lPHeight, MINLAY);
         rFormat.SetFormatAttr( SwFormatFrameSize( ATT_FIX_SIZE, lPgWidth, lPgHeight ));
         // Numbering type
         SvxNumberType aType;
