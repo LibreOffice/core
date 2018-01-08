@@ -57,8 +57,11 @@ endif
 
 # disable for OS/2
 ifneq ($(OS),OS2)
-gb_Output_ESCAPE := $(shell echo|$(gb_AWK) 'BEGIN { printf "%c", 27 }' -)
-gb_Output_BELL := $(shell echo|$(gb_AWK) 'BEGIN { printf "%c", 7 }' -)
+# We can't use $(gb_AWK) here since that is defined in the platform files,
+# which are not included yet.  Reordering the includes causes other
+# problems.  Fortunately hardcoding awk works everywhere except Solaris.
+gb_Output_ESCAPE := $(shell echo|awk 'BEGIN { printf "%c", 27 }' -)
+gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 endif
 
 
