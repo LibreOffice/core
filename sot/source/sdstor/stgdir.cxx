@@ -625,7 +625,7 @@ bool StgDirEntry::Tmp2Strm()
         OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
         if ( !m_pStgStrm )
             return false;
-        sal_uLong n = m_pTmpStrm->GetSize();
+        sal_uInt64 n = m_pTmpStrm->GetSize();
         StgStrm* pNewStrm;
         StgIo& rIo = m_pStgStrm->GetIo();
         sal_uLong nThreshold = (sal_uLong) rIo.m_aHdr.GetThreshold();
@@ -639,7 +639,7 @@ bool StgDirEntry::Tmp2Strm()
             m_pTmpStrm->Seek( 0 );
             while( n )
             {
-                sal_uLong nn = n;
+                sal_uInt64 nn = n;
                 if( nn > 4096 )
                     nn = 4096;
                 if (m_pTmpStrm->ReadBytes( p, nn ) != nn)

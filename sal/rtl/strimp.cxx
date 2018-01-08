@@ -81,7 +81,7 @@ static void *pre_allocateStringFn(sal_Size n)
 static void pre_freeStringFn(void *data)
 {
     char    *addr = static_cast<char*>(data) - 4;
-    sal_Size size = reinterpret_cast<sal_uInt32*>(addr)[0] + 12;
+    sal_uInt32 size = reinterpret_cast<sal_uInt32*>(addr)[0] + 12;
 
     rtl_arena_free(pre_arena, addr, size);
 }

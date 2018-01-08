@@ -111,8 +111,8 @@ void StgCache::SetPhysPageSize( short n )
     if ( n >= 512 )
     {
         m_nPageSize = n;
-        sal_uLong nPos = m_pStrm->Tell();
-        sal_uLong nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
+        sal_uInt64 nPos = m_pStrm->Tell();
+        sal_uInt64 nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
         m_nPages = lcl_GetPageCount( nFileSize, m_nPageSize );
         m_pStrm->Seek( nPos );
     }
@@ -295,7 +295,7 @@ bool StgCache::Open( const OUString& rName, StreamMode nMode )
     SetStrm( pFileStrm, true );
     if( pFileStrm->IsOpen() )
     {
-        sal_uLong nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
+        sal_uInt64 nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
         m_nPages = lcl_GetPageCount( nFileSize, m_nPageSize );
         m_pStrm->Seek( 0 );
     }
@@ -384,7 +384,7 @@ bool StgCache::Write( sal_Int32 nPage, void const * pBuf )
         {
             m_pStrm->Seek(nPos);
         }
-        sal_uLong nRes = m_pStrm->WriteBytes( pBuf, nBytes );
+        size_t nRes = m_pStrm->WriteBytes( pBuf, nBytes );
         if( nRes != nBytes )
             SetError( SVSTREAM_WRITE_ERROR );
         else
