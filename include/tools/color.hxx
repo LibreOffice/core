@@ -192,9 +192,9 @@ inline sal_uInt8 Color::GetLuminance() const
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 {
-    SetRed(COLOR_CHANNEL_MERGE(COLORDATA_RED(mnColor), COLORDATA_RED(rMergeColor.mnColor), cTransparency));
-    SetGreen(COLOR_CHANNEL_MERGE(COLORDATA_GREEN(mnColor), COLORDATA_GREEN(rMergeColor.mnColor), cTransparency));
-    SetBlue(COLOR_CHANNEL_MERGE(COLORDATA_BLUE(mnColor), COLORDATA_BLUE(rMergeColor.mnColor), cTransparency));
+    SetRed(ColorChannelMerge(COLORDATA_RED(mnColor), COLORDATA_RED(rMergeColor.mnColor), cTransparency));
+    SetGreen(ColorChannelMerge(COLORDATA_GREEN(mnColor), COLORDATA_GREEN(rMergeColor.mnColor), cTransparency));
+    SetBlue(ColorChannelMerge(COLORDATA_BLUE(mnColor), COLORDATA_BLUE(rMergeColor.mnColor), cTransparency));
 }
 
 #endif

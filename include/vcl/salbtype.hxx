@@ -480,9 +480,9 @@ inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uIn
 {
     assert( !mbIndex && "Pixel represents index into colortable" );
     assert( !rBitmapColor.mbIndex && "Pixel represents index into colortable" );
-    mcBlueOrIndex = COLOR_CHANNEL_MERGE( mcBlueOrIndex, rBitmapColor.mcBlueOrIndex, cTransparency );
-    mcGreen = COLOR_CHANNEL_MERGE( mcGreen, rBitmapColor.mcGreen, cTransparency );
-    mcRed = COLOR_CHANNEL_MERGE( mcRed, rBitmapColor.mcRed, cTransparency );
+    mcBlueOrIndex = ColorChannelMerge( mcBlueOrIndex, rBitmapColor.mcBlueOrIndex, cTransparency );
+    mcGreen = ColorChannelMerge( mcGreen, rBitmapColor.mcGreen, cTransparency );
+    mcRed = ColorChannelMerge( mcRed, rBitmapColor.mcRed, cTransparency );
 
     return *this;
 }
