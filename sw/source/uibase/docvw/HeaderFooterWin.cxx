@@ -41,6 +41,7 @@
 #include <editeng/boxitem.hxx>
 #include <svtools/svtresid.hxx>
 #include <svx/hdft.hxx>
+#include <sfx2/dispatch.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
@@ -461,6 +462,11 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
     else if (rIdent == "delete")
     {
         rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, false, true );
+    }
+    else if (rIdent == "insert_pagenumber")
+    {
+        SfxViewFrame* pVFrame = rSh.GetView().GetViewFrame();
+        pVFrame->GetBindings().Execute(FN_INSERT_FLD_PGNUMBER);
     }
 }
 
