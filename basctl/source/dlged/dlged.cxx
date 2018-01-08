@@ -823,7 +823,6 @@ void DlgEditor::Paste()
     if ( xClipboard.is() )
     {
         Reference< datatransfer::XTransferable > xTransf;
-
         {
             SolarMutexReleaser aReleaser;
             // get clipboard content
@@ -1052,11 +1051,14 @@ bool DlgEditor::IsPasteAllowed()
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow().GetClipboard();
     if ( xClipboard.is() )
     {
-        // get clipboard content
-        SolarMutexReleaser aReleaser;
-        Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
-
-        return xTransf.is() && xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] );
+        Reference< datatransfer::XTransferable > xTransf;
+        {
+            SolarMutexReleaser aReleaser;
+            // get clipboard content
+            xTransf = xClipboard->getContents();
+        }
+        if (xTransf.is())
+            return xTransf->isDataFlavorSupported(m_ClipboardDataFlavors[0]);
     }
     return false;
 }
