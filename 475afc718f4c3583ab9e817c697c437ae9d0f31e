@@ -45,6 +45,30 @@
       "revId": "475afc718f4c3583ab9e817c697c437ae9d0f31e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_9bbb740e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-01-08T15:07:22Z",
+      "side": 1,
+      "message": "Yes, no I\u0027m aware of it. Committed just for Samuel as this install:module thing doesn\u0027t work out of the box.",
+      "parentUuid": "fa31d9ce_fbf2b005",
+      "range": {
+        "startLine": 3940,
+        "startChar": 58,
+        "endLine": 3940,
+        "endChar": 154
+      },
+      "revId": "475afc718f4c3583ab9e817c697c437ae9d0f31e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
