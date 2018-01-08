@@ -205,11 +205,9 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
                 }
                 else
                 {
-                    ::connectivity::SharedResources aResources;
-                    // TODO FIXME: this does _not_ look like the right error message
-                    const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
-                    ::dbtools::throwGenericSQLException(sMessage ,*this);
-
+                    // There might be files which are not firebird databases.
+                    // This is not a problem.
+                    bIsNewDatabase = true;
                 }
             }
             // TODO: Get DB properties from XML
