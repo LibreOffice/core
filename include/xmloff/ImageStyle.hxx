@@ -31,23 +31,14 @@ class SvXMLUnitConverter;
 class SvXMLExport;
 class SvXMLImport;
 
-class XMLOFF_DLLPUBLIC XMLImageStyle
+namespace XMLImageStyle
 {
-public:
-    XMLImageStyle();
-    ~XMLImageStyle();
 
-    static void exportXML( const OUString& rStrName, const css::uno::Any& rValue, SvXMLExport& rExport );
-    static void importXML( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList, css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport );
+XMLOFF_DLLPUBLIC void exportXML(OUString const & rStrName, css::uno::Any const & rValue, SvXMLExport& rExport);
+XMLOFF_DLLPUBLIC bool importXML(css::uno::Reference<css::xml::sax::XAttributeList> const & xAttrList,
+                                css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport);
 
-private:
-
-    SAL_DLLPRIVATE static void ImpExportXML( const OUString& rStrName, const css::uno::Any& rValue,
-                           SvXMLExport& rExport );
-    SAL_DLLPRIVATE static bool ImpImportXML( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                           css::uno::Any& rValue, OUString& rStrName,
-                           SvXMLImport& rImport );
-};
+}
 
 #endif // INCLUDED_XMLOFF_IMAGESTYLE_HXX
 

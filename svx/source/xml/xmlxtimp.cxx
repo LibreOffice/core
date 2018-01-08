@@ -275,7 +275,6 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XAttributeLis
 {
     try
     {
-        XMLImageStyle aImageStyle;
         XMLImageStyle::importXML( xAttrList, rAny, rName, GetImport() );
     }
     catch (const Exception&)
