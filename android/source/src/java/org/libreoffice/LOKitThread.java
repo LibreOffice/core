@@ -169,6 +169,15 @@ class LOKitThread extends Thread {
         String partPageRectString = ((LOKitTileProvider) mTileProvider).getPartPageRectangles();
         List<RectF> partPageRectangles = mInvalidationHandler.convertPayloadToRectangles(partPageRectString);
         mContext.getDocumentOverlay().setPartPageRectangles(partPageRectangles);
+
+        /* render the new page */
+        mTileProvider.updatePageCount();
+        mLayerClient.setPageRect(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
+        mViewportMetrics = mLayerClient.getViewportMetrics();
+        mLayerClient.setViewportMetrics(mViewportMetrics);
+        mLayerClient.forceRedraw();
+        mLayerClient.forceRender();
+        LOKitShell.moveViewportTo(mContext, new PointF(mContext.getCurrentCursorPosition().left, mContext.getCurrentCursorPosition().top), mLayerClient.getViewportMetrics().getZoomFactor());
     }
 
     private void updateZoomConstraints() {
