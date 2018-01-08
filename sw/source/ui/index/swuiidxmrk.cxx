@@ -1502,7 +1502,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         {
             pTypeListBox = VclPtr<ListBox>::Create(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
             for (int j = 0; j < AUTH_TYPE_END; j++)
-                pTypeListBox->InsertEntry(SwResId(STR_AUTH_FIELD_ARY[j]));
+                pTypeListBox->InsertEntry(SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(j)));
+            pTypeListBox->EnableAutoSize(true);
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
                 pTypeListBox->SelectEntryPos(pFields[aCurInfo.nToxField].toInt32());
