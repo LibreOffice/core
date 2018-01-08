@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #- Env ------------------------------------------------------------------------
 IOSLD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+IOSCLANG = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
 IOSOBJ = $(WORKDIR)/CObject/ios/Kit.o
 
 ifeq ($(ENABLE_DEBUG),TRUE)
@@ -31,7 +32,7 @@ $(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT)
 FORCE:
 
 
-$(IOSKIT):
+$(IOSKIT): $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o
 	$(IOSLD) -r -ios_version_min 11.2 \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
@@ -40,25 +41,30 @@ $(IOSKIT):
 	    `$(SRCDIR)/bin/lo-all-static-libs`
 	$(AR) -r $(IOSKIT2) $(IOSOBJ)
 
-	$(IOSLD) -dylib -ios_version_min $(IOS_DEPLOYMENT_VERSION) \
-	    -syslibroot $(MACOSX_SDK_PATH) \
+	$(IOSCLANG) -dynamiclib -mios-simulator-version-min=$(IOS_DEPLOYMENT_VERSION) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
+	    -isysroot $(MACOSX_SDK_PATH) \
+	    -Xlinker -rpath -Xlinker @executable_path/Frameworks \
+	    -Xlinker -rpath -Xlinker @loader_path/Frameworks \
+	    -dead_strip \
+	    -Xlinker -export_dynamic \
+	    -Xlinker -no_deduplicate \
+	    -Xlinker -objc_abi_version -Xlinker 2 \
+	    -fobjc-link-runtime \
 	    -framework CoreFoundation \
 	    -framework CoreGraphics \
 	    -framework CoreText \
-	    -lc++ \
-	    -lobjc \
-	    -lz \
 	    -liconv \
+	    -lc++ \
+	    -lz \
 	    -lpthread \
-	    -objc_abi_version 2 \
-	    -rpath  @executable_path/Frameworks \
-	    -rpath  @loader_path/Frameworks \
-	    -export_dynamic \
-	    -no_deduplicate \
+	    -single_module \
+	    -compatibility_version 1 \
+	    -current_version 1 \
 	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
 	    `$(SRCDIR)/bin/lo-all-static-libs` \
 	    -o $(IOSKIT)
+
 
 
 
