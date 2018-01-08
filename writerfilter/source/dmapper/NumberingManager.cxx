@@ -191,9 +191,9 @@ sal_Int16 ListLevel::GetParentNumbering( const OUString& sText, sal_Int16 nLevel
     return nParentNumbering;
 }
 
-uno::Sequence< beans::PropertyValue > ListLevel::GetProperties( )
+uno::Sequence<beans::PropertyValue> ListLevel::GetProperties(bool bDefaults)
 {
-    uno::Sequence< beans::PropertyValue > aLevelProps = GetLevelProperties( );
+    uno::Sequence<beans::PropertyValue> aLevelProps = GetLevelProperties(bDefaults);
     if ( m_pParaStyle.get( ) )
         AddParaProperties( &aLevelProps );
     return aLevelProps;
@@ -233,7 +233,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     return comphelper::containerToSequence(rProperties);
 }
 
-uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
+uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults)
 {
     const sal_Int16 aWWToUnoAdjust[] =
     {
@@ -286,7 +286,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         }
     }
 
-    aNumberingProperties.push_back(lcl_makePropVal(PROP_LISTTAB_STOP_POSITION, m_nTabstop));
+    if (bDefaults || m_nTabstop != 0)
+        aNumberingProperties.push_back(lcl_makePropVal(PROP_LISTTAB_STOP_POSITION, m_nTabstop));
 
     //TODO: handling of nFLegal?
     //TODO: nFNoRestart lower levels do not restart when higher levels are incremented, like:
@@ -299,7 +300,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
 //    TODO: sRGBXchNums;     array of inherited numbers
 
 //  nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
-    aNumberingProperties.push_back(lcl_makePropVal(PROP_LEVEL_FOLLOW, m_nXChFollow));
+    if (bDefaults || m_nXChFollow != SvxNumberFormat::LISTTAB)
+        aNumberingProperties.push_back(lcl_makePropVal(PROP_LEVEL_FOLLOW, m_nXChFollow));
 
     PropertyIds const aReadIds[] =
     {
@@ -310,7 +312,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         boost::optional<PropertyMap::Property> aProp = getProperty(rReadId);
         if (aProp)
             aNumberingProperties.emplace_back( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE );
-        else if (rReadId == PROP_FIRST_LINE_INDENT)
+        else if (rReadId == PROP_FIRST_LINE_INDENT && bDefaults)
             // Writer default is -360 twips, Word default seems to be 0.
             aNumberingProperties.emplace_back("FirstLineIndent", 0, uno::makeAny(static_cast<sal_Int32>(0)), beans::PropertyState_DIRECT_VALUE);
     }
@@ -424,7 +426,7 @@ void AbstractListDef::AddLevel( )
     m_aLevels.push_back( pLevel );
 }
 
-uno::Sequence< uno::Sequence< beans::PropertyValue > > AbstractListDef::GetPropertyValues( )
+uno::Sequence<uno::Sequence<beans::PropertyValue>> AbstractListDef::GetPropertyValues(bool bDefaults)
 {
     uno::Sequence< uno::Sequence< beans::PropertyValue > > result( sal_Int32( m_aLevels.size( ) ) );
     uno::Sequence< beans::PropertyValue >* aResult = result.getArray( );
@@ -432,7 +434,7 @@ uno::Sequence< uno::Sequence< beans::PropertyValue > > AbstractListDef::GetPrope
     int nLevels = m_aLevels.size( );
     for ( int i = 0; i < nLevels; i++ )
     {
-        aResult[i] = m_aLevels[i]->GetProperties( );
+        aResult[i] = m_aLevels[i]->GetProperties(bDefaults);
     }
 
     return result;
@@ -456,16 +458,18 @@ OUString ListDef::GetStyleName( sal_Int32 nId )
     return sStyleName;
 }
 
-uno::Sequence< uno::Sequence< beans::PropertyValue > > ListDef::GetPropertyValues( )
+uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyValues()
 {
     if (!m_pAbstractDef)
         return uno::Sequence< uno::Sequence< beans::PropertyValue > >();
 
     // [1] Call the same method on the abstract list
-    uno::Sequence< uno::Sequence< beans::PropertyValue > > aAbstract = m_pAbstractDef->GetPropertyValues( );
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aAbstract
+        = m_pAbstractDef->GetPropertyValues(/*bDefaults=*/true);
 
     // [2] Call the upper class method
-    uno::Sequence< uno::Sequence< beans::PropertyValue > > aThis = AbstractListDef::GetPropertyValues( );
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aThis
+        = AbstractListDef::GetPropertyValues(/*bDefaults=*/false);
 
     // Merge the results of [2] in [1]
     sal_Int32 nThisCount = aThis.getLength( );
@@ -529,7 +533,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             uno::Any aRules = xStyle->getPropertyValue( getPropertyName( PROP_NUMBERING_RULES ) );
             aRules >>= m_xNumRules;
 
-            uno::Sequence< uno::Sequence< beans::PropertyValue > > aProps = GetPropertyValues( );
+            uno::Sequence<uno::Sequence<beans::PropertyValue>> aProps = GetMergedPropertyValues();
 
             sal_Int32 nAbstLevels = m_pAbstractDef ? m_pAbstractDef->Size() : 0;
             sal_Int32 nLevel = 0;
