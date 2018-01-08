@@ -336,7 +336,7 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
 long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPolyPolygon, long nNewWidth, bool bCenter)
 {
     const basegfx::B2DRange aPolygonRange(rPolyPolygon.getB2DRange());
-    const double fOldWidth(aPolygonRange.getWidth() > 1.0 ? aPolygonRange.getWidth() : 1.0);
+    const double fOldWidth(std::max(aPolygonRange.getWidth(), 1.0));
     const double fScale((double)nNewWidth / fOldWidth);
     long nHeight(basegfx::fround(aPolygonRange.getHeight() * fScale));
 

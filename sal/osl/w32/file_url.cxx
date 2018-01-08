@@ -314,7 +314,7 @@ static sal_Int32 PathRemoveFileSpec(LPWSTR lpPath, LPWSTR lpFileName, sal_Int32 
         lpFileName[0] = 0;
         LPWSTR  lpLastBkSlash = wcsrchr( lpPath, '\\' );
         LPWSTR  lpLastSlash = wcsrchr( lpPath, '/' );
-        LPWSTR  lpLastDelimiter = lpLastSlash > lpLastBkSlash ? lpLastSlash : lpLastBkSlash;
+        LPWSTR  lpLastDelimiter = std::max(lpLastSlash, lpLastBkSlash);
 
         if ( lpLastDelimiter )
         {

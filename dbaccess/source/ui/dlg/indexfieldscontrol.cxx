@@ -185,7 +185,7 @@ namespace dbaui
             sal_Int32 nWidthAsc = GetTextWidth(m_sAscendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
             sal_Int32 nWidthDesc = GetTextWidth(m_sDescendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
             // maximum plus some additional space
-            return (nWidthAsc > nWidthDesc ? nWidthAsc : nWidthDesc) + GetTextWidth(OUString('0')) * 2;
+            return std::max(nWidthAsc, nWidthDesc) + GetTextWidth(OUString('0')) * 2;
         }
         return EditBrowseBox::GetTotalCellWidth(_nRow, _nColId);
     }
@@ -211,10 +211,10 @@ namespace dbaui
             sal_Int32 nSortOrderColumnWidth = GetTextWidth(sColumnName);
             // ("ascending" + scrollbar width)
             sal_Int32 nOther = GetTextWidth(m_sAscendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
-            nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
+            nSortOrderColumnWidth = std::max(nSortOrderColumnWidth, nOther);
             // ("descending" + scrollbar width)
             nOther = GetTextWidth(m_sDescendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
-            nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
+            nSortOrderColumnWidth = std::max(nSortOrderColumnWidth, nOther);
             // (plus some additional space)
             nSortOrderColumnWidth += GetTextWidth(OUString('0')) * 2;
             InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HeaderBarItemBits::STDSTYLE, 1);

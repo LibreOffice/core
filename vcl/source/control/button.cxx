@@ -358,8 +358,8 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
             }
         }
 
-        aMax.Width()  = aTSSize.Width()  > aImageSize.Width()  ? aTSSize.Width()  : aImageSize.Width();
-        aMax.Height() = aTSSize.Height() > aImageSize.Height() ? aTSSize.Height() : aImageSize.Height();
+        aMax.Width()  = std::max(aTSSize.Width(), aImageSize.Width());
+        aMax.Height() = std::max(aTSSize.Height(), aImageSize.Height());
 
         // Now calculate the output area for the image and the text according to the image align flags
 

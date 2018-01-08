@@ -511,8 +511,8 @@ static void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, SCSIZE nParmCols, SCSIZE
     {
         if ( nJumpCols == 1 && nJumpRows == 1 )
         {
-            nAdjustCols = nParmCols > nResCols ? nParmCols : nResCols;
-            nAdjustRows = nParmRows > nResRows ? nParmRows : nResRows;
+            nAdjustCols = std::max(nParmCols, nResCols);
+            nAdjustRows = std::max(nParmRows, nResRows);
         }
         else if ( nJumpCols == 1 )
         {
@@ -8772,7 +8772,7 @@ void ScInterpreter::ScMidB()
 
             aStr = lcl_LeftB(aStr, (sal_Int32)fAnfang + (sal_Int32)fCnt - 1);
             sal_Int32 nCnt = getLengthB(aStr) - (sal_Int32)fAnfang + 1;
-            aStr = lcl_RightB(aStr, nCnt>0 ? nCnt:0);
+            aStr = lcl_RightB(aStr, std::max<sal_Int32>(nCnt,0));
             PushString(aStr);
         }
     }

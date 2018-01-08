@@ -544,7 +544,7 @@ static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderCon
             rMaxWidth = std::max (rMaxWidth, aNativeContent.GetWidth());
         }
     }
-    return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
+    return std::max(rCheckHeight, rRadioHeight);
 }
 
 #define gfxExtra 7

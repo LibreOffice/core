@@ -6360,7 +6360,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             aTabItem.Insert( SvxTabStop( (sal_uInt16)0 ) );
         if ( nDefaultTab )
         {
-            nTab = ( nTextOfs2 > nLatestManTab ) ? nTextOfs2 : nLatestManTab;
+            nTab = std::max( nTextOfs2, nLatestManTab );
             nTab /= nDefaultTab;
             nTab = nDefaultTab * ( 1 + nTab );
             for ( i = 0; ( i < 20 ) && ( nTab < 0x1b00 ); i++ )
