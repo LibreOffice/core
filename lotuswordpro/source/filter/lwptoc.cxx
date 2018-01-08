@@ -146,10 +146,10 @@ void LwpTocSuperLayout::RegisterStyle()
  */
 void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
 {
-    XFIndex* pToc = new XFIndex();
+    rtl::Reference<XFIndex> xToc(new XFIndex);
 
-    pToc->SetProtected(false);
-    pToc->SetIndexType(enumXFIndexTOC);
+    xToc->SetProtected(false);
+    xToc->SetIndexType(enumXFIndexTOC);
 
     // add TOC template
     for (sal_uInt16 i = 1; i<= MAX_LEVELS; i++)
@@ -160,7 +160,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
         if(!pLevel)
         {
             // add an blank template so that SODC won't add default style to this level
-            pToc->AddTemplate(OUString::number(i),  OUString(), pTemplate);
+            xToc->AddTemplate(OUString::number(i),  OUString(), pTemplate);
             continue;
         }
 
@@ -226,13 +226,13 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                     pTemplate->AddEntry(enumXFIndexTemplatePage, "TOC Page Number Text Style");
                 }
 
-                pToc->AddTemplate(OUString::number((sal_Int32)i),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);
+                xToc->AddTemplate(OUString::number((sal_Int32)i),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);
                 bInserted = true;
             }
 
             // 1 style in WordPro may be mapped to several styles in SODC
             LwpDocument * pDocument = m_pFoundry->GetDocument()->GetRootDocument();
-            AddSourceStyle(pToc, pLevel,  pDocument->GetFoundry());
+            AddSourceStyle(xToc.get(), pLevel,  pDocument->GetFoundry());
 
             // one level may have several corresponding Styles
             pLevel = GetNextSearchLevelPtr(i, pLevel);  // find next LwpTocLevelData which is same index
@@ -241,7 +241,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
 
     m_pCont = pCont;
     // add TOC content
-    LwpSuperTableLayout::XFConvert(pToc);
+    LwpSuperTableLayout::XFConvert(xToc.get());
 
     rtl::Reference<LwpVirtualLayout> xContainer(GetContainerLayout());
     if (!xContainer.is())
@@ -250,7 +250,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
     // if current TOC is located in a cell, we must add a frame between upper level container and TOC
     if (!xContainer->IsCell())
     {
-        pCont->Add(pToc);
+        pCont->Add(xToc.get());
     }
 }
 
