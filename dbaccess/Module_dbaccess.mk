@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	Library_dbmm \
 	Library_dbu \
 	Library_sdbt \
+	Library_dbahsql \
 	UIConfig_dbaccess \
 	UIConfig_dbapp \
 	UIConfig_dbbrowser \
