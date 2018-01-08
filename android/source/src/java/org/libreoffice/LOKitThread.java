@@ -171,6 +171,11 @@ class LOKitThread extends Thread {
         mContext.getDocumentOverlay().setPartPageRectangles(partPageRectangles);
     }
 
+    private void updatePageSize(int pageWidth, int pageHeight){
+        mTileProvider.setDocumentSize(pageWidth, pageHeight);
+        redraw();
+    }
+
     private void updateZoomConstraints() {
         if (mTileProvider == null) return;
         mLayerClient = mContext.getLayerClient();
@@ -356,6 +361,9 @@ class LOKitThread extends Thread {
                 break;
             case LOEvent.REFRESH:
                 refresh();
+                break;
+            case LOEvent.PAGE_SIZE_CHANGED:
+                updatePageSize(event.mPageWidth, event.mPageHeight);
                 break;
         }
     }

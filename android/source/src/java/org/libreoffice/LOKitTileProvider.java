@@ -33,7 +33,7 @@ class LOKitTileProvider implements TileProvider {
     private final float mTileHeight;
     private final String mInputFile;
     private Office mOffice;
-    private Document mDocument;
+    public Document mDocument;
     private boolean mIsReady = false;
     private LibreOfficeMainActivity mContext;
 
@@ -328,6 +328,12 @@ class LOKitTileProvider implements TileProvider {
         }
 
         return true;
+    }
+
+    @Override
+    public void setDocumentSize(int pageWidth, int pageHeight){
+        mWidthTwip = pageWidth;
+        mHeightTwip = pageHeight;
     }
 
     /**
