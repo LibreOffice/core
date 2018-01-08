@@ -330,7 +330,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
     { // guess divisor
-        sal_Int32 nTmp = ( (sal_Int32)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
+        sal_uInt32 nTmp = ( (sal_uInt32)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
         else
@@ -343,8 +343,8 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
         nK = 0;
         for (i = 0; i < nLenB; i++)
         {
-            nTmp = (sal_Int32)aTmpA.nNum[j - nLenB + i]
-                   - ((sal_Int32)aTmpB.nNum[i] * nQ)
+            nTmp = (sal_uInt32)aTmpA.nNum[j - nLenB + i]
+                   - ((sal_uInt32)aTmpB.nNum[i] * nQ)
                    - nK;
             aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
             nK = (sal_uInt16) (nTmp >> 16);
@@ -397,7 +397,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
     { // Guess divisor
-        sal_Int32 nTmp = ( (sal_Int32)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
+        sal_uInt32 nTmp = ( (sal_uInt32)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
         else
@@ -410,8 +410,8 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
         nK = 0;
         for (i = 0; i < nLenB; i++)
         {
-            nTmp = (sal_Int32)aTmpA.nNum[j - nLenB + i]
-                   - ((sal_Int32)aTmpB.nNum[i] * nQ)
+            nTmp = (sal_uInt32)aTmpA.nNum[j - nLenB + i]
+                   - ((sal_uInt32)aTmpB.nNum[i] * nQ)
                    - nK;
             aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
             nK = (sal_uInt16) (nTmp >> 16);
