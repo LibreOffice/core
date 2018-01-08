@@ -1721,29 +1721,36 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 
             try
             {
-                if( bOverWrite && ::utl::UCBContentHelper::IsDocument( aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
+                OUString aSourceMainURL = aSource.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                OUString aDestMainURL = aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                if (comphelper::isFileUrl(aDestMainURL) && osl::File::move(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
+                    bResult = true;
+                else
                 {
-                    if( pImpl->m_aBackupURL.isEmpty() )
-                        DoInternalBackup_Impl( aOriginalContent );
-
-                    if( !pImpl->m_aBackupURL.isEmpty() )
+                    if (bOverWrite && ::utl::UCBContentHelper::IsDocument(aDestMainURL))
                     {
-                        Reference< XInputStream > aTempInput = aTempCont.openStream();
-                        bTransactStarted = true;
-                        aOriginalContent.setPropertyValue( "Size", uno::makeAny( (sal_Int64)0 ) );
-                        aOriginalContent.writeStream( aTempInput, bOverWrite );
-                        bResult = true;
+                        if( pImpl->m_aBackupURL.isEmpty() )
+                            DoInternalBackup_Impl( aOriginalContent );
+
+                        if( !pImpl->m_aBackupURL.isEmpty() )
+                        {
+                            Reference< XInputStream > aTempInput = aTempCont.openStream();
+                            bTransactStarted = true;
+                            aOriginalContent.setPropertyValue( "Size", uno::makeAny( (sal_Int64)0 ) );
+                            aOriginalContent.writeStream( aTempInput, bOverWrite );
+                            bResult = true;
+                        }
+                        else
+                        {
+                            pImpl->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
+                        }
                     }
                     else
                     {
-                        pImpl->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
+                        Reference< XInputStream > aTempInput = aTempCont.openStream();
+                        aOriginalContent.writeStream( aTempInput, bOverWrite );
+                        bResult = true;
                     }
-                }
-                else
-                {
-                    Reference< XInputStream > aTempInput = aTempCont.openStream();
-                    aOriginalContent.writeStream( aTempInput, bOverWrite );
-                    bResult = true;
                 }
             }
             catch ( const css::ucb::CommandAbortedException& )
