@@ -301,7 +301,7 @@ private:
             return false;
 
         T nMin = nMin1 < nMin2 ? nMin1 : nMin2;
-        T nMax = nMax1 > nMax2 ? nMax1 : nMax2;
+        T nMax = std::max(nMax1, nMax2);
 
         rNewMin = nMin;
         rNewMax = nMax;

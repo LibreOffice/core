@@ -2810,7 +2810,7 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
 
              // #i54993# use min forced by breaks if it's > # pages in
              // scale parameter to avoid bottoming out at <= ZOOM_MIN
-             nPagesToFit = nMinPages > nPagesToFit ? nMinPages : nPagesToFit;
+             nPagesToFit = std::max(nMinPages, nPagesToFit);
         }
 
         sal_uInt16 nLastFitZoom = 0, nLastNonFitZoom = 0;
@@ -2868,8 +2868,8 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
 
              // #i54993# use min forced by breaks if it's > # pages in
              // scale parameters to avoid bottoming out at <= ZOOM_MIN
-             nW = nMinPagesW > nW ? nMinPagesW : nW;
-             nH = nMinPagesH > nH ? nMinPagesH : nH;
+             nW = std::max(nMinPagesW, nW);
+             nH = std::max(nMinPagesH, nH);
         }
 
         sal_uInt16 nLastFitZoom = 0, nLastNonFitZoom = 0;

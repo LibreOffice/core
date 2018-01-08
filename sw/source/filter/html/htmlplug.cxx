@@ -235,8 +235,8 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     if( nLeftSpace > 0 || nRightSpace > 0 )
     {
         SvxLRSpaceItem aLRItem( RES_LR_SPACE );
-        aLRItem.SetLeft( nLeftSpace > 0 ? nLeftSpace : 0 );
-        aLRItem.SetRight( nRightSpace > 0 ? nRightSpace : 0 );
+        aLRItem.SetLeft( std::max<sal_Int32>(nLeftSpace, 0) );
+        aLRItem.SetRight( std::max<sal_Int32>(nRightSpace, 0) );
         rFlyItemSet.Put( aLRItem );
         if( nLeftSpace )
         {

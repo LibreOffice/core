@@ -2792,10 +2792,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             // put page print settings attribute into render data
             const sal_Int32 nRow = pPagePrintSettings->GetRow();
             aRenderer[ nRenderDataIdxStart + 0 ].Name  = "NUpRows";
-            aRenderer[ nRenderDataIdxStart + 0 ].Value <<= ( nRow > 1 ? nRow : 1 );
+            aRenderer[ nRenderDataIdxStart + 0 ].Value <<= std::max<sal_Int32>( nRow, 1);
             const sal_Int32 nCol = pPagePrintSettings->GetCol();
             aRenderer[ nRenderDataIdxStart + 1 ].Name  = "NUpColumns";
-            aRenderer[ nRenderDataIdxStart + 1 ].Value <<= ( nCol > 1 ? nCol : 1 );
+            aRenderer[ nRenderDataIdxStart + 1 ].Value <<= std::max<sal_Int32>( nCol, 1);
             aRenderer[ nRenderDataIdxStart + 2 ].Name  = "NUpPageMarginLeft";
             aRenderer[ nRenderDataIdxStart + 2 ].Value <<= pPagePrintSettings->GetLeftSpace();
             aRenderer[ nRenderDataIdxStart + 3 ].Name  = "NUpPageMarginRight";

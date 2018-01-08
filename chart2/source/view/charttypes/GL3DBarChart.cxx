@@ -1479,7 +1479,7 @@ void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
         maRenderEvent = EVENT_AUTO_FLY;
         mnSelectBarId = nColorRate > mnColorRate ? nId : mnSelectBarId;
         mnPreSelectBarId = mnSelectBarId;
-        mnColorRate = nColorRate > mnColorRate ? nColorRate : mnColorRate;
+        mnColorRate = std::max(nColorRate, mnColorRate);
     }
 }
 

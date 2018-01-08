@@ -570,7 +570,7 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
             pMyItem->text.getLength(), &size);
 
     lpmis->itemWidth = size.cx + 4 + GetSystemMetrics( SM_CXSMICON );
-    lpmis->itemHeight = (size.cy > GetSystemMetrics( SM_CYSMICON )) ? size.cy : GetSystemMetrics( SM_CYSMICON );
+    lpmis->itemHeight = std::max<int>(size.cy, GetSystemMetrics( SM_CYSMICON ));
     lpmis->itemHeight += 4;
 
     DeleteObject( SelectObject(hdc, hfntOld) );

@@ -912,10 +912,10 @@ sal_Int32 Layouter::Implementation::GetIndex (
     return ::tools::Rectangle(
         Point (mnLeftBorder
             + nColumn * maPageObjectSize.Width()
-            + (nColumn>0 ? nColumn : 0) * mnHorizontalGap,
+            + std::max<sal_Int32>(nColumn,0) * mnHorizontalGap,
             mnTopBorder
             + nRow * maPageObjectSize.Height()
-            + (nRow>0 ? nRow : 0) * mnVerticalGap),
+            + std::max<sal_Int32>(nRow,0) * mnVerticalGap),
         maPageObjectSize);
 }
 

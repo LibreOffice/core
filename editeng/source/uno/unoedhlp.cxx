@@ -144,7 +144,7 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
             nClosestStartIndex_e = nCurrIndex;
         }
     }
-    sal_Int32 nClosestStartIndex = nClosestStartIndex_s > nClosestStartIndex_e ? nClosestStartIndex_s : nClosestStartIndex_e;
+    sal_Int32 nClosestStartIndex = std::max(nClosestStartIndex_s, nClosestStartIndex_e);
 
     // find closest index behind of nIndex
     sal_Int32 nClosestEndIndex_s, nClosestEndIndex_e;

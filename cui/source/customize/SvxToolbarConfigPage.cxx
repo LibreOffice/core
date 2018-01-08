@@ -875,7 +875,7 @@ Image SvxToolbarEntriesListBox::GetSizedImage(
     // We need 2 pixels to have a bigger border to the next button image
     sal_uInt16  nPosX = std::max( (sal_uInt16) (((( aNewSize.Width() - 2 ) - aImage.GetSizePixel().Width() ) / 2 ) - 1), (sal_uInt16) 0 );
     sal_uInt16  nPosY = std::max( (sal_uInt16) (((( aNewSize.Height() - 2 ) - aImage.GetSizePixel().Height() ) / 2 ) + 1), (sal_uInt16) 0 );
-    Point   aPos( nPosX > 0 ? nPosX : 0, nPosY > 0 ? nPosY : 0 );
+    Point   aPos( std::max<sal_uInt16>(nPosX, 0), std::max<sal_uInt16>(nPosY, 0) );
     rVDev.SetFillColor( aFillColor );
     rVDev.SetLineColor( aFillColor );
     rVDev.DrawRect( ::tools::Rectangle( Point(), aNewSize ));
