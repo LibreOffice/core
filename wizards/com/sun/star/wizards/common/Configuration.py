@@ -34,7 +34,10 @@ class Configuration(object):
 
         args.append(aPathArgument)
 
-        sView = "com.sun.star.configuration.ConfigurationAccess"
+        if updateable:
+            sView = "com.sun.star.configuration.ConfigurationUpdateAccess"
+        else:
+            sView = "com.sun.star.configuration.ConfigurationAccess"
 
         return oConfigProvider.createInstanceWithArguments(sView, tuple(args))
 
