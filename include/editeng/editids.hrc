@@ -42,7 +42,7 @@
 #define SID_ATTR_CHAR_STRIKEOUT                         ( SID_SVX_START + 13 )
 #define SID_ATTR_CHAR_UNDERLINE                         ( SID_SVX_START + 14 )
 #define SID_ATTR_CHAR_FONTHEIGHT                        ( SID_SVX_START + 15 )
-#define SID_ATTR_CHAR_PROPSIZE                          ( SID_SVX_START + 16 )
+  // free
 #define SID_ATTR_CHAR_COLOR                             ( SID_SVX_START + 17 )
 #define SID_ATTR_CHAR_KERNING                           ( SID_SVX_START + 18 )
 #define SID_ATTR_CHAR_CASEMAP                           ( SID_SVX_START + 19 )

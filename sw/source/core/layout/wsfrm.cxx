@@ -2454,7 +2454,6 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
         break;
 
         case RES_PARATR_TABSTOP:
-        case RES_CHRATR_PROPORTIONALFONTSIZE:
         case RES_CHRATR_SHADOWED:
         case RES_CHRATR_AUTOKERN:
         case RES_CHRATR_UNDERLINE:

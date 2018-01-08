@@ -3490,7 +3490,7 @@ static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_CHRATR_KERNING   */          OutCSS1_SvxKerning,
 /* RES_CHRATR_LANGUAGE  */          OutCSS1_SvxLanguage,
 /* RES_CHRATR_POSTURE   */          OutCSS1_SvxPosture,
-/* RES_CHRATR_PROPORTIONALFONTSIZE*/nullptr,
+/* RES_CHRATR_UNUSED1*/             nullptr,
 /* RES_CHRATR_SHADOWED  */          nullptr,
 /* RES_CHRATR_UNDERLINE */          OutCSS1_SvxUnderline,
 /* RES_CHRATR_WEIGHT    */          OutCSS1_SvxFontWeight,
@@ -3498,7 +3498,7 @@ static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_CHRATR_AUTOKERN  */          nullptr,
 /* RES_CHRATR_BLINK */              OutCSS1_SvxBlink,
 /* RES_CHRATR_NOHYPHEN  */          nullptr, // new: don't separate
-/* RES_CHRATR_NOLINEBREAK */        nullptr, // new: don't wrap
+/* RES_CHRATR_UNUSED2 */            nullptr,
 /* RES_CHRATR_BACKGROUND */         OutCSS1_SvxBrush, // new: character background
 /* RES_CHRATR_CJK_FONT */           OutCSS1_SvxFont,
 /* RES_CHRATR_CJK_FONTSIZE */       OutCSS1_SvxFontHeight,

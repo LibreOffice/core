@@ -3140,7 +3140,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_KERNING   */          OutHTML_CSS1Attr,
 /* RES_CHRATR_LANGUAGE  */          OutHTML_SvxLanguage,
 /* RES_CHRATR_POSTURE   */          OutHTML_SwPosture,
-/* RES_CHRATR_PROPORTIONALFONTSIZE*/nullptr,
+/* RES_CHRATR_UNUSED1*/             nullptr,
 /* RES_CHRATR_SHADOWED  */          nullptr,
 /* RES_CHRATR_UNDERLINE */          OutHTML_SwUnderline,
 /* RES_CHRATR_WEIGHT    */          OutHTML_SwWeight,
@@ -3148,7 +3148,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_AUTOKERN  */          nullptr,
 /* RES_CHRATR_BLINK */              OutHTML_SwBlink,
 /* RES_CHRATR_NOHYPHEN  */          nullptr, // New: don't hyphenate
-/* RES_CHRATR_NOLINEBREAK */        nullptr, // New: don't line-break
+/* RES_CHRATR_UNUSED2 */            nullptr,
 /* RES_CHRATR_BACKGROUND */         OutHTML_CSS1Attr, // New: character background
 /* RES_CHRATR_CJK_FONT */           OutHTML_SvxFont,
 /* RES_CHRATR_CJK_FONTSIZE */       OutHTML_SvxFontHeight,
