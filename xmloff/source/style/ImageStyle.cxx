@@ -22,7 +22,7 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include<xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -30,9 +30,8 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltkmap.hxx>
 
-using namespace ::com::sun::star;
-
-using namespace ::xmloff::token;
+using namespace css;
+using namespace xmloff::token;
 
 enum SvXMLTokenMapAttrs
 {
@@ -44,21 +43,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_IMAGE_ACTUATE
 };
 
-
-XMLImageStyle::XMLImageStyle()
-{
-}
-
-XMLImageStyle::~XMLImageStyle()
-{
-}
-
-void XMLImageStyle::exportXML( const OUString& rStrName, const css::uno::Any& rValue, SvXMLExport& rExport )
-{
-    ImpExportXML( rStrName, rValue, rExport );
-}
-
-void XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rValue, SvXMLExport& rExport )
+void XMLImageStyle::exportXML(OUString const & rStrName, uno::Any const & rValue, SvXMLExport& rExport)
 {
     OUString sImageURL;
 
@@ -97,16 +82,10 @@ void XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rVal
     }
 }
 
-void XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
+bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & xAttrList,
+                              uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport)
 {
-    ImpImportXML( xAttrList, rValue, rStrName, rImport );
-}
-
-bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-                                      uno::Any& rValue, OUString& rStrName,
-                                      SvXMLImport& rImport )
-{
-    static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+     static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
     {
         { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
         { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
@@ -175,7 +154,6 @@ bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList
     }
 
     bool bRet = bHasName && bHasHRef;
-
     return bRet;
 }
 

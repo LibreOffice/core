@@ -1609,8 +1609,6 @@ void SvXMLExport::ExportStyles_( bool )
             uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
             if( xBitmap.is() )
             {
-                XMLImageStyle aImageStyle;
-
                 if( xBitmap->hasElements() )
                 {
                     uno::Sequence< OUString > aNamesSeq ( xBitmap->getElementNames() );
