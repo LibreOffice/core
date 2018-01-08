@@ -221,12 +221,16 @@ namespace
     class SourceHelper
     {
     public:
-        explicit SourceHelper(const SalBitmap& rSourceBitmap)
+        explicit SourceHelper(const SalBitmap& rSourceBitmap, const bool bForceARGB32 = false)
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+            : m_bForceARGB32(bForceARGB32)
+#endif
         {
             const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
-            if (rSrcBmp.GetBitCount() != 32 && rSrcBmp.GetBitCount() != 24)
+            if ((rSrcBmp.GetBitCount() != 32 && rSrcBmp.GetBitCount() != 24) || bForceARGB32)
 #else
+            (void)bForceARGB32;
             if (rSrcBmp.GetBitCount() != 32)
 #endif
             {
@@ -267,13 +271,22 @@ namespace
 
             unsigned char *mask_data = cairo_image_surface_get_data(source);
 
-            cairo_format_t nFormat = cairo_image_surface_get_format(source);
+            const cairo_format_t nFormat = cairo_image_surface_get_format(source);
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+            if (!m_bForceARGB32)
+                assert(nFormat == CAIRO_FORMAT_RGB24_888 && "Expected RGB24_888 image");
+            else
+#endif
             assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
+
             rStride = cairo_format_stride_for_width(nFormat, cairo_image_surface_get_width(source));
 
             return mask_data;
         }
     private:
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+        const bool m_bForceARGB32;
+#endif
         SvpSalBitmap aTmpBmp;
         cairo_surface_t* source;
 
@@ -1225,7 +1238,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
 {
     /** creates an image from the given rectangle, replacing all black pixels
      *  with nMaskColor and make all other full transparent */
-    SourceHelper aSurface(rSalBitmap);
+    SourceHelper aSurface(rSalBitmap, true); // The mask is argb32
     sal_Int32 nStride;
     unsigned char *mask_data = aSurface.getBits(nStride);
     for (sal_Int32 y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
