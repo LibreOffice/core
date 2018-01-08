@@ -578,6 +578,29 @@
           <value>false</value>
         </prop>
       </node>
+      <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
+         <prop oor:name="DockPos" oor:type="xs:string">
+           <value>0,0</value>
+         </prop>
+         <prop oor:name="DockingArea" oor:type="xs:int">
+           <value>1</value>
+         </prop>
+         <prop oor:name="Docked" oor:type="xs:boolean">
+           <value>true</value>
+         </prop>
+         <prop oor:name="UIName" oor:type="xs:string">
+           <value xml:lang="en-US">Edit Points</value>
+         </prop>
+         <prop oor:name="Visible" oor:type="xs:boolean">
+           <value>true</value>
+         </prop>
+         <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+           <value>false</value>
+         </prop>
+         <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+           <value>true</value>
+         </prop>
+       </node>
       <node oor:name="private:resource/toolbar/basicshapes" oor:op="replace">
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>false</value>
