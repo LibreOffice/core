@@ -23,9 +23,12 @@ $(eval $(call gb_Module_add_targets,toolkit,\
     Library_tk \
 ))
 
-#$(eval $(call gb_Module_add_check_targets,toolkit,\
-#    CppunitTest_toolkit \
-#))
+# FIXME fails on some tinderboxes, needs investigation
+ifneq ($(OS),WNT)
+$(eval $(call gb_Module_add_check_targets,toolkit,\
+    CppunitTest_toolkit \
+))
+endif
 
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,toolkit,\
