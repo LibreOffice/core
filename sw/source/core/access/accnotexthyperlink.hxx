@@ -34,7 +34,7 @@ class SwAccessibleNoTextHyperlink :
 {
     friend class SwAccessibleNoTextFrame;
 
-    ::rtl::Reference< SwAccessibleNoTextFrame > xFrame;
+    ::rtl::Reference< SwAccessibleNoTextFrame > mxFrame;
     const SwFrame *mpFrame;
 
     SwFrameFormat *GetFormat()

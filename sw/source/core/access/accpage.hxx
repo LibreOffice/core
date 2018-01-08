@@ -31,7 +31,7 @@
  */
 class SwAccessiblePage : public SwAccessibleContext
 {
-    bool    bIsSelected;    // protected by base class mutex
+    bool    m_bIsSelected;    // protected by base class mutex
 
     bool    IsSelected();
 

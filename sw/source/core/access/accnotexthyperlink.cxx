@@ -38,7 +38,7 @@ using namespace css::uno;
 using namespace css::accessibility;
 
 SwAccessibleNoTextHyperlink::SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrame *aFrame ) :
-    xFrame( p ),
+    mxFrame( p ),
     mpFrame( aFrame )
 {
 }
@@ -77,7 +77,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
         IMapObject* pMapObj = pMap->GetIMapObject(nIndex);
         if (!pMapObj->GetURL().isEmpty())
         {
-            SwViewShell *pVSh = xFrame->GetShell();
+            SwViewShell *pVSh = mxFrame->GetShell();
             if( pVSh )
             {
                 LoadURL( *pVSh, pMapObj->GetURL(), LoadUrlFlags::NONE,
@@ -88,7 +88,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
     }
     else if (!aURL.GetURL().isEmpty())
     {
-        SwViewShell *pVSh = xFrame->GetShell();
+        SwViewShell *pVSh = mxFrame->GetShell();
         if( pVSh )
         {
             LoadURL( *pVSh, aURL.GetURL(), LoadUrlFlags::NONE,
@@ -176,7 +176,7 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionAnchor(
 
     Any aRet;
     //SwFrame* pAnchor = static_cast<SwFlyFrame*>(mpFrame)->GetAnchor();
-    Reference< XAccessible > xAnchor = xFrame->GetAccessibleMap()->GetContext(mpFrame);
+    Reference< XAccessible > xAnchor = mxFrame->GetAccessibleMap()->GetContext(mpFrame);
     //SwAccessibleNoTextFrame* pFrame = xFrame.get();
     //Reference< XAccessible > xAnchor = (XAccessible*)pFrame;
     aRet <<= xAnchor;
