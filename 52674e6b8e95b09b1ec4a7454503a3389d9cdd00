@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_60236b06",
+        "filename": "svx/uiconfig/ui/classificationdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-01-08T09:53:46Z",
+      "side": 1,
+      "message": "This change seems to the worse to me.",
+      "range": {
+        "startLine": 330,
+        "startChar": 114,
+        "endLine": 330,
+        "endChar": 117
+      },
+      "revId": "52674e6b8e95b09b1ec4a7454503a3389d9cdd00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
