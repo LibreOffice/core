@@ -19,21 +19,21 @@
 
 #include <cstdio>
 #include <cstring>
+#include <vector>
 #include <assert.h>
 
 #include <fontsubset.hxx>
 
 #include <vcl/strhelper.hxx>
 
-typedef unsigned char U8;
-typedef unsigned short U16;
-typedef long long S64;
+typedef sal_uInt8 U8;
+typedef sal_uInt16 U16;
+typedef sal_Int64 S64;
 
 typedef sal_Int32 GlyphWidth;
 
 typedef double RealType;
 typedef RealType ValType;
-#include <vector>
 
 static const char* pStringIds[] = {
 /*0*/   ".notdef",      "space",            "exclam",           "quotedbl",
