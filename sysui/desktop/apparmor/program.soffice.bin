@@ -23,12 +23,18 @@
 #Some obscure ones we're excluded (mostly input)
 
 #Generic
-@{libreoffice_ext} = [tT][xX][tT]  #.txt
-@{libreoffice_ext} += {,f,F}[oO][dDtT][tTsSpPbBgGfF]  #All the open document format
-@{libreoffice_ext} += [xX][mMsS][lL]  #.xml and xsl
-@{libreoffice_ext} += [pP][dD][fF]  #.pdf
-@{libreoffice_ext} += [uU][oO][fFtTsSpP]  #Unified office format
-@{libreoffice_ext} += {,x,X}[hH][tT][mM]{,l,L}  #(x)htm(l)
+#.txt
+@{libreoffice_ext} = [tT][xX][tT]
+#All the open document format
+@{libreoffice_ext} += {,f,F}[oO][dDtT][tTsSpPbBgGfF]
+#.xml and xsl
+@{libreoffice_ext} += [xX][mMsS][lL]
+#.pdf
+@{libreoffice_ext} += [pP][dD][fF]
+#Unified office format
+@{libreoffice_ext} += [uU][oO][fFtTsSpP]
+#(x)htm(l)
+@{libreoffice_ext} += {,x,X}[hH][tT][mM]{,l,L}
 
 #Images
 @{libreoffice_ext} += [jJ][pP][gG]
@@ -45,15 +51,19 @@
 
 #Calc
 @{libreoffice_ext} += [xX][lL][sSwWtT]{,x,X}
-@{libreoffice_ext} += [dD][iIbB][fF]  #.dif dbf
-@{libreoffice_ext} += [cCtT][sS][vV]  #.tsv .csv
+#.dif dbf
+@{libreoffice_ext} += [dD][iIbB][fF]
+#.tsv .csv
+@{libreoffice_ext} += [cCtT][sS][vV]
 @{libreoffice_ext} += [sS][lL][kK]
 
 #Impress/Draw
 @{libreoffice_ext} += [pP][pP][tTsS]{,x,X}
 @{libreoffice_ext} += [pP][oO][tT]{,m,M}
-@{libreoffice_ext} += [sS][wW][fF]  #Flash
-@{libreoffice_ext} += [pP][sS][dD]  #Photoshop
+#Flash
+@{libreoffice_ext} += [sS][wW][fF]
+#Photoshop
+@{libreoffice_ext} += [pP][sS][dD]
 
 #Math
 @{libreoffice_ext} += [mM][mM][lL]
