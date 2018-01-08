@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
-.PHONY : all check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install distro-pack-install-strip docs download etags fetch get-submodules id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : all check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch get-submodules id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 MAKECMDGOALS?=all
 build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
@@ -390,18 +390,11 @@ else
 	@exit 1
 endif
 
-define gb_Top_DistroPackInstall
-$(SRCDIR)/bin/distro-install-clean-up
-$(SRCDIR)/bin/distro-install-desktop-integration
-$(SRCDIR)/bin/distro-install-sdk
-$(SRCDIR)/bin/distro-install-file-lists
-endef
-
 distro-pack-install: install
-	$(gb_Top_DistroPackInstall)
-
-distro-pack-install-strip: install-strip
-	$(gb_Top_DistroPackInstall)
+	$(SRCDIR)/bin/distro-install-clean-up
+	$(SRCDIR)/bin/distro-install-desktop-integration
+	$(SRCDIR)/bin/distro-install-sdk
+	$(SRCDIR)/bin/distro-install-file-lists
 
 install-package-%:
 	$(MAKE) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
