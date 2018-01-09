@@ -134,8 +134,11 @@ published service SpreadsheetViewSettings
 
 
     /** disables the display of marks from online spelling.
+
+        @deprecated
      */
     [property] boolean HideSpellMarks;
+
 
     /** This property defines the zoom type for the document.
 
@@ -143,9 +146,10 @@ published service SpreadsheetViewSettings
     */
     [property] short ZoomType;
 
-        /** Defines the zoom value to use.
-            Valid only if the ZoomType is set to
-            com::sun::star::view::DocumentZoomType::BY_VALUE.
+
+    /** Defines the zoom value to use.
+        Valid only if the ZoomType is set to
+        com::sun::star::view::DocumentZoomType::BY_VALUE.
     */
     [property] short ZoomValue;
 };
