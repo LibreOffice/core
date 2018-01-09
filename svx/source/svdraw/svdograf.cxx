@@ -920,6 +920,16 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     aFilterName = rObj.aFilterName;
     bMirrored = rObj.bMirrored;
 
+    mbIsSignatureLine = rObj.mbIsSignatureLine;
+    maSignatureLineId = rObj.maSignatureLineId;
+    maSignatureLineSuggestedSignerName = rObj.maSignatureLineSuggestedSignerName;
+    maSignatureLineSuggestedSignerTitle = rObj.maSignatureLineSuggestedSignerTitle;
+    maSignatureLineSuggestedSignerEmail = rObj.maSignatureLineSuggestedSignerEmail;
+    maSignatureLineSigningInstructions = rObj.maSignatureLineSigningInstructions;
+    mbIsSignatureLineShowSignDate = rObj.mbIsSignatureLineShowSignDate;
+    mbIsSignatureLineCanAddComment = rObj.mbIsSignatureLineCanAddComment;
+    mpSignatureLineUnsignedGraphic = rObj.mpSignatureLineUnsignedGraphic;
+
     if( rObj.IsLinkedGraphic() )
     {
         SetGraphicLink( aFileName, rObj.aReferer, aFilterName );
