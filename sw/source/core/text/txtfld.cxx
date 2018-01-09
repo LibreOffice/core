@@ -440,7 +440,12 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFor
                         pItem = aIter.NextItem();
                     }
                 }
+
+                // Highlightcolor also needed to be untoched, but we can't have that just by clearing the item
+                Color nSaveHighlight = pNumFnt->GetHighlightColor();
+
                 pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
+                pNumFnt->SetHighlightColor(nSaveHighlight);
             }
         }
     }
