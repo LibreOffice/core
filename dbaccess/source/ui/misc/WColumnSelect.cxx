@@ -148,13 +148,23 @@ void OWizColumnSelect::ActivatePage( )
 
     const ODatabaseExport::TColumnVector& rDestColumns = m_pParent->getDestVector();
 
+    // tdf#113923, the added columns must exist in the table
+    // in the case where:
+    // 1: we enabled the creation of a primary key
+    // 2: we come back here from the "Back" button of the next page,
+    // we want to avoid to list the new column generated in the next page
+    const ODatabaseExport::TColumns& rSrcColumns = m_pParent->getSourceColumns();
+
     ODatabaseExport::TColumnVector::const_iterator aIter = rDestColumns.begin();
     ODatabaseExport::TColumnVector::const_iterator aEnd = rDestColumns.end();
     for(;aIter != aEnd;++aIter)
     {
-        const sal_Int32 nPos = m_pNewColumnNames->InsertEntry((*aIter)->first);
-        m_pNewColumnNames->SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
-        m_pOrgColumnNames->RemoveEntry((*aIter)->first);
+        if (rSrcColumns.find((*aIter)->first) != rSrcColumns.end())
+        {
+            const sal_Int32 nPos = m_pNewColumnNames->InsertEntry((*aIter)->first);
+            m_pNewColumnNames->SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
+            m_pOrgColumnNames->RemoveEntry((*aIter)->first);
+        }
     }
     m_pParent->GetOKButton().Enable(m_pNewColumnNames->GetEntryCount() != 0);
     m_pParent->EnableNextButton(m_pNewColumnNames->GetEntryCount() && m_pParent->getOperation() != CopyTableOperation::AppendData);
