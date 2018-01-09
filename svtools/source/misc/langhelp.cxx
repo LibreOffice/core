@@ -90,9 +90,7 @@ public:
         {
             using namespace org::freedesktop::PackageKit;
             css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-            const SystemEnvData* pEnvData = pTopWindow->GetSystemData();
-            sal_uInt32 nDbusId = pEnvData ? GetDbusId(*pEnvData) : 0;
-            xSyncDbusSessionHelper->InstallPackageNames(nDbusId, comphelper::containerToSequence(m_aPackages), OUString());
+            xSyncDbusSessionHelper->InstallPackageNames(comphelper::containerToSequence(m_aPackages), OUString());
         }
         catch (const css::uno::Exception& e)
         {

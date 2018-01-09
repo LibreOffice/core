@@ -55,8 +55,15 @@ namespace
         return proxy;
     }
 
+    GVariant* pk_make_platform_data()
+    {
+        GVariantBuilder builder;
+        g_variant_builder_init(&builder, G_VARIANT_TYPE("a{sv}"));
+        return g_variant_builder_end(&builder);
+    }
+
 void request(
-    char const * method, sal_uInt32 xid,
+    char const * method,
     css::uno::Sequence<OUString> const & resources,
     OUString const & interaction)
 {
@@ -70,13 +77,13 @@ void request(
     }
     auto iactUtf8(OUStringToOString(interaction, RTL_TEXTENCODING_UTF8));
     std::shared_ptr<GDBusProxy> proxy(
-        lcl_GetPackageKitProxy("Modify"), GObjectDeleter<GDBusProxy>());
+        lcl_GetPackageKitProxy("Modify2"), GObjectDeleter<GDBusProxy>());
     GErrorWrapper error;
     std::shared_ptr<GVariant> result(g_dbus_proxy_call_sync(
         proxy.get(), method,
         g_variant_new(
-            "(uass)", static_cast<guint32>(xid), builder.get(),
-            iactUtf8.getStr()),
+            "(asss@a{sv})", builder.get(), iactUtf8.getStr(),
+            "libreoffice-startcenter.desktop", pk_make_platform_data()),
         G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error.getRef()), GVariantDeleter());
 }
 
@@ -92,66 +99,66 @@ namespace shell { namespace sessioninstall
     }
 
 void SyncDbusSessionHelper::InstallPackageFiles(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
+    css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
-    request("InstallPackageFiles", xid, files, interaction);
+    request("InstallPackageFiles", files, interaction);
 }
 
 void SyncDbusSessionHelper::InstallProvideFiles(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
+    css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
-    request("InstallProvideFiles", xid, files, interaction);
+    request("InstallProvideFiles", files, interaction);
 }
 
 void SyncDbusSessionHelper::InstallCatalogs(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
+    css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
-    request("InstallCatalogs", xid, files, interaction);
+    request("InstallCatalogs", files, interaction);
 }
 
 void SyncDbusSessionHelper::InstallPackageNames(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & packages,
+    css::uno::Sequence<OUString> const & packages,
     OUString const & interaction)
 {
-    request("InstallPackageNames", xid, packages, interaction);
+    request("InstallPackageNames", packages, interaction);
 }
 
 void SyncDbusSessionHelper::InstallMimeTypes(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & mimeTypes,
+    css::uno::Sequence<OUString> const & mimeTypes,
     OUString const & interaction)
 {
-    request("InstallMimeTypes", xid, mimeTypes, interaction);
+    request("InstallMimeTypes", mimeTypes, interaction);
 }
 
 void SyncDbusSessionHelper::InstallFontconfigResources(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & resources,
+    css::uno::Sequence<OUString> const & resources,
     OUString const & interaction)
 {
-    request("InstallFontconfigResources", xid, resources, interaction);
+    request("InstallFontconfigResources", resources, interaction);
 }
 
 void SyncDbusSessionHelper::InstallGStreamerResources(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & resources,
+    css::uno::Sequence<OUString> const & resources,
     OUString const & interaction)
 {
-    request("InstallGStreamerResources", xid, resources, interaction);
+    request("InstallGStreamerResources", resources, interaction);
 }
 
 void SyncDbusSessionHelper::RemovePackageByFiles(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
+    css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
-    request("RemovePackageByFiles", xid, files, interaction);
+    request("RemovePackageByFiles", files, interaction);
 }
 
 void SyncDbusSessionHelper::InstallPrinterDrivers(
-    sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
+    css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
-    request("InstallPrinteDrivers", xid, files, interaction);
+    request("InstallPrinteDrivers", files, interaction);
 }
 
 void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled )
