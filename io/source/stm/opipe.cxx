@@ -159,7 +159,7 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
             }
             if( m_pFIFO->getSize() )
             {
-                sal_Int32 nSize = Min( nMaxBytesToRead , m_pFIFO->getSize() );
+                sal_Int32 nSize = std::min( nMaxBytesToRead , m_pFIFO->getSize() );
                 aData.realloc( nSize );
                 m_pFIFO->read( aData , nSize );
                 return nSize;
@@ -197,7 +197,7 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
     }
     m_nBytesToSkip += nBytesToSkip;
 
-    nBytesToSkip = Min( m_pFIFO->getSize() , m_nBytesToSkip );
+    nBytesToSkip = std::min( m_pFIFO->getSize() , m_nBytesToSkip );
     m_pFIFO->skip( nBytesToSkip );
     m_nBytesToSkip -= nBytesToSkip;
 }

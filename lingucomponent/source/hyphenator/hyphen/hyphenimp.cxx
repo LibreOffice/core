@@ -60,9 +60,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-// min, max
-#define Max(a,b) (a > b ? a : b)
-
 Hyphenator::Hyphenator() :
     aEvtListeners   ( GetLinguMutex() )
 {
@@ -364,8 +361,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         {
             const bool bFailed = 0 != hnj_hyphen_hyphenate3( dict, lcword.get(), n, hyphens.get(), nullptr,
                     &rep, &pos, &cut, minLead, minTrail,
-                    Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead  - Max(dict->lhmin, 2))),
-                    Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
+                    std::max<sal_Int16>(dict->clhmin, std::max<sal_Int16>(dict->clhmin, 2) + std::max(0, minLead  - std::max<sal_Int16>(dict->lhmin, 2))),
+                    std::max<sal_Int16>(dict->crhmin, std::max<sal_Int16>(dict->crhmin, 2) + std::max(0, minTrail - std::max<sal_Int16>(dict->rhmin, 2))) );
             if (bFailed)
             {
                 // whoops something did not work
@@ -600,8 +597,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         {
             const bool bFailed = 0 != hnj_hyphen_hyphenate3(dict, lcword.get(), n, hyphens.get(), nullptr,
                     &rep, &pos, &cut, minLead, minTrail,
-                    Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
-                    Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
+                    std::max<sal_Int16>(dict->clhmin, std::max<sal_Int16>(dict->clhmin, 2) + std::max(0, minLead - std::max<sal_Int16>(dict->lhmin, 2))),
+                    std::max<sal_Int16>(dict->crhmin, std::max<sal_Int16>(dict->crhmin, 2) + std::max(0, minTrail - std::max<sal_Int16>(dict->rhmin, 2))) );
             if (bFailed)
             {
                 if (rep)
