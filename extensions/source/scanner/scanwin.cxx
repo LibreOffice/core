@@ -431,7 +431,7 @@ void ImpTwain::ImplXfer()
     if( nCurState == 6 )
     {
         TW_IMAGEINFO    aInfo;
-        HANDLE          hDIB = 0;
+        HANDLE          hDIB = nullptr;
         long            nWidth, nHeight, nXRes, nYRes;
 
         if( PFUNC( &aAppIdent, &aSrcIdent, DG_IMAGE, DAT_IMAGEINFO, MSG_GET, &aInfo ) == TWRC_SUCCESS )
@@ -463,13 +463,13 @@ void ImpTwain::ImplXfer()
                         pBIH->biXPelsPerMeter = FRound( fFactor * nXRes );
                         pBIH->biYPelsPerMeter = FRound( fFactor * nYRes );
 
-                        GlobalUnlock( reinterpret_cast<HGLOBAL>((sal_IntPtr) hDIB) );
+                        GlobalUnlock( static_cast<HGLOBAL>(hDIB) );
                     }
 
-                    mrMgr.SetData( reinterpret_cast<void*>((sal_IntPtr) hDIB) );
+                    mrMgr.SetData( static_cast<void*>(hDIB) );
                 }
                 else
-                    GlobalFree( reinterpret_cast<HGLOBAL>((sal_IntPtr) hDIB) );
+                    GlobalFree( static_cast<HGLOBAL>(hDIB) );
 
                 nCurState = 7;
             }
