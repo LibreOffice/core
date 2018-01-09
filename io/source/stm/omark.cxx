@@ -527,8 +527,8 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
         // read from buffer
         sal_Int32 nRead = 0;
         sal_Int32 nInBuffer = m_pBuffer->getSize() - m_nCurrentPos;
-        sal_Int32 nAdditionalBytesToRead = Min(nMaxBytesToRead-nInBuffer,m_input->available());
-        nAdditionalBytesToRead = Max(0 , nAdditionalBytesToRead );
+        sal_Int32 nAdditionalBytesToRead = std::min<sal_Int32>(nMaxBytesToRead-nInBuffer,m_input->available());
+        nAdditionalBytesToRead = std::max<sal_Int32>(0 , nAdditionalBytesToRead );
 
         // read enough bytes into buffer
         if( 0 == nInBuffer ) {
@@ -543,7 +543,7 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
             m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
         }
 
-        nBytesRead = Min( nMaxBytesToRead , nInBuffer + nRead );
+        nBytesRead = std::min( nMaxBytesToRead , nInBuffer + nRead );
 
         // now take everything from buffer !
         m_pBuffer->readAt( m_nCurrentPos , aData , nBytesRead );
