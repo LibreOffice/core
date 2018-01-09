@@ -309,8 +309,6 @@ void FileStreamWrapper_Impl::checkError()
 #define COMMIT_RESULT_NOTHING_TO_DO     1
 #define COMMIT_RESULT_SUCCESS           2
 
-#define min( x, y ) (( x < y ) ? x : y)
-
 SotClipboardFormatId GetFormatId_Impl( const SvGlobalName& aName )
 {
     if ( aName == SvGlobalName( SO3_SW_CLASSID_60 ) )
@@ -803,7 +801,7 @@ sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
 
             for (sal_uInt64 nInd = 0; nInd < aLength && aReaded == 32000 ; nInd += 32000)
             {
-                sal_uLong aToCopy = min( aLength - nInd, 32000 );
+                sal_uLong aToCopy = std::min<sal_uInt64>( aLength - nInd, 32000 );
                 aReaded = m_rSource->readBytes( aData, aToCopy );
                 aResult += m_pStream->WriteBytes(aData.getArray(), aReaded);
             }
