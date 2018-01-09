@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#if !defined _WIN32 //TODO, #include <sys/file.h>
+
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -988,5 +990,7 @@ llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
 loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
