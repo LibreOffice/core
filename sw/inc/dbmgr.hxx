@@ -243,7 +243,7 @@ class SW_DLLPUBLIC SwDBManager
 
     enum class MergeStatus
     {
-        OK = 0, CANCEL, ERROR
+        Ok = 0, Cancel, Error
     };
 
     MergeStatus     m_aMergeStatus;     ///< current / last merge status
@@ -304,8 +304,8 @@ public:
     bool            Merge( const SwMergeDescriptor& rMergeDesc );
     void            MergeCancel();
 
-    bool     IsMergeOk()     { return MergeStatus::OK     == m_aMergeStatus; };
-    bool     IsMergeError()  { return MergeStatus::ERROR  <= m_aMergeStatus; };
+    bool     IsMergeOk()     { return MergeStatus::Ok     == m_aMergeStatus; };
+    bool     IsMergeError()  { return MergeStatus::Error  <= m_aMergeStatus; };
 
     static std::shared_ptr<SwMailMergeConfigItem> PerformMailMerge(SwView const * pView);
 
