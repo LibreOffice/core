@@ -148,7 +148,7 @@ void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
         // one area copy
         memcpy( &( m_p[nStartWritingIndex]), seq.getConstArray() , nLen );
     }
-    m_nOccupiedBuffer = Max( nPos + seq.getLength() , m_nOccupiedBuffer );
+    m_nOccupiedBuffer = std::max( nPos + seq.getLength() , m_nOccupiedBuffer );
     checkInvariants();
 }
 
