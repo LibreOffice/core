@@ -23,26 +23,26 @@ namespace shell { namespace sessioninstall
             SyncDbusSessionHelper(css::uno::Reference< css::uno::XComponentContext> const&);
 
             // XModify Methods
-            virtual void SAL_CALL InstallPackageFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
+            virtual void SAL_CALL InstallPackageFiles( const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallProvideFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
+            virtual void SAL_CALL InstallProvideFiles( const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallCatalogs( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
+            virtual void SAL_CALL InstallCatalogs( const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallPackageNames( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& packages, const OUString& interaction ) override;
+            virtual void SAL_CALL InstallPackageNames( const css::uno::Sequence< OUString >& packages, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallMimeTypes( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& mimeTypes, const OUString& interaction ) override;
+            virtual void SAL_CALL InstallMimeTypes( const css::uno::Sequence< OUString >& mimeTypes, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& resources, const OUString& interaction ) override;
+            virtual void SAL_CALL InstallFontconfigResources( const css::uno::Sequence< OUString >& resources, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallGStreamerResources( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& resources, const OUString& interaction ) override;
+            virtual void SAL_CALL InstallGStreamerResources( const css::uno::Sequence< OUString >& resources, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const css::uno::Sequence< OUString >& /* types */, const css::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) override
+            virtual void SAL_CALL InstallResources( const css::uno::Sequence< OUString >& /* types */, const css::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) override
                 { throw css::uno::RuntimeException(); } // not implemented
 
-            virtual void SAL_CALL RemovePackageByFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
+            virtual void SAL_CALL RemovePackageByFiles( const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallPrinterDrivers( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
+            virtual void SAL_CALL InstallPrinterDrivers( const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
             // XQuery Methods
             virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, sal_Bool& /* installed */ ) override;

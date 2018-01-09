@@ -22,7 +22,7 @@ module PackageKit
  *  The interface used for modifying the package database.
  *
  * @sa
- * https://git.gnome.org/browse/gnome-software/tree/src/org.freedesktop.PackageKit.xml
+ * https://git.gnome.org/browse/gnome-software/tree/src/org.freedesktop.PackageKit.Modify2.xml
  * for documentation of the corresponding D-Bus interface
  */
 interface XModify : com::sun::star::uno::XInterface
@@ -32,70 +32,70 @@ interface XModify : com::sun::star::uno::XInterface
      * @since LibreOffice 4.0
      */
 
-    void InstallPackageFiles( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+    void InstallPackageFiles([in] sequence< string > files, [in] string interaction);
 
     /**
      * Installs sequence< string > packages to provide sequence< string > files.
      * @since LibreOffice 4.0
      */
 
-    void InstallProvideFiles( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+    void InstallProvideFiles([in] sequence< string > files, [in] string interaction);
 
     /**
      * Installs sequence< string > packages to provide sequence< string > files.
      * @since LibreOffice 4.0
      */
 
-    void InstallCatalogs( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+    void InstallCatalogs([in] sequence< string > files, [in] string interaction);
 
     /**
      * Installs sequence< string > packages from a configured software source.
      * @since LibreOffice 4.0
      */
 
-    void InstallPackageNames( [in] unsigned long xid, [in] sequence< string > packages, [in] string interaction);
+    void InstallPackageNames([in] sequence< string > packages, [in] string interaction);
 
     /**
      * Installs mimetype handlers from a configured software source.
      * @since LibreOffice 4.0
      */
 
-    void InstallMimeTypes( [in] unsigned long xid, [in] sequence< string > mimeTypes, [in] string interaction);
+    void InstallMimeTypes([in] sequence< string > mimeTypes, [in] string interaction);
 
     /**
      * Installs fontconfig resources ( [in] usually fonts) from a configured software source.
      * @since LibreOffice 4.0
      */
 
-    void InstallFontconfigResources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
+    void InstallFontconfigResources([in] sequence< string > resources, [in] string interaction);
 
     /**
      * Installs GStreamer resources ( [in] usually codecs) from a configured software source.
      * @since LibreOffice 4.0
      */
 
-    void InstallGStreamerResources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
+    void InstallGStreamerResources([in] sequence< string > resources, [in] string interaction);
 
     /**
      * Installs resources of a given type from a configured software source.
      * @since LibreOffice 4.0
      */
 
-    void InstallResources( [in] unsigned long xid, [in] sequence< string > types, [in] sequence< string > resources, [in] string interaction);
+    void InstallResources([in] sequence< string > types, [in] sequence< string > resources, [in] string interaction);
 
     /**
      * Removes sequence< string > packages that provide the given local sequence< string > files.
      * @since LibreOffice 4.0
      */
 
-    void RemovePackageByFiles( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+    void RemovePackageByFiles([in] sequence< string > files, [in] string interaction);
 
     /**
      * Installs printer drivers from a configured software source.
      * @since LibreOffice 4.0
      */
 
-    void InstallPrinterDrivers( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+    void InstallPrinterDrivers([in] sequence< string > files, [in] string interaction);
 };
 
 } ; // PackageKit

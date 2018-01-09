@@ -186,7 +186,7 @@ namespace
             return false;
         }
     }
-    void lcl_tryLoadBibliography(const vcl::Window* pTopWindow)
+    void lcl_tryLoadBibliography()
     {
         // lp#527938, debian#602953, fdo#33266, i#105408
         // make sure we actually can instantiate services from base first
@@ -198,11 +198,7 @@ namespace
                 using namespace svtools;
                 Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
                 Sequence< OUString > vPackages { "libreoffice-base" };
-
-                const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : nullptr;
-                sal_uInt32 nDbusId = pEnvData ? GetDbusId(*pEnvData) : 0;
-
-                xSyncDbusSessionHelper->InstallPackageNames(nDbusId, vPackages, OUString());
+                xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
                 // Ill be back (hopefully)!
                 SolarMutexGuard aGuard;
                 executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
@@ -1667,7 +1663,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         break;
 
         case SID_COMP_BIBLIOGRAPHY:
-            lcl_tryLoadBibliography(GetTopWindow());
+            lcl_tryLoadBibliography();
         break;
     }
 }
