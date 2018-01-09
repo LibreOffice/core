@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/subtotaldescriptor.hxx>
 #include <test/sheet/xsubtotaldescriptor.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -30,9 +31,11 @@ using namespace com::sun::star;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 2
+#define NUMBER_OF_TESTS 3
 
-class ScSubTotalDescriptorBaseObj : public CalcUnoApiTest, public apitest::XSubTotalDescriptor
+class ScSubTotalDescriptorBaseObj : public CalcUnoApiTest,
+                                    public apitest::SubTotalDescriptor,
+                                    public apitest::XSubTotalDescriptor
 {
 public:
     ScSubTotalDescriptorBaseObj();
@@ -42,6 +45,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScSubTotalDescriptorBaseObj);
+
+    // SubTotalDescriptor
+    CPPUNIT_TEST(testSubTotalDescriptorProperties);
 
     // XSubTotalDescriptor
     CPPUNIT_TEST(testAddNew);
