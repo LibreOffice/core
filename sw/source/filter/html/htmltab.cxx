@@ -290,7 +290,7 @@ public:
     inline void SetHeight( sal_uInt16 nHeight );
     sal_uInt16 GetHeight() const { return nHeight; }
 
-    inline HTMLTableCell *GetCell( sal_uInt16 nCell ) const;
+    inline HTMLTableCell& GetCell(sal_uInt16 nCell) const;
 
     void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
     SvxAdjust GetAdjust() const { return eAdjust; }
@@ -522,7 +522,7 @@ public:
     ~HTMLTable();
 
     // Identifying of a cell
-    inline HTMLTableCell *GetCell( sal_uInt16 nRow, sal_uInt16 nCell ) const;
+    inline HTMLTableCell& GetCell(sal_uInt16 nRow, sal_uInt16 nCell) const;
 
     // set/determine caption
     inline void SetCaption( const SwStartNode *pStNd, bool bTop );
@@ -778,11 +778,11 @@ inline void HTMLTableRow::SetHeight( sal_uInt16 nHght )
         nHeight = nHght;
 }
 
-inline HTMLTableCell *HTMLTableRow::GetCell( sal_uInt16 nCell ) const
+inline HTMLTableCell& HTMLTableRow::GetCell(sal_uInt16 nCell) const
 {
     OSL_ENSURE( nCell < m_aCells.size(),
         "invalid cell index in HTML table row" );
-    return m_aCells.at(nCell).get();
+    return *m_aCells.at(nCell);
 }
 
 void HTMLTableRow::Expand( sal_uInt16 nCells, bool bOneCell )
@@ -1090,7 +1090,7 @@ const std::shared_ptr<SwHTMLTableLayout>& HTMLTable::CreateLayoutInfo()
         HTMLTableRow *const pRow = (*m_pRows)[i].get();
         for( sal_uInt16 j=0; j<m_nCols; j++ )
         {
-            m_xLayoutInfo->SetCell(pRow->GetCell(j)->CreateLayoutInfo(), i, j);
+            m_xLayoutInfo->SetCell(pRow->GetCell(j).CreateLayoutInfo(), i, j);
             SwHTMLTableLayoutCell* pLayoutCell = m_xLayoutInfo->GetCell(i, j );
 
             if( bExportable )
@@ -1121,10 +1121,12 @@ void HTMLTable::FixRowSpan( sal_uInt16 nRow, sal_uInt16 nCol,
                             const HTMLTableCnts *pCnts )
 {
     sal_uInt16 nRowSpan=1;
-    HTMLTableCell *pCell;
-    while (pCell=GetCell(nRow,nCol), pCell->GetContents().get() == pCnts)
+    while (true)
     {
-        pCell->SetRowSpan( nRowSpan );
+        HTMLTableCell& rCell = GetCell(nRow, nCol);
+        if (rCell.GetContents().get() != pCnts)
+            break;
+        rCell.SetRowSpan(nRowSpan);
         if (m_xLayoutInfo)
             m_xLayoutInfo->GetCell(nRow,nCol)->SetRowSpan(nRowSpan);
 
@@ -1137,7 +1139,7 @@ void HTMLTable::ProtectRowSpan( sal_uInt16 nRow, sal_uInt16 nCol, sal_uInt16 nRo
 {
     for( sal_uInt16 i=0; i<nRowSpan; i++ )
     {
-        GetCell(nRow+i,nCol)->SetProtected();
+        GetCell(nRow+i,nCol).SetProtected();
         if (m_xLayoutInfo)
             m_xLayoutInfo->GetCell(nRow+i,nCol)->SetProtected();
     }
@@ -1152,13 +1154,13 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
     {
         // always the predecessor cell
         if( nCol>0 )
-            pPrevCnts = GetCell( 0, nCol-1 )->GetContents().get();
+            pPrevCnts = GetCell(0, nCol - 1).GetContents().get();
         else
             return m_pPrevStartNode;
     }
     else if( USHRT_MAX==nRow && USHRT_MAX==nCol )
         // contents of preceding cell
-        pPrevCnts = GetCell( m_nRows-1, m_nCols-1 )->GetContents().get();
+        pPrevCnts = GetCell(m_nRows - 1, m_nCols - 1).GetContents().get();
     else
     {
         sal_uInt16 i;
@@ -1169,9 +1171,9 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
         while( i )
         {
             i--;
-            if( 1 == pPrevRow->GetCell(i)->GetRowSpan() )
+            if( 1 == pPrevRow->GetCell(i).GetRowSpan() )
             {
-                pPrevCnts = GetCell(nRow,i)->GetContents().get();
+                pPrevCnts = GetCell(nRow, i).GetContents().get();
                 break;
             }
         }
@@ -1183,14 +1185,14 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
             while( !pPrevCnts && i )
             {
                 i--;
-                pPrevCnts = pPrevRow->GetCell(i)->GetContents().get();
+                pPrevCnts = pPrevRow->GetCell(i).GetContents().get();
             }
         }
     }
     OSL_ENSURE( pPrevCnts, "No previous filled cell found" );
     if( !pPrevCnts )
     {
-        pPrevCnts = GetCell(0,0)->GetContents().get();
+        pPrevCnts = GetCell(0, 0).GetContents().get();
         if( !pPrevCnts )
             return m_pPrevStartNode;
     }
@@ -1268,9 +1270,9 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
     if( pBox->GetSttNd() )
     {
         // Determine background color/graphic
-        const HTMLTableCell *pCell = GetCell( nRow, nCol );
-        pBoxItem = pCell->GetBoxItem();
-        pBGBrushItem = pCell->GetBGBrush().get();
+        const HTMLTableCell& rCell = GetCell(nRow, nCol);
+        pBoxItem = rCell.GetBoxItem();
+        pBGBrushItem = rCell.GetBGBrush().get();
         if( !pBGBrushItem )
         {
             // If a cell spans multiple rows, a background to that row should be copied to the cell.
@@ -1299,10 +1301,10 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 bBottomLine = true;
         }
 
-        eVOri = pCell->GetVertOri();
-        bHasNumFormat = pCell->GetNumFormat( nNumFormat );
+        eVOri = rCell.GetVertOri();
+        bHasNumFormat = rCell.GetNumFormat( nNumFormat );
         if( bHasNumFormat )
-            bHasValue = pCell->GetValue( nValue );
+            bHasValue = rCell.GetValue( nValue );
 
         if( nColSpan==1 && !bTopLine && !bLastBottomLine && !nEmptyRows &&
             !pBGBrushItem && !bHasNumFormat && !pBoxItem)
@@ -1604,23 +1606,23 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
         {
             OSL_ENSURE( nCol < nRightCol, "Gone too far" );
 
-            HTMLTableCell *pCell = GetCell(nTopRow,nCol);
-            const bool bSplit = 1 == pCell->GetColSpan();
+            HTMLTableCell& rCell = GetCell(nTopRow,nCol);
+            const bool bSplit = 1 == rCell.GetColSpan();
 
             OSL_ENSURE((nCol != nRightCol-1) || bSplit, "Split-Flag wrong");
             if( bSplit )
             {
                 SwTableBox* pBox = nullptr;
-                HTMLTableCell *pCell2 = GetCell( nTopRow, nStartCol );
-                if( pCell2->GetColSpan() == (nCol+1-nStartCol) )
+                HTMLTableCell& rCell2 = GetCell(nTopRow, nStartCol);
+                if (rCell2.GetColSpan() == (nCol+1-nStartCol))
                 {
                     // The HTML tables represent a box. So we need to split behind that box
                     nSplitCol = nCol + 1;
 
-                    long nBoxRowSpan = pCell2->GetRowSpan();
-                    if ( !pCell2->GetContents() || pCell2->IsCovered() )
+                    long nBoxRowSpan = rCell2.GetRowSpan();
+                    if (!rCell2.GetContents() || rCell2.IsCovered())
                     {
-                        if ( pCell2->IsCovered() )
+                        if (rCell2.IsCovered())
                             nBoxRowSpan = -1 * nBoxRowSpan;
 
                         const SwStartNode* pPrevStartNd =
@@ -1630,7 +1632,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                         const std::shared_ptr<SwHTMLTableLayoutCnts> xCntsLayoutInfo =
                             xCnts->CreateLayoutInfo();
 
-                        pCell2->SetContents(xCnts);
+                        rCell2.SetContents(xCnts);
                         SwHTMLTableLayoutCell *pCurrCell = m_xLayoutInfo->GetCell(nTopRow, nStartCol);
                         pCurrCell->SetContents(xCntsLayoutInfo);
                         if( nBoxRowSpan < 0 )
@@ -1639,15 +1641,15 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                         // check COLSPAN if needed
                         for( sal_uInt16 j=nStartCol+1; j<nSplitCol; j++ )
                         {
-                            GetCell(nTopRow,j)->SetContents(xCnts);
+                            GetCell(nTopRow, j).SetContents(xCnts);
                             m_xLayoutInfo->GetCell(nTopRow, j)
                                        ->SetContents(xCntsLayoutInfo);
                         }
                     }
 
-                    pBox = MakeTableBox( pLine, pCell2->GetContents().get(),
-                                         nTopRow, nStartCol,
-                                         nBottomRow, nSplitCol );
+                    pBox = MakeTableBox(pLine, rCell2.GetContents().get(),
+                                        nTopRow, nStartCol,
+                                        nBottomRow, nSplitCol);
 
                     if ( 1 != nBoxRowSpan )
                         pBox->setRowSpan( nBoxRowSpan );
@@ -1798,9 +1800,9 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
                  (0==nRow || !((*pParent->m_pRows)[nRow-1])->bBottomBorder)) );
 
     // The child table has to inherit the color of the cell it's contained in, if it doesn't have one
-    const SvxBrushItem *pInhBG = pParent->GetCell(nRow,nCol)->GetBGBrush().get();
+    const SvxBrushItem *pInhBG = pParent->GetCell(nRow, nCol).GetBGBrush().get();
     if( !pInhBG && pParent != m_pTopTable &&
-        pParent->GetCell(nRow,nCol)->GetRowSpan() == pParent->m_nRows )
+        pParent->GetCell(nRow,nCol).GetRowSpan() == pParent->m_nRows )
     {
         // the whole surrounding table is a table in a table and consists only of a single line
         // that's gonna be GC-ed (correctly). That's why the background of that line is copied.
@@ -1889,20 +1891,20 @@ void HTMLTable::SetBorders()
         HTMLTableRow *const pRow = (*m_pRows)[i].get();
         for( sal_uInt16 j=0; j<m_nCols; j++ )
         {
-            HTMLTableCell *pCell = pRow->GetCell(j);
-            if( pCell->GetContents()  )
+            HTMLTableCell& rCell = pRow->GetCell(j);
+            if (rCell.GetContents())
             {
-                HTMLTableCnts *pCnts = pCell->GetContents().get();
+                HTMLTableCnts *pCnts = rCell.GetContents().get();
                 bool bFirstPara = true;
                 while( pCnts )
                 {
                     HTMLTable *pTable = pCnts->GetTable().get();
                     if( pTable && !pTable->BordersSet() )
                     {
-                        pTable->InheritBorders( this, i, j,
-                                                pCell->GetRowSpan(),
-                                                bFirstPara,
-                                                nullptr==pCnts->Next() );
+                        pTable->InheritBorders(this, i, j,
+                                               rCell.GetRowSpan(),
+                                               bFirstPara,
+                                               nullptr==pCnts->Next());
                         pTable->SetBorders();
                     }
                     bFirstPara = false;
@@ -1930,11 +1932,11 @@ sal_uInt16 HTMLTable::GetBorderWidth( const SvxBorderLine& rBLine,
     return nBorderWidth;
 }
 
-inline HTMLTableCell *HTMLTable::GetCell( sal_uInt16 nRow,
-                                          sal_uInt16 nCell ) const
+inline HTMLTableCell& HTMLTable::GetCell(sal_uInt16 nRow,
+                                         sal_uInt16 nCell ) const
 {
     OSL_ENSURE(nRow < m_pRows->size(), "invalid row index in HTML table");
-    return (*m_pRows)[nRow]->GetCell( nCell );
+    return (*m_pRows)[nRow]->GetCell(nCell);
 }
 
 SvxAdjust HTMLTable::GetInheritedAdjust() const
@@ -2008,25 +2010,25 @@ void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
         HTMLTableRow *const pCurRow = (*m_pRows)[m_nCurrentRow].get();
         for( i=m_nCurrentColumn; i<nColsReq; i++ )
         {
-            HTMLTableCell *pCell = pCurRow->GetCell(i);
-            if( pCell->GetContents() )
+            HTMLTableCell& rCell = pCurRow->GetCell(i);
+            if (rCell.GetContents())
             {
                 // A cell from a row further above overlaps this one.
                 // Content and colors are coming from that cell and can be overwritten
                 // or deleted (content) or copied (color) by ProtectRowSpan
-                nSpanedCols = i + pCell->GetColSpan();
-                FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents().get() );
-                if( pCell->GetRowSpan() > nRowSpan )
+                nSpanedCols = i + rCell.GetColSpan();
+                FixRowSpan( m_nCurrentRow-1, i, rCell.GetContents().get() );
+                if (rCell.GetRowSpan() > nRowSpan)
                     ProtectRowSpan( nRowsReq, i,
-                                    pCell->GetRowSpan()-nRowSpan );
+                                    rCell.GetRowSpan()-nRowSpan );
             }
         }
         for( i=nColsReq; i<nSpanedCols; i++ )
         {
             // These contents are anchored in the row above in any case
-            HTMLTableCell *pCell = pCurRow->GetCell(i);
-            FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents().get() );
-            ProtectRowSpan( m_nCurrentRow, i, pCell->GetRowSpan() );
+            HTMLTableCell& rCell = pCurRow->GetCell(i);
+            FixRowSpan( m_nCurrentRow-1, i, rCell.GetContents().get() );
+            ProtectRowSpan( m_nCurrentRow, i, rCell.GetRowSpan() );
         }
     }
 
@@ -2037,7 +2039,7 @@ void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
         {
             const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( rCnts, j, i, eVertOrient, rBGBrushItem, rBoxItem,
+                .Set( rCnts, j, i, eVertOrient, rBGBrushItem, rBoxItem,
                        bHasNumFormat, nNumFormat, bHasValue, nValue, bNoWrap, bCovered );
         }
     }
@@ -2053,7 +2055,7 @@ void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
     if( nCellWidth )
     {
         sal_uInt16 nTmp = bRelWidth ? nCellWidth : (sal_uInt16)aTwipSz.Width();
-        GetCell( m_nCurrentRow, m_nCurrentColumn )->SetWidth( nTmp, bRelWidth );
+        GetCell( m_nCurrentRow, m_nCurrentColumn ).SetWidth( nTmp, bRelWidth );
     }
 
     // Remember height
@@ -2068,7 +2070,7 @@ void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
         m_nCurrentColumn = nSpanedCols;
 
     // and search for the next free cell
-    while( m_nCurrentColumn<m_nCols && GetCell(m_nCurrentRow,m_nCurrentColumn)->IsUsed() )
+    while( m_nCurrentColumn<m_nCols && GetCell(m_nCurrentRow,m_nCurrentColumn).IsUsed() )
         m_nCurrentColumn++;
 }
 
@@ -2107,7 +2109,7 @@ void HTMLTable::OpenRow(SvxAdjust eAdjust, sal_Int16 eVertOrient,
     m_nCurrentColumn=0;
 
     // and search for the next free cell
-    while( m_nCurrentColumn<m_nCols && GetCell(m_nCurrentRow,m_nCurrentColumn)->IsUsed() )
+    while( m_nCurrentColumn<m_nCols && GetCell(m_nCurrentRow,m_nCurrentColumn).IsUsed() )
         m_nCurrentColumn++;
 }
 
@@ -2130,12 +2132,12 @@ void HTMLTable::CloseRow( bool bEmpty )
     sal_uInt16 i=m_nCols;
     while( i )
     {
-        HTMLTableCell *pCell = pRow->GetCell(--i);
-        if( !pCell->GetContents() )
+        HTMLTableCell& rCell = pRow->GetCell(--i);
+        if (!rCell.GetContents())
         {
             sal_uInt16 nColSpan = m_nCols-i;
             if( nColSpan > 1 )
-                pCell->SetColSpan( nColSpan );
+                rCell.SetColSpan(nColSpan);
         }
         else
             break;
@@ -2208,14 +2210,13 @@ void HTMLTable::CloseTable()
     if( m_nRows>m_nCurrentRow )
     {
         HTMLTableRow *const pPrevRow = (*m_pRows)[m_nCurrentRow-1].get();
-        HTMLTableCell *pCell;
         for( i=0; i<m_nCols; i++ )
         {
-            pCell = pPrevRow->GetCell(i);
-            if( pCell->GetRowSpan() > 1 )
+            HTMLTableCell& rCell = pPrevRow->GetCell(i);
+            if (rCell.GetRowSpan() > 1)
             {
-                FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents().get() );
-                ProtectRowSpan(m_nCurrentRow, i, (*m_pRows)[m_nCurrentRow]->GetCell(i)->GetRowSpan());
+                FixRowSpan(m_nCurrentRow-1, i, rCell.GetContents().get());
+                ProtectRowSpan(m_nCurrentRow, i, (*m_pRows)[m_nCurrentRow]->GetCell(i).GetRowSpan());
             }
         }
         for( i=m_nRows-1; i>=m_nCurrentRow; i-- )
