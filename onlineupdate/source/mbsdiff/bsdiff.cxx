@@ -32,9 +32,6 @@
 #define _O_BINARY 0
 #endif
 
-#undef MIN
-#define MIN(x,y) (((x)<(y)) ? (x) : (y))
-
 /*---------------------------------------------------------------------------*/
 
 /* This variable lives in libbz2.  It's declared in bzlib_private.h, so we just
