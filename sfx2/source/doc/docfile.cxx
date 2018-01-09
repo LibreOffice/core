@@ -3393,9 +3393,9 @@ void SfxMedium::CreateTempFile( bool bReplace )
     }
 
     OUString aLogicBase;
-    if (comphelper::isFileUrl(pImpl->m_aLogicName))
+    if (comphelper::isFileUrl(pImpl->m_aLogicName) && !pImpl->m_pInStream)
     {
-        // Try to create the temp file in the same directory.
+        // Try to create the temp file in the same directory when storing.
         sal_Int32 nOffset = pImpl->m_aLogicName.lastIndexOf("/");
         if (nOffset != -1)
             aLogicBase = pImpl->m_aLogicName.copy(0, nOffset);
