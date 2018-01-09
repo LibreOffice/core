@@ -80,7 +80,7 @@ bool CFilterContainer::delFilter( const OUString& aName )
     sal_Int32 pos = getFilterTagPos( aName );
     if ( pos > -1 )
     {
-        m_vFilters.erase( ( m_vFilters.begin() + pos ) );
+        m_vFilters.erase( m_vFilters.begin() + pos );
         m_bIterInitialized = false;
     }
 
