@@ -91,6 +91,8 @@
 #include <unotools/printwarningoptions.hxx>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -1376,6 +1378,68 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage()
         uno::Reference<lang::XComponent> xComp( mxXDrawPage, uno::UNO_QUERY );
     }
     return mxXDrawPage;
+}
+
+class SwDrawPagesObj : public cppu::WeakImplHelper<
+    css::drawing::XDrawPages,
+    css::lang::XServiceInfo>
+{
+private:
+    css::uno::Reference< css::drawing::XDrawPageSupplier > m_xDoc;
+public:
+    SwDrawPagesObj(const css::uno::Reference< css::drawing::XDrawPageSupplier >& rxDoc) : m_xDoc(rxDoc) {}
+
+    // XDrawPages
+    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL
+        insertNewByIndex(sal_Int32 /*nIndex*/) override { throw css::lang::NoSupportException(); }
+
+    virtual void SAL_CALL remove(const css::uno::Reference< css::drawing::XDrawPage >& /*xPage*/) override
+    {
+        throw css::lang::NoSupportException();
+    }
+
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() override { return 1; }
+
+    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
+    {
+        if (Index != 0)
+            throw css::lang::IndexOutOfBoundsException("Writer documents have only one DrawPage!");
+        return css::uno::Any(m_xDoc->getDrawPage());
+    }
+
+    // XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType() override
+    {
+        SolarMutexGuard aGuard;
+        return cppu::UnoType<drawing::XDrawPage>::get();
+    }
+
+    virtual sal_Bool SAL_CALL hasElements() override { return true; }
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override
+    {
+        return OUString("SwDrawPagesObj");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    {
+        return { "com.sun.star.drawing.DrawPages" };
+    }
+};
+
+// XDrawPagesSupplier
+
+uno::Reference<drawing::XDrawPages> SAL_CALL SwXTextDocument::getDrawPages()
+{
+    SolarMutexGuard aGuard;
+    return new SwDrawPagesObj(this);
 }
 
 void SwXTextDocument::Invalidate()

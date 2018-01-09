@@ -301,6 +301,7 @@ public:
     void testTdf114536();
     void testTdf115065();
     void testTdf115132();
+    void testXDrawPagesSupplier();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -481,6 +482,7 @@ public:
     CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST(testTdf115065);
     CPPUNIT_TEST(testTdf115132);
+    CPPUNIT_TEST(testXDrawPagesSupplier);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5941,6 +5943,25 @@ void SwUiWriterTest::testTdf115132()
             CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetSwCursor()->GetNode().FindTableBoxStartNode());
         } while (pWrtShell->GoNextCell(false));
     }
+}
+
+void SwUiWriterTest::testXDrawPagesSupplier()
+{
+    createDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("XDrawPagesSupplier interface is unavailable", xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    CPPUNIT_ASSERT(xDrawPages.is());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There must be only a single DrawPage in Writer documents",
+        sal_Int32(1), xDrawPages->getCount());
+    uno::Any aDrawPage = xDrawPages->getByIndex(0);
+    uno::Reference<drawing::XDrawPage> xDrawPageFromXDrawPages(aDrawPage, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDrawPageFromXDrawPages.is());
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The DrawPage accessed using XDrawPages must be the same as using XDrawPageSupplier",
+        xDrawPage.get(), xDrawPageFromXDrawPages.get());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
