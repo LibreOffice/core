@@ -41,24 +41,12 @@
 
 typedef IDirect3DSurface9 surface_type;
 
-
-#ifndef max
-#define max(a,b) (((a) > (b)) ? (a) : (b))
-#endif
-#ifndef min
-#define min(a,b) (((a) < (b)) ? (a) : (b))
-#endif
-
 #pragma warning(push, 1)
 #pragma warning(disable: 4458)
 
 #include <gdiplus.h>
 
 #pragma warning(pop)
-
-#undef max
-#undef min
-
 
 namespace dxcanvas
 {
