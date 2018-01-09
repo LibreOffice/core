@@ -859,15 +859,6 @@ namespace
             aBuf.append('-').append(pScriptCode);
         return OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
     }
-
-    sal_uInt32 get_xid_for_dbus()
-    {
-        const vcl::Window *pTopWindow = Application::GetActiveTopWindow();
-        if (!pTopWindow)
-            pTopWindow = Application::GetFirstTopLevelWindow();
-        const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : nullptr;
-        return pEnvData ? GetDbusId(*pEnvData) : 0;
-    }
 }
 
 IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
@@ -876,7 +867,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     {
         using namespace org::freedesktop::PackageKit;
         css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-        xSyncDbusSessionHelper->InstallFontconfigResources(get_xid_for_dbus(), comphelper::containerToSequence(m_aCurrentRequests), "hide-finished");
+        xSyncDbusSessionHelper->InstallFontconfigResources(comphelper::containerToSequence(m_aCurrentRequests), "hide-finished");
     }
     catch (const css::uno::Exception& e)
     {

@@ -421,14 +421,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             using namespace svtools;
             css::uno::Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
             const css::uno::Sequence< OUString > vPackages{ "libreoffice-base" };
-
-            vcl::Window* pTopWindow = Application::GetActiveTopWindow();
-            if (!pTopWindow)
-                pTopWindow = Application::GetFirstTopLevelWindow();
-            const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : nullptr;
-            sal_uInt32 nDbusId = pEnvData ? GetDbusId(*pEnvData) : 0;
-
-            xSyncDbusSessionHelper->InstallPackageNames(nDbusId, vPackages, OUString());
+            xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
             SolarMutexGuard aGuard;
             executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_MAILMERGE_INSTALL);
         }
