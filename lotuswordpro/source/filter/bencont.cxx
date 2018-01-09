@@ -326,6 +326,7 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
 
     pMemStream = new SvMemoryStream(pBuf, nLen, StreamMode::READ);
     assert(pMemStream != nullptr);
+    pMemStream->ObjectOwnsMemory(true);
 
     pStream = pMemStream;
 }
