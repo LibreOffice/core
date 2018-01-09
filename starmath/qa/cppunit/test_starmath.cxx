@@ -363,7 +363,7 @@ void Test::editUndoRedo()
         m_xDocShRef->Execute(aUndo);
         m_xDocShRef->UpdateText();
         OUString sFinalText = m_xDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Must now be empty", !sFinalText.getLength());
+        CPPUNIT_ASSERT_MESSAGE("Must now be empty", sFinalText.isEmpty());
     }
 
     SfxRequest aRedo(SID_REDO, SfxCallMode::SYNCHRON, SmDocShell::GetPool());
@@ -379,7 +379,7 @@ void Test::editUndoRedo()
         m_xDocShRef->UpdateText();
         rEditEngine.ClearModifyFlag();
         OUString sFinalText = m_xDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Must be empty", !sFinalText.getLength());
+        CPPUNIT_ASSERT_MESSAGE("Must be empty", sFinalText.isEmpty());
     }
 
 }

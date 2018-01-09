@@ -1929,7 +1929,7 @@ void SmSymDefineDialog::UpdateButtons()
     OUString aTmpSymbolName    (pSymbols->GetText()),
               aTmpSymbolSetName (pSymbolSets->GetText());
 
-    if (aTmpSymbolName.getLength() > 0  &&  aTmpSymbolSetName.getLength() > 0)
+    if (!aTmpSymbolName.isEmpty() && !aTmpSymbolSetName.isEmpty())
     {
         // are all settings equal?
         //! (Font-, Style- and SymbolSet name comparison is not case sensitive)
