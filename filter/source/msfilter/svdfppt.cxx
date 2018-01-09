@@ -3307,22 +3307,17 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                     if ( aHd.nRecInstance < PPT_STYLESHEETENTRYS )
                     {
                         sal_uInt16 nDepth = 0, i = 0;
-                        rSt.ReadUInt16( nDepth );
-                        if ( i <= 5 )
+                        rSt.ReadUInt16(nDepth);
+                        nDepth = std::min<sal_uInt16>(nDepth, nMaxPPTLevels);
+                        auto nHdEndRecPos = DffPropSet::SanitizeEndPos(rSt, aHd.GetRecEndFilePos());
+                        while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nHdEndRecPos ) && ( i < nDepth ) )
                         {
-                            auto nHdEndRecPos = DffPropSet::SanitizeEndPos(rSt, aHd.GetRecEndFilePos());
-                            while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nHdEndRecPos ) && ( i < nDepth ) )
-                            {
-                                bStyles = true;
-                                ReadPPTExtParaLevel( rSt, aExtParaSheet[ (TSS_Type)aHd.nRecInstance ].aExtParaLevel[ i++ ] );
-                            }
-#ifdef DBG_UTIL
-                            if ( rSt.Tell() != aHd.GetRecEndFilePos() )
-                                OSL_FAIL( "PPTExParaProv::PPTExParaProv - error reading PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
-#endif
+                            bStyles = true;
+                            ReadPPTExtParaLevel( rSt, aExtParaSheet[ (TSS_Type)aHd.nRecInstance ].aExtParaLevel[ i++ ] );
                         }
 #ifdef DBG_UTIL
-                        else OSL_FAIL( "PPTExParaProv::PPTExParaProv - depth is greater than 5 (SJ)" );
+                        if ( rSt.Tell() != aHd.GetRecEndFilePos() )
+                            OSL_FAIL( "PPTExParaProv::PPTExParaProv - error reading PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
 #endif
                     }
 #ifdef DBG_UTIL
@@ -3402,8 +3397,9 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
     }
 
     if ( ( nBuFlags & 0x03800000 ) != 0x03800000 )  // merge style sheet
-    {   // we have to read the master attributes
-        if ( pParaProv && ( nLevel < 5 ) )
+    {
+        // we have to read the master attributes
+        if (pParaProv && nLevel < nMaxPPTLevels)
         {
             if ( pParaProv->bStyles )
             {
