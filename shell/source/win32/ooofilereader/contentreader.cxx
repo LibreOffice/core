@@ -111,7 +111,7 @@ ITag* CContentReader::chooseTagReader( const std::wstring& tag_name, const XmlTa
     assert( !m_TagBuilderStack.empty() );
     ITag* pTagBuilder = m_TagBuilderStack.top();
 
-    return ( pTagBuilder->getTagAttribute(CONTENT_TEXT_STYLENAME) );
+    return pTagBuilder->getTagAttribute(CONTENT_TEXT_STYLENAME);
 }
 
 /** add chunk into Chunk Buffer.
