@@ -158,7 +158,7 @@ void SyncDbusSessionHelper::InstallPrinterDrivers(
     css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
-    request("InstallPrinteDrivers", files, interaction);
+    request("InstallPrinterDrivers", files, interaction);
 }
 
 void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled )
