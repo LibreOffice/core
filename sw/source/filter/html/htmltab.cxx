@@ -266,7 +266,7 @@ public:
 };
 
 // Row of a HTML table
-typedef std::vector<std::unique_ptr<HTMLTableCell>> HTMLTableCells;
+typedef std::vector<HTMLTableCell> HTMLTableCells;
 
 class HTMLTableRow
 {
@@ -290,7 +290,11 @@ public:
     inline void SetHeight( sal_uInt16 nHeight );
     sal_uInt16 GetHeight() const { return nHeight; }
 
-    inline HTMLTableCell& GetCell(sal_uInt16 nCell) const;
+    const HTMLTableCell& GetCell(sal_uInt16 nCell) const;
+    HTMLTableCell& GetCell(sal_uInt16 nCell)
+    {
+        return const_cast<HTMLTableCell&>(const_cast<const HTMLTableRow&>(*this).GetCell(nCell));
+    }
 
     void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
     SvxAdjust GetAdjust() const { return eAdjust; }
@@ -522,7 +526,11 @@ public:
     ~HTMLTable();
 
     // Identifying of a cell
-    inline HTMLTableCell& GetCell(sal_uInt16 nRow, sal_uInt16 nCell) const;
+    const HTMLTableCell& GetCell(sal_uInt16 nRow, sal_uInt16 nCell) const;
+    HTMLTableCell& GetCell(sal_uInt16 nRow, sal_uInt16 nCell)
+    {
+        return const_cast<HTMLTableCell&>(const_cast<const HTMLTable&>(*this).GetCell(nRow, nCell));
+    }
 
     // set/determine caption
     inline void SetCaption( const SwStartNode *pStNd, bool bTop );
@@ -755,20 +763,16 @@ std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
                                       bRelWidth, bNoWrap));
 }
 
-HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
-    : bIsEndOfGroup(false),
+HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells) :
+    m_aCells(nCells),
+    bIsEndOfGroup(false),
     nHeight(0),
     nEmptyRows(0),
     eAdjust(SvxAdjust::End),
     eVertOri(text::VertOrientation::TOP),
     bBottomBorder(false)
 {
-    for( sal_uInt16 i=0; i<nCells; i++ )
-    {
-        m_aCells.push_back(o3tl::make_unique<HTMLTableCell>());
-    }
-
-    OSL_ENSURE(nCells == m_aCells.size(),
+    assert(nCells == m_aCells.size() &&
             "wrong Cell count in new HTML table row");
 }
 
@@ -778,11 +782,11 @@ inline void HTMLTableRow::SetHeight( sal_uInt16 nHght )
         nHeight = nHght;
 }
 
-inline HTMLTableCell& HTMLTableRow::GetCell(sal_uInt16 nCell) const
+const HTMLTableCell& HTMLTableRow::GetCell(sal_uInt16 nCell) const
 {
     OSL_ENSURE( nCell < m_aCells.size(),
         "invalid cell index in HTML table row" );
-    return *m_aCells.at(nCell);
+    return m_aCells.at(nCell);
 }
 
 void HTMLTableRow::Expand( sal_uInt16 nCells, bool bOneCell )
@@ -793,12 +797,10 @@ void HTMLTableRow::Expand( sal_uInt16 nCells, bool bOneCell )
     sal_uInt16 nColSpan = nCells - m_aCells.size();
     for (sal_uInt16 i = m_aCells.size(); i < nCells; ++i)
     {
-        std::unique_ptr<HTMLTableCell> pCell(new HTMLTableCell);
-        if( bOneCell )
-            pCell->SetColSpan( nColSpan );
-
-        m_aCells.push_back(std::move(pCell));
-        nColSpan--;
+        m_aCells.emplace_back();
+        if (bOneCell)
+            m_aCells.back().SetColSpan(nColSpan);
+        --nColSpan;
     }
 
     OSL_ENSURE(nCells == m_aCells.size(),
@@ -817,14 +819,14 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
     sal_uInt16 i=nCells;
     while( i )
     {
-        HTMLTableCell *pCell = m_aCells[--i].get();
-        if( !pCell->GetContents() )
+        HTMLTableCell& rCell = m_aCells[--i];
+        if (!rCell.GetContents())
         {
 #if OSL_DEBUG_LEVEL > 0
-            OSL_ENSURE( pCell->GetColSpan() == nEnd - i,
+            OSL_ENSURE( rCell.GetColSpan() == nEnd - i,
                     "invalid col span for empty cell at row end" );
 #endif
-            pCell->SetColSpan( nCells-i);
+            rCell.SetColSpan( nCells-i);
         }
         else
             break;
@@ -832,12 +834,12 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
 #if OSL_DEBUG_LEVEL > 0
     for( i=nCells; i<nEnd; i++ )
     {
-        HTMLTableCell *pCell = m_aCells[i].get();
-        OSL_ENSURE( pCell->GetRowSpan() == 1,
+        HTMLTableCell& rCell = m_aCells[i];
+        OSL_ENSURE( rCell.GetRowSpan() == 1,
                     "RowSpan of to be deleted cell is wrong" );
-        OSL_ENSURE( pCell->GetColSpan() == nEnd - i,
+        OSL_ENSURE( rCell.GetColSpan() == nEnd - i,
                     "ColSpan of to be deleted cell is wrong" );
-        OSL_ENSURE( !pCell->GetContents(), "To be deleted cell has content" );
+        OSL_ENSURE( !rCell.GetContents(), "To be deleted cell has content" );
     }
 #endif
 
@@ -1932,8 +1934,7 @@ sal_uInt16 HTMLTable::GetBorderWidth( const SvxBorderLine& rBLine,
     return nBorderWidth;
 }
 
-inline HTMLTableCell& HTMLTable::GetCell(sal_uInt16 nRow,
-                                         sal_uInt16 nCell ) const
+const HTMLTableCell& HTMLTable::GetCell(sal_uInt16 nRow, sal_uInt16 nCell) const
 {
     OSL_ENSURE(nRow < m_pRows->size(), "invalid row index in HTML table");
     return (*m_pRows)[nRow]->GetCell(nCell);
