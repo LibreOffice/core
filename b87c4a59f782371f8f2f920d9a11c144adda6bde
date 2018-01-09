@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_3b2528c2",
+        "filename": "offapi/com/sun/star/chart2/XDataProviderCreator.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-01-09T08:27:17Z",
+      "side": 1,
+      "message": "Makes sense. Done.",
+      "parentUuid": "1a430d35_90af1f29",
+      "revId": "b87c4a59f782371f8f2f920d9a11c144adda6bde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_d99edf06",
         "filename": "offapi/com/sun/star/chart2/XDataProviderCreator.idl",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2018-01-02T09:11:04Z",
       "side": 1,
       "message": "the @since tag should instead go into the comment pertaining to the new interface as a whole",
+      "revId": "b87c4a59f782371f8f2f920d9a11c144adda6bde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_5b22dcba",
+        "filename": "offapi/com/sun/star/chart2/XDataProviderCreator.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-01-09T08:27:17Z",
+      "side": 1,
+      "message": "Ok. Fixed",
+      "parentUuid": "fa31d9ce_d99edf06",
       "revId": "b87c4a59f782371f8f2f920d9a11c144adda6bde",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
