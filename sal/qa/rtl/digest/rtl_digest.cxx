@@ -388,8 +388,6 @@ public:
         }
 
         {
-#if 0 // Don't remove, but instead fix the test or something
-
             // With this test case rtl_digest_SHA1 computes the wrong sum. This was confirmed
             // by decryption of a MSO encrypted document. Replacing the rtl_digest_SHA1 calculation
             // with sha1 calculation from NSS was able to decrypt the document.
@@ -411,7 +409,6 @@ public:
             OString sKey = createHex(pResult.get(), RTL_DIGEST_LENGTH_SHA1);
 
             CPPUNIT_ASSERT_EQUAL(sExpected, sKey);
-#endif
         }
     }
 

@@ -1047,7 +1047,7 @@ static void endSHA(DigestContextSHA *ctx)
 
     i += 1;
 
-    if (i >= (DIGEST_LBLOCK_SHA - 2))
+    if (i > (DIGEST_LBLOCK_SHA - 2))
     {
         for (; i < DIGEST_LBLOCK_SHA; i++)
         {
