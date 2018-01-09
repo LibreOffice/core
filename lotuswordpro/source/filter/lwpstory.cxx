@@ -107,7 +107,10 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
 
         //Get the xfcontainer for the next para
         pParaCont = xPara->GetXFContainer();
-        xPara.set(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
+        rtl::Reference<LwpPara> xNext(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
+        if (xPara == xNext)
+            throw std::runtime_error("loop in conversion");
+        xPara = xNext;
     }
 
     //process frame which anchor is to cell after converter all the para
