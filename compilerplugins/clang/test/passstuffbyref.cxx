@@ -8,7 +8,6 @@
  */
 
 #include <rtl/ustring.hxx>
-#include <sys/time.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
@@ -57,10 +56,11 @@ struct S2 {
 
 // no warning expected
 
-timeval &operator -= ( timeval &t1, const timeval &t2 );
-timeval operator-( const timeval &t1, const timeval &t2 )
+// Don't flag stuff where the local var is hidden behind a self-returning operation like -=:
+S2 &operator -= ( S2 &t1, const S2 &t2 );
+S2 operator-( const S2 &t1, const S2 &t2 )
 {
-    timeval t0 = t1;
+    S2 t0 = t1;
     return t0 -= t2;
 }
 
