@@ -388,12 +388,6 @@ public:
         }
 
         {
-#if 0 // Don't remove, but instead fix the test or something
-
-            // With this test case rtl_digest_SHA1 computes the wrong sum. This was confirmed
-            // by decryption of a MSO encrypted document. Replacing the rtl_digest_SHA1 calculation
-            // with sha1 calculation from NSS was able to decrypt the document.
-
             const unsigned char aData[] = {
                     0x37, 0x5f, 0x47, 0x7a, 0xd2, 0x13, 0xbe, 0xd2, 0x3c, 0x23, 0x33, 0x39,
                     0x68, 0x21, 0x03, 0x6d, 0x31, 0x00, 0x32, 0x00, 0x33, 0x00, 0x34, 0x00,
@@ -411,7 +405,6 @@ public:
             OString sKey = createHex(pResult.get(), RTL_DIGEST_LENGTH_SHA1);
 
             CPPUNIT_ASSERT_EQUAL(sExpected, sKey);
-#endif
         }
     }
 
