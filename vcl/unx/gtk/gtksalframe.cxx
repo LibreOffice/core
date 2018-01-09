@@ -1051,33 +1051,26 @@ void GtkSalFrame::InitCommon()
                                 None );
 }
 
-static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBeforeRealize )
+static void lcl_set_accept_focus( GtkWindow* pWindow )
 {
-    if (bBeforeRealize)
-        gtk_window_set_accept_focus( pWindow, bAccept );
-    else if( ! bBeforeRealize )
+    if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().startsWith("Metacity") ||
+        GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().endsWith("Muffin)") )
     {
-        Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
-        ::Window aWindow = widget_get_xid(GTK_WIDGET(pWindow));
-        XWMHints* pHints = XGetWMHints( pDisplay, aWindow );
-        if( ! pHints )
-        {
-            pHints = XAllocWMHints();
-            pHints->flags = 0;
-        }
-        pHints->flags |= InputHint;
-        pHints->input = bAccept ? True : False;
-        XSetWMHints( pDisplay, aWindow, pHints );
-        XFree( pHints );
-
-        if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName() == "compiz")
-            return;
+       /*  Metacity considers a toolbar type window as should not
+        *  have focus on mapping, yet it believes it should unfocus
+        *  the parent window... So convince Metacity to not do so,
+        *  by disabling the focus until the window is mapped. We
+        *  will restore the focus later in the map signal.
+        */
+        gtk_window_set_accept_focus( pWindow, false );
 
         /*  remove WM_TAKE_FOCUS protocol; this would usually be the
          *  right thing, but gtk handles it internally whereas we
          *  want to handle it ourselves (as to sometimes not get
          *  the focus)
          */
+        Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
+        ::Window aWindow = widget_get_xid(GTK_WIDGET(pWindow));
         Atom* pProtocols = nullptr;
         int nProtocols = 0;
         XGetWMProtocols( pDisplay,
@@ -1106,25 +1099,12 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
             XFree( pProtocols );
         }
     }
-}
-
-static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
-{
-    GdkWindow* pWin = widget_get_window(GTK_WIDGET(i_pWindow));
-    if (pWin) // only if the window is realized.
-        gdk_x11_window_set_user_time( pWin, i_nTime );
     else
     {
-        Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
-        Atom nUserTime = XInternAtom( pDisplay, "_NET_WM_USER_TIME", True );
-        if( nUserTime )
-        {
-            XChangeProperty( pDisplay, widget_get_xid(GTK_WIDGET(i_pWindow)),
-                             nUserTime, XA_CARDINAL, 32,
-                             PropModeReplace, reinterpret_cast<unsigned char*>(&i_nTime), 1 );
-        }
+        // Only needed for Compiz. The toolbar type hint seems to be enough for other WMs.
+        gtk_window_set_focus_on_map( pWindow, false );
     }
-};
+}
 
 GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )
 {
@@ -1214,7 +1194,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         else if( nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
-            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, true );
+            lcl_set_accept_focus( GTK_WINDOW(m_pWindow) );
             gtk_window_set_decorated( GTK_WINDOW(m_pWindow), false );
         }
         if( (nStyle & SalFrameStyleFlags::PARTIAL_FULLSCREEN )
@@ -1225,31 +1205,18 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         }
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), eType );
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );
+        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), bool(nStyle & SalFrameStyleFlags::SIZEABLE) );
     }
     else if( nStyle & SalFrameStyleFlags::FLOAT )
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_POPUP_MENU );
 
+#ifdef ENABLE_GMENU_INTEGRATION
     if( eWinType == GTK_WINDOW_TOPLEVEL )
     {
-#ifdef ENABLE_GMENU_INTEGRATION
         // Enable DBus native menu if available.
         ensure_dbus_setup( this );
+    }
 #endif
-
-        guint32 nUserTime = 0;
-        if( (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|SalFrameStyleFlags::TOOLWINDOW)) == SalFrameStyleFlags::NONE )
-        {
-            nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
-        }
-        lcl_set_user_time(GTK_WINDOW(m_pWindow), nUserTime);
-    }
-
-    if( bDecoHandling )
-    {
-        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), bool(nStyle & SalFrameStyleFlags::SIZEABLE) );
-        if( nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
-            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, false );
-    }
 }
 
 GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow(GdkNativeWindow aWindow)
@@ -1520,37 +1487,6 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                  */
                  m_pParent->grabPointer( true, true );
             }
-
-            guint32 nUserTime = 0;
-            if( ! bNoActivate && !(m_nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|SalFrameStyleFlags::TOOLWINDOW)) )
-                nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
-
-            //For these floating windows we don't want the main window to lose focus, and metacity has...
-            // metacity-2.24.0/src/core/window.c
-
-            //  if ((focus_window != NULL) && XSERVER_TIME_IS_BEFORE (compare, focus_window->net_wm_user_time))
-            //      "compare" window focus prevented by other activity
-
-            //  where "compare" is this window
-
-            //  which leads to...
-
-            // /* This happens for error dialogs or alerts; these need to remain on
-            // * top, but it would be confusing to have its ancestor remain
-            // * focused.
-            // */
-            // if (meta_window_is_ancestor_of_transient (focus_window, window))
-            //          "The focus window %s is an ancestor of the newly mapped "
-            //         "window %s which isn't being focused.  Unfocusing the "
-            //          "ancestor.\n",
-
-            // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
-            // awesome.
-            if( nUserTime == 0 )
-            {
-                nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
-            }
-            lcl_set_user_time(GTK_WINDOW(m_pWindow), nUserTime );
 
             if( ! bNoActivate && (m_nStyle & SalFrameStyleFlags::TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
@@ -2120,21 +2056,6 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
             {
                 guint32 nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
                 gdk_window_focus( widget_get_window(m_pWindow), nUserTime );
-            }
-            /*  need to do an XSetInputFocus here because
-             *  gdk_window_focus will ask a EWMH compliant WM to put the focus
-             *  to our window - which it of course won't since our input hint
-             *  is set to false.
-             */
-            if (m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
-            {
-                // sad but true: this can cause an XError, we need to catch that
-                // to do this we need to synchronize with the XServer
-                GetGenericUnixSalData()->ErrorTrapPush();
-                XSetInputFocus( getDisplay()->GetDisplay(), widget_get_xid(m_pWindow), RevertToParent, CurrentTime );
-                // fdo#46687 - an XSync should not be necessary - but for some reason it is.
-                XSync( getDisplay()->GetDisplay(), False );
-                GetGenericUnixSalData()->ErrorTrapPop();
             }
         }
         else
@@ -3038,18 +2959,14 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
         }
     }
 
+    if ( pThis->m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
+        gtk_window_set_accept_focus( GTK_WINDOW(pWidget), true );
+
     bool bSetFocus = pThis->m_bSetFocusOnMap;
     pThis->m_bSetFocusOnMap = false;
 
     if( bSetFocus )
-    {
-        GetGenericUnixSalData()->ErrorTrapPush();
-        XSetInputFocus( GtkSalFrame::getDisplay()->GetDisplay(),
-                        widget_get_xid(pWidget),
-                        RevertToParent, CurrentTime );
-        XSync( GtkSalFrame::getDisplay()->GetDisplay(), False );
-        GetGenericUnixSalData()->ErrorTrapPop();
-    }
+        pThis->ToTop( SalFrameToTop::GrabFocus );
 
     pThis->CallCallback( SalEvent::Resize, nullptr );
     pThis->TriggerPaintEvent();
