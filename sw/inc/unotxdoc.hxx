@@ -45,6 +45,7 @@
 #include <com/sun/star/text/XReferenceMarksSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/util/XReplaceable.hpp>
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
@@ -112,6 +113,7 @@ typedef cppu::WeakImplHelper
     css::style::XAutoStylesSupplier,
     css::lang::XServiceInfo,
     css::drawing::XDrawPageSupplier,
+    css::drawing::XDrawPagesSupplier,
     css::text::XDocumentIndexesSupplier,
     css::beans::XPropertySet,
     css::beans::XPropertyState,
@@ -324,6 +326,9 @@ public:
 
     // css::drawing::XDrawPageSupplier
     virtual css::uno::Reference< css::drawing::XDrawPage >  SAL_CALL getDrawPage() override;
+
+    // css::drawing::XDrawPagesSupplier
+    virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getDrawPages() override;
 
     // css::text::XDocumentIndexesSupplier
     virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getDocumentIndexes() override;
