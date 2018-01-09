@@ -3321,7 +3321,8 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                     if ( aHd.nRecInstance < PPT_STYLESHEETENTRYS )
                     {
                         sal_uInt16 nDepth = 0, i = 0;
-                        rSt.ReadUInt16( nDepth );
+                        rSt.ReadUInt16(nDepth);
+                        nDepth = std::min<sal_uInt16>(nDepth, nMaxPPTLevels);
                         auto nHdEndRecPos = DffPropSet::SanitizeEndPos(rSt, aHd.GetRecEndFilePos());
                         while ( ( rSt.GetError() == ERRCODE_NONE ) && ( rSt.Tell() < nHdEndRecPos ) && ( i < nDepth ) )
                         {
@@ -3409,8 +3410,9 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
     }
 
     if ( ( nBuFlags & 0x03800000 ) != 0x03800000 )  // merge style sheet
-    {   // we have to read the master attributes
-        if ( pParaProv && ( nLevel < 5 ) )
+    {
+        // we have to read the master attributes
+        if (pParaProv && nLevel < nMaxPPTLevels)
         {
             if ( pParaProv->bStyles )
             {
