@@ -1051,63 +1051,6 @@ void GtkSalFrame::InitCommon()
                                 None );
 }
 
-static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBeforeRealize )
-{
-    if (bBeforeRealize)
-        gtk_window_set_accept_focus( pWindow, bAccept );
-    else if( ! bBeforeRealize )
-    {
-        Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
-        ::Window aWindow = widget_get_xid(GTK_WIDGET(pWindow));
-        XWMHints* pHints = XGetWMHints( pDisplay, aWindow );
-        if( ! pHints )
-        {
-            pHints = XAllocWMHints();
-            pHints->flags = 0;
-        }
-        pHints->flags |= InputHint;
-        pHints->input = bAccept ? True : False;
-        XSetWMHints( pDisplay, aWindow, pHints );
-        XFree( pHints );
-
-        if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName() == "compiz")
-            return;
-
-        /*  remove WM_TAKE_FOCUS protocol; this would usually be the
-         *  right thing, but gtk handles it internally whereas we
-         *  want to handle it ourselves (as to sometimes not get
-         *  the focus)
-         */
-        Atom* pProtocols = nullptr;
-        int nProtocols = 0;
-        XGetWMProtocols( pDisplay,
-                         aWindow,
-                         &pProtocols, &nProtocols );
-        if( pProtocols )
-        {
-            bool bSet = false;
-            Atom nTakeFocus = XInternAtom( pDisplay, "WM_TAKE_FOCUS", True );
-            if( nTakeFocus )
-            {
-                for( int i = 0; i < nProtocols; i++ )
-                {
-                    if( pProtocols[i] == nTakeFocus )
-                    {
-                        for( int n = i; n < nProtocols-1; n++ )
-                            pProtocols[n] = pProtocols[n+1];
-                        nProtocols--;
-                        i--;
-                        bSet = true;
-                    }
-                }
-            }
-            if( bSet )
-                XSetWMProtocols( pDisplay, aWindow, pProtocols, nProtocols );
-            XFree( pProtocols );
-        }
-    }
-}
-
 static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
 {
     GdkWindow* pWin = widget_get_window(GTK_WIDGET(i_pWindow));
@@ -1214,7 +1157,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         else if( nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
-            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, true );
+            gtk_window_set_focus_on_map( GTK_WINDOW(m_pWindow), false );
             gtk_window_set_decorated( GTK_WINDOW(m_pWindow), false );
         }
         if( (nStyle & SalFrameStyleFlags::PARTIAL_FULLSCREEN )
@@ -1225,6 +1168,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         }
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), eType );
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );
+        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), bool(nStyle & SalFrameStyleFlags::SIZEABLE) );
     }
     else if( nStyle & SalFrameStyleFlags::FLOAT )
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_POPUP_MENU );
@@ -1242,13 +1186,6 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
             nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
         }
         lcl_set_user_time(GTK_WINDOW(m_pWindow), nUserTime);
-    }
-
-    if( bDecoHandling )
-    {
-        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), bool(nStyle & SalFrameStyleFlags::SIZEABLE) );
-        if( nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
-            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, false );
     }
 }
 
@@ -2120,21 +2057,6 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
             {
                 guint32 nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
                 gdk_window_focus( widget_get_window(m_pWindow), nUserTime );
-            }
-            /*  need to do an XSetInputFocus here because
-             *  gdk_window_focus will ask a EWMH compliant WM to put the focus
-             *  to our window - which it of course won't since our input hint
-             *  is set to false.
-             */
-            if (m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
-            {
-                // sad but true: this can cause an XError, we need to catch that
-                // to do this we need to synchronize with the XServer
-                GetGenericUnixSalData()->ErrorTrapPush();
-                XSetInputFocus( getDisplay()->GetDisplay(), widget_get_xid(m_pWindow), RevertToParent, CurrentTime );
-                // fdo#46687 - an XSync should not be necessary - but for some reason it is.
-                XSync( getDisplay()->GetDisplay(), False );
-                GetGenericUnixSalData()->ErrorTrapPop();
             }
         }
         else

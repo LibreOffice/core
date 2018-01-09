@@ -333,7 +333,8 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 
     Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference<XDesktop2> xDesktop = Desktop::create(xContext);
-    Reference<XDispatchProvider> xDispatchProvider(xDesktop->getCurrentFrame(), UNO_QUERY );
+    Reference<XFrame> xFrame(xDesktop->getCurrentFrame());
+    Reference<XDispatchProvider> xDispatchProvider(xFrame, UNO_QUERY);
     if (xDispatchProvider.is())
     {
         INetURLObject aObj( aCommand );
@@ -349,7 +350,11 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 
         Reference<XDispatch> xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
         if (xDispatch.is())
+        {
             xDispatch->dispatch(aTargetURL, aArgs);
+            if (xFrame->getContainerWindow().is())
+                xFrame->getContainerWindow()->setFocus();
+        }
     }
 }
 
