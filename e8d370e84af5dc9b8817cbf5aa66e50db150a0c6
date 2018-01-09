@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_76adf587",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2163,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-09T13:01:32Z",
+      "side": 1,
+      "message": "So clearly, if the nLevelCount is 0, the aRowVector is not pushed back anything above in ln2131, and later referencing its [0] errors out",
+      "range": {
+        "startLine": 2163,
+        "startChar": 39,
+        "endLine": 2163,
+        "endChar": 40
+      },
+      "revId": "e8d370e84af5dc9b8817cbf5aa66e50db150a0c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
