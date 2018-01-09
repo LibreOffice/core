@@ -41,7 +41,6 @@
 
 typedef IDirect3DSurface9 surface_type;
 
-
 #ifndef max
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #endif

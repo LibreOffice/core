@@ -29,23 +29,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <map>
 
-#if defined _MSC_VER
-#ifndef min
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
-#endif
-#endif
-
 #include <prewin.h>
 #include <gdiplus.h>
 #include <postwin.h>
-
-#if defined _MSC_VER
-#undef min
-#undef max
-#endif
 
 inline void ImplSetPixel4( sal_uInt8* pScanline, long nX, const BYTE cIndex )
 {
