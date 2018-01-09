@@ -137,7 +137,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
     bool bAdded = false;
 
     const OUString& aSymbolName( rSymbol.GetName() );
-    if (aSymbolName.getLength() > 0 && rSymbol.GetSymbolSetName().getLength() > 0)
+    if (!aSymbolName.isEmpty() && !rSymbol.GetSymbolSetName().isEmpty())
     {
         const SmSym *pFound = GetSymbolByName( aSymbolName );
         const bool bSymbolConflict = pFound && !pFound->IsEqualInUI( rSymbol );
@@ -170,7 +170,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
 
 void SmSymbolManager::RemoveSymbol( const OUString & rSymbolName )
 {
-    if (rSymbolName.getLength() > 0)
+    if (!rSymbolName.isEmpty())
     {
         size_t nOldSize = m_aSymbols.size();
         m_aSymbols.erase( rSymbolName );
@@ -192,7 +192,7 @@ std::set< OUString > SmSymbolManager::GetSymbolSetNames() const
 const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const OUString& rSymbolSetName )
 {
     SymbolPtrVec_t aRes;
-    if (rSymbolSetName.getLength() > 0)
+    if (!rSymbolSetName.isEmpty())
     {
         SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
         for ( ; aIt != m_aSymbols.end(); ++aIt )
@@ -216,8 +216,8 @@ void SmSymbolManager::Load()
     for (size_t i = 0;  i < nSymbolCount;  ++i)
     {
         const SmSym &rSym = aSymbols[i];
-        OSL_ENSURE( rSym.GetName().getLength() > 0, "symbol without name!" );
-        if (rSym.GetName().getLength() > 0)
+        OSL_ENSURE( !rSym.GetName().isEmpty(), "symbol without name!" );
+        if (!rSym.GetName().isEmpty())
             AddOrReplaceSymbol( rSym );
     }
     m_bModified = true;
