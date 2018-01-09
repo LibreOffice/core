@@ -635,7 +635,7 @@ void Entity::saveException( const Any & e )
     osl::MutexGuard g(maSavedExceptionMutex);
     if (maSavedException.hasValue())
     {
-        SAL_INFO("sax.fastparser", "discarding exception, already have one");
+        SAL_INFO("sax", "discarding exception, already have one");
     }
     else
     {
