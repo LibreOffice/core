@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/spreadsheetviewsettings.hxx>
 #include <test/sheet/xspreadsheetview.hxx>
 #include <test/sheet/xviewfreezable.hxx>
 #include <test/sheet/xviewsplitable.hxx>
@@ -26,11 +27,13 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 3
+#define NUMBER_OF_TESTS 4
 
-class ScTabViewObj : public CalcUnoApiTest, public apitest::XSpreadsheetView,
-                                            public apitest::XViewFreezable,
-                                            public apitest::XViewSplitable
+class ScTabViewObj : public CalcUnoApiTest,
+                     public apitest::SpreadsheetViewSettings,
+                     public apitest::XSpreadsheetView,
+                     public apitest::XViewFreezable,
+                     public apitest::XViewSplitable
 {
 public:
     ScTabViewObj();
@@ -40,6 +43,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTabViewObj);
+
+    // SpreadsheetViewSettings
+    CPPUNIT_TEST(testSpreadsheetViewSettingsProperties);
 
     // XSpreadsheetView
     CPPUNIT_TEST(testGetSetActiveSheet);
