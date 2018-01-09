@@ -3322,21 +3322,15 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                     {
                         sal_uInt16 nDepth = 0, i = 0;
                         rSt.ReadUInt16( nDepth );
-                        if ( i <= 5 )
+                        auto nHdEndRecPos = DffPropSet::SanitizeEndPos(rSt, aHd.GetRecEndFilePos());
+                        while ( ( rSt.GetError() == ERRCODE_NONE ) && ( rSt.Tell() < nHdEndRecPos ) && ( i < nDepth ) )
                         {
-                            auto nHdEndRecPos = DffPropSet::SanitizeEndPos(rSt, aHd.GetRecEndFilePos());
-                            while ( ( rSt.GetError() == ERRCODE_NONE ) && ( rSt.Tell() < nHdEndRecPos ) && ( i < nDepth ) )
-                            {
-                                bStyles = true;
-                                ReadPPTExtParaLevel( rSt, aExtParaSheet[ (TSS_Type)aHd.nRecInstance ].aExtParaLevel[ i++ ] );
-                            }
-#ifdef DBG_UTIL
-                            if ( rSt.Tell() != aHd.GetRecEndFilePos() )
-                                OSL_FAIL( "PPTExParaProv::PPTExParaProv - error reading PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
-#endif
+                            bStyles = true;
+                            ReadPPTExtParaLevel( rSt, aExtParaSheet[ (TSS_Type)aHd.nRecInstance ].aExtParaLevel[ i++ ] );
                         }
 #ifdef DBG_UTIL
-                        else OSL_FAIL( "PPTExParaProv::PPTExParaProv - depth is greater than 5 (SJ)" );
+                        if ( rSt.Tell() != aHd.GetRecEndFilePos() )
+                            OSL_FAIL( "PPTExParaProv::PPTExParaProv - error reading PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
 #endif
                     }
 #ifdef DBG_UTIL
