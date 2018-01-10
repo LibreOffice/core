@@ -24,14 +24,12 @@
 
 ImplAccelManager::~ImplAccelManager()
 {
-    delete mpAccelList;
-    delete mpSequenceList;
 }
 
 bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
 {
     if ( !mpAccelList ) {
-        mpAccelList = new ImplAccelList;
+        mpAccelList.reset( new std::vector< Accelerator* > );
     } else {
         for (Accelerator* i : *mpAccelList) {
             if ( i == pAccel ) {
@@ -68,7 +66,7 @@ void ImplAccelManager::RemoveAccel( Accelerator const * pAccel )
     }
 
     // throw it away
-    for ( ImplAccelList::iterator it = mpAccelList->begin();
+    for ( auto it = mpAccelList->begin();
           it != mpAccelList->end();
           ++it
     ) {
@@ -91,8 +89,7 @@ void ImplAccelManager::EndSequence()
     }
 
     // delete sequence-list
-    delete mpSequenceList;
-    mpSequenceList = nullptr;
+    mpSequenceList.reset();
 }
 
 bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
@@ -193,7 +190,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
             {
 
                 // create sequence list
-                mpSequenceList = new ImplAccelList;
+                mpSequenceList.reset( new std::vector< Accelerator* > );
                 mpSequenceList->insert( mpSequenceList->begin(), pAccel     );
                 mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
 

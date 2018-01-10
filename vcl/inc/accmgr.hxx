@@ -21,24 +21,21 @@
 #define INCLUDED_VCL_INC_ACCMGR_HXX
 
 #include <vector>
+#include <memory>
 
 #include <vcl/keycod.hxx>
 
 class Accelerator;
 
-typedef ::std::vector< Accelerator* > ImplAccelList;
-
 class ImplAccelManager
 {
 private:
-    ImplAccelList*      mpAccelList;
-    ImplAccelList*      mpSequenceList;
+    std::unique_ptr<std::vector< Accelerator* >> mpAccelList;
+    std::unique_ptr<std::vector< Accelerator* >> mpSequenceList;
 
 public:
                         ImplAccelManager()
                         {
-                            mpAccelList    = nullptr;
-                            mpSequenceList = nullptr;
                         }
                         ~ImplAccelManager();
 
