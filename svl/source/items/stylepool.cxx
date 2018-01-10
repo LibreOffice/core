@@ -33,11 +33,11 @@ namespace {
      */
     class Node
     {
-        std::vector<Node*> mChildren; // child nodes, create by findChildNode(..)
+        std::vector<std::unique_ptr<Node>> mChildren; // child nodes, create by findChildNode(..)
         // container of shared pointers of inserted item sets; for non-poolable
         // items more than one item set is needed
         std::vector< std::shared_ptr<SfxItemSet> > maItemSet;
-        const SfxPoolItem *mpItem;   // my pool item
+        std::unique_ptr<const SfxPoolItem> mpItem;   // my pool item
         Node *mpUpper;               // if I'm a child node that's my parent node
         // #i86923#
         const bool mbIsItemIgnorable;
@@ -57,7 +57,6 @@ namespace {
               mpUpper( pParent ),
               mbIsItemIgnorable( bIgnorable )
         {}
-        ~Node();
         // #i86923#
         bool hasItemSet( const bool bCheckUsage ) const;
         // #i87808#
@@ -127,18 +126,15 @@ namespace {
     Node* Node::findChildNode( const SfxPoolItem& rItem,
                                const bool bIsItemIgnorable )
     {
-        Node* pNextNode = this;
-        std::vector<Node*>::const_iterator aIter = mChildren.begin();
-        while( aIter != mChildren.end() )
+        for( auto const & rChild : mChildren )
         {
-            if( rItem.Which() == (*aIter)->mpItem->Which() &&
-                rItem == *(*aIter)->mpItem )
-                return *aIter;
-            ++aIter;
+            if( rItem.Which() == rChild->mpItem->Which() &&
+                rItem == *rChild->mpItem )
+                return rChild.get();
         }
         // #i86923#
-        pNextNode = new Node( rItem, pNextNode, bIsItemIgnorable );
-        mChildren.push_back( pNextNode );
+        auto pNextNode = new Node( rItem, this, bIsItemIgnorable );
+        mChildren.emplace_back( pNextNode );
         return pNextNode;
     }
 
@@ -164,12 +160,13 @@ namespace {
                              const bool bSkipIgnorable )
     {
         // Searching downstairs
-        std::vector<Node*>::const_iterator aIter = mChildren.begin();
+        auto aIter = mChildren.begin();
         // For pLast == 0 and pLast == this all children are of interest
         // for another pLast the search starts behind pLast...
         if( pLast && pLast != this )
         {
-            aIter = std::find( mChildren.begin(), mChildren.end(), pLast );
+            aIter = std::find_if( mChildren.begin(), mChildren.end(),
+                                  [&] (std::unique_ptr<Node> const &p) { return p.get() == pLast; });
             if( aIter != mChildren.end() )
                 ++aIter;
         }
@@ -182,7 +179,7 @@ namespace {
                 ++aIter;
                 continue;
             }
-            pNext = *aIter;
+            pNext = aIter->get();
             // #i86923#
             if ( pNext->hasItemSet( bSkipUnusedItemSets ) )
             {
@@ -212,10 +209,10 @@ namespace {
     {
         bool bHasIgnorableChildren( false );
 
-        std::vector<Node*>::const_iterator aIter = mChildren.begin();
+        auto aIter = mChildren.begin();
         while( aIter != mChildren.end() && !bHasIgnorableChildren )
         {
-            Node* pChild = *aIter;
+            Node* pChild = aIter->get();
             if ( pChild->mbIsItemIgnorable )
             {
                 bHasIgnorableChildren =
@@ -235,10 +232,10 @@ namespace {
         DBG_ASSERT( hasIgnorableChildren( bSkipUnusedItemSets ),
                     "<Node::getItemSetOfIgnorableChild> - node has no ignorable children" );
 
-        std::vector<Node*>::const_iterator aIter = mChildren.begin();
+        auto aIter = mChildren.begin();
         while( aIter != mChildren.end() )
         {
-            Node* pChild = *aIter;
+            Node* pChild = aIter->get();
             if ( pChild->mbIsItemIgnorable )
             {
                 if ( pChild->hasItemSet( bSkipUnusedItemSets ) )
@@ -259,17 +256,6 @@ namespace {
 
         std::shared_ptr<SfxItemSet> pReturn;
         return pReturn;
-    }
-
-    Node::~Node()
-    {
-        std::vector<Node*>::const_iterator aIter = mChildren.begin();
-        while( aIter != mChildren.end() )
-        {
-            delete *aIter;
-            ++aIter;
-        }
-        delete mpItem;
     }
 
     class Iterator : public IStylePoolIteratorAccess

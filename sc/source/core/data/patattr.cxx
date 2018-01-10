@@ -129,8 +129,8 @@ inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     if ( rSet1.Count() != rSet2.Count() )
         return false;
 
-    SfxItemArray pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
-    SfxItemArray pItems2 = rSet2.GetItems_Impl();
+    SfxPoolItem const ** pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
+    SfxPoolItem const ** pItems2 = rSet2.GetItems_Impl();
 
     return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
 }

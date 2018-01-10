@@ -347,7 +347,7 @@ namespace svl { namespace undo { namespace impl
         {
             // remember
             if ( i_action )
-                m_aUndoActionsCleanup.push_back( i_action );
+                m_aUndoActionsCleanup.emplace_back( i_action );
         }
 
         /** schedules the given SfxUndoListener method to be called for all registered listeners.
@@ -368,7 +368,7 @@ namespace svl { namespace undo { namespace impl
     private:
         SfxUndoManager_Data&                m_rManagerData;
         ::osl::ResettableMutexGuard         m_aGuard;
-        ::std::vector< SfxUndoAction* >     m_aUndoActionsCleanup;
+        ::std::vector< std::unique_ptr<SfxUndoAction> > m_aUndoActionsCleanup;
         ::std::vector< NotifyUndoListener > m_notifiers;
     };
 
@@ -381,8 +381,6 @@ namespace svl { namespace undo { namespace impl
         m_aGuard.clear();
 
         // delete all actions
-        for (auto const& undoAction : m_aUndoActionsCleanup)
-            delete undoAction;
         m_aUndoActionsCleanup.clear();
 
         // handle scheduled notification

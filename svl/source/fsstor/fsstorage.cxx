@@ -72,8 +72,8 @@ struct FSStorage_Impl
     ::ucbhelper::Content m_aContent;
     sal_Int32 m_nMode;
 
-    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
-    ::cppu::OTypeCollection* m_pTypeCollection;
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
+    std::unique_ptr<::cppu::OTypeCollection> m_pTypeCollection;
 
     uno::Reference< uno::XComponentContext > m_xContext;
 
@@ -89,18 +89,10 @@ struct FSStorage_Impl
         OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
     }
 
-    ~FSStorage_Impl();
-
     // Copy assignment is forbidden and not implemented.
     FSStorage_Impl (const FSStorage_Impl &) = delete;
     FSStorage_Impl & operator= (const FSStorage_Impl &) = delete;
 };
-
-FSStorage_Impl::~FSStorage_Impl()
-{
-    delete m_pListenersContainer;
-    delete m_pTypeCollection;
-}
 
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,
@@ -276,11 +268,11 @@ uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
 
         if ( m_pImpl->m_pTypeCollection == nullptr )
         {
-            m_pImpl->m_pTypeCollection = new ::cppu::OTypeCollection
+            m_pImpl->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                 (   cppu::UnoType<lang::XTypeProvider>::get()
                                 ,   cppu::UnoType<embed::XStorage>::get()
                                 ,   cppu::UnoType<embed::XHierarchicalStorageAccess>::get()
-                                ,   cppu::UnoType<beans::XPropertySet>::get());
+                                ,   cppu::UnoType<beans::XPropertySet>::get()) );
         }
     }
 
@@ -1056,7 +1048,7 @@ void SAL_CALL FSStorage::addEventListener(
         throw lang::DisposedException();
 
     if ( !m_pImpl->m_pListenersContainer )
-        m_pImpl->m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
+        m_pImpl->m_pListenersContainer.reset(new ::comphelper::OInterfaceContainerHelper2( m_aMutex ));
 
     m_pImpl->m_pListenersContainer->addInterface( xListener );
 }

@@ -130,7 +130,7 @@ bool SvInputStream::open()
         }
         m_xSeekable.set(m_xStream, uno::UNO_QUERY);
         if (!m_xSeekable.is())
-            m_pPipe = new SvDataPipe_Impl;
+            m_pPipe.reset( new SvDataPipe_Impl );
     }
     return true;
 }
@@ -338,7 +338,6 @@ SvInputStream::~SvInputStream()
         {
         }
     }
-    delete m_pPipe;
 }
 
 //  SvOutputStream
