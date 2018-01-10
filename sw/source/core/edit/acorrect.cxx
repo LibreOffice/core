@@ -339,6 +339,12 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
             {
                 // replace the selection
                 pDoc->getIDocumentContentOperations().ReplaceRange( aPam, pFnd->GetLong(), false);
+                // tdf#83260 After calling sw::DocumentContentOperationsManager::ReplaceRange
+                // pTextNd may become invalid when change tracking is on and Edit -> Track Changes -> Show == OFF.
+                // ReplaceRange shows changes, this moves deleted nodes from special section to document.
+                // Then Show mode is disabled again. As a result pTextNd may be invalidated.
+                pTextNd = rCursor.GetNode().GetTextNode();
+
                 bRet = true;
             }
         }
