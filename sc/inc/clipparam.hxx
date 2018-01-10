@@ -26,8 +26,6 @@
 
 #include <vector>
 
-class SfxViewShell;
-
 /**
  * This struct stores general clipboard parameters associated with a
  * ScDocument instance created in clipboard mode.
@@ -40,7 +38,6 @@ struct ScClipParam
     Direction           meDirection;
     bool                mbCutMode;
     sal_uInt32          mnSourceDocID;
-    SfxViewShell*       mpSourceView;
     ScRangeListVector   maProtectedChartRangesVector;
 
     ScClipParam();
@@ -70,9 +67,6 @@ struct ScClipParam
 
     sal_uInt32 getSourceDocID() const { return mnSourceDocID; }
     void setSourceDocID( sal_uInt32 nVal ) { mnSourceDocID = nVal; }
-
-    SfxViewShell* getSourceView() const { return mpSourceView; }
-    void setSourceView( SfxViewShell* pSourceView ) { mpSourceView = pSourceView; }
 };
 
 #endif

@@ -227,14 +227,6 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
             // and lose the 'if' above
             aClipParam.setSourceDocID( pDoc->GetDocumentID() );
 
-            // This is only a workaround, which doesn't allow to paste content
-            // in one view which has been copied in a different view.
-            // TODO: implement a solution providing one clipboard per view
-            if (comphelper::LibreOfficeKit::isActive())
-            {
-                aClipParam.setSourceView(GetViewData().GetViewShell());
-            }
-
             if (SfxObjectShell* pObjectShell = pDoc->GetDocumentShell())
             {
                 // Copy document properties from pObjectShell to pClipDoc (to its clip options, as it has no object shell).
@@ -874,20 +866,6 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     if (GetViewData().SelectionForbidsCellFill())
         return false;
-
-    // This is only a workaround, which doesn't allow to paste content
-    // in one view which has been copied in a different view.
-    // TODO: implement a solution providing one clipboard per view
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        ScTabViewShell* pThisView = GetViewData().GetViewShell();
-        ScTabViewShell* pSourceView = dynamic_cast<ScTabViewShell*>(pClipDoc->GetClipParam().getSourceView());
-
-        if (pThisView && pSourceView && pThisView != pSourceView)
-        {
-            return false;
-        }
-    }
 
     //  undo: save all or no content
     InsertDeleteFlags nContFlags = InsertDeleteFlags::NONE;
