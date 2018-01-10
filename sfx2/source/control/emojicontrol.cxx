@@ -160,13 +160,14 @@ IMPL_LINK_NOARG(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
 
 IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 {
-    OUString sHexText = OUString::number(pItem->getTitle().toUInt32(16));
+    OUString sHexText = pItem->getTitle();
+    sal_uInt32 cEmojiChar = sHexText.toUInt32(16);
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
 
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "Symbols", uno::Any(sHexText) },
+            { "Symbols", uno::Any(OUString(&cEmojiChar, 1)) },
             // add font settings here
             { "FontName", uno::Any(sFontName) }
         }));
