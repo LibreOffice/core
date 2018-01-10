@@ -189,7 +189,7 @@ public:
     void                RemoveStandardButton();
 
     short               Execute() override;
-    void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    void                StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>()) override;
     void                Start();
 
     const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }

@@ -535,12 +535,12 @@ short SfxTabDialog::Execute()
 }
 
 
-void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+void SfxTabDialog::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner)
 {
     if ( !m_pTabCtrl->GetPageCount() )
         return;
     Start_Impl();
-    TabDialog::StartExecuteModal( rEndDialogHdl );
+    TabDialog::StartExecuteModal(rEndDialogHdl, rVclPtrOwner);
 }
 
 

@@ -175,11 +175,12 @@ private:
     void            DoReadUserData( const OUString& rData );
     void            DoReadUserDataSequence( const css::uno::Sequence< css::beans::PropertyValue >& rSettings );
 
-    DECL_LINK( SimpleRefClose, const OUString*, void );
-    DECL_LINK( SimpleRefDone, const OUString&, void );
-    DECL_LINK( SimpleRefAborted, const OUString&, void );
-    DECL_LINK( SimpleRefChange, const OUString&, void );
-    DECL_LINK( FormControlActivated, LinkParamNone*, void );
+    DECL_LINK(SimpleRefClose, const OUString*, void);
+    DECL_LINK(SimpleRefDone, const OUString&, void);
+    DECL_LINK(SimpleRefAborted, const OUString&, void);
+    DECL_LINK(SimpleRefChange, const OUString&, void);
+    DECL_LINK(FormControlActivated, LinkParamNone*, void);
+    DECL_LINK(DialogClosedHdl, Dialog&, void);
 
 protected:
     virtual void    Activate(bool bMDI) override;

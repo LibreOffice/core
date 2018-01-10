@@ -469,7 +469,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     } // while ( nWitch )
 }
 
-void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
+void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& /*rReq*/, const OString &rName)
 {
     ScDocument*             pDoc    = GetViewData().GetDocument();
 
@@ -536,11 +536,13 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScAttrDlg(GetDialogParent(), pOldSet.get()));
+    VclPtr<SfxAbstractTabDialog2> pDlg(pFact->CreateScAttrDlg2(GetDialogParent(), pOldSet.get()));
 
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);
-    short nResult = pDlg->Execute();
+
+    pDlg->StartExecuteModal(LINK(this, ScTabViewShell, DialogClosedHdl), pDlg);
+    /*short nResult = pDlg->Execute();
     bInFormatDialog = false;
 
     if ( nResult == RET_OK )
@@ -557,6 +559,29 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
         ApplyAttributes(pOutSet, pOldSet.get());
 
         rReq.Done( *pOutSet );
+    }*/
+}
+
+IMPL_LINK(ScTabViewShell, DialogClosedHdl, Dialog&, rDlg, void)
+{
+    short nResult = rDlg.GetResult();
+    bInFormatDialog = false;
+
+    if (nResult == RET_OK)
+    {
+        /*
+        const SfxItemSet* pOutSet = rDlg.GetOutputItemSet();
+
+        const SfxPoolItem* pItem = nullptr;
+        if (pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO, true, &pItem) == SfxItemState::SET)
+        {
+            UpdateNumberFormatter(static_cast<const SvxNumberInfoItem&>(*pItem));
+        }
+
+        ApplyAttributes(pOutSet, pOldSet.get());
+
+        rReq.Done(*pOutSet);
+        */
     }
 }
 

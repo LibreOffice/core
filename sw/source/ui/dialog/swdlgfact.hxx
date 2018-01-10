@@ -358,7 +358,7 @@ public:
      {}
     virtual         ~AbstractMailMergeWizard_Impl() override;
     virtual void    dispose() override;
-    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    virtual void    StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>()) override;
     virtual sal_Int32 GetResult() override;
 
     virtual OUString            GetReloadDocument() const override;
