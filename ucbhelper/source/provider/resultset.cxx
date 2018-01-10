@@ -143,8 +143,8 @@ struct ResultSet_Impl
     uno::Sequence< beans::Property >                m_aProperties;
     rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
     osl::Mutex                          m_aMutex;
-    cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
-    PropertyChangeListeners*            m_pPropertyChangeListeners;
+    std::unique_ptr<cppu::OInterfaceContainerHelper> m_pDisposeEventListeners;
+    std::unique_ptr<PropertyChangeListeners>        m_pPropertyChangeListeners;
     sal_Int32                           m_nPos;
     bool                            m_bWasNull;
     bool                            m_bAfterLast;
@@ -154,7 +154,6 @@ struct ResultSet_Impl
         const uno::Sequence< beans::Property >& rProperties,
         const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
         const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
-    inline ~ResultSet_Impl();
 };
 
 inline ResultSet_Impl::ResultSet_Impl(
@@ -172,13 +171,6 @@ inline ResultSet_Impl::ResultSet_Impl(
   m_bWasNull( false ),
   m_bAfterLast( false )
 {
-}
-
-
-inline ResultSet_Impl::~ResultSet_Impl()
-{
-    delete m_pDisposeEventListeners;
-    delete m_pPropertyChangeListeners;
 }
 
 
@@ -313,8 +305,8 @@ void SAL_CALL ResultSet::addEventListener(
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_pDisposeEventListeners )
-        m_pImpl->m_pDisposeEventListeners =
-            new cppu::OInterfaceContainerHelper( m_pImpl->m_aMutex );
+        m_pImpl->m_pDisposeEventListeners.reset(
+            new cppu::OInterfaceContainerHelper( m_pImpl->m_aMutex ));
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -1314,8 +1306,8 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
         throw beans::UnknownPropertyException();
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
-        m_pImpl->m_pPropertyChangeListeners
-            = new PropertyChangeListeners( m_pImpl->m_aMutex );
+        m_pImpl->m_pPropertyChangeListeners.reset(
+             new PropertyChangeListeners( m_pImpl->m_aMutex ));
 
     m_pImpl->m_pPropertyChangeListeners->addInterface(
                                                 aPropertyName, xListener );

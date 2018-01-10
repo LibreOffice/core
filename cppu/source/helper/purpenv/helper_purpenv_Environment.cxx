@@ -26,6 +26,7 @@
 
 #include <typelib/typedescription.h>
 #include <osl/interlck.h>
+#include <memory>
 
 extern "C" {
 typedef void EnvFun_P   (uno_Environment *);
@@ -95,7 +96,7 @@ public:
 protected:
     oslInterlockedCount    m_nRef;
     uno_Environment      * m_pEnv;
-    cppu::Enterable      * m_pEnterable;
+    std::unique_ptr<cppu::Enterable> m_pEnterable;
 
     EnvFun_P    * m_env_acquire;
     EnvFun_P    * m_env_release;
@@ -263,7 +264,7 @@ Base::~Base()
 
     m_pEnv->pReserved = nullptr;
 
-    delete m_pEnterable;
+    m_pEnterable.reset();
     m_pEnv->release(m_pEnv);
 }
 
