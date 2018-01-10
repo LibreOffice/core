@@ -209,14 +209,14 @@ class HTMLTableCell
     std::shared_ptr<SvxBrushItem> m_xBGBrush;         // cell background
     std::shared_ptr<SvxBoxItem> m_xBoxItem;
 
-    sal_uInt32 nNumFormat;
-    sal_uInt16 nRowSpan;                // cell ROWSPAN
-    sal_uInt16 nColSpan;                // cell COLSPAN
-    sal_uInt16 nWidth;                  // cell WIDTH
     double nValue;
-    sal_Int16 eVertOri;         // vertical alignment of the cell
-    bool bProtected : 1;            // cell must not filled
-    bool bRelWidth : 1;             // nWidth is given in %
+    sal_uInt32 nNumFormat;
+    sal_uInt16 nRowSpan;           // cell ROWSPAN
+    sal_uInt16 nColSpan;           // cell COLSPAN
+    sal_uInt16 nWidth;             // cell WIDTH
+    sal_Int16 eVertOri;             // vertical alignment of the cell
+    bool bProtected : 1;           // cell must not filled
+    bool bRelWidth : 1;            // nWidth is given in %
     bool bHasNumFormat : 1;
     bool bHasValue : 1;
     bool bNoWrap : 1;
@@ -271,21 +271,21 @@ typedef std::vector<HTMLTableCell> HTMLTableCells;
 class HTMLTableRow
 {
     HTMLTableCells m_aCells;                ///< cells of the row
-
-    bool bIsEndOfGroup : 1;
-
-    sal_uInt16 nHeight;                     // options of <TR>/<TD>
-    sal_uInt16 nEmptyRows;                  // number of empty rows are following
+    std::unique_ptr<SvxBrushItem> xBGBrush; // background of cell from STYLE
 
     SvxAdjust eAdjust;
+    sal_uInt16 nHeight;                     // options of <TR>/<TD>
+    sal_uInt16 nEmptyRows;                  // number of empty rows are following
     sal_Int16 eVertOri;
-    std::unique_ptr<SvxBrushItem> xBGBrush;             // background of cell from STYLE
+    bool bIsEndOfGroup : 1;
+    bool bBottomBorder : 1;            // Is there a line after the row?
 
 public:
 
-    bool bBottomBorder;                 // Is there a line after the row?
-
     explicit HTMLTableRow( sal_uInt16 nCells );    // cells of the row are empty
+
+    void SetBottomBorder(bool bIn) { bBottomBorder = bIn; }
+    bool GetBottomBorder() const { return bBottomBorder; }
 
     inline void SetHeight( sal_uInt16 nHeight );
     sal_uInt16 GetHeight() const { return nHeight; }
@@ -683,11 +683,11 @@ const std::shared_ptr<SwHTMLTableLayoutCnts>& HTMLTableCnts::CreateLayoutInfo()
 }
 
 HTMLTableCell::HTMLTableCell():
+    nValue(0),
     nNumFormat(0),
     nRowSpan(1),
     nColSpan(1),
     nWidth( 0 ),
-    nValue(0),
     eVertOri( text::VertOrientation::NONE ),
     bProtected(false),
     bRelWidth( false ),
@@ -763,14 +763,14 @@ std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
                                       bRelWidth, bNoWrap));
 }
 
-HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells) :
-    m_aCells(nCells),
-    bIsEndOfGroup(false),
-    nHeight(0),
-    nEmptyRows(0),
-    eAdjust(SvxAdjust::End),
-    eVertOri(text::VertOrientation::TOP),
-    bBottomBorder(false)
+HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
+    : m_aCells(nCells)
+    , eAdjust(SvxAdjust::End)
+    , nHeight(0)
+    , nEmptyRows(0)
+    , eVertOri(text::VertOrientation::TOP)
+    , bIsEndOfGroup(false)
+    , bBottomBorder(false)
 {
     assert(nCells == m_aCells.size() &&
             "wrong Cell count in new HTML table row");
@@ -1286,7 +1286,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         }
 
         bTopLine = 0==nRow && m_bTopBorder && bFirstPara;
-        if (m_aRows[nRow+nRowSpan-1].bBottomBorder && bLastPara)
+        if (m_aRows[nRow+nRowSpan-1].GetBottomBorder() && bLastPara)
         {
             nEmptyRows = m_aRows[nRow+nRowSpan-1].GetEmptyRows();
             if( nRow+nRowSpan == m_nRows )
@@ -1779,9 +1779,9 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
         m_bFillerTopBorder = true; // fillers get a border too
         m_aTopBorderLine = pParent->m_aTopBorderLine;
     }
-    if (pParent->m_aRows[nRow+nRowSpan-1].bBottomBorder && bLastPara)
+    if (pParent->m_aRows[nRow+nRowSpan-1].GetBottomBorder() && bLastPara)
     {
-        m_aRows[m_nRows-1].bBottomBorder = true;
+        m_aRows[m_nRows-1].SetBottomBorder(true);
         m_bFillerBottomBorder = true; // fillers get a border too
         m_aBottomBorderLine =
             nRow+nRowSpan==pParent->m_nRows ? pParent->m_aBottomBorderLine
@@ -1791,7 +1791,7 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
     // The child table mustn't get an upper or lower border, if that's already done by the surrounding table
     // It can get an upper border if the table is not the first paragraph in that cell
     m_bTopAllowed = ( !bFirstPara || (pParent->m_bTopAllowed &&
-                 (0==nRow || !pParent->m_aRows[nRow-1].bBottomBorder)) );
+                 (0==nRow || !pParent->m_aRows[nRow-1].GetBottomBorder())) );
 
     // The child table has to inherit the color of the cell it's contained in, if it doesn't have one
     const SvxBrushItem *pInhBG = pParent->GetCell(nRow, nCol).GetBGBrush().get();
@@ -1861,7 +1861,7 @@ void HTMLTable::SetBorders()
             ((HTMLTableRules::Cols==m_eRules || HTMLTableRules::Groups==m_eRules) &&
              m_aRows[i].IsEndOfGroup()))
         {
-            m_aRows[i].bBottomBorder = true;
+            m_aRows[i].SetBottomBorder(true);
         }
 
     if( m_bTopAllowed && (HTMLTableFrame::Above==m_eFrame || HTMLTableFrame::HSides==m_eFrame ||
@@ -1870,7 +1870,7 @@ void HTMLTable::SetBorders()
     if( HTMLTableFrame::Below==m_eFrame || HTMLTableFrame::HSides==m_eFrame ||
         HTMLTableFrame::Box==m_eFrame )
     {
-        m_aRows[m_nRows-1].bBottomBorder = true;
+        m_aRows[m_nRows-1].SetBottomBorder(true);
     }
     if( HTMLTableFrame::RHS==m_eFrame || HTMLTableFrame::VSides==m_eFrame ||
                       HTMLTableFrame::Box==m_eFrame )
