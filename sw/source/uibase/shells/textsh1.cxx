@@ -1623,7 +1623,17 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             if (comphelper::LibreOfficeKit::isActive())
             {
                 bool bState = false;
+                bool bAllState = true;
+                bool bLastState = false;
                 bool bIsPhysical = false;
+
+                OUString aStyleName;
+                sal_uInt16  nCount = 0;
+                std::vector<OUString> aList;
+                const OUString sPhysical("IsPhysical");
+                const OUString sDisplay("DisplayName");
+                const OUString sHeaderOn(nWhich == FN_INSERT_PAGEHEADER ? OUString("HeaderIsOn") : OUString("FooterIsOn"));
+
                 uno::Reference< XStyleFamiliesSupplier > xSupplier(GetView().GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
                 if (xSupplier.is())
                 {
@@ -1632,18 +1642,30 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     if (xFamilies->getByName("PageStyles") >>= xContainer)
                     {
                         uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
-                        for (sal_Int32 itNames = 0; itNames < aSeqNames.getLength(); itNames++)
+                        for (sal_Int32 itName = 0; itName < aSeqNames.getLength(); itName++)
                         {
-                            uno::Reference< XPropertySet > xPropSet(xContainer->getByName(aSeqNames[itNames]), uno::UNO_QUERY);
-                            if (xPropSet.is() && (xPropSet->getPropertyValue("IsPhysical") >>= bIsPhysical) && bIsPhysical)
+                            aStyleName = aSeqNames[itName];
+                            uno::Reference<XPropertySet> xPropSet(xContainer->getByName(aStyleName), uno::UNO_QUERY);
+                            if (xPropSet.is() && (xPropSet->getPropertyValue(sPhysical) >>= bIsPhysical) && bIsPhysical)
                             {
-                                if ((xPropSet->getPropertyValue(nWhich == FN_INSERT_PAGEHEADER ? OUString("HeaderIsOn") : OUString("FooterIsOn")) >>= bState) && bState)
-                                    break;
+                                xPropSet->getPropertyValue(sDisplay) >>= aStyleName;
+                                if ((xPropSet->getPropertyValue(sHeaderOn)>>= bState) && bState)
+                                    aList.push_back(aStyleName);
+
+                                // Check if all entries have the same state
+                                if(bAllState && bState != bLastState)
+                                    bAllState = false;
+                                bLastState = bState;
+                                ++nCount;
                             }
-                        }
+                       }
                     }
                 }
-                rSet.Put(SfxBoolItem(nWhich, bState));
+
+                if (bAllState && nCount > 1)
+                    aList.push_back("_ALL_");
+
+                rSet.Put(SfxStringListItem(nWhich, &aList));
             }
             else
             {
