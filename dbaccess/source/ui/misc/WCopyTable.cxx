@@ -774,6 +774,10 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
             {
                 if ( m_bAddPKFirstTime )
                 {
+                    // tdf#114955: since we chose to create a primary key
+                    // be sure all other columns won't be in primary key
+                    for (auto const& elem : m_vDestColumns)
+                        elem.second->SetPrimaryKey(false);
                     OFieldDescription* pField = new OFieldDescription();
                     pField->SetName(m_aKeyName);
                     pField->FillFromTypeInfo(pTypeInfo,true,true);
