@@ -429,18 +429,18 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         {
             if ( aMacroName.isEmpty() || aLibrary.isEmpty() )
             {
-                sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
+                sal_Int32 nThirdSlashPos = aScript.indexOf( '/', 8 );
                 sal_Int32 nArgsPos = aScript.indexOf( '(' );
-                if ( ( nHashPos != -1 ) && ( nArgsPos == -1 || nHashPos < nArgsPos ) )
+                if ( ( nThirdSlashPos != -1 ) && ( nArgsPos == -1 || nThirdSlashPos < nArgsPos ) )
                 {
-                    OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INetURLObject::DecodeMechanism::WithCharset ) );
+                    OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nThirdSlashPos-8 ), INetURLObject::DecodeMechanism::WithCharset ) );
                     if ( aBasMgrName == "." )
                         aLibrary = pDoc->GetTitle();
                     else
                         aLibrary = SfxGetpApp()->GetName();
 
                     // Get the macro name
-                    aMacroName = aScript.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
+                    aMacroName = aScript.copy( nThirdSlashPos+1, nArgsPos - nThirdSlashPos - 1 );
                 }
                 else
                 {

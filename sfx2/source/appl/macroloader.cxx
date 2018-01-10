@@ -210,18 +210,18 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
     // 'macro://[docname|.]/lib.mod.proc(args)' => macro of current or qualified document
     // 'macro://obj.method(args)' => direct API call, execute it via App-BASIC
     const OUString& aMacro( rURL );
-    sal_Int32 nHashPos = aMacro.indexOf( '/', 8 );
+    sal_Int32 nThirdSlashPos = aMacro.indexOf( '/', 8 );
     sal_Int32 nArgsPos = aMacro.indexOf( '(' );
     BasicManager *pAppMgr = SfxApplication::GetBasicManager();
     BasicManager *pBasMgr = nullptr;
     ErrCode nErr = ERRCODE_NONE;
 
     // should a macro function be executed ( no direct API call)?
-    if ( -1 != nHashPos && ( -1 == nArgsPos || nHashPos < nArgsPos ) )
+    if ( -1 != nThirdSlashPos && ( -1 == nArgsPos || nThirdSlashPos < nArgsPos ) )
     {
         // find BasicManager
         SfxObjectShell* pDoc = nullptr;
-        OUString aBasMgrName( INetURLObject::decode(aMacro.copy( 8, nHashPos-8 ), INetURLObject::DecodeMechanism::WithCharset) );
+        OUString aBasMgrName( INetURLObject::decode(aMacro.copy( 8, nThirdSlashPos-8 ), INetURLObject::DecodeMechanism::WithCharset) );
         if ( aBasMgrName.isEmpty() )
             pBasMgr = pAppMgr;
         else if ( aBasMgrName == "." )
@@ -258,13 +258,13 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
             }
 
             // find BASIC method
-            OUString aQualifiedMethod( INetURLObject::decode(aMacro.copy( nHashPos+1 ), INetURLObject::DecodeMechanism::WithCharset) );
+            OUString aQualifiedMethod( INetURLObject::decode(aMacro.copy( nThirdSlashPos+1 ), INetURLObject::DecodeMechanism::WithCharset) );
             OUString aArgs;
             if ( -1 != nArgsPos )
             {
                 // remove arguments from macro name
-                aArgs = aQualifiedMethod.copy( nArgsPos - nHashPos - 1 );
-                aQualifiedMethod = aQualifiedMethod.copy( 0, nArgsPos - nHashPos - 1 );
+                aArgs = aQualifiedMethod.copy( nArgsPos - nThirdSlashPos - 1 );
+                aQualifiedMethod = aQualifiedMethod.copy( 0, nArgsPos - nThirdSlashPos - 1 );
             }
 
             if ( pBasMgr->HasMacro( aQualifiedMethod ) )
