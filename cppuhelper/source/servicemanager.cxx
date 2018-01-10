@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 #include <vector>
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -1838,16 +1839,16 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             // Blacklist some components that are known to fail
             if (iterator->second->info->name == "com.sun.star.comp.configuration.backend.KDE4Backend")
             {
-                SAL_INFO("cppuhelper.preload", "Skipping " << iterator->second->info->name);
+                std::cerr << "preload: Skipping " << iterator->second->info->name << std::endl;
                 continue;
             }
 
             // load component library
-            SAL_INFO("cppuhelper.preload", "Loading " << aUri << " for " << iterator->second->info->name);
+            std::cerr << "preload: Loading " << aUri << " for " << iterator->second->info->name << std::endl;
             osl::Module aModule(aUri, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
 
             if (!aModule.is())
-                SAL_WARN("cppuhelper.preload", "Loading " << aUri << " for " << iterator->second->info->name << " failed");
+                std::cerr << "preload: Loading " << aUri << " for " << iterator->second->info->name << " failed" << std::endl;
 
             if (aModule.is() &&
                 !iterator->second->info->environment.isEmpty())
