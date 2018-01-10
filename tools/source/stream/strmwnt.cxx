@@ -109,7 +109,7 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nMode )
     bIsOpen             = false;
     nLockCounter        = 0;
     m_isWritable        = false;
-    pInstanceData       = new StreamData;
+    pInstanceData.reset( new StreamData );
 
     SetBufferSize( 8192 );
     // convert URL to SystemPath, if necessary
@@ -125,7 +125,7 @@ SvFileStream::SvFileStream()
     bIsOpen             = false;
     nLockCounter        = 0;
     m_isWritable        = false;
-    pInstanceData       = new StreamData;
+    pInstanceData.reset( new StreamData );
 
     SetBufferSize( 8192 );
 }
@@ -133,7 +133,6 @@ SvFileStream::SvFileStream()
 SvFileStream::~SvFileStream()
 {
     Close();
-    delete pInstanceData;
 }
 
 /// Does not check for EOF, makes isEof callable

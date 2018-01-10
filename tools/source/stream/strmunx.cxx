@@ -273,7 +273,7 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
 {
     bIsOpen             = false;
     m_isWritable        = false;
-    pInstanceData       = new StreamData;
+    pInstanceData.reset(new StreamData);
 
     SetBufferSize( 1024 );
     // convert URL to SystemPath, if necessary
@@ -290,15 +290,13 @@ SvFileStream::SvFileStream()
 {
     bIsOpen             = false;
     m_isWritable        = false;
-    pInstanceData       = new StreamData;
+    pInstanceData.reset(new StreamData);
     SetBufferSize( 1024 );
 }
 
 SvFileStream::~SvFileStream()
 {
     Close();
-
-    delete pInstanceData;
 }
 
 std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )

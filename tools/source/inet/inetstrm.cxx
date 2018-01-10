@@ -79,7 +79,7 @@ int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uInt32 nSize)
     if (pSourceMsg->GetDocumentLB())
     {
         if (pMsgStrm == nullptr)
-            pMsgStrm = new SvStream (pSourceMsg->GetDocumentLB());
+            pMsgStrm.reset(new SvStream (pSourceMsg->GetDocumentLB()));
 
         sal_uInt32 nRead = pMsgStrm->ReadBytes(pWBuf, (pWEnd - pWBuf));
         pWBuf += nRead;
@@ -156,7 +156,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uInt32 nSize)
                         nChildIndex++;
 
                         // Create child stream.
-                        pChildStrm = new INetMIMEMessageStream(pChild, false);
+                        pChildStrm.reset(new INetMIMEMessageStream(pChild, false));
 
                         if (pSourceMsg->IsMultipart())
                         {
@@ -200,8 +200,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uInt32 nSize)
                     else
                     {
                         // Cleanup exhausted child stream.
-                        delete pChildStrm;
-                        pChildStrm = nullptr;
+                        pChildStrm.reset();
                     }
                 }
             }
@@ -248,8 +247,7 @@ INetMIMEMessageStream::INetMIMEMessageStream(
 
 INetMIMEMessageStream::~INetMIMEMessageStream()
 {
-    delete pChildStrm;
-    delete pMsgStrm;
+    pChildStrm.reset();
 }
 
 int INetMIMEMessageStream::Read(sal_Char* pData, sal_uInt32 nSize)

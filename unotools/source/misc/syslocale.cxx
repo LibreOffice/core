@@ -32,6 +32,7 @@
 #include <osl/nlsupport.h>
 
 #include <vector>
+#include <memory>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -45,9 +46,9 @@ std::weak_ptr<SvtSysLocale_Impl> g_pSysLocale;
 class SvtSysLocale_Impl : public utl::ConfigurationListener
 {
 public:
-        SvtSysLocaleOptions     aSysLocaleOptions;
-        LocaleDataWrapper*      pLocaleData;
-        CharClass*              pCharClass;
+        SvtSysLocaleOptions                    aSysLocaleOptions;
+        std::unique_ptr<LocaleDataWrapper>      pLocaleData;
+        std::unique_ptr<CharClass>              pCharClass;
 
                                 SvtSysLocale_Impl();
     virtual                     ~SvtSysLocale_Impl() override;
@@ -61,7 +62,7 @@ private:
 
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(nullptr)
 {
-    pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() );
+    pLocaleData.reset(new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() ));
     setDateAcceptancePatternsConfig();
 
     // listen for further changes
@@ -71,15 +72,13 @@ SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(nullptr)
 SvtSysLocale_Impl::~SvtSysLocale_Impl()
 {
     aSysLocaleOptions.RemoveListener( this );
-    delete pCharClass;
-    delete pLocaleData;
 }
 
 CharClass* SvtSysLocale_Impl::GetCharClass()
 {
     if ( !pCharClass )
-        pCharClass = new CharClass( aSysLocaleOptions.GetRealLanguageTag() );
-    return pCharClass;
+        pCharClass.reset(new CharClass( aSysLocaleOptions.GetRealLanguageTag() ));
+    return pCharClass.get();
 }
 
 void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints nHint )
@@ -151,7 +150,7 @@ const LocaleDataWrapper& SvtSysLocale::GetLocaleData() const
 
 const LocaleDataWrapper* SvtSysLocale::GetLocaleDataPtr() const
 {
-    return pImpl->pLocaleData;
+    return pImpl->pLocaleData.get();
 }
 
 const CharClass& SvtSysLocale::GetCharClass() const

@@ -327,9 +327,9 @@ class IdlInterfaceMethodImpl
     : public IdlMemberImpl
     , public XIdlMethod
 {
-    Sequence< Reference< XIdlClass > > * _pExceptionTypes;
-    Sequence< Reference< XIdlClass > > * _pParamTypes;
-    Sequence< ParamInfo > *              _pParamInfos;
+    std::unique_ptr<Sequence< Reference< XIdlClass > >> _pExceptionTypes;
+    std::unique_ptr<Sequence< Reference< XIdlClass > >> _pParamTypes;
+    std::unique_ptr<Sequence< ParamInfo >>              _pParamInfos;
 
 public:
     typelib_InterfaceMethodTypeDescription * getMethodTypeDescr() const
@@ -338,11 +338,7 @@ public:
     IdlInterfaceMethodImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                             typelib_TypeDescription * pTypeDescr, typelib_TypeDescription * pDeclTypeDescr )
         : IdlMemberImpl( pReflection, rName, pTypeDescr, pDeclTypeDescr )
-        , _pExceptionTypes( nullptr )
-        , _pParamTypes( nullptr )
-        , _pParamInfos( nullptr )
         {}
-    virtual ~IdlInterfaceMethodImpl() override;
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type & rType ) override;
@@ -364,13 +360,6 @@ public:
     virtual MethodMode SAL_CALL getMode() override;
     virtual Any SAL_CALL invoke( const Any & rObj, Sequence< Any > & rArgs ) override;
 };
-
-IdlInterfaceMethodImpl::~IdlInterfaceMethodImpl()
-{
-    delete _pParamInfos;
-    delete _pParamTypes;
-    delete _pExceptionTypes;
-}
 
 // XInterface
 
@@ -452,8 +441,8 @@ Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getExceptionTypes()
         if (! _pExceptionTypes)
         {
             sal_Int32 nExc = getMethodTypeDescr()->nExceptions;
-            Sequence< Reference< XIdlClass > > * pTempExceptionTypes =
-                new Sequence< Reference< XIdlClass > >( nExc );
+            std::unique_ptr<Sequence< Reference< XIdlClass > >> pTempExceptionTypes(
+                new Sequence< Reference< XIdlClass > >( nExc ));
             Reference< XIdlClass > * pExceptionTypes = pTempExceptionTypes->getArray();
 
             typelib_TypeDescriptionReference ** ppExc =
@@ -463,7 +452,7 @@ Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getExceptionTypes()
             while (nExc--)
                 pExceptionTypes[nExc] = pRefl->forType( ppExc[nExc] );
 
-            _pExceptionTypes = pTempExceptionTypes;
+            _pExceptionTypes = std::move(pTempExceptionTypes);
         }
     }
     return *_pExceptionTypes;
@@ -477,8 +466,8 @@ Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getParameterTypes()
         if (! _pParamTypes)
         {
             sal_Int32 nParams = getMethodTypeDescr()->nParams;
-            Sequence< Reference< XIdlClass > > * pTempParamTypes =
-                new Sequence< Reference< XIdlClass > >( nParams );
+            std::unique_ptr<Sequence< Reference< XIdlClass > > > pTempParamTypes(
+                new Sequence< Reference< XIdlClass > >( nParams ));
             Reference< XIdlClass > * pParamTypes = pTempParamTypes->getArray();
 
             typelib_MethodParameter * pTypelibParams =
@@ -488,7 +477,7 @@ Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getParameterTypes()
             while (nParams--)
                 pParamTypes[nParams] = pRefl->forType( pTypelibParams[nParams].pTypeRef );
 
-            _pParamTypes = pTempParamTypes;
+            _pParamTypes = std::move(pTempParamTypes);
         }
     }
     return *_pParamTypes;
@@ -502,7 +491,7 @@ Sequence< ParamInfo > IdlInterfaceMethodImpl::getParameterInfos()
         if (! _pParamInfos)
         {
             sal_Int32 nParams = getMethodTypeDescr()->nParams;
-            Sequence< ParamInfo > * pTempParamInfos = new Sequence< ParamInfo >( nParams );
+            std::unique_ptr<Sequence< ParamInfo > > pTempParamInfos( new Sequence< ParamInfo >( nParams ) );
             ParamInfo * pParamInfos = pTempParamInfos->getArray();
 
             typelib_MethodParameter * pTypelibParams =
@@ -526,8 +515,8 @@ Sequence< ParamInfo > IdlInterfaceMethodImpl::getParameterInfos()
             }
             else // make also param types sequence if not already initialized
             {
-                Sequence< Reference< XIdlClass > > * pTempParamTypes =
-                    new Sequence< Reference< XIdlClass > >( nParams );
+                std::unique_ptr<Sequence< Reference< XIdlClass > > > pTempParamTypes(
+                    new Sequence< Reference< XIdlClass > >( nParams ));
                 Reference< XIdlClass > * pParamTypes = pTempParamTypes->getArray();
 
                 IdlReflectionServiceImpl * pRefl = getReflection();
@@ -544,10 +533,10 @@ Sequence< ParamInfo > IdlInterfaceMethodImpl::getParameterInfos()
                     rInfo.aType = pParamTypes[nParams] = pRefl->forType( rParam.pTypeRef );
                 }
 
-                _pParamTypes = pTempParamTypes;
+                _pParamTypes = std::move(pTempParamTypes);
             }
 
-            _pParamInfos = pTempParamInfos;
+            _pParamInfos = std::move(pTempParamInfos);
         }
     }
     return *_pParamInfos;
@@ -759,8 +748,6 @@ InterfaceIdlClassImpl::~InterfaceIdlClassImpl()
 {
     for ( sal_Int32 nPos = _nMethods + _nAttributes; nPos--; )
         typelib_typedescription_release( _pSortedMemberInit[nPos].second );
-
-    delete [] _pSortedMemberInit;
 }
 
 
@@ -782,7 +769,7 @@ Sequence< Reference< XIdlClass > > InterfaceIdlClassImpl::getSuperclasses()
 void InterfaceIdlClassImpl::initMembers()
 {
     sal_Int32 nAll = getTypeDescr()->nAllMembers;
-    MemberInit * pSortedMemberInit = new MemberInit[nAll];
+    std::unique_ptr<MemberInit[]> pSortedMemberInit(new MemberInit[nAll]);
     typelib_TypeDescriptionReference ** ppAllMembers = getTypeDescr()->ppAllMembers;
 
     for ( sal_Int32 nPos = 0; nPos < nAll; ++nPos )
@@ -808,7 +795,7 @@ void InterfaceIdlClassImpl::initMembers()
         pSortedMemberInit[nIndex].second = pTD;
     }
 
-    _pSortedMemberInit = pSortedMemberInit;
+    _pSortedMemberInit = std::move(pSortedMemberInit);
 }
 
 sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )

@@ -197,7 +197,7 @@ class InterfaceIdlClassImpl
 
     css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > >      _xSuperClasses;
 
-    MemberInit *                            _pSortedMemberInit; // first methods, then attributes
+    std::unique_ptr<MemberInit[]>           _pSortedMemberInit; // first methods, then attributes
     OUString2Field                          _aName2Field;
     OUString2Method                         _aName2Method;
     sal_Int32                               _nMethods;
