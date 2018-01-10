@@ -23,16 +23,16 @@
  
 --- core/fxge/cfx_facecache.cpp
 +++ core/fxge/cfx_facecache.cpp
-@@ -223,7 +223,8 @@ std::unique_ptr<CFX_GlyphBitmap> CFX_FaceCache::RenderGlyph(
+@@ -183,7 +183,8 @@ std::unique_ptr<CFX_GlyphBitmap> CFX_FaceCache::RenderGlyph(
        }
      }
    } else {
 -    memset(pDestBuf, 0, dest_pitch * bmheight);
 +    if (dest_pitch != 0 && bmheight != 0)
 +      memset(pDestBuf, 0, dest_pitch * bmheight);
-     if (anti_alias == FXFT_RENDER_MODE_MONO &&
-         FXFT_Get_Bitmap_PixelMode(FXFT_Get_Glyph_Bitmap(m_Face)) ==
-             FXFT_PIXEL_MODE_MONO) {
+     int rowbytes = std::min(abs(src_pitch), dest_pitch);
+     for (int row = 0; row < bmheight; row++)
+       memcpy(pDestBuf + row * dest_pitch, pSrcBuf + row * src_pitch, rowbytes);
 --- third_party/agg23/agg_rasterizer_scanline_aa.h
 +++ third_party/agg23/agg_rasterizer_scanline_aa.h
 @@ -349,14 +349,14 @@ public:
