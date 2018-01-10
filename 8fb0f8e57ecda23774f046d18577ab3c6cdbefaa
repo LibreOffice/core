@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9877f701",
+        "filename": "sw/source/ui/dbui/mmoutputtypepage.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-01-10T10:00:29Z",
+      "side": 1,
+      "message": "In my testing this didn\u0027t seem to be needed. Is this leftover from previous attempts?  However, what it DOES do is allow the user to interact with it in case it doesn\u0027t run to completion. If somehow a document fails to create or whatever, the dialog will remain open until the user cancels. \n\nSo the code seems valid, but the comment doesn\u0027t seem valid.",
+      "revId": "8fb0f8e57ecda23774f046d18577ab3c6cdbefaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_b84bdbaf",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-01-10T10:00:29Z",
+      "side": 1,
+      "message": "doesn\u0027t seem to be required?  I can compile without this. Probably leftover from previous attempts...",
+      "revId": "8fb0f8e57ecda23774f046d18577ab3c6cdbefaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_984e17c0",
+        "filename": "sw/source/ui/inc/mmresultdialogs.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-01-10T10:00:29Z",
+      "side": 1,
+      "message": "should be \"sal_Int32 nExpectedCount\" or \"sal_Int32 nEnd\"",
+      "revId": "8fb0f8e57ecda23774f046d18577ab3c6cdbefaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
