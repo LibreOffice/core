@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f8671323",
+        "filename": "external/Module_external.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-10T11:52:19Z",
+      "side": 1,
+      "message": "the \"Corrupted module target stack\" problem is here, the directory is called \"twain-dsm\" so there is no \"twain_dsm/Module_twain_dsm.mk\"\n\nnot sure why that doesn\u0027t cause a more obvious error from the \"include\" directive.\n\nalso you probably want to make this optional via BUILD_TYPE in configure.",
+      "revId": "08acad776ba3d4d203be00bdffca18e46e465668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
