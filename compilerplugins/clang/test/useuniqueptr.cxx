@@ -94,4 +94,22 @@ class Foo8 {
         delete m_pbar2; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
     }
 };
+class Foo9 {
+    XXX* m_pbar1; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    XXX* m_pbar2; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    XXX* m_pbar3; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    ~Foo9()
+    {
+        if (m_pbar1)
+        {
+            delete m_pbar1; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        }
+        if (m_pbar2 != nullptr)
+        {
+            delete m_pbar2; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        }
+        if (m_pbar3 != nullptr)
+            delete m_pbar3; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+    }
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
