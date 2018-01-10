@@ -45,9 +45,6 @@
 
 #include "loadsharedlibcomponentfactory.hxx"
 
-using rtl::OUString;
-using rtl::OString;
-
 #include <registry/registry.hxx>
 #include <xmlreader/xmlreader.hxx>
 
