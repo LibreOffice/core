@@ -217,8 +217,11 @@ void SmNode::PrepareAttributes()
 }
 
 
-void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
+    if (nDepth > 2048)
+        throw std::range_error("parser depth limit");
+
     mbIsPhantom  = false;
     mnFlags      = FontChangeMask::None;
     mnAttributes = FontAttribute::None;
@@ -235,7 +238,7 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     GetFont().SetWeight(WEIGHT_NORMAL);
     GetFont().SetItalic(ITALIC_NONE);
 
-    ForEachNonNull(this, [&rFormat, &rDocShell](SmNode *pNode){pNode->Prepare(rFormat, rDocShell);});
+    ForEachNonNull(this, [&rFormat, &rDocShell, nDepth](SmNode *pNode){pNode->Prepare(rFormat, rDocShell, nDepth + 1);});
 }
 
 void SmNode::Move(const Point& rPosition)
@@ -545,9 +548,9 @@ long SmTableNode::GetFormulaBaseline() const
 /**************************************************************************/
 
 
-void SmLineNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmLineNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    SmNode::Prepare(rFormat, rDocShell);
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
 
     // Here we use the 'FNT_VARIABLE' font since it's ascent and descent in general fit better
     // to the rest of the formula compared to the 'FNT_MATH' font.
@@ -1823,10 +1826,10 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
     rText += "} ";
 }
 
-void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
     //! prepare subnodes first
-    SmNode::Prepare(rFormat, rDocShell);
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
 
     int  nFnt = -1;
     switch (GetToken().eType)
@@ -2043,9 +2046,9 @@ SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP )
 {
 }
 
-void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    SmNode::Prepare(rFormat, rDocShell);
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
 
     // default setting for horizontal alignment of nodes with TTEXT
     // content is as alignl (cannot be done in Arrange since it would
@@ -2404,9 +2407,9 @@ void SmMathSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
 }
 
 
-void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    SmNode::Prepare(rFormat, rDocShell);
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
 
     GetFont() = rFormat.GetFont(GetFontDesc());
     // use same font size as is used for variables
@@ -2589,9 +2592,9 @@ SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken)
 }
 
 
-void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    SmNode::Prepare(rFormat, rDocShell);
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
 
     const SmSym   *pSym;
     SmModule  *pp = SM_MOD();
@@ -2681,9 +2684,9 @@ void SmGlyphSpecialNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 /**************************************************************************/
 
 
-void SmPlaceNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmPlaceNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    SmNode::Prepare(rFormat, rDocShell);
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
 
     GetFont().SetColor(COL_GRAY);
     Flags() |= FontChangeMask::Color | FontChangeMask::Face | FontChangeMask::Italic;
@@ -2704,9 +2707,9 @@ void SmPlaceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 /**************************************************************************/
 
 
-void SmErrorNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmErrorNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    SmNode::Prepare(rFormat, rDocShell);
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
 
     GetFont().SetColor(COL_RED);
     Flags() |= FontChangeMask::Phantom | FontChangeMask::Bold | FontChangeMask::Italic
@@ -2738,9 +2741,9 @@ void SmBlankNode::IncreaseBy(const SmToken &rToken, sal_uInt32 nMultiplyBy)
     }
 }
 
-void SmBlankNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
+void SmBlankNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    SmNode::Prepare(rFormat, rDocShell);
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
 
     // Here it need/should not be the StarMath font, so that for the character
     // used in Arrange a normal (non-clipped) rectangle is generated

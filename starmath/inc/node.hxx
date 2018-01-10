@@ -151,7 +151,7 @@ public:
     /** Prepare preliminary settings about font and text
      *  (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth);
     void PrepareAttributes();
 
     void         SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree = true );
@@ -410,7 +410,7 @@ public:
     /** Set the index within GetText() where the selection end */
     void                SetSelectionEnd(sal_Int32 index) {mnSelectionEnd = index;}
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     virtual void CreateTextFromNode(OUString &rText) override;
 
@@ -441,7 +441,7 @@ protected:
 public:
     explicit SmSpecialNode(const SmToken &rNodeToken);
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
 
     void Accept(SmVisitor* pVisitor) override;
@@ -490,7 +490,7 @@ public:
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth) override;
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void CreateTextFromNode(OUString &rText) override;
     void Accept(SmVisitor* pVisitor) override;
@@ -551,7 +551,7 @@ public:
     }
     SmPlaceNode() : SmMathSymbolNode(SmNodeType::Place, SmToken(TPLACE, MS_PLACE, "<?>")) {};
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
@@ -571,7 +571,7 @@ public:
         SetText(OUString(MS_ERROR));
     }
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
@@ -629,7 +629,7 @@ public:
     void  SetUseExtraSpaces(bool bVal) { mbUseExtraSpaces = bVal; }
     bool  IsUseExtraSpaces() const { return mbUseExtraSpaces; };
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
@@ -1064,7 +1064,7 @@ public:
     const Fraction & GetSizeParameter() const {return maFontSize;}
     FontSizeType GetSizeType() const {return meSizeType;}
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void CreateTextFromNode(OUString &rText) override;
     void Accept(SmVisitor* pVisitor) override;
@@ -1121,7 +1121,7 @@ public:
     sal_uInt16   GetBlankNum() const { return mnNum; }
     void         SetBlankNum(sal_uInt16 nNumber) { mnNum = nNumber; }
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
     virtual void CreateTextFromNode(OUString &rText) override;

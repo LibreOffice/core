@@ -525,7 +525,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
 {
     std::unique_ptr<SmNode> pNode(SmParser().ParseExpression(aElementVisual));
 
-    pNode->Prepare(maFormat, *mpDocShell);
+    pNode->Prepare(maFormat, *mpDocShell, 0);
     pNode->SetSize(Fraction(10,8));
     pNode->Arrange(*this, maFormat);
 

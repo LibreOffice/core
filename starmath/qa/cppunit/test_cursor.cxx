@@ -69,7 +69,7 @@ void Test::testCopyPaste()
 {
     OUString const sInput("a * b + c");
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
-    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
@@ -92,7 +92,7 @@ void Test::testCopySelectPaste()
 {
     OUString const sInput("a * b + c");
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
-    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
@@ -119,7 +119,7 @@ void Test::testCutPaste()
 {
     OUString const sInput("a * b + c");
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
-    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
@@ -142,7 +142,7 @@ void Test::testCutSelectPaste()
 {
     OUString const sInput("a * b + c");
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
-    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;

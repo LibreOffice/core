@@ -528,7 +528,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     } else {
         //Create a new place node
         pSubject = new SmPlaceNode();
-        pSubject->Prepare(mpDocShell->GetFormat(), *mpDocShell);
+        pSubject->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
         it = pLineList->insert(it, pSubject);
         ++it;
         bPatchLine = true;  //We've modified the line it should be patched later.
@@ -637,7 +637,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
     pBody->SetSubNodes(pBodyNode, nullptr);
     pBrace->SetSubNodes(pLeft, pBody, pRight);
-    pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell);
+    pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert into line
     pLineList->insert(it, pBrace);
@@ -872,7 +872,7 @@ void SmCursor::InsertText(const OUString& aString)
     SmTextNode* pText = new SmTextNode(token, FNT_VARIABLE);
     pText->SetText(aString);
     pText->AdjustFontDesc();
-    pText->Prepare(mpDocShell->GetFormat(), *mpDocShell);
+    pText->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     SmNodeList* pList = new SmNodeList;
     pList->push_front(pText);
@@ -973,7 +973,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
     assert(pNewNode);
 
     //Prepare the new node
-    pNewNode->Prepare(mpDocShell->GetFormat(), *mpDocShell);
+    pNewNode->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert new node
     SmNodeList* pList = new SmNodeList;
@@ -1000,7 +1000,7 @@ void SmCursor::InsertSpecial(const OUString& _aString)
     SmSpecialNode* pSpecial = new SmSpecialNode(token);
 
     //Prepare the special node
-    pSpecial->Prepare(mpDocShell->GetFormat(), *mpDocShell);
+    pSpecial->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert the node
     SmNodeList* pList = new SmNodeList;
@@ -1015,7 +1015,7 @@ void SmCursor::InsertCommandText(const OUString& aCommandText) {
     SmNode* pSubExpr = SmParser().ParseExpression(aCommandText);
 
     //Prepare the subtree
-    pSubExpr->Prepare(mpDocShell->GetFormat(), *mpDocShell);
+    pSubExpr->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Convert subtree to list
     SmNodeList* pLineList = NodeToList(pSubExpr);
@@ -1239,7 +1239,7 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
         SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
         pBody->SetSubNodes(pLine, nullptr);
         pBrace->SetSubNodes(pLeft, pBody, pRight);
-        pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell);
+        pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
         pLine = pBrace;
         //TODO: Consider the following alternative behavior:
         //Consider the line: A + {B + C}^D lsub E

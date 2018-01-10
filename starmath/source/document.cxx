@@ -251,7 +251,7 @@ void SmDocShell::ArrangeFormula()
                "Sm : falscher MapMode");
 
     const SmFormat &rFormat = GetFormat();
-    mpTree->Prepare(rFormat, *this);
+    mpTree->Prepare(rFormat, *this, 0);
 
     // format/draw formulas always from left to right,
     // and numbers should not be converted
