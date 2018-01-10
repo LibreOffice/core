@@ -14,6 +14,7 @@
 #include <rtl/strbuf.hxx>
 #include <formula/errorcodes.hxx>
 #include <svtools/miscopt.hxx>
+#include <tools/urlobj.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -238,6 +239,14 @@ void ScInterpreter::ScWebservice()
         if(aURI.isEmpty())
         {
             PushError( formula::errNoValue );
+            return;
+        }
+
+        INetURLObject aObj(aURI, INetProtocol::File);
+        INetProtocol eProtocol = aObj.GetProtocol();
+        if (eProtocol != INetProtocol::Http && eProtocol != INetProtocol::Https)
+        {
+            PushError( FormulaError::NoValue );
             return;
         }
 
