@@ -7,8 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <cassert>
 #include <limits>
+#include <set>
 #include <string>
 #include "plugin.hxx"
 
@@ -82,17 +84,101 @@ QualType resolvePointers(QualType type) {
     return type;
 }
 
+bool isLiteralLike(Expr const * expr) {
+    expr = expr->IgnoreParenImpCasts();
+    if (isa<IntegerLiteral>(expr) || isa<CharacterLiteral>(expr) || isa<FloatingLiteral>(expr)
+        || isa<ImaginaryLiteral>(expr) || isa<CXXBoolLiteralExpr>(expr)
+        || isa<CXXNullPtrLiteralExpr>(expr) || isa<ObjCBoolLiteralExpr>(expr))
+    {
+        return true;
+    }
+    if (auto const e = dyn_cast<DeclRefExpr>(expr)) {
+        auto const d = e->getDecl();
+        if (isa<EnumConstantDecl>(d)) {
+            return true;
+        }
+        if (auto const v = dyn_cast<VarDecl>(d)) {
+            if (d->getType().isConstQualified()) {
+                if (auto const init = v->getAnyInitializer()) {
+                    return isLiteralLike(init);
+                }
+            }
+        }
+        return false;
+    }
+    if (auto const e = dyn_cast<UnaryExprOrTypeTraitExpr>(expr)) {
+        auto const k = e->getKind();
+        return k == UETT_SizeOf || k == UETT_AlignOf;
+    }
+    if (auto const e = dyn_cast<UnaryOperator>(expr)) {
+        auto const k = e->getOpcode();
+        if (k == UO_Plus || k == UO_Minus || k == UO_Not || k == UO_LNot) {
+            return isLiteralLike(e->getSubExpr());
+        }
+        return false;
+    }
+    if (auto const e = dyn_cast<BinaryOperator>(expr)) {
+        auto const k = e->getOpcode();
+        if (k == BO_Mul || k == BO_Div || k == BO_Rem || k == BO_Add || k == BO_Sub || k == BO_Shl
+            || k == BO_Shr || k == BO_And || k == BO_Xor || k == BO_Or)
+        {
+            return isLiteralLike(e->getLHS()) && isLiteralLike(e->getRHS());
+        }
+        return false;
+    }
+    if (auto const e = dyn_cast<ExplicitCastExpr>(expr)) {
+        auto const t = e->getTypeAsWritten();
+        return (t->isArithmeticType() || t->isEnumeralType())
+            && isLiteralLike(e->getSubExprAsWritten());
+    }
+    return false;
+}
+
+bool canBeUsedForFunctionalCast(TypeSourceInfo const * info) {
+    // Must be <simple-type-specifier> or <typename-specifier>, lets approximate that here:
+    assert(info != nullptr);
+    auto const type = info->getType();
+    if (type.hasLocalQualifiers()) {
+        return false;
+    }
+    if (auto const t = dyn_cast<BuiltinType>(type)) {
+        if (!(t->isInteger() || t->isFloatingPoint())) {
+            return false;
+        }
+        auto const loc = info->getTypeLoc().castAs<BuiltinTypeLoc>();
+        return
+            (int(loc.hasWrittenSignSpec()) + int(loc.hasWrittenWidthSpec())
+             + int(loc.hasWrittenTypeSpec()))
+            == 1;
+    }
+    if (isa<TagType>(type) || isa<TemplateTypeParmType>(type) || isa<AutoType>(type)
+        || isa<DecltypeType>(type) || isa<TypedefType>(type))
+    {
+        return true;
+    }
+    if (auto const t = dyn_cast<ElaboratedType>(type)) {
+        return t->getKeyword() == ETK_None;
+    }
+    return false;
+}
+
 class CStyleCast:
-    public RecursiveASTVisitor<CStyleCast>, public loplugin::Plugin
+    public RecursiveASTVisitor<CStyleCast>, public loplugin::RewritePlugin
 {
 public:
-    explicit CStyleCast(loplugin::InstantiationData const & data): Plugin(data)
+    explicit CStyleCast(loplugin::InstantiationData const & data): RewritePlugin(data)
     {}
 
     virtual void run() override {
         if (compiler.getLangOpts().CPlusPlus) {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
+    }
+
+    bool TraverseInitListExpr(InitListExpr * expr, DataRecursionQueue * queue = nullptr) {
+        return WalkUpFromInitListExpr(expr)
+            && TraverseSynOrSemInitListExpr(
+                expr->isSemanticForm() ? expr : expr->getSemanticForm(), queue);
     }
 
     bool TraverseLinkageSpecDecl(LinkageSpecDecl * decl);
@@ -106,7 +192,17 @@ private:
 
     bool isSharedCAndCppCode(SourceLocation location) const;
 
+    bool isLastTokenOfImmediateMacroBodyExpansion(
+        SourceLocation loc, SourceLocation * macroEnd = nullptr) const;
+
+    bool rewriteArithmeticCast(CStyleCastExpr const * expr, char const ** replacement);
+
     unsigned int externCContexts_ = 0;
+    std::set<SourceLocation> rewritten_;
+        // needed when rewriting in macros, in general to avoid "double code replacement, possible
+        // plugin error" warnings, and in particular to avoid adding multiple sets of parens around
+        // sub-exprs
+    std::set<CStyleCastExpr const *> rewrittenSubExprs_;
 };
 
 const char * recommendedFix(clang::CastKind ck) {
@@ -141,13 +237,18 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_IntegralCast ) {
         return true;
     }
+    if (isSharedCAndCppCode(expr->getLocStart())) {
+        return true;
+    }
     char const * perf = nullptr;
     if( expr->getCastKind() == CK_NoOp ) {
         if (!((expr->getSubExpr()->getType()->isPointerType()
                && expr->getType()->isPointerType())
               || expr->getTypeAsWritten()->isReferenceType()))
         {
-            return true;
+            if (rewriteArithmeticCast(expr, &perf)) {
+                return true;
+            }
         }
         if (isConstCast(
                 expr->getSubExprAsWritten()->getType(),
@@ -155,9 +256,6 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         {
             perf = "const_cast";
         }
-    }
-    if (isSharedCAndCppCode(expr->getLocStart())) {
-        return true;
     }
     std::string incompFrom;
     std::string incompTo;
@@ -231,7 +329,335 @@ bool CStyleCast::isSharedCAndCppCode(SourceLocation location) const {
             || compiler.getSourceManager().isMacroBodyExpansion(location));
 }
 
-loplugin::Plugin::Registration< CStyleCast > X("cstylecast");
+bool CStyleCast::isLastTokenOfImmediateMacroBodyExpansion(
+    SourceLocation loc, SourceLocation * macroEnd) const
+{
+    assert(compiler.getSourceManager().isMacroBodyExpansion(loc));
+    auto const spell = compiler.getSourceManager().getSpellingLoc(loc);
+    auto name = Lexer::getImmediateMacroName(
+        loc, compiler.getSourceManager(), compiler.getLangOpts());
+    while (name.startswith("\\\n")) {
+        name = name.drop_front(2);
+        while (!name.empty()
+               && (name.front() == ' ' || name.front() == '\t' || name.front() == '\n'
+                   || name.front() == '\v' || name.front() == '\f'))
+        {
+            name = name.drop_front(1);
+        }
+    }
+    auto const MI
+        = (compiler.getPreprocessor().getMacroDefinitionAtLoc(
+               &compiler.getASTContext().Idents.get(name), spell)
+           .getMacroInfo());
+    assert(MI != nullptr);
+    if (spell == MI->getDefinitionEndLoc()) {
+        if (macroEnd != nullptr) {
+            *macroEnd = compiler.getSourceManager().getImmediateExpansionRange(loc).second;
+        }
+        return true;
+    }
+    return false;
+}
+
+bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const ** replacement) {
+    assert(replacement != nullptr);
+    auto const sub = expr->getSubExprAsWritten();
+    auto const functional = isLiteralLike(sub)
+        && canBeUsedForFunctionalCast(expr->getTypeInfoAsWritten());
+    *replacement = functional ? "functional cast" : "static_cast";
+    if (rewriter == nullptr) {
+        return false;
+    }
+    // Doing modifications for a chain of C-style casts as in
+    //
+    //  (foo)(bar)(baz)x
+    //
+    // leads to unpredictable results, so only rewrite them one at a time, starting with the
+    // outermost:
+    if (auto const e = dyn_cast<CStyleCastExpr>(sub)) {
+        rewrittenSubExprs_.insert(e);
+    }
+    if (rewrittenSubExprs_.find(expr) != rewrittenSubExprs_.end()) {
+        return false;
+    }
+    // Two or four ranges to replace:
+    // First is the CStyleCast's LParen, plus following whitespace, replaced with either "" or
+    // "static_cast<".  (TOOD: insert space before "static_cast<" when converting "else(int)...".)
+    // Second is the CStyleCast's RParen, plus preceding and following whitespace, replaced with
+    // either "" or ">".
+    // If the sub expr is not a ParenExpr, third is the sub expr's begin, inserting "(", and fourth
+    // is the sub expr's end, inserting ")".
+    // (The reason the second and third are not combined is in case there's a comment between them.)
+    auto firstBegin = expr->getLParenLoc();
+    auto secondBegin = expr->getRParenLoc();
+    while (compiler.getSourceManager().isMacroArgExpansion(firstBegin)
+           && compiler.getSourceManager().isMacroArgExpansion(secondBegin)
+           && (compiler.getSourceManager().getImmediateExpansionRange(firstBegin)
+               == compiler.getSourceManager().getImmediateExpansionRange(secondBegin)))
+    {
+        firstBegin = compiler.getSourceManager().getImmediateSpellingLoc(firstBegin);
+        secondBegin = compiler.getSourceManager().getImmediateSpellingLoc(secondBegin);
+    }
+    if (compiler.getSourceManager().isMacroBodyExpansion(firstBegin)
+        && compiler.getSourceManager().isMacroBodyExpansion(secondBegin)
+        && (compiler.getSourceManager().getImmediateMacroCallerLoc(firstBegin)
+            == compiler.getSourceManager().getImmediateMacroCallerLoc(secondBegin)))
+    {
+        firstBegin = compiler.getSourceManager().getSpellingLoc(firstBegin);
+        secondBegin = compiler.getSourceManager().getSpellingLoc(secondBegin);
+    }
+    auto third = sub->getLocStart();
+    auto fourth = sub->getLocEnd();
+    bool macro = false;
+    // Ensure that
+    //
+    //  #define FOO(x) (int)x
+    //  FOO(y)
+    //
+    // is changed to
+    //
+    //  #define FOO(x) static_cast<int>(x)
+    //  FOO(y)
+    //
+    // instead of
+    //
+    //  #define FOO(x) static_cast<int>x
+    //  FOO((y))
+    while (compiler.getSourceManager().isMacroArgExpansion(third)
+           && compiler.getSourceManager().isMacroArgExpansion(fourth)
+           && (compiler.getSourceManager().getImmediateExpansionRange(third)
+               == compiler.getSourceManager().getImmediateExpansionRange(fourth))
+           && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third))
+            //TODO: check fourth is at end of immediate macro expansion, but
+            // SourceManager::isAtEndOfImmediateMacroExpansion requires a location pointing at the
+            // character end of the last token
+    {
+        auto const range = compiler.getSourceManager().getImmediateExpansionRange(third);
+        third = range.first;
+        fourth = range.second;
+        macro = true;
+        assert(third.isValid());
+    }
+    while (compiler.getSourceManager().isMacroArgExpansion(third)
+           && compiler.getSourceManager().isMacroArgExpansion(fourth)
+           && (compiler.getSourceManager().getImmediateExpansionRange(third)
+               == compiler.getSourceManager().getImmediateExpansionRange(fourth)))
+    {
+        third = compiler.getSourceManager().getImmediateSpellingLoc(third);
+        fourth = compiler.getSourceManager().getImmediateSpellingLoc(fourth);
+    }
+    if (isa<ParenExpr>(sub)) {
+        // Ensure that with
+        //
+        //  #define FOO (x)
+        //
+        // a cast like
+        //
+        //  (int) FOO
+        //
+        // is changed to
+        //
+        //  static_cast<int>(FOO)
+        //
+        // instead of
+        //
+        //  static_cast<int>FOO
+        for (;; macro = true) {
+            if (!(compiler.getSourceManager().isMacroBodyExpansion(third)
+                  && compiler.getSourceManager().isMacroBodyExpansion(fourth)
+                  && (compiler.getSourceManager().getImmediateMacroCallerLoc(third)
+                      == compiler.getSourceManager().getImmediateMacroCallerLoc(fourth))
+                  && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third)
+                  && isLastTokenOfImmediateMacroBodyExpansion(fourth)))
+            {
+                if (!macro) {
+                    third = fourth = SourceLocation();
+                }
+                break;
+            }
+            auto const range = compiler.getSourceManager().getImmediateExpansionRange(third);
+            third = range.first;
+            fourth = range.second;
+            assert(third.isValid());
+        }
+        if (third.isValid() && compiler.getSourceManager().isMacroBodyExpansion(third)
+            && compiler.getSourceManager().isMacroBodyExpansion(fourth)
+            && (compiler.getSourceManager().getImmediateMacroCallerLoc(third)
+                == compiler.getSourceManager().getImmediateMacroCallerLoc(fourth)))
+        {
+            third = compiler.getSourceManager().getSpellingLoc(third);
+            fourth = compiler.getSourceManager().getSpellingLoc(fourth);
+            assert(third.isValid());
+        }
+    } else {
+        // Ensure that a cast like
+        //
+        //  (int)LONG_MAX
+        //
+        // (where LONG_MAX expands to __LONG_MAX__, which in turn is a built-in expanding to a value
+        // like 9223372036854775807L) is changed to
+        //
+        //  int(LONG_MAX)
+        //
+        // instead of trying to add the parentheses to the built-in __LONG_MAX__ definition:
+        for (;;) {
+            if (!(compiler.getSourceManager().isMacroBodyExpansion(third)
+                  && compiler.getSourceManager().isMacroBodyExpansion(fourth)
+                  && (compiler.getSourceManager().getImmediateMacroCallerLoc(third)
+                      == compiler.getSourceManager().getImmediateMacroCallerLoc(fourth))
+                  && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third)))
+                // TODO: check that fourth is at end of immediate macro expansion (but
+                // SourceManager::isAtEndOfImmediateMacroExpansion wants a location pointing at the
+                // character end)
+            {
+                break;
+            }
+            auto const range = compiler.getSourceManager().getImmediateExpansionRange(third);
+            third = range.first;
+            fourth = range.second;
+        }
+        // ...and additionally asymmetrically unwind macros only at the start or end, for code like
+        //
+        //  (long)ubidi_getVisualIndex(...)
+        //
+        // (in editeng/source/editeng/impedit2.cxx) where ubidi_getVisualIndex is an object-like
+        // macro, or
+        //
+        //  #define YY_SC_TO_UI(c) ((unsigned int) (unsigned char) c)
+        //
+        // (in hwpfilter/source/lexer.cxx):
+        if (!fourth.isMacroID()) {
+            while (compiler.getSourceManager().isMacroBodyExpansion(third)
+                   && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third, &third))
+            {}
+        }
+        if (!third.isMacroID()) {
+            while (compiler.getSourceManager().isMacroBodyExpansion(fourth)
+                   && isLastTokenOfImmediateMacroBodyExpansion(fourth, &fourth))
+            {}
+        } else if (compiler.getSourceManager().isMacroBodyExpansion(third)) {
+            while (compiler.getSourceManager().isMacroArgExpansion(fourth, &fourth)) {}
+        }
+        if (compiler.getSourceManager().isMacroBodyExpansion(third)
+            && compiler.getSourceManager().isMacroBodyExpansion(fourth)
+            && (compiler.getSourceManager().getImmediateMacroCallerLoc(third)
+                == compiler.getSourceManager().getImmediateMacroCallerLoc(fourth)))
+        {
+            third = compiler.getSourceManager().getSpellingLoc(third);
+            fourth = compiler.getSourceManager().getSpellingLoc(fourth);
+        }
+        assert(third.isValid());
+    }
+    if (firstBegin.isMacroID() || secondBegin.isMacroID() || (third.isValid() && third.isMacroID())
+        || (fourth.isValid() && fourth.isMacroID()))
+    {
+        if (isDebugMode()) {
+            report(
+                DiagnosticsEngine::Fatal,
+                "TODO: cannot rewrite C-style cast in macro, needs investigation",
+                expr->getExprLoc())
+                << expr->getSourceRange();
+        }
+        return false;
+    }
+    unsigned firstLen = Lexer::MeasureTokenLength(
+        firstBegin, compiler.getSourceManager(), compiler.getLangOpts());
+    for (auto l = firstBegin.getLocWithOffset(std::max<unsigned>(firstLen, 1));;
+         l = l.getLocWithOffset(1))
+    {
+        unsigned n = Lexer::MeasureTokenLength(
+            l, compiler.getSourceManager(), compiler.getLangOpts());
+        if (n != 0) {
+            break;
+        }
+        ++firstLen;
+    }
+    unsigned secondLen = Lexer::MeasureTokenLength(
+        secondBegin, compiler.getSourceManager(), compiler.getLangOpts());
+    for (auto l = secondBegin.getLocWithOffset(std::max<unsigned>(secondLen, 1));;
+         l = l.getLocWithOffset(1))
+    {
+        unsigned n = Lexer::MeasureTokenLength(
+            l, compiler.getSourceManager(), compiler.getLangOpts());
+        if (n != 0) {
+            break;
+        }
+        ++secondLen;
+    }
+    for (;;) {
+        auto l = secondBegin.getLocWithOffset(-1);
+        auto const c = compiler.getSourceManager().getCharacterData(l)[0];
+        if (c == '\n') {
+            if (compiler.getSourceManager().getCharacterData(l.getLocWithOffset(-1))[0] == '\\') {
+                break;
+            }
+        } else if (!(c == ' ' || c == '\t' || c == '\v' || c == '\f')) {
+            break;
+        }
+        secondBegin = l;
+        ++secondLen;
+    }
+    if (rewritten_.find(firstBegin) == rewritten_.end()) {
+        rewritten_.insert(firstBegin);
+        if (!replaceText(firstBegin, firstLen, functional ? "" : "static_cast<")) {
+            if (isDebugMode()) {
+                report(
+                    DiagnosticsEngine::Fatal, "TODO: cannot rewrite #1, needs investigation",
+                    firstBegin);
+                report(
+                    DiagnosticsEngine::Note, "when rewriting this C-style cast", expr->getExprLoc())
+                    << expr->getSourceRange();
+            }
+            return false;
+        }
+        if (!replaceText(secondBegin, secondLen, functional ? "" : ">")) {
+            //TODO: roll back
+            if (isDebugMode()) {
+                report(
+                    DiagnosticsEngine::Fatal, "TODO: cannot rewrite #2, needs investigation",
+                    secondBegin);
+                report(
+                    DiagnosticsEngine::Note, "when rewriting this C-style cast", expr->getExprLoc())
+                    << expr->getSourceRange();
+            }
+            return false;
+        }
+    }
+    if (third.isValid()) {
+        if (rewritten_.find(third) == rewritten_.end()) {
+            rewritten_.insert(third);
+            if (!insertTextBefore(third, "(")) {
+                //TODO: roll back
+                if (isDebugMode()) {
+                    report(
+                        DiagnosticsEngine::Fatal, "TODO: cannot rewrite #3, needs investigation",
+                        third);
+                    report(
+                        DiagnosticsEngine::Note, "when rewriting this C-style cast",
+                        expr->getExprLoc())
+                        << expr->getSourceRange();
+                }
+                return false;
+            }
+            if (!insertTextAfterToken(fourth, ")")) {
+                //TODO: roll back
+                if (isDebugMode()) {
+                    report(
+                        DiagnosticsEngine::Fatal, "TODO: cannot rewrite #4, needs investigation",
+                        third);
+                    report(
+                        DiagnosticsEngine::Note, "when rewriting this C-style cast",
+                        expr->getExprLoc())
+                        << expr->getSourceRange();
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+loplugin::Plugin::Registration< CStyleCast > X("cstylecast", true);
 
 }
 
