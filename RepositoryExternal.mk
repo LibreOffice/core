@@ -618,6 +618,13 @@ endef
 
 gb_ExternalProject__use_boost_headers:=
 
+define gb_LinkTarget__use_boost_process
+$(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_PROCESS_LIB))
+
+endef
+
+gb_ExternalProject__use_boost_process :=
+
 else # !SYSTEM_BOOST
 
 define gb_LinkTarget__use_boost_lib
@@ -681,6 +688,15 @@ endef
 define gb_ExternalProject__use_boost_headers
 $(call gb_ExternalProject_use_unpacked,$(1),boost)
 
+endef
+
+define gb_LinkTarget__use_boost_process
+$(call gb_LinkTarget__use_boost_lib,$(1),boost_process)
+
+endef
+
+define gb_ExternalProject__use_boost_process
+$(call gb_ExternalProject_use_static_libraries,$(1),boost_process)
 endef
 
 endif # SYSTEM_BOOST
