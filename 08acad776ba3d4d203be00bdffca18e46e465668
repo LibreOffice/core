@@ -16,6 +16,24 @@
       "revId": "08acad776ba3d4d203be00bdffca18e46e465668",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_785b2355",
+        "filename": "external/Module_external.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-10T11:54:41Z",
+      "side": 1,
+      "message": "Thank you very much!\n\nWrt optionality - undoubtedly. It\u0027s just some wip - and I got stuck here, so needed no other complexity at that stage.",
+      "parentUuid": "fa31d9ce_f8671323",
+      "revId": "08acad776ba3d4d203be00bdffca18e46e465668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
