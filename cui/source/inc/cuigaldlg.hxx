@@ -98,7 +98,7 @@ public:
                         DECL_LINK( CleanUpHdl, void*, void );
 
     virtual short       Execute() override;
-    virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    virtual void        StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>()) override;
     void                SetFileType( const OUString& rType ) { m_pFtSearchType->SetText( rType ); }
     void                SetDirectory( const INetURLObject& rURL ) { m_pFtSearchDir->SetText( GetReducedString( rURL, 30 ) ); }
 };
@@ -144,7 +144,7 @@ public:
 
     void                SetFile( const INetURLObject& rURL ) { m_pFtTakeFile->SetText( GetReducedString( rURL, 30 ) ); }
     virtual short       Execute() override;
-    virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    virtual void        StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>()) override;
 };
 
 class ActualizeProgress : public ModalDialog

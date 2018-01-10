@@ -350,6 +350,7 @@ void Dialog::ImplInitDialogData()
 {
     mpWindowImpl->mbDialog  = true;
     mpPrevExecuteDlg        = nullptr;
+    mpNextExecuteDlg        = nullptr;
     mbInExecute             = false;
     mbInClose               = false;
     mbModalMode             = false;
@@ -584,6 +585,8 @@ void Dialog::dispose()
 {
     mpDialogImpl.reset();
     mpPrevExecuteDlg.clear();
+    mpNextExecuteDlg.clear();
+    mpVclPtrOwner.clear();
     mpActionArea.clear();
     mpContentArea.clear();
 
@@ -780,7 +783,7 @@ bool Dialog::Close()
 
 bool Dialog::ImplStartExecuteModal()
 {
-    if ( mbInExecute )
+    if (mbInExecute || mpVclPtrOwner)
     {
 #ifdef DBG_UTIL
         SAL_WARN( "vcl", "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): "
@@ -826,6 +829,8 @@ bool Dialog::ImplStartExecuteModal()
 
      // link all dialogs which are being executed
     mpPrevExecuteDlg = pSVData->maWinData.mpLastExecuteDlg;
+    if (mpPrevExecuteDlg)
+        mpPrevExecuteDlg->mpNextExecuteDlg = this;
     pSVData->maWinData.mpLastExecuteDlg = this;
 
     // stop capturing, in order to have control over the dialog
@@ -841,7 +846,10 @@ bool Dialog::ImplStartExecuteModal()
         GetParent()->CompatNotify( aNEvt );
     }
     mbInExecute = true;
-    SetModalInputMode(true);
+
+    // no real modality in LibreOfficeKit
+    if (!comphelper::LibreOfficeKit::isActive())
+        SetModalInputMode(true);
 
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
@@ -958,13 +966,16 @@ short Dialog::Execute()
 }
 
 // virtual
-void Dialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+void Dialog::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner)
 {
     if ( !ImplStartExecuteModal() )
         return;
 
     mpDialogImpl->maEndDialogHdl = rEndDialogHdl;
     mpDialogImpl->mbStartedModal = true;
+
+    // take ownership of the dialog
+    mpVclPtrOwner = rVclPtrOwner;
 }
 
 void Dialog::EndDialog( long nResult )
@@ -975,23 +986,17 @@ void Dialog::EndDialog( long nResult )
     SetModalInputMode(false);
 
     // remove dialog from the list of dialogs which are being executed
-    ImplSVData* pSVData = ImplGetSVData();
-    Dialog* pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
-    while ( pExeDlg )
-    {
-        if ( pExeDlg == this )
-        {
-            pSVData->maWinData.mpLastExecuteDlg = mpPrevExecuteDlg;
-            break;
-        }
-        pExeDlg = pExeDlg->mpPrevExecuteDlg;
-    }
+    if (mpPrevExecuteDlg)
+        mpPrevExecuteDlg->mpNextExecuteDlg = mpNextExecuteDlg;
+    if (mpNextExecuteDlg)
+        mpNextExecuteDlg->mpPrevExecuteDlg = mpPrevExecuteDlg;
+
     // set focus to previous modal dialogue if it is modal for
     // the same frame parent (or NULL)
     if( mpPrevExecuteDlg )
     {
         vcl::Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
-        vcl::Window* pPrevFrameParent = mpPrevExecuteDlg->ImplGetFrameWindow()->ImplGetParent();
+        vcl::Window* pPrevFrameParent = mpPrevExecuteDlg->ImplGetFrameWindow()? mpPrevExecuteDlg->ImplGetFrameWindow()->ImplGetParent(): nullptr;
         if( ( !pFrameParent && !pPrevFrameParent ) ||
             ( pFrameParent && pPrevFrameParent && pFrameParent->ImplGetFrame() == pPrevFrameParent->ImplGetFrame() )
             )
@@ -1000,6 +1005,7 @@ void Dialog::EndDialog( long nResult )
         }
     }
     mpPrevExecuteDlg = nullptr;
+    mpNextExecuteDlg = nullptr;
 
     Hide();
     if ( GetParent() )
@@ -1018,11 +1024,14 @@ void Dialog::EndDialog( long nResult )
             mpDialogImpl->maEndDialogHdl.Call( *this );
             mpDialogImpl->maEndDialogHdl = Link<Dialog&,void>();
         }
+
         mpDialogImpl->mbStartedModal = false;
         mpDialogImpl->mnResult = -1;
     }
     mbInExecute = false;
 
+    // Destroy ourselves (if we have a VclPtr owner)
+    mpVclPtrOwner.disposeAndClear();
 }
 
 long Dialog::GetResult() const

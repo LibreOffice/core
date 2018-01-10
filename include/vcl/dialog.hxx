@@ -44,7 +44,9 @@ public:
     };
 
 private:
-    VclPtr<Dialog>  mpPrevExecuteDlg;
+    VclPtr<Dialog>  mpPrevExecuteDlg;       ///< Chain of the modal dialogs, to maintain which one should be shown next when the current one is closed.
+    VclPtr<Dialog>  mpNextExecuteDlg;
+    VclPtr<VclReferenceBase> mpVclPtrOwner; ///< When the StartExecuteModal takes ownership of the dialog so that we can later call disposeAndClear() in EndDialog().
     std::unique_ptr<DialogImpl>     mpDialogImpl;
     long            mnMousePositioned;
     bool            mbInExecute;
@@ -130,7 +132,10 @@ public:
 
     // Dialog::Execute replacement API
 public:
-    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl );
+    /// Asynchronous execution that does not invoke a separate Yield().
+    /// When rVclPtrOwner is provided, the dialog manages its lifecycle by
+    /// itself, and self-destructs in EndDialog().
+    virtual void    StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>());
     long            GetResult() const;
 private:
     bool            ImplStartExecuteModal();

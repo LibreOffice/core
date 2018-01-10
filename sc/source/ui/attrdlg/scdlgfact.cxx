@@ -110,6 +110,7 @@ IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
+IMPL_ABSTDLG2_BASE(ScAbstractTabDialog2_Impl);
 
 AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
 {
@@ -152,6 +153,47 @@ void ScAbstractTabDialog_Impl::SetText( const OUString& rStr )
 OUString ScAbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
+}
+
+void ScAbstractTabDialog2_Impl::SetCurPageId(sal_uInt16 nId)
+{
+    pDlg->SetCurPageId(nId);
+}
+
+void ScAbstractTabDialog2_Impl::SetCurPageId(const OString& rName)
+{
+    pDlg->SetCurPageId(rName);
+}
+
+const SfxItemSet* ScAbstractTabDialog2_Impl::GetOutputItemSet() const
+{
+    return pDlg->GetOutputItemSet();
+}
+
+const sal_uInt16* ScAbstractTabDialog2_Impl::GetInputRanges(const SfxItemPool& pItem)
+{
+    return pDlg->GetInputRanges(pItem);
+}
+
+void ScAbstractTabDialog2_Impl::SetInputSet(const SfxItemSet* pInSet)
+{
+     pDlg->SetInputSet(pInSet);
+}
+
+//From class Window.
+void ScAbstractTabDialog2_Impl::SetText(const OUString& rStr)
+{
+    pDlg->SetText(rStr);
+}
+
+OUString ScAbstractTabDialog2_Impl::GetText() const
+{
+    return pDlg->GetText();
+}
+
+void ScAbstractTabDialog2_Impl::SetSfxRequest(const SfxRequest& rRequest)
+{
+    pDlg->SetSfxRequest(rRequest);
 }
 
 void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
@@ -874,6 +916,12 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScAttrDlg(vcl::
 {
     VclPtr<SfxTabDialog> pDlg = VclPtr<ScAttrDlg>::Create(pParent, pCellAttrs);
     return VclPtr<ScAbstractTabDialog_Impl>::Create(pDlg);
+}
+
+VclPtr<SfxAbstractTabDialog2> ScAbstractDialogFactory_Impl::CreateScAttrDlg2(vcl::Window* pParent, const SfxItemSet* pCellAttrs)
+{
+    VclPtr<SfxTabDialog> pDlg = VclPtr<ScAttrDlg>::Create(pParent, pCellAttrs);
+    return VclPtr<ScAbstractTabDialog2_Impl>::Create(pDlg);
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( vcl::Window*         pParent,

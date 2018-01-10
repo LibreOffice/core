@@ -70,6 +70,16 @@ public:                                             \
     virtual Bitmap  createScreenshot() const override; \
     virtual OString GetScreenshotId() const override; \
 
+#define DECL_ABSTDLG2_BASE(Class,DialogClass)       \
+    ScopedVclPtr<DialogClass> pDlg;                 \
+public:                                             \
+    explicit        Class( DialogClass* p)          \
+                     : pDlg(p)                      \
+                     {}                             \
+    virtual         ~Class() override;                       \
+    virtual void    StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>()) override; \
+    sal_Int32       GetResult() override;
+
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
 {                                                   \
@@ -93,6 +103,19 @@ Bitmap Class::createScreenshot() const              \
 OString Class::GetScreenshotId() const              \
 {                                                   \
     return pDlg->GetScreenshotId();                 \
+}
+
+#define IMPL_ABSTDLG2_BASE(Class)                   \
+Class::~Class()                                     \
+{                                                   \
+}                                                   \
+void Class::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner) \
+{                                                   \
+    pDlg->StartExecuteModal(rEndDialogHdl, rVclPtrOwner) ; \
+}                                                   \
+sal_Int32 Class::GetResult()                        \
+{                                                   \
+    return pDlg->GetResult();                       \
 }
 
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg
@@ -384,6 +407,20 @@ class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual OUString    GetText() const override;
 };
 
+class ScAbstractTabDialog2_Impl : public SfxAbstractTabDialog2
+{
+    DECL_ABSTDLG2_BASE(ScAbstractTabDialog2_Impl, SfxTabDialog)
+    virtual void                SetCurPageId( sal_uInt16 nId ) override;
+    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual const SfxItemSet*   GetOutputItemSet() const override;
+    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
+    virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
+        //From class Window.
+    virtual void        SetText( const OUString& rStr ) override;
+    virtual OUString    GetText() const override;
+    virtual void        SetSfxRequest(const SfxRequest& rRequest) override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 {
@@ -514,6 +551,9 @@ public:
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg( vcl::Window*          pParent,
+                                                    const SfxItemSet* pCellAttrs ) override;
+
+    virtual VclPtr<SfxAbstractTabDialog2> CreateScAttrDlg2( vcl::Window*          pParent,
                                                     const SfxItemSet* pCellAttrs ) override;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScHFEditDlg(vcl::Window*       pParent,
