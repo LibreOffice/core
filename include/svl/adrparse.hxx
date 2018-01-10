@@ -47,7 +47,7 @@ class SVL_DLLPUBLIC SvAddressParser
     friend class SvAddressParser_Impl;
 
     SvAddressEntry_Impl m_aFirst;
-    ::std::vector< SvAddressEntry_Impl* >
+    ::std::vector< SvAddressEntry_Impl >
                         m_aRest;
     bool                m_bHasFirst;
 
@@ -61,7 +61,7 @@ public:
     const OUString& GetEmailAddress(sal_Int32 nIndex) const
     {
         return nIndex == 0 ? m_aFirst.m_aAddrSpec :
-                             m_aRest[ nIndex - 1 ]->m_aAddrSpec;
+                             m_aRest[ nIndex - 1 ].m_aAddrSpec;
     }
 };
 

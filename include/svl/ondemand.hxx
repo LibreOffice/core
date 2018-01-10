@@ -60,25 +60,18 @@ class OnDemandLocaleDataWrapper
             LanguageType        eCurrentLanguage;
             LanguageType        eLastAnyLanguage;
     const   LocaleDataWrapper*  pSystem;
-    const   LocaleDataWrapper*  pEnglish;
-            LocaleDataWrapper*  pAny;
+    std::unique_ptr<const LocaleDataWrapper>  pEnglish;
+    std::unique_ptr<      LocaleDataWrapper>  pAny;
     const   LocaleDataWrapper*  pCurrent;
             bool                bInitialized;
 
 public:
                                 OnDemandLocaleDataWrapper()
                                     : eLastAnyLanguage( LANGUAGE_DONTKNOW )
-                                    , pEnglish(nullptr)
-                                    , pAny(nullptr)
                                     , bInitialized(false)
                                     {
                                         pCurrent = pSystem = aSysLocale.GetLocaleDataPtr();
                                         eCurrentLanguage = LANGUAGE_SYSTEM;
-                                    }
-                                ~OnDemandLocaleDataWrapper()
-                                    {
-                                        delete pEnglish;
-                                        delete pAny;
                                     }
 
             bool                isInitialized() const   { return bInitialized; }
@@ -101,14 +94,14 @@ public:
                                         else if ( eLang == LANGUAGE_ENGLISH_US )
                                         {
                                                 if ( !pEnglish )
-                                                    pEnglish = new LocaleDataWrapper( m_xContext, rLanguageTag );
-                                                pCurrent = pEnglish;
+                                                    pEnglish.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
+                                                pCurrent = pEnglish.get();
                                         }
                                         else
                                         {
                                             if ( !pAny )
                                             {
-                                                pAny = new LocaleDataWrapper( m_xContext, rLanguageTag );
+                                                pAny.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
                                                 eLastAnyLanguage = eLang;
                                             }
                                             else if ( eLastAnyLanguage != eLang )
@@ -116,7 +109,7 @@ public:
                                                 pAny->setLanguageTag( rLanguageTag );
                                                 eLastAnyLanguage = eLang;
                                             }
-                                            pCurrent = pAny;
+                                            pCurrent = pAny.get();
                                         }
                                         eCurrentLanguage = eLang;
                                     }

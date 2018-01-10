@@ -23,6 +23,7 @@
 #include <svl/svldllapi.h>
 #include <com/sun/star/uno/Reference.h>
 #include <tools/stream.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;
@@ -36,7 +37,7 @@ class SVL_DLLPUBLIC SvInputStream: public SvStream
 {
     css::uno::Reference< css::io::XInputStream >   m_xStream;
     css::uno::Reference< css::io::XSeekable >      m_xSeekable;
-    SvDataPipe_Impl *                              m_pPipe;
+    std::unique_ptr<SvDataPipe_Impl>               m_pPipe;
     sal_uInt64                                     m_nSeekedFrom;
 
     SVL_DLLPRIVATE bool open();
