@@ -127,8 +127,10 @@ private:
     OString  m_fileName;     // fileName defined in
 
     ExprComb        m_combOperator;
-    AstExpression*  m_subExpr1;
-    AstExpression*  m_subExpr2;
+    std::unique_ptr<AstExpression>
+                    m_subExpr1;
+    std::unique_ptr<AstExpression>
+                    m_subExpr2;
     std::unique_ptr<AstExprValue>
                     m_exprValue;
     std::unique_ptr<OString>

@@ -23,6 +23,7 @@
 #include <list>
 #include <set>
 #include <vector>
+#include <memory>
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -174,11 +175,11 @@ struct TypeDescriptor_Init_Impl
     // all type description references
     WeakMap_Impl *              pWeakMap;
     // all type description callbacks
-    CallbackSet_Impl *          pCallbacks;
+    std::unique_ptr<CallbackSet_Impl> pCallbacks;
     // A cache to hold descriptions
     TypeDescriptionList_Impl *  pCache;
     // The mutex to guard all type library accesses
-    Mutex *                     pMutex;
+    std::unique_ptr<Mutex>      pMutex;
 
     inline Mutex & getMutex();
 
@@ -217,7 +218,7 @@ inline Mutex & TypeDescriptor_Init_Impl::getMutex()
     {
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if( !pMutex )
-            pMutex = new Mutex();
+            pMutex.reset(new Mutex());
     }
     return * pMutex;
 }
@@ -318,14 +319,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
 #endif
 
     SAL_INFO_IF( pCallbacks && !pCallbacks->empty(), "cppu.typelib", "pCallbacks is not NULL or empty" );
-    delete pCallbacks;
-    pCallbacks = nullptr;
-
-    if( pMutex )
-    {
-        delete pMutex;
-        pMutex = nullptr;
-    }
+    pCallbacks.reset();
 };
 
 namespace { struct Init : public rtl::Static< TypeDescriptor_Init_Impl, Init > {}; }
@@ -338,7 +332,7 @@ extern "C" void SAL_CALL typelib_typedescription_registerCallback(
     TypeDescriptor_Init_Impl &rInit = Init::get();
 //      OslGuard aGuard( rInit.getMutex() );
     if( !rInit.pCallbacks )
-        rInit.pCallbacks = new CallbackSet_Impl;
+        rInit.pCallbacks.reset(new CallbackSet_Impl);
     rInit.pCallbacks->push_back( CallbackEntry( pContext, pCallback ) );
 }
 

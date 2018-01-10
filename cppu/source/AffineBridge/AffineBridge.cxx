@@ -26,6 +26,7 @@
 #include <cppu/Enterable.hxx>
 #include <cppu/helper/purpenv/Environment.hxx>
 #include <cppu/helper/purpenv/Mapping.hxx>
+#include <memory>
 
 
 class InnerThread;
@@ -46,14 +47,14 @@ public:
 
     osl::Mutex            m_innerMutex;
     oslThreadIdentifier   m_innerThreadId;
-    InnerThread         * m_pInnerThread;
+    std::unique_ptr<InnerThread> m_pInnerThread;
     osl::Condition        m_innerCondition;
     sal_Int32             m_enterCount;
 
     osl::Mutex            m_outerMutex;
     oslThreadIdentifier   m_outerThreadId;
     osl::Condition        m_outerCondition;
-    OuterThread         * m_pOuterThread;
+    std::unique_ptr<OuterThread> m_pOuterThread;
 
     explicit  AffineBridge();
     virtual  ~AffineBridge() override;
@@ -149,12 +150,11 @@ AffineBridge::~AffineBridge()
         m_pInnerThread->join();
     }
 
-    delete m_pInnerThread;
+    m_pInnerThread.reset();
 
     if (m_pOuterThread)
     {
         m_pOuterThread->join();
-        delete m_pOuterThread;
     }
 }
 
@@ -238,7 +238,7 @@ void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 
     if (m_innerThreadId == 0) // no inner thread yet
     {
-        m_pInnerThread  = new InnerThread(this);
+        m_pInnerThread.reset(new InnerThread(this));
         m_pInnerThread->resume();
     }
 
@@ -275,10 +275,9 @@ void AffineBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
             if (m_pOuterThread)
             {
                 m_pOuterThread->join();
-                delete m_pOuterThread;
             }
 
-            m_pOuterThread = new OuterThread(this);
+            m_pOuterThread.reset(new OuterThread(this));
         }
     }
 

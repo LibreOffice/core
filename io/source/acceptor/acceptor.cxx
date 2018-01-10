@@ -36,6 +36,7 @@
 
 #include <services.hxx>
 #include "acceptor.hxx"
+#include <memory>
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.Acceptor"
 #define SERVICE_NAME "com.sun.star.connection.Acceptor"
@@ -65,8 +66,8 @@ namespace io_acceptor
                 virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
 
     private:
-        PipeAcceptor *m_pPipe;
-        SocketAcceptor *m_pSocket;
+        std::unique_ptr<PipeAcceptor> m_pPipe;
+        std::unique_ptr<SocketAcceptor> m_pSocket;
         Mutex m_mutex;
         OUString m_sLastDescription;
         bool m_bInAccept;
@@ -87,8 +88,7 @@ namespace io_acceptor
 
     OAcceptor::~OAcceptor()
     {
-        delete m_pPipe;
-        delete m_pSocket;
+        m_pPipe.reset();
     }
 
     struct BeingInAccept
@@ -138,7 +138,7 @@ namespace io_acceptor
                         aDesc.getParameter(
                             "name"));
 
-                    m_pPipe = new PipeAcceptor(aName, sConnectionDescription);
+                    m_pPipe.reset(new PipeAcceptor(aName, sConnectionDescription));
 
                     try
                     {
@@ -148,8 +148,7 @@ namespace io_acceptor
                     {
                         {
                             MutexGuard g( m_mutex );
-                            delete m_pPipe;
-                            m_pPipe = nullptr;
+                            m_pPipe.reset();
                         }
                         throw;
                     }
@@ -171,8 +170,8 @@ namespace io_acceptor
                         = aDesc.getParameter(
                             "tcpnodelay").toInt32() != 0;
 
-                    m_pSocket = new SocketAcceptor(
-                        aHost, nPort, bTcpNoDelay, sConnectionDescription);
+                    m_pSocket.reset(new SocketAcceptor(
+                        aHost, nPort, bTcpNoDelay, sConnectionDescription));
 
                     try
                     {
@@ -182,8 +181,7 @@ namespace io_acceptor
                     {
                         {
                             MutexGuard g( m_mutex );
-                            delete m_pSocket;
-                            m_pSocket = nullptr;
+                            m_pSocket.reset();
                         }
                         throw;
                     }

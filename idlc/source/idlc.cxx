@@ -217,8 +217,6 @@ Idlc::Idlc(Options* pOptions)
 
 Idlc::~Idlc()
 {
-    delete m_pRoot;
-    delete m_pScopes;
 }
 
 void Idlc::init()

@@ -98,27 +98,11 @@ struct ContentImplHelper_Impl
 {
     rtl::Reference< ::ucbhelper::PropertySetInfo >      m_xPropSetInfo;
     rtl::Reference< ::ucbhelper::CommandProcessorInfo > m_xCommandsInfo;
-    cppu::OInterfaceContainerHelper*              m_pDisposeEventListeners;
-    cppu::OInterfaceContainerHelper*              m_pContentEventListeners;
-    cppu::OInterfaceContainerHelper*              m_pPropSetChangeListeners;
-    cppu::OInterfaceContainerHelper*              m_pCommandChangeListeners;
-    PropertyChangeListeners*                      m_pPropertyChangeListeners;
-
-    ContentImplHelper_Impl()
-    : m_pDisposeEventListeners( nullptr ),
-        m_pContentEventListeners( nullptr ),
-      m_pPropSetChangeListeners( nullptr ),
-        m_pCommandChangeListeners( nullptr ),
-      m_pPropertyChangeListeners( nullptr ) {}
-
-    ~ContentImplHelper_Impl()
-    {
-        delete m_pDisposeEventListeners;
-        delete m_pContentEventListeners;
-        delete m_pPropSetChangeListeners;
-        delete m_pCommandChangeListeners;
-        delete m_pPropertyChangeListeners;
-    }
+    std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pDisposeEventListeners;
+    std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pContentEventListeners;
+    std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pPropSetChangeListeners;
+    std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pCommandChangeListeners;
+    std::unique_ptr<PropertyChangeListeners>            m_pPropertyChangeListeners;
 };
 
 } // namespace ucbhelper_impl
@@ -252,8 +236,8 @@ void SAL_CALL ContentImplHelper::addEventListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pDisposeEventListeners )
-        m_pImpl->m_pDisposeEventListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pImpl->m_pDisposeEventListeners.reset(
+            new cppu::OInterfaceContainerHelper( m_aMutex ));
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -282,8 +266,8 @@ void SAL_CALL ContentImplHelper::addContentEventListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pContentEventListeners )
-        m_pImpl->m_pContentEventListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pImpl->m_pContentEventListeners.reset(
+            new cppu::OInterfaceContainerHelper( m_aMutex ));
 
     m_pImpl->m_pContentEventListeners->addInterface( Listener );
 }
@@ -315,8 +299,8 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
-        m_pImpl->m_pPropertyChangeListeners
-            = new PropertyChangeListeners( m_aMutex );
+        m_pImpl->m_pPropertyChangeListeners.reset(
+            new PropertyChangeListeners( m_aMutex ));
 
     sal_Int32 nCount = PropertyNames.getLength();
     if ( !nCount )
@@ -377,8 +361,8 @@ void SAL_CALL ContentImplHelper::addCommandInfoChangeListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pCommandChangeListeners )
-        m_pImpl->m_pCommandChangeListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pImpl->m_pCommandChangeListeners.reset(
+            new cppu::OInterfaceContainerHelper( m_aMutex ));
 
     m_pImpl->m_pCommandChangeListeners->addInterface( Listener );
 }
@@ -583,8 +567,8 @@ void SAL_CALL ContentImplHelper::addPropertySetInfoChangeListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pPropSetChangeListeners )
-        m_pImpl->m_pPropSetChangeListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pImpl->m_pPropSetChangeListeners.reset(
+            new cppu::OInterfaceContainerHelper( m_aMutex ));
 
     m_pImpl->m_pPropSetChangeListeners->addInterface( Listener );
 }
