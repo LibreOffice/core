@@ -103,9 +103,6 @@ CfgStackData* CfgStack::Push(const OString &rTag, const OString &rId)
 
 CfgStack::~CfgStack()
 {
-    for ( size_t i = 0, n = maList.size(); i < n; i++ )
-        delete maList[ i ];
-    maList.clear();
 }
 
 OString CfgStack::GetAccessPath( size_t nPos )
@@ -410,8 +407,8 @@ CfgMerge::CfgMerge(
 
     if (!rMergeSource.isEmpty())
     {
-        pMergeDataFile = new MergeDataFile(
-            rMergeSource, global::inputPathname, true );
+        pMergeDataFile.reset(new MergeDataFile(
+            rMergeSource, global::inputPathname, true ));
         if (rLanguage.equalsIgnoreAsciiCase("ALL") )
         {
             aLanguages = pMergeDataFile->GetLanguages();
@@ -425,7 +422,6 @@ CfgMerge::CfgMerge(
 CfgMerge::~CfgMerge()
 {
     pOutputStream.close();
-    delete pMergeDataFile;
 }
 
 void CfgMerge::WorkOnText(OString &, const OString& rLangIndex)

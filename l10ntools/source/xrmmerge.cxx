@@ -375,8 +375,8 @@ XRMResMerge::XRMResMerge(
 {
     if (!rMergeSource.isEmpty() && sLanguage.equalsIgnoreAsciiCase("ALL"))
     {
-        pMergeDataFile = new MergeDataFile(
-            rMergeSource, sInputFileName, false);
+        pMergeDataFile.reset(new MergeDataFile(
+            rMergeSource, sInputFileName, false));
         aLanguages = pMergeDataFile->GetLanguages();
     }
     else
@@ -393,7 +393,6 @@ XRMResMerge::XRMResMerge(
 XRMResMerge::~XRMResMerge()
 {
     pOutputStream.close();
-    delete pMergeDataFile;
 }
 
 void XRMResMerge::WorkOnDesc(

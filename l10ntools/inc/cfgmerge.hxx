@@ -155,7 +155,7 @@ public:
 class CfgMerge : public CfgParser
 {
 private:
-    MergeDataFile *pMergeDataFile;
+    std::unique_ptr<MergeDataFile> pMergeDataFile;
     std::vector<OString> aLanguages;
     std::unique_ptr<ResData> pResData;
 

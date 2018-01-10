@@ -104,7 +104,7 @@ public:
 class XRMResMerge : public XRMResParser
 {
 private:
-    MergeDataFile *pMergeDataFile;
+    std::unique_ptr<MergeDataFile> pMergeDataFile;
     OString sFilename;
     std::unique_ptr<ResData> pResData;
     std::ofstream pOutputStream;

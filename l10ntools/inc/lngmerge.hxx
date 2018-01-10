@@ -28,8 +28,6 @@
 #include "common.hxx"
 #include "export.hxx"
 
-typedef std::vector< OString* > LngLineList;
-
 #define LNG_OK              0x0000
 #define LNG_COULD_NOT_OPEN  0x0001
 
@@ -43,7 +41,7 @@ typedef std::vector< OString* > LngLineList;
 class LngParser
 {
 private:
-    LngLineList *pLines;
+    std::vector<OString> mvLines;
     OString sSource;
     std::vector<OString> aLanguages;
 
