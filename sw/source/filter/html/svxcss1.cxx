@@ -2019,11 +2019,15 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
         break;
     case CSS1_PIXLENGTH:
         {
-            long nPWidth = (long)pExpr->GetNumber();
-            long nPHeight = 0;
-            SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-            nIndent = (short)nPWidth;
-            bSet = true;
+            double fWidth = pExpr->GetNumber();
+            if (fWidth < SAL_MAX_INT32/2.0 && fWidth > SAL_MIN_INT32/2.0)
+            {
+                long nPWidth = (long)fWidth;
+                long nPHeight = 0;
+                SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
+                nIndent = (short)nPWidth;
+                bSet = true;
+            }
         }
         break;
     case CSS1_PERCENTAGE:
