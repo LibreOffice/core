@@ -432,7 +432,9 @@ public:
         OUString maRelativeName;
         OUString maFilterName;
         OUString maFilterOptions;
+        bool mbIsInCache;         /// true for files already loaded from cache (not from disk)
 
+        SrcFileData() : mbIsInCache(false) {}
         void maybeCreateRealFileName(const OUString& rOwnDocName);
     };
 
@@ -642,6 +644,12 @@ public:
     void clear();
 
     bool hasExternalData() const;
+
+    /**
+     * Returns true if there is a data which was not loaded from cache
+     * and should be loaded from external source.
+     */
+    bool hasUnloadedExternalData() const;
 
     /**
      * Re-generates relative names for all stored source files.  This is
