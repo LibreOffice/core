@@ -38,8 +38,14 @@
 
 #define WATERMARK_LUM_OFFSET        50
 #define WATERMARK_CON_OFFSET        -70
-#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<20)+nFrac*((long)(cVal1)-(cVal0)))>>20))
 
+namespace {
+
+constexpr sal_uInt8 MAP(long cVal0, long cVal1, long nFrac) {
+    return (sal_uInt8)(((cVal0<<20)+nFrac*(cVal1-cVal0))>>20);
+}
+
+}
 
 GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize ) :
     mnUsedSize(0),
