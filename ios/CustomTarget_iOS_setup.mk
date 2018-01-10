@@ -67,10 +67,10 @@ $(IOSGEN)/native-code.h: $(WORKDIR)/ios $(BUILDDIR)/config_host.mk \
 
 	# Set up fundamentalrc, unorc, bootstraprc and versionrc.
 	(echo '[Bootstrap]' \
-        && echo 'BRAND_BASE_DIR=$${ORIGIN}/..' \
-        && echo 'BRAND_INI_DIR=$${ORIGIN}' \
+        && echo 'BRAND_BASE_DIR=$$APP_DATA_DIR/..' \
+        && echo 'BRAND_INI_DIR=$$APP_DATA_DIR' \
         && echo 'BRAND_SHARE_SUBDIR=$(LIBO_SHARE_FOLDER)' \
-        && echo 'BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)' \
+        && echo '##BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)' \
         && echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry ' \
 	        'res:$${BRAND_BASE_DIR}/registry' \
 	&& echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/' \
