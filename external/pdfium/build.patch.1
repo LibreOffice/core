@@ -1,0 +1,21 @@
+diff --git a/core/fxge/dib/cfx_imagetransformer.cpp b/core/fxge/dib/cfx_imagetransformer.cpp
+index 8e01127b0..f4ce4d915 100644
+--- a/core/fxge/dib/cfx_imagetransformer.cpp
++++ b/core/fxge/dib/cfx_imagetransformer.cpp
+@@ -315,14 +315,14 @@ bool CFX_ImageTransformer::Continue(IFX_PauseIndicator* pPause) {
+   } else if (pDestMask) {
+     CalcData cdata = {
+         pDestMask.Get(), result2stretch, pSrcMaskBuf,
+-        m_Storer.GetBitmap()->m_pAlphaMask->GetPitch(),
++        static_cast<uint32_t>(m_Storer.GetBitmap()->m_pAlphaMask->GetPitch()),
+     };
+     CalcMask(cdata);
+   }
+ 
+   CalcData cdata = {pTransformed.Get(), result2stretch,
+                     m_Storer.GetBitmap()->GetBuffer(),
+-                    m_Storer.GetBitmap()->GetPitch()};
++                    static_cast<uint32_t>(m_Storer.GetBitmap()->GetPitch())};
+   if (m_Storer.GetBitmap()->IsAlphaMask()) {
+     CalcAlpha(cdata);
+   } else {
