@@ -114,7 +114,7 @@ void SvxFillToolBoxControl::StateChanged(
                 {
                     mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
                     mpLbFillType->Enable();
-                    drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
+                    drawing::FillStyle eXFS = mpStyleItem->GetValue();
                     meLastXFS = eXFS;
                     mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXFS));
 
@@ -145,7 +145,7 @@ void SvxFillToolBoxControl::StateChanged(
                 mpColorItem.reset(pState ? static_cast<XFillColorItem*>(pState->Clone()) : nullptr);
             }
 
-            if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
+            if(mpStyleItem && drawing::FillStyle_SOLID == mpStyleItem->GetValue())
             {
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
@@ -161,7 +161,7 @@ void SvxFillToolBoxControl::StateChanged(
                 mpFillGradientItem.reset(pState ? static_cast<XFillGradientItem*>(pState->Clone()) : nullptr);
             }
 
-            if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
+            if(mpStyleItem && drawing::FillStyle_GRADIENT == mpStyleItem->GetValue())
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -190,7 +190,7 @@ void SvxFillToolBoxControl::StateChanged(
                 mpHatchItem.reset(pState ? static_cast<XFillHatchItem*>(pState->Clone()) : nullptr);
             }
 
-            if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
+            if(mpStyleItem && drawing::FillStyle_HATCH == mpStyleItem->GetValue())
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -219,7 +219,7 @@ void SvxFillToolBoxControl::StateChanged(
                 mpBitmapItem.reset(pState ? static_cast<XFillBitmapItem*>(pState->Clone()) : nullptr);
             }
 
-            if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
+            if(mpStyleItem && drawing::FillStyle_BITMAP == mpStyleItem->GetValue())
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -245,7 +245,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_GRADIENT == mpStyleItem->GetValue())
                 {
                     if(mpFillGradientItem)
                     {
@@ -270,7 +270,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_HATCH == mpStyleItem->GetValue())
                 {
                     if(mpHatchItem)
                     {
@@ -295,7 +295,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_BITMAP == mpStyleItem->GetValue())
                 {
                     if(mpBitmapItem)
                     {
@@ -323,7 +323,7 @@ void SvxFillToolBoxControl::Update()
 {
     if(mpStyleItem)
     {
-        const drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
+        const drawing::FillStyle eXFS = mpStyleItem->GetValue();
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         switch( eXFS )
@@ -572,7 +572,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectedEntryPos();
 
-    if((drawing::FillStyle)meLastXFS != eXFS)
+    if(meLastXFS != eXFS)
     {
         mpLbFillAttr->Clear();
         SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -751,7 +751,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 
     // #i122676# dependent from bFillStyleChange, do execute a single or two
     // changes in one Execute call
-    const bool bFillStyleChange((drawing::FillStyle) meLastXFS != eXFS);
+    const bool bFillStyleChange(meLastXFS != eXFS);
 
     switch(eXFS)
     {

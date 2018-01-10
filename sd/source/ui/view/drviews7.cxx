@@ -1696,7 +1696,7 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
         rSet.Put(aPageItem);
 
         const SfxItemSet &rPageAttr = pPage->getSdrPageProperties().GetItemSet();
-        drawing::FillStyle eXFS = (drawing::FillStyle) rPageAttr.GetItem( XATTR_FILLSTYLE )->GetValue();
+        drawing::FillStyle eXFS = rPageAttr.GetItem( XATTR_FILLSTYLE )->GetValue();
         XFillStyleItem aFillStyleItem( eXFS );
         aFillStyleItem.SetWhich( SID_ATTR_PAGE_FILLSTYLE );
         rSet.Put(aFillStyleItem);

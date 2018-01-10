@@ -1375,7 +1375,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
 
         if( (nHeight >= 2) && (nHeight <= 9999 ) )
         {
-            nHeight = OutputDevice::LogicToLogic( nHeight, MapUnit::MapPoint, (MapUnit)eUnit  ) / 10;
+            nHeight = OutputDevice::LogicToLogic( nHeight, MapUnit::MapPoint, eUnit  ) / 10;
 
             if( nHeight != (long)aFontHeightItem.GetHeight() )
             {

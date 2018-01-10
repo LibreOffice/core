@@ -530,7 +530,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
     {
         // exceptions are caught at ScDPSaveData::WriteToSource
 
-        sheet::DataPilotFieldOrientation eOrient = (sheet::DataPilotFieldOrientation)nOrientation;
+        sheet::DataPilotFieldOrientation eOrient = nOrientation;
         xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(eOrient) );
 
         sal_Int16 eFunc = static_cast<sal_Int16>(nFunction);

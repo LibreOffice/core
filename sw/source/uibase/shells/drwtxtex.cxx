@@ -803,7 +803,7 @@ ASK_ESCAPE:
                             (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
                 else
                 {
-                    text::WritingMode eMode = (text::WritingMode)
+                    text::WritingMode eMode =
                                     aEditAttr.Get( SDRATTR_TEXTDIRECTION ).GetValue();
 
                     if( nSlotId == SID_TEXTDIRECTION_LEFT_TO_RIGHT )

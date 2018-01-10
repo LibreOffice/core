@@ -649,7 +649,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
             // JP 16.02.99: SplitMergeBoxNm take care of the name themself
             // JP 22.02.99: Linux compiler needs cast
             // JP 28.06.99: rel. BoxName has no preceding tablename!
-            if( fnFormula != (FnScanFormula)&SwTableFormula::SplitMergeBoxNm_ &&
+            if( fnFormula != &SwTableFormula::SplitMergeBoxNm_ &&
                 m_sFormula.getLength()>(nStt+1) && cRelIdentifier != m_sFormula[nStt+1] &&
                 (nSeparator = m_sFormula.indexOf( '.', nStt ))>=0
                 && nSeparator < nEnd )
@@ -662,7 +662,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
                     sTableNm = sTableNm.copy( 0, nSeparator - nStt );
 
                     // when creating a formula the table name is unwanted
-                    if( fnFormula != (FnScanFormula)&SwTableFormula::MakeFormula_ )
+                    if( fnFormula != &SwTableFormula::MakeFormula_ )
                         aStr += sTableNm;
                     nStt = nSeparator;
 

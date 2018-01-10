@@ -676,7 +676,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     {
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
         sal_Int32 nLineWidth = rSet.Get(XATTR_LINEWIDTH).GetValue();
-        drawing::LineStyle eLineStyle = (drawing::LineStyle)rSet.Get(XATTR_LINESTYLE).GetValue();
+        drawing::LineStyle eLineStyle = rSet.Get(XATTR_LINESTYLE).GetValue();
         drawing::FillStyle eFillStyle = rSet.Get(XATTR_FILLSTYLE).GetValue();
 
         if(static_cast<SdrPathObj*>(pObj)->IsClosed()

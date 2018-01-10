@@ -812,7 +812,7 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefaultOrSet, 
         mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
         mpLbFillType->Enable();
         mpColorTextFT->Enable();
-        drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
+        drawing::FillStyle eXFS = mpStyleItem->GetValue();
         eFillStyle nPos = NONE;
         switch(eXFS)
         {
@@ -870,7 +870,7 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSe
         mpFillGradientItem.reset(pItem ? static_cast<XFillGradientItem*>(pItem->Clone()) : nullptr);
     }
 
-    if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
+    if(mpStyleItem && drawing::FillStyle_GRADIENT == mpStyleItem->GetValue())
     {
         mpLbFillAttr->Hide();
         mpLbFillGradFrom->Show();
@@ -909,7 +909,7 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, 
         mpHatchItem.reset(pItem ? static_cast<XFillHatchItem*>(pItem->Clone()) : nullptr);
     }
 
-    if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
+    if(mpStyleItem && drawing::FillStyle_HATCH == mpStyleItem->GetValue())
     {
         mpLbFillAttr->Show();
         mpToolBoxColor->Hide();
@@ -940,7 +940,7 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefaultOrSet, const SfxPoolIte
         mpColorItem.reset(pItem ? static_cast<XFillColorItem*>(pItem->Clone()) : nullptr);
     }
 
-    if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
+    if(mpStyleItem && drawing::FillStyle_SOLID == mpStyleItem->GetValue())
     {
         mpLbFillAttr->Hide();
         mpToolBoxColor->Show();
@@ -957,7 +957,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
         mpBitmapItem.reset(pItem ? static_cast<XFillBitmapItem*>(pItem->Clone()) : nullptr);
     }
 
-    if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
+    if(mpStyleItem && drawing::FillStyle_BITMAP == mpStyleItem->GetValue())
     {
         mpLbFillAttr->Show();
         mpToolBoxColor->Hide();
@@ -1019,7 +1019,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
         {
             if(bDefault)
             {
-                if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_GRADIENT == mpStyleItem->GetValue())
                 {
                     if(mpFillGradientItem)
                     {
@@ -1044,7 +1044,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
         {
             if(bDefault)
             {
-                if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_HATCH == mpStyleItem->GetValue())
                 {
                     if(mpHatchItem)
                     {
@@ -1070,7 +1070,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
         {
             if(bDefault)
             {
-                if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_BITMAP == mpStyleItem->GetValue())
                 {
                     if(mpBitmapItem)
                     {

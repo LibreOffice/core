@@ -54,7 +54,7 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getAlignment()
 
 void SAL_CALL SwVbaParagraphFormat::setAlignment( sal_Int32 _alignment )
 {
-    style::ParagraphAdjust aParaAdjust = ( style::ParagraphAdjust ) getOOoAlignment( _alignment );
+    style::ParagraphAdjust aParaAdjust = getOOoAlignment( _alignment );
     mxParaProps->setPropertyValue("ParaAdjust", uno::makeAny( aParaAdjust ) );
 }
 

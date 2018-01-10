@@ -92,7 +92,7 @@ namespace frm
                 break;
 
             case PROPERTY_ID_FONT_WEIGHT:
-                aValue <<= (float)_rFont.Weight;
+                aValue <<= _rFont.Weight;
                 break;
 
             case PROPERTY_ID_FONT_SLANT:

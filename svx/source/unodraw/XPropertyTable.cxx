@@ -461,7 +461,7 @@ uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
 
     drawing::Hatch aUnoHatch;
 
-    aUnoHatch.Style = (drawing::HatchStyle)aHatch.GetHatchStyle();
+    aUnoHatch.Style = aHatch.GetHatchStyle();
     aUnoHatch.Color = aHatch.GetColor().GetColor();
     aUnoHatch.Distance = aHatch.GetDistance();
     aUnoHatch.Angle = aHatch.GetAngle();
@@ -476,7 +476,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& r
         return std::unique_ptr<XHatchEntry>();
 
     XHatch aXHatch;
-    aXHatch.SetHatchStyle( (css::drawing::HatchStyle)aUnoHatch.Style );
+    aXHatch.SetHatchStyle( aUnoHatch.Style );
     aXHatch.SetColor( aUnoHatch.Color );
     aXHatch.SetDistance( aUnoHatch.Distance );
     aXHatch.SetAngle( aUnoHatch.Angle );
@@ -532,7 +532,7 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
     const XGradient& aXGradient = static_cast<const XGradientEntry*>(pEntry)->GetGradient();
     awt::Gradient aGradient;
 
-    aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
+    aGradient.Style = aXGradient.GetGradientStyle();
     aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
     aGradient.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
     aGradient.Angle = (short)aXGradient.GetAngle();
@@ -554,7 +554,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString
 
     XGradient aXGradient;
 
-    aXGradient.SetGradientStyle( (css::awt::GradientStyle) aGradient.Style );
+    aXGradient.SetGradientStyle( aGradient.Style );
     aXGradient.SetStartColor( aGradient.StartColor );
     aXGradient.SetEndColor( aGradient.EndColor );
     aXGradient.SetAngle( aGradient.Angle );

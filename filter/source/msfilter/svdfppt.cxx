@@ -7431,7 +7431,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
                     XGradient aXGradient(pObj->GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
 
                     css::awt::Gradient aGradient;
-                    aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
+                    aGradient.Style = aXGradient.GetGradientStyle();
                     aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
                     aGradient.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
                     aGradient.Angle = (short)aXGradient.GetAngle();

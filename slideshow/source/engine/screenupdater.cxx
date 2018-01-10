@@ -129,7 +129,7 @@ namespace internal
         if( bViewUpdatesNeeded )
         {
             mpImpl->maUpdaters.applyAll(
-                std::mem_fn((bool (ViewUpdate::*)())&ViewUpdate::update) );
+                std::mem_fn(&ViewUpdate::update) );
         }
 
         if( bViewUpdatesNeeded ||

@@ -186,7 +186,7 @@ inline bool BigInt::IsNeg() const
     if ( !bIsBig )
         return (nVal < 0);
     else
-        return (bool)bIsNeg;
+        return bIsNeg;
 }
 
 inline bool BigInt::IsZero() const

@@ -2305,8 +2305,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_ATTR_PAGE_BITMAP:
         {
             SfxItemSet aSet = rDesc.GetMaster().GetAttrSet();
-            drawing::FillStyle eXFS = (drawing::FillStyle)
-                                        aSet.GetItem(XATTR_FILLSTYLE)->GetValue();
+            drawing::FillStyle eXFS = aSet.GetItem(XATTR_FILLSTYLE)->GetValue();
             XFillStyleItem aFillStyleItem( eXFS );
             aFillStyleItem.SetWhich( SID_ATTR_PAGE_FILLSTYLE );
             rSet.Put(aFillStyleItem);

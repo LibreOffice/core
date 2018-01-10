@@ -299,7 +299,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
 {
     if( rAttrs->GetItemState( GetWhich( XATTR_LINESTYLE ) ) != SfxItemState::DONTCARE )
     {
-        drawing::LineStyle eXLS = (drawing::LineStyle) static_cast<const XLineStyleItem&>( rAttrs->Get( GetWhich( XATTR_LINESTYLE ) ) ).GetValue();
+        drawing::LineStyle eXLS = static_cast<const XLineStyleItem&>( rAttrs->Get( GetWhich( XATTR_LINESTYLE ) ) ).GetValue();
 
         switch( eXLS )
         {

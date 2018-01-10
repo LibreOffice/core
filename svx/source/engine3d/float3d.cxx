@@ -567,7 +567,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     eState = rAttrs.GetItemState(XATTR_FILLSTYLE);
     if(eState != SfxItemState::DONTCARE)
     {
-        drawing::FillStyle eXFS = (drawing::FillStyle)rAttrs.Get(XATTR_FILLSTYLE).GetValue();
+        drawing::FillStyle eXFS = rAttrs.Get(XATTR_FILLSTYLE).GetValue();
         bBitmap = (eXFS == drawing::FillStyle_BITMAP || eXFS == drawing::FillStyle_GRADIENT || eXFS == drawing::FillStyle_HATCH);
     }
 

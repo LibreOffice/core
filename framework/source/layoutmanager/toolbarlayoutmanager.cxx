@@ -855,7 +855,7 @@ bool ToolbarLayoutManager::dockToolbar( const OUString& rResourceURL, ui::Dockin
 
                         ::Point aPixelPos;
                         awt::Point aDockPos;
-                        implts_findNextDockingPos((ui::DockingArea)aUIElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
+                        implts_findNextDockingPos(aUIElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
                         aUIElement.m_aDockedData.m_aPos = aDockPos;
                     }
                 }
@@ -1510,7 +1510,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
 
                 if ( isDefaultPos( rElement.m_aDockedData.m_aPos ))
                 {
-                    implts_findNextDockingPos( (ui::DockingArea)rElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
+                    implts_findNextDockingPos( rElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
                     rElement.m_aDockedData.m_aPos = aDockPos;
                 }
             }
@@ -2616,7 +2616,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
     uno::Reference< awt::XWindow > xWindow( rUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
     uno::Reference< awt::XWindow > xDockingAreaWindow;
     ::tools::Rectangle                    aTrackingRect( rTrackingRect );
-    ui::DockingArea                eDockedArea( (ui::DockingArea)rUIElement.m_aDockedData.m_nDockedArea );
+    ui::DockingArea                eDockedArea( rUIElement.m_aDockedData.m_nDockedArea );
     sal_Int32                      nTopDockingAreaSize( implts_getTopBottomDockingAreaSizes().Width() );
     sal_Int32                      nBottomDockingAreaSize( implts_getTopBottomDockingAreaSizes().Height() );
     bool                           bHorizontalDockArea(( eDockedArea == ui::DockingArea_DOCKINGAREA_TOP ) ||
@@ -3507,7 +3507,7 @@ void SAL_CALL ToolbarLayoutManager::endDocking( const awt::EndDockingEvent& e )
             if ( m_eDockOperation != DOCKOP_ON_COLROW )
             {
                 // we have to renumber our row/column data to insert a new row/column
-                implts_renumberRowColumnData((ui::DockingArea)aUIDockingElement.m_aDockedData.m_nDockedArea, aUIDockingElement );
+                implts_renumberRowColumnData(aUIDockingElement.m_aDockedData.m_nDockedArea, aUIDockingElement );
             }
         }
 
@@ -3691,7 +3691,7 @@ void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject&
                             aSize = pWindow->GetSizePixel();
                     }
 
-                    implts_findNextDockingPos((ui::DockingArea)aUIDockingElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
+                    implts_findNextDockingPos(aUIDockingElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
                     aUIDockingElement.m_aDockedData.m_aPos = aDockPos;
                 }
 

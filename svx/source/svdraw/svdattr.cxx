@@ -969,7 +969,7 @@ void SdrTextFitToSizeTypeItem::SetBoolValue(bool bVal)
 
 bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    drawing::TextFitToSizeType eFS = (drawing::TextFitToSizeType)GetValue();
+    drawing::TextFitToSizeType eFS = GetValue();
     rVal <<= eFS;
 
     return true;
@@ -1530,7 +1530,7 @@ bool SdrMeasureTextHPosItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrMeasureTextHPosItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (drawing::MeasureTextHorzPos)GetValue();
+    rVal <<= GetValue();
     return true;
 }
 
@@ -1575,7 +1575,7 @@ bool SdrMeasureTextVPosItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrMeasureTextVPosItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (drawing::MeasureTextVertPos)GetValue();
+    rVal <<= GetValue();
     return true;
 }
 

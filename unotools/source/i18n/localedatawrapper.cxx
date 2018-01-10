@@ -891,7 +891,7 @@ DateOrder LocaleDataWrapper::getDateOrder() const
         aGuard.changeReadToWrite();
         const_cast<LocaleDataWrapper*>(this)->getDateOrdersImpl();
     }
-    return (DateOrder) nDateOrder;
+    return nDateOrder;
 }
 
 DateOrder LocaleDataWrapper::getLongDateOrder() const
@@ -902,7 +902,7 @@ DateOrder LocaleDataWrapper::getLongDateOrder() const
         aGuard.changeReadToWrite();
         const_cast<LocaleDataWrapper*>(this)->getDateOrdersImpl();
     }
-    return (DateOrder) nLongDateOrder;
+    return nLongDateOrder;
 }
 
 DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const

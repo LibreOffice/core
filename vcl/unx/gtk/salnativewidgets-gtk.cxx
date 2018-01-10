@@ -2983,7 +2983,7 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
             {
                 gtk_paint_flat_box( gWidgetData[m_nXScreen].gToolbarWidget->style,
                                     gdkDrawable,
-                                    (GtkStateType)GTK_STATE_NORMAL,
+                                    GTK_STATE_NORMAL,
                                     GTK_SHADOW_NONE,
                                     &clipRect,
                                     gWidgetData[m_nXScreen].gToolbarWidget,

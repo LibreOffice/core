@@ -130,7 +130,7 @@ public:
     void SetRedrawRegion(const vcl::Region& rNew);
 
     // #i72889# read/write access to TemporaryTarget
-    bool getTemporaryTarget() const { return (bool)mbTemporaryTarget; }
+    bool getTemporaryTarget() const { return mbTemporaryTarget; }
     void setTemporaryTarget(bool bNew) { mbTemporaryTarget = bNew; }
 
     // #i72889# get target output device, take into account output buffering

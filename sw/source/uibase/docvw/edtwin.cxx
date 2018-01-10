@@ -824,7 +824,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView 
                     // to the OOo setting or the system setting explicitly
                     // and/or a better handling of the script type.
                     i18n::UnicodeScript eType = !rInBuffer.isEmpty() ?
-                        (i18n::UnicodeScript)GetAppCharClass().getScript( rInBuffer, 0 ) :
+                        GetAppCharClass().getScript( rInBuffer, 0 ) :
                         i18n::UnicodeScript_kScriptCount;
 
                     bool bSystemIsNonLatin = false;
