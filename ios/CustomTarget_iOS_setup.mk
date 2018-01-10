@@ -17,14 +17,27 @@ $(eval $(call gb_CustomTarget_CustomTarget,ios/iOS_setup))
 
 $(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSGEN)/native-code.h
 
+#- build  ---------------------------------------------------------------------
+.PHONY: FORCE
+FORCE:
+
+
+
+$(WORKDIR)/ios:
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRE,2)
+	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
+	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
+	         $(IOSGEN)/simulator \
+	         $(IOSGEN)/debug \
+	         $(IOSGEN)/release \
+	         $(IOSGEN) $(WORKDIR)/ios;
+
 
 
 #- Generate dynamic files  ---------------------------------------------------
-$(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
+$(IOSGEN)/native-code.h: $(WORKDIR)/ios $(BUILDDIR)/config_host.mk \
+                         $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
-	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
-	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
-	         $(IOSGEN) $(WORKDIR)/ios;
 
 	# generate file with call declarations
 	$(SRCDIR)/solenv/bin/native-code.py \
@@ -88,8 +101,20 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/iOS_setup):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
-	rm -rf $(IOSRES) $(IOSGEN)/native-code.h $(IOSAPPXC)
+	echo $(call gb_StaticLibrary_get_target,iOS_kitBridge)
+	rm -rf $(IOSRES) $(IOSGEN)/native-code.h $(IOSGEN)/build
 	rm -rf $(WORKDIR)/ios
+ifeq ($(ENABLE_DEBUG),TRUE)
+ifeq ($(CPUNAME),X86_64)
+	rm -f $(IOSGEN)/simulator/*
+else
+	rm -f $(IOSGEN)/debug/*
+endif
+else
+ifeq ($(CPUNAME),ARM64)
+	rm -f $(IOSGEN)/release/*
+endif
+endif
 
 
 

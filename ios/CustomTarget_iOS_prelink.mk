@@ -6,16 +6,21 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #- Env ------------------------------------------------------------------------
+IOSLIB = ''
 IOSLD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
 IOSCLANG = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
 IOSOBJ = $(WORKDIR)/CObject/ios/Kit.o
 
 ifeq ($(ENABLE_DEBUG),TRUE)
-IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.dylib
-IOSKIT2 = $(SRCDIR)/ios/generated/libKit_$(CPUNAME)_debug.a
+ifeq ($(CPUNAME),X86_64)
+IOSKIT = $(IOSGEN)/simulator/libKit
 else
-IOSKIT = $(SRCDIR)/ios/generated/libKit_$(CPUNAME).dylib
-IOSKIT2 = $(SRCDIR)/ios/generated/libKit_$(CPUNAME).a
+IOSKIT = $(IOSGEN)/debug/libKit
+endif
+else
+ifeq ($(CPUNAME),ARM64)
+IOSKIT = $(IOSGEN)/release/libKit
+endif
 endif
 
 
@@ -23,7 +28,7 @@ endif
 #- Top level  -----------------------------------------------------------------
 $(eval $(call gb_CustomTarget_CustomTarget,ios/iOS_prelink))
 
-$(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT)
+$(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT).dylib
 
 
 
@@ -32,14 +37,19 @@ $(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT)
 FORCE:
 
 
-$(IOSKIT): $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o
-	$(IOSLD) -r -ios_version_min 11.2 \
+IOSPREBUILD: FORCE
+	$(eval IOSLIBS = `$(SRCDIR)/bin/lo-all-static-libs`)
+
+
+
+$(IOSKIT).dylib: $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,iOS_kitBridge) $(IOSLIBS)
+	$(IOSLD) -r -ios_version_min $(IOS_DEPLOYMENT_VERSION) \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
 	    -o $(IOSOBJ) \
 	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
-	    `$(SRCDIR)/bin/lo-all-static-libs`
-	$(AR) -r $(IOSKIT2) $(IOSOBJ)
+	    $(IOSLIBS)
+	$(AR) -r $(IOSKIT).a $(IOSOBJ)
 
 	$(IOSCLANG) -dynamiclib -mios-simulator-version-min=$(IOS_DEPLOYMENT_VERSION) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
@@ -61,15 +71,14 @@ $(IOSKIT): $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o
 	    -single_module \
 	    -compatibility_version 1 \
 	    -current_version 1 \
-	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
-	    `$(SRCDIR)/bin/lo-all-static-libs` \
-	    -o $(IOSKIT)
+	    $(IOSKIT).a \
+	    -o $(IOSKIT).dylib
 ifeq ($(origin IOS_CODEID),undefined)
 	@echo "please define environment variable IOS_CODEID as\n" \
 	      "export IOS_CODEID=<your apple code identifier>"
 	@exit -1
 else
-	codesign -s "$(IOS_CODEID)" $(IOSKIT) 
+	codesign -s "$(IOS_CODEID)" $(IOSKIT).dylib
 endif
 
 
@@ -77,7 +86,7 @@ endif
 
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/iOS_prelink):
-	rm -f $(IOSKIT) $(IOSKIT2)
+	rm -f $(IOSKIT).a $(IOSKIT).dylib
 
 
 
