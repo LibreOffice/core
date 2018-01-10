@@ -300,6 +300,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bRemoveHidden( false ),
     m_bBodySeen( false ),
     m_bReadingHeaderOrFooter( false ),
+    m_nTableDepth( 0 ),
     m_pTempViewFrame(nullptr)
 {
     m_nEventId = nullptr;

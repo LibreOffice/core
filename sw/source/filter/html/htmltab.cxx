@@ -5069,6 +5069,10 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                                                     bool bHasParentSection,
                                                     bool bHasToFly)
 {
+    TableDepthGuard aGuard(*this);
+    if (aGuard.TooDeep())
+        eState = SvParserState::Error;
+
     if (!IsParserWorking() && !m_pPendStack)
         return std::shared_ptr<HTMLTable>();
 

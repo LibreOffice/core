@@ -493,6 +493,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool m_bBodySeen : 1;
     bool m_bReadingHeaderOrFooter : 1;
 
+    sal_Int32 m_nTableDepth;
+
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
     OUString m_InfoNames[4];
 
@@ -880,6 +882,23 @@ private:
                              bool bSurroundOnly = false ) const;
 
     bool PendingObjectsInPaM(SwPaM& rPam) const;
+
+    class TableDepthGuard
+    {
+    private:
+        SwHTMLParser& m_rParser;
+    public:
+        TableDepthGuard(SwHTMLParser& rParser)
+            : m_rParser(rParser)
+        {
+            ++m_rParser.m_nTableDepth;
+        }
+        bool TooDeep() const { return m_rParser.m_nTableDepth > 2048; }
+        ~TableDepthGuard()
+        {
+            --m_rParser.m_nTableDepth;
+        }
+    };
 
 public:         // used in tables
 
