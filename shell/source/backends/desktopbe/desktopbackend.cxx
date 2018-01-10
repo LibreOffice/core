@@ -340,6 +340,10 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         backend = createBackend(
             context,
             "com.sun.star.configuration.backend.KDE4Backend");
+    } else if ( desktop == "KDE5" ) {
+        backend = createBackend(
+            context,
+            "com.sun.star.configuration.backend.KDE5Backend");
     }
     return backend.is()
         ? backend : static_cast< cppu::OWeakObject * >(new Default);
