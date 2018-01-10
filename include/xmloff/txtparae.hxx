@@ -64,6 +64,11 @@ namespace xmloff
 
 }
 
+namespace basegfx
+{
+    class B2DPoint;
+}
+
 enum class TextPNS
 {
     ODF,
@@ -253,6 +258,7 @@ protected:
     XMLShapeExportFlags addTextFrameAttributes(
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
         bool bShape,
+        basegfx::B2DPoint* pCenter = nullptr,
         OUString *pMinHeightValue = nullptr,
         OUString *pMinWidthValue = nullptr );
 
