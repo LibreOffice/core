@@ -28,7 +28,6 @@
 #include "refdata.hxx"
 #include <tools/mempool.hxx>
 #include "scdllapi.h"
-#include "scmatrix.hxx"
 #include <formula/IFunctionDescription.hxx>
 #include <formula/token.hxx>
 #include "calcmacros.hxx"
@@ -44,6 +43,7 @@ struct RangeMatrix;
 }
 
 class ScJumpMatrix;
+class ScMatrix;
 
 typedef ::std::vector< ScComplexRefData > ScRefList;
 
@@ -299,6 +299,7 @@ protected:
     formula::FormulaConstTokenRef     xUpperLeft;
 public:
     ScMatrixCellResultToken( const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
+    ScMatrixCellResultToken( const ScMatrixCellResultToken& );
     virtual ~ScMatrixCellResultToken() override;
     virtual double              GetDouble() const override;
     virtual svl::SharedString GetString() const override;
