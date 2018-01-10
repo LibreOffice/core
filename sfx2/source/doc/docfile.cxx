@@ -191,6 +191,7 @@ public:
     bool m_bRemote:1;
     bool m_bInputStreamIsReadOnly:1;
     bool m_bInCheckIn:1;
+    bool m_bDisableFileSync = false;
 
     OUString m_aName;
     OUString m_aLogicName;
@@ -1972,13 +1973,16 @@ void SfxMedium::Transfer_Impl()
         {
             TransactedTransferForFS_Impl( aSource, aDest, xComEnv );
 
-            // Hideous - no clean way to do this, so we re-open the file just to fsync it
-            osl::File aFile( aDestURL );
-            if ( aFile.open( osl_File_OpenFlag_Write ) == osl::FileBase::E_None )
+            if (!pImpl->m_bDisableFileSync)
             {
-                aFile.sync();
-                SAL_INFO( "sfx.doc", "fsync'd saved file '" << aDestURL << "'" );
-                aFile.close();
+                // Hideous - no clean way to do this, so we re-open the file just to fsync it
+                osl::File aFile( aDestURL );
+                if ( aFile.open( osl_File_OpenFlag_Write ) == osl::FileBase::E_None )
+                {
+                    aFile.sync();
+                    SAL_INFO( "sfx.doc", "fsync'd saved file '" << aDestURL << "'" );
+                    aFile.close();
+                }
             }
         }
         else
@@ -2732,6 +2736,11 @@ void SfxMedium::CloseAndRelease()
 void SfxMedium::DisableUnlockWebDAV( bool bDisableUnlockWebDAV )
 {
     pImpl->m_bDisableUnlockWebDAV = bDisableUnlockWebDAV;
+}
+
+void SfxMedium::DisableFileSync(bool bDisableFileSync)
+{
+    pImpl->m_bDisableFileSync = bDisableFileSync;
 }
 
 void SfxMedium::UnlockFile( bool bReleaseLockStream )

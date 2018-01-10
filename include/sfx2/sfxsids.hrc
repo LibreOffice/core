@@ -243,8 +243,9 @@
 #define SID_BLUETOOTH_SENDDOC               (SID_SFX_START + 1726)
 #define SID_TEMPLATE_MANAGER                (SID_SFX_START + 1727)
 #define SID_TOOLBAR_MODE                    (SID_SFX_START + 1728)
+#define SID_NO_FILE_SYNC                    (SID_SFX_START + 1729)
 
-//      SID_SFX_free_START                  (SID_SFX_START + 1729)
+//      SID_SFX_free_START                  (SID_SFX_START + 1730)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)

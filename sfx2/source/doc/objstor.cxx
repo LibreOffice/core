@@ -2739,6 +2739,10 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     // create a medium for the target URL
     SfxMedium *pNewFile = new SfxMedium( rFileName, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, nullptr, pMergedParams );
 
+    const SfxBoolItem* pNoFileSync = pMergedParams->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
+    if (pNoFileSync && pNoFileSync->GetValue())
+        pNewFile->DisableFileSync(true);
+
     // set filter; if no filter is given, take the default filter of the factory
     if ( !aFilterName.isEmpty() )
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) );
