@@ -53,7 +53,7 @@ class VCL_DLLPUBLIC VclAbstractDialog2 : public virtual VclReferenceBase
 protected:
     virtual             ~VclAbstractDialog2() override;
 public:
-    virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) = 0;
+    virtual void        StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>()) = 0;
     virtual long        GetResult() = 0;
 };
 

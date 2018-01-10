@@ -245,13 +245,13 @@ short SearchProgress::Execute()
 }
 
 
-void SearchProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+void SearchProgress::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner)
 {
     assert(!maSearchThread.is());
     maSearchThread = new SearchThread(
         this, static_cast< TPGalleryThemeProperties * >(parent_.get()), startUrl_);
     maSearchThread->launch();
-    ModalDialog::StartExecuteModal( rEndDialogHdl );
+    ModalDialog::StartExecuteModal(rEndDialogHdl, rVclPtrOwner);
 }
 
 
@@ -409,13 +409,13 @@ short TakeProgress::Execute()
 }
 
 
-void TakeProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+void TakeProgress::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner)
 {
     assert(!maTakeThread.is());
     maTakeThread = new TakeThread(
         this, static_cast< TPGalleryThemeProperties * >(window_.get()), maTakenList);
     maTakeThread->launch();
-    ModalDialog::StartExecuteModal( rEndDialogHdl );
+    ModalDialog::StartExecuteModal(rEndDialogHdl, rVclPtrOwner);
 }
 
 

@@ -599,11 +599,10 @@ void AbstractMailMergeWizard_Impl::dispose()
     AbstractMailMergeWizard::dispose();
 }
 
-void AbstractMailMergeWizard_Impl::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+void AbstractMailMergeWizard_Impl::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner)
 {
     aEndDlgHdl = rEndDialogHdl;
-    pDlg->StartExecuteModal(
-        LINK( this, AbstractMailMergeWizard_Impl, EndDialogHdl ) );
+    pDlg->StartExecuteModal(LINK(this, AbstractMailMergeWizard_Impl, EndDialogHdl), rVclPtrOwner);
 }
 
 long AbstractMailMergeWizard_Impl::GetResult()

@@ -520,29 +520,16 @@ short SfxTabDialog::Execute()
         return RET_CANCEL;
     Start_Impl();
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
-    {
-        SetLOKNotifier(pViewShell);
-        const Size aSize = GetOptimalSize();
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "dialog");
-        aItems.emplace_back("size", aSize.toString());
-        if (!GetText().isEmpty())
-            aItems.emplace_back("title", GetText().toUtf8());
-        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
-
     return TabDialog::Execute();
 }
 
 
-void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+void SfxTabDialog::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner)
 {
     if ( !m_pTabCtrl->GetPageCount() )
         return;
     Start_Impl();
-    TabDialog::StartExecuteModal( rEndDialogHdl );
+    TabDialog::StartExecuteModal(rEndDialogHdl, rVclPtrOwner);
 }
 
 
@@ -565,6 +552,18 @@ void SfxTabDialog::SetApplyHandler(const Link<Button*, void>& _rHdl)
         m_pApplyBtn->SetClickHdl( _rHdl );
 }
 
+void SfxTabDialog::SfxRequestDone(const SfxItemSet* pItemSet)
+{
+    if (!m_pSfxRequest)
+        return;
+
+    if (!pItemSet)
+        m_pSfxRequest->Done();
+    else
+        m_pSfxRequest->Done(*pItemSet);
+
+    m_pSfxRequest.reset();
+}
 
 void SfxTabDialog::Start_Impl()
 {
@@ -592,6 +591,19 @@ void SfxTabDialog::Start_Impl()
 
     m_pTabCtrl->SetCurPageId( nActPage );
     ActivatePageHdl( m_pTabCtrl );
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
+    {
+        SetLOKNotifier(pViewShell);
+        const Size aSize = GetOptimalSize();
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("type", "dialog");
+        aItems.emplace_back("size", aSize.toString());
+        if (!GetText().isEmpty())
+            aItems.emplace_back("title", GetText().toUtf8());
+        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+    }
 }
 
 void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText )

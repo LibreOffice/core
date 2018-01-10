@@ -521,6 +521,9 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg( vcl::Window*          pParent,
                                                     const SfxItemSet* pCellAttrs ) = 0;
 
+    virtual VclPtr<SfxAbstractTabDialog2> CreateScAttrDlg2( vcl::Window*          pParent,
+                                                    const SfxItemSet* pCellAttrs ) = 0;
+
     virtual VclPtr<SfxAbstractTabDialog> CreateScHFEditDlg(vcl::Window*       pParent,
                                                     const SfxItemSet&   rCoreSet,
                                                     const OUString&     rPageStyle,
