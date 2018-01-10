@@ -59,11 +59,11 @@ Expr const * ignoreAllImplicit(Expr const * expr) {
 }
 
 class UnnecessaryParen:
-    public RecursiveASTVisitor<UnnecessaryParen>, public loplugin::Plugin
+    public RecursiveASTVisitor<UnnecessaryParen>, public loplugin::RewritePlugin
 {
 public:
     explicit UnnecessaryParen(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        RewritePlugin(data) {}
 
     virtual void run() override
     {
@@ -102,6 +102,10 @@ private:
     // typically used as if it were a function-like macro, e.g., as "BAD_CAST(pName)" in
     // SwNode::dumpAsXml (sw/source/core/docnode/node.cxx):
     bool isPrecededBy_BAD_CAST(Expr const * expr);
+
+    bool badCombination(SourceLocation loc, int prevOffset, int nextOffset);
+
+    bool removeParens(ParenExpr const * expr);
 
     std::unordered_set<ParenExpr const *> handled_;
 };
@@ -200,10 +204,12 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
             }
         }
     } else if (isa<CXXNamedCastExpr>(subExpr)) {
-        report(
-            DiagnosticsEngine::Warning, "unnecessary parentheses around cast",
-            parenExpr->getLocStart())
-            << parenExpr->getSourceRange();
+        if (!removeParens(parenExpr)) {
+            report(
+                DiagnosticsEngine::Warning, "unnecessary parentheses around cast",
+                parenExpr->getLocStart())
+                << parenExpr->getSourceRange();
+        }
         handled_.insert(parenExpr);
     }
 
@@ -471,6 +477,92 @@ bool UnnecessaryParen::isPrecededBy_BAD_CAST(Expr const * expr) {
     const char *p1 = SM.getCharacterData( expr->getLocStart().getLocWithOffset(-10) );
     const char *p2 = SM.getCharacterData( expr->getLocStart() );
     return std::string(p1, p2 - p1).find("BAD_CAST") != std::string::npos;
+}
+
+namespace {
+
+bool badCombinationChar(char c) {
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_'
+        || c == '+' || c == '-' || c == '\'' || c == '"';
+}
+
+}
+
+bool UnnecessaryParen::badCombination(SourceLocation loc, int prevOffset, int nextOffset) {
+    //TODO: check for start/end of file; take backslash-newline line concatentation into account
+    auto const c1
+        = compiler.getSourceManager().getCharacterData(loc.getLocWithOffset(prevOffset))[0];
+    auto const c2
+        = compiler.getSourceManager().getCharacterData(loc.getLocWithOffset(nextOffset))[0];
+    // An approximation of avoiding whatever combinations that would cause two ajacent tokens to be
+    // lexed differently, using, for now, letters (TODO: non-ASCII ones) and digits and '_'; '+' and
+    // '-' (to avoid ++, etc.); '\'' and '"' (to avoid u'x' or "foo"bar, etc.):
+    return badCombinationChar(c1) && badCombinationChar(c2);
+}
+
+bool UnnecessaryParen::removeParens(ParenExpr const * expr) {
+    if (rewriter == nullptr) {
+        return false;
+    }
+    auto const firstBegin = expr->getLocStart();
+    auto secondBegin = expr->getLocEnd();
+    if (firstBegin.isMacroID() || secondBegin.isMacroID()) {
+        return false;
+    }
+    unsigned firstLen = Lexer::MeasureTokenLength(
+        firstBegin, compiler.getSourceManager(), compiler.getLangOpts());
+    for (auto l = firstBegin.getLocWithOffset(std::max<unsigned>(firstLen, 1));;
+         l = l.getLocWithOffset(1))
+    {
+        unsigned n = Lexer::MeasureTokenLength(
+            l, compiler.getSourceManager(), compiler.getLangOpts());
+        if (n != 0) {
+            break;
+        }
+        ++firstLen;
+    }
+    unsigned secondLen = Lexer::MeasureTokenLength(
+        secondBegin, compiler.getSourceManager(), compiler.getLangOpts());
+    for (;;) {
+        auto l = secondBegin.getLocWithOffset(-1);
+        auto const c = compiler.getSourceManager().getCharacterData(l)[0];
+        if (c == '\n') {
+            if (compiler.getSourceManager().getCharacterData(l.getLocWithOffset(-1))[0] == '\\') {
+                break;
+            }
+        } else if (!(c == ' ' || c == '\t' || c == '\v' || c == '\f')) {
+            break;
+        }
+        secondBegin = l;
+        ++secondLen;
+    }
+    if (!replaceText(firstBegin, firstLen, badCombination(firstBegin, -1, firstLen) ? " " : "")) {
+        if (isDebugMode()) {
+            report(
+                DiagnosticsEngine::Fatal,
+                "TODO: cannot rewrite opening parenthesis, needs investigation",
+                firstBegin);
+            report(
+                DiagnosticsEngine::Note, "when removing these parentheses", expr->getExprLoc())
+                << expr->getSourceRange();
+        }
+        return false;
+    }
+    if (!replaceText(secondBegin, secondLen, badCombination(secondBegin, -1, secondLen) ? " " : ""))
+    {
+        //TODO: roll back first change
+        if (isDebugMode()) {
+            report(
+                DiagnosticsEngine::Fatal,
+                "TODO: cannot rewrite closing parenthesis, needs investigation",
+                secondBegin);
+            report(
+                DiagnosticsEngine::Note, "when removing these parentheses", expr->getExprLoc())
+                << expr->getSourceRange();
+        }
+        return false;
+    }
+    return true;
 }
 
 loplugin::Plugin::Registration< UnnecessaryParen > X("unnecessaryparen", true);
