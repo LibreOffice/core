@@ -39,6 +39,7 @@ public:
     bool VisitCompoundStmt(const CompoundStmt* );
 private:
     void CheckForUnconditionalDelete(const CXXDestructorDecl*, const CompoundStmt* );
+    void CheckDeleteExpr(const CXXDestructorDecl*, const CXXDeleteExpr* );
     void CheckForForLoopDelete(const CXXDestructorDecl*, const CompoundStmt* );
     void CheckForRangedLoopDelete(const CXXDestructorDecl*, const CompoundStmt* );
 };
@@ -66,69 +67,114 @@ void UseUniquePtr::CheckForUnconditionalDelete(const CXXDestructorDecl* destruct
     for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
     {
         auto deleteExpr = dyn_cast<CXXDeleteExpr>(*i);
-        if (!deleteExpr)
+        if (deleteExpr)
+        {
+            CheckDeleteExpr(destructorDecl, deleteExpr);
             continue;
-
-        const ImplicitCastExpr* pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
-        if (!pCastExpr)
+        }
+        // Check for conditional deletes like:
+        //     if (m_pField != nullptr) delete m_pField;
+        auto ifStmt = dyn_cast<IfStmt>(*i);
+        if (!ifStmt)
             continue;
-        const MemberExpr* pMemberExpr = dyn_cast<MemberExpr>(pCastExpr->getSubExpr());
-        if (!pMemberExpr)
+        auto cond = ifStmt->getCond()->IgnoreImpCasts();
+        if (auto ifCondMemberExpr = dyn_cast<MemberExpr>(cond))
+        {
+            // ignore "if (bMine)"
+            if (!loplugin::TypeCheck(ifCondMemberExpr->getType()).Pointer())
+                continue;
+        }
+        else if (auto binaryOp = dyn_cast<BinaryOperator>(cond))
+        {
+            if (!isa<MemberExpr>(binaryOp->getLHS()->IgnoreImpCasts()))
+                continue;
+        }
+        else
             continue;
-
-        // ignore union games
-        const FieldDecl* pFieldDecl = dyn_cast<FieldDecl>(pMemberExpr->getMemberDecl());
-        if (!pFieldDecl)
+        deleteExpr = dyn_cast<CXXDeleteExpr>(ifStmt->getThen());
+        if (deleteExpr)
+        {
+            CheckDeleteExpr(destructorDecl, deleteExpr);
             continue;
-        TagDecl const * td = dyn_cast<TagDecl>(pFieldDecl->getDeclContext());
-        if (td->isUnion())
+        }
+        auto ifThenCompoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen());
+        if (!ifThenCompoundStmt)
             continue;
-
-        // ignore calling delete on someone else's field
-        if (pFieldDecl->getParent() != destructorDecl->getParent() )
-            continue;
-
-        if (ignoreLocation(pFieldDecl))
-            continue;
-        // to ignore things like the CPPUNIT macros
-        StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(pFieldDecl->getLocStart()));
-        if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
-            continue;
-        // passes and stores pointers to member fields
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sot/source/sdstor/stgdir.hxx"))
-            continue;
-        // something platform-specific
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/hwpfilter/source/htags.h"))
-            continue;
-        // passes pointers to member fields
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sd/inc/sdpptwrp.hxx"))
-            continue;
-        // @TODO intrusive linked-lists here, with some trickiness
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/filter/html/parcss1.hxx"))
-            continue;
-        // @TODO SwDoc has some weird ref-counting going on
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/inc/shellio.hxx"))
-            continue;
-        // @TODO it's sharing pointers with another class
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/inc/formulacell.hxx"))
-            continue;
-        // some weird stuff going on here around struct Entity
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sax/"))
-            continue;
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/sax/"))
-            continue;
-
-        report(
-            DiagnosticsEngine::Warning,
-            "unconditional call to delete on a member, should be using std::unique_ptr",
-            deleteExpr->getLocStart())
-            << deleteExpr->getSourceRange();
-        report(
-            DiagnosticsEngine::Note,
-            "member is here",
-            pFieldDecl->getLocStart())
-            << pFieldDecl->getSourceRange();
+        for (auto j = ifThenCompoundStmt->body_begin(); j != ifThenCompoundStmt->body_end(); ++j)
+        {
+            auto ifDeleteExpr = dyn_cast<CXXDeleteExpr>(*j);
+            if (ifDeleteExpr)
+                CheckDeleteExpr(destructorDecl, ifDeleteExpr);
+        }
     }
+}
+
+void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, const CXXDeleteExpr* deleteExpr)
+{
+    const ImplicitCastExpr* pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
+    if (!pCastExpr)
+        return;
+    const MemberExpr* pMemberExpr = dyn_cast<MemberExpr>(pCastExpr->getSubExpr());
+    if (!pMemberExpr)
+        return;
+
+    // ignore union games
+    const FieldDecl* pFieldDecl = dyn_cast<FieldDecl>(pMemberExpr->getMemberDecl());
+    if (!pFieldDecl)
+        return;
+    TagDecl const * td = dyn_cast<TagDecl>(pFieldDecl->getDeclContext());
+    if (td->isUnion())
+        return;
+
+    // ignore calling delete on someone else's field
+    if (pFieldDecl->getParent() != destructorDecl->getParent() )
+        return;
+
+    if (ignoreLocation(pFieldDecl))
+        return;
+    // to ignore things like the CPPUNIT macros
+    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(pFieldDecl->getLocStart()));
+    if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
+        return;
+    // passes and stores pointers to member fields
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sot/source/sdstor/stgdir.hxx"))
+        return;
+    // something platform-specific
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/hwpfilter/source/htags.h"))
+        return;
+    // passes pointers to member fields
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sd/inc/sdpptwrp.hxx"))
+        return;
+    // @TODO intrusive linked-lists here, with some trickiness
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/filter/html/parcss1.hxx"))
+        return;
+    // @TODO SwDoc has some weird ref-counting going on
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/inc/shellio.hxx"))
+        return;
+    // @TODO it's sharing pointers with another class
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/inc/formulacell.hxx"))
+        return;
+    // some weird stuff going on here around struct Entity
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sax/"))
+        return;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/sax/"))
+        return;
+    // manipulation of tree structures ie. StgAvlNode, don't lend themselves to std::unique_ptr
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sot/"))
+        return;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/sot/"))
+        return;
+
+    report(
+        DiagnosticsEngine::Warning,
+        "unconditional call to delete on a member, should be using std::unique_ptr",
+        deleteExpr->getLocStart())
+        << deleteExpr->getSourceRange();
+    report(
+        DiagnosticsEngine::Note,
+        "member is here",
+        pFieldDecl->getLocStart())
+        << pFieldDecl->getSourceRange();
 }
 
 void UseUniquePtr::CheckForForLoopDelete(const CXXDestructorDecl* destructorDecl, const CompoundStmt* compoundStmt)
