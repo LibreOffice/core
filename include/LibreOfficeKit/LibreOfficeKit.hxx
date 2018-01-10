@@ -583,6 +583,11 @@ public:
     }
 
     /// Returns the last error as a string, the returned pointer has to be freed by the caller.
+
+    /// Exact semantics somewhat unclear (sometimes the code clears the string that the next call to
+    /// getError() will return if no error happens in another function, sometimes not), and
+    /// unfortunately cleaning up that is harder than it seems, because of lovely global variables
+    /// and a unit test that uses the LibreOfficeKit API in an untypical manner.
     char* getError()
     {
         return mpThis->pClass->getError(mpThis);
