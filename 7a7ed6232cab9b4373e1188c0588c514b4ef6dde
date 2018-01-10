@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9be531aa",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3274,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-01-10T22:50:15Z",
+      "side": 1,
+      "message": "would go with \u0027or\u0027 rather than \u0027/\u0027, as we replaced all of these in the menus with \u0027and\u0027s and \u0027or\u0027s.",
+      "range": {
+        "startLine": 3274,
+        "startChar": 73,
+        "endLine": 3274,
+        "endChar": 74
+      },
+      "revId": "7a7ed6232cab9b4373e1188c0588c514b4ef6dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
