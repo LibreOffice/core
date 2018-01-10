@@ -299,6 +299,17 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
 bool SwFlyFreeFrame::supportsAutoContour() const
 {
+    static bool bOverrideHandleContourToAlwaysOff(true);
+
+    // RotateFlyFrameFix: For LO6.0 we need to deactivate the AutoContour feature again, it is simply
+    // not clear how/if to use and save/load it in ODF. This has to be discussed.
+    // The reason not to remove is that this may be used as-is now, using a new switch.
+    // Even when not, the detection if it is possible will be needed in any case later.
+    if(bOverrideHandleContourToAlwaysOff)
+    {
+        return false;
+    }
+
     if(!isTransformableSwFrame())
     {
         // support only when transformed, else there is no free space
