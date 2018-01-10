@@ -36,6 +36,12 @@ $(eval $(call gb_Module_add_targets,shell,\
 ))
 endif
 
+ifeq ($(ENABLE_KDE5),TRUE)
+$(eval $(call gb_Module_add_targets,shell,\
+	Library_kde5be \
+))
+endif
+
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
