@@ -23,6 +23,7 @@
 #include <tools/stream.hxx>
 #include <sal/types.h>
 #include <vector>
+#include <memory>
 
 class INetMIMEMessage;
 class SvStream;
@@ -36,7 +37,8 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     sal_Char       *pRead;
     sal_Char       *pWrite;
 
-    SvStream       *pMsgStrm;
+    std::unique_ptr<SvStream>
+                    pMsgStrm;
     SvMemoryStream  maMsgBuffer;
     sal_Char       *pMsgRead;
     sal_Char       *pMsgWrite;
@@ -44,7 +46,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     bool done;
 
     sal_uInt32             nChildIndex;
-    INetMIMEMessageStream *pChildStrm;
+    std::unique_ptr<INetMIMEMessageStream> pChildStrm;
 
     INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) = delete;
     INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) = delete;

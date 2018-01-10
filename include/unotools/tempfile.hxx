@@ -22,6 +22,7 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <tools/stream.hxx>
+#include <memory>
 
 namespace utl
 {
@@ -45,7 +46,8 @@ namespace utl
 class UNOTOOLS_DLLPUBLIC TempFile
 {
     OUString    aName;
-    SvStream*   pStream;
+    std::unique_ptr<SvStream>
+                pStream;
     bool        bIsDirectory;
     bool        bKillingFileEnabled;
 

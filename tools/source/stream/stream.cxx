@@ -368,8 +368,6 @@ SvStream::~SvStream()
 {
     if (m_xLockBytes.is())
         Flush();
-
-    delete[] m_pRWBuf;
 }
 
 void SvStream::ClearError()
@@ -407,7 +405,7 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
 
     if (m_nBufSize)
     {
-        delete[] m_pRWBuf;
+        m_pRWBuf.reset();
         m_nBufFilePos += m_nBufActualPos;
     }
 
@@ -416,9 +414,9 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
     m_nBufActualPos = 0;
     m_nBufSize      = nBufferSize;
     if (m_nBufSize)
-        m_pRWBuf = new sal_uInt8[ m_nBufSize ];
+        m_pRWBuf.reset(new sal_uInt8[ m_nBufSize ]);
     m_isConsistent  = true;
-    m_pBufPos       = m_pRWBuf;
+    m_pBufPos       = m_pRWBuf.get();
     m_isIoRead = m_isIoWrite = false;
     if( !bDontSeek )
         SeekPos( nActualFilePos );
@@ -429,7 +427,7 @@ void SvStream::ClearBuffer()
     m_nBufActualLen = 0;
     m_nBufActualPos = 0;
     m_nBufFilePos   = 0;
-    m_pBufPos       = m_pRWBuf;
+    m_pBufPos       = m_pRWBuf.get();
     m_isDirty       = false;
     m_isConsistent  = true;
     m_isIoRead = m_isIoWrite = false;
@@ -809,7 +807,7 @@ sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)
             nActualPos -= nAbsPos;
     }
 
-    m_pBufPos = m_pRWBuf + nActualPos;
+    m_pBufPos = m_pRWBuf.get() + nActualPos;
     return Seek( nActualPos );
 }
 
@@ -1225,8 +1223,8 @@ void SvStream::FlushBuffer(bool isConsistent)
     {
         SeekPos(m_nBufFilePos);
         if (m_nCryptMask)
-            CryptAndWriteBuffer(m_pRWBuf, m_nBufActualLen);
-        else if (PutData(m_pRWBuf, m_nBufActualLen) != m_nBufActualLen)
+            CryptAndWriteBuffer(m_pRWBuf.get(), m_nBufActualLen);
+        else if (PutData(m_pRWBuf.get(), m_nBufActualLen) != m_nBufActualLen)
             SetError(SVSTREAM_WRITE_ERROR);
         m_isDirty = false;
     }
@@ -1273,7 +1271,7 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
 
                 SeekPos(m_nBufFilePos + m_nBufActualPos);
                 m_nBufActualLen = 0;
-                m_pBufPos     = m_pRWBuf;
+                m_pBufPos     = m_pRWBuf.get();
                 nCount = GetData( pData, nCount );
                 if (m_nCryptMask)
                     EncryptBuffer(pData, nCount);
@@ -1289,17 +1287,17 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
                 SeekPos(m_nBufFilePos);
 
                 // TODO: Typecast before GetData, sal_uInt16 nCountTmp
-                std::size_t nCountTmp = GetData( m_pRWBuf, m_nBufSize );
+                std::size_t nCountTmp = GetData( m_pRWBuf.get(), m_nBufSize );
                 if (m_nCryptMask)
-                    EncryptBuffer(m_pRWBuf, nCountTmp);
+                    EncryptBuffer(m_pRWBuf.get(), nCountTmp);
                 m_nBufActualLen = (sal_uInt16)nCountTmp;
                 if( nCount > nCountTmp )
                 {
                     nCount = nCountTmp;  // trim count back, EOF see below
                 }
-                memcpy( pData, m_pRWBuf, (size_t)nCount );
+                memcpy( pData, m_pRWBuf.get(), (size_t)nCount );
                 m_nBufActualPos = (sal_uInt16)nCount;
-                m_pBufPos = m_pRWBuf + nCount;
+                m_pBufPos = m_pRWBuf.get() + nCount;
             }
         }
     }
@@ -1359,7 +1357,7 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
             m_nBufFilePos += m_nBufActualPos;
             m_nBufActualLen = 0;
             m_nBufActualPos = 0;
-            m_pBufPos     = m_pRWBuf;
+            m_pBufPos     = m_pRWBuf.get();
             SeekPos(m_nBufFilePos);
             if (m_nCryptMask)
                 nCount = CryptAndWriteBuffer( pData, nCount );
@@ -1370,12 +1368,12 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
         else
         {
             // Copy block to buffer
-            memcpy( m_pRWBuf, pData, (size_t)nCount );
+            memcpy( m_pRWBuf.get(), pData, (size_t)nCount );
 
             // Mind the order!
             m_nBufFilePos += m_nBufActualPos;
             m_nBufActualPos = (sal_uInt16)nCount;
-            m_pBufPos = m_pRWBuf + nCount;
+            m_pBufPos = m_pRWBuf.get() + nCount;
             m_nBufActualLen = (sal_uInt16)nCount;
             m_isDirty = true;
         }
@@ -1399,7 +1397,7 @@ sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
     if (nFilePos >= m_nBufFilePos && nFilePos <= (m_nBufFilePos + m_nBufActualLen))
     {
         m_nBufActualPos = (sal_uInt16)(nFilePos - m_nBufFilePos);
-        m_pBufPos = m_pRWBuf + m_nBufActualPos;
+        m_pBufPos = m_pRWBuf.get() + m_nBufActualPos;
         // Update m_nBufFree to avoid crash upon PutBack
         m_nBufFree = m_nBufActualLen - m_nBufActualPos;
     }
@@ -1408,7 +1406,7 @@ sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
         FlushBuffer(m_isConsistent);
         m_nBufActualLen = 0;
         m_nBufActualPos = 0;
-        m_pBufPos     = m_pRWBuf;
+        m_pBufPos     = m_pRWBuf.get();
         m_nBufFilePos = SeekPos( nFilePos );
     }
     return m_nBufFilePos + m_nBufActualPos;
@@ -1443,11 +1441,11 @@ void SvStream::RefreshBuffer()
 {
     FlushBuffer(m_isConsistent);
     SeekPos(m_nBufFilePos);
-    m_nBufActualLen = (sal_uInt16)GetData( m_pRWBuf, m_nBufSize );
+    m_nBufActualLen = (sal_uInt16)GetData( m_pRWBuf.get(), m_nBufSize );
     if (m_nBufActualLen && m_nError == ERRCODE_IO_PENDING)
         m_nError = ERRCODE_NONE;
     if (m_nCryptMask)
-        EncryptBuffer(m_pRWBuf, (std::size_t)m_nBufActualLen);
+        EncryptBuffer(m_pRWBuf.get(), (std::size_t)m_nBufActualLen);
     m_isConsistent = true;
     m_isIoRead = m_isIoWrite = false;
 }

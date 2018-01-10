@@ -112,6 +112,11 @@ void UseUniquePtr::CheckForUnconditionalDelete(const CXXDestructorDecl* destruct
         // @TODO it's sharing pointers with another class
         if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/inc/formulacell.hxx"))
             continue;
+        // some weird stuff going on here around struct Entity
+        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sax/"))
+            continue;
+        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/sax/"))
+            continue;
 
         report(
             DiagnosticsEngine::Warning,
