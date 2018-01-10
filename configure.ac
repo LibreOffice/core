@@ -595,6 +595,7 @@ linux-gnu*|k*bsd*-gnu*)
     test_kde4=yes
     test_kde5=yes
     test_qt5=yes
+    test_gtk3_kde5=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
         test_fontconfig=yes
@@ -691,6 +692,7 @@ freebsd*)
     test_kde4=yes
     test_kde5=yes
     test_qt5=yes
+    test_gtk3_kde5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -721,6 +723,7 @@ freebsd*)
     test_kde4=yes
     test_kde5=yes
     test_qt5=yes
+    test_gtk3_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
@@ -748,6 +751,7 @@ dragonfly*)
     test_kde4=yes
     test_kde5=yes
     test_qt5=yes
+    test_gtk3_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
@@ -773,6 +777,7 @@ linux-android*)
     test_kde4=no
     test_kde5=no
     test_qt5=no
+    test_gtk3_kde5=no
     test_randr=no
     test_xrender=no
     _os=Android
@@ -1225,6 +1230,12 @@ AC_ARG_ENABLE(kde5,
     AS_HELP_STRING([--enable-kde5],
         [Determines whether to use Qt5/KF5 vclplug on platforms where Qt5 and
          KF5 are available.]),
+,)
+
+AC_ARG_ENABLE(gtk3_kde5,
+    AS_HELP_STRING([--enable-gtk3-kde5],
+        [Determines whether to use Gtk3 vclplug with KDE file dialogs on
+         platforms where Gtk3, Qt5 and Plasma is available.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(gui,
@@ -4542,6 +4553,7 @@ if test "$USING_X11" != TRUE; then
     test_kde4=no
     test_kde5=no
     test_qt5=no
+    test_gtk3_kde5=no
     enable_cairo_canvas=no
 fi
 
@@ -9797,6 +9809,14 @@ if test "x$enable_kde5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE5)
 
+ENABLE_GTK3_KDE5=""
+if test "x$enable_gtk3_kde5" = "xyes"; then
+    ENABLE_GTK3_KDE5="TRUE"
+    AC_DEFINE(ENABLE_GTK3_KDE5)
+    R="$R gtk3_kde5"
+fi
+AC_SUBST(ENABLE_GTK3_KDE5)
+
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
     build_vcl_plugins="none"
@@ -10804,7 +10824,8 @@ QT5_GLIB_CFLAGS=""
 QT5_GLIB_LIBS=""
 QT5_HAVE_GLIB=""
 if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
-        \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \)
+        \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \) -o \
+        \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
 then
     qt5_incdirs="$QT5INC /usr/include/qt5 /usr/include $x_includes"
     qt5_libdirs="$QT5LIB /usr/lib/qt5 /usr/lib $x_libraries"
@@ -10892,7 +10913,8 @@ KF5_CFLAGS=""
 KF5_LIBS=""
 KF5_CONFIG="kf5-config"
 if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
-        \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \)
+        \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
+        \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
 then
     kf5_incdirs="$KF5INC /usr/include/ $x_includes"
     kf5_libdirs="$KF5LIB /usr/lib /usr/lib/kf5 /usr/lib/kf5/devel $x_libraries"
@@ -10942,8 +10964,8 @@ then
 
     PKG_CHECK_MODULES(KF5_XCB,[xcb],,[AC_MSG_ERROR([XCB not installed])])
 
-    KF5_CFLAGS="-I$kf5_incdir -I$kf5_incdir/KCoreAddons -I$kf5_incdir/KI18n -I$kf5_incdir/KConfigCore -I$kf5_incdir/KWindowSystem -I$kf5_incdir/KIOCore -I$qt5_incdir -I$qt5_incdir/QtCore -I$qt5_incdir/QtGui -I$qt5_incdir/QtWidgets -I$qt5_incdir/QtNetwork -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT $KF5_XCB_CFLAGS"
-    KF5_LIBS="-L$kf5_libdir -lKF5CoreAddons -lKF5I18n -lKF5ConfigCore -lKF5WindowSystem -lKF5KIOCore -L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network -lQt5X11Extras $KF5_XCB_LIBS"
+    KF5_CFLAGS="-I$kf5_incdir -I$kf5_incdir/KCoreAddons -I$kf5_incdir/KI18n -I$kf5_incdir/KConfigCore -I$kf5_incdir/KWindowSystem -I$kf5_incdir/KIOCore -I$kf5_incdir/KIOWidgets -I$kf5_incdir/KIOFileWidgets -I$qt5_incdir -I$qt5_incdir/QtCore -I$qt5_incdir/QtGui -I$qt5_incdir/QtWidgets -I$qt5_incdir/QtNetwork -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT $KF5_XCB_CFLAGS"
+    KF5_LIBS="-L$kf5_libdir -lKF5CoreAddons -lKF5I18n -lKF5ConfigCore -lKF5WindowSystem -lKF5KIOCore -lKF5KIOWidgets -lKF5KIOFileWidgets -L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network -lQt5X11Extras $KF5_XCB_LIBS"
     KF5_CFLAGS=$(printf '%s' "$KF5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
     AC_LANG_PUSH([C++])
@@ -12513,6 +12535,7 @@ AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_qt5.h])
 AC_CONFIG_HEADERS([config_host/config_kde5.h])
+AC_CONFIG_HEADERS([config_host/config_gtk3_kde5.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
