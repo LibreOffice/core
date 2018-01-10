@@ -19,8 +19,10 @@
 
 
 // Force reference to libreofficekit_hook
-extern __attribute__((used)) void *libreofficekit_hook_2(const char *);
-static __attribute__((used)) void *(*foop)(const char *) = libreofficekit_hook_2;
+extern __attribute__((used))
+LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
+static __attribute__((used))
+LibreOfficeKit *(*foop)(const char *, const char *) = libreofficekit_hook_2;
 
 // pointers to our instance
 static LibreOfficeKit* kit;
