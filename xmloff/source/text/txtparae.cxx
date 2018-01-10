@@ -2529,8 +2529,9 @@ static bool lcl_txtpara_isBoundAsChar(
 XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     const Reference < XPropertySet >& rPropSet,
     bool bShape,
-    OUString *pMinHeightValue,
-    OUString *pMinWidthValue)
+    basegfx::B2DPoint* pCenter,
+    OUString* pMinHeightValue,
+    OUString* pMinWidthValue)
 {
     XMLShapeExportFlags nShapeFeatures = SEF_DEFAULT;
 
@@ -2592,6 +2593,11 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
                     sValue, nPos );
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_X,
                                       sValue.makeStringAndClear() );
+            if(nullptr != pCenter)
+            {
+                // add left edge to Center
+                pCenter->setX(pCenter->getX() + nPos);
+            }
         }
     }
     else if( TextContentAnchorType_AS_CHARACTER == eAnchor )
@@ -2610,6 +2616,11 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
                     sValue, nPos );
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_Y,
                                       sValue.makeStringAndClear() );
+            if(nullptr != pCenter)
+            {
+                // add top edge to Center
+                pCenter->setY(pCenter->getY() + nPos);
+            }
         }
         if( bShape )
             nShapeFeatures = (nShapeFeatures & ~XMLShapeExportFlags::Y);
@@ -2641,8 +2652,15 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
             }
         }
         else
+        {
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                                       sValue.makeStringAndClear() );
+            if(nullptr != pCenter)
+            {
+                // add half width to Center
+                pCenter->setX(pCenter->getX() + (0.5 * nWidth));
+            }
+        }
     }
     bool bSyncWidth = false;
     if( xPropSetInfo->hasPropertyByName( sIsSyncWidthToHeight ) )
@@ -2693,10 +2711,19 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
                                                             nHeight );
         if( SizeType::FIX != nSizeType && 0==nRelHeight && !bSyncHeight &&
              pMinHeightValue )
+        {
             *pMinHeightValue = sValue.makeStringAndClear();
+        }
         else
+        {
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                                       sValue.makeStringAndClear() );
+            if(nullptr != pCenter)
+            {
+                // add half height to Center
+                pCenter->setY(pCenter->getY() + (0.5 * nHeight));
+            }
+        }
     }
     if( bSyncHeight )
     {
@@ -2869,7 +2896,7 @@ void XMLTextParagraphExport::_exportTextFrame(
     if( !sAutoStyle.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                               GetExport().EncodeStyleName( sAutoStyle ) );
-    addTextFrameAttributes(rPropSet, false, &aMinHeightValue, &sMinWidthValue);
+    addTextFrameAttributes(rPropSet, false, nullptr, &aMinHeightValue, &sMinWidthValue);
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               XML_FRAME, false, true );
@@ -3029,12 +3056,19 @@ void XMLTextParagraphExport::_exportTextGraphic(
     if( !sAutoStyle.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                                   GetExport().EncodeStyleName( sAutoStyle ) );
-    addTextFrameAttributes( rPropSet, false );
+
+    // check if we need to use svg:transform
+    sal_Int16 nRotation(0);
+    rPropSet->getPropertyValue( sGraphicRotation ) >>= nRotation;
+    const bool bUseRotation(0 != nRotation);
+    basegfx::B2DPoint aCenter(0.0, 0.0);
+
+    // add TextFrame attributes like svg:x/y/width/height, also get back
+    // object's center point if rotation is used and has to be exported
+    addTextFrameAttributes(rPropSet, false, bUseRotation ? &aCenter : nullptr);
 
     // svg:transform
-    sal_Int16 nVal = 0;
-    rPropSet->getPropertyValue( sGraphicRotation ) >>= nVal;
-    if( nVal != 0 )
+    if(bUseRotation)
     {
         // RotateFlyFrameFix: im/export full 'draw:transform' using existing tooling.
         // Currently only rotation is used, but combinations with 'draw:transform'
@@ -3047,9 +3081,16 @@ void XMLTextParagraphExport::_exportTextGraphic(
         // we have a right-handed coordinate system, so need to correct this by mirroring
         // the rotation to get the correct transformation. See also case XML_TOK_TEXT_FRAME_TRANSFORM
         // in XMLTextFrameContext_Impl::XMLTextFrameContext_Impl and #i78696#
-        const double fRotate(static_cast< double >(-nVal) * (M_PI/1800.0));
+        const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
 
+        // transform to rotation center which is the object's center
+        aSdXMLImExTransform2D.AddTranslate(-aCenter);
+
+        // add rotation itself
         aSdXMLImExTransform2D.AddRotate(fRotate);
+
+        // back-transform after rotation
+        aSdXMLImExTransform2D.AddTranslate(aCenter);
 
         // Note: using GetTwipUnitConverter instead of GetMM100UnitConverter may be needed,
         // but is not generally available (as it should be, a 'current' UnitConverter should

@@ -1002,12 +1002,21 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 {
                     const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(aFullTransform);
 
-                    // currently we *only* use rotation, so warn if *any* of the other transform parts is used
+                    // currently we *only* use rotation (and translation indirectly), so warn if *any*
+                    // of the other transform parts is used
                     SAL_WARN_IF(!basegfx::fTools::equal(1.0, aDecomposedTransform.getScale().getX()), "xmloff.text", "draw:transform uses scaleX" );
                     SAL_WARN_IF(!basegfx::fTools::equal(1.0, aDecomposedTransform.getScale().getY()), "xmloff.text", "draw:transform uses scaleY" );
-                    SAL_WARN_IF(!basegfx::fTools::equalZero(aDecomposedTransform.getTranslate().getX()), "xmloff.text", "draw:transform uses translateX" );
-                    SAL_WARN_IF(!basegfx::fTools::equalZero(aDecomposedTransform.getTranslate().getY()), "xmloff.text", "draw:transform uses translateY" );
                     SAL_WARN_IF(!basegfx::fTools::equalZero(aDecomposedTransform.getShearX()), "xmloff.text", "draw:transform uses shearX" );
+
+                    // Translation comes from the translate to RotCenter, rot and BackTranslate.
+                    // This means that it represents the translation between unrotated TopLeft
+                    // and rotated TopLeft. This may be checked here now, but currently we only
+                    // use rotation around center and assume that this *was* a rotation around
+                    // center. The check would compare the object's center with the RotCenter
+                    // that can be extracted from the transformation in aFullTransform.
+                    // The definition contains implicitely the RotationCenter absolute
+                    // to the scaled and translated object, so this may be used if needed (see
+                    // _exportTextGraphic how the -trans/rot/trans is composed)
 
                     if(!basegfx::fTools::equalZero(aDecomposedTransform.getRotate()))
                     {
