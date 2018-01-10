@@ -1,0 +1,10 @@
+/*
+Settings for GTK3/KDE5 integration.
+*/
+
+#ifndef CONFIG_GTK3_KDE5_H
+#define CONFIG_GTK3_KDE5_H
+
+#define ENABLE_GTK3_KDE5 0
+
+#endif
