@@ -373,16 +373,15 @@ TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero,
 }
 
 TempFile::TempFile(TempFile && other):
-    aName(std::move(other.aName)), pStream(other.pStream), bIsDirectory(other.bIsDirectory),
+    aName(std::move(other.aName)), pStream(std::move(other.pStream)), bIsDirectory(other.bIsDirectory),
     bKillingFileEnabled(other.bKillingFileEnabled)
 {
-    other.pStream = nullptr;
     other.bKillingFileEnabled = false;
 }
 
 TempFile::~TempFile()
 {
-    delete pStream;
+    pStream.reset();
     if ( bKillingFileEnabled )
     {
         if ( bIsDirectory )
@@ -420,21 +419,17 @@ SvStream* TempFile::GetStream( StreamMode eMode )
     if (!pStream)
     {
         if (!aName.isEmpty())
-            pStream = new SvFileStream(aName, eMode);
+            pStream.reset(new SvFileStream(aName, eMode));
         else
-            pStream = new SvMemoryStream(nullptr, 0, eMode);
+            pStream.reset(new SvMemoryStream(nullptr, 0, eMode));
     }
 
-    return pStream;
+    return pStream.get();
 }
 
 void TempFile::CloseStream()
 {
-    if ( pStream )
-    {
-        delete pStream;
-        pStream = nullptr;
-    }
+    pStream.reset();
 }
 
 OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )

@@ -35,14 +35,11 @@ IntlWrapper::IntlWrapper(
 
 IntlWrapper::~IntlWrapper()
 {
-    delete pLocaleData;
-    delete pCollator;
-    delete pCaseCollator;
 }
 
 void IntlWrapper::ImplNewLocaleData() const
 {
-    const_cast<IntlWrapper*>(this)->pLocaleData = new LocaleDataWrapper( m_xContext, maLanguageTag );
+    const_cast<IntlWrapper*>(this)->pLocaleData.reset( new LocaleDataWrapper( m_xContext, maLanguageTag ) );
 }
 
 void IntlWrapper::ImplNewCollator( bool bCaseSensitive ) const
@@ -51,13 +48,13 @@ void IntlWrapper::ImplNewCollator( bool bCaseSensitive ) const
     if ( bCaseSensitive )
     {
         p->loadDefaultCollator( maLanguageTag.getLocale(), 0 );
-        const_cast<IntlWrapper*>(this)->pCaseCollator = p;
+        const_cast<IntlWrapper*>(this)->pCaseCollator.reset(p);
     }
     else
     {
         p->loadDefaultCollator( maLanguageTag.getLocale(),
                 css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
-        const_cast<IntlWrapper*>(this)->pCollator = p;
+        const_cast<IntlWrapper*>(this)->pCollator.reset(p);
     }
 }
 
