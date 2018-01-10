@@ -278,12 +278,7 @@ SvNumberFormatter::~SvNumberFormatter()
     }
 
     aFTable.clear();
-    delete pFormatTable;
-    delete pCharClass;
-    delete pStringScanner;
-    delete pFormatScanner;
     ClearMergeTable();
-    delete pMergeTable;
 }
 
 
@@ -299,7 +294,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
     maLanguageTag.reset( eLang );
-    pCharClass = new CharClass( m_xContext, maLanguageTag );
+    pCharClass.reset( new CharClass( m_xContext, maLanguageTag ) );
     xLocaleData.init( m_xContext, maLanguageTag );
     xCalendar.init( m_xContext, maLanguageTag.getLocale() );
     xTransliteration.init( m_xContext, eLang );
@@ -312,8 +307,8 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     aThousandSep = pLoc->getNumThousandSep();
     aDateSep = pLoc->getDateSep();
 
-    pStringScanner = new ImpSvNumberInputScan( this );
-    pFormatScanner = new ImpSvNumberformatScan( this );
+    pStringScanner.reset( new ImpSvNumberInputScan( this ) );
+    pFormatScanner.reset( new ImpSvNumberformatScan( this ) );
     pFormatTable = nullptr;
     MaxCLOffset = 0;
     ImpGenerateFormats( 0, false );     // 0 .. 999 for initialized language formats
@@ -485,8 +480,8 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
         LanguageType eLge = eOldLanguage;   // ConvertMode changes this
         bool bCheck = false;
         sal_Int32 nCheckPos = -1;
-        std::unique_ptr<SvNumberformat> pNewEntry(new SvNumberformat( aString, pFormatScanner,
-                                                                      pStringScanner, nCheckPos, eLge ));
+        std::unique_ptr<SvNumberformat> pNewEntry(new SvNumberformat( aString, pFormatScanner.get(),
+                                                                      pStringScanner.get(), nCheckPos, eLge ));
         if ( nCheckPos == 0 )
         {
             SvNumFormatType eCheckType = pNewEntry->GetType();
@@ -519,7 +514,7 @@ const css::uno::Reference<css::uno::XComponentContext>& SvNumberFormatter::GetCo
     return m_xContext;
 }
 
-const ImpSvNumberformatScan* SvNumberFormatter::GetFormatScanner() const { return pFormatScanner; }
+const ImpSvNumberformatScan* SvNumberFormatter::GetFormatScanner() const { return pFormatScanner.get(); }
 
 const LanguageTag& SvNumberFormatter::GetLanguageTag() const { return maLanguageTag; }
 
@@ -528,7 +523,7 @@ const ::utl::TransliterationWrapper* SvNumberFormatter::GetTransliteration() con
     return xTransliteration.get();
 }
 
-const CharClass* SvNumberFormatter::GetCharClass() const { return pCharClass; }
+const CharClass* SvNumberFormatter::GetCharClass() const { return pCharClass.get(); }
 
 const LocaleDataWrapper* SvNumberFormatter::GetLocaleData() const { return xLocaleData.get(); }
 
@@ -582,8 +577,8 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
     LanguageType eLge = eLnge;                          // non-const for ConvertMode
     bool bCheck = false;
     std::unique_ptr<SvNumberformat> p_Entry(new SvNumberformat(rString,
-                                                               pFormatScanner,
-                                                               pStringScanner,
+                                                               pFormatScanner.get(),
+                                                               pStringScanner.get(),
                                                                nCheckPos,
                                                                eLge));
 
@@ -1037,7 +1032,7 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
     }
     else
     {
-        pFormatTable = new SvNumberFormatTable;
+        pFormatTable.reset( new SvNumberFormatTable );
     }
     ChangeIntl(eLnge);
     sal_uInt32 CLOffset = ImpGetCLOffset(ActLnge);
@@ -1635,8 +1630,8 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
     std::unique_ptr<SvNumberformat> p_Entry(new SvNumberformat(sTmpString,
-                                                 pFormatScanner,
-                                                 pStringScanner,
+                                                 pFormatScanner.get(),
+                                                 pStringScanner.get(),
                                                  nCheckPos,
                                                  eLnge));
     if (nCheckPos == 0)                                 // String ok
@@ -1703,8 +1698,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
     if ( bEnglish )
     {
         sTmpString = sFormatString;
-        pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
-                                     pStringScanner, nCheckPos, eLnge ));
+        pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
+                                     pStringScanner.get(), nCheckPos, eLnge ));
     }
     else
     {
@@ -1716,8 +1711,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
         LanguageType eFormatLang = LANGUAGE_ENGLISH_US;
         pFormatScanner->SetConvertMode( LANGUAGE_ENGLISH_US, eLnge );
         sTmpString = sFormatString;
-        pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
-                                     pStringScanner, nCheckPos, eFormatLang ));
+        pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
+                                     pStringScanner.get(), nCheckPos, eFormatLang ));
         pFormatScanner->SetConvertMode( false );
         ChangeIntl( eLnge );
 
@@ -1730,8 +1725,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                 // Force locale's keywords.
                 pFormatScanner->ChangeIntl( ImpSvNumberformatScan::KeywordLocalization::LocaleLegacy );
                 sTmpString = sFormatString;
-                pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
-                                             pStringScanner, nCheckPos, eLnge ));
+                pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
+                                             pStringScanner.get(), nCheckPos, eLnge ));
             }
             else
             {
@@ -1741,8 +1736,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                 eFormatLang = eLnge;
                 pFormatScanner->SetConvertMode( eLnge, LANGUAGE_ENGLISH_US );
                 sTmpString = sFormatString;
-                std::unique_ptr<SvNumberformat> pEntry2(new SvNumberformat( sTmpString, pFormatScanner,
-                                                              pStringScanner, nCheckPos2, eFormatLang ));
+                std::unique_ptr<SvNumberformat> pEntry2(new SvNumberformat( sTmpString, pFormatScanner.get(),
+                                                              pStringScanner.get(), nCheckPos2, eFormatLang ));
                 pFormatScanner->SetConvertMode( false );
                 ChangeIntl( eLnge );
                 if ( nCheckPos2 == 0 && !xTransliteration->isEqual( sFormatString,
@@ -1752,8 +1747,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                     // Force locale's keywords.
                     pFormatScanner->ChangeIntl( ImpSvNumberformatScan::KeywordLocalization::LocaleLegacy );
                     sTmpString = sFormatString;
-                    pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
-                                                 pStringScanner, nCheckPos, eLnge ));
+                    pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
+                                                 pStringScanner.get(), nCheckPos, eLnge ));
                 }
             }
         }
@@ -1789,8 +1784,8 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
     std::unique_ptr<SvNumberformat> p_Entry(new SvNumberformat( sTmpString,
-                                                  pFormatScanner,
-                                                  pStringScanner,
+                                                  pFormatScanner.get(),
+                                                  pStringScanner.get(),
                                                   nCheckPos,
                                                   eLnge));
     if (nCheckPos == 0)                          // String ok
@@ -1843,8 +1838,8 @@ sal_uInt32 SvNumberFormatter::TestNewString(const OUString& sFormatString,
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
     std::unique_ptr<SvNumberformat> pEntry(new SvNumberformat(sTmpString,
-                                                pFormatScanner,
-                                                pStringScanner,
+                                                pFormatScanner.get(),
+                                                pStringScanner.get(),
                                                 nCheckPos,
                                                 eLnge));
     if (nCheckPos == 0)                                 // String ok
@@ -1893,8 +1888,8 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
     }
     sal_Int32 nCheckPos = 0;
     std::unique_ptr<SvNumberformat> pFormat(new SvNumberformat(aCodeStr,
-                                                               pFormatScanner,
-                                                               pStringScanner,
+                                                               pFormatScanner.get(),
+                                                               pStringScanner.get(),
                                                                nCheckPos,
                                                                ActLnge));
     if (nCheckPos != 0)
@@ -2059,8 +2054,8 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
     eLnge = ActLnge;
     OUString aTmpStr( rFormatString );
     sal_Int32 nCheckPos = 0;
-    std::unique_ptr<SvNumberformat> pFormat(new SvNumberformat( aTmpStr, pFormatScanner,
-                                                  pStringScanner, nCheckPos, eLnge ));
+    std::unique_ptr<SvNumberformat> pFormat(new SvNumberformat( aTmpStr, pFormatScanner.get(),
+                                                  pStringScanner.get(), nCheckPos, eLnge ));
     if ( nCheckPos == 0 )
     {
         pFormat->GetFormatSpecialInfo( bThousand, IsRed, nPrecision, nLeadingCnt );
@@ -2337,8 +2332,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         OUString aFormatCode = pFormatScanner->GetBooleanString();
         sal_Int32 nCheckPos = 0;
 
-        std::unique_ptr<SvNumberformat> pNewFormat(new SvNumberformat( aFormatCode, pFormatScanner,
-                                                                       pStringScanner, nCheckPos, ActLnge ));
+        std::unique_ptr<SvNumberformat> pNewFormat(new SvNumberformat( aFormatCode, pFormatScanner.get(),
+                                                                       pStringScanner.get(), nCheckPos, ActLnge ));
         pNewFormat->SetType(SvNumFormatType::LOGICAL);
         pNewFormat->SetStandard();
         if ( !aFTable.emplace(CLOffset + ZF_STANDARD_LOGICAL /* NF_BOOLEAN */,
@@ -2349,8 +2344,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
         // Text
         aFormatCode = "@";
-        pNewFormat.reset(new SvNumberformat( aFormatCode, pFormatScanner,
-                                             pStringScanner, nCheckPos, ActLnge ));
+        pNewFormat.reset(new SvNumberformat( aFormatCode, pFormatScanner.get(),
+                                             pStringScanner.get(), nCheckPos, ActLnge ));
         pNewFormat->SetType(SvNumFormatType::TEXT);
         pNewFormat->SetStandard();
         if ( !aFTable.emplace( CLOffset + ZF_STANDARD_TEXT /* NF_TEXT */,
@@ -3119,7 +3114,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
     }
     else
     {
-        pMergeTable = new SvNumberFormatterIndexTable;
+        pMergeTable.reset( new SvNumberFormatterIndexTable );
     }
 
     sal_uInt32 nCLOffset = 0;
@@ -3183,7 +3178,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
         }
         ++it;
     }
-    return pMergeTable;
+    return pMergeTable.get();
 }
 
 
