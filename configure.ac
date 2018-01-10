@@ -648,6 +648,7 @@ linux-gnu*|k*bsd*-gnu*)
     test_kde4=yes
     test_kde5=yes
     test_qt5=yes
+    test_gtk3_kde5=yes
     test_freetype=yes
     _os=Linux
     ;;
@@ -746,6 +747,7 @@ freebsd*)
     test_kde4=yes
     test_kde5=yes
     test_qt5=yes
+    test_gtk3_kde5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -777,6 +779,7 @@ freebsd*)
     test_kde4=yes
     test_kde5=yes
     test_qt5=yes
+    test_gtk3_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
@@ -806,6 +809,7 @@ dragonfly*)
     test_kde4=yes
     test_kde5=yes
     test_qt5=yes
+    test_gtk3_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
@@ -832,6 +836,7 @@ linux-android*)
     test_kde4=no
     test_kde5=no
     test_qt5=no
+    test_gtk3_kde5=no
     test_randr=no
     test_xrender=no
     _os=Android
@@ -1286,6 +1291,12 @@ AC_ARG_ENABLE(kde5,
     AS_HELP_STRING([--enable-kde5],
         [Determines whether to use Qt5/KF5 vclplug on platforms where Qt5 and
          KF5 are available.]),
+,)
+
+AC_ARG_ENABLE(gtk3_kde5,
+    AS_HELP_STRING([--enable-gtk3-kde5],
+        [Determines whether to use Gtk3 vclplug with KDE file dialogs on
+         platforms where Gtk3, Qt5 and Plasma is available.]),
 ,)
 
 AC_ARG_ENABLE(gui,
@@ -4798,6 +4809,7 @@ if test "$USING_X11" != TRUE; then
     test_kde4=no
     test_kde5=no
     test_qt5=no
+    test_gtk3_kde5=no
     enable_cairo_canvas=no
 fi
 
@@ -10152,6 +10164,14 @@ if test "x$enable_kde5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE5)
 
+ENABLE_GTK3_KDE5=""
+if test "x$enable_gtk3_kde5" = "xyes"; then
+    ENABLE_GTK3_KDE5="TRUE"
+    AC_DEFINE(ENABLE_GTK3_KDE5)
+    R="$R gtk3_kde5"
+fi
+AC_SUBST(ENABLE_GTK3_KDE5)
+
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
     build_vcl_plugins="none"
@@ -13173,6 +13193,7 @@ AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_qt5.h])
 AC_CONFIG_HEADERS([config_host/config_kde5.h])
+AC_CONFIG_HEADERS([config_host/config_gtk3_kde5.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_opengl.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])

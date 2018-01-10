@@ -264,8 +264,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(ENABLE_KDE5),kde5be1) \
 	$(if $(USING_X11), \
 		$(if $(ENABLE_KDE4),vclplug_kde4) \
+		$(if $(ENABLE_GTK3_KDE5),vclplug_gtk3_kde5) \
 	) \
 ))
+ifneq ($(ENABLE_GTK3_KDE5),)
+$(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
+	lo_kde5filepicker \
+))
+endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 	sm \
