@@ -76,6 +76,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/fsdk_filewriteadapter \
     UnpackedTarball/pdfium/fpdfsdk/fpdfannot \
     UnpackedTarball/pdfium/fpdfsdk/fpdfattachment \
+    UnpackedTarball/pdfium/fpdfsdk/fpdfcatalog \
 ))
 
 # fdrm
@@ -272,6 +273,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_stitchfunc \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_object_avail \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_page_object_avail \
+    UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_cross_ref_avail \
 ))
 
 # fpdfdoc
@@ -302,7 +304,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_pagelabel \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_variabletext \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_viewerpreferences \
-    UnpackedTarball/pdfium/core/fpdfdoc/cpvt_color \
     UnpackedTarball/pdfium/core/fpdfdoc/cpvt_fontmap \
     UnpackedTarball/pdfium/core/fpdfdoc/cpvt_generateap \
     UnpackedTarball/pdfium/core/fpdfdoc/cpvt_wordinfo \
@@ -367,7 +368,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/fx_ucddata \
     UnpackedTarball/pdfium/core/fxcrt/fx_unicode \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_attritem \
-    UnpackedTarball/pdfium/core/fxcrt/xml/cxml_attrmap \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_databufacc \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_element \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_parser \
@@ -405,6 +405,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/fx_random \
     UnpackedTarball/pdfium/core/fxcrt/fx_string \
     UnpackedTarball/pdfium/core/fxcrt/widestring \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_seekablemultistream \
 ))
 
 # fxge
@@ -463,7 +464,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 
 # javascript, build with pdf_enable_v8 disabled.
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/fpdfsdk/javascript/JS_Runtime_Stub \
+    UnpackedTarball/pdfium/fxjs/cjs_event_context_stub \
+    UnpackedTarball/pdfium/fxjs/cjs_runtimestub \
 ))
 
 # pwl
@@ -524,6 +526,7 @@ $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
     UnpackedTarball/pdfium/third_party/libopenjpeg20/t2 \
     UnpackedTarball/pdfium/third_party/libopenjpeg20/tcd \
     UnpackedTarball/pdfium/third_party/libopenjpeg20/tgt \
+    UnpackedTarball/pdfium/third_party/libopenjpeg20/sparse_array \
 ))
 
 # pdfium_base
@@ -574,6 +577,7 @@ $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
     UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftlcdfil \
     UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftmm \
     UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftsystem \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftfntfmt \
     UnpackedTarball/pdfium/third_party/freetype/src/src/cff/cff \
     UnpackedTarball/pdfium/third_party/freetype/src/src/cid/type1cid \
     UnpackedTarball/pdfium/third_party/freetype/src/src/psaux/psaux \
