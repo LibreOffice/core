@@ -441,7 +441,7 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFor
                     }
                 }
 
-                // Highlightcolor also needed to be untoched, but we can't have that just by clearing the item
+                // Highlightcolor also needed to be untouched, but we can't have that just by clearing the item
                 Color nSaveHighlight = pNumFnt->GetHighlightColor();
 
                 pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
