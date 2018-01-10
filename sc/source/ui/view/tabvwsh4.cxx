@@ -1554,8 +1554,8 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
         if ( pDocSh->GetCreateMode() != SfxObjectCreateMode::INTERNAL &&
              pDocSh->IsUpdateEnabled() )  // #105575#; update only in the first creation of the ViewShell
         {
-            // Check if there are any external data.
-            bool bLink = rDoc.GetExternalRefManager()->hasExternalData();
+            // Check if there are any external data to load
+            bool bLink = rDoc.GetExternalRefManager()->hasUnloadedExternalData();
             if (!bLink)
             {
                 // #i100042# sheet links can still exist independently from external formula references

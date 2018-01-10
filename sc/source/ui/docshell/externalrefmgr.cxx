@@ -1928,6 +1928,9 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
             getSingleRefTokenFromSrcDoc(
                 nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
 
+        // Mark this file as loaded from cache
+        maSrcFiles[nFileId].mbIsInCache = true;
+
         putCellDataIntoCache(maRefCache, pToken, nFileId, rTabName, rCell, pFmt);
         return pToken;
     }
@@ -3019,6 +3022,14 @@ bool ScExternalRefManager::hasExternalData() const
 {
     return !maSrcFiles.empty();
 }
+
+bool ScExternalRefManager::hasUnloadedExternalData() const
+{
+    // true if we have at least one src file with mbIsInCache == false
+    return 0 < std::count_if( maSrcFiles.begin(), maSrcFiles.end(),
+        [](const SrcFileData & fileData) { return !fileData.mbIsInCache; });
+}
+
 
 void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
 {
