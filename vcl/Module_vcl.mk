@@ -81,12 +81,13 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_kde4 \
 ))
 endif
-ifneq ($(ENABLE_KDE5),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_kde5_moc \
-    Library_vclplug_kde5 \
-))
-endif
+# NOTE: does not compile
+# ifneq ($(ENABLE_KDE5),)
+# $(eval $(call gb_Module_add_targets,vcl,\
+#     CustomTarget_kde5_moc \
+#     Library_vclplug_kde5 \
+# ))
+# endif
 ifneq ($(ENABLE_QT5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_qt5_moc \
