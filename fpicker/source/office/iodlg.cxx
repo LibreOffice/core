@@ -1690,12 +1690,12 @@ short SvtFileDialog::Execute()
 }
 
 
-void SvtFileDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+void SvtFileDialog::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner)
 {
     PrepareExecute();
 
     // start of the dialog
-    ModalDialog::StartExecuteModal( rEndDialogHdl );
+    ModalDialog::StartExecuteModal(rEndDialogHdl, rVclPtrOwner);
 }
 
 

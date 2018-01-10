@@ -83,7 +83,7 @@ public:
     explicit        VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}
     virtual         ~VclAbstractDialog2_Impl() override;
     virtual void    dispose() override;
-    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    virtual void    StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>()) override;
     virtual long    GetResult() override;
 private:
     DECL_LINK( EndDialogHdl, Dialog&, void );

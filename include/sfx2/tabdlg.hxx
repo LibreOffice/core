@@ -27,6 +27,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
+#include <sfx2/request.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -88,6 +89,8 @@ friend class SfxTabDialogUIObject;
     bool                m_bItemsReset;
     bool                m_bStandardPushed;
 
+    std::unique_ptr<SfxRequest> m_pSfxRequest;
+
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, TabControl*, void );
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, TabControl*, bool );
     DECL_DLLPRIVATE_LINK(OkHdl, Button*, void);
@@ -107,7 +110,6 @@ protected:
 
     VclPtr<VclButtonBox>   m_pActionArea;
     SfxItemSet*     m_pExampleSet;
-    SfxItemSet*     GetInputSetImpl();
     SfxTabPage*     GetTabPage( sal_uInt16 nPageId ) const;
 
     /** prepare to leave the current page. Calls the DeactivatePage method of the current page, (if necessary),
@@ -175,6 +177,7 @@ public:
 
     // may provide local slots converted by Map
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
+    SfxItemSet*         GetInputSetImpl();
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet; }
 
@@ -189,13 +192,16 @@ public:
     void                RemoveStandardButton();
 
     short               Execute() override;
-    void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+    void                StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner = VclPtr<VclReferenceBase>()) override;
     void                Start();
 
     const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }
     SfxItemSet*         GetExampleSet() { return m_pExampleSet; }
 
     void                SetApplyHandler(const Link<Button*,void>& _rHdl);
+
+    void                SetSfxRequest(const SfxRequest& rRequest) { m_pSfxRequest.reset(new SfxRequest(rRequest)); }
+    void                SfxRequestDone(const SfxItemSet* pItemSet = nullptr);
 
     SAL_DLLPRIVATE void Start_Impl();
 

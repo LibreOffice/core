@@ -153,11 +153,10 @@ void VclAbstractDialog2_Impl::dispose()
 }
 
 // virtual
-void  VclAbstractDialog2_Impl::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
+void  VclAbstractDialog2_Impl::StartExecuteModal(const Link<Dialog&, void>& rEndDialogHdl, const VclPtr<VclReferenceBase>& rVclPtrOwner)
 {
     m_aEndDlgHdl = rEndDialogHdl;
-    m_pDlg->StartExecuteModal(
-        LINK( this, VclAbstractDialog2_Impl, EndDialogHdl ) );
+    m_pDlg->StartExecuteModal(LINK(this, VclAbstractDialog2_Impl, EndDialogHdl), rVclPtrOwner);
 }
 
 // virtual
