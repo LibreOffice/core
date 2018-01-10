@@ -13,8 +13,10 @@
 #include <scmatrix.hxx>
 #include <rtl/strbuf.hxx>
 #include <formula/errorcodes.hxx>
+#include <sfx2/docfile.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -243,6 +245,13 @@ void ScInterpreter::ScWebservice()
         OUString aURI = GetString().getString();
 
         if(aURI.isEmpty())
+        {
+            PushError( FormulaError::NoValue );
+            return;
+        }
+
+        SfxObjectShell* pShell = pDok->GetDocumentShell();
+        if (pShell && pShell->GetMedium() && SvtSecurityOptions().isUntrustedReferer(pShell->GetMedium()->GetBaseURL()))
         {
             PushError( FormulaError::NoValue );
             return;
