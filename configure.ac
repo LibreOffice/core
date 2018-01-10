@@ -593,6 +593,7 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
+    test_kde5=yes
     test_qt5=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
@@ -688,6 +689,7 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
+    test_kde5=yes
     test_qt5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
@@ -717,6 +719,7 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
+    test_kde5=yes
     test_qt5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
@@ -743,6 +746,7 @@ dragonfly*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
+    test_kde5=yes
     test_qt5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
@@ -767,6 +771,7 @@ linux-android*)
     test_freetype=no
     test_gtk=no
     test_kde4=no
+    test_kde5=no
     test_qt5=no
     test_randr=no
     test_xrender=no
@@ -1214,6 +1219,12 @@ AC_ARG_ENABLE(qt5,
     AS_HELP_STRING([--enable-qt5],
         [Determines whether to use Qt5 vclplug on platforms where Qt5 is
          available.]),
+,)
+
+AC_ARG_ENABLE(kde5,
+    AS_HELP_STRING([--enable-kde5],
+        [Determines whether to use Qt5/KF5 vclplug on platforms where Qt5 and
+         KF5 are available.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(gui,
@@ -4529,6 +4540,7 @@ if test "$USING_X11" != TRUE; then
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
     test_kde4=no
+    test_kde5=no
     test_qt5=no
     enable_cairo_canvas=no
 fi
@@ -9777,6 +9789,14 @@ if test "x$enable_qt5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_QT5)
 
+ENABLE_KDE5=""
+if test "x$enable_kde5" = "xyes"; then
+    ENABLE_KDE5="TRUE"
+    AC_DEFINE(ENABLE_KDE5)
+    R="$R kde5"
+fi
+AC_SUBST(ENABLE_KDE5)
+
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
     build_vcl_plugins="none"
@@ -10874,13 +10894,13 @@ KF5_CONFIG="kf5-config"
 if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
         \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \)
 then
-    kf5_incdirs="$KF5INC /usr/include /usr/include/KF5 $x_includes"
+    kf5_incdirs="$KF5INC /usr/include/ $x_includes"
     kf5_libdirs="$KF5LIB /usr/lib /usr/lib/kf5 /usr/lib/kf5/devel $x_libraries"
     if test -n "$supports_multilib"; then
         kf5_libdirs="$kf5_libdirs /usr/lib64 /usr/lib64/kf5 /usr/lib64/kf5/devel"
     fi
 
-    kf5_test_include="kcoreaddons_version.h"
+    kf5_test_include="KF5/kcoreaddons_version.h"
     kf5_test_library="libKF5CoreAddons.so"
     kf5_libdirs="$qt5_libdir $kf5_libdirs"
 
@@ -10896,7 +10916,7 @@ then
     kf5_incdir="no"
     for kf5_check in $kf5_incdirs; do
         if test -r "$kf5_check/$kf5_test_include"; then
-            kf5_incdir="$kf5_check"
+            kf5_incdir="$kf5_check/KF5"
             break
         fi
     done
@@ -12492,6 +12512,7 @@ AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_qt5.h])
+AC_CONFIG_HEADERS([config_host/config_kde5.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])

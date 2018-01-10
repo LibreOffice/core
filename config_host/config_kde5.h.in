@@ -1,0 +1,10 @@
+/*
+Settings for KDE5 integration.
+*/
+
+#ifndef CONFIG_KDE5_H
+#define CONFIG_KDE5_H
+
+#define KDE5_HAVE_GLIB 0
+
+#endif
