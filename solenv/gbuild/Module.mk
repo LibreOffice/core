@@ -380,8 +380,13 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
+define gb_Module__modulefile
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
+endef
+
 define gb_Module_add_moduledir
-include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
+$(if $(wildcard $(call gb_Module__modulefile,$(1),$(2))),,$(call gb_Output_error,Module does not exist: $(call gb_Module__modulefile,$(1),$(2))))
+include $(call gb_Module__modulefile,$(1),$(2))
 $(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
 $(call gb_Module_get_l10n_target,$(1)) : $$(firstword $$(gb_Module_L10NTARGETSTACK))
 $(call gb_Module_get_check_target,$(1)) : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
