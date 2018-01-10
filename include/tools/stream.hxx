@@ -26,6 +26,7 @@
 #include <vcl/errcode.hxx>
 #include <rtl/string.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class StreamData;
 
@@ -143,7 +144,8 @@ private:
     sal_uInt64      m_nActPos;
 
     // buffer management
-    sal_uInt8*      m_pRWBuf;     ///< Points to read/write buffer
+    std::unique_ptr<sal_uInt8>
+                    m_pRWBuf;     ///< Points to read/write buffer
     sal_uInt8*      m_pBufPos;    ///< m_pRWBuf + m_nBufActualPos
     sal_uInt16      m_nBufSize;   ///< Allocated size of buffer
     sal_uInt16      m_nBufActualLen; ///< Length of used segment of puffer
@@ -582,7 +584,8 @@ TOOLS_DLLPUBLIC bool checkSeek(SvStream &rSt, sal_uInt64 nOffset) SAL_WARN_UNUSE
 class TOOLS_DLLPUBLIC SvFileStream : public SvStream
 {
 private:
-    StreamData*     pInstanceData;
+    std::unique_ptr<StreamData>
+                    pInstanceData;
     OUString        aFilename;
 #if defined(_WIN32)
     sal_uInt16      nLockCounter;

@@ -27,6 +27,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <memory>
 
 /**
     A wrapper of I18N wrappers. Using this is more expensive than using some
@@ -50,9 +51,9 @@ private:
     LanguageTag         maLanguageTag;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    LocaleDataWrapper*  pLocaleData;
-    CollatorWrapper*    pCollator;
-    CollatorWrapper*    pCaseCollator;
+    std::unique_ptr<LocaleDataWrapper>  pLocaleData;
+    std::unique_ptr<CollatorWrapper>    pCollator;
+    std::unique_ptr<CollatorWrapper>    pCaseCollator;
 
     void                ImplNewLocaleData() const;
     void                ImplNewCollator( bool bCaseSensitive ) const;
@@ -65,21 +66,21 @@ public:
                                     {
                                         if ( !pLocaleData )
                                             ImplNewLocaleData();
-                                        return pLocaleData;
+                                        return pLocaleData.get();
                                     }
     /// case insensitive collator, simple IGNORE_CASE
     const CollatorWrapper*      getCollator() const
                                     {
                                         if ( !pCollator )
                                             ImplNewCollator( false );
-                                        return pCollator;
+                                        return pCollator.get();
                                     }
     /// case sensitive collator
     const CollatorWrapper*      getCaseCollator() const
                                     {
                                         if ( !pCaseCollator )
                                             ImplNewCollator( true );
-                                        return pCaseCollator;
+                                        return pCaseCollator.get();
                                     }
 };
 
