@@ -1006,9 +1006,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         aEvent.FeatureURL.Path == "AlignLeft" ||
         aEvent.FeatureURL.Path == "AlignHorizontalCenter" ||
         aEvent.FeatureURL.Path == "AlignRight" ||
-        aEvent.FeatureURL.Path == "DocumentRepair" ||
-        aEvent.FeatureURL.Path == "InsertPageHeader" ||
-        aEvent.FeatureURL.Path == "InsertPageFooter")
+        aEvent.FeatureURL.Path == "DocumentRepair")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;
@@ -1182,6 +1180,27 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
             else if (aEvent.State >>= aSeq)
             {
                 aBuffer.append(aSeq[0]);
+            }
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "InsertPageHeader" ||
+             aEvent.FeatureURL.Path == "InsertPageFooter")
+    {
+        if (aEvent.IsEnabled)
+        {
+            css::uno::Sequence< OUString > aSeq;
+            if (aEvent.State >>= aSeq)
+            {
+                aBuffer.append(u'{');
+                for (sal_Int32 itSeq = 0; itSeq < aSeq.getLength(); itSeq++)
+                {
+                    aBuffer.append("\"" + aSeq[itSeq]);
+                    if (itSeq != aSeq.getLength() - 1)
+                        aBuffer.append("\":true,");
+                    else
+                        aBuffer.append("\":true");
+                }
+                aBuffer.append(u'}');
             }
         }
     }

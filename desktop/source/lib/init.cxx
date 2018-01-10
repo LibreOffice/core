@@ -2795,6 +2795,35 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         aValues.add_child(sStyleFam.toUtf8().getStr(), aChildren);
     }
 
+    // Header & Footer Styles
+    {
+        OUString sName;
+        bool bIsPhysical;
+        boost::property_tree::ptree aChild;
+        uno::Reference<beans::XPropertySet> xProperty;
+        boost::property_tree::ptree aChildren;
+        uno::Reference<container::XNameContainer> xContainer;
+
+        if (xStyleFamilies->getByName("PageStyles") >>= xContainer)
+        {
+            uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
+            for (sal_Int32 itName = 0; itName < aSeqNames.getLength(); itName++)
+            {
+                sName = aSeqNames[itName];
+                xProperty.set(xContainer->getByName(sName), uno::UNO_QUERY);
+                if (xProperty.is() && (xProperty->getPropertyValue("IsPhysical") >>= bIsPhysical) && bIsPhysical)
+                {
+                    xProperty->getPropertyValue("DisplayName") >>= sName;
+                    aChild.put("", sName.toUtf8());
+                    aChildren.push_back(std::make_pair("", aChild));
+                }
+                else
+                    bIsPhysical = false;
+            }
+            aValues.add_child("HeaderFooter", aChildren);
+        }
+    }
+
     {
         boost::property_tree::ptree aCommandList;
 

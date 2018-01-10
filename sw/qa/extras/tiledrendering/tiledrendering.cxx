@@ -23,6 +23,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/slstitm.hxx>
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -1928,10 +1929,19 @@ void SwTiledRenderingTest::testDocumentRepair()
 namespace {
 void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, bool bValue)
 {
+    uno::Sequence<OUString> aSeq;
     const SfxPoolItem* pState = nullptr;
     pViewShell->GetDispatcher()->QueryState(nWhich, pState);
-    CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem * >(pState));
-    CPPUNIT_ASSERT_EQUAL(bValue, dynamic_cast< const SfxBoolItem * >(pState)->GetValue());
+    const SfxStringListItem* pListItem = dynamic_cast<const SfxStringListItem*>(pState);
+    CPPUNIT_ASSERT(pListItem);
+    pListItem->GetStringList(aSeq);
+    if (bValue)
+    {
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aSeq.getLength());
+        CPPUNIT_ASSERT_EQUAL(OUString("Default Style"), aSeq[0]);
+    }
+    else
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSeq.getLength());
 };
 
 }
@@ -1946,16 +1956,18 @@ void SwTiledRenderingTest::testPageHeader()
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEHEADER, false);
     // Insert Page Header
     {
+        SfxStringItem aStyle(FN_INSERT_PAGEHEADER, "Default Style");
         SfxBoolItem aItem(FN_PARAM_1, true);
-        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEHEADER, SfxCallMode::SYNCHRON, {&aItem});
+        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEHEADER, SfxCallMode::API | SfxCallMode::SYNCHRON, {&aStyle, &aItem});
     }
     // Check Page Header State
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEHEADER, true);
 
     // Remove Page Header
     {
+        SfxStringItem aStyle(FN_INSERT_PAGEHEADER, "Default Style");
         SfxBoolItem aItem(FN_PARAM_1, false);
-        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEHEADER, SfxCallMode::SYNCHRON, {&aItem});
+        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEHEADER, SfxCallMode::API | SfxCallMode::SYNCHRON, {&aStyle, &aItem});
     }
     // Check Page Header State
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEHEADER, false);
@@ -1975,16 +1987,18 @@ void SwTiledRenderingTest::testPageFooter()
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, false);
     // Insert Page Footer
     {
+        SfxStringItem aPageStyle(FN_INSERT_PAGEFOOTER, "Default Style");
         SfxBoolItem aItem(FN_PARAM_1, true);
-        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEFOOTER, SfxCallMode::SYNCHRON, {&aItem});
+        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEFOOTER, SfxCallMode::API | SfxCallMode::SYNCHRON, {&aPageStyle, &aItem});
     }
     // Check Page Footer State
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, true);
 
     // Remove Page Footer
     {
+        SfxStringItem aPageStyle(FN_INSERT_PAGEFOOTER, "Default Style");
         SfxBoolItem aItem(FN_PARAM_1, false);
-        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEFOOTER, SfxCallMode::SYNCHRON, {&aItem});
+        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEFOOTER, SfxCallMode::API | SfxCallMode::SYNCHRON, {&aPageStyle, &aItem});
     }
     // Check Footer State
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, false);
