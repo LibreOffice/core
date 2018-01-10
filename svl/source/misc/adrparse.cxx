@@ -663,8 +663,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                             aTheRealName = rInput.copy( (m_pRealNameContentBegin - rInput.getStr()), nLen);
                     }
                     if (pParser->m_bHasFirst)
-                        pParser->m_aRest.push_back(new SvAddressEntry_Impl( aTheAddrSpec,
-                                                                            aTheRealName) );
+                        pParser->m_aRest.emplace_back( aTheAddrSpec, aTheRealName );
                     else
                     {
                         pParser->m_bHasFirst = true;
@@ -729,9 +728,6 @@ SvAddressParser::SvAddressParser(const OUString& rInput)
 
 SvAddressParser::~SvAddressParser()
 {
-    for ( size_t i = m_aRest.size(); i > 0; )
-        delete m_aRest[ --i ];
-    m_aRest.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

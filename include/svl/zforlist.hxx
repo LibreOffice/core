@@ -887,15 +887,15 @@ private:
     std::map<sal_uInt32, std::unique_ptr<SvNumberformat>> aFTable;            // Table of format keys to format entries
     typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
     DefaultFormatKeysMap aDefaultFormatKeys; // Table of default standard to format keys
-    SvNumberFormatTable* pFormatTable;      // For the UI dialog
-    SvNumberFormatterIndexTable* pMergeTable;               // List of indices for merging two formatters
-    CharClass* pCharClass;                  // CharacterClassification
+    std::unique_ptr<SvNumberFormatTable> pFormatTable;      // For the UI dialog
+    std::unique_ptr<SvNumberFormatterIndexTable> pMergeTable; // List of indices for merging two formatters
+    std::unique_ptr<CharClass> pCharClass;                  // CharacterClassification
     OnDemandLocaleDataWrapper xLocaleData;  // LocaleData switched between SYSTEM, ENGLISH and other
     OnDemandTransliterationWrapper xTransliteration;    // Transliteration loaded on demand
     OnDemandCalendarWrapper xCalendar;      // Calendar loaded on demand
     OnDemandNativeNumberWrapper xNatNum;    // Native number service loaded on demand
-    ImpSvNumberInputScan* pStringScanner;   // Input string scanner
-    ImpSvNumberformatScan* pFormatScanner;  // Format code string scanner
+    std::unique_ptr<ImpSvNumberInputScan> pStringScanner;   // Input string scanner
+    std::unique_ptr<ImpSvNumberformatScan> pFormatScanner;  // Format code string scanner
     Link<sal_uInt16,Color*> aColorLink;     // User defined color table CallBack
     sal_uInt32 MaxCLOffset;                     // Max language/country offset used
     sal_uInt32 nDefaultSystemCurrencyFormat;        // NewCurrency matching SYSTEM locale

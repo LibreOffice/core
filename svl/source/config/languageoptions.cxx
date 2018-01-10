@@ -45,8 +45,8 @@ SvtLanguageOptions::SvtLanguageOptions( bool _bDontLoad )
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( ALMutex::get() );
 
-    m_pCJKOptions = new SvtCJKOptions( _bDontLoad );
-    m_pCTLOptions = new SvtCTLOptions( _bDontLoad );
+    m_pCJKOptions.reset(new SvtCJKOptions( _bDontLoad ));
+    m_pCTLOptions.reset(new SvtCTLOptions( _bDontLoad ));
     m_pCTLOptions->AddListener(this);
     m_pCJKOptions->AddListener(this);
 }
@@ -58,8 +58,8 @@ SvtLanguageOptions::~SvtLanguageOptions()
     m_pCTLOptions->RemoveListener(this);
     m_pCJKOptions->RemoveListener(this);
 
-    delete m_pCJKOptions;
-    delete m_pCTLOptions;
+    m_pCJKOptions.reset();
+    m_pCTLOptions.reset();
 }
 // CJK options
 bool SvtLanguageOptions::IsCJKFontEnabled() const

@@ -84,7 +84,7 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         eSetType( SvNumFormatType::UNDEFINED )
 {
     pFormatter = pFormatterP;
-    pNullDate = new Date(30,12,1899);
+    pNullDate.reset( new Date(30,12,1899) );
     nYear2000 = SvNumberFormatter::GetYear2000Default();
     Reset();
     ChangeIntl();
@@ -93,8 +93,6 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
 
 ImpSvNumberInputScan::~ImpSvNumberInputScan()
 {
-    Reset();
-    delete pNullDate;
 }
 
 
@@ -3527,7 +3525,7 @@ void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
     }
     else
     {
-        pNullDate = new Date(Day, Month, Year);
+        pNullDate.reset(new Date(Day, Month, Year));
     }
 }
 

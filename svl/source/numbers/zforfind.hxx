@@ -82,7 +82,7 @@ private:
     bool    bTextInitialized;                   //* Whether days and months are initialized
     bool    bScanGenitiveMonths;                //* Whether to scan an input for genitive months
     bool    bScanPartitiveMonths;               //* Whether to scan an input for partitive months
-    Date* pNullDate;                            //* 30Dec1899
+    std::unique_ptr<Date> pNullDate;                 //* 30Dec1899
     // Variables for provisional results:
     OUString   sStrArray[SV_MAX_COUNT_INPUT_STRINGS];//* Array of scanned substrings
     bool       IsNum[SV_MAX_COUNT_INPUT_STRINGS];    //* Whether a substring is numeric

@@ -25,6 +25,7 @@
 #include <cstddef>
 #include <initializer_list>
 #include <type_traits>
+#include <memory>
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
@@ -33,8 +34,6 @@
 class SfxItemPool;
 class SfxPoolItem;
 class SvStream;
-
-typedef SfxPoolItem const** SfxItemArray;
 
 namespace svl {
 
@@ -84,7 +83,8 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
-    SfxItemArray      m_pItems;        ///< array of items
+    std::unique_ptr<SfxPoolItem const*[]>
+                      m_pItems;        ///< array of items
     sal_uInt16*       m_pWhichRanges;  ///< array of Which Ranges
     sal_uInt16        m_nCount;        ///< number of items
 
@@ -99,7 +99,7 @@ private:
         std::size_t items);
 
 public:
-    SfxItemArray                GetItems_Impl() const { return m_pItems; }
+    SfxPoolItem const**         GetItems_Impl() const { return m_pItems.get(); }
 
 private:
     const SfxItemSet&           operator=(const SfxItemSet &) = delete;

@@ -25,6 +25,7 @@
 #include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 // class SvtLanguageOptions ----------------------------------------------------
 
@@ -49,8 +50,8 @@ class SvtCTLOptions;
 class SVL_DLLPUBLIC SvtLanguageOptions : public ::utl::detail::Options
 {
 private:
-    SvtCJKOptions*  m_pCJKOptions;
-    SvtCTLOptions*  m_pCTLOptions;
+    std::unique_ptr<SvtCJKOptions>  m_pCJKOptions;
+    std::unique_ptr<SvtCTLOptions>  m_pCTLOptions;
 
 public:
     enum EOption
