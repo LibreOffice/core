@@ -43,7 +43,6 @@ IOSPREBUILD: FORCE
 
 
 $(IOSKIT).dylib: IOSPREBUILD $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,iOS_kitBridge) $(IOSLIBS)
-	echo "JAN" $(IOSLIBS)
 	$(IOSLD) -r -ios_version_min $(IOS_DEPLOYMENT_VERSION) \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
