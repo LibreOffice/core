@@ -3185,6 +3185,9 @@ const OUString& Window::GetHelpText() const
 
 void Window::SetWindowPeer( Reference< css::awt::XWindowPeer > xPeer, VCLXWindow* pVCLXWindow  )
 {
+    if (!mpWindowImpl)
+        return;
+
     // be safe against re-entrance: first clear the old ref, then assign the new one
     mpWindowImpl->mxWindowPeer.clear();
     mpWindowImpl->mxWindowPeer = xPeer;
