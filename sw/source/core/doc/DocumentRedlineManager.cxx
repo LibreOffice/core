@@ -1811,7 +1811,11 @@ void DocumentRedlineManager::CompressRedlines()
         const SwPosition* pCurStt = pCur->Start(),
                         * pCurEnd = pCurStt == pCur->GetPoint()
                             ? pCur->GetMark() : pCur->GetPoint();
-        if( *pPrevEnd == *pCurStt && pPrev->CanCombine( *pCur ) &&
+        // tdf83260
+        // Compress only if all text inside the same node.
+        // Cross-node compression will lead to index modification and LO will crush during undo/redo operations
+        if( pPrevStt->nNode == pPrevEnd->nNode && pCurStt->nNode == pCurEnd->nNode &&
+            *pPrevEnd == *pCurStt && pPrev->CanCombine( *pCur ) &&
             pPrevStt->nNode.GetNode().StartOfSectionNode() ==
             pCurEnd->nNode.GetNode().StartOfSectionNode() &&
             !pCurEnd->nNode.GetNode().StartOfSectionNode()->IsTableNode() )

@@ -1387,7 +1387,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
                     if( IsAutoCorrFlag( ChgToEnEmDash ) )
                     {
-                        FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nEnd, eLang );
+                        FnChgToEnEmDash( rDoc, aPara, nCapLttrPos, nEnd, eLang );
                     }
                 }
                 break;
