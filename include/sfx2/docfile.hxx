@@ -169,6 +169,8 @@ public:
     bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
     void                DisableUnlockWebDAV( bool bDisableUnlockWebDAV = true );
     void                UnlockFile( bool bReleaseLockStream );
+    /// Lets Transfer_Impl() not fsync the output file.
+    void DisableFileSync(bool bDisableFileSync);
 
     css::uno::Reference< css::embed::XStorage > GetStorage( bool bCreateTempIfNo = true );
     css::uno::Reference< css::embed::XStorage > GetOutputStorage();
