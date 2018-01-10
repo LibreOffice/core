@@ -42,7 +42,8 @@ IOSPREBUILD: FORCE
 
 
 
-$(IOSKIT).dylib: $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,iOS_kitBridge) $(IOSLIBS)
+$(IOSKIT).dylib: IOSPREBUILD $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,iOS_kitBridge) $(IOSLIBS)
+	echo "JAN" $(IOSLIBS)
 	$(IOSLD) -r -ios_version_min $(IOS_DEPLOYMENT_VERSION) \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
@@ -71,7 +72,7 @@ $(IOSKIT).dylib: $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,iOS_kitBridge
 	    -single_module \
 	    -compatibility_version 1 \
 	    -current_version 1 \
-	    $(IOSKIT).a \
+	    $(IOSOBJ) \
 	    -o $(IOSKIT).dylib
 ifeq ($(origin IOS_CODEID),undefined)
 	@echo "please define environment variable IOS_CODEID as\n" \

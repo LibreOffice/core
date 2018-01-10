@@ -16,7 +16,7 @@
 		393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975771F8BECB0002DC80B /* libiconv.tbd */; };
 		3939757A1F8BECC1002DC80B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975791F8BECC1002DC80B /* libz.tbd */; };
 		39503A751F94D44900F19C78 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 39503A741F94D44900F19C78 /* libc++.tbd */; };
-		396C833F1FC9D89E008E662A /* libKit_X86_64_debug.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 396C833E1FC9D89D008E662A /* libKit_X86_64_debug.dylib */; };
+		396C833F1FC9D89E008E662A /* libKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 396C833E1FC9D89D008E662A /* libKit.dylib */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
@@ -47,7 +47,7 @@
 		393975791F8BECC1002DC80B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
 		39503A741F94D44900F19C78 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		396C833E1FC9D89D008E662A /* libKit_X86_64_debug.dylib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libKit_X86_64_debug.dylib; path = ../generated/libKit_X86_64_debug.dylib; sourceTree = "<group>"; };
+		396C833E1FC9D89D008E662A /* libKit.dylib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libKit.dylib; path = ../generated/simulator/libKit.dylib; sourceTree = "<group>"; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
 		3975A8C91FBD70EE00A87B3A /* LibreOfficeKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LibreOfficeKit.h; path = ../../include/LibreOfficeKit/LibreOfficeKit.h; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				396C833F1FC9D89E008E662A /* libKit_X86_64_debug.dylib in Frameworks */,
+				396C833F1FC9D89E008E662A /* libKit.dylib in Frameworks */,
 				39503A751F94D44900F19C78 /* libc++.tbd in Frameworks */,
 				3939757A1F8BECC1002DC80B /* libz.tbd in Frameworks */,
 				393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */,
@@ -110,7 +110,7 @@
 		3972753A1E77D9F7006ACDCC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				396C833E1FC9D89D008E662A /* libKit_X86_64_debug.dylib */,
+				396C833E1FC9D89D008E662A /* libKit.dylib */,
 				39503A741F94D44900F19C78 /* libc++.tbd */,
 				393975791F8BECC1002DC80B /* libz.tbd */,
 				393975771F8BECB0002DC80B /* libiconv.tbd */,
@@ -359,7 +359,6 @@
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = libKit_ARM64_debug.dylib;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "lokit-Bridging-Header.h";
@@ -549,7 +548,6 @@
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = libKit_X86_64_debug.dylib;
 				OTHER_LIBTOOLFLAGS = "";
 				"OTHER_LIBTOOLFLAGS[arch=*]" = "";
 				SDKROOT = iphoneos;
