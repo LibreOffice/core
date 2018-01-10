@@ -67,10 +67,33 @@ public:
     virtual OUString            GetText() const = 0;
 };
 
+class SfxAbstractDialog2 : virtual public VclAbstractDialog2
+{
+protected:
+    virtual ~SfxAbstractDialog2() override = default;
+public:
+    /** Get a set of items changed in the dialog.
+      */
+    virtual const SfxItemSet*   GetOutputItemSet() const = 0;
+    virtual void                SetText( const OUString& rStr ) = 0;
+    virtual OUString            GetText() const = 0;
+};
+
 class SfxAbstractTabDialog : virtual public SfxAbstractDialog
 {
 protected:
     virtual ~SfxAbstractTabDialog() override = default;
+public:
+    virtual void                SetCurPageId( sal_uInt16 nId ) = 0;
+    virtual void                SetCurPageId( const OString &rName ) = 0;
+    virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& ) = 0;
+    virtual void                SetInputSet( const SfxItemSet* pInSet ) = 0;
+};
+
+class SfxAbstractTabDialog2 : virtual public SfxAbstractDialog2
+{
+protected:
+    virtual ~SfxAbstractTabDialog2() override = default;
 public:
     virtual void                SetCurPageId( sal_uInt16 nId ) = 0;
     virtual void                SetCurPageId( const OString &rName ) = 0;

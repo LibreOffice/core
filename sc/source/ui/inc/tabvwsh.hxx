@@ -24,6 +24,7 @@
 #include <o3tl/deleter.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/htmlcfg.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
 #include <editeng/svxenum.hxx>
@@ -167,6 +168,8 @@ private:
     OUString   maName;
     OUString   maScope;
 
+    VclPtr<SfxAbstractTabDialog2> mpCellFormatDialog;
+
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -175,11 +178,12 @@ private:
     void            DoReadUserData( const OUString& rData );
     void            DoReadUserDataSequence( const css::uno::Sequence< css::beans::PropertyValue >& rSettings );
 
-    DECL_LINK( SimpleRefClose, const OUString*, void );
-    DECL_LINK( SimpleRefDone, const OUString&, void );
-    DECL_LINK( SimpleRefAborted, const OUString&, void );
-    DECL_LINK( SimpleRefChange, const OUString&, void );
-    DECL_LINK( FormControlActivated, LinkParamNone*, void );
+    DECL_LINK(SimpleRefClose, const OUString*, void);
+    DECL_LINK(SimpleRefDone, const OUString&, void);
+    DECL_LINK(SimpleRefAborted, const OUString&, void);
+    DECL_LINK(SimpleRefChange, const OUString&, void);
+    DECL_LINK(FormControlActivated, LinkParamNone*, void);
+    DECL_LINK(DialogClosedHdl, Dialog&, void);
 
 protected:
     virtual void    Activate(bool bMDI) override;

@@ -841,7 +841,7 @@ bool Dialog::ImplStartExecuteModal()
         GetParent()->CompatNotify( aNEvt );
     }
     mbInExecute = true;
-    SetModalInputMode(true);
+    //SetModalInputMode(true);
 
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
@@ -1016,13 +1016,17 @@ void Dialog::EndDialog( long nResult )
         if (mpDialogImpl->maEndDialogHdl.IsSet())
         {
             mpDialogImpl->maEndDialogHdl.Call( *this );
-            mpDialogImpl->maEndDialogHdl = Link<Dialog&,void>();
+            if (mpDialogImpl)
+                mpDialogImpl->maEndDialogHdl = Link<Dialog&,void>();
         }
-        mpDialogImpl->mbStartedModal = false;
-        mpDialogImpl->mnResult = -1;
+
+        if (mpDialogImpl)
+        {
+            mpDialogImpl->mbStartedModal = false;
+            mpDialogImpl->mnResult = -1;
+        }
     }
     mbInExecute = false;
-
 }
 
 long Dialog::GetResult() const
