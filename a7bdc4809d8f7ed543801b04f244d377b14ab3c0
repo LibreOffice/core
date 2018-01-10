@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_fb862d64",
+        "filename": "vcl/source/gdi/pdfextoutdevdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-10T14:37:04Z",
+      "side": 1,
+      "message": "looks good but we shoudl do a min DPI of width \u0026 height and use (I assume) some LogicToWhatever unit conversion - unless we\u0027re sure we have things right here; and is there not some DPI setting we have around the place ? \u003d)\n\nOf course - ideally we\u0027d re-compress very large images that only show up for a few pixels to shrink the PDF.",
+      "revId": "a7bdc4809d8f7ed543801b04f244d377b14ab3c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
