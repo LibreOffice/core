@@ -18,7 +18,7 @@ class Foo1 {
     XXX* m_pbar; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo1()
     {
-        delete m_pbar; // expected-error {{a destructor with only a single unconditional call to delete on a member, is a sure sign it should be using std::unique_ptr for that field [loplugin:useuniqueptr]}}
+        delete m_pbar; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
         m_pbar = nullptr;
     }
 };
@@ -29,8 +29,8 @@ class Foo2 {
     char* m_pbar2; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo2()
     {
-        delete[] m_pbar1; // expected-error {{managing POD type 'char' manually, rather use std::vector / std::array / std::unique_ptr [loplugin:useuniqueptr]}}
-        delete[] m_pbar2; // expected-error {{managing POD type 'char' manually, rather use std::vector / std::array / std::unique_ptr [loplugin:useuniqueptr]}}
+        delete[] m_pbar1; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        delete[] m_pbar2; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
     }
 };
 
@@ -83,6 +83,15 @@ class Class8 {
     {
         for (auto i : m_pbar)
             delete i.second;
+    }
+};
+class Foo8 {
+    XXX* m_pbar1; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    XXX* m_pbar2; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    ~Foo8()
+    {
+        delete m_pbar1; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        delete m_pbar2; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
     }
 };
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -49,10 +49,8 @@ void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 // class LngParser
 
 LngParser::LngParser(const OString &rLngFile)
-    : pLines( nullptr )
-    , sSource( rLngFile )
+    : sSource( rLngFile )
 {
-    pLines = new LngLineList;
     std::ifstream aStream(sSource.getStr());
     if (aStream.is_open())
     {
@@ -70,19 +68,15 @@ LngParser::LngParser(const OString &rLngFile)
                 bFirstLine = false;
             }
 
-            pLines->push_back( new OString(sLine) );
+            mvLines.push_back( sLine );
             std::getline(aStream, s);
         }
-        pLines->push_back( new OString() );
+        mvLines.push_back( OString() );
     }
 }
 
 LngParser::~LngParser()
 {
-    for ( size_t i = 0, n = pLines->size(); i < n; ++i )
-        delete (*pLines)[ i ];
-    pLines->clear();
-    delete pLines;
 }
 
 bool LngParser::CreatePO( const OString &rPOFile )
@@ -98,12 +92,12 @@ bool LngParser::CreatePO( const OString &rPOFile )
     OStringHashMap Text;
     OString sID;
 
-    while( nPos < pLines->size() ) {
-        sLine = *(*pLines)[ nPos++ ];
-        while( nPos < pLines->size() && !isNextGroup( sGroup , sLine ) ) {
+    while( nPos < mvLines.size() ) {
+        sLine = mvLines[ nPos++ ];
+        while( nPos < mvLines.size() && !isNextGroup( sGroup , sLine ) ) {
             ReadLine( sLine , Text );
             sID = sGroup;
-            sLine = *(*pLines)[ nPos++ ];
+            sLine = mvLines[ nPos++ ];
         }
         if( bStart ) {
             bStart = false;
@@ -168,9 +162,9 @@ bool LngParser::Merge(
     OString sGroup;
 
     // seek to next group
-    while ( nPos < pLines->size() && !bGroup )
+    while ( nPos < mvLines.size() && !bGroup )
     {
-        OString sLine( *(*pLines)[ nPos ] );
+        OString sLine( mvLines[ nPos ] );
         sLine = sLine.trim();
         if ( sLine.startsWith("[") && sLine.endsWith("]") )
         {
@@ -180,7 +174,7 @@ bool LngParser::Merge(
         nPos ++;
     }
 
-    while ( nPos < pLines->size()) {
+    while ( nPos < mvLines.size()) {
         OStringHashMap Text;
         OString sID( sGroup );
         std::size_t nLastLangPos = 0;
@@ -193,9 +187,9 @@ bool LngParser::Merge(
 
         OString sLanguagesDone;
 
-        while ( nPos < pLines->size() && !bGroup )
+        while ( nPos < mvLines.size() && !bGroup )
         {
-            OString sLine( *(*pLines)[ nPos ] );
+            OString sLine( mvLines[ nPos ] );
             sLine = sLine.trim();
             if ( sLine.startsWith("[") && sLine.endsWith("]") )
             {
@@ -221,9 +215,7 @@ bool LngParser::Merge(
                     sSearch += ";";
 
                     if ( sLanguagesDone.indexOf( sSearch ) != -1 ) {
-                        LngLineList::iterator it = pLines->begin();
-                        std::advance( it, nPos );
-                        pLines->erase( it );
+                        mvLines.erase( mvLines.begin() + nPos );
                     }
                     if( pEntrys )
                     {
@@ -235,14 +227,14 @@ bool LngParser::Merge(
                                 continue;
 
                             if ( !sNewText.isEmpty()) {
-                                OString *pLine = (*pLines)[ nPos ];
+                                OString & rLine = mvLines[ nPos ];
 
                                 OString sText1( sLang );
                                 sText1 += " = \"";
                                 // escape quotes, unescape double escaped quotes fdo#56648
                                 sText1 += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"");
                                 sText1 += "\"";
-                                *pLine = sText1;
+                                rLine = sText1;
                                 Text[ sLang ] = sNewText;
                             }
                         }
@@ -283,12 +275,10 @@ bool LngParser::Merge(
                         nLastLangPos++;
                         nPos++;
 
-                        if ( nLastLangPos < pLines->size() ) {
-                            LngLineList::iterator it = pLines->begin();
-                            std::advance( it, nLastLangPos );
-                            pLines->insert( it, new OString(sLine) );
+                        if ( nLastLangPos < mvLines.size() ) {
+                            mvLines.insert( mvLines.begin() + nLastLangPos, sLine );
                         } else {
-                            pLines->push_back( new OString(sLine) );
+                            mvLines.push_back( sLine );
                         }
                     }
                 }
@@ -296,8 +286,8 @@ bool LngParser::Merge(
         }
     }
 
-    for ( size_t i = 0; i < pLines->size(); ++i )
-        aDestination << *(*pLines)[i] << '\n';
+    for ( size_t i = 0; i < mvLines.size(); ++i )
+        aDestination << mvLines[i] << '\n';
 
     aDestination.close();
     return true;
