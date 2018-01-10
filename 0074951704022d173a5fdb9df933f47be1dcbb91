@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_78c7a345",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-10T00:37:45Z",
+      "side": 1,
+      "message": "Why deprecated OSL_ENSURE? Why not SAL_WARN or assert()?",
+      "range": {
+        "startLine": 1362,
+        "startChar": 8,
+        "endLine": 1362,
+        "endChar": 18
+      },
+      "revId": "0074951704022d173a5fdb9df933f47be1dcbb91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
