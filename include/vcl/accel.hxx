@@ -23,6 +23,7 @@
 #include <tools/link.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/dllapi.h>
+#include <memory>
 
 class ImplAccelData;
 class ImplAccelEntry;
@@ -33,7 +34,7 @@ class VCL_DLLPUBLIC Accelerator
     friend class ImplAccelManager;
 
 private:
-    ImplAccelData*          mpData;
+    std::unique_ptr<ImplAccelData> mpData;
     Link<Accelerator&,void> maActivateHdl;
     Link<Accelerator&,void> maSelectHdl;
 

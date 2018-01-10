@@ -222,17 +222,15 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyC
 
 Accelerator::Accelerator()
 {
-
     ImplInit();
-    mpData = new ImplAccelData;
+    mpData.reset(new ImplAccelData);
 }
 
 Accelerator::Accelerator(const Accelerator& rAccel)
     : maCurKeyCode( rAccel.maCurKeyCode )
 {
-
     ImplInit();
-    mpData = new ImplAccelData;
+    mpData.reset(new ImplAccelData);
     ImplCopyData(*rAccel.mpData);
 }
 
@@ -244,7 +242,6 @@ Accelerator::~Accelerator()
         *mpDel = true;
 
     ImplDeleteData();
-    delete mpData;
 }
 
 void Accelerator::Activate()

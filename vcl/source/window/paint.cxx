@@ -159,7 +159,7 @@ class PaintHelper
 {
 private:
     VclPtr<vcl::Window> m_pWindow;
-    vcl::Region* m_pChildRegion;
+    std::unique_ptr<vcl::Region> m_pChildRegion;
     tools::Rectangle m_aSelectionRect;
     tools::Rectangle m_aPaintRect;
     vcl::Region m_aPaintRegion;
@@ -262,7 +262,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
            pWindowImpl->maInvalidateRegion.Union(*pWindowImpl->mpWinData->mpTrackRect);
 
         if (pWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAllChildren)
-            m_pChildRegion = new vcl::Region(pWindowImpl->maInvalidateRegion);
+            m_pChildRegion.reset( new vcl::Region(pWindowImpl->maInvalidateRegion) );
         pWindowImpl->maInvalidateRegion.Intersect(*pWinChildClipRegion);
     }
     pWindowImpl->mnPaintFlags = ImplPaintFlags::NONE;
@@ -537,7 +537,7 @@ PaintHelper::~PaintHelper()
         while (pTempWindow)
         {
             if (pTempWindow->mpWindowImpl->mbVisible)
-                pTempWindow->ImplCallPaint(m_pChildRegion, m_nPaintFlags);
+                pTempWindow->ImplCallPaint(m_pChildRegion.get(), m_nPaintFlags);
             pTempWindow = pTempWindow->mpWindowImpl->mpPrev;
         }
     }
@@ -560,8 +560,6 @@ PaintHelper::~PaintHelper()
     // #98943# draw toolbox selection
     if( !m_aSelectionRect.IsEmpty() )
         m_pWindow->DrawSelectionBackground( m_aSelectionRect, 3, false, true );
-
-    delete m_pChildRegion;
 }
 
 namespace vcl {
