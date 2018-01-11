@@ -72,7 +72,6 @@ public:
     virtual ~SfxModalDialog() override;
     virtual void dispose() override;
 
-    virtual short       Execute() override;
     const SfxItemSet*   GetOutputItemSet() const { return pOutputSet; }
     const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
     void                StateChanged( StateChangedType nStateChange ) override;
