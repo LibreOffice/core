@@ -927,7 +927,7 @@ void SdrObject::SingleObjectPainter(OutputDevice& rOut) const
 
 bool SdrObject::LineGeometryUsageIsNecessary() const
 {
-    drawing::LineStyle eXLS = (drawing::LineStyle)GetMergedItem(XATTR_LINESTYLE).GetValue();
+    drawing::LineStyle eXLS = GetMergedItem(XATTR_LINESTYLE).GetValue();
     return (eXLS != drawing::LineStyle_NONE);
 }
 

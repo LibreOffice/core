@@ -134,7 +134,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         drawing::LineStyle eXLS;
 
         if ( pStyleItem )
-            eXLS = ( drawing::LineStyle )pStyleItem->GetValue();
+            eXLS = pStyleItem->GetValue();
         else
             eXLS = drawing::LineStyle_NONE;
 

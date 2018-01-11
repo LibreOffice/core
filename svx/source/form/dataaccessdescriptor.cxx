@@ -110,7 +110,7 @@ namespace svx
             MapString2PropertyEntry::const_iterator aPropPos = rProperties.find( pValues->Name );
             if ( aPropPos != rProperties.end() )
             {
-                DataAccessDescriptorProperty eProperty = (DataAccessDescriptorProperty)aPropPos->second->mnHandle;
+                DataAccessDescriptorProperty eProperty = aPropPos->second->mnHandle;
                 m_aValues[eProperty] = pValues->Value;
             }
             else

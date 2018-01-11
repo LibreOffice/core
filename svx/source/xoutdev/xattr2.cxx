@@ -318,7 +318,7 @@ sal_uInt16 XLineCapItem::GetValueCount() const
 
 css::drawing::LineCap XLineCapItem::GetValue() const
 {
-    const css::drawing::LineCap eRetval((css::drawing::LineCap)SfxEnumItem::GetValue());
+    const css::drawing::LineCap eRetval(SfxEnumItem::GetValue());
     OSL_ENSURE(css::drawing::LineCap_BUTT == eRetval
         || css::drawing::LineCap_ROUND == eRetval
         || css::drawing::LineCap_SQUARE == eRetval, "Unknown enum value in XATTR_LINECAP (!)");

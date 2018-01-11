@@ -795,7 +795,7 @@ void LinePropertyPanelBase::SelectLineStyle()
         return;
     }
 
-    const drawing::LineStyle eXLS(mpStyleItem ? (drawing::LineStyle)mpStyleItem->GetValue() : drawing::LineStyle_NONE);
+    const drawing::LineStyle eXLS(mpStyleItem ? mpStyleItem->GetValue() : drawing::LineStyle_NONE);
     bool bSelected(false);
 
     switch(eXLS)
