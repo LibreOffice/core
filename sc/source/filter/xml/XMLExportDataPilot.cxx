@@ -685,7 +685,7 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
     if (pDim->IsDataLayout())
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD, XML_TRUE);
     OUString sValueStr;
-    sheet::DataPilotFieldOrientation eOrientation = (sheet::DataPilotFieldOrientation) pDim->GetOrientation();
+    sheet::DataPilotFieldOrientation eOrientation = pDim->GetOrientation();
     ScXMLConverter::GetStringFromOrientation( sValueStr,
          eOrientation);
     if( !sValueStr.isEmpty() )

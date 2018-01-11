@@ -359,7 +359,7 @@ void lcl_FillNumberFormats( std::unique_ptr<sal_uInt32[]>& rFormats, long& rCoun
         if ( xDimProp.is() && xDimName.is() )
         {
             sheet::DataPilotFieldOrientation eDimOrient =
-                (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
+                ScUnoHelpFunctions::GetEnumProperty(
                     xDimProp, SC_UNO_DP_ORIENTATION,
                     sheet::DataPilotFieldOrientation_HIDDEN );
             if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
@@ -422,7 +422,7 @@ sal_uInt32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAcces
         if ( xDimProp.is() )
         {
             sheet::DataPilotFieldOrientation eDimOrient =
-                (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
+                ScUnoHelpFunctions::GetEnumProperty(
                     xDimProp, SC_UNO_DP_ORIENTATION,
                     sheet::DataPilotFieldOrientation_HIDDEN );
             if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
@@ -543,7 +543,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
             if ( xDimProp.is() && xDimSupp.is() )
             {
                 sheet::DataPilotFieldOrientation eDimOrient =
-                    (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
+                    ScUnoHelpFunctions::GetEnumProperty(
                         xDimProp, SC_UNO_DP_ORIENTATION,
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 long nDimPos = ScUnoHelpFunctions::GetLongProperty( xDimProp,
@@ -1254,7 +1254,7 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
             if ( xDimProp.is() )
             {
                 sheet::DataPilotFieldOrientation eDimOrient =
-                    (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
+                    ScUnoHelpFunctions::GetEnumProperty(
                         xDimProp, SC_UNO_DP_ORIENTATION,
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 if ( ScUnoHelpFunctions::GetBoolProperty( xDimProp,
