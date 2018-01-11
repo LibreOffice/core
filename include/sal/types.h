@@ -35,11 +35,6 @@
 extern "C" {
 #endif
 
-/********************************************************************************/
-/* Data types
-*/
-
-/* Boolean */
 typedef unsigned char sal_Bool;
 #   define sal_False ((sal_Bool)0)
 #   define sal_True  ((sal_Bool)1)
@@ -199,10 +194,6 @@ typedef void *                   sal_Handle;
     #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
 #endif
 
-/********************************************************************************/
-/* Useful defines
- */
-
 /* The following SAL_MIN_INTn defines codify the assumption that the signed
  * sal_Int types use two's complement representation.  Defining them as
  * "-0x7F... - 1" instead of as "-0x80..." prevents warnings about applying the
@@ -324,7 +315,6 @@ typedef void *                   sal_Handle;
 #endif
 
 /** This is the binary specification of a SAL sequence.
-    <br>
 */
 typedef struct _sal_Sequence
 {
