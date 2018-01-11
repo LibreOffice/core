@@ -191,7 +191,7 @@ public:
     SvxAdjust GetAdjust() const { return nAdjust; }
     sal_uInt16 GetLineWidth() const
            { return sal_uInt16( Right() - GetLeftMargin() + 1 ); }
-    SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
+    SwTwips GetLeftMin() const { return std::min(nFirst, nLeft); }
     bool HasNegFirst() const { return nFirst < nLeft; }
 
     // #i91133#

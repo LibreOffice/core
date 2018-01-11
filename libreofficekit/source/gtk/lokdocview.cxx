@@ -3426,7 +3426,7 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 
     // Clamp the input value in [MIN_ZOOM, MAX_ZOOM]
     fZoom = fZoom < MIN_ZOOM ? MIN_ZOOM : fZoom;
-    fZoom = fZoom > MAX_ZOOM ? MAX_ZOOM : fZoom;
+    fZoom = std::min(fZoom, MAX_ZOOM);
 
     if (lok_approxEqual(fZoom, priv->m_fZoom))
         return;

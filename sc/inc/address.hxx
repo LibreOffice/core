@@ -121,17 +121,17 @@ SAL_WARN_UNUSED_RESULT inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB
 
 SAL_WARN_UNUSED_RESULT inline SCCOL SanitizeCol( SCCOL nCol )
 {
-    return nCol < 0 ? 0 : (nCol > MAXCOL ? MAXCOL : nCol);
+    return nCol < 0 ? 0 : std::min(nCol, MAXCOL);
 }
 
 SAL_WARN_UNUSED_RESULT inline SCROW SanitizeRow( SCROW nRow )
 {
-    return nRow < 0 ? 0 : (nRow > MAXROW ? MAXROW : nRow);
+    return nRow < 0 ? 0 : std::min(nRow, MAXROW);
 }
 
 SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab )
 {
-    return nTab < 0 ? 0 : (nTab > MAXTAB ? MAXTAB : nTab);
+    return nTab < 0 ? 0 : std::min(nTab, MAXTAB);
 }
 
 // The result of ConvertRef() is a bit group of the following:

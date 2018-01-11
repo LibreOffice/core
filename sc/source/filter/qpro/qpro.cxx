@@ -251,7 +251,7 @@ bool ScQProReader::nextRecord()
 #if 1  // rather verbose
     int len = mnLength;
     while (len > 0) {
-        int i, chunk = len < 16 ? len : 16;
+        int i, chunk = std::min(len, 16);
         unsigned char data[16];
         mpStream->Read( data, chunk );
 

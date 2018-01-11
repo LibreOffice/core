@@ -1252,7 +1252,7 @@ static sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Line, sa
         }
     }
 
-    LineNo = LineNo > pProfile->m_NoLines ? pProfile->m_NoLines : LineNo;
+    LineNo = std::min(LineNo, pProfile->m_NoLines);
 
     if (LineNo < pProfile->m_NoLines)
     {

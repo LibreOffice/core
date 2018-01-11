@@ -130,7 +130,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     {
         Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
 
-        int nPickListMenuItems = ( aHistoryList.getLength() > MAX_MENU_ITEMS ) ? MAX_MENU_ITEMS : aHistoryList.getLength();
+        int nPickListMenuItems = std::min( aHistoryList.getLength(), MAX_MENU_ITEMS );
         m_aRecentFilesItems.clear();
         if (( nPickListMenuItems > 0 ) && !m_bDisabled )
         {

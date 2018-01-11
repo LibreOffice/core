@@ -70,6 +70,7 @@
 #include <comphelper/solarmutex.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <algorithm>
 
 #define DRAG_EVENT_MASK ButtonPressMask         |\
                               ButtonReleaseMask     |\
@@ -1932,12 +1933,12 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
                 IncrementalTransfer& rInc = inc_it->second;
 
                 int nBytes = rInc.m_aData.getLength() - rInc.m_nBufferPos;
-                nBytes = (nBytes > m_nIncrementalThreshold) ? m_nIncrementalThreshold : nBytes;
+                nBytes = std::min(nBytes, m_nIncrementalThreshold);
                 if( nBytes < 0 )  // sanity check
                     nBytes = 0;
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "pushing %d bytes: \"%.*s\"...\n",
-                         nBytes, nBytes > 32 ? 32 : nBytes,
+                         nBytes, std::min(nBytes, 32),
                          (const unsigned char*)rInc.m_aData.getConstArray()+rInc.m_nBufferPos );
 #endif
 
@@ -2939,7 +2940,7 @@ int SelectionManager::getXdndVersion( ::Window aWindow, ::Window& rProxy )
         XFree( pBytes );
     }
 
-    nVersion = nVersion > nXdndProtocolRevision ? nXdndProtocolRevision : nVersion;
+    nVersion = std::min<int>(nVersion, nXdndProtocolRevision);
 
     return nVersion;
 }

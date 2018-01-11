@@ -7471,7 +7471,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
     std::unique_ptr<sal_uInt8[]> pDataPtr( new sal_uInt8[ nMaxDopSize ] );
     sal_uInt8* pData = pDataPtr.get();
 
-    sal_uInt32 nRead = nMaxDopSize < nSize ? nMaxDopSize : nSize;
+    sal_uInt32 nRead = std::min(nMaxDopSize, nSize);
     if (nSize < 2 || !checkSeek(rSt, nPos) || nRead != rSt.ReadBytes(pData, nRead))
         nDopError = ERR_SWG_READ_ERROR;     // report error
     else

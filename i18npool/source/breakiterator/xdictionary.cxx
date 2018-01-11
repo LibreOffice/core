@@ -459,7 +459,7 @@ Boundary const & xdictionary::getWordBoundary(const OUString& rText, sal_Int32 a
         } else {
             boundary.startPos = anyPos;
             if (anyPos < len) rText.iterateCodePoints(&anyPos);
-            boundary.endPos = anyPos < len ? anyPos : len;
+            boundary.endPos = std::min(anyPos, len);
         }
         if (wordType == WordType::WORD_COUNT) {
             // skip punctuation for word count.

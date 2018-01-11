@@ -570,7 +570,7 @@ void MethodEntry::reallocParams(sal_uInt16 size)
     if (m_paramCount)
     {
         sal_uInt16 i;
-        sal_uInt16 mn = size < m_paramCount ? size : m_paramCount;
+        sal_uInt16 mn = std::min(size, m_paramCount);
 
         for (i = 0; i < mn; i++)
         {
@@ -594,7 +594,7 @@ void MethodEntry::reallocExcs(sal_uInt16 size)
         newExcNames = nullptr;
 
     sal_uInt16 i;
-    sal_uInt16 mn = size < m_excCount ? size : m_excCount;
+    sal_uInt16 mn = std::min(size, m_excCount);
 
     for (i = 0; i < mn; i++)
     {

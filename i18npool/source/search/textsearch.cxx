@@ -1062,7 +1062,7 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
         if( aWBnd.startPos >= endPos )
             break;
         nStt = aWBnd.startPos < startPos ? startPos : aWBnd.startPos;
-        nEnd = aWBnd.endPos > endPos ? endPos : aWBnd.endPos;
+        nEnd = std::min(aWBnd.endPos, endPos);
 
         if( nStt < nEnd &&
                 pWLD->WLD( searchStr.getStr() + nStt, nEnd - nStt ) <= nLimit )
@@ -1106,7 +1106,7 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
         if( aWBnd.endPos <= endPos )
             break;
         nStt = aWBnd.startPos < endPos ? endPos : aWBnd.startPos;
-        nEnd = aWBnd.endPos > startPos ? startPos : aWBnd.endPos;
+        nEnd = std::min(aWBnd.endPos, startPos);
 
         if( nStt < nEnd &&
                 pWLD->WLD( searchStr.getStr() + nStt, nEnd - nStt ) <= nLimit )
