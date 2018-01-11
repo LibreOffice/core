@@ -916,10 +916,10 @@ bool T602ImportFilterDialog::OptionsDlg()
 {
     Any any;
 #define propInt_(_prop,_nam,_val) \
-    any <<= (sal_Int32)_val;\
+    any <<= static_cast<sal_Int32>(_val);\
     _prop->setPropertyValue(_nam, any);
 #define propShort_(_prop,_nam,_val) \
-    any <<= (sal_Int16)_val;\
+    any <<= static_cast<sal_Int16>(_val);\
     _prop->setPropertyValue(_nam, any);
 #define propBool_(_prop,_nam,_val) \
     any <<= _val;\
