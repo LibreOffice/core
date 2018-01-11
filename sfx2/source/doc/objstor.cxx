@@ -362,15 +362,10 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 }
 
                 SvtSaveOptions::ODFDefaultVersion nDefVersion = SvtSaveOptions::ODFVER_012;
-                bool bUseSHA1InODF12 = false;
-                bool bUseBlowfishInODF12 = false;
-
                 if (!utl::ConfigManager::IsFuzzing())
                 {
                     SvtSaveOptions aSaveOpt;
                     nDefVersion = aSaveOpt.GetODFDefaultVersion();
-                    bUseSHA1InODF12 = officecfg::Office::Common::Save::ODF::UseSHA1InODF12::get();
-                    bUseBlowfishInODF12 = officecfg::Office::Common::Save::ODF::UseBlowfishInODF12::get();
                 }
 
                 // the default values, that should be used for ODF1.1 and older formats
@@ -392,13 +387,9 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     {
                     }
 
-                    if ( !bUseSHA1InODF12 && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
-                    {
-                        aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
-                        aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
-                    }
-                    if ( !bUseBlowfishInODF12 && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
-                        aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+                    aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
+                    aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
+                    aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
                 }
 
                 try
