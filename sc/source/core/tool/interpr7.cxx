@@ -10,6 +10,8 @@
 #include "interpre.hxx"
 #include <rtl/strbuf.hxx>
 #include <formula/errorcodes.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <sfx2/bindings.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/urlobj.hxx>
 
@@ -21,6 +23,11 @@
 #include <datastreamgettime.hxx>
 #include <dpobject.hxx>
 #include <document.hxx>
+#include <tokenarray.hxx>
+#include <webservicelink.hxx>
+#include <formulacell.hxx>
+
+#include <sc.hrc>
 
 #include <boost/shared_ptr.hpp>
 #include <cstring>
@@ -146,6 +153,22 @@ void ScInterpreter::ScFilterXML()
     }
 }
 
+static ScWebServiceLink* lcl_GetWebServiceLink(const sfx2::LinkManager* pLinkMgr, const OUString& rURL)
+{
+    size_t nCount = pLinkMgr->GetLinks().size();
+    for (size_t i=0; i<nCount; ++i)
+    {
+        ::sfx2::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
+        if (ScWebServiceLink* pLink = dynamic_cast<ScWebServiceLink*>(pBase))
+        {
+            if (pLink->GetURL() == rURL)
+                return pLink;
+        }
+    }
+
+    return nullptr;
+}
+
 void ScInterpreter::ScWebservice()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -153,7 +176,7 @@ void ScInterpreter::ScWebservice()
     {
         OUString aURI = GetString().getString();
 
-        if(aURI.isEmpty())
+        if (aURI.isEmpty())
         {
             PushError( errNoValue );
             return;
@@ -163,52 +186,72 @@ void ScInterpreter::ScWebservice()
         INetProtocol eProtocol = aObj.GetProtocol();
         if (eProtocol != INetProtocol::Http && eProtocol != INetProtocol::Https)
         {
-            PushError( FormulaError::NoValue );
+            PushError( errNoValue );
             return;
         }
 
-        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
-        if(!xFileAccess.is())
+        if (!mpLinkManager)
         {
             PushError( errNoValue );
             return;
         }
 
-        uno::Reference< io::XInputStream > xStream;
-        try {
-            xStream = xFileAccess->openFileRead( aURI );
-        }
-        catch (...)
+        // Need to reinterpret after loading (build links)
+        if (rArr.IsRecalcModeNormal())
+            rArr.SetExclusiveRecalcModeOnLoad();
+
+        //  while the link is not evaluated, idle must be disabled (to avoid circular references)
+        bool bOldEnabled = pDok->IsIdleEnabled();
+        pDok->EnableIdle(false);
+
+        // Get/ Create link object
+        ScWebServiceLink* pLink = lcl_GetWebServiceLink(mpLinkManager, aURI);
+
+        bool bWasError = (pMyFormulaCell && pMyFormulaCell->GetRawError() != 0);
+
+        if (!pLink)
         {
-            // don't let any exceptions pass
-            PushError( errNoValue );
-            return;
+            pLink = new ScWebServiceLink(pDok, aURI);
+            mpLinkManager->InsertFileLink(*pLink, OBJECT_CLIENT_FILE, aURI);
+            if ( mpLinkManager->GetLinks().size() == 1 )                    // the first one?
+            {
+                SfxBindings* pBindings = pDok->GetViewBindings();
+                if (pBindings)
+                    pBindings->Invalidate( SID_LINKS );             // Link-Manager enabled
+            }
+
+            //if the document was just loaded, but the ScDdeLink entry was missing, then
+            //don't update this link until the links are updated in response to the users
+            //decision
+            if (!pDok->HasLinkFormulaNeedingCheck())
+            {
+                pLink->Update();
+            }
+
+            if (pMyFormulaCell)
+            {
+                // StartListening after the Update to avoid circular references
+                pMyFormulaCell->StartListening(*pLink);
+            }
         }
-        if ( !xStream.is() )
+        else
         {
-            PushError( errNoValue );
-            return;
+            if (pMyFormulaCell)
+                pMyFormulaCell->StartListening(*pLink);
         }
 
-        const sal_Int32 BUF_LEN = 8000;
-        uno::Sequence< sal_Int8 > buffer( BUF_LEN );
-        OStringBuffer aBuffer( 64000 );
+        //  If an new Error from Reschedule appears when the link is executed then reset the errorflag
+        if (pMyFormulaCell && pMyFormulaCell->GetRawError() != 0 && !bWasError)
+            pMyFormulaCell->SetErrCode(0);
 
-        sal_Int32 nRead = 0;
-        while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
-        {
-            aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
-        }
+        //  check the value
+        if (pLink->HasResult())
+            PushString(pLink->GetResult());
+        else
+            PushError(errNoValue);
 
-        if ( nRead > 0 )
-        {
-            aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
-        }
-
-        xStream->closeInput();
-
-        OUString aContent = OStringToOUString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
-        PushString( aContent );
+        pDok->EnableIdle(bOldEnabled);
+        mpLinkManager->CloseCachedComps();
     }
 }
 
