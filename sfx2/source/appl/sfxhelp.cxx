@@ -649,11 +649,11 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
 static bool impl_showOfflineHelp( const OUString& rURL )
 {
-    OUString aBaseInstallPath;
-    utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
+    OUString aBaseInstallPath = getHelpRootURL();
+    //utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
     OUString aInternal( "vnd.sun.star.help://"  );
 
-    OUString aHelpLink( aBaseInstallPath + "/help/help.html?"  );
+    OUString aHelpLink( aBaseInstallPath + "/" + utl::ConfigManager::getProductVersion() + "/index.html?" );
     aHelpLink += rURL.copy( aInternal.getLength() );
     aHelpLink = aHelpLink.replaceAll("%2F","/").replaceAll("%3A",":");
 
