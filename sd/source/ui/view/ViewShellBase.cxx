@@ -238,6 +238,10 @@ ViewShellBase::ViewShellBase (
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
 
     _pFrame->GetWindow().SetBackground(Application::GetSettings().GetStyleSettings().GetLightColor());
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        GetViewFrame()->GetWindow().SetLOKNotifier(this, true);
+    }
 
     // Set up the members in the correct order.
     if (nullptr != dynamic_cast< DrawDocShell *>( GetViewFrame()->GetObjectShell() ))
