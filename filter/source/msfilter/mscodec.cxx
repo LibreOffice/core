@@ -24,6 +24,7 @@
 #include <string.h>
 #include <tools/solar.h>
 
+#include <comphelper/hash.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 
@@ -373,7 +374,10 @@ void MSCodec_CryptoAPI::InitKey (
     }
 
     // calculate SHA1 hash of initialData
-    rtl_digest_SHA1(initialData.data(), initialData.size(), m_aDigestValue.data(), m_aDigestValue.size());
+    std::vector<unsigned char> const sha1(::comphelper::Hash::calculateHash(
+            initialData.data(), initialData.size(),
+            ::comphelper::HashType::SHA1));
+    m_aDigestValue = sha1;
 
     lcl_PrintDigest(m_aDigestValue.data(), "digest value");
 
@@ -419,7 +423,9 @@ void MSCodec_CryptoAPI::GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8*
     rtl_cipher_decode(m_hCipher,
         pSaltData, 16, verifier.data(), verifier.size());
 
-    rtl_digest_SHA1(verifier.data(), verifier.size(), pDigest, RTL_DIGEST_LENGTH_SHA1);
+    std::vector<unsigned char> const sha1(::comphelper::Hash::calculateHash(
+            verifier.data(), verifier.size(), ::comphelper::HashType::SHA1));
+    ::std::copy(sha1.begin(), sha1.end(), pDigest);
 }
 
 bool MSCodec_Std97::InitCipher(sal_uInt32 nCounter)
@@ -467,8 +473,8 @@ bool MSCodec_CryptoAPI::InitCipher(sal_uInt32 nCounter)
     aKeyData.push_back(sal_uInt8((nCounter >> 16) & 0xff));
     aKeyData.push_back(sal_uInt8((nCounter >> 24) & 0xff));
 
-    std::vector<sal_uInt8> hash(RTL_DIGEST_LENGTH_SHA1);
-    rtl_digest_SHA1(aKeyData.data(), aKeyData.size(), hash.data(), RTL_DIGEST_LENGTH_SHA1);
+    std::vector<unsigned char> const hash(::comphelper::Hash::calculateHash(
+            aKeyData.data(), aKeyData.size(), ::comphelper::HashType::SHA1));
 
     rtlCipherError result =
         rtl_cipher_init(m_hCipher, rtl_Cipher_DirectionDecode,
