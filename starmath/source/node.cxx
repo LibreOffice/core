@@ -219,7 +219,7 @@ void SmNode::PrepareAttributes()
 
 void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    if (nDepth > 2048)
+    if (nDepth > 1024)
         throw std::range_error("parser depth limit");
 
     mbIsPhantom  = false;

@@ -647,7 +647,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
     sal_uInt8 nVariation, int nMatrixRows, int nMatrixCols)
 {
     //depth-protect
-    if (nLevel > 2048)
+    if (nLevel > 1024)
         return false;
 
     sal_uInt8 nTag,nRecord;

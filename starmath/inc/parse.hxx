@@ -53,7 +53,7 @@ class SmParser
         {
             ++m_rParseDepth;
         }
-        bool TooDeep() const { return m_rParseDepth > 2048; }
+        bool TooDeep() const { return m_rParseDepth > 1024; }
         ~DepthProtect()
         {
             --m_rParseDepth;
