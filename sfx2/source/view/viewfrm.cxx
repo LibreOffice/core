@@ -1320,6 +1320,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
 
             case SFX_HINT_DEINITIALIZING:
+                 if (GetWindow().GetLOKNotifier())
+                    GetWindow().ReleaseLOKNotifier();
+
                 GetFrame().DoClose();
                 break;
             case SFX_HINT_DYING:

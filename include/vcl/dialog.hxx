@@ -53,6 +53,7 @@ private:
     SAL_DLLPRIVATE void    RemoveFromDlgList();
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
+    SAL_DLLPRIVATE inline  void ImplLOKNotifier(vcl::Window* pParent);
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
