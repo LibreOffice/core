@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5ed1e7fa",
+        "filename": "Makefile.fetch",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T14:52:02Z",
+      "side": 1,
+      "message": "I need to move this up to other tarballs downloaded from https://dev-www.libreoffice.org/src, as soon as we copy the tarball there",
+      "range": {
+        "startLine": 227,
+        "startChar": 1,
+        "endLine": 229,
+        "endChar": 112
+      },
+      "revId": "5ba0e32a9c214b803f7f2a9a0ac5d08ae1c61e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
