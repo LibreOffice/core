@@ -23,10 +23,10 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
-#include <rtl/digest.h>
 #include <algorithm>
 #include <string.h>
 
@@ -195,12 +195,12 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
                     ,const OUString& _rPassword)
 {
     // first we create the digest we want to have
-    rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    rtl_digest_update(aDigest,_rURL.getStr(),_rURL.getLength()*sizeof(sal_Unicode));
+    ::comphelper::Hash sha1(::comphelper::HashType::SHA1);
+    sha1.update(reinterpret_cast<unsigned char const*>(_rURL.getStr()), _rURL.getLength() * sizeof(sal_Unicode));
     if ( !_rUserName.isEmpty() )
-        rtl_digest_update(aDigest,_rUserName.getStr(),_rUserName.getLength()*sizeof(sal_Unicode));
+        sha1.update(reinterpret_cast<unsigned char const*>(_rUserName.getStr()), _rUserName.getLength() * sizeof(sal_Unicode));
     if ( !_rPassword.isEmpty() )
-        rtl_digest_update(aDigest,_rPassword.getStr(),_rPassword.getLength()*sizeof(sal_Unicode));
+        sha1.update(reinterpret_cast<unsigned char const*>(_rPassword.getStr()), _rPassword.getLength() * sizeof(sal_Unicode));
     // now we need to sort the properties
     std::sort(_rInfo.begin(),_rInfo.end(),TPropertyValueLessFunctor());
 
@@ -221,20 +221,19 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
                 if ( prop.Value >>= aSeq )
                 {
                     for(OUString const & s : aSeq)
-                        rtl_digest_update(aDigest,s.getStr(),s.getLength()*sizeof(sal_Unicode));
+                        sha1.update(reinterpret_cast<unsigned char const*>(s.getStr()), s.getLength() * sizeof(sal_Unicode));
                 }
             }
         }
         if ( !sValue.isEmpty() )
         {
             // we don't have to convert this into UTF8 because we don't store on a file system
-            rtl_digest_update(aDigest,sValue.getStr(),sValue.getLength()*sizeof(sal_Unicode));
+            sha1.update(reinterpret_cast<unsigned char const*>(sValue.getStr()), sValue.getLength() * sizeof(sal_Unicode));
         }
     }
 
-    rtl_digest_get(aDigest,_pBuffer,RTL_DIGEST_LENGTH_SHA1);
-    // we have to destroy the digest
-    rtl_digest_destroy(aDigest);
+    std::vector<unsigned char> result(sha1.finalize());
+    std::copy(result.begin(), result.end(), _pBuffer);
 }
 
 
