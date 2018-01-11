@@ -3862,9 +3862,16 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 nContrast = 0;
             else
             {
-                nContrast *= 101;   //100 + 1 to round
-                nContrast /= 0x10000;
-                nContrast -= 100;
+                if (o3tl::checked_multiply(nContrast, 101, nContrast))  //100 + 1 to round
+                {
+                    SAL_WARN("filter.ms", "bad Contrast value:" << nContrast);
+                    nContrast = 0;
+                }
+                else
+                {
+                    nContrast /= 0x10000;
+                    nContrast -= 100;
+                }
             }
             sal_Int16   nBrightness     = (sal_Int16)( (sal_Int32)GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) / 327 );
             sal_Int32   nGamma          = GetPropertyValue( DFF_Prop_pictureGamma, 0x10000 );
