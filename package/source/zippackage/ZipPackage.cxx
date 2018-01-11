@@ -681,6 +681,8 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     aNamedValue.Value >>= m_bAllowRemoveOnInsert;
                     m_xRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
                 }
+                else if (aNamedValue.Name == "NoFileSync")
+                    aNamedValue.Value >>= m_bDisableFileSync;
 
                 // for now the progress handler is not used, probably it will never be
                 // if ( aNamedValue.Name == "ProgressHandler" )
@@ -1253,7 +1255,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // in case the stream is based on a file it will implement the following interface
             // the call should be used to be sure that the contents are written to the file system
             uno::Reference< io::XAsyncOutputMonitor > asyncOutputMonitor( xTempOut, uno::UNO_QUERY );
-            if ( asyncOutputMonitor.is() )
+            if (asyncOutputMonitor.is() && !m_bDisableFileSync)
                 asyncOutputMonitor->waitForCompletion();
 
             // no need to postpone switching to the new stream since the target was written directly
