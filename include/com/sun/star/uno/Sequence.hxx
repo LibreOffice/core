@@ -23,6 +23,10 @@
 
 #include <cassert>
 #include <cstddef>
+#if defined LIBO_INTERNAL_ONLY
+# include <type_traits>
+# include <ostream>
+#endif
 
 #include "osl/interlck.h"
 #include "com/sun/star/uno/Sequence.h"
@@ -199,6 +203,81 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Sequence< sal_Int8 > * >( &rByteSequence );
 }
+
+#if defined LIBO_INTERNAL_ONLY
+
+/// @cond INTERNAL
+
+namespace uno_detail {
+
+template< typename value_t, typename charT, typename traits >
+void sequence_output_elems( std::basic_ostream<charT, traits> &os, const value_t *pAry, sal_Int32 nLen, std::true_type )
+{
+    // for integral types, use hex notation
+    auto const flags = os.setf(std::ios_base::hex);
+    for(sal_Int32 i=0; i<nLen-1; ++i)
+        os << "0x" << *pAry++ << ", ";
+    if( nLen > 1 )
+        os << "0x" << *pAry++;
+    os.setf(flags);
+}
+
+template< typename value_t, typename charT, typename traits >
+void sequence_output_elems( std::basic_ostream<charT, traits> &os, const value_t *pAry, sal_Int32 nLen, std::false_type )
+{
+    // every other type: rely on their own ostream operator<<
+    for(sal_Int32 i=0; i<nLen-1; ++i)
+        os << *pAry++ << ", ";
+    if( nLen > 1 )
+        os << *pAry++;
+}
+
+template< typename value_t, typename charT, typename traits >
+void sequence_output_bytes( std::basic_ostream<charT, traits> &os, const value_t *pAry, sal_Int32 nLen )
+{
+    // special case bytes - ostream operator<< outputs those as char
+    // values, but we need raw ints here
+    auto const flags = os.setf(std::ios_base::hex);
+    for(sal_Int32 i=0; i<nLen-1; ++i)
+        os << "0x" << (0xFF & +*pAry++) << ", ";
+    if( nLen > 1 )
+        os << "0x" << (0xFF & +*pAry++);
+    os.setf(flags);
+}
+
+template<class B>
+struct negation : std::integral_constant<bool, !bool(B::value)> { };
+
+}
+
+/**
+   Support for Sequence in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
+   macros, for example).
+
+   @since LibreOffice 6.1
+*/
+template< typename value_t, typename charT, typename traits >
+inline typename std::enable_if<uno_detail::negation<std::is_same<sal_Int8, value_t>>::value, std::basic_ostream<charT, traits>>::type &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence < value_t > &v)
+{
+    const value_t *pAry = v.getConstArray();
+    sal_Int32 nLen = v.getLength();
+    uno_detail::sequence_output_elems(os, pAry, nLen, std::is_integral<value_t>());
+    return os;
+}
+
+template< typename value_t, typename charT, typename traits >
+inline typename std::enable_if<std::is_same<sal_Int8, value_t>::value, std::basic_ostream<charT, traits>>::type &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence < value_t > &v)
+{
+    // specialisation for signed bytes
+    const sal_Int8 *pAry = v.getConstArray();
+    sal_Int32 nLen = v.getLength();
+    uno_detail::sequence_output_bytes(os, pAry, nLen);
+    return os;
+}
+
+/// @endcond
+
+#endif
 
 }
 }
