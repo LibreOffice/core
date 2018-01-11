@@ -22,8 +22,6 @@
 
 #include "cgm.hxx"
 
-#define BMCOL( _col ) BitmapColor( (sal_Int8)(_col >> 16 ), (sal_Int8)( _col >> 8 ), (sal_Int8)_col )
-
 #include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
 #include "bundles.hxx"

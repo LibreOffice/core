@@ -20,6 +20,13 @@
 
 #include "main.hxx"
 
+namespace {
+
+constexpr BitmapColor BMCOL(sal_uInt32 _col) {
+    return BitmapColor( (sal_Int8)(_col >> 16 ), (sal_Int8)( _col >> 8 ), (sal_Int8)_col );
+}
+
+}
 
 CGMBitmap::CGMBitmap( CGM& rCGM ) :
     mpCGM                           ( &rCGM ),

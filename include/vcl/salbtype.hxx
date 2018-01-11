@@ -98,7 +98,7 @@ private:
 public:
 
     inline              BitmapColor();
-    inline              BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue );
+    constexpr           BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue );
     inline              BitmapColor( const Color& rColor );
     explicit inline     BitmapColor( sal_uInt8 cIndex );
 
@@ -356,7 +356,7 @@ inline BitmapColor::BitmapColor() :
 {
 }
 
-inline BitmapColor::BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue ) :
+constexpr BitmapColor::BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue ) :
             mcBlueOrIndex   ( cBlue ),
             mcGreen         ( cGreen ),
             mcRed           ( cRed ),
