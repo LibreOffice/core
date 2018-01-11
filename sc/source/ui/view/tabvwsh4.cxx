@@ -1739,6 +1739,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     // when there is more than a single view
     if (comphelper::LibreOfficeKit::isActive())
     {
+        GetViewFrame()->GetWindow().SetLOKNotifier(this, true);
+
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         // have we already one view ?
         if (pViewShell)

@@ -734,6 +734,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pViewImpl = new SwView_Impl(this);
     SetName("View");
     SetWindow( m_pEditWin );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        GetViewFrame()->GetWindow().SetLOKNotifier(this, true);
+    }
 
     m_aTimer.SetTimeout( 120 );
 
