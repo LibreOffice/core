@@ -1653,10 +1653,14 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
         break;
     case CSS1_PIXLENGTH:
         {
-            long nPWidth = 0;
-            long nPHeight = (long)pExpr->GetNumber();
-            SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-            nHeight = (sal_uInt16)nPHeight;
+            double fHeight = pExpr->GetNumber();
+            if (fHeight < SAL_MAX_INT32/2.0 && fHeight > SAL_MIN_INT32/2.0)
+            {
+                long nPHeight = (long)fHeight;
+                long nPWidth = 0;
+                SvxCSS1Parser::PixelToTwip(nPWidth, nPHeight);
+                nHeight = (sal_uInt16)nPHeight;
+            }
         }
         break;
     case CSS1_PERCENTAGE:
