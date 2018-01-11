@@ -2497,7 +2497,7 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
             aRet <<= nSepLineHeightRelative;
         break;
         case WID_TXTCOL_LINE_ALIGN:
-            aRet <<= (style::VerticalAlignment)nSepLineVertAlign;
+            aRet <<= nSepLineVertAlign;
         break;
         case WID_TXTCOL_LINE_IS_ON:
             aRet <<= bSepLineIsOn;

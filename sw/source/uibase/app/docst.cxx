@@ -689,7 +689,7 @@ sal_uInt16 SwDocShell::Edit(
         else
             nMask = SFXSTYLEBIT_USERDEF;
 
-        pStyle = &m_xBasePool->Make( rName, (SfxStyleFamily)nFamily, nMask );
+        pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
 
         // set the current one as Parent
         SwDocStyleSheet* pDStyle = static_cast<SwDocStyleSheet*>(pStyle);
@@ -781,7 +781,7 @@ sal_uInt16 SwDocShell::Edit(
     }
     else
     {
-        pStyle = m_xBasePool->Find( rName, (SfxStyleFamily)nFamily );
+        pStyle = m_xBasePool->Find( rName, nFamily );
         SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
     }
 

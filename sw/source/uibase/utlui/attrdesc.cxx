@@ -302,7 +302,7 @@ bool SwFormatSurround::GetPresentation
 )   const
 {
     const char* pId = nullptr;
-    switch ( (css::text::WrapTextMode)GetValue() )
+    switch ( GetValue() )
     {
         case css::text::WrapTextMode_NONE:
             pId = STR_SURROUND_NONE;

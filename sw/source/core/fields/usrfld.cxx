@@ -280,7 +280,7 @@ bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_DOUBLE:
-        rAny <<= (double) nValue;
+        rAny <<= nValue;
         break;
     case FIELD_PROP_PAR2:
         rAny <<= aContent;
