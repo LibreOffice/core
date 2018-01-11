@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_fe3b7b9a",
+        "filename": "include/svtools/treelistbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-11T10:29:53Z",
+      "side": 1,
+      "message": "shouldn\u0027t that be DontOpenWithDoubleClick?",
+      "revId": "ee9e385b25503756869dab711ae1f77f1cf156b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
