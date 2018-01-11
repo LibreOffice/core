@@ -1071,6 +1071,9 @@ SfxViewShell::SfxViewShell
     // Insert into list
     SfxViewShellArr_Impl &rViewArr = SfxGetpApp()->GetViewShells_Impl();
     rViewArr.push_back(this);
+
+    if (comphelper::LibreOfficeKit::isActive())
+        pViewFrame->GetWindow().SetLOKNotifier(this, true);
 }
 
 
@@ -1094,6 +1097,9 @@ SfxViewShell::~SfxViewShell()
         pImpl->m_pController->ReleaseShell_Impl();
         pImpl->m_pController.clear();
     }
+
+    if (GetViewFrame()->GetWindow().GetLOKNotifier())
+        GetViewFrame()->GetWindow().ReleaseLOKNotifier();
 }
 
 bool SfxViewShell::PrepareClose
@@ -1101,6 +1107,9 @@ bool SfxViewShell::PrepareClose
     bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
 )
 {
+    if (GetViewFrame()->GetWindow().GetLOKNotifier())
+        GetViewFrame()->GetWindow().ReleaseLOKNotifier();
+
     SfxPrinter *pPrinter = GetPrinter();
     if ( pPrinter && pPrinter->IsPrinting() )
     {

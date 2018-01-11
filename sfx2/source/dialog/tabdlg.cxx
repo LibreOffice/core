@@ -403,13 +403,6 @@ void SfxTabDialog::dispose()
     m_pBaseFmtBtn.clear();
     m_pActionArea.clear();
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
-    {
-        pViewShell->notifyWindow(GetLOKWindowId(), "close");
-        ReleaseLOKNotifier();
-    }
-
     TabDialog::dispose();
 }
 
@@ -587,20 +580,6 @@ void SfxTabDialog::Start_Impl()
 
     m_pTabCtrl->SetCurPageId( nActPage );
     ActivatePageHdl( m_pTabCtrl );
-
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
-    {
-        SetLOKNotifier(pViewShell);
-        const Size aSize = GetOptimalSize();
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "dialog");
-        aItems.emplace_back("size", aSize.toString());
-        if (!GetText().isEmpty())
-            aItems.emplace_back("title", GetText().toUtf8());
-        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
 }
 
 void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText )

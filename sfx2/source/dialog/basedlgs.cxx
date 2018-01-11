@@ -161,31 +161,7 @@ void SfxModalDialog::dispose()
     SetDialogData_Impl();
     delete pOutputSet;
 
-    if (comphelper::LibreOfficeKit::isActive() && GetLOKNotifier())
-    {
-        SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "close");
-        ReleaseLOKNotifier();
-    }
-
     ModalDialog::dispose();
-}
-
-short SfxModalDialog::Execute()
-{
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
-    {
-        SetLOKNotifier(pViewShell);
-        const Size aSize = GetOptimalSize();
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "dialog");
-        aItems.emplace_back("size", aSize.toString());
-        if (!GetText().isEmpty())
-            aItems.emplace_back("title", GetText().toUtf8());
-        pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
-
-    return ModalDialog::Execute();
 }
 
 void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
