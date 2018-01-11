@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5e89e7c9",
+        "filename": "sfx2/source/dialog/basedlgs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2018-01-11T18:02:01Z",
+      "side": 0,
+      "message": "If we plan to move it here from SfxModalDialog::dispose, I think we should bin the similar code from SfxModelessDialog::dispose, SfxTabDialog::dispose as well. They are good for nothing there.",
+      "range": {
+        "startLine": 164,
+        "startChar": 31,
+        "endLine": 168,
+        "endChar": 5
+      },
+      "revId": "78b60654ffc612df794c630ddb690e4242e99c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

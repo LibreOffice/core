@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_be9023ee",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2018-01-11T18:02:01Z",
+      "side": 1,
+      "message": "Now since you moved the \"created\" callback here, it means that tabbed dialogs (SfxTabDialog) will get two \"created\" callbacks because the same piece of code is in SfxTabDialog::Execute() as well. Things would have been easy if SfxTabDialog also inherits from SfxModalDialog but it\u0027s not the case.",
+      "range": {
+        "startLine": 937,
+        "startChar": 5,
+        "endLine": 949,
+        "endChar": 5
+      },
+      "revId": "6f1b7bd46554d980c90d5e85b9857f7784233944",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
