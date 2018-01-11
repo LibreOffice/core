@@ -1261,8 +1261,13 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
 
             case SfxHintId::Deinitializing:
+            {
+                if (GetWindow().GetLOKNotifier())
+                    GetWindow().ReleaseLOKNotifier();
+
                 GetFrame().DoClose();
                 break;
+            }
             case SfxHintId::Dying:
                 // when the Object is being deleted, destroy the view too
                 if ( m_xObjSh.is() )

@@ -1209,7 +1209,7 @@ public:
     void                        SetComponentInterface( css::uno::Reference< css::awt::XWindowPeer > const & xIFace );
 
     /// Interface to register for dialog / window tunneling.
-    void                                SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier);
+    void                                SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool bParent = false);
     const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
     vcl::LOKWindowId                    GetLOKWindowId() const;
 
