@@ -101,7 +101,7 @@ public class LOKitThread
             do
             {
                 // this is trying to avoid null context errors which pop up on doc init
-                // doesnt seem to fix
+                // doesn't seem to fix
                 UIGraphicsBeginImageContext(CGSize(width:1,height:1))
                 let doc = try lo.documentLoad(url: url)
                 print("Opened document: \(url)")
