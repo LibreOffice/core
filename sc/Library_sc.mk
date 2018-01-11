@@ -285,6 +285,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/unitconv \
     sc/source/core/tool/userlist \
     sc/source/core/tool/viewopti \
+    sc/source/core/tool/webservicelink \
     sc/source/core/tool/zforauto \
     sc/source/filter/xml/datastreamimport \
     sc/source/filter/xml/XMLCalculationSettingsContext \
