@@ -114,6 +114,12 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
         aMarkedRows.emplace_back(nCurRow, nCurRow);
     }
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SCCOLROW nStart = aMarkedRows[0].mnStart;
+        OnLOKSetWidthOrHeight(nStart, /*width: */ false);
+    }
+
     double nPPTX = GetViewData().GetPPTX();
     double nPPTY = GetViewData().GetPPTY();
     Fraction aZoomX = GetViewData().GetZoomX();
@@ -160,11 +166,19 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
     if ( bPaint && bAnyChanged )
         pDocSh->UpdateOle(&GetViewData());
 
+    if (comphelper::LibreOfficeKit::isActive())
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+
     return bAnyChanged;
 }
 
 bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        OnLOKSetWidthOrHeight(nStartRow, /*width: */ false);
+    }
+
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     SCTAB nTab = GetViewData().GetTabNo();
@@ -200,6 +214,9 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
     if ( bChanged )
         pDocSh->PostPaint( 0, nStartRow, nTab, MAXCOL, MAXROW, nTab,
                                             PaintPartFlags::Grid | PaintPartFlags::Left );
+
+    if (comphelper::LibreOfficeKit::isActive())
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
 
     return bChanged;
 }
