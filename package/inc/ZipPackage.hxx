@@ -99,6 +99,7 @@ protected:
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     std::unique_ptr<ZipFile> m_pZipFile;
+    bool m_bDisableFileSync = false;
 
     bool isLocalFile() const;
 
