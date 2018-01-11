@@ -2236,7 +2236,7 @@ void TimeField::ImplTimeSpinArea( bool bUp )
                 sal_Int32 nPos2 = aText.indexOf( ImplGetLocaleDataWrapper().getTime100SecSep(), nPos );
                 //which ever comes first, bearing in mind that one might not be there
                 if (nPos1 >= 0 && nPos2 >= 0)
-                    nPos = nPos1 < nPos2 ? nPos1 : nPos2;
+                    nPos = std::min(nPos1, nPos2);
                 else if (nPos1 >= 0)
                     nPos = nPos1;
                 else

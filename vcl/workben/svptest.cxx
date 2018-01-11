@@ -152,12 +152,12 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     if( rFrom.GetRed() < rTo.GetRed() )
     {
         nDiff = rTo.GetRed() - rFrom.GetRed();
-        aColor.SetRed( rFrom.GetRed() + ( nDiff < 10 ? nDiff : 10 ) );
+        aColor.SetRed( rFrom.GetRed() + std::min<sal_uInt8>( nDiff, 10 ) );
     }
     else if( rFrom.GetRed() > rTo.GetRed() )
     {
         nDiff = rFrom.GetRed() - rTo.GetRed();
-        aColor.SetRed( rFrom.GetRed() - ( nDiff < 10 ? nDiff : 10 ) );
+        aColor.SetRed( rFrom.GetRed() - std::min<sal_uInt8>( nDiff, 10 ) );
     }
     else
         aColor.SetRed( rFrom.GetRed() );
@@ -166,12 +166,12 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     if( rFrom.GetGreen() < rTo.GetGreen() )
     {
         nDiff = rTo.GetGreen() - rFrom.GetGreen();
-        aColor.SetGreen( rFrom.GetGreen() + ( nDiff < 10 ? nDiff : 10 ) );
+        aColor.SetGreen( rFrom.GetGreen() + std::min<sal_uInt8>( nDiff, 10 ) );
     }
     else if( rFrom.GetGreen() > rTo.GetGreen() )
     {
         nDiff = rFrom.GetGreen() - rTo.GetGreen();
-        aColor.SetGreen( rFrom.GetGreen() - ( nDiff < 10 ? nDiff : 10 ) );
+        aColor.SetGreen( rFrom.GetGreen() - std::min<sal_uInt8>( nDiff, 10 ) );
     }
     else
         aColor.SetGreen( rFrom.GetGreen() );
@@ -180,12 +180,12 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     if( rFrom.GetBlue() < rTo.GetBlue() )
     {
         nDiff = rTo.GetBlue() - rFrom.GetBlue();
-        aColor.SetBlue( rFrom.GetBlue() + ( nDiff < 10 ? nDiff : 10 ) );
+        aColor.SetBlue( rFrom.GetBlue() + std::min<sal_uInt8>( nDiff, 10 ) );
     }
     else if( rFrom.GetBlue() > rTo.GetBlue() )
     {
         nDiff = rFrom.GetBlue() - rTo.GetBlue();
-        aColor.SetBlue( rFrom.GetBlue() - ( nDiff < 10 ? nDiff : 10 ) );
+        aColor.SetBlue( rFrom.GetBlue() - std::min<sal_uInt8>( nDiff, 10 ) );
     }
     else
         aColor.SetBlue( rFrom.GetBlue() );

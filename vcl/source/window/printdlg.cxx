@@ -1435,7 +1435,7 @@ void PrintDialog::updateNupFromPages()
 
         maNUpPage.mpSheetMarginEdt->SetMax(
                   maNUpPage.mpSheetMarginEdt->Normalize(
-                           nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
+                           std::min(nHorzMax, nVertMax) ), FUNIT_100TH_MM );
 
         // maximum page distance
         nHorzMax = (aSize.Width() - 2*nSheetMargin);
@@ -1452,7 +1452,7 @@ void PrintDialog::updateNupFromPages()
 
         maNUpPage.mpPageMarginEdt->SetMax(
                  maNUpPage.mpSheetMarginEdt->Normalize(
-                           nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
+                           std::min(nHorzMax, nVertMax ) ), FUNIT_100TH_MM );
     }
 
     maNUpPage.mpNupRowsEdt->SetValue( nRows );

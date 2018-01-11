@@ -72,7 +72,7 @@ void drawBitmapScaledAndCentered(tools::Rectangle const & rRect, Bitmap aBitmap,
 
     Size aBitmapSize(aBitmap.GetSizePixel());
 
-    double fWidthHeight = nWidth > nHeight ? nHeight : nWidth;
+    double fWidthHeight = std::min(nWidth, nHeight);
     double fScale = fWidthHeight / aBitmapSize.Width();
     aBitmap.Scale(fScale, fScale, aFlag);
 

@@ -146,7 +146,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
         if ( PZSTREAM->avail_out == 0 ) ImplWriteBack();
         if ( PZSTREAM->avail_in == 0 && mnInToRead )
         {
-            nInToRead = ( mnInBufSize > mnInToRead ) ? mnInToRead : mnInBufSize;
+            nInToRead = std::min( mnInBufSize, mnInToRead );
             PZSTREAM->next_in = mpInBuf;
             PZSTREAM->avail_in = rIStm.ReadBytes(mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
@@ -212,7 +212,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
     {
         if ( PZSTREAM->avail_in == 0 && mnInToRead )
         {
-            nInToRead = (mnInBufSize > mnInToRead) ? mnInToRead : mnInBufSize;
+            nInToRead = std::min(mnInBufSize, mnInToRead);
             PZSTREAM->next_in = mpInBuf;
             PZSTREAM->avail_in = rIStm.ReadBytes(mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
@@ -256,7 +256,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize 
     {
         if ( PZSTREAM->avail_in == 0 && mnInToRead )
         {
-            nInToRead = (mnInBufSize > mnInToRead) ? mnInToRead : mnInBufSize;
+            nInToRead = std::min(mnInBufSize, mnInToRead);
 
             sal_uInt32 const nRemaining = rIStm.remainingSize();
             if (nRemaining < nInToRead)

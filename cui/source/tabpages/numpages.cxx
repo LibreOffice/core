@@ -200,7 +200,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
                 xDefNum->getDefaultContinuousNumberingLevels( rLocale );
 
 
-            sal_Int32 nLength = aNumberings.getLength() > NUM_VALUSET_COUNT ? NUM_VALUSET_COUNT :aNumberings.getLength();
+            sal_Int32 nLength = std::min<sal_Int32>(aNumberings.getLength(), NUM_VALUSET_COUNT);
 
             const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
             for(sal_Int32 i = 0; i < nLength; i++)

@@ -1664,7 +1664,7 @@ extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
 #ifdef __m68k__
                 // Anything that is at least 16 bits wide is aligned on a 16-bit
                 // boundary on the m68k default abi
-                sal_Int32 nMaxAlign = (rMaxIntegralTypeSize > 2) ? 2 : rMaxIntegralTypeSize;
+                sal_Int32 nMaxAlign = std::min(rMaxIntegralTypeSize, 2);
                 nStructSize = (nStructSize + nMaxAlign -1) / nMaxAlign * nMaxAlign;
 #else
                 // Example: A { double; int; } structure has a size of 16 instead of 10. The

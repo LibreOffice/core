@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <rtl/alloc.h>
 #include <rtl/cipher.h>
+#include <algorithm>
 
 #define RTL_CIPHER_NTOHL(c, l) \
     ((l)  = (static_cast<sal_uInt32>(*((c)++))) << 24, \
@@ -660,7 +661,7 @@ static rtlCipherError BF_init(
 
     if (pArgData && nArgLen)
     {
-        nArgLen = ((nArgLen < 8) ? nArgLen : 8);
+        nArgLen = std::min<sal_Size>(nArgLen, 8);
         if (eMode == rtl_Cipher_ModeStream)
         {
             memcpy(ctx->m_iv.m_byte, pArgData, nArgLen);

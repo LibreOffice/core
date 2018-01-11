@@ -289,7 +289,7 @@ sal_Int32 ImplEntryList::FindEntry( const void* pData ) const
 long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginIndex ) const
 {
     long nHeight = 0;
-    sal_Int32 nStart = i_nEndIndex > i_nBeginIndex ? i_nBeginIndex : i_nEndIndex;
+    sal_Int32 nStart = std::min(i_nEndIndex, i_nBeginIndex);
     sal_Int32 nStop  = std::max(i_nEndIndex, i_nBeginIndex);
     sal_Int32 nEntryCount = GetEntryCount();
     if( 0 <= nStop && nStop != LISTBOX_ENTRY_NOTFOUND && nEntryCount != 0 )
@@ -1995,7 +1995,7 @@ void ImplListBoxWindow::ScrollHorz( long n )
         if( mnLeft )
         {
             long nAbs = -n;
-            nDiff = - ( ( mnLeft > nAbs ) ? nAbs : mnLeft );
+            nDiff = - std::min( mnLeft, nAbs );
         }
     }
 

@@ -678,7 +678,7 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
         // nCol1 is the first column of the block that gets shifted, determine
         // the head and tail elements that are to be copied for deletion or
         // insertion.
-        size_t nHead = static_cast<size_t>(::std::max( nCol1 + (nDx < 0 ? nDx : 0) - nOldCol1, 0));
+        size_t nHead = static_cast<size_t>(::std::max( nCol1 + std::min<SCCOL>(nDx, 0) - nOldCol1, 0));
         size_t nTail = static_cast<size_t>(::std::max( nOldCol2 - nCol1 + 1, 0));
         size_t n = nHead + nTail;
         if (0 < n && n <= maTableColumnNames.size())

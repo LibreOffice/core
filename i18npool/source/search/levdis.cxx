@@ -316,9 +316,9 @@ int WLevDistance::LCM( int a, int b )
 inline int WLevDistance::Min3( int x, int y, int z )
 {
     if ( x < y )
-        return( x < z ? x : z );
+        return std::min(x, z);
     else
-        return( y < z ? y : z );
+        return std::min(y, z);
 }
 
 // The value in the middle
@@ -326,11 +326,11 @@ int WLevDistance::Mid3( int x, int y, int z )
 {
     int min = Min3(x,y,z);
     if ( x == min )
-        return( y < z ? y : z);
+        return std::min(y, z);
     else if ( y == min )
-        return( x < z ? x : z);
+        return std::min(x, z);
     else        // z == min
-        return( x < y ? x : y);
+        return std::min(x, y);
 }
 
 // Maximum of three values

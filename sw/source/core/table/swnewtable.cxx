@@ -1758,7 +1758,7 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
         long nTmp = nLowerMax - nLowerMin;
         if( nMinWidth > nTmp )
             nMinWidth = nTmp;
-        nTmp = nLowerMax < nUpperMax ? nLowerMax : nUpperMax;
+        nTmp = std::min(nLowerMax, nUpperMax);
         nTmp -= ( nLowerMin < nUpperMin ) ? nUpperMin : nLowerMin;
         // If the overlapping between upper and lower box is less than half
         // of the width (of the smaller cell), bCombine is set,
@@ -1785,7 +1785,7 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
     }
 
     {
-        long nMin = nUpperMin < nLowerMin ? nUpperMin : nLowerMin;
+        long nMin = std::min(nUpperMin, nLowerMin);
         long nMax = nUpperMax < nLowerMax ? nLowerMax : nUpperMax;
         for( size_t i = nTop; i <= nBottom; ++i )
             lcl_SearchSelBox( *this, rBoxes, nMin, nMax, *m_aLines[i],

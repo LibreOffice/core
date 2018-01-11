@@ -470,7 +470,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
         bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
 
         long nFullWidth = (nPrgsWidth + nOffset) * (10000 / nPercentCount);
-        long nPerc = (nPercent2 > 10000) ? 10000 : nPercent2;
+        long nPerc = std::min<sal_uInt16>(nPercent2, 10000);
         ImplControlValue aValue(nFullWidth * nPerc / 10000);
         tools::Rectangle aDrawRect(rPos, Size(nFullWidth, nPrgsHeight));
         tools::Rectangle aControlRegion(aDrawRect);

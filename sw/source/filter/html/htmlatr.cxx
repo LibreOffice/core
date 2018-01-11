@@ -2316,7 +2316,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 else
                 {
                     sal_Int32 nTmpStt = nHtStt < nStrPos ? nStrPos : nHtStt;
-                    sal_Int32 nTmpEnd = nHtEnd < nEnd ? nHtEnd : nEnd;
+                    sal_Int32 nTmpEnd = std::min(nHtEnd, nEnd);
                     aEndPosLst.Insert( pHt->GetAttr(), nTmpStt + nOffset,
                                        nTmpEnd + nOffset,
                                        rHTMLWrt.m_CharFormatInfos );

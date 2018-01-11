@@ -552,7 +552,7 @@ void SAL_CALL OPreparedStatement::setClob(sal_Int32 nParameterIndex, const Refer
     {
         sal_Int64 nCharRemain = nLen - nCharWritten;
         constexpr sal_uInt16 MAX_SIZE = SAL_MAX_UINT16 / 4;
-        sal_uInt16 nWriteSize = (nCharRemain > MAX_SIZE) ? MAX_SIZE : nCharRemain;
+        sal_uInt16 nWriteSize = std::min<sal_Int64>(nCharRemain, MAX_SIZE);
         OString sData = OUStringToOString(
                 xClob->getSubString(nCharWritten, nWriteSize),
                 RTL_TEXTENCODING_UTF8);
@@ -642,7 +642,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
     while (xBlob->length() - nDataWritten > 0)
     {
         sal_uInt64 nDataRemaining = xBlob->length() - nDataWritten;
-        sal_uInt16 nWriteSize = (nDataRemaining > SAL_MAX_UINT16) ? SAL_MAX_UINT16 : nDataRemaining;
+        sal_uInt16 nWriteSize = std::min<sal_uInt64>(nDataRemaining, SAL_MAX_UINT16);
         aErr = isc_put_segment(m_statusVector,
                                &aBlobHandle,
                                nWriteSize,
@@ -802,7 +802,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     while (xBytes.getLength() - nDataWritten > 0)
     {
         sal_uInt64 nDataRemaining = xBytes.getLength() - nDataWritten;
-        sal_uInt16 nWriteSize = (nDataRemaining > SAL_MAX_UINT16) ? SAL_MAX_UINT16 : nDataRemaining;
+        sal_uInt16 nWriteSize = std::min<sal_uInt64>(nDataRemaining, SAL_MAX_UINT16);
         aErr = isc_put_segment(m_statusVector,
                                &aBlobHandle,
                                nWriteSize,

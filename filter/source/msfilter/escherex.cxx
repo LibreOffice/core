@@ -4121,7 +4121,7 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                 // record
                 while ( nBlipSize )
                 {
-                    sal_uInt32 nBytes = ( nBlipSize > nBuf ? nBuf : nBlipSize );
+                    sal_uInt32 nBytes = std::min( nBlipSize, nBuf );
                     pMergePicStreamBSE->ReadBytes(pBuf.get(), nBytes);
                     rSt.WriteBytes(pBuf.get(), nBytes);
                     nBlipSize -= nBytes;

@@ -675,7 +675,7 @@ void MSWordStyles::OutputStylesTable()
     // so simply if there are more styles, don't export those
     // Implementing check for all exports DOCX, DOC, RTF
     sal_uInt16 nLimit = MSWORD_MAX_STYLES_LIMIT;
-    m_nUsedSlots = (nLimit > m_nUsedSlots)? m_nUsedSlots : nLimit;
+    m_nUsedSlots = std::min(nLimit, m_nUsedSlots);
 
     for ( n = 0; n < m_nUsedSlots; n++ )
     {

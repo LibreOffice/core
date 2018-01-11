@@ -3057,7 +3057,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
             {
                 if( nCount )
                     aContents.append( "endbfchar\n" );
-                aContents.append( static_cast<sal_Int32>((nMapped-nCount > 100) ? 100 : nMapped-nCount ) );
+                aContents.append( static_cast<sal_Int32>(std::min(nMapped-nCount, 100)) );
                 aContents.append( " beginbfchar\n" );
             }
             aContents.append( '<' );

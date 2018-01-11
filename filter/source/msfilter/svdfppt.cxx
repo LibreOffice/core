@@ -5425,7 +5425,7 @@ PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, TSS_Type nInstan
     PPTCharPropSet  ( 0 ),
     mrStyleSheet    ( rStyleSheet ),
     mnInstance      ( nInstance ),
-    mnDepth         ( ( nDepth > 4 ) ? 4 : nDepth )
+    mnDepth         ( std::min<sal_uInt32>( nDepth, 4 ) )
 {
 }
 
@@ -5433,7 +5433,7 @@ PPTPortionObj::PPTPortionObj( const PPTCharPropSet& rCharPropSet, const PPTStyle
     PPTCharPropSet  ( rCharPropSet ),
     mrStyleSheet    ( rStyleSheet ),
     mnInstance      ( nInstance ),
-    mnDepth         ( ( nDepth > 4 ) ? 4 : nDepth )
+    mnDepth         ( std::min<sal_uInt32>( nDepth, 4 ) )
 {
 }
 
@@ -7299,8 +7299,8 @@ void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows
         else
             nPosition |= aPt1.Y() < aPt2.Y() ? LinePositionBLTR : LinePositionTLBR;
 
-        std::set< sal_Int32 >::const_iterator aRow( rRows.find( aPt1.Y() < aPt2.Y() ? aPt1.Y() : aPt2.Y() ) );
-        std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( aPt1.X() < aPt2.X() ? aPt1.X() : aPt2.X() ) );
+        std::set< sal_Int32 >::const_iterator aRow( rRows.find( std::min(aPt1.Y(), aPt2.Y() ) ) );
+        std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( std::min(aPt1.X(), aPt2.X() ) ) );
         if ( ( aRow != rRows.end() ) && ( aColumn != rColumns.end() ) )
         {
             nPosition |= ( std::distance( rRows.begin(), aRow ) * rColumns.size() ) + std::distance( rColumns.begin(), aColumn );

@@ -114,7 +114,7 @@ void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    n -= (n > 5) ? 5 : n;
+    n -= std::min<sal_uInt16>(n, 5);
 
     std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
     r.ReadBytes(pText.get(), n);
@@ -356,7 +356,7 @@ void OP_Label123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    n -= (n > 4) ? 4 : n;
+    n -= std::min<sal_uInt16>(n, 4);
 
     std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
     r.ReadBytes(pText.get(), n);
@@ -439,7 +439,7 @@ void OP_Note123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    n -= (n > 4) ? 4 : n;
+    n -= std::min<sal_uInt16>(n, 4);
 
     std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
     r.ReadBytes(pText.get(), n);
@@ -522,7 +522,7 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     SfxItemSet& rItemSet = aPattern.GetItemSet();
 
     r.ReadUInt16( nCode );
-    n -= (n > 2) ? 2 : n;
+    n -= std::min<sal_uInt16>(n, 2);
 
     if ( nCode == 0x0fd2 )
     {
@@ -557,7 +557,7 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
         OP_VerAlign123(rContext, Ver_Align, rItemSet );
 
         rContext.aLotusPatternPool.emplace( nPatternId, aPattern );
-        n -= (n > 20) ? 20 : n;
+        n -= std::min<sal_uInt16>(n, 20);
     }
     r.SeekRel(n);
 }

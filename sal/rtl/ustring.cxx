@@ -436,7 +436,7 @@ sal_Int32 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
 {
     assert(firstLen >= 0 && secondLen >= 0);
     sal_Int32 i;
-    sal_Int32 len = firstLen < secondLen ? firstLen : secondLen;
+    sal_Int32 len = std::min(firstLen, secondLen);
     for (i = 0; i < len; ++i) {
         /* Check ASCII range */
         SAL_WARN_IF( (static_cast<unsigned char>(*second)) > 127, "rtl.string",

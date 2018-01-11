@@ -363,7 +363,7 @@ static size_t GetElementsMax( size_t nMemory )
     // With MAXROWCOUNT==1048576 and 128 columns => 128M elements, 1.5GB
     constexpr size_t nArbitraryLimit = size_t(MAXROWCOUNT) * 128;
     // With the constant 1GB from above that's the actual value.
-    return nElemMax < nArbitraryLimit ? nElemMax : nArbitraryLimit;
+    return std::min(nElemMax, nArbitraryLimit);
 }
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
