@@ -448,8 +448,8 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
 
     rtlRandomPool aRandomPool = rtl_random_createPool();
 
-    // get 16 random chars out of it
-    uno::Sequence < sal_Int8 > aVector(16);
+    // get 32 random chars out of it
+    uno::Sequence < sal_Int8 > aVector(32);
     rtl_random_getBytes( aRandomPool, aVector.getArray(), aVector.getLength() );
 
     rtl_random_destroyPool(aRandomPool);
