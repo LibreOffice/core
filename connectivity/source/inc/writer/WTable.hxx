@@ -56,7 +56,7 @@ namespace connectivity
 {
 namespace writer
 {
-typedef component::OComponentTable OWriterTable_BASE;
+using OWriterTable_BASE = component::OComponentTable;
 class OWriterConnection;
 
 class OWriterTable :  public OWriterTable_BASE
@@ -80,12 +80,12 @@ public:
                  const OUString& Type
                 );
 
-    virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
+    bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
 
-    virtual void SAL_CALL disposing() override;
+    void SAL_CALL disposing() override;
 
     // css::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence< sal_Int8 >& aIdentifier) override;
+    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence< sal_Int8 >& rId) override;
     static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     void construct() override;

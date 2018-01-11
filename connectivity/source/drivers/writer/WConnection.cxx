@@ -34,9 +34,9 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
 
-typedef connectivity::file::OConnection OConnection_BASE;
-
 using namespace ::com::sun::star;
+
+using OConnection_BASE = connectivity::file::OConnection;
 
 namespace connectivity
 {
@@ -45,20 +45,17 @@ namespace writer
 
 OWriterConnection::OWriterConnection(ODriver* _pDriver) : OConnection(_pDriver),m_nDocCount(0)
 {
-    // m_aFilenameExtension is not used
 }
 
-OWriterConnection::~OWriterConnection()
-{
-}
+OWriterConnection::~OWriterConnection() = default;
 
-void OWriterConnection::construct(const OUString& url,const uno::Sequence< beans::PropertyValue >& info)
+void OWriterConnection::construct(const OUString& rURL, const uno::Sequence< beans::PropertyValue >& rInfo)
 {
     //  open file
 
-    sal_Int32 nLen = url.indexOf(':');
-    nLen = url.indexOf(':',nLen+1);
-    OUString aDSN(url.copy(nLen+1));
+    sal_Int32 nLen = rURL.indexOf(':');
+    nLen = rURL.indexOf(':',nLen+1);
+    OUString aDSN(rURL.copy(nLen+1));
 
     m_aFileName = aDSN;
     INetURLObject aURL;
@@ -78,8 +75,8 @@ void OWriterConnection::construct(const OUString& url,const uno::Sequence< beans
     m_sPassword.clear();
     const char pPwd[] = "password";
 
-    const beans::PropertyValue* pIter  = info.getConstArray();
-    const beans::PropertyValue* pEnd   = pIter + info.getLength();
+    const beans::PropertyValue* pIter  = rInfo.getConstArray();
+    const beans::PropertyValue* pEnd   = pIter + rInfo.getLength();
     for (; pIter != pEnd; ++pIter)
     {
         if (pIter->Name == pPwd)
@@ -210,7 +207,7 @@ css::uno::Reference< css::sdbcx::XTablesSupplier > OWriterConnection::createCata
     uno::Reference< css::sdbcx::XTablesSupplier > xTab = m_xCatalog;
     if (!xTab.is())
     {
-        OWriterCatalog* pCat = new OWriterCatalog(this);
+        auto pCat = new OWriterCatalog(this);
         xTab = pCat;
         m_xCatalog = xTab;
     }

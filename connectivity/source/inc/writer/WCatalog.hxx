@@ -34,7 +34,7 @@ public:
     void refreshTables() override;
 
 public:
-    OWriterCatalog(OWriterConnection* _pCon);
+    OWriterCatalog(OWriterConnection* pConnection);
 };
 
 } // namespace writer

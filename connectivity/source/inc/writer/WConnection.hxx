@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <unotools/closeveto.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace com
 {
@@ -80,7 +81,7 @@ class OWriterConnection : public file::OConnection
         {
             m_xDesktop = rDesktop;
             m_xDesktop->addTerminateListener(this);
-            m_pCloseListener.reset(new utl::CloseVeto(rCloseable, true));
+            m_pCloseListener = o3tl::make_unique<utl::CloseVeto>(rCloseable, true);
         }
 
         void stop()
@@ -93,22 +94,22 @@ class OWriterConnection : public file::OConnection
         }
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
+        void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
         {
         }
 
-        virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
+        void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
         {
             stop();
         }
 
-        virtual void SAL_CALL disposing() override
+        void SAL_CALL disposing() override
         {
             stop();
             cppu::WeakComponentImplHelperBase::disposing();
         }
 
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+        void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
         {
             const bool bShutDown = (rEvent.Source == m_xDesktop);
             if (bShutDown)
@@ -120,23 +121,23 @@ class OWriterConnection : public file::OConnection
 
 public:
     OWriterConnection(ODriver* _pDriver);
-    virtual ~OWriterConnection() override;
+    ~OWriterConnection() override;
 
-    virtual void construct(const OUString& _rUrl,
-                           const css::uno::Sequence< css::beans::PropertyValue >& _rInfo) override;
+    void construct(const OUString& rURL,
+                   const css::uno::Sequence< css::beans::PropertyValue >& rInfo) override;
 
     // XServiceInfo
     DECLARE_SERVICE_INFO();
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    void SAL_CALL disposing() override;
 
     // XConnection
-    virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData() override;
-    virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
-    virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement() override;
-    virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement(const OUString& sql) override;
-    virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall(const OUString& sql) override;
+    css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData() override;
+    css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
+    css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement() override;
+    css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement(const OUString& sql) override;
+    css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall(const OUString& sql) override;
 
     // no interface methods
     css::uno::Reference< css::text::XTextDocument> const& acquireDoc();

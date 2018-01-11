@@ -29,10 +29,10 @@ namespace writer
 
 class OWriterDatabaseMetaData : public component::OComponentDatabaseMetaData
 {
-    virtual OUString SAL_CALL getURL() override;
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables(const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types) override;
+    OUString SAL_CALL getURL() override;
+    css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables(const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types) override;
 protected:
-    virtual ~OWriterDatabaseMetaData() override;
+    ~OWriterDatabaseMetaData() override;
 public:
     OWriterDatabaseMetaData(file::OConnection* pConnection);
 };
