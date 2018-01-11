@@ -448,7 +448,7 @@ private:
     // for detective update, is set for each change of a formula
     bool                bDetectiveDirty;
 
-    bool                bHasMacroFunc;      // valid only after loading
+    bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde
 
     sal_uInt8               nAsianCompression;
     sal_uInt8               nAsianKerning;
@@ -1928,8 +1928,8 @@ public:
     bool            IsDetectiveDirty() const     { return bDetectiveDirty; }
     void            SetDetectiveDirty(bool bSet) { bDetectiveDirty = bSet; }
 
-    bool            GetHasMacroFunc() const      { return bHasMacroFunc; }
-    void            SetHasMacroFunc(bool bSet)   { bHasMacroFunc = bSet; }
+    bool            HasLinkFormulaNeedingCheck() const      { return bLinkFormulaNeedingCheck; }
+    void            SetLinkFormulaNeedingCheck(bool bSet)   { bLinkFormulaNeedingCheck = bSet; }
 
     void            SetRangeOverflowType(sal_uInt32 nType)  { nRangeOverflowType = nType; }
     bool            HasRangeOverflow() const                { return nRangeOverflowType != 0; }
