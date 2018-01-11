@@ -1805,6 +1805,34 @@ cppuhelper::ServiceManager::findServiceImplementation(
     return impl;
 }
 
+/// Make a simpler unique name for preload / progress reporting.
+#ifndef DISABLE_DYNLOADING
+static rtl::OUString simplifyModule(const rtl::OUString &uri)
+{
+    sal_Int32 nIdx;
+    OUStringBuffer edit(uri);
+    if ((nIdx = edit.lastIndexOf('/')) > 0)
+        edit.remove(0,nIdx+1);
+    if ((nIdx = edit.lastIndexOf(':')) > 0)
+        edit.remove(0,nIdx+1);
+    if ((nIdx = edit.lastIndexOf("lo.so")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf(".3")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf("gcc3.so")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf(".so")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf("_uno")) > 0)
+        edit.truncate(nIdx);
+    if ((nIdx = edit.lastIndexOf(".jar")) > 0)
+        edit.truncate(nIdx);
+    if (edit.indexOf("lib") == 0)
+        edit.remove(0,3);
+    return edit.makeStringAndClear();
+}
+#endif
+
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 void cppuhelper::ServiceManager::preloadImplementations() {
 #ifdef DISABLE_DYNLOADING
@@ -1814,6 +1842,9 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     osl::MutexGuard g(rBHelper.rMutex);
     css::uno::Environment aSourceEnv(css::uno::Environment::getCurrent());
 
+    std::cerr << "preload:";
+    std::vector<OUString> aReported;
+
     // loop all implementations
     for (Data::NamedImplementations::const_iterator iterator(
             data_.namedImplementations.begin());
@@ -1822,6 +1853,16 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         try
         {
             const rtl::OUString &aLibrary = iterator->second->info->uri;
+
+            if (aLibrary.isEmpty())
+                continue;
+
+            if (std::find(aReported.begin(), aReported.end(), aLibrary) == aReported.end())
+            {
+                std::cerr << " " << simplifyModule(aLibrary);
+                std::cerr.flush();
+                aReported.push_back(aLibrary);
+            }
 
             // expand absolute URI implementation component library
             aUri = cppu::bootstrap_expandUri(aLibrary);
@@ -1839,16 +1880,19 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             // Blacklist some components that are known to fail
             if (iterator->second->info->name == "com.sun.star.comp.configuration.backend.KDE4Backend")
             {
-                std::cerr << "preload: Skipping " << iterator->second->info->name << std::endl;
+                std::cerr << ":skipping";
+                std::cerr.flush();
                 continue;
             }
 
             // load component library
-            std::cerr << "preload: Loading " << aUri << " for " << iterator->second->info->name << std::endl;
             osl::Module aModule(aUri, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
 
             if (!aModule.is())
-                std::cerr << "preload: Loading " << aUri << " for " << iterator->second->info->name << " failed" << std::endl;
+            {
+                std::cerr << ":failed" << std::endl;
+                std::cerr.flush();
+            }
 
             if (aModule.is() &&
                 !iterator->second->info->environment.isEmpty())
@@ -1934,6 +1978,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             aModule.release();
         }
     }
+    std::cerr << std::endl;
 #endif
 }
 
