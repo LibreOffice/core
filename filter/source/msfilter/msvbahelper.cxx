@@ -545,7 +545,7 @@ uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames()
 
 void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rArgs )
 {
-    OSL_ENSURE( rArgs.getLength() < 2, "VBAMacroResolver::initialize - missing arguments" );
+    OSL_ENSURE( rArgs.getLength() > 1, "VBAMacroResolver::initialize - missing arguments" );
     if( rArgs.getLength() < 2 )
         throw uno::RuntimeException();
 
