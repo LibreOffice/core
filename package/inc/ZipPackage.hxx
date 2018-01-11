@@ -99,6 +99,7 @@ protected:
 
     ZipPackageFolder *m_pRootFolder;
     ZipFile          *m_pZipFile;
+    bool m_bDisableFileSync = false;
 
     bool isLocalFile() const;
 
