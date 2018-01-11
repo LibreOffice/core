@@ -1379,9 +1379,9 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
             bChanged = true;
     }
 
-    //  After loading, it must be known if ocDde is in any formula
+    //  After loading, it must be known if ocDde/ocWebservice is in any formula
     //  (for external links warning, CompileXML is called at the end of loading XML file)
-    if (!pDocument->HasLinkFormulaNeedingCheck() && pCode->HasOpCodeRPN(ocDde))
+    if (!pDocument->HasLinkFormulaNeedingCheck() && (pCode->HasOpCodeRPN(ocDde) || pCode->HasOpCodeRPN(ocWebservice)))
         pDocument->SetLinkFormulaNeedingCheck(true);
 
     //volatile cells must be added here for import
