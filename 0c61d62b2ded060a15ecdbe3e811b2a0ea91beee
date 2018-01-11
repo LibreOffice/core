@@ -1,0 +1,274 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2157b203",
+        "filename": "cui/source/dialogs/hlmarkwn.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "Мне кажется, это должно происходить в SvxHlinkDlgMarkWnd::SetOutlineLevel",
+      "range": {
+        "startLine": 149,
+        "startChar": 8,
+        "endLine": 149,
+        "endChar": 40
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_813e9eb6",
+        "filename": "cui/source/dialogs/hlmarkwn.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "Почему не пустая строка, а строка с пробелом?\n\nВообще, мне кажется, maStrLastURL - ненужная переменная *была*, она никогда не использовалась, только в этом единственном месте записывалась. Так вот, можно её сразу в начало перенести:\n\n  if (aStrURL !\u003d \"\")\n    maStrLastURL \u003d aStrURL;\n\nи в дальнейшем по функции уже работать не с aStrURL, а с maStrLastURL.",
+      "range": {
+        "startLine": 335,
+        "startChar": 20,
+        "endLine": 335,
+        "endChar": 21
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_c148965e",
+        "filename": "cui/source/dialogs/hlmarkwn.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "Ты меняешь логику тут. Раньше было возможно, что aStrURL непустая, но не содержит #. Тогда maStrLastURL всё равно становится равной aStrURL. А у тебя в этом случае maStrLastURL станет пустой.",
+      "range": {
+        "startLine": 366,
+        "startChar": 17,
+        "endLine": 366,
+        "endChar": 18
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e173dab2",
+        "filename": "cui/source/dialogs/hlmarkwn.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "Здесь не нужно менять mnOutlineLevel. Добавь в список аргументов ещё уровень рекурсии, и всё.",
+      "range": {
+        "startLine": 526,
+        "startChar": 35,
+        "endLine": 526,
+        "endChar": 49
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_7e222bbb",
+        "filename": "cui/source/inc/hlmarkwn.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "Это не используется нигде",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 21
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_be2ca3ac",
+        "filename": "cui/source/inc/hlmarkwn.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "И это тоже",
+      "range": {
+        "startLine": 32,
+        "startChar": 6,
+        "endLine": 32,
+        "endChar": 10
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_de179752",
+        "filename": "cui/source/inc/hlmarkwn.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "А это используется только в hlmarkwn.cxx - туда ему и дорога, зачем это в заголовке?",
+      "range": {
+        "startLine": 35,
+        "startChar": 17,
+        "endLine": 35,
+        "endChar": 25
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_412586a9",
+        "filename": "cui/source/inc/hlmarkwn.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "Не нужна",
+      "range": {
+        "startLine": 44,
+        "startChar": 14,
+        "endLine": 44,
+        "endChar": 29
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_81105e50",
+        "filename": "cui/source/inc/hlmarkwn.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "здесь нужен override",
+      "range": {
+        "startLine": 58,
+        "startChar": 49,
+        "endLine": 58,
+        "endChar": 50
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a11d6268",
+        "filename": "cui/source/inc/hlmarkwn.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "И здесь тоже",
+      "range": {
+        "startLine": 59,
+        "startChar": 75,
+        "endLine": 59,
+        "endChar": 76
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_6141aa39",
+        "filename": "cui/source/inc/hlmarkwn.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "Это зачем?",
+      "range": {
+        "startLine": 77,
+        "startChar": 16,
+        "endLine": 77,
+        "endChar": 25
+      },
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a13482de",
+        "filename": "cui/source/inc/hlmarkwn.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-11T21:05:42Z",
+      "side": 1,
+      "message": "А здесь нужно добавить ещё GetOutlineLevel - для использования в SvxHlmarkTreeLBox::ExecuteContextMenuAction",
+      "revId": "0c61d62b2ded060a15ecdbe3e811b2a0ea91beee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
