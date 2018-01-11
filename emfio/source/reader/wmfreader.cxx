@@ -393,7 +393,7 @@ namespace emfio
                     // Number of points of each polygon. Determine total number of points
                     std::unique_ptr<sal_uInt16[]> xPolygonPointCounts(new sal_uInt16[nPolyCount]);
                     sal_uInt16* pnPoints = xPolygonPointCounts.get();
-                    tools::PolyPolygon aPolyPoly(nPolyCount, nPolyCount);
+                    tools::PolyPolygon aPolyPoly(nPolyCount);
                     sal_uInt16 nPoints = 0;
                     for (sal_uInt16 a = 0; a < nPolyCount && mpInputStream->good(); ++a)
                     {

@@ -235,7 +235,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     if (aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom())
     {
-        tools::PolyPolygon _aPolyPoly(2, 2);
+        tools::PolyPolygon _aPolyPoly(2);
         rTarget.Push(PushFlags::FILLCOLOR);
         _aPolyPoly.Insert(tools::Rectangle(Point(), GetGraphicSize()));
         _aPolyPoly.Insert(aWorkRect);

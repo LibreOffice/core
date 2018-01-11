@@ -60,7 +60,7 @@ enum class PolyFlags : sal_uInt8
 
 class SvStream;
 class ImplPolygon;
-class ImplPolyPolygon;
+struct ImplPolyPolygon;
 namespace tools { class PolyPolygon; }
 
 namespace basegfx
@@ -189,7 +189,7 @@ public:
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC PolyPolygon
 {
 private:
-    ImplPolyPolygon*    mpImplPolyPolygon;
+    o3tl::cow_wrapper<ImplPolyPolygon>  mpImplPolyPolygon;
 
     enum class PolyClipOp {
         INTERSECT,
@@ -198,7 +198,7 @@ private:
     TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, PolyClipOp nOperation ) const;
 
 public:
-                        PolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
+                        PolyPolygon( sal_uInt16 nInitSize = 16 );
                         PolyPolygon( const tools::Polygon& rPoly );
                         PolyPolygon( const tools::PolyPolygon& rPolyPoly );
                         ~PolyPolygon();
