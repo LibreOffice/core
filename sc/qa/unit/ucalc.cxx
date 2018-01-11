@@ -6215,7 +6215,7 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IdleCalcTextWidth() );
     CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsIdleEnabled() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsDetectiveDirty() );
-    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->GetHasMacroFunc() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasLinkFormulaNeedingCheck() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsChartListenerCollectionNeedsUpdate() );
 
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasRangeOverflow() );
