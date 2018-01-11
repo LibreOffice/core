@@ -2780,8 +2780,14 @@ void ScInterpreter::ScDde()
                     pBindings->Invalidate( SID_LINKS );             // Link-Manager enabled
             }
 
+            //if the document was just loaded, but the ScDdeLink entry was missing, then
+            //don't update this link until the links are updated in response to the users
+            //decision
+            if (!pDok->HasLinkFormulaNeedingCheck())
+            {
                                     //TODO: evaluate asynchron ???
-            pLink->TryUpdate();     //  TryUpdate doesn't call Update multiple times
+                pLink->TryUpdate(); //  TryUpdate doesn't call Update multiple times
+            }
 
             if (pMyFormulaCell)
             {
