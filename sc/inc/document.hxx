@@ -500,8 +500,6 @@ private:
     // for detective update, is set for each change of a formula
     bool                bDetectiveDirty;
 
-    bool                bHasMacroFunc;      // valid only after loading
-
     CharCompressType    nAsianCompression;
     sal_uInt8           nAsianKerning;
 
@@ -1989,9 +1987,6 @@ public:
 
     bool            IsDetectiveDirty() const     { return bDetectiveDirty; }
     void            SetDetectiveDirty(bool bSet) { bDetectiveDirty = bSet; }
-
-    bool            GetHasMacroFunc() const      { return bHasMacroFunc; }
-    void            SetHasMacroFunc(bool bSet)   { bHasMacroFunc = bSet; }
 
     void            SetRangeOverflowType(ErrCode nType)  { nRangeOverflowType = nType; }
     bool            HasRangeOverflow() const             { return nRangeOverflowType != ERRCODE_NONE; }
