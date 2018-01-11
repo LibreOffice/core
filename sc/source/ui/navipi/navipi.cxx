@@ -809,9 +809,9 @@ void ScNavigatorDlg::UpdateSelection()
         uno::Reference< drawing::XShape > xShape;
         if( xIndexAccess->getByIndex(0) >>= xShape )
         {
-            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-            OUString sName;
-            if( ( xProps->getPropertyValue("Name") >>= sName ) && !sName.isEmpty() )
+            uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY_THROW );
+            OUString sName = xNamed->getName();
+            if (!sName.isEmpty())
             {
                 aLbEntries->SelectEntryByName( ScContentId::DRAWING, sName );
             }
