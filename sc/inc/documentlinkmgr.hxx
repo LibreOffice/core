@@ -54,9 +54,9 @@ public:
     bool idleCheckLinks();
 
     bool hasDdeLinks() const;
-    bool hasDdeOrOleLinks() const;
+    bool hasDdeOrOleOrWebServiceLinks() const;
 
-    bool updateDdeOrOleLinks(vcl::Window* pWin);
+    bool updateDdeOrOleOrWebServiceLinks(vcl::Window* pWin);
 
     bool updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
 
@@ -64,7 +64,7 @@ public:
 
     void disconnectDdeLinks();
 private:
-    bool hasDdeOrOleLinks(bool bDde, bool bOle) const;
+    bool hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, bool bWebService) const;
 };
 
 }
