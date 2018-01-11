@@ -573,7 +573,7 @@ bool SvxLRSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText = GetMetricText( (long)nLeftMargin,
+                rText = GetMetricText( nLeftMargin,
                                        eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nPropFirstLineOfst )
@@ -591,7 +591,7 @@ bool SvxLRSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText += GetMetricText( (long)nRightMargin,
+                rText += GetMetricText( nRightMargin,
                                         eCoreUnit, ePresUnit, &rIntl );
             return true;
         }
@@ -604,7 +604,7 @@ bool SvxLRSpaceItem::GetPresentation
             else
             {
                 rText = rText +
-                        GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( nLeftMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             rText += OUString(cpDelim);
@@ -630,7 +630,7 @@ bool SvxLRSpaceItem::GetPresentation
             else
             {
                 rText = rText +
-                        GetMetricText( (long)nRightMargin,
+                        GetMetricText( nRightMargin,
                                        eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }

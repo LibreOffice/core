@@ -101,7 +101,7 @@ bool SvxWritingModeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 bool SvxWritingModeItem::QueryValue( css::uno::Any& rVal,
                                             sal_uInt8 ) const
 {
-    rVal <<= (WritingMode)GetValue();
+    rVal <<= GetValue();
     return true;
 }
 
