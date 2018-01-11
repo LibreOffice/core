@@ -78,7 +78,7 @@ namespace
         mpVirDev(nullptr),
         mnUseCount(0)
     {
-        SetTimeout(3L * 60L * 1000L); // three minutes
+        SetTimeout(3 * 60 * 1000); // three minutes
         Start();
     }
 
