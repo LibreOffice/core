@@ -40,7 +40,6 @@
 		39022C1C1EDC2A2C00100066 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../generated/resources/services; sourceTree = "<group>"; };
 		39022C1E1EDC2AB000100066 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../generated/resources/share; sourceTree = "<group>"; };
 		39022C201EDC2D0800100066 /* icudt60l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt60l.dat; path = ../generated/resources/icudt60l.dat; sourceTree = "<group>"; };
-		39284DB01FA5E150006F43E4 /* dummyLOkit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = dummyLOkit.c; sourceTree = "<group>"; };
 		39284DB21FA5F207006F43E4 /* DocumentActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActions.swift; sourceTree = "<group>"; };
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
 		393975771F8BECB0002DC80B /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
@@ -69,6 +68,7 @@
 		39E950521FC9842000D82C49 /* source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = source; path = ../source; sourceTree = "<group>"; };
 		39EE81531FA644E800B73AB8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39EF4E2E1FA500C9001914AC /* PropertiesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertiesController.swift; sourceTree = "<group>"; };
+		39FF0D4C200681F300A3657D /* LibreOfficeKitInit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LibreOfficeKitInit.h; path = ../../include/LibreOfficeKit/LibreOfficeKitInit.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +101,7 @@
 		3956B72D1FAB3DBF00BF5DE4 /* extra */ = {
 			isa = PBXGroup;
 			children = (
+				39FF0D4C200681F300A3657D /* LibreOfficeKitInit.h */,
 				39E950521FC9842000D82C49 /* source */,
 				3975A8C91FBD70EE00A87B3A /* LibreOfficeKit.h */,
 			);
@@ -143,7 +144,6 @@
 			children = (
 				39EE81531FA644E800B73AB8 /* Info.plist */,
 				39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */,
-				39284DB01FA5E150006F43E4 /* dummyLOkit.c */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
 				3992D8591E5B762A00BEA987 /* DocumentController.swift */,
 				39284DB21FA5F207006F43E4 /* DocumentActions.swift */,
