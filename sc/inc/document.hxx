@@ -429,7 +429,7 @@ private:
     bool                bDetectiveDirty;
 
     sal_uInt8               nMacroCallMode;     // Macros per warning dialog disabled?
-    bool                bHasMacroFunc;      // valid only after loading
+    bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde
 
     sal_uInt8               nVisSpellState;
 
@@ -1794,8 +1794,8 @@ public:
     sal_uInt8           GetMacroCallMode() const     { return nMacroCallMode; }
     void            SetMacroCallMode(sal_uInt8 nNew)     { nMacroCallMode = nNew; }
 
-    bool            GetHasMacroFunc() const      { return bHasMacroFunc; }
-    void            SetHasMacroFunc(bool bSet)   { bHasMacroFunc = bSet; }
+    bool            HasLinkFormulaNeedingCheck() const      { return bLinkFormulaNeedingCheck; }
+    void            SetLinkFormulaNeedingCheck(bool bSet)   { bLinkFormulaNeedingCheck = bSet; }
 
     static bool     CheckMacroWarn();
 

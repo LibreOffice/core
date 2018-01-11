@@ -203,7 +203,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         bExpandRefs( false ),
         bDetectiveDirty( false ),
         nMacroCallMode( SC_MACROCALL_ALLOWED ),
-        bHasMacroFunc( false ),
+        bLinkFormulaNeedingCheck( false ),
         nVisSpellState( 0 ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),

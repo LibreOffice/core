@@ -1351,10 +1351,10 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
             bChanged = true;
     }
 
-    //  Same as in Load: after loading, it must be known if ocMacro is in any formula
-    //  (for macro warning, CompileXML is called at the end of loading XML file)
-    if ( !pDocument->GetHasMacroFunc() && pCode->HasOpCodeRPN( ocMacro ) )
-        pDocument->SetHasMacroFunc( true );
+    //  After loading, it must be known if ocDde is in any formula
+    //  (for external links warning, CompileXML is called at the end of loading XML file)
+    if (!pDocument->HasLinkFormulaNeedingCheck() && pCode->HasOpCodeRPN(ocDde))
+        pDocument->SetLinkFormulaNeedingCheck(true);
 
     //volatile cells must be added here for import
     if( pCode->IsRecalcModeAlways() || pCode->IsRecalcModeForced() ||
