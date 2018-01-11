@@ -507,6 +507,7 @@ bool ZipPackageStream::saveChild(
         std::vector < uno::Sequence < beans::PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
         const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        sal_Int32 nPBKDF2IterationCount,
         const rtlRandomPool &rRandomPool)
 {
     bool bSuccess = true;
@@ -652,8 +653,6 @@ bool ZipPackageStream::saveChild(
                 uno::Sequence < sal_Int8 > aSalt( 16 ), aVector( GetBlockSize() );
                 rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
                 rtl_random_getBytes ( rRandomPool, aVector.getArray(), aVector.getLength() );
-                sal_Int32 const nPBKDF2IterationCount = 100000;
-
                 if ( !m_bHaveOwnKey )
                 {
                     m_aEncryptionKey = rEncryptionKey;
