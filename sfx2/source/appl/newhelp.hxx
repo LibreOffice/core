@@ -579,6 +579,10 @@ public:
 /// Appends ?Language=xy&System=abc to the help URL in rURL
 void AppendConfigToken(OUStringBuffer& rURL, bool bQuestionMark, const OUString &rLang = OUString());
 
+
+/// Get prefered help locale
+static OUString HelpLocaleString();
+
 #endif // INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

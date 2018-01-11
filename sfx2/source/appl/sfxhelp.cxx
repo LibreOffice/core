@@ -128,69 +128,69 @@ OUString getHelpRootURL()
     return s_instURL;
 }
 
-/// Check for built-in
-/// Check if help/lang folder exist.
-bool impl_hasHelpInstalled(const OUString &rLang = OUString("en-US"))
+bool impl_checkHelpLocalePath(OUString& rpPath)
+{
+    osl::DirectoryItem directoryItem;
+    bool bOK = false;
+
+    osl::FileStatus fileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
+    if (osl::DirectoryItem::get(rpPath, directoryItem) == osl::FileBase::E_None &&
+        directoryItem.getFileStatus(fileStatus) == osl::FileBase::E_None &&
+        fileStatus.isDirectory())
+    {
+        bOK = true;
+    }
+    return bOK;
+}
+
+/// Check for built-in help
+/// Check if help//lang folder exist
+bool impl_hasHelpInstalled()
 {
     if (comphelper::LibreOfficeKit::isActive())
         return false;
+
     static OUString aLocaleStr;
+
     if (aLocaleStr.isEmpty())
     {
         // detect installed locale
-        aLocaleStr = utl::ConfigManager::getLocale();
-        bool bOk = !aLocaleStr.isEmpty();
-        if ( !bOk )
-            aLocaleStr = rLang;
+        aLocaleStr = HelpLocaleString();
     }
 
     OUString helpRootURL = getHelpRootURL() + "/" + aLocaleStr;
 
-    osl::DirectoryItem directoryItem;
-    osl::FileStatus fileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
-    if (osl::DirectoryItem::get(helpRootURL, directoryItem) == osl::FileBase::E_None &&
-        directoryItem.getFileStatus(fileStatus) == osl::FileBase::E_None &&
-        fileStatus.isDirectory())
-    {
-        return true;
-    }
-
-    return false;
+    bool bOK = impl_checkHelpLocalePath( helpRootURL );
+    return bOK;
 }
+
+
 /// Check for html built-in help
 /// Check if help/productversion/lang folder exist
-bool impl_hasHTMLHelpInstalled(const OUString &rLang = OUString("en-US"))
+bool impl_hasHTMLHelpInstalled()
 {
     if (comphelper::LibreOfficeKit::isActive())
         return false;
 
     static OUString aLocaleStr;
+
     if (aLocaleStr.isEmpty())
     {
         // detect installed locale
-        aLocaleStr = utl::ConfigManager::getLocale();
-        bool bOk = !aLocaleStr.isEmpty();
-        if ( !bOk )
-            aLocaleStr = rLang;
+        aLocaleStr = HelpLocaleString();
     }
+
     OUString helpRootURL = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aLocaleStr;
 
-    osl::DirectoryItem directoryItem;
-    osl::FileStatus fileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
-    if (osl::DirectoryItem::get(helpRootURL, directoryItem) == osl::FileBase::E_None &&
-        directoryItem.getFileStatus(fileStatus) == osl::FileBase::E_None &&
-        fileStatus.isDirectory())
-    {
-        return true;
-    }
-
-    return false;
+    bool bOK = impl_checkHelpLocalePath( helpRootURL );
+    return bOK;
 }
 
-}
+} // namespace
 
 /// Return the locale we prefer for displaying help
-static OUString const & HelpLocaleString()
+// static OUString const & HelpLocaleString()
+static OUString  HelpLocaleString()
 {
     if (comphelper::LibreOfficeKit::isActive())
         return comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
@@ -201,34 +201,58 @@ static OUString const & HelpLocaleString()
         const OUString aEnglish("en-US");
         // detect installed locale
         aLocaleStr = utl::ConfigManager::getLocale();
-        bool bOk = !aLocaleStr.isEmpty();
-        if ( !bOk )
+
+        if ( aLocaleStr.isEmpty() )
             aLocaleStr = aEnglish;
         else
         {
-            OUString sHelpPath = getHelpRootURL() + "/" + aLocaleStr;
-            osl::DirectoryItem aDirItem;
-
-            if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
+            // get fall-back langage (country)
+            OUString sLang = aLocaleStr ;
+            sal_Int32 nSepPos = sLang.indexOf( '-' );
+            if (nSepPos != -1)
             {
-                bOk = false;
-                OUString sLang(aLocaleStr);
-                sal_Int32 nSepPos = sLang.indexOf( '-' );
-                if (nSepPos != -1)
-                {
-                    bOk = true;
-                    sLang = sLang.copy( 0, nSepPos );
-                    sHelpPath = getHelpRootURL() + "/" + sLang;
-                    if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
-                        bOk = false;
-                }
+                sLang = sLang.copy( 0, nSepPos );
             }
+            OUString sHelpPath("");
+            sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aLocaleStr;
+            if (impl_checkHelpLocalePath(sHelpPath))
+            {
+                return aLocaleStr;
+            }
+            sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + sLang;
+            if (impl_checkHelpLocalePath(sHelpPath))
+            {
+                aLocaleStr = sLang;
+                return aLocaleStr;
+            }
+            sHelpPath = getHelpRootURL() + "/" + aLocaleStr;
+            if (impl_checkHelpLocalePath(sHelpPath))
+            {
+                return aLocaleStr;
+            }
+            sHelpPath = getHelpRootURL() + "/" + sLang;
+            if (impl_checkHelpLocalePath(sHelpPath))
+            {
+                aLocaleStr = sLang;
+                return aLocaleStr;
+            }
+
+            sHelpPath = sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aEnglish;
+            if (impl_checkHelpLocalePath(sHelpPath))
+            {
+                return aEnglish;
+            }
+            sHelpPath = getHelpRootURL() + "/" + aEnglish;
+            if (impl_checkHelpLocalePath(sHelpPath))
+            {
+                aLocaleStr = sLang;
+                return aEnglish;
+            }
+            aLocaleStr = utl::ConfigManager::getLocale();
+            return aLocaleStr;
         }
-        // if not OK, and not even English installed, we use online help, and
-        // have to preserve the full locale name
-        if ( !bOk && (impl_hasHelpInstalled( aEnglish ) || impl_hasHTMLHelpInstalled( aEnglish )))
-            aLocaleStr = aEnglish;
     }
+
     return aLocaleStr;
 }
 
@@ -649,11 +673,10 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
 static bool impl_showOfflineHelp( const OUString& rURL )
 {
-    OUString aBaseInstallPath;
-    utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
+    OUString aBaseInstallPath = getHelpRootURL();
     OUString aInternal( "vnd.sun.star.help://"  );
 
-    OUString aHelpLink( aBaseInstallPath + "/help/help.html?"  );
+    OUString aHelpLink( aBaseInstallPath + "/" + utl::ConfigManager::getProductVersion() + "/index.html?" );
     aHelpLink += rURL.copy( aInternal.getLength() );
     aHelpLink = aHelpLink.replaceAll("%2F","/").replaceAll("%3A",":");
 
@@ -733,6 +756,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                 {
                     OString aHelpId = pParent->GetHelpId();
                     aHelpURL = CreateHelpURL( OStringToOUString(aHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName );
+
                     if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
                     {
                         break;
@@ -744,6 +768,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                         {
                             // create help url of start page ( helpid == 0 -> start page)
                             aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
+
                         }
                         else if (pParent->IsDialog() && !bTriedTabPage)
                         {
