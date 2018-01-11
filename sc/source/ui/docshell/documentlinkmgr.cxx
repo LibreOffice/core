@@ -20,6 +20,7 @@
 #include <documentlinkmgr.hxx>
 #include <datastream.hxx>
 #include <ddelink.hxx>
+#include <webservicelink.hxx>
 #include <sc.hrc>
 #include <scresid.hxx>
 
@@ -115,15 +116,15 @@ bool DocumentLinkManager::idleCheckLinks()
 
 bool DocumentLinkManager::hasDdeLinks() const
 {
-    return hasDdeOrOleLinks(true, false);
+    return hasDdeOrOleOrWebServiceLinks(true, false, false);
 }
 
-bool DocumentLinkManager::hasDdeOrOleLinks() const
+bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks() const
 {
-    return hasDdeOrOleLinks(true, true);
+    return hasDdeOrOleOrWebServiceLinks(true, true, true);
 }
 
-bool DocumentLinkManager::hasDdeOrOleLinks(bool bDde, bool bOle) const
+bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, bool bWebService) const
 {
     if (!mpImpl->mpLinkManager)
         return false;
@@ -136,12 +137,14 @@ bool DocumentLinkManager::hasDdeOrOleLinks(bool bDde, bool bOle) const
             return true;
         if (bOle && dynamic_cast<SdrEmbedObjectLink*>(pBase))
             return true;
+        if (bWebService && dynamic_cast<ScWebServiceLink*>(pBase))
+            return true;
     }
 
     return false;
 }
 
-bool DocumentLinkManager::updateDdeOrOleLinks( vcl::Window* pWin )
+bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(vcl::Window* pWin)
 {
     if (!mpImpl->mpLinkManager)
         return false;
@@ -160,6 +163,13 @@ bool DocumentLinkManager::updateDdeOrOleLinks( vcl::Window* pWin )
         if (pOleLink)
         {
             pOleLink->Update();
+            continue;
+        }
+
+        ScWebServiceLink* pWebserviceLink = dynamic_cast<ScWebServiceLink*>(pBase);
+        if (pWebserviceLink)
+        {
+            pWebserviceLink->Update();
             continue;
         }
 

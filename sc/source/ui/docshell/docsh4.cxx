@@ -458,7 +458,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     ReloadTabLinks();
                     aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
 
-                    bool bAnyDde = aDocument.GetDocLinkManager().updateDdeOrOleLinks(GetActiveDialogParent());
+                    bool bAnyDde = aDocument.GetDocLinkManager().updateDdeOrOleOrWebServiceLinks(GetActiveDialogParent());
 
                     if (bAnyDde)
                     {
