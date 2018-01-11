@@ -1209,7 +1209,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
     if( rAttrs->GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
     {
-        eXLS = (drawing::LineStyle) rAttrs->Get( XATTR_LINESTYLE ).GetValue();
+        eXLS = rAttrs->Get( XATTR_LINESTYLE ).GetValue();
 
         switch( eXLS )
         {

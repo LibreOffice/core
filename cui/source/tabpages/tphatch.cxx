@@ -389,7 +389,7 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
         const SfxPoolItem* pPoolItem = nullptr;
         if( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
         {
-            if( ( drawing::FillStyle_HATCH == (drawing::FillStyle) static_cast<const XFillStyleItem*>( pPoolItem )->GetValue() ) &&
+            if( ( drawing::FillStyle_HATCH == static_cast<const XFillStyleItem*>( pPoolItem )->GetValue() ) &&
                 ( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), true, &pPoolItem ) ) )
             {
                 pHatch.reset(new XHatch( static_cast<const XFillHatchItem*>( pPoolItem )->GetHatchValue() ));
