@@ -448,7 +448,7 @@ private:
     // for detective update, is set for each change of a formula
     bool                bDetectiveDirty;
 
-    bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde
+    bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde and ocWebservice
 
     sal_uInt8               nAsianCompression;
     sal_uInt8               nAsianKerning;
