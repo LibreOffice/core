@@ -23,6 +23,9 @@
 
 #include <cassert>
 #include <cstddef>
+#if __cplusplus >= 201103L
+# include <type_traits>
+#endif
 
 #include "osl/interlck.h"
 #include "com/sun/star/uno/Sequence.h"
@@ -286,6 +289,78 @@ SAL_CALL getCharSequenceCppuType()
         & s_pType_com_sun_star_uno_Sequence_Char );
 }
 
+#if __cplusplus >= 201103L
+
+namespace {
+template<typename T>
+void sequence_output_elems( std::ostream &os, const T *pAry, sal_Int32 nLen, std::true_type )
+{
+    // for integral types, use hex notation
+    os << std::hex;
+    for(sal_Int32 i=0; i<nLen-1; ++i)
+        os << "0x" << *pAry++ << ", ";
+    if( nLen > 1 )
+        os << "0x" << *pAry++;
+    os << std::dec;
+}
+
+template<typename T>
+void sequence_output_elems( std::ostream &os, const T *pAry, sal_Int32 nLen, std::false_type )
+{
+    // every other type: rely on their own ostream operator<<
+    for(sal_Int32 i=0; i<nLen-1; ++i)
+        os << *pAry++ << ", ";
+    if( nLen > 1 )
+        os << *pAry++;
+}
+
+template<typename T>
+void sequence_output_bytes( std::ostream &os, const T *pAry, sal_Int32 nLen )
+{
+    // special case bytes - ostream operator<< outputs those as char
+    // values, but we need raw ints here
+    os << std::hex;
+    for(sal_Int32 i=0; i<nLen-1; ++i)
+        os << "0x" << (0xFF & +*pAry++) << ", ";
+    if( nLen > 1 )
+        os << "0x" << (0xFF & +*pAry++);
+    os << std::dec;
+}
+}
+
+/**
+   Support for Sequence in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
+   macros, for example).
+
+   @since LibreOffice 6.1
+*/
+template< typename value_t > inline std::ostream &operator<<(std::ostream &os, css::uno::Sequence < value_t > &v)
+{
+    const value_t *pAry = v.getConstArray();
+    sal_Int32 nLen = v.getLength();
+    sequence_output_elems(os, pAry, nLen, std::is_integral<value_t>());
+    return os;
+}
+
+template<> inline std::ostream &operator<< < sal_Int8 >(std::ostream &os, css::uno::Sequence < sal_Int8 > &v)
+{
+    // specialisation for signed bytes
+    const sal_Int8 *pAry = v.getConstArray();
+    sal_Int32 nLen = v.getLength();
+    sequence_output_bytes(os, pAry, nLen);
+    return os;
+}
+
+template<> inline std::ostream &operator<< < sal_uInt8 >(std::ostream &os, css::uno::Sequence < sal_uInt8 > &v)
+{
+    // specialisation for unsigned bytes
+    const sal_uInt8 *pAry = v.getConstArray();
+    sal_Int32 nLen = v.getLength();
+    sequence_output_bytes(os, pAry, nLen);
+    return os;
+}
+
+#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
