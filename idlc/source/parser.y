@@ -1421,11 +1421,11 @@ literal :
     }
     | IDL_TRUE
     {
-        $$ = new AstExpression((sal_Int32)1, ET_boolean);
+        $$ = new AstExpression(sal_Int32(1), ET_boolean);
     }
     | IDL_FALSE
     {
-        $$ = new AstExpression((sal_Int32)0, ET_boolean);
+        $$ = new AstExpression(sal_Int32(0), ET_boolean);
     }
     ;
 
