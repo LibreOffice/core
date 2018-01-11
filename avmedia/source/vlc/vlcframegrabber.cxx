@@ -81,7 +81,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
             return ::uno::Reference< css::graphic::XGraphic >();
         }
 
-        mPlayer.setTime( std::max(fMediaTime, 0) * MSEC_IN_SEC );
+        mPlayer.setTime( std::max(fMediaTime, 0.0) * MSEC_IN_SEC );
         mPlayer.pause();
 
         condition.wait(std::chrono::seconds(2));
