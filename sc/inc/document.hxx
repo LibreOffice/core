@@ -429,7 +429,7 @@ private:
     bool                bDetectiveDirty;
 
     sal_uInt8               nMacroCallMode;     // Macros per warning dialog disabled?
-    bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde
+    bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde and ocWebservice
 
     sal_uInt8               nVisSpellState;
 
