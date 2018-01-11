@@ -148,9 +148,6 @@ class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
 public:
     TBCGeneralInfo();
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     void ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
     OUString const & CustomText() { return customText.getString(); }
 };
@@ -178,9 +175,6 @@ class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
 public:
     TBCMenuSpecific();
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     OUString Name();
 };
 
@@ -198,9 +192,6 @@ public:
     TBCCDData();
     virtual ~TBCCDData() override;
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
 };
 
 class TBCComboDropdownSpecific : public TBBase
@@ -209,9 +200,6 @@ class TBCComboDropdownSpecific : public TBBase
 public:
     TBCComboDropdownSpecific( const TBCHeader& header );
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
 };
 
 class TBCBSpecific :  public TBBase
@@ -225,9 +213,6 @@ class TBCBSpecific :  public TBBase
 public:
     TBCBSpecific();
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     // #TODO just add a getGraphic member here
     TBCBitMap* getIcon();
     TBCBitMap* getIconMask();
