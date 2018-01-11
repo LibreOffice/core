@@ -1217,7 +1217,7 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
             if( xPropSet.is() )
             {
-                xPropSet->setPropertyValue("CircleKind", Any( (drawing::CircleKind)meKind) );
+                xPropSet->setPropertyValue("CircleKind", Any( meKind) );
                 xPropSet->setPropertyValue("CircleStartAngle", Any(mnStartAngle) );
                 xPropSet->setPropertyValue("CircleEndAngle", Any(mnEndAngle) );
             }
@@ -1945,7 +1945,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             {
                 xProps->setPropertyValue("StartPosition", Any(maStart));
                 xProps->setPropertyValue("EndPosition", Any(maEnd) );
-                xProps->setPropertyValue("EdgeKind", Any((drawing::ConnectorType)mnType) );
+                xProps->setPropertyValue("EdgeKind", Any(mnType) );
                 xProps->setPropertyValue("EdgeLine1Delta", Any(mnDelta1) );
                 xProps->setPropertyValue("EdgeLine2Delta", Any(mnDelta2) );
                 xProps->setPropertyValue("EdgeLine3Delta", Any(mnDelta3) );
