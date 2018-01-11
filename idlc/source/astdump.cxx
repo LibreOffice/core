@@ -411,7 +411,7 @@ const sal_Char* AstSequence::getRelativName() const
 {
     if ( !m_pRelativName )
     {
-        m_pRelativName = new OString("[]");
+        m_pRelativName.reset( new OString("[]") );
         AstDeclaration const * pType = resolveTypedefs( m_pMemberType );
         *m_pRelativName += pType->getRelativName();
     }

@@ -29,11 +29,6 @@ public:
         , m_pMemberType(pMemberType)
         , m_pRelativName(nullptr)
     {}
-    virtual ~AstSequence() override
-    {
-        if ( m_pRelativName )
-            delete m_pRelativName;
-    }
 
     AstType const * getMemberType() const
         { return m_pMemberType; }
@@ -44,7 +39,7 @@ public:
     virtual const sal_Char* getRelativName() const override;
 private:
     AstType const * m_pMemberType;
-    mutable OString* m_pRelativName;
+    mutable std::unique_ptr<OString> m_pRelativName;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTSEQUENCE_HXX

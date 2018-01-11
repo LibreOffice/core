@@ -46,16 +46,10 @@ public:
         NodeType nodeType, OString* pName, OString const * pInherits,
         std::vector< OString > const * typeParameters);
 
-    ~FeInheritanceHeader()
-    {
-        if ( m_pName )
-            delete m_pName;
-    }
-
     NodeType getNodeType() const
         { return m_nodeType; }
     OString* getName()
-        { return m_pName; }
+        { return m_pName.get(); }
     AstDeclaration* getInherits()
         { return m_pInherits; }
 
@@ -66,7 +60,7 @@ private:
     void initializeInherits(OString const * pinherits);
 
     NodeType        m_nodeType;
-    OString* m_pName;
+    std::unique_ptr<OString> m_pName;
     AstDeclaration* m_pInherits;
     std::vector< OString > m_typeParameters;
 };
