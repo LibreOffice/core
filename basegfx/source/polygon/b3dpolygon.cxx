@@ -706,15 +706,15 @@ class ImplB3DPolygon
 
     // The BColor vector. This vectors are created on demand
     // and may be zero.
-    BColorArray*                                    mpBColors;
+    std::unique_ptr<BColorArray>                    mpBColors;
 
     // The Normals vector. This vectors are created on demand
     // and may be zero.
-    NormalsArray3D*                                 mpNormals;
+    std::unique_ptr<NormalsArray3D>                 mpNormals;
 
     // The TextureCoordinates vector. This vectors are created on demand
     // and may be zero.
-    TextureCoordinate2D*                            mpTextureCoordinates;
+    std::unique_ptr<TextureCoordinate2D>            mpTextureCoordinates;
 
     // The calculated plane normal. mbPlaneNormalValid says if it's valid.
     ::basegfx::B3DVector                            maPlaneNormal;
@@ -761,17 +761,17 @@ public:
         // complete initialization using copy
         if(rToBeCopied.mpBColors && rToBeCopied.mpBColors->isUsed())
         {
-            mpBColors = new BColorArray(*rToBeCopied.mpBColors);
+            mpBColors.reset( new BColorArray(*rToBeCopied.mpBColors) );
         }
 
         if(rToBeCopied.mpNormals && rToBeCopied.mpNormals->isUsed())
         {
-            mpNormals = new NormalsArray3D(*rToBeCopied.mpNormals);
+            mpNormals.reset( new NormalsArray3D(*rToBeCopied.mpNormals) );
         }
 
         if(rToBeCopied.mpTextureCoordinates && rToBeCopied.mpTextureCoordinates->isUsed())
         {
-            mpTextureCoordinates = new TextureCoordinate2D(*rToBeCopied.mpTextureCoordinates);
+            mpTextureCoordinates.reset( new TextureCoordinate2D(*rToBeCopied.mpTextureCoordinates) );
         }
     }
 
@@ -787,56 +787,32 @@ public:
         // complete initialization using partly copy
         if(rToBeCopied.mpBColors && rToBeCopied.mpBColors->isUsed())
         {
-            mpBColors = new BColorArray(*rToBeCopied.mpBColors, nIndex, nCount);
+            mpBColors.reset( new BColorArray(*rToBeCopied.mpBColors, nIndex, nCount) );
 
             if(!mpBColors->isUsed())
             {
-                delete mpBColors;
-                mpBColors = nullptr;
+                mpBColors.reset();
             }
         }
 
         if(rToBeCopied.mpNormals && rToBeCopied.mpNormals->isUsed())
         {
-            mpNormals = new NormalsArray3D(*rToBeCopied.mpNormals, nIndex, nCount);
+            mpNormals.reset( new NormalsArray3D(*rToBeCopied.mpNormals, nIndex, nCount) );
 
             if(!mpNormals->isUsed())
             {
-                delete mpNormals;
-                mpNormals = nullptr;
+                mpNormals.reset();
             }
         }
 
         if(rToBeCopied.mpTextureCoordinates && rToBeCopied.mpTextureCoordinates->isUsed())
         {
-            mpTextureCoordinates = new TextureCoordinate2D(*rToBeCopied.mpTextureCoordinates, nIndex, nCount);
+            mpTextureCoordinates.reset( new TextureCoordinate2D(*rToBeCopied.mpTextureCoordinates, nIndex, nCount) );
 
             if(!mpTextureCoordinates->isUsed())
             {
-                delete mpTextureCoordinates;
-                mpTextureCoordinates = nullptr;
+                mpTextureCoordinates.reset();
             }
-        }
-    }
-
-    ~ImplB3DPolygon()
-    {
-        if(mpBColors)
-        {
-            delete mpBColors;
-            mpBColors = nullptr;
-        }
-
-        if(mpNormals)
-        {
-            delete mpNormals;
-            mpNormals = nullptr;
-        }
-
-        if(mpTextureCoordinates)
-        {
-            delete mpTextureCoordinates;
-            mpTextureCoordinates = nullptr;
         }
     }
 
@@ -1018,7 +994,7 @@ public:
         {
             if(!rValue.equalZero())
             {
-                mpBColors = new BColorArray(maPoints.count());
+                mpBColors.reset( new BColorArray(maPoints.count()) );
                 mpBColors->setBColor(nIndex, rValue);
             }
         }
@@ -1028,8 +1004,7 @@ public:
 
             if(!mpBColors->isUsed())
             {
-                delete mpBColors;
-                mpBColors = nullptr;
+                mpBColors.reset();
             }
         }
     }
@@ -1041,11 +1016,7 @@ public:
 
     void clearBColors()
     {
-        if(mpBColors)
-        {
-            delete mpBColors;
-            mpBColors = nullptr;
-        }
+        mpBColors.reset();
     }
 
     const ::basegfx::B3DVector& getNormal() const
@@ -1077,7 +1048,7 @@ public:
         {
             if(!rValue.equalZero())
             {
-                mpNormals = new NormalsArray3D(maPoints.count());
+                mpNormals.reset( new NormalsArray3D(maPoints.count()) );
                 mpNormals->setNormal(nIndex, rValue);
             }
         }
@@ -1087,8 +1058,7 @@ public:
 
             if(!mpNormals->isUsed())
             {
-                delete mpNormals;
-                mpNormals = nullptr;
+                mpNormals.reset();
             }
         }
     }
@@ -1108,11 +1078,7 @@ public:
 
     void clearNormals()
     {
-        if(mpNormals)
-        {
-            delete mpNormals;
-            mpNormals = nullptr;
-        }
+        mpNormals.reset();
     }
 
     const ::basegfx::B2DPoint& getTextureCoordinate(sal_uInt32 nIndex) const
@@ -1133,7 +1099,7 @@ public:
         {
             if(!rValue.equalZero())
             {
-                mpTextureCoordinates = new TextureCoordinate2D(maPoints.count());
+                mpTextureCoordinates.reset( new TextureCoordinate2D(maPoints.count()) );
                 mpTextureCoordinates->setTextureCoordinate(nIndex, rValue);
             }
         }
@@ -1143,8 +1109,7 @@ public:
 
             if(!mpTextureCoordinates->isUsed())
             {
-                delete mpTextureCoordinates;
-                mpTextureCoordinates = nullptr;
+                mpTextureCoordinates.reset();
             }
         }
     }
@@ -1156,11 +1121,7 @@ public:
 
     void clearTextureCoordinates()
     {
-        if(mpTextureCoordinates)
-        {
-            delete mpTextureCoordinates;
-            mpTextureCoordinates = nullptr;
-        }
+        mpTextureCoordinates.reset();
     }
 
     void transformTextureCoordinates(const ::basegfx::B2DHomMatrix& rMatrix)
@@ -1184,7 +1145,7 @@ public:
             {
                 if(!mpBColors)
                 {
-                    mpBColors = new BColorArray(maPoints.count());
+                    mpBColors.reset( new BColorArray(maPoints.count()) );
                 }
 
                 mpBColors->insert(nIndex, *rSource.mpBColors);
@@ -1201,7 +1162,7 @@ public:
             {
                 if(!mpNormals)
                 {
-                    mpNormals = new NormalsArray3D(maPoints.count());
+                    mpNormals.reset( new NormalsArray3D(maPoints.count()) );
                 }
 
                 mpNormals->insert(nIndex, *rSource.mpNormals);
@@ -1218,7 +1179,7 @@ public:
             {
                 if(!mpTextureCoordinates)
                 {
-                    mpTextureCoordinates = new TextureCoordinate2D(maPoints.count());
+                    mpTextureCoordinates.reset( new TextureCoordinate2D(maPoints.count()) );
                 }
 
                 mpTextureCoordinates->insert(nIndex, *rSource.mpTextureCoordinates);
@@ -1246,8 +1207,7 @@ public:
 
                 if(!mpBColors->isUsed())
                 {
-                    delete mpBColors;
-                    mpBColors = nullptr;
+                    mpBColors.reset();
                 }
             }
 
@@ -1257,8 +1217,7 @@ public:
 
                 if(!mpNormals->isUsed())
                 {
-                    delete mpNormals;
-                    mpNormals = nullptr;
+                    mpNormals.reset();
                 }
             }
 
@@ -1268,8 +1227,7 @@ public:
 
                 if(!mpTextureCoordinates->isUsed())
                 {
-                    delete mpTextureCoordinates;
-                    mpTextureCoordinates = nullptr;
+                    mpTextureCoordinates.reset();
                 }
             }
         }
