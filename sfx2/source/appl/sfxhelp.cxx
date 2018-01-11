@@ -655,7 +655,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
 
     OUString aHelpLink( aBaseInstallPath + "/help/help.html?"  );
     aHelpLink += rURL.copy( aInternal.getLength() );
-    aHelpLink = aHelpLink.replaceAll("%2F","/");
+    aHelpLink = aHelpLink.replaceAll("%2F","/").replaceAll("%3A",":");
 
     // get a html tempfile
     OUString const aExtension(".html");
