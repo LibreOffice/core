@@ -111,8 +111,7 @@ bool LinguIsUnspecified( const OUString & rBcp47 )
 
 static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 {
-    sal_Int32 nMin = n1 < n2 ? n1 : n2;
-    return nMin < n3 ? nMin : n3;
+    return std::min(std::min(n1, n2), n3);
 }
 
 class IntArray2D

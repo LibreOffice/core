@@ -717,8 +717,8 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
                     const double fRBCA(basegfx::B2DVector(aCA - aRB).getLength());
                     const double fRBCB(basegfx::B2DVector(aCB - aRB).getLength());
 
-                    const double fSmallestRA(fRACA < fRACB ? fRACA : fRACB);
-                    const double fSmallestRB(fRBCA < fRBCB ? fRBCA : fRBCB);
+                    const double fSmallestRA(std::min(fRACA, fRACB));
+                    const double fSmallestRB(std::min(fRBCA, fRBCB));
 
                     if(fSmallestRA < fSmallestRB)
                     {
@@ -726,8 +726,8 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
                         aRetval.flip();
                     }
 
-                    const double fSmallestCA(fRACA < fRBCA ? fRACA : fRBCA);
-                    const double fSmallestCB(fRACB < fRBCB ? fRACB : fRBCB);
+                    const double fSmallestCA(std::min(fRACA, fRBCA));
+                    const double fSmallestCB(std::min(fRACB, fRBCB));
 
                     if(fSmallestCB < fSmallestCA)
                     {

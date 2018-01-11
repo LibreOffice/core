@@ -308,7 +308,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
     }
     if (m_pTextNode!=nullptr) {
         // TODO: maybe use hints like FieldHints for this instead of looking at the text...
-        const sal_Int32 l = nNext<m_pTextNode->Len() ? nNext : m_pTextNode->Len();
+        const sal_Int32 l = std::min(nNext, m_pTextNode->Len());
         sal_Int32 p=m_nPosition;
         const sal_Unicode* aStr = m_pTextNode->GetText().getStr();
         while (p<l)

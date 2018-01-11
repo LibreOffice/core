@@ -179,7 +179,7 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
         Decrypt aDecryptor(mKey, iv, AgileEngine::cryptoType(mInfo));
         outputLength = aDecryptor.update(outputBuffer, inputBuffer, inputLength);
 
-        sal_uInt32 writeLength = outputLength > remaining ? remaining : outputLength;
+        sal_uInt32 writeLength = std::min(outputLength, remaining);
         aOutputStream.writeMemory(outputBuffer.data(), writeLength);
 
         remaining -= outputLength;

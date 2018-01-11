@@ -165,7 +165,7 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
             nClosestEndIndex_s = nCurrIndex;
         }
     }
-    sal_Int32 nClosestEndIndex = nClosestEndIndex_s < nClosestEndIndex_e ? nClosestEndIndex_s : nClosestEndIndex_e;
+    sal_Int32 nClosestEndIndex = std::min(nClosestEndIndex_s, nClosestEndIndex_e);
 
     nStartIndex = nClosestStartIndex;
     nEndIndex = nClosestEndIndex;

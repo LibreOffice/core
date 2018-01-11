@@ -80,7 +80,7 @@ void OpenGLSalBitmap::ImplCreateKernel(
 {
     const double fSamplingRadius(rKernel.GetWidth());
     const double fScaledRadius((fScale < 1.0) ? fSamplingRadius / fScale : fSamplingRadius);
-    const double fFilterFactor((fScale < 1.0) ? fScale : 1.0);
+    const double fFilterFactor(std::min(fScale, 1.0));
     int aNumberOfContributions;
     double aSum( 0 );
 

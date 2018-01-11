@@ -65,8 +65,8 @@ awt::Rectangle GetRectangleInterception( const awt::Rectangle& aRect1, const awt
     sal_Int32 nBottom1 = aRect1.Y + aRect1.Height;
     sal_Int32 nRight2 = aRect2.X + aRect2.Width;
     sal_Int32 nBottom2 = aRect2.Y + aRect2.Height;
-    aResult.Width = ( nRight1 < nRight2 ? nRight1 : nRight2 ) - aResult.X;
-    aResult.Height = ( nBottom1 < nBottom2 ? nBottom1 : nBottom2 ) - aResult.Y;
+    aResult.Width = std::min( nRight1, nRight2 ) - aResult.X;
+    aResult.Height = std::min( nBottom1, nBottom2 ) - aResult.Y;
 
     return aResult;
 }

@@ -1341,10 +1341,10 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 
     if( CellsAreRepeated() )
     {
-        SCCOL nStartCol( rCellPos.Col() < MAXCOL ? rCellPos.Col() : MAXCOL );
-        SCROW nStartRow( rCellPos.Row() < MAXROW ? rCellPos.Row() : MAXROW );
-        SCCOL nEndCol( rCellPos.Col() + nColsRepeated - 1 < MAXCOL ? rCellPos.Col() + nColsRepeated - 1 : MAXCOL );
-        SCROW nEndRow( rCellPos.Row() + nRepeatedRows - 1 < MAXROW ? rCellPos.Row() + nRepeatedRows - 1 : MAXROW );
+        SCCOL nStartCol( std::min(rCellPos.Col(), MAXCOL) );
+        SCROW nStartRow( std::min(rCellPos.Row(), MAXROW) );
+        SCCOL nEndCol( std::min<SCCOL>(rCellPos.Col() + nColsRepeated - 1, MAXCOL) );
+        SCROW nEndRow( std::min(rCellPos.Row() + nRepeatedRows - 1, MAXROW) );
         ScRange aScRange( nStartCol, nStartRow, rCellPos.Tab(), nEndCol, nEndRow, rCellPos.Tab() );
         SetContentValidation( aScRange );
         rXMLImport.GetStylesImportHelper()->AddRange( aScRange );

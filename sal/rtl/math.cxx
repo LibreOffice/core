@@ -443,7 +443,7 @@ inline void doubleToString(typename T::String ** pResult,
     // Round the number
     if(nDigits >= 0)
     {
-        if ((fValue += nRoundVal[nDigits > 15 ? 15 : nDigits] ) >= 10)
+        if ((fValue += nRoundVal[std::min<sal_Int32>(nDigits, 15)] ) >= 10)
         {
             fValue = 1.0;
             nExp++;

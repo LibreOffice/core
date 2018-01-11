@@ -165,7 +165,7 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( SwUndoId::DELNUM, rPam.GetDoc() ), SwUndRng( rPam )
 {
-    aNodes.reserve( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode );
+    aNodes.reserve( std::min<sal_uLong>(nEndNode - nSttNode, 255) );
     pHistory.reset( new SwHistory );
 }
 

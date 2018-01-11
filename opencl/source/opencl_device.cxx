@@ -13,6 +13,7 @@
 #include <sstream>
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 #include <comphelper/random.hxx>
 #include <opencl/openclconfig.hxx>
@@ -285,7 +286,7 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
             for (unsigned long i = 0; i < testData->inputSize; i++)
             {
                 fAverage += testData->input0[i];
-                fMin = ((fMin < testData->input1[i]) ? fMin : testData->input1[i]);
+                fMin = std::min(fMin, testData->input1[i]);
                 fSoP += testData->input2[i] * testData->input3[i];
             }
             fAverage /= testData->inputSize;

@@ -129,7 +129,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
         else if ( nArgs < PAIRED_VAR_ARGS )
         {
             sal_uInt16 nFix = nArgs - VAR_ARGS;
-            sal_uInt16 nPos = ( nArg < nFix ? nArg : nFix );
+            sal_uInt16 nPos = std::min( nArg, nFix );
             sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
                     aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
@@ -182,7 +182,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
     else if ( nArgs < PAIRED_VAR_ARGS)
     {
         sal_uInt16 nFix = nArgs - VAR_ARGS;
-        sal_uInt16 nPos = ( nArg < nFix ? nArg : nFix );
+        sal_uInt16 nPos = std::min( nArg, nFix );
         sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
                 aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
         SetArgNameFont( i,

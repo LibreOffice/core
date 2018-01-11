@@ -1114,7 +1114,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if ( pTextNd->IsOutline() )
                 {
                     int nRealLevel = pTextNd->GetAttrOutlineLevel()-1;
-                    nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
+                    nRealLevel = std::min(nRealLevel, 5);
 
                     nPDFType =  static_cast<sal_uInt16>(vcl::PDFWriter::H1 + nRealLevel);
                     switch(nRealLevel)

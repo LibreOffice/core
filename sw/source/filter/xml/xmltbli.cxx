@@ -2396,7 +2396,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
             // In this case, the columns get the correct width even if
             // the sum of the relative widths is smaller than the available
             // width in TWIP. Therefore, we can use the relative width.
-            m_nWidth = nRelWidth > USHRT_MAX ? USHRT_MAX : nRelWidth;
+            m_nWidth = std::min<sal_Int32>(nRelWidth, USHRT_MAX);
         }
         if( nRelWidth != m_nWidth && nRelWidth && nCols )
         {

@@ -359,7 +359,7 @@ void VBACompression::write()
     std::size_t nRemainingSize = nSize;
     while(bStreamNotEnded)
     {
-        std::size_t nChunkSize = nRemainingSize > 4096 ? 4096 : nRemainingSize;
+        std::size_t nChunkSize = std::min<size_t>(nRemainingSize, 4096);
         VBACompressionChunk aChunk(mrCompressedStream, &pData[nSize - nRemainingSize], nChunkSize);
         aChunk.write();
 

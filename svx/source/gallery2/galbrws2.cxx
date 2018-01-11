@@ -896,7 +896,7 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
             mpIconView->InsertItem( static_cast<sal_uInt16>(i) );
         }
 
-        ImplSelectItemId( ( nSelectionId > mpCurTheme->GetObjectCount() ) ? mpCurTheme->GetObjectCount() : nSelectionId );
+        ImplSelectItemId( std::min<sal_uInt16>( nSelectionId, mpCurTheme->GetObjectCount() ) );
     }
 
     switch( GetMode() )

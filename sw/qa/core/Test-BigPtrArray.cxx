@@ -342,7 +342,7 @@ public:
 
         while(bparr.Count())
         {
-            sal_uLong nRemove = (bparr.Count() > 3) ? 3 : bparr.Count();
+            sal_uLong nRemove = std::min<sal_uLong>(bparr.Count(), 3);
             sal_uLong oldCount = bparr.Count();
 
             for (sal_uLong i = 0; i < nRemove; i++)

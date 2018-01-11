@@ -103,7 +103,7 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
     if (nCount2 + pos2 > str2.getLength())
         nCount2 = str2.getLength() - pos2;
 
-    realCount = ((nCount1 > nCount2) ? nCount2 : nCount1);
+    realCount = std::min(nCount1, nCount2);
 
     s1 = str1.getStr() + pos1;
     s2 = str2.getStr() + pos2;

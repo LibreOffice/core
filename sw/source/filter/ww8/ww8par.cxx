@@ -5478,7 +5478,7 @@ namespace
         sal_uInt8 in[WW_BLOCKSIZE];
         for (std::size_t nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
         {
-            std::size_t nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
+            std::size_t nBS = std::min<size_t>(nLen - nI, WW_BLOCKSIZE);
             nBS = rIn.ReadBytes(in, nBS);
             rCtx.InitCipher(nBlock);
             rCtx.Decode(in, nBS, in, nBS);
@@ -5499,7 +5499,7 @@ namespace
         sal_uInt8 in[0x4096];
         for (std::size_t nI = nSt; nI < nLen; nI += 0x4096)
         {
-            std::size_t nBS = (nLen - nI > 0x4096 ) ? 0x4096 : nLen - nI;
+            std::size_t nBS = std::min<size_t>(nLen - nI, 0x4096 );
             nBS = rIn.ReadBytes(in, nBS);
             rCtx.Decode(in, nBS);
             rOut.WriteBytes(in, nBS);

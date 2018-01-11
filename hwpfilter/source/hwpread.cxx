@@ -80,9 +80,9 @@ bool FieldCode::Read(HWPFile & hwpf)
     hwpf.Read4b(&len3, 1);
     hwpf.Read4b(&binlen, 1);
 
-    uint const len1_ = ((len1 > 1024) ? 1024 : len1) / sizeof(hchar);
-    uint const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
-    uint const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
+    uint const len1_ = std::min<uint>(len1, 1024) / sizeof(hchar);
+    uint const len2_ = std::min<uint>(len2, 1024) / sizeof(hchar);
+    uint const len3_ = std::min<uint>(len3, 1024) / sizeof(hchar);
 
     str1.reset( new hchar[len1_ ? len1_ : 1] );
     str2.reset( new hchar[len2_ ? len2_ : 1] );

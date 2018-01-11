@@ -1624,7 +1624,7 @@ long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_b
             while( nBitInByte != 8 )
             {
                 if( (nByte & nMask) != (i_bSet ? nMask : 0) )
-                    return nIndex < i_nW ? nIndex : i_nW;
+                    return std::min(nIndex, i_nW);
                 nMask = nMask >> 1;
                 nBitInByte++;
                 nIndex++;
@@ -1668,7 +1668,7 @@ long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_b
             nIndex += pRunTable[nByte];
         }
     }
-    return nIndex < i_nW ? nIndex : i_nW;
+    return std::min(nIndex, i_nW);
 }
 
 struct BitStreamState

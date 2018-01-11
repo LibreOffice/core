@@ -100,7 +100,7 @@ namespace basegfx
         //    (::std::max(fVal,0.00001));
 
         if(fVal < 0.0)
-            return (fVal < -0.00001 ? fVal : -0.00001);
+            return std::min(fVal, -0.00001);
         else
             return std::max(fVal, 0.00001);
     }

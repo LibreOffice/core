@@ -1029,7 +1029,7 @@ PrinterGfx::PSShowGlyph (const unsigned char nGlyphId)
         if( nLW == 0 )
             nLW = maVirtualStatus.mnTextHeight;
         else
-            nLW = nLW < maVirtualStatus.mnTextHeight ? nLW : maVirtualStatus.mnTextHeight;
+            nLW = std::min(nLW, maVirtualStatus.mnTextHeight);
         psp::getValueOfDouble( pBuffer, static_cast<double>(nLW) / 30.0 );
     }
 

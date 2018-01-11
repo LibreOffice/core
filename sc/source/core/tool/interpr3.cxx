@@ -1261,7 +1261,7 @@ double lcl_GetBinomDistRange(double n, double xs,double xe,
         fFactor *= (n-i+1)/i * p/q;
         fSum += fFactor;
     }
-    return (fSum>1.0) ? 1.0 : fSum;
+    return std::min(fSum,1.0);
 }
 
 void ScInterpreter::ScB()

@@ -1094,9 +1094,9 @@ float fdiv(int a, int b)
 glm::vec2 vec(float x, float y, float nx, float ny)
 {
     x = x < 0.0 ? 0.0 : x;
-    x = x > nx  ? nx  : x;
+    x = std::min(x, nx);
     y = y < 0.0 ? 0.0 : y;
-    y = y > ny  ? ny  : y;
+    y = std::min(y, ny);
     return glm::vec2(fdiv(x, nx), fdiv(y, ny));
 }
 

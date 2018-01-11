@@ -31,6 +31,7 @@
 #if defined(SAL_UNX)
 #include <sys/time.h>
 #endif
+#include <algorithm>
 
 /**
  *  @internal
@@ -1283,7 +1284,7 @@ static void rtl_cache_depot_wsupdate(
     depot->m_prev_min = depot->m_curr_min;
     depot->m_curr_min = depot->m_mag_count;
 
-    npurge = depot->m_curr_min < depot->m_prev_min ? depot->m_curr_min : depot->m_prev_min;
+    npurge = std::min(depot->m_curr_min, depot->m_prev_min);
     for (; npurge > 0; npurge--)
     {
         rtl_cache_magazine_type * mag = rtl_cache_depot_dequeue (depot);

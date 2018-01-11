@@ -899,7 +899,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
             }
         }
         // check if there are defaulted adjustment values that should be filled the hard coded defaults (pDefValue)
-        sal_Int32 nCount = nAdjustmentValues > nAdjustmentDefaults ? nAdjustmentDefaults : nAdjustmentValues;
+        sal_Int32 nCount = std::min(nAdjustmentValues, nAdjustmentDefaults);
         for ( i = 0; i < nCount; i++ )
         {
             if ( seqAdjustmentValues[ i ].State != css::beans::PropertyState_DIRECT_VALUE )

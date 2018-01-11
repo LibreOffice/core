@@ -300,7 +300,7 @@ private:
             // These two ranges cannot be joined.  Move on.
             return false;
 
-        T nMin = nMin1 < nMin2 ? nMin1 : nMin2;
+        T nMin = std::min(nMin1, nMin2);
         T nMax = std::max(nMax1, nMax2);
 
         rNewMin = nMin;

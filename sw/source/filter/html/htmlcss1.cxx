@@ -1112,7 +1112,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
 
 sal_uInt32 SwCSS1Parser::GetFontHeight( sal_uInt16 nSize ) const
 {
-    return m_aFontHeights[ nSize>6 ? 6 : nSize ];
+    return m_aFontHeights[ std::min<sal_uInt16>(nSize,6) ];
 }
 
 const FontList *SwCSS1Parser::GetFontList() const

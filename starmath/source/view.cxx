@@ -912,7 +912,7 @@ void SmViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
 
 void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
-    const Fraction &rFrac = rX < rY ? rX : rY;
+    const Fraction &rFrac = std::min(rX, rY);
     GetGraphicWindow().SetZoom(sal::static_int_cast<sal_uInt16>(long(rFrac * Fraction( 100, 1 ))));
 
     //To avoid rounding errors base class regulates crooked values too

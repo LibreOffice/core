@@ -581,8 +581,8 @@ namespace
         {
             if ( bResize && ( nCurWidth > nIdeal || nCurHeight > nIdeal ) )
             {
-                sal_Int32 nIdealWidth  = nCurWidth  > nIdeal ? nIdeal : nCurWidth;
-                sal_Int32 nIdealHeight = nCurHeight > nIdeal ? nIdeal : nCurHeight;
+                sal_Int32 nIdealWidth  = std::min(nCurWidth, nIdeal);
+                sal_Int32 nIdealHeight = std::min(nCurHeight, nIdeal);
 
                 ::Size aNewSize( nIdealWidth, nIdealHeight );
 

@@ -443,7 +443,7 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
         sal_uInt64 nBytesRead = 0;
         while( nCur < nBytes )
         {
-            sal_uInt32 nPass = (nBytes - nCur) > sizeof( aBuf ) ? sizeof( aBuf ) : nBytes - nCur;
+            sal_uInt32 nPass = std::min<sal_uInt32>(nBytes - nCur, sizeof( aBuf ));
             if( (aErr = osl_readFile( aRead, aBuf, nPass, &nBytesRead)) != osl_File_E_None
                 || nBytesRead == 0 )
             {

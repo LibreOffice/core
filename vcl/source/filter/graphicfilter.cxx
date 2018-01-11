@@ -608,7 +608,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     //--------------------------- XBM ------------------------------------
     if( !bTest )
     {
-        sal_uLong nSize = ( nStreamLen > 2048 ) ? 2048 : nStreamLen;
+        sal_uLong nSize = std::min<sal_uLong>( nStreamLen, 2048 );
         std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8 [ nSize ]);
 
         rStream.Seek( nStreamPos );
@@ -633,7 +633,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     if( !bTest )
     {
         sal_uInt8* pCheckArray = sFirstBytes;
-        sal_uLong nCheckSize = nStreamLen < 256 ? nStreamLen : 256;
+        sal_uLong nCheckSize = std::min<sal_uLong>(nStreamLen, 256);
 
         sal_uInt8 sExtendedOrDecompressedFirstBytes[2048];
         sal_uLong nDecompressedSize = nCheckSize;
@@ -647,7 +647,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             rStream.Seek(nStreamPos);
             aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
             nDecompressedSize = aCodec.Read(rStream, sExtendedOrDecompressedFirstBytes, 2048);
-            nCheckSize = nDecompressedSize < 256 ? nDecompressedSize : 256;
+            nCheckSize = std::min<sal_uLong>(nDecompressedSize, 256);
             aCodec.EndCompression();
             pCheckArray = sExtendedOrDecompressedFirstBytes;
 
@@ -688,11 +688,11 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
             if (bIsGZip)
             {
-                nCheckSize = nDecompressedSize < 2048 ? nDecompressedSize : 2048;
+                nCheckSize = std::min<sal_uLong>(nDecompressedSize, 2048);
             }
             else
             {
-                nCheckSize = nStreamLen < 2048 ? nStreamLen : 2048;
+                nCheckSize = std::min<sal_uLong>(nStreamLen, 2048);
                 rStream.Seek(nStreamPos);
                 nCheckSize = rStream.ReadBytes(sExtendedOrDecompressedFirstBytes, nCheckSize);
             }
