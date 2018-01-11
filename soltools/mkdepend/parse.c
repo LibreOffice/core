@@ -34,7 +34,7 @@ char *hash_lookup( char *symbol, struct symhash *symbols );
 void hash_undefine( char *symbol, struct symhash *symbols );
 int gobble( struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, struct symhash *symbols );
-int deftype ( char *line, struct inclist *file,
+int deftype ( char *line, struct filepointer *filep, struct inclist *file,
     int parse_it, struct symhash *symbols);
 int zero_value(char const *exp, struct symhash *symbols);
 
@@ -47,7 +47,7 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
     boolean recfailOK;
 
     while ((line = get_line(filep))) {
-        switch(type = deftype(line, file, TRUE, symbols)) {
+        switch(type = deftype(line, filep, file, TRUE, symbols)) {
         case IF:
         doif:
             type = find_includes(filep, file,
@@ -170,7 +170,7 @@ int gobble(struct filepointer *filep,
     int    type;
 
     while ((line = get_line(filep))) {
-        switch(type = deftype(line, file, FALSE, symbols)) {
+        switch(type = deftype(line, filep, file, FALSE, symbols)) {
         case IF:
         case IFFALSE:
         case IFGUESSFALSE:
@@ -215,12 +215,12 @@ int gobble(struct filepointer *filep,
 /*
  * Decide what type of # directive this line is.
  */
-int deftype (char *line, struct inclist *file, int parse_it, struct symhash *symbols)
+int deftype (char *line, struct filepointer *filep, struct inclist *file, int parse_it, struct symhash *symbols)
 {
     char   *p;
     char    *directive, savechar;
     int    ret;
-
+    (void)filep;
     /*
      * Parse the directive...
      */
