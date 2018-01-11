@@ -265,7 +265,7 @@ void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle
     {
     case PROPERTY_ID_DEFAULT_STATE:
     {
-        sal_Int16 nDefaultState( (sal_Int16)TRISTATE_FALSE );
+        sal_Int16 nDefaultState = (sal_Int16)TRISTATE_FALSE;
         OSL_VERIFY( _rValue >>= nDefaultState );
         m_eDefaultState = (ToggleState)nDefaultState;
         impl_resetNoBroadcast_nothrow();
