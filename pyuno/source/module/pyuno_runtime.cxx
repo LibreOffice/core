@@ -434,7 +434,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         OString o = OUStringToOString( t.getTypeName(), RTL_TEXTENCODING_ASCII_US );
         return PyRef(
             PyUNO_Type_new (
-                o.getStr(),  (css::uno::TypeClass)t.getTypeClass(), *this),
+                o.getStr(),  t.getTypeClass(), *this),
             SAL_NO_ACQUIRE);
     }
     case css::uno::TypeClass_ANY:
