@@ -20,16 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_UNOKYWDS_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_UNOKYWDS_HXX
 
-// SdXImpressDocument
-const char sUNO_Service_DrawingDocument[] = "com.sun.star.drawing.DrawingDocument";
-const char sUNO_Service_PresentationDocument[] = "com.sun.star.drawing.PresentationDocument";
-
-// SdUnoStyleFamilies
-const char sUNO_SdUnoStyleFamilies[] = "SdUnoStyleFamilies";
-const char sUNO_Graphic_Style_Family_Name[] = "graphics";
-
 // SdUnoPseudoStyleFamily
-const char sUNO_SdUnoPseudoStyleFamily[] = "SdUnoPseudoStyleFamily";
 const char sUNO_PseudoSheet_Title[] = "title";
 const char sUNO_PseudoSheet_SubTitle[] = "subtitle";
 const char sUNO_PseudoSheet_Background[] = "background";
@@ -44,30 +35,6 @@ const char sUNO_PseudoSheet_Outline6[] = "outline6";
 const char sUNO_PseudoSheet_Outline7[] = "outline7";
 const char sUNO_PseudoSheet_Outline8[] = "outline8";
 const char sUNO_PseudoSheet_Outline9[] = "outline9";
-
-// SdUnoPseudoStyle
-const char sUNO_SdUnoPseudoStyle[] = "SdUnoPseudoStyle";
-
-// SdUnoGraphicStyleFamily
-const char sUNO_SdUnoGraphicStyleFamily[] = "SdUnoGraphicStyleFamily";
-const char sUNO_StyleName_standard[] = "standard";
-const char sUNO_StyleName_objwitharrow[] = "objectwitharrow";
-const char sUNO_StyleName_objwithshadow[] = "objectwithshadow";
-const char sUNO_StyleName_objwithoutfill[] = "objectwithoutfill";
-const char sUNO_StyleName_text[] = "text";
-const char sUNO_StyleName_textbody[] = "textbody";
-const char sUNO_StyleName_textbodyjust[] = "textbodyjustfied";
-const char sUNO_StyleName_textbodyindent[] = "textbodyindent";
-const char sUNO_StyleName_title[] = "title";
-const char sUNO_StyleName_title1[] = "title1";
-const char sUNO_StyleName_title2[] = "title2";
-const char sUNO_StyleName_headline[] = "headline";
-const char sUNO_StyleName_headline1[] = "headline1";
-const char sUNO_StyleName_headline2[] = "headline2";
-const char sUNO_StyleName_measure[] = "measure";
-
-// SdUnoGraphicStyle
-const char sUNO_SdUnoGraphicStyle[] = "SdUnoGraphicStyle";
 
 // SdLayer
 const char sUNO_LayerName_background[] = "background";
