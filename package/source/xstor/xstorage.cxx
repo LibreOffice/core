@@ -429,8 +429,10 @@ void OStorage_Impl::OpenOwnPackage()
             for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); aInd++ )
             {
                 if ( m_xProperties[aInd].Name == "RepairPackage"
-                  || m_xProperties[aInd].Name == "ProgressHandler" )
+                  || m_xProperties[aInd].Name == "ProgressHandler"
+                  || m_xProperties[aInd].Name == "NoFileSync" )
                 {
+                    // Forward these to the package.
                     beans::NamedValue aNamedValue( m_xProperties[aInd].Name,
                                                     m_xProperties[aInd].Value );
                     aArguments.realloc( ++nArgNum );

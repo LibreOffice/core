@@ -121,6 +121,7 @@
 #include <openflag.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <com/sun/star/io/WrongFormatException.hpp>
 
@@ -1369,6 +1370,14 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
         aArgs[0] <<= pImpl->xStream;
         aArgs[1] <<= embed::ElementModes::READWRITE;
         pImpl->bStorageBasedOnInStream = true;
+        if (pImpl->m_bDisableFileSync)
+        {
+            // Forward NoFileSync to the storage factory.
+            aArgs.realloc(3);
+            uno::Sequence<beans::PropertyValue> aProperties(
+                comphelper::InitPropertySequence({ { "NoFileSync", uno::makeAny(true) } }));
+            aArgs[2] <<= aProperties;
+        }
     }
     else if ( pImpl->xInputStream.is() )
     {
