@@ -159,7 +159,7 @@ void OWriterTable::fillColumns()
 
         // check if the column name already exists
         OUString aAlias = aColumnName;
-        OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
+        auto aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
         while (aFind != m_aColumns->get().end())
         {
@@ -261,8 +261,8 @@ bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols,
 
     // fields
 
-    OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
-    OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
+    auto aIter = _rCols.get().begin();
+    auto aEnd = _rCols.get().end();
     const OValueRefVector::Vector::size_type nCount = _rRow->get().size();
     for (OValueRefVector::Vector::size_type i = 1; aIter != aEnd && i < nCount;
             ++aIter, i++)

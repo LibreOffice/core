@@ -60,7 +60,7 @@ uno::Reference< sdbc::XConnection > SAL_CALL ODriver::connect(const OUString& ur
     if (! acceptsURL(url))
         return nullptr;
 
-    OWriterConnection* pCon = new OWriterConnection(this);
+    auto pCon = new OWriterConnection(this);
     pCon->construct(url, info);
     uno::Reference< sdbc::XConnection > xCon = pCon;
     m_xConnections.push_back(uno::WeakReferenceHelper(*pCon));

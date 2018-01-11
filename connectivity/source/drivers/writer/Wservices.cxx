@@ -22,14 +22,14 @@
 
 using namespace com::sun::star;
 
-typedef uno::Reference< lang::XSingleServiceFactory > (* createFactoryFunc)
-(
-    const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
-    const OUString& rComponentName,
-    ::cppu::ComponentInstantiation pCreateFunction,
-    const uno::Sequence< OUString >& rServiceNames,
-    rtl_ModuleCount*
-);
+using createFactoryFunc = uno::Reference<lang::XSingleServiceFactory> (*)
+                          (
+                              const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
+                              const OUString& rComponentName,
+                              ::cppu::ComponentInstantiation pCreateFunction,
+                              const uno::Sequence< OUString >& rServiceNames,
+                              rtl_ModuleCount*
+                          );
 
 
 struct ProviderRequest

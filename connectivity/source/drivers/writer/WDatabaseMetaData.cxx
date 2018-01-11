@@ -32,9 +32,7 @@ OWriterDatabaseMetaData::OWriterDatabaseMetaData(file::OConnection* pConnection)
 {
 }
 
-OWriterDatabaseMetaData::~OWriterDatabaseMetaData()
-{
-}
+OWriterDatabaseMetaData::~OWriterDatabaseMetaData() = default;
 
 OUString SAL_CALL OWriterDatabaseMetaData::getURL()
 {
@@ -50,7 +48,7 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    auto pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     uno::Reference<sdbc::XResultSet> xRef = pResult;
 
     // check if ORowSetValue type is given
