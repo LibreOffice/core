@@ -470,6 +470,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
                     rReq.Ignore();
                 }
+
+                rDoc.SetLinkFormulaNeedingCheck(false);
             }
             break;
 
