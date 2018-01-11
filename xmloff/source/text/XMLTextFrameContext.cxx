@@ -1026,7 +1026,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         // with XMLTextParagraphExport::_exportTextGraphic normally it would need
                         // to me mirrored using * -1.0, see conversion there)
                         const double fRotate(aDecomposedTransform.getRotate() * (1800.0/M_PI));
-                        nRotation = static_cast< sal_Int16 >(fRotate) % 3600;
+                        nRotation = static_cast< sal_Int16 >(basegfx::fround(fRotate) % 3600);
                     }
                 }
             }
