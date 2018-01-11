@@ -8,13 +8,16 @@
 import UIKit
 
 
-
 // DocumentController is the main viewer in the app, it displays the selected
 // documents and holds a top entry to view the properties as well as a normal
 // menu to handle global actions
 // It is a delegate class to receive Menu events as well as file handling events
 class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewControllerDelegate
 {
+    var document: DocumentHolder? = nil
+
+    var documentView: DocumentTiledView? = nil
+
     // *** Handling of DocumentController
     // this is normal functions every controller must implement
 
@@ -22,6 +25,10 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // holds known document types
     var KnownDocumentTypes : [String] = []
 
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var mask: UIView!
+    @IBOutlet weak var progressBar: UIProgressView!
+    @IBOutlet weak var searchBar: UISearchBar!
 
     // called once controller is loaded
     override func viewDidLoad()
@@ -36,9 +43,19 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
             let x = ((dict["UTTypeTagSpecification"]  as! NSDictionary)["public.filename-extension"] as! NSArray)
             KnownDocumentTypes.append( x[0] as! String )
         }
+        LOKitThread.instance.progressDelegate = self
     }
 
+    override func viewDidAppear(_ animated: Bool)
+    {
+        let res = Bundle.main.url(forResource: "example", withExtension: "odt")
+        //let res = Bundle.main.url(forResource: "example2", withExtension: "docx")
 
+        if let exampleDoc = res
+        {
+            self.doOpen(exampleDoc)
+        }
+    }
 
     // called when there is a memory constraint
     override func didReceiveMemoryWarning()
@@ -47,6 +64,14 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         // not used in this App
     }
 
+    @IBAction func searchIconTapped(_ sender: Any)
+    {
+        searchBar.isHidden = !searchBar.isHidden
+        if (!searchBar.isHidden)
+        {
+            searchBar.becomeFirstResponder()
+        }
+    }
 
 
     // *** Handling of Background (hipernate)
@@ -60,7 +85,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // Moving to hipernate
     public func Hipernate() -> Void
     {
-        BridgeLOkit_Hipernate()
+        //BridgeLOkit_Hipernate() // FIXME
     }
 
 
@@ -68,7 +93,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // Moving back to foreground
     public func LeaveHipernate() -> Void
     {
-        BridgeLOkit_LeaveHipernate()
+        //BridgeLOkit_LeaveHipernate() // FIXME
     }
 
 
@@ -318,9 +343,153 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // Real open and presentation of document
     public func doOpen(_ docURL : URL)
     {
-        BridgeLOkit_open(docURL.absoluteString);
+        LOKitThread.instance.documentLoad(url: docURL.absoluteString)
+        {
+            doc, error in
+
+            if let document = doc
+            {
+
+                runOnMain
+                {
+                    self.setDocument(doc: document)
+                }
+            }
+            else
+            {
+                // TODO - alert user of failure
+
+            }
+        }
+
+        /* FIXME
         BridgeLOkit_Sizing(4, 4, 256, 256);
+ */
+    }
+
+    /// Sets the document to use and set's up it's view. Should be called on the main thread
+    public func setDocument(doc: DocumentHolder)
+    {
+        if let existingDoc = self.document
+        {
+            // TODO - cleanup
+            self.document = nil
+        }
+        if let exisitingView = self.documentView
+        {
+            exisitingView.removeFromSuperview()
+            self.documentView = nil // forces the close of the view and it's held documents before we setup the new one
+        }
+
+        // setup the new doc view
+        self.document = doc
+
+        let frameToUse = self.scrollView.frame
+
+        let docView = DocumentTiledView(frame: frameToUse, document: doc, scale: 1.0)
+
+        self.scrollView.addSubview(docView)
+        self.scrollView.contentSize = docView.frame.size
+        self.documentView = docView
+
+        // debugging view borders
+        /*
+        self.scrollView.layer.borderColor = UIColor.red.cgColor
+        self.scrollView.layer.borderWidth = 1.0
+        docView.layer.borderColor = UIColor.green.cgColor
+        docView.layer.borderWidth = 1.0
+        */
+    }
+
+    // MARK: - UIScrollViewDelegate
+}
+
+extension DocumentController: UIScrollViewDelegate
+{
+    // return a view that will be scaled. if delegate returns nil, nothing happens
+    func viewForZooming(in scrollView: UIScrollView) -> UIView?
+    {
+        return self.documentView
+    }
+
+    // called before the scroll view begins zooming its content
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?)
+    {
+        print("scrollViewWillBeginZooming currentScale=\(scrollView.zoomScale)")
+    }
+
+    // scale between minimum and maximum. called after any 'bounce' animations
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat)
+    {
+        print("scrollViewDidEndZooming scale=\(scale)")
+        self.documentView?.scrollViewDidEndZooming(scrollView, with: view, atScale: scale)
     }
 }
 
+    // MARK: -  UIKeyInput
+//    public var hasText: Bool
+//    {
+//        true
+//    }
+//
+//
+//    public func insertText(_ text: String)
+//    {
+//
+//    }
+//
+//    public func deleteBackward()
+//    {
+//
+//    }
+
+extension DocumentController: ProgressDelegate
+{
+    // MARK: - ProgressDelegate
+    func statusIndicatorStart()
+    {
+        self.mask?.isHidden = false
+        self.progressBar?.isHidden = false
+        self.progressBar?.progress = 0.0
+    }
+
+    func statusIndicatorFinish()
+    {
+        // what would be nice would be to be able to wait until the initial tiles have rendered...
+        self.mask?.isHidden = true
+        self.progressBar?.isHidden = true
+    }
+
+    func statusIndicatorSetValue(value: Double)
+    {
+        self.progressBar?.progress = Float(value) / 100.0
+    }
+}
+
+extension DocumentController: UISearchBarDelegate
+{
+    // called when text changes (including clear)
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
+    {
+
+    }
+
+
+    // called when keyboard search button pressed
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
+    {
+        if let text = searchBar.text
+        {
+            if text.count > 0
+            {
+                document?.search(searchString: text, forwardDirection: true, from: CGPoint(x:0, y:0) )
+            }
+        }
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
+    {
+        searchBar.isHidden = true
+    }
+}
 
