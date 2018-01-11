@@ -403,13 +403,6 @@ void SfxTabDialog::dispose()
     m_pBaseFmtBtn.clear();
     m_pActionArea.clear();
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
-    {
-        pViewShell->notifyWindow(GetLOKWindowId(), "close");
-        ReleaseLOKNotifier();
-    }
-
     TabDialog::dispose();
 }
 
