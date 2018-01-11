@@ -1784,10 +1784,14 @@ void SwWrtShell::ChangeHeaderOrFooter(
 
                 vcl::Window* pParent = &GetView().GetViewFrame()->GetWindow();
                 short nResult;
-                if (bHeader) {
-                    nResult = ScopedVclPtrInstance<DeleteHeaderDialog>(pParent)->Execute();
-                } else {
-                    nResult = ScopedVclPtrInstance<DeleteFooterDialog>(pParent)->Execute();
+                {
+                    ScopedVclPtrInstance<MessageDialog> aDlg(pParent, bHeader ? "DeleteHeaderDialog" : "DeleteFooterDialog",
+                        bHeader ? "svx/ui/deleteheaderdialog.ui" : "svx/ui/deletefooterdialog.ui");
+
+                    if (comphelper::LibreOfficeKit::isActive())
+                        aDlg->SetLOKNotifier(GetSfxViewShell());
+
+                    nResult = aDlg->Execute();
                 }
 
                 bExecute = nResult == RET_YES;

@@ -595,6 +595,15 @@ void Dialog::dispose()
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("DialogClosed");
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
+        }
+    }
+
     SystemWindow::dispose();
 }
 
@@ -924,6 +933,21 @@ short Dialog::Execute()
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("DialogExecute");
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            const Size aSize = GetOptimalSize();
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("type", "dialog");
+            aItems.emplace_back("size", aSize.toString());
+            if (!GetText().isEmpty())
+                aItems.emplace_back("title", GetText().toUtf8());
+            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+        }
+    }
+
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
     while ( !xWindow->IsDisposed() && mbInExecute )
