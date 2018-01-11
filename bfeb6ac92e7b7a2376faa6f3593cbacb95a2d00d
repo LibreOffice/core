@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_012b8e83",
+        "filename": "sc/inc/column.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-11T20:43:24Z",
+      "side": 1,
+      "message": "Oh noes, passing vector by value is ... bad coding practice. Please find another way",
+      "revId": "bfeb6ac92e7b7a2376faa6f3593cbacb95a2d00d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_c13176ee",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1898,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-11T20:43:24Z",
+      "side": 1,
+      "message": "I wonder if this whole functionality can\u0027t be delegated to drawlayer, after all it is drawlayer that has the informations about which objects are anchored where. From here, you\u0027d just pass the information for which particular column this ( \u003d position recalculations) need to be done and filter the 2D vector of SdrObjects accordingly... ?",
+      "revId": "bfeb6ac92e7b7a2376faa6f3593cbacb95a2d00d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e14cba78",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-11T20:43:24Z",
+      "side": 1,
+      "message": "This might crash if pObjData is null",
+      "revId": "bfeb6ac92e7b7a2376faa6f3593cbacb95a2d00d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0152ae13",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-11T20:43:24Z",
+      "side": 1,
+      "message": "This might crash if pDrawLayer is null",
+      "revId": "bfeb6ac92e7b7a2376faa6f3593cbacb95a2d00d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
