@@ -223,6 +223,13 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                     else
                         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
                 }
+                else if (aDescr[nInd].Name == "NoFileSync")
+                {
+                    // Forward NoFileSync to the storage.
+                    aPropsToSet.realloc(++nNumArgs);
+                    aPropsToSet[nNumArgs - 1].Name = aDescr[nInd].Name;
+                    aPropsToSet[nNumArgs - 1].Value = aDescr[nInd].Value;
+                }
                 else
                     OSL_FAIL( "Unacceptable property, will be ignored!" );
             }
