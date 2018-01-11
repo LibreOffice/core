@@ -293,7 +293,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window const * pParent )
     if (nId == SID_SAVE_BACKGROUND)
     {
         const XFillStyleItem& rStyleItem = aMergedAttr.Get(XATTR_FILLSTYLE);
-        if (drawing::FillStyle_BITMAP == (drawing::FillStyle)rStyleItem.GetValue())
+        if (drawing::FillStyle_BITMAP == rStyleItem.GetValue())
         {
             const XFillBitmapItem& rBitmap = aMergedAttr.Get(XATTR_FILLBITMAP);
             const GraphicObject& rGraphicObj = rBitmap.GetGraphicObject();
