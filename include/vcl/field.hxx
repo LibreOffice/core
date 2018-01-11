@@ -390,7 +390,7 @@ public:
     const tools::Time&             GetMax() const { return maMax; }
 
     void                    SetTimeFormat( TimeFormat eNewFormat );
-    TimeFormat              GetTimeFormat() const { return (TimeFormat)mnTimeFormat;}
+    TimeFormat              GetTimeFormat() const { return mnTimeFormat;}
 
     void                    SetFormat( TimeFieldFormat eNewFormat );
     TimeFieldFormat         GetFormat() const { return meFormat; }

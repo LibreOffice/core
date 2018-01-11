@@ -1451,7 +1451,7 @@ void DateFormatter::SetExtDateFormat( ExtDateFieldFormat eFormat )
 
 ExtDateFieldFormat DateFormatter::GetExtDateFormat( bool bResolveSystemFormat ) const
 {
-    ExtDateFieldFormat eDateFormat = (ExtDateFieldFormat)mnExtDateFormat;
+    ExtDateFieldFormat eDateFormat = mnExtDateFormat;
 
     if ( bResolveSystemFormat && ( eDateFormat <= ExtDateFieldFormat::SystemShortYYYY ) )
     {

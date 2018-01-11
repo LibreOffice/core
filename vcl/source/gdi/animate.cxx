@@ -48,7 +48,7 @@ BitmapChecksum AnimationBitmap::GetChecksum() const
     UInt32ToSVBT32( aSizePix.Height(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( (long) nWait, aBT32 );
+    UInt32ToSVBT32( nWait, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     UInt32ToSVBT32( (long) eDisposal, aBT32 );
