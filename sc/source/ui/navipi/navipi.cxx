@@ -435,6 +435,7 @@ ScNavigatorSettings::ScNavigatorSettings()
     : mnRootSelected(ScContentId::ROOT)
     , mnChildSelected(SC_CONTENT_NOCHILD)
 {
+    maExpandedVec.fill(false);
 }
 
 SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
