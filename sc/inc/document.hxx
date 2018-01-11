@@ -500,6 +500,8 @@ private:
     // for detective update, is set for each change of a formula
     bool                bDetectiveDirty;
 
+    bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde
+
     CharCompressType    nAsianCompression;
     sal_uInt8           nAsianKerning;
 
@@ -1987,6 +1989,9 @@ public:
 
     bool            IsDetectiveDirty() const     { return bDetectiveDirty; }
     void            SetDetectiveDirty(bool bSet) { bDetectiveDirty = bSet; }
+
+    bool            HasLinkFormulaNeedingCheck() const      { return bLinkFormulaNeedingCheck; }
+    void            SetLinkFormulaNeedingCheck(bool bSet)   { bLinkFormulaNeedingCheck = bSet; }
 
     void            SetRangeOverflowType(ErrCode nType)  { nRangeOverflowType = nType; }
     bool            HasRangeOverflow() const             { return nRangeOverflowType != ERRCODE_NONE; }
