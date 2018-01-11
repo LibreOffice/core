@@ -1358,6 +1358,11 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
             bChanged = true;
     }
 
+    //  After loading, it must be known if ocDde is in any formula
+    //  (for external links warning, CompileXML is called at the end of loading XML file)
+    if (!pDocument->HasLinkFormulaNeedingCheck() && pCode->HasOpCodeRPN(ocDde))
+        pDocument->SetLinkFormulaNeedingCheck(true);
+
     //volatile cells must be added here for import
     if( pCode->IsRecalcModeAlways() || pCode->IsRecalcModeForced() ||
         pCode->IsRecalcModeOnLoad() || pCode->IsRecalcModeOnLoadOnce() )
