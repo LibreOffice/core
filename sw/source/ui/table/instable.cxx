@@ -191,7 +191,7 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, Edit&, rEdit, void )
         if( nActVal > nMax )
             m_pRepeatHeaderNF->SetValue( nMax );
         else if( nActVal < nEnteredValRepeatHeaderNF )
-            m_pRepeatHeaderNF->SetValue( ( nEnteredValRepeatHeaderNF < nMax )? nEnteredValRepeatHeaderNF : nMax );
+            m_pRepeatHeaderNF->SetValue( std::min( nEnteredValRepeatHeaderNF, nMax ) );
     }
 }
 IMPL_LINK( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )

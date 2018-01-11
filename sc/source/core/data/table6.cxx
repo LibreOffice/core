@@ -949,7 +949,7 @@ bool ScTable::SearchRangeForEmptyCell(
         {
             // row direction.
             SCROW nLastNonFilteredRow = MAXROW + 1;
-            SCROW nBeginRow = rRange.aEnd.Row() > rRow ? rRow : rRange.aEnd.Row();
+            SCROW nBeginRow = std::min(rRange.aEnd.Row(), rRow);
             for (SCROW nRow = nBeginRow; nRow >= rRange.aStart.Row(); --nRow)
             {
                 if (bSkipFiltered)
@@ -972,7 +972,7 @@ bool ScTable::SearchRangeForEmptyCell(
         else
         {
             // column direction.
-            SCCOL nBeginCol = rRange.aEnd.Col() > rCol ? rCol : rRange.aEnd.Col();
+            SCCOL nBeginCol = std::min(rRange.aEnd.Col(), rCol);
             for (SCCOL nCol = nBeginCol; nCol >= rRange.aStart.Col(); --nCol)
             {
                 SCROW nLastNonFilteredRow = MAXROW + 1;

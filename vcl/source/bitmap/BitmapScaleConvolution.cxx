@@ -44,7 +44,7 @@ void ImplCalculateContributions(
     const double fSamplingRadius(aKernel.GetWidth());
     const double fScale(aDestinationSize / static_cast< double >(aSourceSize));
     const double fScaledRadius((fScale < 1.0) ? fSamplingRadius / fScale : fSamplingRadius);
-    const double fFilterFactor((fScale < 1.0) ? fScale : 1.0);
+    const double fFilterFactor(std::min(fScale, 1.0));
 
     aNumberOfContributions = (long(fabs(ceil(fScaledRadius))) * 2) + 1;
     const long nAllocSize(aDestinationSize * aNumberOfContributions);

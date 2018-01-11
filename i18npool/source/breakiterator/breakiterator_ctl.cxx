@@ -71,7 +71,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::previousCharacters( const OUString& Text,
         } else
             nStartPos = 0;
     } else { // for BS to delete one char.
-        nDone = (nStartPos > nCount) ? nCount : nStartPos;
+        nDone = std::min(nStartPos, nCount);
         nStartPos -= nDone;
     }
 
@@ -98,7 +98,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text,
         } else
             nStartPos = len;
     } else {
-        nDone = (len - nStartPos > nCount) ? nCount : len - nStartPos;
+        nDone = std::min(len - nStartPos, nCount);
         nStartPos += nDone;
     }
 

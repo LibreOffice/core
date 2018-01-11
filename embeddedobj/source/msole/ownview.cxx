@@ -330,7 +330,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
         sal_uInt32 nRead = 0;
         while ( nRead < nDataSize )
         {
-            sal_uInt32 nToRead = ( nDataSize - nRead > 32000 ) ? 32000 : nDataSize - nRead;
+            sal_uInt32 nToRead = std::min<sal_uInt32>( nDataSize - nRead, 32000 );
             sal_uInt32 nLocalRead = xInStream->readBytes( aReadSeq, nToRead );
 
 

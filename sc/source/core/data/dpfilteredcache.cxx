@@ -235,7 +235,7 @@ bool ScDPFilteredCache::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
     if (pLastRow)
     {
         // Return the last row of current segment.
-        *pLastRow = nLastRowFilter < nLastRowPage ? nLastRowFilter : nLastRowPage;
+        *pLastRow = std::min(nLastRowFilter, nLastRowPage);
         *pLastRow -= 1; // End position is not inclusive. Move back one.
     }
 

@@ -133,7 +133,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
             std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ 0x10000 ] );   // 64 kB  Buffer
             while ( nBytesLeft )
             {
-                sal_uInt32 nToDo = ( nBytesLeft > 0x10000 ) ? 0x10000 : nBytesLeft;
+                sal_uInt32 nToDo = std::min<sal_uInt32>( nBytesLeft, 0x10000 );
                 pSourceFile->ReadBytes(pBuf.get(), nToDo);
                 rSt.WriteBytes(pBuf.get(), nToDo);
                 nBytesLeft -= nToDo;

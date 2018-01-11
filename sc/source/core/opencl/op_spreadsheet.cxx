@@ -98,7 +98,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     {
         tmpCur = vSubArguments[1]->GetFormulaToken();
         pCurDVR = static_cast<const formula::DoubleVectorRefToken *>(tmpCur);
-        size_t nCurWindowSize = pCurDVR->GetArrayLength() < pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength() : pCurDVR->GetRefRowSize() ;
+        size_t nCurWindowSize = std::min(pCurDVR->GetArrayLength(), pCurDVR->GetRefRowSize());
         int unrollSize = 8;
         ss << "    int loop;\n";
         if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())

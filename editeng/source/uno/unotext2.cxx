@@ -58,7 +58,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
             if( currentPara == maSelection.nStartPara )
                 nStartPos = std::max(nStartPos, maSelection.nStartPos);
             if( currentPara == maSelection.nEndPara )
-                nEndPos = nEndPos<maSelection.nEndPos ? nEndPos : maSelection.nEndPos;
+                nEndPos = std::min(nEndPos, maSelection.nEndPos);
             ESelection aCurrentParaSel = ESelection( currentPara, nStartPos, currentPara, nEndPos );
             for( auto aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == nullptr); ++aIter )
             {
@@ -400,7 +400,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rTe
                 continue;
 
             nStartPos = std::max<int>(nStartPos, mnSel.nStartPos);
-            nEndPos = nEndPos<mnSel.nEndPos ? nEndPos : mnSel.nEndPos;
+            nEndPos = std::min<sal_uInt16>(nEndPos, mnSel.nEndPos);
             ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
 
             const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );

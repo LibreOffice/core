@@ -351,7 +351,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         nDig = nExp + 1;
 
     // round number
-    if( (nNum += roundArray [( nDig > 16 ) ? 16 : nDig] ) >= 10.0 )
+    if( (nNum += roundArray [std::min<short>( nDig, 16 )] ) >= 10.0 )
     {
         nNum = 1.0;
         ++nExp;

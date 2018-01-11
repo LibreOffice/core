@@ -278,7 +278,7 @@ sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
 
     // Ensure we have enough space for the amount of data we can actually read.
     const sal_Int64 nBytesAvailable = m_nBlobLength - m_nBlobPosition;
-    const sal_Int32 nBytesToRead = nBytes < nBytesAvailable ? nBytes : nBytesAvailable;
+    const sal_Int32 nBytesToRead = std::min<sal_Int64>(nBytes, nBytesAvailable);
 
     if (rDataOut.getLength() < nBytesToRead)
         rDataOut.realloc(nBytesToRead);
@@ -289,7 +289,7 @@ sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
     {
         sal_uInt16 nBytesRead = 0;
         sal_uInt64 nDataRemaining = nBytesToRead - nTotalBytesRead;
-        sal_uInt16 nReadSize = (nDataRemaining > SAL_MAX_UINT16) ? SAL_MAX_UINT16 : nDataRemaining;
+        sal_uInt16 nReadSize = std::min<sal_uInt64>(nDataRemaining, SAL_MAX_UINT16);
         aErr = isc_get_segment(m_statusVector,
                                &m_blobHandle,
                                &nBytesRead,

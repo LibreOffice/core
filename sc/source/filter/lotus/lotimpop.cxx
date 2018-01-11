@@ -267,7 +267,7 @@ void ImportLotus::Formulacell( sal_uInt16 n )
     Read( aAddr );
     Skip( 10 );
 
-    n -= (n > 14) ? 14 : n;
+    n -= std::min<sal_uInt16>(n, 14);
 
     const ScTokenArray* pErg;
     sal_Int32 nRest = n;

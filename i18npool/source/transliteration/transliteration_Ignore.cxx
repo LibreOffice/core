@@ -24,8 +24,6 @@ using namespace com::sun::star::uno;
 
 namespace i18npool {
 
-inline sal_Int32 Min( sal_Int32 a, sal_Int32 b ) { return a > b ? b : a; }
-
 sal_Bool SAL_CALL
 transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
@@ -39,7 +37,7 @@ transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 n
 
     const sal_Unicode * p1 = s1.getStr();
     const sal_Unicode * p2 = s2.getStr();
-    sal_Int32 length = Min(s1.getLength(), s2.getLength());
+    sal_Int32 length = std::min(s1.getLength(), s2.getLength());
     sal_Int32 nmatch;
 
     for ( nmatch = 0; nmatch < length; nmatch++)

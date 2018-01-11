@@ -181,7 +181,7 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     // Scale factor
     const float fx = float(lOutWPix23) / std::max(1L, lDispW);
     const float fy = float(lOutHPix23) / std::max(1L, lDispH);
-    const float f  = fx < fy ? fx : fy;
+    const float f  = std::min(fx, fy);
 
     // zero point
     const long lOutlineW = ROUND(f * lDispW);

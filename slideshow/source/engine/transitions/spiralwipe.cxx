@@ -58,7 +58,7 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
         sal_Int32 len = static_cast<sal_Int32>( (e - (edge /2)) * edge1 * 4 );
         double w = M_PI_2;
         while (len > 0) {
-            const sal_Int32 alen = (len > edge1 ? edge1 : len);
+            const sal_Int32 alen = std::min(len, edge1);
             len -= alen;
             poly = createUnitRect();
             aTransform = basegfx::utils::createScaleB2DHomMatrix(
