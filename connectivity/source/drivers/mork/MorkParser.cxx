@@ -739,7 +739,7 @@ void MorkParser::dump()
               TableIter != iter->second.map.end(); ++TableIter )
         {
             std::cout << "\t Table:"
-                      << ( ( int ) TableIter->first < 0 ? "-" : " " )
+                      << ( TableIter->first < 0 ? "-" : " " )
                       << TableIter->first << std::endl;
 
             for (RowScopeMap::Map::const_iterator RowScopeIter = TableIter->second.map.begin();
@@ -752,7 +752,7 @@ void MorkParser::dump()
                      RowIter != RowScopeIter->second.map.end(); ++RowIter )
                 {
                     std::cout << "\t\t\t Row Id:"
-                              << ((int) RowIter->first < 0 ? "-" : " ")
+                              << (RowIter->first < 0 ? "-" : " ")
                               << RowIter->first << std::endl;
                     std::cout << "\t\t\t\t Cells:" << std::endl;
 
