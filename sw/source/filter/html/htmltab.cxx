@@ -5033,6 +5033,52 @@ namespace
     };
 }
 
+void SwHTMLParser::ClearFootnotesInRange(const SwNodeIndex& rMkNdIdx, const SwNodeIndex& rPtNdIdx)
+{
+    //similarly for footnotes
+    if (m_pFootEndNoteImpl)
+    {
+        m_pFootEndNoteImpl->aTextFootnotes.erase(std::remove_if(m_pFootEndNoteImpl->aTextFootnotes.begin(),
+            m_pFootEndNoteImpl->aTextFootnotes.end(), IndexInRange(rMkNdIdx, rPtNdIdx)), m_pFootEndNoteImpl->aTextFootnotes.end());
+        if (m_pFootEndNoteImpl->aTextFootnotes.empty())
+        {
+            delete m_pFootEndNoteImpl;
+            m_pFootEndNoteImpl = nullptr;
+        }
+    }
+
+    //follow DelFlyInRange pattern here
+    const bool bDelFwrd = rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex();
+
+    SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
+    SwFrameFormats& rTable = *pDoc->GetSpzFrameFormats();
+    for ( auto i = rTable.size(); i; )
+    {
+        SwFrameFormat *pFormat = rTable[--i];
+        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
+        SwPosition const*const pAPos = rAnch.GetContentAnchor();
+        if (pAPos &&
+            ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
+             (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
+            ( bDelFwrd
+                ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
+                : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx ))
+        {
+            if( rPtNdIdx != pAPos->nNode )
+            {
+                // If the Fly is deleted, all Flys in its content have to be deleted too.
+                const SwFormatContent &rContent = pFormat->GetContent();
+                // But only fly formats own their content, not draw formats.
+                if (rContent.GetContentIdx() && pFormat->Which() == RES_FLYFRMFMT)
+                {
+                    ClearFootnotesInRange(*rContent.GetContentIdx(),
+                                          SwNodeIndex(*rContent.GetContentIdx()->GetNode().EndOfSectionNode()));
+                }
+            }
+        }
+    }
+}
+
 void SwHTMLParser::DeleteSection(SwStartNode* pSttNd)
 {
     //if section to be deleted contains a pending m_pMarquee, it will be deleted
@@ -5041,17 +5087,8 @@ void SwHTMLParser::DeleteSection(SwStartNode* pSttNd)
     FrameDeleteWatch aWatch(pObjectFormat);
 
     //similarly for footnotes
-    if (m_pFootEndNoteImpl)
-    {
-        SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
-        m_pFootEndNoteImpl->aTextFootnotes.erase(std::remove_if(m_pFootEndNoteImpl->aTextFootnotes.begin(),
-            m_pFootEndNoteImpl->aTextFootnotes.end(), IndexInRange(aSttIdx, aEndIdx)), m_pFootEndNoteImpl->aTextFootnotes.end());
-        if (m_pFootEndNoteImpl->aTextFootnotes.empty())
-        {
-            delete m_pFootEndNoteImpl;
-            m_pFootEndNoteImpl = nullptr;
-        }
-    }
+    SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
+    ClearFootnotesInRange(aSttIdx, aEndIdx);
 
     m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
 
