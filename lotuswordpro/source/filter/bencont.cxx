@@ -283,22 +283,19 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     sprintf(sDName, "%s-D", pObjectName);
 
     /* traverse the found properties and construct the stream vectors */
-    SvMemoryStream * pMemStream = nullptr;
     // get S&D's stream and merge them together
-    SvStream *pD = nullptr, *pS = nullptr;
-
-    pS = FindValueStreamWithPropertyName(sSName);
-    pD = FindValueStreamWithPropertyName(sDName);
+    std::unique_ptr<SvStream> xS(FindValueStreamWithPropertyName(sSName));
+    std::unique_ptr<SvStream> xD(FindValueStreamWithPropertyName(sDName));
 
     sal_uInt32 nDLen = 0;
-    if(pD)
+    if (xD)
     {
-        nDLen = GetSvStreamSize(pD);
+        nDLen = GetSvStreamSize(xD.get());
     }
     sal_uInt32 nLen = nDLen;
-    if(pS)
+    if (xS)
     {
-        nLen += GetSvStreamSize(pS) ;
+        nLen += GetSvStreamSize(xS.get()) ;
     }
 
     OSL_ENSURE(nLen > 0, "expected a non-0 length");
@@ -312,19 +309,19 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     char * pBuf = new char[nLen];
     assert(pBuf != nullptr);
     char * pPointer = pBuf;
-    if(pD)
+    if (xD)
     {
-        pD->ReadBytes(pPointer, nDLen);
-        delete pD;
+        xD->ReadBytes(pPointer, nDLen);
+        xD.reset();
     }
     pPointer += nDLen;
-    if(pS)
+    if (xS)
     {
-        pS->ReadBytes(pPointer, nLen - nDLen);
-        delete pS;
+        xS->ReadBytes(pPointer, nLen - nDLen);
+        xS.reset();
     }
 
-    pMemStream = new SvMemoryStream(pBuf, nLen, StreamMode::READ);
+    SvMemoryStream* pMemStream = new SvMemoryStream(pBuf, nLen, StreamMode::READ);
     assert(pMemStream != nullptr);
     pMemStream->ObjectOwnsMemory(true);
 
