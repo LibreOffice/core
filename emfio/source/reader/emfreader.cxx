@@ -595,7 +595,7 @@ namespace emfio
         if ( mpInputStream->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - mpInputStream->Tell() ) )
         {
             // Get polygon points
-            tools::PolyPolygon aPolyPoly(nPoly, nPoly);
+            tools::PolyPolygon aPolyPoly(nPoly);
             for (sal_uInt32 i = 0; i < nPoly && mpInputStream->good(); ++i)
             {
                 const sal_uInt16 nPointCount(aPoints[i]);

@@ -30,193 +30,69 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
-ImplPolyPolygon::ImplPolyPolygon( sal_uInt16 nInitSize )
-{
-    mnRefCount  = 1;
-    mnCount     = nInitSize;
-    mnSize      = nInitSize;
-    mnResize    = 16;
-    mpPolyAry   = new tools::Polygon*[ nInitSize ];
-}
-
-ImplPolyPolygon::ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly )
-{
-    mnRefCount  = 1;
-    mnCount     = rImplPolyPoly.mnCount;
-    mnSize      = rImplPolyPoly.mnSize;
-    mnResize    = rImplPolyPoly.mnResize;
-
-    if ( rImplPolyPoly.mpPolyAry )
-    {
-        mpPolyAry = new tools::Polygon*[mnSize];
-        for ( sal_uInt16 i = 0; i < mnCount; i++ )
-            mpPolyAry[i] = new tools::Polygon( *rImplPolyPoly.mpPolyAry[i] );
-    }
-    else
-        mpPolyAry = nullptr;
-}
-
-ImplPolyPolygon::~ImplPolyPolygon()
-{
-    if ( mpPolyAry )
-    {
-        for ( sal_uInt16 i = 0; i < mnCount; i++ )
-            delete mpPolyAry[i];
-        delete[] mpPolyAry;
-    }
-}
-
 namespace tools {
 
-PolyPolygon::PolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
+PolyPolygon::PolyPolygon( sal_uInt16 nInitSize )
+    : mpImplPolyPolygon( ImplPolyPolygon( nInitSize ) )
 {
-    if ( nInitSize > MAX_POLYGONS )
-        nInitSize = MAX_POLYGONS;
-    else if ( !nInitSize )
-        nInitSize = 1;
-    if ( nResize > MAX_POLYGONS )
-        nResize = MAX_POLYGONS;
-    else if ( !nResize )
-        nResize = 1;
-    mpImplPolyPolygon = new ImplPolyPolygon( nInitSize, nResize );
 }
 
 PolyPolygon::PolyPolygon( const tools::Polygon& rPoly )
+    : mpImplPolyPolygon( rPoly )
 {
-    if ( rPoly.GetSize() )
-    {
-        mpImplPolyPolygon = new ImplPolyPolygon( 1 );
-        mpImplPolyPolygon->mpPolyAry[0] = new tools::Polygon( rPoly );
-    }
-    else
-        mpImplPolyPolygon = new ImplPolyPolygon( 16, 16 );
 }
 
 PolyPolygon::PolyPolygon( const tools::PolyPolygon& rPolyPoly )
+    : mpImplPolyPolygon( rPolyPoly.mpImplPolyPolygon )
 {
-    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < (SAL_MAX_UINT32-1), "PolyPolygon: RefCount overflow" );
-
-    mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
-    mpImplPolyPolygon->mnRefCount++;
 }
 
 PolyPolygon::~PolyPolygon()
 {
-    if ( mpImplPolyPolygon->mnRefCount > 1 )
-        mpImplPolyPolygon->mnRefCount--;
-    else
-        delete mpImplPolyPolygon;
 }
 
 void PolyPolygon::Insert( const tools::Polygon& rPoly, sal_uInt16 nPos )
 {
-    if ( mpImplPolyPolygon->mnCount >= MAX_POLYGONS )
-        return;
+    assert ( mpImplPolyPolygon->mvPolyAry.size() < MAX_POLYGONS );
 
-    if ( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
+    if ( nPos > mpImplPolyPolygon->mvPolyAry.size() )
+        nPos = mpImplPolyPolygon->mvPolyAry.size();
 
-    if ( nPos > mpImplPolyPolygon->mnCount )
-        nPos = mpImplPolyPolygon->mnCount;
-
-    if ( !mpImplPolyPolygon->mpPolyAry )
-        mpImplPolyPolygon->mpPolyAry = new tools::Polygon*[mpImplPolyPolygon->mnSize];
-    else if ( mpImplPolyPolygon->mnCount == mpImplPolyPolygon->mnSize )
-    {
-        sal_uInt16      nOldSize = mpImplPolyPolygon->mnSize;
-        sal_uInt16      nNewSize = nOldSize + mpImplPolyPolygon->mnResize;
-        tools::Polygon** pNewAry;
-
-        if ( nNewSize >= MAX_POLYGONS )
-            nNewSize = MAX_POLYGONS;
-        pNewAry = new tools::Polygon*[nNewSize];
-        memcpy( pNewAry, mpImplPolyPolygon->mpPolyAry, nPos*sizeof(Polygon*) );
-        memcpy( pNewAry+nPos+1, mpImplPolyPolygon->mpPolyAry+nPos,
-                (nOldSize-nPos)*sizeof(Polygon*) );
-        delete[] mpImplPolyPolygon->mpPolyAry;
-        mpImplPolyPolygon->mpPolyAry = pNewAry;
-        mpImplPolyPolygon->mnSize = nNewSize;
-    }
-    else if ( nPos < mpImplPolyPolygon->mnCount )
-    {
-        memmove( mpImplPolyPolygon->mpPolyAry+nPos+1,
-                 mpImplPolyPolygon->mpPolyAry+nPos,
-                 (mpImplPolyPolygon->mnCount-nPos)*sizeof(Polygon*) );
-    }
-
-    mpImplPolyPolygon->mpPolyAry[nPos] = new tools::Polygon( rPoly );
-    mpImplPolyPolygon->mnCount++;
+    mpImplPolyPolygon->mvPolyAry.insert(mpImplPolyPolygon->mvPolyAry.begin() + nPos, tools::Polygon( rPoly ));
 }
 
 void PolyPolygon::Remove( sal_uInt16 nPos )
 {
     assert(nPos < Count() && "PolyPolygon::Remove(): nPos >= nSize");
 
-    if ( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
-    delete mpImplPolyPolygon->mpPolyAry[nPos];
-    mpImplPolyPolygon->mnCount--;
-    memmove( mpImplPolyPolygon->mpPolyAry+nPos,
-             mpImplPolyPolygon->mpPolyAry+nPos+1,
-             (mpImplPolyPolygon->mnCount-nPos)*sizeof(Polygon*) );
+    mpImplPolyPolygon->mvPolyAry.erase(mpImplPolyPolygon->mvPolyAry.begin() + nPos);
 }
 
 void PolyPolygon::Replace( const tools::Polygon& rPoly, sal_uInt16 nPos )
 {
     assert(nPos < Count() && "PolyPolygon::Replace(): nPos >= nSize");
 
-    if ( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
-    delete mpImplPolyPolygon->mpPolyAry[nPos];
-    mpImplPolyPolygon->mpPolyAry[nPos] = new tools::Polygon( rPoly );
+    mpImplPolyPolygon->mvPolyAry[nPos] = tools::Polygon( rPoly );
 }
 
 const tools::Polygon& PolyPolygon::GetObject( sal_uInt16 nPos ) const
 {
     assert(nPos < Count() && "PolyPolygon::GetObject(): nPos >= nSize");
 
-    return *(mpImplPolyPolygon->mpPolyAry[nPos]);
+    return mpImplPolyPolygon->mvPolyAry[nPos];
 }
 
 bool PolyPolygon::IsRect() const
 {
     bool bIsRect = false;
     if ( Count() == 1 )
-        bIsRect = mpImplPolyPolygon->mpPolyAry[ 0 ]->IsRect();
+        bIsRect = mpImplPolyPolygon->mvPolyAry[ 0 ].IsRect();
     return bIsRect;
 }
 
 void PolyPolygon::Clear()
 {
-    if ( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( mpImplPolyPolygon->mnResize,
-                                                 mpImplPolyPolygon->mnResize );
-    }
-    else
-    {
-        if ( mpImplPolyPolygon->mpPolyAry )
-        {
-            for ( sal_uInt16 i = 0; i < mpImplPolyPolygon->mnCount; i++ )
-                delete mpImplPolyPolygon->mpPolyAry[i];
-            delete[] mpImplPolyPolygon->mpPolyAry;
-            mpImplPolyPolygon->mpPolyAry = nullptr;
-            mpImplPolyPolygon->mnCount   = 0;
-            mpImplPolyPolygon->mnSize    = mpImplPolyPolygon->mnResize;
-        }
-    }
+    mpImplPolyPolygon->mvPolyAry.clear();
 }
 
 void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
@@ -258,24 +134,17 @@ void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
                 nOptimizeFlags &= ~PolyOptimizeFlags::EDGES;
             }
 
-            // watch for ref counter
-            if( mpImplPolyPolygon->mnRefCount > 1 )
-            {
-                mpImplPolyPolygon->mnRefCount--;
-                mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-            }
-
             // Optimize polygons
-            for( sal_uInt16 i = 0, nPolyCount = mpImplPolyPolygon->mnCount; i < nPolyCount; i++ )
+            for( sal_uInt16 i = 0, nPolyCount = mpImplPolyPolygon->mvPolyAry.size(); i < nPolyCount; i++ )
             {
                 if( bEdges )
                 {
-                    mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( PolyOptimizeFlags::NO_SAME );
-                    tools::Polygon::ImplReduceEdges( *( mpImplPolyPolygon->mpPolyAry[ i ] ), fArea, nPercent );
+                    mpImplPolyPolygon->mvPolyAry[ i ].Optimize( PolyOptimizeFlags::NO_SAME );
+                    tools::Polygon::ImplReduceEdges( mpImplPolyPolygon->mvPolyAry[ i ], fArea, nPercent );
                 }
 
                 if( bool(nOptimizeFlags) )
-                    mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( nOptimizeFlags );
+                    mpImplPolyPolygon->mvPolyAry[ i ].Optimize( nOptimizeFlags );
             }
         }
     }
@@ -287,9 +156,9 @@ void PolyPolygon::AdaptiveSubdivide( tools::PolyPolygon& rResult ) const
 
     tools::Polygon aPolygon;
 
-    for( sal_uInt16 i = 0; i < mpImplPolyPolygon->mnCount; i++ )
+    for( size_t i = 0; i < mpImplPolyPolygon->mvPolyAry.size(); i++ )
     {
-        mpImplPolyPolygon->mpPolyAry[ i ]->AdaptiveSubdivide( aPolygon, 1.0 );
+        mpImplPolyPolygon->mvPolyAry[ i ].AdaptiveSubdivide( aPolygon, 1.0 );
         rResult.Insert( aPolygon );
     }
 }
@@ -353,7 +222,7 @@ void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::P
 
 sal_uInt16 PolyPolygon::Count() const
 {
-    return mpImplPolyPolygon->mnCount;
+    return mpImplPolyPolygon->mvPolyAry.size();
 }
 
 void PolyPolygon::Move( long nHorzMove, long nVertMove )
@@ -361,43 +230,25 @@ void PolyPolygon::Move( long nHorzMove, long nVertMove )
     // Required for DrawEngine
     if( nHorzMove || nVertMove )
     {
-        if ( mpImplPolyPolygon->mnRefCount > 1 )
-        {
-            mpImplPolyPolygon->mnRefCount--;
-            mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-        }
-
         // move points
-        sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
+        sal_uInt16 nPolyCount = mpImplPolyPolygon->mvPolyAry.size();
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
-            mpImplPolyPolygon->mpPolyAry[i]->Move( nHorzMove, nVertMove );
+            mpImplPolyPolygon->mvPolyAry[i].Move( nHorzMove, nVertMove );
     }
 }
 
 void PolyPolygon::Translate( const Point& rTrans )
 {
-    if( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
     // move points
-    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[ i ]->Translate( rTrans );
+    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mvPolyAry.size(); i < nCount; i++ )
+        mpImplPolyPolygon->mvPolyAry[ i ].Translate( rTrans );
 }
 
 void PolyPolygon::Scale( double fScaleX, double fScaleY )
 {
-    if( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
     // Move points
-    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[ i ]->Scale( fScaleX, fScaleY );
+    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mvPolyAry.size(); i < nCount; i++ )
+        mpImplPolyPolygon->mvPolyAry[ i ].Scale( fScaleX, fScaleY );
 }
 
 void PolyPolygon::Rotate( const Point& rCenter, sal_uInt16 nAngle10 )
@@ -413,34 +264,22 @@ void PolyPolygon::Rotate( const Point& rCenter, sal_uInt16 nAngle10 )
 
 void PolyPolygon::Rotate( const Point& rCenter, double fSin, double fCos )
 {
-    if( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
     // move points
-    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[ i ]->Rotate( rCenter, fSin, fCos );
+    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mvPolyAry.size(); i < nCount; i++ )
+        mpImplPolyPolygon->mvPolyAry[ i ].Rotate( rCenter, fSin, fCos );
 }
 
 void PolyPolygon::Clip( const tools::Rectangle& rRect )
 {
-    sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
+    sal_uInt16 nPolyCount = mpImplPolyPolygon->mvPolyAry.size();
     sal_uInt16 i;
 
     if ( !nPolyCount )
         return;
 
-    if ( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
     // Clip every polygon, deleting the empty ones
     for ( i = 0; i < nPolyCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[i]->Clip( rRect );
+        mpImplPolyPolygon->mvPolyAry[i].Clip( rRect );
     while ( nPolyCount )
     {
         if ( GetObject( nPolyCount-1 ).GetSize() <= 2 )
@@ -453,11 +292,11 @@ tools::Rectangle PolyPolygon::GetBoundRect() const
 {
     long    nXMin=0, nXMax=0, nYMin=0, nYMax=0;
     bool    bFirst = true;
-    sal_uInt16  nPolyCount = mpImplPolyPolygon->mnCount;
+    sal_uInt16  nPolyCount = mpImplPolyPolygon->mvPolyAry.size();
 
     for ( sal_uInt16 n = 0; n < nPolyCount; n++ )
     {
-        const tools::Polygon*  pPoly = mpImplPolyPolygon->mpPolyAry[n];
+        const tools::Polygon*  pPoly = &mpImplPolyPolygon->mvPolyAry[n];
         const Point*    pAry = pPoly->GetConstPointAry();
         sal_uInt16          nPointCount = pPoly->GetSize();
 
@@ -495,50 +334,28 @@ Polygon& PolyPolygon::operator[]( sal_uInt16 nPos )
 {
     assert(nPos < Count() && "PolyPolygon::[](): nPos >= nSize");
 
-    if ( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
-    return *(mpImplPolyPolygon->mpPolyAry[nPos]);
+    return mpImplPolyPolygon->mvPolyAry[nPos];
 }
 
 PolyPolygon& PolyPolygon::operator=( const tools::PolyPolygon& rPolyPoly )
 {
-    if (this == &rPolyPoly)
-        return *this;
-
-    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < (SAL_MAX_UINT32-1), "PolyPolygon: RefCount overflow" );
-
-    rPolyPoly.mpImplPolyPolygon->mnRefCount++;
-
-    if ( mpImplPolyPolygon->mnRefCount > 1 )
-        mpImplPolyPolygon->mnRefCount--;
-    else
-        delete mpImplPolyPolygon;
-
     mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
     return *this;
 }
 
 PolyPolygon& PolyPolygon::operator=( tools::PolyPolygon&& rPolyPoly )
 {
-    std::swap(mpImplPolyPolygon, rPolyPoly.mpImplPolyPolygon);
+    mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
     return *this;
 }
 
 bool PolyPolygon::operator==( const tools::PolyPolygon& rPolyPoly ) const
 {
-    if ( rPolyPoly.mpImplPolyPolygon == mpImplPolyPolygon )
-        return true;
-    else
-        return false;
+    return rPolyPoly.mpImplPolyPolygon == mpImplPolyPolygon;
 }
 
 SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 {
-    tools::Polygon* pPoly;
     sal_uInt16 nPolyCount(0);
 
     // Read number of polygons
@@ -555,18 +372,13 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 
     if( nPolyCount )
     {
-        if ( rPolyPoly.mpImplPolyPolygon->mnRefCount > 1 )
-            rPolyPoly.mpImplPolyPolygon->mnRefCount--;
-        else
-            delete rPolyPoly.mpImplPolyPolygon;
+        rPolyPoly.mpImplPolyPolygon->mvPolyAry.resize(nPolyCount);
 
-        rPolyPoly.mpImplPolyPolygon = new ImplPolyPolygon( nPolyCount );
-
+        tools::Polygon aTempPoly;
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         {
-            pPoly = new tools::Polygon;
-            ReadPolygon( rIStream, *pPoly );
-            rPolyPoly.mpImplPolyPolygon->mpPolyAry[i] = pPoly;
+            ReadPolygon( rIStream, aTempPoly );
+            rPolyPoly.mpImplPolyPolygon->mvPolyAry[i] = aTempPoly;
         }
     }
     else
@@ -578,12 +390,12 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 SvStream& WritePolyPolygon( SvStream& rOStream, const tools::PolyPolygon& rPolyPoly )
 {
     // Write number of polygons
-    sal_uInt16 nPolyCount = rPolyPoly.mpImplPolyPolygon->mnCount;
+    sal_uInt16 nPolyCount = rPolyPoly.mpImplPolyPolygon->mvPolyAry.size();
     rOStream.WriteUInt16( nPolyCount );
 
     // output polygons
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
-        WritePolygon( rOStream, *(rPolyPoly.mpImplPolyPolygon->mpPolyAry[i]) );
+        WritePolygon( rOStream, rPolyPoly.mpImplPolyPolygon->mvPolyAry[i] );
 
     return rOStream;
 }
@@ -592,7 +404,6 @@ void PolyPolygon::Read( SvStream& rIStream )
 {
     VersionCompat aCompat( rIStream, StreamMode::READ );
 
-    tools::Polygon* pPoly;
     sal_uInt16 nPolyCount(0);
 
     // Read number of polygons
@@ -609,18 +420,13 @@ void PolyPolygon::Read( SvStream& rIStream )
 
     if( nPolyCount )
     {
-        if ( mpImplPolyPolygon->mnRefCount > 1 )
-            mpImplPolyPolygon->mnRefCount--;
-        else
-            delete mpImplPolyPolygon;
-
-        mpImplPolyPolygon = new ImplPolyPolygon( nPolyCount );
+        mpImplPolyPolygon->mvPolyAry.clear();
 
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         {
-            pPoly = new tools::Polygon;
-            pPoly->ImplRead( rIStream );
-            mpImplPolyPolygon->mpPolyAry[i] = pPoly;
+            tools::Polygon aTempPoly;
+            aTempPoly.ImplRead( rIStream );
+            mpImplPolyPolygon->mvPolyAry.emplace_back( aTempPoly );
         }
     }
     else
@@ -632,12 +438,12 @@ void PolyPolygon::Write( SvStream& rOStream ) const
     VersionCompat aCompat( rOStream, StreamMode::WRITE, 1 );
 
     // Write number of polygons
-    sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
+    sal_uInt16 nPolyCount = mpImplPolyPolygon->mvPolyAry.size();
     rOStream.WriteUInt16( nPolyCount );
 
     // Output polygons
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[i]->ImplWrite( rOStream );
+        mpImplPolyPolygon->mvPolyAry[i].ImplWrite( rOStream );
 }
 
 // convert to basegfx::B2DPolyPolygon and return
@@ -645,10 +451,10 @@ basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
 {
     basegfx::B2DPolyPolygon aRetval;
 
-    for(sal_uInt16 a(0); a < mpImplPolyPolygon->mnCount; a++)
+    for(size_t a(0); a < mpImplPolyPolygon->mvPolyAry.size(); a++)
     {
-        tools::Polygon* pCandidate = mpImplPolyPolygon->mpPolyAry[a];
-        aRetval.append(pCandidate->getB2DPolygon());
+        tools::Polygon const & rCandidate = mpImplPolyPolygon->mvPolyAry[a];
+        aRetval.append(rCandidate.getB2DPolygon());
     }
 
     return aRetval;
@@ -656,6 +462,13 @@ basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
 
 // constructor to convert from basegfx::B2DPolyPolygon
 PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
+    : mpImplPolyPolygon(rPolyPolygon)
+{
+}
+
+} /* namespace tools */
+
+ImplPolyPolygon::ImplPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     const sal_uInt16 nCount(sal_uInt16(rPolyPolygon.count()));
     DBG_ASSERT(sal_uInt32(nCount) == rPolyPolygon.count(),
@@ -663,20 +476,16 @@ PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 
     if ( nCount )
     {
-        mpImplPolyPolygon = new ImplPolyPolygon( nCount );
+        mvPolyAry.resize( nCount );
 
         for(sal_uInt16 a(0); a < nCount; a++)
         {
             basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(sal_uInt32(a)));
-            mpImplPolyPolygon->mpPolyAry[a] = new tools::Polygon( aCandidate );
+            mvPolyAry[a] = tools::Polygon( aCandidate );
         }
     }
     else
-    {
-        mpImplPolyPolygon = new ImplPolyPolygon( 16, 16 );
-    }
+       mvPolyAry.reserve(16);
 }
-
-} /* namespace tools */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

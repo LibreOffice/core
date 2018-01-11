@@ -53,27 +53,37 @@ public:
     bool            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon const * pInitPoly = nullptr );
 };
 
-#define MAX_POLYGONS        ((sal_uInt16)0x3FF0)
+#define MAX_POLYGONS        SAL_MAX_UINT16
 
 namespace tools {
 class Polygon;
 }
 
-class SAL_WARN_UNUSED ImplPolyPolygon
+struct ImplPolyPolygon
 {
-public:
-    tools::Polygon** mpPolyAry;
-    sal_uInt32          mnRefCount;
-    sal_uInt16          mnCount;
-    sal_uInt16          mnSize;
-    sal_uInt16          mnResize;
+    std::vector<tools::Polygon> mvPolyAry;
 
-                    ImplPolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
-                        { mpPolyAry = nullptr; mnCount = 0; mnRefCount = 1;
-                          mnSize = nInitSize; mnResize = nResize; }
-                    ImplPolyPolygon( sal_uInt16 nInitSize );
-                    ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly );
-                    ~ImplPolyPolygon();
+    ImplPolyPolygon( sal_uInt16 nInitSize )
+    {
+       if ( !nInitSize )
+            nInitSize = 1;
+       mvPolyAry.reserve(nInitSize);
+    }
+
+    ImplPolyPolygon( const tools::Polygon& rPoly )
+    {
+        if ( rPoly.GetSize() )
+            mvPolyAry.push_back(rPoly);
+        else
+            mvPolyAry.reserve(16);
+    }
+
+    ImplPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
+
+    bool operator==(ImplPolyPolygon const & other) const
+    {
+        return mvPolyAry == other.mvPolyAry;
+    }
 };
 
 #endif
