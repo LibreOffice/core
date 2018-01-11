@@ -173,11 +173,11 @@ struct TypeDescriptor_Init_Impl
 {
     //sal_Bool          bDesctructorCalled;
     // all type description references
-    WeakMap_Impl *              pWeakMap;
+    std::unique_ptr<WeakMap_Impl> pWeakMap;
     // all type description callbacks
     std::unique_ptr<CallbackSet_Impl> pCallbacks;
     // A cache to hold descriptions
-    TypeDescriptionList_Impl *  pCache;
+    std::unique_ptr<TypeDescriptionList_Impl> pCache;
     // The mutex to guard all type library accesses
     std::unique_ptr<Mutex>      pMutex;
 
@@ -253,8 +253,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
             typelib_typedescription_release( *aIt );
             ++aIt;
         }
-        delete pCache;
-        pCache = nullptr;
     }
 
     if( pWeakMap )
@@ -304,8 +302,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
             ++aIt;
         }
 #endif
-        delete pWeakMap;
-        pWeakMap = nullptr;
     }
 #if OSL_DEBUG_LEVEL > 0
     SAL_INFO_IF( nTypeDescriptionCount, "cppu.typelib", "nTypeDescriptionCount is not zero" );
@@ -504,7 +500,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
             // insert into the chache
             MutexGuard aGuard( rInit.getMutex() );
             if( !rInit.pCache )
-                rInit.pCache = new TypeDescriptionList_Impl;
+                rInit.pCache.reset( new TypeDescriptionList_Impl );
             if( static_cast<sal_Int32>(rInit.pCache->size()) >= nCacheSize )
             {
                 typelib_typedescription_release( rInit.pCache->front() );
@@ -1560,7 +1556,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
     {
         pTDR = reinterpret_cast<typelib_TypeDescriptionReference *>(*ppNewDescription);
         if( !rInit.pWeakMap )
-            rInit.pWeakMap = new WeakMap_Impl;
+            rInit.pWeakMap.reset( new WeakMap_Impl );
 
         // description is the weak itself, so register it
         (*rInit.pWeakMap)[pTDR->pTypeName->buffer] = pTDR;
@@ -2001,7 +1997,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
                 // insert into the chache
                 MutexGuard aGuard( rInit.getMutex() );
                 if( !rInit.pCache )
-                    rInit.pCache = new TypeDescriptionList_Impl;
+                    rInit.pCache.reset( new TypeDescriptionList_Impl );
                 if( static_cast<sal_Int32>(rInit.pCache->size()) >= nCacheSize )
                 {
                     typelib_typedescription_release( rInit.pCache->front() );
@@ -2059,7 +2055,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
                 // insert into the chache
                 MutexGuard aGuard( rInit.getMutex() );
                 if( !rInit.pCache )
-                    rInit.pCache = new TypeDescriptionList_Impl;
+                    rInit.pCache.reset( new TypeDescriptionList_Impl );
                 if( static_cast<sal_Int32>(rInit.pCache->size()) >= nCacheSize )
                 {
                     typelib_typedescription_release( rInit.pCache->front() );
@@ -2112,7 +2108,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
     }
 
     if( !rInit.pWeakMap )
-        rInit.pWeakMap = new WeakMap_Impl;
+        rInit.pWeakMap.reset( new WeakMap_Impl );
     // Heavy hack, the const sal_Unicode * is hold by the typedescription reference
     // not registered
     rInit.pWeakMap->operator[]( (*ppTDR)->pTypeName->buffer ) = *ppTDR;

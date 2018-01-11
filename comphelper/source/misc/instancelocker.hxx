@@ -33,6 +33,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <rtl/ref.hxx>
+#include <memory>
 
 
 class OLockListener;
@@ -47,7 +48,7 @@ class OInstanceLocker : public ::cppu::WeakImplHelper< css::lang::XComponent,
 
     rtl::Reference< OLockListener > m_xLockListener;
 
-    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
 
     bool m_bDisposed;
     bool m_bInitialized;

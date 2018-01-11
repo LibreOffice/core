@@ -22,6 +22,7 @@
 #include <cstring>
 #include <memory>
 #include <new>
+#include <vector>
 
 #include <string.h>
 #include <sal/types.h>
@@ -185,60 +186,38 @@ BlopObject::~BlopObject()
 class StringCache
 {
 public:
-    sal_Unicode**   m_stringTable;
-    sal_uInt16      m_numOfStrings;
+    std::vector<std::unique_ptr<sal_Unicode[]>> m_stringTable;
     sal_uInt16      m_stringsCopied;
 
     explicit StringCache(sal_uInt16 size); // throws std::bad_alloc
-    ~StringCache();
 
     const sal_Unicode*  getString(sal_uInt16 index) const;
     sal_uInt16 createString(const sal_uInt8* buffer); // throws std::bad_alloc
 };
 
 StringCache::StringCache(sal_uInt16 size)
-    : m_stringTable(nullptr)
-    , m_numOfStrings(size)
+    : m_stringTable(size)
     , m_stringsCopied(0)
 {
-    m_stringTable = new sal_Unicode*[m_numOfStrings];
-
-    for (sal_uInt16 i = 0; i < m_numOfStrings; i++)
-    {
-        m_stringTable[i] = nullptr;
-    }
-}
-
-StringCache::~StringCache()
-{
-    if (m_stringTable)
-    {
-        for (sal_uInt16 i = 0; i < m_stringsCopied; i++)
-        {
-            delete[] m_stringTable[i];
-        }
-
-        delete[] m_stringTable;
-    }
 }
 
 const sal_Unicode* StringCache::getString(sal_uInt16 index) const
 {
     if ((index > 0) && (index <= m_stringsCopied))
-        return m_stringTable[index - 1];
+        return m_stringTable[index - 1].get();
     else
         return nullptr;
 }
 
 sal_uInt16 StringCache::createString(const sal_uInt8* buffer)
 {
-    if (m_stringsCopied < m_numOfStrings)
+    if (m_stringsCopied < m_stringTable.size())
     {
         sal_uInt32 len = UINT16StringLen(buffer);
 
-        m_stringTable[m_stringsCopied] = new sal_Unicode[len + 1];
+        m_stringTable[m_stringsCopied].reset( new sal_Unicode[len + 1] );
 
-        readString(buffer, m_stringTable[m_stringsCopied], (len + 1) * sizeof(sal_Unicode));
+        readString(buffer, m_stringTable[m_stringsCopied].get(), (len + 1) * sizeof(sal_Unicode));
 
         return ++m_stringsCopied;
     }
