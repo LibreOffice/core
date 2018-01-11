@@ -489,6 +489,17 @@ void Dialog::ImplInitSettings()
         SetBackground(GetSettings().GetStyleSettings().GetDialogColor());
 }
 
+void Dialog::ImplLOKNotifier(vcl::Window* pParent)
+{
+    if (comphelper::LibreOfficeKit::isActive() && pParent)
+    {
+        if (VclPtr<vcl::Window> pWin = pParent->GetParentWithLOKNotifier())
+        {
+            SetLOKNotifier(pWin->GetLOKNotifier());
+        }
+    }
+}
+
 Dialog::Dialog( WindowType nType )
     : SystemWindow( nType )
     , mbForceBorderWindow(false)
@@ -525,6 +536,7 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     , mbForceBorderWindow(false)
     , mnInitFlag(InitFlag::Default)
 {
+    ImplLOKNotifier(pParent);
     ImplInitDialogData();
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
 }
@@ -534,6 +546,7 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     , mbForceBorderWindow(bBorder)
     , mnInitFlag(eFlag)
 {
+    ImplLOKNotifier(pParent);
     ImplInitDialogData();
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
 }
@@ -543,6 +556,7 @@ Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
     , mbForceBorderWindow(false)
     , mnInitFlag(eFlag)
 {
+    ImplLOKNotifier(pParent);
     ImplInitDialogData();
     ImplInit( pParent, nStyle, eFlag );
 }
@@ -592,6 +606,15 @@ void Dialog::dispose()
     aObject.EventName = "DialogClosed";
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("DialogClosed");
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
+        }
+    }
 
     SystemWindow::dispose();
 }
@@ -858,6 +881,20 @@ bool Dialog::ImplStartExecuteModal()
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("DialogExecute");
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            const Size aSize = GetOptimalSize();
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("type", "dialog");
+            aItems.emplace_back("size", aSize.toString());
+            if (!GetText().isEmpty())
+                aItems.emplace_back("title", GetText().toUtf8());
+            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+        }
+    }
 
     return true;
 }

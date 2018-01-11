@@ -3177,19 +3177,22 @@ LOKWindowsMap& GetLOKWindowsMap()
 
 }
 
-void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier)
+void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool bParent)
 {
     // don't allow setting this twice
     assert(mpWindowImpl->mpLOKNotifier == nullptr);
     assert(pNotifier);
 
-    // Counter to be able to have unique id's for each window.
-    static vcl::LOKWindowId sLastLOKWindowId = 1;
+    if (!bParent)
+    {
+        // Counter to be able to have unique id's for each window.
+        static vcl::LOKWindowId sLastLOKWindowId = 1;
 
-    // assign the LOK window id
-    assert(mpWindowImpl->mnLOKWindowId == 0);
-    mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
-    GetLOKWindowsMap().insert(std::map<vcl::LOKWindowId, VclPtr<vcl::Window>>::value_type(mpWindowImpl->mnLOKWindowId, this));
+        // assign the LOK window id
+        assert(mpWindowImpl->mnLOKWindowId == 0);
+        mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
+        GetLOKWindowsMap().insert(std::map<vcl::LOKWindowId, VclPtr<vcl::Window>>::value_type(mpWindowImpl->mnLOKWindowId, this));
+    }
 
     mpWindowImpl->mpLOKNotifier = pNotifier;
 }
@@ -3220,8 +3223,6 @@ const vcl::ILibreOfficeKitNotifier* Window::GetLOKNotifier() const
 
 vcl::LOKWindowId Window::GetLOKWindowId() const
 {
-    assert(mpWindowImpl->mnLOKWindowId > 0);
-
     return mpWindowImpl->mnLOKWindowId;
 }
 
