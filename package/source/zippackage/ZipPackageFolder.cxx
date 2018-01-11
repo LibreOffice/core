@@ -257,6 +257,7 @@ bool ZipPackageFolder::saveChild(
         std::vector < uno::Sequence < PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
         const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        sal_Int32 nPBKDF2IterationCount,
         const rtlRandomPool &rRandomPool)
 {
     const OUString sMediaTypeProperty ("MediaType");
@@ -278,7 +279,7 @@ bool ZipPackageFolder::saveChild(
     else
         aPropSet.realloc( 0 );
 
-    saveContents( sTempName, rManList, rZipOut, rEncryptionKey, rRandomPool);
+    saveContents( sTempName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool);
 
     // folder can have a mediatype only in package format
     if ( aPropSet.getLength() && ( m_nFormat == embed::StorageFormats::PACKAGE ) )
@@ -292,6 +293,7 @@ void ZipPackageFolder::saveContents(
         std::vector < uno::Sequence < PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
         const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        sal_Int32 nPBKDF2IterationCount,
         const rtlRandomPool &rRandomPool ) const
 {
     bool bWritingFailed = false;
@@ -330,7 +332,7 @@ void ZipPackageFolder::saveContents(
         {
             bMimeTypeStreamStored = true;
             bWritingFailed = !aIter->second->pStream->saveChild(
-                rPath + aIter->first, rManList, rZipOut, rEncryptionKey, rRandomPool );
+                rPath + aIter->first, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool );
         }
     }
 
@@ -346,12 +348,12 @@ void ZipPackageFolder::saveContents(
             if (rInfo.bFolder)
             {
                 bWritingFailed = !rInfo.pFolder->saveChild(
-                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, rRandomPool );
+                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool );
             }
             else
             {
                 bWritingFailed = !rInfo.pStream->saveChild(
-                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, rRandomPool );
+                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool );
             }
         }
     }

@@ -287,6 +287,7 @@ void ZipPackage::parseManifest()
                                         pStream->SetToBeCompressed ( true );
                                         pStream->SetToBeEncrypted ( true );
                                         pStream->SetIsEncrypted ( true );
+                                        pStream->setIterationCount(0);
 
                                         // clamp to default SHA256 start key magic value,
                                         // c.f. ZipPackageStream::GetEncryptionKey()
@@ -1249,10 +1250,10 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         const OUString sMediaType ("MediaType");
         const OUString sVersion ("Version");
         const OUString sFullPath ("FullPath");
+        const bool bIsGpgEncrypt = m_aGpgProps.hasElements();
 
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
-            bool bIsGpgEncrypt = m_aGpgProps.hasElements();
             uno::Sequence < PropertyValue > aPropSeq(
                 bIsGpgEncrypt ? PKG_SIZE_NOENCR_MNFST+1 : PKG_SIZE_NOENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
@@ -1275,8 +1276,10 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // for encrypted streams
             RandomPool aRandomPool;
 
+            sal_Int32 const nPBKDF2IterationCount = 100000;
+
             // call saveContents ( it will recursively save sub-directories
-            m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(), aRandomPool.get());
+            m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(), bIsGpgEncrypt ? 0 : nPBKDF2IterationCount, aRandomPool.get());
         }
 
         if( m_nFormat == embed::StorageFormats::PACKAGE )
