@@ -1014,7 +1014,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     // use rotation around center and assume that this *was* a rotation around
                     // center. The check would compare the object's center with the RotCenter
                     // that can be extracted from the transformation in aFullTransform.
-                    // The definition contains implicitely the RotationCenter absolute
+                    // The definition contains implicitly the RotationCenter absolute
                     // to the scaled and translated object, so this may be used if needed (see
                     // _exportTextGraphic how the -trans/rot/trans is composed)
 
