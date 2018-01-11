@@ -70,7 +70,7 @@ namespace
         maFreeBuffers(),
         maUsedBuffers()
     {
-        SetTimeout(10L * 1000L); // ten seconds
+        SetTimeout(10 * 1000); // ten seconds
         SetDebugName("drawinglayer::VDevBuffer via Invoke()");
     }
 
