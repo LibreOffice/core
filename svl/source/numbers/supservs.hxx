@@ -24,6 +24,7 @@
 #include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <memory>
 
 /**
  * SvNumberFormatsSupplierServiceObject - a number formats supplier which
@@ -37,7 +38,7 @@ class SvNumberFormatsSupplierServiceObject final
             ,public css::lang::XInitialization
             ,public css::lang::XServiceInfo
 {
-    SvNumberFormatter*                                  m_pOwnFormatter;
+    std::unique_ptr<SvNumberFormatter>                  m_pOwnFormatter;
     css::uno::Reference< css::uno::XComponentContext >  m_xORB;
 
     void implEnsureFormatter();

@@ -36,11 +36,6 @@ OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInp
 
 OFSInputStreamContainer::~OFSInputStreamContainer()
 {
-    if ( m_pListenersContainer )
-    {
-        delete m_pListenersContainer;
-        m_pListenersContainer = nullptr;
-    }
 }
 
 uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
@@ -267,7 +262,7 @@ void SAL_CALL OFSInputStreamContainer::addEventListener( const uno::Reference< l
         throw lang::DisposedException();
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
+        m_pListenersContainer.reset( new ::comphelper::OInterfaceContainerHelper2( m_aMutex ) );
 
     m_pListenersContainer->addInterface( xListener );
 }

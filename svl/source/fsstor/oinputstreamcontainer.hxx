@@ -29,6 +29,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 
 #include <osl/mutex.hxx>
+#include <memory>
 
 class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStream
                                                             ,css::embed::XExtendedStorageStream >
@@ -43,7 +44,7 @@ class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStr
 
     bool m_bDisposed;
 
-    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
 
 public:
     explicit OFSInputStreamContainer( const css::uno::Reference < css::io::XInputStream >& xStream );
