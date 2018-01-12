@@ -227,7 +227,7 @@ void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display )
 {
     SolarMutexGuard aGuard;
 
-    if ( ( _display < 0 ) || ( _display >= (sal_Int32)Application::GetScreenCount() ) )
+    if ( ( _display < 0 ) || ( _display >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
         throw IndexOutOfBoundsException();
 
     SystemWindow* pWindow = dynamic_cast< SystemWindow* >( GetWindowImpl() );

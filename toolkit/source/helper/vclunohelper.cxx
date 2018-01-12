@@ -175,7 +175,7 @@ tools::Polygon VCLUnoHelper::CreatePolygon( const css::uno::Sequence< sal_Int32 
     sal_Int32 nLen = DataX.getLength();
     const sal_Int32* pDataX = DataX.getConstArray();
     const sal_Int32* pDataY = DataY.getConstArray();
-    tools::Polygon aPoly( (sal_uInt16) nLen );
+    tools::Polygon aPoly( static_cast<sal_uInt16>(nLen) );
     for ( sal_Int32 n = 0; n < nLen; n++ )
     {
         Point aPnt;
@@ -202,8 +202,8 @@ css::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rF
     css::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetFamilyName();
     aFD.StyleName = rFont.GetStyleName();
-    aFD.Height = (sal_Int16)rFont.GetFontSize().Height();
-    aFD.Width = (sal_Int16)rFont.GetFontSize().Width();
+    aFD.Height = static_cast<sal_Int16>(rFont.GetFontSize().Height());
+    aFD.Width = static_cast<sal_Int16>(rFont.GetFontSize().Width());
     aFD.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamilyType());
     aFD.CharSet = rFont.GetCharSet();
     aFD.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
@@ -230,8 +230,8 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
         aFont.SetFontSize( Size( rDescr.Width, rDescr.Height ) );
     if ( (FontFamily)rDescr.Family != FAMILY_DONTKNOW )
         aFont.SetFamily( (FontFamily)rDescr.Family );
-    if ( (rtl_TextEncoding)rDescr.CharSet != RTL_TEXTENCODING_DONTKNOW )
-        aFont.SetCharSet( (rtl_TextEncoding)rDescr.CharSet );
+    if ( static_cast<rtl_TextEncoding>(rDescr.CharSet) != RTL_TEXTENCODING_DONTKNOW )
+        aFont.SetCharSet( static_cast<rtl_TextEncoding>(rDescr.CharSet) );
     if ( (FontPitch)rDescr.Pitch != PITCH_DONTKNOW )
         aFont.SetPitch( (FontPitch)rDescr.Pitch );
     if ( rDescr.CharacterWidth )
@@ -246,7 +246,7 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
         aFont.SetStrikeout( (FontStrikeout)rDescr.Strikeout );
 
     // Not DONTKNOW
-    aFont.SetOrientation( (short)rDescr.Orientation );
+    aFont.SetOrientation( static_cast<short>(rDescr.Orientation) );
     aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
     aFont.SetWordLineMode( rDescr.WordLineMode );
 
@@ -266,10 +266,10 @@ vcl::Font VCLUnoHelper::CreateFont( const css::uno::Reference< css::awt::XFont >
 css::awt::SimpleFontMetric VCLUnoHelper::CreateFontMetric( const FontMetric& rFontMetric )
 {
     css::awt::SimpleFontMetric aFM;
-    aFM.Ascent = (sal_Int16)rFontMetric.GetAscent();
-    aFM.Descent = (sal_Int16)rFontMetric.GetDescent();
-    aFM.Leading = (sal_Int16)rFontMetric.GetInternalLeading();
-    aFM.Slant = (sal_Int16)rFontMetric.GetSlant();
+    aFM.Ascent = static_cast<sal_Int16>(rFontMetric.GetAscent());
+    aFM.Descent = static_cast<sal_Int16>(rFontMetric.GetDescent());
+    aFM.Leading = static_cast<sal_Int16>(rFontMetric.GetInternalLeading());
+    aFM.Slant = static_cast<sal_Int16>(rFontMetric.GetSlant());
     aFM.FirstChar = 0x0020;
     aFM.LastChar = 0xFFFD;
     return aFM;
@@ -393,7 +393,7 @@ namespace
                 if ( aUnit.nMeasurementUnit == _nUnit )
                 {
                     _rFieldToUNOValueFactor = aUnit.nFieldToMeasureFactor;
-                    return (sal_Int16)aUnit.eFieldUnit;
+                    return static_cast<sal_Int16>(aUnit.eFieldUnit);
                 }
             }
         }
@@ -401,7 +401,7 @@ namespace
             return -1;
 
         _rFieldToUNOValueFactor = 1;
-        return (sal_Int16)FUNIT_NONE;
+        return sal_Int16(FUNIT_NONE);
     }
 }
 
@@ -410,7 +410,7 @@ namespace
 
 sal_Int16 VCLUnoHelper::ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _nUNOToFieldValueFactor )
 {
-    return convertMeasurementUnit( (sal_Int16)_nFieldUnit, FieldUnitToMeasurementUnit, _nUNOToFieldValueFactor );
+    return convertMeasurementUnit( static_cast<sal_Int16>(_nFieldUnit), FieldUnitToMeasurementUnit, _nUNOToFieldValueFactor );
 }
 
 

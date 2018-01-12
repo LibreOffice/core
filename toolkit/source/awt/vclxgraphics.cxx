@@ -192,28 +192,28 @@ void VCLXGraphics::setTextColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    maTextColor = Color( (sal_uInt32)nColor );
+    maTextColor = Color( static_cast<sal_uInt32>(nColor) );
 }
 
 void VCLXGraphics::setTextFillColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    maTextFillColor = Color( (sal_uInt32)nColor );
+    maTextFillColor = Color( static_cast<sal_uInt32>(nColor) );
 }
 
 void VCLXGraphics::setLineColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    maLineColor = Color( (sal_uInt32)nColor );
+    maLineColor = Color( static_cast<sal_uInt32>(nColor) );
 }
 
 void VCLXGraphics::setFillColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    maFillColor = Color( (sal_uInt32)nColor );
+    maFillColor = Color( static_cast<sal_uInt32>(nColor) );
 }
 
 void VCLXGraphics::setRasterOp( awt::RasterOperation eROP )
@@ -310,14 +310,14 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
 
         if(nDestWidth != nSourceWidth)
         {
-            float zoomX = (float)nDestWidth / (float)nSourceWidth;
-            aSz.Width() = (long) ((float)aSz.Width() * zoomX);
+            float zoomX = static_cast<float>(nDestWidth) / static_cast<float>(nSourceWidth);
+            aSz.Width() = static_cast<long>(static_cast<float>(aSz.Width()) * zoomX);
         }
 
         if(nDestHeight != nSourceHeight)
         {
-            float zoomY = (float)nDestHeight / (float)nSourceHeight;
-            aSz.Height() = (long) ((float)aSz.Height() * zoomY);
+            float zoomY = static_cast<float>(nDestHeight) / static_cast<float>(nSourceHeight);
+            aSz.Height() = static_cast<long>(static_cast<float>(aSz.Height()) * zoomY);
         }
 
         if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)
@@ -400,7 +400,7 @@ void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int3
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::COLORS );
-        sal_uInt16 nPolys = (sal_uInt16) DataX.getLength();
+        sal_uInt16 nPolys = static_cast<sal_uInt16>(DataX.getLength());
         tools::PolyPolygon aPolyPoly( nPolys );
         for ( sal_uInt16 n = 0; n < nPolys; n++ )
             aPolyPoly[n] = VCLUnoHelper::CreatePolygon( DataX.getConstArray()[n], DataY.getConstArray()[n] );

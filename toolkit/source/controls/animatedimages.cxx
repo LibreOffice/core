@@ -336,7 +336,7 @@ namespace toolkit {
             return makeAny( css::awt::VisualEffect::NONE );
 
         case BASEPROPERTY_STEP_TIME:
-            return makeAny( (sal_Int32) 100 );
+            return makeAny( sal_Int32(100) );
 
         case BASEPROPERTY_AUTO_REPEAT:
             return makeAny( true );

@@ -128,7 +128,7 @@ void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< 
     SolarMutexGuard aGuard;
 
     sal_uInt32 nCount = Components.getLength();
-    DBG_ASSERT( nCount == (sal_uInt32)Tabs.getLength(), "setTabOrder: TabCount != ComponentCount" );
+    DBG_ASSERT( nCount == static_cast<sal_uInt32>(Tabs.getLength()), "setTabOrder: TabCount != ComponentCount" );
     const css::uno::Reference< css::awt::XWindow > * pComps = Components.getConstArray();
     const css::uno::Any* pTabs = Tabs.getConstArray();
 

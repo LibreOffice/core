@@ -311,8 +311,7 @@ namespace toolkit
                 break;
 
             case BASEPROPERTY_ORIENTATION:
-                aReturn <<= (sal_Int32)
-                    (   ( 0 != ( GetWindow()->GetStyle() & WB_HSCROLL ) )
+                aReturn <<= static_cast<sal_Int32>(   ( 0 != ( GetWindow()->GetStyle() & WB_HSCROLL ) )
                     ?   ScrollBarOrientation::HORIZONTAL
                     :   ScrollBarOrientation::VERTICAL
                     );
