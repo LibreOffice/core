@@ -45,6 +45,7 @@
 #include <drawdoc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentListsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <unofreg.hxx>
@@ -56,8 +57,10 @@
 #include <ndtxt.hxx>
 #include <editsh.hxx>
 #include <strings.hrc>
+#include <svl/stritem.hxx>
 #include "xmlimp.hxx"
 #include "xmltexti.hxx"
+#include <list.hxx>
 #include <swdll.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <docsh.hxx>
@@ -829,7 +832,7 @@ void SwXMLImport::endDocument()
 
             // tdf#113877
             // when we insert one document with list inside into another one with list at the insert position,
-            // the resulting numbering in these lists are not consequent.
+            // the resulting numbering in these lists is not consequent.
             //
             // Main document:
             //  1. One
@@ -852,65 +855,7 @@ void SwXMLImport::endDocument()
             //  6. Three
             //  7.
             //
-            if (IsInsertMode() && m_pSttNdIdx->GetIndex())
-            {
-                sal_uLong index = 1;
-
-                // the last node of the main document where we have inserted a document
-                SwNode * p1 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + 0];
-
-                // the first node of the inserted document
-                SwNode * p2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
-
-                // the first node of the inserted document,
-                // which will be used to detect if inside inserted document a new list was started
-                const SfxPoolItem* listId2Initial = nullptr;
-
-                while (
-                    p1 && p2
-                    && (p1->GetNodeType() == p2->GetNodeType())
-                    && (p1->IsTextNode() == p2->IsTextNode())
-                    )
-                {
-                    SwContentNode * c1 = static_cast<SwContentNode *>(p1);
-                    SwContentNode * c2 = static_cast<SwContentNode *>(p2);
-
-                    const SfxPoolItem* listId1 = c1->GetNoCondAttr(RES_PARATR_LIST_ID, false);
-                    const SfxPoolItem* listId2 = c2->GetNoCondAttr(RES_PARATR_LIST_ID, false);
-
-                    if (!listId2Initial)
-                    {
-                        listId2Initial = listId2;
-                    }
-
-                    if (! (listId2Initial && listId2 && (*listId2Initial == *listId2)) )
-                    {
-                        // no more list items of the first list inside inserted document
-                        break;
-                    }
-
-                    if (listId1 && listId2)
-                    {
-                        c2->SetAttr(*listId1);
-                    }
-                    else
-                    {
-                        // no more appropriate list items
-                        break;
-                    }
-
-                    // get next item
-                    index++;
-                    if (index >= pDoc->GetNodes().Count())
-                    {
-                        // no more items
-                        break;
-                    }
-
-                    p2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
-                }
-            }
-
+            MergeListsAtDocumentInsertPosition(pDoc);
         }
     }
 
@@ -983,6 +928,180 @@ void SwXMLImport::endDocument()
     // delegate to parent: takes care of error handling
     SvXMLImport::endDocument();
     ClearTextImport();
+}
+
+// tdf#113877
+// when we insert one document with list inside into another one with list at the insert position,
+// the resulting numbering in these lists is not consequent.
+//
+// CASE-1: Main document:
+//  1. One
+//  2. Two
+//  3. Three
+//  4.                      <-- insert position
+//
+// Inserted document:
+//  1. One
+//  2. Two
+//  3. Three
+//  4.
+//
+// Expected result
+//  1. One
+//  2. Two
+//  3. Three
+//  4. One
+//  5. Two
+//  6. Three
+//  7.
+//
+// CASE-2: Main document:
+//  1. One
+//  2. Two
+//  3. Three
+//  4.                      <-- insert position
+//
+// Inserted document:
+//  A) One
+//  B) Two
+//  C) Three
+//  D)
+//
+// Expected result
+//  1. One
+//  2. Two
+//  3. Three
+//  4. One
+//  A) Two
+//  B) Three
+//  5.
+//
+void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
+{
+    // 1. check enviroment
+    if (! pDoc)
+        return;
+
+    if (! IsInsertMode() || ! m_pSttNdIdx->GetIndex())
+        return;
+
+    sal_uLong index = 1;
+
+    // the last node of the main document where we have inserted a document
+    const SwNodePtr node1 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + 0];
+
+    // the first node of the inserted document
+    SwNodePtr node2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
+
+    if (! (node1 && node2
+        && (node1->GetNodeType() == node2->GetNodeType())
+        && (node1->IsTextNode() == node2->IsTextNode())
+        ))
+    {
+        // not a text node at insert position
+        return;
+    }
+
+    // 2. get the first node of the inserted document,
+    // which will be used to detect if inside inserted document a new list was started after the first list
+    const SfxPoolItem* pListId2Initial = nullptr;
+    {
+        SwContentNode* contentNode1 = static_cast<SwContentNode *>(node1);
+        SwContentNode* contentNode2 = static_cast<SwContentNode *>(node2);
+
+        // check if both lists have the same list properties
+        const SfxPoolItem* pListId1 = contentNode1->GetNoCondAttr( RES_PARATR_LIST_ID, false );
+        const SfxPoolItem* pListId2 = contentNode2->GetNoCondAttr( RES_PARATR_LIST_ID, false );
+
+        if (! pListId1)
+            return;
+        if (! pListId2)
+            return;
+
+        const OUString& sListId1 = dynamic_cast<const SfxStringItem*>(pListId1)->GetValue();
+        const OUString& sListId2 = dynamic_cast<const SfxStringItem*>(pListId2)->GetValue();
+
+        const SwList* pList1 = pDoc->getIDocumentListsAccess().getListByName( sListId1 );
+        const SwList* pList2 = pDoc->getIDocumentListsAccess().getListByName( sListId2 );
+
+        if (! pList1)
+            return;
+        if (! pList2)
+            return;
+
+        const OUString& sDefaultListStyleName1 = pList1->GetDefaultListStyleName();
+        const OUString& sDefaultListStyleName2 = pList2->GetDefaultListStyleName();
+
+        if (sDefaultListStyleName1 != sDefaultListStyleName2)
+        {
+            const SwNumRule* pNumRule1 = pDoc->FindNumRulePtr( sDefaultListStyleName1 );
+            const SwNumRule* pNumRule2 = pDoc->FindNumRulePtr( sDefaultListStyleName2 );
+
+            if (pNumRule1 && pNumRule2)
+            {
+                // check style of the each list level
+                for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
+                {
+                    if( !( pNumRule1->Get( n ) == pNumRule2->Get( n ) ))
+                    {
+                        return;
+                    }
+                }
+
+                // our list should be merged
+                pListId2Initial = pListId2;
+            }
+        }
+        else
+        {
+            // our list should be merged
+            pListId2Initial = pListId2;
+        }
+    }
+
+    if (! pListId2Initial)
+    {
+        // two lists have different styles => they should not be merged
+        return;
+    }
+
+    // 3. merge two lists
+    while (
+        node1 && node2
+        && (node1->GetNodeType() == node2->GetNodeType())
+        && (node1->IsTextNode() == node2->IsTextNode())
+        )
+    {
+        SwContentNode* contentNode1 = static_cast<SwContentNode *>( node1 );
+        SwContentNode* contentNode2 = static_cast<SwContentNode *>( node2 );
+
+        const SfxPoolItem* pListId1 = contentNode1->GetNoCondAttr( RES_PARATR_LIST_ID, false );
+        const SfxPoolItem* pListId2 = contentNode2->GetNoCondAttr( RES_PARATR_LIST_ID, false );
+
+        if (! pListId1)
+            return;
+        if (! pListId2)
+            return;
+
+        if (*pListId2Initial != *pListId2)
+        {
+            // no more list items of the first list inside inserted document
+            return;
+        }
+
+        // set list style to this list element
+        contentNode2->SetAttr(*pListId1);
+
+        // get next item
+        index++;
+        if (index >= pDoc->GetNodes().Count())
+        {
+            // no more items
+            return;
+        }
+
+        node2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
+    }
 }
 
 // Locally derive XMLTextShapeImportHelper, so we can take care of the
