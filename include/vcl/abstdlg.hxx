@@ -25,6 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vector>
+#include <functional>
 
 namespace vcl { class Window; }
 class Dialog;
@@ -41,6 +42,23 @@ protected:
     virtual             ~VclAbstractDialog() override;
 public:
     virtual short       Execute() = 0;
+
+    struct AsyncContext {
+        VclPtr<VclReferenceBase> mxOwner;
+        std::function<void(sal_Int32)> maEndDialogFn;
+        bool isSet() { return !!maEndDialogFn; }
+    };
+
+    bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn, VclPtr<VclReferenceBase> xOwner)
+    {
+        AsyncContext aCtx;
+        aCtx.mxOwner = xOwner;
+        aCtx.maEndDialogFn = rEndDialogFn;
+        return StartExecuteAsync(aCtx);
+    }
+
+    /// Commence execution of a modal dialog.
+    virtual bool StartExecuteAsync(AsyncContext &);
 
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
