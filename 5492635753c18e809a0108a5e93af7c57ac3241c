@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4c3f7d25",
+        "filename": "sw/qa/uitest/writer_tests/specialCharacter.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:22:05Z",
+      "side": 1,
+      "message": "If that sleep is necessary I need to have a look again.",
+      "revId": "5492635753c18e809a0108a5e93af7c57ac3241c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_2c3a4937",
+        "filename": "sw/qa/uitest/writer_tests/specialCharacter.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:22:05Z",
+      "side": 1,
+      "message": "Trailing whitespace and way too long line.",
+      "revId": "5492635753c18e809a0108a5e93af7c57ac3241c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
