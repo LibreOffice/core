@@ -3438,7 +3438,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
 {
 #ifdef IOS
     // For iOS we already hardcode the inifile as "rc" in the .app directory.
-    rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("soffice"));
+    rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("fundamental"));
     xContext = cppu::defaultBootstrap_InitialComponentContext(aAppProgramURL + "/rc");
 #elif defined MACOSX
     rtl::Bootstrap::setIniFilename(aAppProgramURL + "/../Resources/" SAL_CONFIGFILE("soffice"));
