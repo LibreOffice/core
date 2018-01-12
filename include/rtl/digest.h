@@ -288,11 +288,18 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5 (
     FIPS PUB 180 (Superseded by FIPS PUB 180-1)
       Secure Hash Standard
 
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_create()
  */
 SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA (void) SAL_THROW_EXTERN_C();
 
 /** Destroy a SHA digest handle.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_destroy()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA (
@@ -301,6 +308,10 @@ SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA (
 
 
 /** Update a SHA digest with given data.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_update()
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA (
@@ -309,6 +320,10 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA (
 ) SAL_THROW_EXTERN_C();
 
 /** Finalize a SHA digest and retrieve the digest value.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_get()
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA (
@@ -320,6 +335,9 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA (
 
     This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
 
     @see rtl_digest_updateSHA()
     @see rtl_digest_getSHA()
@@ -349,11 +367,18 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA (
     FIPS PUB 180-1 (Supersedes FIPS PUB 180)
       Secure Hash Standard
 
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_create()
  */
 SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA1 (void) SAL_THROW_EXTERN_C();
 
 /** Destroy a SHA1 digest handle.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_destroy()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA1 (
@@ -361,6 +386,10 @@ SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA1 (
 ) SAL_THROW_EXTERN_C();
 
 /** Update a SHA1 digest with given data.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_update()
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
@@ -369,6 +398,10 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
 ) SAL_THROW_EXTERN_C();
 
 /** Finalize a SHA1 digest and retrieve the digest value.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_get()
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
@@ -380,6 +413,9 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 
     This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
 
     @see rtl_digest_updateSHA1()
     @see rtl_digest_getSHA1()
@@ -480,11 +516,18 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
     RFC 2898 (Informational)
       PKCS #5: Password-Based Cryptography Specification Version 2.0
 
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_create()
  */
 SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1 (void) SAL_THROW_EXTERN_C();
 
 /** Destroy a HMAC_SHA1 digest handle.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_destroy()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyHMAC_SHA1 (
@@ -492,6 +535,10 @@ SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyHMAC_SHA1 (
 ) SAL_THROW_EXTERN_C();
 
 /** Initialize a HMAC_SHA1 digest.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_init()
 
     @param  Digest   [in] digest handle.
@@ -506,6 +553,10 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
 ) SAL_THROW_EXTERN_C();
 
 /** Update a HMAC_SHA1 digest with given data.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_update()
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
@@ -514,6 +565,10 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
 ) SAL_THROW_EXTERN_C();
 
 /** Finalize a HMAC_SHA1 digest and retrieve the digest value.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
     @see rtl_digest_get()
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
@@ -525,6 +580,9 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
 
     This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
 
     @see rtl_digest_initHMAC_SHA1()
     @see rtl_digest_updateHMAC_SHA1()
@@ -550,6 +608,11 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
     The PBKDF2 key derivation function is specified in
     RFC 2898 (Informational)
       PKCS #5: Password-Based Cryptography Specification Version 2.0
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility
+                or if the input is guaranteed to have a good length
+                by a start-key derivation round.
 
     @param  pKeyData  [out] derived key
     @param  nKeyLen   [in]  derived key length
