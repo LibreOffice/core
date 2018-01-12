@@ -155,6 +155,23 @@ SfxRequest::SfxRequest
         pImpl->SetPool( pArgs->GetPool() );
     else
         pImpl->SetPool( rOrig.pImpl->pPool );
+
+    // setup macro recording if it was in the original SfxRequest
+    if (rOrig.pImpl->pViewFrame && rOrig.pImpl->xRecorder.is())
+    {
+        nSlot = rOrig.nSlot;
+        pImpl->pViewFrame = rOrig.pImpl->pViewFrame;
+        if (pImpl->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl(nSlot, &pImpl->pShell, &pImpl->pSlot, true, true))
+        {
+            pImpl->SetPool( &pImpl->pShell->GetPool() );
+            pImpl->xRecorder = SfxRequest::GetMacroRecorder(pImpl->pViewFrame);
+            pImpl->aTarget = pImpl->pShell->GetName();
+        }
+        else
+        {
+            SAL_WARN("sfx", "Recording unsupported slot: " << pImpl->pPool->GetSlotId(nSlot));
+        }
+    }
 }
 
 

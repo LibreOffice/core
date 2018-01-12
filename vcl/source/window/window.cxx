@@ -2494,6 +2494,8 @@ bool Window::IsCallHandlersOnInputDisabled() const
 
 void Window::EnableInput( bool bEnable, bool bChild )
 {
+    if (!mpWindowImpl)
+        return;
 
     bool bNotify = (bEnable != mpWindowImpl->mbInputDisabled);
     if ( mpWindowImpl->mpBorderWindow )
@@ -2557,6 +2559,9 @@ void Window::EnableInput( bool bEnable, bool bChild )
 
 void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
 {
+    if (!mpWindowImpl)
+        return;
+
     EnableInput( bEnable );
 
     // pExecuteWindow is the first Overlap-Frame --> if this

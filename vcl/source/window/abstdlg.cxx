@@ -58,6 +58,12 @@ VclAbstractDialog::~VclAbstractDialog()
 {
 }
 
+bool VclAbstractDialog::StartExecuteAsync(AsyncContext &)
+{
+    assert(false);
+    return false;
+}
+
 std::vector<OString> VclAbstractDialog::getAllPageUIXMLDescriptions() const
 {
     // default has no pages

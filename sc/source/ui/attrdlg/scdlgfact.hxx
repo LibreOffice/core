@@ -65,6 +65,7 @@ public:                                             \
                      {}                             \
     virtual         ~Class() override;                       \
     virtual short   Execute() override ;            \
+    virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override; \
     std::vector<OString> getAllPageUIXMLDescriptions() const override; \
     bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
     virtual Bitmap  createScreenshot() const override; \
@@ -78,6 +79,10 @@ short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
 }                                                   \
+bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)\
+{ \
+    return pDlg->StartExecuteAsync( rCtx ); \
+} \
 std::vector<OString> Class::getAllPageUIXMLDescriptions() const \
 {                                                   \
     return pDlg->getAllPageUIXMLDescriptions();     \
