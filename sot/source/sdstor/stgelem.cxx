@@ -184,7 +184,7 @@ bool StgHeader::Store( StgIo& rIo )
 
 static bool lcl_wontoverflow(short shift)
 {
-    return shift >= 0 && shift < (short)sizeof(short) * 8 - 1;
+    return shift >= 0 && shift < short(sizeof(short)) * 8 - 1;
 }
 
 static bool isKnownSpecial(sal_Int32 nLocation)
@@ -199,7 +199,7 @@ static bool isKnownSpecial(sal_Int32 nLocation)
 bool StgHeader::Check()
 {
     return  memcmp( m_cSignature, cStgSignature, 8 ) == 0
-            && (short) ( m_nVersion >> 16 ) == 3
+            && static_cast<short>( m_nVersion >> 16 ) == 3
             && m_nPageSize == 9
             && lcl_wontoverflow(m_nPageSize)
             && lcl_wontoverflow(m_nDataPageSize)

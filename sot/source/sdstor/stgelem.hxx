@@ -126,7 +126,7 @@ public:
     void        Store( void* );
     StgEntryType GetType() const            { return (StgEntryType) m_cType;  }
     sal_Int32   GetStartPage() const        { return m_nPage1; }
-    void        SetType( StgEntryType t )   { m_cType = (sal_uInt8) t; }
+    void        SetType( StgEntryType t )   { m_cType = static_cast<sal_uInt8>(t); }
     sal_Int32   GetSize() const             { return m_nSize; }
     void        SetSize( sal_Int32 n )      { m_nSize = n; }
     const ClsId& GetClassId() const         { return m_aClsId; }
