@@ -289,7 +289,7 @@ oslFileError FileHandle_Impl::setPos(sal_uInt64 uPos)
 
 sal_uInt64 FileHandle_Impl::getSize() const
 {
-    off_t const bufend = std::max((off_t)0, m_bufptr) + m_buflen;
+    off_t const bufend = std::max(off_t(0), m_bufptr) + m_buflen;
     return std::max(m_size, sal::static_int_cast< sal_uInt64 >(bufend));
 }
 
@@ -309,23 +309,23 @@ oslFileError FileHandle_Impl::setSize(sal_uInt64 uSize)
         }
 
         /* Save current position */
-        off_t const nCurPos = lseek(m_fd, (off_t)0, SEEK_CUR);
-        if (nCurPos == (off_t)-1)
+        off_t const nCurPos = lseek(m_fd, off_t(0), SEEK_CUR);
+        if (nCurPos == off_t(-1))
             return result;
 
         /* Try 'expand' via 'lseek()' and 'write()' */
-        if (lseek(m_fd, (off_t)(nSize - 1), SEEK_SET) == -1)
+        if (lseek(m_fd, static_cast<off_t>(nSize - 1), SEEK_SET) == -1)
             return result;
 
-        if (write(m_fd, "", (size_t)1) == -1)
+        if (write(m_fd, "", size_t(1)) == -1)
         {
             /* Failure. Restore saved position */
-            (void) lseek(m_fd, (off_t)nCurPos, SEEK_SET);
+            (void) lseek(m_fd, static_cast<off_t>(nCurPos), SEEK_SET);
             return result;
         }
 
         /* Success. Restore saved position */
-        if (lseek(m_fd, (off_t)nCurPos, SEEK_SET) == -1)
+        if (lseek(m_fd, static_cast<off_t>(nCurPos), SEEK_SET) == -1)
             return result;
     }
 
@@ -354,13 +354,13 @@ oslFileError FileHandle_Impl::readAt(
 
         m_offset = nOffset;
 
-        if ((sal_uInt64) m_offset >= m_size)
+        if (static_cast<sal_uInt64>(m_offset) >= m_size)
         {
             nBytes = 0;
         }
         else
         {
-            nBytes = std::min(nBytesRequested, (size_t) (m_size - m_offset));
+            nBytes = std::min(nBytesRequested, static_cast<size_t>(m_size - m_offset));
             memmove(pBuffer, m_buffer + m_offset, nBytes);
             m_offset += nBytes;
         }

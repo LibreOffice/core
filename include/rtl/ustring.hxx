@@ -3610,7 +3610,7 @@ struct OUStringHash
         persistently, as its computation may change in later revisions.
      */
     size_t operator()(const OUString& rString) const
-        { return (size_t)rString.hashCode(); }
+        { return static_cast<size_t>(rString.hashCode()); }
 };
 
 /* ======================================================================= */

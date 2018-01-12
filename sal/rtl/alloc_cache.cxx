@@ -181,7 +181,7 @@ rtl_cache_bufctl_type * rtl_cache_hash_remove(
 
     if (lookups > 1)
     {
-        sal_Size nbuf = (sal_Size)(cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free);
+        sal_Size nbuf = static_cast<sal_Size>(cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free);
         if (nbuf > 4 * cache->m_hash_size)
         {
             if (!(cache->m_features & RTL_CACHE_FEATURE_RESCALE))
@@ -744,9 +744,9 @@ rtl_cache_type * rtl_cache_activate(
         if (flags & RTL_CACHE_FLAG_QUANTUMCACHE)
         {
             /* next power of 2 above 3 * qcache_max */
-            if (slabsize < (((sal_Size)1) << highbit(3 * source->m_qcache_max)))
+            if (slabsize < ((sal_Size(1)) << highbit(3 * source->m_qcache_max)))
             {
-                slabsize = (((sal_Size)1) << highbit(3 * source->m_qcache_max));
+                slabsize = ((sal_Size(1)) << highbit(3 * source->m_qcache_max));
             }
         }
         else
@@ -760,7 +760,7 @@ rtl_cache_type * rtl_cache_activate(
 
         slabsize = RTL_MEMORY_P2ROUNDUP(slabsize, source->m_quantum);
         if (!RTL_MEMORY_ISP2(slabsize))
-            slabsize = (((sal_Size)1) << highbit(slabsize));
+            slabsize = ((sal_Size(1)) << highbit(slabsize));
         cache->m_slab_size = slabsize;
 
         if (cache->m_slab_size > source->m_quantum)

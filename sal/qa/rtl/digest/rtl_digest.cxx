@@ -76,7 +76,7 @@ OString createHex(const sal_uInt8* pKeyBuffer, sal_uInt32 nKeyLen)
     OStringBuffer aBuffer(nKeyLen * 2 + 1);
     for (sal_uInt32 i = 0; i < nKeyLen; ++i)
     {
-        sal_Int32 nValue = (sal_Int32) pKeyBuffer[i];
+        sal_Int32 nValue = static_cast<sal_Int32>(pKeyBuffer[i]);
         if (nValue < 16)
             aBuffer.append('0');
         aBuffer.append(nValue, 16);

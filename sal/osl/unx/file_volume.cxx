@@ -161,7 +161,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #   define OSL_detail_NTFS_SUPER_MAGIC                0x5346544e
 #   define OSL_detail_STATFS_STRUCT                   struct statfs
 #   define OSL_detail_STATFS(dir, sfs)                statfs((dir), (sfs))
-#   define OSL_detail_STATFS_BLKSIZ(a)                ((sal_uInt64)((a).f_bsize))
+#   define OSL_detail_STATFS_BLKSIZ(a)                (static_cast<sal_uInt64>((a).f_bsize))
 #   define OSL_detail_STATFS_IS_NFS(a)                (OSL_detail_NFS_SUPER_MAGIC == (a).f_type)
 #   define OSL_detail_STATFS_IS_SMB(a)                (OSL_detail_SMB_SUPER_MAGIC == (a).f_type)
 #   define OSL_detail_STATFS_ISREMOTE(a)              (OSL_detail_STATFS_IS_NFS((a)) || OSL_detail_STATFS_IS_SMB((a)))
@@ -250,7 +250,7 @@ static oslFileError osl_psz_getVolumeInformation (
             (uFieldMask & osl_VolumeInfo_Mask_UsedSpace))
         {
             pInfo->uTotalSpace   = OSL_detail_STATFS_BLKSIZ(sfs);
-            pInfo->uTotalSpace  *= (sal_uInt64)(sfs.f_blocks);
+            pInfo->uTotalSpace  *= static_cast<sal_uInt64>(sfs.f_blocks);
             pInfo->uValidFields |= osl_VolumeInfo_Mask_TotalSpace;
         }
 
@@ -260,9 +260,9 @@ static oslFileError osl_psz_getVolumeInformation (
             pInfo->uFreeSpace = OSL_detail_STATFS_BLKSIZ(sfs);
 
             if (getuid() == 0)
-                pInfo->uFreeSpace *= (sal_uInt64)(sfs.f_bfree);
+                pInfo->uFreeSpace *= static_cast<sal_uInt64>(sfs.f_bfree);
             else
-                pInfo->uFreeSpace *= (sal_uInt64)(sfs.f_bavail);
+                pInfo->uFreeSpace *= static_cast<sal_uInt64>(sfs.f_bavail);
 
             pInfo->uValidFields |= osl_VolumeInfo_Mask_FreeSpace;
         }
@@ -300,7 +300,7 @@ static oslFileError osl_psz_getVolumeInformation (
         long nLen = pathconf(pszDirectory, _PC_NAME_MAX);
         if (nLen > 0)
         {
-            pInfo->uMaxNameLength = (sal_uInt32)nLen;
+            pInfo->uMaxNameLength = static_cast<sal_uInt32>(nLen);
             pInfo->uValidFields |= osl_VolumeInfo_Mask_MaxNameLength;
         }
     }
@@ -311,7 +311,7 @@ static oslFileError osl_psz_getVolumeInformation (
         long nLen = pathconf (pszDirectory, _PC_PATH_MAX);
         if (nLen > 0)
         {
-            pInfo->uMaxPathLength  = (sal_uInt32)nLen;
+            pInfo->uMaxPathLength  = static_cast<sal_uInt32>(nLen);
             pInfo->uValidFields   |= osl_VolumeInfo_Mask_MaxPathLength;
         }
     }

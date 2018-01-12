@@ -339,8 +339,8 @@ public:
 
 double get_time(timeval* time)
 {
-    double nTime = (double)time->tv_sec;
-    nTime += ((double)time->tv_usec)/1000000.0;
+    double nTime = static_cast<double>(time->tv_sec);
+    nTime += static_cast<double>(time->tv_usec)/1000000.0;
     return nTime;
 }
 

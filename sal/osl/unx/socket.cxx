@@ -108,7 +108,7 @@ static oslAddrFamily osl_AddrFamilyFromNative(sal_uInt32 nativeType)
 }
 
 #define FAMILY_FROM_NATIVE(y) osl_AddrFamilyFromNative(y)
-#define FAMILY_TO_NATIVE(x) (short)FamilyMap[x]
+#define FAMILY_TO_NATIVE(x) static_cast<short>(FamilyMap[x])
 
 static const sal_uInt32 ProtocolMap[]= {
     0,                          /* osl_Socket_ProtocolIp      */
@@ -326,7 +326,7 @@ static oslSocketAddr createSocketAddrWithFamily(
 
         pInetAddr->sin_family = FAMILY_TO_NATIVE(osl_Socket_FamilyInet);
         pInetAddr->sin_addr.s_addr = nAddr;
-        pInetAddr->sin_port = (sal_uInt16)(port&0xffff);
+        pInetAddr->sin_port = static_cast<sal_uInt16>(port&0xffff);
         break;
        }
     default:
@@ -582,7 +582,7 @@ static bool isFullQualifiedDomainName (const sal_Char *pHostName)
      * is a name which contains a dot '.' in it ( would
      * match as well for 'hostname.' but is good enough
      * for now )*/
-    return strchr( pHostName, (int)'.' ) != nullptr;
+    return strchr( pHostName, int('.') ) != nullptr;
 }
 
 static sal_Char* getFullQualifiedDomainName (const sal_Char *pHostName)
@@ -1080,7 +1080,7 @@ sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(oslSocketAddr pAddr, sal_Int32 Por
         struct sockaddr_in* pSystemInetAddr= reinterpret_cast<sockaddr_in*>(&pAddr->m_sockaddr);
         if ( pSystemInetAddr->sin_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
         {
-            pSystemInetAddr->sin_port= htons((short)Port);
+            pSystemInetAddr->sin_port= htons(static_cast<short>(Port));
             return true;
         }
     }
@@ -2001,7 +2001,7 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
                             void*                   pBuffer,
                             sal_uInt32                  BufferLen)
 {
-    socklen_t nOptLen = (socklen_t) BufferLen;
+    socklen_t nOptLen = static_cast<socklen_t>(BufferLen);
 
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
     if ( pSocket == nullptr )

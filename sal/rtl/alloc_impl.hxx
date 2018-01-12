@@ -44,12 +44,12 @@
 #define RTL_MEMORY_ALIGN(value, align) (((value) + ((align) - 1)) & ~((align) - 1))
 
 #define RTL_MEMORY_ISP2(value) (((value) & ((value) - 1)) == 0)
-#define RTL_MEMORY_P2ALIGN(value, align) ((value) & -(sal_IntPtr)(align))
+#define RTL_MEMORY_P2ALIGN(value, align) ((value) & -static_cast<sal_IntPtr>(align))
 
 #define RTL_MEMORY_P2ROUNDUP(value, align) \
-    (-(-(sal_IntPtr)(value) & -(sal_IntPtr)(align)))
+    (-(-static_cast<sal_IntPtr>(value) & -static_cast<sal_IntPtr>(align)))
 #define RTL_MEMORY_P2END(value, align) \
-    (-(~(sal_IntPtr)(value) & -(sal_IntPtr)(align)))
+    (-(~static_cast<sal_IntPtr>(value) & -static_cast<sal_IntPtr>(align)))
 
 /** highbit(): log2() + 1
     (complexity O(1))
