@@ -111,13 +111,13 @@ struct ToolBoxLayoutData : public ControlLayoutData
 
 struct ImplToolBoxPrivateData
 {
-    vcl::ToolBoxLayoutData*         m_pLayoutData;
+    std::unique_ptr<vcl::ToolBoxLayoutData> m_pLayoutData;
     ToolBox::ImplToolItems          m_aItems;
 
     ImplToolBoxPrivateData();
     ~ImplToolBoxPrivateData();
 
-    void ImplClearLayoutData() { delete m_pLayoutData; m_pLayoutData = nullptr; }
+    void ImplClearLayoutData() { m_pLayoutData.reset(); }
 
     // called when dropdown items are clicked
     Link<ToolBox *, void> maDropdownClickHdl;

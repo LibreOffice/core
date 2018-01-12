@@ -70,7 +70,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
 
 ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
 {
-    delete m_pLayoutData;
+    m_pLayoutData.reset();
     mpMenu.disposeAndClear();
 }
 
@@ -1457,7 +1457,7 @@ void ToolBox::ImplUpdateInputEnable()
 
 void ToolBox::ImplFillLayoutData()
 {
-    mpData->m_pLayoutData = new ToolBoxLayoutData;
+    mpData->m_pLayoutData.reset(new ToolBoxLayoutData);
 
     ImplToolItems::size_type nCount = mpData->m_aItems.size();
     for( ImplToolItems::size_type i = 0; i < nCount; i++ )
