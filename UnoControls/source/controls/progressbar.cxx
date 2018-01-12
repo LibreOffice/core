@@ -325,7 +325,7 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
         rGraphics->setLineColor ( m_nForegroundColor );
 
         sal_Int32   nBlockStart     =   0;   // = left site of new block
-        sal_Int32   nBlockCount     =   m_nBlockValue!=0.00 ? (sal_Int32)((m_nValue-m_nMinRange)/m_nBlockValue) : 0;   // = number of next block
+        sal_Int32   nBlockCount     =   m_nBlockValue!=0.00 ? static_cast<sal_Int32>((m_nValue-m_nMinRange)/m_nBlockValue) : 0;   // = number of next block
 
         // Draw horizontal progressbar
         // decision in "recalcRange()"
@@ -405,8 +405,8 @@ void ProgressBar::impl_recalcRange ()
     double fBlockValue  = fRange/fMaxBlocks;
 
     m_nBlockValue       = fBlockValue;
-    m_aBlockSize.Height = (sal_Int32)fBlockHeight;
-    m_aBlockSize.Width  = (sal_Int32)fBlockWidth;
+    m_aBlockSize.Height = static_cast<sal_Int32>(fBlockHeight);
+    m_aBlockSize.Width  = static_cast<sal_Int32>(fBlockWidth);
 }
 
 }   // namespace unocontrols
