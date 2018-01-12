@@ -289,7 +289,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     const SfxPoolItem* pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ROT_X );
     if(pItem)
     {
-        const double fTmp(((double)static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getX()) / fUIScale);
+        const double fTmp((static_cast<double>(static_cast<const SfxInt32Item*>(pItem)->GetValue()) - maAnchor.getX()) / fUIScale);
         SetMetricValue(*m_pMtrPosX, basegfx::fround(fTmp), ePoolUnit);
     }
     else
@@ -300,7 +300,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     pItem = GetItem(*rAttrs, SID_ATTR_TRANSFORM_ROT_Y);
     if(pItem)
     {
-        const double fTmp(((double)static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getY()) / fUIScale);
+        const double fTmp((static_cast<double>(static_cast<const SfxInt32Item*>(pItem)->GetValue()) - maAnchor.getY()) / fUIScale);
         SetMetricValue(*m_pMtrPosY, basegfx::fround(fTmp), ePoolUnit);
     }
     else
@@ -583,7 +583,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         if( pItem )
         {
             const double fUIScale(double(pView->GetModel()->GetUIScale()));
-            const double fTmp((double)static_cast<const SdrMetricItem*>(pItem)->GetValue() / fUIScale);
+            const double fTmp(static_cast<double>(static_cast<const SdrMetricItem*>(pItem)->GetValue()) / fUIScale);
             SetMetricValue(*m_pMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else
@@ -966,20 +966,20 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         // get Width
         double nWidth = static_cast<double>(m_pMtrWidth->GetValue( meDlgUnit ));
         nWidth = MetricField::ConvertDoubleValue( nWidth, m_pMtrWidth->GetBaseValue(), m_pMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-        long lWidth = long(nWidth * (double)aUIScale);
+        long lWidth = long(nWidth * static_cast<double>(aUIScale));
         lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
         lWidth = static_cast<long>(m_pMtrWidth->Denormalize( lWidth ));
 
         // get Height
         double nHeight = static_cast<double>(m_pMtrHeight->GetValue( meDlgUnit ));
         nHeight = MetricField::ConvertDoubleValue( nHeight, m_pMtrHeight->GetBaseValue(), m_pMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-        long lHeight = long(nHeight * (double)aUIScale);
+        long lHeight = long(nHeight * static_cast<double>(aUIScale));
         lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
         lHeight = static_cast<long>(m_pMtrHeight->Denormalize( lHeight ));
 
         // put Width & Height to itemset
-        rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), (sal_uInt32) lWidth ) );
-        rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), (sal_uInt32) lHeight ) );
+        rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), static_cast<sal_uInt32>(lWidth) ) );
+        rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), static_cast<sal_uInt32>(lHeight) ) );
         rOutAttrs->Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal::static_int_cast< sal_uInt16 >( meRP ) ) );
         bModified = true;
     }
@@ -1070,7 +1070,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
     { // #i75273# set width
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
-        mfOldWidth = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
+        mfOldWidth = std::max( pItem ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0.0, 1.0 );
         double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
 
         if(m_pMtrWidth->GetDecimalDigits())
@@ -1082,7 +1082,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
     { // #i75273# set height
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_HEIGHT );
-        mfOldHeight = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
+        mfOldHeight = std::max( pItem ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0.0, 1.0 );
         double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
 
         if(m_pMtrHeight->GetDecimalDigits())
@@ -1160,8 +1160,8 @@ DeactivateRC SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
     {
-        double fX((double)m_pMtrPosX->GetValue());
-        double fY((double)m_pMtrPosY->GetValue());
+        double fX(static_cast<double>(m_pMtrPosX->GetValue()));
+        double fY(static_cast<double>(m_pMtrPosY->GetValue()));
 
         GetTopLeftPosition(fX, fY, maRange);
         const ::tools::Rectangle aOutRectangle(
@@ -1308,7 +1308,7 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
         }
     }
 
-    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
+    const double fMaxLong(static_cast<double>(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
     fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);
@@ -1549,7 +1549,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
 {
     if( m_pCbxScale->IsChecked() && m_pCbxScale->IsEnabled() )
     {
-        sal_Int64 nHeight(basegfx::fround64((mfOldHeight * (double)m_pMtrWidth->GetValue()) / mfOldWidth));
+        sal_Int64 nHeight(basegfx::fround64((mfOldHeight * static_cast<double>(m_pMtrWidth->GetValue())) / mfOldWidth));
 
         if(nHeight <= m_pMtrHeight->GetMax(FUNIT_NONE))
         {
@@ -1560,7 +1560,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
             nHeight = m_pMtrHeight->GetMax(FUNIT_NONE);
             m_pMtrHeight->SetUserValue(nHeight);
 
-            const sal_Int64 nWidth(basegfx::fround64((mfOldWidth * (double)nHeight) / mfOldHeight));
+            const sal_Int64 nWidth(basegfx::fround64((mfOldWidth * static_cast<double>(nHeight)) / mfOldHeight));
             m_pMtrWidth->SetUserValue(nWidth, FUNIT_NONE);
         }
     }
@@ -1571,7 +1571,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
 {
     if( m_pCbxScale->IsChecked() && m_pCbxScale->IsEnabled() )
     {
-        sal_Int64 nWidth(basegfx::fround64((mfOldWidth * (double)m_pMtrHeight->GetValue()) / mfOldHeight));
+        sal_Int64 nWidth(basegfx::fround64((mfOldWidth * static_cast<double>(m_pMtrHeight->GetValue())) / mfOldHeight));
 
         if(nWidth <= m_pMtrWidth->GetMax(FUNIT_NONE))
         {
@@ -1582,7 +1582,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
             nWidth = m_pMtrWidth->GetMax(FUNIT_NONE);
             m_pMtrWidth->SetUserValue(nWidth);
 
-            const sal_Int64 nHeight(basegfx::fround64((mfOldHeight * (double)nWidth) / mfOldWidth));
+            const sal_Int64 nHeight(basegfx::fround64((mfOldHeight * static_cast<double>(nWidth)) / mfOldWidth));
             m_pMtrHeight->SetUserValue(nHeight, FUNIT_NONE);
         }
     }
@@ -1599,8 +1599,8 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl, Button*, void)
 {
     if( m_pCbxScale->IsChecked() )
     {
-        mfOldWidth  = std::max( (double)GetCoreValue( *m_pMtrWidth,  mePoolUnit ), 1.0 );
-        mfOldHeight = std::max( (double)GetCoreValue( *m_pMtrHeight, mePoolUnit ), 1.0 );
+        mfOldWidth  = std::max( static_cast<double>(GetCoreValue( *m_pMtrWidth,  mePoolUnit )), 1.0 );
+        mfOldHeight = std::max( static_cast<double>(GetCoreValue( *m_pMtrHeight, mePoolUnit )), 1.0 );
     }
 }
 

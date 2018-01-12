@@ -126,7 +126,7 @@ namespace svx
         // the font for the secondary text:
         vcl::Font aSmallerFont(rRenderContext.GetFont());
         // heuristic: 80% of the original size
-        aSmallerFont.SetFontHeight( (long)( 0.8 * aSmallerFont.GetFontHeight() ) );
+        aSmallerFont.SetFontHeight( static_cast<long>( 0.8 * aSmallerFont.GetFontHeight() ) );
 
         // let's calculate the size of our two texts
         ::tools::Rectangle aPrimaryRect = rRenderContext.GetTextRect( _rRect, m_sPrimaryText, _nTextStyle );

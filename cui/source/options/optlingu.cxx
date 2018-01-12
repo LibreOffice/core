@@ -146,10 +146,10 @@ bool KillFile_Impl( const OUString& rURL )
 // c: 1 -> checked 0 -> unchecked
 // n: index
 
-#define TYPE_SPELL      (sal_uInt8)1
-#define TYPE_GRAMMAR    (sal_uInt8)2
-#define TYPE_HYPH       (sal_uInt8)3
-#define TYPE_THES       (sal_uInt8)4
+#define TYPE_SPELL      sal_uInt8(1)
+#define TYPE_GRAMMAR    sal_uInt8(2)
+#define TYPE_HYPH       sal_uInt8(3)
+#define TYPE_THES       sal_uInt8(4)
 
 class ModuleUserData_Impl
 {
@@ -189,9 +189,9 @@ public:
                  bool bChecked, bool bEditable, bool bDeletable );
 
     sal_uLong   GetUserData() const         { return nVal; }
-    sal_uInt16  GetEntryId() const          { return (sal_uInt16)(nVal >> 16); }
-    bool        IsChecked() const           { return (bool)((nVal >>  8) & 0x01); }
-    bool        IsDeletable() const         { return (bool)((nVal >> 10) & 0x01); }
+    sal_uInt16  GetEntryId() const          { return static_cast<sal_uInt16>(nVal >> 16); }
+    bool        IsChecked() const           { return static_cast<bool>((nVal >>  8) & 0x01); }
+    bool        IsDeletable() const         { return static_cast<bool>((nVal >> 10) & 0x01); }
 };
 
 
@@ -200,10 +200,10 @@ DicUserData::DicUserData(
         bool bChecked, bool bEditable, bool bDeletable )
 {
     DBG_ASSERT( nEID < 65000, "Entry Id out of range" );
-    nVal =  ((sal_uLong)(0xFFFF & nEID)         << 16) |
-            ((sal_uLong)(bChecked ? 1 : 0)      <<  8) |
-            ((sal_uLong)(bEditable ? 1 : 0)     <<  9) |
-            ((sal_uLong)(bDeletable ? 1 : 0)    << 10);
+    nVal =  (static_cast<sal_uLong>(0xFFFF & nEID)         << 16) |
+            (static_cast<sal_uLong>(bChecked ? 1 : 0)      <<  8) |
+            (static_cast<sal_uLong>(bEditable ? 1 : 0)     <<  9) |
+            (static_cast<sal_uLong>(bDeletable ? 1 : 0)    << 10);
 }
 
 
@@ -289,8 +289,8 @@ static const char * aEidToPropName[] =
 
 static inline OUString lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
-    DBG_ASSERT( (unsigned int) eEntryId < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
-    return OUString::createFromAscii( aEidToPropName[ (int) eEntryId ] );
+    DBG_ASSERT( static_cast<unsigned int>(eEntryId) < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
+    return OUString::createFromAscii( aEidToPropName[ static_cast<int>(eEntryId) ] );
 }
 
 class OptionsBreakSet : public ModalDialog
@@ -359,11 +359,11 @@ public:
                      bool bCheckable, bool bChecked );
 
     sal_uLong   GetUserData() const         { return nVal; }
-    sal_uInt16  GetEntryId() const          { return (sal_uInt16)(nVal >> 16); }
-    bool        HasNumericValue() const     { return (bool)((nVal >> 10) & 0x01); }
-    sal_uInt16  GetNumericValue() const     { return (sal_uInt16)(nVal & 0xFF); }
-    bool        IsCheckable() const         { return (bool)((nVal >> 9) & 0x01); }
-    bool        IsModified() const          { return (bool)((nVal >> 11) & 0x01); }
+    sal_uInt16  GetEntryId() const          { return static_cast<sal_uInt16>(nVal >> 16); }
+    bool        HasNumericValue() const     { return static_cast<bool>((nVal >> 10) & 0x01); }
+    sal_uInt16  GetNumericValue() const     { return static_cast<sal_uInt16>(nVal & 0xFF); }
+    bool        IsCheckable() const         { return static_cast<bool>((nVal >> 9) & 0x01); }
+    bool        IsModified() const          { return static_cast<bool>((nVal >> 11) & 0x01); }
 
     void        SetNumericValue( sal_uInt8 nNumVal );
 };
@@ -374,11 +374,11 @@ OptionsUserData::OptionsUserData( sal_uInt16 nEID,
 {
     DBG_ASSERT( nEID < 65000, "Entry Id out of range" );
     DBG_ASSERT( nNumVal < 256, "value out of range" );
-    nVal =  ((sal_uLong)(0xFFFF & nEID)         << 16) |
-            ((sal_uLong)(bHasNV ? 1 : 0)        << 10) |
-            ((sal_uLong)(bCheckable ? 1 : 0)    <<  9) |
-            ((sal_uLong)(bChecked ? 1 : 0)      <<  8) |
-            ((sal_uLong)(0xFF & nNumVal));
+    nVal =  (static_cast<sal_uLong>(0xFFFF & nEID)         << 16) |
+            (static_cast<sal_uLong>(bHasNV ? 1 : 0)        << 10) |
+            (static_cast<sal_uLong>(bCheckable ? 1 : 0)    <<  9) |
+            (static_cast<sal_uLong>(bChecked ? 1 : 0)      <<  8) |
+            static_cast<sal_uLong>(0xFF & nNumVal);
 }
 
 void OptionsUserData::SetNumericValue( sal_uInt8 nNumVal )
@@ -387,7 +387,7 @@ void OptionsUserData::SetNumericValue( sal_uInt8 nNumVal )
     {
         nVal &= 0xffffff00;
         nVal |= nNumVal;
-        nVal |= (sal_uLong)1 << 11; // mark as modified
+        nVal |= sal_uLong(1) << 11; // mark as modified
     }
 }
 
@@ -537,12 +537,12 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( LanguageType nLang, 
     if (pTable->count( nLang ))
         aRes = (*pTable)[ nLang ];      // add configured services
     sal_Int32 nIdx = aRes.getLength();
-    DBG_ASSERT( (sal_Int32) nDisplayServices >= nIdx, "size mismatch" );
+    DBG_ASSERT( static_cast<sal_Int32>(nDisplayServices) >= nIdx, "size mismatch" );
     aRes.realloc( nDisplayServices );
     OUString *pRes = aRes.getArray();
 
     // add not configured services
-    for (sal_Int32 i = 0;  i < (sal_Int32) nDisplayServices;  ++i)
+    for (sal_Int32 i = 0;  i < static_cast<sal_Int32>(nDisplayServices);  ++i)
     {
         const ServiceInfo_Impl &rInfo = aDisplayServiceArr[ i ];
         OUString aImplName;
@@ -1197,8 +1197,8 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         aLngCfg.SetProperty( aPropName, aAny );
     }
 
-    SvTreeListEntry *pPreBreakEntry  = m_pLinguOptionsCLB->GetEntry( (sal_uLong) EID_NUM_PRE_BREAK );
-    SvTreeListEntry *pPostBreakEntry = m_pLinguOptionsCLB->GetEntry( (sal_uLong) EID_NUM_POST_BREAK );
+    SvTreeListEntry *pPreBreakEntry  = m_pLinguOptionsCLB->GetEntry( sal_uLong(EID_NUM_PRE_BREAK) );
+    SvTreeListEntry *pPostBreakEntry = m_pLinguOptionsCLB->GetEntry( sal_uLong(EID_NUM_POST_BREAK) );
     DBG_ASSERT( pPreBreakEntry, "NULL Pointer" );
     DBG_ASSERT( pPostBreakEntry, "NULL Pointer" );
     if (pPreBreakEntry && pPostBreakEntry)
@@ -1208,15 +1208,15 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         if ( aPreBreakData.IsModified() || aPostBreakData.IsModified() )
         {
             SfxHyphenRegionItem aHyp( GetWhich( SID_ATTR_HYPHENREGION ) );
-            aHyp.GetMinLead()  = (sal_uInt8) aPreBreakData.GetNumericValue();
-            aHyp.GetMinTrail() = (sal_uInt8) aPostBreakData.GetNumericValue();
+            aHyp.GetMinLead()  = static_cast<sal_uInt8>(aPreBreakData.GetNumericValue());
+            aHyp.GetMinTrail() = static_cast<sal_uInt8>(aPostBreakData.GetNumericValue());
             rCoreSet->Put( aHyp );
         }
     }
 
 
     // automatic spell checking
-    bool bNewAutoCheck = m_pLinguOptionsCLB->IsChecked( (sal_uLong) EID_SPELL_AUTO );
+    bool bNewAutoCheck = m_pLinguOptionsCLB->IsChecked( sal_uLong(EID_SPELL_AUTO) );
     const SfxPoolItem* pOld = GetOldItem( *rCoreSet, SID_AUTOSPELL_CHECK );
     if ( !pOld || static_cast<const SfxBoolItem*>(pOld)->GetValue() != bNewAutoCheck )
     {
@@ -1281,7 +1281,7 @@ void SvxLinguTabPage::UpdateDicBox_Impl()
     {
         const uno::Reference< XDictionary > &rDic = pDic[i];
         if (rDic.is())
-            AddDicBoxEntry( rDic, (sal_uInt16)i );
+            AddDicBoxEntry( rDic, static_cast<sal_uInt16>(i) );
     }
 
     m_pLinguDicsCLB->SetUpdateMode(true);
@@ -1375,7 +1375,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     pEntry = CreateEntry( sNumMinWordlen,   CBCOL_SECOND );
     aLngCfg.GetProperty( UPN_HYPH_MIN_WORD_LENGTH ) >>= nVal;
-    nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, true, (sal_uInt16)nVal, false, false).GetUserData();
+    nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
     pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
 
@@ -1387,16 +1387,16 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
     aLngCfg.GetProperty( UPN_HYPH_MIN_LEADING ) >>= nVal;
     if (pHyp)
-        nVal = (sal_Int16) pHyp->GetMinLead();
-    nUserData = OptionsUserData( EID_NUM_PRE_BREAK, true, (sal_uInt16)nVal, false, false).GetUserData();
+        nVal = static_cast<sal_Int16>(pHyp->GetMinLead());
+    nUserData = OptionsUserData( EID_NUM_PRE_BREAK, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
     pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
 
     pEntry = CreateEntry( sNumPostBreak,    CBCOL_SECOND );
     aLngCfg.GetProperty( UPN_HYPH_MIN_TRAILING ) >>= nVal;
     if (pHyp)
-        nVal = (sal_Int16) pHyp->GetMinTrail();
-    nUserData = OptionsUserData( EID_NUM_POST_BREAK, true, (sal_uInt16)nVal, false, false).GetUserData();
+        nVal = static_cast<sal_Int16>(pHyp->GetMinTrail());
+    nUserData = OptionsUserData( EID_NUM_POST_BREAK, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
     pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
 
@@ -1523,7 +1523,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
 
                 aDics.getArray()[ nLen ] = xNewDic;
 
-                AddDicBoxEntry( xNewDic, (sal_uInt16) nLen );
+                AddDicBoxEntry( xNewDic, static_cast<sal_uInt16>(nLen) );
             }
         }
     }
@@ -1633,7 +1633,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                     long nVal = static_cast<long>(aDlg->GetNumericFld().GetValue());
                     if (-1 != nVal && aData.GetNumericValue() != nVal)
                     {
-                        aData.SetNumericValue( (sal_uInt8)nVal ); //! sets IsModified !
+                        aData.SetNumericValue( static_cast<sal_uInt8>(nVal) ); //! sets IsModified !
                         pEntry->SetUserData( reinterpret_cast<void *>(aData.GetUserData()) );
                         m_pLinguOptionsCLB->Invalidate();
                     }
@@ -1977,7 +1977,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
 
         Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
         const OUString *pName = aNames.getConstArray();
-        sal_uLong nNames = (sal_uLong) aNames.getLength();
+        sal_uLong nNames = static_cast<sal_uLong>(aNames.getLength());
         sal_Int32 nLocalIndex = 0;  // index relative to parent
         for (n = 0;  n < nNames;  ++n)
         {
@@ -2005,7 +2005,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
                 const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, false,
-                                        bCheck, TYPE_SPELL, (sal_uInt8)nLocalIndex++ );
+                                        bCheck, TYPE_SPELL, static_cast<sal_uInt8>(nLocalIndex++) );
                 pNewEntry->SetUserData( static_cast<void *>(pUserData) );
                 pModel->Insert( pNewEntry );
             }
@@ -2021,7 +2021,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
         pName = aNames.getConstArray();
-        nNames = (sal_uLong) aNames.getLength();
+        nNames = static_cast<sal_uLong>(aNames.getLength());
         nLocalIndex = 0;
         for (n = 0;  n < nNames;  ++n)
         {
@@ -2049,7 +2049,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
                 const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, false,
-                                        bCheck, TYPE_GRAMMAR, (sal_uInt8)nLocalIndex++ );
+                                        bCheck, TYPE_GRAMMAR, static_cast<sal_uInt8>(nLocalIndex++) );
                 pNewEntry->SetUserData( static_cast<void *>(pUserData) );
                 pModel->Insert( pNewEntry );
             }
@@ -2065,7 +2065,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
         pName = aNames.getConstArray();
-        nNames = (sal_uLong) aNames.getLength();
+        nNames = static_cast<sal_uLong>(aNames.getLength());
         nLocalIndex = 0;
         for (n = 0;  n < nNames;  ++n)
         {
@@ -2093,7 +2093,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
                 const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, false,
-                                        bCheck, TYPE_HYPH, (sal_uInt8)nLocalIndex++ );
+                                        bCheck, TYPE_HYPH, static_cast<sal_uInt8>(nLocalIndex++) );
                 pNewEntry->SetUserData( static_cast<void *>(pUserData) );
                 pModel->Insert( pNewEntry );
             }
@@ -2109,7 +2109,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
         pName = aNames.getConstArray();
-        nNames = (sal_uLong) aNames.getLength();
+        nNames = static_cast<sal_uLong>(aNames.getLength());
         nLocalIndex = 0;
         for (n = 0;  n < nNames;  ++n)
         {
@@ -2137,7 +2137,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
                 const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, false,
-                                        bCheck, TYPE_THES, (sal_uInt8)nLocalIndex++ );
+                                        bCheck, TYPE_THES, static_cast<sal_uInt8>(nLocalIndex++) );
                 pNewEntry->SetUserData( static_cast<void *>(pUserData) );
                 pModel->Insert( pNewEntry );
             }

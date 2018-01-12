@@ -91,22 +91,22 @@ void GraphicPreviewWindow::ScaleImageToFit()
         aPreviewSize.Width() && aPreviewSize.Height() &&
         aGrfSize.Width() && aGrfSize.Height() )
     {
-        const double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();
-        const double fPreWH = (double) aPreviewSize.Width() / aPreviewSize.Height();
+        const double fGrfWH = static_cast<double>(aGrfSize.Width()) / aGrfSize.Height();
+        const double fPreWH = static_cast<double>(aPreviewSize.Width()) / aPreviewSize.Height();
 
         if( fGrfWH < fPreWH )
         {
-            aGrfSize.Width()  = (long) ( aPreviewSize.Height() * fGrfWH );
+            aGrfSize.Width()  = static_cast<long>( aPreviewSize.Height() * fGrfWH );
             aGrfSize.Height() = aPreviewSize.Height();
         }
         else
         {
             aGrfSize.Width()  = aPreviewSize.Width();
-            aGrfSize.Height() = (long) ( aPreviewSize.Width() / fGrfWH );
+            aGrfSize.Height() = static_cast<long>( aPreviewSize.Width() / fGrfWH );
         }
 
-        mfScaleX = (double) aGrfSize.Width() / aSizePixel.Width();
-        mfScaleY = (double) aGrfSize.Height() / aSizePixel.Height();
+        mfScaleX = static_cast<double>(aGrfSize.Width()) / aSizePixel.Width();
+        mfScaleY = static_cast<double>(aGrfSize.Height()) / aSizePixel.Height();
 
         if( !mpOrigGraphic->IsAnimated() )
         {
@@ -371,7 +371,7 @@ void GraphicFilterSolarize::dispose()
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    sal_uInt8       nGreyThreshold = (sal_uInt8) FRound( mpMtrThreshold->GetValue() * 2.55 );
+    sal_uInt8       nGreyThreshold = static_cast<sal_uInt8>(FRound( mpMtrThreshold->GetValue() * 2.55 ));
     BmpFilterParam  aParam( nGreyThreshold );
 
     if( rGraphic.IsAnimated() )
@@ -491,7 +491,7 @@ void GraphicFilterPoster::dispose()
 Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic          aRet;
-    const sal_uInt16 nPosterCount = (sal_uInt16) mpNumPoster->GetValue();
+    const sal_uInt16 nPosterCount = static_cast<sal_uInt16>(mpNumPoster->GetValue());
 
     if( rGraphic.IsAnimated() )
     {

@@ -560,13 +560,13 @@ short SfxInsertFloatingFrameDialog::Execute()
 
                 long lMarginWidth;
                 if ( !m_pCBMarginWidthDefault->IsChecked() )
-                    lMarginWidth = (long) m_pNMMarginWidth->GetText().toInt32();
+                    lMarginWidth = static_cast<long>(m_pNMMarginWidth->GetText().toInt32());
                 else
                     lMarginWidth = SIZE_NOT_SET;
 
                 long lMarginHeight;
                 if ( !m_pCBMarginHeightDefault->IsChecked() )
-                    lMarginHeight = (long) m_pNMMarginHeight->GetText().toInt32();
+                    lMarginHeight = static_cast<long>(m_pNMMarginHeight->GetText().toInt32());
                 else
                     lMarginHeight = SIZE_NOT_SET;
 

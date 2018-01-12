@@ -775,7 +775,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         {
             bool bPtRel = MapUnit::MapPoint == rItem.GetPropUnit();
             pSizeBox->SetPtRelative( bPtRel );
-            pSizeBox->SetValue( bPtRel ? ((short)rItem.GetProp()) * 10 : rItem.GetProp() );
+            pSizeBox->SetValue( bPtRel ? static_cast<short>(rItem.GetProp()) * 10 : rItem.GetProp() );
         }
         else
         {
@@ -1063,9 +1063,9 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( !bChanged && pExampleSet &&
          pExampleSet->GetItemState( nWhich, false, &pItem ) == SfxItemState::SET )
     {
-        float fSize = (float)nSize / 10;
+        float fSize = static_cast<float>(nSize) / 10;
         long nVal = CalcToUnit( fSize, rSet.GetPool()->GetMetric( nWhich ) );
-        if ( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() != (sal_uInt32)nVal )
+        if ( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() != static_cast<sal_uInt32>(nVal) )
             bChanged = true;
     }
 
@@ -1081,14 +1081,14 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
             SvxFontHeightItem aHeight( 240, 100, nWhich );
             if ( pSizeBox->IsPtRelative() )
-                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)( nSize / 10 ), MapUnit::MapPoint, eUnit );
+                aHeight.SetHeight( rOldItem.GetHeight(), static_cast<sal_uInt16>( nSize / 10 ), MapUnit::MapPoint, eUnit );
             else
-                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)nSize );
+                aHeight.SetHeight( rOldItem.GetHeight(), static_cast<sal_uInt16>(nSize) );
             rSet.Put( aHeight );
         }
         else
         {
-            float fSize = (float)nSize / 10;
+            float fSize = static_cast<float>(nSize) / 10;
             rSet.Put( SvxFontHeightItem( CalcToUnit( fSize, eUnit ), 100, nWhich ) );
         }
         bModified = true;
@@ -2511,12 +2511,12 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 
 SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet& rInSet )
     : SvxCharBasePage(pParent, "PositionPage", "cui/ui/positionpage.ui", rInSet)
-    , m_nSuperEsc((short)DFLT_ESC_SUPER)
-    , m_nSubEsc((short)DFLT_ESC_SUB)
+    , m_nSuperEsc(short(DFLT_ESC_SUPER))
+    , m_nSubEsc(short(DFLT_ESC_SUB))
     , m_nScaleWidthItemSetVal(100)
     , m_nScaleWidthInitialVal(100)
-    , m_nSuperProp((sal_uInt8)DFLT_ESC_PROP)
-    , m_nSubProp((sal_uInt8)DFLT_ESC_PROP)
+    , m_nSuperProp(sal_uInt8(DFLT_ESC_PROP))
+    , m_nSubProp(sal_uInt8(DFLT_ESC_PROP))
 {
     get(m_pHighPosBtn, "superscript");
     get(m_pNormalPosBtn, "normal");
@@ -2686,8 +2686,8 @@ IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, Button*, pBtn, void )
 
 IMPL_LINK_NOARG(SvxCharPositionPage, FontModifyHdl_Impl, Edit&, void)
 {
-    sal_uInt8 nEscProp = (sal_uInt8)m_pFontSizeMF->GetValue();
-    short nEsc  = (short)m_pHighLowMF->GetValue();
+    sal_uInt8 nEscProp = static_cast<sal_uInt8>(m_pFontSizeMF->GetValue());
+    short nEsc  = static_cast<short>(m_pHighLowMF->GetValue());
     nEsc *= m_pLowPosBtn->IsChecked() ? -1 : 1;
     UpdatePreview_Impl( 100, nEscProp, nEsc );
 }
@@ -2725,15 +2725,15 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
 {
     long nVal = static_cast<long>(m_pKerningMF->GetValue());
     nVal = LogicToLogic( nVal, MapUnit::MapPoint, MapUnit::MapTwip );
-    long nKern = (short)m_pKerningMF->Denormalize( nVal );
+    long nKern = static_cast<short>(m_pKerningMF->Denormalize( nVal ));
 
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
 
-    rFont.SetFixKerning( (short)nKern );
-    rCJKFont.SetFixKerning( (short)nKern );
-    rCTLFont.SetFixKerning( (short)nKern );
+    rFont.SetFixKerning( static_cast<short>(nKern) );
+    rCJKFont.SetFixKerning( static_cast<short>(nKern) );
+    rCTLFont.SetFixKerning( static_cast<short>(nKern) );
     m_pPreviewWin->Invalidate();
 }
 
@@ -2748,16 +2748,16 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, Control&, rControl, void )
     if ( m_pHighLowMF == pField )
     {
         if ( bLow )
-            m_nSubEsc = (short)m_pHighLowMF->GetValue() * -1;
+            m_nSubEsc = static_cast<short>(m_pHighLowMF->GetValue()) * -1;
         else
-            m_nSuperEsc = (short)m_pHighLowMF->GetValue();
+            m_nSuperEsc = static_cast<short>(m_pHighLowMF->GetValue());
     }
     else if ( m_pFontSizeMF == pField )
     {
         if ( bLow )
-            m_nSubProp = (sal_uInt8)m_pFontSizeMF->GetValue();
+            m_nSubProp = static_cast<sal_uInt8>(m_pFontSizeMF->GetValue());
         else
-            m_nSuperProp = (sal_uInt8)m_pFontSizeMF->GetValue();
+            m_nSuperProp = static_cast<sal_uInt8>(m_pFontSizeMF->GetValue());
     }
 }
 
@@ -2787,10 +2787,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
 
     if ( !sUser.isEmpty() )
     {
-        m_nSuperEsc = (short)sUser.getToken( 0, ';' ).toInt32();
-        m_nSubEsc = (short)sUser.getToken( 1, ';' ).toInt32();
-        m_nSuperProp = (sal_uInt8)sUser.getToken( 2, ';' ).toInt32();
-        m_nSubProp = (sal_uInt8)sUser.getToken( 3, ';' ).toInt32();
+        m_nSuperEsc = static_cast<short>(sUser.getToken( 0, ';' ).toInt32());
+        m_nSubEsc = static_cast<short>(sUser.getToken( 1, ';' ).toInt32());
+        m_nSuperProp = static_cast<sal_uInt8>(sUser.getToken( 2, ';' ).toInt32());
+        m_nSubProp = static_cast<sal_uInt8>(sUser.getToken( 3, ';' ).toInt32());
 
         //fdo#75307 validate all the entries and discard all of them if any are
         //out of range
@@ -2906,9 +2906,9 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
 
         // set Kerning at the Font, convert into Twips before
         long nKern = LogicToLogic( rItem.GetValue(), eUnit, MapUnit::MapTwip );
-        rFont.SetFixKerning( (short)nKern );
-        rCJKFont.SetFixKerning( (short)nKern );
-        rCTLFont.SetFixKerning( (short)nKern );
+        rFont.SetFixKerning( static_cast<short>(nKern) );
+        rCJKFont.SetFixKerning( static_cast<short>(nKern) );
+        rCTLFont.SetFixKerning( static_cast<short>(nKern) );
 
         //the attribute value must be displayed also if it's above the maximum allowed value
         long nVal = static_cast<long>(m_pKerningMF->GetMax());
@@ -3034,10 +3034,10 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
             nEsc = bHigh ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;
         else
         {
-            nEsc = (short)m_pHighLowMF->Denormalize( m_pHighLowMF->GetValue() );
+            nEsc = static_cast<short>(m_pHighLowMF->Denormalize( m_pHighLowMF->GetValue() ));
             nEsc *= (bHigh ? 1 : -1);
         }
-        nEscProp = (sal_uInt8)m_pFontSizeMF->Denormalize( m_pFontSizeMF->GetValue() );
+        nEscProp = static_cast<sal_uInt8>(m_pFontSizeMF->Denormalize( m_pFontSizeMF->GetValue() ));
     }
     else
     {
@@ -3075,7 +3075,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
 
     long nTmp = static_cast<long>(m_pKerningMF->GetValue());
     long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, eUnit );
-    nKerning = (short)m_pKerningMF->Denormalize( nVal );
+    nKerning = static_cast<short>(m_pKerningMF->Denormalize( nVal ));
 
     SfxItemState eOldKernState = rOldSet.GetItemState( nWhich, false );
     if ( pOld )
@@ -3108,7 +3108,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if ( m_pScaleWidthMF->IsValueChangedFromSaved() )
     {
-        rSet->Put( SvxCharScaleWidthItem( (sal_uInt16)m_pScaleWidthMF->GetValue(), nWhich ) );
+        rSet->Put( SvxCharScaleWidthItem( static_cast<sal_uInt16>(m_pScaleWidthMF->GetValue()), nWhich ) );
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
@@ -3218,7 +3218,7 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 
     if ( aDlg->Execute() == RET_OK )
     {
-        sal_Unicode cChar = (sal_Unicode) aDlg->GetChar();
+        sal_Unicode cChar = static_cast<sal_Unicode>(aDlg->GetChar());
         SetBracket( cChar, bStart );
     }
     else

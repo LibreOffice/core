@@ -171,7 +171,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                             );
                             mpBrowser->m_pLbxFound->InsertEntry(
                                 GetReducedString( aFoundURL, 50 ),
-                                (sal_uInt16) mpBrowser->aFoundList.size() - 1 );
+                                static_cast<sal_uInt16>(mpBrowser->aFoundList.size()) - 1 );
                         }
                     }
                 }
@@ -292,7 +292,7 @@ void TakeThread::execute()
         const sal_Int32 nPos = mpBrowser->bTakeAll ? i : mpBrowser->m_pLbxFound->GetSelectedEntryPos( i );
         const INetURLObject aURL( mpBrowser->aFoundList[ nPos ]);
 
-        mrTakenList.push_back( (sal_uLong)nPos );
+        mrTakenList.push_back( static_cast<sal_uLong>(nPos) );
 
         {
             SolarMutexGuard aGuard;
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
     // refill list box
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
-            aRemainingVector.push_back( pBrowser->m_pLbxFound->GetEntry( (sal_uInt16) i ) );
+            aRemainingVector.push_back( pBrowser->m_pLbxFound->GetEntry( static_cast<sal_uInt16>(i) ) );
 
     pBrowser->m_pLbxFound->Clear();
 
@@ -525,7 +525,7 @@ GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
 
     GalleryTheme::InsertAllThemes(*m_pLbResName);
 
-    m_pLbResName->SelectEntryPos( (sal_uInt16) pThm->GetId() );
+    m_pLbResName->SelectEntryPos( static_cast<sal_uInt16>(pThm->GetId()) );
     m_pLbResName->GrabFocus();
 
     m_pBtnOk->SetClickHdl( LINK( this, GalleryIdDialog, ClickOkHdl ) );

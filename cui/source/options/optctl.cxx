@@ -145,7 +145,7 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet* )
             SAL_WARN( "cui.options", "SvxCTLOptionsPage::Reset(): invalid movement enum" );
     }
 
-    sal_uInt16 nPos = (sal_uInt16)aCTLOptions.GetCTLTextNumerals();
+    sal_uInt16 nPos = static_cast<sal_uInt16>(aCTLOptions.GetCTLTextNumerals());
     DBG_ASSERT( nPos < m_pNumeralsLB->GetEntryCount(), "SvxCTLOptionsPage::Reset(): invalid numerals enum" );
     m_pNumeralsLB->SelectEntryPos( nPos );
 

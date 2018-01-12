@@ -131,7 +131,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, Edit&, void)
 {
-    sal_uInt16 nPos = (sal_uInt16)m_pMtrTransparent->GetValue();
+    sal_uInt16 nPos = static_cast<sal_uInt16>(m_pMtrTransparent->GetValue());
     rXFSet.Put(XFillTransparenceItem(nPos));
 
     // preview
@@ -157,16 +157,16 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void const * pControl)
     }
 
     // preview
-    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)m_pMtrTrgrStartValue->GetValue() * 255) / 100);
-    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)m_pMtrTrgrEndValue->GetValue() * 255) / 100);
+    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_pMtrTrgrStartValue->GetValue()) * 255) / 100);
+    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_pMtrTrgrEndValue->GetValue()) * 255) / 100);
     XGradient aTmpGradient(
                 Color(nStartCol, nStartCol, nStartCol),
                 Color(nEndCol, nEndCol, nEndCol),
                 (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos(),
-                (sal_uInt16)m_pMtrTrgrAngle->GetValue() * 10,
-                (sal_uInt16)m_pMtrTrgrCenterX->GetValue(),
-                (sal_uInt16)m_pMtrTrgrCenterY->GetValue(),
-                (sal_uInt16)m_pMtrTrgrBorder->GetValue(),
+                static_cast<sal_uInt16>(m_pMtrTrgrAngle->GetValue()) * 10,
+                static_cast<sal_uInt16>(m_pMtrTrgrCenterX->GetValue()),
+                static_cast<sal_uInt16>(m_pMtrTrgrCenterY->GetValue()),
+                static_cast<sal_uInt16>(m_pMtrTrgrBorder->GetValue()),
                 100, 100);
 
     XFillFloatTransparenceItem aItem( aTmpGradient);
@@ -314,7 +314,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
     if(m_pMtrTransparent->IsEnabled())
     {
         // linear transparence
-        sal_uInt16 nPos = (sal_uInt16)m_pMtrTransparent->GetValue();
+        sal_uInt16 nPos = static_cast<sal_uInt16>(m_pMtrTransparent->GetValue());
         if(m_pMtrTransparent->IsValueChangedFromSaved() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);
@@ -341,16 +341,16 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
             || m_pMtrTrgrStartValue->IsValueChangedFromSaved()
             || m_pMtrTrgrEndValue->IsValueChangedFromSaved() )
         {
-            sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)m_pMtrTrgrStartValue->GetValue() * 255) / 100);
-            sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)m_pMtrTrgrEndValue->GetValue() * 255) / 100);
+            sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_pMtrTrgrStartValue->GetValue()) * 255) / 100);
+            sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_pMtrTrgrEndValue->GetValue()) * 255) / 100);
             XGradient aTmpGradient(
                         Color(nStartCol, nStartCol, nStartCol),
                         Color(nEndCol, nEndCol, nEndCol),
                         (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos(),
-                        (sal_uInt16)m_pMtrTrgrAngle->GetValue() * 10,
-                        (sal_uInt16)m_pMtrTrgrCenterX->GetValue(),
-                        (sal_uInt16)m_pMtrTrgrCenterY->GetValue(),
-                        (sal_uInt16)m_pMtrTrgrBorder->GetValue(),
+                        static_cast<sal_uInt16>(m_pMtrTrgrAngle->GetValue()) * 10,
+                        static_cast<sal_uInt16>(m_pMtrTrgrCenterX->GetValue()),
+                        static_cast<sal_uInt16>(m_pMtrTrgrCenterY->GetValue()),
+                        static_cast<sal_uInt16>(m_pMtrTrgrBorder->GetValue()),
                         100, 100);
 
             XFillFloatTransparenceItem aItem(aTmpGradient);
@@ -419,8 +419,8 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     m_pMtrTrgrBorder->SetValue(rGradient.GetBorder());
     m_pMtrTrgrCenterX->SetValue(rGradient.GetXOffset());
     m_pMtrTrgrCenterY->SetValue(rGradient.GetYOffset());
-    m_pMtrTrgrStartValue->SetValue((sal_uInt16)((((sal_uInt16)rGradient.GetStartColor().GetRed() + 1) * 100) / 255));
-    m_pMtrTrgrEndValue->SetValue((sal_uInt16)((((sal_uInt16)rGradient.GetEndColor().GetRed() + 1) * 100) / 255));
+    m_pMtrTrgrStartValue->SetValue(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255));
+    m_pMtrTrgrEndValue->SetValue(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255));
 
     // linear transparence
     sal_uInt16 nTransp = static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue();

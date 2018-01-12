@@ -124,21 +124,21 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
 
         case LLINESPACE_PROP:
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
-            rLineSpace.SetPropLineSpace( (sal_uInt8)lValue );
+            rLineSpace.SetPropLineSpace( static_cast<sal_uInt8>(lValue) );
             break;
 
         case LLINESPACE_MIN:
-            rLineSpace.SetLineHeight( (sal_uInt16)lValue );
+            rLineSpace.SetLineHeight( static_cast<sal_uInt16>(lValue) );
             rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
             break;
 
         case LLINESPACE_DURCH:
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
-            rLineSpace.SetInterLineSpace( (sal_uInt16)lValue );
+            rLineSpace.SetInterLineSpace( static_cast<sal_uInt16>(lValue) );
             break;
 
         case LLINESPACE_FIX:
-            rLineSpace.SetLineHeight((sal_uInt16)lValue);
+            rLineSpace.SetLineHeight(static_cast<sal_uInt16>(lValue));
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Fix );
             rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         break;
@@ -277,21 +277,21 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
             if ( m_pTopDist->IsRelative() )
                 aMargin.SetUpper( rOldItem.GetUpper(),
-                                  (sal_uInt16)m_pTopDist->GetValue() );
+                                  static_cast<sal_uInt16>(m_pTopDist->GetValue()) );
             else
-                aMargin.SetUpper( (sal_uInt16)GetCoreValue( *m_pTopDist, eUnit ) );
+                aMargin.SetUpper( static_cast<sal_uInt16>(GetCoreValue( *m_pTopDist, eUnit )) );
 
             if ( m_pBottomDist->IsRelative() )
                 aMargin.SetLower( rOldItem.GetLower(),
-                                  (sal_uInt16)m_pBottomDist->GetValue() );
+                                  static_cast<sal_uInt16>(m_pBottomDist->GetValue()) );
             else
-                aMargin.SetLower( (sal_uInt16)GetCoreValue( *m_pBottomDist, eUnit ) );
+                aMargin.SetLower( static_cast<sal_uInt16>(GetCoreValue( *m_pBottomDist, eUnit )) );
 
         }
         else
         {
-            aMargin.SetUpper( (sal_uInt16)GetCoreValue( *m_pTopDist, eUnit ) );
-            aMargin.SetLower( (sal_uInt16)GetCoreValue( *m_pBottomDist, eUnit ) );
+            aMargin.SetUpper( static_cast<sal_uInt16>(GetCoreValue( *m_pTopDist, eUnit )) );
+            aMargin.SetLower( static_cast<sal_uInt16>(GetCoreValue( *m_pBottomDist, eUnit )) );
         }
         aMargin.SetContextValue(m_pContextualCB->IsChecked());
         eState = GetItemSet().GetItemState( nWhich );
@@ -324,29 +324,29 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
             if ( m_pLeftIndent->IsRelative() )
                 aMargin.SetTextLeft( rOldItem.GetTextLeft(),
-                                    (sal_uInt16)m_pLeftIndent->GetValue() );
+                                    static_cast<sal_uInt16>(m_pLeftIndent->GetValue()) );
             else
                 aMargin.SetTextLeft( GetCoreValue( *m_pLeftIndent, eUnit ) );
 
             if ( m_pRightIndent->IsRelative() )
                 aMargin.SetRight( rOldItem.GetRight(),
-                                  (sal_uInt16)m_pRightIndent->GetValue() );
+                                  static_cast<sal_uInt16>(m_pRightIndent->GetValue()) );
             else
                 aMargin.SetRight( GetCoreValue( *m_pRightIndent, eUnit ) );
 
             if ( m_pFLineIndent->IsRelative() )
                 aMargin.SetTextFirstLineOfst( rOldItem.GetTextFirstLineOfst(),
-                                             (sal_uInt16)m_pFLineIndent->GetValue() );
+                                             static_cast<sal_uInt16>(m_pFLineIndent->GetValue()) );
             else
                 aMargin.SetTextFirstLineOfst(
-                    (sal_uInt16)GetCoreValue( *m_pFLineIndent, eUnit ) );
+                    static_cast<sal_uInt16>(GetCoreValue( *m_pFLineIndent, eUnit )) );
         }
         else
         {
             aMargin.SetTextLeft( GetCoreValue( *m_pLeftIndent, eUnit ) );
             aMargin.SetRight( GetCoreValue( *m_pRightIndent, eUnit ) );
             aMargin.SetTextFirstLineOfst(
-                (sal_uInt16)GetCoreValue( *m_pFLineIndent, eUnit ) );
+                static_cast<sal_uInt16>(GetCoreValue( *m_pFLineIndent, eUnit )) );
         }
         aMargin.SetAutoFirst(m_pAutoCB->IsChecked());
         if ( aMargin.GetTextFirstLineOfst() < 0 )
@@ -879,11 +879,11 @@ void SvxStdParagraphTabPage::Init_Impl()
 
 void SvxStdParagraphTabPage::UpdateExample_Impl()
 {
-    m_pExampleWin->SetFirstLineOfst( (short)m_pFLineIndent->Denormalize( m_pFLineIndent->GetValue( FUNIT_TWIP ) ) );
+    m_pExampleWin->SetFirstLineOfst( static_cast<short>(m_pFLineIndent->Denormalize( m_pFLineIndent->GetValue( FUNIT_TWIP ) )) );
     m_pExampleWin->SetLeftMargin( static_cast<long>(m_pLeftIndent->Denormalize( m_pLeftIndent->GetValue( FUNIT_TWIP ) ) ) );
     m_pExampleWin->SetRightMargin( static_cast<long>(m_pRightIndent->Denormalize( m_pRightIndent->GetValue( FUNIT_TWIP ) ) ) );
-    m_pExampleWin->SetUpper( (sal_uInt16)m_pTopDist->Denormalize( m_pTopDist->GetValue( FUNIT_TWIP ) ) );
-    m_pExampleWin->SetLower( (sal_uInt16)m_pBottomDist->Denormalize( m_pBottomDist->GetValue( FUNIT_TWIP ) ) );
+    m_pExampleWin->SetUpper( static_cast<sal_uInt16>(m_pTopDist->Denormalize( m_pTopDist->GetValue( FUNIT_TWIP ) )) );
+    m_pExampleWin->SetLower( static_cast<sal_uInt16>(m_pBottomDist->Denormalize( m_pBottomDist->GetValue( FUNIT_TWIP ) )) );
 
     sal_Int32 nPos = m_pLineDist->GetSelectedEntryPos();
 
@@ -1381,10 +1381,10 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
         if ( eHyphenState == TRISTATE_TRUE )
         {
-            aHyphen.GetMinLead() = (sal_uInt8)m_pExtHyphenBeforeBox->GetValue();
-            aHyphen.GetMinTrail() = (sal_uInt8)m_pExtHyphenAfterBox->GetValue();
+            aHyphen.GetMinLead() = static_cast<sal_uInt8>(m_pExtHyphenBeforeBox->GetValue());
+            aHyphen.GetMinTrail() = static_cast<sal_uInt8>(m_pExtHyphenAfterBox->GetValue());
         }
-        aHyphen.GetMaxHyphens() = (sal_uInt8)m_pMaxHyphenEdit->GetValue();
+        aHyphen.GetMaxHyphens() = static_cast<sal_uInt8>(m_pMaxHyphenEdit->GetValue());
 
         if ( !pOld ||
             !( *static_cast<const SvxHyphenZoneItem*>(pOld) == aHyphen ) ||
@@ -1542,7 +1542,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_pWidowRowNo->IsValueModified() )
     {
         SvxWidowsItem rItem( eState == TRISTATE_TRUE ?
-                             (sal_uInt8)m_pWidowRowNo->GetValue() : 0, _nWhich );
+                             static_cast<sal_uInt8>(m_pWidowRowNo->GetValue()) : 0, _nWhich );
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_WIDOWS );
 
         if ( m_pWidowBox->IsValueChangedFromSaved() || !pOld || !( *static_cast<const SvxWidowsItem*>(pOld) == rItem ) )
@@ -1559,7 +1559,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_pOrphanRowNo->IsValueModified() )
     {
         SvxOrphansItem rItem( eState == TRISTATE_TRUE ?
-                             (sal_uInt8)m_pOrphanRowNo->GetValue() : 0, _nWhich );
+                             static_cast<sal_uInt8>(m_pOrphanRowNo->GetValue()) : 0, _nWhich );
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_ORPHANS );
 
         if ( m_pOrphanBox->IsValueChangedFromSaved() ||

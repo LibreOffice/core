@@ -227,7 +227,7 @@ void SvxMultiPathDialog::dispose()
 {
     if (m_pRadioLB)
     {
-        sal_uInt16 nPos = (sal_uInt16)m_pRadioLB->GetEntryCount();
+        sal_uInt16 nPos = static_cast<sal_uInt16>(m_pRadioLB->GetEntryCount());
         while ( nPos-- )
         {
             SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nPos );

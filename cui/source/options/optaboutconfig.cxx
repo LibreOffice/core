@@ -651,7 +651,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                         //if the value is 0 and length is not 1, there is something wrong
                         if( ( nNumb==0 && sNewValue.getLength()!=1 ) || nNumb >= SAL_MAX_INT16 || nNumb <= SAL_MIN_INT16)
                             throw uno::Exception("out of range short", nullptr);
-                        nShort = (sal_Int16) nNumb;
+                        nShort = static_cast<sal_Int16>(nNumb);
                         pProperty->Value <<= nShort;
                     }
                     else if( sPropertyType == "long" )
@@ -698,7 +698,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                         //convert all strings to appropriate type
                         for( size_t i = 0; i < seqStr.size(); ++i )
                         {
-                            seqShort[i] = (sal_Int16) seqStr[i].toInt32();
+                            seqShort[i] = static_cast<sal_Int16>(seqStr[i].toInt32());
                         }
                         pProperty->Value <<= seqShort;
                     }

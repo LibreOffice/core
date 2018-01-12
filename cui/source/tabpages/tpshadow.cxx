@@ -312,7 +312,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // transparency
-    sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
+    sal_uInt16 nVal = static_cast<sal_uInt16>(m_pMtrTransparent->GetValue());
     if( m_pMtrTransparent->IsValueChangedFromSaved() )
     {
         SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
@@ -464,7 +464,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     m_rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );
-    sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
+    sal_uInt16 nVal = static_cast<sal_uInt16>(m_pMtrTransparent->GetValue());
     m_rXFSet.Put( XFillTransparenceItem( nVal ) );
 
     // shadow removal

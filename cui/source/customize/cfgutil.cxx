@@ -1012,7 +1012,7 @@ bool SfxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
             }
 
             if ( nParentPos + nChildCount + 1 > nEntries )
-                ScrollOutputArea( (short)( nEntries - ( nParentPos + nChildCount + 1 ) ) );
+                ScrollOutputArea( static_cast<short>( nEntries - ( nParentPos + nChildCount + 1 ) ) );
         }
     }
 

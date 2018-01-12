@@ -114,7 +114,7 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
     fmscInitial.nContext = nInitialContext;
     m_lnkContextSupplier.Call(fmscInitial);
     DBG_ASSERT(fmscInitial.xCursor.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
-    DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == (sal_Int32)fmscInitial.arrFields.size(),
+    DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == static_cast<sal_Int32>(fmscInitial.arrFields.size()),
         "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplied !");
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     for (const Reference<XInterface> & arrField : fmscInitial.arrFields)
@@ -416,7 +416,7 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
 {
     DBG_ASSERT(rBox.GetSelectedEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unexpected : not exactly one entry select!");
 
-    m_pSearchEngine->RebuildUsedFields(m_prbAllFields->IsChecked() ? -1 : (sal_Int16)m_plbField->GetSelectedEntryPos());
+    m_pSearchEngine->RebuildUsedFields(m_prbAllFields->IsChecked() ? -1 : static_cast<sal_Int16>(m_plbField->GetSelectedEntryPos()));
         // calls m_pSearchEngine->InvalidatePreviousLoc too
 
     sal_Int32 nCurrentContext = m_plbForm->GetSelectedEntryPos();
@@ -532,7 +532,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
             m_plbField->InsertEntry(fmscContext.strUsedFields.getToken(i, ';'));
     }
 
-    if (nContext < (sal_Int32)m_arrContextFields.size() && !m_arrContextFields[nContext].isEmpty())
+    if (nContext < static_cast<sal_Int32>(m_arrContextFields.size()) && !m_arrContextFields[nContext].isEmpty())
     {
         m_plbField->SelectEntry(m_arrContextFields[nContext]);
     }
@@ -718,7 +718,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
             break;
 
         case FmSearchProgress::State::Successful:
-            OnFound(pProgress->aBookmark, (sal_Int16)pProgress->nFieldIndex);
+            OnFound(pProgress->aBookmark, static_cast<sal_Int16>(pProgress->nFieldIndex));
             EnableSearchUI(true);
             break;
 
