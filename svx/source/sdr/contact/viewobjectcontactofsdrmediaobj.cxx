@@ -107,8 +107,8 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
             aViewRange.transform(GetObjectContact().getViewInformation2D().getViewTransformation());
 
             const tools::Rectangle aViewRectangle(
-                (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
-                (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
+                static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
+                static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
 
             mpMediaWindow->setPosSize(aViewRectangle);
             mpMediaWindow->show();

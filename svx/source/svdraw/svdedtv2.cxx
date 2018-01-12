@@ -840,35 +840,35 @@ void SdrEditView::DistributeMarkedObjects()
                     {
                         // calculate room in-between
                         sal_Int32 nWidth = GetAllMarkedBoundRect().GetWidth() + 1;
-                        double fStepWidth = ((double)nWidth - (double)nFullLength) / (double)(aEntryList.size() - 1);
-                        double fStepStart = (double)aEntryList[ 0 ]->mnPos;
-                        fStepStart += fStepWidth + (double)((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
+                        double fStepWidth = (static_cast<double>(nWidth) - static_cast<double>(nFullLength)) / static_cast<double>(aEntryList.size() - 1);
+                        double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
+                        fStepStart += fStepWidth + static_cast<double>((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
 
                         // move entries 1..n-1
                         for( size_t i = 1, n = aEntryList.size()-1; i < n; ++i )
                         {
                             ImpDistributeEntry* pCurr = aEntryList[ i    ];
                             ImpDistributeEntry* pNext = aEntryList[ i + 1];
-                            sal_Int32 nDelta = (sal_Int32)(fStepStart + 0.5) - pCurr->mnPos;
+                            sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
                             if( bUndo )
                                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(nDelta, 0));
-                            fStepStart += fStepWidth + (double)((pCurr->mnLength + pNext->mnLength) / 2);
+                            fStepStart += fStepWidth + static_cast<double>((pCurr->mnLength + pNext->mnLength) / 2);
                         }
                     }
                     else
                     {
                         // calculate distances
                         sal_Int32 nWidth = aEntryList[ aEntryList.size() - 1 ]->mnPos - aEntryList[ 0 ]->mnPos;
-                        double fStepWidth = (double)nWidth / (double)(aEntryList.size() - 1);
-                        double fStepStart = (double)aEntryList[ 0 ]->mnPos;
+                        double fStepWidth = static_cast<double>(nWidth) / static_cast<double>(aEntryList.size() - 1);
+                        double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
                         fStepStart += fStepWidth;
 
                         // move entries 1..n-1
                         for( size_t i = 1 ; i < aEntryList.size()-1 ; ++i )
                         {
                             ImpDistributeEntry* pCurr = aEntryList[ i ];
-                            sal_Int32 nDelta = (sal_Int32)(fStepStart + 0.5) - pCurr->mnPos;
+                            sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
                             if( bUndo )
                                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(nDelta, 0));
@@ -935,35 +935,35 @@ void SdrEditView::DistributeMarkedObjects()
                     {
                         // calculate room in-between
                         sal_Int32 nHeight = GetAllMarkedBoundRect().GetHeight() + 1;
-                        double fStepWidth = ((double)nHeight - (double)nFullLength) / (double)(aEntryList.size() - 1);
-                        double fStepStart = (double)aEntryList[ 0 ]->mnPos;
-                        fStepStart += fStepWidth + (double)((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
+                        double fStepWidth = (static_cast<double>(nHeight) - static_cast<double>(nFullLength)) / static_cast<double>(aEntryList.size() - 1);
+                        double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
+                        fStepStart += fStepWidth + static_cast<double>((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
 
                         // move entries 1..n-1
                         for( size_t i = 1, n = aEntryList.size()-1; i < n; ++i)
                         {
                             ImpDistributeEntry* pCurr = aEntryList[ i     ];
                             ImpDistributeEntry* pNext = aEntryList[ i + 1 ];
-                            sal_Int32 nDelta = (sal_Int32)(fStepStart + 0.5) - pCurr->mnPos;
+                            sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
                             if( bUndo )
                                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(0, nDelta));
-                            fStepStart += fStepWidth + (double)((pCurr->mnLength + pNext->mnLength) / 2);
+                            fStepStart += fStepWidth + static_cast<double>((pCurr->mnLength + pNext->mnLength) / 2);
                         }
                     }
                     else
                     {
                         // calculate distances
                         sal_Int32 nHeight = aEntryList[ aEntryList.size() - 1 ]->mnPos - aEntryList[ 0 ]->mnPos;
-                        double fStepWidth = (double)nHeight / (double)(aEntryList.size() - 1);
-                        double fStepStart = (double)aEntryList[ 0 ]->mnPos;
+                        double fStepWidth = static_cast<double>(nHeight) / static_cast<double>(aEntryList.size() - 1);
+                        double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
                         fStepStart += fStepWidth;
 
                         // move entries 1..n-1
                         for(size_t i = 1, n = aEntryList.size()-1; i < n; ++i)
                         {
                             ImpDistributeEntry* pCurr = aEntryList[ i ];
-                            sal_Int32 nDelta = (sal_Int32)(fStepStart + 0.5) - pCurr->mnPos;
+                            sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
                             if( bUndo )
                                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(0, nDelta));

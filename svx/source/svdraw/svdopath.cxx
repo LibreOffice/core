@@ -169,8 +169,8 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
     {
         bValid=false;
         bClosed=rPO.IsClosed();          // closed object?
-        nPoly=(sal_uInt16)rHdl.GetPolyNum();            // number of the polygon in the PolyPolygon
-        nPnt=(sal_uInt16)rHdl.GetPointNum();            // number of points in the above polygon
+        nPoly=static_cast<sal_uInt16>(rHdl.GetPolyNum());            // number of the polygon in the PolyPolygon
+        nPnt=static_cast<sal_uInt16>(rHdl.GetPointNum());            // number of points in the above polygon
         const XPolygon aTmpXP(rPO.GetPathPoly().getB2DPolygon(nPoly));
         nPointCount=aTmpXP.GetPointCount();        // number of point of the polygon
         if (nPointCount==0 || (bClosed && nPointCount==1)) return; // minimum of 1 points for Lines, minimum of 2 points for Polygon
@@ -325,7 +325,7 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     long nRad=0;
     if (bRet) {
         double cs=cos(nTmpAngle*nPi180);
-        double nR=(double)GetLen(Point(dx,dy))/cs/2;
+        double nR=static_cast<double>(GetLen(Point(dx,dy)))/cs/2;
         nRad=std::abs(svx::Round(nR));
     }
     if (dAngle<18000) {
@@ -552,7 +552,7 @@ bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat const & rDrag )  const
 
     bool bMultiPointDrag(true);
 
-    if(aPathPolygon[(sal_uInt16)pHdl->GetPolyNum()].IsControl((sal_uInt16)pHdl->GetPointNum()))
+    if(aPathPolygon[static_cast<sal_uInt16>(pHdl->GetPolyNum())].IsControl(static_cast<sal_uInt16>(pHdl->GetPointNum())))
         bMultiPointDrag = false;
 
     if(bMultiPointDrag)
@@ -605,8 +605,8 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
         {
             for(SdrHdl* pHandle : mpSdrPathDragData->maHandles)
             {
-                const sal_uInt16 nPolyIndex((sal_uInt16)pHandle->GetPolyNum());
-                const sal_uInt16 nPointIndex((sal_uInt16)pHandle->GetPointNum());
+                const sal_uInt16 nPolyIndex(static_cast<sal_uInt16>(pHandle->GetPolyNum()));
+                const sal_uInt16 nPointIndex(static_cast<sal_uInt16>(pHandle->GetPointNum()));
                 const XPolygon& rOrig = mpSdrPathDragData->maOrig[nPolyIndex];
                 XPolygon& rMove = mpSdrPathDragData->maMove[nPolyIndex];
                 const sal_uInt16 nPointCount(rOrig.GetPointCount());
@@ -688,8 +688,8 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                     long ndx=aPos.X()-aPnt1.X();
                     long ndy=aPos.Y()-aPnt1.Y();
                     bPnt1=true;
-                    double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
-                    double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
+                    double nXFact=0; if (!bVLin) nXFact=static_cast<double>(ndx)/static_cast<double>(ndx0);
+                    double nYFact=0; if (!bHLin) nYFact=static_cast<double>(ndy)/static_cast<double>(ndy0);
                     bool bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
                     bool bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
                     if (bHor) ndy=long(ndy0*nXFact);
@@ -709,8 +709,8 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                     long ndx=aPos.X()-aPnt2.X();
                     long ndy=aPos.Y()-aPnt2.Y();
                     bPnt2=true;
-                    double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
-                    double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
+                    double nXFact=0; if (!bVLin) nXFact=static_cast<double>(ndx)/static_cast<double>(ndx0);
+                    double nYFact=0; if (!bHLin) nYFact=static_cast<double>(ndy)/static_cast<double>(ndy0);
                     bool bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
                     bool bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
                     if (bHor) ndy=long(ndy0*nXFact);
@@ -848,7 +848,7 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat const & rDrag)
         const SdrHdl* pHdl=rDrag.GetHdl();
 
         // reference the polygon
-        XPolygon& rXP=aPathPolygon[(sal_uInt16)pHdl->GetPolyNum()];
+        XPolygon& rXP=aPathPolygon[static_cast<sal_uInt16>(pHdl->GetPolyNum())];
 
         // the 5 points that might have changed
         if (!mpSdrPathDragData->bPrevIsBegPnt) rXP[mpSdrPathDragData->nPrevPrevPnt0]=mpSdrPathDragData->aXP[mpSdrPathDragData->nPrevPrevPnt];
@@ -1031,8 +1031,8 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
         if(!pDragData->IsMultiPointDrag())
         {
-            sal_uInt16 nPntNum((sal_uInt16)pHdl->GetPointNum());
-            const XPolygon& rXPoly = aPathPolygon[(sal_uInt16)rDrag.GetHdl()->GetPolyNum()];
+            sal_uInt16 nPntNum(static_cast<sal_uInt16>(pHdl->GetPointNum()));
+            const XPolygon& rXPoly = aPathPolygon[static_cast<sal_uInt16>(rDrag.GetHdl()->GetPolyNum())];
             sal_uInt16 nPointCount(rXPoly.GetPointCount());
             bool bClose(IsClosed(meObjectKind));
 
@@ -1151,10 +1151,10 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
     }
     else
     {
-        const XPolygon& rXP=aPathPolygon[(sal_uInt16)rDrag.GetHdl()->GetPolyNum()];
+        const XPolygon& rXP=aPathPolygon[static_cast<sal_uInt16>(rDrag.GetHdl()->GetPolyNum())];
         if (rXP.GetPointCount()<=2) {
             XPolygon aXPoly(rXP);
-            aXPoly[(sal_uInt16)rDrag.GetHdl()->GetPointNum()]=rDrag.GetNow();
+            aXPoly[static_cast<sal_uInt16>(rDrag.GetHdl()->GetPointNum())]=rDrag.GetNow();
             aRetval.Insert(std::move(aXPoly));
             return aRetval.getB2DPolyPolygon();
         }
@@ -2060,8 +2060,8 @@ sal_uInt32 SdrPathObj::GetPlusHdlCount(const SdrHdl& rHdl) const
     // keep old stuff to be able to keep old SdrHdl stuff, too
     const XPolyPolygon aOldPathPolygon(GetPathPoly());
     sal_uInt16 nCnt = 0;
-    sal_uInt16 nPnt = (sal_uInt16)rHdl.GetPointNum();
-    sal_uInt16 nPolyNum = (sal_uInt16)rHdl.GetPolyNum();
+    sal_uInt16 nPnt = static_cast<sal_uInt16>(rHdl.GetPointNum());
+    sal_uInt16 nPolyNum = static_cast<sal_uInt16>(rHdl.GetPolyNum());
 
     if(nPolyNum < aOldPathPolygon.Count())
     {
@@ -2091,8 +2091,8 @@ SdrHdl* SdrPathObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlusNum) const
     // keep old stuff to be able to keep old SdrHdl stuff, too
     const XPolyPolygon aOldPathPolygon(GetPathPoly());
     SdrHdl* pHdl = nullptr;
-    sal_uInt16 nPnt = (sal_uInt16)rHdl.GetPointNum();
-    sal_uInt16 nPolyNum = (sal_uInt16)rHdl.GetPolyNum();
+    sal_uInt16 nPnt = static_cast<sal_uInt16>(rHdl.GetPointNum());
+    sal_uInt16 nPolyNum = static_cast<sal_uInt16>(rHdl.GetPolyNum());
 
     if (nPolyNum<aOldPathPolygon.Count())
     {
@@ -2253,7 +2253,7 @@ bool SdrPathObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
                             const sal_Int32 nCloseDist(pOut->PixelToLogic(Size(pView->GetAutoCloseDistPix(), 0)).Width());
                             const basegfx::B2DVector aDistVector(aCandidate.getB2DPoint(aCandidate.count() - 1) - aCandidate.getB2DPoint(0));
 
-                            if(aDistVector.getLength() <= (double)nCloseDist)
+                            if(aDistVector.getLength() <= static_cast<double>(nCloseDist))
                             {
                                 // close it
                                 ImpSetClosed(true);

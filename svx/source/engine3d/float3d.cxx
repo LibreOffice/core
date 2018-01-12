@@ -581,7 +581,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if(eState != SfxItemState::DONTCARE)
         {
             sal_uInt32 nValue = rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS).GetValue();
-            if(nValue != (sal_uInt32 )m_pNumHorizontal->GetValue())
+            if(nValue != static_cast<sal_uInt32>(m_pNumHorizontal->GetValue()))
             {
                 m_pNumHorizontal->SetValue( nValue );
                 bUpdate = true;
@@ -606,7 +606,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( eState != SfxItemState::DONTCARE )
         {
             sal_uInt32 nValue = rAttrs.Get(SDRATTR_3DOBJ_VERT_SEGS).GetValue();
-            if( nValue != (sal_uInt32) m_pNumVertical->GetValue() )
+            if( nValue != static_cast<sal_uInt32>(m_pNumVertical->GetValue()) )
             {
                 m_pNumVertical->SetValue( nValue );
                 bUpdate = true;
@@ -1736,7 +1736,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Edge rounding
     if( !m_pMtrPercentDiagonal->IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue = (sal_uInt16) m_pMtrPercentDiagonal->GetValue();
+        sal_uInt16 nValue = static_cast<sal_uInt16>(m_pMtrPercentDiagonal->GetValue());
         rAttrs.Put(makeSvx3DPercentDiagonalItem(nValue));
     }
     else
@@ -1745,7 +1745,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Depth scale
     if( !m_pMtrBackscale->IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue = (sal_uInt16)m_pMtrBackscale->GetValue();
+        sal_uInt16 nValue = static_cast<sal_uInt16>(m_pMtrBackscale->GetValue());
         rAttrs.Put(makeSvx3DBackscaleItem(nValue));
     }
     else
@@ -1754,7 +1754,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // End angle
     if( !m_pMtrEndAngle->IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue = (sal_uInt16)m_pMtrEndAngle->GetValue();
+        sal_uInt16 nValue = static_cast<sal_uInt16>(m_pMtrEndAngle->GetValue());
         rAttrs.Put(makeSvx3DEndAngleItem(nValue));
     }
     else
@@ -1821,7 +1821,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Slant (Shadow)
     if( !m_pMtrSlant->IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue2 = (sal_uInt16) m_pMtrSlant->GetValue();
+        sal_uInt16 nValue2 = static_cast<sal_uInt16>(m_pMtrSlant->GetValue());
         rAttrs.Put(makeSvx3DShadowSlantItem(nValue2));
     }
     else
@@ -2150,7 +2150,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Specular intensity
     if( !m_pMtrMatSpecularIntensity->IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue2 = (sal_uInt16) m_pMtrMatSpecularIntensity->GetValue();
+        sal_uInt16 nValue2 = static_cast<sal_uInt16>(m_pMtrMatSpecularIntensity->GetValue());
         rAttrs.Put(makeSvx3DMaterialSpecularIntensityItem(nValue2));
     }
     else

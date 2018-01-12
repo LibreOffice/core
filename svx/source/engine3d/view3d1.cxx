@@ -175,12 +175,12 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr)
 
 double E3dView::GetDefaultCamPosZ()
 {
-    return (double) mpModel->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE).GetValue();
+    return static_cast<double>(mpModel->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE).GetValue());
 }
 
 double E3dView::GetDefaultCamFocal()
 {
-    return (double) mpModel->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue();
+    return static_cast<double>(mpModel->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

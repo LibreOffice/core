@@ -183,7 +183,7 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         mxImpl->mbValuesSet   = true;
 
         if ( mxImpl->mnSliderCenter == mxImpl->mnMaxZoom )
-            mxImpl->mnSliderCenter = mxImpl->mnMinZoom + (sal_uInt16)((mxImpl->mnMaxZoom - mxImpl->mnMinZoom) * 0.5);
+            mxImpl->mnSliderCenter = mxImpl->mnMinZoom + static_cast<sal_uInt16>((mxImpl->mnMaxZoom - mxImpl->mnMinZoom) * 0.5);
 
 
         DBG_ASSERT( mxImpl->mnMinZoom <= mxImpl->mnCurrentZoom &&
@@ -201,7 +201,7 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         for ( sal_Int32 j = 0; j < rSnappingPoints.getLength(); ++j )
         {
             const sal_Int32 nSnappingPoint = rSnappingPoints[j];
-            aTmpSnappingPoints.insert( (sal_uInt16)nSnappingPoint );
+            aTmpSnappingPoints.insert( static_cast<sal_uInt16>(nSnappingPoint) );
         }
 
         // remove snapping points that are to close to each other:

@@ -219,7 +219,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         aLevel.realloc(aLevel.getLength() + 1);
                         PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
                         rValue.Name = sValue;
-                        rValue.Value <<= (sal_Int32)(i + 1);
+                        rValue.Value <<= static_cast<sal_Int32>(i + 1);
                         sText = xFormatter->makeNumberingString( aLevel, aLocale );
                     }
                     catch(Exception&)
@@ -291,7 +291,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     pProperties[0].Name = "NumberingType";
                     pProperties[0].Value <<= aNumberingTypes[i];
                     pProperties[1].Name = "Value";
-                    pProperties[1].Value <<= (sal_Int32)1;
+                    pProperties[1].Value <<= sal_Int32(1);
                     try
                     {
                         sLevelTexts[i] = xFormatter->makeNumberingString( aProperties, aLocale );
@@ -312,7 +312,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     if(aParentNumberings[i])
                     {
                         //insert old numberings here
-                        sal_Int32 nStartLevel = std::min((sal_Int32)aParentNumberings[i], i);
+                        sal_Int32 nStartLevel = std::min(static_cast<sal_Int32>(aParentNumberings[i]), i);
                         for(sal_Int32 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
                         {
                             OUString sTmp(sLevelTexts[nParentLevel]);

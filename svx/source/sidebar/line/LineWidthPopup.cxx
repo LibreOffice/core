@@ -161,7 +161,7 @@ IMPL_LINK(LineWidthPopup, MFModifyHdl, Edit&, /*rControl*/, void)
     }
     long nTmp = static_cast<long>(m_xMFWidth->GetValue());
     long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, m_eMapUnit );
-    sal_Int32 nNewWidth = (short)m_xMFWidth->Denormalize( nVal );
+    sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->Denormalize( nVal ));
     XLineWidthItem aWidthItem(nNewWidth);
     m_rParent.setLineWidth(aWidthItem);
 }
@@ -185,7 +185,7 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
         m_xVSWidth->SetImage(m_aIMGCus);
         m_xVSWidth->SetCusEnable(true);
 
-        OUString aStrTip( OUString::number( (double)m_nCustomWidth / 10));
+        OUString aStrTip( OUString::number( static_cast<double>(m_nCustomWidth) / 10));
         aStrTip += m_sPt;
         m_xVSWidth->SetItemText(9, aStrTip);
     }

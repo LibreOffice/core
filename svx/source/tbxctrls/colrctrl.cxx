@@ -279,7 +279,7 @@ void SvxColorDockingWindow::FillValueSet()
 
     Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
 
-    aColorSet->InsertItem( (sal_uInt16)1, Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
+    aColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
 
     aColorSet->addEntriesForXColorList(*pColorList, 2);
 }
@@ -292,8 +292,8 @@ void SvxColorDockingWindow::SetSize()
     aSize.Height() -= 4;
 
     // calculate rows and columns
-    nCols = (sal_uInt16) ( aSize.Width() / aItemSize.Width() );
-    nLines = (sal_uInt16) ( (float) aSize.Height() / (float) aItemSize.Height() /*+ 0.35*/ );
+    nCols = static_cast<sal_uInt16>( aSize.Width() / aItemSize.Width() );
+    nLines = static_cast<sal_uInt16>( static_cast<float>(aSize.Height()) / static_cast<float>(aItemSize.Height()) /*+ 0.35*/ );
     if( nLines == 0 )
         nLines++;
 
@@ -310,7 +310,7 @@ void SvxColorDockingWindow::SetSize()
     if( nScrollWidth > 0 )
     {
         // calculate columns with scroll bar
-        nCols = (sal_uInt16) ( ( aSize.Width() - nScrollWidth ) / aItemSize.Width() );
+        nCols = static_cast<sal_uInt16>( ( aSize.Width() - nScrollWidth ) / aItemSize.Width() );
     }
     aColorSet->SetColCount( nCols );
 
@@ -440,8 +440,8 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
     rNewSize.Height() -= 4;
 
     // determine columns and rows
-    nCols = (sal_uInt16) ( (float) rNewSize.Width() / (float) aItemSize.Width() + 0.5 );
-    nLines = (sal_uInt16) ( (float) rNewSize.Height() / (float) aItemSize.Height() + 0.5 );
+    nCols = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Width()) / static_cast<float>(aItemSize.Width()) + 0.5 );
+    nLines = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Height()) / static_cast<float>(aItemSize.Height()) + 0.5 );
     if( nLines == 0 )
         nLines = 1;
 
@@ -458,8 +458,8 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
     if( nScrollWidth > 0 )
     {
         // calculate columns with scroll bar
-        nCols = (sal_uInt16) ( ( (float) rNewSize.Width() - (float) nScrollWidth )
-                               / (float) aItemSize.Width() + 0.5 );
+        nCols = static_cast<sal_uInt16>( ( static_cast<float>(rNewSize.Width()) - static_cast<float>(nScrollWidth) )
+                               / static_cast<float>(aItemSize.Width()) + 0.5 );
     }
     if( nCols <= 1 )
         nCols = 2;

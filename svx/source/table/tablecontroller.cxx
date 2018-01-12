@@ -2446,7 +2446,7 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
             const sal_Int32 nLastRow = std::min( aEnd.mnRow + 2, nRowCount );
             const sal_Int32 nLastCol = std::min( aEnd.mnCol + 2, nColCount );
 
-            for( sal_Int32 nRow = std::max( aStart.mnRow - 1, (sal_Int32)0 ); nRow < nLastRow; nRow++ )
+            for( sal_Int32 nRow = std::max( aStart.mnRow - 1, sal_Int32(0) ); nRow < nLastRow; nRow++ )
             {
                 CellPosFlag nRowFlags = CellPosFlag::NONE;
                 nRowFlags |= (nRow == aStart.mnRow) ? CellPosFlag::Top : CellPosFlag::NONE;
@@ -2454,7 +2454,7 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
                 nRowFlags |= (nRow < aStart.mnRow)  ? CellPosFlag::Upper : CellPosFlag::NONE;
                 nRowFlags |= (nRow > aEnd.mnRow)    ? CellPosFlag::Lower : CellPosFlag::NONE;
 
-                for( sal_Int32 nCol = std::max( aStart.mnCol - 1, (sal_Int32)0 ); nCol < nLastCol; nCol++ )
+                for( sal_Int32 nCol = std::max( aStart.mnCol - 1, sal_Int32(0) ); nCol < nLastCol; nCol++ )
                 {
                     CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
                     if( !xCell.is() )
@@ -2921,10 +2921,10 @@ void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellB
     {
         // current cell is inside the selection
 
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), SvxBoxItemLine::TOP, SvxBoxInfoItemValidFlags::TOP, (bool)(nCellPosFlags & CellPosFlag::Top));
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), SvxBoxItemLine::BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM, (bool)(nCellPosFlags & CellPosFlag::Bottom));
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), SvxBoxItemLine::LEFT, SvxBoxInfoItemValidFlags::LEFT, (bool)(nCellPosFlags & CellPosFlag::Left));
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), SvxBoxItemLine::RIGHT, SvxBoxInfoItemValidFlags::RIGHT, (bool)(nCellPosFlags & CellPosFlag::Right));
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), SvxBoxItemLine::TOP, SvxBoxInfoItemValidFlags::TOP, static_cast<bool>(nCellPosFlags & CellPosFlag::Top));
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), SvxBoxItemLine::BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM, static_cast<bool>(nCellPosFlags & CellPosFlag::Bottom));
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), SvxBoxItemLine::LEFT, SvxBoxInfoItemValidFlags::LEFT, static_cast<bool>(nCellPosFlags & CellPosFlag::Left));
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), SvxBoxItemLine::RIGHT, SvxBoxInfoItemValidFlags::RIGHT, static_cast<bool>(nCellPosFlags & CellPosFlag::Right));
 
         lcl_MergeDistance(rLinesState, SvxBoxItemLine::TOP, rCellBoxItem.GetDistance(SvxBoxItemLine::TOP));
         lcl_MergeDistance(rLinesState, SvxBoxItemLine::BOTTOM, rCellBoxItem.GetDistance(SvxBoxItemLine::BOTTOM));
@@ -2963,7 +2963,7 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
              *    it will be set to indeterminate state (SetValid() on
              *    rBoxInfoItem).
              */
-            for( sal_Int32 nRow = std::max( aStart.mnRow - 1, (sal_Int32)0 ); nRow < nLastRow; nRow++ )
+            for( sal_Int32 nRow = std::max( aStart.mnRow - 1, sal_Int32(0) ); nRow < nLastRow; nRow++ )
             {
                 CellPosFlag nRowFlags = CellPosFlag::NONE;
                 nRowFlags |= (nRow == aStart.mnRow) ? CellPosFlag::Top : CellPosFlag::NONE;
@@ -2971,7 +2971,7 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
                 nRowFlags |= (nRow < aStart.mnRow)  ? CellPosFlag::Upper : CellPosFlag::NONE;
                 nRowFlags |= (nRow > aEnd.mnRow)    ? CellPosFlag::Lower : CellPosFlag::NONE;
 
-                for( sal_Int32 nCol = std::max( aStart.mnCol - 1, (sal_Int32)0 ); nCol < nLastCol; nCol++ )
+                for( sal_Int32 nCol = std::max( aStart.mnCol - 1, sal_Int32(0) ); nCol < nLastCol; nCol++ )
                 {
                     CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
                     if( !xCell.is() )

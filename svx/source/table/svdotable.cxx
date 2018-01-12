@@ -535,7 +535,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
                     if( (bRTL && (nEdge >= 0)) || (!bRTL && (nEdge < mxTable->getColumnCount())) )
                     {
                         nWidth = mpLayouter->getColumnWidth( nEdge );
-                        nWidth = std::max( (sal_Int32)(nWidth - nOffset), (sal_Int32)0 );
+                        nWidth = std::max( static_cast<sal_Int32>(nWidth - nOffset), sal_Int32(0) );
 
                         Reference< XPropertySet > xColSet( xCols->getByIndex( nEdge ), UNO_QUERY_THROW );
                         xColSet->setPropertyValue( sSize, Any( nWidth ) );

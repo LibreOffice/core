@@ -151,7 +151,7 @@ void TextCharacterSpacingControl::ExecuteCharacterSpacing(long nValue, bool bClo
     nValue = nValue * nSign;
 
     long nVal = LogicToLogic(nValue, MapUnit::MapPoint, eUnit);
-    short nKern = (nValue == 0) ? 0 : (short)maEditKerning->Denormalize(nVal);
+    short nKern = (nValue == 0) ? 0 : static_cast<short>(maEditKerning->Denormalize(nVal));
 
     SvxKerningItem aKernItem(nSign * nKern, SID_ATTR_CHAR_KERNING);
 

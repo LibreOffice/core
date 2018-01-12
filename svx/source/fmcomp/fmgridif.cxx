@@ -84,16 +84,16 @@ css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
     css::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetFamilyName();
     aFD.StyleName = rFont.GetStyleName();
-    aFD.Height = (sal_Int16)rFont.GetFontSize().Height();
-    aFD.Width = (sal_Int16)rFont.GetFontSize().Width();
-    aFD.Family = (sal_Int16)rFont.GetFamilyType();
+    aFD.Height = static_cast<sal_Int16>(rFont.GetFontSize().Height());
+    aFD.Width = static_cast<sal_Int16>(rFont.GetFontSize().Width());
+    aFD.Family = static_cast<sal_Int16>(rFont.GetFamilyType());
     aFD.CharSet = rFont.GetCharSet();
-    aFD.Pitch = (sal_Int16)rFont.GetPitch();
+    aFD.Pitch = static_cast<sal_Int16>(rFont.GetPitch());
     aFD.CharacterWidth = vcl::unohelper::ConvertFontWidth( rFont.GetWidthType() );
     aFD.Weight= vcl::unohelper::ConvertFontWeight( rFont.GetWeight() );
     aFD.Slant = vcl::unohelper::ConvertFontSlant( rFont.GetItalic() );
-    aFD.Underline = (sal_Int16)rFont.GetUnderline();
-    aFD.Strikeout = (sal_Int16)rFont.GetStrikeout();
+    aFD.Underline = static_cast<sal_Int16>(rFont.GetUnderline());
+    aFD.Strikeout = static_cast<sal_Int16>(rFont.GetStrikeout());
     aFD.Orientation = rFont.GetOrientation();
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
@@ -109,14 +109,14 @@ vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
     aFont.SetStyleName( rDescr.StyleName );
     aFont.SetFontSize( ::Size( rDescr.Width, rDescr.Height ) );
     aFont.SetFamily( (FontFamily)rDescr.Family );
-    aFont.SetCharSet( (rtl_TextEncoding)rDescr.CharSet );
+    aFont.SetCharSet( static_cast<rtl_TextEncoding>(rDescr.CharSet) );
     aFont.SetPitch( (FontPitch)rDescr.Pitch );
     aFont.SetWidthType( vcl::unohelper::ConvertFontWidth( rDescr.CharacterWidth ) );
     aFont.SetWeight( vcl::unohelper::ConvertFontWeight( rDescr.Weight ) );
     aFont.SetItalic( (FontItalic)rDescr.Slant );
     aFont.SetUnderline( (::FontLineStyle)rDescr.Underline );
     aFont.SetStrikeout( (::FontStrikeout)rDescr.Strikeout );
-    aFont.SetOrientation( (sal_Int16)rDescr.Orientation );
+    aFont.SetOrientation( static_cast<sal_Int16>(rDescr.Orientation) );
     aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
     aFont.SetWordLineMode( rDescr.WordLineMode );
     return aFont;
@@ -1243,8 +1243,8 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
         pReturnArray[i] = false;
 
-        sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
-        DBG_ASSERT(nModelPos != (sal_uInt16)-1, "FmXGridPeer::queryFieldDataType : no model pos !");
+        sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos(static_cast<sal_uInt16>(i)));
+        DBG_ASSERT(nModelPos != sal_uInt16(-1), "FmXGridPeer::queryFieldDataType : no model pos !");
 
         pCol = aColumns[ nModelPos ];
         const DbGridRowRef xRow = pGrid->GetSeekRow();
@@ -1303,8 +1303,8 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     Reference< css::sdb::XColumn >  xFieldContent;
     for (sal_Int32 i=0; i < nColumnCount; ++i)
     {
-        sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
-        DBG_ASSERT(nModelPos != (sal_uInt16)-1, "FmXGridPeer::queryFieldData : invalid model pos !");
+        sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos(static_cast<sal_uInt16>(i)));
+        DBG_ASSERT(nModelPos != sal_uInt16(-1), "FmXGridPeer::queryFieldData : invalid model pos !");
 
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
         // FS - 30.09.99 - 68644
@@ -1335,10 +1335,10 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
                 // everything else is requested in the DatabaseVariant
                 case TypeClass_FLOAT            : pReturnArray[i] <<= xFieldContent->getFloat(); break;
                 case TypeClass_DOUBLE           : pReturnArray[i] <<= xFieldContent->getDouble(); break;
-                case TypeClass_SHORT            : pReturnArray[i] <<= (sal_Int16)xFieldContent->getShort(); break;
-                case TypeClass_LONG             : pReturnArray[i] <<= (sal_Int32)xFieldContent->getLong(); break;
-                case TypeClass_UNSIGNED_SHORT   : pReturnArray[i] <<= (sal_uInt16)xFieldContent->getShort(); break;
-                case TypeClass_UNSIGNED_LONG    : pReturnArray[i] <<= (sal_uInt32)xFieldContent->getLong(); break;
+                case TypeClass_SHORT            : pReturnArray[i] <<= static_cast<sal_Int16>(xFieldContent->getShort()); break;
+                case TypeClass_LONG             : pReturnArray[i] <<= static_cast<sal_Int32>(xFieldContent->getLong()); break;
+                case TypeClass_UNSIGNED_SHORT   : pReturnArray[i] <<= static_cast<sal_uInt16>(xFieldContent->getShort()); break;
+                case TypeClass_UNSIGNED_LONG    : pReturnArray[i] <<= static_cast<sal_uInt32>(xFieldContent->getLong()); break;
                 case TypeClass_BOOLEAN          : pReturnArray[i] <<= xFieldContent->getBoolean(); break;
                 default:
                 {
@@ -1391,7 +1391,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
             // this is valid because we are listening at the cursor, too (RecordCount, -status, edit mode)
             return;
 
-        sal_uInt16 nId = pGrid->GetColumnIdFromModelPos((sal_uInt16)i);
+        sal_uInt16 nId = pGrid->GetColumnIdFromModelPos(static_cast<sal_uInt16>(i));
         bool bInvalidateColumn = false;
 
         if (evt.PropertyName == FM_PROP_LABEL)
@@ -1716,7 +1716,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt)
 
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     // take handle column into account
-    if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
+    if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == static_cast<sal_Int32>(pGrid->GetModelColCount()))
         return;
 
     Reference< XPropertySet >  xNewColumn(evt.Element, css::uno::UNO_QUERY);
@@ -1728,7 +1728,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt)
     if (aWidth >>= nWidth)
         nWidth = pGrid->LogicToPixel(Point(nWidth, 0), MapMode(MapUnit::Map10thMM)).X();
 
-    pGrid->AppendColumn(aName, (sal_uInt16)nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
+    pGrid->AppendColumn(aName, static_cast<sal_uInt16>(nWidth), static_cast<sal_Int16>(::comphelper::getINT32(evt.Accessor)));
 
     // now set the column
     DbGridColumn* pCol = pGrid->GetColumns().at( ::comphelper::getINT32(evt.Accessor) );
@@ -1760,7 +1760,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt)
     if (bWasEditing)
         pGrid->DeactivateCell();
 
-    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)::comphelper::getINT32(evt.Accessor)));
+    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(static_cast<sal_uInt16>(::comphelper::getINT32(evt.Accessor))));
 
     removeColumnListeners(xOldColumn);
     addColumnListeners(xNewColumn);
@@ -1770,7 +1770,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt)
     sal_Int32 nWidth = 0;
     if (aWidth >>= nWidth)
         nWidth = pGrid->LogicToPixel(Point(nWidth, 0), MapMode(MapUnit::Map10thMM)).X();
-    sal_uInt16 nNewId = pGrid->AppendColumn(aName, (sal_uInt16)nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
+    sal_uInt16 nNewId = pGrid->AppendColumn(aName, static_cast<sal_uInt16>(nWidth), static_cast<sal_Int16>(::comphelper::getINT32(evt.Accessor)));
     sal_uInt16 nNewPos = pGrid->GetModelColumnPos(nNewId);
 
     // set the model of the new column
@@ -1804,10 +1804,10 @@ void FmXGridPeer::elementRemoved(const ContainerEvent& evt)
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
 
     // take handle column into account
-    if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
+    if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == static_cast<sal_Int32>(pGrid->GetModelColCount()))
         return;
 
-    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)::comphelper::getINT32(evt.Accessor)));
+    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(static_cast<sal_uInt16>(::comphelper::getINT32(evt.Accessor))));
 
     Reference< XPropertySet > xOldColumn(evt.Element, css::uno::UNO_QUERY);
     removeColumnListeners(xOldColumn);
@@ -2041,18 +2041,18 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName )
         }
         else if ( _rPropertyName == FM_PROP_TEXTCOLOR )
         {
-            aProp <<= (sal_Int32)pDataWindow->GetControlForeground().GetColor();
+            aProp <<= static_cast<sal_Int32>(pDataWindow->GetControlForeground().GetColor());
         }
         else if ( _rPropertyName == FM_PROP_BACKGROUNDCOLOR )
         {
-            aProp <<= (sal_Int32)pDataWindow->GetControlBackground().GetColor();
+            aProp <<= static_cast<sal_Int32>(pDataWindow->GetControlBackground().GetColor());
         }
         else if ( _rPropertyName == FM_PROP_ROWHEIGHT )
         {
             sal_Int32 nPixelHeight = pGrid->GetDataRowHeight();
             // take the zoom factor into account
             nPixelHeight = pGrid->CalcReverseZoom(nPixelHeight);
-            aProp <<= (sal_Int32)pGrid->PixelToLogic(Point(0, nPixelHeight), MapMode(MapUnit::Map10thMM)).Y();
+            aProp <<= static_cast<sal_Int32>(pGrid->PixelToLogic(Point(0, nPixelHeight), MapMode(MapUnit::Map10thMM)).Y());
         }
         else if ( _rPropertyName == FM_PROP_HASNAVIGATION )
         {
@@ -2266,7 +2266,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt)
                 m_xColumns->getByIndex(i) >>= xCol;
                 if ( xCol == xSelection )
                 {
-                    pGrid->markColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)i));
+                    pGrid->markColumn(pGrid->GetColumnIdFromModelPos(static_cast<sal_uInt16>(i)));
                     break;
                 }
             }
@@ -2276,7 +2276,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt)
             {   // (if this does not take effect, the selectionChanged was implicitly triggered by the control itself)
                 if ( i < nColCount )
                 {
-                    pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1);
+                    pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( static_cast<sal_uInt16>(i) )) + 1);
                     // SelectColumnPos has led to an implicit ActivateCell again
                     if (pGrid->IsEditing())
                         pGrid->DeactivateCell();
@@ -2331,7 +2331,7 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex)
 
     Any aElement;
     // get the columnid
-    sal_uInt16 nId = pGrid->GetColumnIdFromViewPos((sal_uInt16)_nIndex);
+    sal_uInt16 nId = pGrid->GetColumnIdFromViewPos(static_cast<sal_uInt16>(_nIndex));
     // get the list position
     sal_uInt16 nPos = pGrid->GetModelColumnPos(nId);
 
@@ -2818,7 +2818,7 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, DbGridControlNavigationBarState, nSlot
 
     const std::vector<DbGridControlNavigationBarState>& aSlots = getSupportedGridSlots();
 
-    DBG_ASSERT((sal_Int32)aSlots.size() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconsistent data returned by getSupportedURLs/getSupportedGridSlots!");
+    DBG_ASSERT(static_cast<sal_Int32>(aSlots.size()) == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconsistent data returned by getSupportedURLs/getSupportedGridSlots!");
 
     for (size_t i=0; i<aSlots.size(); ++i, ++pUrls)
     {

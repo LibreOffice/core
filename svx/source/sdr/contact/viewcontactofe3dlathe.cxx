@@ -74,9 +74,9 @@ namespace sdr
             // get more data
             const sal_uInt32 nHorizontalSegments(GetE3dLatheObj().GetHorizontalSegments());
             const sal_uInt32 nVerticalSegments(GetE3dLatheObj().GetVerticalSegments());
-            const double fDiagonal((double)GetE3dLatheObj().GetPercentDiagonal() / 100.0);
-            const double fBackScale((double)GetE3dLatheObj().GetBackScale() / 100.0);
-            const double fRotation(((double)GetE3dLatheObj().GetEndAngle() / 1800.0) * F_PI);
+            const double fDiagonal(static_cast<double>(GetE3dLatheObj().GetPercentDiagonal()) / 100.0);
+            const double fBackScale(static_cast<double>(GetE3dLatheObj().GetBackScale()) / 100.0);
+            const double fRotation((static_cast<double>(GetE3dLatheObj().GetEndAngle()) / 1800.0) * F_PI);
             const bool bSmoothNormals(GetE3dLatheObj().GetSmoothNormals()); // Plane itself
             const bool bSmoothLids(GetE3dLatheObj().GetSmoothLids()); // Front/back
             const bool bCharacterMode(GetE3dLatheObj().GetCharacterMode());

@@ -306,7 +306,7 @@ namespace sdr
             aLocalGrafInfo.SetChannelG(rItemSet.Get(SDRATTR_GRAFGREEN).GetValue());
             aLocalGrafInfo.SetChannelB(rItemSet.Get(SDRATTR_GRAFBLUE).GetValue());
             aLocalGrafInfo.SetGamma(rItemSet.Get(SDRATTR_GRAFGAMMA).GetValue() * 0.01);
-            aLocalGrafInfo.SetTransparency((sal_uInt8)::basegfx::fround(std::min(nTrans, (sal_uInt16)100) * 2.55));
+            aLocalGrafInfo.SetTransparency(static_cast<sal_uInt8>(::basegfx::fround(std::min(nTrans, sal_uInt16(100)) * 2.55)));
             aLocalGrafInfo.SetInvert(rItemSet.Get(SDRATTR_GRAFINVERT).GetValue());
             aLocalGrafInfo.SetDrawMode(rItemSet.Get(SDRATTR_GRAFMODE).GetValue());
             aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());

@@ -636,7 +636,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
     sal_Int32 nCount=GetPageCount();
     for (i=nCount-1; i>=0; i--)
     {
-        DeletePage( (sal_uInt16)i );
+        DeletePage( static_cast<sal_uInt16>(i) );
     }
     maPages.clear();
     PageListChanged();
@@ -645,7 +645,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
     nCount=GetMasterPageCount();
     for(i=nCount-1; i>=0; i--)
     {
-        DeleteMasterPage( (sal_uInt16)i );
+        DeleteMasterPage( static_cast<sal_uInt16>(i) );
     }
     maMaPag.clear();
     MasterPageListChanged();
@@ -1639,7 +1639,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     // get the drawing pages
     if (bInsPages) {
         sal_uInt16 nSourcePos=nFirstPageNum;
-        sal_uInt16 nMergeCount=sal_uInt16(std::abs((long)((long)nFirstPageNum-nLastPageNum))+1);
+        sal_uInt16 nMergeCount=sal_uInt16(std::abs(static_cast<long>(static_cast<long>(nFirstPageNum)-nLastPageNum))+1);
         if (nDestPos>GetPageCount()) nDestPos=GetPageCount();
         while (nMergeCount>0) {
             SdrPage* pPg=nullptr;

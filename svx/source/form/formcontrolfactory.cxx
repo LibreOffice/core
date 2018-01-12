@@ -602,7 +602,7 @@ namespace svxform
                 // both the minimum and the maximum value properties can be either Long or Double
                 Property aProperty = xModelPSI->getPropertyByName( FM_PROP_VALUEMIN );
                 if ( aProperty.Type.getTypeClass() == TypeClass_DOUBLE )
-                    aValue <<= (double)nMinValue;
+                    aValue <<= static_cast<double>(nMinValue);
                 else if ( aProperty.Type.getTypeClass() == TypeClass_LONG )
                     aValue <<= nMinValue;
                 else
@@ -614,7 +614,7 @@ namespace svxform
                 // both the minimum and the maximum value properties can be either Long or Double
                 aProperty = xModelPSI->getPropertyByName( FM_PROP_VALUEMAX );
                 if ( aProperty.Type.getTypeClass() == TypeClass_DOUBLE )
-                    aValue <<= (double)nMaxValue;
+                    aValue <<= static_cast<double>(nMaxValue);
                 else if ( aProperty.Type.getTypeClass() == TypeClass_LONG )
                     aValue <<= nMaxValue;
                 else

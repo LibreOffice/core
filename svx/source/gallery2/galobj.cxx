@@ -75,8 +75,8 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
         if(!aRetval.IsEmpty())
         {
             const Size aCurrentSizePixel(aRetval.GetSizePixel());
-            const double fScaleX((double)rSizePixel.Width() / (double)aCurrentSizePixel.Width());
-            const double fScaleY((double)rSizePixel.Height() / (double)aCurrentSizePixel.Height());
+            const double fScaleX(static_cast<double>(rSizePixel.Width()) / static_cast<double>(aCurrentSizePixel.Width()));
+            const double fScaleY(static_cast<double>(rSizePixel.Height()) / static_cast<double>(aCurrentSizePixel.Height()));
             const double fScale(std::min(fScaleX, fScaleY));
 
             // only scale when need to decrease, no need to make bigger as original. Also
@@ -132,12 +132,12 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
             }
             else
             {
-                const float fFactor  = (float) aBmpSize.Width() / aBmpSize.Height();
-                const Size  aNewSize( std::max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
-                                      std::max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
+                const float fFactor  = static_cast<float>(aBmpSize.Width()) / aBmpSize.Height();
+                const Size  aNewSize( std::max( static_cast<long>(fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
+                                      std::max( static_cast<long>(fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
                 if(aThumbBmp.Scale(
-                    (double) aNewSize.Width() / aBmpSize.Width(),
-                    (double) aNewSize.Height() / aBmpSize.Height(),
+                    static_cast<double>(aNewSize.Width()) / aBmpSize.Width(),
+                    static_cast<double>(aNewSize.Height()) / aBmpSize.Height(),
                     BmpScaleFlag::BestQuality ) )
                 {
                     aThumbBmp.Convert( BmpConversion::N8BitColors );
@@ -149,12 +149,12 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
     else if( rGraphic.GetType() == GraphicType::GdiMetafile )
     {
         const Size aPrefSize( rGraphic.GetPrefSize() );
-        const double fFactor  = (double)aPrefSize.Width() / (double)aPrefSize.Height();
+        const double fFactor  = static_cast<double>(aPrefSize.Width()) / static_cast<double>(aPrefSize.Height());
         Size aSize( S_THUMB, S_THUMB );
         if ( fFactor < 1.0 )
-            aSize.Width() = (sal_Int32)( S_THUMB * fFactor );
+            aSize.Width() = static_cast<sal_Int32>( S_THUMB * fFactor );
         else
-            aSize.Height() = (sal_Int32)( S_THUMB / fFactor );
+            aSize.Height() = static_cast<sal_Int32>( S_THUMB / fFactor );
 
         const GraphicConversionParameters aParameters(aSize, false, true, true /*TODO: extra ", true" post-#i121194#*/);
         aThumbBmp = rGraphic.GetBitmapEx(aParameters);

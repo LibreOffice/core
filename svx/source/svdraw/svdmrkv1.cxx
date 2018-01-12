@@ -133,11 +133,11 @@ bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
     SdrUShortCont& rPts=pMark->GetMarkedPoints();
     if (!bUnmark)
     {
-        rPts.insert((sal_uInt16)nHdlNum);
+        rPts.insert(static_cast<sal_uInt16>(nHdlNum));
     }
     else
     {
-        SdrUShortCont::const_iterator it = rPts.find( (sal_uInt16)nHdlNum );
+        SdrUShortCont::const_iterator it = rPts.find( static_cast<sal_uInt16>(nHdlNum) );
         if (it != rPts.end())
         {
             rPts.erase(it);

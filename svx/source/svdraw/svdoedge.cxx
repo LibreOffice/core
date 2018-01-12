@@ -1331,7 +1331,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         }
         if (nTmp>=3) {
             nQual0=nQual;
-            nQual+=(sal_uIntPtr)nTmp*0x01000000;
+            nQual+=static_cast<sal_uIntPtr>(nTmp)*0x01000000;
             if (nQual<nQual0 || nTmp>15) bOverflow = true;
         }
         if (nPointCount>=2) { // check exit angle again
@@ -1388,7 +1388,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         }
         if (nPointCount<=1) nIntersections++;
         nQual0=nQual;
-        nQual+=(sal_uIntPtr)nIntersections*0x10000000;
+        nQual+=static_cast<sal_uIntPtr>(nIntersections)*0x10000000;
         if (nQual<nQual0 || nIntersections>15) bOverflow = true;
 
         if (bOverflow || nQual==0xFFFFFFFF) nQual=0xFFFFFFFE;
@@ -1775,8 +1775,8 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
                     }
                 }
                 if (nPt>0) {
-                    Point aPos((*pEdgeTrack)[(sal_uInt16)nPt]);
-                    aPos+=(*pEdgeTrack)[(sal_uInt16)nPt+1];
+                    Point aPos((*pEdgeTrack)[static_cast<sal_uInt16>(nPt)]);
+                    aPos+=(*pEdgeTrack)[static_cast<sal_uInt16>(nPt)+1];
                     aPos.X()/=2;
                     aPos.Y()/=2;
                     pHdl->SetPos(aPos);
@@ -1787,7 +1787,7 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
             } else if (eKind==SdrEdgeKind::ThreeLines) {
                 sal_uInt32 nNum(nHdlNum);
                 if (GetConnectedNode(true)==nullptr) nNum++;
-                Point aPos((*pEdgeTrack)[(sal_uInt16)nNum-1]);
+                Point aPos((*pEdgeTrack)[static_cast<sal_uInt16>(nNum)-1]);
                 pHdl=new ImpEdgeHdl(aPos,SdrHdlKind::Poly);
                 if (nNum==2) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(SdrEdgeLineCode::Obj1Line2);
                 if (nNum==3) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(SdrEdgeLineCode::Obj2Line2);
@@ -2104,7 +2104,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     aMouseRect.Top()   -=aHalfConSiz.Height();
     aMouseRect.Right() +=aHalfConSiz.Width();
     aMouseRect.Bottom()+=aHalfConSiz.Height();
-    sal_uInt16 nBoundHitTol=(sal_uInt16)aHalfConSiz.Width()/2; if (nBoundHitTol==0) nBoundHitTol=1;
+    sal_uInt16 nBoundHitTol=static_cast<sal_uInt16>(aHalfConSiz.Width())/2; if (nBoundHitTol==0) nBoundHitTol=1;
     size_t no=pOL->GetObjCount();
     bool bFnd = false;
     SdrObjConnection aTestCon;
@@ -2167,7 +2167,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     if (bOk && aMouseRect.IsInside(aConPos)) {
                         if (bUser) bUserFnd = true;
                         bFnd = true;
-                        sal_uIntPtr nDist=(sal_uIntPtr)std::abs(aConPos.X()-rPt.X())+(sal_uIntPtr)std::abs(aConPos.Y()-rPt.Y());
+                        sal_uIntPtr nDist=static_cast<sal_uIntPtr>(std::abs(aConPos.X()-rPt.X()))+static_cast<sal_uIntPtr>(std::abs(aConPos.Y()-rPt.Y()));
                         if (nDist<nBestDist) {
                             nBestDist=nDist;
                             aTestCon.pObj=pObj;
@@ -2519,7 +2519,7 @@ void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
         // for user defined glue points we have
         // to get the id for this index first
         const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : nullptr;
-        if( pList == nullptr || SDRGLUEPOINT_NOTFOUND == pList->FindGluePoint((sal_uInt16)nIndex) )
+        if( pList == nullptr || SDRGLUEPOINT_NOTFOUND == pList->FindGluePoint(static_cast<sal_uInt16>(nIndex)) )
             return;
     }
     else if( nIndex < 0 )
@@ -2527,7 +2527,7 @@ void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
         nIndex = 0;
     }
 
-    rConn1.SetConnectorId( (sal_uInt16)nIndex );
+    rConn1.SetConnectorId( static_cast<sal_uInt16>(nIndex) );
 
     SetChanged();
     SetRectsDirty();

@@ -174,7 +174,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
         aStr += " ";
         aStr += OUString::number(nFavorite);
         Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
-        mpCtlFavorites->InsertItem( (sal_uInt16)nFavorite, aThumbImage, aStr );
+        mpCtlFavorites->InsertItem( static_cast<sal_uInt16>(nFavorite), aThumbImage, aStr );
     }
 }
 
@@ -651,7 +651,7 @@ void FontworkCharacterSpacingDialog::dispose()
 
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const
 {
-    return (sal_Int32)m_pMtrScale->GetValue();
+    return static_cast<sal_Int32>(m_pMtrScale->GetValue());
 }
 
 }

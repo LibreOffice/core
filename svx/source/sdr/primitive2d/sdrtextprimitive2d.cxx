@@ -74,7 +74,7 @@ namespace
             else
             {
                 const sal_uInt16 nPageCount(pPage->GetModel()->GetPageCount());
-                nRetval = ((sal_Int16)nPageCount - 1) / 2;
+                nRetval = (static_cast<sal_Int16>(nPageCount) - 1) / 2;
             }
         }
 

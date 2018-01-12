@@ -304,10 +304,10 @@ namespace sdr
                     // assume AA needs one pixel more and invalidate one pixel more
                     const double fDiscreteOne(getDiscreteOne());
                     const tools::Rectangle aInvalidateRectangle(
-                        (sal_Int32)floor(rRange.getMinX() - fDiscreteOne),
-                        (sal_Int32)floor(rRange.getMinY() - fDiscreteOne),
-                        (sal_Int32)ceil(rRange.getMaxX() + fDiscreteOne),
-                        (sal_Int32)ceil(rRange.getMaxY() + fDiscreteOne));
+                        static_cast<sal_Int32>(floor(rRange.getMinX() - fDiscreteOne)),
+                        static_cast<sal_Int32>(floor(rRange.getMinY() - fDiscreteOne)),
+                        static_cast<sal_Int32>(ceil(rRange.getMaxX() + fDiscreteOne)),
+                        static_cast<sal_Int32>(ceil(rRange.getMaxY() + fDiscreteOne)));
 
                     // simply invalidate
                     static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);
@@ -317,8 +317,8 @@ namespace sdr
                     // #i77674# transform to rectangle. Use floor/ceil to get all covered
                     // discrete pixels, see #i75163# and OverlayManagerBuffered::invalidateRange
                     const tools::Rectangle aInvalidateRectangle(
-                        (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
-                        (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
+                        static_cast<sal_Int32>(floor(rRange.getMinX())), static_cast<sal_Int32>(floor(rRange.getMinY())),
+                        static_cast<sal_Int32>(ceil(rRange.getMaxX())), static_cast<sal_Int32>(ceil(rRange.getMaxY())));
 
                     // simply invalidate
                     static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);

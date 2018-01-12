@@ -82,11 +82,11 @@ namespace
 
         if(bShadow)
         {
-            nRetval = (sal_uInt8)((rSet.Get(SDRATTR_SHADOWTRANSPARENCE).GetValue() * 255) / 100);
+            nRetval = static_cast<sal_uInt8>((rSet.Get(SDRATTR_SHADOWTRANSPARENCE).GetValue() * 255) / 100);
         }
         else
         {
-            nRetval = (sal_uInt8)((rSet.Get(XATTR_LINETRANSPARENCE).GetValue() * 255) / 100);
+            nRetval = static_cast<sal_uInt8>((rSet.Get(XATTR_LINETRANSPARENCE).GetValue() * 255) / 100);
         }
 
         return nRetval;
@@ -113,7 +113,7 @@ namespace
 
         return drawinglayer::attribute::LineAttribute(
             aColorAttribute,
-            (double)nLineWidth,
+            static_cast<double>(nLineWidth),
             impGetB2DLineJoin(eLineJoint),
             eLineCap);
     }
@@ -131,7 +131,7 @@ namespace
             if(rDash.GetDots() || rDash.GetDashes())
             {
                 const sal_uInt32 nLineWidth = rSet.Get(XATTR_LINEWIDTH).GetValue();
-                fFullDotDashLen = rDash.CreateDotDashArray(aDotDashArray, (double)nLineWidth);
+                fFullDotDashLen = rDash.CreateDotDashArray(aDotDashArray, static_cast<double>(nLineWidth));
             }
         }
 

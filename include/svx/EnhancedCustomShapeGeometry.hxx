@@ -88,7 +88,7 @@ struct mso_CustomShape
     sal_uInt32                              nHandles;
 };
 
-#define MSO_I | (sal_Int32)0x80000000
+#define MSO_I | sal_Int32(0x80000000)
 
 bool                        SortFilledObjectsToBackByDefault( MSO_SPT eSpType );
 SVX_DLLPUBLIC bool          IsCustomShapeFilledByDefault( MSO_SPT eSpType );

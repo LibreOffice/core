@@ -44,8 +44,8 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 n
     ::std::vector< sal_uInt16> aRemove( rFmtLB.GetEntryCount(), nDontRemove);
     for (size_t i=0; i<aRemove.size(); ++i)
     {
-        sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(
-                sal::static_int_cast< sal_Int32 >(i)));
+        sal_uInt16 nEntryData = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(
+                sal::static_int_cast< sal_Int32 >(i))));
         if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N && nEntryData != nDoNotRemove)
             aRemove[i] = nEntryData;
     }
@@ -61,8 +61,8 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 n
                 bool bInsert = true;
                 for(sal_Int32 nEntry = 0; nEntry < rFmtLB.GetEntryCount(); nEntry++)
                 {
-                    sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(nEntry));
-                    if(nEntryData == (sal_uInt16) nCurrent)
+                    sal_uInt16 nEntryData = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(nEntry)));
+                    if(nEntryData == static_cast<sal_uInt16>(nCurrent))
                     {
                         bInsert = false;
                         aRemove[nEntry] = nDontRemove;
@@ -73,7 +73,7 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 n
                 {
                     OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
                     sal_Int32 nPos = rFmtLB.InsertEntry(aIdent);
-                    rFmtLB.SetEntryData(nPos, reinterpret_cast<void*>((sal_uLong)nCurrent));
+                    rFmtLB.SetEntryData(nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(nCurrent)));
                 }
             }
         }
@@ -82,7 +82,7 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 n
     {
         if (i != nDontRemove)
         {
-            sal_Int32 nPos = rFmtLB.GetEntryPos( reinterpret_cast<void*>((sal_uLong)i));
+            sal_Int32 nPos = rFmtLB.GetEntryPos( reinterpret_cast<void*>(static_cast<sal_uLong>(i)));
             rFmtLB.RemoveEntry( nPos);
         }
     }

@@ -294,7 +294,7 @@ const Color& XColorItem::GetColorValue() const
 
 bool XColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
+    rVal <<= static_cast<sal_Int32>(GetColorValue().GetRGBColor());
     return true;
 }
 
@@ -411,9 +411,9 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
     rDotDashArray.resize( nNumDotDashArray, 0.0 );
     sal_uInt16 a;
     sal_uInt16 nIns(0);
-    double fDashDotDistance = (double)GetDistance();
-    double fSingleDashLen = (double)GetDashLen();
-    double fSingleDotLen = (double)GetDotLen();
+    double fDashDotDistance = static_cast<double>(GetDistance());
+    double fSingleDashLen = static_cast<double>(GetDashLen());
+    double fSingleDotLen = static_cast<double>(GetDotLen());
 
     if (fLineWidth == 0.0)
         fLineWidth = SMALLEST_DASH_WIDTH;
@@ -789,7 +789,7 @@ bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
 
             XDash aXDash = GetDashValue();
-            aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)nVal));
+            aXDash.SetDashStyle((css::drawing::DashStyle)static_cast<sal_uInt16>(nVal));
 
             if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
                 aXDash.SetDots(1);
@@ -888,7 +888,7 @@ bool XLineWidthItem::GetPresentation
     OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
-    rText = GetMetricText( (long) GetValue(),
+    rText = GetMetricText( static_cast<long>(GetValue()),
                             eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
@@ -946,7 +946,7 @@ bool XLineColorItem::GetPresentation
 
 bool XLineColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
+    rVal <<= static_cast<sal_Int32>(GetColorValue().GetRGBColor());
     return true;
 }
 
@@ -1603,7 +1603,7 @@ bool XLineStartWidthItem::GetPresentation
     OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
-    rText = GetMetricText( (long) GetValue(),
+    rText = GetMetricText( static_cast<long>(GetValue()),
                             eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
@@ -1641,7 +1641,7 @@ bool XLineEndWidthItem::GetPresentation
     OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
-    rText = GetMetricText( (long) GetValue(),
+    rText = GetMetricText( static_cast<long>(GetValue()),
                             eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
@@ -1868,7 +1868,7 @@ bool XFillColorItem::GetPresentation
 
 bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
+    rVal <<= static_cast<sal_Int32>(GetColorValue().GetRGBColor());
 
     return true;
 }
@@ -2046,9 +2046,9 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
 
             const XGradient& aXGradient = GetGradientValue();
             aGradient2.Style = aXGradient.GetGradientStyle();
-            aGradient2.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
-            aGradient2.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
-            aGradient2.Angle = (short)aXGradient.GetAngle();
+            aGradient2.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor().GetColor());
+            aGradient2.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor().GetColor());
+            aGradient2.Angle = static_cast<short>(aXGradient.GetAngle());
             aGradient2.Border = aXGradient.GetBorder();
             aGradient2.XOffset = aXGradient.GetXOffset();
             aGradient2.YOffset = aXGradient.GetYOffset();
@@ -2070,9 +2070,9 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
             css::awt::Gradient aGradient2;
 
             aGradient2.Style = aXGradient.GetGradientStyle();
-            aGradient2.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
-            aGradient2.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
-            aGradient2.Angle = (short)aXGradient.GetAngle();
+            aGradient2.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor().GetColor());
+            aGradient2.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor().GetColor());
+            aGradient2.Angle = static_cast<short>(aXGradient.GetAngle());
             aGradient2.Border = aXGradient.GetBorder();
             aGradient2.XOffset = aXGradient.GetXOffset();
             aGradient2.YOffset = aXGradient.GetYOffset();
@@ -2091,9 +2091,9 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
         }
 
         case MID_GRADIENT_STYLE: rVal <<= (sal_Int16)GetGradientValue().GetGradientStyle(); break;
-        case MID_GRADIENT_STARTCOLOR: rVal <<= (sal_Int32)GetGradientValue().GetStartColor().GetColor(); break;
-        case MID_GRADIENT_ENDCOLOR: rVal <<= (sal_Int32)GetGradientValue().GetEndColor().GetColor(); break;
-        case MID_GRADIENT_ANGLE: rVal <<= (sal_Int16)GetGradientValue().GetAngle(); break;
+        case MID_GRADIENT_STARTCOLOR: rVal <<= static_cast<sal_Int32>(GetGradientValue().GetStartColor().GetColor()); break;
+        case MID_GRADIENT_ENDCOLOR: rVal <<= static_cast<sal_Int32>(GetGradientValue().GetEndColor().GetColor()); break;
+        case MID_GRADIENT_ANGLE: rVal <<= static_cast<sal_Int16>(GetGradientValue().GetAngle()); break;
         case MID_GRADIENT_BORDER: rVal <<= GetGradientValue().GetBorder(); break;
         case MID_GRADIENT_XOFFSET: rVal <<= GetGradientValue().GetXOffset(); break;
         case MID_GRADIENT_YOFFSET: rVal <<= GetGradientValue().GetYOffset(); break;
@@ -2496,7 +2496,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
         case MID_HATCH_STYLE:
             rVal <<= aHatch.GetHatchStyle(); break;
         case MID_HATCH_COLOR:
-            rVal <<= (sal_Int32)aHatch.GetColor().GetColor(); break;
+            rVal <<= static_cast<sal_Int32>(aHatch.GetColor().GetColor()); break;
         case MID_HATCH_DISTANCE:
             rVal <<= aHatch.GetDistance(); break;
         case MID_HATCH_ANGLE:

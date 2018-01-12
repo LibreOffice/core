@@ -893,7 +893,7 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
         for (sal_uInt32 i = 0, nCount = mpCurTheme->GetObjectCount(); i < nCount;)
         {
             mpListView->RowInserted( i++ );
-            mpIconView->InsertItem( (sal_uInt16) i );
+            mpIconView->InsertItem( static_cast<sal_uInt16>(i) );
         }
 
         ImplSelectItemId( ( nSelectionId > mpCurTheme->GetObjectCount() ) ? mpCurTheme->GetObjectCount() : nSelectionId );
@@ -955,7 +955,7 @@ sal_uInt32 GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& 
         else
         {
             nRet = mpListView->FirstSelectedRow() + 1;
-            rSelPos = mpListView->GetFieldRectPixel( (sal_uInt16) nRet, 1 ).Center();
+            rSelPos = mpListView->GetFieldRectPixel( static_cast<sal_uInt16>(nRet), 1 ).Center();
         }
     }
 

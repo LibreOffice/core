@@ -127,7 +127,7 @@ NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& 
 
 sal_uInt16 NBOTypeMgrBase:: IsSingleLevel(sal_uInt16 nCurLevel)
 {
-    sal_uInt16 nLv = (sal_uInt16)0xFFFF;
+    sal_uInt16 nLv = sal_uInt16(0xFFFF);
     sal_uInt16 nCount = 0;
     sal_uInt16 nMask = 1;
     for( sal_uInt16 i = 0; i < SVX_MAX_NUM; i++ )
@@ -143,7 +143,7 @@ sal_uInt16 NBOTypeMgrBase:: IsSingleLevel(sal_uInt16 nCurLevel)
     if ( nCount == 1)
         return nLv;
     else
-        return (sal_uInt16)0xFFFF;
+        return sal_uInt16(0xFFFF);
 }
 
 void NBOTypeMgrBase::SetItems(const SfxItemSet* pArg) {
@@ -276,14 +276,14 @@ void BulletsTypeMgr::Init()
 }
 sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex)
 {
-    if ( mLevel == (sal_uInt16)0xFFFF || mLevel == 0)
-        return (sal_uInt16)0xFFFF;
+    if ( mLevel == sal_uInt16(0xFFFF) || mLevel == 0)
+        return sal_uInt16(0xFFFF);
     //if ( !lcl_IsNumFmtSet(pNR, mLevel) ) return (sal_uInt16)0xFFFF;
 
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
 
-    if ( nActLv == (sal_uInt16)0xFFFF )
-        return (sal_uInt16)0xFFFF;
+    if ( nActLv == sal_uInt16(0xFFFF) )
+        return sal_uInt16(0xFFFF);
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_Unicode cChar = aFmt.GetBulletChar();
@@ -297,20 +297,20 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
         }
     }
 
-    return (sal_uInt16)0xFFFF;
+    return sal_uInt16(0xFFFF);
 }
 
 void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
-    if ( mLevel == (sal_uInt16)0xFFFF || mLevel == 0)
+    if ( mLevel == sal_uInt16(0xFFFF) || mLevel == 0)
         return;
 
-    if ( GetNBOIndexForNumRule(aNum,mLevel) != (sal_uInt16)0xFFFF )
+    if ( GetNBOIndexForNumRule(aNum,mLevel) != sal_uInt16(0xFFFF) )
         return;
 
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
 
-    if ( nActLv == (sal_uInt16)0xFFFF )
+    if ( nActLv == sal_uInt16(0xFFFF) )
         return;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
@@ -439,13 +439,13 @@ void NumberingTypeMgr::Init()
 
 sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex)
 {
-    if ( mLevel == (sal_uInt16)0xFFFF || mLevel > aNum.GetLevelCount() || mLevel == 0)
-        return (sal_uInt16)0xFFFF;
+    if ( mLevel == sal_uInt16(0xFFFF) || mLevel > aNum.GetLevelCount() || mLevel == 0)
+        return sal_uInt16(0xFFFF);
 
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
 
-    if ( nActLv == (sal_uInt16)0xFFFF )
-        return (sal_uInt16)0xFFFF;
+    if ( nActLv == sal_uInt16(0xFFFF) )
+        return sal_uInt16(0xFFFF);
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix())[0];
@@ -470,14 +470,14 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     }
 
 
-    return (sal_uInt16)0xFFFF;
+    return sal_uInt16(0xFFFF);
 }
 
 void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
 
-    if ( nActLv == (sal_uInt16)0xFFFF )
+    if ( nActLv == sal_uInt16(0xFFFF) )
         return;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
@@ -700,7 +700,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
     }
 
 
-    return (sal_uInt16)0xFFFF;
+    return sal_uInt16(0xFFFF);
 }
 
 void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
@@ -789,7 +789,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
         const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
         if (pLevelSettings->nNumberType !=aFmt.GetNumberingType()) isResetSize=true;
         aFmt.SetNumberingType( pLevelSettings->nNumberType );
-        sal_uInt16 nUpperLevelOrChar = (sal_uInt16)pLevelSettings->nParentNumbering;
+        sal_uInt16 nUpperLevelOrChar = static_cast<sal_uInt16>(pLevelSettings->nParentNumbering);
         if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
         {
             if( pLevelSettings->sBulletFont.getLength() &&

@@ -1486,7 +1486,7 @@ void FmXFormShell::ExecuteSearch_Lock()
     {
         if (m_aSearchForms.at(i) == xActiveForm)
         {
-            nInitialContext = (sal_Int16)i;
+            nInitialContext = static_cast<sal_Int16>(i);
             break;
         }
     }
@@ -2194,7 +2194,7 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
     if (impl_checkDisposed_Lock())
         return;
 
-    DBG_ASSERT((rfriWhere.nContext >= 0) && (rfriWhere.nContext < (sal_Int16)m_aSearchForms.size()),
+    DBG_ASSERT((rfriWhere.nContext >= 0) && (rfriWhere.nContext < static_cast<sal_Int16>(m_aSearchForms.size())),
         "FmXFormShell::OnFoundData : invalid context!");
     Reference< XForm> xForm( m_aSearchForms.at(rfriWhere.nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnFoundData : invalid form!");
@@ -2259,7 +2259,7 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
         m_xLastGridFound = xControlModel;
 
         if ( xGrid.is() )
-            xGrid->setCurrentColumnPosition((sal_Int16)nGridColumn);
+            xGrid->setCurrentColumnPosition(static_cast<sal_Int16>(nGridColumn));
     }
 
     // As the cursor has been repositioned, I have (in positioned) invalidated
@@ -2277,7 +2277,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound_Lock, FmFoundRecordInformation&, rfri
     if (impl_checkDisposed_Lock())
         return;
 
-    DBG_ASSERT((rfriWhere.nContext >= 0) && (rfriWhere.nContext < (sal_Int16)m_aSearchForms.size()),
+    DBG_ASSERT((rfriWhere.nContext >= 0) && (rfriWhere.nContext < static_cast<sal_Int16>(m_aSearchForms.size())),
         "FmXFormShell::OnCanceledNotFound : invalid context!");
     Reference< XForm> xForm( m_aSearchForms.at(rfriWhere.nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnCanceledNotFound : invalid form!");
@@ -2306,7 +2306,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
     if (impl_checkDisposed_Lock())
         return 0;
 
-    DBG_ASSERT(rfmscContextInfo.nContext < (sal_Int16)m_aSearchForms.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
+    DBG_ASSERT(rfmscContextInfo.nContext < static_cast<sal_Int16>(m_aSearchForms.size()), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
     Reference< XForm> xForm( m_aSearchForms.at(rfmscContextInfo.nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnSearchContextRequest : unexpected : invalid context !");
 
@@ -3426,7 +3426,7 @@ void FmXFormShell::CreateExternalView_Lock()
 
                 // bound column
                 pListBoxDescription->Name = FM_PROP_BOUNDCOLUMN;
-                pListBoxDescription->Value <<= (sal_Int16)1;
+                pListBoxDescription->Value <<= sal_Int16(1);
                 ++pListBoxDescription;
 
                 // content type

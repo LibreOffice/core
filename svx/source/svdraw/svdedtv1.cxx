@@ -515,13 +515,13 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
     {
         // for PolyObj's, but NOT for SdrPathObj's, e.g. the measurement object
         sal_uInt32 nPointCount(pO->GetPointCount());
-        XPolygon aXP((sal_uInt16)nPointCount);
+        XPolygon aXP(static_cast<sal_uInt16>(nPointCount));
         sal_uInt32 nPtNum;
 
         for(nPtNum = 0; nPtNum < nPointCount; nPtNum++)
         {
             Point aPt(pO->GetPoint(nPtNum));
-            aXP[(sal_uInt16)nPtNum]=aPt;
+            aXP[static_cast<sal_uInt16>(nPtNum)]=aPt;
         }
 
         switch (eMode)
@@ -535,7 +535,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
         {
             // broadcasting could be optimized here, but for the
             // current two points of the measurement object, it's fine
-            pO->SetPoint(aXP[(sal_uInt16)nPtNum],nPtNum);
+            pO->SetPoint(aXP[static_cast<sal_uInt16>(nPtNum)],nPtNum);
         }
 
         bDone = true;
@@ -629,13 +629,13 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, con
     {
         // e. g. for the measurement object
         sal_uInt32 nPointCount(pO->GetPointCount());
-        XPolygon aXP((sal_uInt16)nPointCount);
+        XPolygon aXP(static_cast<sal_uInt16>(nPointCount));
         sal_uInt32 nPtNum;
 
         for(nPtNum = 0; nPtNum < nPointCount; nPtNum++)
         {
             Point aPt(pO->GetPoint(nPtNum));
-            aXP[(sal_uInt16)nPtNum]=aPt;
+            aXP[static_cast<sal_uInt16>(nPtNum)]=aPt;
         }
 
         aXP.Distort(rRef, rDistortedRect);
@@ -644,7 +644,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, con
         {
             // broadcasting could be optimized here, but for the
             // current two points of the measurement object it's fine
-            pO->SetPoint(aXP[(sal_uInt16)nPtNum],nPtNum);
+            pO->SetPoint(aXP[static_cast<sal_uInt16>(nPtNum)],nPtNum);
         }
     }
 }
@@ -1097,7 +1097,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
                 if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINESTARTWIDTH))
                 {
                     const sal_Int32 nValAct(rSet.Get(XATTR_LINESTARTWIDTH).GetValue());
-                    const sal_Int32 nValNewStart(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
+                    const sal_Int32 nValNewStart(std::max(sal_Int32(0), nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
 
                     pObj->SetMergedItem(XLineStartWidthItem(nValNewStart));
                 }
@@ -1105,7 +1105,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
                 if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINEENDWIDTH))
                 {
                     const sal_Int32 nValAct(rSet.Get(XATTR_LINEENDWIDTH).GetValue());
-                    const sal_Int32 nValNewEnd(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
+                    const sal_Int32 nValNewEnd(std::max(sal_Int32(0), nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
 
                     pObj->SetMergedItem(XLineEndWidthItem(nValNewEnd));
                 }
@@ -1542,8 +1542,8 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
             } else {
                 if (nNewShearAngle!=0 && nOldShearAngle!=0) {
                     // bug fix
-                    double nOld=tan((double)nOldShearAngle*nPi180);
-                    double nNew=tan((double)nNewShearAngle*nPi180);
+                    double nOld=tan(static_cast<double>(nOldShearAngle)*nPi180);
+                    double nNew=tan(static_cast<double>(nNewShearAngle)*nPi180);
                     nNew-=nOld;
                     nNew=atan(nNew)/nPi180;
                     nShearAngle=svx::Round(nNew);

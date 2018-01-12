@@ -245,7 +245,7 @@ namespace
 
             for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
             {
-                aDXArray.push_back((double)rInfo.mpDXArray[a]);
+                aDXArray.push_back(static_cast<double>(rInfo.mpDXArray[a]));
             }
         }
 
@@ -559,7 +559,7 @@ namespace
     {
         // for contour text, ignore (clip away) all portions which are below
         // the visible area given by maScale
-        if(pInfo && (double)pInfo->mrStartPos.Y() < maScale.getY())
+        if(pInfo && static_cast<double>(pInfo->mrStartPos.Y()) < maScale.getY())
         {
             impHandleDrawPortionInfo(*pInfo);
         }
@@ -1171,7 +1171,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // to layout without mirroring
     const double fScaleX(fabs(aScale.getX()) / aOutlinerScale.getX());
     const double fScaleY(fabs(aScale.getY()) / aOutlinerScale.getY());
-    rOutliner.SetGlobalCharStretching((sal_Int16)FRound(fScaleX * 100.0), (sal_Int16)FRound(fScaleY * 100.0));
+    rOutliner.SetGlobalCharStretching(static_cast<sal_Int16>(FRound(fScaleX * 100.0)), static_cast<sal_Int16>(FRound(fScaleY * 100.0)));
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
@@ -1199,7 +1199,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
 // timing generators
 #define ENDLESS_LOOP    (0xffffffff)
-#define ENDLESS_TIME    ((double)0xffffffff)
+#define ENDLESS_TIME    (double(0xffffffff))
 #define PIXEL_DPI       (96.0)
 
 void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const
@@ -1209,8 +1209,8 @@ void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryLi
 
     // get values
     const SfxItemSet& rSet = GetObjectItemSet();
-    const sal_uInt32 nRepeat((sal_uInt32)rSet.Get(SDRATTR_TEXT_ANICOUNT).GetValue());
-    double fDelay((double)rSet.Get(SDRATTR_TEXT_ANIDELAY).GetValue());
+    const sal_uInt32 nRepeat(static_cast<sal_uInt32>(rSet.Get(SDRATTR_TEXT_ANICOUNT).GetValue()));
+    double fDelay(static_cast<double>(rSet.Get(SDRATTR_TEXT_ANIDELAY).GetValue()));
 
     if(0.0 == fDelay)
     {
@@ -1373,8 +1373,8 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
     // get data. Goal is to calculate fTimeFullPath which is the time needed to
     // move animation from (0.0) to (1.0) state
     const SfxItemSet& rSet = GetObjectItemSet();
-    double fAnimationDelay((double)rSet.Get(SDRATTR_TEXT_ANIDELAY).GetValue());
-    double fSingleStepWidth((double)rSet.Get(SDRATTR_TEXT_ANIAMOUNT).GetValue());
+    double fAnimationDelay(static_cast<double>(rSet.Get(SDRATTR_TEXT_ANIDELAY).GetValue()));
+    double fSingleStepWidth(static_cast<double>(rSet.Get(SDRATTR_TEXT_ANIAMOUNT).GetValue()));
     const SdrTextAniDirection eDirection(GetTextAniDirection());
     const bool bForward(SdrTextAniDirection::Right == eDirection || SdrTextAniDirection::Down == eDirection);
 

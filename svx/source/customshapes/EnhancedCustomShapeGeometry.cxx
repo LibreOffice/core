@@ -6197,7 +6197,7 @@ static const sal_uInt16 mso_DefaultFillingTable[] =
 bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
 {
     bool bIsFilledByDefault = true;
-    sal_uInt32 i = (sal_uInt32)eSpType;
+    sal_uInt32 i = static_cast<sal_uInt32>(eSpType);
     if ( i < 0x100 )
         bIsFilledByDefault = ( mso_DefaultFillingTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) == 0;
     return bIsFilledByDefault;
@@ -6243,7 +6243,7 @@ static const sal_uInt16 mso_DefaultStrokingTable[] =
 bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
 {
     bool bIsStrokedByDefault = true;
-    sal_uInt32 i = (sal_uInt32)eSpType;
+    sal_uInt32 i = static_cast<sal_uInt32>(eSpType);
     if ( i < 0x100 )
         bIsStrokedByDefault = ( mso_DefaultStrokingTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) == 0;
     return bIsStrokedByDefault;
@@ -6256,7 +6256,7 @@ static const sal_uInt16 msoSortFilledObjectsToBackTable[] =
 bool SortFilledObjectsToBackByDefault( MSO_SPT eSpType )
 {
     bool bSortFilledObjectsToBackByDefault = true;
-    sal_uInt32 i = (sal_uInt32)eSpType;
+    sal_uInt32 i = static_cast<sal_uInt32>(eSpType);
     if ( i < 0x100 )
         bSortFilledObjectsToBackByDefault = ( msoSortFilledObjectsToBackTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) != 0;
     return bSortFilledObjectsToBackByDefault;

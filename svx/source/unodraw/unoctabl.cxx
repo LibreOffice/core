@@ -98,7 +98,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
 
     if( pList.is() )
     {
-        pList->Insert(o3tl::make_unique<XColorEntry>(Color((ColorData)nColor), aName));
+        pList->Insert(o3tl::make_unique<XColorEntry>(Color(static_cast<ColorData>(nColor)), aName));
     }
 }
 
@@ -122,7 +122,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
-    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(Color((ColorData)nColor), aName ));
+    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(Color(static_cast<ColorData>(nColor)), aName ));
 }
 
 // XNameAccess
@@ -133,7 +133,7 @@ uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
         throw container::NoSuchElementException();
 
     const XColorEntry* pEntry = pList->GetColor(nIndex);
-    return uno::Any( (sal_Int32) pEntry->GetColor().GetRGBColor() );
+    return uno::Any( static_cast<sal_Int32>(pEntry->GetColor().GetRGBColor()) );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()

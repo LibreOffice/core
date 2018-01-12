@@ -298,12 +298,12 @@ void SdrTableRTFParser::FillTable()
             xRows->insertByIndex( nRowCount, mnRowCnt - nRowCount );
         }
 
-        for( sal_Int32 nRow = 0; nRow < (sal_Int32)maRows.size(); nRow++ )
+        for( sal_Int32 nRow = 0; nRow < static_cast<sal_Int32>(maRows.size()); nRow++ )
         {
             RTFColumnVectorPtr xColumn( maRows[nRow] );
             nCol = 0;
             auto aEdge = maColumnEdges.begin();
-            for( sal_Int32 nIdx = 0; nCol < nColMax && nIdx < (sal_Int32)xColumn->size(); nIdx++ )
+            for( sal_Int32 nIdx = 0; nCol < nColMax && nIdx < static_cast<sal_Int32>(xColumn->size()); nIdx++ )
             {
                 RTFCellInfoPtr xCellInfo( (*xColumn)[nIdx] );
 
