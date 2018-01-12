@@ -56,6 +56,7 @@ StyleSheetEntry::StyleSheetEntry() :
         sStyleIdentifierI()
         ,sStyleIdentifierD()
         ,bIsDefaultStyle(false)
+        ,bIsChapterNumbering(false)
         ,bInvalidHeight(false)
         ,bHasUPE(false)
         ,nStyleTypeCode(STYLE_TYPE_UNKNOWN)
@@ -73,8 +74,8 @@ StyleSheetEntry::~StyleSheetEntry()
 TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry ):
     StyleSheetEntry( )
 {
-
     bIsDefaultStyle = rEntry.bIsDefaultStyle;
+    bIsChapterNumbering = rEntry.bIsChapterNumbering;
     bInvalidHeight = rEntry.bInvalidHeight;
     bHasUPE = rEntry.bHasUPE;
     nStyleTypeCode = STYLE_TYPE_TABLE;
