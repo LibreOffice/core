@@ -352,14 +352,14 @@ XFStyle* LwpNumericFormat::Convert()
         pStyle->SetPrefix(aPrefix);
         //Set suffix
         pStyle->SetSurfix(aSuffix);
-        pStyle->SetColor( XFColor( (sal_uInt8)aColor.GetRed(),
-                                   (sal_uInt8)aColor.GetGreen(),
-                                   (sal_uInt8)aColor.GetBlue()) );
+        pStyle->SetColor( XFColor( static_cast<sal_uInt8>(aColor.GetRed()),
+                                   static_cast<sal_uInt8>(aColor.GetGreen()),
+                                   static_cast<sal_uInt8>(aColor.GetBlue())) );
     }
     {//Negtive
-        pStyle->SetNegativeStyle( aNegPrefix, aNegSuffix, XFColor((sal_uInt8)aNegativeColor.GetRed(),
-                                                                    (sal_uInt8)aNegativeColor.GetGreen(),
-                                                                    (sal_uInt8)aNegativeColor.GetBlue()) );
+        pStyle->SetNegativeStyle( aNegPrefix, aNegSuffix, XFColor(static_cast<sal_uInt8>(aNegativeColor.GetRed()),
+                                                                    static_cast<sal_uInt8>(aNegativeColor.GetGreen()),
+                                                                    static_cast<sal_uInt8>(aNegativeColor.GetBlue())) );
     }
 
     return pStyle;

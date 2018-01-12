@@ -144,7 +144,7 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
             }
             else if (nScalemode & LwpLayoutScale::PERCENTAGE)
             {
-                double fScalePercentage = (double)pMyScale->GetScalePercentage() / 1000;
+                double fScalePercentage = static_cast<double>(pMyScale->GetScalePercentage()) / 1000;
                 fSclGrafWidth = fScalePercentage * fWidth;
                 fSclGrafHeight = fScalePercentage * fHeight;
             }
@@ -255,8 +255,8 @@ void LwpOleObject::XFConvert(XFContentContainer * /*pCont*/)
 
 void LwpOleObject::GetGrafOrgSize(double & rWidth, double & rHeight)
 {
-    rWidth = (double)m_SizeRect.GetWidth()/1000;//cm unit
-    rHeight = (double)m_SizeRect.GetHeight()/1000;//cm unit
+    rWidth = static_cast<double>(m_SizeRect.GetWidth())/1000;//cm unit
+    rHeight = static_cast<double>(m_SizeRect.GetHeight())/1000;//cm unit
 }
 
 void LwpOleObject::RegisterStyle()

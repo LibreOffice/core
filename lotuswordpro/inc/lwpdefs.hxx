@@ -62,7 +62,7 @@
 #define INCLUDED_LOTUSWORDPRO_INC_LWPDEFS_HXX
 
 #define BAD_OFFSET 0xFFFFFFFFUL
-#define BAD_ATOM ((sal_Int32)(-1))              // Invalid Atom ID
+#define BAD_ATOM (sal_Int32(-1))              // Invalid Atom ID
 
 //Please remove the item from the commented defines after you add the tag to the following enum.
 enum VO_TYPE

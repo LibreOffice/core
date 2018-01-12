@@ -692,7 +692,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             rtl::Reference<XFFont> pFont = m_pLayout->GetFont();
             if(pFont.is())
             {
-                offset = (double)(pFont->GetFontSize())*CM_PER_INCH/POINTS_PER_INCH;
+                offset = static_cast<double>(pFont->GetFontSize())*CM_PER_INCH/POINTS_PER_INCH;
             }
             fYOffset = offset-fYOffset;
             break;

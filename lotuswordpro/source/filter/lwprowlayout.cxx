@@ -117,11 +117,11 @@ void LwpRowLayout::RegisterStyle()
 
     if (m_nDirection & 0x0030)
     {
-        pRowStyle->SetMinRowHeight((float)LwpTools::ConvertFromUnitsToMetric(cheight));
+        pRowStyle->SetMinRowHeight(static_cast<float>(LwpTools::ConvertFromUnitsToMetric(cheight)));
     }
     else
     {
-        pRowStyle->SetRowHeight((float)LwpTools::ConvertFromUnitsToMetric(cheight));
+        pRowStyle->SetRowHeight(static_cast<float>(LwpTools::ConvertFromUnitsToMetric(cheight)));
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_StyleName = pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName();
@@ -166,9 +166,9 @@ void LwpRowLayout::Read()
     // Row layout content
     crowid = pStrm->QuickReaduInt16();
     cheight = pStrm->QuickReadInt32();
-    cLeaderDotCount = (sal_uInt8)pStrm->QuickReaduInt16();  // was written as lushort.
+    cLeaderDotCount = static_cast<sal_uInt8>(pStrm->QuickReaduInt16());  // was written as lushort.
     cLeaderDotY = MAXUNIT;  // Sentinel meaning "not calculated yet"
-    cRowFlags = (sal_uInt8)pStrm->QuickReaduInt16();    // was written as lushort.
+    cRowFlags = static_cast<sal_uInt8>(pStrm->QuickReaduInt16());    // was written as lushort.
 
     pStrm->SkipExtra();
 }
@@ -283,11 +283,11 @@ void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
 
     if (m_nDirection & 0x0030)
     {
-        pNewStyle->SetMinRowHeight((float)fHeight);
+        pNewStyle->SetMinRowHeight(static_cast<float>(fHeight));
     }
     else
     {
-        pNewStyle->SetRowHeight((float)fHeight);
+        pNewStyle->SetRowHeight(static_cast<float>(fHeight));
     }
 
     pXFRow->SetStyleName(pXFStyleManager->AddStyle(pNewStyle).m_pStyle->GetStyleName());

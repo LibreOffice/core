@@ -139,8 +139,8 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             // original drawing size
             long nWidth = 0, nHeight = 0;
             m_pGraphicObj->GetGrafOrgSize(nWidth, nHeight);
-            double fGrafOrgWidth = (double)nWidth/TWIPS_PER_CM;
-            double fGrafOrgHeight = (double)nHeight/TWIPS_PER_CM;
+            double fGrafOrgWidth = static_cast<double>(nWidth)/TWIPS_PER_CM;
+            double fGrafOrgHeight = static_cast<double>(nHeight)/TWIPS_PER_CM;
 
             // get margin values
             double fLeftMargin = xMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
@@ -167,14 +167,14 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             }
             else if (nScalemode & LwpLayoutScale::PERCENTAGE)
             {
-                double fScalePercentage = (double)pMyScale->GetScalePercentage() / 1000;
+                double fScalePercentage = static_cast<double>(pMyScale->GetScalePercentage()) / 1000;
                 m_aTransformData.fScaleX = fScalePercentage;
                 m_aTransformData.fScaleY = fScalePercentage;
             }
             else if (nScalemode & LwpLayoutScale::FIT_IN_FRAME)
             {
-                double fWidth0 = (double)right / TWIPS_PER_CM;
-                double fHeight0 = (double)bottom / TWIPS_PER_CM;
+                double fWidth0 = static_cast<double>(right) / TWIPS_PER_CM;
+                double fHeight0 = static_cast<double>(bottom) / TWIPS_PER_CM;
 
                 double fWidth1 = LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
                 double fHeight1 = LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
@@ -206,8 +206,8 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
                 double fNewCenterX = (double(left)/TWIPS_PER_CM + fFrameWidth/*-fOffsetX*/) / 2;
                 double fNewCenterY = (double(top)/TWIPS_PER_CM + fFrameHeight/*-fOffsetY*/) / 2;
 
-                m_aTransformData.fOffsetX = fNewCenterX - (double)aCenter.X()/TWIPS_PER_CM;
-                m_aTransformData.fOffsetY = fNewCenterY -(double)aCenter.Y()/TWIPS_PER_CM;
+                m_aTransformData.fOffsetX = fNewCenterX - static_cast<double>(aCenter.X())/TWIPS_PER_CM;
+                m_aTransformData.fOffsetY = fNewCenterY -static_cast<double>(aCenter.Y())/TWIPS_PER_CM;
             }
             else
             {
