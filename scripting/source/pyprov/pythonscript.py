@@ -859,7 +859,7 @@ class PackageBrowseNode( unohelper.Base, XBrowseNode ):
         return CONTAINER
 
     def getScript( self, uri ):
-        log.debug( "DirBrowseNode getScript " + uri + " invoked" )
+        log.debug( "PackageBrowseNode getScript " + uri + " invoked" )
         raise IllegalArgumentException( "PackageBrowseNode couldn't instantiate script " + uri , self , 0 )
 
 
