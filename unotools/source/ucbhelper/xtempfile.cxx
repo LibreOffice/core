@@ -150,7 +150,7 @@ sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& 
     sal_uInt32 nRead = mpStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
-    if (nRead < (std::size_t)aData.getLength())
+    if (nRead < static_cast<std::size_t>(aData.getLength()))
         aData.realloc( nRead );
 
     if ( sal::static_int_cast<sal_uInt32>(nBytesToRead) > nRead )
@@ -241,7 +241,7 @@ void SAL_CALL OTempFileService::writeBytes( const css::uno::Sequence< sal_Int8 >
     checkConnected();
     sal_uInt32 nWritten = mpStream->WriteBytes(aData.getConstArray(), aData.getLength());
     checkError();
-    if  ( nWritten != (sal_uInt32)aData.getLength())
+    if  ( nWritten != static_cast<sal_uInt32>(aData.getLength()))
         throw css::io::BufferSizeExceededException( OUString(),static_cast < css::uno::XWeak * > ( this ) );
 }
 void SAL_CALL OTempFileService::flush(  )
@@ -322,7 +322,7 @@ void SAL_CALL OTempFileService::seek( sal_Int64 nLocation )
     if ( nLocation < 0 || nLocation > getLength() )
         throw css::lang::IllegalArgumentException();
 
-    mpStream->Seek((sal_uInt32) nLocation );
+    mpStream->Seek(static_cast<sal_uInt32>(nLocation) );
     checkError();
 }
 sal_Int64 SAL_CALL OTempFileService::getPosition(  )
@@ -332,7 +332,7 @@ sal_Int64 SAL_CALL OTempFileService::getPosition(  )
 
     sal_uInt32 nPos = mpStream->Tell();
     checkError();
-    return (sal_Int64)nPos;
+    return static_cast<sal_Int64>(nPos);
 }
 sal_Int64 SAL_CALL OTempFileService::getLength(  )
 {
@@ -348,7 +348,7 @@ sal_Int64 SAL_CALL OTempFileService::getLength(  )
 
     checkError();
 
-    return (sal_Int64)nEndPos;
+    return static_cast<sal_Int64>(nEndPos);
 }
 
 // XStream

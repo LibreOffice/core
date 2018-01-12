@@ -613,14 +613,14 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
     {
         const char*         pStr = *ppStr;
         const sal_Unicode*  pNameStr = rName.getStr();
-        while ( (*pNameStr == (sal_Unicode)(unsigned char)*pStr) && *pStr )
+        while ( (*pNameStr == static_cast<sal_Unicode>(static_cast<unsigned char>(*pStr))) && *pStr )
         {
             pNameStr++;
             pStr++;
         }
         if ( !*pStr )
         {
-            sal_Int32 nLen = (sal_Int32)(pNameStr - rName.getStr());
+            sal_Int32 nLen = static_cast<sal_Int32>(pNameStr - rName.getStr());
             rName = rName.copy(nLen);
             return true;
         }
@@ -641,7 +641,7 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
 
 static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
 {
-    sal_Int32 nStrLen = (sal_Int32)strlen( pStr );
+    sal_Int32 nStrLen = static_cast<sal_Int32>(strlen( pStr ));
     if( nStrLen >= rName.getLength() )
         return 0;
 
@@ -696,7 +696,7 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
 
 static bool ImplFindAndErase( OUString& rName, const char* pStr )
 {
-    sal_Int32 nLen = (sal_Int32)strlen(pStr);
+    sal_Int32 nLen = static_cast<sal_Int32>(strlen(pStr));
     sal_Int32 nPos = rName.indexOfAsciiL(pStr, nLen );
     if ( nPos < 0 )
         return false;

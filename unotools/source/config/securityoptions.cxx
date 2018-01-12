@@ -715,7 +715,7 @@ void SvtSecurityOptions_Impl::ImplCommit()
             {
                 bDone = !m_bROBasicMode;
                 if( bDone )
-                    lValues[ nRealCount ] <<= (sal_Int32)m_eBasicMode;
+                    lValues[ nRealCount ] <<= static_cast<sal_Int32>(m_eBasicMode);
             }
             break;
             case PROPERTYHANDLE_EXECUTEPLUGINS:

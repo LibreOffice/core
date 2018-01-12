@@ -152,7 +152,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
         Sequence< OUString > aNodes = GetNodeNames( sNodes );
         if ( aNodes.getLength() > 0 )
         {
-            for ( sal_uInt32 n = 0; n < (sal_uInt32)aNodes.getLength(); ++n )
+            for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(aNodes.getLength()); ++n )
             {
                 OUString sSubNodeName( sNodes + m_sPathDelimiter + aNodes[n] );
                 ReadNode( sSubNodeName, _eType == NT_Group ? NT_Page : NT_Option );

@@ -173,7 +173,7 @@ void SvtExtendedSecurityOptions_Impl::ImplCommit()
         switch( nProperty )
         {
             case PROPERTYHANDLE_HYPERLINKS_OPEN:    {
-                                                        seqValues[nProperty] <<= (sal_Int32)m_eOpenHyperlinkMode;
+                                                        seqValues[nProperty] <<= static_cast<sal_Int32>(m_eOpenHyperlinkMode);
                                                     }
                                                     break;
         }

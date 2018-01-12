@@ -100,8 +100,8 @@ class SvtDynMenu
         //           special string "sSeparator" to perform too ...
         Sequence< Sequence< PropertyValue > > GetList() const
         {
-            sal_Int32                             nSetupCount = (sal_Int32)lSetupEntries.size();
-            sal_Int32                             nUserCount  = (sal_Int32)lUserEntries.size();
+            sal_Int32                             nSetupCount = static_cast<sal_Int32>(lSetupEntries.size());
+            sal_Int32                             nUserCount  = static_cast<sal_Int32>(lUserEntries.size());
             sal_Int32                             nStep       = 0;
             Sequence< PropertyValue >             lProperties ( PROPERTYCOUNT );
             Sequence< Sequence< PropertyValue > > lResult     ( nSetupCount+nUserCount );
