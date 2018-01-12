@@ -32,6 +32,7 @@ using namespace ::com::sun::star;
 #include <editeng/flstitem.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/infobar.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
@@ -111,6 +112,40 @@ using namespace ::com::sun::star;
 #include <documentlinkmgr.hxx>
 #include <memory>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+
+void ScDocShell::ReloadAllLinks()
+{
+    aDocument.SetLinkFormulaNeedingCheck(false);
+    getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+
+    ReloadTabLinks();
+    aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
+
+    bool bAnyDde = aDocument.GetDocLinkManager().updateDdeOrOleOrWebServiceLinks(GetActiveDialogParent());
+
+    if (bAnyDde)
+    {
+        //  calculate formulas and paint like in the TrackTimeHdl
+        aDocument.TrackFormulas();
+        Broadcast(SfxHint(SfxHintId::ScDataChanged));
+
+        //  Should FID_DATACHANGED become asynchronous some time
+        //  (e.g., with Invalidate at Window), an update needs to be forced here.
+    }
+
+    aDocument.UpdateAreaLinks();
+}
+
+IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, Button*, void )
+{
+    ReloadAllLinks();
+
+    ScTabViewShell* pViewSh = GetBestViewShell();
+    SfxViewFrame* pViewFrame = pViewSh ? pViewSh->GetFrame() : nullptr;
+    if (pViewFrame)
+        pViewFrame->RemoveInfoBar("enablecontent");
+    SAL_WARN_IF(!pViewFrame, "sc", "expected there to be a ViewFrame");
+}
 
 void ScDocShell::Execute( SfxRequest& rReq )
 {
@@ -408,14 +443,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
             break;
         case SID_UPDATETABLINKS:
             {
-                comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
-                rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
-
                 ScDocument& rDoc = GetDocument();
 
                 ScLkUpdMode nSet = rDoc.GetLinkMode();
 
-                sal_uInt16 nDlgRet=RET_NO;
                 if(nSet==LM_UNKNOWN)
                 {
                     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
@@ -441,43 +472,35 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     nSet = LM_NEVER;
                 }
 
-                if(nSet==LM_ON_DEMAND)
+                if (nSet == LM_ALWAYS)
                 {
-                    ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                                             ScGlobal::GetRscString(STR_RELOAD_TABLES) );
-
-                    nDlgRet=aBox->Execute();
-                }
-
-                if (nDlgRet == RET_YES || nSet==LM_ALWAYS)
-                {
-                    ReloadTabLinks();
-                    aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
-
-                    bool bAnyDde = aDocument.GetDocLinkManager().updateDdeOrOleOrWebServiceLinks(GetActiveDialogParent());
-
-                    if (bAnyDde)
-                    {
-                        //  calculate formulas and paint like in the TrackTimeHdl
-                        aDocument.TrackFormulas();
-                        Broadcast(SfxHint(SfxHintId::ScDataChanged));
-
-                        //  Should FID_DATACHANGED become asynchronous some time
-                        //  (e.g., with Invalidate at Window), an update needs to be forced here.
-                    }
-
-                    aDocument.UpdateAreaLinks();
-
-                    //! test for error
+                    ReloadAllLinks();
                     rReq.Done();
                 }
-                else
+                else if (nSet == LM_NEVER)
                 {
-                    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+                    getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
                     rReq.Ignore();
                 }
-
-                rDoc.SetLinkFormulaNeedingCheck(false);
+                else if (nSet == LM_ON_DEMAND)
+                {
+                    ScTabViewShell* pViewSh = GetBestViewShell();
+                    SfxViewFrame* pViewFrame = pViewSh ? pViewSh->GetFrame() : nullptr;
+                    if (pViewFrame)
+                    {
+                        pViewFrame->RemoveInfoBar("enablecontent");
+                        auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", ScGlobal::GetRscString(STR_RELOAD_TABLES), InfoBarType::Warning);
+                        if (pInfoBar)
+                        {
+                            VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
+                            xBtn->SetText(ScResId(STR_ENABLE_CONTENT));
+                            xBtn->SetSizePixel(xBtn->GetOptimalSize());
+                            xBtn->SetClickHdl(LINK(this, ScDocShell, ReloadAllLinksHdl));
+                            pInfoBar->addButton(xBtn);
+                        }
+                    }
+                    rReq.Done();
+                }
             }
             break;
 
