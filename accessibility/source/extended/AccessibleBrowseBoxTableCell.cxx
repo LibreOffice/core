@@ -75,7 +75,7 @@ namespace accessibility
                                 sal_Int32 _nOffset )
         :AccessibleBrowseBoxCell( _rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos )
     {
-        m_nOffset = ( _nOffset == OFFSET_DEFAULT ) ? (sal_Int32)BBINDEX_FIRSTCONTROL : _nOffset;
+        m_nOffset = ( _nOffset == OFFSET_DEFAULT ) ? sal_Int32(BBINDEX_FIRSTCONTROL) : _nOffset;
         sal_Int32 nIndex = getIndex_Impl( _nRowPos, _nColPos, _rBrowseBox.GetColumnCount() );
        setAccessibleName( _rBrowseBox.GetAccessibleObjectName( BBTYPE_TABLECELL, nIndex ) );
        setAccessibleDescription( _rBrowseBox.GetAccessibleObjectDescription( BBTYPE_TABLECELL, nIndex ) );

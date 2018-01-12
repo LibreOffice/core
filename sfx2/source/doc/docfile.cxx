@@ -1435,7 +1435,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
             // current version
             short nVersion = pVersion ? pVersion->GetValue() : 0;
             if ( nVersion<0 )
-                nVersion = ( (short) pImpl->aVersions.getLength() ) + nVersion;
+                nVersion = static_cast<short>(pImpl->aVersions.getLength()) + nVersion;
             else if ( nVersion )
                 nVersion--;
 
@@ -1746,7 +1746,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                         {
                             Reference< XInputStream > aTempInput = aTempCont.openStream();
                             bTransactStarted = true;
-                            aOriginalContent.setPropertyValue( "Size", uno::makeAny( (sal_Int64)0 ) );
+                            aOriginalContent.setPropertyValue( "Size", uno::makeAny( sal_Int64(0) ) );
                             aOriginalContent.writeStream( aTempInput, bOverWrite );
                             bResult = true;
                         }

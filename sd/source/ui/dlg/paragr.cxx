@@ -111,7 +111,7 @@ bool SdParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
         rSet->Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
 
-        const sal_Int16 nStartAt = (sal_Int16)m_pNewStartNF->GetValue();
+        const sal_Int16 nStartAt = static_cast<sal_Int16>(m_pNewStartNF->GetValue());
         rSet->Put(SfxInt16Item(ATTR_NUMBER_NEWSTART_AT, bNumberNewStartChecked && bNewStartChecked ? nStartAt : -1));
     }
 

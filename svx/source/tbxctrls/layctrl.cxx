@@ -484,7 +484,7 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
         }
 
         while ( nWidth > 0 &&
-                (short)(aWinPos.X()+(nMX*nWidth-1)) >= aMaxPos.X()-3 )
+                static_cast<short>(aWinPos.X()+(nMX*nWidth-1)) >= aMaxPos.X()-3 )
             nWidth--;
 
         if ( nNewCol > nWidth )

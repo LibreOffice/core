@@ -150,7 +150,7 @@ void ImpDeleteNotesPages( const Reference< XModel >& rxModel )
             while( xShapes->getCount() )
                 xShapes->remove( Reference< XShape >( xShapes->getByIndex( xShapes->getCount() - 1 ), UNO_QUERY_THROW ) );
 
-            xPropSet->setPropertyValue( "Layout", Any( (sal_Int16)21 ) );
+            xPropSet->setPropertyValue( "Layout", Any( sal_Int16(21) ) );
         }
     }
     catch( Exception& )
@@ -217,13 +217,13 @@ void ImpCompressGraphic( Reference< XGraphicProvider > const & rxGraphicProvider
             aFilterData[ 0 ].Name = "ImageResolution";
             aFilterData[ 0 ].Value <<= nImageResolution;
             aFilterData[ 1 ].Name = "ColorMode";      // todo: jpeg color mode (0->true color, 1->greyscale)
-            aFilterData[ 1 ].Value <<= (sal_Int32)0;
+            aFilterData[ 1 ].Value <<= sal_Int32(0);
             aFilterData[ 2 ].Name = "Quality";        // quality that is used if we export to jpeg
             aFilterData[ 2 ].Value <<= nJPEGQuality;
             aFilterData[ 3 ].Name = "Compression";    // compression that is used if we export to png
-            aFilterData[ 3 ].Value <<= (sal_Int32)6;
+            aFilterData[ 3 ].Value <<= sal_Int32(6);
             aFilterData[ 4 ].Name = "Interlaced";     // interlaced is turned off if we export to png
-            aFilterData[ 4 ].Value <<= (sal_Int32)0;
+            aFilterData[ 4 ].Value <<= sal_Int32(0);
             aFilterData[ 5 ].Name = "LogicalSize";
             aFilterData[ 5 ].Value <<= rLogicalSize;
             aFilterData[ 6 ].Name = "RemoveCropArea";
@@ -289,10 +289,10 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
 
                             if ( aSize100thMM.Width && aSize100thMM.Height )
                             {
-                                aGraphicCropPixel.Left = static_cast< sal_Int32 >( ( (double)aSourceSizePixel.Width * aGraphicCropLogic.Left ) / aSize100thMM.Width );
-                                aGraphicCropPixel.Top = static_cast< sal_Int32 >( ( (double)aSourceSizePixel.Height* aGraphicCropLogic.Top ) / aSize100thMM.Height );
-                                aGraphicCropPixel.Right = static_cast< sal_Int32 >( ( (double)aSourceSizePixel.Width * ( aSize100thMM.Width - aGraphicCropLogic.Right ) ) / aSize100thMM.Width );
-                                aGraphicCropPixel.Bottom = static_cast< sal_Int32 >( ( (double)aSourceSizePixel.Height* ( aSize100thMM.Height - aGraphicCropLogic.Bottom ) ) / aSize100thMM.Height );
+                                aGraphicCropPixel.Left = static_cast< sal_Int32 >( ( static_cast<double>(aSourceSizePixel.Width) * aGraphicCropLogic.Left ) / aSize100thMM.Width );
+                                aGraphicCropPixel.Top = static_cast< sal_Int32 >( ( static_cast<double>(aSourceSizePixel.Height)* aGraphicCropLogic.Top ) / aSize100thMM.Height );
+                                aGraphicCropPixel.Right = static_cast< sal_Int32 >( ( static_cast<double>(aSourceSizePixel.Width) * ( aSize100thMM.Width - aGraphicCropLogic.Right ) ) / aSize100thMM.Width );
+                                aGraphicCropPixel.Bottom = static_cast< sal_Int32 >( ( static_cast<double>(aSourceSizePixel.Height)* ( aSize100thMM.Height - aGraphicCropLogic.Bottom ) ) / aSize100thMM.Height );
 
                                 // first calculating new SourceSizePixel by removing the cropped area
                                 aSourceSizePixel.Width = aGraphicCropPixel.Right - aGraphicCropPixel.Left;
@@ -316,16 +316,16 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                                 aDestSizePixel = aSourceSizePixel;
                             if ( rGraphicSettings.mnImageResolution && aLogicalSize.Width && aLogicalSize.Height )
                             {
-                                const double fSourceDPIX = ((double)aSourceSizePixel.Width / ((double)aLogicalSize.Width / 2540.0 ));
-                                const double fSourceDPIY = ((double)aSourceSizePixel.Height/ ((double)aLogicalSize.Height/ 2540.0 ));
+                                const double fSourceDPIX = (static_cast<double>(aSourceSizePixel.Width) / (static_cast<double>(aLogicalSize.Width) / 2540.0 ));
+                                const double fSourceDPIY = (static_cast<double>(aSourceSizePixel.Height)/ (static_cast<double>(aLogicalSize.Height)/ 2540.0 ));
 
                                 // check, if the bitmap DPI exceeds the maximum DPI
                                 if( ( fSourceDPIX > rGraphicSettings.mnImageResolution ) || ( fSourceDPIY > rGraphicSettings.mnImageResolution ) )
                                 {
-                                    const double fNewSizePixelX = ((double)aDestSizePixel.Width * rGraphicSettings.mnImageResolution ) / fSourceDPIX;
-                                    const double fNewSizePixelY = ((double)aDestSizePixel.Height* rGraphicSettings.mnImageResolution ) / fSourceDPIY;
+                                    const double fNewSizePixelX = (static_cast<double>(aDestSizePixel.Width) * rGraphicSettings.mnImageResolution ) / fSourceDPIX;
+                                    const double fNewSizePixelY = (static_cast<double>(aDestSizePixel.Height)* rGraphicSettings.mnImageResolution ) / fSourceDPIY;
 
-                                    aDestSizePixel = awt::Size( (sal_Int32)fNewSizePixelX, (sal_Int32)fNewSizePixelY );
+                                    aDestSizePixel = awt::Size( static_cast<sal_Int32>(fNewSizePixelX), static_cast<sal_Int32>(fNewSizePixelY) );
                                     bNeedsOptimizing = true;
                                 }
                             }
@@ -427,10 +427,10 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                                     if ( !aGraphicSettings.mbRemoveCropArea )
                                     {
                                         awt::Size aNewSize( GraphicCollector::GetOriginalSize( rxContext, xNewGraphic ) );
-                                        aGraphicCropLogic.Left = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Left * ((double)aNewSize.Width / (double)aSize100thMM.Width));
-                                        aGraphicCropLogic.Top = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Top * ((double)aNewSize.Height / (double)aSize100thMM.Height));
-                                        aGraphicCropLogic.Right = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Right * ((double)aNewSize.Width / (double)aSize100thMM.Width));
-                                        aGraphicCropLogic.Bottom = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Bottom * ((double)aNewSize.Height / (double)aSize100thMM.Height));
+                                        aGraphicCropLogic.Left = static_cast<sal_Int32>(static_cast<double>(aGraphicUserIter->maGraphicCropLogic.Left) * (static_cast<double>(aNewSize.Width) / static_cast<double>(aSize100thMM.Width)));
+                                        aGraphicCropLogic.Top = static_cast<sal_Int32>(static_cast<double>(aGraphicUserIter->maGraphicCropLogic.Top) * (static_cast<double>(aNewSize.Height) / static_cast<double>(aSize100thMM.Height)));
+                                        aGraphicCropLogic.Right = static_cast<sal_Int32>(static_cast<double>(aGraphicUserIter->maGraphicCropLogic.Right) * (static_cast<double>(aNewSize.Width) / static_cast<double>(aSize100thMM.Width)));
+                                        aGraphicCropLogic.Bottom = static_cast<sal_Int32>(static_cast<double>(aGraphicUserIter->maGraphicCropLogic.Bottom) * (static_cast<double>(aNewSize.Height) / static_cast<double>(aSize100thMM.Height)));
                                     }
                                     xShapePropertySet->setPropertyValue( "GraphicCrop", Any( aGraphicCropLogic ) );
                                 }

@@ -1500,7 +1500,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     RegionData_Impl* pRegion;
     pRegion = new RegionData_Impl( this, rTitle );
 
-    if ( ! InsertRegion( pRegion, (size_t)-1 ) )
+    if ( ! InsertRegion( pRegion, size_t(-1) ) )
     {
         delete pRegion;
         return;

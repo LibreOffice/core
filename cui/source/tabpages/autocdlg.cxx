@@ -121,14 +121,14 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
     m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
     sal_Int32 nPos = m_pLanguageLB->GetSelectedEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
-    m_pLanguageLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_uInt16)LANGUAGE_UNDETERMINED) );
+    m_pLanguageLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uInt16>(LANGUAGE_UNDETERMINED)) );
 
     // Initializing doesn't work for static on linux - therefore here
     if( LANGUAGE_SYSTEM == eLastDialogLanguage )
         eLastDialogLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 
     LanguageType nSelectLang = LANGUAGE_UNDETERMINED;
-    nPos = m_pLanguageLB->GetEntryPos( reinterpret_cast<void*>((sal_uInt16)eLastDialogLanguage) );
+    nPos = m_pLanguageLB->GetEntryPos( reinterpret_cast<void*>(static_cast<sal_uInt16>(eLastDialogLanguage)) );
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
         nSelectLang = eLastDialogLanguage;
     m_pLanguageLB->SelectLanguage( nSelectLang );
@@ -580,7 +580,7 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     bModified |= pOpt->bRightMargin != bCheck;
     pOpt->bRightMargin = bCheck;
     bModified |= nPercent != pOpt->nRightMargin;
-    pOpt->nRightMargin = (sal_uInt8)nPercent;
+    pOpt->nRightMargin = static_cast<sal_uInt8>(nPercent);
 
     bCheck = m_pCheckLB->IsChecked(APPLY_NUMBERING, CBCOL_SECOND);
     bModified |= pOpt->bSetNumRule != bCheck;
@@ -750,7 +750,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
         aDlg->GetPrcntFld().SetValue(nPercent);
         if(RET_OK == aDlg->Execute())
         {
-            nPercent = (sal_uInt16)aDlg->GetPrcntFld().GetValue();
+            nPercent = static_cast<sal_uInt16>(aDlg->GetPrcntFld().GetValue());
             sMargin = " " +
                 unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
         }
@@ -1009,7 +1009,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             pArray = &aDoubleStringTable[eOldLanguage]; // create new array
         }
 
-        sal_uInt32 nListBoxCount = (sal_uInt32) m_pReplaceTLB->GetEntryCount();
+        sal_uInt32 nListBoxCount = static_cast<sal_uInt32>(m_pReplaceTLB->GetEntryCount());
         sal_uInt32 i;
         for(i = 0; i < nListBoxCount; i++)
         {
@@ -2264,11 +2264,11 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     bModified |= pOpt->bAutoCmpltShowAsTip != bCheck;
     pOpt->bAutoCmpltShowAsTip = bCheck;
 
-    nVal = (sal_uInt16)m_pNFMinWordlen->GetValue();
+    nVal = static_cast<sal_uInt16>(m_pNFMinWordlen->GetValue());
     bModified |= nVal != pOpt->nAutoCmpltWordLen;
     pOpt->nAutoCmpltWordLen = nVal;
 
-    nVal = (sal_uInt16)m_pNFMaxEntries->GetValue();
+    nVal = static_cast<sal_uInt16>(m_pNFMaxEntries->GetValue());
     bModified |= nVal != pOpt->nAutoCmpltListLen;
     pOpt->nAutoCmpltListLen = nVal;
 
@@ -2277,7 +2277,7 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     {
         sal_uLong nKey = reinterpret_cast<sal_uLong>(m_pDCBExpandKey->GetEntryData( nPos ));
         bModified |= nKey != pOpt->nAutoCmpltExpandKey;
-        pOpt->nAutoCmpltExpandKey = (sal_uInt16)nKey;
+        pOpt->nAutoCmpltExpandKey = static_cast<sal_uInt16>(nKey);
     }
 
     if (m_pAutoCompleteList && m_nAutoCmpltListCnt != m_pLBEntries->GetEntryCount())

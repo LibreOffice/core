@@ -1506,8 +1506,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     if ( bRet && (bSetColWidths || bSetRowHeights) )
     {   // Adjust column width/row height; base 100% zoom
         Fraction aZoom( 1, 1 );
-        double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / GetOutputFactor(); // Factor is printer display ratio
-        double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
+        double nPPTX = ScGlobal::nScreenPPTX * static_cast<double>(aZoom) / GetOutputFactor(); // Factor is printer display ratio
+        double nPPTY = ScGlobal::nScreenPPTY * static_cast<double>(aZoom);
         ScopedVclPtrInstance< VirtualDevice > pVirtDev;
         //  all sheets (for Excel import)
         SCTAB nTabCount = aDocument.GetTableCount();
@@ -1534,7 +1534,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         nCol, nTab, pVirtDev, nPPTX, nPPTY, aZoom, aZoom, false, &aMark,
                         &aColWidthParam[nCol] );
                     aDocument.SetColWidth( nCol, nTab,
-                        nWidth + (sal_uInt16)ScGlobal::nLastColWidthExtra );
+                        nWidth + static_cast<sal_uInt16>(ScGlobal::nLastColWidthExtra) );
                 }
             }
         }
@@ -2906,7 +2906,7 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
     if ( pPrinter )
         for ( SCTAB i=0; i<rDocStat.nTableCount; i++ )
             rDocStat.nPageCount = sal::static_int_cast<sal_uInt16>( rDocStat.nPageCount +
-                (sal_uInt16) ScPrintFunc( this, pPrinter, i ).GetTotalPages() );
+                static_cast<sal_uInt16>(ScPrintFunc( this, pPrinter, i ).GetTotalPages()) );
 }
 
 VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog( const SfxItemSet &rSet )

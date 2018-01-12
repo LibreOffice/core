@@ -367,7 +367,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
 
 inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
-    if ((sal_uInt32)eId + nScTokenOff >= 0xFFFF)
+    if (static_cast<sal_uInt32>(eId) + nScTokenOff >= 0xFFFF)
     {
         SAL_WARN("sc.filter", "-TokenPool::operator<<: enum too large! " << static_cast<sal_uInt32>(eId));
     }
@@ -376,7 +376,7 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
         if (!GrowId())
             return *this;
 
-    pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) eId ) + nScTokenOff;
+    pP_Id[ nP_IdAkt ] = static_cast<sal_uInt16>(eId) + nScTokenOff;
     nP_IdAkt++;
 
     return *this;
@@ -423,7 +423,7 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId& rId )
 #ifdef DBG_UTIL
         m_nRek = 0;
 #endif
-        GetElement( ( sal_uInt16 ) rId - 1 );
+        GetElement( static_cast<sal_uInt16>(rId) - 1 );
     }
 
     return pScToken;

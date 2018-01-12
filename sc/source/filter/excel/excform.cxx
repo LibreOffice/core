@@ -463,7 +463,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pResult, XclImpStream& aIn, std
             case 0x1E: // Integer                               [315 266]
             {
                 sal_uInt16 nUINT16 = aIn.ReaduInt16();
-                aStack << aPool.Store( ( double ) nUINT16 );
+                aStack << aPool.Store( static_cast<double>(nUINT16) );
                 break;
             }
             case 0x1F: // Number                                [315 266]
@@ -1601,7 +1601,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )
                 if( aPool.IsSingleOp( eParam[ nLauf ], ocMissing ) )
                 {
                     if( !nNullParam )
-                        nNullParam = (sal_uInt16) aPool.Store( 0.0 );
+                        nNullParam = static_cast<sal_uInt16>(aPool.Store( 0.0 ));
                     eParam[ nLauf ] = nNullParam;
                 }
             }

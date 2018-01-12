@@ -1178,8 +1178,8 @@ namespace drawinglayer
             if(!aRange.isEmpty())
             {
                 const ::tools::Rectangle aRectangle(
-                    (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
-                    (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
+                    static_cast<sal_Int32>(floor(aRange.getMinX())), static_cast<sal_Int32>(floor(aRange.getMinY())),
+                    static_cast<sal_Int32>(ceil(aRange.getMaxX())), static_cast<sal_Int32>(ceil(aRange.getMaxY())));
 
                 if(!aRectangle.IsEmpty())
                 {

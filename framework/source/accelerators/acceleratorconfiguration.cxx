@@ -177,7 +177,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
             throw css::lang::IllegalArgumentException(
                     "Empty command strings are not allowed here.",
                     static_cast< ::cppu::OWeakObject* >(this),
-                    (sal_Int16)i);
+                    static_cast<sal_Int16>(i));
 
         if (!rCache.hasCommand(rCommand))
             continue;
@@ -714,7 +714,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
             throw css::lang::IllegalArgumentException(
                     "Empty command strings are not allowed here.",
                     static_cast< ::cppu::OWeakObject* >(this),
-                    (sal_Int16)i);
+                    static_cast<sal_Int16>(i));
 
         if (!rCache.hasCommand(rCommand))
             continue;

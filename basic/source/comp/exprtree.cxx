@@ -886,7 +886,7 @@ short SbiConstExpression::GetShortValue()
             pParser->Error( ERRCODE_BASIC_OUT_OF_RANGE );
         }
 
-        return (short) n;
+        return static_cast<short>(n);
     }
 }
 

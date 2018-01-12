@@ -188,19 +188,19 @@ bool SdGRFFilter::Import()
             if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
                  aGrfSize.Height() && aPagSize.Height() )
             {
-                double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();
-                double fWinWH = (double) aPagSize.Width() / aPagSize.Height();
+                double fGrfWH = static_cast<double>(aGrfSize.Width()) / aGrfSize.Height();
+                double fWinWH = static_cast<double>(aPagSize.Width()) / aPagSize.Height();
 
                 // adjust graphic to page size (scales)
                 if( fGrfWH < fWinWH )
                 {
-                    aGrfSize.Width() = (long) ( aPagSize.Height() * fGrfWH );
+                    aGrfSize.Width() = static_cast<long>( aPagSize.Height() * fGrfWH );
                     aGrfSize.Height() = aPagSize.Height();
                 }
                 else if( fGrfWH > 0.F )
                 {
                     aGrfSize.Width() = aPagSize.Width();
-                    aGrfSize.Height()= (long) ( aPagSize.Width() / fGrfWH );
+                    aGrfSize.Height()= static_cast<long>( aPagSize.Width() / fGrfWH );
                 }
             }
 

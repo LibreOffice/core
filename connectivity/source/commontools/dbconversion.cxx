@@ -121,9 +121,9 @@ namespace dbtools
     css::util::Date DBTypeConversion::toDate(const sal_Int32 _nVal)
     {
         css::util::Date aReturn;
-        aReturn.Day = (sal_uInt16)(_nVal % 100);
-        aReturn.Month = (sal_uInt16)((_nVal  / 100) % 100);
-        aReturn.Year = (sal_uInt16)(_nVal  / 10000);
+        aReturn.Day = static_cast<sal_uInt16>(_nVal % 100);
+        aReturn.Month = static_cast<sal_uInt16>((_nVal  / 100) % 100);
+        aReturn.Year = static_cast<sal_uInt16>(_nVal  / 10000);
         return aReturn;
     }
 
@@ -209,7 +209,7 @@ namespace dbtools
         do
         {
             nTempDays = nDays;
-            rYear = (sal_uInt16)((nTempDays / 365) - i);
+            rYear = static_cast<sal_uInt16>((nTempDays / 365) - i);
             nTempDays -= (rYear-1) * 365;
             nTempDays -= ((rYear-1) / 4) - ((rYear-1) / 100) + ((rYear-1) / 400);
             bCalc = false;
@@ -238,7 +238,7 @@ namespace dbtools
             nTempDays -= implDaysInMonth( rMonth, rYear );
             rMonth++;
         }
-        rDay = (sal_uInt16)nTempDays;
+        rDay = static_cast<sal_uInt16>(nTempDays);
     }
 
     sal_Int32 DBTypeConversion::toDays(const css::util::Date& _rVal, const css::util::Date& _rNullDate)
@@ -249,13 +249,13 @@ namespace dbtools
 
     double DBTypeConversion::toDouble(const css::util::Date& rVal, const css::util::Date& _rNullDate)
     {
-        return (double)toDays(rVal, _rNullDate);
+        return static_cast<double>(toDays(rVal, _rNullDate));
     }
 
 
     double DBTypeConversion::toDouble(const css::util::Time& rVal)
     {
-        return (double)getNsFromTime(rVal) / fNanoSecondsPerDay;
+        return static_cast<double>(getNsFromTime(rVal)) / fNanoSecondsPerDay;
     }
 
 
@@ -269,7 +269,7 @@ namespace dbtools
         aTimePart.Seconds           = _rVal.Seconds;
         aTimePart.NanoSeconds       = _rVal.NanoSeconds;
 
-        return ((double)nTime) + toDouble(aTimePart);
+        return static_cast<double>(nTime) + toDouble(aTimePart);
     }
 
     static void addDays(const sal_Int32 nDays, css::util::Date& _rDate)
@@ -323,9 +323,9 @@ namespace dbtools
         css::util::Date aRet = _rNullDate;
 
         if (dVal >= 0)
-            addDays((sal_Int32)dVal,aRet);
+            addDays(static_cast<sal_Int32>(dVal),aRet);
         else
-            subDays((sal_uInt32)(-dVal),aRet);
+            subDays(static_cast<sal_uInt32>(-dVal),aRet);
             //  x -= (sal_uInt32)(-nDays);
 
         return aRet;
@@ -333,10 +333,10 @@ namespace dbtools
 
     css::util::Time DBTypeConversion::toTime(const double dVal, short nDigits)
     {
-        const sal_Int32 nDays     = (sal_Int32)dVal;
+        const sal_Int32 nDays     = static_cast<sal_Int32>(dVal);
         sal_Int64 nNS;
         {
-            double fSeconds((dVal - (double)nDays) * (fNanoSecondsPerDay / nanoSecInSec));
+            double fSeconds((dVal - static_cast<double>(nDays)) * (fNanoSecondsPerDay / nanoSecInSec));
             fSeconds = ::rtl::math::round( fSeconds, nDigits );
             nNS = fSeconds * nanoSecInSec;
         }
@@ -412,12 +412,12 @@ namespace dbtools
         sal_uInt16  nYear   = 0,
                     nMonth  = 0,
                     nDay    = 0;
-        nYear   = (sal_uInt16)_sSQLString.getToken(0,sDateSep,nIndex).toInt32();
+        nYear   = static_cast<sal_uInt16>(_sSQLString.getToken(0,sDateSep,nIndex).toInt32());
         if(nIndex != -1)
         {
-            nMonth = (sal_uInt16)_sSQLString.getToken(0,sDateSep,nIndex).toInt32();
+            nMonth = static_cast<sal_uInt16>(_sSQLString.getToken(0,sDateSep,nIndex).toInt32());
             if(nIndex != -1)
-                nDay = (sal_uInt16)_sSQLString.getToken(0,sDateSep,nIndex).toInt32();
+                nDay = static_cast<sal_uInt16>(_sSQLString.getToken(0,sDateSep,nIndex).toInt32());
         }
 
         return css::util::Date(nDay,nMonth,nYear);

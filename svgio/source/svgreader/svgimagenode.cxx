@@ -273,7 +273,7 @@ namespace svgio
                     if(!aBitmapEx.IsEmpty() && 0 != aBitmapEx.GetSizePixel().Width()  && 0 != aBitmapEx.GetSizePixel().Height())
                     {
                         // calculate centered unit size
-                        const double fAspectRatio = (double)aBitmapEx.GetSizePixel().Width() / (double)aBitmapEx.GetSizePixel().Height();
+                        const double fAspectRatio = static_cast<double>(aBitmapEx.GetSizePixel().Width()) / static_cast<double>(aBitmapEx.GetSizePixel().Height());
 
                         if(basegfx::fTools::equal(fAspectRatio, 0.0))
                         {

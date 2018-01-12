@@ -112,7 +112,7 @@ void ScrollableDialog::lcl_Scroll( long nX, long nY )
 
 IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB, void )
 {
-    sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
+    sal_uInt16 nPos = static_cast<sal_uInt16>(pSB->GetThumbPos());
     if( pSB == maVScrollBar.get() )
         lcl_Scroll(mnScrollPos.X(), nPos );
     else if( pSB == maHScrollBar.get() )

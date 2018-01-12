@@ -327,7 +327,7 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     }
     else
     {
-        sal_uInt16 nPage = (sal_uInt16)( m_pBtnPageNo->IsChecked()
+        sal_uInt16 nPage = static_cast<sal_uInt16>( m_pBtnPageNo->IsChecked()
                                     ? m_pEdPageNo->GetValue()
                                     : 0 );
 
@@ -355,7 +355,7 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALE),
                                       *rCoreSet, rOldSet,
                                       *m_pLbScaleMode, SC_TPTABLE_SCALE_PERCENT,
-                                      *m_pEdScaleAll, (sal_uInt16)m_pEdScaleAll->GetValue() );
+                                      *m_pEdScaleAll, static_cast<sal_uInt16>(m_pEdScaleAll->GetValue()) );
 
     bDataChanged |= lcl_PutScaleItem2( GetWhich(SID_SCATTR_PAGE_SCALETO),
                                       *rCoreSet, rOldSet,
@@ -366,7 +366,7 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALETOPAGES),
                                       *rCoreSet, rOldSet,
                                       *m_pLbScaleMode, SC_TPTABLE_SCALE_TO_PAGES,
-                                      *m_pEdScalePageNum, (sal_uInt16)m_pEdScalePageNum->GetValue() );
+                                      *m_pEdScalePageNum, static_cast<sal_uInt16>(m_pEdScalePageNum->GetValue()) );
 
     return bDataChanged;
 }

@@ -647,7 +647,7 @@ void FileDialogHelper_Impl::updateVersions()
                             ControlActions::ADD_ITEMS, aValue );
 
             Any aPos;
-            aPos <<= (sal_Int32) 0;
+            aPos <<= sal_Int32(0);
             xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                             ControlActions::SET_SELECT_ITEM, aPos );
         }
@@ -693,8 +693,8 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Timer *, void)
                 sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
                 sal_Int32 nBmpHeight = aBmp.GetSizePixel().Height();
 
-                double nXRatio = (double) nOutWidth / nBmpWidth;
-                double nYRatio = (double) nOutHeight / nBmpHeight;
+                double nXRatio = static_cast<double>(nOutWidth) / nBmpWidth;
+                double nYRatio = static_cast<double>(nOutHeight) / nBmpHeight;
 
                 if ( nXRatio < nYRatio )
                     aBmp.Scale( nXRatio, nXRatio );
@@ -1479,7 +1479,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 sal_Int32 nVersion = 0;
                 if ( ( aValue >>= nVersion ) && nVersion > 0 )
                     // open a special version; 0 == current version
-                    rpSet->Put( SfxInt16Item( SID_VERSION, (short)nVersion ) );
+                    rpSet->Put( SfxInt16Item( SID_VERSION, static_cast<short>(nVersion) ) );
             }
             catch( const IllegalArgumentException& ){}
         }
@@ -1970,7 +1970,7 @@ void FileDialogHelper_Impl::saveConfig()
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             bool bValue = false;
             aValue >>= bValue;
-            SetToken( aUserData, 1, ' ', OUString::number( (sal_Int32) bValue ) );
+            SetToken( aUserData, 1, ' ', OUString::number( static_cast<sal_Int32>(bValue) ) );
 
             INetURLObject aObj( getPath() );
 
@@ -2006,7 +2006,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
                 bool bAutoExt = true;
                 aValue >>= bAutoExt;
-                SetToken( aUserData, 0, ' ', OUString::number( (sal_Int32) bAutoExt ) );
+                SetToken( aUserData, 0, ' ', OUString::number( static_cast<sal_Int32>(bAutoExt) ) );
                 bWriteConfig = true;
             }
             catch( const IllegalArgumentException& ){}
@@ -2031,7 +2031,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aValue >>= bSelection;
                 if ( comphelper::string::getTokenCount(aUserData, ' ') < 3 )
                     aUserData += " ";
-                SetToken( aUserData, 2, ' ', OUString::number( (sal_Int32) bSelection ) );
+                SetToken( aUserData, 2, ' ', OUString::number( static_cast<sal_Int32>(bSelection) ) );
                 bWriteConfig = true;
             }
             catch( const IllegalArgumentException& ){}
@@ -2156,7 +2156,7 @@ void FileDialogHelper_Impl::loadConfig()
         if ( mbHasAutoExt )
         {
             sal_Int32 nFlag = aUserData.getToken( 0, ' ' ).toInt32();
-            aValue <<= (bool) nFlag;
+            aValue <<= static_cast<bool>(nFlag);
             try
             {
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
@@ -2167,7 +2167,7 @@ void FileDialogHelper_Impl::loadConfig()
         if( mbHasSelectionBox )
         {
             sal_Int32 nFlag = aUserData.getToken( 2, ' ' ).toInt32();
-            aValue <<= (bool) nFlag;
+            aValue <<= static_cast<bool>(nFlag);
             try
             {
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, aValue );

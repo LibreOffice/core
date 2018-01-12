@@ -457,19 +457,19 @@ namespace sdr
                     // assume AA needs one pixel more and invalidate one pixel more
                     const double fDiscreteOne(getDiscreteOne());
                     const basegfx::B2IPoint aTopLeft(
-                        (sal_Int32)floor(aDiscreteRange.getMinX() - fDiscreteOne),
-                        (sal_Int32)floor(aDiscreteRange.getMinY() - fDiscreteOne));
+                        static_cast<sal_Int32>(floor(aDiscreteRange.getMinX() - fDiscreteOne)),
+                        static_cast<sal_Int32>(floor(aDiscreteRange.getMinY() - fDiscreteOne)));
                     const basegfx::B2IPoint aBottomRight(
-                        (sal_Int32)ceil(aDiscreteRange.getMaxX() + fDiscreteOne),
-                        (sal_Int32)ceil(aDiscreteRange.getMaxY() + fDiscreteOne));
+                        static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxX() + fDiscreteOne)),
+                        static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxY() + fDiscreteOne)));
 
                     maBufferRememberedRangePixel.expand(aTopLeft);
                     maBufferRememberedRangePixel.expand(aBottomRight);
                 }
                 else
                 {
-                    const basegfx::B2IPoint aTopLeft((sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()));
-                    const basegfx::B2IPoint aBottomRight((sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
+                    const basegfx::B2IPoint aTopLeft(static_cast<sal_Int32>(floor(aDiscreteRange.getMinX())), static_cast<sal_Int32>(floor(aDiscreteRange.getMinY())));
+                    const basegfx::B2IPoint aBottomRight(static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxX())), static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxY())));
 
                     maBufferRememberedRangePixel.expand(aTopLeft);
                     maBufferRememberedRangePixel.expand(aBottomRight);

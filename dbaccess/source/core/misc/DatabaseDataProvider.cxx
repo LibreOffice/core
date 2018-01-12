@@ -521,7 +521,7 @@ void SAL_CALL DatabaseDataProvider::setApplyFilter( sal_Bool the_value )
         osl::MutexGuard g(m_aMutex);
         m_xAggregateSet->setPropertyValue( PROPERTY_APPLYFILTER,   uno::makeAny( the_value ) );
     }
-    set(PROPERTY_APPLYFILTER,(bool)the_value,m_ApplyFilter);
+    set(PROPERTY_APPLYFILTER,static_cast<bool>(the_value),m_ApplyFilter);
 }
 
 OUString SAL_CALL DatabaseDataProvider::getHavingClause()
@@ -577,7 +577,7 @@ sal_Bool SAL_CALL DatabaseDataProvider::getEscapeProcessing()
 
 void SAL_CALL DatabaseDataProvider::setEscapeProcessing(sal_Bool the_value)
 {
-    set(PROPERTY_ESCAPE_PROCESSING,(bool)the_value,m_EscapeProcessing);
+    set(PROPERTY_ESCAPE_PROCESSING,static_cast<bool>(the_value),m_EscapeProcessing);
 }
 
 ::sal_Int32 SAL_CALL DatabaseDataProvider::getRowLimit()

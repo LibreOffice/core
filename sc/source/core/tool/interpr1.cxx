@@ -459,7 +459,7 @@ void ScInterpreter::ScChooseJump()
                             if ( bIsValue )
                             {
                                 pJumpMat->SetJump( nC, nR, fVal,
-                                        pJump[ (short)fVal ],
+                                        pJump[ static_cast<short>(fVal) ],
                                         pJump[ nJumpCount ]);
                             }
                             else
@@ -488,7 +488,7 @@ void ScInterpreter::ScChooseJump()
             sal_Int16 nJumpIndex = GetInt16();
             if (nGlobalError == FormulaError::NONE && (nJumpIndex >= 1) && (nJumpIndex < nJumpCount))
             {
-                aCode.Jump( pJump[ (short) nJumpIndex ], pJump[ nJumpCount ] );
+                aCode.Jump( pJump[ static_cast<short>(nJumpIndex) ], pJump[ nJumpCount ] );
                 bHaveJump = true;
             }
             else
@@ -646,8 +646,8 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         // Do not modify the original range because we use it
                         // to adjust the size of the result matrix if necessary.
                         ScAddress aAdr( aRange.aStart);
-                        sal_uLong nCol = (sal_uLong)aAdr.Col() + nC;
-                        sal_uLong nRow = (sal_uLong)aAdr.Row() + nR;
+                        sal_uLong nCol = static_cast<sal_uLong>(aAdr.Col()) + nC;
+                        sal_uLong nRow = static_cast<sal_uLong>(aAdr.Row()) + nR;
                         if ((nCol > static_cast<sal_uLong>(aRange.aEnd.Col()) &&
                                     aRange.aEnd.Col() != aRange.aStart.Col())
                                 || (nRow > static_cast<sal_uLong>(aRange.aEnd.Row()) &&
@@ -1065,7 +1065,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 aRes.mpMat->CompareNotEqual();
                 break;
             default:
-                SAL_WARN("sc",  "ScInterpreter::QueryMat: unhandled comparison operator: " << (int)eOp);
+                SAL_WARN("sc",  "ScInterpreter::QueryMat: unhandled comparison operator: " << static_cast<int>(eOp));
                 aRes.mpMat.reset();
                 return aRes;
         }
@@ -1602,7 +1602,7 @@ void ScInterpreter::ScBitAnd()
             (num2 >= n2power48) || (num2 < 0))
         PushIllegalArgument();
     else
-        PushDouble ((sal_uInt64) num1 & (sal_uInt64) num2);
+        PushDouble (static_cast<sal_uInt64>(num1) & static_cast<sal_uInt64>(num2));
 }
 
 void ScInterpreter::ScBitOr()
@@ -1617,7 +1617,7 @@ void ScInterpreter::ScBitOr()
             (num2 >= n2power48) || (num2 < 0))
         PushIllegalArgument();
     else
-        PushDouble ((sal_uInt64) num1 | (sal_uInt64) num2);
+        PushDouble (static_cast<sal_uInt64>(num1) | static_cast<sal_uInt64>(num2));
 }
 
 void ScInterpreter::ScBitXor()
@@ -1632,7 +1632,7 @@ void ScInterpreter::ScBitXor()
             (num2 >= n2power48) || (num2 < 0))
         PushIllegalArgument();
     else
-        PushDouble ((sal_uInt64) num1 ^ (sal_uInt64) num2);
+        PushDouble (static_cast<sal_uInt64>(num1) ^ static_cast<sal_uInt64>(num2));
 }
 
 void ScInterpreter::ScBitLshift()
@@ -2288,7 +2288,7 @@ void ScInterpreter::ScCell()
                 long nZeroWidth = pPrinter->GetTextWidth( OUString( '0' ) );
                 pPrinter->SetFont( aOldFont );
                 pPrinter->SetMapMode( aOldMode );
-                int nZeroCount = (int)(pDok->GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
+                int nZeroCount = static_cast<int>(pDok->GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
                 PushInt( nZeroCount );
             }
             else if( aInfoType == "PREFIX" )
@@ -3349,7 +3349,7 @@ void ScInterpreter::ScCode()
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
             RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-        PushInt( (unsigned char) OUStringToOString(OUString(aStr[0]), osl_getThreadTextEncoding(), convertFlags).toChar() );
+        PushInt( static_cast<unsigned char>(OUStringToOString(OUString(aStr[0]), osl_getThreadTextEncoding(), convertFlags).toChar()) );
     }
 }
 
@@ -4135,7 +4135,7 @@ void ScInterpreter::ScColumns()
                 SetError(FormulaError::IllegalParameter);
         }
     }
-    PushDouble((double)nVal);
+    PushDouble(static_cast<double>(nVal));
 }
 
 void ScInterpreter::ScRows()
@@ -4192,7 +4192,7 @@ void ScInterpreter::ScRows()
                 SetError(FormulaError::IllegalParameter);
         }
     }
-    PushDouble((double)nVal);
+    PushDouble(static_cast<double>(nVal));
 }
 
 void ScInterpreter::ScSheets()
@@ -4239,7 +4239,7 @@ void ScInterpreter::ScSheets()
             }
         }
     }
-    PushDouble( (double) nVal );
+    PushDouble( static_cast<double>(nVal) );
 }
 
 void ScInterpreter::ScColumn()
@@ -4283,7 +4283,7 @@ void ScInterpreter::ScColumn()
                     SCROW nRow1(0);
                     SCTAB nTab1(0);
                     PopSingleRef( nCol1, nRow1, nTab1 );
-                    nVal = (double) (nCol1 + 1);
+                    nVal = static_cast<double>(nCol1 + 1);
                 }
                 break;
                 case svDoubleRef :
@@ -4302,7 +4302,7 @@ void ScInterpreter::ScColumn()
                         if (pResMat)
                         {
                             for (SCCOL i = nCol1; i <= nCol2; i++)
-                                pResMat->PutDouble((double)(i+1),
+                                pResMat->PutDouble(static_cast<double>(i+1),
                                         static_cast<SCSIZE>(i-nCol1), 0);
                             PushMatrix(pResMat);
                             return;
@@ -4311,7 +4311,7 @@ void ScInterpreter::ScColumn()
                             nVal = 0.0;
                     }
                     else
-                        nVal = (double) (nCol1 + 1);
+                        nVal = static_cast<double>(nCol1 + 1);
                 }
                 break;
                 default:
@@ -4364,7 +4364,7 @@ void ScInterpreter::ScRow()
                     SCROW nRow1(0);
                     SCTAB nTab1(0);
                     PopSingleRef( nCol1, nRow1, nTab1 );
-                    nVal = (double) (nRow1 + 1);
+                    nVal = static_cast<double>(nRow1 + 1);
                 }
                 break;
                 case svDoubleRef :
@@ -4383,7 +4383,7 @@ void ScInterpreter::ScRow()
                         if (pResMat)
                         {
                             for (SCROW i = nRow1; i <= nRow2; i++)
-                                pResMat->PutDouble((double)(i+1), 0,
+                                pResMat->PutDouble(static_cast<double>(i+1), 0,
                                         static_cast<SCSIZE>(i-nRow1));
                             PushMatrix(pResMat);
                             return;
@@ -4392,7 +4392,7 @@ void ScInterpreter::ScRow()
                             nVal = 0.0;
                     }
                     else
-                        nVal = (double) (nRow1 + 1);
+                        nVal = static_cast<double>(nRow1 + 1);
                 }
                 break;
                 default:
@@ -4452,7 +4452,7 @@ void ScInterpreter::ScSheet()
             if ( nGlobalError != FormulaError::NONE )
                 nVal = 0;
         }
-        PushDouble( (double) nVal );
+        PushDouble( static_cast<double>(nVal) );
     }
 }
 
@@ -4896,7 +4896,7 @@ void ScInterpreter::ScMatch()
                 }
                 nDelta = nC - nCol1;
             }
-            PushDouble((double) (nDelta + 1));
+            PushDouble(static_cast<double>(nDelta + 1));
         }
         else
             PushIllegalParameter();
@@ -7915,8 +7915,8 @@ void ScInterpreter::ScAddressFunc()
     }
     nFlags |= ScRefFlags::VALID | ScRefFlags::ROW_VALID | ScRefFlags::COL_VALID;
 
-    SCCOL nCol = (SCCOL) GetInt16();
-    SCROW nRow = (SCROW) GetInt32();
+    SCCOL nCol = static_cast<SCCOL>(GetInt16());
+    SCROW nRow = static_cast<SCROW>(GetInt32());
     if( eConv == FormulaGrammar::CONV_XL_R1C1 )
     {
         // YUCK!  The XL interface actually treats rel R1C1 refs differently
@@ -8004,8 +8004,8 @@ void ScInterpreter::ScOffset()
             PopSingleRef(nCol1, nRow1, nTab1);
             if (nParamCount == 3 || (nColNew < 0 && nRowNew < 0))
             {
-                nCol1 = (SCCOL)((long) nCol1 + nColPlus);
-                nRow1 = (SCROW)((long) nRow1 + nRowPlus);
+                nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1) + nColPlus);
+                nRow1 = static_cast<SCROW>(static_cast<long>(nRow1) + nRowPlus);
                 if (!ValidCol(nCol1) || !ValidRow(nRow1))
                     PushIllegalArgument();
                 else
@@ -8017,10 +8017,10 @@ void ScInterpreter::ScOffset()
                     nColNew = 1;
                 if (nRowNew < 0)
                     nRowNew = 1;
-                nCol1 = (SCCOL)((long)nCol1+nColPlus);
-                nRow1 = (SCROW)((long)nRow1+nRowPlus);
-                nCol2 = (SCCOL)((long)nCol1+nColNew-1);
-                nRow2 = (SCROW)((long)nRow1+nRowNew-1);
+                nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
+                nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
+                nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
+                nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
                 if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
                     !ValidCol(nCol2) || !ValidRow(nRow2))
                     PushIllegalArgument();
@@ -8042,8 +8042,8 @@ void ScInterpreter::ScOffset()
 
             if (nParamCount == 3 || (nColNew < 0 && nRowNew < 0))
             {
-                nCol1 = (SCCOL)((long) nCol1 + nColPlus);
-                nRow1 = (SCROW)((long) nRow1 + nRowPlus);
+                nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1) + nColPlus);
+                nRow1 = static_cast<SCROW>(static_cast<long>(nRow1) + nRowPlus);
                 if (!ValidCol(nCol1) || !ValidRow(nRow1))
                     PushIllegalArgument();
                 else
@@ -8055,10 +8055,10 @@ void ScInterpreter::ScOffset()
                     nColNew = 1;
                 if (nRowNew < 0)
                     nRowNew = 1;
-                nCol1 = (SCCOL)((long)nCol1+nColPlus);
-                nRow1 = (SCROW)((long)nRow1+nRowPlus);
-                nCol2 = (SCCOL)((long)nCol1+nColNew-1);
-                nRow2 = (SCROW)((long)nRow1+nRowNew-1);
+                nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
+                nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
+                nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
+                nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
                 nTab2 = nTab1;
                 if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
                     !ValidCol(nCol2) || !ValidRow(nRow2))
@@ -8075,10 +8075,10 @@ void ScInterpreter::ScOffset()
                 nColNew = nCol2 - nCol1 + 1;
             if (nRowNew < 0)
                 nRowNew = nRow2 - nRow1 + 1;
-            nCol1 = (SCCOL)((long)nCol1+nColPlus);
-            nRow1 = (SCROW)((long)nRow1+nRowPlus);
-            nCol2 = (SCCOL)((long)nCol1+nColNew-1);
-            nRow2 = (SCROW)((long)nRow1+nRowNew-1);
+            nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
+            nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
+            nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
+            nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
             if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
                 !ValidCol(nCol2) || !ValidRow(nRow2) || nTab1 != nTab2)
                 PushIllegalArgument();
@@ -8103,10 +8103,10 @@ void ScInterpreter::ScOffset()
                 nColNew = nCol2 - nCol1 + 1;
             if (nRowNew < 0)
                 nRowNew = nRow2 - nRow1 + 1;
-            nCol1 = (SCCOL)((long)nCol1+nColPlus);
-            nRow1 = (SCROW)((long)nRow1+nRowPlus);
-            nCol2 = (SCCOL)((long)nCol1+nColNew-1);
-            nRow2 = (SCROW)((long)nRow1+nRowNew-1);
+            nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
+            nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
+            nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
+            nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
             if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
                 !ValidCol(nCol2) || !ValidRow(nRow2) || nTab1 != nTab2)
                 PushIllegalArgument();
@@ -8135,18 +8135,18 @@ void ScInterpreter::ScIndex()
         else
             nArea = 1;
         if (nParamCount >= 3)
-            nCol = (SCCOL) GetInt16();
+            nCol = static_cast<SCCOL>(GetInt16());
         else
             nCol = 0;
         if (nParamCount >= 2)
-            nRow = (SCROW) GetInt32();
+            nRow = static_cast<SCROW>(GetInt32());
         else
             nRow = 0;
         if (GetStackType() == svRefList)
             nAreaCount = (sp ? pStack[sp-1]->GetRefList()->size() : 0);
         else
             nAreaCount = 1;     // one reference or array or whatever
-        if (nGlobalError != FormulaError::NONE || nAreaCount == 0 || (size_t)nArea > nAreaCount)
+        if (nGlobalError != FormulaError::NONE || nAreaCount == 0 || static_cast<size_t>(nArea) > nAreaCount)
         {
             PushError( FormulaError::NoRef);
             return;
@@ -8308,7 +8308,7 @@ void ScInterpreter::ScIndex()
                             PushSingleRef( nCol1, nRow1+nRow-1, nTab1 );
                         else if ( bRowArray )
                         {
-                            nCol =(SCCOL) nRow;
+                            nCol =static_cast<SCCOL>(nRow);
                             nRow = 1;
                             PushSingleRef( nCol1+nCol-1, nRow1+nRow-1, nTab1);
                         }
@@ -8396,7 +8396,7 @@ void ScInterpreter::ScCurrency()
         double fVal = GetDouble();
         double fFac;
         if ( fDec != 0.0 )
-            fFac = pow( (double)10, fDec );
+            fFac = pow( double(10), fDec );
         else
             fFac = 1.0;
         if (fVal < 0.0)
@@ -8409,14 +8409,14 @@ void ScInterpreter::ScCurrency()
         sal_uLong nIndex = pFormatter->GetStandardFormat(
                                         SvNumFormatType::CURRENCY,
                                         ScGlobal::eLnge);
-        if ( (sal_uInt16) fDec != pFormatter->GetFormatPrecision( nIndex ) )
+        if ( static_cast<sal_uInt16>(fDec) != pFormatter->GetFormatPrecision( nIndex ) )
         {
             OUString sFormatString = pFormatter->GenerateFormat(
                                                    nIndex,
                                                    ScGlobal::eLnge,
                                                    true,        // with thousands separator
                                                    false,       // not red
-                                                  (sal_uInt16) fDec);// decimal places
+                                                  static_cast<sal_uInt16>(fDec));// decimal places
             if (!pFormatter->GetPreviewString(sFormatString,
                                               fVal,
                                               aStr,
@@ -8498,7 +8498,7 @@ void ScInterpreter::ScFixed()
         double fVal = GetDouble();
         double fFac;
         if ( fDec != 0.0 )
-            fFac = pow( (double)10, fDec );
+            fFac = pow( double(10), fDec );
         else
             fFac = 1.0;
         if (fVal < 0.0)
@@ -8516,7 +8516,7 @@ void ScInterpreter::ScFixed()
                                                ScGlobal::eLnge,
                                                bThousand,   // with thousands separator
                                                false,       // not red
-                                               (sal_uInt16) fDec);// decimal places
+                                               static_cast<sal_uInt16>(fDec));// decimal places
         if (!pFormatter->GetPreviewString(sFormatString,
                                                   fVal,
                                                   aStr,
@@ -8555,7 +8555,7 @@ void ScInterpreter::ScFind()
                     sStr.iterateCodePoints( &nIdx );
                     ++nCnt;
                 }
-                PushDouble( ( double )nCnt );
+                PushDouble( static_cast<double>(nCnt) );
             }
         }
     }
@@ -8587,7 +8587,7 @@ void ScInterpreter::ScLeft()
                 return ;
             }
             else
-                n = (sal_Int32) nVal;
+                n = static_cast<sal_Int32>(nVal);
         }
         else
             n = 1;
@@ -8699,7 +8699,7 @@ void ScInterpreter::ScRightB()
                 return ;
             }
             else
-                n = (sal_Int32) nVal;
+                n = static_cast<sal_Int32>(nVal);
         }
         else
             n = 1;
@@ -8750,7 +8750,7 @@ void ScInterpreter::ScLeftB()
                 return ;
             }
             else
-                n = (sal_Int32) nVal;
+                n = static_cast<sal_Int32>(nVal);
         }
         else
             n = 1;
@@ -8770,8 +8770,8 @@ void ScInterpreter::ScMidB()
         else
         {
 
-            aStr = lcl_LeftB(aStr, (sal_Int32)fAnfang + (sal_Int32)fCnt - 1);
-            sal_Int32 nCnt = getLengthB(aStr) - (sal_Int32)fAnfang + 1;
+            aStr = lcl_LeftB(aStr, static_cast<sal_Int32>(fAnfang) + static_cast<sal_Int32>(fCnt) - 1);
+            sal_Int32 nCnt = getLengthB(aStr) - static_cast<sal_Int32>(fAnfang) + 1;
             aStr = lcl_RightB(aStr, std::max<sal_Int32>(nCnt,0));
             PushString(aStr);
         }
@@ -8895,7 +8895,7 @@ void ScInterpreter::ScRight()
                 return ;
             }
             else
-                n = (sal_Int32) nVal;
+                n = static_cast<sal_Int32>(nVal);
         }
         else
             n = 1;
@@ -8958,7 +8958,7 @@ void ScInterpreter::ScSearch()
                     sStr.iterateCodePoints( &nIdx );
                     ++nCnt;
                 }
-                PushDouble( ( double )nCnt );
+                PushDouble( static_cast<double>(nCnt) );
             }
         }
     }
@@ -8968,8 +8968,8 @@ void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        sal_Int32 nSubLen = ( sal_Int32 )GetStringPositionArgument();
-        sal_Int32 nStart  = ( sal_Int32 )GetStringPositionArgument();
+        sal_Int32 nSubLen = static_cast<sal_Int32>(GetStringPositionArgument());
+        sal_Int32 nStart  = static_cast<sal_Int32>(GetStringPositionArgument());
         OUString aStr = GetString().getString();
         if ( nStart < 1 || nSubLen < 0 )
             PushIllegalArgument();
@@ -9083,7 +9083,7 @@ void ScInterpreter::ScSubstitute()
                 return;
             }
             else
-                nCnt = (sal_Int32) fCnt;
+                nCnt = static_cast<sal_Int32>(fCnt);
         }
         else
             nCnt = 0;
@@ -9138,7 +9138,7 @@ void ScInterpreter::ScRept()
         else
         {
             const sal_Int32 nLen = aStr.getLength();
-            sal_Int32 n = (sal_Int32) fCnt;
+            sal_Int32 n = static_cast<sal_Int32>(fCnt);
             OUStringBuffer aRes(n*nLen);
             while( n-- )
                 aRes.append(aStr);

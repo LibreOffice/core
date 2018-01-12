@@ -666,7 +666,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             mxScrollBar->SetPosSizePixel(aPos, aSize);
             mxScrollBar->SetRangeMax(mnLines);
             mxScrollBar->SetVisibleSize(mnVisLines);
-            mxScrollBar->SetThumbPos((long)mnFirstLine);
+            mxScrollBar->SetThumbPos(static_cast<long>(mnFirstLine));
             long nPageSize = mnVisLines;
             if (nPageSize < 1)
                 nPageSize = 1;
@@ -1065,7 +1065,7 @@ bool ValueSet::ImplHasAccessibleListeners()
 
 IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar, void )
 {
-    sal_uInt16 nNewFirstLine = (sal_uInt16)pScrollBar->GetThumbPos();
+    sal_uInt16 nNewFirstLine = static_cast<sal_uInt16>(pScrollBar->GetThumbPos());
     if ( nNewFirstLine != mnFirstLine )
     {
         mnFirstLine = nNewFirstLine;
@@ -1794,15 +1794,15 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     // if necessary scroll to the visible area
     if (mbScroll && nItemId && mnCols)
     {
-        sal_uInt16 nNewLine = (sal_uInt16)(nItemPos / mnCols);
+        sal_uInt16 nNewLine = static_cast<sal_uInt16>(nItemPos / mnCols);
         if ( nNewLine < mnFirstLine )
         {
             mnFirstLine = nNewLine;
             bNewLine = true;
         }
-        else if ( nNewLine > (sal_uInt16)(mnFirstLine+mnVisLines-1) )
+        else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
         {
-            mnFirstLine = (sal_uInt16)(nNewLine-mnVisLines+1);
+            mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
             bNewLine = true;
         }
     }

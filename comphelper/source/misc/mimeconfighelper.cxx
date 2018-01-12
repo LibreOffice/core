@@ -56,8 +56,8 @@ OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Seq
             if ( nInd == 4 || nInd == 6 || nInd == 8 || nInd == 10 )
                 aResult += "-";
 
-            sal_Int32 nDigit1 = (sal_Int32)( (sal_uInt8)aClassID[nInd] / 16 );
-            sal_Int32 nDigit2 = (sal_uInt8)aClassID[nInd] % 16;
+            sal_Int32 nDigit1 = static_cast<sal_Int32>( static_cast<sal_uInt8>(aClassID[nInd]) / 16 );
+            sal_Int32 nDigit2 = static_cast<sal_uInt8>(aClassID[nInd]) % 16;
             aResult += OUString::number( nDigit1, 16 ) + OUString::number( nDigit2, 16 );
         }
     }
@@ -97,7 +97,7 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
             if ( nDigit1 > 15 || nDigit2 > 15 )
                 break;
 
-            aResult[nSeqInd++] = (sal_Int8)( nDigit1 * 16 + nDigit2 );
+            aResult[nSeqInd++] = static_cast<sal_Int8>( nDigit1 * 16 + nDigit2 );
 
             if ( nStrPointer < nLength && aCharClassID[nStrPointer] == '-' )
                 nStrPointer++;
@@ -723,7 +723,7 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
                     if ( xFilterEnum->nextElement() >>= aProps )
                     {
                         SequenceAsHashMap aPropsHM( aProps );
-                        SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aPropsHM.getUnpackedValueOrDefault( "Flags", (sal_Int32)0 ));
+                        SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aPropsHM.getUnpackedValueOrDefault( "Flags", sal_Int32(0) ));
 
                         // that should be import, export, own filter and not a template filter ( TemplatePath flag )
                         SfxFilterFlags const nRequired = (SfxFilterFlags::OWN
@@ -768,7 +768,7 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
             if ( aImpFilterAny >>= aImpData )
             {
                 SequenceAsHashMap aImpFilterHM( aImpData );
-                SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aImpFilterHM.getUnpackedValueOrDefault( "Flags", (sal_Int32)0 ));
+                SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aImpFilterHM.getUnpackedValueOrDefault( "Flags", sal_Int32(0) ));
 
                 if ( !( nFlags & SfxFilterFlags::IMPORT ) )
                 {
@@ -839,7 +839,7 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
             {
                 SequenceAsHashMap aPropsHM( aProps );
                 SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aPropsHM.getUnpackedValueOrDefault("Flags",
-                                                                        (sal_Int32)0 ));
+                                                                        sal_Int32(0) ));
                 if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
                 {
                     if ( ( nFlags & SfxFilterFlags::DEFAULT ) == SfxFilterFlags::DEFAULT )
@@ -876,14 +876,14 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt3
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
 {
     uno::Sequence< sal_Int8 > aResult( 16 );
-    aResult[0] = (sal_Int8)( n1 >> 24 );
-    aResult[1] = (sal_Int8)( ( n1 << 8 ) >> 24 );
-    aResult[2] = (sal_Int8)( ( n1 << 16 ) >> 24 );
-    aResult[3] = (sal_Int8)( ( n1 << 24 ) >> 24 );
-    aResult[4] = (sal_Int8)( n2 >> 8 );
-    aResult[5] = (sal_Int8)( ( n2 << 8 ) >> 8 );
-    aResult[6] = (sal_Int8)( n3 >> 8 );
-    aResult[7] = (sal_Int8)( ( n3 << 8 ) >> 8 );
+    aResult[0] = static_cast<sal_Int8>( n1 >> 24 );
+    aResult[1] = static_cast<sal_Int8>( ( n1 << 8 ) >> 24 );
+    aResult[2] = static_cast<sal_Int8>( ( n1 << 16 ) >> 24 );
+    aResult[3] = static_cast<sal_Int8>( ( n1 << 24 ) >> 24 );
+    aResult[4] = static_cast<sal_Int8>( n2 >> 8 );
+    aResult[5] = static_cast<sal_Int8>( ( n2 << 8 ) >> 8 );
+    aResult[6] = static_cast<sal_Int8>( n3 >> 8 );
+    aResult[7] = static_cast<sal_Int8>( ( n3 << 8 ) >> 8 );
     aResult[8] = b8;
     aResult[9] = b9;
     aResult[10] = b10;

@@ -179,7 +179,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                 if (xThes.is()  &&  xThes->hasLocale( rLocale ))
                     aMeanings = xThes->queryMeanings( aChkWord, rLocale, rProperties );
 
-                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                pEntry->nLastTriedSvcIndex = static_cast<sal_Int16>(i);
                 ++i;
             }
 

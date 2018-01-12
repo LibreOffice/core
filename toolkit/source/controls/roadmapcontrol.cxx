@@ -108,12 +108,12 @@ static void lcl_throwIndexOutOfBoundsException( )
                     aReturn <<= true;
                     break;
                 case BASEPROPERTY_CURRENTITEMID:
-                    aReturn <<= (sal_Int16) -1;
+                    aReturn <<= sal_Int16(-1);
                     break;
                 case BASEPROPERTY_TEXT:
                    break;
                 case BASEPROPERTY_BORDER:
-                    aReturn <<= (sal_Int16) 2;              // No Border
+                    aReturn <<= sal_Int16(2);              // No Border
                     break;
                 case BASEPROPERTY_DEFAULTCONTROL:
                     aReturn <<= OUString::createFromAscii( szServiceName_UnoControlRoadmap );
@@ -182,7 +182,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     Any SAL_CALL UnoControlRoadmapModel::getByIndex( sal_Int32 Index )
     {
-        if (( Index >= (sal_Int32)maRoadmapItems.size()) || (Index < 0))
+        if (( Index >= static_cast<sal_Int32>(maRoadmapItems.size())) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
         Any aAny( maRoadmapItems.at( Index ) );
         return aAny;
@@ -191,7 +191,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     void UnoControlRoadmapModel::MakeRMItemValidation( sal_Int32 Index, const Reference< XInterface >& xRoadmapItem )
     {
-        if ((Index > (sal_Int32)maRoadmapItems.size()) || ( Index < 0 ) )
+        if ((Index > static_cast<sal_Int32>(maRoadmapItems.size())) || ( Index < 0 ) )
             lcl_throwIndexOutOfBoundsException( );
         if ( !xRoadmapItem.is() )
             lcl_throwIllegalArgumentException();
@@ -271,7 +271,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     void SAL_CALL UnoControlRoadmapModel::insertByIndex( const sal_Int32 Index, const Any& Element)
     {
-        if ( ( Index >= ( (sal_Int32)maRoadmapItems.size() + 1 ) ) || (Index < 0))
+        if ( ( Index >= ( static_cast<sal_Int32>(maRoadmapItems.size()) + 1 ) ) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
         Reference< XInterface > xRoadmapItem;
         Element >>= xRoadmapItem;
@@ -284,7 +284,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         sal_Int16 n_CurrentItemID = GetCurrentItemID( xPropertySet );
         if ( Index <= n_CurrentItemID )
         {
-            Any aAny(( sal_Int16 ) ( n_CurrentItemID + 1 ) );
+            Any aAny(static_cast<sal_Int16>( n_CurrentItemID + 1 ) );
             xPropertySet->setPropertyValue( GetPropertyName( BASEPROPERTY_CURRENTITEMID ), aAny );
         }
     }
@@ -292,7 +292,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
     {
-        if (( Index > (sal_Int32)maRoadmapItems.size()) || (Index < 0))
+        if (( Index > static_cast<sal_Int32>(maRoadmapItems.size())) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
         Reference< XInterface > xRoadmapItem;
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
@@ -303,7 +303,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         Any aAny;
         if ( Index <= n_CurrentItemID )
         {
-            if ( n_CurrentItemID >= (sal_Int32)maRoadmapItems.size() )
+            if ( n_CurrentItemID >= static_cast<sal_Int32>(maRoadmapItems.size()) )
             {
                 n_CurrentItemID = sal::static_int_cast< sal_Int16 >(
                     maRoadmapItems.size()-1);
@@ -312,9 +312,9 @@ static void lcl_throwIndexOutOfBoundsException( )
                 aAny <<= n_CurrentItemID;
             }
             else if (Index == n_CurrentItemID)
-                aAny <<= ( sal_Int16 ) -1;
+                aAny <<= sal_Int16(-1);
             else if( Index < n_CurrentItemID)
-                aAny <<= ( sal_Int16 ) ( n_CurrentItemID - 1 );
+                aAny <<= static_cast<sal_Int16>( n_CurrentItemID - 1 );
             xPropertySet->setPropertyValue( GetPropertyName( BASEPROPERTY_CURRENTITEMID ), aAny );
         }
     }

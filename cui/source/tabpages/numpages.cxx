@@ -705,7 +705,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                 break;
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
             aFmt.SetNumberingType( pLevelSettings->nNumberType );
-            sal_uInt16 nUpperLevelOrChar = (sal_uInt16)pLevelSettings->nParentNumbering;
+            sal_uInt16 nUpperLevelOrChar = static_cast<sal_uInt16>(pLevelSettings->nParentNumbering);
             if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
             {
                 // #i93908# clear suffix for bullet lists
@@ -1022,16 +1022,16 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
                 BitmapEx aBitmap = aGraphic.GetBitmapEx();
                 long nPixelX = aBitmap.GetSizePixel().Width();
                 long nPixelY = aBitmap.GetSizePixel().Height();
-                double ratio = nPixelY/(double)nPixelX;
+                double ratio = nPixelY/static_cast<double>(nPixelX);
                 if(nPixelX > 30)
                 {
                     nPixelX = 30;
-                    nPixelY = (long) (nPixelX*ratio);
+                    nPixelY = static_cast<long>(nPixelX*ratio);
                 }
                 if(nPixelY > 30)
                 {
                     nPixelY = 30;
-                    nPixelX = (long) (nPixelY/ratio);
+                    nPixelX = static_cast<long>(nPixelY/ratio);
                 }
 
                 aBitmap.Scale( Size( nPixelX, nPixelY ), BmpScaleFlag::Fast );
@@ -1040,9 +1040,9 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
 
                 Sequence< PropertyValue > aFilterData( 2 );
                 aFilterData[ 0 ].Name = "Compression";
-                aFilterData[ 0 ].Value <<= (sal_Int32) -1 ;
+                aFilterData[ 0 ].Value <<= sal_Int32(-1) ;
                 aFilterData[ 1 ].Name = "Quality";
-                aFilterData[ 1 ].Value <<= (sal_Int32) 1;
+                aFilterData[ 1 ].Value <<= sal_Int32(1);
 
                 sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( gURL.GetFileExtension() );
                 rFilter.ExportGraphic( aScaledGraphic, gURL , nFilterFormat, &aFilterData );
@@ -1399,7 +1399,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         sal_Int32 nFmtCount = m_pFmtLB->GetEntryCount();
         for(sal_Int32 i = nFmtCount; i; i--)
         {
-            sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1));
+            sal_uInt16 nEntryData = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1)));
             if(/*SVX_NUM_NUMBER_NONE == nEntryData ||*/
                 (SVX_NUM_BITMAP|LINK_TOKEN) ==  nEntryData)
                 m_pFmtLB->RemoveEntry(i - 1);
@@ -1426,7 +1426,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         sal_Int32 nFmtCount = m_pFmtLB->GetEntryCount();
         for(sal_Int32 i = nFmtCount; i; i--)
         {
-            sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1));
+            sal_uInt16 nEntryData = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1)));
             if( /*nEntryData >= SVX_NUM_CHARS_UPPER_LETTER &&*/  nEntryData <= SVX_NUM_NUMBER_NONE)
                 m_pFmtLB->RemoveEntry(i - 1);
         }
@@ -1724,7 +1724,7 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, Edit&, rBox, void )
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(e));
-            aNumFmt.SetIncludeUpperLevels((sal_uInt8) std::min(static_cast<NumericField&>(rBox).GetValue(), sal_Int64(e + 1)) );
+            aNumFmt.SetIncludeUpperLevels(static_cast<sal_uInt8>(std::min(static_cast<NumericField&>(rBox).GetValue(), sal_Int64(e + 1))) );
             pActNum->SetLevel(e, aNumFmt);
         }
         nMask <<= 1;
@@ -1839,7 +1839,7 @@ IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox&, rBox, void )
             {
                 const SvxBrushItem* pBrushItem =  aNumFmt.GetBrush();
                 const Size& rSize = aNumFmt.GetGraphicSize();
-                sal_Int16 eOrient = (sal_Int16)nPos;
+                sal_Int16 eOrient = static_cast<sal_Int16>(nPos);
                 aNumFmt.SetGraphicBrush( pBrushItem, &rSize, &eOrient );
                 pActNum->SetLevel(i, aNumFmt);
             }
@@ -1887,7 +1887,7 @@ IMPL_LINK(SvxNumOptionsTabPage, BulColorHdl_Impl, SvxColorListBox&, rColorBox, v
 
 IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, Edit&, rField, void)
 {
-    sal_uInt16 nRelSize = (sal_uInt16)static_cast<MetricField&>(rField).GetValue();
+    sal_uInt16 nRelSize = static_cast<sal_uInt16>(static_cast<MetricField&>(rField).GetValue());
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2014,8 +2014,8 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
                     {
                         bool bWidth = aSize.Width() > aSize.Height();
                         double nScale = bWidth ?
-                                            (double)MAX_BMP_WIDTH / (double)aSize.Width():
-                                                (double)MAX_BMP_HEIGHT / (double)aSize.Height();
+                                            double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
+                                                double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
                         aBitmap.Scale(nScale, nScale);
                     }
                     Image aImage(aBitmap);
@@ -2084,7 +2084,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
             {
                 SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
                 aNumFmt.SetBulletFont(&aActBulletFont);
-                aNumFmt.SetBulletChar( (sal_Unicode) pMap->GetChar() );
+                aNumFmt.SetBulletChar( static_cast<sal_Unicode>(pMap->GetChar()) );
                 pActNum->SetLevel(i, aNumFmt);
             }
             _nMask <<= 1;
@@ -2120,9 +2120,9 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                 Size aSaveSize(aSize);
 
                 if (aInitSize[i].Height())
-                    fSizeRatio = (double)aInitSize[i].Width() / (double)aInitSize[i].Height();
+                    fSizeRatio = static_cast<double>(aInitSize[i].Width()) / static_cast<double>(aInitSize[i].Height());
                 else
-                    fSizeRatio = (double)1;
+                    fSizeRatio = double(1);
 
                 if(bWidth)
                 {
@@ -2130,7 +2130,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                     aSize.Width() = nWidthVal;
                     if (bRatio)
                     {
-                        aSize.Height() = aInitSize[i].Height() + (long)((double)nDelta / fSizeRatio);
+                        aSize.Height() = aInitSize[i].Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio);
                         m_pHeightMF->SetUserValue(m_pHeightMF->Normalize(
                             OutputDevice::LogicToLogic( aSize.Height(), eCoreUnit, MapUnit::Map100thMM )),
                                 FUNIT_100TH_MM);
@@ -2142,7 +2142,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                     aSize.Height() = nHeightVal;
                     if (bRatio)
                     {
-                        aSize.Width() = aInitSize[i].Width() + (long)((double)nDelta * fSizeRatio);
+                        aSize.Width() = aInitSize[i].Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio);
                         m_pWidthMF->SetUserValue(m_pWidthMF->Normalize(
                             OutputDevice::LogicToLogic( aSize.Width(), eCoreUnit, MapUnit::Map100thMM )),
                                 FUNIT_100TH_MM);
@@ -2221,7 +2221,7 @@ void SvxNumOptionsTabPage::EditModifyHdl_Impl( Edit* pEdit )
             else if(bSuffix)
                 aNumFmt.SetSuffix( m_pSuffixED->GetText() );
             else if(bStart)
-                aNumFmt.SetStart( (sal_uInt16)m_pStartED->GetValue() );
+                aNumFmt.SetStart( static_cast<sal_uInt16>(m_pStartED->GetValue()) );
             pActNum->SetLevel(i, aNumFmt);
         }
         nMask <<= 1;
@@ -2241,7 +2241,7 @@ static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &r
         {
             Size aGSize( rFmt.GetGraphicSize() );
             aGSize.Width() /= nDivision;
-            nRet = (sal_uInt16)aGSize.Width();
+            nRet = static_cast<sal_uInt16>(aGSize.Width());
             aGSize.Height() /= nDivision;
             pGrf->Draw( pVDev, Point(nXStart,nYMiddle - ( aGSize.Height() / 2) ),
                     pVDev->PixelToLogic( aGSize ) );
@@ -2280,7 +2280,7 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     long nY = nYStart;
     nY -= ((aTmpSize.Height() - rSize.Height())/ 2);
     pVDev->DrawText( Point(nXStart, nY), aText );
-    sal_uInt16 nRet = (sal_uInt16)pVDev->GetTextWidth(aText);
+    sal_uInt16 nRet = static_cast<sal_uInt16>(pVDev->GetTextWidth(aText));
 
     pVDev->SetFont(aTmpFont);
     return nRet;
@@ -2425,7 +2425,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     pVDev->SetFont(aStdFont);
                     OUString aText(' ');
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
-                    nBulletWidth = nBulletWidth + (sal_uInt16)pVDev->GetTextWidth(aText);
+                    nBulletWidth = nBulletWidth + static_cast<sal_uInt16>(pVDev->GetTextWidth(aText));
                 }
 
                 sal_uInt16 nTextXPos( 0 );
@@ -2540,7 +2540,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     OUString aText(pActNum->MakeNumString(aNum));
                     pVDev->DrawText(Point(nXStart, nYStart), aText);
                     pVDev->SetFont(aStdFont);
-                    nTextOffset = (sal_uInt16)pVDev->GetTextWidth(aText);
+                    nTextOffset = static_cast<sal_uInt16>(pVDev->GetTextWidth(aText));
                     nTextOffset = nTextOffset + nXStep;
                     nPreNum++;
                 }
@@ -2813,13 +2813,13 @@ void SvxNumPositionTabPage::InitControls()
         long nDistBorderNum;
         if(bRelative)
         {
-            nDistBorderNum = (long)aNumFmtArr[nLvl]->GetAbsLSpace()+ aNumFmtArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = static_cast<long>(aNumFmtArr[nLvl]->GetAbsLSpace())+ aNumFmtArr[nLvl]->GetFirstLineOffset();
             if(nLvl)
-                nDistBorderNum -= (long)aNumFmtArr[nLvl - 1]->GetAbsLSpace()+ aNumFmtArr[nLvl - 1]->GetFirstLineOffset();
+                nDistBorderNum -= static_cast<long>(aNumFmtArr[nLvl - 1]->GetAbsLSpace())+ aNumFmtArr[nLvl - 1]->GetFirstLineOffset();
         }
         else
         {
-            nDistBorderNum = (long)aNumFmtArr[nLvl]->GetAbsLSpace()+ aNumFmtArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = static_cast<long>(aNumFmtArr[nLvl]->GetAbsLSpace())+ aNumFmtArr[nLvl]->GetFirstLineOffset();
         }
         SetMetricValue(*m_pDistBorderMF, nDistBorderNum, eCoreUnit);
     }
@@ -3241,12 +3241,12 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
                 }
                 else
                 {
-                    aNumFmt.SetAbsLSpace( (short)nValue - aNumFmt.GetFirstLineOffset());
+                    aNumFmt.SetAbsLSpace( static_cast<short>(nValue) - aNumFmt.GetFirstLineOffset());
                 }
             }
             else if (&rFld == m_pDistNumMF)
             {
-                aNumFmt.SetCharTextDistance( (short)nValue );
+                aNumFmt.SetCharTextDistance( static_cast<short>(nValue) );
             }
             else if (&rFld == m_pIndentMF)
             {
@@ -3254,7 +3254,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
                 long nAbsLSpace = aNumFmt.GetAbsLSpace();
                 aNumFmt.SetAbsLSpace(sal_uInt16(nAbsLSpace + nDiff));
-                aNumFmt.SetFirstLineOffset( -(short)nValue );
+                aNumFmt.SetFirstLineOffset( -static_cast<short>(nValue) );
             }
 
             pActNum->SetLevel( i, aNumFmt );

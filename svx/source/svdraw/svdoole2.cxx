@@ -1528,8 +1528,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 // objects' visual area. The scaling will not change, but it might exist already and must
                 // be used in calculations
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-                Size aVisSize( (long)( Fraction( maRect.GetWidth() ) / aScaleWidth ),
-                                (long)( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
+                Size aVisSize( static_cast<long>( Fraction( maRect.GetWidth() ) / aScaleWidth ),
+                                static_cast<long>( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
 
                 aVisSize = OutputDevice::LogicToLogic(aVisSize, MapMode(pModel->GetScaleUnit()), MapMode(aMapUnit));
                 awt::Size aSz;
@@ -1545,8 +1545,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 {}
 
                 tools::Rectangle aAcceptedVisArea;
-                aAcceptedVisArea.SetSize( Size( (long)( Fraction( long( aSz.Width ) ) * aScaleWidth ),
-                                                (long)( Fraction( long( aSz.Height ) ) * aScaleHeight ) ) );
+                aAcceptedVisArea.SetSize( Size( static_cast<long>( Fraction( long( aSz.Width ) ) * aScaleWidth ),
+                                                static_cast<long>( Fraction( long( aSz.Height ) ) * aScaleHeight ) ) );
                 if (aVisSize != aAcceptedVisArea.GetSize())
                 {
                     // server changed VisArea to its liking and the VisArea is different than the suggested one

@@ -336,8 +336,8 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, ScrollFlags )
         Update();
 
         // does the new area overlap the old one?
-        if ( std::abs( (int)aDeltaPix.Height() ) < aOutPixSz.Height() ||
-             std::abs( (int)aDeltaPix.Width() ) < aOutPixSz.Width() )
+        if ( std::abs( static_cast<int>(aDeltaPix.Height()) ) < aOutPixSz.Height() ||
+             std::abs( static_cast<int>(aDeltaPix.Width()) ) < aOutPixSz.Width() )
         {
             // scroll the overlapping area
             SetMapMode( aMap );

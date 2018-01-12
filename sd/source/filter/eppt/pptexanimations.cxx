@@ -213,7 +213,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
         }
     }
     if ( !bTranslated )
-        nPresetSubType = (sal_uInt32)rPresetSubType.toInt32();
+        nPresetSubType = static_cast<sal_uInt32>(rPresetSubType.toInt32());
     return nPresetSubType;
 }
 
@@ -815,7 +815,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
     }
     else if ( xNode->getDuration() >>= fDuration )
     {
-        aAnim.mnDuration = (sal_Int32)( fDuration * 1000.0 );
+        aAnim.mnDuration = static_cast<sal_Int32>( fDuration * 1000.0 );
     }
     else
         aAnim.mnDuration = -1;
@@ -925,7 +925,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
     else
     {
         const oox::ppt::preset_maping* p = oox::ppt::preset_maping::getList();
-    while( p->mpStrPresetId && ((p->mnPresetClass != (sal_Int32)nAPIPresetClass) || !rPreset.equalsAscii( p->mpStrPresetId )) )
+    while( p->mpStrPresetId && ((p->mnPresetClass != static_cast<sal_Int32>(nAPIPresetClass)) || !rPreset.equalsAscii( p->mpStrPresetId )) )
         p++;
 
     if( p->mpStrPresetId )
@@ -967,10 +967,10 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
         pAny[ DFF_ANIM_MASTERREL ] = &aMasterRel;
 
-        aOverride <<= (sal_Int32)1;
+        aOverride <<= sal_Int32(1);
         pAny[ DFF_ANIM_OVERRIDE ] = &aOverride;
 
-        aRunTimeContext <<= (sal_Int32)1;
+        aRunTimeContext <<= sal_Int32(1);
         pAny[ DFF_ANIM_RUNTIMECONTEXT ] = &aRunTimeContext;
     }
 
@@ -1193,7 +1193,7 @@ void AnimationExporter::exportAnimPropertyString( SvStream& rStrm, const sal_uIn
 void AnimationExporter::exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt16 nPropertyId, const double& rVal )
 {
     EscherExAtom aExAtom( rStrm, DFF_msofbtAnimAttributeValue, nPropertyId );
-    float fFloat = (float)rVal;
+    float fFloat = static_cast<float>(rVal);
     rStrm.WriteUChar( DFF_ANIM_PROP_TYPE_FLOAT )
          .WriteFloat( fFloat );
 }
@@ -1328,7 +1328,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                                 nBegin = -1;
                         }
                         else if ( aEvent.Offset >>= fTiming )
-                            nBegin = (sal_Int32)( fTiming * 1000.0 );
+                            nBegin = static_cast<sal_Int32>( fTiming * 1000.0 );
                     }
                     aSource = aEvent.Source;
                 }
@@ -1341,7 +1341,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                 else if ( aAny >>= fTiming )
                 {
                     bCreateEvent = true;
-                    nBegin = (sal_Int32)( fTiming * 1000.0 );
+                    nBegin = static_cast<sal_Int32>( fTiming * 1000.0 );
                 }
             }
             break;
@@ -1419,21 +1419,21 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
         if ( rSourceValue >>= aHSL )
         {
             aDest += "hsl("
-                  +  OUString::number( (sal_Int32)( aHSL[ 0 ] / ( 360.0 / 255 ) ) )
+                  +  OUString::number( static_cast<sal_Int32>( aHSL[ 0 ] / ( 360.0 / 255 ) ) )
                   +  aP
-                  +  OUString::number( (sal_Int32)( aHSL[ 1 ] * 255.0 ) )
+                  +  OUString::number( static_cast<sal_Int32>( aHSL[ 1 ] * 255.0 ) )
                   +  aP
-                  +  OUString::number( (sal_Int32)( aHSL[ 2 ] * 255.0 ) )
+                  +  OUString::number( static_cast<sal_Int32>( aHSL[ 2 ] * 255.0 ) )
                   +  ")";
         }
         else if ( rSourceValue >>= nColor )
         {
             aDest += "rgb("
-                  +  OUString::number( ( (sal_Int8)nColor ) )
+                  +  OUString::number( static_cast<sal_Int8>(nColor) )
                   +  aP
-                  +  OUString::number( ( (sal_Int8)( nColor >> 8 ) ) )
+                  +  OUString::number( static_cast<sal_Int8>( nColor >> 8 ) )
                   +  aP
-                  +  OUString::number( ( (sal_Int8)( nColor >> 16 ) ) )
+                  +  OUString::number( static_cast<sal_Int8>( nColor >> 16 ) )
                   +  ")";
         }
     }
@@ -1809,7 +1809,7 @@ void AnimationExporter::exportAnimateKeyPoints( SvStream& rStrm, const Reference
         {
             {
                 EscherExAtom aAnimKeyTime( rStrm, DFF_msofbtAnimKeyTime );
-                sal_Int32 nKeyTime = (sal_Int32)( aKeyTimes[ i ] * 1000.0 );
+                sal_Int32 nKeyTime = static_cast<sal_Int32>( aKeyTimes[ i ] * 1000.0 );
                 rStrm.WriteInt32( nKeyTime );
             }
             Any aAny[ 2 ];
@@ -1848,10 +1848,10 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
     if ( aAny >>= eTiming )
     {
         if ( eTiming == Timing_INDEFINITE )
-            fRepeatCount = ((float)3.40282346638528860e+38);
+            fRepeatCount = (float(3.40282346638528860e+38));
     }
     else if ( aAny >>= fRepeat )
-        fRepeatCount = (float)fRepeat;
+        fRepeatCount = static_cast<float>(fRepeat);
     if ( fRepeatCount != 0.0 )
     {
         EscherExAtom aExAtom( rStrm, DFF_msofbtAnimValue );
@@ -1860,7 +1860,7 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
              .WriteFloat( fRepeatCount );
     }
     // accelerate (3)
-    float fAccelerate = (float)xNode->getAcceleration();
+    float fAccelerate = static_cast<float>(xNode->getAcceleration());
     if ( bExportAlways || ( fAccelerate != 0.0 ) )
     {
         EscherExAtom aExAtom( rStrm, DFF_msofbtAnimValue );
@@ -1870,7 +1870,7 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
     }
 
     // decelerate (4)
-    float fDecelerate = (float)xNode->getDecelerate();
+    float fDecelerate = static_cast<float>(xNode->getDecelerate());
     if ( bExportAlways || ( fDecelerate != 0.0 ) )
     {
         EscherExAtom aExAtom( rStrm, DFF_msofbtAnimValue );
@@ -1973,8 +1973,8 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
                     if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
                     {
                         nBits |= 1;
-                        fByX = (float)( fX * 100 );
-                        fByY = (float)( fY * 100 );
+                        fByX = static_cast<float>( fX * 100 );
+                        fByY = static_cast<float>( fY * 100 );
                     }
                 }
                 if ( xTransform->getFrom() >>= aPair )
@@ -1982,8 +1982,8 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
                     if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
                     {
                         nBits |= 2;
-                        fFromX = (float)( fX * 100 );
-                        fFromY = (float)( fY * 100 );
+                        fFromX = static_cast<float>( fX * 100 );
+                        fFromY = static_cast<float>( fY * 100 );
                     }
                 }
                 if( xTransform->getTo() >>= aPair )
@@ -1991,8 +1991,8 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
                     if ( ( aPair.First >>= fX ) && ( aPair.Second >>= fY ) )
                     {
                         nBits |= 4;
-                        fToX = (float)( fX * 100 );
-                        fToY = (float)( fY * 100 );
+                        fToX = static_cast<float>( fX * 100 );
+                        fToY = static_cast<float>( fY * 100 );
                     }
                 }
 
@@ -2019,17 +2019,17 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
                 if ( xTransform->getBy() >>= fVal )
                 {
                     nBits |= 1;
-                    fBy = (float)fVal;
+                    fBy = static_cast<float>(fVal);
                 }
                 if ( xTransform->getFrom() >>= fVal )
                 {
                     nBits |= 2;
-                    fFrom = (float)fVal;
+                    fFrom = static_cast<float>(fVal);
                 }
                 if ( xTransform->getTo() >>= fVal )
                 {
                     nBits |= 4;
-                    fTo = (float)fVal;
+                    fTo = static_cast<float>(fVal);
                 }
                 rStrm.WriteUInt32( nBits ).WriteFloat( fBy ).WriteFloat( fFrom ).WriteFloat( fTo ).WriteUInt32( nU1 );
             }
@@ -2050,15 +2050,15 @@ bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColorSpac
     Sequence< double > aHSL( 3 );
     if ( rAny >>= nColor )      // RGB color
     {
-        rA = (sal_uInt8)( nColor >> 16 );
-        rB = (sal_uInt8)( nColor >> 8 );
-        rC = (sal_uInt8) nColor;
+        rA = static_cast<sal_uInt8>( nColor >> 16 );
+        rB = static_cast<sal_uInt8>( nColor >> 8 );
+        rC = static_cast<sal_uInt8>(nColor);
     }
     else if ( rAny >>= aHSL )   // HSL
     {
-        rA = (sal_Int32) ( aHSL[ 0 ] * 255.0 / 360.0 );
-        rB = (sal_Int32) ( aHSL[ 1 ] * 255.0 );
-        rC = (sal_Int32) ( aHSL[ 2 ] * 255.0 );
+        rA = static_cast<sal_Int32>( aHSL[ 0 ] * 255.0 / 360.0 );
+        rB = static_cast<sal_Int32>( aHSL[ 1 ] * 255.0 );
+        rC = static_cast<sal_Int32>( aHSL[ 2 ] * 255.0 );
     }
     else
         bIsColor = false;
@@ -2133,7 +2133,7 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
             case TextAnimationType::BY_LETTER : nTextUnitEffect = 2; break;
         }
 
-        fInterval = (float)xIterate->getIterateInterval();
+        fInterval = static_cast<float>(xIterate->getIterateInterval());
 
         // convert interval from absolute to percentage
         double fDuration = 0.0;
@@ -2163,7 +2163,7 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
         }
 
         if( fDuration )
-            fInterval = (float)(100.0 * fInterval / fDuration);
+            fInterval = static_cast<float>(100.0 * fInterval / fDuration);
 
         rStrm.WriteFloat( fInterval ).WriteInt32( nTextUnitEffect ).WriteInt32( nU1 ).WriteInt32( nU2 ).WriteInt32( nU3 );
         aTarget = xIterate->getTarget();

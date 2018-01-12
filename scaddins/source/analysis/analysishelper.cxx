@@ -178,7 +178,7 @@ sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 
 sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
-    sal_Int32 nDays = ((sal_Int32)nYear-1) * 365;
+    sal_Int32 nDays = (static_cast<sal_Int32>(nYear)-1) * 365;
     nDays += ((nYear-1) / 4) - ((nYear-1) / 100) + ((nYear-1) / 400);
 
     for( sal_uInt16 i = 1; i < nMonth; i++ )
@@ -211,8 +211,8 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
     do
     {
         nTempDays = nDays;
-        rYear = (sal_uInt16)((nTempDays / 365) - i);
-        nTempDays -= ((sal_Int32) rYear -1) * 365;
+        rYear = static_cast<sal_uInt16>((nTempDays / 365) - i);
+        nTempDays -= (static_cast<sal_Int32>(rYear) -1) * 365;
         nTempDays -= (( rYear -1) / 4) - (( rYear -1) / 100) + ((rYear -1) / 400);
         bCalc = false;
         if ( nTempDays < 1 )
@@ -240,7 +240,7 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
         nTempDays -= DaysInMonth( rMonth, rYear );
         rMonth++;
     }
-    rDay = (sal_uInt16)nTempDays;
+    rDay = static_cast<sal_uInt16>(nTempDays);
 }
 
 
@@ -541,7 +541,7 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
                     for ( sal_Int16 i = nYear1; i <= nYear2; i++ )
                         nDayCount += ( IsLeapYear( i ) ? 366 : 365 );
 
-                    nDaysInYear = ( double ) nDayCount / ( double ) ( nYear2 - nYear1 + 1 );
+                    nDaysInYear = static_cast<double>(nDayCount) / static_cast<double>( nYear2 - nYear1 + 1 );
                 }
                 // we take advantage of the fact that (ODFv1.2 part 2) 4.11.7.7.9
                 // 4.11.7.7.10 can be permuted without changing the end result

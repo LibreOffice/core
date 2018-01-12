@@ -292,22 +292,22 @@ long ScColumn::GetNeededSize(
                 double nRealOrient = nRotate * F_PI18000;   // nRotate is in 1/100 Grad
                 double nCosAbs = fabs( cos( nRealOrient ) );
                 double nSinAbs = fabs( sin( nRealOrient ) );
-                long nHeight = (long)( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
+                long nHeight = static_cast<long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
                 long nWidth;
                 if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
-                    nWidth  = (long)( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
+                    nWidth  = static_cast<long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
                 else if ( rOptions.bTotalSize )
                 {
-                    nWidth = (long) ( pDocument->GetColWidth( nCol,nTab ) * nPPT );
+                    nWidth = static_cast<long>( pDocument->GetColWidth( nCol,nTab ) * nPPT );
                     bAddMargin = false;
                     //  only to the right:
                     //TODO: differ on direction up/down (only Text/whole height)
                     if ( pPattern->GetRotateDir( pCondSet ) == ScRotateDir::Right )
-                        nWidth += (long)( pDocument->GetRowHeight( nRow,nTab ) *
+                        nWidth += static_cast<long>( pDocument->GetRowHeight( nRow,nTab ) *
                                             nPPT * nCosAbs / nSinAbs );
                 }
                 else
-                    nWidth  = (long)( aSize.Height() / nSinAbs );   //TODO: limit?
+                    nWidth  = static_cast<long>( aSize.Height() / nSinAbs );   //TODO: limit?
 
                 if ( bBreak && !rOptions.bTotalSize )
                 {
@@ -325,14 +325,14 @@ long ScColumn::GetNeededSize(
             {
                 if (bWidth)
                 {
-                    nValue += (long) ( pMargin->GetLeftMargin() * nPPT ) +
-                              (long) ( pMargin->GetRightMargin() * nPPT );
+                    nValue += static_cast<long>( pMargin->GetLeftMargin() * nPPT ) +
+                              static_cast<long>( pMargin->GetRightMargin() * nPPT );
                     if ( nIndent )
-                        nValue += (long) ( nIndent * nPPT );
+                        nValue += static_cast<long>( nIndent * nPPT );
                 }
                 else
-                    nValue += (long) ( pMargin->GetTopMargin() * nPPT ) +
-                              (long) ( pMargin->GetBottomMargin() * nPPT );
+                    nValue += static_cast<long>( pMargin->GetTopMargin() * nPPT ) +
+                              static_cast<long>( pMargin->GetBottomMargin() * nPPT );
             }
 
             //  linebreak done ?
@@ -342,7 +342,7 @@ long ScColumn::GetNeededSize(
                 //  test with EditEngine the safety at 90%
                 //  (due to rounding errors and because EditEngine formats partially differently)
 
-                long nDocPixel = (long) ( ( pDocument->GetColWidth( nCol,nTab ) -
+                long nDocPixel = static_cast<long>( ( pDocument->GetColWidth( nCol,nTab ) -
                                     pMargin->GetLeftMargin() - pMargin->GetRightMargin() -
                                     nIndent )
                                     * nPPT );
@@ -412,16 +412,16 @@ long ScColumn::GetNeededSize(
             }
 
             // use original width for hidden columns:
-            long nDocWidth = (long) ( pDocument->GetOriginalWidth(nCol,nTab) * fWidthFactor );
+            long nDocWidth = static_cast<long>( pDocument->GetOriginalWidth(nCol,nTab) * fWidthFactor );
             SCCOL nColMerge = pMerge->GetColMerge();
             if (nColMerge > 1)
                 for (SCCOL nColAdd=1; nColAdd<nColMerge; nColAdd++)
-                    nDocWidth += (long) ( pDocument->GetColWidth(nCol+nColAdd,nTab) * fWidthFactor );
-            nDocWidth -= (long) ( pMargin->GetLeftMargin() * fWidthFactor )
-                       + (long) ( pMargin->GetRightMargin() * fWidthFactor )
+                    nDocWidth += static_cast<long>( pDocument->GetColWidth(nCol+nColAdd,nTab) * fWidthFactor );
+            nDocWidth -= static_cast<long>( pMargin->GetLeftMargin() * fWidthFactor )
+                       + static_cast<long>( pMargin->GetRightMargin() * fWidthFactor )
                        + 1;     // output size is width-1 pixel (due to gridline)
             if ( nIndent )
-                nDocWidth -= (long) ( nIndent * fWidthFactor );
+                nDocWidth -= static_cast<long>( nIndent * fWidthFactor );
 
             // space for AutoFilter button:  20 * nZoom/100
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
@@ -467,20 +467,20 @@ long ScColumn::GetNeededSize(
             double nRealOrient = nRotate * F_PI18000;   // nRotate is in 1/100 Grad
             double nCosAbs = fabs( cos( nRealOrient ) );
             double nSinAbs = fabs( sin( nRealOrient ) );
-            long nHeight = (long)( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
+            long nHeight = static_cast<long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
             long nWidth;
             if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
-                nWidth  = (long)( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
+                nWidth  = static_cast<long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
             else if ( rOptions.bTotalSize )
             {
-                nWidth = (long) ( pDocument->GetColWidth( nCol,nTab ) * nPPT );
+                nWidth = static_cast<long>( pDocument->GetColWidth( nCol,nTab ) * nPPT );
                 bAddMargin = false;
                 if ( pPattern->GetRotateDir( pCondSet ) == ScRotateDir::Right )
-                    nWidth += (long)( pDocument->GetRowHeight( nRow,nTab ) *
+                    nWidth += static_cast<long>( pDocument->GetRowHeight( nRow,nTab ) *
                                         nPPT * nCosAbs / nSinAbs );
             }
             else
-                nWidth  = (long)( aSize.Height() / nSinAbs );   //TODO: limit?
+                nWidth  = static_cast<long>( aSize.Height() / nSinAbs );   //TODO: limit?
             aSize = Size( nWidth, nHeight );
 
             Size aPixSize = pDev->LogicToPixel( aSize, aHMMMode );
@@ -528,20 +528,20 @@ long ScColumn::GetNeededSize(
         {
             if (bWidth)
             {
-                nValue += (long) ( pMargin->GetLeftMargin() * nPPT ) +
-                          (long) ( pMargin->GetRightMargin() * nPPT );
+                nValue += static_cast<long>( pMargin->GetLeftMargin() * nPPT ) +
+                          static_cast<long>( pMargin->GetRightMargin() * nPPT );
                 if (nIndent)
-                    nValue += (long) ( nIndent * nPPT );
+                    nValue += static_cast<long>( nIndent * nPPT );
             }
             else
             {
-                nValue += (long) ( pMargin->GetTopMargin() * nPPT ) +
-                          (long) ( pMargin->GetBottomMargin() * nPPT );
+                nValue += static_cast<long>( pMargin->GetTopMargin() * nPPT ) +
+                          static_cast<long>( pMargin->GetBottomMargin() * nPPT );
 
                 if ( bAsianVertical && pDev->GetOutDevType() != OUTDEV_PRINTER )
                 {
                     //  add 1pt extra (default margin value) for line breaks with SetVertical
-                    nValue += (long) ( 20 * nPPT );
+                    nValue += static_cast<long>( 20 * nPPT );
                 }
             }
         }
@@ -658,8 +658,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX );
         pDev->SetFont( aFont );
         const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
-        long nMargin = (long) ( pMargin->GetLeftMargin() * nPPTX ) +
-                        (long) ( pMargin->GetRightMargin() * nPPTX );
+        long nMargin = static_cast<long>( pMargin->GetLeftMargin() * nPPTX ) +
+                        static_cast<long>( pMargin->GetRightMargin() * nPPTX );
 
         // Try to find the row that has the longest string, and measure the width of that string.
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
@@ -724,8 +724,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                     aOptions.pPattern = pPattern;
                     aOptions.bGetFont = (pPattern != pOldPattern || nScript != SvtScriptType::NONE);
                     pOldPattern = pPattern;
-                    sal_uInt16 nThis = (sal_uInt16) GetNeededSize(
-                        nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern);
+                    sal_uInt16 nThis = static_cast<sal_uInt16>(GetNeededSize(
+                        nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern));
                     if (nThis)
                     {
                         if (nThis > nWidth || !bFound)
@@ -742,7 +742,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
     if (bFound)
     {
         nWidth += 2;
-        sal_uInt16 nTwips = (sal_uInt16) (nWidth / nPPTX);
+        sal_uInt16 nTwips = static_cast<sal_uInt16>(nWidth / nPPTX);
         return nTwips;
     }
     else
@@ -943,8 +943,7 @@ void ScColumn::GetOptimalHeight(
                         {
                             aOptions.pPattern = pPattern;
                             const ScPatternAttr* pOldPattern = pPattern;
-                            sal_uInt16 nHeight = (sal_uInt16)
-                                    ( GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
+                            sal_uInt16 nHeight = static_cast<sal_uInt16>( GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
                                                         rCxt.getZoomX(), rCxt.getZoomY(), false, aOptions,
                                                         &pPattern) / rCxt.getPPTY() );
                             if (nHeight > rHeights.getValue(nRow))

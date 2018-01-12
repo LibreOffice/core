@@ -43,7 +43,7 @@ void PaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
         OUString aStr = SvxResId(pPaperAry[i].first);
         Paper eSize = (Paper)pPaperAry[i].second;
         sal_Int32 nPos = InsertEntry( aStr );
-        SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)eSize) );
+        SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(eSize)) );
     }
 }
 

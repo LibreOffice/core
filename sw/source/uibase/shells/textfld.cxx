@@ -645,7 +645,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SwScriptField* pField = static_cast<SwScriptField*>(aMgr.GetCurField());
                     bNew = !pField || (pField->GetTyp()->Which() != SwFieldIds::Script);
-                    bUpdate = pField && ( bIsUrl != (bool)pField->GetFormat() || pField->GetPar2() != aType || pField->GetPar1() != aText );
+                    bUpdate = pField && ( bIsUrl != static_cast<bool>(pField->GetFormat()) || pField->GetPar2() != aType || pField->GetPar1() != aText );
                 }
                 else
                 {
@@ -891,7 +891,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     const OUString& rName   = rHlnkItem.GetName();
     const OUString& rURL    = rHlnkItem.GetURL();
     const OUString& rTarget = rHlnkItem.GetTargetFrame();
-    sal_uInt16 nType =  (sal_uInt16)rHlnkItem.GetInsertMode();
+    sal_uInt16 nType =  static_cast<sal_uInt16>(rHlnkItem.GetInsertMode());
     nType &= ~HLINK_HTMLMODE;
     const SvxMacroTableDtor* pMacroTable = rHlnkItem.GetMacroTable();
 

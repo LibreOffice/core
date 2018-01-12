@@ -170,7 +170,7 @@ Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
 Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal_Int32 nIndex) const
 {
     //  NumberingRule aRule;
-    const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);
+    const SvxNumberFormat& rFmt = maRule.GetLevel(static_cast<sal_uInt16>(nIndex));
     sal_uInt16 nIdx = 0;
 
     const int nProps = 15;
@@ -178,7 +178,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
 
     Any aVal;
     {
-        aVal <<= (sal_uInt16)rFmt.GetNumberingType();
+        aVal <<= static_cast<sal_uInt16>(rFmt.GetNumberingType());
         beans::PropertyValue aAlignProp( UNO_NAME_NRULE_NUMBERINGTYPE, -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aAlignProp;
     }
@@ -241,21 +241,21 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
         pArray[nIdx++] = aGraphicSizeProp;
     }
 
-    aVal <<= (sal_Int16)rFmt.GetStart();
+    aVal <<= static_cast<sal_Int16>(rFmt.GetStart());
     pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_START_WITH, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= (sal_Int32)rFmt.GetAbsLSpace();
+    aVal <<= static_cast<sal_Int32>(rFmt.GetAbsLSpace());
     pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_LEFT_MARGIN, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= (sal_Int32)rFmt.GetFirstLineOffset();
+    aVal <<= static_cast<sal_Int32>(rFmt.GetFirstLineOffset());
     pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_FIRST_LINE_OFFSET, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     pArray[nIdx++] = beans::PropertyValue("SymbolTextDistance", -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= (sal_Int32)rFmt.GetBulletColor().GetColor();
+    aVal <<= static_cast<sal_Int32>(rFmt.GetBulletColor().GetColor());
     pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_BULLET_COLOR, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= (sal_Int16)rFmt.GetBulletRelSize();
+    aVal <<= static_cast<sal_Int16>(rFmt.GetBulletRelSize());
     pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_BULLET_RELSIZE, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     DBG_ASSERT( nIdx <= nProps, "FixMe: overflow in Array!!! [CL]" );
@@ -266,7 +266,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
 
 void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::PropertyValue >& rProperties, sal_Int32 nIndex)
 {
-    SvxNumberFormat aFmt(maRule.GetLevel( (sal_uInt16)nIndex ));
+    SvxNumberFormat aFmt(maRule.GetLevel( static_cast<sal_uInt16>(nIndex) ));
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     for(int i = 0; i < rProperties.getLength(); i++)
     {
@@ -337,7 +337,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             sal_Int16 nAdjust = sal_Int16();
             if( aVal >>= nAdjust )
             {
-                aFmt.SetNumAdjust(ConvertUnoAdjust( (unsigned short)nAdjust ));
+                aFmt.SetNumAdjust(ConvertUnoAdjust( static_cast<unsigned short>(nAdjust) ));
                 continue;
             }
         }
@@ -397,7 +397,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             sal_Int32 nMargin = 0;
             if( aVal >>= nMargin )
             {
-                aFmt.SetAbsLSpace((sal_uInt16)nMargin);
+                aFmt.SetAbsLSpace(static_cast<sal_uInt16>(nMargin));
                 continue;
             }
         }
@@ -406,7 +406,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             sal_Int32 nMargin = 0;
             if( aVal >>= nMargin )
             {
-                aFmt.SetFirstLineOffset((sal_uInt16)nMargin);
+                aFmt.SetFirstLineOffset(static_cast<sal_uInt16>(nMargin));
                 continue;
             }
         }
@@ -415,7 +415,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             sal_Int32 nTextDistance = 0;
             if( aVal >>= nTextDistance )
             {
-                aFmt.SetCharTextDistance((sal_uInt16)nTextDistance);
+                aFmt.SetCharTextDistance(static_cast<sal_uInt16>(nTextDistance));
                 continue;
             }
         }
@@ -439,7 +439,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
                     nSize = 100;
                 }
 
-                aFmt.SetBulletRelSize( (short)nSize );
+                aFmt.SetBulletRelSize( static_cast<short>(nSize) );
                 continue;
             }
         }
@@ -461,7 +461,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             aFmt.SetGraphicBrush( &aBrushItem );
         }
     }
-    maRule.SetLevel( (sal_uInt16)nIndex, aFmt );
+    maRule.SetLevel( static_cast<sal_uInt16>(nIndex), aFmt );
 }
 
 const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > const & xRule )

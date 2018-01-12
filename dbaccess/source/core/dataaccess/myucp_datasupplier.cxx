@@ -104,7 +104,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
+    if ( static_cast<size_t>(nIndex) < m_pImpl->m_aResults.size() )
     {
         OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( !aId.isEmpty() )
@@ -134,7 +134,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
+    if ( static_cast<size_t>(nIndex) < m_pImpl->m_aResults.size() )
     {
         Reference< XContentIdentifier > xId = m_pImpl->m_aResults[ nIndex ]->xId;
         if ( xId.is() )
@@ -159,7 +159,7 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( (size_t)_nIndex < m_pImpl->m_aResults.size() )
+    if ( static_cast<size_t>(_nIndex) < m_pImpl->m_aResults.size() )
     {
         Reference< XContent > xContent = m_pImpl->m_aResults[ _nIndex ]->xContent.get();
         if ( xContent.is() )
@@ -196,7 +196,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
+    if ( static_cast<size_t>(nIndex) < m_pImpl->m_aResults.size() )
     {
         // Result already present.
         return true;
@@ -242,7 +242,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
         // Callbacks follow!
         aGuard.clear();
 
-        if ( (size_t)nOldCount < m_pImpl->m_aResults.size() )
+        if ( static_cast<size_t>(nOldCount) < m_pImpl->m_aResults.size() )
             xResultSet->rowCountChanged(
                                     nOldCount, m_pImpl->m_aResults.size() );
 
@@ -278,7 +278,7 @@ sal_uInt32 DataSupplier::totalCount()
         // Callbacks follow!
         aGuard.clear();
 
-        if ( (size_t)nOldCount < m_pImpl->m_aResults.size() )
+        if ( static_cast<size_t>(nOldCount) < m_pImpl->m_aResults.size() )
             xResultSet->rowCountChanged(
                                     nOldCount, m_pImpl->m_aResults.size() );
 
@@ -303,7 +303,7 @@ DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
+    if ( static_cast<size_t>(nIndex) < m_pImpl->m_aResults.size() )
     {
         Reference< XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
         if ( xRow.is() )
@@ -330,7 +330,7 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
+    if ( static_cast<size_t>(nIndex) < m_pImpl->m_aResults.size() )
         m_pImpl->m_aResults[ nIndex ]->xRow.clear();
 }
 

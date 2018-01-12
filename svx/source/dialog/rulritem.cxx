@@ -467,7 +467,7 @@ bool SvxColumnItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= bOrtho;
             break;
         case MID_ACTUAL:
-            rVal <<= (sal_Int32) nActColumn;
+            rVal <<= static_cast<sal_Int32>(nActColumn);
             break;
         case MID_TABLE:
             rVal <<= bTable;
@@ -499,15 +499,15 @@ bool SvxColumnItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             break;
         case MID_ORTHO:
             rVal >>= nVal;
-            bOrtho = (bool) nVal;
+            bOrtho = static_cast<bool>(nVal);
             break;
         case MID_ACTUAL:
             rVal >>= nVal;
-            nActColumn = (sal_uInt16) nVal;
+            nActColumn = static_cast<sal_uInt16>(nVal);
             break;
         case MID_TABLE:
             rVal >>= nVal;
-            bTable = (bool) nVal;
+            bTable = static_cast<bool>(nVal);
             break;
         default:
             OSL_FAIL("Wrong MemberId!");

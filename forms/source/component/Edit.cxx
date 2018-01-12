@@ -510,7 +510,7 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         aCurrentText = m_xAggregateSet->getPropertyValue(PROPERTY_TEXT);
 
         m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN) >>= nOldTextLen;
-        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny((sal_Int16)0));
+        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny(sal_Int16(0)));
     }
 
     OEditBaseModel::write(_rxOutStream);
@@ -579,7 +579,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
                 if (nFieldLen && nFieldLen <= USHRT_MAX)
                 {
                     Any aVal;
-                    aVal <<= (sal_Int16)nFieldLen;
+                    aVal <<= static_cast<sal_Int16>(nFieldLen);
                     m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
 
                     m_bMaxTextLenModified = true;
@@ -601,7 +601,7 @@ void OEditModel::onDisconnectedDbColumn()
     if ( hasField() && m_bMaxTextLenModified )
     {
         Any aVal;
-        aVal <<= (sal_Int16)0;  // Only if it was 0, I switched it in onConnectedDbColumn
+        aVal <<= sal_Int16(0);  // Only if it was 0, I switched it in onConnectedDbColumn
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
         m_bMaxTextLenModified = false;
     }

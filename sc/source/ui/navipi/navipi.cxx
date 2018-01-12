@@ -233,7 +233,7 @@ SCCOL ColumnEdit::NumStrToAlpha( OUString& rStr )
     SCCOL  nColumn = 0;
 
     if ( CharClass::isAsciiNumeric(rStr) )
-        nColumn = NumToAlpha( (SCCOL)rStr.toInt32(), rStr );
+        nColumn = NumToAlpha( static_cast<SCCOL>(rStr.toInt32()), rStr );
     else
         rStr.clear();
 
@@ -304,7 +304,7 @@ Size RowEdit::GetOptimalSize() const
 void RowEdit::ExecuteRow()
 {
     SCCOL nCol = xDlg->aEdCol->GetCol();
-    SCROW nRow = (SCROW)GetValue();
+    SCROW nRow = static_cast<SCROW>(GetValue());
 
     if ( (nCol > 0) && (nRow > 0) )
         xDlg->SetCurrentCell(nCol - 1, nRow - 1);
@@ -923,7 +923,7 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
         if (eMode != NAV_LMODE_NONE)
         {
             ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
-            rCfg.SetListMode( (sal_uInt16) eMode );
+            rCfg.SetListMode( static_cast<sal_uInt16>(eMode) );
         }
 
         if (pNav)

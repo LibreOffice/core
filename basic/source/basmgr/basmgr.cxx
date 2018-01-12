@@ -1057,7 +1057,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
     // Use original name otherwise ImpLoadLibrary failes...
     pLibInfo->SetLibName( rLibName );
     // but doesn't work this way if name exists twice
-    sal_uInt16 nLibId = (sal_uInt16) mpImpl->aLibs.size() - 1;
+    sal_uInt16 nLibId = static_cast<sal_uInt16>(mpImpl->aLibs.size()) - 1;
 
     // Set StorageName before load because it is compared with pCurStorage
     pLibInfo->SetStorageName( aStorageName );
@@ -1194,7 +1194,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 
 sal_uInt16 BasicManager::GetLibCount() const
 {
-    return (sal_uInt16)mpImpl->aLibs.size();
+    return static_cast<sal_uInt16>(mpImpl->aLibs.size());
 }
 
 StarBASIC* BasicManager::GetLib( sal_uInt16 nLib ) const
@@ -1231,7 +1231,7 @@ sal_uInt16 BasicManager::GetLibId( const OUString& rName ) const
     {
         if (mpImpl->aLibs[i]->GetLibName().equalsIgnoreAsciiCase( rName ))
         {
-            return (sal_uInt16)i;
+            return static_cast<sal_uInt16>(i);
         }
     }
     return LIB_NOTFOUND;
@@ -1473,8 +1473,8 @@ namespace
     SbMethod* lcl_queryMacro( BasicManager* i_manager, OUString const& i_fullyQualifiedName )
     {
         sal_Int32 nLast = 0;
-        OUString sLibName = i_fullyQualifiedName.getToken( (sal_Int32)0, '.', nLast );
-        OUString sModule = i_fullyQualifiedName.getToken( (sal_Int32)0, '.', nLast );
+        OUString sLibName = i_fullyQualifiedName.getToken( sal_Int32(0), '.', nLast );
+        OUString sModule = i_fullyQualifiedName.getToken( sal_Int32(0), '.', nLast );
         OUString sMacro;
         if(nLast >= 0)
         {

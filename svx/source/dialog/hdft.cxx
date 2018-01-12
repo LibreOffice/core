@@ -307,15 +307,15 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
 
     // Margins
     SvxLRSpaceItem aLR( nWLRSpace );
-    aLR.SetLeft( (sal_uInt16)GetCoreValue( *m_pLMEdit, eUnit ) );
-    aLR.SetRight( (sal_uInt16)GetCoreValue( *m_pRMEdit, eUnit ) );
+    aLR.SetLeft( static_cast<sal_uInt16>(GetCoreValue( *m_pLMEdit, eUnit )) );
+    aLR.SetRight( static_cast<sal_uInt16>(GetCoreValue( *m_pRMEdit, eUnit )) );
     aSet.Put( aLR );
 
     SvxULSpaceItem aUL( nWULSpace );
     if ( nId == SID_ATTR_PAGE_HEADERSET )
-        aUL.SetLower( (sal_uInt16)nDist );
+        aUL.SetLower( static_cast<sal_uInt16>(nDist) );
     else
-        aUL.SetUpper( (sal_uInt16)nDist );
+        aUL.SetUpper( static_cast<sal_uInt16>(nDist) );
     aSet.Put( aUL );
 
     // Background and border?
@@ -1034,7 +1034,7 @@ void SvxHFPage::RangeHdl()
     long nFHeight = m_pBspWin->GetFtHeight();
     long nFDist   = m_pBspWin->GetFtDist();
 
-    long nHeight = std::max( (long)MINBODY,
+    long nHeight = std::max( long(MINBODY),
         static_cast<long>(m_pHeightEdit->Denormalize( m_pHeightEdit->GetValue( FUNIT_TWIP ) ) ) );
     long nDist   = m_pTurnOnBox->IsChecked() ?
         static_cast<long>(m_pDistEdit->Denormalize( m_pDistEdit->GetValue( FUNIT_TWIP ) )) : 0;

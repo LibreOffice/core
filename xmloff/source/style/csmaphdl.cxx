@@ -84,12 +84,12 @@ bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
 
     if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
     {
-        rValue <<= (sal_Int16)style::CaseMap::SMALLCAPS;
+        rValue <<= sal_Int16(style::CaseMap::SMALLCAPS);
         bRet = true;
     }
     else if( IsXMLToken( rStrImpValue, XML_CASEMAP_NORMAL ) )
     {
-        rValue <<= (sal_Int16)style::CaseMap::NONE;
+        rValue <<= sal_Int16(style::CaseMap::NONE);
         bRet = true;
     }
 

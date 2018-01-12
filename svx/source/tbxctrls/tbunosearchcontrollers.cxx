@@ -127,11 +127,11 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     auto aArgs( comphelper::InitPropertySequence( {
         { "SearchItem.SearchString", css::uno::makeAny( sFindText ) },
         { "SearchItem.Backward", css::uno::makeAny( aSearchBackwards ) },
-        { "SearchItem.SearchFlags", css::uno::makeAny( (sal_Int32)0 ) },
+        { "SearchItem.SearchFlags", css::uno::makeAny( sal_Int32(0) ) },
         { "SearchItem.TransliterateFlags", css::uno::makeAny( (sal_Int32)nFlags ) },
         { "SearchItem.Command", css::uno::makeAny( (sal_Int16)(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
         { "SearchItem.AlgorithmType", css::uno::makeAny( (sal_Int16)css::util::SearchAlgorithms_ABSOLUTE ) },
-        { "SearchItem.AlgorithmType2", css::uno::makeAny( (sal_Int16)css::util::SearchAlgorithms2::ABSOLUTE ) },
+        { "SearchItem.AlgorithmType2", css::uno::makeAny( sal_Int16(css::util::SearchAlgorithms2::ABSOLUTE) ) },
         { "SearchItem.SearchFormatted", css::uno::makeAny( bSearchFormatted ) }
     } ) );
 

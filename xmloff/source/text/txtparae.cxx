@@ -1007,7 +1007,7 @@ void XMLTextParagraphExport::exportListChange(
                     if ( rNextInfo.HasStartValue() )
                     {
                         OUStringBuffer aBuffer;
-                        aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
+                        aBuffer.append( static_cast<sal_Int32>(rNextInfo.GetStartValue()) );
                         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
                                       aBuffer.makeStringAndClear() );
                     }
@@ -1084,7 +1084,7 @@ void XMLTextParagraphExport::exportListChange(
     if( rNextInfo.HasStartValue() )
     {
         OUStringBuffer aBuffer;
-        aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
+        aBuffer.append( static_cast<sal_Int32>(rNextInfo.GetStartValue()) );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
                                   aBuffer.makeStringAndClear() );
     }
@@ -1093,7 +1093,7 @@ void XMLTextParagraphExport::exportListChange(
               rNextInfo.GetLevel() == 1 )
     {
         OUStringBuffer aBuffer;
-        aBuffer.append( (sal_Int32)rNextInfo.GetListLevelStartValue() );
+        aBuffer.append( static_cast<sal_Int32>(rNextInfo.GetListLevelStartValue()) );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
                                   aBuffer.makeStringAndClear() );
     }

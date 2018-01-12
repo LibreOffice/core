@@ -63,8 +63,8 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
     // tdf#98646 check if Rectangle which contains the bounds of the region to
     // be shown eventually contains values that cause overflows when processing
     // e.g. when calling GetWidth()
-    const bool bOverflowInX(!rtl::math::approxEqual((double)rRect.getWidth(), (double)rRect.Right() - (double)rRect.Left()));
-    const bool bOverflowInY(!rtl::math::approxEqual((double)rRect.getHeight(), (double)rRect.Bottom() - (double)rRect.Top()));
+    const bool bOverflowInX(!rtl::math::approxEqual(static_cast<double>(rRect.getWidth()), static_cast<double>(rRect.Right()) - static_cast<double>(rRect.Left())));
+    const bool bOverflowInY(!rtl::math::approxEqual(static_cast<double>(rRect.getHeight()), static_cast<double>(rRect.Bottom()) - static_cast<double>(rRect.Top())));
 
     if(bOverflowInX || bOverflowInY)
     {

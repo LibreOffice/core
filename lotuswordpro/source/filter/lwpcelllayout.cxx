@@ -164,7 +164,7 @@ void LwpCellLayout::ApplyPadding(XFCellStyle *pCellStyle)
     double fRight = GetMarginsValue(MARGIN_RIGHT);
     double fTop = GetMarginsValue(MARGIN_TOP);
     double fBottom = GetMarginsValue(MARGIN_BOTTOM);
-    pCellStyle->SetPadding((float)fLeft,(float)fRight,(float)fTop,(float)fBottom);
+    pCellStyle->SetPadding(static_cast<float>(fLeft),static_cast<float>(fRight),static_cast<float>(fTop),static_cast<float>(fBottom));
 }
 /**
  * @short   Apply border to cell style according to cell position, default cell layout won't use this function
@@ -619,7 +619,7 @@ void LwpCellLayout::Read()
     else
     {
         crowid = pStrm->QuickReaduInt16();
-        ccolid = (sal_uInt8) pStrm->QuickReaduInt16();  // written as a lushort
+        ccolid = static_cast<sal_uInt8>(pStrm->QuickReaduInt16());  // written as a lushort
 
         sal_uInt16 type;
 
@@ -817,7 +817,7 @@ void LwpConnectedCellLayout::Read()
 
     cnumrows = m_pObjStrm->QuickReaduInt16();
     numcols = m_pObjStrm->QuickReaduInt16();        // written as a lushort
-    cnumcols = (sal_uInt8)numcols;
+    cnumcols = static_cast<sal_uInt8>(numcols);
 
     m_nRealrowspan = cnumrows;
     m_nRealcolspan = cnumcols;

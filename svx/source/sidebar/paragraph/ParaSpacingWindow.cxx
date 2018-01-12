@@ -99,8 +99,8 @@ IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
     if(pDisp)
     {
         SvxULSpaceItem aMargin(SID_ATTR_PARA_ULSPACE);
-        aMargin.SetUpper((sal_uInt16)GetCoreValue(*m_pAboveSpacing, m_eUnit));
-        aMargin.SetLower((sal_uInt16)GetCoreValue(*m_pBelowSpacing, m_eUnit));
+        aMargin.SetUpper(static_cast<sal_uInt16>(GetCoreValue(*m_pAboveSpacing, m_eUnit)));
+        aMargin.SetLower(static_cast<sal_uInt16>(GetCoreValue(*m_pBelowSpacing, m_eUnit)));
         pDisp->ExecuteList(SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, {&aMargin});
     }
 }
@@ -211,7 +211,7 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         long aTxtRight = pSpace->GetRight();
         long aTxtFirstLineOfst = pSpace->GetTextFirstLineOfst();
 
-        aTxtLeft = (long)m_pBeforeSpacing->Normalize(aTxtLeft);
+        aTxtLeft = static_cast<long>(m_pBeforeSpacing->Normalize(aTxtLeft));
 
         if(m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)
              && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
@@ -220,7 +220,7 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
             m_pFLSpacing->SetMin(aTxtLeft*-1, FUNIT_100TH_MM);
         }
 
-        aTxtRight = (long)m_pAfterSpacing->Normalize(aTxtRight);
+        aTxtRight = static_cast<long>(m_pAfterSpacing->Normalize(aTxtRight));
 
         switch(m_aContext.GetCombinedContext_DI())
         {
@@ -250,7 +250,7 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         m_pBeforeSpacing->SetValue(aTxtLeft, FUNIT_100TH_MM);
         m_pAfterSpacing->SetValue(aTxtRight, FUNIT_100TH_MM);
 
-        aTxtFirstLineOfst = (long)m_pFLSpacing->Normalize(aTxtFirstLineOfst);
+        aTxtFirstLineOfst = static_cast<long>(m_pFLSpacing->Normalize(aTxtFirstLineOfst));
         m_pFLSpacing->SetValue(aTxtFirstLineOfst, FUNIT_100TH_MM);
     }
     else if(eState == SfxItemState::DISABLED)
@@ -286,7 +286,7 @@ IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, Edit&, void)
         SvxLRSpaceItem aMargin(SID_ATTR_PARA_LRSPACE);
         aMargin.SetTextLeft(GetCoreValue(*m_pBeforeSpacing, m_eUnit));
         aMargin.SetRight(GetCoreValue(*m_pAfterSpacing, m_eUnit));
-        aMargin.SetTextFirstLineOfst((short)GetCoreValue(*m_pFLSpacing, m_eUnit));
+        aMargin.SetTextFirstLineOfst(static_cast<short>(GetCoreValue(*m_pFLSpacing, m_eUnit)));
 
         pDisp->ExecuteList(SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, {&aMargin});
     }

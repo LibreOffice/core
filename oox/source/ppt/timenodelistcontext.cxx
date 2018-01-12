@@ -607,7 +607,7 @@ namespace oox { namespace ppt {
                 // TODO what to do with mbZoomContents
                 mbZoomContents = attribs.getBool( XML_zoomContents, false );
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
-                    <<= (sal_Int16)AnimationTransformType::SCALE;
+                    <<= sal_Int16(AnimationTransformType::SCALE);
             }
 
         virtual void onEndElement() override
@@ -685,7 +685,7 @@ namespace oox { namespace ppt {
                 AttributeList attribs( xAttribs );
 
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
-                    <<= (sal_Int16)AnimationTransformType::ROTATE;
+                    <<= sal_Int16(AnimationTransformType::ROTATE);
                 // see also DFF_msofbtAnimateRotationData in
                 // sd/source/filter/ppt/pptinanimations.cxx
                 if(attribs.hasAttribute( XML_by ) )
@@ -730,7 +730,7 @@ namespace oox { namespace ppt {
             : TimeNodeContext( rParent, aElement, pNode )
             {
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
-                    <<= (sal_Int16)AnimationTransformType::TRANSLATE;
+                    <<= sal_Int16(AnimationTransformType::TRANSLATE);
 
                 AttributeList attribs( xAttribs );
                 sal_Int32 nOrigin = xAttribs->getOptionalValueToken( XML_origin, 0 );

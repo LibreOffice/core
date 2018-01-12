@@ -42,10 +42,10 @@
 #define SPLITWIN_SPLITSIZEAUTOHIDE      72
 #define SPLITWIN_SPLITSIZEFADE          72
 
-#define SPLIT_HORZ              ((sal_uInt16)0x0001)
-#define SPLIT_VERT              ((sal_uInt16)0x0002)
-#define SPLIT_WINDOW            ((sal_uInt16)0x0004)
-#define SPLIT_NOSPLIT           ((sal_uInt16)0x8000)
+#define SPLIT_HORZ              (sal_uInt16(0x0001))
+#define SPLIT_VERT              (sal_uInt16(0x0002))
+#define SPLIT_WINDOW            (sal_uInt16(0x0004))
+#define SPLIT_NOSPLIT           (sal_uInt16(0x8000))
 
 class ImplSplitItem
 {
@@ -524,7 +524,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                 }
             }
             // do not compensate rounding errors here
-            if ( (nAbsItems < (sal_uInt16)(std::abs( nSizeDelta ))) && nSizeWinSize )
+            if ( (nAbsItems < static_cast<sal_uInt16>(std::abs( nSizeDelta ))) && nSizeWinSize )
             {
                 long nNewSizeWinSize = 0;
 

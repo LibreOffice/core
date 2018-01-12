@@ -2066,11 +2066,11 @@ sal_uInt16 SwTextFrame::GetParHeight() const
     if( !HasPara() )
     {   // For non-empty paragraphs this is a special case
         // For UnderSized we can simply just ask 1 Twip more
-        sal_uInt16 nRet = (sal_uInt16)getFramePrintArea().SSize().Height();
+        sal_uInt16 nRet = static_cast<sal_uInt16>(getFramePrintArea().SSize().Height());
         if( IsUndersized() )
         {
             if( IsEmpty() || GetText().isEmpty() )
-                nRet = (sal_uInt16)EmptyHeight();
+                nRet = static_cast<sal_uInt16>(EmptyHeight());
             else
                 ++nRet;
         }
@@ -2168,7 +2168,7 @@ SwTwips SwTextFrame::CalcFitToContent()
     SwHookOut aHook( aInf );
 
     // i#54031 - assure mininum of MINLAY twips.
-    const SwTwips nMax = std::max( (SwTwips)MINLAY, aLine.CalcFitToContent_() + 1 );
+    const SwTwips nMax = std::max( SwTwips(MINLAY), aLine.CalcFitToContent_() + 1 );
 
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -2466,7 +2466,7 @@ sal_uInt16 SwTextFrame::FirstLineHeight() const
     if ( !HasPara() )
     {
         if( IsEmpty() && isFrameAreaDefinitionValid() )
-            return IsVertical() ? (sal_uInt16)getFramePrintArea().Width() : (sal_uInt16)getFramePrintArea().Height();
+            return IsVertical() ? static_cast<sal_uInt16>(getFramePrintArea().Width()) : static_cast<sal_uInt16>(getFramePrintArea().Height());
         return USHRT_MAX;
     }
     const SwParaPortion *pPara = GetPara();
@@ -2509,7 +2509,7 @@ void SwTextFrame::ChgThisLines()
         if ( rInf.IsCountBlankLines() )
         {
             aLine.Bottom();
-            nNew = (sal_uLong)aLine.GetLineNr();
+            nNew = static_cast<sal_uLong>(aLine.GetLineNr());
         }
         else
         {

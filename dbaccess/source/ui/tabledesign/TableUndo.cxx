@@ -328,7 +328,7 @@ void OPrimKeyUndoAct::Undo()
     long nIndex;
 
     // delete inserted keys
-    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
+    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != long(SFX_ENDOFSELECTION); nIndex=m_aInsKeys.NextSelected() )
     {
         OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
@@ -336,7 +336,7 @@ void OPrimKeyUndoAct::Undo()
     }
 
     // restore deleted keys
-    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
+    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != long(SFX_ENDOFSELECTION); nIndex=m_aDelKeys.NextSelected() )
     {
         OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
@@ -353,11 +353,11 @@ void OPrimKeyUndoAct::Redo()
     long nIndex;
 
     // delete the deleted keys
-    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
+    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != long(SFX_ENDOFSELECTION); nIndex=m_aDelKeys.NextSelected() )
         (*pRowList)[nIndex]->SetPrimaryKey( false );
 
     // restore the inserted keys
-    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
+    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != long(SFX_ENDOFSELECTION); nIndex=m_aInsKeys.NextSelected() )
         (*pRowList)[nIndex]->SetPrimaryKey( true );
 
     m_pEditorCtrl->InvalidateHandleColumn();

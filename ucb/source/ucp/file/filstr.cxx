@@ -146,8 +146,8 @@ XStream_impl::readBytes(
     {
         throw io::IOException( THROW_WHERE );
     }
-    aData = uno::Sequence< sal_Int8 > ( buffer.get(), (sal_uInt32)nrc );
-    return ( sal_Int32 ) nrc;
+    aData = uno::Sequence< sal_Int8 > ( buffer.get(), static_cast<sal_uInt32>(nrc) );
+    return static_cast<sal_Int32>(nrc);
 }
 
 

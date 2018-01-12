@@ -304,7 +304,7 @@ void SfxFrame::GetViewData_Impl()
         }
 
         if ( pViewFrame->GetCurViewId() )
-            pSet->Put( SfxUInt16Item( SID_VIEW_ID, (sal_uInt16)pViewFrame->GetCurViewId() ) );
+            pSet->Put( SfxUInt16Item( SID_VIEW_ID, static_cast<sal_uInt16>(pViewFrame->GetCurViewId()) ) );
     }
 }
 

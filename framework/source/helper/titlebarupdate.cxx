@@ -282,7 +282,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     if ( pWindow && ( pWindow->GetType() == WindowType::WORKWINDOW ) )
     {
         WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
-        pWorkWindow->SetIcon( (sal_uInt16)nIcon );
+        pWorkWindow->SetIcon( static_cast<sal_uInt16>(nIcon) );
 
         css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
         OUString aURL;

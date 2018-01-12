@@ -76,7 +76,7 @@ inline BitmapChecksum vcl_get_checksum (
     sal_uInt32 DatLen
 )
 {
-    return (BitmapChecksum)(vcl_crc64( Checksum, Data, DatLen ));
+    return static_cast<BitmapChecksum>(vcl_crc64( Checksum, Data, DatLen ));
 }
 
 

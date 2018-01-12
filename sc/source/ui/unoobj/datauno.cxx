@@ -421,8 +421,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             if ( rProp.Value >>= aAddress )
             {
                 rParam.nDestTab = aAddress.Sheet;
-                rParam.nDestCol = (SCCOL)aAddress.Column;
-                rParam.nDestRow = (SCROW)aAddress.Row;
+                rParam.nDestCol = static_cast<SCCOL>(aAddress.Column);
+                rParam.nDestRow = static_cast<SCROW>(aAddress.Row);
             }
         }
         else if (aPropName == SC_UNONAME_ISULIST)
@@ -431,7 +431,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         {
             sal_Int32 nVal = 0;
             if ( rProp.Value >>= nVal )
-                rParam.nUserIndex = (sal_uInt16)nVal;
+                rParam.nUserIndex = static_cast<sal_uInt16>(nVal);
         }
         else if (aPropName == SC_UNONAME_COLLLOC)
         {
@@ -474,7 +474,7 @@ void SAL_CALL ScSubTotalFieldObj::setGroupColumn( sal_Int32 nGroupColumn )
     ScSubTotalParam aParam;
     xParent->GetData(aParam);
 
-    aParam.nField[nPos] = (SCCOL)nGroupColumn;
+    aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
 
     xParent->PutData(aParam);
 }
@@ -638,7 +638,7 @@ sal_Int32 SAL_CALL ScSubTotalDescriptorBase::getCount()
 uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XSubTotalField> xField(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    uno::Reference<sheet::XSubTotalField> xField(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xField.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -692,7 +692,7 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
     {
         sal_Int32 nVal = 0;
         if ( aValue >>= nVal )
-            aParam.nUserIndex = (sal_uInt16)nVal;
+            aParam.nUserIndex = static_cast<sal_uInt16>(nVal);
     }
     else if (aPropertyName == SC_UNONAME_MAXFLD )
     {
@@ -729,9 +729,9 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const OUString& aP
     else if (aPropertyName == SC_UNONAME_ULIST || aPropertyName == SC_UNONAME_ENUSLIST )
         aRet <<= aParam.bUserDef;
     else if (aPropertyName == SC_UNONAME_UINDEX || aPropertyName == SC_UNONAME_USINDEX )
-        aRet <<= (sal_Int32) aParam.nUserIndex;
+        aRet <<= static_cast<sal_Int32>(aParam.nUserIndex);
     else if (aPropertyName == SC_UNONAME_MAXFLD )
-        aRet <<= (sal_Int32) MAXSUBTOTAL;
+        aRet <<= sal_Int32(MAXSUBTOTAL);
 
     return aRet;
 }
@@ -871,7 +871,7 @@ void SAL_CALL ScConsolidationDescriptor::setSources(
                     const uno::Sequence<table::CellRangeAddress>& aSources )
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = (sal_uInt16)aSources.getLength();
+    sal_uInt16 nCount = static_cast<sal_uInt16>(aSources.getLength());
     if (nCount)
     {
         const table::CellRangeAddress* pAry = aSources.getConstArray();
@@ -905,8 +905,8 @@ void SAL_CALL ScConsolidationDescriptor::setStartOutputPosition(
                                 const table::CellAddress& aStartOutputPosition )
 {
     SolarMutexGuard aGuard;
-    aParam.nCol = (SCCOL)aStartOutputPosition.Column;
-    aParam.nRow = (SCROW)aStartOutputPosition.Row;
+    aParam.nCol = static_cast<SCCOL>(aStartOutputPosition.Column);
+    aParam.nRow = static_cast<SCROW>(aStartOutputPosition.Row);
     aParam.nTab = aStartOutputPosition.Sheet;
 }
 
@@ -1424,8 +1424,8 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
         if ( aValue >>= aAddress )
         {
             aParam.nDestTab = aAddress.Sheet;
-            aParam.nDestCol = (SCCOL)aAddress.Column;
-            aParam.nDestRow = (SCROW)aAddress.Row;
+            aParam.nDestCol = static_cast<SCCOL>(aAddress.Column);
+            aParam.nDestRow = static_cast<SCROW>(aAddress.Row);
         }
     }
     else if (aPropertyName == SC_UNONAME_SAVEOUT)
@@ -1454,7 +1454,7 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const OUString& aPro
     else if (aPropertyName == SC_UNONAME_ISCASE )
         aRet <<= aParam.bCaseSens;
     else if (aPropertyName == SC_UNONAME_MAXFLD )
-        aRet <<= (sal_Int32) aParam.GetEntryCount();
+        aRet <<= static_cast<sal_Int32>(aParam.GetEntryCount());
     else if (aPropertyName == SC_UNONAME_ORIENT )
     {
         table::TableOrientation eOrient = aParam.bByRow ? table::TableOrientation_ROWS :
@@ -1682,8 +1682,8 @@ void SAL_CALL ScDatabaseRangeObj::setDataArea( const table::CellRangeAddress& aD
     {
         ScDBData aNewData( *pData );
         //! MoveTo ???
-        aNewData.SetArea( aDataArea.Sheet, (SCCOL)aDataArea.StartColumn, (SCROW)aDataArea.StartRow,
-                                           (SCCOL)aDataArea.EndColumn, (SCROW)aDataArea.EndRow );
+        aNewData.SetArea( aDataArea.Sheet, static_cast<SCCOL>(aDataArea.StartColumn), static_cast<SCROW>(aDataArea.StartRow),
+                                           static_cast<SCCOL>(aDataArea.EndColumn), static_cast<SCROW>(aDataArea.EndRow) );
         ScDBDocFunc aFunc(*pDocShell);
         aFunc.ModifyDBData(aNewData);
     }
@@ -2189,8 +2189,8 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
     {
         ScDBDocFunc aFunc(*pDocShell);
 
-        ScRange aNameRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
-                            (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
+        ScRange aNameRange( static_cast<SCCOL>(aRange.StartColumn), static_cast<SCROW>(aRange.StartRow), aRange.Sheet,
+                            static_cast<SCCOL>(aRange.EndColumn),   static_cast<SCROW>(aRange.EndRow),   aRange.Sheet );
         bDone = aFunc.AddDBRange( aName, aNameRange );
     }
     if (!bDone)
@@ -2346,8 +2346,8 @@ void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRan
             throw lang::IndexOutOfBoundsException();
 
         ScDBDocFunc aFunc(*pDocShell);
-        ScRange aUnnamedRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
-                            (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
+        ScRange aUnnamedRange( static_cast<SCCOL>(aRange.StartColumn), static_cast<SCROW>(aRange.StartRow), aRange.Sheet,
+                            static_cast<SCCOL>(aRange.EndColumn),   static_cast<SCROW>(aRange.EndRow),   aRange.Sheet );
         bDone = aFunc.AddDBRange( STR_DB_LOCAL_NONAME, aUnnamedRange );
     }
     if (!bDone)
@@ -2377,7 +2377,7 @@ sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
     {
          if (pDocShell->GetDocument().GetTableCount() <= nTab)
             throw lang::IndexOutOfBoundsException();
-        if (pDocShell->GetDocument().GetAnonymousDBData((SCTAB) nTab))
+        if (pDocShell->GetDocument().GetAnonymousDBData(static_cast<SCTAB>(nTab)))
             return true;
         return false;
     }

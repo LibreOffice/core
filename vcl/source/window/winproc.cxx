@@ -867,7 +867,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 nVCLEvent = VclEventId::NONE;
                 break;
         }
-        KeyEvent aKeyEvent((sal_Unicode)nCharCode, aKeyCode, nRepeat);
+        KeyEvent aKeyEvent(static_cast<sal_Unicode>(nCharCode), aKeyCode, nRepeat);
         if (nVCLEvent != VclEventId::NONE && Application::HandleKey(nVCLEvent, pWindow, &aKeyEvent))
             return true;
     }
@@ -878,7 +878,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         if( Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep() )
         {
             OUString aSep( pWindow->GetSettings().GetLocaleDataWrapper().getNumDecimalSep() );
-            nCharCode = (sal_uInt16) aSep[0];
+            nCharCode = static_cast<sal_uInt16>(aSep[0]);
         }
     }
 
@@ -972,7 +972,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
       pChildOutDev->HasMirroredGraphics() && pChild->IsRTLEnabled() )
         aKeyCode = vcl::KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
-    KeyEvent    aKeyEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
+    KeyEvent    aKeyEvt( static_cast<sal_Unicode>(nCharCode), aKeyCode, nRepeat );
     NotifyEvent aNotifyEvt( nSVEvent, pChild, &aKeyEvt );
     bool bKeyPreNotify = ImplCallPreNotify( aNotifyEvt );
     bool bRet = true;

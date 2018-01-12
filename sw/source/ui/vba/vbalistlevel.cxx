@@ -312,7 +312,7 @@ void SAL_CALL SwVbaListLevel::setResetOnHigher( ::sal_Int32 /*_resetonhigher*/ )
 
 void SAL_CALL SwVbaListLevel::setStartAt( ::sal_Int32 _startat )
 {
-    sal_Int16 nStartWith = (sal_Int16)_startat;
+    sal_Int16 nStartWith = static_cast<sal_Int16>(_startat);
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, "StartWith", uno::makeAny( nStartWith ) );
 }
 
@@ -364,7 +364,7 @@ void SAL_CALL SwVbaListLevel::setTextPosition( float _textposition )
 
 void SAL_CALL SwVbaListLevel::setTrailingCharacter( ::sal_Int32 _trailingcharacter )
 {
-    sal_Int16 nLabelFollowedBy = (sal_Int16)_trailingcharacter;
+    sal_Int16 nLabelFollowedBy = static_cast<sal_Int16>(_trailingcharacter);
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, "LabelFollowedBy", uno::makeAny( nLabelFollowedBy ) );
 }
 

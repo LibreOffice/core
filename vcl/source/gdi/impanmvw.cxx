@@ -127,13 +127,13 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size
 
     // calculate x scaling
     if( rAnmSize.Width() > 1 )
-        fFactX = (double) ( maSzPix.Width() - 1 ) / ( rAnmSize.Width() - 1 );
+        fFactX = static_cast<double>( maSzPix.Width() - 1 ) / ( rAnmSize.Width() - 1 );
     else
         fFactX = 1.0;
 
     // calculate y scaling
     if( rAnmSize.Height() > 1 )
-        fFactY = (double) ( maSzPix.Height() - 1 ) / ( rAnmSize.Height() - 1 );
+        fFactY = static_cast<double>( maSzPix.Height() - 1 ) / ( rAnmSize.Height() - 1 );
     else
         fFactY = 1.0;
 
@@ -171,7 +171,7 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
     std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( pRenderContext->GetClipRegion() ) : nullptr);
 
     aVDev->SetOutputSizePixel( maSzPix, false );
-    nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1 );
+    nPos = std::min( nPos, static_cast<sal_uLong>(mpParent->Count()) - 1 );
 
     for( sal_uLong i = 0; i <= nPos; i++ )
         draw( i, aVDev.get() );
@@ -212,7 +212,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         Size                    aSizePix;
         Size                    aBmpSizePix;
         const sal_uLong             nLastPos = mpParent->Count() - 1;
-        const AnimationBitmap&  rAnm = mpParent->Get( (sal_uInt16) ( mnActPos = std::min( nPos, nLastPos ) ) );
+        const AnimationBitmap&  rAnm = mpParent->Get( static_cast<sal_uInt16>( mnActPos = std::min( nPos, nLastPos ) ) );
 
         getPosSize( rAnm, aPosPix, aSizePix );
 

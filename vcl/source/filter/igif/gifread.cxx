@@ -205,7 +205,7 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
 
         if( pAcc1 )
         {
-            cTransIndex1 = (sal_uInt8) pAcc1->GetBestPaletteIndex( aWhite );
+            cTransIndex1 = static_cast<sal_uInt8>(pAcc1->GetBestPaletteIndex( aWhite ));
             cNonTransIndex1 = cTransIndex1 ? 0 : 1;
         }
         else
@@ -364,7 +364,7 @@ bool GIFReader::ReadExtension()
                                 rIStm.ReadUChar( cByte );
                                 nLoops = cByte;
                                 rIStm.ReadUChar( cByte );
-                                nLoops |= ( (sal_uInt16) cByte << 8 );
+                                nLoops |= ( static_cast<sal_uInt16>(cByte) << 8 );
                                 rIStm.ReadUChar( cByte );
 
                                 bStatus = ( cByte == 0 );
@@ -415,7 +415,7 @@ bool GIFReader::ReadExtension()
             bRet = true;
             while( cSize && bStatus && !rIStm.eof() )
             {
-                sal_uInt16 nCount = (sal_uInt16) cSize + 1;
+                sal_uInt16 nCount = static_cast<sal_uInt16>(cSize) + 1;
                 const sal_uInt64 nMaxPossible = rIStm.remainingSize();
                 if (nCount > nMaxPossible)
                     nCount = nMaxPossible;
@@ -537,8 +537,8 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
                 // lines will be copied if interlaced
                 if( nLastInterCount )
                 {
-                    long nMinY = std::min( (long) nLastImageY + 1, (long) nImageHeight - 1 );
-                    long nMaxY = std::min( (long) nLastImageY + nLastInterCount, (long) nImageHeight - 1 );
+                    long nMinY = std::min( static_cast<long>(nLastImageY) + 1, static_cast<long>(nImageHeight) - 1 );
+                    long nMaxY = std::min( static_cast<long>(nLastImageY) + nLastInterCount, static_cast<long>(nImageHeight) - 1 );
 
                     // copy last line read, if lines do not coincide
                     // ( happens at the end of the image )
@@ -589,7 +589,7 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
                     }
                 }
 
-                nLastImageY = (sal_uInt16) nT1;
+                nLastImageY = static_cast<sal_uInt16>(nT1);
                 nYAcc = nT1;
             }
             else

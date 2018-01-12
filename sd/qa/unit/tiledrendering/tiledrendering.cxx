@@ -58,7 +58,7 @@ static char const DATA_DIRECTORY[] = "/sd/qa/unit/tiledrendering/data/";
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
-    os << (sal_Int32)id;
+    os << static_cast<sal_Int32>(id);
     return os;
 }
 
@@ -1345,7 +1345,7 @@ void SdTiledRenderingTest::testTdf102223()
     rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
     CPPUNIT_ASSERT_EQUAL(OUString("Red"), rEditView.GetSelected());
     const SvxFontHeightItem& rItem = rEditView.GetAttribs().Get(EE_CHAR_FONTHEIGHT);
-    CPPUNIT_ASSERT_EQUAL((int)1411, (int)rItem.GetHeight());
+    CPPUNIT_ASSERT_EQUAL(int(1411), static_cast<int>(rItem.GetHeight()));
 
     // cut contents of cell
     uno::Sequence<beans::PropertyValue> aArgs;
@@ -1357,7 +1357,7 @@ void SdTiledRenderingTest::testTdf102223()
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView2.SetSelection(ESelection(0, 0, 0, 1)); // start para, start char, end para, end char.
     const SvxFontHeightItem& rItem2 = rEditView2.GetAttribs().Get(EE_CHAR_FONTHEIGHT);
-    CPPUNIT_ASSERT_EQUAL((int)1411, (int)rItem2.GetHeight());
+    CPPUNIT_ASSERT_EQUAL(int(1411), static_cast<int>(rItem2.GetHeight()));
 
     comphelper::LibreOfficeKit::setActive(false);
 }
@@ -1442,7 +1442,7 @@ void SdTiledRenderingTest::testTdf103083()
     CPPUNIT_ASSERT_EQUAL(OUString("No-Logo Content~LT~Gliederung 2"),
                          pOutliner->GetStyleSheet(2)->GetName());
     const SfxItemSet& rParagraphItemSet1 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, rParagraphItemSet1.Count());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rParagraphItemSet1.Count());
 
     // cut contents of bullet item
     comphelper::dispatchCommand(".uno:Cut", uno::Sequence<beans::PropertyValue>());
@@ -1470,7 +1470,7 @@ void SdTiledRenderingTest::testTdf103083()
                          pOutliner->GetStyleSheet(2)->GetName());
 
     const SfxItemSet& rParagraphItemSet2 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, rParagraphItemSet2.Count());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rParagraphItemSet2.Count());
 
     comphelper::LibreOfficeKit::setActive(false);
 }

@@ -91,10 +91,10 @@ namespace
             if( nEntryPos >= 0 )
             {
                 _rNewConPos.Y() += nEntryPos;
-                _rNewConPos.Y() += (long)( 0.5 * nRowHeight );
+                _rNewConPos.Y() += static_cast<long>( 0.5 * nRowHeight );
             }
             else
-                _rNewConPos.Y() -= (long)( 0.5 * nRowHeight );
+                _rNewConPos.Y() -= static_cast<long>( 0.5 * nRowHeight );
 
             long nListBoxBottom = _pWin->GetPosPixel().Y()
                                     + pListBox->GetPosPixel().Y()
@@ -221,8 +221,8 @@ bool OConnectionLine::RecalcLine()
     Point aSourceCenter( 0, 0 );
     Point aDestCenter( 0, 0 );
 
-    aSourceCenter.X() = pSourceWin->GetPosPixel().X() + (long)( 0.5*pSourceWin->GetSizePixel().Width() );
-    aDestCenter.X() = pDestWin->GetPosPixel().X() + (long)( 0.5*pDestWin->GetSizePixel().Width() );
+    aSourceCenter.X() = pSourceWin->GetPosPixel().X() + static_cast<long>( 0.5*pSourceWin->GetSizePixel().Width() );
+    aDestCenter.X() = pDestWin->GetPosPixel().X() + static_cast<long>( 0.5*pDestWin->GetSizePixel().Width() );
 
     const OTableWindow* pFirstWin   = pDestWin;
     const OTableWindow* pSecondWin  = pSourceWin;
@@ -296,7 +296,7 @@ double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
 {
     Point v(p2 - p1);
     Point w(pM - p1);
-    double a = sqrt((double)(v.X()*v.X() + v.Y()*v.Y()));
+    double a = sqrt(static_cast<double>(v.X()*v.X() + v.Y()*v.Y()));
     double l = (v.X() * w.Y() - v.Y() * w.X()) / a;
     double a2 = w.X()*v.X()+w.Y()*v.Y();
     a = a2 / (a * a);

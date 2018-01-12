@@ -828,7 +828,7 @@ namespace connectivity
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
                     {"nodepath", Any(OUString("/org.openoffice.Setup/L10N" ))}, // the path to the node to open
-                    {"depth", Any((sal_Int32)-1)}, // the depth: -1 means unlimited
+                    {"depth", Any(sal_Int32(-1))}, // the depth: -1 means unlimited
                 }));
                 // create the access
                 Reference< XPropertySet > xNode(

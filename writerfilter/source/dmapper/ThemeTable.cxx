@@ -264,7 +264,7 @@ OUString ThemeTable::fromLCIDToScriptTag(LanguageType lang)
 {
     // conversion list from:
     // http://blogs.msdn.com/b/officeinteroperability/archive/2013/04/22/office-open-xml-themes-schemes-and-fonts.aspx
-    switch ((sal_uInt16)lang)
+    switch (static_cast<sal_uInt16>(lang))
     {
         case 0x429  :  // lidFarsi
         case 0x401  :  // lidArabic

@@ -232,7 +232,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 m_pTypeInfo->aCreateParams  = aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bNullable      = (sal_Int32)aValue == ColumnValue::NULLABLE;
+                m_pTypeInfo->bNullable      = static_cast<sal_Int32>(aValue) == ColumnValue::NULLABLE;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 // bCaseSensitive
@@ -653,7 +653,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
     OFieldDescription* pField = new OFieldDescription();
     pField->SetType(m_pTypeInfo);
     pField->SetName(aAlias);
-    pField->SetPrecision(std::min<sal_Int32>((sal_Int32)255,m_pTypeInfo->nPrecision));
+    pField->SetPrecision(std::min<sal_Int32>(sal_Int32(255),m_pTypeInfo->nPrecision));
     pField->SetScale(0);
     pField->SetIsNullable(ColumnValue::NULLABLE);
     pField->SetAutoIncrement(false);
@@ -772,7 +772,7 @@ void ODatabaseExport::adjustFormat()
                 OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vNumberFormat.size()),"m_vFormatKey: Illegal index for vector");
                 OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vColumnSize.size()),"m_vColumnSize: Illegal index for vector");
                 m_vNumberFormat[nColPos] = CheckString(m_sTextToken,m_vNumberFormat[nColPos]);
-                m_vColumnSize[nColPos] = std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos], m_sTextToken.getLength());
+                m_vColumnSize[nColPos] = std::max<sal_Int32>(static_cast<sal_Int32>(m_vColumnSize[nColPos]), m_sTextToken.getLength());
             }
         }
         eraseTokens();
@@ -831,7 +831,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     {
         ODatabaseExport::TPositions::const_iterator aFind = std::find_if(_rvColumns.begin(),_rvColumns.end(),
             [j] (const ODatabaseExport::TPositions::value_type& tPos)
-                { return tPos.second == (sal_Int32)(j+1); });
+                { return tPos.second == static_cast<sal_Int32>(j+1); });
         if ( _rvColumns.end() != aFind && aFind->second != COLUMN_POSITION_NOT_FOUND && aFind->first != COLUMN_POSITION_NOT_FOUND )
         {
             OSL_ENSURE((aFind->first) < static_cast<sal_Int32>(aInsertList.size()),"aInsertList: Illegal index for vector");

@@ -642,7 +642,7 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
                 return;
 
             pConfiguration->GoToChild(OUString("Font"));
-            pConfiguration->SetProperty("Size", Any((sal_Int32)(nNewSize+0.5)));
+            pConfiguration->SetProperty("Size", Any(static_cast<sal_Int32>(nNewSize+0.5)));
             pConfiguration->CommitChanges();
         }
         catch (Exception&)

@@ -462,7 +462,7 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
             rValue <<= m_bEnableVisible;
             break;
         case PROPERTY_ID_BORDER:
-            rValue <<= (sal_Int16)m_nBorder;
+            rValue <<= static_cast<sal_Int16>(m_nBorder);
             break;
         case PROPERTY_ID_BORDERCOLOR:
             rValue = m_aBorderColor;
@@ -670,7 +670,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             aReturn <<= OUString();
             break;
         case PROPERTY_ID_BORDER:
-            aReturn <<= (sal_Int16)1;
+            aReturn <<= sal_Int16(1);
             break;
         case PROPERTY_ID_BORDERCOLOR:
         case PROPERTY_ID_TABSTOP:
@@ -928,19 +928,19 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     FontDescriptor aFont( getFont() );
     if ( nAnyMask & FONTATTRIBS )
     {
-        aFont.Weight = (float)vcl::unohelper::ConvertFontWeight( _rxInStream->readShort() );
+        aFont.Weight = static_cast<float>(vcl::unohelper::ConvertFontWeight( _rxInStream->readShort() ));
         aFont.Slant = (FontSlant)_rxInStream->readShort();
         aFont.Underline = _rxInStream->readShort();
         aFont.Strikeout = _rxInStream->readShort();
-        aFont.Orientation = ( (float)_rxInStream->readShort() ) / 10;
+        aFont.Orientation = static_cast<float>(_rxInStream->readShort()) / 10;
         aFont.Kerning = _rxInStream->readBoolean() != 0;
         aFont.WordLineMode = _rxInStream->readBoolean() != 0;
     }
     if ( nAnyMask & FONTSIZE )
     {
-        aFont.Width = (sal_Int16)_rxInStream->readLong();
-        aFont.Height = (sal_Int16)_rxInStream->readLong();
-        aFont.CharacterWidth = (float)vcl::unohelper::ConvertFontWidth( _rxInStream->readShort() );
+        aFont.Width = static_cast<sal_Int16>(_rxInStream->readLong());
+        aFont.Height = static_cast<sal_Int16>(_rxInStream->readLong());
+        aFont.CharacterWidth = static_cast<float>(vcl::unohelper::ConvertFontWidth( _rxInStream->readShort() ));
     }
     if ( nAnyMask & FONTTYPE )
     {

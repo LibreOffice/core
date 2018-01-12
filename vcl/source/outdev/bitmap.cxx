@@ -755,7 +755,7 @@ private:
             double fTemp = std::abs((nOffset + i) * fReverseScale);
 
             pMap[i] = MinMax(nDstLocation + long(fTemp), 0, nSampleRange);
-            pMapOffset[i] = (long) ((fTemp - pMap[i]) * 128.0);
+            pMapOffset[i] = static_cast<long>((fTemp - pMap[i]) * 128.0);
         }
     }
 
@@ -1344,8 +1344,8 @@ namespace
     inline sal_uInt8 CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAlpha,
                                 const sal_uInt8 nDstAlpha, const sal_uInt8 nResAlpha, const sal_uInt8 nDestColor )
     {
-        int c = nResAlpha ? ( (int)nSourceAlpha*nSourceColor + (int)nDstAlpha*nDestColor -
-                              (int)nDstAlpha*nDestColor*nSourceAlpha/255 ) / (int)nResAlpha : 0;
+        int c = nResAlpha ? ( static_cast<int>(nSourceAlpha)*nSourceColor + static_cast<int>(nDstAlpha)*nDestColor -
+                              static_cast<int>(nDstAlpha)*nDestColor*nSourceAlpha/255 ) / static_cast<int>(nResAlpha) : 0;
         return sal_uInt8( c );
     }
 
@@ -1370,7 +1370,7 @@ namespace
 
         // Co = Cs + Cd*(1-As)
         // Ad = As + Ad*(1-As)
-        nResAlpha = (int)nSrcAlpha + (int)nDstAlpha - (int)nDstAlpha*nSrcAlpha/255;
+        nResAlpha = static_cast<int>(nSrcAlpha) + static_cast<int>(nDstAlpha) - static_cast<int>(nDstAlpha)*nSrcAlpha/255;
 
         aDstCol.SetRed( CalcColor( aSrcCol.GetRed(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetRed() ) );
         aDstCol.SetBlue( CalcColor( aSrcCol.GetBlue(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetBlue() ) );
@@ -1437,12 +1437,12 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
 
                     aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
-                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
+                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
                                               nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16 ] +
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
                     pW->SetPixel( nY, nX, aIndex );
 
-                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
+                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
                                                    nVCLGLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
                                                    nVCLBLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] ) );
                     pAlphaW->SetPixel( nY, nX, aIndex );
@@ -1534,7 +1534,7 @@ Bitmap OutputDevice::BlendBitmap(
 
                     aDstCol = pB->GetColor( nY, nX );
                     aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pA->GetPixelIndex( nMapY, nMapX ) );
-                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
+                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
                                               nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16 ] +
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
                     pW->SetPixel( nY, nX, aIndex );

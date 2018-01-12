@@ -229,7 +229,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
                     {
                         if ( n != nHighlightedItem )
                         {
-                            ChangeHighlightItem( (sal_uInt16)n, false );
+                            ChangeHighlightItem( static_cast<sal_uInt16>(n), false );
                         }
 
                         bool bAllowNewPopup = true;
@@ -250,7 +250,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
                     {
                         if ( n != nHighlightedItem )
                         {
-                            ChangeHighlightItem( (sal_uInt16)n, true );
+                            ChangeHighlightItem( static_cast<sal_uInt16>(n), true );
                         }
                         else if ( pItemData->nBits & MenuItemBits::POPUPSELECT )
                         {
@@ -388,7 +388,7 @@ IMPL_LINK( MenuFloatingWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
 void MenuFloatingWindow::EnableScrollMenu( bool b )
 {
     bScrollMenu = b;
-    nScrollerHeight = b ? (sal_uInt16) GetSettings().GetStyleSettings().GetScrollBarSize() /2 : 0;
+    nScrollerHeight = b ? static_cast<sal_uInt16>(GetSettings().GetStyleSettings().GetScrollBarSize()) /2 : 0;
     bScrollDown = true;
     InitMenuClipRegion(*this);
 }
@@ -941,7 +941,7 @@ void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
         }
         else
         {
-            n = (sal_uInt16)-1;
+            n = sal_uInt16(-1);
             nLoop = n+1;
         }
     }

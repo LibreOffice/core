@@ -130,7 +130,7 @@ void SvxNoSpaceEdit::Modify()
     {
         OUString aValue = GetText();
 
-        if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
+        if ( !comphelper::string::isdigitAsciiString(aValue) || static_cast<long>(aValue.toInt32()) > USHRT_MAX )
             // the maximum value of a port number is USHRT_MAX
             ScopedVclPtrInstance<MessageDialog>(this, CuiResId( RID_SVXSTR_OPT_PROXYPORTS))->Execute();
     }
@@ -529,7 +529,7 @@ IMPL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, void )
     Edit* pEdit = static_cast<Edit*>(&rControl);
     OUString aValue = pEdit->GetText();
 
-    if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
+    if ( !comphelper::string::isdigitAsciiString(aValue) || static_cast<long>(aValue.toInt32()) > USHRT_MAX )
         pEdit->SetText( OUString('0') );
 }
 

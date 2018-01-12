@@ -59,7 +59,7 @@ static rtl_String const aImplEmpty_rtl_String =
 #define IMPL_RTL_IS_USTRING         0
 
 #define IMPL_RTL_STRCODE            sal_Char
-#define IMPL_RTL_USTRCODE( c )      ((unsigned char)c)
+#define IMPL_RTL_USTRCODE( c )      (static_cast<unsigned char>(c))
 #define IMPL_RTL_STRNAME( n )       rtl_str_ ## n
 
 #define IMPL_RTL_STRINGNAME( n )    rtl_string_ ## n
@@ -122,8 +122,8 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
 float SAL_CALL rtl_str_toFloat(sal_Char const * pStr) SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    return (float) rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr),
-                                           '.', 0, nullptr, nullptr);
+    return static_cast<float>(rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr),
+                                           '.', 0, nullptr, nullptr));
 }
 
 double SAL_CALL rtl_str_toDouble(sal_Char const * pStr) SAL_THROW_EXTERN_C()
@@ -221,7 +221,7 @@ bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
             nNewLen = rtl_ImplGetFastUTF8ByteLen( pSource, nLength );
             /* Includes the string only ASCII, then we could copy
                the buffer faster */
-            if ( nNewLen == (sal_Size)nLength )
+            if ( nNewLen == static_cast<sal_Size>(nLength) )
             {
                 sal_Char* pBuffer;
                 if ( *pTarget )
@@ -235,7 +235,7 @@ bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
                     OSL_ENSURE( *pSource <= 127,
                                 "rtl_uString2String() - UTF8 test is encoding is wrong" );
 
-                    *pBuffer = (sal_Char)(unsigned char)*pSource;
+                    *pBuffer = static_cast<sal_Char>(static_cast<unsigned char>(*pSource));
                     pBuffer++;
                     pSource++;
                     nLength--;

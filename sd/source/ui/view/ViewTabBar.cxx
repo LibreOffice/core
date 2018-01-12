@@ -440,7 +440,7 @@ void ViewTabBar::AddTabBarButton (
     if (nPosition>=0
         && nPosition<=mpTabControl->GetPageCount())
     {
-        sal_uInt16 nIndex ((sal_uInt16)nPosition);
+        sal_uInt16 nIndex (static_cast<sal_uInt16>(nPosition));
 
         // Insert the button into our local array.
         maTabBarButtons.insert(maTabBarButtons.begin()+nIndex, rButton);

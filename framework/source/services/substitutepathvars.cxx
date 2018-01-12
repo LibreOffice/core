@@ -216,7 +216,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
             // Example: WORK_PATH=c:\test, $(workdirurl)=WORK_PATH => WORK_PATH=$(workdirurl) and this cannot be substituted!
             ReSubstFixedVarOrder aFixedVar;
             aFixedVar.eVariable       = PreDefVariable(i);
-            aFixedVar.nVarValueLength = m_aPreDefVars.m_FixedVar[(sal_Int32)aFixedVar.eVariable].getLength();
+            aFixedVar.nVarValueLength = m_aPreDefVars.m_FixedVar[static_cast<sal_Int32>(aFixedVar.eVariable)].getLength();
             m_aReSubstFixedVarOrder.push_back( aFixedVar );
         }
     }
@@ -594,7 +594,7 @@ OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const
         throw NoSuchElementException("Unknown variable!", static_cast<cppu::OWeakObject *>(this));
     }
     PreDefVariable nIndex = pNTOIIter->second;
-    return m_aPreDefVars.m_FixedVar[(sal_Int32)nIndex];
+    return m_aPreDefVars.m_FixedVar[static_cast<sal_Int32>(nIndex)];
 }
 
 void SubstitutePathVariables::SetPredefinedPathVariables()
@@ -666,7 +666,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;
 
     // Set $(langid)
-    m_aPreDefVars.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::number( (sal_uInt16)m_aPreDefVars.m_eLanguageType );
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::number( static_cast<sal_uInt16>(m_aPreDefVars.m_eLanguageType) );
 
     // Set the other pre defined path variables
     // Set $(work)

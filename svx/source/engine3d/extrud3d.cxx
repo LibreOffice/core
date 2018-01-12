@@ -68,7 +68,7 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DP
     SetDefaultAttributes(rDefault);
 
     // set extrude depth
-    GetProperties().SetObjectItemDirect(makeSvx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
+    GetProperties().SetObjectItemDirect(makeSvx3DDepthItem(static_cast<sal_uInt32>(fDepth + 0.5)));
 }
 
 E3dExtrudeObj::E3dExtrudeObj()
@@ -184,7 +184,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
             }
 
             // translate by extrude depth
-            aTransform.translate(0.0, 0.0, (double)GetExtrudeDepth());
+            aTransform.translate(0.0, 0.0, static_cast<double>(GetExtrudeDepth()));
 
             aBackSide.transform(aTransform);
         }

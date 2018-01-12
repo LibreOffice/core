@@ -673,14 +673,14 @@ void ScFiltersTest::testCachedFormulaResultsODS()
             for(SCROW nRow = 0; nRow < 2; ++nRow)
             {
                 OUStringBuffer aIsErrorFormula("=ISERROR(");
-                aIsErrorFormula.append((char)('A'+nCol)).append(OUString::number(nRow));
+                aIsErrorFormula.append(static_cast<char>('A'+nCol)).append(OUString::number(nRow));
                 aIsErrorFormula.append(")");
                 OUString aFormula = aIsErrorFormula.makeStringAndClear();
                 rDoc.SetString(nCol, nRow + 2, 2, aFormula);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), rDoc.GetString(nCol, nRow +2, 2), OUString("TRUE"));
 
                 OUStringBuffer aIsTextFormula("=ISTEXT(");
-                aIsTextFormula.append((char)('A'+nCol)).append(OUString::number(nRow));
+                aIsTextFormula.append(static_cast<char>('A'+nCol)).append(OUString::number(nRow));
                 aIsTextFormula.append(")");
                 rDoc.SetString(nCol, nRow + 4, 2, aIsTextFormula.makeStringAndClear());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("", rDoc.GetString(nCol, nRow +4, 2), OUString("FALSE"));
@@ -3304,7 +3304,7 @@ void ScFiltersTest::testColumnStyle2XLSX()
         const SfxPoolItem& rItem = pAttr->GetItem(ATTR_FONT_HEIGHT);
         const SvxFontHeightItem& rFontHeight = static_cast<const SvxFontHeightItem&>(rItem);
         sal_uInt16 nHeight = rFontHeight.GetHeight();
-        CPPUNIT_ASSERT_EQUAL((sal_uInt16)240, nHeight);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(240), nHeight);
     }
 
     {

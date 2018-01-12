@@ -927,7 +927,7 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
 
         if( pMap->IsCont( nTryY, nTryX ) )
         {
-            rChain.ImplAdd( (sal_uInt8) nLastDir );
+            rChain.ImplAdd( static_cast<sal_uInt8>(nLastDir) );
             pMap->Set( nActY = nTryY, nActX = nTryX, VECT_DONE_INDEX );
             nFound = 1;
         }
@@ -944,7 +944,7 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
 
                     if( pMap->IsCont( nTryY, nTryX ) )
                     {
-                        rChain.ImplAdd( (sal_uInt8) nDir );
+                        rChain.ImplAdd( static_cast<sal_uInt8>(nDir) );
                         pMap->Set( nActY = nTryY, nActX = nTryX, VECT_DONE_INDEX );
                         nFound = 1;
                         nLastDir = nDir;

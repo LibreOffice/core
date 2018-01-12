@@ -634,7 +634,7 @@ namespace pcr
         m_sPageSelection.clear();
 
         const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
-        if ( (sal_uInt16)-1 != nCurrentPage )
+        if ( sal_uInt16(-1) != nCurrentPage )
         {
             for (   HashString2Int16::const_iterator pageId = m_aPageIds.begin();
                     pageId != m_aPageIds.end();
@@ -658,7 +658,7 @@ namespace pcr
 
     sal_uInt16 OPropertyBrowserController::impl_getPageIdForCategory_nothrow( const OUString& _rCategoryName ) const
     {
-        sal_uInt16 nPageId = (sal_uInt16)-1;
+        sal_uInt16 nPageId = sal_uInt16(-1);
         HashString2Int16::const_iterator pagePos = m_aPageIds.find( _rCategoryName );
         if ( pagePos != m_aPageIds.end() )
             nPageId = pagePos->second;
@@ -670,7 +670,7 @@ namespace pcr
     {
         sal_uInt16 nNewPage = impl_getPageIdForCategory_nothrow( m_sPageSelection );
 
-        if ( haveView() && ( nNewPage != (sal_uInt16)-1 ) )
+        if ( haveView() && ( nNewPage != sal_uInt16(-1) ) )
             m_pView->activatePage( nNewPage );
 
         // just in case ...
@@ -1204,7 +1204,7 @@ namespace pcr
                         << property->second.Name << "'!");
                 // finally insert this property control
                 sal_uInt16 nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
-                if ( nTargetPageId == (sal_uInt16)-1 )
+                if ( nTargetPageId == sal_uInt16(-1) )
                 {
                     // this category does not yet exist. This is allowed, as an inspector model might be lazy, and not provide
                     // any category information of its own. In this case, we have a fallback ...
@@ -1627,7 +1627,7 @@ namespace pcr
             throw RuntimeException();
 
         sal_uInt16 nPageId = impl_getPageIdForCategory_nothrow( _rCategory );
-        OSL_ENSURE( nPageId != (sal_uInt16)-1, "OPropertyBrowserController::showCategory: invalid category!" );
+        OSL_ENSURE( nPageId != sal_uInt16(-1), "OPropertyBrowserController::showCategory: invalid category!" );
 
         getPropertyBox().ShowPropertyPage( nPageId, _bShow );
     }

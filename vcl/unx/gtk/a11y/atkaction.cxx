@@ -177,7 +177,7 @@ appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& 
             rBuffer.append("<Alt>");
 
         if( ( rKeyStrokes[i].KeyCode >= awt::Key::A ) && ( rKeyStrokes[i].KeyCode <= awt::Key::Z ) )
-            rBuffer.append( (sal_Char) ( 'a' + ( rKeyStrokes[i].KeyCode - awt::Key::A ) ) );
+            rBuffer.append( static_cast<sal_Char>( 'a' + ( rKeyStrokes[i].KeyCode - awt::Key::A ) ) );
         else
         {
             sal_Char c = '\0';
@@ -229,7 +229,7 @@ action_wrapper_get_keybinding (AtkAction *action,
             {
                 OStringBuffer aRet;
 
-                sal_Int32 nmax = std::min( xBinding->getAccessibleKeyBindingCount(), (sal_Int32) 3 );
+                sal_Int32 nmax = std::min( xBinding->getAccessibleKeyBindingCount(), sal_Int32(3) );
                 for( sal_Int32 n = 0; n < nmax; n++ )
                 {
                     appendKeyStrokes( aRet,  xBinding->getAccessibleKeyBinding( n ) );

@@ -346,11 +346,11 @@ namespace frm
 
         if ( _rPropertyName == PROPERTY_BACKGROUNDCOLOR )
         {
-            aReturn <<= (sal_Int32)pNavBar->GetControlBackground().GetColor();
+            aReturn <<= static_cast<sal_Int32>(pNavBar->GetControlBackground().GetColor());
         }
         else if ( _rPropertyName == PROPERTY_TEXTLINECOLOR )
         {
-            aReturn <<= (sal_Int32)pNavBar->GetTextLineColor().GetColor();
+            aReturn <<= static_cast<sal_Int32>(pNavBar->GetTextLineColor().GetColor());
         }
         else if ( _rPropertyName == PROPERTY_ICONSIZE )
         {

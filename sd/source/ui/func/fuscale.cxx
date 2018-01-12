@@ -73,7 +73,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         std::unique_ptr<SvxZoomItem> pZoomItem;
         SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
 
-        nValue = (sal_Int16) mpWindow->GetZoom();
+        nValue = static_cast<sal_Int16>(mpWindow->GetZoom());
 
         // zoom on page size?
         if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr &&
@@ -112,7 +112,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact ? pFact->CreateSvxZoomDialog(nullptr, aNewAttr) : nullptr);
         if (pDlg)
         {
-            pDlg->SetLimits( (sal_uInt16)mpWindow->GetMinZoom(), (sal_uInt16)mpWindow->GetMaxZoom() );
+            pDlg->SetLimits( static_cast<sal_uInt16>(mpWindow->GetMinZoom()), static_cast<sal_uInt16>(mpWindow->GetMaxZoom()) );
             sal_uInt16 nResult = pDlg->Execute();
             switch( nResult )
             {

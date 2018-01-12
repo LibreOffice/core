@@ -98,7 +98,7 @@ namespace
 
                 for(sal_Int32 a=0; a < mnTextLength; a++)
                 {
-                    maDblDXArray.push_back((double)rInfo.mpDXArray[a]);
+                    maDblDXArray.push_back(static_cast<double>(rInfo.mpDXArray[a]));
                 }
             }
         }
@@ -147,7 +147,7 @@ namespace
 
             if(maFont.IsVertical())
             {
-                fRetval = aTextLayouter.getTextHeight() * (double)nLength;
+                fRetval = aTextLayouter.getTextHeight() * static_cast<double>(nLength);
             }
             else
             {
@@ -629,7 +629,7 @@ namespace
                             drawinglayer::primitive2d::UnifiedTransparencePrimitive2D* pNew2 =
                                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                     aStrokePrimitiveSequence,
-                                    (double)rOutlineAttribute.getTransparence() / 100.0);
+                                    static_cast<double>(rOutlineAttribute.getTransparence()) / 100.0);
                             aNewPrimitives.push_back(pNew2);
                         }
                         else

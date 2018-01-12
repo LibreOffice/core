@@ -1098,7 +1098,7 @@ namespace accessibility
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aValue;
-        sal_Int32 level = ((sal_Int32) m_aEntryPath.size() - 1);
+        sal_Int32 level = (static_cast<sal_Int32>(m_aEntryPath.size()) - 1);
         level = level < 0 ?  0: level;
         aValue <<= level;
         return aValue;
@@ -1145,7 +1145,7 @@ namespace accessibility
         switch(getAccessibleRole())
         {
             case AccessibleRole::CHECK_BOX:
-                aValue <<= (sal_Int32)1;
+                aValue <<= sal_Int32(1);
                 break;
             case AccessibleRole::LABEL:
             default:
@@ -1165,7 +1165,7 @@ namespace accessibility
         switch(getAccessibleRole())
         {
             case AccessibleRole::CHECK_BOX:
-                aValue <<= (sal_Int32)0;
+                aValue <<= sal_Int32(0);
                 break;
             case AccessibleRole::LABEL:
             default:

@@ -164,8 +164,8 @@ Statement::Statement( const ::rtl::Reference< comphelper::RefCountedMutex > & re
     , m_multipleResultUpdateCount(0)
     , m_lastOidInserted(InvalidOid)
 {
-    m_props[STATEMENT_QUERY_TIME_OUT] <<= (sal_Int32)0;
-    m_props[STATEMENT_MAX_ROWS] <<= (sal_Int32)0;
+    m_props[STATEMENT_QUERY_TIME_OUT] <<= sal_Int32(0);
+    m_props[STATEMENT_MAX_ROWS] <<= sal_Int32(0);
     m_props[STATEMENT_RESULT_SET_CONCURRENCY] <<=
         css::sdbc::ResultSetConcurrency::READ_ONLY;
     m_props[STATEMENT_RESULT_SET_TYPE] <<=
@@ -505,7 +505,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
 
                 // check, whether the columns are in the result set (required !)
                 int i;
-                for( i = 0 ; i < (int)sourceTableKeys.size() ;  i ++ )
+                for( i = 0 ; i < static_cast<int>(sourceTableKeys.size()) ;  i ++ )
                 {
                     if( -1 == PQfnumber(
                             result,
@@ -516,7 +516,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     }
                 }
 
-                if( sourceTableKeys.size() && i == (int)sourceTableKeys.size() )
+                if( sourceTableKeys.size() && i == static_cast<int>(sourceTableKeys.size()) )
                 {
                     *(data->pLastResultset) =
                         UpdateableResultSet::createFromPGResultSet(

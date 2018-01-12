@@ -28,8 +28,8 @@
 #else
 // From MinGW
 typedef unsigned short WORD;
-#define PRIMARYLANGID(lgid) ((WORD)(lgid) & 0x3ff)
-#define SUBLANGID(lgid) ((WORD)(lgid) >> 10)
+#define PRIMARYLANGID(lgid) (static_cast<WORD>(lgid) & 0x3ff)
+#define SUBLANGID(lgid) (static_cast<WORD>(lgid) >> 10)
 #define LANG_SPANISH 0x0a
 #define SUBLANG_NEUTRAL 0x00
 #define SUBLANG_SPANISH 0x01
@@ -183,7 +183,7 @@ std::string make_winrc_unicode_string(const OUString& str)
     const sal_Unicode* pchr = str.getStr();
 
     for (size_t i = 0; i < length; i++)
-        oss << "\\x" << std::hex << (int)*pchr++;
+        oss << "\\x" << std::hex << static_cast<int>(*pchr++);
 
     oss << "\"";
     return oss.str();
@@ -297,7 +297,7 @@ void add_group_entries(
         OString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
         iso_lang_identifier myiso_lang( iso_lang );
         LanguageType ltype = LanguageTag( myiso_lang.make_OUString()).makeFallback().getLanguageType();
-        if(  ( (sal_uInt16)ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
+        if(  ( static_cast<sal_uInt16>(ltype) & 0x0200 ) == 0 && map[ ltype ].empty()  )
         {
             Substitutor.set_language(iso_lang_identifier(iso_lang));
 
@@ -314,7 +314,7 @@ void add_group_entries(
         {
             if( !map[ ltype ].empty() )
             {
-                printf("ERROR: Duplicated ms id %d found for the languages %s and %s !!!! This does not work in microsoft resources\nPlease remove one!\n", (sal_uInt16)ltype , map[ ltype ].c_str() , iso_lang.getStr());
+                printf("ERROR: Duplicated ms id %d found for the languages %s and %s !!!! This does not work in microsoft resources\nPlease remove one!\n", static_cast<sal_uInt16>(ltype) , map[ ltype ].c_str() , iso_lang.getStr());
                 exit( -1 );
             }
         }

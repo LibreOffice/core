@@ -88,7 +88,7 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, bool bWrite )
     aSize = Application::GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
     aSize = Application::GetAppWindow()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
 
-    pVar->PutInteger( (sal_Int16)aSize.Width() );
+    pVar->PutInteger( static_cast<sal_Int16>(aSize.Width()) );
 }
 
 void SbStdPicture::PropHeight( SbxVariable* pVar, bool bWrite )
@@ -103,7 +103,7 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, bool bWrite )
     aSize = Application::GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
     aSize = Application::GetAppWindow()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
 
-    pVar->PutInteger( (sal_Int16)aSize.Height() );
+    pVar->PutInteger( static_cast<sal_Int16>(aSize.Height()) );
 }
 
 
@@ -192,9 +192,9 @@ void SbStdFont::PropUnderline( SbxVariable* pVar, bool bWrite )
 void SbStdFont::PropSize( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
-        SetSize( (sal_uInt16)pVar->GetInteger() );
+        SetSize( static_cast<sal_uInt16>(pVar->GetInteger()) );
     else
-        pVar->PutInteger( (sal_Int16)GetSize() );
+        pVar->PutInteger( static_cast<sal_Int16>(GetSize()) );
 }
 
 void SbStdFont::PropName( SbxVariable* pVar, bool bWrite )

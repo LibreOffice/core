@@ -224,7 +224,7 @@ SdPage* SdDrawDocument::GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const
 
 sal_uInt16 SdDrawDocument::GetSdPageCount(PageKind ePgKind) const
 {
-    return (sal_uInt16)mpDrawPageListWatcher->GetSdPageCount(ePgKind);
+    return static_cast<sal_uInt16>(mpDrawPageListWatcher->GetSdPageCount(ePgKind));
 }
 
 SdPage* SdDrawDocument::GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind)
@@ -234,12 +234,12 @@ SdPage* SdDrawDocument::GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind)
 
 sal_uInt16 SdDrawDocument::GetMasterSdPageCount(PageKind ePgKind) const
 {
-    return (sal_uInt16)mpMasterPageListWatcher->GetSdPageCount(ePgKind);
+    return static_cast<sal_uInt16>(mpMasterPageListWatcher->GetSdPageCount(ePgKind));
 }
 
 sal_uInt16 SdDrawDocument::GetActiveSdPageCount() const
 {
-    return (sal_uInt16)mpDrawPageListWatcher->GetVisibleSdPageCount();
+    return static_cast<sal_uInt16>(mpDrawPageListWatcher->GetVisibleSdPageCount());
 }
 
 // Adapt the page numbers that are registered in the page objects of the notes
@@ -592,8 +592,8 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 
                     sal_uLong nTop    = aPageOffset.Y();
                     sal_uLong nLeft   = aPageOffset.X();
-                    sal_uLong nBottom = std::max((long)(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
-                    sal_uLong nRight  = std::max((long)(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
+                    sal_uLong nBottom = std::max(static_cast<long>(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
+                    sal_uLong nRight  = std::max(static_cast<long>(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
 
                     pPage->SetBorder(nLeft, nTop, nRight, nBottom);
                 }
@@ -774,7 +774,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     // If necessary, look backwards, until we find a page that wasn't selected
     nPage = nTargetPage;
 
-    if (nPage != (sal_uInt16)-1)
+    if (nPage != sal_uInt16(-1))
     {
         pPage = GetSdPage(nPage, PageKind::Standard);
         while (nPage > 0 && pPage->IsSelected())
@@ -785,12 +785,12 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
 
         if (pPage->IsSelected())
         {
-            nPage = (sal_uInt16)-1;
+            nPage = sal_uInt16(-1);
         }
     }
 
     // Insert before the first page
-    if (nPage == (sal_uInt16)-1)
+    if (nPage == sal_uInt16(-1))
     {
         std::vector<SdPage*>::reverse_iterator iter;
         for (iter = aPageList.rbegin(); iter != aPageList.rend(); ++iter)

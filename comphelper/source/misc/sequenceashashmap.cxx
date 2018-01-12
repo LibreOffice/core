@@ -146,7 +146,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::NamedVa
 
 void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::PropertyValue >& lDestination) const
 {
-    sal_Int32 c = (sal_Int32)size();
+    sal_Int32 c = static_cast<sal_Int32>(size());
     lDestination.realloc(c);
     css::beans::PropertyValue* pDestination = lDestination.getArray();
 
@@ -163,7 +163,7 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::PropertyValue
 
 void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >& lDestination) const
 {
-    sal_Int32 c = (sal_Int32)size();
+    sal_Int32 c = static_cast<sal_Int32>(size());
     lDestination.realloc(c);
     css::beans::NamedValue* pDestination = lDestination.getArray();
 

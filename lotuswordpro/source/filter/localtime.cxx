@@ -77,7 +77,7 @@ bool LtgGmTime(long rtime,LtTm& rtm)
 
     long tmptim;
     long caltim = rtime;
-    tmptim = (long)(caltim / FOURYEAR_SEC);
+    tmptim = static_cast<long>(caltim / FOURYEAR_SEC);
     caltim -= tmptim * FOURYEAR_SEC;
 
     //Determine which year of the interval
@@ -120,7 +120,7 @@ bool LtgGmTime(long rtime,LtTm& rtm)
     //Determine days since January 1 (0 - 365). This is the tm_yday value.
     //Leave caltim with number of elapsed seconds in that day.
 
-    rtm.tm_yday = (long)(caltim / DAY_SEC);
+    rtm.tm_yday = static_cast<long>(caltim / DAY_SEC);
     caltim -= rtm.tm_yday * DAY_SEC;
 
     //Determine months since January (0 - 11) and day of month (1 - 31)
@@ -147,16 +147,16 @@ bool LtgGmTime(long rtime,LtTm& rtm)
 
     //Determine days since Sunday (0 - 6)
 
-    rtm.tm_wday = ((long)(rtime / DAY_SEC) + BASE_DOW) % 7;
+    rtm.tm_wday = (static_cast<long>(rtime / DAY_SEC) + BASE_DOW) % 7;
 
     //Determine hours since midnight (0 - 23), minutes after the hour
     //(0 - 59), and seconds after the minute (0 - 59).
 
-    rtm.tm_hour = (long)(caltim / 3600);
+    rtm.tm_hour = static_cast<long>(caltim / 3600);
     caltim -= rtm.tm_hour * 3600;
 
-    rtm.tm_min = (long)(caltim / 60);
-    rtm.tm_sec = (long)(caltim - (rtm.tm_min) * 60);
+    rtm.tm_min = static_cast<long>(caltim / 60);
+    rtm.tm_sec = static_cast<long>(caltim - (rtm.tm_min) * 60);
 
     //adjust year & month
     rtm.tm_year += 1900;

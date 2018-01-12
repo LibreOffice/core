@@ -190,7 +190,7 @@ VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const 
             aModName += " (" + sObjName + ")";
         }
     }
-    pTabBar->InsertPage( (sal_uInt16)nKey, aModName );
+    pTabBar->InsertPage( static_cast<sal_uInt16>(nKey), aModName );
     pTabBar->Sort();
     if(pWin)
     {

@@ -122,7 +122,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharHeightComplex, fHeight);
     }
 
-    rPropMap.setProperty( PROP_CharKerning, (sal_Int16) GetTextSpacingPoint( moSpacing.get( 0 ) ));
+    rPropMap.setProperty( PROP_CharKerning, static_cast<sal_Int16>(GetTextSpacingPoint( moSpacing.get( 0 ) )));
 
     rPropMap.setProperty( PROP_CharUnderline, GetFontUnderline( moUnderline.get( XML_none ) ));
     rPropMap.setProperty( PROP_CharStrikeout, GetFontStrikeout( moStrikeout.get( XML_noStrike ) ));

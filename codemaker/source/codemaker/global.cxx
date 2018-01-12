@@ -330,7 +330,7 @@ bool FileStream::write(void const * buffer, sal_uInt64 size) {
 
 FileStream &operator<<(FileStream& o, sal_uInt32 i) {
     sal_uInt64 writtenBytes;
-    OString s = OString::number((sal_Int32)i);
+    OString s = OString::number(static_cast<sal_Int32>(i));
     osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }

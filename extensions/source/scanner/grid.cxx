@@ -315,13 +315,13 @@ Point GridWindow::transform( double x, double y )
 {
     Point aRet;
 
-    aRet.X() = (long)( ( x - m_fMinX ) *
-        (double)m_aGridArea.GetWidth() / ( m_fMaxX - m_fMinX )
+    aRet.X() = static_cast<long>( ( x - m_fMinX ) *
+        static_cast<double>(m_aGridArea.GetWidth()) / ( m_fMaxX - m_fMinX )
         + m_aGridArea.Left() );
-    aRet.Y() = (long)(
+    aRet.Y() = static_cast<long>(
         m_aGridArea.Bottom() -
         ( y - m_fMinY ) *
-        (double)m_aGridArea.GetHeight() / ( m_fMaxY - m_fMinY ) );
+        static_cast<double>(m_aGridArea.GetHeight()) / ( m_fMaxY - m_fMinY ) );
     return aRet;
 }
 
@@ -331,8 +331,8 @@ void GridWindow::transform( const Point& rOriginal, double& x, double& y )
     const long nHeight = m_aGridArea.GetHeight();
     if (!nWidth || !nHeight)
         return;
-    x = ( rOriginal.X() - m_aGridArea.Left() ) * (m_fMaxX - m_fMinX) / (double)nWidth + m_fMinX;
-    y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / (double)nHeight + m_fMinY;
+    x = ( rOriginal.X() - m_aGridArea.Left() ) * (m_fMaxX - m_fMinX) / static_cast<double>(nWidth) + m_fMinX;
+    y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / static_cast<double>(nHeight) + m_fMinY;
 }
 
 void GridWindow::drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2 )
@@ -344,8 +344,8 @@ void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, doub
 {
     // get a nice chunk size like 10, 100, 25 or such
     fChunkOut = ( fMax - fMin ) / 6.0;
-    int logchunk = (int)std::log10( fChunkOut );
-    int nChunk = (int)( fChunkOut / std::exp( (double)(logchunk-1) * M_LN10 ) );
+    int logchunk = static_cast<int>(std::log10( fChunkOut ));
+    int nChunk = static_cast<int>( fChunkOut / std::exp( static_cast<double>(logchunk-1) * M_LN10 ) );
     if( nChunk >= 75 )
         nChunk = 100;
     else if( nChunk >= 35 )
@@ -358,10 +358,10 @@ void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, doub
         nChunk = 10;
     else
         nChunk = 5;
-    fChunkOut = (double) nChunk * exp( (double)(logchunk-1) * M_LN10 );
+    fChunkOut = static_cast<double>(nChunk) * exp( static_cast<double>(logchunk-1) * M_LN10 );
     // compute whole chunks fitting into fMin
-    nChunk = (int)( fMin / fChunkOut );
-    fMinChunkOut = (double)nChunk * fChunkOut;
+    nChunk = static_cast<int>( fMin / fChunkOut );
+    fMinChunkOut = static_cast<double>(nChunk) * fChunkOut;
     while( fMinChunkOut < fMin )
         fMinChunkOut += fChunkOut;
 }

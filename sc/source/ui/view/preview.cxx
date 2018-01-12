@@ -351,7 +351,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     }
 
     Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    Fraction aHorPrevZoom( static_cast<long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
 
     bool bDoPrint = ( pFillLocation == nullptr );
@@ -460,15 +460,15 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         if (nPrinted)   // if not, draw everything grey
         {
             aLocalPageSize = pPrintFunc->GetPageSize();
-            aLocalPageSize.Width()  = (long) (aLocalPageSize.Width()  * HMM_PER_TWIPS );
-            aLocalPageSize.Height() = (long) (aLocalPageSize.Height() * HMM_PER_TWIPS );
+            aLocalPageSize.Width()  = static_cast<long>(aLocalPageSize.Width()  * HMM_PER_TWIPS );
+            aLocalPageSize.Height() = static_cast<long>(aLocalPageSize.Height() * HMM_PER_TWIPS );
 
-            nLeftMargin = (long) ( nLeftMargin * HMM_PER_TWIPS );
-            nRightMargin = (long) ( nRightMargin * HMM_PER_TWIPS );
-            nTopMargin = (long) ( nTopMargin * HMM_PER_TWIPS );
-            nBottomMargin = (long) ( nBottomMargin * HMM_PER_TWIPS );
-            nHeaderHeight = (long) ( nHeaderHeight * HMM_PER_TWIPS * mnScale / 100 + nTopMargin );
-            nFooterHeight = (long) ( nFooterHeight * HMM_PER_TWIPS * mnScale / 100 + nBottomMargin );
+            nLeftMargin = static_cast<long>( nLeftMargin * HMM_PER_TWIPS );
+            nRightMargin = static_cast<long>( nRightMargin * HMM_PER_TWIPS );
+            nTopMargin = static_cast<long>( nTopMargin * HMM_PER_TWIPS );
+            nBottomMargin = static_cast<long>( nBottomMargin * HMM_PER_TWIPS );
+            nHeaderHeight = static_cast<long>( nHeaderHeight * HMM_PER_TWIPS * mnScale / 100 + nTopMargin );
+            nFooterHeight = static_cast<long>( nFooterHeight * HMM_PER_TWIPS * mnScale / 100 + nBottomMargin );
         }
 
         if (!bStateValid)
@@ -543,10 +543,10 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         {
             SetMapMode(aMMMode);
             SetLineColor( COL_BLACK );
-            DrawInvert( (long)( nTopMargin - aOffset.Y() ), PointerStyle::VSizeBar );
-            DrawInvert( (long)(nPageEndY - nBottomMargin ), PointerStyle::VSizeBar );
-            DrawInvert( (long)( nLeftMargin - aOffset.X() ), PointerStyle::HSizeBar );
-            DrawInvert( (long)( nPageEndX - nRightMargin ) , PointerStyle::HSizeBar );
+            DrawInvert( static_cast<long>( nTopMargin - aOffset.Y() ), PointerStyle::VSizeBar );
+            DrawInvert( static_cast<long>(nPageEndY - nBottomMargin ), PointerStyle::VSizeBar );
+            DrawInvert( static_cast<long>( nLeftMargin - aOffset.X() ), PointerStyle::HSizeBar );
+            DrawInvert( static_cast<long>( nPageEndX - nRightMargin ) , PointerStyle::HSizeBar );
             if( bHeaderOn )
             {
                 DrawInvert( nHeaderHeight - aOffset.Y(), PointerStyle::VSizeBar );
@@ -738,7 +738,7 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
         //  apply new MapMode and call UpdateScrollBars to update aOffset
 
         Fraction aPreviewZoom( nZoom, 100 );
-        Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+        Fraction aHorPrevZoom( static_cast<long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
         MapMode aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
         SetMapMode( aMMMode );
 
@@ -821,8 +821,8 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
     Size aLocalPageSize = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab );
     if ( aLocalPageSize.Width() && aLocalPageSize.Height() )
     {
-        long nZoomX = (long) ( aWinSize.Width() * 100  / ( aLocalPageSize.Width() * nWinScaleX ));
-        long nZoomY = (long) ( aWinSize.Height() * 100 / ( aLocalPageSize.Height() * nWinScaleY ));
+        long nZoomX = static_cast<long>( aWinSize.Width() * 100  / ( aLocalPageSize.Width() * nWinScaleX ));
+        long nZoomY = static_cast<long>( aWinSize.Height() * 100 / ( aLocalPageSize.Height() * nWinScaleY ));
 
         long nOptimal = nZoomX;
         if (!bWidthOnly && nZoomY<nOptimal)
@@ -833,7 +833,7 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
         if (nOptimal>400)
             nOptimal = 400;
 
-        return (sal_uInt16) nOptimal;
+        return static_cast<sal_uInt16>(nOptimal);
     }
     else
         return nZoom;
@@ -966,7 +966,7 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
 void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Fraction  aPreviewZoom( nZoom, 100 );
-    Fraction  aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    Fraction  aHorPrevZoom( static_cast<long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode   aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
 
     aButtonDownChangePoint = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
@@ -1049,7 +1049,7 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 {
         Fraction  aPreviewZoom( nZoom, 100 );
-        Fraction  aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+        Fraction  aHorPrevZoom( static_cast<long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
         MapMode   aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
 
         aButtonUpPt = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
@@ -1103,13 +1103,13 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     ScDocShellModificator aModificator( *pDocShell );
                     if( bLeftRulerChange && bLeftRulerMove )
                     {
-                       aLRItem.SetLeft( (long)( aButtonUpPt.X() / HMM_PER_TWIPS + aOffset.X() / HMM_PER_TWIPS ));
+                       aLRItem.SetLeft( static_cast<long>( aButtonUpPt.X() / HMM_PER_TWIPS + aOffset.X() / HMM_PER_TWIPS ));
                        rStyleSet.Put( aLRItem );
                        pDocShell->SetModified();
                     }
                     else if( bRightRulerChange && bRightRulerMove )
                     {
-                        aLRItem.SetRight( (long)( nWidth - aButtonUpPt.X() / HMM_PER_TWIPS - aOffset.X() / HMM_PER_TWIPS ));
+                        aLRItem.SetRight( static_cast<long>( nWidth - aButtonUpPt.X() / HMM_PER_TWIPS - aOffset.X() / HMM_PER_TWIPS ));
                         rStyleSet.Put( aLRItem );
                         pDocShell->SetModified();
                     }
@@ -1175,13 +1175,13 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     if( bTopRulerMove && bTopRulerChange )
                     {
-                        aULItem.SetUpperValue( (sal_uInt16)( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS ) );
+                        aULItem.SetUpperValue( static_cast<sal_uInt16>( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS ) );
                         rStyleSet.Put( aULItem );
                         pDocShell->SetModified();
                     }
                     else if( bBottomRulerMove && bBottomRulerChange )
                     {
-                        aULItem.SetLowerValue( (sal_uInt16)( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS ) );
+                        aULItem.SetLowerValue( static_cast<sal_uInt16>( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS ) );
                         rStyleSet.Put( aULItem );
                         pDocShell->SetModified();
                     }
@@ -1192,7 +1192,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         {
                             const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
                             Size  aHeaderSize = rHeaderSet.Get(ATTR_PAGE_SIZE).GetSize();
-                            aHeaderSize.Height() = (long)( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS - aULItem.GetUpper());
+                            aHeaderSize.Height() = static_cast<long>( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS - aULItem.GetUpper());
                             aHeaderSize.Height() = aHeaderSize.Height() * 100 / mnScale;
                             SvxSetItem  aNewHeader( rStyleSet.Get(ATTR_PAGE_HEADERSET) );
                             aNewHeader.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
@@ -1207,7 +1207,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         {
                             const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
                             Size aFooterSize = rFooterSet.Get(ATTR_PAGE_SIZE).GetSize();
-                            aFooterSize.Height() = (long)( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS - aULItem.GetLower() );
+                            aFooterSize.Height() = static_cast<long>( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS - aULItem.GetLower() );
                             aFooterSize.Height() = aFooterSize.Height() * 100 / mnScale;
                             SvxSetItem  aNewFooter( rStyleSet.Get(ATTR_PAGE_FOOTERSET) );
                             aNewFooter.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
@@ -1267,20 +1267,20 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                 if( !bLayoutRTL )
                 {
-                    nNewColWidth = (long) ( PixelToLogic( Point( rMEvt.GetPosPixel().X() - mvRight[ nColNumberButttonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth = static_cast<long>( PixelToLogic( Point( rMEvt.GetPosPixel().X() - mvRight[ nColNumberButttonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
                     nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButttonDown, nTab );
                 }
                 else
                 {
 
-                    nNewColWidth = (long) ( PixelToLogic( Point( mvRight[ nColNumberButttonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth = static_cast<long>( PixelToLogic( Point( mvRight[ nColNumberButttonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
                     nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButttonDown, nTab );
                 }
 
                 if( nNewColWidth >= 0 )
                 {
                     pDocShell->GetDocFunc().SetWidthOrHeight(
-                        true, aCols, nTab, SC_SIZE_DIRECT, (sal_uInt16)nNewColWidth, true, true);
+                        true, aCols, nTab, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nNewColWidth), true, true);
                     pDocShell->SetModified();
                 }
                 if ( ValidTab( nTab ) )
@@ -1299,7 +1299,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 void ScPreview::MouseMove( const MouseEvent& rMEvt )
 {
     Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    Fraction aHorPrevZoom( static_cast<long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode  aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
     Point    aMouseMovePoint = PixelToLogic( rMEvt.GetPosPixel(), aMMMode );
 
@@ -1322,31 +1322,31 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
         else
             pPrintFunc = new ScPrintFunc( this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions );
 
-        nLeftMargin = (long)( pPrintFunc->GetLeftMargin() * HMM_PER_TWIPS - aOffset.X() );
-        nRightMargin = (long)( pPrintFunc->GetRightMargin() * HMM_PER_TWIPS );
-        nRightMargin = (long)( nWidth * HMM_PER_TWIPS - nRightMargin - aOffset.X() );
-        nTopMargin = (long)( pPrintFunc->GetTopMargin() * HMM_PER_TWIPS - aOffset.Y() );
-        nBottomMargin = (long)( pPrintFunc->GetBottomMargin() * HMM_PER_TWIPS );
-        nBottomMargin = (long)( nHeight * HMM_PER_TWIPS - nBottomMargin - aOffset.Y() );
+        nLeftMargin = static_cast<long>( pPrintFunc->GetLeftMargin() * HMM_PER_TWIPS - aOffset.X() );
+        nRightMargin = static_cast<long>( pPrintFunc->GetRightMargin() * HMM_PER_TWIPS );
+        nRightMargin = static_cast<long>( nWidth * HMM_PER_TWIPS - nRightMargin - aOffset.X() );
+        nTopMargin = static_cast<long>( pPrintFunc->GetTopMargin() * HMM_PER_TWIPS - aOffset.Y() );
+        nBottomMargin = static_cast<long>( pPrintFunc->GetBottomMargin() * HMM_PER_TWIPS );
+        nBottomMargin = static_cast<long>( nHeight * HMM_PER_TWIPS - nBottomMargin - aOffset.Y() );
         if( mnScale > 0 )
         {
-            nHeaderHeight = (long)( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS * mnScale / 100 );
-            nFooterHeight = (long)( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS * mnScale / 100 );
+            nHeaderHeight = static_cast<long>( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS * mnScale / 100 );
+            nFooterHeight = static_cast<long>( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS * mnScale / 100 );
         }
         else
         {
-            nHeaderHeight = (long)( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS );
-            nFooterHeight = (long)( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS );
+            nHeaderHeight = static_cast<long>( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS );
+            nFooterHeight = static_cast<long>( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS );
         }
         delete pPrintFunc;
     }
 
     Point   aPixPt( rMEvt.GetPosPixel() );
     Point   aLeftTop = LogicToPixel( Point( nLeftMargin, -aOffset.Y() ) , aMMMode );
-    Point   aLeftBottom = LogicToPixel( Point( nLeftMargin ,(long)(nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
+    Point   aLeftBottom = LogicToPixel( Point( nLeftMargin ,static_cast<long>(nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
     Point   aRightTop = LogicToPixel( Point( nRightMargin, -aOffset.Y() ), aMMMode );
     Point   aTopLeft = LogicToPixel( Point( -aOffset.X(), nTopMargin ), aMMMode );
-    Point   aTopRight = LogicToPixel( Point( (long)(nWidth * HMM_PER_TWIPS - aOffset.X()), nTopMargin ), aMMMode );
+    Point   aTopRight = LogicToPixel( Point( static_cast<long>(nWidth * HMM_PER_TWIPS - aOffset.X()), nTopMargin ), aMMMode );
     Point   aBottomLeft = LogicToPixel( Point( -aOffset.X(), nBottomMargin ), aMMMode );
     Point   aHeaderLeft = LogicToPixel( Point(  -aOffset.X(), nHeaderHeight ), aMMMode );
     Point   aFooderLeft = LogicToPixel( Point( -aOffset.X(), nFooterHeight ), aMMMode );
@@ -1356,7 +1356,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     for( SCCOL i=aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
     {
         Point   aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
-        Point   aColumnBottom = LogicToPixel( Point( 0, (long)( nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
+        Point   aColumnBottom = LogicToPixel( Point( 0, static_cast<long>( nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
         long nRight = i < static_cast<SCCOL>(mvRight.size()) ? mvRight[i] : 0;
         if( aPixPt.X() < ( nRight + 2 ) && ( aPixPt.X() > ( nRight - 2 ) ) && ( aPixPt.X() < aRightTop.X() ) && ( aPixPt.X() > aLeftTop.X() )
             && ( aPixPt.Y() > aColumnTop.Y() ) && ( aPixPt.Y() < aColumnBottom.Y() ) && !bLeftRulerMove && !bRightRulerMove
@@ -1537,7 +1537,7 @@ css::uno::Reference<css::accessibility::XAccessible> ScPreview::CreateAccessible
 void ScPreview::DragMove( long nDragMovePos, PointerStyle nFlags )
 {
     Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    Fraction aHorPrevZoom( static_cast<long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode  aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
     SetMapMode( aMMMode );
     long  nPos = nDragMovePos;
@@ -1567,12 +1567,12 @@ void ScPreview::DrawInvert( long nDragPos, PointerStyle nFlags )
     long  nWidth = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Width();
     if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )
     {
-        tools::Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,(long)( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));
+        tools::Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,static_cast<long>( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));
         Invert( aRect, InvertFlags::N50 );
     }
     else if( nFlags == PointerStyle::VSizeBar )
     {
-        tools::Rectangle aRect( -aOffset.X(), nDragPos,(long)( ( nWidth * HMM_PER_TWIPS ) - aOffset.X() ), nDragPos + 1 );
+        tools::Rectangle aRect( -aOffset.X(), nDragPos,static_cast<long>( ( nWidth * HMM_PER_TWIPS ) - aOffset.X() ), nDragPos + 1 );
         Invert( aRect, InvertFlags::N50 );
     }
 }

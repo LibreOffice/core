@@ -155,7 +155,7 @@ namespace pcr
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
-            aPropValue <<= (sal_Int32)getTypedControlWindow()->GetFormatKey();
+            aPropValue <<= static_cast<sal_Int32>(getTypedControlWindow()->GetFormatKey());
         return aPropValue;
     }
 

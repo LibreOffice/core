@@ -551,7 +551,7 @@ void Calendar_gregorian::getValue()
             fieldValue[CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS] = nMillis;
         }
         else
-            fieldValue[fieldIndex] = (sal_Int16) value;
+            fieldValue[fieldIndex] = static_cast<sal_Int16>(value);
 
         // offset 1 since the value for week start day SunDay is different between Calendar and Weekdays.
         if ( fieldIndex == CalendarFieldIndex::DAY_OF_WEEK )
@@ -716,14 +716,14 @@ Calendar_gregorian::getMinimumNumberOfDaysForFirstWeek()
 sal_Int16 SAL_CALL
 Calendar_gregorian::getNumberOfMonthsInYear()
 {
-    return (sal_Int16) aCalendar.Months.getLength();
+    return static_cast<sal_Int16>(aCalendar.Months.getLength());
 }
 
 
 sal_Int16 SAL_CALL
 Calendar_gregorian::getNumberOfDaysInWeek()
 {
-    return (sal_Int16) aCalendar.Days.getLength();
+    return static_cast<sal_Int16>(aCalendar.Days.getLength());
 }
 
 

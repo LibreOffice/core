@@ -83,7 +83,7 @@ static void osl_gen_random_name_impl_(rtl_uString** rand_name)
 
     gettimeofday(&tv, nullptr);
 
-    value += ((uint64_t)tv.tv_usec << 16) ^ tv.tv_sec ^ getpid();
+    value += (static_cast<uint64_t>(tv.tv_usec) << 16) ^ tv.tv_sec ^ getpid();
 
     v = value;
 

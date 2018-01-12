@@ -613,7 +613,7 @@ sal_uInt16 SwModule::GetLinkUpdMode() const
 {
     if(!m_pUsrPref)
         GetUsrPref(false);
-    return (sal_uInt16)m_pUsrPref->GetUpdateLinkMode();
+    return static_cast<sal_uInt16>(m_pUsrPref->GetUpdateLinkMode());
 }
 
 SwFieldUpdateFlags SwModule::GetFieldUpdateFlags() const

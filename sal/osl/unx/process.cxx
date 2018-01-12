@@ -169,7 +169,7 @@ static void ChildStatusProc(void *pData)
 
         if (channel[0] != -1) close(channel[0]);
 
-        if ((data.m_uid != (uid_t)-1) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
+        if ((data.m_uid != uid_t(-1)) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
         {
             OSL_ASSERT(geteuid() == 0);     /* must be root */
 
@@ -183,7 +183,7 @@ static void ChildStatusProc(void *pData)
         if (data.m_pszDir)
             chstatus = chdir(data.m_pszDir);
 
-        if (chstatus == 0 && ((data.m_uid == (uid_t)-1) || ((data.m_uid == getuid()) && (data.m_gid == getgid()))))
+        if (chstatus == 0 && ((data.m_uid == uid_t(-1)) || ((data.m_uid == getuid()) && (data.m_gid == getgid()))))
         {
             int i;
             for (i = 0; data.m_pszEnv[i] != nullptr; i++)
@@ -621,7 +621,7 @@ oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
         Data.m_name = static_cast<oslSecurityImpl*>(Security)->m_pPasswd.pw_name;
     }
     else
-        Data.m_uid = (uid_t)-1;
+        Data.m_uid = uid_t(-1);
 
     Data.m_pProcImpl = static_cast<oslProcessImpl*>(malloc(sizeof(oslProcessImpl)));
     Data.m_pProcImpl->m_pid = 0;
@@ -713,7 +713,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
         /* check if it is one of our child processes */
         while (pChild != nullptr)
         {
-            if (Ident == (sal_uInt32) pChild->m_pid)
+            if (Ident == static_cast<sal_uInt32>(pChild->m_pid))
                 break;
 
             pChild = pChild->m_pnext;
@@ -1066,7 +1066,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
                 if (clktck < 0) {
                     return osl_Process_E_Unknown;
                 }
-                hz = (unsigned long) clktck;
+                hz = static_cast<unsigned long>(clktck);
 
                 userseconds = procstat.utime/hz;
                 systemseconds = procstat.stime/hz;

@@ -33,7 +33,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
     rV.aCol1 = rG.aGradient.GetStartColor();
     if(100 != rG.aGradient.GetStartIntens())
     {
-        const double fFact((double)rG.aGradient.GetStartIntens() / 100.0);
+        const double fFact(static_cast<double>(rG.aGradient.GetStartIntens()) / 100.0);
         rV.aCol1 = Color(rV.aCol1.getBColor() * fFact);
     }
 
@@ -41,7 +41,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
     rV.aCol2 = rG.aGradient.GetEndColor();
     if(100 != rG.aGradient.GetEndIntens())
     {
-        const double fFact((double)rG.aGradient.GetEndIntens() / 100.0);
+        const double fFact(static_cast<double>(rG.aGradient.GetEndIntens()) / 100.0);
         rV.aCol2 = Color(rV.aCol2.getBColor() * fFact);
     }
 
@@ -61,14 +61,14 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
             if(rG.aGradient.GetBorder())
             {
                 basegfx::B2DVector aFullVec(aStartPos - aEndPos);
-                const double fLen = (aFullVec.getLength() * (100.0 - (double)rG.aGradient.GetBorder())) / 100.0;
+                const double fLen = (aFullVec.getLength() * (100.0 - static_cast<double>(rG.aGradient.GetBorder()))) / 100.0;
                 aFullVec.normalize();
                 aStartPos = aEndPos + (aFullVec * fLen);
             }
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
+                const double fAngle = static_cast<double>(rG.aGradient.GetAngle()) * (F_PI180 / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -84,14 +84,14 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
             if(rG.aGradient.GetBorder())
             {
                 basegfx::B2DVector aFullVec(aEndPos - aStartPos);
-                const double fLen = (aFullVec.getLength() * (100.0 - (double)rG.aGradient.GetBorder())) / 100.0;
+                const double fLen = (aFullVec.getLength() * (100.0 - static_cast<double>(rG.aGradient.GetBorder()))) / 100.0;
                 aFullVec.normalize();
                 aEndPos = aStartPos + (aFullVec * fLen);
             }
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
+                const double fAngle = static_cast<double>(rG.aGradient.GetAngle()) * (F_PI180 / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -108,14 +108,14 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
             if(rG.aGradient.GetBorder())
             {
                 basegfx::B2DVector aFullVec(aStartPos - aEndPos);
-                const double fLen = (aFullVec.getLength() * (100.0 - (double)rG.aGradient.GetBorder())) / 100.0;
+                const double fLen = (aFullVec.getLength() * (100.0 - static_cast<double>(rG.aGradient.GetBorder()))) / 100.0;
                 aFullVec.normalize();
                 aStartPos = aEndPos + (aFullVec * fLen);
             }
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
+                const double fAngle = static_cast<double>(rG.aGradient.GetAngle()) * (F_PI180 / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -143,14 +143,14 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
             if(rG.aGradient.GetBorder())
             {
                 basegfx::B2DVector aFullVec(aStartPos - aEndPos);
-                const double fLen = (aFullVec.getLength() * (100.0 - (double)rG.aGradient.GetBorder())) / 100.0;
+                const double fLen = (aFullVec.getLength() * (100.0 - static_cast<double>(rG.aGradient.GetBorder()))) / 100.0;
                 aFullVec.normalize();
                 aStartPos = aEndPos + (aFullVec * fLen);
             }
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
+                const double fAngle = static_cast<double>(rG.aGradient.GetAngle()) * (F_PI180 / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -269,7 +269,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 // set
                 if(nNewBorder != rG.aGradient.GetBorder())
                 {
-                    rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
+                    rG.aGradient.SetBorder(static_cast<sal_uInt16>(nNewBorder));
                 }
             }
 
@@ -300,7 +300,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 // set
                 if(nNewBorder != rG.aGradient.GetBorder())
                 {
-                    rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
+                    rG.aGradient.SetBorder(static_cast<sal_uInt16>(nNewBorder));
                 }
 
                 aFullVec.normalize();
@@ -362,8 +362,8 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                     nNewYOffset = 100;
                 }
 
-                rG.aGradient.SetXOffset((sal_uInt16)nNewXOffset);
-                rG.aGradient.SetYOffset((sal_uInt16)nNewYOffset);
+                rG.aGradient.SetXOffset(static_cast<sal_uInt16>(nNewXOffset));
+                rG.aGradient.SetYOffset(static_cast<sal_uInt16>(nNewYOffset));
 
                 aStartPos -= aOffset;
                 aEndPos -= aOffset;
@@ -394,7 +394,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 // set
                 if(nNewBorder != rG.aGradient.GetBorder())
                 {
-                    rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
+                    rG.aGradient.SetBorder(static_cast<sal_uInt16>(nNewBorder));
                 }
 
                 // angle is not definitely necessary for these modes, but it makes
@@ -458,8 +458,8 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                     nNewYOffset = 100;
                 }
 
-                rG.aGradient.SetXOffset((sal_uInt16)nNewXOffset);
-                rG.aGradient.SetYOffset((sal_uInt16)nNewYOffset);
+                rG.aGradient.SetXOffset(static_cast<sal_uInt16>(nNewXOffset));
+                rG.aGradient.SetYOffset(static_cast<sal_uInt16>(nNewYOffset));
 
                 aStartPos -= aOffset;
                 aEndPos -= aOffset;
@@ -490,7 +490,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 // set
                 if(nNewBorder != rG.aGradient.GetBorder())
                 {
-                    rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
+                    rG.aGradient.SetBorder(static_cast<sal_uInt16>(nNewBorder));
                 }
 
                 // angle is not definitely necessary for these modes, but it makes

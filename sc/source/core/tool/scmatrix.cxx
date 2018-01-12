@@ -361,7 +361,7 @@ static size_t GetElementsMax( size_t nMemory )
     // With 1GB that's ~85M elements, or 85 whole columns.
     constexpr size_t nElemMax = nMemMax / nPerElem;
     // With MAXROWCOUNT==1048576 and 128 columns => 128M elements, 1.5GB
-    constexpr size_t nArbitraryLimit = (size_t)MAXROWCOUNT * 128;
+    constexpr size_t nArbitraryLimit = size_t(MAXROWCOUNT) * 128;
     // With the constant 1GB from above that's the actual value.
     return nElemMax < nArbitraryLimit ? nElemMax : nArbitraryLimit;
 }
@@ -1645,7 +1645,7 @@ inline double evaluate( double fVal, ScQueryOp eOp )
             ;
     }
 
-    SAL_WARN("sc.core",  "evaluate: unhandled comparison operator: " << (int)eOp);
+    SAL_WARN("sc.core",  "evaluate: unhandled comparison operator: " << static_cast<int>(eOp));
     return CreateDoubleError( FormulaError::UnknownState);
 }
 
@@ -3319,7 +3319,7 @@ public:
 
     TRet operator()(bool bVal) const
     {
-        return maOp((double)bVal, mfVal);
+        return maOp(static_cast<double>(bVal), mfVal);
     }
 
     double operator()(const svl::SharedString& rStr) const

@@ -286,10 +286,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         switch( nMemberId )
                         {
                             case MID_L_MARGIN:
-                                rLRSpace.SetTextLeft( nAbs, (sal_uInt16)nProp );
+                                rLRSpace.SetTextLeft( nAbs, static_cast<sal_uInt16>(nProp) );
                                 break;
                             case MID_R_MARGIN:
-                                rLRSpace.SetRight( nAbs, (sal_uInt16)nProp );
+                                rLRSpace.SetRight( nAbs, static_cast<sal_uInt16>(nProp) );
                                 break;
                         }
                     }
@@ -307,7 +307,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
                                                              -0x7fff, 0x7fff );
 
-                    rLRSpace.SetTextFirstLineOfst( (short)nAbs, (sal_uInt16)nProp );
+                    rLRSpace.SetTextFirstLineOfst( static_cast<short>(nAbs), static_cast<sal_uInt16>(nProp) );
                 }
                 break;
 
@@ -341,10 +341,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
             switch( nMemberId )
             {
                 case MID_UP_MARGIN:
-                    rULSpace.SetUpper( (sal_uInt16)nAbs, (sal_uInt16)nProp );
+                    rULSpace.SetUpper( static_cast<sal_uInt16>(nAbs), static_cast<sal_uInt16>(nProp) );
                     break;
                 case MID_LO_MARGIN:
-                    rULSpace.SetLower( (sal_uInt16)nAbs, (sal_uInt16)nProp );
+                    rULSpace.SetLower( static_cast<sal_uInt16>(nAbs), static_cast<sal_uInt16>(nProp) );
                     break;
                 default:
                     OSL_FAIL("unknown MemberId");
@@ -456,16 +456,16 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                     if( nMemberId == LEFT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        rBox.SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::LEFT );
+                        rBox.SetDistance( static_cast<sal_uInt16>(nTemp), SvxBoxItemLine::LEFT );
                     if( nMemberId == RIGHT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        rBox.SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::RIGHT );
+                        rBox.SetDistance( static_cast<sal_uInt16>(nTemp), SvxBoxItemLine::RIGHT );
                     if( nMemberId == TOP_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        rBox.SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::TOP );
+                        rBox.SetDistance( static_cast<sal_uInt16>(nTemp), SvxBoxItemLine::TOP );
                     if( nMemberId == BOTTOM_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        rBox.SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::BOTTOM);
+                        rBox.SetDistance( static_cast<sal_uInt16>(nTemp), SvxBoxItemLine::BOTTOM);
                     break;
 
                 case ALL_BORDER:
@@ -792,7 +792,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 // "auto" as "0" for tables - now that we support a real offset
                 //  0, this fake "0" MUST NOT be imported as offset 0!
                 if( bOk && nVal > 0 )
-                    rPageDesc.SetNumOffset( (sal_uInt16)nVal );
+                    rPageDesc.SetNumOffset( static_cast<sal_uInt16>(nVal) );
             }
         }
         break;
@@ -870,7 +870,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         else if( nValue > 100 )
                             nValue = 100;
 
-                        rFrameSize.SetWidthPercent( (sal_Int8)nValue );
+                        rFrameSize.SetWidthPercent( static_cast<sal_Int8>(nValue) );
                     }
                 }
                 break;
@@ -905,7 +905,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         else if( nValue > USHRT_MAX )
                             nValue = USHRT_MAX;
 
-                        rFrameSize.SetWidth( (sal_uInt16)nValue );
+                        rFrameSize.SetWidth( static_cast<sal_uInt16>(nValue) );
                         rFrameSize.SetHeightSizeType( ATT_VAR_SIZE );
                         bOk = true;
                     }
@@ -921,9 +921,9 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 if( bOk )
                 {
                     if( bSetWidth )
-                        rFrameSize.SetWidth( (sal_uInt16)nValue );
+                        rFrameSize.SetWidth( static_cast<sal_uInt16>(nValue) );
                     if( bSetHeight )
-                        rFrameSize.SetHeight( (sal_uInt16)nValue );
+                        rFrameSize.SetHeight( static_cast<sal_uInt16>(nValue) );
                     if( bSetSizeType )
                         rFrameSize.SetHeightSizeType( eSizeType );
                 }

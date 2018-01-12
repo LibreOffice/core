@@ -2678,7 +2678,7 @@ namespace pcr
                 pItem = nullptr;
                 if ( SfxItemState::SET == pResult->GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, false, &pItem ) )
                 {
-                    _out_rNewValue <<= (sal_Int32)( static_cast< const SfxUInt32Item* >( pItem )->GetValue() );
+                    _out_rNewValue <<= static_cast<sal_Int32>( static_cast< const SfxUInt32Item* >( pItem )->GetValue() );
                     bChanged = true;
                 }
             }

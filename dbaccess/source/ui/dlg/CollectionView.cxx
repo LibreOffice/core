@@ -275,9 +275,9 @@ void OCollectionView::initCurrentPath()
             static const char s_sReportsCID[] = "private:reports";
             m_bCreateForm = s_sFormsCID == sCID;
             OUString sPath("/");
-            if ( m_bCreateForm && sCID.getLength() != (sal_Int32)strlen(s_sFormsCID))
+            if ( m_bCreateForm && sCID.getLength() != static_cast<sal_Int32>(strlen(s_sFormsCID)))
                 sPath = sCID.copy(strlen(s_sFormsCID));
-            else if ( !m_bCreateForm && sCID.getLength() != (sal_Int32)strlen(s_sReportsCID) )
+            else if ( !m_bCreateForm && sCID.getLength() != static_cast<sal_Int32>(strlen(s_sReportsCID)) )
                 sPath = sCID.copy(strlen(s_sReportsCID) - 2);
 
             m_pFTCurrentPath->SetText(sPath);

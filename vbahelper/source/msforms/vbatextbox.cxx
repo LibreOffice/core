@@ -78,7 +78,7 @@ ScVbaTextBox::getMaxLength()
     aValue = m_xProps->getPropertyValue( "MaxTextLen" );
     sal_Int16 nMaxLength = 0;
     aValue >>= nMaxLength;
-    return (sal_Int32)nMaxLength;
+    return static_cast<sal_Int32>(nMaxLength);
 }
 
 void SAL_CALL

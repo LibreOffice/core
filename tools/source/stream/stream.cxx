@@ -1252,10 +1252,10 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
         {
             // => yes
             if (nCount != 0)
-                memcpy(pData, m_pBufPos, (size_t) nCount);
-            m_nBufActualPos = m_nBufActualPos + (sal_uInt16)nCount;
+                memcpy(pData, m_pBufPos, static_cast<size_t>(nCount));
+            m_nBufActualPos = m_nBufActualPos + static_cast<sal_uInt16>(nCount);
             m_pBufPos += nCount;
-            m_nBufFree = m_nBufFree - (sal_uInt16)nCount;
+            m_nBufFree = m_nBufFree - static_cast<sal_uInt16>(nCount);
         }
         else
         {
@@ -1290,13 +1290,13 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
                 std::size_t nCountTmp = GetData( m_pRWBuf.get(), m_nBufSize );
                 if (m_nCryptMask)
                     EncryptBuffer(m_pRWBuf.get(), nCountTmp);
-                m_nBufActualLen = (sal_uInt16)nCountTmp;
+                m_nBufActualLen = static_cast<sal_uInt16>(nCountTmp);
                 if( nCount > nCountTmp )
                 {
                     nCount = nCountTmp;  // trim count back, EOF see below
                 }
-                memcpy( pData, m_pRWBuf.get(), (size_t)nCount );
-                m_nBufActualPos = (sal_uInt16)nCount;
+                memcpy( pData, m_pRWBuf.get(), static_cast<size_t>(nCount) );
+                m_nBufActualPos = static_cast<sal_uInt16>(nCount);
                 m_pBufPos = m_pRWBuf.get() + nCount;
             }
         }
@@ -1337,8 +1337,8 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
     m_isIoWrite = true;
     if (nCount <= static_cast<std::size_t>(m_nBufSize - m_nBufActualPos))
     {
-        memcpy( m_pBufPos, pData, (size_t)nCount );
-        m_nBufActualPos = m_nBufActualPos + (sal_uInt16)nCount;
+        memcpy( m_pBufPos, pData, static_cast<size_t>(nCount) );
+        m_nBufActualPos = m_nBufActualPos + static_cast<sal_uInt16>(nCount);
         // Update length if buffer was updated
         if (m_nBufActualPos > m_nBufActualLen)
             m_nBufActualLen = m_nBufActualPos;
@@ -1368,13 +1368,13 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
         else
         {
             // Copy block to buffer
-            memcpy( m_pRWBuf.get(), pData, (size_t)nCount );
+            memcpy( m_pRWBuf.get(), pData, static_cast<size_t>(nCount) );
 
             // Mind the order!
             m_nBufFilePos += m_nBufActualPos;
-            m_nBufActualPos = (sal_uInt16)nCount;
+            m_nBufActualPos = static_cast<sal_uInt16>(nCount);
             m_pBufPos = m_pRWBuf.get() + nCount;
-            m_nBufActualLen = (sal_uInt16)nCount;
+            m_nBufActualLen = static_cast<sal_uInt16>(nCount);
             m_isDirty = true;
         }
     }
@@ -1396,7 +1396,7 @@ sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
     // Is seek position within buffer?
     if (nFilePos >= m_nBufFilePos && nFilePos <= (m_nBufFilePos + m_nBufActualLen))
     {
-        m_nBufActualPos = (sal_uInt16)(nFilePos - m_nBufFilePos);
+        m_nBufActualPos = static_cast<sal_uInt16>(nFilePos - m_nBufFilePos);
         m_pBufPos = m_pRWBuf.get() + m_nBufActualPos;
         // Update m_nBufFree to avoid crash upon PutBack
         m_nBufFree = m_nBufActualLen - m_nBufActualPos;
@@ -1441,11 +1441,11 @@ void SvStream::RefreshBuffer()
 {
     FlushBuffer(m_isConsistent);
     SeekPos(m_nBufFilePos);
-    m_nBufActualLen = (sal_uInt16)GetData( m_pRWBuf.get(), m_nBufSize );
+    m_nBufActualLen = static_cast<sal_uInt16>(GetData( m_pRWBuf.get(), m_nBufSize ));
     if (m_nBufActualLen && m_nError == ERRCODE_IO_PENDING)
         m_nError = ERRCODE_NONE;
     if (m_nCryptMask)
-        EncryptBuffer(m_pRWBuf.get(), (std::size_t)m_nBufActualLen);
+        EncryptBuffer(m_pRWBuf.get(), static_cast<std::size_t>(m_nBufActualLen));
     m_isConsistent = true;
     m_isIoRead = m_isIoWrite = false;
 }
@@ -1483,7 +1483,7 @@ std::size_t SvStream::CryptAndWriteBuffer( const void* pStart, std::size_t nLen)
         else
             nBufCount = nLen;
         nLen -= nBufCount;
-        memcpy( pTemp, pDataPtr, (sal_uInt16)nBufCount );
+        memcpy( pTemp, pDataPtr, static_cast<sal_uInt16>(nBufCount) );
         // ******** Encrypt ********
         for (unsigned char & rn : pTemp)
         {
@@ -1700,7 +1700,7 @@ std::size_t SvMemoryStream::GetData( void* pData, std::size_t nCount )
         nCount = nMaxCount;
     if (nCount != 0)
     {
-        memcpy( pData, pBuf+nPos, (size_t)nCount );
+        memcpy( pData, pBuf+nPos, static_cast<size_t>(nCount) );
     }
     nPos += nCount;
     return nCount;
@@ -1753,7 +1753,7 @@ std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
         }
     }
     assert(pBuf && "Possibly Reallocate failed");
-    memcpy( pBuf+nPos, pData, (size_t)nCount);
+    memcpy( pBuf+nPos, pData, static_cast<size_t>(nCount));
 
     nPos += nCount;
     if( nPos > nEndOfData )
@@ -1778,8 +1778,8 @@ sal_uInt64 SvMemoryStream::SeekPos(sal_uInt64 const nNewPos)
         {
             if( nResize )  // Is extension possible?
             {
-                long nDiff = (long)(nNewPos - nSize + 1);
-                nDiff += (long)nResize;
+                long nDiff = static_cast<long>(nNewPos - nSize + 1);
+                nDiff += static_cast<long>(nResize);
                 ReAllocateMemory( nDiff );
                 nPos = nNewPos;
                 nEndOfData = nNewPos;
@@ -1821,9 +1821,9 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
         return false;
 
     bool bRetVal    = false;
-    long nTemp      = (long)nSize;
+    long nTemp      = static_cast<long>(nSize);
     nTemp           += nDiff;
-    std::size_t nNewSize  = (std::size_t)nTemp;
+    std::size_t nNewSize  = static_cast<std::size_t>(nTemp);
 
     if( nNewSize )
     {
@@ -1832,7 +1832,7 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
         bRetVal = true; // Success!
         if( nNewSize < nSize )      // Are we shrinking?
         {
-            memcpy( pNewBuf, pBuf, (size_t)nNewSize );
+            memcpy( pNewBuf, pBuf, static_cast<size_t>(nNewSize) );
             if( nPos > nNewSize )
                 nPos = 0;
             if( nEndOfData >= nNewSize )
@@ -1842,7 +1842,7 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
         {
             if (nSize != 0)
             {
-                memcpy( pNewBuf, pBuf, (size_t)nSize );
+                memcpy( pNewBuf, pBuf, static_cast<size_t>(nSize) );
             }
             memset(pNewBuf + nSize, 0x00, nNewSize - nSize);
         }
@@ -1909,7 +1909,7 @@ void SvMemoryStream::SetSize(sal_uInt64 const nNewSize)
         return;
     }
 
-    long nDiff = (long)nNewSize - (long)nSize;
+    long nDiff = static_cast<long>(nNewSize) - static_cast<long>(nSize);
     ReAllocateMemory( nDiff );
 }
 

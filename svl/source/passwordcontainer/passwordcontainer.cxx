@@ -150,8 +150,8 @@ static OUString getAsciiLine( const ::rtl::ByteSequence& buf )
 
     for( int ind = 0; ind < buf.getLength(); ind++ )
     {
-        outbuf[ind*2]   = ( ((sal_uInt8)buf[ind]) >> 4 ) + 'a';
-        outbuf[ind*2+1] = ( ((sal_uInt8)buf[ind]) & 0x0f ) + 'a';
+        outbuf[ind*2]   = ( static_cast<sal_uInt8>(buf[ind]) >> 4 ) + 'a';
+        outbuf[ind*2+1] = ( static_cast<sal_uInt8>(buf[ind]) & 0x0f ) + 'a';
     }
     outbuf[buf.getLength()*2] = '\0';
 
@@ -169,7 +169,7 @@ static ::rtl::ByteSequence getBufFromAsciiLine( const OUString& line )
 
     for( int ind = 0; ind < tmpLine.getLength()/2; ind++ )
     {
-        aResult[ind] = ( (sal_uInt8)( tmpLine[ind*2] - 'a' ) << 4 ) | (sal_uInt8)( tmpLine[ind*2+1] - 'a' );
+        aResult[ind] = ( static_cast<sal_uInt8>( tmpLine[ind*2] - 'a' ) << 4 ) | static_cast<sal_uInt8>( tmpLine[ind*2+1] - 'a' );
     }
 
     return aResult;
@@ -430,7 +430,7 @@ std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLin
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = (char)(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
+                code[ ind ] = static_cast<char>(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
 
             rtlCipherError result = rtl_cipher_init (
                     aDecoder, rtl_Cipher_DirectionDecode,
@@ -481,7 +481,7 @@ OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = (char)(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
+                code[ ind ] = static_cast<char>(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
 
             rtlCipherError result = rtl_cipher_init (
                     aEncoder, rtl_Cipher_DirectionEncode,

@@ -114,7 +114,7 @@ struct OStorePageGuard
     }
 };
 
-#define STORE_PAGE_NULL ((sal_uInt32)(~0))
+#define STORE_PAGE_NULL (sal_uInt32(~0))
 
 struct OStorePageDescriptor
 {

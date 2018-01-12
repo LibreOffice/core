@@ -209,7 +209,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         SwFieldType* pFieldType = pMgr->GetFieldType(SwFieldIds::Unknown, --i);
         if( pFieldType->GetName() == m_pCategoryBox->GetText() )
         {
-            nSelFormat = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat();
+            nSelFormat = static_cast<sal_uInt16>(static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat());
             break;
         }
     }
@@ -274,7 +274,7 @@ void SwCaptionDialog::Apply()
         aOpt.SetCategory(comphelper::string::strip(aName, ' '));
         aOpt.SetNumSeparator( m_pNumberingSeparatorED->GetText() );
     }
-    aOpt.SetNumType( (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectedEntryData()) );
+    aOpt.SetNumType( static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectedEntryData())) );
     aOpt.SetSeparator( m_pSepEdit->IsEnabled() ? m_pSepEdit->GetText() : OUString() );
     aOpt.SetCaption( m_pTextEdit->GetText() );
     aOpt.SetPos( m_pPosBox->GetSelectedEntryPos() );
@@ -355,7 +355,7 @@ void SwCaptionDialog::DrawSample()
     bool bNone = sFieldTypeName == m_sNone;
     if( !bNone )
     {
-        const sal_uInt16 nNumFormat = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectedEntryData());
+        const sal_uInt16 nNumFormat = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectedEntryData()));
         if( SVX_NUM_NUMBER_NONE != nNumFormat )
         {
             // category
@@ -494,7 +494,7 @@ void SwSequenceOptionDialog::Apply()
     SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
                                         SwFieldIds::SetExp, aFieldTypeName ));
 
-    sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectedEntryPos() - 1);
+    sal_Int8 nLvl = static_cast<sal_Int8>( m_pLbLevel->GetSelectedEntryPos() - 1);
     sal_Unicode cDelim = m_pEdDelim->GetText()[0];
 
     bool bUpdate = true;

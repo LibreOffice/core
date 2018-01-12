@@ -404,7 +404,7 @@ SdrObject* FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 {
     OUString sDataSource     = rFieldDesc.getToken(0,u'\x000B');
     OUString sObjectName     = rFieldDesc.getToken(1,u'\x000B');
-    sal_uInt16 nObjectType   = (sal_uInt16)rFieldDesc.getToken(2,u'\x000B').toInt32();
+    sal_uInt16 nObjectType   = static_cast<sal_uInt16>(rFieldDesc.getToken(2,u'\x000B').toInt32());
     OUString sFieldName      = rFieldDesc.getToken(3,u'\x000B');
 
     if (sFieldName.isEmpty() || sObjectName.isEmpty() || sDataSource.isEmpty())

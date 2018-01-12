@@ -628,7 +628,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpCbExportFormFields->Check( mbExportFormFieldsUserSelection );
     }
 
-    mpLbFormsFormat->SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
+    mpLbFormsFormat->SelectEntryPos( static_cast<sal_uInt16>(paParent->mnFormsType) );
     mpCbAllowDuplicateFieldNames->Check( paParent->mbAllowDuplicateFieldNames );
     mpFormsFrame->Enable( paParent->mbExportFormFields );
 

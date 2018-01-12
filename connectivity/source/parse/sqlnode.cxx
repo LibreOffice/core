@@ -108,7 +108,7 @@ namespace
     {
         OUString rNewValue = rQuot;
         rNewValue += rValue;
-        sal_Int32 nIndex = (sal_Int32)-1;   // Replace quotes with double quotes or the parser gets into problems
+        sal_Int32 nIndex = sal_Int32(-1);   // Replace quotes with double quotes or the parser gets into problems
 
         if (!rQuot.isEmpty())
         {
@@ -1754,7 +1754,7 @@ void OSQLParseNode::replaceNodeValue(const OUString& rTableAlias, const OUString
     {
         if (SQL_ISRULE(this,column_ref) && count() == 1 && getChild(0)->getTokenValue() == rColumnName)
         {
-            OSQLParseNode * pCol = removeAt((sal_uInt32)0);
+            OSQLParseNode * pCol = removeAt(sal_uInt32(0));
             append(new OSQLParseNode(rTableAlias,SQLNodeType::Name));
             append(new OSQLParseNode(".",SQLNodeType::Punctuation));
             append(pCol);
@@ -1839,7 +1839,7 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
             pSearchCondition->removeAt(2);
 
             pNewRight   = MakeANDNode(pOr->removeAt(2)      ,pRight);
-            pNewLeft    = MakeANDNode(pOr->removeAt((sal_uInt32)0)  ,new OSQLParseNode(*pRight));
+            pNewLeft    = MakeANDNode(pOr->removeAt(sal_uInt32(0))  ,new OSQLParseNode(*pRight));
             pNewNode    = MakeORNode(pNewLeft,pNewRight);
             // and append new Node
             replaceAndReset(pSearchCondition,pNewNode);
@@ -1855,10 +1855,10 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
             OSQLParseNode* pNewRight = nullptr;
 
             // cut left from parent
-            pSearchCondition->removeAt((sal_uInt32)0);
+            pSearchCondition->removeAt(sal_uInt32(0));
 
             pNewRight   = MakeANDNode(pLeft,pOr->removeAt(2));
-            pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt((sal_uInt32)0));
+            pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt(sal_uInt32(0)));
             pNewNode    = MakeORNode(pNewLeft,pNewRight);
 
             // and append new Node
@@ -1890,9 +1890,9 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
         if(bNegate)
         {
             OSQLParseNode* pNewNode = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_term));
-            pNewNode->append(pSearchCondition->removeAt((sal_uInt32)0));
+            pNewNode->append(pSearchCondition->removeAt(sal_uInt32(0)));
             pNewNode->append(new OSQLParseNode("AND",SQLNodeType::Keyword,SQL_TOKEN_AND));
-            pNewNode->append(pSearchCondition->removeAt((sal_uInt32)1));
+            pNewNode->append(pSearchCondition->removeAt(sal_uInt32(1)));
             replaceAndReset(pSearchCondition,pNewNode);
 
             pLeft   = pNewNode->getChild(0);
@@ -1910,9 +1910,9 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
         if(bNegate)
         {
             OSQLParseNode* pNewNode = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::search_condition));
-            pNewNode->append(pSearchCondition->removeAt((sal_uInt32)0));
+            pNewNode->append(pSearchCondition->removeAt(sal_uInt32(0)));
             pNewNode->append(new OSQLParseNode("OR",SQLNodeType::Keyword,SQL_TOKEN_OR));
-            pNewNode->append(pSearchCondition->removeAt((sal_uInt32)1));
+            pNewNode->append(pSearchCondition->removeAt(sal_uInt32(1)));
             replaceAndReset(pSearchCondition,pNewNode);
 
             pLeft   = pNewNode->getChild(0);
@@ -1925,9 +1925,9 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
     // SQL_TOKEN_NOT ( boolean_primary )
     else if (SQL_ISRULE(pSearchCondition,boolean_factor))
     {
-        OSQLParseNode *pNot = pSearchCondition->removeAt((sal_uInt32)0);
+        OSQLParseNode *pNot = pSearchCondition->removeAt(sal_uInt32(0));
         delete pNot;
-        OSQLParseNode *pBooleanTest = pSearchCondition->removeAt((sal_uInt32)0);
+        OSQLParseNode *pBooleanTest = pSearchCondition->removeAt(sal_uInt32(0));
         // TODO is this needed // pBooleanTest->setParent(NULL);
         replaceAndReset(pSearchCondition,pBooleanTest);
 
@@ -2063,7 +2063,7 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
     if(( SQL_ISRULE(pSearchCondition,boolean_term) || SQL_ISRULE(pSearchCondition,search_condition))
         && *pSearchCondition->getChild(0) == *pSearchCondition->getChild(2))
     {
-        pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
+        pNewNode = pSearchCondition->removeAt(sal_uInt32(0));
         replaceAndReset(pSearchCondition,pNewNode);
     }
     // (a or b) and a || ( b or c ) and a
@@ -2085,22 +2085,22 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
 
         if ( *p2ndSearch->getChild(0) == *pSearchCondition->getChild(2-nPos) ) // a and ( a or b) -> a or b
         {
-            pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
+            pNewNode = pSearchCondition->removeAt(sal_uInt32(0));
             replaceAndReset(pSearchCondition,pNewNode);
 
         }
         else if ( *p2ndSearch->getChild(2) == *pSearchCondition->getChild(2-nPos) ) // a and ( b or a) -> a or b
         {
-            pNewNode = pSearchCondition->removeAt((sal_uInt32)2);
+            pNewNode = pSearchCondition->removeAt(sal_uInt32(2));
             replaceAndReset(pSearchCondition,pNewNode);
         }
         else if ( p2ndSearch->getByRule(OSQLParseNode::search_condition) )
         {
             // a and ( b or c ) -> ( a and b ) or ( a and c )
             // ( b or c ) and a -> ( a and b ) or ( a and c )
-            OSQLParseNode* pC = p2ndSearch->removeAt((sal_uInt32)2);
-            OSQLParseNode* pB = p2ndSearch->removeAt((sal_uInt32)0);
-            OSQLParseNode* pA = pSearchCondition->removeAt((sal_uInt32)2-nPos);
+            OSQLParseNode* pC = p2ndSearch->removeAt(sal_uInt32(2));
+            OSQLParseNode* pB = p2ndSearch->removeAt(sal_uInt32(0));
+            OSQLParseNode* pA = pSearchCondition->removeAt(sal_uInt32(2)-nPos);
 
             OSQLParseNode* p1stAnd = MakeANDNode(pA,pB);
             OSQLParseNode* p2ndAnd = MakeANDNode(new OSQLParseNode(*pA),pC);
@@ -2119,12 +2119,12 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
     {
         if(*pSearchCondition->getChild(2)->getChild(0) == *pSearchCondition->getChild(0))
         {
-            pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
+            pNewNode = pSearchCondition->removeAt(sal_uInt32(0));
             replaceAndReset(pSearchCondition,pNewNode);
         }
         else if(*pSearchCondition->getChild(2)->getChild(2) == *pSearchCondition->getChild(0))
         {
-            pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
+            pNewNode = pSearchCondition->removeAt(sal_uInt32(0));
             replaceAndReset(pSearchCondition,pNewNode);
         }
     }
@@ -2133,12 +2133,12 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
     {
         if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2))
         {
-            pNewNode = pSearchCondition->removeAt((sal_uInt32)2);
+            pNewNode = pSearchCondition->removeAt(sal_uInt32(2));
             replaceAndReset(pSearchCondition,pNewNode);
         }
         else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2))
         {
-            pNewNode = pSearchCondition->removeAt((sal_uInt32)2);
+            pNewNode = pSearchCondition->removeAt(sal_uInt32(2));
             replaceAndReset(pSearchCondition,pNewNode);
         }
     }
@@ -2192,12 +2192,12 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
             OSQLParseNode::eraseBraces(pLeft);
             OSQLParseNode::eraseBraces(pRight);
 
-            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt((sal_uInt32)0),pNewRule);
+            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(sal_uInt32(0)),pNewRule);
             replaceAndReset(pSearchCondition,pNode);
         }
         else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2)->getChild(0))
         {
-            OSQLParseNode* pLeft = pSearchCondition->getChild(0)->removeAt((sal_uInt32)0);
+            OSQLParseNode* pLeft = pSearchCondition->getChild(0)->removeAt(sal_uInt32(0));
             OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(2);
             OSQLParseNode* pNode = MakeORNode(pLeft,pRight);
 
@@ -2215,7 +2215,7 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
         else if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2)->getChild(2))
         {
             OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(2);
-            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt((sal_uInt32)0);
+            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(sal_uInt32(0));
             OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
 
             OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
@@ -2226,13 +2226,13 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
             OSQLParseNode::eraseBraces(pLeft);
             OSQLParseNode::eraseBraces(pRight);
 
-            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt((sal_uInt32)0),pNewRule);
+            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(sal_uInt32(0)),pNewRule);
             replaceAndReset(pSearchCondition,pNode);
         }
         else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2)->getChild(2))
         {
-            OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt((sal_uInt32)0);
-            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt((sal_uInt32)0);
+            OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(sal_uInt32(0));
+            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(sal_uInt32(0));
             OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
 
             OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));

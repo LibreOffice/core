@@ -28,7 +28,7 @@
 typedef ::std::map< sal_uLong, ImplAccelEntry* > ImplAccelMap;
 typedef ::std::vector< ImplAccelEntry* > ImplAccelList;
 
-#define ACCELENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
+#define ACCELENTRY_NOTFOUND     (sal_uInt16(0xFFFF))
 
 class ImplAccelData
 {
@@ -68,7 +68,7 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
             if ( nId > nCompareId )
                 nLow = nMid + 1;
             else
-                return (sal_uInt16)nMid;
+                return static_cast<sal_uInt16>(nMid);
         }
     }
     while ( nLow <= nHigh );
@@ -76,9 +76,9 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
     if ( pIndex )
     {
         if ( nId > nCompareId )
-            *pIndex = (sal_uInt16)(nMid+1);
+            *pIndex = static_cast<sal_uInt16>(nMid+1);
         else
-            *pIndex = (sal_uInt16)nMid;
+            *pIndex = static_cast<sal_uInt16>(nMid);
     }
 
     return ACCELENTRY_NOTFOUND;
@@ -262,7 +262,7 @@ void Accelerator::InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode )
 sal_uInt16 Accelerator::GetItemCount() const
 {
 
-    return (sal_uInt16)mpData->maIdList.size();
+    return static_cast<sal_uInt16>(mpData->maIdList.size());
 }
 
 sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const

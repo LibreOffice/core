@@ -290,8 +290,8 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
             pItemTransfHeight= GetItem( rGeoAttr, SID_ATTR_TRANSFORM_HEIGHT );
         }
     }
-    m_fObjectWidth = std::max( pItemTransfWidth ? (double)static_cast<const SfxUInt32Item*>(pItemTransfWidth)->GetValue() : 0.0, 1.0 );
-    m_fObjectHeight = std::max( pItemTransfHeight ? (double)static_cast<const SfxUInt32Item*>(pItemTransfHeight)->GetValue() : 0.0, 1.0 );
+    m_fObjectWidth = std::max( pItemTransfWidth ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItemTransfWidth)->GetValue()) : 0.0, 1.0 );
+    m_fObjectHeight = std::max( pItemTransfHeight ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItemTransfHeight)->GetValue()) : 0.0, 1.0 );
     double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectWidth), mePoolUnit, MapUnit::Map100thMM )) / fUIScale);
     m_fObjectWidth = fTmpWidth;
 

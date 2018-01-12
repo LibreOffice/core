@@ -753,7 +753,7 @@ void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_In
             DBG_ASSERT( pEntry, "invalid entry" );
             if ( pEntry == pTemp )
             {
-                _rPath.push_front( (sal_Int32)i );
+                _rPath.push_front( static_cast<sal_Int32>(i) );
                 break;
             }
         }
@@ -1709,7 +1709,7 @@ void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& a
     GetModel()->InvalidateEntry( pEntry );
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
-    short nWidth = pImpl->UpdateContextBmpWidthVector( pEntry, (short)aSize.Width() );
+    short nWidth = pImpl->UpdateContextBmpWidthVector( pEntry, static_cast<short>(aSize.Width()) );
     if( nWidth > nContextBmpWidthMax )
     {
         nContextBmpWidthMax = nWidth;
@@ -1727,7 +1727,7 @@ void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aB
     GetModel()->InvalidateEntry( pEntry );
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
-    short nWidth = pImpl->UpdateContextBmpWidthVector( pEntry, (short)aSize.Width() );
+    short nWidth = pImpl->UpdateContextBmpWidthVector( pEntry, static_cast<short>(aSize.Width()) );
     if( nWidth > nContextBmpWidthMax )
     {
         nContextBmpWidthMax = nWidth;
@@ -1753,13 +1753,13 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
         Size aSize = GetCollapsedEntryBmp( pEntry ).GetSizePixel();
         if( aSize.Width() > nContextBmpWidthMax )
         {
-            nContextBmpWidthMax = (short)aSize.Width();
+            nContextBmpWidthMax = static_cast<short>(aSize.Width());
             nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
         aSize = GetExpandedEntryBmp( pEntry ).GetSizePixel();
         if( aSize.Width() > nContextBmpWidthMax )
         {
-            nContextBmpWidthMax = (short)aSize.Width();
+            nContextBmpWidthMax = static_cast<short>(aSize.Width());
             nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
     }
@@ -1897,7 +1897,7 @@ void SvTreeListBox::SetDefaultExpandedEntryBmp( const Image& aBmp )
 {
     Size aSize = aBmp.GetSizePixel();
     if( aSize.Width() > nContextBmpWidthMax )
-        nContextBmpWidthMax = (short)aSize.Width();
+        nContextBmpWidthMax = static_cast<short>(aSize.Width());
     SetTabs();
 
     pImpl->SetDefaultEntryExpBmp( aBmp );
@@ -1907,7 +1907,7 @@ void SvTreeListBox::SetDefaultCollapsedEntryBmp( const Image& aBmp )
 {
     Size aSize = aBmp.GetSizePixel();
     if( aSize.Width() > nContextBmpWidthMax )
-        nContextBmpWidthMax = (short)aSize.Width();
+        nContextBmpWidthMax = static_cast<short>(aSize.Width());
     SetTabs();
 
     pImpl->SetDefaultEntryColBmp( aBmp );
@@ -2066,14 +2066,14 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
         long nVis = pImpl->aVerSBar->GetVisibleSize();
         long nTemp = nThumb + nVis;
         if( nDeltaEntries > (nMax - nTemp) )
-            nDeltaEntries = (short)(nMax - nTemp);
-        pImpl->PageDown( (sal_uInt16)nDeltaEntries );
+            nDeltaEntries = static_cast<short>(nMax - nTemp);
+        pImpl->PageDown( static_cast<sal_uInt16>(nDeltaEntries) );
     }
     else
     {
         if( nDeltaEntries > nThumb )
-            nDeltaEntries = (short)nThumb;
-        pImpl->PageUp( (sal_uInt16)nDeltaEntries );
+            nDeltaEntries = static_cast<short>(nThumb);
+        pImpl->PageUp( static_cast<sal_uInt16>(nDeltaEntries) );
     }
     pImpl->SyncVerThumb();
     NotifyEndScroll();
@@ -2104,7 +2104,7 @@ void SvTreeListBox::SetEntryHeight( SvTreeListEntry const * pEntry )
     SvViewDataEntry* pViewData = GetViewDataEntry( pEntry );
     while( nCur < nCount )
     {
-        short nHeight = (short)(SvLBoxItem::GetSize( pViewData, nCur ).Height());
+        short nHeight = static_cast<short>(SvLBoxItem::GetSize( pViewData, nCur ).Height());
         if( nHeight > nHeightMax )
             nHeightMax = nHeight;
         nCur++;
@@ -2142,7 +2142,7 @@ void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
     const Size aSize( rBmp.GetSizePixel() );
     if( aSize.Height() > nEntryHeight )
     {
-        nEntryHeight = (short)aSize.Height() + nEntryHeightOffs;
+        nEntryHeight = static_cast<short>(aSize.Height()) + nEntryHeightOffs;
         pImpl->SetEntryHeight();
     }
 }
@@ -2152,7 +2152,7 @@ void SvTreeListBox::AdjustEntryHeight()
     Size aSize( GetTextWidth(OUString('X')), GetTextHeight() );
     if( aSize.Height()  >  nEntryHeight )
     {
-        nEntryHeight = (short)aSize.Height() + nEntryHeightOffs;
+        nEntryHeight = static_cast<short>(aSize.Height()) + nEntryHeightOffs;
         pImpl->SetEntryHeight();
     }
 }
@@ -2484,7 +2484,7 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
     long nOutputWidth = pImpl->GetOutputSize().Width();
     Size aSize( nOutputWidth - aPos.X(), aItemSize.Height() );
     sal_uInt16 nPos = std::find( aTabs.begin(), aTabs.end(), pTab ) - aTabs.begin();
-    if( nPos+1 < (sal_uInt16)aTabs.size() )
+    if( nPos+1 < static_cast<sal_uInt16>(aTabs.size()) )
     {
         SvLBoxTab* pRightTab = aTabs[ nPos + 1 ];
         long nRight = GetTabPos( pEntry, pRightTab );
@@ -3016,9 +3016,9 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
                 pLastTab = aTabs[ nLastTab ];
 
             aSize.Width() = pLastTab ? pLastTab->GetPos() : 0x0fffffff;
-            nFocusWidth = (short)aSize.Width();
+            nFocusWidth = static_cast<short>(aSize.Width());
             if( pTab )
-                nFocusWidth = nFocusWidth - (short)nTabPos; //pTab->GetPos();
+                nFocusWidth = nFocusWidth - static_cast<short>(nTabPos); //pTab->GetPos();
         }
         else
         {
@@ -3043,7 +3043,7 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
     if( aRect.Right() >= nRealWidth )
     {
         aRect.Right() = nRealWidth-1;
-        nFocusWidth = (short)aRect.GetWidth();
+        nFocusWidth = static_cast<short>(aRect.GetWidth());
     }
     return aRect;
 }
@@ -3056,8 +3056,8 @@ sal_IntPtr SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
     if( pTab->IsDynamic() )
     {
         sal_uInt16 nDepth = pModel->GetDepth( pEntry );
-        nDepth = nDepth * (sal_uInt16)nIndent;
-        nPos += (sal_IntPtr)nDepth;
+        nDepth = nDepth * static_cast<sal_uInt16>(nIndent);
+        nPos += static_cast<sal_IntPtr>(nDepth);
     }
     return nPos;
 }
@@ -3371,7 +3371,7 @@ SvLBoxTab* SvTreeListBox::GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rPo
 
 void SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
 {
-    sal_uInt16 nPos = (sal_uInt16)aTabs.size();
+    sal_uInt16 nPos = static_cast<sal_uInt16>(aTabs.size());
     while( nPos )
     {
         --nPos;
@@ -3645,7 +3645,7 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl:
     {
         rStateSet.AddState( AccessibleStateType::EXPANDABLE );
         if ( IsExpanded( pEntry ) )
-            rStateSet.AddState( (sal_Int16)AccessibleStateType::EXPANDED );
+            rStateSet.AddState( sal_Int16(AccessibleStateType::EXPANDED) );
     }
 
     if ( GetCheckButtonState( pEntry ) == SvButtonState::Checked )

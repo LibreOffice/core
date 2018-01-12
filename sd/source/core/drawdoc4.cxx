@@ -1299,7 +1299,7 @@ sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight
     {
         // http://specs.openoffice.org/g11n/font_sizes/42775_42725_Individual_configurable_font_size_for_default_fonts.odt
         double fTemp = double(nWesternFontHeight) * 1.333;
-        nWesternFontHeight = (sal_uInt32)fTemp;
+        nWesternFontHeight = static_cast<sal_uInt32>(fTemp);
         // make some nice values for UI that displays PT instead of 1/100th mm
         nWesternFontHeight = ((nWesternFontHeight * 72) + 1270) / 2540L;
         nWesternFontHeight = ((nWesternFontHeight * 2540L) + 36) / 72;

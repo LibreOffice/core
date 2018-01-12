@@ -52,7 +52,7 @@ void ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
     {
         if (nReference)
         {
-            double fPercent((double)nNewReference / nReference);
+            double fPercent(static_cast<double>(nNewReference) / nReference);
             double fValue(nValue * fPercent);
             nValue = static_cast<sal_Int32>(fValue);
             nReference = nNewReference;
@@ -91,7 +91,7 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
             double fPercent((fNewValue * 100) / nRange);
             if (fPercent >= (fOldPercent + fProgressStep) || fPercent < fOldPercent)
             {
-                xStatusIndicator->setValue((sal_Int32)fNewValue);
+                xStatusIndicator->setValue(static_cast<sal_Int32>(fNewValue));
                 fOldPercent = fPercent;
             }
         }

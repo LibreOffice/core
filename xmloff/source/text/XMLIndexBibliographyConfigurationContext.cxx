@@ -194,7 +194,7 @@ SvXMLImportContextRef XMLIndexBibliographyConfigurationContext::CreateChildConte
 
             PropertyValue aNameValue;
             aNameValue.Name = sSortKey;
-            aNameValue.Value <<= (sal_Int16)nKey;
+            aNameValue.Value <<= static_cast<sal_Int16>(nKey);
             aKey[0] = aNameValue;
 
             PropertyValue aSortValue;

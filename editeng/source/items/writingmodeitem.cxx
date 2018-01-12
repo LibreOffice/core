@@ -86,7 +86,7 @@ bool SvxWritingModeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
             case WritingMode_LR_TB:
             case WritingMode_RL_TB:
             case WritingMode_TB_RL:
-                SetValue( (sal_uInt16)nVal );
+                SetValue( static_cast<sal_uInt16>(nVal) );
                 bRet = true;
                 break;
             default:

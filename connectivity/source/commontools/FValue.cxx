@@ -964,7 +964,7 @@ OUString ORowSetValue::getString( ) const
                     const sal_Int8* pBegin  = aSeq.getConstArray();
                     const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                     for(;pBegin != pEnd;++pBegin)
-                        sVal.append((sal_Int32)*pBegin,16);
+                        sVal.append(static_cast<sal_Int32>(*pBegin),16);
                     aRet = sVal.makeStringAndClear();
                 }
                 break;
@@ -996,7 +996,7 @@ OUString ORowSetValue::getString( ) const
                     {
                         if ( xClob.is() )
                         {
-                            aRet = xClob->getSubString(1,(sal_Int32)xClob->length() );
+                            aRet = xClob->getSubString(1,static_cast<sal_Int32>(xClob->length()) );
                         }
                     }
                 }
@@ -1683,16 +1683,16 @@ float ORowSetValue::getFloat()  const
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = (float)m_aValue.m_nDouble;
+                nRet = static_cast<float>(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
-                nRet = (float)dbtools::DBTypeConversion::toDouble(*static_cast<css::util::Date*>(m_aValue.m_pValue));
+                nRet = static_cast<float>(dbtools::DBTypeConversion::toDouble(*static_cast<css::util::Date*>(m_aValue.m_pValue)));
                 break;
             case DataType::TIME:
-                nRet = (float)dbtools::DBTypeConversion::toDouble(*static_cast<css::util::Time*>(m_aValue.m_pValue));
+                nRet = static_cast<float>(dbtools::DBTypeConversion::toDouble(*static_cast<css::util::Time*>(m_aValue.m_pValue)));
                 break;
             case DataType::TIMESTAMP:
-                nRet = (float)dbtools::DBTypeConversion::toDouble(*static_cast<css::util::DateTime*>(m_aValue.m_pValue));
+                nRet = static_cast<float>(dbtools::DBTypeConversion::toDouble(*static_cast<css::util::DateTime*>(m_aValue.m_pValue)));
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -1715,19 +1715,19 @@ float ORowSetValue::getFloat()  const
                 if ( m_bSigned )
                     nRet = m_aValue.m_nInt16;
                 else
-                    nRet = (float)m_aValue.m_uInt16;
+                    nRet = static_cast<float>(m_aValue.m_uInt16);
                 break;
             case DataType::INTEGER:
                 if ( m_bSigned )
-                    nRet = (float)m_aValue.m_nInt32;
+                    nRet = static_cast<float>(m_aValue.m_nInt32);
                 else
-                    nRet = (float)m_aValue.m_uInt32;
+                    nRet = static_cast<float>(m_aValue.m_uInt32);
                 break;
             case DataType::BIGINT:
                 if ( m_bSigned )
-                    nRet = (float)m_aValue.m_nInt64;
+                    nRet = static_cast<float>(m_aValue.m_nInt64);
                 else
-                    nRet = (float)m_aValue.m_uInt64;
+                    nRet = static_cast<float>(m_aValue.m_uInt64);
                 break;
             default:
                 {
@@ -1905,7 +1905,7 @@ css::util::Date ORowSetValue::getDate() const
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
-                aValue = DBTypeConversion::toDate((double)*this);
+                aValue = DBTypeConversion::toDate(static_cast<double>(*this));
                 break;
 
             case DataType::DATE:
@@ -1939,7 +1939,7 @@ css::util::Date ORowSetValue::getDate() const
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
             case DataType::TIME:
-                aValue = DBTypeConversion::toDate( (double)0 );
+                aValue = DBTypeConversion::toDate( double(0) );
                 break;
         }
     }
@@ -1960,12 +1960,12 @@ css::util::Time ORowSetValue::getTime()        const
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                aValue = DBTypeConversion::toTime((double)*this);
+                aValue = DBTypeConversion::toTime(static_cast<double>(*this));
                 break;
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
-                aValue = DBTypeConversion::toTime((double)*this);
+                aValue = DBTypeConversion::toTime(static_cast<double>(*this));
                 break;
             case DataType::TIMESTAMP:
                 {
@@ -2004,12 +2004,12 @@ css::util::DateTime ORowSetValue::getDateTime()    const
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                aValue = DBTypeConversion::toDateTime((double)*this);
+                aValue = DBTypeConversion::toDateTime(static_cast<double>(*this));
                 break;
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
-                aValue = DBTypeConversion::toDateTime((double)*this);
+                aValue = DBTypeConversion::toDateTime(static_cast<double>(*this));
                 break;
             case DataType::DATE:
                 {

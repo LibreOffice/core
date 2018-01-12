@@ -657,10 +657,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             // delete pages, that are not of any interest for us
             for( long i = ( pWorkModel->GetPageCount() - 1 ); i >= 0; i-- )
             {
-                SdPage* pP = static_cast< SdPage* >( pWorkModel->GetPage( (sal_uInt16) i ) );
+                SdPage* pP = static_cast< SdPage* >( pWorkModel->GetPage( static_cast<sal_uInt16>(i) ) );
 
                 if( pP->GetPageKind() != PageKind::Standard )
-                    pWorkModel->DeletePage( (sal_uInt16) i );
+                    pWorkModel->DeletePage( static_cast<sal_uInt16>(i) );
             }
 
             bReturn = Paste(*pWorkModel, maDropPos, pPage, nPasteOptions);
@@ -900,10 +900,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     // delete pages, that are not of any interest for us
                     for( long i = ( pModel->GetPageCount() - 1 ); i >= 0; i-- )
                     {
-                        SdPage* pP = static_cast< SdPage* >( pModel->GetPage( (sal_uInt16) i ) );
+                        SdPage* pP = static_cast< SdPage* >( pModel->GetPage( static_cast<sal_uInt16>(i) ) );
 
                         if( pP->GetPageKind() != PageKind::Standard )
-                            pModel->DeletePage( (sal_uInt16) i );
+                            pModel->DeletePage( static_cast<sal_uInt16>(i) );
                     }
 
                     bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
@@ -1344,8 +1344,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 SfxItemSet              aSet( mrDoc.GetPool() );
                 bool                    bClosed = pPickObj->IsClosedObj();
                 ::sd::Window* pWin = mpViewSh->GetActiveWindow();
-                sal_uInt16 nHitLog = (sal_uInt16) pWin->PixelToLogic(
-                    Size(FuPoor::HITPIX, 0 ) ).Width();
+                sal_uInt16 nHitLog = static_cast<sal_uInt16>(pWin->PixelToLogic(
+                    Size(FuPoor::HITPIX, 0 ) ).Width());
                 const long              n2HitLog = nHitLog << 1;
                 Point                   aHitPosR( rPos );
                 Point                   aHitPosL( rPos );

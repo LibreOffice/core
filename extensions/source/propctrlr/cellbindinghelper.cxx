@@ -127,7 +127,7 @@ namespace pcr
 
                     if ( xSuppForms->getForms() == xFormsCollection )
                     {   // found it
-                        nSheetIndex = (sal_Int16)i;
+                        nSheetIndex = static_cast<sal_Int16>(i);
                         _out_rxSheet.set( xSuppPage, UNO_QUERY_THROW );
                         break;
                     }
@@ -176,7 +176,7 @@ namespace pcr
             try
             {
                 Reference< XSpreadsheet > xSheet;
-                xConverter->setPropertyValue( PROPERTY_REFERENCE_SHEET, makeAny( (sal_Int32)getControlSheetIndex( xSheet ) ) );
+                xConverter->setPropertyValue( PROPERTY_REFERENCE_SHEET, makeAny( static_cast<sal_Int32>(getControlSheetIndex( xSheet )) ) );
                 xConverter->setPropertyValue( _rInputProperty, _rInputValue );
                 _rOutputValue = xConverter->getPropertyValue( _rOutputProperty );
                 bSuccess = true;

@@ -874,7 +874,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
     do
     {
         if (pStartPos)
-            *pStartPos = (sal_Int32)m_pFileStream->Tell();
+            *pStartPos = static_cast<sal_Int32>(m_pFileStream->Tell());
         m_pFileStream->ReadByteStringLine(m_aCurrentLine, nEncoding);
         if (m_pFileStream->eof())
             return false;
@@ -943,7 +943,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
     while(nonEmpty && m_aCurrentLine.Len() == 0);
 
     if(pEndPos)
-        *pEndPos = (sal_Int32)m_pFileStream->Tell();
+        *pEndPos = static_cast<sal_Int32>(m_pFileStream->Tell());
     return true;
 }
 

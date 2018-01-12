@@ -55,15 +55,15 @@ void AttributesTest::test()
     xAttributeList->addUnknown("a", "a");
     xAttributeList->addUnknown("b", "b", "b");
     xAttributeList->addUnknown("c", "c");
-    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 3, xAttributeList->getUnknownAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(3), xAttributeList->getUnknownAttributes().getLength() );
 
-    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 2, xAttributeList->getFastAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(2), xAttributeList->getFastAttributes().getLength() );
 
     xAttributeList->clear();
     CPPUNIT_ASSERT( !xAttributeList->hasAttribute(1) );
-    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 0, xAttributeList->getFastAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), xAttributeList->getFastAttributes().getLength() );
     xAttributeList->addUnknown("c", "c");
-    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 1, xAttributeList->getUnknownAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), xAttributeList->getUnknownAttributes().getLength() );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( AttributesTest );

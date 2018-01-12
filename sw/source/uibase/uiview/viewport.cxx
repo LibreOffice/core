@@ -1146,7 +1146,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
     const Fraction &rFrac = rX < rY ? rX : rY;
-    SetZoom( SvxZoomType::PERCENT, (short) long(rFrac * Fraction( 100, 1 )) );
+    SetZoom( SvxZoomType::PERCENT, static_cast<short>(long(rFrac * Fraction( 100, 1 ))) );
 
     // To minimize rounding errors we also adjust the odd values
     // of the base class if necessary.
@@ -1205,9 +1205,9 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     {
         long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
-            nFact = std::max( (long) 20, basegfx::zoomtools::zoomOut( nFact ));
+            nFact = std::max( long(20), basegfx::zoomtools::zoomOut( nFact ));
         else
-            nFact = std::min( (long) 600, basegfx::zoomtools::zoomIn( nFact ));
+            nFact = std::min( long(600), basegfx::zoomtools::zoomIn( nFact ));
 
         SetZoom( SvxZoomType::PERCENT, nFact );
         bOk = true;

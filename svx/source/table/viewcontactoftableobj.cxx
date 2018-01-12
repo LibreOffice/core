@@ -277,10 +277,10 @@ namespace sdr
                                 {
                                     // create cell transformation matrix
                                     basegfx::B2DHomMatrix aCellMatrix;
-                                    aCellMatrix.set(0, 0, (double)aCellArea.getWidth());
-                                    aCellMatrix.set(1, 1, (double)aCellArea.getHeight());
-                                    aCellMatrix.set(0, 2, (double)aCellArea.getMinX() + aObjectRange.getMinX());
-                                    aCellMatrix.set(1, 2, (double)aCellArea.getMinY() + aObjectRange.getMinY());
+                                    aCellMatrix.set(0, 0, static_cast<double>(aCellArea.getWidth()));
+                                    aCellMatrix.set(1, 1, static_cast<double>(aCellArea.getHeight()));
+                                    aCellMatrix.set(0, 2, static_cast<double>(aCellArea.getMinX()) + aObjectRange.getMinX());
+                                    aCellMatrix.set(1, 2, static_cast<double>(aCellArea.getMinY()) + aObjectRange.getMinY());
 
                                     // handle cell fillings and text
                                     const SfxItemSet& rCellItemSet = xCurrentCell->GetItemSet();

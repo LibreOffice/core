@@ -1132,7 +1132,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                                 | ( nCurrentFlags >> 16 ) ) ^ 0xffffffff;       // attributes from mergeflags
                 nCurrentFlags &= ( ( nMergeFlags & 0xffff0000 )                 // apply zero master bits
                                 | ( nMergeFlags >> 16 ) ) ^ 0xffffffff;
-                nCurrentFlags |= (sal_uInt16)nMergeFlags;                       // apply filled master bits
+                nCurrentFlags |= static_cast<sal_uInt16>(nMergeFlags);                       // apply filled master bits
                 mpPropSetEntries[ nRecType ].nContent = nCurrentFlags;
                 mpPropSetEntries[ nRecType ].nComplexIndexOrFlagsHAttr |= static_cast< sal_uInt16 >( nContent >> 16 );
             }
@@ -1180,7 +1180,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                         // for -16 this works
                         if ( nSize < 0 )
                             nSize = ( -nSize ) >> 2;
-                        sal_uInt32 nDataSize = (sal_uInt32)( nSize * nNumElem );
+                        sal_uInt32 nDataSize = static_cast<sal_uInt32>( nSize * nNumElem );
 
                         // sometimes the content size is 6 bytes too small (array header information is missing )
                         if ( nDataSize == nContent )

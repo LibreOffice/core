@@ -181,7 +181,7 @@ private:
 void RenderAnimationThread::execute()
 {
     osl::MutexGuard aGuard(mpChart->maMutex);
-    glm::vec3 aStep = (maEndPos - maStartPos)/(float)mnSteps;
+    glm::vec3 aStep = (maEndPos - maStartPos)/static_cast<float>(mnSteps);
     for(sal_Int32 i = 0; i < mnSteps; ++i)
     {
         mpChart->maCameraPosition += aStep;
@@ -298,8 +298,8 @@ void RenderBenchMarkThread::MoveToDefault()
         mpChart->mpRenderer->EndClick();
         mnStep = 0;
         mnStepsTotal = STEPS;
-        maStep = (mpChart->maDefaultCameraPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
-        maStepDirection = (mpChart->maDefaultCameraDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
+        maStep = (mpChart->maDefaultCameraPosition - mpChart->maCameraPosition)/static_cast<float>(mnStepsTotal);
+        maStepDirection = (mpChart->maDefaultCameraDirection - mpChart->maCameraDirection)/static_cast<float>(mnStepsTotal);
         mbExecuting = true;
     }
     MoveCamera();
@@ -330,7 +330,7 @@ void RenderBenchMarkThread::MoveToBar()
         maTargetDirection.x += BAR_SIZE_X / 2.0f;
         maTargetDirection.y += BAR_SIZE_Y / 2.0f;
         maTargetPosition.y = maTargetDirection.y - 240;
-        maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras(mpChart->maCameraPosition, maTargetPosition, mpChart->maCameraDirection, maTargetDirection)/((float)mnStepsTotal);
+        maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras(mpChart->maCameraPosition, maTargetPosition, mpChart->maCameraDirection, maTargetDirection)/static_cast<float>(mnStepsTotal);
         mpChart->maClickCond.set();
         mbExecuting = true;
         mbNeedFlyBack = false;
@@ -361,7 +361,7 @@ void RenderBenchMarkThread::MoveToSelectedBar()
     maTargetDirection.x += BAR_SIZE_X / 2.0f;
     maTargetDirection.y += BAR_SIZE_Y / 2.0f;
     maTargetPosition.y = maTargetDirection.y - 240;
-    maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras( maTargetPosition,  maTargetDirection)/((float)mnStepsTotal);
+    maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras( maTargetPosition,  maTargetDirection)/static_cast<float>(mnStepsTotal);
     mpChart->maClickCond.set();
     mbExecuting = true;
     mbNeedFlyBack = false;
@@ -390,7 +390,7 @@ void RenderBenchMarkThread::AutoMoveToBar()
         maTargetDirection.x += BAR_SIZE_X / 2.0f;
         maTargetDirection.y += BAR_SIZE_Y / 2.0f;
         maTargetPosition.y = maTargetDirection.y - 240;
-        maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras(mpChart->maCameraPosition, maTargetPosition, mpChart->maCameraDirection, maTargetDirection)/((float)mnStepsTotal);
+        maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras(mpChart->maCameraPosition, maTargetPosition, mpChart->maCameraDirection, maTargetDirection)/static_cast<float>(mnStepsTotal);
         mpChart->mpRenderer->StartClick(mpChart->mnSelectBarId);
         mbAutoFlyExecuting = true;
         mbNeedFlyBack = false;
@@ -850,7 +850,7 @@ void GL3DBarChart::create3DShapes(const std::vector<std::unique_ptr<VDataSeries>
         //if scroll the bars, set the speed and distance first
         if (mbScrollFlg)
         {
-            mpRenderer->SetScrollSpeed((BAR_SIZE_X + BAR_DISTANCE_X) / (float)miScrollRate);
+            mpRenderer->SetScrollSpeed((BAR_SIZE_X + BAR_DISTANCE_X) / static_cast<float>(miScrollRate));
             mpRenderer->SetScrollDistance(BAR_SIZE_X + BAR_DISTANCE_X);
         }
         spawnRenderThread(new RenderBenchMarkThread(this));
@@ -1115,7 +1115,7 @@ void GL3DBarChart::scroll(long nDelta)
             (maRenderEvent != EVENT_AUTO_FLY) && (maRenderEvent != EVENT_SHOW_SELECT))
             return;
         glm::vec3 aDir = glm::normalize(maCameraPosition - maCameraDirection);
-        maCameraPosition -= ((float)nDelta/10) * aDir;
+        maCameraPosition -= (static_cast<float>(nDelta)/10) * aDir;
         mpCamera->setPosition(maCameraPosition);
         if(mbBenchMarkMode)
         {
@@ -1143,7 +1143,7 @@ float GL3DBarChart::addScreenTextShape(OUString &nStr, const glm::vec2& rLeftOrR
 {
     maScreenTextShapes.push_back(o3tl::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, nStr, rColor, nEvent));
     const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(nStr);
-    float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * nTextHeight / 2.0f;
+    float nRectWidth = static_cast<float>(rTextCache.maSize.Width()) / static_cast<float>(rTextCache.maSize.Height()) * nTextHeight / 2.0f;
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maScreenTextShapes.back().get());
     if (bLeftTopFlag)
         pScreenText->setPosition(rLeftOrRightTop, glm::vec2(rLeftOrRightTop.x + nRectWidth, rLeftOrRightTop.y - nTextHeight), rPos);
@@ -1206,7 +1206,7 @@ void GL3DBarChart::updateDataUpdateFPS()
         }
         else
         {
-            float fFPS = (float)miDataUpdateCounter * 1000 / (float)nDeltaMs;
+            float fFPS = static_cast<float>(miDataUpdateCounter) * 1000 / static_cast<float>(nDeltaMs);
             maDataUpdateFPS = OUString::number(fFPS);
         }
         miDataUpdateCounter = 0;
@@ -1253,7 +1253,7 @@ void GL3DBarChart::addMovementScreenText(sal_uInt32 nBarId)
     OUString aBarValue = "Value: " + OUString::number(rBarInfo.mnVal);
     maScreenTextShapes.push_back(o3tl::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID, true));
     const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
-    float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.024;
+    float nRectWidth = static_cast<float>(rTextCache.maSize.Width()) / static_cast<float>(rTextCache.maSize.Height()) * 0.024;
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maScreenTextShapes.back().get());
     pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
 }
@@ -1450,7 +1450,7 @@ void GL3DBarChart::updateScroll()
                 OUString aBarValue = "Value: " + OUString::number(i.mnVal);
                 maScreenTextShapes.push_back(o3tl::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID, true));
                 const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
-                float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.024;
+                float nRectWidth = static_cast<float>(rTextCache.maSize.Width()) / static_cast<float>(rTextCache.maSize.Height()) * 0.024;
                 glm::vec3 aTextPos = glm::vec3(i.maPos.x + BAR_SIZE_X / 2.0f,
                                       i.maPos.y + BAR_SIZE_Y / 2.0f,
                                       i.maPos.z);

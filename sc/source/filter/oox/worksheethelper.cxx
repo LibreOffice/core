@@ -1164,7 +1164,7 @@ void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
     {
         for( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
         {
-            rDoc.SetColWidthOnly( nCol, nTab, (sal_uInt16)sc::HMMToTwips( nWidth ) );
+            rDoc.SetColWidthOnly( nCol, nTab, static_cast<sal_uInt16>(sc::HMMToTwips( nWidth )) );
         }
     }
 
@@ -1217,7 +1217,7 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     {
         /* always import the row height, ensures better layout */
         ScDocument& rDoc = getScDocument();
-        rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, (sal_uInt16)sc::HMMToTwips(nHeight) );
+        rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(sc::HMMToTwips(nHeight)) );
         if(rModel.mbCustomHeight)
             rDoc.SetManualHeight( nStartRow, nEndRow, nTab, true );
     }

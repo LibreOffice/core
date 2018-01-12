@@ -172,8 +172,8 @@ PreparedStatement::PreparedStatement(
     , m_multipleResultUpdateCount(0)
     , m_lastOidInserted( InvalidOid )
 {
-    m_props[PREPARED_STATEMENT_QUERY_TIME_OUT] <<= (sal_Int32)0;
-    m_props[PREPARED_STATEMENT_MAX_ROWS] <<= (sal_Int32)0;
+    m_props[PREPARED_STATEMENT_QUERY_TIME_OUT] <<= sal_Int32(0);
+    m_props[PREPARED_STATEMENT_MAX_ROWS] <<= sal_Int32(0);
     m_props[PREPARED_STATEMENT_RESULT_SET_CONCURRENCY] <<=
         css::sdbc::ResultSetConcurrency::READ_ONLY;
     m_props[PREPARED_STATEMENT_RESULT_SET_TYPE] <<=
@@ -211,7 +211,7 @@ PreparedStatement::~PreparedStatement()
 
 void PreparedStatement::checkColumnIndex( sal_Int32 parameterIndex )
 {
-    if( parameterIndex < 1 || parameterIndex > (sal_Int32) m_vars.size() )
+    if( parameterIndex < 1 || parameterIndex > static_cast<sal_Int32>(m_vars.size()) )
     {
         throw SQLException(
             "pq_preparedstatement: parameter index out of range (expected 1 to "

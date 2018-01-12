@@ -453,8 +453,8 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         // Adjust line height, base is 100% zoom
         Fraction aZoom( 1, 1 );
         // Factor is printer to display ratio
-        double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / nOutputFactor;
-        double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
+        double nPPTX = ScGlobal::nScreenPPTX * static_cast<double>(aZoom) / nOutputFactor;
+        double nPPTY = ScGlobal::nScreenPPTY * static_cast<double>(aZoom);
         ScopedVclPtrInstance< VirtualDevice > pVirtDev;
         sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoom, aZoom, pVirtDev);
         aCxt.setExtraHeight(ScGlobal::nLastRowHeightExtra);
@@ -566,8 +566,8 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
 
     Point aCellInsertPos(
-        (long)((double) mpDoc->GetColOffset( nCol, nTab ) * HMM_PER_TWIPS),
-        (long)((double) mpDoc->GetRowOffset( nRow, nTab ) * HMM_PER_TWIPS) );
+        static_cast<long>(static_cast<double>(mpDoc->GetColOffset( nCol, nTab )) * HMM_PER_TWIPS),
+        static_cast<long>(static_cast<double>(mpDoc->GetRowOffset( nRow, nTab )) * HMM_PER_TWIPS) );
 
     Point aInsertPos( aCellInsertPos );
     Point aSpace;

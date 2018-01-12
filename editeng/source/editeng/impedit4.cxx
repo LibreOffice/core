@@ -506,9 +506,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
     // DefTab:
     MapMode aTwpMode( MapUnit::MapTwip );
-    sal_uInt16 nDefTabTwps = (sal_uInt16) GetRefDevice()->LogicToLogic(
+    sal_uInt16 nDefTabTwps = static_cast<sal_uInt16>(GetRefDevice()->LogicToLogic(
                                         Point( aEditDoc.GetDefTab(), 0 ),
-                                        &GetRefMapMode(), &aTwpMode ).X();
+                                        &GetRefMapMode(), &aTwpMode ).X());
     rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DEFTAB );
     rOutput.WriteUInt32AsString( nDefTabTwps );
     rOutput << endl;
@@ -699,7 +699,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             rOutput.WriteInt32AsString( nTxtFirst );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LI );
             sal_uInt32 nTxtLeft = static_cast< sal_uInt32 >(static_cast<const SvxLRSpaceItem&>(rItem).GetTextLeft());
-            nTxtLeft = (sal_uInt32)LogicToTwips( nTxtLeft );
+            nTxtLeft = static_cast<sal_uInt32>(LogicToTwips( nTxtLeft ));
             rOutput.WriteInt32AsString( nTxtLeft );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RI );
             sal_uInt32 nTxtRight = static_cast<const SvxLRSpaceItem&>(rItem).GetRight();
@@ -711,7 +711,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SB );
             sal_uInt32 nUpper = static_cast<const SvxULSpaceItem&>(rItem).GetUpper();
-            nUpper = (sal_uInt32)LogicToTwips( nUpper );
+            nUpper = static_cast<sal_uInt32>(LogicToTwips( nUpper ));
             rOutput.WriteUInt32AsString( nUpper );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SA );
             sal_uInt32 nLower = static_cast<const SvxULSpaceItem&>(rItem).GetLower();
@@ -1181,7 +1181,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     bool bUsePortionInfo = false;
     XParaPortionList* pPortionInfo = rTextObject.mpImpl->GetPortionInfo();
 
-    if ( pPortionInfo && ( (long)pPortionInfo->GetPaperWidth() == aPaperSize.Width() )
+    if ( pPortionInfo && ( static_cast<long>(pPortionInfo->GetPaperWidth()) == aPaperSize.Width() )
             && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() )
             && ( pPortionInfo->GetStretchX() == nStretchX )
             && ( pPortionInfo->GetStretchY() == nStretchY ) )
@@ -1861,7 +1861,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() );
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
-            xSpellAlt = xSpeller->spell( aWord, (sal_uInt16)eLang, aEmptySeq );
+            xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
         }
 
         if ( !xSpellAlt.is() )
@@ -1909,7 +1909,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
         }
 
         if ( !aWord.isEmpty() )
-            xSpellAlt = xSpeller->spell( aWord, (sal_uInt16)GetLanguage( aCurSel.Max() ), aEmptySeq );
+            xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(GetLanguage( aCurSel.Max() )), aEmptySeq );
 
         if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
@@ -2285,7 +2285,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 {
                     const sal_Int32 nWStart = aSel.Min().GetIndex();
                     const sal_Int32 nWEnd = aSel.Max().GetIndex();
-                    if ( !xSpeller->isValid( aWord, (sal_uInt16)GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ), aEmptySeq ) )
+                    if ( !xSpeller->isValid( aWord, static_cast<sal_uInt16>(GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) )), aEmptySeq ) )
                     {
                         // Check if already marked correctly...
                         const sal_Int32 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
@@ -2433,7 +2433,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() );
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
-            xSpellAlt = xSpeller->spell( aWord, (sal_uInt16)eLang, aEmptySeq );
+            xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
         }
         aCurSel = WordRight( aCurSel.Max(), css::i18n::WordType::DICTIONARY_WORD );
     }

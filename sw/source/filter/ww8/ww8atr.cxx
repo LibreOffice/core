@@ -945,7 +945,7 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
         if( m_rWW8Export.m_pDoc->GetDocumentType() != SwDoc::DOCTYPE_MSWORD )
         {
             m_rWW8Export.InsUInt16( NS_sprm::sprmCFBiDi );
-            m_rWW8Export.pO->push_back( (sal_uInt8)1 );
+            m_rWW8Export.pO->push_back( sal_uInt8(1) );
         }
     }
 
@@ -953,7 +953,7 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
     if (nScript == i18n::ScriptType::COMPLEX && !bIsRTL)
     {
         m_rWW8Export.InsUInt16( NS_sprm::sprmCFComplexScripts );
-        m_rWW8Export.pO->push_back( (sal_uInt8)0x81 );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x81) );
         m_rWW8Export.pDop->bUseThaiLineBreakingRules = true;
     }
 }
@@ -1342,19 +1342,19 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
     {
         // use sprmCRgLid0_80 rather than sprmCLid
         m_rWW8Export.InsUInt16( nId );
-        m_rWW8Export.InsUInt16( (sal_uInt16)rLanguage.GetLanguage() );
+        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
 
         // Word 2000 and above apparently require both old and new versions of
         // these sprms to be set, without it spellchecking doesn't work
         if ( nId == NS_sprm::sprmCRgLid0_80 )
         {
             m_rWW8Export.InsUInt16( NS_sprm::sprmCRgLid0 );
-            m_rWW8Export.InsUInt16( (sal_uInt16)rLanguage.GetLanguage() );
+            m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
         }
         else if ( nId == NS_sprm::sprmCRgLid1_80 )
         {
             m_rWW8Export.InsUInt16( NS_sprm::sprmCRgLid1 );
-            m_rWW8Export.InsUInt16( (sal_uInt16)rLanguage.GetLanguage() );
+            m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
         }
     }
 }
@@ -1390,7 +1390,7 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
                                     RES_CHRATR_FONTSIZE )).GetHeight();
         m_rWW8Export.InsUInt16( NS_sprm::sprmCHpsPos );
 
-        m_rWW8Export.InsUInt16( (short)(( nHeight * nEsc + 500 ) / 1000 ));
+        m_rWW8Export.InsUInt16( static_cast<short>(( nHeight * nEsc + 500 ) / 1000 ));
 
         if( 100 != nProp || !b )
         {
@@ -1420,7 +1420,7 @@ void WW8AttributeOutput::CharFontSize( const SvxFontHeightItem& rHeight )
     {
         m_rWW8Export.InsUInt16( nId );
 
-        m_rWW8Export.InsUInt16( (sal_uInt16)(( rHeight.GetHeight() + 5 ) / 10 ) );
+        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(( rHeight.GetHeight() + 5 ) / 10 ) );
     }
 }
 
@@ -1443,15 +1443,15 @@ void WW8AttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
     if( nId )
     {
         m_rWW8Export.InsUInt16( nId );
-        m_rWW8Export.pO->push_back( (sal_uInt8)0x81 );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x81) );
     }
     else
     {
         // switch both flags off
         m_rWW8Export.InsUInt16( NS_sprm::sprmCFEmboss );
-        m_rWW8Export.pO->push_back( (sal_uInt8)0x0 );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x0) );
         m_rWW8Export.InsUInt16( NS_sprm::sprmCFImprint );
-        m_rWW8Export.pO->push_back( (sal_uInt8)0x0 );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x0) );
     }
 }
 
@@ -1461,7 +1461,7 @@ void WW8AttributeOutput::CharBidiRTL( const SfxPoolItem& rHt )
     if( rAttr.GetValue() == 1 )
     {
         m_rWW8Export.InsUInt16(0x85a);
-        m_rWW8Export.pO->push_back((sal_uInt8)1);
+        m_rWW8Export.pO->push_back(sal_uInt8(1));
     }
 }
 
@@ -1469,7 +1469,7 @@ void WW8AttributeOutput::CharIdctHint( const SfxPoolItem& rHt )
 {
     const SfxInt16Item& rAttr = static_cast<const SfxInt16Item&>(rHt);
     m_rWW8Export.InsUInt16(0x286F);
-    m_rWW8Export.pO->push_back((sal_uInt8)(rAttr.GetValue()));
+    m_rWW8Export.pO->push_back(static_cast<sal_uInt8>(rAttr.GetValue()));
 }
 
 void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
@@ -1485,8 +1485,8 @@ void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
         // here corrupts the table, hence !m_rWW8Export.bIsInTable
 
         m_rWW8Export.InsUInt16( NS_sprm::sprmCFELayout );
-        m_rWW8Export.pO->push_back( (sal_uInt8)0x06 ); //len 6
-        m_rWW8Export.pO->push_back( (sal_uInt8)0x01 );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x06) ); //len 6
+        m_rWW8Export.pO->push_back( sal_uInt8(0x01) );
 
         m_rWW8Export.InsUInt16( rRotate.IsFitToLine() ? 1 : 0 );
         static const sal_uInt8 aZeroArr[ 3 ] = { 0, 0, 0 };
@@ -1658,11 +1658,11 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
 
         // write attributes of hyperlink character 0x01
         SwWW8Writer::InsUInt16( aItems, NS_sprm::sprmCFFldVanish );
-        aItems.push_back( (sal_uInt8)0x81 );
+        aItems.push_back( sal_uInt8(0x81) );
         SwWW8Writer::InsUInt16( aItems, NS_sprm::sprmCPicLocation );
         SwWW8Writer::InsUInt32( aItems, nLinkPosInDataStrm );
         SwWW8Writer::InsUInt16( aItems, NS_sprm::sprmCFData );
-        aItems.push_back( (sal_uInt8)0x01 );
+        aItems.push_back( sal_uInt8(0x01) );
     }
 
     //Technically we should probably Remove all attribs
@@ -2283,7 +2283,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( TOX_USER == pTOX->GetType() )
                         {
                             sStr += "\"";
-                            sStr += OUString((sal_Char)( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ));
+                            sStr += OUString(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ));
                             sStr += sEntryEnd;
                         }
                     }
@@ -2336,7 +2336,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             }
                         }
 
-                        sal_uInt8 nMaxMSAutoEvaluate = nPosOfLowestNonStandardLvl < nTOXLvl ? nPosOfLowestNonStandardLvl : (sal_uInt8)nTOXLvl;
+                        sal_uInt8 nMaxMSAutoEvaluate = nPosOfLowestNonStandardLvl < nTOXLvl ? nPosOfLowestNonStandardLvl : static_cast<sal_uInt8>(nTOXLvl);
 
                         //output \o 1-X where X is the highest normal outline style to be included in the toc
                         if ( nMaxMSAutoEvaluate )
@@ -3448,8 +3448,8 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
     if ( rTwoLines.GetValue() )
     {
         m_rWW8Export.InsUInt16( NS_sprm::sprmCFELayout );
-        m_rWW8Export.pO->push_back( (sal_uInt8)0x06 ); //len 6
-        m_rWW8Export.pO->push_back( (sal_uInt8)0x02 );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x06) ); //len 6
+        m_rWW8Export.pO->push_back( sal_uInt8(0x02) );
 
         sal_Unicode cStart = rTwoLines.GetStartBracket();
         sal_Unicode cEnd = rTwoLines.GetEndBracket();
@@ -3579,7 +3579,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
         {
             //"sprmPDxaWidth"
             m_rWW8Export.InsUInt16( NS_sprm::sprmPDxaWidth );
-            m_rWW8Export.InsUInt16( (sal_uInt16)rSize.GetWidth() );
+            m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rSize.GetWidth()) );
         }
 
         if ( rSize.GetHeight() )
@@ -3591,8 +3591,8 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
             switch ( rSize.GetHeightSizeType() )
             {
                 case ATT_VAR_SIZE: break;
-                case ATT_FIX_SIZE: nH = (sal_uInt16)rSize.GetHeight() & 0x7fff; break;
-                default:           nH = (sal_uInt16)rSize.GetHeight() | 0x8000; break;
+                case ATT_FIX_SIZE: nH = static_cast<sal_uInt16>(rSize.GetHeight()) & 0x7fff; break;
+                default:           nH = static_cast<sal_uInt16>(rSize.GetHeight()) | 0x8000; break;
             }
             m_rWW8Export.InsUInt16( nH );
         }
@@ -3914,7 +3914,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         // sprmPDxaFromText10
         m_rWW8Export.InsUInt16( NS_sprm::LN_PDxaFromText10 );
         // use average, since WW only knows one value
-        m_rWW8Export.InsUInt16( (sal_uInt16) ( ( rLR.GetLeft() + rLR.GetRight() ) / 2 ) );
+        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>( ( rLR.GetLeft() + rLR.GetRight() ) / 2 ) );
     }
     else if ( m_rWW8Export.m_bOutPageDescs )                // PageDescs
     {
@@ -3927,8 +3927,8 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         }
         else
             nLDist = nRDist = 0;
-        nLDist = nLDist + (sal_uInt16)rLR.GetLeft();
-        nRDist = nRDist + (sal_uInt16)rLR.GetRight();
+        nLDist = nLDist + static_cast<sal_uInt16>(rLR.GetLeft());
+        nRDist = nRDist + static_cast<sal_uInt16>(rLR.GetRight());
 
         // sprmSDxaLeft
         m_rWW8Export.InsUInt16( NS_sprm::sprmSDxaLeft );
@@ -3942,11 +3942,11 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
     {                                          // normal paragraphs
         // sprmPDxaLeft
         m_rWW8Export.InsUInt16( 0x845E );        //asian version ?
-        m_rWW8Export.InsUInt16( (sal_uInt16)rLR.GetTextLeft() );
+        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLR.GetTextLeft()) );
 
         // sprmPDxaRight
         m_rWW8Export.InsUInt16( 0x845D );        //asian version ?
-        m_rWW8Export.InsUInt16( (sal_uInt16)rLR.GetRight() );
+        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLR.GetRight()) );
 
         // sprmPDxaLeft1
         m_rWW8Export.InsUInt16( 0x8460 );        //asian version ?
@@ -3963,7 +3963,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         // sprmPDyaFromText
         m_rWW8Export.InsUInt16( NS_sprm::sprmPDyaFromText );
         // use average, since WW only knows one value
-        m_rWW8Export.InsUInt16( (sal_uInt16) ( ( rUL.GetUpper() + rUL.GetLower() ) / 2 ) );
+        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>( ( rUL.GetUpper() + rUL.GetLower() ) / 2 ) );
     }
     else if ( m_rWW8Export.m_bOutPageDescs )            // Page-UL
     {
@@ -4007,7 +4007,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         if (rUL.GetContext())
         {
             m_rWW8Export.InsUInt16(NS_sprm::sprmPFContextualSpacing);
-            m_rWW8Export.pO->push_back( (sal_uInt8)rUL.GetContext() );
+            m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(rUL.GetContext()) );
         }
     }
 }
@@ -4035,7 +4035,7 @@ void WW8AttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyVe
         switch( rFlyVert.GetVertOrient() )
         {
             case text::VertOrientation::NONE:
-                nPos = (short)rFlyVert.GetPos();
+                nPos = static_cast<short>(rFlyVert.GetPos());
                 break;
             case text::VertOrientation::CENTER:
             case text::VertOrientation::LINE_CENTER:
@@ -4073,7 +4073,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyH
         switch( rFlyHori.GetHoriOrient() )
         {
             case text::HoriOrientation::NONE:
-                nPos = (short)rFlyHori.GetPos();
+                nPos = static_cast<short>(rFlyHori.GetPos());
                 if( !nPos )
                     nPos = 1;   // WW: 0 is reserved
                 break;
@@ -4465,7 +4465,7 @@ void WW8AttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol
             m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
             m_rWW8Export.InsUInt16( rCol.
                                     CalcPrtColWidth( n,
-                                                     ( sal_uInt16 ) nPageSize ) );
+                                                     static_cast<sal_uInt16>(nPageSize) ) );
 
             if ( n + 1 != nCols )
             {
@@ -4529,11 +4529,11 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
         // look if all columns are equal
         bool bEven = true;
         sal_uInt16 n;
-        sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, (sal_uInt16)nPageSize );
+        sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, static_cast<sal_uInt16>(nPageSize) );
         for ( n = 1; n < nCols; n++ )
         {
             short nDiff = nColWidth -
-                rCol.CalcPrtColWidth( n, (sal_uInt16)nPageSize );
+                rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
 
             if ( nDiff > 10 || nDiff < -10 )      // Tolerance: 10 tw
             {
@@ -4584,10 +4584,10 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
         default:
             break;
         case SvxLineSpaceRule::Fix: // Fix
-            nSpace = -(short)rSpacing.GetLineHeight();
+            nSpace = -static_cast<short>(rSpacing.GetLineHeight());
             break;
         case SvxLineSpaceRule::Min: // At least
-            nSpace = (short)rSpacing.GetLineHeight();
+            nSpace = static_cast<short>(rSpacing.GetLineHeight());
             break;
         case SvxLineSpaceRule::Auto:
         {
@@ -4612,13 +4612,13 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                 OSL_ENSURE( pSet, "No attrset for lineheight :-(" );
                 if ( pSet )
                 {
-                    nSpace = nSpace + (short)( AttrSetToLineHeight( GetExport().m_pDoc->getIDocumentSettingAccess(),
+                    nSpace = nSpace + static_cast<short>( AttrSetToLineHeight( GetExport().m_pDoc->getIDocumentSettingAccess(),
                         *pSet, *Application::GetDefaultDevice(), nScript ) );
                 }
             }
             else // Proportional
             {
-                nSpace = (short)( ( 240L * rSpacing.GetPropLineSpace() ) / 100L );
+                nSpace = static_cast<short>( ( 240L * rSpacing.GetPropLineSpace() ) / 100L );
                 nMulti = 1;
                 break;
             }
@@ -5444,7 +5444,7 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
 
             // Maybe add here a check that also the start & end of the redline is the entire paragraph
             if ( ( uStartNodeIndex == uEndNodeIndex - 1 ) &&
-                 ( uStartCharIndex == (sal_uLong)rNode.Len() ) &&
+                 ( uStartCharIndex == static_cast<sal_uLong>(rNode.Len()) ) &&
                  ( uEndCharIndex == 0)
                )
             {

@@ -217,7 +217,7 @@ void SbRtl_Error(StarBASIC * pBasic, SbxArray & rPar, bool)
             }
             else
             {
-                nErr = StarBASIC::GetSfxFromVBError( (sal_uInt16)nCode );
+                nErr = StarBASIC::GetSfxFromVBError( static_cast<sal_uInt16>(nCode) );
             }
         }
 
@@ -788,9 +788,9 @@ void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
             DirectoryItem::get( getFullPath( aStr ), aItem );
             FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
             aItem.getFileStatus( aFileStatus );
-            nLen = (sal_Int32)aFileStatus.getFileSize();
+            nLen = static_cast<sal_Int32>(aFileStatus.getFileSize());
         }
-        rPar.Get(0)->PutLong( (long)nLen );
+        rPar.Get(0)->PutLong( static_cast<long>(nLen) );
     }
 }
 
@@ -1583,7 +1583,7 @@ void SbRtl_String(StarBASIC *, SbxArray & rPar, bool)
         }
         if( rPar.Get(2)->GetType() == SbxINTEGER )
         {
-            aFiller = (sal_Unicode)rPar.Get(2)->GetInteger();
+            aFiller = static_cast<sal_Unicode>(rPar.Get(2)->GetInteger());
         }
         else
         {
@@ -1657,7 +1657,7 @@ void SbRtl_Val(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
         if ( aStr.getLength() > 1 && aStr[0] == '&' )
         {
             int nRadix = 10;
-            char aChar = (char)aStr[1];
+            char aChar = static_cast<char>(aStr[1]);
             if ( aChar == 'h' || aChar == 'H' )
             {
                 nRadix = 16;
@@ -1669,8 +1669,8 @@ void SbRtl_Val(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
             if ( nRadix != 10 )
             {
                 OString aByteStr(OUStringToOString(aStr, osl_getThreadTextEncoding()));
-                sal_Int16 nlResult = (sal_Int16)strtol( aByteStr.getStr()+2, &pEndPtr, nRadix);
-                nResult = (double)nlResult;
+                sal_Int16 nlResult = static_cast<sal_Int16>(strtol( aByteStr.getStr()+2, &pEndPtr, nRadix));
+                nResult = static_cast<double>(nlResult);
             }
         }
         else
@@ -1704,17 +1704,17 @@ sal_Int16 implGetDateDay( double aDate )
     Date aRefDate( 1, 1, 1900 );
     aRefDate.AddDays( aDate );
 
-    sal_Int16 nRet = (sal_Int16)( aRefDate.GetDay() );
+    sal_Int16 nRet = static_cast<sal_Int16>( aRefDate.GetDay() );
     return nRet;
 }
 
 sal_Int16 implGetDateMonth( double aDate )
 {
     Date aRefDate( 1,1,1900 );
-    sal_Int32 nDays = (sal_Int32)aDate;
+    sal_Int32 nDays = static_cast<sal_Int32>(aDate);
     nDays -= 2; // standardize: 1.1.1900 => 0.0
     aRefDate.AddDays( nDays );
-    sal_Int16 nRet = (sal_Int16)( aRefDate.GetMonth() );
+    sal_Int16 nRet = static_cast<sal_Int16>( aRefDate.GetMonth() );
     return nRet;
 }
 
@@ -1962,8 +1962,8 @@ void SbRtl_CDateFromIso(StarBASIC *, SbxArray & rPar, bool)
             }
 
             double dDate;
-            if (!implDateSerial( (sal_Int16)(nSign * aYearStr.toInt32()),
-                        (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), bUseTwoDigitYear, false, dDate ))
+            if (!implDateSerial( static_cast<sal_Int16>(nSign * aYearStr.toInt32()),
+                        static_cast<sal_Int16>(aMonthStr.toInt32()), static_cast<sal_Int16>(aDayStr.toInt32()), bUseTwoDigitYear, false, dDate ))
                 break;
 
             rPar.Get(0)->PutDate( dDate );
@@ -2155,8 +2155,8 @@ sal_Int16 implGetHour( double dDate )
 {
     double nFrac = dDate - floor( dDate );
     nFrac *= 86400.0;
-    sal_Int32 nSeconds = (sal_Int32)(nFrac + 0.5);
-    sal_Int16 nHour = (sal_Int16)(nSeconds / 3600);
+    sal_Int32 nSeconds = static_cast<sal_Int32>(nFrac + 0.5);
+    sal_Int16 nHour = static_cast<sal_Int16>(nSeconds / 3600);
     return nHour;
 }
 
@@ -2205,13 +2205,13 @@ sal_Int16 implGetSecond( double dDate )
 {
     double nFrac = dDate - floor( dDate );
     nFrac *= 86400.0;
-    sal_Int32 nSeconds = (sal_Int32)(nFrac + 0.5);
-    sal_Int16 nTemp = (sal_Int16)(nSeconds / 3600);
+    sal_Int32 nSeconds = static_cast<sal_Int32>(nFrac + 0.5);
+    sal_Int16 nTemp = static_cast<sal_Int16>(nSeconds / 3600);
     nSeconds -= nTemp * 3600;
-    nTemp = (sal_Int16)(nSeconds / 60);
+    nTemp = static_cast<sal_Int16>(nSeconds / 60);
     nSeconds -= nTemp * 60;
 
-    sal_Int16 nRet = (sal_Int16)nSeconds;
+    sal_Int16 nRet = static_cast<sal_Int16>(nSeconds);
     return nRet;
 }
 
@@ -2233,12 +2233,12 @@ double Now_Impl()
 {
     Date aDate( Date::SYSTEM );
     tools::Time aTime( tools::Time::SYSTEM );
-    double aSerial = (double)GetDayDiff( aDate );
+    double aSerial = static_cast<double>(GetDayDiff( aDate ));
     long nSeconds = aTime.GetHour();
     nSeconds *= 3600;
     nSeconds += aTime.GetMin() * 60;
     nSeconds += aTime.GetSec();
-    double nDays = ((double)nSeconds) / (24.0*3600.0);
+    double nDays = static_cast<double>(nSeconds) / (24.0*3600.0);
     aSerial += nDays;
     return aSerial;
 }
@@ -2274,7 +2274,7 @@ void SbRtl_Time(StarBASIC *, SbxArray & rPar, bool bWrite)
             nSeconds *= 3600;
             nSeconds += aTime.GetMin() * 60;
             nSeconds += aTime.GetSec();
-            double nDays = (double)nSeconds * ( 1.0 / (24.0*3600.0) );
+            double nDays = static_cast<double>(nSeconds) * ( 1.0 / (24.0*3600.0) );
             Color* pCol;
 
             std::shared_ptr<SvNumberFormatter> pFormatter;
@@ -2307,7 +2307,7 @@ void SbRtl_Timer(StarBASIC *, SbxArray & rPar, bool)
     nSeconds *= 3600;
     nSeconds += aTime.GetMin() * 60;
     nSeconds += aTime.GetSec();
-    rPar.Get(0)->PutDate( (double)nSeconds );
+    rPar.Get(0)->PutDate( static_cast<double>(nSeconds) );
 }
 
 
@@ -2316,7 +2316,7 @@ void SbRtl_Date(StarBASIC *, SbxArray & rPar, bool bWrite)
     if ( !bWrite )
     {
         Date aToday( Date::SYSTEM );
-        double nDays = (double)GetDayDiff( aToday );
+        double nDays = static_cast<double>(GetDayDiff( aToday ));
         SbxVariable* pMeth = rPar.Get( 0 );
         if( pMeth->IsString() )
         {
@@ -3059,12 +3059,12 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
             aDate = Date( aDT.Day, aDT.Month, aDT.Year );
         }
 
-        double fSerial = (double)GetDayDiff( aDate );
+        double fSerial = static_cast<double>(GetDayDiff( aDate ));
         long nSeconds = aTime.GetHour();
         nSeconds *= 3600;
         nSeconds += aTime.GetMin() * 60;
         nSeconds += aTime.GetSec();
-        double nDays = ((double)nSeconds) / (24.0*3600.0);
+        double nDays = static_cast<double>(nSeconds) / (24.0*3600.0);
         fSerial += nDays;
 
         Color* pCol;
@@ -3200,7 +3200,7 @@ void SbRtl_Loc(StarBASIC *, SbxArray & rPar, bool)
         {
             nPos = pSvStrm->Tell();
         }
-        rPar.Get(0)->PutLong( (sal_Int32)nPos );
+        rPar.Get(0)->PutLong( static_cast<sal_Int32>(nPos) );
     }
 }
 
@@ -3225,7 +3225,7 @@ void SbRtl_Lof(StarBASIC *, SbxArray & rPar, bool)
         sal_uInt64 const nOldPos = pSvStrm->Tell();
         sal_uInt64 const nLen = pSvStrm->Seek( STREAM_SEEK_TO_END );
         pSvStrm->Seek( nOldPos );
-        rPar.Get(0)->PutLong( (sal_Int32)nLen );
+        rPar.Get(0)->PutLong( static_cast<sal_Int32>(nLen) );
     }
 }
 
@@ -3233,7 +3233,7 @@ void SbRtl_Lof(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Seek(StarBASIC *, SbxArray & rPar, bool)
 {
     // No changes for UCB
-    int nArgs = (int)rPar.Count();
+    int nArgs = static_cast<int>(rPar.Count());
     if ( nArgs < 2 || nArgs > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3257,7 +3257,7 @@ void SbRtl_Seek(StarBASIC *, SbxArray & rPar, bool)
             nPos = nPos / pSbStrm->GetBlockLen();
         }
         nPos++; // Basic counts from 1
-        rPar.Get(0)->PutLong( (sal_Int32)nPos );
+        rPar.Get(0)->PutLong( static_cast<sal_Int32>(nPos) );
     }
     else                // Seek-Statement
     {
@@ -3341,7 +3341,7 @@ void SbRtl_Randomize(StarBASIC *, SbxArray & rPar, bool)
     }
     if( rPar.Count() == 2 )
     {
-        int nSeed = (int)rPar.Get(1)->GetInteger();
+        int nSeed = static_cast<int>(rPar.Get(1)->GetInteger());
         theRandomNumberGenerator::get().global_rng.seed(nSeed);
     }
     // without parameter, no need to do anything - RNG is seeded at first use
@@ -3545,7 +3545,7 @@ void SbRtl_VarType(StarBASIC *, SbxArray & rPar, bool)
     else
     {
         SbxDataType eType = rPar.Get(1)->GetType();
-        rPar.Get(0)->PutInteger( (sal_Int16)eType );
+        rPar.Get(0)->PutInteger( static_cast<sal_Int16>(eType) );
     }
 }
 
@@ -3709,7 +3709,7 @@ void SbRtl_Len(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_DDEInitiate(StarBASIC *, SbxArray & rPar, bool)
 {
-    int nArgs = (int)rPar.Count();
+    int nArgs = static_cast<int>(rPar.Count());
     if ( nArgs != 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3734,7 +3734,7 @@ void SbRtl_DDEInitiate(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_DDETerminate(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    int nArgs = (int)rPar.Count();
+    int nArgs = static_cast<int>(rPar.Count());
     if ( nArgs != 2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3752,7 +3752,7 @@ void SbRtl_DDETerminate(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_DDETerminateAll(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    int nArgs = (int)rPar.Count();
+    int nArgs = static_cast<int>(rPar.Count());
     if ( nArgs != 1 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3769,7 +3769,7 @@ void SbRtl_DDETerminateAll(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_DDERequest(StarBASIC *, SbxArray & rPar, bool)
 {
-    int nArgs = (int)rPar.Count();
+    int nArgs = static_cast<int>(rPar.Count());
     if ( nArgs != 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3793,7 +3793,7 @@ void SbRtl_DDERequest(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_DDEExecute(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    int nArgs = (int)rPar.Count();
+    int nArgs = static_cast<int>(rPar.Count());
     if ( nArgs != 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3812,7 +3812,7 @@ void SbRtl_DDEExecute(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_DDEPoke(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    int nArgs = (int)rPar.Count();
+    int nArgs = static_cast<int>(rPar.Count());
     if ( nArgs != 4 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3865,7 +3865,7 @@ void SbRtl_LBound(StarBASIC *, SbxArray & rPar, bool)
     if( pArr )
     {
         sal_Int32 nLower, nUpper;
-        short nDim = (nParCount == 3) ? (short)rPar.Get(2)->GetInteger() : 1;
+        short nDim = (nParCount == 3) ? static_cast<short>(rPar.Get(2)->GetInteger()) : 1;
         if( !pArr->GetDim32( nDim, nLower, nUpper ) )
             StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
         else
@@ -3889,7 +3889,7 @@ void SbRtl_UBound(StarBASIC *, SbxArray & rPar, bool)
     if( pArr )
     {
         sal_Int32 nLower, nUpper;
-        short nDim = (nParCount == 3) ? (short)rPar.Get(2)->GetInteger() : 1;
+        short nDim = (nParCount == 3) ? static_cast<short>(rPar.Get(2)->GetInteger()) : 1;
         if( !pArr->GetDim32( nDim, nLower, nUpper ) )
             StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
         else
@@ -4234,7 +4234,7 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     MessBoxStyle nWinBits;
     WinBits nType = 0; // MB_OK
     if( nArgCount >= 3 )
-        nType = (WinBits)rPar.Get(2)->GetInteger();
+        nType = static_cast<WinBits>(rPar.Get(2)->GetInteger());
     WinBits nStyle = nType;
     nStyle &= 15; // delete bits 4-16
     if( nStyle > 5 )
@@ -4539,7 +4539,7 @@ static long GetDayDiff( const Date& rDate )
 sal_Int16 implGetDateYear( double aDate )
 {
     Date aRefDate( 1,1,1900 );
-    long nDays = (long) aDate;
+    long nDays = static_cast<long>(aDate);
     nDays -= 2; // standardize: 1.1.1900 => 0.0
     aRefDate.AddDays( nDays );
     sal_Int16 nRet = aRefDate.GetYear();
@@ -4635,7 +4635,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
     }
 
     long nDiffDays = GetDayDiff( aCurDate );
-    rdRet = (double)nDiffDays;
+    rdRet = static_cast<double>(nDiffDays);
     return true;
 }
 
@@ -4664,8 +4664,8 @@ sal_Int16 implGetMinute( double dDate )
 {
     double nFrac = dDate - floor( dDate );
     nFrac *= 86400.0;
-    sal_Int32 nSeconds = (sal_Int32)(nFrac + 0.5);
-    sal_Int16 nTemp = (sal_Int16)(nSeconds % 3600);
+    sal_Int32 nSeconds = static_cast<sal_Int32>(nFrac + 0.5);
+    sal_Int16 nTemp = static_cast<sal_Int16>(nSeconds % 3600);
     sal_Int16 nMin = nTemp / 60;
     return nMin;
 }

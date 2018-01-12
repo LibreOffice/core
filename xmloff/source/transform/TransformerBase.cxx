@@ -567,7 +567,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             {
 
                                 // #i13778#,#i36248# apply correct twip-to-1/100mm
-                                nMeasure = (sal_Int32)( nMeasure >= 0
+                                nMeasure = static_cast<sal_Int32>( nMeasure >= 0
                                                         ? ((nMeasure*127+36)/72)
                                                         : ((nMeasure*127-36)/72) );
 
@@ -735,7 +735,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             {
 
                                 // #i13778#,#i36248#/ apply correct 1/100mm-to-twip conversion
-                                nMeasure = (sal_Int32)( nMeasure >= 0
+                                nMeasure = static_cast<sal_Int32>( nMeasure >= 0
                                                         ? ((nMeasure*72+63)/127)
                                                         : ((nMeasure*72-63)/127) );
 
@@ -816,7 +816,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             if( (c >= '0') && (c <= '9') )
                                 aBuffer.append( c );
                             else
-                                aBuffer.append( (sal_Int32)c );
+                                aBuffer.append( static_cast<sal_Int32>(c) );
                         }
 
                         pMutableAttrList->SetValueByIndex( i, aBuffer.makeStringAndClear() );

@@ -98,7 +98,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     {
         sal_Int32 nLeft, nTop, nRight, nBottom;
         GetBorder( nLeft, nTop, nRight, nBottom );
-        mnDDHeight = (sal_uInt16)(GetTextHeight() + nTop + nBottom + 4);
+        mnDDHeight = static_cast<sal_uInt16>(GetTextHeight() + nTop + nBottom + 4);
 
         if( IsNativeWidgetEnabled() &&
             IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire ) )
@@ -413,7 +413,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     else
     {
         long        nTextHeight = pDev->GetTextHeight();
-        sal_uInt16  nLines = ( nTextHeight > 0 ) ? (sal_uInt16)(aSize.Height() / nTextHeight) : 1;
+        sal_uInt16  nLines = ( nTextHeight > 0 ) ? static_cast<sal_uInt16>(aSize.Height() / nTextHeight) : 1;
         tools::Rectangle   aClip( aPos, aSize );
 
         pDev->IntersectClipRegion( aClip );
@@ -1317,13 +1317,13 @@ void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines 
     if ( !IsDropDownBox() )
     {
         Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();
-        rnCols = (sal_uInt16) (aOutSz.Width()/nCharWidth);
-        rnLines = (sal_uInt16) (aOutSz.Height()/mpImplLB->GetEntryHeight());
+        rnCols = static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth);
+        rnLines = static_cast<sal_uInt16>(aOutSz.Height()/mpImplLB->GetEntryHeight());
     }
     else
     {
         Size aOutSz = mpImplWin->GetOutputSizePixel();
-        rnCols = (sal_uInt16) (aOutSz.Width()/nCharWidth);
+        rnCols = static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth);
         rnLines = 1;
     }
 }

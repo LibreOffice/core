@@ -276,7 +276,7 @@ table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
 void SAL_CALL ScNamedRangeObj::setReferencePosition( const table::CellAddress& aReferencePosition )
 {
     SolarMutexGuard aGuard;
-    ScAddress aPos( (SCCOL)aReferencePosition.Column, (SCROW)aReferencePosition.Row, aReferencePosition.Sheet );
+    ScAddress aPos( static_cast<SCCOL>(aReferencePosition.Column), static_cast<SCROW>(aReferencePosition.Row), aReferencePosition.Sheet );
     // GRAM_API for API compatibility.
     Modify_Impl( nullptr, nullptr, nullptr, &aPos, nullptr,formula::FormulaGrammar::GRAM_API );
 }
@@ -477,7 +477,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
     sal_Int32 nUnoType )
 {
     SolarMutexGuard aGuard;
-    ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, aPosition.Sheet );
+    ScAddress aPos( static_cast<SCCOL>(aPosition.Column), static_cast<SCROW>(aPosition.Row), aPosition.Sheet );
 
     ScRangeData::Type nNewType = ScRangeData::Type::Name;
     if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= ScRangeData::Type::Criteria;
@@ -564,7 +564,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const OUString& aName )
 void SAL_CALL ScNamedRangesObj::outputList( const table::CellAddress& aOutputPosition )
 {
     SolarMutexGuard aGuard;
-    ScAddress aPos( (SCCOL)aOutputPosition.Column, (SCROW)aOutputPosition.Row, aOutputPosition.Sheet );
+    ScAddress aPos( static_cast<SCCOL>(aOutputPosition.Column), static_cast<SCROW>(aOutputPosition.Row), aOutputPosition.Sheet );
     if (pDocShell)
         pDocShell->GetDocFunc().InsertNameList( aPos, true );
 }
@@ -600,7 +600,7 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount()
 uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
 
@@ -1090,7 +1090,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
         ScDocument& rDoc = pDocShell->GetDocument();
         ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
 
-        if ( pOldList && nIndex >= 0 && nIndex < (sal_Int32)pOldList->size() )
+        if ( pOldList && nIndex >= 0 && nIndex < static_cast<sal_Int32>(pOldList->size()) )
         {
             ScRangePairListRef xNewList(pOldList->Clone());
 
@@ -1143,7 +1143,7 @@ sal_Int32 SAL_CALL ScLabelRangesObj::getCount()
 uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< sheet::XLabelRange >  xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    uno::Reference< sheet::XLabelRange >  xRange(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
 

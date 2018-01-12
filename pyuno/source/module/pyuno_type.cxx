@@ -141,7 +141,7 @@ sal_Unicode PyChar2Unicode( PyObject *obj )
             "uno.Char contains an empty unicode string");
     }
 
-    sal_Unicode c = (sal_Unicode)PyUnicode_AsUnicode( value.get() )[0];
+    sal_Unicode c = static_cast<sal_Unicode>(PyUnicode_AsUnicode( value.get() )[0]);
     return c;
 }
 

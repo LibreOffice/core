@@ -523,7 +523,7 @@ bool PPTWriterBase::GetStyleSheets()
             aXPropSet( mXModel, UNO_QUERY );
 
         sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, "TabStop" ) )
-            ? (sal_uInt16)( *o3tl::doAccess<sal_Int32>(mAny) / 4.40972 )
+            ? static_cast<sal_uInt16>( *o3tl::doAccess<sal_Int32>(mAny) / 4.40972 )
             : 1250;
 
         maStyleSheetList.push_back( new PPTExStyleSheet( nDefaultTab, dynamic_cast<PPTExBulletProvider*>(this) ) );

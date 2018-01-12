@@ -609,7 +609,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
             throw IllegalArgumentException(
                 "incorrect number of parameters passed invoking function " + FunctionName +
                 "expected " + OUString::number(nFParamsLen) + ", got " + OUString::number(InParams.getLength()),
-                static_cast<OWeakObject *>(this), (sal_Int16) 1 );
+                static_cast<OWeakObject *>(this), sal_Int16(1) );
         }
 
         // IN Parameter
@@ -655,7 +655,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                 // is OUT/INOUT parameter?
                 if (rFParam.aMode != ParamMode_IN)
                 {
-                    pOutIndices[nOutIndex] = (sal_Int16)nPos;
+                    pOutIndices[nOutIndex] = static_cast<sal_Int16>(nPos);
                     if (rFParam.aMode == ParamMode_OUT)
                         rDestType->createObject( pInvokeParams[nPos] );     // default init
                     ++nOutIndex;

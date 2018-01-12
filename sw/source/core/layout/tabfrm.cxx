@@ -4948,7 +4948,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                     double nTmpWidth = nSumWidth;
                     nTmpWidth *= nPrtWidth;
                     nTmpWidth /= nWish;
-                    nWidth = (SwTwips)nTmpWidth;
+                    nWidth = static_cast<SwTwips>(nTmpWidth);
 
                     // 3. calculate frame widths of cells up to this one:
                     const SwFrame* pTmpCell = static_cast<const SwLayoutFrame*>(GetUpper())->Lower();
@@ -4968,7 +4968,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                     double nTmpWidth = nWidth;
                     nTmpWidth *= nPrtWidth;
                     nTmpWidth /= nWish;
-                    nWidth = (SwTwips)nTmpWidth;
+                    nWidth = static_cast<SwTwips>(nTmpWidth);
                 }
             }
         }

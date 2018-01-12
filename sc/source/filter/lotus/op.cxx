@@ -51,7 +51,7 @@
 #include <map>
 #include <memory>
 
-static sal_uInt16 nDefWidth = ( sal_uInt16 ) ( TWIPS_PER_CHAR * 10 );
+static sal_uInt16 nDefWidth = sal_uInt16( TWIPS_PER_CHAR * 10 );
 
 void NI(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
 {
@@ -180,7 +180,7 @@ void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
         sal_uInt16 nBreite;
         if( nWidthSpaces )
             // assuming 10cpi character set
-            nBreite = ( sal_uInt16 ) ( TWIPS_PER_CHAR * nWidthSpaces );
+            nBreite = static_cast<sal_uInt16>( TWIPS_PER_CHAR * nWidthSpaces );
         else
         {
             rContext.pDoc->SetColHidden(nCol, nCol, 0, true);
@@ -319,7 +319,7 @@ void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     r.SeekRel( n - 8 );  // skip the rest
 
-    nDefWidth = ( sal_uInt16 ) ( TWIPS_PER_CHAR * nDefWidth );
+    nDefWidth = static_cast<sal_uInt16>( TWIPS_PER_CHAR * nDefWidth );
 
     // instead of default, set all Cols in SC by hand
     for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )

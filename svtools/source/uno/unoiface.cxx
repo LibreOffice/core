@@ -320,7 +320,7 @@ sal_Int16 VCLXMultiLineEdit::getMaxTextLen()
     SolarMutexGuard aGuard;
 
     VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
-    return pMultiLineEdit ? (sal_Int16)pMultiLineEdit->GetMaxTextLen() : (sal_Int16)0;
+    return pMultiLineEdit ? static_cast<sal_Int16>(pMultiLineEdit->GetMaxTextLen()) : sal_Int16(0);
 }
 
 OUString VCLXMultiLineEdit::getTextLines()
@@ -497,7 +497,7 @@ css::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName )
             break;
             case BASEPROPERTY_MAXTEXTLEN:
             {
-                aProp <<= (sal_Int16) pMultiLineEdit->GetMaxTextLen();
+                aProp <<= static_cast<sal_Int16>(pMultiLineEdit->GetMaxTextLen());
             }
             break;
             default:
@@ -903,7 +903,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
                             sal_Int32 nValue = 0;
                             if (!(Value >>= nValue))
                                 throw css::lang::IllegalArgumentException();
-                            SetValue(css::uno::makeAny((double)nValue));
+                            SetValue(css::uno::makeAny(static_cast<double>(nValue)));
                             break;
                         }
 
@@ -927,7 +927,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
             {
                 sal_Int32 n = 0;
                 if ( Value >>= n )
-                     pField->SetDecimalDigits( (sal_uInt16)n );
+                     pField->SetDecimalDigits( static_cast<sal_uInt16>(n) );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
@@ -1440,20 +1440,20 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
     {
         bool bEnable = false;
         evt.NewValue >>= bEnable;
-        pField->EnableRoadmapItem( (RoadmapTypes::ItemId)nID , bEnable );
+        pField->EnableRoadmapItem( static_cast<RoadmapTypes::ItemId>(nID) , bEnable );
     }
     else if ( sPropertyName == "Label" )
     {
         OUString sLabel;
         evt.NewValue >>= sLabel;
-        pField->ChangeRoadmapItemLabel( (RoadmapTypes::ItemId)nID , sLabel );
+        pField->ChangeRoadmapItemLabel( static_cast<RoadmapTypes::ItemId>(nID) , sLabel );
     }
     else if  ( sPropertyName == "ID" )
     {
         sal_Int32 nNewID = 0;
         evt.NewValue >>= nNewID;
         evt.OldValue >>= nID;
-        pField->ChangeRoadmapItemID( (RoadmapTypes::ItemId)nID, (RoadmapTypes::ItemId)nNewID );
+        pField->ChangeRoadmapItemID( static_cast<RoadmapTypes::ItemId>(nID), static_cast<RoadmapTypes::ItemId>(nNewID) );
     }
 //    else
         // TODO handle Interactive appropriately
@@ -1502,7 +1502,7 @@ void SVTXRoadmap::elementInserted( const css::container::ContainerEvent& _rEvent
         RMItemData CurItemData = GetRMItemData(  _rEvent );
         sal_Int32 InsertIndex = 0;
         _rEvent.Accessor >>= InsertIndex;
-        pField->InsertRoadmapItem( InsertIndex, CurItemData.Label, (RoadmapTypes::ItemId)CurItemData.n_ID, CurItemData.b_Enabled );
+        pField->InsertRoadmapItem( InsertIndex, CurItemData.Label, static_cast<RoadmapTypes::ItemId>(CurItemData.n_ID), CurItemData.b_Enabled );
     }
 }
 
@@ -1527,7 +1527,7 @@ void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent
         RMItemData CurItemData = GetRMItemData(  _rEvent );
         sal_Int32 ReplaceIndex = 0;
         _rEvent.Accessor >>= ReplaceIndex;
-        pField->ReplaceRoadmapItem( ReplaceIndex, CurItemData.Label, (RoadmapTypes::ItemId)CurItemData.n_ID, CurItemData.b_Enabled );
+        pField->ReplaceRoadmapItem( ReplaceIndex, CurItemData.Label, static_cast<RoadmapTypes::ItemId>(CurItemData.n_ID), CurItemData.b_Enabled );
     }
 }
 
@@ -1562,7 +1562,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
             {
                    sal_Int32 nId = 0;
                 Value >>= nId;
-                pField->SelectRoadmapItemByID( (RoadmapTypes::ItemId)nId );
+                pField->SelectRoadmapItemByID( static_cast<RoadmapTypes::ItemId>(nId) );
             }
             break;
 
@@ -2096,7 +2096,7 @@ void VCLXProgressBar::ImplUpdateValue()
     }
 
     // set progressbar value
-    pProgressBar->SetValue( (sal_uInt16) nPercent );
+    pProgressBar->SetValue( static_cast<sal_uInt16>(nPercent) );
 }
 
 // css::uno::XInterface

@@ -1748,13 +1748,13 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
 
     if ( !aStr.isEmpty())
     {
-        sal_uInt16 nCount=(sal_uInt16)aStr.toInt32();
+        sal_uInt16 nCount=static_cast<sal_uInt16>(aStr.toInt32());
 
         for(sal_uInt16 i=0;i<nCount;i++)
         {
             sal_Int32 n1 = aStr.indexOf(';');
             aStr = aStr.copy( n1+1 );
-            pTheView->SetTab(i, (sal_uInt16)aStr.toInt32(), MapUnit::MapPixel);
+            pTheView->SetTab(i, static_cast<sal_uInt16>(aStr.toInt32()), MapUnit::MapPixel);
         }
     }
 }

@@ -459,10 +459,10 @@ void ScOptSolverDlg::ReadConditions()
         aRowEntry.nOperator = mpOperator[nRow]->GetSelectedEntryPos();
 
         long nVecPos = nScrollPos + nRow;
-        if ( nVecPos >= (long)maConditions.size() && !aRowEntry.IsDefault() )
+        if ( nVecPos >= static_cast<long>(maConditions.size()) && !aRowEntry.IsDefault() )
             maConditions.resize( nVecPos + 1 );
 
-        if ( nVecPos < (long)maConditions.size() )
+        if ( nVecPos < static_cast<long>(maConditions.size()) )
             maConditions[nVecPos] = aRowEntry;
 
         // remove default entries at the end
@@ -480,7 +480,7 @@ void ScOptSolverDlg::ShowConditions()
         ScOptConditionRow aRowEntry;
 
         long nVecPos = nScrollPos + nRow;
-        if ( nVecPos < (long)maConditions.size() )
+        if ( nVecPos < static_cast<long>(maConditions.size()) )
             aRowEntry = maConditions[nVecPos];
 
         mpLeftEdit[nRow]->SetRefString( aRowEntry.aLeftStr );
@@ -490,7 +490,7 @@ void ScOptSolverDlg::ShowConditions()
 
     // allow to scroll one page behind the visible or stored rows
     long nVisible = nScrollPos + EDIT_ROW_COUNT;
-    long nMax = std::max( nVisible, (long) maConditions.size() );
+    long nMax = std::max( nVisible, static_cast<long>(maConditions.size()) );
     m_pScrollBar->SetRange( Range( 0, nMax + EDIT_ROW_COUNT ) );
     m_pScrollBar->SetThumbPos( nScrollPos );
 
@@ -502,7 +502,7 @@ void ScOptSolverDlg::EnableButtons()
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         long nVecPos = nScrollPos + nRow;
-        mpDelButton[nRow]->Enable( nVecPos < (long)maConditions.size() );
+        mpDelButton[nRow]->Enable( nVecPos < static_cast<long>(maConditions.size()) );
     }
 }
 
@@ -667,7 +667,7 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, Button*, pBtn, void )
 
             ReadConditions();
             long nVecPos = nScrollPos + nRow;
-            if ( nVecPos < (long)maConditions.size() )
+            if ( nVecPos < static_cast<long>(maConditions.size()) )
             {
                 maConditions.erase( maConditions.begin() + nVecPos );
                 ShowConditions();

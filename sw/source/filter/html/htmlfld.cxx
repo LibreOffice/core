@@ -308,7 +308,7 @@ void SwHTMLParser::NewField()
                 pFormatOption->GetEnum( nFormat, aHTMLAuthorFieldFormatTable );
             if( bFixed )
             {
-                nFormat = (SwAuthorFormat)((int)nFormat | AF_FIXED);
+                nFormat = (SwAuthorFormat)(static_cast<int>(nFormat) | AF_FIXED);
                 bInsOnEndTag = true;
             }
 
@@ -338,7 +338,7 @@ void SwHTMLParser::NewField()
                 nSub = TIMEFLD;
                 pFormatTable = aHTMLTimeFieldFormatTable;
                 if( !aValue.isEmpty() )
-                    nTime = (sal_uLong)aValue.toInt32();
+                    nTime = static_cast<sal_uLong>(aValue.toInt32());
             }
             if( !aValue.isEmpty() )
                 nSub |= FIXEDFLD;
@@ -413,7 +413,7 @@ void SwHTMLParser::NewField()
                 short nOff = 0;
 
                 if( nFormat!=SVX_NUM_CHAR_SPECIAL && !aValue.isEmpty() )
-                    nOff = (short)aValue.toInt32();
+                    nOff = static_cast<short>(aValue.toInt32());
                 else if( nSub == PG_NEXT  )
                     nOff = 1;
                 else if( nSub == PG_PREV  )
@@ -437,8 +437,8 @@ void SwHTMLParser::NewField()
             if( pSubOption->GetEnum( nSub, aHTMLDocInfoFieldSubTable ) )
             {
                 sal_uInt16 nExtSub = 0;
-                if( DI_CREATE==(SwDocInfoSubType)nSub ||
-                    DI_CHANGE==(SwDocInfoSubType)nSub )
+                if( DI_CREATE==static_cast<SwDocInfoSubType>(nSub) ||
+                    DI_CHANGE==static_cast<SwDocInfoSubType>(nSub) )
                 {
                     nExtSub = DI_SUB_AUTHOR;
                     if( pFormatOption )
@@ -502,7 +502,7 @@ void SwHTMLParser::NewField()
                 pFormatOption->GetEnum( nFormat, aHTMLFileNameFieldFormatTable );
             if( bFixed )
             {
-                nFormat = (SwFileNameFormat)((int)nFormat | FF_FIXED);
+                nFormat = (SwFileNameFormat)(static_cast<int>(nFormat) | FF_FIXED);
                 bInsOnEndTag = true;
             }
 

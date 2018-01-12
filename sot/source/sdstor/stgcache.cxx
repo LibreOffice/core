@@ -58,7 +58,7 @@ rtl::Reference< StgPage > StgPage::Create( short nData, sal_Int32 nPage )
 
 void StgCache::SetToPage ( const rtl::Reference< StgPage >& rPage, short nOff, sal_Int32 nVal )
 {
-    if( ( nOff < (short) ( rPage->GetSize() / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
+    if( ( nOff < static_cast<short>( rPage->GetSize() / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
     {
 #ifdef OSL_BIGENDIAN
         nVal = OSL_SWAPDWORD(nVal);

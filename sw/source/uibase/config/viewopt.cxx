@@ -306,7 +306,7 @@ void SwViewOption::Init( vcl::Window const *pWin )
 {
     if( !m_nPixelTwips && pWin )
     {
-        m_nPixelTwips = (sal_uInt16)pWin->PixelToLogic( Size(1,1) ).Height();
+        m_nPixelTwips = static_cast<sal_uInt16>(pWin->PixelToLogic( Size(1,1) ).Height());
     }
 }
 

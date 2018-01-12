@@ -230,8 +230,8 @@ void OStartMarker::Resize()
 
     Size aImageSize = m_aImage->GetImage().GetSizePixel();
     const MapMode& rMapMode = GetMapMode();
-    aImageSize.Width() = long(aImageSize.Width() * (double)rMapMode.GetScaleX());
-    aImageSize.Height() = long(aImageSize.Height() * (double)rMapMode.GetScaleY());
+    aImageSize.Width() = long(aImageSize.Width() * static_cast<double>(rMapMode.GetScaleX()));
+    aImageSize.Height() = long(aImageSize.Height() * static_cast<double>(rMapMode.GetScaleY()));
 
     long nExtraWidth = long(REPORT_EXTRA_SPACE * rMapMode.GetScaleX());
 

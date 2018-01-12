@@ -866,7 +866,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
     if (mpViewShell)
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData().GetMarkData();
-        bResult = rMarkdata.IsRowMarked((SCROW)nRow);
+        bResult = rMarkdata.IsRowMarked(static_cast<SCROW>(nRow));
     }
     return bResult;
 }
@@ -887,7 +887,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
     if (mpViewShell)
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData().GetMarkData();
-        bResult = rMarkdata.IsColumnMarked((SCCOL)nColumn);
+        bResult = rMarkdata.IsColumnMarked(static_cast<SCCOL>(nColumn));
     }
     return bResult;
 }

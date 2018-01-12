@@ -258,7 +258,7 @@ OUString CreateMD5FromString( const OUString& aMsg )
         // Create hex-value string from the MD5 value to keep the string size minimal
         OUStringBuffer aBuffer( nMD5KeyLen * 2 + 1 );
         for ( sal_uInt32 i = 0; i < nMD5KeyLen; i++ )
-            aBuffer.append( (sal_Int32)pMD5KeyBuffer[i], 16 );
+            aBuffer.append( static_cast<sal_Int32>(pMD5KeyBuffer[i]), 16 );
 
         return aBuffer.makeStringAndClear();
     }
@@ -1216,7 +1216,7 @@ void PipeIpcThread::execute()
                 }
             }
 
-            SAL_WARN( "desktop.app", "Error on accept: " << (int)nError);
+            SAL_WARN( "desktop.app", "Error on accept: " << static_cast<int>(nError));
             TimeValue tval;
             tval.Seconds = 1;
             tval.Nanosec = 0;

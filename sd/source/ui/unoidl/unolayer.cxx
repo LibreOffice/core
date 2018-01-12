@@ -494,7 +494,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         SdrLayerAdmin& rLA=mpModel->mpDoc->GetLayerAdmin();
         const sal_Int32 nMax=rLA.GetLayerCount();
         if (nIndex>nMax) nIndex=nMax;
-        xLayer = GetLayer (rLA.NewLayer(aLayerName,(sal_uInt16)nIndex));
+        xLayer = GetLayer (rLA.NewLayer(aLayerName,static_cast<sal_uInt16>(nIndex)));
         mpModel->SetModified();
     }
     return xLayer;
@@ -596,7 +596,7 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
     if( mpModel->mpDoc )
     {
         SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
-        uno::Reference<drawing::XLayer> xLayer (GetLayer (rLayerAdmin.GetLayer((sal_uInt16)nLayer)));
+        uno::Reference<drawing::XLayer> xLayer (GetLayer (rLayerAdmin.GetLayer(static_cast<sal_uInt16>(nLayer))));
         aAny <<= xLayer;
     }
     return aAny;

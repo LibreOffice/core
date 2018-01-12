@@ -822,7 +822,7 @@ SvxMacroTabPage::SvxMacroTabPage(vcl::Window* pParent,
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(nullptr), Reference< util::XModifiable >(nullptr));
     DisplayAppEvents(true);
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvTreeListEntry* pE = rListBox.GetEntry( (sal_uLong)nSelectedIndex );
+    SvTreeListEntry* pE = rListBox.GetEntry( static_cast<sal_uLong>(nSelectedIndex) );
     if( pE )
         rListBox.Select(pE);
 }

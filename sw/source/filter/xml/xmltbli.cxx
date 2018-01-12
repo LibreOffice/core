@@ -470,13 +470,13 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             GetImport().GetTextImport()->SetCellParaStyleDefault(rValue);
             break;
         case XML_TOK_TABLE_NUM_COLS_SPANNED:
-            nColSpan = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
+            nColSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
             break;
         case XML_TOK_TABLE_NUM_ROWS_SPANNED:
-            nRowSpan = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
+            nRowSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
             break;
         case XML_TOK_TABLE_NUM_COLS_REPEATED:
-            nColRepeat = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
+            nColRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
             break;
         case XML_TOK_TABLE_FORMULA:
             {
@@ -751,7 +751,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
             if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 aStyleName = rValue;
             else if( IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
-                nColRep = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
+                nColRep = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
             else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
                 aDfltCellStyleName = rValue;
         }
@@ -891,7 +891,7 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
             }
             else if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
             {
-                nRowRepeat = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
+                nRowRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
             }
             else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
             {
@@ -2400,12 +2400,12 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
         }
         if( nRelWidth != m_nWidth && nRelWidth && nCols )
         {
-            double n = (double)m_nWidth / (double)nRelWidth;
+            double n = static_cast<double>(m_nWidth) / static_cast<double>(nRelWidth);
             nRelWidth = 0;
             for( colIter = m_aColumnWidths.begin(); colIter < m_aColumnWidths.end() - 1; ++colIter)
             {
-                sal_Int32 nW = (sal_Int32)( colIter->width * n);
-                colIter->width = (sal_uInt16)nW;
+                sal_Int32 nW = static_cast<sal_Int32>( colIter->width * n);
+                colIter->width = static_cast<sal_uInt16>(nW);
                 nRelWidth += nW;
             }
             m_aColumnWidths.back().width = (m_nWidth-nRelWidth);
@@ -2420,7 +2420,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
             // The absolute space that is available for all columns with a
             // relative width.
             sal_Int32 nAbsForRelWidth =
-                    m_nWidth > nAbsWidth ? m_nWidth - nAbsWidth : (sal_Int32)0L;
+                    m_nWidth > nAbsWidth ? m_nWidth - nAbsWidth : sal_Int32(0L);
 
             // The relative width that has to be distributed in addition to
             // equally widthed columns.
@@ -2430,7 +2430,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
             // minimum widthed columns.
             sal_Int32 nMinAbs = nRelCols * MINLAY;
             sal_Int32 nExtraAbs =
-                    nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : (sal_Int32)0L;
+                    nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : sal_Int32(0L);
 
             bool bMin = false;      // Do all columns get the mininum width?
             bool bMinExtra = false; // Do all columns get the minimum width plus
@@ -2665,7 +2665,7 @@ void SwXMLTableContext::MakeTable()
                 else
                 {
                     m_nWidth = pSize->GetWidth();
-                    if( m_nWidth < (sal_Int32)GetColumnCount() * MINLAY )
+                    if( m_nWidth < static_cast<sal_Int32>(GetColumnCount()) * MINLAY )
                     {
                         m_nWidth = GetColumnCount() * MINLAY;
                     }

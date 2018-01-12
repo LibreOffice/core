@@ -184,7 +184,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     // order of entries in list box and maProperties is the same
     sal_Int32 nEntryCount = maProperties.getLength();
     SvTreeList* pModel = m_pLbSettings->GetModel();
-    if ( nEntryCount == (sal_Int32)pModel->GetEntryCount() )
+    if ( nEntryCount == static_cast<sal_Int32>(pModel->GetEntryCount()) )
     {
         for (sal_Int32 nEntryPos=0; nEntryPos<nEntryCount; ++nEntryPos)
         {
@@ -428,7 +428,7 @@ sal_Int32 ScSolverIntegerDialog::GetValue() const
         return SAL_MIN_INT32;
     if ( nValue > SAL_MAX_INT32 )
         return SAL_MAX_INT32;
-    return (sal_Int32) nValue;
+    return static_cast<sal_Int32>(nValue);
 }
 
 ScSolverValueDialog::ScSolverValueDialog( vcl::Window * pParent )

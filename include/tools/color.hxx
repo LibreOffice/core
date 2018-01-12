@@ -157,13 +157,13 @@ public:
 inline void Color::SetRed( sal_uInt8 nRed )
 {
     mnColor &= 0xFF00FFFF;
-    mnColor |= ((sal_uInt32)nRed)<<16;
+    mnColor |= static_cast<sal_uInt32>(nRed)<<16;
 }
 
 inline void Color::SetGreen( sal_uInt8 nGreen )
 {
     mnColor &= 0xFFFF00FF;
-    mnColor |= ((sal_uInt16)nGreen)<<8;
+    mnColor |= static_cast<sal_uInt16>(nGreen)<<8;
 }
 
 inline void Color::SetBlue( sal_uInt8 nBlue )
@@ -175,7 +175,7 @@ inline void Color::SetBlue( sal_uInt8 nBlue )
 inline void Color::SetTransparency( sal_uInt8 nTransparency )
 {
     mnColor &= 0x00FFFFFF;
-    mnColor |= ((sal_uInt32)nTransparency)<<24;
+    mnColor |= static_cast<sal_uInt32>(nTransparency)<<24;
 }
 
 inline bool Color::IsRGBEqual( const Color& rColor ) const

@@ -294,7 +294,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     if ( aAutoSaveEdit->IsValueChangedFromSaved() )
     {
         rSet->Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
-                                 (sal_uInt16)aAutoSaveEdit->GetValue() ) );
+                                 static_cast<sal_uInt16>(aAutoSaveEdit->GetValue()) ) );
         bModified = true;
     }
 

@@ -1038,10 +1038,10 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         aSnap = rSh.GetViewOptions()->GetSnapSize();
         short nDiv = rSh.GetViewOptions()->GetDivisionX();
         if ( nDiv > 0 )
-            aSnap.Width() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
+            aSnap.Width() = std::max( sal_uLong(1), static_cast<sal_uLong>(aSnap.Width()) / nDiv );
         nDiv = rSh.GetViewOptions()->GetDivisionY();
         if ( nDiv > 0 )
-            aSnap.Height() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
+            aSnap.Height() = std::max( sal_uLong(1), static_cast<sal_uLong>(aSnap.Height()) / nDiv );
     }
 
     if(bHuge)
@@ -1239,10 +1239,10 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
         Size aSnap( rSh.GetViewOptions()->GetSnapSize() );
         short nDiv = rSh.GetViewOptions()->GetDivisionX();
         if ( nDiv > 0 )
-            aSnap.Width() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
+            aSnap.Width() = std::max( sal_uLong(1), static_cast<sal_uLong>(aSnap.Width()) / nDiv );
         nDiv = rSh.GetViewOptions()->GetDivisionY();
         if ( nDiv > 0 )
-            aSnap.Height() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
+            aSnap.Height() = std::max( sal_uLong(1), static_cast<sal_uLong>(aSnap.Height()) / nDiv );
 
         if(bOnePixel)
         {

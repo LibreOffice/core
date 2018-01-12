@@ -1769,7 +1769,7 @@ IMPL_LINK_NOARG(ToolBarManager, Select, ToolBox *, void)
     if ( m_bDisposed )
         return;
 
-    sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
+    sal_Int16   nKeyModifier( static_cast<sal_Int16>(m_pToolBar->GetModifier()) );
     sal_uInt16      nId( m_pToolBar->GetCurItemId() );
 
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );

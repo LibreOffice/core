@@ -219,7 +219,7 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
         nStart = COMPLETE_STRING;
         nEnd = COMPLETE_STRING;
 
-        for( ; nAct < (sal_Int32)rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nAct )
+        for( ; nAct < static_cast<sal_Int32>(rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()) ; ++nAct )
         {
             rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
 
@@ -374,7 +374,7 @@ bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
     sal_Int32 nOldAct = nAct;
     bool bRet = false;
 
-    for( nAct = nFirst; nAct < (sal_Int32)rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nAct )
+    for( nAct = nFirst; nAct < static_cast<sal_Int32>(rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()) ; ++nAct )
     {
         rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
         if( nChkEnd < nStart )

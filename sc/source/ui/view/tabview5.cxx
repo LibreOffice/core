@@ -581,7 +581,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
         if (nScrollX > 0)
             while (nScrollX > 0 && nPosX < MAXCOL)
             {
-                nScrollX -= (long) ( pDoc->GetColWidth(nPosX, nTab) * nPPTX );
+                nScrollX -= static_cast<long>( pDoc->GetColWidth(nPosX, nTab) * nPPTX );
                 ++nPosX;
                 ++nLinesX;
             }
@@ -589,14 +589,14 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
             while (nScrollX < 0 && nPosX > 0)
             {
                 --nPosX;
-                nScrollX += (long) ( pDoc->GetColWidth(nPosX, nTab) * nPPTX );
+                nScrollX += static_cast<long>( pDoc->GetColWidth(nPosX, nTab) * nPPTX );
                 --nLinesX;
             }
 
         if (nScrollY > 0)
             while (nScrollY > 0 && nPosY < MAXROW)
             {
-                nScrollY -= (long) ( pDoc->GetRowHeight(nPosY, nTab) * nPPTY );
+                nScrollY -= static_cast<long>( pDoc->GetRowHeight(nPosY, nTab) * nPPTY );
                 ++nPosY;
                 ++nLinesY;
             }
@@ -604,7 +604,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
             while (nScrollY < 0 && nPosY > 0)
             {
                 --nPosY;
-                nScrollY += (long) ( pDoc->GetRowHeight(nPosY, nTab) * nPPTY );
+                nScrollY += static_cast<long>( pDoc->GetRowHeight(nPosY, nTab) * nPPTY );
                 --nLinesY;
             }
 

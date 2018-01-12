@@ -123,7 +123,7 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
 {
     SANE_Int    nInfo = 0;
 
-    SANE_Status nStatus = p_control_option( maHandle, (SANE_Int)nOption,
+    SANE_Status nStatus = p_control_option( maHandle, static_cast<SANE_Int>(nOption),
                                 nAction, pData, &nInfo );
     DUMP_STATE( nStatus, "sane_control_option" );
 #if OSL_DEBUG_LEVEL > 0
@@ -271,7 +271,7 @@ void Sane::ReloadOptions()
         fprintf( stderr, "Error: sane driver returned %s while reading number of options !\n", p_strstatus( nStatus ) );
 
     mnOptions = pOptions[ 0 ];
-    if( (size_t)pZero->size > sizeof( SANE_Word ) )
+    if( static_cast<size_t>(pZero->size) > sizeof( SANE_Word ) )
         fprintf( stderr, "driver returned numer of options with larger size tha SANE_Word !!!\n" );
     if( mppOptions )
         delete [] mppOptions;
@@ -384,7 +384,7 @@ bool Sane::GetOptionValue( int n, double& rRet, int nElement )
     {
         bSuccess = true;
         if( mppOptions[n]->type == SANE_TYPE_INT )
-            rRet = (double)pRet[ nElement ];
+            rRet = static_cast<double>(pRet[ nElement ]);
         else
             rRet = SANE_UNFIX( pRet[nElement] );
     }
@@ -406,7 +406,7 @@ bool Sane::GetOptionValue( int n, double* pSet )
         if( mppOptions[n]->type == SANE_TYPE_FIXED )
             pSet[i] = SANE_UNFIX( pFixedSet[i] );
         else
-            pSet[i] = (double) pFixedSet[i];
+            pSet[i] = static_cast<double>(pFixedSet[i]);
     }
     return true;
 }
@@ -440,7 +440,7 @@ void Sane::SetOptionValue( int n, double fSet, int nElement )
         if( nStatus == SANE_STATUS_GOOD )
         {
             pSet[nElement] = mppOptions[n]->type == SANE_TYPE_INT ?
-                (SANE_Word)fSet : SANE_FIX( fSet );
+                static_cast<SANE_Word>(fSet) : SANE_FIX( fSet );
             ControlOption(  n, SANE_ACTION_SET_VALUE, pSet.get() );
         }
     }
@@ -448,7 +448,7 @@ void Sane::SetOptionValue( int n, double fSet, int nElement )
     {
         SANE_Word nSetTo =
             mppOptions[n]->type == SANE_TYPE_INT ?
-            (SANE_Word)fSet : SANE_FIX( fSet );
+            static_cast<SANE_Word>(fSet) : SANE_FIX( fSet );
 
         ControlOption( n, SANE_ACTION_SET_VALUE, &nSetTo );
     }
@@ -465,7 +465,7 @@ void Sane::SetOptionValue( int n, double const * pSet )
         if( mppOptions[n]->type == SANE_TYPE_FIXED )
             pFixedSet[i] = SANE_FIX( pSet[i] );
         else
-            pFixedSet[i] = (SANE_Word)pSet[i];
+            pFixedSet[i] = static_cast<SANE_Word>(pSet[i]);
     }
     ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet.get() );
 }
@@ -494,7 +494,7 @@ static inline sal_uInt8 ReadValue( FILE* fp, int depth )
              return 0;
         }
 
-        return (sal_uInt8)( nWord / 256 );
+        return static_cast<sal_uInt8>( nWord / 256 );
     }
     sal_uInt8 nByte;
     size_t items_read = fread( &nByte, 1, 1, fp );
@@ -556,7 +556,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
             GetOptionValue( nOption, fBRx )              &&
             GetOptionUnit( nOption ) == SANE_UNIT_MM )
         {
-            nWidthMM = (int)fabs(fBRx - fTLx);
+            nWidthMM = static_cast<int>(fabs(fBRx - fTLx));
         }
     }
     if( ( nOption = GetOptionByName( "tl-y" ) ) != -1   &&
@@ -568,7 +568,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
             GetOptionValue( nOption, fBRy )              &&
             GetOptionUnit( nOption ) == SANE_UNIT_MM )
         {
-            nHeightMM = (int)fabs(fBRy - fTLy);
+            nHeightMM = static_cast<int>(fabs(fBRy - fTLy));
         }
     }
     if( ( nOption = GetOptionByName( "resolution" ) ) != -1 )
@@ -632,11 +632,11 @@ bool Sane::Start( BitmapTransporter& rBitmap )
             {
                 aParams.format = (SANE_Frame)5;
             }
-            fprintf( stderr, "format:           %s\n", ppFormats[ (int)aParams.format ] );
+            fprintf( stderr, "format:           %s\n", ppFormats[ static_cast<int>(aParams.format) ] );
             fprintf( stderr, "last_frame:       %s\n", aParams.last_frame ? "TRUE" : "FALSE" );
-            fprintf( stderr, "depth:            %d\n", (int)aParams.depth );
-            fprintf( stderr, "pixels_per_line:  %d\n", (int)aParams.pixels_per_line );
-            fprintf( stderr, "bytes_per_line:   %d\n", (int)aParams.bytes_per_line );
+            fprintf( stderr, "depth:            %d\n", static_cast<int>(aParams.depth) );
+            fprintf( stderr, "pixels_per_line:  %d\n", static_cast<int>(aParams.pixels_per_line) );
+            fprintf( stderr, "bytes_per_line:   %d\n", static_cast<int>(aParams.bytes_per_line) );
 #endif
             if( ! pBuffer )
             {
@@ -707,7 +707,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                     struct timeval tv;
 
                     FD_ZERO( &fdset );
-                    FD_SET( (int)fd, &fdset );
+                    FD_SET( static_cast<int>(fd), &fdset );
                     tv.tv_sec = 5;
                     tv.tv_usec = 0;
                     if( select( fd+1, &fdset, nullptr, nullptr, &tv ) == 0 )
@@ -735,16 +735,16 @@ bool Sane::Start( BitmapTransporter& rBitmap )
 
             int nFrameLength = ftell( pFrame );
             fseek( pFrame, 0, SEEK_SET );
-            sal_uInt32 nWidth = (sal_uInt32) aParams.pixels_per_line;
-            sal_uInt32 nHeight = (sal_uInt32) (nFrameLength / aParams.bytes_per_line);
+            sal_uInt32 nWidth = static_cast<sal_uInt32>(aParams.pixels_per_line);
+            sal_uInt32 nHeight = static_cast<sal_uInt32>(nFrameLength / aParams.bytes_per_line);
             if( ! bWidthSet )
             {
                 if( ! fResl )
                     fResl = 300; // if all else fails that's a good guess
                 if( ! nWidthMM )
-                    nWidthMM = (int)(((double)nWidth / fResl) * 25.4);
+                    nWidthMM = static_cast<int>((static_cast<double>(nWidth) / fResl) * 25.4);
                 if( ! nHeightMM )
-                    nHeightMM = (int)(((double)nHeight / fResl) * 25.4);
+                    nHeightMM = static_cast<int>((static_cast<double>(nHeight) / fResl) * 25.4);
                 SAL_INFO("extensions.scanner", "set dimensions to(" << nWidth << ", " << nHeight << ") Pixel, (" << nWidthMM << ", " << nHeightMM <<
                     ") mm, resolution is " << fResl);
 
@@ -915,15 +915,15 @@ int Sane::GetRange( int n, double*& rpDouble )
         }
         else
         {
-            fMin = (double)mppOptions[n]->constraint.range->min;
-            fMax = (double)mppOptions[n]->constraint.range->max;
-            fQuant = (double)mppOptions[n]->constraint.range->quant;
+            fMin = static_cast<double>(mppOptions[n]->constraint.range->min);
+            fMax = static_cast<double>(mppOptions[n]->constraint.range->max);
+            fQuant = static_cast<double>(mppOptions[n]->constraint.range->quant);
         }
         if( fQuant != 0.0 )
         {
             dbg_msg( "quantum range [ %lg ; %lg ; %lg ]\n",
                      fMin, fQuant, fMax );
-            nItems = (int)((fMax - fMin)/fQuant)+1;
+            nItems = static_cast<int>((fMax - fMin)/fQuant)+1;
             rpDouble = new double[ nItems ];
             double fValue = fMin;
             for( i = 0; i < nItems; i++, fValue += fQuant )
@@ -949,7 +949,7 @@ int Sane::GetRange( int n, double*& rpDouble )
         {
             rpDouble[i] = bIsFixed ?
                 SANE_UNFIX( mppOptions[n]->constraint.word_list[i+1] ) :
-                (double)mppOptions[n]->constraint.word_list[i+1];
+                static_cast<double>(mppOptions[n]->constraint.word_list[i+1]);
         }
         dbg_msg( "wordlist [ %lg ... %lg ]\n",
                  rpDouble[ 0 ], rpDouble[ nItems-1 ] );
@@ -971,7 +971,7 @@ OUString Sane::GetOptionUnitName( int n )
 {
     OUString aText;
     SANE_Unit nUnit = mppOptions[n]->unit;
-    size_t nUnitAsSize = (size_t)nUnit;
+    size_t nUnitAsSize = static_cast<size_t>(nUnit);
     if (nUnitAsSize >= SAL_N_ELEMENTS( ppUnits ))
         aText = "[unknown units]";
     else

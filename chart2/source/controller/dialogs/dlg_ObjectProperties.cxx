@@ -591,7 +591,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             break;
 
         case RID_SVXPAGE_NUMBERFORMAT:
-               aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
+               aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO)));
             rPage.PageCreated(aSet);
             break;
         case TP_XERRORBAR:

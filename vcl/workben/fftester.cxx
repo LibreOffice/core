@@ -109,43 +109,43 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             GDIMetaFile aGDIMetaFile;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) ReadWindowMetafile(aFileStream, aGDIMetaFile);
+            ret = static_cast<int>(ReadWindowMetafile(aFileStream, aGDIMetaFile));
         }
         else if (strcmp(argv[2], "jpg") == 0)
         {
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) ImportJPEG(aFileStream, aGraphic, GraphicFilterImportFlags::NONE, nullptr);
+            ret = static_cast<int>(ImportJPEG(aFileStream, aGraphic, GraphicFilterImportFlags::NONE, nullptr));
         }
         else if (strcmp(argv[2], "gif") == 0)
         {
             SvFileStream aFileStream(out, StreamMode::READ);
             Graphic aGraphic;
-            ret = (int) ImportGIF(aFileStream, aGraphic);
+            ret = static_cast<int>(ImportGIF(aFileStream, aGraphic));
         }
         else if (strcmp(argv[2], "xbm") == 0)
         {
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) ImportXBM(aFileStream, aGraphic);
+            ret = static_cast<int>(ImportXBM(aFileStream, aGraphic));
         }
         else if (strcmp(argv[2], "xpm") == 0)
         {
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) ImportXPM(aFileStream, aGraphic);
+            ret = static_cast<int>(ImportXPM(aFileStream, aGraphic));
         }
         else if (strcmp(argv[2], "png") == 0)
         {
             SvFileStream aFileStream(out, StreamMode::READ);
             vcl::PNGReader aReader(aFileStream);
-            ret = (int) !!aReader.Read();
+            ret = static_cast<int>(!!aReader.Read());
         }
         else if (strcmp(argv[2], "bmp") == 0)
         {
             Bitmap aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) ReadDIB(aTarget, aFileStream, true);
+            ret = static_cast<int>(ReadDIB(aTarget, aFileStream, true));
         }
         else if (strcmp(argv[2], "svm") == 0)
         {
@@ -167,7 +167,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "dxf") == 0)
         {
@@ -182,7 +182,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "met") == 0)
         {
@@ -197,7 +197,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if ((strcmp(argv[2], "pbm") == 0) || strcmp(argv[2], "ppm") == 0)
         {
@@ -212,7 +212,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "psd") == 0)
         {
@@ -227,7 +227,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "eps") == 0)
         {
@@ -242,7 +242,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "pct") == 0)
         {
@@ -257,7 +257,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "pcx") == 0)
         {
@@ -272,7 +272,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "ras") == 0)
         {
@@ -287,7 +287,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "tga") == 0)
         {
@@ -302,7 +302,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "tif") == 0)
         {
@@ -317,7 +317,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
+            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
         }
         else if ((strcmp(argv[2], "doc") == 0) || (strcmp(argv[2], "ww8") == 0))
         {
@@ -331,7 +331,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "ww6") == 0)
         {
@@ -345,7 +345,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "ww2") == 0)
         {
@@ -359,7 +359,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "rtf") == 0)
         {
@@ -373,7 +373,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "html") == 0)
         {
@@ -387,7 +387,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "fodt") == 0)
         {
@@ -401,7 +401,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "docx") == 0)
         {
@@ -415,7 +415,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "fods") == 0)
         {
@@ -429,7 +429,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "xlsx") == 0)
         {
@@ -443,7 +443,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "fodp") == 0)
         {
@@ -457,7 +457,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "pptx") == 0)
         {
@@ -471,7 +471,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "xls") == 0)
         {
@@ -485,7 +485,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "wks") == 0)
         {
@@ -499,7 +499,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "hwp") == 0)
         {
@@ -513,7 +513,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "602") == 0)
         {
@@ -527,7 +527,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "lwp") == 0)
         {
@@ -541,7 +541,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "ppt") == 0)
         {
@@ -555,7 +555,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "cgm") == 0)
         {
@@ -569,7 +569,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "qpw") == 0)
         {
@@ -583,7 +583,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "dif") == 0)
         {
@@ -597,7 +597,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "sc-rtf") == 0)
         {
@@ -611,7 +611,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "slk") == 0)
         {
@@ -625,7 +625,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "ole") == 0)
         {
@@ -639,7 +639,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "mml") == 0)
         {
@@ -653,7 +653,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
         else if (strcmp(argv[2], "mtp") == 0)
         {
@@ -667,7 +667,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 aLibrary.release();
             }
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (int) (*pfnImport)(aFileStream);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
         }
 #endif
     }

@@ -35,8 +35,8 @@ Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHand
     Libxml2ExtensionHandle aHandle;
     aHandle.functionLookupFunction = reinterpret_cast< sal_Int64 >( &xforms_lookupFunc );
     aHandle.functionData = reinterpret_cast< sal_Int64 >( this );
-    aHandle.variableLookupFunction = (sal_Int64)0;
-    aHandle.variableData = (sal_Int64)0;
+    aHandle.variableLookupFunction = sal_Int64(0);
+    aHandle.variableData = sal_Int64(0);
     return aHandle;
 }
 

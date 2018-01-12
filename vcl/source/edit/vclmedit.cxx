@@ -637,8 +637,8 @@ void ImpVclMEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLi
     static const sal_Unicode sampleChar = { 'x' };
     Size aOutSz = mpTextWindow->GetOutputSizePixel();
     Size aCharSz( mpTextWindow->GetTextWidth( OUString(sampleChar) ), mpTextWindow->GetTextHeight() );
-    rnCols = (sal_uInt16) (aOutSz.Width()/aCharSz.Width());
-    rnLines = (sal_uInt16) (aOutSz.Height()/aCharSz.Height());
+    rnCols = static_cast<sal_uInt16>(aOutSz.Width()/aCharSz.Width());
+    rnLines = static_cast<sal_uInt16>(aOutSz.Height()/aCharSz.Height());
 }
 
 void ImpVclMEdit::Enable( bool bEnable )
@@ -1384,7 +1384,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
 
     OUString aText = GetText();
     Size aTextSz( pDev->GetTextWidth( aText ), pDev->GetTextHeight() );
-    sal_uLong nLines = (sal_uLong) (aSize.Height() / aTextSz.Height());
+    sal_uLong nLines = static_cast<sal_uLong>(aSize.Height() / aTextSz.Height());
     if ( !nLines )
         nLines = 1;
     aTextSz.Height() = nLines*aTextSz.Height();

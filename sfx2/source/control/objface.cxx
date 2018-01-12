@@ -38,15 +38,15 @@ extern "C" {
 static int
 SfxCompareSlots_qsort( const void* pSmaller, const void* pBigger )
 {
-    return ( (int) static_cast<SfxSlot const *>(pSmaller)->GetSlotId() ) -
-           ( (int) static_cast<SfxSlot const *>(pBigger)->GetSlotId() );
+    return static_cast<int>(static_cast<SfxSlot const *>(pSmaller)->GetSlotId()) -
+           static_cast<int>(static_cast<SfxSlot const *>(pBigger)->GetSlotId());
 }
 
 static int
 SfxCompareSlots_bsearch( const void* pSmaller, const void* pBigger )
 {
-    return ( (int) *static_cast<sal_uInt16 const *>(pSmaller) ) -
-           ( (int) static_cast<SfxSlot const *>(pBigger)->GetSlotId() );
+    return static_cast<int>(*static_cast<sal_uInt16 const *>(pSmaller)) -
+           static_cast<int>(static_cast<SfxSlot const *>(pBigger)->GetSlotId());
 }
 
 }

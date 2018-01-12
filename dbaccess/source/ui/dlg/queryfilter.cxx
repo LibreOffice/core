@@ -518,7 +518,7 @@ void DlgFilterCrit::SetLine( int nIdx, const PropertyValue& _rItem, bool _bOr )
         ListSelectHdl( *pColumnListControl );
 
         // select the appropriate condition
-        pPredicateListControl->SelectEntryPos( GetSelectionPos( (sal_Int32)_rItem.Handle, *pPredicateListControl ) );
+        pPredicateListControl->SelectEntryPos( GetSelectionPos( static_cast<sal_Int32>(_rItem.Handle), *pPredicateListControl ) );
 
         // initially normalize this value
         OUString aString( aStr );

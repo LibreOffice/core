@@ -120,7 +120,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView const *pVw)
     m_pFormatLB->SelectNumberingType(nSelFormat);
 
     // position
-    m_pPosLB->SelectEntryPos((sal_Int32)rInf.GetPos());
+    m_pPosLB->SelectEntryPos(static_cast<sal_Int32>(rInf.GetPos()));
 
     // offset
     sal_uInt16 nOffset = rInf.GetPosFromLeft();
@@ -222,16 +222,16 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, Button*, void)
     aInf.SetPos((LineNumberPosition)m_pPosLB->GetSelectedEntryPos());
 
     // offset
-    aInf.SetPosFromLeft((sal_uInt16)m_pOffsetMF->Denormalize(m_pOffsetMF->GetValue(FUNIT_TWIP)));
+    aInf.SetPosFromLeft(static_cast<sal_uInt16>(m_pOffsetMF->Denormalize(m_pOffsetMF->GetValue(FUNIT_TWIP))));
 
     // numbering offset
-    aInf.SetCountBy((sal_uInt16)m_pNumIntervalNF->GetValue());
+    aInf.SetCountBy(static_cast<sal_uInt16>(m_pNumIntervalNF->GetValue()));
 
     // divider
     aInf.SetDivider(m_pDivisorED->GetText());
 
     // divider offset
-    aInf.SetDividerCountBy((sal_uInt16)m_pDivIntervalNF->GetValue());
+    aInf.SetDividerCountBy(static_cast<sal_uInt16>(m_pDivIntervalNF->GetValue()));
 
     // count
     aInf.SetCountBlankLines(m_pCountEmptyLinesCB->IsChecked());

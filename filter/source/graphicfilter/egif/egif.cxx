@@ -211,7 +211,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
         const double fStep = 100. / nCount;
 
         nMinPercent = 0;
-        nMaxPercent = (sal_uInt32)fStep;
+        nMaxPercent = static_cast<sal_uInt32>(fStep);
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {
@@ -220,7 +220,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
             WriteBitmapEx( rAnimBmp.aBmpEx, rAnimBmp.aPosPix, true,
                            rAnimBmp.nWait, rAnimBmp.eDisposal );
             nMinPercent = nMaxPercent;
-            nMaxPercent = (sal_uInt32)(nMaxPercent + fStep);
+            nMaxPercent = static_cast<sal_uInt32>(nMaxPercent + fStep);
         }
     }
 }
@@ -297,8 +297,8 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
     if( bStatus )
     {
         // 256 colors
-        const sal_uInt16    nWidth = (sal_uInt16) rSize.Width();
-        const sal_uInt16    nHeight = (sal_uInt16) rSize.Height();
+        const sal_uInt16    nWidth = static_cast<sal_uInt16>(rSize.Width());
+        const sal_uInt16    nHeight = static_cast<sal_uInt16>(rSize.Height());
         const sal_uInt8     cFlags = 128 | ( 7 << 4 );
 
         // write values
@@ -325,7 +325,7 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
 {
     DBG_ASSERT( rAnimation.Count() > 0, "Animation has no bitmaps!" );
 
-    sal_uInt16 nLoopCount = (sal_uInt16) rAnimation.GetLoopCount();
+    sal_uInt16 nLoopCount = static_cast<sal_uInt16>(rAnimation.GetLoopCount());
 
     // if only one run should take place
     // the LoopExtension won't be written
@@ -337,8 +337,8 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
         if( nLoopCount )
             nLoopCount--;
 
-        const sal_uInt8 cLoByte = (sal_uInt8) nLoopCount;
-        const sal_uInt8 cHiByte = (sal_uInt8) ( nLoopCount >> 8 );
+        const sal_uInt8 cLoByte = static_cast<sal_uInt8>(nLoopCount);
+        const sal_uInt8 cHiByte = static_cast<sal_uInt8>( nLoopCount >> 8 );
 
         m_rGIF.WriteUChar( 0x21 );
         m_rGIF.WriteUChar( 0xff );
@@ -375,7 +375,7 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
 {
     if( bStatus )
     {
-        const sal_uInt16    nDelay = (sal_uInt16) nTimer;
+        const sal_uInt16    nDelay = static_cast<sal_uInt16>(nTimer);
         sal_uInt8           cFlags = 0;
 
         // set Transparency-Flag
@@ -406,11 +406,11 @@ void GIFWriter::WriteLocalHeader()
 {
     if( bStatus )
     {
-        const sal_uInt16    nPosX = (sal_uInt16) nActX;
-        const sal_uInt16    nPosY = (sal_uInt16) nActY;
-        const sal_uInt16    nWidth = (sal_uInt16) m_pAcc->Width();
-        const sal_uInt16    nHeight = (sal_uInt16) m_pAcc->Height();
-        sal_uInt8       cFlags = (sal_uInt8) ( m_pAcc->GetBitCount() - 1 );
+        const sal_uInt16    nPosX = static_cast<sal_uInt16>(nActX);
+        const sal_uInt16    nPosY = static_cast<sal_uInt16>(nActY);
+        const sal_uInt16    nWidth = static_cast<sal_uInt16>(m_pAcc->Width());
+        const sal_uInt16    nHeight = static_cast<sal_uInt16>(m_pAcc->Height());
+        sal_uInt8       cFlags = static_cast<sal_uInt8>( m_pAcc->GetBitCount() - 1 );
 
         // set Interlaced-Flag
         if( nInterlaced )

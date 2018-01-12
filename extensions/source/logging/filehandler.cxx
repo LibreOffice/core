@@ -188,7 +188,7 @@ namespace logging
             {
                 SAL_WARN( "extensions.logging", "FileHandler::impl_prepareFile_nothrow: could not open the designated log file:"
                             "\nURL: " << m_sFileURL
-                            << "\nerror code: " << (sal_Int32)res );
+                            << "\nerror code: " << static_cast<sal_Int32>(res) );
             }
         #endif
             if ( m_eFileValidity == eValid )

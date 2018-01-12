@@ -170,7 +170,7 @@ PageMarginControl::PageMarginControl( sal_uInt16 nId, vcl::Window* pParent )
     m_pLast->SetClickHdl( LINK( this, PageMarginControl, SelectMarginHdl ) );
 
     get( m_pContainer, "container" );
-    m_pWidthHeightField = VclPtr<MetricField>::Create( m_pContainer.get(), (WinBits)0 );
+    m_pWidthHeightField = VclPtr<MetricField>::Create( m_pContainer.get(), WinBits(0) );
     m_pWidthHeightField->Hide();
     m_pWidthHeightField->SetUnit( FUNIT_CM );
     m_pWidthHeightField->SetMax( 9999 );

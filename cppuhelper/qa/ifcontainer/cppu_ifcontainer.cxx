@@ -115,8 +115,8 @@ namespace cppu_ifcontainer
             aElements = pContainer->getElements();
 
             CPPUNIT_ASSERT_MESSAGE("query contents",
-                                   bool((int)aElements.getLength() == nTests));
-            if ((int)aElements.getLength() == nTests)
+                                   bool(static_cast<int>(aElements.getLength()) == nTests));
+            if (static_cast<int>(aElements.getLength()) == nTests)
             {
                 for (i = 0; i < nTests; i++)
                 {

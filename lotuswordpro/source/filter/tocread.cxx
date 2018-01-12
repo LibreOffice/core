@@ -452,7 +452,7 @@ CBenTOCReader::ReadSegment(CBenValue * pValue, BenByte * pLookAhead)
         else if (Length != 0)
         {
             assert(Length <= 4);
-            new CBenValueSegment(pValue, ImmData, (unsigned short) Length);
+            new CBenValueSegment(pValue, ImmData, static_cast<unsigned short>(Length));
         }
     }
 

@@ -181,7 +181,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
 
 void LibrariesElement::endElement()
 {
-    sal_Int32 nLibCount = mxImport->mpLibArray->mnLibCount = (sal_Int32)mLibDescriptors.size();
+    sal_Int32 nLibCount = mxImport->mpLibArray->mnLibCount = static_cast<sal_Int32>(mLibDescriptors.size());
     mxImport->mpLibArray->mpLibs.reset( new LibDescriptor[ nLibCount ] );
 
     for( sal_Int32 i = 0 ; i < nLibCount ; i++ )

@@ -1220,9 +1220,9 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                                              nPosY + pRowInfo[nArrY].nHeight - 1 );
 
                             long nSize = pAttr->GetWidth();
-                            long nSizeX = (long)(nSize*mnPPTX);
+                            long nSizeX = static_cast<long>(nSize*mnPPTX);
                             if (nSizeX >= nMaxWidth) nSizeX = nMaxWidth-1;
-                            long nSizeY = (long)(nSize*mnPPTY);
+                            long nSizeY = static_cast<long>(nSize*mnPPTY);
                             if (nSizeY >= nRowHeight) nSizeY = nRowHeight-1;
 
                             nSizeX *= nLayoutSign;      // used only to add to rectangle values
@@ -1562,7 +1562,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                             while (nCol > nX)
                             {
                                 --nCol;
-                                nPosX -= nLayoutSign * (long)pRowInfo[0].pCellInfo[nCol + 1].nWidth;
+                                nPosX -= nLayoutSign * static_cast<long>(pRowInfo[0].pCellInfo[nCol + 1].nWidth);
                             }
                         }
 
@@ -1582,7 +1582,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                         double nCos = cos(nRealOrient);
                         double nSin = sin(nRealOrient);
                         //! restrict !!!
-                        long nSkew = (long)(nRowHeight * nCos / nSin);
+                        long nSkew = static_cast<long>(nRowHeight * nCos / nSin);
 
                         switch (eRotMode)
                         {
@@ -2262,8 +2262,8 @@ void ScOutputData::AddPDFNotes()
                 if ( mpDoc->GetNote(nMergeX, nMergeY, nTab) && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
-                    long nNoteWidth = (long)( SC_CLIPMARK_SIZE * mnPPTX );
-                    long nNoteHeight = (long)( SC_CLIPMARK_SIZE * mnPPTY );
+                    long nNoteWidth = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
+                    long nNoteHeight = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTY );
 
                     long nMarkX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - nNoteWidth ) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )
@@ -2352,26 +2352,26 @@ void ScOutputData::DrawClipMarks()
                                 nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & ScMF::Hor ) )
                         {
                             --nOverX;
-                            nStartPosX -= nLayoutSign * (long) ( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
+                            nStartPosX -= nLayoutSign * static_cast<long>( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
                         }
 
                         while ( nOverY > 0 && ( static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                 nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & ScMF::Ver ) )
                         {
                             --nOverY;
-                            nStartPosY -= nLayoutSign * (long) ( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
+                            nStartPosY -= nLayoutSign * static_cast<long>( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
                         }
 
-                        long nOutWidth = (long) ( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
-                        long nOutHeight = (long) ( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
+                        long nOutWidth = static_cast<long>( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
+                        long nOutHeight = static_cast<long>( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
 
                         const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(
                                     mpDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE ));
                         SCCOL nCountX = pMerge->GetColMerge();
                         for (SCCOL i=1; i<nCountX; i++)
-                            nOutWidth += (long) ( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
+                            nOutWidth += static_cast<long>( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
                         SCROW nCountY = pMerge->GetRowMerge();
-                        nOutHeight += (long) mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY);
+                        nOutHeight += static_cast<long>(mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY));
 
                         if ( bLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
@@ -2390,9 +2390,9 @@ void ScOutputData::DrawClipMarks()
                                     &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
                             SCCOL nCountX = pMerge->GetColMerge();
                             for (SCCOL i=1; i<nCountX; i++)
-                                nOutWidth += (long) ( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
+                                nOutWidth += static_cast<long>( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
                             SCROW nCountY = pMerge->GetRowMerge();
-                            nOutHeight += (long) mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY);
+                            nOutHeight += static_cast<long>(mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY));
                         }
 
                         long nStartPosX = nPosX;
@@ -2409,7 +2409,7 @@ void ScOutputData::DrawClipMarks()
                     else
                         aCellRect.Right() -= 1;
 
-                    long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
+                    long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
 
                     if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Right : ScClipMark::Left ) )

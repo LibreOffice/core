@@ -87,8 +87,8 @@ extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
         }
         WARNMS(cinfo, JWRN_JPEG_EOF);
         /* Insert a fake EOI marker */
-        source->buffer[0] = (JOCTET) 0xFF;
-        source->buffer[1] = (JOCTET) JPEG_EOI;
+        source->buffer[0] = JOCTET(0xFF);
+        source->buffer[1] = JOCTET(JPEG_EOI);
         nbytes = 2;
     }
 
@@ -109,17 +109,17 @@ extern "C" void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
      */
     if (numberOfBytes > 0)
     {
-        while (numberOfBytes > (long) source->pub.bytes_in_buffer)
+        while (numberOfBytes > static_cast<long>(source->pub.bytes_in_buffer))
         {
-            numberOfBytes -= (long) source->pub.bytes_in_buffer;
+            numberOfBytes -= static_cast<long>(source->pub.bytes_in_buffer);
             (void) fill_input_buffer(cinfo);
 
             /* note we assume that fill_input_buffer will never return false,
              * so suspension need not be handled.
              */
         }
-        source->pub.next_input_byte += (size_t) numberOfBytes;
-        source->pub.bytes_in_buffer -= (size_t) numberOfBytes;
+        source->pub.next_input_byte += static_cast<size_t>(numberOfBytes);
+        source->pub.bytes_in_buffer -= static_cast<size_t>(numberOfBytes);
     }
 }
 
@@ -204,7 +204,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
 
         for( sal_uInt16 n = 0; n < 256; n++ )
         {
-            const sal_uInt8 cGray = (sal_uInt8) n;
+            const sal_uInt8 cGray = static_cast<sal_uInt8>(n);
             aGrayPal[ n ] = BitmapColor( cGray, cGray, cGray );
         }
 

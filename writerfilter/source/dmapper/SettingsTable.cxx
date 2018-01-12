@@ -325,7 +325,7 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         break;
     case NS_ooxml::LN_CT_DocProtect_enforcement: // 92039
         m_pImpl->m_DocumentProtection.m_bEnforcement = (nIntValue != 0);
-        m_pImpl->m_bProtectForm &= (bool)nIntValue;
+        m_pImpl->m_bProtectForm &= static_cast<bool>(nIntValue);
         break;
     case NS_ooxml::LN_CT_DocProtect_formatting: // 92038
         m_pImpl->m_DocumentProtection.m_bFormatting = (nIntValue != 0);

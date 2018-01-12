@@ -1467,7 +1467,7 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
     if( SfxItemState::SET == rItemSet.GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) )
     {
         sal_uInt16 nProp = static_cast<const SvxFontHeightItem *>(pItem)->GetProp();
-        nLines = (sal_uInt8)((nProp + 50) / 100);
+        nLines = static_cast<sal_uInt8>((nProp + 50) / 100);
         if( nLines < 1 )
             nLines = 1;
         else if( nLines > MAX_DROPCAP_LINES )
@@ -1513,7 +1513,7 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
         {
             do
             {
-                aName = "first-letter " + OUString::number( (sal_Int32)(++m_nDropCapCnt) );
+                aName = "first-letter " + OUString::number( static_cast<sal_Int32>(++m_nDropCapCnt) );
             }
             while( m_pDoc->FindCharFormatByName(aName) );
         }
@@ -2044,7 +2044,7 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
     switch( rPropInfo.m_eWidthType )
     {
     case SVX_CSS1_LTYPE_PERCENTAGE:
-        nPrcWidth = rPropInfo.m_nWidth > 0 ? (sal_uInt8)rPropInfo.m_nWidth : 1;
+        nPrcWidth = rPropInfo.m_nWidth > 0 ? static_cast<sal_uInt8>(rPropInfo.m_nWidth) : 1;
         nWidth = MINFLY;
         break;
     case SVX_CSS1_LTYPE_TWIP:
@@ -2057,7 +2057,7 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
     switch( rPropInfo.m_eHeightType )
     {
     case SVX_CSS1_LTYPE_PERCENTAGE:
-        nPrcHeight = rPropInfo.m_nHeight > 0 ? (sal_uInt8)rPropInfo.m_nHeight : 1;
+        nPrcHeight = rPropInfo.m_nHeight > 0 ? static_cast<sal_uInt8>(rPropInfo.m_nHeight) : 1;
         break;
     case SVX_CSS1_LTYPE_TWIP:
         // Netscape and MS-IE interpreting the height incorrectly as minimum height,
@@ -2186,7 +2186,7 @@ void SwHTMLParser::GetMarginsFromContextWithNumBul( sal_uInt16& nLeft,
     const SwHTMLNumRuleInfo& rInfo = const_cast<SwHTMLParser*>(this)->GetNumInfo();
     if( rInfo.GetDepth() )
     {
-        sal_uInt8 nLevel = (sal_uInt8)( (rInfo.GetDepth() <= MAXLEVEL ? rInfo.GetDepth()
+        sal_uInt8 nLevel = static_cast<sal_uInt8>( (rInfo.GetDepth() <= MAXLEVEL ? rInfo.GetDepth()
                                                             : MAXLEVEL) - 1 );
         const SwNumFormat& rNumFormat = rInfo.GetNumRule()->Get(nLevel);
         nLeft = nLeft + rNumFormat.GetAbsLSpace();
@@ -2241,7 +2241,7 @@ void SwHTMLParser::EndContextAttrs( HTMLAttrContext *pContext )
                 pAttr->Invalidate();
             else if( nChars > MAX_DROPCAP_CHARS )
                 nChars = MAX_DROPCAP_CHARS;
-            static_cast<SwFormatDrop&>(pAttr->GetItem()).GetChars() = (sal_uInt8)nChars;
+            static_cast<SwFormatDrop&>(pAttr->GetItem()).GetChars() = static_cast<sal_uInt8>(nChars);
         }
 
         EndAttr( pAttr );

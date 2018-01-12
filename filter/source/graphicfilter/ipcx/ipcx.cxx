@@ -151,7 +151,7 @@ void PCXReader::ImplReadHeader()
     }
 
     nbyte = 0;
-    m_rPCX.ReadUChar( nbyte ); nBitsPerPlanePix = (sal_uLong)nbyte;
+    m_rPCX.ReadUChar( nbyte ); nBitsPerPlanePix = static_cast<sal_uLong>(nbyte);
     sal_uInt16 nMinX(0),nMinY(0),nMaxX(0),nMaxY(0);
     m_rPCX.ReadUInt16( nMinX ).ReadUInt16( nMinY ).ReadUInt16( nMaxX ).ReadUInt16( nMaxY );
 
@@ -173,15 +173,15 @@ void PCXReader::ImplReadHeader()
 
     m_rPCX.SeekRel( 1 );
     nbyte = 0;
-    m_rPCX.ReadUChar( nbyte );   nPlanes = (sal_uLong)nbyte;
+    m_rPCX.ReadUChar( nbyte );   nPlanes = static_cast<sal_uLong>(nbyte);
     sal_uInt16 nushort(0);
-    m_rPCX.ReadUInt16( nushort ); nBytesPerPlaneLin = (sal_uLong)nushort;
+    m_rPCX.ReadUInt16( nushort ); nBytesPerPlaneLin = static_cast<sal_uLong>(nushort);
     sal_uInt16 nPaletteInfo;
     m_rPCX.ReadUInt16( nPaletteInfo );
 
     m_rPCX.SeekRel( 58 );
 
-    nDestBitsPerPixel = (sal_uInt16)( nBitsPerPlanePix * nPlanes );
+    nDestBitsPerPixel = static_cast<sal_uInt16>( nBitsPerPlanePix * nPlanes );
     if (nDestBitsPerPixel == 2 || nDestBitsPerPixel == 3) nDestBitsPerPixel = 4;
 
     if ( ( nDestBitsPerPixel != 1 && nDestBitsPerPixel != 4 && nDestBitsPerPixel != 8 && nDestBitsPerPixel != 24 )
@@ -242,7 +242,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
                     m_rPCX.ReadUChar( nDat );
                     if ( ( nDat & 0xc0 ) == 0xc0 )
                     {
-                        nCount =( (sal_uLong)nDat ) & 0x003f;
+                        nCount =static_cast<sal_uLong>(nDat) & 0x003f;
                         m_rPCX.ReadUChar( nDat );
                         if ( nCount < nx )
                         {

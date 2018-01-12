@@ -325,9 +325,9 @@ IMPL_LINK(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
             aCurrentColor = Color(m_pHexcustom->GetColor());
         else
         {
-            aCurrentColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pRcustom->GetValue() ),
-                                            (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pGcustom->GetValue() ),
-                                            (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pBcustom->GetValue() ) ).GetColor() );
+            aCurrentColor.SetColor ( Color( static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pRcustom->GetValue()) )),
+                                            static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pGcustom->GetValue()) )),
+                                            static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pBcustom->GetValue()) )) ).GetColor() );
 
         }
         UpdateColorValues();
@@ -335,10 +335,10 @@ IMPL_LINK(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
     else
     {
         // read current MtrFields, if cmyk, then k-value as transparency
-        aCurrentColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pKcustom->GetValue() ),
-                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pCcustom->GetValue() ),
-                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pYcustom->GetValue() ),
-                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pMcustom->GetValue() ) ).GetColor() );
+        aCurrentColor.SetColor ( Color( static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pKcustom->GetValue()) )),
+                                        static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pCcustom->GetValue()) )),
+                                        static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pYcustom->GetValue()) )),
+                                        static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pMcustom->GetValue()) )) ).GetColor() );
         ConvertColorValues (aCurrentColor, ColorModel::RGB);
     }
 
@@ -540,8 +540,8 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
     {
         case ColorModel::RGB:
         {
-            CmykToRgb_Impl (rColor, (sal_uInt16)rColor.GetTransparency() );
-            rColor.SetTransparency ((sal_uInt8) 0);
+            CmykToRgb_Impl (rColor, static_cast<sal_uInt16>(rColor.GetTransparency()) );
+            rColor.SetTransparency (sal_uInt8(0));
         }
         break;
 
@@ -549,7 +549,7 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
         {
             sal_uInt16 nK;
             RgbToCmyk_Impl (rColor, nK );
-            rColor.SetTransparency ((sal_uInt8) nK);
+            rColor.SetTransparency (static_cast<sal_uInt8>(nK));
         }
         break;
     }
@@ -703,19 +703,19 @@ void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const sal_uInt16 nK )
 
     if( lTemp < 0 )
         lTemp = 0;
-    rColor.SetRed( (sal_uInt8)lTemp );
+    rColor.SetRed( static_cast<sal_uInt8>(lTemp) );
 
     lTemp = 255 - ( rColor.GetGreen() + nK );
 
     if( lTemp < 0 )
         lTemp = 0;
-    rColor.SetGreen( (sal_uInt8)lTemp );
+    rColor.SetGreen( static_cast<sal_uInt8>(lTemp) );
 
     lTemp = 255 - ( rColor.GetBlue() + nK );
 
     if( lTemp < 0 )
         lTemp = 0;
-    rColor.SetBlue( (sal_uInt8)lTemp );
+    rColor.SetBlue( static_cast<sal_uInt8>(lTemp) );
 }
 
 
@@ -730,7 +730,7 @@ sal_uInt16 SvxColorTabPage::ColorToPercent_Impl( sal_uInt16 nColor )
             break;
 
         case ColorModel::CMYK:
-            nValue = (sal_uInt16) ( (double) nColor * 100.0 / 255.0 + 0.5 );
+            nValue = static_cast<sal_uInt16>( static_cast<double>(nColor) * 100.0 / 255.0 + 0.5 );
             break;
     }
 
@@ -749,7 +749,7 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
             break;
 
         case ColorModel::CMYK:
-            nValue = (sal_uInt16) ( (double) nPercent * 255.0 / 100.0 + 0.5 );
+            nValue = static_cast<sal_uInt16>( static_cast<double>(nPercent) * 255.0 / 100.0 + 0.5 );
             break;
     }
 

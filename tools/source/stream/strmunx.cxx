@@ -211,7 +211,7 @@ static ErrCode GetSvError( int nErrno )
         { ETXTBSY,      SVSTREAM_ACCESS_DENIED  },
         { EEXIST,       SVSTREAM_CANNOT_MAKE    },
         { ENOSPC,       SVSTREAM_DISK_FULL      },
-        { (int)0xFFFF,  SVSTREAM_GENERALERROR }
+        { int(0xFFFF),  SVSTREAM_GENERALERROR }
     };
 
     ErrCode nRetVal = SVSTREAM_GENERALERROR; // default error
@@ -306,14 +306,14 @@ std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
     sal_uInt64 nRead = 0;
     if ( IsOpen() )
     {
-        oslFileError rc = osl_readFile(pInstanceData->rHandle,pData,(sal_uInt64)nSize,&nRead);
+        oslFileError rc = osl_readFile(pInstanceData->rHandle,pData,static_cast<sal_uInt64>(nSize),&nRead);
         if ( rc != osl_File_E_None )
         {
             SetError( ::GetSvError( rc ));
             return -1;
         }
     }
-    return (std::size_t)nRead;
+    return static_cast<std::size_t>(nRead);
 }
 
 std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
@@ -323,7 +323,7 @@ std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
     sal_uInt64 nWrite = 0;
     if ( IsOpen() )
     {
-        oslFileError rc = osl_writeFile(pInstanceData->rHandle,pData,(sal_uInt64)nSize,&nWrite);
+        oslFileError rc = osl_writeFile(pInstanceData->rHandle,pData,static_cast<sal_uInt64>(nSize),&nWrite);
         if ( rc != osl_File_E_None )
         {
             SetError( ::GetSvError( rc ) );
@@ -332,13 +332,13 @@ std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
         else if( !nWrite )
             SetError( SVSTREAM_DISK_FULL );
     }
-    return (std::size_t)nWrite;
+    return static_cast<std::size_t>(nWrite);
 }
 
 sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
 {
     // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(nPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
+    assert(nPos != sal_uInt64(sal_uInt32(STREAM_SEEK_TO_END)));
     if ( IsOpen() )
     {
         oslFileError rc;

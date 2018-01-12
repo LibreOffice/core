@@ -90,10 +90,10 @@ typedef sal_uInt64 SalExtStyle;
 #define SAL_FRAME_EXT_STYLE_DOCMODIFIED     SalExtStyle(0x00000002)
 
 // Flags for SetPosSize
-#define SAL_FRAME_POSSIZE_X                 ((sal_uInt16)0x0001)
-#define SAL_FRAME_POSSIZE_Y                 ((sal_uInt16)0x0002)
-#define SAL_FRAME_POSSIZE_WIDTH             ((sal_uInt16)0x0004)
-#define SAL_FRAME_POSSIZE_HEIGHT            ((sal_uInt16)0x0008)
+#define SAL_FRAME_POSSIZE_X                 (sal_uInt16(0x0001))
+#define SAL_FRAME_POSSIZE_Y                 (sal_uInt16(0x0002))
+#define SAL_FRAME_POSSIZE_WIDTH             (sal_uInt16(0x0004))
+#define SAL_FRAME_POSSIZE_HEIGHT            (sal_uInt16(0x0008))
 
 struct SystemParentData;
 struct ImplSVEvent;

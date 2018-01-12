@@ -64,7 +64,7 @@ css::uno::Any UnoControlContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId 
 {
     css::uno::Any aDefault;
     if ( nPropId == BASEPROPERTY_BORDER )
-        aDefault <<= (sal_Int16) 0;
+        aDefault <<= sal_Int16(0);
     else
         aDefault = UnoControlModel::ImplGetDefaultValue( nPropId );
     return aDefault;

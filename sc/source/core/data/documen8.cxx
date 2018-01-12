@@ -624,9 +624,9 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 if (!aScope.hasProgressBar() && pCol->IsFormulaDirty(nRow))
                     aScope.createProgressBar();
 
-                sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize(
+                sal_uInt16 nNewWidth = static_cast<sal_uInt16>(GetNeededSize(
                     aScope.Col(), aScope.Row(), aScope.Tab(),
-                    pDev, nPPTX, nPPTY, aZoomFract,aZoomFract, true, true);   // bTotalSize
+                    pDev, nPPTX, nPPTY, aZoomFract,aZoomFract, true, true));   // bTotalSize
 
                 pColIter->setValue(nNewWidth);
                 aScope.setNeedMore(true);

@@ -97,7 +97,7 @@ sal_uInt32 CGM::ImplGetUI16()
 
 sal_uInt8 CGM::ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision )
 {
-    return (sal_uInt8)( nSource >> ( ( nPrecision - 1 ) << 3 ) );
+    return static_cast<sal_uInt8>( nSource >> ( ( nPrecision - 1 ) << 3 ) );
 };
 
 sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
@@ -110,12 +110,12 @@ sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
     {
         case 1 :
         {
-            return  (char)*pSource;
+            return  static_cast<char>(*pSource);
         }
 
         case 2 :
         {
-            return (sal_Int16)( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
+            return static_cast<sal_Int16>( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
         }
 
         case 3 :
@@ -124,7 +124,7 @@ sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
         }
         case 4:
         {
-            return (sal_Int32)( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
+            return static_cast<sal_Int32>( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
         }
         default:
             mbStatus = false;
@@ -141,10 +141,10 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
     switch( nPrecision )
     {
         case 1 :
-            return  (sal_Int8)*pSource;
+            return  static_cast<sal_Int8>(*pSource);
         case 2 :
         {
-            return (sal_uInt16)( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
+            return static_cast<sal_uInt16>( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
         }
         case 3 :
         {
@@ -152,7 +152,7 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
         }
         case 4:
         {
-            return (sal_uInt32)( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
+            return static_cast<sal_uInt32>( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
         }
         default:
             mbStatus = false;
@@ -210,7 +210,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
         if ( nRealSize == 4 )
         {
             memcpy( static_cast<void*>(&fFloatBuf), pPtr, 4 );
-            nRetValue = (double)fFloatBuf;
+            nRetValue = static_cast<double>(fFloatBuf);
         }
         else
         {
@@ -228,17 +228,17 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
             nVal = pShort[ nSwitch ];
             nVal <<= 16;
             nVal |= pShort[ nSwitch ^ 1 ];
-            nRetValue = (double)nVal;
+            nRetValue = static_cast<double>(nVal);
             nRetValue /= 65536;
         }
         else
         {
             sal_Int32* pLong = static_cast<sal_Int32*>(pPtr);
-            nRetValue = (double)abs( pLong[ nSwitch ] );
+            nRetValue = static_cast<double>(abs( pLong[ nSwitch ] ));
             nRetValue *= 65536;
-            nVal = (sal_uInt32)( pLong[ nSwitch ^ 1 ] );
+            nVal = static_cast<sal_uInt32>( pLong[ nSwitch ^ 1 ] );
             nVal >>= 16;
-            nRetValue += (double)nVal;
+            nRetValue += static_cast<double>(nVal);
             if ( pLong[ nSwitch ] < 0 )
             {
                 nRetValue = -nRetValue;
@@ -365,12 +365,12 @@ sal_uInt32 CGM::ImplGetBitmapColor( bool bDirect )
         if ( !nDiff )
             nDiff++;
         nColor = ( ( nColor - pElement->nColorValueExtent[ 2 ] ) << 8 ) / nDiff;
-        nTmp |= (sal_uInt8)nColor;
+        nTmp |= static_cast<sal_uInt8>(nColor);
     }
     else
     {
         sal_uInt32 nIndex = ImplGetUI( pElement->nColorIndexPrecision );
-        nTmp = pElement->aColorTable[ (sal_uInt8)nIndex ] ;
+        nTmp = pElement->aColorTable[ static_cast<sal_uInt8>(nIndex) ] ;
     }
     return nTmp;
 }

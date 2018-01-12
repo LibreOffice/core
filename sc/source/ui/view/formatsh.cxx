@@ -1232,10 +1232,10 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                             break;
                     }
 
-                    const bool bThousand = (bool)sFormat[0].toInt32();
-                    const bool bNegRed = (bool)sFormat[1].toInt32();
-                    const sal_uInt16 nPrecision = (sal_uInt16)sFormat[2].toInt32();
-                    const sal_uInt16 nLeadZeroes = (sal_uInt16)sFormat[3].toInt32();
+                    const bool bThousand = static_cast<bool>(sFormat[0].toInt32());
+                    const bool bNegRed = static_cast<bool>(sFormat[1].toInt32());
+                    const sal_uInt16 nPrecision = static_cast<sal_uInt16>(sFormat[2].toInt32());
+                    const sal_uInt16 nLeadZeroes = static_cast<sal_uInt16>(sFormat[3].toInt32());
 
                     aCode = pFormatter->GenerateFormat(
                         nCurrentNumberFormat,//modify

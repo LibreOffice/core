@@ -66,7 +66,7 @@ sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements()
     // => The last one is getLength() - 1!
     // m_nPosition's current value is the position for the next element, which will be return, if user call "nextElement()"
     // => We have more elements if current position less then the length of the list!
-    return ( m_nPosition < (sal_uInt32)(m_seqComponents.size()) );
+    return ( m_nPosition < static_cast<sal_uInt32>(m_seqComponents.size()) );
 }
 
 //  XEnumeration

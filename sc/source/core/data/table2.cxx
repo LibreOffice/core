@@ -2989,7 +2989,7 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
             return mpColWidth->GetValue(nCol);
     }
     else
-        return (sal_uInt16) STD_COL_WIDTH;
+        return sal_uInt16(STD_COL_WIDTH);
 }
 
 sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const
@@ -3021,7 +3021,7 @@ sal_uInt16 ScTable::GetOriginalWidth( SCCOL nCol ) const        // always the se
     if (ValidCol(nCol) && mpColWidth)
         return mpColWidth->GetValue(nCol);
     else
-        return (sal_uInt16) STD_COL_WIDTH;
+        return sal_uInt16(STD_COL_WIDTH);
 }
 
 sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol ) const
@@ -3139,7 +3139,7 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZ
         return nHeight;
     }
     else
-        return (nEndRow - nStartRow + 1) * (sal_uLong)ScGlobal::nStdRowHeight;
+        return (nEndRow - nStartRow + 1) * static_cast<sal_uLong>(ScGlobal::nStdRowHeight);
 }
 
 sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
@@ -3179,7 +3179,7 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
         return nHeight;
     }
     else
-        return (sal_uLong) ((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight * fScale);
+        return static_cast<sal_uLong>((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight * fScale);
 }
 
 sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if hidden
@@ -3749,8 +3749,8 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
         const long nMax = ::std::numeric_limits<long>::max();
         // #i113884# Avoid int32 overflow with possible negative results than can cause bad effects.
         // If the draw page size is smaller than all rows, only the bottom of the sheet is affected.
-        long x = ( fValX > (double)nMax ) ? nMax : (long) fValX;
-        long y = ( fValY > (double)nMax ) ? nMax : (long) fValY;
+        long x = ( fValX > static_cast<double>(nMax) ) ? nMax : static_cast<long>(fValX);
+        long y = ( fValY > static_cast<double>(nMax) ) ? nMax : static_cast<long>(fValY);
 
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;

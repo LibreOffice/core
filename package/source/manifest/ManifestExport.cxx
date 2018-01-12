@@ -499,13 +499,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 {
                     sStartKeyAlg = sSHA256_URL_ODF12; // TODO use sSHA256_URL
                     (void) sSHA256_URL;
-                    aBuffer.append( (sal_Int32)32 );
+                    aBuffer.append( sal_Int32(32) );
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else if ( nStartKeyAlgID == xml::crypto::DigestID::SHA1 )
                 {
                     sStartKeyAlg = sSHA1_Name;
-                    aBuffer.append( (sal_Int32)20 );
+                    aBuffer.append( sal_Int32(20) );
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else

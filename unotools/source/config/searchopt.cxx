@@ -97,7 +97,7 @@ void SvtSearchOptions_Impl::SetFlag( sal_uInt16 nOffset, bool bVal )
 {
     DBG_ASSERT( nOffset <= MAX_FLAGS_OFFSET, "offset out of range");
     sal_Int32 nOldFlags = nFlags;
-    sal_Int32 nMask = ((sal_Int32) 1)  << nOffset;
+    sal_Int32 nMask = (sal_Int32(1))  << nOffset;
     if (bVal)
         nFlags |= nMask;
     else

@@ -141,7 +141,7 @@ void SdModule::Execute(SfxRequest& rReq)
                                 PutItem( *pItem );
                                 SdOptions* pOptions = GetSdOptions( eDocType );
                                 if(pOptions)
-                                    pOptions->SetMetric( (sal_uInt16)eUnit );
+                                    pOptions->SetMetric( static_cast<sal_uInt16>(eUnit) );
                                 rReq.Done();
                             }
                         }

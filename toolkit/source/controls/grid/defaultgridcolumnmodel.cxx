@@ -231,7 +231,7 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        if ( index >=0 && index < ((sal_Int32)m_aColumns.size()))
+        if ( index >=0 && index < static_cast<sal_Int32>(m_aColumns.size()))
             return m_aColumns[index];
 
         throw css::lang::IndexOutOfBoundsException();

@@ -407,7 +407,7 @@ sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId )
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         ? reinterpret_cast< sal_Int64 >( this )
-        : (sal_Int64)0;
+        : sal_Int64(0);
 }
 
 Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()

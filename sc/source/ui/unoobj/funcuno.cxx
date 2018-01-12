@@ -329,15 +329,15 @@ public:
 
     void visitElem( long nCol, long nRow, sal_Int16 elem )
     {
-        mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
+        mpDoc->SetValue( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), 0, elem );
     }
     void visitElem( long nCol, long nRow, sal_Int32 elem )
     {
-        mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
+        mpDoc->SetValue( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), 0, elem );
     }
     void visitElem( long nCol, long nRow, const double& elem )
     {
-        mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
+        mpDoc->SetValue( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), 0, elem );
     }
     void visitElem( long nCol, long nRow, const OUString& elem )
     {
@@ -560,7 +560,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                     else
                     {
                         // copy data
-                        if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, (SCROW)nDocRow, 0 ) ) )
+                        if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, static_cast<SCROW>(nDocRow), 0 ) ) )
                             bOverflow = true;
                     }
 

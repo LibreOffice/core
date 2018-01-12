@@ -213,7 +213,7 @@ void OReportSection::fill()
     m_pView->SetDragStripes( true );
     m_pView->SetPageVisible();
     sal_Int32 nColor = m_xSection->getBackColor();
-    if ( nColor == (sal_Int32)COL_TRANSPARENT )
+    if ( nColor == static_cast<sal_Int32>(COL_TRANSPARENT) )
         nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
     m_pView->SetApplicationDocumentColor(nColor);
 
@@ -468,7 +468,7 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         if ( _rEvent.Source == m_xSection || PROPERTY_BACKCOLOR == _rEvent.PropertyName )
         {
             sal_Int32 nColor = m_xSection->getBackColor();
-            if ( nColor == (sal_Int32)COL_TRANSPARENT )
+            if ( nColor == static_cast<sal_Int32>(COL_TRANSPARENT) )
                 nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
             m_pView->SetApplicationDocumentColor(nColor);
             Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::NoErase);

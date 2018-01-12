@@ -180,7 +180,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     sal_uInt16 nIdx = pItem->GetValue();
     bool bToggle = false;
-    if( nIdx == (sal_uInt16)0xFFFF )
+    if( nIdx == sal_uInt16(0xFFFF) )
     {
         // If the nIdx is (sal_uInt16)0xFFFF, means set bullet status to on/off
         nIdx = 1;
@@ -201,7 +201,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
                 nSId == FN_SVX_SET_BULLET ? NBOType::Bullets : NBOType::Numbering );
         if ( pNumRuleMgr )
         {
-            sal_uInt16 nActNumLvl = (sal_uInt16)0xFFFF;
+            sal_uInt16 nActNumLvl = sal_uInt16(0xFFFF);
             const SfxPoolItem* pNumLevelItem = nullptr;
             if(SfxItemState::SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pNumLevelItem))
                 nActNumLvl = static_cast<const SfxUInt16Item*>(pNumLevelItem)->GetValue();

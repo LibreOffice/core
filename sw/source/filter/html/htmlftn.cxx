@@ -94,7 +94,7 @@ sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
             break;
 
         case 1:
-            rInfo.nFootnoteOffset = aPart.isEmpty() ? 0 : (sal_uInt16)aPart.toInt32();
+            rInfo.nFootnoteOffset = aPart.isEmpty() ? 0 : static_cast<sal_uInt16>(aPart.toInt32());
             break;
 
         case 2:
@@ -263,13 +263,13 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
         OSL_ENSURE( nPos == static_cast<size_t>(rHTMLWrt.m_nFootNote + rHTMLWrt.m_nEndNote),
                 "OutHTML_SwFormatFootnote: wrong position" );
         sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_anc;
-        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote + OUString::number( (sal_Int32)(++rHTMLWrt.m_nEndNote) );
+        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote + OUString::number( static_cast<sal_Int32>(++rHTMLWrt.m_nEndNote) );
     }
     else
     {
         nPos = rHTMLWrt.m_nFootNote;
         sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote_anc;
-        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number( (sal_Int32)(++rHTMLWrt.m_nFootNote));
+        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number( static_cast<sal_Int32>(++rHTMLWrt.m_nFootNote));
     }
 
     if( !rHTMLWrt.m_pFootEndNotes )
@@ -325,13 +325,13 @@ void SwHTMLWriter::OutFootEndNotes()
         {
             sClass = OOO_STRING_SVTOOLS_HTML_sdendnote;
             sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote;
-            sFootnoteName += OUString::number((sal_Int32)(++m_nEndNote));
+            sFootnoteName += OUString::number(static_cast<sal_Int32>(++m_nEndNote));
         }
         else
         {
             sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote;
             sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
-            sFootnoteName += OUString::number((sal_Int32)(++m_nFootNote));
+            sFootnoteName += OUString::number(static_cast<sal_Int32>(++m_nFootNote));
         }
 
         if( m_bLFPossible )
@@ -416,14 +416,14 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
     {
         sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_sym;
         sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote;
-        sFootnoteName += OUString::number((sal_Int32)m_nEndNote);
+        sFootnoteName += OUString::number(static_cast<sal_Int32>(m_nEndNote));
         pInfo = &pDoc->GetEndNoteInfo();
     }
     else
     {
         sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote_sym;
         sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
-        sFootnoteName += OUString::number((sal_Int32)m_nFootNote);
+        sFootnoteName += OUString::number(static_cast<sal_Int32>(m_nFootNote));
         pInfo = &pDoc->GetFootnoteInfo();
     }
 

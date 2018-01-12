@@ -547,7 +547,7 @@ void SlideSorterViewShell::WriteFrameViewData()
     if (mpFrameView != nullptr)
     {
         view::SlideSorterView& rView (mpSlideSorter->GetView());
-        mpFrameView->SetSlidesPerRow((sal_uInt16)rView.GetLayouter().GetColumnCount());
+        mpFrameView->SetSlidesPerRow(static_cast<sal_uInt16>(rView.GetLayouter().GetColumnCount()));
 
         // DrawMode for 'main' window
         if( mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
@@ -567,7 +567,7 @@ void SlideSorterViewShell::WriteFrameViewData()
             // We have no current page to set but at least we can make sure
             // that the index of the frame view has a legal value.
             if (mpFrameView->GetSelectedPage() >= mpSlideSorter->GetModel().GetPageCount())
-                mpFrameView->SetSelectedPage((sal_uInt16)mpSlideSorter->GetModel().GetPageCount()-1);
+                mpFrameView->SetSelectedPage(static_cast<sal_uInt16>(mpSlideSorter->GetModel().GetPageCount())-1);
         }
     }
 }
@@ -738,7 +738,7 @@ void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
     SyncPageSelectionToDocument(xSelection);
 
     // Moves selected pages after page -1
-    GetDoc()->MovePages( (sal_uInt16) -1 );
+    GetDoc()->MovePages( sal_uInt16(-1) );
 
     PostMoveSlidesActions(xSelection);
 }

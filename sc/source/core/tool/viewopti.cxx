@@ -397,7 +397,7 @@ ScViewCfg::ScViewCfg() :
                         if ( pValues[nProp] >>= nIntVal )
                         {
                             //#i80528# adapt to new range eventually
-                            if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
+                            if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
                             SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode)nIntVal);
                         }
@@ -406,7 +406,7 @@ ScViewCfg::ScViewCfg() :
                         if ( pValues[nProp] >>= nIntVal )
                         {
                             //#i80528# adapt to new range eventually
-                            if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
+                            if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
                             SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode)nIntVal);
                         }
@@ -415,7 +415,7 @@ ScViewCfg::ScViewCfg() :
                         if ( pValues[nProp] >>= nIntVal )
                         {
                             //#i80528# adapt to new range eventually
-                            if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
+                            if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
                             SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode)nIntVal);
                         }
@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(ScViewCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCLAYOUTOPT_GRIDCOLOR:
-                pValues[nProp] <<= (sal_Int32) GetGridColor().GetColor();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetGridColor().GetColor());
                 break;
             case SCLAYOUTOPT_GRIDLINES:
                 pValues[nProp] <<= GetOption( VOPT_GRID );
@@ -553,13 +553,13 @@ IMPL_LINK_NOARG(ScViewCfg, DisplayCommitHdl, ScLinkConfigItem&, void)
                 pValues[nProp] <<= GetOption( VOPT_CLIPMARKS );
                 break;
             case SCDISPLAYOPT_OBJECTGRA:
-                pValues[nProp] <<= (sal_Int32) GetObjMode( VOBJ_TYPE_OLE );
+                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode( VOBJ_TYPE_OLE ));
                 break;
             case SCDISPLAYOPT_CHART:
-                pValues[nProp] <<= (sal_Int32) GetObjMode( VOBJ_TYPE_CHART );
+                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode( VOBJ_TYPE_CHART ));
                 break;
             case SCDISPLAYOPT_DRAWING:
-                pValues[nProp] <<= (sal_Int32) GetObjMode( VOBJ_TYPE_DRAW );
+                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode( VOBJ_TYPE_DRAW ));
                 break;
         }
     }
@@ -579,22 +579,22 @@ IMPL_LINK_NOARG(ScViewCfg, GridCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCGRIDOPT_RESOLU_X:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldDrawX();
+                pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldDrawX());
                 break;
             case SCGRIDOPT_RESOLU_Y:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldDrawY();
+                pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldDrawY());
                 break;
             case SCGRIDOPT_SUBDIV_X:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldDivisionX();
+                pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldDivisionX());
                 break;
             case SCGRIDOPT_SUBDIV_Y:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldDivisionY();
+                pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldDivisionY());
                 break;
             case SCGRIDOPT_OPTION_X:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldSnapX();
+                pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldSnapX());
                 break;
             case SCGRIDOPT_OPTION_Y:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldSnapY();
+                pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldSnapY());
                 break;
             case SCGRIDOPT_SNAPTOGRID:
                 pValues[nProp] <<= rGrid.GetUseGridSnap();

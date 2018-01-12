@@ -263,7 +263,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         pSdrObj[ 0 ] = pObj; // due to #37347 the Object must be entered only
                              // after GetContour()
         pTextRanger[ 0 ] = new TextRanger( aPolyPolygon, pPolyPolygon, 20,
-            (sal_uInt16)rLRSpace.GetLeft(), (sal_uInt16)rLRSpace.GetRight(),
+            static_cast<sal_uInt16>(rLRSpace.GetLeft()), static_cast<sal_uInt16>(rLRSpace.GetRight()),
             pFormat->GetSurround().IsOutside(), false, pFrame->IsVertical() );
         pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
         pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );

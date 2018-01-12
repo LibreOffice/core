@@ -178,10 +178,10 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         OUString aEntry;
         for (SCSIZE nR=0; nR<nRows; nR++)
         {
-            aLine = aLinkStr.getToken( (sal_Int32) nR, '\n' );
+            aLine = aLinkStr.getToken( static_cast<sal_Int32>(nR), '\n' );
             for (SCSIZE nC=0; nC<nCols; nC++)
             {
-                aEntry = aLine.getToken( (sal_Int32) nC, '\t' );
+                aEntry = aLine.getToken( static_cast<sal_Int32>(nC), '\t' );
                 sal_uInt32 nIndex = nStdFormat;
                 double fVal = double();
                 if ( nMode != SC_DDE_TEXT && pFormatter->IsNumberFormat( aEntry, nIndex, fVal ) )

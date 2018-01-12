@@ -114,7 +114,7 @@ sal_uInt32 HTMLOption::GetNumber() const
         "GetNumber: Option not numerical" );
     OUString aTmp(comphelper::string::stripStart(aValue, ' '));
     sal_Int32 nTmp = aTmp.toInt32();
-    return nTmp >= 0 ? (sal_uInt32)nTmp : 0;
+    return nTmp >= 0 ? static_cast<sal_uInt32>(nTmp) : 0;
 }
 
 sal_Int32 HTMLOption::GetSNumber() const
@@ -189,9 +189,9 @@ void HTMLOption::GetColor( Color& rColor ) const
         }
     }
 
-    rColor.SetRed(   (sal_uInt8)((nColor & 0x00ff0000) >> 16) );
-    rColor.SetGreen( (sal_uInt8)((nColor & 0x0000ff00) >> 8));
-    rColor.SetBlue(  (sal_uInt8)(nColor & 0x000000ff) );
+    rColor.SetRed(   static_cast<sal_uInt8>((nColor & 0x00ff0000) >> 16) );
+    rColor.SetGreen( static_cast<sal_uInt8>((nColor & 0x0000ff00) >> 8));
+    rColor.SetBlue(  static_cast<sal_uInt8>(nColor & 0x000000ff) );
 }
 
 HTMLInputType HTMLOption::GetInputType() const
@@ -504,7 +504,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                         static_cast<sal_uInt64>(nPos+1)*GetCharSize(),
                                         "Wrong stream position" );
                             DBG_ASSERT( nlLinePos-nLinePos ==
-                                        (sal_uLong)(nPos+1),
+                                        static_cast<sal_uLong>(nPos+1),
                                         "Wrong line position" );
                             rInput.Seek( nStreamPos );
                             nlLinePos = nLinePos;
@@ -541,7 +541,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                                 static_cast<sal_uInt64>(nPos+1)*GetCharSize(),
                                                 "Wrong stream position" );
                                     DBG_ASSERT( nlLinePos-nLinePos ==
-                                                (sal_uLong)(nPos+1),
+                                                static_cast<sal_uLong>(nPos+1),
                                                 "Wrong line position" );
                                     rInput.Seek( nStreamPos );
                                     nlLinePos = nLinePos;

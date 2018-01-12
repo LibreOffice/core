@@ -242,7 +242,7 @@ void AccessibleBrowseBoxTableBase::implSelectRow( sal_Int32 nRow, bool bSelect )
 
 void AccessibleBrowseBoxTableBase::implSelectColumn( sal_Int32 nColumnPos, bool bSelect )
 {
-    mpBrowseBox->SelectColumn( (sal_uInt16)nColumnPos, bSelect );
+    mpBrowseBox->SelectColumn( static_cast<sal_uInt16>(nColumnPos), bSelect );
 }
 
 sal_Int32 AccessibleBrowseBoxTableBase::implGetSelectedRowCount() const

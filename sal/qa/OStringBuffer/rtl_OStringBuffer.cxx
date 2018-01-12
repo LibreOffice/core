@@ -14755,7 +14755,7 @@ namespace rtl_OStringBuffer
         void append_001()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("3.0");
+            float                  input = static_cast<float>(atof("3.0"));
 
             // LLA:
             // the complex problem is here, that a float value is not really what we write.
@@ -14775,7 +14775,7 @@ namespace rtl_OStringBuffer
         void append_002()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("3.5");
+            float                  input = static_cast<float>(atof("3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14791,7 +14791,7 @@ namespace rtl_OStringBuffer
         void append_003()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("3.0625");
+            float                  input = static_cast<float>(atof("3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14807,7 +14807,7 @@ namespace rtl_OStringBuffer
         void append_004()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("3.502525");
+            float                  input = static_cast<float>(atof("3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14823,7 +14823,7 @@ namespace rtl_OStringBuffer
         void append_005()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("3.141592");
+            float                  input = static_cast<float>(atof("3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14839,7 +14839,7 @@ namespace rtl_OStringBuffer
         void append_006()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("3.5025255");
+            float                  input = static_cast<float>(atof("3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14855,7 +14855,7 @@ namespace rtl_OStringBuffer
         void append_007()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("3.00390625");
+            float                  input = static_cast<float>(atof("3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14871,7 +14871,7 @@ namespace rtl_OStringBuffer
         void append_008()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("3.0");
+            float                  input = static_cast<float>(atof("3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14887,7 +14887,7 @@ namespace rtl_OStringBuffer
         void append_009()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("3.5");
+            float                  input = static_cast<float>(atof("3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14903,7 +14903,7 @@ namespace rtl_OStringBuffer
         void append_010()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("3.0625");
+            float                  input = static_cast<float>(atof("3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14919,7 +14919,7 @@ namespace rtl_OStringBuffer
         void append_011()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("3.502525");
+            float                  input = static_cast<float>(atof("3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14935,7 +14935,7 @@ namespace rtl_OStringBuffer
         void append_012()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("3.141592");
+            float                  input = static_cast<float>(atof("3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14951,7 +14951,7 @@ namespace rtl_OStringBuffer
         void append_013()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("3.5025255");
+            float                  input = static_cast<float>(atof("3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14967,7 +14967,7 @@ namespace rtl_OStringBuffer
         void append_014()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("3.00390625");
+            float                  input = static_cast<float>(atof("3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14983,7 +14983,7 @@ namespace rtl_OStringBuffer
         void append_015()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("3.0");
+            float                  input = static_cast<float>(atof("3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -14999,7 +14999,7 @@ namespace rtl_OStringBuffer
         void append_016()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("3.5");
+            float                  input = static_cast<float>(atof("3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15015,7 +15015,7 @@ namespace rtl_OStringBuffer
         void append_017()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("3.0625");
+            float                  input = static_cast<float>(atof("3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15031,7 +15031,7 @@ namespace rtl_OStringBuffer
         void append_018()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("3.502525");
+            float                  input = static_cast<float>(atof("3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15047,7 +15047,7 @@ namespace rtl_OStringBuffer
         void append_019()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("3.141592");
+            float                  input = static_cast<float>(atof("3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15063,7 +15063,7 @@ namespace rtl_OStringBuffer
         void append_020()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("3.5025255");
+            float                  input = static_cast<float>(atof("3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15079,7 +15079,7 @@ namespace rtl_OStringBuffer
         void append_021()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("3.00390625");
+            float                  input = static_cast<float>(atof("3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15095,7 +15095,7 @@ namespace rtl_OStringBuffer
         void append_022()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            float                  input = (float)atof("3.0");
+            float                  input = static_cast<float>(atof("3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15111,7 +15111,7 @@ namespace rtl_OStringBuffer
         void append_023()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            float                  input = (float)atof("3.5");
+            float                  input = static_cast<float>(atof("3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15127,7 +15127,7 @@ namespace rtl_OStringBuffer
         void append_024()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            float                  input = (float)atof("3.0625");
+            float                  input = static_cast<float>(atof("3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15143,7 +15143,7 @@ namespace rtl_OStringBuffer
         void append_025()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            float                  input = (float)atof("3.502525");
+            float                  input = static_cast<float>(atof("3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15332,7 +15332,7 @@ namespace rtl_OStringBuffer
         void append_001()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("-3.0");
+            float                  input = static_cast<float>(atof("-3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15348,7 +15348,7 @@ namespace rtl_OStringBuffer
         void append_002()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("-3.5");
+            float                  input = static_cast<float>(atof("-3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15364,7 +15364,7 @@ namespace rtl_OStringBuffer
         void append_003()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("-3.0625");
+            float                  input = static_cast<float>(atof("-3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15380,7 +15380,7 @@ namespace rtl_OStringBuffer
         void append_004()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("-3.502525");
+            float                  input = static_cast<float>(atof("-3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15396,7 +15396,7 @@ namespace rtl_OStringBuffer
         void append_005()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("-3.141592");
+            float                  input = static_cast<float>(atof("-3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15412,7 +15412,7 @@ namespace rtl_OStringBuffer
         void append_006()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("-3.5025255");
+            float                  input = static_cast<float>(atof("-3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15428,7 +15428,7 @@ namespace rtl_OStringBuffer
         void append_007()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            float                  input = (float)atof("-3.00390625");
+            float                  input = static_cast<float>(atof("-3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15444,7 +15444,7 @@ namespace rtl_OStringBuffer
         void append_008()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("-3.0");
+            float                  input = static_cast<float>(atof("-3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15460,7 +15460,7 @@ namespace rtl_OStringBuffer
         void append_009()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("-3.5");
+            float                  input = static_cast<float>(atof("-3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15476,7 +15476,7 @@ namespace rtl_OStringBuffer
         void append_010()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("-3.0625");
+            float                  input = static_cast<float>(atof("-3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15492,7 +15492,7 @@ namespace rtl_OStringBuffer
         void append_011()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("-3.502525");
+            float                  input = static_cast<float>(atof("-3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15508,7 +15508,7 @@ namespace rtl_OStringBuffer
         void append_012()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("-3.141592");
+            float                  input = static_cast<float>(atof("-3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15524,7 +15524,7 @@ namespace rtl_OStringBuffer
         void append_013()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("-3.5025255");
+            float                  input = static_cast<float>(atof("-3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15540,7 +15540,7 @@ namespace rtl_OStringBuffer
         void append_014()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            float                  input = (float)atof("-3.00390625");
+            float                  input = static_cast<float>(atof("-3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15556,7 +15556,7 @@ namespace rtl_OStringBuffer
         void append_015()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("-3.0");
+            float                  input = static_cast<float>(atof("-3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15572,7 +15572,7 @@ namespace rtl_OStringBuffer
         void append_016()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("-3.5");
+            float                  input = static_cast<float>(atof("-3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15588,7 +15588,7 @@ namespace rtl_OStringBuffer
         void append_017()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("-3.0625");
+            float                  input = static_cast<float>(atof("-3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15604,7 +15604,7 @@ namespace rtl_OStringBuffer
         void append_018()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("-3.502525");
+            float                  input = static_cast<float>(atof("-3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15620,7 +15620,7 @@ namespace rtl_OStringBuffer
         void append_019()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("-3.141592");
+            float                  input = static_cast<float>(atof("-3.141592"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15636,7 +15636,7 @@ namespace rtl_OStringBuffer
         void append_020()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("-3.5025255");
+            float                  input = static_cast<float>(atof("-3.5025255"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15652,7 +15652,7 @@ namespace rtl_OStringBuffer
         void append_021()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            float                  input = (float)atof("-3.00390625");
+            float                  input = static_cast<float>(atof("-3.00390625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15668,7 +15668,7 @@ namespace rtl_OStringBuffer
         void append_022()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            float                  input = (float)atof("-3.0");
+            float                  input = static_cast<float>(atof("-3.0"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15684,7 +15684,7 @@ namespace rtl_OStringBuffer
         void append_023()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            float                  input = (float)atof("-3.5");
+            float                  input = static_cast<float>(atof("-3.5"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15700,7 +15700,7 @@ namespace rtl_OStringBuffer
         void append_024()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            float                  input = (float)atof("-3.0625");
+            float                  input = static_cast<float>(atof("-3.0625"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
@@ -15716,7 +15716,7 @@ namespace rtl_OStringBuffer
         void append_025()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            float                  input = (float)atof("-3.502525");
+            float                  input = static_cast<float>(atof("-3.502525"));
 
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );

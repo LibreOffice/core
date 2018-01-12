@@ -35,7 +35,7 @@ namespace rptui
 {
 
 
-    #define MAX_CONDITIONS  (size_t)3
+    #define MAX_CONDITIONS  size_t(3)
 
     class OReportController;
     class Condition;

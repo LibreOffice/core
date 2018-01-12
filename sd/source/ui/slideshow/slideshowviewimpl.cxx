@@ -329,15 +329,15 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
 
     if( meAnimationMode != ANIMATIONMODE_SHOW )
     {
-        aOutputSize.Width() = (long)( aOutputSize.Width() / 1.03 );
-        aOutputSize.Height() = (long)( aOutputSize.Height() / 1.03 );
+        aOutputSize.Width() = static_cast<long>( aOutputSize.Width() / 1.03 );
+        aOutputSize.Height() = static_cast<long>( aOutputSize.Height() / 1.03 );
     }
 
     SdPage* pP = mpDoc->GetSdPage( 0, PageKind::Standard );
     Size aPageSize( pP->GetSize() );
 
-    const double page_ratio = (double)aPageSize.Width() / (double)aPageSize.Height();
-    const double output_ratio = (double)aOutputSize.Width() / (double)aOutputSize.Height();
+    const double page_ratio = static_cast<double>(aPageSize.Width()) / static_cast<double>(aPageSize.Height());
+    const double output_ratio = static_cast<double>(aOutputSize.Width()) / static_cast<double>(aOutputSize.Height());
 
     if( page_ratio > output_ratio )
     {

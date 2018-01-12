@@ -373,7 +373,7 @@ bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= 0 == (GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE);
         break;
     case FIELD_PROP_FORMAT:
-        rAny <<= (sal_Int32)GetFormat();
+        rAny <<= static_cast<sal_Int32>(GetFormat());
         break;
     case FIELD_PROP_PAR1:
         rAny <<= aContent;
@@ -677,7 +677,7 @@ void SwDBNumSetField::Evaluate(SwDoc const * pDoc)
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
                         pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, true))
     {   // condition OK -> adjust current Set
-        pMgr->ToRecordId(std::max((sal_uInt16)aPar2.toInt32(), sal_uInt16(1))-1);
+        pMgr->ToRecordId(std::max(static_cast<sal_uInt16>(aPar2.toInt32()), sal_uInt16(1))-1);
     }
 }
 
@@ -846,7 +846,7 @@ bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
-        rAny <<= (sal_Int16)GetFormat();
+        rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
     case FIELD_PROP_FORMAT:
         rAny <<= nNumber;

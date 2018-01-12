@@ -421,8 +421,8 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
     if (!pNewObj)
         throw RuntimeException("Failed to get DPObject", static_cast<cppu::OWeakObject*>(this));
 
-    ScRange aOutputRange((SCCOL)aOutputAddress.Column, (SCROW)aOutputAddress.Row, (SCTAB)aOutputAddress.Sheet,
-                        (SCCOL)aOutputAddress.Column, (SCROW)aOutputAddress.Row, (SCTAB)aOutputAddress.Sheet);
+    ScRange aOutputRange(static_cast<SCCOL>(aOutputAddress.Column), static_cast<SCROW>(aOutputAddress.Row), static_cast<SCTAB>(aOutputAddress.Sheet),
+                        static_cast<SCCOL>(aOutputAddress.Column), static_cast<SCROW>(aOutputAddress.Row), static_cast<SCTAB>(aOutputAddress.Sheet));
     pNewObj->SetOutRange(aOutputRange);
     OUString aName = aNewName;
     if (aName.isEmpty())

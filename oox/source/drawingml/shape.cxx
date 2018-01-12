@@ -525,7 +525,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 }
             }
             // rotate around object's center
-            aTransformation.rotate( F_PI180 * ( (double)mnRotation / 60000.0 ) );
+            aTransformation.rotate( F_PI180 * ( static_cast<double>(mnRotation) / 60000.0 ) );
         }
 
         // move object back from center

@@ -177,23 +177,23 @@ start:
         case SbxCURRENCY:
             nRes = p->nInt64; break;
         case SbxBYTE:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nByte);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(p->nByte);
             break;
         case SbxCHAR:
-            nRes = (sal_Int64)CURRENCY_FACTOR * reinterpret_cast<sal_Int64>(p->pChar);
+            nRes = sal_Int64(CURRENCY_FACTOR) * reinterpret_cast<sal_Int64>(p->pChar);
             break;
         case SbxBOOL:
         case SbxINTEGER:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nInteger);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(p->nInteger);
             break;
         case SbxUSHORT:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nUShort);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(p->nUShort);
             break;
         case SbxLONG:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nLong);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(p->nLong);
             break;
         case SbxULONG:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nULong);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(p->nULong);
             break;
 
         case SbxSALINT64:
@@ -226,25 +226,25 @@ start:
 #endif
 //TODO: bring back SbxINT64 types here for limits -1 with flag value at SAL_MAX/MIN
         case SbxSINGLE:
-            if( p->nSingle * CURRENCY_FACTOR + 0.5 > (float)SAL_MAX_INT64
-             || p->nSingle * CURRENCY_FACTOR - 0.5 < (float)SAL_MIN_INT64 )
+            if( p->nSingle * CURRENCY_FACTOR + 0.5 > float(SAL_MAX_INT64)
+             || p->nSingle * CURRENCY_FACTOR - 0.5 < float(SAL_MIN_INT64) )
             {
                 nRes = SAL_MAX_INT64;
-                if( p->nSingle * CURRENCY_FACTOR - 0.5 < (float)SAL_MIN_INT64 )
+                if( p->nSingle * CURRENCY_FACTOR - 0.5 < float(SAL_MIN_INT64) )
                     nRes = SAL_MIN_INT64;
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 break;
             }
-            nRes = ImpDoubleToCurrency( (double)p->nSingle );
+            nRes = ImpDoubleToCurrency( static_cast<double>(p->nSingle) );
             break;
 
         case SbxDATE:
         case SbxDOUBLE:
-            if( p->nDouble * CURRENCY_FACTOR + 0.5 > (double)SAL_MAX_INT64
-             || p->nDouble * CURRENCY_FACTOR - 0.5 < (double)SAL_MIN_INT64 )
+            if( p->nDouble * CURRENCY_FACTOR + 0.5 > double(SAL_MAX_INT64)
+             || p->nDouble * CURRENCY_FACTOR - 0.5 < double(SAL_MIN_INT64) )
             {
                 nRes = SAL_MAX_INT64;
-                if( p->nDouble * CURRENCY_FACTOR - 0.5 < (double)SAL_MIN_INT64 )
+                if( p->nDouble * CURRENCY_FACTOR - 0.5 < double(SAL_MIN_INT64) )
                     nRes = SAL_MIN_INT64;
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 break;
@@ -285,18 +285,18 @@ start:
         }
 
         case SbxBYREF | SbxCHAR:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pChar);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(*p->pChar);
             break;
         case SbxBYREF | SbxBYTE:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pByte);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(*p->pByte);
             break;
         case SbxBYREF | SbxBOOL:
         case SbxBYREF | SbxINTEGER:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pInteger);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(*p->pInteger);
             break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pUShort);
+            nRes = sal_Int64(CURRENCY_FACTOR) * static_cast<sal_Int64>(*p->pUShort);
             break;
 
         // from here on had to be tested
@@ -353,7 +353,7 @@ start:
 
         // from here no longer
         case SbxSINGLE:
-            p->nSingle = (float)( r / CURRENCY_FACTOR ); break;
+            p->nSingle = static_cast<float>( r / CURRENCY_FACTOR ); break;
         case SbxDATE:
         case SbxDOUBLE:
             p->nDouble =  ImpCurrencyToDouble( r ); break;
@@ -401,7 +401,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); val = SbxMINCHAR;
             }
-            *p->pChar = (sal_Unicode) val; break;
+            *p->pChar = static_cast<sal_Unicode>(val); break;
         }
         case SbxBYREF | SbxBYTE:
         {
@@ -414,7 +414,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); val = 0;
             }
-            *p->pByte = (sal_uInt8) val; break;
+            *p->pByte = static_cast<sal_uInt8>(val); break;
         }
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
@@ -428,7 +428,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); val = SbxMININT;
             }
-            *p->pInteger = (sal_uInt16) val; break;
+            *p->pInteger = static_cast<sal_uInt16>(val); break;
         }
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
@@ -442,7 +442,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); val = 0;
             }
-            *p->pUShort = (sal_uInt16) val; break;
+            *p->pUShort = static_cast<sal_uInt16>(val); break;
         }
         case SbxBYREF | SbxLONG:
         {
@@ -455,7 +455,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); val = SbxMINLNG;
             }
-            *p->pLong = (sal_Int32) val; break;
+            *p->pLong = static_cast<sal_Int32>(val); break;
         }
         case SbxBYREF | SbxULONG:
         {
@@ -468,16 +468,16 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); val = 0;
             }
-            *p->pULong = (sal_uInt32) val; break;
+            *p->pULong = static_cast<sal_uInt32>(val); break;
         }
         case SbxBYREF | SbxCURRENCY:
             *p->pnInt64 = r; break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = r / CURRENCY_FACTOR; break;
         case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = (sal_uInt64)r / CURRENCY_FACTOR; break;
+            *p->puInt64 = static_cast<sal_uInt64>(r) / CURRENCY_FACTOR; break;
         case SbxBYREF | SbxSINGLE:
-            p->nSingle = (float)( r / CURRENCY_FACTOR ); break;
+            p->nSingle = static_cast<float>( r / CURRENCY_FACTOR ); break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = ImpCurrencyToDouble( r ); break;

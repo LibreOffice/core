@@ -119,14 +119,14 @@ bool AddonsToolBarFactory::hasButtonsInContext(
 
     // Check before we create a toolbar that we have at least one button in
     // the current frame context.
-    for ( sal_uInt32 i = 0; i < (sal_uInt32)rPropSeqSeq.getLength(); i++ )
+    for ( sal_uInt32 i = 0; i < static_cast<sal_uInt32>(rPropSeqSeq.getLength()); i++ )
     {
         bool    bIsButton( true );
         bool    bIsCorrectContext( false );
         sal_uInt32  nPropChecked( 0 );
 
         const Sequence< PropertyValue >& rPropSeq = rPropSeqSeq[i];
-        for ( sal_uInt32 j = 0; j < (sal_uInt32)rPropSeq.getLength(); j++ )
+        for ( sal_uInt32 j = 0; j < static_cast<sal_uInt32>(rPropSeq.getLength()); j++ )
         {
             if ( rPropSeq[j].Name == "Context" )
             {

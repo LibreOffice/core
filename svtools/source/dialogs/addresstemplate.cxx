@@ -617,7 +617,7 @@ void AssignmentPersistentData::ImplCommit()
         // the logical names
         OUString sLogicalFieldNames(STR_LOGICAL_FIELD_NAMES);
         sal_Int32 nAdjustedTokenCount = comphelper::string::getTokenCount(sLogicalFieldNames, ';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
-        DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
+        DBG_ASSERT(nAdjustedTokenCount == static_cast<sal_Int32>(m_pImpl->aFieldLabels.size()),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
         m_pImpl->aLogicalFieldNames.reserve(nAdjustedTokenCount);
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
@@ -1049,8 +1049,8 @@ void AssignmentPersistentData::ImplCommit()
             // the new row for the focus
             sal_Int32 nNewFocusRow = nOldFocusRow + nDelta;
             // normalize
-            nNewFocusRow = std::min(nNewFocusRow, (sal_Int32)(FIELD_PAIRS_VISIBLE - 1), ::std::less< sal_Int32 >());
-            nNewFocusRow = std::max(nNewFocusRow, (sal_Int32)0, ::std::less< sal_Int32 >());
+            nNewFocusRow = std::min(nNewFocusRow, sal_Int32(FIELD_PAIRS_VISIBLE - 1), ::std::less< sal_Int32 >());
+            nNewFocusRow = std::max(nNewFocusRow, sal_Int32(0), ::std::less< sal_Int32 >());
             // set the new focus (in the same column)
             m_pImpl->pFields[nNewFocusRow * 2 + nOldFocusColumn]->GrabFocus();
         }

@@ -118,7 +118,7 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
             {
                 // use only these metrics
                 sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
-                m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
+                m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
                 break;
             }
             default:; //prevent warning
@@ -221,7 +221,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
     if ( m_pMetricLB->IsValueChangedFromSaved() )
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos ));
+        const sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos )));
         rSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -229,7 +229,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
     if(m_pTabMF->IsVisible() && m_pTabMF->IsValueChangedFromSaved())
     {
         rSet->Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    (sal_uInt16)m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP))));
+                    static_cast<sal_uInt16>(m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP)))));
         bRet = true;
     }
 
@@ -329,7 +329,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
 
         for ( sal_Int32 i = 0; i < m_pMetricLB->GetEntryCount(); ++i )
         {
-            if ( (int)reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( i )) == (int)eFieldUnit )
+            if ( static_cast<int>(reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( i ))) == static_cast<int>(eFieldUnit) )
             {
                 m_pMetricLB->SelectEntryPos( i );
                 break;
@@ -501,7 +501,7 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
             if (!pFieldType->GetName().isEmpty()
                 && pFieldType->GetName() == m_pCategoryBox->GetText())
             {
-                nSelFormat = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat();
+                nSelFormat = static_cast<sal_uInt16>(static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat());
                 break;
             }
         }
@@ -755,7 +755,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
 
         for (sal_Int32 i = 0; i < m_pFormatBox->GetEntryCount(); i++)
         {
-            if (pOpt->GetNumType() == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(i)))
+            if (pOpt->GetNumType() == static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(i))))
             {
                 m_pFormatBox->SelectEntryPos(i);
                 break;
@@ -818,7 +818,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry const * pEntry)
         pOpt->SetCategory("");
     else
         pOpt->SetCategory(comphelper::string::strip(aName, ' '));
-    pOpt->SetNumType((sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetSelectedEntryData()));
+    pOpt->SetNumType(static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFormatBox->GetSelectedEntryData())));
     pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString() );
     pOpt->SetPos(m_pPosBox->GetSelectedEntryPos());
     sal_Int32 nPos = m_pLbLevel->GetSelectedEntryPos();
@@ -887,8 +887,8 @@ void SwCaptionOptPage::InvalidatePreview()
         //#i61007# order of captions
         bool bOrderNumberingFirst = m_pLbCaptionOrder->GetSelectedEntryPos() == 1;
         // number
-        const sal_uInt16 nNumFormat = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(
-                                        m_pFormatBox->GetSelectedEntryPos() ));
+        const sal_uInt16 nNumFormat = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(
+                                        m_pFormatBox->GetSelectedEntryPos() )));
         if( SVX_NUM_NUMBER_NONE != nNumFormat )
         {
             //#i61007# order of captions

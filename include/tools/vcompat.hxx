@@ -24,10 +24,10 @@
 inline sal_uInt32 COMPAT_FORMAT( char char1, char char2, char char3, char char4 )
 {
     return
-        ((sal_uInt32)char1) |
-        (((sal_uInt32)char2) <<  8) |
-        (((sal_uInt32)char3) << 16) |
-        (((sal_uInt32)char4) << 24);
+        static_cast<sal_uInt32>(char1) |
+        (static_cast<sal_uInt32>(char2) <<  8) |
+        (static_cast<sal_uInt32>(char3) << 16) |
+        (static_cast<sal_uInt32>(char4) << 24);
 };
 
 class SvStream;

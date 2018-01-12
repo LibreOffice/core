@@ -236,7 +236,7 @@ namespace sdr { namespace contact {
     void ControlHolder::setZoom( const ::basegfx::B2DVector& _rScale ) const
     {
         // no check whether we're valid, this is the responsibility of the caller
-        m_xControlView->setZoom( (float)_rScale.getX(), (float)_rScale.getY() );
+        m_xControlView->setZoom( static_cast<float>(_rScale.getX()), static_cast<float>(_rScale.getY()) );
     }
 
 
@@ -265,8 +265,8 @@ namespace sdr { namespace contact {
         if ( pWindow )
         {
             const Fraction& rZoom( pWindow->GetZoom() );
-            aZoom.setX( (double)rZoom );
-            aZoom.setY( (double)rZoom );
+            aZoom.setX( static_cast<double>(rZoom) );
+            aZoom.setY( static_cast<double>(rZoom) );
         }
         return aZoom;
     }
@@ -298,7 +298,7 @@ namespace sdr { namespace contact {
         ::basegfx::B2DPoint aBottomRight( _rLogicBoundingRect.Right(), _rLogicBoundingRect.Bottom() );
         aBottomRight *= _rViewTransformation;
 
-        const tools::Rectangle aPaintRectPixel( (long)aTopLeft.getX(), (long)aTopLeft.getY(), (long)aBottomRight.getX(), (long)aBottomRight.getY() );
+        const tools::Rectangle aPaintRectPixel( static_cast<long>(aTopLeft.getX()), static_cast<long>(aTopLeft.getY()), static_cast<long>(aBottomRight.getX()), static_cast<long>(aBottomRight.getY()) );
         _rControl.setPosSize( aPaintRectPixel );
 
         // determine the scale from the current view transformation, and the normalization matrix
@@ -840,8 +840,8 @@ namespace sdr { namespace contact {
 
         ::basegfx::B2DHomMatrix aScaleNormalization;
         const MapMode& aCurrentDeviceMapMode( rPageViewDevice.GetMapMode() );
-        aScaleNormalization.set( 0, 0, (double)aCurrentDeviceMapMode.GetScaleX() );
-        aScaleNormalization.set( 1, 1, (double)aCurrentDeviceMapMode.GetScaleY() );
+        aScaleNormalization.set( 0, 0, static_cast<double>(aCurrentDeviceMapMode.GetScaleX()) );
+        aScaleNormalization.set( 1, 1, static_cast<double>(aCurrentDeviceMapMode.GetScaleY()) );
         m_aZoomLevelNormalization *= aScaleNormalization;
 
     #if OSL_DEBUG_LEVEL > 0

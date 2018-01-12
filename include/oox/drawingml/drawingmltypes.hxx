@@ -187,7 +187,7 @@ inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
 /** Converts the passed 64-bit integer value from EMUs to Points. */
 inline float convertEmuToPoints( sal_Int64 nValue )
 {
-    return (float) nValue / EMU_PER_PT;
+    return static_cast<float>(nValue) / EMU_PER_PT;
 }
 
 /** A structure for a point with 64-bit integer components. */

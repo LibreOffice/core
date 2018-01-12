@@ -1819,9 +1819,9 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
         long nEd1 = ::lcl_CalcWish( pEnd,   nWish, nPrtWidth ) + nOfst;
 
         if ( nSt1 <= nEd1 )
-            nEd1 += (long)((nEdSz * nPrtWidth) / nWish) - 1;
+            nEd1 += static_cast<long>((nEdSz * nPrtWidth) / nWish) - 1;
         else
-            nSt1 += (long)((nStSz * nPrtWidth) / nWish) - 1;
+            nSt1 += static_cast<long>((nStSz * nPrtWidth) / nWish) - 1;
 
         long nSt2;
         long nEd2;

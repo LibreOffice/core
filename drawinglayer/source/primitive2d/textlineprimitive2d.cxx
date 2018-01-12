@@ -175,7 +175,7 @@ namespace drawinglayer
 
                     for(const int* p = pDotDashArray; *p; ++p)
                     {
-                        aDoubleArray.push_back((double)(*p) * fHeight);
+                        aDoubleArray.push_back(static_cast<double>(*p) * fHeight);
                     }
 
                     aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);

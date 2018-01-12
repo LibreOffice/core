@@ -207,7 +207,7 @@ OUString xdg_user_dir_lookup (const char *type)
             {
                 if ((*p == '\\') && (*(p+1) != 0))
                     p++;
-                aUserDirBuf.append((sal_Unicode)*p++);
+                aUserDirBuf.append(static_cast<sal_Unicode>(*p++));
             }
         }//end of while
         osl_closeFile(handle);

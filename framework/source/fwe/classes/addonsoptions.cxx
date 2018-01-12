@@ -306,8 +306,8 @@ void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize,
                                               const Image &rImage,
                                               const OUString &rURL)
 {
-    aSizeEntry[(int)eSize].aImage = rImage;
-    aSizeEntry[(int)eSize].aURL = rURL;
+    aSizeEntry[static_cast<int>(eSize)].aImage = rImage;
+    aSizeEntry[static_cast<int>(eSize)].aURL = rURL;
 }
 
 //  constructor
@@ -494,7 +494,7 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool
     if ( pIter != m_aImageManager.end() )
     {
         ImageSize eSize = bBig ? IMGSIZE_BIG : IMGSIZE_SMALL;
-        int nIdx = (int)eSize;
+        int nIdx = static_cast<int>(eSize);
         int nOtherIdx = nIdx ? 0 : 1;
 
         OneImageEntry& rSizeEntry = pIter->second.aSizeEntry[nIdx];
@@ -701,7 +701,7 @@ bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNode
         }
     }
 
-    return ( (sal_uInt32)rAddonOfficeToolBarSeq.getLength() > nToolBarItemCount );
+    return ( static_cast<sal_uInt32>(rAddonOfficeToolBarSeq.getLength()) > nToolBarItemCount );
 }
 
 void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
@@ -836,7 +836,7 @@ void AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructi
     aMergeMenuBaseNode += m_aPathDelimiter;
 
     // extend the node names to have full path strings
-    for ( sal_uInt32 i = 0; i < (sal_uInt32)aSubMenuNodeNames.getLength(); i++ )
+    for ( sal_uInt32 i = 0; i < static_cast<sal_uInt32>(aSubMenuNodeNames.getLength()); i++ )
         aSubMenuNodeNames[i] = aMergeMenuBaseNode + aSubMenuNodeNames[i];
 
     ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
@@ -1016,7 +1016,7 @@ bool AddonsOptions_Impl::ReadMergeStatusbarData(
         }
     }
 
-    return ( (sal_uInt32)rMergeStatusbarItems.getLength() > nStatusbarItemCount );
+    return ( static_cast<sal_uInt32>(rMergeStatusbarItems.getLength()) > nStatusbarItemCount );
 }
 
 bool AddonsOptions_Impl::ReadStatusBarItem(
@@ -1084,7 +1084,7 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
-            for ( sal_uInt32 n = 0; n < (sal_uInt32)aRootSubMenuNodeNames.getLength(); n++ )
+            for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(aRootSubMenuNodeNames.getLength()); n++ )
                 aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aMenuItem[ OFFSET_MENUITEM_SUBMENU ].Value <<= aSubMenuSeq;
@@ -1149,7 +1149,7 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
-            for ( sal_uInt32 n = 0; n < (sal_uInt32)aRootSubMenuNodeNames.getLength(); n++ )
+            for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(aRootSubMenuNodeNames.getLength()); n++ )
                 aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aSubMenuSeq;

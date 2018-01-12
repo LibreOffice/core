@@ -87,7 +87,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
     if( bDisposing )
         throw lang::DisposedException();
 
-    if( Index < 0 || Index > (sal_Int32)( mpSdCustomShow ? mpSdCustomShow->PagesVector().size() : 0 ) )
+    if( Index < 0 || Index > static_cast<sal_Int32>( mpSdCustomShow ? mpSdCustomShow->PagesVector().size() : 0 ) )
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference< drawing::XDrawPage > xPage;
@@ -185,7 +185,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
     if( bDisposing )
         throw lang::DisposedException();
 
-    if (Index < 0 || !mpSdCustomShow || Index >= (sal_Int32)mpSdCustomShow->PagesVector().size())
+    if (Index < 0 || !mpSdCustomShow || Index >= static_cast<sal_Int32>(mpSdCustomShow->PagesVector().size()))
         throw lang::IndexOutOfBoundsException();
 
     uno::Any aAny;

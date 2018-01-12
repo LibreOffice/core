@@ -339,8 +339,8 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
 
 void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    long nDifX = ((long) nCol1) - ((long) nStartCol);
-    long nDifY = ((long) nRow1) - ((long) nStartRow);
+    long nDifX = static_cast<long>(nCol1) - static_cast<long>(nStartCol);
+    long nDifY = static_cast<long>(nRow1) - static_cast<long>(nStartRow);
 
     long nSortDif = bByRow ? nDifX : nDifY;
     long nSortEnd = bByRow ? static_cast<long>(nCol2) : static_cast<long>(nRow2);

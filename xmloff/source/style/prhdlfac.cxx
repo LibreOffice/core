@@ -133,7 +133,7 @@ XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 // Interface
 const XMLPropertyHandler* XMLPropertyHandlerFactory::GetPropertyHandler( sal_Int32 nType ) const
 {
-    SAL_WARN_IF( (nType & ~((sal_uInt32)MID_FLAG_MASK)) != 0, "xmloff",
+    SAL_WARN_IF( (nType & ~(sal_uInt32(MID_FLAG_MASK))) != 0, "xmloff",
                 "GetPropertyHandler called with flags in type" );
     return GetBasicHandler( nType );
 }

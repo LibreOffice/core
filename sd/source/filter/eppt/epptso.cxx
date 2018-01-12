@@ -118,8 +118,8 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
 
         if ( rGraphicSize.Width() && rGraphicSize.Height() )
         {
-            double          fQ1 = ( (double)aPrefSize.Width() / (double)aPrefSize.Height() );
-            double          fQ2 = ( (double)rGraphicSize.Width() / (double)rGraphicSize.Height() );
+            double          fQ1 = ( static_cast<double>(aPrefSize.Width()) / static_cast<double>(aPrefSize.Height()) );
+            double          fQ2 = ( static_cast<double>(rGraphicSize.Width()) / static_cast<double>(rGraphicSize.Height()) );
             double          fXScale = 1;
             double          fYScale = 1;
 
@@ -131,8 +131,8 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
             if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
             {
                 aBmpEx.Scale( fXScale, fYScale );
-                Size aNewSize( (sal_Int32)((double)rGraphicSize.Width() / fXScale + 0.5 ),
-                                (sal_Int32)((double)rGraphicSize.Height() / fYScale + 0.5 ) );
+                Size aNewSize( static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Width()) / fXScale + 0.5 ),
+                                static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
 
                 rGraphicSize = aNewSize;
 
@@ -143,7 +143,7 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
         sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, xGraphicObject->GetUniqueID());
 
         if ( nId && ( nId < 0x10000 ) )
-            nRetValue = (sal_uInt16)nId - 1;
+            nRetValue = static_cast<sal_uInt16>(nId) - 1;
     }
     return nRetValue;
 }
@@ -283,7 +283,7 @@ sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStrea
 
     if ( pStrm )
     {
-        pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
+        pStrm->SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
         pStrm->WriteUInt32( nSize - 8 );
         pStrm->SeekRel( nSize - 8 );
     }
@@ -303,7 +303,7 @@ sal_uInt32 PPTWriter::ImplProgTagContainer( SvStream* pStrm, SvMemoryStream* pBi
         nSize += ImplProgBinaryTagContainer( pStrm, pBinTagStrm );
         if ( pStrm )
         {
-            pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
+            pStrm->SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
             pStrm->WriteUInt32( nSize - 8 );
             pStrm->SeekRel( nSize - 8 );
         }
@@ -327,7 +327,7 @@ sal_uInt32 PPTWriter::ImplDocumentListContainer( SvStream* pStrm )
 
     if ( pStrm )
     {
-        pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
+        pStrm->SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
         pStrm->WriteUInt32( nSize - 8 );
         pStrm->SeekRel( nSize - 8 );
     }
@@ -386,7 +386,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
     PPTWriter::WriteCString( *mpExEmbed, rStringVer3, 3 );
 
     nHyperSize = mpExEmbed->Tell() - nHyperStart;
-    mpExEmbed->SeekRel( - ( (sal_Int32)nHyperSize + 4 ) );
+    mpExEmbed->SeekRel( - ( static_cast<sal_Int32>(nHyperSize) + 4 ) );
     mpExEmbed->WriteUInt32( nHyperSize );
     mpExEmbed->SeekRel( nHyperSize );
     return nHyperId;
@@ -671,7 +671,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         {
             double fN = 100.0;
             fN *= pDesc->Scaling;
-            nNormalSpacing = (sal_Int16)( fN + 0.5 );
+            nNormalSpacing = static_cast<sal_Int16>( fN + 0.5 );
         }
         if ( !mbFontIndependentLineSpacing && bFirstParagraph && ( nLineSpacing > nNormalSpacing ) )    // sj: i28747, no replacement for fixed linespacing
         {
@@ -683,14 +683,14 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             if ( nLineSpacing > 0 )
             {
                 if ( !mbFontIndependentLineSpacing && pDesc )
-                     nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+                     nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) * pDesc->Scaling + 0.5 );
             }
             else
             {
-                if ( !pPara->mbFixedLineSpacing && rPortion.mnCharHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+                if ( !pPara->mbFixedLineSpacing && rPortion.mnCharHeight > static_cast<sal_uInt16>( static_cast<double>(-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
                     nLineSpacing = nNormalSpacing;
                 else
-                    nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
+                    nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) / 4.40972 );
             }
             if ( ( pPara->meLineSpacing == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
@@ -730,7 +730,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             nPropertyFlags |= 0x400;
 
         FontCollectionEntry aFontDescEntry( pPara->aFontDesc.Name, pPara->aFontDesc.Family, pPara->aFontDesc.Pitch, pPara->aFontDesc.CharSet );
-        sal_uInt16  nFontId = (sal_uInt16)maFontCollection.GetId( aFontDescEntry );
+        sal_uInt16  nFontId = static_cast<sal_uInt16>(maFontCollection.GetId( aFontDescEntry ));
 
         rOut.WriteUInt32( nCharCount )
             .WriteUInt16( nDepth )                          // Level
@@ -874,8 +874,8 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 }
 
                 sal_Int32 nB = nBackgroundColor & 0xff;
-                nB += (sal_uInt8)( nBackgroundColor >> 8  );
-                nB += (sal_uInt8)( nBackgroundColor >> 16 );
+                nB += static_cast<sal_uInt8>( nBackgroundColor >> 8  );
+                nB += static_cast<sal_uInt8>( nBackgroundColor >> 16 );
                 // if the background color is nearly black, relief can't been used, because the text would not be visible
                 if ( nB < 0x60 || ( nBackgroundColor != nCharColor ) )
                 {
@@ -990,8 +990,8 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     else
         mnAngle = ( 36000 - ( mnAngle % 36000 ) );
 
-    double  fCos = cos( (double)mnAngle * F_PI18000 );
-    double  fSin = sin( (double)mnAngle * F_PI18000 );
+    double  fCos = cos( static_cast<double>(mnAngle) * F_PI18000 );
+    double  fSin = sin( static_cast<double>(mnAngle) * F_PI18000 );
 
     double  fWidthHalf = maRect.GetWidth() / 2.0;
     double  fHeightHalf = maRect.GetHeight() / 2.0;
@@ -999,7 +999,7 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     double  fXDiff = fCos * fWidthHalf + fSin * (-fHeightHalf);
     double  fYDiff = - ( fSin * fWidthHalf - fCos * ( -fHeightHalf ) );
 
-    maRect.Move( (sal_Int32)( -( fWidthHalf - fXDiff ) ), (sal_Int32)(  - ( fHeightHalf + fYDiff ) ) );
+    maRect.Move( static_cast<sal_Int32>( -( fWidthHalf - fXDiff ) ), static_cast<sal_Int32>(  - ( fHeightHalf + fYDiff ) ) );
     mnAngle *= 655;
     mnAngle += 0x8000;
     mnAngle &=~0xffff;                                  // round nAngle to full grads
@@ -1010,7 +1010,7 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     {
         // Maddeningly, in those two areas of PPT is the BoundingBox already
         // vertical. Therefore, we need to put down it BEFORE THE ROTATION.
-        css::awt::Point aTopLeft( (sal_Int32)( maRect.Left() + fWidthHalf - fHeightHalf ), (sal_Int32)( maRect.Top() + fHeightHalf - fWidthHalf ) );
+        css::awt::Point aTopLeft( static_cast<sal_Int32>( maRect.Left() + fWidthHalf - fHeightHalf ), static_cast<sal_Int32>( maRect.Top() + fHeightHalf - fWidthHalf ) );
         const long nRotatedWidth(maRect.GetHeight());
         const long nRotatedHeight(maRect.GetWidth());
         const Size aNewSize(nRotatedWidth, nRotatedHeight);
@@ -1031,7 +1031,7 @@ void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropert
                 sal_Int16 nLineSpacing = pPara->mnLineSpacing;
                 const FontCollectionEntry* pDesc = maFontCollection.GetById( rPortion.mnFont );
                 if ( pDesc )
-                     nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+                     nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) * pDesc->Scaling + 0.5 );
 
                 if ( ( nLineSpacing > 0 ) && ( nLineSpacing < 100 ) )
                 {
@@ -1079,7 +1079,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         ImplWriteParagraphs( rOut, aTextObj );
         ImplWritePortions( rOut, aTextObj );
         nSize = rOut.Tell() - nPos;
-        rOut.SeekRel( - ( (sal_Int32)nSize - 4 ) );
+        rOut.SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
         rOut.WriteUInt32( nSize - 8 );
         rOut.SeekRel( nSize - 8 );
 
@@ -1219,7 +1219,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             {
                                 nParaFlags |= nMask << 16;
                                 nNumberingRule[ nDepth << 1 ] = pPara->nTextOfs;
-                                nNumberingRule[ ( nDepth << 1 ) + 1 ] = (sal_Int16)pPara->nBulletOfs;
+                                nNumberingRule[ ( nDepth << 1 ) + 1 ] = static_cast<sal_Int16>(pPara->nBulletOfs);
                             }
                         }
                     }
@@ -1241,8 +1241,8 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             const sal_uInt32 nDefaultTabSize = MapSize( awt::Size( nDefaultTabSizeSrc, 1 ) ).Width;
             sal_uInt32  nDefaultTabs = std::abs( maRect.GetWidth() ) / nDefaultTabSize;
             if ( nTabs )
-                nDefaultTabs -= (sal_Int32)( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );
-            if ( (sal_Int32)nDefaultTabs < 0 )
+                nDefaultTabs -= static_cast<sal_Int32>( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );
+            if ( static_cast<sal_Int32>(nDefaultTabs) < 0 )
                 nDefaultTabs = 0;
 
             sal_uInt32 nTabCount = nTabs + nDefaultTabs;
@@ -1270,7 +1270,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                     pRuleOut->WriteUInt16( nTabCount );
                     for ( i = 0; i < nTabs; i++ )
                     {
-                        sal_uInt16 nPosition = (sal_uInt16)( ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs );
+                        sal_uInt16 nPosition = static_cast<sal_uInt16>( ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs );
                         sal_uInt16 nType;
                         switch ( pTabStop[ i ].Alignment )
                         {
@@ -1287,7 +1287,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
                     sal_uInt32 nWidth = 1;
                     if ( nTabs )
-                        nWidth += (sal_Int32)( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize );
+                        nWidth += static_cast<sal_Int32>( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize );
                     nWidth *= nDefaultTabSize;
                     for ( i = 0; i < nDefaultTabs; i++, nWidth += nDefaultTabSize )
                         pRuleOut->WriteUInt32( nWidth );
@@ -1300,7 +1300,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         pRuleOut->WriteInt16( nNumberingRule[ ( i << 1 ) + 1 ] );
                 }
                 sal_uInt32 nBufSize = pRuleOut->Tell() - nRulePos;
-                pRuleOut->SeekRel( - ( (sal_Int32)nBufSize - 4 ) );
+                pRuleOut->SeekRel( - ( static_cast<sal_Int32>(nBufSize) - 4 ) );
                 pRuleOut->WriteUInt32( nBufSize - 8 );
                 pRuleOut->SeekRel( nBufSize - 8 );
             }
@@ -1364,7 +1364,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                     rExtBuStr.WriteUInt32( 0 ).WriteUInt32( 0 );
                 }
                 sal_uInt32 nBulletSize = ( rExtBuStr.Tell() - nPos2 ) - 8;
-                rExtBuStr.SeekRel( - ( (sal_Int32)nBulletSize + 4 ) );
+                rExtBuStr.SeekRel( - ( static_cast<sal_Int32>(nBulletSize) + 4 ) );
                 rExtBuStr.WriteUInt32( nBulletSize );
                 rExtBuStr.SeekRel( nBulletSize );
             }
@@ -1490,7 +1490,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
                     INetURLObject aUrl( aBookmark );
                     if ( INetProtocol::File == aUrl.GetProtocol() )
                         aBookmarkFile = aUrl.PathToFileName();
-                    nHyperLinkID = ImplInsertBookmarkURL( aBookmark, (sal_uInt32)(2 | ( 1U << 31 )), aBookmarkFile, aBookmark, "", "" );
+                    nHyperLinkID = ImplInsertBookmarkURL( aBookmark, sal_uInt32(2 | ( 1U << 31 )), aBookmarkFile, aBookmark, "", "" );
                 }
             }
         }
@@ -1873,10 +1873,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     css::awt::Size  aSize( mXShape->getSize() );
                     css::awt::Point aStart, aEnd, aCenter;
                     ::tools::Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
-                    aStart.X =   (sal_Int32) ( cos( nStartAngle * F_PI18000 ) * 100.0 );
-                    aStart.Y = - (sal_Int32) ( sin( nStartAngle * F_PI18000 ) * 100.0 );
-                    aEnd.X =   (sal_Int32) ( cos( nEndAngle * F_PI18000 ) * 100.0 );
-                    aEnd.Y = - (sal_Int32) ( sin( nEndAngle * F_PI18000 ) * 100.0 ) ;
+                    aStart.X =   static_cast<sal_Int32>( cos( nStartAngle * F_PI18000 ) * 100.0 );
+                    aStart.Y = - static_cast<sal_Int32>( sin( nStartAngle * F_PI18000 ) * 100.0 );
+                    aEnd.X =   static_cast<sal_Int32>( cos( nEndAngle * F_PI18000 ) * 100.0 );
+                    aEnd.Y = - static_cast<sal_Int32>( sin( nEndAngle * F_PI18000 ) * 100.0 ) ;
                     aCenter.X = aPoint.X + ( aSize.Width / 2 );
                     aCenter.Y = aPoint.Y + ( aSize.Height / 2 );
                     aStart.X += aCenter.X;
@@ -1887,7 +1887,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     bool bNeedText = true;
                     if ( mnAngle )
                     {
-                        aPolygon.Rotate( aRect.TopLeft(), (sal_uInt16)( mnAngle / 10 ) );
+                        aPolygon.Rotate( aRect.TopLeft(), static_cast<sal_uInt16>( mnAngle / 10 ) );
                         if ( ImplGetText() )
                         {
                             // #i119551# PPT does not support groups of polygons and text (MS patch KB2289187)
@@ -2044,8 +2044,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     for ( sal_Int32 i = 0; i < aControlName.getLength(); i++ )
                     {
                         sal_Unicode nUnicode = aControlName[i];
-                        *pTmp++ = (sal_uInt8)nUnicode;
-                        *pTmp++ = (sal_uInt8)( nUnicode >> 8 );
+                        *pTmp++ = static_cast<sal_uInt8>(nUnicode);
+                        *pTmp++ = static_cast<sal_uInt8>( nUnicode >> 8 );
                     }
                     *pTmp++ = 0;
                     *pTmp = 0;
@@ -2655,7 +2655,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                    .WriteUInt16( 0 )
                                    .WriteUInt16( 0x435 );
 
-                        sal_uInt16 i, nStringLen = (sal_uInt16)aMediaURL.getLength();
+                        sal_uInt16 i, nStringLen = static_cast<sal_uInt16>(aMediaURL.getLength());
                         mpExEmbed->WriteUInt32( EPP_CString << 16 ).WriteUInt32( nStringLen * 2 );
                         for ( i = 0; i < nStringLen; i++ )
                         {
@@ -2663,7 +2663,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             mpExEmbed->WriteUInt16( nChar );
                         }
                         nSize = mpExEmbed->Tell() - nStart;
-                        mpExEmbed->SeekRel( - ( (sal_Int32)nSize + 4 ) );
+                        mpExEmbed->SeekRel( - ( static_cast<sal_Int32>(nSize) + 4 ) );
                         mpExEmbed->WriteUInt32( nSize );    // size of PPT_PST_ExMCIMovie
                         mpExEmbed->SeekRel( 0x10 );
                         nSize -= 20;
@@ -2900,7 +2900,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 double fDist = hypot( maRect.GetWidth(), maRect.GetHeight() );
                 maRect = ::tools::Rectangle( Point( aTextRefPoint.X, aTextRefPoint.Y ),
-                                        Point( (sal_Int32)( aTextRefPoint.X + fDist ), aTextRefPoint.Y - 1 ) );
+                                        Point( static_cast<sal_Int32>( aTextRefPoint.X + fDist ), aTextRefPoint.Y - 1 ) );
                 ImplCreateTextShape( aPropOpt, aSolverContainer, false );
                 aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );        // Size Shape To Fit Text
                 if ( mnAngle < 0 )
@@ -3333,7 +3333,7 @@ void TextObjBinary::Write( SvStream* pStrm )
     for ( sal_uInt32 i = 0; i < ParagraphCount(); ++i )
         GetParagraph(i)->Write( pStrm );
     nSize = pStrm->Tell() - nPos;
-    pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
+    pStrm->SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
     pStrm->WriteUInt32( nSize - 8 );
     pStrm->SeekRel( nSize - 8 );
 }
@@ -3356,7 +3356,7 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
                 pStrm ->WriteUInt32( nPortionSize )
                        .WriteInt32( nFlags )
                        .WriteInt16( 1 )    // spellinfo -> needs rechecking
-                       .WriteInt16( (sal_uInt16)LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType() )
+                       .WriteInt16( static_cast<sal_uInt16>(LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType()) )
                        .WriteInt16( 0 );   // alt language
             }
         }

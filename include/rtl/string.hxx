@@ -1864,7 +1864,7 @@ struct OStringHash
         persistently, as its computation may change in later revisions.
      */
     size_t operator()( const OString& rString ) const
-        { return (size_t)rString.hashCode(); }
+        { return static_cast<size_t>(rString.hashCode()); }
 };
 
 /** Equality functor for classic c-strings (i.e., null-terminated char* strings). */

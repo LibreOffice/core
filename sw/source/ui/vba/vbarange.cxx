@@ -310,7 +310,7 @@ SwVbaRange::getListFormat()
 ::sal_Int32 SAL_CALL SwVbaRange::getLanguageID()
 {
     uno::Reference< beans::XPropertySet > xParaProps( mxTextCursor, uno::UNO_QUERY_THROW );
-    return (sal_uInt16)SwVbaStyle::getLanguageID( xParaProps );
+    return static_cast<sal_uInt16>(SwVbaStyle::getLanguageID( xParaProps ));
 }
 
 void SAL_CALL SwVbaRange::setLanguageID( ::sal_Int32 _languageid )

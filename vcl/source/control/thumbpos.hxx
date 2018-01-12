@@ -14,8 +14,8 @@ inline long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
 {
     if (!nDenominator)
         return 0;
-    double n = ((double)nNumber * (double)nNumerator) / (double)nDenominator;
-    return (long)n;
+    double n = (static_cast<double>(nNumber) * static_cast<double>(nNumerator)) / static_cast<double>(nDenominator);
+    return static_cast<long>(n);
 }
 
 #endif // INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX

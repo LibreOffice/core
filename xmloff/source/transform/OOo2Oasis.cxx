@@ -1946,7 +1946,7 @@ sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 
     }
     else
     {
-        return (sal_Int64)0;
+        return sal_Int64(0);
     }
 }
 

@@ -261,7 +261,7 @@ void SAL_CALL ButtonToolbarController::click()
     if ( m_bDisposed )
         throw DisposedException();
 
-    sal_Int16   nKeyModifier( (sal_Int16)m_pToolbar->GetModifier() );
+    sal_Int16   nKeyModifier( static_cast<sal_Int16>(m_pToolbar->GetModifier()) );
     execute( nKeyModifier );
 }
 

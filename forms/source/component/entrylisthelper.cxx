@@ -82,13 +82,13 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryChanged: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position >= 0 ) && ( _rEvent.Position < (sal_Int32)m_aStringItems.size() ),
+        OSL_ENSURE( ( _rEvent.Position >= 0 ) && ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) ),
             "OEntryListHelper::entryChanged: invalid index!" );
         OSL_ENSURE( _rEvent.Entries.getLength() == 1,
             "OEntryListHelper::entryChanged: invalid string list!" );
 
         if  (   ( _rEvent.Position >= 0 )
-            &&  ( _rEvent.Position < (sal_Int32)m_aStringItems.size() )
+            &&  ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) )
             &&  ( _rEvent.Entries.getLength() > 0 )
             )
         {
@@ -106,11 +106,11 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeInserted: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < (sal_Int32)m_aStringItems.size() ) && ( _rEvent.Entries.getLength() > 0 ),
+        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) ) && ( _rEvent.Entries.getLength() > 0 ),
             "OEntryListHelper::entryRangeRemoved: invalid count and/or position!" );
 
         if  (   ( _rEvent.Position > 0 )
-            &&  ( _rEvent.Position < (sal_Int32)m_aStringItems.size() )
+            &&  ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) )
             &&  ( _rEvent.Entries.getLength() > 0 )
             )
         {
@@ -128,12 +128,12 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeRemoved: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Count > 0 ) && ( _rEvent.Position + _rEvent.Count <= (sal_Int32)m_aStringItems.size() ),
+        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Count > 0 ) && ( _rEvent.Position + _rEvent.Count <= static_cast<sal_Int32>(m_aStringItems.size()) ),
             "OEntryListHelper::entryRangeRemoved: invalid count and/or position!" );
 
         if  (   ( _rEvent.Position > 0 )
             &&  ( _rEvent.Count > 0 )
-            &&  ( _rEvent.Position + _rEvent.Count <= (sal_Int32)m_aStringItems.size() )
+            &&  ( _rEvent.Position + _rEvent.Count <= static_cast<sal_Int32>(m_aStringItems.size()) )
             )
         {
             m_aStringItems.erase(m_aStringItems.begin() + _rEvent.Position,

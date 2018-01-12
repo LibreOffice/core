@@ -322,11 +322,11 @@ void VCLXMenu::removeItem(
     if (!mpMenu)
         return;
 
-    sal_Int32 nItemCount = (sal_Int32)mpMenu->GetItemCount();
+    sal_Int32 nItemCount = static_cast<sal_Int32>(mpMenu->GetItemCount());
     if ( ( nCount > 0 ) && ( nPos >= 0 ) && ( nPos < nItemCount ) && ( nItemCount > 0 ))
     {
         sal_Int16 nP = sal::static_int_cast< sal_Int16 >(
-            std::min( (int)(nPos+nCount), (int)nItemCount ));
+            std::min( static_cast<int>(nPos+nCount), static_cast<int>(nItemCount) ));
         while( nP-nPos > 0 )
             mpMenu->RemoveItem( --nP );
     }
@@ -603,7 +603,7 @@ namespace
     {
         css::awt::KeyEvent aAWTKey;
         aAWTKey.Modifiers = 0;
-        aAWTKey.KeyCode   = (sal_Int16)aVCLKey.GetCode();
+        aAWTKey.KeyCode   = static_cast<sal_Int16>(aVCLKey.GetCode());
 
         if (aVCLKey.IsShift())
             aAWTKey.Modifiers |= css::awt::KeyModifier::SHIFT;
@@ -623,7 +623,7 @@ namespace
         bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
         bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
         bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
-        sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
+        sal_uInt16   nKey   = static_cast<sal_uInt16>(aAWTKey.KeyCode);
 
         return vcl::KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
     }

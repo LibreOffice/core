@@ -71,7 +71,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
             &nInfo, &nConverted);
         CPPUNIT_ASSERT_EQUAL(nNumber, nSize);
-        CPPUNIT_ASSERT_EQUAL((sal_uInt32)0, nInfo);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nInfo);
         CPPUNIT_ASSERT_EQUAL(nNumber, nConverted);
         rtl_destroyTextToUnicodeContext(aConverter, aContext);
         rtl_destroyTextToUnicodeConverter(aConverter);
@@ -116,7 +116,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
              | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR),
             &nInfo, &nConverted);
         CPPUNIT_ASSERT_EQUAL(nNumber, nSize);
-        CPPUNIT_ASSERT_EQUAL((sal_uInt32)0, nInfo);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nInfo);
         CPPUNIT_ASSERT_EQUAL(nNumber, nConverted);
         rtl_destroyUnicodeToTextContext(aConverter, aContext);
         rtl_destroyUnicodeToTextConverter(aConverter);
@@ -163,9 +163,9 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
 
             sal_uInt32 nExpectedInfo = (RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_UNDEFINED);
 
-            CPPUNIT_ASSERT_EQUAL((sal_Size) 0, nSize);
+            CPPUNIT_ASSERT_EQUAL(sal_Size(0), nSize);
             CPPUNIT_ASSERT_EQUAL(nExpectedInfo, nInfo);
-            CPPUNIT_ASSERT_EQUAL((sal_Size) 0, nConverted);
+            CPPUNIT_ASSERT_EQUAL(sal_Size(0), nConverted);
 
             rtl_destroyTextToUnicodeContext(aConverter, aContext);
             rtl_destroyTextToUnicodeConverter(aConverter);
@@ -214,7 +214,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                 RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0)),
             &nInfo, &nConverted);
         CPPUNIT_ASSERT_EQUAL(rTest.m_nUnicodeSize, nSize);
-        CPPUNIT_ASSERT_EQUAL((sal_uInt32) 0, nInfo);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nInfo);
         CPPUNIT_ASSERT_EQUAL(rTest.m_nTextSize, nConverted);
 
         rtl_destroyTextToUnicodeContext(aConverter, aContext);
@@ -264,7 +264,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                     nFlags, &nInfo, &nConverted);
                 nOutput += nSize;
                 nInput += nConverted;
-                CPPUNIT_ASSERT_EQUAL((sal_uInt32) 0,
+                CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
                                      (nInfo & ~RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL));
             }
             CPPUNIT_ASSERT_EQUAL(rTest.m_nUnicodeSize, nOutput);

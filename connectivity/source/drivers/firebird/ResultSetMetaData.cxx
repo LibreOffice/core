@@ -245,7 +245,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
         Reference<XRow> xRow ( xRes, UNO_QUERY);
         if(xRes->next())
         {
-            return (sal_Int32) xRow->getShort(1);
+            return static_cast<sal_Int32>(xRow->getShort(1));
         }
         else
         {

@@ -528,15 +528,15 @@ namespace cppcanvas
                     // scale color coefficients with gradient intensities
                     const sal_uInt16 nStartIntensity( rGradient.GetStartIntensity() );
                     ::Color aVCLStartColor( rGradient.GetStartColor() );
-                    aVCLStartColor.SetRed( (sal_uInt8)(aVCLStartColor.GetRed() * nStartIntensity / 100) );
-                    aVCLStartColor.SetGreen( (sal_uInt8)(aVCLStartColor.GetGreen() * nStartIntensity / 100) );
-                    aVCLStartColor.SetBlue( (sal_uInt8)(aVCLStartColor.GetBlue() * nStartIntensity / 100) );
+                    aVCLStartColor.SetRed( static_cast<sal_uInt8>(aVCLStartColor.GetRed() * nStartIntensity / 100) );
+                    aVCLStartColor.SetGreen( static_cast<sal_uInt8>(aVCLStartColor.GetGreen() * nStartIntensity / 100) );
+                    aVCLStartColor.SetBlue( static_cast<sal_uInt8>(aVCLStartColor.GetBlue() * nStartIntensity / 100) );
 
                     const sal_uInt16 nEndIntensity( rGradient.GetEndIntensity() );
                     ::Color aVCLEndColor( rGradient.GetEndColor() );
-                    aVCLEndColor.SetRed( (sal_uInt8)(aVCLEndColor.GetRed() * nEndIntensity / 100) );
-                    aVCLEndColor.SetGreen( (sal_uInt8)(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
-                    aVCLEndColor.SetBlue( (sal_uInt8)(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
+                    aVCLEndColor.SetRed( static_cast<sal_uInt8>(aVCLEndColor.GetRed() * nEndIntensity / 100) );
+                    aVCLEndColor.SetGreen( static_cast<sal_uInt8>(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
+                    aVCLEndColor.SetBlue( static_cast<sal_uInt8>(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
 
                     uno::Reference<rendering::XColorSpace> xColorSpace(
                         rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
@@ -816,7 +816,7 @@ namespace cppcanvas
                 sal_Int32 nNormalWidth = rParms.mrVDev.GetFontMetric( aTestFont ).GetAverageFontWidth();
                 if( nNormalWidth != nFontWidthLog )
                     if( nNormalWidth )
-                        aFontMatrix.m00 = (double)nFontWidthLog / nNormalWidth;
+                        aFontMatrix.m00 = static_cast<double>(nFontWidthLog) / nNormalWidth;
             }
 
             // #i52608# apply map mode scale also to font matrix - an
@@ -1477,11 +1477,11 @@ namespace cppcanvas
 
                         // TODO(Q2): define and use appropriate enumeration types
                         rState.textReliefStyle          = rFont.GetRelief();
-                        rState.textOverlineStyle        = (sal_Int8)rFont.GetOverline();
+                        rState.textOverlineStyle        = static_cast<sal_Int8>(rFont.GetOverline());
                         rState.textUnderlineStyle       = rParms.maFontUnderline.is_initialized() ?
-                            (*rParms.maFontUnderline ? (sal_Int8)LINESTYLE_SINGLE : (sal_Int8)LINESTYLE_NONE) :
-                            (sal_Int8)rFont.GetUnderline();
-                        rState.textStrikeoutStyle       = (sal_Int8)rFont.GetStrikeout();
+                            (*rParms.maFontUnderline ? sal_Int8(LINESTYLE_SINGLE) : sal_Int8(LINESTYLE_NONE)) :
+                            static_cast<sal_Int8>(rFont.GetUnderline());
+                        rState.textStrikeoutStyle       = static_cast<sal_Int8>(rFont.GetStrikeout());
                         rState.textEmphasisMarkStyle    = rFont.GetEmphasisMark() & FontEmphasisMark::Style;
                         rState.isTextEffectShadowSet    = rFont.IsShadow();
                         rState.isTextWordUnderlineSet   = rFont.IsWordLineMode();
@@ -1580,8 +1580,8 @@ namespace cppcanvas
 
                         rStates.getState().transform.translate( rPos.X(),
                                                                  rPos.Y() );
-                        rStates.getState().transform.scale( (double)rSize.Width() / aMtfSizePix.Width(),
-                                                             (double)rSize.Height() / aMtfSizePix.Height() );
+                        rStates.getState().transform.scale( static_cast<double>(rSize.Width()) / aMtfSizePix.Width(),
+                                                             static_cast<double>(rSize.Height()) / aMtfSizePix.Height() );
 
                         createActions( const_cast<GDIMetaFile&>(pAct->GetSubstitute()),
                                        rFactoryParms,
@@ -1945,8 +1945,8 @@ namespace cppcanvas
                                     vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
                                     vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
                                     ::basegfx::B2DPoint(1,1) ),
-                                ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound() ) / rRect.GetWidth(),
-                                ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound() ) / rRect.GetHeight() ) );
+                                static_cast<double>(static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound()) / rRect.GetWidth(),
+                                static_cast<double>(static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound()) / rRect.GetHeight() ) );
                         aPoly.transform( rStates.getState().mapModeTransform );
 
                         createFillAndStroke( aPoly,
@@ -2568,7 +2568,7 @@ namespace cppcanvas
                             // entry represents the 'end' position of
                             // the corresponding character, thus, we
                             // let i run from 1 to nLen.
-                            *p++ += (long)i*nWidthDifference/nLen;
+                            *p++ += static_cast<long>(i)*nWidthDifference/nLen;
                         }
 
                         createTextAction(

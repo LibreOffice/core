@@ -148,7 +148,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 else
                 {
                     const OUString& rValue = pField->GetPar2();
-                    short nValue = (short)rValue.toInt32();
+                    short nValue = static_cast<short>(rValue.toInt32());
                     if( (eSubType == PG_NEXT && nValue!=1) ||
                         (eSubType == PG_PREV && nValue!=-1) ||
                         (eSubType == PG_RANDOM && nValue!=0) )

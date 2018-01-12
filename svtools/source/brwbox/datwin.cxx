@@ -94,12 +94,12 @@ BrowserColumn::BrowserColumn( sal_uInt16 nItemId,
     _aTitle( rTitle ),
     _bFrozen( false )
 {
-    double n = (double)_nWidth;
-    n *= (double)rCurrentZoom.GetDenominator();
+    double n = static_cast<double>(_nWidth);
+    n *= static_cast<double>(rCurrentZoom.GetDenominator());
     if (!rCurrentZoom.GetNumerator())
         throw o3tl::divide_by_zero();
-    n /= (double)rCurrentZoom.GetNumerator();
-    _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
+    n /= static_cast<double>(rCurrentZoom.GetNumerator());
+    _nOriginalWidth = n>0 ? static_cast<long>(n+0.5) : -static_cast<long>(-n+0.5);
 }
 
 BrowserColumn::~BrowserColumn()
@@ -117,12 +117,12 @@ void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZ
     }
     else
     {
-        double n = (double)_nWidth;
-        n *= (double)rCurrentZoom.GetDenominator();
+        double n = static_cast<double>(_nWidth);
+        n *= static_cast<double>(rCurrentZoom.GetDenominator());
         if (!rCurrentZoom.GetNumerator())
             throw o3tl::divide_by_zero();
-        n /= (double)rCurrentZoom.GetNumerator();
-        _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
+        n /= static_cast<double>(rCurrentZoom.GetNumerator());
+        _nOriginalWidth = n>0 ? static_cast<long>(n+0.5) : -static_cast<long>(-n+0.5);
     }
 }
 
@@ -168,7 +168,7 @@ void BrowserColumn::Draw( BrowseBox const & rBox, OutputDevice& rDev, const Poin
 void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 {
     double n(_nOriginalWidth * rNewZoom);
-    _nWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
+    _nWidth = n>0 ? static_cast<long>(n+0.5) : -static_cast<long>(-n+0.5);
 }
 
 

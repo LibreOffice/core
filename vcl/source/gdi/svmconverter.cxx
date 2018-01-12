@@ -81,7 +81,7 @@ bool ImplReadPolyPoly(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
     tools::Polygon aPoly;
     sal_Int32 nPolyCount32(0);
     rIStm.ReadInt32(nPolyCount32);
-    sal_uInt16 nPolyCount = (sal_uInt16)nPolyCount32;
+    sal_uInt16 nPolyCount = static_cast<sal_uInt16>(nPolyCount32);
 
     for (sal_uInt16 i = 0; i < nPolyCount && rIStm.good(); ++i)
     {
@@ -129,22 +129,22 @@ void ImplReadColor( SvStream& rIStm, Color& rColor )
 {
     sal_Int16 nVal(0);
 
-    rIStm.ReadInt16( nVal ); rColor.SetRed( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
-    rIStm.ReadInt16( nVal ); rColor.SetGreen( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
-    rIStm.ReadInt16( nVal ); rColor.SetBlue( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
+    rIStm.ReadInt16( nVal ); rColor.SetRed( sal::static_int_cast<sal_uInt8>(static_cast<sal_uInt16>(nVal) >> 8) );
+    rIStm.ReadInt16( nVal ); rColor.SetGreen( sal::static_int_cast<sal_uInt8>(static_cast<sal_uInt16>(nVal) >> 8) );
+    rIStm.ReadInt16( nVal ); rColor.SetBlue( sal::static_int_cast<sal_uInt8>(static_cast<sal_uInt16>(nVal) >> 8) );
 }
 
 void ImplWriteColor( SvStream& rOStm, const Color& rColor )
 {
     sal_Int16 nVal;
 
-    nVal = ( (sal_Int16) rColor.GetRed() << 8 ) | rColor.GetRed();
+    nVal = ( static_cast<sal_Int16>(rColor.GetRed()) << 8 ) | rColor.GetRed();
     rOStm.WriteInt16( nVal );
 
-    nVal = ( (sal_Int16) rColor.GetGreen() << 8 ) | rColor.GetGreen();
+    nVal = ( static_cast<sal_Int16>(rColor.GetGreen()) << 8 ) | rColor.GetGreen();
     rOStm.WriteInt16( nVal );
 
-    nVal = ( (sal_Int16) rColor.GetBlue() << 8 ) | rColor.GetBlue();
+    nVal = ( static_cast<sal_Int16>(rColor.GetBlue()) << 8 ) | rColor.GetBlue();
     rOStm.WriteInt16( nVal );
 }
 
@@ -890,7 +890,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 rIStm.ReadCharAsBool(bItalic).ReadCharAsBool(bOutline).ReadCharAsBool(bShadow).ReadCharAsBool(bTransparent);
 
                 aFont.SetFontSize( Size( nWidth, nHeight ) );
-                aFont.SetCharSet( (rtl_TextEncoding) nCharSet );
+                aFont.SetCharSet( static_cast<rtl_TextEncoding>(nCharSet) );
                 aFont.SetFamily( (FontFamily) nFamily );
                 aFont.SetPitch( (FontPitch) nPitch );
                 aFont.SetAlignment( (FontAlign) nAlign );
@@ -2376,8 +2376,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                     GDIMetaFile     aMtf( rTransMtf );
                     const Size      aSrcSize( rTransMtf.GetPrefSize() );
                     Point           aSrcPt( rTransMtf.GetPrefMapMode().GetOrigin() );
-                    const double    fScaleX = aSrcSize.Width() ? (double) rSize.Width() / aSrcSize.Width() : 1.0;
-                    const double    fScaleY = aSrcSize.Height() ? (double) rSize.Height() / aSrcSize.Height() : 1.0;
+                    const double    fScaleX = aSrcSize.Width() ? static_cast<double>(rSize.Width()) / aSrcSize.Width() : 1.0;
+                    const double    fScaleY = aSrcSize.Height() ? static_cast<double>(rSize.Height()) / aSrcSize.Height() : 1.0;
                     long            nMoveX, nMoveY;
 
                     if( fScaleX != 1.0 || fScaleY != 1.0 )
@@ -2511,7 +2511,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
             {
                 const MetaTextLineAction*   pA = static_cast<const MetaTextLineAction*>(pAction);
                 const Point&                rStartPt = pA->GetStartPoint();
-                const sal_Int32             nWidth = (sal_Int32) pA->GetWidth();
+                const sal_Int32             nWidth = static_cast<sal_Int32>(pA->GetWidth());
                 const FontStrikeout         eStrikeout = pA->GetStrikeout();
                 const FontLineStyle         eUnderline = pA->GetUnderline();
                 sal_uLong                   nOldPos, nNewPos;

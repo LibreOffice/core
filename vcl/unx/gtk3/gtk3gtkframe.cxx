@@ -1800,7 +1800,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     GdkScreen *pScreen = nullptr;
     GdkRectangle aNewMonitor;
 
-    bool bSpanAllScreens = nNewScreen == (unsigned int)-1;
+    bool bSpanAllScreens = nNewScreen == static_cast<unsigned int>(-1);
     m_bSpanMonitorsWhenFullscreen = bSpanAllScreens && getDisplay()->getSystem()->GetDisplayScreenCount() > 1;
     gint nMonitor = -1;
     if (m_bSpanMonitorsWhenFullscreen)   //span all screens
@@ -2595,8 +2595,8 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 
     if (!aDel.isDeleted())
     {
-        int frame_x = (int)(pEvent->x_root - pEvent->x);
-        int frame_y = (int)(pEvent->y_root - pEvent->y);
+        int frame_x = static_cast<int>(pEvent->x_root - pEvent->x);
+        int frame_y = static_cast<int>(pEvent->y_root - pEvent->y);
         if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
         {
             pThis->m_bGeometryIsProvisional = false;
@@ -2611,8 +2611,8 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     if (!aDel.isDeleted())
     {
         aEvent.mnTime   = pEvent->time;
-        aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-        aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+        aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
+        aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
         aEvent.mnCode   = GetMouseModCode( pEvent->state );
 
         if( AllSettings::GetLayoutRTL() )
@@ -2648,11 +2648,11 @@ IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
     GdkEvent* pEvent = m_aPendingScrollEvents.back();
 
     aEvent.mnTime = pEvent->scroll.time;
-    aEvent.mnX = (sal_uLong)pEvent->scroll.x;
+    aEvent.mnX = static_cast<sal_uLong>(pEvent->scroll.x);
     // --- RTL --- (mirror mouse pos)
     if (AllSettings::GetLayoutRTL())
         aEvent.mnX = maGeometry.nWidth - 1 - aEvent.mnX;
-    aEvent.mnY = (sal_uLong)pEvent->scroll.y;
+    aEvent.mnY = static_cast<sal_uLong>(pEvent->scroll.y);
     aEvent.mnCode = GetMouseModCode( pEvent->scroll.state );
 
     double delta_x(0.0), delta_y(0.0);
@@ -2716,11 +2716,11 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEvent* pInEvent, gpointer fram
     SalWheelMouseEvent aEvent;
 
     aEvent.mnTime = rEvent.time;
-    aEvent.mnX = (sal_uLong)rEvent.x;
+    aEvent.mnX = static_cast<sal_uLong>(rEvent.x);
     // --- RTL --- (mirror mouse pos)
     if (AllSettings::GetLayoutRTL())
         aEvent.mnX = pThis->maGeometry.nWidth - 1 - aEvent.mnX;
-    aEvent.mnY = (sal_uLong)rEvent.y;
+    aEvent.mnY = static_cast<sal_uLong>(rEvent.y);
     aEvent.mnCode = GetMouseModCode(rEvent.state);
 
     switch (rEvent.direction)
@@ -2817,8 +2817,8 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     vcl::DeletionListener aDel( pThis );
 
-    int frame_x = (int)(pEvent->x_root - pEvent->x);
-    int frame_y = (int)(pEvent->y_root - pEvent->y);
+    int frame_x = static_cast<int>(pEvent->x_root - pEvent->x);
+    int frame_y = static_cast<int>(pEvent->y_root - pEvent->y);
     if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
     {
         pThis->m_bGeometryIsProvisional = false;
@@ -2833,8 +2833,8 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     {
         SalMouseEvent aEvent;
         aEvent.mnTime   = pEvent->time;
-        aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-        aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+        aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
+        aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
         aEvent.mnCode   = GetMouseModCode( pEvent->state );
         aEvent.mnButton = 0;
 
@@ -2862,8 +2862,8 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+    aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
+    aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
@@ -3930,7 +3930,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
     pThis->m_aInputEvent.mnCursorFlags      = 0;
 
-    pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, (int)pThis->m_aInputEvent.maText.getLength() ), ExtTextInputAttr::NONE );
+    pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, static_cast<int>(pThis->m_aInputEvent.maText.getLength()) ), ExtTextInputAttr::NONE );
 
     PangoAttrIterator *iter = pango_attr_list_get_iterator(pAttrs);
     do

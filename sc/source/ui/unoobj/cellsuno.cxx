@@ -2043,10 +2043,10 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                     {
                         case ATTR_VALUE_FORMAT:
                             //  default has no language set
-                            aAny <<= (sal_Int32)( static_cast<const SfxUInt32Item&>(rSet.Get(pEntry->nWID)).GetValue() );
+                            aAny <<= static_cast<sal_Int32>( static_cast<const SfxUInt32Item&>(rSet.Get(pEntry->nWID)).GetValue() );
                             break;
                         case ATTR_INDENT:
-                            aAny <<= (sal_Int16)( TwipsToHMM(static_cast<const SfxUInt16Item&>(
+                            aAny <<= static_cast<sal_Int16>( TwipsToHMM(static_cast<const SfxUInt16Item&>(
                                             rSet.Get(pEntry->nWID)).GetValue()) );
                             break;
                         default:
@@ -2154,7 +2154,7 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                 if ( !(rValue >>= nIntVal) )
                     throw lang::IllegalArgumentException();
 
-                sal_uLong nNewFormat = (sal_uLong)nIntVal;
+                sal_uLong nNewFormat = static_cast<sal_uLong>(nIntVal);
                 rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
 
                 const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
@@ -2184,7 +2184,7 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                 if ( !(rValue >>= nIntVal) )
                     throw lang::IllegalArgumentException();
 
-                rSet.Put( SfxUInt16Item( rEntry.nWID, (sal_uInt16)HMMToTwips(nIntVal) ) );
+                rSet.Put( SfxUInt16Item( rEntry.nWID, static_cast<sal_uInt16>(HMMToTwips(nIntVal)) ) );
 
             }
             break;
@@ -2492,11 +2492,11 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                     pDataSet->Get( ATTR_LANGUAGE_FORMAT ).GetLanguage();
                             nOldFormat = rDoc.GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
-                            rAny <<= (sal_Int32)nOldFormat;
+                            rAny <<= static_cast<sal_Int32>(nOldFormat);
                         }
                         break;
                     case ATTR_INDENT:
-                        rAny <<= (sal_Int16)( TwipsToHMM(static_cast<const SfxUInt16Item&>(
+                        rAny <<= static_cast<sal_Int16>( TwipsToHMM(static_cast<const SfxUInt16Item&>(
                                         pDataSet->Get(pEntry->nWID)).GetValue()) );
                         break;
                     case ATTR_STACKED:
@@ -3100,7 +3100,7 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, 
                 nEndRow = MAXROW;
 
             ScRangeListRef xChartRanges = new ScRangeList;
-            xChartRanges->Append( ScRange( 0, 0, nTab, (SCCOL)nEndColumn, (SCROW)nEndRow, nTab ) );
+            xChartRanges->Append( ScRange( 0, 0, nTab, static_cast<SCCOL>(nEndColumn), static_cast<SCROW>(nEndRow), nTab ) );
             return xChartRanges;
         }
     }
@@ -3536,8 +3536,8 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                         {
                             //  date/time identification
 
-                            sal_uLong nIndex = (sal_uLong)static_cast<const SfxUInt32Item*>(rDoc.GetAttr(
-                                        aIter.GetPos(), ATTR_VALUE_FORMAT))->GetValue();
+                            sal_uLong nIndex = static_cast<sal_uLong>(static_cast<const SfxUInt32Item*>(rDoc.GetAttr(
+                                        aIter.GetPos(), ATTR_VALUE_FORMAT))->GetValue());
                             SvNumFormatType nTyp = rDoc.GetFormatTable()->GetType(nIndex);
                             if ((nTyp == SvNumFormatType::DATE) || (nTyp == SvNumFormatType::TIME) ||
                                     (nTyp == SvNumFormatType::DATETIME))
@@ -3648,7 +3648,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         ScDocument& rDoc = pDocShell->GetDocument();
         ScMarkData aMarkData;
 
-        SCCOLROW nCmpPos = bColumnDiff ? (SCCOLROW)aCompare.Row : (SCCOLROW)aCompare.Column;
+        SCCOLROW nCmpPos = bColumnDiff ? static_cast<SCCOLROW>(aCompare.Row) : static_cast<SCCOLROW>(aCompare.Column);
 
         //  first select everything, where at all something is in the comparison column
         //  (in the second step the selection is cancelled for equal cells)
@@ -3740,8 +3740,8 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryIntersec
                             const table::CellRangeAddress& aRange )
 {
     SolarMutexGuard aGuard;
-    ScRange aMask( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
-                   (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
+    ScRange aMask( static_cast<SCCOL>(aRange.StartColumn), static_cast<SCROW>(aRange.StartRow), aRange.Sheet,
+                   static_cast<SCCOL>(aRange.EndColumn),   static_cast<SCROW>(aRange.EndRow),   aRange.Sheet );
 
     ScRangeList aNew;
     for ( size_t i = 0, nCount = aRanges.size(); i < nCount; ++i )
@@ -4825,7 +4825,7 @@ uno::Reference<table::XCell> ScCellRangeObj::GetCellByPosition_Impl(
 
         if ( nPosX <= aRange.aEnd.Col() && nPosY <= aRange.aEnd.Row() )
         {
-            ScAddress aNew( (SCCOL)nPosX, (SCROW)nPosY, aRange.aStart.Tab() );
+            ScAddress aNew( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), aRange.aStart.Tab() );
             return new ScCellObj( pDocSh, aNew );
         }
     }
@@ -4860,8 +4860,8 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
         if ( nStartX <= nEndX && nEndX <= aRange.aEnd.Col() &&
              nStartY <= nEndY && nEndY <= aRange.aEnd.Row() )
         {
-            ScRange aNew( (SCCOL)nStartX, (SCROW)nStartY, aRange.aStart.Tab(),
-                          (SCCOL)nEndX, (SCROW)nEndY, aRange.aEnd.Tab() );
+            ScRange aNew( static_cast<SCCOL>(nStartX), static_cast<SCROW>(nStartY), aRange.aStart.Tab(),
+                          static_cast<SCCOL>(nEndX), static_cast<SCROW>(nEndY), aRange.aEnd.Tab() );
             return new ScCellRangeObj( pDocSh, aNew );
         }
     }
@@ -5229,14 +5229,14 @@ void SAL_CALL ScCellRangeObj::setTableOperation( const table::CellRangeAddress& 
     {
         bool bError = false;
         ScTabOpParam aParam;
-        aParam.aRefFormulaCell = ScRefAddress( (SCCOL)aFormulaRange.StartColumn,
-                                              (SCROW)aFormulaRange.StartRow, aFormulaRange.Sheet );
-        aParam.aRefFormulaEnd  = ScRefAddress( (SCCOL)aFormulaRange.EndColumn,
-                                              (SCROW)aFormulaRange.EndRow, aFormulaRange.Sheet );
-        aParam.aRefRowCell     = ScRefAddress( (SCCOL)aRowCell.Column,
-                                              (SCROW)aRowCell.Row, aRowCell.Sheet );
-        aParam.aRefColCell     = ScRefAddress( (SCCOL)aColumnCell.Column,
-                                              (SCROW)aColumnCell.Row, aColumnCell.Sheet );
+        aParam.aRefFormulaCell = ScRefAddress( static_cast<SCCOL>(aFormulaRange.StartColumn),
+                                              static_cast<SCROW>(aFormulaRange.StartRow), aFormulaRange.Sheet );
+        aParam.aRefFormulaEnd  = ScRefAddress( static_cast<SCCOL>(aFormulaRange.EndColumn),
+                                              static_cast<SCROW>(aFormulaRange.EndRow), aFormulaRange.Sheet );
+        aParam.aRefRowCell     = ScRefAddress( static_cast<SCCOL>(aRowCell.Column),
+                                              static_cast<SCROW>(aRowCell.Row), aRowCell.Sheet );
+        aParam.aRefColCell     = ScRefAddress( static_cast<SCCOL>(aColumnCell.Column),
+                                              static_cast<SCROW>(aColumnCell.Row), aColumnCell.Sheet );
 
         switch (nMode)
         {
@@ -5642,10 +5642,10 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
         aParam.bHasHeader = true;
 
         table::CellRangeAddress aDataAddress(xAddr->getRangeAddress());
-        aParam.nCol1 = (SCCOL)aDataAddress.StartColumn;
-        aParam.nRow1 = (SCROW)aDataAddress.StartRow;
-        aParam.nCol2 = (SCCOL)aDataAddress.EndColumn;
-        aParam.nRow2 = (SCROW)aDataAddress.EndRow;
+        aParam.nCol1 = static_cast<SCCOL>(aDataAddress.StartColumn);
+        aParam.nRow1 = static_cast<SCROW>(aDataAddress.StartRow);
+        aParam.nCol2 = static_cast<SCCOL>(aDataAddress.EndColumn);
+        aParam.nRow2 = static_cast<SCROW>(aDataAddress.EndRow);
         aParam.nTab  = aDataAddress.Sheet;
 
         ScDocument& rDoc = pDocSh->GetDocument();
@@ -7125,7 +7125,7 @@ void SAL_CALL ScTableSheetObj::moveRange( const table::CellAddress& aDestination
         OSL_ENSURE( aSource.Sheet == GetTab_Impl(), "wrong table in CellRangeAddress" );
         ScRange aSourceRange;
         ScUnoConversion::FillScRange( aSourceRange, aSource );
-        ScAddress aDestPos( (SCCOL)aDestination.Column, (SCROW)aDestination.Row, aDestination.Sheet );
+        ScAddress aDestPos( static_cast<SCCOL>(aDestination.Column), static_cast<SCROW>(aDestination.Row), aDestination.Sheet );
         (void)pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, true, true, true, true );
     }
 }
@@ -7140,7 +7140,7 @@ void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination
         OSL_ENSURE( aSource.Sheet == GetTab_Impl(), "wrong table in CellRangeAddress" );
         ScRange aSourceRange;
         ScUnoConversion::FillScRange( aSourceRange, aSource );
-        ScAddress aDestPos( (SCCOL)aDestination.Column, (SCROW)aDestination.Row, aDestination.Sheet );
+        ScAddress aDestPos( static_cast<SCCOL>(aDestination.Column), static_cast<SCROW>(aDestination.Row), aDestination.Sheet );
         (void)pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, false, true, true, true );
     }
 }
@@ -7229,7 +7229,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
         if ( rDoc.IsUndoEnabled() )
             pOldRanges = rDoc.CreatePrintRangeSaver();
 
-        sal_uInt16 nCount = (sal_uInt16) aPrintAreas.getLength();
+        sal_uInt16 nCount = static_cast<sal_uInt16>(aPrintAreas.getLength());
         rDoc.ClearPrintRanges( nTab );
         if (nCount)
         {
@@ -7552,7 +7552,7 @@ sal_Bool SAL_CALL ScTableSheetObj::hideDependents( const table::CellAddress& aPo
     {
         SCTAB nTab = GetTab_Impl();
         OSL_ENSURE( aPosition.Sheet == nTab, "wrong table in CellAddress" );
-        ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
+        ScAddress aPos( static_cast<SCCOL>(aPosition.Column), static_cast<SCROW>(aPosition.Row), nTab );
         return pDocSh->GetDocFunc().DetectiveDelSucc( aPos );
     }
     return false;
@@ -7566,7 +7566,7 @@ sal_Bool SAL_CALL ScTableSheetObj::hidePrecedents( const table::CellAddress& aPo
     {
         SCTAB nTab = GetTab_Impl();
         OSL_ENSURE( aPosition.Sheet == nTab, "wrong table in CellAddress" );
-        ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
+        ScAddress aPos( static_cast<SCCOL>(aPosition.Column), static_cast<SCROW>(aPosition.Row), nTab );
         return pDocSh->GetDocFunc().DetectiveDelPred( aPos );
     }
     return false;
@@ -7580,7 +7580,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showDependents( const table::CellAddress& aPo
     {
         SCTAB nTab = GetTab_Impl();
         OSL_ENSURE( aPosition.Sheet == nTab, "wrong table in CellAddress" );
-        ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
+        ScAddress aPos( static_cast<SCCOL>(aPosition.Column), static_cast<SCROW>(aPosition.Row), nTab );
         return pDocSh->GetDocFunc().DetectiveAddSucc( aPos );
     }
     return false;
@@ -7594,7 +7594,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showPrecedents( const table::CellAddress& aPo
     {
         SCTAB nTab = GetTab_Impl();
         OSL_ENSURE( aPosition.Sheet == nTab, "wrong table in CellAddress" );
-        ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
+        ScAddress aPos( static_cast<SCCOL>(aPosition.Column), static_cast<SCROW>(aPosition.Row), nTab );
         return pDocSh->GetDocFunc().DetectiveAddPred( aPos );
     }
     return false;
@@ -7608,7 +7608,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showErrors( const table::CellAddress& aPositi
     {
         SCTAB nTab = GetTab_Impl();
         OSL_ENSURE( aPosition.Sheet == nTab, "wrong table in CellAddress" );
-        ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
+        ScAddress aPos( static_cast<SCCOL>(aPosition.Column), static_cast<SCROW>(aPosition.Row), nTab );
         return pDocSh->GetDocFunc().DetectiveAddError( aPos );
     }
     return false;
@@ -7826,15 +7826,15 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
             ScMarkData aMarkData;
             aMarkData.SelectTable( nTab, true );
 
-            sal_uInt16 nRangeCount = (sal_uInt16)rScenRanges.getLength();
+            sal_uInt16 nRangeCount = static_cast<sal_uInt16>(rScenRanges.getLength());
             if (nRangeCount)
             {
                 const table::CellRangeAddress* pAry = rScenRanges.getConstArray();
                 for (sal_uInt16 i=0; i<nRangeCount; i++)
                 {
                     OSL_ENSURE( pAry[i].Sheet == nTab, "addRanges with wrong Tab" );
-                    ScRange aOneRange( (SCCOL)pAry[i].StartColumn, (SCROW)pAry[i].StartRow, nTab,
-                                       (SCCOL)pAry[i].EndColumn,   (SCROW)pAry[i].EndRow,   nTab );
+                    ScRange aOneRange( static_cast<SCCOL>(pAry[i].StartColumn), static_cast<SCROW>(pAry[i].StartRow), nTab,
+                                       static_cast<SCCOL>(pAry[i].EndColumn),   static_cast<SCROW>(pAry[i].EndRow),   nTab );
 
                     aMarkData.SetMultiMarkArea( aOneRange );
                 }
@@ -8592,7 +8592,7 @@ void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEn
                 //  property is 1/100mm, column width is twips
                 nNewWidth = HMMToTwips(nNewWidth);
                 rFunc.SetWidthOrHeight(
-                    true, aColArr, nTab, SC_SIZE_ORIGINAL, (sal_uInt16)nNewWidth, true, true);
+                    true, aColArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(nNewWidth), true, true);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
@@ -8642,8 +8642,8 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
             // for hidden column, return original height
             sal_uInt16 nWidth = rDoc.GetOriginalWidth( nCol, nTab );
             //  property is 1/100mm, column width is twips
-            nWidth = (sal_uInt16) TwipsToHMM(nWidth);
-            rAny <<= (sal_Int32)nWidth;
+            nWidth = static_cast<sal_uInt16>(TwipsToHMM(nWidth));
+            rAny <<= static_cast<sal_Int32>(nWidth);
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
@@ -8729,7 +8729,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
                 //  property is 1/100mm, row height is twips
                 nNewHeight = HMMToTwips(nNewHeight);
                 rFunc.SetWidthOrHeight(
-                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, (sal_uInt16)nNewHeight, true, true);
+                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(nNewHeight), true, true);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
@@ -8788,8 +8788,8 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
             // for hidden row, return original height
             sal_uInt16 nHeight = rDoc.GetOriginalHeight( nRow, nTab );
             //  property is 1/100mm, row height is twips
-            nHeight = (sal_uInt16) TwipsToHMM(nHeight);
-            rAny <<= (sal_Int32)nHeight;
+            nHeight = static_cast<sal_uInt16>(TwipsToHMM(nHeight));
+            rAny <<= static_cast<sal_Int32>(nHeight);
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {

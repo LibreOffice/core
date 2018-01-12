@@ -395,7 +395,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
         aRef.Set( nCol1, nRow1, nTab1, false, true, true );
         aForString.append(aRef.GetRefString(this, nTab1));
         nCol1++;
-        nCol2 = std::min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
+        nCol2 = std::min( nCol2, static_cast<SCCOL>(rParam.aRefFormulaEnd.Col() -
                     rParam.aRefFormulaCell.Col() + nCol1 + 1));
     }
     else if (rParam.meMode == ScTabOpParam::Row) // row only
@@ -408,7 +408,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
         aRef.Set( nCol1, nRow1, nTab1, true, false, true );
         aForString.append(aRef.GetRefString(this, nTab1));
         nRow1++;
-        nRow2 = std::min( nRow2, (SCROW)(rParam.aRefFormulaEnd.Row() -
+        nRow2 = std::min( nRow2, static_cast<SCROW>(rParam.aRefFormulaEnd.Row() -
                     rParam.aRefFormulaCell.Row() + nRow1 + 1));
     }
     else // both
@@ -630,7 +630,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
                 break;
             case SUBTOTAL_FUNC_AVE:
                 if (aData.nCount)
-                    rResult = aData.nVal / (double) aData.nCount;
+                    rResult = aData.nVal / static_cast<double>(aData.nCount);
                 else
                     aData.bError = true;
                 break;
@@ -664,7 +664,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
         {
             sal_uInt16 nIdx = pFormat->GetSubformatIndex( fVal );
-            nPrecision = (short)pFormat->GetFormatPrecision( nIdx );
+            nPrecision = static_cast<short>(pFormat->GetFormatPrecision( nIdx ));
             switch ( nType )
             {
                 case SvNumFormatType::PERCENT:      // 0.41% == 0.0041
@@ -674,11 +674,11 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
                 {
                     short nExp = 0;
                     if ( fVal > 0.0 )
-                        nExp = (short)floor( log10( fVal ) );
+                        nExp = static_cast<short>(floor( log10( fVal ) ));
                     else if ( fVal < 0.0 )
-                        nExp = (short)floor( log10( -fVal ) );
+                        nExp = static_cast<short>(floor( log10( -fVal ) ));
                     nPrecision -= nExp;
-                    short nInteger = (short)pFormat->GetFormatIntegerDigits( nIdx );
+                    short nInteger = static_cast<short>(pFormat->GetFormatIntegerDigits( nIdx ));
                     if ( nInteger > 1 ) // Engineering notation
                     {
                         short nIncrement = nExp % nInteger;
@@ -706,7 +706,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
         }
         else
         {
-            nPrecision = (short)GetDocOptions().GetStdPrecision();
+            nPrecision = static_cast<short>(GetDocOptions().GetStdPrecision());
             // #i115512# no rounding for automatic decimals
             if (nPrecision == static_cast<short>(SvNumberFormatter::UNLIMITED_PRECISION))
                 return fVal;

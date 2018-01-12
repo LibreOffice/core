@@ -390,7 +390,7 @@ void ExtensionBox_Impl::selectEntry( const long nPos )
             m_vEntries[ m_nActive ]->m_bActive = false;
         }
 
-        if ( ( nPos >= 0 ) && ( nPos < (long) m_vEntries.size() ) )
+        if ( ( nPos >= 0 ) && ( nPos < static_cast<long>(m_vEntries.size()) ) )
         {
             m_bHasActive = true;
             m_nActive = nPos;
@@ -663,7 +663,7 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 
     if ( nSelect < 0 )
         nSelect = 0;
-    if ( nSelect >= (long) m_vEntries.size() )
+    if ( nSelect >= static_cast<long>(m_vEntries.size()) )
         nSelect = m_vEntries.size() - 1;
 
     selectEntry( nSelect );
@@ -1033,7 +1033,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
                         if ( nPos < m_nActive )
                             m_nActive -= 1;
                         else if ( ( nPos == m_nActive ) &&
-                                  ( nPos == (long) m_vEntries.size() ) )
+                                  ( nPos == static_cast<long>(m_vEntries.size()) ) )
                             m_nActive -= 1;
 
                         m_bHasActive = false;

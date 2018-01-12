@@ -308,7 +308,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         // vertical (always center):
 
-        aPos.Y() += (mnRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
+        aPos.Y() += (mnRowHeight - static_cast<sal_uInt16>(aStrSize.Height())) / 2;
 
         // horizontal
 

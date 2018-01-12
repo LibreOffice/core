@@ -184,8 +184,8 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
         {
             // NO Encoding during conversion!
             // The specification says that the low byte should be used in case it is not NULL
-            char nHighChar = (char)( aUString[nInd] >> 8 );
-            char nLowChar = (char)( aUString[nInd] & 0xFF );
+            char nHighChar = static_cast<char>( aUString[nInd] >> 8 );
+            char nLowChar = static_cast<char>( aUString[nInd] & 0xFF );
             char nChar = nLowChar ? nLowChar : nHighChar;
 
             for ( int nMatrixInd = 0; nMatrixInd < 7; ++nMatrixInd )
@@ -197,7 +197,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
             nLowResult = ( ( ( nLowResult >> 14 ) & 0x0001 ) | ( ( nLowResult << 1 ) & 0x7FFF ) ) ^ nChar;
         }
 
-        nLowResult = (sal_uInt16)( ( ( ( nLowResult >> 14 ) & 0x001 ) | ( ( nLowResult << 1 ) & 0x7FF ) ) ^ nLen ^ 0xCE4B );
+        nLowResult = static_cast<sal_uInt16>( ( ( ( nLowResult >> 14 ) & 0x001 ) | ( ( nLowResult << 1 ) & 0x7FF ) ) ^ nLen ^ 0xCE4B );
 
         nResult = ( nHighResult << 16 ) | nLowResult;
     }

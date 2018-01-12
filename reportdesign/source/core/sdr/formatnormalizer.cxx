@@ -132,7 +132,7 @@ namespace rptui
             try
             {
                 sal_Int32 nCount( _rxColumns->getCount() );
-                _inout_rFields.reserve( _inout_rFields.size() + (size_t)nCount );
+                _inout_rFields.reserve( _inout_rFields.size() + static_cast<size_t>(nCount) );
 
                 Reference< XPropertySet > xColumn;
                 FormatNormalizer::Field aField;

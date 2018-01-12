@@ -47,7 +47,7 @@ namespace vcl
     };
 }
 
-#define IMAGELIST_IMAGE_NOTFOUND    ((sal_uInt16)0xFFFF)
+#define IMAGELIST_IMAGE_NOTFOUND    (sal_uInt16(0xFFFF))
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
 {

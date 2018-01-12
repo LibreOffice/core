@@ -455,13 +455,13 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         DataChanged();
         bInRangeUpdate = false;
 
-        long nDiff = aNewStr.getLength() - (long)(nOldEnd-nOldStart);
+        long nDiff = aNewStr.getLength() - static_cast<long>(nOldEnd-nOldStart);
 
         rData.aRef = rNew;
         rData.nSelEnd = rData.nSelEnd + nDiff;
         rData.nColorData = nNewColor;
 
-        sal_uInt16 nCount = (sal_uInt16) pRangeFindList->Count();
+        sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFindList->Count());
         for (sal_uInt16 i=nIndex+1; i<nCount; i++)
         {
             ScRangeFindData& rNext = pRangeFindList->GetObject( i );
@@ -595,7 +595,7 @@ static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
     }
     if ( nLevel )
         return -1;
-    return (sal_Int32) (p - p0);
+    return static_cast<sal_Int32>(p - p0);
 }
 
 ScInputHandler::ScInputHandler()

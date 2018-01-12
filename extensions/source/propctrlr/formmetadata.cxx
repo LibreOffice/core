@@ -621,15 +621,15 @@ namespace pcr
                     break;
 
                 case TypeClass_SHORT:
-                    _out_rValue <<= (sal_Int16)nPos;
+                    _out_rValue <<= static_cast<sal_Int16>(nPos);
                     break;
 
                 case TypeClass_UNSIGNED_SHORT:
-                    _out_rValue <<= (sal_uInt16)nPos;
+                    _out_rValue <<= static_cast<sal_uInt16>(nPos);
                     break;
 
                 case TypeClass_UNSIGNED_LONG:
-                    _out_rValue <<= (sal_uInt32)nPos;
+                    _out_rValue <<= static_cast<sal_uInt32>(nPos);
                     break;
 
                 default:
@@ -657,7 +657,7 @@ namespace pcr
             --nIntValue;
 
         std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
-        if ( ( nIntValue >= 0 ) && ( nIntValue < (sal_Int32)aEnumStrings.size() ) )
+        if ( ( nIntValue >= 0 ) && ( nIntValue < static_cast<sal_Int32>(aEnumStrings.size()) ) )
         {
             sReturn = aEnumStrings[ nIntValue ];
         }

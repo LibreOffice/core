@@ -150,7 +150,7 @@ namespace frm
         switch ( _nHandle )
         {
         case PROPERTY_ID_DEFAULT_SPIN_VALUE:
-            aReturn <<= (sal_Int32)0;
+            aReturn <<= sal_Int32(0);
             break;
 
         default:
@@ -178,7 +178,7 @@ namespace frm
 
     Any OSpinButtonModel::getDefaultForReset() const
     {
-        return makeAny( (sal_Int32)m_nDefaultSpinValue );
+        return makeAny( static_cast<sal_Int32>(m_nDefaultSpinValue) );
     }
 
 

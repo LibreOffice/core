@@ -97,18 +97,18 @@ void SdVectorizeDlg::dispose()
     if( rBmpSize.Width() && rBmpSize.Height() && rDispSize.Width() && rDispSize.Height() )
     {
         Size         aBmpSize( rBmpSize );
-        const double fGrfWH = (double) aBmpSize.Width() / aBmpSize.Height();
-        const double fWinWH = (double) rDispSize.Width() / rDispSize.Height();
+        const double fGrfWH = static_cast<double>(aBmpSize.Width()) / aBmpSize.Height();
+        const double fWinWH = static_cast<double>(rDispSize.Width()) / rDispSize.Height();
 
         if( fGrfWH < fWinWH )
         {
-            aBmpSize.Width() = (long) ( rDispSize.Height() * fGrfWH );
+            aBmpSize.Width() = static_cast<long>( rDispSize.Height() * fGrfWH );
             aBmpSize.Height()= rDispSize.Height();
         }
         else
         {
             aBmpSize.Width() = rDispSize.Width();
-            aBmpSize.Height()= (long) ( rDispSize.Width() / fGrfWH);
+            aBmpSize.Height()= static_cast<long>( rDispSize.Width() / fGrfWH);
         }
 
         const Point aBmpPos( ( rDispSize.Width()  - aBmpSize.Width() ) >> 1,
@@ -143,7 +143,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale 
     else
         rScale = Fraction( 1, 1 );
 
-    aNew.ReduceColors( (sal_uInt16) m_pNmLayers->GetValue() );
+    aNew.ReduceColors( static_cast<sal_uInt16>(m_pNmLayers->GetValue()) );
 
     return aNew;
 }
@@ -159,7 +159,7 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
     if( !!aTmp )
     {
         const Link<long,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
-        aTmp.Vectorize( rMtf, (sal_uInt8) m_pMtReduce->GetValue(), &aPrgsHdl );
+        aTmp.Vectorize( rMtf, static_cast<sal_uInt8>(m_pMtReduce->GetValue()), &aPrgsHdl );
 
         if( m_pCbFillHoles->IsChecked() )
         {
@@ -240,9 +240,9 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
         }
     }
 
-    const Color aColor( (sal_uInt8) FRound( nSumR * fMult ),
-                        (sal_uInt8) FRound( nSumG * fMult ),
-                        (sal_uInt8) FRound( nSumB * fMult ) );
+    const Color aColor( static_cast<sal_uInt8>(FRound( nSumR * fMult )),
+                        static_cast<sal_uInt8>(FRound( nSumG * fMult )),
+                        static_cast<sal_uInt8>(FRound( nSumB * fMult )) );
 
     ::tools::Rectangle   aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
     const Size& rMaxSize = rMtf.GetPrefSize();
@@ -262,7 +262,7 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
 
 IMPL_LINK( SdVectorizeDlg, ProgressHdl, long, nData, void )
 {
-    m_pPrgs->SetValue( (sal_uInt16)nData );
+    m_pPrgs->SetValue( static_cast<sal_uInt16>(nData) );
 }
 
 IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl, Button*, void)

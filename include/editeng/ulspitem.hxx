@@ -30,7 +30,7 @@
     This item describes the Upper- and Lower space of a page or paragraph.
 */
 
-#define ULSPACE_16_VERSION  ((sal_uInt16)0x0001)
+#define ULSPACE_16_VERSION  (sal_uInt16(0x0001))
 
 class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 {

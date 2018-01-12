@@ -470,7 +470,7 @@ sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
         DFLT_ESC_AUTO_SUB != GetEscapement() )
     {
         const long nAscent = nOldAscent +
-                             ( (long) m_nOrgHeight * GetEscapement() ) / 100;
+                             ( static_cast<long>(m_nOrgHeight) * GetEscapement() ) / 100;
         if ( nAscent>0 )
             return std::max<sal_uInt16>( nAscent, m_nOrgAscent );
     }
@@ -989,7 +989,7 @@ sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
         DFLT_ESC_AUTO_SUB != GetEscapement() )
     {
         long nDescent = nOldHeight - nOldAscent -
-                             ( (long) m_nOrgHeight * GetEscapement() ) / 100;
+                             ( static_cast<long>(m_nOrgHeight) * GetEscapement() ) / 100;
         const sal_uInt16 nDesc = nDescent>0
                 ? std::max<sal_uInt16>( nDescent, m_nOrgHeight - m_nOrgAscent)
                 : m_nOrgHeight - m_nOrgAscent;
@@ -1093,7 +1093,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
             const sal_uInt16 nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
                                                              rInf.GetOut() );
             aTextSize.Height() =
-                (long)CalcEscHeight( (sal_uInt16)aTextSize.Height(), nAscent);
+                static_cast<long>(CalcEscHeight( static_cast<sal_uInt16>(aTextSize.Height()), nAscent));
         }
     }
 
@@ -1415,7 +1415,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo const & rInf, Point& rPos )
 
         break;
     default :
-        nOfst = ((long)m_nOrgHeight * GetEscapement()) / 100;
+        nOfst = (static_cast<long>(m_nOrgHeight) * GetEscapement()) / 100;
 
         switch ( nDir )
         {

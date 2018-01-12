@@ -776,10 +776,10 @@ bool CCIDecompressor::ReadEOL()
 
             if ( nOptions & CCI_OPTION_INVERSEBITORDER )
                 nByte = pByteSwap[ nByte ];
-            nInputBitsBuf=(nInputBitsBuf<<8) | (sal_uLong)nByte;
+            nInputBitsBuf=(nInputBitsBuf<<8) | static_cast<sal_uLong>(nByte);
             nInputBitsBufSize += 8;
         }
-        nCode = (sal_uInt16)( ( nInputBitsBuf >> ( nInputBitsBufSize - 12 ) ) & 0x0fff );
+        nCode = static_cast<sal_uInt16>( ( nInputBitsBuf >> ( nInputBitsBufSize - 12 ) ) & 0x0fff );
         if ( nCode == 0x0001 )
         {
             nEOLCount++;
@@ -802,7 +802,7 @@ bool CCIDecompressor::Read2DTag()
         pIStream->ReadUChar( nByte );
         if ( nOptions & CCI_OPTION_INVERSEBITORDER )
             nByte = pByteSwap[ nByte ];
-        nInputBitsBuf=(sal_uLong)nByte;
+        nInputBitsBuf=static_cast<sal_uLong>(nByte);
         nInputBitsBufSize=8;
     }
     nInputBitsBufSize--;
@@ -819,7 +819,7 @@ sal_uInt8 CCIDecompressor::ReadBlackOrWhite()
         pIStream->ReadUChar( nByte );
         if ( nOptions & CCI_OPTION_INVERSEBITORDER )
             nByte = pByteSwap[ nByte ];
-        nInputBitsBuf=(sal_uLong)nByte;
+        nInputBitsBuf=static_cast<sal_uLong>(nByte);
         nInputBitsBufSize=8;
     }
     nInputBitsBufSize--;
@@ -838,10 +838,10 @@ sal_uInt16 CCIDecompressor::ReadCodeAndDecode(const CCILookUpTableEntry * pLookU
         pIStream->ReadUChar( nByte );
         if ( nOptions  & CCI_OPTION_INVERSEBITORDER )
             nByte = pByteSwap[ nByte ];
-        nInputBitsBuf=(nInputBitsBuf<<8) | (sal_uLong)nByte;
+        nInputBitsBuf=(nInputBitsBuf<<8) | static_cast<sal_uLong>(nByte);
         nInputBitsBufSize+=8;
     }
-    sal_uInt16 nCode = (sal_uInt16)((nInputBitsBuf>>(nInputBitsBufSize-nMaxCodeBits))
+    sal_uInt16 nCode = static_cast<sal_uInt16>((nInputBitsBuf>>(nInputBitsBufSize-nMaxCodeBits))
                    &(0xffff>>(16-nMaxCodeBits)));
     sal_uInt16 nCodeBits = pLookUp[nCode].nCodeBits;
     if (nCodeBits==0) bStatus=false;
@@ -932,10 +932,10 @@ bool CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nBitsTo
             pIStream->ReadUChar( nByte );
             if ( nOptions & CCI_OPTION_INVERSEBITORDER )
                 nByte = pByteSwap[ nByte ];
-            nInputBitsBuf=(nInputBitsBuf<<8) | (sal_uLong)nByte;
+            nInputBitsBuf=(nInputBitsBuf<<8) | static_cast<sal_uLong>(nByte);
             nInputBitsBufSize+=8;
         }
-        nCode=(sal_uInt16)((nInputBitsBuf>>(nInputBitsBufSize-13))&0x1fff);
+        nCode=static_cast<sal_uInt16>((nInputBitsBuf>>(nInputBitsBufSize-13))&0x1fff);
 
         // determine the number of DataBits CodeBits:
         if (nBlackOrWhite) {

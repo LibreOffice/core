@@ -98,7 +98,7 @@ sal_Int16 checkScriptType(sal_Unicode c)
         {UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, SCRIPT_HANJA},
     };
 
-    UBlockCode block=ublock_getCode((sal_uInt32) c);
+    UBlockCode block=ublock_getCode(static_cast<sal_uInt32>(c));
     sal_uInt16 i;
     for ( i = 0; i < SAL_N_ELEMENTS(scriptList); i++) {
         if (block <= scriptList[i].to) break;

@@ -110,7 +110,7 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference< css::container::XIn
 
         // if the col is hidden, put it into the list
         if (bIsHidden)
-            m_pList->SetEntryData( m_pList->InsertEntry(sCurName), reinterpret_cast<void*>((sal_Int64)i) );
+            m_pList->SetEntryData( m_pList->InsertEntry(sCurName), reinterpret_cast<void*>(static_cast<sal_Int64>(i)) );
     }
 }
 

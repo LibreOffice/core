@@ -234,7 +234,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         sal_Int64 nNum = aStrNum.makeStringAndClear().toInt64();
         sal_Int64 nDenom = aStrDenom.makeStringAndClear().toInt64();
         if (nDenom == 0) return false; // Division by zero
-        double nFrac2Dec = nWholeNum + (double)nNum/nDenom; // Convert to double for floating point precision
+        double nFrac2Dec = nWholeNum + static_cast<double>(nNum)/nDenom; // Convert to double for floating point precision
         aStrFrac.append(nFrac2Dec);
         // Reconvert division result to string and parse
         nDecPos = aStrFrac.indexOf('.');
@@ -701,7 +701,7 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
         aSelection.Justify();
         OUString aText = GetField()->GetText();
         // leave it as is if selected until end
-        if ( (sal_Int32)aSelection.Max() == aText.getLength() )
+        if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;
@@ -1109,13 +1109,13 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sa
                                      FieldUnit eInUnit, FieldUnit eOutUnit )
 {
     double nDouble = nonValueDoubleToValueDouble( ConvertDoubleValue(
-                (double)nValue, mnBaseValue, nDecDigits, eInUnit, eOutUnit ) );
+                static_cast<double>(nValue), mnBaseValue, nDecDigits, eInUnit, eOutUnit ) );
     sal_Int64 nLong ;
 
     // caution: precision loss in double cast
-    if ( nDouble <= (double)SAL_MIN_INT64 )
+    if ( nDouble <= double(SAL_MIN_INT64) )
         nLong = SAL_MIN_INT64;
-    else if ( nDouble >= (double)SAL_MAX_INT64 )
+    else if ( nDouble >= double(SAL_MAX_INT64) )
         nLong = SAL_MAX_INT64;
     else
         nLong = static_cast<sal_Int64>( nDouble );
@@ -1299,7 +1299,7 @@ static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 
 
     // Recalculate unit
     // caution: conversion to double loses precision
-    rValue = MetricField::ConvertDoubleValue( (double)nValue, nBaseValue, nDecDigits, eEntryUnit, eUnit );
+    rValue = MetricField::ConvertDoubleValue( static_cast<double>(nValue), nBaseValue, nDecDigits, eEntryUnit, eUnit );
 
     return true;
 }
@@ -1313,11 +1313,11 @@ bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, 
         double nTempVal = rValue;
         // caution: precision loss in double cast
         if ( nTempVal > GetMax() )
-            nTempVal = (double)GetMax();
+            nTempVal = static_cast<double>(GetMax());
         else if ( nTempVal < GetMin())
-            nTempVal = (double)GetMin();
+            nTempVal = static_cast<double>(GetMin());
 
-        rOutStr = CreateFieldText( (sal_Int64)nTempVal );
+        rOutStr = CreateFieldText( static_cast<sal_Int64>(nTempVal) );
         return true;
     }
 }
@@ -1401,16 +1401,16 @@ sal_Int64 MetricFormatter::GetValue( FieldUnit eOutUnit ) const
     double nTempValue;
     // caution: precision loss in double cast
     if ( !ImplMetricGetValue( GetField()->GetText(), nTempValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
-        nTempValue = (double)mnLastValue;
+        nTempValue = static_cast<double>(mnLastValue);
 
     // caution: precision loss in double cast
     if ( nTempValue > mnMax )
-        nTempValue = (double)mnMax;
+        nTempValue = static_cast<double>(mnMax);
     else if ( nTempValue < mnMin )
-        nTempValue = (double)mnMin;
+        nTempValue = static_cast<double>(mnMin);
 
     // convert to requested units
-    return MetricField::ConvertValue( (sal_Int64)nTempValue, mnBaseValue, GetDecimalDigits(), meUnit, eOutUnit );
+    return MetricField::ConvertValue( static_cast<sal_Int64>(nTempValue), mnBaseValue, GetDecimalDigits(), meUnit, eOutUnit );
 }
 
 void MetricFormatter::SetValue( sal_Int64 nValue )
@@ -1477,9 +1477,9 @@ void MetricFormatter::Reformat()
 
     OUString aStr;
     // caution: precision loss in double cast
-    double nTemp = (double)mnLastValue;
+    double nTemp = static_cast<double>(mnLastValue);
     bool bOK = ImplMetricReformat( aText, nTemp, aStr );
-    mnLastValue = (sal_Int64)nTemp;
+    mnLastValue = static_cast<sal_Int64>(nTemp);
 
     if ( !bOK )
         return;
@@ -1763,7 +1763,7 @@ sal_Int64 MetricBox::GetValue( sal_Int32 nPos ) const
                         GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit );
 
     // convert to previously configured units
-    sal_Int64 nRetValue = MetricField::ConvertValue( (sal_Int64)nValue, mnBaseValue, GetDecimalDigits(),
+    sal_Int64 nRetValue = MetricField::ConvertValue( static_cast<sal_Int64>(nValue), mnBaseValue, GetDecimalDigits(),
                                                      meUnit, FUNIT_NONE );
 
     return nRetValue;

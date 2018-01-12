@@ -128,8 +128,8 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
                 break;
             nScreen++;
         }
-        nDX_ = (long)w;
-        nDY_ = (long)h;
+        nDX_ = static_cast<long>(w);
+        nDY_ = static_cast<long>(h);
         nDX = nDX_;
         nDY = nDY_;
         m_nXScreen = SalX11Screen( nScreen );

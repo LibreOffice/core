@@ -660,7 +660,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= Expand();
         break;
     case FIELD_PROP_SHORT1:
-        rAny <<= (sal_Int16)nSeqNo;
+        rAny <<= static_cast<sal_Int16>(nSeqNo);
         break;
     default:
         assert(false);

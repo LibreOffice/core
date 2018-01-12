@@ -494,7 +494,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             long nSizeX = 0;
             for (SCCOL i=nPosX+1; i<=nEndX; i++)
                 nSizeX += pDoc->GetColWidth( i, nTab );
-            long nSizeY = (long) pDoc->GetRowHeight( nPosY+1, nEndY, nTab );
+            long nSizeY = static_cast<long>(pDoc->GetRowHeight( nPosY+1, nEndY, nTab ));
 
             SCCOL nDelStartX = nStartX;
             SCROW nDelStartY = nStartY;

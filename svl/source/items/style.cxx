@@ -419,7 +419,7 @@ sal_uInt16 SfxStyleSheetIterator::Count()
     sal_uInt16 n = 0;
     if( IsTrivialSearch())
     {
-        n = (sal_uInt16) pBasePool->pImpl->mxIndexedStyleSheets->GetNumberOfStyleSheets();
+        n = static_cast<sal_uInt16>(pBasePool->pImpl->mxIndexedStyleSheets->GetNumberOfStyleSheets());
     }
     else if(nMask == SFXSTYLEBIT_ALL)
     {

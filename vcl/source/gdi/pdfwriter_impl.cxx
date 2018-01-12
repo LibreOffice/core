@@ -550,7 +550,7 @@ static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
         else
         {
             rBuffer.append( '#' );
-            appendHex( (sal_Int8)aStr[i], rBuffer );
+            appendHex( static_cast<sal_Int8>(aStr[i]), rBuffer );
         }
     }
 }
@@ -570,7 +570,7 @@ static void appendName( const sal_Char* pStr, OStringBuffer& rBuffer )
         else
         {
             rBuffer.append( '#' );
-            appendHex( (sal_Int8)*pStr, rBuffer );
+            appendHex( static_cast<sal_Int8>(*pStr), rBuffer );
         }
         pStr++;
     }
@@ -602,10 +602,10 @@ static void appendLiteralString( const sal_Char* pStr, sal_Int32 nLength, OStrin
         case ')' :
         case '\\' :
             rBuffer.append( "\\" );
-            rBuffer.append( (sal_Char) *pStr );
+            rBuffer.append( static_cast<sal_Char>(*pStr) );
             break;
         default:
-            rBuffer.append( (sal_Char) *pStr );
+            rBuffer.append( static_cast<sal_Char>(*pStr) );
             break;
         }
         pStr++;
@@ -648,14 +648,14 @@ static void appendDestinationName( const OUString& rString, OStringBuffer& rBuff
             (aChar >= 'A' && aChar <= 'Z' ) ||
             aChar == '-' )
         {
-            rBuffer.append((sal_Char)aChar);
+            rBuffer.append(static_cast<sal_Char>(aChar));
         }
         else
         {
             sal_Int8 aValueHigh = sal_Int8(aChar >> 8);
             if(aValueHigh > 0)
                 appendHex( aValueHigh, rBuffer );
-            appendHex( (sal_Int8)(aChar & 255 ), rBuffer );
+            appendHex( static_cast<sal_Int8>(aChar & 255 ), rBuffer );
         }
     }
 }
@@ -668,8 +668,8 @@ void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& 
     for( int i = 0; i < nLen; i++ )
     {
         sal_Unicode aChar = pStr[i];
-        appendHex( (sal_Int8)(aChar >> 8), rBuffer );
-        appendHex( (sal_Int8)(aChar & 255 ), rBuffer );
+        appendHex( static_cast<sal_Int8>(aChar >> 8), rBuffer );
+        appendHex( static_cast<sal_Int8>(aChar & 255 ), rBuffer );
     }
 }
 
@@ -695,7 +695,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
         else
         {
             aBuffer.append( '#' );
-            appendHex( (sal_Int8)aStr[i], aBuffer );
+            appendHex( static_cast<sal_Int8>(aStr[i]), aBuffer );
         }
     }
 
@@ -858,8 +858,8 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
         fValue=-fValue;
     }
 
-    sal_Int64 nInt = (sal_Int64)fValue;
-    fValue -= (double)nInt;
+    sal_Int64 nInt = static_cast<sal_Int64>(fValue);
+    fValue -= static_cast<double>(nInt);
     // optimizing hardware may lead to a value of 1.0 after the subtraction
     if( rtl::math::approxEqual(fValue, 1.0) || log10( 1.0-fValue ) <= -nPrecision )
     {
@@ -869,8 +869,8 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
     sal_Int64 nFrac = 0;
     if( fValue )
     {
-        fValue *= pow( 10.0, (double)nPrecision );
-        nFrac = (sal_Int64)fValue;
+        fValue *= pow( 10.0, static_cast<double>(nPrecision) );
+        nFrac = static_cast<sal_Int64>(fValue);
     }
     if( bNeg && ( nInt || nFrac ) )
         rBuffer.append( '-' );
@@ -879,7 +879,7 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
     {
         int i;
         rBuffer.append( '.' );
-        sal_Int64 nBound = (sal_Int64)(pow( 10.0, nPrecision - 1.0 )+0.5);
+        sal_Int64 nBound = static_cast<sal_Int64>(pow( 10.0, nPrecision - 1.0 )+0.5);
         for ( i = 0; ( i < nPrecision ) && nFrac; i++ )
         {
             sal_Int64 nNumb = nFrac / nBound;
@@ -898,15 +898,15 @@ static void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConv
         if( bConvertToGrey )
         {
             sal_uInt8 cByte = rColor.GetLuminance();
-            appendDouble( (double)cByte / 255.0, rBuffer );
+            appendDouble( static_cast<double>(cByte) / 255.0, rBuffer );
         }
         else
         {
-            appendDouble( (double)rColor.GetRed() / 255.0, rBuffer );
+            appendDouble( static_cast<double>(rColor.GetRed()) / 255.0, rBuffer );
             rBuffer.append( ' ' );
-            appendDouble( (double)rColor.GetGreen() / 255.0, rBuffer );
+            appendDouble( static_cast<double>(rColor.GetGreen()) / 255.0, rBuffer );
             rBuffer.append( ' ' );
-            appendDouble( (double)rColor.GetBlue() / 255.0, rBuffer );
+            appendDouble( static_cast<double>(rColor.GetBlue()) / 255.0, rBuffer );
         }
     }
 }
@@ -973,8 +973,8 @@ Matrix3::Matrix3()
 
 Point Matrix3::transform( const Point& rOrig ) const
 {
-    double x = (double)rOrig.X(), y = (double)rOrig.Y();
-    return Point( (int)(x*f[0] + y*f[2] + f[4]), (int)(x*f[1] + y*f[3] + f[5]) );
+    double x = static_cast<double>(rOrig.X()), y = static_cast<double>(rOrig.Y());
+    return Point( static_cast<int>(x*f[0] + y*f[2] + f[4]), static_cast<int>(x*f[1] + y*f[3] + f[5]) );
 }
 
 void Matrix3::skew( double alpha, double beta )
@@ -1068,7 +1068,7 @@ void Matrix3::append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuff
     rBuffer.append( ' ' );
     appendDouble( f[3], rBuffer );
     rBuffer.append( ' ' );
-    rPage.appendPoint( Point( (long)f[4], (long)f[5] ), rBuffer );
+    rPage.appendPoint( Point( static_cast<long>(f[4]), static_cast<long>(f[5]) ), rBuffer );
 }
 
 static void appendResourceMap( OStringBuffer& rBuf, const char* pPrefix, const PDFWriterImpl::ResourceMap& rList )
@@ -1183,7 +1183,7 @@ void PDFWriterImpl::PDFPage::endStream()
     OStringBuffer aLine;
     aLine.append( m_nStreamLengthObject );
     aLine.append( " 0 obj\n" );
-    aLine.append( (sal_Int64)(nEndStreamPos-m_nBeginStreamPos) );
+    aLine.append( static_cast<sal_Int64>(nEndStreamPos-m_nBeginStreamPos) );
     aLine.append( "\nendobj\n\n" );
     m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() );
 }
@@ -1249,14 +1249,14 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     if( m_nDuration > 0 )
     {
         aLine.append( "/Dur " );
-        aLine.append( (sal_Int32)m_nDuration );
+        aLine.append( static_cast<sal_Int32>(m_nDuration) );
         aLine.append( "\n" );
     }
     if( m_eTransition != PDFWriter::PageTransition::Regular && m_nTransTime > 0 )
     {
         // transition duration
         aLine.append( "/Trans<</D " );
-        appendDouble( (double)m_nTransTime/1000.0, aLine, 3 );
+        appendDouble( static_cast<double>(m_nTransTime)/1000.0, aLine, 3 );
         aLine.append( "\n" );
         const char *pStyle = nullptr, *pDm = nullptr, *pM = nullptr, *pDi = nullptr;
         switch( m_eTransition )
@@ -1387,9 +1387,9 @@ void PDFWriterImpl::PDFPage::appendRect( const tools::Rectangle& rRect, OStringB
 {
     appendPoint( rRect.BottomLeft() + Point( 0, 1 ), rBuffer );
     rBuffer.append( ' ' );
-    appendMappedLength( (sal_Int32)rRect.GetWidth(), rBuffer, false );
+    appendMappedLength( static_cast<sal_Int32>(rRect.GetWidth()), rBuffer, false );
     rBuffer.append( ' ' );
-    appendMappedLength( (sal_Int32)rRect.GetHeight(), rBuffer );
+    appendMappedLength( static_cast<sal_Int32>(rRect.GetHeight()), rBuffer );
     rBuffer.append( " re" );
 }
 
@@ -1569,7 +1569,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
                              m_pWriter->m_aMapMode,
                              m_pWriter->getReferenceDevice(),
                              Size( 1000, 1000 ) ) );
-    fLength *= pixelToPoint((double)(bVertical ? aSize.Height() : aSize.Width()) / 1000.0);
+    fLength *= pixelToPoint(static_cast<double>(bVertical ? aSize.Height() : aSize.Width()) / 1000.0);
     appendDouble( fLength, rBuffer, nPrecision );
 }
 
@@ -1602,25 +1602,25 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         rBuffer.append( "[ " );
         if( rInfo.GetDashLen() == rInfo.GetDotLen() ) // degraded case
         {
-            appendMappedLength( (sal_Int32)rInfo.GetDashLen(), rBuffer );
+            appendMappedLength( static_cast<sal_Int32>(rInfo.GetDashLen()), rBuffer );
             rBuffer.append( ' ' );
-            appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
+            appendMappedLength( static_cast<sal_Int32>(rInfo.GetDistance()), rBuffer );
             rBuffer.append( ' ' );
         }
         else
         {
             for( int n = 0; n < rInfo.GetDashCount(); n++ )
             {
-                appendMappedLength( (sal_Int32)rInfo.GetDashLen(), rBuffer );
+                appendMappedLength( static_cast<sal_Int32>(rInfo.GetDashLen()), rBuffer );
                 rBuffer.append( ' ' );
-                appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
+                appendMappedLength( static_cast<sal_Int32>(rInfo.GetDistance()), rBuffer );
                 rBuffer.append( ' ' );
             }
             for( int m = 0; m < rInfo.GetDotCount(); m++ )
             {
-                appendMappedLength( (sal_Int32)rInfo.GetDotLen(), rBuffer );
+                appendMappedLength( static_cast<sal_Int32>(rInfo.GetDotLen()), rBuffer );
                 rBuffer.append( ' ' );
-                appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
+                appendMappedLength( static_cast<sal_Int32>(rInfo.GetDistance()), rBuffer );
                 rBuffer.append( ' ' );
             }
         }
@@ -1629,7 +1629,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
 
     if( rInfo.GetWidth() > 1 )
     {
-        appendMappedLength( (sal_Int32)rInfo.GetWidth(), rBuffer );
+        appendMappedLength( static_cast<sal_Int32>(rInfo.GetWidth()), rBuffer );
         rBuffer.append( " w\n" );
     }
     else if( rInfo.GetWidth() == 0 )
@@ -1849,20 +1849,20 @@ OString PDFWriter::GetDateTime()
     osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
     osl_getDateTimeFromTimeValue(&aTVal, &aDT);
     aRet.append("D:");
-    aRet.append((sal_Char)('0' + ((aDT.Year / 1000) % 10)));
-    aRet.append((sal_Char)('0' + ((aDT.Year / 100) % 10)));
-    aRet.append((sal_Char)('0' + ((aDT.Year / 10) % 10)));
-    aRet.append((sal_Char)('0' + (aDT.Year % 10)));
-    aRet.append((sal_Char)('0' + ((aDT.Month / 10) % 10)));
-    aRet.append((sal_Char)('0' + (aDT.Month % 10)));
-    aRet.append((sal_Char)('0' + ((aDT.Day / 10) % 10)));
-    aRet.append((sal_Char)('0' + (aDT.Day % 10)));
-    aRet.append((sal_Char)('0' + ((aDT.Hours / 10) % 10)));
-    aRet.append((sal_Char)('0' + (aDT.Hours % 10)));
-    aRet.append((sal_Char)('0' + ((aDT.Minutes / 10) % 10)));
-    aRet.append((sal_Char)('0' + (aDT.Minutes % 10)));
-    aRet.append((sal_Char)('0' + ((aDT.Seconds / 10) % 10)));
-    aRet.append((sal_Char)('0' + (aDT.Seconds % 10)));
+    aRet.append(static_cast<sal_Char>('0' + ((aDT.Year / 1000) % 10)));
+    aRet.append(static_cast<sal_Char>('0' + ((aDT.Year / 100) % 10)));
+    aRet.append(static_cast<sal_Char>('0' + ((aDT.Year / 10) % 10)));
+    aRet.append(static_cast<sal_Char>('0' + (aDT.Year % 10)));
+    aRet.append(static_cast<sal_Char>('0' + ((aDT.Month / 10) % 10)));
+    aRet.append(static_cast<sal_Char>('0' + (aDT.Month % 10)));
+    aRet.append(static_cast<sal_Char>('0' + ((aDT.Day / 10) % 10)));
+    aRet.append(static_cast<sal_Char>('0' + (aDT.Day % 10)));
+    aRet.append(static_cast<sal_Char>('0' + ((aDT.Hours / 10) % 10)));
+    aRet.append(static_cast<sal_Char>('0' + (aDT.Hours % 10)));
+    aRet.append(static_cast<sal_Char>('0' + ((aDT.Minutes / 10) % 10)));
+    aRet.append(static_cast<sal_Char>('0' + (aDT.Minutes % 10)));
+    aRet.append(static_cast<sal_Char>('0' + ((aDT.Seconds / 10) % 10)));
+    aRet.append(static_cast<sal_Char>('0' + (aDT.Seconds % 10)));
 
     sal_uInt32 nDelta = 0;
     if (aGMT.Seconds > aTVal.Seconds)
@@ -1880,11 +1880,11 @@ OString PDFWriter::GetDateTime()
 
     if (nDelta)
     {
-        aRet.append((sal_Char)('0' + ((nDelta / 36000) % 10)));
-        aRet.append((sal_Char)('0' + ((nDelta / 3600) % 10)));
+        aRet.append(static_cast<sal_Char>('0' + ((nDelta / 36000) % 10)));
+        aRet.append(static_cast<sal_Char>('0' + ((nDelta / 3600) % 10)));
         aRet.append("'");
-        aRet.append((sal_Char)('0' + ((nDelta / 600) % 6)));
-        aRet.append((sal_Char)('0' + ((nDelta / 60) % 10)));
+        aRet.append(static_cast<sal_Char>('0' + ((nDelta / 600) % 6)));
+        aRet.append(static_cast<sal_Char>('0' + ((nDelta / 60) % 10)));
     }
     aRet.append( "'" );
 
@@ -1928,25 +1928,25 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     // to use the localtime notation only
     // according to a recommendation in XMP Specification (Jan 2004, page 75)
     // the Acrobat way seems the right approach
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year/1000)%10)) );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year/100)%10)) );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year/10)%10)) );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Year/1000)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Year/100)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Year/10)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Year)%10)) );
     aCreationMetaDateString.append( "-" );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Month/10)%10)) );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Month)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Month/10)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Month)%10)) );
     aCreationMetaDateString.append( "-" );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Day/10)%10)) );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Day)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Day/10)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Day)%10)) );
     aCreationMetaDateString.append( "T" );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Hours/10)%10)) );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Hours)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Hours/10)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Hours)%10)) );
     aCreationMetaDateString.append( ":" );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Minutes/10)%10)) );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Minutes)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Minutes/10)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Minutes)%10)) );
     aCreationMetaDateString.append( ":" );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Seconds/10)%10)) );
-    aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Seconds)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Seconds/10)%10)) );
+    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Seconds)%10)) );
 
     sal_uInt32 nDelta = 0;
     if( aGMT.Seconds > aTVal.Seconds )
@@ -1966,11 +1966,11 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     }
     if( nDelta )
     {
-        aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/36000)%10)) );
-        aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/3600)%10)) );
+        aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((nDelta/36000)%10)) );
+        aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((nDelta/3600)%10)) );
         aCreationMetaDateString.append( ":" );
-        aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/600)%6)) );
-        aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/60)%10)) );
+        aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((nDelta/600)%6)) );
+        aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((nDelta/60)%10)) );
     }
     aID.append( i_rCString1.getStr(), i_rCString1.getLength() );
 
@@ -2018,8 +2018,8 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
             for( int i = 0; i < nLen; i++ )
             {
                 sal_Unicode aUnChar = pStr[i];
-                *pCopy++ = (sal_uInt8)( aUnChar >> 8 );
-                *pCopy++ = (sal_uInt8)( aUnChar & 255 );
+                *pCopy++ = static_cast<sal_uInt8>( aUnChar >> 8 );
+                *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
                 nChars += 2;
             }
             //encrypt in place
@@ -2155,7 +2155,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     sal_uInt64 nWritten;
     if( m_pCodec )
     {
-        m_pCodec->Write( *m_pMemStream, static_cast<const sal_uInt8*>(pBuffer), (sal_uLong)nBytes );
+        m_pCodec->Write( *m_pMemStream, static_cast<const sal_uInt8*>(pBuffer), static_cast<sal_uLong>(nBytes) );
         nWritten = nBytes;
     }
     else
@@ -2476,7 +2476,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
                 m_aLinkPropertyMap.find( nLink );
             if( link_it != m_aLinkPropertyMap.end() )
                 nLink = link_it->second;
-            if( nLink >= 0 && nLink < (sal_Int32)m_aLinks.size() )
+            if( nLink >= 0 && nLink < static_cast<sal_Int32>(m_aLinks.size()) )
             {
                 // update struct parent of link
                 OStringBuffer aStructParentEntry( 32 );
@@ -2778,10 +2778,10 @@ bool PDFWriterImpl::emitTilings()
             emitComment( "PDFWriterImpl::emitTilings" );
         }
 
-        sal_Int32 nX = (sal_Int32)tiling.m_aRectangle.Left();
-        sal_Int32 nY = (sal_Int32)tiling.m_aRectangle.Top();
-        sal_Int32 nW = (sal_Int32)tiling.m_aRectangle.GetWidth();
-        sal_Int32 nH = (sal_Int32)tiling.m_aRectangle.GetHeight();
+        sal_Int32 nX = static_cast<sal_Int32>(tiling.m_aRectangle.Left());
+        sal_Int32 nY = static_cast<sal_Int32>(tiling.m_aRectangle.Top());
+        sal_Int32 nW = static_cast<sal_Int32>(tiling.m_aRectangle.GetWidth());
+        sal_Int32 nH = static_cast<sal_Int32>(tiling.m_aRectangle.GetHeight());
         if( tiling.m_aCellSize.Width() == 0 )
             tiling.m_aCellSize.Width() = nW;
         if( tiling.m_aCellSize.Height() == 0 )
@@ -2840,7 +2840,7 @@ bool PDFWriterImpl::emitTilings()
         if( bDeflate )
             aTilingObj.append( "/Filter/FlateDecode" );
         aTilingObj.append( "/Length " );
-        aTilingObj.append( (sal_Int32)nTilingStreamSize );
+        aTilingObj.append( static_cast<sal_Int32>(nTilingStreamSize) );
         aTilingObj.append( ">>\nstream\n" );
         if ( !updateObject( tiling.m_nObject ) ) return false;
         if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) ) return false;
@@ -3008,7 +3008,7 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
         {
             int nOffset = (nSubsetID % 26);
             nSubsetID /= 26;
-            rBuffer.append( (sal_Char)('A'+nOffset) );
+            rBuffer.append( static_cast<sal_Char>('A'+nOffset) );
         }
         rBuffer.append( '+' );
     }
@@ -3057,18 +3057,18 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
             {
                 if( nCount )
                     aContents.append( "endbfchar\n" );
-                aContents.append( (sal_Int32)((nMapped-nCount > 100) ? 100 : nMapped-nCount ) );
+                aContents.append( static_cast<sal_Int32>((nMapped-nCount > 100) ? 100 : nMapped-nCount ) );
                 aContents.append( " beginbfchar\n" );
             }
             aContents.append( '<' );
-            appendHex( (sal_Int8)pEncoding[n], aContents );
+            appendHex( static_cast<sal_Int8>(pEncoding[n]), aContents );
             aContents.append( "> <" );
             // TODO: handle code points>U+FFFF
             sal_Int32 nIndex = pEncToUnicodeIndex[n];
             for( sal_Int32 j = 0; j < pCodeUnitsPerGlyph[n]; j++ )
             {
-                appendHex( (sal_Int8)(pCodeUnits[nIndex + j] / 256), aContents );
-                appendHex( (sal_Int8)(pCodeUnits[nIndex + j] & 255), aContents );
+                appendHex( static_cast<sal_Int8>(pCodeUnits[nIndex + j] / 256), aContents );
+                appendHex( static_cast<sal_Int8>(pCodeUnits[nIndex + j] & 255), aContents );
             }
             aContents.append( ">\n" );
             nCount++;
@@ -3099,7 +3099,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     sal_Int32 nLen = 0;
     if (!g_bDebugDisableCompression)
     {
-        nLen = (sal_Int32)aStream.Tell();
+        nLen = static_cast<sal_Int32>(aStream.Tell());
         aStream.Seek( 0 );
         aLine.append( nLen );
         aLine.append( "/Filter/FlateDecode" );
@@ -3154,13 +3154,13 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
     aLine.append( "\n"
                   "/FontBBox[" );
     // note: Top and Bottom are reversed in VCL and PDF rectangles
-    aLine.append( (sal_Int32)rInfo.m_aFontBBox.TopLeft().X() );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.TopLeft().X()) );
     aLine.append( ' ' );
-    aLine.append( (sal_Int32)rInfo.m_aFontBBox.TopLeft().Y() );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.TopLeft().Y()) );
     aLine.append( ' ' );
-    aLine.append( (sal_Int32)rInfo.m_aFontBBox.BottomRight().X() );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.BottomRight().X()) );
     aLine.append( ' ' );
-    aLine.append( (sal_Int32)(rInfo.m_aFontBBox.BottomRight().Y()+1) );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.BottomRight().Y()+1) );
     aLine.append( "]/ItalicAngle " );
     if( pFont->GetItalic() == ITALIC_OBLIQUE || pFont->GetItalic() == ITALIC_NORMAL )
         aLine.append( "-30" );
@@ -3168,13 +3168,13 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
         aLine.append( "0" );
     aLine.append( "\n"
                   "/Ascent " );
-    aLine.append( (sal_Int32)rInfo.m_nAscent );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_nAscent) );
     aLine.append( "\n"
                   "/Descent " );
-    aLine.append( (sal_Int32)-rInfo.m_nDescent );
+    aLine.append( static_cast<sal_Int32>(-rInfo.m_nDescent) );
     aLine.append( "\n"
                   "/CapHeight " );
-    aLine.append( (sal_Int32)rInfo.m_nCapHeight );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_nCapHeight) );
     // According to PDF reference 1.4 StemV is required
     // seems a tad strange to me, but well ...
     aLine.append( "\n"
@@ -3306,7 +3306,7 @@ bool PDFWriterImpl::emitFonts()
                 sal_uInt64 nStartPos = 0;
                 if( aSubsetInfo.m_nFontType == FontType::SFNT_TTF )
                 {
-                    aLine.append( (sal_Int32)nLength1 );
+                    aLine.append( static_cast<sal_Int32>(nLength1) );
 
                     aLine.append( ">>\n"
                                  "stream\n" );
@@ -3341,14 +3341,14 @@ bool PDFWriterImpl::emitFonts()
                     if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
-                    getPfbSegmentLengths(xBuffer.get(), (int)nBytesRead, aSegmentLengths);
+                    getPfbSegmentLengths(xBuffer.get(), static_cast<int>(nBytesRead), aSegmentLengths);
                     // the lengths below are mandatory for PDF-exported Type1 fonts
                     // because the PFB segment headers get stripped! WhyOhWhy.
-                    aLine.append( (sal_Int32)aSegmentLengths[0] );
+                    aLine.append( static_cast<sal_Int32>(aSegmentLengths[0]) );
                     aLine.append( "/Length2 " );
-                    aLine.append( (sal_Int32)aSegmentLengths[1] );
+                    aLine.append( static_cast<sal_Int32>(aSegmentLengths[1]) );
                     aLine.append( "/Length3 " );
-                    aLine.append( (sal_Int32)aSegmentLengths[2] );
+                    aLine.append( static_cast<sal_Int32>(aSegmentLengths[2]) );
 
                     aLine.append( ">>\n"
                                  "stream\n" );
@@ -3385,7 +3385,7 @@ bool PDFWriterImpl::emitFonts()
                 aLine.setLength( 0 );
                 aLine.append( nStreamLengthObject );
                 aLine.append( " 0 obj\n" );
-                aLine.append( (sal_Int64)(nEndPos-nStartPos) );
+                aLine.append( static_cast<sal_Int64>(nEndPos-nStartPos) );
                 aLine.append( "\nendobj\n\n" );
                 if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
 
@@ -3408,7 +3408,7 @@ bool PDFWriterImpl::emitFonts()
                 aLine.append( "\n"
                              "/FirstChar 0\n"
                              "/LastChar " );
-                aLine.append( (sal_Int32)(nGlyphs-1) );
+                aLine.append( static_cast<sal_Int32>(nGlyphs-1) );
                 aLine.append( "\n"
                              "/Widths[" );
                 for( int i = 0; i < nGlyphs; i++ )
@@ -3625,7 +3625,7 @@ sal_Int32 PDFWriterImpl::emitOutline()
             appendUnicodeTextStringEncrypt( rItem.m_aTitle, rItem.m_nObject, aLine );
             aLine.append( "\n" );
             // Dest is not required
-            if( rItem.m_nDestID >= 0 && rItem.m_nDestID < (sal_Int32)m_aDests.size() )
+            if( rItem.m_nDestID >= 0 && rItem.m_nDestID < static_cast<sal_Int32>(m_aDests.size()) )
             {
                 aLine.append( "/Dest" );
                 appendDest( rItem.m_nDestID, aLine );
@@ -3658,9 +3658,9 @@ sal_Int32 PDFWriterImpl::emitOutline()
 
 bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
 {
-    if( nDestID < 0 || nDestID >= (sal_Int32)m_aDests.size() )
+    if( nDestID < 0 || nDestID >= static_cast<sal_Int32>(m_aDests.size()) )
     {
-        SAL_INFO("vcl.pdfwriter", "ERROR: invalid dest " << (int)nDestID << " requested");
+        SAL_INFO("vcl.pdfwriter", "ERROR: invalid dest " << static_cast<int>(nDestID) << " requested");
         return false;
     }
 
@@ -5039,7 +5039,7 @@ bool PDFWriterImpl::emitCatalog()
     }
     aLine.append( "]\n"
                   "/Count " );
-    aLine.append( (sal_Int32)m_aPages.size() );
+    aLine.append( static_cast<sal_Int32>(m_aPages.size()) );
     aLine.append( ">>\n"
                   "endobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -5099,7 +5099,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( "/PageMode/FullScreen\n" ); //document is opened full screen
 
     OStringBuffer aInitPageRef;
-    if( m_aContext.InitialPage >= 0 && m_aContext.InitialPage < (sal_Int32)m_aPages.size() )
+    if( m_aContext.InitialPage >= 0 && m_aContext.InitialPage < static_cast<sal_Int32>(m_aPages.size()) )
     {
         aInitPageRef.append( m_aPages[m_aContext.InitialPage].m_nPageObject );
         aInitPageRef.append( " 0 R" );
@@ -5142,7 +5142,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( aInitPageRef.makeStringAndClear() );
         aLine.append( " /XYZ null null " );
         if( m_aContext.Zoom >= 50 && m_aContext.Zoom <= 1600 )
-            aLine.append( (double)m_aContext.Zoom/100.0 );
+            aLine.append( static_cast<double>(m_aContext.Zoom)/100.0 );
         else
             aLine.append( "0" );
         aLine.append( "]\n" );
@@ -5391,7 +5391,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     //FIXME: Check if hash is calculated from the correct byterange
     if (osl::File::E_None != m_aFile.read(buffer1.get(), m_nSignatureContentOffset - 1 , bytesRead1) ||
-        bytesRead1 != (sal_uInt64)m_nSignatureContentOffset - 1)
+        bytesRead1 != static_cast<sal_uInt64>(m_nSignatureContentOffset) - 1)
     {
         SAL_WARN("vcl.pdfwriter", "First buffer read failed");
         return false;
@@ -5402,7 +5402,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (osl::File::E_None != m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ||
         osl::File::E_None != m_aFile.read(buffer2.get(), nLastByteRangeNo, bytesRead2) ||
-        bytesRead2 != (sal_uInt64) nLastByteRangeNo)
+        bytesRead2 != static_cast<sal_uInt64>(nLastByteRangeNo))
     {
         SAL_WARN("vcl.pdfwriter", "Second buffer read failed");
         return false;
@@ -5604,7 +5604,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     std::vector<unsigned char> aBuffer(nBytesNeeded);
     cmsSaveProfileToMem(hProfile, &aBuffer[0], &nBytesNeeded);
     cmsCloseProfile(hProfile);
-    bool written = writeBuffer( &aBuffer[0], (sal_Int32) aBuffer.size() );
+    bool written = writeBuffer( &aBuffer[0], static_cast<sal_Int32>(aBuffer.size()) );
     disableStreamEncryption();
     endCompression();
     sal_uInt64 nEndStreamPos = 0;
@@ -5621,7 +5621,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.setLength( 0 );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 obj\n" );
-    aLine.append( (sal_Int64)(nEndStreamPos-nBeginStreamPos) );
+    aLine.append( static_cast<sal_Int64>(nEndStreamPos-nBeginStreamPos) );
     aLine.append( "\nendobj\n\n" );
     if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
     aLine.setLength( 0 );
@@ -5875,7 +5875,7 @@ bool PDFWriterImpl::emitTrailer()
     sal_Int32 nObjects = m_aObjects.size();
     OStringBuffer aLine;
     aLine.append( "0 " );
-    aLine.append( (sal_Int32)(nObjects+1) );
+    aLine.append( static_cast<sal_Int32>(nObjects+1) );
     aLine.append( "\n" );
     aLine.append( "0000000000 65535 f \n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -5906,7 +5906,7 @@ bool PDFWriterImpl::emitTrailer()
     aLine.setLength( 0 );
     aLine.append( "trailer\n"
                   "<</Size " );
-    aLine.append( (sal_Int32)(nObjects+1) );
+    aLine.append( static_cast<sal_Int32>(nObjects+1) );
     aLine.append( "/Root " );
     aLine.append( m_nCatalogObject );
     aLine.append( " 0 R\n" );
@@ -5958,7 +5958,7 @@ bool PDFWriterImpl::emitTrailer()
     }
     aLine.append( ">>\n"
                   "startxref\n" );
-    aLine.append( (sal_Int64)nXRefOffset );
+    aLine.append( static_cast<sal_Int64>(nXRefOffset) );
     aLine.append( "\n"
                   "%%EOF\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -6062,9 +6062,9 @@ void PDFWriterImpl::sortWidgets()
         {
             SAL_WARN( "vcl.pdfwriter", "wrong number of sorted annotations" );
             SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions "
-                     "on page nr " << (long int)item.first << ", " <<
-                     (long int)item.second.aSortedAnnots.size() << " sorted and " <<
-                     (long int)nAnnots << " unsorted");
+                     "on page nr " << static_cast<long int>(item.first) << ", " <<
+                     static_cast<long int>(item.second.aSortedAnnots.size()) << " sorted and " <<
+                     static_cast<long int>(nAnnots) << " unsorted");
         }
     }
 
@@ -6163,7 +6163,7 @@ bool PDFWriterImpl::emitAdditionalStreams()
         aLine.setLength( 0 );
         aLine.append( nSizeObject );
         aLine.append( " 0 obj\n" );
-        aLine.append( (sal_Int64)(nEndStreamPos-nBeginStreamPos) );
+        aLine.append( static_cast<sal_Int64>(nEndStreamPos-nBeginStreamPos) );
         aLine.append( "\nendobj\n\n" );
         if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
             return false;
@@ -6421,19 +6421,19 @@ void PDFWriterImpl::drawVerticalGlyphs(
         {
             fDeltaAngle = M_PI/2.0;
             aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent();
-            aDeltaPos.Y() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent() * fXScale);
+            aDeltaPos.Y() = static_cast<int>(static_cast<double>(m_pReferenceDevice->GetFontMetric().GetDescent()) * fXScale);
             fYScale = fXScale;
             fTempXScale = 1.0;
             fSkewA = -fSkewB;
             fSkewB = 0.0;
         }
-        aDeltaPos += (m_pReferenceDevice->PixelToLogic( Point( (int)((double)nXOffset/fXScale), 0 ) ) - m_pReferenceDevice->PixelToLogic( Point() ) );
+        aDeltaPos += (m_pReferenceDevice->PixelToLogic( Point( static_cast<int>(static_cast<double>(nXOffset)/fXScale), 0 ) ) - m_pReferenceDevice->PixelToLogic( Point() ) );
         if( i < rGlyphs.size()-1 )
         // #i120627# the text on the Y axis is reversed when export ppt file to PDF format
         {
             long nOffsetX = rGlyphs[i+1].m_aPos.X() - rGlyphs[i].m_aPos.X();
             long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
-            nXOffset += (int)sqrt(double(nOffsetX*nOffsetX + nOffsetY*nOffsetY));
+            nXOffset += static_cast<int>(sqrt(double(nOffsetX*nOffsetX + nOffsetY*nOffsetY)));
         }
         if( ! rGlyphs[i].m_nGlyphId )
             continue;
@@ -6544,7 +6544,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
             const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
             double fAdvance = aThisPos.X() - aPrevPos.X();
             fAdvance *= 1000.0 / nPixelFontHeight;
-            const sal_Int32 nAdjustment = (sal_Int32)(rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5);
+            const sal_Int32 nAdjustment = static_cast<sal_Int32>(rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5);
             if( nAdjustment != 0 )
             {
                 // apply individual glyph positioning
@@ -6609,8 +6609,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if( aMetric.GetAverageFontWidth() != m_aCurrentPDFState.m_aFont.GetAverageFontWidth() )
         {
             fXScale =
-                (double)m_aCurrentPDFState.m_aFont.GetAverageFontWidth() /
-                (double)aMetric.GetAverageFontWidth();
+                static_cast<double>(m_aCurrentPDFState.m_aFont.GetAverageFontWidth()) /
+                static_cast<double>(aMetric.GetAverageFontWidth());
         }
         // force state before GetFontMetric
         m_pReferenceDevice->ImplNewFont();
@@ -6637,7 +6637,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     while( nAngle < 0 )
         nAngle += 3600;
     nAngle = nAngle % 3600;
-    double fAngle = (double)nAngle * M_PI / 1800.0;
+    double fAngle = static_cast<double>(nAngle) * M_PI / 1800.0;
 
     Matrix3 aRotScale;
     aRotScale.scale( fXScale, 1.0 );
@@ -6702,7 +6702,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         }
         else
         {
-            double fW = (double)m_aCurrentPDFState.m_aFont.GetFontHeight() / 30.0;
+            double fW = static_cast<double>(m_aCurrentPDFState.m_aFont.GetFontHeight()) / 30.0;
             m_aPages.back().appendMappedLength( fW, aLine );
             aLine.append ( " w\n" );
         }
@@ -7285,7 +7285,7 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLin
     if ( eTextLine == LINESTYLE_BOLDWAVE )
         nLineWidth = 3*nLineWidth;
 
-    m_aPages.back().appendMappedLength( (sal_Int32)nLineWidth, aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineWidth), aLine );
     aLine.append( " w " );
 
     if ( eTextLine == LINESTYLE_DOUBLEWAVE )
@@ -7402,7 +7402,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
     if ( !nLineHeight )
         return;
 
-    m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine );
     aLine.append( " w " );
     appendStrokingColor( aColor, aLine );
     aLine.append( "\n" );
@@ -7412,7 +7412,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
         case LINESTYLE_DOTTED:
         case LINESTYLE_BOLDDOTTED:
             aLine.append( "[ " );
-            m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
+            m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine, false );
             aLine.append( " ] 0 d\n" );
             break;
         case LINESTYLE_DASH:
@@ -7442,7 +7442,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
+                m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine, false );
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( " ] 0 d\n" );
@@ -7458,11 +7458,11 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
+                m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine, false );
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
+                m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine, false );
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( " ] 0 d\n" );
@@ -7473,20 +7473,20 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
     }
 
     aLine.append( "0 " );
-    m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos), aLine );
     aLine.append( " m " );
-    m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, false );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nWidth), aLine, false );
     aLine.append( ' ' );
-    m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos), aLine );
     aLine.append( " l S\n" );
     if ( eTextLine == LINESTYLE_DOUBLE )
     {
         aLine.append( "0 " );
-        m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos2-nLineHeight), aLine );
         aLine.append( " m " );
-        m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, false );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nWidth), aLine, false );
         aLine.append( ' ' );
-        m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos2-nLineHeight), aLine );
         aLine.append( " l S\n" );
     }
 
@@ -7531,27 +7531,27 @@ void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontSt
     if ( !nLineHeight )
         return;
 
-    m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine );
     aLine.append( " w " );
     appendStrokingColor( aColor, aLine );
     aLine.append( "\n" );
 
     aLine.append( "0 " );
-    m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos), aLine );
     aLine.append( " m " );
-    m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nWidth), aLine );
     aLine.append( ' ' );
-    m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos), aLine );
     aLine.append( " l S\n" );
 
     if ( eStrikeout == STRIKEOUT_DOUBLE )
     {
         aLine.append( "0 " );
-        m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos2-nLineHeight), aLine );
         aLine.append( " m " );
-        m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nWidth), aLine );
         aLine.append( ' ' );
-        m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos2-nLineHeight), aLine );
         aLine.append( " l S\n" );
     }
 
@@ -7653,7 +7653,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     aLine.append( "q " );
 
     // rotate and translate matrix
-    double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
+    double fAngle = static_cast<double>(m_aCurrentPDFState.m_aFont.GetOrientation()) * M_PI / 1800.0;
     Matrix3 aMat;
     aMat.rotate( fAngle );
     aMat.translate( aPos.X(), aPos.Y() );
@@ -7780,7 +7780,7 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
     m_aPages.back().convertRect( m_aTransparentObjects.back().m_aBoundRect );
     m_aTransparentObjects.back().m_nObject          = createObject();
     m_aTransparentObjects.back().m_nExtGStateObject = createObject();
-    m_aTransparentObjects.back().m_fAlpha           = (double)(100-nTransparentPercent) / 100.0;
+    m_aTransparentObjects.back().m_fAlpha           = static_cast<double>(100-nTransparentPercent) / 100.0;
     m_aTransparentObjects.back().m_pContentStream   = new SvMemoryStream( 256, 256 );
     // create XObject's content stream
     OStringBuffer aContent( 256 );
@@ -7923,7 +7923,7 @@ void PDFWriterImpl::endTransparencyGroup( const tools::Rectangle& rBoundingBox, 
     // convert rectangle to default user space
     m_aPages.back().convertRect( m_aTransparentObjects.back().m_aBoundRect );
     m_aTransparentObjects.back().m_nObject      = createObject();
-    m_aTransparentObjects.back().m_fAlpha       = (double)(100-nTransparentPercent) / 100.0;
+    m_aTransparentObjects.back().m_fAlpha       = static_cast<double>(100-nTransparentPercent) / 100.0;
     // get XObject's content stream
     m_aTransparentObjects.back().m_pContentStream = static_cast<SvMemoryStream*>(endRedirect());
     m_aTransparentObjects.back().m_nExtGStateObject = createObject();
@@ -7987,15 +7987,15 @@ void PDFWriterImpl::drawRectangle( const tools::Rectangle& rRect, sal_uInt32 nHo
         m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
         return;
 
-    if( nHorzRound > (sal_uInt32)rRect.GetWidth()/2 )
+    if( nHorzRound > static_cast<sal_uInt32>(rRect.GetWidth())/2 )
         nHorzRound = rRect.GetWidth()/2;
-    if( nVertRound > (sal_uInt32)rRect.GetHeight()/2 )
+    if( nVertRound > static_cast<sal_uInt32>(rRect.GetHeight())/2 )
         nVertRound = rRect.GetHeight()/2;
 
     Point aPoints[16];
     const double kappa = 0.5522847498;
-    const sal_uInt32 kx = (sal_uInt32)((kappa*(double)nHorzRound)+0.5);
-    const sal_uInt32 ky = (sal_uInt32)((kappa*(double)nVertRound)+0.5);
+    const sal_uInt32 kx = static_cast<sal_uInt32>((kappa*static_cast<double>(nHorzRound))+0.5);
+    const sal_uInt32 ky = static_cast<sal_uInt32>((kappa*static_cast<double>(nVertRound))+0.5);
 
     aPoints[1]  = Point( rRect.TopLeft().X() + nHorzRound, rRect.TopLeft().Y() );
     aPoints[0]  = Point( aPoints[1].X() - kx, aPoints[1].Y() );
@@ -8076,8 +8076,8 @@ void PDFWriterImpl::drawEllipse( const tools::Rectangle& rRect )
 
     Point aPoints[12];
     const double kappa = 0.5522847498;
-    const sal_uInt32 kx = (sal_uInt32)((kappa*(double)rRect.GetWidth()/2.0)+0.5);
-    const sal_uInt32 ky = (sal_uInt32)((kappa*(double)rRect.GetHeight()/2.0)+0.5);
+    const sal_uInt32 kx = static_cast<sal_uInt32>((kappa*static_cast<double>(rRect.GetWidth())/2.0)+0.5);
+    const sal_uInt32 ky = static_cast<sal_uInt32>((kappa*static_cast<double>(rRect.GetHeight())/2.0)+0.5);
 
     aPoints[1]  = Point( rRect.TopLeft().X() + rRect.GetWidth()/2, rRect.TopLeft().Y() );
     aPoints[0]  = Point( aPoints[1].X() - kx, aPoints[1].Y() );
@@ -8140,16 +8140,16 @@ static double calcAngle( const tools::Rectangle& rRect, const Point& rPoint )
                   (rRect.Top()+rRect.Bottom()+1)/2);
     Point aPoint = rPoint - aOrigin;
 
-    double fX = (double)aPoint.X();
-    double fY = (double)-aPoint.Y();
+    double fX = static_cast<double>(aPoint.X());
+    double fY = static_cast<double>(-aPoint.Y());
 
     if ((rRect.GetHeight() == 0) || (rRect.GetWidth() == 0))
         throw o3tl::divide_by_zero();
 
     if( rRect.GetWidth() > rRect.GetHeight() )
-        fY = fY*((double)rRect.GetWidth()/(double)rRect.GetHeight());
+        fY = fY*(static_cast<double>(rRect.GetWidth())/static_cast<double>(rRect.GetHeight()));
     else if( rRect.GetHeight() > rRect.GetWidth() )
-        fX = fX*((double)rRect.GetHeight()/(double)rRect.GetWidth());
+        fX = fX*(static_cast<double>(rRect.GetHeight())/static_cast<double>(rRect.GetWidth()));
     return atan2( fY, fX );
 }
 
@@ -8168,18 +8168,18 @@ void PDFWriterImpl::drawArc( const tools::Rectangle& rRect, const Point& rStart,
     double fStopAngle  = calcAngle( rRect, rStop );
     while( fStopAngle < fStartAngle )
         fStopAngle += 2.0*M_PI;
-    const int nFragments = (int)((fStopAngle-fStartAngle)/(M_PI/2.0))+1;
-    const double fFragmentDelta = (fStopAngle-fStartAngle)/(double)nFragments;
+    const int nFragments = static_cast<int>((fStopAngle-fStartAngle)/(M_PI/2.0))+1;
+    const double fFragmentDelta = (fStopAngle-fStartAngle)/static_cast<double>(nFragments);
     const double kappa = fabs( 4.0 * (1.0-cos(fFragmentDelta/2.0))/sin(fFragmentDelta/2.0) / 3.0);
-    const double halfWidth = (double)rRect.GetWidth()/2.0;
-    const double halfHeight = (double)rRect.GetHeight()/2.0;
+    const double halfWidth = static_cast<double>(rRect.GetWidth())/2.0;
+    const double halfHeight = static_cast<double>(rRect.GetHeight())/2.0;
 
     const Point aCenter( (rRect.Left()+rRect.Right()+1)/2,
                          (rRect.Top()+rRect.Bottom()+1)/2 );
 
     OStringBuffer aLine( 30*nFragments );
-    Point aPoint( (int)(halfWidth * cos(fStartAngle) ),
-                  -(int)(halfHeight * sin(fStartAngle) ) );
+    Point aPoint( static_cast<int>(halfWidth * cos(fStartAngle) ),
+                  -static_cast<int>(halfHeight * sin(fStartAngle) ) );
     aPoint += aCenter;
     m_aPages.back().appendPoint( aPoint, aLine );
     aLine.append( " m " );
@@ -8187,22 +8187,22 @@ void PDFWriterImpl::drawArc( const tools::Rectangle& rRect, const Point& rStart,
     {
         for( int i = 0; i < nFragments; i++ )
         {
-            const double fStartFragment = fStartAngle + (double)i*fFragmentDelta;
+            const double fStartFragment = fStartAngle + static_cast<double>(i)*fFragmentDelta;
             const double fStopFragment = fStartFragment + fFragmentDelta;
-            aPoint = Point( (int)(halfWidth * (cos(fStartFragment) - kappa*sin(fStartFragment) ) ),
-                            -(int)(halfHeight * (sin(fStartFragment) + kappa*cos(fStartFragment) ) ) );
+            aPoint = Point( static_cast<int>(halfWidth * (cos(fStartFragment) - kappa*sin(fStartFragment) ) ),
+                            -static_cast<int>(halfHeight * (sin(fStartFragment) + kappa*cos(fStartFragment) ) ) );
             aPoint += aCenter;
             m_aPages.back().appendPoint( aPoint, aLine );
             aLine.append( ' ' );
 
-            aPoint = Point( (int)(halfWidth * (cos(fStopFragment) + kappa*sin(fStopFragment) ) ),
-                            -(int)(halfHeight * (sin(fStopFragment) - kappa*cos(fStopFragment) ) ) );
+            aPoint = Point( static_cast<int>(halfWidth * (cos(fStopFragment) + kappa*sin(fStopFragment) ) ),
+                            -static_cast<int>(halfHeight * (sin(fStopFragment) - kappa*cos(fStopFragment) ) ) );
             aPoint += aCenter;
             m_aPages.back().appendPoint( aPoint, aLine );
             aLine.append( ' ' );
 
-            aPoint = Point( (int)(halfWidth * cos(fStopFragment) ),
-                            -(int)(halfHeight * sin(fStopFragment) ) );
+            aPoint = Point( static_cast<int>(halfWidth * cos(fStopFragment) ),
+                            -static_cast<int>(halfHeight * sin(fStopFragment) ) );
             aPoint += aCenter;
             m_aPages.back().appendPoint( aPoint, aLine );
             aLine.append( " c\n" );
@@ -8471,7 +8471,7 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
             aBoundRect.Right()  += nLW;
             aBoundRect.Bottom() += nLW;
         }
-        endTransparencyGroup( aBoundRect, (sal_uInt16)(100.0*rInfo.m_fTransparency) );
+        endTransparencyGroup( aBoundRect, static_cast<sal_uInt16>(100.0*rInfo.m_fTransparency) );
     }
 }
 
@@ -8546,7 +8546,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     */
 
     aLine.append( "/Length " );
-    aLine.append( (sal_Int32)nSize );
+    aLine.append( static_cast<sal_Int32>(nSize) );
     aLine.append( "\n" );
     if( bFlateFilter )
         aLine.append( "/Filter/FlateDecode\n" );
@@ -8594,7 +8594,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
         else
         {
             rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_END );
-            sal_Int32 nMaskSize = (sal_Int32)rObject.m_pSoftMaskStream->Tell();
+            sal_Int32 nMaskSize = static_cast<sal_Int32>(rObject.m_pSoftMaskStream->Tell());
             rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_BEGIN );
             sal_Int32 nMaskObject = createObject();
             aLine.append( "/SMask<</Type/Mask/S/Luminosity/G " );
@@ -8692,9 +8692,9 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
             aLine.append('3');
             break;
         default:
-            aLine.append( (sal_Int32)aSize.Width() );
+            aLine.append( static_cast<sal_Int32>(aSize.Width()) );
             aLine.append( ' ' );
-            aLine.append( (sal_Int32)aSize.Height() );
+            aLine.append( static_cast<sal_Int32>(aSize.Height()) );
     }
     aLine.append( " ]\n"
                   "/BitsPerSample 8\n"
@@ -8768,7 +8768,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
     aLine.setLength( 0 );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 obj\n" );
-    aLine.append( (sal_Int64)(nEndStreamPos-nStartStreamPos) );
+    aLine.append( static_cast<sal_Int64>(nEndStreamPos-nStartStreamPos) );
     aLine.append( "\nendobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
@@ -8825,13 +8825,13 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
             aPoly[1] = aBoundRect.TopCenter();
             aPoly.Rotate( aCenter, 3600 - nAngle );
 
-            aLine.append( (sal_Int32) aPoly[0].X() );
+            aLine.append( static_cast<sal_Int32>(aPoly[0].X()) );
             aLine.append( " " );
-            aLine.append( (sal_Int32) aPoly[0].Y() );
+            aLine.append( static_cast<sal_Int32>(aPoly[0].Y()) );
             aLine.append( " " );
-            aLine.append( (sal_Int32) aPoly[1].X());
+            aLine.append( static_cast<sal_Int32>(aPoly[1].X()));
             aLine.append( " ");
-            aLine.append( (sal_Int32) aPoly[1].Y());
+            aLine.append( static_cast<sal_Int32>(aPoly[1].Y()));
             aLine.append( " ]\n");
             aLine.append("/Extend [true true]\n");
             break;
@@ -8839,9 +8839,9 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
         default:
             aLine.append("/Domain[ 0 1 0 1 ]\n"
                     "/Matrix[ " );
-            aLine.append( (sal_Int32)aSize.Width() );
+            aLine.append( static_cast<sal_Int32>(aSize.Width()) );
             aLine.append( " 0 0 " );
-            aLine.append( (sal_Int32)aSize.Height() );
+            aLine.append( static_cast<sal_Int32>(aSize.Height()) );
             aLine.append( " 0 0 ]\n");
     }
     aLine.append("/Function " );
@@ -8894,9 +8894,9 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     aLine.append( rObject.m_nObject );
     aLine.append( " 0 obj\n"
                   "<</Type/XObject/Subtype/Image/Width " );
-    aLine.append( (sal_Int32)rObject.m_aID.m_aPixelSize.Width() );
+    aLine.append( static_cast<sal_Int32>(rObject.m_aID.m_aPixelSize.Width()) );
     aLine.append( " /Height " );
-    aLine.append( (sal_Int32)rObject.m_aID.m_aPixelSize.Height() );
+    aLine.append( static_cast<sal_Int32>(rObject.m_aID.m_aPixelSize.Height()) );
     aLine.append( " /BitsPerComponent 8 " );
     if( rObject.m_bTrueColor )
         aLine.append( "/ColorSpace/DeviceRGB" );
@@ -9481,9 +9481,9 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     aLine.append( rObject.m_nObject );
     aLine.append( " 0 obj\n"
                   "<</Type/XObject/Subtype/Image/Width " );
-    aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
+    aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Width()) );
     aLine.append( "/Height " );
-    aLine.append( (sal_Int32)aBitmap.GetSizePixel().Height() );
+    aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Height()) );
     aLine.append( "/BitsPerComponent " );
     aLine.append( nBitsPerComponent );
     aLine.append( "/Length " );
@@ -9498,7 +9498,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         else
         {
             aLine.append( "/Filter/CCITTFaxDecode/DecodeParms<</K -1/BlackIs1 true/Columns " );
-            aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
+            aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Width()) );
             aLine.append( ">>\n" );
         }
     }
@@ -9541,7 +9541,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         else
         {
             aLine.append( "[ /Indexed/DeviceRGB " );
-            aLine.append( (sal_Int32)(pAccess->GetPaletteEntryCount()-1) );
+            aLine.append( static_cast<sal_Int32>(pAccess->GetPaletteEntryCount()-1) );
             aLine.append( "\n<" );
             if( m_aContext.Encryption.Encrypt() )
             {
@@ -9619,17 +9619,17 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             aLine.append( "/Mask[ " );
             if( bTrueColor )
             {
-                aLine.append( (sal_Int32)aTransparentColor.GetRed() );
+                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetRed()) );
                 aLine.append( ' ' );
-                aLine.append( (sal_Int32)aTransparentColor.GetRed() );
+                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetRed()) );
                 aLine.append( ' ' );
-                aLine.append( (sal_Int32)aTransparentColor.GetGreen() );
+                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetGreen()) );
                 aLine.append( ' ' );
-                aLine.append( (sal_Int32)aTransparentColor.GetGreen() );
+                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetGreen()) );
                 aLine.append( ' ' );
-                aLine.append( (sal_Int32)aTransparentColor.GetBlue() );
+                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetBlue()) );
                 aLine.append( ' ' );
-                aLine.append( (sal_Int32)aTransparentColor.GetBlue() );
+                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetBlue()) );
             }
             else
             {
@@ -9695,7 +9695,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     aLine.setLength( 0 );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 obj\n" );
-    aLine.append( (sal_Int64)(nEndPos-nStartPos) );
+    aLine.append( static_cast<sal_Int64>(nEndPos-nStartPos) );
     aLine.append( "\nendobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
@@ -9802,10 +9802,10 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
 
     aLine.append( "q " );
     sal_Int32 nCheckWidth = 0;
-    m_aPages.back().appendMappedLength( (sal_Int32)rTargetArea.GetWidth(), aLine, false, &nCheckWidth );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rTargetArea.GetWidth()), aLine, false, &nCheckWidth );
     aLine.append( " 0 0 " );
     sal_Int32 nCheckHeight = 0;
-    m_aPages.back().appendMappedLength( (sal_Int32)rTargetArea.GetHeight(), aLine, true, &nCheckHeight );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rTargetArea.GetHeight()), aLine, true, &nCheckHeight );
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rTargetArea.BottomLeft(), aLine );
     aLine.append( " cm\n/Im" );
@@ -9841,10 +9841,10 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
         aLine.append( ' ' );
     }
     sal_Int32 nCheckWidth = 0;
-    m_aPages.back().appendMappedLength( (sal_Int32)rDestSize.Width(), aLine, false, &nCheckWidth );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rDestSize.Width()), aLine, false, &nCheckWidth );
     aLine.append( " 0 0 " );
     sal_Int32 nCheckHeight = 0;
-    m_aPages.back().appendMappedLength( (sal_Int32)rDestSize.Height(), aLine, true, &nCheckHeight );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rDestSize.Height()), aLine, true, &nCheckHeight );
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), aLine );
     aLine.append( " cm\n/Im" );
@@ -9989,9 +9989,9 @@ void PDFWriterImpl::drawGradient( const tools::Rectangle& rRect, const Gradient&
     if( m_aGraphicsStack.front().m_aLineColor != Color( COL_TRANSPARENT ) )
         aLine.append( "q " );
     aLine.append( "0 0 " );
-    m_aPages.back().appendMappedLength( (sal_Int32)rRect.GetWidth(), aLine, false );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rRect.GetWidth()), aLine, false );
     aLine.append( ' ' );
-    m_aPages.back().appendMappedLength( (sal_Int32)rRect.GetHeight(), aLine );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rRect.GetHeight()), aLine );
     aLine.append( " re W n\n" );
 
     aLine.append( "/P" );
@@ -10000,9 +10000,9 @@ void PDFWriterImpl::drawGradient( const tools::Rectangle& rRect, const Gradient&
     if( m_aGraphicsStack.front().m_aLineColor != Color( COL_TRANSPARENT ) )
     {
         aLine.append( "Q 0 0 " );
-        m_aPages.back().appendMappedLength( (sal_Int32)rRect.GetWidth(), aLine, false );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rRect.GetWidth()), aLine, false );
         aLine.append( ' ' );
-        m_aPages.back().appendMappedLength( (sal_Int32)rRect.GetHeight(), aLine );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rRect.GetHeight()), aLine );
         aLine.append( " re S " );
     }
     aLine.append( "Q\n" );
@@ -10435,7 +10435,7 @@ void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rN
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
         return;
 
     m_aNotes.emplace_back( );
@@ -10454,7 +10454,7 @@ sal_Int32 PDFWriterImpl::createLink( const tools::Rectangle& rRect, sal_Int32 nP
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
         return -1;
 
     sal_Int32 nRet = m_aLinks.size();
@@ -10500,7 +10500,7 @@ sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const tools
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
         return -1;
 
     sal_Int32 nRet = m_aNamedDests.size();
@@ -10521,7 +10521,7 @@ sal_Int32 PDFWriterImpl::createDest( const tools::Rectangle& rRect, sal_Int32 nP
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
         return -1;
 
     sal_Int32 nRet = m_aDests.size();
@@ -10543,9 +10543,9 @@ sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const tools::
 
 void PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 {
-    if( nLinkId < 0 || nLinkId >= (sal_Int32)m_aLinks.size() )
+    if( nLinkId < 0 || nLinkId >= static_cast<sal_Int32>(m_aLinks.size()) )
         return;
-    if( nDestId < 0 || nDestId >= (sal_Int32)m_aDests.size() )
+    if( nDestId < 0 || nDestId >= static_cast<sal_Int32>(m_aDests.size()) )
         return;
 
     m_aLinks[ nLinkId ].m_nDest = nDestId;
@@ -10553,7 +10553,7 @@ void PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 
 void PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
-    if( nLinkId < 0 || nLinkId >= (sal_Int32)m_aLinks.size() )
+    if( nLinkId < 0 || nLinkId >= static_cast<sal_Int32>(m_aLinks.size()) )
         return;
 
     m_aLinks[ nLinkId ].m_nDest = -1;
@@ -10612,10 +10612,10 @@ sal_Int32 PDFWriterImpl::createOutlineItem( sal_Int32 nParent, const OUString& r
 
 void PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
 {
-    if( nItem < 1 || nItem >= (sal_Int32)m_aOutline.size() )
+    if( nItem < 1 || nItem >= static_cast<sal_Int32>(m_aOutline.size()) )
         return;
 
-    if( nNewParent < 0 || nNewParent >= (sal_Int32)m_aOutline.size() || nNewParent == nItem )
+    if( nNewParent < 0 || nNewParent >= static_cast<sal_Int32>(m_aOutline.size()) || nNewParent == nItem )
     {
         nNewParent = 0;
     }
@@ -10625,7 +10625,7 @@ void PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent 
 
 void PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, const OUString& rText )
 {
-    if( nItem < 1 || nItem >= (sal_Int32)m_aOutline.size() )
+    if( nItem < 1 || nItem >= static_cast<sal_Int32>(m_aOutline.size()) )
         return;
 
     m_aOutline[ nItem ].m_aTitle = psp::WhitespaceToSpace( rText );
@@ -10633,9 +10633,9 @@ void PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, const OUString& rText )
 
 void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
 {
-    if( nItem < 1 || nItem >= (sal_Int32)m_aOutline.size() ) // item does not exist
+    if( nItem < 1 || nItem >= static_cast<sal_Int32>(m_aOutline.size()) ) // item does not exist
         return;
-    if( nDestID < 0 || nDestID >= (sal_Int32)m_aDests.size() ) // dest does not exist
+    if( nDestID < 0 || nDestID >= static_cast<sal_Int32>(m_aDests.size()) ) // dest does not exist
         return;
     m_aOutline[nItem].m_nDestID = nDestID;
 }
@@ -11345,7 +11345,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
     else if( m_nCurrentStructElement > 0 && m_bEmitStructure )
         SAL_INFO("vcl.pdfwriter",
                  "rejecting setStructureAttributeNumerical( " << getAttributeTag( eAttr )
-                 << ", " << (int)nValue
+                 << ", " << static_cast<int>(nValue)
                  << " ) on " << getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType )
                  << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr()
                  << ") element");
@@ -11356,7 +11356,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
 void PDFWriterImpl::setStructureBoundingBox( const tools::Rectangle& rRect )
 {
     sal_Int32 nPageNr = m_nCurrentPage;
-    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() || !m_aContext.Tagged )
+    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) || !m_aContext.Tagged )
         return;
 
     if( m_nCurrentStructElement > 0 && m_bEmitStructure )
@@ -11395,7 +11395,7 @@ void PDFWriterImpl::setAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr )
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
         return;
 
     m_aPages[ nPageNr ].m_nDuration = nSeconds;
@@ -11406,7 +11406,7 @@ void PDFWriterImpl::setPageTransition( PDFWriter::PageTransition eType, sal_uInt
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
         return;
 
     m_aPages[ nPageNr ].m_eTransition   = eType;
@@ -11510,7 +11510,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
         return -1;
 
     bool sigHidden(true);
@@ -11577,7 +11577,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_eType          = PDFWriter::CheckBox;
         rNewWidget.m_nRadioGroup    = rBtn.RadioGroup;
 
-        SAL_WARN_IF( nRadioGroupWidget < 0 || nRadioGroupWidget >= (sal_Int32)m_aWidgets.size(), "vcl.pdfwriter", "no radio group parent" );
+        SAL_WARN_IF( nRadioGroupWidget < 0 || nRadioGroupWidget >= static_cast<sal_Int32>(m_aWidgets.size()), "vcl.pdfwriter", "no radio group parent" );
 
         PDFWidget& rRadioButton = m_aWidgets[nRadioGroupWidget];
         rRadioButton.m_aKids.push_back( rNewWidget.m_nObject );

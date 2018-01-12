@@ -490,7 +490,7 @@ void getJavaPropsFromSafetySettings(
             "VirtualMachine/Security");
         if( key_CheckSecurity.is())
         {
-            bool val = (bool) key_CheckSecurity->getLongValue();
+            bool val = static_cast<bool>(key_CheckSecurity->getLongValue());
             OUString sProperty("stardiv.security.disableSecurity=");
             if( val)
                 sProperty= sProperty + "false";
@@ -1305,7 +1305,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
             css::uno::Sequence<css::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
                 {"nodepath", css::uno::Any(OUString("org.openoffice.Inet/Settings"))},
-                {"depth", css::uno::Any((sal_Int32)-1)}
+                {"depth", css::uno::Any(sal_Int32(-1))}
             }));
             m_xInetConfiguration.set(
                     xConfigProvider->createInstanceWithArguments(
@@ -1320,7 +1320,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
             css::uno::Sequence<css::uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
             {
                 {"nodepath", css::uno::Any(OUString("org.openoffice.Office.Java/VirtualMachine"))},
-                {"depth", css::uno::Any((sal_Int32)-1)} // depth: -1 means unlimited
+                {"depth", css::uno::Any(sal_Int32(-1))} // depth: -1 means unlimited
             }));
             m_xJavaConfiguration.set(
                     xConfigProvider->createInstanceWithArguments(

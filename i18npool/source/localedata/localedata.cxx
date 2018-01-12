@@ -1305,7 +1305,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
                         break;
                     case 1:
                         rVal.Name = "NumberingType";
-                        rVal.Value <<= (sal_Int16) sVal.toInt32();
+                        rVal.Value <<= static_cast<sal_Int16>(sVal.toInt32());
                         break;
                     case 2:
                         rVal.Name = "Suffix";
@@ -1317,7 +1317,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
                         break;
                     case 4:
                         rVal.Name = "NatNum";
-                        rVal.Value <<= (sal_Int16) sVal.toInt32();
+                        rVal.Value <<= static_cast<sal_Int16>(sVal.toInt32());
                         break;
                     default:
                         OSL_ASSERT(false);
@@ -1561,7 +1561,7 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
     pValues[8].Name = "FirstLineOffset";
     pValues[8].Value <<= pTemp->nFirstLineOffset;
     pValues[9].Name = "Adjust";
-    pValues[9].Value <<= (sal_Int16)HoriOrientation::LEFT;
+    pValues[9].Value <<= sal_Int16(HoriOrientation::LEFT);
     pValues[10].Name = "Transliteration";
     pValues[10].Value <<= pTemp->sTransliteration;
     pValues[11].Name = "NatNum";

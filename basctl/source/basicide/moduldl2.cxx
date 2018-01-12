@@ -834,7 +834,7 @@ void LibPage::InsertLib()
                         ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aLibName ) && xDlgLibContImport->isLibraryLink( aLibName ) ) ) )
                 {
                     SvTreeListEntry* pEntry = pLibDlg->GetLibBox().DoInsertEntry( aLibName );
-                    sal_uInt16 nPos = (sal_uInt16) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
+                    sal_uInt16 nPos = static_cast<sal_uInt16>(pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry ));
                     pLibDlg->GetLibBox().CheckEntryPos(nPos);
                 }
             }

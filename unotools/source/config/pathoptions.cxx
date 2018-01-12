@@ -219,7 +219,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
     {
         OUString    aPathValue;
         OUString    aResult;
-        sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
+        sal_Int32   nHandle = m_aMapEnumToPropHandle[ static_cast<sal_Int32>(ePath) ];
 
         // Substitution is done by the service itself using the substition service
         Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
@@ -297,7 +297,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
         a <<= aNewValue;
         try
         {
-            m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ (sal_Int32)ePath], a );
+            m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ static_cast<sal_Int32>(ePath)], a );
         }
         catch (const Exception& e)
         {
@@ -396,7 +396,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
 }
 
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
-    m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT )
+    m_aPathArray( sal_Int32(SvtPathOptions::PATH_COUNT) )
 {
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 

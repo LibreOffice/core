@@ -354,13 +354,13 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     if (SbxVariable const* pVar = IsSbxVariable(pSBX))
                     {
                         SbxDataType eType = pVar->GetType();
-                        if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
+                        if ( static_cast<sal_uInt8>(eType) == sal_uInt8(SbxOBJECT) )
                             // might cause a crash e. g. at the selections-object
                             // Type == Object does not mean pVar == Object!
                             ; // aHelpText = ((SbxObject*)pVar)->GetClassName();
                         else if ( eType & SbxARRAY )
                             ; // aHelpText = "{...}";
-                        else if ( (sal_uInt8)eType != (sal_uInt8)SbxEMPTY )
+                        else if ( static_cast<sal_uInt8>(eType) != sal_uInt8(SbxEMPTY) )
                         {
                             aHelpText = pVar->GetName();
                             if ( aHelpText.isEmpty() )     // name is not copied with the passed parameters
@@ -1291,7 +1291,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
     }
     else
     {
-        rModulWindow.GetBreakPoints().AdjustBreakPoints( (sal_uInt16)nPara+1, bInserted );
+        rModulWindow.GetBreakPoints().AdjustBreakPoints( static_cast<sal_uInt16>(nPara)+1, bInserted );
 
         long nLineHeight = GetTextHeight();
         Size aSz = rModulWindow.GetBreakPointWindow().GetOutputSize();
@@ -1441,7 +1441,7 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         {
             long nYPos = aMousePos.Y() + nCurYOffset;
             long nLine = nYPos / nLineHeight + 1;
-            rModulWindow.ToggleBreakPoint( (sal_uLong)nLine );
+            rModulWindow.ToggleBreakPoint( static_cast<sal_uLong>(nLine) );
             Invalidate();
         }
     }
@@ -2294,7 +2294,7 @@ bool WatchTreeListBox::ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUSt
     if (SbxVariable* pVar = IsSbxVariable(pSBX))
     {
         SbxDataType eType = pVar->GetType();
-        if ( (sal_uInt8)eType != (sal_uInt8)SbxOBJECT
+        if ( static_cast<sal_uInt8>(eType) != sal_uInt8(SbxOBJECT)
              && ( eType & SbxARRAY ) == 0 )
         {
             // If the type is variable, the conversion of the SBX does not matter,
@@ -2479,7 +2479,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         aWatchStr += "<?>";
                     }
                 }
-                else if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
+                else if ( static_cast<sal_uInt8>(eType) == sal_uInt8(SbxOBJECT) )
                 {
                     if (SbxObject* pObj = dynamic_cast<SbxObject*>(pVar->GetObject()))
                     {
@@ -2530,7 +2530,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         implEnableChildren( pEntry, false );
                     }
 
-                    bool bString = ((sal_uInt8)eType == (sal_uInt8)SbxSTRING);
+                    bool bString = (static_cast<sal_uInt8>(eType) == sal_uInt8(SbxSTRING));
                     OUString aStrStr( "\"" );
                     if( bString )
                     {
@@ -2827,7 +2827,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         }
         // get column/line count
         const sal_uInt16& nColumns = aLongestEntry.getLength();
-        const sal_uInt16  nLines = static_cast<sal_uInt16>( std::min( (sal_Int32) 6, pListBox->GetEntryCount() ));
+        const sal_uInt16  nLines = static_cast<sal_uInt16>( std::min( sal_Int32(6), pListBox->GetEntryCount() ));
 
         Size aSize = pListBox->CalcBlockSize( nColumns, nLines );
         //set the size

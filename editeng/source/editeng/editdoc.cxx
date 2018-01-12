@@ -391,7 +391,7 @@ void TextPortionList::DeleteFromPortion(sal_Int32 nDelFrom)
 
 sal_Int32 TextPortionList::Count() const
 {
-    return (sal_Int32)maPortions.size();
+    return static_cast<sal_Int32>(maPortions.size());
 }
 
 const TextPortion& TextPortionList::operator[](sal_Int32 nPos) const
@@ -692,17 +692,17 @@ sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const
 
 ParaPortion* ParaPortionList::operator [](sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
 }
 
 const ParaPortion* ParaPortionList::operator [](sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
 }
 
 ParaPortion* ParaPortionList::Release(sal_Int32 nPos)
 {
-    if (nPos < 0 || (sal_Int32)maPortions.size() <= nPos)
+    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) <= nPos)
     {
         SAL_WARN( "editeng", "ParaPortionList::Release - out of bounds pos " << nPos);
         return nullptr;
@@ -714,7 +714,7 @@ ParaPortion* ParaPortionList::Release(sal_Int32 nPos)
 
 void ParaPortionList::Remove(sal_Int32 nPos)
 {
-    if (nPos < 0 || (sal_Int32)maPortions.size() <= nPos)
+    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) <= nPos)
     {
         SAL_WARN( "editeng", "ParaPortionList::Remove - out of bounds pos " << nPos);
         return;
@@ -724,7 +724,7 @@ void ParaPortionList::Remove(sal_Int32 nPos)
 
 void ParaPortionList::Insert(sal_Int32 nPos, ParaPortion* p)
 {
-    if (nPos < 0 || (sal_Int32)maPortions.size() < nPos)
+    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) < nPos)
     {
         SAL_WARN( "editeng", "ParaPortionList::Insert - out of bounds pos " << nPos);
         return;
@@ -781,12 +781,12 @@ sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
 
 const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
 }
 
 ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1041,7 +1041,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
         }
     }
 
-    SetHeight( (sal_uInt16)aSz.Height() );
+    SetHeight( static_cast<sal_uInt16>(aSz.Height()) );
     return aSz;
 }
 
@@ -1889,7 +1889,7 @@ const SfxPoolItem* ItemList::First()
 
 const SfxPoolItem* ItemList::Next()
 {
-    if ( CurrentItem + 1 < (sal_Int32)aItemPool.size() )
+    if ( CurrentItem + 1 < static_cast<sal_Int32>(aItemPool.size()) )
     {
         ++CurrentItem;
         return aItemPool[ CurrentItem ];
@@ -2011,7 +2011,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
         const SvxEscapementItem& rEsc = rSet.Get( EE_CHAR_ESCAPEMENT );
 
         sal_uInt16 const nProp = rEsc.GetProportionalHeight();
-        rFont.SetPropr( (sal_uInt8)nProp );
+        rFont.SetPropr( static_cast<sal_uInt8>(nProp) );
 
         short nEsc = rEsc.GetEsc();
         if ( nEsc == DFLT_ESC_AUTO_SUPER )
@@ -2062,12 +2062,12 @@ sal_Int32 EditDoc::GetPos(const ContentNode* p) const
 
 const ContentNode* EditDoc::GetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? maContents[nPos].get() : nullptr;
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maContents.size()) ? maContents[nPos].get() : nullptr;
 }
 
 ContentNode* EditDoc::GetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? maContents[nPos].get() : nullptr;
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maContents.size()) ? maContents[nPos].get() : nullptr;
 }
 
 const ContentNode* EditDoc::operator[](sal_Int32 nPos) const
@@ -2092,7 +2092,7 @@ void EditDoc::Insert(sal_Int32 nPos, ContentNode* p)
 
 void EditDoc::Remove(sal_Int32 nPos)
 {
-    if (nPos < 0 || nPos >= (sal_Int32)maContents.size())
+    if (nPos < 0 || nPos >= static_cast<sal_Int32>(maContents.size()))
     {
         SAL_WARN( "editeng", "EditDoc::Remove - out of bounds pos " << nPos);
         return;
@@ -2102,7 +2102,7 @@ void EditDoc::Remove(sal_Int32 nPos)
 
 void EditDoc::Release(sal_Int32 nPos)
 {
-    if (nPos < 0 || nPos >= (sal_Int32)maContents.size())
+    if (nPos < 0 || nPos >= static_cast<sal_Int32>(maContents.size()))
     {
         SAL_WARN( "editeng", "EditDoc::Release - out of bounds pos " << nPos);
         return;
@@ -2767,10 +2767,10 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
 #if OSL_DEBUG_LEVEL > 0
     CharAttribList::DbgCheckAttribs(*this);
 #endif
-    for (sal_Int32 i = 0; i < (sal_Int32)aAttribs.size(); ++i)
+    for (sal_Int32 i = 0; i < static_cast<sal_Int32>(aAttribs.size()); ++i)
     {
         EditCharAttrib& rAttr = *aAttribs[i].get();
-        for (sal_Int32 nNext = i+1; nNext < (sal_Int32)aAttribs.size(); ++nNext)
+        for (sal_Int32 nNext = i+1; nNext < static_cast<sal_Int32>(aAttribs.size()); ++nNext)
         {
             EditCharAttrib& rNext = *aAttribs[nNext].get();
             if (!rAttr.IsFeature() && rNext.GetStart() == rAttr.GetEnd() && rNext.Which() == rAttr.Which())
@@ -2877,7 +2877,7 @@ void CharAttribList::Remove(const EditCharAttrib* p)
 
 void CharAttribList::Remove(sal_Int32 nPos)
 {
-    if (nPos >= (sal_Int32)aAttribs.size())
+    if (nPos >= static_cast<sal_Int32>(aAttribs.size()))
         return;
 
     aAttribs.erase(aAttribs.begin()+nPos);

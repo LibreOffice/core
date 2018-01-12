@@ -396,40 +396,40 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             css::frame::status::LeftRightMarginScale aLRSpace;
-            aLRSpace.Left = (sal_Int32)(bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin);
-            aLRSpace.TextLeft = (sal_Int32)(bConvert ? convertTwipToMm100(nTxtLeft) : nTxtLeft);
-            aLRSpace.Right = (sal_Int32)(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
-            aLRSpace.ScaleLeft = (sal_Int16)nPropLeftMargin;
-            aLRSpace.ScaleRight = (sal_Int16)nPropRightMargin;
-            aLRSpace.FirstLine = (sal_Int32)(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
-            aLRSpace.ScaleFirstLine = (sal_Int16)(nPropFirstLineOfst);
+            aLRSpace.Left = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin);
+            aLRSpace.TextLeft = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nTxtLeft) : nTxtLeft);
+            aLRSpace.Right = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
+            aLRSpace.ScaleLeft = static_cast<sal_Int16>(nPropLeftMargin);
+            aLRSpace.ScaleRight = static_cast<sal_Int16>(nPropRightMargin);
+            aLRSpace.FirstLine = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
+            aLRSpace.ScaleFirstLine = static_cast<sal_Int16>(nPropFirstLineOfst);
             aLRSpace.AutoFirstLine = IsAutoFirst();
             rVal <<= aLRSpace;
             break;
         }
         case MID_L_MARGIN:
-            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin);
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin);
             break;
 
         case MID_TXT_LMARGIN :
-            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nTxtLeft) : nTxtLeft);
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nTxtLeft) : nTxtLeft);
         break;
         case MID_R_MARGIN:
-            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
             break;
         case MID_L_REL_MARGIN:
-            rVal <<= (sal_Int16)nPropLeftMargin;
+            rVal <<= static_cast<sal_Int16>(nPropLeftMargin);
         break;
         case MID_R_REL_MARGIN:
-            rVal <<= (sal_Int16)nPropRightMargin;
+            rVal <<= static_cast<sal_Int16>(nPropRightMargin);
         break;
 
         case MID_FIRST_LINE_INDENT:
-            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
-            rVal <<= (sal_Int16)(nPropFirstLineOfst);
+            rVal <<= static_cast<sal_Int16>(nPropFirstLineOfst);
             break;
 
         case MID_FIRST_AUTO:
@@ -468,8 +468,8 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             SetRight(bConvert ? convertMm100ToTwip(aLRSpace.Right) : aLRSpace.Right);
             nPropLeftMargin = aLRSpace.ScaleLeft;
             nPropRightMargin = aLRSpace.ScaleRight;
-            SetTextFirstLineOfst((short)(bConvert ?  convertMm100ToTwip(aLRSpace.FirstLine) : aLRSpace.FirstLine));
-            SetPropTextFirstLineOfst ( (sal_uInt16)aLRSpace.ScaleFirstLine );
+            SetTextFirstLineOfst(static_cast<short>(bConvert ?  convertMm100ToTwip(aLRSpace.FirstLine) : aLRSpace.FirstLine));
+            SetPropTextFirstLineOfst ( static_cast<sal_uInt16>(aLRSpace.ScaleFirstLine) );
             SetAutoFirst( aLRSpace.AutoFirstLine );
             break;
         }
@@ -491,20 +491,20 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if((rVal >>= nRel) && nRel >= 0 && nRel < USHRT_MAX)
             {
                 if(MID_L_REL_MARGIN== nMemberId)
-                    nPropLeftMargin = (sal_uInt16)nRel;
+                    nPropLeftMargin = static_cast<sal_uInt16>(nRel);
                 else
-                    nPropRightMargin = (sal_uInt16)nRel;
+                    nPropRightMargin = static_cast<sal_uInt16>(nRel);
             }
             else
                 return false;
         }
         break;
         case MID_FIRST_LINE_INDENT     :
-            SetTextFirstLineOfst((short)(bConvert ?  convertMm100ToTwip(nVal) : nVal));
+            SetTextFirstLineOfst(static_cast<short>(bConvert ?  convertMm100ToTwip(nVal) : nVal));
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
-            SetPropTextFirstLineOfst ( (sal_uInt16)nVal );
+            SetPropTextFirstLineOfst ( static_cast<sal_uInt16>(nVal) );
             break;
 
         case MID_FIRST_AUTO:
@@ -582,7 +582,7 @@ bool SvxLRSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText += GetMetricText( (long)nFirstLineOfst,
+                rText += GetMetricText( static_cast<long>(nFirstLineOfst),
                                         eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nRightMargin )
@@ -617,7 +617,7 @@ bool SvxLRSpaceItem::GetPresentation
                 else
                 {
                     rText = rText +
-                            GetMetricText( (long)nFirstLineOfst,
+                            GetMetricText( static_cast<long>(nFirstLineOfst),
                                             eCoreUnit, ePresUnit, &rIntl ) +
                             " " + EditResId(GetMetricId(ePresUnit));
                 }
@@ -652,7 +652,7 @@ sal_uInt16 SvxLRSpaceItem::GetVersion( sal_uInt16 nFileVersion ) const
 
 void SvxLRSpaceItem::ScaleMetrics( long nMult, long nDiv )
 {
-    nFirstLineOfst = (short)Scale( nFirstLineOfst, nMult, nDiv );
+    nFirstLineOfst = static_cast<short>(Scale( nFirstLineOfst, nMult, nDiv ));
     nTxtLeft = Scale( nTxtLeft, nMult, nDiv );
     nLeftMargin = Scale( nLeftMargin, nMult, nDiv );
     nRightMargin = Scale( nRightMargin, nMult, nDiv );
@@ -716,18 +716,18 @@ bool SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             css::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
-            aUpperLowerMarginScale.Upper = (sal_Int32)(bConvert ? convertTwipToMm100(nUpper) : nUpper);
-            aUpperLowerMarginScale.Lower = (sal_Int32)(bConvert ? convertTwipToMm100(nLower) : nPropUpper);
-            aUpperLowerMarginScale.ScaleUpper = (sal_Int16)nPropUpper;
-            aUpperLowerMarginScale.ScaleLower = (sal_Int16)nPropLower;
+            aUpperLowerMarginScale.Upper = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nUpper) : nUpper);
+            aUpperLowerMarginScale.Lower = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nLower) : nPropUpper);
+            aUpperLowerMarginScale.ScaleUpper = static_cast<sal_Int16>(nPropUpper);
+            aUpperLowerMarginScale.ScaleLower = static_cast<sal_Int16>(nPropLower);
             rVal <<= aUpperLowerMarginScale;
             break;
         }
-        case MID_UP_MARGIN: rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nUpper) : nUpper); break;
-        case MID_LO_MARGIN: rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nLower) : nLower); break;
+        case MID_UP_MARGIN: rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nUpper) : nUpper); break;
+        case MID_LO_MARGIN: rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nLower) : nLower); break;
         case MID_CTX_MARGIN: rVal <<= bContext; break;
-        case MID_UP_REL_MARGIN: rVal <<= (sal_Int16) nPropUpper; break;
-        case MID_LO_REL_MARGIN: rVal <<= (sal_Int16) nPropLower; break;
+        case MID_UP_REL_MARGIN: rVal <<= static_cast<sal_Int16>(nPropUpper); break;
+        case MID_LO_REL_MARGIN: rVal <<= static_cast<sal_Int16>(nPropLower); break;
     }
     return true;
 }
@@ -747,8 +747,8 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( !(rVal >>= aUpperLowerMarginScale ))
                 return false;
             {
-                SetUpper((sal_uInt16)(bConvert ? convertMm100ToTwip( aUpperLowerMarginScale.Upper ) : aUpperLowerMarginScale.Upper));
-                SetLower((sal_uInt16)(bConvert ? convertMm100ToTwip( aUpperLowerMarginScale.Lower ) : aUpperLowerMarginScale.Lower));
+                SetUpper(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip( aUpperLowerMarginScale.Upper ) : aUpperLowerMarginScale.Upper));
+                SetLower(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip( aUpperLowerMarginScale.Lower ) : aUpperLowerMarginScale.Lower));
                 if( aUpperLowerMarginScale.ScaleUpper > 1 )
                     nPropUpper = aUpperLowerMarginScale.ScaleUpper;
                 if( aUpperLowerMarginScale.ScaleLower > 1 )
@@ -759,12 +759,12 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_UP_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
-            SetUpper((sal_uInt16)(bConvert ? convertMm100ToTwip(nVal) : nVal));
+            SetUpper(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip(nVal) : nVal));
             break;
         case MID_LO_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
-            SetLower((sal_uInt16)(bConvert ? convertMm100ToTwip(nVal) : nVal));
+            SetLower(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip(nVal) : nVal));
             break;
         case MID_CTX_MARGIN :
             if (!(rVal >>= bVal))
@@ -778,9 +778,9 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if((rVal >>= nRel) && nRel > 1 )
             {
                 if(MID_UP_REL_MARGIN == nMemberId)
-                    nPropUpper = (sal_uInt16)nRel;
+                    nPropUpper = static_cast<sal_uInt16>(nRel);
                 else
-                    nPropLower = (sal_uInt16)nRel;
+                    nPropLower = static_cast<sal_uInt16>(nRel);
             }
             else
                 return false;
@@ -833,7 +833,7 @@ bool SvxULSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText = GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, &rIntl );
+                rText = GetMetricText( static_cast<long>(nUpper), eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nPropLower )
             {
@@ -841,7 +841,7 @@ bool SvxULSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText += GetMetricText( (long)nLower, eCoreUnit, ePresUnit, &rIntl );
+                rText += GetMetricText( static_cast<long>(nLower), eCoreUnit, ePresUnit, &rIntl );
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -855,7 +855,7 @@ bool SvxULSpaceItem::GetPresentation
             else
             {
                 rText = rText +
-                        GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<long>(nUpper), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             rText = rText + OUString(cpDelim) + EditResId(RID_SVXITEMS_ULSPACE_LOWER);
@@ -867,7 +867,7 @@ bool SvxULSpaceItem::GetPresentation
             else
             {
                 rText = rText +
-                        GetMetricText( (long)nLower, eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<long>(nLower), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             return true;
@@ -886,8 +886,8 @@ sal_uInt16 SvxULSpaceItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 
 void SvxULSpaceItem::ScaleMetrics( long nMult, long nDiv )
 {
-    nUpper = (sal_uInt16)Scale( nUpper, nMult, nDiv );
-    nLower = (sal_uInt16)Scale( nLower, nMult, nDiv );
+    nUpper = static_cast<sal_uInt16>(Scale( nUpper, nMult, nDiv ));
+    nLower = static_cast<sal_uInt16>(Scale( nLower, nMult, nDiv ));
 }
 
 
@@ -1240,7 +1240,7 @@ bool SvxShadowItem::GetPresentation
             rText = rText +
                     EditResId(pId) +
                     OUString(cpDelim) +
-                    GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, &rIntl ) +
+                    GetMetricText( static_cast<long>(nWidth), eCoreUnit, ePresUnit, &rIntl ) +
                     OUString(cpDelim) +
                     EditResId(RID_SVXITEMS_SHADOW[(int)eLocation]);
             return true;
@@ -1257,7 +1257,7 @@ bool SvxShadowItem::GetPresentation
             rText = rText +
                     EditResId(pId) +
                     OUString(cpDelim) +
-                    GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, &rIntl ) +
+                    GetMetricText( static_cast<long>(nWidth), eCoreUnit, ePresUnit, &rIntl ) +
                     " " + EditResId(GetMetricId(ePresUnit)) +
                     OUString(cpDelim) +
                     EditResId(RID_SVXITEMS_SHADOW[(int)eLocation]);
@@ -1283,7 +1283,7 @@ SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) 
 
 void SvxShadowItem::ScaleMetrics( long nMult, long nDiv )
 {
-    nWidth = (sal_uInt16)Scale( nWidth, nMult, nDiv );
+    nWidth = static_cast<sal_uInt16>(Scale( nWidth, nMult, nDiv ));
 }
 
 
@@ -1465,11 +1465,11 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aSeq[1] <<= SvxBoxItem::SvxLineToLine(GetRight(), bConvert);
             aSeq[2] <<= SvxBoxItem::SvxLineToLine(GetBottom(), bConvert);
             aSeq[3] <<= SvxBoxItem::SvxLineToLine(GetTop(), bConvert);
-            aSeq[4] <<= (sal_Int32)(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance());
-            aSeq[5] <<= (sal_Int32)(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist );
-            aSeq[6] <<= (sal_Int32)(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist );
-            aSeq[7] <<= (sal_Int32)(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist );
-            aSeq[8] <<= (sal_Int32)(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist );
+            aSeq[4] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance());
+            aSeq[5] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist );
+            aSeq[6] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist );
+            aSeq[7] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist );
+            aSeq[8] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist );
             rVal <<= aSeq;
             return true;
         }
@@ -1518,7 +1518,7 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     }
 
     if( bDistMember )
-        rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nDist) : nDist);
+        rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nDist) : nDist);
     else
         rVal <<= aRetLine;
 
@@ -1780,11 +1780,11 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if ( aSeq[0] >>= nVal )
                     aBorderLine.Color = nVal;
                 if ( aSeq[1] >>= nVal )
-                    aBorderLine.InnerLineWidth = (sal_Int16) nVal;
+                    aBorderLine.InnerLineWidth = static_cast<sal_Int16>(nVal);
                 if ( aSeq[2] >>= nVal )
-                    aBorderLine.OuterLineWidth = (sal_Int16) nVal;
+                    aBorderLine.OuterLineWidth = static_cast<sal_Int16>(nVal);
                 if ( aSeq[3] >>= nVal )
-                    aBorderLine.LineDistance = (sal_Int16) nVal;
+                    aBorderLine.LineDistance = static_cast<sal_Int16>(nVal);
                 if (aSeq.getLength() >= 5) // fdo#40874 added fields
                 {
                     if (aSeq[4] >>= nVal)
@@ -1855,18 +1855,18 @@ bool SvxBoxItem::GetPresentation
                     rText = rText + pRight->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
                 }
             }
-            rText += GetMetricText( (long)nTopDist, eCoreUnit, ePresUnit, &rIntl );
+            rText += GetMetricText( static_cast<long>(nTopDist), eCoreUnit, ePresUnit, &rIntl );
             if( nTopDist != nBottomDist || nTopDist != nLeftDist ||
                 nTopDist != nRightDist )
             {
                 rText = rText +
                         cpDelimTmp +
-                        GetMetricText( (long)nBottomDist, eCoreUnit,
+                        GetMetricText( static_cast<long>(nBottomDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( (long)nLeftDist, eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<long>(nLeftDist), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( (long)nRightDist, eCoreUnit,
+                        GetMetricText( static_cast<long>(nRightDist), eCoreUnit,
                                         ePresUnit, &rIntl );
             }
             return true;
@@ -1923,7 +1923,7 @@ bool SvxBoxItem::GetPresentation
                 nTopDist == nRightDist )
             {
                 rText = rText +
-                        GetMetricText( (long)nTopDist, eCoreUnit,
+                        GetMetricText( static_cast<long>(nTopDist), eCoreUnit,
                                             ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
@@ -1931,22 +1931,22 @@ bool SvxBoxItem::GetPresentation
             {
                 rText = rText +
                         EditResId(RID_SVXITEMS_BORDER_TOP) +
-                        GetMetricText( (long)nTopDist, eCoreUnit,
+                        GetMetricText( static_cast<long>(nTopDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_BOTTOM) +
-                        GetMetricText( (long)nBottomDist, eCoreUnit,
+                        GetMetricText( static_cast<long>(nBottomDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_LEFT) +
-                        GetMetricText( (long)nLeftDist, eCoreUnit,
+                        GetMetricText( static_cast<long>(nLeftDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_RIGHT) +
-                        GetMetricText( (long)nRightDist, eCoreUnit,
+                        GetMetricText( static_cast<long>(nRightDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
@@ -2016,10 +2016,10 @@ void SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
     if ( pBottom )  pBottom->ScaleMetrics( nMult, nDiv );
     if ( pLeft )    pLeft->ScaleMetrics( nMult, nDiv );
     if ( pRight )   pRight->ScaleMetrics( nMult, nDiv );
-    nTopDist = (sal_uInt16)Scale( nTopDist, nMult, nDiv );
-    nBottomDist = (sal_uInt16)Scale( nBottomDist, nMult, nDiv );
-    nLeftDist = (sal_uInt16)Scale( nLeftDist, nMult, nDiv );
-    nRightDist = (sal_uInt16)Scale( nRightDist, nMult, nDiv );
+    nTopDist = static_cast<sal_uInt16>(Scale( nTopDist, nMult, nDiv ));
+    nBottomDist = static_cast<sal_uInt16>(Scale( nBottomDist, nMult, nDiv ));
+    nLeftDist = static_cast<sal_uInt16>(Scale( nLeftDist, nMult, nDiv ));
+    nRightDist = static_cast<sal_uInt16>(Scale( nRightDist, nMult, nDiv ));
 }
 
 
@@ -2371,7 +2371,7 @@ void SvxBoxInfoItem::ScaleMetrics( long nMult, long nDiv )
 {
     if ( pHori ) pHori->ScaleMetrics( nMult, nDiv );
     if ( pVert ) pVert->ScaleMetrics( nMult, nDiv );
-    nDefDist = (sal_uInt16)Scale( nDefDist, nMult, nDiv );
+    nDefDist = static_cast<sal_uInt16>(Scale( nDefDist, nMult, nDiv ));
 }
 
 
@@ -2409,7 +2409,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 nVal |= 0x04;
             aSeq[2] <<= nVal;
             aSeq[3] <<= static_cast<sal_Int16>(nValidFlags);
-            aSeq[4] <<= (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist());
+            aSeq[4] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist());
             rVal <<= aSeq;
             return true;
         }
@@ -2436,7 +2436,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
         case MID_DISTANCE:
             bIntMember = true;
-            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist());
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist());
             break;
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
@@ -2484,7 +2484,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     if( bConvert )
                         nVal = convertMm100ToTwip(nVal);
-                    SetDefDist( (sal_uInt16)nVal );
+                    SetDefDist( static_cast<sal_uInt16>(nVal) );
                 }
             }
             return true;
@@ -2517,11 +2517,11 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     if ( aSeq[0] >>= nVal )
                         aBorderLine.Color = nVal;
                     if ( aSeq[1] >>= nVal )
-                        aBorderLine.InnerLineWidth = (sal_Int16) nVal;
+                        aBorderLine.InnerLineWidth = static_cast<sal_Int16>(nVal);
                     if ( aSeq[2] >>= nVal )
-                        aBorderLine.OuterLineWidth = (sal_Int16) nVal;
+                        aBorderLine.OuterLineWidth = static_cast<sal_Int16>(nVal);
                     if ( aSeq[3] >>= nVal )
-                        aBorderLine.LineDistance = (sal_Int16) nVal;
+                        aBorderLine.LineDistance = static_cast<sal_Int16>(nVal);
                     if (aSeq.getLength() >= 5) // fdo#40874 added fields
                     {
                         if (aSeq[4] >>= nVal)
@@ -2601,7 +2601,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 if( bConvert )
                     nVal = convertMm100ToTwip(nVal);
-                SetDefDist( (sal_uInt16)nVal );
+                SetDefDist( static_cast<sal_uInt16>(nVal) );
             }
             break;
         }
@@ -2747,7 +2747,7 @@ SfxPoolItem* SvxFormatKeepItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxFormatKeepItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteSChar( (sal_Int8)GetValue() );
+    rStrm.WriteSChar( static_cast<sal_Int8>(GetValue()) );
     return rStrm;
 }
 
@@ -2957,9 +2957,9 @@ void SvxLineItem::SetLine( const SvxBorderLine* pNew )
     pLine.reset( pNew ? new SvxBorderLine( *pNew ) : nullptr );
 }
 
-#define LOAD_GRAPHIC    ((sal_uInt16)0x0001)
-#define LOAD_LINK       ((sal_uInt16)0x0002)
-#define LOAD_FILTER     ((sal_uInt16)0x0004)
+#define LOAD_GRAPHIC    (sal_uInt16(0x0001))
+#define LOAD_LINK       (sal_uInt16(0x0002))
+#define LOAD_FILTER     (sal_uInt16(0x0004))
 
 SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
@@ -3044,10 +3044,10 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
             sal_uInt32  nRed    = aTempColor.GetRed();
             sal_uInt32  nGreen  = aTempColor.GetGreen();
             sal_uInt32  nBlue   = aTempColor.GetBlue();
-            nRed   += (sal_uInt32)(aTempFillColor.GetRed())*2;
-            nGreen += (sal_uInt32)(aTempFillColor.GetGreen())*2;
-            nBlue  += (sal_uInt32)(aTempFillColor.GetBlue())*2;
-            aColor = Color( (sal_Int8)(nRed/3), (sal_Int8)(nGreen/3), (sal_Int8)(nBlue/3) );
+            nRed   += static_cast<sal_uInt32>(aTempFillColor.GetRed())*2;
+            nGreen += static_cast<sal_uInt32>(aTempFillColor.GetGreen())*2;
+            nBlue  += static_cast<sal_uInt32>(aTempFillColor.GetBlue())*2;
+            aColor = Color( static_cast<sal_Int8>(nRed/3), static_cast<sal_Int8>(nGreen/3), static_cast<sal_Int8>(nBlue/3) );
         }
         break;
 
@@ -3056,10 +3056,10 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
             sal_uInt32  nRed    = aTempColor.GetRed();
             sal_uInt32  nGreen  = aTempColor.GetGreen();
             sal_uInt32  nBlue   = aTempColor.GetBlue();
-            nRed   += (sal_uInt32)(aTempFillColor.GetRed());
-            nGreen += (sal_uInt32)(aTempFillColor.GetGreen());
-            nBlue  += (sal_uInt32)(aTempFillColor.GetBlue());
-            aColor = Color( (sal_Int8)(nRed/2), (sal_Int8)(nGreen/2), (sal_Int8)(nBlue/2) );
+            nRed   += static_cast<sal_uInt32>(aTempFillColor.GetRed());
+            nGreen += static_cast<sal_uInt32>(aTempFillColor.GetGreen());
+            nBlue  += static_cast<sal_uInt32>(aTempFillColor.GetBlue());
+            aColor = Color( static_cast<sal_Int8>(nRed/2), static_cast<sal_Int8>(nGreen/2), static_cast<sal_Int8>(nBlue/2) );
         }
         break;
 
@@ -3068,10 +3068,10 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
             sal_uInt32  nRed    = aTempColor.GetRed()*2;
             sal_uInt32  nGreen  = aTempColor.GetGreen()*2;
             sal_uInt32  nBlue   = aTempColor.GetBlue()*2;
-            nRed   += (sal_uInt32)(aTempFillColor.GetRed());
-            nGreen += (sal_uInt32)(aTempFillColor.GetGreen());
-            nBlue  += (sal_uInt32)(aTempFillColor.GetBlue());
-            aColor = Color( (sal_Int8)(nRed/3), (sal_Int8)(nGreen/3), (sal_Int8)(nBlue/3) );
+            nRed   += static_cast<sal_uInt32>(aTempFillColor.GetRed());
+            nGreen += static_cast<sal_uInt32>(aTempFillColor.GetGreen());
+            nBlue  += static_cast<sal_uInt32>(aTempFillColor.GetBlue());
+            aColor = Color( static_cast<sal_Int8>(nRed/3), static_cast<sal_Int8>(nGreen/3), static_cast<sal_Int8>(nBlue/3) );
         }
         break;
 
@@ -3189,7 +3189,7 @@ static inline sal_Int8 lcl_PercentToTransparency(long nPercent)
 
 sal_Int8 SvxBrushItem::TransparencyToPercent(sal_Int32 nTrans)
 {
-    return (sal_Int8)((nTrans * 100 + 127) / 254);
+    return static_cast<sal_Int8>((nTrans * 100 + 127) / 254);
 }
 
 
@@ -3199,16 +3199,16 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch( nMemberId)
     {
         case MID_BACK_COLOR:
-            rVal <<= (sal_Int32)( aColor.GetColor() );
+            rVal <<= static_cast<sal_Int32>( aColor.GetColor() );
         break;
         case MID_BACK_COLOR_R_G_B:
-            rVal <<= (sal_Int32)( aColor.GetRGBColor() );
+            rVal <<= static_cast<sal_Int32>( aColor.GetRGBColor() );
         break;
         case MID_BACK_COLOR_TRANSPARENCY:
             rVal <<= SvxBrushItem::TransparencyToPercent(aColor.GetTransparency());
         break;
         case MID_GRAPHIC_POSITION:
-            rVal <<= (style::GraphicLocation)(sal_Int16)eGraphicPos;
+            rVal <<= (style::GraphicLocation)static_cast<sal_Int16>(eGraphicPos);
         break;
 
         case MID_GRAPHIC:

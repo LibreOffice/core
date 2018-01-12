@@ -434,7 +434,7 @@ static bool lcl_HFPresentation
                 }
                 else
                 {
-                    aText += GetMetricText( (long)nLeftMargin,
+                    aText += GetMetricText( static_cast<long>(nLeftMargin),
                                            eCoreMetric, ePresentationMetric, &rIntl );
                     aText += " " + EditResId(GetMetricId(ePresentationMetric));
                 }
@@ -449,7 +449,7 @@ static bool lcl_HFPresentation
                 }
                 else
                 {
-                    aText += GetMetricText( (long)nRightMargin,
+                    aText += GetMetricText( static_cast<long>(nRightMargin),
                                             eCoreMetric, ePresentationMetric, &rIntl );
                     aText += " " + EditResId(GetMetricId(ePresentationMetric));
                 }

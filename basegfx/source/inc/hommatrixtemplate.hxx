@@ -423,7 +423,7 @@ namespace basegfx
 
                 if(aWork.ludcmp(nIndex, nParity))
                 {
-                    fRetval = (double)nParity;
+                    fRetval = static_cast<double>(nParity);
 
                     // last line needs no multiply if not existing; default value would be 1.
                     const sal_uInt16 nMaxLine(

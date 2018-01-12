@@ -307,7 +307,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
 // sc_which = the Calc Which-ID of the item
 // ee_which = the edit engine Which-ID of the item
 #define PUTITEM( item, sc_which, ee_which ) \
-    ScfTools::PutItem( rItemSet, item, (bEE ? ((sal_uInt16)ee_which) : (sc_which)), bSkipPoolDefs )
+    ScfTools::PutItem( rItemSet, item, (bEE ? (static_cast<sal_uInt16>(ee_which)) : (sc_which)), bSkipPoolDefs )
 
 // Font item
     if( mbFontNameUsed )

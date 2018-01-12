@@ -107,12 +107,12 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     while ( nAngle > 9000 )
         nAngle = ( 18000 - ( nAngle % 18000 ) );
 
-    double fVal = (double)nAngle * F_PI18000;
+    double fVal = static_cast<double>(nAngle) * F_PI18000;
     double  fCos = cos( fVal );
     double  fSin = sin( fVal );
 
-    double  nWidthHalf = (double) aRect.GetWidth() / 2;
-    double  nHeightHalf = (double) aRect.GetHeight() / 2;
+    double  nWidthHalf = static_cast<double>(aRect.GetWidth()) / 2;
+    double  nHeightHalf = static_cast<double>(aRect.GetHeight()) / 2;
 
     // fdo#70838:
     // when you rotate an object, the top-left corner of its bounding box is moved
@@ -124,7 +124,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     double nXDiff = fSin * nHeightHalf + fCos * nWidthHalf  - nWidthHalf;
     double nYDiff = fSin * nWidthHalf  + fCos * nHeightHalf - nHeightHalf;
 
-    aRect.Move( (sal_Int32) nXDiff, (sal_Int32) nYDiff );
+    aRect.Move( static_cast<sal_Int32>(nXDiff), static_cast<sal_Int32>(nYDiff) );
 
     // calculate the proper angle value to be saved
     nAngle = rObj.GetAngle();
@@ -371,10 +371,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 nEndAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
 
                 Point aStart, aEnd, aCenter;
-                aStart.X() = (sal_Int32)( cos( nStartAngle * F_PI18000 ) * 100.0 );
-                aStart.Y() = - (sal_Int32)( sin( nStartAngle * F_PI18000 ) * 100.0 );
-                aEnd.X() = (sal_Int32)( cos( nEndAngle * F_PI18000 ) * 100.0 );
-                aEnd.Y() = - (sal_Int32)( sin( nEndAngle * F_PI18000 ) * 100.0 );
+                aStart.X() = static_cast<sal_Int32>( cos( nStartAngle * F_PI18000 ) * 100.0 );
+                aStart.Y() = - static_cast<sal_Int32>( sin( nStartAngle * F_PI18000 ) * 100.0 );
+                aEnd.X() = static_cast<sal_Int32>( cos( nEndAngle * F_PI18000 ) * 100.0 );
+                aEnd.Y() = - static_cast<sal_Int32>( sin( nEndAngle * F_PI18000 ) * 100.0 );
                 const tools::Rectangle& rRect = aRect100thmm;
                 aCenter.X() = rRect.Left() + ( rRect.GetWidth() / 2 );
                 aCenter.Y() = rRect.Top() + ( rRect.GetHeight() / 2 );
@@ -385,7 +385,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 tools::Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
                 if( rObj.GetAngle() )
                 {
-                    aPolygon.Rotate( rRect.TopLeft(), (sal_uInt16)( rObj.GetAngle() / 10 ) );
+                    aPolygon.Rotate( rRect.TopLeft(), static_cast<sal_uInt16>( rObj.GetAngle() / 10 ) );
                     rObj.SetAngle( 0 );
                 }
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -737,7 +737,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
             double fDist = hypot( rObj.GetRect().GetWidth(),
                                     rObj.GetRect().GetHeight() );
             rObj.SetRect( tools::Rectangle( rTextRefPoint,
-                            Point( (sal_Int32)( rTextRefPoint.X() + fDist ), rTextRefPoint.Y() - 1 ) ) );
+                            Point( static_cast<sal_Int32>( rTextRefPoint.X() + fDist ), rTextRefPoint.Y() - 1 ) ) );
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             mpEscherEx->AddShape( ESCHER_ShpInst_TextBox, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );

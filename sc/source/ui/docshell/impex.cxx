@@ -1083,10 +1083,10 @@ static bool lcl_PutString(
         {
             using namespace ::com::sun::star;
             bool bSecondCal = false;
-            sal_uInt16 nDay  = (sal_uInt16) rStr.copy( nStart[nDP], nEnd[nDP]+1-nStart[nDP] ).toInt32();
-            sal_uInt16 nYear = (sal_uInt16) rStr.copy( nStart[nYP], nEnd[nYP]+1-nStart[nYP] ).toInt32();
+            sal_uInt16 nDay  = static_cast<sal_uInt16>(rStr.copy( nStart[nDP], nEnd[nDP]+1-nStart[nDP] ).toInt32());
+            sal_uInt16 nYear = static_cast<sal_uInt16>(rStr.copy( nStart[nYP], nEnd[nYP]+1-nStart[nYP] ).toInt32());
             OUString aMStr = rStr.copy( nStart[nMP], nEnd[nMP]+1-nStart[nMP] );
-            sal_Int16 nMonth = (sal_Int16) aMStr.toInt32();
+            sal_Int16 nMonth = static_cast<sal_Int16>(aMStr.toInt32());
             if (!nMonth)
             {
                 static const char aSepShortened[] = "SEP";
@@ -1149,11 +1149,11 @@ static bool lcl_PutString(
                 // time fields to zero (ICU calendar instance defaults to current date/time)
                 nHour = nMinute = nSecond = nMilli = 0;
                 if (nFound > 3)
-                    nHour = (sal_Int16) rStr.copy( nStart[3], nEnd[3]+1-nStart[3]).toInt32();
+                    nHour = static_cast<sal_Int16>(rStr.copy( nStart[3], nEnd[3]+1-nStart[3]).toInt32());
                 if (nFound > 4)
-                    nMinute = (sal_Int16) rStr.copy( nStart[4], nEnd[4]+1-nStart[4]).toInt32();
+                    nMinute = static_cast<sal_Int16>(rStr.copy( nStart[4], nEnd[4]+1-nStart[4]).toInt32());
                 if (nFound > 5)
-                    nSecond = (sal_Int16) rStr.copy( nStart[5], nEnd[5]+1-nStart[5]).toInt32();
+                    nSecond = static_cast<sal_Int16>(rStr.copy( nStart[5], nEnd[5]+1-nStart[5]).toInt32());
                 if (nFound > 6)
                 {
                     sal_Unicode cDec = '.';
@@ -1162,7 +1162,7 @@ static bool lcl_PutString(
                     rtl_math_ConversionStatus eStatus;
                     double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus );
                     if (eStatus == rtl_math_ConversionStatus_Ok)
-                        nMilli = (sal_Int16) (1000.0 * fV + 0.5);
+                        nMilli = static_cast<sal_Int16>(1000.0 * fV + 0.5);
                 }
                 pCalendar->setValue( i18n::CalendarFieldIndex::HOUR, nHour );
                 pCalendar->setValue( i18n::CalendarFieldIndex::MINUTE, nMinute );
@@ -1975,7 +1975,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     if( nCol > nEndCol )
                         nEndCol = nCol;
                 }
-                if ( 0 <= nFormat && nFormat < (sal_Int32)aFormats.size() && !bInvalidCol && !bInvalidRow )
+                if ( 0 <= nFormat && nFormat < static_cast<sal_Int32>(aFormats.size()) && !bInvalidCol && !bInvalidRow )
                 {
                     sal_uInt32 nKey = aFormats[nFormat];
                     pDoc->ApplyAttr( nCol, nRow, aRange.aStart.Tab(),

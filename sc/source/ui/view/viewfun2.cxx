@@ -174,7 +174,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
     Fraction aZoomY = GetViewData().GetZoomY();
     sal_uInt16 nOldPixel = 0;
     if (nStartRow == nEndRow)
-        nOldPixel = (sal_uInt16) (rDoc.GetRowHeight(nStartRow,nTab) * nPPTY);
+        nOldPixel = static_cast<sal_uInt16>(rDoc.GetRowHeight(nStartRow,nTab) * nPPTY);
 
     ScSizeDeviceProvider aProv(pDocSh);
     if (aProv.IsPrinter())
@@ -192,7 +192,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
 
     if (bChanged && ( nStartRow == nEndRow ))
     {
-        sal_uInt16 nNewPixel = (sal_uInt16) (rDoc.GetRowHeight(nStartRow,nTab) * nPPTY);
+        sal_uInt16 nNewPixel = static_cast<sal_uInt16>(rDoc.GetRowHeight(nStartRow,nTab) * nPPTY);
         if ( nNewPixel == nOldPixel )
             bChanged = false;
     }

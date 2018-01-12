@@ -623,7 +623,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
 
 void SelectionFunction::GotoPage (int nIndex)
 {
-    sal_uInt16 nPageCount = (sal_uInt16)mrSlideSorter.GetModel().GetPageCount();
+    sal_uInt16 nPageCount = static_cast<sal_uInt16>(mrSlideSorter.GetModel().GetPageCount());
 
     if (nIndex >= nPageCount)
         nIndex = nPageCount - 1;

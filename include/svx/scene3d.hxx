@@ -108,7 +108,7 @@ public:
 
     // Distance:
     double GetDistance() const
-        { return (double)GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE).GetValue(); }
+        { return static_cast<double>(GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE).GetValue()); }
 
     // Focal length: before cm, now 1/10th mm (*100)
     double GetFocalLength() const

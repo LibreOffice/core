@@ -292,9 +292,9 @@ void SwSortDlg::Apply()
     bCheck2 = m_pKeyCB2->IsChecked();
     bCheck3 = m_pKeyCB3->IsChecked();
 
-    nCol1 = (sal_uInt16)m_pColEdt1->GetValue();
-    nCol2 = (sal_uInt16)m_pColEdt2->GetValue();
-    nCol3 = (sal_uInt16)m_pColEdt3->GetValue();
+    nCol1 = static_cast<sal_uInt16>(m_pColEdt1->GetValue());
+    nCol2 = static_cast<sal_uInt16>(m_pColEdt2->GetValue());
+    nCol3 = static_cast<sal_uInt16>(m_pColEdt3->GetValue());
 
     nType1 = m_pTypDLB1->GetSelectedEntryPos();
     nType2 = m_pTypDLB2->GetSelectedEntryPos();

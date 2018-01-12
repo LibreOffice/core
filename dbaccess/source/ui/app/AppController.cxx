@@ -2628,7 +2628,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
             ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
             if ( aLayoutInfo.has( OUString(INFO_PREVIEW) ) )
             {
-                const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( INFO_PREVIEW, (sal_Int32)0 ) );
+                const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( INFO_PREVIEW, sal_Int32(0) ) );
                 m_ePreviewMode = static_cast< PreviewMode >( nPreviewMode );
                 if ( getView() )
                     getContainer()->switchPreview( m_ePreviewMode );

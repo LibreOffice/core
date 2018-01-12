@@ -106,7 +106,7 @@ gint
 g_lo_menu_get_n_items_from_section (GLOMenu *menu,
                                     gint     section)
 {
-    g_return_val_if_fail (0 <= section && section < (gint) menu->items->len, 0);
+    g_return_val_if_fail (0 <= section && section < static_cast<gint>(menu->items->len), 0);
 
     GLOMenu *model = g_lo_menu_get_section (menu, section);
 
@@ -152,7 +152,7 @@ g_lo_menu_insert_in_section (GLOMenu     *menu,
                              const gchar *label)
 {
     g_return_if_fail (G_IS_LO_MENU (menu));
-    g_return_if_fail (0 <= section && section < (gint) menu->items->len);
+    g_return_if_fail (0 <= section && section < static_cast<gint>(menu->items->len));
 
     GLOMenu *model = g_lo_menu_get_section (menu, section);
 
@@ -179,7 +179,7 @@ g_lo_menu_set_attribute_value (GLOMenu     *menu,
     g_return_if_fail (attribute != nullptr);
     g_return_if_fail (valid_attribute_name (attribute));
 
-    if (position >= (gint) menu->items->len)
+    if (position >= static_cast<gint>(menu->items->len))
         return;
 
     struct item menu_item = g_array_index (menu->items, struct item, position);
@@ -478,7 +478,7 @@ g_lo_menu_set_link (GLOMenu     *menu,
     g_return_if_fail (link != nullptr);
     g_return_if_fail (valid_attribute_name (link));
 
-    if (position < 0 || position >= (gint) menu->items->len)
+    if (position < 0 || position >= static_cast<gint>(menu->items->len))
         position = menu->items->len - 1;
 
     struct item menu_item = g_array_index (menu->items, struct item, position);
@@ -497,7 +497,7 @@ g_lo_menu_insert_section (GLOMenu     *menu,
 {
     g_return_if_fail (G_IS_LO_MENU (menu));
 
-    if (position < 0 || position > (gint) menu->items->len)
+    if (position < 0 || position > static_cast<gint>(menu->items->len))
         position = menu->items->len;
 
     struct item menu_item;
@@ -540,13 +540,13 @@ g_lo_menu_new_submenu_in_item_in_section (GLOMenu *menu,
                                           gint     position)
 {
     g_return_if_fail (G_IS_LO_MENU (menu));
-    g_return_if_fail (0 <= section && section < (gint) menu->items->len);
+    g_return_if_fail (0 <= section && section < static_cast<gint>(menu->items->len));
 
     GLOMenu* model = g_lo_menu_get_section (menu, section);
 
     g_return_if_fail (model != nullptr);
 
-    if (0 <= position && position < (gint) model->items->len) {
+    if (0 <= position && position < static_cast<gint>(model->items->len)) {
         GMenuModel* submenu = G_MENU_MODEL (g_lo_menu_new());
 
         g_lo_menu_set_link (model, position, G_MENU_LINK_SUBMENU, submenu);
@@ -565,7 +565,7 @@ g_lo_menu_get_submenu_from_item_in_section (GLOMenu *menu,
                                             gint     position)
 {
     g_return_val_if_fail (G_IS_LO_MENU (menu), nullptr);
-    g_return_val_if_fail (0 <= section && section < (gint) menu->items->len, nullptr);
+    g_return_val_if_fail (0 <= section && section < static_cast<gint>(menu->items->len), nullptr);
 
     GLOMenu *model = g_lo_menu_get_section (menu, section);
 
@@ -573,7 +573,7 @@ g_lo_menu_get_submenu_from_item_in_section (GLOMenu *menu,
 
     GLOMenu *submenu = nullptr;
 
-    if (0 <= position && position < (gint) model->items->len)
+    if (0 <= position && position < static_cast<gint>(model->items->len))
         submenu = G_LO_MENU (G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
                 ->get_item_link (G_MENU_MODEL (model), position, G_MENU_LINK_SUBMENU));
         //submenu = g_menu_model_get_item_link (G_MENU_MODEL (model), position, G_MENU_LINK_SUBMENU);
@@ -624,7 +624,7 @@ g_lo_menu_remove (GLOMenu *menu,
                   gint     position)
 {
     g_return_if_fail (G_IS_LO_MENU (menu));
-    g_return_if_fail (0 <= position && position < (gint) menu->items->len);
+    g_return_if_fail (0 <= position && position < static_cast<gint>(menu->items->len));
 
     g_lo_menu_clear_item (&g_array_index (menu->items, struct item, position));
     g_array_remove_index (menu->items, position);
@@ -637,7 +637,7 @@ g_lo_menu_remove_from_section (GLOMenu *menu,
                                gint     position)
 {
     g_return_if_fail (G_IS_LO_MENU (menu));
-    g_return_if_fail (0 <= section && section < (gint) menu->items->len);
+    g_return_if_fail (0 <= section && section < static_cast<gint>(menu->items->len));
 
     GLOMenu *model = g_lo_menu_get_section (menu, section);
 

@@ -179,7 +179,7 @@ void SheetScenarios::importScenarios( SequenceInputStream& rStrm )
 
 Scenario& SheetScenarios::createScenario()
 {
-    bool bIsActive = maScenarios.size() == (sal_uInt32) maModel.mnShown;
+    bool bIsActive = maScenarios.size() == static_cast<sal_uInt32>(maModel.mnShown);
     ScenarioVector::value_type xScenario( new Scenario( *this, mnSheet, bIsActive ) );
     maScenarios.push_back( xScenario );
     return *xScenario;

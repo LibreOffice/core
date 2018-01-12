@@ -573,7 +573,7 @@ namespace basegfx
                     {
                         // if fDistance >= fLength decrement with multiple of fLength
                         sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
-                        fDistance -= (double)nCount * fLength;
+                        fDistance -= static_cast<double>(nCount) * fLength;
                     }
                     else
                     {
@@ -884,7 +884,7 @@ namespace basegfx
             CutFlagValue aRetval(CutFlagValue::NONE);
             double fCut1(0.0);
             double fCut2(0.0);
-            bool bFinished(!((bool)(aCutFlags & CutFlagValue::ALL)));
+            bool bFinished(!static_cast<bool>(aCutFlags & CutFlagValue::ALL));
 
             // test for same points?
             if(!bFinished
@@ -2765,7 +2765,7 @@ namespace basegfx
 
                     for(sal_uInt32 a(0); a < nLoopCount; a++)
                     {
-                        const double fRelativePos((double)a / (double)nSegments); // 0.0 .. 1.0
+                        const double fRelativePos(static_cast<double>(a) / static_cast<double>(nSegments)); // 0.0 .. 1.0
                         const B2DPoint aNewPoint(getPositionRelative(rCandidate, fRelativePos, fLength));
                         aRetval.append(aNewPoint);
                     }
@@ -3285,8 +3285,8 @@ namespace basegfx
             const css::drawing::FlagSequence& rFlagSequenceSource,
             bool bCheckClosed)
         {
-            const sal_uInt32 nCount((sal_uInt32)rPointSequenceSource.getLength());
-            OSL_ENSURE(nCount == (sal_uInt32)rFlagSequenceSource.getLength(),
+            const sal_uInt32 nCount(static_cast<sal_uInt32>(rPointSequenceSource.getLength()));
+            OSL_ENSURE(nCount == static_cast<sal_uInt32>(rFlagSequenceSource.getLength()),
                 "UnoPolygonBezierCoordsToB2DPolygon: Unequal count of Points and Flags (!)");
 
             // prepare new polygon
@@ -3483,8 +3483,8 @@ namespace basegfx
                         const sal_uInt32 nTargetCount(aCollectPoints.size());
                         OSL_ENSURE(nTargetCount == aCollectFlags.size(), "Unequal Point and Flag count (!)");
 
-                        rPointSequenceRetval.realloc((sal_Int32)nTargetCount);
-                        rFlagSequenceRetval.realloc((sal_Int32)nTargetCount);
+                        rPointSequenceRetval.realloc(static_cast<sal_Int32>(nTargetCount));
+                        rFlagSequenceRetval.realloc(static_cast<sal_Int32>(nTargetCount));
                         css::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
                         css::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
 
@@ -3502,8 +3502,8 @@ namespace basegfx
                     // straightforward point list creation
                     const sal_uInt32 nTargetCount(nPointCount + (bClosed ? 1 : 0));
 
-                    rPointSequenceRetval.realloc((sal_Int32)nTargetCount);
-                    rFlagSequenceRetval.realloc((sal_Int32)nTargetCount);
+                    rPointSequenceRetval.realloc(static_cast<sal_Int32>(nTargetCount));
+                    rFlagSequenceRetval.realloc(static_cast<sal_Int32>(nTargetCount));
 
                     css::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
                     css::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();

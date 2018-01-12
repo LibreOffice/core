@@ -205,12 +205,12 @@ namespace svt
         if ( m_pImpl->nActivePath != -1 )
             nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
 
-        DBG_ASSERT( (sal_Int32)aNewPathPos->second.size() > nCurrentStatePathIndex,
+        DBG_ASSERT( static_cast<sal_Int32>(aNewPathPos->second.size()) > nCurrentStatePathIndex,
             "RoadmapWizard::activate: you cannot activate a path which has less states than we've already advanced!" );
             // If this asserts, this for instance means that we are already in state number, say, 5
             // of our current path, and the caller tries to activate a path which has less than 5
             // states
-        if ( (sal_Int32)aNewPathPos->second.size() <= nCurrentStatePathIndex )
+        if ( static_cast<sal_Int32>(aNewPathPos->second.size()) <= nCurrentStatePathIndex )
             return;
 
         // assert that the current and the new path are equal, up to nCurrentStatePathIndex
@@ -243,7 +243,7 @@ namespace svt
             return;
 
         // determine up to which index (in the new path) we have to display the items
-        RoadmapTypes::ItemIndex nUpperStepBoundary = (RoadmapTypes::ItemIndex)rActivePath.size();
+        RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<RoadmapTypes::ItemIndex>(rActivePath.size());
         bool bIncompletePath = false;
         if ( !m_pImpl->bActivePathIsDefinite )
         {
@@ -355,14 +355,14 @@ namespace svt
 
         sal_Int32 nNextStateIndex = nCurrentStatePathIndex + 1;
 
-        while   (   ( nNextStateIndex < (sal_Int32)aActivePathPos->second.size() )
+        while   (   ( nNextStateIndex < static_cast<sal_Int32>(aActivePathPos->second.size()) )
                 &&  ( m_pImpl->aDisabledStates.find( aActivePathPos->second[ nNextStateIndex ] ) != m_pImpl->aDisabledStates.end() )
                 )
         {
             ++nNextStateIndex;
         }
 
-        if ( nNextStateIndex >= (sal_Int32)aActivePathPos->second.size() )
+        if ( nNextStateIndex >= static_cast<sal_Int32>(aActivePathPos->second.size()) )
             // there is no next state in the current path (at least none which is enabled)
             return WZS_INVALID_STATE;
 
@@ -453,8 +453,8 @@ namespace svt
         bool bResult = true;
         if ( nNewIndex > nCurrentIndex )
         {
-            bResult = skipUntil( (WizardState)nCurItemId );
-            WizardState nTemp = (WizardState)nCurItemId;
+            bResult = skipUntil( static_cast<WizardState>(nCurItemId) );
+            WizardState nTemp = static_cast<WizardState>(nCurItemId);
             while( nTemp )
             {
                 if( m_pImpl->aDisabledStates.find( --nTemp ) != m_pImpl->aDisabledStates.end() )
@@ -462,7 +462,7 @@ namespace svt
             }
         }
         else
-            bResult = skipBackwardUntil( (WizardState)nCurItemId );
+            bResult = skipBackwardUntil( static_cast<WizardState>(nCurItemId) );
 
         if ( !bResult )
             m_pImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
@@ -524,7 +524,7 @@ namespace svt
         }
 
         // if the state is currently in the roadmap, reflect it's new status
-        m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
+        m_pImpl->pRoadmap->EnableRoadmapItem( static_cast<RoadmapTypes::ItemId>(_nState), _bEnable );
     }
 
 
@@ -555,7 +555,7 @@ namespace svt
     void RoadmapWizard::updateRoadmapItemLabel( WizardState _nState )
     {
         const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
-        RoadmapTypes::ItemIndex nUpperStepBoundary = (RoadmapTypes::ItemIndex)rActivePath.size();
+        RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<RoadmapTypes::ItemIndex>(rActivePath.size());
         RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
         sal_Int32 nCurrentStatePathIndex = -1;
         if ( m_pImpl->nActivePath != -1 )

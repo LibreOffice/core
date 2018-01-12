@@ -424,7 +424,7 @@ void EditUndoMoveParagraphs::Undo()
     aTmpRange.Min() += nDiff;
     aTmpRange.Max() += nDiff;
 
-    if ( nParagraphs.Min() < (long)nDest )
+    if ( nParagraphs.Min() < static_cast<long>(nDest) )
     {
         long nLen = aTmpRange.Len();
         aTmpRange.Min() -= nLen;

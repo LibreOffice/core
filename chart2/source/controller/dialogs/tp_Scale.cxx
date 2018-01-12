@@ -316,7 +316,7 @@ void ScaleTabPage::Reset(const SfxItemSet* rInAttrs)
         m_bAllowDateAxis = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
     m_nAxisType=chart2::AxisType::REALNUMBER;
     if (rInAttrs->GetItemState(SCHATTR_AXISTYPE, true, &pPoolItem) == SfxItemState::SET)
-        m_nAxisType = (int) static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        m_nAxisType = static_cast<int>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
     if( m_nAxisType==chart2::AxisType::DATE && !m_bAllowDateAxis )
         m_nAxisType=chart2::AxisType::CATEGORY;
     if( m_bAllowDateAxis )
@@ -556,7 +556,7 @@ void ScaleTabPage::SetNumFormat()
 
     if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, true, &pPoolItem ) == SfxItemState::SET )
     {
-        sal_uLong nFmt = (sal_uLong)static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        sal_uLong nFmt = static_cast<sal_uLong>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
 
         m_pFmtFldMax->SetFormatKey( nFmt );
         m_pFmtFldMin->SetFormatKey( nFmt );

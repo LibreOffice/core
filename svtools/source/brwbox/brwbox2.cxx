@@ -478,13 +478,13 @@ void BrowseBox::Resize()
     // resized - which is done in UpdateScrollbars)
     sal_uLong nSBSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
-        nSBSize = (sal_uLong)(nSBSize * (double)GetZoom());
+        nSBSize = static_cast<sal_uLong>(nSBSize * static_cast<double>(GetZoom()));
 
     DoHideCursor( "Resize" );
     sal_uInt16 nOldVisibleRows = 0;
     //fdo#42694, post #i111125# GetDataRowHeight() can be 0
     if (GetDataRowHeight())
-        nOldVisibleRows = (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
+        nOldVisibleRows = static_cast<sal_uInt16>(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
 
     // did we need a horizontal scroll bar or is there a Control Area?
     if ( !pDataWin->bNoHScroll &&
@@ -510,7 +510,7 @@ void BrowseBox::Resize()
     sal_uInt16 nVisibleRows = 0;
 
     if (GetDataRowHeight())
-        nVisibleRows = (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
+        nVisibleRows = static_cast<sal_uInt16>(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
 
     // TopRow is unchanged, but the number of visible lines has changed.
     if ( nVisibleRows != nOldVisibleRows )
@@ -785,8 +785,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     sal_uLong nRelBottomRow = aOverallAreaSize.Height();
     if (!_bForeignDevice && nDataRowHeigt)
     {
-        nRelTopRow = ((sal_uLong)_rRect.Top() / nDataRowHeigt);
-        nRelBottomRow = (sal_uLong)(_rRect.Bottom()) / nDataRowHeigt;
+        nRelTopRow = (static_cast<sal_uLong>(_rRect.Top()) / nDataRowHeigt);
+        nRelBottomRow = static_cast<sal_uLong>(_rRect.Bottom()) / nDataRowHeigt;
     }
 
     // cache frequently used values
@@ -806,13 +806,13 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
 
     // redraw the invalid fields
     for ( sal_uLong nRelRow = nRelTopRow;
-          nRelRow <= nRelBottomRow && (sal_uLong)nTopRow+nRelRow < (sal_uLong)nRowCount;
+          nRelRow <= nRelBottomRow && static_cast<sal_uLong>(nTopRow)+nRelRow < static_cast<sal_uLong>(nRowCount);
           ++nRelRow, aPos.Y() += nDataRowHeigt )
     {
         // get row
         // check valid area, to be on the safe side:
-        DBG_ASSERT( (sal_uInt16)(nTopRow+nRelRow) < nRowCount, "BrowseBox::ImplPaintData: invalid seek" );
-        if ( (nTopRow+long(nRelRow)) < 0 || (sal_uInt16)(nTopRow+nRelRow) >= nRowCount )
+        DBG_ASSERT( static_cast<sal_uInt16>(nTopRow+nRelRow) < nRowCount, "BrowseBox::ImplPaintData: invalid seek" );
+        if ( (nTopRow+long(nRelRow)) < 0 || static_cast<sal_uInt16>(nTopRow+nRelRow) >= nRowCount )
             continue;
 
         // prepare row
@@ -880,7 +880,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
                 _rOut.DrawRect( aFieldRect );
             }
 
-            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nRow == (sal_uLong)GetCurRow()))
+            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nRow == static_cast<sal_uLong>(GetCurRow())))
                 DrawCursor();
 
             // draw a single field.
@@ -1048,7 +1048,7 @@ void BrowseBox::UpdateScrollbars()
     // the size of the corner window (and the width of the VSB/height of the HSB)
     sal_uLong nCornerSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
-        nCornerSize = (sal_uLong)(nCornerSize * (double)GetZoom());
+        nCornerSize = static_cast<sal_uLong>(nCornerSize * static_cast<double>(GetZoom()));
 
     bool bNeedsVScroll = false;
     long nMaxRows = 0;
@@ -1112,14 +1112,14 @@ void BrowseBox::UpdateScrollbars()
         Size( aDataWinSize.Width() - nHScrX, nCornerSize ) );
 
     // total scrollable columns
-    short nScrollCols = short(pCols.size()) - (short)nFrozenCols;
+    short nScrollCols = short(pCols.size()) - static_cast<short>(nFrozenCols);
 
     // visible columns
     short nVisibleHSize = nLastCol == BROWSER_INVALIDID
-        ? (short)( pCols.size() - nFirstCol )
-        : (short)( nLastCol - nFirstCol );
+        ? static_cast<short>( pCols.size() - nFirstCol )
+        : static_cast<short>( nLastCol - nFirstCol );
 
-    short nRange = std::max( nScrollCols, (short)0 );
+    short nRange = std::max( nScrollCols, short(0) );
     aHScroll->SetVisibleSize( nVisibleHSize );
     aHScroll->SetRange( Range( 0, nRange ));
     if ( bNeedsHScroll && !aHScroll->IsVisible() )
@@ -1379,11 +1379,11 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
         {
             // compute right end of column
             BrowserColumn *pCol = pCols[ nCol ];
-            sal_uInt16 nR = (sal_uInt16)(nX + pCol->Width() - 1);
+            sal_uInt16 nR = static_cast<sal_uInt16>(nX + pCol->Width() - 1);
 
             // show resize-pointer?
             if ( bResizing || ( pCol->GetId() &&
-                 std::abs( ((long) nR ) - rEvt.GetPosPixel().X() ) < MIN_COLUMNWIDTH ) )
+                 std::abs( static_cast<long>(nR) - rEvt.GetPosPixel().X() ) < MIN_COLUMNWIDTH ) )
             {
                 aNewPointer = Pointer( PointerStyle::HSplit );
                 if ( bResizing )
@@ -1423,7 +1423,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
 
         // width changed?
         nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
-        if ( (nDragX - nResizeX) != (long)pCols[ nResizeCol ]->Width() )
+        if ( (nDragX - nResizeX) != static_cast<long>(pCols[ nResizeCol ]->Width()) )
         {
             // resize column
             long nMaxX = pDataWin->GetSizePixel().Width();

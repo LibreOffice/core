@@ -59,7 +59,7 @@ sal_Int64 SAL_CALL OMetaConnection::getSomething( const css::uno::Sequence< sal_
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         ? reinterpret_cast< sal_Int64 >( this )
-        : (sal_Int64)0;
+        : sal_Int64(0);
 }
 
 Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()

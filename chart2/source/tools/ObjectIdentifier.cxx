@@ -491,7 +491,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
 
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
-    if(aRet.getLength() > (sal_Int32)strlen(m_aProtocol))
+    if(aRet.getLength() > static_cast<sal_Int32>(strlen(m_aProtocol)))
         aRet.append("/");
 
     if(!rParentParticle.isEmpty())
@@ -683,7 +683,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
 
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
-    if(aRet.getLength() > (sal_Int32)strlen(m_aProtocol))
+    if(aRet.getLength() > static_cast<sal_Int32>(strlen(m_aProtocol)))
         aRet.append("/");
     aRet.append(rParentPartical);
     if(!rParentPartical.isEmpty())

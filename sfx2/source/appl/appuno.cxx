@@ -255,7 +255,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     aStr.append(pSlot->pUnoName).append('.').append(pType->aAttrib[nSub].pName);
                     if ( rPropValue.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
                     {
-                        sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
+                        sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->aAttrib[nSub].nAID));
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
                         if ( pItem->PutValue( rPropValue.Value, nSubId ) )
@@ -372,7 +372,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
                             ++nFoundArgs;
 #endif
-                            sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
+                            sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->aAttrib[nSub].nAID));
                             if ( bConvertTwips )
                                 nSubId |= CONVERT_TWIPS;
                             if (!pItem->PutValue( rProp.Value, nSubId ) )
@@ -1265,7 +1265,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 // complex type, add a property value for every member of the struct
                 for ( sal_uInt16 n=1; n<=nSubCount; ++n )
                 {
-                    sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[n-1].nAID;
+                    sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->aAttrib[n-1].nAID));
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
 
@@ -1311,7 +1311,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 // complex type, add a property value for every member of the struct
                 for ( sal_uInt16 n = 1; n <= nSubCount; ++n )
                 {
-                    sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
+                    sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(rArg.pType->aAttrib[n-1].nAID));
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
 
@@ -1429,12 +1429,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_VIEW_ID, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sViewId;
-            pValue[nActProp++].Value <<= (sal_Int16) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            pValue[nActProp++].Value <<= static_cast<sal_Int16>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
         }
         if ( rSet.GetItemState( SID_PLUGIN_MODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sPluginMode;
-            pValue[nActProp++].Value <<= (sal_Int16) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            pValue[nActProp++].Value <<= static_cast<sal_Int16>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
         }
         if ( rSet.GetItemState( SID_DOC_READONLY, false, &pItem ) == SfxItemState::SET )
         {
@@ -1548,12 +1548,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_MACROEXECMODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sMacroExecMode;
-            pValue[nActProp++].Value <<= (sal_Int16) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            pValue[nActProp++].Value <<= static_cast<sal_Int16>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
         }
         if ( rSet.GetItemState( SID_UPDATEDOCMODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sUpdateDocMode;
-            pValue[nActProp++].Value <<= (sal_Int16) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            pValue[nActProp++].Value <<= static_cast<sal_Int16>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
         }
         if ( rSet.GetItemState( SID_REPAIRPACKAGE, false, &pItem ) == SfxItemState::SET )
         {

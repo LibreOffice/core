@@ -65,7 +65,7 @@ inline void ScUnoConversion::FillScAddress(
         ScAddress& rScAddress,
         const css::table::CellAddress& rApiAddress )
 {
-    rScAddress.Set( (SCCOL)rApiAddress.Column, (SCROW)rApiAddress.Row, (SCTAB)rApiAddress.Sheet );
+    rScAddress.Set( static_cast<SCCOL>(rApiAddress.Column), static_cast<SCROW>(rApiAddress.Row), static_cast<SCTAB>(rApiAddress.Sheet) );
 }
 
 inline void ScUnoConversion::FillApiAddress(
@@ -81,8 +81,8 @@ inline void ScUnoConversion::FillScRange(
         ScRange& rScRange,
         const css::table::CellRangeAddress& rApiRange )
 {
-    rScRange.aStart.Set( (SCCOL)rApiRange.StartColumn, (SCROW)rApiRange.StartRow, (SCTAB)rApiRange.Sheet );
-    rScRange.aEnd.Set( (SCCOL)rApiRange.EndColumn, (SCROW)rApiRange.EndRow, (SCTAB)rApiRange.Sheet );
+    rScRange.aStart.Set( static_cast<SCCOL>(rApiRange.StartColumn), static_cast<SCROW>(rApiRange.StartRow), static_cast<SCTAB>(rApiRange.Sheet) );
+    rScRange.aEnd.Set( static_cast<SCCOL>(rApiRange.EndColumn), static_cast<SCROW>(rApiRange.EndRow), static_cast<SCTAB>(rApiRange.Sheet) );
 }
 
 inline void ScUnoConversion::FillApiRange(

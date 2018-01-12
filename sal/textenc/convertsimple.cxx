@@ -524,7 +524,7 @@ sal_Size sal::detail::textenc::convertCharToUnicode(
     pEndSrcBuf  = pSrcBuf+nSrcBytes;
     while ( pSrcBuf < pEndSrcBuf )
     {
-        unsigned char c = (unsigned char)*pSrcBuf;
+        unsigned char c = static_cast<unsigned char>(*pSrcBuf);
         if ( c < 0x80 )
             cConv = c;
         else

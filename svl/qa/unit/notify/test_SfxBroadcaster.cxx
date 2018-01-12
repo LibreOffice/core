@@ -60,10 +60,10 @@ SfxBroadcasterTest::AddingListenersIncreasesCount()
     SfxBroadcaster sb;
     MockedSfxListener sl;
 
-    CPPUNIT_ASSERT_EQUAL((size_t)0, sb.GetListenerCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), sb.GetListenerCount());
 
     sl.StartListening(sb, true);
-    CPPUNIT_ASSERT_EQUAL((size_t)1, sb.GetListenerCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), sb.GetListenerCount());
 }
 
 void
@@ -72,11 +72,11 @@ SfxBroadcasterTest::RemovingListenersDecreasesCount()
     SfxBroadcaster sb;
     MockedSfxListener sl;
 
-    CPPUNIT_ASSERT_EQUAL((size_t)0, sb.GetListenerCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), sb.GetListenerCount());
     sl.StartListening(sb, true);
-    CPPUNIT_ASSERT_EQUAL((size_t)1, sb.GetListenerCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), sb.GetListenerCount());
     sl.EndListening(sb, true);
-    CPPUNIT_ASSERT_EQUAL((size_t)0, sb.GetListenerCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), sb.GetListenerCount());
 }
 
 void
@@ -89,7 +89,7 @@ SfxBroadcasterTest::HintsAreNotForwardedToRemovedListeners()
 
     sl1.StartListening(sb, true);
     sl2.StartListening(sb, true);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("All listeners were added.", (size_t)2, sb.GetListenerCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("All listeners were added.", size_t(2), sb.GetListenerCount());
     sl1.EndListening(sb, true);
     sb.Forward(sb, hint);
     CPPUNIT_ASSERT_EQUAL(true, sl2.NotifyWasCalled());
@@ -103,7 +103,7 @@ SfxBroadcasterTest::SameListenerCanBeAddedMoreThanOnce()
     SfxBroadcaster sb;
     sb.AddListener(sl);
     sb.AddListener(sl);
-    CPPUNIT_ASSERT_EQUAL((size_t)2, sb.GetListenerCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), sb.GetListenerCount());
 }
 
 void
@@ -114,7 +114,7 @@ SfxBroadcasterTest::StoppingListeningAffectsOnlyFirstOfIdenticalListeners()
     sb.AddListener(sl);
     sb.AddListener(sl);
     sb.RemoveListener(sl);
-    CPPUNIT_ASSERT_EQUAL((size_t)1, sb.GetListenerCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), sb.GetListenerCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SfxBroadcasterTest);

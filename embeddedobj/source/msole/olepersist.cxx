@@ -309,7 +309,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
         nRead = xInStream->readBytes( aHeadData, 4 );
         sal_uInt32 nLen = 0;
         if ( nRead == 4 && aHeadData.getLength() == 4 )
-            nLen = ( ( ( (sal_uInt32)aHeadData[3] * 0x100 + (sal_uInt32)aHeadData[2] ) * 0x100 ) + (sal_uInt32)aHeadData[1] ) * 0x100 + (sal_uInt32)aHeadData[0];
+            nLen = ( ( ( static_cast<sal_uInt32>(aHeadData[3]) * 0x100 + static_cast<sal_uInt32>(aHeadData[2]) ) * 0x100 ) + static_cast<sal_uInt32>(aHeadData[1]) ) * 0x100 + static_cast<sal_uInt32>(aHeadData[0]);
         if ( nLen > 4 )
         {
             xInStream->skipBytes( nLen - 4 );
@@ -322,7 +322,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
         // check whether the first bytes represent the size
         sal_uInt32 nSize = 0;
         for ( sal_Int32 nInd = 3; nInd >= 0; nInd-- )
-            nSize = ( nSize << 8 ) + (sal_uInt8)aData[nInd];
+            nSize = ( nSize << 8 ) + static_cast<sal_uInt8>(aData[nInd]);
 
         if ( nSize == xSeek->getLength() - 4 )
             nHeaderOffset = 4;
@@ -441,7 +441,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     // write width
     for ( nIndex = 0; nIndex < 4; nIndex++ )
     {
-        aData[nIndex] = (sal_Int8)( aSize.Width % 0x100 );
+        aData[nIndex] = static_cast<sal_Int8>( aSize.Width % 0x100 );
         aSize.Width /= 0x100;
     }
     xTempOutStream->writeBytes( aData );
@@ -449,7 +449,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     // write height
     for ( nIndex = 0; nIndex < 4; nIndex++ )
     {
-        aData[nIndex] = (sal_Int8)( aSize.Height % 0x100 );
+        aData[nIndex] = static_cast<sal_Int8>( aSize.Height % 0x100 );
         aSize.Height /= 0x100;
     }
     xTempOutStream->writeBytes( aData );
@@ -472,7 +472,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     }
     for ( sal_Int32 nInd = 0; nInd < 4; nInd++ )
     {
-        aData[nInd] = (sal_Int8)( ( (sal_uInt64) nLength ) % 0x100 );
+        aData[nInd] = static_cast<sal_Int8>( static_cast<sal_uInt64>(nLength) % 0x100 );
         nLength /= 0x100;
     }
     xTempSeek->seek( 36 );

@@ -337,7 +337,7 @@ rtl_arena_segment_type * rtl_arena_hash_remove(
 
         if (lookups > 1)
         {
-            sal_Size nseg = (sal_Size)(arena->m_stats.m_alloc - arena->m_stats.m_free);
+            sal_Size nseg = static_cast<sal_Size>(arena->m_stats.m_alloc - arena->m_stats.m_free);
             if (nseg > 4 * arena->m_hash_size)
             {
                 if (!(arena->m_flags & RTL_ARENA_FLAG_RESCALE))
@@ -396,7 +396,7 @@ bool rtl_arena_segment_alloc(
         }
 
         /* roundup to next power of 2 */
-        size = (((sal_Size)1) << msb);
+        size = ((sal_Size(1)) << msb);
     }
 
     index = lowbit(RTL_MEMORY_P2ALIGN(arena->m_freelist_bitmap, size));
@@ -555,7 +555,7 @@ void rtl_arena_constructor(void * obj)
         head = &(arena->m_freelist_head[i]);
         rtl_arena_segment_constructor (head);
 
-        head->m_size = (((sal_Size)1) << i);
+        head->m_size = ((sal_Size(1)) << i);
         head->m_type = RTL_ARENA_SEGMENT_TYPE_HEAD;
     }
 
@@ -590,7 +590,7 @@ void rtl_arena_destructor(void * obj)
     {
         head = &(arena->m_freelist_head[i]);
 
-        assert(head->m_size == (((sal_Size)1) << i));
+        assert(head->m_size == ((sal_Size(1)) << i));
         assert(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
 
         rtl_arena_segment_destructor (head);
@@ -623,7 +623,7 @@ rtl_arena_type * rtl_arena_activate(
         if (!RTL_MEMORY_ISP2(quantum))
         {
             /* roundup to next power of 2 */
-            quantum = (((sal_Size)1) << highbit(quantum));
+            quantum = ((sal_Size(1)) << highbit(quantum));
         }
         quantum_cache_max = RTL_MEMORY_P2ROUNDUP(quantum_cache_max, quantum);
 
@@ -1060,7 +1060,7 @@ void * rtl_machdep_alloc(
 #endif
 
 #if defined(SAL_UNX)
-    addr = mmap (nullptr, (size_t)size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+    addr = mmap (nullptr, static_cast<size_t>(size), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 #elif defined(SAL_W32)
     addr = VirtualAlloc (nullptr, (SIZE_T)size, MEM_COMMIT, PAGE_READWRITE);
 #endif /* (SAL_UNX || SAL_W32) */
@@ -1102,7 +1102,7 @@ sal_Size rtl_machdep_pagesize()
 #if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
     return (sal_Size)getpagesize();
 #else  /* POSIX */
-    return (sal_Size)sysconf(_SC_PAGESIZE);
+    return static_cast<sal_Size>(sysconf(_SC_PAGESIZE));
 #endif /* xBSD || POSIX */
 #elif defined(SAL_W32)
     SYSTEM_INFO info;

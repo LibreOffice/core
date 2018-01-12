@@ -561,7 +561,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         const SfxItemSet* pRequestArguments = rRequest.GetArgs();
         if (pRequestArguments)
         {
-            const SfxBoolItem* pIsActive = rRequest.GetArg<SfxBoolItem>((sal_uInt16)nSlotId);
+            const SfxBoolItem* pIsActive = rRequest.GetArg<SfxBoolItem>(static_cast<sal_uInt16>(nSlotId));
             if (!pIsActive->GetValue ())
             {
                 if (nSlotId == SID_NOTES_MASTER_MODE)

@@ -171,7 +171,7 @@ bool SwTableField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= sExpand;
         break;
     case FIELD_PROP_FORMAT:
-        rAny <<= (sal_Int32)GetFormat();
+        rAny <<= static_cast<sal_Int32>(GetFormat());
         break;
     default:
         bRet = false;

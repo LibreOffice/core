@@ -249,7 +249,7 @@ sal_Int32 FastTokenHandlerBase::getTokenFromChars(
         nLen = strlen( pToken );
 
     if( pTokenHandler )
-        nRet = pTokenHandler->getTokenDirect( pToken, (sal_Int32) nLen );
+        nRet = pTokenHandler->getTokenDirect( pToken, static_cast<sal_Int32>(nLen) );
     else
     {
         // heap allocate, copy & then free

@@ -36,7 +36,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
 
     OString onumeral = OUStringToOString( numeral , RTL_TEXTENCODING_ASCII_US ) ;
 
-    chNumeral = xmlStrndup( reinterpret_cast<const xmlChar*>(onumeral.getStr()), ( int )onumeral.getLength() ) ;
+    chNumeral = xmlStrndup( reinterpret_cast<const xmlChar*>(onumeral.getStr()), static_cast<int>(onumeral.getLength()) ) ;
 
     if( xmlSecBnInitialize( &bn, 0 ) < 0 ) {
         xmlFree( chNumeral ) ;

@@ -426,7 +426,7 @@ namespace drawinglayer
             // handle FontRotation (if defined)
             if(!basegfx::fTools::equalZero(fFontRotation))
             {
-                sal_Int16 aRotate10th((sal_Int16)(fFontRotation * (-1800.0/F_PI)));
+                sal_Int16 aRotate10th(static_cast<sal_Int16>(fFontRotation * (-1800.0/F_PI)));
                 aRetval.SetOrientation(aRotate10th % 3600);
             }
 
@@ -481,7 +481,7 @@ namespace drawinglayer
             // means the scaling is in the direct relation of width to height
             if(rFont.GetFontSize().getWidth() > 0)
             {
-                o_rSize.setX((double)rFont.GetFontSize().getWidth());
+                o_rSize.setX(static_cast<double>(rFont.GetFontSize().getWidth()));
             }
 #endif
             return aRetval;

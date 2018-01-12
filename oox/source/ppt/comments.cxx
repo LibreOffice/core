@@ -76,7 +76,7 @@ OUString Comment::getAuthor ( const CommentAuthorList& list )
 
 const Comment& CommentList::getCommentAtIndex (int index)
 {
-    if(index >= (int)cmLst.size() || index < 0)
+    if(index >= static_cast<int>(cmLst.size()) || index < 0)
         throw css::lang::IllegalArgumentException();
 
     return cmLst.at(index)

@@ -114,7 +114,7 @@ class INetURLHistory_Impl
 
     static sal_uInt16 capacity()
     {
-        return (sal_uInt16)(INETHIST_SIZE_LIMIT);
+        return sal_uInt16(INETHIST_SIZE_LIMIT);
     }
 
     static sal_uInt32 crc32 (OUString const & rData)

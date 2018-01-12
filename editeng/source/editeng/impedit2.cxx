@@ -211,7 +211,7 @@ void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
     else
         pRefDev = pSharedVCL->GetVirtualDevice();
 
-    nOnePixelInRef = (sal_uInt16)pRefDev->PixelToLogic( Size( 1, 0 ) ).Width();
+    nOnePixelInRef = static_cast<sal_uInt16>(pRefDev->PixelToLogic( Size( 1, 0 ) ).Width());
 
     if ( IsFormatted() )
     {
@@ -232,7 +232,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
     SetRefDevice( pRefDev );
 
     pRefDev->SetMapMode( rMapMode );
-    nOnePixelInRef = (sal_uInt16)pRefDev->PixelToLogic( Size( 1, 0 ) ).Width();
+    nOnePixelInRef = static_cast<sal_uInt16>(pRefDev->PixelToLogic( Size( 1, 0 ) ).Width());
     if ( IsFormatted() )
     {
         FormatFullDoc();
@@ -1122,7 +1122,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView const * pEditView, const 
             bool bRTLPortion = rTextPortion.IsRightToLeft();
 
             // -1: We are 'behind' the character
-            long nVisPos = (long)ubidi_getVisualIndex( pBidi, bWasBehind ? nPosInLine-1 : nPosInLine, &nError );
+            long nVisPos = static_cast<long>(ubidi_getVisualIndex( pBidi, bWasBehind ? nPosInLine-1 : nPosInLine, &nError ));
             if ( bVisualToLeft )
             {
                 if ( !bWasBehind || bRTLPortion )
@@ -2112,9 +2112,9 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
 EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 nNewPos )
 {
     aOldPositions.Justify();
-    bool bValidAction = ( (long)nNewPos < aOldPositions.Min() ) || ( (long)nNewPos > aOldPositions.Max() );
+    bool bValidAction = ( static_cast<long>(nNewPos) < aOldPositions.Min() ) || ( static_cast<long>(nNewPos) > aOldPositions.Max() );
     OSL_ENSURE( bValidAction, "Move in itself?" );
-    OSL_ENSURE( aOldPositions.Max() <= (long)GetParaPortions().Count(), "totally over it: MoveParagraphs" );
+    OSL_ENSURE( aOldPositions.Max() <= static_cast<long>(GetParaPortions().Count()), "totally over it: MoveParagraphs" );
 
     EditSelection aSelection;
 
@@ -2862,14 +2862,14 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
         {
             // Correct only if really a word gets overlapped in the process of
             // Spell checking
-            if (i->mnStart > (size_t)nEnd)
+            if (i->mnStart > static_cast<size_t>(nEnd))
             {
                 pRWrongs->push_back(*i);
                 editeng::MisspellRange& rRWrong = pRWrongs->back();
                 rRWrong.mnStart = rRWrong.mnStart - nEnd;
                 rRWrong.mnEnd = rRWrong.mnEnd - nEnd;
             }
-            else if (i->mnStart < (size_t)nEnd && i->mnEnd > (size_t)nEnd)
+            else if (i->mnStart < static_cast<size_t>(nEnd) && i->mnEnd > static_cast<size_t>(nEnd))
                 i->mnEnd = nEnd;
         }
         sal_Int32 nInv = nEnd ? nEnd-1 : nEnd;
@@ -3149,7 +3149,7 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
     }
 
     nMaxWidth++; // widen it, because in CreateLines for >= is wrapped.
-    return (sal_uInt32)nMaxWidth;
+    return static_cast<sal_uInt32>(nMaxWidth);
 }
 
 sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, bool bIgnoreExtraSpace )
@@ -4007,7 +4007,7 @@ long ImpEditEngine::GetXPos(
             if( pLine->GetCharPosArray().size() )
             {
                 sal_Int32 nPos = nIndex - 1 - pLine->GetStart();
-                if (nPos < 0 || nPos >= (sal_Int32)pLine->GetCharPosArray().size())
+                if (nPos < 0 || nPos >= static_cast<sal_Int32>(pLine->GetCharPosArray().size()))
                 {
                     nPos = pLine->GetCharPosArray().size()-1;
                     OSL_FAIL("svx::ImpEditEngine::GetXPos(), index out of range!");

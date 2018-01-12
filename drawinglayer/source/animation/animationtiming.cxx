@@ -297,14 +297,14 @@ namespace drawinglayer
 
         double AnimationEntryLoop::getDuration() const
         {
-            return (mfDuration * (double)mnRepeat);
+            return (mfDuration * static_cast<double>(mnRepeat));
         }
 
         double AnimationEntryLoop::getStateAtTime(double fTime) const
         {
             if(mnRepeat && !basegfx::fTools::equalZero(mfDuration))
             {
-                const sal_uInt32 nCurrentLoop((sal_uInt32)(fTime / mfDuration));
+                const sal_uInt32 nCurrentLoop(static_cast<sal_uInt32>(fTime / mfDuration));
 
                 if(nCurrentLoop > mnRepeat)
                 {
@@ -312,7 +312,7 @@ namespace drawinglayer
                 }
                 else
                 {
-                    const double fTimeAtLoopStart((double)nCurrentLoop * mfDuration);
+                    const double fTimeAtLoopStart(static_cast<double>(nCurrentLoop) * mfDuration);
                     const double fRelativeTime(fTime - fTimeAtLoopStart);
                     return AnimationEntryList::getStateAtTime(fRelativeTime);
                 }
@@ -327,11 +327,11 @@ namespace drawinglayer
 
             if(mnRepeat && !basegfx::fTools::equalZero(mfDuration))
             {
-                const sal_uInt32 nCurrentLoop((sal_uInt32)(fTime / mfDuration));
+                const sal_uInt32 nCurrentLoop(static_cast<sal_uInt32>(fTime / mfDuration));
 
                 if(nCurrentLoop <= mnRepeat)
                 {
-                    const double fTimeAtLoopStart((double)nCurrentLoop * mfDuration);
+                    const double fTimeAtLoopStart(static_cast<double>(nCurrentLoop) * mfDuration);
                     const double fRelativeTime(fTime - fTimeAtLoopStart);
                     const double fNextEventAtLoop(AnimationEntryList::getNextEventTime(fRelativeTime));
 

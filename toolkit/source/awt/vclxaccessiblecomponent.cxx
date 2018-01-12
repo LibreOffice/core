@@ -503,7 +503,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
-        vcl::Window* pChild = GetWindow()->GetAccessibleChildWindow( (sal_uInt16)i );
+        vcl::Window* pChild = GetWindow()->GetAccessibleChildWindow( static_cast<sal_uInt16>(i) );
         if ( pChild )
             xAcc = pChild->GetAccessible();
     }
@@ -735,7 +735,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  )
                 aFont = pWindow->GetFont();
             nColor = aFont.GetColor().GetColor();
             // COL_AUTO is not very meaningful for AT
-            if ( nColor == (sal_Int32)COL_AUTO)
+            if ( nColor == sal_Int32(COL_AUTO))
                 nColor = pWindow->GetTextColor().GetColor();
         }
     }

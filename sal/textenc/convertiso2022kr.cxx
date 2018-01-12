@@ -120,7 +120,7 @@ sal_Size ImplConvertIso2022KrToUnicode(void const * pData,
                 eState = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ESC;
             else if (nChar < 0x80)
                 if (pDestBufPtr != pDestBufEnd)
-                    *pDestBufPtr++ = (sal_Unicode) nChar;
+                    *pDestBufPtr++ = static_cast<sal_Unicode>(nChar);
                 else
                     goto no_output;
             else
@@ -157,7 +157,7 @@ sal_Size ImplConvertIso2022KrToUnicode(void const * pData,
                 if (nUnicode != 0)
                     if (pDestBufPtr != pDestBufEnd)
                     {
-                        *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                        *pDestBufPtr++ = static_cast<sal_Unicode>(nUnicode);
                         eState = IMPL_ISO_2022_KR_TO_UNICODE_STATE_1001;
                     }
                     else
@@ -339,7 +339,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(void const * pData,
             {
                 if (ImplIsHighSurrogate(nChar))
                 {
-                    nHighSurrogate = (sal_Unicode) nChar;
+                    nHighSurrogate = static_cast<sal_Unicode>(nChar);
                     continue;
                 }
             }

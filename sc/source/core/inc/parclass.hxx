@@ -64,7 +64,7 @@ public:
                                     ForceArray or ReferenceOrForceArray. */
     static  bool        HasForceArray( OpCode eOp)
                                     {
-                                        return 0 <= (short)eOp &&
+                                        return 0 <= static_cast<short>(eOp) &&
                                             eOp <= SC_OPCODE_LAST_OPCODE_ID &&
                                             pData[eOp].bHasForceArray;
                                     }

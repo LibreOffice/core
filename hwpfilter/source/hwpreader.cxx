@@ -44,9 +44,9 @@
 #define rchars(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(false)
 #define padd(x,y,z)     mxList->addAttribute(x,y,z)
 #define Double2Str(x)   OUString::number(x)
-#define WTI(x)          ((double)(x) / 1800.)     // unit => inch
-#define WTMM(x)     ((double)(x) / 1800. * 25.4)  // unit => mm
-#define WTSM(x)     ((int)((x) / 1800. * 2540))   // unit ==> 1/100 mm
+#define WTI(x)          (static_cast<double>(x) / 1800.)     // unit => inch
+#define WTMM(x)     (static_cast<double>(x) / 1800. * 25.4)  // unit => mm
+#define WTSM(x)     (static_cast<int>((x) / 1800. * 2540))   // unit ==> 1/100 mm
 
 #define PI 3.14159265358979323846
 
@@ -129,7 +129,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHWP(SvStream &rStream)
             nRead = rStream.ReadBytes(aData, 32768);
             if (nRead == 0)
                 break;
-            stream->addData(aData, (int)nRead);
+            stream->addData(aData, static_cast<int>(nRead));
         }
 
         HWPFile hwpfile;
@@ -1351,7 +1351,7 @@ void HwpReader::parseCharShape(CharShape const * cshape)
         OUString(buf, size, RTL_TEXTENCODING_EUC_KR));
 
     padd("style:text-scale", sXML_CDATA,
-        ascii(Int2Str((int)(cshape->ratio[0] * fRatio), "%d%%", buf)));
+        ascii(Int2Str(static_cast<int>(cshape->ratio[0] * fRatio), "%d%%", buf)));
 
     double sspace = (cshape->size / 25) * cshape->space[0] / 100.;
 
@@ -1429,7 +1429,7 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
 
     unsigned char set_align = 0;
 
-    switch ((int) pshape->arrange_type)
+    switch (static_cast<int>(pshape->arrange_type))
     {
         case 1:
             strcpy(buf, "start");
@@ -4049,20 +4049,20 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                              rotate = -(PI/2);
                      }
                      else
-                         rotate = atan((double)( pt[1].y - pt[0].y )/(pt[1].x - pt[0].x ));
+                         rotate = atan(static_cast<double>( pt[1].y - pt[0].y )/(pt[1].x - pt[0].x ));
                      if( pt[1].x < pt[0].x )
                          rotate += PI;
 
                      for( i = 0 ; i < 3 ; i++){
-                         r_pt[i].x = (int)(pt[i].x * cos(-rotate) - pt[i].y * sin(-rotate));
-                         r_pt[i].y = (int)(pt[i].y * cos(-rotate) + pt[i].x * sin(-rotate));
+                         r_pt[i].x = static_cast<int>(pt[i].x * cos(-rotate) - pt[i].y * sin(-rotate));
+                         r_pt[i].y = static_cast<int>(pt[i].y * cos(-rotate) + pt[i].x * sin(-rotate));
                      }
 
                      /* 4 - Calculation of reflex angle */
                      if( r_pt[2].y == r_pt[1].y )
                          skewX = 0;
                      else
-                         skewX = atan((double)(r_pt[2].x - r_pt[1].x )/( r_pt[2].y - r_pt[1].y ));
+                         skewX = atan(static_cast<double>(r_pt[2].x - r_pt[1].x )/( r_pt[2].y - r_pt[1].y ));
                      if( skewX >= PI/2 )
                          skewX -= PI;
                      if( skewX <= -PI/2 )
@@ -4089,8 +4089,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                           bIsRotate = true;
                      }
                      if( bIsRotate ){
-                         drawobj->extent.w = (int)sqrt(double(DBL(pt[1].x-pt[0].x)+DBL(pt[1].y-pt[0].y)));
-                         drawobj->extent.h = (int)sqrt(double(DBL(pt[2].x-pt[1].x)+DBL(pt[2].y-pt[1].y)));
+                         drawobj->extent.w = static_cast<int>(sqrt(double(DBL(pt[1].x-pt[0].x)+DBL(pt[1].y-pt[0].y))));
+                         drawobj->extent.h = static_cast<int>(sqrt(double(DBL(pt[2].x-pt[1].x)+DBL(pt[2].y-pt[1].y))));
                          padd("draw:transform", sXML_CDATA, trans);
                      }
             }
@@ -4264,7 +4264,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                         start_angle = 0.5 * PI;
                                 }
                                 else{
-                                     start_angle = atan((double)( pal->pt[0].y - pal->pt[1].y )/( pal->pt[1].x - pal->pt[0].x ));
+                                     start_angle = atan(static_cast<double>( pal->pt[0].y - pal->pt[1].y )/( pal->pt[1].x - pal->pt[0].x ));
                                      if( pal->pt[1].x < pal->pt[0].x )
                                          start_angle += PI;
                                 }
@@ -4275,7 +4275,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                         end_angle = 0.5 * PI;
                                 }
                                 else{
-                                     end_angle = atan((double)( pal->pt[2].y - pal->pt[1].y )/( pal->pt[1].x - pal->pt[2].x ));
+                                     end_angle = atan(static_cast<double>( pal->pt[2].y - pal->pt[1].y )/( pal->pt[1].x - pal->pt[2].x ));
                                      if( pal->pt[1].x < pal->pt[2].x )
                                          end_angle += PI;
                                 }
@@ -4400,21 +4400,21 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                   NaturalSpline(n, tarr, yarr, yb, carr, darr);
                               }
 
-                              sprintf(buf, "M%d %dC%d %d", WTSM((int)xarr[0]), WTSM((int)yarr[0]),
-                                      WTSM((int)(xarr[0] + xb[0]/3)), WTSM((int)(yarr[0] + yb[0]/3)) );
+                              sprintf(buf, "M%d %dC%d %d", WTSM(static_cast<int>(xarr[0])), WTSM(static_cast<int>(yarr[0])),
+                                      WTSM(static_cast<int>(xarr[0] + xb[0]/3)), WTSM(static_cast<int>(yarr[0] + yb[0]/3)) );
                               oustr += ascii(buf);
 
                               for( i = 1 ; i < n  ; i++ ){
                                   if( i == n -1 ){
                                       sprintf(buf, " %d %d %d %dz",
-                                              WTSM((int)(xarr[i] - xb[i]/3)), WTSM((int)(yarr[i] - yb[i]/3)),
-                                              WTSM((int)xarr[i]), WTSM((int)yarr[i]) );
+                                              WTSM(static_cast<int>(xarr[i] - xb[i]/3)), WTSM(static_cast<int>(yarr[i] - yb[i]/3)),
+                                              WTSM(static_cast<int>(xarr[i])), WTSM(static_cast<int>(yarr[i])) );
                                   }
                                   else{
                                       sprintf(buf, " %d %d %d %d %d %d",
-                                              WTSM((int)(xarr[i] - xb[i]/3)), WTSM((int)(yarr[i] - yb[i]/3)),
-                                              WTSM((int)xarr[i]), WTSM((int)yarr[i]),
-                                              WTSM((int)xarr[i] + xb[i]/3), WTSM((int)(yarr[i] + yb[i]/3)) );
+                                              WTSM(static_cast<int>(xarr[i] - xb[i]/3)), WTSM(static_cast<int>(yarr[i] - yb[i]/3)),
+                                              WTSM(static_cast<int>(xarr[i])), WTSM(static_cast<int>(yarr[i])),
+                                              WTSM(static_cast<int>(xarr[i]) + xb[i]/3), WTSM(static_cast<int>(yarr[i] + yb[i]/3)) );
                                   }
 
                                   oustr += ascii(buf);

@@ -3322,7 +3322,7 @@ bool IsExtraData( const SwDoc *pDoc )
     const SwLineNumberInfo &rInf = pDoc->GetLineNumberInfo();
     return rInf.IsPaintLineNumbers() ||
            rInf.IsCountInFlys() ||
-           ((sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE &&
+           (static_cast<sal_Int16>(SW_MOD()->GetRedlineMarkPos()) != text::HoriOrientation::NONE &&
             !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty());
 }
 

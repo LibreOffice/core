@@ -287,7 +287,7 @@ public:
         SVGFilter::ObjectSet::const_iterator aMasterPageIt = mMasterPageSet.begin();
         for( ; aMasterPageIt != mMasterPageSet.end(); ++aMasterPageIt )
         {
-            aTextFieldCharSets[ *aMasterPageIt ][ sFieldId ].insert( (sal_Unicode)( format ) );
+            aTextFieldCharSets[ *aMasterPageIt ][ sFieldId ].insert( static_cast<sal_Unicode>( format ) );
         }
     }
 };
@@ -1236,7 +1236,7 @@ void SVGFilter::implEmbedBulletGlyphs()
 
 void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData )
 {
-    OUString sId = "bullet-char-template-" + OUString::number( (sal_Int32)cBullet );
+    OUString sId = "bullet-char-template-" + OUString::number( static_cast<sal_Int32>(cBullet) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 
     OUString sFactor = OUString::number( 1.0 / 2048 );
@@ -2172,7 +2172,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                     // we look for the most verbose date format
                     for( ; aChar != aCharSet.end(); ++aChar )
                     {
-                        eCurDateFormat = (SvxDateFormat)( (int)( *aChar ) & 0x0f );
+                        eCurDateFormat = (SvxDateFormat)( static_cast<int>( *aChar ) & 0x0f );
                         switch( eDateFormat )
                         {
                             case SvxDateFormat::StdSmall:

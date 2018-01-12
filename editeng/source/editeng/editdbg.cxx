@@ -165,7 +165,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
             aDebStr.append("Language=");
-            aDebStr.append((sal_Int32)static_cast<sal_uInt16>(static_cast<const SvxLanguageItem&>(rItem).GetLanguage()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(static_cast<const SvxLanguageItem&>(rItem).GetLanguage())));
         break;
         case EE_CHAR_COLOR:
         {
@@ -276,7 +276,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         {
             aDebStr.append("Kerning=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxKerningItem&>(rItem).GetValue()));
-            Size aSz( 0, (short)static_cast<const SvxKerningItem&>(rItem).GetValue() );
+            Size aSz( 0, static_cast<short>(static_cast<const SvxKerningItem&>(rItem).GetValue()) );
             MapUnit eUnit = rPool.GetMetric( rItem.Which() );
             MapMode aItemMapMode(eUnit);
             MapMode aPntMap( MapUnit::MapPoint );

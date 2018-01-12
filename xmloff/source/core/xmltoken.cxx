@@ -3344,7 +3344,7 @@ namespace xmloff { namespace token {
         assert(XML_TOKEN_INVALID < eToken);
         assert(eToken < XML_TOKEN_END);
 
-        const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
+        const XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
         return rString.equalsAsciiL( pToken->pChar, pToken->nLength );
     }
 
@@ -3355,7 +3355,7 @@ namespace xmloff { namespace token {
         assert(XML_TOKEN_INVALID < eToken);
         assert(eToken < XML_TOKEN_END);
 
-        const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
+        const XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
         return aIter.isString( pToken->pChar );
     }
 }

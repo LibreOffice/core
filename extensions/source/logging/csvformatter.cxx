@@ -243,13 +243,13 @@ namespace logging
             char buffer[ 31 ];
             const size_t buffer_size = sizeof( buffer );
             snprintf( buffer, buffer_size, "%04i-%02i-%02iT%02i:%02i:%02i.%09i",
-                (int)record.LogTime.Year,
-                (int)record.LogTime.Month,
-                (int)record.LogTime.Day,
-                (int)record.LogTime.Hours,
-                (int)record.LogTime.Minutes,
-                (int)record.LogTime.Seconds,
-                (int)record.LogTime.NanoSeconds );
+                static_cast<int>(record.LogTime.Year),
+                static_cast<int>(record.LogTime.Month),
+                static_cast<int>(record.LogTime.Day),
+                static_cast<int>(record.LogTime.Hours),
+                static_cast<int>(record.LogTime.Minutes),
+                static_cast<int>(record.LogTime.Seconds),
+                static_cast<int>(record.LogTime.NanoSeconds) );
             aLogEntry.appendAscii( buffer );
             aLogEntry.append(comma_char);
         }

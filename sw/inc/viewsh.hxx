@@ -87,8 +87,8 @@ namespace vcl
 
 // Define for flags needed in ctor or layers below.
 // Currently the Preview flag is needed for DrawPage.
-#define VSHELLFLAG_ISPREVIEW            ((long)0x1)
-#define VSHELLFLAG_SHARELAYOUT          ((long)0x2)
+#define VSHELLFLAG_ISPREVIEW            (long(0x1))
+#define VSHELLFLAG_SHARELAYOUT          (long(0x2))
 typedef std::shared_ptr<SwRootFrame> SwRootFramePtr;
 
 class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>

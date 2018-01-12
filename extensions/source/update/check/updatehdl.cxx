@@ -122,8 +122,8 @@ void UpdateHandler::enableControls( short nCtrlState )
     // enum list and must never be disabled
     for ( int i=0; i<HELP_BUTTON; i++ )
     {
-        short nCurStateVal = (short)(nCtrlState >> i);
-        short nOldStateVal = (short)(mnLastCtrlState >> i);
+        short nCurStateVal = static_cast<short>(nCtrlState >> i);
+        short nOldStateVal = static_cast<short>(mnLastCtrlState >> i);
         if ( ( nCurStateVal & 0x01 ) != ( nOldStateVal & 0x01 ) )
         {
             bool bEnableControl = ( ( nCurStateVal & 0x01 ) == 0x01 );
@@ -262,7 +262,7 @@ OUString UpdateHandler::getBubbleText( UpdateState eState )
     osl::MutexGuard aGuard( maMutex );
 
     OUString sText;
-    sal_Int32 nIndex = (sal_Int32) eState;
+    sal_Int32 nIndex = static_cast<sal_Int32>(eState);
 
     loadStrings();
 
@@ -278,7 +278,7 @@ OUString UpdateHandler::getBubbleTitle( UpdateState eState )
     osl::MutexGuard aGuard( maMutex );
 
     OUString sText;
-    sal_Int32 nIndex = (sal_Int32) eState;
+    sal_Int32 nIndex = static_cast<sal_Int32>(eState);
 
     loadStrings();
 
@@ -750,7 +750,7 @@ void UpdateHandler::focusControl( DialogControls eID )
 
     OSL_ENSURE( (eID < BUTTON_COUNT), "UpdateHandler::focusControl: id to big!" );
 
-    uno::Reference< awt::XWindow > xWindow( xContainer->getControl( msButtonIDs[(short)eID] ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xWindow( xContainer->getControl( msButtonIDs[static_cast<short>(eID)] ), uno::UNO_QUERY );
     if ( xWindow.is() )
         xWindow->setFocus();
 }
@@ -984,18 +984,18 @@ void UpdateHandler::showControls( short nControls )
     // The buttons from CANCEL_BUTTON to RESUME_BUTTON will be shown or
     // hidden on demand
     short nShiftMe;
-    for ( int i = 0; i <= (int)RESUME_BUTTON; i++ )
+    for ( int i = 0; i <= int(RESUME_BUTTON); i++ )
     {
-        nShiftMe = (short)(nControls >> i);
-        showControl( msButtonIDs[i], (bool)(nShiftMe & 0x01) );
+        nShiftMe = static_cast<short>(nControls >> i);
+        showControl( msButtonIDs[i], static_cast<bool>(nShiftMe & 0x01) );
     }
 
-    nShiftMe = (short)(nControls >> THROBBER_CTRL);
-    startThrobber( (bool)(nShiftMe & 0x01) );
+    nShiftMe = static_cast<short>(nControls >> THROBBER_CTRL);
+    startThrobber( static_cast<bool>(nShiftMe & 0x01) );
 
-    nShiftMe = (short)(nControls >> PROGRESS_CTRL);
-    showControl( CTRL_PROGRESS, (bool)(nShiftMe & 0x01) );
-    showControl( TEXT_PERCENT, (bool)(nShiftMe & 0x01) );
+    nShiftMe = static_cast<short>(nControls >> PROGRESS_CTRL);
+    showControl( CTRL_PROGRESS, static_cast<bool>(nShiftMe & 0x01) );
+    showControl( TEXT_PERCENT, static_cast<bool>(nShiftMe & 0x01) );
 
     // Status text needs to be smaller, when there are buttons at the right side of the dialog
     if ( ( nControls & ( (1<<CANCEL_BUTTON) + (1<<PAUSE_BUTTON) + (1<<RESUME_BUTTON) ) )  != 0 )

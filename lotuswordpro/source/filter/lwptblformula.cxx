@@ -259,7 +259,7 @@ void LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 
     for (sal_uInt16 Count = 0; Count < NumberOfArguments; Count++)
     {
-        sal_uInt8 ArgumentType = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as lushort
+        sal_uInt8 ArgumentType = static_cast<sal_uInt8>(m_pObjStrm->QuickReaduInt16()); // written as lushort
         sal_uInt16 ArgumentDiskLength = m_pObjStrm->QuickReaduInt16();
         bool bArgument = true;
 
@@ -595,14 +595,14 @@ OUString LwpFormulaTools::GetName(sal_uInt16 nTokenType)
 OUString LwpFormulaTools::GetCellAddr(sal_Int16 nRow, sal_Int16 nCol, LwpTableLayout* pCellsMap)
 {
     OUString aCellAddr;
-    XFCell* pCell = pCellsMap->GetCellsMap(nRow,(sal_uInt8)nCol);
+    XFCell* pCell = pCellsMap->GetCellsMap(nRow,static_cast<sal_uInt8>(nCol));
     if (pCell)
     {
         aCellAddr = pCell->GetCellName();
     }
     else
     {
-        assert( -1==nRow || -1==(sal_Int8)nCol);
+        assert( -1==nRow || -1==static_cast<sal_Int8>(nCol));
     }
     return aCellAddr;
 }

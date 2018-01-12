@@ -77,7 +77,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
 
     if (RndStdIds::FLY_AT_PAGE == nRndId)
     {
-        aAnchor.SetPageNum( (sal_uInt16)nNdPgPos );
+        aAnchor.SetPageNum( static_cast<sal_uInt16>(nNdPgPos) );
     }
     else
     {

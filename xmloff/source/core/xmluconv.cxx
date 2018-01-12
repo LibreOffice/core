@@ -325,9 +325,9 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     fValue -= nValue;
     double fCount;
     if (nValue > 0)
-         fCount = ::rtl::math::approxFloor (log10((double)nValue)) + 1;
+         fCount = ::rtl::math::approxFloor (log10(static_cast<double>(nValue))) + 1;
     else if (nValue < 0)
-         fCount = ::rtl::math::approxFloor (log10((double)(nValue * -1))) + 1;
+         fCount = ::rtl::math::approxFloor (log10(static_cast<double>(nValue * -1))) + 1;
     else
         fCount = 0.0;
     sal_Int16 nCount = sal_Int16(fCount);

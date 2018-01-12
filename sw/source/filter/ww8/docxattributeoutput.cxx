@@ -6891,7 +6891,7 @@ void DocxAttributeOutput::CharAutoKern( const SvxAutoKernItem& rAutoKern )
 {
     // auto kerning is bound to a minimum font size in Word - but is just a boolean in Writer :-(
     // kerning is based on half-point sizes, so 2 enables kerning for fontsize 1pt or higher. (1 is treated as size 12, and 0 is treated as disabled.)
-    const OString sFontSize = OString::number( (sal_uInt32) rAutoKern.GetValue() * 2 );
+    const OString sFontSize = OString::number( static_cast<sal_uInt32>(rAutoKern.GetValue()) * 2 );
     m_pSerializer->singleElementNS(XML_w, XML_kern, FSNS( XML_w, XML_val ), sFontSize.getStr(), FSEND );
 }
 
@@ -7909,8 +7909,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         else
             m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginRight = 0;
 
-        m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginLeft + (sal_uInt16)rLRSpace.GetLeft();
-        m_pageMargins.nPageMarginRight = m_pageMargins.nPageMarginRight + (sal_uInt16)rLRSpace.GetRight();
+        m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginLeft + static_cast<sal_uInt16>(rLRSpace.GetLeft());
+        m_pageMargins.nPageMarginRight = m_pageMargins.nPageMarginRight + static_cast<sal_uInt16>(rLRSpace.GetRight());
 
         AddToAttrList( m_pSectionSpacingAttrList, 2,
                 FSNS( XML_w, XML_left ), OString::number( m_pageMargins.nPageMarginLeft ).getStr(),
@@ -8258,7 +8258,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         {
             // Calculate opacity value
             // Consider oox/source/vml/vmlformatting.cxx : decodeColor() function.
-            double fOpacity = (double)(*oAlpha) * 65535 / ::oox::drawingml::MAX_PERCENT;
+            double fOpacity = static_cast<double>(*oAlpha) * 65535 / ::oox::drawingml::MAX_PERCENT;
             OUString sOpacity = OUString::number(fOpacity) + "f";
 
             AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_opacity, OUStringToOString(sOpacity, RTL_TEXTENCODING_UTF8).getStr() );
@@ -8568,7 +8568,7 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCo
         for ( sal_uInt16 n = 0; n < nCols; ++n )
         {
             FastAttributeList *pColAttrList = FastSerializerHelper::createAttrList();
-            sal_uInt16 nWidth = rCol.CalcPrtColWidth( n, ( sal_uInt16 ) nPageSize );
+            sal_uInt16 nWidth = rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
             pColAttrList->add( FSNS( XML_w, XML_w ),
                     OString::number( nWidth ).getStr( ) );
 

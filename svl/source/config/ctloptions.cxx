@@ -181,7 +181,7 @@ void SvtCTLOptions_Impl::ImplCommit()
                 if (!m_bROCTLCursorMovement)
                 {
                     pNames[nRealCount] = pOrgNames[nProp];
-                    pValues[nRealCount] <<= (sal_Int32)m_eCTLCursorMovement;
+                    pValues[nRealCount] <<= static_cast<sal_Int32>(m_eCTLCursorMovement);
                     ++nRealCount;
                 }
             }
@@ -192,7 +192,7 @@ void SvtCTLOptions_Impl::ImplCommit()
                 if (!m_bROCTLTextNumerals)
                 {
                     pNames[nRealCount] = pOrgNames[nProp];
-                    pValues[nRealCount] <<= (sal_Int32)m_eCTLTextNumerals;
+                    pValues[nRealCount] <<= static_cast<sal_Int32>(m_eCTLTextNumerals);
                     ++nRealCount;
                 }
             }

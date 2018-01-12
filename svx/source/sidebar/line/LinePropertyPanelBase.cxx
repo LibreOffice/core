@@ -559,7 +559,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeLineStyleHdl, ListBox&, void)
 
             setLineStyle(aItem);
         }
-        else if (mxLineStyleList.is() && mxLineStyleList->Count() > (long)(nPos - 2))
+        else if (mxLineStyleList.is() && mxLineStyleList->Count() > static_cast<long>(nPos - 2))
         {
             // drawing::LineStyle_DASH
             const XLineStyleItem aItemA(drawing::LineStyle_DASH);
@@ -585,7 +585,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeStartHdl, ListBox&, void)
         std::unique_ptr<XLineStartItem> pItem;
         if( nPos == 0 )
             pItem.reset(new XLineStartItem());
-        else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
+        else if( mxLineEndList.is() && mxLineEndList->Count() > static_cast<long>( nPos - 1 ) )
             pItem.reset(new XLineStartItem( mpLBStart->GetSelectedEntry(),mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
         setLineStartStyle(pItem.get());
     }
@@ -599,7 +599,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEndHdl, ListBox&, void)
         std::unique_ptr<XLineEndItem> pItem;
         if( nPos == 0 )
             pItem.reset(new XLineEndItem());
-        else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
+        else if( mxLineEndList.is() && mxLineEndList->Count() > static_cast<long>( nPos - 1 ) )
             pItem.reset(new XLineEndItem( mpLBEnd->GetSelectedEntry(), mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
         setLineEndStyle(pItem.get());
     }
@@ -683,7 +683,7 @@ IMPL_LINK(LinePropertyPanelBase, ToolboxWidthSelectHdl,ToolBox*, pToolBox, void)
 
 IMPL_LINK_NOARG( LinePropertyPanelBase, ChangeTransparentHdl, Edit&, void )
 {
-    sal_uInt16 nVal = (sal_uInt16)mpMFTransparent->GetValue();
+    sal_uInt16 nVal = static_cast<sal_uInt16>(mpMFTransparent->GetValue());
     XLineTransparenceItem aItem( nVal );
 
     setLineTransparency(aItem);

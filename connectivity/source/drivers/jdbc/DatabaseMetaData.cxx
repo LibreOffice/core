@@ -124,7 +124,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         sal_Int32 typeFilterCount = _types.getLength();
         if ( typeFilterCount )
         {
-            jobjectArray pObjArray = t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::st_getMyClass(), nullptr );
+            jobjectArray pObjArray = t.pEnv->NewObjectArray( static_cast<jsize>(typeFilterCount), java_lang_String::st_getMyClass(), nullptr );
             OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
             const OUString* typeFilter = _types.getConstArray();
             bool bIncludeAllTypes = false;
@@ -136,7 +136,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                     break;
                 }
                 jstring aT = convertwchar_tToJavaString( t.pEnv, *typeFilter );
-                t.pEnv->SetObjectArrayElement( pObjArray, (jsize)i, aT );
+                t.pEnv->SetObjectArrayElement( pObjArray, static_cast<jsize>(i), aT );
                 OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
             }
 

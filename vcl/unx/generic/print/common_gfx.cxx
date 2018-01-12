@@ -75,8 +75,8 @@ PrinterGfx::Init (const JobData& rData)
     mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice != -1 ) : ( rData.m_pParser == nullptr || rData.m_pParser->isColorDevice() );
     int nRes = rData.m_aContext.getRenderResolution();
     mnDpi           = nRes;
-    mfScaleX        = 72.0 / (double)mnDpi;
-    mfScaleY        = 72.0 / (double)mnDpi;
+    mfScaleX        = 72.0 / static_cast<double>(mnDpi);
+    mfScaleY        = 72.0 / static_cast<double>(mnDpi);
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
     mbUploadPS42Fonts = rInfo.m_pParser && rInfo.m_pParser->isType42Capable();
 }
@@ -226,7 +226,7 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< tools::Rectangle >::iterator&
                 nNewDX = aPoint.X() - aLastPoint.X();
                 nNewDY = aPoint.Y() - aLastPoint.Y();
                 if( nNewDX != 0 &&
-                    (double)nNewDY/(double)nNewDX == (double)nDY/(double)nDX )
+                    static_cast<double>(nNewDY)/static_cast<double>(nNewDX) == double(nDY)/double(nDX) )
                     continue;
             }
             PSBinLineTo (aPoint, rOldPoint, rColumn);
@@ -245,7 +245,7 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< tools::Rectangle >::iterator&
                 nNewDX = aPoint.X() - aLastPoint.X();
                 nNewDY = aPoint.Y() - aLastPoint.Y();
                 if( nNewDX != 0 &&
-                    (double)nNewDY/(double)nNewDX == (double)nDY/(double)nDX )
+                    static_cast<double>(nNewDY)/static_cast<double>(nNewDX) == double(nDY)/double(nDX) )
                     continue;
             }
             PSBinLineTo (aPoint, rOldPoint, rColumn);
@@ -696,20 +696,20 @@ PrinterGfx::PSSetColor ()
         if( mbColor )
         {
             nChar  = psp::getValueOfDouble (pBuffer,
-                                            (double)rColor.GetRed() / 255.0, 5);
+                                            static_cast<double>(rColor.GetRed()) / 255.0, 5);
             nChar += psp::appendStr (" ", pBuffer + nChar);
             nChar += psp::getValueOfDouble (pBuffer + nChar,
-                                            (double)rColor.GetGreen() / 255.0, 5);
+                                            static_cast<double>(rColor.GetGreen()) / 255.0, 5);
             nChar += psp::appendStr (" ", pBuffer + nChar);
             nChar += psp::getValueOfDouble (pBuffer + nChar,
-                                            (double)rColor.GetBlue() / 255.0, 5);
+                                            static_cast<double>(rColor.GetBlue()) / 255.0, 5);
             nChar += psp::appendStr (" setrgbcolor\n", pBuffer + nChar );
         }
         else
         {
             Color aColor( rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
             sal_uInt8 nCol = aColor.GetLuminance();
-            nChar  = psp::getValueOfDouble( pBuffer, (double)nCol / 255.0, 5 );
+            nChar  = psp::getValueOfDouble( pBuffer, static_cast<double>(nCol) / 255.0, 5 );
             nChar += psp::appendStr( " setgray\n", pBuffer + nChar );
         }
 
@@ -784,7 +784,7 @@ PrinterGfx::PSSetFont ()
         nChar += psp::appendStr  ( " [",        pSetFont + nChar);
         nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
         nChar += psp::appendStr  (" 0 ",        pSetFont + nChar);
-        nChar += psp::getValueOfDouble (pSetFont + nChar, 0.27*(double)nTextWidth, 3 );
+        nChar += psp::getValueOfDouble (pSetFont + nChar, 0.27*static_cast<double>(nTextWidth), 3 );
         nChar += psp::appendStr  ( " ",         pSetFont + nChar);
         nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
 
@@ -929,7 +929,7 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
     // build the command, it is a char with bit represention 000cxxyy
     // c represents the char, xx and yy repr. the field width of the dx and dy shift,
     // dx and dy represent the number of bytes to read after the opcode
-    sal_Char cCmd = (eType == lineto ? (sal_Char)0x00 : (sal_Char)0x10);
+    sal_Char cCmd = (eType == lineto ? sal_Char(0x00) : sal_Char(0x10));
     switch (nYPrec)
     {
         case 2: break;
@@ -1002,7 +1002,7 @@ PrinterGfx::PSHexString (const unsigned char* pString, sal_Int16 nLen)
             WritePS (mpPageBody, pHexString, nChar);
             nChar = 0;
         }
-        nChar += psp::getHexValueOf ((sal_Int32)pString[i], pHexString + nChar);
+        nChar += psp::getHexValueOf (static_cast<sal_Int32>(pString[i]), pHexString + nChar);
     }
 
     nChar += psp::appendStr (">\n", pHexString + nChar);
@@ -1030,7 +1030,7 @@ PrinterGfx::PSShowGlyph (const unsigned char nGlyphId)
             nLW = maVirtualStatus.mnTextHeight;
         else
             nLW = nLW < maVirtualStatus.mnTextHeight ? nLW : maVirtualStatus.mnTextHeight;
-        psp::getValueOfDouble( pBuffer, (double)nLW / 30.0 );
+        psp::getValueOfDouble( pBuffer, static_cast<double>(nLW) / 30.0 );
     }
 
     // dispatch to the drawing method
@@ -1107,10 +1107,10 @@ PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt3
 
     if( fLeft != fRight && fTop != fBottom )
     {
-        double fScaleX = (double)rBoundingBox.GetWidth()/(fRight-fLeft);
-        double fScaleY = -(double)rBoundingBox.GetHeight()/(fTop-fBottom);
-        Point aTranslatePoint( (int)(rBoundingBox.Left()-fLeft*fScaleX),
-                               (int)(rBoundingBox.Bottom()+1-fBottom*fScaleY) );
+        double fScaleX = static_cast<double>(rBoundingBox.GetWidth())/(fRight-fLeft);
+        double fScaleY = -static_cast<double>(rBoundingBox.GetHeight())/(fTop-fBottom);
+        Point aTranslatePoint( static_cast<int>(rBoundingBox.Left()-fLeft*fScaleX),
+                               static_cast<int>(rBoundingBox.Bottom()+1-fBottom*fScaleY) );
         // prepare EPS
         WritePS( mpPageBody,
                  "/b4_Inc_state save def\n"

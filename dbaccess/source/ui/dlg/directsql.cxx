@@ -135,7 +135,7 @@ namespace dbaui
         {
             m_aStatementHistory.pop_front();
             m_aNormalizedHistory.pop_front();
-            m_pSQLHistory->RemoveEntry((sal_uInt16)0);
+            m_pSQLHistory->RemoveEntry(sal_uInt16(0));
         }
     }
 

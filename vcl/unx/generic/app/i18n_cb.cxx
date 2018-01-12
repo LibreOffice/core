@@ -83,13 +83,13 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
 
     int to = from + howmuch;
 
-      if (to == (int)ptext->nLength)
+      if (to == static_cast<int>(ptext->nLength))
     {
         // delete from the end of the text
         ptext->nLength = from;
       }
     else
-        if (to < (int)ptext->nLength)
+        if (to < static_cast<int>(ptext->nLength))
     {
         // cut out of the middle of the text
         memmove( static_cast<void*>(ptext->pUnicodeBuffer + from),
@@ -121,7 +121,7 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
 {
       size_t nnewsize = ptext->nSize;
 
-      while ( nnewsize <= (size_t)nnewlimit )
+      while ( nnewsize <= static_cast<size_t>(nnewlimit) )
         nnewsize *= 2;
 
       ptext->nSize = nnewsize;
@@ -228,7 +228,7 @@ void
 Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback const * feedback,
         int from, int amount )
 {
-    if ( (from + amount) > (int)ptext->nLength )
+    if ( (from + amount) > static_cast<int>(ptext->nLength) )
     {
         // XXX this indicates an error, are we out of sync ?
         fprintf (stderr, "Preedit_UpdateAttributes( %i + %i > %i )\n",

@@ -231,7 +231,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                 sal_Int32 nRepeat = 0;
                 aValue >>= nRepeat;
                 if( nRepeat >= 0 && nRepeat < USHRT_MAX )
-                    pFormat->GetDoc()->SetRowsToRepeat( *pTable, (sal_uInt16) nRepeat );
+                    pFormat->GetDoc()->SetRowsToRepeat( *pTable, static_cast<sal_uInt16>(nRepeat) );
             }
         }
         break;
@@ -253,7 +253,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                 sal_Int16 nSet = 0;
                 aValue >>= nSet;
                 if(nSet && nSet <=100)
-                    aSz.SetWidthPercent( (sal_uInt8)nSet );
+                    aSz.SetWidthPercent( static_cast<sal_uInt8>(nSet) );
             }
             else if(FN_TABLE_IS_RELATIVE_WIDTH == pEntry->nWID)
             {
@@ -1389,7 +1389,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= ATT_VAR_SIZE == rSize.GetHeightSizeType();
                 }
                 else
-                    aRet <<= (sal_Int32)(convertTwipToMm100(rSize.GetSize().Height()));
+                    aRet <<= static_cast<sal_Int32>(convertTwipToMm100(rSize.GetSize().Height()));
             }
             break;
 
@@ -2937,7 +2937,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 break;
 
                 case FN_UNO_TABLE_COLUMN_RELATIVE_SUM:
-                    aRet <<= (sal_Int16) UNO_TABLE_COLUMN_SUM;
+                    aRet <<= sal_Int16(UNO_TABLE_COLUMN_SUM);
                 break;
 
                 case RES_ANCHOR:
@@ -3980,7 +3980,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         // remove actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pUnoCursor->GetDoc());
     }
-    pFrameFormat->GetDoc()->InsertRow(*pUnoCursor, (sal_uInt16)nCount, bAppend);
+    pFrameFormat->GetDoc()->InsertRow(*pUnoCursor, static_cast<sal_uInt16>(nCount), bAppend);
 }
 
 void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
@@ -4130,7 +4130,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         UnoActionRemoveContext aRemoveContext(pUnoCursor->GetDoc());
     }
 
-    pFrameFormat->GetDoc()->InsertCol(*pUnoCursor, (sal_uInt16)nCount, bAppend);
+    pFrameFormat->GetDoc()->InsertCol(*pUnoCursor, static_cast<sal_uInt16>(nCount), bAppend);
 }
 
 ///@see SwXTableRows::removeByIndex (TODO: seems to be copy and paste programming here)

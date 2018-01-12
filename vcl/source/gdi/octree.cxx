@@ -204,9 +204,9 @@ void Octree::CreatePalette( NODE* pNode )
     if( pNode->bLeaf )
     {
         pNode->nPalIndex = nPalIndex;
-        aPal[ nPalIndex++ ] = BitmapColor( (sal_uInt8) ( (double) pNode->nRed / pNode->nCount ),
-                                           (sal_uInt8) ( (double) pNode->nGreen / pNode->nCount ),
-                                           (sal_uInt8) ( (double) pNode->nBlue / pNode->nCount ) );
+        aPal[ nPalIndex++ ] = BitmapColor( static_cast<sal_uInt8>( static_cast<double>(pNode->nRed) / pNode->nCount ),
+                                           static_cast<sal_uInt8>( static_cast<double>(pNode->nGreen) / pNode->nCount ),
+                                           static_cast<sal_uInt8>( static_cast<double>(pNode->nBlue) / pNode->nCount ) );
     }
     else for(OctreeNode* i : pNode->pChild)
         if( i )
@@ -246,7 +246,7 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
 
     for( int nIndex = 0; nIndex < nColors; nIndex++ )
     {
-        const BitmapColor&  rColor = rPal[ (sal_uInt16) nIndex ];
+        const BitmapColor&  rColor = rPal[ static_cast<sal_uInt16>(nIndex) ];
         const long          cRed = rColor.GetRed();
         const long          cGreen = rColor.GetGreen();
         const long          cBlue = rColor.GetBlue();
@@ -268,10 +268,10 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             for( g = 0, gdist = rdist, gxx = cginc; g < nColorMax;  gdist += gxx, g++, gxx += xsqr2 )
             {
                 for( b = 0, bdist = gdist, bxx = cbinc; b < nColorMax; bdist += bxx, b++, cdp++, crgbp++, bxx += xsqr2 )
-                    if ( !nIndex || ( (long) *cdp ) > bdist )
+                    if ( !nIndex || static_cast<long>(*cdp) > bdist )
                     {
                         *cdp = bdist;
-                        *crgbp = (sal_uInt8) nIndex;
+                        *crgbp = static_cast<sal_uInt8>(nIndex);
                     }
             }
         }

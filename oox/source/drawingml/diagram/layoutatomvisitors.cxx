@@ -92,7 +92,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     // stop processing if it's not a child of previous LayoutNode
 
     const DiagramData::PointsNameMap::const_iterator aDataNode = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
-    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end() || mnCurrIdx >= (sal_Int32)aDataNode->second.size())
+    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end() || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
         return;
 
     const dgm::Point* pNewNode = aDataNode->second.at(mnCurrIdx);

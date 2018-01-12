@@ -209,7 +209,7 @@ namespace sfx2
         {
             nStartPos = aBoundary.endPos;
             OUString sSearchToken( rSearchString.copy(
-                (sal_uInt16)aBoundary.startPos, (sal_uInt16)aBoundary.endPos - (sal_uInt16)aBoundary.startPos ) );
+                static_cast<sal_uInt16>(aBoundary.startPos), static_cast<sal_uInt16>(aBoundary.endPos) - static_cast<sal_uInt16>(aBoundary.startPos) ) );
             if ( !sSearchToken.isEmpty() && ( sSearchToken.getLength() > 1 || sSearchToken[0] != '.' ) )
             {
                 if ( bForSearch && sSearchToken[ sSearchToken.getLength() - 1 ] != '*' )
@@ -960,7 +960,7 @@ void SearchTabPage_Impl::dispose()
     nChecked = m_pScopeCB->IsChecked() ? 1 : 0;
     aUserData += OUString::number( nChecked );
     aUserData += ";";
-    sal_Int32 nCount = std::min( m_pSearchED->GetEntryCount(), (sal_Int32)10 );  // save only 10 entries
+    sal_Int32 nCount = std::min( m_pSearchED->GetEntryCount(), sal_Int32(10) );  // save only 10 entries
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
@@ -1430,7 +1430,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
     if ( aViewOpt.Exists() )
         nPageId = aViewOpt.GetPageID();
-    m_pTabCtrl->SetCurPageId( (sal_uInt16)nPageId );
+    m_pTabCtrl->SetCurPageId( static_cast<sal_uInt16>(nPageId) );
     ActivatePageHdl( m_pTabCtrl );
     m_pActiveLB->SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
 
@@ -1459,7 +1459,7 @@ void SfxHelpIndexWindow_Impl::dispose()
         delete static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
 
     SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
-    aViewOpt.SetPageID( (sal_Int32)m_pTabCtrl->GetCurPageId() );
+    aViewOpt.SetPageID( static_cast<sal_Int32>(m_pTabCtrl->GetCurPageId()) );
 
     disposeBuilder();
     m_pActiveLB.clear();
@@ -1485,7 +1485,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
         m_pActiveLB->SetEntryData( nPos, pFactory );
     }
 
-    m_pActiveLB->SetDropDownLineCount( (sal_uInt16)aFactories.size() );
+    m_pActiveLB->SetDropDownLineCount( static_cast<sal_uInt16>(aFactories.size()) );
     if ( m_pActiveLB->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         SetActiveFactory();
 }

@@ -552,8 +552,8 @@ public:
     void                OccupyGrids( const SvxIconChoiceCtrlEntry* );
     void                OccupyGrid( GridId nId )
                         {
-                            DBG_ASSERT(!_pGridMap || nId<(sal_uLong)(_nGridCols*_nGridRows),"OccupyGrid: Bad GridId");
-                            if(_pGridMap && nId < (sal_uLong)(_nGridCols *_nGridRows) )
+                            DBG_ASSERT(!_pGridMap || nId<static_cast<sal_uLong>(_nGridCols*_nGridRows),"OccupyGrid: Bad GridId");
+                            if(_pGridMap && nId < static_cast<sal_uLong>(_nGridCols *_nGridRows) )
                                 _pGridMap[ nId ] = true;
                         }
 

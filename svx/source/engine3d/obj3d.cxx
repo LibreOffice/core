@@ -329,7 +329,7 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     // transform pos from 2D world to 3D eye
     const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
     const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
-    basegfx::B2DPoint aScaleCenter2D((double)rRef.X(), (double)rRef.Y());
+    basegfx::B2DPoint aScaleCenter2D(static_cast<double>(rRef.X()), static_cast<double>(rRef.Y()));
     basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
 
     aInverseSceneTransform.invert();
@@ -399,8 +399,8 @@ void E3dObject::NbcMove(const Size& rSize)
 
     // build relative movement vector in eye coordinates
     basegfx::B3DPoint aMove(
-        (double)rSize.Width() * aEyeVol.getWidth() / (double)aRect.GetWidth(),
-        (double)-rSize.Height() * aEyeVol.getHeight() / (double)aRect.GetHeight(),
+        static_cast<double>(rSize.Width()) * aEyeVol.getWidth() / static_cast<double>(aRect.GetWidth()),
+        static_cast<double>(-rSize.Height()) * aEyeVol.getHeight() / static_cast<double>(aRect.GetHeight()),
         0.0);
     basegfx::B3DPoint aPos(0.0, 0.0, 0.0);
 

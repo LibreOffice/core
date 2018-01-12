@@ -653,7 +653,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
             ++aDirect
         )
     {
-        const SfxPoolItem* pCurrentItem = _rSource.GetItem((sal_uInt16)aDirect->first);
+        const SfxPoolItem* pCurrentItem = _rSource.GetItem(static_cast<sal_uInt16>(aDirect->first));
         if (pCurrentItem)
         {
             sal_Int16 nAttributes = PropertyAttribute::READONLY;
@@ -709,7 +709,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     std::vector< sal_Int32>::const_iterator aDetailsEnd = aDetailIds.end();
     for (std::vector< sal_Int32>::const_iterator aIter = aDetailIds.begin();aIter != aDetailsEnd ; ++aIter)
     {
-        const SfxPoolItem* pCurrent = _rSource.GetItem((sal_uInt16)*aIter);
+        const SfxPoolItem* pCurrent = _rSource.GetItem(static_cast<sal_uInt16>(*aIter));
         aTranslation = m_aIndirectPropTranslator.find(*aIter);
         if ( pCurrent && (m_aIndirectPropTranslator.end() != aTranslation) )
         {

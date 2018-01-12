@@ -270,7 +270,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 /*columnIndex*/ )
 
 void OResultSet::checkIndex(sal_Int32 columnIndex )
 {
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->get().size())
+    if(columnIndex <= 0 || columnIndex > static_cast<sal_Int32>(m_xColumns->get().size()))
         ::dbtools::throwInvalidIndexException(*this);
 }
 
@@ -297,7 +297,7 @@ bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload)
     if (!bForceReload)
     {
         // Check whether we've already fetched the row...
-        if ( !(m_aRow->get())[0].isNull() && (sal_Int32)(m_aRow->get())[0] == cardNumber )
+        if ( !(m_aRow->get())[0].isNull() && static_cast<sal_Int32>((m_aRow->get())[0]) == cardNumber )
             return true;
     }
 //    else
@@ -347,7 +347,7 @@ OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex )
     ResultSetEntryGuard aGuard( *this );
 
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
-    OSL_ENSURE(columnIndex <= (sal_Int32)m_xColumns->get().size(), "Trying to access invalid columns number");
+    OSL_ENSURE(columnIndex <= static_cast<sal_Int32>(m_xColumns->get().size()), "Trying to access invalid columns number");
     checkIndex( columnIndex );
 
     // If this query was sorted then we should have a valid KeySet, so use it
@@ -597,7 +597,7 @@ void OResultSet::getFastPropertyValue(
     switch(nHandle)
     {
         case PROPERTY_ID_RESULTSETCONCURRENCY:
-            rValue <<= (sal_Int32)ResultSetConcurrency::UPDATABLE;
+            rValue <<= sal_Int32(ResultSetConcurrency::UPDATABLE);
             break;
         case PROPERTY_ID_RESULTSETTYPE:
             rValue <<= m_nResultSetType;
@@ -606,7 +606,7 @@ void OResultSet::getFastPropertyValue(
             rValue <<= m_nFetchDirection;
             break;
         case PROPERTY_ID_FETCHSIZE:
-            rValue <<= (sal_Int32)0;
+            rValue <<= sal_Int32(0);
             break;
         case PROPERTY_ID_ISBOOKMARKABLE:
             const_cast< OResultSet* >( this )->determineReadOnly();
@@ -653,8 +653,8 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchStr
         "Parameter name [" << m_nParamIndex << "]: " << aParameterName);
 
     if ( m_aParameterRow.is() ) {
-        OSL_ENSURE( m_nParamIndex < (sal_Int32)m_aParameterRow->get().size() + 1, "More parameters than values found" );
-        rMatchString = (m_aParameterRow->get())[(sal_uInt16)m_nParamIndex];
+        OSL_ENSURE( m_nParamIndex < static_cast<sal_Int32>(m_aParameterRow->get().size()) + 1, "More parameters than values found" );
+        rMatchString = (m_aParameterRow->get())[static_cast<sal_uInt16>(m_nParamIndex)];
         SAL_INFO("connectivity.mork", "Prop Value: " << rMatchString);
     }
     else {
@@ -688,7 +688,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                 SAL_INFO("connectivity.mork", "Prop Column Name: " << aColName);
                 if ( m_aParameterRow.is() ) {
-                    aParameterValue = (m_aParameterRow->get())[(sal_uInt16)i];
+                    aParameterValue = (m_aParameterRow->get())[static_cast<sal_uInt16>(i)];
                     SAL_INFO("connectivity.mork", "Prop Value: " << aParameterValue);
                 }
                 else {
@@ -1022,7 +1022,7 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
     if ( m_pKeySet.is() )
     {
         sal_Int32  nPos;
-        for(nPos=0;nPos < (sal_Int32)m_pKeySet->get().size();nPos++)
+        for(nPos=0;nPos < static_cast<sal_Int32>(m_pKeySet->get().size());nPos++)
         {
             if (nCardNum == (m_pKeySet->get())[nPos])
             {
@@ -1086,7 +1086,7 @@ void OResultSet::executeQuery()
                 std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
                 for ( std::vector<sal_Int16>::size_type i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
                 {
-                    OSL_ENSURE((sal_Int32)m_aRow->get().size() > *aOrderByIter,"Invalid Index");
+                    OSL_ENSURE(static_cast<sal_Int32>(m_aRow->get().size()) > *aOrderByIter,"Invalid Index");
                     switch ((m_aRow->get().begin()+*aOrderByIter)->getTypeKind())
                     {
                     case DataType::CHAR:
@@ -1248,7 +1248,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                     ++aIter,++nColumnPos
                 )
             {
-                if ( nColumnPos < (sal_Int32)aColumnNames.size() )
+                if ( nColumnPos < static_cast<sal_Int32>(aColumnNames.size()) )
                     sSelectColumnRealName = aColumnNames[nColumnPos];
                 else
                 {
@@ -1306,7 +1306,7 @@ bool OResultSet::validRow( sal_uInt32 nRow)
 {
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
 
-    while ( nRow > (sal_uInt32)nNumberOfRecords && !MQueryHelper::queryComplete() ) {
+    while ( nRow > static_cast<sal_uInt32>(nNumberOfRecords) && !MQueryHelper::queryComplete() ) {
             if (!m_aQueryHelper.checkRowAvailable( nRow ))
             {
                 SAL_INFO(
@@ -1324,7 +1324,7 @@ bool OResultSet::validRow( sal_uInt32 nRow)
     }
 
     if (( nRow == 0 ) ||
-        ( nRow > (sal_uInt32)nNumberOfRecords && MQueryHelper::queryComplete()) ){
+        ( nRow > static_cast<sal_uInt32>(nNumberOfRecords) && MQueryHelper::queryComplete()) ){
         SAL_INFO("connectivity.mork", "validRow(" << nRow << "): return False");
         return false;
     }
@@ -1338,7 +1338,7 @@ bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     if (m_CurrentRowCount < nMaxCardNumber)
     {
         sal_Int32   nKeyValue;
-        if ( (sal_Int32)m_pKeySet->get().capacity() < nMaxCardNumber )
+        if ( static_cast<sal_Int32>(m_pKeySet->get().capacity()) < nMaxCardNumber )
             m_pKeySet->get().reserve(nMaxCardNumber + 20 );
 
         for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
@@ -1395,7 +1395,7 @@ bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
         return false;
     }
     sal_Int32 nCurCard;
-    if ( nCurPos < (sal_Int32)m_pKeySet->get().size() ) //The requested row is exist in m_pKeySet, so we just use it
+    if ( nCurPos < static_cast<sal_Int32>(m_pKeySet->get().size()) ) //The requested row is exist in m_pKeySet, so we just use it
     {
         nCurCard = (m_pKeySet->get())[nCurPos-1];
     }
@@ -1411,7 +1411,7 @@ bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     }
     //Insert new retrieved items for later use
     fillKeySet(nNumberOfRecords);
-    m_nRowPos = (sal_uInt32)nCurPos;
+    m_nRowPos = static_cast<sal_uInt32>(nCurPos);
     SAL_INFO("connectivity.mork", "return True, m_nRowPos = " << m_nRowPos);
     fetchCurrentRow();
     return true;
@@ -1438,7 +1438,7 @@ css::uno::Any OResultSet::getBookmark(  )
     }
 
     OSL_ENSURE((!m_aRow->isDeleted()),"getBookmark called for deleted row");
-    return makeAny((sal_Int32)(m_aRow->get())[0]);
+    return makeAny(static_cast<sal_Int32>((m_aRow->get())[0]));
 }
 sal_Bool  OResultSet::moveToBookmark( const css::uno::Any& bookmark )
 {

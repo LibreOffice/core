@@ -72,7 +72,7 @@ static sal_Int32 Impl_WLD_StringLen( const sal_Unicode* pStr )
     const sal_Unicode* pTempStr = pStr;
     while( *pTempStr )
         pTempStr++;
-    return (sal_Int32)(pTempStr-pStr);
+    return static_cast<sal_Int32>(pTempStr-pStr);
 }
 
 // Distance from string to pattern

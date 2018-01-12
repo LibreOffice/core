@@ -287,8 +287,8 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     // Big-Endian:
     for (int i = 0; i < 4; ++i)
     {
-        nFirstLong=(nFirstLong<<8)|(sal_uLong)sFirstBytes[i];
-        nSecondLong=(nSecondLong<<8)|(sal_uLong)sFirstBytes[i+4];
+        nFirstLong=(nFirstLong<<8)|static_cast<sal_uLong>(sFirstBytes[i]);
+        nSecondLong=(nSecondLong<<8)|static_cast<sal_uLong>(sFirstBytes[i+4]);
     }
 
     // The following variable is used when bTest == true. It remains false
@@ -1957,14 +1957,14 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             else if (nColorCount<=256)   nBitsPerPixel=8;
             else if (nColorCount<=65536) nBitsPerPixel=16;
             else                         nBitsPerPixel=24;
-            nNeededMem=((sal_uLong)aSizePixel.Width()*(sal_uLong)aSizePixel.Height()*nBitsPerPixel+7)/8;
+            nNeededMem=(static_cast<sal_uLong>(aSizePixel.Width())*static_cast<sal_uLong>(aSizePixel.Height())*nBitsPerPixel+7)/8;
 
             // is the image larger than available memory?
             if (nMaxMem<nNeededMem)
             {
-                double fFak=sqrt(((double)nMaxMem)/((double)nNeededMem));
-                aSizePixel.Width()=(sal_uLong)(((double)aSizePixel.Width())*fFak);
-                aSizePixel.Height()=(sal_uLong)(((double)aSizePixel.Height())*fFak);
+                double fFak=sqrt(static_cast<double>(nMaxMem)/static_cast<double>(nNeededMem));
+                aSizePixel.Width()=static_cast<sal_uLong>(static_cast<double>(aSizePixel.Width())*fFak);
+                aSizePixel.Height()=static_cast<sal_uLong>(static_cast<double>(aSizePixel.Height())*fFak);
             }
 
             aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
@@ -2107,7 +2107,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                                         for ( k = 0; k < 4; k++ )
                                         {
                                             nChunkType <<= 8;
-                                            nChunkType |= (sal_uInt8)aAdditionalChunkSequence[ j ].Name[ k ];
+                                            nChunkType |= static_cast<sal_uInt8>(aAdditionalChunkSequence[ j ].Name[ k ]);
                                         }
                                         css::uno::Sequence< sal_Int8 > aByteSeq;
                                         if ( aAdditionalChunkSequence[ j ].Value >>= aByteSeq )
@@ -2376,7 +2376,7 @@ ErrCode GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputS
 {
     css::uno::Sequence< css::beans::PropertyValue > aFilterData(1);
     aFilterData[0].Name = "Compression";
-    aFilterData[0].Value <<= (sal_uInt32) 9;
+    aFilterData[0].Value <<= sal_uInt32(9);
 
     sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName("PNG");
     return ExportGraphic(rGraphic, OUString(), rOutputStream, nFilterFormat, &aFilterData);

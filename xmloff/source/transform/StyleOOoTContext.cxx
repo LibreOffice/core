@@ -900,7 +900,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_ATACTION_GAMMA_OOO:        // converts double value to percentage
             {
                 double fValue = sAttrValue.toDouble();
-                sal_Int32 nValue = (sal_Int32)((fValue * 100.0) + ( fValue > 0 ? 0.5 : - 0.5 ) );
+                sal_Int32 nValue = static_cast<sal_Int32>((fValue * 100.0) + ( fValue > 0 ? 0.5 : - 0.5 ) );
 
                 OUStringBuffer aOut;
                 ::sax::Converter::convertPercent( aOut, nValue );

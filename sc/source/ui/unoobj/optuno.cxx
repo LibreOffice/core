@@ -81,7 +81,7 @@ bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
         {
             sal_Int32 nIntVal = 0;
             if ( aValue >>= nIntVal )
-                rOptions.SetIterCount( (sal_uInt16)nIntVal );
+                rOptions.SetIterCount( static_cast<sal_uInt16>(nIntVal) );
         }
         break;
         case PROP_UNO_ITEREPSILON :
@@ -140,7 +140,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
             aRet <<= rOptions.IsCalcAsShown();
         break;
         case PROP_UNO_DEFTABSTOP :
-            aRet <<= (sal_Int16)( rOptions.GetTabDistance() );
+            aRet <<= static_cast<sal_Int16>( rOptions.GetTabDistance() );
         break;
         case PROP_UNO_IGNORECASE :
             aRet <<= rOptions.IsIgnoreCase();
@@ -149,7 +149,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
             aRet <<= rOptions.IsIter();
         break;
         case PROP_UNO_ITERCOUNT:
-            aRet <<= (sal_Int32)( rOptions.GetIterCount() );
+            aRet <<= static_cast<sal_Int32>( rOptions.GetIterCount() );
         break;
         case PROP_UNO_ITEREPSILON:
             aRet <<= rOptions.GetIterEps();
@@ -173,7 +173,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
             aRet <<= rOptions.IsAutoSpell();
         break;
         case PROP_UNO_STANDARDDEC :
-            aRet <<= (sal_Int16)( rOptions.GetStdPrecision() );
+            aRet <<= static_cast<sal_Int16>( rOptions.GetStdPrecision() );
         break;
         case PROP_UNO_REGEXENABLED:
             aRet <<= rOptions.IsFormulaRegexEnabled();

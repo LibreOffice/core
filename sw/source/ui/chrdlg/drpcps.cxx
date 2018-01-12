@@ -183,7 +183,7 @@ OUString GetDefaultString(sal_Int32 nChars)
 {
     OUString aStr;
     for (sal_Int32 i = 0; i < nChars; i++)
-        aStr += OUString((char) (i + 65));
+        aStr += OUString(static_cast<char>(i + 65));
     return aStr;
 }
 
@@ -758,9 +758,9 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit&, rEdit, void )
     if (&rEdit == m_pDropCapsField || &rEdit == m_pTextEdit)
         m_pPict->SetText (sPreview);
     else if (&rEdit == m_pLinesField)
-        m_pPict->SetLines((sal_uInt8)m_pLinesField->GetValue());
+        m_pPict->SetLines(static_cast<sal_uInt8>(m_pLinesField->GetValue()));
     else
-        m_pPict->SetDistance((sal_uInt16)m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP)));
+        m_pPict->SetDistance(static_cast<sal_uInt16>(m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP))));
 
     bModified = true;
 }
@@ -781,9 +781,9 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
         if(bOn)
         {
             // quantity, lines, gap
-            aFormat.GetChars()     = (sal_uInt8) m_pDropCapsField->GetValue();
-            aFormat.GetLines()     = (sal_uInt8) m_pLinesField->GetValue();
-            aFormat.GetDistance()  = (sal_uInt16) m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP));
+            aFormat.GetChars()     = static_cast<sal_uInt8>(m_pDropCapsField->GetValue());
+            aFormat.GetLines()     = static_cast<sal_uInt8>(m_pLinesField->GetValue());
+            aFormat.GetDistance()  = static_cast<sal_uInt16>(m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP)));
             aFormat.GetWholeWord() = m_pWholeWordCB->IsChecked();
 
             // template

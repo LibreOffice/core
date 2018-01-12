@@ -179,7 +179,7 @@ void SwInputWindow::Resize()
     long    nLeft       = aEdit->GetPosPixel().X();
     Size    aEditSize   = aEdit->GetSizePixel();
 
-    aEditSize.Width() = std::max( ((long)(nWidth - nLeft - 5)), (long)0 );
+    aEditSize.Width() = std::max( static_cast<long>(nWidth - nLeft - 5), long(0) );
     aEdit->SetSizePixel( aEditSize );
     aEdit->Invalidate();
 }
@@ -206,7 +206,7 @@ void SwInputWindow::ShowWin()
             sal_Int32 nPos = 0;
             short nSrch = -1;
             while( (nPos = rPos.indexOf( ':',nPos + 1 ) ) != -1 )
-                nSrch = (short) nPos;
+                nSrch = static_cast<short>(nPos);
             aPos->SetText( rPos.copy( ++nSrch ) );
             aAktTableName = pWrtShell->GetTableFormat()->GetName();
         }
@@ -486,11 +486,11 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
     OUString aBoxes = aPrefix;
     aBoxes += rBoxes;
     Selection aSelection(GetSelection());
-    sal_uInt16 nSel = (sal_uInt16) aSelection.Len();
+    sal_uInt16 nSel = static_cast<sal_uInt16>(aSelection.Len());
     // OS: The following expression ensures that in the overwrite mode,
     // the selected closing parenthesis will be not deleted.
     if( nSel && ( nSel > 1 ||
-                  GetText()[ (sal_uInt16)aSelection.Min() ] != cClose ))
+                  GetText()[ static_cast<sal_uInt16>(aSelection.Min()) ] != cClose ))
         Cut();
     else
         aSelection.Max() = aSelection.Min();
@@ -511,7 +511,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
     {
         bool bFound = false;
         sal_Unicode cCh;
-        sal_uInt16 nPos, nEndPos = 0, nStartPos = (sal_uInt16) aSelection.Min();
+        sal_uInt16 nPos, nEndPos = 0, nStartPos = static_cast<sal_uInt16>(aSelection.Min());
         if( nStartPos-- )
         {
             do {
@@ -537,8 +537,8 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
                 ++nEndPos;
             }
             // Only if the current position lies in the range or right behind.
-            if( bFound && !( nStartPos < (sal_uInt16)aSelection.Max() &&
-                             (sal_uInt16)aSelection.Max() <= nEndPos + 1 ))
+            if( bFound && !( nStartPos < static_cast<sal_uInt16>(aSelection.Max()) &&
+                             static_cast<sal_uInt16>(aSelection.Max()) <= nEndPos + 1 ))
                 bFound = false;
         }
         if( bFound )
@@ -552,7 +552,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
             OUString aTmp = OUStringBuffer().
                 append(cOpen).append(aBoxes).append(cClose).
                 makeStringAndClear();
-            nPos = (sal_uInt16)aSelection.Min();
+            nPos = static_cast<sal_uInt16>(aSelection.Min());
             aActText = aActText.replaceAt( nPos, 0, aTmp );
             nPos = nPos + aTmp.getLength();
         }

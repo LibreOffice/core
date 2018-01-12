@@ -1039,7 +1039,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                 if (pArgs->xSpeller.is())
                 {
                     SvxSpellWrapper::CheckSpellLang( pArgs->xSpeller, eActLang );
-                    pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, (sal_uInt16)eActLang,
+                    pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, static_cast<sal_uInt16>(eActLang),
                                             Sequence< PropertyValue >() );
                 }
                 if( pArgs->xSpellAlt.is() )
@@ -1345,13 +1345,13 @@ SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
-            bool bSpell = xSpell.is() && xSpell->hasLanguage( (sal_uInt16)eActLang );
+            bool bSpell = xSpell.is() && xSpell->hasLanguage( static_cast<sal_uInt16>(eActLang) );
             if( bSpell && !rWord.isEmpty() )
             {
                 // check for: bAlter => xHyphWord.is()
                 OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
 
-                if( !xSpell->isValid( rWord, (sal_uInt16)eActLang, Sequence< PropertyValue >() ) )
+                if( !xSpell->isValid( rWord, static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) )
                 {
                     sal_Int32 nSmartTagStt = nBegin;
                     sal_Int32 nDummy = 1;

@@ -189,7 +189,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
 
 void ODatabaseMetaDataResultSet::checkIndex(sal_Int32 columnIndex )
 {
-    if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
+    if(columnIndex >= static_cast<sal_Int32>((*m_aRowsIter).size()) || columnIndex < 1)
         ::dbtools::throwInvalidIndexException(*this);
 }
 
@@ -675,14 +675,14 @@ ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getEmptyValue()
 /// return an ORowSetValueDecorator with 0 as value
 ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::get0Value()
 {
-    static ORowSetValueDecoratorRef a0ValueRef = new ORowSetValueDecorator((sal_Int32)0);
+    static ORowSetValueDecoratorRef a0ValueRef = new ORowSetValueDecorator(sal_Int32(0));
     return a0ValueRef;
 }
 
 /// return an ORowSetValueDecorator with 1 as value
 ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::get1Value()
 {
-    static ORowSetValueDecoratorRef a1ValueRef = new ORowSetValueDecorator((sal_Int32)1);
+    static ORowSetValueDecoratorRef a1ValueRef = new ORowSetValueDecorator(sal_Int32(1));
     return a1ValueRef;
 }
 

@@ -139,11 +139,11 @@ namespace o3tl {
 
 // bit 3,4,5
 #define CSS1_OUTMODE_SPAN_NO_OFF    0x0000U
-#define CSS1_OUTMODE_SPAN_TAG_OFF   ((sal_uInt16)(0x0001U << 3))
-#define CSS1_OUTMODE_STYLE_OPT_OFF  ((sal_uInt16)(0x0002U << 3))
-#define CSS1_OUTMODE_RULE_OFF       ((sal_uInt16)(0x0003U << 3))
+#define CSS1_OUTMODE_SPAN_TAG_OFF   (sal_uInt16(0x0001U << 3))
+#define CSS1_OUTMODE_STYLE_OPT_OFF  (sal_uInt16(0x0002U << 3))
+#define CSS1_OUTMODE_RULE_OFF       (sal_uInt16(0x0003U << 3))
 #define CSS1_OUTMODE_SPAN_TAG1_OFF  ((sal_uInt16)(0x0004U << 3))
-#define CSS1_OUTMODE_ANY_OFF        ((sal_uInt16)(0x0007U << 3))
+#define CSS1_OUTMODE_ANY_OFF        (sal_uInt16(0x0007U << 3))
 
 #define CSS1_OUTMODE_ONOFF(a) (CSS1_OUTMODE_##a##_ON|CSS1_OUTMODE_##a##_OFF)
 #define CSS1_OUTMODE_SPAN_TAG       CSS1_OUTMODE_ONOFF(SPAN_TAG)
@@ -153,31 +153,31 @@ namespace o3tl {
 // the following flags specify what should be outputted
 // bit 6,7,8,9
 #define CSS1_OUTMODE_TEMPLATE       0x0000U
-#define CSS1_OUTMODE_BODY           ((sal_uInt16)(0x0001U << 6))
-#define CSS1_OUTMODE_PARA           ((sal_uInt16)(0x0002U << 6))
-#define CSS1_OUTMODE_HINT           ((sal_uInt16)(0x0003U << 6))
-#define CSS1_OUTMODE_FRAME          ((sal_uInt16)(0x0004U << 6))
-#define CSS1_OUTMODE_TABLE          ((sal_uInt16)(0x0005U << 6))
-#define CSS1_OUTMODE_TABLEBOX       ((sal_uInt16)(0x0006U << 6))
-#define CSS1_OUTMODE_DROPCAP        ((sal_uInt16)(0x0007U << 6))
-#define CSS1_OUTMODE_SECTION        ((sal_uInt16)(0x0008U << 6))
-#define CSS1_OUTMODE_SOURCE         ((sal_uInt16)(0x000fU << 6))
+#define CSS1_OUTMODE_BODY           (sal_uInt16(0x0001U << 6))
+#define CSS1_OUTMODE_PARA           (sal_uInt16(0x0002U << 6))
+#define CSS1_OUTMODE_HINT           (sal_uInt16(0x0003U << 6))
+#define CSS1_OUTMODE_FRAME          (sal_uInt16(0x0004U << 6))
+#define CSS1_OUTMODE_TABLE          (sal_uInt16(0x0005U << 6))
+#define CSS1_OUTMODE_TABLEBOX       (sal_uInt16(0x0006U << 6))
+#define CSS1_OUTMODE_DROPCAP        (sal_uInt16(0x0007U << 6))
+#define CSS1_OUTMODE_SECTION        (sal_uInt16(0x0008U << 6))
+#define CSS1_OUTMODE_SOURCE         (sal_uInt16(0x000fU << 6))
 
 // bit 10
-#define CSS1_OUTMODE_ENCODE         ((sal_uInt16)(0x0001U << 10))
+#define CSS1_OUTMODE_ENCODE         (sal_uInt16(0x0001U << 10))
 
 // bit 11,12,13
 // don't care about script
 #define CSS1_OUTMODE_ANY_SCRIPT     0x0000U
 // no cjk or ctl items
-#define CSS1_OUTMODE_WESTERN        ((sal_uInt16)(0x0001U << 11))
+#define CSS1_OUTMODE_WESTERN        (sal_uInt16(0x0001U << 11))
 // no western or ctl items
-#define CSS1_OUTMODE_CJK            ((sal_uInt16)(0x0002U << 11))
+#define CSS1_OUTMODE_CJK            (sal_uInt16(0x0002U << 11))
 // no western or cjk items
-#define CSS1_OUTMODE_CTL            ((sal_uInt16)(0x0003U << 11))
+#define CSS1_OUTMODE_CTL            (sal_uInt16(0x0003U << 11))
 // no western, cjk or ctl items
-#define CSS1_OUTMODE_NO_SCRIPT      ((sal_uInt16)(0x0004U << 11))
-#define CSS1_OUTMODE_SCRIPT         ((sal_uInt16)(0x0007U << 11))
+#define CSS1_OUTMODE_NO_SCRIPT      (sal_uInt16(0x0004U << 11))
+#define CSS1_OUTMODE_SCRIPT         (sal_uInt16(0x0007U << 11))
 
 // the HTML writer
 struct HTMLControl
@@ -489,7 +489,7 @@ public:
 
     sal_Int32 GetLineLen()
     {
-        return (sal_Int32)(Strm().Tell()-m_nLastLFPos);
+        return static_cast<sal_Int32>(Strm().Tell()-m_nLastLFPos);
     }
     void OutNewLine( bool bCheck=false );
 

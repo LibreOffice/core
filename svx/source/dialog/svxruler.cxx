@@ -570,8 +570,8 @@ void SvxRuler::UpdateFrame()
 
     if(mxColumnItem.get())
     {
-        mxRulerImpl->nColLeftPix = (sal_uInt16) ConvertSizePixel(mxColumnItem->GetLeft());
-        mxRulerImpl->nColRightPix = (sal_uInt16) ConvertSizePixel(mxColumnItem->GetRight());
+        mxRulerImpl->nColLeftPix = static_cast<sal_uInt16>(ConvertSizePixel(mxColumnItem->GetLeft()));
+        mxRulerImpl->nColRightPix = static_cast<sal_uInt16>(ConvertSizePixel(mxColumnItem->GetRight()));
     }
 }
 
@@ -1094,7 +1094,7 @@ void SvxRuler::UpdateTabs()
 
         const sal_uInt16 nDefTabBuf = lPosPixel > lRightIndent || lLastTab > lRightIndent
                     ? 0
-                    : (sal_uInt16)( (lRightIndent - lPosPixel) / nDefTabDist );
+                    : static_cast<sal_uInt16>( (lRightIndent - lPosPixel) / nDefTabDist );
 
         if(mxTabStopItem->Count() + TAB_GAP + nDefTabBuf > nTabBufSize)
         {
@@ -2000,7 +2000,7 @@ void SvxRuler::ApplyMargins()
         }
         else
         {
-            nRight = std::max((long)0,
+            nRight = std::max(long(0),
                             mxPagePosItem->GetWidth() - mxLRSpaceItem->GetLeft() -
                                 (ConvertHPosLogic(GetMargin2()) - lAppNullOffset));
 
@@ -2029,7 +2029,7 @@ void SvxRuler::ApplyMargins()
         }
         mxULSpaceItem->SetLower(
             PixelVAdjust(
-                std::max((long)0, mxPagePosItem->GetHeight() -
+                std::max(long(0), mxPagePosItem->GetHeight() -
                     mxULSpaceItem->GetUpper() -
                     (ConvertVPosLogic(GetMargin2()) -
                      lAppNullOffset)), mxULSpaceItem->GetLower()));
@@ -2052,7 +2052,7 @@ long SvxRuler::RoundToCurrentMapMode(long lValue) const
     double aRoundingFactor = aUnitData.nTickUnit / aUnitData.nTick1;
 
     long lNewValue = OutputDevice::LogicToLogic(Size(lValue, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
-    lNewValue = (rtl::math::round(lNewValue / (double) aUnitData.nTickUnit * aRoundingFactor) / aRoundingFactor) * aUnitData.nTickUnit;
+    lNewValue = (rtl::math::round(lNewValue / static_cast<double>(aUnitData.nTickUnit) * aRoundingFactor) / aRoundingFactor) * aUnitData.nTickUnit;
     return OutputDevice::LogicToLogic(Size(lNewValue, 0), GetCurrentMapMode(), pEditWin->GetMapMode()).Width();
 }
 
@@ -2414,9 +2414,9 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
                     }
                     else
                         lActWidth = mpBorders[i].nPos;
-                    mxRulerImpl->pPercBuf[i] = (sal_uInt16)((lActWidth * 1000)
+                    mxRulerImpl->pPercBuf[i] = static_cast<sal_uInt16>((lActWidth * 1000)
                                                     / mxRulerImpl->nTotalDist);
-                    mxRulerImpl->pBlockBuf[i] = (sal_uInt16)lActBorderSum;
+                    mxRulerImpl->pBlockBuf[i] = static_cast<sal_uInt16>(lActBorderSum);
                     lActBorderSum += mpBorders[i].nWidth;
                 }
             }
@@ -2437,9 +2437,9 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
                 {
                     lActWidth += mpBorders[i].nPos - lPos;
                     lPos = mpBorders[i].nPos + mpBorders[i].nWidth;
-                    mxRulerImpl->pPercBuf[i] = (sal_uInt16)((lActWidth * 1000)
+                    mxRulerImpl->pPercBuf[i] = static_cast<sal_uInt16>((lActWidth * 1000)
                                                     / mxRulerImpl->nTotalDist);
-                    mxRulerImpl->pBlockBuf[i] = (sal_uInt16)lActBorderSum;
+                    mxRulerImpl->pBlockBuf[i] = static_cast<sal_uInt16>(lActBorderSum);
                     lActBorderSum += mpBorders[i].nWidth;
                 }
             }
@@ -2454,7 +2454,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
             for(sal_uInt16 i = nIdx+1; i < nTabCount; ++i)
             {
                 const long nDelta = mpTabs[i].nPos - mpTabs[nIdx].nPos;
-                mxRulerImpl->pPercBuf[i] = (sal_uInt16)((nDelta * 1000) / mxRulerImpl->nTotalDist);
+                mxRulerImpl->pPercBuf[i] = static_cast<sal_uInt16>((nDelta * 1000) / mxRulerImpl->nTotalDist);
             }
             break;
         }
@@ -3573,7 +3573,7 @@ long SvxRuler::CalcPropMaxRight(sal_uInt16 nCol) const
             }
         }
 
-        _nMaxRight -= (long)(lFences + lMinFrame / (float) lMinSpace * lColumns);
+        _nMaxRight -= static_cast<long>(lFences + lMinFrame / static_cast<float>(lMinSpace) * lColumns);
         return _nMaxRight;
     }
     else

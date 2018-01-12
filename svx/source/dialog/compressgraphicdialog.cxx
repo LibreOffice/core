@@ -203,7 +203,7 @@ void CompressGraphicsDialog::Update()
     aBitmapSizeString = aBitmapSizeString.replaceAll("$(HEIGHT_IN_PX)", OUString::number(aPixelSize.Height()));
     m_pFixedText2->SetText(aBitmapSizeString);
 
-    int aValX = (int) (aPixelSize.Width() / GetViewWidthInch());
+    int aValX = static_cast<int>(aPixelSize.Width() / GetViewWidthInch());
 
     OUString aViewSizeString = SvxResId(STR_IMAGE_VIEW_SIZE);
 
@@ -229,29 +229,29 @@ void CompressGraphicsDialog::Update()
 
 void CompressGraphicsDialog::UpdateNewWidthMF()
 {
-    int nPixelX = (sal_Int32)( GetViewWidthInch() * m_dResolution );
+    int nPixelX = static_cast<sal_Int32>( GetViewWidthInch() * m_dResolution );
     m_pMFNewWidth->SetText( OUString::number( nPixelX ));
 }
 
 void CompressGraphicsDialog::UpdateNewHeightMF()
 {
-    int nPixelY = (sal_Int32)( GetViewHeightInch() * m_dResolution );
+    int nPixelY = static_cast<sal_Int32>( GetViewHeightInch() * m_dResolution );
     m_pMFNewHeight->SetText( OUString::number( nPixelY ));
 }
 
 void CompressGraphicsDialog::UpdateResolutionLB()
 {
-    m_pResolutionLB->SetText( OUString::number( (sal_Int32) m_dResolution ) );
+    m_pResolutionLB->SetText( OUString::number( static_cast<sal_Int32>(m_dResolution) ) );
 }
 
 double CompressGraphicsDialog::GetViewWidthInch()
 {
-    return (double) MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MapUnit::Map100thMM, FUNIT_INCH) / 100.0;
+    return static_cast<double>(MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MapUnit::Map100thMM, FUNIT_INCH)) / 100.0;
 }
 
 double CompressGraphicsDialog::GetViewHeightInch()
 {
-    return (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MapUnit::Map100thMM, FUNIT_INCH) / 100.0;
+    return static_cast<double>(MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MapUnit::Map100thMM, FUNIT_INCH)) / 100.0;
 }
 
 BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType()
@@ -275,8 +275,8 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     BitmapEx aBitmap = m_aGraphic.GetBitmapEx();
     if ( m_pReduceResolutionCB->IsChecked() )
     {
-        long nPixelX = (long)( GetViewWidthInch() * m_dResolution );
-        long nPixelY = (long)( GetViewHeightInch() * m_dResolution );
+        long nPixelX = static_cast<long>( GetViewWidthInch() * m_dResolution );
+        long nPixelY = static_cast<long>( GetViewHeightInch() * m_dResolution );
 
         aBitmap.Scale( Size( nPixelX, nPixelY ), GetSelectedInterpolationType() );
     }
@@ -285,11 +285,11 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
 
     Sequence< PropertyValue > aFilterData( 3 );
     aFilterData[ 0 ].Name = "Interlaced";
-    aFilterData[ 0 ].Value <<= (sal_Int32) 0;
+    aFilterData[ 0 ].Value <<= sal_Int32(0);
     aFilterData[ 1 ].Name = "Compression";
-    aFilterData[ 1 ].Value <<= (sal_Int32) m_pCompressionMF->GetValue();
+    aFilterData[ 1 ].Value <<= static_cast<sal_Int32>(m_pCompressionMF->GetValue());
     aFilterData[ 2 ].Name = "Quality";
-    aFilterData[ 2 ].Value <<= (sal_Int32) m_pQualityMF->GetValue();
+    aFilterData[ 2 ].Value <<= static_cast<sal_Int32>(m_pQualityMF->GetValue());
 
     OUString aGraphicFormatName = m_pLosslessRB->IsChecked() ? OUString( "png" ) : OUString( "jpg" );
 
@@ -341,7 +341,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl, Edit&, void )
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl, Edit&, void )
 {
-    m_dResolution = (double) m_pResolutionLB->GetText().toInt32();
+    m_dResolution = static_cast<double>(m_pResolutionLB->GetText().toInt32());
 
     UpdateNewWidthMF();
     UpdateNewHeightMF();
@@ -395,11 +395,11 @@ tools::Rectangle CompressGraphicsDialog::GetScaledCropRectangle()
 {
     if ( m_pReduceResolutionCB->IsChecked() )
     {
-        long nPixelX = (long)( GetViewWidthInch()  * m_dResolution );
-        long nPixelY = (long)( GetViewHeightInch() * m_dResolution );
+        long nPixelX = static_cast<long>( GetViewWidthInch()  * m_dResolution );
+        long nPixelY = static_cast<long>( GetViewHeightInch() * m_dResolution );
         Size aSize = m_aGraphic.GetBitmapEx().GetSizePixel();
-        double aScaleX = nPixelX / (double) aSize.Width();
-        double aScaleY = nPixelY / (double) aSize.Height();
+        double aScaleX = nPixelX / static_cast<double>(aSize.Width());
+        double aScaleY = nPixelY / static_cast<double>(aSize.Height());
 
         return tools::Rectangle(
             m_aCropRectangle.Left()  * aScaleX,

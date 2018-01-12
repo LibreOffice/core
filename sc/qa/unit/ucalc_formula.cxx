@@ -1717,7 +1717,7 @@ void Test::testFormulaRefUpdateRange()
     // Sticky reference including last row.
     m_pDoc->SetString( 2,0,1, "=SUM(B:B)");
     // Reference to last row.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("MAXROW changed, adapt unit test.", 1048575, (int)MAXROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("MAXROW changed, adapt unit test.", 1048575, int(MAXROW));
     m_pDoc->SetString( 2,1,1, "=SUM(B1048576:C1048576)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C1.", 3.0, m_pDoc->GetValue(2,0,1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C2.", 2.0, m_pDoc->GetValue(2,1,1));
@@ -1732,7 +1732,7 @@ void Test::testFormulaRefUpdateRange()
     // C3 with sticky reference including last column.
     m_pDoc->SetString( 2,2,1, "=SUM(23:23)");
     // C4 with reference to last column.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("MAXCOL changed, adapt unit test.", 1023, (int)MAXCOL);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("MAXCOL changed, adapt unit test.", 1023, int(MAXCOL));
     m_pDoc->SetString( 2,3,1, "=SUM(AMJ22:AMJ23)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C3.", 3.0, m_pDoc->GetValue(2,2,1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C4.", 2.0, m_pDoc->GetValue(2,3,1));

@@ -82,7 +82,7 @@ IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation, void*, void)
     mnEventId = nullptr;
     if (mpSlideShow.is())
     {
-        if (mnDisplayCount != (sal_Int32)Application::GetScreenCount())
+        if (mnDisplayCount != static_cast<sal_Int32>(Application::GetScreenCount()))
         {
             bool bIsExitAfterPresenting = mpSlideShow->IsExitAfterPresenting();
             mpSlideShow->SetExitAfterPresenting(false);

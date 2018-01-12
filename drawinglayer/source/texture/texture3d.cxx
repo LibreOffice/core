@@ -92,8 +92,8 @@ namespace drawinglayer
                 mpReadTransparence = Bitmap::ScopedReadAccess(maTransparence);
             }
 
-            mfMulX = (double)mpReadBitmap->Width() / maSize.getX();
-            mfMulY = (double)mpReadBitmap->Height() / maSize.getY();
+            mfMulX = static_cast<double>(mpReadBitmap->Width()) / maSize.getX();
+            mfMulY = static_cast<double>(mpReadBitmap->Height()) / maSize.getY();
 
             if(maSize.getX() <= 1.0)
             {
@@ -156,11 +156,11 @@ namespace drawinglayer
         {
             if(mpReadBitmap)
             {
-                rX = (sal_Int32)((rUV.getX() - maTopLeft.getX()) * mfMulX);
+                rX = static_cast<sal_Int32>((rUV.getX() - maTopLeft.getX()) * mfMulX);
 
                 if(rX >= 0 && rX < mpReadBitmap->Width())
                 {
-                    rY = (sal_Int32)((rUV.getY() - maTopLeft.getY()) * mfMulY);
+                    rY = static_cast<sal_Int32>((rUV.getY() - maTopLeft.getY()) * mfMulY);
 
                     return (rY >= 0 && rY < mpReadBitmap->Height());
                 }
@@ -178,9 +178,9 @@ namespace drawinglayer
                 const double fConvertColor(1.0 / 255.0);
                 const BitmapColor aBMCol(mpReadBitmap->GetColor(nY, nX));
                 const basegfx::BColor aBSource(
-                    (double)aBMCol.GetRed() * fConvertColor,
-                    (double)aBMCol.GetGreen() * fConvertColor,
-                    (double)aBMCol.GetBlue() * fConvertColor);
+                    static_cast<double>(aBMCol.GetRed()) * fConvertColor,
+                    static_cast<double>(aBMCol.GetGreen()) * fConvertColor,
+                    static_cast<double>(aBMCol.GetBlue()) * fConvertColor);
 
                 rBColor = aBSource;
 
@@ -189,7 +189,7 @@ namespace drawinglayer
                     // when we have a transparence, make use of it
                     const sal_uInt8 aLuminance(impGetTransparence(nX, nY));
 
-                    rfOpacity = ((double)(0xff - aLuminance) * (1.0 / 255.0));
+                    rfOpacity = (static_cast<double>(0xff - aLuminance) * (1.0 / 255.0));
                 }
                 else
                 {
@@ -212,7 +212,7 @@ namespace drawinglayer
                 {
                     // this texture has an alpha part, use it
                     const sal_uInt8 aLuminance(impGetTransparence(nX, nY));
-                    const double fNewOpacity((double)(0xff - aLuminance) * (1.0 / 255.0));
+                    const double fNewOpacity(static_cast<double>(0xff - aLuminance) * (1.0 / 255.0));
 
                     rfOpacity = 1.0 - ((1.0 - fNewOpacity) * (1.0 - rfOpacity));
                 }
@@ -222,7 +222,7 @@ namespace drawinglayer
                     const BitmapColor aBMCol(mpReadBitmap->GetColor(nY, nX));
                     const Color aColor(aBMCol.GetRed(), aBMCol.GetGreen(), aBMCol.GetBlue());
 
-                    rfOpacity = ((double)(0xff - aColor.GetLuminance()) * (1.0 / 255.0));
+                    rfOpacity = (static_cast<double>(0xff - aColor.GetLuminance()) * (1.0 / 255.0));
                 }
             }
             else

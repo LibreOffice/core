@@ -1137,7 +1137,7 @@ void VCLXWindow::setBackground( sal_Int32 nColor )
 
     if ( GetWindow() )
     {
-        Color aColor( (sal_uInt32)nColor );
+        Color aColor( static_cast<sal_uInt32>(nColor) );
         GetWindow()->SetBackground( aColor );
         GetWindow()->SetControlBackground( aColor );
 
@@ -1211,7 +1211,7 @@ void VCLXWindow::setForeground( sal_Int32 nColor )
 
     if ( GetWindow() )
     {
-        Color aColor( (sal_uInt32)nColor );
+        Color aColor( static_cast<sal_uInt32>(nColor) );
         GetWindow()->SetControlForeground( aColor );
     }
 }
@@ -1282,7 +1282,7 @@ void VCLXWindow::PushPropertyIds( std::vector< sal_uInt16 > &rIds,
 
     for ( int nId = nFirstId; nId != BASEPROPERTY_NOTFOUND;
           nId = va_arg( pVarArgs, int ) )
-        rIds.push_back( (sal_uInt16) nId );
+        rIds.push_back( static_cast<sal_uInt16>(nId) );
 
     va_end( pVarArgs );
 }
@@ -2001,10 +2001,10 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
             }
             break;
             case BASEPROPERTY_BACKGROUNDCOLOR:
-                aProp <<= (sal_Int32) GetWindow()->GetControlBackground().GetColor();
+                aProp <<= static_cast<sal_Int32>(GetWindow()->GetControlBackground().GetColor());
             break;
             case BASEPROPERTY_DISPLAYBACKGROUNDCOLOR:
-                aProp <<= (sal_Int32) GetWindow()->GetDisplayBackground().GetColor().GetColor();
+                aProp <<= static_cast<sal_Int32>(GetWindow()->GetDisplayBackground().GetColor().GetColor());
             break;
             case BASEPROPERTY_FONTRELIEF:
                 aProp <<= (sal_Int16) GetWindow()->GetControlFont().GetRelief();
@@ -2013,16 +2013,16 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                 aProp <<= (sal_Int16) GetWindow()->GetControlFont().GetEmphasisMark();
             break;
             case BASEPROPERTY_TEXTCOLOR:
-                aProp <<= (sal_Int32) GetWindow()->GetControlForeground().GetColor();
+                aProp <<= static_cast<sal_Int32>(GetWindow()->GetControlForeground().GetColor());
             break;
             case BASEPROPERTY_TEXTLINECOLOR:
-                aProp <<= (sal_Int32) GetWindow()->GetTextLineColor().GetColor();
+                aProp <<= static_cast<sal_Int32>(GetWindow()->GetTextLineColor().GetColor());
             break;
             case BASEPROPERTY_FILLCOLOR:
-                aProp <<= (sal_Int32) GetWindow()->GetFillColor().GetColor();
+                aProp <<= static_cast<sal_Int32>(GetWindow()->GetFillColor().GetColor());
             break;
             case BASEPROPERTY_LINECOLOR:
-                aProp <<= (sal_Int32) GetWindow()->GetLineColor().GetColor();
+                aProp <<= static_cast<sal_Int32>(GetWindow()->GetLineColor().GetColor());
             break;
             case BASEPROPERTY_BORDER:
             {
@@ -2064,11 +2064,11 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                     {
                         WinBits nStyle = GetWindow()->GetStyle();
                         if ( nStyle & WB_LEFT )
-                            aProp <<= (sal_Int16) PROPERTY_ALIGN_LEFT;
+                            aProp <<= sal_Int16(PROPERTY_ALIGN_LEFT);
                         else if ( nStyle & WB_CENTER )
-                            aProp <<= (sal_Int16) PROPERTY_ALIGN_CENTER;
+                            aProp <<= sal_Int16(PROPERTY_ALIGN_CENTER);
                         else if ( nStyle & WB_RIGHT )
-                            aProp <<= (sal_Int16) PROPERTY_ALIGN_RIGHT;
+                            aProp <<= sal_Int16(PROPERTY_ALIGN_RIGHT);
                     }
                     break;
                     default: break;
@@ -2119,11 +2119,11 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
             break;
 
             case BASEPROPERTY_SYMBOL_COLOR:
-                aProp <<= (sal_Int32)GetWindow()->GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+                aProp <<= static_cast<sal_Int32>(GetWindow()->GetSettings().GetStyleSettings().GetButtonTextColor().GetColor());
                 break;
 
             case BASEPROPERTY_BORDERCOLOR:
-                aProp <<= (sal_Int32)GetWindow()->GetSettings().GetStyleSettings().GetMonoColor().GetColor();
+                aProp <<= static_cast<sal_Int32>(GetWindow()->GetSettings().GetStyleSettings().GetMonoColor().GetColor());
                 break;
         }
     }

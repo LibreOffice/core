@@ -935,7 +935,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
     Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                       .appendAscii( GetComponentDir() )
                                                                       .append( "/media/image" )
-                                                                      .append( (sal_Int32) mnImageCounter )
+                                                                      .append( static_cast<sal_Int32>(mnImageCounter) )
                                                                       .appendAscii( pExtension )
                                                                       .makeStringAndClear(),
                                                                       sMediaType );
@@ -950,7 +950,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
                                 OUStringBuffer()
                                 .appendAscii( GetRelationCompPrefix() )
                                 .appendAscii( sRelPathToMedia.getStr() )
-                                .append( (sal_Int32) mnImageCounter ++ )
+                                .append( static_cast<sal_Int32>(mnImageCounter ++) )
                                 .appendAscii( pExtension )
                                 .makeStringAndClear() );
 
@@ -1005,7 +1005,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
         Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(OUStringBuffer()
                                                                        .appendAscii(GetComponentDir())
                                                                        .append("/media/media")
-                                                                       .append((sal_Int32) mnImageCounter)
+                                                                       .append(static_cast<sal_Int32>(mnImageCounter))
                                                                        .append(aExtension)
                                                                        .makeStringAndClear(),
                                                                        aMimeType);
@@ -1018,7 +1018,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
         // create the relation
         OUString aPath = OUStringBuffer().appendAscii(GetRelationCompPrefix())
                                          .append("media/media")
-                                         .append((sal_Int32) mnImageCounter++)
+                                         .append(static_cast<sal_Int32>(mnImageCounter++))
                                          .append(aExtension)
                                          .makeStringAndClear();
         aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::VIDEO), aPath);
@@ -1405,7 +1405,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     }
     else if( GETA( CharHeight ) )
     {
-        nSize = (sal_Int32) (100*(*o3tl::doAccess<float>(mAny)));
+        nSize = static_cast<sal_Int32>(100*(*o3tl::doAccess<float>(mAny)));
         if ( nElement == XML_rPr )
         {
             rbOverridingCharHeight = true;
@@ -1414,7 +1414,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     }
 
      if( GETA( CharKerning ) )
-        nCharKerning = (sal_Int32)(*o3tl::doAccess<sal_Int16>(mAny));
+        nCharKerning = static_cast<sal_Int32>(*o3tl::doAccess<sal_Int16>(mAny));
     /**  While setting values in propertymap,
     *    CharKerning converted using GetTextSpacingPoint
     *    i.e set @ http://opengrok.libreoffice.org/xref/core/oox/source/drawingml/textcharacterproperties.cxx#129
@@ -2035,7 +2035,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
 
         if( nBulletRelSize && nBulletRelSize != 100 )
             mpFS->singleElementNS( XML_a, XML_buSzPct,
-                                   XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
+                                   XML_val, IS( std::max( sal_Int32(25000), std::min( sal_Int32(400000), 1000*( static_cast<sal_Int32>(nBulletRelSize) ) ) ) ), FSEND );
         if( bHasFontDesc )
         {
             if ( SVX_NUM_CHAR_SPECIAL == nNumberingType )
@@ -2122,7 +2122,7 @@ void DrawingML::WriteLinespacing( const LineSpacing& rSpacing )
     if( rSpacing.Mode == LineSpacingMode::PROP )
     {
         mpFS->singleElementNS( XML_a, XML_spcPct,
-                               XML_val, I32S( ((sal_Int32)rSpacing.Height)*1000 ),
+                               XML_val, I32S( (static_cast<sal_Int32>(rSpacing.Height))*1000 ),
                                FSEND );
     }
     else
@@ -2621,7 +2621,7 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape, const S
                     aSegments = uno::Sequence<drawing::EnhancedCustomShapeSegment>(4);
                     aSegments[0].Count = 1;
                     aSegments[0].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
-                    aSegments[1].Count = (sal_Int16)std::min( aPairs.getLength() - 1, (sal_Int32)32767 );
+                    aSegments[1].Count = static_cast<sal_Int16>(std::min( aPairs.getLength() - 1, sal_Int32(32767) ));
                     aSegments[1].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
                     aSegments[2].Count = 0;
                     aSegments[2].Command = drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;

@@ -53,7 +53,7 @@ void SwBreakDlg::Apply()
             oPgNum = boost::none;
             if (m_pPageNumBox->IsChecked())
             {
-                oPgNum = (sal_uInt16)m_pPageNumEdit->GetValue();
+                oPgNum = static_cast<sal_uInt16>(m_pPageNumEdit->GetValue());
             }
         }
     }

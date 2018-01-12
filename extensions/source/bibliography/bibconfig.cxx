@@ -227,7 +227,7 @@ void    BibConfig::ImplCommit()
     PropertyValue* pNodeValues = aNodeValues.getArray();
 
     sal_Int32 nIndex = 0;
-    for(sal_Int32 i = 0; i < (sal_Int32)pMappingsArr->size(); i++)
+    for(sal_Int32 i = 0; i < static_cast<sal_Int32>(pMappingsArr->size()); i++)
     {
         const Mapping* pMapping = (*pMappingsArr)[i].get();
         OUString sPrefix(cDataSourceHistory);

@@ -136,7 +136,7 @@ OString makeTempName(const OString& prefix)
 #if defined(SAL_W32) || defined(SAL_UNX)
 
     OSL_ASSERT( sizeof(tmpFilePattern) >
-                (size_t) ( tmpPath.getLength()
+                static_cast<size_t>( tmpPath.getLength()
                            + RTL_CONSTASCII_LENGTH( PATH_SEPARATOR )
                            + prefix.getLength()
                            + RTL_CONSTASCII_LENGTH( "XXXXXX") ) );
@@ -329,7 +329,7 @@ sal_Int32 compileFile(const OString * pathname)
                                     nullptr, startDir.pData, nullptr, 0, &hProcess );
 
     oslProcessInfo hInfo;
-    hInfo.Size = (sal_uInt32)(sizeof(oslProcessInfo));
+    hInfo.Size = sal_uInt32(sizeof(oslProcessInfo));
     if (osl_getProcessInfo(hProcess, osl_Process_EXITCODE, &hInfo)
         != osl_Process_E_None)
     {

@@ -103,7 +103,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     memset(szConnStrOut,'\0',4096);
     memset(szConnStrIn,'\0',2048);
     OString aConStr(OUStringToOString(aConnectStr,getTextEncoding()));
-    memcpy(szConnStrIn, aConStr.getStr(), std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
+    memcpy(szConnStrIn, aConStr.getStr(), std::min<sal_Int32>(sal_Int32(2048),aConStr.getLength()));
 
 #ifndef MACOSX
     N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,reinterpret_cast<SQLPOINTER>(nTimeOut),SQL_IS_UINTEGER);
@@ -116,9 +116,9 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     nSQLRETURN = N3SQLDriverConnect(m_aConnectionHandle,
                       nullptr,
                       szConnStrIn,
-                      (SQLSMALLINT) std::min((sal_Int32)2048,aConStr.getLength()),
+                      static_cast<SQLSMALLINT>(std::min(sal_Int32(2048),aConStr.getLength())),
                       szConnStrOut,
-                      (SQLSMALLINT) (sizeof(szConnStrOut)/sizeof(SDB_ODBC_CHAR)) -1,
+                      SQLSMALLINT(sizeof(szConnStrOut)/sizeof(SDB_ODBC_CHAR)) -1,
                       &cbConnStrOut,
                       SQL_DRIVER_NOPROMPT);
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA || SQL_SUCCESS_WITH_INFO == nSQLRETURN)

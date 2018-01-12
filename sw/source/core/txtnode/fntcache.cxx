@@ -290,7 +290,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
             const vcl::Font aOldFnt( rRefDev.GetFont() );
             const_cast<OutputDevice&>(rRefDev).SetFont( *m_pPrtFont );
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
-            m_nPrtAscent = (sal_uInt16) aOutMet.GetAscent();
+            m_nPrtAscent = static_cast<sal_uInt16>(aOutMet.GetAscent());
             const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
         }
 
@@ -331,7 +331,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
 #if OSL_DEBUG_LEVEL > 0
             // Check if vcl did not change the meaning of GetTextHeight
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
-            long nTmpPrtHeight = (sal_uInt16)aOutMet.GetAscent() + aOutMet.GetDescent();
+            long nTmpPrtHeight = static_cast<sal_uInt16>(aOutMet.GetAscent()) + aOutMet.GetDescent();
             // #i106098#: do not compare with == here due to rounding error
             OSL_ENSURE( std::abs(nTmpPrtHeight - m_nPrtHeight) < 3,
                     "GetTextHeight != Ascent + Descent" );
@@ -483,9 +483,9 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
             m_nZoom = USHRT_MAX - 1;
     }
 
-    m_nScrAscent = (sal_uInt16)pOut->GetFontMetric().GetAscent();
+    m_nScrAscent = static_cast<sal_uInt16>(pOut->GetFontMetric().GetAscent());
     if ( USHRT_MAX == m_nScrHeight )
-        m_nScrHeight = (sal_uInt16)pOut->GetTextHeight();
+        m_nScrHeight = static_cast<sal_uInt16>(pOut->GetTextHeight());
 
     // reset original output device font
     pOut->SetFont( aOldOutFont );
@@ -1057,7 +1057,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
                     {
                         pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
-                            rInf.GetKanaComp(), (sal_uInt16)m_aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
+                            rInf.GetKanaComp(), static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
                         bSpecialJust = true;
                     }
                     ///Asian Justification
@@ -1227,7 +1227,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
-                                   (sal_uInt16)m_aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
+                                   static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
                     bSpecialJust = true;
                 }
 
@@ -1431,10 +1431,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 Point aTmpPos( aTextOriginPos );
                 pSI->Compress( pScrArray.get(), rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)m_aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTmpPos );
+                               static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTmpPos );
                 pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)m_aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
+                               static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
             }
 
             // Asian Justification
@@ -1905,7 +1905,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         if( bCompress )
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                (sal_uInt16)m_aFont.GetFontSize().Height() ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
+                static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
         else
             rInf.SetKanaDiff( 0 );
 
@@ -1967,7 +1967,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                         rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray.get(),
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                (sal_uInt16) m_aFont.GetFontSize().Height() ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
+                static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
             aTextSize.Width() = pKernArray[ nLn - 1 ];
         }
         else
@@ -2026,7 +2026,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
         {
             pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
                            rInf.GetKanaComp(),
-                           (sal_uInt16) m_aFont.GetFontSize().Height(),
+                           static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()),
                            lcl_IsFullstopCentered( rInf.GetOut() ) );
         }
 
@@ -2444,7 +2444,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo const & rInf, long nTextWidth )
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
                                     rInf.GetIdx(), nLn );
         if( rInf.GetScriptInfo()->Compress( pKernArray.get(), rInf.GetIdx(), nLn,
-                            rInf.GetKanaComp(), (sal_uInt16)GetHeight( m_nActual ),
+                            rInf.GetKanaComp(), static_cast<sal_uInt16>(GetHeight( m_nActual )),
                             lcl_IsFullstopCentered( rInf.GetOut() ) ) )
         {
             long nKernAdd = nKern;

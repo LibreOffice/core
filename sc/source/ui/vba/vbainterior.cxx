@@ -82,7 +82,7 @@ static PatternMap aPatternMap( lcl_getPatternMap() );
 ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >&  xProps, ScDocument* pScDoc ) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(xProps), m_pScDoc( pScDoc )
 {
     // auto color
-    m_aPattColor.SetColor( (sal_uInt32)0x0 );
+    m_aPattColor.SetColor( sal_uInt32(0x0) );
     m_nPattern = 0;
     if ( !m_xProps.is() )
         throw lang::IllegalArgumentException("properties", uno::Reference< uno::XInterface >(), 2 );
@@ -129,9 +129,9 @@ ScVbaInterior::SetMixedColor()
     // set mixed color
     Color aMixedColor;
     if( nPattern > 0 )
-        aMixedColor = GetPatternColor( Color(nPatternColor), aBackColor, (sal_uInt32)nPattern );
+        aMixedColor = GetPatternColor( Color(nPatternColor), aBackColor, static_cast<sal_uInt32>(nPattern) );
     else
-        aMixedColor = GetPatternColor( aBackColor, aBackColor, (sal_uInt32)nPattern );
+        aMixedColor = GetPatternColor( aBackColor, aBackColor, static_cast<sal_uInt32>(nPattern) );
     sal_Int32 nMixedColor = aMixedColor.GetColor() & COLORMAST;
     m_xProps->setPropertyValue( BACKCOLOR , uno::makeAny( nMixedColor ) );
 }

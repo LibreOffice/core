@@ -614,7 +614,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     if (!bDone)
                     {
                         pViewData->GetViewShell()->
-                            InsertURL( rName, rURL, rTarget, (sal_uInt16) eMode );
+                            InsertURL( rName, rURL, rTarget, static_cast<sal_uInt16>(eMode) );
 
                         // when "Button", the InsertURL in ViewShell turns the EditShell  off
                         // thus the immediate return statement

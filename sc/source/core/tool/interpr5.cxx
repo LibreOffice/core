@@ -1649,8 +1649,8 @@ void ScInterpreter::ScPow()
     {
         if (fVal1 < 0 && fVal2 != 0.0)
         {
-            int i = (int) (1 / fVal2 + ((fVal2 < 0) ? -0.5 : 0.5));
-            if (i % 2 != 0 && rtl::math::approxEqual(1 / ((double) i), fVal2))
+            int i = static_cast<int>(1 / fVal2 + ((fVal2 < 0) ? -0.5 : 0.5));
+            if (i % 2 != 0 && rtl::math::approxEqual(1 / static_cast<double>(i), fVal2))
                 PushDouble(-pow(-fVal1, fVal2));
             else
                 PushDouble(pow(fVal1, fVal2));

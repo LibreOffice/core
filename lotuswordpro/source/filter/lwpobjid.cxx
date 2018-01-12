@@ -109,7 +109,7 @@ void LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
         LwpIndexManager& rIdxMgr = pFactory->GetIndexManager();
-        m_nLow = rIdxMgr.GetObjTime( (sal_uInt16)m_nIndex);
+        m_nLow = rIdxMgr.GetObjTime( static_cast<sal_uInt16>(m_nIndex));
     }
     else
     {
@@ -140,7 +140,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
         LwpIndexManager& rIdxMgr = pFactory->GetIndexManager();
-        m_nLow = rIdxMgr.GetObjTime( (sal_uInt16)m_nIndex);
+        m_nLow = rIdxMgr.GetObjTime( static_cast<sal_uInt16>(m_nIndex));
     }
     else
         m_nLow = pStrm->QuickReaduInt32();

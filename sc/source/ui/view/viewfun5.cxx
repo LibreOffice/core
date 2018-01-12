@@ -97,7 +97,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             if (pDoc->IsNegativePage(nTab))
                 nXT = -nXT;
             sal_uLong nYT = pDoc->GetRowHeight( 0, nPosY-1, nTab);
-            aPos = Point( (long)(nXT * HMM_PER_TWIPS), (long)(nYT * HMM_PER_TWIPS) );
+            aPos = Point( static_cast<long>(nXT * HMM_PER_TWIPS), static_cast<long>(nYT * HMM_PER_TWIPS) );
         }
     }
 

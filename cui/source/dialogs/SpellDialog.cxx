@@ -658,7 +658,7 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
         break;
         case SPELLUNDO_CHANGE_NEXTERROR:
         {
-            m_pSentenceED->MoveErrorMarkTo((sal_uInt16)rAction.GetOldErrorStart(), (sal_uInt16)rAction.GetOldErrorEnd(), false);
+            m_pSentenceED->MoveErrorMarkTo(static_cast<sal_uInt16>(rAction.GetOldErrorStart()), static_cast<sal_uInt16>(rAction.GetOldErrorEnd()), false);
             if(rAction.IsErrorLanguageSelected())
             {
                 UpdateBoxes_Impl();
@@ -752,7 +752,7 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
     if(!sError.isEmpty())
     {
         LanguageType eLanguage = static_cast<SvxLanguageBox*>(&rBox)->GetSelectLanguage();
-        Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, (sal_uInt16)eLanguage,
+        Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, static_cast<sal_uInt16>(eLanguage),
                                             Sequence< PropertyValue >() );
         if( xAlt.is() )
             m_pSentenceED->SetAlternatives( xAlt );
@@ -1583,7 +1583,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
             aCursor.GetIndex() += xEntry->getReplacementText().getLength();
         // maybe the error found here is already added to the dictionary and has to be ignored
-        } else if(pSpellErrorDescription && !bGrammarError && xSpell->isValid( GetErrorText(), (sal_uInt16)LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ), Sequence< PropertyValue >() )) {
+        } else if(pSpellErrorDescription && !bGrammarError && xSpell->isValid( GetErrorText(), static_cast<sal_uInt16>(LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale )), Sequence< PropertyValue >() )) {
             ++aCursor.GetIndex();
         }
         else
@@ -1625,8 +1625,8 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, bool bGrammarError)
 {
     TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR );
-    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTWEIGHT );
+    pTextEngine->RemoveAttribs( 0, sal_uInt16(TEXTATTR_FONTCOLOR) );
+    pTextEngine->RemoveAttribs( 0, sal_uInt16(TEXTATTR_FONTWEIGHT) );
     pTextEngine->SetAttrib( TextAttribFontWeight(WEIGHT_BOLD), 0, nStart, nEnd );
     pTextEngine->SetAttrib( TextAttribFontColor(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED), 0, nStart, nEnd );
     m_nErrorStart = nStart;
@@ -1686,7 +1686,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
     //adjust end position
     long nEndTemp = m_nErrorEnd;
     nEndTemp += nDiffLen;
-    m_nErrorEnd = (sal_uInt16)nEndTemp;
+    m_nErrorEnd = static_cast<sal_uInt16>(nEndTemp);
 
     SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
                     SPELLUNDO_MOVE_ERROREND, GetSpellDialog()->aDialogUndoLink);
@@ -1960,9 +1960,9 @@ void SentenceEditWindow_Impl::UndoActionEnd()
 void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 {
     if(nOffset > 0)
-        m_nErrorEnd = m_nErrorEnd - (sal_uInt16)nOffset;
+        m_nErrorEnd = m_nErrorEnd - static_cast<sal_uInt16>(nOffset);
     else
-        m_nErrorEnd = m_nErrorEnd -(sal_uInt16)- nOffset;
+        m_nErrorEnd = m_nErrorEnd -static_cast<sal_uInt16>(- nOffset);
 }
 
 
@@ -1997,8 +1997,8 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 
     //remove error marks
     TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR );
-    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTWEIGHT );
+    pTextEngine->RemoveAttribs( 0, sal_uInt16(TEXTATTR_FONTCOLOR) );
+    pTextEngine->RemoveAttribs( 0, sal_uInt16(TEXTATTR_FONTWEIGHT) );
 
     //put the appropriate action on the Undo-stack
     SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(

@@ -1272,7 +1272,7 @@ void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
 void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
-    mnWidth = (sal_uLong)FRound( mnWidth * fabs(fScaleX) );
+    mnWidth = static_cast<sal_uLong>(FRound( mnWidth * fabs(fScaleX) ));
 }
 
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -3439,7 +3439,7 @@ void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt16( (sal_uInt16)meTextLanguage );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(meTextLanguage) );
 }
 
 void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )

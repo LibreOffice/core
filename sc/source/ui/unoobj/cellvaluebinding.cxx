@@ -226,7 +226,7 @@ namespace calc
             if ( m_xCell.is() )
                 aReturn <<= m_xCell->getValue();
             else
-                aReturn <<= (double)0;
+                aReturn <<= double(0);
             break;
 
         case TypeClass_LONG:
@@ -236,13 +236,13 @@ namespace calc
                 // The list position value in the cell is 1-based.
                 // We subtract 1 from any cell value (no special handling for 0 or negative values).
 
-                sal_Int32 nValue = (sal_Int32) rtl::math::approxFloor( m_xCell->getValue() );
+                sal_Int32 nValue = static_cast<sal_Int32>(rtl::math::approxFloor( m_xCell->getValue() ));
                 --nValue;
 
                 aReturn <<= nValue;
             }
             else
-                aReturn <<= (sal_Int32)0;
+                aReturn <<= sal_Int32(0);
             break;
 
         default:

@@ -165,7 +165,7 @@ namespace pcr
         sal_Int32 index = std::find( aValues.begin(), aValues.end(), nAsInt ) - aValues.begin();
 
         std::vector< OUString > aDescriptions( getDescriptions() );
-        if ( ( index >= 0 ) && ( index < (sal_Int32)aDescriptions.size() ) )
+        if ( ( index >= 0 ) && ( index < static_cast<sal_Int32>(aDescriptions.size()) ) )
             sDescription = aDescriptions[ index ];
         else
         {

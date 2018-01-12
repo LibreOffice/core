@@ -188,13 +188,13 @@
 
         switch ( nHandle )
         {
-            case GCM_PROPERTY_ID_POS_X:             aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_POS_Y:             aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_WIDTH:             aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_HEIGHT:            aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_POS_X:             aDefault <<= sal_Int32(0); break;
+            case GCM_PROPERTY_ID_POS_Y:             aDefault <<= sal_Int32(0); break;
+            case GCM_PROPERTY_ID_WIDTH:             aDefault <<= sal_Int32(0); break;
+            case GCM_PROPERTY_ID_HEIGHT:            aDefault <<= sal_Int32(0); break;
             case GCM_PROPERTY_ID_NAME:              aDefault <<= OUString(); break;
-            case GCM_PROPERTY_ID_TABINDEX:          aDefault <<= (sal_Int16) -1; break;
-            case GCM_PROPERTY_ID_STEP:              aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_TABINDEX:          aDefault <<= sal_Int16(-1); break;
+            case GCM_PROPERTY_ID_STEP:              aDefault <<= sal_Int32(0); break;
             case GCM_PROPERTY_ID_TAG:               aDefault <<= OUString(); break;
             case GCM_PROPERTY_ID_RESOURCERESOLVER:  aDefault <<= Reference< resource::XStringResourceResolver >(); break;
             default:                            OSL_FAIL( "ImplGetDefaultValueByHandle - unknown Property" );
@@ -516,8 +516,8 @@
     ::cppu::IPropertyArrayHelper* OCommonGeometryControlModel::createArrayHelper( sal_Int32 _nId ) const
     {
         OSL_ENSURE( _nId == m_nPropertyMapId, "OCommonGeometryControlModel::createArrayHelper: invalid argument!" );
-        OSL_ENSURE( _nId < (sal_Int32)AggregateProperties::get().size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (1)!" );
-        OSL_ENSURE( _nId < (sal_Int32)AmbiguousPropertyIds::get().size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (2)!" );
+        OSL_ENSURE( _nId < static_cast<sal_Int32>(AggregateProperties::get().size()), "OCommonGeometryControlModel::createArrayHelper: invalid status info (1)!" );
+        OSL_ENSURE( _nId < static_cast<sal_Int32>(AmbiguousPropertyIds::get().size()), "OCommonGeometryControlModel::createArrayHelper: invalid status info (2)!" );
 
         // our own properties
         Sequence< Property > aProps;

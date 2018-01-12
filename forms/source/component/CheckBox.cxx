@@ -130,7 +130,7 @@ void SAL_CALL OCheckBoxModel::write(const Reference<css::io::XObjectOutputStream
     _rxOutStream->writeShort(0x0003);
     // Properties
     _rxOutStream << getReferenceValue();
-    _rxOutStream << (sal_Int16)getDefaultChecked();
+    _rxOutStream << static_cast<sal_Int16>(getDefaultChecked());
     writeHelpTextCompatibly(_rxOutStream);
     // from version 0x0003 : common properties
     writeCommonProperties(_rxOutStream);
@@ -210,7 +210,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
         bool bTriState = true;
         if ( m_xAggregateSet.is() )
             m_xAggregateSet->getPropertyValue( PROPERTY_TRISTATE ) >>= bTriState;
-        aValue <<= (sal_Int16)( bTriState ? TRISTATE_INDET : getDefaultChecked() );
+        aValue <<= static_cast<sal_Int16>( bTriState ? TRISTATE_INDET : getDefaultChecked() );
     }
     else if ( !aValue.hasValue() )
     {
@@ -218,7 +218,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
         // bValue cannot be used uninitialised here.
         // But GCC does not see/understand that, which breaks -Werror builds,
         // so we explicitly default-initialise it.
-        aValue <<= (sal_Int16)( bValue ? TRISTATE_TRUE : TRISTATE_FALSE );
+        aValue <<= static_cast<sal_Int16>( bValue ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
 
     return aValue;

@@ -999,9 +999,9 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "IsAutoRetrievingEnabled",    makeAny( false ) ),
         // known LDAP driver settings
         AsciiPropertyValue( "HostName",                   makeAny( OUString() ) ),
-        AsciiPropertyValue( "PortNumber",                 makeAny( (sal_Int32)389 ) ),
+        AsciiPropertyValue( "PortNumber",                 makeAny( sal_Int32(389) ) ),
         AsciiPropertyValue( "BaseDN",                     makeAny( OUString() ) ),
-        AsciiPropertyValue( "MaxRowCount",                makeAny( (sal_Int32)100 ) ),
+        AsciiPropertyValue( "MaxRowCount",                makeAny( sal_Int32(100) ) ),
         // known MySQLNative driver settings
         AsciiPropertyValue( "LocalSocket",                makeAny( OUString() ) ),
         AsciiPropertyValue( "NamedPipe",                  makeAny( OUString() ) ),
@@ -1020,7 +1020,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "ColumnAliasInOrderBy",       makeAny( true ) ),
         AsciiPropertyValue( "EnableSQL92Check",           makeAny( false ) ),
         AsciiPropertyValue( "BooleanComparisonMode",      makeAny( BooleanComparisonMode::EQUAL_INTEGER ) ),
-        AsciiPropertyValue( "TableTypeFilterMode",        makeAny( (sal_Int32)3 ) ),
+        AsciiPropertyValue( "TableTypeFilterMode",        makeAny( sal_Int32(3) ) ),
         AsciiPropertyValue( "RespectDriverResultSetType", makeAny( false ) ),
         AsciiPropertyValue( "UseSchemaInSelect",          makeAny( true ) ),
         AsciiPropertyValue( "UseCatalogInSelect",         makeAny( true ) ),

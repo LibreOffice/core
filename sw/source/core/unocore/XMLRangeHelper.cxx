@@ -83,23 +83,23 @@ void lcl_getXMLStringForCell( const /*::chart::*/XMLRangeHelper::Cell & rCell, O
 
     // get A, B, C, ..., AA, AB, ... representation of column number
     if( nCol < 26 )
-        output->append( (sal_Unicode)('A' + nCol) );
+        output->append( static_cast<sal_Unicode>('A' + nCol) );
     else if( nCol < 702 )
     {
-        output->append( (sal_Unicode)('A' + nCol / 26 - 1 ));
-        output->append( (sal_Unicode)('A' + nCol % 26) );
+        output->append( static_cast<sal_Unicode>('A' + nCol / 26 - 1 ));
+        output->append( static_cast<sal_Unicode>('A' + nCol % 26) );
     }
     else    // works for nCol <= 18,278
     {
-        output->append( (sal_Unicode)('A' + nCol / 702 - 1 ));
-        output->append( (sal_Unicode)('A' + (nCol % 702) / 26 ));
-        output->append( (sal_Unicode)('A' + nCol % 26) );
+        output->append( static_cast<sal_Unicode>('A' + nCol / 702 - 1 ));
+        output->append( static_cast<sal_Unicode>('A' + (nCol % 702) / 26 ));
+        output->append( static_cast<sal_Unicode>('A' + nCol % 26) );
     }
 
     // write row number as number
     if( ! rCell.bRelativeRow )
         output->append( '$' );
-    output->append( rCell.nRow + (sal_Int32)1 );
+    output->append( rCell.nRow + sal_Int32(1) );
 }
 
 void lcl_getSingleCellAddressFromXMLString(

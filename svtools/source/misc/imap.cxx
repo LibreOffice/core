@@ -42,7 +42,7 @@
 
 /******************************************************************************/
 
-sal_uInt16 IMapObject::nActualTextEncoding = (sal_uInt16) RTL_TEXTENCODING_DONTKNOW;
+sal_uInt16 IMapObject::nActualTextEncoding = sal_uInt16(RTL_TEXTENCODING_DONTKNOW);
 
 /******************************************************************************/
 
@@ -320,8 +320,8 @@ bool IMapCircleObject::IsHit( const Point& rPoint ) const
     const Point aPoint( aCenter - rPoint );
     bool        bRet = false;
 
-    if ( (sal_Int32) sqrt( (double) aPoint.X() * aPoint.X() +
-                       aPoint.Y() * aPoint.Y() ) <= nRadius )
+    if ( static_cast<sal_Int32>(sqrt( static_cast<double>(aPoint.X()) * aPoint.X() +
+                       aPoint.Y() * aPoint.Y() )) <= nRadius )
     {
         bRet = true;
     }
@@ -911,7 +911,7 @@ void ImageMap::Write( SvStream& rOStm ) const
     IMapCompat*             pCompat;
     OUString                aImageName( GetName() );
     SvStreamEndian          nOldFormat = rOStm.GetEndian();
-    sal_uInt16              nCount = (sal_uInt16) GetIMapObjectCount();
+    sal_uInt16              nCount = static_cast<sal_uInt16>(GetIMapObjectCount());
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding(); //vomit!
 
     rOStm.SetEndian( SvStreamEndian::LITTLE );

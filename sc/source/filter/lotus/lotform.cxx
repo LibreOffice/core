@@ -487,7 +487,7 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
                         // missing range
                         nNewId = aPool.Store( rR );
                     else
-                        nNewId = aPool.Store( ( sal_uInt16 ) nId );
+                        nNewId = aPool.Store( static_cast<sal_uInt16>(nId) );
                 }
 
                 aStack << nNewId;
@@ -514,7 +514,7 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
                         // missing range
                         nNewId = aPool.Store( aCRD );
                     else
-                        nNewId = aPool.Store( ( sal_uInt16 ) nId );
+                        nNewId = aPool.Store( static_cast<sal_uInt16>(nId) );
                 }
 
                 aStack << nNewId;
@@ -528,7 +528,7 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
             {
                 sal_Int16   nVal;
                 Read( nVal );
-                aStack << aPool.Store( ( double ) nVal );
+                aStack << aPool.Store( static_cast<double>(nVal) );
             }
                 break;
             case FT_ConstString:

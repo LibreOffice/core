@@ -653,9 +653,9 @@ void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
         aOutArea.Bottom() = aOutArea.Top();
 
     if ( DoBigScroll() )
-        SetScrollDiffX( (sal_uInt16)aOutArea.GetWidth() * 3 / 10 );
+        SetScrollDiffX( static_cast<sal_uInt16>(aOutArea.GetWidth()) * 3 / 10 );
     else
-        SetScrollDiffX( (sal_uInt16)aOutArea.GetWidth() * 2 / 10 );
+        SetScrollDiffX( static_cast<sal_uInt16>(aOutArea.GetWidth()) * 2 / 10 );
 }
 
 void ImpEditView::InvalidateAtWindow(const tools::Rectangle& rRect)
@@ -981,7 +981,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             // Scroll right, negative:
             nDocDiffX = aEditCursor.Left() - aTmpVisArea.Left();
             // Can it be a little more?
-            if ( aEditCursor.Left() > ( - (long)GetScrollDiffX() ) )
+            if ( aEditCursor.Left() > ( - static_cast<long>(GetScrollDiffX()) ) )
                 nDocDiffX -= GetScrollDiffX();
             else
                 nDocDiffX -= aEditCursor.Left();
@@ -1190,7 +1190,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
             aNewVisArea.Bottom() -= ndX;
         }
     }
-    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Bottom() > (long)pEditEngine->pImpEditEngine->GetTextHeight() ) )
+    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Bottom() > static_cast<long>(pEditEngine->pImpEditEngine->GetTextHeight()) ) )
     {
         // GetTextHeight still optimizing!
         long nDiff = pEditEngine->pImpEditEngine->GetTextHeight() - aNewVisArea.Bottom(); // negative
@@ -1218,7 +1218,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
             aNewVisArea.Right() += ndY;
         }
     }
-    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth( false ) ) )
+    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Right() > static_cast<long>(pEditEngine->pImpEditEngine->CalcTextWidth( false )) ) )
     {
         long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( false ) - aNewVisArea.Right();     // negative
         aNewVisArea.Move( nDiff, 0 );   // could end up in the negative area...
@@ -1902,8 +1902,8 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         // Sensitive area to be scrolled.
         Size aSz( 5, 0 );
         aSz = GetWindow()->PixelToLogic( aSz );
-        pDragAndDropInfo->nSensibleRange = (sal_uInt16) aSz.Width();
-        pDragAndDropInfo->nCursorWidth = (sal_uInt16) aSz.Width() / 2;
+        pDragAndDropInfo->nSensibleRange = static_cast<sal_uInt16>(aSz.Width());
+        pDragAndDropInfo->nCursorWidth = static_cast<sal_uInt16>(aSz.Width()) / 2;
         pDragAndDropInfo->aBeginDragSel = pEditEngine->pImpEditEngine->CreateESel( aCopySel );
 
         uno::Reference<datatransfer::XTransferable> xData = pEditEngine->CreateTransferable(aCopySel);

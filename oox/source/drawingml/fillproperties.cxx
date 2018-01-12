@@ -586,8 +586,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     {
                         awt::Gradient aGrad(aGradient);
                         uno::Any aVal;
-                        aGrad.EndColor = (sal_Int32)( nEndTrans | nEndTrans << 8 | nEndTrans << 16 );
-                        aGrad.StartColor = (sal_Int32)( nStartTrans | nStartTrans << 8 | nStartTrans << 16 );
+                        aGrad.EndColor = static_cast<sal_Int32>( nEndTrans | nEndTrans << 8 | nEndTrans << 16 );
+                        aGrad.StartColor = static_cast<sal_Int32>( nStartTrans | nStartTrans << 8 | nStartTrans << 16 );
                         aVal <<= aGrad;
                         rPropMap.setProperty( ShapeProperty::GradientTransparency, aGrad );
                     }

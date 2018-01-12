@@ -201,9 +201,9 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
         else
         {
             short n = p->GetInteger();
-            if( n >= 1 && n <= (short) pObjs->Count() )
+            if( n >= 1 && n <= static_cast<short>(pObjs->Count()) )
             {
-                pRes = pObjs->Get( (sal_uInt16) n - 1 );
+                pRes = pObjs->Get( static_cast<sal_uInt16>(n) - 1 );
             }
         }
         if( !pRes )
@@ -223,10 +223,10 @@ void SbxCollection::CollRemove( SbxArray* pPar_ )
     else
     {
         short n = pPar_->Get( 1 )->GetInteger();
-        if( n < 1 || n > (short) pObjs->Count() )
+        if( n < 1 || n > static_cast<short>(pObjs->Count()) )
             SetError( ERRCODE_BASIC_BAD_INDEX );
         else
-            Remove( pObjs->Get( (sal_uInt16) n - 1 ) );
+            Remove( pObjs->Get( static_cast<sal_uInt16>(n) - 1 ) );
     }
 }
 

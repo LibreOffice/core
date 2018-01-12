@@ -104,21 +104,21 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
         if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
             aSize.Height() && aPageSize.Height() )
         {
-            float fGrfWH =  (float)aSize.Width() /
-                            (float)aSize.Height();
-            float fWinWH =  (float)aPageSize.Width() /
-                            (float)aPageSize.Height();
+            float fGrfWH =  static_cast<float>(aSize.Width()) /
+                            static_cast<float>(aSize.Height());
+            float fWinWH =  static_cast<float>(aPageSize.Width()) /
+                            static_cast<float>(aPageSize.Height());
 
             // constrain size to page size if necessary
             if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
             {
-                aSize.Width() = (long)(aPageSize.Height() * fGrfWH);
+                aSize.Width() = static_cast<long>(aPageSize.Height() * fGrfWH);
                 aSize.Height()= aPageSize.Height();
             }
             else
             {
                 aSize.Width() = aPageSize.Width();
-                aSize.Height()= (long)(aPageSize.Width() / fGrfWH);
+                aSize.Height()= static_cast<long>(aPageSize.Width() / fGrfWH);
             }
         }
 
@@ -242,7 +242,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (pArgs->Count () == 1)
                 {
                     const SfxUInt32Item* pLineStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
-                    if (CHECK_RANGE ((sal_Int32)drawing::LineStyle_NONE, (sal_Int32)pLineStyle->GetValue(), (sal_Int32)drawing::LineStyle_DASH))
+                    if (CHECK_RANGE ((sal_Int32)drawing::LineStyle_NONE, static_cast<sal_Int32>(pLineStyle->GetValue()), (sal_Int32)drawing::LineStyle_DASH))
                     {
                         pAttr->ClearItem (XATTR_LINESTYLE);
                         XLineStyleItem aStyleItem((drawing::LineStyle) pLineStyle->GetValue());
@@ -288,9 +288,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     pAttr->ClearItem (XATTR_FILLCOLOR);
                     pAttr->ClearItem (XATTR_FILLSTYLE);
-                    XFillColorItem aColorItem(-1, Color ((sal_uInt8) pRed->GetValue (),
-                                                           (sal_uInt8) pGreen->GetValue (),
-                                                           (sal_uInt8) pBlue->GetValue ()));
+                    XFillColorItem aColorItem(-1, Color (static_cast<sal_uInt8>(pRed->GetValue ()),
+                                                           static_cast<sal_uInt8>(pGreen->GetValue ()),
+                                                           static_cast<sal_uInt8>(pBlue->GetValue ())));
                     aColorItem.SetWhich(XATTR_FILLCOLOR);
                     pAttr->Put(aColorItem);
                     rBindings.Invalidate (SID_ATTR_FILL_COLOR);
@@ -313,9 +313,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
                     pAttr->ClearItem (XATTR_LINECOLOR);
-                    XLineColorItem aColorItem(-1, Color((sal_uInt8) pRed->GetValue(),
-                                                        (sal_uInt8) pGreen->GetValue(),
-                                                        (sal_uInt8) pBlue->GetValue()));
+                    XLineColorItem aColorItem(-1, Color(static_cast<sal_uInt8>(pRed->GetValue()),
+                                                        static_cast<sal_uInt8>(pGreen->GetValue()),
+                                                        static_cast<sal_uInt8>(pBlue->GetValue())));
                     aColorItem.SetWhich(XATTR_LINECOLOR);
                     pAttr->Put(aColorItem);
                     rBindings.Invalidate (SID_ATTR_LINE_COLOR);
@@ -338,9 +338,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                     long          nCounts        = pGradientList->Count ();
-                    Color         aColor ((sal_uInt8) pRed->GetValue (),
-                                          (sal_uInt8) pGreen->GetValue (),
-                                          (sal_uInt8) pBlue->GetValue ());
+                    Color         aColor (static_cast<sal_uInt8>(pRed->GetValue ()),
+                                          static_cast<sal_uInt8>(pGreen->GetValue ()),
+                                          static_cast<sal_uInt8>(pBlue->GetValue ()));
                     long i;
 
                     pAttr->ClearItem (XATTR_FILLGRADIENT);
@@ -409,9 +409,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
-                    Color      aColor ((sal_uInt8) pRed->GetValue (),
-                                       (sal_uInt8) pGreen->GetValue (),
-                                       (sal_uInt8) pBlue->GetValue ());
+                    Color      aColor (static_cast<sal_uInt8>(pRed->GetValue ()),
+                                       static_cast<sal_uInt8>(pGreen->GetValue ()),
+                                       static_cast<sal_uInt8>(pBlue->GetValue ()));
                     long i;
 
                     pAttr->ClearItem (XATTR_FILLHATCH);
@@ -475,10 +475,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pDashLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHLEN);
                     const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
 
-                    if (CHECK_RANGE ((sal_Int32)css::drawing::DashStyle_RECT, (sal_Int32)pStyle->GetValue(), (sal_Int32)css::drawing::DashStyle_ROUNDRELATIVE))
+                    if (CHECK_RANGE ((sal_Int32)css::drawing::DashStyle_RECT, static_cast<sal_Int32>(pStyle->GetValue()), (sal_Int32)css::drawing::DashStyle_ROUNDRELATIVE))
                     {
-                        XDash aNewDash ((css::drawing::DashStyle) pStyle->GetValue (), (short) pDots->GetValue (), pDotLen->GetValue (),
-                                        (short) pDashes->GetValue (), pDashLen->GetValue (), pDistance->GetValue ());
+                        XDash aNewDash ((css::drawing::DashStyle) pStyle->GetValue (), static_cast<short>(pDots->GetValue ()), pDotLen->GetValue (),
+                                        static_cast<short>(pDashes->GetValue ()), pDashLen->GetValue (), pDistance->GetValue ());
 
                         pAttr->ClearItem (XATTR_LINEDASH);
                         pAttr->ClearItem (XATTR_LINESTYLE);
@@ -530,13 +530,13 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_STARTINTENS);
                     const SfxUInt32Item* pEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ENDINTENS);
 
-                    if (CHECK_RANGE ((sal_Int32)css::awt::GradientStyle_LINEAR, (sal_Int32)pStyle->GetValue(), (sal_Int32)css::awt::GradientStyle_RECT) &&
-                        CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360) &&
-                        CHECK_RANGE (0, (sal_Int32)pBorder->GetValue (), 100) &&
-                        CHECK_RANGE (0, (sal_Int32)pCenterX->GetValue (), 100) &&
-                        CHECK_RANGE (0, (sal_Int32)pCenterY->GetValue (), 100) &&
-                        CHECK_RANGE (0, (sal_Int32)pStart->GetValue (), 100) &&
-                        CHECK_RANGE (0, (sal_Int32)pEnd->GetValue (), 100))
+                    if (CHECK_RANGE ((sal_Int32)css::awt::GradientStyle_LINEAR, static_cast<sal_Int32>(pStyle->GetValue()), (sal_Int32)css::awt::GradientStyle_RECT) &&
+                        CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360) &&
+                        CHECK_RANGE (0, static_cast<sal_Int32>(pBorder->GetValue ()), 100) &&
+                        CHECK_RANGE (0, static_cast<sal_Int32>(pCenterX->GetValue ()), 100) &&
+                        CHECK_RANGE (0, static_cast<sal_Int32>(pCenterY->GetValue ()), 100) &&
+                        CHECK_RANGE (0, static_cast<sal_Int32>(pStart->GetValue ()), 100) &&
+                        CHECK_RANGE (0, static_cast<sal_Int32>(pEnd->GetValue ()), 100))
                     {
                         pAttr->ClearItem (XATTR_FILLGRADIENT);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -555,11 +555,11 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                                 aGradient.SetGradientStyle ((css::awt::GradientStyle) pStyle->GetValue ());
                                 aGradient.SetAngle (pAngle->GetValue () * 10);
-                                aGradient.SetBorder ((short) pBorder->GetValue ());
-                                aGradient.SetXOffset ((short) pCenterX->GetValue ());
-                                aGradient.SetYOffset ((short) pCenterY->GetValue ());
-                                aGradient.SetStartIntens ((short) pStart->GetValue ());
-                                aGradient.SetEndIntens ((short) pEnd->GetValue ());
+                                aGradient.SetBorder (static_cast<short>(pBorder->GetValue ()));
+                                aGradient.SetXOffset (static_cast<short>(pCenterX->GetValue ()));
+                                aGradient.SetYOffset (static_cast<short>(pCenterY->GetValue ()));
+                                aGradient.SetStartIntens (static_cast<short>(pStart->GetValue ()));
+                                aGradient.SetEndIntens (static_cast<short>(pEnd->GetValue ()));
 
                                 XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                                 aStyleItem.SetWhich(XATTR_FILLSTYLE);
@@ -575,9 +575,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         {
                             Color aBlack (0, 0, 0);
                             XGradient aGradient (aBlack, aBlack, (css::awt::GradientStyle) pStyle->GetValue (),
-                                                 pAngle->GetValue () * 10, (short) pCenterX->GetValue (),
-                                                 (short) pCenterY->GetValue (), (short) pBorder->GetValue (),
-                                                 (short) pStart->GetValue (), (short) pEnd->GetValue ());
+                                                 pAngle->GetValue () * 10, static_cast<short>(pCenterX->GetValue ()),
+                                                 static_cast<short>(pCenterY->GetValue ()), static_cast<short>(pBorder->GetValue ()),
+                                                 static_cast<short>(pStart->GetValue ()), static_cast<short>(pEnd->GetValue ()));
 
                             pGradientList->Insert(o3tl::make_unique<XGradientEntry>(aGradient, pName->GetValue()));
                             XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
@@ -613,8 +613,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
                     const SfxUInt32Item* pAngle = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLE);
 
-                    if (CHECK_RANGE ((sal_Int32)css::drawing::HatchStyle_SINGLE, (sal_Int32)pStyle->GetValue(), (sal_Int32)css::drawing::HatchStyle_TRIPLE) &&
-                        CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360))
+                    if (CHECK_RANGE ((sal_Int32)css::drawing::HatchStyle_SINGLE, static_cast<sal_Int32>(pStyle->GetValue()), (sal_Int32)css::drawing::HatchStyle_TRIPLE) &&
+                        CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360))
                     {
                         pAttr->ClearItem (XATTR_FILLHATCH);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -830,7 +830,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XLineWidthItem &rLineWidthItem = aAttr.Get (XATTR_LINEWIDTH);
 
-                rSet.Put (SfxUInt32Item (nWhich, (long) rLineWidthItem.GetValue ()));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<long>(rLineWidthItem.GetValue ())));
                 break;
             }
 
@@ -884,7 +884,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                         ;
                 }
 
-                rSet.Put (SfxUInt32Item (nWhich, (long) ((nWhich == SID_GETRED)
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<long>((nWhich == SID_GETRED)
                                                              ? aColor.GetRed ()
                                                              : (nWhich == SID_GETGREEN)
                                                                    ? aColor.GetGreen ()

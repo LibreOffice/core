@@ -172,7 +172,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                         break;
                 }
                 if (nWrapType)
-                    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPWR).append((sal_Int32)nWrapType);
+                    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPWR)
+                        .append(static_cast<sal_Int32>(nWrapType));
             }
             break;
             case ESCHER_Prop_fillColor:
@@ -282,7 +283,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                     // number of segments
                     sal_uInt16 nSegments = impl_GetUInt16(pSegmentIt);
                     sal_Int32 nVertices = 0;
-                    aSegmentInfo.append("2;").append((sal_Int32)nSegments);
+                    aSegmentInfo.append("2;").append(static_cast<sal_Int32>(nSegments));
                     pSegmentIt += 4;
 
                     for (; nSegments; --nSegments)
@@ -295,7 +296,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                         unsigned char nSegmentType = (nSeg & 0xE000) >> 13;
                         unsigned short nSegmentCount = nSeg & 0x03FF;
 
-                        aSegmentInfo.append(';').append((sal_Int32)nSeg);
+                        aSegmentInfo.append(';').append(static_cast<sal_Int32>(nSeg));
                         switch (nSegmentType)
                         {
                             case msopathLineTo:

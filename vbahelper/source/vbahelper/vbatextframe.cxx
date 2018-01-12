@@ -78,7 +78,7 @@ float SAL_CALL
 VbaTextFrame::getMarginBottom()
 {
     sal_Int32 nMargin = getMargin( "TextLowerDistance" );
-    float fMargin = (float)Millimeter::getInPoints( nMargin );
+    float fMargin = static_cast<float>(Millimeter::getInPoints( nMargin ));
     return fMargin;
 }
 
@@ -92,7 +92,7 @@ float SAL_CALL
 VbaTextFrame::getMarginTop()
 {
     sal_Int32 nMargin = getMargin( "TextUpperDistance" );
-    float fMargin = (float)Millimeter::getInPoints( nMargin );
+    float fMargin = static_cast<float>(Millimeter::getInPoints( nMargin ));
     return fMargin;
 }
 
@@ -106,7 +106,7 @@ float SAL_CALL
 VbaTextFrame::getMarginLeft()
 {
     sal_Int32 nMargin = getMargin( "TextLeftDistance" );
-    float fMargin = (float)Millimeter::getInPoints( nMargin );
+    float fMargin = static_cast<float>(Millimeter::getInPoints( nMargin ));
     return fMargin;
 }
 
@@ -120,7 +120,7 @@ float SAL_CALL
 VbaTextFrame::getMarginRight()
 {
     sal_Int32 nMargin = getMargin( "TextRightDistance" );
-    float fMargin = (float)Millimeter::getInPoints( nMargin );
+    float fMargin = static_cast<float>(Millimeter::getInPoints( nMargin ));
     return fMargin;
 }
 

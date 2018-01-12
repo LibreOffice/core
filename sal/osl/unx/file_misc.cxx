@@ -746,7 +746,7 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
         return osl_File_E_ISDIR;
     }
 
-    nSourceSize=(size_t)aFileStat.st_size;
+    nSourceSize=static_cast<size_t>(aFileStat.st_size);
     nMode=aFileStat.st_mode;
     nAcTime=aFileStat.st_atime;
     nModTime=aFileStat.st_mtime;
@@ -974,7 +974,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
                 break;
 
             // We know nRead <= nToRead, so it must fit in a size_t
-            nRemains -= (size_t) nRead;
+            nRemains -= static_cast<size_t>(nRead);
         }
         while( nRemains );
     }

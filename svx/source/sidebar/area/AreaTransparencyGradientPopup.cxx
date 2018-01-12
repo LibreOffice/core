@@ -65,9 +65,9 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     if (rGradient.GetXOffset() == AreaPropertyPanelBase::DEFAULT_CENTERX
         && rGradient.GetYOffset() == AreaPropertyPanelBase::DEFAULT_CENTERY
         && (rGradient.GetAngle() / 10) == AreaPropertyPanelBase::DEFAULT_ANGLE
-        && ((sal_uInt16)((((sal_uInt16)rGradient.GetStartColor().GetRed() + 1) * 100) / 255))
+        && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255)
             == AreaPropertyPanelBase::DEFAULT_STARTVALUE
-        && ((sal_uInt16)((((sal_uInt16)rGradient.GetEndColor().GetRed() + 1) * 100) / 255))
+        && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255)
             == AreaPropertyPanelBase::DEFAULT_ENDVALUE
         && rGradient.GetBorder() == AreaPropertyPanelBase::DEFAULT_BORDER)
     {
@@ -80,8 +80,8 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     maMtrTrgrCenterX->SetValue(aGradient.GetXOffset());
     maMtrTrgrCenterY->SetValue(aGradient.GetYOffset());
     maMtrTrgrAngle->SetValue(aGradient.GetAngle() / 10);
-    maMtrTrgrStartValue->SetValue((sal_uInt16)((((sal_uInt16)aGradient.GetStartColor().GetRed() + 1) * 100) / 255));
-    maMtrTrgrEndValue->SetValue((sal_uInt16)((((sal_uInt16)aGradient.GetEndColor().GetRed() + 1) * 100) / 255));
+    maMtrTrgrStartValue->SetValue(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aGradient.GetStartColor().GetRed()) + 1) * 100) / 255));
+    maMtrTrgrEndValue->SetValue(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aGradient.GetEndColor().GetRed()) + 1) * 100) / 255));
     maMtrTrgrBorder->SetValue(aGradient.GetBorder());
 }
 
@@ -116,7 +116,7 @@ void AreaTransparencyGradientPopup::Rearrange(XFillFloatTransparenceItem const *
 void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_uInt8 nEndCol)
 {
     //Added
-    sal_Int16 aMtrValue = (sal_Int16)maMtrTrgrAngle->GetValue();
+    sal_Int16 aMtrValue = static_cast<sal_Int16>(maMtrTrgrAngle->GetValue());
     while(aMtrValue<0)
         aMtrValue += 360;
     sal_uInt16 nVal = aMtrValue/360;
@@ -127,10 +127,10 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
         Color(nStartCol, nStartCol, nStartCol),
         Color(nEndCol, nEndCol, nEndCol),
         (css::awt::GradientStyle)(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
-        (sal_uInt16)maMtrTrgrAngle->GetValue() * 10,
-        (sal_uInt16)maMtrTrgrCenterX->GetValue(),
-        (sal_uInt16)maMtrTrgrCenterY->GetValue(),
-        (sal_uInt16)maMtrTrgrBorder->GetValue(),
+        static_cast<sal_uInt16>(maMtrTrgrAngle->GetValue()) * 10,
+        static_cast<sal_uInt16>(maMtrTrgrCenterX->GetValue()),
+        static_cast<sal_uInt16>(maMtrTrgrCenterY->GetValue()),
+        static_cast<sal_uInt16>(maMtrTrgrBorder->GetValue()),
         100, 100);
 
     mrAreaPropertyPanel.SetGradient(aTmpGradient);
@@ -142,16 +142,16 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
 
 IMPL_LINK_NOARG(AreaTransparencyGradientPopup, ModifiedTrgrHdl_Impl, Edit&, void)
 {
-    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
-    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
+    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(maMtrTrgrStartValue->GetValue()) * 255) / 100);
+    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(maMtrTrgrEndValue->GetValue()) * 255) / 100);
     ExecuteValueModify( nStartCol, nEndCol );
 }
 
 IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Left_Click45_Impl, ToolBox *, void)
 {
-    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
-    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
-    sal_uInt16 nTemp = (sal_uInt16)maMtrTrgrAngle->GetValue();
+    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(maMtrTrgrStartValue->GetValue()) * 255) / 100);
+    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(maMtrTrgrEndValue->GetValue()) * 255) / 100);
+    sal_uInt16 nTemp = static_cast<sal_uInt16>(maMtrTrgrAngle->GetValue());
     if (nTemp>=315)
         nTemp -= 360;
     nTemp += 45;
@@ -161,9 +161,9 @@ IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Left_Click45_Impl, ToolBox *, voi
 
 IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Right_Click45_Impl, ToolBox *, void)
 {
-    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
-    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
-    sal_uInt16 nTemp = (sal_uInt16)maMtrTrgrAngle->GetValue();
+    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(maMtrTrgrStartValue->GetValue()) * 255) / 100);
+    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(maMtrTrgrEndValue->GetValue()) * 255) / 100);
+    sal_uInt16 nTemp = static_cast<sal_uInt16>(maMtrTrgrAngle->GetValue());
     if (nTemp<45)
         nTemp += 360;
     nTemp -= 45;

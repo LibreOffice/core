@@ -418,7 +418,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {
                     if(rEntry.nWID == FN_UNO_NUM_LEVEL)
-                        *pAny <<= (sal_Int16)(pTextNd->GetActualListLevel());
+                        *pAny <<= static_cast<sal_Int16>(pTextNd->GetActualListLevel());
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                     {
                         *pAny <<= pTextNd->IsCountedInList();

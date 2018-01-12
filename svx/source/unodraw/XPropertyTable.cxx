@@ -255,7 +255,7 @@ uno::Reference< uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyLis
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    return uno::Any( (sal_Int32)static_cast<const XColorEntry*>(pEntry)->GetColor().GetColor() );
+    return uno::Any( static_cast<sal_Int32>(static_cast<const XColorEntry*>(pEntry)->GetColor().GetColor()) );
 }
 
 std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& rName, const uno::Any& rAny) const
@@ -264,7 +264,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& r
     if( !(rAny >>= nColor) )
         return std::unique_ptr<XPropertyEntry>();
 
-    const Color aColor( (ColorData)nColor );
+    const Color aColor( static_cast<ColorData>(nColor) );
     return o3tl::make_unique<XColorEntry>(aColor, rName);
 }
 
@@ -533,9 +533,9 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
     awt::Gradient aGradient;
 
     aGradient.Style = aXGradient.GetGradientStyle();
-    aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
-    aGradient.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
-    aGradient.Angle = (short)aXGradient.GetAngle();
+    aGradient.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor().GetColor());
+    aGradient.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor().GetColor());
+    aGradient.Angle = static_cast<short>(aXGradient.GetAngle());
     aGradient.Border = aXGradient.GetBorder();
     aGradient.XOffset = aXGradient.GetXOffset();
     aGradient.YOffset = aXGradient.GetYOffset();

@@ -72,7 +72,7 @@ namespace frm
         switch ( _nHandle )
         {
         case PROPERTY_ID_REFVALUE:          _rValue <<= m_sReferenceValue; break;
-        case PROPERTY_ID_DEFAULT_STATE:    _rValue <<= (sal_Int16)m_eDefaultChecked; break;
+        case PROPERTY_ID_DEFAULT_STATE:    _rValue <<= static_cast<sal_Int16>(m_eDefaultChecked); break;
 
         case PROPERTY_ID_UNCHECKED_REFVALUE:
             _rValue <<= m_sNoCheckReferenceValue;
@@ -133,7 +133,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_DEFAULT_STATE:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, (sal_Int16)m_eDefaultChecked );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_eDefaultChecked) );
             break;
 
         default:
@@ -146,7 +146,7 @@ namespace frm
 
     Any OReferenceValueComponent::getDefaultForReset() const
     {
-        return makeAny( (sal_Int16)m_eDefaultChecked );
+        return makeAny( static_cast<sal_Int16>(m_eDefaultChecked) );
     }
 
 

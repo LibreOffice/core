@@ -75,8 +75,8 @@ void IcnCursor_Impl::ImplCreate()
         SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
         // const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
         tools::Rectangle rRect( pView->CalcBmpRect( pEntry ) );
-        short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / nDeltaHeight );
-        short nX = (short)( ((rRect.Left()+rRect.Right())/2) / nDeltaWidth );
+        short nY = static_cast<short>( ((rRect.Top()+rRect.Bottom())/2) / nDeltaHeight );
+        short nX = static_cast<short>( ((rRect.Left()+rRect.Right())/2) / nDeltaWidth );
 
         // capture rounding errors
         if( nY >= nRows )
@@ -316,7 +316,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     sal_uInt16 nRowMax = nY;
     do
     {
-        SvxIconChoiceCtrlEntry* pEntry = SearchCol((sal_uInt16)nCurCol, nRowMin, nRowMax, true, false);
+        SvxIconChoiceCtrlEntry* pEntry = SearchCol(static_cast<sal_uInt16>(nCurCol), nRowMin, nRowMax, true, false);
         if( pEntry )
             return pEntry;
         if( nRowMin )
@@ -332,7 +332,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
 {
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
-        const long nPos = (long)pView->GetEntryListPos( pStart );
+        const long nPos = static_cast<long>(pView->GetEntryListPos( pStart ));
         long nEntriesInView = (pView->aOutputSize.Height() / pView->nGridDY);
         nEntriesInView *=
             ((pView->aOutputSize.Width()+(pView->nGridDX/2)) / pView->nGridDX );
@@ -340,7 +340,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
         if( bDown )
         {
             nNewPos += nEntriesInView;
-            if( nNewPos >= (long)pView->aEntries.size() )
+            if( nNewPos >= static_cast<long>(pView->aEntries.size()) )
                 nNewPos = pView->aEntries.size() - 1;
         }
         else
@@ -350,7 +350,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
                 nNewPos = 0;
         }
         if( nPos != nNewPos )
-            return pView->aEntries[ (size_t)nNewPos ];
+            return pView->aEntries[ static_cast<size_t>(nNewPos) ];
         return nullptr;
     }
     long nOpt = pView->GetEntryBoundRect( pStart ).Top();
@@ -435,7 +435,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     sal_uInt16 nColMax = nX;
     do
     {
-        SvxIconChoiceCtrlEntry* pEntry = SearchRow((sal_uInt16)nCurRow, nColMin, nColMax, true, false);
+        SvxIconChoiceCtrlEntry* pEntry = SearchRow(static_cast<sal_uInt16>(nCurRow), nColMin, nColMax, true, false);
         if( pEntry )
             return pEntry;
         if( nColMin )
@@ -459,8 +459,8 @@ void IcnCursor_Impl::SetDeltas()
     if( !nRows )
         nRows = 1;
 
-    nDeltaWidth = (short)(rSize.Width() / nCols);
-    nDeltaHeight = (short)(rSize.Height() / nRows);
+    nDeltaWidth = static_cast<short>(rSize.Width() / nCols);
+    nDeltaHeight = static_cast<short>(rSize.Height() / nRows);
     if( !nDeltaHeight )
     {
         nDeltaHeight = 1;
@@ -567,8 +567,8 @@ void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
     if( !nDY )
         nDY++;
 
-    rDX = (sal_uInt16)nDX;
-    rDY = (sal_uInt16)nDY;
+    rDX = static_cast<sal_uInt16>(nDX);
+    rDY = static_cast<sal_uInt16>(nDY);
 }
 
 GridId IcnGridMap_Impl::GetGrid( sal_uInt16 nGridX, sal_uInt16 nGridY )
@@ -598,8 +598,8 @@ GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos )
     {
         nY = _nGridRows - 1;
     }
-    GridId nId = GetGrid( (sal_uInt16)nX, (sal_uInt16)nY );
-    DBG_ASSERT(nId <(sal_uLong)(_nGridCols*_nGridRows),"GetGrid failed");
+    GridId nId = GetGrid( static_cast<sal_uInt16>(nX), static_cast<sal_uInt16>(nY) );
+    DBG_ASSERT(nId <static_cast<sal_uLong>(_nGridCols*_nGridRows),"GetGrid failed");
     return nId;
 }
 
@@ -624,13 +624,13 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid()
 
     while( true )
     {
-        const sal_uLong nCount = (sal_uInt16)(_nGridCols * _nGridRows);
+        const sal_uLong nCount = static_cast<sal_uInt16>(_nGridCols * _nGridRows);
         for( sal_uLong nCur = nStart; nCur < nCount; nCur++ )
         {
             if( !_pGridMap[ nCur ] )
             {
                 _pGridMap[ nCur ] = true;
-                return (GridId)nCur;
+                return static_cast<GridId>(nCur);
             }
         }
         DBG_ASSERT(!bExpanded,"ExpandGrid failed");
@@ -669,7 +669,7 @@ sal_uLong IcnGridMap_Impl::GetGridCount( const Size& rSizePixel, sal_uInt16 nDX,
     if( ndx < 0 ) ndx *= -1;
     long ndy = (rSizePixel.Height() - TBOFFS_WINBORDER) / nDY;
     if( ndy < 0 ) ndy *= -1;
-    return (sal_uLong)(ndx * ndy);
+    return static_cast<sal_uLong>(ndx * ndy);
 }
 
 void IcnGridMap_Impl::OutputSizeChanged()
@@ -703,13 +703,13 @@ void IcnGridMap_Impl::GetGridCoord( GridId nId, sal_uInt16& rGridX, sal_uInt16& 
     Create();
     if( _pView->nWinBits & WB_ALIGN_TOP )
     {
-        rGridX = (sal_uInt16)(nId % _nGridCols);
-        rGridY = (sal_uInt16)(nId / _nGridCols);
+        rGridX = static_cast<sal_uInt16>(nId % _nGridCols);
+        rGridY = static_cast<sal_uInt16>(nId / _nGridCols);
     }
     else
     {
-        rGridX = (sal_uInt16)(nId / _nGridRows);
-        rGridY = (sal_uInt16)(nId % _nGridRows);
+        rGridX = static_cast<sal_uInt16>(nId / _nGridRows);
+        rGridY = static_cast<sal_uInt16>(nId % _nGridRows);
     }
 }
 

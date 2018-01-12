@@ -133,7 +133,7 @@ XInputStream_impl::readBytes(
     // if any code relies on this, so be conservative---SB):
     if (sal::static_int_cast<sal_Int32>(nrc) != nBytesToRead)
         aData.realloc(sal_Int32(nrc));
-    return ( sal_Int32 ) nrc;
+    return static_cast<sal_Int32>(nrc);
 }
 
 sal_Int32 SAL_CALL

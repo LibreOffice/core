@@ -195,7 +195,7 @@ Point XIMStatusWindow::updatePosition()
         int x, y;
         ::Window aChild;
         XTranslateCoordinates( static_cast<Display*>(pParentEnvData->pDisplay),
-                               (::Window)pParentEnvData->aShellWindow,
+                               static_cast<::Window>(pParentEnvData->aShellWindow),
                                vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetRootWindow( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen() ),
                                0, 0,
                                &x, &y,
@@ -267,7 +267,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl, void*, void)
     if( m_bDelayedShow )
     {
         XRaiseWindow( static_cast<Display*>(pData->pDisplay),
-                      (::Window)pData->aShellWindow );
+                      static_cast<::Window>(pData->aShellWindow) );
     }
 }
 

@@ -116,11 +116,11 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
         // if not bold or requiring emboldening prefer light fonts to bold fonts
         FontWeight ePatternWeight = rFSD.mbEmbolden ? WEIGHT_NORMAL : rFSD.GetWeight();
 
-        int nReqWeight = (int)ePatternWeight;
+        int nReqWeight = static_cast<int>(ePatternWeight);
         if ( ePatternWeight > WEIGHT_MEDIUM )
             nReqWeight += 100;
 
-        int nGivenWeight = (int)GetWeight();
+        int nGivenWeight = static_cast<int>(GetWeight());
         if( GetWeight() > WEIGHT_MEDIUM )
             nGivenWeight += 100;
 

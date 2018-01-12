@@ -105,7 +105,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
             { continue; }
     }
 
-    c1 = (sal_Int32)lInfos.size();
+    c1 = static_cast<sal_Int32>(lInfos.size());
     i1 = 0;
 
     css::uno::Sequence< css::frame::DispatchInformation >       lReturn(c1);

@@ -342,7 +342,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
                 sal_Int32 nTmp = rValue.toInt32();
                 nNumStartValue =
                     (nTmp < 0) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
-                                                        : (sal_Int16)nTmp );
+                                                        : static_cast<sal_Int16>(nTmp) );
             }
             break;
         case XML_TOK_TEXT_LEVEL_ATTR_DISPLAY_LEVELS:
@@ -351,7 +351,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
                 sal_Int32 nTmp = rValue.toInt32();
                 nNumDisplayLevels =
                     (nTmp < 1) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
-                                                        : (sal_Int16)nTmp );
+                                                        : static_cast<sal_Int16>(nTmp) );
             }
             break;
         }
@@ -470,7 +470,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
         pProps[nPos++].Value <<= nFirstLineOffset;
 
         pProps[nPos].Name = "SymbolTextDistance";
-        pProps[nPos++].Value <<= (sal_Int16)nMinLabelDist;
+        pProps[nPos++].Value <<= static_cast<sal_Int16>(nMinLabelDist);
 
         pProps[nPos].Name = "PositionAndSpaceMode";
         pProps[nPos++].Value <<= ePosAndSpaceMode;
@@ -740,12 +740,12 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR:
             {
                 if( IsXMLToken( rValue, XML_TRUE ) )
-                    rListLevel.SetColor( (sal_Int32)0xffffffff );
+                    rListLevel.SetColor( sal_Int32(0xffffffff) );
             }
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE:
             if (::sax::Converter::convertPercent( nVal, rValue ))
-                rListLevel.SetRelSize( (sal_Int16)nVal );
+                rListLevel.SetRelSize( static_cast<sal_Int16>(nVal) );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE:
             {
@@ -1221,7 +1221,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     beans::PropertyValue *pProps = aPropSeq.getArray();
 
     pProps->Name = "NumberingType";
-    (pProps++)->Value <<= (sal_Int16)(bOrdered ? NumberingType::ARABIC
+    (pProps++)->Value <<= static_cast<sal_Int16>(bOrdered ? NumberingType::ARABIC
                                                  : NumberingType::CHAR_SPECIAL );
     if( !bOrdered )
     {
@@ -1242,7 +1242,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         (pProps++)->Value <<= aFDesc;
 
         OUStringBuffer sTmp(1);
-        sTmp.append( (sal_Unicode)(0xF000 + 149) );
+        sTmp.append( sal_Unicode(0xF000 + 149) );
         pProps->Name = "BulletChar";
         (pProps++)->Value <<= sTmp.makeStringAndClear();
         pProps->Name = "CharStyleName";

@@ -422,7 +422,7 @@ inline void SvtFileView_Impl::EndEditing()
 
 OUString CreateExactSizeText( sal_Int64 nSize )
 {
-    double fSize( ( double ) nSize );
+    double fSize( static_cast<double>(nSize) );
     int nDec;
 
     long nMega = 1024 * 1024;
@@ -1352,8 +1352,8 @@ void SvtFileView::SetConfigString( const OUString& rCfgStr )
     DBG_ASSERT( pBar, "invalid headerbar" );
 
     sal_Int32 nIdx = 0;
-    mpImpl->mnSortColumn = (sal_uInt16)rCfgStr.getToken( 0, ';', nIdx ).toInt32();
-    bool bUp = (bool)(sal_uInt16)rCfgStr.getToken( 0, ';', nIdx ).toInt32();
+    mpImpl->mnSortColumn = static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32());
+    bool bUp = static_cast<bool>(static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32()));
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImpl->mnSortColumn );
 
     if ( bUp )
@@ -1370,7 +1370,7 @@ void SvtFileView::SetConfigString( const OUString& rCfgStr )
 
     while ( nIdx != -1 )
     {
-        sal_uInt16 nItemId = (sal_uInt16)rCfgStr.getToken( 0, ';', nIdx ).toInt32();
+        sal_uInt16 nItemId = static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32());
         pBar->SetItemSize( nItemId, rCfgStr.getToken( 0, ';', nIdx ).toInt32() );
     }
 

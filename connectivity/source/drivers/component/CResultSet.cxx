@@ -80,7 +80,7 @@ Any SAL_CALL OComponentResultSet::getBookmark(  )
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
+    return makeAny(static_cast<sal_Int32>((m_aRow->get())[0]->getValue()));
 }
 
 sal_Bool SAL_CALL OComponentResultSet::moveToBookmark( const  Any& bookmark )

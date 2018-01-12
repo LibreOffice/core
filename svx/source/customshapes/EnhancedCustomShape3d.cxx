@@ -229,16 +229,16 @@ Point EnhancedCustomShape3d::Transformation2D::Transform2D( const basegfx::B3DPo
     Point aPoint2D;
     if ( eProjectionMode == drawing::ProjectionMode_PARALLEL )
     {
-        aPoint2D.X() = (sal_Int32)rPoint3D.getX();
-        aPoint2D.Y() = (sal_Int32)rPoint3D.getY();
+        aPoint2D.X() = static_cast<sal_Int32>(rPoint3D.getX());
+        aPoint2D.Y() = static_cast<sal_Int32>(rPoint3D.getY());
     }
     else
     {
         double fX = rPoint3D.getX() - fOriginX;
         double fY = rPoint3D.getY() - fOriginY;
         double f = ( fZScreen - fViewPoint.getZ() ) / ( rPoint3D.getZ() - fViewPoint.getZ() );
-        aPoint2D.X() = (sal_Int32)(( fX - fViewPoint.getX() ) * f + fViewPoint.getX() + fOriginX );
-        aPoint2D.Y() = (sal_Int32)(( fY - fViewPoint.getY() ) * f + fViewPoint.getY() + fOriginY );
+        aPoint2D.X() = static_cast<sal_Int32>(( fX - fViewPoint.getX() ) * f + fViewPoint.getX() + fOriginX );
+        aPoint2D.Y() = static_cast<sal_Int32>(( fY - fViewPoint.getY() ) * f + fViewPoint.getY() + fOriginY );
     }
     aPoint2D.Move( aCenter.X(), aCenter.Y() );
     return aPoint2D;
@@ -513,13 +513,13 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                             const XFillBitmapItem& rBmpItm = p3DObj->GetMergedItem(XATTR_FILLBITMAP);
                             aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
                             Size aBmpSize( aFillBmp.GetSizePixel() );
-                            double fXScale = (double)aBoundRect.GetWidth() / (double)aSnapRect.GetWidth();
-                            double fYScale = (double)aBoundRect.GetHeight() / (double)aSnapRect.GetHeight();
+                            double fXScale = static_cast<double>(aBoundRect.GetWidth()) / static_cast<double>(aSnapRect.GetWidth());
+                            double fYScale = static_cast<double>(aBoundRect.GetHeight()) / static_cast<double>(aSnapRect.GetHeight());
 
-                            Point aPt( (sal_Int32)( (double)( aBoundRect.Left() - aSnapRect.Left() )* (double)aBmpSize.Width() / (double)aSnapRect.GetWidth() ),
-                                                (sal_Int32)( (double)( aBoundRect.Top() - aSnapRect.Top() ) * (double)aBmpSize.Height() / (double)aSnapRect.GetHeight() ) );
-                            Size aSize( (sal_Int32)( aBmpSize.Width() * fXScale ),
-                                                    (sal_Int32)( aBmpSize.Height() * fYScale ) );
+                            Point aPt( static_cast<sal_Int32>( static_cast<double>( aBoundRect.Left() - aSnapRect.Left() )* static_cast<double>(aBmpSize.Width()) / static_cast<double>(aSnapRect.GetWidth()) ),
+                                                static_cast<sal_Int32>( static_cast<double>( aBoundRect.Top() - aSnapRect.Top() ) * static_cast<double>(aBmpSize.Height()) / static_cast<double>(aSnapRect.GetHeight()) ) );
+                            Size aSize( static_cast<sal_Int32>( aBmpSize.Width() * fXScale ),
+                                                    static_cast<sal_Int32>( aBmpSize.Height() * fYScale ) );
                             tools::Rectangle aCropRect( aPt, aSize );
                             aFillBmp.Crop( aCropRect );
                             p3DObj->SetMergedItem(XFillBitmapItem(OUString(), Graphic(aFillBmp)));
@@ -670,13 +670,13 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             /* sal_Bool bLight2Harsh = */ GetBool( rGeometryItem, "SecondLightHarsh", false );
             /* sal_Bool bLightFace = */ GetBool( rGeometryItem, "LightFace", false );
 
-            sal_uInt16 nAmbientColor = (sal_uInt16)( fAmbientIntensity * 255.0 );
+            sal_uInt16 nAmbientColor = static_cast<sal_uInt16>( fAmbientIntensity * 255.0 );
             if ( nAmbientColor > 255 )
                 nAmbientColor = 255;
-            Color aGlobalAmbientColor( (sal_uInt8)nAmbientColor, (sal_uInt8)nAmbientColor, (sal_uInt8)nAmbientColor );
+            Color aGlobalAmbientColor( static_cast<sal_uInt8>(nAmbientColor), static_cast<sal_uInt8>(nAmbientColor), static_cast<sal_uInt8>(nAmbientColor) );
             pScene->GetProperties().SetObjectItem( makeSvx3DAmbientcolorItem( aGlobalAmbientColor ) );
 
-            sal_uInt8 nSpotLight1 = (sal_uInt8)( fLightIntensity * 255.0 );
+            sal_uInt8 nSpotLight1 = static_cast<sal_uInt8>( fLightIntensity * 255.0 );
             basegfx::B3DVector aSpotLight1( aFirstLightDirection.DirectionX, - ( aFirstLightDirection.DirectionY ), -( aFirstLightDirection.DirectionZ ) );
             aSpotLight1.normalize();
             pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff1Item( true ) );
@@ -684,7 +684,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor1Item( aAmbientSpot1Color ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection1Item( aSpotLight1 ) );
 
-            sal_uInt8 nSpotLight2 = (sal_uInt8)( fLight2Intensity * 255.0 );
+            sal_uInt8 nSpotLight2 = static_cast<sal_uInt8>( fLight2Intensity * 255.0 );
             basegfx::B3DVector aSpotLight2( aSecondLightDirection.DirectionX, -aSecondLightDirection.DirectionY, -aSecondLightDirection.DirectionZ );
             aSpotLight2.normalize();
             pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff2Item( true ) );
@@ -708,14 +708,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 aSpecularCol = Color( 200, 200, 200 );
                 fSpecular += 0.15;
             }
-            sal_Int32 nIntensity = (sal_Int32)fSpecular * 100;
+            sal_Int32 nIntensity = static_cast<sal_Int32>(fSpecular) * 100;
             if ( nIntensity > 100 )
                 nIntensity = 100;
             else if ( nIntensity < 0 )
                 nIntensity = 0;
             nIntensity = 100 - nIntensity;
             pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularItem( aSpecularCol ) );
-            pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularIntensityItem( (sal_uInt16)nIntensity ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularIntensityItem( static_cast<sal_uInt16>(nIntensity) ) );
 
             pScene->SetLogicRect( CalculateNewSnapRect( pCustomShape, aSnapRect, aBoundRect2d, pMap ) );
 
@@ -746,12 +746,12 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* p
 
     for ( i = 0; i < 4; i++ )
     {
-        aBoundVolume.append(basegfx::B3DPoint(aPolygon[ (sal_uInt16)i ].X() - aCenter.X(), aPolygon[ (sal_uInt16)i ].Y() - aCenter.Y(), fExtrusionForward));
+        aBoundVolume.append(basegfx::B3DPoint(aPolygon[ static_cast<sal_uInt16>(i) ].X() - aCenter.X(), aPolygon[ static_cast<sal_uInt16>(i) ].Y() - aCenter.Y(), fExtrusionForward));
     }
 
     for ( i = 0; i < 4; i++ )
     {
-        aBoundVolume.append(basegfx::B3DPoint(aPolygon[ (sal_uInt16)i ].X() - aCenter.X(), aPolygon[ (sal_uInt16)i ].Y() - aCenter.Y(), fExtrusionBackward));
+        aBoundVolume.append(basegfx::B3DPoint(aPolygon[ static_cast<sal_uInt16>(i) ].X() - aCenter.X(), aPolygon[ static_cast<sal_uInt16>(i) ].Y() - aCenter.Y(), fExtrusionBackward));
     }
 
     drawing::Direction3D aRotationCenterDefault( 0, 0, 0 ); // default seems to be wrong, a fractional size of shape has to be used!!
@@ -783,7 +783,7 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* p
 
     tools::Polygon aTransformed( 8 );
     for ( i = 0; i < 8; i++ )
-        aTransformed[ (sal_uInt16)i ] = aTransformation2D.Transform2D( aBoundVolume.getB3DPoint( i ) );
+        aTransformed[ static_cast<sal_uInt16>(i) ] = aTransformation2D.Transform2D( aBoundVolume.getB3DPoint( i ) );
 
     return aTransformed.GetBoundRect();
 }

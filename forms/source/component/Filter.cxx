@@ -577,14 +577,14 @@ namespace frm
                         ||  aText.equalsIgnoreAsciiCase("IS TRUE")
                         )
                     {
-                        aValue <<= (sal_Int32)TRISTATE_TRUE;
+                        aValue <<= sal_Int32(TRISTATE_TRUE);
                     }
                     else if ( aText == "0" || aText.equalsIgnoreAsciiCase("FALSE") )
                     {
-                        aValue <<= (sal_Int32)TRISTATE_FALSE;
+                        aValue <<= sal_Int32(TRISTATE_FALSE);
                     }
                     else
-                        aValue <<= (sal_Int32)TRISTATE_INDET;
+                        aValue <<= sal_Int32(TRISTATE_INDET);
 
                     m_aText = aText;
                     xVclWindow->setProperty( PROPERTY_STATE, aValue );
@@ -598,9 +598,9 @@ namespace frm
                     OUString aRefText = ::comphelper::getString(css::uno::Reference< XPropertySet > (getModel(), UNO_QUERY)->getPropertyValue(PROPERTY_REFVALUE));
                     Any aValue;
                     if (aText == aRefText)
-                        aValue <<= (sal_Int32)TRISTATE_TRUE;
+                        aValue <<= sal_Int32(TRISTATE_TRUE);
                     else
-                        aValue <<= (sal_Int32)TRISTATE_FALSE;
+                        aValue <<= sal_Int32(TRISTATE_FALSE);
                     m_aText = aText;
                     xVclWindow->setProperty(PROPERTY_STATE, aValue);
                 }

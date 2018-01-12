@@ -1146,7 +1146,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             {
                 aBorderLine.Color = 0;
                 aBorderLine.InnerLineWidth = 0;
-                aBorderLine.OuterLineWidth = (sal_Int16)rBorderLine.nLineWidth;
+                aBorderLine.OuterLineWidth = static_cast<sal_Int16>(rBorderLine.nLineWidth);
                 aBorderLine.LineDistance = 0;
             }
             PropertyIds const aBorderProps[] =
@@ -1275,9 +1275,9 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             }
 
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_ADJUST_CONTRAST ),
-                uno::makeAny((sal_Int16)m_pImpl->nContrast));
+                uno::makeAny(static_cast<sal_Int16>(m_pImpl->nContrast)));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_ADJUST_LUMINANCE ),
-                uno::makeAny((sal_Int16)m_pImpl->nBrightness));
+                uno::makeAny(static_cast<sal_Int16>(m_pImpl->nBrightness)));
             if(m_pImpl->eColorMode != drawing::ColorMode_STANDARD)
             {
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_GRAPHIC_COLOR_MODE ),

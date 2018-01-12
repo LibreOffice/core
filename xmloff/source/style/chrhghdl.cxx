@@ -49,7 +49,7 @@ bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
                     eSrcUnit, util::MeasureUnit::POINT))
         {
             fSize = ::std::max<double>(fSize, 1.0); // fdo#49876: 0pt is invalid
-            rValue <<= (float)fSize;
+            rValue <<= static_cast<float>(fSize);
             return true;
         }
     }
@@ -65,7 +65,7 @@ bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     if( rValue >>= fSize )
     {
         fSize = ::std::max<float>(fSize, 1.0f); // fdo#49876: 0pt is invalid
-        ::sax::Converter::convertDouble(aOut, (double)fSize, true,
+        ::sax::Converter::convertDouble(aOut, static_cast<double>(fSize), true,
                 util::MeasureUnit::POINT, util::MeasureUnit::POINT);
         aOut.append( 'p');
         aOut.append( 't');
@@ -91,7 +91,7 @@ bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         sal_Int32 nPrc = 100;
         if (::sax::Converter::convertPercent( nPrc, rStrImpValue ))
         {
-            rValue <<= (sal_Int16)nPrc;
+            rValue <<= static_cast<sal_Int16>(nPrc);
             return true;
         }
     }
@@ -129,7 +129,7 @@ bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     if (::sax::Converter::convertMeasure( nRel, rStrImpValue,
                 util::MeasureUnit::POINT ))
     {
-        rValue <<= (float)nRel;
+        rValue <<= static_cast<float>(nRel);
         return true;
     }
 

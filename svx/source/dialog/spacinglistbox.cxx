@@ -30,7 +30,7 @@ SpacingListBox::SpacingListBox(vcl::Window* pParent)
         OUString aStr = SvxResId(RID_SVXSTRARY_SPACING[i].first);
         sal_uInt16 nData = RID_SVXSTRARY_SPACING[i].second;
         sal_Int32 nPos = InsertEntry( aStr );
-        SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)nData) );
+        SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(nData)) );
     }
     SetDropDownLineCount(8);
     SelectEntryPos(0);

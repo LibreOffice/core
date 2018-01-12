@@ -202,7 +202,7 @@ namespace pcr
         if ( m_bIsPassword )
         {
             if ( !sText.isEmpty() )
-                aPropValue <<= (sal_Int16)sText[0];
+                aPropValue <<= static_cast<sal_Int16>(sText[0]);
         }
         else
             aPropValue <<= sText;
@@ -235,7 +235,7 @@ namespace pcr
 
         if ( n > std::numeric_limits< long >::max() )
             return std::numeric_limits< long >::max();
-        return (long)n;
+        return static_cast<long>(n);
     }
 
 
@@ -507,7 +507,7 @@ namespace pcr
         if ( minValue == std::numeric_limits< sal_Int64 >::min() )
             aReturn.IsPresent = false;
         else
-            aReturn.Value = (double)minValue;
+            aReturn.Value = static_cast<double>(minValue);
 
         return aReturn;
     }
@@ -530,7 +530,7 @@ namespace pcr
         if ( maxValue == std::numeric_limits< sal_Int64 >::max() )
             aReturn.IsPresent = false;
         else
-            aReturn.Value = (double)maxValue;
+            aReturn.Value = static_cast<double>(maxValue);
 
         return aReturn;
     }
@@ -615,7 +615,7 @@ namespace pcr
 
     double ONumericControl::impl_fieldValueToApiValue_nothrow( sal_Int64 _nFieldValue ) const
     {
-        double nApiValue = ImplCalcDoubleValue( (long)_nFieldValue, getTypedControlWindow()->GetDecimalDigits() );
+        double nApiValue = ImplCalcDoubleValue( static_cast<long>(_nFieldValue), getTypedControlWindow()->GetDecimalDigits() );
         nApiValue *= m_nFieldToUNOValueFactor;
         return nApiValue;
     }
@@ -654,7 +654,7 @@ namespace pcr
         css::util::Color nColor = COL_TRANSPARENT;
         if (_rValue.hasValue())
             _rValue >>= nColor;
-        getTypedControlWindow()->SelectEntry(::Color((ColorData)nColor));
+        getTypedControlWindow()->SelectEntry(::Color(static_cast<ColorData>(nColor)));
     }
 
     Any SAL_CALL OColorControl::getValue()
@@ -663,7 +663,7 @@ namespace pcr
         ::Color aRgbCol = getTypedControlWindow()->GetSelectEntryColor();
         if (aRgbCol == COL_TRANSPARENT)
             return aPropValue;
-        aPropValue <<= (css::util::Color)aRgbCol.GetColor();
+        aPropValue <<= static_cast<css::util::Color>(aRgbCol.GetColor());
         return aPropValue;
     }
 
@@ -1167,7 +1167,7 @@ namespace pcr
             {
                 for (sal_Int32 i=1; i<nCount; ++i)
                 {
-                    aInput=aStr.getToken((sal_uInt16)i, '\n');
+                    aInput=aStr.getToken(static_cast<sal_uInt16>(i), '\n');
                     if (!aInput.isEmpty())
                     {
                         aOutput += ";";

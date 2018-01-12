@@ -247,7 +247,7 @@ bool PSDReader::ImplReadHeader()
             mpPalette.reset( new sal_uInt8[ 768 ] );
             for ( sal_uInt16 i = 0; i < 256; i++ )
             {
-                mpPalette[ i ] = mpPalette[ i + 256 ] = mpPalette[ i + 512 ] = (sal_uInt8)i;
+                mpPalette[ i ] = mpPalette[ i + 256 ] = mpPalette[ i + 512 ] = static_cast<sal_uInt8>(i);
             }
         }
         break;
@@ -472,7 +472,7 @@ bool PSDReader::ImplReadBody()
                     const sal_uInt16 nCount = -nRunCount + 1;
                     for (sal_uInt16 i = 0; i < nCount && m_rPSD.good(); ++i)
                     {
-                        mpWriteAcc->SetPixel( nY, nX, BitmapColor( nRed, (sal_uInt8)0, (sal_uInt8)0 ) );
+                        mpWriteAcc->SetPixel( nY, nX, BitmapColor( nRed, sal_uInt8(0), sal_uInt8(0) ) );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
                             nX = 0;
@@ -490,7 +490,7 @@ bool PSDReader::ImplReadBody()
                         m_rPSD.ReadUChar( nRed );
                         if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
                             m_rPSD.ReadUChar( nDummy );
-                        mpWriteAcc->SetPixel( nY, nX, BitmapColor( nRed, (sal_uInt8)0, (sal_uInt8)0 ) );
+                        mpWriteAcc->SetPixel( nY, nX, BitmapColor( nRed, sal_uInt8(0), sal_uInt8(0) ) );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
                             nX = 0;
@@ -677,9 +677,9 @@ bool PSDReader::ImplReadBody()
                         sal_Int32 nDAT = pBlack[ nX + nY * mpFileHeader->nColumns ] * ( nBlackMax - 256 ) / 0x1ff;
 
                         aBitmapColor = mpReadAcc->GetPixel( nY, nX );
-                        sal_uInt8 cR = (sal_uInt8) MinMax( aBitmapColor.GetRed() - nDAT, 0L, 255L );
-                        sal_uInt8 cG = (sal_uInt8) MinMax( aBitmapColor.GetGreen() - nDAT, 0L, 255L );
-                        sal_uInt8 cB = (sal_uInt8) MinMax( aBitmapColor.GetBlue() - nDAT, 0L, 255L );
+                        sal_uInt8 cR = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetRed() - nDAT, 0L, 255L ));
+                        sal_uInt8 cG = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetGreen() - nDAT, 0L, 255L ));
+                        sal_uInt8 cB = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetBlue() - nDAT, 0L, 255L ));
                         mpWriteAcc->SetPixel( nY, nX, BitmapColor( cR, cG, cB ) );
                     }
                 }

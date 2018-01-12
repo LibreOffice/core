@@ -553,7 +553,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                     if(!(aValue >>= nVerb))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->mnVerb = (sal_uInt16)nVerb;
+                    pInfo->mnVerb = static_cast<sal_uInt16>(nVerb);
                     break;
                 }
                 case WID_DIMCOLOR:
@@ -766,10 +766,10 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
             aRet <<= EffectMigration::GetSoundOn( mpShape );
             break;
         case WID_BLUESCREEN:
-            aRet <<= (sal_Int32)( pInfo?pInfo->maBlueScreen.GetColor():0x00ffffff );
+            aRet <<= static_cast<sal_Int32>( pInfo?pInfo->maBlueScreen.GetColor():0x00ffffff );
             break;
         case WID_VERB:
-            aRet <<= (sal_Int32)( pInfo?pInfo->mnVerb:0 );
+            aRet <<= static_cast<sal_Int32>( pInfo?pInfo->mnVerb:0 );
             break;
         case WID_DIMCOLOR:
             aRet <<= EffectMigration::GetDimColor( mpShape );
@@ -1352,7 +1352,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_VERB:
                 if( nFound & FoundFlags::Verb )
                 {
-                    pInfo->mnVerb = (sal_uInt16)nVerb;
+                    pInfo->mnVerb = static_cast<sal_uInt16>(nVerb);
                     bOk = true;
                 }
                 break;
@@ -1628,7 +1628,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             break;
 
         case presentation::ClickAction_VERB:
-            aAny <<= (sal_Int32)pInfo->mnVerb;
+            aAny <<= static_cast<sal_Int32>(pInfo->mnVerb);
             pProperties->Name = maStrVerb;
             pProperties->Handle = -1;
             pProperties->Value = aAny;

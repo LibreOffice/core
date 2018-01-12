@@ -65,7 +65,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     checkError();
 
     // If read characters < MaxLength, adjust css::uno::Sequence
-    if (nRead < (std::size_t)aData.getLength())
+    if (nRead < static_cast<std::size_t>(aData.getLength()))
         aData.realloc( nRead );
 
     return nRead;
@@ -107,7 +107,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available()
     m_pSvStream->Seek(STREAM_SEEK_TO_END);
     checkError();
 
-    sal_Int32 nAvailable = (sal_Int32)m_pSvStream->Tell() - nPos;
+    sal_Int32 nAvailable = static_cast<sal_Int32>(m_pSvStream->Tell()) - nPos;
     m_pSvStream->Seek(nPos);
     checkError();
 
@@ -159,7 +159,7 @@ void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
-    m_pSvStream->Seek((sal_uInt32)_nLocation);
+    m_pSvStream->Seek(static_cast<sal_uInt32>(_nLocation));
     checkError();
 }
 
@@ -170,7 +170,7 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  )
 
     sal_uInt32 nPos = m_pSvStream->Tell();
     checkError();
-    return (sal_Int64)nPos;
+    return static_cast<sal_Int64>(nPos);
 }
 
 sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  )
@@ -187,7 +187,7 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  )
 
     checkError();
 
-    return (sal_Int64)nEndPos;
+    return static_cast<sal_Int64>(nEndPos);
 }
 
 //= OOutputStreamWrapper
@@ -203,7 +203,7 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int
     sal_uInt32 nWritten = rStream.WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = rStream.GetError();
     if  (   (ERRCODE_NONE != err)
-        ||  (nWritten != (sal_uInt32)aData.getLength())
+        ||  (nWritten != static_cast<sal_uInt32>(aData.getLength()))
         )
     {
         throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
@@ -256,7 +256,7 @@ void SAL_CALL OSeekableOutputStreamWrapper::release(  ) throw ()
 
 void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation )
 {
-    rStream.Seek((sal_uInt32)_nLocation);
+    rStream.Seek(static_cast<sal_uInt32>(_nLocation));
     checkError();
 }
 
@@ -264,7 +264,7 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getPosition(  )
 {
     sal_uInt32 nPos = rStream.Tell();
     checkError();
-    return (sal_Int64)nPos;
+    return static_cast<sal_Int64>(nPos);
 }
 
 sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  )
@@ -278,7 +278,7 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  )
 
     checkError();
 
-    return (sal_Int64)nEndPos;
+    return static_cast<sal_Int64>(nEndPos);
 }
 
 OStreamWrapper::~OStreamWrapper() = default;
@@ -303,7 +303,7 @@ void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& a
     sal_uInt32 nWritten = m_pSvStream->WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = m_pSvStream->GetError();
     if  (   (ERRCODE_NONE != err)
-        ||  (nWritten != (sal_uInt32)aData.getLength())
+        ||  (nWritten != static_cast<sal_uInt32>(aData.getLength()))
         )
     {
         throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));

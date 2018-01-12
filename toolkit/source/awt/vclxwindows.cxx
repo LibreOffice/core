@@ -131,19 +131,19 @@ namespace toolkit
             sal_Int32 nWhiteLuminance = Color( COL_WHITE ).GetLuminance();
 
             Color aLightShadow( nBackgroundColor );
-            aLightShadow.IncreaseLuminance( (sal_uInt8)( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
+            aLightShadow.IncreaseLuminance( static_cast<sal_uInt8>( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
             aStyleSettings.SetLightBorderColor( aLightShadow );
 
             Color aLight( nBackgroundColor );
-            aLight.IncreaseLuminance( (sal_uInt8)( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
+            aLight.IncreaseLuminance( static_cast<sal_uInt8>( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
             aStyleSettings.SetLightColor( aLight );
 
             Color aShadow( nBackgroundColor );
-            aShadow.DecreaseLuminance( (sal_uInt8)( nBackgroundLuminance * 1 / 3 ) );
+            aShadow.DecreaseLuminance( static_cast<sal_uInt8>( nBackgroundLuminance * 1 / 3 ) );
             aStyleSettings.SetShadowColor( aShadow );
 
             Color aDarkShadow( nBackgroundColor );
-            aDarkShadow.DecreaseLuminance( (sal_uInt8)( nBackgroundLuminance * 2 / 3 ) );
+            aDarkShadow.DecreaseLuminance( static_cast<sal_uInt8>( nBackgroundLuminance * 2 / 3 ) );
             aStyleSettings.SetDarkShadowColor( aDarkShadow );
         }
 
@@ -195,9 +195,9 @@ namespace toolkit
 
         StyleSettings aStyleSettings = _pWindow->GetSettings().GetStyleSettings();
         if ( aStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
-            aEffect <<= (sal_Int16)FLAT;
+            aEffect <<= sal_Int16(FLAT);
         else
-            aEffect <<= (sal_Int16)LOOK3D;
+            aEffect <<= sal_Int16(LOOK3D);
         return aEffect;
     }
 }
@@ -557,7 +557,7 @@ css::uno::Any VCLXButton::getProperty( const OUString& PropertyName )
             {
                 if ( GetWindow()->GetType() == WindowType::PUSHBUTTON )
                 {
-                     aProp <<= (sal_Int16)static_cast<PushButton*>(pButton.get())->GetState();
+                     aProp <<= static_cast<sal_Int16>(static_cast<PushButton*>(pButton.get())->GetState());
                 }
             }
             break;
@@ -998,7 +998,7 @@ css::uno::Any VCLXCheckBox::getProperty( const OUString& PropertyName )
                  aProp <<= pCheckBox->IsTriStateEnabled();
                 break;
             case BASEPROPERTY_STATE:
-                 aProp <<= (sal_Int16)pCheckBox->GetState();
+                 aProp <<= static_cast<sal_Int16>(pCheckBox->GetState());
                 break;
             default:
             {
@@ -1173,7 +1173,7 @@ css::uno::Any VCLXRadioButton::getProperty( const OUString& PropertyName )
                 aProp = ::toolkit::getVisualEffect( pButton );
                 break;
             case BASEPROPERTY_STATE:
-                aProp <<= (sal_Int16) ( pButton->IsChecked() ? 1 : 0 );
+                aProp <<= static_cast<sal_Int16>( pButton->IsChecked() ? 1 : 0 );
                 break;
             case BASEPROPERTY_AUTOTOGGLE:
                 aProp <<= pButton->IsRadioCheckEnabled();
@@ -1937,7 +1937,7 @@ css::uno::Any VCLXListBox::getProperty( const OUString& PropertyName )
             break;
             case BASEPROPERTY_LINECOUNT:
             {
-                 aProp <<= (sal_Int16) pListBox->GetDropDownLineCount();
+                 aProp <<= static_cast<sal_Int16>(pListBox->GetDropDownLineCount());
             }
             break;
             case BASEPROPERTY_STRINGITEMLIST:
@@ -3991,10 +3991,10 @@ css::uno::Any VCLXEdit::getProperty( const OUString& PropertyName )
                  aProp <<= pEdit->IsReadOnly();
                 break;
             case BASEPROPERTY_ECHOCHAR:
-                 aProp <<= (sal_Int16) pEdit->GetEchoChar();
+                 aProp <<= static_cast<sal_Int16>(pEdit->GetEchoChar());
                 break;
             case BASEPROPERTY_MAXTEXTLEN:
-                 aProp <<= (sal_Int16) pEdit->GetMaxTextLen();
+                 aProp <<= static_cast<sal_Int16>(pEdit->GetMaxTextLen());
                 break;
             default:
             {
@@ -4356,7 +4356,7 @@ css::uno::Any VCLXComboBox::getProperty( const OUString& PropertyName )
         {
             case BASEPROPERTY_LINECOUNT:
             {
-                 aProp <<= (sal_Int16)  pComboBox->GetDropDownLineCount();
+                 aProp <<= static_cast<sal_Int16>(pComboBox->GetDropDownLineCount());
             }
             break;
             case BASEPROPERTY_AUTOCOMPLETE:
@@ -5426,7 +5426,7 @@ void VCLXNumericField::setValue( double Value )
         // (e.g., input 105 using 2 digits returns 1,05)
         // Thus, to set a value of 1,05, insert 105 and 2 digits
         pNumericFormatter->SetValue(
-            (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
+            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 
         // #107218# Call same listeners like VCL would do after user interaction
         VclPtr< Edit > pEdit = GetAs< Edit >();
@@ -5446,7 +5446,7 @@ double VCLXNumericField::getValue()
 
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     return pNumericFormatter
-        ? ImplCalcDoubleValue( (double)pNumericFormatter->GetValue(), pNumericFormatter->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericFormatter->GetValue()), pNumericFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -5457,7 +5457,7 @@ void VCLXNumericField::setMin( double Value )
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetMin(
-            (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
+            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getMin()
@@ -5466,7 +5466,7 @@ double VCLXNumericField::getMin()
 
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     return pNumericFormatter
-        ? ImplCalcDoubleValue( (double)pNumericFormatter->GetMin(), pNumericFormatter->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericFormatter->GetMin()), pNumericFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -5477,7 +5477,7 @@ void VCLXNumericField::setMax( double Value )
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetMax(
-            (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
+            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getMax()
@@ -5486,7 +5486,7 @@ double VCLXNumericField::getMax()
 
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     return pNumericFormatter
-        ? ImplCalcDoubleValue( (double)pNumericFormatter->GetMax(), pNumericFormatter->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericFormatter->GetMax()), pNumericFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -5497,7 +5497,7 @@ void VCLXNumericField::setFirst( double Value )
     VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     if ( pNumericField )
         pNumericField->SetFirst(
-            (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
+            static_cast<long>(ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getFirst()
@@ -5506,7 +5506,7 @@ double VCLXNumericField::getFirst()
 
     VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     return pNumericField
-        ? ImplCalcDoubleValue( (double)pNumericField->GetFirst(), pNumericField->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericField->GetFirst()), pNumericField->GetDecimalDigits() )
         : 0;
 }
 
@@ -5517,7 +5517,7 @@ void VCLXNumericField::setLast( double Value )
     VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     if ( pNumericField )
         pNumericField->SetLast(
-            (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
+            static_cast<long>(ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getLast()
@@ -5526,7 +5526,7 @@ double VCLXNumericField::getLast()
 
     VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     return pNumericField
-        ? ImplCalcDoubleValue( (double)pNumericField->GetLast(), pNumericField->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericField->GetLast()), pNumericField->GetDecimalDigits() )
         : 0;
 }
 
@@ -5548,7 +5548,7 @@ void VCLXNumericField::setSpinSize( double Value )
     VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     if ( pNumericField )
         pNumericField->SetSpinSize(
-            (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
+            static_cast<long>(ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getSpinSize()
@@ -5557,7 +5557,7 @@ double VCLXNumericField::getSpinSize()
 
     VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     return pNumericField
-        ? ImplCalcDoubleValue( (double)pNumericField->GetSpinSize(), pNumericField->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericField->GetSpinSize()), pNumericField->GetDecimalDigits() )
         : 0;
 }
 
@@ -5930,7 +5930,7 @@ css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName )
                 aProp <<= GetAs< NumericField >()->IsUseThousandSep();
                 break;
             case BASEPROPERTY_UNIT:
-                aProp <<= (sal_uInt16) (GetAs< MetricField >()->GetUnit());
+                aProp <<= static_cast<sal_uInt16>(GetAs< MetricField >()->GetUnit());
                 break;
             case BASEPROPERTY_CUSTOMUNITTEXT:
                 aProp <<= GetAs< MetricField >()->GetCustomUnitText();
@@ -6040,7 +6040,7 @@ double VCLXCurrencyField::getValue()
 
     LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     return pCurrencyFormatter
-        ? ImplCalcDoubleValue( (double)pCurrencyFormatter->GetValue(), pCurrencyFormatter->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pCurrencyFormatter->GetValue()), pCurrencyFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -6060,7 +6060,7 @@ double VCLXCurrencyField::getMin()
 
     LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     return pCurrencyFormatter
-        ? ImplCalcDoubleValue( (double)pCurrencyFormatter->GetMin(), pCurrencyFormatter->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pCurrencyFormatter->GetMin()), pCurrencyFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -6080,7 +6080,7 @@ double VCLXCurrencyField::getMax()
 
     LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     return pCurrencyFormatter
-        ? ImplCalcDoubleValue( (double)pCurrencyFormatter->GetMax(), pCurrencyFormatter->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pCurrencyFormatter->GetMax()), pCurrencyFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -6100,7 +6100,7 @@ double VCLXCurrencyField::getFirst()
 
     VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     return pCurrencyField
-        ? ImplCalcDoubleValue( (double)pCurrencyField->GetFirst(), pCurrencyField->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pCurrencyField->GetFirst()), pCurrencyField->GetDecimalDigits() )
         : 0;
 }
 
@@ -6120,7 +6120,7 @@ double VCLXCurrencyField::getLast()
 
     VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     return pCurrencyField
-        ? ImplCalcDoubleValue( (double)pCurrencyField->GetLast(), pCurrencyField->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pCurrencyField->GetLast()), pCurrencyField->GetDecimalDigits() )
         : 0;
 }
 
@@ -6140,7 +6140,7 @@ double VCLXCurrencyField::getSpinSize()
 
     VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     return pCurrencyField
-        ? ImplCalcDoubleValue( (double)pCurrencyField->GetSpinSize(), pCurrencyField->GetDecimalDigits() )
+        ? ImplCalcDoubleValue( static_cast<double>(pCurrencyField->GetSpinSize()), pCurrencyField->GetDecimalDigits() )
         : 0;
 }
 

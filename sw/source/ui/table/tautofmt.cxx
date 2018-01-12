@@ -480,7 +480,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, Button*, void)
 IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, ListBox&, void)
 {
     bool bBtnEnable = false;
-    sal_uInt8 nSelPos = (sal_uInt8) m_pLbFormat->GetSelectedEntryPos(), nOldIdx = nIndex;
+    sal_uInt8 nSelPos = static_cast<sal_uInt8>(m_pLbFormat->GetSelectedEntryPos()), nOldIdx = nIndex;
     if( nSelPos >= nDfltStylePos )
     {
         nIndex = nSelPos - nDfltStylePos;

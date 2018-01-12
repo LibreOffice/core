@@ -108,12 +108,12 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId 
     sDTDD += " ";
     if( rNm.startsWith(sDTDD) )
         // DefinitionList - term
-        return (sal_uInt16)rNm.copy( sDTDD.getLength() ).toInt32() | HTML_DLCOLL_DT;
+        return static_cast<sal_uInt16>(rNm.copy( sDTDD.getLength() ).toInt32()) | HTML_DLCOLL_DT;
 
     sDTDD = OOO_STRING_SVTOOLS_HTML_dd " ";
     if( rNm.startsWith(sDTDD) )
         // DefinitionList - definition
-        return (sal_uInt16)rNm.copy( sDTDD.getLength() ).toInt32() | HTML_DLCOLL_DD;
+        return static_cast<sal_uInt16>(rNm.copy( sDTDD.getLength() ).toInt32()) | HTML_DLCOLL_DD;
 
     return 0;
 }

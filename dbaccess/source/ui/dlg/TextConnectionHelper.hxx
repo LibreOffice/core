@@ -34,10 +34,10 @@ namespace dbaui
 
 {
 
-    #define TC_EXTENSION    ((short)0x01)   // a section specifying the extension of the files to connect to
-    #define TC_SEPARATORS   ((short)0x02)   // a section specifying the various separators
-    #define TC_HEADER       ((short)0x04)   // a section containing the "Text contains header" check box only
-    #define TC_CHARSET      ((short)0x08)   // not yet implemented
+    #define TC_EXTENSION    (short(0x01))   // a section specifying the extension of the files to connect to
+    #define TC_SEPARATORS   (short(0x02))   // a section specifying the various separators
+    #define TC_HEADER       (short(0x04))   // a section containing the "Text contains header" check box only
+    #define TC_CHARSET      (short(0x08))   // not yet implemented
 
     // OTextConnectionPage
     class OTextConnectionHelper final : public TabPage

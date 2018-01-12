@@ -533,7 +533,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             bOk = !bIsVal;          // only Text
             if ( bOk )
             {
-                double nLenVal = (double) aString.getLength();
+                double nLenVal = static_cast<double>(aString.getLength());
                 ScRefCellValue aTmpCell(nLenVal);
                 bOk = IsCellValid(aTmpCell, rPos);
             }
@@ -764,8 +764,8 @@ bool ScValidationData::GetSelectionFromFormula(
                     //For external reference and a formula that results in an area or array, date formats are still lost.
                     if ( bRef )
                     {
-                        pDocument->GetInputString((SCCOL)(nCol+aRange.aStart.Col()),
-                            (SCROW)(nRow+aRange.aStart.Row()), aRange.aStart.Tab() , aValStr);
+                        pDocument->GetInputString(static_cast<SCCOL>(nCol+aRange.aStart.Col()),
+                            static_cast<SCROW>(nRow+aRange.aStart.Row()), aRange.aStart.Tab() , aValStr);
                     }
                     else
                     {

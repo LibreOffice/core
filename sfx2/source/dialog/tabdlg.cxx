@@ -577,7 +577,7 @@ void SfxTabDialog::Start_Impl()
         SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
 
         // initial TabPage from Program/Help/config
-        nActPage = (sal_uInt16)aDlgOpt.GetPageID();
+        nActPage = static_cast<sal_uInt16>(aDlgOpt.GetPageID());
 
         if ( USHRT_MAX != m_nAppPageId )
             nActPage = m_nAppPageId;

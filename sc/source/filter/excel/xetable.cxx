@@ -783,7 +783,7 @@ void XclExpLabelCell::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_cm, XML_vm, XML_ph
             FSEND );
     rWorksheet->startElement( XML_v, FSEND );
-    rWorksheet->write( (sal_Int32) mnSstIndex );
+    rWorksheet->write( static_cast<sal_Int32>(mnSstIndex) );
     rWorksheet->endElement( XML_v );
     rWorksheet->endElement( XML_c );
 }
@@ -1520,13 +1520,13 @@ void XclExpDimensions::SetDimensions(
 void XclExpDimensions::SaveXml( XclExpXmlStream& rStrm )
 {
     ScRange aRange;
-    aRange.aStart.SetRow( (SCROW) mnFirstUsedXclRow );
-    aRange.aStart.SetCol( (SCCOL) mnFirstUsedXclCol );
+    aRange.aStart.SetRow( static_cast<SCROW>(mnFirstUsedXclRow) );
+    aRange.aStart.SetCol( static_cast<SCCOL>(mnFirstUsedXclCol) );
 
     if( mnFirstFreeXclRow != mnFirstUsedXclRow && mnFirstFreeXclCol != mnFirstUsedXclCol )
     {
-        aRange.aEnd.SetRow( (SCROW) (mnFirstFreeXclRow-1) );
-        aRange.aEnd.SetCol( (SCCOL) (mnFirstFreeXclCol-1) );
+        aRange.aEnd.SetRow( static_cast<SCROW>(mnFirstFreeXclRow-1) );
+        aRange.aEnd.SetCol( static_cast<SCCOL>(mnFirstFreeXclCol-1) );
     }
 
     aRange.PutInOrder();
@@ -2117,7 +2117,7 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
                 // OOXTODO: XML_spans,          optional
                 XML_s,              haveFormat ? lcl_GetStyleId( rStrm, mnXFIndex ).getStr() : nullptr,
                 XML_customFormat,   ToPsz( haveFormat ),
-                XML_ht,             OString::number( (double) mnHeight / 20.0 ).getStr(),
+                XML_ht,             OString::number( static_cast<double>(mnHeight) / 20.0 ).getStr(),
                 XML_hidden,         ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ),
                 XML_customHeight,   ToPsz( ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ),
                 XML_outlineLevel,   OString::number(  mnOutlineLevel ).getStr(),

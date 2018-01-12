@@ -646,7 +646,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                     {
                         if( aPrintOpts.GetOutputQuality() != nValue)
                         {
-                            aPrintOpts.SetOutputQuality( (sal_uInt16)nValue );
+                            aPrintOpts.SetOutputQuality( static_cast<sal_uInt16>(nValue) );
                             bOptionsChanged = true;
                         }
                         bOk = true;
@@ -697,7 +697,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                     sal_Int32 nValue = 0;
                     if( (*pValues >>= nValue) && (nValue >= 0) )
                     {
-                        pDoc->SetDefaultTabulator((sal_uInt16)nValue);
+                        pDoc->SetDefaultTabulator(static_cast<sal_uInt16>(nValue));
                         bOk = true;
                         bChanged = true;
                     }
@@ -892,7 +892,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                 // the document and determine it really differs from the old
                 // one.
                 sal_Int16 nOldValue =
-                    (sal_Int16)pDoc->GetPrinterIndependentLayout ();
+                    static_cast<sal_Int16>(pDoc->GetPrinterIndependentLayout ());
                 sal_Int16 nValue = 0;
                 if (*pValues >>= nValue)
                 {
@@ -1060,7 +1060,7 @@ DocumentSettings::_getPropertyValues(
                 *pValue <<= aPrintOpts.IsOutline();
                 break;
             case HANDLE_SLIDESPERHANDOUT:
-                *pValue <<= (sal_Int16)aPrintOpts.GetHandoutPages();
+                *pValue <<= static_cast<sal_Int16>(aPrintOpts.GetHandoutPages());
                 break;
             case HANDLE_HANDOUTHORIZONTAL:
                 *pValue <<= aPrintOpts.IsHandoutHorizontal();
@@ -1093,13 +1093,13 @@ DocumentSettings::_getPropertyValues(
                 *pValue <<= aPrintOpts.IsBackPage();
                 break;
             case HANDLE_PRINTQUALITY:
-                *pValue <<= (sal_Int32)aPrintOpts.GetOutputQuality();
+                *pValue <<= static_cast<sal_Int32>(aPrintOpts.GetOutputQuality());
                 break;
             case HANDLE_MEASUREUNIT:
                 {
                     short nMeasure;
                     SvxFieldUnitToMeasureUnit( pDoc->GetUIUnit(), nMeasure );
-                    *pValue <<= (sal_Int16)nMeasure;
+                    *pValue <<= static_cast<sal_Int16>(nMeasure);
                 }
                 break;
             case HANDLE_SCALE_NUM:
@@ -1109,10 +1109,10 @@ DocumentSettings::_getPropertyValues(
                 *pValue <<= pDoc->GetUIScale().GetDenominator();
                 break;
             case HANDLE_TABSTOP:
-                *pValue <<= (sal_Int32)pDoc->GetDefaultTabulator();
+                *pValue <<= static_cast<sal_Int32>(pDoc->GetDefaultTabulator());
                 break;
             case HANDLE_PAGENUMFMT:
-                *pValue <<= (sal_Int32)pDoc->GetPageNumType();
+                *pValue <<= static_cast<sal_Int32>(pDoc->GetPageNumType());
                 break;
             case HANDLE_PRINTERNAME:
                 {
@@ -1177,7 +1177,7 @@ DocumentSettings::_getPropertyValues(
             case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
             {
                 sal_Int16 nPrinterIndependentLayout =
-                    (sal_Int16)pDoc->GetPrinterIndependentLayout();
+                    static_cast<sal_Int16>(pDoc->GetPrinterIndependentLayout());
                 *pValue <<= nPrinterIndependentLayout;
             }
             break;

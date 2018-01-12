@@ -121,7 +121,7 @@ sal_Bool UnoPropertyArrayHelper::hasPropertyByName(const OUString& rPropertyName
 
 sal_Int32 UnoPropertyArrayHelper::getHandleByName( const OUString & rPropertyName )
 {
-    sal_Int32 nId = (sal_Int32 ) GetPropertyId( rPropertyName );
+    sal_Int32 nId = static_cast<sal_Int32>(GetPropertyId( rPropertyName ));
     return nId ? nId : -1;
 }
 

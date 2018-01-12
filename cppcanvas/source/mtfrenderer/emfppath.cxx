@@ -87,7 +87,7 @@ namespace cppcanvas
             if (pPointTypes)
                 for (int i = 0; i < nPoints; i ++) {
                     s.ReadUChar( pPointTypes [i] );
-                    SAL_INFO ("cppcanvas.emf", "EMF+\tpoint type: " << (int)pPointTypes [i]);
+                    SAL_INFO ("cppcanvas.emf", "EMF+\tpoint type: " << static_cast<int>(pPointTypes [i]));
                 }
 
             aPolygon.clear ();

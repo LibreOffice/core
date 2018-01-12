@@ -1448,7 +1448,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
 const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine, sal_uInt16& nCol,
     bool bFollowJumps, const SbiImage* pImg ) const
 {
-    sal_uInt32 nPC = (sal_uInt32) ( p - reinterpret_cast<const sal_uInt8*>(pImage->GetCode()) );
+    sal_uInt32 nPC = static_cast<sal_uInt32>( p - reinterpret_cast<const sal_uInt8*>(pImage->GetCode()) );
     while( nPC < pImage->GetCodeSize() )
     {
         SbiOpcode eOp = (SbiOpcode ) ( *p++ );
@@ -1472,7 +1472,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             nl |= *p++ << 16 ; nl |= *p++ << 24;
             nc = *p++; nc |= *p++ << 8;
             nc |= *p++ << 16 ; nc |= *p++ << 24;
-            nLine = (sal_uInt16)nl; nCol = (sal_uInt16)nc;
+            nLine = static_cast<sal_uInt16>(nl); nCol = static_cast<sal_uInt16>(nc);
             return p;
         }
         else if( eOp >= SbiOpcode::SbOP2_START && eOp <= SbiOpcode::SbOP2_END )
@@ -1582,14 +1582,14 @@ SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
             pImg = pImage;
         for( sal_uInt32 i = 0; i < pMethods->Count(); i++ )
         {
-            SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethods->Get( (sal_uInt16)i )  );
+            SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethods->Get( static_cast<sal_uInt16>(i) )  );
             if( pMeth )
             {
                 //fixup method start positions
                 if ( bCvtToLegacy )
                     pMeth->nStart = pImg->CalcLegacyOffset( pMeth->nStart );
                 else
-                    pMeth->nStart = pImg->CalcNewOffset( (sal_uInt16)pMeth->nStart );
+                    pMeth->nStart = pImg->CalcNewOffset( static_cast<sal_uInt16>(pMeth->nStart) );
             }
         }
 
@@ -1986,7 +1986,7 @@ bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     sal_uInt16 nFlag;
     rStrm.ReadUInt16( nFlag );
 
-    sal_Int16 nTempStart = (sal_Int16)nStart;
+    sal_Int16 nTempStart = static_cast<sal_Int16>(nStart);
 
     if( nVer == 2 )
     {

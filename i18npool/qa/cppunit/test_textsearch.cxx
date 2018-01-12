@@ -128,7 +128,7 @@ void TestTextSearch::testSearches()
     CPPUNIT_ASSERT_EQUAL( bStartRes, aRes.startOffset[0] );
     CPPUNIT_ASSERT_EQUAL( bEndRes, aRes.endOffset[0] );
 
-    aOptions.transliterateFlags = (int) (TransliterationFlags::IGNORE_CASE
+    aOptions.transliterateFlags = static_cast<int>(TransliterationFlags::IGNORE_CASE
                                 | TransliterationFlags::IGNORE_WIDTH);
     aOptions.searchString = "([^ ]*)[ ]*([^ ]*)";
     m_xSearch->setOptions(aOptions);

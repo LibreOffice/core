@@ -112,8 +112,8 @@ namespace comphelper_ifcontainer
             std::vector< Reference< XInterface > > aElements = pContainer->getElements();
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("query contents",
-                                   (int)aElements.size(), nTests);
-            if ((int)aElements.size() == nTests)
+                                   static_cast<int>(aElements.size()), nTests);
+            if (static_cast<int>(aElements.size()) == nTests)
             {
                 for (i = 0; i < nTests; i++)
                 {

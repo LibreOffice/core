@@ -128,7 +128,7 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_aCommandURL( ITEM_DESCRIPTOR_COMMANDURL )
  {
     // create hash map
-    for ( int i = 0; i < (int)TB_XML_ENTRY_COUNT; i++ )
+    for ( int i = 0; i < int(TB_XML_ENTRY_COUNT); i++ )
     {
         if ( ToolBoxEntries[i].nNamespace == TB_NS_TOOLBAR )
         {

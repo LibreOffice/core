@@ -190,8 +190,8 @@ sal_Int32 SwVbaTableHelper::GetColWidth( sal_Int32 nCol, sal_Int32 nRow )
     sal_Int32 nWidth = GetColWidth( aCols, nCol );
 
     sal_Int32 nTableWidth = getTableWidth( );
-    double dAbsWidth = ( (double)nWidth / UNO_TABLE_COLUMN_SUM ) * (double) nTableWidth;
-    return ( sal_Int32 )Millimeter::getInPoints( static_cast<int>(dAbsWidth) );
+    double dAbsWidth = ( static_cast<double>(nWidth) / UNO_TABLE_COLUMN_SUM ) * static_cast<double>(nTableWidth);
+    return static_cast<sal_Int32>(Millimeter::getInPoints( static_cast<int>(dAbsWidth) ));
 }
 
 sal_Int32 SwVbaTableHelper::GetColWidth( SwTabCols& rCols, sal_Int32 nNum )
@@ -254,7 +254,7 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
                 aCols[ GetRightSeparator( aCols, nCol ) ] += nDiff;
             else
             {
-                int nDiffLeft = nDiff - (int)GetColWidth( aCols, nCol + 1) + (int)MINLAY;
+                int nDiffLeft = nDiff - static_cast<int>(GetColWidth( aCols, nCol + 1)) + int(MINLAY);
                 aCols[ GetRightSeparator( aCols, nCol ) ] += (nDiff - nDiffLeft);
                 aCols[ GetRightSeparator( aCols, nCol - 1 ) ] -= nDiffLeft;
             }
@@ -263,7 +263,7 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
             aCols[ GetRightSeparator( aCols, nCol-1 ) ] -= nDiff;
     }
     else
-        aCols.SetRight( std::min( (long)nNewWidth, aCols.GetRightMax()) );
+        aCols.SetRight( std::min( static_cast<long>(nNewWidth), aCols.GetRightMax()) );
 
     pTable->SetTabCols(aCols, aOldCols, pStart, bCurRowOnly );
 }

@@ -912,13 +912,13 @@ void ODatabaseForm::Encode( OUString& rString )
                 default:
                 {
                     // Convert to hex
-                    short nHi = ((sal_Int16)nCharCode) / 16;
-                    short nLo = ((sal_Int16)nCharCode) - (nHi*16);
-                    if( nHi > 9 ) nHi += (int)'A'-10; else nHi += (int)'0';
-                    if( nLo > 9 ) nLo += (int)'A'-10; else nLo += (int)'0';
+                    short nHi = static_cast<sal_Int16>(nCharCode) / 16;
+                    short nLo = static_cast<sal_Int16>(nCharCode) - (nHi*16);
+                    if( nHi > 9 ) nHi += int('A')-10; else nHi += int('0');
+                    if( nLo > 9 ) nLo += int('A')-10; else nLo += int('0');
                     aResult.append('%');
-                    aResult.append((sal_Unicode)nHi);
-                    aResult.append((sal_Unicode)nLo);
+                    aResult.append(static_cast<sal_Unicode>(nHi));
+                    aResult.append(static_cast<sal_Unicode>(nLo));
                 }
             }
         }
@@ -1153,7 +1153,7 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
         nConcurrency = ResultSetConcurrency::READ_ONLY;
 
     m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_CONCURRENCY, makeAny( nConcurrency ) );
-    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_TYPE, makeAny( (sal_Int32)ResultSetType::SCROLL_SENSITIVE ) );
+    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_TYPE, makeAny( sal_Int32(ResultSetType::SCROLL_SENSITIVE) ) );
 
     bool bSuccess = false;
     try
@@ -1509,7 +1509,7 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             rValue <<= m_bAllowDelete;
             break;
         case PROPERTY_ID_PRIVILEGES:
-            rValue <<= (sal_Int32)m_nPrivileges;
+            rValue <<= static_cast<sal_Int32>(m_nPrivileges);
             break;
         case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
             rValue = m_aDynamicControlBorder;
@@ -2819,7 +2819,7 @@ void ODatabaseForm::load_impl(bool bCausedByParentForm, bool bMoveToFirst, const
     // a database form always uses caching
     // we use starting fetchsize with at least 10 rows
     if (bConnected)
-        m_xAggregateSet->setPropertyValue(PROPERTY_FETCHSIZE, makeAny((sal_Int32)40));
+        m_xAggregateSet->setPropertyValue(PROPERTY_FETCHSIZE, makeAny(sal_Int32(40)));
 
     // if we're loaded as sub form we got a "rowSetChanged" from the parent rowset _before_ we got the "loaded"
     // so we don't need to execute the statement again, this was already done
@@ -3834,7 +3834,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
                 // unknown in earlier versions
             nCycle = (sal_Int32)TabulatorCycle_RECORDS;
     }
-    _rxOutStream->writeShort((sal_Int16) nCycle);
+    _rxOutStream->writeShort(static_cast<sal_Int16>(nCycle));
 
     _rxOutStream->writeShort((sal_Int16)m_eNavigation);
 
@@ -3866,7 +3866,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     {
         sal_Int32 nRealCycle = 0;
         ::cppu::enum2int(nRealCycle, m_aCycle);
-        _rxOutStream->writeShort((sal_Int16)nRealCycle);
+        _rxOutStream->writeShort(static_cast<sal_Int16>(nRealCycle));
     }
 }
 

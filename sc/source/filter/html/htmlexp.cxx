@@ -273,8 +273,8 @@ sal_uInt16 ScHTMLExport::ToPixel( sal_uInt16 nVal )
 {
     if( nVal )
     {
-        nVal = (sal_uInt16)pAppWin->LogicToPixel(
-                    Size( nVal, nVal ), MapMode( MapUnit::MapTwip ) ).Width();
+        nVal = static_cast<sal_uInt16>(pAppWin->LogicToPixel(
+                    Size( nVal, nVal ), MapMode( MapUnit::MapTwip ) ).Width());
         if( !nVal ) // If there's a Twip there should also be a Pixel
             nVal = 1;
     }
@@ -371,7 +371,7 @@ void ScHTMLExport::WriteHeader()
         }
     }
     rStrm.WriteCharPtr( "; " ).WriteCharPtr( "font-size:" )
-       .WriteCharPtr( GetFontSizeCss( ( sal_uInt16 ) aHTMLStyle.nFontHeight ) ).WriteCharPtr( " }" );
+       .WriteCharPtr( GetFontSizeCss( static_cast<sal_uInt16>(aHTMLStyle.nFontHeight) ) ).WriteCharPtr( " }" );
 
     OUT_LF();
 
@@ -999,7 +999,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     sal_uInt32 nFontHeight = rFontHeightItem.GetHeight();
     if ( nFontHeight != aHTMLStyle.nFontHeight )
     {
-        nSetFontSizeNumber = GetFontSizeNumber( (sal_uInt16) nFontHeight );
+        nSetFontSizeNumber = GetFontSizeNumber( static_cast<sal_uInt16>(nFontHeight) );
         if ( nSetFontSizeNumber == aHTMLStyle.nFontSizeNumber )
             nSetFontSizeNumber = 0;   // no difference, don't set
     }

@@ -272,9 +272,9 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     Size                aTextSize;
 
     if (bVertical)
-        nBarSize = (sal_uInt16) GetSizePixel().Width();
+        nBarSize = static_cast<sal_uInt16>(GetSizePixel().Width());
     else
-        nBarSize = (sal_uInt16) GetSizePixel().Height();
+        nBarSize = static_cast<sal_uInt16>(GetSizePixel().Height());
 
     SCCOLROW    nPos = GetPos();
 
@@ -786,7 +786,7 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
         else
         {
             if (bDragMoved)
-                SetEntrySize( nDragNo, (sal_uInt16) nNewWidth );
+                SetEntrySize( nDragNo, static_cast<sal_uInt16>(nNewWidth) );
         }
     }
     else

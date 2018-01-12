@@ -32,7 +32,7 @@ void startRecording(bool bStartRecording)
     {
         TimeValue systemTime;
         osl_getSystemTime( &systemTime );
-        g_aStartTime = (long long) systemTime.Seconds * 1000000 + systemTime.Nanosec/1000;
+        g_aStartTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
         g_aNesting = 0;
     }
     g_bRecording = bStartRecording;
@@ -45,7 +45,7 @@ long long addRecording(const char * aProfileId, long long aCreateTime)
     {
         TimeValue systemTime;
         osl_getSystemTime( &systemTime );
-        long long aTime = (long long) systemTime.Seconds * 1000000 + systemTime.Nanosec/1000;
+        long long aTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
         if (!aProfileId)
             aProfileId = "(null)";
         OUString aString(aProfileId, strlen(aProfileId), RTL_TEXTENCODING_UTF8);

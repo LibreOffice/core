@@ -2840,8 +2840,8 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView const & rPageView, const
         if(nVerDiv < DRAG_CROOK_RASTER_MINIMUM)
             nVerDiv = DRAG_CROOK_RASTER_MINIMUM;
 
-        const double fXLen(rMarkRect.GetWidth() / (double)nHorDiv);
-        const double fYLen(rMarkRect.GetHeight() / (double)nVerDiv);
+        const double fXLen(rMarkRect.GetWidth() / static_cast<double>(nHorDiv));
+        const double fYLen(rMarkRect.GetHeight() / static_cast<double>(nVerDiv));
         double fYPos(rMarkRect.Top());
         sal_uInt32 a, b;
 
@@ -3158,15 +3158,15 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
         if (bVertical)
         {
-            a=((double)dy1)/((double)dx1); // slope of the radius
-            nNeuRad=((long)(dy1*a)+dx1) /2;
+            a=static_cast<double>(dy1)/static_cast<double>(dx1); // slope of the radius
+            nNeuRad=(static_cast<long>(dy1*a)+dx1) /2;
             aNeuCenter.X()+=nNeuRad;
             nPntWink=GetAngle(aPnt-aNeuCenter);
         }
         else
         {
-            a=((double)dx1)/((double)dy1); // slope of the radius
-            nNeuRad=((long)(dx1*a)+dy1) /2;
+            a=static_cast<double>(dx1)/static_cast<double>(dy1); // slope of the radius
+            nNeuRad=(static_cast<long>(dx1*a)+dy1) /2;
             aNeuCenter.Y()+=nNeuRad;
             nPntWink=GetAngle(aPnt-aNeuCenter)-9000;
         }
@@ -3200,7 +3200,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
         if (bResize)
         {
-            long nMul=(long)(nUmfang*NormAngle360(nPntWink)/36000);
+            long nMul=static_cast<long>(nUmfang*NormAngle360(nPntWink)/36000);
 
             if (bAtCenter)
                 nMul*=2;
@@ -3210,7 +3210,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         }
         else
         {
-            nAngle=(long)((nMarkSize*360/nUmfang)*100)/2;
+            nAngle=static_cast<long>((nMarkSize*360/nUmfang)*100)/2;
 
             if (nAngle==0)
                 bValid=false;
@@ -3841,8 +3841,8 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         }
 
         const SdrGrafCropItem& rOldCrop = pObj->GetMergedItem(SDRATTR_GRAFCROP);
-        double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
-        double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
+        double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / static_cast<double>(aOldRect.GetWidth());
+        double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / static_cast<double>(aOldRect.GetHeight());
 
         sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
         sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();

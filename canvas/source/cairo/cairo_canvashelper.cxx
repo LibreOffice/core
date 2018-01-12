@@ -1817,7 +1817,7 @@ namespace cairocanvas
                 rendering::RGBColor* pOut( aRes.getArray() );
                 for( std::size_t i=0; i<nLen; i+=4 )
                 {
-                    const double fAlpha((sal_uInt8)pIn[3]);
+                    const double fAlpha(static_cast<sal_uInt8>(pIn[3]));
                     if( fAlpha )
                         *pOut++ = rendering::RGBColor(
                             pIn[2]/fAlpha,
@@ -1842,7 +1842,7 @@ namespace cairocanvas
                 rendering::ARGBColor* pOut( aRes.getArray() );
                 for( std::size_t i=0; i<nLen; i+=4 )
                 {
-                    const double fAlpha((sal_uInt8)pIn[3]);
+                    const double fAlpha(static_cast<sal_uInt8>(pIn[3]));
                     if( fAlpha )
                         *pOut++ = rendering::ARGBColor(
                             fAlpha/255.0,

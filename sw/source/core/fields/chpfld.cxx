@@ -197,7 +197,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
-        rAny <<= (sal_Int8)nLevel;
+        rAny <<= static_cast<sal_Int8>(nLevel);
         break;
 
     case FIELD_PROP_USHORT1:

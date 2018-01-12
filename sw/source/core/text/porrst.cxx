@@ -188,7 +188,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
     : bLeft( false )
 {
-    Height( (sal_uInt16)(rInf.GetTextFrame()->getFramePrintArea().Height()) );
+    Height( static_cast<sal_uInt16>(rInf.GetTextFrame()->getFramePrintArea().Height()) );
     aPos.X() = rInf.GetTextFrame()->getFrameArea().Left() +
                rInf.GetTextFrame()->getFramePrintArea().Right();
     aPos.Y() = rInf.GetTextFrame()->getFrameArea().Top() +
@@ -425,7 +425,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                                     nTmp /= 100;
                                     if( !nTmp )
                                         ++nTmp;
-                                    rRegDiff = (sal_uInt16)nTmp;
+                                    rRegDiff = static_cast<sal_uInt16>(nTmp);
                                     nNetHeight = rRegDiff;
                                     break;
                                 }

@@ -248,13 +248,13 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window const * pParent )
     aNewAttr.Put( aMaxSizeItem );
 
     // paperbin
-    SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, (sal_uInt8)mpPage->GetPaperBin() );
+    SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, static_cast<sal_uInt8>(mpPage->GetPaperBin()) );
     aNewAttr.Put( aPaperBinItem );
 
-    SvxLRSpaceItem aLRSpaceItem( (sal_uInt16)mpPage->GetLeftBorder(), (sal_uInt16)mpPage->GetRightBorder(), 0, 0, mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE));
+    SvxLRSpaceItem aLRSpaceItem( static_cast<sal_uInt16>(mpPage->GetLeftBorder()), static_cast<sal_uInt16>(mpPage->GetRightBorder()), 0, 0, mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE));
     aNewAttr.Put( aLRSpaceItem );
 
-    SvxULSpaceItem aULSpaceItem( (sal_uInt16)mpPage->GetUpperBorder(), (sal_uInt16)mpPage->GetLowerBorder(), mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
+    SvxULSpaceItem aULSpaceItem( static_cast<sal_uInt16>(mpPage->GetUpperBorder()), static_cast<sal_uInt16>(mpPage->GetLowerBorder()), mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
     aNewAttr.Put( aULSpaceItem );
 
     // Application

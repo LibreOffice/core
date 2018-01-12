@@ -406,7 +406,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 {
                     if (eEnc == RTL_TEXTENCODING_UTF8)
                     {
-                        if (((unsigned char) *c) >> 6 != 2)
+                        if (static_cast<unsigned char>(*c) >> 6 != 2)
                             leftrep++;
                     }
                     else
@@ -468,17 +468,17 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 }
 
                 // handle shortening
-                sal_Int16 nPos = (sal_Int16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
+                sal_Int16 nPos = static_cast<sal_Int16>((nHyphenationPosAltHyph < nHyphenationPos) ?
                 nHyphenationPosAltHyph : nHyphenationPos);
                 // discretionary hyphenation
                 xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LinguLocaleToLanguage( aLocale ), nPos,
                     aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
-                    (sal_Int16) nHyphenationPosAltHyph);
+                    static_cast<sal_Int16>(nHyphenationPosAltHyph));
             }
             else
             {
                 xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LinguLocaleToLanguage( aLocale ),
-                    (sal_Int16)nHyphenationPos, aWord, (sal_Int16) nHyphenationPos);
+                    static_cast<sal_Int16>(nHyphenationPos), aWord, static_cast<sal_Int16>(nHyphenationPos));
             }
         }
 

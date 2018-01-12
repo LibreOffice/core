@@ -64,7 +64,7 @@ namespace accessibility
 
     void AccessibleParaManager::SetNum( sal_Int32 nNumParas )
     {
-        if( (size_t)nNumParas < maChildren.size() )
+        if( static_cast<size_t>(nNumParas) < maChildren.size() )
             Release( nNumParas, maChildren.size() );
 
         maChildren.resize( nNumParas );

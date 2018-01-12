@@ -294,7 +294,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
             }
 
             // FontSize
-            nFontSize = (sal_uInt16)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
+            nFontSize = static_cast<sal_uInt16>((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
             SfxItemSet& rOutlineSet = pSheet->GetItemSet();
             rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT ) );
             rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT_CJK ) );

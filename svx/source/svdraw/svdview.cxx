@@ -649,7 +649,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     if (bGlue)
                     {
                         pObj=pHdl->GetObj();
-                        nGlueId=(sal_uInt16)pHdl->GetObjHdlNum();
+                        nGlueId=static_cast<sal_uInt16>(pHdl->GetObjHdlNum());
                     }
                 }
                 else if (bMarked)

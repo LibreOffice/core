@@ -785,12 +785,12 @@ OString XclXmlUtils::ToOString( const XclRangeList& rRanges )
 
 OUString XclXmlUtils::ToOUString( const char* s )
 {
-    return OUString( s, (sal_Int32) strlen( s ), RTL_TEXTENCODING_ASCII_US );
+    return OUString( s, static_cast<sal_Int32>(strlen( s )), RTL_TEXTENCODING_ASCII_US );
 }
 
 OUString XclXmlUtils::ToOUString( const ScfUInt16Vec& rBuf, sal_Int32 nStart, sal_Int32 nLength )
 {
-    if( nLength == -1 || ( nLength > ((sal_Int32)rBuf.size() - nStart) ) )
+    if( nLength == -1 || ( nLength > (static_cast<sal_Int32>(rBuf.size()) - nStart) ) )
         nLength = (rBuf.size() - nStart);
 
     return nLength > 0

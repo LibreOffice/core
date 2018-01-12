@@ -372,9 +372,9 @@ void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
         pData->SetSelection(m_pMEdit->GetSelection());
 
         if (m_pTabCtrl->GetCurPageId() == TP_FUNCTION)
-            pData->SetMode( (sal_uInt16) FORMULA_FORMDLG_FORMULA );
+            pData->SetMode( sal_uInt16(FORMULA_FORMDLG_FORMULA) );
         else
-            pData->SetMode( (sal_uInt16) FORMULA_FORMDLG_EDIT );
+            pData->SetMode( sal_uInt16(FORMULA_FORMDLG_EDIT) );
         pData->SetUndoStr(m_pMEdit->GetText());
         pData->SetMatrixFlag(m_pBtnMatrix->IsChecked());
     }
@@ -1314,7 +1314,7 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
         sal_Int32 n1 = m_aFormulaHelper.GetArgStart( aFormula, nFormulaStrPos, nEdFocus + pData->GetOffset() );
 
         pData->SaveValues();
-        pData->SetMode( (sal_uInt16) FORMULA_FORMDLG_FORMULA );
+        pData->SetMode( sal_uInt16(FORMULA_FORMDLG_FORMULA) );
         pData->SetFStart( n1 );
         pData->SetUndoStr( aUndoStr );
         ClearAllParas();
@@ -1501,7 +1501,7 @@ void FormulaDlg_Impl::UpdateSelection()
     sal_Int32 nLength = (nPos < m_aArguments.size()) ? m_aArguments[nPos].getLength() : 0;
 
     Selection aSel( nArgPos, nArgPos+nLength);
-    m_pHelper->setSelection( (sal_uInt16)nArgPos,(sal_uInt16)(nArgPos+nLength));
+    m_pHelper->setSelection( static_cast<sal_uInt16>(nArgPos),static_cast<sal_uInt16>(nArgPos+nLength));
     m_pMEdit->SetSelection(aSel);
     m_pMEFormula->UpdateOldSel();
 }

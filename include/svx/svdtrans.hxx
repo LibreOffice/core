@@ -51,7 +51,7 @@ class XPolygon;
 class XPolyPolygon;
 namespace svx
 {
-    inline long Round(double a) { return a>0.0 ? (long)(a+0.5) : -(long)((-a)+0.5); }
+    inline long Round(double a) { return a>0.0 ? static_cast<long>(a+0.5) : -static_cast<long>((-a)+0.5); }
 }
 
 inline void MoveRect(tools::Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
@@ -145,11 +145,11 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
     double nAngle;
     if (bVertical) {
         long dy=rPnt.Y()-rCenter.Y();
-        nAngle=(double)dy/(double)rRad.Y();
+        nAngle=static_cast<double>(dy)/static_cast<double>(rRad.Y());
         rPnt.Y()=rCenter.Y();
     } else {
         long dx=rCenter.X()-rPnt.X();
-        nAngle=(double)dx/(double)rRad.X();
+        nAngle=static_cast<double>(dx)/static_cast<double>(rRad.X());
         rPnt.X()=rCenter.X();
     }
     return nAngle;

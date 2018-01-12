@@ -873,7 +873,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertNumber(nTmp, rValue, 1, SHRT_MAX))
-                    nPage = (sal_Int16)nTmp;
+                    nPage = static_cast<sal_Int16>(nTmp);
             }
             break;
         case XML_TOK_TEXT_FRAME_X:
@@ -890,7 +890,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 sal_Int32 nTmp;
                 ::sax::Converter::convertPercent( nTmp, rValue );
-                nRelWidth = (sal_Int16)nTmp;
+                nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             else
             {
@@ -907,7 +907,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertPercent( nTmp, rValue ))
-                    nRelWidth = (sal_Int16)nTmp;
+                    nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             break;
         case XML_TOK_TEXT_FRAME_MIN_WIDTH:
@@ -915,7 +915,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 sal_Int32 nTmp;
                 ::sax::Converter::convertPercent( nTmp, rValue );
-                nRelWidth = (sal_Int16)nTmp;
+                nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             else
             {
@@ -930,7 +930,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 sal_Int32 nTmp;
                 ::sax::Converter::convertPercent( nTmp, rValue );
-                nRelHeight = (sal_Int16)nTmp;
+                nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             else
             {
@@ -952,7 +952,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertPercent( nTmp, rValue ))
-                    nRelHeight = (sal_Int16)nTmp;
+                    nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             break;
         case XML_TOK_TEXT_FRAME_MIN_HEIGHT:
@@ -960,7 +960,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 sal_Int32 nTmp;
                 ::sax::Converter::convertPercent( nTmp, rValue );
-                nRelHeight = (sal_Int16)nTmp;
+                nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             else
             {

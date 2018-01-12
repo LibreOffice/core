@@ -392,7 +392,7 @@ void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > const & xCh
     CPPUNIT_ASSERT( xRegressionCurveContainer.is() );
 
     Sequence< Reference< chart2::XRegressionCurve > > xRegressionCurveSequence = xRegressionCurveContainer->getRegressionCurves();
-    CPPUNIT_ASSERT_EQUAL((sal_Int32) 3, xRegressionCurveSequence.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xRegressionCurveSequence.getLength());
 
     Reference<chart2::XRegressionCurve> xCurve;
 

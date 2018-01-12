@@ -145,10 +145,10 @@ cpyBootstrapSocketPath(sal_Char *name, size_t len)
             {
                 if (pStrValue->length > 0)
                 {
-                    size_t nCopy = (len-1 < (size_t)pStrValue->length) ? len-1 : (size_t)pStrValue->length;
+                    size_t nCopy = (len-1 < static_cast<size_t>(pStrValue->length)) ? len-1 : static_cast<size_t>(pStrValue->length);
                     strncpy (name, pStrValue->buffer, nCopy);
                     name[nCopy] = '\0';
-                    bRet = (size_t)pStrValue->length < len;
+                    bRet = static_cast<size_t>(pStrValue->length) < len;
                 }
                 rtl_string_release(pStrValue);
             }

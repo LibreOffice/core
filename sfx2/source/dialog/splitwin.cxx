@@ -235,24 +235,24 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
             aWinData = aTemp;
         if ( aWinData.startsWith("V") )
         {
-            pEmptyWin->nState = (sal_uInt16) aWinData.getToken( 1, ',' ).toInt32();
+            pEmptyWin->nState = static_cast<sal_uInt16>(aWinData.getToken( 1, ',' ).toInt32());
             if ( pEmptyWin->nState & 2 )
                 pEmptyWin->bFadeIn = true;
             bPinned = true; // always assume pinned - floating mode not used anymore
 
             sal_uInt16 i=2;
-            sal_uInt16 nCount = (sal_uInt16) aWinData.getToken(i++, ',').toInt32();
+            sal_uInt16 nCount = static_cast<sal_uInt16>(aWinData.getToken(i++, ',').toInt32());
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 SfxDock_Impl *pDock = new SfxDock_Impl;
                 pDock->pWin = nullptr;
                 pDock->bNewLine = false;
                 pDock->bHide = true;
-                pDock->nType = (sal_uInt16) aWinData.getToken(i++, ',').toInt32();
+                pDock->nType = static_cast<sal_uInt16>(aWinData.getToken(i++, ',').toInt32());
                 if ( !pDock->nType )
                 {
                     // could mean NewLine
-                    pDock->nType = (sal_uInt16) aWinData.getToken(i++, ',').toInt32();
+                    pDock->nType = static_cast<sal_uInt16>(aWinData.getToken(i++, ',').toInt32());
                     if ( !pDock->nType )
                     {
                         // Read error
@@ -463,7 +463,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             {
                 // Not known until now in which real line it is located
                 GetWindowPos( rDock.pWin, nL, nPos );
-                nLine = (short) nL;
+                nLine = static_cast<short>(nL);
             }
 
             if ( !pFoundDock )

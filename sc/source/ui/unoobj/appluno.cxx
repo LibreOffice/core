@@ -350,7 +350,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             //  ScGlobal::SetUseTabCol does not do much else
 
             pUserList->clear();
-            sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
+            sal_uInt16 nCount = static_cast<sal_uInt16>(aSeq.getLength());
             const OUString* pAry = aSeq.getConstArray();
             for (sal_uInt16 i=0; i<nCount; i++)
             {
@@ -395,16 +395,16 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
     else if (aPropertyName == SC_UNONAME_ENTERED ) aRet <<= aInpOpt.GetEnterEdit();
     else if (aPropertyName == SC_UNONAME_EXPREF ) aRet <<= aInpOpt.GetExpandRefs();
     else if (aPropertyName == SC_UNONAME_EXTFMT ) aRet <<= aInpOpt.GetExtendFormat();
-    else if (aPropertyName == SC_UNONAME_LINKUPD ) aRet <<= (sal_Int16) aAppOpt.GetLinkMode();
+    else if (aPropertyName == SC_UNONAME_LINKUPD ) aRet <<= static_cast<sal_Int16>(aAppOpt.GetLinkMode());
     else if (aPropertyName == SC_UNONAME_MARKHDR ) aRet <<= aInpOpt.GetMarkHeader();
     else if (aPropertyName == SC_UNONAME_MOVESEL ) aRet <<= aInpOpt.GetMoveSelection();
     else if (aPropertyName == SC_UNONAME_RANGEFIN ) aRet <<= aInpOpt.GetRangeFinder();
     else if (aPropertyName == SC_UNONAME_USETABCOL ) aRet <<= aInpOpt.GetUseTabCol();
     else if (aPropertyName == SC_UNONAME_PRMETRICS ) aRet <<= aInpOpt.GetTextWysiwyg();
     else if (aPropertyName == SC_UNONAME_REPLWARN ) aRet <<= aInpOpt.GetReplaceCellsWarn();
-    else if (aPropertyName == SC_UNONAME_METRIC )  aRet <<= (sal_Int16) aAppOpt.GetAppMetric();
-    else if (aPropertyName == SC_UNONAME_MOVEDIR ) aRet <<= (sal_Int16) aInpOpt.GetMoveDir();
-    else if (aPropertyName == SC_UNONAME_STBFUNC ) aRet <<= (sal_Int16) aAppOpt.GetStatusFunc();
+    else if (aPropertyName == SC_UNONAME_METRIC )  aRet <<= static_cast<sal_Int16>(aAppOpt.GetAppMetric());
+    else if (aPropertyName == SC_UNONAME_MOVEDIR ) aRet <<= static_cast<sal_Int16>(aInpOpt.GetMoveDir());
+    else if (aPropertyName == SC_UNONAME_STBFUNC ) aRet <<= static_cast<sal_Int16>(aAppOpt.GetStatusFunc());
     else if (aPropertyName == SC_UNONAME_SCALE )
     {
         sal_Int16 nZoomVal = 0;
@@ -486,12 +486,12 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
                     const uno::Sequence<sal_Int32>& aRecentFunctionIds )
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = (sal_uInt16) std::min( aRecentFunctionIds.getLength(), (sal_Int32) LRU_MAX );
+    sal_uInt16 nCount = static_cast<sal_uInt16>(std::min( aRecentFunctionIds.getLength(), sal_Int32(LRU_MAX) ));
     const sal_Int32* pAry = aRecentFunctionIds.getConstArray();
 
     std::unique_ptr<sal_uInt16[]> pFuncs(nCount ? new sal_uInt16[nCount] : nullptr);
     for (sal_uInt16 i=0; i<nCount; i++)
-        pFuncs[i] = (sal_uInt16)pAry[i];        //! check for valid values?
+        pFuncs[i] = static_cast<sal_uInt16>(pAry[i]);        //! check for valid values?
 
     ScModule* pScMod = SC_MOD();
     ScAppOptions aNewOpts(pScMod->GetAppOptions());
@@ -529,10 +529,10 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
     beans::PropertyValue* pArray = rSequence.getArray();
 
     pArray[0].Name = SC_UNONAME_ID;
-    pArray[0].Value <<= (sal_Int32) rDesc.nFIndex;
+    pArray[0].Value <<= static_cast<sal_Int32>(rDesc.nFIndex);
 
     pArray[1].Name = SC_UNONAME_CATEGORY;
-    pArray[1].Value <<= (sal_Int32) rDesc.nCategory;
+    pArray[1].Value <<= static_cast<sal_Int32>(rDesc.nCategory);
 
     pArray[2].Name = SC_UNONAME_NAME;
     if (rDesc.pFuncName)
@@ -582,7 +582,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int
     if ( !pFuncList )
         throw uno::RuntimeException();                  // should not happen
 
-    sal_uInt16 nCount = (sal_uInt16)pFuncList->GetCount();
+    sal_uInt16 nCount = static_cast<sal_uInt16>(pFuncList->GetCount());
     for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
     {
         const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
@@ -606,7 +606,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
     if ( !pFuncList )
         throw uno::RuntimeException();                  // should not happen
 
-    sal_uInt16 nCount = (sal_uInt16)pFuncList->GetCount();
+    sal_uInt16 nCount = static_cast<sal_uInt16>(pFuncList->GetCount());
     for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
     {
         const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
@@ -641,7 +641,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
     if ( !pFuncList )
         throw uno::RuntimeException();                  // should not happen
 
-    if ( nIndex >= 0 && nIndex < (sal_Int32)pFuncList->GetCount() )
+    if ( nIndex >= 0 && nIndex < static_cast<sal_Int32>(pFuncList->GetCount()) )
     {
         const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
         if ( pDesc )

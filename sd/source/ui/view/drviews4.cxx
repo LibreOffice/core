@@ -397,9 +397,9 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
                 }
             }
 
-            pBmpMask->SetColor( Color( (sal_uInt8) ( nRed / fDiv + .5 ),
-                                 (sal_uInt8) ( nGreen / fDiv + .5 ),
-                                 (sal_uInt8) ( nBlue / fDiv + .5 ) ) );
+            pBmpMask->SetColor( Color( static_cast<sal_uInt8>( nRed / fDiv + .5 ),
+                                 static_cast<sal_uInt8>( nGreen / fDiv + .5 ),
+                                 static_cast<sal_uInt8>( nBlue / fDiv + .5 ) ) );
         }
     }
 }
@@ -504,8 +504,8 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             // is there a snap object under the cursor?
             SdrPageView* pPV;
             Point   aMPos = pWin->PixelToLogic( maMousePos );
-            sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic(
-                Size(FuPoor::HITPIX, 0 ) ).Width();
+            sal_uInt16  nHitLog = static_cast<sal_uInt16>(GetActiveWindow()->PixelToLogic(
+                Size(FuPoor::HITPIX, 0 ) ).Width());
             sal_uInt16  nHelpLine;
             // for glue points
             SdrObject*  pObj = nullptr;

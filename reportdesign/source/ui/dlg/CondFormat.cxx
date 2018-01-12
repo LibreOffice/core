@@ -190,7 +190,7 @@ namespace rptui
 
         try
         {
-            if ( _nNewCondIndex > (size_t)m_xCopy->getCount() )
+            if ( _nNewCondIndex > static_cast<size_t>(m_xCopy->getCount()) )
                 throw IllegalArgumentException();
 
             Reference< XFormatCondition > xCond = m_xCopy->createFormatCondition();
@@ -280,8 +280,8 @@ namespace rptui
         Condition *pMovedCondition;
         try
         {
-            aMovedCondition = m_xCopy->getByIndex( (sal_Int32)nOldConditionIndex );
-            m_xCopy->removeByIndex( (sal_Int32)nOldConditionIndex );
+            aMovedCondition = m_xCopy->getByIndex( static_cast<sal_Int32>(nOldConditionIndex) );
+            m_xCopy->removeByIndex( static_cast<sal_Int32>(nOldConditionIndex) );
 
             Conditions::iterator aRemovePos( m_aConditions.begin() + nOldConditionIndex );
             pMovedCondition = aRemovePos->get();
@@ -295,7 +295,7 @@ namespace rptui
 
         try
         {
-            m_xCopy->insertByIndex( (sal_Int32)nNewConditionIndex, aMovedCondition );
+            m_xCopy->insertByIndex( static_cast<sal_Int32>(nNewConditionIndex), aMovedCondition );
             m_aConditions.insert( m_aConditions.begin() + nNewConditionIndex, pMovedCondition );
         }
         catch( const Exception& )
@@ -385,7 +385,7 @@ namespace rptui
             aArgs[1].Value <<= VCLUnoHelper::GetInterface(this);
 
             aArgs[2].Name = PROPERTY_FONTCOLOR;
-            aArgs[2].Value <<= (sal_uInt32)rColor.GetColor();
+            aArgs[2].Value <<= static_cast<sal_uInt32>(rColor.GetColor());
 
             // we use this way to create undo actions
             m_rController.executeUnChecked(_nCommandId,aArgs);
@@ -539,7 +539,7 @@ namespace rptui
 
     size_t ConditionalFormattingDialog::impl_getFirstVisibleConditionIndex() const
     {
-        return (size_t)m_pCondScroll->GetThumbPos();
+        return static_cast<size_t>(m_pCondScroll->GetThumbPos());
     }
 
 

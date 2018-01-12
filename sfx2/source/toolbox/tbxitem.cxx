@@ -529,7 +529,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
 void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier )
 {
     SolarMutexGuard aGuard;
-    Select( (sal_uInt16)KeyModifier );
+    Select( static_cast<sal_uInt16>(KeyModifier) );
 }
 
 void SAL_CALL SfxToolBoxControl::click()

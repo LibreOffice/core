@@ -296,7 +296,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( aPardMap.nOutlineLvl )
                 {
                     pSet->Put( SfxInt16Item( aPardMap.nOutlineLvl,
-                                                (sal_uInt16)nTokenValue ));
+                                                static_cast<sal_uInt16>(nTokenValue) ));
                 }
                 break;
 
@@ -433,7 +433,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     if( nTokenValue > 200 )     // Data value for PropLnSp
                         nTokenValue = 200;      // is one BYTE !!!
 
-                    aLSpace.SetPropLineSpace( (sal_uInt8)nTokenValue );
+                    aLSpace.SetPropLineSpace( static_cast<sal_uInt8>(nTokenValue) );
                     aLSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
 
                     pSet->Put( aLSpace );
@@ -471,7 +471,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                         CalcValue();
 
                     if (eLnSpc != SvxLineSpaceRule::Auto)
-                        aLSpace.SetLineHeight( (sal_uInt16)nTokenValue );
+                        aLSpace.SetLineHeight( static_cast<sal_uInt16>(nTokenValue) );
 
                     aLSpace.SetLineSpaceRule(eLnSpc);
                     pSet->Put(aLSpace);
@@ -569,7 +569,7 @@ SET_FONTALIGNMENT:
                     }
                     else
                     {
-                        nEs = (short)-nTokenValue;
+                        nEs = static_cast<short>(-nTokenValue);
                         nProp = (nToken == RTF_SUB) ? DFLT_ESC_PROP : 100;
                     }
                     pSet->Put( SvxEscapementItem( nEs, nProp, nEsc ));
@@ -593,7 +593,7 @@ SET_FONTALIGNMENT:
                         nTokenValue *= 5;
                     if( IsCalcValue() )
                         CalcValue();
-                    pSet->Put( SvxKerningItem( (short)nTokenValue, aPlainMap.nKering ));
+                    pSet->Put( SvxKerningItem( static_cast<short>(nTokenValue), aPlainMap.nKering ));
                 }
                 break;
 
@@ -618,7 +618,7 @@ SET_FONTALIGNMENT:
                         nTokenValue = 0;
                     if( IsCalcValue() )
                         CalcValue();
-                    pSet->Put( SvxKerningItem( (short)nTokenValue, aPlainMap.nKering ));
+                    pSet->Put( SvxKerningItem( static_cast<short>(nTokenValue), aPlainMap.nKering ));
                 }
                 break;
 
@@ -653,7 +653,7 @@ SET_FONTALIGNMENT:
 //                   if( IsCalcValue() )
 //                       CalcValue();
                     SvxFontHeightItem aTmpItem(
-                            (sal_uInt16)nTokenValue, 100,
+                            static_cast<sal_uInt16>(nTokenValue), 100,
                             SID_ATTR_CHAR_FONTHEIGHT );
                     SetScriptAttr( eCharType, *pSet, aTmpItem );
                 }
@@ -917,7 +917,7 @@ ATTR_SETOVERLINE:
                     }
                     else
                     {
-                        nEs = (short)nTokenValue;
+                        nEs = static_cast<short>(nTokenValue);
                         nProp = (nToken == RTF_SUPER) ? DFLT_ESC_PROP : 100;
                     }
                     pSet->Put( SvxEscapementItem( nEs, nProp, nEsc ));
@@ -1509,23 +1509,23 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 switch( nBorderTyp )
                 {
                 case RTF_BRDRB:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue, SvxBoxItemLine::BOTTOM );
+                    aAttr.SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::BOTTOM );
                     break;
 
                 case RTF_BRDRT:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue, SvxBoxItemLine::TOP );
+                    aAttr.SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::TOP );
                     break;
 
                 case RTF_BRDRL:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue, SvxBoxItemLine::LEFT );
+                    aAttr.SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::LEFT );
                     break;
 
                 case RTF_BRDRR:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue, SvxBoxItemLine::RIGHT );
+                    aAttr.SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::RIGHT );
                     break;
 
                 case RTF_BOX:
-                    aAttr.SetAllDistances( (sal_uInt16)nTokenValue );
+                    aAttr.SetAllDistances( static_cast<sal_uInt16>(nTokenValue) );
                     break;
                 }
             }
@@ -1590,7 +1590,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
         case RTF_CLSHDNG:
         case RTF_CHSHDNG:
         case RTF_SHADING:
-            nFillValue = (sal_uInt8)( nTokenValue / 100 );
+            nFillValue = static_cast<sal_uInt8>( nTokenValue / 100 );
             break;
 
         case RTF_CLBGDKHOR:
@@ -1677,9 +1677,9 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
         aColor = aCol;
     else
         aColor = Color(
-            (sal_uInt8)CalcShading( aCol.GetRed(), aFCol.GetRed(), nFillValue ),
-            (sal_uInt8)CalcShading( aCol.GetGreen(), aFCol.GetGreen(), nFillValue ),
-            (sal_uInt8)CalcShading( aCol.GetBlue(), aFCol.GetBlue(), nFillValue ) );
+            static_cast<sal_uInt8>(CalcShading( aCol.GetRed(), aFCol.GetRed(), nFillValue )),
+            static_cast<sal_uInt8>(CalcShading( aCol.GetGreen(), aFCol.GetGreen(), nFillValue )),
+            static_cast<sal_uInt8>(CalcShading( aCol.GetBlue(), aFCol.GetBlue(), nFillValue )) );
 
     rSet.Put( SvxBrushItem( aColor, nWh ) );
     SkipToken();

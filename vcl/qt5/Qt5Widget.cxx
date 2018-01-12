@@ -107,8 +107,8 @@ void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
     }
 
     aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnX = (long)pEvent->pos().x();
-    aEvent.mnY = (long)pEvent->pos().y();
+    aEvent.mnX = static_cast<long>(pEvent->pos().x());
+    aEvent.mnY = static_cast<long>(pEvent->pos().y());
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
     SalEvent nEventType;

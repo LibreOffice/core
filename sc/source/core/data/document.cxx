@@ -2956,7 +2956,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                         aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nClipStartRow);
                 }
                 nC1 = nC2 + 1;
-                nC2 = std::min((SCCOL)(nC1 + nXw), nCol2);
+                nC2 = std::min(static_cast<SCCOL>(nC1 + nXw), nCol2);
             } while (nC1 <= nCol2);
             if (nClipStartRow > nClipEndRow)
                 nClipStartRow = aClipRange.aStart.Row();
@@ -2996,7 +2996,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             }
 
             nR1 = nR2 + 1;
-            nR2 = std::min((SCROW)(nR1 + nYw), nRow2);
+            nR2 = std::min(static_cast<SCROW>(nR1 + nYw), nRow2);
         } while (nR1 <= nRow2);
     }
 
@@ -4194,7 +4194,7 @@ sal_uLong ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
 {
     // faster for a single row
     if (nStartRow == nEndRow)
-        return (sal_uLong) (GetRowHeight( nStartRow, nTab) * fScale);
+        return static_cast<sal_uLong>(GetRowHeight( nStartRow, nTab) * fScale);
 
     // check bounds because this method replaces former for(i=start;i<=end;++i) loops
     if (nStartRow > nEndRow)

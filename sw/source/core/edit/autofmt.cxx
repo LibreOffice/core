@@ -1310,7 +1310,7 @@ void SwAutoFormat::BuildTextIndent()
                     IsSentenceAtEnd( *m_pCurTextNd );
 
     if( m_aFlags.bAFormatByInput )
-        m_pCurTextNd->SetAutoFormatLvl( (sal_uInt8)CalcLevel( *m_pCurTextNd ) );
+        m_pCurTextNd->SetAutoFormatLvl( static_cast<sal_uInt8>(CalcLevel( *m_pCurTextNd )) );
 
     SetColl( RES_POOLCOLL_TEXT_MOVE );
     if( !bBreak )
@@ -1748,7 +1748,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
         SwTextFrameInfo aFInfo( m_pCurTextFrame );
         const SwTextNode* pNxtNd = GetNextNode();
         while(  CanJoin( pNxtNd ) &&
-                20 < std::abs( (long)(nSpaces - aFInfo.SetFrame(
+                20 < std::abs( static_cast<long>(nSpaces - aFInfo.SetFrame(
                                 GetFrame( *pNxtNd ) ).GetLineStart() ))
             )
         {

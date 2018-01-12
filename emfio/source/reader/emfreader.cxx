@@ -590,7 +590,7 @@ namespace emfio
         {
             sal_uInt32 nPoints(0);
             mpInputStream->ReadUInt32( nPoints );
-            aPoints[i] = (sal_uInt16)nPoints;
+            aPoints[i] = static_cast<sal_uInt16>(nPoints);
         }
         if ( mpInputStream->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - mpInputStream->Tell() ) )
         {
@@ -681,7 +681,7 @@ namespace emfio
 
                     mpInputStream->ReadUInt32( nCommentId );
 
-                    SAL_INFO ("emfio", "\t\tbegin " << (char)(nCommentId & 0xff) << (char)((nCommentId & 0xff00) >> 8) << (char)((nCommentId & 0xff0000) >> 16) << (char)((nCommentId & 0xff000000) >> 24) << " id: 0x" << std::hex << nCommentId << std::dec);
+                    SAL_INFO ("emfio", "\t\tbegin " << static_cast<char>(nCommentId & 0xff) << static_cast<char>((nCommentId & 0xff00) >> 8) << static_cast<char>((nCommentId & 0xff0000) >> 16) << static_cast<char>((nCommentId & 0xff000000) >> 24) << " id: 0x" << std::hex << nCommentId << std::dec);
 
                     if( nCommentId == EMR_COMMENT_EMFPLUS && nRecSize >= 12 )
                     {
@@ -761,7 +761,7 @@ namespace emfio
                     {
                         mpInputStream->ReadUInt32( nNom1 ).ReadUInt32( nDen1 ).ReadUInt32( nNom2 ).ReadUInt32( nDen2 );
                         if (nDen1 != 0 && nDen2 != 0)
-                            ScaleWinExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+                            ScaleWinExt( static_cast<double>(nNom1) / nDen1, static_cast<double>(nNom2) / nDen2 );
                         else
                             SAL_WARN("vcl.emf", "ignoring bogus divide by zero");
                     }
@@ -778,7 +778,7 @@ namespace emfio
                     {
                         mpInputStream->ReadUInt32( nNom1 ).ReadUInt32( nDen1 ).ReadUInt32( nNom2 ).ReadUInt32( nDen2 );
                         if (nDen1 != 0 && nDen2 != 0)
-                            ScaleDevExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+                            ScaleDevExt( static_cast<double>(nNom1) / nDen1, static_cast<double>(nNom2) / nDen2 );
                         else
                             SAL_WARN("vcl.emf", "ignoring bogus divide by zero");
                     }

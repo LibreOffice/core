@@ -400,7 +400,7 @@ uno::Sequence< sal_Int16 >
     sal_Int16 *pLang = aLangs.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)
     {
-        pLang[i] = (sal_uInt16)LinguLocaleToLanguage( pLocale[i] );
+        pLang[i] = static_cast<sal_uInt16>(LinguLocaleToLanguage( pLocale[i] ));
     }
 
     return aLangs;

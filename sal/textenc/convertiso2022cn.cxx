@@ -150,7 +150,7 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
                 eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC;
             else if (nChar < 0x80)
                 if (pDestBufPtr != pDestBufEnd)
-                    *pDestBufPtr++ = (sal_Unicode) nChar;
+                    *pDestBufPtr++ = static_cast<sal_Unicode>(nChar);
                 else
                     goto no_output;
             else
@@ -201,7 +201,7 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
                     if (nUnicode != 0)
                         if (pDestBufPtr != pDestBufEnd)
                         {
-                            *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                            *pDestBufPtr++ = static_cast<sal_Unicode>(nUnicode);
                             eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_SO;
                         }
                         else
@@ -328,17 +328,16 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
                             {
                                 nOffset += nLast - nFirst + 1;
                                 nFirst = pCns116431992Data[nOffset++];
-                                *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                                *pDestBufPtr++ = static_cast<sal_Unicode>(nUnicode);
                                 *pDestBufPtr++
-                                    = (sal_Unicode)
-                                          pCns116431992Data[
-                                              nOffset + (nChar - nFirst)];
+                                    = static_cast<sal_Unicode>(pCns116431992Data[
+                                              nOffset + (nChar - nFirst)]);
                             }
                             else
                                 goto no_output;
                         else
                             if (pDestBufPtr != pDestBufEnd)
-                                *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                                *pDestBufPtr++ = static_cast<sal_Unicode>(nUnicode);
                             else
                                 goto no_output;
                     }
@@ -541,7 +540,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
         {
             if (ImplIsHighSurrogate(nChar))
             {
-                nHighSurrogate = (sal_Unicode) nChar;
+                nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
         }

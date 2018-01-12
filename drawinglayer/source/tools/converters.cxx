@@ -53,9 +53,9 @@ namespace drawinglayer
             if(nViewVisibleArea > nMaxQuadratPixels)
             {
                 // reduce render size
-                double fReduceFactor = sqrt((double)nMaxQuadratPixels / (double)nViewVisibleArea);
-                nDiscreteWidth = basegfx::fround((double)nDiscreteWidth * fReduceFactor);
-                nDiscreteHeight = basegfx::fround((double)nDiscreteHeight * fReduceFactor);
+                double fReduceFactor = sqrt(static_cast<double>(nMaxQuadratPixels) / static_cast<double>(nViewVisibleArea));
+                nDiscreteWidth = basegfx::fround(static_cast<double>(nDiscreteWidth) * fReduceFactor);
+                nDiscreteHeight = basegfx::fround(static_cast<double>(nDiscreteHeight) * fReduceFactor);
 
                 const drawinglayer::primitive2d::Primitive2DReference aEmbed(
                     new drawinglayer::primitive2d::TransformPrimitive2D(

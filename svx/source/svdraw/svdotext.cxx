@@ -942,7 +942,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
             bNoMoreLoop = true;
         }
 
-        rOutliner.SetGlobalCharStretching((sal_uInt16)nX,(sal_uInt16)nY);
+        rOutliner.SetGlobalCharStretching(static_cast<sal_uInt16>(nX),static_cast<sal_uInt16>(nY));
         nLoopCount++;
         Size aSiz(rOutliner.CalcTextSize());
         long nXDiff=aSiz.Width()-nWantWdt;

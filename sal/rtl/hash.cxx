@@ -67,8 +67,8 @@ static sal_uInt32 getNextSize(sal_uInt32 nSize)
 
 static sal_uInt32 hashString(rtl_uString *pString)
 {
-    return (sal_uInt32) rtl_ustr_hashCode_WithLength(pString->buffer,
-                                                     pString->length);
+    return static_cast<sal_uInt32>(rtl_ustr_hashCode_WithLength(pString->buffer,
+                                                     pString->length));
 }
 
 static StringHashTable * rtl_str_hash_new(sal_uInt32 nSize)

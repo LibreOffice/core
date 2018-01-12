@@ -631,9 +631,9 @@ void GenPspGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLeve
         if( eItalic != ITALIC_NORMAL && eItalic != ITALIC_OBLIQUE )
             bArtItalic = true;
     }
-    int nWeight = (int)pEntry->GetWeight();
-    int nRealWeight = (int)m_pPrinterGfx->GetFontMgr().getFontWeight( nID );
-    if( nRealWeight <= (int)WEIGHT_MEDIUM && nWeight > (int)WEIGHT_MEDIUM )
+    int nWeight = static_cast<int>(pEntry->GetWeight());
+    int nRealWeight = static_cast<int>(m_pPrinterGfx->GetFontMgr().getFontWeight( nID ));
+    if( nRealWeight <= int(WEIGHT_MEDIUM) && nWeight > int(WEIGHT_MEDIUM) )
     {
         bArtBold = true;
     }

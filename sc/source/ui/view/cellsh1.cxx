@@ -1465,7 +1465,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_3, bTranspose ) );
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_4, bAsLink ) );
                             rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nFunction) ) );
-                            rReq.AppendItem( SfxInt16Item( FN_PARAM_5, (sal_Int16) eMoveMode ) );
+                            rReq.AppendItem( SfxInt16Item( FN_PARAM_5, static_cast<sal_Int16>(eMoveMode) ) );
                             rReq.Done();
                         }
                     }
@@ -2525,7 +2525,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const OUString& rName   = pHyper->GetName();
                     const OUString& rURL    = pHyper->GetURL();
                     const OUString& rTarget = pHyper->GetTargetFrame();
-                    sal_uInt16 nType = (sal_uInt16) pHyper->GetInsertMode();
+                    sal_uInt16 nType = static_cast<sal_uInt16>(pHyper->GetInsertMode());
 
                     pTabViewShell->InsertURL( rName, rURL, rTarget, nType );
                     rReq.Done();

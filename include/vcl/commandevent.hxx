@@ -55,8 +55,8 @@ namespace o3tl
     template<> struct typed_flags<ExtTextInputAttr> : is_typed_flags<ExtTextInputAttr, 0xff00> {};
 }
 
-#define EXTTEXTINPUT_CURSOR_INVISIBLE           ((sal_uInt16)0x0001)
-#define EXTTEXTINPUT_CURSOR_OVERWRITE           ((sal_uInt16)0x0002)
+#define EXTTEXTINPUT_CURSOR_INVISIBLE           (sal_uInt16(0x0001))
+#define EXTTEXTINPUT_CURSOR_OVERWRITE           (sal_uInt16(0x0002))
 
 
 class VCL_DLLPUBLIC CommandEvent
@@ -133,7 +133,7 @@ enum class CommandWheelMode
 };
 
 // Magic value used in mnLines field in CommandWheelData
-#define COMMAND_WHEEL_PAGESCROLL        ((sal_uLong)0xFFFFFFFF)
+#define COMMAND_WHEEL_PAGESCROLL        (sal_uLong(0xFFFFFFFF))
 
 class VCL_DLLPUBLIC CommandWheelData
 {

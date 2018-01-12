@@ -107,7 +107,7 @@ ScInputCfg::ScInputCfg() :
                 {
                     case SCINPUTOPT_MOVEDIR:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetMoveDir( (sal_uInt16)nIntVal );
+                            SetMoveDir( static_cast<sal_uInt16>(nIntVal) );
                         break;
                     case SCINPUTOPT_MOVESEL:
                         SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
@@ -159,7 +159,7 @@ void ScInputCfg::ImplCommit()
         switch(nProp)
         {
             case SCINPUTOPT_MOVEDIR:
-                pValues[nProp] <<= (sal_Int32) GetMoveDir();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetMoveDir());
                 break;
             case SCINPUTOPT_MOVESEL:
                 pValues[nProp] <<= GetMoveSelection();

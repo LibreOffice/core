@@ -90,7 +90,7 @@ bool sal::detail::textenc::handleUndefinedUnicodeToTextChar(
     {
         if ( nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 )
         {
-            **ppDestBuf = (char)(unsigned char)(c-RTL_TEXTCVT_BYTE_PRIVATE_START);
+            **ppDestBuf = static_cast<char>(static_cast<unsigned char>(c-RTL_TEXTCVT_BYTE_PRIVATE_START));
             (*ppDestBuf)++;
             (*ppSrcBuf)++;
             return true;

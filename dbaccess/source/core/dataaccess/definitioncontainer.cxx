@@ -378,7 +378,7 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex )
 {
     MutexGuard aGuard(m_aMutex);
 
-    if ((_nIndex < 0) || (_nIndex >= (sal_Int32)m_aDocuments.size()))
+    if ((_nIndex < 0) || (_nIndex >= static_cast<sal_Int32>(m_aDocuments.size())))
         throw IndexOutOfBoundsException();
 
     Documents::iterator aPos = m_aDocuments[_nIndex];

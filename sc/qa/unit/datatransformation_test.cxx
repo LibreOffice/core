@@ -63,11 +63,11 @@ void ScDataTransformationTest::testColumnRemove()
             double nVal = m_pDoc->GetValue(nCol, nRow, 0);
             if (nCol < 5)
             {
-                ASSERT_DOUBLES_EQUAL((double)(nCol)*nRow, nVal);
+                ASSERT_DOUBLES_EQUAL(static_cast<double>(nCol)*nRow, nVal);
             }
             else
             {
-                ASSERT_DOUBLES_EQUAL((double)(nCol+1)*nRow, nVal);
+                ASSERT_DOUBLES_EQUAL(static_cast<double>(nCol+1)*nRow, nVal);
             }
         }
     }

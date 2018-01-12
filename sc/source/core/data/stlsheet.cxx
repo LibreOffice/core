@@ -167,7 +167,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
                         SvxSizeItem     aHFSizeItem( // 0,5 cm + distance
                                             ATTR_PAGE_SIZE,
-                                            Size( 0, (long)( 500 / HMM_PER_TWIPS ) + HFDIST_CM ) );
+                                            Size( 0, long( 500 / HMM_PER_TWIPS ) + HFDIST_CM ) );
 
                         SvxULSpaceItem  aHFDistItem ( HFDIST_CM,// nUp
                                                       HFDIST_CM,// nLow

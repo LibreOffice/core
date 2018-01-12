@@ -113,7 +113,7 @@ public:
     long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex ) const;
     long            GetEntryHeight( sal_Int32  nPos ) const;
 
-    sal_Int32       GetEntryCount() const { return (sal_Int32 )maEntries.size(); }
+    sal_Int32       GetEntryCount() const { return static_cast<sal_Int32>(maEntries.size()); }
     bool            HasImages() const { return mnImages != 0; }
 
     OUString        GetEntryText( sal_Int32  nPos ) const;

@@ -174,7 +174,7 @@ css::uno::Reference<css::uno::XInterface> create(
         sal_uInt32 nType = UHashMap::getId( rServiceSpecifier );
         if( nType != UHASHMAP_NOTFOUND )
         {
-            sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
+            sal_uInt16 nT = static_cast<sal_uInt16>(nType & ~E3D_INVENTOR_FLAG);
             SdrInventor nI = (nType & E3D_INVENTOR_FLAG) ? SdrInventor::E3d : SdrInventor::Default;
 
             return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, nullptr, nullptr, referer )) );
@@ -589,7 +589,7 @@ uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
         if( (Index < 0) || (Index >= mrModel.mpDoc->GetPageCount() ) )
             throw lang::IndexOutOfBoundsException();
 
-        SdrPage* pPage = mrModel.mpDoc->GetPage( (sal_uInt16)Index );
+        SdrPage* pPage = mrModel.mpDoc->GetPage( static_cast<sal_uInt16>(Index) );
         if( pPage )
         {
             uno::Reference< uno::XInterface > xPage( pPage->mxUnoPage );
@@ -640,7 +640,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
         else
             pPage = new SdrPage(*mrModel.mpDoc);
 
-        mrModel.mpDoc->InsertPage( pPage, (sal_uInt16)nIndex );
+        mrModel.mpDoc->InsertPage( pPage, static_cast<sal_uInt16>(nIndex) );
         xDrawPage.set( pPage->getUnoPage(), uno::UNO_QUERY );
     }
 

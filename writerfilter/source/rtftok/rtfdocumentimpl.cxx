@@ -795,7 +795,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
                 count--;
                 if (!count)
                 {
-                    aStream.WriteChar((char)b);
+                    aStream.WriteChar(static_cast<char>(b));
                     count = 2;
                     b = 0;
                 }
@@ -963,11 +963,11 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     nYExt = (m_aStates.top().aPicture.nGoalHeight ? m_aStates.top().aPicture.nGoalHeight
                                                   : m_aStates.top().aPicture.nHeight);
     if (m_aStates.top().aPicture.nScaleX != 100)
-        nXExt = (((long)m_aStates.top().aPicture.nScaleX)
+        nXExt = (static_cast<long>(m_aStates.top().aPicture.nScaleX)
                  * (nXExt - (m_aStates.top().aPicture.nCropL + m_aStates.top().aPicture.nCropR)))
                 / 100L;
     if (m_aStates.top().aPicture.nScaleY != 100)
-        nYExt = (((long)m_aStates.top().aPicture.nScaleY)
+        nYExt = (static_cast<long>(m_aStates.top().aPicture.nScaleY)
                  * (nYExt - (m_aStates.top().aPicture.nCropT + m_aStates.top().aPicture.nCropB)))
                 / 100L;
     if (m_aStates.top().bInShape)
@@ -2317,7 +2317,7 @@ RTFError RTFDocumentImpl::popState()
                         count--;
                         if (!count)
                         {
-                            aBuf.append((char)b);
+                            aBuf.append(static_cast<char>(b));
                             count = 2;
                             b = 0;
                         }

@@ -299,7 +299,7 @@ namespace connectivity
 
             OSL_ENSURE(column > 0, "file::OResultSet::mapColumn: invalid column index!");
             // the first column (index 0) is for convenience only. The first real select column is number 1.
-            if ((column > 0) && (column < (sal_Int32)m_aColMapping.size()))
+            if ((column > 0) && (column < static_cast<sal_Int32>(m_aColMapping.size())))
                 map = m_aColMapping[column];
 
             return map;

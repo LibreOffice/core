@@ -260,20 +260,20 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 
     if(mnType == 21 /* AUTOLAYOUT_NOTES */)
     {
-        aTitleSize.Height() = (long) (aTitleSize.Height() / 2.5);
+        aTitleSize.Height() = static_cast<long>(aTitleSize.Height() / 2.5);
         Point aPos = aTitlePos;
         aPos.Y() += long( aTitleSize.Height() * 0.083 );
         Size aPartArea = aTitleSize;
         Size aSize;
 
         // scale handout rectangle using actual page size
-        double fH = (double) aPartArea.Width()  / aPageSize.Width();
-        double fV = (double) aPartArea.Height() / aPageSize.Height();
+        double fH = static_cast<double>(aPartArea.Width())  / aPageSize.Width();
+        double fV = static_cast<double>(aPartArea.Height()) / aPageSize.Height();
 
         if ( fH > fV )
             fH = fV;
-        aSize.Width()  = (long) (fH * aPageSize.Width());
-        aSize.Height() = (long) (fH * aPageSize.Height());
+        aSize.Width()  = static_cast<long>(fH * aPageSize.Width());
+        aSize.Height() = static_cast<long>(fH * aPageSize.Height());
 
         aPos.X() += (aPartArea.Width() - aSize.Width()) / 2;
         aPos.Y() += (aPartArea.Height()- aSize.Height())/ 2;

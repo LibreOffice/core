@@ -1367,7 +1367,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     // Assign verb
                     mpView->UnmarkAll();
                     mpView->MarkObj(pObj, mpView->GetSdrPageView());
-                    pDrViewSh->DoVerb((sal_Int16)pInfo->mnVerb);
+                    pDrViewSh->DoVerb(static_cast<sal_Int16>(pInfo->mnVerb));
                     bAnimated = true;
                 }
                 break;

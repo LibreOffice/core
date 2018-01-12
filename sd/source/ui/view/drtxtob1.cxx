@@ -164,7 +164,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                             nUpper -= 100;
                             nUpper = std::max<long>( nUpper, 0 );
                         }
-                        pNewItem->SetUpper( (sal_uInt16) nUpper );
+                        pNewItem->SetUpper( static_cast<sal_uInt16>(nUpper) );
 
                         long nLower = pNewItem->GetLower();
                         if( nSlot == SID_PARASPACE_INCREASE )
@@ -174,7 +174,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                             nLower -= 100;
                             nLower = std::max<long>( nLower, 0 );
                         }
-                        pNewItem->SetLower( (sal_uInt16) nLower );
+                        pNewItem->SetLower( static_cast<sal_uInt16>(nLower) );
 
                         SfxItemSet aNewAttrs( aAttr );
                         aNewAttrs.Put( *pNewItem );
@@ -205,7 +205,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         nUpper -= 100;
                         nUpper = std::max<long>( nUpper, 0 );
                     }
-                    pNewItem->SetUpper( (sal_uInt16) nUpper );
+                    pNewItem->SetUpper( static_cast<sal_uInt16>(nUpper) );
 
                     long nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
@@ -215,7 +215,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         nLower -= 100;
                         nLower = std::max<long>( nLower, 0 );
                     }
-                    pNewItem->SetLower( (sal_uInt16) nLower );
+                    pNewItem->SetLower( static_cast<sal_uInt16>(nLower) );
 
                     aNewAttrs.Put( *pNewItem );
                     pNewItem.reset();

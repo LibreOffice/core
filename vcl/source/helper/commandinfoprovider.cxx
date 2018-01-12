@@ -125,7 +125,7 @@ vcl::KeyCode AWTKey2VCLKey(const awt::KeyEvent& aAWTKey)
     bool bMod1  = ((aAWTKey.Modifiers & awt::KeyModifier::MOD1 ) == awt::KeyModifier::MOD1  );
     bool bMod2  = ((aAWTKey.Modifiers & awt::KeyModifier::MOD2 ) == awt::KeyModifier::MOD2  );
     bool bMod3  = ((aAWTKey.Modifiers & awt::KeyModifier::MOD3 ) == awt::KeyModifier::MOD3  );
-    sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
+    sal_uInt16   nKey   = static_cast<sal_uInt16>(aAWTKey.KeyCode);
 
     return vcl::KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }

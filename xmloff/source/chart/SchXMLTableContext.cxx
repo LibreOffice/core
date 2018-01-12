@@ -544,7 +544,7 @@ SchXMLTableRowContext::SchXMLTableRowContext(
 
     std::vector< SchXMLCell > aNewRow;
     aNewRow.reserve( mrTable.nNumberOfColsEstimate );
-    while( mrTable.aData.size() <= (unsigned long)mrTable.nRowIndex )
+    while( mrTable.aData.size() <= static_cast<unsigned long>(mrTable.nRowIndex) )
         mrTable.aData.push_back( aNewRow );
 }
 

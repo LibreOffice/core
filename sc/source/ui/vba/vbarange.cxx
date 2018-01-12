@@ -209,7 +209,7 @@ static double lcl_TwipsToPoints( sal_uInt16 nVal )
 
 static double lcl_Round2DecPlaces( double nVal )
 {
-    nVal  = (nVal * (double)100);
+    nVal  = (nVal * double(100));
     long tmp = static_cast<long>(nVal);
     if ( ( nVal - tmp ) >= 0.5 )
         ++tmp;
@@ -729,9 +729,9 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
             {
                 uno::Reference< table::XCellRange > xRange( xCell, uno::UNO_QUERY_THROW );
                 if ( bState )
-                    xCell->setValue( (double) 1 );
+                    xCell->setValue( double(1) );
                 else
-                    xCell->setValue( (double) 0 );
+                    xCell->setValue( double(0) );
                 NumFormatHelper cellNumFormat( xRange );
                 cellNumFormat.setNumberFormat( util::NumberFormat::LOGICAL );
             }
@@ -2762,8 +2762,8 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
         if ( nStartX <= nEndX && nEndX <= parentAddress.aEnd.Col() &&
              nStartY <= nEndY && nEndY <= parentAddress.aEnd.Row() )
         {
-            ScRange aNew( (SCCOL)nStartX, (SCROW)nStartY, parentAddress.aStart.Tab(),
-                          (SCCOL)nEndX, (SCROW)nEndY, parentAddress.aEnd.Tab() );
+            ScRange aNew( static_cast<SCCOL>(nStartX), static_cast<SCROW>(nStartY), parentAddress.aStart.Tab(),
+                          static_cast<SCCOL>(nEndX), static_cast<SCROW>(nEndY), parentAddress.aEnd.Tab() );
             xCellRange = new ScCellRangeObj( getScDocShell(), aNew );
         }
     }
@@ -3555,7 +3555,7 @@ ScVbaRange::End( ::sal_Int32 Direction )
     OUString sActiveCell = xApplication->getActiveCell()->Address(aDft, aDft, aDft, aDft, aDft );
 
     // position current cell upper left of this range
-    Cells( uno::makeAny( (sal_Int32) 1 ), uno::makeAny( (sal_Int32) 1 ) )->Select();
+    Cells( uno::makeAny( sal_Int32(1) ), uno::makeAny( sal_Int32(1) ) )->Select();
 
     uno::Reference< frame::XModel > xModel = getModelFromRange( mxRange );
 
@@ -4303,7 +4303,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     bool bIsNumeric = false;
     if ( sCriteria1.startsWith( EQUALS ) )
     {
-        if ( sCriteria1.getLength() == (sal_Int32)strlen(EQUALS) )
+        if ( sCriteria1.getLength() == static_cast<sal_Int32>(strlen(EQUALS)) )
             rFilterField.Operator = sheet::FilterOperator2::EMPTY;
         else
         {
@@ -4318,7 +4318,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     }
     else if ( sCriteria1.startsWith( NOTEQUALS ) )
     {
-        if ( sCriteria1.getLength() == (sal_Int32)strlen(NOTEQUALS) )
+        if ( sCriteria1.getLength() == static_cast<sal_Int32>(strlen(NOTEQUALS)) )
             rFilterField.Operator = sheet::FilterOperator2::NOT_EMPTY;
         else
         {
@@ -4885,7 +4885,7 @@ uno::Any ScVbaRange::getShowDetail()
     ScDocument& rDoc = getDocumentFromRange( mxRange );
     ScOutlineTable* pOutlineTable = rDoc.GetOutlineTable(static_cast<SCTAB>(thisAddress.Sheet), true);
     const ScOutlineArray& rOutlineArray =  bColumn ? pOutlineTable->GetColArray(): pOutlineTable->GetRowArray();
-    SCCOLROW nPos = bColumn ? (SCCOLROW)(thisAddress.EndColumn-1):(SCCOLROW)(thisAddress.EndRow-1);
+    SCCOLROW nPos = bColumn ? static_cast<SCCOLROW>(thisAddress.EndColumn-1):static_cast<SCCOLROW>(thisAddress.EndRow-1);
     const ScOutlineEntry* pEntry = rOutlineArray.GetEntryByPos( 0, nPos );
     if( pEntry )
     {

@@ -1010,7 +1010,7 @@ bool OSelectionBrowseBox::SaveModified()
 
             case BROW_ORDER_ROW:
             {
-                strOldCellContents = OUString::number((sal_uInt16)pEntry->GetOrderDir());
+                strOldCellContents = OUString::number(static_cast<sal_uInt16>(pEntry->GetOrderDir()));
                 sal_Int32 nIdx = m_pOrderCell->GetSelectedEntryPos();
                 if (nIdx == LISTBOX_ENTRY_NOTFOUND)
                     nIdx = 0;
@@ -1021,7 +1021,7 @@ bool OSelectionBrowseBox::SaveModified()
                     m_pVisibleCell->GetBox().Check();
                     RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
                 }
-                sNewValue = OUString::number((sal_uInt16)pEntry->GetOrderDir());
+                sNewValue = OUString::number(static_cast<sal_uInt16>(pEntry->GetOrderDir()));
             }   break;
 
             case BROW_COLUMNALIAS_ROW:
@@ -1280,8 +1280,8 @@ void OSelectionBrowseBox::RemoveField(sal_uInt16 nColumnId )
     sal_uInt16 nPos = GetColumnPos(nColumnId);
     OSL_ENSURE(getFields().size() > sal_uInt16(nPos-1),"ID is to great!");
 
-    OTableFieldDescRef pDesc = getEntry((sal_uInt32)(nPos - 1)) ;
-    pDesc->SetColWidth( (sal_uInt16)GetColumnWidth(nColumnId) );    // was not stored this before
+    OTableFieldDescRef pDesc = getEntry(static_cast<sal_uInt32>(nPos - 1)) ;
+    pDesc->SetColWidth( static_cast<sal_uInt16>(GetColumnWidth(nColumnId)) );    // was not stored this before
 
     // trigger UndoAction
     if ( !m_bInUndoMode )
@@ -1474,7 +1474,7 @@ tools::Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 void OSelectionBrowseBox::InsertColumn(const OTableFieldDescRef& pEntry, sal_uInt16& _nColumnPosition)
 {
     // the control should have exactly one more column: the HandleColumn
-    OSL_ENSURE(_nColumnPosition == BROWSER_INVALIDID || (_nColumnPosition <= (long)getFields().size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
+    OSL_ENSURE(_nColumnPosition == BROWSER_INVALIDID || (_nColumnPosition <= static_cast<long>(getFields().size())), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
      // -1 means at the end. Count means at the end, others denotes a correct position
 
     sal_uInt16 nCurCol = GetCurColumnId();
@@ -2266,7 +2266,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
             break;
         case BROW_ORDER_ROW:
         {
-            sal_uInt16 nIdx = (sal_uInt16)strNewText.toInt32();
+            sal_uInt16 nIdx = static_cast<sal_uInt16>(strNewText.toInt32());
             pEntry->SetOrderDir(EOrderDir(nIdx));
         }   break;
         case BROW_COLUMNALIAS_ROW:

@@ -1010,8 +1010,8 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
 
         if (IsSevenMinus(GetFIBVersion()))
         {
-            aShortSprm[0] = (sal_uInt8)( ( nPrm & 0xfe) >> 1 );
-            aShortSprm[1] = (sal_uInt8)(   nPrm         >> 8 );
+            aShortSprm[0] = static_cast<sal_uInt8>( ( nPrm & 0xfe) >> 1 );
+            aShortSprm[1] = static_cast<sal_uInt8>(   nPrm         >> 8 );
             p->nSprmsLen = nPrm ? 2 : 0;        // length
 
             // store Position of internal mini storage in Data Pointer
@@ -1021,7 +1021,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         {
             p->pMemPos = nullptr;
             p->nSprmsLen = 0;
-            sal_uInt8 nSprmListIdx = (sal_uInt8)((nPrm & 0xfe) >> 1);
+            sal_uInt8 nSprmListIdx = static_cast<sal_uInt8>((nPrm & 0xfe) >> 1);
             if( nSprmListIdx )
             {
                 // process Sprm Id Matching as explained in MS Documentation
@@ -1107,9 +1107,9 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                 if( nSprmId )
                 {
                     // move Sprm Id and Sprm Param to internal mini storage:
-                    aShortSprm[0] = (sal_uInt8)  ( nSprmId & 0x00ff)       ;
-                    aShortSprm[1] = (sal_uInt8)( ( nSprmId & 0xff00) >> 8 );
-                    aShortSprm[2] = (sal_uInt8)( nPrm >> 8 );
+                    aShortSprm[0] = static_cast<sal_uInt8>( nSprmId & 0x00ff)       ;
+                    aShortSprm[1] = static_cast<sal_uInt8>( ( nSprmId & 0xff00) >> 8 );
+                    aShortSprm[2] = static_cast<sal_uInt8>( nPrm >> 8 );
 
                     // store Sprm Length in member:
                     p->nSprmsLen = nPrm ? 3 : 0;
@@ -1365,7 +1365,7 @@ short WW8_BRCVer9::DetermineBorderProperties(short *pSpace) const
     short nMSTotalWidth;
 
     //Specification in 8ths of a point, 1 Point = 20 Twips, so by 2.5
-    nMSTotalWidth  = (short)dptLineWidth() * 20 / 8;
+    nMSTotalWidth  = static_cast<short>(dptLineWidth()) * 20 / 8;
 
     //Figure out the real size of the border according to word
     switch (brcType())
@@ -1418,7 +1418,7 @@ short WW8_BRCVer9::DetermineBorderProperties(short *pSpace) const
     }
 
     if (pSpace)
-        *pSpace = (short)dptSpace() * 20; // convert from points to twips
+        *pSpace = static_cast<short>(dptSpace()) * 20; // convert from points to twips
     return nMSTotalWidth;
 }
 
@@ -4247,7 +4247,7 @@ void WW8PLCFx_Book::SetIdx2(sal_uInt32 nI)
     if( nIMax )
     {
         pBook[1]->SetIdx( nI & 0x7fffffff );
-        nIsEnd = (sal_uInt16)( ( nI >> 31 ) & 1 );  // 0 or 1
+        nIsEnd = static_cast<sal_uInt16>( ( nI >> 31 ) & 1 );  // 0 or 1
     }
 }
 
@@ -6213,7 +6213,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
     Set_UInt16( pData, m_wIdent );
     Set_UInt16( pData, m_nFib );
     Set_UInt16( pData, m_nProduct );
-    Set_UInt16( pData, (sal_uInt16)m_lid );
+    Set_UInt16( pData, static_cast<sal_uInt16>(m_lid) );
     Set_UInt16( pData, m_pnNext );
 
     sal_uInt16 nBits16 = 0;
@@ -6269,7 +6269,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
         Set_UInt16( pData, m_wMagicCreatedPrivate );
         Set_UInt16( pData, m_wMagicRevisedPrivate );
         pData += 9 * sizeof( sal_Int16 );
-        Set_UInt16( pData, (sal_uInt16)m_lidFE );
+        Set_UInt16( pData, static_cast<sal_uInt16>(m_lidFE) );
         Set_UInt16( pData, m_clw );
     }
 
@@ -6417,10 +6417,10 @@ void WW8Fib::Write(SvStream& rStrm)
     if( !bVer8 )
     {
         pData += 1*sizeof( sal_Int16);
-        Set_UInt16( pData, (sal_uInt16)m_pnChpFirst );
-        Set_UInt16( pData, (sal_uInt16)m_pnPapFirst );
-        Set_UInt16( pData, (sal_uInt16)m_cpnBteChp );
-        Set_UInt16( pData, (sal_uInt16)m_cpnBtePap );
+        Set_UInt16( pData, static_cast<sal_uInt16>(m_pnChpFirst) );
+        Set_UInt16( pData, static_cast<sal_uInt16>(m_pnPapFirst) );
+        Set_UInt16( pData, static_cast<sal_uInt16>(m_cpnBteChp) );
+        Set_UInt16( pData, static_cast<sal_uInt16>(m_cpnBtePap) );
     }
 
     Set_UInt32( pData, m_fcPlcfdoaMom ); // only at Ver67, in Ver8 unused
@@ -6493,8 +6493,8 @@ void WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, m_lcbPlcfTch );
 
         pData += 0x3FA - 0x38A;
-        Set_UInt16( pData, (sal_uInt16)0x0002);
-        Set_UInt16( pData, (sal_uInt16)0x00D9);
+        Set_UInt16( pData, sal_uInt16(0x0002));
+        Set_UInt16( pData, sal_uInt16(0x00D9));
 
         pData += 0x41A - 0x3FE;
         Set_UInt32( pData, m_fcAtrdExtra );
@@ -6529,7 +6529,7 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, LanguageType nLidLocale)
     OSL_ENSURE(chs <= 0x100, "overflowed winword charset set");
     if (chs == 0x0100)
         return RTL_TEXTENCODING_APPLE_ROMAN;
-    if (chs == 0 && (sal_uInt16)nLidLocale >= 999)
+    if (chs == 0 && static_cast<sal_uInt16>(nLidLocale) >= 999)
     {
         /*
          nLidLocale:

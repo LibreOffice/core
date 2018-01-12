@@ -172,7 +172,7 @@ void IconViewImpl::KeyDown( bool bPageDown )
 
     aVerSBar->SetThumbPos( nThumbPos+nDelta );
     if( bPageDown )
-        PageDown( (short)nDelta );
+        PageDown( static_cast<short>(nDelta) );
     else
         CursorDown();
 
@@ -203,7 +203,7 @@ void IconViewImpl::KeyUp( bool bPageUp )
 
     aVerSBar->SetThumbPos( nThumbPos - nDelta );
     if( bPageUp )
-        PageUp( (short)nDelta );
+        PageUp( static_cast<short>(nDelta) );
     else
         CursorUp();
 
@@ -238,8 +238,8 @@ SvTreeListEntry* IconViewImpl::GetClickedEntry( const Point& rPoint ) const
     if( pView->GetEntryCount() == 0 || !pStartEntry || !pView->GetEntryHeight() || !pView->GetEntryWidth())
         return nullptr;
 
-    sal_uInt16 nY = (sal_uInt16)(rPoint.Y() / pView->GetEntryHeight() );
-    sal_uInt16 nX = (sal_uInt16)(rPoint.X() / pView->GetEntryWidth() );
+    sal_uInt16 nY = static_cast<sal_uInt16>(rPoint.Y() / pView->GetEntryHeight() );
+    sal_uInt16 nX = static_cast<sal_uInt16>(rPoint.X() / pView->GetEntryWidth() );
     sal_uInt16 nTemp = nY * pView->GetColumnsCount() + nX;
 
     SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
@@ -329,7 +329,7 @@ SvTreeListEntry* IconViewImpl::GetEntry( const Point& rPoint ) const
         || !pView->GetEntryWidth())
         return nullptr;
 
-    sal_uInt16 nClickedEntry = (sal_uInt16)(rPoint.Y() / pView->GetEntryHeight() * pView->GetColumnsCount() + rPoint.X() / pView->GetEntryWidth() );
+    sal_uInt16 nClickedEntry = static_cast<sal_uInt16>(rPoint.Y() / pView->GetEntryHeight() * pView->GetColumnsCount() + rPoint.X() / pView->GetEntryWidth() );
     sal_uInt16 nTemp = nClickedEntry;
     SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
     if( nTemp != nClickedEntry )

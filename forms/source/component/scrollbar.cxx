@@ -57,7 +57,7 @@ namespace frm
             }
             else
             {
-                nControlValue = (sal_Int32)::rtl::math::round( nExternalValue );
+                nControlValue = static_cast<sal_Int32>(::rtl::math::round( nExternalValue ));
             }
         }
         else
@@ -75,7 +75,7 @@ namespace frm
         Any aExternalDoubleValue;
         sal_Int32 nScrollValue = 0;
         if ( _rControlIntValue >>= nScrollValue )
-            aExternalDoubleValue <<= (double)nScrollValue;
+            aExternalDoubleValue <<= static_cast<double>(nScrollValue);
         else
         {
             OSL_FAIL( "translateControlIntToExternalDoubleValue: no integer scroll value!" );
@@ -196,7 +196,7 @@ namespace frm
         switch ( _nHandle )
         {
         case PROPERTY_ID_DEFAULT_SCROLL_VALUE:
-            aReturn <<= (sal_Int32)0;
+            aReturn <<= sal_Int32(0);
             break;
 
         default:
@@ -224,7 +224,7 @@ namespace frm
 
     Any OScrollBarModel::getDefaultForReset() const
     {
-        return makeAny( (sal_Int32)m_nDefaultScrollValue );
+        return makeAny( static_cast<sal_Int32>(m_nDefaultScrollValue) );
     }
 
 

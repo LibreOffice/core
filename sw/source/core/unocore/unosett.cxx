@@ -438,11 +438,11 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
         break;
         case  WID_NUMBERING_TYPE :
         {
-            aRet <<= (sal_Int16)rFootnoteInfo.aFormat.GetNumberingType();
+            aRet <<= static_cast<sal_Int16>(rFootnoteInfo.aFormat.GetNumberingType());
         }
         break;
         case  WID_START_AT:
-            aRet <<= (sal_Int16)rFootnoteInfo.nFootnoteOffset;
+            aRet <<= static_cast<sal_Int16>(rFootnoteInfo.nFootnoteOffset);
         break;
         case  WID_FOOTNOTE_COUNTING  :
         {
@@ -676,10 +676,10 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 aRet <<= rEndInfo.GetSuffix();
             break;
             case  WID_NUMBERING_TYPE :
-                aRet <<= (sal_Int16)rEndInfo.aFormat.GetNumberingType();
+                aRet <<= static_cast<sal_Int16>(rEndInfo.aFormat.GetNumberingType());
             break;
             case  WID_START_AT:
-                aRet <<= (sal_Int16)rEndInfo.nFootnoteOffset;
+                aRet <<= static_cast<sal_Int16>(rEndInfo.nFootnoteOffset);
             break;
             case  WID_PARAGRAPH_STYLE    :
             {
@@ -941,7 +941,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
         }
         break;
         case WID_NUMBERING_TYPE  :
-            aRet <<= (sal_Int16)rInfo.GetNumType().GetNumberingType();
+            aRet <<= static_cast<sal_Int16>(rInfo.GetNumType().GetNumberingType());
         break;
         case WID_NUMBER_POSITION :
         {
@@ -973,13 +973,13 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
         }
         break;
         case WID_INTERVAL   :
-            aRet <<= (sal_Int16)rInfo.GetCountBy();
+            aRet <<= static_cast<sal_Int16>(rInfo.GetCountBy());
         break;
         case WID_SEPARATOR_TEXT  :
             aRet <<= rInfo.GetDivider();
         break;
         case WID_SEPARATOR_INTERVAL:
-            aRet <<= (sal_Int16)rInfo.GetDividerCountBy();
+            aRet <<= static_cast<sal_Int16>(rInfo.GetDividerCountBy());
         break;
         case WID_COUNT_EMPTY_LINES :
             aRet <<= rInfo.IsCountBlankLines();
@@ -1265,7 +1265,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     SolarMutexGuard aGuard;
     OSL_ENSURE( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
 
-    const SwNumFormat& rFormat = rNumRule.Get( (sal_uInt16)nIndex );
+    const SwNumFormat& rFormat = rNumRule.Get( static_cast<sal_uInt16>(nIndex) );
 
     SwCharFormat* pCharFormat = rFormat.GetCharFormat();
     OUString CharStyleName;
@@ -1498,7 +1498,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     SolarMutexGuard aGuard;
     OSL_ENSURE( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
 
-    SwNumFormat aFormat(rNumRule.Get( (sal_uInt16)nIndex ));
+    SwNumFormat aFormat(rNumRule.Get( static_cast<sal_uInt16>(nIndex) ));
 
     OUString sHeadingStyleName;
     OUString sParagraphStyleName;
@@ -1739,7 +1739,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     sal_Int32 nValue = 0;
                     pProp->Value >>= nValue;
                     // #i23727# nValue can be negative
-                    aFormat.SetAbsLSpace((short) convertMm100ToTwip(nValue));
+                    aFormat.SetAbsLSpace(static_cast<short>(convertMm100ToTwip(nValue)));
                 }
                 break;
                 case 7: //UNO_NAME_SYMBOL_TEXT_DISTANCE,
@@ -1747,7 +1747,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     sal_Int32 nValue = 0;
                     pProp->Value >>= nValue;
                     if(nValue >= 0)
-                        aFormat.SetCharTextDistance((short) convertMm100ToTwip(nValue));
+                        aFormat.SetCharTextDistance(static_cast<short>(convertMm100ToTwip(nValue)));
                     else
                         bWrongArg = true;
                 }
@@ -1758,7 +1758,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     pProp->Value >>= nValue;
                     // #i23727# nValue can be positive
                     nValue = convertMm100ToTwip(nValue);
-                    aFormat.SetFirstLineOffset((short)nValue);
+                    aFormat.SetFirstLineOffset(static_cast<short>(nValue));
                 }
                 break;
                 case 9: // UNO_NAME_POSITION_AND_SPACE_MODE
@@ -2299,7 +2299,7 @@ SwXTextColumns::SwXTextColumns(const SwFormatCol& rFormatCol) :
 {
     const sal_uInt16 nItemGutterWidth = rFormatCol.GetGutterWidth();
     nAutoDistance = bIsAutomaticWidth ?
-                        USHRT_MAX == nItemGutterWidth ? DEF_GUTTER_WIDTH : (sal_Int32)nItemGutterWidth
+                        USHRT_MAX == nItemGutterWidth ? DEF_GUTTER_WIDTH : static_cast<sal_Int32>(nItemGutterWidth)
                         : 0;
     nAutoDistance = convertTwipToMm100(nAutoDistance);
 

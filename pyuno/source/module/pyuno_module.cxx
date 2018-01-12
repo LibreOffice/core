@@ -658,7 +658,7 @@ static PyObject *systemPathToFileUrl(
         buf.append( "Couldn't convert " );
         buf.append( sysPath );
         buf.append( " to a file url for reason (" );
-        buf.append( (sal_Int32) e );
+        buf.append( static_cast<sal_Int32>(e) );
         buf.append( ")" );
         raisePyExceptionWithAny(
             makeAny( RuntimeException( buf.makeStringAndClear() )));
@@ -684,7 +684,7 @@ static PyObject * fileUrlToSystemPath(
         buf.append( "Couldn't convert file url " );
         buf.append( sysPath );
         buf.append( " to a system path for reason (" );
-        buf.append( (sal_Int32) e );
+        buf.append( static_cast<sal_Int32>(e) );
         buf.append( ")" );
         raisePyExceptionWithAny(
             makeAny( RuntimeException( buf.makeStringAndClear() )));
@@ -709,7 +709,7 @@ static PyObject * absolutize( SAL_UNUSED_PARAMETER PyObject *, PyObject * args )
             buf.append( " using root " );
             buf.append( ouPath );
             buf.append( " for reason (" );
-            buf.append( (sal_Int32) e );
+            buf.append( static_cast<sal_Int32>(e) );
             buf.append( ")" );
 
             PyErr_SetString(

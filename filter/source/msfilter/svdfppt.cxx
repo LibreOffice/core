@@ -622,7 +622,7 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
 
         if ( ( nGlobalColorsCount <= 64 ) && ( nFillColorsCount <= 64 ) )
         {
-            if ( (sal_uInt32)( ( nGlobalColorsCount + nFillColorsCount ) * 44 + 12 ) == nRecLen )
+            if ( static_cast<sal_uInt32>( ( nGlobalColorsCount + nFillColorsCount ) * 44 + 12 ) == nRecLen )
             {
                 sal_uInt32 OriginalGlobalColors[ 64 ];
                 sal_uInt32 NewGlobalColors[ 64 ];
@@ -688,13 +688,13 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                         sal_uInt32 nSearch = OriginalGlobalColors[ j ];
                         sal_uInt32 nReplace = NewGlobalColors[ j ];
 
-                        pSearchColors[ j ].SetRed( (sal_uInt8)nSearch );
-                        pSearchColors[ j ].SetGreen( (sal_uInt8)( nSearch >> 8 ) );
-                        pSearchColors[ j ].SetBlue( (sal_uInt8)( nSearch >> 16 ) );
+                        pSearchColors[ j ].SetRed( static_cast<sal_uInt8>(nSearch) );
+                        pSearchColors[ j ].SetGreen( static_cast<sal_uInt8>( nSearch >> 8 ) );
+                        pSearchColors[ j ].SetBlue( static_cast<sal_uInt8>( nSearch >> 16 ) );
 
-                        pReplaceColors[ j ].SetRed( (sal_uInt8)nReplace );
-                        pReplaceColors[ j ].SetGreen( (sal_uInt8)( nReplace >> 8 ) );
-                        pReplaceColors[ j ].SetBlue( (sal_uInt8)( nReplace >> 16 ) );
+                        pReplaceColors[ j ].SetRed( static_cast<sal_uInt8>(nReplace) );
+                        pReplaceColors[ j ].SetGreen( static_cast<sal_uInt8>( nReplace >> 8 ) );
+                        pReplaceColors[ j ].SetBlue( static_cast<sal_uInt8>( nReplace >> 16 ) );
                     }
                     GDIMetaFile aGdiMetaFile( rGraphic.GetGDIMetaFile() );
                     aGdiMetaFile.ReplaceColors( pSearchColors.get(), pReplaceColors.get(),
@@ -1815,7 +1815,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
         ReadDffRecordHeader( rStCtrl, aHd );
 
         sal_uInt32 nLen = aHd.nRecLen - 4;
-        if ( (sal_Int32)nLen > 0 )
+        if ( static_cast<sal_Int32>(nLen) > 0 )
         {
             bool bSuccess = false;
 
@@ -1965,7 +1965,7 @@ SvMemoryStream* SdrPowerPointImport::ImportExOleObjStg( sal_uInt32 nPersistPtr, 
         if ( aHd.nRecType == DFF_PST_ExOleObjStg )
         {
             sal_uInt32 nLen = aHd.nRecLen - 4;
-            if ( (sal_Int32)nLen > 0 )
+            if ( static_cast<sal_Int32>(nLen) > 0 )
             {
                 rStCtrl.ReadUInt32( nOleId );
                 pRet = new SvMemoryStream;
@@ -2383,7 +2383,7 @@ bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStream& 
                 if ( i > n )
                 {
                     OUString aPre = read_uInt16s_ToOUString(rSt, n);
-                    n = (sal_uInt16)( i - 6 );
+                    n = static_cast<sal_uInt16>( i - 6 );
                     OUString aSuf = read_uInt16s_ToOUString(rSt, n);
                     sal_Int32 nV = aSuf.toInt32();
                     if ( ( nV == nVersion ) && ( aPre == "___PPT" ) )
@@ -2424,7 +2424,7 @@ bool SdrPowerPointImport::SeekToAktPage( DffRecordHeader* pRecHd ) const
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
     if ( pList && ( nAktPageNum < pList->size() ) )
     {
-        sal_uLong nPersist = (*pList)[ (sal_uInt16)nAktPageNum ].aPersistAtom.nPsrReference;
+        sal_uLong nPersist = (*pList)[ static_cast<sal_uInt16>(nAktPageNum) ].aPersistAtom.nPsrReference;
         if ( nPersist > 0 && nPersist < nPersistPtrCnt )
         {
             sal_uLong nFPos = 0;
@@ -3442,7 +3442,7 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
         {
             SvxBrushItem aBrush( aGraphic, GPOS_MM, SID_ATTR_BRUSH );
             rNumberFormat.SetGraphicBrush( &aBrush );
-            sal_uInt32 nHeight = (sal_uInt32)( (double)nFontHeight * 0.2540 * nBulletHeight + 0.5 );
+            sal_uInt32 nHeight = static_cast<sal_uInt32>( static_cast<double>(nFontHeight) * 0.2540 * nBulletHeight + 0.5 );
             Size aPrefSize( aGraphic.GetPrefSize() );
             sal_uInt32 nWidth;
             if (aPrefSize.Height())
@@ -3647,7 +3647,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManag
     boost::optional< sal_Int16 > oStartNumbering;
     ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, TSS_Type::Unknown, oStartNumbering, rCharLevel.mnFontHeight, nullptr );
     if ( ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP ) && ( nBulletHeight > 0x7fff ) )
-        nBulletHeight = rCharLevel.mnFontHeight ? ((-((sal_Int16)nBulletHeight)) * 100 ) / rCharLevel.mnFontHeight : 100;
+        nBulletHeight = rCharLevel.mnFontHeight ? ((- static_cast<sal_Int16>(nBulletHeight)) * 100 ) / rCharLevel.mnFontHeight : 100;
     ImplGetNumberFormat( rManager, rNumberFormat );
     switch ( rNumberFormat.GetNumberingType() )
     {
@@ -3754,7 +3754,7 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rM
     Color aCol( rManager.MSO_TEXT_CLR_ToColor( nBulletColor ) );
     aFont.SetColor( aCol );
 
-    sal_uInt16 nBuChar = (sal_uInt16)nBulletChar;
+    sal_uInt16 nBuChar = static_cast<sal_uInt16>(nBulletChar);
     if ( aFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
     {
         nBuChar &= 0x00ff;
@@ -3762,10 +3762,10 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rM
     }
     rNumberFormat.SetBulletFont( &aFont );
     rNumberFormat.SetBulletChar( nBuChar );
-    rNumberFormat.SetBulletRelSize( (sal_uInt16)nBulletHeight );
+    rNumberFormat.SetBulletRelSize( static_cast<sal_uInt16>(nBulletHeight) );
     rNumberFormat.SetBulletColor( aCol );
-    sal_uInt16 nAbsLSpace = (sal_uInt16)( ( nTextOfs * 2540 ) / 576 );
-    sal_uInt16 nFirstLineOffset = nAbsLSpace - (sal_uInt16)( ( nBulletOfs * 2540 ) / 576 );
+    sal_uInt16 nAbsLSpace = static_cast<sal_uInt16>( ( nTextOfs * 2540 ) / 576 );
+    sal_uInt16 nFirstLineOffset = nAbsLSpace - static_cast<sal_uInt16>( ( nBulletOfs * 2540 ) / 576 );
     rNumberFormat.SetAbsLSpace( nAbsLSpace );
     rNumberFormat.SetFirstLineOffset( -nFirstLineOffset );
 }
@@ -3805,7 +3805,7 @@ PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
         nDepth.mnAsianOrComplexFont = 0xffff;
         nDepth.mnFontHeight = nFontHeight;
         nDepth.mnFontColor = nColor;
-        nDepth.mnFontColorInStyleSheet = Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
+        nDepth.mnFontColorInStyleSheet = Color( static_cast<sal_uInt8>(nColor), static_cast<sal_uInt8>( nColor >> 8 ), static_cast<sal_uInt8>( nColor >> 16 ) );
         nDepth.mnEscapement = 0;
     }
 }
@@ -3825,7 +3825,7 @@ void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
     if ( nCMask & 0x0000FFFF )
     {
         sal_uInt16 nBitAttr;
-        maCharLevel[ nLevel ].mnFlags &= ~( (sal_uInt16)nCMask );
+        maCharLevel[ nLevel ].mnFlags &= ~static_cast<sal_uInt16>(nCMask);
         rIn.ReadUInt16( nBitAttr ); // Bit attributes (bold, underlined, ...)
         maCharLevel[ nLevel ].mnFlags |= nBitAttr;
     }
@@ -3924,7 +3924,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
     sal_uInt32  nVal32, nPMask;
     rIn.ReadUInt32( nPMask );
 
-    nMask16 = (sal_uInt16)nPMask & 0xf;
+    nMask16 = static_cast<sal_uInt16>(nPMask) & 0xf;
     if ( nMask16 )
     {
         rIn.ReadUInt16( nVal16 );
@@ -4006,7 +4006,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
             rIn.ReadUInt16( nVal16 );
         if ( nPMask & 0xe0000 )
         {
-            sal_uInt16 nFlagsToModifyMask = (sal_uInt16)( ( nPMask >> 17 ) & 7 );
+            sal_uInt16 nFlagsToModifyMask = static_cast<sal_uInt16>( ( nPMask >> 17 ) & 7 );
             rIn.ReadUInt16( nVal16 );
             // bits that are not involved to zero
             nVal16 &= nFlagsToModifyMask;
@@ -4047,7 +4047,7 @@ void PPTParaSheet::UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeig
 {
     if ( maParaLevel[ nLevel ].mnBulletHeight > 0x7fff ) // a negative value is the absolute bullet height
     {
-        sal_Int16  nBulletRelSize = ( sal_Int16 )maParaLevel[ nLevel ].mnBulletHeight;
+        sal_Int16  nBulletRelSize = static_cast<sal_Int16>(maParaLevel[ nLevel ].mnBulletHeight);
         nBulletRelSize = nFontHeight ? ((-nBulletRelSize) * 100 ) / nFontHeight : 100;
         if ( nBulletRelSize < 0 ) //bullet size over flow
             nBulletRelSize = 100;
@@ -5127,9 +5127,9 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
 
     // character attributes
     rIn.ReadUInt32( nMask );
-    if ( (sal_uInt16)nMask )
+    if ( static_cast<sal_uInt16>(nMask) )
     {
-        aSet.mnAttrSet |= (sal_uInt16)nMask;
+        aSet.mnAttrSet |= static_cast<sal_uInt16>(nMask);
         rIn.ReadUInt16( aSet.mnFlags );
     }
     if ( nMask & 0x10000 )  // cfTypeface
@@ -5238,13 +5238,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             if ( !nChar )
                 break;
             if ( ( nChar & 0xff00 ) == 0xf000 )         // in this special case we got a symbol
-                aSpecMarkerList.push_back( (sal_uInt32)( i | PPT_SPEC_SYMBOL ) );
+                aSpecMarkerList.push_back( static_cast<sal_uInt32>( i | PPT_SPEC_SYMBOL ) );
             else if ( nChar == 0xd )
             {
                 if ( nInstance == TSS_Type::PageTitle )
                     *pPtr = 0xb;
                 else
-                    aSpecMarkerList.push_back( (sal_uInt32)( i | PPT_SPEC_NEWLINE ) );
+                    aSpecMarkerList.push_back( static_cast<sal_uInt32>( i | PPT_SPEC_NEWLINE ) );
             }
         }
         if ( i )
@@ -5266,7 +5266,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                 if ( nInstance == TSS_Type::PageTitle )
                     *pPtr = 0xb;
                 else
-                    aSpecMarkerList.push_back( (sal_uInt32)( (pPtr - pBuf.get()) | PPT_SPEC_NEWLINE ) );
+                    aSpecMarkerList.push_back( static_cast<sal_uInt32>( (pPtr - pBuf.get()) | PPT_SPEC_NEWLINE ) );
             }
             pPtr++;
         }
@@ -5788,7 +5788,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
 
         if ( nVal )
         {
-            nEsc = (sal_Int16)nVal;
+            nEsc = static_cast<sal_Int16>(nVal);
             nProp = DFLT_ESC_PROP;
         }
         SvxEscapementItem aItem( nEsc, nProp, EE_CHAR_ESCAPEMENT );
@@ -5897,7 +5897,7 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
         {
             nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[sanitizeForMaxPPTLevels(mxParaSet->mnDepth)].mnFontHeight;
         }
-        nBulletRelSize = nFontHeight ? ((-((sal_Int16)nBulletRelSize)) * 100 ) / nFontHeight : 100;
+        nBulletRelSize = nFontHeight ? ((- static_cast<sal_Int16>(nBulletRelSize)) * 100 ) / nFontHeight : 100;
     }
 }
 
@@ -5993,7 +5993,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                 rRetValue = rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn );
                 if ( pParaLevel )
                 {
-                    if ( rRetValue != ( (sal_uInt32)pParaLevel->mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) ) )
+                    if ( rRetValue != ( static_cast<sal_uInt32>(pParaLevel->mnBuFlags) & ( 1 << PPT_ParaAttr_BulletOn ) ) )
                         bIsHardAttribute = true;
                 }
             }
@@ -6137,21 +6137,21 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
             case PPT_ParaAttr_AsianLB_1 :
             {
                 rRetValue = rParaLevel.mnAsianLineBreak & 1;
-                if ( pParaLevel && ( rRetValue != ( (sal_uInt32)pParaLevel->mnAsianLineBreak & 1 ) ) )
+                if ( pParaLevel && ( rRetValue != ( static_cast<sal_uInt32>(pParaLevel->mnAsianLineBreak) & 1 ) ) )
                     bIsHardAttribute = true;
             }
             break;
             case PPT_ParaAttr_AsianLB_2 :
             {
                 rRetValue = ( rParaLevel.mnAsianLineBreak >> 1 ) & 1;
-                if ( pParaLevel && ( rRetValue != ( ( (sal_uInt32)pParaLevel->mnAsianLineBreak >> 1 ) & 1 ) ) )
+                if ( pParaLevel && ( rRetValue != ( ( static_cast<sal_uInt32>(pParaLevel->mnAsianLineBreak) >> 1 ) & 1 ) ) )
                     bIsHardAttribute = true;
             }
             break;
             case PPT_ParaAttr_AsianLB_3 :
             {
                 rRetValue = ( rParaLevel.mnAsianLineBreak >> 2 ) & 1;
-                if ( pParaLevel && ( rRetValue != ( ( (sal_uInt32)pParaLevel->mnAsianLineBreak >> 2 ) & 1 ) ) )
+                if ( pParaLevel && ( rRetValue != ( ( static_cast<sal_uInt32>(pParaLevel->mnAsianLineBreak) >> 2 ) & 1 ) ) )
                     bIsHardAttribute = true;
             }
             break;
@@ -6225,8 +6225,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     if ( !nIsBullet2 )
     {
         SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-        sal_uInt16 nAbsLSpace = (sal_uInt16)( ( _nTextOfs * 2540 ) / 576 );
-        sal_uInt16 nFirstLineOffset = nAbsLSpace - (sal_uInt16)( ( _nBulletOfs * 2540 ) / 576 );
+        sal_uInt16 nAbsLSpace = static_cast<sal_uInt16>( ( _nTextOfs * 2540 ) / 576 );
+        sal_uInt16 nFirstLineOffset = nAbsLSpace - static_cast<sal_uInt16>( ( _nBulletOfs * 2540 ) / 576 );
         aLRSpaceItem.SetLeft( nAbsLSpace );
         aLRSpaceItem.SetTextFirstLineOfstValue( -nFirstLineOffset );
         rSet.Put( aLRSpaceItem );
@@ -6258,7 +6258,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     // LineSpacing
     PPTPortionObj* pPortion = First();
     bool bIsHardAttribute = GetAttrib( PPT_ParaAttr_LineFeed, nVal, nDestinationInstance );
-    nVal2 = (sal_Int16)nVal;
+    nVal2 = static_cast<sal_Int16>(nVal);
     sal_uInt32 nFont = sal_uInt32();
     if ( pPortion && pPortion->GetAttrib( PPT_CharAttr_Font, nFont, nDestinationInstance ) )
         bIsHardAttribute = true;
@@ -6269,19 +6269,19 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         {
             sal_uInt32 nFontHeight;
             pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
-            nVal2 = -(sal_Int16)( ( nFontHeight * nVal * 8 ) / 100 );
+            nVal2 = -static_cast<sal_Int16>( ( nFontHeight * nVal * 8 ) / 100 );
         }
         SdrTextFixedCellHeightItem aHeightItem(true);
         aHeightItem.SetWhich(SDRATTR_TEXT_USEFIXEDCELLHEIGHT);
         rSet.Put( aHeightItem );
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
         if ( nVal2 <= 0 ) {
-            aItem.SetLineHeight( (sal_uInt16)( rManager.ScalePoint( -nVal2 ) / 8 ) );
+            aItem.SetLineHeight( static_cast<sal_uInt16>( rManager.ScalePoint( -nVal2 ) / 8 ) );
             aItem.SetLineSpaceRule( SvxLineSpaceRule::Fix );
             aItem.SetInterLineSpaceRule(SvxInterLineSpaceRule::Off);
         } else
         {
-            sal_uInt8 nPropLineSpace = (sal_uInt8)nVal2;
+            sal_uInt8 nPropLineSpace = static_cast<sal_uInt8>(nVal2);
             aItem.SetPropLineSpace( nPropLineSpace );
             aItem.SetLineSpaceRule( SvxLineSpaceRule::Auto );
         }
@@ -6289,8 +6289,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     }
 
     // Paragraph Spacing
-    bIsHardAttribute = ( (sal_uInt32)GetAttrib( PPT_ParaAttr_UpperDist, nUpperDist, nDestinationInstance ) +
-        (sal_uInt32)GetAttrib( PPT_ParaAttr_LowerDist, nLowerDist, nDestinationInstance ) ) != 0;
+    bIsHardAttribute = ( static_cast<sal_uInt32>(GetAttrib( PPT_ParaAttr_UpperDist, nUpperDist, nDestinationInstance )) +
+        static_cast<sal_uInt32>(GetAttrib( PPT_ParaAttr_LowerDist, nLowerDist, nDestinationInstance )) ) != 0;
     if ( ( nUpperDist > 0 ) || ( nLowerDist > 0 ) )
     {
         if (!m_PortionList.empty())
@@ -6298,31 +6298,31 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             sal_uInt32 nFontHeight = 0;
             m_PortionList.back()->GetAttrib(
                     PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance);
-            if ( ((sal_Int16)nUpperDist) > 0 )
-                nUpperDist = - (sal_Int16)( ( nFontHeight * nUpperDist * 100 ) / 1000 );
-            if ( ((sal_Int16)nLowerDist) > 0 )
-                nLowerDist = - (sal_Int16)( ( nFontHeight * nLowerDist * 100 ) / 1000 );
+            if ( static_cast<sal_Int16>(nUpperDist) > 0 )
+                nUpperDist = - static_cast<sal_Int16>( ( nFontHeight * nUpperDist * 100 ) / 1000 );
+            if ( static_cast<sal_Int16>(nLowerDist) > 0 )
+                nLowerDist = - static_cast<sal_Int16>( ( nFontHeight * nLowerDist * 100 ) / 1000 );
         }
         bIsHardAttribute = true;
     }
     if ( bIsHardAttribute )
     {
         SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
-        nVal2 = (sal_Int16)nUpperDist;
+        nVal2 = static_cast<sal_Int16>(nUpperDist);
         if ( nVal2 <= 0 )
-            aULSpaceItem.SetUpper( (sal_uInt16)(((sal_uInt32) - nVal2 * 2540 ) / ( 72 * 8 ) ) );
+            aULSpaceItem.SetUpper( static_cast<sal_uInt16>((static_cast<sal_uInt32>(- nVal2) * 2540 ) / ( 72 * 8 ) ) );
         else
         {
             aULSpaceItem.SetUpperValue( 0 );
-            aULSpaceItem.SetPropUpper( (sal_uInt16)nUpperDist == 100 ? 101 : (sal_uInt16)nUpperDist );
+            aULSpaceItem.SetPropUpper( static_cast<sal_uInt16>(nUpperDist) == 100 ? 101 : static_cast<sal_uInt16>(nUpperDist) );
         }
-        nVal2 = (sal_Int16)nLowerDist;
+        nVal2 = static_cast<sal_Int16>(nLowerDist);
         if ( nVal2 <= 0 )
-            aULSpaceItem.SetLower( (sal_uInt16)(((sal_uInt32) - nVal2 * 2540 ) / ( 72 * 8 ) ) );
+            aULSpaceItem.SetLower( static_cast<sal_uInt16>((static_cast<sal_uInt32>(- nVal2) * 2540 ) / ( 72 * 8 ) ) );
         else
         {
             aULSpaceItem.SetLowerValue( 0 );
-            aULSpaceItem.SetPropLower( (sal_uInt16)nLowerDist == 100 ? 101 : (sal_uInt16)nLowerDist );
+            aULSpaceItem.SetPropLower( static_cast<sal_uInt16>(nLowerDist) == 100 ? 101 : static_cast<sal_uInt16>(nLowerDist) );
         }
         rSet.Put( aULSpaceItem );
     }
@@ -6343,8 +6343,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             for ( i = 0; i < GetTabCount(); i++ )
             {
                 SvxTabAdjust eTabAdjust;
-                nTab = GetTabOffsetByIndex( (sal_uInt16)i );
-                switch( GetTabStyleByIndex( (sal_uInt16)i ) )
+                nTab = GetTabOffsetByIndex( static_cast<sal_uInt16>(i) );
+                switch( GetTabStyleByIndex( static_cast<sal_uInt16>(i) ) )
                 {
                     case 1 :    eTabAdjust = SvxTabAdjust::Center; break;
                     case 2 :    eTabAdjust = SvxTabAdjust::Right; break;
@@ -6357,7 +6357,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             nLatestManTab = nTab;
         }
         if ( nIsBullet2 == 0 )
-            aTabItem.Insert( SvxTabStop( (sal_uInt16)0 ) );
+            aTabItem.Insert( SvxTabStop( sal_uInt16(0) ) );
         if ( nDefaultTab )
         {
             nTab = std::max( nTextOfs2, nLatestManTab );
@@ -6365,7 +6365,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             nTab = nDefaultTab * ( 1 + nTab );
             for ( i = 0; ( i < 20 ) && ( nTab < 0x1b00 ); i++ )
             {
-                aTabItem.Insert( SvxTabStop( (sal_uInt16)( ( ( nTab - nTextOfs2 ) * 2540 ) / 576 ) ) );
+                aTabItem.Insert( SvxTabStop( static_cast<sal_uInt16>( ( ( nTab - nTextOfs2 ) * 2540 ) / 576 ) ) );
                 nTab += nDefaultTab;
             }
         }
@@ -6889,8 +6889,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                         if ( nEndPos )
                                                         {
                                                             xEntry.reset(new PPTFieldEntry);
-                                                            xEntry->nPos = (sal_uInt16)nStartPos;
-                                                            xEntry->nTextRangeEnd = (sal_uInt16)nEndPos;
+                                                            xEntry->nPos = static_cast<sal_uInt16>(nStartPos);
+                                                            xEntry->nTextRangeEnd = static_cast<sal_uInt16>(nEndPos);
                                                             OUString aTarget( pHyperlink->aTarget );
                                                             if ( !pHyperlink->aConvSubString.isEmpty() )
                                                             {
@@ -7432,9 +7432,9 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
 
                     css::awt::Gradient aGradient;
                     aGradient.Style = aXGradient.GetGradientStyle();
-                    aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
-                    aGradient.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
-                    aGradient.Angle = (short)aXGradient.GetAngle();
+                    aGradient.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor().GetColor());
+                    aGradient.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor().GetColor());
+                    aGradient.Angle = static_cast<short>(aXGradient.GetAngle());
                     aGradient.Border = aXGradient.GetBorder();
                     aGradient.XOffset = aXGradient.GetXOffset();
                     aGradient.YOffset = aXGradient.GetYOffset();

@@ -332,10 +332,10 @@ void SvxRTFParser::ReadStyleTable()
         case RTF_SNEXT:     pStyle->nNext = sal_uInt16(nTokenValue);    break;
         case RTF_OUTLINELEVEL:
         case RTF_SOUTLVL:   pStyle->nOutlineNo = sal_uInt8(nTokenValue);    break;
-        case RTF_S:         nStyleNo = (short)nTokenValue;
+        case RTF_S:         nStyleNo = static_cast<short>(nTokenValue);
                             bHasStyleNo = true;
                             break;
-        case RTF_CS:        nStyleNo = (short)nTokenValue;
+        case RTF_CS:        nStyleNo = static_cast<short>(nTokenValue);
                             bHasStyleNo = true;
                             break;
 
@@ -510,7 +510,7 @@ void SvxRTFParser::ReadFontTable()
                 if (-1 != nTokenValue)
                 {
                     rtl_TextEncoding nrtl_TextEncoding = rtl_getTextEncodingFromWindowsCharset(
-                        (sal_uInt8)nTokenValue);
+                        static_cast<sal_uInt8>(nTokenValue));
                     pFont->SetCharSet(nrtl_TextEncoding);
                     //When we're in a font, the fontname is in the font
                     //charset, except for symbol fonts I believe
@@ -533,7 +533,7 @@ void SvxRTFParser::ReadFontTable()
             case RTF_F:
                 bCheckNewFont = true;
                 nInsFontNo = nFontNo;
-                nFontNo = (short)nTokenValue;
+                nFontNo = static_cast<short>(nTokenValue);
                 break;
             case RTF_FALT:
                 bIsAltFntNm = true;

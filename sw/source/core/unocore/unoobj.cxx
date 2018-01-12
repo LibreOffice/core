@@ -344,7 +344,7 @@ lcl_SetNodeNumStart(SwPaM & rCursor, uno::Any const& rValue)
 {
     sal_Int16 nTmp = 1;
     rValue >>= nTmp;
-    sal_uInt16 nStt = (nTmp < 0 ? USHRT_MAX : (sal_uInt16)nTmp);
+    sal_uInt16 nStt = (nTmp < 0 ? USHRT_MAX : static_cast<sal_uInt16>(nTmp));
     SwDoc* pDoc = rCursor.GetDoc();
     UnoActionContext aAction(pDoc);
 
@@ -2517,7 +2517,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     pArray[2] = beans::PropertyValue("IsSortColumns", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= (sal_Int32) 3;
+    aVal <<= sal_Int32(3);
     pArray[3] = beans::PropertyValue("MaxSortFieldsCount", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 

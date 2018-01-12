@@ -130,7 +130,7 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
     std::vector<sal_uInt16> aShortGlyphIds;
     aShortGlyphIds.reserve(mnReqGlyphCount);
     for (int i = 0; i < mnReqGlyphCount; ++i)
-        aShortGlyphIds.push_back((sal_uInt16)mpReqGlyphIds[i]);
+        aShortGlyphIds.push_back(static_cast<sal_uInt16>(mpReqGlyphIds[i]));
     // remove const_cast when sft-subsetter is const-correct
     sal_uInt8* pEncArray = const_cast<sal_uInt8*>( mpReqEncodedIds );
 #endif

@@ -133,10 +133,10 @@ bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 }
 
 
-#define MARGIN_LEFT     ( (MarginPosition)0x0001 )
-#define MARGIN_RIGHT    ( (MarginPosition)0x0002 )
-#define MARGIN_TOP      ( (MarginPosition)0x0004 )
-#define MARGIN_BOTTOM   ( (MarginPosition)0x0008 )
+#define MARGIN_LEFT     ( MarginPosition(0x0001) )
+#define MARGIN_RIGHT    ( MarginPosition(0x0002) )
+#define MARGIN_TOP      ( MarginPosition(0x0004) )
+#define MARGIN_BOTTOM   ( MarginPosition(0x0008) )
 
 // class SvxPageDescPage --------------------------------------------------
 
@@ -420,10 +420,10 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(*pItem);
         SetMetricValue( *m_pLeftMarginEdit, rLRSpace.GetLeft(), eUnit );
         m_pBspWin->SetLeft(
-            (sal_uInt16)ConvertLong_Impl( rLRSpace.GetLeft(), eUnit ) );
+            static_cast<sal_uInt16>(ConvertLong_Impl( rLRSpace.GetLeft(), eUnit )) );
         SetMetricValue( *m_pRightMarginEdit, rLRSpace.GetRight(), eUnit );
         m_pBspWin->SetRight(
-            (sal_uInt16)ConvertLong_Impl( rLRSpace.GetRight(), eUnit ) );
+            static_cast<sal_uInt16>(ConvertLong_Impl( rLRSpace.GetRight(), eUnit )) );
     }
 
     // adjust margins (top/bottom)
@@ -434,10 +434,10 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(*pItem);
         SetMetricValue( *m_pTopMarginEdit, rULSpace.GetUpper(), eUnit );
         m_pBspWin->SetTop(
-            (sal_uInt16)ConvertLong_Impl( (long)rULSpace.GetUpper(), eUnit ) );
+            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<long>(rULSpace.GetUpper()), eUnit )) );
         SetMetricValue( *m_pBottomMarginEdit, rULSpace.GetLower(), eUnit );
         m_pBspWin->SetBottom(
-            (sal_uInt16)ConvertLong_Impl( (long)rULSpace.GetLower(), eUnit ) );
+            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<long>(rULSpace.GetLower()), eUnit )) );
     }
 
     // general page data
@@ -462,7 +462,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     //adjust numeration type of the page style
     //Get the Position of the saved NumType
     for(int i=0; i<m_pNumberFormatBox->GetEntryCount(); i++)
-        if(eNumType == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pNumberFormatBox->GetEntryData(i)))
+        if(eNumType == static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pNumberFormatBox->GetEntryData(i))))
         {
             m_pNumberFormatBox->SelectEntryPos( i );
             break;
@@ -485,10 +485,10 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
         aBinName = EditResId(RID_SVXSTR_PAPERBIN_SETTINGS);
     else
-        aBinName = mpDefPrinter->GetPaperBinName( (sal_uInt16)nPaperBin );
+        aBinName = mpDefPrinter->GetPaperBinName( static_cast<sal_uInt16>(nPaperBin) );
 
     const sal_Int32 nEntryPos = m_pPaperTrayBox->InsertEntry( aBinName );
-    m_pPaperTrayBox->SetEntryData( nEntryPos, reinterpret_cast<void*>((sal_uLong)nPaperBin) );
+    m_pPaperTrayBox->SetEntryData( nEntryPos, reinterpret_cast<void*>(static_cast<sal_uLong>(nPaperBin)) );
     m_pPaperTrayBox->SelectEntry( aBinName );
 
     Size aPaperSize = SvxPaperInfo::GetPaperSize( mpDefPrinter );
@@ -662,13 +662,13 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 
     if ( m_pLeftMarginEdit->IsValueChangedFromSaved() )
     {
-        aMargin.SetLeft( (sal_uInt16)GetCoreValue( *m_pLeftMarginEdit, eUnit ) );
+        aMargin.SetLeft( static_cast<sal_uInt16>(GetCoreValue( *m_pLeftMarginEdit, eUnit )) );
         bModified = true;
     }
 
     if ( m_pRightMarginEdit->IsValueChangedFromSaved() )
     {
-        aMargin.SetRight( (sal_uInt16)GetCoreValue( *m_pRightMarginEdit, eUnit ) );
+        aMargin.SetRight( static_cast<sal_uInt16>(GetCoreValue( *m_pRightMarginEdit, eUnit )) );
         bModified = true;
     }
 
@@ -687,13 +687,13 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 
     if ( m_pTopMarginEdit->IsValueChangedFromSaved() )
     {
-        aTopMargin.SetUpper( (sal_uInt16)GetCoreValue( *m_pTopMarginEdit, eUnit ) );
+        aTopMargin.SetUpper( static_cast<sal_uInt16>(GetCoreValue( *m_pTopMarginEdit, eUnit )) );
         bMod = true;
     }
 
     if ( m_pBottomMarginEdit->IsValueChangedFromSaved() )
     {
-        aTopMargin.SetLower( (sal_uInt16)GetCoreValue( *m_pBottomMarginEdit, eUnit ) );
+        aTopMargin.SetLower( static_cast<sal_uInt16>(GetCoreValue( *m_pBottomMarginEdit, eUnit )) );
         bMod = true;
     }
 
@@ -713,12 +713,12 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     // paper tray
     nWhich = GetWhich( SID_ATTR_PAGE_PAPERBIN );
     sal_Int32 nPos = m_pPaperTrayBox->GetSelectedEntryPos();
-    sal_uInt16 nBin = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pPaperTrayBox->GetEntryData( nPos ));
+    sal_uInt16 nBin = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pPaperTrayBox->GetEntryData( nPos )));
     pOld = GetOldItem( *rSet, SID_ATTR_PAGE_PAPERBIN );
 
     if ( !pOld || static_cast<const SvxPaperBinItem*>(pOld)->GetValue() != nBin )
     {
-        rSet->Put( SvxPaperBinItem( nWhich, (sal_uInt8)nBin ) );
+        rSet->Put( SvxPaperBinItem( nWhich, static_cast<sal_uInt8>(nBin) ) );
         bModified = true;
     }
 
@@ -901,7 +901,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
     sal_Int32 nEntryPos = m_pPaperTrayBox->InsertEntry(
         EditResId( RID_SVXSTR_PAPERBIN_SETTINGS ) );
     m_pPaperTrayBox->SetEntryData( nEntryPos,
-        reinterpret_cast<void*>((sal_uLong)PAPERBIN_PRINTER_SETTINGS) );
+        reinterpret_cast<void*>(sal_uLong(PAPERBIN_PRINTER_SETTINGS)) );
     OUString aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );
     const sal_uInt16 nBinCount = mpDefPrinter->GetPaperBinCount();
 
@@ -914,7 +914,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
             aName = aPaperBin + " " + OUString::number( i+1 );
         }
         nEntryPos = m_pPaperTrayBox->InsertEntry( aName );
-        m_pPaperTrayBox->SetEntryData( nEntryPos, reinterpret_cast<void*>((sal_uLong)i) );
+        m_pPaperTrayBox->SetEntryData( nEntryPos, reinterpret_cast<void*>(static_cast<sal_uLong>(i)) );
     }
     m_pPaperTrayBox->SelectEntry( aOldName );
     m_pPaperTrayBox->SetUpdateMode( true );

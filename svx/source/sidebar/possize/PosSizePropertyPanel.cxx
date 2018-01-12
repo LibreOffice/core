@@ -324,16 +324,16 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
     {
-        long nHeight = (long) ( ((double) mlOldHeight * (double) mpMtrWidth->GetValue()) / (double) mlOldWidth );
+        long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(mpMtrWidth->GetValue())) / static_cast<double>(mlOldWidth) );
         if( nHeight <= mpMtrHeight->GetMax( FUNIT_NONE ) )
         {
             mpMtrHeight->SetUserValue( nHeight, FUNIT_NONE );
         }
         else
         {
-            nHeight = (long)mpMtrHeight->GetMax( FUNIT_NONE );
+            nHeight = static_cast<long>(mpMtrHeight->GetMax( FUNIT_NONE ));
             mpMtrHeight->SetUserValue( nHeight );
-            const long nWidth = (long) ( ((double) mlOldWidth * (double) nHeight) / (double) mlOldHeight );
+            const long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(nHeight)) / static_cast<double>(mlOldHeight) );
             mpMtrWidth->SetUserValue( nWidth, FUNIT_NONE );
         }
     }
@@ -346,16 +346,16 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
     {
-        long nWidth = (long) ( ((double)mlOldWidth * (double)mpMtrHeight->GetValue()) / (double)mlOldHeight );
+        long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(mpMtrHeight->GetValue())) / static_cast<double>(mlOldHeight) );
         if( nWidth <= mpMtrWidth->GetMax( FUNIT_NONE ) )
         {
             mpMtrWidth->SetUserValue( nWidth, FUNIT_NONE );
         }
         else
         {
-            nWidth = (long)mpMtrWidth->GetMax( FUNIT_NONE );
+            nWidth = static_cast<long>(mpMtrWidth->GetMax( FUNIT_NONE ));
             mpMtrWidth->SetUserValue( nWidth );
-            const long nHeight = (long) ( ((double)mlOldHeight * (double)nWidth) / (double)mlOldWidth );
+            const long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(nWidth)) / static_cast<double>(mlOldWidth) );
             mpMtrHeight->SetUserValue( nHeight, FUNIT_NONE );
         }
     }
@@ -373,7 +373,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
         lX += maAnchorPos.X();
         lX = long( lX * aUIScale );
 
-        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
+        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
 
         GetBindings()->GetDispatcher()->ExecuteList(
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosXItem });
@@ -391,7 +391,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
         lY += maAnchorPos.Y();
         lY = long( lY * aUIScale );
 
-        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
+        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
 
         GetBindings()->GetDispatcher()->ExecuteList(
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosYItem });
@@ -448,7 +448,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
 
     // #i123993# Need to take UIScale into account when executing rotations
     const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
+    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,static_cast<sal_uInt32>(nTmp));
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
@@ -463,7 +463,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl*, void )
 
     // #i123993# Need to take UIScale into account when executing rotations
     const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
+    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,static_cast<sal_uInt32>(nTmp));
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
@@ -807,7 +807,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     ::rtl::OUString aTemp;
     if ( aUserItem >>= aTemp )
         sUserData = aTemp;
-    mpCbxScale->Check( (bool)sUserData.toInt32() );
+    mpCbxScale->Check( static_cast<bool>(sUserData.toInt32()) );
 }
 
 
@@ -819,22 +819,22 @@ void PosSizePropertyPanel::executeSize()
     Fraction aUIScale = mpView->GetModel()->GetUIScale();
 
     // get Width
-    double nWidth = (double)mpMtrWidth->GetValue( meDlgUnit );
+    double nWidth = static_cast<double>(mpMtrWidth->GetValue( meDlgUnit ));
     nWidth = MetricField::ConvertDoubleValue( nWidth, mpMtrWidth->GetBaseValue(), mpMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-    long lWidth = (long)(nWidth * (double)aUIScale);
+    long lWidth = static_cast<long>(nWidth * static_cast<double>(aUIScale));
     lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
-    lWidth = (long)mpMtrWidth->Denormalize( lWidth );
+    lWidth = static_cast<long>(mpMtrWidth->Denormalize( lWidth ));
 
     // get Height
-    double nHeight = (double)mpMtrHeight->GetValue( meDlgUnit );
+    double nHeight = static_cast<double>(mpMtrHeight->GetValue( meDlgUnit ));
     nHeight = MetricField::ConvertDoubleValue( nHeight, mpMtrHeight->GetBaseValue(), mpMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-    long lHeight = (long)(nHeight * (double)aUIScale);
+    long lHeight = static_cast<long>(nHeight * static_cast<double>(aUIScale));
     lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
-    lHeight = (long)mpMtrWidth->Denormalize( lHeight );
+    lHeight = static_cast<long>(mpMtrWidth->Denormalize( lHeight ));
 
     // put Width & Height to itemset
-    SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, (sal_uInt32) lWidth);
-    SfxUInt32Item aHeightItem( SID_ATTR_TRANSFORM_HEIGHT, (sal_uInt32) lHeight);
+    SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, static_cast<sal_uInt32>(lWidth));
+    SfxUInt32Item aHeightItem( SID_ATTR_TRANSFORM_HEIGHT, static_cast<sal_uInt32>(lHeight));
     SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, (sal_uInt16)RectPoint::LT);
     const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
 
@@ -1047,7 +1047,7 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     fRight  -= maRect.getWidth();
     fBottom -= maRect.getHeight();
 
-    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
+    const double fMaxLong(static_cast<double>(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
     fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);

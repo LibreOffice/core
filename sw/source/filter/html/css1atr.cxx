@@ -176,7 +176,7 @@ OString lclConvToHex(sal_uInt16 nHex)
     sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < 2; ++n )
     {
-        *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
+        *(--pStr) = static_cast<sal_Char>(nHex & 0xf ) + 48;
         if( *pStr > '9' )
             *pStr += 39;
         nHex >>= 4;
@@ -423,18 +423,18 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         if( nBigVal <= LONG_MAX )
         {
             // a long is sufficient
-            nLongVal = (long)nBigVal;
+            nLongVal = static_cast<long>(nBigVal);
         }
         else
         {
-            rOut.append(nBigVal / (sal_Int64)nFac);
-            if( (nBigVal % (sal_Int64)nFac) != 0 )
+            rOut.append(nBigVal / static_cast<sal_Int64>(nFac));
+            if( (nBigVal % static_cast<sal_Int64>(nFac)) != 0 )
             {
                 rOut.append('.');
-                while( nFac > 1 && (nBigVal % (sal_Int64)nFac) != 0 )
+                while( nFac > 1 && (nBigVal % static_cast<sal_Int64>(nFac)) != 0 )
                 {
                     nFac /= 10;
-                    rOut.append((nBigVal / (sal_Int64)nFac) % (sal_Int64)10);
+                    rOut.append((nBigVal / static_cast<sal_Int64>(nFac)) % sal_Int64(10));
                 }
             }
             bOutLongVal = false;
@@ -1949,7 +1949,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                         nYPos -= aULItem.GetUpper();
                         if( nYPos < 0 )
                         {
-                            aULItem.SetUpper( (sal_uInt16)(aULItem.GetUpper() + nYPos) );
+                            aULItem.SetUpper( static_cast<sal_uInt16>(aULItem.GetUpper() + nYPos) );
                             nYPos = 0;
                         }
                     }
@@ -1965,7 +1965,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                         nXPos -= aLRItem.GetLeft();
                         if( nXPos < 0 )
                         {
-                            aLRItem.SetLeft( (sal_uInt16)(aLRItem.GetLeft() + nXPos) );
+                            aLRItem.SetLeft( static_cast<sal_uInt16>(aLRItem.GetLeft() + nXPos) );
                             nXPos = 0;
                         }
                     }
@@ -2696,7 +2696,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     if( nHeight )
-        rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, (long)nHeight );
+        rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, static_cast<long>(nHeight) );
     else if( nPrcHeight &&
         !(nPrcHeight < 115 && rHTMLWrt.m_bParaDotLeaders )) // avoid HTML scrollbars and missing descenders
     {
@@ -2916,7 +2916,7 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
 
         // max-width = max-width - margin-left for TOC paragraphs with dot leaders
         if( rHTMLWrt.m_bParaDotLeaders )
-            rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_max_width, (long)(DOT_LEADERS_MAX_WIDTH/2.54*72*20) - nLeftMargin );
+            rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_max_width, long(DOT_LEADERS_MAX_WIDTH/2.54*72*20) - nLeftMargin );
 
     }
 
@@ -2926,7 +2926,7 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     // The LineIndent of the first line might contain the room for numbering
-    long nFirstLineIndent = (long)rLRItem.GetTextFirstLineOfst() -
+    long nFirstLineIndent = static_cast<long>(rLRItem.GetTextFirstLineOfst()) -
         rHTMLWrt.m_nFirstLineIndent;
     if( rHTMLWrt.m_nDfltFirstLineIndent != nFirstLineIndent )
     {
@@ -2946,13 +2946,13 @@ static Writer& OutCSS1_SvxULSpace( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.m_nDfltTopMargin != rULItem.GetUpper() )
     {
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_top,
-                                     (long)rULItem.GetUpper() );
+                                     static_cast<long>(rULItem.GetUpper()) );
     }
 
     if( rHTMLWrt.m_nDfltBottomMargin != rULItem.GetLower() )
     {
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_bottom,
-                                     (long)rULItem.GetLower() );
+                                     static_cast<long>(rULItem.GetLower()) );
     }
 
     return rWrt;

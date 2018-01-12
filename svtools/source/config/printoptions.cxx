@@ -654,7 +654,7 @@ void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
     rOptions.SetReducedGradientStepCount( GetReducedGradientStepCount() );
     rOptions.SetReduceBitmaps( IsReduceBitmaps() );
     rOptions.SetReducedBitmapMode( (PrinterBitmapMode) GetReducedBitmapMode() );
-    rOptions.SetReducedBitmapResolution( aDPIArray[ std::min( (sal_uInt16) GetReducedBitmapResolution(), (sal_uInt16)( DPI_COUNT - 1 ) ) ] );
+    rOptions.SetReducedBitmapResolution( aDPIArray[ std::min( static_cast<sal_uInt16>(GetReducedBitmapResolution()), sal_uInt16( DPI_COUNT - 1 ) ) ] );
     rOptions.SetReducedBitmapIncludesTransparency( IsReducedBitmapIncludesTransparency() );
     rOptions.SetConvertToGreyscales( IsConvertToGreyscales() );
     rOptions.SetPDFAsStandardPrintJobFormat( IsPDFAsStandardPrintJobFormat() );
@@ -687,7 +687,7 @@ void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
         {
             if( nDPI >= aDPIArray[ i ] )
             {
-                SetReducedBitmapResolution( (sal_Int16) i );
+                SetReducedBitmapResolution( static_cast<sal_Int16>(i) );
                 i = -1;
             }
         }

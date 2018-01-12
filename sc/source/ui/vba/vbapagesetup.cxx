@@ -516,7 +516,7 @@ void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber)
     try
     {
         uno::Any aValue;
-        aValue <<= (sal_Int16)firstPageNumber;
+        aValue <<= static_cast<sal_Int16>(firstPageNumber);
         mxPageProps->setPropertyValue("FirstPageNumber", aValue );
     }
     catch (const uno::Exception&)

@@ -254,8 +254,8 @@ namespace basegfx
             nVerSeg = std::min(nMaxSegments, std::max(nMinSegments, nVerSeg));
 
             // create constants
-            const double fVerDiffPerStep((fVerStop - fVerStart) / (double)nVerSeg);
-            const double fHorDiffPerStep((fHorStop - fHorStart) / (double)nHorSeg);
+            const double fVerDiffPerStep((fVerStop - fVerStart) / static_cast<double>(nVerSeg));
+            const double fHorDiffPerStep((fHorStop - fHorStart) / static_cast<double>(nHorSeg));
             bool bHorClosed(fTools::equal(fHorStop - fHorStart, F_2PI));
             bool bVerFromTop(fTools::equal(fVerStart, F_PI2));
             bool bVerToBottom(fTools::equal(fVerStop, -F_PI2));
@@ -267,12 +267,12 @@ namespace basegfx
 
             for(a = nLoopVerInit; a < nLoopVerLimit; a++)
             {
-                const double fVer(fVerStart + ((double)a * fVerDiffPerStep));
+                const double fVer(fVerStart + (static_cast<double>(a) * fVerDiffPerStep));
                 B3DPolygon aNew;
 
                 for(b = 0; b < nLoopHorLimit; b++)
                 {
-                    const double fHor(fHorStart + ((double)b * fHorDiffPerStep));
+                    const double fHor(fHorStart + (static_cast<double>(b) * fHorDiffPerStep));
                     aNew.append(getPointFromCartesian(fHor, fVer));
                 }
 
@@ -283,7 +283,7 @@ namespace basegfx
             // create vertical half-rings
             for(a = 0; a < nLoopHorLimit; a++)
             {
-                const double fHor(fHorStart + ((double)a * fHorDiffPerStep));
+                const double fHor(fHorStart + (static_cast<double>(a) * fHorDiffPerStep));
                 B3DPolygon aNew;
 
                 if(bVerFromTop)
@@ -293,7 +293,7 @@ namespace basegfx
 
                 for(b = nLoopVerInit; b < nLoopVerLimit; b++)
                 {
-                    const double fVer(fVerStart + ((double)b * fVerDiffPerStep));
+                    const double fVer(fVerStart + (static_cast<double>(b) * fVerDiffPerStep));
                     aNew.append(getPointFromCartesian(fHor, fVer));
                 }
 

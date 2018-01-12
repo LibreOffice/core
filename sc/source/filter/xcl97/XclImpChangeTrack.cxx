@@ -257,7 +257,7 @@ void XclImpChangeTrack::ReadCell(
         break;
         case EXC_CHTR_TYPE_BOOL:
         {
-            double fValue = (double) (pStrm->ReaduInt16() != 0);
+            double fValue = static_cast<double>(pStrm->ReaduInt16() != 0);
             if( pStrm->IsValid() )
             {
                 rCell.meType = CELLTYPE_VALUE;

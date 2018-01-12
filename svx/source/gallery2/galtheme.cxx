@@ -1352,7 +1352,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     pCompat.reset();
 
     // Fill the rest of the buffer.
-    const long  nRest = std::max( 512L - ( (long) rOStm.Tell() - nReservePos ), 0L );
+    const long  nRest = std::max( 512L - ( static_cast<long>(rOStm.Tell()) - nReservePos ), 0L );
 
     if( nRest )
     {

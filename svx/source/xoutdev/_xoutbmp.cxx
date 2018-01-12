@@ -463,7 +463,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 const long          nWidth2 = nWidth - 2;
                 const long          nHeight = aSize.Height();
                 const long          nHeight2 = nHeight - 2;
-                const long          lThres2 = (long) cThreshold * cThreshold;
+                const long          lThres2 = static_cast<long>(cThreshold) * cThreshold;
                 const sal_uInt8 nWhitePalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_WHITE))));
                 const sal_uInt8 nBlackPalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_BLACK))));
                 long                nSum1;
@@ -484,17 +484,17 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                         nXTmp = nX;
 
                         nSum1 = -( nSum2 = lGray = pReadAcc->GetPixelIndex( nY, nXTmp++ ) );
-                        nSum2 += ( (long) pReadAcc->GetPixelIndex( nY, nXTmp++ ) ) << 1;
+                        nSum2 += static_cast<long>(pReadAcc->GetPixelIndex( nY, nXTmp++ )) << 1;
                         nSum1 += ( lGray = pReadAcc->GetPixelIndex( nY, nXTmp ) );
                         nSum2 += lGray;
 
-                        nSum1 += ( (long) pReadAcc->GetPixelIndex( nY1, nXTmp ) ) << 1;
-                        nSum1 -= ( (long) pReadAcc->GetPixelIndex( nY1, nXTmp -= 2 ) ) << 1;
+                        nSum1 += static_cast<long>(pReadAcc->GetPixelIndex( nY1, nXTmp )) << 1;
+                        nSum1 -= static_cast<long>(pReadAcc->GetPixelIndex( nY1, nXTmp -= 2 )) << 1;
 
-                        nSum1 += ( lGray = -(long) pReadAcc->GetPixelIndex( nY2, nXTmp++ ) );
+                        nSum1 += ( lGray = -static_cast<long>(pReadAcc->GetPixelIndex( nY2, nXTmp++ )) );
                         nSum2 += lGray;
-                        nSum2 -= ( (long) pReadAcc->GetPixelIndex( nY2, nXTmp++ ) ) << 1;
-                        nSum1 += ( lGray = (long) pReadAcc->GetPixelIndex( nY2, nXTmp ) );
+                        nSum2 -= static_cast<long>(pReadAcc->GetPixelIndex( nY2, nXTmp++ )) << 1;
+                        nSum1 += ( lGray = static_cast<long>(pReadAcc->GetPixelIndex( nY2, nXTmp )) );
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
@@ -556,8 +556,8 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
         if (pAcc && nWidth && nHeight)
         {
             const Size&         rPrefSize = aWorkBmp.GetPrefSize();
-            const double        fFactorX = (double) rPrefSize.Width() / nWidth;
-            const double        fFactorY = (double) rPrefSize.Height() / nHeight;
+            const double        fFactorX = static_cast<double>(rPrefSize.Width()) / nWidth;
+            const double        fFactorY = static_cast<double>(rPrefSize.Height()) / nHeight;
             const long          nStartX1 = aWorkRect.Left() + 1;
             const long          nEndX1 = aWorkRect.Right();
             const long          nStartX2 = nEndX1 - 1;

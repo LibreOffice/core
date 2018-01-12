@@ -783,7 +783,7 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uInt32 nFormatId) cons
 // determine FormatId from Pseudo-ID
 sal_uInt16 SwFieldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uInt32 nFormatId) const
 {
-    sal_uInt16 nId = (sal_uInt16)nFormatId;
+    sal_uInt16 nId = static_cast<sal_uInt16>(nFormatId);
     switch( nTypeId )
     {
         case TYP_DOCINFOFLD:
@@ -838,7 +838,7 @@ sal_uInt16 SwFieldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uInt32 nFormatId) con
                     sal_Int16 nCurrent = pTypes[nType];
                     if (nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
                     {
-                        if (nValidEntry == ((sal_Int32)nFormatId))
+                        if (nValidEntry == static_cast<sal_Int32>(nFormatId))
                         {
                             nId = pTypes[nType];
                             break;
@@ -941,7 +941,7 @@ bool SwFieldMgr::InsertField(
         {
             SwScriptFieldType* pType =
                 static_cast<SwScriptFieldType*>(pCurShell->GetFieldType(0, SwFieldIds::Script));
-            pField = new SwScriptField(pType, rData.m_sPar1, rData.m_sPar2, (bool)nFormatId);
+            pField = new SwScriptField(pType, rData.m_sPar1, rData.m_sPar2, static_cast<bool>(nFormatId));
             break;
         }
 
@@ -998,14 +998,14 @@ bool SwFieldMgr::InsertField(
 
     case TYP_CHAPTERFLD:
         {
-            sal_uInt16 nByte = (sal_uInt16)rData.m_sPar2.toInt32();
+            sal_uInt16 nByte = static_cast<sal_uInt16>(rData.m_sPar2.toInt32());
             SwChapterFieldType* pTyp =
                 static_cast<SwChapterFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::Chapter) );
             pField = new SwChapterField(pTyp, nFormatId);
             nByte = std::max(sal_uInt16(1), nByte);
             nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
-            static_cast<SwChapterField*>(pField)->SetLevel((sal_uInt8)nByte);
+            static_cast<SwChapterField*>(pField)->SetLevel(static_cast<sal_uInt8>(nByte));
             break;
         }
 
@@ -1013,7 +1013,7 @@ bool SwFieldMgr::InsertField(
     case TYP_PREVPAGEFLD:
     case TYP_PAGENUMBERFLD:
         {
-            short nOff = (short)rData.m_sPar2.toInt32();
+            short nOff = static_cast<short>(rData.m_sPar2.toInt32());
 
             if(rData.m_nTypeId == TYP_NEXTPAGEFLD)
             {
@@ -1093,7 +1093,7 @@ bool SwFieldMgr::InsertField(
         {
             SwGetRefFieldType* pTyp =
                 static_cast<SwGetRefFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::GetRef) );
-            sal_uInt16 nSeqNo = (sal_uInt16)rData.m_sPar2.toInt32();
+            sal_uInt16 nSeqNo = static_cast<sal_uInt16>(rData.m_sPar2.toInt32());
             pField = new SwGetRefField(pTyp, rData.m_sPar1, nSubType, nSeqNo, nFormatId);
             bExp = true;
             break;
@@ -1444,7 +1444,7 @@ bool SwFieldMgr::InsertField(
         case TYP_SETREFPAGEFLD:
             pField = new SwRefPageSetField( static_cast<SwRefPageSetFieldType*>(
                                 pCurShell->GetFieldType( 0, SwFieldIds::RefPageSet ) ),
-                                (short)rData.m_sPar2.toInt32(), 0 != nSubType  );
+                                static_cast<short>(rData.m_sPar2.toInt32()), 0 != nSubType  );
             bPageVar = true;
             break;
 
@@ -1575,17 +1575,17 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
 
         case TYP_CHAPTERFLD:
         {
-            sal_uInt16 nByte = (sal_uInt16)rPar2.toInt32();
+            sal_uInt16 nByte = static_cast<sal_uInt16>(rPar2.toInt32());
             nByte = std::max(sal_uInt16(1), nByte);
             nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
-            static_cast<SwChapterField*>(pTmpField)->SetLevel((sal_uInt8)nByte);
+            static_cast<SwChapterField*>(pTmpField)->SetLevel(static_cast<sal_uInt8>(nByte));
             bSetPar2 = false;
             break;
         }
 
         case TYP_SCRIPTFLD:
-            static_cast<SwScriptField*>(pTmpField)->SetCodeURL((bool)nFormat);
+            static_cast<SwScriptField*>(pTmpField)->SetCodeURL(static_cast<bool>(nFormat));
             break;
 
         case TYP_NEXTPAGEFLD:
@@ -1598,7 +1598,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             {
                 if( nFormat + 2 == SVX_NUM_PAGEDESC )
                     nFormat = SVX_NUM_PAGEDESC;
-                short nOff = (short)sPar2.toInt32();
+                short nOff = static_cast<short>(sPar2.toInt32());
                 nOff += 1;
                 sPar2 = OUString::number(nOff);
             }
@@ -1614,7 +1614,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             {
                 if( nFormat + 2 == SVX_NUM_PAGEDESC )
                     nFormat = SVX_NUM_PAGEDESC;
-                short nOff = (short)sPar2.toInt32();
+                short nOff = static_cast<short>(sPar2.toInt32());
                 nOff -= 1;
                 sPar2 = OUString::number(nOff);
             }
@@ -1629,10 +1629,10 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
         case TYP_GETREFFLD:
             {
                 bSetPar2 = false;
-                static_cast<SwGetRefField*>(pTmpField)->SetSubType( (sal_uInt16)rPar2.toInt32() );
+                static_cast<SwGetRefField*>(pTmpField)->SetSubType( static_cast<sal_uInt16>(rPar2.toInt32()) );
                 const sal_Int32 nPos = rPar2.indexOf( '|' );
                 if( nPos>=0 )
-                    static_cast<SwGetRefField*>(pTmpField)->SetSeqNo( (sal_uInt16)rPar2.copy( nPos + 1 ).toInt32());
+                    static_cast<SwGetRefField*>(pTmpField)->SetSeqNo( static_cast<sal_uInt16>(rPar2.copy( nPos + 1 ).toInt32()));
             }
             break;
         case TYP_DROPDOWN:

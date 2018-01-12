@@ -95,7 +95,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , eCurLanguage (LANGUAGE_NONE)
     , pCurCurrencyEntry(nullptr)
     , bBankingSymbol  (false)
-    , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
+    , nCurCurrencyEntryPos(sal_uInt16(SELPOS_NONE))
     , bUseStarFormat  (false)
     , bIsDefaultValNum (true)
 {
@@ -132,7 +132,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , eCurLanguage (LANGUAGE_NONE)
     , pCurCurrencyEntry(nullptr)
     , bBankingSymbol  (false)
-    , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
+    , nCurCurrencyEntryPos(sal_uInt16(SELPOS_NONE))
     , bUseStarFormat  (false)
     , bIsDefaultValNum (false)
 {
@@ -555,7 +555,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
 
     DBG_ASSERT( nSelPos != SELPOS_NONE, "Leere Formatliste!" );
 
-    nFmtLbSelPos = (nSelPos != SELPOS_NONE) ? (sal_uInt16)nSelPos : 0;
+    nFmtLbSelPos = (nSelPos != SELPOS_NONE) ? static_cast<sal_uInt16>(nSelPos) : 0;
     GetPreviewString_Impl( rPrevString, rpPrevColor );
 }
 
@@ -1242,7 +1242,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
                 SvNumFormatType nMyCat=pNumEntry->GetMaskedType();
                 CategoryToPos_Impl(nMyCat,nMyType);
 
-                return (short) nMyType;
+                return static_cast<short>(nMyType);
             }
             return 0;
         }
@@ -1388,7 +1388,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, sal_
             for(size_t i=1;i<nCount;i++)
             {
                 const sal_uInt16 j = aCurCurrencyList[i];
-                if (j != (sal_uInt16)-1 && j < nTableCount &&
+                if (j != sal_uInt16(-1) && j < nTableCount &&
                         pTmpCurrencyEntry == &rCurrencyTable[j])
                 {
                     *pPos=static_cast<sal_uInt16>(i);
@@ -1412,7 +1412,7 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt32 nPos)
     if(nPos<aCurCurrencyList.size())
     {
         sal_uInt16 nCurrencyPos=aCurCurrencyList[nPos];
-        if(nCurrencyPos!=(sal_uInt16)-1)
+        if(nCurrencyPos!=sal_uInt16(-1))
         {
             pCurCurrencyEntry=const_cast<NfCurrencyEntry*>(&rCurrencyTable[nCurrencyPos]);
             nCurCurrencyEntryPos=nPos;
@@ -1449,7 +1449,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const OUString& rFmtString 
 
     sal_uInt16 nPos=FindCurrencyTableEntry(rFmtString, bTestBanking);
 
-    if(nPos!=(sal_uInt16)-1)
+    if(nPos!=sal_uInt16(-1))
     {
         sal_uInt16 nStart=0;
         if(bTestBanking && aCurCurrencyList.size()>nPos)
@@ -1461,12 +1461,12 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const OUString& rFmtString 
             if(aCurCurrencyList[j]==nPos) return j;
         }
     }
-    return (sal_uInt16) -1;
+    return sal_uInt16(-1);
 }
 
 sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const OUString& rFmtString, bool &bTestBanking )
 {
-    sal_uInt16 nPos=(sal_uInt16) -1;
+    sal_uInt16 nPos=sal_uInt16(-1);
 
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.size();
@@ -1543,7 +1543,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpC
     {
         if(aCurCurrencyList[j]==nPos) return j;
     }
-    return (sal_uInt16) -1;
+    return sal_uInt16(-1);
 }
 
 bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos,
@@ -1551,7 +1551,7 @@ bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos,
 {
     bool bFlag=false;
 
-    if(nPos!=(sal_uInt16)-1)
+    if(nPos!=sal_uInt16(-1))
     {
         const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
         sal_uInt16 nCount=rCurrencyTable.size();

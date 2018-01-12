@@ -281,8 +281,8 @@ namespace svxform
                 m_pFormModel->BegUndo(aUndoStr);
             }
 
-            if (nRelPos >= (sal_uInt32)xContainer->getCount())
-                nRelPos = (sal_uInt32)xContainer->getCount();
+            if (nRelPos >= static_cast<sal_uInt32>(xContainer->getCount()))
+                nRelPos = static_cast<sal_uInt32>(xContainer->getCount());
 
             // UndoAction
             if ( bUndo && m_pPropChangeList->CanUndo())

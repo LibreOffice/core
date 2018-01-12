@@ -145,7 +145,7 @@ sal_Int32 OReportWindow::getMaxMarkerWidth() const
 {
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_aViewsWindow->GetMapMode().GetScaleX();
-    return sal_Int32((long)aStartWidth);
+    return sal_Int32(static_cast<long>(aStartWidth));
 }
 
 sal_Int32 OReportWindow::GetTotalWidth() const
@@ -173,7 +173,7 @@ void OReportWindow::Resize()
         Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
 
         const Point aOffset = LogicToPixel(Point(SECTION_OFFSET, 0), MapMode(MapUnit::MapAppFont));
-        Point aStartPoint((long)aStartWidth + aOffset.X(),0);
+        Point aStartPoint(static_cast<long>(aStartWidth) + aOffset.X(),0);
         uno::Reference<report::XReportDefinition> xReportDefinition = getReportView()->getController().getReportDefinition();
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
         sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
@@ -412,14 +412,14 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
             break;
         case SvxZoomType::WHOLEPAGE:
             {
-                nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
+                nZoom = static_cast<sal_uInt16>(static_cast<long>(Fraction(aSize.Width()*100,impl_getRealPixelWidth())));
                 MapMode aMap( MapUnit::Map100thMM );
                 const Size aHeight = m_aViewsWindow->LogicToPixel(m_aViewsWindow->PixelToLogic(Size(0,GetTotalHeight() + m_aHRuler->GetSizePixel().Height())),aMap);
-                nZoom = ::std::min(nZoom,(sal_uInt16)(long)Fraction(aSize.Height()*100,aHeight.Height()));
+                nZoom = ::std::min(nZoom,static_cast<sal_uInt16>(static_cast<long>(Fraction(aSize.Height()*100,aHeight.Height()))));
             }
             break;
         case SvxZoomType::PAGEWIDTH:
-            nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
+            nZoom = static_cast<sal_uInt16>(static_cast<long>(Fraction(aSize.Width()*100,impl_getRealPixelWidth())));
             break;
         default:
             break;

@@ -196,7 +196,7 @@ bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     FontFamily eNewFamily;
     bool bRet = SvXMLUnitConverter::convertEnum( eNewFamily, rStrImpValue, lcl_getFontFamilyGenericMapping() );
     if( bRet )
-        rValue <<= (sal_Int16)eNewFamily;
+        rValue <<= static_cast<sal_Int16>(eNewFamily);
 
     return bRet;
 }
@@ -229,7 +229,7 @@ XMLFontEncodingPropHdl::~XMLFontEncodingPropHdl()
 bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( IsXMLToken( rStrImpValue, XML_X_SYMBOL ) )
-        rValue <<= (sal_Int16) RTL_TEXTENCODING_SYMBOL;
+        rValue <<= sal_Int16(RTL_TEXTENCODING_SYMBOL);
 
     return true;
 }
@@ -242,7 +242,7 @@ bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
 
     if( rValue >>= nSet )
     {
-        if( (rtl_TextEncoding)nSet == RTL_TEXTENCODING_SYMBOL )
+        if( static_cast<rtl_TextEncoding>(nSet) == RTL_TEXTENCODING_SYMBOL )
         {
             aOut.append( GetXMLToken(XML_X_SYMBOL) );
             rStrExpValue = aOut.makeStringAndClear();
@@ -265,7 +265,7 @@ bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rVa
     FontPitch eNewPitch;
     bool bRet = SvXMLUnitConverter::convertEnum( eNewPitch, rStrImpValue, aFontPitchMapping );
     if( bRet )
-        rValue <<= (sal_Int16)eNewPitch;
+        rValue <<= static_cast<sal_Int16>(eNewPitch);
 
     return bRet;
 }

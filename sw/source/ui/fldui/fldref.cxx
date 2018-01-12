@@ -145,7 +145,7 @@ void SwFieldRefPage::SaveSelectedTextNode()
         SvTreeListEntry* pEntry = m_pSelectionToolTipLB->GetCurEntry();
         if ( pEntry )
         {
-            const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+            const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
             if ( nTypeId == REFFLDFLAG_HEADING )
             {
@@ -226,7 +226,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
         if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->HasWriterListeners() && pSh->IsUsed(*pType))
         {
             nPos = m_pTypeLB->InsertEntry(pType->GetName());
-            m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)(REFFLDFLAG | n)));
+            m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(REFFLDFLAG | n)));
         }
     }
 
@@ -269,7 +269,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
                 {
-                    if(nVal == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i)))
+                    if(nVal == static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i))))
                     {
                         m_pTypeLB->SelectEntryPos(i);
                         break;
@@ -381,7 +381,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
     if (nOld == GetTypeSel())
         return;
 
-    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     // fill selection-ListBox
     OUString sFilter = comphelper::string::strip(m_pFilterED->GetText(), ' ');
@@ -401,7 +401,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
     switch (nTypeId)
     {
         case TYP_GETREFFLD:
-            if (REFFLDFLAG & (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld)))
+            if (REFFLDFLAG & static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld))))
                 // the old one stays
                 nFieldDlgFormatSel = m_pFormatLB->GetSelectedEntryPos();
             bName = true;
@@ -417,7 +417,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
         default:
             if( REFFLDFLAG & nTypeId )
             {
-                const sal_uInt16 nOldId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld));
+                const sal_uInt16 nOldId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld)));
                 if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
                     // then the old one stays
                     nFieldDlgFormatSel = m_pFormatLB->GetSelectedEntryPos();
@@ -449,7 +449,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, SubTypeListBoxHdl, ListBox&, void)
 }
 void SwFieldRefPage::SubTypeHdl()
 {
-    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     switch(nTypeId)
     {
@@ -499,7 +499,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
     if(!pSh)
         pSh = ::GetActiveWrtShell();
     SwGetRefField* pRefField = static_cast<SwGetRefField*>(GetCurField());
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     OUString sOldSel;
     // #i83479#
@@ -862,7 +862,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl, Edit&, void)
     const bool bEmptyName = aName.isEmpty();
 
     bool bEnable = true;
-    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     if ((nTypeId == TYP_SETREFFLD && !GetFieldMgr().CanInsertRefMark(aName)) ||
         (bEmptyName && (nTypeId == TYP_GETREFFLD || nTypeId == TYP_SETREFFLD ||
@@ -877,7 +877,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl, Edit&, void)
 bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 {
     bool bModified = false;
-    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     sal_uInt16 nSubType = 0;
     const sal_Int32 nEntryPos = m_pFormatLB->GetSelectedEntryPos();

@@ -862,7 +862,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 // RepeatHeaderLines
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_4, true, &pItem))
                    aInsTableOpts.mnRowsToRepeat =
-                            (sal_uInt16)static_cast< const SfxInt16Item* >(pItem)->GetValue();
+                            static_cast<sal_uInt16>(static_cast< const SfxInt16Item* >(pItem)->GetValue());
                 //WithBorder
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_5, true, &pItem) &&
                     static_cast< const SfxBoolItem* >(pItem)->GetValue())
@@ -902,7 +902,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         if(pTAFormat)
                             aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFormat->GetName()));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, 0 != (aInsTableOpts.mnInsMode & tabopts::HEADLINE)));
-                        aReq.AppendItem( SfxInt16Item( FN_PARAM_4, (short)aInsTableOpts.mnRowsToRepeat ));
+                        aReq.AppendItem( SfxInt16Item( FN_PARAM_4, static_cast<short>(aInsTableOpts.mnRowsToRepeat) ));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, 0 != (aInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER) ));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_6, !(aInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT)));
                     }
@@ -2063,23 +2063,23 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
                         case SvtScriptType::LATIN:
                             nCJKSize = nHeight * nCJKSize / nWesternSize;
                             nCTLSize = nHeight * nCTLSize / nWesternSize;
-                            nWesternSize = (sal_Int32) nHeight;
+                            nWesternSize = static_cast<sal_Int32>(nHeight);
                         break;
                         case SvtScriptType::ASIAN:
                             nCTLSize = nHeight* nCTLSize / nCJKSize;
                             nWesternSize = nHeight * nWesternSize / nCJKSize;
-                            nCJKSize = (sal_Int32) nHeight;
+                            nCJKSize = static_cast<sal_Int32>(nHeight);
                         break;
                         case SvtScriptType::COMPLEX:
                             nCJKSize = nHeight * nCJKSize / nCTLSize;
                             nWesternSize = nHeight * nWesternSize / nCTLSize;
-                            nCTLSize = (sal_Int32) nHeight;
+                            nCTLSize = static_cast<sal_Int32>(nHeight);
                         break;
                         default: break;
                     }
-                    aHeightSet.Put( SvxFontHeightItem( (sal_uInt32)nWesternSize, 100, RES_CHRATR_FONTSIZE ));
-                    aHeightSet.Put( SvxFontHeightItem( (sal_uInt32)nCJKSize, 100, RES_CHRATR_CJK_FONTSIZE ));
-                    aHeightSet.Put( SvxFontHeightItem( (sal_uInt32)nCTLSize, 100, RES_CHRATR_CTL_FONTSIZE ));
+                    aHeightSet.Put( SvxFontHeightItem( static_cast<sal_uInt32>(nWesternSize), 100, RES_CHRATR_FONTSIZE ));
+                    aHeightSet.Put( SvxFontHeightItem( static_cast<sal_uInt32>(nCJKSize), 100, RES_CHRATR_CJK_FONTSIZE ));
+                    aHeightSet.Put( SvxFontHeightItem( static_cast<sal_uInt32>(nCTLSize), 100, RES_CHRATR_CTL_FONTSIZE ));
                     pArgs = &aHeightSet;
                 }
             }
@@ -2662,7 +2662,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 }
 
                 if ( pFlags )
-                    aInsTableOpts.mnInsMode = (sal_uInt16) pFlags->GetValue();
+                    aInsTableOpts.mnInsMode = static_cast<sal_uInt16>(pFlags->GetValue());
                 else
                 {
                     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -2692,7 +2692,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     _rRequest.AppendItem( SfxStringItem( FN_PARAM_2, aAutoName ) );
                 _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nCols ) );
                 _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRows ) );
-                _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, (sal_Int32) aInsTableOpts.mnInsMode ) );
+                _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, static_cast<sal_Int32>(aInsTableOpts.mnInsMode) ) );
                 _rRequest.Done();
 
                 rSh.StartUndo(SwUndoId::INSTABLE);

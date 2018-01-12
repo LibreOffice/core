@@ -61,13 +61,13 @@ using namespace ::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand;
 
 void EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( EnhancedCustomShapeParameter& rParameter, const sal_Int32 nValue )
 {
-    sal_uInt32 nDat = (sal_uInt32)nValue;
+    sal_uInt32 nDat = static_cast<sal_uInt32>(nValue);
     sal_Int32  nNewValue = nValue;
 
     // check if this is a special point
     if ( ( nDat >> 16 ) == 0x8000 )
     {
-        nNewValue = (sal_uInt16)nDat;
+        nNewValue = static_cast<sal_uInt16>(nDat);
         rParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
     }
     else
@@ -642,8 +642,8 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
         nCoordHeight = nCoordHeightG;
     }
 
-    fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
-    fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
+    fXScale = nCoordWidth == 0 ? 0.0 : static_cast<double>(aLogicRect.GetWidth()) / static_cast<double>(nCoordWidth);
+    fYScale = nCoordHeight == 0 ? 0.0 : static_cast<double>(aLogicRect.GetHeight()) / static_cast<double>(nCoordHeight);
     if ( bOOXMLShape )
     {
         SAL_INFO(
@@ -656,21 +656,21 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
         if ( nCoordWidth == 0 )
         {
             if ( nWidth )
-                fXScale = (double)aLogicRect.GetWidth() / (double)nWidth;
+                fXScale = static_cast<double>(aLogicRect.GetWidth()) / static_cast<double>(nWidth);
             else
                 fXScale = 1.0;
         }
         if ( nCoordHeight == 0 )
         {
             if ( nHeight )
-                fYScale = (double)aLogicRect.GetHeight() / (double)nHeight;
+                fYScale = static_cast<double>(aLogicRect.GetHeight()) / static_cast<double>(nHeight);
             else
                 fYScale = 1.0;
         }
     }
-    if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
+    if ( static_cast<sal_uInt32>(nXRef) != 0x80000000 && aLogicRect.GetHeight() )
     {
-        fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
+        fXRatio = static_cast<double>(aLogicRect.GetWidth()) / static_cast<double>(aLogicRect.GetHeight());
         if ( fXRatio > 1 )
             fXScale /= fXRatio;
         else
@@ -678,9 +678,9 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
     }
     else
         fXRatio = 1.0;
-    if ( (sal_uInt32)nYRef != 0x80000000 && aLogicRect.GetWidth() )
+    if ( static_cast<sal_uInt32>(nYRef) != 0x80000000 && aLogicRect.GetWidth() )
     {
-        fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
+        fYRatio = static_cast<double>(aLogicRect.GetHeight()) / static_cast<double>(aLogicRect.GetWidth());
         if ( fYRatio > 1 )
             fYScale /= fYRatio;
         else
@@ -747,7 +747,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         *pAny >>= bFlipV;
 
     if ( dynamic_cast<const SdrObjCustomShape*>( pCustomShapeObj) !=  nullptr )    // should always be a SdrObjCustomShape, but you don't know
-        nRotateAngle = (sal_Int32)(static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetObjectRotation() * 100.0);
+        nRotateAngle = static_cast<sal_Int32>(static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetObjectRotation() * 100.0);
     else
          nRotateAngle = pCustomShapeObj->GetRotateAngle();
 
@@ -832,8 +832,8 @@ double EnhancedCustomShape2d::GetEnumFunc( const ExpressionFunct eFunc ) const
         case ExpressionFunct::EnumPi :         fRet = F_PI; break;
         case ExpressionFunct::EnumLeft :       fRet = 0.0; break;
         case ExpressionFunct::EnumTop :        fRet = 0.0; break;
-        case ExpressionFunct::EnumRight :      fRet = (double)nCoordWidth * fXRatio;   break;
-        case ExpressionFunct::EnumBottom :     fRet = (double)nCoordHeight * fYRatio; break;
+        case ExpressionFunct::EnumRight :      fRet = static_cast<double>(nCoordWidth) * fXRatio;   break;
+        case ExpressionFunct::EnumBottom :     fRet = static_cast<double>(nCoordHeight) * fYRatio; break;
         case ExpressionFunct::EnumXStretch :   fRet = nXRef; break;
         case ExpressionFunct::EnumYStretch :   fRet = nYRef; break;
         case ExpressionFunct::EnumHasStroke :  fRet = bStroked ? 1.0 : 0.0; break;
@@ -857,7 +857,7 @@ double EnhancedCustomShape2d::GetAdjustValueAsDouble( const sal_Int32 nIndex ) c
         {
             sal_Int32 nNumber = 0;
             seqAdjustmentValues[ nIndex ].Value >>= nNumber;
-            fNumber = (double)nNumber;
+            fNumber = static_cast<double>(nNumber);
         }
     }
     return fNumber;
@@ -866,7 +866,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
 {
     double fNumber = 0.0;
     static sal_uInt32 nLevel = 0;
-    if ( nIndex < (sal_Int32)vNodesSharedPtr.size() )
+    if ( nIndex < static_cast<sal_Int32>(vNodesSharedPtr.size()) )
     {
         if ( vNodesSharedPtr[ nIndex ].get() ) {
             nLevel ++;
@@ -935,7 +935,7 @@ Point EnhancedCustomShape2d::GetPoint( const css::drawing::EnhancedCustomShapePa
             {
                 fVal *= fYScale;
             }
-            aRetValue.Y() = (sal_Int32)fVal;
+            aRetValue.Y() = static_cast<sal_Int32>(fVal);
         }
         else            // width
         {
@@ -1052,15 +1052,15 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
         {
             if (dBrightness >=0.0)
             { //lighten, blending with white
-                return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetRed() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0)  ),
-                              (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetGreen() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) ),
-                              (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetBlue() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) )  );
+                return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetRed() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0)  )),
+                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetGreen() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) )),
+                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetBlue() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) ))  );
             }
             else
             { //darken (indicated by negative sign), blending with black
-                return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetRed() * (1.0+dBrightness), 0.0, 255.0)  ),
-                              (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetGreen() * (1.0+dBrightness), 0.0, 255.0) ),
-                              (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetBlue() * (1.0+dBrightness), 0.0, 255.0) )  );
+                return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetRed() * (1.0+dBrightness), 0.0, 255.0)  )),
+                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetGreen() * (1.0+dBrightness), 0.0, 255.0) )),
+                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetBlue() * (1.0+dBrightness), 0.0, 255.0) ))  );
             }
         }
     }
@@ -1091,9 +1091,9 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
         }
 
         aHSVColor = basegfx::utils::hsv2rgb(aHSVColor);
-        return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 ),
-                    (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 ),
-                    (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 ) );
+        return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 )),
+                    static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 )),
+                    static_cast<sal_uInt8>(static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 )) );
     }
 }
 
@@ -1648,8 +1648,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
 
                         fWidth *= fXScale;
                         fHeight*= fYScale;
-                        Point aP( (sal_Int32)( _aCenter.X() - fWidth ), (sal_Int32)( _aCenter.Y() - fHeight ) );
-                        Size  aS( (sal_Int32)( fWidth * 2.0 ), (sal_Int32)( fHeight * 2.0 ) );
+                        Point aP( static_cast<sal_Int32>( _aCenter.X() - fWidth ), static_cast<sal_Int32>( _aCenter.Y() - fHeight ) );
+                        Size  aS( static_cast<sal_Int32>( fWidth * 2.0 ), static_cast<sal_Int32>( fHeight * 2.0 ) );
                         tools::Rectangle aRect( aP, aS );
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {
@@ -1657,11 +1657,11 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                             GetParameter( fStartAngle, seqCoordinates[ rSrcPt + 2 ].First,  false, false );
                             GetParameter( fEndAngle  , seqCoordinates[ rSrcPt + 2 ].Second, false, false );
 
-                            if ( ((sal_Int32)fStartAngle % 360) != ((sal_Int32)fEndAngle % 360) )
+                            if ( (static_cast<sal_Int32>(fStartAngle) % 360) != (static_cast<sal_Int32>(fEndAngle) % 360) )
                             {
-                                if ( (sal_Int32)fStartAngle & 0x7fff0000 )  // SJ: if the angle was imported from our escher import, then the
+                                if ( static_cast<sal_Int32>(fStartAngle) & 0x7fff0000 )  // SJ: if the angle was imported from our escher import, then the
                                     fStartAngle /= 65536.0;                 // value is shifted by 16. TODO: already change the fixed float to a
-                                if ( (sal_Int32)fEndAngle & 0x7fff0000 )    // double in the import filter
+                                if ( static_cast<sal_Int32>(fEndAngle) & 0x7fff0000 )    // double in the import filter
                                 {
                                     fEndAngle /= 65536.0;
                                     fEndAngle = fEndAngle + fStartAngle;
@@ -1678,7 +1678,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                                 double fy1 = ( -sin( fStartAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
                                 double fx2 = ( cos( fEndAngle * F_PI180 ) * 65536.0 * fXScale ) + fCenterX;
                                 double fy2 = ( -sin( fEndAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
-                                aNewB2DPolygon.append(CreateArc( aRect, Point( (sal_Int32)fx1, (sal_Int32)fy1 ), Point( (sal_Int32)fx2, (sal_Int32)fy2 ), false));
+                                aNewB2DPolygon.append(CreateArc( aRect, Point( static_cast<sal_Int32>(fx1), static_cast<sal_Int32>(fy1) ), Point( static_cast<sal_Int32>(fx2), static_cast<sal_Int32>(fy2) ), false));
                             }
                             else
                             {   /* SJ: TODO: this block should be replaced sometimes, because the current point
@@ -1686,8 +1686,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                                    point if ANGLEELLIPSETO was used, but the method CreateArc
                                    is at the moment not able to draw full circles (if startangle is 0
                                    and endangle 360 nothing is painted :-( */
-                                sal_Int32 nXControl = (sal_Int32)((double)aRect.GetWidth() * 0.2835 );
-                                sal_Int32 nYControl = (sal_Int32)((double)aRect.GetHeight() * 0.2835 );
+                                sal_Int32 nXControl = static_cast<sal_Int32>(static_cast<double>(aRect.GetWidth()) * 0.2835 );
+                                sal_Int32 nYControl = static_cast<sal_Int32>(static_cast<double>(aRect.GetHeight()) * 0.2835 );
                                 Point aCenter( aRect.Center() );
 
                                 // append start point
@@ -1792,12 +1792,12 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {
                             Point aCenter( aRect.Center() );
-                            Point aStart( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + nXor ) ], true, true ) );
-                            Point aEnd( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + ( nXor ^ 1 ) ) ], true, true ) );
-                            aStart.X() = (sal_Int32)( (double)( aStart.X() - aCenter.X() ) ) + aCenter.X();
-                            aStart.Y() = (sal_Int32)( (double)( aStart.Y() - aCenter.Y() ) ) + aCenter.Y();
-                            aEnd.X()   = (sal_Int32)( (double)( aEnd.X()   - aCenter.X() ) ) + aCenter.X();
-                            aEnd.Y()   = (sal_Int32)( (double)( aEnd.Y()   - aCenter.Y() ) ) + aCenter.Y();
+                            Point aStart( GetPoint( seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + nXor ) ], true, true ) );
+                            Point aEnd( GetPoint( seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + ( nXor ^ 1 ) ) ], true, true ) );
+                            aStart.X() = static_cast<sal_Int32>( static_cast<double>( aStart.X() - aCenter.X() ) ) + aCenter.X();
+                            aStart.Y() = static_cast<sal_Int32>( static_cast<double>( aStart.Y() - aCenter.Y() ) ) + aCenter.Y();
+                            aEnd.X()   = static_cast<sal_Int32>( static_cast<double>( aEnd.X()   - aCenter.X() ) ) + aCenter.X();
+                            aEnd.Y()   = static_cast<sal_Int32>( static_cast<double>( aEnd.Y()   - aCenter.Y() ) ) + aCenter.Y();
                             aNewB2DPolygon.append(CreateArc( aRect, aStart, aEnd, bClockwise));
                         }
                         rSrcPt += 4;
@@ -1811,11 +1811,11 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
 
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
                     {
-                        GetParameter ( fWR, seqCoordinates[ (sal_uInt16)rSrcPt ].First, true, false );
-                        GetParameter ( fHR, seqCoordinates[ (sal_uInt16)rSrcPt ].Second, false, true );
+                        GetParameter ( fWR, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt) ].First, true, false );
+                        GetParameter ( fHR, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt) ].Second, false, true );
 
-                        GetParameter ( fStartAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1) ].First, false, false );
-                        GetParameter ( fSwingAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1 ) ].Second, false, false );
+                        GetParameter ( fStartAngle, seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + 1) ].First, false, false );
+                        GetParameter ( fSwingAngle, seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + 1 ) ].Second, false, false );
 
                         // Convert angles to radians, but don't do any scaling / translation yet.
 

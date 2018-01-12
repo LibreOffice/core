@@ -340,10 +340,10 @@ struct OStoreDirectoryDataBlock
         /** Construction.
         */
         LinkDescriptor()
-            : m_nIndex0 ((sal_uInt16)(~0)),
-              m_nIndex1 ((sal_uInt16)(~0)),
-              m_nIndex2 ((sal_uInt16)(~0)),
-              m_nIndex3 ((sal_uInt16)(~0))
+            : m_nIndex0 (sal_uInt16(~0)),
+              m_nIndex1 (sal_uInt16(~0)),
+              m_nIndex2 (sal_uInt16(~0)),
+              m_nIndex3 (sal_uInt16(~0))
         {}
     };
 
@@ -417,7 +417,7 @@ struct OStoreDirectoryDataBlock
 
     /** direct.
     */
-    static const sal_uInt16 directCount = (sal_uInt16)(STORE_LIMIT_DATAPAGE_DIRECT);
+    static const sal_uInt16 directCount = sal_uInt16(STORE_LIMIT_DATAPAGE_DIRECT);
 
     sal_uInt32 directLink (sal_uInt16 nIndex) const
     {
@@ -434,7 +434,7 @@ struct OStoreDirectoryDataBlock
 
     /** single.
     */
-    static const sal_uInt16 singleCount = (sal_uInt16)(STORE_LIMIT_DATAPAGE_SINGLE);
+    static const sal_uInt16 singleCount = sal_uInt16(STORE_LIMIT_DATAPAGE_SINGLE);
 
     sal_uInt32 singleLink (sal_uInt16 nIndex) const
     {
@@ -451,7 +451,7 @@ struct OStoreDirectoryDataBlock
 
     /** double.
     */
-    static const sal_uInt16 doubleCount = (sal_uInt16)(STORE_LIMIT_DATAPAGE_DOUBLE);
+    static const sal_uInt16 doubleCount = sal_uInt16(STORE_LIMIT_DATAPAGE_DOUBLE);
 
     sal_uInt32 doubleLink (sal_uInt16 nIndex) const
     {
@@ -468,7 +468,7 @@ struct OStoreDirectoryDataBlock
 
     /** triple.
     */
-    static const sal_uInt16 tripleCount = (sal_uInt16)(STORE_LIMIT_DATAPAGE_TRIPLE);
+    static const sal_uInt16 tripleCount = sal_uInt16(STORE_LIMIT_DATAPAGE_TRIPLE);
 
     sal_uInt32 tripleLink (sal_uInt16 nIndex) const
     {
@@ -561,7 +561,7 @@ struct OStoreDirectoryPageData : public store::PageData
         ChunkDescriptor (sal_uInt32 nPosition, sal_uInt16 nCapacity)
         {
             m_nPage   = nPosition / nCapacity;
-            m_nOffset = (sal_uInt16)((nPosition % nCapacity) & 0xffff);
+            m_nOffset = static_cast<sal_uInt16>((nPosition % nCapacity) & 0xffff);
             m_nLength = nCapacity - m_nOffset;
         }
     };

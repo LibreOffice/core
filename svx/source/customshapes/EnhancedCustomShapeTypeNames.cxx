@@ -291,7 +291,7 @@ MSO_SPT EnhancedCustomShapeTypeNames::Get( const OUString& rShapeType )
     int i, nLen = rShapeType.getLength();
     std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
-        pBuf[ i ] = (char)rShapeType[ i ];
+        pBuf[ i ] = static_cast<char>(rShapeType[ i ]);
     pBuf[ i ] = 0;
     TypeNameHashMap::const_iterator aHashIter( pHashMap->find( pBuf.get() ) );
     if ( aHashIter != pHashMap->end() )
@@ -546,7 +546,7 @@ OUString EnhancedCustomShapeTypeNames::GetAccName( const OUString& rShapeType )
     int i, nLen = rShapeType.getLength();
     std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
-        pBuf[ i ] = (char)rShapeType[ i ];
+        pBuf[ i ] = static_cast<char>(rShapeType[ i ]);
     pBuf[ i ] = 0;
     TypeACCNameHashMap::const_iterator aHashIter( pACCHashMap->find( pBuf.get() ) );
     if ( aHashIter != pACCHashMap->end() )

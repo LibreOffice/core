@@ -1734,7 +1734,7 @@ void ScColumn::StoreToCache(SvStream& rStrm) const
     rStrm.WriteUInt64(nLastRow + 1); // the rows are zero based
 
     StoreToCacheFunc aFunc(rStrm);
-    sc::ParseBlock(maCells.begin(), maCells, aFunc, (SCROW)0, nLastRow);
+    sc::ParseBlock(maCells.begin(), maCells, aFunc, SCROW(0), nLastRow);
 }
 
 void ScColumn::RestoreFromCache(SvStream& rStrm)

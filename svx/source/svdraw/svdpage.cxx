@@ -854,7 +854,7 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
     if (rxOrder.is())
     {
         const sal_Int32 nCount = rxOrder->getCount();
-        if ((sal_uInt32)nCount != maList.size())
+        if (static_cast<sal_uInt32>(nCount) != maList.size())
             return;
 
         if (mxNavigationOrder.get() == nullptr)

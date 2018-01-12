@@ -141,7 +141,7 @@ void FrameContainer::clear()
 sal_uInt32 FrameContainer::getCount() const
 {
     SolarMutexGuard g;
-    return( (sal_uInt32)m_aContainer.size() );
+    return static_cast<sal_uInt32>(m_aContainer.size());
 }
 
 /**-***************************************************************************************************************

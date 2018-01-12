@@ -285,7 +285,7 @@ std::shared_ptr<const SfxFilter> SfxObjectFactory::GetTemplateFilter() const
         if( pTemp->IsOwnFormat() && pTemp->IsOwnTemplateFormat() && ( pTemp->GetVersion() > nVersion ) )
         {
             pFilter = pTemp;
-            nVersion = (sal_uInt16) pTemp->GetVersion();
+            nVersion = static_cast<sal_uInt16>(pTemp->GetVersion());
         }
 
         pTemp = aIter.Next();

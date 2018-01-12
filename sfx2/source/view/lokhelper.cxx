@@ -32,7 +32,7 @@ int SfxLokHelper::createView()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
         return -1;
-    return (sal_Int32)pViewShell->GetViewShellId();
+    return static_cast<sal_Int32>(pViewShell->GetViewShellId());
 }
 
 void SfxLokHelper::destroyView(int nId)
@@ -46,7 +46,7 @@ void SfxLokHelper::destroyView(int nId)
 
     for (SfxViewShell* pViewShell : rViewArr)
     {
-        if ((sal_Int32)pViewShell->GetViewShellId() == nViewShellId)
+        if (static_cast<sal_Int32>(pViewShell->GetViewShellId()) == nViewShellId)
         {
             SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
             SfxRequest aRequest(pViewFrame, SID_CLOSEWIN);
@@ -67,7 +67,7 @@ void SfxLokHelper::setView(int nId)
 
     for (SfxViewShell* pViewShell : rViewArr)
     {
-        if ((sal_Int32)pViewShell->GetViewShellId() == nViewShellId)
+        if (static_cast<sal_Int32>(pViewShell->GetViewShellId()) == nViewShellId)
         {
             // update the current LOK language for the dialog tunneling
             comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
@@ -96,7 +96,7 @@ int SfxLokHelper::getView(SfxViewShell* pViewShell)
     if (!pViewShell)
         return -1;
 
-    return (sal_Int32)pViewShell->GetViewShellId();
+    return static_cast<sal_Int32>(pViewShell->GetViewShellId());
 }
 
 std::size_t SfxLokHelper::getViewsCount()
@@ -118,7 +118,7 @@ bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
     for (std::size_t i = 0; i < rViewArr.size(); ++i)
     {
         SfxViewShell* pViewShell = rViewArr[i];
-        pArray[i] = (sal_Int32)pViewShell->GetViewShellId();
+        pArray[i] = static_cast<sal_Int32>(pViewShell->GetViewShellId());
     }
     return true;
 }
@@ -194,7 +194,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OStri
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
         aBuf.append(", ");
-        aBuf.append((sal_Int32) pThisView->getPart());
+        aBuf.append(static_cast<sal_Int32>(pThisView->getPart()));
     }
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aBuf.makeStringAndClear().getStr());
 }

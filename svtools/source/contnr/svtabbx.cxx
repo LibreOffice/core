@@ -120,7 +120,7 @@ void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
         return;
 
     delete [] pTabList;
-    sal_uInt16 nCount = (sal_uInt16)(*pTabs);
+    sal_uInt16 nCount = static_cast<sal_uInt16>(*pTabs);
     pTabList = new SvLBoxTab[ nCount ];
     nTabCount = nCount;
 
@@ -965,7 +965,7 @@ OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBox
         }
         case ::svt::BBTYPE_COLUMNHEADERCELL:
         {
-            aRetText = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( (sal_uInt16)_nPos ) );
+            aRetText = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( static_cast<sal_uInt16>(_nPos) ) );
             break;
         }
 

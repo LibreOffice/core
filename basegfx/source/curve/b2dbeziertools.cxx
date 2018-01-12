@@ -52,7 +52,7 @@ namespace basegfx
 
             for(sal_uInt32 a(1);;)
             {
-                const B2DPoint aNext(rBase.interpolatePoint((double)a / (double)mnEdgeCount));
+                const B2DPoint aNext(rBase.interpolatePoint(static_cast<double>(a) / static_cast<double>(mnEdgeCount)));
                 const B2DVector aEdge(aNext - aCurrent);
 
                 fLength += aEdge.getLength();

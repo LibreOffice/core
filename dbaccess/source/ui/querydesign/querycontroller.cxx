@@ -148,7 +148,7 @@ namespace dbaui
             if (!_pNode->isToken())
             {
                 // rule name as rule: ...
-                rString = "RULE_ID: " + OUString::number( (sal_Int32)_pNode->getRuleID() ) +
+                rString = "RULE_ID: " + OUString::number( static_cast<sal_Int32>(_pNode->getRuleID()) ) +
                           "(" + OSQLParser::RuleIDToStr(_pNode->getRuleID()) + ")";
 
                 _pParent = _pBox->InsertEntry(rString,_pParent);
@@ -1922,7 +1922,7 @@ bool OQueryController::allowQueries() const
         return false;
 
     const NamedValueCollection& rArguments( getInitParams() );
-    sal_Int32 nCommandType = rArguments.getOrDefault( PROPERTY_COMMAND_TYPE, (sal_Int32)CommandType::QUERY );
+    sal_Int32 nCommandType = rArguments.getOrDefault( PROPERTY_COMMAND_TYPE, sal_Int32(CommandType::QUERY) );
     bool bCreatingView = ( nCommandType == CommandType::TABLE );
     return !bCreatingView;
 }

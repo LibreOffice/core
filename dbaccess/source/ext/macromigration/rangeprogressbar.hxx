@@ -56,7 +56,7 @@ namespace dbmm
 
         void SetValue(sal_uInt32 _nValue)
         {
-            m_pBar->SetValue( (sal_uInt16)( 100.0 * _nValue / m_nRange ) );
+            m_pBar->SetValue( static_cast<sal_uInt16>( 100.0 * _nValue / m_nRange ) );
         }
 
     private:

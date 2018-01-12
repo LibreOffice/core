@@ -406,8 +406,8 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
                         mbpHYs = true;
 
                         // convert into MapUnit::Map100thMM
-                        maPhysSize.Width()  = (sal_Int32)( (100000.0 * maOrigSize.Width()) / nXPixelPerMeter );
-                        maPhysSize.Height() = (sal_Int32)( (100000.0 * maOrigSize.Height()) / nYPixelPerMeter );
+                        maPhysSize.Width()  = static_cast<sal_Int32>( (100000.0 * maOrigSize.Width()) / nXPixelPerMeter );
+                        maPhysSize.Height() = static_cast<sal_Int32>( (100000.0 * maOrigSize.Height()) / nYPixelPerMeter );
                     }
                 }
             }
@@ -610,7 +610,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     if (nMinSizeRequired > mnStreamSize)
     {
         SAL_WARN("vcl.gdi", "overlarge png dimensions: " <<
-                 maOrigSize.Width() << " x " << maOrigSize.Height() << " depth: " << (int)mnPngDepth <<
+                 maOrigSize.Width() << " x " << maOrigSize.Height() << " depth: " << static_cast<int>(mnPngDepth) <<
                  " couldn't be supplied by file length " << mnStreamSize << " at least " << nMinSizeRequired << " needed ");
         return false;
     }
@@ -709,7 +709,7 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt16 nBitDepth )
 
     mxAcc->SetPaletteEntryCount( nPaletteEntryCount );
     for ( sal_uInt32 i = 0, nStart = 0; nStart < 256; i++, nStart += nAdd )
-        mxAcc->SetPaletteColor( (sal_uInt16)i, BitmapColor( mpColorTable[ nStart ],
+        mxAcc->SetPaletteColor( static_cast<sal_uInt16>(i), BitmapColor( mpColorTable[ nStart ],
             mpColorTable[ nStart ], mpColorTable[ nStart ] ) );
 }
 
@@ -823,7 +823,7 @@ void PNGReaderImpl::ImplGetGamma()
         return;
 
     sal_uInt32  nGammaValue = ImplReadsal_uInt32();
-    double      fGamma = ( ( VIEWING_GAMMA / DISPLAY_GAMMA ) * ( (double)nGammaValue / 100000 ) );
+    double      fGamma = ( ( VIEWING_GAMMA / DISPLAY_GAMMA ) * ( static_cast<double>(nGammaValue) / 100000 ) );
     double      fInvGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
 
     if ( fInvGamma != 1.0 )
@@ -832,7 +832,7 @@ void PNGReaderImpl::ImplGetGamma()
             mpColorTable = new sal_uInt8[ 256 ];
 
         for ( sal_Int32 i = 0; i < 256; i++ )
-            mpColorTable[ i ] = (sal_uInt8)(pow((double)i/255.0, fInvGamma) * 255.0 + 0.5);
+            mpColorTable[ i ] = static_cast<sal_uInt8>(pow(static_cast<double>(i)/255.0, fInvGamma) * 255.0 + 0.5);
 
         if ( mbGrayScale )
             ImplGetGrayPalette( mnPngDepth );
@@ -850,7 +850,7 @@ void PNGReaderImpl::ImplGetBackground()
                 sal_uInt16 nCol = *maDataIter++;
                 if ( nCol < mxAcc->GetPaletteEntryCount() )
                 {
-                    mxAcc->Erase( mxAcc->GetPaletteColor( (sal_uInt8)nCol ) );
+                    mxAcc->Erase( mxAcc->GetPaletteColor( static_cast<sal_uInt8>(nCol) ) );
                     break;
                 }
             }
@@ -892,12 +892,12 @@ sal_uInt8 PNGReaderImpl::ImplScaleColor()
     sal_uInt32 nMask = ( ( 1 << mnPngDepth ) - 1 );
     sal_uInt16 nCol = ( *maDataIter++ << 8 );
 
-    nCol += *maDataIter++ & (sal_uInt16)nMask;
+    nCol += *maDataIter++ & static_cast<sal_uInt16>(nMask);
 
     if ( mnPngDepth > 8 )   // convert 16bit graphics to 8
         nCol >>= 8;
 
-    return (sal_uInt8) nCol;
+    return static_cast<sal_uInt8>(nCol);
 }
 
 // ImplReadIDAT reads as much image data as needed
@@ -940,7 +940,7 @@ void PNGReaderImpl::ImplReadIDAT()
                 mnYpos += mnYAdd;
             }
 
-            if ( mnYpos >= (sal_uInt32)maOrigSize.Height() )
+            if ( mnYpos >= static_cast<sal_uInt32>(maOrigSize.Height()) )
             {
                 if( (mnPass < 7) && mnInterlaceType )
                     if( ImplPreparePass() )

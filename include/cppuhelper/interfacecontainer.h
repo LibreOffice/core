@@ -501,7 +501,7 @@ struct SAL_WARN_UNUSED OBroadcastHelperVar
 struct hashType_Impl
 {
     size_t operator()(const css::uno::Type & s) const
-    { return (size_t) s.getTypeName().hashCode(); }
+    { return static_cast<size_t>(s.getTypeName().hashCode()); }
 };
 
 

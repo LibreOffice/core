@@ -140,7 +140,7 @@ void log( RuntimeCargo * cargo, sal_Int32 level, const char *str )
                      localDateTime.NanoSeconds/1000000),
                  strLevel[level],
                  sal::static_int_cast< long >(
-                     (sal_Int32) osl::Thread::getCurrentIdentifier()),
+                     static_cast<sal_Int32>(osl::Thread::getCurrentIdentifier())),
                  str );
     }
 }

@@ -128,7 +128,7 @@ uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames()
 {
     const sal_uInt16 nAttrCount = mpContainer->GetAttrCount();
 
-    uno::Sequence< OUString > aElementNames( (sal_Int32)nAttrCount );
+    uno::Sequence< OUString > aElementNames( static_cast<sal_Int32>(nAttrCount) );
     OUString *pNames = aElementNames.getArray();
 
     for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )

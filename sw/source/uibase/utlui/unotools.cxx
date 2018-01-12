@@ -247,13 +247,13 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             if(0 ==(m_nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
             {
                 uno::Any aZoom;
-                aZoom <<= (sal_Int16)view::DocumentZoomType::PAGE_WIDTH_EXACT;
+                aZoom <<= sal_Int16(view::DocumentZoomType::PAGE_WIDTH_EXACT);
                 xViewProps->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
             }
             else
             {
                 uno::Any aZoom;
-                aZoom <<= (sal_Int16)view::DocumentZoomType::BY_VALUE;
+                aZoom <<= sal_Int16(view::DocumentZoomType::BY_VALUE);
                 xViewProps->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
 
                 sal_Int16 nZoomValue = 50;
@@ -352,7 +352,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             aSize <<= aPSize;
             xPProp->setPropertyValue(UNO_NAME_SIZE, aSize);
 
-            uno::Any aZero; aZero <<= (sal_Int32)0;
+            uno::Any aZero; aZero <<= sal_Int32(0);
             xPProp->setPropertyValue(UNO_NAME_LEFT_MARGIN, aZero);
             xPProp->setPropertyValue(UNO_NAME_RIGHT_MARGIN, aZero);
         }
@@ -490,7 +490,7 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu, bool )
         uno::Any aZoom;
         aZoom <<= nZoom;
         xViewProps->setPropertyValue(UNO_NAME_ZOOM_VALUE, aZoom);
-        aZoom <<= (sal_Int16)view::DocumentZoomType::BY_VALUE;
+        aZoom <<= sal_Int16(view::DocumentZoomType::BY_VALUE);
         xViewProps->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
     }
     else if(ITEM_UP == nId || ITEM_DOWN == nId)

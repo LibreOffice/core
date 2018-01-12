@@ -640,7 +640,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pFontLB->GetSelectedEntryPos();
-    const sal_uInt16 nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
+    const sal_uInt16 nFont = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos )));
     aFont = GetDevFont( nFont );
     aFont.SetWeight( WEIGHT_DONTKNOW );
     aFont.SetItalic( ITALIC_NONE );

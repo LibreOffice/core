@@ -195,7 +195,7 @@ Any OXMLDataSourceSetting::convertString(const css::uno::Type& _rExpectedType, c
                     "OXMLDataSourceSetting::convertString: could not convert \""
                     << _rReadCharacters << "\" into an integer!");
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
-                    aReturn <<= (sal_Int16)nValue;
+                    aReturn <<= static_cast<sal_Int16>(nValue);
                 else
                     aReturn <<= nValue;
                 break;

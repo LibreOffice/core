@@ -140,8 +140,8 @@ LanguageType EditView::CheckLanguage(
             LanguageType nTmpLang = aLangList[i];
             if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
-                if (xSpell->hasLanguage( (sal_uInt16)nTmpLang ) &&
-                    xSpell->isValid( rText, (sal_uInt16)nTmpLang, Sequence< PropertyValue >() ))
+                if (xSpell->hasLanguage( static_cast<sal_uInt16>(nTmpLang) ) &&
+                    xSpell->isValid( rText, static_cast<sal_uInt16>(nTmpLang), Sequence< PropertyValue >() ))
                 {
                     nLang = nTmpLang;
                     break;
@@ -883,11 +883,11 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         Sequence< PropertyValue > aPropVals(1);
         PropertyValue &rVal = aPropVals.getArray()[0];
         rVal.Name = UPN_MAX_NUMBER_OF_SUGGESTIONS;
-        rVal.Value <<= (sal_Int16) 7;
+        rVal.Value <<= sal_Int16(7);
 
         // Are there any replace suggestions?
         Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
-                xSpeller->spell( aSelected, (sal_uInt16)pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ), aPropVals );
+                xSpeller->spell( aSelected, static_cast<sal_uInt16>(pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 )), aPropVals );
 
         Reference< linguistic2::XLanguageGuessing >  xLangGuesser( EditDLL::Get().GetGlobalData()->GetLanguageGuesser() );
 
@@ -940,7 +940,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         if (xSpellAlt.is())
             aAlt = xSpellAlt->getAlternatives();
         const OUString *pAlt = aAlt.getConstArray();
-        sal_uInt16 nWords = (sal_uInt16) aAlt.getLength();
+        sal_uInt16 nWords = static_cast<sal_uInt16>(aAlt.getLength());
         if ( nWords )
         {
             for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
@@ -971,7 +971,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             aDics = xDicList->getDictionaries();
             pDic  = aDics.getConstArray();
             LanguageType nCheckedLanguage = pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 );
-            sal_uInt16 nDicCount = (sal_uInt16)aDics.getLength();
+            sal_uInt16 nDicCount = static_cast<sal_uInt16>(aDics.getLength());
             for (sal_uInt16 i = 0; i < nDicCount; i++)
             {
                 uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
@@ -1377,7 +1377,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
         {
             nHeight = OutputDevice::LogicToLogic( nHeight, MapUnit::MapPoint, eUnit  ) / 10;
 
-            if( nHeight != (long)aFontHeightItem.GetHeight() )
+            if( nHeight != static_cast<long>(aFontHeightItem.GetHeight()) )
             {
                 aFontHeightItem.SetHeight( nHeight );
                 std::unique_ptr<SfxPoolItem> pNewItem(aFontHeightItem.CloneSetWhich(*pWhich));

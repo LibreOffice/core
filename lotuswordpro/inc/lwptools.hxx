@@ -107,7 +107,7 @@ public:
 
 inline double LwpTools::ConvertFromUnits(sal_Int32 nUnits)
 {
-    return (double)nUnits/UNITS_PER_INCH;
+    return static_cast<double>(nUnits)/UNITS_PER_INCH;
 }
 inline double LwpTools::ConvertToMetric(double fInch)
 {

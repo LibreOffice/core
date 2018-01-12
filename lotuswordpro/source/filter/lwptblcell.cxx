@@ -89,7 +89,7 @@ void LwpCellList::Read()
     LwpObjectID cDependent;
     cDependent.ReadIndexed(m_pObjStrm.get());
 
-    cColumn = (sal_uInt8) m_pObjStrm->QuickReaduInt16();        // written as a sal_uInt16
+    cColumn = static_cast<sal_uInt8>(m_pObjStrm->QuickReaduInt16());        // written as a sal_uInt16
 //  sal_uInt8 cCellFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16();   // written as a sal_uInt16
     m_pObjStrm->SeekRel(2);//CellFlags
     m_pObjStrm->SkipExtra();
@@ -232,7 +232,7 @@ void LwpDependent::Read()
 
     cFormulaInfo.ReadIndexed(m_pObjStrm.get());
     cReferenceOffset = m_pObjStrm->QuickReaduInt16();
-    cFlags = (sal_uInt8)m_pObjStrm->QuickReaduInt16();  // Written as lushort.
+    cFlags = static_cast<sal_uInt8>(m_pObjStrm->QuickReaduInt16());  // Written as lushort.
 
     m_pObjStrm->SkipExtra();
 }
@@ -248,14 +248,14 @@ void LwpRowSpecifier::QuickRead(LwpObjectStream *pStrm)
 }
 void LwpColumnSpecifier::QuickRead(LwpObjectStream *pStrm)
 {
-    cColumn = (sal_uInt8)pStrm->QuickReaduInt16();
+    cColumn = static_cast<sal_uInt8>(pStrm->QuickReaduInt16());
     cQualifier.QuickRead(pStrm);
 }
 
 void LwpRowColumnQualifier::QuickRead(LwpObjectStream *pStrm)
 {
     // written as lushort for future flags
-    cFlags = (sal_uInt8)pStrm->QuickReaduInt16();
+    cFlags = static_cast<sal_uInt8>(pStrm->QuickReaduInt16());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

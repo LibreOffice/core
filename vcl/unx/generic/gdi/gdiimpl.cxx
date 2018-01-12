@@ -77,8 +77,8 @@ public:
     {
         for (sal_uLong i = 0; i < nPoints; ++i)
         {
-            Points_[i].x = (short)p[i].mnX;
-            Points_[i].y = (short)p[i].mnY;
+            Points_[i].x = static_cast<short>(p[i].mnX);
+            Points_[i].y = static_cast<short>(p[i].mnY);
         }
         Points_[nPoints] = Points_[0]; // close polyline
     }
@@ -1023,10 +1023,10 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
             {
                 XRectangle aRect;
 
-                aRect.x = (short)aRectIter->Left();
-                aRect.y = (short)aRectIter->Top();
-                aRect.width = (unsigned short)nW;
-                aRect.height = (unsigned short)nH;
+                aRect.x = static_cast<short>(aRectIter->Left());
+                aRect.y = static_cast<short>(aRectIter->Top());
+                aRect.width = static_cast<unsigned short>(nW);
+                aRect.height = static_cast<unsigned short>(nH);
                 XUnionRectWithRegion(&aRect, mrParent.mpClipRegion, mrParent.mpClipRegion);
             }
         }
@@ -1132,13 +1132,13 @@ void X11SalGraphicsImpl::SetROPLineColor( SalROPColor nROPColor )
     switch( nROPColor )
     {
         case SalROPColor::N0 : // 0
-            mnPenPixel = (Pixel)0;
+            mnPenPixel = Pixel(0);
             break;
         case SalROPColor::N1 : // 1
-            mnPenPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
+            mnPenPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
         case SalROPColor::Invert : // 2
-            mnPenPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
+            mnPenPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
     }
     mnPenColor  = mrParent.GetColormap().GetColor( mnPenPixel );
@@ -1150,13 +1150,13 @@ void X11SalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
     switch( nROPColor )
     {
         case SalROPColor::N0 : // 0
-            mnBrushPixel = (Pixel)0;
+            mnBrushPixel = Pixel(0);
             break;
         case SalROPColor::N1 : // 1
-            mnBrushPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
+            mnBrushPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
         case SalROPColor::Invert : // 2
-            mnBrushPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
+            mnBrushPixel = static_cast<Pixel>(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
     }
     mbDitherBrush   = false;

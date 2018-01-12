@@ -469,7 +469,7 @@ void SwXMLExport::ExportContent_()
     if (xPropSet.is())
     {
         Any aAny = xPropSet->getPropertyValue( "TwoDigitYear" );
-        aAny <<= (sal_Int16)1930;
+        aAny <<= sal_Int16(1930);
 
         sal_Int16 nYear = 0;
         aAny >>= nYear;

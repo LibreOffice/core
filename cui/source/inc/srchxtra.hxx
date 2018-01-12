@@ -82,9 +82,9 @@ public:
     virtual ~SvxSearchSimilarityDialog() override;
     virtual void dispose() override;
 
-    sal_uInt16  GetOther()      { return (sal_uInt16)m_pOtherFld->GetValue(); }
-    sal_uInt16  GetShorter()    { return (sal_uInt16)m_pShorterFld->GetValue(); }
-    sal_uInt16  GetLonger()     { return (sal_uInt16)m_pLongerFld->GetValue(); }
+    sal_uInt16  GetOther()      { return static_cast<sal_uInt16>(m_pOtherFld->GetValue()); }
+    sal_uInt16  GetShorter()    { return static_cast<sal_uInt16>(m_pShorterFld->GetValue()); }
+    sal_uInt16  GetLonger()     { return static_cast<sal_uInt16>(m_pLongerFld->GetValue()); }
     bool    IsRelaxed()     { return m_pRelaxBox->IsChecked(); }
 };
 

@@ -172,7 +172,7 @@ sal_uInt16 ExcDummyRec::GetNum() const
 
 void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
 {
-    rStrm << (sal_uInt16)(bVal ? 0x0001 : 0x0000);
+    rStrm << static_cast<sal_uInt16>(bVal ? 0x0001 : 0x0000);
 }
 
 std::size_t ExcBoolRecord::GetLen() const
@@ -357,14 +357,14 @@ ExcBundlesheet::ExcBundlesheet( const RootData& rRootData, SCTAB _nTab ) :
 void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
 {
     m_nOwnPos = rStrm.GetSvStreamPos();
-    rStrm   << (sal_uInt32) 0x00000000              // dummy (stream position of the sheet)
+    rStrm   << sal_uInt32(0x00000000)              // dummy (stream position of the sheet)
             << nGrbit;
     rStrm.WriteByteString(aName);             // 8 bit length, max 255 chars
 }
 
 std::size_t ExcBundlesheet::GetLen() const
 {
-    return 7 + std::min( aName.getLength(), (sal_Int32) 255 );
+    return 7 + std::min( aName.getLength(), sal_Int32(255) );
 }
 
 //--------------------------------------------------------- class ExcDummy_02 -
@@ -594,13 +594,13 @@ void ExcFilterCondition::Save( XclExpStream& rStrm )
         break;
         case EXC_AFTYPE_STRING:
             OSL_ENSURE( pText, "ExcFilterCondition::Save() -- pText is NULL!" );
-            rStrm << (sal_uInt32)0 << (sal_uInt8) pText->Len() << (sal_uInt16)0 << (sal_uInt8)0;
+            rStrm << sal_uInt32(0) << static_cast<sal_uInt8>(pText->Len()) << sal_uInt16(0) << sal_uInt8(0);
         break;
         case EXC_AFTYPE_BOOLERR:
-            rStrm << (sal_uInt8)0 << (sal_uInt8)((fVal != 0) ? 1 : 0) << (sal_uInt32)0 << (sal_uInt16)0;
+            rStrm << sal_uInt8(0) << static_cast<sal_uInt8>((fVal != 0) ? 1 : 0) << sal_uInt32(0) << sal_uInt16(0);
         break;
         default:
-            rStrm << (sal_uInt32)0 << (sal_uInt32)0;
+            rStrm << sal_uInt32(0) << sal_uInt32(0);
     }
 }
 
@@ -766,7 +766,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
             {
                 if( fVal < 0 )      fVal = 0;
                 if( fVal >= 501 )   fVal = 500;
-                nFlags |= (nNewFlags | (sal_uInt16)fVal << 7);
+                nFlags |= (nNewFlags | static_cast<sal_uInt16>(fVal) << 7);
             }
             // normal condition
             else

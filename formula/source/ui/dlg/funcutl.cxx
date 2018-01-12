@@ -93,7 +93,7 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
                     if ( !pEdNext )
                     {
                         nThumb++;
-                        bDoScroll = ( nThumb+3 < (long)nArgs );
+                        bDoScroll = ( nThumb+3 < static_cast<long>(nArgs) );
                     }
                     else
                     {

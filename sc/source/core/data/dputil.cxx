@@ -316,7 +316,7 @@ sal_Int32 ScDPUtil::getDatePartValue(
         // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
 
         double fTime = fValue - rtl::math::approxFloor(fValue);
-        long nSeconds = (long)rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5);
+        long nSeconds = static_cast<long>(rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5));
 
         switch (nDatePart)
         {

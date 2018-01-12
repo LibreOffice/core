@@ -108,7 +108,7 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
     {
         rName++;
         sBuffer.append( rPrefix );
-        sBuffer.append( (sal_Int32)rName );
+        sBuffer.append( static_cast<sal_Int32>(rName) );
         sName = sBuffer.makeStringAndClear();
     }
     while (rNames.find(sName) != rNames.end());
@@ -189,7 +189,7 @@ sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* p
             return it - pPool->begin();
     }
 
-    return (sal_uInt32)-1;
+    return sal_uInt32(-1);
 }
 
 OUString XMLTextListAutoStylePool::Add(
@@ -199,7 +199,7 @@ OUString XMLTextListAutoStylePool::Add(
     XMLTextListAutoStylePoolEntry_Impl aTmp( rNumRules );
 
     sal_uInt32 nPos = Find( &aTmp );
-    if( nPos != (sal_uInt32)-1 )
+    if( nPos != sal_uInt32(-1) )
     {
         sName = (*pPool)[ nPos ]->GetName();
     }
@@ -223,7 +223,7 @@ OUString XMLTextListAutoStylePool::Find(
     XMLTextListAutoStylePoolEntry_Impl aTmp( rNumRules );
 
     sal_uInt32 nPos = Find( &aTmp );
-    if( nPos != (sal_uInt32)-1 )
+    if( nPos != sal_uInt32(-1) )
         sName = (*pPool)[ nPos ]->GetName();
 
     return sName;
@@ -235,7 +235,7 @@ OUString XMLTextListAutoStylePool::Find(
     OUString sName;
     XMLTextListAutoStylePoolEntry_Impl aTmp( rInternalName );
     sal_uInt32 nPos = Find( &aTmp );
-    if( nPos != (sal_uInt32)-1 )
+    if( nPos != sal_uInt32(-1) )
         sName = (*pPool)[ nPos ]->GetName();
 
     return sName;

@@ -154,7 +154,7 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
             sal_uInt16 nChar;
             for ( sal_Int32 i = 0; i < aString.getLength(); i++ )
             {
-                nChar = (sal_uInt16)aString[ i ];
+                nChar = static_cast<sal_uInt16>(aString[ i ]);
                 if ( nChar == 0xa )
                     nChar++;
                 else if ( !bSymbol )
@@ -240,7 +240,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     {
         FontCollectionEntry aFontDesc( *o3tl::doAccess<OUString>(mAny) );
         sal_uInt32  nCount = rFontCollection.GetCount();
-        mnFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
+        mnFont = static_cast<sal_uInt16>(rFontCollection.GetId( aFontDesc ));
         if ( mnFont == nCount )
         {
             FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
@@ -267,7 +267,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         {
             FontCollectionEntry aFontDesc( *o3tl::doAccess<OUString>(mAny) );
             sal_uInt32  nCount = rFontCollection.GetCount();
-            mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
+            mnAsianOrComplexFont = static_cast<sal_uInt16>(rFontCollection.GetId( aFontDesc ));
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
@@ -288,7 +288,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         {
             FontCollectionEntry aFontDesc( *o3tl::doAccess<OUString>(mAny) );
             sal_uInt32  nCount = rFontCollection.GetCount();
-            mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
+            mnAsianOrComplexFont = static_cast<sal_uInt16>(rFontCollection.GetId( aFontDesc ));
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
@@ -337,7 +337,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         float fVal(0.0);
         if ( mAny >>= fVal )
         {
-            mnCharHeight = (sal_uInt16)( fVal + 0.5 );
+            mnCharHeight = static_cast<sal_uInt16>( fVal + 0.5 );
             meCharHeight = GetPropertyState( mXPropSet, aCharHeightName );
         }
     }
@@ -416,8 +416,8 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     {
         sal_uInt32 nSOColor = *( o3tl::doAccess<sal_uInt32>(mAny) );
         mnCharColor = nSOColor & 0xff00ff00;                            // green and hibyte
-        mnCharColor |= (sal_uInt8)  nSOColor << 16;                   // red and blue is switched
-        mnCharColor |= (sal_uInt8)( nSOColor >> 16 );
+        mnCharColor |= static_cast<sal_uInt8>(nSOColor) << 16;                   // red and blue is switched
+        mnCharColor |= static_cast<sal_uInt8>( nSOColor >> 16 );
     }
     meCharColor = ePropState;
 
@@ -775,8 +775,8 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
             double fLen = aBuGraSize.Height();
             fCharHeight = fCharHeight * 0.2540;
             double fQuo = fLen / fCharHeight;
-            nBulletRealSize = (sal_Int16)( fQuo + 0.5 );
-            if ( (sal_uInt16)nBulletRealSize > 400 )
+            nBulletRealSize = static_cast<sal_Int16>( fQuo + 0.5 );
+            if ( static_cast<sal_uInt16>(nBulletRealSize) > 400 )
                 nBulletRealSize = 400;
         }
     }
@@ -859,13 +859,13 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     else if ( aPropName == "LeftMargin" )
                         nTextOfs = nTextOfs + static_cast< sal_Int16 >( *o3tl::doAccess<sal_Int32>(pPropValue[i].Value) / ( 2540.0 / 576 ) );
                     else if ( aPropName == "FirstLineOffset" )
-                        nBulletOfs += (sal_Int16)( *o3tl::doAccess<sal_Int32>(pPropValue[i].Value) / ( 2540.0 / 576 ) );
+                        nBulletOfs += static_cast<sal_Int16>( *o3tl::doAccess<sal_Int32>(pPropValue[i].Value) / ( 2540.0 / 576 ) );
                     else if ( aPropName == "BulletColor" )
                     {
                         sal_uInt32 nSOColor = *o3tl::doAccess<sal_uInt32>(pPropValue[i].Value);
                         nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
-                        nBulletColor |= (sal_uInt8)  nSOColor << 16;              // red
-                        nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // blue
+                        nBulletColor |= static_cast<sal_uInt8>(nSOColor) << 16;              // red
+                        nBulletColor |= static_cast<sal_uInt8>( nSOColor >> 16 ) | 0xfe000000; // blue
                     }
                     else if ( aPropName == "BulletRelSize" )
                     {
@@ -1152,18 +1152,18 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
         switch ( aLineSpacing.Mode )
         {
             case css::style::LineSpacingMode::FIX :
-                mnLineSpacing = (sal_Int16)(-( aLineSpacing.Height ) );
+                mnLineSpacing = static_cast<sal_Int16>(-( aLineSpacing.Height ) );
                 mbFixedLineSpacing = true;
                 break;
             case css::style::LineSpacingMode::MINIMUM :
             case css::style::LineSpacingMode::LEADING :
-                mnLineSpacing = (sal_Int16)(-( aLineSpacing.Height ) );
+                mnLineSpacing = static_cast<sal_Int16>(-( aLineSpacing.Height ) );
                 mbFixedLineSpacing = false;
            break;
 
             case css::style::LineSpacingMode::PROP :
             default:
-                mnLineSpacing = (sal_Int16)( aLineSpacing.Height );
+                mnLineSpacing = static_cast<sal_Int16>( aLineSpacing.Height );
             break;
         }
     }
@@ -1172,14 +1172,14 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     if ( ImplGetPropertyValue( "ParaBottomMargin", bGetPropStateValue ) )
     {
         double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + ( 2540.0 / 576.0 ) - 1;
-        mnLineSpacingBottom = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
+        mnLineSpacingBottom = static_cast<sal_Int16>(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingBottom = ePropState;
 
     if ( ImplGetPropertyValue( "ParaTopMargin", bGetPropStateValue ) )
     {
         double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + ( 2540.0 / 576.0 ) - 1;
-        mnLineSpacingTop = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
+        mnLineSpacingTop = static_cast<sal_Int16>(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingTop = ePropState;
 
@@ -1420,11 +1420,11 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
         pVDev->SetFont( aFont );
         FontMetric aMetric( pVDev->GetFontMetric() );
 
-        sal_uInt16 nTxtHeight = (sal_uInt16)aMetric.GetAscent() + (sal_uInt16)aMetric.GetDescent();
+        sal_uInt16 nTxtHeight = static_cast<sal_uInt16>(aMetric.GetAscent()) + static_cast<sal_uInt16>(aMetric.GetDescent());
 
         if ( nTxtHeight )
         {
-            double fScaling = (double)nTxtHeight / 120.0;
+            double fScaling = static_cast<double>(nTxtHeight) / 120.0;
             if ( ( fScaling > 0.50 ) && ( fScaling < 1.5 ) )
                 rEntry.Scaling = fScaling;
         }

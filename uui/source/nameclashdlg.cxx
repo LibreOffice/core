@@ -28,10 +28,10 @@
 
 IMPL_LINK( NameClashDialog, ButtonHdl_Impl, Button *, pBtn, void )
 {
-    long nRet = (long) ABORT;
+    long nRet = long(ABORT);
     if ( m_pBtnRename == pBtn )
     {
-        nRet = (long) RENAME;
+        nRet = long(RENAME);
         OUString aNewName = m_pEDNewName->GetText();
         if ( ( aNewName == maNewName ) || aNewName.isEmpty() )
         {
@@ -42,7 +42,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, Button *, pBtn, void )
         maNewName = aNewName;
     }
     else if ( m_pBtnOverwrite == pBtn )
-        nRet = (long) OVERWRITE;
+        nRet = long(OVERWRITE);
 
     EndDialog( nRet );
 }

@@ -332,7 +332,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
 
     for( long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++ )
     {
-        const tools::Polygon& rPoly = rPolyPoly[ (sal_uInt16) nPoly ];
+        const tools::Polygon& rPoly = rPolyPoly[ static_cast<sal_uInt16>(nPoly) ];
 
         if( rPoly.GetSize() > 1 )
         {
@@ -340,7 +340,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
 
             for( long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++ )
             {
-                aCurSegment.SetEnd( rPoly[ (sal_uInt16)( i % nCount ) ] );
+                aCurSegment.SetEnd( rPoly[ static_cast<sal_uInt16>( i % nCount ) ] );
                 nAdd = 0;
 
                 if( rLine.Intersection( aCurSegment, fX, fY ) )
@@ -348,7 +348,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
                     if( ( fabs( fX - aCurSegment.GetStart().X() ) <= 0.0000001 ) &&
                         ( fabs( fY - aCurSegment.GetStart().Y() ) <= 0.0000001 ) )
                     {
-                        const tools::Line aPrevSegment( rPoly[ (sal_uInt16)( ( i > 1 ) ? ( i - 2 ) : ( nCount - 1 ) ) ], aCurSegment.GetStart() );
+                        const tools::Line aPrevSegment( rPoly[ static_cast<sal_uInt16>( ( i > 1 ) ? ( i - 2 ) : ( nCount - 1 ) ) ], aCurSegment.GetStart() );
                         const double    fPrevDistance = rLine.GetDistance( aPrevSegment.GetStart() );
                         const double    fCurDistance = rLine.GetDistance( aCurSegment.GetEnd() );
 
@@ -361,7 +361,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
                     else if( ( fabs( fX - aCurSegment.GetEnd().X() ) <= 0.0000001 ) &&
                              ( fabs( fY - aCurSegment.GetEnd().Y() ) <= 0.0000001 ) )
                     {
-                        const tools::Line aNextSegment( aCurSegment.GetEnd(), rPoly[ (sal_uInt16)( ( i + 1 ) % nCount ) ] );
+                        const tools::Line aNextSegment( aCurSegment.GetEnd(), rPoly[ static_cast<sal_uInt16>( ( i + 1 ) % nCount ) ] );
 
                         if( ( fabs( rLine.GetDistance( aNextSegment.GetEnd() ) ) <= 0.0000001 ) &&
                             ( rLine.GetDistance( aCurSegment.GetStart() ) > 0.0 ) )

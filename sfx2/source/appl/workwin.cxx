@@ -1714,8 +1714,8 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
 void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, bool bEnabled, SfxVisibilityFlags nMode )
 {
-    sal_uInt16 nInter = (sal_uInt16) ( lId >> 16 );
-    sal_uInt16 nId = (sal_uInt16) ( lId & 0xFFFF );
+    sal_uInt16 nInter = static_cast<sal_uInt16>( lId >> 16 );
+    sal_uInt16 nId = static_cast<sal_uInt16>( lId & 0xFFFF );
 
     SfxChildWin_Impl *pCW=nullptr;
     SfxWorkWindow *pWork = pParent;

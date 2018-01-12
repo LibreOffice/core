@@ -256,7 +256,7 @@ void LwpDrawObj::SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 n
     }
 
     // line width
-    double fWidth = (double)nWidth/TWIPS_PER_CM;
+    double fWidth = static_cast<double>(nWidth)/TWIPS_PER_CM;
 
     // line color
     XFColor aXFColor(rColor.nR, rColor.nG, rColor.nB);
@@ -280,10 +280,10 @@ void LwpDrawObj::SetPosition(XFFrame* pObj)
         fScaleY = m_pTransData->fScaleY;
     }
 
-    pObj->SetPosition((double)m_aObjHeader.nLeft/TWIPS_PER_CM * fScaleX+ fOffsetX,
-        (double)m_aObjHeader.nTop/TWIPS_PER_CM * fScaleY + fOffsetY,
-        (double)(m_aObjHeader.nRight-m_aObjHeader.nLeft)/TWIPS_PER_CM * fScaleX,
-        (double)(m_aObjHeader.nBottom-m_aObjHeader.nTop)/TWIPS_PER_CM * fScaleY);
+    pObj->SetPosition(static_cast<double>(m_aObjHeader.nLeft)/TWIPS_PER_CM * fScaleX+ fOffsetX,
+        static_cast<double>(m_aObjHeader.nTop)/TWIPS_PER_CM * fScaleY + fOffsetY,
+        static_cast<double>(m_aObjHeader.nRight-m_aObjHeader.nLeft)/TWIPS_PER_CM * fScaleX,
+        static_cast<double>(m_aObjHeader.nBottom-m_aObjHeader.nTop)/TWIPS_PER_CM * fScaleY);
 }
 
 /**
@@ -311,7 +311,7 @@ void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag
     // arrowhead flag of an object's end side
     sal_uInt8 nRightArrow = (nArrowFlag & 0xF0) >> 4;
 
-    double fWidth_inch = (double)nLineWidth/TWIPS_PER_CM;
+    double fWidth_inch = static_cast<double>(nLineWidth)/TWIPS_PER_CM;
     double fArrowSize_inch = fWidth_inch + 0.08;
     double fArrowSize = fArrowSize_inch * CM_PER_INCH;
 
@@ -453,10 +453,10 @@ OUString LwpDrawLine::RegisterStyle()
 XFFrame* LwpDrawLine::CreateDrawObj(const OUString& rStyleName )
 {
     XFDrawPath* pLine = new XFDrawPath();
-    pLine->MoveTo(XFPoint((double)(m_aLineRec.nStartX)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)(m_aLineRec.nStartY)/TWIPS_PER_CM * m_pTransData->fScaleY));
-    pLine->LineTo(XFPoint((double)(m_aLineRec.nEndX)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)(m_aLineRec.nEndY)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pLine->MoveTo(XFPoint(static_cast<double>(m_aLineRec.nStartX)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aLineRec.nStartY)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pLine->LineTo(XFPoint(static_cast<double>(m_aLineRec.nEndX)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aLineRec.nEndY)/TWIPS_PER_CM * m_pTransData->fScaleY));
     SetPosition(pLine);
 
     pLine->SetStyleName(rStyleName);
@@ -467,8 +467,8 @@ XFFrame* LwpDrawLine::CreateDrawObj(const OUString& rStyleName )
 XFFrame* LwpDrawLine::CreateStandardDrawObj(const  OUString& rStyleName)
 {
     XFDrawLine* pLine = new XFDrawLine();
-    pLine->SetStartPoint((double)(m_aLineRec.nStartX)/TWIPS_PER_CM,(double)(m_aLineRec.nStartY)/TWIPS_PER_CM);
-    pLine->SetEndPoint((double)(m_aLineRec.nEndX)/TWIPS_PER_CM,(double)(m_aLineRec.nEndY)/TWIPS_PER_CM);
+    pLine->SetStartPoint(static_cast<double>(m_aLineRec.nStartX)/TWIPS_PER_CM,static_cast<double>(m_aLineRec.nStartY)/TWIPS_PER_CM);
+    pLine->SetEndPoint(static_cast<double>(m_aLineRec.nEndX)/TWIPS_PER_CM,static_cast<double>(m_aLineRec.nEndY)/TWIPS_PER_CM);
 
     pLine->SetStyleName(rStyleName);
     return pLine;
@@ -535,12 +535,12 @@ OUString LwpDrawPolyLine::RegisterStyle()
 XFFrame* LwpDrawPolyLine::CreateDrawObj(const OUString& rStyleName )
 {
     XFDrawPath* pPolyline = new XFDrawPath();
-    pPolyline->MoveTo(XFPoint((double)m_pVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-            (double)m_pVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pPolyline->MoveTo(XFPoint(static_cast<double>(m_pVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            static_cast<double>(m_pVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     for (sal_uInt16 nC = 1; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
-        pPolyline->LineTo(XFPoint((double)m_pVector[nC].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-            (double)m_pVector[nC].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+        pPolyline->LineTo(XFPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     }
     SetPosition(pPolyline);
 
@@ -554,8 +554,8 @@ XFFrame* LwpDrawPolyLine::CreateStandardDrawObj(const  OUString& rStyleName)
     XFDrawPolyline* pPolyline = new XFDrawPolyline();
     for (sal_uInt16 nC = 0; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
-        pPolyline->AddPoint((double)m_pVector[nC].x/TWIPS_PER_CM,
-            (double)m_pVector[nC].y/TWIPS_PER_CM);
+        pPolyline->AddPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM,
+            static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM);
     }
 
     pPolyline->SetStyleName(rStyleName);
@@ -621,12 +621,12 @@ OUString LwpDrawPolygon::RegisterStyle()
 XFFrame* LwpDrawPolygon::CreateDrawObj(const OUString& rStyleName)
 {
     XFDrawPath* pPolygon = new XFDrawPath();
-    pPolygon->MoveTo(XFPoint((double)m_pVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-            (double)m_pVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pPolygon->MoveTo(XFPoint(static_cast<double>(m_pVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            static_cast<double>(m_pVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     for (sal_uInt16 nC = 1; nC < m_nNumPoints; nC++)
     {
-        pPolygon->LineTo(XFPoint((double)m_pVector[nC].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-            (double)m_pVector[nC].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+        pPolygon->LineTo(XFPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     }
     pPolygon->ClosePath();
     SetPosition(pPolygon);
@@ -640,8 +640,8 @@ XFFrame* LwpDrawPolygon::CreateStandardDrawObj(const  OUString& rStyleName)
     XFDrawPolygon* pPolygon = new XFDrawPolygon();
     for (sal_uInt16 nC = 0; nC < m_nNumPoints; nC++)
     {
-        pPolygon->AddPoint((double)m_pVector[nC].x/TWIPS_PER_CM,
-            (double)m_pVector[nC].y/TWIPS_PER_CM);
+        pPolygon->AddPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM,
+            static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM);
     }
 
     pPolygon->SetStyleName(rStyleName);
@@ -707,15 +707,15 @@ XFFrame* LwpDrawRectangle::CreateDrawObj(const OUString& rStyleName)
     else
     {
         XFDrawPath* pRect = new XFDrawPath();
-        pRect->MoveTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-            (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+        pRect->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
         for (sal_uInt8 nC = 1; nC < 4; nC++)
         {
-            pRect->LineTo(XFPoint((double)m_aVector[nC].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-                (double)m_aVector[nC].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+            pRect->LineTo(XFPoint(static_cast<double>(m_aVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+                static_cast<double>(m_aVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
         }
-        pRect->LineTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-                (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+        pRect->LineTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+                static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
         pRect->ClosePath();
         SetPosition(pRect);
 
@@ -728,38 +728,38 @@ XFFrame* LwpDrawRectangle::CreateDrawObj(const OUString& rStyleName)
 XFFrame* LwpDrawRectangle::CreateRoundedRect(const OUString& rStyleName)
 {
     XFDrawPath* pRoundedRect = new XFDrawPath();
-    pRoundedRect->MoveTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-    (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pRoundedRect->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+    static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
 
     sal_uInt8 nPtIndex = 1;
     for (sal_uInt8 nC = 0; nC < 7; nC++)
     {
         if (nC%2 == 0)
         {
-            XFPoint aCtrl1((double)m_aVector[nPtIndex].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-                (double)m_aVector[nPtIndex].y/TWIPS_PER_CM * m_pTransData->fScaleY);
+            XFPoint aCtrl1(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+                static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
             nPtIndex++;
-            XFPoint aCtrl2((double)m_aVector[nPtIndex].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-                (double)m_aVector[nPtIndex].y/TWIPS_PER_CM * m_pTransData->fScaleY);
+            XFPoint aCtrl2(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+                static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
             nPtIndex++;
-            XFPoint aDest((double)m_aVector[nPtIndex].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-                (double)m_aVector[nPtIndex].y/TWIPS_PER_CM * m_pTransData->fScaleY);
+            XFPoint aDest(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+                static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
             nPtIndex++;
 
             pRoundedRect->CurveTo(aDest, aCtrl1, aCtrl2);
         }
         else
         {
-            XFPoint aDest((double)m_aVector[nPtIndex].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-                (double)m_aVector[nPtIndex].y/TWIPS_PER_CM * m_pTransData->fScaleY);
+            XFPoint aDest(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+                static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
             nPtIndex++;
 
             pRoundedRect->LineTo(aDest);
         }
     }
 
-    pRoundedRect->LineTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-                (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pRoundedRect->LineTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+                static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     pRoundedRect->ClosePath();
     SetPosition(pRoundedRect);
 
@@ -860,19 +860,19 @@ OUString LwpDrawEllipse::RegisterStyle()
 XFFrame* LwpDrawEllipse::CreateDrawObj(const OUString& rStyleName )
 {
     XFDrawPath* pEllipse = new XFDrawPath();
-    pEllipse->MoveTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pEllipse->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     sal_uInt8 nPtIndex = 1;
     for (sal_uInt8 nC = 0; nC < 4; nC++)
     {
-        XFPoint aCtrl1((double)m_aVector[nPtIndex].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)m_aVector[nPtIndex].y/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aCtrl1(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
         nPtIndex++;
-        XFPoint aCtrl2((double)m_aVector[nPtIndex].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)m_aVector[nPtIndex].y/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aCtrl2(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
         nPtIndex++;
-        XFPoint aDest((double)m_aVector[nPtIndex].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)m_aVector[nPtIndex].y/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aDest(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
         nPtIndex++;
 
         pEllipse->CurveTo(aDest, aCtrl1, aCtrl2);
@@ -939,14 +939,14 @@ OUString LwpDrawArc::RegisterStyle()
 XFFrame* LwpDrawArc::CreateDrawObj(const OUString& rStyleName )
 {
     XFDrawPath* pArc = new XFDrawPath();
-    pArc->MoveTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
-    XFPoint aDest((double)m_aVector[3].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)m_aVector[3].y/TWIPS_PER_CM * m_pTransData->fScaleY);
-    XFPoint aCtl1((double)m_aVector[1].x/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)m_aVector[1].y/TWIPS_PER_CM * m_pTransData->fScaleY);
-    XFPoint aCtl2((double)m_aVector[2].x/TWIPS_PER_CM* m_pTransData->fScaleX,
-        (double)m_aVector[2].y/TWIPS_PER_CM * m_pTransData->fScaleY);
+    pArc->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    XFPoint aDest(static_cast<double>(m_aVector[3].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aVector[3].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+    XFPoint aCtl1(static_cast<double>(m_aVector[1].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(m_aVector[1].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+    XFPoint aCtl2(static_cast<double>(m_aVector[2].x)/TWIPS_PER_CM* m_pTransData->fScaleX,
+        static_cast<double>(m_aVector[2].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
     pArc->CurveTo(aDest, aCtl1, aCtl2);
 
     SetPosition(pArc);
@@ -1163,8 +1163,8 @@ void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
     sal_Int16 nX, nY;
     nX = (m_aTextArtRec.aPath[0].pPts[0].x + m_aTextArtRec.aPath[1].pPts[0].x) / 2;
     nY = (m_aTextArtRec.aPath[0].pPts[0].y + m_aTextArtRec.aPath[1].pPts[0].y) / 2;
-    XFPoint aStart((double)nX/TWIPS_PER_CM * m_pTransData->fScaleX,
-        (double)nY/TWIPS_PER_CM * m_pTransData->fScaleY);
+    XFPoint aStart(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
     pPath->MoveTo(aStart);
 
     sal_uInt8 nPtIndex = 1;
@@ -1172,20 +1172,20 @@ void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
     {
         nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
         nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
-        XFPoint aCtrl1((double)nX/TWIPS_PER_CM * m_pTransData->fScaleX,
-            (double)nY/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aCtrl1(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
         nPtIndex++;
         nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
         nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
-        XFPoint aCtrl2((double)nX/TWIPS_PER_CM * m_pTransData->fScaleX,
-            (double)nY/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aCtrl2(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
         nPtIndex++;
         nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
         nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
-        XFPoint aDest((double)nX/TWIPS_PER_CM * m_pTransData->fScaleX,
-            (double)nY/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aDest(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
         pPath->CurveTo(aDest, aCtrl1, aCtrl2);
     }
@@ -1418,57 +1418,57 @@ void LwpDrawBitmap::Read()
     sal_uInt32 nOffBits = 14 + aInfoHeader2.nHeaderLen + rgbTableSize;
     m_pImageData[0] = 'B';
     m_pImageData[1] = 'M';
-    m_pImageData[2] = (sal_uInt8)m_aBmpRec.nFileSize;
-    m_pImageData[3] = (sal_uInt8)(m_aBmpRec.nFileSize >> 8);
-    m_pImageData[4] = (sal_uInt8)(m_aBmpRec.nFileSize >> 16);
-    m_pImageData[5] = (sal_uInt8)(m_aBmpRec.nFileSize >> 24);
+    m_pImageData[2] = static_cast<sal_uInt8>(m_aBmpRec.nFileSize);
+    m_pImageData[3] = static_cast<sal_uInt8>(m_aBmpRec.nFileSize >> 8);
+    m_pImageData[4] = static_cast<sal_uInt8>(m_aBmpRec.nFileSize >> 16);
+    m_pImageData[5] = static_cast<sal_uInt8>(m_aBmpRec.nFileSize >> 24);
     m_pImageData[6] = 0;
     m_pImageData[7] = 0;
     m_pImageData[8] = 0;
     m_pImageData[9] = 0;
-    m_pImageData[10] = (sal_uInt8)nOffBits;
-    m_pImageData[11] = (sal_uInt8)(nOffBits >> 8);
-    m_pImageData[12] = (sal_uInt8)(nOffBits >> 16);
-    m_pImageData[13] = (sal_uInt8)(nOffBits >> 24);
+    m_pImageData[10] = static_cast<sal_uInt8>(nOffBits);
+    m_pImageData[11] = static_cast<sal_uInt8>(nOffBits >> 8);
+    m_pImageData[12] = static_cast<sal_uInt8>(nOffBits >> 16);
+    m_pImageData[13] = static_cast<sal_uInt8>(nOffBits >> 24);
 
     sal_uInt32 nDIBRemaining;
     sal_uInt8* pPicData = m_pImageData;
     if (aInfoHeader2.nHeaderLen== sizeof(BmpInfoHeader))
     {
-        m_pImageData[14] = (sal_uInt8)aInfoHeader2.nHeaderLen;
-        m_pImageData[15] = (sal_uInt8)(aInfoHeader2.nHeaderLen >> 8);
-        m_pImageData[16] = (sal_uInt8)(aInfoHeader2.nHeaderLen >> 16);
-        m_pImageData[17] = (sal_uInt8)(aInfoHeader2.nHeaderLen >> 24);
-        m_pImageData[18] = (sal_uInt8)aInfoHeader2.nWidth;
-        m_pImageData[19] = (sal_uInt8)(aInfoHeader2.nWidth >> 8);
-        m_pImageData[20] = (sal_uInt8)aInfoHeader2.nHeight;
-        m_pImageData[21] = (sal_uInt8)(aInfoHeader2.nHeight >> 8);
-        m_pImageData[22] = (sal_uInt8)aInfoHeader2.nPlanes;
-        m_pImageData[23] = (sal_uInt8)(aInfoHeader2.nPlanes >> 8);
-        m_pImageData[24] = (sal_uInt8)aInfoHeader2.nBitCount;
-        m_pImageData[25] = (sal_uInt8)(aInfoHeader2.nBitCount >> 8);
+        m_pImageData[14] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen);
+        m_pImageData[15] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 8);
+        m_pImageData[16] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 16);
+        m_pImageData[17] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 24);
+        m_pImageData[18] = static_cast<sal_uInt8>(aInfoHeader2.nWidth);
+        m_pImageData[19] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 8);
+        m_pImageData[20] = static_cast<sal_uInt8>(aInfoHeader2.nHeight);
+        m_pImageData[21] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 8);
+        m_pImageData[22] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes);
+        m_pImageData[23] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes >> 8);
+        m_pImageData[24] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount);
+        m_pImageData[25] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount >> 8);
 
         nDIBRemaining = m_aBmpRec.nFileSize - 26;
         pPicData += 26*sizeof(sal_uInt8);
     }
     else
     {
-        m_pImageData[14] = (sal_uInt8)aInfoHeader2.nHeaderLen;
-        m_pImageData[15] = (sal_uInt8)(aInfoHeader2.nHeaderLen >> 8);
-        m_pImageData[16] = (sal_uInt8)(aInfoHeader2.nHeaderLen >> 16);
-        m_pImageData[17] = (sal_uInt8)(aInfoHeader2.nHeaderLen >> 24);
-        m_pImageData[18] = (sal_uInt8)aInfoHeader2.nWidth;
-        m_pImageData[19] = (sal_uInt8)(aInfoHeader2.nWidth >> 8);
-        m_pImageData[20] = (sal_uInt8)(aInfoHeader2.nWidth >> 16);
-        m_pImageData[21] = (sal_uInt8)(aInfoHeader2.nWidth >> 24);
-        m_pImageData[22] = (sal_uInt8)aInfoHeader2.nHeight;
-        m_pImageData[23] = (sal_uInt8)(aInfoHeader2.nHeight >> 8);
-        m_pImageData[24] = (sal_uInt8)(aInfoHeader2.nHeight >> 16);
-        m_pImageData[25] = (sal_uInt8)(aInfoHeader2.nHeight >> 24);
-        m_pImageData[26] = (sal_uInt8)aInfoHeader2.nPlanes;
-        m_pImageData[27] = (sal_uInt8)(aInfoHeader2.nPlanes >> 8);
-        m_pImageData[28] = (sal_uInt8)aInfoHeader2.nBitCount;
-        m_pImageData[29] = (sal_uInt8)(aInfoHeader2.nBitCount >> 8);
+        m_pImageData[14] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen);
+        m_pImageData[15] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 8);
+        m_pImageData[16] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 16);
+        m_pImageData[17] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 24);
+        m_pImageData[18] = static_cast<sal_uInt8>(aInfoHeader2.nWidth);
+        m_pImageData[19] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 8);
+        m_pImageData[20] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 16);
+        m_pImageData[21] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 24);
+        m_pImageData[22] = static_cast<sal_uInt8>(aInfoHeader2.nHeight);
+        m_pImageData[23] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 8);
+        m_pImageData[24] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 16);
+        m_pImageData[25] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 24);
+        m_pImageData[26] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes);
+        m_pImageData[27] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes >> 8);
+        m_pImageData[28] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount);
+        m_pImageData[29] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount >> 8);
 
         nDIBRemaining = m_aBmpRec.nFileSize - 30;
         pPicData += 30*sizeof(sal_uInt8);

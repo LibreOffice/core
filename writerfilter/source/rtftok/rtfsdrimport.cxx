@@ -415,7 +415,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "gtextSize")
         {
             // RTF size is multiplied by 2^16
-            nFontSize = (float)rProperty.second.toUInt32() / RTF_MULTIPLIER;
+            nFontSize = static_cast<float>(rProperty.second.toUInt32()) / RTF_MULTIPLIER;
         }
         else if (rProperty.first == "pib")
         {

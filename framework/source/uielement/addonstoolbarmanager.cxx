@@ -218,7 +218,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     sal_uInt32  nElements( 0 );
     bool    bAppendSeparator( false );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
-    for ( sal_uInt32 n = 0; n < (sal_uInt32)rAddonToolbar.getLength(); n++ )
+    for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(rAddonToolbar.getLength()); n++ )
     {
         OUString   aURL;
         OUString   aTitle;
@@ -409,7 +409,7 @@ IMPL_LINK_NOARG(AddonsToolBarManager, Select, ToolBox *, void)
     if ( m_bDisposed )
         return;
 
-    sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
+    sal_Int16   nKeyModifier( static_cast<sal_Int16>(m_pToolBar->GetModifier()) );
     sal_uInt16      nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )

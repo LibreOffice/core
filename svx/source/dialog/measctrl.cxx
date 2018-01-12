@@ -39,8 +39,8 @@ SvxXMeasurePreview::SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle)
     SetMapMode(aMapMode);
 
     Size aSize = GetOutputSize();
-    Point aPt1 = Point(aSize.Width() / 5, (long) (aSize.Height() / 2));
-    Point aPt2 = Point(aSize.Width() * 4 / 5, (long) (aSize.Height() / 2));
+    Point aPt1 = Point(aSize.Width() / 5, static_cast<long>(aSize.Height() / 2));
+    Point aPt2 = Point(aSize.Width() * 4 / 5, static_cast<long>(aSize.Height() / 2));
 
     pMeasureObj = new SdrMeasureObj(aPt1, aPt2);
     pModel = new SdrModel();
@@ -57,9 +57,9 @@ void SvxXMeasurePreview::Resize()
     Control::Resize();
 
     Size aSize = GetOutputSize();
-    Point aPt1 = Point(aSize.Width() / 5, (long) (aSize.Height() / 2));
+    Point aPt1 = Point(aSize.Width() / 5, static_cast<long>(aSize.Height() / 2));
     pMeasureObj->SetPoint(aPt1, 0);
-    Point aPt2 = Point(aSize.Width() * 4 / 5, (long) (aSize.Height() / 2));
+    Point aPt2 = Point(aSize.Width() * 4 / 5, static_cast<long>(aSize.Height() / 2));
     pMeasureObj->SetPoint(aPt2, 1);
 }
 

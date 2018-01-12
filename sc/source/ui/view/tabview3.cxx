@@ -2344,7 +2344,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             //!if ( nCol1 > 0 && !aViewData.GetDocument()->IsBlockEmpty(
             //!                     aViewData.GetTabNo(),
             //!                     0, nRow1, nCol1-1, nRow2 ) )
-            long nMarkPixel = (long)( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
+            long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
             aStart.X() -= nMarkPixel * nLayoutSign;
         }
 
@@ -2430,7 +2430,7 @@ void ScTabView::PaintRangeFinder( long nNumber )
         if ( pRangeFinder && pRangeFinder->GetDocName() == aViewData.GetDocShell()->GetTitle() )
         {
             SCTAB nTab = aViewData.GetTabNo();
-            sal_uInt16 nCount = (sal_uInt16)pRangeFinder->Count();
+            sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFinder->Count());
 
             if (nNumber < 0)
             {

@@ -65,8 +65,8 @@ using namespace css;
                                      WB_TOP | WB_VCENTER | WB_BOTTOM |  \
                                      WB_WORDBREAK | WB_NOLABEL)
 
-#define STYLE_RADIOBUTTON_MONO      ((sal_uInt16)0x0001) // legacy
-#define STYLE_CHECKBOX_MONO         ((sal_uInt16)0x0001) // legacy
+#define STYLE_RADIOBUTTON_MONO      (sal_uInt16(0x0001)) // legacy
+#define STYLE_CHECKBOX_MONO         (sal_uInt16(0x0001)) // legacy
 
 class ImplCommonButtonData
 {

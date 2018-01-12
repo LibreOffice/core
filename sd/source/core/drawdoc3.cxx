@@ -160,7 +160,7 @@ static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBoo
         if( rBookmarkList.empty() )
         {
             // simply take master page of nPos'th page in source document
-            pBMMPage = static_cast<SdPage*>(&(pBookmarkDoc->GetSdPage((sal_uInt16)nPos, PageKind::Standard)->TRG_GetMasterPage()));
+            pBMMPage = static_cast<SdPage*>(&(pBookmarkDoc->GetSdPage(static_cast<sal_uInt16>(nPos), PageKind::Standard)->TRG_GetMasterPage()));
         }
         else
         {
@@ -1208,8 +1208,8 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
 
         if (!pMaster)
         {
-            pMaster = GetMasterSdPage( (sal_uInt16) nMPage, PageKind::Standard );
-            pNotesMaster = GetMasterSdPage( (sal_uInt16) nMPage, PageKind::Notes );
+            pMaster = GetMasterSdPage( static_cast<sal_uInt16>(nMPage), PageKind::Standard );
+            pNotesMaster = GetMasterSdPage( static_cast<sal_uInt16>(nMPage), PageKind::Notes );
         }
         else
         {

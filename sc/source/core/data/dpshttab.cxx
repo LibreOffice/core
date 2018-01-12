@@ -149,7 +149,7 @@ sal_uInt32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
 bool ScSheetDPData::getIsDataLayoutDimension(long nColumn)
 {
     CreateCacheTable();
-    return (nColumn ==(long)( aCacheTable.getColSize()));
+    return (nColumn ==static_cast<long>( aCacheTable.getColSize()));
 }
 
 void ScSheetDPData::SetEmptyFlags( bool bIgnoreEmptyRowsP, bool bRepeatIfEmptyP )

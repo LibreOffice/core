@@ -397,7 +397,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
         pTabWin->disposeOnce();
     }
 
-    if ( (sal_Int32)m_vTableConnection.size() < (nCount-1) ) // if some connections could be removed
+    if ( static_cast<sal_Int32>(m_vTableConnection.size()) < (nCount-1) ) // if some connections could be removed
         modified();
 }
 
@@ -1116,7 +1116,7 @@ bool OJoinTableView::IsAddAllowed()
         Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
 
         sal_Int32 nMax = xMetaData.is() ? xMetaData->getMaxTablesInSelect() : 0;
-        if (nMax && nMax <= (sal_Int32)m_aTableMap.size())
+        if (nMax && nMax <= static_cast<sal_Int32>(m_aTableMap.size()))
             return false;
     }
     catch(SQLException&)
@@ -1335,7 +1335,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                                 DeselectConn(GetSelectedConn());
                             else
                                 // no win for any reason -> select the next or previous conn
-                                if (i < (sal_Int32)m_vTableConnection.size())
+                                if (i < static_cast<sal_Int32>(m_vTableConnection.size()))
                                     // there is a currently active conn
                                     pNextConn = m_vTableConnection[(i + (bForward ? 1 : m_vTableConnection.size() - 1)) % m_vTableConnection.size()].get();
                                 else

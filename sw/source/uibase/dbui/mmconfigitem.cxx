@@ -533,7 +533,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
             case 23: pValues[nProp] <<= m_sMailPassword;        break;
             case 24 :pValues[nProp] <<= m_aDBData.sDataSource;           break;
             case 25 :pValues[nProp] <<= m_aDBData.sCommand;              break;
-            case 26 :pValues[nProp] <<= (short)m_aDBData.nCommandType;   break;
+            case 26 :pValues[nProp] <<= static_cast<short>(m_aDBData.nCommandType);   break;
             case 27 :pValues[nProp] <<= m_sFilter; break;
             case 28 :pValues[nProp] <<= m_aSavedDocuments; break;
             case 29: pValues[nProp] <<= m_bIsEMailSupported; break;
@@ -882,7 +882,7 @@ Reference< XResultSet> const & SwMailMergeConfigItem::GetResultSet() const
             xRowProperties->setPropertyValue("DataSourceName", makeAny(m_pImpl->m_aDBData.sDataSource));
             xRowProperties->setPropertyValue("Command", makeAny(m_pImpl->m_aDBData.sCommand));
             xRowProperties->setPropertyValue("CommandType", makeAny(m_pImpl->m_aDBData.nCommandType));
-            xRowProperties->setPropertyValue("FetchSize", makeAny((sal_Int32)10));
+            xRowProperties->setPropertyValue("FetchSize", makeAny(sal_Int32(10)));
             xRowProperties->setPropertyValue("ActiveConnection", makeAny(m_pImpl->m_xConnection.getTyped()));
             try
             {

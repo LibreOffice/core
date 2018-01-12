@@ -40,10 +40,10 @@ struct ImplToolBoxPrivateData;
 class  ImplTrackRect;
 class  PopupMenu;
 
-#define TOOLBOX_STYLE_FLAT          ((sal_uInt16)0x0004)
+#define TOOLBOX_STYLE_FLAT          (sal_uInt16(0x0004))
 
 // item ids in the custom menu may not exceed this constant
-#define TOOLBOX_MENUITEM_START      ((sal_uInt16)0x1000)
+#define TOOLBOX_MENUITEM_START      (sal_uInt16(0x1000))
 
 // defines for the menubutton
 enum class ToolBoxMenuType {

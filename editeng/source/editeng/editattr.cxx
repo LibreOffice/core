@@ -289,7 +289,7 @@ EditCharAttribEscapement::EditCharAttribEscapement( const SvxEscapementItem& rAt
 void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
 {
     sal_uInt16 const nProp = static_cast<const SvxEscapementItem*>(GetItem())->GetProportionalHeight();
-    rFont.SetPropr( (sal_uInt8)nProp );
+    rFont.SetPropr( static_cast<sal_uInt8>(nProp) );
 
     short nEsc = static_cast<const SvxEscapementItem*>(GetItem())->GetEsc();
     if ( nEsc == DFLT_ESC_AUTO_SUPER )

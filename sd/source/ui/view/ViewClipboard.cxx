@@ -198,7 +198,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
         // pages are inserted.
         pBookmarkList = &rTransferable.GetPageBookmarks();
         pDataDocSh = rTransferable.GetPageDocShell();
-        nInsertPgCnt = (sal_uInt16)pBookmarkList->size();
+        nInsertPgCnt = static_cast<sal_uInt16>(pBookmarkList->size());
     }
     else
     {

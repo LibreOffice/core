@@ -300,7 +300,7 @@ void ZipPackageFolder::saveContents(
     {
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry(aEntry);
-        pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
+        pTempEntry->nPathLen = static_cast<sal_Int16>( OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
         pTempEntry->nExtraLen = -1;
         pTempEntry->sPath = rPath;
 

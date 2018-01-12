@@ -126,7 +126,7 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCre
                 }
             }
             const OUString sPath = sGroup.getToken(1, GLOS_DELIM);
-            sal_uInt16 nComparePath = (sal_uInt16)sPath.toInt32();
+            sal_uInt16 nComparePath = static_cast<sal_uInt16>(sPath.toInt32());
             if(nCurrentPath == nComparePath &&
                 sGroup.getToken(0, GLOS_DELIM) == sCurBase)
                 bPathEqual = true;
@@ -277,7 +277,7 @@ OUString SwGlossaryHdl::GetGlossaryShortName(const OUString &rName)
     if(pTmp)
     {
         sal_uInt16 nIdx = pTmp->GetLongIndex( rName );
-        if( nIdx != (sal_uInt16) -1 )
+        if( nIdx != sal_uInt16(-1) )
             sReturn = pTmp->GetShortName( nIdx );
         if( !pCurGrp )
             delete pTmp;
@@ -290,7 +290,7 @@ bool SwGlossaryHdl::HasShortName(const OUString& rShortName) const
 {
     SwTextBlocks *pBlock = pCurGrp ? pCurGrp.get()
                                    : rStatGlossaries.GetGroupDoc( aCurGrp );
-    bool bRet = pBlock->GetIndex( rShortName ) != (sal_uInt16) -1;
+    bool bRet = pBlock->GetIndex( rShortName ) != sal_uInt16(-1);
     if( !pCurGrp )
         delete pBlock;
     return bRet;
@@ -319,13 +319,13 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
 
     const sal_uInt16 nSuccess = pWrtShell->MakeGlossary( *pTmp, rName, rShortName,
                             rCfg.IsSaveRelFile(), pOnlyText );
-    if(nSuccess == (sal_uInt16) -1 )
+    if(nSuccess == sal_uInt16(-1) )
     {
         ScopedVclPtrInstance<MessageDialog>(pWrtShell->GetView().GetWindow(), SwResId(STR_ERR_INSERT_GLOS), VclMessageType::Info)->Execute();
     }
     if( !pCurGrp )
         delete pTmp;
-    return nSuccess != (sal_uInt16) -1;
+    return nSuccess != sal_uInt16(-1);
 }
 
 // Delete a autotext
@@ -338,7 +338,7 @@ bool SwGlossaryHdl::DelGlossary(const OUString &rShortName)
         return false;
 
     sal_uInt16 nIdx = pGlossary->GetIndex( rShortName );
-    if( nIdx != (sal_uInt16) -1 )
+    if( nIdx != sal_uInt16(-1) )
         pGlossary->Delete( nIdx );
     if( !pCurGrp )
         delete pGlossary;
@@ -395,7 +395,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     sal_uInt16 nFound = !rCfg.IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : -1;
     // if not found then search in all groups
-    if( nFound == (sal_uInt16) -1 )
+    if( nFound == sal_uInt16(-1) )
     {
         const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
@@ -454,7 +454,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 }
                 else
                 {
-                    nFound = (sal_uInt16) -1;
+                    nFound = sal_uInt16(-1);
                     bCancel = true;
                 }
             }
@@ -462,7 +462,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
     }
 
     // not found
-    if( nFound == (sal_uInt16) -1 )
+    if( nFound == sal_uInt16(-1) )
     {
         if( !bCancel )
         {

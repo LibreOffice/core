@@ -641,7 +641,7 @@ bool lcl_GetHandlePosition( sal_Int32 &nValue, const EnhancedCustomShapeParamete
     {
         double fValue(0.0);
         if ( rParam.Value >>= fValue )
-            nValue = (sal_Int32)fValue;
+            nValue = static_cast<sal_Int32>(fValue);
     }
     else
         rParam.Value >>= nValue;

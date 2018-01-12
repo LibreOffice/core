@@ -508,7 +508,7 @@ void BrowseBox::GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumn
     {
         const Range& rRange = pColumnSel->GetRange( nRange );
         // loop has to include aRange.Max()
-        for( sal_Int32 nCol = rRange.Min(); nCol <= (sal_Int32)rRange.Max(); ++nCol )
+        for( sal_Int32 nCol = rRange.Min(); nCol <= static_cast<sal_Int32>(rRange.Max()); ++nCol )
         {
             DBG_ASSERT( nIndex < nCount,
                 "GetAllSelectedColumns - range overflow" );

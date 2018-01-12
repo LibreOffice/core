@@ -820,8 +820,8 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::startElement( const OUString& aName
 
     for (int i = 0; i < nLength; ++i)
     {
-        aAttributes[i].sName = xAttribs->getNameByIndex((short)i);
-        aAttributes[i].sValue =xAttribs->getValueByIndex((short)i);
+        aAttributes[i].sName = xAttribs->getNameByIndex(static_cast<short>(i));
+        aAttributes[i].sValue =xAttribs->getValueByIndex(static_cast<short>(i));
     }
 
     compressedStartElement(aName, aAttributes);

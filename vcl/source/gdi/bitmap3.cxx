@@ -37,8 +37,8 @@
 #include <octree.hxx>
 #include <BitmapScaleConvolution.hxx>
 
-#define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10)|((sal_uLong)(_def_cG)<<5)|(sal_uLong)(_def_cB))
-#define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255))
+#define RGB15( _def_cR, _def_cG, _def_cB )  ((static_cast<sal_uLong>(_def_cR)<<10)|(static_cast<sal_uLong>(_def_cG)<<5)|static_cast<sal_uLong>(_def_cB))
+#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
 
 #define CALC_ERRORS                                                             \
                         nTemp = p1T[nX++] >> 12;                              \
@@ -426,7 +426,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                             const sal_uLong nG = *pReadScan++;
                             const sal_uLong nR = *pReadScan++;
 
-                            *pWriteScan++ = (sal_uInt8) ( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
+                            *pWriteScan++ = static_cast<sal_uInt8>( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
                         }
                     }
                 }
@@ -446,7 +446,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                             const sal_uLong nG = *pReadScan++;
                             const sal_uLong nB = *pReadScan++;
 
-                            *pWriteScan++ = (sal_uInt8) ( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
+                            *pWriteScan++ = static_cast<sal_uInt8>( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
                         }
                     }
                 }
@@ -632,7 +632,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
             for (long nY = 0; nY < nHeight; nY++, nYTmp++)
             {
                 // first pixel in the line
-                cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex(pQLine1[0].ImplGetColor());
+                cIndex = static_cast<sal_uInt8>(aColorMap.GetBestPaletteIndex(pQLine1[0].ImplGetColor()));
                 pWriteAcc->SetPixelIndex(nY, 0, cIndex);
 
                 long nX;
@@ -704,8 +704,8 @@ bool Bitmap::ImplConvertGhosted()
 
             for( long i = 0, nCount = aNewPal.GetEntryCount(); i < nCount; i++ )
             {
-                const BitmapColor& rOld = pR->GetPaletteColor( (sal_uInt16) i );
-                aNewPal[ (sal_uInt16) i ] = BitmapColor( ( rOld.GetRed() >> 1 ) | 0x80,
+                const BitmapColor& rOld = pR->GetPaletteColor( static_cast<sal_uInt16>(i) );
+                aNewPal[ static_cast<sal_uInt16>(i) ] = BitmapColor( ( rOld.GetRed() >> 1 ) | 0x80,
                                                      ( rOld.GetGreen() >> 1 ) | 0x80,
                                                      ( rOld.GetBlue() >> 1 ) | 0x80 );
             }
@@ -868,8 +868,8 @@ bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 
     if( aSize.Width() && aSize.Height() )
     {
-        bRet = Scale( (double) rNewSize.Width() / aSize.Width(),
-                      (double) rNewSize.Height() / aSize.Height(),
+        bRet = Scale( static_cast<double>(rNewSize.Width()) / aSize.Width(),
+                      static_cast<double>(rNewSize.Height()) / aSize.Height(),
                       nScaleFlag );
     }
     else
@@ -1030,7 +1030,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
             {
                 const long nNewWidth1 = nNewWidth - 1;
                 const long nWidth1 = pReadAcc->Width() - 1;
-                const double fRevScaleX = (double) nWidth1 / nNewWidth1;
+                const double fRevScaleX = static_cast<double>(nWidth1) / nNewWidth1;
 
                 std::unique_ptr<long[]> pLutInt(new long[ nNewWidth ]);
                 std::unique_ptr<long[]> pLutFrac(new long[ nNewWidth ]);
@@ -1038,9 +1038,9 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 for( long nX = 0, nTemp = nWidth - 2; nX < nNewWidth; nX++ )
                 {
                     double fTemp = nX * fRevScaleX;
-                    pLutInt[ nX ] = MinMax( (long) fTemp, 0, nTemp );
+                    pLutInt[ nX ] = MinMax( static_cast<long>(fTemp), 0, nTemp );
                     fTemp -= pLutInt[ nX ];
-                    pLutFrac[ nX ] = (long) ( fTemp * 1024. );
+                    pLutFrac[ nX ] = static_cast<long>( fTemp * 1024. );
                 }
 
                 for( long nY = 0; nY < nHeight; nY++ )
@@ -1089,9 +1089,9 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                             long lXG1 = aCol1.GetGreen() - lXG0;
                             long lXB1 = aCol1.GetBlue() - lXB0;
 
-                            aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
-                            aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
-                            aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
+                            aCol0.SetRed( static_cast<sal_uInt8>( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
+                            aCol0.SetGreen( static_cast<sal_uInt8>( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
+                            aCol0.SetBlue( static_cast<sal_uInt8>( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
 
                             pWriteAcc->SetPixel( nY, nX, aCol0 );
                         }
@@ -1117,7 +1117,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 {
                     const long nNewHeight1 = nNewHeight - 1;
                     const long nHeight1 = pReadAcc->Height() - 1;
-                    const double fRevScaleY = (double) nHeight1 / nNewHeight1;
+                    const double fRevScaleY = static_cast<double>(nHeight1) / nNewHeight1;
 
                     std::unique_ptr<long[]> pLutInt(new long[ nNewHeight ]);
                     std::unique_ptr<long[]> pLutFrac(new long[ nNewHeight ]);
@@ -1125,9 +1125,9 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                     for( long nY = 0, nTemp = nHeight - 2; nY < nNewHeight; nY++ )
                     {
                         double fTemp = nY * fRevScaleY;
-                        pLutInt[ nY ] = MinMax( (long) fTemp, 0, nTemp );
+                        pLutInt[ nY ] = MinMax( static_cast<long>(fTemp), 0, nTemp );
                         fTemp -= pLutInt[ nY ];
-                        pLutFrac[ nY ] = (long) ( fTemp * 1024. );
+                        pLutFrac[ nY ] = static_cast<long>( fTemp * 1024. );
                     }
 
                     // after 1st step, bitmap *is* 24bit format (see above)
@@ -1162,9 +1162,9 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                                 long lXG1 = aCol1.GetGreen() - lXG0;
                                 long lXB1 = aCol1.GetBlue() - lXB0;
 
-                                aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
-                                aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
-                                aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
+                                aCol0.SetRed( static_cast<sal_uInt8>( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
+                                aCol0.SetGreen( static_cast<sal_uInt8>( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
+                                aCol0.SetBlue( static_cast<sal_uInt8>( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
 
                                 pWriteAcc->SetPixel( nY, nX, aCol0 );
                             }
@@ -1223,7 +1223,7 @@ bool Bitmap::ImplDitherMatrix()
     {
         const sal_uLong nWidth = pReadAcc->Width();
         const sal_uLong nHeight = pReadAcc->Height();
-        BitmapColor aIndex( (sal_uInt8) 0 );
+        BitmapColor aIndex( sal_uInt8(0) );
 
         if( pReadAcc->HasPalette() )
         {
@@ -1237,7 +1237,7 @@ bool Bitmap::ImplDitherMatrix()
                     const sal_uLong nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16;
                     const sal_uLong nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16;
 
-                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
+                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
                     pWriteAcc->SetPixel( nY, nX, aIndex );
                 }
             }
@@ -1254,7 +1254,7 @@ bool Bitmap::ImplDitherMatrix()
                     const sal_uLong nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16;
                     const sal_uLong nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16;
 
-                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
+                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
                     pWriteAcc->SetPixel( nY, nX, aIndex );
                 }
             }
@@ -1317,9 +1317,9 @@ bool Bitmap::ImplDitherFloyd()
                 {
                     aColor = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( 0, nZ ) );
 
-                    *pTmp++ = (long) aColor.GetBlue() << 12;
-                    *pTmp++ = (long) aColor.GetGreen() << 12;
-                    *pTmp++ = (long) aColor.GetRed() << 12;
+                    *pTmp++ = static_cast<long>(aColor.GetBlue()) << 12;
+                    *pTmp++ = static_cast<long>(aColor.GetGreen()) << 12;
+                    *pTmp++ = static_cast<long>(aColor.GetRed()) << 12;
                 }
             }
             else
@@ -1328,9 +1328,9 @@ bool Bitmap::ImplDitherFloyd()
                 {
                     aColor = pReadAcc->GetPixel( 0, nZ );
 
-                    *pTmp++ = (long) aColor.GetBlue() << 12;
-                    *pTmp++ = (long) aColor.GetGreen() << 12;
-                    *pTmp++ = (long) aColor.GetRed() << 12;
+                    *pTmp++ = static_cast<long>(aColor.GetBlue()) << 12;
+                    *pTmp++ = static_cast<long>(aColor.GetGreen()) << 12;
+                    *pTmp++ = static_cast<long>(aColor.GetRed()) << 12;
                 }
             }
 
@@ -1348,9 +1348,9 @@ bool Bitmap::ImplDitherFloyd()
                         {
                             aColor = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nZ ) );
 
-                            *pTmp++ = (long) aColor.GetBlue() << 12;
-                            *pTmp++ = (long) aColor.GetGreen() << 12;
-                            *pTmp++ = (long) aColor.GetRed() << 12;
+                            *pTmp++ = static_cast<long>(aColor.GetBlue()) << 12;
+                            *pTmp++ = static_cast<long>(aColor.GetGreen()) << 12;
+                            *pTmp++ = static_cast<long>(aColor.GetRed()) << 12;
                         }
                     }
                     else
@@ -1359,9 +1359,9 @@ bool Bitmap::ImplDitherFloyd()
                         {
                             aColor = pReadAcc->GetPixel( nY, nZ );
 
-                            *pTmp++ = (long) aColor.GetBlue() << 12;
-                            *pTmp++ = (long) aColor.GetGreen() << 12;
-                            *pTmp++ = (long) aColor.GetRed() << 12;
+                            *pTmp++ = static_cast<long>(aColor.GetBlue()) << 12;
+                            *pTmp++ = static_cast<long>(aColor.GetGreen()) << 12;
+                            *pTmp++ = static_cast<long>(aColor.GetRed()) << 12;
                         }
                     }
                 }
@@ -1512,7 +1512,7 @@ bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
 {
     bool bRet;
 
-    if( GetColorCount() <= (sal_uLong) nColorCount )
+    if( GetColorCount() <= static_cast<sal_uLong>(nColorCount) )
         bRet = true;
     else if( nColorCount )
     {
@@ -1533,7 +1533,7 @@ bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
 {
     Bitmap aNewBmp;
     ScopedReadAccess pRAcc(*this);
-    const sal_uInt16 nColCount = std::min( nColorCount, (sal_uInt16) 256 );
+    const sal_uInt16 nColCount = std::min( nColorCount, sal_uInt16(256) );
     sal_uInt16 nBitCount;
     bool bRet = false;
 
@@ -1658,9 +1658,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
                     const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetPixelIndex( nY, nX ) );
-                    pCountTable[ ( ( ( (sal_uInt32) rCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
-                                 ( ( ( (sal_uInt32) rCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) |
-                                 ( ( (sal_uInt32) rCol.GetBlue() ) >> nRightShiftBits ) ].mnCount++;
+                    pCountTable[ ( ( static_cast<sal_uInt32>(rCol.GetRed()) >> nRightShiftBits ) << nLeftShiftBits2 ) |
+                                 ( ( static_cast<sal_uInt32>(rCol.GetGreen()) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                 ( static_cast<sal_uInt32>(rCol.GetBlue()) >> nRightShiftBits ) ].mnCount++;
                 }
             }
         }
@@ -1671,9 +1671,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
                     const BitmapColor aCol( pRAcc->GetPixel( nY, nX ) );
-                    pCountTable[ ( ( ( (sal_uInt32) aCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
-                                 ( ( ( (sal_uInt32) aCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) |
-                                 ( ( (sal_uInt32) aCol.GetBlue() ) >> nRightShiftBits ) ].mnCount++;
+                    pCountTable[ ( ( static_cast<sal_uInt32>(aCol.GetRed()) >> nRightShiftBits ) << nLeftShiftBits2 ) |
+                                 ( ( static_cast<sal_uInt32>(aCol.GetGreen()) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                 ( static_cast<sal_uInt32>(aCol.GetBlue()) >> nRightShiftBits ) ].mnCount++;
                 }
             }
         }
@@ -1685,9 +1685,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         for( sal_uInt16 n = 0; n < nColCount; n++ )
         {
             const PopularColorCount& rPop = pCountTable[ n ];
-            aNewPal[ n ] = BitmapColor( (sal_uInt8) ( ( rPop.mnIndex >> nLeftShiftBits2 ) << nRightShiftBits ),
-                                        (sal_uInt8) ( ( ( rPop.mnIndex >> nLeftShiftBits1 ) & ( nColorsPerComponent - 1 ) ) << nRightShiftBits ),
-                                        (sal_uInt8) ( ( rPop.mnIndex & ( nColorsPerComponent - 1 ) ) << nRightShiftBits ) );
+            aNewPal[ n ] = BitmapColor( static_cast<sal_uInt8>( ( rPop.mnIndex >> nLeftShiftBits2 ) << nRightShiftBits ),
+                                        static_cast<sal_uInt8>( ( ( rPop.mnIndex >> nLeftShiftBits1 ) & ( nColorsPerComponent - 1 ) ) << nRightShiftBits ),
+                                        static_cast<sal_uInt8>( ( rPop.mnIndex & ( nColorsPerComponent - 1 ) ) << nRightShiftBits ) );
         }
 
         Bitmap aNewBmp( GetSizePixel(), nBitCount, &aNewPal );
@@ -1695,13 +1695,13 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 
         if( pWAcc )
         {
-            BitmapColor aDstCol( (sal_uInt8) 0 );
+            BitmapColor aDstCol( sal_uInt8(0) );
             std::unique_ptr<sal_uInt8[]> pIndexMap(new sal_uInt8[ nTotalColors ]);
 
             for( long nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
                 for( long nG = 0; nG < 256; nG += nColorOffset )
                     for( long nB = 0; nB < 256; nB += nColorOffset )
-                        pIndexMap[ nIndex++ ] = (sal_uInt8) aNewPal.GetBestIndex( BitmapColor( (sal_uInt8) nR, (sal_uInt8) nG, (sal_uInt8) nB ) );
+                        pIndexMap[ nIndex++ ] = static_cast<sal_uInt8>(aNewPal.GetBestIndex( BitmapColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) ) ));
 
             if( pRAcc->HasPalette() )
             {
@@ -1710,9 +1710,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
                         const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetPixelIndex( nY, nX ) );
-                        aDstCol.SetIndex( pIndexMap[ ( ( ( (sal_uInt32) rCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
-                                                     ( ( ( (sal_uInt32) rCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) |
-                                                     ( ( (sal_uInt32) rCol.GetBlue() ) >> nRightShiftBits ) ] );
+                        aDstCol.SetIndex( pIndexMap[ ( ( static_cast<sal_uInt32>(rCol.GetRed()) >> nRightShiftBits ) << nLeftShiftBits2 ) |
+                                                     ( ( static_cast<sal_uInt32>(rCol.GetGreen()) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                                     ( static_cast<sal_uInt32>(rCol.GetBlue()) >> nRightShiftBits ) ] );
                         pWAcc->SetPixel( nY, nX, aDstCol );
                     }
                 }
@@ -1724,9 +1724,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
                         const BitmapColor aCol( pRAcc->GetPixel( nY, nX ) );
-                        aDstCol.SetIndex( pIndexMap[ ( ( ( (sal_uInt32) aCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
-                                                     ( ( ( (sal_uInt32) aCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) |
-                                                     ( ( (sal_uInt32) aCol.GetBlue() ) >> nRightShiftBits ) ] );
+                        aDstCol.SetIndex( pIndexMap[ ( ( static_cast<sal_uInt32>(aCol.GetRed()) >> nRightShiftBits ) << nLeftShiftBits2 ) |
+                                                     ( ( static_cast<sal_uInt32>(aCol.GetGreen()) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                                     ( static_cast<sal_uInt32>(aCol.GetBlue()) >> nRightShiftBits ) ] );
                         pWAcc->SetPixel( nY, nX, aDstCol );
                     }
                 }
@@ -1859,10 +1859,10 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
     {
         if( pBuf[ RGB15( nR1, nG1, nB1 ) ] )
         {
-            aCol.SetRed( (sal_uInt8) ( nR1 << 3 ) );
-            aCol.SetGreen( (sal_uInt8) ( nG1 << 3 ) );
-            aCol.SetBlue( (sal_uInt8) ( nB1 << 3 ) );
-            rPal[ (sal_uInt16) rIndex++ ] = aCol;
+            aCol.SetRed( static_cast<sal_uInt8>( nR1 << 3 ) );
+            aCol.SetGreen( static_cast<sal_uInt8>( nG1 << 3 ) );
+            aCol.SetBlue( static_cast<sal_uInt8>( nB1 << 3 ) );
+            rPal[ static_cast<sal_uInt16>(rIndex++) ] = aCol;
         }
     }
     else
@@ -1889,10 +1889,10 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
                 }
             }
 
-            aCol.SetRed( (sal_uInt8) ( ( nRSum / nPixels ) << 3 ) );
-            aCol.SetGreen( (sal_uInt8) ( ( nGSum / nPixels ) << 3 ) );
-            aCol.SetBlue( (sal_uInt8) ( ( nBSum / nPixels ) << 3 ) );
-            rPal[ (sal_uInt16) rIndex++ ] = aCol;
+            aCol.SetRed( static_cast<sal_uInt8>( ( nRSum / nPixels ) << 3 ) );
+            aCol.SetGreen( static_cast<sal_uInt8>( ( nGSum / nPixels ) << 3 ) );
+            aCol.SetBlue( static_cast<sal_uInt8>( ( nBSum / nPixels ) << 3 ) );
+            rPal[ static_cast<sal_uInt16>(rIndex++) ] = aCol;
         }
         else
         {
@@ -2034,18 +2034,18 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             {
                 if(!msoBrightness)
                 {
-                    cMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0, 255 );
-                    cMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0, 255 );
-                    cMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0, 255 );
+                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
+                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
+                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
                 }
                 else
                 {
                     // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
                     // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
                     // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
-                    cMapR[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 );
-                    cMapG[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 );
-                    cMapB[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 );
+                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
+                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
+                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
                 }
                 if( bGamma )
                 {
@@ -2166,9 +2166,9 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess const * pR
             }
 
             BitmapColor aResultColor(
-                (sal_uInt8) MinMax( aValueRed / aSum, 0, 255 ),
-                (sal_uInt8) MinMax( aValueGreen / aSum, 0, 255 ),
-                (sal_uInt8) MinMax( aValueBlue / aSum, 0, 255 ) );
+                static_cast<sal_uInt8>(MinMax( aValueRed / aSum, 0, 255 )),
+                static_cast<sal_uInt8>(MinMax( aValueGreen / aSum, 0, 255 )),
+                static_cast<sal_uInt8>(MinMax( aValueBlue / aSum, 0, 255 )) );
 
             int nDestX = nSourceY;
             int nDestY = nSourceX;

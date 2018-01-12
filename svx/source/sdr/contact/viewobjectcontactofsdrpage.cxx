@@ -215,7 +215,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageFill::cre
     {
         const SdrPage& rPage = getPage();
 
-        const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWidth(), (double)rPage.GetHeight());
+        const basegfx::B2DRange aPageFillRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
         const basegfx::B2DPolygon aPageFillPolygon(basegfx::utils::createPolygonFromRect(aPageFillRange));
         Color aPageFillColor;
 
@@ -454,10 +454,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageGrid::cre
         const basegfx::BColor aRGBGridColor(aGridColor.getBColor());
 
         basegfx::B2DHomMatrix aGridMatrix;
-        aGridMatrix.set(0, 0, (double)(rPage.GetWidth() - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
-        aGridMatrix.set(1, 1, (double)(rPage.GetHeight() - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
-        aGridMatrix.set(0, 2, (double)rPage.GetLeftBorder());
-        aGridMatrix.set(1, 2, (double)rPage.GetUpperBorder());
+        aGridMatrix.set(0, 0, static_cast<double>(rPage.GetWidth() - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
+        aGridMatrix.set(1, 1, static_cast<double>(rPage.GetHeight() - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
+        aGridMatrix.set(0, 2, static_cast<double>(rPage.GetLeftBorder()));
+        aGridMatrix.set(1, 2, static_cast<double>(rPage.GetUpperBorder()));
 
         const Size aRaw(rView.GetGridCoarse());
         const Size aFine(rView.GetGridFine());
@@ -537,8 +537,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
-                const SdrHelpLine& rHelpLine = rHelpLineList[(sal_uInt16)a];
-                const basegfx::B2DPoint aPosition((double)rHelpLine.GetPos().X(), (double)rHelpLine.GetPos().Y());
+                const SdrHelpLine& rHelpLine = rHelpLineList[static_cast<sal_uInt16>(a)];
+                const basegfx::B2DPoint aPosition(static_cast<double>(rHelpLine.GetPos().X()), static_cast<double>(rHelpLine.GetPos().Y()));
                 const double fDiscreteDashLength(4.0);
 
                 switch(rHelpLine.GetKind())

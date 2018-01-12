@@ -2187,11 +2187,11 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
 // helpers used in ScRange::Format
 static inline bool lcl_ColAbsFlagDiffer(const ScRefFlags nFlags)
 {
-    return (bool)(nFlags & ScRefFlags::COL_ABS) != (bool)(nFlags & ScRefFlags::COL2_ABS);
+    return static_cast<bool>(nFlags & ScRefFlags::COL_ABS) != static_cast<bool>(nFlags & ScRefFlags::COL2_ABS);
 }
 static inline bool lcl_RowAbsFlagDiffer(const ScRefFlags nFlags)
 {
-    return (bool)(nFlags & ScRefFlags::ROW_ABS) != (bool)(nFlags & ScRefFlags::ROW2_ABS);
+    return static_cast<bool>(nFlags & ScRefFlags::ROW_ABS) != static_cast<bool>(nFlags & ScRefFlags::ROW2_ABS);
 }
 
 OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,

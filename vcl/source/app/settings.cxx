@@ -1829,7 +1829,7 @@ StyleSettings::SetCursorBlinkTime( sal_uInt64 nBlinkTime )
 sal_uInt64
 StyleSettings::GetCursorBlinkTime() const
 {
-    return (long) mxData->mnCursorBlinkTime;
+    return static_cast<long>(mxData->mnCursorBlinkTime);
 }
 
 void
@@ -2074,10 +2074,10 @@ void StyleSettings::Set3DColors( const Color& rColor )
         sal_uLong   nRed    = mxData->maLightColor.GetRed();
         sal_uLong   nGreen  = mxData->maLightColor.GetGreen();
         sal_uLong   nBlue   = mxData->maLightColor.GetBlue();
-        nRed   += (sal_uLong)(mxData->maShadowColor.GetRed());
-        nGreen += (sal_uLong)(mxData->maShadowColor.GetGreen());
-        nBlue  += (sal_uLong)(mxData->maShadowColor.GetBlue());
-        mxData->maCheckedColor = Color( (sal_uInt8)(nRed/2), (sal_uInt8)(nGreen/2), (sal_uInt8)(nBlue/2) );
+        nRed   += static_cast<sal_uLong>(mxData->maShadowColor.GetRed());
+        nGreen += static_cast<sal_uLong>(mxData->maShadowColor.GetGreen());
+        nBlue  += static_cast<sal_uLong>(mxData->maShadowColor.GetBlue());
+        mxData->maCheckedColor = Color( static_cast<sal_uInt8>(nRed/2), static_cast<sal_uInt8>(nGreen/2), static_cast<sal_uInt8>(nBlue/2) );
     }
     else
     {
@@ -2095,9 +2095,9 @@ void StyleSettings::SetCheckedColorSpecialCase( )
         mxData->maCheckedColor = Color( 0xCC, 0xCC, 0xCC );
     else
     {
-        sal_uInt8 nRed   = (sal_uInt8)(((sal_uInt16)mxData->maFaceColor.GetRed()   + (sal_uInt16)mxData->maLightColor.GetRed())/2);
-        sal_uInt8 nGreen = (sal_uInt8)(((sal_uInt16)mxData->maFaceColor.GetGreen() + (sal_uInt16)mxData->maLightColor.GetGreen())/2);
-        sal_uInt8 nBlue  = (sal_uInt8)(((sal_uInt16)mxData->maFaceColor.GetBlue()  + (sal_uInt16)mxData->maLightColor.GetBlue())/2);
+        sal_uInt8 nRed   = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maFaceColor.GetRed())   + static_cast<sal_uInt16>(mxData->maLightColor.GetRed()))/2);
+        sal_uInt8 nGreen = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maFaceColor.GetGreen()) + static_cast<sal_uInt16>(mxData->maLightColor.GetGreen()))/2);
+        sal_uInt8 nBlue  = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maFaceColor.GetBlue())  + static_cast<sal_uInt16>(mxData->maLightColor.GetBlue()))/2);
         mxData->maCheckedColor = Color( nRed, nGreen, nBlue );
     }
 }

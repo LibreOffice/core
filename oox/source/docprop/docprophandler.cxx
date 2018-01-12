@@ -98,25 +98,25 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
     const sal_Int32 nLen = aChars.getLength();
     if ( nLen >= 4 )
     {
-        aOslDTime.Year = (sal_Int16)aChars.copy( 0, 4 ).toInt32();
+        aOslDTime.Year = static_cast<sal_Int16>(aChars.copy( 0, 4 ).toInt32());
 
         if ( nLen >= 7 && aChars[4] == '-' )
         {
-            aOslDTime.Month = (sal_uInt16)aChars.copy( 5, 2 ).toInt32();
+            aOslDTime.Month = static_cast<sal_uInt16>(aChars.copy( 5, 2 ).toInt32());
 
             if ( nLen >= 10 && aChars[7] == '-' )
             {
-                aOslDTime.Day = (sal_uInt16)aChars.copy( 8, 2 ).toInt32();
+                aOslDTime.Day = static_cast<sal_uInt16>(aChars.copy( 8, 2 ).toInt32());
 
                 if ( nLen >= 16 && aChars[10] == 'T' && aChars[13] == ':' )
                 {
-                    aOslDTime.Hours = (sal_uInt16)aChars.copy( 11, 2 ).toInt32();
-                    aOslDTime.Minutes = (sal_uInt16)aChars.copy( 14, 2 ).toInt32();
+                    aOslDTime.Hours = static_cast<sal_uInt16>(aChars.copy( 11, 2 ).toInt32());
+                    aOslDTime.Minutes = static_cast<sal_uInt16>(aChars.copy( 14, 2 ).toInt32());
 
                     sal_Int32 nOptTime = 0;
                     if ( nLen >= 19 && aChars[16] == ':' )
                     {
-                        aOslDTime.Seconds = (sal_uInt16)aChars.copy( 17, 2 ).toInt32();
+                        aOslDTime.Seconds = static_cast<sal_uInt16>(aChars.copy( 17, 2 ).toInt32());
                         nOptTime += 3;
                         if ( nLen >= 20 && aChars[19] == '.' )
                         {
@@ -634,7 +634,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
 
                     case VT_TOKEN( i1 ):
                     case VT_TOKEN( i2 ):
-                        AddCustomProperty( uno::makeAny( (sal_Int16)aChars.toInt32() ) );
+                        AddCustomProperty( uno::makeAny( static_cast<sal_Int16>(aChars.toInt32()) ) );
                         break;
 
                     case VT_TOKEN( i4 ):

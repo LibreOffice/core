@@ -971,8 +971,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         if ( nTextId )
         {
-            pImpRec->aTextId.nTxBxS = (sal_uInt16)( nTextId >> 16 );
-            pImpRec->aTextId.nSequence = (sal_uInt16)nTextId;
+            pImpRec->aTextId.nTxBxS = static_cast<sal_uInt16>( nTextId >> 16 );
+            pImpRec->aTextId.nSequence = static_cast<sal_uInt16>(nTextId);
         }
 
         pImpRec->nDxWrapDistLeft = GetPropertyValue(
@@ -1060,7 +1060,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                  && (rObjData.nCalledByGroup < 2) )
               )
                 StoreShapeOrder( pImpRec->nShapeId,
-                                ( ( (sal_uLong)pImpRec->aTextId.nTxBxS ) << 16 )
+                                ( static_cast<sal_uLong>(pImpRec->aTextId.nTxBxS) << 16 )
                                     + pImpRec->aTextId.nSequence, pObj );
         }
         else
@@ -2793,7 +2793,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
     {
         if (!m_aFontSrcCharSets.empty())
             eSrcCharSet = m_aFontSrcCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && (size_t)m_nCharFormat < m_vColl.size() )
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && static_cast<size_t>(m_nCharFormat) < m_vColl.size() )
             eSrcCharSet = m_vColl[m_nCharFormat].GetCharSet();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(m_nAktColl) && m_nAktColl < m_vColl.size())
             eSrcCharSet = m_vColl[m_nAktColl].GetCharSet();
@@ -2817,7 +2817,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCJKCharSet()
     {
         if (!m_aFontSrcCJKCharSets.empty())
             eSrcCharSet = m_aFontSrcCJKCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && (size_t)m_nCharFormat < m_vColl.size() )
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && static_cast<size_t>(m_nCharFormat) < m_vColl.size() )
             eSrcCharSet = m_vColl[m_nCharFormat].GetCJKCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && StyleExists(m_nAktColl) && m_nAktColl < m_vColl.size())
             eSrcCharSet = m_vColl[m_nAktColl].GetCJKCharSet();
@@ -2918,7 +2918,7 @@ bool SwWW8ImplReader::LangUsesHindiNumbers(LanguageType nLang)
 {
     bool bResult = false;
 
-    switch ((sal_uInt16)nLang)
+    switch (static_cast<sal_uInt16>(nLang))
     {
         case 0x1401: // Arabic(Algeria)
         case 0x3c01: // Arabic(Bahrain)
@@ -3583,7 +3583,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x15:
             if( !m_bSpec )        // Juristenparagraph
             {
-                cp_set::iterator aItr = m_aTOXEndCps.find((WW8_CP)nPosCp);
+                cp_set::iterator aItr = m_aTOXEndCps.find(static_cast<WW8_CP>(nPosCp));
                 if (aItr == m_aTOXEndCps.end())
                     cInsert = u'\x00a7';
                 else
@@ -4117,9 +4117,9 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             if ((nCrCount++ & 0x40) == 0 && nType == MAN_MAINTEXT && l <= nTextLen)
             {
                 if (nTextLen < WW8_CP_MAX/100)
-                    m_nProgress = (sal_uInt16)(l * 100 / nTextLen);
+                    m_nProgress = static_cast<sal_uInt16>(l * 100 / nTextLen);
                 else
-                    m_nProgress = (sal_uInt16)(l / nTextLen * 100);
+                    m_nProgress = static_cast<sal_uInt16>(l / nTextLen * 100);
                 m_xProgress->Update(m_nProgress); // Update
             }
         }

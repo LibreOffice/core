@@ -269,7 +269,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     nEscAbs = static_cast<long>(m_pMF_ANSATZ->GetValue());
 
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
-    nEscRel = (long)static_cast<const SdrCaptionEscRelItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
+    nEscRel = static_cast<long>(static_cast<const SdrCaptionEscRelItem&>( rOutAttrs.Get( nWhich ) ).GetValue());
 
     //------- line length ----------
     nWhich = GetWhich( SDRATTR_CAPTIONLINELEN );

@@ -190,7 +190,7 @@ sal_uLong StorageStream::Read( void* pData, sal_uLong nSize )
     if( Validate() )
     {
         pEntry->Seek( nPos );
-        nSize = pEntry->Read( pData, (sal_Int32) nSize );
+        nSize = pEntry->Read( pData, static_cast<sal_Int32>(nSize) );
         pIo->MoveError( *this );
         nPos += nSize;
     }
@@ -204,7 +204,7 @@ sal_uLong StorageStream::Write( const void* pData, sal_uLong nSize )
     if( Validate( true ) )
     {
         pEntry->Seek( nPos );
-        nSize = pEntry->Write( pData, (sal_Int32) nSize );
+        nSize = pEntry->Write( pData, static_cast<sal_Int32>(nSize) );
         pIo->MoveError( *this );
         nPos += nSize;
     }
@@ -231,7 +231,7 @@ bool StorageStream::SetSize( sal_uLong nNewSize )
 {
     if( Validate( true ) )
     {
-        bool b = pEntry->SetSize( (sal_Int32) nNewSize );
+        bool b = pEntry->SetSize( static_cast<sal_Int32>(nNewSize) );
         pIo->MoveError( *this );
         return b;
     }

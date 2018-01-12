@@ -404,7 +404,7 @@ unsigned char * codeSnippet( unsigned char * code,
         sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
         bool bHasHiddenParam )
 {
-    sal_uInt64 nOffsetAndIndex = ( ( (sal_uInt64) nVtableOffset ) << 32 ) | ( (sal_uInt64) nFunctionIndex );
+    sal_uInt64 nOffsetAndIndex = ( static_cast<sal_uInt64>(nVtableOffset) << 32 ) | static_cast<sal_uInt64>(nFunctionIndex);
 
     if ( bHasHiddenParam )
         nOffsetAndIndex |= 0x80000000;

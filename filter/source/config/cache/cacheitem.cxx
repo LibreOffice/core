@@ -88,7 +88,7 @@ void CacheItem::validateUINames(const OUString& sActLocale)
 
 css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyValueList()
 {
-    sal_Int32 c = (sal_Int32)size();
+    sal_Int32 c = static_cast<sal_Int32>(size());
     sal_Int32 i = 0;
 
     css::uno::Sequence< css::beans::PropertyValue > lList(c);

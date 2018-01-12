@@ -231,7 +231,7 @@ void HTMLDataProvider::Import()
         return;
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
-    mpDoc->ResetClip(mpDocument, (SCTAB)0);
+    mpDoc->ResetClip(mpDocument, SCTAB(0));
     mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, mrDataSource.getURL(), mrDataSource.getID(),
             std::bind(&HTMLDataProvider::ImportFinished, this), mrDataSource.getDataTransformation());
     mxHTMLFetchThread->launch();

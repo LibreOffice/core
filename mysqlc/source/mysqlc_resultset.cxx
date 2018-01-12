@@ -380,7 +380,7 @@ sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return (sal_Int16) m_result->getInt(column);
+        return static_cast<sal_Int16>(m_result->getInt(column));
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -1043,7 +1043,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getProp
 
 void OResultSet::checkColumnIndex(sal_Int32 index)
 {
-    if (index < 1 || index > (int) fieldCount) {
+    if (index < 1 || index > static_cast<int>(fieldCount)) {
         /* static object for efficiency or thread safety is a problem ? */
         throw SQLException("index out of range", *this, rtl::OUString(), 1, Any());
     }

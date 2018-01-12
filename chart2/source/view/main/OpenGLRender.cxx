@@ -348,7 +348,7 @@ void OpenGLRender::SetSize(int width, int height)
 void OpenGLRender::SetSizePixel(int width, int height)
 {
     m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
-    m_Projection = m_Projection * glm::scale(glm::vec3((float)width / m_iWidth, -(float)height / m_iHeight, 1.0f));
+    m_Projection = m_Projection * glm::scale(glm::vec3(static_cast<float>(width) / m_iWidth, -static_cast<float>(height) / m_iHeight, 1.0f));
 
     m_View       = glm::lookAt(glm::vec3(0,m_iHeight,1),
                                glm::vec3(0,m_iHeight,0),
@@ -357,12 +357,12 @@ void OpenGLRender::SetSizePixel(int width, int height)
 
 void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha)
 {
-    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, nAlpha/255.f);
+    m_2DColor = glm::vec4(static_cast<float>(r) / 255.0f, static_cast<float>(g) / 255.0f, static_cast<float>(b) / 255.0f, nAlpha/255.f);
 }
 
 void OpenGLRender::SetLine2DWidth(int width)
 {
-    m_fLineWidth = std::max((float)width, 0.001f);
+    m_fLineWidth = std::max(static_cast<float>(width), 0.001f);
 }
 
 void OpenGLRender::SetColor(sal_uInt32 color, sal_uInt8 nAlpha)
@@ -370,7 +370,7 @@ void OpenGLRender::SetColor(sal_uInt32 color, sal_uInt8 nAlpha)
     sal_uInt8 r = (color & 0x00FF0000) >> 16;
     sal_uInt8 g = (color & 0x0000FF00) >> 8;
     sal_uInt8 b = (color & 0x000000FF);
-    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, nAlpha/ 255.f);
+    m_2DColor = glm::vec4(static_cast<float>(r) / 255.0f, static_cast<float>(g) / 255.0f, static_cast<float>(b) / 255.0f, nAlpha/ 255.f);
 }
 
 int OpenGLRender::Create2DCircle(int detail)
@@ -651,7 +651,7 @@ int OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixel
     long bmpHeight = aPixelSize.Height();
 
     TextInfo aTextInfo;
-    aTextInfo.rotation = -(double)rotation / 360.0 * 2* GL_PI;
+    aTextInfo.rotation = -static_cast<double>(rotation) / 360.0 * 2* GL_PI;
     aTextInfo.vertex[0] = -aSize.Width / 2;
     aTextInfo.vertex[1] = -aSize.Height / 2;
     aTextInfo.vertex[2] = m_fZStep;
@@ -857,28 +857,28 @@ void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, css:
     sal_uInt8 g = (color1 & 0x0000FF00) >> 8;
     sal_uInt8 b = (color1 & 0x000000FF);
 
-    m_BackgroundColor[0] = (float)r / 255.0f;
-    m_BackgroundColor[1] = (float)g / 255.0f;
-    m_BackgroundColor[2] = (float)b / 255.0f;
+    m_BackgroundColor[0] = static_cast<float>(r) / 255.0f;
+    m_BackgroundColor[1] = static_cast<float>(g) / 255.0f;
+    m_BackgroundColor[2] = static_cast<float>(b) / 255.0f;
     m_BackgroundColor[3] = fillStyle != css::drawing::FillStyle_NONE ? 1.0 : 0.0;
 
-    m_BackgroundColor[4] = (float)r / 255.0f;
-    m_BackgroundColor[5] = (float)g / 255.0f;
-    m_BackgroundColor[6] = (float)b / 255.0f;
+    m_BackgroundColor[4] = static_cast<float>(r) / 255.0f;
+    m_BackgroundColor[5] = static_cast<float>(g) / 255.0f;
+    m_BackgroundColor[6] = static_cast<float>(b) / 255.0f;
     m_BackgroundColor[7] = fillStyle != css::drawing::FillStyle_NONE ? 1.0 : 0.0;
 
     r = (color2 & 0x00FF0000) >> 16;
     g = (color2 & 0x0000FF00) >> 8;
     b = (color2 & 0x000000FF);
 
-    m_BackgroundColor[8] = (float)r / 255.0f;
-    m_BackgroundColor[9] = (float)g / 255.0f;
-    m_BackgroundColor[10] = (float)b / 255.0f;
+    m_BackgroundColor[8] = static_cast<float>(r) / 255.0f;
+    m_BackgroundColor[9] = static_cast<float>(g) / 255.0f;
+    m_BackgroundColor[10] = static_cast<float>(b) / 255.0f;
     m_BackgroundColor[11] = fillStyle != css::drawing::FillStyle_NONE ? 1.0 : 0.0;
 
-    m_BackgroundColor[12] = (float)r / 255.0f;
-    m_BackgroundColor[13] = (float)g / 255.0f;
-    m_BackgroundColor[14] = (float)b / 255.0f;
+    m_BackgroundColor[12] = static_cast<float>(r) / 255.0f;
+    m_BackgroundColor[13] = static_cast<float>(g) / 255.0f;
+    m_BackgroundColor[14] = static_cast<float>(b) / 255.0f;
     m_BackgroundColor[15] = fillStyle != css::drawing::FillStyle_NONE ? 1.0 : 0.0;
     SAL_INFO("chart2.opengl", "color1 = " << color1 << ", color2 = " << color2);
 

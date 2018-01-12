@@ -916,8 +916,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 switch( eZT )
                 {
                     case SvxZoomType::PERCENT:
-                        SetZoom( (long) static_cast<const SvxZoomItem&>( pArgs->
-                                            Get( SID_ATTR_ZOOM ) ).GetValue() );
+                        SetZoom( static_cast<long>(static_cast<const SvxZoomItem&>( pArgs->
+                                            Get( SID_ATTR_ZOOM ) ).GetValue()) );
                         break;
 
                     case SvxZoomType::OPTIMAL:
@@ -1234,8 +1234,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SdrPageView* pPV;
             Point   aMPos = GetActiveWindow()->PixelToLogic( maMousePos );
-            sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic( Size(
-                FuPoor::HITPIX, 0 ) ).Width();
+            sal_uInt16  nHitLog = static_cast<sal_uInt16>(GetActiveWindow()->PixelToLogic( Size(
+                FuPoor::HITPIX, 0 ) ).Width());
             sal_uInt16  nHelpLine;
 
             mbMousePosFreezed = false;
@@ -1404,7 +1404,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case FN_NUM_BULLET_ON:
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
-            SfxUInt16Item aItem(FN_SVX_SET_BULLET, (sal_uInt16)0xFFFF);
+            SfxUInt16Item aItem(FN_SVX_SET_BULLET, sal_uInt16(0xFFFF));
             GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_BULLET,
                     SfxCallMode::RECORD, { &aItem });
         }
@@ -1413,7 +1413,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case FN_NUM_NUMBERING_ON:
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
-            SfxUInt16Item aItem(FN_SVX_SET_NUMBER, (sal_uInt16)0xFFFF);
+            SfxUInt16Item aItem(FN_SVX_SET_NUMBER, sal_uInt16(0xFFFF));
             GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_NUMBER,
                     SfxCallMode::RECORD, { &aItem });
         }
@@ -1858,7 +1858,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if ( aPrevLayer == aName )
                 {
-                    nPrevLayer = std::max(nLayer, (sal_uInt16) 4);
+                    nPrevLayer = std::max(nLayer, sal_uInt16(4));
                 }
             }
 

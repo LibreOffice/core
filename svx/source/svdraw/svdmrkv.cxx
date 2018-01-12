@@ -1424,7 +1424,7 @@ bool SdrMarkView::MarkObj(const Point& rPnt, short nTol, bool bToggle, bool bDee
     nTol=ImpGetHitTolLogic(nTol,nullptr);
     SdrSearchOptions nOptions=SdrSearchOptions::PICKMARKABLE;
     if (bDeep) nOptions=nOptions|SdrSearchOptions::DEEP;
-    SdrObject* pObj = PickObj(rPnt, (sal_uInt16)nTol, pPV, nOptions);
+    SdrObject* pObj = PickObj(rPnt, static_cast<sal_uInt16>(nTol), pPV, nOptions);
     if (pObj) {
         bool bUnmark=bToggle && IsObjMarked(pObj);
         MarkObj(pObj,pPV,bUnmark);

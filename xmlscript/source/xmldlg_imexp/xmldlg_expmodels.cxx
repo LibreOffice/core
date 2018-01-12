@@ -569,7 +569,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
     sal_Int16 nEcho = 0;
     if (readProp( "EchoChar" ) >>= nEcho)
     {
-        sal_Unicode cEcho = (sal_Unicode)nEcho;
+        sal_Unicode cEcho = static_cast<sal_Unicode>(nEcho);
         addAttribute( XMLNS_DIALOGS_PREFIX ":echochar", OUString( &cEcho, 1 ) );
     }
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":linked-cell" );

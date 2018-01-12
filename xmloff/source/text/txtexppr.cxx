@@ -224,7 +224,7 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
     if( pFontPitchState && (pFontPitchState->maValue >>= nTmp ) )
         nPitch = static_cast< FontPitch >( nTmp );
     if( pFontCharsetState && (pFontCharsetState->maValue >>= nTmp ) )
-        eEnc = (rtl_TextEncoding)nTmp;
+        eEnc = static_cast<rtl_TextEncoding>(nTmp);
 
     //Resolves: fdo#67665 The purpose here appears to be to replace
     //FontFamilyName and FontStyleName etc with a single FontName property. The

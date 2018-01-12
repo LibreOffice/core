@@ -75,7 +75,7 @@ public:
 
 inline const BitmapPalette& Octree::GetPalette()
 {
-    aPal.SetEntryCount( (sal_uInt16) nLeafCount );
+    aPal.SetEntryCount( static_cast<sal_uInt16>(nLeafCount) );
     nPalIndex = 0;
     CreatePalette( pTree );
     return aPal;
@@ -110,9 +110,9 @@ public:
 
 inline sal_uInt16 InverseColorMap::GetBestPaletteIndex( const BitmapColor& rColor )
 {
-    return pMap[ ( ( (sal_uLong) rColor.GetRed() >> nBits ) << OCTREE_BITS_1 ) |
-                 ( ( (sal_uLong) rColor.GetGreen() >> nBits ) << OCTREE_BITS ) |
-                 ( (sal_uLong) rColor.GetBlue() >> nBits ) ];
+    return pMap[ ( ( static_cast<sal_uLong>(rColor.GetRed()) >> nBits ) << OCTREE_BITS_1 ) |
+                 ( ( static_cast<sal_uLong>(rColor.GetGreen()) >> nBits ) << OCTREE_BITS ) |
+                 ( static_cast<sal_uLong>(rColor.GetBlue()) >> nBits ) ];
 }
 
 #endif // INCLUDED_VCL_INC_OCTREE_HXX

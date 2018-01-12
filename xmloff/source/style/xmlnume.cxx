@@ -152,7 +152,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 sBulletFontStyleName = rFDesc.StyleName;
                 eBulletFontFamily = static_cast< FontFamily >( rFDesc.Family );
                 eBulletFontPitch = static_cast< FontPitch >( rFDesc.Pitch );
-                eBulletFontEncoding = (rtl_TextEncoding)rFDesc.CharSet;
+                eBulletFontEncoding = static_cast<rtl_TextEncoding>(rFDesc.CharSet);
             }
         }
         else if( rProp.Name == "GraphicURL" )
@@ -337,13 +337,13 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
         if( nStartValue != 1 )
         {
-            sTmp.append( (sal_Int32)nStartValue );
+            sTmp.append( static_cast<sal_Int32>(nStartValue) );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
                           sTmp.makeStringAndClear() );
         }
         if( nDisplayLevels > 1 && NumberingType::NUMBER_NONE != eType )
         {
-            sTmp.append( (sal_Int32)nDisplayLevels );
+            sTmp.append( static_cast<sal_Int32>(nDisplayLevels) );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_DISPLAY_LEVELS,
                           sTmp.makeStringAndClear() );
         }
@@ -556,18 +556,18 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                                                   sBulletFontStyleName );
 
                     XMLFontFamilyPropHdl aFamilyHdl;
-                    if( aFamilyHdl.exportXML( sTemp, Any((sal_Int16)eBulletFontFamily), rUnitConv  ) )
+                    if( aFamilyHdl.exportXML( sTemp, Any(static_cast<sal_Int16>(eBulletFontFamily)), rUnitConv  ) )
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_FONT_FAMILY_GENERIC,
                                                   sTemp );
 
                     XMLFontPitchPropHdl aPitchHdl;
-                    if( aPitchHdl.exportXML( sTemp, Any((sal_Int16)eBulletFontPitch), rUnitConv  ) )
+                    if( aPitchHdl.exportXML( sTemp, Any(static_cast<sal_Int16>(eBulletFontPitch)), rUnitConv  ) )
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_FONT_PITCH, sTemp );
 
                     XMLFontEncodingPropHdl aEncHdl;
-                    if( aEncHdl.exportXML( sTemp, Any((sal_Int16)eBulletFontEncoding), rUnitConv  ) )
+                    if( aEncHdl.exportXML( sTemp, Any(static_cast<sal_Int16>(eBulletFontEncoding)), rUnitConv  ) )
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_FONT_CHARSET, sTemp );
                 }

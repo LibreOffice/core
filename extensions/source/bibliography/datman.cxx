@@ -759,13 +759,13 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
         if(aPropertySet.is())
         {
             Any aVal;
-            aVal <<= (sal_Int32)ResultSetType::SCROLL_INSENSITIVE;
+            aVal <<= sal_Int32(ResultSetType::SCROLL_INSENSITIVE);
             aPropertySet->setPropertyValue("ResultSetType",aVal );
-            aVal <<= (sal_Int32)ResultSetConcurrency::READ_ONLY;
+            aVal <<= sal_Int32(ResultSetConcurrency::READ_ONLY);
             aPropertySet->setPropertyValue("ResultSetConcurrency", aVal);
 
             //Caching for Performance
-            aVal <<= (sal_Int32)50;
+            aVal <<= sal_Int32(50);
             aPropertySet->setPropertyValue("FetchSize", aVal);
 
             Reference< XConnection >    xConnection = getConnection(rDesc.sDataSource);
@@ -975,7 +975,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
             aPropertySet->setPropertyValue("Command", aVal);
             aPropertySet->setPropertyValue("CommandType", makeAny(CommandType::TABLE));
             //Caching for Performance
-            aVal <<= (sal_Int32)50;
+            aVal <<= sal_Int32(50);
             aPropertySet->setPropertyValue("FetchSize", aVal);
             OUString aString("SELECT * FROM ");
             // quote the table name which may contain catalog.schema.table
@@ -1293,7 +1293,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                 uno::Any aAny;
 
                 //uno::Reference< beans::XPropertySet >  xPropSet(xControl, UNO_QUERY);
-                aAny <<= (sal_Int16)1;
+                aAny <<= sal_Int16(1);
                 xPropSet->setPropertyValue("BoundColumn", aAny);
                 aAny <<= ListSourceType_VALUELIST;
                 xPropSet->setPropertyValue("ListSourceType", aAny);

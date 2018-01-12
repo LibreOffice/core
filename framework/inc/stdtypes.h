@@ -42,7 +42,7 @@ struct KeyEventHashCode
 {
     size_t operator()( const css::awt::KeyEvent& aEvent ) const
     {
-        return (size_t)(aEvent.KeyCode  +
+        return static_cast<size_t>(aEvent.KeyCode  +
                         //aEvent.KeyChar  +
                         //aEvent.KeyFunc  +
                         aEvent.Modifiers);

@@ -815,7 +815,7 @@ namespace pcr
         // the initial selection in the dialog
         Sequence< OUString > aNames( pEventHolder->getElementNames() );
         const OUString* pChosenEvent = std::find( aNames.begin(), aNames.end(), rForEvent.sListenerMethodName );
-        sal_uInt16 nInitialSelection = (sal_uInt16)( pChosenEvent - aNames.begin() );
+        sal_uInt16 nInitialSelection = static_cast<sal_uInt16>( pChosenEvent - aNames.begin() );
 
         // the dialog
         SvxAbstractDialogFactory* pFactory = SvxAbstractDialogFactory::Create();

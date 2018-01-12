@@ -1301,10 +1301,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 //style sheets cannot have a numbering rule attached
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
                 if (pStyleSheetPropertyMap)
-                    pStyleSheetPropertyMap->SetListLevel( (sal_Int16)nIntValue );
+                    pStyleSheetPropertyMap->SetListLevel( static_cast<sal_Int16>(nIntValue) );
             }
             else
-                rContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny( (sal_Int16)nIntValue ));
+                rContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny( static_cast<sal_Int16>(nIntValue) ));
         break;
     case NS_ooxml::LN_CT_NumPr_numId:
         {
@@ -1621,7 +1621,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         nIntValue = fDoubleValue  > 100. ?  0 : 1;
                     }
                     else if((aStyleVal >>= nStyleValue) ||
-                            (nStyleValue = (sal_Int16)comphelper::getEnumAsINT32(aStyleVal)) >= 0 )
+                            (nStyleValue = static_cast<sal_Int16>(comphelper::getEnumAsINT32(aStyleVal))) >= 0 )
                     {
                         nIntValue = 0x83a == nSprmId ?
                             nStyleValue ? 0 : 4 :
@@ -1999,7 +1999,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             uno::Reference< beans::XPropertySet > xLineNumberingPropSet = xLineNumberingProperties->getLineNumberingProperties();
             xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_IS_ON ), uno::makeAny(true) );
             if( aSettings.nInterval )
-                xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_INTERVAL ), uno::makeAny((sal_Int16)aSettings.nInterval) );
+                xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_INTERVAL ), uno::makeAny(static_cast<sal_Int16>(aSettings.nInterval)) );
             if( aSettings.nDistance )
                 xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_DISTANCE ), uno::makeAny(aSettings.nDistance) );
             xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_RESTART_AT_EACH_PAGE ), uno::makeAny(aSettings.bRestartAtEachPage) );
@@ -2074,7 +2074,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 if( pSectHdl->IsEqualWidth() )
                 {
                     pSectionContext->SetEvenlySpaced( true );
-                    pSectionContext->SetColumnCount( (sal_Int16) (pSectHdl->GetNum() - 1) );
+                    pSectionContext->SetColumnCount( static_cast<sal_Int16>(pSectHdl->GetNum() - 1) );
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
                     pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
                 }
@@ -2082,7 +2082,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 {
                     pSectionContext->SetEvenlySpaced( false );
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
-                    pSectionContext->SetColumnCount( (sal_Int16)(pSectHdl->GetColumns().size() -1));
+                    pSectionContext->SetColumnCount( static_cast<sal_Int16>(pSectHdl->GetColumns().size() -1));
                     std::vector<Column_>::const_iterator tmpIter = pSectHdl->GetColumns().begin();
                     for (; tmpIter != pSectHdl->GetColumns().end(); ++tmpIter)
                     {
@@ -2094,7 +2094,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 }
                 else if( pSectHdl->GetNum() > 0 )
                 {
-                    pSectionContext->SetColumnCount( (sal_Int16)pSectHdl->GetNum() - 1 );
+                    pSectionContext->SetColumnCount( static_cast<sal_Int16>(pSectHdl->GetNum()) - 1 );
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
                     pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
                 }

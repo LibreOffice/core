@@ -43,7 +43,7 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDev
 
         if(&rOutDev == &rDevice)
         {
-            mnWindowId = (sal_uInt16)a;
+            mnWindowId = static_cast<sal_uInt16>(a);
             break;
         }
     }
@@ -58,9 +58,9 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
 {
     ::tools::Rectangle aVisibleArea;
 
-    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
+    if(static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
     {
-        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(static_cast<sal_uInt32>(mnWindowId));
         aVisibleArea = pPaintWindow->GetVisibleArea();
     }
 
@@ -74,9 +74,9 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
 Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 {
     OSL_ASSERT (mpView != nullptr);
-    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
+    if(static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
     {
-        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(static_cast<sal_uInt32>(mnWindowId));
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
         ::tools::Rectangle aBBox(static_cast<vcl::Window&>(rOutDev).GetWindowExtentsRelative(nullptr));
         return rOutDev.LogicToPixel (rPoint) + aBBox.TopLeft();
@@ -88,9 +88,9 @@ Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 {
     OSL_ASSERT (mpView != nullptr);
-    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
+    if(static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
     {
-        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(static_cast<sal_uInt32>(mnWindowId));
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
         return rOutDev.LogicToPixel (rSize);
     }

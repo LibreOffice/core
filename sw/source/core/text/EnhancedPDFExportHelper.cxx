@@ -801,7 +801,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
 
             if ( nDefaultLang != nCurrentLanguage )
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Language, (sal_uInt16)nCurrentLanguage );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Language, static_cast<sal_uInt16>(nCurrentLanguage) );
         }
 
         if ( bLinkAttribute )
@@ -2036,7 +2036,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     continue;
 
                 // Get parent id from stack:
-                const sal_Int8 nLevel = (sal_Int8)mrSh.getIDocumentOutlineNodesAccess()->getOutlineLevel( i );
+                const sal_Int8 nLevel = static_cast<sal_Int8>(mrSh.getIDocumentOutlineNodesAccess()->getOutlineLevel( i ));
                 sal_Int8 nLevelOnTopOfStack = aOutlineStack.top().first;
                 while ( nLevelOnTopOfStack >= nLevel &&
                         nLevelOnTopOfStack != -1 )

@@ -2627,7 +2627,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     // handle bOmitDurationIfZero here, because we can precisely compare ints
     if (!(bIsDuration && (nMinutes==0)))
     {
-        ProcessDateTime(eName, (double)nMinutes / (double)(24*60),
+        ProcessDateTime(eName, static_cast<double>(nMinutes) / double(24*60),
                         bIsDate, bIsDuration);
     }
 }
@@ -3437,7 +3437,7 @@ OUString XMLTextFieldExport::MakeFootnoteRefName(
     // generate foot-/endnote ID
     OUStringBuffer aBuf;
     aBuf.append("ftn");
-    aBuf.append((sal_Int32)nSeqNo);
+    aBuf.append(static_cast<sal_Int32>(nSeqNo));
     return aBuf.makeStringAndClear();
 }
 
@@ -3449,7 +3449,7 @@ OUString XMLTextFieldExport::MakeSequenceRefName(
     OUStringBuffer aBuf;
     aBuf.append("ref");
     aBuf.append(rSeqName);
-    aBuf.append((sal_Int32)nSeqNo);
+    aBuf.append(static_cast<sal_Int32>(nSeqNo));
     return aBuf.makeStringAndClear();
 }
 

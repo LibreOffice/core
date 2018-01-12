@@ -548,7 +548,7 @@ void SAL_CALL OResultSet::updateRow(  )
         lcl_throwError(STR_TABLE_READONLY,*this);
 
     m_bRowUpdated = m_pTable->UpdateRow(*m_aInsertRow, m_aRow,m_xColsIdx);
-    *(m_aInsertRow->get())[0] = (sal_Int32)(m_aRow->get())[0]->getValue();
+    *(m_aInsertRow->get())[0] = static_cast<sal_Int32>((m_aRow->get())[0]->getValue());
 
     clearInsertRow();
 }
@@ -565,7 +565,7 @@ void SAL_CALL OResultSet::deleteRow()
     if(m_aRow->isDeleted())
         lcl_throwError(STR_ROW_ALREADY_DELETED,*this);
 
-    sal_Int32 nPos = (sal_Int32)(m_aRow->get())[0]->getValue();
+    sal_Int32 nPos = static_cast<sal_Int32>((m_aRow->get())[0]->getValue());
     m_bRowDeleted = m_pTable->DeleteRow(*m_xColumns);
     if(m_bRowDeleted && m_pFileSet.is())
     {
@@ -849,7 +849,7 @@ again:
         }
         else if (m_pFileSet.is())
         {
-            sal_uInt32 nBookmarkValue = std::abs((sal_Int32)(m_aEvaluateRow->get())[0]->getValue());
+            sal_uInt32 nBookmarkValue = std::abs(static_cast<sal_Int32>((m_aEvaluateRow->get())[0]->getValue()));
             m_pFileSet->get().push_back(nBookmarkValue);
         }
     }
@@ -933,13 +933,13 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
             // The FileCursor is outside of the valid range, if:
             // a.) m_nRowPos < 1
             // b.) a KeySet exists and m_nRowPos > m_pFileSet->size()
-            if (m_nRowPos < 0 || (m_pFileSet->isFrozen() && eCursorPosition != IResultSetHelper::BOOKMARK && m_nRowPos >= (sal_Int32)m_pFileSet->get().size() )) // && m_pFileSet->IsFrozen()
+            if (m_nRowPos < 0 || (m_pFileSet->isFrozen() && eCursorPosition != IResultSetHelper::BOOKMARK && m_nRowPos >= static_cast<sal_Int32>(m_pFileSet->get().size()) )) // && m_pFileSet->IsFrozen()
             {
                 goto Error;
             }
             else
             {
-                if (m_nRowPos < (sal_Int32)m_pFileSet->get().size())
+                if (m_nRowPos < static_cast<sal_Int32>(m_pFileSet->get().size()))
                 {
                     // Fetch via Index
                     bool bOK = ExecuteRow(IResultSetHelper::BOOKMARK,(m_pFileSet->get())[m_nRowPos],false,bRetrieveData);
@@ -967,7 +967,7 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
                     }
                     bool bOK = true;
                     // Determine the number of further Fetches
-                    while (bOK && m_nRowPos >= (sal_Int32)m_pFileSet->get().size())
+                    while (bOK && m_nRowPos >= static_cast<sal_Int32>(m_pFileSet->get().size()))
                     {
                         bOK = ExecuteRow(IResultSetHelper::NEXT,1,true, false);//bRetrieveData);
                     }
@@ -1064,7 +1064,7 @@ Error:
             case IResultSetHelper::ABSOLUTE1:
             case IResultSetHelper::RELATIVE1:
                 if (nOffset > 0)
-                    m_nRowPos = m_pFileSet.is() ? (sal_Int32)m_pFileSet->get().size() : -1;
+                    m_nRowPos = m_pFileSet.is() ? static_cast<sal_Int32>(m_pFileSet->get().size()) : -1;
                 else if (nOffset < 0)
                     m_nRowPos = -1;
                 break;
@@ -1114,7 +1114,7 @@ void OResultSet::sortRows()
     std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
     for (std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
     {
-        OSL_ENSURE((sal_Int32)m_aSelectRow->get().size() > *aOrderByIter,"Invalid Index");
+        OSL_ENSURE(static_cast<sal_Int32>(m_aSelectRow->get().size()) > *aOrderByIter,"Invalid Index");
         switch ((*(m_aSelectRow->get().begin()+*aOrderByIter))->getValue().getTypeKind())
         {
             case DataType::CHAR:

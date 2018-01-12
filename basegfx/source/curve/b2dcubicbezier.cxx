@@ -691,8 +691,8 @@ namespace basegfx
         }
 
         // look right and left for even smaller distances
-        double fStepValue(1.0 / (double)((nPointCount - 1) * 2)); // half the edge step width
-        double fPosition((double)nSmallestIndex / (double)(nPointCount - 1));
+        double fStepValue(1.0 / static_cast<double>((nPointCount - 1) * 2)); // half the edge step width
+        double fPosition(static_cast<double>(nSmallestIndex) / static_cast<double>(nPointCount - 1));
 
         while(true)
         {

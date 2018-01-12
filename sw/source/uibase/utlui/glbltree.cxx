@@ -253,7 +253,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
             nRet = rEvt.mnAction;
             std::unique_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
             int nAbsContPos = pDropEntry ?
-                                (int) GetModel()->GetAbsPos(pDropEntry):
+                                static_cast<int>(GetModel()->GetAbsPos(pDropEntry)):
                                     - 1;
             sal_uLong nEntryCount = GetEntryCount();
 
@@ -944,7 +944,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
             SfxViewFrame* pGlobFrame = m_pActiveShell->GetView().GetViewFrame();
             SwGlobalFrameListener_Impl aFrameListener(*pGlobFrame);
 
-            sal_uLong nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : (sal_uLong)-1;
+            sal_uLong nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : sal_uLong(-1);
             // Creating a new doc
             SfxStringItem aFactory(SID_NEWDOCDIRECT,
                             SwDocShell::Factory().GetFilterContainer()->GetName());
@@ -970,7 +970,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
                 {
                     pGlobFrame->ToTop();
                     // Due to the update the entries are invalid
-                    if(nEntryPos != (sal_uLong)-1)
+                    if(nEntryPos != sal_uLong(-1))
                     {
                         Update( false );
                         Display();

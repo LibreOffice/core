@@ -43,7 +43,7 @@ public:
     void  CloseSubRecord();
 };
 
-#define SDIOCOMPAT_VERSIONDONTKNOW (sal_uInt16)0xffff
+#define SDIOCOMPAT_VERSIONDONTKNOW sal_uInt16(0xffff)
 
 class SD_DLLPUBLIC SdIOCompat : public old_SdrDownCompat
 {

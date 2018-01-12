@@ -522,7 +522,7 @@ namespace vclcanvas
             else
             {
                 const int nTransPercent( (nTransparency * 100 + 128) / 255 );  // normal rounding, no truncation here
-                mpOutDev->getOutDev().DrawTransparent( aPolyPoly, (sal_uInt16)nTransPercent );
+                mpOutDev->getOutDev().DrawTransparent( aPolyPoly, static_cast<sal_uInt16>(nTransPercent) );
             }
 
             if( mp2ndOutDev )
@@ -1008,7 +1008,7 @@ namespace vclcanvas
         rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
 
         const ::tools::Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
-        const sal_uInt16 nBitCount( std::min( (sal_uInt16)24, rOutDev.GetBitCount() ) );
+        const sal_uInt16 nBitCount( std::min( sal_uInt16(24), rOutDev.GetBitCount() ) );
         const BitmapPalette* pPalette = nullptr;
 
         if( nBitCount <= 8 )
@@ -1052,10 +1052,10 @@ namespace vclcanvas
 
                         for( x=0; x<nWidth; ++x )
                         {
-                            *pScan++ = (sal_uInt8)pWriteAccess->GetBestPaletteIndex(
+                            *pScan++ = static_cast<sal_uInt8>(pWriteAccess->GetBestPaletteIndex(
                                 BitmapColor( data[ nCurrPos ],
                                              data[ nCurrPos+1 ],
-                                             data[ nCurrPos+2 ] ) );
+                                             data[ nCurrPos+2 ] ) ));
 
                             nCurrPos += 4;
                         }

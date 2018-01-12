@@ -302,7 +302,7 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
         rDevice.fTime = tools::Time::GetMonotonicTicks() - kernelTime;
 
         // Scale time to how long it would have taken to go all the way to outputSize
-        rDevice.fTime /= ((double) j / testData->outputSize);
+        rDevice.fTime /= (static_cast<double>(j) / testData->outputSize);
 
         // InterpretTail - the S/W fallback is nothing like as efficient
         // as any good openCL implementation: no SIMD, tons of branching

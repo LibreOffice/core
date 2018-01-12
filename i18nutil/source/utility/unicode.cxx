@@ -46,7 +46,7 @@ T getScriptType( const sal_Unicode ch, const L* typeList, T unknownType ) {
     }
 
     return (type < UnicodeScript_kScriptCount &&
-            ch >= UnicodeScriptType[static_cast<int>(typeList[i].from)][(int)UnicodeScriptTypeFrom]) ?
+            ch >= UnicodeScriptType[static_cast<int>(typeList[i].from)][int(UnicodeScriptTypeFrom)]) ?
             typeList[i].value : unknownType;
 }
 
@@ -74,7 +74,7 @@ unicode::getUnicodeType( const sal_Unicode ch ) {
     else c = ch;
 
     sal_Int16 address = UnicodeTypeIndex[ch >> 8];
-    return r = (sal_Int16)((address < UnicodeTypeNumberBlock) ? UnicodeTypeBlockValue[address] :
+    return r = static_cast<sal_Int16>((address < UnicodeTypeNumberBlock) ? UnicodeTypeBlockValue[address] :
         UnicodeTypeValue[((address - UnicodeTypeNumberBlock) << 8) + (ch & 0xff)]);
 }
 

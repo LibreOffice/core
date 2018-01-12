@@ -281,7 +281,7 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
             // Divide by the number
             if(nCnt > 1)
             {
-                maGlobalCenter /= (double)nCnt;
+                maGlobalCenter /= static_cast<double>(nCnt);
             }
 
             // get rotate center and transform to 3D eye coordinates
@@ -337,7 +337,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             {
                 fWAngle = NormAngle360(GetAngle(rPnt - DragStat().GetRef1()) -
                     rCandidate.mnStartAngle) - rCandidate.mnLastAngle;
-                rCandidate.mnLastAngle = (long)fWAngle + rCandidate.mnLastAngle;
+                rCandidate.mnLastAngle = static_cast<long>(fWAngle) + rCandidate.mnLastAngle;
                 fWAngle /= 100.0;
                 fHAngle = 0.0;
             }
@@ -345,10 +345,10 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             {
                 if ((maFullBound.GetWidth() == 0) || (maFullBound.GetHeight() == 0))
                     throw o3tl::divide_by_zero();
-                fWAngle = 90.0 * (double)(rPnt.X() - maLastPos.X())
-                    / (double)maFullBound.GetWidth();
-                fHAngle = 90.0 * (double)(rPnt.Y() - maLastPos.Y())
-                    / (double)maFullBound.GetHeight();
+                fWAngle = 90.0 * static_cast<double>(rPnt.X() - maLastPos.X())
+                    / static_cast<double>(maFullBound.GetWidth());
+                fHAngle = 90.0 * static_cast<double>(rPnt.Y() - maLastPos.Y())
+                    / static_cast<double>(maFullBound.GetHeight());
             }
             long nSnap = 0;
 
@@ -357,8 +357,8 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
             if(nSnap != 0)
             {
-                fWAngle = (double)(((long) fWAngle + nSnap/2) / nSnap * nSnap);
-                fHAngle = (double)(((long) fHAngle + nSnap/2) / nSnap * nSnap);
+                fWAngle = static_cast<double>((static_cast<long>(fWAngle) + nSnap/2) / nSnap * nSnap);
+                fHAngle = static_cast<double>((static_cast<long>(fHAngle) + nSnap/2) / nSnap * nSnap);
             }
 
             // to radians
@@ -508,7 +508,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                 const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
 
                 // move coor from 2d world to 3d Eye
-                basegfx::B2DPoint aGlobalMoveHead2D((double)(rPnt.X() - maLastPos.X()), (double)(rPnt.Y() - maLastPos.Y()));
+                basegfx::B2DPoint aGlobalMoveHead2D(static_cast<double>(rPnt.X() - maLastPos.X()), static_cast<double>(rPnt.Y() - maLastPos.Y()));
                 basegfx::B2DPoint aGlobalMoveTail2D(0.0, 0.0);
                 basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
 
@@ -581,9 +581,9 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                 const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mp3DObj->GetScene()->GetViewContact());
                 const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
 
-                basegfx::B2DPoint aGlobalScaleStart2D((double)(aStartPos.X()), (double)(aStartPos.Y()));
-                basegfx::B2DPoint aGlobalScaleNext2D((double)(rPnt.X()), (double)(rPnt.Y()));
-                basegfx::B2DPoint aGlobalScaleFixPos2D((double)(maScaleFixPos.X()), (double)(maScaleFixPos.Y()));
+                basegfx::B2DPoint aGlobalScaleStart2D(static_cast<double>(aStartPos.X()), static_cast<double>(aStartPos.Y()));
+                basegfx::B2DPoint aGlobalScaleNext2D(static_cast<double>(rPnt.X()), static_cast<double>(rPnt.Y()));
+                basegfx::B2DPoint aGlobalScaleFixPos2D(static_cast<double>(maScaleFixPos.X()), static_cast<double>(maScaleFixPos.Y()));
                 basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
 
                 aInverseSceneTransform.invert();

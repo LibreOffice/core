@@ -154,7 +154,7 @@ void DocumentHandler::startElement(const char *psName, const librevenge::RVNGPro
                 if (keyLength==listEncodedLength[j] && strncmp(i.key(), listEncoded[j], keyLength)==0)
                 {
                     librevenge::RVNGString decodedValue("");
-                    unescapeXML(i()->getStr().cstr(), (unsigned long) strlen(i()->getStr().cstr()), decodedValue);
+                    unescapeXML(i()->getStr().cstr(), static_cast<unsigned long>(strlen(i()->getStr().cstr())), decodedValue);
                     sValue=OUString(decodedValue.cstr(), strlen(decodedValue.cstr()), RTL_TEXTENCODING_UTF8);
                     break;
                 }

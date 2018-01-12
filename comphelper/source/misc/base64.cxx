@@ -76,20 +76,20 @@ void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const 
     {
         case 1:
         {
-            nBinaer = ((sal_uInt8)pBuffer[nStart + 0]) << 16;
+            nBinaer = static_cast<sal_uInt8>(pBuffer[nStart + 0]) << 16;
         }
         break;
         case 2:
         {
-            nBinaer = (((sal_uInt8)pBuffer[nStart + 0]) << 16) +
-                    (((sal_uInt8)pBuffer[nStart + 1]) <<  8);
+            nBinaer = (static_cast<sal_uInt8>(pBuffer[nStart + 0]) << 16) +
+                    (static_cast<sal_uInt8>(pBuffer[nStart + 1]) <<  8);
         }
         break;
         default:
         {
-            nBinaer = (((sal_uInt8)pBuffer[nStart + 0]) << 16) +
-                    (((sal_uInt8)pBuffer[nStart + 1]) <<  8) +
-                    ((sal_uInt8)pBuffer[nStart + 2]);
+            nBinaer = (static_cast<sal_uInt8>(pBuffer[nStart + 0]) << 16) +
+                    (static_cast<sal_uInt8>(pBuffer[nStart + 1]) <<  8) +
+                    static_cast<sal_uInt8>(pBuffer[nStart + 2]);
         }
         break;
     }
@@ -171,11 +171,11 @@ sal_Int32 Base64::decodeSomeChars(uno::Sequence<sal_Int8>& rOutBuffer, const OUS
                                       (aDecodeBuffer[2] << 6) +
                                        aDecodeBuffer[3];
 
-                    *pOutBuffer++  = (sal_Int8)((nOut & 0xff0000) >> 16);
+                    *pOutBuffer++  = static_cast<sal_Int8>((nOut & 0xff0000) >> 16);
                     if( nBytesGotFromDecoding > 1 )
-                        *pOutBuffer++  = (sal_Int8)((nOut & 0xff00) >> 8);
+                        *pOutBuffer++  = static_cast<sal_Int8>((nOut & 0xff00) >> 8);
                     if( nBytesGotFromDecoding > 2 )
-                        *pOutBuffer++  = (sal_Int8)(nOut & 0xff);
+                        *pOutBuffer++  = static_cast<sal_Int8>(nOut & 0xff);
                     nCharsDecoded = nInBufferPos + 1;
                     nBytesToDecode = 0;
                     nBytesGotFromDecoding = 3;

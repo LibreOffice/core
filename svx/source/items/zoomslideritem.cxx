@@ -78,7 +78,7 @@ bool SvxZoomSliderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
 
         case MID_ZOOMSLIDER_CURRENTZOOM :
             {
-                rVal <<= (sal_Int32) GetValue();
+                rVal <<= static_cast<sal_Int32>(GetValue());
             }
             break;
         case MID_ZOOMSLIDER_SNAPPINGPOINTS:
@@ -147,7 +147,7 @@ bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
 
                     if ( bAllConverted && nConvertedCount == ZOOMSLIDER_PARAMS )
                     {
-                        SetValue( (sal_uInt16)nCurrentZoom );
+                        SetValue( static_cast<sal_uInt16>(nCurrentZoom) );
                         maValues = aValues;
                         mnMinZoom = sal::static_int_cast< sal_uInt16 >( nMinZoom );
                         mnMaxZoom = sal::static_int_cast< sal_uInt16 >( nMaxZoom );
@@ -164,7 +164,7 @@ bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                 sal_Int32 nVal = 0;
                 if ( rVal >>= nVal )
                 {
-                    SetValue( (sal_uInt16)nVal );
+                    SetValue( static_cast<sal_uInt16>(nVal) );
                     return true;
                 }
                 else
@@ -187,7 +187,7 @@ bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                 sal_Int32 nVal = 0;
                 if( rVal >>= nVal )
                 {
-                    mnMinZoom = (sal_uInt16)nVal;
+                    mnMinZoom = static_cast<sal_uInt16>(nVal);
                     return true;
                 }
                 else
@@ -198,7 +198,7 @@ bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                 sal_Int32 nVal = 0;
                 if( rVal >>= nVal )
                 {
-                    mnMaxZoom = (sal_uInt16)nVal;
+                    mnMaxZoom = static_cast<sal_uInt16>(nVal);
                     return true;
                 }
                 else

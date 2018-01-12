@@ -157,7 +157,7 @@ protected:
     FileFormat* getFormat(sal_Int32 nExportType)
     {
         FileFormat* pFormat = &aFileFormats[0];
-        if (((sal_uInt32) nExportType) < SAL_N_ELEMENTS(aFileFormats))
+        if (static_cast<sal_uInt32>(nExportType) < SAL_N_ELEMENTS(aFileFormats))
             pFormat = &aFileFormats[nExportType];
         return pFormat;
     }

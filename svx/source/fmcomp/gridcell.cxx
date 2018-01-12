@@ -142,16 +142,16 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< css::bea
 {
     Clear();
 
-    m_nTypeId = (sal_Int16)nTypeId;
+    m_nTypeId = static_cast<sal_Int16>(nTypeId);
     if (xField != m_xField)
     {
         // initial setting
         m_xField = xField;
         xField->getPropertyValue(FM_PROP_FORMATKEY) >>= m_nFormatKey;
-        m_nFieldPos   = (sal_Int16)_nFieldPos;
+        m_nFieldPos   = static_cast<sal_Int16>(_nFieldPos);
         m_bReadOnly   = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISREADONLY));
         m_bAutoValue  = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT));
-        m_nFieldType  = (sal_Int16)::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
+        m_nFieldType  = static_cast<sal_Int16>(::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE)));
 
         switch (m_nFieldType)
         {
@@ -1694,7 +1694,7 @@ void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
 bool DbCheckBox::commitControl()
 {
     m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE,
-                    makeAny( (sal_Int16)( static_cast< CheckBoxControl* >( m_pWindow.get() )->GetBox().GetState() ) ) );
+                    makeAny( static_cast<sal_Int16>( static_cast< CheckBoxControl* >( m_pWindow.get() )->GetBox().GetState() ) ) );
     return true;
 }
 
@@ -1868,9 +1868,9 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     if ( !m_pWindow || !_rxModel.is() )
         return;
 
-    sal_Int32   nMin        = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) );
-    sal_Int32   nMax        = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) );
-    sal_Int32   nStep       = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) );
+    sal_Int32   nMin        = static_cast<sal_Int32>(getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) ));
+    sal_Int32   nMax        = static_cast<sal_Int32>(getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) ));
+    sal_Int32   nStep       = static_cast<sal_Int32>(getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) ));
     bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
     sal_Int16   nScale      = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
     bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
@@ -2641,7 +2641,7 @@ bool DbListBox::commitControl()
     if (static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryCount())
     {
         aSelectSeq.realloc(1);
-        *aSelectSeq.getArray() = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryPos();
+        *aSelectSeq.getArray() = static_cast<sal_Int16>(static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryPos());
     }
     aVal <<= aSelectSeq;
     m_rColumn.getModel()->setPropertyValue(FM_PROP_SELECT_SEQ, aVal);
@@ -2852,7 +2852,7 @@ bool DbFilterField::commitControl()
             aText.clear();
             if (static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryCount())
             {
-                sal_Int16 nPos = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryPos();
+                sal_Int16 nPos = static_cast<sal_Int16>(static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryPos());
                 if ( ( nPos >= 0 ) && ( nPos < m_aValueList.getLength() ) )
                     aText = m_aValueList.getConstArray()[nPos];
             }
@@ -3895,7 +3895,7 @@ short SAL_CALL FmXCheckBoxCell::getState()
     if (m_pBox)
     {
         UpdateFromColumn();
-        return (short)m_pBox->GetState();
+        return static_cast<short>(m_pBox->GetState());
     }
     return TRISTATE_INDET;
 }
@@ -4212,8 +4212,8 @@ void SAL_CALL FmXListBoxCell::selectItemsPos(const Sequence< sal_Int16 >& aPosit
 
     if (m_pBox)
     {
-        for ( sal_uInt16 n = (sal_uInt16)aPositions.getLength(); n; )
-            m_pBox->SelectEntryPos( (sal_uInt16) aPositions.getConstArray()[--n], bSelect );
+        for ( sal_uInt16 n = static_cast<sal_uInt16>(aPositions.getLength()); n; )
+            m_pBox->SelectEntryPos( static_cast<sal_uInt16>(aPositions.getConstArray()[--n]), bSelect );
     }
 }
 

@@ -388,7 +388,7 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
     // use scaling?
     if( nWidthPixel )
     {
-        const Fraction aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+        const Fraction aFrac( static_cast<long>(nWidthPixel), pVDev->LogicToPixel( aPageSize, aMM ).Width() );
 
         aMM.SetScaleX( aFrac );
 
@@ -398,7 +398,7 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
 
     if( nHeightPixel )
     {
-        const Fraction aFrac( (long) nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
+        const Fraction aFrac( static_cast<long>(nHeightPixel), pVDev->LogicToPixel( aPageSize, aMM ).Height() );
 
         if( nWidthPixel == 0 )
             aMM.SetScaleX( aFrac );
@@ -667,8 +667,8 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                         else
                             nHeightPix = aSizePix.Height();
 
-                        double fWidthDif = (double)aSizePix.Width() / nWidthPix;
-                        double fHeightDif = (double)aSizePix.Height() / nHeightPix;
+                        double fWidthDif = static_cast<double>(aSizePix.Width()) / nWidthPix;
+                        double fHeightDif = static_cast<double>(aSizePix.Height()) / nHeightPix;
 
                         if (fWidthDif > fHeightDif)
                             nHeightPix = static_cast<long>(aSizePix.Height() / fWidthDif);

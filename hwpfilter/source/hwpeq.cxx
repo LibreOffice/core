@@ -501,7 +501,7 @@ static int next_token(MzString &white, MzString &token, istream *strm)
 
   // read preceding ws
   if( IS_WS(ch) ) {
-    do white << (char) ch;
+    do white << static_cast<char>(ch);
     while( IS_WS(ch = strm->get()) );
   }
 
@@ -509,11 +509,11 @@ static int next_token(MzString &white, MzString &token, istream *strm)
       || (ch != std::istream::traits_type::eof() && rtl::isAsciiAlpha(ch)) )
   {
     if( ch == '\\' ) {
-      token << (char) ch;
+      token << static_cast<char>(ch);
       ch = strm->get();
     }
     do {
-      token << (char) ch;
+      token << static_cast<char>(ch);
       ch = strm->get();
     } while( ch != std::istream::traits_type::eof()
              && (ch & 0x80 || rtl::isAsciiAlpha(ch)) ) ;
@@ -536,19 +536,19 @@ static int next_token(MzString &white, MzString &token, istream *strm)
       token = "^";
   }
   else if( IS_BINARY(ch) ) {
-    do token << (char) ch;
+    do token << static_cast<char>(ch);
     while( IS_BINARY(ch = strm->get()) );
     strm->putback(static_cast<char>(ch));
   }
   else if( ch != std::istream::traits_type::eof() && rtl::isAsciiDigit(ch) ) {
     do {
-        token << (char) ch;
+        token << static_cast<char>(ch);
         ch = strm->get();
     } while( ch != std::istream::traits_type::eof() && rtl::isAsciiDigit(ch) );
     strm->putback(static_cast<char>(ch));
   }
   else
-    token << (char) ch;
+    token << static_cast<char>(ch);
 
   return token.length();
 }
@@ -565,7 +565,7 @@ static std::istream::int_type read_white_space(MzString& outs, istream *strm)
   else {
     std::istream::int_type ch;
     while( IS_WS(ch = strm->get()) )
-      outs << (char )ch;
+      outs << static_cast<char>(ch);
     strm->putback(static_cast<char>(ch));
     result = ch;
   }
@@ -735,7 +735,7 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
       sstr << token;
       while( (ch = strm->get()) != std::istream::traits_type::eof()
              && IS_WS(ch) )
-        sstr << (char)ch;
+        sstr << static_cast<char>(ch);
       if( ch != '{' )
         sstr << "{}";
       else {

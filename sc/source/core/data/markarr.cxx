@@ -71,14 +71,14 @@ bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
         {
             i = (nLo + nHi) / 2;
             if (i > 0)
-                nStartRow = (long) pData[i - 1].nRow;
+                nStartRow = static_cast<long>(pData[i - 1].nRow);
             else
                 nStartRow = -1;
-            long nEndRow = (long) pData[i].nRow;
-            if (nEndRow < (long) nRow)
+            long nEndRow = static_cast<long>(pData[i].nRow);
+            if (nEndRow < static_cast<long>(nRow))
                 nLo = ++i;
             else
-                if (nStartRow >= (long) nRow)
+                if (nStartRow >= static_cast<long>(nRow))
                     nHi = --i;
                 else
                     bFound = true;
@@ -88,7 +88,7 @@ bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
         bFound = false;
 
     if (bFound)
-        nIndex=(SCSIZE)i;
+        nIndex=static_cast<SCSIZE>(i);
     else
         nIndex=0;
     return bFound;

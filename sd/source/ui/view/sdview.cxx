@@ -1348,7 +1348,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                         pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
                     }
                     sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
-                    pText->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
+                    pText->SetOutlinerParaObject(pOutliner->CreateParaObject(0, static_cast<sal_uInt16>(nParaCount)));
                     pOutliner->Clear();
                 }
             }
@@ -1379,7 +1379,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                 pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
             }
             sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
-            pTextObj->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
+            pTextObj->SetOutlinerParaObject(pOutliner->CreateParaObject(0, static_cast<sal_uInt16>(nParaCount)));
             pOutliner->Clear();
         }
     }

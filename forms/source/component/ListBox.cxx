@@ -162,7 +162,7 @@ namespace frm
 
         m_nClassId = FormComponentType::LISTBOX;
         m_eListSourceType = ListSourceType_VALUELIST;
-        m_aBoundColumn <<= (sal_Int16)1;
+        m_aBoundColumn <<= sal_Int16(1);
         initValueProperty( PROPERTY_SELECT_SEQ, PROPERTY_ID_SELECT_SEQ);
 
         init();
@@ -617,7 +617,7 @@ namespace frm
         {
             SAL_WARN( "forms.component", "OListBoxModel::read : invalid (means unknown) version !");
             ValueList().swap(m_aListSourceValues);
-            m_aBoundColumn <<= (sal_Int16)0;
+            m_aBoundColumn <<= sal_Int16(0);
             clearBoundValues();
             m_eListSourceType = ListSourceType_VALUELIST;
             m_aDefaultSelectSeq.realloc(0);
@@ -1406,7 +1406,7 @@ namespace frm
         {
             sal_Int32 nSelectIndex = -1;
             OSL_VERIFY( _rExternalValue >>= nSelectIndex );
-            if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < (sal_Int32)getStringItemList().size() ) )
+            if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < static_cast<sal_Int32>(getStringItemList().size()) ) )
             {
                 aSelectIndexes.realloc( 1 );
                 aSelectIndexes[ 0 ] = static_cast< sal_Int16 >( nSelectIndex );
@@ -1474,8 +1474,8 @@ namespace frm
 
             OUString operator ()( sal_Int16 _nIndex )
             {
-                OSL_ENSURE( _nIndex < (sal_Int32)m_rList.size(), "ExtractStringFromSequence_Safe: inconsistence!" );
-                if ( _nIndex < (sal_Int32)m_rList.size() )
+                OSL_ENSURE( _nIndex < static_cast<sal_Int32>(m_rList.size()), "ExtractStringFromSequence_Safe: inconsistence!" );
+                if ( _nIndex < static_cast<sal_Int32>(m_rList.size()) )
                     return m_rList[ _nIndex ];
                 return OUString();
             }

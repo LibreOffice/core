@@ -426,7 +426,7 @@ void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nInde
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize( m_pFnt->GetTextSize_( aDrawInf ) );
-    nMaxSizeDiff = (sal_uInt16)aDrawInf.GetKanaDiff();
+    nMaxSizeDiff = static_cast<sal_uInt16>(aDrawInf.GetKanaDiff());
     nMinSize = aSize.Width();
 }
 
@@ -908,7 +908,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
     Point aTmpPos( nX, nY );
     const_cast<SwTextPaintInfo&>(rInf).SetPos( aTmpPos );
     sal_uInt16 nOldWidth = rPor.Width();
-    const_cast<SwLinePortion&>(rPor).Width( (sal_uInt16)aFontSize.Width() );
+    const_cast<SwLinePortion&>(rPor).Width( static_cast<sal_uInt16>(aFontSize.Width()) );
     rInf.DrawText( aTmp, rPor );
     const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
     const_cast<SwTextPaintInfo&>(rInf).SetFont( const_cast<SwFont*>(pOldFnt) );

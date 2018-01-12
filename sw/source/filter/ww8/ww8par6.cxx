@@ -839,7 +839,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
         aLastSection = maSegments.back();
 
     //Here
-    sal_uInt16 nLIdx = ( ( (sal_uInt16)mrReader.m_xWwFib->m_lid & 0xff ) == 0x9 ) ? 1 : 0;
+    sal_uInt16 nLIdx = ( ( static_cast<sal_uInt16>(mrReader.m_xWwFib->m_lid) & 0xff ) == 0x9 ) ? 1 : 0;
 
     //BEGIN read section values
     wwSection aNewSection(*mrReader.m_pPaM->GetPoint());
@@ -1542,7 +1542,7 @@ inline bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
 {
     SprmResult aS = pPap->HasSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
-        *pVar = (sal_Int16)SVBT16ToShort(aS.pSprm);
+        *pVar = static_cast<sal_Int16>(SVBT16ToShort(aS.pSprm));
     return aS.pSprm != nullptr;
 }
 
@@ -1550,7 +1550,7 @@ inline bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId
 {
     SprmResult aS = pStyle->HasParaSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
-        *pVar = (sal_Int16)SVBT16ToShort(aS.pSprm);
+        *pVar = static_cast<sal_Int16>(SVBT16ToShort(aS.pSprm));
     return aS.pSprm != nullptr;
 }
 
@@ -1898,7 +1898,7 @@ bToggelPos(false)
                 nLoMgn = 0;
             break;  // down
         default:
-            nYPos = rWW.nSp27 + (short)nIniFlyDy;
+            nYPos = rWW.nSp27 + static_cast<short>(nIniFlyDy);
             break;  // corrections from ini file
     }
 
@@ -1924,7 +1924,7 @@ bToggelPos(false)
             bToggelPos = true;
             break;  // outside
         default:
-            nXPos = rWW.nSp26 + (short)nIniFlyDx;
+            nXPos = rWW.nSp26 + static_cast<short>(nIniFlyDx);
             break;  // corrections from ini file
     }
 
@@ -3362,7 +3362,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
         nPos2 = 100;
     if( nPos2 < -100 )
         nPos2 = -100;
-    SvxEscapementItem aEs( (short)nPos2, 100, RES_CHRATR_ESCAPEMENT );
+    SvxEscapementItem aEs( static_cast<short>(nPos2), 100, RES_CHRATR_ESCAPEMENT );
     NewAttr( aEs );
 }
 
@@ -3914,7 +3914,7 @@ void SwWW8ImplReader::Read_CColl( sal_uInt16, const sal_uInt8* pData, short nLen
     }
 
     NewAttr( SwFormatCharFormat( static_cast<SwCharFormat*>(m_vColl[nId].m_pFormat) ) );
-    m_nCharFormat = (short) nId;
+    m_nCharFormat = static_cast<short>(nId);
 }
 
 /*
@@ -3939,7 +3939,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* pData, short n
         return;
     }
     sal_Int16 nAutoKern = SVBT16ToShort( pData );    // Kerning in Twips
-    NewAttr(SvxAutoKernItem((bool)nAutoKern, RES_CHRATR_AUTOKERN));
+    NewAttr(SvxAutoKernItem(static_cast<bool>(nAutoKern), RES_CHRATR_AUTOKERN));
 }
 
 void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, short nLen )
@@ -4235,15 +4235,15 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
 
         // as discussed with AMA, the limit is nonsensical
         if( n>200 ) n = 200;        // SW_UI maximum
-        aLSpc.SetPropLineSpace( (sal_uInt8)n );
+        aLSpc.SetPropLineSpace( static_cast<sal_uInt8>(n) );
         const SvxFontHeightItem* pH = static_cast<const SvxFontHeightItem*>(
             GetFormatAttr( RES_CHRATR_FONTSIZE ));
-        nSpaceTw = (sal_uInt16)( n * pH->GetHeight() / 100 );
+        nSpaceTw = static_cast<sal_uInt16>( n * pH->GetHeight() / 100 );
     }
     else                            // Fixed / Minimum
     {
         // for negative space, the distance is "exact", otherwise "at least"
-        nSpaceTw = (sal_uInt16)nSpace;
+        nSpaceTw = static_cast<sal_uInt16>(nSpace);
         aLSpc.SetLineHeight( nSpaceTw );
         aLSpc.SetLineSpaceRule( eLnSpc);
     }
@@ -4900,16 +4900,16 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                 GetBorderDistance( aBrcs, aInnerDist );
 
                 if (nBorder & (1 << WW8_LEFT))
-                    aBox.SetDistance( (sal_uInt16)aInnerDist.Left(), SvxBoxItemLine::LEFT );
+                    aBox.SetDistance( static_cast<sal_uInt16>(aInnerDist.Left()), SvxBoxItemLine::LEFT );
 
                 if (nBorder & (1 << WW8_TOP))
-                    aBox.SetDistance( (sal_uInt16)aInnerDist.Top(), SvxBoxItemLine::TOP );
+                    aBox.SetDistance( static_cast<sal_uInt16>(aInnerDist.Top()), SvxBoxItemLine::TOP );
 
                 if (nBorder & (1 << WW8_RIGHT))
-                    aBox.SetDistance( (sal_uInt16)aInnerDist.Right(), SvxBoxItemLine::RIGHT );
+                    aBox.SetDistance( static_cast<sal_uInt16>(aInnerDist.Right()), SvxBoxItemLine::RIGHT );
 
                 if (nBorder & (1 << WW8_BOT))
-                    aBox.SetDistance( (sal_uInt16)aInnerDist.Bottom(), SvxBoxItemLine::BOTTOM );
+                    aBox.SetDistance( static_cast<sal_uInt16>(aInnerDist.Bottom()), SvxBoxItemLine::BOTTOM );
 
                 NewAttr( aBox );
 

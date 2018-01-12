@@ -341,9 +341,9 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 
             const SfxItemSet& rSceneSet = pScene->GetMergedItemSet();
             double fCamPosZ =
-                (double)rSceneSet.Get(SDRATTR_3DSCENE_DISTANCE).GetValue();
+                static_cast<double>(rSceneSet.Get(SDRATTR_3DSCENE_DISTANCE).GetValue());
             double fCamFocal =
-                (double)rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue();
+                static_cast<double>(rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue());
 
             aCam.SetAutoAdjustProjection(false);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
@@ -352,7 +352,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             aCam.SetPosAndLookAt(aCamPos, aLookAt);
             aCam.SetFocalLength(fCamFocal / 100.0);
             aCam.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fCamPosZ), aLookAt);
-            aCam.SetDeviceWindow(tools::Rectangle(0, 0, (long)fW, (long)fH));
+            aCam.SetDeviceWindow(tools::Rectangle(0, 0, static_cast<long>(fW), static_cast<long>(fH)));
 
             // set at scene
             pScene->SetCamera(aCam);

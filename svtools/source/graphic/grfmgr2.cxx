@@ -42,7 +42,7 @@
 namespace {
 
 constexpr sal_uInt8 MAP(long cVal0, long cVal1, long nFrac) {
-    return (sal_uInt8)(((cVal0<<20)+nFrac*(cVal1-cVal0))>>20);
+    return static_cast<sal_uInt8>(((cVal0<<20)+nFrac*(cVal1-cVal0))>>20);
 }
 
 }
@@ -336,7 +336,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
     if(aBitmapWidth > 1 && aUnrotatedWidth > 1)
     {
-        fRevScaleX = (double) ( aBitmapWidth  - 1 ) / (double)( aUnrotatedWidth  - 1 );
+        fRevScaleX = static_cast<double>( aBitmapWidth  - 1 ) / static_cast<double>( aUnrotatedWidth  - 1 );
         // create horizontal mapping table
         long x;
         for( x = 0, nTmpX = aBitmapWidth - 1, nTmp = aBitmapWidth - 2 >= 0 ? aBitmapWidth -2 : 0L; x < aUnrotatedWidth; x++ )
@@ -347,7 +347,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                 fTmp = nTmpX - fTmp;
 
             pMapIX[ x ] = MinMax( fTmp, 0, nTmp );
-            pMapFX[ x ] = (long) ( ( fTmp - pMapIX[ x ] ) * 1048576.0 );
+            pMapFX[ x ] = static_cast<long>( ( fTmp - pMapIX[ x ] ) * 1048576.0 );
         }
         scaleByAveraging |= fRevScaleX > 5.0/3.0;
     }
@@ -355,7 +355,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     {
         if(aBitmapWidth == 1)
         {
-            fRevScaleX = 1.0 / (double) aUnrotatedWidth;
+            fRevScaleX = 1.0 / static_cast<double>(aUnrotatedWidth);
             for ( long x = 0; x < aUnrotatedWidth ; x++)
             {
                 pMapIX[x] = 0;
@@ -365,17 +365,17 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
         }
         else
         {
-            fRevScaleX = (double) aBitmapWidth / (double)aUnrotatedWidth;
-            fTmp = (double)aBitmapWidth / 2.0;
+            fRevScaleX = static_cast<double>(aBitmapWidth) / static_cast<double>(aUnrotatedWidth);
+            fTmp = static_cast<double>(aBitmapWidth) / 2.0;
 
-            pMapIX[ 0 ] = (long)fTmp;
-            pMapFX[ 0 ] = (long)( ( fTmp - pMapIX[ 0 ] ) * 1048576.0 );
+            pMapIX[ 0 ] = static_cast<long>(fTmp);
+            pMapFX[ 0 ] = static_cast<long>( ( fTmp - pMapIX[ 0 ] ) * 1048576.0 );
             scaleByAveraging = true;
         }
     }
     if(aBitmapHeight > 1 && aUnrotatedHeight > 1)
     {
-        fRevScaleY = (double) ( aBitmapHeight  - 1 ) / (double)( aUnrotatedHeight - 1 );
+        fRevScaleY = static_cast<double>( aBitmapHeight  - 1 ) / static_cast<double>( aUnrotatedHeight - 1 );
         // create vertical mapping table
         long y;
         for( y = 0, nTmpY = aBitmapHeight - 1, nTmp = aBitmapHeight - 2 >= 0 ? aBitmapHeight - 2 : 0L; y < aUnrotatedHeight; y++ )
@@ -386,7 +386,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                 fTmp = nTmpY - fTmp;
 
             pMapIY[ y ] = MinMax( fTmp, 0, nTmp );
-            pMapFY[ y ] = (long) ( ( fTmp - pMapIY[ y ] ) * 1048576.0 );
+            pMapFY[ y ] = static_cast<long>( ( fTmp - pMapIY[ y ] ) * 1048576.0 );
         }
         scaleByAveraging |= fRevScaleY > 5.0/3.0;
     }
@@ -394,7 +394,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     {
         if(aBitmapHeight == 1)
         {
-            fRevScaleY = 1.0 / (double)aUnrotatedHeight;
+            fRevScaleY = 1.0 / static_cast<double>(aUnrotatedHeight);
             for (long y = 0; y < aUnrotatedHeight; ++y)
             {
                 pMapIY[y] = 0;
@@ -404,11 +404,11 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
         }
         else
         {
-            fRevScaleY = (double) aBitmapHeight / (double)aUnrotatedHeight;
-            fTmp = (double)aBitmapHeight / 2.0;
+            fRevScaleY = static_cast<double>(aBitmapHeight) / static_cast<double>(aUnrotatedHeight);
+            fTmp = static_cast<double>(aBitmapHeight) / 2.0;
 
-            pMapIY[ 0 ] = (long)fTmp;
-            pMapFY[ 0 ] = (long)( ( fTmp - pMapIY[ 0 ] ) * 1048576.0 );
+            pMapIY[ 0 ] = static_cast<long>(fTmp);
+            pMapFY[ 0 ] = static_cast<long>( ( fTmp - pMapIY[ 0 ] ) * 1048576.0 );
             scaleByAveraging = true;
         }
     }
@@ -810,11 +810,11 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
                     // create new horizontal mapping table
                     for( long nX = 0; nX < aUnrotatedWidth; nX++ )
-                        pMapLX[ nX ] = FRound( (double) pMapIX[ nX ] + pMapFX[ nX ] / 1048576.0 );
+                        pMapLX[ nX ] = FRound( static_cast<double>(pMapIX[ nX ]) + pMapFX[ nX ] / 1048576.0 );
 
                     // create new vertical mapping table
                     for( long nY = 0; nY < aUnrotatedHeight; nY++ )
-                        pMapLY[ nY ] = FRound( (double) pMapIY[ nY ] + pMapFY[ nY ] / 1048576.0 );
+                        pMapLY[ nY ] = FRound( static_cast<double>(pMapIY[ nY ]) + pMapFY[ nY ] / 1048576.0 );
 
                     // do mask rotation
                     for( long nY = 0; nY < aTargetHeight; nY++ )
@@ -1102,8 +1102,8 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
     bool        bNonBitmapActionEncountered(false);
     if( aNewSize.Width() && aNewSize.Height() && rSz.Width() && rSz.Height() )
     {
-        const double fGrfWH = (double) aNewSize.Width() / aNewSize.Height();
-        const double fOutWH = (double) rSz.Width() / rSz.Height();
+        const double fGrfWH = static_cast<double>(aNewSize.Width()) / aNewSize.Height();
+        const double fOutWH = static_cast<double>(rSz.Width()) / rSz.Height();
 
         const double fScaleX = fOutWH / fGrfWH;
         const double fScaleY = 1.0;
@@ -1476,7 +1476,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
                         nNewTrans = nTrans + *pAScan;
-                        *pAScan++ = (sal_uInt8) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
+                        *pAScan++ = static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
                     }
                 }
             }
@@ -1489,7 +1489,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
                         nNewTrans = nTrans + pA->GetPixel( nY, nX ).GetIndex();
-                        aAlphaValue.SetIndex( (sal_uInt8) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
+                        aAlphaValue.SetIndex( static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
                         pA->SetPixel( nY, nX, aAlphaValue );
                     }
                 }
@@ -2095,8 +2095,8 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
     if( !(aSizePixel.Width() && aSizePixel.Height() && rDstSize.Width() && rDstSize.Height()) )
         return;
 
-    double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
-    double fDstWH = (double) rDstSize.Width() / rDstSize.Height();
+    double fSrcWH = static_cast<double>(aSizePixel.Width()) / aSizePixel.Height();
+    double fDstWH = static_cast<double>(rDstSize.Width()) / rDstSize.Height();
     double fScaleX = 1.0, fScaleY = 1.0;
 
     // always choose scaling to shrink bitmap

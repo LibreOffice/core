@@ -192,13 +192,13 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         if( lWidth < 0 )
         {
             long nTmp = ( aRect.Right() - aRect.Left() ) / -lWidth;
-            nNumber = (sal_uInt16) std::min( nTmp, (long)nNumber );
+            nNumber = static_cast<sal_uInt16>(std::min( nTmp, static_cast<long>(nNumber) ));
         }
 
         if( lHeight < 0 )
         {
             long nTmp = ( aRect.Bottom() - aRect.Top() ) / -lHeight;
-            nNumber = (sal_uInt16) std::min( nTmp, (long)nNumber );
+            nNumber = static_cast<sal_uInt16>(std::min( nTmp, static_cast<long>(nNumber) ));
         }
 
         for( sal_uInt16 i = 1; i <= nNumber; i++ )
@@ -268,9 +268,9 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             if( bColor )
             {
                 // probably room for optimizations, but may can lead to rounding errors
-                sal_uInt8 nRed = aStartColor.GetRed() + (sal_uInt8) ( ( (long) aEndColor.GetRed() - (long) aStartColor.GetRed() ) * (long) i / (long) nNumber  );
-                sal_uInt8 nGreen = aStartColor.GetGreen() + (sal_uInt8) ( ( (long) aEndColor.GetGreen() - (long) aStartColor.GetGreen() ) *  (long) i / (long) nNumber );
-                sal_uInt8 nBlue = aStartColor.GetBlue() + (sal_uInt8) ( ( (long) aEndColor.GetBlue() - (long) aStartColor.GetBlue() ) * (long) i / (long) nNumber );
+                sal_uInt8 nRed = aStartColor.GetRed() + static_cast<sal_uInt8>( ( static_cast<long>(aEndColor.GetRed()) - static_cast<long>(aStartColor.GetRed()) ) * static_cast<long>(i) / static_cast<long>(nNumber)  );
+                sal_uInt8 nGreen = aStartColor.GetGreen() + static_cast<sal_uInt8>( ( static_cast<long>(aEndColor.GetGreen()) - static_cast<long>(aStartColor.GetGreen()) ) *  static_cast<long>(i) / static_cast<long>(nNumber) );
+                sal_uInt8 nBlue = aStartColor.GetBlue() + static_cast<sal_uInt8>( ( static_cast<long>(aEndColor.GetBlue()) - static_cast<long>(aStartColor.GetBlue()) ) * static_cast<long>(i) / static_cast<long>(nNumber) );
                 Color aNewColor( nRed, nGreen, nBlue );
                 SfxItemSet aNewSet( mpViewShell->GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR>{} );
                 aNewSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );

@@ -93,7 +93,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
         if (nRow == 0)
             if (nChar < 0x80)
                 if (pDestBufPtr != pDestBufEnd)
-                    *pDestBufPtr++ = (sal_Unicode) nChar;
+                    *pDestBufPtr++ = static_cast<sal_Unicode>(nChar);
                 else
                     goto no_output;
             else if (nChar >= 0x81 && nChar <= 0xFE)
@@ -198,16 +198,16 @@ sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
                     {
                         nOffset += nLast - nFirst + 1;
                         nFirst = pBig5Hkscs2001Data[nOffset++];
-                        *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                        *pDestBufPtr++ = static_cast<sal_Unicode>(nUnicode);
                         *pDestBufPtr++
-                            = (sal_Unicode) pBig5Hkscs2001Data[
-                                                nOffset + (nChar - nFirst)];
+                            = static_cast<sal_Unicode>(pBig5Hkscs2001Data[
+                                                nOffset + (nChar - nFirst)]);
                     }
                     else
                         goto no_output;
                 else
                     if (pDestBufPtr != pDestBufEnd)
-                        *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                        *pDestBufPtr++ = static_cast<sal_Unicode>(nUnicode);
                     else
                         goto no_output;
                 nRow = 0;
@@ -316,7 +316,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
         {
             if (ImplIsHighSurrogate(nChar))
             {
-                nHighSurrogate = (sal_Unicode) nChar;
+                nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
         }

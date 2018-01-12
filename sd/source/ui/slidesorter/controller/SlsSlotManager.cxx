@@ -500,7 +500,7 @@ void SlotManager::GetAttrState (SfxItemSet& rSet)
                 rSet.Put (
                     SfxUInt16Item (
                         nSlotId,
-                        (sal_uInt16)mrSlideSorter.GetView().GetLayouter().GetColumnCount()
+                        static_cast<sal_uInt16>(mrSlideSorter.GetView().GetLayouter().GetColumnCount())
                         )
                     );
             break;
@@ -1054,7 +1054,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
                 // Create shapes for the default layout.
                 pNewPage = pDocument->GetMasterSdPage(
-                    (sal_uInt16)(nInsertionIndex+1), PageKind::Standard);
+                    static_cast<sal_uInt16>(nInsertionIndex+1), PageKind::Standard);
                 pNewPage->CreateTitleAndLayout (true,true);
             }
         }

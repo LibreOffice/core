@@ -287,7 +287,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
 
                 case 195:
                     if( nExtTab >= 0 )
-                        rContext.pLotusRoot->maAttrTable.Apply(rContext.pLotusRoot, (SCTAB)nExtTab);
+                        rContext.pLotusRoot->maAttrTable.Apply(rContext.pLotusRoot, static_cast<SCTAB>(nExtTab));
                     nExtTab++;
                     break;
                 case 197:
@@ -302,7 +302,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
         }
     }
 
-    rContext.pLotusRoot->maAttrTable.Apply(rContext.pLotusRoot, (SCTAB)nExtTab);
+    rContext.pLotusRoot->maAttrTable.Apply(rContext.pLotusRoot, static_cast<SCTAB>(nExtTab));
 
     return eRet;
 }

@@ -83,7 +83,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     arg += secondParaWidth;
     CheckSubArgumentIsNan(ss,vSubArguments,arg++);
 
-    if (vSubArguments.size() == (unsigned int)(3+(secondParaWidth-1)))
+    if (vSubArguments.size() == static_cast<unsigned int>(3+(secondParaWidth-1)))
     {
         ss << "    double tmp";
         ss << 3+(secondParaWidth-1);

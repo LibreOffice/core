@@ -1111,7 +1111,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                 //handles (2) and part of (6)
                 pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
                 sal_Int32 nCount = xParaCursor->getString().getLength();
-                pToBeSavedProperties->SetDropCapLength(nCount > 0 && nCount < 255 ? (sal_Int8)nCount : 1);
+                pToBeSavedProperties->SetDropCapLength(nCount > 0 && nCount < 255 ? static_cast<sal_Int8>(nCount) : 1);
             }
             if( rAppendContext.pLastParagraphProperties.get() )
             {
@@ -1120,10 +1120,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     //handles (4) and part of (5)
                     //create a DropCap property, add it to the property sequence of finishParagraph
                     sal_Int32 nLines = rAppendContext.pLastParagraphProperties->GetLines();
-                    aDrop.Lines = nLines > 0 && nLines < SAL_MAX_INT8 ? (sal_Int8)nLines : 2;
+                    aDrop.Lines = nLines > 0 && nLines < SAL_MAX_INT8 ? static_cast<sal_Int8>(nLines) : 2;
                     aDrop.Count = rAppendContext.pLastParagraphProperties->GetDropCapLength();
                     sal_Int32 nHSpace = rAppendContext.pLastParagraphProperties->GethSpace();
-                    aDrop.Distance  = nHSpace > 0 && nHSpace < SAL_MAX_INT16 ? (sal_Int16)nHSpace : 0;
+                    aDrop.Distance  = nHSpace > 0 && nHSpace < SAL_MAX_INT16 ? static_cast<sal_Int16>(nHSpace) : 0;
                     //completes (5)
                     if( pParaContext->IsFrameMode() )
                         pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
@@ -3357,7 +3357,7 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
         aChapterNo[0].Value <<= getPropertyName( PROP_TOKEN_CHAPTER_INFO );
         aChapterNo[1].Name = getPropertyName( PROP_CHAPTER_FORMAT );
         //todo: is ChapterFormat::Number correct?
-        aChapterNo[1].Value <<= (sal_Int16)text::ChapterFormat::NUMBER;
+        aChapterNo[1].Value <<= sal_Int16(text::ChapterFormat::NUMBER);
         pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
 
         beans::PropertyValues aChapterSeparator(2);
@@ -4405,7 +4405,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         {
                             sal_Int32 nLevel = sValue.toInt32();
                             if( !sValue.isEmpty() && nLevel >= 0 && nLevel <= 10 )
-                                xTC->setPropertyValue(getPropertyName(PROP_LEVEL), uno::makeAny( (sal_Int16)nLevel ));
+                                xTC->setPropertyValue(getPropertyName(PROP_LEVEL), uno::makeAny( static_cast<sal_Int16>(nLevel) ));
                         }
     //                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
     //                    \n Suppress page numbers

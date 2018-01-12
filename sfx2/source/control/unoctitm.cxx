@@ -816,7 +816,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 sal_uInt16 nSubId( 0 );
                 if ( eMapUnit == MapUnit::MapTwip )
                     nSubId |= CONVERT_TWIPS;
-                pItem->QueryValue( aEvent.Result, (sal_uInt8)nSubId );
+                pItem->QueryValue( aEvent.Result, static_cast<sal_uInt8>(nSubId) );
             }
 
             rListener->dispatchFinished( aEvent );
@@ -948,7 +948,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             if ( eMapUnit == MapUnit::MapTwip )
                 nSubId |= CONVERT_TWIPS;
 
-            pState->QueryValue( aState, (sal_uInt8)nSubId );
+            pState->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );
         }
         else if ( eState == SfxItemState::DONTCARE )
         {

@@ -1626,7 +1626,7 @@ bool SdrMeasureUnitItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrMeasureUnitItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetValue();
+    rVal <<= static_cast<sal_Int32>(GetValue());
     return true;
 }
 
@@ -1750,7 +1750,7 @@ SfxPoolItem* SdrGrafGamma100Item::Clone( SfxItemPool* /*pPool */) const
 
 bool SdrGrafGamma100Item::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= ((double)GetValue()) / 100.0;
+    rVal <<= static_cast<double>(GetValue()) / 100.0;
     return true;
 }
 
@@ -1760,7 +1760,7 @@ bool SdrGrafGamma100Item::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
     if(!(rVal >>= nGamma))
         return false;
 
-    SetValue( (sal_uInt32)(nGamma * 100.0  ) );
+    SetValue( static_cast<sal_uInt32>(nGamma * 100.0  ) );
     return true;
 }
 

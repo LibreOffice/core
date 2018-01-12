@@ -528,7 +528,7 @@ sal_uInt16 PostItField_::GetPageNo(
         sal_uInt16 nPgNo = pFrame->GetPhyPageNum();
         if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ))
         {
-            rLineNo = (sal_uInt16)(pFrame->GetLineCount( nPos ) +
+            rLineNo = static_cast<sal_uInt16>(pFrame->GetLineCount( nPos ) +
                       pFrame->GetAllLines() - pFrame->GetThisLines());
             rVirtPgNo = pFrame->GetVirtPageNum();
             return nPgNo;

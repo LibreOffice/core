@@ -325,7 +325,7 @@ protected:
     virtual bool SaveModified() override;
     virtual bool IsModified() const override;
 
-    virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1) override;
+    virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = sal_uInt16(-1)) override;
     void RemoveColumn(sal_uInt16 nId);
     DbGridColumn* CreateColumn(sal_uInt16 nId) const;
     virtual void ColumnMoved(sal_uInt16 nId) override;
@@ -418,7 +418,7 @@ public:
 
     // the number of columns in the model
     sal_uInt16 GetViewColCount() const { return ColCount() - 1; }
-    sal_uInt16 GetModelColCount() const { return (sal_uInt16)m_aColumns.size(); }
+    sal_uInt16 GetModelColCount() const { return static_cast<sal_uInt16>(m_aColumns.size()); }
     // reverse to GetViewColumnPos: Id of position, the first non-handle column has position 0
     sal_uInt16 GetColumnIdFromViewPos( sal_uInt16 nPos ) const { return GetColumnId(nPos + 1); }
     sal_uInt16 GetColumnIdFromModelPos( sal_uInt16 nPos ) const;

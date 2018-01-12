@@ -174,15 +174,15 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
             // move into the direction of the center, as a basic position for the rotation
             pC1->Y()-=y0;
             // resize, account for the distance from the center
-            pC1->Y()=svx::Round(((double)pC1->Y()) /rRad.X()*(cx-pC1->X()));
+            pC1->Y()=svx::Round(static_cast<double>(pC1->Y()) /rRad.X()*(cx-pC1->X()));
             pC1->Y()+=cy;
         } else {
             // move into the direction of the center, as a basic position for the rotation
             pC1->X()-=x0;
             // resize, account for the distance from the center
             long nPntRad=cy-pC1->Y();
-            double nFact=(double)nPntRad/(double)rRad.Y();
-            pC1->X()=svx::Round((double)pC1->X()*nFact);
+            double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
+            pC1->X()=svx::Round(static_cast<double>(pC1->X())*nFact);
             pC1->X()+=cx;
         }
         RotatePoint(*pC1,rCenter,sn,cs);
@@ -192,15 +192,15 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
             // move into the direction of the center, as a basic position for the rotation
             pC2->Y()-=y0;
             // resize, account for the distance from the center
-            pC2->Y()=svx::Round(((double)pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X()));
+            pC2->Y()=svx::Round(static_cast<double>(pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X()));
             pC2->Y()+=cy;
         } else {
             // move into the direction of the center, as a basic position for the rotation
             pC2->X()-=x0;
             // resize, account for the distance from the center
             long nPntRad=rCenter.Y()-pC2->Y();
-            double nFact=(double)nPntRad/(double)rRad.Y();
-            pC2->X()=svx::Round((double)pC2->X()*nFact);
+            double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
+            pC2->X()=svx::Round(static_cast<double>(pC2->X())*nFact);
             pC2->X()+=cx;
         }
         RotatePoint(*pC2,rCenter,sn,cs);
@@ -277,7 +277,7 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
         long nBtm=rRefRect.Bottom();
         long nHgt=nBtm-nTop;
         long dy=rPnt.Y()-y0;
-        double a=((double)(y0-nTop))/nHgt;
+        double a=static_cast<double>(y0-nTop)/nHgt;
         a*=dy;
         rPnt.Y()=y0+svx::Round(a);
     } return 0.0;
@@ -388,7 +388,7 @@ long GetAngle(const Point& rPnt)
         if (rPnt.Y()>0) a=-9000;
         else a=9000;
     } else {
-        a=svx::Round(atan2((double)-rPnt.Y(),(double)rPnt.X())/nPi180);
+        a=svx::Round(atan2(static_cast<double>(-rPnt.Y()),static_cast<double>(rPnt.X()))/nPi180);
     }
     return a;
 }
@@ -425,7 +425,7 @@ long GetLen(const Point& rPnt)
         x*=x;
         y*=y;
         x+=y;
-        x=svx::Round(sqrt((double)x));
+        x=svx::Round(sqrt(static_cast<double>(x)));
         return x;
     } else {
         double nx=x;

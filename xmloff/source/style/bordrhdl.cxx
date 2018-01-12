@@ -211,7 +211,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
                  rUnitConverter.convertMeasureToCore( nTemp, aToken, 0,
                                                  USHRT_MAX ) )
         {
-            nWidth = (sal_uInt16)nTemp;
+            nWidth = static_cast<sal_uInt16>(nTemp);
             bHasWidth = true;
         }
         else

@@ -530,7 +530,7 @@ bool ZipPackageStream::saveChild(
     ZipEntry* pTempEntry = pAutoTempEntry.get();
 
     pTempEntry->sPath = rPath;
-    pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
+    pTempEntry->nPathLen = static_cast<sal_Int16>( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
 
     const bool bToBeEncrypted = m_bToBeEncrypted && (rEncryptionKey.getLength() || m_bHaveOwnKey);
     const bool bToBeCompressed = bToBeEncrypted || m_bToBeCompressed;

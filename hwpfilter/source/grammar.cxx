@@ -60,7 +60,7 @@ int debug(const char *format, ...);
 #define YYFLAG      -32768
 #define YYNTBASE    43
 
-#define YYTRANSLATE(x) ((unsigned)(x) <= 285 ? yytranslate[x] : 66)
+#define YYTRANSLATE(x) (static_cast<unsigned>(x) <= 285 ? yytranslate[x] : 66)
 
 static const char yytranslate[] = {     0,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,

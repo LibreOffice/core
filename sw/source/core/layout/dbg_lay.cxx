@@ -370,14 +370,14 @@ void SwImplProtocol::CheckLine( OString& rLine )
                         }
                         break;
                 case 4: {
-                            sal_uInt8 nNew = (sal_uInt8)nVal;
+                            sal_uInt8 nNew = static_cast<sal_uInt8>(nVal);
                             if( bNo )
                                 nTestMode &= ~nNew; // reset test mode
                             else
                                 nTestMode |= nNew;      // set test mode
                         }
                         break;
-                case 5: nMaxLines = (sal_uInt16)nVal;
+                case 5: nMaxLines = static_cast<sal_uInt16>(nVal);
                         break;
                 case 6: aVars.push_back( nVal );
                         break;
