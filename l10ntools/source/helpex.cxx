@@ -89,7 +89,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 while( !aInput.eof() )
                 {
                     // coverity[tainted_data] - this is a build time tool
-                    const OString sXhpFile( sTemp.data(), (sal_Int32)sTemp.length() );
+                    const OString sXhpFile( sTemp.data(), static_cast<sal_Int32>(sTemp.length()) );
                     HelpParser aParser( sXhpFile );
                     const OString sOutput(
                         aArgs.m_sOutputFile +

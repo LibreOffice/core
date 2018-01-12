@@ -199,7 +199,7 @@ MergeDataFile::MergeDataFile(
         const OString sFileName( lcl_NormalizeFilename(rFile) );
         const bool bReadAll = sFileName.isEmpty();
         // coverity[tainted_data] - this is a build time tool
-        const OString sPoFileName(sPoFile.data(), (sal_Int32)sPoFile.length());
+        const OString sPoFileName(sPoFile.data(), static_cast<sal_Int32>(sPoFile.length()));
         PoIfstream aPoInput;
         aPoInput.open( sPoFileName );
         if ( !aPoInput.isOpen() )
