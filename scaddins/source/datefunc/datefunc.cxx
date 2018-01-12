@@ -384,7 +384,7 @@ sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 
 sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
-    sal_Int32 nDays = ((sal_Int32)nYear-1) * 365;
+    sal_Int32 nDays = (static_cast<sal_Int32>(nYear)-1) * 365;
     nDays += ((nYear-1) / 4) - ((nYear-1) / 100) + ((nYear-1) / 400);
 
     for( sal_uInt16 i = 1; i < nMonth; i++ )
@@ -418,8 +418,8 @@ void DaysToDate( sal_Int32 nDays,
     do
     {
         nTempDays = nDays;
-        rYear = (sal_uInt16)((nTempDays / 365) - i);
-        nTempDays -= ((sal_Int32) rYear -1) * 365;
+        rYear = static_cast<sal_uInt16>((nTempDays / 365) - i);
+        nTempDays -= (static_cast<sal_Int32>(rYear) -1) * 365;
         nTempDays -= (( rYear -1) / 4) - (( rYear -1) / 100) + ((rYear -1) / 400);
         bCalc = false;
         if ( nTempDays < 1 )
@@ -447,7 +447,7 @@ void DaysToDate( sal_Int32 nDays,
         nTempDays -= DaysInMonth( rMonth, rYear );
         rMonth++;
     }
-    rDay = (sal_uInt16)nTempDays;
+    rDay = static_cast<sal_uInt16>(nTempDays);
 }
 
 /**
@@ -659,7 +659,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
     sal_uInt16 nDay, nMonth, nYear;
     DaysToDate(nDays,nDay,nMonth,nYear);
 
-    return (sal_Int32)IsLeapYear(nYear);
+    return static_cast<sal_Int32>(IsLeapYear(nYear));
 }
 
 /**
