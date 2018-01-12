@@ -87,7 +87,8 @@
 
 
 LwpFrib::LwpFrib(LwpPara* pPara)
-    : m_pPara(pPara)
+    : m_pFribMap(nullptr)
+    , m_pPara(pPara)
     , m_pNext(nullptr)
     , m_nFribType(0)
     , m_pModifiers(nullptr)
@@ -100,6 +101,7 @@ LwpFrib::LwpFrib(LwpPara* pPara)
 
 LwpFrib::~LwpFrib()
 {
+    Deregister();
 }
 
 LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag,sal_uInt8 editID)
@@ -445,6 +447,20 @@ XFColor LwpFrib::GetHighlightColor()
 {
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
     return pGlobal->GetHighlightColor(m_nEditor);
+}
+
+void LwpFrib::Register(std::map<LwpFrib*,OUString>* pFribMap)
+{
+    m_pFribMap = pFribMap;
+}
+
+void LwpFrib::Deregister()
+{
+    if (m_pFribMap)
+    {
+        m_pFribMap->erase(this);
+        m_pFribMap = nullptr;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

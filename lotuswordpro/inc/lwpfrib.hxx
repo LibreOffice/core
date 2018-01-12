@@ -97,6 +97,7 @@ public:
     OUString GetEditor();
     XFColor GetHighlightColor();
 protected:
+    std::map<LwpFrib*,OUString>* m_pFribMap;
     LwpPara* m_pPara;
     LwpFrib* m_pNext;
     sal_uInt8 m_nFribType;
@@ -119,6 +120,9 @@ public:
         REV_INSERT =0,
         REV_DELETE = 1,
     };
+
+    void Register(std::map<LwpFrib*,OUString>* pFribMap);
+    void Deregister();
 private:
     static void ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo);
 protected:
