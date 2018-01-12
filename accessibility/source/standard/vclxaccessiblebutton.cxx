@@ -258,7 +258,7 @@ Any VCLXAccessibleButton::getCurrentValue(  )
 
     VclPtr< PushButton > pButton = GetAs< PushButton >();
     if ( pButton )
-        aValue <<= (sal_Int32) pButton->IsPressed();
+        aValue <<= static_cast<sal_Int32>(pButton->IsPressed());
 
     return aValue;
 }
@@ -294,7 +294,7 @@ Any VCLXAccessibleButton::getMaximumValue(  )
     OExternalLockGuard aGuard( this );
 
     Any aValue;
-    aValue <<= (sal_Int32) 1;
+    aValue <<= sal_Int32(1);
 
     return aValue;
 }
@@ -305,7 +305,7 @@ Any VCLXAccessibleButton::getMinimumValue(  )
     OExternalLockGuard aGuard( this );
 
     Any aValue;
-    aValue <<= (sal_Int32) 0;
+    aValue <<= sal_Int32(0);
 
     return aValue;
 }

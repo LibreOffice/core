@@ -58,7 +58,7 @@ AccessibleGridControlTable::getAccessibleChild( sal_Int32 nChildIndex )
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
     sal_Int32 nCount = getAccessibleChildCount();
-    if(m_pAccessCellVector.empty() || m_pAccessCellVector.size() != (unsigned)nCount)
+    if(m_pAccessCellVector.empty() || m_pAccessCellVector.size() != static_cast<unsigned>(nCount))
     {
         m_pAccessCellVector.resize(nCount);
         m_pCellVector.resize(nCount);
@@ -125,7 +125,7 @@ OUString SAL_CALL AccessibleGridControlTable::getAccessibleColumnDescription( sa
 
     ensureIsAlive();
     ensureIsValidColumn( nColumn );
-    return m_aTable.GetColumnDescription( (sal_uInt16)nColumn );
+    return m_aTable.GetColumnDescription( static_cast<sal_uInt16>(nColumn) );
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlTable::getAccessibleRowHeaders()
@@ -198,7 +198,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTable::getAccessibleCellA
     ensureIsValidAddress( nRow, nColumn );
     sal_Int32 nCount = getAccessibleChildCount();
     sal_Int32 nChildIndex = nRow*m_aTable.GetColumnCount() + nColumn;
-    if(m_pAccessCellVector.empty() || m_pAccessCellVector.size() != (unsigned)nCount)
+    if(m_pAccessCellVector.empty() || m_pAccessCellVector.size() != static_cast<unsigned>(nCount))
     {
         m_pAccessCellVector.resize(nCount);
         m_pCellVector.resize(nCount);

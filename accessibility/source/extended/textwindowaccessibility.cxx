@@ -957,14 +957,14 @@ Document::retrieveCharacterAttributes(
     //character height
     aAttribs[i].Name = "CharHeight";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= (sal_Int16)aFont.GetFontHeight();
+    aAttribs[i].Value <<= static_cast<sal_Int16>(aFont.GetFontHeight());
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character posture
     aAttribs[i].Name = "CharPosture";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= (sal_Int16)aFont.GetItalic();
+    aAttribs[i].Value <<= static_cast<sal_Int16>(aFont.GetItalic());
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
@@ -980,21 +980,21 @@ Document::retrieveCharacterAttributes(
     //character strikeout
     aAttribs[i].Name = "CharStrikeout";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= (sal_Int16)aFont.GetStrikeout();
+    aAttribs[i].Value <<= static_cast<sal_Int16>(aFont.GetStrikeout());
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character underline
     aAttribs[i].Name = "CharUnderline";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= (sal_Int16)aFont.GetUnderline();
+    aAttribs[i].Value <<= static_cast<sal_Int16>(aFont.GetUnderline());
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character weight
     aAttribs[i].Name = "CharWeight";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= (float)aFont.GetWeight();
+    aAttribs[i].Value <<= static_cast<float>(aFont.GetWeight());
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 

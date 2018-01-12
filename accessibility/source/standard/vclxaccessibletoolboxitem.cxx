@@ -684,10 +684,10 @@ Any VCLXAccessibleToolBoxItem::getCurrentValue(  )
 
     Any aValue;
     if ( m_pToolBox )
-        aValue <<= (sal_Int32)m_pToolBox->IsItemChecked( m_nItemId );
+        aValue <<= static_cast<sal_Int32>(m_pToolBox->IsItemChecked( m_nItemId ));
 
     if( m_nRole == AccessibleRole::PANEL )
-        aValue <<= (sal_Int32)0;
+        aValue <<= sal_Int32(0);
     return aValue;
 }
 
@@ -716,12 +716,12 @@ sal_Bool VCLXAccessibleToolBoxItem::setCurrentValue( const Any& aNumber )
 
 Any VCLXAccessibleToolBoxItem::getMaximumValue(  )
 {
-    return Any((sal_Int32)1);
+    return Any(sal_Int32(1));
 }
 
 Any VCLXAccessibleToolBoxItem::getMinimumValue(  )
 {
-    return Any((sal_Int32)0);
+    return Any(sal_Int32(0));
 }
 
 

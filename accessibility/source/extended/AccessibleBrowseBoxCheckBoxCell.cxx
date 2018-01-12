@@ -99,9 +99,9 @@ namespace accessibility
         Any aValue;
 
         if ( m_bIsTriState )
-            aValue <<= (sal_Int32) 2;
+            aValue <<= sal_Int32(2);
         else
-            aValue <<= (sal_Int32) 1;
+            aValue <<= sal_Int32(1);
 
         return aValue;
     }
@@ -109,7 +109,7 @@ namespace accessibility
     Any SAL_CALL AccessibleCheckBoxCell::getMinimumValue(  )
     {
         Any aValue;
-        aValue <<= (sal_Int32) 0;
+        aValue <<= sal_Int32(0);
 
         return aValue;
     }

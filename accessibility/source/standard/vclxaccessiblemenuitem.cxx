@@ -508,9 +508,9 @@ Any VCLXAccessibleMenuItem::getCurrentValue(  )
 
     Any aValue;
     if ( IsSelected() )
-        aValue <<= (sal_Int32) 1;
+        aValue <<= sal_Int32(1);
     else
-        aValue <<= (sal_Int32) 0;
+        aValue <<= sal_Int32(0);
 
     return aValue;
 }
@@ -542,7 +542,7 @@ sal_Bool VCLXAccessibleMenuItem::setCurrentValue( const Any& aNumber )
 Any VCLXAccessibleMenuItem::getMaximumValue(  )
 {
     Any aValue;
-    aValue <<= (sal_Int32) 1;
+    aValue <<= sal_Int32(1);
 
     return aValue;
 }
@@ -551,7 +551,7 @@ Any VCLXAccessibleMenuItem::getMaximumValue(  )
 Any VCLXAccessibleMenuItem::getMinimumValue(  )
 {
     Any aValue;
-    aValue <<= (sal_Int32) 0;
+    aValue <<= sal_Int32(0);
 
     return aValue;
 }
