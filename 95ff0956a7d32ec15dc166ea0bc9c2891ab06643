@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_ec2f51f4",
+        "filename": "sw/qa/uitest/writer_tests/insertFormattingMark.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:20:16Z",
+      "side": 1,
+      "message": "One empty line seems to be enough",
+      "revId": "95ff0956a7d32ec15dc166ea0bc9c2891ab06643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
