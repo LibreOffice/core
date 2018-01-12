@@ -45,7 +45,7 @@ namespace chelp {
         {
             if( m_ptr )
             {
-                sal_Int32 sizeOfFile = ( sal_Int32 ) m_ptr[0];
+                sal_Int32 sizeOfFile = static_cast<sal_Int32>(m_ptr[0]);
                 OUString Hash( m_ptr+1,sizeOfFile,RTL_TEXTENCODING_UTF8 );
                 sal_Int32 idx;
                 if( ( idx = Hash.indexOf( u'#' ) ) != -1 )
@@ -60,7 +60,7 @@ namespace chelp {
             if( ! m_ptr )
                 return OUString();
 
-            sal_Int32 sizeOfFile = ( sal_Int32 ) m_ptr[0];
+            sal_Int32 sizeOfFile = static_cast<sal_Int32>(m_ptr[0]);
             OUString File( m_ptr+1,sizeOfFile,RTL_TEXTENCODING_UTF8 );
             sal_Int32 idx;
             if( ( idx = File.indexOf( u'#' ) ) != -1 )
@@ -75,8 +75,8 @@ namespace chelp {
             if( ! m_ptr )
                 return OUString();
 
-            sal_Int32 sizeOfDatabase = ( int ) m_ptr[ 1+ ( sal_Int32 ) m_ptr[0] ];
-            return OUString( m_ptr + 2 + ( sal_Int32 ) m_ptr[0],sizeOfDatabase,RTL_TEXTENCODING_UTF8 );
+            sal_Int32 sizeOfDatabase = static_cast<int>(m_ptr[ 1+ static_cast<sal_Int32>(m_ptr[0]) ]);
+            return OUString( m_ptr + 2 + static_cast<sal_Int32>(m_ptr[0]),sizeOfDatabase,RTL_TEXTENCODING_UTF8 );
         }
 
 
@@ -91,7 +91,7 @@ namespace chelp {
             //than 127 defaults to a negative value, casting it would allow up
             //to 255 but instead make use of the null termination to avoid
             //running into a later problem with strings >= 255
-            const sal_Char* pTitle = m_ptr + 3 + m_ptr[0] +  ( sal_Int32 ) m_ptr[ 1+ ( sal_Int32 ) m_ptr[0] ];
+            const sal_Char* pTitle = m_ptr + 3 + m_ptr[0] +  static_cast<sal_Int32>(m_ptr[ 1+ static_cast<sal_Int32>(m_ptr[0]) ]);
 
             return OUString(pTitle, rtl_str_getLength(pTitle), RTL_TEXTENCODING_UTF8);
         }
