@@ -39,7 +39,7 @@ void ThreadPoolTest::testPreferredConcurrency() {
     setenv("MAX_CONCURRENCY", std::to_string(nThreads).c_str(), true);
     nThreads = comphelper::ThreadPool::getPreferredConcurrency();
     CPPUNIT_ASSERT_MESSAGE("Expected no more than hardware threads",
-                           nThreads <= (sal_Int32)std::thread::hardware_concurrency());
+                           nThreads <= static_cast<sal_Int32>(std::thread::hardware_concurrency()));
 
     // Revert and check. Again, nothing should change.
     unsetenv("MAX_CONCURRENCY");

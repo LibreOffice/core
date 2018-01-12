@@ -86,7 +86,7 @@ namespace comphelper
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( nIndex < 0 || nIndex >= (sal_Int32)m_aKeyBindings.size() )
+        if ( nIndex < 0 || nIndex >= static_cast<sal_Int32>(m_aKeyBindings.size()) )
             throw IndexOutOfBoundsException();
 
         return m_aKeyBindings[nIndex];

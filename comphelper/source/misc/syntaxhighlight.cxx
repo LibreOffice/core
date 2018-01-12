@@ -598,8 +598,8 @@ SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(
         aCharTypeTab[i] |= nHelpMask;
     for( i = 'A' ; i <= 'Z' ; i++ )
         aCharTypeTab[i] |= nHelpMask;
-    aCharTypeTab[(int)'_'] |= nHelpMask;
-    aCharTypeTab[(int)'$'] |= nHelpMask;
+    aCharTypeTab[int('_')] |= nHelpMask;
+    aCharTypeTab[int('$')] |= nHelpMask;
 
     // Digit (can be identifier and number)
     nHelpMask = CharFlags::InIdentifier | CharFlags::StartNumber |
@@ -608,10 +608,10 @@ SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(
         aCharTypeTab[i] |= nHelpMask;
 
     // Add e, E, . and & here manually
-    aCharTypeTab[(int)'e'] |= CharFlags::InNumber;
-    aCharTypeTab[(int)'E'] |= CharFlags::InNumber;
-    aCharTypeTab[(int)'.'] |= CharFlags::InNumber | CharFlags::StartNumber;
-    aCharTypeTab[(int)'&'] |= CharFlags::StartNumber;
+    aCharTypeTab[int('e')] |= CharFlags::InNumber;
+    aCharTypeTab[int('E')] |= CharFlags::InNumber;
+    aCharTypeTab[int('.')] |= CharFlags::InNumber | CharFlags::StartNumber;
+    aCharTypeTab[int('&')] |= CharFlags::StartNumber;
 
     // Hexadecimal digit
     for( i = 'a' ; i <= 'f' ; i++ )
@@ -624,43 +624,43 @@ SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(
         aCharTypeTab[i] |= CharFlags::InOctNumber;
 
     // String literal start/end characters
-    aCharTypeTab[(int)'\''] |= CharFlags::StartString;
-    aCharTypeTab[(int)'\"'] |= CharFlags::StartString;
-    aCharTypeTab[(int)'[']  |= CharFlags::StartString;
-    aCharTypeTab[(int)'`']  |= CharFlags::StartString;
+    aCharTypeTab[int('\'')] |= CharFlags::StartString;
+    aCharTypeTab[int('\"')] |= CharFlags::StartString;
+    aCharTypeTab[int('[')]  |= CharFlags::StartString;
+    aCharTypeTab[int('`')]  |= CharFlags::StartString;
 
     // Operator characters
-    aCharTypeTab[(int)'!'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'%'] |= CharFlags::Operator;
+    aCharTypeTab[int('!')] |= CharFlags::Operator;
+    aCharTypeTab[int('%')] |= CharFlags::Operator;
     // aCharTypeTab[(int)'&'] |= CharFlags::Operator;     Removed because of #i14140
-    aCharTypeTab[(int)'('] |= CharFlags::Operator;
-    aCharTypeTab[(int)')'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'*'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'+'] |= CharFlags::Operator;
-    aCharTypeTab[(int)','] |= CharFlags::Operator;
-    aCharTypeTab[(int)'-'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'/'] |= CharFlags::Operator;
-    aCharTypeTab[(int)':'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'<'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'='] |= CharFlags::Operator;
-    aCharTypeTab[(int)'>'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'?'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'^'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'|'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'~'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'{'] |= CharFlags::Operator;
-    aCharTypeTab[(int)'}'] |= CharFlags::Operator;
+    aCharTypeTab[int('(')] |= CharFlags::Operator;
+    aCharTypeTab[int(')')] |= CharFlags::Operator;
+    aCharTypeTab[int('*')] |= CharFlags::Operator;
+    aCharTypeTab[int('+')] |= CharFlags::Operator;
+    aCharTypeTab[int(',')] |= CharFlags::Operator;
+    aCharTypeTab[int('-')] |= CharFlags::Operator;
+    aCharTypeTab[int('/')] |= CharFlags::Operator;
+    aCharTypeTab[int(':')] |= CharFlags::Operator;
+    aCharTypeTab[int('<')] |= CharFlags::Operator;
+    aCharTypeTab[int('=')] |= CharFlags::Operator;
+    aCharTypeTab[int('>')] |= CharFlags::Operator;
+    aCharTypeTab[int('?')] |= CharFlags::Operator;
+    aCharTypeTab[int('^')] |= CharFlags::Operator;
+    aCharTypeTab[int('|')] |= CharFlags::Operator;
+    aCharTypeTab[int('~')] |= CharFlags::Operator;
+    aCharTypeTab[int('{')] |= CharFlags::Operator;
+    aCharTypeTab[int('}')] |= CharFlags::Operator;
     // aCharTypeTab[(int)'['] |= CharFlags::Operator;     Removed because of #i17826
-    aCharTypeTab[(int)']'] |= CharFlags::Operator;
-    aCharTypeTab[(int)';'] |= CharFlags::Operator;
+    aCharTypeTab[int(']')] |= CharFlags::Operator;
+    aCharTypeTab[int(';')] |= CharFlags::Operator;
 
     // Space
-    aCharTypeTab[(int)' ' ] |= CharFlags::Space;
-    aCharTypeTab[(int)'\t'] |= CharFlags::Space;
+    aCharTypeTab[int(' ') ] |= CharFlags::Space;
+    aCharTypeTab[int('\t')] |= CharFlags::Space;
 
     // End of line characters
-    aCharTypeTab[(int)'\r'] |= CharFlags::EOL;
-    aCharTypeTab[(int)'\n'] |= CharFlags::EOL;
+    aCharTypeTab[int('\r')] |= CharFlags::EOL;
+    aCharTypeTab[int('\n')] |= CharFlags::EOL;
 
     ppListKeyWords = nullptr;
     nKeyWordCount = 0;

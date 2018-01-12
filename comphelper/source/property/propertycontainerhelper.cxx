@@ -82,7 +82,7 @@ void OPropertyContainerHelper::registerProperty(const OUString& _rName, sal_Int3
         "OPropertyContainerHelper::registerProperty: you gave me nonsense : the pointer must be non-NULL");
 
     PropertyDescription aNewProp;
-    aNewProp.aProperty = Property( _rName, _nHandle, _rMemberType, (sal_Int16)_nAttributes );
+    aNewProp.aProperty = Property( _rName, _nHandle, _rMemberType, static_cast<sal_Int16>(_nAttributes) );
     aNewProp.eLocated = PropertyDescription::LocationType::DerivedClassRealType;
     aNewProp.aLocation.pDerivedClassMember = _pPointerToMember;
 
@@ -112,7 +112,7 @@ void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName,
     _nAttributes |= PropertyAttribute::MAYBEVOID;
 
     PropertyDescription aNewProp;
-    aNewProp.aProperty = Property( _rName, _nHandle, _rExpectedType, (sal_Int16)_nAttributes );
+    aNewProp.aProperty = Property( _rName, _nHandle, _rExpectedType, static_cast<sal_Int16>(_nAttributes) );
     aNewProp.eLocated = PropertyDescription::LocationType::DerivedClassAnyType;
     aNewProp.aLocation.pDerivedClassMember = _pPointerToMember;
 
@@ -132,7 +132,7 @@ void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, 
         "bad initial value");
 
     PropertyDescription aNewProp;
-    aNewProp.aProperty = Property( _rName, _nHandle, _rType, (sal_Int16)_nAttributes );
+    aNewProp.aProperty = Property( _rName, _nHandle, _rType, static_cast<sal_Int16>(_nAttributes) );
     aNewProp.eLocated = PropertyDescription::LocationType::HoldMyself;
     aNewProp.aLocation.nOwnClassVectorIndex = m_aHoldProperties.size();
     m_aHoldProperties.push_back(_pInitialValue);
@@ -274,7 +274,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
 
             if (PropertyDescription::LocationType::HoldMyself == aPos->eLocated)
             {
-                OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < (sal_Int32)m_aHoldProperties.size(),
+                OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < static_cast<sal_Int32>(m_aHoldProperties.size()),
                     "OPropertyContainerHelper::convertFastPropertyValue: invalid position !");
                 auto aIter = m_aHoldProperties.begin() + aPos->aLocation.nOwnClassVectorIndex;
                 pPropContainer = &(*aIter);
@@ -414,7 +414,7 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
     switch (aPos->eLocated)
     {
         case PropertyDescription::LocationType::HoldMyself:
-            OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < (sal_Int32)m_aHoldProperties.size(),
+            OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < static_cast<sal_Int32>(m_aHoldProperties.size()),
                 "OPropertyContainerHelper::convertFastPropertyValue: invalid position !");
             _rValue = m_aHoldProperties[aPos->aLocation.nOwnClassVectorIndex];
             break;
@@ -473,7 +473,7 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     {
         pOwnProps->Name = aLoop->aProperty.Name;
         pOwnProps->Handle = aLoop->aProperty.Handle;
-        pOwnProps->Attributes = (sal_Int16)aLoop->aProperty.Attributes;
+        pOwnProps->Attributes = static_cast<sal_Int16>(aLoop->aProperty.Attributes);
         pOwnProps->Type = aLoop->aProperty.Type;
     }
 

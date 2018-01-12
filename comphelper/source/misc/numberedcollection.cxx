@@ -183,7 +183,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
 {
     // create ordered list of all possible numbers.
     std::vector< ::sal_Int32 > lPossibleNumbers;
-    ::sal_Int32                  c = (::sal_Int32)m_lComponents.size ();
+    ::sal_Int32                  c = static_cast<::sal_Int32>(m_lComponents.size ());
     ::sal_Int32                  i = 1;
 
     // c can't be less then 0 ... otherwise hash.size() has an error :-)

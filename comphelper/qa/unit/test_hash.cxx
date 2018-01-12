@@ -38,7 +38,7 @@ std::string tostring(const std::vector<unsigned char>& a)
     std::stringstream aStrm;
     for (auto& i:a)
     {
-        aStrm << std::setw(2) << std::setfill('0') << std::hex << (int)i;
+        aStrm << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i);
     }
 
     return aStrm.str();

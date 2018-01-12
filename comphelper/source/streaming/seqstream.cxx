@@ -121,7 +121,7 @@ void SAL_CALL SequenceInputStream::seek( sal_Int64 location )
 {
     if ( location > m_aData.getLength() || location < 0 || location > SAL_MAX_INT32 )
         throw IllegalArgumentException();
-    m_nPos = (sal_Int32) location;
+    m_nPos = static_cast<sal_Int32>(location);
 }
 
 sal_Int64 SAL_CALL SequenceInputStream::getPosition()

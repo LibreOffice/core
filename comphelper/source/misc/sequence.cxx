@@ -43,7 +43,7 @@ css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _r
         if( nPos>-1 )
         {
             css::uno::Sequence<sal_Int16> aRetSeq( 1 );
-            aRetSeq.getArray()[0] = (sal_Int16)nPos;
+            aRetSeq.getArray()[0] = static_cast<sal_Int16>(nPos);
 
             return aRetSeq;
         }
@@ -62,7 +62,7 @@ css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _r
         {
             if( *pTArray == _rValue )
             {
-                *pReturn = (sal_Int16)i;
+                *pReturn = static_cast<sal_Int16>(i);
                 ++pReturn;
             }
         }

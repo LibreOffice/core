@@ -211,7 +211,7 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
             *_pOriginalHandle = (*i).second.nOriginalHandle;
         if (_pPropName)
         {
-            OSL_ENSURE((*i).second.nPos < (sal_Int32)m_aProperties.size(),"Invalid index for sequence!");
+            OSL_ENSURE((*i).second.nPos < static_cast<sal_Int32>(m_aProperties.size()),"Invalid index for sequence!");
             const css::beans::Property& rProperty = m_aProperties[(*i).second.nPos];
             *_pPropName = rProperty.Name;
         }
