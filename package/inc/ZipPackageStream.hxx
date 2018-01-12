@@ -84,9 +84,9 @@ public:
     void SetFromManifest( bool bValue ) { m_bFromManifest = bValue; }
 
     enum class Bugs { None, WinEncodingWrongSHA1, WrongSHA1 };
-    ::rtl::Reference<EncryptionData> GetEncryptionData(Bugs bugs = Bugs::WrongSHA1);
+    ::rtl::Reference<EncryptionData> GetEncryptionData(Bugs bugs = Bugs::None);
 
-    css::uno::Sequence<sal_Int8> GetEncryptionKey(Bugs bugs = Bugs::WrongSHA1);
+    css::uno::Sequence<sal_Int8> GetEncryptionKey(Bugs bugs = Bugs::None);
 
     sal_Int32 GetStartKeyGenID();
 
