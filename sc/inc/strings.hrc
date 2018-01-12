@@ -328,6 +328,8 @@
 #define STR_ZTEST_Z_CRITICAL_ONE_TAIL               NC_("STR_ZTEST_Z_CRITICAL_ONE_TAIL", "z Critical one-tail")
 #define STR_ZTEST_P_TWO_TAIL                        NC_("STR_ZTEST_P_TWO_TAIL", "P (Z<=z) two-tail")
 #define STR_ZTEST_Z_CRITICAL_TWO_TAIL               NC_("STR_ZTEST_Z_CRITICAL_TWO_TAIL", "z Critical two-tail")
+/*infobar for allowing links to update or not*/
+#define STR_ENABLE_CONTENT                          NC_("STR_ENABLE_CONTENT", "Enable Content")
 
 #endif
 

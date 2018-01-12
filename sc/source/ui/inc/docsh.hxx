@@ -291,6 +291,7 @@ public:
 
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer) override;
     void            UpdateLinks() override;
+    void            ReloadAllLinks();
     void            ReloadTabLinks();
 
     void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
@@ -328,6 +329,7 @@ public:
     void            UnlockDocument();
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_LINK( ReloadAllLinksHdl, Button*, void );
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() override;
 
