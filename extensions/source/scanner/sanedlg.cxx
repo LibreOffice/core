@@ -393,7 +393,7 @@ void SaneDlg::InitFields()
         {
             mpReslBox->Enable();
 
-            mpReslBox->SetValue( (long)fRes );
+            mpReslBox->SetValue( static_cast<long>(fRes) );
             double *pDouble = nullptr;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
@@ -401,33 +401,33 @@ void SaneDlg::InitFields()
                 assert(pDouble);
                 if( nValue )
                 {
-                    mpReslBox->SetMin( (long)pDouble[0] );
-                    mpReslBox->SetMax( (long)pDouble[ nValue-1 ] );
+                    mpReslBox->SetMin( static_cast<long>(pDouble[0]) );
+                    mpReslBox->SetMax( static_cast<long>(pDouble[ nValue-1 ]) );
                     for( i=0; i<nValue; i++ )
                     {
-                        if( i == 0 || i == nValue-1 || ! ( ((int)pDouble[i]) % 20) )
-                            mpReslBox->InsertValue( (long)pDouble[i] );
+                        if( i == 0 || i == nValue-1 || ! ( static_cast<int>(pDouble[i]) % 20) )
+                            mpReslBox->InsertValue( static_cast<long>(pDouble[i]) );
                     }
                 }
                 else
                 {
-                    mpReslBox->SetMin( (long)pDouble[0] );
-                    mpReslBox->SetMax( (long)pDouble[1] );
-                    mpReslBox->InsertValue( (long)pDouble[0] );
+                    mpReslBox->SetMin( static_cast<long>(pDouble[0]) );
+                    mpReslBox->SetMax( static_cast<long>(pDouble[1]) );
+                    mpReslBox->InsertValue( static_cast<long>(pDouble[0]) );
                     // Can only select 75 and 2400 dpi in Scanner dialogue
                     // scanner allows random setting of dpi resolution, a slider might be useful
                     // support that
                     // workaround: offer at least some more standard dpi resolution between
                     // min and max value
                     int bGot300 = 0;
-                    for ( long nRes = (long) pDouble[0] * 2; nRes < (long) pDouble[1]; nRes = nRes * 2 )
+                    for ( long nRes = static_cast<long>(pDouble[0]) * 2; nRes < static_cast<long>(pDouble[1]); nRes = nRes * 2 )
                     {
                         if ( !bGot300 && nRes > 300 ) {
                             nRes = 300; bGot300 = 1;
                         }
                         mpReslBox->InsertValue(nRes);
                     }
-                    mpReslBox->InsertValue( (long)pDouble[1] );
+                    mpReslBox->InsertValue( static_cast<long>(pDouble[1]) );
                 }
             }
             else
@@ -469,18 +469,18 @@ void SaneDlg::InitFields()
                 if( mrSane.GetOptionUnit( nOption ) == SANE_UNIT_MM )
                 {
                     pField->SetUnit( FUNIT_MM );
-                    pField->SetValue( (int)fValue, FUNIT_MM );
+                    pField->SetValue( static_cast<int>(fValue), FUNIT_MM );
                 }
                 else // SANE_UNIT_PIXEL
                 {
-                    pField->SetValue( (int)fValue, FUNIT_CUSTOM );
+                    pField->SetValue( static_cast<int>(fValue), FUNIT_CUSTOM );
                     pField->SetCustomUnitText("Pixel");
                 }
                 switch( i ) {
-                    case 0: aTopLeft.X() = (int)fValue;break;
-                    case 1: aTopLeft.Y() = (int)fValue;break;
-                    case 2: aBottomRight.X() = (int)fValue;break;
-                    case 3: aBottomRight.Y() = (int)fValue;break;
+                    case 0: aTopLeft.X() = static_cast<int>(fValue);break;
+                    case 1: aTopLeft.Y() = static_cast<int>(fValue);break;
+                    case 2: aBottomRight.X() = static_cast<int>(fValue);break;
+                    case 3: aBottomRight.Y() = static_cast<int>(fValue);break;
                 }
             }
             double *pDouble = nullptr;
@@ -489,11 +489,11 @@ void SaneDlg::InitFields()
             {
                 if( pDouble )
                 {
-                    pField->SetMin( (long)pDouble[0] );
+                    pField->SetMin( static_cast<long>(pDouble[0]) );
                     if( nValue )
-                        pField->SetMax( (long)pDouble[ nValue-1 ] );
+                        pField->SetMax( static_cast<long>(pDouble[ nValue-1 ]) );
                     else
-                        pField->SetMax( (long)pDouble[ 1 ] );
+                        pField->SetMax( static_cast<long>(pDouble[ 1 ]) );
                     delete [] pDouble;
                 }
                 switch( i ) {
@@ -506,10 +506,10 @@ void SaneDlg::InitFields()
             else
             {
                 switch( i ) {
-                    case 0: aMinTopLeft.X() = (int)fValue;break;
-                    case 1: aMinTopLeft.Y() = (int)fValue;break;
-                    case 2: aMaxBottomRight.X() = (int)fValue;break;
-                    case 3: aMaxBottomRight.Y() = (int)fValue;break;
+                    case 0: aMinTopLeft.X() = static_cast<int>(fValue);break;
+                    case 1: aMinTopLeft.Y() = static_cast<int>(fValue);break;
+                    case 2: aMaxBottomRight.X() = static_cast<int>(fValue);break;
+                    case 3: aMaxBottomRight.Y() = static_cast<int>(fValue);break;
                 }
             }
             pField->Enable();
@@ -636,7 +636,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
                     std::unique_ptr<double[]> x(new double[ nElements ]);
                     std::unique_ptr<double[]> y(new double[ nElements ]);
                     for( int i = 0; i < nElements; i++ )
-                        x[ i ] = (double)i;
+                        x[ i ] = static_cast<double>(i);
                     mrSane.GetOptionValue( mnCurrentOption, y.get() );
 
                     ScopedVclPtrInstance< GridDialog > aGrid( x.get(), y.get(), nElements, this );
@@ -659,7 +659,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
     }
     if( pButton == mpOKButton || pButton == mpScanButton )
     {
-        double fRes = (double)mpReslBox->GetValue();
+        double fRes = static_cast<double>(mpReslBox->GetValue());
         SetAdjustedNumericalValue( "resolution", fRes );
         UpdateScanArea(true);
         SaveState();
@@ -779,7 +779,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit&, rEdit, void )
         }
         else if( &rEdit == mpReslBox )
         {
-            double fRes = (double)mpReslBox->GetValue();
+            double fRes = static_cast<double>(mpReslBox->GetValue());
             int nOption = mrSane.GetOptionByName( "resolution" );
             if( nOption != -1 )
             {
@@ -804,7 +804,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit&, rEdit, void )
                         fRes = pDouble[ 1 ];
                 }
                 delete[] pDouble;
-                mpReslBox->SetValue( (sal_uLong)fRes );
+                mpReslBox->SetValue( static_cast<sal_uLong>(fRes) );
             }
         }
         else if( &rEdit == mpNumericEdit )
@@ -874,7 +874,7 @@ void SaneDlg::AcquirePreview()
 
     UpdateScanArea( true );
     // set small resolution for preview
-    double fResl = (double)mpReslBox->GetValue();
+    double fResl = static_cast<double>(mpReslBox->GetValue());
     SetAdjustedNumericalValue( "resolution", 30.0 );
 
     int nOption = mrSane.GetOptionByName( "preview" );
@@ -905,7 +905,7 @@ void SaneDlg::AcquirePreview()
     }
 
     SetAdjustedNumericalValue( "resolution", fResl );
-    mpReslBox->SetValue( (sal_uLong)fResl );
+    mpReslBox->SetValue( static_cast<sal_uLong>(fResl) );
 
     mpPreview->UpdatePreviewBounds();
     mpPreview->Invalidate();
@@ -1299,10 +1299,10 @@ void SaneDlg::UpdateScanArea(bool bSend)
 
     if( mrSane.IsOpen() )
     {
-        SetAdjustedNumericalValue( "tl-x", (double)aUL.X() );
-        SetAdjustedNumericalValue( "tl-y", (double)aUL.Y() );
-        SetAdjustedNumericalValue( "br-x", (double)aBR.X() );
-        SetAdjustedNumericalValue( "br-y", (double)aBR.Y() );
+        SetAdjustedNumericalValue( "tl-x", static_cast<double>(aUL.X()) );
+        SetAdjustedNumericalValue( "tl-y", static_cast<double>(aUL.Y()) );
+        SetAdjustedNumericalValue( "br-x", static_cast<double>(aBR.X()) );
+        SetAdjustedNumericalValue( "br-y", static_cast<double>(aBR.Y()) );
     }
 }
 

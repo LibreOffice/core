@@ -229,7 +229,7 @@ namespace pcr
             aArgs[1].Name  = PROPERTY_COMMAND;
             aArgs[1].Value <<= m_xObjectAdapter->getSQLCommand();
             aArgs[2].Name  = PROPERTY_COMMANDTYPE;
-            aArgs[2].Value <<= (sal_Int32)CommandType::COMMAND;
+            aArgs[2].Value <<= sal_Int32(CommandType::COMMAND);
             aArgs[3].Name  = PROPERTY_ESCAPE_PROCESSING;
             aArgs[3].Value <<= m_xObjectAdapter->getEscapeProcessing();
 

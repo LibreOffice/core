@@ -375,7 +375,7 @@ namespace dbp
 
     OOptionValuesPage::OOptionValuesPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, "OptionValuesPage", "modules/sabpilot/ui/optionvaluespage.ui")
-        ,m_nLastSelection((::svt::WizardTypes::WizardState)-1)
+        ,m_nLastSelection(::svt::WizardTypes::WizardState(-1))
     {
         get(m_pValue, "optionvalue");
         get(m_pOptions, "radiobuttons");
@@ -410,15 +410,15 @@ namespace dbp
 
     void OOptionValuesPage::implTraveledOptions()
     {
-        if ((::svt::WizardTypes::WizardState)-1 != m_nLastSelection)
+        if (::svt::WizardTypes::WizardState(-1) != m_nLastSelection)
         {
             // save the value for the last option
-            DBG_ASSERT((size_t)m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
+            DBG_ASSERT(static_cast<size_t>(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
             m_aUncommittedValues[m_nLastSelection] = m_pValue->GetText();
         }
 
         m_nLastSelection = m_pOptions->GetSelectedEntryPos();
-        DBG_ASSERT((size_t)m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
+        DBG_ASSERT(static_cast<size_t>(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
         m_pValue->SetText(m_aUncommittedValues[m_nLastSelection]);
     }
 

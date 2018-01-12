@@ -136,7 +136,7 @@ namespace pcr
                 // ensure that the "transfer selection as" property is reset. Since we can't remember
                 // it at the object itself, but derive it from the binding only, we have to normalize
                 // it now that there *is* no binding anymore.
-                setPropertyValue( PROPERTY_CELL_EXCHANGE_TYPE, makeAny( (sal_Int16) 0 ) );
+                setPropertyValue( PROPERTY_CELL_EXCHANGE_TYPE, makeAny( sal_Int16(0) ) );
             }
         }
         break;
@@ -261,7 +261,7 @@ namespace pcr
         case PROPERTY_ID_CELL_EXCHANGE_TYPE:
         {
             Reference< XValueBinding > xBinding( m_pHelper->getCurrentBinding() );
-            aReturn <<= (sal_Int16)( CellBindingHelper::isCellIntegerBinding( xBinding ) ? 1 : 0 );
+            aReturn <<= static_cast<sal_Int16>( CellBindingHelper::isCellIntegerBinding( xBinding ) ? 1 : 0 );
         }
         break;
 

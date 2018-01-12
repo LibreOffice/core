@@ -368,7 +368,7 @@ namespace pcr
                 long nVisibleSize   = GetVScroll()->GetVisibleSize();
                 long nFirstVisible = GetModel()->GetAbsPos( FirstVisible());
 
-                if ( ( nThumbPos + nVisibleSize + 1 ) < (long)( nLastSelPos + 3 ) )
+                if ( ( nThumbPos + nVisibleSize + 1 ) < static_cast<long>( nLastSelPos + 3 ) )
                     GetVScroll()->DoScrollAction(ScrollType::LineDown);
                 else if((nThumbPos+nVisibleSize+1) >= nFirstVisible)
                     GetVScroll()->DoScrollAction(ScrollType::LineUp);

@@ -96,7 +96,7 @@ static void openFile( OutData& out )
         } while( osl_File_E_EXIST == rc );
 
         if( osl_File_E_None == rc )
-            out.Handler->downloadStarted(out.File, (sal_Int64) fDownloadSize);
+            out.Handler->downloadStarted(out.File, static_cast<sal_Int64>(fDownloadSize));
     }
 }
 
@@ -137,7 +137,7 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
     if( nullptr != out->FileHandle )
         osl_writeFile(out->FileHandle, ptr, size * nmemb, &nBytesWritten);
 
-    return (size_t) nBytesWritten;
+    return static_cast<size_t>(nBytesWritten);
 }
 
 
@@ -160,7 +160,7 @@ progress_callback( void *clientp, double dltotal, double dlnow, SAL_UNUSED_PARAM
         long nCode;
         curl_easy_getinfo(out->curl, CURLINFO_RESPONSE_CODE, &nCode);
         if( (nCode != 302) && (nCode != 303) && (dltotal > 0) )
-            out->Handler->downloadProgressAt((sal_Int8)fPercent);
+            out->Handler->downloadProgressAt(static_cast<sal_Int8>(fPercent));
 
         return 0;
     }
@@ -257,7 +257,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
         {
             // curl_off_t offset = nOffset; libcurl seems to be compiled with large
             // file support (and we not) ..
-            sal_Int64 offset = (sal_Int64) out.Offset;
+            sal_Int64 offset = static_cast<sal_Int64>(out.Offset);
             curl_easy_setopt(pCURL, CURLOPT_RESUME_FROM_LARGE, offset);
         }
 

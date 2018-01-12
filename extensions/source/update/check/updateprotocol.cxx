@@ -211,12 +211,12 @@ checkForUpdates(
                     {
                         sal_Int32 pos = xRelNote->getAttribute("pos").toInt32();
 
-                        ReleaseNote aRelNote((sal_uInt8) pos, xRelNote->getAttribute("src"));
+                        ReleaseNote aRelNote(static_cast<sal_uInt8>(pos), xRelNote->getAttribute("src"));
 
                         if( xRelNote->hasAttribute("src2") )
                         {
                             pos = xRelNote->getAttribute("pos2").toInt32();
-                            aRelNote.Pos2 = (sal_Int8) pos;
+                            aRelNote.Pos2 = static_cast<sal_Int8>(pos);
                             aRelNote.URL2 = xRelNote->getAttribute("src2");
                         }
 

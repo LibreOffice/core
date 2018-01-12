@@ -80,7 +80,7 @@ namespace pcr
         sal_uInt16 nCount = m_aTabControl->GetPageCount();
         for(long i = nCount-1; i >= 0; --i)
         {
-            sal_uInt16 nID = m_aTabControl->GetPageId((sal_uInt16)i);
+            sal_uInt16 nID = m_aTabControl->GetPageId(static_cast<sal_uInt16>(i));
             VclPtr<OBrowserPage> pPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage(nID));
             if (pPage)
             {
@@ -135,7 +135,7 @@ namespace pcr
         sal_Int32 nPageMinWidth = 0;
         for(long i = nCount-1; i >= 0; --i)
         {
-            sal_uInt16 nID = m_aTabControl->GetPageId((sal_uInt16)i);
+            sal_uInt16 nID = m_aTabControl->GetPageId(static_cast<sal_uInt16>(i));
             OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage(nID));
             if (pPage)
             {
@@ -516,7 +516,7 @@ namespace pcr
         // commit the data on the current (to-be-deactivated) tab page
         // (79404)
         sal_Int32 nCurrentId = m_aTabControl->GetCurPageId();
-        OBrowserPage* pCurrentPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage((sal_uInt16)nCurrentId));
+        OBrowserPage* pCurrentPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage(static_cast<sal_uInt16>(nCurrentId)));
         if ( !pCurrentPage )
             return true;
 

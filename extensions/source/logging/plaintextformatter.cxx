@@ -81,7 +81,7 @@ namespace logging
     {
         char buffer[ 30 ];
         const int buffer_size = sizeof( buffer );
-        int used = snprintf( buffer, buffer_size, "%10i", (int)_rRecord.SequenceNumber );
+        int used = snprintf( buffer, buffer_size, "%10i", static_cast<int>(_rRecord.SequenceNumber) );
         if ( used >= buffer_size || used < 0 )
             buffer[ buffer_size - 1 ] = 0;
 
@@ -95,8 +95,8 @@ namespace logging
         aLogEntry.append( " " );
 
         snprintf( buffer, buffer_size, "%04i-%02i-%02i %02i:%02i:%02i.%09i",
-            (int)_rRecord.LogTime.Year, (int)_rRecord.LogTime.Month, (int)_rRecord.LogTime.Day,
-            (int)_rRecord.LogTime.Hours, (int)_rRecord.LogTime.Minutes, (int)_rRecord.LogTime.Seconds, (int)_rRecord.LogTime.NanoSeconds );
+            static_cast<int>(_rRecord.LogTime.Year), static_cast<int>(_rRecord.LogTime.Month), static_cast<int>(_rRecord.LogTime.Day),
+            static_cast<int>(_rRecord.LogTime.Hours), static_cast<int>(_rRecord.LogTime.Minutes), static_cast<int>(_rRecord.LogTime.Seconds), static_cast<int>(_rRecord.LogTime.NanoSeconds) );
         aLogEntry.appendAscii( buffer );
         aLogEntry.append( " " );
 
