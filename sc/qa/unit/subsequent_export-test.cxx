@@ -564,14 +564,31 @@ void ScExportTest::testCommentExportXLSX()
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
-    CPPUNIT_ASSERT(pSheet);
+    const xmlDocPtr pComments = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
+    CPPUNIT_ASSERT(pComments);
 
-    assertXPath(pSheet, "/x:comments/x:authors/x:author[1]", "BAKO");
-    assertXPath(pSheet, "/x:comments/x:authors/x:author", 1);
+    assertXPath(pComments, "/x:comments/x:authors/x:author[1]", "BAKO");
+    assertXPath(pComments, "/x:comments/x:authors/x:author", 1);
 
-    assertXPath(pSheet, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "Komentarz");
+    assertXPath(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "Komentarz");
 
+    const xmlDocPtr pVmlDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
+    CPPUNIT_ASSERT(pVmlDrawing);
+
+    //assertXPath(pVmlDrawing, "/xml/v:shapetype", "coordsize", "21600,21600");
+    assertXPath(pVmlDrawing, "/xml/v:shapetype", "spt", "202");
+    assertXPath(pVmlDrawing, "/xml/v:shapetype/v:stroke", "joinstyle", "miter");
+    const OUString sShapeTypeId = "#" + getXPath(pVmlDrawing, "/xml/v:shapetype", "id");
+
+    assertXPath(pVmlDrawing, "/xml/v:shape", "type", sShapeTypeId);
+    assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow", "color", "black");
+    assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow", "obscured", "t");
+
+    assertXPath(pVmlDrawing, "/xml/v:shape/x:ClientData", 1);
+    //assertXPath(pVmlDrawing, "/xml/v:shape/ClientData/MoveWithCells", 1);
+    //assertXPath(pVmlDrawing, "/xml/v:shape/ClientData/SizeWithCells", 1);
+    //assertXPath(pVmlDrawing, "/xml/v:shape/ClientData/Row", "0");
+    //assertXPath(pVmlDrawing, "/xml/v:shape/ClientData/Column", "0");
 }
 
 #if HAVE_MORE_FONTS
