@@ -1248,7 +1248,7 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 {
     unsigned short red,green,blue;
 
-    switch( (int)color )
+    switch( static_cast<int>(color) )
     {
         case 0 :                                  // black
             red =  0xff * (100 - shade ) /100;

@@ -176,7 +176,7 @@ bool HStreamIODev::read1b(unsigned char &out)
     if (res < 1)
         return false;
 
-    out = (unsigned char)rBuf[0];
+    out = static_cast<unsigned char>(rBuf[0]);
     return true;
 }
 
@@ -196,7 +196,7 @@ bool HStreamIODev::read2b(unsigned short &out)
     if (res < 2)
         return false;
 
-    out = ((unsigned char) rBuf[1] << 8 | (unsigned char) rBuf[0]);
+    out = (static_cast<unsigned char>(rBuf[1]) << 8 | static_cast<unsigned char>(rBuf[0]));
     return true;
 }
 
@@ -207,8 +207,8 @@ bool HStreamIODev::read4b(unsigned int &out)
     if (res < 4)
         return false;
 
-    out = ((unsigned char) rBuf[3] << 24 | (unsigned char) rBuf[2] << 16 |
-        (unsigned char) rBuf[1] << 8 | (unsigned char) rBuf[0]);
+    out = (static_cast<unsigned char>(rBuf[3]) << 24 | static_cast<unsigned char>(rBuf[2]) << 16 |
+        static_cast<unsigned char>(rBuf[1]) << 8 | static_cast<unsigned char>(rBuf[0]));
     return true;
 }
 

@@ -71,7 +71,7 @@
  * we want to instead treat it as an 8-bit unsigned char, hence the
  * double cast.
  */
-#define YY_SC_TO_UI(c) ((unsigned int) (unsigned char) c)
+#define YY_SC_TO_UI(c) (static_cast<unsigned int>(static_cast<unsigned char>(c)))
 
 /* Translate the current start state into a value that can be later handed
  * to BEGIN to return to the state.
@@ -220,7 +220,7 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
  */
 #define YY_DO_BEFORE_ACTION \
     yytext_ptr = yy_bp; \
-    yyleng = (int) (yy_cp - yy_bp); \
+    yyleng = static_cast<int>(yy_cp - yy_bp); \
     yy_hold_char = *yy_cp; \
     *yy_cp = '\0'; \
     yy_c_buf_p = yy_cp;
@@ -1024,9 +1024,9 @@ YY_MALLOC_DECL
         int c = '*', n; \
         for ( n = 0; n < max_size && \
                  (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
-            buf[n] = (char) c; \
+            buf[n] = static_cast<char>(c); \
         if ( c == '\n' ) \
-            buf[n++] = (char) c; \
+            buf[n++] = static_cast<char>(c); \
         if ( c == EOF && ferror( yyin ) ) \
             YY_FATAL_ERROR( "input in flex scanner failed" ); \
         result = n; \
@@ -1125,11 +1125,11 @@ yy_match:
                 }
             while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
                 {
-                yy_current_state = (int) yy_def[yy_current_state];
+                yy_current_state = static_cast<int>(yy_def[yy_current_state]);
                 if ( yy_current_state >= 994 )
-                    yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[(unsigned int) yy_c]);
+                    yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[static_cast<unsigned int>(yy_c)]);
                 }
-            yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+            yy_current_state = yy_nxt[yy_base[yy_current_state] + static_cast<unsigned int>(yy_c)];
             ++yy_cp;
             }
         while ( yy_base[yy_current_state] != 1315 );
@@ -1348,7 +1348,7 @@ case YY_STATE_EOF(INITIAL):
     case YY_END_OF_BUFFER:
         {
         /* Amount of text matched not including the EOB char. */
-        int yy_amount_of_matched_text = (int) (yy_cp - yytext_ptr) - 1;
+        int yy_amount_of_matched_text = static_cast<int>(yy_cp - yytext_ptr) - 1;
 
         /* Undo the effects of YY_DO_BEFORE_ACTION. */
         *yy_cp = yy_hold_char;
@@ -1516,7 +1516,7 @@ static int yy_get_next_buffer()
     /* Try to read more data. */
 
     /* First move last chars to start of buffer. */
-    number_to_move = (int) (yy_c_buf_p - yytext_ptr) - 1;
+    number_to_move = static_cast<int>(yy_c_buf_p - yytext_ptr) - 1;
 
     for ( i = 0; i < number_to_move; ++i )
         *(dest++) = *(source++);
@@ -1543,7 +1543,7 @@ static int yy_get_next_buffer()
             YY_BUFFER_STATE b = yy_current_buffer;
 
             int yy_c_buf_p_offset =
-                (int) (yy_c_buf_p - b->yy_ch_buf);
+                static_cast<int>(yy_c_buf_p - b->yy_ch_buf);
 
             if ( b->yy_is_our_buffer )
                 {
@@ -1632,11 +1632,11 @@ static yy_state_type yy_get_previous_state()
             }
         while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
             {
-            yy_current_state = (int) yy_def[yy_current_state];
+            yy_current_state = static_cast<int>(yy_def[yy_current_state]);
             if ( yy_current_state >= 994 )
-                yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[(unsigned int) yy_c]);
+                yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[static_cast<unsigned int>(yy_c)]);
             }
-        yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+        yy_current_state = yy_nxt[yy_base[yy_current_state] + static_cast<unsigned int>(yy_c)];
         }
 
     return yy_current_state;
@@ -1667,11 +1667,11 @@ yy_state_type yy_current_state;
         }
     while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
         {
-        yy_current_state = (int) yy_def[yy_current_state];
+        yy_current_state = static_cast<int>(yy_def[yy_current_state]);
         if ( yy_current_state >= 994 )
-            yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[(unsigned int) yy_c]);
+            yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[static_cast<unsigned int>(yy_c)]);
         }
-    yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+    yy_current_state = yy_nxt[yy_base[yy_current_state] + static_cast<unsigned int>(yy_c)];
     yy_is_jam = (yy_current_state == 993);
 
     return yy_is_jam ? 0 : yy_current_state;
