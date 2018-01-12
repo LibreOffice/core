@@ -85,8 +85,8 @@ public:
     ~ImplSplitSet();
 
     std::vector< ImplSplitItem > mvItems;
-    Wallpaper*          mpWallpaper;
-    Bitmap*             mpBitmap;
+    std::unique_ptr<Wallpaper>   mpWallpaper;
+    std::unique_ptr<Bitmap>      mpBitmap;
     long                mnLastSize;
     long                mnSplitSize;
     sal_uInt16          mnId;
@@ -128,15 +128,8 @@ ImplSplitSet::ImplSplitSet() :
 
 ImplSplitSet::~ImplSplitSet()
 {
-    if ( mpWallpaper ) {
-        delete mpWallpaper;
-        mpWallpaper = nullptr;
-    }
-
-    if ( mpBitmap ) {
-        delete mpBitmap;
-        mpBitmap = nullptr;
-    }
+    mpWallpaper.reset();
+    mpBitmap.reset();
 }
 
 /** Check whether the given size is inside the valid range defined by
@@ -944,7 +937,7 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
                             mnDX - mnRightBorder - 1,
                             mnDY - mnBottomBorder - 1);
 
-            ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper, pSet->mpBitmap);
+            ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper.get(), pSet->mpBitmap.get());
         }
     }
 
@@ -958,7 +951,7 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
                 Point aPoint(rItems[i].mnLeft, rItems[i].mnTop);
                 Size aSize(rItems[i].mnWidth, rItems[i].mnHeight);
                 tools::Rectangle aRect(aPoint, aSize);
-                ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper, pSet->mpBitmap);
+                ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper.get(), pSet->mpBitmap.get());
             }
         }
     }
