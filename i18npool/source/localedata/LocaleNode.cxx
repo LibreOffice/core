@@ -686,7 +686,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         of.writeParameter("FormatUsage", aUsage, formatCount);
 
         aFormatIndex = currNodeAttr.getValueByName("formatindex");
-        sal_Int16 formatindex = (sal_Int16)aFormatIndex.toInt32();
+        sal_Int16 formatindex = static_cast<sal_Int16>(aFormatIndex.toInt32());
         // Ensure the new reserved range is not used anymore, free usage start
         // was up'ed from 50 to 60.
         if (50 <= formatindex && formatindex < nFirstFreeFormatIndex)
@@ -907,7 +907,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             }
             while (++it != aFormatIndexSet.end() && *it == nNext);
         }
-        fprintf( stderr, "Hint: Next free formatindex is %d.\n", (int)nNext);
+        fprintf( stderr, "Hint: Next free formatindex is %d.\n", static_cast<int>(nNext));
     }
 
     // Check presence of all required format codes only in first section
@@ -1221,13 +1221,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             incErrorStr( "Error: failed to extract full date acceptance pattern: %s\n", aPattern);
             fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
                     OSTR( OUString(&cDateSep, 1)), OSTR( sTheDateEditFormat),
-                    (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
+                    int(cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY));
         }
         else
         {
             fprintf( stderr, "Generated date acceptance pattern: '%s' from '%s' (formatindex=\"%d\" and defined DateSeparator '%s')\n",
                     OSTR( aPattern), OSTR( sTheDateEditFormat),
-                    (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY,
+                    int(cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY),
                     OSTR( OUString(&cDateSep, 1)));
             // Insert at front so full date pattern is first in checks.
             theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern);
@@ -1240,13 +1240,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 incErrorStr( "Error: failed to extract 2nd date acceptance pattern: %s\n", aPattern2);
                 fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
                         OSTR( OUString(&cDateSep2, 1)), OSTR( sTheDateEditFormat),
-                        (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
+                        int(cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY));
             }
             else
             {
                 fprintf( stderr, "Generated  2nd acceptance pattern: '%s' from '%s' (formatindex=\"%d\")\n",
                         OSTR( aPattern2), OSTR( sTheDateEditFormat),
-                        (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
+                        int(cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY));
                 theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern2);
             }
         }
@@ -1961,7 +1961,7 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
         str = currencyNode -> findNode ("CurrencyName") -> getValue();
         of.writeParameter("currencyName", str, nbOfCurrencies);
         str = currencyNode -> findNode ("DecimalPlaces") -> getValue();
-        sal_Int16 nDecimalPlaces = (sal_Int16)str.toInt32();
+        sal_Int16 nDecimalPlaces = static_cast<sal_Int16>(str.toInt32());
         of.writeIntParameter("currencyDecimalPlaces", nbOfCurrencies, nDecimalPlaces);
         of.writeAsciiString("\n");
     };

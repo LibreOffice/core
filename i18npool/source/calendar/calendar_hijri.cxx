@@ -68,9 +68,9 @@ Calendar_hijri::Calendar_hijri()
 void Calendar_hijri::mapToGregorian()
 {
     if (fieldSet & FIELDS) {
-        sal_Int32 day = (sal_Int32)fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH];
-        sal_Int32 month = (sal_Int32)fieldSetValue[CalendarFieldIndex::MONTH] + 1;
-        sal_Int32 year = (sal_Int32)fieldSetValue[CalendarFieldIndex::YEAR];
+        sal_Int32 day = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH]);
+        sal_Int32 month = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::MONTH]) + 1;
+        sal_Int32 year = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::YEAR]);
         if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
             year *= -1;
 
@@ -78,8 +78,8 @@ void Calendar_hijri::mapToGregorian()
 
         fieldSetValue[CalendarFieldIndex::ERA] = year <= 0 ? 0 : 1;
         fieldSetValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>(month - 1);
-        fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16) day;
-        fieldSetValue[CalendarFieldIndex::YEAR] = (sal_Int16) abs(year);
+        fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = static_cast<sal_Int16>(day);
+        fieldSetValue[CalendarFieldIndex::YEAR] = static_cast<sal_Int16>(abs(year));
         fieldSet |= FIELDS;
     }
 }
@@ -89,19 +89,19 @@ void Calendar_hijri::mapFromGregorian()
 {
     sal_Int32 month, day, year;
 
-    day = (sal_Int32)fieldValue[CalendarFieldIndex::DAY_OF_MONTH];
-    month = (sal_Int32)fieldValue[CalendarFieldIndex::MONTH] + 1;
-    year = (sal_Int32)fieldValue[CalendarFieldIndex::YEAR];
+    day = static_cast<sal_Int32>(fieldValue[CalendarFieldIndex::DAY_OF_MONTH]);
+    month = static_cast<sal_Int32>(fieldValue[CalendarFieldIndex::MONTH]) + 1;
+    year = static_cast<sal_Int32>(fieldValue[CalendarFieldIndex::YEAR]);
     if (fieldValue[CalendarFieldIndex::ERA] == 0)
         year *= -1;
 
     // Get Hijri date
     getHijri(&day, &month, &year);
 
-    fieldValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)day;
+    fieldValue[CalendarFieldIndex::DAY_OF_MONTH] = static_cast<sal_Int16>(day);
     fieldValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>(month - 1);
-    fieldValue[CalendarFieldIndex::YEAR] = (sal_Int16) abs(year);
-    fieldValue[CalendarFieldIndex::ERA] = (sal_Int16) year < 1 ? 0 : 1;
+    fieldValue[CalendarFieldIndex::YEAR] = static_cast<sal_Int16>(abs(year));
+    fieldValue[CalendarFieldIndex::ERA] = static_cast<sal_Int16>(year) < 1 ? 0 : 1;
 }
 
 
@@ -183,10 +183,10 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     julday = getJulianDay(*day, *month, *year);
 
     // obtain approx. of how many Synodic months since the beginning of the year 1900
-    synmonth = (sal_Int32)(0.5 + (julday - jd1900)/SynPeriod);
+    synmonth = static_cast<sal_Int32>(0.5 + (julday - jd1900)/SynPeriod);
 
     newsyn = synmonth;
-    prevday = (sal_Int32)julday - 0.5;
+    prevday = static_cast<sal_Int32>(julday) - 0.5;
 
     do {
         newjd = NewMoon(newsyn);
@@ -200,12 +200,12 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     syndiff = newsyn - SynRef;
 
     // Round up the day
-    *day = (sal_Int32)(((sal_Int32)julday) - newjd + 0.5);
+    *day = static_cast<sal_Int32>(static_cast<sal_Int32>(julday) - newjd + 0.5);
     *month =  (syndiff % 12) + 1;
 
     // currently not supported
     //dayOfYear = (sal_Int32)(month * SynPeriod + day);
-    *year = GregRef + (sal_Int32)(syndiff / 12);
+    *year = GregRef + static_cast<sal_Int32>(syndiff / 12);
 
     // If month negative, consider it previous year
     if (syndiff != 0 && *month <= 0) {
@@ -237,10 +237,10 @@ Calendar_hijri::ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     jday = NewMoon(nmonth) + *day;
 
     // Round-up
-    jday = (double)((sal_Int32)(jday + 0.5));
+    jday = static_cast<double>(static_cast<sal_Int32>(jday + 0.5));
 
     // Use algorithm from "Numerical Recipes in C"
-    getGregorianDay((sal_Int32)jday, day, month, year);
+    getGregorianDay(static_cast<sal_Int32>(jday), day, month, year);
 
     // Julian -> Gregorian only works for non-negative year
     if ( *year <= 0 ) {
@@ -261,9 +261,9 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
     /* test whether to adjust for the Gregorian calendar crossover */
     if (lJulianDay >= GREGORIAN_CROSSOVER) {
     /* calculate a small adjustment */
-    long lAdjust = (long) (((float) (lJulianDay - 1867216) - 0.25) / 36524.25);
+    long lAdjust = static_cast<long>((static_cast<float>(lJulianDay - 1867216) - 0.25) / 36524.25);
 
-    lFactorA = lJulianDay + 1 + lAdjust - ((long) (0.25 * lAdjust));
+    lFactorA = lJulianDay + 1 + lAdjust - static_cast<long>(0.25 * lAdjust);
 
     } else {
     /* no adjustment needed */
@@ -271,12 +271,12 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
     }
 
     lFactorB = lFactorA + 1524;
-    lFactorC = (long) (6680.0 + ((float) (lFactorB - 2439870) - 122.1) / 365.25);
-    lFactorD = (long) (365 * lFactorC + (0.25 * lFactorC));
-    lFactorE = (long) ((lFactorB - lFactorD) / 30.6001);
+    lFactorC = static_cast<long>(6680.0 + (static_cast<float>(lFactorB - 2439870) - 122.1) / 365.25);
+    lFactorD = static_cast<long>(365 * lFactorC + (0.25 * lFactorC));
+    lFactorE = static_cast<long>((lFactorB - lFactorD) / 30.6001);
 
     /* now, pull out the day number */
-    *pnDay = lFactorB - lFactorD - (long) (30.6001 * lFactorE);
+    *pnDay = lFactorB - lFactorD - static_cast<long>(30.6001 * lFactorE);
 
     /* ...and the month, adjusting it if necessary */
     *pnMonth = lFactorE - 1;
@@ -314,18 +314,18 @@ Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
     jm = month + 13;
     }
 
-    sal_Int32 intgr = (sal_Int32)((sal_Int32)(365.25 * jy) + (sal_Int32)(30.6001 * jm) + day + 1720995 );
+    sal_Int32 intgr = static_cast<sal_Int32>(static_cast<sal_Int32>(365.25 * jy) + static_cast<sal_Int32>(30.6001 * jm) + day + 1720995 );
 
     //check for switch to Gregorian calendar
     double const gregcal = 15 + 31 * ( 10 + 12 * 1582 );
 
     if( day + 31 * (month + 12 * year) >= gregcal ) {
         double ja;
-        ja = (sal_Int32)(0.01 * jy);
-        intgr += (sal_Int32)(2 - ja + (sal_Int32)(0.25 * ja));
+        ja = static_cast<sal_Int32>(0.01 * jy);
+        intgr += static_cast<sal_Int32>(2 - ja + static_cast<sal_Int32>(0.25 * ja));
     }
 
-    return (double) intgr;
+    return static_cast<double>(intgr);
 }
 
 }
