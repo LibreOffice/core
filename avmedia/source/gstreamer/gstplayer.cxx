@@ -477,7 +477,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 #endif
         {
             SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " processSyncMessage prepare window id: " <<
-                      GST_MESSAGE_TYPE_NAME( message ) << " " << (int)mnWindowID );
+                      GST_MESSAGE_TYPE_NAME( message ) << " " << static_cast<int>(mnWindowID) );
             if( mpXOverlay )
                 g_object_unref( G_OBJECT ( mpXOverlay ) );
             g_object_set( GST_MESSAGE_SRC( message ), "force-aspect-ratio", FALSE, nullptr );
@@ -496,7 +496,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
             gst_message_parse_state_changed (message, nullptr, &newstate, &pendingstate);
 
-            SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " state change received, new state " << (int)newstate << " pending " << (int)pendingstate );
+            SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " state change received, new state " << static_cast<int>(newstate) << " pending " << static_cast<int>(pendingstate) );
             if( newstate == GST_STATE_PAUSED &&
                 pendingstate == GST_STATE_VOID_PENDING ) {
 
@@ -852,7 +852,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
 
         g_object_get( G_OBJECT( mpVolumeControl ), "volume", &nGstVolume, nullptr );
 
-        nVolumeDB = (sal_Int16) ( 20.0*log10 ( nGstVolume ) );
+        nVolumeDB = static_cast<sal_Int16>( 20.0*log10 ( nGstVolume ) );
     }
 
     return nVolumeDB;
@@ -935,7 +935,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                 {
                     mbUseGtkSink = false;
                     mnWindowID = pEnvData->aWindow;
-                    SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << (int)mnWindowID << " XOverlay " << mpXOverlay);
+                    SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
                     gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
                     if ( mpXOverlay != nullptr )
                         gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );

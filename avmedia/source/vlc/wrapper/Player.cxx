@@ -235,7 +235,7 @@ namespace wrapper
     void Player::setWindow( intptr_t id )
     {
 #if defined UNX
-        libvlc_media_player_set_xwindow( mPlayer, (uint32_t) id );
+        libvlc_media_player_set_xwindow( mPlayer, static_cast<uint32_t>(id) );
 #elif defined MACOSX
         libvlc_media_player_set_nsobject( mPlayer, reinterpret_cast<void*>( id ) );
 #elif defined WNT
