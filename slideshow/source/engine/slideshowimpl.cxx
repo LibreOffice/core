@@ -1491,7 +1491,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     //LineWidth
                     double              fLineWidth;
                     fLineWidth = pPolyPoly->getStrokeWidth();
-                    aXPropSet->setPropertyValue("LineWidth", uno::Any((sal_Int32)fLineWidth) );
+                    aXPropSet->setPropertyValue("LineWidth", uno::Any(static_cast<sal_Int32>(fLineWidth)) );
 
                     // make polygons special
                     xLayerManager->attachShapeToLayer(rPolyShape, xDrawnInSlideshow);
