@@ -49,7 +49,7 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
             uno::Sequence<uno::Any> aCreationArguments(comphelper::InitAnyPropertySequence(
             {
                 {"nodepath", uno::Any(rsRootName)},
-                {"depth", uno::Any((sal_Int32)-1)}
+                {"depth", uno::Any(sal_Int32(-1))}
             }));
 
             OUString sAccessService;

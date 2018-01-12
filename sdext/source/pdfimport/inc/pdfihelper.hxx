@@ -82,7 +82,7 @@ namespace pdfi
     {
         size_t operator()(const FontAttributes& rFont ) const
         {
-            return (size_t)rFont.familyName.hashCode()
+            return static_cast<size_t>(rFont.familyName.hashCode())
                 ^  size_t(rFont.isBold ? 0xd47be593 : 0)
                 ^  size_t(rFont.isItalic ? 0x1efd51a1 : 0)
                 ^  size_t(rFont.isUnderline ? 0xf6bd325a : 0)

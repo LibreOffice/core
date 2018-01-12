@@ -175,7 +175,7 @@ PPPOptimizerTokenEnum TKGet( const OUString& rToken )
     int i, nLen = rToken.getLength();
     std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
-        pBuf[ i ] = (char)rToken[ i ];
+        pBuf[ i ] = static_cast<char>(rToken[ i ]);
     pBuf[ i ] = 0;
     TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf.get() ) );
     if ( aHashIter != pHashMap->end() )

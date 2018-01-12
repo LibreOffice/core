@@ -107,7 +107,7 @@ OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rContr
         Any( nXPos ),
         Any( nYPos ),
         Any( static_cast< sal_Int16 >(nPushButtonType) ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( nTabIndex ),
         Any( nWidth ) };
 
@@ -141,7 +141,7 @@ OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rCo
         Any( bMultiLine ),
         Any( nXPos ),
         Any( nYPos ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( nTabIndex ),
         Any( nWidth ) };
 
@@ -178,7 +178,7 @@ OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
         Any( rLabel ),
         Any( nXPos ),
         Any( nYPos ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( nTabIndex ),
         Any( nWidth ) };
 
@@ -216,12 +216,12 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
         Any( fEffectiveMax ),
         Any( fEffectiveMin ),
         Any( true ),
-        Any( (sal_Int32)12 ),
+        Any( sal_Int32(12) ),
         Any( nXPos ),
         Any( nYPos ),
         Any( true ),
         Any( true ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( nTabIndex ),
         Any( nWidth ) };
 
@@ -264,10 +264,10 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
         Any( true ),
         Any( bEnabled ),
         Any( nHeight ),
-        Any( (sal_Int16)8),
+        Any( sal_Int16(8)),
         Any( nXPos ),
         Any( nYPos ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( rItemList ),
         Any( nTabIndex ),
         Any( nWidth ) };
@@ -304,7 +304,7 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
         Any( bMultiLine ),
         Any( nXPos ),
         Any( nYPos ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( nTabIndex ),
         Any( nWidth ) };
 
@@ -342,11 +342,11 @@ OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rCont
         Any( true ),
         Any( bEnabled ),
         Any( nHeight ),
-        Any( (sal_Int16)8),
+        Any( sal_Int16(8)),
         Any( false ),
         Any( nXPos ),
         Any( nYPos ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( rItemList ),
         Any( nTabIndex ),
         Any( nWidth ) };
@@ -435,9 +435,9 @@ void OptimizerDialog::UpdateControlStatesPage1()
     bool bDeleteHiddenSlides( GetConfigProperty( TK_DeleteHiddenSlides, false ) );
     bool bDeleteNotesPages( GetConfigProperty( TK_DeleteNotesPages, false ) );
 
-    setControlProperty( "CheckBox0Pg3", "State", Any( (sal_Int16)bDeleteUnusedMasterPages ) );
-    setControlProperty( "CheckBox1Pg3", "State", Any( (sal_Int16)bDeleteNotesPages ) );
-    setControlProperty( "CheckBox2Pg3", "State", Any( (sal_Int16)bDeleteHiddenSlides ) );
+    setControlProperty( "CheckBox0Pg3", "State", Any( static_cast<sal_Int16>(bDeleteUnusedMasterPages) ) );
+    setControlProperty( "CheckBox1Pg3", "State", Any( static_cast<sal_Int16>(bDeleteNotesPages) ) );
+    setControlProperty( "CheckBox2Pg3", "State", Any( static_cast<sal_Int16>(bDeleteHiddenSlides) ) );
 }
 void OptimizerDialog::InitPage1()
 {
@@ -473,9 +473,9 @@ void OptimizerDialog::UpdateControlStatesPage2()
     bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, false ) );
     bool bRemoveCropArea( GetConfigProperty( TK_RemoveCropArea, false ) );
     bool bEmbedLinkedGraphics( GetConfigProperty( TK_EmbedLinkedGraphics, true ) );
-    sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, (sal_Int32)90 ) );
+    sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, sal_Int32(90) ) );
 
-    sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, (sal_Int32)0 ) );
+    sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, sal_Int32(0) ) );
 
     sal_Int32 nI0, nI1, nI2, nI3;
     nI0 = nI1 = nI2 = nI3 = 0;
@@ -497,14 +497,14 @@ void OptimizerDialog::UpdateControlStatesPage2()
     if ( aResolutionText.isEmpty() )
         aResolutionText = OUString::number( nImageResolution );
 
-    setControlProperty( "RadioButton0Pg1", "State", Any( (sal_Int16)( !bJPEGCompression ) ) );
-    setControlProperty( "RadioButton1Pg1", "State", Any( (sal_Int16) bJPEGCompression ) );
+    setControlProperty( "RadioButton0Pg1", "State", Any( static_cast<sal_Int16>( !bJPEGCompression ) ) );
+    setControlProperty( "RadioButton1Pg1", "State", Any( static_cast<sal_Int16>(bJPEGCompression) ) );
     setControlProperty( "FixedText1Pg1", "Enabled", Any( bJPEGCompression ) );
     setControlProperty( "FormattedField0Pg1", "Enabled", Any( bJPEGCompression ) );
-    setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( (double)nJPEGQuality ) );
-    setControlProperty( "CheckBox1Pg1", "State", Any( (sal_Int16)bRemoveCropArea ) );
+    setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( static_cast<double>(nJPEGQuality) ) );
+    setControlProperty( "CheckBox1Pg1", "State", Any( static_cast<sal_Int16>(bRemoveCropArea) ) );
     setControlProperty( "ComboBox0Pg1", "Text", Any( aResolutionText ) );
-    setControlProperty( "CheckBox2Pg1", "State", Any( (sal_Int16)bEmbedLinkedGraphics ) );
+    setControlProperty( "CheckBox2Pg1", "State", Any( static_cast<sal_Int16>(bEmbedLinkedGraphics) ) );
 }
 void OptimizerDialog::InitPage2()
 {
@@ -535,13 +535,13 @@ void OptimizerDialog::InitPage2()
 void OptimizerDialog::UpdateControlStatesPage3()
 {
     bool bConvertOLEObjects( GetConfigProperty( TK_OLEOptimization, false ) );
-    sal_Int16 nOLEOptimizationType( GetConfigProperty( TK_OLEOptimizationType, (sal_Int16)0 ) );
+    sal_Int16 nOLEOptimizationType( GetConfigProperty( TK_OLEOptimizationType, sal_Int16(0) ) );
 
-    setControlProperty( "CheckBox0Pg2", "State", Any( (sal_Int16)bConvertOLEObjects ) );
+    setControlProperty( "CheckBox0Pg2", "State", Any( static_cast<sal_Int16>(bConvertOLEObjects) ) );
     setControlProperty( "RadioButton0Pg2", "Enabled", Any( bConvertOLEObjects ) );
-    setControlProperty( "RadioButton0Pg2", "State", Any( (sal_Int16)( nOLEOptimizationType == 0 ) ) );
+    setControlProperty( "RadioButton0Pg2", "State", Any( static_cast<sal_Int16>( nOLEOptimizationType == 0 ) ) );
     setControlProperty( "RadioButton1Pg2", "Enabled", Any( bConvertOLEObjects ) );
-    setControlProperty( "RadioButton1Pg2", "State", Any( (sal_Int16)( nOLEOptimizationType == 1 ) ) );
+    setControlProperty( "RadioButton1Pg2", "State", Any( static_cast<sal_Int16>( nOLEOptimizationType == 1 ) ) );
 }
 void OptimizerDialog::InitPage3()
 {
@@ -594,13 +594,13 @@ void OptimizerDialog::UpdateControlStatesPage4()
     bool bSaveAs( GetConfigProperty( TK_SaveAs, true ) );
     if ( mbIsReadonly )
     {
-        setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)false ) );
-        setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16)true ) );
+        setControlProperty( "RadioButton0Pg4", "State", Any( sal_Int16(false) ) );
+        setControlProperty( "RadioButton1Pg4", "State", Any( sal_Int16(true) ) );
     }
     else
     {
-        setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)( !bSaveAs ) ) );
-        setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16) bSaveAs ) );
+        setControlProperty( "RadioButton0Pg4", "State", Any( static_cast<sal_Int16>( !bSaveAs ) ) );
+        setControlProperty( "RadioButton1Pg4", "State", Any( static_cast<sal_Int16>(bSaveAs) ) );
     }
     setControlProperty( "ComboBox0Pg4", "Enabled", Any( false ) );
 
@@ -731,8 +731,8 @@ void OptimizerDialog::UpdateControlStatesPage4()
 // generating graphic compression info
     sal_Int32 nGraphics = 0;
     bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, false ) );
-    sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, (sal_Int32)90 ) );
-    sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, (sal_Int32)0 ) );
+    sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, sal_Int32(90) ) );
+    sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, sal_Int32(0) ) );
     GraphicSettings aGraphicSettings( bJPEGCompression, nJPEGQuality, GetConfigProperty( TK_RemoveCropArea, false ),
                                         nImageResolution, GetConfigProperty( TK_EmbedLinkedGraphics, true ) );
     GraphicCollector::CountGraphics( UnoDialog::mxContext, mxController->getModel(), aGraphicSettings, nGraphics );
@@ -834,14 +834,14 @@ void OptimizerDialog::InitPage4()
             OUString("Width") };
 
         Any pValues[] = {
-            Any( (sal_Int32)12 ),
+            Any( sal_Int32(12) ),
             Any( OUString("STR_SAVE_AS") ),
-            Any( (sal_Int32)( PAGE_POS_X + 6 ) ),
-            Any( (sal_Int32)( DIALOG_HEIGHT - 75 ) ),
-            Any( (sal_Int32)0 ),
-            Any( (sal_Int32)100 ),
-            Any( (sal_Int32)0 ),
-            Any( (sal_Int32)( PAGE_WIDTH - 12 ) ) };
+            Any( sal_Int32( PAGE_POS_X + 6 ) ),
+            Any( sal_Int32( DIALOG_HEIGHT - 75 ) ),
+            Any( sal_Int32(0) ),
+            Any( sal_Int32(100) ),
+            Any( sal_Int32(0) ),
+            Any( sal_Int32( PAGE_WIDTH - 12 ) ) };
 
         sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 

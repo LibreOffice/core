@@ -406,7 +406,7 @@ int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPD
         PDFObject* pStream = i_pPDFFile->findObject( nObject, nGeneration );
         if( ! pStream )
         {
-            fprintf( stderr, "object %d %d not found !\n", (int)nObject, (int)nGeneration );
+            fprintf( stderr, "object %d %d not found !\n", static_cast<int>(nObject), static_cast<int>(nGeneration) );
             continue;
         }
 

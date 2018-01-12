@@ -139,7 +139,7 @@ void writeBinaryBuffer( const OutputBuffer& rBuffer )
     // put buffer to stderr
     if( !rBuffer.empty() )
         if( fwrite(&rBuffer[0], sizeof(char),
-                   rBuffer.size(), g_binary_out) != (size_t)rBuffer.size() )
+                   rBuffer.size(), g_binary_out) != static_cast<size_t>(rBuffer.size()) )
             exit(1); // error
 
     // ---sync point--- see SYNC STREAMS above
@@ -163,7 +163,7 @@ bool ExtractJpegData(Stream* str, OutputBuffer& outBuf)
 
         if (collectBytes)
         {
-            outBuf.push_back((Output_t)b1);
+            outBuf.push_back(static_cast<Output_t>(b1));
 
             bytesToMarker--;
             bytesToLen--;
@@ -183,8 +183,8 @@ bool ExtractJpegData(Stream* str, OutputBuffer& outBuf)
                     collectBytes = true;
                     bytesToMarker = 2;
 
-                    outBuf.push_back((Output_t)0xFF);
-                    outBuf.push_back((Output_t)0xD8);
+                    outBuf.push_back(Output_t(0xFF));
+                    outBuf.push_back(Output_t(0xD8));
                 }
                 else
                 {
@@ -225,7 +225,7 @@ void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
     o_rOutputBuf.clear();
     ExtractJpegData(str, o_rOutputBuf);
 
-    printf( " JPEG %d", (int)o_rOutputBuf.size() );
+    printf( " JPEG %d", static_cast<int>(o_rOutputBuf.size()) );
     if( bWithLinefeed )
         printf("\n");
 
@@ -349,7 +349,7 @@ void writePng_( OutputBuffer&     o_rOutputBuf,
     // get png image
     PngHelper::createPng( o_rOutputBuf, str, width, height, zeroColor, oneColor, bIsMask );
 
-    printf( " PNG %d", (int)o_rOutputBuf.size() );
+    printf( " PNG %d", static_cast<int>(o_rOutputBuf.size()) );
     if( bWithLinefeed )
         printf("\n");
 }
@@ -365,7 +365,7 @@ void writePng_( OutputBuffer& o_rOutputBuf,
     // get png image
     PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap );
 
-    printf( " PNG %d", (int)o_rOutputBuf.size() );
+    printf( " PNG %d", static_cast<int>(o_rOutputBuf.size()) );
     printf("\n");
 }
 
@@ -380,7 +380,7 @@ void writePng_( OutputBuffer& o_rOutputBuf,
     // get png image
     PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert );
 
-    printf( " PNG %d", (int)o_rOutputBuf.size() );
+    printf( " PNG %d", static_cast<int>(o_rOutputBuf.size()) );
     printf("\n");
 }
 
@@ -492,7 +492,7 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
     // ---sync point--- see SYNC STREAMS above
     fflush(stdout);
 
-    if( fwrite(pBuf, sizeof(char), nSize, g_binary_out) != (size_t)nSize )
+    if( fwrite(pBuf, sizeof(char), nSize, g_binary_out) != static_cast<size_t>(nSize) )
     {
         gfree(pBuf);
         exit(1); // error
@@ -744,7 +744,7 @@ void PDFOutDev::updateFont(GfxState *state)
 
         Ref* pID = gfxFont->getID();
         // TODO(Q3): Portability problem
-        long long fontID = (long long)pID->gen << 32 | (long long)pID->num;
+        long long fontID = static_cast<long long>(pID->gen) << 32 | static_cast<long long>(pID->num);
         std::unordered_map< long long, FontAttributes >::const_iterator it =
             m_aFontMap.find( fontID );
         if( it == m_aFontMap.end() )
@@ -993,8 +993,8 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
         // lower bound values, second half upper bound values
         if( colorMap->getColorSpace()->getMode() == csIndexed )
         {
-            aMaskBuf.push_back( (char)maskColors[0] );
-            aMaskBuf.push_back( (char)maskColors[gfxColorMaxComps] );
+            aMaskBuf.push_back( static_cast<char>(maskColors[0]) );
+            aMaskBuf.push_back( static_cast<char>(maskColors[gfxColorMaxComps]) );
         }
         else
         {
@@ -1017,7 +1017,7 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
         }
     }
 
-    printf( " %d", (int)aMaskBuf.size() );
+    printf( " %d", static_cast<int>(aMaskBuf.size()) );
     writeImageLF( aBuf, str, width, height, colorMap );
     writeBinaryBuffer(aBuf);
     writeBinaryBuffer(aMaskBuf);
