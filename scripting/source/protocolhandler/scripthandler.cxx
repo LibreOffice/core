@@ -240,7 +240,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             OUString reason = "ScriptProtocolHandler::dispatch: caught ";
 
-            invokeResult <<= reason.concat( aException.getValueTypeName() ).concat( e.Message );
+            invokeResult <<= reason.concat( aException.getValueTypeName() ).concat( ": " ).concat( e.Message );
 
             bCaughtException = true;
         }
