@@ -680,21 +680,21 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         else
         {
 #endif /* PY_MAJOR_VERSION >= 3 */
-        sal_Int64 l = (sal_Int64)PyLong_AsLong (o);
+        sal_Int64 l = static_cast<sal_Int64>(PyLong_AsLong (o));
         if( l < 128 && l >= -128 )
         {
-            sal_Int8 b = (sal_Int8 ) l;
+            sal_Int8 b = static_cast<sal_Int8>(l);
             a <<= b;
         }
         else if( l <= 0x7fff && l >= -0x8000 )
         {
-            sal_Int16 s = (sal_Int16) l;
+            sal_Int16 s = static_cast<sal_Int16>(l);
             a <<= s;
         }
         else if( l <= SAL_CONST_INT64(0x7fffffff) &&
                  l >= -SAL_CONST_INT64(0x80000000) )
         {
-            sal_Int32 l32 = (sal_Int32) l;
+            sal_Int32 l32 = static_cast<sal_Int32>(l);
             a <<= l32;
         }
         else

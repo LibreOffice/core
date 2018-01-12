@@ -263,15 +263,15 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         break;
     case typelib_TypeClass_BYTE:
         buf.append( "0x" );
-        buf.append( (sal_Int32)*static_cast<sal_Int8 const *>(pVal), 16 );
+        buf.append( static_cast<sal_Int32>(*static_cast<sal_Int8 const *>(pVal)), 16 );
         break;
     case typelib_TypeClass_SHORT:
         buf.append( "0x" );
-        buf.append( (sal_Int32)*static_cast<sal_Int16 const *>(pVal), 16 );
+        buf.append( static_cast<sal_Int32>(*static_cast<sal_Int16 const *>(pVal)), 16 );
         break;
     case typelib_TypeClass_UNSIGNED_SHORT:
         buf.append( "0x" );
-        buf.append( (sal_Int32)*static_cast<sal_uInt16 const *>(pVal), 16 );
+        buf.append( static_cast<sal_Int32>(*static_cast<sal_uInt16 const *>(pVal)), 16 );
         break;
     case typelib_TypeClass_LONG:
         buf.append( "0x" );
@@ -279,7 +279,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         break;
     case typelib_TypeClass_UNSIGNED_LONG:
         buf.append( "0x" );
-        buf.append( (sal_Int64)*static_cast<sal_uInt32 const *>(pVal), 16 );
+        buf.append( static_cast<sal_Int64>(*static_cast<sal_uInt32 const *>(pVal)), 16 );
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -356,10 +356,10 @@ int lcl_PySlice_GetIndicesEx( PyObject *pObject, sal_Int32 nLen, sal_Int32 *nSta
         return -1;
     }
 
-    *nStart = (sal_Int32)nStart_ssize;
-    *nStop = (sal_Int32)nStop_ssize;
-    *nStep = (sal_Int32)nStep_ssize;
-    *nSliceLength = (sal_Int32)nSliceLength_ssize;
+    *nStart = static_cast<sal_Int32>(nStart_ssize);
+    *nStop = static_cast<sal_Int32>(nStop_ssize);
+    *nStep = static_cast<sal_Int32>(nStep_ssize);
+    *nSliceLength = static_cast<sal_Int32>(nSliceLength_ssize);
     return 0;
 }
 
@@ -1013,7 +1013,7 @@ int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue )
             PyErr_SetString( PyExc_ValueError, "tuple too large" );
             return 1;
         }
-        sal_Int32 nTupleLength = (sal_Int32)nTupleLength_ssize;
+        sal_Int32 nTupleLength = static_cast<sal_Int32>(nTupleLength_ssize);
 
         if ( (nTupleLength != nSliceLength) && (nStep != 1) )
         {

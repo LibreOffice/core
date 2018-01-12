@@ -158,7 +158,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
                     if( seqInfo[i].aMode == css::reflection::ParamMode_OUT ||
                         seqInfo[i].aMode == css::reflection::ParamMode_INOUT )
                     {
-                        ret[nOutsAssigned] = (sal_Int16) i;
+                        ret[nOutsAssigned] = static_cast<sal_Int16>(i);
                         nOutsAssigned ++;
                     }
                 }
