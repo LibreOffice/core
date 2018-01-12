@@ -111,23 +111,23 @@ public:
     virtual sal_Bool SAL_CALL getIsUseDictionaryList() override
         { return getPropertyBool(UPN_IS_USE_DICTIONARY_LIST); }
     virtual void SAL_CALL setIsUseDictionaryList(sal_Bool p1) override
-        { setProperty(UPN_IS_USE_DICTIONARY_LIST, (bool) p1); }
+        { setProperty(UPN_IS_USE_DICTIONARY_LIST, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsIgnoreControlCharacters() override
         { return getPropertyBool(UPN_IS_IGNORE_CONTROL_CHARACTERS); }
     virtual void SAL_CALL setIsIgnoreControlCharacters(sal_Bool p1) override
-        { setProperty(UPN_IS_IGNORE_CONTROL_CHARACTERS, (bool) p1); }
+        { setProperty(UPN_IS_IGNORE_CONTROL_CHARACTERS, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsSpellUpperCase() override
         { return getPropertyBool(UPN_IS_SPELL_UPPER_CASE); }
     virtual void SAL_CALL setIsSpellUpperCase(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_UPPER_CASE, (bool) p1); }
+        { setProperty(UPN_IS_SPELL_UPPER_CASE, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsSpellWithDigits() override
         { return getPropertyBool(UPN_IS_SPELL_WITH_DIGITS); }
     virtual void SAL_CALL setIsSpellWithDigits(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_WITH_DIGITS, (bool) p1); }
+        { setProperty(UPN_IS_SPELL_WITH_DIGITS, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsSpellCapitalization() override
         { return getPropertyBool(UPN_IS_SPELL_CAPITALIZATION); }
     virtual void SAL_CALL setIsSpellCapitalization(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_CAPITALIZATION, (bool) p1); }
+        { setProperty(UPN_IS_SPELL_CAPITALIZATION, static_cast<bool>(p1)); }
     virtual sal_Int16 SAL_CALL getHyphMinLeading() override
         { return getPropertyInt16(UPN_HYPH_MIN_LEADING); }
     virtual void SAL_CALL setHyphMinLeading(sal_Int16 p1) override
@@ -147,23 +147,23 @@ public:
     virtual sal_Bool SAL_CALL getIsHyphAuto() override
         { return getPropertyBool(UPN_IS_HYPH_AUTO); }
     virtual void SAL_CALL setIsHyphAuto(sal_Bool p1) override
-        { setProperty(UPN_IS_HYPH_AUTO, (bool) p1); }
+        { setProperty(UPN_IS_HYPH_AUTO, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsHyphSpecial() override
         { return getPropertyBool(UPN_IS_HYPH_SPECIAL); }
     virtual void SAL_CALL setIsHyphSpecial(sal_Bool p1) override
-        { setProperty(UPN_IS_HYPH_SPECIAL, (bool) p1); }
+        { setProperty(UPN_IS_HYPH_SPECIAL, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsSpellAuto() override
         { return getPropertyBool(UPN_IS_SPELL_AUTO); }
     virtual void SAL_CALL setIsSpellAuto(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_AUTO, (bool) p1); }
+        { setProperty(UPN_IS_SPELL_AUTO, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsSpellSpecial() override
         { return getPropertyBool(UPN_IS_SPELL_SPECIAL); }
     virtual void SAL_CALL setIsSpellSpecial(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_SPECIAL, (bool) p1); }
+        { setProperty(UPN_IS_SPELL_SPECIAL, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsWrapReverse() override
         { return getPropertyBool(UPN_IS_WRAP_REVERSE); }
     virtual void SAL_CALL setIsWrapReverse(sal_Bool p1) override
-        { setProperty(UPN_IS_WRAP_REVERSE, (bool) p1); }
+        { setProperty(UPN_IS_WRAP_REVERSE, static_cast<bool>(p1)); }
     virtual css::lang::Locale SAL_CALL getDefaultLocale_CJK() override
         { return getPropertyLocale(UPN_DEFAULT_LOCALE_CJK); }
     virtual void SAL_CALL setDefaultLocale_CJK(const css::lang::Locale& p1) override

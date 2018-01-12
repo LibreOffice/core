@@ -301,9 +301,9 @@ void ConvDic::AddEntry( const OUString &rLeftText, const OUString &rRightText )
     if (bMaxCharCountIsValid)
     {
         if (rLeftText.getLength() > nMaxLeftCharCount)
-            nMaxLeftCharCount   = (sal_Int16) rLeftText.getLength();
+            nMaxLeftCharCount   = static_cast<sal_Int16>(rLeftText.getLength());
         if (pFromRight.get() && rRightText.getLength() > nMaxRightCharCount)
-            nMaxRightCharCount  = (sal_Int16) rRightText.getLength();
+            nMaxRightCharCount  = static_cast<sal_Int16>(rRightText.getLength());
     }
 
     bIsModified = true;
@@ -513,7 +513,7 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
         ConvMap::iterator aIt = aFromLeft.begin();
         while (aIt != aFromLeft.end())
         {
-            sal_Int16 nTmp = (sal_Int16) (*aIt).first.getLength();
+            sal_Int16 nTmp = static_cast<sal_Int16>((*aIt).first.getLength());
             if (nTmp > nMaxLeftCharCount)
                 nMaxLeftCharCount = nTmp;
             ++aIt;
@@ -525,7 +525,7 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
             aIt = pFromRight->begin();
             while (aIt != pFromRight->end())
             {
-                sal_Int16 nTmp = (sal_Int16) (*aIt).first.getLength();
+                sal_Int16 nTmp = static_cast<sal_Int16>((*aIt).first.getLength());
                 if (nTmp > nMaxRightCharCount)
                     nMaxRightCharCount = nTmp;
                 ++aIt;
