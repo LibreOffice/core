@@ -158,20 +158,20 @@ std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::
         if ( nLength > SAL_MAX_INT32 )
             throw uno::RuntimeException();
 
-        uno::Sequence< sal_Int8 > aBuffer( (sal_Int32)nLength );
+        uno::Sequence< sal_Int8 > aBuffer( static_cast<sal_Int32>(nLength) );
         m_xSeekable->seek( 0 );
 
-        sal_Int32 nRead = m_xInputStream->readBytes( aBuffer, (sal_Int32)nLength );
+        sal_Int32 nRead = m_xInputStream->readBytes( aBuffer, static_cast<sal_Int32>(nLength) );
         nLength -= nRead;
         while ( nLength > 0 )
         {
-            uno::Sequence< sal_Int8 > aTmpBuf( (sal_Int32)nLength );
-            nRead = m_xInputStream->readBytes( aTmpBuf, (sal_Int32)nLength );
+            uno::Sequence< sal_Int8 > aTmpBuf( static_cast<sal_Int32>(nLength) );
+            nRead = m_xInputStream->readBytes( aTmpBuf, static_cast<sal_Int32>(nLength) );
             if ( nRead > nLength )
                 throw uno::RuntimeException();
 
             for ( sal_Int32 nInd = 0; nInd < nRead; nInd++ )
-                aBuffer[aBuffer.getLength() - (sal_Int32)nLength + nInd] = aTmpBuf[nInd];
+                aBuffer[aBuffer.getLength() - static_cast<sal_Int32>(nLength) + nInd] = aTmpBuf[nInd];
             nLength -= nRead;
         }
 

@@ -60,7 +60,7 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 
 } // namespace
 
-const double D_MAX_U_INT32 = (double) 0xffffffff;      // 4294967295.0
+const double D_MAX_U_INT32 = double(0xffffffff);      // 4294967295.0
 
 const double D_MAX_D_BY_100  = 1.7E306;
 const double D_MIN_M_BY_1000 = 2.3E-305;
@@ -82,7 +82,7 @@ sal_Int32 SvNumberformat::InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_U
         int n = 2;   // Default for chars > 128 (HACK!)
         if( c <= 127 )
         {
-            n = (int)cCharWidths[ c - 32 ];
+            n = static_cast<int>(cCharWidths[ c - 32 ]);
         }
         while( n-- )
         {
@@ -98,7 +98,7 @@ static long GetPrecExp( double fAbsVal )
     if ( fAbsVal < 1e-7 || fAbsVal > 1e7 )
     {
         // Shear: whether it's faster or not, falls in between 1e6 and 1e7
-        return (long) floor( log10( fAbsVal ) ) + 1;
+        return static_cast<long>(floor( log10( fAbsVal ) )) + 1;
     }
     else
     {
@@ -928,7 +928,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     {
                         sStr = "NatNum";
                         //! eSymbolType is negative
-                        sal_uInt8 nNum = (sal_uInt8)(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
+                        sal_uInt8 nNum = static_cast<sal_uInt8>(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
                         sStr += OUString::number( nNum );
                         NumFor[nIndex].SetNatNumNum( nNum, false );
                     }
@@ -950,7 +950,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     else
                     {
                         //! eSymbolType is negative
-                        sal_uInt8 nNum = (sal_uInt8)(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
+                        sal_uInt8 nNum = static_cast<sal_uInt8>(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
                         sStr = "DBNum" + OUStringLiteral1('0' + nNum);
                         NumFor[nIndex].SetNatNumNum( nNum, true );
                     }
@@ -1680,7 +1680,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                     sBuffSymbol.append( aBufStr.copy( --nPos, aNatNum.getLength()+1 ));
                     nPos += aNatNum.getLength()+1;
                     //! SymbolType is negative
-                    eSymbolType = (short) (BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
+                    eSymbolType = static_cast<short>(BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
                     eState = SsGetPrefix;
                 }
                 else if ( lcl_matchKeywordAndGetNumber( aBufStr, nPos-1, aDBNum, nDBNum) &&
@@ -2042,17 +2042,17 @@ short SvNumberformat::ImpCheckCondition(double fNumber,
     case NUMBERFORMAT_OP_NO:
         return -1;
     case NUMBERFORMAT_OP_EQ:
-        return (short) (fNumber == fLimit);
+        return static_cast<short>(fNumber == fLimit);
     case NUMBERFORMAT_OP_NE:
-        return (short) (fNumber != fLimit);
+        return static_cast<short>(fNumber != fLimit);
     case NUMBERFORMAT_OP_LT:
-        return (short) (fNumber <  fLimit);
+        return static_cast<short>(fNumber <  fLimit);
     case NUMBERFORMAT_OP_LE:
-        return (short) (fNumber <= fLimit);
+        return static_cast<short>(fNumber <= fLimit);
     case NUMBERFORMAT_OP_GT:
-        return (short) (fNumber >  fLimit);
+        return static_cast<short>(fNumber >  fLimit);
     case NUMBERFORMAT_OP_GE:
-        return (short) (fNumber >= fLimit);
+        return static_cast<short>(fNumber >= fLimit);
     default:
         return -1;
     }
@@ -2544,9 +2544,9 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         if ( rInfo.nCntPre != 1 ) // rescale Exp
         {
             sal_Int32 nExp = ExpStr.toString().toInt32() * nExpSign;
-            sal_Int32 nRescale = (rInfo.nCntPre != 0) ? nExp % (sal_Int32)rInfo.nCntPre : -1;
+            sal_Int32 nRescale = (rInfo.nCntPre != 0) ? nExp % static_cast<sal_Int32>(rInfo.nCntPre) : -1;
             if( nRescale < 0 && rInfo.nCntPre != 0 )
-                nRescale += (sal_Int32)rInfo.nCntPre;
+                nRescale += static_cast<sal_Int32>(rInfo.nCntPre);
             nExp -= nRescale;
             if ( nExp < 0 )
             {
@@ -2651,7 +2651,7 @@ double SvNumberformat::GetRoundFractionValue ( double fNumber ) const
     // fNumber is modified in ImpGetFractionElements to absolute fractional part
     ImpGetFractionElements ( fNumber, nIx, fIntPart, nFrac, nDiv );
     if ( nDiv > 0 )
-        return fSign * ( fIntPart + (double)nFrac / (double)nDiv );
+        return fSign * ( fIntPart + static_cast<double>(nFrac) / static_cast<double>(nDiv) );
     else
         return fSign * fIntPart;
 }
@@ -2667,9 +2667,9 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
     nDiv = lcl_GetDenominatorString( rInfo, NumFor[nIx].GetCount() ).toInt32();
     if( nDiv > 0 )
     {   // Forced Denominator
-        nFrac = (sal_uInt64)floor ( fNumber * nDiv );
-        double fFracNew = (double)nFrac / (double)nDiv;
-        double fFracNew1 = (double)(nFrac + 1) / (double)nDiv;
+        nFrac = static_cast<sal_uInt64>(floor ( fNumber * nDiv ));
+        double fFracNew = static_cast<double>(nFrac) / static_cast<double>(nDiv);
+        double fFracNew1 = static_cast<double>(nFrac + 1) / static_cast<double>(nDiv);
         double fDiff = fNumber - fFracNew;
         if( fDiff > ( fFracNew1 - fNumber ) )
         {
@@ -2679,7 +2679,7 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
     else // Calculated Denominator
     {
         nDiv = 1;
-        sal_uInt64 nBasis = ((sal_uInt64)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
+        sal_uInt64 nBasis = static_cast<sal_uInt64>(floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
         sal_uInt64 nFracPrev = 1, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
         double fRemainder = fNumber;
 
@@ -2688,8 +2688,8 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
         while ( fRemainder > 0.0 )
         {
             double fTemp = 1.0 / fRemainder;             // 64bits precision required when fRemainder is very weak
-            nPartialDenom = (sal_uInt64) floor(fTemp);   // due to floating point notation with double precision
-            fRemainder = fTemp - (double)nPartialDenom;
+            nPartialDenom = static_cast<sal_uInt64>(floor(fTemp));   // due to floating point notation with double precision
+            fRemainder = fTemp - static_cast<double>(nPartialDenom);
             nDivNext = nPartialDenom * nDiv + nDivPrev;
             if ( nDivNext <= nBasis )  // continue loop
             {
@@ -2706,7 +2706,7 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
                 {
                     sal_uInt64 nFracTest = nCollat * nFrac + nFracPrev;
                     sal_uInt64 nDivTest  = nCollat * nDiv  + nDivPrev;
-                    double fSign = ((double)nFrac > fNumber * (double)nDiv)?1.0:-1.0;
+                    double fSign = (static_cast<double>(nFrac) > fNumber * static_cast<double>(nDiv))?1.0:-1.0;
                     if ( fSign * ( double(nFrac * nDivTest + nDiv * nFracTest) - 2.0 * double(nDiv * nDivTest) * fNumber ) > 0.0 )
                     {
                         nFrac = nFracTest;
@@ -2756,14 +2756,14 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 
     if (rInfo.nCntPre == 0) // Improper fraction
     {
-        double fNum1 = fNum * (double)nDiv + (double)nFrac;
+        double fNum1 = fNum * static_cast<double>(nDiv) + static_cast<double>(nFrac);
 
         if (fNum1 > D_MAX_U_INT32)
         {
             sBuff = ImpSvNumberformatScan::GetErrorString();
             return false;
         }
-        nFrac = (sal_uInt64) floor(fNum1);
+        nFrac = static_cast<sal_uInt64>(floor(fNum1));
     }
     else if (fNum == 0.0 && nFrac != 0)
     {
@@ -2939,7 +2939,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         sBuff = ImpSvNumberformatScan::GetErrorString();
         return false;
     }
-    sal_uInt32 nSeconds = (sal_uInt32)floor( fTime );
+    sal_uInt32 nSeconds = static_cast<sal_uInt32>(floor( fTime ));
 
     OUStringBuffer sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                                                           rtl_math_StringFormat_F, int(nCntPost), '.'));
@@ -3758,7 +3758,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
     sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
 
-    sal_uInt32 nSeconds = (sal_uInt32)floor( fTime );
+    sal_uInt32 nSeconds = static_cast<sal_uInt32>(floor( fTime ));
     OUStringBuffer sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                                                   rtl_math_StringFormat_F, int(nCntPost), '.'));
     sSecStr.stripStart('0');
@@ -4134,7 +4134,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             if ((rInfo.nCntPost + nPrecExp) > 15 && nPrecExp < 15)
             {
                 sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, 15-nPrecExp, '.');
-                for (long l = 15-nPrecExp; l < (long) rInfo.nCntPost; l++)
+                for (long l = 15-nPrecExp; l < static_cast<long>(rInfo.nCntPost); l++)
                 {
                     sStr.append('0');
                 }
@@ -5269,7 +5269,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             if ( nLanguageID == LANGUAGE_SYSTEM && nOriginalLang != LANGUAGE_DONTKNOW )
                 nLanguageID = nOriginalLang;
         }
-        lcl_insertLCID( aStr, nAlphabetID + nCalendarID + (sal_uInt16)nLanguageID, nPosInsertLCID );
+        lcl_insertLCID( aStr, nAlphabetID + nCalendarID + static_cast<sal_uInt16>(nLanguageID), nPosInsertLCID );
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats

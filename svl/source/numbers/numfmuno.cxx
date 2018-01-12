@@ -650,12 +650,12 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
     else if (aPropertyName == PROPERTYNAME_DECIMALS)
     {
         pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-        aRet <<= (sal_Int16) nDecimals;
+        aRet <<= static_cast<sal_Int16>(nDecimals);
     }
     else if (aPropertyName == PROPERTYNAME_LEADING)
     {
         pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-        aRet <<= (sal_Int16) nLeading;
+        aRet <<= static_cast<sal_Int16>(nLeading);
     }
     else if (aPropertyName == PROPERTYNAME_NEGRED)
     {
@@ -869,9 +869,9 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
         aRet <<= rDate.GetUNODate();
     }
     else if (aPropertyName == PROPERTYNAME_STDDEC)
-        aRet <<= (sal_Int16)( pFormatter->GetStandardPrec() );
+        aRet <<= static_cast<sal_Int16>( pFormatter->GetStandardPrec() );
     else if (aPropertyName == PROPERTYNAME_TWODIGIT)
-        aRet <<= (sal_Int16)( pFormatter->GetYear2000() );
+        aRet <<= static_cast<sal_Int16>( pFormatter->GetYear2000() );
     else
         throw beans::UnknownPropertyException();
 

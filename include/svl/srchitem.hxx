@@ -262,7 +262,7 @@ bool SvxSearchItem::IsLEVRelaxed() const
 
 sal_uInt16 SvxSearchItem::GetLEVOther() const
 {
-    return (sal_Int16) m_aSearchOpt.changedChars;
+    return static_cast<sal_Int16>(m_aSearchOpt.changedChars);
 }
 
 void SvxSearchItem::SetLEVOther( sal_uInt16 nVal )
@@ -272,7 +272,7 @@ void SvxSearchItem::SetLEVOther( sal_uInt16 nVal )
 
 sal_uInt16 SvxSearchItem::GetLEVShorter() const
 {
-    return (sal_Int16) m_aSearchOpt.insertedChars;
+    return static_cast<sal_Int16>(m_aSearchOpt.insertedChars);
 }
 
 void SvxSearchItem::SetLEVShorter( sal_uInt16 nVal )
@@ -282,7 +282,7 @@ void SvxSearchItem::SetLEVShorter( sal_uInt16 nVal )
 
 sal_uInt16 SvxSearchItem::GetLEVLonger() const
 {
-    return (sal_Int16) m_aSearchOpt.deletedChars;
+    return static_cast<sal_Int16>(m_aSearchOpt.deletedChars);
 }
 
 void SvxSearchItem::SetLEVLonger( sal_uInt16 nVal )

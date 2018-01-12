@@ -615,7 +615,7 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
             {
                 bCheck = true;
                 nKey = nPos+1;
-                pStdFormat->SetLastInsertKey((sal_uInt16) (nKey-CLOffset), SvNumberformat::FormatterPrivateAccess());
+                pStdFormat->SetLastInsertKey(static_cast<sal_uInt16>(nKey-CLOffset), SvNumberformat::FormatterPrivateAccess());
             }
         }
     }
@@ -2797,7 +2797,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         }
     }
 
-    pStdFormat->SetLastInsertKey( (sal_uInt16)(nPos - CLOffset), SvNumberformat::FormatterPrivateAccess() );
+    pStdFormat->SetLastInsertKey( static_cast<sal_uInt16>(nPos - CLOffset), SvNumberformat::FormatterPrivateAccess() );
 }
 
 
@@ -3167,7 +3167,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                 }
                 else
                 {
-                    pStdFormat->SetLastInsertKey((sal_uInt16) (nNewKey - nCLOffset),
+                    pStdFormat->SetLastInsertKey(static_cast<sal_uInt16>(nNewKey - nCLOffset),
                             SvNumberformat::FormatterPrivateAccess());
                 }
             }
@@ -3297,7 +3297,7 @@ sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear ) const
 sal_uInt16 SvNumberFormatter::GetYear2000Default()
 {
     if (!utl::ConfigManager::IsFuzzing())
-        return (sal_uInt16) ::utl::MiscCfg().GetYear2000();
+        return static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000());
     return 1930;
 }
 

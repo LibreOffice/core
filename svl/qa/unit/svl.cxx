@@ -412,7 +412,7 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
         aMessage += "\", ";
         aMessage += rtl::OString::number( fPreviewNumber );
         aMessage += ", sStr, ppColor, ";
-        aMessage += rtl::OString::number( (sal_uInt16)eLang );
+        aMessage += rtl::OString::number( static_cast<sal_uInt16>(eLang) );
         aMessage += " ) failed";
         CPPUNIT_FAIL( aMessage.getStr() );
     }

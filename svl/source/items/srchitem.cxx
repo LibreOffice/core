@@ -486,7 +486,7 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
                 nLocale = LanguageTag::convertToLanguageType( m_aSearchOpt.Locale );
             else
                 nLocale = LANGUAGE_NONE;
-            rVal <<= (sal_Int16)(sal_uInt16)nLocale;
+            rVal <<= static_cast<sal_Int16>(static_cast<sal_uInt16>(nLocale));
             break;
         }
 
@@ -608,7 +608,7 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_SEARCH_COMMAND:
             bRet = (rVal >>= nInt); m_nCommand = static_cast<SvxSearchCmd>(nInt); break;
         case MID_SEARCH_STYLEFAMILY:
-            bRet = (rVal >>= nInt); m_eFamily =  (SfxStyleFamily) (sal_Int16) nInt; break;
+            bRet = (rVal >>= nInt); m_eFamily =  (SfxStyleFamily) static_cast<sal_Int16>(nInt); break;
         case MID_SEARCH_CELLTYPE:
             bRet = (rVal >>= nInt); m_nCellType = static_cast<SvxSearchCellType>(nInt); break;
         case MID_SEARCH_ROWDIRECTION:
@@ -628,9 +628,9 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_SEARCH_ASIANOPTIONS:
             bRet = (rVal >>= m_bAsianOptions); break;
         case MID_SEARCH_ALGORITHMTYPE:
-            bRet = (rVal >>= nInt); m_aSearchOpt.algorithmType = (SearchAlgorithms)(sal_Int16)nInt; break;
+            bRet = (rVal >>= nInt); m_aSearchOpt.algorithmType = (SearchAlgorithms)static_cast<sal_Int16>(nInt); break;
         case MID_SEARCH_ALGORITHMTYPE2:
-            bRet = (rVal >>= nInt); m_aSearchOpt.AlgorithmType2 = (sal_Int16)nInt; break;
+            bRet = (rVal >>= nInt); m_aSearchOpt.AlgorithmType2 = static_cast<sal_Int16>(nInt); break;
         case MID_SEARCH_FLAGS:
             bRet = (rVal >>= m_aSearchOpt.searchFlag); break;
         case MID_SEARCH_SEARCHSTRING:

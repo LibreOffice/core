@@ -172,11 +172,11 @@ double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFr
         }
         else if (bPreSep)
         {
-            fNum = fNum * 10.0 + (double) (rStr[nPos] - '0');
+            fNum = fNum * 10.0 + static_cast<double>(rStr[nPos] - '0');
         }
         else
         {
-            fFrac = fFrac * 10.0 + (double) (rStr[nPos] - '0');
+            fFrac = fFrac * 10.0 + static_cast<double>(rStr[nPos] - '0');
             --nExp;
         }
         nPos++;
@@ -921,7 +921,7 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     }
     else if (nIndex - nStartIndex < nCnt)
     {
-        nHour   = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
+        nHour   = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
     }
     else
     {
@@ -935,11 +935,11 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     }
     else if (nIndex - nStartIndex < nCnt)
     {
-        nMinute = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
+        nMinute = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
     }
     if (nIndex - nStartIndex < nCnt)
     {
-        nSecond = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
+        nSecond = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
     }
     if (nIndex - nStartIndex < nCnt)
     {
@@ -957,9 +957,9 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     {
         nHour = 0;
     }
-    fOutNumber = ((double)nHour*3600 +
-                  (double)nMinute*60 +
-                  (double)nSecond +
+    fOutNumber = (static_cast<double>(nHour)*3600 +
+                  static_cast<double>(nMinute)*60 +
+                  static_cast<double>(nSecond) +
                   fSecond100)/86400.0;
     return bRet;
 }
@@ -971,7 +971,7 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex ) const
 
     if (sStrArray[nNums[nIndex]].getLength() <= 2)
     {
-        sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].toInt32();
+        sal_uInt16 nNum = static_cast<sal_uInt16>(sStrArray[nNums[nIndex]].toInt32());
         if (nNum <= 31)
         {
             nRes = nNum;
@@ -989,7 +989,7 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex ) const
 
     if (sStrArray[nNums[nIndex]].getLength() <= 2)
     {
-        sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].toInt32();
+        sal_uInt16 nNum = static_cast<sal_uInt16>(sStrArray[nNums[nIndex]].toInt32());
         if ( 0 < nNum && nNum <= nRes )
         {
             nRes = nNum - 1; // zero based for CalendarFieldIndex::MONTH
@@ -1012,7 +1012,7 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
     // leading zero as convention.
     if (nLen <= 6)
     {
-        nYear = (sal_uInt16) sStrArray[nNums[nIndex]].toInt32();
+        nYear = static_cast<sal_uInt16>(sStrArray[nNums[nIndex]].toInt32());
         // A year in another, not Gregorian CE era is never expanded.
         // A year < 100 entered with at least 3 digits with leading 0 is taken
         // as is without expansion.
