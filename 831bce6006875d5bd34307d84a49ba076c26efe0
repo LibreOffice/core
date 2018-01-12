@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_ec1671a6",
+        "filename": "sw/qa/uitest/writer_tests/horizontalLine.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:28:29Z",
+      "side": 1,
+      "message": "Trailing empty lines. Actually I think we need to use the correct template from TEMPLATE.SOURCECODE.HEADER which has a vim and emacs line.\n\nThe final line of all new python files should be:\n# vim: set shiftwidth\u003d4 softtabstop\u003d4 expandtab:\n\nand the first line:\n# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-",
+      "revId": "831bce6006875d5bd34307d84a49ba076c26efe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
