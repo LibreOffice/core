@@ -212,7 +212,7 @@ class PasswordContainer : public ::cppu::WeakImplHelper<
 {
 private:
     PassMap      m_aContainer;
-    StorageItem* m_pStorageFile;
+    std::unique_ptr<StorageItem> m_pStorageFile;
     ::osl::Mutex mMutex;
     OUString m_aMasterPasswd; // master password is set when the string is not empty
     css::uno::Reference< css::lang::XComponent > mComponent;

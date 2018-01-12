@@ -56,11 +56,6 @@ OFSStreamContainer::OFSStreamContainer( const uno::Reference < io::XStream >& xS
 
 OFSStreamContainer::~OFSStreamContainer()
 {
-    if ( m_pListenersContainer )
-    {
-        delete m_pListenersContainer;
-        m_pListenersContainer = nullptr;
-    }
 }
 
 // XInterface
@@ -259,7 +254,7 @@ void SAL_CALL OFSStreamContainer::addEventListener( const uno::Reference< lang::
         throw lang::DisposedException();
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
+        m_pListenersContainer.reset(new ::comphelper::OInterfaceContainerHelper2( m_aMutex ));
 
     m_pListenersContainer->addInterface( xListener );
 }
