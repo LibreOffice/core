@@ -100,6 +100,7 @@
 #include <basic/modsizeexceeded.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -2742,6 +2743,16 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     const SfxBoolItem* pNoFileSync = pMergedParams->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
     if (pNoFileSync && pNoFileSync->GetValue())
         pNewFile->DisableFileSync(true);
+
+    bool bUseThumbnailSave = IsUseThumbnailSave();
+    comphelper::ScopeGuard aThumbnailGuard(
+        [this, bUseThumbnailSave] { this->SetUseThumbnailSave(bUseThumbnailSave); });
+    const SfxBoolItem* pNoThumbnail = pMergedParams->GetItem<SfxBoolItem>(SID_NO_THUMBNAIL, false);
+    if (pNoThumbnail)
+        // Thumbnail generation should be avoided just for this save.
+        SetUseThumbnailSave(!pNoThumbnail->GetValue());
+    else
+        aThumbnailGuard.dismiss();
 
     // set filter; if no filter is given, take the default filter of the factory
     if ( !aFilterName.isEmpty() )
