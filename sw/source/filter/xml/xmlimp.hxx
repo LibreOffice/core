@@ -177,6 +177,7 @@ public:
                              const OUString& rName,
                              const SfxItemSet **ppItemSet=0,
                              OUString *pParent=0 ) const;
+    void MergeListsAtDocumentInsertPosition(SwDoc *pDoc);
 
     virtual void SetStatistics(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
