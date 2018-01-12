@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2c032975",
+        "filename": "sw/qa/uitest/writer_tests/exchangeDatabase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:17:52Z",
+      "side": 1,
+      "message": "Please use the close_dialog_through_button command.",
+      "revId": "ca2c8d94134b2ce3e51888d88d30fda43caf7002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_6cf52182",
+        "filename": "sw/qa/uitest/writer_tests/exchangeDatabase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:17:52Z",
+      "side": 1,
+      "message": "close_doc is missing here. It should work without as the document has not been changed but please let us try to always add them.",
+      "revId": "ca2c8d94134b2ce3e51888d88d30fda43caf7002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_4cf85d7d",
+        "filename": "sw/qa/uitest/writer_tests/exchangeDatabase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:17:52Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "ca2c8d94134b2ce3e51888d88d30fda43caf7002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
