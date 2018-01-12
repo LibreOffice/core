@@ -116,7 +116,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private boolean isKeyboardOpen = false;
     private boolean isFormattingToolbarOpen = false;
     private boolean isSearchToolbarOpen = false;
-    private boolean isDocumentChanged = false;
+    private static boolean isDocumentChanged = false;
     public boolean isNewDocument = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -773,7 +773,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         return mIsSpreadsheet;
     }
 
-    public void setDocumentChanged (boolean changed) {
+    public static void setDocumentChanged (boolean changed) {
         isDocumentChanged = changed;
     }
 

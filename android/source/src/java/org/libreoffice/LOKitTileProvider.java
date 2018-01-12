@@ -593,6 +593,7 @@ class LOKitTileProvider implements TileProvider {
     private void setGraphicSelection(int type, PointF documentCoordinate) {
         int x = (int) pixelToTwip(documentCoordinate.x, mDPI);
         int y = (int) pixelToTwip(documentCoordinate.y, mDPI);
+        LibreOfficeMainActivity.setDocumentChanged(true);
         mDocument.setGraphicSelection(type, x, y);
     }
 
