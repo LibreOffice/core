@@ -66,7 +66,7 @@
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XDataProviderCreator.hpp>
+#include <com/sun/star/chart2/XDataProviderAccess.hpp>
 
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <vcl/msgbox.hxx>
@@ -1407,7 +1407,7 @@ void ChartController::executeDispatch_SourceData()
     {
         // Check if we will able to create data provider later
         Reference< lang::XServiceInfo > xParentServiceInfo( rModel.getParent(), uno::UNO_QUERY );
-        if ( !xParentServiceInfo.is() || !xParentServiceInfo->supportsService("com.sun.star.chart2.XDataProviderCreator") )
+        if ( !xParentServiceInfo.is() || !xParentServiceInfo->supportsService("com.sun.star.chart2.XDataProviderAccess") )
             return;
 
         SolarMutexGuard aSolarGuard;
@@ -1422,14 +1422,14 @@ void ChartController::executeDispatch_SourceData()
         rModel.removeDataProviders();
 
         // Ask parent document to create new data provider
-        css::uno::Reference< com::sun::star::chart2::XDataProviderCreator > xCreatorDoc(
+        css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(
             rModel.getParent(), uno::UNO_QUERY );
-        OSL_ENSURE( xCreatorDoc.is(), "Invalid XDataProviderCreator" );
+        SAL_WARN_IF( !xCreatorDoc.is(), "chart2.main", "Invalid XDataProviderAccess" );
 
         if ( xCreatorDoc.is() )
         {
             uno::Reference< data::XDataProvider > xDataProvider = xCreatorDoc->createDataProvider();
-            OSL_ENSURE( xCreatorDoc.is(), "Data provider was not created" );
+            SAL_WARN_IF( !xDataProvider.is(), "chart2.main", "Data provider was not created" );
             if ( xDataProvider.is() )
             {
                 rModel.attachDataProvider(xDataProvider);

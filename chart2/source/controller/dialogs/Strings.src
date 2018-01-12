@@ -36,7 +36,7 @@ String STR_DLG_STEPPED_LINE_PROPERTIES
 
 String STR_DLG_REMOVE_DATA_TABLE
 {
-    Text [ en-US ] = "Do you want to delete data table and switch to data ranges?" ;
+    Text [ en-US ] = "This chart currently contains an internal data table. Do you want to proceed, deleting the internal data table, and set a new data range?" ;
 };
 
 String STR_PAGE_CHARTTYPE

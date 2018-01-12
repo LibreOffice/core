@@ -38,7 +38,7 @@
 #include <com/sun/star/sheet/XSpreadsheets2.hpp>
 #include <com/sun/star/sheet/XDocumentAuditing.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/XDataProviderCreator.hpp>
+#include <com/sun/star/chart2/XDataProviderAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -87,7 +87,7 @@ class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public SvxFmMSFactory,  ///< derived from XMultiServiceFactory
                     public css::lang::XServiceInfo,
                     public css::util::XChangesNotifier,
-                    public css::chart2::XDataProviderCreator,
+                    public css::chart2::XDataProviderAccess,
                     public css::sheet::opencl::XOpenCLSelection
 {
 private:
@@ -158,7 +158,7 @@ public:
     virtual css::uno::Reference< css::sheet::XSpreadsheets > SAL_CALL
                             getSheets() throw(css::uno::RuntimeException, std::exception) override;
 
-                            /// XDataProviderCreator
+                            /// XDataProviderAccess
     virtual ::css::uno::Reference< css::chart2::data::XDataProvider > SAL_CALL
                             createDataProvider() throw (com::sun::star::uno::RuntimeException, std::exception) override;
 

@@ -26,10 +26,12 @@
 module com {  module sun {  module star {  module chart2 {
 
 
-/** creates a chart2 data provider for given document
+/** Provides access to chart2 data providers for a given document
+
+    @since LibreOffice 6.1
 
  */
-interface XDataProviderCreator : com::sun::star::uno::XInterface
+interface XDataProviderAccess : com::sun::star::uno::XInterface
 {
 
     /** creates a data provider for chart2

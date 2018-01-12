@@ -554,7 +554,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
             OSL_ENSURE(xParentServiceInfo.is(), "Invalid XServiceInfo");
             if ( xParentServiceInfo.is() )
             {
-                bCanCreateDataProvider = xParentServiceInfo->supportsService("com.sun.star.chart2.XDataProviderCreator");
+                bCanCreateDataProvider = xParentServiceInfo->supportsService("com.sun.star.chart2.XDataProviderAccess");
             }
         }
     }
