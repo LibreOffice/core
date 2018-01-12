@@ -46,12 +46,12 @@ void CGM::ImplDoClass5()
                 if ( pElement->eVDCType == VDC_REAL )
                     nWidth = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 else
-                    nWidth = (double)ImplGetI( pElement->nVDCIntegerPrecision );
+                    nWidth = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
 
                 ImplMapDouble( nWidth );
             }
             else
-                nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25; // scaling in 1/4 mm
+                nWidth = static_cast<sal_uInt32>(ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize )) * 25; // scaling in 1/4 mm
 
             ( pElement->nAspectSourceFlags & ASF_LINEWIDTH )
                 ? pElement->pLineBundle->nLineWidth = nWidth
@@ -85,11 +85,11 @@ void CGM::ImplDoClass5()
                 if ( pElement->eVDCType == VDC_REAL )
                     nWidth = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 else
-                    nWidth = (double)ImplGetI( pElement->nVDCIntegerPrecision );
+                    nWidth = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
                 ImplMapDouble( nWidth );
             }
             else
-                nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25;
+                nWidth = static_cast<sal_uInt32>(ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize )) * 25;
             ( pElement->nAspectSourceFlags & ASF_MARKERSIZE )
                 ? pElement->pMarkerBundle->nMarkerSize = nWidth
                     : pElement->aMarkerBundle.nMarkerSize = nWidth;
@@ -262,12 +262,12 @@ void CGM::ImplDoClass5()
                 if ( pElement->eVDCType == VDC_REAL )
                     nWidth = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 else
-                    nWidth = (double)ImplGetI( pElement->nVDCIntegerPrecision );
+                    nWidth = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
 
                 ImplMapDouble( nWidth );
             }
             else
-                nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25;
+                nWidth = static_cast<sal_uInt32>(ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize )) * 25;
             ( pElement->nAspectSourceFlags & ASF_EDGEWIDTH )
                 ? pElement->pEdgeBundle->nEdgeWidth = nWidth
                     : pElement->aEdgeBundle.nEdgeWidth = nWidth;

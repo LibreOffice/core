@@ -151,7 +151,7 @@ bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
 
     nColor=GetEntityColor(rE);
     if (nColor<0) return false;
-    aColor=ConvertColor((sal_uInt8)nColor);
+    aColor=ConvertColor(static_cast<sal_uInt8>(nColor));
 
     if (aActLineColor!=aColor) {
         pVirDev->SetLineColor( aActLineColor = aColor );
@@ -171,7 +171,7 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 
     nColor=GetEntityColor(rE);
     if (nColor<0) return false;
-    aColor=ConvertColor((sal_uInt8)nColor);
+    aColor=ConvertColor(static_cast<sal_uInt8>(nColor));
 
     if (aActLineColor!=aColor) {
         pVirDev->SetLineColor( aActLineColor = aColor );
@@ -196,7 +196,7 @@ bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, 
 
     nColor=GetEntityColor(rE);
     if (nColor<0) return false;
-    aColor=ConvertColor((sal_uInt8)nColor);
+    aColor=ConvertColor(static_cast<sal_uInt8>(nColor));
 
     aFont.SetColor(aColor);
     aFont.SetTransparent(true);
@@ -264,15 +264,15 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
     rTransform.Transform(rE.aP0,aC);
     if (rE.fThickness==0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
         pVirDev->DrawEllipse(
-            tools::Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
-                      (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)));
+            tools::Rectangle(static_cast<long>(aC.fx-frx+0.5),static_cast<long>(aC.fy-fry+0.5),
+                      static_cast<long>(aC.fx+frx+0.5),static_cast<long>(aC.fy+fry+0.5)));
     }
     else {
         double fAng;
         nPoints=OptPointsPerCircle;
         tools::Polygon aPoly(nPoints);
         for (i=0; i<nPoints; i++) {
-            fAng=2*3.14159265359/(double)(nPoints-1)*(double)i;
+            fAng=2*3.14159265359/static_cast<double>(nPoints-1)*static_cast<double>(i);
             rTransform.Transform(
                 rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),0),
                 aPoly[i]
@@ -282,7 +282,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
         if (rE.fThickness!=0) {
             tools::Polygon aPoly2(nPoints);
             for (i=0; i<nPoints; i++) {
-                fAng=2*3.14159265359/(double)(nPoints-1)*(double)i;
+                fAng=2*3.14159265359/static_cast<double>(nPoints-1)*static_cast<double>(i);
                 rTransform.Transform(
                     rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),rE.fThickness),
                     aPoly2[i]
@@ -324,18 +324,18 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
             rTransform.Transform(aVE,aPS);
         }
         pVirDev->DrawArc(
-            tools::Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
-                      (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)),
+            tools::Rectangle(static_cast<long>(aC.fx-frx+0.5),static_cast<long>(aC.fy-fry+0.5),
+                      static_cast<long>(aC.fx+frx+0.5),static_cast<long>(aC.fy+fry+0.5)),
             aPS,aPE
         );
     }
     else {
         double fAng;
-        nPoints=(sal_uInt16)(fdA/360.0*(double)OptPointsPerCircle+0.5);
+        nPoints=static_cast<sal_uInt16>(fdA/360.0*static_cast<double>(OptPointsPerCircle)+0.5);
         if (nPoints<2) nPoints=2;
         tools::Polygon aPoly(nPoints);
         for (i=0; i<nPoints; i++) {
-            fAng=3.14159265359/180.0 * ( fA1 + fdA/(double)(nPoints-1)*(double)i );
+            fAng=3.14159265359/180.0 * ( fA1 + fdA/static_cast<double>(nPoints-1)*static_cast<double>(i) );
             rTransform.Transform(
                 rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),0),
                 aPoly[i]
@@ -345,7 +345,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         if (rE.fThickness!=0) {
             tools::Polygon aPoly2(nPoints);
             for (i=0; i<nPoints; i++) {
-                fAng=3.14159265359/180.0 * ( fA1 + fdA/(double)(nPoints-1)*(double)i );
+                fAng=3.14159265359/180.0 * ( fA1 + fdA/static_cast<double>(nPoints-1)*static_cast<double>(i) );
                 rTransform.Transform(
                     rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),rE.fThickness),
                     aPoly2[i]
@@ -418,9 +418,9 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     short nAng;
     DXFTransform aT( DXFTransform(rE.fXScale,rE.fHeight,1.0,rE.fRotAngle,rE.aP0), rTransform );
     aT.TransDir(DXFVector(0,1,0),aV);
-    nHeight=(sal_uInt16)(aV.Abs()+0.5);
+    nHeight=static_cast<sal_uInt16>(aV.Abs()+0.5);
     fA=aT.CalcRotAngle();
-    nAng=(short)(fA*10.0+0.5);
+    nAng=static_cast<short>(fA*10.0+0.5);
     aT.TransDir(DXFVector(1,0,0),aV);
     if ( SetFontAttribute( rE,nAng, nHeight ) )
     {
@@ -476,9 +476,9 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         short nAng;
         DXFTransform aT( DXFTransform( rE.fXScale, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0 ), rTransform );
         aT.TransDir(DXFVector(0,1,0),aV);
-        nHeight=(sal_uInt16)(aV.Abs()+0.5);
+        nHeight=static_cast<sal_uInt16>(aV.Abs()+0.5);
         fA=aT.CalcRotAngle();
-        nAng=(short)(fA*10.0+0.5);
+        nAng=static_cast<short>(fA*10.0+0.5);
         aT.TransDir(DXFVector(1,0,0),aV);
         if (SetFontAttribute(rE,nAng,nHeight))
         {
@@ -534,10 +534,10 @@ void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const
     sal_Int32 i, nPolySize = rE.nCount;
     if ( nPolySize && rE.pP )
     {
-        tools::Polygon aPoly( (sal_uInt16)nPolySize);
+        tools::Polygon aPoly( static_cast<sal_uInt16>(nPolySize));
         for ( i = 0; i < nPolySize; i++ )
         {
-            rTransform.Transform( rE.pP[ (sal_uInt16)i ], aPoly[ (sal_uInt16)i ] );
+            rTransform.Transform( rE.pP[ static_cast<sal_uInt16>(i) ], aPoly[ static_cast<sal_uInt16>(i) ] );
         }
         if ( SetLineAttribute( rE ) )
         {
@@ -593,7 +593,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                     }
                 }
             }
-            sal_uInt16 i, nSize = (sal_uInt16)aPtAry.size();
+            sal_uInt16 i, nSize = static_cast<sal_uInt16>(aPtAry.size());
             if ( nSize )
             {
                 tools::Polygon aPoly( nSize );
@@ -773,8 +773,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
 
     OptPointsPerCircle=50;
 
-    nMinPercent=(sal_uLong)nminpercent;
-    nMaxPercent=(sal_uLong)nmaxpercent;
+    nMinPercent=static_cast<sal_uLong>(nminpercent);
+    nMaxPercent=static_cast<sal_uLong>(nmaxpercent);
     nLastPercent=nMinPercent;
     nMainEntitiesCount=CountEntities(pDXF->aEntities);
 
@@ -835,8 +835,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
                                                    pDXF->aBoundingBox.fMaxY*fScale,
                                                   -pDXF->aBoundingBox.fMinZ*fScale));
             }
-            aPrefSize.Width() =(long)(fWidth*fScale+1.5);
-            aPrefSize.Height()=(long)(fHeight*fScale+1.5);
+            aPrefSize.Width() =static_cast<long>(fWidth*fScale+1.5);
+            aPrefSize.Height()=static_cast<long>(fHeight*fScale+1.5);
         }
     }
     else {
@@ -857,8 +857,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
                 )
             );
         }
-        aPrefSize.Width() =(long)(fWidth*fScale+1.5);
-        aPrefSize.Height()=(long)(fHeight*fScale+1.5);
+        aPrefSize.Width() =static_cast<long>(fWidth*fScale+1.5);
+        aPrefSize.Height()=static_cast<long>(fHeight*fScale+1.5);
     }
 
     if (bStatus)

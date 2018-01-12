@@ -152,8 +152,8 @@ void DXFTransform::Transform(const DXFVector & rSrc, DXFVector & rTgt) const
 
 void DXFTransform::Transform(const DXFVector & rSrc, Point & rTgt) const
 {
-    rTgt.X()=(long)( rSrc.fx * aMX.fx + rSrc.fy * aMY.fx + rSrc.fz * aMZ.fx + aMP.fx + 0.5 );
-    rTgt.Y()=(long)( rSrc.fx * aMX.fy + rSrc.fy * aMY.fy + rSrc.fz * aMZ.fy + aMP.fy + 0.5 );
+    rTgt.X()=static_cast<long>( rSrc.fx * aMX.fx + rSrc.fy * aMY.fx + rSrc.fz * aMZ.fx + aMP.fx + 0.5 );
+    rTgt.Y()=static_cast<long>( rSrc.fx * aMX.fy + rSrc.fy * aMY.fy + rSrc.fz * aMZ.fy + aMP.fy + 0.5 );
 }
 
 
@@ -205,12 +205,12 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
     LineInfo aLineInfo;
 
     aLineInfo.SetStyle( aDXFLineInfo.eStyle );
-    aLineInfo.SetWidth( (sal_Int32) (aDXFLineInfo.fWidth * scale + 0.5) );
+    aLineInfo.SetWidth( static_cast<sal_Int32>(aDXFLineInfo.fWidth * scale + 0.5) );
     aLineInfo.SetDashCount( static_cast< sal_uInt16 >( aDXFLineInfo.nDashCount ) );
-    aLineInfo.SetDashLen( (sal_Int32) (aDXFLineInfo.fDashLen * scale + 0.5) );
+    aLineInfo.SetDashLen( static_cast<sal_Int32>(aDXFLineInfo.fDashLen * scale + 0.5) );
     aLineInfo.SetDotCount( static_cast< sal_uInt16 >( aDXFLineInfo.nDotCount ) );
-    aLineInfo.SetDotLen( (sal_Int32) (aDXFLineInfo.fDotLen * scale + 0.5) );
-    aLineInfo.SetDistance( (sal_Int32) (aDXFLineInfo.fDistance * scale + 0.5) );
+    aLineInfo.SetDotLen( static_cast<sal_Int32>(aDXFLineInfo.fDotLen * scale + 0.5) );
+    aLineInfo.SetDistance( static_cast<sal_Int32>(aDXFLineInfo.fDistance * scale + 0.5) );
 
     if ( aLineInfo.GetDashCount() > 0 && aLineInfo.GetDashLen() == 0 )
         aLineInfo.SetDashLen(1);

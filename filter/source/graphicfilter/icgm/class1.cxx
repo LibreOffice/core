@@ -155,7 +155,7 @@ void CGM::ImplDoClass1()
             }
             for ( nI0 = 0; nI0 < nI1; nI0++ )
             {
-                pElement->nColorValueExtent[ nI0 ] = (sal_uInt8)ImplGetUI( pElement->nColorPrecision );
+                pElement->nColorValueExtent[ nI0 ] = static_cast<sal_uInt8>(ImplGetUI( pElement->nColorPrecision ));
             }
         }
         break;

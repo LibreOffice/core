@@ -74,15 +74,15 @@ DateTime DTTM2DateTime( long lDTTM )
     DateTime aDateTime(Date( 0 ), ::tools::Time( 0 ));
     if( lDTTM )
     {
-        sal_uInt16 lMin = (sal_uInt16)(lDTTM & 0x0000003F);
+        sal_uInt16 lMin = static_cast<sal_uInt16>(lDTTM & 0x0000003F);
         lDTTM >>= 6;
-        sal_uInt16 lHour= (sal_uInt16)(lDTTM & 0x0000001F);
+        sal_uInt16 lHour= static_cast<sal_uInt16>(lDTTM & 0x0000001F);
         lDTTM >>= 5;
-        sal_uInt16 lDay = (sal_uInt16)(lDTTM & 0x0000001F);
+        sal_uInt16 lDay = static_cast<sal_uInt16>(lDTTM & 0x0000001F);
         lDTTM >>= 5;
-        sal_uInt16 lMon = (sal_uInt16)(lDTTM & 0x0000000F);
+        sal_uInt16 lMon = static_cast<sal_uInt16>(lDTTM & 0x0000000F);
         lDTTM >>= 4;
-        sal_uInt16 lYear= (sal_uInt16)(lDTTM & 0x000001FF) + 1900;
+        sal_uInt16 lYear= static_cast<sal_uInt16>(lDTTM & 0x000001FF) + 1900;
         aDateTime = DateTime(Date(lDay, lMon, lYear), tools::Time(lHour, lMin));
     }
     return aDateTime;

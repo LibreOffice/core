@@ -390,7 +390,7 @@ void TIFFWriter::ImplWriteBody()
                     if (!( nShift & 1 ))
                         nTemp = ( mpAcc->GetPixelIndex( y, x ) << 4 );
                     else
-                        Compress( (sal_uInt8)( nTemp | ( mpAcc->GetPixelIndex( y, x ) & 0xf ) ) );
+                        Compress( static_cast<sal_uInt8>( nTemp | ( mpAcc->GetPixelIndex( y, x ) & 0xf ) ) );
                 }
                 if ( nShift & 1 )
                     Compress( nTemp );
@@ -410,13 +410,13 @@ void TIFFWriter::ImplWriteBody()
                     j |= ( ( ~mpAcc->GetPixelIndex( y, x ) ) & 1 );
                     if ( j & 0x100 )
                     {
-                        Compress( (sal_uInt8)j );
+                        Compress( static_cast<sal_uInt8>(j) );
                         j = 1;
                     }
                 }
                 if ( j != 1 )
                 {
-                    Compress( (sal_uInt8)(j << ( ( ( x & 7) ^ 7 ) + 1 ) ) );
+                    Compress( static_cast<sal_uInt8>(j << ( ( ( x & 7) ^ 7 ) + 1 ) ) );
                     j = 1;
                 }
             }
@@ -501,7 +501,7 @@ void TIFFWriter::StartCompression()
     for ( i = 0; i < 4096; i++)
     {
         pTable[ i ].pBrother = pTable[ i ].pFirstChild = nullptr;
-        pTable[ i ].nValue = (sal_uInt8)( pTable[ i ].nCode = i );
+        pTable[ i ].nValue = static_cast<sal_uInt8>( pTable[ i ].nCode = i );
     }
 
     pPrefix = nullptr;
@@ -546,7 +546,7 @@ void TIFFWriter::Compress( sal_uInt8 nCompThis )
             }
             else
             {
-                if( nTableSize == (sal_uInt16)( ( 1 << nCodeSize ) - 1 ) )
+                if( nTableSize == static_cast<sal_uInt16>( ( 1 << nCodeSize ) - 1 ) )
                     nCodeSize++;
 
                 p = pTable + ( nTableSize++ );

@@ -52,14 +52,14 @@ namespace tools
 
 inline sal_uInt16 uInt16_( sal_Int32 nValue )
 {
-    OSL_ENSURE( (nValue >= 0) && ((sal_uInt32)nValue <= 0xffff), "overflow while converting sal_Int32 to sal_uInt16" );
-    return (sal_uInt16)nValue;
+    OSL_ENSURE( (nValue >= 0) && (static_cast<sal_uInt32>(nValue) <= 0xffff), "overflow while converting sal_Int32 to sal_uInt16" );
+    return static_cast<sal_uInt16>(nValue);
 }
 
 inline sal_Int16 Int16_( sal_Int32 nValue )
 {
     OSL_ENSURE( (nValue >= -32768) && (nValue <= 32767), "overflow while converting sal_Int32 to sal_Int16" );
-    return (sal_Int16)nValue;
+    return static_cast<sal_Int16>(nValue);
 }
 
 class VirtualDevice;

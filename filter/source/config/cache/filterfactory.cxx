@@ -320,7 +320,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             // "iflags=-1"      => not allowed
             // "iflags=0"       => not useful
             // "iflags=283648"  => only filter, which has set these flag field will be addressed
-            sal_Int32 nCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32)0);
+            sal_Int32 nCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, sal_Int32(0));
             if (
                 (nIFlags > 0                       ) &&
                 ((nCheckValue & nIFlags) != nIFlags)
@@ -379,7 +379,7 @@ class stlcomp_removeIfMatchFlags
             try
             {
                 const CacheItem aFilter = m_pCache->getItem(FilterCache::E_FILTER, sFilter);
-                        sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, ((sal_Int32)0));
+                        sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32(0)));
 
                 bool bMatch = false;
                 if (m_bIFlags)

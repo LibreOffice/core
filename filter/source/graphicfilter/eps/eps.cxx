@@ -576,7 +576,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "%%BeginPageSetup" );
     ImplWriteLine( "%%EndPageSetup" );
     ImplWriteLine( "pum" );
-    ImplScale( (double)aSizePoint.Width() / (double)pMTF->GetPrefSize().Width(), (double)aSizePoint.Height() / (double)pMTF->GetPrefSize().Height() );
+    ImplScale( static_cast<double>(aSizePoint.Width()) / static_cast<double>(pMTF->GetPrefSize().Width()), static_cast<double>(aSizePoint.Height()) / static_cast<double>(pMTF->GetPrefSize().Height()) );
     ImplWriteDouble( 0 );
     ImplWriteDouble( -pMTF->GetPrefSize().Height() );
     ImplWriteLine( "t" );
@@ -1174,8 +1174,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 const Size      aSrcSize( aTmpMtf.GetPrefSize() );
                 const Point     aDestPt( pA->GetPoint() );
                 const Size      aDestSize( pA->GetSize() );
-                const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                const double    fScaleX = aSrcSize.Width() ? static_cast<double>(aDestSize.Width()) / aSrcSize.Width() : 1.0;
+                const double    fScaleY = aSrcSize.Height() ? static_cast<double>(aDestSize.Height()) / aSrcSize.Height() : 1.0;
                 long            nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
@@ -1257,7 +1257,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 bSkipSequence = false;
                             if ( aStartArrow.Count() || aEndArrow.Count() )
                                 bSkipSequence = false;
-                            if ( (sal_uInt32)eJT > 2 )
+                            if ( static_cast<sal_uInt32>(eJT) > 2 )
                                 bSkipSequence = false;
                             if ( l_aDashArray.size() && ( fStrokeWidth != 0.0 ) )
                                 bSkipSequence = false;
@@ -1941,7 +1941,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
         if ( nHeightLeft )
         {
             nHeightLeft++;
-            aSourcePos.Y() = (long) ( rPoint.Y() + ( nYHeightOrg * ( nHeightOrg - nHeightLeft ) ) / nHeightOrg );
+            aSourcePos.Y() = static_cast<long>( rPoint.Y() + ( nYHeightOrg * ( nHeightOrg - nHeightLeft ) ) / nHeightOrg );
         }
     }
 }
@@ -1953,9 +1953,9 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
         case '(' :
         case ')' :
         case '\\' :
-            ImplWriteByte( (sal_uInt8)'\\', PS_NONE );
+            ImplWriteByte( sal_uInt8('\\'), PS_NONE );
     }
-    ImplWriteByte( (sal_uInt8)nChar, PS_NONE );
+    ImplWriteByte( static_cast<sal_uInt8>(nChar), PS_NONE );
 }
 
 void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, const long* pDXArry, bool bStretch )
@@ -2175,8 +2175,8 @@ void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
     ImplWriteLine( "tm setmatrix" );
     double fMul = ImplGetScaling(rMapMode);
-    double fScaleX = (double)rMapMode.GetScaleX() * fMul;
-    double fScaleY = (double)rMapMode.GetScaleY() * fMul;
+    double fScaleX = static_cast<double>(rMapMode.GetScaleX()) * fMul;
+    double fScaleY = static_cast<double>(rMapMode.GetScaleY()) * fMul;
     ImplTranslate( rMapMode.GetOrigin().X() * fScaleX, rMapMode.GetOrigin().Y() * fScaleY );
     ImplScale( fScaleX, fScaleY );
 }
@@ -2276,13 +2276,13 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
     if ( eLineCap != eLCap )
     {
         eLineCap = eLCap;
-        ImplWriteLong( (sal_Int32)eLineCap );
+        ImplWriteLong( static_cast<sal_Int32>(eLineCap) );
         ImplWriteLine( "lc", PS_SPACE );
     }
     if ( eJoinType != eJoin )
     {
         eJoinType = eJoin;
-        ImplWriteLong( (sal_Int32)eJoinType );
+        ImplWriteLong( static_cast<sal_Int32>(eJoinType) );
         ImplWriteLine( "lj", PS_SPACE );
     }
     if ( eJoinType == SvtGraphicStroke::joinMiter )
@@ -2363,8 +2363,8 @@ void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 
 void PSWriter::ImplWriteDouble( double fNumber )
 {
-    sal_Int32   nPTemp = (sal_Int32)fNumber;
-    sal_Int32   nATemp = labs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
+    sal_Int32   nPTemp = static_cast<sal_Int32>(fNumber);
+    sal_Int32   nATemp = labs( static_cast<sal_Int32>( ( fNumber - nPTemp ) * 100000 ) );
 
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
         mpPS->WriteChar( '-' );
@@ -2477,12 +2477,12 @@ inline void PSWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
     nOffset -= nCodeLen;
     while ( nOffset < 24 )
     {
-        ImplWriteHexByte( (sal_uInt8)( dwShift >> 24 ) );
+        ImplWriteHexByte( static_cast<sal_uInt8>( dwShift >> 24 ) );
         dwShift <<= 8;
         nOffset += 8;
     }
     if ( nCode == 257 && nOffset != 32 )
-        ImplWriteHexByte( (sal_uInt8)( dwShift >> 24 ) );
+        ImplWriteHexByte( static_cast<sal_uInt8>( dwShift >> 24 ) );
 }
 
 void PSWriter::StartCompression()
@@ -2503,7 +2503,7 @@ void PSWriter::StartCompression()
     for ( i = 0; i < 4096; i++ )
     {
         pTable[ i ].pBrother = pTable[ i ].pFirstChild = nullptr;
-        pTable[ i ].nValue = (sal_uInt8)( pTable[ i ].nCode = i );
+        pTable[ i ].nValue = static_cast<sal_uInt8>( pTable[ i ].nCode = i );
     }
     pPrefix = nullptr;
     WriteBits( nClearCode, nCodeSize );
@@ -2546,7 +2546,7 @@ void PSWriter::Compress( sal_uInt8 nCompThis )
             }
             else
             {
-                if( nTableSize == (sal_uInt16)( ( 1 << nCodeSize ) - 1 ) )
+                if( nTableSize == static_cast<sal_uInt16>( ( 1 << nCodeSize ) - 1 ) )
                     nCodeSize++;
 
                 p = pTable + ( nTableSize++ );

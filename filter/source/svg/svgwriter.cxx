@@ -215,13 +215,13 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
         tools::Rectangle aRect( aPoly.GetBoundRect() );
 
         // adjust start/end colors with intensities
-        aStartColor.SetRed( (sal_uInt8)( ( aStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 ) );
-        aStartColor.SetGreen( (sal_uInt8)( ( aStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100 ) );
-        aStartColor.SetBlue( (sal_uInt8)( ( aStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100 ) );
+        aStartColor.SetRed( static_cast<sal_uInt8>( ( aStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 ) );
+        aStartColor.SetGreen( static_cast<sal_uInt8>( ( aStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100 ) );
+        aStartColor.SetBlue( static_cast<sal_uInt8>( ( aStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100 ) );
 
-        aEndColor.SetRed( (sal_uInt8)( ( aEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100 ) );
-        aEndColor.SetGreen( (sal_uInt8)( ( aEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100 ) );
-        aEndColor.SetBlue( (sal_uInt8)( ( aEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100 ) );
+        aEndColor.SetRed( static_cast<sal_uInt8>( ( aEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100 ) );
+        aEndColor.SetGreen( static_cast<sal_uInt8>( ( aEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100 ) );
+        aEndColor.SetBlue( static_cast<sal_uInt8>( ( aEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100 ) );
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId,
                             ( rGradientId = "Gradient_" ) += OUString::number( nCurGradientId++ ) );
@@ -1031,7 +1031,7 @@ bool SVGTextWriter::nextParagraph()
                                                 }
                                                 mcBulletChar = cBullet;
 #if OSL_DEBUG_LEVEL > 0
-                                                sInfo = OUString::number( (sal_Int32) cBullet );
+                                                sInfo = OUString::number( static_cast<sal_Int32>(cBullet) );
                                                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "bullet-char", sInfo );
 #endif
                                             }
@@ -1806,7 +1806,7 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
 
     for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
     {
-        const tools::Polygon&  rPoly = rPolyPoly[ (sal_uInt16) i ];
+        const tools::Polygon&  rPoly = rPolyPoly[ static_cast<sal_uInt16>(i) ];
         sal_uInt16 n = 1, nSize = rPoly.GetSize();
 
         if( nSize > 1 )
@@ -2276,11 +2276,11 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
                     // Emulate non-smooth gradient
                     if( 0 < nSteps && nSteps < 100 )
                     {
-                        double fOffsetStep = ( 1.0 - fBorderOffset ) / (double)nSteps;
+                        double fOffsetStep = ( 1.0 - fBorderOffset ) / static_cast<double>(nSteps);
                         for( sal_uInt16 i = 0; i < nSteps; i++ ) {
-                            Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / (double) nSteps );
+                            Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / static_cast<double>(nSteps) );
                             ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
-                            aColor = ImplGetGradientColor( aStartColor, aEndColor, ( i + 1 ) / (double) nSteps );
+                            aColor = ImplGetGradientColor( aStartColor, aEndColor, ( i + 1 ) / static_cast<double>(nSteps) );
                             ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
                         }
                     }
@@ -2296,21 +2296,21 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
                     // Emulate non-smooth gradient
                     if( 0 < nSteps && nSteps < 100 )
                     {
-                        double fOffsetStep = ( 0.5 - fBorderOffset ) / (double)nSteps;
+                        double fOffsetStep = ( 0.5 - fBorderOffset ) / static_cast<double>(nSteps);
                         // Upper half
                         for( sal_uInt16 i = 0; i < nSteps; i++ )
                         {
-                            Color aColor = ImplGetGradientColor( aEndColor, aStartColor, i / (double) nSteps );
+                            Color aColor = ImplGetGradientColor( aEndColor, aStartColor, i / static_cast<double>(nSteps) );
                             ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
-                            aColor = ImplGetGradientColor( aEndColor, aStartColor, (i + 1 ) / (double) nSteps );
+                            aColor = ImplGetGradientColor( aEndColor, aStartColor, (i + 1 ) / static_cast<double>(nSteps) );
                             ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
                         }
                         // Lower half
                         for( sal_uInt16 i = 0; i < nSteps; i++ )
                         {
-                            Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / (double) nSteps );
+                            Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / static_cast<double>(nSteps) );
                             ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
-                            aColor = ImplGetGradientColor( aStartColor, aEndColor, (i + 1 ) / (double) nSteps );
+                            aColor = ImplGetGradientColor( aStartColor, aEndColor, (i + 1 ) / static_cast<double>(nSteps) );
                             ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
                         }
                     }
@@ -2351,9 +2351,9 @@ void SVGActionWriter::ImplWriteGradientStop( const Color& rColor, double fOffset
 Color SVGActionWriter::ImplGetColorWithIntensity( const Color& rColor,
                                                   sal_uInt16 nIntensity )
 {
-     sal_uInt8 nNewRed = (sal_uInt8)( (long)rColor.GetRed() * nIntensity / 100L );
-     sal_uInt8 nNewGreen = (sal_uInt8)( (long)rColor.GetGreen() * nIntensity / 100L );
-     sal_uInt8 nNewBlue = (sal_uInt8)( (long)rColor.GetBlue() * nIntensity / 100L );
+     sal_uInt8 nNewRed = static_cast<sal_uInt8>( static_cast<long>(rColor.GetRed()) * nIntensity / 100L );
+     sal_uInt8 nNewGreen = static_cast<sal_uInt8>( static_cast<long>(rColor.GetGreen()) * nIntensity / 100L );
+     sal_uInt8 nNewBlue = static_cast<sal_uInt8>( static_cast<long>(rColor.GetBlue()) * nIntensity / 100L );
      return Color( nNewRed, nNewGreen, nNewBlue);
 }
 
@@ -2363,18 +2363,18 @@ Color SVGActionWriter::ImplGetGradientColor( const Color& rStartColor,
                                              double fOffset )
 {
     long nRedStep = rEndColor.GetRed() - rStartColor.GetRed();
-    long nNewRed = rStartColor.GetRed() + (long)( nRedStep * fOffset );
+    long nNewRed = rStartColor.GetRed() + static_cast<long>( nRedStep * fOffset );
     nNewRed = ( nNewRed < 0 ) ? 0 : ( nNewRed > 0xFF) ? 0xFF : nNewRed;
 
     long nGreenStep = rEndColor.GetGreen() - rStartColor.GetGreen();
-    long nNewGreen = rStartColor.GetGreen() + (long)( nGreenStep * fOffset );
+    long nNewGreen = rStartColor.GetGreen() + static_cast<long>( nGreenStep * fOffset );
     nNewGreen = ( nNewGreen < 0 ) ? 0 : ( nNewGreen > 0xFF) ? 0xFF : nNewGreen;
 
     long nBlueStep = rEndColor.GetBlue() - rStartColor.GetBlue();
-    long nNewBlue = rStartColor.GetBlue() + (long)( nBlueStep * fOffset );
+    long nNewBlue = rStartColor.GetBlue() + static_cast<long>( nBlueStep * fOffset );
     nNewBlue = ( nNewBlue < 0 ) ? 0 : ( nNewBlue > 0xFF) ? 0xFF : nNewBlue;
 
-    return Color( (sal_uInt8)nNewRed, (sal_uInt8)nNewGreen, (sal_uInt8)nNewBlue );
+    return Color( static_cast<sal_uInt8>(nNewRed), static_cast<sal_uInt8>(nNewGreen), static_cast<sal_uInt8>(nNewBlue) );
 }
 
 
@@ -2386,8 +2386,8 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
 {
     Point          aSrcPt( rMtf.GetPrefMapMode().GetOrigin() );
     const Size     aSrcSize( rMtf.GetPrefSize() );
-    const double   fScaleX = aSrcSize.Width() ? (double) rDestSize.Width() / aSrcSize.Width() : 1.0;
-    const double   fScaleY = aSrcSize.Height() ? (double) rDestSize.Height() / aSrcSize.Height() : 1.0;
+    const double   fScaleX = aSrcSize.Width() ? static_cast<double>(rDestSize.Width()) / aSrcSize.Width() : 1.0;
+    const double   fScaleY = aSrcSize.Height() ? static_cast<double>(rDestSize.Height()) / aSrcSize.Height() : 1.0;
     long           nMoveX, nMoveY;
 
     if( fScaleX != 1.0 || fScaleY != 1.0 )
@@ -2612,7 +2612,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
                 long i;
-                const double fFactor = (double) nWidth / aNormSize.Width();
+                const double fFactor = static_cast<double>(nWidth) / aNormSize.Width();
 
                 for( i = 0; i < ( nLen - 1 ); i++ )
                     pDX[ i ] = FRound( pDX[ i ] * fFactor );
@@ -2808,7 +2808,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         sal_uInt8 const*const pData = pA->GetData();
                         if (pData && (pA->GetDataSize()))
                         {
-                            sal_uInt16 sz = (sal_uInt16)((pA->GetDataSize()) / 2);
+                            sal_uInt16 sz = static_cast<sal_uInt16>((pA->GetDataSize()) / 2);
                             if (sz)
                             {
                                 sType.append("; ");
@@ -3142,7 +3142,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                             mapCurShape->maShapePolyPoly = aShapePolyPoly;
                             mapCurShape->maShapeFillColor = aFill.getFillColor();
-                            mapCurShape->maShapeFillColor.SetTransparency( (sal_uInt8) FRound( 255.0 * aFill.getTransparency() ) );
+                            mapCurShape->maShapeFillColor.SetTransparency( static_cast<sal_uInt8>(FRound( 255.0 * aFill.getTransparency() )) );
 
                             if( bGradient )
                             {
@@ -3231,7 +3231,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
 
                     mapCurShape->maShapeLineColor = mpVDev->GetLineColor();
-                    mapCurShape->maShapeLineColor.SetTransparency( (sal_uInt8) FRound( aStroke.getTransparency() * 255.0 ) );
+                    mapCurShape->maShapeLineColor.SetTransparency( static_cast<sal_uInt8>(FRound( aStroke.getTransparency() * 255.0 )) );
                     mapCurShape->mnStrokeWidth = FRound( aStroke.getStrokeWidth() );
                     aStroke.getDashArray( mapCurShape->maDashArray );
 

@@ -109,7 +109,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
 
             if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == nullptr )
                 return false;
-            mnCol = (sal_uInt16)mnMaxVal + 1;
+            mnCol = static_cast<sal_uInt16>(mnMaxVal) + 1;
             if ( mnCol > 256 )
                 mnCol = 256;
 
@@ -117,7 +117,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             for ( sal_uLong i = 0; i < mnCol; i++ )
             {
                 sal_uLong nCount = 255 * i / mnCol;
-                mpAcc->SetPaletteColor( i, BitmapColor( (sal_uInt8)nCount, (sal_uInt8)nCount, (sal_uInt8)nCount ) );
+                mpAcc->SetPaletteColor( i, BitmapColor( static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount) ) );
             }
             break;
         case 2 :
@@ -329,7 +329,7 @@ bool PBMReader::ImplReadBody()
                     nRed = 255 * nR / mnMaxVal;
                     nGreen = 255 * nG / mnMaxVal;
                     nBlue = 255 * nB / mnMaxVal;
-                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
+                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                     if ( nWidth == mnWidth )
                     {
                         nWidth = 0;

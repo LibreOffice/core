@@ -368,7 +368,7 @@ sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
     sal_Int32 nAngle = 0;
     if ( nContent )
     {
-        nAngle = ( (sal_Int16)( nContent >> 16) * 100L ) + ( ( ( nContent & 0x0000ffff) * 100L ) >> 16 );
+        nAngle = ( static_cast<sal_Int16>( nContent >> 16) * 100L ) + ( ( ( nContent & 0x0000ffff) * 100L ) >> 16 );
         nAngle = NormAngle360( -nAngle );
     }
     return nAngle;
@@ -525,7 +525,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     if (pList->GetCount() > nC )
                                     {
                                         bValidGluePoint = true;
-                                        nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 3 );
+                                        nId = static_cast<sal_Int32>((*pList)[ static_cast<sal_uInt16>(nC)].GetId() + 3 );
                                     }
                                     else
                                     {
@@ -558,15 +558,15 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                                 sal_Int32 nHeight= aBoundRect.GetHeight();
                                                                 if ( !nHeight )
                                                                     nHeight = 1;
-                                                                fXRel /= (double)nWidth;
+                                                                fXRel /= static_cast<double>(nWidth);
                                                                 fXRel *= 10000;
-                                                                fYRel /= (double)nHeight;
+                                                                fYRel /= static_cast<double>(nHeight);
                                                                 fYRel *= 10000;
-                                                                aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
+                                                                aGluePoint.SetPos( Point( static_cast<sal_Int32>(fXRel), static_cast<sal_Int32>(fYRel) ) );
                                                                 aGluePoint.SetPercent( true );
                                                                 aGluePoint.SetAlign( SdrAlign::VERT_TOP | SdrAlign::HORZ_LEFT );
                                                                 aGluePoint.SetEscDir( SdrEscapeDirection::SMART );
-                                                                nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
+                                                                nId = static_cast<sal_Int32>((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
                                                                 bNotFound = false;
                                                             }
                                                             nPointCount++;
@@ -609,7 +609,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     if ( pList && ( pList->GetCount() > nC ) )
                                     {
                                         bValidGluePoint = true;
-                                        nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 3 );
+                                        nId = static_cast<sal_Int32>((*pList)[ static_cast<sal_uInt16>(nC)].GetId() + 3 );
                                     }
                                 }
                                 else if ( nGluePointType == EnhancedCustomShapeGluePointType::RECT )
@@ -654,7 +654,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     {
                                         if ( *pAny >>= aSegments )
                                         {
-                                            for ( nPt = 0, k = 1; nC && ( k < (sal_uInt32)aSegments.getLength() ); k++ )
+                                            for ( nPt = 0, k = 1; nC && ( k < static_cast<sal_uInt32>(aSegments.getLength()) ); k++ )
                                             {
                                                 sal_Int16 j, nCnt2 = aSegments[ k ].Count;
                                                 if ( aSegments[ k ].Command != EnhancedCustomShapeSegmentCommand::UNKNOWN )
@@ -710,7 +710,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     {
                                         css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
                                         *pAny >>= aCoordinates;
-                                        if ( nPt < (sal_uInt32)aCoordinates.getLength() )
+                                        if ( nPt < static_cast<sal_uInt32>(aCoordinates.getLength()) )
                                         {
                                             nId = 4;
                                             css::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
@@ -734,7 +734,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                 static_cast<SdrObjCustomShape*>(pO)->SetMergedItem( aGeometryItem );
                                                 SdrGluePointList* pLst = pO->ForceGluePointList();
                                                 if ( pLst->GetCount() > nGluePoints )
-                                                    nId = (sal_Int32)((*pLst)[ (sal_uInt16)nGluePoints ].GetId() + 3 );
+                                                    nId = static_cast<sal_Int32>((*pLst)[ static_cast<sal_uInt16>(nGluePoints) ].GetId() + 3 );
                                             }
                                         }
                                     }
@@ -875,9 +875,9 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
         break;
         case mso_lineArrowOvalEnd :
         {
-            aRetPolyPoly = basegfx::B2DPolyPolygon( XPolygon( Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 ),
-                                (sal_Int32)( fWidthMul * fLineWidth * 0.50 ),
-                                    (sal_Int32)( fLengthMul * fLineWidth * 0.50 ), 0, 3600 ).getB2DPolygon() );
+            aRetPolyPoly = basegfx::B2DPolyPolygon( XPolygon( Point( static_cast<sal_Int32>( fWidthMul * fLineWidth * 0.50 ), 0 ),
+                                static_cast<sal_Int32>( fWidthMul * fLineWidth * 0.50 ),
+                                    static_cast<sal_Int32>( fLengthMul * fLineWidth * 0.50 ), 0, 3600 ).getB2DPolygon() );
             rbArrowCenter = true;
             aArrowName.append("msArrowOvalEnd ");
         }
@@ -886,7 +886,7 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
     }
     aArrowName.append(nLineNumber);
     rsArrowName = aArrowName.makeStringAndClear();
-    rnArrowWidth = (sal_Int32)( fLineWidth * fWidthMul );
+    rnArrowWidth = static_cast<sal_Int32>( fLineWidth * fWidthMul );
 
     return aRetPolyPoly;
 }
@@ -903,7 +903,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
     if ( nLineFlags & 8 )
     {
         // Line Attributes
-        sal_Int32 nLineWidth = (sal_Int32)GetPropertyValue( DFF_Prop_lineWidth, 9525 );
+        sal_Int32 nLineWidth = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_lineWidth, 9525 ));
 
         // support LineCap
         const MSO_LineCap eLineCap((MSO_LineCap)GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare));
@@ -1581,8 +1581,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         const OUString sViewBox( "ViewBox" );
         aViewBox.X = GetPropertyValue( DFF_Prop_geoLeft, 0 );
         aViewBox.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
-        aViewBox.Width = nCoordWidth = ((sal_Int32)GetPropertyValue( DFF_Prop_geoRight, 21600 ) ) - aViewBox.X;
-        aViewBox.Height = nCoordHeight = ((sal_Int32)GetPropertyValue( DFF_Prop_geoBottom, 21600 ) ) - aViewBox.Y;
+        aViewBox.Width = nCoordWidth = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_geoRight, 21600 )) - aViewBox.X;
+        aViewBox.Height = nCoordHeight = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_geoBottom, 21600 )) - aViewBox.Y;
         aProp.Name = sViewBox;
         aProp.Value <<= aViewBox;
         aPropVec.push_back( aProp );
@@ -1641,7 +1641,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DAmbientIntensity ) )
         {
             const OUString sExtrusionBrightness( "Brightness" );
-            double fBrightness = (sal_Int32)GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 0 );
+            double fBrightness = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 0 ));
             fBrightness /= 655.36;
             aProp.Name = sExtrusionBrightness;
             aProp.Value <<= fBrightness;
@@ -1651,8 +1651,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DExtrudeBackward ) || IsProperty( DFF_Prop_c3DExtrudeForward ) )
         {
             const OUString sDepth( "Depth" );
-            double fBackDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeBackward, 1270 * 360 )) / 360.0;
-            double fForeDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeForward, 0 )) / 360.0;
+            double fBackDepth = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DExtrudeBackward, 1270 * 360 ))) / 360.0;
+            double fForeDepth = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DExtrudeForward, 0 ))) / 360.0;
             double fDepth = fBackDepth + fForeDepth;
             double fFraction = fDepth != 0.0 ? fForeDepth / fDepth : 0;
             EnhancedCustomShapeParameterPair aDepthParaPair;
@@ -1668,7 +1668,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DDiffuseAmt ) )
         {
             const OUString sExtrusionDiffusion( "Diffusion" );
-            double fDiffusion = (sal_Int32)GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 );
+            double fDiffusion = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 ));
             fDiffusion /= 655.36;
             aProp.Name = sExtrusionDiffusion;
             aProp.Value <<= fDiffusion;
@@ -1679,7 +1679,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             const OUString sExtrusionNumberOfLineSegments( "NumberOfLineSegments" );
             aProp.Name = sExtrusionNumberOfLineSegments;
-            aProp.Value <<= (sal_Int32)GetPropertyValue( DFF_Prop_c3DTolerance, 0 );
+            aProp.Value <<= static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DTolerance, 0 ));
             aExtrusionPropVec.push_back( aProp );
         }
         // "LightFace"
@@ -1704,7 +1704,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DKeyIntensity ) )
         {
             const OUString sExtrusionFirstLightLevel( "FirstLightLevel" );
-            double fFirstLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyIntensity, 0 );
+            double fFirstLightLevel = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyIntensity, 0 ));
             fFirstLightLevel /= 655.36;
             aProp.Name = sExtrusionFirstLightLevel;
             aProp.Value <<= fFirstLightLevel;
@@ -1714,7 +1714,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DFillIntensity ) )
         {
             const OUString sExtrusionSecondLightLevel( "SecondLightLevel" );
-            double fSecondLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DFillIntensity, 0 );
+            double fSecondLightLevel = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillIntensity, 0 ));
             fSecondLightLevel /= 655.36;
             aProp.Name = sExtrusionSecondLightLevel;
             aProp.Value <<= fSecondLightLevel;
@@ -1723,9 +1723,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "FirtstLightDirection"
         if ( IsProperty( DFF_Prop_c3DKeyX ) || IsProperty( DFF_Prop_c3DKeyY ) || IsProperty( DFF_Prop_c3DKeyZ ) )
         {
-            double fLightX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyX, 50000 ));
-            double fLightY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyY, 0 ));
-            double fLightZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyZ, 10000 ));
+            double fLightX = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyX, 50000 )));
+            double fLightY = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyY, 0 )));
+            double fLightZ = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyZ, 10000 )));
             css::drawing::Direction3D aExtrusionFirstLightDirection( fLightX, fLightY, fLightZ );
             const OUString sExtrusionFirstLightDirection( "FirstLightDirection" );
             aProp.Name = sExtrusionFirstLightDirection;
@@ -1735,9 +1735,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "SecondLightDirection"
         if ( IsProperty( DFF_Prop_c3DFillX ) || IsProperty( DFF_Prop_c3DFillY ) || IsProperty( DFF_Prop_c3DFillZ ) )
         {
-            double fLight2X = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillX, (sal_uInt32)-50000 ));
-            double fLight2Y = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillY, 0 ));
-            double fLight2Z = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillZ, 10000 ));
+            double fLight2X = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillX, sal_uInt32(-50000) )));
+            double fLight2Y = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillY, 0 )));
+            double fLight2Z = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillZ, 10000 )));
             css::drawing::Direction3D aExtrusionSecondLightDirection( fLight2X, fLight2Y, fLight2Z );
             const OUString sExtrusionSecondLightDirection( "SecondLightDirection" );
             aProp.Name = sExtrusionSecondLightDirection;
@@ -1768,8 +1768,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DXRotationAngle ) || IsProperty( DFF_Prop_c3DYRotationAngle ) )
         {
             const OUString sExtrusionAngle( "RotateAngle" );
-            double fAngleX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 )) / 65536.0;
-            double fAngleY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYRotationAngle, 0 )) / 65536.0;
+            double fAngleX = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 ))) / 65536.0;
+            double fAngleY = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DYRotationAngle, 0 ))) / 65536.0;
             EnhancedCustomShapeParameterPair aRotateAnglePair;
             aRotateAnglePair.First.Value <<= fAngleX;
             aRotateAnglePair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
@@ -1787,9 +1787,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if ( IsProperty( DFF_Prop_c3DRotationCenterX ) || IsProperty( DFF_Prop_c3DRotationCenterY ) || IsProperty( DFF_Prop_c3DRotationCenterZ ) )
             {
                 css::drawing::Direction3D aRotationCenter(
-                    (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 )) / 360.0,
-                    (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 )) / 360.0,
-                    (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 )) / 360.0 );
+                    static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 ))) / 360.0,
+                    static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 ))) / 360.0,
+                    static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 ))) / 360.0 );
 
                 const OUString sExtrusionRotationCenter( "RotationCenter" );
                 aProp.Name = sExtrusionRotationCenter;
@@ -1801,7 +1801,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DShininess ) )
         {
             const OUString sExtrusionShininess( "Shininess" );
-            double fShininess = (sal_Int32)GetPropertyValue( DFF_Prop_c3DShininess, 0 );
+            double fShininess = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DShininess, 0 ));
             fShininess /= 655.36;
             aProp.Name = sExtrusionShininess;
             aProp.Value <<= fShininess;
@@ -1811,8 +1811,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DSkewAmount ) || IsProperty( DFF_Prop_c3DSkewAngle ) )
         {
             const OUString sExtrusionSkew( "Skew" );
-            double fSkewAmount = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 );
-            double fSkewAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle, sal::static_int_cast< sal_uInt32 >(-135 * 65536) )) / 65536.0;
+            double fSkewAmount = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 ));
+            double fSkewAngle = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSkewAngle, sal::static_int_cast< sal_uInt32 >(-135 * 65536) ))) / 65536.0;
 
             EnhancedCustomShapeParameterPair aSkewPair;
             aSkewPair.First.Value <<= fSkewAmount;
@@ -1827,7 +1827,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DSpecularAmt ) )
         {
             const OUString sExtrusionSpecularity( "Specularity" );
-            double fSpecularity = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 );
+            double fSpecularity = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 ));
             fSpecularity /= 1333;
             aProp.Name = sExtrusionSpecularity;
             aProp.Value <<= fSpecularity;
@@ -1843,9 +1843,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "ViewPoint" in 1/100mm
         if ( IsProperty( DFF_Prop_c3DXViewpoint ) || IsProperty( DFF_Prop_c3DYViewpoint ) || IsProperty( DFF_Prop_c3DZViewpoint ) )
         {
-            double fViewX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DXViewpoint, 1250000 )) / 360.0;
-            double fViewY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYViewpoint, (sal_uInt32)-1250000 ))/ 360.0;
-            double fViewZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DZViewpoint, 9000000 )) / 360.0;
+            double fViewX = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DXViewpoint, 1250000 ))) / 360.0;
+            double fViewY = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DYViewpoint, sal_uInt32(-1250000) )))/ 360.0;
+            double fViewZ = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DZViewpoint, 9000000 ))) / 360.0;
             css::drawing::Position3D aExtrusionViewPoint( fViewX, fViewY, fViewZ );
             const OUString sExtrusionViewPoint( "ViewPoint" );
             aProp.Name = sExtrusionViewPoint;
@@ -1856,8 +1856,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DOriginX ) || IsProperty( DFF_Prop_c3DOriginY ) )
         {
             const OUString sExtrusionOrigin( "Origin" );
-            double fOriginX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginX, 32768 ));
-            double fOriginY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginY, (sal_uInt32)-32768 ));
+            double fOriginX = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DOriginX, 32768 )));
+            double fOriginY = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DOriginY, sal_uInt32(-32768) )));
             fOriginX /= 65536;
             fOriginY /= 65536;
             EnhancedCustomShapeParameterPair aOriginPair;
@@ -2017,7 +2017,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 }
                 if ( nFlags & SvxMSDffHandleFlags::RANGE )
                 {
-                    if ( (sal_uInt32)nRangeXMin != 0x80000000 )
+                    if ( static_cast<sal_uInt32>(nRangeXMin) != 0x80000000 )
                     {
                         if ( nRangeXMin == 2 )
                             nRangeXMin = nCoordWidth / 2;
@@ -2029,7 +2029,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         aProp.Value <<= aRangeXMinimum;
                         aHandlePropVec.push_back( aProp );
                     }
-                    if ( (sal_uInt32)nRangeXMax != 0x7fffffff )
+                    if ( static_cast<sal_uInt32>(nRangeXMax) != 0x7fffffff )
                     {
                         if ( nRangeXMax == 2 )
                             nRangeXMax = nCoordWidth / 2;
@@ -2041,7 +2041,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         aProp.Value <<= aRangeXMaximum;
                         aHandlePropVec.push_back( aProp );
                     }
-                    if ( (sal_uInt32)nRangeYMin != 0x80000000 )
+                    if ( static_cast<sal_uInt32>(nRangeYMin) != 0x80000000 )
                     {
                         if ( nRangeYMin == 2 )
                             nRangeYMin = nCoordHeight / 2;
@@ -2053,7 +2053,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         aProp.Value <<= aRangeYMinimum;
                         aHandlePropVec.push_back( aProp );
                     }
-                    if ( (sal_uInt32)nRangeYMax != 0x7fffffff )
+                    if ( static_cast<sal_uInt32>(nRangeYMax) != 0x7fffffff )
                     {
                         if ( nRangeYMax == 2 )
                             nRangeYMax = nCoordHeight / 2;
@@ -2068,7 +2068,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 }
                 if ( nFlags & SvxMSDffHandleFlags::RADIUS_RANGE )
                 {
-                    if ( (sal_uInt32)nRangeXMin != 0x7fffffff )
+                    if ( static_cast<sal_uInt32>(nRangeXMin) != 0x7fffffff )
                     {
                         if ( nRangeXMin == 2 )
                             nRangeXMin = nCoordWidth / 2;
@@ -2080,7 +2080,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         aProp.Value <<= aRadiusRangeMinimum;
                         aHandlePropVec.push_back( aProp );
                     }
-                    if ( (sal_uInt32)nRangeXMax != 0x80000000 )
+                    if ( static_cast<sal_uInt32>(nRangeXMax) != 0x80000000 )
                     {
                         if ( nRangeXMax == 2 )
                             nRangeXMax = nCoordWidth / 2;
@@ -2227,7 +2227,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     sal_uInt16 nTmp(0);
                     rIn.ReadUInt16( nTmp );
                     sal_Int16 nCommand = EnhancedCustomShapeSegmentCommand::UNKNOWN;
-                    sal_Int16 nCnt = (sal_Int16)( nTmp & 0x1fff );//Last 13 bits for segment points number
+                    sal_Int16 nCnt = static_cast<sal_Int16>( nTmp & 0x1fff );//Last 13 bits for segment points number
                     switch( nTmp >> 13 )//First 3 bits for command type
                     {
                         case 0x0:
@@ -2321,7 +2321,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     }
                     // if the command is unknown, we will store all the data in nCnt, so it will be possible to export without loss
                     if ( nCommand == EnhancedCustomShapeSegmentCommand::UNKNOWN )
-                        nCnt = (sal_Int16)nTmp;
+                        nCnt = static_cast<sal_Int16>(nTmp);
                     aSegments[ i ].Command = nCommand;
                     aSegments[ i ].Count = nCnt;
                 }
@@ -2439,7 +2439,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         }
         if ( IsProperty( DFF_Prop_connectorType ) )
         {
-            sal_Int16 nGluePointType = (sal_uInt16)GetPropertyValue( DFF_Prop_connectorType, 0 );
+            sal_Int16 nGluePointType = static_cast<sal_uInt16>(GetPropertyValue( DFF_Prop_connectorType, 0 ));
             const OUString sGluePointType( "GluePointType" );
             aProp.Name = sGluePointType;
             aProp.Value <<= nGluePointType;
@@ -2595,7 +2595,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         rSet.Put( makeSdrShadowColorItem( rManager.MSO_CLR_ToColor( 0x00808080, DFF_Prop_shadowColor ) ) );
     }
     if ( IsProperty( DFF_Prop_shadowOpacity ) )
-        rSet.Put( makeSdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity, 0 ) ) / 655 ) ) );
+        rSet.Put( makeSdrShadowTransparenceItem( static_cast<sal_uInt16>( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity, 0 ) ) / 655 ) ) );
     if ( IsProperty( DFF_Prop_shadowOffsetX ) )
     {
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX, 0 ) );
@@ -2807,7 +2807,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     {
         nRotateAngle = GetPropertyValue( DFF_Prop_Rotation, 0 );
         if(nRotateAngle)//fixed point number
-            nRotateAngle = ( (sal_Int16)( nRotateAngle >> 16) * 100L ) + ( ( ( nRotateAngle & 0x0000ffff) * 100L ) >> 16 );
+            nRotateAngle = ( static_cast<sal_Int16>( nRotateAngle >> 16) * 100L ) + ( ( ( nRotateAngle & 0x0000ffff) * 100L ) >> 16 );
         nRotateAngle = ( nRotateAngle + 5 ) / 10 ;//round up
         //nAngle is a clockwise angle. If nRotateAngle is a clockwise angle, then gradient need be rotated a little less
         //Or it need be rotated a little more
@@ -2834,8 +2834,8 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     }
     //if the type is linear or axial, just save focus to nFocusX and nFocusY for export
     //Core function does no need them. They serves for rect gradient(CenterXY).
-    sal_uInt16 nFocusX = (sal_uInt16)nFocus;
-    sal_uInt16 nFocusY = (sal_uInt16)nFocus;
+    sal_uInt16 nFocusX = static_cast<sal_uInt16>(nFocus);
+    sal_uInt16 nFocusY = static_cast<sal_uInt16>(nFocus);
 
     switch( eMSO_FillType )
     {
@@ -2882,8 +2882,8 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     //Construct tranparency item. This item can coordinate with both solid and gradient.
     if ( dTrans < 1.0 || dBackTrans < 1.0 )
     {
-        sal_uInt8 nStartCol = (sal_uInt8)( (1 - dTrans )* 255 );
-        sal_uInt8 nEndCol = (sal_uInt8)( ( 1- dBackTrans ) * 255 );
+        sal_uInt8 nStartCol = static_cast<sal_uInt8>( (1 - dTrans )* 255 );
+        sal_uInt8 nEndCol = static_cast<sal_uInt8>( ( 1- dBackTrans ) * 255 );
         aCol1 = Color(nStartCol, nStartCol, nStartCol);
         aCol2 = Color(nEndCol, nEndCol, nEndCol);
 
@@ -3361,7 +3361,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
     if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )    // sj: it needs to be checked if 0xfe is used in
         nColorCode &= 0x00ffffff;                       // other cases than ppt text -> if not this code can be removed
 
-    sal_uInt8 nUpper = (sal_uInt8)( nColorCode >> 24 );
+    sal_uInt8 nUpper = static_cast<sal_uInt8>( nColorCode >> 24 );
 
     // sj: below change from 0x1b to 0x19 was done because of i84812 (0x02 -> rgb color),
     // now I have some problems to fix i104685 (there the color value is 0x02000000 which requires
@@ -3371,7 +3371,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         if( ( nUpper & 0x08 ) || ( ( nUpper & 0x10 ) == 0 ) )
         {
             // SCHEMECOLOR
-            if ( !GetColorFromPalette( ( nUpper & 8 ) ? (sal_uInt16)nColorCode : nUpper, aColor ) )
+            if ( !GetColorFromPalette( ( nUpper & 8 ) ? static_cast<sal_uInt16>(nColorCode) : nUpper, aColor ) )
             {
                 switch( nContentProperty )
                 {
@@ -3394,8 +3394,8 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
             sal_uInt16 nParameter = sal_uInt16(( nColorCode >> 16 ) & 0x00ff);  // the HiByte of nParameter is not zero, an exclusive AND is helping :o
-            sal_uInt16 nFunctionBits = (sal_uInt16)( ( nColorCode & 0x00000f00 ) >> 8 );
-            sal_uInt16 nAdditionalFlags = (sal_uInt16)( ( nColorCode & 0x0000f000) >> 8 );
+            sal_uInt16 nFunctionBits = static_cast<sal_uInt16>( ( nColorCode & 0x00000f00 ) >> 8 );
+            sal_uInt16 nAdditionalFlags = static_cast<sal_uInt16>( ( nColorCode & 0x0000f000) >> 8 );
             sal_uInt16 nColorIndex = sal_uInt16(nColorCode & 0x00ff);
             sal_uInt32 nPropColor = 0;
 
@@ -3514,44 +3514,44 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                 break;
                 case 0x03 :     // add grey level RGB(p,p,p)
                 {
-                    sal_Int16 nR = (sal_Int16)aColor.GetRed() + (sal_Int16)nParameter;
-                    sal_Int16 nG = (sal_Int16)aColor.GetGreen() + (sal_Int16)nParameter;
-                    sal_Int16 nB = (sal_Int16)aColor.GetBlue() + (sal_Int16)nParameter;
+                    sal_Int16 nR = static_cast<sal_Int16>(aColor.GetRed()) + static_cast<sal_Int16>(nParameter);
+                    sal_Int16 nG = static_cast<sal_Int16>(aColor.GetGreen()) + static_cast<sal_Int16>(nParameter);
+                    sal_Int16 nB = static_cast<sal_Int16>(aColor.GetBlue()) + static_cast<sal_Int16>(nParameter);
                     if ( nR > 0x00ff )
                         nR = 0x00ff;
                     if ( nG > 0x00ff )
                         nG = 0x00ff;
                     if ( nB > 0x00ff )
                         nB = 0x00ff;
-                    aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
+                    aColor = Color( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
                 }
                 break;
                 case 0x04 :     // subtract grey level RGB(p,p,p)
                 {
-                    sal_Int16 nR = (sal_Int16)aColor.GetRed() - (sal_Int16)nParameter;
-                    sal_Int16 nG = (sal_Int16)aColor.GetGreen() - (sal_Int16)nParameter;
-                    sal_Int16 nB = (sal_Int16)aColor.GetBlue() - (sal_Int16)nParameter;
+                    sal_Int16 nR = static_cast<sal_Int16>(aColor.GetRed()) - static_cast<sal_Int16>(nParameter);
+                    sal_Int16 nG = static_cast<sal_Int16>(aColor.GetGreen()) - static_cast<sal_Int16>(nParameter);
+                    sal_Int16 nB = static_cast<sal_Int16>(aColor.GetBlue()) - static_cast<sal_Int16>(nParameter);
                     if ( nR < 0 )
                         nR = 0;
                     if ( nG < 0 )
                         nG = 0;
                     if ( nB < 0 )
                         nB = 0;
-                    aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
+                    aColor = Color( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
                 }
                 break;
                 case 0x05 :     // subtract from gray level RGB(p,p,p)
                 {
-                    sal_Int16 nR = (sal_Int16)nParameter - (sal_Int16)aColor.GetRed();
-                    sal_Int16 nG = (sal_Int16)nParameter - (sal_Int16)aColor.GetGreen();
-                    sal_Int16 nB = (sal_Int16)nParameter - (sal_Int16)aColor.GetBlue();
+                    sal_Int16 nR = static_cast<sal_Int16>(nParameter) - static_cast<sal_Int16>(aColor.GetRed());
+                    sal_Int16 nG = static_cast<sal_Int16>(nParameter) - static_cast<sal_Int16>(aColor.GetGreen());
+                    sal_Int16 nB = static_cast<sal_Int16>(nParameter) - static_cast<sal_Int16>(aColor.GetBlue());
                     if ( nR < 0 )
                         nR = 0;
                     if ( nG < 0 )
                         nG = 0;
                     if ( nB < 0 )
                         nB = 0;
-                    aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
+                    aColor = Color( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
                 }
                 break;
                 case 0x06 :     // per component: black if < p, white if >= p
@@ -3574,7 +3574,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         GetColorFromPalette( nUpper, aColor );
     }
     else    // attributed hard, maybe with hint to SYSTEMRGB
-        aColor = Color( (sal_uInt8)nColorCode, (sal_uInt8)( nColorCode >> 8 ), (sal_uInt8)( nColorCode >> 16 ) );
+        aColor = Color( static_cast<sal_uInt8>(nColorCode), static_cast<sal_uInt8>( nColorCode >> 8 ), static_cast<sal_uInt8>( nColorCode >> 16 ) );
     return aColor;
 }
 
@@ -3714,10 +3714,10 @@ static Size lcl_GetPrefSize(const Graphic& rGraf, const MapMode& aWanted)
 // otherwise rGraf is untouched and pSet is used to store the corresponding SdrGrafCropItem
 static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Graphic& rGraf )
 {
-    sal_Int32 nCropTop      = (sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_cropFromTop, 0 );
-    sal_Int32 nCropBottom   = (sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_cropFromBottom, 0 );
-    sal_Int32 nCropLeft     = (sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_cropFromLeft, 0 );
-    sal_Int32 nCropRight    = (sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_cropFromRight, 0 );
+    sal_Int32 nCropTop      = static_cast<sal_Int32>(rPropSet.GetPropertyValue( DFF_Prop_cropFromTop, 0 ));
+    sal_Int32 nCropBottom   = static_cast<sal_Int32>(rPropSet.GetPropertyValue( DFF_Prop_cropFromBottom, 0 ));
+    sal_Int32 nCropLeft     = static_cast<sal_Int32>(rPropSet.GetPropertyValue( DFF_Prop_cropFromLeft, 0 ));
+    sal_Int32 nCropRight    = static_cast<sal_Int32>(rPropSet.GetPropertyValue( DFF_Prop_cropFromRight, 0 ));
 
     if( nCropTop || nCropBottom || nCropLeft || nCropRight )
     {
@@ -3735,23 +3735,23 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
         }
         if ( nCropTop )
         {
-            fFactor = (double)nCropTop / 65536.0;
-            nTop = (sal_uInt32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+            fFactor = static_cast<double>(nCropTop) / 65536.0;
+            nTop = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
         }
         if ( nCropBottom )
         {
-            fFactor = (double)nCropBottom / 65536.0;
-            nBottom = (sal_uInt32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+            fFactor = static_cast<double>(nCropBottom) / 65536.0;
+            nBottom = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
         }
         if ( nCropLeft )
         {
-            fFactor = (double)nCropLeft / 65536.0;
-            nLeft = (sal_uInt32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+            fFactor = static_cast<double>(nCropLeft) / 65536.0;
+            nLeft = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
         }
         if ( nCropRight )
         {
-            fFactor = (double)nCropRight / 65536.0;
-            nRight = (sal_uInt32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+            fFactor = static_cast<double>(nCropRight) / 65536.0;
+            nRight = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
         }
         if ( pSet ) // use crop attributes ?
             pSet->Put( SdrGrafCropItem( nLeft, nTop, nRight, nBottom ) );
@@ -3873,7 +3873,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     nContrast -= 100;
                 }
             }
-            sal_Int16   nBrightness     = (sal_Int16)( (sal_Int32)GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) / 327 );
+            sal_Int16   nBrightness     = static_cast<sal_Int16>( static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_pictureBrightness, 0 )) / 327 );
             sal_Int32   nGamma          = GetPropertyValue( DFF_Prop_pictureGamma, 0x10000 );
             GraphicDrawMode eDrawMode   = GraphicDrawMode::Standard;
             switch ( GetPropertyValue( DFF_Prop_pictureActive, 0 ) & 6 )
@@ -3907,7 +3907,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     if ( nBrightness )
                         rSet.Put( SdrGrafLuminanceItem( nBrightness ) );
                     if ( nContrast )
-                        rSet.Put( SdrGrafContrastItem( (sal_Int16)nContrast ) );
+                        rSet.Put( SdrGrafContrastItem( static_cast<sal_Int16>(nContrast) ) );
                     if ( nGamma != 0x10000 )
                         rSet.Put( SdrGrafGamma100Item( nGamma / 655 ) );
                     if ( eDrawMode != GraphicDrawMode::Standard )
@@ -3927,7 +3927,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                         {
                             BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                                aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false, true );
+                                aBitmapEx.Adjust( nBrightness, static_cast<sal_Int16>(nContrast), 0, 0, 0, static_cast<double>(nGamma) / 0x10000, false, true );
                             if ( eDrawMode == GraphicDrawMode::Greys )
                                 aBitmapEx.Convert( BmpConversion::N8BitGreys );
                             else if ( eDrawMode == GraphicDrawMode::Mono )
@@ -3941,7 +3941,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                         {
                             GDIMetaFile aGdiMetaFile( aGraf.GetGDIMetaFile() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                                aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false, true );
+                                aGdiMetaFile.Adjust( nBrightness, static_cast<sal_Int16>(nContrast), 0, 0, 0, static_cast<double>(nGamma) / 0x10000, false, true );
                             if ( eDrawMode == GraphicDrawMode::Greys )
                                 aGdiMetaFile.Convert( MtfConversion::N8BitGreys );
                             else if ( eDrawMode == GraphicDrawMode::Mono )
@@ -4265,13 +4265,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         if (!rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() &&
             !o3tl::checked_sub(r, l, nWidth) && !o3tl::checked_sub(u, o, nHeight))
         {
-            double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
-            double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
+            double fXScale = static_cast<double>(rClientRect.GetWidth()) / static_cast<double>(rGlobalChildRect.GetWidth());
+            double fYScale = static_cast<double>(rClientRect.GetHeight()) / static_cast<double>(rGlobalChildRect.GetHeight());
             double fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
             double fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
             double fWidth = nWidth * fXScale;
             double fHeight = nHeight * fYScale;
-            aObjData.aChildAnchor = tools::Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
+            aObjData.aChildAnchor = tools::Rectangle( Point( static_cast<sal_Int32>(fl), static_cast<sal_Int32>(fo) ), Size( static_cast<sal_Int32>( fWidth + 1 ), static_cast<sal_Int32>( fHeight + 1 ) ) );
         }
     }
 
@@ -4422,7 +4422,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         {
                             sal_Int32 nTextWidth = GetPropertyValue( DFF_Prop_gtextSpacing, 1 << 16 ) / 655;
                             if ( nTextWidth != 100 )
-                                aSet.Put( SvxCharScaleWidthItem( (sal_uInt16)nTextWidth, EE_CHAR_FONTWIDTH ) );
+                                aSet.Put( SvxCharScaleWidthItem( static_cast<sal_uInt16>(nTextWidth), EE_CHAR_FONTWIDTH ) );
                         }
                         if ( ngtextFStrikethrough & 0x1000 ) // SJ: Font Kerning On ?
                             aSet.Put( SvxKerningItem( 1, EE_CHAR_KERNING ) );
@@ -4452,7 +4452,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText
                                 && aObjName.match( "PowerPlusWaterMarkObject" ) )
                             {
-                                double fRatio = (double)pDevice->GetTextHeight() / nTextWidth;
+                                double fRatio = static_cast<double>(pDevice->GetTextHeight()) / nTextWidth;
                                 sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
                                 sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
 
@@ -4532,7 +4532,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( pAny && ( *pAny >>= seqCoordinates ) && ( seqCoordinates.getLength() >= 4 ) )
                         {
                             sal_Int32 nPtNum, nNumElemVert = seqCoordinates.getLength();
-                            XPolygon aXP( (sal_uInt16)nNumElemVert );
+                            XPolygon aXP( static_cast<sal_uInt16>(nNumElemVert) );
                             for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
                             {
                                 Point aP;
@@ -4541,7 +4541,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 seqCoordinates[ nPtNum ].Second.Value >>= nY;
                                 aP.X() = nX;
                                 aP.Y() = nY;
-                                aXP[ (sal_uInt16)nPtNum ] = aP;
+                                aXP[ static_cast<sal_uInt16>(nPtNum) ] = aP;
                             }
                             aPolyBoundRect = tools::Rectangle( aXP.GetBoundRect() );
                             if ( nNumElemVert >= 3 )
@@ -4568,7 +4568,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             {
                                 double fNumber;
                                 seqAdjustmentValues[ 0 ].Value >>= fNumber;
-                                nEndAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
+                                nEndAngle = NormAngle360( - static_cast<sal_Int32>(fNumber) * 100 );
                             }
                             else
                             {
@@ -4584,7 +4584,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     fNumber = atan2( double( aStartPt.X() - cent.X() ),double( aStartPt.Y() - cent.Y() ) )+ F_PI; // 0..2PI
                                     fNumber /= F_PI180; // 0..360.0
                                 }
-                                nEndAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
+                                nEndAngle = NormAngle360( - static_cast<sal_Int32>(fNumber) * 100 );
                                 seqAdjustmentValues[ 0 ].Value <<= fNumber;
                                 seqAdjustmentValues[ 0 ].State = css::beans::PropertyState_DIRECT_VALUE;     // so this value will properly be stored
                             }
@@ -4593,7 +4593,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             {
                                 double fNumber;
                                 seqAdjustmentValues[ 1 ].Value >>= fNumber;
-                                nStartAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
+                                nStartAngle = NormAngle360( - static_cast<sal_Int32>(fNumber) * 100 );
                             }
                             else
                             {
@@ -4609,7 +4609,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( nStartAngle != nEndAngle )
                         {
                             XPolygon aXPoly( aPolyBoundRect.Center(), aPolyBoundRect.GetWidth() / 2, aPolyBoundRect.GetHeight() / 2,
-                                (sal_uInt16)nStartAngle / 10, (sal_uInt16)nEndAngle / 10, true );
+                                static_cast<sal_uInt16>(nStartAngle) / 10, static_cast<sal_uInt16>(nEndAngle) / 10, true );
                             tools::Rectangle aPolyPieRect( aXPoly.GetBoundRect() );
 
                             double  fYScale = 0.0, fXScale = 0.0;
@@ -4625,42 +4625,42 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                             if ( aPolyBoundRect.GetWidth() && aPolyPieRect.GetWidth() )
                             {
-                                fXScale = (double)aLogicRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                                fXScale = static_cast<double>(aLogicRect.GetWidth()) / static_cast<double>(aPolyPieRect.GetWidth());
                                 if ( nSpFlags & ShapeFlag::FlipH )
-                                    fXOfs = ( (double)aPolyPieRect.Right() - (double)aPolyBoundRect.Right() ) * fXScale;
+                                    fXOfs = ( static_cast<double>(aPolyPieRect.Right()) - static_cast<double>(aPolyBoundRect.Right()) ) * fXScale;
                                 else
-                                    fXOfs = ( (double)aPolyBoundRect.Left() - (double)aPolyPieRect.Left() ) * fXScale;
+                                    fXOfs = ( static_cast<double>(aPolyBoundRect.Left()) - static_cast<double>(aPolyPieRect.Left()) ) * fXScale;
                             }
                             if ( aPolyBoundRect.GetHeight() && aPolyPieRect.GetHeight() )
                             {
-                                fYScale = (double)aLogicRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                                fYScale = static_cast<double>(aLogicRect.GetHeight()) / static_cast<double>(aPolyPieRect.GetHeight());
                                 if ( nSpFlags & ShapeFlag::FlipV )
-                                    fYOfs = ( (double)aPolyPieRect.Bottom() - (double)aPolyBoundRect.Bottom() ) * fYScale;
+                                    fYOfs = ( static_cast<double>(aPolyPieRect.Bottom()) - static_cast<double>(aPolyBoundRect.Bottom()) ) * fYScale;
                                 else
-                                    fYOfs = ((double)aPolyBoundRect.Top() - (double)aPolyPieRect.Top() ) * fYScale;
+                                    fYOfs = (static_cast<double>(aPolyBoundRect.Top()) - static_cast<double>(aPolyPieRect.Top()) ) * fYScale;
                             }
 
                             if ( aPolyPieRect.GetWidth() )
-                                fXScale = (double)aPolyBoundRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                                fXScale = static_cast<double>(aPolyBoundRect.GetWidth()) / static_cast<double>(aPolyPieRect.GetWidth());
                             if ( aPolyPieRect.GetHeight() )
-                                fYScale = (double)aPolyBoundRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                                fYScale = static_cast<double>(aPolyBoundRect.GetHeight()) / static_cast<double>(aPolyPieRect.GetHeight());
 
                             tools::Rectangle aOldBoundRect( aObjData.aBoundRect );
-                            aObjData.aBoundRect = tools::Rectangle( Point( aLogicRect.Left() + (sal_Int32)fXOfs, aLogicRect.Top() + (sal_Int32)fYOfs ),
-                                 Size( (sal_Int32)( aLogicRect.GetWidth() * fXScale ), (sal_Int32)( aLogicRect.GetHeight() * fYScale ) ) );
+                            aObjData.aBoundRect = tools::Rectangle( Point( aLogicRect.Left() + static_cast<sal_Int32>(fXOfs), aLogicRect.Top() + static_cast<sal_Int32>(fYOfs) ),
+                                 Size( static_cast<sal_Int32>( aLogicRect.GetWidth() * fXScale ), static_cast<sal_Int32>( aLogicRect.GetHeight() * fYScale ) ) );
 
                             // creating the text frame -> scaling into (0,0),(21600,21600) destination coordinate system
                             double fTextFrameScaleX = 0.0;
                             double fTextFrameScaleY = 0.0;
                             if (aPolyBoundRect.GetWidth())
-                                fTextFrameScaleX = (double)21600 / (double)aPolyBoundRect.GetWidth();
+                                fTextFrameScaleX = double(21600) / static_cast<double>(aPolyBoundRect.GetWidth());
                             if (aPolyBoundRect.GetHeight())
-                                fTextFrameScaleY = (double)21600 / (double)aPolyBoundRect.GetHeight();
+                                fTextFrameScaleY = double(21600) / static_cast<double>(aPolyBoundRect.GetHeight());
 
-                            sal_Int32 nLeft  = (sal_Int32)(( aPolyPieRect.Left()  - aPolyBoundRect.Left() ) * fTextFrameScaleX );
-                            sal_Int32 nTop   = (sal_Int32)(( aPolyPieRect.Top()   - aPolyBoundRect.Top() )  * fTextFrameScaleY );
-                            sal_Int32 nRight = (sal_Int32)(( aPolyPieRect.Right() - aPolyBoundRect.Left() ) * fTextFrameScaleX );
-                            sal_Int32 nBottom= (sal_Int32)(( aPolyPieRect.Bottom()- aPolyBoundRect.Top() )  * fTextFrameScaleY );
+                            sal_Int32 nLeft  = static_cast<sal_Int32>(( aPolyPieRect.Left()  - aPolyBoundRect.Left() ) * fTextFrameScaleX );
+                            sal_Int32 nTop   = static_cast<sal_Int32>(( aPolyPieRect.Top()   - aPolyBoundRect.Top() )  * fTextFrameScaleY );
+                            sal_Int32 nRight = static_cast<sal_Int32>(( aPolyPieRect.Right() - aPolyBoundRect.Left() ) * fTextFrameScaleX );
+                            sal_Int32 nBottom= static_cast<sal_Int32>(( aPolyPieRect.Bottom()- aPolyBoundRect.Top() )  * fTextFrameScaleY );
                             css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.First,     nLeft );
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.Second,    nTop );
@@ -5010,13 +5010,13 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
                         {
                             double fWidth = r - l;
                             double fHeight= u - o;
-                            double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
-                            double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
+                            double fXScale = static_cast<double>(rClientRect.GetWidth()) / static_cast<double>(rGlobalChildRect.GetWidth());
+                            double fYScale = static_cast<double>(rClientRect.GetHeight()) / static_cast<double>(rGlobalChildRect.GetHeight());
                             double fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
                             double fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
                             fWidth *= fXScale;
                             fHeight *= fYScale;
-                            rGroupClientAnchor = tools::Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
+                            rGroupClientAnchor = tools::Rectangle( Point( static_cast<sal_Int32>(fl), static_cast<sal_Int32>(fo) ), Size( static_cast<sal_Int32>( fWidth + 1 ), static_cast<sal_Int32>( fHeight + 1 ) ) );
                         }
                         bFirst = false;
                     }
@@ -5440,8 +5440,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
         if ( nTextId )
         {
-            pTextImpRec->aTextId.nTxBxS = (sal_uInt16)( nTextId >> 16 );
-            pTextImpRec->aTextId.nSequence = (sal_uInt16)nTextId;
+            pTextImpRec->aTextId.nTxBxS = static_cast<sal_uInt16>( nTextId >> 16 );
+            pTextImpRec->aTextId.nSequence = static_cast<sal_uInt16>(nTextId);
         }
 
         pTextImpRec->nDxWrapDistLeft = GetPropertyValue(
@@ -5540,7 +5540,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                  && (rObjData.nCalledByGroup < 2) )
               )
                 StoreShapeOrder( pImpRec->nShapeId,
-                                ( ( (sal_uLong)pImpRec->aTextId.nTxBxS ) << 16 )
+                                ( static_cast<sal_uLong>(pImpRec->aTextId.nTxBxS) << 16 )
                                     + pImpRec->aTextId.nSequence, pObj );
         }
 
@@ -6534,8 +6534,8 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
                     if( aOldSize.Width() && ( aOldSize.Width() != aMtfSize100.Width() ) &&
                         aOldSize.Height() && ( aOldSize.Height() != aMtfSize100.Height() ) )
                     {
-                        aMtf.Scale( (double) aMtfSize100.Width() / aOldSize.Width(),
-                                    (double) aMtfSize100.Height() / aOldSize.Height() );
+                        aMtf.Scale( static_cast<double>(aMtfSize100.Width()) / aOldSize.Width(),
+                                    static_cast<double>(aMtfSize100.Height()) / aOldSize.Height() );
                         aMtf.SetPrefSize( aMtfSize100 );
                         aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                         rData = aMtf;
@@ -6790,7 +6790,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
             {
                 std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nStrLen ]);
                 rStm.ReadBytes(pBuf.get(), nStrLen);
-                aSvrName = OUString( pBuf.get(), (sal_uInt16) nStrLen-1, osl_getThreadTextEncoding() );
+                aSvrName = OUString( pBuf.get(), static_cast<sal_uInt16>(nStrLen)-1, osl_getThreadTextEncoding() );
             }
             else
                 break;

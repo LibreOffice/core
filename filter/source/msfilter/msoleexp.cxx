@@ -268,7 +268,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
                         sal_Int32 nVal = pRect[ind];
                         for ( int nByte = 0; nByte < 4; nByte++ )
                         {
-                            aWriteSet[ind*4+nByte] = (sal_Int8) nVal % 0x100;
+                            aWriteSet[ind*4+nByte] = static_cast<sal_Int8>(nVal) % 0x100;
                             nVal /= 0x100;
                         }
                     }

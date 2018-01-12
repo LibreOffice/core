@@ -186,9 +186,9 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, const OUString& rStrin
     sal_uInt8* pBuf = new sal_uInt8[ nLen ];
     for ( j = i = 0; i < rString.getLength(); i++ )
     {
-        sal_uInt16 nChar = (sal_uInt16)rString[ i ];
-        pBuf[ j++ ] = (sal_uInt8)nChar;
-        pBuf[ j++ ] = (sal_uInt8)( nChar >> 8 );
+        sal_uInt16 nChar = static_cast<sal_uInt16>(rString[ i ]);
+        pBuf[ j++ ] = static_cast<sal_uInt8>(nChar);
+        pBuf[ j++ ] = static_cast<sal_uInt8>( nChar >> 8 );
     }
     pBuf[ j++ ] = 0;
     pBuf[ j++ ] = 0;
@@ -321,8 +321,8 @@ sal_uInt32 EscherPropertyContainer::ImplGetColor( const sal_uInt32 nSOColor, boo
     if ( bSwap )
     {
         sal_uInt32 nColor = nSOColor & 0xff00;      // green
-        nColor |= (sal_uInt8)  nSOColor << 16;    // red
-        nColor |= (sal_uInt8)( nSOColor >> 16 );    // blue
+        nColor |= static_cast<sal_uInt8>(nSOColor) << 16;    // red
+        nColor |= static_cast<sal_uInt8>( nSOColor >> 16 );    // blue
         return nColor;
     }
     else
@@ -814,7 +814,7 @@ void EscherPropertyContainer::CreateTextProperties(
     {
         sal_uInt16 nAngle = EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, "RotateAngle", true ) ?
-                (sal_uInt16)( ( *o3tl::doAccess<sal_Int32>(aAny) ) + 5 ) / 10 : 0;
+                static_cast<sal_uInt16>( ( *o3tl::doAccess<sal_Int32>(aAny) ) + 5 ) / 10 : 0;
         if (nAngle==900)
         {
             AddOpt( ESCHER_Prop_txflTextFlow, ESCHER_txflBtoT );
@@ -1367,7 +1367,7 @@ GraphicObject* lclDrawHatch( const drawing::Hatch& rHatch, const Color& rBackCol
     pVDev->SetLineColor();
     pVDev->SetFillColor(bFillBackground ? rBackColor : Color(COL_TRANSPARENT));
     pVDev->DrawRect(rRect);
-    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, (sal_uInt16)rHatch.Angle));
+    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, static_cast<sal_uInt16>(rHatch.Angle)));
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
@@ -1525,7 +1525,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         else
         {
             nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "RotateAngle", true )
-                ? (sal_uInt16)( ( *o3tl::doAccess<sal_Int32>(aAny) ) + 5 ) / 10
+                ? static_cast<sal_uInt16>( ( *o3tl::doAccess<sal_Int32>(aAny) ) + 5 ) / 10
                 : 0;
         }
 
@@ -1635,7 +1635,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
 
             if(nAngle && bIsGraphicMtf)
             {
-                AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
+                AddOpt( ESCHER_Prop_Rotation, ( ( (static_cast<sal_Int32>(nAngle) << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
             }
 
             if ( eBitmapMode == drawing::BitmapMode_REPEAT )
@@ -1762,7 +1762,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Any& rAny
     if ( rAny.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
     {
         auto pSourcePolyPolygon = o3tl::doAccess<drawing::PolyPolygonBezierCoords>(rAny);
-        sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->Coordinates.getLength();
+        sal_uInt16 nOuterSequenceCount = static_cast<sal_uInt16>(pSourcePolyPolygon->Coordinates.getLength());
 
         // get pointer of inner sequences
         drawing::PointSequence const * pOuterSequence = pSourcePolyPolygon->Coordinates.getConstArray();
@@ -1789,7 +1789,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Any& rAny
 
                     if ( pArray && pFlags )
                     {
-                        nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
+                        nInnerSequenceCount = static_cast<sal_uInt16>(pInnerSequence->getLength());
                         aPolygon = tools::Polygon( nInnerSequenceCount );
                         for( b = 0; b < nInnerSequenceCount; b++)
                         {
@@ -1809,7 +1809,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Any& rAny
     }
     else if ( auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PointSequenceSequence>(rAny) )
     {
-        sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->getLength();
+        sal_uInt16 nOuterSequenceCount = static_cast<sal_uInt16>(pSourcePolyPolygon->getLength());
 
         // get pointer to inner sequences
         drawing::PointSequence const * pOuterSequence = pSourcePolyPolygon->getConstArray();
@@ -1830,7 +1830,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Any& rAny
                           pInnerSequence->getConstArray();
                     if ( pArray != nullptr )
                     {
-                        nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
+                        nInnerSequenceCount = static_cast<sal_uInt16>(pInnerSequence->getLength());
                         aPolygon = tools::Polygon( nInnerSequenceCount );
                         for( b = 0; b < nInnerSequenceCount; b++)
                         {
@@ -1854,7 +1854,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Any& rAny
             awt::Point const * pArray = pInnerSequence->getConstArray();
             if ( pArray != nullptr )
             {
-                nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
+                nInnerSequenceCount = static_cast<sal_uInt16>(pInnerSequence->getLength());
                 aPolygon = tools::Polygon( nInnerSequenceCount );
                 for( a = 0; a < nInnerSequenceCount; a++)
                 {
@@ -1937,12 +1937,12 @@ bool EscherPropertyContainer::CreatePolygonProperties(
             sal_uInt8* pSegmentBuf = new sal_uInt8[ nSegmentBufSize ];
 
             sal_uInt8* pPtr = pVerticesBuf;
-            *pPtr++ = (sal_uInt8)  nTotalPoints;                    // Little endian
-            *pPtr++ = (sal_uInt8)( nTotalPoints >> 8 );
-            *pPtr++ = (sal_uInt8)  nTotalPoints;
-            *pPtr++ = (sal_uInt8)( nTotalPoints >> 8 );
-            *pPtr++ = (sal_uInt8)0xf0;
-            *pPtr++ = (sal_uInt8)0xff;
+            *pPtr++ = static_cast<sal_uInt8>(nTotalPoints);                    // Little endian
+            *pPtr++ = static_cast<sal_uInt8>( nTotalPoints >> 8 );
+            *pPtr++ = static_cast<sal_uInt8>(nTotalPoints);
+            *pPtr++ = static_cast<sal_uInt8>( nTotalPoints >> 8 );
+            *pPtr++ = sal_uInt8(0xf0);
+            *pPtr++ = sal_uInt8(0xff);
 
             for (sal_uInt16 j = 0; j < nPolyCount; ++j)
             {
@@ -1954,20 +1954,20 @@ bool EscherPropertyContainer::CreatePolygonProperties(
                     aPoint.X() -= rGeoRect.X;
                     aPoint.Y() -= rGeoRect.Y;
 
-                    *pPtr++ = (sal_uInt8)( aPoint.X() );
-                    *pPtr++ = (sal_uInt8)( aPoint.X() >> 8 );
-                    *pPtr++ = (sal_uInt8)( aPoint.Y() );
-                    *pPtr++ = (sal_uInt8)( aPoint.Y() >> 8 );
+                    *pPtr++ = static_cast<sal_uInt8>( aPoint.X() );
+                    *pPtr++ = static_cast<sal_uInt8>( aPoint.X() >> 8 );
+                    *pPtr++ = static_cast<sal_uInt8>( aPoint.Y() );
+                    *pPtr++ = static_cast<sal_uInt8>( aPoint.Y() >> 8 );
                 }
             }
 
             pPtr = pSegmentBuf;
-            *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 1 );
-            *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 9 );
-            *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 1 );
-            *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 9 );
-            *pPtr++ = (sal_uInt8)2;
-            *pPtr++ = (sal_uInt8)0;
+            *pPtr++ = static_cast<sal_uInt8>( ( nSegmentBufSize - 6 ) >> 1 );
+            *pPtr++ = static_cast<sal_uInt8>( ( nSegmentBufSize - 6 ) >> 9 );
+            *pPtr++ = static_cast<sal_uInt8>( ( nSegmentBufSize - 6 ) >> 1 );
+            *pPtr++ = static_cast<sal_uInt8>( ( nSegmentBufSize - 6 ) >> 9 );
+            *pPtr++ = sal_uInt8(2);
+            *pPtr++ = sal_uInt8(0);
 
             for (sal_uInt16 j = 0; j < nPolyCount; ++j)
             {
@@ -2225,7 +2225,7 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                                 rShapeType = ESCHER_ShpInst_CurvedConnector3;
                                 AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
                                 AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
-                                AddOpt( ESCHER_Prop_adjust2Value, -(sal_Int32)nAdjustValue2 );
+                                AddOpt( ESCHER_Prop_adjust2Value, -static_cast<sal_Int32>(nAdjustValue2) );
                             }
                             break;
 
@@ -2240,9 +2240,9 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                                             AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
                                             aPoly = aPolyPolygon[ 0 ];
                                             sal_Int32 nAdjCount = lcl_GetAdjustValueCount( aPoly );
-                                            rShapeType = ( sal_uInt16 )( ESCHER_ShpInst_BentConnector2 + nAdjCount);
+                                            rShapeType = static_cast<sal_uInt16>( ESCHER_ShpInst_BentConnector2 + nAdjCount);
                                             for ( sal_Int32 i = 0 ; i < nAdjCount; ++ i)
-                                                AddOpt( (sal_uInt16) ( ESCHER_Prop_adjustValue+i) , lcl_GetConnectorAdjustValue( aPoly, i ) );
+                                                AddOpt( static_cast<sal_uInt16>( ESCHER_Prop_adjustValue+i) , lcl_GetConnectorAdjustValue( aPoly, i ) );
                                         }
                                         sal_Int32 nAngle=0;
                                         if (lcl_GetAngle(aPoly,rShapeFlags,nAngle ))
@@ -2308,7 +2308,7 @@ void EscherPropertyContainer::CreateShadowProperties(
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowYDistance" ) )
                         AddOpt( ESCHER_Prop_shadowOffsetY, *o3tl::doAccess<sal_Int32>(aAny) * 360 );
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowTransparence" ) )
-                        AddOpt( ESCHER_Prop_shadowOpacity,  0x10000 - (((sal_uInt32)*o3tl::doAccess<sal_uInt16>(aAny)) * 655 ) );
+                        AddOpt( ESCHER_Prop_shadowOpacity,  0x10000 - (static_cast<sal_uInt32>(*o3tl::doAccess<sal_uInt16>(aAny)) * 655 ) );
                 }
             }
         }
@@ -2324,7 +2324,7 @@ sal_Int32 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter( cons
     {
         double fValue(0.0);
         if ( rParameter.Value >>= fValue )
-            nValue = (sal_Int32)fValue;
+            nValue = static_cast<sal_Int32>(fValue);
     }
     else
         rParameter.Value >>= nValue;
@@ -2333,12 +2333,12 @@ sal_Int32 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter( cons
     {
         case drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
-            size_t nIndex = (size_t) nValue;
+            size_t nIndex = static_cast<size_t>(nValue);
             OSL_ASSERT(nIndex < rEquationOrder.size());
             if ( nIndex < rEquationOrder.size() )
             {
-                nValue = (sal_uInt16)rEquationOrder[ nIndex ];
-                nValue |= (sal_uInt32)0x80000000;
+                nValue = static_cast<sal_uInt16>(rEquationOrder[ nIndex ]);
+                nValue |= sal_uInt32(0x80000000);
             }
         }
         break;
@@ -2347,8 +2347,8 @@ sal_Int32 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter( cons
             if(bAdjustTrans)
             {
                 sal_uInt32 nAdjustValue = 0;
-                bool bGot = GetOpt((sal_uInt16)( DFF_Prop_adjustValue + nValue ), nAdjustValue);
-                if(bGot) nValue = (sal_Int32)nAdjustValue;
+                bool bGot = GetOpt(static_cast<sal_uInt16>( DFF_Prop_adjustValue + nValue ), nAdjustValue);
+                if(bGot) nValue = static_cast<sal_Int32>(nAdjustValue);
             }
         }
         break;
@@ -2374,7 +2374,7 @@ bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue, const 
     {
         double fValue(0.0);
         if ( rParameter.Value >>= fValue )
-            nRetValue = (sal_Int32)fValue;
+            nRetValue = static_cast<sal_Int32>(fValue);
     }
     else
         rParameter.Value >>= nRetValue;
@@ -2554,7 +2554,7 @@ bool EscherPropertyContainer::GetAdjustmentValue( const drawing::EnhancedCustomS
         rkProp.Value >>= fValue;
         if ( bUseFixedFloat )
             fValue *= 65536.0;
-        nValue = (sal_Int32)fValue;
+        nValue = static_cast<sal_Int32>(fValue);
     }
     else
     {
@@ -2693,7 +2693,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 double fExtrusionBrightness = 0;
                                 if ( rrProp.Value >>= fExtrusionBrightness )
-                                    AddOpt( DFF_Prop_c3DAmbientIntensity, (sal_Int32)( fExtrusionBrightness * 655.36 ) );
+                                    AddOpt( DFF_Prop_c3DAmbientIntensity, static_cast<sal_Int32>( fExtrusionBrightness * 655.36 ) );
                             }
                             else if ( rrProp.Name == sExtrusionDepth )
                             {
@@ -2706,12 +2706,12 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     double fBackDepth = fDepth - fForeDepth;
 
                                     fBackDepth *= 360.0;
-                                    AddOpt( DFF_Prop_c3DExtrudeBackward, (sal_Int32)fBackDepth );
+                                    AddOpt( DFF_Prop_c3DExtrudeBackward, static_cast<sal_Int32>(fBackDepth) );
 
                                     if ( fForeDepth != 0.0 )
                                     {
                                         fForeDepth *= 360.0;
-                                        AddOpt( DFF_Prop_c3DExtrudeForward, (sal_Int32)fForeDepth );
+                                        AddOpt( DFF_Prop_c3DExtrudeForward, static_cast<sal_Int32>(fForeDepth) );
                                     }
                                 }
                             }
@@ -2719,7 +2719,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 double fExtrusionDiffusion = 0;
                                 if ( rrProp.Value >>= fExtrusionDiffusion )
-                                    AddOpt( DFF_Prop_c3DDiffuseAmt, (sal_Int32)( fExtrusionDiffusion * 655.36 ) );
+                                    AddOpt( DFF_Prop_c3DDiffuseAmt, static_cast<sal_Int32>( fExtrusionDiffusion * 655.36 ) );
                             }
                             else if ( rrProp.Name == sExtrusionNumberOfLineSegments )
                             {
@@ -2767,22 +2767,22 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 double fExtrusionFirstLightLevel = 0;
                                 if ( rrProp.Value >>= fExtrusionFirstLightLevel )
-                                    AddOpt( DFF_Prop_c3DKeyIntensity, (sal_Int32)( fExtrusionFirstLightLevel * 655.36 ) );
+                                    AddOpt( DFF_Prop_c3DKeyIntensity, static_cast<sal_Int32>( fExtrusionFirstLightLevel * 655.36 ) );
                             }
                             else if ( rrProp.Name == sExtrusionSecondLightLevel )
                             {
                                 double fExtrusionSecondLightLevel = 0;
                                 if ( rrProp.Value >>= fExtrusionSecondLightLevel )
-                                    AddOpt( DFF_Prop_c3DFillIntensity, (sal_Int32)( fExtrusionSecondLightLevel * 655.36 ) );
+                                    AddOpt( DFF_Prop_c3DFillIntensity, static_cast<sal_Int32>( fExtrusionSecondLightLevel * 655.36 ) );
                             }
                             else if ( rrProp.Name == sExtrusionFirstLightDirection )
                             {
                                 drawing::Direction3D aExtrusionFirstLightDirection;
                                 if ( rrProp.Value >>= aExtrusionFirstLightDirection )
                                 {
-                                    AddOpt( DFF_Prop_c3DKeyX, (sal_Int32)aExtrusionFirstLightDirection.DirectionX  );
-                                    AddOpt( DFF_Prop_c3DKeyY, (sal_Int32)aExtrusionFirstLightDirection.DirectionY  );
-                                    AddOpt( DFF_Prop_c3DKeyZ, (sal_Int32)aExtrusionFirstLightDirection.DirectionZ  );
+                                    AddOpt( DFF_Prop_c3DKeyX, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionX)  );
+                                    AddOpt( DFF_Prop_c3DKeyY, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionY)  );
+                                    AddOpt( DFF_Prop_c3DKeyZ, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionZ)  );
                                 }
                             }
                             else if ( rrProp.Name == sExtrusionSecondLightDirection )
@@ -2790,9 +2790,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 drawing::Direction3D aExtrusionSecondLightPosition;
                                 if ( rrProp.Value >>= aExtrusionSecondLightPosition )
                                 {
-                                    AddOpt( DFF_Prop_c3DFillX, (sal_Int32)aExtrusionSecondLightPosition.DirectionX  );
-                                    AddOpt( DFF_Prop_c3DFillY, (sal_Int32)aExtrusionSecondLightPosition.DirectionY  );
-                                    AddOpt( DFF_Prop_c3DFillZ, (sal_Int32)aExtrusionSecondLightPosition.DirectionZ  );
+                                    AddOpt( DFF_Prop_c3DFillX, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionX)  );
+                                    AddOpt( DFF_Prop_c3DFillY, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionY)  );
+                                    AddOpt( DFF_Prop_c3DFillZ, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionZ)  );
                                 }
                             }
                             else if ( rrProp.Name == sExtrusionMetal )
@@ -2839,8 +2839,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 {
                                     fExtrusionAngleX *= 65536;
                                     fExtrusionAngleY *= 65536;
-                                    AddOpt( DFF_Prop_c3DXRotationAngle, (sal_Int32)fExtrusionAngleX );
-                                    AddOpt( DFF_Prop_c3DYRotationAngle, (sal_Int32)fExtrusionAngleY );
+                                    AddOpt( DFF_Prop_c3DXRotationAngle, static_cast<sal_Int32>(fExtrusionAngleX) );
+                                    AddOpt( DFF_Prop_c3DYRotationAngle, static_cast<sal_Int32>(fExtrusionAngleY) );
                                 }
                             }
                             else if ( rrProp.Name == sExtrusionRotationCenter )
@@ -2848,9 +2848,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 drawing::Direction3D aExtrusionRotationCenter;
                                 if ( rrProp.Value >>= aExtrusionRotationCenter )
                                 {
-                                    AddOpt( DFF_Prop_c3DRotationCenterX, (sal_Int32)( aExtrusionRotationCenter.DirectionX * 360.0 ) );
-                                    AddOpt( DFF_Prop_c3DRotationCenterY, (sal_Int32)( aExtrusionRotationCenter.DirectionY * 360.0 ) );
-                                    AddOpt( DFF_Prop_c3DRotationCenterZ, (sal_Int32)( aExtrusionRotationCenter.DirectionZ * 360.0 ) );
+                                    AddOpt( DFF_Prop_c3DRotationCenterX, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionX * 360.0 ) );
+                                    AddOpt( DFF_Prop_c3DRotationCenterY, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionY * 360.0 ) );
+                                    AddOpt( DFF_Prop_c3DRotationCenterZ, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionZ * 360.0 ) );
                                     nFillHarshFlags &=~8; // don't use AutoRotationCenter;
                                 }
                             }
@@ -2858,7 +2858,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 double fExtrusionShininess = 0;
                                 if ( rrProp.Value >>= fExtrusionShininess )
-                                    AddOpt( DFF_Prop_c3DShininess, (sal_Int32)( fExtrusionShininess * 655.36 ) );
+                                    AddOpt( DFF_Prop_c3DShininess, static_cast<sal_Int32>( fExtrusionShininess * 655.36 ) );
                             }
                             else if ( rrProp.Name == sExtrusionSkew )
                             {
@@ -2867,15 +2867,15 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
                                 if ( ( rrProp.Value >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= fSkewAmount ) && ( aSkewParaPair.Second.Value >>= fSkewAngle ) )
                                 {
-                                    AddOpt( DFF_Prop_c3DSkewAmount, (sal_Int32)fSkewAmount );
-                                    AddOpt( DFF_Prop_c3DSkewAngle, (sal_Int32)( fSkewAngle * 65536 ) );
+                                    AddOpt( DFF_Prop_c3DSkewAmount, static_cast<sal_Int32>(fSkewAmount) );
+                                    AddOpt( DFF_Prop_c3DSkewAngle, static_cast<sal_Int32>( fSkewAngle * 65536 ) );
                                 }
                             }
                             else if ( rrProp.Name == sExtrusionSpecularity )
                             {
                                 double fExtrusionSpecularity = 0;
                                 if ( rrProp.Value >>= fExtrusionSpecularity )
-                                    AddOpt( DFF_Prop_c3DSpecularAmt, (sal_Int32)( fExtrusionSpecularity * 1333 ) );
+                                    AddOpt( DFF_Prop_c3DSpecularAmt, static_cast<sal_Int32>( fExtrusionSpecularity * 1333 ) );
                             }
                             else if ( rrProp.Name == sExtrusionProjectionMode )
                             {
@@ -2897,9 +2897,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     aExtrusionViewPoint.PositionX *= 360.0;
                                     aExtrusionViewPoint.PositionY *= 360.0;
                                     aExtrusionViewPoint.PositionZ *= 360.0;
-                                    AddOpt( DFF_Prop_c3DXViewpoint, (sal_Int32)aExtrusionViewPoint.PositionX  );
-                                    AddOpt( DFF_Prop_c3DYViewpoint, (sal_Int32)aExtrusionViewPoint.PositionY  );
-                                    AddOpt( DFF_Prop_c3DZViewpoint, (sal_Int32)aExtrusionViewPoint.PositionZ  );
+                                    AddOpt( DFF_Prop_c3DXViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionX)  );
+                                    AddOpt( DFF_Prop_c3DYViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionY)  );
+                                    AddOpt( DFF_Prop_c3DZViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionZ)  );
                                 }
                             }
                             else if ( rrProp.Name == sExtrusionOrigin )
@@ -2909,8 +2909,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 drawing::EnhancedCustomShapeParameterPair aOriginPair;
                                 if ( ( rrProp.Value >>= aOriginPair ) && ( aOriginPair.First.Value >>= fExtrusionOriginX ) && ( aOriginPair.Second.Value >>= fExtrusionOriginY ) )
                                 {
-                                    AddOpt( DFF_Prop_c3DOriginX, (sal_Int32)( fExtrusionOriginX * 65536 ) );
-                                    AddOpt( DFF_Prop_c3DOriginY, (sal_Int32)( fExtrusionOriginY * 65536 ) );
+                                    AddOpt( DFF_Prop_c3DOriginX, static_cast<sal_Int32>( fExtrusionOriginX * 65536 ) );
+                                    AddOpt( DFF_Prop_c3DOriginY, static_cast<sal_Int32>( fExtrusionOriginY * 65536 ) );
                                 }
                             }
                             else if ( rrProp.Name == sExtrusionColor )
@@ -2944,7 +2944,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 {
                     if ( !bIsDefaultObject )
                     {
-                        sal_uInt16 nElements = (sal_uInt16)aEquations.size();
+                        sal_uInt16 nElements = static_cast<sal_uInt16>(aEquations.size());
                         if ( nElements )
                         {
                             sal_uInt16 nElementSize = 8;
@@ -3052,7 +3052,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     if ( rrProp.Value >>= aGluePoints )
                                     {
                                         // creating the vertices
-                                        sal_uInt16 nElements = (sal_uInt16)aGluePoints.getLength();
+                                        sal_uInt16 nElements = static_cast<sal_uInt16>(aGluePoints.getLength());
                                         if ( nElements )
                                         {
                                             sal_uInt16 j, nElementSize = 8;
@@ -3084,7 +3084,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 sal_Int16 nGluePointType = sal_Int16();
                                 if ( rrProp.Value >>= nGluePointType )
-                                    AddOpt( DFF_Prop_connectorType, (sal_uInt16)nGluePointType );
+                                    AddOpt( DFF_Prop_connectorType, static_cast<sal_uInt16>(nGluePointType) );
                             }
                             else if ( rrProp.Name == sPathSegments )
                             {
@@ -3094,9 +3094,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     if ( rrProp.Value >>= aSegments )
                                     {
                                         // creating seginfo
-                                        if ( (sal_uInt16)aSegments.getLength() )
+                                        if ( static_cast<sal_uInt16>(aSegments.getLength()) )
                                         {
-                                            sal_uInt16 j, nElements = (sal_uInt16)aSegments.getLength();
+                                            sal_uInt16 j, nElements = static_cast<sal_uInt16>(aSegments.getLength());
                                             sal_uInt16 nElementSize = 2;
                                             sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                                             SvMemoryStream aOut( nStreamSize );
@@ -3112,7 +3112,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 // If the segment type is msopathEscape, the lower 13 bits
                                                 // are divided in a 5 bit escape code and 8 bit
                                                 // vertex count (not segment count!)
-                                                sal_uInt16 nVal = (sal_uInt16)aSegments[ j ].Count;
+                                                sal_uInt16 nVal = static_cast<sal_uInt16>(aSegments[ j ].Count);
                                                 switch( aSegments[ j ].Command )
                                                 {
                                                     case drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN :
@@ -3233,9 +3233,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aPathTextFrames;
                                     if ( rrProp.Value >>= aPathTextFrames )
                                     {
-                                        if ( (sal_uInt16)aPathTextFrames.getLength() )
+                                        if ( static_cast<sal_uInt16>(aPathTextFrames.getLength()) )
                                         {
-                                            sal_uInt16 j, nElements = (sal_uInt16)aPathTextFrames.getLength();
+                                            sal_uInt16 j, nElements = static_cast<sal_uInt16>(aPathTextFrames.getLength());
                                             sal_uInt16 nElementSize = 16;
                                             sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                                             SvMemoryStream aOut( nStreamSize );
@@ -3484,7 +3484,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         bPredefinedHandlesUsed = false;
                         if ( rProp.Value >>= aHandlesPropSeq )
                         {
-                            sal_uInt16 nElements = (sal_uInt16)aHandlesPropSeq.getLength();
+                            sal_uInt16 nElements = static_cast<sal_uInt16>(aHandlesPropSeq.getLength());
                             if ( nElements )
                             {
                                 sal_uInt16 k, nElementSize = 36;
@@ -3571,8 +3571,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name == sRadiusRangeMinimum )
                                         {
-                                            nYRangeMin = (sal_Int32)0xff4c0000; // the range of angles seems to be a not
-                                            nYRangeMax = (sal_Int32)0x00b40000; // used feature, so we are defaulting this
+                                            nYRangeMin = sal_Int32(0xff4c0000); // the range of angles seems to be a not
+                                            nYRangeMax = sal_Int32(0x00b40000); // used feature, so we are defaulting this
 
                                             drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                                             if ( rPropVal.Value >>= aRadiusRangeMinimum )
@@ -3584,8 +3584,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name == sRadiusRangeMaximum )
                                         {
-                                            nYRangeMin = (sal_Int32)0xff4c0000; // the range of angles seems to be a not
-                                            nYRangeMax = (sal_Int32)0x00b40000; // used feature, so we are defaulting this
+                                            nYRangeMin = sal_Int32(0xff4c0000); // the range of angles seems to be a not
+                                            nYRangeMax = sal_Int32(0x00b40000); // used feature, so we are defaulting this
 
                                             drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                                             if ( rPropVal.Value >>= aRadiusRangeMaximum )
@@ -3680,7 +3680,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     sal_Int32 k, nValue = 0, nAdjustmentValues = aAdjustmentSeq.getLength();
                     for ( k = 0; k < nAdjustmentValues; k++ )
                         if( GetAdjustmentValue( aAdjustmentSeq[ k ], k, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
-                            AddOpt( (sal_uInt16)( DFF_Prop_adjustValue + k ), (sal_uInt32)nValue );
+                            AddOpt( static_cast<sal_uInt16>( DFF_Prop_adjustValue + k ), static_cast<sal_uInt32>(nValue) );
                 }
             }
             if( bPathCoordinatesProp )
@@ -3691,7 +3691,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     // creating the vertices
                     if (aCoordinates.getLength() > 0)
                     {
-                        sal_uInt16 j, nElements = (sal_uInt16)aCoordinates.getLength();
+                        sal_uInt16 j, nElements = static_cast<sal_uInt16>(aCoordinates.getLength());
                         sal_uInt16 nElementSize = 8;
                         sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                         SvMemoryStream aOut( nStreamSize );
@@ -4002,7 +4002,7 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, s
 {
     sal_uInt32  nPictureOffset = bWritePictureOffset ? mnPictureOffset : 0;
 
-    rSt.WriteUInt32( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) )
+    rSt.WriteUInt32( ( ESCHER_BSE << 16 ) | ( ( static_cast<sal_uInt16>(meBlibType) << 4 ) | 2 ) )
        .WriteUInt32( 36 + nResize )
        .WriteUChar( meBlibType );
 
@@ -4283,7 +4283,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
             if ( mnFlags & EscherGraphicProviderFlags::UseInstances )
             {
-                rPicOutStrm.WriteUInt32( 0x7f90000 | (sal_uInt16)( mvBlibEntrys.size() << 4 ) )
+                rPicOutStrm.WriteUInt32( 0x7f90000 | static_cast<sal_uInt16>( mvBlibEntrys.size() << 4 ) )
                            .WriteUInt32( 0 );
                 nAtomSize = rPicOutStrm.Tell();
                  if ( eBlibType == PNG )
@@ -4423,7 +4423,7 @@ sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const tools::Polygon& rPol
 {
     sal_uInt16 nCount = rPoly.GetSize();
     sal_uInt16 nClosest = nCount;
-    double fDist = (sal_uInt32)0xffffffff;
+    double fDist = sal_uInt32(0xffffffff);
     while( nCount-- )
     {
         double fDistance = hypot( rPoint.X - rPoly[ nCount ].X(), rPoint.Y - rPoly[ nCount ].Y() );
@@ -4488,7 +4488,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                             {
                                 for ( b = 0; b < pInnerSequence->getLength(); b++, nIndex++, pArray++ )
                                 {
-                                    sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y );
+                                    sal_uInt32 nDist = static_cast<sal_uInt32>(hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y ));
                                     if ( nDist < nDistance )
                                     {
                                         nRule = nIndex;
@@ -4541,7 +4541,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                                     drawing::PolygonFlags ePolyFlags = *pFlags++;
                                     if ( ePolyFlags == drawing::PolygonFlags_CONTROL )
                                         continue;
-                                    sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y );
+                                    sal_uInt32 nDist = static_cast<sal_uInt32>(hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y ));
                                     if ( nDist < nDistance )
                                     {
                                         nRule = nIndex;
@@ -4625,7 +4625,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                                 if ( rPoly.GetFlags( b ) != PolyFlags::Normal )
                                     continue;
                                 const Point& rPt = rPoly[ b ];
-                                sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - rPt.X(), aRefPoint.Y - rPt.Y() );
+                                sal_uInt32 nDist = static_cast<sal_uInt32>(hypot( aRefPoint.X - rPt.X(), aRefPoint.Y - rPt.Y() ));
                                 if ( nDist < nDistance )
                                 {
                                     nRule = nIndex;
@@ -4657,7 +4657,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             sal_Int32 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny, aPropertySet, "RotateAngle", true ) )
                     ? *o3tl::doAccess<sal_Int32>(aAny) : 0;
             if ( nAngle )
-                aPoly.Rotate( aRect.TopLeft(), (sal_uInt16)( ( nAngle + 5 ) / 10 ) );
+                aPoly.Rotate( aRect.TopLeft(), static_cast<sal_uInt16>( ( nAngle + 5 ) / 10 ) );
             nRule = GetClosestPoint( aPoly, aRefPoint );
 
             if (aType == OString( "drawing.Ellipse" ))
@@ -5307,8 +5307,8 @@ void EscherEx::Commit( EscherPropertyContainer& rProps, const tools::Rectangle& 
 sal_uInt32 EscherEx::GetColor( const sal_uInt32 nSOColor )
 {
     sal_uInt32 nColor = nSOColor & 0xff00;          // Green
-    nColor |= (sal_uInt8)  nSOColor << 16;        // Red
-    nColor |= (sal_uInt8)( nSOColor >> 16 );        // Blue
+    nColor |= static_cast<sal_uInt8>(nSOColor) << 16;        // Red
+    nColor |= static_cast<sal_uInt8>( nSOColor >> 16 );        // Blue
     return nColor;
 }
 

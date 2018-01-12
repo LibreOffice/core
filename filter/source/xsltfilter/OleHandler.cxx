@@ -167,7 +167,7 @@ namespace XSLT
         {
             //get the length and seek to 0
             Reference<XSeekable> xSeek (m_rootStream, UNO_QUERY);
-            int oleLength = (int) xSeek->getLength();
+            int oleLength = static_cast<int>(xSeek->getLength());
             xSeek->seek(0);
             //read all bytes
             Reference<XInputStream> xInput = m_rootStream->getInputStream();
@@ -194,15 +194,15 @@ namespace XSLT
         Reference<XOutputStream> xOutput = subStream->getOutputStream();
         //write the length to the temp stream
         Sequence<sal_Int8> header(4);
-        header[0] = (sal_Int8) (oledata.getLength() >> 0) & 0xFF;
-        header[1] = (sal_Int8) (oledata.getLength() >> 8) & 0xFF;
-        header[2] = (sal_Int8) (oledata.getLength() >> 16) & 0xFF;
-        header[3] = (sal_Int8) (oledata.getLength() >> 24) & 0xFF;
+        header[0] = static_cast<sal_Int8>(oledata.getLength() >> 0) & 0xFF;
+        header[1] = static_cast<sal_Int8>(oledata.getLength() >> 8) & 0xFF;
+        header[2] = static_cast<sal_Int8>(oledata.getLength() >> 16) & 0xFF;
+        header[3] = static_cast<sal_Int8>(oledata.getLength() >> 24) & 0xFF;
         xOutput->writeBytes(header);
 
         // Compress the bytes
         Sequence<sal_Int8> output(oledata.getLength());
-        std::unique_ptr< ::ZipUtils::Deflater> compresser(new ::ZipUtils::Deflater((sal_Int32) 3, false));
+        std::unique_ptr< ::ZipUtils::Deflater> compresser(new ::ZipUtils::Deflater(sal_Int32(3), false));
         compresser->setInputSegment(oledata);
         compresser->finish();
         int compressedDataLength = compresser->doDeflateSegment(output, 0, oledata.getLength());

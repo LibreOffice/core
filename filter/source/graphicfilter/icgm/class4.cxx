@@ -62,7 +62,7 @@ void CGM::ImplGetVector( double* pVector )
     {
         for ( sal_uInt32 i = 0; i < 4; i++ )
         {
-            pVector[ i ] = (double)ImplGetI( pElement->nVDCIntegerPrecision );
+            pVector[ i ] = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
         }
     }
     pVector[ 0 ] *= mnVDCXmul;
@@ -123,12 +123,12 @@ void CGM::ImplDoClass4()
             case 0x01 : /*PolyLine*/
             {
                 sal_uInt32 nPoints = mnElementSize / ImplGetPointSize();
-                tools::Polygon aPolygon( (sal_uInt16)nPoints );
+                tools::Polygon aPolygon( static_cast<sal_uInt16>(nPoints) );
                 for ( sal_uInt32 i = 0; i < nPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, true );
-                    aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), i );
+                    aPolygon.SetPoint( Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) ), i );
                 }
                 if ( mbFigure )
                     mpOutAct->RegPolyLine( aPolygon );
@@ -151,20 +151,20 @@ void CGM::ImplDoClass4()
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
                             ImplGetPoint( aFloatPoint, true );
-                            aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), 0 );
+                            aPolygon.SetPoint( Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) ), 0 );
                         }
                         mpOutAct->RegPolyLine( aPolygon );
                     }
                     else
                     {
                         mpOutAct->BeginGroup();
-                        tools::Polygon aPolygon( (sal_uInt16)2 );
+                        tools::Polygon aPolygon( sal_uInt16(2) );
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
                             ImplGetPoint( aFloatPoint, true );
-                            aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), 0 );
+                            aPolygon.SetPoint( Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) ), 0 );
                             ImplGetPoint( aFloatPoint, true );
-                            aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), 1);
+                            aPolygon.SetPoint( Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) ), 1);
                             mpOutAct->DrawPolyLine( aPolygon );
                         }
                         mpOutAct->EndGroup();
@@ -191,7 +191,7 @@ void CGM::ImplDoClass4()
                 mpSource[mnParaSize + nSize] = 0;
 
                 awt::Size aSize;
-                awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
+                awt::Point aPoint( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) );
                 mpOutAct->DrawText( aPoint, aSize,
                                 reinterpret_cast<char*>(mpSource) + mnParaSize, (FinalFlag)nType );
                 mnParaSize = mnElementSize;
@@ -213,8 +213,8 @@ void CGM::ImplDoClass4()
                 }
                 else
                 {
-                    dx = (double)ImplGetI( pElement->nVDCIntegerPrecision );
-                    dy = (double)ImplGetI( pElement->nVDCIntegerPrecision );
+                    dx = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
+                    dy = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
                 }
                 ImplMapDouble( dx );
                 ImplMapDouble( dy );
@@ -228,8 +228,8 @@ void CGM::ImplDoClass4()
 
                 mpSource[ mnParaSize + nSize ] = 0;
 
-                awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
-                awt::Size aSize((long)dx, (long)dy);
+                awt::Point aPoint( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) );
+                awt::Size aSize(static_cast<long>(dx), static_cast<long>(dy));
                 mpOutAct->DrawText( aPoint, aSize ,
                                 reinterpret_cast<char*>(mpSource) + mnParaSize, (FinalFlag)nType );
                 mnParaSize = mnElementSize;
@@ -263,7 +263,7 @@ void CGM::ImplDoClass4()
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, true );
-                    aPolygon.SetPoint( Point ( (long)( aFloatPoint.X ), (long)( aFloatPoint.Y ) ), i );
+                    aPolygon.SetPoint( Point ( static_cast<long>( aFloatPoint.X ), static_cast<long>( aFloatPoint.Y ) ), i );
                 }
                 mpOutAct->DrawPolygon( aPolygon );
             }
@@ -284,7 +284,7 @@ void CGM::ImplDoClass4()
                 {
                     ImplGetPoint( aFloatPoint, true );
                     nEdgeFlag = ImplGetUI16();
-                    pPoints[ nPoints++ ] = Point( (long)aFloatPoint.X, (long)aFloatPoint.Y );
+                    pPoints[ nPoints++ ] = Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) );
                     if ( ( nEdgeFlag & 2 ) || ( mnParaSize == mnElementSize ) )
                     {
                         tools::Polygon aPolygon( nPoints );
@@ -351,7 +351,7 @@ void CGM::ImplDoClass4()
                 if ( pElement->eVDCType == VDC_REAL )
                     aRadius.X = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 else
-                    aRadius.X = (double)ImplGetI( pElement->nVDCIntegerPrecision );
+                    aRadius.X = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
                 ImplMapDouble( aRadius.X );
                 aRadius.Y = aRadius.X;
                 mpOutAct->DrawEllipse( aCenter, aRadius, fRotation );
@@ -409,9 +409,9 @@ void CGM::ImplDoClass4()
 
                     if ( mbFigure )
                     {
-                        tools::Rectangle aBoundingBox( Point( (long)( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
-                            Size( static_cast< long >( 2 * fRadius ), (long)( 2 * fRadius) ) );
-                        tools::Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), PolyStyle::Arc );
+                        tools::Rectangle aBoundingBox( Point( static_cast<long>( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
+                            Size( static_cast< long >( 2 * fRadius ), static_cast<long>( 2 * fRadius) ) );
+                        tools::Polygon aPolygon( aBoundingBox, Point( static_cast<long>(aStartingPoint.X), static_cast<long>(aStartingPoint.Y) ) ,Point( static_cast<long>(aEndingPoint.X), static_cast<long>(aEndingPoint.Y) ), PolyStyle::Arc );
                         if ( nSwitch )
                             mpOutAct->RegPolyLine( aPolygon, true );
                         else
@@ -506,7 +506,7 @@ void CGM::ImplDoClass4()
                 }
                 else
                 {
-                    aRadius.X = (double)ImplGetI( pElement->nVDCIntegerPrecision );
+                    aRadius.X = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
                 }
 
                 ImplMapDouble( aRadius.X );
@@ -528,11 +528,11 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                 {
                     tools::Rectangle aBoundingBox(
-                        Point( (long)( aCenter.X - aRadius.X ), long( aCenter.Y - aRadius.X ) ),
-                        Size( static_cast< long >( 2 * aRadius.X ), (long)( 2 * aRadius.X ) ) );
+                        Point( static_cast<long>( aCenter.X - aRadius.X ), long( aCenter.Y - aRadius.X ) ),
+                        Size( static_cast< long >( 2 * aRadius.X ), static_cast<long>( 2 * aRadius.X ) ) );
                     tools::Polygon aPolygon( aBoundingBox,
-                        Point( (long)vector[ 0 ], (long)vector[ 1 ] ),
-                        Point( (long)vector[ 2 ], (long)vector[ 3 ] ), PolyStyle::Arc );
+                        Point( static_cast<long>(vector[ 0 ]), static_cast<long>(vector[ 1 ]) ),
+                        Point( static_cast<long>(vector[ 2 ]), static_cast<long>(vector[ 3 ]) ), PolyStyle::Arc );
                     mpOutAct->RegPolyLine( aPolygon );
                 }
                 else
@@ -561,7 +561,7 @@ void CGM::ImplDoClass4()
                 }
                 else
                 {
-                    aRadius.X = (double)ImplGetI( pElement->nVDCIntegerPrecision );
+                    aRadius.X = static_cast<double>(ImplGetI( pElement->nVDCIntegerPrecision ));
                 }
                 ImplMapDouble( aRadius.X );
                 aRadius.Y = aRadius.X;
@@ -721,7 +721,7 @@ void CGM::ImplDoClass4()
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, true );
-                    aPolygon.SetPoint( Point ( (long)( aFloatPoint.X ), (long)( aFloatPoint.Y ) ), i );
+                    aPolygon.SetPoint( Point ( static_cast<long>( aFloatPoint.X ), static_cast<long>( aFloatPoint.Y ) ), i );
                 }
                 if ( nOrder & 4 )
                 {
