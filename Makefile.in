@@ -152,6 +152,7 @@ gbuild_TARGETS := AllLangHelp \
 	Pyuno \
 	PythonTest \
 	Rdb \
+	SdiTarget \
 	StaticLibrary \
 	UIConfig \
 	UITest \
