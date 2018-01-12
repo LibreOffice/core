@@ -1220,7 +1220,7 @@ Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
     if( !xSeekable.is() )
         return aRetSeq;
 
-    sal_Int32 nSize = (sal_Int32)xSeekable->getPosition();
+    sal_Int32 nSize = static_cast<sal_Int32>(xSeekable->getPosition());
 
     Reference< io::XInputStream> xInputStream( m_xTempFile, UNO_QUERY );
     if( !xInputStream.is() )
@@ -1287,8 +1287,8 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
     }
 
     // Write header
-    sal_Int16 nLocaleCount16 = (sal_Int16)nLocaleCount;
-    sal_Int16 iDefault16 = (sal_Int16)iDefault;
+    sal_Int16 nLocaleCount16 = static_cast<sal_Int16>(nLocaleCount);
+    sal_Int16 iDefault16 = static_cast<sal_Int16>(iDefault);
     aOut.writeInt16( 0 ); // nVersion
     aOut.writeInt16( nLocaleCount16 );
     aOut.writeInt16( iDefault16 );
