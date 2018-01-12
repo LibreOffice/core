@@ -200,7 +200,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton, void )
         {
             BreakPoint* pBrk = new BreakPoint( nLine );
             pBrk->bEnabled = m_pCheckBox->IsChecked();
-            pBrk->nStopAfter = (size_t) m_pNumericField->GetValue();
+            pBrk->nStopAfter = static_cast<size_t>(m_pNumericField->GetValue());
             m_aModifiedBreakPointList.InsertSorted( pBrk );
             OUString aEntryStr( "# " + OUString::number(pBrk->nLine) );
             m_pComboBox->InsertEntry( aEntryStr );

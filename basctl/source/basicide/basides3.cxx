@@ -97,7 +97,7 @@ VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const
     if( pWin )
     {
         pWin->GrabScrollBars( aHScrollBar.get(), aVScrollBar.get() );
-        pTabBar->InsertPage( (sal_uInt16)nKey, aDlgName );
+        pTabBar->InsertPage( static_cast<sal_uInt16>(nKey), aDlgName );
         pTabBar->Sort();
         if ( !pCurWin )
             SetCurWindow( pWin, false, false );
