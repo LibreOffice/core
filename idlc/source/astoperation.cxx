@@ -41,7 +41,7 @@ bool AstOperation::isVariadic() const {
 bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 {
     sal_uInt16      nParam = getNodeCount(NT_parameter);
-    sal_uInt16      nExcep = (sal_uInt16)m_exceptions.size();
+    sal_uInt16      nExcep = static_cast<sal_uInt16>(m_exceptions.size());
 
     OUString returnTypeName;
     if (m_pReturnType == nullptr) {

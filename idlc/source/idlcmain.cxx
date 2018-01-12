@@ -76,7 +76,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if ( options.verbose() )
         {
             fprintf( stdout, "%s: compiling %i source files ... \n",
-                options.getProgramName().getStr(), (int)files.size() );
+                options.getProgramName().getStr(), static_cast<int>(files.size()) );
             fflush( stdout );
         }
         for (std::vector< OString >::const_iterator i(files.begin());
