@@ -223,7 +223,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     ,m_aSqlParser( _rContext, &m_aParseContext )
     ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser )
     ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser )
-    ,m_aElementaryParts( (size_t)SQLPartCount )
+    ,m_aElementaryParts( size_t(SQLPartCount) )
     ,m_xConnection(_xConnection)
     ,m_xMetaData(_xConnection->getMetaData())
     ,m_xConnectionTables( _rxTables )
@@ -571,7 +571,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
 
 OUString OSingleSelectQueryComposer::composeStatementFromParts( const std::vector< OUString >& _rParts )
 {
-    OSL_ENSURE( _rParts.size() == (size_t)SQLPartCount, "OSingleSelectQueryComposer::composeStatementFromParts: invalid parts array!" );
+    OSL_ENSURE( _rParts.size() == size_t(SQLPartCount), "OSingleSelectQueryComposer::composeStatementFromParts: invalid parts array!" );
 
     OUStringBuffer aSql( m_aPureSelectSQL );
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
@@ -648,7 +648,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
 
     // collect the 4 single parts as they're currently set
     std::vector< OUString > aClauses;
-    aClauses.reserve( (size_t)SQLPartCount );
+    aClauses.reserve( size_t(SQLPartCount) );
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
         aClauses.push_back( getSQLPart( eLoopParts, m_aSqlIterator, true ) );
 
@@ -838,7 +838,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
         ::connectivity::parse::OParseColumn::StringMap aColumnNames;
 
         sal_Int32 nCount = xResultSetMeta->getColumnCount();
-        OSL_ENSURE( (size_t) nCount == aSelectColumns->get().size(), "OSingleSelectQueryComposer::getColumns: inconsistent column counts, this might result in wrong columns!" );
+        OSL_ENSURE( static_cast<size_t>(nCount) == aSelectColumns->get().size(), "OSingleSelectQueryComposer::getColumns: inconsistent column counts, this might result in wrong columns!" );
         for(sal_Int32 i=1;i<=nCount;++i)
         {
             OUString sColumnName = xResultSetMeta->getColumnName(i);
@@ -886,7 +886,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
             {
                 aSelectColumns->get().emplace_back(::connectivity::parse::OParseColumn::createColumnForResultSet( xResultSetMeta, m_xMetaData, i ,aColumnNames)
                 );
-                OSL_ENSURE( aSelectColumns->get().size() == (size_t)i, "OSingleSelectQueryComposer::getColumns: inconsistency!" );
+                OSL_ENSURE( aSelectColumns->get().size() == static_cast<size_t>(i), "OSingleSelectQueryComposer::getColumns: inconsistency!" );
             }
             else if ( aRealFind == aSelectColumns->get().end() )
             {
@@ -928,7 +928,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
             else
                 continue;
 
-            aUsedSelectColumns.insert( (size_t)(i - 1) );
+            aUsedSelectColumns.insert( static_cast<size_t>(i - 1) );
             aNames.push_back( sColumnName );
         }
     }
@@ -1616,7 +1616,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                         const ::sal_Int64 nLength = xClob->length();
                         if ( sal_Int64(nLength + aSQL.getLength() + STR_LIKE.getLength() ) < sal_Int64(SAL_MAX_INT32) )
                         {
-                            aSQL.append("'" + xClob->getSubString(1,(sal_Int32)nLength) + "'");
+                            aSQL.append("'" + xClob->getSubString(1,static_cast<sal_Int32>(nLength)) + "'");
                         }
                     }
                     else
@@ -1641,7 +1641,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                     for(;pBegin != pEnd;++pBegin)
                     {
-                        aSQL.append( (sal_Int32)*pBegin, 16 );
+                        aSQL.append( static_cast<sal_Int32>(*pBegin), 16 );
                     }
                     if(nSearchable == ColumnSearch::CHAR)
                         aSQL.append( "\'" );

@@ -697,7 +697,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                             makeAny( ColumnValue::NO_NULLS != nNullable )
                         );
                         if ( ColumnValue::NO_NULLS == nNullable )
-                            aDefault <<= (sal_Int16)TRISTATE_FALSE;
+                            aDefault <<= sal_Int16(TRISTATE_FALSE);
                     }
                     break;
 
@@ -746,9 +746,9 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     if ( nType == DataType::BIT || nType == DataType::BOOLEAN )
                     {
                         if ( aDefault.hasValue() )
-                            aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)TRISTATE_FALSE : (sal_Int16)TRISTATE_TRUE;
+                            aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? sal_Int16(TRISTATE_FALSE) : sal_Int16(TRISTATE_TRUE);
                         else
-                            aDefault <<= (sal_Int16)TRISTATE_INDET;
+                            aDefault <<= sal_Int16(TRISTATE_INDET);
                     }
                 }
 
@@ -856,7 +856,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             if(xProp.is())
             {
                 if(!evt.NewValue.hasValue())
-                    xProp->setPropertyValue(PROPERTY_WIDTH,makeAny((sal_Int32)227));
+                    xProp->setPropertyValue(PROPERTY_WIDTH,makeAny(sal_Int32(227)));
                 else
                     xProp->setPropertyValue(PROPERTY_WIDTH,evt.NewValue);
             }
@@ -918,7 +918,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
 
                 bool bDefault = !evt.NewValue.hasValue();
                 if (bDefault)
-                    pData->xObjectProperties->setPropertyValue(PROPERTY_ROW_HEIGHT,makeAny((sal_Int32)45));
+                    pData->xObjectProperties->setPropertyValue(PROPERTY_ROW_HEIGHT,makeAny(sal_Int32(45)));
                 else
                     pData->xObjectProperties->setPropertyValue(PROPERTY_ROW_HEIGHT,evt.NewValue);
             }
@@ -1935,7 +1935,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                             Any* pSelectionNos = aSelection.getArray();
                             while (nIdx >= 0)
                             {
-                                *pSelectionNos++ <<= (sal_Int32)(nIdx + 1);
+                                *pSelectionNos++ <<= static_cast<sal_Int32>(nIdx + 1);
                                 nIdx = pSelection->NextSelected();
                             }
                         }
@@ -2747,7 +2747,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         }
         else
         {
-            if ((sal_Int32)m_pTreeView->getListBox().GetChildCount(pEntry) < ( xNames->getElementNames().getLength() - 1 ) )
+            if (static_cast<sal_Int32>(m_pTreeView->getListBox().GetChildCount(pEntry)) < ( xNames->getElementNames().getLength() - 1 ) )
             {
                 // the item inserts its children on demand, but it has not been expanded yet. So ensure here and
                 // now that it has all items

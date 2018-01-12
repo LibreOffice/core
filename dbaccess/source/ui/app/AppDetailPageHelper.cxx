@@ -1263,18 +1263,18 @@ bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::R
     if( aNewSize.Width() && aNewSize.Height() )
     {
         // scale to fit window
-        const double fGrfWH = (double) aNewSize.Width() / aNewSize.Height();
-        const double fWinWH = (double) aWinSize.Width() / aWinSize.Height();
+        const double fGrfWH = static_cast<double>(aNewSize.Width()) / aNewSize.Height();
+        const double fWinWH = static_cast<double>(aWinSize.Width()) / aWinSize.Height();
 
         if ( fGrfWH < fWinWH )
         {
-            aNewSize.Width() = (long) ( aWinSize.Height() * fGrfWH );
+            aNewSize.Width() = static_cast<long>( aWinSize.Height() * fGrfWH );
             aNewSize.Height()= aWinSize.Height();
         }
         else
         {
             aNewSize.Width() = aWinSize.Width();
-            aNewSize.Height()= (long) ( aWinSize.Width() / fGrfWH);
+            aNewSize.Height()= static_cast<long>( aWinSize.Width() / fGrfWH);
         }
 
         const Point aNewPos( ( aWinSize.Width()  - aNewSize.Width() ) >> 1,

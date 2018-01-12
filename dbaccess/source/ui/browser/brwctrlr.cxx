@@ -746,7 +746,7 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
     // we want to have a grid with a "flat" border
     Reference< XPropertySet >  xGridSet(m_xGridModel, UNO_QUERY);
     if ( xGridSet.is() )
-        xGridSet->setPropertyValue(PROPERTY_BORDER, makeAny((sal_Int16)2));
+        xGridSet->setPropertyValue(PROPERTY_BORDER, makeAny(sal_Int16(2)));
 
 
     // marry them
@@ -2281,7 +2281,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField() const
             return xEmptyReturn;
     sal_uInt16 nViewPos = xGrid->getCurrentColumnPosition();
     sal_uInt16 nCurrentCol = getBrowserView()->View2ModelPos(nViewPos);
-    if (nCurrentCol == (sal_uInt16)-1)
+    if (nCurrentCol == sal_uInt16(-1))
         return xEmptyReturn;
 
     // get the according column from the model
@@ -2315,7 +2315,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext&, r
         if (!IsSearchableControl(xCurrentColumn))
             continue;
 
-        sal_uInt16 nModelPos = getBrowserView()->View2ModelPos((sal_uInt16)nViewPos);
+        sal_uInt16 nModelPos = getBrowserView()->View2ModelPos(static_cast<sal_uInt16>(nViewPos));
         Reference< XPropertySet >  xCurrentColModel(xModelColumns->getByIndex(nModelPos),UNO_QUERY);
         OUString aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
 

@@ -1257,7 +1257,7 @@ void ORowSet::impl_restoreDataColumnsWriteable_throw()
     TDataColumns::const_iterator aIter = m_aDataColumns.begin();
     for (auto const& readOnlyDataColumn : m_aReadOnlyDataColumns)
     {
-        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, makeAny( (bool) readOnlyDataColumn) );
+        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, makeAny( static_cast<bool>(readOnlyDataColumn)) );
         ++aIter;
     }
     m_aReadOnlyDataColumns.clear();
@@ -1476,7 +1476,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 
         Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
         const sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-        if ( m_aParametersSet.size() < (size_t)nParamCount )
+        if ( m_aParametersSet.size() < static_cast<size_t>(nParamCount) )
             m_aParametersSet.resize( nParamCount ,false);
 
         ::dbtools::askForParameters( xComposer, this, m_xActiveConnection, _rxHandler,m_aParametersSet );
@@ -1698,7 +1698,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
     size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues->get().size() );
     for ( size_t i=1; i<=nParamCount; ++i )
     {
-        ORowSetValue& rParamValue( getParameterStorage( (sal_Int32)i ) );
+        ORowSetValue& rParamValue( getParameterStorage( static_cast<sal_Int32>(i) ) );
         ::dbtools::setObjectWithInfo( xParam, i, rParamValue.makeAny(), rParamValue.getTypeKind() );
         m_aParameterValueForCache->get().push_back(rParamValue);
     }
@@ -1906,7 +1906,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,makeAny(sal_Int32(227)));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny((sal_Int32)0));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny(sal_Int32(0)));
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN, css::uno::Any(false));
                         }
                         catch(Exception&)
@@ -2470,7 +2470,7 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
     if ( parameterIndex < 1 )
         throwInvalidIndexException( *this );
 
-    if ( m_aParametersSet.size() < (size_t)parameterIndex )
+    if ( m_aParametersSet.size() < static_cast<size_t>(parameterIndex) )
         m_aParametersSet.resize( parameterIndex ,false);
     m_aParametersSet[parameterIndex - 1] = true;
 
@@ -2482,13 +2482,13 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
             impl_disposeParametersContainer_nothrow();
         if ( m_pParameters.is() )
         {
-            if ( (size_t)parameterIndex > m_pParameters->size() )
+            if ( static_cast<size_t>(parameterIndex) > m_pParameters->size() )
                 throwInvalidIndexException( *this );
             return (*m_pParameters)[ parameterIndex - 1 ];
         }
     }
 
-    if ( m_aPrematureParamValues->get().size() < (size_t)parameterIndex )
+    if ( m_aPrematureParamValues->get().size() < static_cast<size_t>(parameterIndex) )
         m_aPrematureParamValues->get().resize( parameterIndex );
     return m_aPrematureParamValues->get()[ parameterIndex - 1 ];
 }
@@ -2662,7 +2662,7 @@ void SAL_CALL ORowSet::clearParameters(  )
 
     size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues->get().size() );
     for ( size_t i=1; i<=nParamCount; ++i )
-        getParameterStorage( (sal_Int32)i ).setNull();
+        getParameterStorage( static_cast<sal_Int32>(i) ).setNull();
     m_aParametersSet.clear();
 }
 

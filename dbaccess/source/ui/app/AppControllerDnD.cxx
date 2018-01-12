@@ -250,7 +250,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const std::vecto
                     // #i33353#
                     OSL_ENSURE( aThisRound->getLength() - 1 >= 0, "OApplicationController::deleteObjects: empty name?" );
                     OUStringBuffer sSmallestSiblingName( *aThisRound );
-                    sSmallestSiblingName.append( (sal_Unicode)( '/' + 1) );
+                    sSmallestSiblingName.append( sal_Unicode( '/' + 1) );
 
                     std::set< OUString >::const_iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
                     for ( std::set< OUString >::const_iterator aObsolete = aThisRound;

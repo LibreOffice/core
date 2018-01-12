@@ -223,7 +223,7 @@ Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex )
 {
     MutexGuard aGuard(m_rMutex);
 
-    if ((_nIndex < 0) || (_nIndex >= (sal_Int32)m_aBookmarksIndexed.size()))
+    if ((_nIndex < 0) || (_nIndex >= static_cast<sal_Int32>(m_aBookmarksIndexed.size())))
         throw IndexOutOfBoundsException();
 
     return makeAny(m_aBookmarksIndexed[_nIndex]->second);

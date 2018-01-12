@@ -73,7 +73,7 @@ sal_Int32 DlgSize::GetValue()
 {
     if (m_pCB_STANDARD->IsChecked())
         return -1;
-    return (sal_Int32)m_pMF_VALUE->GetValue( FUNIT_CM );
+    return static_cast<sal_Int32>(m_pMF_VALUE->GetValue( FUNIT_CM ));
 }
 
 IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton, void )

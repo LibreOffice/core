@@ -478,7 +478,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
             pInfo->aCreateParams    = aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bNullable        = (sal_Int32)aValue == ColumnValue::NULLABLE;
+            pInfo->bNullable        = static_cast<sal_Int32>(aValue) == ColumnValue::NULLABLE;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             // bCaseSensitive
@@ -490,10 +490,10 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
             // bUnsigned
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bCurrency        = (bool)aValue;
+            pInfo->bCurrency        = static_cast<bool>(aValue);
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bAutoIncrement   = (bool)aValue;
+            pInfo->bAutoIncrement   = static_cast<bool>(aValue);
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->aLocalTypeName   = aValue;
@@ -769,7 +769,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
 
             if(callColumnFormatDialog(_pParent,_pFormatter,nDataType,nFormatKey,eJustify,bHasFormat))
             {
-                xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny((sal_Int16)dbaui::mapTextAllign(eJustify)));
+                xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny(static_cast<sal_Int16>(dbaui::mapTextAllign(eJustify))));
                 if (bHasFormat)
                     xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
 
@@ -865,7 +865,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
             if (_bHasFormat)
             {
                 const SfxUInt32Item* pFormat = pSet->GetItem<SfxUInt32Item>(SBA_DEF_FMTVALUE);
-                _nFormatKey = (sal_Int32)pFormat->GetValue();
+                _nFormatKey = static_cast<sal_Int32>(pFormat->GetValue());
             }
             bRet = true;
         }

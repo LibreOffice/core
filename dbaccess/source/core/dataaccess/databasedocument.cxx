@@ -268,7 +268,7 @@ namespace
         try
         {
             if ( _bStart )
-                xStatusIndicator->start( OUString(), (sal_Int32)1000000 );
+                xStatusIndicator->start( OUString(), sal_Int32(1000000) );
             else
                 xStatusIndicator->end();
         }
@@ -300,7 +300,7 @@ namespace
 
         try
         {
-            _rxStatusIndicator->start( OUString(), (sal_Int32)1000000 );
+            _rxStatusIndicator->start( OUString(), sal_Int32(1000000) );
 
             sal_Int32 nLength = _rCallArgs.getLength();
             _rCallArgs.realloc( nLength + 1 );

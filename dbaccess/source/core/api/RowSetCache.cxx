@@ -469,7 +469,7 @@ static Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
-            return makeAny((sal_Int32)i_aValue);
+            return makeAny(static_cast<sal_Int32>(i_aValue));
         default:
             if ( i_pCacheSet && i_aValue.isNull())
                 i_aValue = i_pCacheSet->getBookmark();
@@ -669,7 +669,7 @@ bool ORowSetCache::next(  )
         {
             moveWindow();
 
-            OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+            OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < static_cast<sal_Int32>(m_pMatrix->size()),"Position is behind end()!");
             m_aMatrixIter = calcPosition();
             checkPositionFlags();
         }
@@ -829,7 +829,7 @@ void ORowSetCache::moveWindow()
     if ( m_nStartPos < m_nPosition && m_nPosition <= m_nEndPos )
     {
         // just move inside the window
-        OSL_ENSURE((m_nPosition - m_nStartPos) <= (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+        OSL_ENSURE((m_nPosition - m_nStartPos) <= static_cast<sal_Int32>(m_pMatrix->size()),"Position is behind end()!");
         // make double plus sure that we have fetched that row
         m_aMatrixIter = calcPosition();
         OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(), "New m_aMatrixIter is at end(), but should not.");
@@ -1113,7 +1113,7 @@ bool ORowSetCache::last(  )
         moveWindow();
         // we have to repositioning because moveWindow can modify the cache
         m_xCacheSet->last();
-        OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+        OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < static_cast<sal_Int32>(m_pMatrix->size()),"Position is behind end()!");
         m_aMatrixIter = calcPosition();
     }
     else
@@ -1161,7 +1161,7 @@ bool ORowSetCache::absolute( sal_Int32 row )
                 m_bBeforeFirst  = false;
                 m_bAfterLast    = m_nPosition > m_nRowCount;
                 moveWindow();
-                OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+                OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < static_cast<sal_Int32>(m_pMatrix->size()),"Position is behind end()!");
                 m_aMatrixIter = calcPosition();
             }
         }
@@ -1231,7 +1231,7 @@ bool ORowSetCache::previous(  )
             m_bAfterLast = false;
             --m_nPosition;
             moveWindow();
-            OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+            OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < static_cast<sal_Int32>(m_pMatrix->size()),"Position is behind end()!");
 
             checkPositionFlags();
 
@@ -1371,7 +1371,7 @@ bool ORowSetCache::deleteRow(  )
         return false;
 
     --m_nRowCount;
-    OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+    OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < static_cast<sal_Int32>(m_pMatrix->size()),"Position is behind end()!");
     ORowSetMatrix::iterator aPos = calcPosition();
     (*aPos)   = nullptr;
 
@@ -1522,7 +1522,7 @@ void ORowSetCache::checkPositionFlags()
 
 void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 {
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->get().size())
+    if(m_bAfterLast || columnIndex >= static_cast<sal_Int32>((*m_aInsertRow)->get().size()))
         throwFunctionSequenceException(m_xSet.get());
 }
 

@@ -277,7 +277,7 @@ namespace dbaui
     bool IndexFieldsControl::implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos)
     {
         _rPos = m_aFields.end();
-        if ((_nRow < 0) || (_nRow >= (sal_Int32)m_aFields.size()))
+        if ((_nRow < 0) || (_nRow >= static_cast<sal_Int32>(m_aFields.size())))
             return false;
         _rPos = m_aFields.begin() + _nRow;
         return true;
@@ -308,7 +308,7 @@ namespace dbaui
                 else
                 {
                     sal_Int32 nRow = GetCurRow();
-                    OSL_ENSURE(nRow < (sal_Int32)m_aFields.size(), "IndexFieldsControl::SaveModified: invalid current row!");
+                    OSL_ENSURE(nRow < static_cast<sal_Int32>(m_aFields.size()), "IndexFieldsControl::SaveModified: invalid current row!");
                     if (nRow >= 0)  // may be -1 in case the control was empty
                     {
                         // remove the field from the selection
@@ -388,7 +388,7 @@ namespace dbaui
                 sal_Int32 nCurrentRow = GetCurRow();
                 sal_Int32 rowCount = GetRowCount();
 
-                OSL_ENSURE(((sal_Int32)(m_aFields.size() + 1)) == rowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
+                OSL_ENSURE((static_cast<sal_Int32>(m_aFields.size() + 1)) == rowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
 
                 if (!sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
                 {   // in the last row, an non-empty string has been selected
