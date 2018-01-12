@@ -1187,8 +1187,9 @@ parse( $file );
 close( $file );
 
 if ( !defined( $result_shapes{'textBox'} ) ) {
+    # tdf#114842 shapetype id of the textbox, must be the same as defined
     $result_shapes{'textBox'} =
-        "<v:shapetype id=\"shapetype___ID__\" coordsize=\"21600,21600\" " .
+        "<v:shapetype id=\"_x005F_x0000_t__ID__\" coordsize=\"21600,21600\" " .
         "o:spt=\"__ID__\" path=\"m,l,21600l21600,21600l21600,xe\">\n" .
         "<v:stroke joinstyle=\"miter\"/>\n" .
         "<v:path gradientshapeok=\"t\" o:connecttype=\"rect\"/>\n" .
