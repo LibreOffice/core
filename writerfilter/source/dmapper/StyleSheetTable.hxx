@@ -56,6 +56,7 @@ public:
     OUString sStyleIdentifierI;
     OUString sStyleIdentifierD;
     bool            bIsDefaultStyle;
+    bool            bIsChapterNumbering;  //LO built-in Chapter Numbering "Outline" list style
     bool            bInvalidHeight;
     bool            bHasUPE; //universal property expansion
     StyleType       nStyleTypeCode; //sgc

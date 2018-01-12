@@ -625,6 +625,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                         xOutlines->getChapterNumberingRules( );
 
                     StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
+                    pParaStyle->bIsChapterNumbering = true;
                     aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
 
                     xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
