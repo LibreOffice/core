@@ -262,7 +262,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
             if ( nColCount > 0 && xRow.is() )
             {
-                nEndCol = (SCCOL)( rParam.nCol1 + nColCount - 1 );
+                nEndCol = static_cast<SCCOL>( rParam.nCol1 + nColCount - 1 );
 
                 uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
                 uno::Sequence<sal_Bool> aColCurr( nColCount );      // currency flag is not in types

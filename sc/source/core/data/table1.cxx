@@ -312,8 +312,8 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
         if ( pDrawLayer->ScAddPage( nTab ) )    // sal_False (not inserted) during Undo
         {
             pDrawLayer->ScRenamePage( nTab, aName );
-            sal_uLong const nx = (sal_uLong) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
-            sal_uLong ny = (sal_uLong) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
+            sal_uLong const nx = sal_uLong(double(MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
+            sal_uLong ny = static_cast<sal_uLong>(double(MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
             pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( nx, ny ), false );
         }
     }
@@ -1903,7 +1903,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         aCol[rCol].SetTextWidth(nRow, static_cast<sal_uInt16>(nPixel));
     }
 
-    long nTwips = (long) (nPixel / nPPTX);
+    long nTwips = static_cast<long>(nPixel / nPPTX);
     long nDocW = GetColWidth( rCol );
 
     long nMissing = nTwips - nDocW;

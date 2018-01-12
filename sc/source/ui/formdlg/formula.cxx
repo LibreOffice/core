@@ -175,7 +175,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
             pData->SetFStart( 1 );      // after "="
         }
 
-        pData->SetMode( (sal_uInt16) eMode );
+        pData->SetMode( static_cast<sal_uInt16>(eMode) );
         OUString rStrExp = GetMeText();
 
         Update(rStrExp);

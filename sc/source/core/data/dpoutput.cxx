@@ -153,25 +153,25 @@ void ScDPOutputImpl::OutputDataArea()
     mnCols.push_back( mnTabEndCol+1); //set last row bottom
     mnRows.push_back( mnTabEndRow+1); //set last col bottom
 
-    bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
+    bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == static_cast<SCROW>(mnRows.size()) );
 
     std::sort( mnCols.begin(), mnCols.end());
     std::sort( mnRows.begin(), mnRows.end());
 
-    for( SCCOL nCol = 0; nCol < (SCCOL)mnCols.size()-1; nCol ++ )
+    for( SCCOL nCol = 0; nCol < static_cast<SCCOL>(mnCols.size())-1; nCol ++ )
     {
         if ( !bAllRows )
         {
-            if ( nCol < (SCCOL)mnCols.size()-2)
+            if ( nCol < static_cast<SCCOL>(mnCols.size())-2)
             {
-                for ( SCROW i = nCol%2; i < (SCROW)mnRows.size()-2; i +=2 )
+                for ( SCROW i = nCol%2; i < static_cast<SCROW>(mnRows.size())-2; i +=2 )
                     OutputBlockFrame( mnCols[nCol], mnRows[i], mnCols[nCol+1]-1, mnRows[i+1]-1 );
                 if ( mnRows.size()>=2 )
                     OutputBlockFrame(  mnCols[nCol], mnRows[mnRows.size()-2], mnCols[nCol+1]-1, mnRows[mnRows.size()-1]-1 );
             }
             else
             {
-                for ( SCROW i = 0 ; i < (SCROW)mnRows.size()-1; i++ )
+                for ( SCROW i = 0 ; i < static_cast<SCROW>(mnRows.size())-1; i++ )
                     OutputBlockFrame(  mnCols[nCol], mnRows[i], mnCols[nCol+1]-1,  mnRows[i+1]-1 );
             }
         }
@@ -785,17 +785,17 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         //TODO: limit frames to horizontal or vertical?
         if (bColHeader)
         {
-            outputimp.OutputBlockFrame( nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1 );
+            outputimp.OutputBlockFrame( nCol,nMemberStartRow+static_cast<SCROW>(nLevel), nCol,nDataStartRow-1 );
 
-            lcl_SetStyleById( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1,
+            lcl_SetStyleById( pDoc,nTab, nCol,nMemberStartRow+static_cast<SCROW>(nLevel), nCol,nDataStartRow-1,
                                     STR_PIVOT_STYLE_TITLE );
             lcl_SetStyleById( pDoc,nTab, nCol,nDataStartRow, nCol,nTabEndRow,
                                     STR_PIVOT_STYLE_RESULT );
         }
         else
         {
-            outputimp.OutputBlockFrame( nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow );
-            lcl_SetStyleById( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow,
+            outputimp.OutputBlockFrame( nMemberStartCol+static_cast<SCCOL>(nLevel),nRow, nDataStartCol-1,nRow );
+            lcl_SetStyleById( pDoc,nTab, nMemberStartCol+static_cast<SCCOL>(nLevel),nRow, nDataStartCol-1,nRow,
                                     STR_PIVOT_STYLE_TITLE );
             lcl_SetStyleById( pDoc,nTab, nDataStartCol,nRow, nTabEndCol,nRow,
                                     STR_PIVOT_STYLE_RESULT );
@@ -877,20 +877,20 @@ void ScDPOutput::CalcSizes()
         }
 
         nTabStartCol = aStartPos.Col();
-        nTabStartRow = aStartPos.Row() + (SCROW)nPageSize;          // below page fields
+        nTabStartRow = aStartPos.Row() + static_cast<SCROW>(nPageSize);          // below page fields
         nMemberStartCol = nTabStartCol;
-        nMemberStartRow = nTabStartRow + (SCROW) nHeaderSize;
-        nDataStartCol = nMemberStartCol + (SCCOL)pRowFields.size();
-        nDataStartRow = nMemberStartRow + (SCROW)pColFields.size();
+        nMemberStartRow = nTabStartRow + static_cast<SCROW>(nHeaderSize);
+        nDataStartCol = nMemberStartCol + static_cast<SCCOL>(pRowFields.size());
+        nDataStartRow = nMemberStartRow + static_cast<SCROW>(pColFields.size());
         if ( nColCount > 0 )
-            nTabEndCol = nDataStartCol + (SCCOL)nColCount - 1;
+            nTabEndCol = nDataStartCol + static_cast<SCCOL>(nColCount) - 1;
         else
             nTabEndCol = nDataStartCol;     // single column will remain empty
         // if page fields are involved, include the page selection cells
         if ( !pPageFields.empty() && nTabEndCol < nTabStartCol + 1 )
             nTabEndCol = nTabStartCol + 1;
         if ( nRowCount > 0 )
-            nTabEndRow = nDataStartRow + (SCROW)nRowCount - 1;
+            nTabEndRow = nDataStartRow + static_cast<SCROW>(nRowCount) - 1;
         else
             nTabEndRow = nDataStartRow;     // single row will remain empty
         bSizesValid = true;
@@ -1012,17 +1012,17 @@ void ScDPOutput::Output()
         nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow );
     for (size_t nField=0; nField<pColFields.size(); nField++)
     {
-        SCCOL nHdrCol = nDataStartCol + (SCCOL)nField;              //TODO: check for overflow
+        SCCOL nHdrCol = nDataStartCol + static_cast<SCCOL>(nField);              //TODO: check for overflow
         FieldCell(nHdrCol, nTabStartRow, nTab, pColFields[nField], true);
 
-        SCROW nRowPos = nMemberStartRow + (SCROW)nField;                //TODO: check for overflow
+        SCROW nRowPos = nMemberStartRow + static_cast<SCROW>(nField);                //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].maResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisColCount = rSequence.getLength();
         OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //TODO: ???
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
-            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //TODO: check for overflow
+            SCCOL nColPos = nDataStartCol + static_cast<SCCOL>(nCol);                //TODO: check for overflow
             HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
             if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
@@ -1030,7 +1030,7 @@ void ScDPOutput::Output()
                 long nEnd = nCol;
                 while ( nEnd+1 < nThisColCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
                     ++nEnd;
-                SCCOL nEndColPos = nDataStartCol + (SCCOL)nEnd;     //TODO: check for overflow
+                SCCOL nEndColPos = nDataStartCol + static_cast<SCCOL>(nEnd);     //TODO: check for overflow
                 if ( nField+1 < pColFields.size())
                 {
                     if ( nField == pColFields.size() - 2 )
@@ -1062,18 +1062,18 @@ void ScDPOutput::Output()
     vbSetBorder.resize( nTabEndRow - nDataStartRow + 1, false );
     for (size_t nField=0; nField<pRowFields.size(); nField++)
     {
-        SCCOL nHdrCol = nTabStartCol + (SCCOL)nField;                   //TODO: check for overflow
+        SCCOL nHdrCol = nTabStartCol + static_cast<SCCOL>(nField);                   //TODO: check for overflow
         SCROW nHdrRow = nDataStartRow - 1;
         FieldCell(nHdrCol, nHdrRow, nTab, pRowFields[nField], true);
 
-        SCCOL nColPos = nMemberStartCol + (SCCOL)nField;                //TODO: check for overflow
+        SCCOL nColPos = nMemberStartCol + static_cast<SCCOL>(nField);                //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].maResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisRowCount = rSequence.getLength();
         OSL_ENSURE( nThisRowCount == nRowCount, "count mismatch" );     //TODO: ???
         for (long nRow=0; nRow<nThisRowCount; nRow++)
         {
-            SCROW nRowPos = nDataStartRow + (SCROW)nRow;                //TODO: check for overflow
+            SCROW nRowPos = nDataStartRow + static_cast<SCROW>(nRow);                //TODO: check for overflow
             HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
             if ( ( pArray[nRow].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
@@ -1083,7 +1083,7 @@ void ScDPOutput::Output()
                     long nEnd = nRow;
                     while ( nEnd+1 < nThisRowCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
                         ++nEnd;
-                    SCROW nEndRowPos = nDataStartRow + (SCROW)nEnd;     //TODO: check for overflow
+                    SCROW nEndRowPos = nDataStartRow + static_cast<SCROW>(nEnd);     //TODO: check for overflow
                     outputimp.AddRow( nRowPos );
                     if ( !vbSetBorder[ nRow ] )
                     {
@@ -1121,13 +1121,13 @@ void ScDPOutput::Output()
 
     for (long nRow=0; nRow<nRowCount; nRow++)
     {
-        SCROW nRowPos = nDataStartRow + (SCROW)nRow;                    //TODO: check for overflow
+        SCROW nRowPos = nDataStartRow + static_cast<SCROW>(nRow);                    //TODO: check for overflow
         const sheet::DataResult* pColAry = pRowAry[nRow].getConstArray();
         long nThisColCount = pRowAry[nRow].getLength();
         OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //TODO: ???
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
-            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //TODO: check for overflow
+            SCCOL nColPos = nDataStartCol + static_cast<SCCOL>(nCol);                //TODO: check for overflow
             DataCell( nColPos, nRowPos, nTab, pColAry[nCol] );
         }
     }

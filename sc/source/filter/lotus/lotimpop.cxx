@@ -143,7 +143,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
             Read( nCol );
             Read( nSpaces );
             // Attention: ambiguous Correction factor!
-            pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), ( sal_uInt16 ) ( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
+            pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), static_cast<sal_uInt16>( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
 
             nCnt--;
         }

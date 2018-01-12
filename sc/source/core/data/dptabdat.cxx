@@ -88,7 +88,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
                 //TODO: use settings for different definitions
                 case 0: nRet = aDate.GetYear();                 break;      //!...
                 case 1: nRet = aDate.GetWeekOfYear();           break;
-                case 2: nRet = (long)aDate.GetDayOfWeek();      break;
+                case 2: nRet = static_cast<long>(aDate.GetDayOfWeek());      break;
                 default:
                     OSL_FAIL("GetDatePart: wrong level");
             }
@@ -258,7 +258,7 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 
     const ::std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
 
-    return GetCacheTable().getCache().GetItemDataById( (SCCOL) nDim, (SCROW)nMembers[nIndex] );
+    return GetCacheTable().getCache().GetItemDataById( static_cast<SCCOL>(nDim), static_cast<SCROW>(nMembers[nIndex]) );
 }
 
 const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)

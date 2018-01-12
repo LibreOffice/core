@@ -94,7 +94,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     if (!bStrict)
         aDate.AddDays( nDay - 1 );
     if (aDate.IsValidAndGregorian())
-        return (double) (aDate - pFormatter->GetNullDate());
+        return static_cast<double>(aDate - pFormatter->GetNullDate());
     else
     {
         SetError(FormulaError::NoValue);
@@ -107,7 +107,7 @@ void ScInterpreter::ScGetActDate()
     nFuncFmtType = SvNumFormatType::DATE;
     Date aActDate( Date::SYSTEM );
     long nDiff = aActDate - pFormatter->GetNullDate();
-    PushDouble((double) nDiff);
+    PushDouble(static_cast<double>(nDiff));
 }
 
 void ScInterpreter::ScGetActTime()
@@ -120,52 +120,52 @@ void ScInterpreter::ScGetActTime()
                    aActTime.GetMin()     / static_cast<double>(::tools::Time::minutePerDay) +
                    aActTime.GetSec()     / static_cast<double>(::tools::Time::secondPerDay) +
                    aActTime.GetNanoSec() / static_cast<double>(::tools::Time::nanoSecPerDay);
-    PushDouble( (double) nDiff + fTime );
+    PushDouble( static_cast<double>(nDiff) + fTime );
 }
 
 void ScInterpreter::ScGetYear()
 {
     Date aDate = pFormatter->GetNullDate();
     aDate.AddDays( GetInt32());
-    PushDouble( (double) aDate.GetYear() );
+    PushDouble( static_cast<double>(aDate.GetYear()) );
 }
 
 void ScInterpreter::ScGetMonth()
 {
     Date aDate = pFormatter->GetNullDate();
     aDate.AddDays( GetInt32());
-    PushDouble( (double) aDate.GetMonth() );
+    PushDouble( static_cast<double>(aDate.GetMonth()) );
 }
 
 void ScInterpreter::ScGetDay()
 {
     Date aDate = pFormatter->GetNullDate();
     aDate.AddDays( GetInt32());
-    PushDouble((double) aDate.GetDay());
+    PushDouble(static_cast<double>(aDate.GetDay()));
 }
 
 void ScInterpreter::ScGetMin()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::tools::Time::secondPerHour;
-    PushDouble( (double) (nVal / ::tools::Time::secondPerMinute) );
+    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5)) % ::tools::Time::secondPerHour;
+    PushDouble( static_cast<double>(nVal / ::tools::Time::secondPerMinute) );
 }
 
 void ScInterpreter::ScGetSec()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::tools::Time::secondPerMinute;
-    PushDouble( (double) nVal );
+    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5)) % ::tools::Time::secondPerMinute;
+    PushDouble( static_cast<double>(nVal) );
 }
 
 void ScInterpreter::ScGetHour()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) / ::tools::Time::secondPerHour;
-    PushDouble((double) nVal);
+    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5)) / ::tools::Time::secondPerHour;
+    PushDouble(static_cast<double>(nVal));
 }
 
 void ScInterpreter::ScGetDateValue()
@@ -201,7 +201,7 @@ void ScInterpreter::ScGetDayOfWeek()
 
         Date aDate = pFormatter->GetNullDate();
         aDate.AddDays( GetInt32());
-        int nVal = (int) aDate.GetDayOfWeek();  // MONDAY = 0
+        int nVal = static_cast<int>(aDate.GetDayOfWeek());  // MONDAY = 0
         switch (nFlag)
         {
             case 1:     // Sunday = 1
@@ -243,7 +243,7 @@ void ScInterpreter::ScWeeknumOOo()
 
         Date aDate = pFormatter->GetNullDate();
         aDate.AddDays( GetInt32());
-        PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
+        PushInt( static_cast<int>(aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY )));
     }
 }
 
@@ -293,7 +293,7 @@ void ScInterpreter::ScGetWeekOfYear()
                 PushIllegalArgument();
                 return;
         }
-        PushInt( (int) aDate.GetWeekOfYear( eFirstDayOfWeek, nMinimumNumberOfDaysInWeek ) );
+        PushInt( static_cast<int>(aDate.GetWeekOfYear( eFirstDayOfWeek, nMinimumNumberOfDaysInWeek )) );
     }
 }
 
@@ -303,7 +303,7 @@ void ScInterpreter::ScGetIsoWeekOfYear()
     {
         Date aDate = pFormatter->GetNullDate();
         aDate.AddDays( GetInt32());
-        PushInt( (int) aDate.GetWeekOfYear() );
+        PushInt( static_cast<int>(aDate.GetWeekOfYear()) );
     }
 }
 
@@ -365,7 +365,7 @@ FormulaError ScInterpreter::GetWeekendAndHolidayMasks(
 
             // Weekend days defined by string, Sunday...Saturday
             for ( int i = 0; i < 7; i++ )
-                bWeekendMask[ i ] = ( bool ) nWeekendDays[ ( i == 6 ? 0 : i + 1 ) ];
+                bWeekendMask[ i ] = static_cast<bool>(nWeekendDays[ ( i == 6 ? 0 : i + 1 ) ]);
         }
     }
     else
@@ -561,7 +561,7 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
                 }
                 ++nDate1;
             }
-            PushDouble( ( double ) ( bReverse ? -nCnt : nCnt ) );
+            PushDouble( static_cast<double>( bReverse ? -nCnt : nCnt ) );
         }
     }
 }
@@ -592,7 +592,7 @@ void ScInterpreter::ScWorkday_MS()
             nDate += nNullDate;
 
             if ( !nDays )
-                PushDouble( ( double ) ( nDate - nNullDate ) );
+                PushDouble( static_cast<double>( nDate - nNullDate ) );
             else
             {
                 size_t nMax = nSortArray.size();
@@ -632,7 +632,7 @@ void ScInterpreter::ScWorkday_MS()
                              nDays++;
                     }
                 }
-                PushDouble( ( double ) ( nDate - nNullDate ) );
+                PushDouble( static_cast<double>( nDate - nNullDate ) );
             }
         }
     }
@@ -768,11 +768,11 @@ void ScInterpreter::ScGetDiffDate360()
                 else
                     aDate2.SetDay(30);
             }
-            PushDouble( (double) nSign *
-                (  (double) aDate2.GetDay() + (double) aDate2.GetMonth() * 30.0 +
-                   (double) aDate2.GetYear() * 360.0
-                 - (double) aDate1.GetDay() - (double) aDate1.GetMonth() * 30.0
-                 - (double)aDate1.GetYear() * 360.0) );
+            PushDouble( static_cast<double>(nSign) *
+                (  static_cast<double>(aDate2.GetDay()) + static_cast<double>(aDate2.GetMonth()) * 30.0 +
+                   static_cast<double>(aDate2.GetYear()) * 360.0
+                 - static_cast<double>(aDate1.GetDay()) - static_cast<double>(aDate1.GetMonth()) * 30.0
+                 - static_cast<double>(aDate1.GetYear()) * 360.0) );
         }
     }
 }
@@ -1567,7 +1567,7 @@ void ScInterpreter::ScMIRR()
             else
             {
                 double fResult = -fNPV_reinvest / fNPV_invest;
-                fResult *= pow( fRate1_reinvest, (double)( nCount - 1 ) );
+                fResult *= pow( fRate1_reinvest, static_cast<double>( nCount - 1 ) );
                 fResult = pow( fResult, div( 1.0, (nCount - 1)) );
                 PushDouble( fResult - 1.0 );
             }
@@ -1726,7 +1726,7 @@ void ScInterpreter::ScDB()
         double fSumOffRate = fFirstOffRate;
         double fMin = fLife;
         if (fMin > fPeriod) fMin = fPeriod;
-        sal_uInt16 iMax = (sal_uInt16)::rtl::math::approxFloor(fMin);
+        sal_uInt16 iMax = static_cast<sal_uInt16>(::rtl::math::approxFloor(fMin));
         for (sal_uInt16 i = 2; i <= iMax; i++)
         {
             fDb = (fCost - fSumOffRate) * fOffRate;
@@ -1743,7 +1743,7 @@ double ScInterpreter::ScInterVDB(double fCost, double fSalvage, double fLife,
 {
     double fVdb=0;
     double fIntEnd   = ::rtl::math::approxCeil(fPeriod);
-    sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
+    sal_uLong nLoopEnd   = static_cast<sal_uLong>(fIntEnd);
 
     double fTerm, fSln; // SLN: Straight-Line Depreciation
     double fSalvageValue = fCost - fSalvage;
@@ -1756,8 +1756,8 @@ double ScInterpreter::ScInterVDB(double fCost, double fSalvage, double fLife,
     {
         if(!bNowSln)
         {
-            fDdb = ScGetDDB(fCost, fSalvage, fLife, (double) i, fFactor);
-            fSln = fSalvageValue/ (fLife1 - (double) (i-1));
+            fDdb = ScGetDDB(fCost, fSalvage, fLife, static_cast<double>(i), fFactor);
+            fSln = fSalvageValue/ (fLife1 - static_cast<double>(i-1));
 
             if (fSln > fDdb)
             {
@@ -1816,15 +1816,15 @@ void ScInterpreter::ScVDB()
         {
             double fIntStart = ::rtl::math::approxFloor(fStart);
             double fIntEnd   = ::rtl::math::approxCeil(fEnd);
-            sal_uLong nLoopStart = (sal_uLong) fIntStart;
-            sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
+            sal_uLong nLoopStart = static_cast<sal_uLong>(fIntStart);
+            sal_uLong nLoopEnd   = static_cast<sal_uLong>(fIntEnd);
 
             fVdb = 0.0;
             if (bNoSwitch)
             {
                 for (sal_uLong i = nLoopStart + 1; i <= nLoopEnd; i++)
                 {
-                    double fTerm = ScGetDDB(fCost, fSalvage, fLife, (double) i, fFactor);
+                    double fTerm = ScGetDDB(fCost, fSalvage, fLife, static_cast<double>(i), fFactor);
 
                     //respect partial period in the Beginning/ End:
                     if ( i == nLoopStart+1 )
@@ -2265,9 +2265,9 @@ void ScInterpreter::ScCumIpmt()
             PushIllegalArgument();
         else
         {
-            bool bPayInAdvance = ( bool ) fFlag;
-            sal_uLong nStart = (sal_uLong) fStart;
-            sal_uLong nEnd = (sal_uLong) fEnd ;
+            bool bPayInAdvance = static_cast<bool>(fFlag);
+            sal_uLong nStart = static_cast<sal_uLong>(fStart);
+            sal_uLong nEnd = static_cast<sal_uLong>(fEnd) ;
             double fPmt = ScGetPMT(fRate, fNper, fPv, 0.0, bPayInAdvance);
             double fIpmt = 0.0;
             if (nStart == 1)
@@ -2279,9 +2279,9 @@ void ScInterpreter::ScCumIpmt()
             for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (bPayInAdvance)
-                    fIpmt += ScGetFV(fRate, (double)(i-2), fPmt, fPv, true) - fPmt;
+                    fIpmt += ScGetFV(fRate, static_cast<double>(i-2), fPmt, fPv, true) - fPmt;
                 else
-                    fIpmt += ScGetFV(fRate, (double)(i-1), fPmt, fPv, false);
+                    fIpmt += ScGetFV(fRate, static_cast<double>(i-1), fPmt, fPv, false);
             }
             fIpmt *= fRate;
             PushDouble(fIpmt);
@@ -2307,11 +2307,11 @@ void ScInterpreter::ScCumPrinc()
             PushIllegalArgument();
         else
         {
-            bool bPayInAdvance = ( bool ) fFlag;
+            bool bPayInAdvance = static_cast<bool>(fFlag);
             double fPmt = ScGetPMT(fRate, fNper, fPv, 0.0, bPayInAdvance);
             double fPpmt = 0.0;
-            sal_uLong nStart = (sal_uLong) fStart;
-            sal_uLong nEnd = (sal_uLong) fEnd;
+            sal_uLong nStart = static_cast<sal_uLong>(fStart);
+            sal_uLong nEnd = static_cast<sal_uLong>(fEnd);
             if (nStart == 1)
             {
                 if (bPayInAdvance)
@@ -2323,9 +2323,9 @@ void ScInterpreter::ScCumPrinc()
             for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (bPayInAdvance)
-                    fPpmt += fPmt - (ScGetFV(fRate, (double)(i-2), fPmt, fPv, true) - fPmt) * fRate;
+                    fPpmt += fPmt - (ScGetFV(fRate, static_cast<double>(i-2), fPmt, fPv, true) - fPmt) * fRate;
                 else
-                    fPpmt += fPmt - ScGetFV(fRate, (double)(i-1), fPmt, fPv, false) * fRate;
+                    fPpmt += fPmt - ScGetFV(fRate, static_cast<double>(i-1), fPmt, fPv, false) * fRate;
             }
             PushDouble(fPpmt);
         }
@@ -2657,7 +2657,7 @@ void ScInterpreter::ScStyle()
             aStyle2 = GetString().getString();
         long nTimeOut = 0;                          // timeout
         if (nParamCount >= 2)
-            nTimeOut = (long)(GetDouble()*1000.0);
+            nTimeOut = static_cast<long>(GetDouble()*1000.0);
         OUString aStyle1 = GetString().getString(); // Template for immediate
 
         if (nTimeOut < 0)
@@ -2731,7 +2731,7 @@ void ScInterpreter::ScDde()
                 PushIllegalArgument();
                 return;
             }
-            nMode = (sal_uInt8) nTmp;
+            nMode = static_cast<sal_uInt8>(nTmp);
         }
         OUString aItem  = GetString().getString();
         OUString aTopic = GetString().getString();
@@ -2848,7 +2848,7 @@ void ScInterpreter::ScBase()
         {
             double fLen = ::rtl::math::approxFloor( GetDouble() );
             if ( 1.0 <= fLen && fLen < SAL_MAX_UINT16 )
-                nMinLen = (sal_Int32) fLen;
+                nMinLen = static_cast<sal_Int32>(fLen);
             else if ( fLen == 0.0 )
                 nMinLen = 1;
             else
@@ -2876,16 +2876,16 @@ void ScInterpreter::ScBase()
             }
             sal_Unicode* p = pBuf + nBuf - 1;
             *p = 0;
-            if ( fVal <= (sal_uLong)(~0) )
+            if ( fVal <= sal_uLong(~0) )
             {
-                sal_uLong nVal = (sal_uLong) fVal;
-                sal_uLong nBase = (sal_uLong) fBase;
+                sal_uLong nVal = static_cast<sal_uLong>(fVal);
+                sal_uLong nBase = static_cast<sal_uLong>(fBase);
                 while ( nVal && p > pBuf )
                 {
                     *--p = pDigits[ nVal % nBase ];
                     nVal /= nBase;
                 }
-                fVal = (double) nVal;
+                fVal = static_cast<double>(nVal);
             }
             else
             {
@@ -2933,9 +2933,9 @@ void ScInterpreter::ScBase()
                         if ( fDig <= 0.0 )
                             nDig = 0;
                         else if ( fDig >= fBase )
-                            nDig = ((size_t) fBase) - 1;
+                            nDig = static_cast<size_t>(fBase) - 1;
                         else
-                            nDig = (size_t) fDig;
+                            nDig = static_cast<size_t>(fDig);
                     }
                     *--p = pDigits[ nDig ];
                     fVal = fInt;
@@ -2966,7 +2966,7 @@ void ScInterpreter::ScDecimal()
         if ( nGlobalError == FormulaError::NONE && 2 <= fBase && fBase <= 36 )
         {
             double fVal = 0.0;
-            int nBase = (int) fBase;
+            int nBase = static_cast<int>(fBase);
             const sal_Unicode* p = aStr.getStr();
             while ( *p == ' ' || *p == '\t' )
                 p++;        // strip leading white space
@@ -3049,11 +3049,11 @@ void ScInterpreter::ScRoman()
         {
             static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
             static const sal_uInt16 pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
-            static const sal_uInt16 nMaxIndex = (sal_uInt16)(SAL_N_ELEMENTS(pValues) - 1);
+            static const sal_uInt16 nMaxIndex = sal_uInt16(SAL_N_ELEMENTS(pValues) - 1);
 
             OUString aRoman;
-            sal_uInt16 nVal = (sal_uInt16) fVal;
-            sal_uInt16 nMode = (sal_uInt16) fMode;
+            sal_uInt16 nVal = static_cast<sal_uInt16>(fVal);
+            sal_uInt16 nMode = static_cast<sal_uInt16>(fMode);
 
             for( sal_uInt16 i = 0; i <= nMaxIndex / 2; i++ )
             {
@@ -3353,7 +3353,7 @@ void ScInterpreter::ScEuroConvert()
                         double fIntermediate = fVal / fFromRate;
                         if ( fPrecision )
                             fIntermediate = ::rtl::math::round( fIntermediate,
-                                                            (int) fPrecision );
+                                                            static_cast<int>(fPrecision) );
                         fRes = fIntermediate * fToRate;
                     }
                     if ( !bFullPrecision )

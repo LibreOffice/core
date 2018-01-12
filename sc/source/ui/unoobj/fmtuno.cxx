@@ -293,7 +293,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         {
             table::CellAddress aAddress;
             if ( rProp.Value >>= aAddress )
-                aEntry.maPos = ScAddress( (SCCOL)aAddress.Column, (SCROW)aAddress.Row, aAddress.Sheet );
+                aEntry.maPos = ScAddress( static_cast<SCCOL>(aAddress.Column), static_cast<SCROW>(aAddress.Row), aAddress.Sheet );
         }
         else if ( rProp.Name == SC_UNONAME_SOURCESTR )
         {
@@ -377,7 +377,7 @@ sal_Int32 SAL_CALL ScTableConditionalFormat::getCount()
 uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xEntry.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -415,7 +415,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
         {
-            xEntry.set(GetObjectByIndex_Impl((sal_uInt16)i));
+            xEntry.set(GetObjectByIndex_Impl(static_cast<sal_uInt16>(i)));
             break;
         }
 
@@ -561,7 +561,7 @@ table::CellAddress SAL_CALL ScTableConditionalEntry::getSourcePosition()
 void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddress& aSourcePosition )
 {
     SolarMutexGuard aGuard;
-    aData.maPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
+    aData.maPos.Set( static_cast<SCCOL>(aSourcePosition.Column), static_cast<SCROW>(aSourcePosition.Row), aSourcePosition.Sheet );
 }
 
 // XSheetConditionalEntry
@@ -749,7 +749,7 @@ table::CellAddress SAL_CALL ScTableValidationObj::getSourcePosition()
 void SAL_CALL ScTableValidationObj::setSourcePosition( const table::CellAddress& aSourcePosition )
 {
     SolarMutexGuard aGuard;
-    aSrcPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
+    aSrcPos.Set( static_cast<SCCOL>(aSourcePosition.Column), static_cast<SCROW>(aSourcePosition.Row), aSourcePosition.Sheet );
 }
 
 uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens( sal_Int32 nIndex )

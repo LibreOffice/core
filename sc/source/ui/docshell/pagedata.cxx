@@ -91,7 +91,7 @@ void ScPageBreakData::AddPages()
         long nPage = pData[0].GetFirstPage();
         for (size_t i=0; i+1<nUsed; i++)
         {
-            nPage += ((long)pData[i].GetPagesX())*pData[i].GetPagesY();
+            nPage += static_cast<long>(pData[i].GetPagesX())*pData[i].GetPagesY();
             pData[i+1].SetFirstPage( nPage );
         }
     }

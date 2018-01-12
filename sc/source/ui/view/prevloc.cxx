@@ -288,14 +288,14 @@ tools::Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPo
     {
         sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nTab );
         if (nDocW)
-            nPosX += (long) (nDocW * nScaleX);
+            nPosX += static_cast<long>(nDocW * nScaleX);
     }
-    long nSizeX = (long) ( pDoc->GetColWidth( nEndCol, nTab ) * nScaleX );
+    long nSizeX = static_cast<long>( pDoc->GetColWidth( nEndCol, nTab ) * nScaleX );
 
     SCROW nEndRow = rCellPos.Row();
-    long nPosY = (long) pDoc->GetScaledRowHeight( rRange.aStart.Row(),
-            nEndRow, nTab, nScaleY);
-    long nSizeY = (long) ( pDoc->GetRowHeight( nEndRow, nTab ) * nScaleY );
+    long nPosY = static_cast<long>(pDoc->GetScaledRowHeight( rRange.aStart.Row(),
+            nEndRow, nTab, nScaleY));
+    long nSizeY = static_cast<long>( pDoc->GetRowHeight( nEndRow, nTab ) * nScaleY );
 
     Size aOffsetLogic( nPosX, nPosY );
     Size aSizeLogic( nSizeX, nSizeY );
@@ -553,7 +553,7 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                 if (!pDoc->ColHidden(nCol, nTab))
                 {
                     sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nTab );
-                    long nNextX = nPosX + (long) (nDocW * nScaleX);
+                    long nNextX = nPosX + static_cast<long>(nDocW * nScaleX);
 
                     long nPixelStart = pWindow->LogicToPixel( Size( nPosX, 0 ), aCellMapMode ).Width();
                     long nPixelEnd = pWindow->LogicToPixel( Size( nNextX, 0 ), aCellMapMode ).Width() - 1;
@@ -572,7 +572,7 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                 if (!pDoc->ColHidden(nCol, nTab))
                 {
                     sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nTab );
-                    long nNextX = nPosX + (long) (nDocW * nScaleX);
+                    long nNextX = nPosX + static_cast<long>(nDocW * nScaleX);
 
                     long nPixelStart = pWindow->LogicToPixel( Size( nPosX, 0 ), aCellMapMode ).Width();
                     long nPixelEnd = pWindow->LogicToPixel( Size( nNextX, 0 ), aCellMapMode ).Width() - 1;
@@ -618,7 +618,7 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                     continue;
 
                 sal_uInt16 nDocH = pDoc->GetOriginalHeight( nRow, nTab );
-                long nNextY = nPosY + (long) (nDocH * nScaleY);
+                long nNextY = nPosY + static_cast<long>(nDocH * nScaleY);
 
                 long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
                 long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
@@ -639,7 +639,7 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                     continue;
 
                 sal_uInt16 nDocH = pDoc->GetOriginalHeight( nRow, nTab );
-                long nNextY = nPosY + (long) (nDocH * nScaleY);
+                long nNextY = nPosY + static_cast<long>(nDocH * nScaleY);
 
                 long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
                 long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;

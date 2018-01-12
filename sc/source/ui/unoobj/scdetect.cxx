@@ -107,7 +107,7 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
 
         if( nMuster < 0x0100 )
         { // compare bytes
-            if( ( sal_uInt8 ) nMuster != nByte )
+            if( static_cast<sal_uInt8>(nMuster) != nByte )
                 bSync = false;
         }
         else if( nMuster & M_DC )
@@ -115,12 +115,12 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
         }
         else if( nMuster & M_ALT(0) )
         { // alternative Bytes
-            sal_uInt8 nAnzAlt = ( sal_uInt8 ) nMuster;
+            sal_uInt8 nAnzAlt = static_cast<sal_uInt8>(nMuster);
             bSync = false;          // first unsynchron
             while( nAnzAlt > 0 )
             {
                 pSearch++;
-                if( ( sal_uInt8 ) *pSearch == nByte )
+                if( static_cast<sal_uInt8>(*pSearch) == nByte )
                     bSync = true;   // only now synchronization
                 nAnzAlt--;
             }

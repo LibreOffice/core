@@ -6509,9 +6509,9 @@ void Test::testUndoDataAnchor()
 
 void Test::testEmptyCalcDocDefaults()
 {
-    CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetCellCount() );
-    CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetFormulaGroupCount() );
-    CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetCodeCount() );
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetCellCount() );
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetFormulaGroupCount() );
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetCodeCount() );
     CPPUNIT_ASSERT_EQUAL( (int)CharCompressType::NONE, (int)m_pDoc->GetAsianCompression() );
 
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasPrintRange() );

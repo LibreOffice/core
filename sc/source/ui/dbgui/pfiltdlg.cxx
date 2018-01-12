@@ -189,7 +189,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                 aValStr = aStrEmpty;
             else if (rEntry.IsQueryByNonEmpty())
                 aValStr = aStrNotEmpty;
-            sal_uInt16  nCondPos     = (sal_uInt16)rEntry.eOp;
+            sal_uInt16  nCondPos     = static_cast<sal_uInt16>(rEntry.eOp);
             sal_uInt16  nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
             aFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
@@ -213,12 +213,12 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 
        (m_pLbField1->GetSelectedEntryPos() != 0)
     && (m_pLbField2->GetSelectedEntryPos() != 0)
-        ? m_pLbConnect1->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(1).eConnect )
+        ? m_pLbConnect1->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(1).eConnect) )
         : m_pLbConnect1->SetNoSelection();
 
        (m_pLbField2->GetSelectedEntryPos() != 0)
     && (m_pLbField3->GetSelectedEntryPos() != 0)
-        ? m_pLbConnect2->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(2).eConnect )
+        ? m_pLbConnect2->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(2).eConnect) )
         : m_pLbConnect2->SetNoSelection();
 
     if ( m_pLbField1->GetSelectedEntryPos() == 0 )

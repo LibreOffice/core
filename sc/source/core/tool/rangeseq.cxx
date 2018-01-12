@@ -53,7 +53,7 @@ static long lcl_DoubleToLong( double fVal )
     double fInt = (fVal >= 0.0) ? ::rtl::math::approxFloor( fVal ) :
                                   ::rtl::math::approxCeil( fVal );
     if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
-        return (long)fInt;
+        return static_cast<long>(fInt);
     else
         return 0;       // out of range
 }
@@ -74,7 +74,7 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const S
         sal_Int32* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
             pColAry[nCol] = lcl_DoubleToLong( pDoc->GetValue(
-                ScAddress( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab ) ) );
+                ScAddress( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab ) ) );
 
         pRowAry[nRow] = aColSeq;
     }
@@ -127,7 +127,7 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const
         double* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
             pColAry[nCol] = pDoc->GetValue(
-                ScAddress( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab ) );
+                ScAddress( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab ) );
 
         pRowAry[nRow] = aColSeq;
     }
@@ -183,7 +183,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const
         for (long nCol = 0; nCol < nColCount; nCol++)
         {
             FormulaError nErrCode = pDoc->GetStringForFormula(
-                        ScAddress((SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab),
+                        ScAddress(static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab),
                         pColAry[nCol] );
             if ( nErrCode != FormulaError::NONE )
                 bHasErrors = true;
@@ -256,7 +256,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
         {
             uno::Any& rElement = pColAry[nCol];
 
-            ScAddress aPos( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab );
+            ScAddress aPos( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab );
             ScRefCellValue aCell(*pDoc, aPos);
 
             if (aCell.isEmpty())

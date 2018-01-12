@@ -26,7 +26,7 @@
 
 static inline sal_uLong TimeNow()          // seconds
 {
-    return (sal_uLong) time(nullptr);
+    return static_cast<sal_uLong>(time(nullptr));
 }
 
 namespace {

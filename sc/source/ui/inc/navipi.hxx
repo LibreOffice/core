@@ -148,7 +148,7 @@ public:
     {
         xDlg = pNaviDlg;
     }
-    SCROW   GetRow() { return (SCROW)GetValue(); }
+    SCROW   GetRow() { return static_cast<SCROW>(GetValue()); }
     void    SetRow(SCROW nRow) { SetValue(nRow); }
 
 protected:

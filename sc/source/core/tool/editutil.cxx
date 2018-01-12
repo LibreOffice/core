@@ -290,18 +290,18 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
-    long nCellX = (long) ( pDoc->GetColWidth(nCol,nTab) * nPPTX );
+    long nCellX = static_cast<long>( pDoc->GetColWidth(nCol,nTab) * nPPTX );
     if ( pMerge->GetColMerge() > 1 )
     {
         SCCOL nCountX = pMerge->GetColMerge();
         for (SCCOL i=1; i<nCountX; i++)
-            nCellX += (long) ( pDoc->GetColWidth(nCol+i,nTab) * nPPTX );
+            nCellX += static_cast<long>( pDoc->GetColWidth(nCol+i,nTab) * nPPTX );
     }
-    long nCellY = (long) ( pDoc->GetRowHeight(nRow,nTab) * nPPTY );
+    long nCellY = static_cast<long>( pDoc->GetRowHeight(nRow,nTab) * nPPTY );
     if ( pMerge->GetRowMerge() > 1 )
     {
         SCROW nCountY = pMerge->GetRowMerge();
-        nCellY += (long) pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
+        nCellY += static_cast<long>(pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY));
     }
 
     const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
@@ -309,14 +309,14 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
                 SvxCellHorJustify::Left )
         nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
-    long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
+    long nPixDifX   = static_cast<long>( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
     aStartPos.X()   += nPixDifX * nLayoutSign;
-    nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     // due to line feed, etc.
+    nCellX          -= nPixDifX + static_cast<long>( pMargin->GetRightMargin() * nPPTX );     // due to line feed, etc.
 
     //  align vertical position to the one in the table
 
     long nPixDifY;
-    long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
+    long nTopMargin = static_cast<long>( pMargin->GetTopMargin() * nPPTY );
     SvxCellVerJustify eJust = pPattern->GetItem(ATTR_VER_JUSTIFY).GetValue();
 
     //  asian vertical is always edited top-aligned
@@ -340,7 +340,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
             pDev->SetFont(aFont);
             nTextHeight = pDev->GetTextHeight() + nTopMargin +
-                            (long) ( pMargin->GetBottomMargin() * nPPTY );
+                            static_cast<long>( pMargin->GetBottomMargin() * nPPTY );
         }
 
         pDev->SetMapMode(aMode);

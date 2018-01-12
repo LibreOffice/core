@@ -39,7 +39,7 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         mnCurPos(0),
         pActDefault( nullptr ),
         pDefMerge( nullptr ),
-        nStartAdjust( (sal_uLong)~0 ),
+        nStartAdjust( sal_uLong(~0) ),
         nLastWidth(0),
         bNewDef( false )
 {
@@ -126,7 +126,7 @@ bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
 
 void ScRTFParser::ColAdjust()
 {
-    if ( nStartAdjust != (sal_uLong)~0 )
+    if ( nStartAdjust != sal_uLong(~0) )
     {
         SCCOL nCol = 0;
         for (size_t i = nStartAdjust, nListSize = maList.size(); i < nListSize; ++i)
@@ -147,7 +147,7 @@ void ScRTFParser::ColAdjust()
             if ( nCol > nColMax )
                 nColMax = nCol;
         }
-        nStartAdjust = (sal_uLong)~0;
+        nStartAdjust = sal_uLong(~0);
         aColTwips.clear();
     }
 }
@@ -340,7 +340,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
                 mxActEntry->aItemSet.Set(pActDefault->aItemSet);
                 EntryEnd(mxActEntry.get(), pInfo->aSelection);
 
-                if ( nStartAdjust == (sal_uLong)~0 )
+                if ( nStartAdjust == sal_uLong(~0) )
                     nStartAdjust = maList.size();
                 maList.push_back(mxActEntry);
                 NewActEntry(mxActEntry.get()); // New free-flying mxActEntry

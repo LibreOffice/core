@@ -223,10 +223,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
         {
             const svtools::ColorConfig& rColors = GetColorConfig();
             bool bArrows =
-                ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
-                  ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
+                ( ScDetectiveFunc::GetArrowColor() != static_cast<ColorData>(rColors.GetColorValue(svtools::CALCDETECTIVE).nColor) ||
+                  ScDetectiveFunc::GetErrorColor() != static_cast<ColorData>(rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor) );
             bool bComments =
-                ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
+                ( ScDetectiveFunc::GetCommentColor() != static_cast<ColorData>(rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor) );
             if ( bArrows || bComments )
             {
                 ScDetectiveFunc::InitializeColors(); // get the new colors
@@ -734,7 +734,7 @@ void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
     if(nFIndex != 0)
     {
         const ScAppOptions& rAppOpt = GetAppOptions();
-        sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
+        sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), sal_uInt16(LRU_MAX) );
         sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
 
         sal_uInt16  aIdxList[LRU_MAX];

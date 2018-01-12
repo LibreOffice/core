@@ -61,7 +61,7 @@ public:
                                     { return nCol < nColCount && nRow < nRowCount; }
                                 // data column by column
             sal_uLong               GetIndex( SCCOL nCol, SCROW nRow ) const
-                                    { return (sal_uLong) nCol * nRowCount + nRow; }
+                                    { return static_cast<sal_uLong>(nCol) * nRowCount + nRow; }
 
             const ScAddress*    GetPosition( sal_uLong nIndex ) const
                                     {

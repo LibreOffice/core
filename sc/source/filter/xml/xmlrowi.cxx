@@ -69,7 +69,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                 break;
                 case XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ):
                 {
-                    nRepeatedRows = std::max( it.toInt32(), (sal_Int32) 1 );
+                    nRepeatedRows = std::max( it.toInt32(), sal_Int32(1) );
                     nRepeatedRows = std::min( nRepeatedRows, MAXROWCOUNT );
                 }
                 break;
@@ -175,7 +175,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
                                 if ( nSheet != pStyle->GetLastSheet() )
                                 {
                                     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
-                                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, (SCROW)nFirstRow, nSheet ) );
+                                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, static_cast<SCROW>(nFirstRow), nSheet ) );
                                     pStyle->SetLastSheet(nSheet);
                                 }
                             }

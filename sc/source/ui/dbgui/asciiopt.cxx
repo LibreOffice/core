@@ -236,7 +236,7 @@ OUString ScAsciiOptions::WriteToString() const
 
     aOutStr += "," +
                // Language
-               OUString::number((sal_uInt16)eLang) + "," +
+               OUString::number(static_cast<sal_uInt16>(eLang)) + "," +
                // Import quoted field as text.
                OUString::boolean( bQuotedFieldAsText ) + "," +
                // Detect special numbers.

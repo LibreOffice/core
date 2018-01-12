@@ -203,7 +203,7 @@ double ScInterpreter::gauss(double x)
 {
 
     double xAbs = fabs(x);
-    sal_uInt16 xShort = (sal_uInt16)::rtl::math::approxFloor(xAbs);
+    sal_uInt16 xShort = static_cast<sal_uInt16>(::rtl::math::approxFloor(xAbs));
     double nVal = 0.0;
     if (xShort == 0)
     {
@@ -1196,8 +1196,8 @@ void ScInterpreter::ScPermut()
         else
         {
             double nVal = n;
-            for (sal_uLong i = (sal_uLong)k-1; i >= 1; i--)
-                nVal *= n-(double)i;
+            for (sal_uLong i = static_cast<sal_uLong>(k)-1; i >= 1; i--)
+                nVal *= n-static_cast<double>(i);
             PushDouble(nVal);
         }
     }
@@ -1642,7 +1642,7 @@ void ScInterpreter::ScTDist()
         PushIllegalArgument();
         return;
     }
-    PushDouble( GetTDist( T, fDF, ( int )fFlag ) );
+    PushDouble( GetTDist( T, fDF, static_cast<int>(fFlag) ) );
 }
 
 void ScInterpreter::ScTDist_T( int nTails )
@@ -1811,7 +1811,7 @@ void ScInterpreter::ScPoissonDist( bool bODFF )
                     int nEnd = sal::static_int_cast<int>( x );
                     for (int i = 1; i <= nEnd; i++)
                     {
-                        fSummand = (fSummand * lambda)/(double)i;
+                        fSummand = (fSummand * lambda)/static_cast<double>(i);
                         fSum += fSummand;
                     }
                     PushDouble(fSum);
@@ -2716,7 +2716,7 @@ void ScInterpreter::ScTTest()
         PushIllegalArgument();
         return;
     }
-    PushDouble( GetTDist( fT, fF, ( int )fTails ) );
+    PushDouble( GetTDist( fT, fF, static_cast<int>(fTails) ) );
 }
 
 void ScInterpreter::ScFTest()
@@ -2848,7 +2848,7 @@ void ScInterpreter::ScChiTest()
     double fDF;
     if (nC1 == 1 || nR1 == 1)
     {
-        fDF = (double)(nC1*nR1 - 1);
+        fDF = static_cast<double>(nC1*nR1 - 1);
         if (fDF == 0.0)
         {
             PushNoValue();
@@ -2856,7 +2856,7 @@ void ScInterpreter::ScChiTest()
         }
     }
     else
-        fDF = (double)(nC1-1)*(double)(nR1-1);
+        fDF = static_cast<double>(nC1-1)*static_cast<double>(nR1-1);
     PushDouble(GetChiDist(fChi, fDF));
 }
 
@@ -3399,7 +3399,7 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
         return rArray[0];
     else
     {
-        size_t nIndex = (size_t)::rtl::math::approxFloor( fPercentile * (nSize-1));
+        size_t nIndex = static_cast<size_t>(::rtl::math::approxFloor( fPercentile * (nSize-1)));
         double fDiff = fPercentile * (nSize-1) - ::rtl::math::approxFloor( fPercentile * (nSize-1));
         OSL_ENSURE(nIndex < nSize, "GetPercentile: wrong index(1)");
         vector<double>::iterator iter = rArray.begin() + nIndex;
@@ -3425,13 +3425,13 @@ double ScInterpreter::GetPercentileExclusive( vector<double> & rArray, double fP
         SetError( FormulaError::NoValue );
         return 0.0;
     }
-    if ( fPercentile * nSize1 < 1.0 || fPercentile * nSize1 > (double) ( nSize1 - 1 ) )
+    if ( fPercentile * nSize1 < 1.0 || fPercentile * nSize1 > static_cast<double>( nSize1 - 1 ) )
     {
         SetError( FormulaError::IllegalParameter );
         return 0.0;
     }
 
-    size_t nIndex = (size_t)::rtl::math::approxFloor( fPercentile * nSize1 - 1 );
+    size_t nIndex = static_cast<size_t>(::rtl::math::approxFloor( fPercentile * nSize1 - 1 ));
     double fDiff = fPercentile *  nSize1 - 1 - ::rtl::math::approxFloor( fPercentile * nSize1 - 1 );
     OSL_ENSURE(nIndex < ( nSize1 - 1 ), "GetPercentile: wrong index(1)");
     vector<double>::iterator iter = rArray.begin() + nIndex;
@@ -3625,7 +3625,7 @@ double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVa
         if ( bInclusive )
             fRes = 0.0;
         else
-            fRes = 1.0 / ( double )( nSize + 1 );
+            fRes = 1.0 / static_cast<double>( nSize + 1 );
     }
     else
     {
@@ -3647,7 +3647,7 @@ double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVa
             if ( bInclusive )
                 fRes = div( nOldCount, nSize - 1 );
             else
-                fRes = ( double )( i + 1 ) / ( double )( nSize + 1 );
+                fRes = static_cast<double>( i + 1 ) / static_cast<double>( nSize + 1 );
         }
         else
         {
@@ -3664,9 +3664,9 @@ double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVa
                 double fFract = ( fVal - rArray[ nOldCount - 1 ] ) /
                     ( rArray[ nOldCount ] - rArray[ nOldCount - 1 ] );
                 if ( bInclusive )
-                    fRes = div( ( double )( nOldCount - 1 ) + fFract, nSize - 1 );
+                    fRes = div( static_cast<double>( nOldCount - 1 ) + fFract, nSize - 1 );
                 else
-                    fRes = ( ( double )nOldCount + fFract ) / ( double )( nSize + 1 );
+                    fRes = ( static_cast<double>(nOldCount) + fFract ) / static_cast<double>( nSize + 1 );
             }
         }
     }
@@ -3690,7 +3690,7 @@ void ScInterpreter::ScTrimMean()
         PushNoValue();
     else
     {
-        sal_uLong nIndex = (sal_uLong) ::rtl::math::approxFloor(alpha*(double)nSize);
+        sal_uLong nIndex = static_cast<sal_uLong>(::rtl::math::approxFloor(alpha*static_cast<double>(nSize)));
         if (nIndex % 2 != 0)
             nIndex--;
         nIndex /= 2;
@@ -3698,7 +3698,7 @@ void ScInterpreter::ScTrimMean()
         double fSum = 0.0;
         for (SCSIZE i = nIndex; i < nSize-nIndex; i++)
             fSum += aSortArray[i];
-        PushDouble(fSum/(double)(nSize-2*nIndex));
+        PushDouble(fSum/static_cast<double>(nSize-2*nIndex));
     }
 }
 

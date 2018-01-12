@@ -166,9 +166,9 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyNa
     else if (aPropertyName == SC_UNO_SRCHSIMREL) aRet <<= pSearchItem->IsLEVRelaxed();
     else if (aPropertyName == SC_UNO_SRCHSTYLES) aRet <<= pSearchItem->GetPattern();
     else if (aPropertyName == SC_UNO_SRCHWORDS)  aRet <<= pSearchItem->GetWordOnly();
-    else if (aPropertyName == SC_UNO_SRCHSIMADD) aRet <<= (sal_Int16) pSearchItem->GetLEVLonger();
-    else if (aPropertyName == SC_UNO_SRCHSIMEX)  aRet <<= (sal_Int16) pSearchItem->GetLEVOther();
-    else if (aPropertyName == SC_UNO_SRCHSIMREM) aRet <<= (sal_Int16) pSearchItem->GetLEVShorter();
+    else if (aPropertyName == SC_UNO_SRCHSIMADD) aRet <<= static_cast<sal_Int16>(pSearchItem->GetLEVLonger());
+    else if (aPropertyName == SC_UNO_SRCHSIMEX)  aRet <<= static_cast<sal_Int16>(pSearchItem->GetLEVOther());
+    else if (aPropertyName == SC_UNO_SRCHSIMREM) aRet <<= static_cast<sal_Int16>(pSearchItem->GetLEVShorter());
     else if (aPropertyName == SC_UNO_SRCHTYPE)   aRet <<= (sal_Int16) pSearchItem->GetCellType();
     else if (aPropertyName == SC_UNO_SRCHFILTERED) aRet <<= pSearchItem->IsSearchFiltered();
     else if (aPropertyName == SC_UNO_SRCHFORMATTED) aRet <<= pSearchItem->IsSearchFormatted();

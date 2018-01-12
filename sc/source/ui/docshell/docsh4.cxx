@@ -1528,7 +1528,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
         long nBlkTwipsX = 0;
         if (bHeaders)
-            nBlkTwipsX += (long) PRINT_HEADER_WIDTH;
+            nBlkTwipsX += long(PRINT_HEADER_WIDTH);
         SCCOL nStartCol = rRange.aStart.Col();
         SCCOL nEndCol = rRange.aEnd.Col();
         if ( pRepeatCol && nStartCol >= pRepeatCol->aStart.Col() )
@@ -1546,7 +1546,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
         long nBlkTwipsY = 0;
         if (bHeaders)
-            nBlkTwipsY += (long) PRINT_HEADER_HEIGHT;
+            nBlkTwipsY += long(PRINT_HEADER_HEIGHT);
         SCROW nStartRow = rRange.aStart.Row();
         SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
@@ -1573,8 +1573,8 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
                             aPhysPage.Height() * 100 / nBlkTwipsY );
         if ( nNeeded < ZOOM_MIN )
             nNeeded = ZOOM_MIN;         // boundary
-        if ( nNeeded < (long) nNewScale )
-            nNewScale = (sal_uInt16) nNeeded;
+        if ( nNeeded < static_cast<long>(nNewScale) )
+            nNewScale = static_cast<sal_uInt16>(nNeeded);
 
         bChange = ( nNewScale != nOldScale || nOldPages != 0 );
         if ( bChange )
@@ -2078,7 +2078,7 @@ namespace {
 void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
-    long nTwips = (long) (rVal / HMM_PER_TWIPS);
+    long nTwips = static_cast<long>(rVal / HMM_PER_TWIPS);
     long nSnap = 0;
     while ( nCol<MAXCOL )
     {
@@ -2091,14 +2091,14 @@ void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
         else
             break;
     }
-    rVal = (long) ( nSnap * HMM_PER_TWIPS );
+    rVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
     rStartCol = nCol;
 }
 
 void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
-    long nTwips = (long) (rVal / HMM_PER_TWIPS);
+    long nTwips = static_cast<long>(rVal / HMM_PER_TWIPS);
     long nSnap = 0;
 
     bool bFound = false;
@@ -2127,7 +2127,7 @@ void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
     if (!bFound)
         nRow = MAXROW;  // all hidden down to the bottom
 
-    rVal = (long) ( nSnap * HMM_PER_TWIPS );
+    rVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;
 }
 

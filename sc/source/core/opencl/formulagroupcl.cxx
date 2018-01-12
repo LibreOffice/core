@@ -170,7 +170,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     if (pHostBuffer)
     {
         mpClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
+            cl_mem_flags(CL_MEM_READ_ONLY) | CL_MEM_USE_HOST_PTR,
             szHostBuffer,
             pHostBuffer, &err);
         if (CL_SUCCESS != err)
@@ -183,7 +183,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             szHostBuffer = sizeof(double); // a dummy small value
                                            // Marshal as a buffer of NANs
         mpClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR,
+            cl_mem_flags(CL_MEM_READ_ONLY) | CL_MEM_ALLOC_HOST_PTR,
             szHostBuffer, nullptr, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
@@ -782,7 +782,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
     {
         // Marshal strings. Right now we pass hashes of these string
         mpClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR,
+            cl_mem_flags(CL_MEM_READ_ONLY) | CL_MEM_ALLOC_HOST_PTR,
             szHostBuffer, nullptr, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
@@ -813,7 +813,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
             szHostBuffer = sizeof(cl_int); // a dummy small value
                                            // Marshal as a buffer of NANs
         mpClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR,
+            cl_mem_flags(CL_MEM_READ_ONLY) | CL_MEM_ALLOC_HOST_PTR,
             szHostBuffer, nullptr, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
@@ -1445,7 +1445,7 @@ public:
             mpDVR->GetArrays()[Base::mnIndex].mpNumericArray);
         size_t szHostBuffer = nInput * sizeof(double);
         Base::mpClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
+            cl_mem_flags(CL_MEM_READ_ONLY) | CL_MEM_USE_HOST_PTR,
             szHostBuffer,
             pHostBuffer, &err);
         SAL_INFO("sc.opencl", "Created buffer " << Base::mpClmem << " size " << nInput << "*" << sizeof(double) << "=" << szHostBuffer << " using host buffer " << pHostBuffer);
@@ -1493,7 +1493,7 @@ public:
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
         // set work group size and execute
-        size_t global_work_size[] = { 256, (size_t)w };
+        size_t global_work_size[] = { 256, static_cast<size_t>(w) };
         size_t const local_work_size[] = { 256, 1 };
         SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
@@ -1551,7 +1551,7 @@ public:
                 throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
             // set work group size and execute
-            size_t global_work_size1[] = { 256, (size_t)w };
+            size_t global_work_size1[] = { 256, static_cast<size_t>(w) };
             size_t const local_work_size1[] = { 256, 1 };
             SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
             err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
@@ -1581,7 +1581,7 @@ public:
                 mpClmem2 = nullptr;
             }
             mpClmem2 = clCreateBuffer(kEnv.mpkContext,
-                (cl_mem_flags)CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                cl_mem_flags(CL_MEM_READ_WRITE) | CL_MEM_COPY_HOST_PTR,
                 w * sizeof(double) * 2, pAllBuffer.get(), &err);
             if (CL_SUCCESS != err)
                 throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
@@ -2262,7 +2262,7 @@ public:
                 throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
             // set work group size and execute
-            size_t global_work_size[] = { 256, (size_t)nVectorWidth };
+            size_t global_work_size[] = { 256, static_cast<size_t>(nVectorWidth) };
             size_t const local_work_size[] = { 256, 1 };
             SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
             err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
@@ -2346,7 +2346,7 @@ public:
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
                 // set work group size and execute
-                size_t global_work_size[] = { 256, (size_t)nVectorWidth };
+                size_t global_work_size[] = { 256, static_cast<size_t>(nVectorWidth) };
                 size_t const local_work_size[] = { 256, 1 };
                 SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
@@ -3745,7 +3745,7 @@ std::string const & DynamicKernel::GetMD5()
             RTL_DIGEST_LENGTH_MD5);
         for (sal_uInt8 i : result)
         {
-            md5s << std::hex << (int)i;
+            md5s << std::hex << static_cast<int>(i);
         }
         mKernelHash = md5s.str();
     }
@@ -3877,7 +3877,7 @@ void DynamicKernel::Launch( size_t nr )
     cl_int err;
     // The results
     mpResClmem = clCreateBuffer(kEnv.mpkContext,
-        (cl_mem_flags)CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
+        cl_mem_flags(CL_MEM_READ_WRITE) | CL_MEM_ALLOC_HOST_PTR,
         nr * sizeof(double), nullptr, &err);
     if (CL_SUCCESS != err)
         throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);

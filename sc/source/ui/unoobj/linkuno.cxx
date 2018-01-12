@@ -191,7 +191,7 @@ void ScSheetLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
 {
     ScTableLink* pLink = GetLink_Impl();
     if( pLink )
-        pLink->SetRefreshDelay( (sal_uLong) nRefresh );
+        pLink->SetRefreshDelay( static_cast<sal_uLong>(nRefresh) );
 }
 
 // XPropertySet
@@ -348,7 +348,7 @@ sal_Int32 ScSheetLinkObj::getRefreshDelay() const
     sal_Int32 nRet = 0;
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
-        nRet = (sal_Int32) pLink->GetRefreshDelay();
+        nRet = static_cast<sal_Int32>(pLink->GetRefreshDelay());
     return nRet;
 }
 
@@ -659,7 +659,7 @@ void ScAreaLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
 {
     ScAreaLink* pLink = lcl_GetAreaLink( pDocShell, nPos );
     if( pLink )
-        pLink->SetRefreshDelay( (sal_uLong) nRefresh );
+        pLink->SetRefreshDelay( static_cast<sal_uLong>(nRefresh) );
 }
 
 // XRefreshable
@@ -831,7 +831,7 @@ sal_Int32 ScAreaLinkObj::getRefreshDelay() const
     sal_Int32 nRet = 0;
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
     if (pLink)
-        nRet = (sal_Int32) pLink->GetRefreshDelay();
+        nRet = static_cast<sal_Int32>(pLink->GetRefreshDelay());
     return nRet;
 }
 
@@ -904,7 +904,7 @@ void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 ScAreaLinkObj* ScAreaLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if ( pDocShell && nIndex >= 0 && nIndex < getCount() )
-        return new ScAreaLinkObj( pDocShell, (size_t)nIndex );
+        return new ScAreaLinkObj( pDocShell, static_cast<size_t>(nIndex) );
 
     return nullptr;    // not found
 }
@@ -919,7 +919,7 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
     if (pDocShell)
     {
         OUString aFileStr   (aFileName);
-        ScAddress aDestAddr( (SCCOL)aDestPos.Column, (SCROW)aDestPos.Row, aDestPos.Sheet );
+        ScAddress aDestAddr( static_cast<SCCOL>(aDestPos.Column), static_cast<SCROW>(aDestPos.Row), aDestPos.Sheet );
 
         aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  //! in InsertAreaLink ???
         pDocShell->GetDocFunc().InsertAreaLink( aFileStr, aFilter, aFilterOptions,
@@ -931,7 +931,7 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
 void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, (size_t)nIndex);
+    ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, static_cast<size_t>(nIndex));
     if (pLink)
     {
         //! SetAddUndo or what
@@ -1217,7 +1217,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     if (pDocShell)
     {
         OUString aAppl, aTopic, aItem;
-        if ( pDocShell->GetDocument().GetDdeLinkData( (size_t)nIndex, aAppl, aTopic, aItem ) )
+        if ( pDocShell->GetDocument().GetDdeLinkData( static_cast<size_t>(nIndex), aAppl, aTopic, aItem ) )
             return new ScDDELinkObj( pDocShell, aAppl, aTopic, aItem );
     }
     return nullptr;

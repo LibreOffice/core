@@ -602,7 +602,7 @@ public:
 
 inline long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )
 {
-    long nRet = (long)( nTwips * nFactor );
+    long nRet = static_cast<long>( nTwips * nFactor );
     if ( !nRet && nTwips )
         nRet = 1;
     return nRet;

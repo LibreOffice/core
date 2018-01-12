@@ -149,11 +149,11 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 
         if ( nVisibleMode != SC_DPSAVEMODE_DONTKNOW )
             lcl_SetBoolProperty( xMembProp,
-                    SC_UNO_DP_ISVISIBLE, (bool)nVisibleMode );
+                    SC_UNO_DP_ISVISIBLE, static_cast<bool>(nVisibleMode) );
 
         if ( nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW )
             lcl_SetBoolProperty( xMembProp,
-                    SC_UNO_DP_SHOWDETAILS, (bool)nShowDetailsMode );
+                    SC_UNO_DP_SHOWDETAILS, static_cast<bool>(nShowDetailsMode) );
 
         if (mpLayoutName)
             ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
@@ -538,7 +538,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         if ( nUsedHierarchy >= 0 )
         {
-            xDimProp->setPropertyValue( SC_UNO_DP_USEDHIERARCHY, uno::Any((sal_Int32)nUsedHierarchy) );
+            xDimProp->setPropertyValue( SC_UNO_DP_USEDHIERARCHY, uno::Any(static_cast<sal_Int32>(nUsedHierarchy)) );
         }
 
         if ( pReferenceValue )
@@ -603,7 +603,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
-                        SC_UNO_DP_SHOWEMPTY, (bool)nShowEmptyMode );
+                        SC_UNO_DP_SHOWEMPTY, static_cast<bool>(nShowEmptyMode) );
 
                 lcl_SetBoolProperty( xLevProp,
                     SC_UNO_DP_REPEATITEMLABELS, bRepeatItemLabels );
@@ -1122,10 +1122,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             if ( nIgnoreEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    SC_UNO_DP_IGNOREEMPTY, (bool)nIgnoreEmptyMode );
+                    SC_UNO_DP_IGNOREEMPTY, static_cast<bool>(nIgnoreEmptyMode) );
             if ( nRepeatEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    SC_UNO_DP_REPEATEMPTY, (bool)nRepeatEmptyMode );
+                    SC_UNO_DP_REPEATEMPTY, static_cast<bool>(nRepeatEmptyMode) );
         }
         catch(uno::Exception&)
         {
@@ -1212,10 +1212,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             if ( nColumnGrandMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    SC_UNO_DP_COLGRAND, (bool)nColumnGrandMode );
+                    SC_UNO_DP_COLGRAND, static_cast<bool>(nColumnGrandMode) );
             if ( nRowGrandMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    SC_UNO_DP_ROWGRAND, (bool)nRowGrandMode );
+                    SC_UNO_DP_ROWGRAND, static_cast<bool>(nRowGrandMode) );
         }
     }
     catch(uno::Exception&)

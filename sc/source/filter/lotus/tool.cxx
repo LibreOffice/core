@@ -120,10 +120,10 @@ double SnumToDouble( sal_Int16 nVal )
     if( nVal & 0x0001 )
     {
         fVal = pFacts[ ( nVal >> 1 ) & 0x0007 ];
-        fVal *= ( sal_Int16 ) ( nVal >> 4 );
+        fVal *= static_cast<sal_Int16>( nVal >> 4 );
     }
     else
-        fVal = ( sal_Int16 ) ( nVal >> 1 );
+        fVal = static_cast<sal_Int16>( nVal >> 1 );
 
     return fVal;
 }
@@ -137,9 +137,9 @@ double Snum32ToDouble( sal_uInt32 nValue )
     if (temp)
     {
         if (nValue & 0x00000010)
-                fValue /= pow((double)10, temp);
+                fValue /= pow(double(10), temp);
         else
-        fValue *= pow((double)10, temp);
+        fValue *= pow(double(10), temp);
     }
 
     if (nValue & 0x00000020)

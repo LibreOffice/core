@@ -2458,7 +2458,7 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
     }
 
     // properties
-    rPropSet.SetProperty( EXC_CHPROP_3DRELATIVEHEIGHT, (sal_Int32)(maData.mnRelHeight / 2)); // seems to be 200%, change to 100%
+    rPropSet.SetProperty( EXC_CHPROP_3DRELATIVEHEIGHT, static_cast<sal_Int32>(maData.mnRelHeight / 2)); // seems to be 200%, change to 100%
     rPropSet.SetProperty( EXC_CHPROP_ROTATIONVERTICAL, nRotationY );
     rPropSet.SetProperty( EXC_CHPROP_ROTATIONHORIZONTAL, nRotationX );
     rPropSet.SetProperty( EXC_CHPROP_PERSPECTIVE, nPerspective );
@@ -3391,7 +3391,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
 
         // main grid
         ScfPropertySet aGridProp( xAxis->getGridProperties() );
-        aGridProp.SetBoolProperty( EXC_CHPROP_SHOW, (bool)mxMajorGrid );
+        aGridProp.SetBoolProperty( EXC_CHPROP_SHOW, static_cast<bool>(mxMajorGrid) );
         if( mxMajorGrid )
             mxMajorGrid->Convert( GetChRoot(), aGridProp, EXC_CHOBJTYPE_GRIDLINE );
         // sub grid
@@ -3399,7 +3399,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
         if( aSubGridPropSeq.hasElements() )
         {
             ScfPropertySet aSubGridProp( aSubGridPropSeq[ 0 ] );
-            aSubGridProp.SetBoolProperty( EXC_CHPROP_SHOW, (bool)mxMinorGrid );
+            aSubGridProp.SetBoolProperty( EXC_CHPROP_SHOW, static_cast<bool>(mxMinorGrid) );
             if( mxMinorGrid )
                 mxMinorGrid->Convert( GetChRoot(), aSubGridProp, EXC_CHOBJTYPE_GRIDLINE );
         }

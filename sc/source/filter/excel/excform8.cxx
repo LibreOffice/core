@@ -428,7 +428,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x1E: // Integer                               [315 266]
             {
                 sal_uInt16 nUINT16 = aIn.ReaduInt16();
-                aStack << aPool.Store( ( double ) nUINT16 );
+                aStack << aPool.Store( static_cast<double>(nUINT16) );
                 break;
             }
             case 0x1F: // Number                                [315 266]
@@ -1461,7 +1461,7 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
             if ( nDiff < 0)
             {
                 // relative column references wrap around
-                nRelCol = static_cast<sal_Int16>(256 + (int)nRelCol);
+                nRelCol = static_cast<sal_Int16>(256 + static_cast<int>(nRelCol));
             }
             rSRD.SetRelCol(nRelCol);
         }

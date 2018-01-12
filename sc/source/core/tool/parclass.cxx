@@ -287,7 +287,7 @@ void ScParameterClassification::Init()
         else
         {
             RunData* pRun = &pData[ pRaw->eOp ];
-            SAL_WARN_IF(pRun->aData.nParam[0] != Unknown,  "sc.core", "already assigned: " << (int)pRaw->eOp);
+            SAL_WARN_IF(pRun->aData.nParam[0] != Unknown,  "sc.core", "already assigned: " << static_cast<int>(pRaw->eOp));
             memcpy( &(pRun->aData), &(pRaw->aData), sizeof(CommonData));
             // fill 0-initialized fields with real values
             if ( pRun->aData.nRepeatLast )
@@ -361,7 +361,7 @@ formula::ParamClass ScParameterClassification::GetParameterType(
             // added to avoid warnings
         }
     }
-    if ( 0 <= (short)eOp && eOp <= SC_OPCODE_LAST_OPCODE_ID )
+    if ( 0 <= static_cast<short>(eOp) && eOp <= SC_OPCODE_LAST_OPCODE_ID )
     {
         sal_uInt8 nRepeat;
         formula::ParamClass eType;

@@ -325,17 +325,17 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
        (pLbField1->GetSelectedEntryPos() != 0)
     && (pLbField2->GetSelectedEntryPos() != 0)
-        ? pLbConnect2->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(1).eConnect )
+        ? pLbConnect2->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(1).eConnect) )
         : pLbConnect2->SetNoSelection();
 
        (pLbField2->GetSelectedEntryPos() != 0)
     && (pLbField3->GetSelectedEntryPos() != 0)
-        ? pLbConnect3->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(2).eConnect )
+        ? pLbConnect3->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(2).eConnect) )
         : pLbConnect3->SetNoSelection();
 
        (pLbField3->GetSelectedEntryPos() != 0)
     && (pLbField4->GetSelectedEntryPos() != 0)
-        ? pLbConnect4->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(3).eConnect )
+        ? pLbConnect4->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(3).eConnect) )
         : pLbConnect4->SetNoSelection();
     if ( pLbField1->GetSelectedEntryPos() == 0 )
     {
@@ -1169,7 +1169,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
                     if (maRefreshExceptQuery.size() < nQENext + 1)
                         maRefreshExceptQuery.resize(nQENext + 1, false);
                     if (theQueryData.GetEntry(nQENext).bDoQuery || maRefreshExceptQuery[nQENext])
-                        maConnLbArr[i+1]->SelectEntryPos( (sal_uInt16) theQueryData.GetEntry(nQENext).eConnect );
+                        maConnLbArr[i+1]->SelectEntryPos( static_cast<sal_uInt16>(theQueryData.GetEntry(nQENext).eConnect) );
                     else
                         maConnLbArr[i+1]->SetNoSelection();
                 }
@@ -1184,7 +1184,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
                 if (maRefreshExceptQuery.size() < nQE + 1)
                     maRefreshExceptQuery.resize(nQE + 1, false);
                 if(rEntry.bDoQuery || maRefreshExceptQuery[nQE])
-                    maConnLbArr[i]->SelectEntryPos( (sal_uInt16) rEntry.eConnect );
+                    maConnLbArr[i]->SelectEntryPos( static_cast<sal_uInt16>(rEntry.eConnect) );
                 else
                     maConnLbArr[i]->SetNoSelection();
             }

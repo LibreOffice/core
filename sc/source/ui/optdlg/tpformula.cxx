@@ -116,7 +116,7 @@ void ScTpFormulaOptions::OnFocusSeparatorInput(Edit* pEdit)
 
     // Make sure the entire text is selected.
     sal_Int32 nLen = pEdit->GetText().getLength();
-    Selection aSel(0, (sal_uInt16)nLen);
+    Selection aSel(0, static_cast<sal_uInt16>(nLen));
     pEdit->SetSelection(aSel);
     maOldSepValue = pEdit->GetText();
 }

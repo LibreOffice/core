@@ -66,7 +66,7 @@
 #include <math.h>
 #include <memory>
 
-#define D_MAX_LONG_  (double) 0x7fffffff
+#define D_MAX_LONG_  double(0x7fffffff)
 
 namespace {
 
@@ -281,9 +281,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     long nCmpInc = 0;
                     FillDateCmd eType;
-                    long nDDiff = aDate2.GetDay()   - (long) aDate1.GetDay();
-                    long nMDiff = aDate2.GetMonth() - (long) aDate1.GetMonth();
-                    long nYDiff = aDate2.GetYear()  - (long) aDate1.GetYear();
+                    long nDDiff = aDate2.GetDay()   - static_cast<long>(aDate1.GetDay());
+                    long nMDiff = aDate2.GetMonth() - static_cast<long>(aDate1.GetMonth());
+                    long nYDiff = aDate2.GetYear()  - static_cast<long>(aDate1.GetYear());
                     if ( nDDiff )
                     {
                         eType = FILL_DAY;
@@ -312,9 +312,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             }
                             else
                             {
-                                nDDiff = aDate2.GetDay()   - (long) aDate1.GetDay();
-                                nMDiff = aDate2.GetMonth() - (long) aDate1.GetMonth();
-                                nYDiff = aDate2.GetYear()  - (long) aDate1.GetYear();
+                                nDDiff = aDate2.GetDay()   - static_cast<long>(aDate1.GetDay());
+                                nMDiff = aDate2.GetMonth() - static_cast<long>(aDate1.GetMonth());
+                                nYDiff = aDate2.GetYear()  - static_cast<long>(aDate1.GetYear());
                                 if (nDDiff || ( nMDiff + 12 * nYDiff != nCmpInc ))
                                     bVal = false;
                             }
@@ -836,7 +836,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
     {
         nCol2 = nCol1;                          // use only first column
         nSrcCount = nRow2 - nRow1 + 1;
-        nIndex = ((long)nEndY) - nRow1;         // can be negative
+        nIndex = static_cast<long>(nEndY) - nRow1;         // can be negative
         if ( nEndY >= nRow1 )
             eFillDir = FILL_TO_BOTTOM;
         else
@@ -846,7 +846,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
     {
         nEndY = nRow2 = nRow1;                  // use only first row
         nSrcCount = nCol2 - nCol1 + 1;
-        nIndex = ((long)nEndX) - nCol1;         // can be negative
+        nIndex = static_cast<long>(nEndX) - nCol1;         // can be negative
         if ( nEndX >= nCol1 )
             eFillDir = FILL_TO_RIGHT;
         else
@@ -969,11 +969,11 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                                 bool bBooleanCell = (pDocument->GetFormatTable()->GetType( nNumFmt) ==
                                         SvNumFormatType::LOGICAL);
                                 if (!bBooleanCell)
-                                    nVal += (double) nDelta;
+                                    nVal += static_cast<double>(nDelta);
                             }
                             else
                             {
-                                nVal += (double) nDelta;
+                                nVal += static_cast<double>(nDelta);
                             }
                         }
 
@@ -1007,7 +1007,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                         aValue = aCell.getString(pDocument);
                         nHeadNoneTail = lcl_DecompValueString( aValue, nVal );
                         if ( nHeadNoneTail )
-                            nStart = (double)nVal;
+                            nStart = static_cast<double>(nVal);
                         else
                             nStart = 0.0;
                     }
@@ -1027,7 +1027,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
             if ( eFillCmd == FILL_LINEAR )
             {
                 double nAdd = nInc;
-                bValueOk = ( SubTotal::SafeMult( nAdd, (double) nIndex ) &&
+                bValueOk = ( SubTotal::SafeMult( nAdd, static_cast<double>(nIndex) ) &&
                              SubTotal::SafePlus( nStart, nAdd ) );
             }
             else        // date
@@ -1050,15 +1050,15 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     if ( nHeadNoneTail < 0 )
                     {
                         if (aValue == ScGlobal::GetOrdinalSuffix( nVal))
-                            aValue = ScGlobal::GetOrdinalSuffix( (sal_Int32)nStart );
+                            aValue = ScGlobal::GetOrdinalSuffix( static_cast<sal_Int32>(nStart) );
 
-                        aValue = lcl_ValueString( (sal_Int32)nStart, nMinDigits ) + aValue;
+                        aValue = lcl_ValueString( static_cast<sal_Int32>(nStart), nMinDigits ) + aValue;
                     }
                     else
                     {
                         if ( nHeadNoneTail == 2 && nStart >= 0 ) // Put back the '+'
                             aValue += "+";
-                        aValue += lcl_ValueString( (sal_Int32)nStart, nMinDigits );
+                        aValue += lcl_ValueString( static_cast<sal_Int32>(nStart), nMinDigits );
                     }
                 }
                 else
@@ -1091,7 +1091,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
     const sal_uInt16 nMinYear = 1583;
     const sal_uInt16 nMaxYear = 9956;
 
-    long nInc = (long) nStep;       // upper/lower limits ?
+    long nInc = static_cast<long>(nStep);       // upper/lower limits ?
     Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
     Date aDate = aNullDate;
     aDate.AddDays(rVal);
@@ -1151,8 +1151,8 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
                     aDate = Date( 31,12, nMaxYear );
                 else
                 {
-                    aDate.SetMonth((sal_uInt16) nMonth);
-                    aDate.SetYear((sal_uInt16) nYear);
+                    aDate.SetMonth(static_cast<sal_uInt16>(nMonth));
+                    aDate.SetYear(static_cast<sal_uInt16>(nYear));
                     aDate.SetDay( std::min( Date::GetDaysInMonth( nMonth, nYear), nDayOfMonth ) );
                 }
             }
@@ -1166,7 +1166,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
                 else if ( nYear > nMaxYear )
                     aDate = Date( 31,12, nMaxYear );
                 else
-                    aDate.SetYear((sal_uInt16) nYear);
+                    aDate.SetYear(static_cast<sal_uInt16>(nYear));
             }
             break;
         default:
@@ -1451,9 +1451,9 @@ void ScTable::FillAutoSimple(
                     {
                         sal_Int32 nNextValue;
                         if (nStringValue < 0)
-                            nNextValue = nStringValue - (sal_Int32)nDelta;
+                            nNextValue = nStringValue - static_cast<sal_Int32>(nDelta);
                         else
-                            nNextValue = nStringValue + (sal_Int32)nDelta;
+                            nNextValue = nStringValue + static_cast<sal_Int32>(nDelta);
 
                         if ( nHeadNoneTail < 0 )
                         {
@@ -1751,7 +1751,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         //  to avoid accumulating rounding errors
                                         nVal = nStartVal;
                                         double nAdd = nStepValue;
-                                        if ( !SubTotal::SafeMult( nAdd, (double) ++nIndex ) ||
+                                        if ( !SubTotal::SafeMult( nAdd, static_cast<double>(++nIndex) ) ||
                                                 !SubTotal::SafePlus( nVal, nAdd ) )
                                             bError = true;
                                     }
@@ -1817,13 +1817,13 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             {
                 if ( nStepValue >= 0 )
                 {
-                    if ( nMaxValue >= (double)LONG_MAX )
-                        nMaxValue = (double)LONG_MAX - 1;
+                    if ( nMaxValue >= double(LONG_MAX) )
+                        nMaxValue = double(LONG_MAX) - 1;
                 }
                 else
                 {
-                    if ( nMaxValue <= (double)LONG_MIN )
-                        nMaxValue = (double)LONG_MIN + 1;
+                    if ( nMaxValue <= double(LONG_MIN) )
+                        nMaxValue = double(LONG_MIN) + 1;
                 }
                 OUString aValue;
                 if (eCellType == CELLTYPE_STRING)
@@ -1835,14 +1835,14 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );
                 if ( nHeadNoneTail )
                 {
-                    double nStartVal = (double)nStringValue;
+                    double nStartVal = static_cast<double>(nStringValue);
                     double nVal = nStartVal;
                     long nIndex = 0;
                     bool bError = false;
                     bool bOverflow = false;
 
                     bool bIsOrdinalSuffix = aValue == ScGlobal::GetOrdinalSuffix(
-                                (sal_Int32)nStartVal);
+                                static_cast<sal_Int32>(nStartVal));
 
                     rInner = nIStart;
                     while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
@@ -1859,7 +1859,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                             //  to avoid accumulating rounding errors
                                             nVal = nStartVal;
                                             double nAdd = nStepValue;
-                                            if ( !SubTotal::SafeMult( nAdd, (double) ++nIndex ) ||
+                                            if ( !SubTotal::SafeMult( nAdd, static_cast<double>(++nIndex) ) ||
                                                     !SubTotal::SafePlus( nVal, nAdd ) )
                                                 bError = true;
                                         }
@@ -1898,7 +1898,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 aCol[nCol].SetError(static_cast<SCROW>(nRow), FormulaError::IllegalFPOperation);
                             else
                             {
-                                nStringValue = (sal_Int32)nVal;
+                                nStringValue = static_cast<sal_Int32>(nVal);
                                 OUString aStr;
                                 if ( nHeadNoneTail < 0 )
                                 {

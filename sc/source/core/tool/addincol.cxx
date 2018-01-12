@@ -1243,7 +1243,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     // AddInArgumentType_CALLER is already left out in FuncData
 
-    rDesc.nArgCount = (sal_uInt16)nArgCount;
+    rDesc.nArgCount = static_cast<sal_uInt16>(nArgCount);
     if ( nArgCount )
     {
         bool bMultiple = false;

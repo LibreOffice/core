@@ -529,7 +529,7 @@ static void lcl_FillProps( EscherPropertyContainer& rPropOpt, SdrObject* pCaptio
                 // If the Colour is the same as the 'ToolTip' System colour then
                 // use the default rather than the explicit colour value. This will
                 // be incorrect where user has chosen to use this colour explicitly.
-                Color aColor( (sal_uInt8)nValue, (sal_uInt8)( nValue >> 8 ), (sal_uInt8)( nValue >> 16 ) );
+                Color aColor( static_cast<sal_uInt8>(nValue), static_cast<sal_uInt8>( nValue >> 8 ), static_cast<sal_uInt8>( nValue >> 16 ) );
                 const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
                 if( aColor == rSett.GetHelpColor().GetColor() )
                 {
@@ -726,7 +726,7 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
     ::insert_value( nDropDownFlags, EXC_OBJ_DROPDOWN_SIMPLE, 0, 2 );
     ::set_flag( nDropDownFlags, EXC_OBJ_DROPDOWN_FILTERED, bIsFiltered );
     rStrm.StartRecord( EXC_ID_OBJLBSDATA, 16 );
-    rStrm   << (sal_uInt32)0 << (sal_uInt16)0 << (sal_uInt16)0x0301 << (sal_uInt16)0
+    rStrm   << sal_uInt32(0) << sal_uInt16(0) << sal_uInt16(0x0301) << sal_uInt16(0)
             << nDropDownFlags << sal_uInt16( 20 ) << sal_uInt16( 130 );
     rStrm.EndRecord();
 }
@@ -948,7 +948,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 
             // OBJPICTFMLA subrecord, undocumented as usual
             XclExpString aName( xOleStg->GetUserName() );
-            sal_uInt16 nPadLen = (sal_uInt16)(aName.GetSize() & 0x01);
+            sal_uInt16 nPadLen = static_cast<sal_uInt16>(aName.GetSize() & 0x01);
             sal_uInt16 nFmlaLen = static_cast< sal_uInt16 >( 12 + aName.GetSize() + nPadLen );
             sal_uInt16 nSubRecLen = nFmlaLen + 6;
 
@@ -1024,20 +1024,20 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
 
     pDrawing->startElement( FSNS( XML_xdr, XML_from ),
             FSEND );
-    XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), (sal_Int32) aRange.aStart.Col() );
+    XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), static_cast<sal_Int32>(aRange.aStart.Col()) );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_colOff ),
             oox::drawingml::convertHmmToEmu( aLocation.Left() - aRangeRect.Left() ) );
-    XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_row ), (sal_Int32) aRange.aStart.Row() );
+    XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_row ), static_cast<sal_Int32>(aRange.aStart.Row()) );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_rowOff ),
             oox::drawingml::convertHmmToEmu( aLocation.Top() - aRangeRect.Top() ) );
     pDrawing->endElement( FSNS( XML_xdr, XML_from ) );
 
     pDrawing->startElement( FSNS( XML_xdr, XML_to ),
             FSEND );
-    XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), (sal_Int32) aRange.aEnd.Col() );
+    XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), static_cast<sal_Int32>(aRange.aEnd.Col()) );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_colOff ),
             oox::drawingml::convertHmmToEmu( aLocation.Right() - aRangeRect.Right() ) );
-    XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_row ), (sal_Int32) aRange.aEnd.Row() );
+    XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_row ), static_cast<sal_Int32>(aRange.aEnd.Row()) );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_rowOff ),
             oox::drawingml::convertHmmToEmu( aLocation.Bottom() - aRangeRect.Bottom() ) );
     pDrawing->endElement( FSNS( XML_xdr, XML_to ) );
@@ -1420,10 +1420,10 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
 
     rStrm   << count                            // number of cells
             << sal_uInt8(bProtected)            // fProtection
-            << (sal_uInt8) 0                    // fHidden
-            << (sal_uInt8) sName.Len()          // length of scen name
-            << (sal_uInt8) sComment.Len()       // length of comment
-            << (sal_uInt8) sUserName.Len();     // length of user name
+            << sal_uInt8(0)                    // fHidden
+            << static_cast<sal_uInt8>(sName.Len())          // length of scen name
+            << static_cast<sal_uInt8>(sComment.Len())       // length of comment
+            << static_cast<sal_uInt8>(sUserName.Len());     // length of user name
     sName.WriteFlagField( rStrm );
     sName.WriteBuffer( rStrm );
 
@@ -1496,10 +1496,10 @@ ExcEScenarioManager::~ExcEScenarioManager()
 
 void ExcEScenarioManager::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (sal_uInt16) aScenes.size()  // number of scenarios
+    rStrm   << static_cast<sal_uInt16>(aScenes.size())  // number of scenarios
             << nActive                      // active scen
             << nActive                      // last displayed
-            << (sal_uInt16) 0;              // reference areas
+            << sal_uInt16(0);              // reference areas
 }
 
 void ExcEScenarioManager::Save( XclExpStream& rStrm )

@@ -56,7 +56,7 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocu
 ScAddInAsync::~ScAddInAsync()
 {
     // in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
-    mpFuncData->Unadvice( (double)nHandle );
+    mpFuncData->Unadvice( static_cast<double>(nHandle) );
     if ( meType == ParamType::PTR_STRING && pStr )      // include type comparison because of union
         delete pStr;
     delete pDocs;

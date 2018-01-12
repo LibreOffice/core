@@ -301,7 +301,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 else
                 {
                     const Fraction& rOldY = GetViewData().GetZoomY();
-                    sal_uInt16 nZoom = (sal_uInt16)long( rOldY * 100 );
+                    sal_uInt16 nZoom = static_cast<sal_uInt16>(long( rOldY * 100 ));
                     rSet.Put( SvxZoomItem( SvxZoomType::PERCENT, nZoom, nWhich ) );
                 }
                 break;
@@ -313,7 +313,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     else
                     {
                         const Fraction& rOldY = GetViewData().GetZoomY();
-                        sal_uInt16 nCurrentZoom = (sal_uInt16)long( rOldY * 100 );
+                        sal_uInt16 nCurrentZoom = static_cast<sal_uInt16>(long( rOldY * 100 ));
 
                         if( nCurrentZoom )
                         {

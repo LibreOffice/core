@@ -246,7 +246,7 @@ ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( vcl::Window* pWin )
     {
         sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
         if ( nHandle )
-            pObj = dynamic_cast<ScDrawTransferObj*>(reinterpret_cast<TransferableHelper*>( (sal_IntPtr) nHandle ));
+            pObj = dynamic_cast<ScDrawTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle) ));
     }
 
     return pObj;

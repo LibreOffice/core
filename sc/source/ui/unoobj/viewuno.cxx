@@ -205,7 +205,7 @@ void SAL_CALL ScViewPaneBase::setFirstVisibleColumn(sal_Int32 nFirstVisibleColum
                                 (ScSplitPos) nPane;
         ScHSplitPos eWhichH = WhichH( eWhich );
 
-        long nDeltaX = ((long)nFirstVisibleColumn) - rViewData.GetPosX( eWhichH );
+        long nDeltaX = static_cast<long>(nFirstVisibleColumn) - rViewData.GetPosX( eWhichH );
         pViewShell->ScrollX( nDeltaX, eWhichH );
     }
 }
@@ -238,7 +238,7 @@ void SAL_CALL ScViewPaneBase::setFirstVisibleRow( sal_Int32 nFirstVisibleRow )
                                 (ScSplitPos) nPane;
         ScVSplitPos eWhichV = WhichV( eWhich );
 
-        long nDeltaY = ((long)nFirstVisibleRow) - rViewData.GetPosY( eWhichV );
+        long nDeltaY = static_cast<long>(nFirstVisibleRow) - rViewData.GetPosY( eWhichV );
         pViewShell->ScrollY( nDeltaY, eWhichV );
     }
 }
@@ -283,8 +283,8 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
         ScDocShell* pDocSh = pViewShell->GetViewData().GetDocShell();
 
         table::CellRangeAddress aAdr(getVisibleRange());        //! helper function with ScRange?
-        ScRange aRange( (SCCOL)aAdr.StartColumn, (SCROW)aAdr.StartRow, aAdr.Sheet,
-                        (SCCOL)aAdr.EndColumn, (SCROW)aAdr.EndRow, aAdr.Sheet );
+        ScRange aRange( static_cast<SCCOL>(aAdr.StartColumn), static_cast<SCROW>(aAdr.StartRow), aAdr.Sheet,
+                        static_cast<SCCOL>(aAdr.EndColumn), static_cast<SCROW>(aAdr.EndRow), aAdr.Sheet );
         if ( aRange.aStart == aRange.aEnd )
             return new ScCellObj( pDocSh, aRange.aStart );
         else
@@ -988,7 +988,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getCount()
 uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XViewPane> xPane(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    uno::Reference<sheet::XViewPane> xPane(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xPane.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -1126,8 +1126,8 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
                 vcl::Window* pActiveWin = rData.GetActiveWin();
                 Point aPos = pActiveWin->PixelToLogic(rPoint);
 
-                sal_uInt16 nHitLog = (sal_uInt16) pActiveWin->PixelToLogic(
-                                 Size(pDrawView->GetHitTolerancePixel(),0)).Width();
+                sal_uInt16 nHitLog = static_cast<sal_uInt16>(pActiveWin->PixelToLogic(
+                                 Size(pDrawView->GetHitTolerancePixel(),0)).Width());
 
                 const size_t nCount(pDrawPage->GetObjCount());
                 bool bFound(false);
@@ -1406,7 +1406,7 @@ sal_Int16 ScTabViewObj::GetZoom() const
     if (pViewSh)
     {
         const Fraction& rZoomY = pViewSh->GetViewData().GetZoomY();    // Y will be shown
-        return (sal_Int16)long( rZoomY * 100 );
+        return static_cast<sal_Int16>(long( rZoomY * 100 ));
     }
     return 0;
 }
@@ -1653,7 +1653,7 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
             aWinStart = pWin->GetPosPixel();
 
         ScViewData& rViewData = pViewSh->GetViewData();
-        Point aSplit(rViewData.GetScrPos( (SCCOL)nColumns, (SCROW)nRows, SC_SPLIT_BOTTOMLEFT, true ));
+        Point aSplit(rViewData.GetScrPos( static_cast<SCCOL>(nColumns), static_cast<SCROW>(nRows), SC_SPLIT_BOTTOMLEFT, true ));
         aSplit += aWinStart;
 
         pViewSh->SplitAtPixel( aSplit );
@@ -1799,7 +1799,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             if ( aValue >>= nIntVal )
             {
                 //#i80528# adapt to new range eventually
-                if((sal_Int16)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int16)VOBJ_MODE_SHOW;
+                if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
                 aNewOpt.SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode)nIntVal);
             }
@@ -1810,7 +1810,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             if ( aValue >>= nIntVal )
             {
                 //#i80528# adapt to new range eventually
-                if((sal_Int16)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int16)VOBJ_MODE_SHOW;
+                if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
                 aNewOpt.SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode)nIntVal);
             }
@@ -1821,7 +1821,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             if ( aValue >>= nIntVal )
             {
                 //#i80528# adapt to new range eventually
-                if((sal_Int16)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int16)VOBJ_MODE_SHOW;
+                if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
                 aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode)nIntVal);
             }
@@ -1905,10 +1905,10 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
             aRet <<= rOpt.GetOption( VOPT_SYNTAX );
         else if ( aPropertyName == SC_UNO_VERTSCROLL || aPropertyName == OLD_UNO_VERTSCROLL )
             aRet <<= rOpt.GetOption( VOPT_VSCROLL );
-        else if ( aPropertyName == SC_UNO_SHOWOBJ )    aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_OLE ) );
-        else if ( aPropertyName == SC_UNO_SHOWCHARTS ) aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_CHART ) );
-        else if ( aPropertyName == SC_UNO_SHOWDRAW )   aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
-        else if ( aPropertyName == SC_UNO_GRIDCOLOR )  aRet <<= (sal_Int32)( rOpt.GetGridColor().GetColor() );
+        else if ( aPropertyName == SC_UNO_SHOWOBJ )    aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_OLE ) );
+        else if ( aPropertyName == SC_UNO_SHOWCHARTS ) aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_CHART ) );
+        else if ( aPropertyName == SC_UNO_SHOWDRAW )   aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
+        else if ( aPropertyName == SC_UNO_GRIDCOLOR )  aRet <<= static_cast<sal_Int32>( rOpt.GetGridColor().GetColor() );
         else if ( aPropertyName == SC_UNO_VISAREA ) aRet <<= GetVisArea();
         else if ( aPropertyName == SC_UNO_ZOOMTYPE ) aRet <<= GetZoomType();
         else if ( aPropertyName == SC_UNO_ZOOMVALUE ) aRet <<= GetZoom();

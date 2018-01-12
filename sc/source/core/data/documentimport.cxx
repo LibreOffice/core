@@ -454,7 +454,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
         aRef.Set(nCol1, nRow1, nTab, false, true, true);
         aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
         nCol1++;
-        nCol2 = std::min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
+        nCol2 = std::min( nCol2, static_cast<SCCOL>(rParam.aRefFormulaEnd.Col() -
                     rParam.aRefFormulaCell.Col() + nCol1 + 1));
     }
     else if (rParam.meMode == ScTabOpParam::Row) // row only

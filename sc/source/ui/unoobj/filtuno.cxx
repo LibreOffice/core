@@ -93,7 +93,7 @@ namespace
             pProperties[0] >>= nChar;
             if( nChar >= 0)
             {
-                nCharSet = (rtl_TextEncoding) nChar;
+                nCharSet = static_cast<rtl_TextEncoding>(nChar);
                 return charsetSource::charset_from_user_setting;
             }
         }
@@ -113,7 +113,7 @@ namespace
 
         aValues = aItem.GetProperties( aNames );
         pProperties = aValues.getArray();
-        pProperties[0] <<= (sal_Int32) nCharSet;
+        pProperties[0] <<= static_cast<sal_Int32>(nCharSet);
 
         aItem.PutProperties(aNames, aValues);
     }

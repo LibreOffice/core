@@ -64,7 +64,7 @@ sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
         {
             if ( rDel == theDelTab.getToken( i, cSep ) )
             {
-                nCode = (sal_Unicode) theDelTab.getToken( i+1, cSep ).toInt32();
+                nCode = static_cast<sal_Unicode>(theDelTab.getToken( i+1, cSep ).toInt32());
                 i     = nCount;
             }
             else
@@ -84,7 +84,7 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
         sal_Int32 i = 0;
         while ( i<nCount )
         {
-            if ( nCode == (sal_Unicode) theDelTab.getToken( i+1, cSep ).toInt32() )
+            if ( nCode == static_cast<sal_Unicode>(theDelTab.getToken( i+1, cSep ).toInt32()) )
             {
                 aStrDel = theDelTab.getToken( i, cSep );
                 i       = nCount;
@@ -318,7 +318,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
         nCode = pTab->GetCode( aStr );
 
         if ( nCode == 0 )
-            nCode = (sal_uInt16)aStr[0];
+            nCode = static_cast<sal_uInt16>(aStr[0]);
     }
 
     return nCode;

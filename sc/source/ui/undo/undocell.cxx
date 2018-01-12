@@ -875,7 +875,7 @@ ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
     bIsDelete = ( pOperation == nullptr );
     if (!bIsDelete)
     {
-        nAction = (sal_uInt16) pOperation->GetOperation();
+        nAction = static_cast<sal_uInt16>(pOperation->GetOperation());
         aPos = pOperation->GetPos();
     }
 }

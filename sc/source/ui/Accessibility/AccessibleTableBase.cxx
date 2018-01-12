@@ -311,8 +311,8 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
 
     // FIXME: representing rows & columns this way is a plain and simple madness.
     // this needs a radical re-think.
-    sal_Int64 nMax = ((sal_Int64)(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
-                      (sal_Int64)(maRange.aEnd.Col() - maRange.aStart.Col() + 1));
+    sal_Int64 nMax = (static_cast<sal_Int64>(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
+                      static_cast<sal_Int64>(maRange.aEnd.Col() - maRange.aStart.Col() + 1));
     if (nMax > SAL_MAX_INT32)
         nMax = SAL_MAX_INT32;
     if (nMax < 0)

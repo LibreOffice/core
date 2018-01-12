@@ -468,8 +468,8 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         for (i=nStartCol; i<=nEndCol; i++)
             nRight += GetColWidth(i,nTab);
 
-        aMMRect.Left()  = (long)(nLeft  * HMM_PER_TWIPS);
-        aMMRect.Right() = (long)(nRight * HMM_PER_TWIPS);
+        aMMRect.Left()  = static_cast<long>(nLeft  * HMM_PER_TWIPS);
+        aMMRect.Right() = static_cast<long>(nRight * HMM_PER_TWIPS);
     }
     else
         aMMRect = GetMMRect( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
@@ -680,7 +680,7 @@ bool ScDocument::GetAsianKerning() const
 
 void ScDocument::SetAsianKerning(bool bNew)
 {
-    nAsianKerning = (sal_uInt8)bNew;
+    nAsianKerning = static_cast<sal_uInt8>(bNew);
     if ( mpEditEngine )
         mpEditEngine->SetKernAsianPunctuation( static_cast<bool>( nAsianKerning ) );
     if ( mpDrawLayer )

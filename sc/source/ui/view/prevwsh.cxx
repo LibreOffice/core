@@ -246,8 +246,8 @@ bool ScPreviewShell::GetPageSize( Size& aPageSize )
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
 
     aPageSize = pParamSet->Get(ATTR_PAGE_SIZE).GetSize();
-    aPageSize.Width()  = (long) (aPageSize.Width()  * HMM_PER_TWIPS );
-    aPageSize.Height() = (long) (aPageSize.Height() * HMM_PER_TWIPS );
+    aPageSize.Width()  = static_cast<long>(aPageSize.Width()  * HMM_PER_TWIPS );
+    aPageSize.Height() = static_cast<long>(aPageSize.Height() * HMM_PER_TWIPS );
     return true;
 }
 
@@ -483,14 +483,14 @@ bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
         long nOld = pPreview->GetZoom();
         long nNew;
         if ( pData->GetDelta() < 0 )
-            nNew = std::max( (long) MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
+            nNew = std::max( long(MINZOOM), basegfx::zoomtools::zoomOut( nOld ));
         else
-            nNew = std::min( (long) MAXZOOM, basegfx::zoomtools::zoomIn( nOld ));
+            nNew = std::min( long(MAXZOOM), basegfx::zoomtools::zoomIn( nOld ));
 
         if ( nNew != nOld )
         {
             eZoom = SvxZoomType::PERCENT;
-            pPreview->SetZoom( (sal_uInt16)nNew );
+            pPreview->SetZoom( static_cast<sal_uInt16>(nNew) );
         }
 
         bDone = true;
@@ -918,7 +918,7 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
     if (!rData.isEmpty())
     {
         sal_Int32 nIndex = 0;
-        pPreview->SetZoom((sal_uInt16)rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32());
+        pPreview->SetZoom(static_cast<sal_uInt16>(rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32()));
         pPreview->SetPageNo(rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32());
         eZoom = SvxZoomType::PERCENT;
     }

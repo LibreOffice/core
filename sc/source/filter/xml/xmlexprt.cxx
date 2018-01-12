@@ -648,7 +648,7 @@ void ScXMLExport::ExportMeta_()
 
     uno::Sequence<beans::NamedValue> stats
     {
-        { "TableCount",  uno::makeAny((sal_Int32)nTableCount) },
+        { "TableCount",  uno::makeAny(static_cast<sal_Int32>(nTableCount)) },
         { "CellCount",   uno::makeAny(nCellCount) },
         { "ObjectCount", uno::makeAny(nShapesCount) }
     };
@@ -1819,7 +1819,7 @@ void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset
                 xDestStream->writeBytes( aOutSeq );
             }
 
-            rNewStart = (sal_Int32)xDestSeek->getPosition();
+            rNewStart = static_cast<sal_Int32>(xDestSeek->getPosition());
 
             if ( nStartOffset > nSourceStreamPos )
                 lcl_SkipBytesInBlocks( xSourceStream, nStartOffset - nSourceStreamPos );
@@ -1834,7 +1834,7 @@ void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset
             }
             nSourceStreamPos = nEndOffset;
 
-            rNewEnd = (sal_Int32)xDestSeek->getPosition();
+            rNewEnd = static_cast<sal_Int32>(xDestSeek->getPosition());
         }
     }
 }
@@ -1913,7 +1913,7 @@ void ScXMLExport::ExportContent_()
         {
             sal_Int32 nStartOffset = -1;
             sal_Int32 nEndOffset = -1;
-            if (pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) && !pDoc->GetChangeTrack())
+            if (pSheetData && pDoc && pDoc->IsStreamValid(static_cast<SCTAB>(nTable)) && !pDoc->GetChangeTrack())
                 pSheetData->GetStreamPos( nTable, nStartOffset, nEndOffset );
 
             if ( nStartOffset >= 0 && nEndOffset >= 0 && xSourceStream.is() )
@@ -3572,7 +3572,7 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
         if( rAreaLink.nRefresh )
         {
             ::sax::Converter::convertDuration( sValue,
-                    (double)rAreaLink.nRefresh / 86400 );
+                    static_cast<double>(rAreaLink.nRefresh) / 86400 );
             AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sValue.makeStringAndClear() );
         }
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_CELL_RANGE_SOURCE, true, true );
@@ -3920,7 +3920,7 @@ void ScXMLExport::WriteTableSource()
                                 {
                                     OUStringBuffer sBuffer;
                                     ::sax::Converter::convertDuration( sBuffer,
-                                            (double)nRefresh / 86400 );
+                                            static_cast<double>(nRefresh) / 86400 );
                                     AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sBuffer.makeStringAndClear() );
                                 }
                                 SvXMLElementExport aSourceElem(*this, XML_NAMESPACE_TABLE, XML_TABLE_SOURCE, true, true);

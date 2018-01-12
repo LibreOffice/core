@@ -765,7 +765,7 @@ void ScTabView::UpdateVarZoom()
         const Fraction& rOldX = GetViewData().GetZoomX();
         const Fraction& rOldY = GetViewData().GetZoomY();
         long nOldPercent = long(rOldY * 100);
-        sal_uInt16 nNewZoom = CalcZoom( eZoomType, (sal_uInt16)nOldPercent );
+        sal_uInt16 nNewZoom = CalcZoom( eZoomType, static_cast<sal_uInt16>(nOldPercent) );
         Fraction aNew( nNewZoom, 100 );
 
         if ( aNew != rOldX || aNew != rOldY )
@@ -985,12 +985,12 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             //  and can't be changed directly
 
             const Fraction& rOldY = aViewData.GetZoomY();
-            long nOld = (long)( rOldY * 100 );
+            long nOld = static_cast<long>( rOldY * 100 );
             long nNew;
             if ( pData->GetDelta() < 0 )
-                nNew = std::max( (long) MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
+                nNew = std::max( long(MINZOOM), basegfx::zoomtools::zoomOut( nOld ));
             else
-                nNew = std::min( (long) MAXZOOM, basegfx::zoomtools::zoomIn( nOld ));
+                nNew = std::min( long(MAXZOOM), basegfx::zoomtools::zoomIn( nOld ));
             if ( nNew != nOld )
             {
                 // scroll wheel doesn't set the AppOptions default
@@ -1087,7 +1087,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             if (bHoriz)
             {
                 aHelpStr = ScGlobal::GetRscString(STR_COLUMN) +
-                           " " + ScColToAlpha((SCCOL) nScrollPos);
+                           " " + ScColToAlpha(static_cast<SCCOL>(nScrollPos));
 
                 aRect.Left() = aMousePos.X();
                 aRect.Top()  = aPos.Y() - 4;
@@ -1120,10 +1120,10 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             nDelta = 1;
             break;
         case ScrollType::PageUp:
-            if ( pScroll == aHScrollLeft.get() ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_LEFT );
-            if ( pScroll == aHScrollRight.get() ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_RIGHT );
-            if ( pScroll == aVScrollTop.get() ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_TOP );
-            if ( pScroll == aVScrollBottom.get() ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_BOTTOM );
+            if ( pScroll == aHScrollLeft.get() ) nDelta = -static_cast<long>(aViewData.PrevCellsX( SC_SPLIT_LEFT ));
+            if ( pScroll == aHScrollRight.get() ) nDelta = -static_cast<long>(aViewData.PrevCellsX( SC_SPLIT_RIGHT ));
+            if ( pScroll == aVScrollTop.get() ) nDelta = -static_cast<long>(aViewData.PrevCellsY( SC_SPLIT_TOP ));
+            if ( pScroll == aVScrollBottom.get() ) nDelta = -static_cast<long>(aViewData.PrevCellsY( SC_SPLIT_BOTTOM ));
             if (nDelta==0) nDelta=-1;
             break;
         case ScrollType::PageDown:
@@ -1592,7 +1592,7 @@ void ScTabView::DoHSplit(long nSplitPos)
             long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
             if ( nLeftWidth < 0 ) nLeftWidth = 0;
             nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
-                            (sal_uInt16) nLeftWidth );
+                            static_cast<sal_uInt16>(nLeftWidth) );
             if ( nNewDelta > MAXCOL )
                 nNewDelta = MAXCOL;
             aViewData.SetPosX( SC_SPLIT_RIGHT, nNewDelta );
@@ -1664,7 +1664,7 @@ void ScTabView::DoVSplit(long nSplitPos)
             long nTopHeight = nSplitPos - pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
             if ( nTopHeight < 0 ) nTopHeight = 0;
             nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP,
-                            (sal_uInt16) nTopHeight );
+                            static_cast<sal_uInt16>(nTopHeight) );
             if ( nNewDelta > MAXROW )
                 nNewDelta = MAXROW;
             aViewData.SetPosY( SC_SPLIT_BOTTOM, nNewDelta );
@@ -1699,11 +1699,11 @@ Point ScTabView::GetInsertPos()
     long nPosX = 0;
     for (SCCOL i=0; i<nCol; i++)
         nPosX += pDoc->GetColWidth(i,nTab);
-    nPosX = (long)(nPosX * HMM_PER_TWIPS);
+    nPosX = static_cast<long>(nPosX * HMM_PER_TWIPS);
     if ( pDoc->IsNegativePage( nTab ) )
         nPosX = -nPosX;
-    long nPosY = (long) pDoc->GetRowHeight( 0, nRow-1, nTab);
-    nPosY = (long)(nPosY * HMM_PER_TWIPS);
+    long nPosY = static_cast<long>(pDoc->GetRowHeight( 0, nRow-1, nTab));
+    nPosY = static_cast<long>(nPosY * HMM_PER_TWIPS);
     return Point(nPosX,nPosY);
 }
 
@@ -1737,8 +1737,8 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        long nDocX = (long)( (double) pDoc->GetColOffset( MAXCOL + 1, nTab ) * HMM_PER_TWIPS ) * nLayoutSign;
-        long nDocY = (long)( (double) pDoc->GetRowOffset( MAXROW + 1, nTab ) * HMM_PER_TWIPS );
+        long nDocX = static_cast<long>( static_cast<double>(pDoc->GetColOffset( MAXCOL + 1, nTab )) * HMM_PER_TWIPS ) * nLayoutSign;
+        long nDocY = static_cast<long>( static_cast<double>(pDoc->GetRowOffset( MAXROW + 1, nTab )) * HMM_PER_TWIPS );
 
         if ( aVisible.Left() * nLayoutSign > nDocX * nLayoutSign )
             aVisible.Left() = nDocX;
@@ -2795,7 +2795,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         if (pModelObj)
             aOldSize = pModelObj->getDocumentSize();
 
-        aViewData.SetMaxTiledRow(std::min(std::max(nEndRow, aViewData.GetMaxTiledRow()) + nVisibleRows, (long)MAXTILEDROW));
+        aViewData.SetMaxTiledRow(std::min(std::max(nEndRow, aViewData.GetMaxTiledRow()) + nVisibleRows, long(MAXTILEDROW)));
 
         Size aNewSize(0, 0);
         if (pModelObj)
@@ -2936,7 +2936,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         if (pModelObj)
             aOldSize = pModelObj->getDocumentSize();
 
-        aViewData.SetMaxTiledCol(std::min(std::max(nEndCol, aViewData.GetMaxTiledCol()) + nVisibleCols, (long)MAXCOL));
+        aViewData.SetMaxTiledCol(std::min(std::max(nEndCol, aViewData.GetMaxTiledCol()) + nVisibleCols, long(MAXCOL)));
 
         Size aNewSize(0, 0);
         if (pModelObj)

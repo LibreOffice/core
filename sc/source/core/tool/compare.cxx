@@ -173,11 +173,11 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 fRes = (bMatch ? 0 : 1);
             }
             else if (rComp.mbIgnoreCase)
-                fRes = (double) ScGlobal::GetCollator()->compareString(
-                        rCell1.maStr.getString(), rCell2.maStr.getString());
+                fRes = static_cast<double>(ScGlobal::GetCollator()->compareString(
+                        rCell1.maStr.getString(), rCell2.maStr.getString()));
             else
-                fRes = (double) ScGlobal::GetCaseCollator()->compareString(
-                        rCell1.maStr.getString(), rCell2.maStr.getString());
+                fRes = static_cast<double>(ScGlobal::GetCaseCollator()->compareString(
+                        rCell1.maStr.getString(), rCell2.maStr.getString()));
         }
         else if (rComp.meOp == SC_EQUAL || rComp.meOp == SC_NOT_EQUAL)
         {
@@ -187,11 +187,11 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 fRes = (rCell1.maStr.getData() == rCell2.maStr.getData()) ? 0 : 1;
         }
         else if (rComp.mbIgnoreCase)
-            fRes = (double) ScGlobal::GetCollator()->compareString(
-                rCell1.maStr.getString(), rCell2.maStr.getString());
+            fRes = static_cast<double>(ScGlobal::GetCollator()->compareString(
+                rCell1.maStr.getString(), rCell2.maStr.getString()));
         else
-            fRes = (double) ScGlobal::GetCaseCollator()->compareString(
-                rCell1.maStr.getString(), rCell2.maStr.getString());
+            fRes = static_cast<double>(ScGlobal::GetCaseCollator()->compareString(
+                rCell1.maStr.getString(), rCell2.maStr.getString()));
     }
 
     if (nStringQuery && pOptions)

@@ -210,21 +210,21 @@ bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
     {
         i = (nLo + nHi) / 2;
         if (i > 0)
-            nStartRow = (long) mvData[i - 1].nEndRow;
+            nStartRow = static_cast<long>(mvData[i - 1].nEndRow);
         else
             nStartRow = -1;
-        const long nEndRow = (long) mvData[i].nEndRow;
-        if (nEndRow < (long) nRow)
+        const long nEndRow = static_cast<long>(mvData[i].nEndRow);
+        if (nEndRow < static_cast<long>(nRow))
             nLo = ++i;
         else
-            if (nStartRow >= (long) nRow)
+            if (nStartRow >= static_cast<long>(nRow))
                 nHi = --i;
             else
                 bFound = true;
     }
 
     if (bFound)
-        nIndex=(SCSIZE)i;
+        nIndex=static_cast<SCSIZE>(i);
     else
         nIndex=0;
     return bFound;
@@ -1128,7 +1128,7 @@ void ScAttrArray::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLine
         {
             pPattern = mvData[i].pPattern;
             lcl_MergeToFrame( pLineOuter, pLineInner, rFlags, pPattern, bLeft, nDistRight, false,
-                            nEndRow - std::min( mvData[i].nEndRow, (SCROW)(nEndRow-1) ) );
+                            nEndRow - std::min( mvData[i].nEndRow, static_cast<SCROW>(nEndRow-1) ) );
             // nDistBottom here always > 0
         }
 
@@ -1234,7 +1234,7 @@ void ScAttrArray::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfo
             SCROW nTmpEnd;
             for (SCSIZE i=nStartIndex; i<=nEndIndex;)
             {
-                nTmpEnd = std::min( (SCROW)(nEndRow-1), mvData[i].nEndRow );
+                nTmpEnd = std::min( static_cast<SCROW>(nEndRow-1), mvData[i].nEndRow );
                 bool bChanged = ApplyFrame(&rLineOuter, pLineInner, nTmpStart, nTmpEnd,
                                            bLeft, nDistRight, false, nEndRow - nTmpEnd);
                 nTmpStart = nTmpEnd+1;
@@ -1712,7 +1712,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         sal_uInt16 nOldValue = rOldSet.Get( ATTR_INDENT ).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         // To keep Increment indent from running outside the cell1659
-        long nColWidth = (long)pDocument->GetColWidth(nCol,nTab);
+        long nColWidth = static_cast<long>(pDocument->GetColWidth(nCol,nTab));
         if ( bIncrement )
         {
             if ( nNewValue < nColWidth-SC_INDENT_STEP )
@@ -2381,8 +2381,8 @@ void ScAttrArray::CopyArea(
     nStartRow -= nDy;   // Source
     nEndRow -= nDy;
 
-    SCROW nDestStart = std::max((long)((long)nStartRow + nDy), (long) 0);
-    SCROW nDestEnd = std::min((long)((long)nEndRow + nDy), (long) MAXROW);
+    SCROW nDestStart = std::max(static_cast<long>(static_cast<long>(nStartRow) + nDy), long(0));
+    SCROW nDestEnd = std::min(static_cast<long>(static_cast<long>(nEndRow) + nDy), long(MAXROW));
 
     ScDocumentPool* pSourceDocPool = pDocument->GetPool();
     ScDocumentPool* pDestDocPool = rAttrArray.pDocument->GetPool();
@@ -2434,12 +2434,12 @@ void ScAttrArray::CopyArea(
             }
 
             rAttrArray.SetPatternArea(nDestStart,
-                            std::min((SCROW)(mvData[i].nEndRow + nDy), nDestEnd), pNewPattern);
+                            std::min(static_cast<SCROW>(mvData[i].nEndRow + nDy), nDestEnd), pNewPattern);
         }
 
         // when pasting from clipboard and skipping filtered rows, the adjusted
         // end position can be negative
-        nDestStart = std::max((long)nDestStart, (long)(mvData[i].nEndRow + nDy + 1));
+        nDestStart = std::max(static_cast<long>(nDestStart), static_cast<long>(mvData[i].nEndRow + nDy + 1));
     }
 }
 
@@ -2452,8 +2452,8 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
     nStartRow -= nDy;  // Source
     nEndRow -= nDy;
 
-    SCROW nDestStart = std::max((long)((long)nStartRow + nDy), (long) 0);
-    SCROW nDestEnd = std::min((long)((long)nEndRow + nDy), (long) MAXROW);
+    SCROW nDestStart = std::max(static_cast<long>(static_cast<long>(nStartRow) + nDy), long(0));
+    SCROW nDestEnd = std::min(static_cast<long>(static_cast<long>(nEndRow) + nDy), long(MAXROW));
 
     if ( !rAttrArray.HasAttrib( nDestStart, nDestEnd, HasAttrFlags::Overlapped ) )
     {
@@ -2492,12 +2492,12 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
                 pNewPattern = pOldPattern->PutInPool( rAttrArray.pDocument, pDocument );
 
             rAttrArray.SetPatternAreaSafe(nDestStart,
-                            std::min((SCROW)(mvData[i].nEndRow + nDy), nDestEnd), pNewPattern, false);
+                            std::min(static_cast<SCROW>(mvData[i].nEndRow + nDy), nDestEnd), pNewPattern, false);
         }
 
         // when pasting from clipboard and skipping filtered rows, the adjusted
         // end position can be negative
-        nDestStart = std::max((long)nDestStart, (long)(mvData[i].nEndRow + nDy + 1));
+        nDestStart = std::max(static_cast<long>(nDestStart), static_cast<long>(mvData[i].nEndRow + nDy + 1));
     }
 }
 

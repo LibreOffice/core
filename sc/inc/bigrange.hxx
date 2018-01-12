@@ -83,21 +83,21 @@ inline ScAddress ScBigAddress::MakeAddress() const
     else if ( nCol > MAXCOL )
         nColA = MAXCOL;
     else
-        nColA = (SCCOL) nCol;
+        nColA = static_cast<SCCOL>(nCol);
 
     if ( nRow < 0 )
         nRowA = 0;
     else if ( nRow > MAXROW )
         nRowA = MAXROW;
     else
-        nRowA = (SCROW) nRow;
+        nRowA = static_cast<SCROW>(nRow);
 
     if ( nTab < 0 )
         nTabA = 0;
     else if ( nTab > MAXTAB )
         nTabA = MAXTAB;
     else
-        nTabA = (SCTAB) nTab;
+        nTabA = static_cast<SCTAB>(nTab);
 
     return ScAddress( nColA, nRowA, nTabA );
 }

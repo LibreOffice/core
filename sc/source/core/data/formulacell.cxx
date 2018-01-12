@@ -4555,7 +4555,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
         if (pInterpreter == nullptr ||
             !pInterpreter->interpret(*pDocument, xGroup->mpTopCell->aPos, xGroup, aCode))
         {
-            SAL_INFO("sc.opencl", "interpreting group " << mxGroup << " (state " << (int) mxGroup->meCalcState << ") failed, disabling");
+            SAL_INFO("sc.opencl", "interpreting group " << mxGroup << " (state " << static_cast<int>(mxGroup->meCalcState) << ") failed, disabling");
             mxGroup->meCalcState = sc::GroupCalcDisabled;
 
             // Undo the hack above

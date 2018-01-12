@@ -472,7 +472,7 @@ const TokenId TokenPool::Store( const OUString& rString )
         *ppP_Str[ ppP_Str.m_writemark ] = rString;
 
     /* attention truncate to 16 bits */
-    pSize[ nElementAkt ] = ( sal_uInt16 ) ppP_Str[ ppP_Str.m_writemark ]->getLength();
+    pSize[ nElementAkt ] = static_cast<sal_uInt16>(ppP_Str[ ppP_Str.m_writemark ]->getLength());
 
     nElementAkt++;
     ppP_Str.m_writemark++;
@@ -693,7 +693,7 @@ void TokenPool::Reset()
 
 bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
 {
-    sal_uInt16 nId = (sal_uInt16) rId;
+    sal_uInt16 nId = static_cast<sal_uInt16>(rId);
     if( nId && nId <= nElementAkt )
     {// existent?
         nId--;
@@ -720,7 +720,7 @@ bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
 const OUString* TokenPool::GetExternal( const TokenId& rId ) const
 {
     const OUString*   p = nullptr;
-    sal_uInt16 n = (sal_uInt16) rId;
+    sal_uInt16 n = static_cast<sal_uInt16>(rId);
     if( n && n <= nElementAkt )
     {
         n--;

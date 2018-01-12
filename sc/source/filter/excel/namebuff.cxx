@@ -39,7 +39,7 @@ sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )
     while( cAkt )
     {
         n *= 70;
-        n += ( sal_uInt32 ) cAkt;
+        n += static_cast<sal_uInt32>(cAkt);
         pAkt++;
         cAkt = *pAkt;
     }

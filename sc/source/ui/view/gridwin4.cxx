@@ -97,8 +97,8 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     lcl_LimitRect( aInner, aVisible );
 
     tools::Rectangle aOuter = aInner;
-    long nHor = (long) ( SC_SCENARIO_HSPACE * nPPTX );
-    long nVer = (long) ( SC_SCENARIO_VSPACE * nPPTY );
+    long nHor = static_cast<long>( SC_SCENARIO_HSPACE * nPPTX );
+    long nVer = static_cast<long>( SC_SCENARIO_VSPACE * nPPTY );
     aOuter.Left()   -= nHor;
     aOuter.Right()  += nHor;
     aOuter.Top()    -= nVer;
@@ -842,7 +842,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         if ( pRangeFinder && !pRangeFinder->IsHidden() &&
                 pRangeFinder->GetDocName() == pDocSh->GetTitle() )
         {
-            sal_uInt16 nCount = (sal_uInt16)pRangeFinder->Count();
+            sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFinder->Count());
             for (sal_uInt16 i=0; i<nCount; i++)
             {
                 ScRangeFindData& rData = pRangeFinder->GetObject(i);
@@ -1461,9 +1461,9 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
 
                                 long nPageNo = rData.GetFirstPage();
                                 if ( rData.IsTopDown() )
-                                    nPageNo += ((long)nColPos)*nRowBreaks+nRowPos;
+                                    nPageNo += static_cast<long>(nColPos)*nRowBreaks+nRowPos;
                                 else
-                                    nPageNo += ((long)nRowPos)*nColBreaks+nColPos;
+                                    nPageNo += static_cast<long>(nRowPos)*nColBreaks+nColPos;
 
                                 OUString aThisPageStr = aPageStr.replaceFirst("%1", OUString::number(nPageNo));
 

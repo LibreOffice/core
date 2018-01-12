@@ -1018,7 +1018,7 @@ long ScDPGroupTableData::GetSourceDim( long nDim )
 {
     if ( getIsDataLayoutDimension( nDim ) )
         return nSourceCount;
-    if (  nDim >= nSourceCount && nDim < nSourceCount +(long) aGroups.size()  )
+    if (  nDim >= nSourceCount && nDim < nSourceCount +static_cast<long>(aGroups.size())  )
     {
          const ScDPGroupDimension& rGroupDim = aGroups[nDim - nSourceCount];
             return  rGroupDim.GetSourceDim();
