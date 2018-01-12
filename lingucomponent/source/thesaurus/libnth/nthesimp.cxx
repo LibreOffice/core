@@ -378,7 +378,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         if (stem)
         {
             xTmpRes2 = xSpell->spell( "<?xml?><query type='analyze'><word>" +
-                                      aPTerm + "</word></query>", (sal_uInt16)nLanguage, rProperties );
+                                      aPTerm + "</word></query>", static_cast<sal_uInt16>(nLanguage), rProperties );
             if (xTmpRes2.is())
             {
                 Sequence<OUString>seq = xTmpRes2->getAlternatives();
@@ -415,7 +415,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                     {
                         Reference< XSpellAlternatives > xTmpRes;
                         xTmpRes = xSpell->spell( "<?xml?><query type='generate'><word>" +
-                        sTerm + "</word>" + codeTerm + "</query>", (sal_uInt16)nLanguage, rProperties );
+                        sTerm + "</word>" + codeTerm + "</query>", static_cast<sal_uInt16>(nLanguage), rProperties );
                         if (xTmpRes.is())
                         {
                             Sequence<OUString>seq = xTmpRes->getAlternatives();
@@ -467,11 +467,11 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         stem = 1;
 
         xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
-        if (!xSpell.is() || !xSpell->isValid( SPELLML_SUPPORT, (sal_uInt16)nLanguage, rProperties ))
+        if (!xSpell.is() || !xSpell->isValid( SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage), rProperties ))
             return noMeanings;
         Reference< XSpellAlternatives > xTmpRes;
         xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
-            aRTerm + "</word></query>", (sal_uInt16)nLanguage, rProperties );
+            aRTerm + "</word></query>", static_cast<sal_uInt16>(nLanguage), rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
@@ -488,7 +488,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         if (!pos)
             return noMeanings;
         xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
-            aRTerm.copy(pos + 1) + "</word></query>", (sal_uInt16)nLanguage, rProperties );
+            aRTerm.copy(pos + 1) + "</word></query>", static_cast<sal_uInt16>(nLanguage), rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
