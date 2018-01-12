@@ -456,7 +456,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         {
             rtl::Reference< ucbhelper::SimpleCertificateValidationRequest >
                 xRequest( new ucbhelper::SimpleCertificateValidationRequest(
-                    (sal_Int32)certValidity, xEECert, pSession->getHostName() ) );
+                    static_cast<sal_Int32>(certValidity), xEECert, pSession->getHostName() ) );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
@@ -1549,7 +1549,7 @@ void NeonSession::LOCK( const OUString & inPath,
     }
 
     // Set the lock timeout
-    theLock->timeout = (long)rLock.Timeout;
+    theLock->timeout = static_cast<long>(rLock.Timeout);
 
     // Set the lock owner
     OUString aValue;

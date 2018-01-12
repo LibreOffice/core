@@ -57,7 +57,7 @@ public:
                          SortedEntryList(){}
                         ~SortedEntryList(){ Clear(); }
 
-    sal_uInt32          Count() const { return (sal_uInt32) maData.size(); }
+    sal_uInt32          Count() const { return static_cast<sal_uInt32>(maData.size()); }
 
     void                Clear();
     void                Insert( SortListData *pEntry, sal_IntPtr nPos );
@@ -76,7 +76,7 @@ public:
                      EventList(){}
                     ~EventList(){ Clear(); }
 
-    sal_uInt32      Count() { return (sal_uInt32) maData.size(); }
+    sal_uInt32      Count() { return static_cast<sal_uInt32>(maData.size()); }
 
     void            AddEvent( sal_IntPtr nType, sal_IntPtr nPos );
     void            Insert( css::ucb::ListAction *pAction ) { maData.push_back( pAction ); }
