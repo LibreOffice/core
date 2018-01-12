@@ -20,48 +20,67 @@
 #include <rtl/ustring.hxx>
 #include <xmlmultiimagehelper.hxx>
 
+#include <comphelper/graphicmimetype.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
 {
     sal_uInt32 getQualityIndex(const OUString& rString)
     {
+        OUString sMimeType;
+        if (rString.startsWith("vnd.sun.star.GraphicObject"))
+        {
+            sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(rString);
+        }
+        else if (rString.startsWith("vnd.sun.star.Package"))
+        {
+            sMimeType
+                = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(OUStringToOString(
+                    rString.copy(rString.lastIndexOf(".") + 1), RTL_TEXTENCODING_ASCII_US));
+        }
+        else
+        {
+            SAL_WARN("xmloff", "Unknown image source: " << rString);
+            return 0;
+        }
+
         // pixel formats first
-        if(rString.endsWith(".bmp"))
+        if(sMimeType == "image/bmp")
         {
             return 10;
         }
-        if(rString.endsWith(".gif"))
+        if(sMimeType == "image/gif")
         {
             return 20;
         }
-        if(rString.endsWith(".jpg"))
+        if(sMimeType == "image/jpeg")
         {
             return 30;
         }
-        if(rString.endsWith(".png"))
+        if(sMimeType == "image/png")
         {
             return 40;
         }
 
         // vector formats, prefer always
-        if(rString.endsWith(".svm"))
+        if(sMimeType == "image/x-svm")
         {
             return 1000;
         }
-        if(rString.endsWith(".wmf"))
+        if(sMimeType == "image/x-wmf")
         {
             return 1010;
         }
-        if(rString.endsWith(".emf"))
+        if(sMimeType == "image/x-emf")
         {
             return 1020;
         }
-        if(rString.endsWith(".pdf"))
+        if(sMimeType == "application/pdf")
         {
             return 1030;
         }
-        if(rString.endsWith(".svg"))
+        if(sMimeType == "image/svg+xml")
         {
             return 1040;
         }

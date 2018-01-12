@@ -19,12 +19,12 @@
 
 #include <comphelper/graphicmimetype.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -48,8 +48,8 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(const OString& rExt)
     static const XMLGraphicMimeTypeMapper aMapper[]
         = { { "gif", "image/gif" },   { "png", "image/png" },     { "jpg", "image/jpeg" },
             { "tif", "image/tiff" },  { "svg", "image/svg+xml" }, { "pdf", "application/pdf" },
-            { "wmf", "image/x-wmf" }, { "eps", "image/x-eps" },   { "bmp", "image/bmp" },
-            { "pct", "image/x-pict" } };
+            { "wmf", "image/x-wmf" }, { "emf", "image/x-emf" },   { "eps", "image/x-eps" },
+            { "bmp", "image/bmp" },   { "pct", "image/x-pict" },  { "svm", "image/x-svm" } };
 
     OUString aMimeType;
 
