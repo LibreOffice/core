@@ -62,8 +62,6 @@ BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
 
 BasicCodeTagger::~BasicCodeTagger()
 {
-    if ( m_pXmlTreeWalker != nullptr )
-      delete m_pXmlTreeWalker;
 }
 //!Gathers all the <bascode> tag nodes from xml tree.
 /*!
@@ -75,9 +73,7 @@ void BasicCodeTagger::getBasicCodeContainerNodes()
 
     m_BasicCodeContainerTags.clear();
 
-    if ( m_pXmlTreeWalker != nullptr )
-      delete m_pXmlTreeWalker;
-    m_pXmlTreeWalker = new LibXmlTreeWalker( m_pDocument );
+    m_pXmlTreeWalker.reset(new LibXmlTreeWalker( m_pDocument ));
 
     currentNode = m_pXmlTreeWalker->currentNode();
     if ( !( xmlStrcmp( currentNode->name, reinterpret_cast<const xmlChar*>("bascode") ) ) )
