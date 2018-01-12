@@ -42,7 +42,9 @@ IOSPREBUILD: FORCE
 
 
 
-$(IOSKIT).dylib: IOSPREBUILD $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,iOS_kitBridge) $(IOSLIBS)
+$(IOSKIT).a: IOSPREBUILD $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,iOS_kitBridge) \
+	    $(IOSLIBS)
+	$(call gb_Output_announce,iOS prelink object,$(true),LNK,2)
 	$(IOSLD) -r -ios_version_min $(IOS_DEPLOYMENT_VERSION) \
 	    -syslibroot $(MACOSX_SDK_PATH) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
@@ -51,6 +53,9 @@ $(IOSKIT).dylib: IOSPREBUILD $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,i
 	    $(IOSLIBS)
 	$(AR) -r $(IOSKIT).a $(IOSOBJ)
 
+
+$(IOSKIT).dylib: $(IOSKIT).a
+	$(call gb_Output_announce,iOS dylib,$(true),LNK,2)
 	$(IOSCLANG) -dynamiclib -mios-simulator-version-min=$(IOS_DEPLOYMENT_VERSION) \
 	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
 	    -isysroot $(MACOSX_SDK_PATH) \
