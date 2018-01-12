@@ -726,7 +726,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
 
 void OPreparedStatement::checkParameterIndex(sal_Int32 column)
 {
-    if (column < 1 || column > (sal_Int32) m_paramCount) {
+    if (column < 1 || column > static_cast<sal_Int32>(m_paramCount)) {
         throw SQLException("Parameter index out of range", *this, rtl::OUString(), 1, Any ());
     }
 }

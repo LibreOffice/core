@@ -323,7 +323,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
 {
-    if (columnIndex < 1 || columnIndex > (sal_Int32) meta->getColumnCount()) {
+    if (columnIndex < 1 || columnIndex > static_cast<sal_Int32>(meta->getColumnCount())) {
 
         rtl::OUStringBuffer buf;
         buf.appendAscii( "Column index out of range (expected 1 to " );
