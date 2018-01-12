@@ -122,14 +122,14 @@ public:
             throw BoundsError();
         }
         return (
-            ((sal_Int64)m_pBuffer[index]   << 56) |
-            ((sal_Int64)m_pBuffer[index+1] << 48) |
-            ((sal_Int64)m_pBuffer[index+2] << 40) |
-            ((sal_Int64)m_pBuffer[index+3] << 32) |
-            ((sal_Int64)m_pBuffer[index+4] << 24) |
-            ((sal_Int64)m_pBuffer[index+5] << 16) |
-            ((sal_Int64)m_pBuffer[index+6] << 8)  |
-            ((sal_Int64)m_pBuffer[index+7] << 0)
+            (static_cast<sal_Int64>(m_pBuffer[index])   << 56) |
+            (static_cast<sal_Int64>(m_pBuffer[index+1]) << 48) |
+            (static_cast<sal_Int64>(m_pBuffer[index+2]) << 40) |
+            (static_cast<sal_Int64>(m_pBuffer[index+3]) << 32) |
+            (static_cast<sal_Int64>(m_pBuffer[index+4]) << 24) |
+            (static_cast<sal_Int64>(m_pBuffer[index+5]) << 16) |
+            (static_cast<sal_Int64>(m_pBuffer[index+6]) << 8)  |
+            (static_cast<sal_Int64>(m_pBuffer[index+7]) << 0)
         );
     }
 
@@ -139,14 +139,14 @@ public:
             throw BoundsError();
         }
         return (
-            ((sal_uInt64)m_pBuffer[index]   << 56) |
-            ((sal_uInt64)m_pBuffer[index+1] << 48) |
-            ((sal_uInt64)m_pBuffer[index+2] << 40) |
-            ((sal_uInt64)m_pBuffer[index+3] << 32) |
-            ((sal_uInt64)m_pBuffer[index+4] << 24) |
-            ((sal_uInt64)m_pBuffer[index+5] << 16) |
-            ((sal_uInt64)m_pBuffer[index+6] << 8)  |
-            ((sal_uInt64)m_pBuffer[index+7] << 0)
+            (static_cast<sal_uInt64>(m_pBuffer[index])   << 56) |
+            (static_cast<sal_uInt64>(m_pBuffer[index+1]) << 48) |
+            (static_cast<sal_uInt64>(m_pBuffer[index+2]) << 40) |
+            (static_cast<sal_uInt64>(m_pBuffer[index+3]) << 32) |
+            (static_cast<sal_uInt64>(m_pBuffer[index+4]) << 24) |
+            (static_cast<sal_uInt64>(m_pBuffer[index+5]) << 16) |
+            (static_cast<sal_uInt64>(m_pBuffer[index+6]) << 8)  |
+            (static_cast<sal_uInt64>(m_pBuffer[index+7]) << 0)
         );
     }
 };
@@ -556,7 +556,7 @@ const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index) const
             }
         }
 
-        aString = m_pStringCache->getString((sal_uInt16) (m_pIndex[index - 1] * -1));
+        aString = m_pStringCache->getString(static_cast<sal_uInt16>(m_pIndex[index - 1] * -1));
     }
 
     return aString;

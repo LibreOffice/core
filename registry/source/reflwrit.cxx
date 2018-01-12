@@ -80,7 +80,7 @@ sal_uInt32 writeString(sal_uInt8* buffer, const sal_Unicode* v)
 
     for (i = 0; i < len; i++)
     {
-        buff += writeUINT16(buff, (sal_uInt16) v[i]);
+        buff += writeUINT16(buff, static_cast<sal_uInt16>(v[i]));
     }
 
     return (buff - buffer);
@@ -103,7 +103,7 @@ sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSiz
 
         buff += readUINT16(buff, aChar);
 
-        v[i] = (sal_Unicode) aChar;
+        v[i] = static_cast<sal_Unicode>(aChar);
     }
 
     v[len - 1] = L'\0';
@@ -262,12 +262,12 @@ sal_uInt32 CPInfo::toBlop(sal_uInt8* buffer)
     sal_uInt8* buff = buffer;
 
     buff += writeUINT32(buff, getBlopSize());
-    buff += writeUINT16(buff, (sal_uInt16) m_tag);
+    buff += writeUINT16(buff, static_cast<sal_uInt16>(m_tag));
 
     switch (m_tag)
     {
         case CP_TAG_CONST_BOOL:
-            buff += writeBYTE(buff, (sal_uInt8) m_value.aConst.aBool);
+            buff += writeBYTE(buff, static_cast<sal_uInt8>(m_value.aConst.aBool));
             break;
         case CP_TAG_CONST_BYTE:
             buff += writeBYTE(
@@ -868,8 +868,7 @@ void TypeWriter::createBlop()
 
         for (sal_uInt16 i = 0; i < m_methodCount; i++)
         {
-            pMethodEntrySize[i] = (sal_uInt16)
-                ( blopMethodEntrySize +                                 // header
+            pMethodEntrySize[i] = static_cast<sal_uInt16>( blopMethodEntrySize +                                 // header
                   sizeof(sal_uInt16) +                                  // parameterCount
                   (m_methods[i].m_paramCount * blopParamEntrySize) +    // exceptions
                   sizeof(sal_uInt16) +                                  // exceptionCount
@@ -1044,8 +1043,8 @@ void TypeWriter::createBlop()
     pBuffer += writeUINT16(pBuffer, majorVersion);
     pBuffer += writeUINT16(pBuffer, BLOP_HEADER_N_ENTRIES);
 
-    pBuffer += writeUINT16(pBuffer, (sal_uInt16)RT_UNO_IDL);
-    pBuffer += writeUINT16(pBuffer, (sal_uInt16)m_typeClass);
+    pBuffer += writeUINT16(pBuffer, sal_uInt16(RT_UNO_IDL));
+    pBuffer += writeUINT16(pBuffer, static_cast<sal_uInt16>(m_typeClass));
     pBuffer += writeUINT16(pBuffer, cpIndexThisName);
     pBuffer += writeUINT16(pBuffer, 0); // cpIndexUik
     pBuffer += writeUINT16(pBuffer, cpIndexDoku);
