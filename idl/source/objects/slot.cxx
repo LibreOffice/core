@@ -285,8 +285,8 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 void SvMetaSlot::Insert( SvSlotElementList& rList)
 {
     // get insert position through binary search in slotlist
-    sal_uInt16 nId = (sal_uInt16) GetSlotId().GetValue();
-    sal_uInt16 nListCount = (sal_uInt16) rList.size();
+    sal_uInt16 nId = static_cast<sal_uInt16>(GetSlotId().GetValue());
+    sal_uInt16 nListCount = static_cast<sal_uInt16>(rList.size());
     sal_uInt16 nPos;
 
     if ( !nListCount )
@@ -302,7 +302,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList)
         {
             nMid = (nLow + nHigh) >> 1;
             DBG_ASSERT( nMid < nListCount, "bsearch is buggy" );
-            int nDiff = (int) nId - (int) rList[ nMid ]->GetSlotId().GetValue();
+            int nDiff = static_cast<int>(nId) - static_cast<int>(rList[ nMid ]->GetSlotId().GetValue());
             if ( nDiff < 0)
             {
                 if ( nMid == 0 )
@@ -326,13 +326,13 @@ void SvMetaSlot::Insert( SvSlotElementList& rList)
     DBG_ASSERT( nPos <= nListCount,
         "nPos too large" );
     DBG_ASSERT( nPos == nListCount || nId <=
-        (sal_uInt16) rList[ nPos ]->GetSlotId().GetValue(),
+        static_cast<sal_uInt16>(rList[ nPos ]->GetSlotId().GetValue()),
         "Successor has lower SlotId" );
     DBG_ASSERT( nPos == 0 || nId >
-        (sal_uInt16) rList[ nPos-1 ]->GetSlotId().GetValue(),
+        static_cast<sal_uInt16>(rList[ nPos-1 ]->GetSlotId().GetValue()),
         "Predecessor has higher SlotId" );
     DBG_ASSERT( nPos+1 >= nListCount || nId <
-        (sal_uInt16) rList[ nPos+1 ]->GetSlotId().GetValue(),
+        static_cast<sal_uInt16>(rList[ nPos+1 ]->GetSlotId().GetValue()),
         "Successor has lower SlotId" );
 
     if ( nPos < rList.size() )
@@ -624,7 +624,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             if( !SvIdlDataBase::FindType( pPType, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.push_back( pPType );
         }
-        return (sal_uInt16)rList.size();
+        return static_cast<sal_uInt16>(rList.size());
     }
     return 0;
 }
@@ -642,7 +642,7 @@ sal_uInt16 SvMetaSlot::WriteSlotMap( const OString& rShellName, sal_uInt16 nCoun
     if( IsMethod() )
     {
         SvMetaType * pType = GetType();
-        nSCount = (sal_uInt16)pType->GetAttrCount();
+        nSCount = static_cast<sal_uInt16>(pType->GetAttrCount());
     }
 
     WriteSlot( rShellName, nCount, slotId, rSlotList, nStart, rBase, rOutStm );
