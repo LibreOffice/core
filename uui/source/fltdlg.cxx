@@ -142,7 +142,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
             if( !sEntry.isEmpty() )
             {
                 int nPos = m_pLbFilters->GetSelectedEntryPos();
-                if( nPos < (int)(m_pFilterNames->size()) )
+                if( nPos < static_cast<int>(m_pFilterNames->size()) )
                 {
                     pSelectedItem  = m_pFilterNames->begin();
                     pSelectedItem += nPos;
@@ -174,7 +174,7 @@ class StringCalculator : public ::cppu::WeakImplHelper< css::util::XStringWidth 
 
         sal_Int32 SAL_CALL queryStringWidth( const OUString& sString ) override
         {
-            return (sal_Int32)(m_pDevice->GetTextWidth(sString));
+            return static_cast<sal_Int32>(m_pDevice->GetTextWidth(sString));
         }
 
     private:
