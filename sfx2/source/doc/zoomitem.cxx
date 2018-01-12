@@ -82,7 +82,7 @@ bool SvxZoomItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
         }
 
-        case MID_VALUE: rVal <<= (sal_Int32) GetValue(); break;
+        case MID_VALUE: rVal <<= static_cast<sal_Int32>(GetValue()); break;
         case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
         case MID_TYPE: rVal <<= (sal_Int16) eType; break;
         default:
@@ -129,7 +129,7 @@ bool SvxZoomItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
                 if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
                 {
-                    SetValue( (sal_uInt16)nValueTmp );
+                    SetValue( static_cast<sal_uInt16>(nValueTmp) );
                     nValueSet = static_cast<SvxZoomEnableFlags>(nValueSetTmp);
                     eType = static_cast<SvxZoomType>(nTypeTmp);
                     return true;
@@ -142,7 +142,7 @@ bool SvxZoomItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nVal = 0;
             if ( rVal >>= nVal )
             {
-                SetValue( (sal_uInt16)nVal );
+                SetValue( static_cast<sal_uInt16>(nVal) );
                 return true;
             }
             else

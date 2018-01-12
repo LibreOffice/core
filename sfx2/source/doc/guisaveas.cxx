@@ -515,7 +515,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
     {
         ::comphelper::SequenceAsHashMap aFiltHM( aProps );
         SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aFiltHM.getUnpackedValueOrDefault("Flags",
-                                                        (sal_Int32)0 ));
+                                                        sal_Int32(0) ));
         if ( ( ( nFlags & nMust ) == nMust ) && !( nFlags & nDont ) )
             aFilterProps = aProps;
     }
@@ -735,13 +735,13 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
             m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
 
         aFiltPropsHM = ::comphelper::SequenceAsHashMap( aFilterProps );
-        nFiltFlags = static_cast<SfxFilterFlags>(aFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 ));
+        nFiltFlags = static_cast<SfxFilterFlags>(aFiltPropsHM.getUnpackedValueOrDefault("Flags", sal_Int32(0) ));
     }
 
     // only a temporary solution until default filter retrieving feature is implemented
     // then GetDocServiceDefaultFilter() must be used
     ::comphelper::SequenceAsHashMap aDefFiltPropsHM = GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT, SfxFilterFlags::NONE );
-    SfxFilterFlags nDefFiltFlags = static_cast<SfxFilterFlags>(aDefFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 ));
+    SfxFilterFlags nDefFiltFlags = static_cast<SfxFilterFlags>(aDefFiltPropsHM.getUnpackedValueOrDefault("Flags", sal_Int32(0) ));
 
     // if the old filter is not acceptable
     // and there is no default filter or it is not acceptable for requested parameters then proceed with saveAs
@@ -770,7 +770,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
         if ( aPreusedFilterName != aFilterName && aUIName != aDefUIName )
         {
             if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefExtension,
-                                                            (bool)( nDefFiltFlags & SfxFilterFlags::ALIEN ) ) )
+                                                            static_cast<bool>( nDefFiltFlags & SfxFilterFlags::ALIEN ) ) )
                 return STATUS_SAVEAS_STANDARDNAME;
         }
     }
@@ -941,7 +941,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
             m_pOwner->GetFilterConfiguration()->getByName( aOldFilterName ) >>= aOldFilterProps;
 
         ::comphelper::SequenceAsHashMap aOldFiltPropsHM( aOldFilterProps );
-        SfxFilterFlags nOldFiltFlags = static_cast<SfxFilterFlags>(aOldFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 ));
+        SfxFilterFlags nOldFiltFlags = static_cast<SfxFilterFlags>(aOldFiltPropsHM.getUnpackedValueOrDefault("Flags", sal_Int32(0) ));
 
         if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || bool(nOldFiltFlags & nDont) )
         {

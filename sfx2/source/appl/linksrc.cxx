@@ -149,7 +149,7 @@ bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEn
 SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
 {
     SvLinkSource_Entry_Impl* pRet = nullptr;
-    if( nPos + 1 < (sal_uInt16)aArr.size() )
+    if( nPos + 1 < static_cast<sal_uInt16>(aArr.size()) )
     {
         ++nPos;
         if( rOrigArr.size() == aArr.size() &&

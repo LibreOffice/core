@@ -755,7 +755,7 @@ std::size_t SfxBindings::GetSlotPos( sal_uInt16 nId, std::size_t nStartSearchAt 
     {
         nMid = (nLow + nHigh) >> 1;
         DBG_ASSERT( nMid < pImpl->pCaches.size(), "bsearch is buggy" );
-        int nDiff = (int) nId - (int) ( (pImpl->pCaches[nMid])->GetId() );
+        int nDiff = static_cast<int>(nId) - static_cast<int>( (pImpl->pCaches[nMid])->GetId() );
         if ( nDiff < 0)
         {   if ( nMid == 0 )
                 break;

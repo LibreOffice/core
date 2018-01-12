@@ -896,7 +896,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             pImpl->aWinState = pInfo->aWinState;
 
             // check for valid alignment
-            SfxChildAlignment eLocalAlignment = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
+            SfxChildAlignment eLocalAlignment = (SfxChildAlignment) static_cast<sal_uInt16>(aStr.toInt32());
             bool bIgnoreFloatConfig = (eLocalAlignment == SfxChildAlignment::NOALIGNMENT &&
                                        !StyleSettings::GetDockingFloatsSupported());
             if (pImpl->bDockingPrevented || bIgnoreFloatConfig)
@@ -918,7 +918,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             if ( nPos != -1 )
             {
                 aStr = aStr.copy(nPos+1);
-                pImpl->SetLastAlignment( (SfxChildAlignment) (sal_uInt16) aStr.toInt32() );
+                pImpl->SetLastAlignment( (SfxChildAlignment) static_cast<sal_uInt16>(aStr.toInt32()) );
             }
 
             nPos = aStr.indexOf(',');
@@ -929,8 +929,8 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
                 aStr = aStr.copy(nPos+1);
                 if ( GetPosSizeFromString( aStr, aPos, pImpl->aSplitSize ) )
                 {
-                    pImpl->nLine = pImpl->nDockLine = (sal_uInt16) aPos.X();
-                    pImpl->nPos  = pImpl->nDockPos  = (sal_uInt16) aPos.Y();
+                    pImpl->nLine = pImpl->nDockLine = static_cast<sal_uInt16>(aPos.X());
+                    pImpl->nPos  = pImpl->nDockPos  = static_cast<sal_uInt16>(aPos.Y());
                     pImpl->nVerticalSize = pImpl->aSplitSize.Height();
                     pImpl->nHorizontalSize = pImpl->aSplitSize.Width();
                     if ( GetSplitSizeFromString( aStr, pImpl->aSplitSize ))

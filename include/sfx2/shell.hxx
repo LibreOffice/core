@@ -553,7 +553,7 @@ inline void SfxShell::SetPool
             #Class, Abstract, GetInterfaceId(),                             \
             SuperClass::GetStaticInterface(),                               \
             a##Class##Slots_Impl[0],                                        \
-            (sal_uInt16) (sizeof(a##Class##Slots_Impl) / sizeof(SfxSlot) ) );   \
+            sal_uInt16(sizeof(a##Class##Slots_Impl) / sizeof(SfxSlot) ) );   \
             InitInterface_Impl();                                           \
         }                                                                   \
         return pInterface;                                                  \

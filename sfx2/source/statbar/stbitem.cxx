@@ -296,7 +296,7 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
-                              (sal_uInt16)rMouseEvent.ClickCount,
+                              static_cast<sal_uInt16>(rMouseEvent.ClickCount),
                               MouseEventModifiers::NONE,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
@@ -312,7 +312,7 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
-                              (sal_uInt16)rMouseEvent.ClickCount,
+                              static_cast<sal_uInt16>(rMouseEvent.ClickCount),
                               MouseEventModifiers::NONE,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
@@ -327,7 +327,7 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
-                              (sal_uInt16)rMouseEvent.ClickCount,
+                              static_cast<sal_uInt16>(rMouseEvent.ClickCount),
                               MouseEventModifiers::NONE,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );

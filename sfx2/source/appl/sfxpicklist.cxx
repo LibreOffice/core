@@ -197,7 +197,7 @@ SfxPickListImpl::SfxPickListImpl( sal_uInt32 nAllowedMenuSize ) :
     m_nAllowedMenuSize( nAllowedMenuSize )
 {
     m_xStringLength = new StringLength;
-    m_nAllowedMenuSize = ::std::min( m_nAllowedMenuSize, (sal_uInt32)PICKLIST_MAXSIZE );
+    m_nAllowedMenuSize = ::std::min( m_nAllowedMenuSize, sal_uInt32(PICKLIST_MAXSIZE) );
     StartListening( *SfxGetpApp() );
 }
 

@@ -197,7 +197,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     {
                         bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::AutoSaveTime))
-                            if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ), (sal_uInt16)aSaveOptions.GetAutoSaveTime())))
+                            if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ), static_cast<sal_uInt16>(aSaveOptions.GetAutoSaveTime()))))
                                 bRet = false;
                     }
                     break;
@@ -735,7 +735,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
         OUString aNoChangeStr( ' ' );
         for( sal_uInt32 nPath=0; nPath<nCount; ++nPath )
         {
-            OUString sValue = pEnumItem->GetValueTextByPos((sal_uInt16)nPath);
+            OUString sValue = pEnumItem->GetValueTextByPos(static_cast<sal_uInt16>(nPath));
             if ( sValue != aNoChangeStr )
             {
                 switch( nPath )
