@@ -303,13 +303,13 @@ void StyleElement::importFontStyle(
     // dialog:font-height %numeric; #IMPLIED
     if (getStringAttr( &aValue, "font-height", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
-        _descr.Height = (sal_Int16)toInt32( aValue );
+        _descr.Height = static_cast<sal_Int16>(toInt32( aValue ));
         bFontImport = true;
     }
     // dialog:font-width %numeric; #IMPLIED
     if (getStringAttr(&aValue, "font-width", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
-        _descr.Width = (sal_Int16)toInt32( aValue );
+        _descr.Width = static_cast<sal_Int16>(toInt32( aValue ));
         bFontImport = true;
     }
     // dialog:font-stylename CDATA #IMPLIED
@@ -763,7 +763,7 @@ bool ImportContext::importShortProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        _xControlModel->setPropertyValue( rPropName, makeAny( (sal_Int16)toInt32( aValue ) ) );
+        _xControlModel->setPropertyValue( rPropName, makeAny( static_cast<sal_Int16>(toInt32( aValue )) ) );
         return true;
     }
     return false;
