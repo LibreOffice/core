@@ -59,7 +59,7 @@ const OUString & cppu_cppenv_getStaticOIdPart()
             ::rtl_getGlobalProcessId( ar );
             for (unsigned char i : ar)
             {
-                aRet.append( (sal_Int32)i, 16 );
+                aRet.append( static_cast<sal_Int32>(i), 16 );
             }
 #if (defined(__GNUC__) && defined(__APPLE__))
             s_pStaticOidPart = new OUString( aRet.makeStringAndClear() );
