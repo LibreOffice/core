@@ -309,10 +309,10 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
             return false;
 
-        sal_uInt32 nUrlSize = (sal_uInt8)aReadSeq[0]
-                            + (sal_uInt8)aReadSeq[1] * 0x100
-                            + (sal_uInt8)aReadSeq[2] * 0x10000
-                            + (sal_uInt8)aReadSeq[3] * 0x1000000;
+        sal_uInt32 nUrlSize = static_cast<sal_uInt8>(aReadSeq[0])
+                            + static_cast<sal_uInt8>(aReadSeq[1]) * 0x100
+                            + static_cast<sal_uInt8>(aReadSeq[2]) * 0x10000
+                            + static_cast<sal_uInt8>(aReadSeq[3]) * 0x1000000;
         sal_Int64 nTargetPos = xSeekable->getPosition() + nUrlSize;
 
         xSeekable->seek( nTargetPos );
@@ -321,10 +321,10 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
             return false;
 
-        sal_uInt32 nDataSize = (sal_uInt8)aReadSeq[0]
-                            + (sal_uInt8)aReadSeq[1] * 0x100
-                            + (sal_uInt8)aReadSeq[2] * 0x10000
-                            + (sal_uInt8)aReadSeq[3] * 0x1000000;
+        sal_uInt32 nDataSize = static_cast<sal_uInt8>(aReadSeq[0])
+                            + static_cast<sal_uInt8>(aReadSeq[1]) * 0x100
+                            + static_cast<sal_uInt8>(aReadSeq[2]) * 0x10000
+                            + static_cast<sal_uInt8>(aReadSeq[3]) * 0x1000000;
 
         aReadSeq.realloc( 32000 );
         sal_uInt32 nRead = 0;
