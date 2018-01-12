@@ -1118,7 +1118,7 @@ sal_Int32 OPropertyArrayHelper::fillHandles( sal_Int32 * pHandles, const Sequenc
     for( sal_Int32 i = 0; i < nReqLen; i++ )
     {
         // Calculate logarithm
-        sal_Int32 n = (sal_Int32)(pEnd - pCur);
+        sal_Int32 n = static_cast<sal_Int32>(pEnd - pCur);
         sal_Int32 nLog = 0;
         while( n )
         {

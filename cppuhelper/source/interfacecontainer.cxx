@@ -373,7 +373,7 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
                 pArray[i++] = (*iter).first;
             ++iter;
         }
-        if( (t_type2ptr::size_type)i != nSize ) {
+        if( static_cast<t_type2ptr::size_type>(i) != nSize ) {
             // may be empty container, reduce the sequence to the right size
             aInterfaceTypes = css::uno::Sequence< Type >( pArray, i );
         }
@@ -554,7 +554,7 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
                 pArray[i++] = (*iter).first;
             ++iter;
         }
-        if( (t_long2ptr::size_type)i != nSize ) {
+        if( static_cast<t_long2ptr::size_type>(i) != nSize ) {
             // may be empty container, reduce the sequence to the right size
             aInterfaceTypes = css::uno::Sequence< sal_Int32 >( pArray, i );
         }
