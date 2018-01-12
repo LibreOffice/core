@@ -1574,7 +1574,7 @@ const uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
         if ( m_nStartKeyGenerationID == xml::crypto::DigestID::SHA256 )
             aNameToFind = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
         else if ( m_nStartKeyGenerationID == xml::crypto::DigestID::SHA1 )
-            aNameToFind = PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
+            aNameToFind = PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         else
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
 

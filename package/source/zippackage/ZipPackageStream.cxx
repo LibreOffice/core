@@ -1012,7 +1012,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         uno::Reference< io::XInputStream > xResult;
         try
         {
-            xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData(Bugs::WrongSHA1), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
+            xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData(Bugs::None), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
         }
         catch( const packages::WrongPasswordException& )
         {
@@ -1020,8 +1020,8 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
             {
                 SAL_WARN("package", "ZipPackageStream::getDataStream(): SHA1 mismatch, trying fallbacks...");
                 try
-                {   // tdf#114939 try without legacy StarOffice SHA1 bug
-                    xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData(Bugs::None), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
+                {   // tdf#114939 try with legacy StarOffice SHA1 bug
+                    xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData(Bugs::WrongSHA1), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
                     return xResult;
                 }
                 catch (const packages::WrongPasswordException&)
