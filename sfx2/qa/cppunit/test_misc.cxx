@@ -20,11 +20,17 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
+#include <unotest/macros_test.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/processfactory.hxx>
+#include <sfx2/app.hxx>
 
 
 using namespace ::com::sun::star;
@@ -34,10 +40,13 @@ namespace {
 
 class MiscTest
     : public test::BootstrapFixture
+    , public unotest::MacrosTest
     , public XmlTestTools
 {
 public:
+    virtual void setUp() override;
     void testODFCustomMetadata();
+    void testNoThumbnail();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
     {
@@ -52,10 +61,18 @@ public:
 
     CPPUNIT_TEST_SUITE(MiscTest);
     CPPUNIT_TEST(testODFCustomMetadata);
+    CPPUNIT_TEST(testNoThumbnail);
     CPPUNIT_TEST_SUITE_END();
 
 private:
 };
+
+void MiscTest::setUp()
+{
+    m_xContext = comphelper::getProcessComponentContext();
+    mxDesktop.set(frame::Desktop::create(m_xContext));
+    SfxApplication::GetOrCreate();
+}
 
 void MiscTest::testODFCustomMetadata()
 {
@@ -86,6 +103,27 @@ void MiscTest::testODFCustomMetadata()
     aTempFile.EnableKillingFile();
 }
 
+void MiscTest::testNoThumbnail()
+{
+    // Load a document.
+    const OUString aURL(m_directories.getURLFromSrc("/sfx2/qa/cppunit/misc/hello.odt"));
+    uno::Reference<lang::XComponent> xComponent
+        = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Save it with the NoThumbnail option and assert that it has no thumbnail.
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xStorable.is());
+    utl::TempFile aTempFile;
+    uno::Sequence<beans::PropertyValue> aProperties(
+        comphelper::InitPropertySequence({ { "NoThumbnail", uno::makeAny(true) } }));
+    xStorable->storeToURL(aTempFile.GetURL(), aProperties);
+    uno::Reference<packages::zip::XZipFileAccess2> xZipFile
+        = packages::zip::ZipFileAccess::createWithURL(m_xContext, aTempFile.GetURL());
+    CPPUNIT_ASSERT(!xZipFile->hasByName("Thumbnails/thumbnail.png"));
+
+    xComponent->dispose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MiscTest);
 
