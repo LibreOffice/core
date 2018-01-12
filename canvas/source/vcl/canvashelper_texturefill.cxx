@@ -208,9 +208,9 @@ namespace vclcanvas
                 std::tie(nIndex,fAlpha)=aLerper.lerp(double(i)/nStepCount);
 
                 rOutDev.SetFillColor(
-                    Color( (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                           (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                           (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                    Color( static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                           static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                           static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                 // copy right edge of polygon to left edge (and also
                 // copy the closing point)
@@ -375,9 +375,9 @@ namespace vclcanvas
 
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                               (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                               (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                        Color( static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                     // scale and render polygon, by interpolating between
                     // outer and inner polygon.
@@ -387,13 +387,13 @@ namespace vclcanvas
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                        aTempPoly[(sal_uInt16)p] = ::Point(
+                        aTempPoly[static_cast<sal_uInt16>(p)] = ::Point(
                             basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
                             basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
 
                     // close polygon explicitly
-                    aTempPoly[(sal_uInt16)p] = aTempPoly[0];
+                    aTempPoly[static_cast<sal_uInt16>(p)] = aTempPoly[0];
 
                     // TODO(P1): compare with vcl/source/gdi/outdev4.cxx,
                     // OutputDevice::ImplDrawComplexGradient(), there's a note
@@ -433,9 +433,9 @@ namespace vclcanvas
 
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                               (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                               (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                        Color( static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
 #if OSL_DEBUG_LEVEL > 0
                     if( i && !(i % 10) )
@@ -451,13 +451,13 @@ namespace vclcanvas
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                        aTempPoly[(sal_uInt16)p] = ::Point(
+                        aTempPoly[static_cast<sal_uInt16>(p)] = ::Point(
                             basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
                             basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
 
                     // close polygon explicitly
-                    aTempPoly[(sal_uInt16)p] = aTempPoly[0];
+                    aTempPoly[static_cast<sal_uInt16>(p)] = aTempPoly[0];
 
                     // swap inner and outer polygon
                     aTempPolyPoly.Replace( aTempPolyPoly.GetObject( 1 ), 0 );

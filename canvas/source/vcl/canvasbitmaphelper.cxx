@@ -248,10 +248,10 @@ namespace vclcanvas
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
-                                *pScan++ = (sal_uInt8)pWriteAccess->GetBestPaletteIndex(
+                                *pScan++ = static_cast<sal_uInt8>(pWriteAccess->GetBestPaletteIndex(
                                     BitmapColor( data[ nCurrPos   ],
                                                  data[ nCurrPos+1 ],
-                                                 data[ nCurrPos+2 ] ) );
+                                                 data[ nCurrPos+2 ] ) ));
 
                                 nCurrPos += 3;
 
@@ -341,10 +341,10 @@ namespace vclcanvas
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
-                                *pScan++ = (sal_uInt8)pWriteAccess->GetBestPaletteIndex(
+                                *pScan++ = static_cast<sal_uInt8>(pWriteAccess->GetBestPaletteIndex(
                                     BitmapColor( data[ nCurrPos   ],
                                                  data[ nCurrPos+1 ],
-                                                 data[ nCurrPos+2 ] ) );
+                                                 data[ nCurrPos+2 ] ) ));
 
                                 nCurrPos += 4; // skip three colors, _plus_ alpha
                             }

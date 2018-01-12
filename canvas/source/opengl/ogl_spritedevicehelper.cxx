@@ -56,8 +56,8 @@ static void initTransformation(const ::Size& rSize)
 {
     // use whole window
     glViewport( 0,0,
-                (GLsizei)rSize.Width(),
-                (GLsizei)rSize.Height() );
+                static_cast<GLsizei>(rSize.Width()),
+                static_cast<GLsizei>(rSize.Height()) );
 
     // model coordinate system is already in device pixel
     glMatrixMode(GL_MODELVIEW);

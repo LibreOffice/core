@@ -485,7 +485,7 @@ namespace cairocanvas
             if (rSysFontData.bFakeBold)
             {
                 double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetFontHeight() );
-                int total_steps = 1 * ((int) (bold_dx + 0.5));
+                int total_steps = 1 * static_cast<int>(bold_dx + 0.5);
 
                 // loop to draw the text for every half pixel of displacement
                 for (int nSteps = 0; nSteps < total_steps; nSteps++)
@@ -497,7 +497,7 @@ namespace cairocanvas
                     }
                     cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
                 }
-                SAL_INFO("canvas.cairo",":cairocanvas::TextLayout::draw(S,O,p,v,r): FAKEBOLD - dx:" << (int) bold_dx);
+                SAL_INFO("canvas.cairo",":cairocanvas::TextLayout::draw(S,O,p,v,r): FAKEBOLD - dx:" << static_cast<int>(bold_dx));
             }
 
             cairo_font_face_destroy(font_face);
