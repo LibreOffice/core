@@ -695,6 +695,9 @@ sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Pseudo>(const SwDoc& rDoc, OUString
 template<>
 sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Table>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
+    if (!rDoc.HasTableStyles())
+        return 0;
+
     const auto pAutoFormats = &rDoc.GetTableStyles();
     const sal_Int32 nCount = pAutoFormats->size();
     if (0 <= nIndex && nIndex < nCount)

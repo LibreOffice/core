@@ -323,7 +323,7 @@ class SW_DLLPUBLIC SwDoc final
     css::uno::Reference<css::container::XNameContainer> m_xTemplateToProjectCache;
 
     /// Table styles (autoformats that are applied with table changes).
-    std::unique_ptr<SwTableAutoFormatTable> mpTableStyles;
+    std::unique_ptr<SwTableAutoFormatTable> m_pTableStyles;
     /// Cell Styles not assigned to a Table Style
     std::unique_ptr<SwCellStyleTable> mpCellStyles;
 private:
@@ -1235,8 +1235,13 @@ public:
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );
 
     /// Return the available table styles.
-    SwTableAutoFormatTable& GetTableStyles() { return *mpTableStyles.get(); }
-    const SwTableAutoFormatTable& GetTableStyles() const { return *mpTableStyles.get(); }
+    SwTableAutoFormatTable& GetTableStyles();
+    const SwTableAutoFormatTable& GetTableStyles() const
+    {
+        return const_cast<SwDoc*>(this)->GetTableStyles();
+    }
+    /// Counts table styles without triggering lazy-load of them.
+    bool HasTableStyles() const { return m_pTableStyles != nullptr; }
     // Create a new table style. Tracked by Undo.
     SwTableAutoFormat* MakeTableStyle(const OUString& rName, bool bBroadcast = false);
     // Delete table style named rName. Tracked by undo.
