@@ -64,7 +64,7 @@ XMLTextListItemContext::XMLTextListItemContext(
         {
             sal_Int32 nTmp = rValue.toInt32();
             if( nTmp >= 0 && nTmp <= SHRT_MAX )
-                nStartValue = (sal_Int16)nTmp;
+                nStartValue = static_cast<sal_Int16>(nTmp);
         }
         else if ( nPrefix == XML_NAMESPACE_TEXT &&
                   IsXMLToken( aLocalName, XML_STYLE_OVERRIDE ) )

@@ -1300,7 +1300,7 @@ namespace xmloff
         sal_Int32 nItems = aItems.getLength();
         sal_Int32 nValues = aValues.getLength();
 
-        sal_Int16 nMaxLen = (sal_Int16)std::max(nItems, nValues);
+        sal_Int16 nMaxLen = static_cast<sal_Int16>(std::max(nItems, nValues));
 
         for (sal_Int16 i=0; i<nMaxLen; ++i )
         {

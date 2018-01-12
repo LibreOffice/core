@@ -246,7 +246,7 @@ void XMLFootnoteConfigurationImportContext::StartElement(
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertNumber(nTmp, sValue))
                 {
-                    nOffset = (sal_uInt16)nTmp;
+                    nOffset = static_cast<sal_uInt16>(nTmp);
                 }
                 break;
             }

@@ -117,7 +117,7 @@ void MultiPropertySetHelper::getValues(
 
     // re-alloc aValues (if necessary) and fill with values from XPropertySet
     sal_Int16 nSupportedPropertiesCount =
-        (sal_Int16)aPropertySequence.getLength();
+        static_cast<sal_Int16>(aPropertySequence.getLength());
     if ( aValues.getLength() != nSupportedPropertiesCount )
         aValues.realloc( nSupportedPropertiesCount );
     Any* pMutableArray = aValues.getArray();

@@ -1397,7 +1397,7 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
         const SvXMLStyleContext* pStyle = GetStyle(a);
         if (const SdXMLPresentationPageLayoutContext* pContext = dynamic_cast<const SdXMLPresentationPageLayoutContext*>(pStyle))
         {
-            xLayouts->insertByName(pStyle->GetName(), uno::makeAny((sal_Int32)pContext->GetTypeId()));
+            xLayouts->insertByName(pStyle->GetName(), uno::makeAny(static_cast<sal_Int32>(pContext->GetTypeId())));
         }
     }
 

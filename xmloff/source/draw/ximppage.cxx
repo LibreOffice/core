@@ -447,7 +447,7 @@ void SdXMLGenericPageContext::SetLayout()
                 OUString aPropName("Layout");
                 Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
                 if( xInfo.is() && xInfo->hasPropertyByName( aPropName ) )
-                    xPropSet->setPropertyValue(aPropName, uno::makeAny( (sal_Int16)nType ) );
+                    xPropSet->setPropertyValue(aPropName, uno::makeAny( static_cast<sal_Int16>(nType) ) );
             }
         }
     }

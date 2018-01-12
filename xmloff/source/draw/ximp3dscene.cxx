@@ -351,7 +351,7 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const css::uno::Reference
     // focalLength
     xPropSet->setPropertyValue("D3DSceneFocalLength", uno::Any(mnFocalLength));
     // shadowSlant
-    xPropSet->setPropertyValue("D3DSceneShadowSlant", uno::Any((sal_Int16)mnShadowSlant));
+    xPropSet->setPropertyValue("D3DSceneShadowSlant", uno::Any(static_cast<sal_Int16>(mnShadowSlant)));
     // shadeMode
     xPropSet->setPropertyValue("D3DSceneShadeMode", uno::Any(mxShadeMode));
     // ambientColor

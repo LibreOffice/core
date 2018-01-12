@@ -106,9 +106,9 @@ const SvXMLEnumMapEntry<TriState> aCheckStateMap[] =
 };
 const SvXMLEnumMapEntry<sal_Int16> aTextAlignMap[] =
 {
-    { XML_START,        (sal_uInt16)awt::TextAlign::LEFT },
-    { XML_CENTER,       (sal_uInt16)awt::TextAlign::CENTER },
-    { XML_END,          (sal_uInt16)awt::TextAlign::RIGHT },
+    { XML_START,        sal_uInt16(awt::TextAlign::LEFT) },
+    { XML_CENTER,       sal_uInt16(awt::TextAlign::CENTER) },
+    { XML_END,          sal_uInt16(awt::TextAlign::RIGHT) },
     { XML_JUSTIFY,      -1 },
     { XML_JUSTIFIED,    -1 },
     { XML_TOKEN_INVALID, 0 }

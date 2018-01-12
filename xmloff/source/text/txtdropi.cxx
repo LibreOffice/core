@@ -79,7 +79,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
         case XML_TOK_DROP_LINES:
             if (::sax::Converter::convertNumber( nTmp, rValue, 0, 255 ))
             {
-                aFormat.Lines = nTmp < 2 ? 0 : (sal_Int8)nTmp;
+                aFormat.Lines = nTmp < 2 ? 0 : static_cast<sal_Int8>(nTmp);
             }
             break;
 
@@ -91,7 +91,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
             else if (::sax::Converter::convertNumber( nTmp, rValue, 1, 255 ))
             {
                 bWholeWord = false;
-                aFormat.Count = (sal_Int8)nTmp;
+                aFormat.Count = static_cast<sal_Int8>(nTmp);
             }
             break;
 
@@ -99,7 +99,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         nTmp, rValue, 0 ))
             {
-                aFormat.Distance = (sal_uInt16)nTmp;
+                aFormat.Distance = static_cast<sal_uInt16>(nTmp);
             }
             break;
 

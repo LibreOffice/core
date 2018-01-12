@@ -47,7 +47,7 @@ bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, co
         bRet = rUnitConverter.convertMeasureToCore( nKerning, rStrImpValue );
     }
 
-    rValue <<= (sal_Int16)nKerning;
+    rValue <<= static_cast<sal_Int16>(nKerning);
 
     return bRet;
 }

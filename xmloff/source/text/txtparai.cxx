@@ -122,7 +122,7 @@ XMLCharContext::XMLCharContext(
                     if( nTmp > USHRT_MAX )
                         m_nCount = USHRT_MAX;
                     else
-                        m_nCount = (sal_uInt16)nTmp;
+                        m_nCount = static_cast<sal_uInt16>(nTmp);
                 }
             }
         }
@@ -1286,7 +1286,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
              && nTmp < GetImport().GetTextImport()->
                               GetChapterNumbering()->getCount() )
         {
-            rPropSet->setPropertyValue("Level", uno::makeAny((sal_Int16)(nTmp - 1)));
+            rPropSet->setPropertyValue("Level", uno::makeAny(static_cast<sal_Int16>(nTmp - 1)));
         }
         // else: value out of range -> ignore
     }
@@ -1833,7 +1833,7 @@ XMLParaContext::XMLParaContext(
                 {
                     if( nTmp > 127 )
                         nTmp = 127;
-                    nOutlineLevel = (sal_Int8)nTmp;
+                    nOutlineLevel = static_cast<sal_Int8>(nTmp);
                 }
                 // Lost outline numbering in master document (#i73509#)
                 mbOutlineLevelAttrFound = true;

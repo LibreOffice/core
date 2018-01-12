@@ -41,7 +41,7 @@ bool XMLConstantsPropertyHandler::importXML(
         nEnum, rStrImpValue, pMap );
 
     if( bRet )
-        rValue <<= (sal_Int16)nEnum;
+        rValue <<= static_cast<sal_Int16>(nEnum);
 
     return bRet;
 }

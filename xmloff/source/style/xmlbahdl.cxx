@@ -37,14 +37,14 @@ static void lcl_xmloff_setAny( Any& rValue, sal_Int32 nValue, sal_Int8 nBytes )
             nValue = SCHAR_MIN;
         else if( nValue > SCHAR_MAX )
             nValue = SCHAR_MAX;
-        rValue <<= (sal_Int8)nValue;
+        rValue <<= static_cast<sal_Int8>(nValue);
         break;
     case 2:
         if( nValue < SHRT_MIN )
             nValue = SHRT_MIN;
         else if( nValue > SHRT_MAX )
             nValue = SHRT_MAX;
-        rValue <<= (sal_Int16)nValue;
+        rValue <<= static_cast<sal_Int16>(nValue);
         break;
     case 4:
         rValue <<= nValue;
@@ -335,7 +335,7 @@ bool XMLDoublePercentPropHdl::importXML( const OUString& rStrImpValue, Any& rVal
     {
         sal_Int32 nValue = 0;
         bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
-        fValue = ((double)nValue) / 100.0;
+        fValue = static_cast<double>(nValue) / 100.0;
     }
     rValue <<= fValue;
 
@@ -352,7 +352,7 @@ bool XMLDoublePercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
         fValue *= 100.0;
         if( fValue > 0 ) fValue += 0.5; else    fValue -= 0.5;
 
-        sal_Int32 nValue = (sal_Int32)fValue;
+        sal_Int32 nValue = static_cast<sal_Int32>(fValue);
 
         OUStringBuffer aOut;
         ::sax::Converter::convertPercent( aOut, nValue );
@@ -762,7 +762,7 @@ bool XMLIsAutoColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue
     bool bValue;
     bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
     if( bRet && bValue )
-        rValue <<= (sal_Int32)-1;
+        rValue <<= sal_Int32(-1);
 
     return true;
 }

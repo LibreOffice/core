@@ -752,7 +752,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                 }
                 case XML_TOK_TEXTFIELD_NUMBERING_SEPARATOR:
                     cSeparationChar =
-                        (sal_Char)xAttrList->getValueByIndex(i).toChar();
+                        static_cast<sal_Char>(xAttrList->getValueByIndex(i).toChar());
                     break;
 
                 default:

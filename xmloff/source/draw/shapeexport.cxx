@@ -275,7 +275,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
 
-    if( (sal_Int32)aShapeInfoVector.size() <= nZIndex )
+    if( static_cast<sal_Int32>(aShapeInfoVector.size()) <= nZIndex )
     {
         OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): no shape info allocated for a given shape" );
         return;
@@ -644,7 +644,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
 
-    if( (sal_Int32)aShapeInfoVector.size() <= nZIndex )
+    if( static_cast<sal_Int32>(aShapeInfoVector.size()) <= nZIndex )
     {
         SAL_WARN( "xmloff", "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
         return;
@@ -1022,7 +1022,7 @@ void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShap
         if( maCurrentShapesIter == maShapesInfos.end() )
         {
             ImplXMLShapeExportInfoVector aNewInfoVector;
-            aNewInfoVector.resize( (ShapesInfos::size_type) xShapes->getCount() );
+            aNewInfoVector.resize( static_cast<ShapesInfos::size_type>(xShapes->getCount()) );
             maShapesInfos[ xShapes ] = aNewInfoVector;
 
             maCurrentShapesIter = maShapesInfos.find( xShapes );
@@ -1030,7 +1030,7 @@ void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShap
             SAL_WARN_IF( maCurrentShapesIter == maShapesInfos.end(), "xmloff", "XMLShapeExport::seekShapes(): insert into stl::map failed" );
         }
 
-        SAL_WARN_IF( (*maCurrentShapesIter).second.size() != (ShapesInfos::size_type)xShapes->getCount(), "xmloff", "XMLShapeExport::seekShapes(): XShapes size varied between calls" );
+        SAL_WARN_IF( (*maCurrentShapesIter).second.size() != static_cast<ShapesInfos::size_type>(xShapes->getCount()), "xmloff", "XMLShapeExport::seekShapes(): XShapes size varied between calls" );
 
     }
     else
@@ -3627,7 +3627,7 @@ void XMLShapeExport::export3DSceneAttributes( const css::uno::Reference< css::be
     aAny = xPropSet->getPropertyValue("D3DSceneShadowSlant");
     sal_Int16 nShadowSlant = 0;
     aAny >>= nShadowSlant;
-    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, OUString::number((sal_Int32)nShadowSlant));
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, OUString::number(static_cast<sal_Int32>(nShadowSlant)));
 
     // shadeMode
     aAny = xPropSet->getPropertyValue("D3DSceneShadeMode");
@@ -3825,7 +3825,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
         {
             bool bPosition = false;
             const uno::Sequence< beans::PropertyValue >& rPropSeq = rHandles[ i ];
-            for ( j = 0; j < (sal_uInt32)rPropSeq.getLength(); j++ )
+            for ( j = 0; j < static_cast<sal_uInt32>(rPropSeq.getLength()); j++ )
             {
                 const beans::PropertyValue& rPropVal = rPropSeq[ j ];
                 switch( EASGet( rPropVal.Name ) )
@@ -3990,7 +3990,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                 break;
                 case 1 :
                 {
-                    aSegment.Count = (sal_Int16)std::min( nCoords - 1, (sal_Int32)32767 );
+                    aSegment.Count = static_cast<sal_Int16>(std::min( nCoords - 1, sal_Int32(32767) ));
                     aSegment.Command = css::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
                 }
                 break;
@@ -4687,9 +4687,9 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aPathTextFrames;
                                         if ( rProp.Value >>= aPathTextFrames )
                                         {
-                                            if ( (sal_uInt16)aPathTextFrames.getLength() )
+                                            if ( static_cast<sal_uInt16>(aPathTextFrames.getLength()) )
                                             {
-                                                sal_uInt16 k, nElements = (sal_uInt16)aPathTextFrames.getLength();
+                                                sal_uInt16 k, nElements = static_cast<sal_uInt16>(aPathTextFrames.getLength());
                                                 for ( k = 0; k < nElements; k++ )
                                                 {
                                                     ExportParameter( aStrBuffer, aPathTextFrames[ k ].TopLeft.First );

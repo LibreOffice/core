@@ -76,7 +76,7 @@ namespace
 
     css::util::Date lcl_getDate( double _nValue )
     {
-        Date aToolsDate((sal_uInt32)_nValue);
+        Date aToolsDate(static_cast<sal_uInt32>(_nValue));
         css::util::Date aDate;
         ::utl::typeConvert(aToolsDate, aDate);
         return aDate;
@@ -114,7 +114,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                     append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                     append("\" into an integer!").getStr());
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
-                    aReturn <<= (sal_Int16)nValue;
+                    aReturn <<= static_cast<sal_Int16>(nValue);
                 else
                     aReturn <<= nValue;
                 break;
@@ -129,11 +129,11 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
 
             if (bEnumAsInt)
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
-                    aReturn <<= (sal_Int16)nEnumValue;
+                    aReturn <<= static_cast<sal_Int16>(nEnumValue);
                 else
-                    aReturn <<= (sal_Int32)nEnumValue;
+                    aReturn <<= static_cast<sal_Int32>(nEnumValue);
             else
-                aReturn = ::cppu::int2enum((sal_Int32)nEnumValue, _rExpectedType);
+                aReturn = ::cppu::int2enum(static_cast<sal_Int32>(nEnumValue), _rExpectedType);
         }
         break;
         case TypeClass_HYPER:
@@ -182,14 +182,14 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 {
                     case TYPE_DATE:
                     {
-                        OSL_ENSURE(((sal_uInt32)nValue) - nValue == 0,
+                        OSL_ENSURE((static_cast<sal_uInt32>(nValue)) - nValue == 0,
                             "PropertyConversion::convertString: a Date value with a fractional part?");
                         aReturn <<= lcl_getDate(nValue);
                     }
                     break;
                     case TYPE_TIME:
                     {
-                        OSL_ENSURE(((sal_uInt32)nValue) == 0,
+                        OSL_ENSURE((static_cast<sal_uInt32>(nValue)) == 0,
                             "PropertyConversion::convertString: a tools::Time value with more than a fractional part?");
                         aReturn <<= lcl_getTime(nValue);
                     }

@@ -282,11 +282,11 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
     for (size_t n = m_PropertiesList.size(); i < n; ++i)
     {
         XMLAutoStylePoolProperties *const pIS = m_PropertiesList[i].get();
-        if( nProperties > (sal_Int32)pIS->GetProperties().size() )
+        if( nProperties > static_cast<sal_Int32>(pIS->GetProperties().size()) )
         {
             continue;
         }
-        else if( nProperties < (sal_Int32)pIS->GetProperties().size() )
+        else if( nProperties < static_cast<sal_Int32>(pIS->GetProperties().size()) )
         {
             break;
         }
@@ -325,11 +325,11 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const ve
     for (size_t n = m_PropertiesList.size(); i < n; ++i)
     {
         XMLAutoStylePoolProperties *const pIS = m_PropertiesList[i].get();
-        if( nProperties > (sal_Int32)pIS->GetProperties().size() )
+        if( nProperties > static_cast<sal_Int32>(pIS->GetProperties().size()) )
         {
             continue;
         }
-        else if( nProperties < (sal_Int32)pIS->GetProperties().size() )
+        else if( nProperties < static_cast<sal_Int32>(pIS->GetProperties().size()) )
         {
             break;
         }

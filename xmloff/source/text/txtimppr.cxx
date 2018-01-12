@@ -210,7 +210,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 
         if( !pFontFamily )
         {
-            aAny <<= (sal_Int16)css::awt::FontFamily::DONTKNOW;
+            aAny <<= sal_Int16(css::awt::FontFamily::DONTKNOW);
 
     #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
@@ -223,7 +223,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 
         if( !pFontPitch )
         {
-            aAny <<= (sal_Int16)css::awt::FontPitch::DONTKNOW;
+            aAny <<= sal_Int16(css::awt::FontPitch::DONTKNOW);
     #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 3 );
@@ -235,7 +235,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 
         if( !pFontCharSet )
         {
-            aAny <<= (sal_Int16)osl_getThreadTextEncoding();
+            aAny <<= static_cast<sal_Int16>(osl_getThreadTextEncoding());
     #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 4 );
@@ -809,7 +809,7 @@ void XMLTextImportPropertyMapper::finished(
         if( nSizeTypeIndex != -1 )
         {
             XMLPropertyState aSizeTypeState( nSizeTypeIndex );
-            aSizeTypeState.maValue <<= (sal_Int16)( bHasAnyMinHeight
+            aSizeTypeState.maValue <<= static_cast<sal_Int16>( bHasAnyMinHeight
                                                         ? SizeType::MIN
                                                         : SizeType::FIX);
             rProperties.push_back( aSizeTypeState );
@@ -837,7 +837,7 @@ void XMLTextImportPropertyMapper::finished(
         if( nWidthTypeIndex != -1 )
         {
             XMLPropertyState aSizeTypeState( nWidthTypeIndex );
-            aSizeTypeState.maValue <<= (sal_Int16)( bHasAnyMinWidth
+            aSizeTypeState.maValue <<= static_cast<sal_Int16>( bHasAnyMinWidth
                                                         ? SizeType::MIN
                                                         : SizeType::FIX);
             rProperties.push_back( aSizeTypeState );

@@ -507,7 +507,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                     {
                         sal_Int32 nValue;
                         ::sax::Converter::convertPercent( nValue, rAttrValue );
-                        const double fValue = ((double)nValue) / 100.0;
+                        const double fValue = static_cast<double>(nValue) / 100.0;
                         pAttrList->AddAttribute( rAttrName, OUString::number( fValue ) );
                     }
                     break;

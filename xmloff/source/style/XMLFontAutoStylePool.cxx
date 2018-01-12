@@ -318,17 +318,17 @@ void XMLFontAutoStylePool::exportXML()
                                       XML_FONT_ADORNMENTS,
                                       rStyleName );
 
-        aAny <<= (sal_Int16)pEntry->GetFamily();
+        aAny <<= static_cast<sal_Int16>(pEntry->GetFamily());
         if( aFamilyHdl.exportXML( sTmp, aAny, rUnitConv  ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                       XML_FONT_FAMILY_GENERIC, sTmp );
 
-        aAny <<= (sal_Int16)pEntry->GetPitch();
+        aAny <<= static_cast<sal_Int16>(pEntry->GetPitch());
         if( aPitchHdl.exportXML( sTmp, aAny, rUnitConv  ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                       XML_FONT_PITCH, sTmp );
 
-        aAny <<= (sal_Int16)pEntry->GetEncoding();
+        aAny <<= static_cast<sal_Int16>(pEntry->GetEncoding());
         if( aEncHdl.exportXML( sTmp, aAny, rUnitConv  ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                       XML_FONT_CHARSET, sTmp );
