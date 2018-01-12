@@ -245,7 +245,7 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
 
 MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
-    if ( nPos >= (long) getItemCount() )
+    if ( nPos >= static_cast<long>(getItemCount()) )
         return CMD_NONE;
 
     ScopedVclPtrInstance<PopupMenu> aPopup;
@@ -802,7 +802,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, Button*, void)
 IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    bool bLockInterface = (bool) _bLockInterface;
+    bool bLockInterface = static_cast<bool>(_bLockInterface);
 
     if ( m_bStartProgress && !m_bHasProgress )
         m_aIdle.Start();
@@ -998,7 +998,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Timer *, void)
         }
 
         if ( m_pProgressBar->IsVisible() )
-            m_pProgressBar->SetValue( (sal_uInt16) m_nProgress );
+            m_pProgressBar->SetValue( static_cast<sal_uInt16>(m_nProgress) );
     }
 }
 
@@ -1159,7 +1159,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn, Button*, void)
 IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    bool bLockInterface = (bool) _bLockInterface;
+    bool bLockInterface = static_cast<bool>(_bLockInterface);
 
     if ( m_bStartProgress && !m_bHasProgress )
         m_aIdle.Start();
@@ -1312,7 +1312,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl, Timer *, void)
         }
 
         if ( m_pProgressBar->IsVisible() )
-            m_pProgressBar->SetValue( (sal_uInt16) m_nProgress );
+            m_pProgressBar->SetValue( static_cast<sal_uInt16>(m_nProgress) );
     }
 }
 

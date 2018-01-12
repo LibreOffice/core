@@ -1234,7 +1234,7 @@ sal_Bool ExtensionManager::synchronize(
         OUString sSynchronizingBundled(StrSyncRepository());
         sSynchronizingBundled = sSynchronizingBundled.replaceAll("%NAME", "bundled");
         dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
-        bModified |= (bool)getBundledRepository()->synchronize(xAbortChannel, xCmdEnv);
+        bModified |= static_cast<bool>(getBundledRepository()->synchronize(xAbortChannel, xCmdEnv));
         progressBundled.update("\n\n");
 
         //Always determine the active extension.

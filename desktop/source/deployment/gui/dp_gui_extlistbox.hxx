@@ -174,7 +174,7 @@ public:
     virtual Size GetOptimalSize() const override;
 
     TEntry_Impl const & GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
-    long            GetEntryCount() { return (long) m_vEntries.size(); }
+    long            GetEntryCount() { return static_cast<long>(m_vEntries.size()); }
     tools::Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }
     long            PointToPos( const Point& rPos );
