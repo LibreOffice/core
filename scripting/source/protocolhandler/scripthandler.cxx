@@ -186,10 +186,12 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                int argCount = 0;
                for ( int index = 0; index < lArgs.getLength(); index++ )
                {
-                   // Sometimes we get a propertyval with name = "Referer"
-                   // this is not an argument to be passed to script, so
-                   // ignore.
-                   if ( lArgs[ index ].Name != "Referer" ||
+                   // Sometimes we get a propertyval with name = "Referer" or "SynchronMode". These
+                   // are not actual arguments to be passed to script, but flags describing the
+                   // call, so ignore. Who thought that passing such "meta-arguments" mixed in with
+                   // real arguments was a good idea?
+                   if ( (lArgs[ index ].Name != "Referer" &&
+                         lArgs[ index ].Name != "SynchronMode") ||
                         lArgs[ index ].Name.isEmpty() ) //TODO:???
                    {
                        inArgs.realloc( ++argCount );
