@@ -244,7 +244,7 @@ namespace emfio
                     mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     break;
                 }
-                ScaleWinExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
+                ScaleWinExt( static_cast<double>(nXNum) / nXDenom, static_cast<double>(nYNum) / nYDenom );
             }
             break;
 
@@ -269,7 +269,7 @@ namespace emfio
                     mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     break;
                 }
-                ScaleDevExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
+                ScaleDevExt( static_cast<double>(nXNum) / nXDenom, static_cast<double>(nYNum) / nYDenom );
             }
             break;
 
@@ -796,7 +796,7 @@ namespace emfio
                         nCount++;
                     pBmp.reset();
                 }
-                Color aColor( (sal_uInt8)( nRed / nCount ), (sal_uInt8)( nGreen / nCount ), (sal_uInt8)( nBlue / nCount ) );
+                Color aColor( static_cast<sal_uInt8>( nRed / nCount ), static_cast<sal_uInt8>( nGreen / nCount ), static_cast<sal_uInt8>( nBlue / nCount ) );
                 CreateObject(o3tl::make_unique<WinMtfFillStyle>( aColor, false ));
             }
             break;
@@ -1107,7 +1107,7 @@ namespace emfio
                                 }
                             }
                         }
-                        else if ( (nNewMagic == static_cast< sal_uInt32 >(0x43464D57)) && (nLen >= 34) && ( (sal_Int32)(nLen + 10) <= (sal_Int32)(mnRecSize * 2) ))
+                        else if ( (nNewMagic == static_cast< sal_uInt32 >(0x43464D57)) && (nLen >= 34) && ( static_cast<sal_Int32>(nLen + 10) <= static_cast<sal_Int32>(mnRecSize * 2) ))
                         {
                             sal_uInt32 nComType = 0, nVersion = 0, nFlags = 0, nComRecCount = 0,
                                        nCurRecSize = 0, nRemainingSize = 0, nEMFTotalSize = 0;
@@ -1252,8 +1252,8 @@ namespace emfio
             {
                 // #n417818#: If we have an external header then overwrite the bounds!
                 tools::Rectangle aExtRect(0, 0,
-                    (double)mpExternalHeader->xExt * 567 * mnUnitsPerInch / 1440000,
-                    (double)mpExternalHeader->yExt * 567 * mnUnitsPerInch / 1440000);
+                    static_cast<double>(mpExternalHeader->xExt) * 567 * mnUnitsPerInch / 1440000,
+                    static_cast<double>(mpExternalHeader->yExt) * 567 * mnUnitsPerInch / 1440000);
                 aPlaceableBound = aExtRect;
 
                 SAL_INFO("vcl.wmf", "External header size "
