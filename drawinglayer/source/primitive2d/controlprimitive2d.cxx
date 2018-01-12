@@ -177,7 +177,7 @@ namespace drawinglayer
                                     aScreenZoom *= fZoomScale;
 
                                     // set zoom at control view for text scaling
-                                    xControlView->setZoom((float)aScreenZoom.getX(), (float)aScreenZoom.getY());
+                                    xControlView->setZoom(static_cast<float>(aScreenZoom.getX()), static_cast<float>(aScreenZoom.getY()));
                                 }
                             }
 

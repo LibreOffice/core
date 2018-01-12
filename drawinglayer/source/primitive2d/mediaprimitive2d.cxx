@@ -58,7 +58,7 @@ namespace drawinglayer
             if(getDiscreteBorder())
             {
                 const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
-                    basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
+                    basegfx::B2DVector(static_cast<double>(getDiscreteBorder()), static_cast<double>(getDiscreteBorder())));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
 
                 basegfx::B2DRange aSourceRange(0.0, 0.0, 1.0, 1.0);
@@ -130,7 +130,7 @@ namespace drawinglayer
             if(getDiscreteBorder())
             {
                 const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
-                    basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
+                    basegfx::B2DVector(static_cast<double>(getDiscreteBorder()), static_cast<double>(getDiscreteBorder())));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
 
                 aRetval.grow(-0.5 * fDiscreteSize);

@@ -801,7 +801,7 @@ namespace drawinglayer
                         // create hatch
                         const basegfx::B2DVector aDiscreteDistance(maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
                         const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
-                        const sal_uInt16 nAngle10((sal_uInt16)basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800));
+                        const sal_uInt16 nAngle10(static_cast<sal_uInt16>(basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800)));
                         ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
 
                         // draw hatch using VCL
@@ -828,8 +828,8 @@ namespace drawinglayer
                     // create rectangle for fill
                     const basegfx::B2DRange& aViewport(getViewInformation2D().getDiscreteViewport());
                     const ::tools::Rectangle aRectangle(
-                        (sal_Int32)floor(aViewport.getMinX()), (sal_Int32)floor(aViewport.getMinY()),
-                        (sal_Int32)ceil(aViewport.getMaxX()), (sal_Int32)ceil(aViewport.getMaxY()));
+                        static_cast<sal_Int32>(floor(aViewport.getMinX())), static_cast<sal_Int32>(floor(aViewport.getMinY())),
+                        static_cast<sal_Int32>(ceil(aViewport.getMaxX())), static_cast<sal_Int32>(ceil(aViewport.getMaxY())));
                     mpOutputDevice->DrawRect(aRectangle);
 
                     // restore AA setting

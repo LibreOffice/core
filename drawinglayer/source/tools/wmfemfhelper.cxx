@@ -686,7 +686,7 @@ namespace wmfemfhelper
         if(nStartIntens != 100)
         {
             const basegfx::BColor aBlack;
-            aStart = interpolate(aBlack, aStart, (double)nStartIntens * 0.01);
+            aStart = interpolate(aBlack, aStart, static_cast<double>(nStartIntens) * 0.01);
         }
 
         const Color aEndColor(rGradient.GetEndColor());
@@ -696,7 +696,7 @@ namespace wmfemfhelper
         if(nEndIntens != 100)
         {
             const basegfx::BColor aBlack;
-            aEnd = interpolate(aBlack, aEnd, (double)nEndIntens * 0.01);
+            aEnd = interpolate(aBlack, aEnd, static_cast<double>(nEndIntens) * 0.01);
         }
 
         drawinglayer::attribute::GradientStyle aGradientStyle(drawinglayer::attribute::GradientStyle::Rect);
@@ -737,10 +737,10 @@ namespace wmfemfhelper
 
         return drawinglayer::attribute::FillGradientAttribute(
             aGradientStyle,
-            (double)rGradient.GetBorder() * 0.01,
-            (double)rGradient.GetOfsX() * 0.01,
-            (double)rGradient.GetOfsY() * 0.01,
-            (double)rGradient.GetAngle() * F_PI1800,
+            static_cast<double>(rGradient.GetBorder()) * 0.01,
+            static_cast<double>(rGradient.GetOfsX()) * 0.01,
+            static_cast<double>(rGradient.GetOfsY()) * 0.01,
+            static_cast<double>(rGradient.GetAngle()) * F_PI1800,
             aStart,
             aEnd,
             rGradient.GetSteps());
@@ -774,8 +774,8 @@ namespace wmfemfhelper
 
         return drawinglayer::attribute::FillHatchAttribute(
             aHatchStyle,
-            (double)rHatch.GetDistance(),
-            (double)rHatch.GetAngle() * F_PI1800,
+            static_cast<double>(rHatch.GetDistance()),
+            static_cast<double>(rHatch.GetAngle()) * F_PI1800,
             rHatch.GetColor().getBColor(),
             3, // same default as VCL, a minimum of three discrete units (pixels) offset
             false);
@@ -1310,7 +1310,7 @@ namespace wmfemfhelper
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
     {
-        const double fLineWidth(fabs((double)rAction.GetWidth()));
+        const double fLineWidth(fabs(static_cast<double>(rAction.GetWidth())));
 
         if(fLineWidth > 0.0)
         {
@@ -1848,7 +1848,7 @@ namespace wmfemfhelper
 
                             for(sal_uInt32 a(0); a < nTextLength; a++)
                             {
-                                aDXArray.push_back((double)(*(pDXArray + a)));
+                                aDXArray.push_back(static_cast<double>(*(pDXArray + a)));
                             }
                         }
 

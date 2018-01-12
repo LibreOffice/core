@@ -902,8 +902,8 @@ namespace drawinglayer
                                 // still need to fill in the location (is a class Rectangle)
                                 const basegfx::B2DRange aRangeLogic(rControlPrimitive.getB2DRange(getViewInformation2D()));
                                 const ::tools::Rectangle aRectLogic(
-                                    (sal_Int32)floor(aRangeLogic.getMinX()), (sal_Int32)floor(aRangeLogic.getMinY()),
-                                    (sal_Int32)ceil(aRangeLogic.getMaxX()), (sal_Int32)ceil(aRangeLogic.getMaxY()));
+                                    static_cast<sal_Int32>(floor(aRangeLogic.getMinX())), static_cast<sal_Int32>(floor(aRangeLogic.getMinY())),
+                                    static_cast<sal_Int32>(ceil(aRangeLogic.getMaxX())), static_cast<sal_Int32>(ceil(aRangeLogic.getMaxY())));
                                 pPDFControl->Location = aRectLogic;
 
                                 Size aFontSize(pPDFControl->TextFont.GetFontSize());
@@ -1017,8 +1017,8 @@ namespace drawinglayer
                         // emulate data handling from ImpEditEngine::Paint
                         const basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
                         const ::tools::Rectangle aRectLogic(
-                            (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
-                            (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
+                            static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
+                            static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
                         aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic);
                         aBookmark.aBookmark = aURL;
@@ -1861,7 +1861,7 @@ namespace drawinglayer
                                 }
 
                                 // set line and fill color
-                                const sal_uInt16 nTransPercentVcl((sal_uInt16)basegfx::fround(rUniTransparenceCandidate.getTransparence() * 100.0));
+                                const sal_uInt16 nTransPercentVcl(static_cast<sal_uInt16>(basegfx::fround(rUniTransparenceCandidate.getTransparence() * 100.0)));
                                 mpOutputDevice->SetFillColor(Color(aPolygonColor));
                                 mpOutputDevice->SetLineColor();
 
@@ -1900,7 +1900,7 @@ namespace drawinglayer
 
                                 // create uniform VCL gradient for uniform transparency
                                 Gradient aVCLGradient;
-                                const sal_uInt8 nTransPercentVcl((sal_uInt8)basegfx::fround(rUniTransparenceCandidate.getTransparence() * 255.0));
+                                const sal_uInt8 nTransPercentVcl(static_cast<sal_uInt8>(basegfx::fround(rUniTransparenceCandidate.getTransparence() * 255.0)));
                                 const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
 
                                 aVCLGradient.SetStyle(GradientStyle::Linear);
@@ -1984,8 +1984,8 @@ namespace drawinglayer
                             basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
                             aViewRange.transform(maCurrentTransformation);
                             const ::tools::Rectangle aRectLogic(
-                                (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
-                                (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
+                                static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
+                                static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
                             const ::tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
                             Size aSizePixel(aRectPixel.GetSize());
                             const Point aEmptyPoint;
@@ -1997,9 +1997,9 @@ namespace drawinglayer
                             if(nViewVisibleArea > nMaxQuadratPixels)
                             {
                                 // reduce render size
-                                fReduceFactor = sqrt((double)nMaxQuadratPixels / (double)nViewVisibleArea);
-                                aSizePixel = Size(basegfx::fround((double)aSizePixel.getWidth() * fReduceFactor),
-                                    basegfx::fround((double)aSizePixel.getHeight() * fReduceFactor));
+                                fReduceFactor = sqrt(double(nMaxQuadratPixels) / static_cast<double>(nViewVisibleArea));
+                                aSizePixel = Size(basegfx::fround(static_cast<double>(aSizePixel.getWidth()) * fReduceFactor),
+                                    basegfx::fround(static_cast<double>(aSizePixel.getHeight()) * fReduceFactor));
                             }
 
                             if(aBufferDevice->SetOutputSizePixel(aSizePixel))
@@ -2016,8 +2016,8 @@ namespace drawinglayer
                                 basegfx::B2DHomMatrix aViewTransform(aBufferDevice->GetViewTransformation());
                                 const Size aDPIOld(mpOutputDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
                                 const Size aDPINew(aBufferDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
-                                const double fDPIXChange((double)aDPIOld.getWidth() / (double)aDPINew.getWidth());
-                                const double fDPIYChange((double)aDPIOld.getHeight() / (double)aDPINew.getHeight());
+                                const double fDPIXChange(static_cast<double>(aDPIOld.getWidth()) / static_cast<double>(aDPINew.getWidth()));
+                                const double fDPIYChange(static_cast<double>(aDPIOld.getHeight()) / static_cast<double>(aDPINew.getHeight()));
 
                                 if(!basegfx::fTools::equal(fDPIXChange, 1.0) || !basegfx::fTools::equal(fDPIYChange, 1.0))
                                 {

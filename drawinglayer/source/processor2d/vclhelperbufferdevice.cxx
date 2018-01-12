@@ -259,8 +259,8 @@ namespace drawinglayer
         basegfx::B2DRange aRangePixel(rRange);
         aRangePixel.transform(mrOutDev.GetViewTransformation());
         const ::tools::Rectangle aRectPixel(
-            (sal_Int32)floor(aRangePixel.getMinX()), (sal_Int32)floor(aRangePixel.getMinY()),
-            (sal_Int32)ceil(aRangePixel.getMaxX()), (sal_Int32)ceil(aRangePixel.getMaxY()));
+            static_cast<sal_Int32>(floor(aRangePixel.getMinX())), static_cast<sal_Int32>(floor(aRangePixel.getMinY())),
+            static_cast<sal_Int32>(ceil(aRangePixel.getMaxX())), static_cast<sal_Int32>(ceil(aRangePixel.getMaxY())));
         const Point aEmptyPoint;
         maDestPixel = ::tools::Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
         maDestPixel.Intersection(aRectPixel);
@@ -396,7 +396,7 @@ namespace drawinglayer
             }
             else if(0.0 != fTrans)
             {
-                sal_uInt8 nMaskValue((sal_uInt8)basegfx::fround(fTrans * 255.0));
+                sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
                 const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
                 mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
             }

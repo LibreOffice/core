@@ -143,7 +143,7 @@ namespace drawinglayer
                     for (sal_uInt32 a(0); a < nCount; a++)
                     {
                         const sal_uInt32 aStepTime(generateStepTime(a));
-                        const animation::AnimationEntryFixed aTime((double)aStepTime, (double)a / (double)nCount);
+                        const animation::AnimationEntryFixed aTime(static_cast<double>(aStepTime), static_cast<double>(a) / static_cast<double>(nCount));
 
                         aAnimationLoop.append(aTime);
                     }
@@ -366,7 +366,7 @@ namespace drawinglayer
                 static const sal_uInt64 nAllowedSize(64 * 256 * 256);
                 static const sal_uInt64 nHugeSize(10000000);
                 const Size aTarget(maAnimation.GetDisplaySizePixel());
-                const sal_uInt64 nUsedSize((sal_uInt64)maAnimation.Count() * aTarget.Width() * aTarget.Height());
+                const sal_uInt64 nUsedSize(static_cast<sal_uInt64>(maAnimation.Count()) * aTarget.Width() * aTarget.Height());
 
                 if (nUsedSize < nAllowedSize)
                 {
@@ -407,7 +407,7 @@ namespace drawinglayer
                 Primitive2DReference aRetval;
                 const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
                 const sal_uInt32 nLen(maAnimation.Count());
-                sal_uInt32 nIndex(basegfx::fround(fState * (double)nLen));
+                sal_uInt32 nIndex(basegfx::fround(fState * static_cast<double>(nLen)));
 
                 // nIndex is the requested frame - it is in range [0..nLen[
                 // create frame representation in VirtualDevices

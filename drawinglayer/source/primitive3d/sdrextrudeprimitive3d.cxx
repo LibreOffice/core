@@ -62,7 +62,7 @@ namespace drawinglayer
                     const double fFrontArea(basegfx::utils::getArea(aFirstPolygon));
                     const double fSqrtFrontArea(sqrt(fFrontArea));
                     double fRelativeTextureWidth = basegfx::fTools::equalZero(fSqrtFrontArea) ? 1.0 : fFrontLength / fSqrtFrontArea;
-                    fRelativeTextureWidth = (double)((sal_uInt32)(fRelativeTextureWidth - 0.5));
+                    fRelativeTextureWidth = static_cast<double>(static_cast<sal_uInt32>(fRelativeTextureWidth - 0.5));
 
                     if(fRelativeTextureWidth < 1.0)
                     {

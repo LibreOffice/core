@@ -72,7 +72,7 @@ namespace drawinglayer
                         basegfx::B3DPoint aLastLeft(0.0, 1.0, 0.0);
                         basegfx::B3DPoint aLastRight(1.0, 1.0, 0.0);
                         basegfx::B3DHomMatrix aRot;
-                        aRot.rotate(F_2PI / (double)m_nLineTubeSegments, 0.0, 0.0);
+                        aRot.rotate(F_2PI / static_cast<double>(m_nLineTubeSegments), 0.0, 0.0);
                         m_aLineTubeList.resize(m_nLineTubeSegments);
 
                         for(sal_uInt32 a = 0; a < m_nLineTubeSegments; ++a)
@@ -154,7 +154,7 @@ namespace drawinglayer
                         const basegfx::B3DPoint aNull(0.0, 0.0, 0.0);
                         basegfx::B3DPoint aLast(0.0, 1.0, 0.0);
                         basegfx::B3DHomMatrix aRot;
-                        aRot.rotate(F_2PI / (double)m_nLineCapSegments, 0.0, 0.0);
+                        aRot.rotate(F_2PI / static_cast<double>(m_nLineCapSegments), 0.0, 0.0);
                         m_aLineCapList.resize(m_nLineCapSegments);
 
                         for(sal_uInt32 a = 0; a < m_nLineCapSegments; ++a)
@@ -309,7 +309,7 @@ namespace drawinglayer
                     if(basegfx::B2DLineJoin::Round == aLineJoin)
                     {
                         // calculate new horizontal segments
-                        const sal_uInt32 nHorSeg(basegfx::fround((fAngle / F_2PI) * (double)nSegments));
+                        const sal_uInt32 nHorSeg(basegfx::fround((fAngle / F_2PI) * static_cast<double>(nSegments)));
 
                         if(nHorSeg)
                         {
@@ -345,7 +345,7 @@ namespace drawinglayer
                             }
                         }
 
-                        const double fInc(F_PI / (double)nVerSeg);
+                        const double fInc(F_PI / static_cast<double>(nVerSeg));
                         const double fSin(sin(-fAngle));
                         const double fCos(cos(-fAngle));
                         const bool bMiter(basegfx::B2DLineJoin::Miter == aLineJoin);

@@ -163,7 +163,7 @@ namespace drawinglayer
 
                             if(basegfx::fTools::more(fCosFac2, 0.0))
                             {
-                                fCosFac2 = pow(fCosFac2, (double)nSpecularIntensity);
+                                fCosFac2 = pow(fCosFac2, static_cast<double>(nSpecularIntensity));
                                 aRetval += (rSpecular * fCosFac2);
                             }
                         }
