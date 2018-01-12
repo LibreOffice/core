@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_acef19af",
+        "filename": "sw/qa/uitest/writer_tests/tdf108124.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:19:02Z",
+      "side": 1,
+      "message": "Way too many empty lines ;)",
+      "revId": "0d3903ffcce38a93ef7b211e7c10d3026e63c86c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
