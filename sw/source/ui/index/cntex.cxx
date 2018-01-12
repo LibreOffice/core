@@ -221,7 +221,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     xAcc->replaceByIndex(i, aAny);
                 }
             }
-            lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LEVEL, (sal_Int16)rDesc.GetLevel());
+            lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LEVEL, static_cast<sal_Int16>(rDesc.GetLevel()));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_MARKS,           bool(nContentOptions & SwTOXElement::Mark        ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OUTLINE,         bool(nContentOptions & SwTOXElement::OutlineLevel));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_EMBEDDED_OBJECTS,bool(nContentOptions & SwTOXElement::Ole            ));
@@ -345,7 +345,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                             SwTwips nTempPos = aToken.nTabStopPosition >= 0 ?
                                                             aToken.nTabStopPosition : 0;
                             nTempPos = convertTwipToMm100(nTempPos);
-                            pPropValArr[4].Value <<= (sal_Int32)nTempPos;
+                            pPropValArr[4].Value <<= static_cast<sal_Int32>(nTempPos);
                         }
                         else if(TOKEN_TEXT == aToken.eTokenType)
                         {

@@ -179,11 +179,11 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
         if(!IsRefresh() && sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
             OUString sVal = sUserData.getToken(1, ';');
-            sal_uInt16 nVal = (sal_uInt16)sVal.toInt32();
+            sal_uInt16 nVal = static_cast<sal_uInt16>(sVal.toInt32());
             if( USHRT_MAX != nVal )
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
-                    if(nVal == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i)))
+                    if(nVal == static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i))))
                     {
                         m_pTypeLB->SelectEntryPos(i);
                         break;
@@ -245,7 +245,7 @@ IMPL_LINK( SwFieldVarPage, SubTypeListBoxHdl, ListBox&, rBox, void )
 
 void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
 {
-    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
     sal_Int32 nSelPos = m_pSelectionLB->GetSelectedEntryPos();
     size_t nSelData = SIZE_MAX;
 
@@ -569,7 +569,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
 
     if(m_pSelectionLB->IsCallAddSelection())
     {
-        nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+        nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
         switch (nTypeId)
         {
@@ -606,7 +606,7 @@ void SwFieldVarPage::UpdateSubType()
     m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
 
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
     std::vector<OUString> aList;
     GetFieldMgr().GetSubTypes(nTypeId, aList);
     const size_t nCount = aList.size();
@@ -834,7 +834,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
 {
     OUString sValue(m_pValueED->GetText());
     bool bHasValue = !sValue.isEmpty();
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
     bool bInsert = false, bApply = false, bDelete = false;
 
     OUString sName( m_pNameED->GetText() );
@@ -955,7 +955,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
 
 IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
 {
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     const sal_uInt16 nCurId = pBox->GetCurItemId();
 
@@ -1007,7 +1007,7 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
 
         sal_uLong nFormat = m_pFormatLB->GetSelectedEntryPos();
         if (nFormat != LISTBOX_ENTRY_NOTFOUND)
-            nFormat = reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData((sal_Int32)nFormat));
+            nFormat = reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(static_cast<sal_Int32>(nFormat)));
 
         if (pType)  // change
         {
@@ -1115,14 +1115,14 @@ IMPL_LINK_NOARG(SwFieldVarPage, SeparatorHdl, Edit&, void)
 
 bool SwFieldVarPage::FillItemSet(SfxItemSet* )
 {
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     OUString aVal(m_pValueED->GetText());
     OUString aName(m_pNameED->GetText());
 
     const sal_Int32 nSubPos = m_pSelectionLB->GetSelectedEntryPos();
     sal_uInt16 nSubType = (nSubPos == LISTBOX_ENTRY_NOTFOUND) ? 0 :
-        (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSubPos));
+        static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSubPos)));
 
     sal_uInt32 nFormat;
 
@@ -1305,7 +1305,7 @@ void SwFieldVarPage::FillUserData()
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData( nTypeSel ));
+        nTypeSel = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData( nTypeSel )));
     sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }

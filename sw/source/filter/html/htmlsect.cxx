@@ -567,7 +567,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             aDir = rOption.GetString();
             break;
         case HtmlOptionId::COLS:
-            nCols = (sal_uInt16)rOption.GetNumber();
+            nCols = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WIDTH:
             nWidth = rOption.GetNumber();
@@ -576,7 +576,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
                 nWidth = 100;
             break;
         case HtmlOptionId::GUTTER:
-            nGutter = (sal_uInt16)rOption.GetNumber();
+            nGutter = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         default: break;
         }
@@ -600,7 +600,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
                                           aItemSet, aPropInfo, &aLang, &aDir );
 
     // Calculate width.
-    sal_uInt8 nPrcWidth = bPrcWidth ? (sal_uInt8)nWidth : 0;
+    sal_uInt8 nPrcWidth = bPrcWidth ? static_cast<sal_uInt8>(nWidth) : 0;
     SwTwips nTwipWidth = 0;
     if( !bPrcWidth && nWidth && Application::GetDefaultDevice() )
     {
@@ -695,9 +695,9 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         if( nGutter && Application::GetDefaultDevice() )
         {
-            nGutter = (sal_uInt16)Application::GetDefaultDevice()
+            nGutter = static_cast<sal_uInt16>(Application::GetDefaultDevice()
                              ->PixelToLogic( Size(nGutter, 0),
-                                             MapMode(MapUnit::MapTwip) ).Width();
+                                             MapMode(MapUnit::MapTwip) ).Width());
         }
 
         SwFormatCol aFormatCol;

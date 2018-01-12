@@ -492,7 +492,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         aFileName = pTemplateItem->GetValue();
                         const SfxInt32Item* pFlagsItem = rReq.GetArg<SfxInt32Item>(SID_TEMPLATE_LOAD);
                         if ( pFlagsItem )
-                            nFlags = static_cast<SfxTemplateFlags>((sal_uInt16) pFlagsItem->GetValue());
+                            nFlags = static_cast<SfxTemplateFlags>(static_cast<sal_uInt16>(pFlagsItem->GetValue()));
                     }
                 }
 

@@ -270,7 +270,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             rWrt.Strm().WriteOString( sOut );
 
         if( rWrt.m_bCfgOutStyles )
-            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (sal_uInt8)i );
+            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), static_cast<sal_uInt8>(i) );
 
         rWrt.Strm().WriteChar( '>' );
 

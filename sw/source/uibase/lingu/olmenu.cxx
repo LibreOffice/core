@@ -174,7 +174,7 @@ void SwSpellPopup::fillLangPopupMenu(
         {
             for (sal_Int32 i = 0; i < rLocales.getLength(); ++i)
             {
-                if (aLangItems.size() == (size_t)nMaxCount)
+                if (aLangItems.size() == size_t(nMaxCount))
                     break;
                 const lang::Locale& rLocale = rLocales[i];
                 if (lcl_checkScriptType( nScriptType, SvtLanguageTable::GetLanguageType( rLocale.Language )))

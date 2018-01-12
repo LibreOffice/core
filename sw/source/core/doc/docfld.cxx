@@ -582,7 +582,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
     SwDBData aNewDBData;
     aNewDBData.sDataSource = rNewName.getToken(0, DB_DELIM);
     aNewDBData.sCommand = rNewName.getToken(1, DB_DELIM);
-    aNewDBData.nCommandType = (short)rNewName.getToken(2, DB_DELIM).toInt32();
+    aNewDBData.nCommandType = static_cast<short>(rNewName.getToken(2, DB_DELIM).toInt32());
 
     SwSectionFormats& rArr = GetSections();
     for (auto n = rArr.size(); n; )

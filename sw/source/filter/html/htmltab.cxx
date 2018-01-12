@@ -929,7 +929,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
 
     const Color& rBorderColor = pOptions->aBorderColor;
 
-    long nBorderOpt = (long)pOptions->nBorder;
+    long nBorderOpt = static_cast<long>(pOptions->nBorder);
     long nPWidth = nBorderOpt==USHRT_MAX ? NETSCAPE_DFLT_BORDER
                                          : nBorderOpt;
     long nPHeight = nBorderOpt==USHRT_MAX ? 0 : nBorderOpt;
@@ -938,7 +938,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     // nBorder tells the width of the border as it's used in the width calculation of NetScape
     // If pOption->nBorder == USHRT_MAX, there wasn't a BORDER option given
     // Nonetheless, a 1 pixel wide border will be used for width calculation
-    m_nBorder = (sal_uInt16)nPWidth;
+    m_nBorder = static_cast<sal_uInt16>(nPWidth);
     if( nBorderOpt==USHRT_MAX )
         nPWidth = 0;
 
@@ -997,8 +997,8 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     nPWidth = pOptions->nHSpace;
     nPHeight = pOptions->nVSpace;
     SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-    m_nHSpace = (sal_uInt16)nPWidth;
-    m_nVSpace = (sal_uInt16)nPHeight;
+    m_nHSpace = static_cast<sal_uInt16>(nPWidth);
+    m_nVSpace = static_cast<sal_uInt16>(nPHeight);
 
     m_bColSpec = false;
 
@@ -1313,11 +1313,11 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         pFrameFormat = pBox->ClaimFrameFormat();
 
         // calculate width of the box
-        SwTwips nFrameWidth = (SwTwips)m_xLayoutInfo->GetColumn(nCol)
-                                                ->GetRelColWidth();
+        SwTwips nFrameWidth = static_cast<SwTwips>(m_xLayoutInfo->GetColumn(nCol)
+                                                ->GetRelColWidth());
         for( sal_uInt16 i=1; i<nColSpan; i++ )
-            nFrameWidth += (SwTwips)m_xLayoutInfo->GetColumn(nCol+i)
-                                             ->GetRelColWidth();
+            nFrameWidth += static_cast<SwTwips>(m_xLayoutInfo->GetColumn(nCol+i)
+                                             ->GetRelColWidth());
 
         // Only set the border on edit boxes.
         // On setting the upper and lower border, keep in mind if
@@ -1963,10 +1963,10 @@ void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
                             bool bHasNumFormat, sal_uInt32 nNumFormat,
                             bool bHasValue, double nValue, bool bNoWrap )
 {
-    if( !nRowSpan || (sal_uInt32)m_nCurrentRow + nRowSpan > USHRT_MAX )
+    if( !nRowSpan || static_cast<sal_uInt32>(m_nCurrentRow) + nRowSpan > USHRT_MAX )
         nRowSpan = 1;
 
-    if( !nColSpan || (sal_uInt32)m_nCurrentColumn + nColSpan > USHRT_MAX )
+    if( !nColSpan || static_cast<sal_uInt32>(m_nCurrentColumn) + nColSpan > USHRT_MAX )
         nColSpan = 1;
 
     sal_uInt16 nColsReq = m_nCurrentColumn + nColSpan;
@@ -2046,7 +2046,7 @@ void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
     // Only set width on the first cell!
     if( nCellWidth )
     {
-        sal_uInt16 nTmp = bRelWidth ? nCellWidth : (sal_uInt16)aTwipSz.Width();
+        sal_uInt16 nTmp = bRelWidth ? nCellWidth : static_cast<sal_uInt16>(aTwipSz.Width());
         GetCell( m_nCurrentRow, m_nCurrentColumn ).SetWidth( nTmp, bRelWidth );
     }
 
@@ -2180,7 +2180,7 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidt
     for( i=m_nCurrentColumn; i<nColsReq; i++ )
     {
         HTMLTableColumn& rCol = m_aColumns[i];
-        sal_uInt16 nTmp = bRelWidth ? nColWidth : (sal_uInt16)aTwipSz.Width();
+        sal_uInt16 nTmp = bRelWidth ? nColWidth : static_cast<sal_uInt16>(aTwipSz.Width());
         rCol.SetWidth( nTmp, bRelWidth );
         rCol.SetAdjust( eAdjust );
         rCol.SetVertOri( eVertOrient );
@@ -2395,7 +2395,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         {
             pFrameFormat->LockModify();
             SwFormatFrameSize aFrameSize( pFrameFormat->GetFrameSize() );
-            aFrameSize.SetWidthPercent( (sal_uInt8)m_nWidth );
+            aFrameSize.SetWidthPercent( static_cast<sal_uInt8>(m_nWidth) );
             pFrameFormat->SetFormatAttr( aFrameSize );
             pFrameFormat->UnlockModify();
         }
@@ -2528,7 +2528,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             sal_uInt32 nMin = m_xLayoutInfo->GetMin();
             if( nMin > USHRT_MAX )
                 nMin = USHRT_MAX;
-            SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMin, MINLAY );
+            SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, static_cast<SwTwips>(nMin), MINLAY );
             aFlyFrameSize.SetWidthPercent( 100 );
             m_pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
             bIsInFlyFrame = false;
@@ -2544,7 +2544,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
                 sal_uInt32 nMax = m_xLayoutInfo->GetMax();
                 if( nMax > USHRT_MAX )
                     nMax = USHRT_MAX;
-                SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMax, MINLAY );
+                SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, static_cast<SwTwips>(nMax), MINLAY );
                 m_pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
                 bIsInFlyFrame = false;
             }
@@ -2571,7 +2571,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             SdrObject *pObj = (*m_pResizeDrawObjects)[i];
             sal_uInt16 nRow = (*m_pDrawObjectPrcWidths)[3*i];
             sal_uInt16 nCol = (*m_pDrawObjectPrcWidths)[3*i+1];
-            sal_uInt8 nPrcWidth = (sal_uInt8)(*m_pDrawObjectPrcWidths)[3*i+2];
+            sal_uInt8 nPrcWidth = static_cast<sal_uInt8>((*m_pDrawObjectPrcWidths)[3*i+2]);
 
             SwHTMLTableLayoutCell *pLayoutCell =
                 m_xLayoutInfo->GetCell( nRow, nCol );
@@ -2579,7 +2579,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
             sal_uInt16 nWidth2, nDummy;
             m_xLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
-            nWidth2 = static_cast< sal_uInt16 >(((long)m_nWidth * nPrcWidth) / 100);
+            nWidth2 = static_cast< sal_uInt16 >((static_cast<long>(m_nWidth) * nPrcWidth) / 100);
 
             SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );
         }
@@ -2611,7 +2611,7 @@ void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPrcWidth )
         m_pDrawObjectPrcWidths = new std::vector<sal_uInt16>;
     m_pDrawObjectPrcWidths->push_back( m_nCurrentRow );
     m_pDrawObjectPrcWidths->push_back( m_nCurrentColumn );
-    m_pDrawObjectPrcWidths->push_back( (sal_uInt16)nPrcWidth );
+    m_pDrawObjectPrcWidths->push_back( static_cast<sal_uInt16>(nPrcWidth) );
 }
 
 void HTMLTable::MakeParentContents()
@@ -3026,10 +3026,10 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 m_aId = rOption.GetString();
                 break;
             case HtmlOptionId::COLSPAN:
-                m_nColSpan = (sal_uInt16)rOption.GetNumber();
+                m_nColSpan = static_cast<sal_uInt16>(rOption.GetNumber());
                 break;
             case HtmlOptionId::ROWSPAN:
-                m_nRowSpan = (sal_uInt16)rOption.GetNumber();
+                m_nRowSpan = static_cast<sal_uInt16>(rOption.GetNumber());
                 break;
             case HtmlOptionId::ALIGN:
                 m_eAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eAdjust );
@@ -3038,13 +3038,13 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 m_eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, m_eVertOri );
                 break;
             case HtmlOptionId::WIDTH:
-                m_nWidth = (sal_uInt16)rOption.GetNumber();   // Just for Netscape
+                m_nWidth = static_cast<sal_uInt16>(rOption.GetNumber());   // Just for Netscape
                 m_bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 if( m_bPrcWidth && m_nWidth>100 )
                     m_nWidth = 100;
                 break;
             case HtmlOptionId::HEIGHT:
-                m_nHeight = (sal_uInt16)rOption.GetNumber();  // Just for Netscape
+                m_nHeight = static_cast<sal_uInt16>(rOption.GetNumber());  // Just for Netscape
                 if( rOption.GetString().indexOf('%') != -1)
                     m_nHeight = 0;    // don't consider % attributes
                 break;
@@ -4427,10 +4427,10 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                     InsertBookmark( rOption.GetString() );
                     break;
                 case HtmlOptionId::SPAN:
-                    pSaveStruct->nColGrpSpan = (sal_uInt16)rOption.GetNumber();
+                    pSaveStruct->nColGrpSpan = static_cast<sal_uInt16>(rOption.GetNumber());
                     break;
                 case HtmlOptionId::WIDTH:
-                    pSaveStruct->nColGrpWidth = (sal_uInt16)rOption.GetNumber();
+                    pSaveStruct->nColGrpWidth = static_cast<sal_uInt16>(rOption.GetNumber());
                     pSaveStruct->bRelColGrpWidth =
                         (rOption.GetString().indexOf('*') != -1);
                     break;
@@ -4509,10 +4509,10 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                         InsertBookmark( rOption.GetString() );
                         break;
                     case HtmlOptionId::SPAN:
-                        nColSpan = (sal_uInt16)rOption.GetNumber();
+                        nColSpan = static_cast<sal_uInt16>(rOption.GetNumber());
                         break;
                     case HtmlOptionId::WIDTH:
-                        nColWidth = (sal_uInt16)rOption.GetNumber();
+                        nColWidth = static_cast<sal_uInt16>(rOption.GetNumber());
                         bRelColWidth =
                             (rOption.GetString().indexOf('*') != -1);
                         break;
@@ -4866,24 +4866,24 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             aId = rOption.GetString();
             break;
         case HtmlOptionId::COLS:
-            nCols = (sal_uInt16)rOption.GetNumber();
+            nCols = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WIDTH:
-            nWidth = (sal_uInt16)rOption.GetNumber();
+            nWidth = static_cast<sal_uInt16>(rOption.GetNumber());
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             if( bPrcWidth && nWidth>100 )
                 nWidth = 100;
             break;
         case HtmlOptionId::HEIGHT:
-            nHeight = (sal_uInt16)rOption.GetNumber();
+            nHeight = static_cast<sal_uInt16>(rOption.GetNumber());
             if( rOption.GetString().indexOf('%') != -1 )
                 nHeight = 0;    // don't use % attributes
             break;
         case HtmlOptionId::CELLPADDING:
-            nCellPadding = (sal_uInt16)rOption.GetNumber();
+            nCellPadding = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::CELLSPACING:
-            nCellSpacing = (sal_uInt16)rOption.GetNumber();
+            nCellSpacing = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::ALIGN:
             {
@@ -4902,7 +4902,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
                 !rOption.GetString().equalsIgnoreAsciiCase(
                         OOO_STRING_SVTOOLS_HTML_O_border))
             {
-                nBorder = (sal_uInt16)rOption.GetNumber();
+                nBorder = static_cast<sal_uInt16>(rOption.GetNumber());
             }
             else
                 nBorder = 1;
@@ -4950,10 +4950,10 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             aDir = rOption.GetString();
             break;
         case HtmlOptionId::HSPACE:
-            nHSpace = (sal_uInt16)rOption.GetNumber();
+            nHSpace = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::VSPACE:
-            nVSpace = (sal_uInt16)rOption.GetNumber();
+            nVSpace = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         default: break;
         }
@@ -5324,7 +5324,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
             }
 
             // Process SwTable
-            sal_uInt16 nBrowseWidth = (sal_uInt16)GetCurrentBrowseWidth();
+            sal_uInt16 nBrowseWidth = static_cast<sal_uInt16>(GetCurrentBrowseWidth());
             xSaveStruct->MakeTable(nBrowseWidth, *m_pPam->GetPoint(), m_xDoc.get());
         }
 

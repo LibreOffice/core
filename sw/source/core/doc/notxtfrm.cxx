@@ -656,8 +656,8 @@ void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
 
     // Did the height change?
     SwTwips nChgHght = IsVertical() ?
-        (SwTwips)(aNewSize.Width() - getFramePrintArea().Width()) :
-        (SwTwips)(aNewSize.Height() - getFramePrintArea().Height());
+        static_cast<SwTwips>(aNewSize.Width() - getFramePrintArea().Width()) :
+        static_cast<SwTwips>(aNewSize.Height() - getFramePrintArea().Height());
     if( nChgHght > 0)
         Grow( nChgHght );
     else if( nChgHght < 0)

@@ -314,7 +314,7 @@ namespace
             aInfo.mbSelected = true;
             if( mnStartCol == USHRT_MAX )
             {
-                mnStartCol = (sal_uInt16)maLines[nLine].size();
+                mnStartCol = static_cast<sal_uInt16>(maLines[nLine].size());
                 if( pSelBoxes->size() < 2 )
                 {
                     pSelBoxes = nullptr;
@@ -367,7 +367,7 @@ namespace
             const sal_uInt16 nLineCount = rLines.size();
             if( nLineCount < mnAddLine )
                 mnAddLine = nLineCount;
-            sal_uInt16 nLine = (sal_uInt16)maLines.size();
+            sal_uInt16 nLine = static_cast<sal_uInt16>(maLines.size());
             maLines.resize( nLine + mnAddLine );
             while( mnAddLine )
             {

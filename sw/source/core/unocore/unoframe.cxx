@@ -1469,17 +1469,17 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         pNoText->SetContour(nullptr);
                     else if(aValue >>= aParam)
                     {
-                        tools::PolyPolygon aPoly((sal_uInt16)aParam.getLength());
+                        tools::PolyPolygon aPoly(static_cast<sal_uInt16>(aParam.getLength()));
                         for(sal_Int32 i = 0; i < aParam.getLength(); i++)
                         {
                             const ::drawing::PointSequence* pPointSeq = aParam.getConstArray();
                             sal_Int32 nPoints = pPointSeq[i].getLength();
                             const ::awt::Point* pPoints = pPointSeq[i].getConstArray();
-                            tools::Polygon aSet( (sal_uInt16)nPoints );
+                            tools::Polygon aSet( static_cast<sal_uInt16>(nPoints) );
                             for(sal_Int32 j = 0; j < nPoints; j++)
                             {
                                 Point aPoint(pPoints[j].X, pPoints[j].Y);
-                                aSet.SetPoint(aPoint, (sal_uInt16)j);
+                                aSet.SetPoint(aPoint, static_cast<sal_uInt16>(j));
                             }
                             // Close polygon if it isn't closed already.
                             aSet.Optimize( PolyOptimizeFlags::CLOSE );
@@ -2175,7 +2175,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 pObj = pFormat->FindSdrObject();
             if( pObj )
             {
-                aAny <<= (sal_Int32)pObj->GetOrdNum();
+                aAny <<= static_cast<sal_Int32>(pObj->GetOrdNum());
             }
         }
         else if(FN_UNO_CLSID == pEntry->nWID || FN_UNO_MODEL == pEntry->nWID||
@@ -2310,7 +2310,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
         sal_Int32 nValue = 0;
         aAny >>= nValue;
-        aAny <<= (sal_Int16)nValue;
+        aAny <<= static_cast<sal_Int16>(nValue);
     }
 
     // check for needed metric translation

@@ -432,7 +432,7 @@ inline void SwHTMLTableLayout::SetCell( std::unique_ptr<SwHTMLTableLayoutCell> p
 
 inline long SwHTMLTableLayout::GetBrowseWidthMin() const
 {
-    return (long)( (!m_nWidthOption || m_bPrcWidthOption) ? m_nMin : m_nRelTabWidth );
+    return static_cast<long>( (!m_nWidthOption || m_bPrcWidthOption) ? m_nMin : m_nRelTabWidth );
 }
 
 void SwHTMLTableLayout::SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight )

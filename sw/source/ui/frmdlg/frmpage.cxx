@@ -1208,12 +1208,12 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
 
         if (m_pRelWidthCB->IsChecked())
         {
-            aSz.SetWidthPercent((sal_uInt8)std::min( static_cast< sal_Int64 >(MAX_PERCENT_WIDTH), m_aWidthED.Convert(m_aWidthED.NormalizePercent(nNewWidth), FUNIT_TWIP, FUNIT_CUSTOM)));
+            aSz.SetWidthPercent(static_cast<sal_uInt8>(std::min( static_cast< sal_Int64 >(MAX_PERCENT_WIDTH), m_aWidthED.Convert(m_aWidthED.NormalizePercent(nNewWidth), FUNIT_TWIP, FUNIT_CUSTOM))));
         }
         else
             aSz.SetWidthPercent(0);
         if (m_pRelHeightCB->IsChecked())
-            aSz.SetHeightPercent((sal_uInt8)std::min(static_cast< sal_Int64 >(MAX_PERCENT_HEIGHT), m_aHeightED.Convert(m_aHeightED.NormalizePercent(nNewHeight), FUNIT_TWIP, FUNIT_CUSTOM)));
+            aSz.SetHeightPercent(static_cast<sal_uInt8>(std::min(static_cast< sal_Int64 >(MAX_PERCENT_HEIGHT), m_aHeightED.Convert(m_aHeightED.NormalizePercent(nNewHeight), FUNIT_TWIP, FUNIT_CUSTOM))));
         else
             aSz.SetHeightPercent(0);
 
@@ -2109,12 +2109,12 @@ IMPL_LINK( SwFramePage, ModifyHdl, Edit&, rEdit, void )
     {
         if (&rEdit == m_aWidthED.get())
         {
-            nHeight = SwTwips((double)nWidth / m_fWidthHeightRatio);
+            nHeight = SwTwips(static_cast<double>(nWidth) / m_fWidthHeightRatio);
             m_aHeightED.SetPrcntValue(m_aHeightED.NormalizePercent(nHeight), FUNIT_TWIP);
         }
         else if (&rEdit == m_aHeightED.get())
         {
-            nWidth = SwTwips((double)nHeight * m_fWidthHeightRatio);
+            nWidth = SwTwips(static_cast<double>(nHeight) * m_fWidthHeightRatio);
             m_aWidthED.SetPrcntValue(m_aWidthED.NormalizePercent(nWidth), FUNIT_TWIP);
         }
     }
@@ -2268,7 +2268,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
 
     // columns
     SwFormatCol aCol( rSet.Get(RES_COL) );
-    ::FitToActualSize( aCol, (sal_uInt16)rSize.GetWidth() );
+    ::FitToActualSize( aCol, static_cast<sal_uInt16>(rSize.GetWidth()) );
 
     RndStdIds eAnchorId = GetAnchor();
 

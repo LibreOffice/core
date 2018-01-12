@@ -834,7 +834,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
 
     if( bFull )
     {
-        Width( rInf.Width() - (sal_uInt16)rInf.X() );
+        Width( rInf.Width() - static_cast<sal_uInt16>(rInf.X()) );
         if( bFly )
         {
             SetLen( 0 );
@@ -891,7 +891,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
             return;
     }
     Point aPos( rInf.X() + GRFNUM_SECURE, rInf.Y() - GetRelPos() + GRFNUM_SECURE );
-    long nTmpWidth = std::max( (long)0, (long)(nFixWidth - 2 * GRFNUM_SECURE) );
+    long nTmpWidth = std::max( long(0), static_cast<long>(nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
     const bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
@@ -1215,7 +1215,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), nullptr, m_aExpand, i, 1 );
             Size aSize = aTmpFont.GetTextSize_( aDrawInf );
             const sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
-            aPos[ i ] = (sal_uInt16)aSize.Width();
+            aPos[ i ] = static_cast<sal_uInt16>(aSize.Width());
             if( i == nTop ) // enter the second line
             {
                 nLowPos = nMaxDescent;
@@ -1293,7 +1293,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     {
         if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFieldGrp()
             || !static_cast<SwFieldPortion*>(rInf.GetLast())->IsFollow() ) )
-            Width( (sal_uInt16)( rInf.Width() - rInf.X() ) );
+            Width( static_cast<sal_uInt16>( rInf.Width() - rInf.X() ) );
         else
         {
             Truncate();

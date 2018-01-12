@@ -191,7 +191,7 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
 void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
                                    bool bTable )
 {
-    if( (sal_uInt32)-1 == m_nBorderColor )
+    if( sal_uInt32(-1) == m_nBorderColor )
     {
         Color aGrayColor( COL_GRAY );
         if( !pBorderLine->GetColor().IsRGBEqual( aGrayColor ) )
@@ -335,15 +335,15 @@ sal_uInt16 SwWriteTable::GetAbsWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
     nWidth -= GetLeftSpace( nCol ) + GetRightSpace( nCol, nColSpan );
 
     OSL_ENSURE( nWidth > 0, "Column Width <= 0. OK?" );
-    return nWidth > 0 ? (sal_uInt16)nWidth : 0;
+    return nWidth > 0 ? static_cast<sal_uInt16>(nWidth) : 0;
 }
 
 sal_uInt16 SwWriteTable::GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
 {
     long nWidth = GetRawWidth( nCol, nColSpan );
 
-    return (sal_uInt16)(long)Fraction( nWidth*256 + GetBaseWidth()/2,
-                                   GetBaseWidth() );
+    return static_cast<sal_uInt16>(static_cast<long>(Fraction( nWidth*256 + GetBaseWidth()/2,
+                                   GetBaseWidth() )));
 }
 
 sal_uInt16 SwWriteTable::GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
@@ -352,8 +352,8 @@ sal_uInt16 SwWriteTable::GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
 
     // Looks funny, but is nothing more than
     // [(100 * nWidth) + .5] without rounding errors
-    return (sal_uInt16)(long)Fraction( nWidth*100 + GetBaseWidth()/2,
-                                   GetBaseWidth() );
+    return static_cast<sal_uInt16>(static_cast<long>(Fraction( nWidth*100 + GetBaseWidth()/2,
+                                   GetBaseWidth() )));
 }
 
 long SwWriteTable::GetAbsHeight(long nRawHeight, size_t const nRow,
@@ -656,7 +656,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                 // The new table model may have true row span attributes
                 const long nAttrRowSpan = pBox->getRowSpan();
                 if ( 1 < nAttrRowSpan )
-                    nRowSpan = (sal_uInt16)nAttrRowSpan;
+                    nRowSpan = static_cast<sal_uInt16>(nAttrRowSpan);
                 else if ( nAttrRowSpan < 1 )
                     nRowSpan = 0;
 
@@ -726,7 +726,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 
 SwWriteTable::SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, long nWidth,
     sal_uInt32 nBWidth, bool bRel, sal_uInt16 nMaxDepth, sal_uInt16 nLSub, sal_uInt16 nRSub, sal_uInt32 nNumOfRowsToRepeat)
-    : m_pTable(pTable), m_nBorderColor((sal_uInt32)-1), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
+    : m_pTable(pTable), m_nBorderColor(sal_uInt32(-1)), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
     m_nInnerBorder(0), m_nBaseWidth(nBWidth), m_nHeadEndRow(USHRT_MAX),
      m_nLeftSub(nLSub), m_nRightSub(nRSub), m_nTabWidth(nWidth), m_bRelWidths(bRel),
     m_bUseLayoutHeights(true),
@@ -759,7 +759,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, lo
 }
 
 SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo)
-    : m_pTable(pTable), m_nBorderColor((sal_uInt32)-1), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
+    : m_pTable(pTable), m_nBorderColor(sal_uInt32(-1)), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
     m_nInnerBorder(0), m_nBaseWidth(pLayoutInfo->GetWidthOption()), m_nHeadEndRow(0),
     m_nLeftSub(0), m_nRightSub(0), m_nTabWidth(pLayoutInfo->GetWidthOption()),
     m_bRelWidths(pLayoutInfo->HasPrcWidthOption()), m_bUseLayoutHeights(false),

@@ -162,7 +162,7 @@ bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
-    rVal <<= (sal_Int16)GetValue();
+    rVal <<= static_cast<sal_Int16>(GetValue());
     return true;
 }
 
@@ -174,7 +174,7 @@ bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
     if (rVal >>= nValue)
     {
         // sal_uInt16 argument needed
-        SetValue( (sal_uInt16) nValue );
+        SetValue( static_cast<sal_uInt16>(nValue) );
         return true;
     }
 
@@ -305,7 +305,7 @@ bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= (sal_uInt16)GraphicDrawMode::Watermark)
     {
-        SetEnumValue((sal_uInt16)eVal);
+        SetEnumValue(static_cast<sal_uInt16>(eVal));
         return true;
     }
     return false;

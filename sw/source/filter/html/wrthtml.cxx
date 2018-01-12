@@ -632,8 +632,8 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         {
             if( nGutter && Application::GetDefaultDevice() )
             {
-                nGutter = (sal_uInt16)Application::GetDefaultDevice()
-                                ->LogicToPixel( Size(nGutter, 0), MapMode(MapUnit::MapTwip) ).Width();
+                nGutter = static_cast<sal_uInt16>(Application::GetDefaultDevice()
+                                ->LogicToPixel( Size(nGutter, 0), MapMode(MapUnit::MapTwip) ).Width());
             }
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_gutter "=\"" + OString::number(nGutter) + "\"");
         }

@@ -1865,7 +1865,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         rPropVal.Name = sMMToPixelRatio;
         const Size a100thMMSize( 1000, 1000 );
         const Size aPixelSize = GetMap()->LogicToPixel( a100thMMSize );
-        const float fRatio = ((float)a100thMMSize.Width()/100)/aPixelSize.Width();
+        const float fRatio = (static_cast<float>(a100thMMSize.Width())/100)/aPixelSize.Width();
         rPropVal.Value <<= fRatio;
         rPropVal.Handle = -1;
         rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
@@ -2161,7 +2161,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
                 {
-                    crBack = (sal_uInt32)xComponent->getBackground();
+                    crBack = static_cast<sal_uInt32>(xComponent->getBackground());
                 }
                 rValue.Value <<= crBack;
             }
@@ -2203,7 +2203,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                     sal_Int32 nLen = 1;
                     if( pWrongList->InWrongWord(nBegin,nLen) && !pTextNode->IsSymbol(nBegin) )
                     {
-                        rValue.Value <<= (sal_uInt16)LINESTYLE_WAVE;
+                        rValue.Value <<= sal_uInt16(LINESTYLE_WAVE);
                     }
                 }
             }
@@ -2224,7 +2224,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                     sal_Int32 nLen = 1;
                     if( pWrongList->InWrongWord(nBegin,nLen) && !pTextNode->IsSymbol(nBegin) )
                     {
-                        rValue.Value <<= (sal_Int32)0x00ff0000;
+                        rValue.Value <<= sal_Int32(0x00ff0000);
                         continue;
                     }
                 }
@@ -2274,7 +2274,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             if ( GetPortionData().IsIndexInFootnode(nIndex) )
             {
-                rValue.Value <<= (sal_Int32)101;
+                rValue.Value <<= sal_Int32(101);
             }
             continue;
         }

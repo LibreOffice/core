@@ -414,10 +414,10 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= GetValue();
         break;
     case FIELD_PROP_FORMAT:
-        rAny <<= (sal_Int32)GetFormat();
+        rAny <<= static_cast<sal_Int32>(GetFormat());
         break;
     case FIELD_PROP_USHORT1:
-         rAny <<= (sal_Int16)nSubType;
+         rAny <<= static_cast<sal_Int16>(nSubType);
         break;
     case FIELD_PROP_PAR1:
          rAny <<= GetFormula();
@@ -1063,13 +1063,13 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
         break;
     case FIELD_PROP_FORMAT:
-        rAny <<= (sal_Int32)GetFormat();
+        rAny <<= static_cast<sal_Int32>(GetFormat());
         break;
     case FIELD_PROP_USHORT2:
-        rAny <<= (sal_Int16)GetFormat();
+        rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
     case FIELD_PROP_USHORT1:
-        rAny <<= (sal_Int16)nSeqNo;
+        rAny <<= static_cast<sal_Int16>(nSeqNo);
         break;
     case FIELD_PROP_PAR1:
         rAny <<= SwStyleNameMapper::GetProgName(GetPar1(), SwGetPoolIdFromName::TxtColl );

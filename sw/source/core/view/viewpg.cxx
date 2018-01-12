@@ -175,7 +175,7 @@ void SwViewShell::PrintProspect(
         {
             // Round percentages for Drawings so that these can paint their objects properly
             aScY *= Fraction( 1000, 1 );
-            long nTmp = (long)aScY;
+            long nTmp = static_cast<long>(aScY);
             if( 1 < nTmp )
                 --nTmp;
             else

@@ -41,8 +41,8 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
 {
     sal_uInt16 nInsMode = 0;
     rName = m_pNameEdit->GetText();
-    rRow = (sal_uInt16)m_pRowNF->GetValue();
-    rCol = (sal_uInt16)m_pColNF->GetValue();
+    rRow = static_cast<sal_uInt16>(m_pRowNF->GetValue());
+    rCol = static_cast<sal_uInt16>(m_pColNF->GetValue());
 
     if (m_pBorderCB->IsChecked())
         nInsMode |= tabopts::DEFAULT_BORDER;

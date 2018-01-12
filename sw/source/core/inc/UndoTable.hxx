@@ -215,8 +215,8 @@ public:
         nCurrBox = nBoxIdx;
         nCount = nMode;
         nSetColType = nType;
-        nAbsDiff = (sal_uInt16)nAbsDif;
-        nRelDiff = (sal_uInt16)nRelDif;
+        nAbsDiff = static_cast<sal_uInt16>(nAbsDif);
+        nRelDiff = static_cast<sal_uInt16>(nRelDif);
     }
 };
 

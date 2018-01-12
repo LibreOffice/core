@@ -2249,7 +2249,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
             if( sNm.startsWith( aName ) )
             {
                 // Determine Number and set the Flag
-                nNum = (sal_uInt16)sNm.copy( nNmLen ).toInt32();
+                nNum = static_cast<sal_uInt16>(sNm.copy( nNmLen ).toInt32());
                 if( nNum-- && nNum < mpNumRuleTable->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }

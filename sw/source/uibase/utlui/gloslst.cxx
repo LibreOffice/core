@@ -38,7 +38,7 @@
 
 #include <strings.hrc>
 
-#define STRING_DELIM (char)0x0A
+#define STRING_DELIM char(0x0A)
 #define GLOS_TIMEOUT 30000   // update every 30 seconds
 #define FIND_MAX_GLOS 20
 

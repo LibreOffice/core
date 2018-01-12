@@ -54,10 +54,10 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
                 pUnoArgs[i] <<= pVar->GetOUString();
                 break;
             case SbxCHAR:
-                pUnoArgs[i] <<= (sal_Int16)pVar->GetChar() ;
+                pUnoArgs[i] <<= static_cast<sal_Int16>(pVar->GetChar()) ;
                 break;
             case SbxUSHORT:
-                pUnoArgs[i] <<= (sal_Int16)pVar->GetUShort();
+                pUnoArgs[i] <<= static_cast<sal_Int16>(pVar->GetUShort());
                 break;
             case SbxLONG:
                 pUnoArgs[i] <<= pVar->GetLong();

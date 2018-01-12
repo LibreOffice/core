@@ -245,7 +245,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ProtectForm ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ) );
-        m_pFormattingLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nOptions) );
+        m_pFormattingLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nOptions)) );
     }
 
     m_pFormattingLB->SetDropDownLineCount( m_pFormattingLB->GetEntryCount() );

@@ -270,8 +270,8 @@ DECLARE_WW8EXPORT_TEST(testTdf91687, "tdf91687.doc")
     // Exported Watermarks were resized
     uno::Reference<drawing::XShape> xWatermark = getShape(1);
 
-    CPPUNIT_ASSERT_EQUAL((sal_Int32)5172, xWatermark->getSize().Height);
-    CPPUNIT_ASSERT_EQUAL((sal_Int32)18105, xWatermark->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5172), xWatermark->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(18105), xWatermark->getSize().Width);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf114308, "tdf114308.doc")
@@ -279,7 +279,7 @@ DECLARE_WW8EXPORT_TEST(testTdf114308, "tdf114308.doc")
     // Watermark with no additional padding
     uno::Reference<drawing::XShape> xWatermark = getShape(1);
 
-    CPPUNIT_ASSERT_EQUAL((sal_Int32)8729, xWatermark->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8729), xWatermark->getSize().Height);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf111480, "tdf111480.doc")

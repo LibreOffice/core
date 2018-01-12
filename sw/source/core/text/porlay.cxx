@@ -801,7 +801,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     // If we are at the start of a group, we do not trust nScript,
     // we better get nScript from the breakiterator:
     if ( nChg == nGrpStart )
-        nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg );
+        nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ));
 
     // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
 
@@ -860,8 +860,8 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 
         // Get next script type or set to weak in order to exit
         sal_uInt8 nNextScript = ( nEnd < rText.getLength() ) ?
-           (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rText, nEnd ) :
-           (sal_uInt8)WEAK;
+           static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rText, nEnd )) :
+           sal_uInt8(WEAK);
 
         if ( nScript != nNextScript )
         {
@@ -1157,7 +1157,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
         }
 
         if ( nChg < rText.getLength() )
-            nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg );
+            nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ));
 
         nLastCompression = nChg;
         nLastKashida = nChg;

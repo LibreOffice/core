@@ -195,10 +195,10 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
             const SvxTabStopItem& rDefTabs =
                     static_cast<const SvxTabStopItem&>(pAppView->GetWrtShell().
                                         GetDefault(RES_PARATR_TABSTOP));
-                pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, (sal_uInt16)::GetTabDist(rDefTabs)));
+                pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(::GetTabDist(rDefTabs))));
         }
         else
-            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, (sal_uInt16)pPref->GetDefTab()));
+            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(pPref->GetDefTab())));
     }
 
     // Options for GridTabPage
@@ -209,8 +209,8 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     aGridItem.SetGridVisible( aViewOpt.IsGridVisible());
 
     const Size& rSnapSize = aViewOpt.GetSnapSize();
-    aGridItem.SetFieldDrawX( (sal_uInt16) (rSnapSize.Width() ));
-    aGridItem.SetFieldDrawY( (sal_uInt16) (rSnapSize.Height()));
+    aGridItem.SetFieldDrawX( static_cast<sal_uInt16>(rSnapSize.Width() ));
+    aGridItem.SetFieldDrawY( static_cast<sal_uInt16>(rSnapSize.Height()));
 
     aGridItem.SetFieldDivisionX( aViewOpt.GetDivisionX());
     aGridItem.SetFieldDivisionY( aViewOpt.GetDivisionY());
@@ -358,10 +358,10 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         Size aSize( pGridItem->GetFieldDrawX(), pGridItem->GetFieldDrawY()  );
         if( aViewOpt.GetSnapSize() != aSize )
             aViewOpt.SetSnapSize( aSize );
-        short nDiv = (short)pGridItem->GetFieldDivisionX() ;
+        short nDiv = static_cast<short>(pGridItem->GetFieldDivisionX()) ;
         if( aViewOpt.GetDivisionX() != nDiv  )
             aViewOpt.SetDivisionX( nDiv );
-        nDiv = (short)pGridItem->GetFieldDivisionY();
+        nDiv = static_cast<short>(pGridItem->GetFieldDivisionY());
         if( aViewOpt.GetDivisionY() != nDiv  )
             aViewOpt.SetDivisionY( nDiv  );
 

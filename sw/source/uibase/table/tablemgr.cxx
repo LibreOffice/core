@@ -132,7 +132,7 @@ void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
             bCurrentOnly = true;
         SwTwips nWidth = GetColWidth(nNum);
 
-        int nDiff = (int)(nNewWidth - nWidth);
+        int nDiff = static_cast<int>(nNewWidth - nWidth);
         if( !nNum )
             aCols[ GetRightSeparator(0) ] += nDiff;
         else if( nNum < GetColCount()  )
@@ -141,7 +141,7 @@ void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
                 aCols[ GetRightSeparator(nNum) ] += nDiff;
             else
             {
-                int nDiffLeft = nDiff - (int)GetColWidth(nNum + 1) + (int)MINLAY;
+                int nDiffLeft = nDiff - static_cast<int>(GetColWidth(nNum + 1)) + int(MINLAY);
                 aCols[ GetRightSeparator(nNum) ] += (nDiff - nDiffLeft);
                 aCols[ GetRightSeparator(nNum - 1) ] -= nDiffLeft;
             }
@@ -346,7 +346,7 @@ sal_uInt16  SwTableFUNC::GetColCount() const
 
 int SwTableFUNC::GetRightSeparator(int nNum) const
 {
-    OSL_ENSURE( nNum < (int)GetColCount() ,"Index out of range");
+    OSL_ENSURE( nNum < static_cast<int>(GetColCount()) ,"Index out of range");
     int i = 0;
     while( nNum >= 0 )
     {

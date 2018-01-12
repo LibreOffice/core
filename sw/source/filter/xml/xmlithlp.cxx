@@ -134,7 +134,7 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
         else if( !rHasWidth &&
              rUnitConverter.convertMeasureToCore(nTemp, aToken, 0, USHRT_MAX))
         {
-            rWidth = (sal_uInt16)nTemp;
+            rWidth = static_cast<sal_uInt16>(nTemp);
             rHasWidth = true;
         }
         else

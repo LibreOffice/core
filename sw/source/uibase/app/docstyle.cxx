@@ -444,7 +444,7 @@ void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString&
     if (it != maUnique.end())
         return;
 
-    maUnique[aStr] = (sal_uInt32)maImpl.size();
+    maUnique[aStr] = static_cast<sal_uInt32>(maImpl.size());
     maImpl.push_back(aStr);
 }
 

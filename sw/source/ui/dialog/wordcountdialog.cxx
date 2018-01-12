@@ -96,9 +96,9 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
     {
         sal_Int64 nCharsPerStandardizedPage = officecfg::Office::Writer::WordCount::StandardizedPageSize::get();
         setDoubleValue(m_pCurrentStandardizedPagesFT,
-            (double)rCurrent.nChar / nCharsPerStandardizedPage);
+            static_cast<double>(rCurrent.nChar) / nCharsPerStandardizedPage);
         setDoubleValue(m_pDocStandardizedPagesFT,
-            (double)rDoc.nChar / nCharsPerStandardizedPage);
+            static_cast<double>(rDoc.nChar) / nCharsPerStandardizedPage);
     }
 
     bool bShowCJK = (SvtCJKOptions().IsAnyEnabled() || rDoc.nAsianWord);

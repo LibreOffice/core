@@ -457,9 +457,9 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                         sal_Int32 nFnd = sNumStr.indexOf( sSrch );
                         if( -1 != nFnd )
                         {
-                            *pLvlPos = (sal_uInt8)(nFnd + rFormat.GetPrefix().getLength() + 1 );
+                            *pLvlPos = static_cast<sal_uInt8>(nFnd + rFormat.GetPrefix().getLength() + 1 );
                             ++pLvlPos;
-                            sNumStr = sNumStr.replaceAt( nFnd, 1, OUString((char)i) );
+                            sNumStr = sNumStr.replaceAt( nFnd, 1, OUString(static_cast<char>(i)) );
                         }
                     }
                     // #i86652#

@@ -197,7 +197,7 @@ void SAL_CALL SwVbaRows::Delete(  )
 void SAL_CALL SwVbaRows::SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle )
 {
     uno::Reference< word::XColumns > xColumns( new SwVbaColumns( getParent(), mxContext, mxTextTable, mxTextTable->getColumns() ) );
-    sal_Int32 nIndent = (sal_Int32) LeftIndent;
+    sal_Int32 nIndent = static_cast<sal_Int32>(LeftIndent);
     switch( RulerStyle )
     {
         case word::WdRulerStyle::wdAdjustFirstColumn:
@@ -263,7 +263,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
             "(nNewWidth <= 0) || (nWidth <= 0)"
         );
     }
-    double propFactor = (double)nNewWidth/(double)nWidth;
+    double propFactor = static_cast<double>(nNewWidth)/static_cast<double>(nWidth);
 
     // get all columns, calculate and set the new width of the columns
     uno::Reference< XCollection > xCol( xColumns, uno::UNO_QUERY_THROW );
@@ -272,7 +272,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
     {
         uno::Reference< word::XColumn > xColumn( xCol->Item( uno::makeAny( i ), uno::Any() ), uno::UNO_QUERY_THROW );
         sal_Int32 nColWidth = xColumn->getWidth();
-        sal_Int32 nNewColWidth = ( sal_Int32 )( propFactor * nColWidth );
+        sal_Int32 nNewColWidth = static_cast<sal_Int32>( propFactor * nColWidth );
         xColumn->setWidth( nNewColWidth );
     }
 
@@ -292,7 +292,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
     // get all columns, calculate and set the new width of the columns
     uno::Reference< XCollection > xCol( xColumns, uno::UNO_QUERY_THROW );
     sal_Int32 nColCount = xCol->getCount();
-    sal_Int32 nNewColWidth = (sal_Int32)( double( nNewWidth )/nColCount );
+    sal_Int32 nNewColWidth = static_cast<sal_Int32>( double( nNewWidth )/nColCount );
     for( sal_Int32 i = 0; i < nColCount; i++ )
     {
         uno::Reference< word::XColumn > xColumn( xCol->Item( uno::makeAny( i ), uno::Any() ), uno::UNO_QUERY_THROW );

@@ -137,7 +137,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     // process width
     if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.m_eWidthType )
     {
-        nPrcWidth = (sal_uInt8)rCSS1PropInfo.m_nWidth;
+        nPrcWidth = static_cast<sal_uInt8>(rCSS1PropInfo.m_nWidth);
         aTwipSz.Width() = rTwipDfltSize.Width();
     }
     else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.m_eWidthType )
@@ -146,7 +146,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     }
     else if( bPrcWidth && rPixSize.Width() )
     {
-        nPrcWidth = (sal_uInt8)rPixSize.Width();
+        nPrcWidth = static_cast<sal_uInt8>(rPixSize.Width());
         if( nPrcWidth > 100 )
             nPrcWidth = 100;
 
@@ -164,7 +164,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     // process height
     if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.m_eHeightType )
     {
-        nPrcHeight = (sal_uInt8)rCSS1PropInfo.m_nHeight;
+        nPrcHeight = static_cast<sal_uInt8>(rCSS1PropInfo.m_nHeight);
         aTwipSz.Height() = rTwipDfltSize.Height();
     }
     else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.m_eHeightType )
@@ -173,7 +173,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     }
     else if( bPrcHeight && rPixSize.Height() )
     {
-        nPrcHeight = (sal_uInt8)rPixSize.Height();
+        nPrcHeight = static_cast<sal_uInt8>(rPixSize.Height());
         if( nPrcHeight > 100 )
             nPrcHeight = 100;
 
@@ -209,7 +209,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
             Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
                                                 MapMode(MapUnit::MapTwip) );
         nLeftSpace = nRightSpace = aTwipSpc.Width();
-        nUpperSpace = nLowerSpace = (sal_uInt16)aTwipSpc.Height();
+        nUpperSpace = nLowerSpace = static_cast<sal_uInt16>(aTwipSpc.Height());
     }
 
     // set left/right margin
@@ -339,23 +339,23 @@ void SwHTMLParser::InsertEmbed()
             if( USHRT_MAX==aSize.Width() )
             {
                 bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-                aSize.Width() = (long)rOption.GetNumber();
+                aSize.Width() = static_cast<long>(rOption.GetNumber());
             }
             break;
         case HtmlOptionId::HEIGHT:
             if( USHRT_MAX==aSize.Height() )
             {
                 bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-                aSize.Height() = (long)rOption.GetNumber();
+                aSize.Height() = static_cast<long>(rOption.GetNumber());
             }
             break;
         case HtmlOptionId::HSPACE:
             if( USHRT_MAX==aSpace.Width() )
-                aSpace.Width() = (long)rOption.GetNumber();
+                aSpace.Width() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::VSPACE:
             if( USHRT_MAX==aSpace.Height() )
-                aSpace.Height() = (long)rOption.GetNumber();
+                aSpace.Height() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::UNKNOWN:
             if (rOption.GetTokenString().equalsIgnoreAsciiCase(
@@ -530,11 +530,11 @@ void SwHTMLParser::NewObject()
             break;
         case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.Width() = (long)rOption.GetNumber();
+            aSize.Width() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.Height() = (long)rOption.GetNumber();
+            aSize.Height() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
@@ -546,10 +546,10 @@ void SwHTMLParser::NewObject()
             aName = rOption.GetString();
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.Width() = (long)rOption.GetNumber();
+            aSpace.Width() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.Height() = (long)rOption.GetNumber();
+            aSpace.Height() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::BORDER:
             break;
@@ -694,17 +694,17 @@ void SwHTMLParser::InsertApplet()
             break;
         case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.Width() = (long)rOption.GetNumber();
+            aSize.Width() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.Height() = (long)rOption.GetNumber();
+            aSize.Height() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.Width() = (long)rOption.GetNumber();
+            aSpace.Width() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.Height() = (long)rOption.GetNumber();
+            aSpace.Height() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::MAYSCRIPT:
             bMayScript = true;
@@ -845,17 +845,17 @@ void SwHTMLParser::InsertFloatingFrame()
             break;
         case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.Width() = (long)rOption.GetNumber();
+            aSize.Width() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.Height() = (long)rOption.GetNumber();
+            aSize.Height() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.Width() = (long)rOption.GetNumber();
+            aSpace.Width() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.Height() = (long)rOption.GetNumber();
+            aSpace.Height() = static_cast<long>(rOption.GetNumber());
             break;
         default: break;
         }

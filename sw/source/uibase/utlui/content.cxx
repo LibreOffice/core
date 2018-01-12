@@ -522,7 +522,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             size_t nPos = 0;
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
-                const sal_Int8 nLevel = (sal_Int8)pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
+                const sal_Int8 nLevel = static_cast<sal_Int8>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i));
                 if(nLevel >= nOutlineLevel )
                     nMemberCount--;
                 else
@@ -1802,7 +1802,7 @@ void SwContentTree::Display( bool bActive )
         && pVScroll->GetThumbPos() != nOldScrollPos)
     {
         sal_Int32 nDelta = pVScroll->GetThumbPos() - nOldScrollPos;
-        ScrollOutputArea( (short)nDelta );
+        ScrollOutputArea( static_cast<short>(nDelta) );
     }
 }
 
@@ -3015,7 +3015,7 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         case 110:
             nSelectedPopupEntry -= 100;
             if(m_nOutlineLevel != nSelectedPopupEntry )
-                SetOutlineLevel((sal_Int8)nSelectedPopupEntry);
+                SetOutlineLevel(static_cast<sal_Int8>(nSelectedPopupEntry));
         break;
         case 201:
         case 202:

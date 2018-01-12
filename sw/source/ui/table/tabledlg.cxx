@@ -679,8 +679,8 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             }
             if(nColSum != pTableData->GetWidth())
             {
-                SwTwips nMinWidth = std::min( (long)MINLAY,
-                                    (long) (pTableData->GetWidth() /
+                SwTwips nMinWidth = std::min( long(MINLAY),
+                                    static_cast<long>(pTableData->GetWidth() /
                                             pTableData->GetColCount() - 1));
                 SwTwips nDiff = nColSum - pTableData->GetWidth();
                 while ( std::abs(nDiff) > pTableData->GetColCount() + 1 )

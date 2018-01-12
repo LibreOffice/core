@@ -113,7 +113,7 @@ void SwHTMLWrtTable::Pixelize( sal_uInt16& rValue )
         if( !aSz.Width() )
             aSz.Width() = 1;
         aSz = Application::GetDefaultDevice()->PixelToLogic( aSz, MapMode(MapUnit::MapTwip) );
-        rValue = (sal_uInt16)aSz.Width();
+        rValue = static_cast<sal_uInt16>(aSz.Width());
     }
 }
 
@@ -905,7 +905,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     const SwFormatFrameSize& rFrameSize = pFormat->GetFrameSize();
     long nWidth = rFrameSize.GetSize().Width();
     sal_uInt8 nPrcWidth = rFrameSize.GetWidthPercent();
-    sal_uInt16 nBaseWidth = (sal_uInt16)nWidth;
+    sal_uInt16 nBaseWidth = static_cast<sal_uInt16>(nWidth);
 
     sal_Int16 eTabHoriOri = pFormat->GetHoriOrient().GetHoriOrient();
 

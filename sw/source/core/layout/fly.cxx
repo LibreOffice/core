@@ -2515,8 +2515,8 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
 
                     if ( aOrgSize.Width() && aOrgSize.Height() )
                     {
-                        double fScaleX = (double) aOrig.Width() / aOrgSize.Width();
-                        double fScaleY = (double) aOrig.Height() / aOrgSize.Height();
+                        double fScaleX = static_cast<double>(aOrig.Width()) / aOrgSize.Width();
+                        double fScaleY = static_cast<double>(aOrig.Height()) / aOrgSize.Height();
 
                         for ( sal_uInt16 j = 0, nPolyCount = rContour.Count(); j < nPolyCount; j++ )
                         {

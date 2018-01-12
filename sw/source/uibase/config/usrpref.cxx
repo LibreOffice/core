@@ -288,20 +288,20 @@ void SwLayoutViewConfig::ImplCommit()
             case  5: rVal <<= rParent.IsViewVRuler(true); break;         // "Window/VerticalRuler",
             case  6:
                 if(rParent.m_bIsHScrollMetricSet)
-                    rVal <<= (sal_Int32)rParent.m_eHScrollMetric;                     // "Window/HorizontalRulerUnit"
+                    rVal <<= static_cast<sal_Int32>(rParent.m_eHScrollMetric);                     // "Window/HorizontalRulerUnit"
             break;
             case  7:
                 if(rParent.m_bIsVScrollMetricSet)
-                    rVal <<= (sal_Int32)rParent.m_eVScrollMetric;                     // "Window/VerticalRulerUnit"
+                    rVal <<= static_cast<sal_Int32>(rParent.m_eVScrollMetric);                     // "Window/VerticalRulerUnit"
             break;
             case  8: rVal <<= rParent.IsSmoothScroll(); break;                      // "Window/SmoothScroll",
-            case  9: rVal <<= (sal_Int32)rParent.GetZoom(); break;                  // "Zoom/Value",
+            case  9: rVal <<= static_cast<sal_Int32>(rParent.GetZoom()); break;                  // "Zoom/Value",
             case 10: rVal <<= (sal_Int32)rParent.GetZoomType(); break;              // "Zoom/Type",
             case 11: rVal <<= rParent.IsAlignMathObjectsToBaseline(); break;        // "Other/IsAlignMathObjectsToBaseline"
-            case 12: rVal <<= (sal_Int32)rParent.GetMetric(); break;                // "Other/MeasureUnit",
+            case 12: rVal <<= static_cast<sal_Int32>(rParent.GetMetric()); break;                // "Other/MeasureUnit",
             case 13: rVal <<= static_cast<sal_Int32>(convertTwipToMm100(rParent.GetDefTab())); break;// "Other/TabStop",
             case 14: rVal <<= rParent.IsVRulerRight(); break;                       // "Window/IsVerticalRulerRight",
-            case 15: rVal <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;     // "ViewLayout/Columns",
+            case 15: rVal <<= static_cast<sal_Int32>(rParent.GetViewLayoutColumns()); break;     // "ViewLayout/Columns",
             case 16: rVal <<= rParent.IsViewLayoutBookMode(); break;                // "ViewLayout/BookMode",
             case 17: rVal <<= rParent.IsSquaredPageMode(); break;                   // "Other/IsSquaredPageMode",
             case 18: rVal <<= rParent.IsApplyCharUnit(); break;                     // "Other/ApplyCharUnit",
@@ -415,10 +415,10 @@ void SwGridConfig::ImplCommit()
             case  0: pValues[nProp] <<= rParent.IsSnap(); break;//      "Option/SnapToGrid",
             case  1: pValues[nProp] <<= rParent.IsGridVisible(); break;//"Option/VisibleGrid",
             case  2: pValues[nProp] <<= rParent.IsSynchronize(); break;//  "Option/Synchronize",
-            case  3: pValues[nProp] <<= (sal_Int32)convertTwipToMm100(rParent.GetSnapSize().Width()); break;//      "Resolution/XAxis",
-            case  4: pValues[nProp] <<= (sal_Int32)convertTwipToMm100(rParent.GetSnapSize().Height()); break;//      "Resolution/YAxis",
-            case  5: pValues[nProp] <<= (sal_Int16)rParent.GetDivisionX(); break;//   "Subdivision/XAxis",
-            case  6: pValues[nProp] <<= (sal_Int16)rParent.GetDivisionY(); break;//   "Subdivision/YAxis"
+            case  3: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(rParent.GetSnapSize().Width())); break;//      "Resolution/XAxis",
+            case  4: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(rParent.GetSnapSize().Height())); break;//      "Resolution/YAxis",
+            case  5: pValues[nProp] <<= static_cast<sal_Int16>(rParent.GetDivisionX()); break;//   "Subdivision/XAxis",
+            case  6: pValues[nProp] <<= static_cast<sal_Int16>(rParent.GetDivisionY()); break;//   "Subdivision/YAxis"
         }
     }
     PutProperties(aNames, aValues);
@@ -448,8 +448,8 @@ void SwGridConfig::Load()
                     case  2: rParent.SetSynchronize(bSet); break;//  "Option/Synchronize",
                     case  3: aSnap.Width() = convertMm100ToTwip(nSet); break;//      "Resolution/XAxis",
                     case  4: aSnap.Height() = convertMm100ToTwip(nSet); break;//      "Resolution/YAxis",
-                    case  5: rParent.SetDivisionX((short)nSet); break;//   "Subdivision/XAxis",
-                    case  6: rParent.SetDivisionY((short)nSet); break;//   "Subdivision/YAxis"
+                    case  5: rParent.SetDivisionX(static_cast<short>(nSet)); break;//   "Subdivision/XAxis",
+                    case  6: rParent.SetDivisionY(static_cast<short>(nSet)); break;//   "Subdivision/YAxis"
                 }
             }
         }
@@ -498,7 +498,7 @@ void SwCursorConfig::ImplCommit()
         switch(nProp)
         {
             case  0: pValues[nProp] <<= rParent.IsShadowCursor();                   break; // "DirectCursor/UseDirectCursor",
-            case  1: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCursorFillMode(); break; // "DirectCursor/Insert",
+            case  1: pValues[nProp] <<= static_cast<sal_Int32>(rParent.GetShdwCursorFillMode()); break; // "DirectCursor/Insert",
             case  2: pValues[nProp] <<= rParent.IsCursorInProtectedArea();          break; // "Option/ProtectedArea"
         }
     }
@@ -527,7 +527,7 @@ void SwCursorConfig::Load()
                 switch(nProp)
                 {
                     case  0: rParent.SetShadowCursor(bSet);                  break; // "DirectCursor/UseDirectCursor",
-                    case  1: rParent.SetShdwCursorFillMode((sal_uInt8)nSet); break; // "DirectCursor/Insert",
+                    case  1: rParent.SetShdwCursorFillMode(static_cast<sal_uInt8>(nSet)); break; // "DirectCursor/Insert",
                     case  2: rParent.SetCursorInProtectedArea(bSet);         break; // "Option/ProtectedArea"
                 }
             }
@@ -559,7 +559,7 @@ void SwWebColorConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= (sal_Int32)rParent.GetRetoucheColor().GetColor();   break;// "Color",
+            case  0: pValues[nProp] <<= static_cast<sal_Int32>(rParent.GetRetoucheColor().GetColor());   break;// "Color",
         }
     }
     PutProperties(aPropNames, aValues);

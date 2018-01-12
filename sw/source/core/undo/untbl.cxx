@@ -1290,7 +1290,7 @@ void SaveBox::SaveContentAttrs( SwDoc* pDoc )
     else
     {
         sal_uLong nEnd = pDoc->GetNodes()[ nSttNode ]->EndOfSectionIndex();
-        Ptrs.pContentAttrs = new SfxItemSets( (sal_uInt8)(nEnd - nSttNode - 1 ) );
+        Ptrs.pContentAttrs = new SfxItemSets( static_cast<sal_uInt8>(nEnd - nSttNode - 1 ) );
         for( sal_uLong n = nSttNode + 1; n < nEnd; ++n )
         {
             SwContentNode* pCNd = pDoc->GetNodes()[ n ]->GetContentNode();
@@ -2117,7 +2117,7 @@ void SwUndoTableMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
     }
 
     // as separator for inserts of new boxes after shifting
-    aNewSttNds.push_back( (sal_uLong)0 );
+    aNewSttNds.push_back( sal_uLong(0) );
 
     // The new table model does not delete overlapped cells (by row span),
     // so the rBoxes array might be empty even some cells have been merged.

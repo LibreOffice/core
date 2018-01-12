@@ -617,7 +617,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         aTwipSpc.Height()  =
             ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
                 static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2;
-        m_nDfltTopMargin = m_nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
+        m_nDfltTopMargin = m_nDfltBottomMargin = static_cast<sal_uInt16>(aTwipSpc.Height());
     }
 
     if( (nFrameOpts & HtmlFrmOpts::Space) &&
@@ -884,7 +884,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         aTwipSpc.Height()  =
             ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
                 static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2;
-        m_nDfltTopMargin = m_nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
+        m_nDfltTopMargin = m_nDfltBottomMargin = static_cast<sal_uInt16>(aTwipSpc.Height());
     }
 
     if( (nFrameOptions & HtmlFrmOpts::Space) &&
@@ -1346,7 +1346,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
                 aPixelBorder.Height() = 0;
 
             nBorderWidth =
-                (sal_uInt16)(aPixelBorder.Width() + aPixelBorder.Height());
+                static_cast<sal_uInt16>(aPixelBorder.Width() + aPixelBorder.Height());
         }
 
         if( pColBorderLine )
@@ -1573,9 +1573,9 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     {
         if( nGutter && Application::GetDefaultDevice() )
         {
-            nGutter = (sal_uInt16)Application::GetDefaultDevice()
+            nGutter = static_cast<sal_uInt16>(Application::GetDefaultDevice()
                             ->LogicToPixel( Size(nGutter,0),
-                                            MapMode(MapUnit::MapTwip) ).Width();
+                                            MapMode(MapUnit::MapTwip) ).Width());
         }
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_gutter).
             append("=\"").append(static_cast<sal_Int32>(nGutter)).append("\"");
@@ -1879,8 +1879,8 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
         nSize > HTML_PARSPACE && Application::GetDefaultDevice() )
     {
         nSize -= HTML_PARSPACE;
-        nSize = (sal_Int16)Application::GetDefaultDevice()
-            ->LogicToPixel( Size(nSize,0), MapMode(MapUnit::MapTwip) ).Width();
+        nSize = static_cast<sal_Int16>(Application::GetDefaultDevice()
+            ->LogicToPixel( Size(nSize,0), MapMode(MapUnit::MapTwip) ).Width());
 
         aSpacer = OStringBuffer(OOO_STRING_SVTOOLS_HTML_spacer).
             append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).

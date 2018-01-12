@@ -345,7 +345,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
     SetBorderStyle( WindowBorderStyle::MONO );
 
     m_aFrameSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
-    ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrameSize.Width());
+    ::FitToActualSize(m_aCols, static_cast<sal_uInt16>(m_aFrameSize.Width()));
 
     long nHeight = m_aFrameSize.Height();
     Fraction aScale( m_aWinSize.Height(), nHeight );
@@ -460,15 +460,15 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
         long nWish = pCol->GetWishWidth();
         nWish *= nFrameWidth;
         nWish /= nWishSum;
-        pCol->SetWishWidth((sal_uInt16)nWish);
+        pCol->SetWishWidth(static_cast<sal_uInt16>(nWish));
         long nLeft = pCol->GetLeft();
         nLeft *= nFrameWidth;
         nLeft /= nWishSum;
-        pCol->SetLeft((sal_uInt16)nLeft);
+        pCol->SetLeft(static_cast<sal_uInt16>(nLeft));
         long nRight = pCol->GetRight();
         nRight *= nFrameWidth;
         nRight /= nWishSum;
-        pCol->SetRight((sal_uInt16)nRight);
+        pCol->SetRight(static_cast<sal_uInt16>(nRight));
     }
     // #97495# make sure that the automatic column width's are always equal
     if(nColCount && m_aCols.IsOrtho())

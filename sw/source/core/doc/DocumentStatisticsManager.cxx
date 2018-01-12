@@ -186,24 +186,24 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     css::uno::Sequence < css::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
     sal_Int32 n=0;
     aStat[n].Name = "TableCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nTable;
+    aStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nTable);
     aStat[n].Name = "ImageCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nGrf;
+    aStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nGrf);
     aStat[n].Name = "ObjectCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nOLE;
+    aStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nOLE);
     if ( mpDocStat->nPage )
     {
         aStat[n].Name = "PageCount";
-        aStat[n++].Value <<= (sal_Int32)mpDocStat->nPage;
+        aStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nPage);
     }
     aStat[n].Name = "ParagraphCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nPara;
+    aStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nPara);
     aStat[n].Name = "WordCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nWord;
+    aStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nWord);
     aStat[n].Name = "CharacterCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nChar;
+    aStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nChar);
     aStat[n].Name = "NonWhitespaceCharacterCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nCharExcludingSpaces;
+    aStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nCharExcludingSpaces);
 
     // For e.g. autotext documents there is no pSwgInfo (#i79945)
     SwDocShell* pObjShell(m_rDoc.GetDocShell());

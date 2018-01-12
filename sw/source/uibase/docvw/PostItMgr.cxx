@@ -1962,10 +1962,10 @@ void SwPostItMgr::CorrectPositions()
     // yeah, I know,    if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
     // check, if anchor overlay object exists.
     const long aAnchorX = pFirstPostIt->Anchor()
-                          ? mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
+                          ? mpEditWin->LogicToPixel( Point(static_cast<long>(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
                           : 0;
     const long aAnchorY = pFirstPostIt->Anchor()
-                          ? mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
+                          ? mpEditWin->LogicToPixel( Point(0,static_cast<long>(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
                           : 0;
     if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
     {
@@ -1979,9 +1979,9 @@ void SwPostItMgr::CorrectPositions()
                 if ( item->bShow && item->pPostIt && item->pPostIt->Anchor() )
                 {
                     aAnchorPosX = pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
-                        ? mpEditWin->LogicToPixel( Point((long)(item->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
-                        : mpEditWin->LogicToPixel( Point((long)(item->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
-                    aAnchorPosY = mpEditWin->LogicToPixel( Point(0,(long)(item->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
+                        ? mpEditWin->LogicToPixel( Point(static_cast<long>(item->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
+                        : mpEditWin->LogicToPixel( Point(static_cast<long>(item->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
+                    aAnchorPosY = mpEditWin->LogicToPixel( Point(0,static_cast<long>(item->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
                     item->pPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
                 }
             }
@@ -2010,7 +2010,7 @@ unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
         double fScaleX = double(mpWrtShell->GetOut()->GetMapMode().GetScaleX());
         nZoom = fScaleX * 100;
     }
-    unsigned long aWidth = (unsigned long)(nZoom * 1.8);
+    unsigned long aWidth = static_cast<unsigned long>(nZoom * 1.8);
 
     if (bPx)
         return aWidth;

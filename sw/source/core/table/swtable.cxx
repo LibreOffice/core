@@ -736,7 +736,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             SwTableBoxes& rTableBoxes = pBox->GetUpper()->GetTabBoxes();
             if( nPos && rTableBoxes[ nPos - 1 ]->getRowSpan() != 1 )
                 nLeftDiff = 0;
-            if( nPos + 1 < (sal_uInt16)rTableBoxes.size() &&
+            if( nPos + 1 < static_cast<sal_uInt16>(rTableBoxes.size()) &&
                 rTableBoxes[ nPos + 1 ]->getRowSpan() != 1 )
                 nRightDiff = 0;
         }
@@ -1201,7 +1201,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
         nOldPos = lcl_MulDiv64<long>(nOldPos, rParm.nOldWish, nOldWidth);
         if( nOldPos != nNewPos && nNewPos > 0 && nOldPos > 0 )
         {
-            ColChange aChg( (sal_uInt16)nOldPos, (sal_uInt16)nNewPos );
+            ColChange aChg( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
             aOldNew.push_back( aChg );
         }
     }
@@ -1244,7 +1244,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             }
             aRowSpanPos.clear();
         }
-        if( nCurr+1 < (sal_uInt16)rLines.size() )
+        if( nCurr+1 < static_cast<sal_uInt16>(rLines.size()) )
         {
             ChangeList aCopy;
             ChangeList::iterator pCop = aOldNew.begin();
@@ -1264,7 +1264,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
                 lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[++j],
                     rParm.nOldWish, nOldWidth, false );
                 lcl_AdjustWidthsInLine( rLines[j], aCopy, rParm, 0 );
-                bGoOn = !aRowSpanPos.empty() && j+1 < (sal_uInt16)rLines.size();
+                bGoOn = !aRowSpanPos.empty() && j+1 < static_cast<sal_uInt16>(rLines.size());
             }
         }
         ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, COLFUZZY );

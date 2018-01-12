@@ -379,7 +379,7 @@ OString const & MSWordStyles::GetStyleId(sal_uInt16 nId) const
 static void impl_SkipOdd( ww::bytes* pO, std::size_t nTableStrmTell )
 {
     if ( ( nTableStrmTell + pO->size() ) & 1 )     // start on even
-        pO->push_back( (sal_uInt8)0 );         // Address
+        pO->push_back( sal_uInt8(0) );         // Address
 }
 
 void WW8AttributeOutput::EndStyle()
@@ -437,7 +437,7 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal
     // write names
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rName.getLength() ); // length
     SwWW8Writer::InsAsString16( *m_rWW8Export.pO, rName );
-    m_rWW8Export.pO->push_back( (sal_uInt8)0 );             // Despite P-String 0 at the end!
+    m_rWW8Export.pO->push_back( sal_uInt8(0) );             // Despite P-String 0 at the end!
 }
 
 void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
@@ -639,7 +639,7 @@ void WW8AttributeOutput::StartStyles()
     sal_uLong nCurPos = m_rWW8Export.pTableStrm->Tell();
     if ( nCurPos & 1 )                   // start on even
     {
-        m_rWW8Export.pTableStrm->WriteChar( (char)0 );        // Address
+        m_rWW8Export.pTableStrm->WriteChar( char(0) );        // Address
         ++nCurPos;
     }
     rFib.m_fcStshfOrig = rFib.m_fcStshf = nCurPos;
@@ -715,7 +715,7 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
 
     memset(maWW8_FFN, 0, sizeof(maWW8_FFN));
 
-    maWW8_FFN[0] = (sal_uInt8)( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.getLength() ) ));
+    maWW8_FFN[0] = static_cast<sal_uInt8>( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.getLength() ) ));
     if (mbAlt)
         maWW8_FFN[0] = static_cast< sal_uInt8 >(maWW8_FFN[0] + 2 * ( 1 + msAltNm.getLength()));
 
@@ -1323,9 +1323,9 @@ void WW8AttributeOutput::SectFootnoteEndnotePr()
     m_rWW8Export.InsUInt16( NS_sprm::sprmSRncFtn );
     switch( rInfo.eNum )
     {
-    case FTNNUM_PAGE:     m_rWW8Export.pO->push_back( (sal_uInt8) /*rncRstPage*/ 2 ); break;
-    case FTNNUM_CHAPTER:  m_rWW8Export.pO->push_back( (sal_uInt8) /*rncRstSect*/ 1 ); break;
-    default:              m_rWW8Export.pO->push_back( (sal_uInt8) /*rncCont*/ 0 ); break;
+    case FTNNUM_PAGE:     m_rWW8Export.pO->push_back( sal_uInt8/*rncRstPage*/ (2) ); break;
+    case FTNNUM_CHAPTER:  m_rWW8Export.pO->push_back( sal_uInt8/*rncRstSect*/ (1) ); break;
+    default:              m_rWW8Export.pO->push_back( sal_uInt8/*rncCont*/ (0) ); break;
     }
 }
 
@@ -1361,7 +1361,7 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
     if ( nRestartNo )
     {
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSLnnMin );
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)nRestartNo - 1 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, static_cast<sal_uInt16>(nRestartNo) - 1 );
     }
 }
 
@@ -2252,7 +2252,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
                     // Commented text ranges as bookmarks (SttbfAtnBkmk)
                     rFib.m_fcSttbfAtnbkmk = nFcStart;
-                    SwWW8Writer::WriteShort( *rWrt.pTableStrm, (sal_Int16)(sal_uInt16)0xFFFF ); // SttbfAtnBkmk.fExtend
+                    SwWW8Writer::WriteShort( *rWrt.pTableStrm, sal_Int16(sal_uInt16(0xFFFF)) ); // SttbfAtnBkmk.fExtend
                     SwWW8Writer::WriteShort( *rWrt.pTableStrm, aRangeStartPos.size() ); // SttbfAtnBkmk.cData
                     SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xA );                   // SttbfAtnBkmk.cbExtra
 
@@ -2379,7 +2379,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                         "Impossible");
                 sal_uInt16 nFndPos = static_cast< sal_uInt16 >(aIter - aStrArr.begin());
                 OUString sInitials( aIter->second );
-                sal_uInt8 nInitialsLen = (sal_uInt8)sInitials.getLength();
+                sal_uInt8 nInitialsLen = static_cast<sal_uInt8>(sInitials.getLength());
                 if ( nInitialsLen > 9 )
                 {
                     sInitials = sInitials.copy( 0, 9 );

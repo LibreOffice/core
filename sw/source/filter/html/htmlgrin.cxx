@@ -376,7 +376,7 @@ void SwHTMLParser::InsertImage()
                 sAltNm = rOption.GetString();
                 break;
             case HtmlOptionId::BORDER:
-                nBorder = (sal_uInt16)rOption.GetNumber();
+                nBorder = static_cast<sal_uInt16>(rOption.GetNumber());
                 break;
             case HtmlOptionId::ISMAP:
                 bIsMap = true;
@@ -502,8 +502,8 @@ IMAGE_SETEVENT:
     long nHBorderWidth = 0, nVBorderWidth = 0;
     if( nBorder )
     {
-        nHBorderWidth = (long)nBorder;
-        nVBorderWidth = (long)nBorder;
+        nHBorderWidth = static_cast<long>(nBorder);
+        nVBorderWidth = static_cast<long>(nBorder);
         SvxCSS1Parser::PixelToTwip( nVBorderWidth, nHBorderWidth );
 
         ::editeng::SvxBorderLine aHBorderLine( nullptr, nHBorderWidth );
@@ -615,7 +615,7 @@ IMAGE_SETEVENT:
             // a percentage value
             if( bPrcWidth )
             {
-                nPrcWidth = (sal_uInt8)nWidth;
+                nPrcWidth = static_cast<sal_uInt8>(nWidth);
                 nPrcHeight = 255;
             }
             else
@@ -627,7 +627,7 @@ IMAGE_SETEVENT:
         {
             if( bPrcHeight )
             {
-                nPrcHeight = (sal_uInt8)nHeight;
+                nPrcHeight = static_cast<sal_uInt8>(nHeight);
                 nPrcWidth = 255;
             }
             else
@@ -642,10 +642,10 @@ IMAGE_SETEVENT:
         bSetTwipSize = false;
 
         if( bPrcWidth )
-            nPrcWidth = (sal_uInt8)nWidth;
+            nPrcWidth = static_cast<sal_uInt8>(nWidth);
 
         if( bPrcHeight )
-            nPrcHeight = (sal_uInt8)nHeight;
+            nPrcHeight = static_cast<sal_uInt8>(nHeight);
     }
 
     // set image map

@@ -660,7 +660,7 @@ bool SwView::SearchAll()
             m_pWrtShell->SttDoc();
     }
     m_bExtra = false;
-    sal_uInt16 nFound = (sal_uInt16)FUNC_Search( aOpts );
+    sal_uInt16 nFound = static_cast<sal_uInt16>(FUNC_Search( aOpts ));
     m_bFound = 0 != nFound;
 
     m_pWrtShell->EndAllAction();

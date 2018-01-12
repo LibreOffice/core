@@ -151,15 +151,15 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
                 if ( eFUnit != FUNIT_LINE )
                 {
                    sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
-                   m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
+                   m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
                    m_pHMetric->InsertEntry( sMetric );
-                   m_pHMetric->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
+                   m_pHMetric->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
                 }
                 // a vertical ruler has not the 'character' unit
                 if ( eFUnit != FUNIT_CHAR )
                 {
                    sal_Int32 nPos = m_pVMetric->InsertEntry( sMetric );
-                   m_pVMetric->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
+                   m_pVMetric->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
                 }
                 break;
             }
@@ -208,7 +208,7 @@ static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemS
         FieldUnit eFieldUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         for ( sal_Int32 i = 0; i < rMetric->GetEntryCount(); ++i )
         {
-            if ( (int)reinterpret_cast<sal_IntPtr>(rMetric->GetEntryData( i )) == (int)eFieldUnit )
+            if ( static_cast<int>(reinterpret_cast<sal_IntPtr>(rMetric->GetEntryData( i ))) == static_cast<int>(eFieldUnit) )
             {
                 rMetric->SelectEntryPos( i );
                 break;
@@ -267,7 +267,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     if ( m_pMetricLB->IsValueChangedFromSaved() )
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos ));
+        const sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos )));
         rSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -276,7 +276,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     if ( m_pHMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pHMetric->GetEntryData( nMPos ));
+        const sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pHMetric->GetEntryData( nMPos )));
         rSet->Put( SfxUInt16Item( FN_HSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -284,7 +284,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     if ( m_pVMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pVMetric->GetEntryData( nMPos ));
+        const sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pVMetric->GetEntryData( nMPos )));
         rSet->Put( SfxUInt16Item( FN_VSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -651,7 +651,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
                     sal_Int32 nHeight, sal_uInt16 nFontHeightWhich)
 {
-    float fSize = (float)nHeight / 10;
+    float fSize = static_cast<float>(nHeight) / 10;
     nHeight = CalcToUnit( fSize, MapUnit::MapTwip );
     SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(nType);
     pColl->SetFormatAttr(SvxFontHeightItem(nHeight, 100, nFontHeightWhich));
@@ -680,27 +680,27 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
     m_pFontConfig->SetFontIndex(sIdx, m_nFontGroup);
     if(bStandardHeightChanged)
     {
-        float fSize = (float)m_pStandardHeightLB->GetValue() / 10;
+        float fSize = static_cast<float>(m_pStandardHeightLB->GetValue()) / 10;
         m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MapUnit::MapTwip ), FONT_STANDARD, m_nFontGroup );
     }
     if(bTitleHeightChanged)
     {
-        float fSize = (float)m_pTitleHeightLB->GetValue() / 10;
+        float fSize = static_cast<float>(m_pTitleHeightLB->GetValue()) / 10;
         m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MapUnit::MapTwip ), FONT_OUTLINE, m_nFontGroup );
     }
     if(bListHeightChanged)
     {
-        float fSize = (float)m_pListHeightLB->GetValue() / 10;
+        float fSize = static_cast<float>(m_pListHeightLB->GetValue()) / 10;
         m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MapUnit::MapTwip ), FONT_LIST, m_nFontGroup );
     }
     if(bLabelHeightChanged)
     {
-        float fSize = (float)m_pLabelHeightLB->GetValue() / 10;
+        float fSize = static_cast<float>(m_pLabelHeightLB->GetValue()) / 10;
         m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MapUnit::MapTwip ), FONT_CAPTION, m_nFontGroup );
     }
     if(bIndexHeightChanged)
     {
-        float fSize = (float)m_pIndexHeightLB->GetValue() / 10;
+        float fSize = static_cast<float>(m_pIndexHeightLB->GetValue()) / 10;
         m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MapUnit::MapTwip ), FONT_INDEX, m_nFontGroup );
     }
 
@@ -728,7 +728,7 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
         }
         if(bStandardHeightChanged)
         {
-            float fSize = (float)m_pStandardHeightLB->GetValue() / 10;
+            float fSize = static_cast<float>(m_pStandardHeightLB->GetValue()) / 10;
             m_pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, MapUnit::MapTwip ), 100, nFontHeightWhich ) );
             SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFormatAttr(nFontHeightWhich);
@@ -894,7 +894,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
             m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
             FONT_GROUP_CJK == m_nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE;
         const SvxFontHeightItem& rFontHeightStandard = static_cast<const SvxFontHeightItem& >(pColl->GetFormatAttr(nFontHeightWhich));
-        nStandardHeight = (sal_Int32)rFontHeightStandard.GetHeight();
+        nStandardHeight = static_cast<sal_Int32>(rFontHeightStandard.GetHeight());
 
         pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
         const SvxFontItem& rFontHL = !m_nFontGroup ? pColl->GetFont() :
@@ -902,7 +902,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         m_sShellTitle = sOutBackup = rFontHL.GetFamilyName();
 
         const SvxFontHeightItem& rFontHeightTitle = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr( nFontHeightWhich ));
-        nTitleHeight = (sal_Int32)rFontHeightTitle.GetHeight();
+        nTitleHeight = static_cast<sal_Int32>(rFontHeightTitle.GetHeight());
 
         const sal_uInt16 nFontWhich =
             m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
@@ -914,7 +914,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         m_sShellList = sListBackup = rFontLS.GetFamilyName();
 
         const SvxFontHeightItem& rFontHeightList = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
-        nListHeight = (sal_Int32)rFontHeightList.GetHeight();
+        nListHeight = static_cast<sal_Int32>(rFontHeightList.GetHeight());
         m_bListHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
         pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_LABEL);
@@ -923,7 +923,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_sShellLabel = sCapBackup = rFontCP.GetFamilyName();
         const SvxFontHeightItem& rFontHeightLabel = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
-        nLabelHeight = (sal_Int32)rFontHeightLabel.GetHeight();
+        nLabelHeight = static_cast<sal_Int32>(rFontHeightLabel.GetHeight());
         m_bLabelHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
         pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_REGISTER_BASE);
@@ -932,7 +932,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
         const SvxFontHeightItem& rFontHeightIndex = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
-        nIndexHeight = (sal_Int32)rFontHeightIndex.GetHeight();
+        nIndexHeight = static_cast<sal_Int32>(rFontHeightIndex.GetHeight());
         m_bIndexHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
     }
     m_pStandardBox->SetText(sStdBackup );
@@ -1153,16 +1153,16 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     if(m_pRowMoveMF->IsModified())
-        pModOpt->SetTableHMove( (sal_uInt16)m_pRowMoveMF->Denormalize( m_pRowMoveMF->GetValue(FUNIT_TWIP)));
+        pModOpt->SetTableHMove( static_cast<sal_uInt16>(m_pRowMoveMF->Denormalize( m_pRowMoveMF->GetValue(FUNIT_TWIP))));
 
     if(m_pColMoveMF->IsModified())
-        pModOpt->SetTableVMove( (sal_uInt16)m_pColMoveMF->Denormalize( m_pColMoveMF->GetValue(FUNIT_TWIP)));
+        pModOpt->SetTableVMove( static_cast<sal_uInt16>(m_pColMoveMF->Denormalize( m_pColMoveMF->GetValue(FUNIT_TWIP))));
 
     if(m_pRowInsertMF->IsModified())
-        pModOpt->SetTableHInsert((sal_uInt16)m_pRowInsertMF->Denormalize( m_pRowInsertMF->GetValue(FUNIT_TWIP)));
+        pModOpt->SetTableHInsert(static_cast<sal_uInt16>(m_pRowInsertMF->Denormalize( m_pRowInsertMF->GetValue(FUNIT_TWIP))));
 
     if(m_pColInsertMF->IsModified())
-        pModOpt->SetTableVInsert((sal_uInt16)m_pColInsertMF->Denormalize( m_pColInsertMF->GetValue(FUNIT_TWIP)));
+        pModOpt->SetTableVInsert(static_cast<sal_uInt16>(m_pColInsertMF->Denormalize( m_pColInsertMF->GetValue(FUNIT_TWIP))));
 
     TableChgMode eMode;
     if(m_pFixRB->IsChecked())

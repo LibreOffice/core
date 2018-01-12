@@ -675,7 +675,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
                 SvxULSpaceItem aUL( 0, PT_7, RES_UL_SPACE );
-                aLSpc.SetPropLineSpace( (sal_uInt8) 115 );
+                aLSpc.SetPropLineSpace( sal_uInt8(115) );
                 if( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
                 aSet.Put( aUL );
                 aSet.Put( aLSpc );
@@ -691,7 +691,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TEXT_NEGIDENT:        // Text body neg. indentation
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOfst( -(short)GetMetricVal( CM_05 ));
+                aLR.SetTextFirstLineOfst( -static_cast<short>(GetMetricVal( CM_05 )));
                 aLR.SetTextLeft( GetMetricVal( CM_1 ));
                 SvxTabStopItem aTStops(RES_PARATR_TABSTOP);
                 aTStops.Insert( SvxTabStop( 0 ));
@@ -905,7 +905,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOfst( -(short)( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) ) );
+                aLR.SetTextFirstLineOfst( -static_cast<short>( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) ) );
                 aLR.SetTextLeft( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
                 aSet.Put( aLR );
@@ -1712,8 +1712,8 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
     }
     SvxULSpaceItem aUL( RES_UL_SPACE );
     {
-        aUL.SetUpper( (sal_uInt16)aLR.GetLeft() );
-        aUL.SetLower( (sal_uInt16)aLR.GetLeft() );
+        aUL.SetUpper( static_cast<sal_uInt16>(aLR.GetLeft()) );
+        aUL.SetLower( static_cast<sal_uInt16>(aLR.GetLeft()) );
     }
 
     SwAttrSet aSet( m_rDoc.GetAttrPool(), aPgFrameFormatSetRange );
@@ -1783,8 +1783,8 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         {
             lcl_PutStdPageSizeIntoItemSet( &m_rDoc, aSet );
             aLR.SetRight( GetMetricVal( CM_1 ));
-            aUL.SetUpper( (sal_uInt16)aLR.GetRight() );
-            aUL.SetLower( (sal_uInt16)aLR.GetRight() );
+            aUL.SetUpper( static_cast<sal_uInt16>(aLR.GetRight()) );
+            aUL.SetLower( static_cast<sal_uInt16>(aLR.GetRight()) );
             aSet.Put( aLR );
             aSet.Put( aUL );
 

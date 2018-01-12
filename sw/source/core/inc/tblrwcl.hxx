@@ -129,7 +129,7 @@ struct SwGCLineBorder
 
     SwGCLineBorder( const SwTableBox& rBox )
         : pLines( &rBox.GetTabLines() ), pShareFormats(nullptr), nLinePos( 0 )  {}
-    bool IsLastLine() const { return nLinePos + 1 >= (sal_uInt16)pLines->size(); }
+    bool IsLastLine() const { return nLinePos + 1 >= static_cast<sal_uInt16>(pLines->size()); }
 };
 
 class SwGCBorder_BoxBrd

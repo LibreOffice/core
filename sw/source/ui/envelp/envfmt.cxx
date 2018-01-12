@@ -192,7 +192,7 @@ SwEnvFormatPage::SwEnvFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
         }
     }
     m_pSizeFormatBox->InsertEntry(SvxPaperInfo::GetName(PAPER_USER));
-    aIDs.push_back( (sal_uInt16) PAPER_USER );
+    aIDs.push_back( sal_uInt16(PAPER_USER) );
 
 }
 
@@ -236,11 +236,11 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, SpinField&, rEdit, void )
         Paper ePaper = SvxPaperInfo::GetSvxPaper(
             Size(nRotatedWidth, nRotatedHeight), MapUnit::MapTwip);
         for (size_t i = 0; i < aIDs.size(); ++i)
-            if (aIDs[i] == (sal_uInt16)ePaper)
+            if (aIDs[i] == static_cast<sal_uInt16>(ePaper))
                 m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
 
         // remember user size
-        if (aIDs[m_pSizeFormatBox->GetSelectedEntryPos()] == (sal_uInt16)PAPER_USER)
+        if (aIDs[m_pSizeFormatBox->GetSelectedEntryPos()] == sal_uInt16(PAPER_USER))
         {
             lUserW = lWidth ;
             lUserH = lHeight;
@@ -391,7 +391,7 @@ IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, ListBox&, void)
     long lAddrFromTop;
 
     const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectedEntryPos()];
-    if (nPaper != (sal_uInt16)PAPER_USER)
+    if (nPaper != sal_uInt16(PAPER_USER))
     {
         Size aSz = SvxPaperInfo::GetPaperSize((Paper)nPaper);
         lWidth  = std::max(aSz.Width(), aSz.Height());
@@ -431,14 +431,14 @@ void SwEnvFormatPage::SetMinMax()
          lHeight = std::min(lWVal, lHVal);
 
     // Min and Max
-    m_pAddrLeftField->SetMin((long) 100 * (GetFieldVal(*m_pSendLeftField) + 566), FUNIT_TWIP);
-    m_pAddrLeftField->SetMax((long) 100 * (lWidth  - 2 * 566), FUNIT_TWIP);
-    m_pAddrTopField->SetMin((long) 100 * (GetFieldVal(*m_pSendTopField ) + 2 * 566), FUNIT_TWIP);
-    m_pAddrTopField->SetMax((long) 100 * (lHeight - 2 * 566), FUNIT_TWIP);
-    m_pSendLeftField->SetMin((long) 100 * 566, FUNIT_TWIP);
-    m_pSendLeftField->SetMax((long) 100 * (GetFieldVal(*m_pAddrLeftField) - 566), FUNIT_TWIP);
-    m_pSendTopField->SetMin((long) 100 * 566, FUNIT_TWIP);
-    m_pSendTopField->SetMax((long) 100 * (GetFieldVal(*m_pAddrTopField ) - 2 * 566), FUNIT_TWIP);
+    m_pAddrLeftField->SetMin(long(100) * (GetFieldVal(*m_pSendLeftField) + 566), FUNIT_TWIP);
+    m_pAddrLeftField->SetMax(long(100) * (lWidth  - 2 * 566), FUNIT_TWIP);
+    m_pAddrTopField->SetMin(long(100) * (GetFieldVal(*m_pSendTopField ) + 2 * 566), FUNIT_TWIP);
+    m_pAddrTopField->SetMax(long(100) * (lHeight - 2 * 566), FUNIT_TWIP);
+    m_pSendLeftField->SetMin(long(100) * 566, FUNIT_TWIP);
+    m_pSendLeftField->SetMax(long(100) * (GetFieldVal(*m_pAddrLeftField) - 566), FUNIT_TWIP);
+    m_pSendTopField->SetMin(long(100) * 566, FUNIT_TWIP);
+    m_pSendTopField->SetMax(long(100) * (GetFieldVal(*m_pAddrTopField ) - 2 * 566), FUNIT_TWIP);
 
     // First and last
     m_pAddrLeftField->SetFirst(m_pAddrLeftField->GetMin());
@@ -486,7 +486,7 @@ void SwEnvFormatPage::FillItem(SwEnvItem& rItem)
     rItem.m_nSendFromTop  = static_cast< sal_Int32 >(GetFieldVal(*m_pSendTopField ));
 
     const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectedEntryPos()];
-    if (nPaper == (sal_uInt16)PAPER_USER)
+    if (nPaper == sal_uInt16(PAPER_USER))
     {
         long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));
         long lHVal = static_cast< long >(GetFieldVal(*m_pSizeHeightField));
@@ -517,7 +517,7 @@ void SwEnvFormatPage::Reset(const SfxItemSet* rSet)
         Size( std::min(rItem.m_nWidth, rItem.m_nHeight),
         std::max(rItem.m_nWidth, rItem.m_nHeight)), MapUnit::MapTwip);
     for (size_t i = 0; i < aIDs.size(); ++i)
-        if (aIDs[i] == (sal_uInt16)ePaper)
+        if (aIDs[i] == static_cast<sal_uInt16>(ePaper))
             m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
 
     // Metric fields

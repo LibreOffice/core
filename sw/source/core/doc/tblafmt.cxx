@@ -551,7 +551,7 @@ bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_sNumFormatString,
         RTL_TEXTENCODING_UTF8);
-    rStream.WriteUInt16( (sal_uInt16)m_eSysLanguage ).WriteUInt16( (sal_uInt16)m_eNumFormatLanguage );
+    rStream.WriteUInt16( static_cast<sal_uInt16>(m_eSysLanguage) ).WriteUInt16( static_cast<sal_uInt16>(m_eNumFormatLanguage) );
 
     return ERRCODE_NONE == rStream.GetError();
 }
@@ -1313,7 +1313,7 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
                     OSL_ENSURE( false, "The Header contains more or newer Data" );
                     rStream.Seek( nPos + nCnt );
                 }
-                rStream.SetStreamCharSet( (rtl_TextEncoding)nChrSet );
+                rStream.SetStreamCharSet( static_cast<rtl_TextEncoding>(nChrSet) );
                 rStream.SetVersion( nFileVers );
             }
 

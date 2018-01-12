@@ -358,7 +358,7 @@ SwFlyFrameFormat* SwWW8ImplReader::MakeGrafNotInContent(const WW8PicDesc& rPD,
     sal_Int32 nNetHeight = nHeight + rPD.nCT + rPD.nCB;
     if (m_xSFlyPara->nLineSpace && m_xSFlyPara->nLineSpace > nNetHeight)
         m_xSFlyPara->nYPos =
-            (sal_uInt16)( m_xSFlyPara->nYPos + m_xSFlyPara->nLineSpace - nNetHeight );
+            static_cast<sal_uInt16>( m_xSFlyPara->nYPos + m_xSFlyPara->nLineSpace - nNetHeight );
 
     WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), true);
 

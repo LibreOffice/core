@@ -139,7 +139,7 @@ static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
 
     // The difference between the total sum of the desired width and the so far
     // calculated columns and margins should result in the width of the last column.
-    rArr[rColItem.Count()-1].SetWishWidth( rCols.GetWishWidth() - (sal_uInt16)nSumAll );
+    rArr[rColItem.Count()-1].SetWishWidth( rCols.GetWishWidth() - static_cast<sal_uInt16>(nSumAll) );
 
     rCols.SetOrtho(false, 0, 0 );
 }
@@ -189,7 +189,7 @@ void ResizeFrameCols(SwFormatCol& rCol,
                     long nLeftDelta )
 {
     SwColumns& rArr = rCol.GetColumns();
-    long nWishSum = (long)rCol.GetWishWidth();
+    long nWishSum = static_cast<long>(rCol.GetWishWidth());
     long nWishDiff = (nWishSum * 100/nOldWidth * nNewWidth) / 100 - nWishSum;
     long nNewWishWidth = nWishSum + nWishDiff;
     if(nNewWishWidth > 0xffffl)
@@ -202,23 +202,23 @@ void ResizeFrameCols(SwFormatCol& rCol,
             SwColumn* pCol = &i;
             long nVal = pCol->GetWishWidth();
             lcl_Scale(nVal, nScale);
-            pCol->SetWishWidth((sal_uInt16) nVal);
+            pCol->SetWishWidth(static_cast<sal_uInt16>(nVal));
             nVal = pCol->GetLeft();
             lcl_Scale(nVal, nScale);
-            pCol->SetLeft((sal_uInt16) nVal);
+            pCol->SetLeft(static_cast<sal_uInt16>(nVal));
             nVal = pCol->GetRight();
             lcl_Scale(nVal, nScale);
-            pCol->SetRight((sal_uInt16) nVal);
+            pCol->SetRight(static_cast<sal_uInt16>(nVal));
         }
         lcl_Scale(nNewWishWidth, nScale);
         lcl_Scale(nWishDiff, nScale);
     }
-    rCol.SetWishWidth( (sal_uInt16)nNewWishWidth );
+    rCol.SetWishWidth( static_cast<sal_uInt16>(nNewWishWidth) );
 
     if( nLeftDelta >= 2 || nLeftDelta <= -2)
-        rArr.front().SetWishWidth(rArr.front().GetWishWidth() + (sal_uInt16)nWishDiff);
+        rArr.front().SetWishWidth(rArr.front().GetWishWidth() + static_cast<sal_uInt16>(nWishDiff));
     else
-        rArr.back().SetWishWidth(rArr.back().GetWishWidth() + (sal_uInt16)nWishDiff);
+        rArr.back().SetWishWidth(rArr.back().GetWishWidth() + static_cast<sal_uInt16>(nWishDiff));
     // Reset auto width
     rCol.SetOrtho(false, 0, 0 );
 }
@@ -300,7 +300,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 }
 
                 SwFormatFrameSize aSize( pFormat->GetFrameSize() );
-                long nOldWidth = (long) aSize.GetWidth();
+                long nOldWidth = static_cast<long>(aSize.GetWidth());
 
                 if(aSize.GetWidthPercent())
                 {
@@ -317,7 +317,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 {
                     SwFormatCol aCol(pFormat->GetCol());
 
-                    ::ResizeFrameCols(aCol, nOldWidth, (long)aSize.GetWidth(), nDeltaX );
+                    ::ResizeFrameCols(aCol, nOldWidth, static_cast<long>(aSize.GetWidth()), nDeltaX );
                     aSet.Put(aCol);
                 }
 
@@ -365,8 +365,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 SwRect aSectRect = rSh.GetAnyCurRect(CurRectType::SectionPrt);
                 const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section);
                 aSectRect.Pos() += aTmpRect.Pos();
-                long nLeftDiff = aLongLR.GetLeft() - (long)(aSectRect.Left() - rPageRect.Left() );
-                long nRightDiff = aLongLR.GetRight() - (long)( rPageRect.Right() - aSectRect.Right());
+                long nLeftDiff = aLongLR.GetLeft() - static_cast<long>(aSectRect.Left() - rPageRect.Left() );
+                long nRightDiff = aLongLR.GetRight() - static_cast<long>( rPageRect.Right() - aSectRect.Right());
                 //change the LRSpaceItem of the section accordingly
                 const SwSection* pCurrSect = rSh.GetCurrSection();
                 const SwSectionFormat* pSectFormat = pCurrSect->GetFormat();
@@ -478,8 +478,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 SwRect aSectRect = rSh.GetAnyCurRect(CurRectType::SectionPrt);
                 const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section);
                 aSectRect.Pos() += aTmpRect.Pos();
-                const long nLeftDiff = aLongULSpace.GetUpper() - (long)(aSectRect.Top() - rPageRect.Top());
-                const long nRightDiff = aLongULSpace.GetLower() - (long)(nPageHeight - aSectRect.Bottom() + rPageRect.Top());
+                const long nLeftDiff = aLongULSpace.GetUpper() - static_cast<long>(aSectRect.Top() - rPageRect.Top());
+                const long nRightDiff = aLongULSpace.GetLower() - static_cast<long>(nPageHeight - aSectRect.Bottom() + rPageRect.Top());
                 //change the LRSpaceItem of the section accordingly
                 const SwSection* pCurrSect = rSh.GetCurrSection();
                 const SwSectionFormat* pSectFormat = pCurrSect->GetFormat();
@@ -508,9 +508,9 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     const bool bHead = bool(nFrameType & FrameTypeFlags::HEADER);
                     SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
                     if ( bHead )
-                        aUL.SetUpper( (sal_uInt16)aLongULSpace.GetUpper() );
+                        aUL.SetUpper( static_cast<sal_uInt16>(aLongULSpace.GetUpper()) );
                     else
-                        aUL.SetLower( (sal_uInt16)aLongULSpace.GetLower() );
+                        aUL.SetLower( static_cast<sal_uInt16>(aLongULSpace.GetLower()) );
                     aDesc.GetMaster().SetFormatAttr( aUL );
 
                     if( (bHead && pHeaderFormat) || (!bHead && pFooterFormat) )
@@ -529,8 +529,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 else
                 {
                     SvxULSpaceItem aUL(RES_UL_SPACE);
-                    aUL.SetUpper((sal_uInt16)aLongULSpace.GetUpper());
-                    aUL.SetLower((sal_uInt16)aLongULSpace.GetLower());
+                    aUL.SetUpper(static_cast<sal_uInt16>(aLongULSpace.GetUpper()));
+                    aUL.SetLower(static_cast<sal_uInt16>(aLongULSpace.GetLower()));
                     aDesc.GetMaster().SetFormatAttr(aUL);
                 }
 
@@ -548,8 +548,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             SwPageDesc aDesc( rDesc );
             {
                 SvxULSpaceItem aUL(RES_UL_SPACE);
-                aUL.SetUpper((sal_uInt16)aLongULSpace.GetUpper());
-                aUL.SetLower((sal_uInt16)aLongULSpace.GetLower());
+                aUL.SetUpper(static_cast<sal_uInt16>(aLongULSpace.GetUpper()));
+                aUL.SetLower(static_cast<sal_uInt16>(aLongULSpace.GetLower()));
                 aDesc.GetMaster().SetFormatAttr(aUL);
             }
             rSh.ChgPageDesc( nDescId, aDesc );
@@ -596,14 +596,14 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             long nColumnRight = 0;
             if ( nPageColumnType == 4 )
             {
-                nColumnRight = (long)(nWidth/3);
+                nColumnRight = static_cast<long>(nWidth/3);
                 nColumnLeft = nWidth - nColumnRight;
                 aCols.GetColumns()[0].SetWishWidth( nColumnLeft );
                 aCols.GetColumns()[1].SetWishWidth( nColumnRight );
             }
             else if ( nPageColumnType == 5 )
             {
-                nColumnLeft = (long)(nWidth/3);
+                nColumnLeft = static_cast<long>(nWidth/3);
                 nColumnRight = nWidth - nColumnLeft;
                 aCols.GetColumns()[0].SetWishWidth( nColumnLeft );
                 aCols.GetColumns()[1].SetWishWidth( nColumnRight );
@@ -837,7 +837,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     rSh.GetTabCols(aTabCols);
 
                 // left table border
-                long nBorder = (long)(aColItem.GetLeft() - aTabCols.GetLeftMin());
+                long nBorder = static_cast<long>(aColItem.GetLeft() - aTabCols.GetLeftMin());
                 aTabCols.SetLeft( nBorder );
 
                 nBorder = (bVerticalWriting ? nPageHeight : nPageWidth) - aTabCols.GetLeftMin() - aColItem.GetRight();
@@ -1360,8 +1360,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             // Page margin top bottom
             SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
-            SvxLongULSpaceItem aLongUL( (long)aUL.GetUpper(),
-                                        (long)aUL.GetLower(),
+            SvxLongULSpaceItem aLongUL( static_cast<long>(aUL.GetUpper()),
+                                        static_cast<long>(aUL.GetLower()),
                                         SID_ATTR_LONG_ULSPACE);
 
             if ( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
@@ -1393,8 +1393,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 rSet.Put( aLongUL );
             else
             {
-                SvxULSpaceItem aULTmp((sal_uInt16)aLongUL.GetUpper(),
-                                      (sal_uInt16)aLongUL.GetLower(),
+                SvxULSpaceItem aULTmp(static_cast<sal_uInt16>(aLongUL.GetUpper()),
+                                      static_cast<sal_uInt16>(aLongUL.GetLower()),
                                       nWhich);
                 rSet.Put(aULTmp);
             }
@@ -1406,8 +1406,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             const SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
             SvxLongULSpaceItem aLongUL(
-                (long)aUL.GetUpper(),
-                (long)aUL.GetLower(),
+                static_cast<long>(aUL.GetUpper()),
+                static_cast<long>(aUL.GetLower()),
                 SID_ATTR_PAGE_ULSPACE );
 
             rSet.Put( aLongUL );
@@ -1799,8 +1799,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                             aRect.Pos() += aTmpRect.Pos();
 
                             // make relative to page position:
-                            aColItem.SetLeft ((sal_uInt16)( aRect.Left() - rPageRect.Left() ));
-                            aColItem.SetRight((sal_uInt16)( rPageRect.Right() - aRect.Right()));
+                            aColItem.SetLeft (static_cast<sal_uInt16>( aRect.Left() - rPageRect.Left() ));
+                            aColItem.SetRight(static_cast<sal_uInt16>( rPageRect.Right() - aRect.Right()));
                         }
                         aColItem.SetOrtho(aColItem.CalcOrtho());
 
@@ -1871,12 +1871,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         if (bVerticalWriting)
                         {
-                            aColItem.SetLeft((sal_uInt16)rPagePrtRect.Top());
+                            aColItem.SetLeft(static_cast<sal_uInt16>(rPagePrtRect.Top()));
                             aColItem.SetRight(sal_uInt16(nPageHeight - rPagePrtRect.Bottom()));
                         }
                         else
                         {
-                            aColItem.SetLeft((sal_uInt16)rPagePrtRect.Left());
+                            aColItem.SetLeft(static_cast<sal_uInt16>(rPagePrtRect.Left()));
                             aColItem.SetRight(sal_uInt16(nPageWidth - rPagePrtRect.Right()));
                         }
                     }
@@ -2046,9 +2046,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                                     : CurRectType::Page, pPt ));
 
                     // The width of the frame or within the page margins.
-                    const sal_uInt16 nTotalWidth = (sal_uInt16)aRect.Width();
+                    const sal_uInt16 nTotalWidth = static_cast<sal_uInt16>(aRect.Width());
                     // The entire frame width - The difference is twice the distance to the edge.
-                    const sal_uInt16 nOuterWidth = (sal_uInt16)aAbsRect.Width();
+                    const sal_uInt16 nOuterWidth = static_cast<sal_uInt16>(aAbsRect.Width());
                     int nWidth = 0,
                         nEnd = 0;
                     aRectangle.Left() = 0;
@@ -2165,7 +2165,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aRect.Pos() += rSh.GetAnyCurRect( CurRectType::FlyEmbedded,
                                                                 pPt ).Pos();
 
-                    const sal_uInt16 nTotalWidth = (sal_uInt16)aRect.Width();
+                    const sal_uInt16 nTotalWidth = static_cast<sal_uInt16>(aRect.Width());
                     // Initialize nStart and nEnd initialisieren for nNum == 0
                     int nWidth = 0,
                         nStart = 0,
@@ -2266,7 +2266,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 bool bShared = !rDesc.IsHeaderShared();
                 bool bFirst = !rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
-                sal_uInt16 nLayout = ((int)bShared<<1) + (int)bFirst;
+                sal_uInt16 nLayout = (static_cast<int>(bShared)<<1) + static_cast<int>(bFirst);
                 SfxInt16Item aLayoutItem(SID_ATTR_PAGE_HEADER_LAYOUT, nLayout);
                 rSet.Put(aLayoutItem);
             }
@@ -2291,7 +2291,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 bool bShared = !rDesc.IsFooterShared();
                 bool bFirst = !rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
-                sal_uInt16 nLayout = ((int)bShared<<1) + (int)bFirst;
+                sal_uInt16 nLayout = (static_cast<int>(bShared)<<1) + static_cast<int>(bFirst);
                 SfxInt16Item aLayoutItem(SID_ATTR_PAGE_FOOTER_LAYOUT, nLayout);
                 rSet.Put(aLayoutItem);
             }

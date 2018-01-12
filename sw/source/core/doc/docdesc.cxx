@@ -107,8 +107,8 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     SvxULSpaceItem aUL( RES_UL_SPACE );
 
-    aUL.SetUpper( (sal_uInt16)nMinTop );
-    aUL.SetLower( (sal_uInt16)nMinBottom );
+    aUL.SetUpper( static_cast<sal_uInt16>(nMinTop) );
+    aUL.SetLower( static_cast<sal_uInt16>(nMinBottom) );
     aLR.SetRight( nMinRight );
     aLR.SetLeft( nMinLeft );
 

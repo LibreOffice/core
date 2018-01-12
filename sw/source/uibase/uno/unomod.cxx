@@ -617,7 +617,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             sal_Int32 nTmp = 0;
             if(!(rValue >>= nTmp)  ||  !(0 <= nTmp  &&  nTmp < 100))
                 throw IllegalArgumentException();
-            mpViewOption->SetDivisionX( (short) nTmp );
+            mpViewOption->SetDivisionX( static_cast<short>(nTmp) );
         }
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_Y  :
@@ -625,7 +625,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             sal_Int32 nTmp = 0;
             if(!(rValue >>= nTmp)  ||  !(0 <= nTmp  &&  nTmp < 100))
                 throw IllegalArgumentException();
-            mpViewOption->SetDivisionY( (short) nTmp );
+            mpViewOption->SetDivisionY( static_cast<short>(nTmp) );
         }
         break;
         case  HANDLE_VIEWSET_ZOOM                   :
@@ -633,7 +633,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             sal_Int16 nZoom = 0;
             if(!(rValue >>= nZoom) || nZoom > 1000 || nZoom < 5)
                 throw lang::IllegalArgumentException();
-            mpViewOption->SetZoom((sal_uInt16)nZoom);
+            mpViewOption->SetZoom(static_cast<sal_uInt16>(nZoom));
             mbApplyZoom = true;
         }
         break;
@@ -835,23 +835,23 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : bBoolVal = mpConstViewOption->IsShowScrollBarTips(); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
             bBool = false;
-            rValue <<= (sal_Int32) convertTwipToMm100(mpConstViewOption->GetSnapSize().Width());
+            rValue <<= static_cast<sal_Int32>(convertTwipToMm100(mpConstViewOption->GetSnapSize().Width()));
         break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_Y   :
             bBool = false;
-            rValue <<= (sal_Int32) convertTwipToMm100(mpConstViewOption->GetSnapSize().Height());
+            rValue <<= static_cast<sal_Int32>(convertTwipToMm100(mpConstViewOption->GetSnapSize().Height()));
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_X  :
             bBool = false;
-            rValue <<= (sal_Int32) mpConstViewOption->GetDivisionX();
+            rValue <<= static_cast<sal_Int32>(mpConstViewOption->GetDivisionX());
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_Y  :
             bBool = false;
-            rValue <<= (sal_Int32) mpConstViewOption->GetDivisionY();
+            rValue <<= static_cast<sal_Int32>(mpConstViewOption->GetDivisionY());
         break;
         case  HANDLE_VIEWSET_ZOOM                   :
                 bBool = false;
-                rValue <<= (sal_Int16)mpConstViewOption->GetZoom();
+                rValue <<= static_cast<sal_Int16>(mpConstViewOption->GetZoom());
         break;
         case HANDLE_VIEWSET_ZOOM_TYPE:
         {
@@ -904,12 +904,12 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             {
                 FieldUnit eUnit;
                 pView->GetHRulerMetric( eUnit );
-                rValue <<= (sal_Int32)eUnit;
+                rValue <<= static_cast<sal_Int32>(eUnit);
             }
             else
             {
                 const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( false );
-                rValue <<= (sal_Int32)pUsrPref->GetHScrollMetric();
+                rValue <<= static_cast<sal_Int32>(pUsrPref->GetHScrollMetric());
             }
             bBool = false;
         }
@@ -920,12 +920,12 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             {
                 FieldUnit eUnit;
                 pView->GetVRulerMetric( eUnit );
-                rValue <<= (sal_Int32)eUnit;
+                rValue <<= static_cast<sal_Int32>(eUnit);
             }
             else
             {
                 const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( false );
-                rValue <<= (sal_Int32)pUsrPref->GetVScrollMetric();
+                rValue <<= static_cast<sal_Int32>(pUsrPref->GetVScrollMetric());
             }
             bBool = false;
         }

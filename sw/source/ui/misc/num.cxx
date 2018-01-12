@@ -284,13 +284,13 @@ void SwNumPositionTabPage::InitControls()
         long nDistBorderNum;
         if(bRelative)
         {
-            nDistBorderNum = (long)aNumFormatArr[nLvl]->GetAbsLSpace()+ aNumFormatArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = static_cast<long>(aNumFormatArr[nLvl]->GetAbsLSpace())+ aNumFormatArr[nLvl]->GetFirstLineOffset();
             if(nLvl)
-                nDistBorderNum -= (long)aNumFormatArr[nLvl - 1]->GetAbsLSpace()+ aNumFormatArr[nLvl - 1]->GetFirstLineOffset();
+                nDistBorderNum -= static_cast<long>(aNumFormatArr[nLvl - 1]->GetAbsLSpace())+ aNumFormatArr[nLvl - 1]->GetFirstLineOffset();
         }
         else
         {
-            nDistBorderNum = (long)aNumFormatArr[nLvl]->GetAbsLSpace()+ aNumFormatArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = static_cast<long>(aNumFormatArr[nLvl]->GetAbsLSpace())+ aNumFormatArr[nLvl]->GetFirstLineOffset();
         }
         m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nDistBorderNum),FUNIT_TWIP);
     }
@@ -693,7 +693,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, SpinField&, rSpin, void )
                 }
                 else
                 {
-                    aNumFormat.SetAbsLSpace( (short)nValue - aNumFormat.GetFirstLineOffset());
+                    aNumFormat.SetAbsLSpace( static_cast<short>(nValue) - aNumFormat.GetFirstLineOffset());
                 }
             }
             else if (&rField == m_pDistNumMF)

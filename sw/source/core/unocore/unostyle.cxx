@@ -2303,7 +2303,7 @@ uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry
     //
     // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
     if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && aResult.getValueType() == cppu::UnoType<sal_Int32>::get())
-        aResult <<= (sal_Int16)(aResult.get<sal_Int32>());
+        aResult <<= static_cast<sal_Int16>(aResult.get<sal_Int32>());
     // check for needed metric translation
     if(rEntry.nMemberId & SFX_METRIC_ITEM && GetDoc())
     {
@@ -4698,7 +4698,7 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const
             return nullptr;
 
         const auto& rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-        if (rTableTemplateMap.size() <= (size_t)nTemplateIndex)
+        if (rTableTemplateMap.size() <= static_cast<size_t>(nTemplateIndex))
             return nullptr;
 
         SwTableAutoFormat* pTableAutoFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);

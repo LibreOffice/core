@@ -600,7 +600,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer*, pIdle, void )
     sal_uInt16 nCount  = 0;
     // at first the region around the cursor is processed
     TextSelection aSel = m_pTextView->GetSelection();
-    sal_uInt16 nCur = (sal_uInt16)aSel.GetStart().GetPara();
+    sal_uInt16 nCur = static_cast<sal_uInt16>(aSel.GetStart().GetPara());
     if(nCur > 40)
         nCur -= 40;
     else
@@ -725,7 +725,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
             r.eType != svtools::HTMLKEYWORD &&
             r.eType != svtools::HTMLUNKNOWN)
                 r.eType = svtools::HTMLUNKNOWN;
-        Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue(r.eType).nColor);
+        Color aColor(static_cast<ColorData>(SW_MOD()->GetColorConfig().GetColorValue(r.eType).nColor));
         sal_uInt16 nLine = nLineOff+r.nLine;
         m_pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
     }

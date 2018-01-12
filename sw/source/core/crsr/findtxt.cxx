@@ -623,7 +623,7 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
             Move( fnMoveForward, GoInContent ) &&
             (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
-            1 == std::abs( (int)( GetPoint()->nNode.GetIndex() -
+            1 == std::abs( static_cast<int>( GetPoint()->nNode.GetIndex() -
                              GetMark()->nNode.GetIndex()) ) )
         {
             // if backward search, switch point and mark
@@ -735,7 +735,7 @@ sal_uLong SwCursor::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSear
 
     bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
-        eFndRngs = (FindRanges)(eFndRngs | FindRanges::InSel);
+        eFndRngs = static_cast<FindRanges>(eFndRngs | FindRanges::InSel);
     SwFindParaText aSwFindParaText( rSearchOpt, bSearchInNotes, bReplace, *this );
     sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );

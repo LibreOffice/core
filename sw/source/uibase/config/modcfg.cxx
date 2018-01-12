@@ -619,12 +619,12 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
     {
         case 0: pValues[nProp] <<= rOpt.UseCaption(); break;//Enable
         case 1: pValues[nProp] <<= rOpt.GetCategory(); break;//Category
-        case 2: pValues[nProp] <<= (sal_Int32)rOpt.GetNumType(); break;//Numbering",
+        case 2: pValues[nProp] <<= static_cast<sal_Int32>(rOpt.GetNumType()); break;//Numbering",
         case 3: pValues[nProp] <<= rOpt.GetNumSeparator(); break;//NumberingSeparator",
         case 4: pValues[nProp] <<= rOpt.GetCaption();  break;//CaptionText",
         case 5: pValues[nProp] <<= rOpt.GetSeparator();break;//Delimiter",
-        case 6: pValues[nProp] <<= (sal_Int32)rOpt.GetLevel();   break;//Level",
-        case 7: pValues[nProp] <<= (sal_Int32)rOpt.GetPos();     break;//Position",
+        case 6: pValues[nProp] <<= static_cast<sal_Int32>(rOpt.GetLevel());   break;//Level",
+        case 7: pValues[nProp] <<= static_cast<sal_Int32>(rOpt.GetPos());     break;//Position",
         case 8: pValues[nProp] <<= rOpt.GetCharacterStyle(); break; //CharacterStyle
         case 9: pValues[nProp] <<= rOpt.CopyAttributes(); break; //ApplyAttributes
     }
@@ -1151,10 +1151,10 @@ void SwTableConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case 0 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTableHMove); break;   //"Shift/Row",
-            case 1 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTableVMove); break;     //"Shift/Column",
-            case 2 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTableHInsert); break;   //"Insert/Row",
-            case 3 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTableVInsert); break;   //"Insert/Column",
+            case 0 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableHMove)); break;   //"Shift/Row",
+            case 1 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableVMove)); break;     //"Shift/Column",
+            case 2 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableHInsert)); break;   //"Insert/Row",
+            case 3 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableVInsert)); break;   //"Insert/Column",
             case 4 : pValues[nProp] <<= (sal_Int32)eTableChgMode; break;   //"Change/Effect",
             case 5 : pValues[nProp] <<= bInsTableFormatNum; break;  //"Input/NumberRecognition",
             case 6 : pValues[nProp] <<= bInsTableChangeNumFormat; break;  //"Input/NumberFormatRecognition",
@@ -1177,10 +1177,10 @@ void SwTableConfig::Load()
             sal_Int32 nTemp = 0;
             switch (nProp)
             {
-                case 0 : pValues[nProp] >>= nTemp; nTableHMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;  //"Shift/Row",
-                case 1 : pValues[nProp] >>= nTemp; nTableVMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;     //"Shift/Column",
-                case 2 : pValues[nProp] >>= nTemp; nTableHInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Row",
-                case 3 : pValues[nProp] >>= nTemp; nTableVInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Column",
+                case 0 : pValues[nProp] >>= nTemp; nTableHMove = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;  //"Shift/Row",
+                case 1 : pValues[nProp] >>= nTemp; nTableVMove = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;     //"Shift/Column",
+                case 2 : pValues[nProp] >>= nTemp; nTableHInsert = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Row",
+                case 3 : pValues[nProp] >>= nTemp; nTableVInsert = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Column",
                 case 4 : pValues[nProp] >>= nTemp; eTableChgMode = (TableChgMode)nTemp; break;   //"Change/Effect",
                 case 5 : bInsTableFormatNum = *o3tl::doAccess<bool>(pValues[nProp]);  break;  //"Input/NumberRecognition",
                 case 6 : bInsTableChangeNumFormat = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/NumberFormatRecognition",
@@ -1350,7 +1350,7 @@ void SwCompareConfig::ImplCommit()
     pValues[0] <<= (sal_Int32) eCmpMode;
     pValues[1] <<= bUseRsid;
     pValues[2] <<= bIgnorePieces;
-    pValues[3] <<= (sal_Int32) nPieceLen;
+    pValues[3] <<= static_cast<sal_Int32>(nPieceLen);
     pValues[4] <<= m_bStoreRsid;
 
     PutProperties(aNames, aValues);

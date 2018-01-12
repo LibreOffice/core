@@ -106,8 +106,7 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
             rFormat.GetAttrSet().GetItemState( RES_BOXATR_FORMAT,
                                             false, &pItem ) )
         {
-            sal_Int32 nFormat = (sal_Int32)
-                static_cast<const SwTableBoxNumFormat *>(pItem)->GetValue();
+            sal_Int32 nFormat = static_cast<sal_Int32>(static_cast<const SwTableBoxNumFormat *>(pItem)->GetValue());
 
             if ( (nFormat != -1) && (nFormat != static_cast<sal_Int32>(getSwDefaultTextFormat())) )
             {

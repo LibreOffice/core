@@ -2978,14 +2978,14 @@ sal_Bool SAL_CALL SwXFieldEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
 
-    return m_pImpl->m_nNextIndex < (sal_Int32)m_pImpl->m_Items.size();
+    return m_pImpl->m_nNextIndex < static_cast<sal_Int32>(m_pImpl->m_Items.size());
 }
 
 uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
 
-    if (m_pImpl->m_nNextIndex >= (sal_Int32)m_pImpl->m_Items.size())
+    if (m_pImpl->m_nNextIndex >= static_cast<sal_Int32>(m_pImpl->m_Items.size()))
         throw container::NoSuchElementException(
             "SwXFieldEnumeration::nextElement",
             css::uno::Reference<css::uno::XInterface>());

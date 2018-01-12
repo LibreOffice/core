@@ -347,7 +347,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
 
         // If the ColumnArray has a wrong count, ignore it!
         if( pColArr &&
-            (size_t)(nCols + ( text::HoriOrientation::NONE == eAdjust ? 2 : 1 )) != pColArr->size() )
+            static_cast<size_t>(nCols + ( text::HoriOrientation::NONE == eAdjust ? 2 : 1 )) != pColArr->size() )
             pColArr = nullptr;
     }
 
@@ -2308,7 +2308,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
             SwPaM* pTmp = &rPam;
             while( &rPam != ( pTmp = pTmp->GetNext() ))
                 for( int i = 0; i < 2; ++i )
-                    pTmp->GetBound( (bool)i ) = *rPam.GetPoint();
+                    pTmp->GetBound( static_cast<bool>(i) ) = *rPam.GetPoint();
         }
 
         // Merge them
@@ -2911,7 +2911,7 @@ void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )
     aPosArr.push_back(nWidth);
     SwTableBox* p = const_cast<SwTableBox*>(&rBox);
     m_Boxes.push_back(p);
-    nWidth = nWidth + (sal_uInt16)rBox.GetFrameFormat()->GetFrameSize().GetWidth();
+    nWidth = nWidth + static_cast<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
 }
 
 const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
@@ -2934,7 +2934,7 @@ const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
         if( n >= aPosArr.size() )
             --n;
 
-        nWidth = nWidth + (sal_uInt16)rBox.GetFrameFormat()->GetFrameSize().GetWidth();
+        nWidth = nWidth + static_cast<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
         pRet = m_Boxes[ n ];
     }
     return pRet;
@@ -3650,7 +3650,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
         else if( pSetPara->nCurBox == pSetPara->nEndBox )
             pSetPara->nAFormatBox = 3;
         else
-            pSetPara->nAFormatBox = (sal_uInt8)(1 + ((pSetPara->nCurBox-1) & 1));
+            pSetPara->nAFormatBox = static_cast<sal_uInt8>(1 + ((pSetPara->nCurBox-1) & 1));
     }
 
     if (rBox.GetBox()->GetSttNd())
@@ -3764,7 +3764,7 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
         else if (static_cast<size_t>(n+1) == rFLns.size())
             aPara.nAFormatLine = 3;
         else
-            aPara.nAFormatLine = (sal_uInt8)(1 + ((n-1) & 1 ));
+            aPara.nAFormatLine = static_cast<sal_uInt8>(1 + ((n-1) & 1 ));
 
         aPara.nAFormatBox = 0;
         aPara.nCurBox = 0;

@@ -88,9 +88,9 @@ struct SwXMLTableColumnCmpWidth_Impl
 {
     bool operator()( SwXMLTableColumn_Impl* const& lhs, SwXMLTableColumn_Impl* const& rhs ) const
     {
-        sal_Int32 n = (sal_Int32)lhs->GetWidthOpt() - (sal_Int32)rhs->GetWidthOpt();
+        sal_Int32 n = static_cast<sal_Int32>(lhs->GetWidthOpt()) - static_cast<sal_Int32>(rhs->GetWidthOpt());
         if( !n )
-            n = (sal_Int32)lhs->GetRelWidth() - (sal_Int32)rhs->GetRelWidth();
+            n = static_cast<sal_Int32>(lhs->GetRelWidth()) - static_cast<sal_Int32>(rhs->GetRelWidth());
         return n < 0;
     }
 };
@@ -296,7 +296,7 @@ static OUString lcl_xmltble_appendBoxPrefix(const OUString& rNamePrefix,
     if( bTop )
     {
         OUString sTmp;
-        sw_GetTableBoxColStr( (sal_uInt16)nCol, sTmp );
+        sw_GetTableBoxColStr( static_cast<sal_uInt16>(nCol), sTmp );
         return rNamePrefix + "." + sTmp + OUString::number(nRow + 1);
     }
     return rNamePrefix
@@ -543,7 +543,7 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
         }
         if( rCol.GetRelWidth() )
         {
-            sValue.append( (sal_Int32)rCol.GetRelWidth() );
+            sValue.append( static_cast<sal_Int32>(rCol.GetRelWidth()) );
             sValue.append( '*' );
             AddAttribute( XML_NAMESPACE_STYLE, XML_REL_COLUMN_WIDTH,
                           sValue.makeStringAndClear() );

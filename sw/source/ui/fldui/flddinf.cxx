@@ -193,12 +193,12 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (pSelEntry != nullptr)
     {
         m_pTypeTLB->Select(pSelEntry);
-        nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData());
+        nSubType = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pSelEntry->GetUserData()));
     }
     else if ( m_pTypeTLB->GetEntry(0) )
     {
         pSelEntry = m_pTypeTLB->GetEntry(0);
-        nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData());
+        nSubType = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pSelEntry->GetUserData()));
     }
 
     FillSelectionLB(nSubType);
@@ -234,14 +234,14 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, TypeHdl, SvTreeListBox*, void)
         m_pTypeTLB->Select(pSelEntry);
     }
     else if (pOldEntry != pSelEntry)
-        FillSelectionLB((sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData()));
+        FillSelectionLB(static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pSelEntry->GetUserData())));
 
     SubTypeHdl(*m_pSelectionLB);
 }
 
 IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
 {
-    sal_uInt16 nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData());
+    sal_uInt16 nSubType = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pSelEntry->GetUserData()));
     sal_Int32 nPos = m_pSelectionLB->GetSelectedEntryPos();
     sal_uInt16 nExtSubType;
     SvNumFormatType nNewType = SvNumFormatType::ALL;
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
             nPos = 0;
         }
 
-        nExtSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nPos));
+        nExtSubType = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nPos)));
     }
     else
         nExtSubType = DI_SUB_TIME;
@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
         nPos = m_pSelectionLB->GetSelectedEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nPos));
+            nSubType = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nPos)));
 
             nOldSubType &= ~DI_SUB_FIXED;
             if (nOldSubType == nSubType)
@@ -425,10 +425,10 @@ sal_Int32 SwFieldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 
 bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
 {
-    if (!pSelEntry || (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData()) == USHRT_MAX)
+    if (!pSelEntry || static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pSelEntry->GetUserData())) == USHRT_MAX)
         return false;
 
-    sal_uInt16 nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData());
+    sal_uInt16 nSubType = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pSelEntry->GetUserData()));
 
     sal_uInt32 nFormat = 0;
 
@@ -439,7 +439,7 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
         aName = m_pTypeTLB->GetEntryText(pSelEntry);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
-        nSubType |= (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nPos));
+        nSubType |= static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nPos)));
 
     if (m_pFixedCB->IsChecked())
         nSubType |= DI_SUB_FIXED;

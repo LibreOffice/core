@@ -709,7 +709,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
             {
                 const SwColumn* pCol = &rCols[i];
                 nStart1 = pCol->GetLeft() + nWidth1;
-                nWidth1 += (long)rCol.CalcColWidth( i, (sal_uInt16)nWidth );
+                nWidth1 += static_cast<long>(rCol.CalcColWidth( i, static_cast<sal_uInt16>(nWidth) ));
                 nEnd1 = nWidth1 - pCol->GetRight();
             }
             if(nStart1 || nEnd1 != nWidth)

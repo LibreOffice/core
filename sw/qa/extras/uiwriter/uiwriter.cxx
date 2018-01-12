@@ -886,7 +886,7 @@ void SwUiWriterTest::testDOCXAutoTextMultiple()
     std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-multiple.dotx");
 
     // check entries count
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, pGlossary->GetCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pGlossary->GetCount());
 
     // check names of entries, sorted order
     CPPUNIT_ASSERT_EQUAL(OUString("Anothercomplex"), pGlossary->GetLongName(0));
@@ -938,7 +938,7 @@ void SwUiWriterTest::testDOCXAutoTextGallery()
     CPPUNIT_ASSERT(pDoc != nullptr);
 
     // check entries count
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)1, pGlossary->GetCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pGlossary->GetCount());
 
     // check entry name (if not contains gallery type)
     CPPUNIT_ASSERT_EQUAL(OUString("Multiple"), pGlossary->GetLongName(0));
@@ -953,14 +953,14 @@ void SwUiWriterTest::testWatermarkDOCX()
 
     CPPUNIT_ASSERT(eState >= SfxItemState::DEFAULT);
     CPPUNIT_ASSERT(pItem);
-    CPPUNIT_ASSERT_EQUAL((unsigned short)SID_WATERMARK, pItem->Which());
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(SID_WATERMARK), pItem->Which());
 
     const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>(pItem);
     CPPUNIT_ASSERT_EQUAL(OUString("CustomWatermark"), pWatermark->GetText());
     CPPUNIT_ASSERT_EQUAL(OUString("DejaVu Sans Light"), pWatermark->GetFont());
-    CPPUNIT_ASSERT_EQUAL((sal_Int16)45, pWatermark->GetAngle());
-    CPPUNIT_ASSERT_EQUAL((sal_uInt32)0x548dd4, pWatermark->GetColor());
-    CPPUNIT_ASSERT_EQUAL((sal_Int16)50, pWatermark->GetTransparency());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(45), pWatermark->GetAngle());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x548dd4), pWatermark->GetColor());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
 }
 
 void SwUiWriterTest::testWatermarkPosition()
@@ -2350,14 +2350,14 @@ void SwUiWriterTest::testSearchWithTransliterate()
     sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,SwDocPositions::Start,SwDocPositions::End);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(true);
     CPPUNIT_ASSERT_EQUAL(OUString(),pShellCursor->GetText());
-    CPPUNIT_ASSERT_EQUAL(0,(int)case1);
+    CPPUNIT_ASSERT_EQUAL(0,static_cast<int>(case1));
     SearchOpt.searchString = "paragraph";
     SearchOpt.transliterateFlags = TransliterationFlags::IGNORE_KASHIDA_CTL;
     //transliteration option set so that all search strings are found
     sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,SwDocPositions::Start,SwDocPositions::End);
     pShellCursor = pWrtShell->getShellCursor(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCursor->GetText());
-    CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+    CPPUNIT_ASSERT_EQUAL(1,static_cast<int>(case2));
 }
 
 void SwUiWriterTest::testTdf73660()
@@ -3680,13 +3680,13 @@ void SwUiWriterTest::testTdf90883TableBoxGetCoordinates()
     pWrtShell->Down(true);
     SwSelBoxes aBoxes;
     ::GetTableSel( *pWrtShell, aBoxes );
-    CPPUNIT_ASSERT_EQUAL( 2, (int)aBoxes.size() );
+    CPPUNIT_ASSERT_EQUAL( 2, static_cast<int>(aBoxes.size()) );
     Point pos ( aBoxes[0]->GetCoordinates() );
-    CPPUNIT_ASSERT_EQUAL( 1, (int)pos.X() );
-    CPPUNIT_ASSERT_EQUAL( 1, (int)pos.Y() );
+    CPPUNIT_ASSERT_EQUAL( 1, static_cast<int>(pos.X()) );
+    CPPUNIT_ASSERT_EQUAL( 1, static_cast<int>(pos.Y()) );
     pos = aBoxes[1]->GetCoordinates();
-    CPPUNIT_ASSERT_EQUAL( 1, (int)pos.X() );
-    CPPUNIT_ASSERT_EQUAL( 2, (int)pos.Y() );
+    CPPUNIT_ASSERT_EQUAL( 1, static_cast<int>(pos.X()) );
+    CPPUNIT_ASSERT_EQUAL( 2, static_cast<int>(pos.Y()) );
 }
 
 void SwUiWriterTest::testEmbeddedDataSource()

@@ -443,7 +443,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         }
 
         if ( EXCHG_IN_ACTION_DEFAULT != nEventAction )
-            nUserOpt = (sal_Int8)nEventAction;
+            nUserOpt = static_cast<sal_Int8>(nEventAction);
 
         // show DropCursor or UserMarker ?
         if( SotExchangeDest::SWDOC_FREE_AREA_WEB == m_nDropDestination ||

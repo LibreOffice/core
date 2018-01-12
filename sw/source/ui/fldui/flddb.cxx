@@ -167,11 +167,11 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
         OUString sUserData = GetUserData();
         if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            const sal_uInt16 nVal = (sal_uInt16)sUserData.getToken(1, ';').toInt32();
+            const sal_uInt16 nVal = static_cast<sal_uInt16>(sUserData.getToken(1, ';').toInt32());
             if(nVal != USHRT_MAX)
             {
                 for (sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); ++i)
-                    if(nVal == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i)))
+                    if(nVal == static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i))))
                     {
                         m_pTypeLB->SelectEntryPos(i);
                         break;
@@ -213,7 +213,7 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
 
     if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
-        const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+        const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
         sal_uLong nFormat = 0;
         sal_uInt16 nSubType = 0;
 
@@ -300,7 +300,7 @@ void SwFieldDBPage::TypeHdl( ListBox const * pBox )
     if(!pSh)
         pSh = ::GetActiveWrtShell();
     bool bCond = false, bSetNo = false, bFormat = false, bDBFormat = false;
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     m_pDatabaseTLB->ShowColumns(nTypeId == TYP_DBFLD);
 
@@ -409,7 +409,7 @@ IMPL_LINK( SwFieldDBPage, NumSelectHdl, ListBox&, rLB, void )
 void SwFieldDBPage::CheckInsert()
 {
     bool bInsert = true;
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     SvTreeListEntry* pEntry = m_pDatabaseTLB->GetCurEntry();
 
@@ -440,7 +440,7 @@ IMPL_LINK( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox, void )
     SvTreeListEntry* pEntry = pBox->GetCurEntry();
     if (pEntry)
     {
-        const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+        const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
         pEntry = m_pDatabaseTLB->GetParent(pEntry);
 
@@ -494,7 +494,7 @@ void    SwFieldDBPage::FillUserData()
 {
     const sal_Int32 nEntryPos = m_pTypeLB->GetSelectedEntryPos();
     const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
-        ? USHRT_MAX : (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData( nEntryPos ));
+        ? USHRT_MAX : static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData( nEntryPos )));
     SetUserData(USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
 }
 

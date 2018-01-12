@@ -226,8 +226,8 @@ ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
         pStrm->ResetError();
     else if( SvParserState::Accepted != eState )
     {
-        const OUString sErr(OUString::number((sal_Int32)xParser->GetLineNr())
-            + "," + OUString::number((sal_Int32)xParser->GetLinePos()));
+        const OUString sErr(OUString::number(static_cast<sal_Int32>(xParser->GetLineNr()))
+            + "," + OUString::number(static_cast<sal_Int32>(xParser->GetLinePos())));
 
         // use the stream as transport for error number
         nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
@@ -3542,7 +3542,7 @@ void SwHTMLParser::NewBasefontAttr()
         switch( rOption.GetToken() )
         {
         case HtmlOptionId::SIZE:
-            nSize = (sal_uInt16)rOption.GetNumber();
+            nSize = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::ID:
             aId = rOption.GetString();
@@ -3651,14 +3651,14 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
                     '-' == rOption.GetString()[0] )
                     nSSize = o3tl::saturating_add<sal_Int32>(nBaseSize, rOption.GetSNumber());
                 else
-                    nSSize = (sal_Int32)rOption.GetNumber();
+                    nSSize = static_cast<sal_Int32>(rOption.GetNumber());
 
                 if( nSSize < 1 )
                     nSSize = 1;
                 else if( nSSize > 7 )
                     nSSize = 7;
 
-                nSize = (sal_uInt16)nSSize;
+                nSize = static_cast<sal_uInt16>(nSSize);
                 nFontHeight = m_aFontHeights[nSize-1];
             }
             break;
@@ -4832,12 +4832,12 @@ void SwHTMLParser::InsertSpacer()
         case HtmlOptionId::WIDTH:
             // First only save as pixel value!
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.Width() = (long)rOption.GetNumber();
+            aSize.Width() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::HEIGHT:
             // First only save as pixel value!
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.Height() = (long)rOption.GetNumber();
+            aSize.Height() = static_cast<long>(rOption.GetNumber());
             break;
         case HtmlOptionId::SIZE:
             // First only save as pixel value!
@@ -4920,12 +4920,12 @@ void SwHTMLParser::InsertSpacer()
             {
                 SvxULSpaceItem aULSpace( static_cast<const SvxULSpaceItem&>(pTextNode
                     ->SwContentNode::GetAttr( RES_UL_SPACE )) );
-                aULSpace.SetLower( aULSpace.GetLower() + (sal_uInt16)nSize );
+                aULSpace.SetLower( aULSpace.GetLower() + static_cast<sal_uInt16>(nSize) );
                 pTextNode->SetAttr( aULSpace );
             }
             else
             {
-                NewAttr(m_xAttrTab, &m_xAttrTab->pULSpace, SvxULSpaceItem(0, (sal_uInt16)nSize, RES_UL_SPACE));
+                NewAttr(m_xAttrTab, &m_xAttrTab->pULSpace, SvxULSpaceItem(0, static_cast<sal_uInt16>(nSize), RES_UL_SPACE));
                 EndAttr( m_xAttrTab->pULSpace, false );
 
                 AppendTextNode();    // Don't change spacing!
@@ -4951,7 +4951,7 @@ void SwHTMLParser::InsertSpacer()
                 short nIndent = 0;
 
                 GetMarginsFromContextWithNumBul( nLeft, nRight, nIndent );
-                nIndent = nIndent + (short)nSize;
+                nIndent = nIndent + static_cast<short>(nSize);
 
                 SvxLRSpaceItem aLRItem( RES_LR_SPACE );
                 aLRItem.SetTextLeft( nLeft );
@@ -4963,7 +4963,7 @@ void SwHTMLParser::InsertSpacer()
             }
             else
             {
-                NewAttr(m_xAttrTab, &m_xAttrTab->pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ));
+                NewAttr(m_xAttrTab, &m_xAttrTab->pKerning, SvxKerningItem( static_cast<short>(nSize), RES_CHRATR_KERNING ));
                 OUString aTmp( ' ' );
                 m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aTmp );
                 EndAttr( m_xAttrTab->pKerning );
@@ -4978,7 +4978,7 @@ sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
     {
         long nTwips = Application::GetDefaultDevice()->PixelToLogic(
                     Size( nPixel, nPixel ), MapMode( MapUnit::MapTwip ) ).Width();
-        return nTwips <= USHRT_MAX ? (sal_uInt16)nTwips : USHRT_MAX;
+        return nTwips <= USHRT_MAX ? static_cast<sal_uInt16>(nTwips) : USHRT_MAX;
     }
     else
         return nPixel;
@@ -5203,11 +5203,11 @@ void SwHTMLParser::InsertHorzRule()
             aId = rOption.GetString();
             break;
         case HtmlOptionId::SIZE:
-            nSize = (sal_uInt16)rOption.GetNumber();
+            nSize = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            nWidth = (sal_uInt16)rOption.GetNumber();
+            nWidth = static_cast<sal_uInt16>(rOption.GetNumber());
             if( bPrcWidth && nWidth>=100 )
             {
                 // the default case are 100% lines (no attributes necessary)
@@ -5259,7 +5259,7 @@ void SwHTMLParser::InsertHorzRule()
         if( nSize )
         {
             long nPWidth = 0;
-            long nPHeight = (long)nSize;
+            long nPHeight = static_cast<long>(nSize);
             SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
             if ( !bNoShade )
             {
@@ -5292,12 +5292,12 @@ void SwHTMLParser::InsertHorzRule()
         {
             // fake length and alignment of line above paragraph indents
             long nBrowseWidth = GetCurrentBrowseWidth();
-            nWidth = bPrcWidth ? (sal_uInt16)((nWidth*nBrowseWidth) / 100)
-                               : ToTwips( (sal_uInt16)nBrowseWidth );
+            nWidth = bPrcWidth ? static_cast<sal_uInt16>((nWidth*nBrowseWidth) / 100)
+                               : ToTwips( static_cast<sal_uInt16>(nBrowseWidth) );
             if( nWidth < MINLAY )
                 nWidth = MINLAY;
 
-            const SwFormatColl *pColl = ((long)nWidth < nBrowseWidth) ? GetCurrFormatColl() : nullptr;
+            const SwFormatColl *pColl = (static_cast<long>(nWidth) < nBrowseWidth) ? GetCurrFormatColl() : nullptr;
             if (pColl)
             {
                 SvxLRSpaceItem aLRItem( pColl->GetLRSpace() );
@@ -5306,16 +5306,16 @@ void SwHTMLParser::InsertHorzRule()
                 switch( eAdjust )
                 {
                 case SvxAdjust::Right:
-                    aLRItem.SetTextLeft( (sal_uInt16)nDist );
+                    aLRItem.SetTextLeft( static_cast<sal_uInt16>(nDist) );
                     break;
                 case SvxAdjust::Left:
-                    aLRItem.SetRight( (sal_uInt16)nDist );
+                    aLRItem.SetRight( static_cast<sal_uInt16>(nDist) );
                     break;
                 case SvxAdjust::Center:
                 default:
                     nDist /= 2;
-                    aLRItem.SetTextLeft( (sal_uInt16)nDist );
-                    aLRItem.SetRight( (sal_uInt16)nDist );
+                    aLRItem.SetTextLeft( static_cast<sal_uInt16>(nDist) );
+                    aLRItem.SetRight( static_cast<sal_uInt16>(nDist) );
                     break;
                 }
 

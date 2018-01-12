@@ -650,7 +650,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&
     }
 
     Any aZoom;
-    aZoom <<= (sal_Int16)DocumentZoomType::ENTIRE_PAGE;
+    aZoom <<= sal_Int16(DocumentZoomType::ENTIRE_PAGE);
     m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
 
     const SwFormatFrameSize& rPageSize = m_pExampleWrtShell->GetPageDesc(

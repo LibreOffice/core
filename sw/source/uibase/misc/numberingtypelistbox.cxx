@@ -151,11 +151,11 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
                 sal_Int16 nCurrent = pTypes[nType];
                 if(nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
-                    if(LISTBOX_ENTRY_NOTFOUND == GetEntryPos(reinterpret_cast<void*>((sal_uLong)nCurrent)))
+                    if(LISTBOX_ENTRY_NOTFOUND == GetEntryPos(reinterpret_cast<void*>(static_cast<sal_uLong>(nCurrent))))
                     {
                         OUString aIdent = pImpl->xInfo->getNumberingIdentifier( nCurrent );
                         sal_Int32 nPos = InsertEntry(aIdent);
-                        SetEntryData(nPos, reinterpret_cast<void*>((sal_uLong)nCurrent));
+                        SetEntryData(nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(nCurrent)));
                     }
                 }
             }
@@ -179,7 +179,7 @@ SvxNumType   SwNumberingTypeListBox::GetSelectedNumberingType()
 
 bool    SwNumberingTypeListBox::SelectNumberingType(SvxNumType nType)
 {
-    sal_Int32 nPos = GetEntryPos(reinterpret_cast<void*>((sal_uLong)nType));
+    sal_Int32 nPos = GetEntryPos(reinterpret_cast<void*>(static_cast<sal_uLong>(nType)));
     SelectEntryPos( nPos );
     return LISTBOX_ENTRY_NOTFOUND != nPos;
 }

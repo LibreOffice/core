@@ -394,7 +394,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
                    FieldFlags::Start | FieldFlags::CmdStart | FieldFlags::CmdEnd );
     }
 
-    WriteChar( (char)1 );   // paste graphic symbols in the main text
+    WriteChar( char(1) );   // paste graphic symbols in the main text
 
     sal_uInt8 aArr[ 18 ];
     sal_uInt8* pArr = aArr;
@@ -425,7 +425,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
                 nHeight-=nFontHeight/20;
 
                 Set_UInt16( pArr, NS_sprm::sprmCHpsPos );
-                Set_UInt16( pArr, -((sal_Int16)nHeight));
+                Set_UInt16( pArr, - static_cast<sal_Int16>(nHeight));
             }
         }
     }
@@ -452,7 +452,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
          ( (eAn == RndStdIds::FLY_AT_PARA) ||
            (eAn == RndStdIds::FLY_AT_PAGE) ) )
     {
-        WriteChar( (char)0x0d ); // close the surrounding frame with CR
+        WriteChar( char(0x0d) ); // close the surrounding frame with CR
 
         static sal_uInt8 nSty[2] = { 0, 0 };
         pO->insert( pO->end(), nSty, nSty+2 );     // Style #0
@@ -497,12 +497,12 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
         == pAttrSet->GetItemState(RES_GRFATR_CROPGRF, false, &pItem)))
     {
         const SwCropGrf& rCr = *static_cast<const SwCropGrf*>(pItem);
-        nCropL = (sal_Int16)rCr.GetLeft();
-        nCropR = (sal_Int16)rCr.GetRight();
-        nCropT = (sal_Int16)rCr.GetTop();
-        nCropB = (sal_Int16)rCr.GetBottom();
-        nXSizeAdd = nXSizeAdd - (sal_Int16)( rCr.GetLeft() + rCr.GetRight() );
-        nYSizeAdd = nYSizeAdd - (sal_Int16)( rCr.GetTop() + rCr.GetBottom() );
+        nCropL = static_cast<sal_Int16>(rCr.GetLeft());
+        nCropR = static_cast<sal_Int16>(rCr.GetRight());
+        nCropT = static_cast<sal_Int16>(rCr.GetTop());
+        nCropB = static_cast<sal_Int16>(rCr.GetBottom());
+        nXSizeAdd = nXSizeAdd - static_cast<sal_Int16>( rCr.GetLeft() + rCr.GetRight() );
+        nYSizeAdd = nYSizeAdd - static_cast<sal_Int16>( rCr.GetTop() + rCr.GetBottom() );
     }
 
     Size aGrTwipSz(rFly.GetSize());
@@ -600,7 +600,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
         if ( !bIsSubstitutedSize )
         {
             const double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd );
-            Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+            Set_UInt16( pArr, static_cast<sal_uInt16>(::rtl::math::round(fVal)) );
         }
         else
         {
@@ -617,7 +617,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
         if ( !bIsSubstitutedSize )
         {
             const double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
-            Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+            Set_UInt16( pArr, static_cast<sal_uInt16>(::rtl::math::round(fVal)) );
         }
         else
         {
@@ -731,7 +731,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
     {
         double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd);
-        Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+        Set_UInt16( pArr, static_cast<sal_uInt16>(::rtl::math::round(fVal)) );
     }
     else
         pArr += 2;
@@ -739,7 +739,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     if( aGrTwipSz.Height() + nYSizeAdd )            // set my
     {
         double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
-        Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+        Set_UInt16( pArr, static_cast<sal_uInt16>(::rtl::math::round(fVal)) );
     }
     else
         pArr += 2;

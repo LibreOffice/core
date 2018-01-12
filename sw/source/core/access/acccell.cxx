@@ -428,7 +428,7 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
             uno::Reference<XAccessibleComponent> xCompoentDoc(xAccDoc, uno::UNO_QUERY);
             if (xCompoentDoc.is())
             {
-                crBack = (sal_uInt32)xCompoentDoc->getBackground();
+                crBack = static_cast<sal_uInt32>(xCompoentDoc->getBackground());
             }
         }
     }

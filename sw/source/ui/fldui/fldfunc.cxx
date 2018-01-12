@@ -188,7 +188,7 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
-                    if(nVal == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i)))
+                    if(nVal == static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i))))
                     {
                         m_pTypeLB->SelectEntryPos(i);
                         break;
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
     if (nOld == GetTypeSel())
         return;
 
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     // fill Selection-Listbox
     UpdateSubType();
@@ -415,7 +415,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SwFieldFuncPage, SelectHdl, ListBox&, void)
 {
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     if( TYP_MACROFLD == nTypeId )
         m_pNameED->SetText( m_pSelectionLB->GetSelectedEntry() );
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, ListEnableHdl, Edit&, void)
 // renew types in SelectionBox
 void SwFieldFuncPage::UpdateSubType()
 {
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     // fill Selection-Listbox
     m_pSelectionLB->SetUpdateMode(false);
@@ -549,7 +549,7 @@ IMPL_LINK_NOARG( SwFieldFuncPage, MacroHdl, Button *, void)
 
 bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
 {
-    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     sal_uInt16 nSubType = 0;
 
@@ -636,7 +636,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, ModifyHdl, Edit&, void)
     const sal_Int32 nLen = m_pNameED->GetText().getLength();
 
     bool bEnable = true;
-    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+    sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
     if( TYP_COMBINED_CHARS == nTypeId &&
         (!nLen || nLen > MAX_COMBINED_CHARACTERS ))

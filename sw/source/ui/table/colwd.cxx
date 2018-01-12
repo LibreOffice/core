@@ -32,7 +32,7 @@
 
 IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, Edit&, void)
 {
-    sal_uInt16 nId = (sal_uInt16)m_pColNF->GetValue()-1;
+    sal_uInt16 nId = static_cast<sal_uInt16>(m_pColNF->GetValue())-1;
     const SwTwips lWidth = rFnc.GetColWidth(nId);
     m_pWidthMF->SetMax(m_pWidthMF->Normalize(rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
     m_pWidthMF->SetValue(m_pWidthMF->Normalize(lWidth), FUNIT_TWIP);

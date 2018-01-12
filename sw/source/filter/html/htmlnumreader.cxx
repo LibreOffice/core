@@ -65,7 +65,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
 
     // Increment the numbering depth
     rInfo.IncDepth();
-    sal_uInt8 nLevel = (sal_uInt8)( (rInfo.GetDepth() <= MAXLEVEL ? rInfo.GetDepth()
+    sal_uInt8 nLevel = static_cast<sal_uInt8>( (rInfo.GetDepth() <= MAXLEVEL ? rInfo.GetDepth()
                                                         : MAXLEVEL) - 1 );
 
     // Create rules if needed
@@ -167,7 +167,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
             break;
         case HtmlOptionId::START:
             {
-                sal_uInt16 nStart = (sal_uInt16)rOption.GetNumber();
+                sal_uInt16 nStart = static_cast<sal_uInt16>(rOption.GetNumber());
                 if( bNewNumFormat )
                 {
                     aNumFormat.SetStart( nStart );
@@ -200,10 +200,10 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
             }
             break;
         case HtmlOptionId::WIDTH:
-            nWidth = (sal_uInt16)rOption.GetNumber();
+            nWidth = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::HEIGHT:
-            nHeight = (sal_uInt16)rOption.GetNumber();
+            nHeight = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
@@ -271,11 +271,11 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
                         nAbsLSpace < -aPropInfo.m_nLeftMargin )
                         nAbsLSpace = 0U;
                     else if( aPropInfo.m_nLeftMargin > USHRT_MAX ||
-                             (long)nAbsLSpace +
+                             static_cast<long>(nAbsLSpace) +
                                             aPropInfo.m_nLeftMargin > USHRT_MAX )
                         nAbsLSpace = USHRT_MAX;
                     else
-                        nAbsLSpace = nAbsLSpace + (sal_uInt16)aPropInfo.m_nLeftMargin;
+                        nAbsLSpace = nAbsLSpace + static_cast<sal_uInt16>(aPropInfo.m_nLeftMargin);
 
                     aNumFormat.SetAbsLSpace( nAbsLSpace );
                     bChangeNumFormat = true;
@@ -444,7 +444,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
         switch( rOption.GetToken() )
         {
             case HtmlOptionId::VALUE:
-                nStart = (sal_uInt16)rOption.GetNumber();
+                nStart = static_cast<sal_uInt16>(rOption.GetNumber());
                 break;
             case HtmlOptionId::ID:
                 aId = rOption.GetString();

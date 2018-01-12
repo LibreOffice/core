@@ -601,14 +601,14 @@ static void lcl_html_setFixedFontProperty(
     rPropSet->setPropertyValue("FontStyleName",
                                 aTmp );
 
-    aTmp <<= (sal_Int16) aFixedFont.GetFamilyType();
+    aTmp <<= static_cast<sal_Int16>(aFixedFont.GetFamilyType());
     rPropSet->setPropertyValue("FontFamily", aTmp );
 
-    aTmp <<= (sal_Int16) aFixedFont.GetCharSet();
+    aTmp <<= static_cast<sal_Int16>(aFixedFont.GetCharSet());
     rPropSet->setPropertyValue("FontCharset",
                                 aTmp );
 
-    aTmp <<= (sal_Int16) aFixedFont.GetPitch();
+    aTmp <<= static_cast<sal_Int16>(aFixedFont.GetPitch());
     rPropSet->setPropertyValue("FontPitch", aTmp );
 
     aTmp <<= float(10.0);
@@ -968,8 +968,8 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int32)static_cast<const SvxColorItem *>(pItem)->GetValue()
-                                                         .GetRGBColor();
+            aTmp <<= static_cast<sal_Int32>(static_cast<const SvxColorItem *>(pItem)->GetValue()
+                                                         .GetRGBColor());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1003,19 +1003,19 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             sPropName = "FontFamily";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
-                aTmp <<= (sal_Int16)pFontItem->GetFamily() ;
+                aTmp <<= static_cast<sal_Int16>(pFontItem->GetFamily()) ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
             sPropName = "FontCharset";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
-                aTmp <<= (sal_Int16)pFontItem->GetCharSet() ;
+                aTmp <<= static_cast<sal_Int16>(pFontItem->GetCharSet()) ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
             sPropName = "FontPitch";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
-                aTmp <<= (sal_Int16)pFontItem->GetPitch() ;
+                aTmp <<= static_cast<sal_Int16>(pFontItem->GetPitch()) ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
         }
@@ -1036,7 +1036,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int16)static_cast<const SvxPostureItem *>(pItem)->GetPosture();
+            aTmp <<= static_cast<sal_Int16>(static_cast<const SvxPostureItem *>(pItem)->GetPosture());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1045,7 +1045,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int16)static_cast<const SvxUnderlineItem *>(pItem)->GetLineStyle();
+            aTmp <<= static_cast<sal_Int16>(static_cast<const SvxUnderlineItem *>(pItem)->GetLineStyle());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1054,7 +1054,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int16)static_cast<const SvxCrossedOutItem *>(pItem)->GetStrikeout();
+            aTmp <<= static_cast<sal_Int16>(static_cast<const SvxCrossedOutItem *>(pItem)->GetStrikeout());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1145,7 +1145,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         if( text::TextContentAnchorType_AT_PAGE == nAnchorType )
         {
-            aTmp <<= (sal_Int16) 1 ;
+            aTmp <<= sal_Int16(1) ;
             xShapePropSet->setPropertyValue("AnchorPageNo", aTmp );
         }
         else
@@ -1162,12 +1162,12 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         if( bSetPos )
         {
-            aTmp <<= (sal_Int16)text::HoriOrientation::NONE;
+            aTmp <<= sal_Int16(text::HoriOrientation::NONE);
             xShapePropSet->setPropertyValue("HoriOrient", aTmp );
             aTmp <<= nXPos ;
             xShapePropSet->setPropertyValue("HoriOrientPosition", aTmp );
 
-            aTmp <<= (sal_Int16)text::VertOrientation::NONE;
+            aTmp <<= sal_Int16(text::VertOrientation::NONE);
             xShapePropSet->setPropertyValue("VertOrient", aTmp );
             aTmp <<= nYPos ;
             xShapePropSet->setPropertyValue("VertOrientPosition", aTmp );
@@ -1441,10 +1441,10 @@ void SwHTMLParser::InsertInput()
             bDisabled = true;
             break;
         case HtmlOptionId::MAXLENGTH:
-            nMaxLen = (sal_Int16)rOption.GetNumber();
+            nMaxLen = static_cast<sal_Int16>(rOption.GetNumber());
             break;
         case HtmlOptionId::SIZE:
-            nSize = (sal_uInt16)rOption.GetNumber();
+            nSize = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::SRC:
             sImgSrc = rOption.GetString();
@@ -1618,7 +1618,7 @@ void SwHTMLParser::InsertInput()
     {
         if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
         {
-            aTmp <<= (sal_Int16)nTabIndex ;
+            aTmp <<= static_cast<sal_Int16>(nTabIndex) ;
             xPropSet->setPropertyValue("TabIndex", aTmp );
         }
 
@@ -1680,7 +1680,7 @@ void SwHTMLParser::InsertInput()
             aTmp <<= FormButtonType_SUBMIT;
             xPropSet->setPropertyValue("ButtonType", aTmp );
 
-            aTmp <<= (sal_Int16) 0  ;
+            aTmp <<= sal_Int16(0)  ;
             xPropSet->setPropertyValue("Border",
                                         aTmp );
         }
@@ -1737,7 +1737,7 @@ void SwHTMLParser::InsertInput()
 
         if( HTMLInputType::Password == eType )
         {
-            aTmp <<= (sal_Int16)'*' ;
+            aTmp <<= sal_Int16('*') ;
             xPropSet->setPropertyValue("EchoChar", aTmp );
         }
 
@@ -1903,10 +1903,10 @@ void SwHTMLParser::NewTextArea()
             bDisabled = true;
             break;
         case HtmlOptionId::ROWS:
-            nRows = (sal_uInt16)rOption.GetNumber();
+            nRows = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::COLS:
-            nCols = (sal_uInt16)rOption.GetNumber();
+            nCols = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WRAP:
             nWrap = rOption.GetEnum( aHTMLTextAreaWrapTable, nWrap );
@@ -2010,7 +2010,7 @@ void SwHTMLParser::NewTextArea()
 
     if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
     {
-        aTmp <<= (sal_Int16)nTabIndex ;
+        aTmp <<= static_cast<sal_Int16>(nTabIndex) ;
         xPropSet->setPropertyValue("TabIndex", aTmp );
     }
 
@@ -2184,7 +2184,7 @@ void SwHTMLParser::NewSelect()
             bDisabled = true;
             break;
         case HtmlOptionId::SIZE:
-            m_nSelectEntryCnt = (sal_uInt16)rOption.GetNumber();
+            m_nSelectEntryCnt = static_cast<sal_uInt16>(rOption.GetNumber());
             break;
 
         case HtmlOptionId::TABINDEX:
@@ -2269,7 +2269,7 @@ void SwHTMLParser::NewSelect()
 
     if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
     {
-        aTmp <<= (sal_Int16)nTabIndex ;
+        aTmp <<= static_cast<sal_Int16>(nTabIndex) ;
         xPropSet->setPropertyValue("TabIndex", aTmp );
     }
 
@@ -2359,8 +2359,8 @@ void SwHTMLParser::EndSelect()
     size_t nEntryCnt = m_pFormImpl->GetStringList().size();
     if(!m_pFormImpl->GetStringList().empty())
     {
-        Sequence<OUString> aList( (sal_Int32)nEntryCnt );
-        Sequence<OUString> aValueList( (sal_Int32)nEntryCnt );
+        Sequence<OUString> aList( static_cast<sal_Int32>(nEntryCnt) );
+        Sequence<OUString> aValueList( static_cast<sal_Int32>(nEntryCnt) );
         OUString *pStrings = aList.getArray();
         OUString *pValues = aValueList.getArray();
 
@@ -2387,11 +2387,11 @@ void SwHTMLParser::EndSelect()
             m_pFormImpl->GetSelectedList().insert( m_pFormImpl->GetSelectedList().begin(), 0 );
             nSelCnt = 1;
         }
-        Sequence<sal_Int16> aSelList( (sal_Int32)nSelCnt );
+        Sequence<sal_Int16> aSelList( static_cast<sal_Int32>(nSelCnt) );
         sal_Int16 *pSels = aSelList.getArray();
         for(size_t i = 0; i < nSelCnt; ++i)
         {
-            pSels[i] = (sal_Int16)m_pFormImpl->GetSelectedList()[i];
+            pSels[i] = static_cast<sal_Int16>(m_pFormImpl->GetSelectedList()[i]);
         }
         rPropSet->setPropertyValue("DefaultSelection", Any(aSelList) );
 

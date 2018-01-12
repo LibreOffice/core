@@ -124,14 +124,14 @@ class XmlPortionDumper:public SwPortionHandler
         xmlTextWriterStartElement( writer, BAD_CAST( "Text" ) );
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nLength" ),
-                                           "%i", ( int ) nLength );
+                                           "%i", static_cast<int>(nLength) );
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
                                            "%s", getTypeName( nType ) );
         if (nHeight > 0)
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", (int)nHeight);
+            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
         if (nWidth > 0)
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", (int)nWidth);
+            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
 
         xmlTextWriterEndElement( writer );
     }
@@ -156,7 +156,7 @@ class XmlPortionDumper:public SwPortionHandler
         xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nLength" ),
-                                           "%i", ( int ) nLength );
+                                           "%i", static_cast<int>(nLength) );
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
                                            "%s", getTypeName( nType ) );
@@ -165,10 +165,10 @@ class XmlPortionDumper:public SwPortionHandler
                                            "%s", sText8.getStr(  ) );
 
         if (nHeight > 0)
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", (int)nHeight);
+            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
 
         if (nWidth > 0)
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", (int)nWidth);
+            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
 
         if (pFont)
             pFont->dumpAsXml(writer);
@@ -183,7 +183,7 @@ class XmlPortionDumper:public SwPortionHandler
         if (nWidth > 0)
             xmlTextWriterWriteFormatAttribute( writer,
                                                BAD_CAST( "nWidth" ),
-                                               "%i", ( int ) nWidth );
+                                               "%i", static_cast<int>(nWidth) );
         xmlTextWriterEndElement( writer );
     }
 
@@ -196,7 +196,7 @@ class XmlPortionDumper:public SwPortionHandler
         xmlTextWriterStartElement( writer, BAD_CAST( "Skip" ) );
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nLength" ),
-                                           "%i", ( int ) nLength );
+                                           "%i", static_cast<int>(nLength) );
         xmlTextWriterEndElement( writer );
         ofs += nLength;
     }

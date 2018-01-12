@@ -233,7 +233,7 @@ IMPL_LINK_NOARG( PageHeaderPanel, HeaderToggleHdl, Button*, void )
 
 IMPL_LINK_NOARG( PageHeaderPanel, HeaderLRMarginHdl, ListBox&, void )
 {
-    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpHeaderMarginPresetLB->GetSelectedEntryData());
+    sal_uInt16 nVal = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(mpHeaderMarginPresetLB->GetSelectedEntryData()));
     mpHeaderLRMarginItem->SetLeft(nVal);
     mpHeaderLRMarginItem->SetRight(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_LRMARGIN,
@@ -242,7 +242,7 @@ IMPL_LINK_NOARG( PageHeaderPanel, HeaderLRMarginHdl, ListBox&, void )
 
 IMPL_LINK_NOARG( PageHeaderPanel, HeaderSpacingHdl, ListBox&, void )
 {
-    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpHeaderSpacingLB->GetSelectedEntryData());
+    sal_uInt16 nVal = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(mpHeaderSpacingLB->GetSelectedEntryData()));
     mpHeaderSpacingItem->SetLower(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_SPACING,
                                                  SfxCallMode::RECORD, { mpHeaderSpacingItem.get() } );

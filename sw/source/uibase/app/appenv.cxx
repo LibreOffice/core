@@ -243,7 +243,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         {
             OSL_ENSURE(pOldSh, "No document - wasn't 'Insert' disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
-            aItem.SetValue((sal_uInt8)pSh->getIDocumentDeviceAccess().getPrinter(true)->GetPaperBin());
+            aItem.SetValue(static_cast<sal_uInt8>(pSh->getIDocumentDeviceAccess().getPrinter(true)->GetPaperBin()));
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFormatAttr(aItem);
         }
 
@@ -353,8 +353,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         long lLeft  = rItem.m_nShiftRight,
              lUpper = rItem.m_nShiftDown;
 
-        sal_uInt16 nPageW = (sal_uInt16) std::max(rItem.m_nWidth, rItem.m_nHeight),
-               nPageH = (sal_uInt16) std::min(rItem.m_nWidth, rItem.m_nHeight);
+        sal_uInt16 nPageW = static_cast<sal_uInt16>(std::max(rItem.m_nWidth, rItem.m_nHeight)),
+               nPageH = static_cast<sal_uInt16>(std::min(rItem.m_nWidth, rItem.m_nHeight));
 
         switch (rItem.m_eAlign)
         {
@@ -371,8 +371,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         }
         SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
         SvxULSpaceItem aULMargin( RES_UL_SPACE );
-        aLRMargin.SetLeft ((sal_uInt16) lLeft );
-        aULMargin.SetUpper((sal_uInt16) lUpper);
+        aLRMargin.SetLeft (static_cast<sal_uInt16>(lLeft) );
+        aULMargin.SetUpper(static_cast<sal_uInt16>(lUpper));
         aLRMargin.SetRight(0);
         aULMargin.SetLower(0);
         rFormat.SetFormatAttr(aLRMargin);

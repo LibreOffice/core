@@ -169,7 +169,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
         rSet->Put(SfxBoolItem(FN_NUMBER_NEWSTART, bNewStartChecked));
         rSet->Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
-                  bNumberNewStartChecked && bNewStartChecked ? (sal_uInt16)m_pNewStartNF->GetValue() : USHRT_MAX));
+                  bNumberNewStartChecked && bNewStartChecked ? static_cast<sal_uInt16>(m_pNewStartNF->GetValue()) : USHRT_MAX));
     }
 
     if(m_pCountParaCB->IsValueChangedFromSaved()||

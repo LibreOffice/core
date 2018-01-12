@@ -175,7 +175,7 @@ bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
         m_pConfigItem->SetMailServer(m_pServerED->GetText());
 
     if(m_pPortNF->IsModified())
-        m_pConfigItem->SetMailPort((sal_Int16)m_pPortNF->GetValue());
+        m_pConfigItem->SetMailPort(static_cast<sal_Int16>(m_pPortNF->GetValue()));
 
     m_pConfigItem->SetSecureConnection(m_pSecureCB->IsChecked());
 

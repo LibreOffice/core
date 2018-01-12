@@ -76,7 +76,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     if ( pSI )
         nScript = pSI->ScriptType( nPos );
     else
-        nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos );
+        nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos ));
 
     // Note: rInf.GetIdx() can differ from nPos,
     // e.g., when rPor is a field portion. nPos referes to the string passed
@@ -191,10 +191,10 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
             pPor->GetExpText( rInf, aStr );
             const_cast<SwTextSizeInfo &>(rInf).SetOnWin( bOldOnWin );
 
-            nNextScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( aStr, 0 );
+            nNextScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( aStr, 0 ));
         }
         else
-            nNextScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rInf.GetText(), nPos );
+            nNextScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rInf.GetText(), nPos ));
 
         if( ASIAN == nNextScript )
         {
@@ -222,7 +222,7 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     // The word/char is larger than the line
     // Special case 1: The word is larger than the line
     // We truncate ...
-    const sal_uInt16 nLineWidth = (sal_uInt16)(rInf.Width() - rInf.X());
+    const sal_uInt16 nLineWidth = static_cast<sal_uInt16>(rInf.Width() - rInf.X());
     sal_Int32 nLen = rGuess.CutPos() - rInf.GetIdx();
     if (nLen > 0)
     {
@@ -329,7 +329,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         short nKern = rInf.GetFont()->CheckKerning();
         if( nKern > 0 && rInf.Width() < rInf.X() + Width() + nKern )
         {
-            nKern = (short)(rInf.Width() - rInf.X() - Width() - 1);
+            nKern = static_cast<short>(rInf.Width() - rInf.X() - Width() - 1);
             if( nKern < 0 )
                 nKern = 0;
         }

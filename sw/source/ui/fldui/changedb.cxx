@@ -192,7 +192,7 @@ void SwChangeDBDlg::UpdateFields()
         {
             OUString sTmp(m_pUsedDBTLB->GetEntryText( m_pUsedDBTLB->GetParent( pEntry )) +
                           OUStringLiteral1(DB_DELIM) + m_pUsedDBTLB->GetEntryText( pEntry ) + OUStringLiteral1(DB_DELIM) +
-                          OUString::number((int)reinterpret_cast<sal_uLong>(pEntry->GetUserData())));
+                          OUString::number(static_cast<int>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()))));
             aDBNames.push_back(sTmp);
         }
         pEntry = m_pUsedDBTLB->NextSelected(pEntry);

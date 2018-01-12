@@ -1990,7 +1990,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
                 const sal_uInt16 nCstScale = 635;        // unit scale between AOO and MS Word
                 const sal_uInt32 nShadowType = 131074;   // shadow type of ms word. need to set the default value.
 
-                sal_uInt32  nColor = (sal_uInt32)(pSI->GetColor().GetColor()) ;
+                sal_uInt32  nColor = static_cast<sal_uInt32>(pSI->GetColor().GetColor()) ;
                 sal_Int32 nOffX = pSI->GetWidth() * nCstScale;
                 sal_Int32 nOffY = pSI->GetWidth() * nCstScale;
 
