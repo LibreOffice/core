@@ -407,7 +407,7 @@ Time tools::Time::GetUTCOffset()
     }
 
     nTempTime = abs( nCacheSecOffset );
-    tools::Time aTime( 0, (sal_uInt16)nTempTime );
+    tools::Time aTime( 0, static_cast<sal_uInt16>(nTempTime) );
     if ( nCacheSecOffset < 0 )
         aTime = -aTime;
     return aTime;

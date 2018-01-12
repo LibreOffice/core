@@ -166,7 +166,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     while ( ( err != Z_STREAM_END)  && ( PZSTREAM->avail_in || mnInToRead ) );
     ImplWriteBack();
 
-    return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
+    return ( mbStatus ) ? static_cast<long>(PZSTREAM->total_out - nOldTotal_Out) : -1;
 }
 
 void ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt32 nSize )
@@ -235,7 +235,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
     if ( err == Z_STREAM_END )
         mbFinish = true;
 
-    return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
+    return (mbStatus ? static_cast<long>(nSize - PZSTREAM->avail_out) : -1);
 }
 
 long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
@@ -288,7 +288,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize 
     if ( err == Z_STREAM_END )
         mbFinish = true;
 
-    return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
+    return (mbStatus ? static_cast<long>(nSize - PZSTREAM->avail_out) : -1);
 }
 
 void ZCodec::ImplWriteBack()

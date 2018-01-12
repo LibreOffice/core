@@ -35,11 +35,11 @@ constexpr ColorData RGB_COLORDATA(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
     return sal_uInt32(b) | (sal_uInt32(g) << 8) | (sal_uInt32(r) << 16);
 }
 
-#define COLORDATA_RED( n )          ((sal_uInt8)((n)>>16))
-#define COLORDATA_GREEN( n )        ((sal_uInt8)(((sal_uInt16)(n)) >> 8))
-#define COLORDATA_BLUE( n )         ((sal_uInt8)(n))
-#define COLORDATA_TRANSPARENCY( n ) ((sal_uInt8)((n)>>24))
-#define COLORDATA_RGB( n )          ((ColorData)((n) & 0x00FFFFFF))
+#define COLORDATA_RED( n )          (static_cast<sal_uInt8>((n)>>16))
+#define COLORDATA_GREEN( n )        (static_cast<sal_uInt8>((static_cast<sal_uInt16>(n)) >> 8))
+#define COLORDATA_BLUE( n )         (static_cast<sal_uInt8>(n))
+#define COLORDATA_TRANSPARENCY( n ) (static_cast<sal_uInt8>((n)>>24))
+#define COLORDATA_RGB( n )          (static_cast<ColorData>((n) & 0x00FFFFFF))
 
 #define COL_BLACK                   RGB_COLORDATA( 0x00, 0x00, 0x00 )
 #define COL_BLUE                    RGB_COLORDATA( 0x00, 0x00, 0x80 )
@@ -63,7 +63,7 @@ constexpr ColorData RGB_COLORDATA(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
 #define COL_YELLOW_HIGHLIGHT        RGB_COLORDATA( 0xFF, 0xF2, 0x00 )
 #define COL_WHITE                   RGB_COLORDATA( 0xFF, 0xFF, 0xFF )
 #define COL_TRANSPARENT             TRGB_COLORDATA( 0xFF, 0xFF, 0xFF, 0xFF )
-#define COL_AUTO                    (ColorData)0xFFFFFFFF
+#define COL_AUTO                    ColorData(0xFFFFFFFF)
 #define COL_AUTHOR1_DARK            RGB_COLORDATA(198, 146, 0)
 #define COL_AUTHOR1_NORMAL          RGB_COLORDATA(255, 255, 158)
 #define COL_AUTHOR1_LIGHT           RGB_COLORDATA(255, 255, 195)
@@ -94,7 +94,7 @@ constexpr ColorData RGB_COLORDATA(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
 
 constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 nSrcTrans)
 {
-    return (sal_uInt8) ((((sal_Int32)nDst-nSrc)*nSrcTrans+((nSrc<<8)|nDst))>>8);
+    return static_cast<sal_uInt8>(((static_cast<sal_Int32>(nDst)-nSrc)*nSrcTrans+((nSrc<<8)|nDst))>>8);
 };
 
 #endif

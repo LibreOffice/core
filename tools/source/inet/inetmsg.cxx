@@ -64,7 +64,7 @@ static sal_uInt16 ParseNumber(const OString& rStr, sal_Int32& nIndex)
     OString aNum(rStr.copy(nIndex, (n - nIndex)));
     nIndex = n;
 
-    return (sal_uInt16)(aNum.toInt32());
+    return static_cast<sal_uInt16>(aNum.toInt32());
 }
 
 static sal_uInt16 ParseMonth(const OString& rStr, sal_Int32& nIndex)

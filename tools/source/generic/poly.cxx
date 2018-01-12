@@ -177,10 +177,10 @@ ImplPolygon::ImplPolygon( const Point& rCenter, long nRadX, long nRadY )
         const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
         if (!bOverflow)
         {
-            nPoints = (sal_uInt16) MinMax(
+            nPoints = static_cast<sal_uInt16>(MinMax(
                 ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                           sqrt( (double) labs(nRadXY) ) ) ),
-                32, 256 );
+                           sqrt( static_cast<double>(labs(nRadXY)) ) ) ),
+                32, 256 ));
         }
         else
         {
@@ -240,10 +240,10 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
         if (!bOverflow)
         {
-            nPoints = (sal_uInt16) MinMax(
+            nPoints = static_cast<sal_uInt16>(MinMax(
                 ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                           sqrt( (double) labs(nRadXY) ) ) ),
-                32, 256 );
+                           sqrt( static_cast<double>(labs(nRadXY)) ) ) ),
+                32, 256 ));
         }
         else
         {
@@ -273,7 +273,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
             fDiff = F_2PI;
 
         // Proportionally shrink number of points( fDiff / (2PI) );
-        nPoints = std::max( (sal_uInt16) ( ( fDiff * 0.1591549 ) * nPoints ), (sal_uInt16) 16 );
+        nPoints = std::max( static_cast<sal_uInt16>( ( fDiff * 0.1591549 ) * nPoints ), sal_uInt16(16) );
         fStep = fDiff / ( nPoints - 1 );
 
         if( PolyStyle::Pie == eStyle )
@@ -771,7 +771,7 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
                 else
                     ady += mn/2;
             ady /= mn;
-            nNewX = (long)ady + lx;
+            nNewX = static_cast<long>(ady) + lx;
         }
     }
     else
@@ -797,7 +797,7 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
                 else
                     adx += md/2;
             adx /= md;
-            nNewY = (long)adx + ly;
+            nNewY = static_cast<long>(adx) + ly;
         }
     }
 
@@ -1229,7 +1229,7 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
         }
 
         // fill result polygon
-        rResult = tools::Polygon( (sal_uInt16)aPoints.size() ); // ensure sufficient size for copy
+        rResult = tools::Polygon( static_cast<sal_uInt16>(aPoints.size()) ); // ensure sufficient size for copy
         ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mxPointAry.get());
     }
 }
@@ -1333,7 +1333,7 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
                         else if( fRelLen > 1.0 )
                             fRelLen = 1.0;
 
-                        if( ( (sal_uInt32) ( ( ( fLenFact - 1.0 ) * 1000000.0 ) + 0.5 ) < fBound ) &&
+                        if( ( static_cast<sal_uInt32>( ( ( fLenFact - 1.0 ) * 1000000.0 ) + 0.5 ) < fBound ) &&
                             ( fabs( fGradB ) <= ( fRelLen * fBound * 0.01 ) ) )
                         {
                             bDeletePoint = true;
@@ -1388,8 +1388,8 @@ void Polygon::Scale( double fScaleX, double fScaleY )
     for ( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
     {
         Point& rPnt = mpImplPolygon->mxPointAry[i];
-        rPnt.X() = (long) ( fScaleX * rPnt.X() );
-        rPnt.Y() = (long) ( fScaleY * rPnt.Y() );
+        rPnt.X() = static_cast<long>( fScaleX * rPnt.X() );
+        rPnt.Y() = static_cast<long>( fScaleY * rPnt.Y() );
     }
 }
 

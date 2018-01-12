@@ -214,8 +214,8 @@ void B3dTransformationSet::CalcViewport()
     if(GetRatio() != 0.0)
     {
         // Compute current aspect ratio of boundaries
-        double fBoundWidth = (double)(maViewportRectangle.GetWidth() + 1);
-        double fBoundHeight = (double)(maViewportRectangle.GetHeight() + 1);
+        double fBoundWidth = static_cast<double>(maViewportRectangle.GetWidth() + 1);
+        double fBoundHeight = static_cast<double>(maViewportRectangle.GetHeight() + 1);
         double fActRatio = 1;
         double fFactor;
 
@@ -270,8 +270,8 @@ void B3dTransformationSet::CalcViewport()
 
     // fill parameters for ViewportTransformation
     // Translation
-    maTranslate.setX((double)maSetBound.Left() + ((maSetBound.GetWidth() - 1) / 2.0));
-    maTranslate.setY((double)maSetBound.Top() + ((maSetBound.GetHeight() - 1) / 2.0));
+    maTranslate.setX(static_cast<double>(maSetBound.Left()) + ((maSetBound.GetWidth() - 1) / 2.0));
+    maTranslate.setY(static_cast<double>(maSetBound.Top()) + ((maSetBound.GetHeight() - 1) / 2.0));
     maTranslate.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
 
     // Scaling

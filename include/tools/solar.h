@@ -47,13 +47,13 @@ typedef sal_uInt8   SVBT64[8];
 #ifdef __cplusplus
 
 inline sal_uInt16 SVBT16ToShort( const SVBT16 p ) { return static_cast<sal_uInt16>
-                                                     ((sal_uInt16)p[0]
-                                                   + ((sal_uInt16)p[1] <<  8)); }
+                                                     (static_cast<sal_uInt16>(p[0])
+                                                   + (static_cast<sal_uInt16>(p[1]) <<  8)); }
 inline sal_uInt32 SVBT32ToUInt32 ( const SVBT32 p ) { return static_cast<sal_uInt32>
-                                                     ((sal_uInt32)p[0]
-                                                   + ((sal_uInt32)p[1] <<  8)
-                                                   + ((sal_uInt32)p[2] << 16)
-                                                   + ((sal_uInt32)p[3] << 24)); }
+                                                     (static_cast<sal_uInt32>(p[0])
+                                                   + (static_cast<sal_uInt32>(p[1]) <<  8)
+                                                   + (static_cast<sal_uInt32>(p[2]) << 16)
+                                                   + (static_cast<sal_uInt32>(p[3]) << 24)); }
 #if defined OSL_LITENDIAN
 inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
                                                     reinterpret_cast<sal_uInt8*>(&n)[0] = p[0];
@@ -78,12 +78,12 @@ inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
                                                     return n; }
 #endif
 
-inline void     ShortToSVBT16( sal_uInt16 n, SVBT16 p ) { p[0] = (sal_uInt8) n;
-                                                      p[1] = (sal_uInt8)(n >>  8); }
-inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p ) { p[0] = (sal_uInt8) n;
-                                                      p[1] = (sal_uInt8)(n >>  8);
-                                                      p[2] = (sal_uInt8)(n >> 16);
-                                                      p[3] = (sal_uInt8)(n >> 24); }
+inline void     ShortToSVBT16( sal_uInt16 n, SVBT16 p ) { p[0] = static_cast<sal_uInt8>(n);
+                                                      p[1] = static_cast<sal_uInt8>(n >>  8); }
+inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p ) { p[0] = static_cast<sal_uInt8>(n);
+                                                      p[1] = static_cast<sal_uInt8>(n >>  8);
+                                                      p[2] = static_cast<sal_uInt8>(n >> 16);
+                                                      p[3] = static_cast<sal_uInt8>(n >> 24); }
 #if defined OSL_LITENDIAN
 inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = reinterpret_cast<sal_uInt8*>(&n)[0];
                                                        p[1] = reinterpret_cast<sal_uInt8*>(&n)[1];

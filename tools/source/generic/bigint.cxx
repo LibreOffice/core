@@ -65,8 +65,8 @@ void BigInt::MakeBigInt( const BigInt& rVal )
             nTmp = nVal;
         }
 
-        nNum[0] = (sal_uInt16)(nTmp & 0xffffL);
-        nNum[1] = (sal_uInt16)(nTmp >> 16);
+        nNum[0] = static_cast<sal_uInt16>(nTmp & 0xffffL);
+        nNum[1] = static_cast<sal_uInt16>(nTmp >> 16);
         if ( nTmp & 0xffff0000L )
             nLen = 2;
         else
@@ -88,7 +88,7 @@ void BigInt::Normalize()
             else if ( nNum[1] & 0x8000 )
                 return;
             else
-                nVal = ((sal_Int32)nNum[1] << 16) + nNum[0];
+                nVal = (static_cast<sal_Int32>(nNum[1]) << 16) + nNum[0];
 
             bIsBig = false;
 
@@ -109,9 +109,9 @@ void BigInt::Mult( const BigInt &rVal, sal_uInt16 nMul )
     sal_uInt16 nK = 0;
     for ( int i = 0; i < rVal.nLen; i++ )
     {
-        sal_uInt32 nTmp = (sal_uInt32)rVal.nNum[i] * (sal_uInt32)nMul + nK;
-        nK            = (sal_uInt16)(nTmp >> 16);
-        nNum[i] = (sal_uInt16)nTmp;
+        sal_uInt32 nTmp = static_cast<sal_uInt32>(rVal.nNum[i]) * static_cast<sal_uInt32>(nMul) + nK;
+        nK            = static_cast<sal_uInt16>(nTmp >> 16);
+        nNum[i] = static_cast<sal_uInt16>(nTmp);
     }
 
     if ( nK )
@@ -131,11 +131,11 @@ void BigInt::Div( sal_uInt16 nDiv, sal_uInt16& rRem )
     sal_uInt32 nK = 0;
     for ( int i = nLen - 1; i >= 0; i-- )
     {
-        sal_uInt32 nTmp = (sal_uInt32)nNum[i] + (nK << 16);
-        nNum[i] = (sal_uInt16)(nTmp / nDiv);
+        sal_uInt32 nTmp = static_cast<sal_uInt32>(nNum[i]) + (nK << 16);
+        nNum[i] = static_cast<sal_uInt16>(nTmp / nDiv);
         nK            = nTmp % nDiv;
     }
-    rRem = (sal_uInt16)nK;
+    rRem = static_cast<sal_uInt16>(nK);
 
     if ( nNum[nLen-1] == 0 )
         nLen -= 1;
@@ -181,12 +181,12 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
         sal_Int32 k;
         sal_Int32 nZ = 0;
         for (i = 0, k = 0; i < len; i++) {
-            nZ = (sal_Int32)nNum[i] + (sal_Int32)rB.nNum[i] + k;
+            nZ = static_cast<sal_Int32>(nNum[i]) + static_cast<sal_Int32>(rB.nNum[i]) + k;
             if (nZ & 0xff0000L)
                 k = 1;
             else
                 k = 0;
-            rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
+            rErg.nNum[i] = static_cast<sal_uInt16>(nZ & 0xffffL);
         }
         // If an overflow occurred, add to solution
         if (nZ & 0xff0000L) // or if(k)
@@ -241,12 +241,12 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
         {
             for (i = 0, k = 0; i < len; i++)
             {
-                nZ = (sal_Int32)nNum[i] - (sal_Int32)rB.nNum[i] + k;
+                nZ = static_cast<sal_Int32>(nNum[i]) - static_cast<sal_Int32>(rB.nNum[i]) + k;
                 if (nZ < 0)
                     k = -1;
                 else
                     k = 0;
-                rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
+                rErg.nNum[i] = static_cast<sal_uInt16>(nZ & 0xffffL);
             }
             rErg.bIsNeg = bIsNeg;
         }
@@ -254,12 +254,12 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
         {
             for (i = 0, k = 0; i < len; i++)
             {
-                nZ = (sal_Int32)rB.nNum[i] - (sal_Int32)nNum[i] + k;
+                nZ = static_cast<sal_Int32>(rB.nNum[i]) - static_cast<sal_Int32>(nNum[i]) + k;
                 if (nZ < 0)
                     k = -1;
                 else
                     k = 0;
-                rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
+                rErg.nNum[i] = static_cast<sal_uInt16>(nZ & 0xffffL);
             }
             // if a < b, revert sign
             rErg.bIsNeg = !bIsNeg;
@@ -300,12 +300,12 @@ void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
     {
         for (i = 0, k = 0; i < nLen; i++)
         {
-            nZ = (sal_uInt32)nNum[i] * (sal_uInt32)rB.nNum[j] +
-                 (sal_uInt32)rErg.nNum[i + j] + k;
-            rErg.nNum[i + j] = (sal_uInt16)(nZ & 0xffffU);
+            nZ = static_cast<sal_uInt32>(nNum[i]) * static_cast<sal_uInt32>(rB.nNum[j]) +
+                 static_cast<sal_uInt32>(rErg.nNum[i + j]) + k;
+            rErg.nNum[i + j] = static_cast<sal_uInt16>(nZ & 0xffffU);
             k = nZ >> 16;
         }
-        rErg.nNum[i + j] = (sal_uInt16)k;
+        rErg.nNum[i + j] = static_cast<sal_uInt16>(k);
     }
 }
 
@@ -317,7 +317,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
     sal_uInt16  nLenB1 = rB.nLen - 1;
     BigInt aTmpA, aTmpB;
 
-    nMult = (sal_uInt16)(0x10000L / ((sal_Int32)rB.nNum[nLenB1] + 1));
+    nMult = static_cast<sal_uInt16>(0x10000L / (static_cast<sal_Int32>(rB.nNum[nLenB1]) + 1));
 
     aTmpA.Mult( *this, nMult );
     if ( aTmpA.nLen == nLen )
@@ -330,26 +330,26 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
     { // guess divisor
-        sal_uInt32 nTmp = ( (sal_uInt32)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
+        sal_uInt32 nTmp = ( static_cast<sal_uInt32>(aTmpA.nNum[j]) << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
         else
-            nQ = (sal_uInt16)(nTmp / aTmpB.nNum[nLenB1]);
+            nQ = static_cast<sal_uInt16>(nTmp / aTmpB.nNum[nLenB1]);
 
-        if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
-            ((nTmp - (sal_uInt32)aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
+        if ( (static_cast<sal_uInt32>(aTmpB.nNum[nLenB1 - 1]) * nQ) >
+            ((nTmp - static_cast<sal_uInt32>(aTmpB.nNum[nLenB1]) * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
         // Start division
         nK = 0;
         for (i = 0; i < nLenB; i++)
         {
-            nTmp = (sal_uInt32)aTmpA.nNum[j - nLenB + i]
-                   - ((sal_uInt32)aTmpB.nNum[i] * nQ)
+            nTmp = static_cast<sal_uInt32>(aTmpA.nNum[j - nLenB + i])
+                   - (static_cast<sal_uInt32>(aTmpB.nNum[i]) * nQ)
                    - nK;
-            aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
-            nK = (sal_uInt16) (nTmp >> 16);
+            aTmpA.nNum[j - nLenB + i] = static_cast<sal_uInt16>(nTmp);
+            nK = static_cast<sal_uInt16>(nTmp >> 16);
             if ( nK )
-                nK = (sal_uInt16)(0x10000U - nK);
+                nK = static_cast<sal_uInt16>(0x10000U - nK);
         }
         sal_uInt16& rNum( aTmpA.nNum[j - nLenB + i] );
         rNum -= nK;
@@ -362,7 +362,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
             for (i = 0; i < nLenB; i++)
             {
                 nTmp = aTmpA.nNum[j - nLenB + i] + aTmpB.nNum[i] + nK;
-                aTmpA.nNum[j - nLenB + i] = (sal_uInt16)(nTmp & 0xFFFFL);
+                aTmpA.nNum[j - nLenB + i] = static_cast<sal_uInt16>(nTmp & 0xFFFFL);
                 if (nTmp & 0xFFFF0000L)
                     nK = 1;
                 else
@@ -384,7 +384,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
     sal_Int16  nLenB1 = rB.nLen - 1;
     BigInt aTmpA, aTmpB;
 
-    nMult = (sal_uInt16)(0x10000L / ((sal_Int32)rB.nNum[nLenB1] + 1));
+    nMult = static_cast<sal_uInt16>(0x10000L / (static_cast<sal_Int32>(rB.nNum[nLenB1]) + 1));
 
     aTmpA.Mult( *this, nMult);
     if ( aTmpA.nLen == nLen )
@@ -397,26 +397,26 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
     { // Guess divisor
-        sal_uInt32 nTmp = ( (sal_uInt32)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
+        sal_uInt32 nTmp = ( static_cast<sal_uInt32>(aTmpA.nNum[j]) << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
         else
-            nQ = (sal_uInt16)(nTmp / aTmpB.nNum[nLenB1]);
+            nQ = static_cast<sal_uInt16>(nTmp / aTmpB.nNum[nLenB1]);
 
-        if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
+        if ( (static_cast<sal_uInt32>(aTmpB.nNum[nLenB1 - 1]) * nQ) >
             ((nTmp - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
         // Start division
         nK = 0;
         for (i = 0; i < nLenB; i++)
         {
-            nTmp = (sal_uInt32)aTmpA.nNum[j - nLenB + i]
-                   - ((sal_uInt32)aTmpB.nNum[i] * nQ)
+            nTmp = static_cast<sal_uInt32>(aTmpA.nNum[j - nLenB + i])
+                   - (static_cast<sal_uInt32>(aTmpB.nNum[i]) * nQ)
                    - nK;
-            aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
-            nK = (sal_uInt16) (nTmp >> 16);
+            aTmpA.nNum[j - nLenB + i] = static_cast<sal_uInt16>(nTmp);
+            nK = static_cast<sal_uInt16>(nTmp >> 16);
             if ( nK )
-                nK = (sal_uInt16)(0x10000U - nK);
+                nK = static_cast<sal_uInt16>(0x10000U - nK);
         }
         sal_uInt16& rNum( aTmpA.nNum[j - nLenB + i] );
         rNum = rNum - nK;
@@ -428,7 +428,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
             nK = 0;
             for (i = 0; i < nLenB; i++) {
                 nTmp = aTmpA.nNum[j - nLenB + i] + aTmpB.nNum[i] + nK;
-                aTmpA.nNum[j - nLenB + i] = (sal_uInt16)(nTmp & 0xFFFFL);
+                aTmpA.nNum[j - nLenB + i] = static_cast<sal_uInt16>(nTmp & 0xFFFFL);
                 if (nTmp & 0xFFFF0000L)
                     nK = 1;
                 else
@@ -541,13 +541,13 @@ BigInt::BigInt( double nValue )
 
         while ( ( nValue > 65536.0 ) && ( i < MAX_DIGITS ) )
         {
-            nNum[i] = (sal_uInt16) fmod( nValue, 65536.0 );
+            nNum[i] = static_cast<sal_uInt16>(fmod( nValue, 65536.0 ));
             nValue -= nNum[i];
             nValue /= 65536.0;
             i++;
         }
         if ( i < MAX_DIGITS )
-            nNum[i++] = (sal_uInt16) nValue;
+            nNum[i++] = static_cast<sal_uInt16>(nValue);
 
         nLen = i;
 
@@ -564,8 +564,8 @@ BigInt::BigInt( sal_uInt32 nValue )
     {
         bIsBig  = true;
         bIsNeg  = false;
-        nNum[0] = (sal_uInt16)(nValue & 0xffffU);
-        nNum[1] = (sal_uInt16)(nValue >> 16);
+        nNum[0] = static_cast<sal_uInt16>(nValue & 0xffffU);
+        nNum[1] = static_cast<sal_uInt16>(nValue >> 16);
         nLen    = 2;
     }
     else
@@ -605,17 +605,17 @@ BigInt::BigInt( sal_Int64 nValue )
 BigInt::operator double() const
 {
     if ( !bIsBig )
-        return (double) nVal;
+        return static_cast<double>(nVal);
     else
     {
         int     i = nLen-1;
-        double  nRet = (double) ((sal_uInt32)nNum[i]);
+        double  nRet = static_cast<double>(static_cast<sal_uInt32>(nNum[i]));
 
         while ( i )
         {
             nRet *= 65536.0;
             i--;
-            nRet += (double) ((sal_uInt32)nNum[i]);
+            nRet += static_cast<double>(static_cast<sal_uInt32>(nNum[i]));
         }
 
         if ( bIsNeg )
@@ -748,11 +748,11 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
             sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
-                nTmp = (sal_uInt16) -rVal.nVal;
+                nTmp = static_cast<sal_uInt16>(-rVal.nVal);
                 bIsNeg = !bIsNeg;
             }
             else
-                nTmp = (sal_uInt16) rVal.nVal;
+                nTmp = static_cast<sal_uInt16>(rVal.nVal);
 
             Div( nTmp, nTmp );
             Normalize();
@@ -798,11 +798,11 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
             sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
-                nTmp = (sal_uInt16) -rVal.nVal;
+                nTmp = static_cast<sal_uInt16>(-rVal.nVal);
                 bIsNeg = !bIsNeg;
             }
             else
-                nTmp = (sal_uInt16) rVal.nVal;
+                nTmp = static_cast<sal_uInt16>(rVal.nVal);
 
             Div( nTmp, nTmp );
             *this = BigInt( nTmp );

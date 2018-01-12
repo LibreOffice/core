@@ -27,7 +27,7 @@ FixedMemPool::FixedMemPool(char const * pTypeName, sal_uInt16 nTypeSize)
   : m_pTypeName (pTypeName)
 {
     char name[RTL_CACHE_NAME_LENGTH + 1];
-    snprintf (name, sizeof(name), "FixedMemPool_%d", (int)nTypeSize);
+    snprintf (name, sizeof(name), "FixedMemPool_%d", static_cast<int>(nTypeSize));
     m_pImpl = reinterpret_cast<FixedMemPool_Impl*>(rtl_cache_create (name, nTypeSize, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0));
     SAL_INFO("tools.memtools","FixedMemPool::ctor(\"" << m_pTypeName << "\"): " << m_pImpl);
 }
