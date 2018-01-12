@@ -3865,6 +3865,16 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
     return true;
 }
 
+SwTableAutoFormatTable& SwDoc::GetTableStyles()
+{
+    if (!m_pTableStyles)
+    {
+        m_pTableStyles.reset(new SwTableAutoFormatTable);
+        m_pTableStyles->Load();
+    }
+    return *m_pTableStyles.get();
+}
+
 OUString SwDoc::GetUniqueTableName() const
 {
     if( IsInMailMerge())
