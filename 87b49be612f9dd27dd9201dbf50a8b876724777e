@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_6cce015c",
+        "filename": "sw/qa/uitest/writer_tests/trackedChanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:13:34Z",
+      "side": 1,
+      "message": "trailing whitespaces",
+      "revId": "87b49be612f9dd27dd9201dbf50a8b876724777e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_8cdb351b",
+        "filename": "sw/qa/uitest/writer_tests/trackedChanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:13:34Z",
+      "side": 1,
+      "message": "same",
+      "revId": "87b49be612f9dd27dd9201dbf50a8b876724777e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_acd8f91e",
+        "filename": "sw/qa/uitest/writer_tests/trackedChanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:13:34Z",
+      "side": 1,
+      "message": "same",
+      "revId": "87b49be612f9dd27dd9201dbf50a8b876724777e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_cc036d75",
+        "filename": "sw/qa/uitest/writer_tests/trackedChanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:13:34Z",
+      "side": 1,
+      "message": "same",
+      "revId": "87b49be612f9dd27dd9201dbf50a8b876724777e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ec083194",
+        "filename": "sw/qa/uitest/writer_tests/trackedChanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:13:34Z",
+      "side": 1,
+      "message": "same",
+      "revId": "87b49be612f9dd27dd9201dbf50a8b876724777e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
