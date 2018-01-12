@@ -22,6 +22,29 @@
       "revId": "78b60654ffc612df794c630ddb690e4242e99c94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_419e6657",
+        "filename": "sfx2/source/dialog/tabdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2018-01-12T07:58:26Z",
+      "side": 0,
+      "message": "I am not sure how it\u0027s going to work if we don\u0027t set the lok notifier for tabbed dialogs here. The reason it worked for children of SfxModalDialog (and SfxTabDialog is not one of them) is because SfxModalDialog::StateChanged sets the lok notifier. There is no SfxTabDialog::StateChanged, so notifier would never be set if we don\u0027t set it here.\n\nI might be missing something. Did you check if after this patch tabbed dialogs are working? Eg: Character dialog in writer and format cell dialog in Calc?",
+      "range": {
+        "startLine": 524,
+        "startChar": 5,
+        "endLine": 524,
+        "endChar": 35
+      },
+      "revId": "78b60654ffc612df794c630ddb690e4242e99c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
