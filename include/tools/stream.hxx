@@ -144,7 +144,7 @@ private:
     sal_uInt64      m_nActPos;
 
     // buffer management
-    std::unique_ptr<sal_uInt8>
+    std::unique_ptr<sal_uInt8[]>
                     m_pRWBuf;     ///< Points to read/write buffer
     sal_uInt8*      m_pBufPos;    ///< m_pRWBuf + m_nBufActualPos
     sal_uInt16      m_nBufSize;   ///< Allocated size of buffer
