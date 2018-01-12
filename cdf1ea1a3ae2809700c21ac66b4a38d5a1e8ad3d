@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_e12afae6",
+        "filename": "package/source/manifest/ManifestImport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-12T09:25:13Z",
+      "side": 1,
+      "message": "Lots of duplicated code here that differs only in keyword value",
+      "revId": "cdf1ea1a3ae2809700c21ac66b4a38d5a1e8ad3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
