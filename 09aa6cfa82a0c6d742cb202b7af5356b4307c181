@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_c155f61d",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-12T14:39:46Z",
+      "side": 1,
+      "message": "Since meant largely for diagnosis output, easier to inspect in my mind (for binary data).",
+      "parentUuid": "fa31d9ce_c1aa5670",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_e1b59ad0",
         "filename": "include/com/sun/star/uno/Sequence.hxx",
         "patchSetId": 1
