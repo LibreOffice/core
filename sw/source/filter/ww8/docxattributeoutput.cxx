@@ -7763,14 +7763,22 @@ void DocxAttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
             FSEND );
 }
 
-void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* /*pTextNd*/, sal_Int32 nLvl, sal_Int32 nNumId )
+void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* pTextNd, sal_Int32 nLvl, sal_Int32 nNumId )
 {
     if ( USHRT_MAX != nNumId )
     {
-        m_pSerializer->startElementNS( XML_w, XML_numPr, FSEND );
-        m_pSerializer->singleElementNS( XML_w, XML_ilvl, FSNS( XML_w, XML_val ), OString::number( nLvl).getStr(), FSEND );
-        m_pSerializer->singleElementNS( XML_w, XML_numId, FSNS( XML_w, XML_val ), OString::number( nNumId).getStr(), FSEND );
-        m_pSerializer->endElementNS( XML_w, XML_numPr );
+        const sal_Int32 nTableSize = m_rExport.m_pUsedNumTable ? m_rExport.m_pUsedNumTable->size() : 0;
+        const SwNumRule* pRule = nNumId > 0 && nNumId <= nTableSize ? (*m_rExport.m_pUsedNumTable)[nNumId-1] : nullptr;
+        const bool bOutlineRule = pRule && pRule->IsOutlineRule();
+
+        // Do not export outline rules (Chapter Numbering) as paragraph properties, only as style properties.
+        if ( !pTextNd || !bOutlineRule )
+        {
+            m_pSerializer->startElementNS( XML_w, XML_numPr, FSEND );
+            m_pSerializer->singleElementNS( XML_w, XML_ilvl, FSNS( XML_w, XML_val ), OString::number( nLvl).getStr(), FSEND );
+            m_pSerializer->singleElementNS( XML_w, XML_numId, FSNS( XML_w, XML_val ), OString::number( nNumId).getStr(), FSEND );
+            m_pSerializer->endElementNS( XML_w, XML_numPr );
+        }
     }
 }
 
