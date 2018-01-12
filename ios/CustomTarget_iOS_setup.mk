@@ -36,7 +36,8 @@ $(WORKDIR)/ios:
 
 #- Generate dynamic files  ---------------------------------------------------
 $(IOSGEN)/native-code.h: $(WORKDIR)/ios $(BUILDDIR)/config_host.mk \
-                         $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
+                         $(SRCDIR)/ios/CustomTarget_iOS_setup.mk \
+	                 $(SRCDIR)/solenv/bin/native-code.py
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 
 	# generate file with call declarations
