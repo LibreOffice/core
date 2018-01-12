@@ -249,7 +249,7 @@ void SAL_CALL OButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
     switch ( _nHandle )
     {
     case PROPERTY_ID_DEFAULT_STATE:
-        _rValue <<= (sal_Int16)m_eDefaultState;
+        _rValue <<= static_cast<sal_Int16>(m_eDefaultState);
         break;
 
     default:
@@ -265,7 +265,7 @@ void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle
     {
     case PROPERTY_ID_DEFAULT_STATE:
     {
-        sal_Int16 nDefaultState = (sal_Int16)TRISTATE_FALSE;
+        sal_Int16 nDefaultState = sal_Int16(TRISTATE_FALSE);
         OSL_VERIFY( _rValue >>= nDefaultState );
         m_eDefaultState = (ToggleState)nDefaultState;
         impl_resetNoBroadcast_nothrow();
@@ -285,7 +285,7 @@ sal_Bool SAL_CALL OButtonModel::convertFastPropertyValue( Any& _rConvertedValue,
     switch ( _nHandle )
     {
     case PROPERTY_ID_DEFAULT_STATE:
-        bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, (sal_Int16)m_eDefaultState );
+        bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_eDefaultState) );
         break;
 
     default:
@@ -302,7 +302,7 @@ Any OButtonModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     switch ( _nHandle )
     {
     case PROPERTY_ID_DEFAULT_STATE:
-        aDefault <<= (sal_Int16)TRISTATE_FALSE;
+        aDefault <<= sal_Int16(TRISTATE_FALSE);
         break;
 
     default:

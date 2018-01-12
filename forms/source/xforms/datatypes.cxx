@@ -868,7 +868,7 @@ namespace xforms
 
     bool OShortIntegerType::_getValue( const OUString& value, double& fValue )
     {
-        fValue = (double)(sal_Int16)value.toInt32();
+        fValue = static_cast<double>(static_cast<sal_Int16>(value.toInt32()));
         // TODO/eforms
         // this does not care for values which do not fit into a sal_Int16, but simply
         // cuts them down. A better implementation here should probably return <FALSE/>

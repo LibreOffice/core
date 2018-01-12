@@ -408,7 +408,7 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
             {
                 sal_Int32 nAlign( 0 );
                 if ( rConvertedValue >>= nAlign )
-                    rConvertedValue <<= (sal_Int16)nAlign;
+                    rConvertedValue <<= static_cast<sal_Int16>(nAlign);
             }
             break;
         case PROPERTY_ID_HIDDEN:

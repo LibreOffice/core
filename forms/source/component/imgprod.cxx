@@ -353,18 +353,18 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 
                 for( sal_uInt32 i = 0; i < nPalCount; i++, pTmp++ )
                 {
-                    const BitmapColor& rCol = pBmpAcc->GetPaletteColor( (sal_uInt16) i );
+                    const BitmapColor& rCol = pBmpAcc->GetPaletteColor( static_cast<sal_uInt16>(i) );
 
-                    *pTmp = ( (sal_Int32) rCol.GetRed() ) << (sal_Int32)24;
-                    *pTmp |= ( (sal_Int32) rCol.GetGreen() ) << (sal_Int32)16;
-                    *pTmp |= ( (sal_Int32) rCol.GetBlue() ) << (sal_Int32)8;
-                    *pTmp |= (sal_Int32)0x000000ffL;
+                    *pTmp = static_cast<sal_Int32>(rCol.GetRed()) << sal_Int32(24);
+                    *pTmp |= static_cast<sal_Int32>(rCol.GetGreen()) << sal_Int32(16);
+                    *pTmp |= static_cast<sal_Int32>(rCol.GetBlue()) << sal_Int32(8);
+                    *pTmp |= sal_Int32(0x000000ffL);
                 }
 
                 if( rGraphic.IsTransparent() )
                 {
                     // append transparent entry
-                    *pTmp = (sal_Int32)0xffffff00L;
+                    *pTmp = sal_Int32(0xffffff00L);
                     mnTransIndex = nPalCount;
                     nPalCount++;
                 }
@@ -484,9 +484,9 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                 {
                     const BitmapColor aCol( pBmpAcc->GetPixel( nY, nX ) );
 
-                    *pTmp = ( (sal_Int32) aCol.GetRed() ) << 24;
-                    *pTmp |= ( (sal_Int32) aCol.GetGreen() ) << 16;
-                    *pTmp |= ( (sal_Int32) aCol.GetBlue() ) << 8;
+                    *pTmp = static_cast<sal_Int32>(aCol.GetRed()) << 24;
+                    *pTmp |= static_cast<sal_Int32>(aCol.GetGreen()) << 16;
+                    *pTmp |= static_cast<sal_Int32>(aCol.GetBlue()) << 8;
 
                     if( pMskAcc->GetPixel( nY, nX ) != aWhite )
                         *pTmp |= 0x000000ffUL;

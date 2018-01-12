@@ -559,9 +559,9 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                     {
                         Locale aApplicationLocale = Application::GetSettings().GetUILanguageTag().getLocale();
                         if (m_bOriginalNumeric)
-                            aFmtKey <<= (sal_Int32)xTypes->getStandardFormat(NumberFormat::NUMBER, aApplicationLocale);
+                            aFmtKey <<= static_cast<sal_Int32>(xTypes->getStandardFormat(NumberFormat::NUMBER, aApplicationLocale));
                         else
-                            aFmtKey <<= (sal_Int32)xTypes->getStandardFormat(NumberFormat::TEXT, aApplicationLocale);
+                            aFmtKey <<= static_cast<sal_Int32>(xTypes->getStandardFormat(NumberFormat::TEXT, aApplicationLocale));
                     }
                 }
                 aSupplier >>= m_xOriginalFormatter;
@@ -665,7 +665,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         if (hasProperty(s_aFormatStringProp, xFormat))
             xFormat->getPropertyValue(s_aFormatStringProp) >>= sFormatDescription;
         _rxOutStream->writeUTF(sFormatDescription);
-        _rxOutStream->writeLong((sal_uInt16)eFormatLanguage);
+        _rxOutStream->writeLong(static_cast<sal_uInt16>(eFormatLanguage));
     }
     // version 2 : write the properties common to all OEditBaseModels
     writeCommonEditProperties(_rxOutStream);
@@ -731,7 +731,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
                 {
                     Locale aDescriptionLanguage( LanguageTag::convertToLocale(eDescriptionLanguage));
                     nKey = xFormats->queryKey(sFormatDescription, aDescriptionLanguage, false);
-                    if (nKey == (sal_Int32)-1)
+                    if (nKey == sal_Int32(-1))
                     {   // does not yet exist in my formatter...
                         nKey = xFormats->addNew(sFormatDescription, aDescriptionLanguage);
                     }
@@ -858,7 +858,7 @@ Any OFormattedModel::translateExternalValueToControlValue( const Any& _rExternal
     {
         bool bExternalValue = false;
         _rExternalValue >>= bExternalValue;
-        aControlValue <<= (double)( bExternalValue ? 1 : 0 );
+        aControlValue <<= static_cast<double>( bExternalValue ? 1 : 0 );
     }
     break;
     default:

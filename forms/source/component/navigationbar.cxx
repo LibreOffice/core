@@ -396,7 +396,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_ICONSIZE:
-            aDefault <<= (sal_Int16)0;
+            aDefault <<= sal_Int16(0);
             break;
 
         case PROPERTY_ID_DEFAULTCONTROL:
@@ -409,11 +409,11 @@ namespace frm
             break;
 
         case PROPERTY_ID_BORDER:
-            aDefault <<= (sal_Int16)0;
+            aDefault <<= sal_Int16(0);
             break;
 
         case PROPERTY_ID_DELAY:
-            aDefault <<= (sal_Int32)20;
+            aDefault <<= sal_Int32(20);
             break;
 
         default:

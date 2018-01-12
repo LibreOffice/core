@@ -1327,7 +1327,7 @@ namespace frm
 
     sal_Int32 FormOperations::impl_getRowCount_throw() const
     {
-        return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ROWCOUNT, (sal_Int32)0 );
+        return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ROWCOUNT, sal_Int32(0) );
     }
 
     bool FormOperations::impl_isRowCountFinal_throw() const

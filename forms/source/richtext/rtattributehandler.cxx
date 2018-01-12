@@ -68,7 +68,7 @@ namespace frm
 
     void AttributeHandler::putItemForScript( SfxItemSet& _rAttribs, const SfxPoolItem& _rItem, SvtScriptType _nForScriptType ) const
     {
-        SvxScriptSetItem aSetItem( (WhichId)getAttributeId(), *_rAttribs.GetPool() );
+        SvxScriptSetItem aSetItem( static_cast<WhichId>(getAttributeId()), *_rAttribs.GetPool() );
         aSetItem.PutItemForScriptType( _nForScriptType, _rItem );
         _rAttribs.Put( aSetItem.GetItemSet(), false );
     }
@@ -109,7 +109,7 @@ namespace frm
             case SID_ATTR_CHAR_LATIN_WEIGHT:    nWhich = EE_CHAR_WEIGHT;    break;
 
             default:
-                nWhich = _rPool.GetWhich( (SfxSlotId)_nAttributeId );
+                nWhich = _rPool.GetWhich( static_cast<SfxSlotId>(_nAttributeId) );
             }
             return nWhich;
         }
@@ -157,7 +157,7 @@ namespace frm
             break;
 
         default:
-            pReturn = new SlotHandler( (SfxSlotId)_nAttributeId, lcl_implGetWhich( _rEditEnginePool, _nAttributeId ) );
+            pReturn = new SlotHandler( static_cast<SfxSlotId>(_nAttributeId), lcl_implGetWhich( _rEditEnginePool, _nAttributeId ) );
             break;
 
         }
@@ -229,7 +229,7 @@ namespace frm
         if ( 100 == m_nLineSpace )
             aLineSpacing.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         else
-            aLineSpacing.SetPropLineSpace( (sal_uInt8)m_nLineSpace );
+            aLineSpacing.SetPropLineSpace( static_cast<sal_uInt8>(m_nLineSpace) );
 
         _rNewAttribs.Put( aLineSpacing );
     }
