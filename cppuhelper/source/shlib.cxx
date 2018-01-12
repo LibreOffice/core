@@ -266,10 +266,6 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         }
         if (fp == 0) {
             SAL_WARN("cppuhelper", "unknown factory name \"" << name << "\"");
-#if defined IOS && !defined SAL_LOG_WARN
-            // If the above SAL_WARN expanded to nothing, print to stderr...
-            fprintf(stderr, "Unknown factory name %s\n", OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
-#endif
             throw css::loader::CannotActivateFactoryException(
                 "unknown factory name \"" + name + "\"",
                 css::uno::Reference<css::uno::XInterface>());
@@ -290,10 +286,6 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             }
         }
         SAL_WARN("cppuhelper", "unknown constructor name \"" << constructor << "\"");
-#if defined IOS && !defined SAL_LOG_WARN
-            // If the above SAL_WARN expanded to nothing, print to stderr...
-            fprintf(stderr, "Unknown constructor name %s\n", OUStringToOString(constructor, RTL_TEXTENCODING_UTF8).getStr());
-#endif
         throw css::loader::CannotActivateFactoryException(
             "unknown constructor name \"" + constructor + "\"",
             css::uno::Reference<css::uno::XInterface>());
