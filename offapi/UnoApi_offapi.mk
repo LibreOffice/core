@@ -2030,7 +2030,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XCoordinateSystem \
 	XCoordinateSystemContainer \
 	XDataInterpreter \
-	XDataProviderCreator \
+	XDataProviderAccess \
 	XDataSeries \
 	XDataSeriesContainer \
 	XDefaultSizeTransmitter \
