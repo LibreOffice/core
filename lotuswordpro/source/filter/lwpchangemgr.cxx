@@ -89,6 +89,7 @@ LwpChangeMgr::LwpChangeMgr()
     m_pFribMap = &m_DocFribMap;
     m_ChangeList.clear();
 }
+
 LwpChangeMgr::~LwpChangeMgr()
 {
     m_pFribMap=nullptr;
@@ -102,6 +103,7 @@ void LwpChangeMgr::AddChangeFrib(LwpFrib* pFrib)
     m_nCounter++;
     OUString sID = "ct"+ OUString::number(m_nCounter);
     m_pFribMap->insert(std::pair<LwpFrib*,OUString>(pFrib,sID));
+    pFrib->Register(m_pFribMap);
 }
 
 OUString LwpChangeMgr::GetChangeID(LwpFrib* pFrib)
