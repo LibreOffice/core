@@ -68,7 +68,6 @@ extern "C"
     {
         (void)pPath;
     }
-#endif // IOS
 
     static void *lok_dlsym(void *Hnd, const char *pName)
     {
@@ -79,6 +78,7 @@ extern "C"
     {
         return dlclose(Hnd);
     }
+#endif // IOS
 
 
 #else
@@ -165,12 +165,12 @@ extern "C"
     }
 #endif
 
+#if !defined(IOS)
 static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 {
     char *imp_lib;
     void *dlhandle;
 
-#if !defined(IOS)
     size_t partial_length, imp_lib_size;
     struct stat dir_st;
 
@@ -233,14 +233,10 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
             return NULL;
         }
     }
-#else
-    (void)install_path;
-    imp_lib = strdup("the app executable");
-    dlhandle = RTLD_MAIN_ONLY;
-#endif
     *_imp_lib = imp_lib;
     return dlhandle;
 }
+#endif
 
 typedef LibreOfficeKit *(LokHookFunction)( const char *install_path);
 
@@ -248,10 +244,14 @@ typedef LibreOfficeKit *(LokHookFunction2)( const char *install_path, const char
 
 typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_url );
 
+extern __attribute__ ((visibility("default")))
+    LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
+
 static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_url )
 {
-    char *imp_lib;
+#if !defined(IOS)
     void *dlhandle;
+    char *imp_lib;
     LokHookFunction *pSym;
     LokHookFunction2 *pSym2;
 
@@ -288,6 +288,9 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     // dlhandle is "leaked"
     // coverity[leaked_storage]
     return pSym2( install_path, user_profile_url );
+#else
+    return libreofficekit_hook_2( install_path, user_profile_url );
+#endif
 }
 
 static
