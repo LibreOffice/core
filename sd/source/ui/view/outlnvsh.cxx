@@ -1067,7 +1067,7 @@ void OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
     long   nThumb = pHScroll->GetThumbPos();
     long   nRange = pHScroll->GetRange().Len();
-    double fX     = (double) nThumb / nRange;
+    double fX     = static_cast<double>(nThumb) / nRange;
 
     Window*       pWin          = mpContentWindow.get();
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
@@ -1076,7 +1076,7 @@ void OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     long          nTextWidth    = pOlView->GetPaperWidth();
     nViewWidth                  = std::max(nViewWidth, nTextWidth);
     long          nCurrentPos   = pOutlinerView->GetVisArea().Left();
-    long          nTargetPos    = (long)(fX * nViewWidth);
+    long          nTargetPos    = static_cast<long>(fX * nViewWidth);
     long          nDelta        = nTargetPos - nCurrentPos;
 
     pOutlinerView->HideCursor();
@@ -1088,7 +1088,7 @@ void OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 {
     long nThumb = pVScroll->GetThumbPos();
     long nRange = pVScroll->GetRange().Len();
-    double fY = (double) nThumb / nRange;
+    double fY = static_cast<double>(nThumb) / nRange;
 
     Window*       pWin          = mpContentWindow.get();
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
@@ -1097,7 +1097,7 @@ void OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     long          nTextHeight   = pOlView->GetOutliner().GetTextHeight();
     nViewHeight                += nTextHeight;
     long          nCurrentPos   = pOutlinerView->GetVisArea().Top();
-    long          nTargetPos    = (long)(fY * nViewHeight);
+    long          nTargetPos    = static_cast<long>(fY * nViewHeight);
     long          nDelta        = nTargetPos - nCurrentPos;
 
     pOutlinerView->HideCursor();
@@ -1260,7 +1260,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Zoom-Item
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
-        sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
+        sal_uInt16 nZoom = static_cast<sal_uInt16>(GetActiveWindow()->GetZoom());
 
         std::unique_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
 
@@ -1283,7 +1283,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         else
         {
             sd::Window * pActiveWindow = GetActiveWindow();
-            SvxZoomSliderItem aZoomItem( (sal_uInt16) pActiveWindow->GetZoom(), (sal_uInt16)pActiveWindow->GetMinZoom(), (sal_uInt16)pActiveWindow->GetMaxZoom() ) ;
+            SvxZoomSliderItem aZoomItem( static_cast<sal_uInt16>(pActiveWindow->GetZoom()), static_cast<sal_uInt16>(pActiveWindow->GetMinZoom()), static_cast<sal_uInt16>(pActiveWindow->GetMaxZoom()) ) ;
             aZoomItem.AddSnappingPoint(100);
             rSet.Put( aZoomItem );
         }
@@ -1330,11 +1330,11 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         if( nPos >= GetDoc()->GetSdPageCount( PageKind::Standard ) )
             nPos = 0;
 
-        SdrPage* pPage = GetDoc()->GetSdPage( (sal_uInt16) nPos, PageKind::Standard );
+        SdrPage* pPage = GetDoc()->GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard );
 
         aPageStr = SdResId(STR_SD_PAGE_COUNT);
 
-        aPageStr = aPageStr.replaceFirst("%1", OUString::number((sal_Int32)(nPos + 1)));
+        aPageStr = aPageStr.replaceFirst("%1", OUString::number(static_cast<sal_Int32>(nPos + 1)));
         aPageStr = aPageStr.replaceFirst("%2", OUString::number(nPageCount));
 
         aLayoutStr = pPage->GetLayoutName();

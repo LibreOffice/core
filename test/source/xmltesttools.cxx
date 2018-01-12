@@ -132,7 +132,7 @@ void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath,
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("In <" + OString(pXmlDoc->name) + ">, XPath '" + rXPath + "' number of child-nodes is incorrect").getStr(),
-                                 nNumberOfChildNodes, (int)xmlChildElementCount(pXmlNode));
+                                 nNumberOfChildNodes, static_cast<int>(xmlChildElementCount(pXmlNode)));
     xmlXPathFreeObject(pXmlObj);
 #else
     (void)pXmlDoc;

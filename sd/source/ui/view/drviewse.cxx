@@ -127,7 +127,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest const & rReq, ::sd::View* pV
             {
                 for(sal_Int32 a(0); a < aInputString.getLength(); a++)
                 {
-                    sal_Char aChar = (sal_Char)aInputString[a];
+                    sal_Char aChar = static_cast<sal_Char>(aInputString[a]);
                     vcl::KeyCode aKeyCode;
                     KeyEvent aKeyEvent(aChar, aKeyCode);
 
@@ -1090,12 +1090,12 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 Size aPageSize = pPageView->GetPage()->GetSize();
 
                 aPagePos.X() += aPageSize.Width()  / 2;
-                aPageSize.Width() = (long) (aPageSize.Width() * 1.03);
+                aPageSize.Width() = static_cast<long>(aPageSize.Width() * 1.03);
 
                 if( rReq.GetSlot() == SID_SIZE_PAGE )
                 {
                     aPagePos.Y() += aPageSize.Height() / 2;
-                    aPageSize.Height() = (long) (aPageSize.Height() * 1.03);
+                    aPageSize.Height() = static_cast<long>(aPageSize.Height() * 1.03);
                     aPagePos.Y() -= aPageSize.Height() / 2;
                 }
                 else
@@ -1186,8 +1186,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( mpDrawView->AreObjectsMarked() )
             {
                 maMarkRect = mpDrawView->GetAllMarkedRect();
-                long nW = (long) (maMarkRect.GetWidth()  * 1.03);
-                long nH = (long) (maMarkRect.GetHeight() * 1.03);
+                long nW = static_cast<long>(maMarkRect.GetWidth()  * 1.03);
+                long nH = static_cast<long>(maMarkRect.GetHeight() * 1.03);
                 Point aPos = maMarkRect.Center();
                 aPos.X() -= nW / 2;
                 aPos.Y() -= nH / 2;
@@ -1218,8 +1218,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             {
                 ::tools::Rectangle aBoundRect( pPageView->GetObjList()->GetAllObjBoundRect() );
 
-                long nW = (long) (aBoundRect.GetWidth() * 1.03);
-                long nH = (long) (aBoundRect.GetHeight() * 1.03);
+                long nW = static_cast<long>(aBoundRect.GetWidth() * 1.03);
+                long nH = static_cast<long>(aBoundRect.GetHeight() * 1.03);
                 Point aPos = aBoundRect.Center();
                 aPos.X() -= nW / 2;
                 aPos.Y() -= nH / 2;

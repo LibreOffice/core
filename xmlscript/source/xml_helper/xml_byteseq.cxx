@@ -56,7 +56,7 @@ public:
 sal_Int32 BSeqInputStream::readBytes(
     Sequence< sal_Int8 > & rData, sal_Int32 nBytesToRead )
 {
-    nBytesToRead = ((nBytesToRead > (sal_Int32)_seq.size() - _nPos)
+    nBytesToRead = ((nBytesToRead > static_cast<sal_Int32>(_seq.size()) - _nPos)
                     ? _seq.size() - _nPos
                     : nBytesToRead);
 

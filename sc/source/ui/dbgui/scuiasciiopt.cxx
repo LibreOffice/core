@@ -102,7 +102,7 @@ static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode 
     {
         OUString aStr;
         for ( i=0; i<nCount; i+=2 )
-            if ( (sal_Unicode)rList.getToken(i+1,'\t').toInt32() == cSelect )
+            if ( static_cast<sal_Unicode>(rList.getToken(i+1,'\t').toInt32()) == cSelect )
                 aStr = rList.getToken(i,'\t');
         if (aStr.isEmpty())
             aStr = OUString(cSelect);         // Ascii
@@ -121,7 +121,7 @@ static sal_Unicode lcl_CharFromCombo( const ComboBox& rCombo, const OUString& rL
         for ( sal_Int32 i=0; i<nCount; i+=2 )
         {
             if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.getToken(i,'\t') ) )
-                c = (sal_Unicode)rList.getToken(i+1,'\t').toInt32();
+                c = static_cast<sal_Unicode>(rList.getToken(i+1,'\t').toInt32());
         }
         if (!c && !aStr.isEmpty())
         {
@@ -130,7 +130,7 @@ static sal_Unicode lcl_CharFromCombo( const ComboBox& rCombo, const OUString& rL
             if( (aStr.getLength() == 1) || (cFirst < '0') || (cFirst > '9') )
                 c = cFirst;
             else    // keep old behaviour for compatibility (i.e. "39" -> "'")
-                c = (sal_Unicode) aStr.toInt32();       // Ascii
+                c = static_cast<sal_Unicode>(aStr.toInt32());       // Ascii
         }
     }
     return c;
@@ -616,7 +616,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     rOpt.SetCharSetSystem( mbCharSetSystem );
     rOpt.SetLanguage(pLbCustomLang->GetSelectLanguage());
     rOpt.SetFixedLen( pRbFixed->IsChecked() );
-    rOpt.SetStartRow( (long)pNfRow->GetValue() );
+    rOpt.SetStartRow( static_cast<long>(pNfRow->GetValue()) );
     mpTableBox->FillColumnData( rOpt );
     if( pRbSeparated->IsChecked() )
     {

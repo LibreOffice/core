@@ -41,8 +41,8 @@ static sal_Int32 map100thmm( sal_Int32 n100thMM )
 Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int32 nDocWidth, sal_Int32 nDocHeight, sal_Int32 nJPEGcompressMode )
 :   mnDocWidth( map100thmm(nDocWidth) ),
     mnDocHeight( map100thmm(nDocHeight) ),
-    mnDocXScale( (double)nTWIPWidthOutput / mnDocWidth ),
-    mnDocYScale( (double)nTWIPHeightOutput / mnDocHeight ),
+    mnDocXScale( static_cast<double>(nTWIPWidthOutput) / mnDocWidth ),
+    mnDocYScale( static_cast<double>(nTWIPHeightOutput) / mnDocHeight ),
     mpClipPolyPolygon( nullptr ),
     mpTag( nullptr ),
     mpSprite( nullptr ),
@@ -60,7 +60,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     mpFontsStream = maFontsTempFile.GetStream( StreamMode::WRITE|StreamMode::TRUNC );
 
     // define an invisible button with the size of a page
-    tools::Rectangle aRect( 0, 0, (long)( mnDocWidth * mnDocXScale ), (long)( mnDocHeight * mnDocYScale ) );
+    tools::Rectangle aRect( 0, 0, static_cast<long>( mnDocWidth * mnDocXScale ), static_cast<long>( mnDocHeight * mnDocYScale ) );
     tools::Polygon aPoly( aRect );
     FillStyle aFill = FillStyle( Color(COL_WHITE) );
     mnWhiteBackgroundShapeId = defineShape( aPoly, aFill );

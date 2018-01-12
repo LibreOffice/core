@@ -76,7 +76,7 @@ void ImpSWFDialog::dispose()
 
 Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 {
-    sal_Int32 nCompressMode = (sal_Int32)mpNumFldQuality->GetValue();
+    sal_Int32 nCompressMode = static_cast<sal_Int32>(mpNumFldQuality->GetValue());
     maConfigItem.WriteInt32( "CompressMode" , nCompressMode );
     maConfigItem.WriteBool( "ExportAll", mpCheckExportAll->IsChecked() );
     maConfigItem.WriteBool( "ExportBackgrounds", mpCheckExportBackgrounds->IsChecked() );

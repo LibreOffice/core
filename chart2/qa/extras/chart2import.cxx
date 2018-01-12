@@ -1045,7 +1045,7 @@ void Chart2ImportTest::testTrendlineDefaultValue2007XLSX()
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<chart2::XRegressionCurveContainer> xRegressionCurveContainer(xDataSeries, UNO_QUERY_THROW);
     Sequence< Reference<chart2::XRegressionCurve> > xRegressionCurveSequence = xRegressionCurveContainer->getRegressionCurves();
-    CPPUNIT_ASSERT_EQUAL((sal_Int32) 1, xRegressionCurveSequence.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xRegressionCurveSequence.getLength());
 
     Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
 
@@ -1071,7 +1071,7 @@ void Chart2ImportTest::testTrendlineDefaultValue2013XLSX()
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<chart2::XRegressionCurveContainer> xRegressionCurveContainer(xDataSeries, UNO_QUERY_THROW);
     Sequence< Reference<chart2::XRegressionCurve> > xRegressionCurveSequence = xRegressionCurveContainer->getRegressionCurves();
-    CPPUNIT_ASSERT_EQUAL((sal_Int32) 1, xRegressionCurveSequence.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xRegressionCurveSequence.getLength());
 
     Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
 

@@ -893,7 +893,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
 
         xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, uno::Any(xConnection) );
 
-        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any((sal_Int32) sdb::CommandType::TABLE) );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any(sal_Int32(sdb::CommandType::TABLE)) );
 
         xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(aTabName) );
 

@@ -1420,7 +1420,7 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
               ( nNumeric = rTarget.toInt32() ) > 0 && nNumeric <= MAXROW+1 )
     {
         // row number is always mapped to cell A(row) on the same sheet
-        rTargetRange = ScAddress( 0, (SCROW)(nNumeric-1), nSourceTab );     // target row number is 1-based
+        rTargetRange = ScAddress( 0, static_cast<SCROW>(nNumeric-1), nSourceTab );     // target row number is 1-based
         bRangeValid = true;             // row number
     }
     else if ( pDoc->GetTable( rTarget, nNameTab ) )
@@ -2055,14 +2055,10 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                             Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
                             Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
 
-                            long nX1 = aLocationPixel.Left() + (long)
-                                ( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
-                            long nX2 = aLocationPixel.Left() + (long)
-                                ( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
-                            long nY1 = aLocationPixel.Top() + (long)
-                                ( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
-                            long nY2 = aLocationPixel.Top() + (long)
-                                ( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
+                            long nX1 = aLocationPixel.Left() + static_cast<long>( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
+                            long nX2 = aLocationPixel.Left() + static_cast<long>( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
+                            long nY1 = aLocationPixel.Top() + static_cast<long>( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
+                            long nY2 = aLocationPixel.Top() + static_cast<long>( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
 
                             if ( nX1 > aLocationPixel.Right() ) nX1 = aLocationPixel.Right();
                             if ( nX2 > aLocationPixel.Right() ) nX2 = aLocationPixel.Right();
@@ -2285,8 +2281,8 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
         ScDocument& rDoc = pDocShell->GetDocument();
         double fValue = 0.0;
         bool bFound = rDoc.Solver(
-                    (SCCOL)aFormulaPosition.Column, (SCROW)aFormulaPosition.Row, aFormulaPosition.Sheet,
-                    (SCCOL)aVariablePosition.Column, (SCROW)aVariablePosition.Row, aVariablePosition.Sheet,
+                    static_cast<SCCOL>(aFormulaPosition.Column), static_cast<SCROW>(aFormulaPosition.Row), aFormulaPosition.Sheet,
+                    static_cast<SCCOL>(aVariablePosition.Column), static_cast<SCROW>(aVariablePosition.Row), aVariablePosition.Sheet,
                     aGoalValue, fValue );
         aResult.Result = fValue;
         if (bFound)
@@ -3286,7 +3282,7 @@ uno::Reference<drawing::XDrawPage> ScDrawPagesObj::GetObjectByIndex_Impl(sal_Int
         OSL_ENSURE(pDrawLayer,"Cannot create Draw-Layer");
         if ( pDrawLayer && nIndex >= 0 && nIndex < pDocShell->GetDocument().GetTableCount() )
         {
-            SdrPage* pPage = pDrawLayer->GetPage((sal_uInt16)nIndex);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nIndex));
             OSL_ENSURE(pPage,"Draw-Page not found");
             if (pPage)
             {
@@ -3606,7 +3602,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
 uno::Reference< table::XCell > SAL_CALL ScTableSheetsObj::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow, sal_Int32 nSheet )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XCellRange> xSheet(static_cast<ScCellRangeObj*>(GetObjectByIndex_Impl((sal_uInt16)nSheet)));
+    uno::Reference<table::XCellRange> xSheet(static_cast<ScCellRangeObj*>(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nSheet))));
     if (! xSheet.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -3616,7 +3612,7 @@ uno::Reference< table::XCell > SAL_CALL ScTableSheetsObj::getCellByPosition( sal
 uno::Reference< table::XCellRange > SAL_CALL ScTableSheetsObj::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom, sal_Int32 nSheet )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XCellRange> xSheet(static_cast<ScCellRangeObj*>(GetObjectByIndex_Impl((sal_uInt16)nSheet)));
+    uno::Reference<table::XCellRange> xSheet(static_cast<ScCellRangeObj*>(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nSheet))));
     if (! xSheet.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -3791,8 +3787,8 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
     if ( pDocShell && nCount > 0 && nPosition >= 0 && nStartCol+nPosition <= nEndCol &&
             nStartCol+nPosition+nCount-1 <= MAXCOL )
     {
-        ScRange aRange( (SCCOL)(nStartCol+nPosition), 0, nTab,
-                        (SCCOL)(nStartCol+nPosition+nCount-1), MAXROW, nTab );
+        ScRange aRange( static_cast<SCCOL>(nStartCol+nPosition), 0, nTab,
+                        static_cast<SCCOL>(nStartCol+nPosition+nCount-1), MAXROW, nTab );
         bDone = pDocShell->GetDocFunc().InsertCells( aRange, nullptr, INS_INSCOLS_BEFORE, true, true );
     }
     if (!bDone)
@@ -3806,8 +3802,8 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
     //  the range to be deleted has to lie within the object
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartCol+nIndex+nCount-1 <= nEndCol )
     {
-        ScRange aRange( (SCCOL)(nStartCol+nIndex), 0, nTab,
-                        (SCCOL)(nStartCol+nIndex+nCount-1), MAXROW, nTab );
+        ScRange aRange( static_cast<SCCOL>(nStartCol+nIndex), 0, nTab,
+                        static_cast<SCCOL>(nStartCol+nIndex+nCount-1), MAXROW, nTab );
         bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DEL_DELCOLS, true );
     }
     if (!bDone)
@@ -3911,7 +3907,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
         sal_Int32 nNewWidth = 0;
         if ( aValue >>= nNewWidth )
             rFunc.SetWidthOrHeight(
-                true, aColArr, nTab, SC_SIZE_ORIGINAL, (sal_uInt16)HMMToTwips(nNewWidth), true, true);
+                true, aColArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(HMMToTwips(nNewWidth)), true, true);
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
     {
@@ -3955,7 +3951,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
     {
         // for hidden column, return original height
         sal_uInt16 nWidth = rDoc.GetOriginalWidth( nStartCol, nTab );
-        aAny <<= (sal_Int32)TwipsToHMM(nWidth);
+        aAny <<= static_cast<sal_Int32>(TwipsToHMM(nWidth));
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
     {
@@ -4030,8 +4026,8 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
     if ( pDocShell && nCount > 0 && nPosition >= 0 && nStartRow+nPosition <= nEndRow &&
             nStartRow+nPosition+nCount-1 <= MAXROW )
     {
-        ScRange aRange( 0, (SCROW)(nStartRow+nPosition), nTab,
-                        MAXCOL, (SCROW)(nStartRow+nPosition+nCount-1), nTab );
+        ScRange aRange( 0, static_cast<SCROW>(nStartRow+nPosition), nTab,
+                        MAXCOL, static_cast<SCROW>(nStartRow+nPosition+nCount-1), nTab );
         bDone = pDocShell->GetDocFunc().InsertCells( aRange, nullptr, INS_INSROWS_BEFORE, true, true );
     }
     if (!bDone)
@@ -4045,8 +4041,8 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
     // the range to be deleted has to lie within the object
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartRow+nIndex+nCount-1 <= nEndRow )
     {
-        ScRange aRange( 0, (SCROW)(nStartRow+nIndex), nTab,
-                        MAXCOL, (SCROW)(nStartRow+nIndex+nCount-1), nTab );
+        ScRange aRange( 0, static_cast<SCROW>(nStartRow+nIndex), nTab,
+                        MAXCOL, static_cast<SCROW>(nStartRow+nIndex+nCount-1), nTab );
         bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DEL_DELROWS, true );
     }
     if (!bDone)
@@ -4121,7 +4117,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
 
             // TODO: It's probably cleaner to use a different property name
             // for this.
-            rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, (sal_uInt16)HMMToTwips(nNewHeight) );
+            rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(HMMToTwips(nNewHeight)) );
         }
         else
         {
@@ -4144,12 +4140,12 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
                 // TODO: This is a band-aid fix.  Eventually we need to
                 // re-work ods' style import to get it to set styles to
                 // ScDocument directly.
-                rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, (sal_uInt16)HMMToTwips(nNewHeight) );
+                rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(HMMToTwips(nNewHeight)) );
                 rDoc.SetManualHeight( nStartRow, nEndRow, nTab, true );
             }
             else
                 rFunc.SetWidthOrHeight(
-                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, (sal_uInt16)HMMToTwips(nNewHeight), true, true);
+                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(HMMToTwips(nNewHeight)), true, true);
         }
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
@@ -4212,7 +4208,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     {
         // for hidden row, return original height
         sal_uInt16 nHeight = rDoc.GetOriginalHeight( nStartRow, nTab );
-        aAny <<= (sal_Int32)TwipsToHMM(nHeight);
+        aAny <<= static_cast<sal_Int32>(TwipsToHMM(nHeight));
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
     {
@@ -4333,7 +4329,7 @@ void SAL_CALL ScAnnotationsObj::insertNew(
     if (pDocShell)
     {
         OSL_ENSURE( aPosition.Sheet == nTab, "addAnnotation with a wrong Sheet" );
-        ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
+        ScAddress aPos( static_cast<SCCOL>(aPosition.Column), static_cast<SCROW>(aPosition.Row), nTab );
         pDocShell->GetDocFunc().ReplaceNote( aPos, rText, nullptr, nullptr, true );
     }
 }
@@ -4439,7 +4435,7 @@ bool ScScenariosObj::GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex
     {
         OUString aTabName;
         ScDocument& rDoc = pDocShell->GetDocument();
-        SCTAB nCount = (SCTAB)getCount();
+        SCTAB nCount = static_cast<SCTAB>(getCount());
         for (SCTAB i=0; i<nCount; i++)
             if (rDoc.GetName( nTab+i+1, aTabName ))
                 if (aTabName == rName)
@@ -4454,7 +4450,7 @@ bool ScScenariosObj::GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex
 
 ScTableSheetObj* ScScenariosObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
-    sal_uInt16 nCount = (sal_uInt16)getCount();
+    sal_uInt16 nCount = static_cast<sal_uInt16>(getCount());
     if ( pDocShell && nIndex >= 0 && nIndex < nCount )
         return new ScTableSheetObj( pDocShell, nTab+static_cast<SCTAB>(nIndex)+1 );
 
@@ -4480,15 +4476,15 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
         ScMarkData aMarkData;
         aMarkData.SelectTable( nTab, true );
 
-        sal_uInt16 nRangeCount = (sal_uInt16)aRanges.getLength();
+        sal_uInt16 nRangeCount = static_cast<sal_uInt16>(aRanges.getLength());
         if (nRangeCount)
         {
             const table::CellRangeAddress* pAry = aRanges.getConstArray();
             for (sal_uInt16 i=0; i<nRangeCount; i++)
             {
                 OSL_ENSURE( pAry[i].Sheet == nTab, "addScenario with a wrong Tab" );
-                ScRange aRange( (SCCOL)pAry[i].StartColumn, (SCROW)pAry[i].StartRow, nTab,
-                                (SCCOL)pAry[i].EndColumn,   (SCROW)pAry[i].EndRow,   nTab );
+                ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), static_cast<SCROW>(pAry[i].StartRow), nTab,
+                                static_cast<SCCOL>(pAry[i].EndColumn),   static_cast<SCROW>(pAry[i].EndRow),   nTab );
 
                 aMarkData.SetMultiMarkArea( aRange );
             }
@@ -4576,7 +4572,7 @@ uno::Any SAL_CALL ScScenariosObj::getByName( const OUString& aName )
 uno::Sequence<OUString> SAL_CALL ScScenariosObj::getElementNames()
 {
     SolarMutexGuard aGuard;
-    SCTAB nCount = (SCTAB)getCount();
+    SCTAB nCount = static_cast<SCTAB>(getCount());
     uno::Sequence<OUString> aSeq(nCount);
 
     if ( pDocShell )    // otherwise Count = 0

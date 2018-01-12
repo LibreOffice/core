@@ -626,7 +626,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         if ( nIndex < aIter.Count() )
         {
-            SfxStyleSheetBase* pStyle = aIter[(sal_uInt16)nIndex];
+            SfxStyleSheetBase* pStyle = aIter[static_cast<sal_uInt16>(nIndex)];
             if ( pStyle )
             {
                 return new ScStyleObj( pDocShell, eFamily, pStyle->GetName() );
@@ -1558,7 +1558,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                 {
                                     sal_Int16 nVal = 0;
                                     *pValue >>= nVal;
-                                    rSet.Put( SfxUInt16Item( pEntry->nWID, (sal_uInt16)HMMToTwips(nVal) ) );
+                                    rSet.Put( SfxUInt16Item( pEntry->nWID, static_cast<sal_uInt16>(HMMToTwips(nVal)) ) );
                                 }
                                 break;
                             case ATTR_ROTATE_VALUE:
@@ -1651,7 +1651,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                                 for (sal_uInt16 i=0; i<nCount; i++)
                                                     if ( aName == pPrinter->GetPaperBinName(i) )
                                                     {
-                                                        nTray = (sal_uInt8) i;
+                                                        nTray = static_cast<sal_uInt8>(i);
                                                         bFound = true;
                                                         break;
                                                     }

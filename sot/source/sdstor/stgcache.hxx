@@ -118,7 +118,7 @@ public:
 
 inline sal_Int32 StgCache::GetFromPage ( const rtl::Reference< StgPage >& rPage, short nOff )
 {
-    if( ( nOff >= (short) ( rPage->GetSize() / sizeof( sal_Int32 ) ) ) || nOff < 0 )
+    if( ( nOff >= static_cast<short>( rPage->GetSize() / sizeof( sal_Int32 ) ) ) || nOff < 0 )
         return -1;
     sal_Int32 n = static_cast<sal_Int32*>(rPage->GetData())[ nOff ];
 #ifdef OSL_BIGENDIAN

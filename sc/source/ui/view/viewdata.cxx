@@ -514,8 +514,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
     SetHScrollMode  ( true );
     SetOutlineMode  ( true );
 
-    aScrSize = Size( (long) ( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
-                     (long) ( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
+    aScrSize = Size( long( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
+                     static_cast<long>( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
     maTabData.push_back( new ScViewDataTable );
     pThisTab = maTabData[nTabNo];
     for (sal_uInt16 j=0; j<4; j++)
@@ -824,9 +824,9 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
 
     // sanity check - we shouldn't need something this low / big
     SAL_WARN_IF(rNewX < Fraction(1, 100) || rNewX > Fraction(100, 1), "sc.viewdata",
-                "fraction rNewX not sensible: " << (double) rNewX);
+                "fraction rNewX not sensible: " << static_cast<double>(rNewX));
     SAL_WARN_IF(rNewY < Fraction(1, 100) || rNewY > Fraction(100, 1), "sc.viewdata",
-                "fraction rNewY not sensible: " << (double) rNewY);
+                "fraction rNewY not sensible: " << static_cast<double>(rNewY));
 
     if ( bAll )
     {
@@ -2043,7 +2043,7 @@ SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uI
 
     SCCOL  nX;
     sal_uInt16  nScrPosX = 0;
-    if (nScrSizeX == SC_SIZE_NONE) nScrSizeX = (sal_uInt16) aScrSize.Width();
+    if (nScrSizeX == SC_SIZE_NONE) nScrSizeX = static_cast<sal_uInt16>(aScrSize.Width());
 
     if (nDir==1)
         nX = nPosX;             // forwards
@@ -2062,7 +2062,7 @@ SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uI
             if (nTSize)
             {
                 long nSizeXPix = ToPixel( nTSize, nPPTX );
-                nScrPosX = sal::static_int_cast<sal_uInt16>( nScrPosX + (sal_uInt16) nSizeXPix );
+                nScrPosX = sal::static_int_cast<sal_uInt16>( nScrPosX + static_cast<sal_uInt16>(nSizeXPix) );
             }
         }
     }
@@ -2083,7 +2083,7 @@ SCROW ScViewData::CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uI
     if (pView)
         const_cast<ScViewData*>(this)->aScrSize.Height() = pView->GetGridHeight(eWhichY);
 
-    if (nScrSizeY == SC_SIZE_NONE) nScrSizeY = (sal_uInt16) aScrSize.Height();
+    if (nScrSizeY == SC_SIZE_NONE) nScrSizeY = static_cast<sal_uInt16>(aScrSize.Height());
 
     SCROW nY;
 
@@ -2316,7 +2316,7 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 
         pThisTab->nPosX[eWhich] = nNewPosX;
         pThisTab->nTPosX[eWhich] = nTPosX;
-        pThisTab->nMPosX[eWhich] = (long) (nTPosX * HMM_PER_TWIPS);
+        pThisTab->nMPosX[eWhich] = static_cast<long>(nTPosX * HMM_PER_TWIPS);
         pThisTab->nPixPosX[eWhich] = nPixPosX;
     }
     else
@@ -2359,7 +2359,7 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 
         pThisTab->nPosY[eWhich] = nNewPosY;
         pThisTab->nTPosY[eWhich] = nTPosY;
-        pThisTab->nMPosY[eWhich] = (long) (nTPosY * HMM_PER_TWIPS);
+        pThisTab->nMPosY[eWhich] = static_cast<long>(nTPosY * HMM_PER_TWIPS);
         pThisTab->nPixPosY[eWhich] = nPixPosY;
     }
     else
@@ -2421,7 +2421,7 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
         if (nTSize)
         {
             nSizePix = ToPixel( nTSize, nPPTX );
-            nScrPosX += (sal_uInt16) nSizePix;
+            nScrPosX += static_cast<sal_uInt16>(nSizePix);
         }
     }
 
@@ -2431,7 +2431,7 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
         if (nTSize)
         {
             nSizePix = ToPixel( nTSize, nPPTY );
-            nScrPosY += (sal_uInt16) nSizePix;
+            nScrPosY += static_cast<sal_uInt16>(nSizePix);
         }
     }
 
@@ -2446,14 +2446,14 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     bool bEnd;
 
     nSize = 0;
-    nTwips = (long) (rVisAreaStart.X() / HMM_PER_TWIPS);
+    nTwips = static_cast<long>(rVisAreaStart.X() / HMM_PER_TWIPS);
     if ( pDoc->IsLayoutRTL( nTabNo ) )
         nTwips = -nTwips;
     SCCOL nX1 = 0;
     bEnd = false;
     while (!bEnd)
     {
-        nAdd = (long) pDoc->GetColWidth(nX1,nTabNo);
+        nAdd = static_cast<long>(pDoc->GetColWidth(nX1,nTabNo));
         if (nSize+nAdd <= nTwips+1 && nX1<MAXCOL)
         {
             nSize += nAdd;
@@ -2464,12 +2464,12 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     }
 
     nSize = 0;
-    nTwips = (long) (rVisAreaStart.Y() / HMM_PER_TWIPS);
+    nTwips = static_cast<long>(rVisAreaStart.Y() / HMM_PER_TWIPS);
     SCROW nY1 = 0;
     bEnd = false;
     while (!bEnd)
     {
-        nAdd = (long) pDoc->GetRowHeight(nY1,nTabNo);
+        nAdd = static_cast<long>(pDoc->GetRowHeight(nY1,nTabNo));
         if (nSize+nAdd <= nTwips+1 && nY1<MAXROW)
         {
             nSize += nAdd;
@@ -2494,10 +2494,8 @@ void ScViewData::SetScreen( const tools::Rectangle& rVisArea )
     //  here without GetOutputFactor(), since it's for the output into a Metafile
 
     aScrSize = rVisArea.GetSize();
-    aScrSize.Width() = (long)
-        ( aScrSize.Width() * ScGlobal::nScreenPPTX / HMM_PER_TWIPS );
-    aScrSize.Height() = (long)
-        ( aScrSize.Height() * ScGlobal::nScreenPPTY / HMM_PER_TWIPS );
+    aScrSize.Width() = static_cast<long>( aScrSize.Width() * ScGlobal::nScreenPPTX / HMM_PER_TWIPS );
+    aScrSize.Height() = static_cast<long>( aScrSize.Height() * ScGlobal::nScreenPPTY / HMM_PER_TWIPS );
 }
 
 ScDocFunc& ScViewData::GetDocFunc() const
@@ -2572,18 +2570,18 @@ void ScViewData::UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY 
     aHeight *= Fraction( aScrSize.Height(),1 );
     aHeight /= aOldY;
 
-    aScrSize.Width()  = (long) aWidth;
-    aScrSize.Height() = (long) aHeight;
+    aScrSize.Width()  = static_cast<long>(aWidth);
+    aScrSize.Height() = static_cast<long>(aHeight);
 }
 
 void ScViewData::CalcPPT()
 {
     double nOldPPTX = nPPTX;
     double nOldPPTY = nPPTY;
-    nPPTX = ScGlobal::nScreenPPTX * (double) GetZoomX();
+    nPPTX = ScGlobal::nScreenPPTX * static_cast<double>(GetZoomX());
     if (pDocShell)
         nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Factor is printer to screen
-    nPPTY = ScGlobal::nScreenPPTY * (double) GetZoomY();
+    nPPTY = ScGlobal::nScreenPPTY * static_cast<double>(GetZoomY());
 
     //  if detective objects are present,
     //  try to adjust horizontal scale so the most common column width has minimal rounding errors,
@@ -2636,9 +2634,9 @@ void ScViewData::WriteUserData(OUString& rData)
     // PosX[left]/PosX[right]/PosY[top]/PosY[bottom]
     // when rows bigger than 8192, "+" instead of "/"
 
-    sal_uInt16 nZoom = (sal_uInt16)long(pThisTab->aZoomY * 100);
+    sal_uInt16 nZoom = static_cast<sal_uInt16>(long(pThisTab->aZoomY * 100));
     rData = OUString::number( nZoom ) + "/";
-    nZoom = (sal_uInt16)long(pThisTab->aPageZoomY * 100);
+    nZoom = static_cast<sal_uInt16>(long(pThisTab->aPageZoomY * 100));
     rData += OUString::number( nZoom ) + "/";
     if (bPagebreak)
         rData += "1";
@@ -2836,7 +2834,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
                 rSplitPos = Point( bHSplit ? pViewTab->nHSplitPos : 0, bVSplit ? pViewTab->nVSplitPos : 0 );
                 rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MapUnit::MapTwip ) );
                 if( pDocShell )
-                    rSplitPos.X() = (long)((double)rSplitPos.X() / pDocShell->GetOutputFactor());
+                    rSplitPos.X() = static_cast<long>(static_cast<double>(rSplitPos.X()) / pDocShell->GetOutputFactor());
             }
             else if( bFrozen )
             {
@@ -2976,7 +2974,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                 if( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
                 {
                     double nFactor = pDocShell->GetOutputFactor();
-                    aPixel.X() = (long)( aPixel.X() * nFactor + 0.5 );
+                    aPixel.X() = static_cast<long>( aPixel.X() * nFactor + 0.5 );
                 }
 
                 bHSplit = bHSplit && aPixel.X() > 0;

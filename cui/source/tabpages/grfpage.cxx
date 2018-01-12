@@ -457,7 +457,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
                   lcl_GetValue(*m_pRightMF, eUnit) );
         if(!nWidth)
             nWidth++;
-        sal_uInt16 nZoom = (sal_uInt16)( aSize.Width() * 100 / nWidth);
+        sal_uInt16 nZoom = static_cast<sal_uInt16>( aSize.Width() * 100 / nWidth);
         m_pWidthZoomMF->SetValue(nZoom);
     }
     else
@@ -467,7 +467,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
                   lcl_GetValue(*m_pBottomMF, eUnit));
         if(!nHeight)
             nHeight++;
-        sal_uInt16 nZoom = (sal_uInt16)( aSize.Height() * 100 / nHeight);
+        sal_uInt16 nZoom = static_cast<sal_uInt16>( aSize.Height() * 100 / nHeight);
         m_pHeightZoomMF->SetValue(nZoom);
     }
 }
@@ -599,10 +599,10 @@ void SvxGrfCropPage::CalcZoom()
     sal_uInt16 nZoom = 0;
     long nDen;
     if( (nDen = aOrigSize.Width() - nLRBorders) > 0)
-        nZoom = (sal_uInt16)((( nWidth  * 1000 / nDen )+5)/10);
+        nZoom = static_cast<sal_uInt16>((( nWidth  * 1000 / nDen )+5)/10);
     m_pWidthZoomMF->SetValue(nZoom);
     if( (nDen = aOrigSize.Height() - nULBorders) > 0)
-        nZoom = (sal_uInt16)((( nHeight * 1000 / nDen )+5)/10);
+        nZoom = static_cast<sal_uInt16>((( nHeight * 1000 / nDen )+5)/10);
     else
         nZoom = 0;
     m_pHeightZoomMF->SetValue(nZoom);
@@ -699,10 +699,10 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         sTemp += OUStringLiteral1(0x00D7) + aFld->GetText();
 
         if ( aOrigPixelSize.Width() && aOrigPixelSize.Height() ) {
-             sal_Int32 ax = sal_Int32(floor((float)aOrigPixelSize.Width() /
-                        ((float)aOrigSize.Width()/TWIP_TO_INCH)+0.5));
-             sal_Int32 ay = sal_Int32(floor((float)aOrigPixelSize.Height() /
-                        ((float)aOrigSize.Height()/TWIP_TO_INCH)+0.5));
+             sal_Int32 ax = sal_Int32(floor(static_cast<float>(aOrigPixelSize.Width()) /
+                        (static_cast<float>(aOrigSize.Width())/TWIP_TO_INCH)+0.5));
+             sal_Int32 ay = sal_Int32(floor(static_cast<float>(aOrigPixelSize.Height()) /
+                        (static_cast<float>(aOrigSize.Height())/TWIP_TO_INCH)+0.5));
              sTemp += " ";
              sTemp += CuiResId( RID_SVXSTR_PPI );
              OUString sPPI = OUString::number(ax);

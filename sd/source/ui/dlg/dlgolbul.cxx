@@ -157,7 +157,7 @@ void OutlineBulletDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         {
             FieldUnit eMetric = pSdView->GetDoc().GetUIUnit();
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,(sal_uInt16)eMetric));
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
             rPage.PageCreated(aSet);
         }
     }
@@ -167,7 +167,7 @@ void OutlineBulletDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         {
             FieldUnit eMetric = pSdView->GetDoc().GetUIUnit();
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,(sal_uInt16)eMetric));
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
             rPage.PageCreated(aSet);
         }
     }

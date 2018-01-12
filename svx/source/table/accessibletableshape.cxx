@@ -768,8 +768,8 @@ sal_Int32 SAL_CALL AccessibleTableShape::getSelectedAccessibleChildCount()
         CellPos aFirstPos, aLastPos;
         pController->getSelectedCells( aFirstPos, aLastPos );
 
-        const sal_Int32 nSelectedColumns = std::max( (sal_Int32)0, aLastPos.mnCol - aFirstPos.mnCol ) + 1;
-        const sal_Int32 nSelectedRows = std::max( (sal_Int32)0, aLastPos.mnRow - aFirstPos.mnRow ) + 1;
+        const sal_Int32 nSelectedColumns = std::max( sal_Int32(0), aLastPos.mnCol - aFirstPos.mnCol ) + 1;
+        const sal_Int32 nSelectedRows = std::max( sal_Int32(0), aLastPos.mnRow - aFirstPos.mnRow ) + 1;
         return nSelectedRows * nSelectedColumns;
     }
 

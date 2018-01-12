@@ -40,7 +40,7 @@ ExSoundEntry::ExSoundEntry(const OUString& rString)
             comphelper::getProcessComponentContext() );
         sal_Int64 nVal = 0;
         aCnt.getPropertyValue("Size") >>= nVal;
-        nFileSize = (sal_uInt32)nVal;
+        nFileSize = static_cast<sal_uInt32>(nVal);
     }
     catch( css::uno::Exception& )
     {

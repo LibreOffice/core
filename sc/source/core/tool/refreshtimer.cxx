@@ -24,7 +24,7 @@ void ScRefreshTimerControl::SetAllowRefresh( bool b )
 {
     if ( b && nBlockRefresh )
         --nBlockRefresh;
-    else if ( !b && nBlockRefresh < (sal_uInt16)(~0) )
+    else if ( !b && nBlockRefresh < sal_uInt16(~0) )
         ++nBlockRefresh;
 }
 

@@ -187,7 +187,7 @@ sal_Bool SAL_CALL IFrameObject::load(
 
         uno::Sequence < beans::PropertyValue > aProps(2);
         aProps[0].Name = "PluginMode";
-        aProps[0].Value <<= (sal_Int16) 2;
+        aProps[0].Value <<= sal_Int16(2);
         aProps[1].Name = "ReadOnly";
         aProps[1].Value <<= true;
         uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
@@ -361,12 +361,12 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     break;
     case WID_FRAME_MARGIN_WIDTH:
     {
-        aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Width();
+        aAny <<= static_cast<sal_Int32>(maFrmDescr.GetMargin().Width());
     }
     break;
     case WID_FRAME_MARGIN_HEIGHT:
     {
-        aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Height();
+        aAny <<= static_cast<sal_Int32>(maFrmDescr.GetMargin().Height());
     }
     break;
     default: ;

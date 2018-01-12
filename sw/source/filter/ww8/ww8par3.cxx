@@ -565,8 +565,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             for(int i=0;i<4;++i)
                 rParaSprms.push_back(*pBegin++);
             short nDxaLeft = SVBT16ToShort(aSprm.pSprm);
-            aLVL.nDxaLeft = (0 < nDxaLeft) ? (sal_uInt16)nDxaLeft
-                            : (sal_uInt16)(-nDxaLeft);
+            aLVL.nDxaLeft = (0 < nDxaLeft) ? static_cast<sal_uInt16>(nDxaLeft)
+                            : static_cast<sal_uInt16>(-nDxaLeft);
         }
 
         // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
@@ -636,8 +636,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
                 if (bDoAdjust)
                 {
                     aLVL.nDxaLeft = (0 < nTabPos)
-                                    ? (sal_uInt16)nTabPos
-                                    : (sal_uInt16)(-nTabPos);
+                                    ? static_cast<sal_uInt16>(nTabPos)
+                                    : static_cast<sal_uInt16>(-nTabPos);
 
                     aLVL.nDxaLeft1 = nDesired - aLVL.nDxaLeft;
                 }
@@ -710,7 +710,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     // 5. convert read values into Writer syntax
 
     if( 0 <= aLVL.nStartAt )
-        nStartNo = (sal_uInt16)aLVL.nStartAt;
+        nStartNo = static_cast<sal_uInt16>(aLVL.nStartAt);
 
     switch( aLVL.nNFC )
     {
@@ -2010,7 +2010,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
         }
         else
         {
-            m_nLFOPosition = (sal_uInt16)nData-1;
+            m_nLFOPosition = static_cast<sal_uInt16>(nData)-1;
             /*
             If we are a ww8+ style with ww7- style lists then there is a
             bizarre broken word bug where when the list is removed from a para
@@ -2283,7 +2283,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
                 OUString aNm;
                 if (xPropSetInfo->hasPropertyByName(aNm = "TextColor"))
                 {
-                    aTmp <<= (sal_Int32)static_cast<const SvxColorItem*>(pItem)->GetValue().GetColor();
+                    aTmp <<= static_cast<sal_Int32>(static_cast<const SvxColorItem*>(pItem)->GetValue().GetColor());
                     rPropSet->setPropertyValue(aNm, aTmp);
                 }
             }
@@ -2300,17 +2300,17 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
                 }
                 if (xPropSetInfo->hasPropertyByName(aNm = "FontFamily"))
                 {
-                    aTmp <<= (sal_Int16)pFontItem->GetFamily();
+                    aTmp <<= static_cast<sal_Int16>(pFontItem->GetFamily());
                     rPropSet->setPropertyValue( aNm, aTmp );
                 }
                 if (xPropSetInfo->hasPropertyByName(aNm = "FontCharset"))
                 {
-                    aTmp <<= (sal_Int16)pFontItem->GetCharSet();
+                    aTmp <<= static_cast<sal_Int16>(pFontItem->GetCharSet());
                     rPropSet->setPropertyValue( aNm, aTmp );
                 }
                 if (xPropSetInfo->hasPropertyByName(aNm = "FontPitch"))
                 {
-                    aTmp <<= (sal_Int16)pFontItem->GetPitch();
+                    aTmp <<= static_cast<sal_Int16>(pFontItem->GetPitch());
                     rPropSet->setPropertyValue( aNm, aTmp );
                 }
 
@@ -2327,7 +2327,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
             {
                 Size aSize( aFont.GetFontSize().Width(),
                             static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() );
-                aTmp <<= ((float)aSize.Height()) / 20.0;
+                aTmp <<= static_cast<float>(aSize.Height()) / 20.0;
 
                 aFont.SetFontSize(OutputDevice::LogicToLogic(aSize,
                     MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM)));
@@ -2341,17 +2341,17 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
             break;
 
         case RES_CHRATR_UNDERLINE:
-            aTmp <<= (sal_Int16)(static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle());
+            aTmp <<= static_cast<sal_Int16>(static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle());
             aFont.SetUnderline(static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle());
             break;
 
         case RES_CHRATR_CROSSEDOUT:
-            aTmp <<= (sal_Int16)( static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout() );
+            aTmp <<= static_cast<sal_Int16>( static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout() );
             aFont.SetStrikeout( static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout() );
             break;
 
         case RES_CHRATR_POSTURE:
-            aTmp <<= (sal_Int16)( static_cast<const SvxPostureItem*>(pItem)->GetPosture() );
+            aTmp <<= static_cast<sal_Int16>( static_cast<const SvxPostureItem*>(pItem)->GetPosture() );
             aFont.SetItalic( static_cast<const SvxPostureItem*>(pItem)->GetPosture() );
             break;
 
@@ -2494,7 +2494,7 @@ bool WW8FormulaCheckBox::Import(const uno::Reference <
         aTmp <<= msName;
     xPropSet->setPropertyValue("Name", aTmp );
 
-    aTmp <<= (sal_Int16)mnChecked;
+    aTmp <<= static_cast<sal_Int16>(mnChecked);
     xPropSet->setPropertyValue("DefaultState", aTmp);
 
     if (!msToolTip.isEmpty())
@@ -2550,7 +2550,7 @@ bool SwMSConvertControls::InsertControl(
 
     xShapePropSet->setPropertyValue("AnchorType", uno::Any((sal_Int16)nTemp) );
 
-    xShapePropSet->setPropertyValue("VertOrient", uno::Any((sal_Int16)text::VertOrientation::TOP) );
+    xShapePropSet->setPropertyValue("VertOrient", uno::Any(sal_Int16(text::VertOrientation::TOP)) );
 
     uno::Reference< text::XText >  xDummyTextRef;
     uno::Reference< text::XTextRange >  xTextRg =

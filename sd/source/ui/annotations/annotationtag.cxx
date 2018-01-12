@@ -368,8 +368,8 @@ void AnnotationTag::Move( int nDX, int nDY )
             mrManager.GetDoc()->BegUndo( SdResId( STR_ANNOTATION_UNDO_MOVE ) );
 
         RealPoint2D aPosition( mxAnnotation->getPosition() );
-        aPosition.X += (double)nDX / 100.0;
-        aPosition.Y += (double)nDY / 100.0;
+        aPosition.X += static_cast<double>(nDX) / 100.0;
+        aPosition.Y += static_cast<double>(nDY) / 100.0;
         mxAnnotation->setPosition( aPosition );
 
         if( mrManager.GetDoc()->IsUndoEnabled() )
@@ -649,7 +649,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
                         if( pHdl )
                         {
                             mrView.BrkAction();
-                            const sal_uInt16 nDrgLog = (sal_uInt16)pWindow->PixelToLogic(Size(DRGPIX,0)).Width();
+                            const sal_uInt16 nDrgLog = static_cast<sal_uInt16>(pWindow->PixelToLogic(Size(DRGPIX,0)).Width());
 
                             rtl::Reference< AnnotationTag > xTag( this );
 

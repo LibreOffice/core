@@ -173,8 +173,8 @@ bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
         (void)memcpy( mpnKey, aKey.getConstArray(), 16 );
         bResult = true;
 
-        mnKey = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95BaseKey", (sal_Int16)0 );
-        mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95PasswordHash", (sal_Int16)0 );
+        mnKey = static_cast<sal_uInt16>(aHashData.getUnpackedValueOrDefault("XOR95BaseKey", sal_Int16(0) ));
+        mnHash = static_cast<sal_uInt16>(aHashData.getUnpackedValueOrDefault("XOR95PasswordHash", sal_Int16(0) ));
     }
     else
         OSL_FAIL( "Unexpected key size!" );
@@ -186,8 +186,8 @@ uno::Sequence< beans::NamedValue > MSCodec_Xor95::GetEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
     aHashData[ OUString( "XOR95EncryptionKey" ) ] <<= uno::Sequence<sal_Int8>( reinterpret_cast<sal_Int8*>(mpnKey), 16 );
-    aHashData[ OUString( "XOR95BaseKey" ) ] <<= (sal_Int16)mnKey;
-    aHashData[ OUString( "XOR95PasswordHash" ) ] <<= (sal_Int16)mnHash;
+    aHashData[ OUString( "XOR95BaseKey" ) ] <<= static_cast<sal_Int16>(mnKey);
+    aHashData[ OUString( "XOR95PasswordHash" ) ] <<= static_cast<sal_Int16>(mnHash);
 
     return aHashData.getAsConstNamedValueList();
 }

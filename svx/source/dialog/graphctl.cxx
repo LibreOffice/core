@@ -210,19 +210,19 @@ void GraphCtrl::Resize()
         const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
         const long      nWidth = aWinSize.Width();
         const long      nHeight = aWinSize.Height();
-        double          fGrfWH = (double) aGraphSize.Width() / aGraphSize.Height();
-        double          fWinWH = (double) nWidth / nHeight;
+        double          fGrfWH = static_cast<double>(aGraphSize.Width()) / aGraphSize.Height();
+        double          fWinWH = static_cast<double>(nWidth) / nHeight;
 
         // Adapt Bitmap to Thumb size
         if ( fGrfWH < fWinWH)
         {
-            aNewSize.Width() = (long) ( (double) nHeight * fGrfWH );
+            aNewSize.Width() = static_cast<long>( static_cast<double>(nHeight) * fGrfWH );
             aNewSize.Height()= nHeight;
         }
         else
         {
             aNewSize.Width() = nWidth;
-            aNewSize.Height()= (long) ( (double) nWidth / fGrfWH );
+            aNewSize.Height()= static_cast<long>( static_cast<double>(nWidth) / fGrfWH );
         }
 
         aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;

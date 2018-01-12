@@ -695,7 +695,7 @@ void TaskManager::page( sal_Int32 CommandId,
         err = aFile.read( static_cast<void*>(BFF),bfz,nrc );
         if(  err == osl::FileBase::E_None )
         {
-            uno::Sequence< sal_Int8 > seq( BFF, (sal_uInt32)nrc );
+            uno::Sequence< sal_Int8 > seq( BFF, static_cast<sal_uInt32>(nrc) );
             try
             {
                 xOutputStream->writeBytes( seq );

@@ -878,8 +878,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
         convertTwipToMm100(aCrop.GetBottom()) );
 
     // Compute delta to apply
-    double fScaleX = ( aGraphicSize.Width() - aCropRectangle.Left() - aCropRectangle.Right() ) / (double)nOldWidth;
-    double fScaleY = ( aGraphicSize.Height() - aCropRectangle.Top() - aCropRectangle.Bottom() ) / (double)nOldHeight;
+    double fScaleX = ( aGraphicSize.Width() - aCropRectangle.Left() - aCropRectangle.Right() ) / static_cast<double>(nOldWidth);
+    double fScaleY = ( aGraphicSize.Height() - aCropRectangle.Top() - aCropRectangle.Bottom() ) / static_cast<double>(nOldHeight);
 
     sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
     sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();

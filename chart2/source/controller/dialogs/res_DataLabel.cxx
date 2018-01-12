@@ -192,7 +192,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
         m_pCBPercent->Check();
 
     SfxItemSet aNumberSet = NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( *m_pPool );
-    aNumberSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
+    aNumberSet.Put (SvxNumberInfoItem( m_pNumberFormatter, static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO)));
 
     bool bPercent = ( pButton == m_pPB_NumberFormatForPercent );
 

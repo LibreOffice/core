@@ -88,7 +88,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const css::uno::Any 
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
-                i = ( sal_Int64 ) c;
+                i = static_cast<sal_Int64>(c);
                 break;
             }
         default:
@@ -109,7 +109,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const css::uno::Any
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
-                i = ( sal_uInt64 ) c;
+                i = static_cast<sal_uInt64>(c);
                 break;
             }
         default:
@@ -129,7 +129,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const css::uno::Any 
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
-                i = ( sal_Int32 ) c;
+                i = static_cast<sal_Int32>(c);
                 break;
             }
         default:
@@ -149,7 +149,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const css::uno::Any
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
-                i = ( sal_uInt32 ) c;
+                i = static_cast<sal_uInt32>(c);
                 break;
             }
         default:
@@ -169,7 +169,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const css::uno::Any 
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
-                i = ( sal_Int16 ) c;
+                i = static_cast<sal_Int16>(c);
                 break;
             }
         default:
@@ -189,7 +189,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const css::uno::Any
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
-                i = ( sal_Int16 ) c;
+                i = static_cast<sal_Int16>(c);
                 break;
             }
         default:
@@ -237,7 +237,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const css::uno::Any &a )
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
-                f = ( float ) c;
+                f = static_cast<float>(c);
                 break;
             }
         default:
@@ -263,7 +263,7 @@ inline void SAL_CALL convertPropertyValue( double &d , const css::uno::Any &a )
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
-                d = (double) c;
+                d = static_cast<double>(c);
                 break;
             }
         default:

@@ -160,7 +160,7 @@ void doTest(util::DateTime const & rdt, char const*const pis,
     util::DateTime odt;
     SAL_INFO("sax.cppunit","about to convert '" << is << "'");
     bool bSuccess( Converter::parseDateTime(odt, is) );
-    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds << " UTC: " << (bool)odt.IsUTC);
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds << " UTC: " << static_cast<bool>(odt.IsUTC));
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
     OUStringBuffer buf;
@@ -254,7 +254,7 @@ void doTestTime(util::DateTime const & rdt, char const*const pis,
     util::DateTime odt;
     SAL_INFO("sax.cppunit","about to convert '" << is << "'");
     bool bSuccess( Converter::parseTimeOrDateTime(odt, is) );
-    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds << " UTC: " << (bool)odt.IsUTC);
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds << " UTC: " << static_cast<bool>(odt.IsUTC));
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
     OUStringBuffer buf;

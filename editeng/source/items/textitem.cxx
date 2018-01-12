@@ -222,9 +222,9 @@ bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             css::awt::FontDescriptor aFontDescriptor;
             aFontDescriptor.Name = aFamilyName;
             aFontDescriptor.StyleName = aStyleName;
-            aFontDescriptor.Family = (sal_Int16)(eFamily);
-            aFontDescriptor.CharSet = (sal_Int16)(eTextEncoding);
-            aFontDescriptor.Pitch = (sal_Int16)(ePitch);
+            aFontDescriptor.Family = static_cast<sal_Int16>(eFamily);
+            aFontDescriptor.CharSet = static_cast<sal_Int16>(eTextEncoding);
+            aFontDescriptor.Pitch = static_cast<sal_Int16>(ePitch);
             rVal <<= aFontDescriptor;
         }
         break;
@@ -234,9 +234,9 @@ bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_FONT_STYLE_NAME:
             rVal <<= aStyleName;
         break;
-        case MID_FONT_FAMILY    : rVal <<= (sal_Int16)(eFamily);    break;
-        case MID_FONT_CHAR_SET  : rVal <<= (sal_Int16)(eTextEncoding);  break;
-        case MID_FONT_PITCH     : rVal <<= (sal_Int16)(ePitch); break;
+        case MID_FONT_FAMILY    : rVal <<= static_cast<sal_Int16>(eFamily);    break;
+        case MID_FONT_CHAR_SET  : rVal <<= static_cast<sal_Int16>(eTextEncoding);  break;
+        case MID_FONT_PITCH     : rVal <<= static_cast<sal_Int16>(ePitch); break;
     }
     return true;
 }
@@ -255,7 +255,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             aFamilyName = aFontDescriptor.Name;
             aStyleName = aFontDescriptor.StyleName;
             eFamily = (FontFamily)aFontDescriptor.Family;
-            eTextEncoding = (rtl_TextEncoding)aFontDescriptor.CharSet;
+            eTextEncoding = static_cast<rtl_TextEncoding>(aFontDescriptor.CharSet);
             ePitch = (FontPitch)aFontDescriptor.Pitch;
         }
         break;
@@ -288,7 +288,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nSet = sal_Int16();
             if(!(rVal >>= nSet))
                 return false;
-            eTextEncoding = (rtl_TextEncoding)nSet;
+            eTextEncoding = static_cast<rtl_TextEncoding>(nSet);
         }
         break;
         case MID_FONT_PITCH     :
@@ -372,7 +372,7 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     aStyle = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     // Set the "correct" textencoding
-    eFontTextEncoding = (sal_uInt8)GetSOLoadTextEncoding( eFontTextEncoding );
+    eFontTextEncoding = static_cast<sal_uInt8>(GetSOLoadTextEncoding( eFontTextEncoding ));
 
     // at some point, the StarBats changes from  ANSI font to SYMBOL font
     if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName == "StarBats" )
@@ -394,7 +394,7 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
     return new SvxFontItem( (FontFamily)_eFamily, aName, aStyle,
-                            (FontPitch)eFontPitch, (rtl_TextEncoding)eFontTextEncoding, Which() );
+                            (FontPitch)eFontPitch, static_cast<rtl_TextEncoding>(eFontTextEncoding), Which() );
 }
 
 
@@ -473,7 +473,7 @@ bool SvxPostureItem::GetPresentation
 
 OUString SvxPostureItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos <= (sal_uInt16)ITALIC_NORMAL, "enum overflow!" );
+    DBG_ASSERT( nPos <= sal_uInt16(ITALIC_NORMAL), "enum overflow!" );
 
     FontItalic eItalic = (FontItalic)nPos;
     const char* pId = nullptr;
@@ -635,7 +635,7 @@ OUString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos ) const
     };
 
     static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_WEIGHTS) - 1 == WEIGHT_BLACK, "must match");
-    assert(nPos <= (sal_uInt16)WEIGHT_BLACK && "enum overflow!" );
+    assert(nPos <= sal_uInt16(WEIGHT_BLACK) && "enum overflow!" );
     return EditResId(RID_SVXITEMS_WEIGHTS[nPos]);
 }
 
@@ -672,9 +672,9 @@ bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return false;
-                fValue = (float)nValue;
+                fValue = static_cast<float>(nValue);
             }
-            SetValue( vcl::unohelper::ConvertFontWeight((float)fValue) );
+            SetValue( vcl::unohelper::ConvertFontWeight(static_cast<float>(fValue)) );
         }
         break;
     }
@@ -740,7 +740,7 @@ SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
     {
         sal_uInt8 nP;
         rStrm .ReadUChar( nP );
-        nprop = (sal_uInt16)nP;
+        nprop = static_cast<sal_uInt16>(nP);
     }
 
     if( FONTHEIGHT_UNIT_VERSION <= nVersion )
@@ -781,7 +781,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // CONVERT_TWIPS is not set.
             if( bConvert )
             {
-                aFontHeight.Height = (float)( nHeight / 20.0 );
+                aFontHeight.Height = static_cast<float>( nHeight / 20.0 );
             }
             else
             {
@@ -791,9 +791,9 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 aFontHeight.Height = fRoundPoints;
             }
 
-            aFontHeight.Prop = (sal_Int16)(MapUnit::MapRelative == ePropUnit ? nProp : 100);
+            aFontHeight.Prop = static_cast<sal_Int16>(MapUnit::MapRelative == ePropUnit ? nProp : 100);
 
-            float fRet = (float)(short)nProp;
+            float fRet = static_cast<float>(static_cast<short>(nProp));
             switch( ePropUnit )
             {
                 case MapUnit::MapRelative:
@@ -821,7 +821,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // CONVERT_TWIPS is not set.
             if( bConvert )
             {
-                rVal <<= (float)( nHeight / 20.0 );
+                rVal <<= static_cast<float>( nHeight / 20.0 );
             }
             else
             {
@@ -833,11 +833,11 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_FONTHEIGHT_PROP:
-            rVal <<= (sal_Int16)(MapUnit::MapRelative == ePropUnit ? nProp : 100);
+            rVal <<= static_cast<sal_Int16>(MapUnit::MapRelative == ePropUnit ? nProp : 100);
         break;
         case MID_FONTHEIGHT_DIFF:
         {
-            float fRet = (float)(short)nProp;
+            float fRet = static_cast<float>(static_cast<short>(nProp));
             switch( ePropUnit )
             {
                 case MapUnit::MapRelative:
@@ -884,19 +884,19 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
             break;
         case MapUnit::MapPoint:
         {
-            short nTemp = (short)nProp;
+            short nTemp = static_cast<short>(nProp);
             nDiff = nTemp * 20;
             if(!bCoreInTwip)
-                nDiff = (short)convertTwipToMm100((long)nDiff);
+                nDiff = static_cast<short>(convertTwipToMm100(static_cast<long>(nDiff)));
             break;
         }
         case MapUnit::Map100thMM:
             //then the core is surely also in 1/100 mm
-            nDiff = (short)nProp;
+            nDiff = static_cast<short>(nProp);
             break;
         case MapUnit::MapTwip:
             // Here surely TWIP
-            nDiff = ((short)nProp);
+            nDiff = static_cast<short>(nProp);
             break;
         default:
             break;
@@ -926,7 +926,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if( fPoint < 0. || fPoint > 10000. )
                     return false;
 
-                nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
+                nHeight = static_cast<long>( fPoint * 20.0 + 0.5 );        // Twips
                 if (!bConvert)
                     nHeight = convertTwipToMm100(nHeight);  // Convert, if the item contains 1/100mm
 
@@ -946,12 +946,12 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return false;
-                fPoint = (float)nValue;
+                fPoint = static_cast<float>(nValue);
             }
             if(fPoint < 0. || fPoint > 10000.)
                     return false;
 
-            nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
+            nHeight = static_cast<long>( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
                 nHeight = convertTwipToMm100(nHeight);  // Convert, if the item contains 1/100mm
         }
@@ -979,11 +979,11 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return false;
-                fValue = (float)nValue;
+                fValue = static_cast<float>(nValue);
             }
-            sal_Int16 nCoreDiffValue = (sal_Int16)(fValue * 20.);
+            sal_Int16 nCoreDiffValue = static_cast<sal_Int16>(fValue * 20.);
             nHeight += bConvert ? nCoreDiffValue : convertTwipToMm100(nCoreDiffValue);
-            nProp = (sal_uInt16)((sal_Int16)fValue);
+            nProp = static_cast<sal_uInt16>(static_cast<sal_Int16>(fValue));
             ePropUnit = MapUnit::MapPoint;
         }
         break;
@@ -1002,14 +1002,14 @@ bool SvxFontHeightItem::GetPresentation
 {
     if( MapUnit::MapRelative != ePropUnit )
     {
-        rText = OUString::number( (short)nProp ) +
+        rText = OUString::number( static_cast<short>(nProp) ) +
                 " " + EditResId( GetMetricId( ePropUnit ) );
-        if( 0 <= (short)nProp )
+        if( 0 <= static_cast<short>(nProp) )
             rText = "+" + rText;
     }
     else if( 100 == nProp )
     {
-        rText = GetMetricText( (long)nHeight,
+        rText = GetMetricText( static_cast<long>(nHeight),
                                 eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                 " " + EditResId(GetMetricId(MapUnit::MapPoint));
     }
@@ -1029,7 +1029,7 @@ sal_uInt16 SvxFontHeightItem::GetVersion(sal_uInt16 nFileVersion) const
 
 void SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
 {
-    nHeight = (sal_uInt32)Scale( nHeight, nMult, nDiv );
+    nHeight = static_cast<sal_uInt32>(Scale( nHeight, nMult, nDiv ));
 }
 
 
@@ -1044,7 +1044,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewP
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
     if( MapUnit::MapRelative != eUnit )
-        nHeight = nNewHeight + ::ItemToControl( (short)nNewProp, eUnit,
+        nHeight = nNewHeight + ::ItemToControl( short(nNewProp), eUnit,
                                                 FUNIT_TWIP );
     else if( 100 != nNewProp )
         nHeight = sal_uInt32(( nNewHeight * nNewProp ) / 100 );
@@ -1062,7 +1062,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
 
     if( MapUnit::MapRelative != eMetric )
         nHeight = nNewHeight +
-                ::ControlToItem( ::ItemToControl((short)nNewProp, eMetric,
+                ::ControlToItem( ::ItemToControl(static_cast<short>(nNewProp), eMetric,
                                         FUNIT_TWIP ), FUNIT_TWIP,
                                         eCoreMetric );
     else if( 100 != nNewProp )
@@ -1167,10 +1167,10 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         rVal <<= GetBoolValue();
         break;
     case MID_TL_STYLE:
-        rVal <<= (sal_Int16)(GetValue());
+        rVal <<= static_cast<sal_Int16>(GetValue());
         break;
     case MID_TL_COLOR:
-        rVal <<= (sal_Int32)( mColor.GetColor() );
+        rVal <<= static_cast<sal_Int32>( mColor.GetColor() );
         break;
     case MID_TL_HASCOLOR:
         rVal <<= !mColor.GetTransparency();
@@ -1275,7 +1275,7 @@ OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
         RID_SVXITEMS_UL_BOLDWAVE
     };
     static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_UL) - 1 == LINESTYLE_BOLDWAVE, "must match");
-    assert(nPos <= (sal_uInt16)LINESTYLE_BOLDWAVE && "enum overflow!");
+    assert(nPos <= sal_uInt16(LINESTYLE_BOLDWAVE) && "enum overflow!");
     return EditResId(RID_SVXITEMS_UL[nPos]);
 }
 
@@ -1326,7 +1326,7 @@ OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
         RID_SVXITEMS_OL_BOLDWAVE
     };
     static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_OL) - 1 == LINESTYLE_BOLDWAVE, "must match");
-    assert(nPos <= (sal_uInt16)LINESTYLE_BOLDWAVE && "enum overflow!");
+    assert(nPos <= sal_uInt16(LINESTYLE_BOLDWAVE) && "enum overflow!");
     return EditResId(RID_SVXITEMS_OL[nPos]);
 }
 
@@ -1408,7 +1408,7 @@ OUString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos ) const
         RID_SVXITEMS_STRIKEOUT_X
     };
     static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_STRIKEOUT) - 1 == STRIKEOUT_X, "must match");
-    assert(nPos <= (sal_uInt16)STRIKEOUT_X && "enum overflow!");
+    assert(nPos <= sal_uInt16(STRIKEOUT_X) && "enum overflow!");
     return EditResId(RID_SVXITEMS_STRIKEOUT[nPos]);
 }
 
@@ -1421,7 +1421,7 @@ bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= GetBoolValue();
         break;
         case MID_CROSS_OUT:
-            rVal <<= (sal_Int16)(GetValue());
+            rVal <<= static_cast<sal_Int16>(GetValue());
         break;
     }
     return true;
@@ -1656,7 +1656,7 @@ bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) c
         }
         default:
         {
-            rVal <<= (sal_Int32)(aColor.GetColor());
+            rVal <<= static_cast<sal_Int32>(aColor.GetColor());
             break;
         }
     }
@@ -1731,7 +1731,7 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    rVal <<= (sal_Int32)(mColor.GetColor());
+    rVal <<= static_cast<sal_Int32>(mColor.GetColor());
     return true;
 }
 
@@ -1836,7 +1836,7 @@ SfxPoolItem* SvxKerningItem::Clone( SfxItemPool * ) const
 
 void SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
 {
-    SetValue( (sal_Int16)Scale( GetValue(), nMult, nDiv ) );
+    SetValue( static_cast<sal_Int16>(Scale( GetValue(), nMult, nDiv )) );
 }
 
 
@@ -1857,7 +1857,7 @@ bool SvxKerningItem::GetPresentation
     switch ( ePres )
     {
         case SfxItemPresentation::Nameless:
-            rText = GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
+            rText = GetMetricText( static_cast<long>(GetValue()), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                     " " + EditResId(GetMetricId(MapUnit::MapPoint));
             return true;
         case SfxItemPresentation::Complete:
@@ -1873,7 +1873,7 @@ bool SvxKerningItem::GetPresentation
             if (pId)
                 rText += EditResId(pId);
             rText = rText +
-                    GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
+                    GetMetricText( static_cast<long>(GetValue()), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                     " " + EditResId(GetMetricId(MapUnit::MapPoint));
             return true;
         }
@@ -1886,7 +1886,7 @@ bool SvxKerningItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Int16 nVal = GetValue();
     if(nMemberId & CONVERT_TWIPS)
-        nVal = (sal_Int16)convertTwipToMm100(nVal);
+        nVal = static_cast<sal_Int16>(convertTwipToMm100(nVal));
     rVal <<= nVal;
     return true;
 }
@@ -1897,7 +1897,7 @@ bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
     if(!(rVal >>= nVal))
         return false;
     if(nMemberId & CONVERT_TWIPS)
-        nVal = (sal_Int16)convertMm100ToTwip(nVal);
+        nVal = static_cast<sal_Int16>(convertMm100ToTwip(nVal));
     SetValue(nVal);
     return true;
 }
@@ -2093,10 +2093,10 @@ bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch(nMemberId)
     {
         case MID_ESC:
-            rVal <<= (sal_Int16)(nEsc);
+            rVal <<= static_cast<sal_Int16>(nEsc);
         break;
         case MID_ESC_HEIGHT:
-            rVal <<= (sal_Int8)(nProp);
+            rVal <<= static_cast<sal_Int8>(nProp);
         break;
         case MID_AUTO_ESC:
             rVal <<= (DFLT_ESC_AUTO_SUB == nEsc || DFLT_ESC_AUTO_SUPER == nEsc);
@@ -2191,7 +2191,7 @@ bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch(nMemberId)
     {
         case MID_LANG_INT:  // for basic conversions!
-            rVal <<= (sal_Int16)(sal_uInt16)GetValue();
+            rVal <<= static_cast<sal_Int16>(static_cast<sal_uInt16>(GetValue()));
         break;
         case MID_LANG_LOCALE:
             lang::Locale aRet( LanguageTag::convertToLocale( GetValue(), false));
@@ -2351,7 +2351,7 @@ bool SvxEmphasisMarkItem::GetPresentation
 
     FontEmphasisMark nVal = GetEmphasisMark();
     rText = EditResId(RID_SVXITEMS_EMPHASIS[
-                           (sal_uInt16)(FontEmphasisMark)( nVal & FontEmphasisMark::Style )]);
+                           (sal_uInt16)static_cast<FontEmphasisMark>( nVal & FontEmphasisMark::Style )]);
     const char* pId = ( FontEmphasisMark::PosAbove & nVal )
                     ? RID_SVXITEMS_EMPHASIS_ABOVE_POS
                     : ( FontEmphasisMark::PosBelow & nVal )
@@ -2593,7 +2593,7 @@ bool SvxTextRotateItem::QueryValue(css::uno::Any& rVal,
     switch (nMemberId)
     {
     case MID_ROTATE:
-        rVal <<= (sal_Int16)GetValue();
+        rVal <<= static_cast<sal_Int16>(GetValue());
         break;
     default:
         bRet = false;
@@ -2612,7 +2612,7 @@ bool SvxTextRotateItem::PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
     {
         sal_Int16 nVal = 0;
         if ((rVal >>= nVal) && (0 == nVal || 900 == nVal || 2700 == nVal))
-            SetValue((sal_uInt16)nVal);
+            SetValue(static_cast<sal_uInt16>(nVal));
         else
             bRet = false;
         break;
@@ -2777,7 +2777,7 @@ bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
     sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)
     {
-        SetValue( (sal_uInt16) nValue );
+        SetValue( static_cast<sal_uInt16>(nValue) );
         return true;
     }
 
@@ -2789,7 +2789,7 @@ bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
-    rVal <<= (sal_Int16)GetValue();
+    rVal <<= static_cast<sal_Int16>(GetValue());
     return true;
 }
 

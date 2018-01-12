@@ -113,7 +113,7 @@ void TestVbaCompression::testSimple1()
             aOutputMemoryStream.GetSize());
     for (sal_uInt64 i = 0; i < nSize; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(pReferenceData[i]), static_cast<int>(pData[i]));
     }
 }
 
@@ -135,7 +135,7 @@ void TestVbaCompression::testSimple2()
             aOutputMemoryStream.GetSize());
     for (sal_uInt64 i = 0; i < nSize; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(pReferenceData[i]), static_cast<int>(pData[i]));
     }
 }
 
@@ -157,7 +157,7 @@ void TestVbaCompression::testSimple3()
             aOutputMemoryStream.GetSize());
     for (sal_uInt64 i = 0; i < nSize; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(pReferenceData[i]), static_cast<int>(pData[i]));
     }
 }
 
@@ -179,7 +179,7 @@ void TestVbaCompression::testComplex1()
             aOutputMemoryStream.GetSize());
     for (sal_uInt64 i = 0; i < nSize; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(pReferenceData[i]), static_cast<int>(pData[i]));
     }
 }
 
@@ -201,7 +201,7 @@ void TestVbaCompression::testSpec321()
             aOutputMemoryStream.GetSize());
     for (sal_uInt64 i = 0; i < nSize; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(pReferenceData[i]), static_cast<int>(pData[i]));
     }
 }
 
@@ -223,7 +223,7 @@ void TestVbaCompression::testSpec322()
             aOutputMemoryStream.GetSize());
     for (sal_uInt64 i = 0; i < nSize; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(pReferenceData[i]), static_cast<int>(pData[i]));
     }
 }
 
@@ -245,7 +245,7 @@ void TestVbaCompression::testSpec323()
             aOutputMemoryStream.GetSize());
     for (sal_uInt64 i = 0; i < nSize; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(pReferenceData[i]), static_cast<int>(pData[i]));
     }
 }
 

@@ -90,7 +90,7 @@ namespace
             {
                 while (nSize != 0)
                 {
-                    const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
+                    const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
 
                     if (osl::File::E_None == rCandidate->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) && nBytesTransfer == nToTransfer)
                     {
@@ -1008,7 +1008,7 @@ namespace
                 {
                     while (nSize != 0)
                     {
-                        const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
+                        const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
 
                         if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
                         {
@@ -1051,7 +1051,7 @@ namespace
 
                         while (bOkay && nSize != 0)
                         {
-                            const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
+                            const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
 
                             if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
                             {
@@ -1134,7 +1134,7 @@ namespace
 
                         while (bOkay && nSize != 0)
                         {
-                            const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
+                            const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
 
                             if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
                             {

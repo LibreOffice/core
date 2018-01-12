@@ -140,7 +140,7 @@ std::vector< OUString > MergeProposalSeqs(
     size_t nAltCount1 = rAlt1.size();
     size_t nAltCount2 = rAlt2.size();
 
-    sal_Int32 nCountNew = std::min<sal_Int32>( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
+    sal_Int32 nCountNew = std::min<sal_Int32>( nAltCount1 + nAltCount2, sal_Int32(MAX_PROPOSALS) );
     aMerged.resize( nCountNew );
 
     sal_Int32 nIndex = 0;
@@ -209,7 +209,7 @@ sal_Int16 SAL_CALL SpellAlternatives::getFailureType()
 sal_Int16 SAL_CALL SpellAlternatives::getAlternativesCount()
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return (sal_Int16) aAlt.getLength();
+    return static_cast<sal_Int16>(aAlt.getLength());
 }
 
 

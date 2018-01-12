@@ -295,8 +295,8 @@ struct WW8_BRC  // BoRder Code (WW8 version)
         aBits1[0] = _dptLineWidth;
         aBits1[1] = _brcType;
         aBits2[0] = _ico;
-        aBits2[1] = _dptSpace | ((sal_uInt8)_fShadow << 5)
-            | ((sal_uInt8)_fFrame << 6);
+        aBits2[1] = _dptSpace | (static_cast<sal_uInt8>(_fShadow) << 5)
+            | (static_cast<sal_uInt8>(_fFrame) << 6);
     }
     // Convert BRC from WW6 to WW8 format
     explicit WW8_BRC(const WW8_BRCVer6& brcVer6);
@@ -346,8 +346,8 @@ struct WW8_BRCVer9  // BoRder Code (WW9 version)
         UInt32ToSVBT32(_cv, aBits1);
         aBits2[0] = _dptLineWidth;
         aBits2[1] = _brcType;
-        aBits2[2] = _dptSpace | ((sal_uInt8)_fShadow << 5)
-            | ((sal_uInt8)_fFrame << 6);
+        aBits2[2] = _dptSpace | (static_cast<sal_uInt8>(_fShadow) << 5)
+            | (static_cast<sal_uInt8>(_fFrame) << 6);
         aBits2[3] = 0;
     }
     // Convert BRC from WW8 to WW9 format
@@ -582,10 +582,10 @@ private:
 public:
     WW8_SHD() : maBits(0) {}
 
-    sal_uInt8 GetFore() const { return (sal_uInt8)( maBits & 0x1f); }
-    sal_uInt8 GetBack() const { return (sal_uInt8)((maBits >> 5 ) & 0x1f); }
+    sal_uInt8 GetFore() const { return static_cast<sal_uInt8>( maBits & 0x1f); }
+    sal_uInt8 GetBack() const { return static_cast<sal_uInt8>((maBits >> 5 ) & 0x1f); }
     sal_uInt8 GetStyle(bool bVer67)  const
-        { return (sal_uInt8)((maBits >> 10) & ( bVer67 ? 0x1f : 0x3f ) ); }
+        { return static_cast<sal_uInt8>((maBits >> 10) & ( bVer67 ? 0x1f : 0x3f ) ); }
 
     sal_uInt16 GetValue() const { return maBits; }
 

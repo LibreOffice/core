@@ -137,7 +137,7 @@ namespace svt { namespace table
     TableSize UnoControlTableModel::getColumnCount() const
     {
         DBG_CHECK_ME();
-        return (TableSize)m_pImpl->aColumns.size();
+        return static_cast<TableSize>(m_pImpl->aColumns.size());
     }
 
 

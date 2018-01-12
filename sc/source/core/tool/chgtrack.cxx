@@ -2737,21 +2737,21 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
         ScRange aRange( rRange );
         ScBigRange& r = pLastCutMove->GetBigRange();
         SCCOL nTmpCol;
-        if ( (nTmpCol = (SCCOL) (r.aEnd.Col() - r.aStart.Col())) != (nCol2 - nCol1) )
+        if ( (nTmpCol = static_cast<SCCOL>(r.aEnd.Col() - r.aStart.Col())) != (nCol2 - nCol1) )
         {
             aRange.aEnd.SetCol( aRange.aStart.Col() + nTmpCol );
             nCol1 += nTmpCol + 1;
             bDoContents = true;
         }
         SCROW nTmpRow;
-        if ( (nTmpRow = (SCROW) (r.aEnd.Row() - r.aStart.Row())) != (nRow2 - nRow1) )
+        if ( (nTmpRow = static_cast<SCROW>(r.aEnd.Row() - r.aStart.Row())) != (nRow2 - nRow1) )
         {
             aRange.aEnd.SetRow( aRange.aStart.Row() + nTmpRow );
             nRow1 += nTmpRow + 1;
             bDoContents = true;
         }
         SCTAB nTmpTab;
-        if ( (nTmpTab = (SCTAB) (r.aEnd.Tab() - r.aStart.Tab())) != (nTab2 - nTab1) )
+        if ( (nTmpTab = static_cast<SCTAB>(r.aEnd.Tab() - r.aStart.Tab())) != (nTab2 - nTab1) )
         {
             aRange.aEnd.SetTab( aRange.aStart.Tab() + nTmpTab );
             nTab1 += nTmpTab + 1;
@@ -4240,7 +4240,7 @@ bool ScChangeTrack::Reject(
             if ( bRejected )
             {
                 // pRefDoc NULL := Do not save deleted Cells
-                AppendDeleteRange( pAct->GetBigRange().MakeRange(), nullptr, (short) 0,
+                AppendDeleteRange( pAct->GetBigRange().MakeRange(), nullptr, short(0),
                     pAct->GetActionNumber() );
             }
         }

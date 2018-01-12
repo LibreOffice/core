@@ -283,7 +283,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     if(SfxItemState::SET == rSet.GetItemState(SID_BACKGRND_DESTINATION, false, &pItem))
     {
         SwViewOption aUsrPref( *rSh.GetViewOptions() );
-        aUsrPref.SetTableDest((sal_uInt8)static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+        aUsrPref.SetTableDest(static_cast<sal_uInt8>(static_cast<const SfxUInt16Item*>(pItem)->GetValue()));
         SW_MOD()->ApplyUsrPref(aUsrPref, &rSh.GetView());
     }
     bool bBorder = ( SfxItemState::SET == rSet.GetItemState( RES_BOX ) ||
@@ -376,7 +376,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
             SwFormatFrameSize aSz( ATT_VAR_SIZE, nWidth );
             if(pRep->GetWidthPercent())
             {
-                aSz.SetWidthPercent( (sal_uInt8)pRep->GetWidthPercent() );
+                aSz.SetWidthPercent( static_cast<sal_uInt8>(pRep->GetWidthPercent()) );
             }
             aSet.Put(aSz);
         }

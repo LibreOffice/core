@@ -63,7 +63,7 @@ void SwVbaStyle::setLanguageID( const uno::Reference< beans::XPropertySet >& xTC
 
 ::sal_Int32 SAL_CALL SwVbaStyle::getLanguageID()
 {
-    return (sal_uInt16)getLanguageID( mxStyleProps );
+    return static_cast<sal_uInt16>(getLanguageID( mxStyleProps ));
 }
 
 void SAL_CALL SwVbaStyle::setLanguageID( ::sal_Int32 _languageid )

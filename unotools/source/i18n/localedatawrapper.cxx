@@ -337,7 +337,7 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
                     OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
                     aMsg.append(aDebugLocale);
                     aMsg.append("  ->  0x");
-                    aMsg.append((sal_Int32)(sal_uInt16)eLang, 16);
+                    aMsg.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang)), 16);
                     aMsg.append("  ->  ");
                     aMsg.append(aBackLanguageTag.getBcp47());
                     outputCheckMessage( aMsg.makeStringAndClear() );
@@ -727,7 +727,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
                         p = pStop;
                 break;
                 default:
-                    if (!nInSection && nSym == -1 && rCode.match(aCurrSymbol, (sal_Int32)(p - pStr)))
+                    if (!nInSection && nSym == -1 && rCode.match(aCurrSymbol, static_cast<sal_Int32>(p - pStr)))
                     {   // currency symbol not surrounded by [$...]
                         nSym = p - pStr;
                         if (nBlank == -1 && pStr < p && *(p-1) == ' ')
@@ -1125,7 +1125,7 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber )
     sal_Unicode* pTempBuf = aTempBuf;
     do
     {
-        *pTempBuf = (sal_Unicode)(nNumber % 10) + '0';
+        *pTempBuf = static_cast<sal_Unicode>(nNumber % 10) + '0';
         pTempBuf++;
         nNumber /= 10;
     }
@@ -1150,7 +1150,7 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMin
     sal_Unicode* pTempBuf = aTempBuf;
     do
     {
-        *pTempBuf = (sal_Unicode)(nNumber % 10) + '0';
+        *pTempBuf = static_cast<sal_Unicode>(nNumber % 10) + '0';
         pTempBuf++;
         nNumber /= 10;
         nMinLen--;
@@ -1278,8 +1278,8 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
     }
 
     // convert number
-    pNumBuf = ImplAddUNum( aNumBuf, (sal_uInt64)nNumber );
-    nNumLen = (sal_uInt16)(sal_uLong)(pNumBuf-aNumBuf);
+    pNumBuf = ImplAddUNum( aNumBuf, static_cast<sal_uInt64>(nNumber) );
+    nNumLen = static_cast<sal_uInt16>(static_cast<sal_uLong>(pNumBuf-aNumBuf));
     pNumBuf = aNumBuf;
 
     if ( nNumLen <= nDecimals )
@@ -1577,7 +1577,7 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
     // convert number
     sal_Unicode* pEndNumBuf = ImplAddFormatNum( pNumBuffer, nNumber, nDecimals,
         bUseThousandSep, true );
-    sal_Int32 nNumLen = (sal_Int32)(sal_uLong)(pEndNumBuf-pNumBuffer);
+    sal_Int32 nNumLen = static_cast<sal_Int32>(static_cast<sal_uLong>(pEndNumBuf-pNumBuffer));
 
     // replace zeros with zero character
     if ( (cZeroChar != '0') && nDecimals /* && IsNumTrailingZeros() */ )

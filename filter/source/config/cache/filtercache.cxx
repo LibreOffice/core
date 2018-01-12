@@ -1362,7 +1362,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     }
 
     // update fill state. Note: it's a bit field, which combines different parts.
-    m_eFillState = (EFillState) ((sal_Int32)m_eFillState | (sal_Int32)eRequiredState);
+    m_eFillState = (EFillState) (static_cast<sal_Int32>(m_eFillState) | static_cast<sal_Int32>(eRequiredState));
 
     // any data readed?
     // yes! => validate it and update optimized structures.

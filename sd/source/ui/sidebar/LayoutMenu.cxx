@@ -273,8 +273,8 @@ void LayoutMenu::Resize()
 
             int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
 
-            SetColCount ((sal_uInt16)nColumnCount);
-            SetLineCount ((sal_uInt16)nRowCount);
+            SetColCount (static_cast<sal_uInt16>(nColumnCount));
+            SetLineCount (static_cast<sal_uInt16>(nRowCount));
         }
     }
 
@@ -579,7 +579,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 }
                 else
                 {
-                    if (GetSelectItemId() == (sal_uInt16)-1)
+                    if (GetSelectItemId() == sal_uInt16(-1))
                         return;
                     ::tools::Rectangle aBBox (GetItemRect(GetSelectItemId()));
                     aMenuPosition = aBBox.Center();

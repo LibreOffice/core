@@ -1046,7 +1046,7 @@ void TextFieldElement::endElement()
         sal_Int16 nChar = 0;
         if(!aValue.isEmpty())
         {
-            nChar = (sal_Int16)aValue[ 0 ];
+            nChar = static_cast<sal_Int16>(aValue[ 0 ]);
         }
         xControlModel->setPropertyValue( "EchoChar", makeAny( nChar ) );
     }

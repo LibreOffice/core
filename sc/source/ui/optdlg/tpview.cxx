@@ -188,9 +188,9 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     pAnchorCB  ->Check(pLocalOptions->GetOption(VOPT_ANCHOR));
     pClipMarkCB->Check(pLocalOptions->GetOption(VOPT_CLIPMARKS));
 
-    pObjGrfLB  ->SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_OLE) );
-    pDiagramLB ->SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_CHART) );
-    pDrawLB    ->SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_DRAW) );
+    pObjGrfLB  ->SelectEntryPos( static_cast<sal_uInt16>(pLocalOptions->GetObjMode(VOBJ_TYPE_OLE)) );
+    pDiagramLB ->SelectEntryPos( static_cast<sal_uInt16>(pLocalOptions->GetObjMode(VOBJ_TYPE_CHART)) );
+    pDrawLB    ->SelectEntryPos( static_cast<sal_uInt16>(pLocalOptions->GetObjMode(VOBJ_TYPE_DRAW)) );
 
     pRowColHeaderCB->Check( pLocalOptions->GetOption(VOPT_HEADER) );
     pHScrollCB->Check( pLocalOptions->GetOption(VOPT_HSCROLL) );
@@ -372,7 +372,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
             {
                 // only use these metrics
                 sal_Int32 nPos = m_pUnitLB->InsertEntry( sMetric );
-                m_pUnitLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
+                m_pUnitLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
             }
             break;
             default:
@@ -426,7 +426,7 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
     const sal_Int32 nMPos = m_pUnitLB->GetSelectedEntryPos();
     if ( m_pUnitLB->IsValueChangedFromSaved() )
     {
-        sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos ));
+        sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos )));
         rCoreSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }

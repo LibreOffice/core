@@ -265,7 +265,7 @@ storeError store_findFirst (
     memset (pFindData, 0, sizeof (storeFindData));
 
     // Find first.
-    pFindData->m_nReserved = (sal_uInt32)(~0);
+    pFindData->m_nReserved = sal_uInt32(~0);
     return xDirectory->iterate (*pFindData);
 }
 

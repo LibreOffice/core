@@ -845,7 +845,7 @@ void OStatement_Base::setCursorName(const OUString &_par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     OString aName(OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
-    N3SQLSetCursorName(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aName.getStr())), (SQLSMALLINT)aName.getLength());
+    N3SQLSetCursorName(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aName.getStr())), static_cast<SQLSMALLINT>(aName.getLength()));
 }
 
 bool OStatement_Base::isUsingBookmarks() const

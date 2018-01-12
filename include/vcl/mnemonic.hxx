@@ -46,7 +46,7 @@
                                      (MNEMONIC_RANGE_4_END-MNEMONIC_RANGE_4_START+1))
 
 #define MNEMONIC_CHAR               u'~'
-#define MNEMONIC_INDEX_NOTFOUND     ((sal_uInt16)0xFFFF)
+#define MNEMONIC_INDEX_NOTFOUND     (sal_uInt16(0xFFFF))
 
 
 class VCL_DLLPUBLIC MnemonicGenerator

@@ -81,7 +81,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
                 {
                     double fTime;
                     if (::sax::Converter::convertDuration( fTime, aIter.toString() ))
-                        pCellRangeSource->nRefresh = std::max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
+                        pCellRangeSource->nRefresh = std::max( static_cast<sal_Int32>(fTime * 86400.0), sal_Int32(0) );
                 }
                 break;
             }

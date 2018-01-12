@@ -105,10 +105,10 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pRightWin->SetTabulatorTabPage(this);
     m_pCenterWin->SetTabulatorTabPage(this);
     m_pDezWin->SetTabulatorTabPage(this);
-    m_pLeftWin->SetTabStyle((sal_uInt16)(RULER_TAB_LEFT|WB_HORZ));
-    m_pRightWin->SetTabStyle((sal_uInt16)(RULER_TAB_RIGHT|WB_HORZ));
-    m_pCenterWin->SetTabStyle((sal_uInt16)(RULER_TAB_CENTER|WB_HORZ));
-    m_pDezWin->SetTabStyle((sal_uInt16)(RULER_TAB_DECIMAL|WB_HORZ));
+    m_pLeftWin->SetTabStyle(sal_uInt16(RULER_TAB_LEFT|WB_HORZ));
+    m_pRightWin->SetTabStyle(sal_uInt16(RULER_TAB_RIGHT|WB_HORZ));
+    m_pCenterWin->SetTabStyle(sal_uInt16(RULER_TAB_CENTER|WB_HORZ));
+    m_pDezWin->SetTabStyle(sal_uInt16(RULER_TAB_DECIMAL|WB_HORZ));
     //upper radiobuttons
     SvtCJKOptions aCJKOptions;
     get(m_pLeftTab,  aCJKOptions.IsAsianTypographyEnabled() ? "radiobuttonST_LEFTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_LEFT");

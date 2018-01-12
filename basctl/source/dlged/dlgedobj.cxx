@@ -602,7 +602,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
                         SAL_WARN("basctl", "tab " << i << " > SAL_MAX_INT16");
                         continue;
                     }
-                    xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) i) );
+                    xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(i)) );
                 }
             }
 
@@ -873,7 +873,7 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
         {
             // set tabindex
                Sequence< OUString > aNames = xCont->getElementNames();
-            xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) aNames.getLength()) );
+            xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames.getLength())) );
 
             // insert control model in dialog model
             Reference< awt::XControlModel > xCtrl( xPSet , UNO_QUERY );
@@ -999,7 +999,7 @@ void DlgEdObj::SetDefaults()
                 // set tabindex
                    Sequence< OUString > aNames = xCont->getElementNames();
                 uno::Any aTabIndex;
-                aTabIndex <<= (sal_Int16) aNames.getLength();
+                aTabIndex <<= static_cast<sal_Int16>(aNames.getLength());
                 xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
 
                 // set step

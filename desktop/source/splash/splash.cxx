@@ -38,7 +38,7 @@
 #include <vcl/introwin.hxx>
 #include <vcl/virdev.hxx>
 
-#define NOT_LOADED  ((long)-1)
+#define NOT_LOADED  (long(-1))
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
@@ -473,7 +473,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     if ( nCount > 0 )
     {
         // retrieve size from first screen
-        tools::Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
+        tools::Rectangle aScreenArea = Application::GetScreenPosSizePixel(static_cast<unsigned int>(0));
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
     }
@@ -516,7 +516,7 @@ void SplashScreen::determineProgressRatioValues(
     if ( nCount > 0 )
     {
         // retrieve size from first screen
-        tools::Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
+        tools::Rectangle aScreenArea = Application::GetScreenPosSizePixel(static_cast<unsigned int>(0));
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
         nScreenRatio  = nHeight ? sal_Int32( rtl::math::round( double( nWidth ) / double( nHeight ), 2 ) * 100 ) :  0;

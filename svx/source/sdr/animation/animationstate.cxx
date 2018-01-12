@@ -80,7 +80,7 @@ namespace sdr
                 // next time point exists, use it
                 sal_uInt32 nNextTime;
 
-                if(fNextTime >= (double)0xffffff00)
+                if(fNextTime >= double(0xffffff00))
                 {
                     // take care for very late points in time, e.g. when a text animation stops
                     // in a defined AnimationEntryFixed with endless (0xffffffff) duration
@@ -88,12 +88,12 @@ namespace sdr
                 }
                 else
                 {
-                    nNextTime = (sal_uInt32)fNextTime;
+                    nNextTime = static_cast<sal_uInt32>(fNextTime);
                 }
 
                 // ensure step forward in integer timing, the floating step difference maybe smaller than 1.0. Use
                 // at least 25ms for next step
-                const sal_uInt32 nMinimumStepTime((sal_uInt32)fCurrentTime + 25);
+                const sal_uInt32 nMinimumStepTime(static_cast<sal_uInt32>(fCurrentTime) + 25);
 
                 if(nNextTime <= nMinimumStepTime)
                 {

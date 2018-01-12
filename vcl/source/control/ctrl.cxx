@@ -110,7 +110,7 @@ ControlLayoutData::ControlLayoutData() : m_pParent( nullptr )
 
 tools::Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
 {
-    return (nIndex >= 0 && nIndex < (long) m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : tools::Rectangle();
+    return (nIndex >= 0 && nIndex < static_cast<long>(m_aUnicodeBoundRects.size())) ? m_aUnicodeBoundRects[ nIndex ] : tools::Rectangle();
 }
 
 tools::Rectangle Control::GetCharacterBounds( long nIndex ) const

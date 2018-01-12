@@ -387,7 +387,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
 
 ToolbarMenuEntry* ToolbarMenu_Impl::implGetEntry( int nEntry ) const
 {
-    if( (nEntry < 0) || (nEntry >= (int)maEntryVector.size() ) )
+    if( (nEntry < 0) || (nEntry >= static_cast<int>(maEntryVector.size()) ) )
         return nullptr;
 
     return maEntryVector[nEntry].get();
@@ -1005,7 +1005,7 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
         }
         else
         {
-            if( n < ((int)mpImpl->maEntryVector.size()-1) )
+            if( n < (static_cast<int>(mpImpl->maEntryVector.size())-1) )
                 n++;
             else
                 if( mpImpl->mnHighlightedEntry == -1 )

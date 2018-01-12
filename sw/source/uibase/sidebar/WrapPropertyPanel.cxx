@@ -214,7 +214,7 @@ IMPL_LINK_NOARG(WrapPropertyPanel, EnableContourHdl, Button*, void)
 
 IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
 {
-    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(rBox.GetSelectedEntryData());
+    sal_uInt16 nVal = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(rBox.GetSelectedEntryData()));
 
     SvxLRSpaceItem aLRItem(nVal, nVal, 0, 0, RES_LR_SPACE);
     SvxULSpaceItem aULItem(nVal, nVal, RES_UL_SPACE);

@@ -1175,7 +1175,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         std::vector< OUString >::iterator aEquationNameEnd  = maEquationNames.end();
         while( aEquationNameIter != aEquationNameEnd )
         {
-            (*pH)[ *aEquationNameIter ] = (sal_Int32)( aEquationNameIter - maEquationNames.begin() );
+            (*pH)[ *aEquationNameIter ] = static_cast<sal_Int32>( aEquationNameIter - maEquationNames.begin() );
             ++aEquationNameIter;
         }
 

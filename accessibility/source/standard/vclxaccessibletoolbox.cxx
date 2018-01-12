@@ -375,7 +375,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( ToolBox::ImplToolItems::size_type _
 
         // TODO: we should make this dependent on the existence of event listeners
         // with the current implementation, we always create accessible object
-        Any aNewChild = Any( getAccessibleChild( (sal_Int32)_nPos ) );
+        Any aNewChild = Any( getAccessibleChild( static_cast<sal_Int32>(_nPos) ) );
             //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
         NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewChild );
     }
@@ -399,7 +399,7 @@ void VCLXAccessibleToolBox::UpdateAllItems_Impl()
         for ( i = 0; i < nCount; ++i )
         {
             Any aNewValue;
-            aNewValue <<= getAccessibleChild( (sal_Int32)i );
+            aNewValue <<= getAccessibleChild( static_cast<sal_Int32>(i) );
                 //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
             NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewValue );
         }

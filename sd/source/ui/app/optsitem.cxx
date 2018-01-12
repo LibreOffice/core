@@ -190,7 +190,7 @@ SdOptionsLayout::SdOptionsLayout(bool bImpress, bool bUseConfig) :
     bDragStripes( false ),
     bHandlesBezier( false ),
     bHelplines( true ),
-    nMetric((sal_uInt16)(isMetricSystem() ? FUNIT_CM : FUNIT_INCH)),
+    nMetric(static_cast<sal_uInt16>(isMetricSystem() ? FUNIT_CM : FUNIT_INCH)),
     nDefTab( 1250 )
 {
     EnableModify( true );
@@ -248,8 +248,8 @@ bool SdOptionsLayout::ReadData( const Any* pValues )
     if( pValues[2].hasValue() ) SetMoveOutline( *o3tl::doAccess<bool>(pValues[ 2 ]) );
     if( pValues[3].hasValue() ) SetDragStripes( *o3tl::doAccess<bool>(pValues[ 3 ]) );
     if( pValues[4].hasValue() ) SetHelplines( *o3tl::doAccess<bool>(pValues[ 4 ]) );
-    if( pValues[5].hasValue() ) SetMetric( (sal_uInt16) *o3tl::doAccess<sal_Int32>(pValues[ 5 ]) );
-    if( pValues[6].hasValue() ) SetDefTab( (sal_uInt16) *o3tl::doAccess<sal_Int32>(pValues[ 6 ]) );
+    if( pValues[5].hasValue() ) SetMetric( static_cast<sal_uInt16>(*o3tl::doAccess<sal_Int32>(pValues[ 5 ])) );
+    if( pValues[6].hasValue() ) SetDefTab( static_cast<sal_uInt16>(*o3tl::doAccess<sal_Int32>(pValues[ 6 ])) );
 
     return true;
 }
@@ -261,8 +261,8 @@ bool SdOptionsLayout::WriteData( Any* pValues ) const
     pValues[ 2 ] <<= IsMoveOutline();
     pValues[ 3 ] <<= IsDragStripes();
     pValues[ 4 ] <<= IsHelplines();
-    pValues[ 5 ] <<= (sal_Int32) GetMetric();
-    pValues[ 6 ] <<= (sal_Int32) GetDefTab();
+    pValues[ 5 ] <<= static_cast<sal_Int32>(GetMetric());
+    pValues[ 6 ] <<= static_cast<sal_Int32>(GetDefTab());
 
     return true;
 }
@@ -577,7 +577,7 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
     pValues[ 6 ] <<= IsDoubleClickTextEdit();
     pValues[ 7 ] <<= IsClickChangeRotation();
     // The preview is not supported anymore.  Use a dummy value.
-    pValues[ 8 ] <<= (double)0;// GetPreviewQuality();
+    pValues[ 8 ] <<= double(0);// GetPreviewQuality();
     pValues[ 9 ] <<= IsSolidDragging();
     pValues[ 10 ] <<= GetDefaultObjectSizeWidth();
     pValues[ 11 ] <<= GetDefaultObjectSizeHeight();
@@ -796,9 +796,9 @@ bool SdOptionsSnap::ReadData( const Any* pValues )
     if( pValues[4].hasValue() ) SetOrtho( *o3tl::doAccess<bool>(pValues[ 4 ]) );
     if( pValues[5].hasValue() ) SetBigOrtho( *o3tl::doAccess<bool>(pValues[ 5 ]) );
     if( pValues[6].hasValue() ) SetRotate( *o3tl::doAccess<bool>(pValues[ 6 ]) );
-    if( pValues[7].hasValue() ) SetSnapArea( (sal_Int16) *o3tl::doAccess<sal_Int32>(pValues[ 7 ]) );
-    if( pValues[8].hasValue() ) SetAngle( (sal_Int16) *o3tl::doAccess<sal_Int32>(pValues[ 8 ]) );
-    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( (sal_Int16) *o3tl::doAccess<sal_Int32>(pValues[ 9 ]) );
+    if( pValues[7].hasValue() ) SetSnapArea( static_cast<sal_Int16>(*o3tl::doAccess<sal_Int32>(pValues[ 7 ])) );
+    if( pValues[8].hasValue() ) SetAngle( static_cast<sal_Int16>(*o3tl::doAccess<sal_Int32>(pValues[ 8 ])) );
+    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( static_cast<sal_Int16>(*o3tl::doAccess<sal_Int32>(pValues[ 9 ])) );
 
     return true;
 }
@@ -812,9 +812,9 @@ bool SdOptionsSnap::WriteData( Any* pValues ) const
     pValues[ 4 ] <<= IsOrtho();
     pValues[ 5 ] <<= IsBigOrtho();
     pValues[ 6 ] <<= IsRotate();
-    pValues[ 7 ] <<= (sal_Int32) GetSnapArea();
-    pValues[ 8 ] <<= (sal_Int32) GetAngle();
-    pValues[ 9 ] <<= (sal_Int32) GetEliminatePolyPointLimitAngle();
+    pValues[ 7 ] <<= static_cast<sal_Int32>(GetSnapArea());
+    pValues[ 8 ] <<= static_cast<sal_Int32>(GetAngle());
+    pValues[ 9 ] <<= static_cast<sal_Int32>(GetEliminatePolyPointLimitAngle());
 
     return true;
 }
@@ -845,8 +845,8 @@ SdOptionsSnapItem::SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView c
         maOptionsSnap.SetBigOrtho( pView->IsBigOrtho() );
         maOptionsSnap.SetRotate( pView->IsAngleSnapEnabled() );
         maOptionsSnap.SetSnapArea( pView->GetSnapMagneticPixel() );
-        maOptionsSnap.SetAngle( (sal_Int16) pView->GetSnapAngle() );
-        maOptionsSnap.SetEliminatePolyPointLimitAngle( (sal_Int16) pView->GetEliminatePolyPointLimitAngle() );
+        maOptionsSnap.SetAngle( static_cast<sal_Int16>(pView->GetSnapAngle()) );
+        maOptionsSnap.SetEliminatePolyPointLimitAngle( static_cast<sal_Int16>(pView->GetEliminatePolyPointLimitAngle()) );
     }
     else if( pOpts )
     {
@@ -1051,12 +1051,12 @@ bool SdOptionsGrid::ReadData( const Any* pValues )
 
 bool SdOptionsGrid::WriteData( Any* pValues ) const
 {
-    pValues[ 0 ] <<= (sal_Int32) GetFieldDrawX();
-    pValues[ 1 ] <<= (sal_Int32) GetFieldDrawY();
-    pValues[ 2 ] <<= ( GetFieldDivisionX() ? ( (double) GetFieldDrawX() / GetFieldDivisionX() - 1.0 ) : (double) 0 );
-    pValues[ 3 ] <<= ( GetFieldDivisionY() ? ( (double) GetFieldDrawY() / GetFieldDivisionY() - 1.0 ) : (double) 0 );
-    pValues[ 4 ] <<= (sal_Int32) GetFieldSnapX();
-    pValues[ 5 ] <<= (sal_Int32) GetFieldSnapY();
+    pValues[ 0 ] <<= static_cast<sal_Int32>(GetFieldDrawX());
+    pValues[ 1 ] <<= static_cast<sal_Int32>(GetFieldDrawY());
+    pValues[ 2 ] <<= ( GetFieldDivisionX() ? ( static_cast<double>(GetFieldDrawX()) / GetFieldDivisionX() - 1.0 ) : double(0) );
+    pValues[ 3 ] <<= ( GetFieldDivisionY() ? ( static_cast<double>(GetFieldDrawY()) / GetFieldDivisionY() - 1.0 ) : double(0) );
+    pValues[ 4 ] <<= static_cast<sal_Int32>(GetFieldSnapX());
+    pValues[ 5 ] <<= static_cast<sal_Int32>(GetFieldSnapY());
     pValues[ 6 ] <<= IsUseGridSnap();
     pValues[ 7 ] <<= IsSynchronize();
     pValues[ 8 ] <<= IsGridVisible();
@@ -1232,7 +1232,7 @@ bool SdOptionsPrint::ReadData( const Any* pValues )
     if( pValues[7].hasValue() ) SetFrontPage( *o3tl::doAccess<bool>(pValues[ 7 ]) );
     if( pValues[8].hasValue() ) SetBackPage( *o3tl::doAccess<bool>(pValues[ 8 ]) );
     if( pValues[9].hasValue() ) SetPaperbin( *o3tl::doAccess<bool>(pValues[ 9 ]) );
-    if( pValues[10].hasValue() ) SetOutputQuality( (sal_uInt16) *o3tl::doAccess<sal_Int32>(pValues[ 10 ]) );
+    if( pValues[10].hasValue() ) SetOutputQuality( static_cast<sal_uInt16>(*o3tl::doAccess<sal_Int32>(pValues[ 10 ])) );
     if( pValues[11].hasValue() ) SetDraw( *o3tl::doAccess<bool>(pValues[ 11 ]) );
 
     // just for impress
@@ -1242,7 +1242,7 @@ bool SdOptionsPrint::ReadData( const Any* pValues )
         if( pValues[13].hasValue() ) SetHandout( *o3tl::doAccess<bool>(pValues[ 13 ]) );
         if( pValues[14].hasValue() ) SetOutline( *o3tl::doAccess<bool>(pValues[ 14 ]) );
         if( pValues[15].hasValue() ) SetHandoutHorizontal( *o3tl::doAccess<bool>(pValues[15]) );
-        if( pValues[16].hasValue() ) SetHandoutPages( (sal_uInt16)*o3tl::doAccess<sal_Int32>(pValues[16]) );
+        if( pValues[16].hasValue() ) SetHandoutPages( static_cast<sal_uInt16>(*o3tl::doAccess<sal_Int32>(pValues[16])) );
     }
 
     return true;
@@ -1260,7 +1260,7 @@ bool SdOptionsPrint::WriteData( Any* pValues ) const
     pValues[ 7 ] <<= IsFrontPage();
     pValues[ 8 ] <<= IsBackPage();
     pValues[ 9 ] <<= IsPaperbin();
-    pValues[ 10 ] <<= (sal_Int32) GetOutputQuality();
+    pValues[ 10 ] <<= static_cast<sal_Int32>(GetOutputQuality());
     pValues[ 11 ] <<= IsDraw();
 
     // just for impress

@@ -4654,7 +4654,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
             bool bCornerVerticalUp   = rMouse.Y() >= aCellStart.Y()    && rMouse.Y() <= aCellStart.Y() + 8;
 
             //  corner is hit only if the mouse is within the cell
-            sal_uInt16 nCount = (sal_uInt16)pRangeFinder->Count();
+            sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFinder->Count());
             for (sal_uInt16 i=nCount; i;)
             {
                 //  search backwards so that the last repainted frame is found
@@ -4953,10 +4953,10 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
             nEndY = MAXROW;
         }
 
-        aNew.aStart.SetCol((SCCOL)nStartX);
-        aNew.aStart.SetRow((SCROW)nStartY);
-        aNew.aEnd.SetCol((SCCOL)nEndX);
-        aNew.aEnd.SetRow((SCROW)nEndY);
+        aNew.aStart.SetCol(static_cast<SCCOL>(nStartX));
+        aNew.aStart.SetRow(static_cast<SCROW>(nStartY));
+        aNew.aEnd.SetCol(static_cast<SCCOL>(nEndX));
+        aNew.aEnd.SetRow(static_cast<SCROW>(nEndY));
     }
 
     if ( bUp )
@@ -5244,7 +5244,7 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
         if (!nBWidth)
             return false;                   // No Button drawn yet -> there is none
         long nBHeight = aButSize.Height();
-        long nHSpace  = (long)( SC_SCENARIO_HSPACE * pViewData->GetPPTX() );
+        long nHSpace  = static_cast<long>( SC_SCENARIO_HSPACE * pViewData->GetPPTX() );
 
         //! cache the Ranges in Table!!!!
 

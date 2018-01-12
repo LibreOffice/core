@@ -98,12 +98,12 @@ void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, sal_Int64 
     while (nRotation > 9000)
         nRotation = (18000 - (nRotation % 18000));
 
-    double fVal = (double)nRotation * F_PI18000;
+    double fVal = static_cast<double>(nRotation) * F_PI18000;
     double fCos = cos(fVal);
     double fSin = sin(fVal);
 
-    double nWidthHalf = (double)rSize.Width() / 2;
-    double nHeightHalf = (double)rSize.Height() / 2;
+    double nWidthHalf = static_cast<double>(rSize.Width()) / 2;
+    double nHeightHalf = static_cast<double>(rSize.Height()) / 2;
 
     double nXDiff = fSin * nHeightHalf + fCos * nWidthHalf - nWidthHalf;
     double nYDiff = fSin * nWidthHalf + fCos * nHeightHalf - nHeightHalf;
@@ -1009,7 +1009,8 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
         return;
 
     // Distance is measured diagonally from corner
-    double nShadowDist = sqrt((double)aShadowItem.GetWidth() * aShadowItem.GetWidth() * 2.0);
+    double nShadowDist
+        = sqrt(static_cast<double>(aShadowItem.GetWidth()) * aShadowItem.GetWidth() * 2.0);
     OString aShadowDist(OString::number(TwipsToEMU(nShadowDist)));
     OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
     OString aShadowAlpha = lcl_ConvertTransparency(aShadowItem.GetColor());

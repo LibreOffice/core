@@ -300,7 +300,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
             {
                 sal_Int32 nCharSpacing = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_FONTWORK_CHARACTER_SPACING)->GetValue();
-                pObj->SetMergedItem( SvxCharScaleWidthItem( (sal_uInt16)nCharSpacing, EE_CHAR_FONTWIDTH ) );
+                pObj->SetMergedItem( SvxCharScaleWidthItem( static_cast<sal_uInt16>(nCharSpacing), EE_CHAR_FONTWIDTH ) );
                 pObj->BroadcastObjectChange();
             }
         }

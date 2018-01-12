@@ -189,14 +189,14 @@ bool OStaticSet::absolute( sal_Int32 row )
 
         sal_Int32 nRow = getRow();
         nRow += row;
-        if(nRow <= (sal_Int32)m_aSet.size())
+        if(nRow <= static_cast<sal_Int32>(m_aSet.size()))
             m_aSetIter = m_aSet.begin() + nRow;
         else
             m_aSetIter = m_aSet.begin();
     }
     else if(row > 0)
     {
-        if(row >= (sal_Int32)m_aSet.size())
+        if(row >= static_cast<sal_Int32>(m_aSet.size()))
         {
             if(!m_bEnd)
             {
@@ -205,7 +205,7 @@ bool OStaticSet::absolute( sal_Int32 row )
                     bNext = fetchRow();
             }
 
-            if(row > (sal_Int32)m_aSet.size())
+            if(row > static_cast<sal_Int32>(m_aSet.size()))
                 m_aSetIter = m_aSet.end();  // check again
             else
                 m_aSetIter = m_aSet.begin() + row;

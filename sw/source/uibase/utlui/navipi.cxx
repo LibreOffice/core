@@ -465,7 +465,7 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
     {
         if(m_aPageChgIdle.IsActive())
             m_aPageChgIdle.Stop();
-        m_pCreateView->GetWrtShell().GotoPage((sal_uInt16)rEdit.GetValue(), true);
+        m_pCreateView->GetWrtShell().GotoPage(static_cast<sal_uInt16>(rEdit.GetValue()), true);
         m_pCreateView->GetEditWin().GrabFocus();
         m_pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
     }

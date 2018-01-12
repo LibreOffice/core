@@ -199,32 +199,32 @@ namespace frm
 
     void NavigationToolBar::enableFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != ToolBox::ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( static_cast<sal_uInt16>(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::enableFeature: invalid id!" );
 
-        implEnableItem( (sal_uInt16)_nFeatureId, _bEnabled );
+        implEnableItem( static_cast<sal_uInt16>(_nFeatureId), _bEnabled );
     }
 
 
     void NavigationToolBar::checkFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != ToolBox::ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( static_cast<sal_uInt16>(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
-        m_pToolbar->CheckItem( (sal_uInt16)_nFeatureId, _bEnabled );
+        m_pToolbar->CheckItem( static_cast<sal_uInt16>(_nFeatureId), _bEnabled );
     }
 
 
     void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const OUString& _rText )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != ToolBox::ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( static_cast<sal_uInt16>(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
-        vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( (sal_uInt16)_nFeatureId );
+        vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( static_cast<sal_uInt16>(_nFeatureId) );
         if ( pItemWindow )
             pItemWindow->SetText( _rText );
         else
-            m_pToolbar->SetItemText( (sal_uInt16)_nFeatureId, _rText );
+            m_pToolbar->SetItemText( static_cast<sal_uInt16>(_nFeatureId), _rText );
     }
 
 
@@ -678,7 +678,7 @@ namespace frm
                 return;
 
             if ( m_pDispatcher )
-                m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, "Position", makeAny( (sal_Int32)nRecord ) );
+                m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, "Position", makeAny( static_cast<sal_Int32>(nRecord) ) );
 
             SaveValue();
         }

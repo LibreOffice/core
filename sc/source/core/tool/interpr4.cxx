@@ -430,10 +430,10 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             return false;
                         // Append a 0-pad-byte if string length is odd
                         // MUST be sal_uInt16
-                        sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
+                        sal_uInt16 nStrLen = static_cast<sal_uInt16>(aTmp.getLength());
                         sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
 
-                        if (((sal_uLong)nPos + (5 * sizeof(sal_uInt16)) + nLen) > MAXARRSIZE)
+                        if ((static_cast<sal_uLong>(nPos) + (5 * sizeof(sal_uInt16)) + nLen) > MAXARRSIZE)
                             return false;
                         *p++ = static_cast<sal_uInt16>(nCol);
                         *p++ = static_cast<sal_uInt16>(nRow);
@@ -554,9 +554,9 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 return false;
                             // Append a 0-pad-byte if string length is odd
                             // MUST be sal_uInt16
-                            sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
+                            sal_uInt16 nStrLen = static_cast<sal_uInt16>(aTmp.getLength());
                             sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
-                            if ( ((sal_uLong)nPos + 2 + nLen) > MAXARRSIZE)
+                            if ( (static_cast<sal_uLong>(nPos) + 2 + nLen) > MAXARRSIZE)
                                 return false;
                             *p++ = nLen;
                             memcpy( p, aTmp.getStr(), nStrLen + 1);
@@ -3281,7 +3281,7 @@ void ScInterpreter::ScMacro()
     bool bOk = true;
     for( short i = nParamCount; i && bOk ; i-- )
     {
-        SbxVariable* pPar = refPar->Get( (sal_uInt16) i );
+        SbxVariable* pPar = refPar->Get( static_cast<sal_uInt16>(i) );
         switch( GetStackType() )
         {
             case svDouble:

@@ -105,9 +105,9 @@ namespace o3tl
 }
 
 // Mouse buttons
-#define MOUSE_LEFT              ((sal_uInt16)0x0001)
-#define MOUSE_MIDDLE            ((sal_uInt16)0x0002)
-#define MOUSE_RIGHT             ((sal_uInt16)0x0004)
+#define MOUSE_LEFT              (sal_uInt16(0x0001))
+#define MOUSE_MIDDLE            (sal_uInt16(0x0002))
+#define MOUSE_RIGHT             (sal_uInt16(0x0004))
 
 
 class VCL_DLLPUBLIC MouseEvent

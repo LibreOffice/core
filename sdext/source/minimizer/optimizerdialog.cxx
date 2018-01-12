@@ -115,7 +115,7 @@ void OptimizerDialog::InitRoadmap()
         xPropertySet->setPropertyValue( "ImageURL", Any( sURL ) );
         xPropertySet->setPropertyValue( "Activated", Any( true ) );
         xPropertySet->setPropertyValue( "Complete", Any( true ) );
-        xPropertySet->setPropertyValue( "CurrentItemID", Any( (sal_Int16)ITEM_ID_INTRODUCTION ) );
+        xPropertySet->setPropertyValue( "CurrentItemID", Any( sal_Int16(ITEM_ID_INTRODUCTION) ) );
         xPropertySet->setPropertyValue( "Text", Any( getString( STR_STEPS ) ) );
     }
     catch( Exception& )
@@ -631,7 +631,7 @@ void TextListenerFormattedField0Pg1::textChanged( const TextEvent& /* rEvent */ 
     double fDouble = 0;
     Any aAny = mrOptimizerDialog.getControlProperty( "FormattedField0Pg1", "EffectiveValue" );
     if ( aAny >>= fDouble )
-        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
+        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( static_cast<sal_Int32>(fDouble) ) );
 }
 void TextListenerFormattedField0Pg1::disposing( const css::lang::EventObject& /* Source */ )
 {
@@ -674,7 +674,7 @@ void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
         if ( fDouble > 100 )
             fDouble = 100;
         mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( fDouble ) );
-        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
+        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( static_cast<sal_Int32>(fDouble) ) );
     }
 }
 void SpinListenerFormattedField0Pg1::down( const SpinEvent& /* rEvent */ )
@@ -687,18 +687,18 @@ void SpinListenerFormattedField0Pg1::down( const SpinEvent& /* rEvent */ )
         if ( fDouble < 0 )
             fDouble = 0;
         mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( fDouble ) );
-        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
+        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( static_cast<sal_Int32>(fDouble) ) );
     }
 }
 void SpinListenerFormattedField0Pg1::first( const SpinEvent& /* rEvent */ )
 {
     mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( static_cast< double >( 0 ) ) );
-    mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)0 ) );
+    mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( sal_Int32(0) ) );
 }
 void SpinListenerFormattedField0Pg1::last( const SpinEvent& /* rEvent */ )
 {
     mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( static_cast< double >( 100 ) ) );
-    mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)100 ) );
+    mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( sal_Int32(100) ) );
 }
 void SpinListenerFormattedField0Pg1::disposing( const css::lang::EventObject& /* Source */ )
 {

@@ -68,7 +68,7 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
 #define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      11
 
-#define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
+#define VCL_TOOLBOX_STYLE_FLAT              (sal_uInt16(0x0004)) // from <vcl/toolbox.hxx>
 
 class SvtMiscOptions_Impl : public ConfigItem
 {

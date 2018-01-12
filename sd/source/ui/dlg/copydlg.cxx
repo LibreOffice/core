@@ -195,28 +195,28 @@ void CopyDlg::Reset()
     else
     {
         long nTmp;
-        nTmp = (long)aStr.getToken( 0, TOKEN ).toInt32();
+        nTmp = static_cast<long>(aStr.getToken( 0, TOKEN ).toInt32());
         m_pNumFldCopies->SetValue( nTmp );
 
-        nTmp = (long)aStr.getToken( 1, TOKEN ).toInt32();
+        nTmp = static_cast<long>(aStr.getToken( 1, TOKEN ).toInt32());
         m_pMtrFldMoveX->SetValue( nTmp );
 
-        nTmp = (long)aStr.getToken( 2, TOKEN ).toInt32();
+        nTmp = static_cast<long>(aStr.getToken( 2, TOKEN ).toInt32());
         m_pMtrFldMoveY->SetValue( nTmp );
 
-        nTmp = (long)aStr.getToken( 3, TOKEN ).toInt32();
+        nTmp = static_cast<long>(aStr.getToken( 3, TOKEN ).toInt32());
         m_pMtrFldAngle->SetValue( nTmp );
 
-        nTmp = (long)aStr.getToken( 4, TOKEN ).toInt32();
+        nTmp = static_cast<long>(aStr.getToken( 4, TOKEN ).toInt32());
         m_pMtrFldWidth->SetValue( nTmp );
 
-        nTmp = (long)aStr.getToken( 5, TOKEN ).toInt32();
+        nTmp = static_cast<long>(aStr.getToken( 5, TOKEN ).toInt32());
         m_pMtrFldHeight->SetValue( nTmp );
 
-        nTmp = (long)aStr.getToken( 6, TOKEN ).toInt32();
+        nTmp = static_cast<long>(aStr.getToken( 6, TOKEN ).toInt32());
         m_pLbStartColor->SelectEntry( Color( nTmp ) );
 
-        nTmp = (long)aStr.getToken( 7, TOKEN ).toInt32();
+        nTmp = static_cast<long>(aStr.getToken( 7, TOKEN ).toInt32());
         m_pLbEndColor->SelectEntry( Color( nTmp ) );
     }
 
@@ -232,7 +232,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
     long nHeight = long( GetCoreValue( *m_pMtrFldHeight, MapUnit::Map100thMM) * maUIScale);
     long nWidth  = long( GetCoreValue( *m_pMtrFldWidth, MapUnit::Map100thMM) * maUIScale);
 
-    rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, (sal_uInt16) m_pNumFldCopies->GetValue() ) );
+    rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, static_cast<sal_uInt16>(m_pNumFldCopies->GetValue()) ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_Y, nMoveY ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, static_cast<sal_Int32>(m_pMtrFldAngle->GetValue()) ) );

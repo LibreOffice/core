@@ -72,9 +72,9 @@ namespace psp
         {
             size_t operator()(const css::lang::Locale& rLocale) const
             { return
-                  (size_t)rLocale.Language.hashCode()
-                ^ (size_t)rLocale.Country.hashCode()
-                ^ (size_t)rLocale.Variant.hashCode()
+                  static_cast<size_t>(rLocale.Language.hashCode())
+                ^ static_cast<size_t>(rLocale.Country.hashCode())
+                ^ static_cast<size_t>(rLocale.Variant.hashCode())
                 ;
             }
         };
@@ -896,7 +896,7 @@ void PPDParser::insertKey( const OUString& rKey, PPDKey* pKey )
 
 const PPDKey* PPDParser::getKey( int n ) const
 {
-    return ((unsigned int)n < m_aOrderedKeys.size() && n >= 0) ? m_aOrderedKeys[n] : nullptr;
+    return (static_cast<unsigned int>(n) < m_aOrderedKeys.size() && n >= 0) ? m_aOrderedKeys[n] : nullptr;
 }
 
 const PPDKey* PPDParser::getKey( const OUString& rKey ) const
@@ -1442,10 +1442,10 @@ bool PPDParser::getMargins(
     aArea = m_pPaperDimensions->getValue( nPDim )->m_aValue;
     PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
     PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
-    rLeft  = (int)(ImLLx + 0.5);
-    rLower = (int)(ImLLy + 0.5);
-    rUpper = (int)(PDHeight - ImURy + 0.5);
-    rRight = (int)(PDWidth - ImURx + 0.5);
+    rLeft  = static_cast<int>(ImLLx + 0.5);
+    rLower = static_cast<int>(ImLLy + 0.5);
+    rUpper = static_cast<int>(PDHeight - ImURy + 0.5);
+    rRight = static_cast<int>(PDWidth - ImURx + 0.5);
 
     return true;
 }
@@ -1468,8 +1468,8 @@ bool PPDParser::getPaperDimension(
     OUString aArea = m_pPaperDimensions->getValue( nPDim )->m_aValue;
     PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
     PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
-    rHeight = (int)(PDHeight + 0.5);
-    rWidth  = (int)(PDWidth + 0.5);
+    rHeight = static_cast<int>(PDHeight + 0.5);
+    rWidth  = static_cast<int>(PDWidth + 0.5);
 
     return true;
 }
@@ -1487,8 +1487,8 @@ OUString PPDParser::matchPaper( int nWidth, int nHeight ) const
         OUString aArea =  m_pPaperDimensions->getValue( i )->m_aValue;
         double PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
         double PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
-        PDWidth     /= (double)nWidth;
-        PDHeight    /= (double)nHeight;
+        PDWidth     /= static_cast<double>(nWidth);
+        PDHeight    /= static_cast<double>(nHeight);
         if( PDWidth >= 0.9      &&  PDWidth <= 1.1      &&
             PDHeight >= 0.9     &&  PDHeight <= 1.1         )
         {
@@ -1596,7 +1596,7 @@ PPDKey::~PPDKey()
 
 const PPDValue* PPDKey::getValue( int n ) const
 {
-    return ((unsigned int)n < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : nullptr;
+    return (static_cast<unsigned int>(n) < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : nullptr;
 }
 
 const PPDValue* PPDKey::getValue( const OUString& rOption ) const

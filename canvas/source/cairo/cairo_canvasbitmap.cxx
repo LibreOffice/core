@@ -147,10 +147,10 @@ namespace cairocanvas
                         cairo_surface_flush(pPixels);
                         unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
                         unsigned int nStride = cairo_image_surface_get_stride( pPixels );
-                        for( unsigned long y = 0; y < (unsigned long) aSize.Height(); y++ )
+                        for( unsigned long y = 0; y < static_cast<unsigned long>(aSize.Height()); y++ )
                         {
                             sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
-                            for( unsigned long x = 0; x < (unsigned long) aSize.Width(); x++ )
+                            for( unsigned long x = 0; x < static_cast<unsigned long>(aSize.Width()); x++ )
                             {
 #if defined OSL_BIGENDIAN
                                 sal_uInt8 nB = (*pPix >> 24);
@@ -166,9 +166,9 @@ namespace cairocanvas
                                 if( nAlpha != 0 && nAlpha != 255 )
                                 {
                                     // Cairo uses pre-multiplied alpha - we do not => re-multiply
-                                    nR = (sal_uInt8) MinMax( ((sal_uInt32)nR * 255) / nAlpha, 0, 255 );
-                                    nG = (sal_uInt8) MinMax( ((sal_uInt32)nG * 255) / nAlpha, 0, 255 );
-                                    nB = (sal_uInt8) MinMax( ((sal_uInt32)nB * 255) / nAlpha, 0, 255 );
+                                    nR = static_cast<sal_uInt8>(MinMax( (static_cast<sal_uInt32>(nR) * 255) / nAlpha, 0, 255 ));
+                                    nG = static_cast<sal_uInt8>(MinMax( (static_cast<sal_uInt32>(nG) * 255) / nAlpha, 0, 255 ));
+                                    nB = static_cast<sal_uInt8>(MinMax( (static_cast<sal_uInt32>(nB) * 255) / nAlpha, 0, 255 ));
                                 }
                                 pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
                                 pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );

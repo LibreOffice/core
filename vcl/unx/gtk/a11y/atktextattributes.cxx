@@ -174,7 +174,7 @@ static inline
 double toPoint(sal_Int16 n)
 {
     // 100th mm -> pt
-    return (double) (n * 72) / 2540;
+    return static_cast<double>(n * 72) / 2540;
 }
 
 /*****************************************************************************/
@@ -290,7 +290,7 @@ String2Color( uno::Any& rAny, const gchar * value )
     if( 3 != sscanf( value, "%d,%d,%d", &red, &green, &blue ) )
         return false;
 
-    sal_Int32 nColor = (sal_Int32) blue | ( (sal_Int32) green << 8 ) | ( ( sal_Int32 ) red << 16 );
+    sal_Int32 nColor = static_cast<sal_Int32>(blue) | ( static_cast<sal_Int32>(green) << 8 ) | ( static_cast<sal_Int32>(red) << 16 );
     rAny <<= nColor;
     return true;
 }
@@ -575,7 +575,7 @@ UnitString2CMM( uno::Any& rAny, const gchar * value )
 
     fValue = fValue * 100;
 
-    rAny <<= (sal_Int32) fValue;
+    rAny <<= static_cast<sal_Int32>(fValue);
     return true;
 }
 
@@ -615,7 +615,7 @@ String2Bool( uno::Any& rAny, const gchar * value )
 static gchar*
 Scale2String( const uno::Any& rAny )
 {
-    return g_strdup_printf( "%g", (double) (rAny.get< sal_Int16 > ()) / 100 );
+    return g_strdup_printf( "%g", static_cast<double>(rAny.get< sal_Int16 > ()) / 100 );
 }
 
 static bool
@@ -626,7 +626,7 @@ String2Scale( uno::Any& rAny, const gchar * value )
     if( 1 != sscanf( value, "%lg", &dval ) )
         return false;
 
-    rAny <<= (sal_Int16) (dval * 100);
+    rAny <<= static_cast<sal_Int16>(dval * 100);
     return true;
 }
 

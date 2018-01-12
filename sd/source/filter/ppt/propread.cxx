@@ -164,7 +164,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                         ReadUtf16( pString[ i ] );
                     if ( pString[ nItemSize - 1 ] == 0 )
                     {
-                        if ( (sal_uInt16)nItemSize > 1 )
+                        if ( static_cast<sal_uInt16>(nItemSize) > 1 )
                             rString = OUString(pString.get(), lcl_getMaxSafeStrLen(nItemSize));
                         else
                             rString.clear();

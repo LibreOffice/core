@@ -277,7 +277,7 @@ int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMes
     GtkDialog *pDialog = GTK_DIALOG (
         g_object_new (GTK_TYPE_MESSAGE_DIALOG,
                       "title", aTitle.getStr(),
-                      "message-type", (int)GTK_MESSAGE_WARNING,
+                      "message-type", int(GTK_MESSAGE_WARNING),
                       "text", aMessage.getStr(),
                       nullptr));
     int nButton = 0;

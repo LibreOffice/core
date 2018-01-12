@@ -219,7 +219,7 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
         case XML_TOK_COLUMN_SEP_HEIGHT:
             if (::sax::Converter::convertPercent( nVal, rValue ) &&
                  nVal >=1 && nVal <= 100 )
-                nHeight = (sal_Int8)nVal;
+                nHeight = static_cast<sal_Int8>(nVal);
             break;
         case XML_TOK_COLUMN_SEP_COLOR:
             ::sax::Converter::convertColor( nColor, rValue );
@@ -272,7 +272,7 @@ XMLTextColumnsContext::XMLTextColumnsContext(
             if( IsXMLToken( aLocalName, XML_COLUMN_COUNT ) &&
                 ::sax::Converter::convertNumber( nVal, rValue, 0, SHRT_MAX ))
             {
-                nCount = (sal_Int16)nVal;
+                nCount = static_cast<sal_Int16>(nVal);
             }
             else if( IsXMLToken( aLocalName, XML_COLUMN_GAP ) )
             {
@@ -339,7 +339,7 @@ void XMLTextColumnsContext::EndElement( )
         xColumns->setColumnCount( 1 );
     }
     else if( !bAutomatic && pColumns &&
-             pColumns->size() == (sal_uInt16)nCount )
+             pColumns->size() == static_cast<sal_uInt16>(nCount) )
     {
         // if we have column descriptions, one per column, and we don't use
         // automatic width, then set the column widths
@@ -351,7 +351,7 @@ void XMLTextColumnsContext::EndElement( )
         for( i = 0; i < nCount; i++ )
         {
             const TextColumn& rColumn =
-                (*pColumns)[(sal_uInt16)i]->getTextColumn();
+                (*pColumns)[static_cast<sal_uInt16>(i)]->getTextColumn();
             if( rColumn.Width > 0 )
             {
                 nRelWidth += rColumn.Width;
@@ -367,7 +367,7 @@ void XMLTextColumnsContext::EndElement( )
             for( i=0; i < nCount; i++ )
             {
                 TextColumn& rColumn =
-                    (*pColumns)[(sal_uInt16)i]->getTextColumn();
+                    (*pColumns)[static_cast<sal_uInt16>(i)]->getTextColumn();
                 if( rColumn.Width == 0 )
                 {
                     rColumn.Width = nColWidth;
@@ -378,10 +378,10 @@ void XMLTextColumnsContext::EndElement( )
             }
         }
 
-        Sequence< TextColumn > aColumns( (sal_Int32)nCount );
+        Sequence< TextColumn > aColumns( static_cast<sal_Int32>(nCount) );
         TextColumn *pTextColumns = aColumns.getArray();
         for( i=0; i < nCount; i++ )
-            *pTextColumns++ = (*pColumns)[(sal_uInt16)i]->getTextColumn();
+            *pTextColumns++ = (*pColumns)[static_cast<sal_uInt16>(i)]->getTextColumn();
 
         xColumns->setColumns( aColumns );
     }

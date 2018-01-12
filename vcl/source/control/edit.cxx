@@ -489,7 +489,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     if (nLen)
     {
-        if ((size_t) (2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
+        if (static_cast<size_t>(2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
         {
             pDXBuffer.reset(new long[2 * (nLen + 1)]);
             pDX = pDXBuffer.get();
@@ -1084,7 +1084,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
     if( !aText.isEmpty() )
     {
-        if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+        if( static_cast<size_t>(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
             pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
@@ -1200,7 +1200,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     long   nDXBuffer[256];
     std::unique_ptr<long[]> pDXBuffer;
     long*  pDX = nDXBuffer;
-    if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+    if( static_cast<size_t>(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
         pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
         pDX = pDXBuffer.get();
@@ -2136,7 +2136,7 @@ void Edit::Command( const CommandEvent& rCEvt )
 
             if( !aText.isEmpty() )
             {
-                if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+                if( static_cast<size_t>(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
                 {
                     pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
                     pDX = pDXBuffer.get();

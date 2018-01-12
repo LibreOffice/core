@@ -1132,10 +1132,10 @@ void OGLTransitionerImpl::disposing()
                 "whole transition (frames: " << mnFrameCount
                 << ") took: " << std::chrono::duration_cast<std::chrono::microseconds>(duration).count()
                 << " fps: "
-                << (((double)mnFrameCount*1000000000.0)/std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count())
+                << ((static_cast<double>(mnFrameCount)*1000000000.0)/std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count())
                 << " time spent in updates: " << std::chrono::duration_cast<std::chrono::microseconds>(m_TotalUpdateDuration).count()
                 << " percentage of transition time: "
-                << (100*(((double)std::chrono::duration_cast<std::chrono::nanoseconds>(m_TotalUpdateDuration).count())/((double)std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count())))
+                << (100*((static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(m_TotalUpdateDuration).count()))/(static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count()))))
                 << '%'
             );
     }

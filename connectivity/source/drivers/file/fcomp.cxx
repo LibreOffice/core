@@ -354,17 +354,17 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode const * pPredicateNode)
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                pOb1->setValue((double)pOb1->getValue());
-                pOb2->setValue((double)pOb2->getValue());
+                pOb1->setValue(static_cast<double>(pOb1->getValue()));
+                pOb2->setValue(static_cast<double>(pOb2->getValue()));
                 break;
             case DataType::FLOAT:
-                pOb1->setValue((float)pOb1->getValue());
-                pOb2->setValue((float)pOb2->getValue());
+                pOb1->setValue(static_cast<float>(pOb1->getValue()));
+                pOb2->setValue(static_cast<float>(pOb2->getValue()));
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                pOb1->setValue((double)pOb1->getValue());
-                pOb2->setValue((double)pOb2->getValue());
+                pOb1->setValue(static_cast<double>(pOb1->getValue()));
+                pOb2->setValue(static_cast<double>(pOb2->getValue()));
                 break;
             case DataType::DATE:
                 pOb1->setValue(static_cast<util::Date>(pOb1->getValue()));

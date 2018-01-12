@@ -398,7 +398,7 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     mnWidth = rFSD.mnWidth;
     if( !mnWidth )
         mnWidth = rFSD.mnHeight;
-    mfStretch = (double)mnWidth / rFSD.mnHeight;
+    mfStretch = static_cast<double>(mnWidth) / rFSD.mnHeight;
     // sanity check (e.g. #i66394#, #i66244#, #66537#)
     if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) )
         return;
@@ -586,12 +586,12 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
     {
         // left
         bStretched = (mfStretch != 1.0);
-        aVector.x  = (FT_Pos)(+rMetrics.descender * mfStretch);
+        aVector.x  = static_cast<FT_Pos>(+rMetrics.descender * mfStretch);
         aVector.y  = -rMetrics.ascender;
-        aMatrix.xx = (FT_Pos)(-mnSin / mfStretch);
-        aMatrix.yy = (FT_Pos)(-mnSin * mfStretch);
-        aMatrix.xy = (FT_Pos)(-mnCos * mfStretch);
-        aMatrix.yx = (FT_Pos)(+mnCos / mfStretch);
+        aMatrix.xx = static_cast<FT_Pos>(-mnSin / mfStretch);
+        aMatrix.yy = static_cast<FT_Pos>(-mnSin * mfStretch);
+        aMatrix.xy = static_cast<FT_Pos>(-mnCos * mfStretch);
+        aMatrix.yx = static_cast<FT_Pos>(+mnCos / mfStretch);
     }
 
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )

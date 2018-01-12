@@ -50,7 +50,7 @@ void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity
 
                 (*aIter)->getPropertyValue(aName) >>= aFieldName;
                 guint nFieldNumber = findEvoabField(aFieldName);
-                if (nFieldNumber == (guint)-1)
+                if (nFieldNumber == guint(-1))
                 {
                     connectivity::SharedResources aResource;
                     const OUString sError( aResource.getResourceStringWithSubstitution(

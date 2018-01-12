@@ -686,7 +686,7 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
     GetData_Impl( xOldRanges, bColHeaders, bRowHeaders );
 
     ScRangeList* pList = new ScRangeList;
-    sal_uInt16 nRangeCount = (sal_uInt16)aRanges.getLength();
+    sal_uInt16 nRangeCount = static_cast<sal_uInt16>(aRanges.getLength());
     if (nRangeCount)
     {
         const table::CellRangeAddress* pAry = aRanges.getConstArray();

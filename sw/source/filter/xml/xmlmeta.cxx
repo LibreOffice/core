@@ -147,7 +147,7 @@ void SwXMLImport::SetStatistics(
     // and autostyles.
     sal_Int32 nProgressReference = 250;
     if( nTokens & XML_TOK_META_STAT_PARA )
-        nProgressReference = (sal_Int32)aDocStat.nPara;
+        nProgressReference = static_cast<sal_Int32>(aDocStat.nPara);
     else if ( nTokens & XML_TOK_META_STAT_PAGE )
         o3tl::checked_multiply<sal_Int32>(aDocStat.nPage, 10, nProgressReference);
     ProgressBarHelper* pProgress = GetProgressBarHelper();

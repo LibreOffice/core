@@ -484,7 +484,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
     else
     {
         // here we determine the page after which we should insert
-        SdPage* pPreviousStandardPage = mpDoc->GetSdPage( std::min( (sal_uInt16)(nPageCount - 1), nPage ), PageKind::Standard );
+        SdPage* pPreviousStandardPage = mpDoc->GetSdPage( std::min( static_cast<sal_uInt16>(nPageCount - 1), nPage ), PageKind::Standard );
         SdrLayerIDSet aVisibleLayers = pPreviousStandardPage->TRG_GetMasterPageVisibleLayers();
         bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
         bool bIsPageObj = aVisibleLayers.IsSet( aBckgrndObj );
@@ -1240,7 +1240,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             if(!(aValue >>= nValue) || nValue < 0 )
                 throw lang::IllegalArgumentException();
 
-            mpDoc->SetDefaultTabulator((sal_uInt16)nValue);
+            mpDoc->SetDefaultTabulator(static_cast<sal_uInt16>(nValue));
             break;
         }
         case WID_MODEL_VISAREA:
@@ -1314,7 +1314,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             break;
         }
         case WID_MODEL_TABSTOP:
-            aAny <<= (sal_Int32)mpDoc->GetDefaultTabulator();
+            aAny <<= static_cast<sal_Int32>(mpDoc->GetDefaultTabulator());
             break;
         case WID_MODEL_VISAREA:
             {
@@ -1907,11 +1907,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
             {
                 vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData* >( pOut->GetExtOutDevData() );
 
-                if ( !( mpDoc->GetSdPage((sal_Int16) nPageNumber-1, PageKind::Standard)->IsExcluded() ) ||
+                if ( !( mpDoc->GetSdPage(static_cast<sal_Int16>(nPageNumber)-1, PageKind::Standard)->IsExcluded() ) ||
                     (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
                 {
                     std::unique_ptr<::sd::ClientView> pView( new ::sd::ClientView( mpDocShell, pOut ) );
-                    ::tools::Rectangle                         aVisArea = ::tools::Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
+                    ::tools::Rectangle                         aVisArea = ::tools::Rectangle( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
                     vcl::Region                       aRegion( aVisArea );
 
                     ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
@@ -1934,7 +1934,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                     if( xModel == mpDocShell->GetModel() )
                     {
-                        pView->ShowSdrPage( mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind ));
+                        pView->ShowSdrPage( mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind ));
                         SdrPageView* pPV = pView->GetSdrPageView();
 
                         if( pOldSdView )
@@ -2151,7 +2151,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 rBookmarks.clear();
                                 //---> #i56629, #i40318
                                 //get the page name, will be used as outline element in PDF bookmark pane
-                                OUString aPageName = mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1 , PageKind::Standard )->GetName();
+                                OUString aPageName = mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1 , PageKind::Standard )->GetName();
                                 if( !aPageName.isEmpty() )
                                 {
                                     // Destination PageNum
@@ -2816,7 +2816,7 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByIndex( sal_Int32 Index )
     if( (Index < 0) || (Index >= mpModel->mpDoc->GetSdPageCount( PageKind::Standard ) ) )
         throw lang::IndexOutOfBoundsException();
 
-    SdPage* pPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)Index, PageKind::Standard );
+    SdPage* pPage = mpModel->mpDoc->GetSdPage( static_cast<sal_uInt16>(Index), PageKind::Standard );
     if( pPage )
     {
         uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
@@ -2927,7 +2927,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByInde
 
     if( mpModel->mpDoc )
     {
-        SdPage* pPage = mpModel->InsertSdPage( (sal_uInt16)nIndex, false );
+        SdPage* pPage = mpModel->InsertSdPage( static_cast<sal_uInt16>(nIndex), false );
         if( pPage )
         {
             uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
@@ -3085,7 +3085,7 @@ uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
     if( (Index < 0) || (Index >= mpModel->mpDoc->GetMasterSdPageCount( PageKind::Standard ) ) )
         throw lang::IndexOutOfBoundsException();
 
-    SdPage* pPage = mpModel->mpDoc->GetMasterSdPage( (sal_uInt16)Index, PageKind::Standard );
+    SdPage* pPage = mpModel->mpDoc->GetMasterSdPage( static_cast<sal_uInt16>(Index), PageKind::Standard );
     if( pPage )
     {
         uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
@@ -3136,7 +3136,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             bUnique = true;
             for( sal_Int32 nMaster = 1; nMaster < nMPageCount; nMaster++ )
             {
-                SdPage* pPage = static_cast<SdPage*>(pDoc->GetMasterPage((sal_uInt16)nMaster));
+                SdPage* pPage = static_cast<SdPage*>(pDoc->GetMasterPage(static_cast<sal_uInt16>(nMaster)));
                 if( pPage && pPage->GetName() == aPrefix )
                 {
                     bUnique = false;
@@ -3160,8 +3160,8 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         static_cast<SdStyleSheetPool*>(pDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );
 
         // get the first page for initial size and border settings
-        SdPage* pPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PageKind::Standard );
-        SdPage* pRefNotesPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PageKind::Notes);
+        SdPage* pPage = mpModel->mpDoc->GetSdPage( sal_uInt16(0), PageKind::Standard );
+        SdPage* pRefNotesPage = mpModel->mpDoc->GetSdPage( sal_uInt16(0), PageKind::Notes);
 
         // create and insert new draw masterpage
         SdPage* pMPage = mpModel->mpDoc->AllocSdPage(true);
@@ -3171,7 +3171,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                            pPage->GetRightBorder(),
                            pPage->GetLowerBorder() );
         pMPage->SetLayoutName( aLayoutName );
-        pDoc->InsertMasterPage(pMPage,  (sal_uInt16)nInsertPos);
+        pDoc->InsertMasterPage(pMPage,  static_cast<sal_uInt16>(nInsertPos));
 
         {
             // ensure default MasterPage fill
@@ -3189,7 +3189,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetRightBorder(),
                                 pRefNotesPage->GetLowerBorder() );
         pMNotesPage->SetLayoutName( aLayoutName );
-        pDoc->InsertMasterPage(pMNotesPage,  (sal_uInt16)nInsertPos + 1);
+        pDoc->InsertMasterPage(pMNotesPage,  static_cast<sal_uInt16>(nInsertPos) + 1);
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);
         mpModel->SetModified();
     }

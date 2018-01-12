@@ -55,7 +55,7 @@ public:
     sal_uInt8 GetPropr() const { return nPropr; }
     void SetPropr( const sal_uInt8 nNewPropr ) { nPropr = nNewPropr; }
     void SetProprRel( const sal_uInt8 nNewPropr )
-        { SetPropr( (sal_uInt8)( (long)nNewPropr * (long)nPropr / 100L ) ); }
+        { SetPropr( static_cast<sal_uInt8>( static_cast<long>(nNewPropr) * static_cast<long>(nPropr) / 100L ) ); }
 
     // Kerning
     short GetFixKerning() const { return nKern; }

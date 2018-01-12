@@ -69,7 +69,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
                 xSearchLoop = *o3tl::doAccess<css::uno::Reference<css::uno::XInterface>>(aElement);
                 bCheckingStartingPoint = false;
 
-                m_arrChildIndizies.push_back((sal_Int32)0);
+                m_arrChildIndizies.push_back(sal_Int32(0));
             }
             else
             {   // otherwise, look above and to the right, if possible

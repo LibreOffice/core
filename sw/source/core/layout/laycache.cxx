@@ -110,7 +110,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             else
                 nOffset = COMPLETE_STRING;
             aIo.CloseFlagRec();
-            Insert( SW_LAYCACHE_IO_REC_PARA, nIndex, (sal_Int32)nOffset );
+            Insert( SW_LAYCACHE_IO_REC_PARA, nIndex, static_cast<sal_Int32>(nOffset) );
             aIo.CloseRec();
             break;
         }
@@ -119,7 +119,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.OpenFlagRec();
             aIo.GetStream().ReadUInt32( nIndex )
                            .ReadUInt32( nOffset );
-            Insert( SW_LAYCACHE_IO_REC_TABLE, nIndex, (sal_Int32)nOffset );
+            Insert( SW_LAYCACHE_IO_REC_TABLE, nIndex, static_cast<sal_Int32>(nOffset) );
             aIo.CloseFlagRec();
             aIo.CloseRec();
             break;
@@ -246,7 +246,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             // immediately.
                             if( pTab->GetFollow() )
                             {
-                                if( nOfst == (sal_uLong) COMPLETE_STRING )
+                                if( nOfst == sal_uLong(COMPLETE_STRING) )
                                     nOfst = 0;
                                 do
                                 {
@@ -1067,7 +1067,7 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
     {
         sal_uInt32 nVal(0);
         pStream->ReadUInt32( nVal );
-        sal_uInt8 cRecTyp = (sal_uInt8)nVal;
+        sal_uInt8 cRecTyp = static_cast<sal_uInt8>(nVal);
         if (!nVal || cRecTyp != cType || !pStream->good())
         {
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );

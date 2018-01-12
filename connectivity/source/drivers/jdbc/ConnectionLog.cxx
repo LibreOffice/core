@@ -81,7 +81,7 @@ namespace comphelper { namespace log { namespace convert
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );
         snprintf( buffer, buffer_size, "%04i-%02i-%02i",
-            (int)_rDate.Year, (int)_rDate.Month, (int)_rDate.Day );
+            static_cast<int>(_rDate.Year), static_cast<int>(_rDate.Month), static_cast<int>(_rDate.Day) );
         return OUString::createFromAscii( buffer );
     }
 
@@ -91,7 +91,7 @@ namespace comphelper { namespace log { namespace convert
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );
         snprintf( buffer, buffer_size, "%02i:%02i:%02i.%09i",
-            (int)_rTime.Hours, (int)_rTime.Minutes, (int)_rTime.Seconds, (int)_rTime.NanoSeconds );
+            static_cast<int>(_rTime.Hours), static_cast<int>(_rTime.Minutes), static_cast<int>(_rTime.Seconds), static_cast<int>(_rTime.NanoSeconds) );
         return OUString::createFromAscii( buffer );
     }
 
@@ -101,8 +101,8 @@ namespace comphelper { namespace log { namespace convert
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );
         snprintf( buffer, buffer_size, "%04i-%02i-%02i %02i:%02i:%02i.%09i",
-            (int)_rDateTime.Year, (int)_rDateTime.Month, (int)_rDateTime.Day,
-            (int)_rDateTime.Hours, (int)_rDateTime.Minutes, (int)_rDateTime.Seconds, (int)_rDateTime.NanoSeconds );
+            static_cast<int>(_rDateTime.Year), static_cast<int>(_rDateTime.Month), static_cast<int>(_rDateTime.Day),
+            static_cast<int>(_rDateTime.Hours), static_cast<int>(_rDateTime.Minutes), static_cast<int>(_rDateTime.Seconds), static_cast<int>(_rDateTime.NanoSeconds) );
         return OUString::createFromAscii( buffer );
     }
 

@@ -247,7 +247,7 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         // How many nodes are being inserted?
         // Enough, then we can fill the page to the brim
         ONDXNode aInnerNode;
-        if (!IsLeaf() || nRowsLeft < (sal_uInt32)(rIndex.GetMaxNodes() / 2))
+        if (!IsLeaf() || nRowsLeft < static_cast<sal_uInt32>(rIndex.GetMaxNodes() / 2))
             aInnerNode = Split(*aNewPage);
         else
         {
@@ -310,7 +310,7 @@ bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
     {
         ++nCount;
         // shift right
-        for (sal_uInt16 i = std::min((sal_uInt16)(nMaxCount-1), (sal_uInt16)(nCount-1)); nPos < i; --i)
+        for (sal_uInt16 i = std::min(static_cast<sal_uInt16>(nMaxCount-1), static_cast<sal_uInt16>(nCount-1)); nPos < i; --i)
             (*this)[i] = (*this)[i-1];
     }
     else
@@ -705,7 +705,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
             rStream.WriteBytes(&buf[0], sizeof(double));
         }
         else
-            rStream.WriteDouble( (double) aKey.getValue() );
+            rStream.WriteDouble( static_cast<double>(aKey.getValue()) );
     }
     else
     {

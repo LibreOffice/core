@@ -71,8 +71,8 @@ void Point::RotateAround( long& rX, long& rY,
         long nY = rY-nOriginY;
 
         // Rotation...
-        rX = +((long)(nCos*nX + nSin*nY)) + nOriginX;
-        rY = -((long)(nSin*nX - nCos*nY)) + nOriginY;
+        rX = + static_cast<long>(nCos*nX + nSin*nY) + nOriginX;
+        rY = - static_cast<long>(nSin*nX - nCos*nY) + nOriginY;
     }
 }
 

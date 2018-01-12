@@ -323,8 +323,8 @@ void TableValueSet::Resize()
 
         int nVisibleRowCount = (aValueSetSize.Height()+2) / aItemSize.Height();
 
-        SetColCount ((sal_uInt16)nColumnCount);
-        SetLineCount ((sal_uInt16)nRowCount);
+        SetColCount (static_cast<sal_uInt16>(nColumnCount));
+        SetLineCount (static_cast<sal_uInt16>(nRowCount));
 
         if( !m_bModal )
         {
@@ -402,7 +402,7 @@ void TableDesignWidget::updateControls()
                 {
                     if( aNames[nIndex] == sStyleName )
                     {
-                        nSelection = (sal_uInt16)nIndex+1;
+                        nSelection = static_cast<sal_uInt16>(nIndex)+1;
                         break;
                     }
                 }

@@ -388,10 +388,10 @@ void ScDocShell::CalcOutputFactor()
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow);    // font color doesn't matter here
     pVirtWindow->SetFont(aDefFont);
     nWindowWidth = pVirtWindow->GetTextWidth(aTestString);
-    nWindowWidth = (long) ( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );
+    nWindowWidth = static_cast<long>( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );
 
     if (nPrinterWidth && nWindowWidth)
-        nPrtToScreenFactor = nPrinterWidth / (double) nWindowWidth;
+        nPrtToScreenFactor = nPrinterWidth / static_cast<double>(nWindowWidth);
     else
     {
         OSL_FAIL("GetTextSize returns 0 ??");

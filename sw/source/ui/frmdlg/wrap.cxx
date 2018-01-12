@@ -339,8 +339,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bBottomMod = m_pBottomMarginED->IsValueModified();
 
     SvxULSpaceItem aUL( RES_UL_SPACE );
-    aUL.SetUpper((sal_uInt16)m_pTopMarginED->Denormalize(m_pTopMarginED->GetValue(FUNIT_TWIP)));
-    aUL.SetLower((sal_uInt16)m_pBottomMarginED->Denormalize(m_pBottomMarginED->GetValue(FUNIT_TWIP)));
+    aUL.SetUpper(static_cast<sal_uInt16>(m_pTopMarginED->Denormalize(m_pTopMarginED->GetValue(FUNIT_TWIP))));
+    aUL.SetLower(static_cast<sal_uInt16>(m_pBottomMarginED->Denormalize(m_pBottomMarginED->GetValue(FUNIT_TWIP))));
 
     if ( bTopMod || bBottomMod )
     {
@@ -356,8 +356,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bRightMod = m_pRightMarginED->IsValueModified();
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    aLR.SetLeft((sal_uInt16)m_pLeftMarginED->Denormalize(m_pLeftMarginED->GetValue(FUNIT_TWIP)));
-    aLR.SetRight((sal_uInt16)m_pRightMarginED->Denormalize(m_pRightMarginED->GetValue(FUNIT_TWIP)));
+    aLR.SetLeft(static_cast<sal_uInt16>(m_pLeftMarginED->Denormalize(m_pLeftMarginED->GetValue(FUNIT_TWIP))));
+    aLR.SetRight(static_cast<sal_uInt16>(m_pRightMarginED->Denormalize(m_pRightMarginED->GetValue(FUNIT_TWIP))));
 
     if ( bLeftMod || bRightMod )
     {
@@ -407,8 +407,8 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         // #i18732#
         aVal.bFollowTextFlow = rSet.Get(RES_FOLLOW_TEXT_FLOW).GetValue();
 
-        aVal.nHoriOrient = (short)rHori.GetHoriOrient();
-        aVal.nVertOrient = (short)rVert.GetVertOrient();
+        aVal.nHoriOrient = static_cast<short>(rHori.GetHoriOrient());
+        aVal.nVertOrient = static_cast<short>(rVert.GetVertOrient());
 
         aVal.nHPos = rHori.GetPos();
         aVal.nHRelOrient = rHori.GetRelationOrient();

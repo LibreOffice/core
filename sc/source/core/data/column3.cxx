@@ -3123,7 +3123,7 @@ public:
             else
             {
                 // Both previous and current cells are regular cells.
-                assert(pPrev->aPos.Row() == (SCROW)(nRow - 1));
+                assert(pPrev->aPos.Row() == static_cast<SCROW>(nRow - 1));
                 xPrevGrp = pPrev->CreateCellGroup(2, eCompState == ScFormulaCell::EqualInvariant);
                 pCur->SetCellGroup(xPrevGrp);
                 ++nRow;

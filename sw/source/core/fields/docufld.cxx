@@ -224,7 +224,7 @@ OUString SwPageNumberField::GetPar2() const
 
 void SwPageNumberField::SetPar2(const OUString& rStr)
 {
-    nOffset = (short)rStr.toInt32();
+    nOffset = static_cast<short>(rStr.toInt32());
 }
 
 sal_uInt16 SwPageNumberField::GetSubType() const
@@ -237,7 +237,7 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_FORMAT:
-        rAny <<= (sal_Int16)GetFormat();
+        rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
     case FIELD_PROP_USHORT1:
         rAny <<= nOffset;
@@ -799,7 +799,7 @@ bool SwDocStatField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch ( nWhichId )
     {
     case FIELD_PROP_USHORT2:
-        rAny <<= (sal_Int16)GetFormat();
+        rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
 
     default:
@@ -1173,7 +1173,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_USHORT1:
-        rAny  <<= (sal_Int16)aContent.toInt32();
+        rAny  <<= static_cast<sal_Int16>(aContent.toInt32());
         break;
 
     case FIELD_PROP_BOOL1:
@@ -1181,7 +1181,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_FORMAT:
-        rAny  <<= (sal_Int32)GetFormat();
+        rAny  <<= static_cast<sal_Int32>(GetFormat());
         break;
 
     case FIELD_PROP_DOUBLE:
@@ -2114,7 +2114,7 @@ OUString SwRefPageSetField::GetPar2() const
 
 void SwRefPageSetField::SetPar2(const OUString& rStr)
 {
-    SetOffset( (short) rStr.toInt32() );
+    SetOffset( static_cast<short>(rStr.toInt32()) );
 }
 
 bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -2125,7 +2125,7 @@ bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= bOn;
         break;
     case FIELD_PROP_USHORT1:
-        rAny <<= (sal_Int16)nOffset;
+        rAny <<= static_cast<sal_Int16>(nOffset);
         break;
     default:
         assert(false);
@@ -2360,7 +2360,7 @@ bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
         case FIELD_PROP_USHORT1:
-            rAny <<= (sal_Int16)GetFormat();
+            rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
         case FIELD_PROP_PAR1:
             rAny <<= sText;

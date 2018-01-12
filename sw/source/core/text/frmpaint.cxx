@@ -292,7 +292,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     const SwFormatLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
-    sal_Int16 eHor = (sal_Int16)SW_MOD()->GetRedlineMarkPos();
+    sal_Int16 eHor = static_cast<sal_Int16>(SW_MOD()->GetRedlineMarkPos());
     if( eHor != text::HoriOrientation::NONE && !IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
         eHor = text::HoriOrientation::NONE;
     bool bRedLine = eHor != text::HoriOrientation::NONE;

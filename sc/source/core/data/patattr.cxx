@@ -333,7 +333,7 @@ void ScPatternAttr::GetFont(
         Fraction aFraction( 1,1 );
         if (pScale)
             aFraction = *pScale;
-        Size aSize( 0, (long) nFontHeight );
+        Size aSize( 0, static_cast<long>(nFontHeight) );
         MapMode aDestMode = pOutDev->GetMapMode();
         MapMode aSrcMode( MapUnit::MapTwip, Point(), aFraction, aFraction );
         if (aDestMode.GetMapUnit() == MapUnit::MapPixel && pOutDev->GetDPIX() > 0)
@@ -349,7 +349,7 @@ void ScPatternAttr::GetFont(
     }
     else /* if pOutDev != NULL */
     {
-        rFont.SetFontSize( Size( 0, (long) nFontHeight ) );
+        rFont.SetFontSize( Size( 0, static_cast<long>(nFontHeight) ) );
     }
 
     //  determine effective font color

@@ -697,8 +697,8 @@ void SwDocShell::SubInitNew()
         // only set Widow/Orphan defaults on a new, non-web document - not an opened one
         if( GetMedium() && GetMedium()->GetOrigURL().isEmpty() )
         {
-            m_xDoc->SetDefault( SvxWidowsItem(  (sal_uInt8) 2, RES_PARATR_WIDOWS)  );
-            m_xDoc->SetDefault( SvxOrphansItem( (sal_uInt8) 2, RES_PARATR_ORPHANS) );
+            m_xDoc->SetDefault( SvxWidowsItem(  sal_uInt8(2), RES_PARATR_WIDOWS)  );
+            m_xDoc->SetDefault( SvxOrphansItem( sal_uInt8(2), RES_PARATR_ORPHANS) );
         }
     }
 

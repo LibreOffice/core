@@ -131,7 +131,7 @@ public:
     bool    IsDragStripes() const { Init(); return bDragStripes; }
     bool    IsHandlesBezier() const { Init(); return bHandlesBezier; }
     bool    IsHelplines() const { Init(); return bHelplines; }
-    sal_uInt16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? (sal_uInt16)SfxModule::GetCurrentFieldUnit() : nMetric ); }
+    sal_uInt16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? static_cast<sal_uInt16>(SfxModule::GetCurrentFieldUnit()) : nMetric ); }
     sal_uInt16  GetDefTab() const { Init(); return nDefTab; }
 
     void    SetRulerVisible( bool bOn ) { if( bRuler != bOn ) { OptionsChanged(); bRuler = bOn; } }

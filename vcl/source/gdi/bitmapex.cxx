@@ -306,7 +306,7 @@ BitmapChecksum BitmapEx::GetChecksum() const
     UInt32ToSVBT32( (long) eTransparent, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( (long) bAlpha, aBT32 );
+    UInt32ToSVBT32( static_cast<long>(bAlpha), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     if( ( TransparentType::Bitmap == eTransparent ) && !aMask.IsEmpty() )
@@ -386,8 +386,8 @@ bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
         ( rNewSize.Width()  != aBitmapSize.Width() ||
           rNewSize.Height() != aBitmapSize.Height() ) )
     {
-        bRet = Scale( (double) rNewSize.Width() / aBitmapSize.Width(),
-                      (double) rNewSize.Height() / aBitmapSize.Height(),
+        bRet = Scale( static_cast<double>(rNewSize.Width()) / aBitmapSize.Width(),
+                      static_cast<double>(rNewSize.Height()) / aBitmapSize.Height(),
                       nScaleFlag );
     }
     else
@@ -696,7 +696,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStanda
 
     // Draw a rect into virDevice
     aVirDevice->DrawRect( aRect );
-    Point aPointPixel( (long)imgposX, (long)imgposY );
+    Point aPointPixel( static_cast<long>(imgposX), static_cast<long>(imgposY) );
     aVirDevice->DrawBitmapEx( aPointPixel, aRet );
     aRet = aVirDevice->GetBitmapEx( aEmptyPoint, aStdSize );
 
@@ -1060,11 +1060,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else if(ScanlineFormat::N24BitTcBgr == xContent->GetScanlineFormat())
                 {
-                    for(sal_uInt32 y(0); y < (sal_uInt32)xContent->Height(); y++)
+                    for(sal_uInt32 y(0); y < static_cast<sal_uInt32>(xContent->Height()); y++)
                     {
                         Scanline pScan = xContent->GetScanline(y);
 
-                        for(sal_uInt32 x(0); x < (sal_uInt32)xContent->Width(); x++)
+                        for(sal_uInt32 x(0); x < static_cast<sal_uInt32>(xContent->Width()); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *(pScan + 2)* fConvertColor,
@@ -1079,11 +1079,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else if(ScanlineFormat::N24BitTcRgb == xContent->GetScanlineFormat())
                 {
-                    for(sal_uInt32 y(0); y < (sal_uInt32)xContent->Height(); y++)
+                    for(sal_uInt32 y(0); y < static_cast<sal_uInt32>(xContent->Height()); y++)
                     {
                         Scanline pScan = xContent->GetScanline(y);
 
-                        for(sal_uInt32 x(0); x < (sal_uInt32)xContent->Width(); x++)
+                        for(sal_uInt32 x(0); x < static_cast<sal_uInt32>(xContent->Width()); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *pScan * fConvertColor,
@@ -1098,15 +1098,15 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else
                 {
-                    for(sal_uInt32 y(0); y < (sal_uInt32)xContent->Height(); y++)
+                    for(sal_uInt32 y(0); y < static_cast<sal_uInt32>(xContent->Height()); y++)
                     {
-                        for(sal_uInt32 x(0); x < (sal_uInt32)xContent->Width(); x++)
+                        for(sal_uInt32 x(0); x < static_cast<sal_uInt32>(xContent->Width()); x++)
                         {
                             const BitmapColor aBMCol(xContent->GetColor(y, x));
                             const basegfx::BColor aBSource(
-                                (double)aBMCol.GetRed() * fConvertColor,
-                                (double)aBMCol.GetGreen() * fConvertColor,
-                                (double)aBMCol.GetBlue() * fConvertColor);
+                                static_cast<double>(aBMCol.GetRed()) * fConvertColor,
+                                static_cast<double>(aBMCol.GetGreen()) * fConvertColor,
+                                static_cast<double>(aBMCol.GetBlue()) * fConvertColor);
                             const basegfx::BColor aBDest(rModifier->getModifiedColor(aBSource));
 
                             xContent->SetPixel(y, x, BitmapColor(Color(aBDest)));

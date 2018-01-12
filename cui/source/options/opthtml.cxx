@@ -100,19 +100,19 @@ bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
 {
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     if(aSize1NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(0, (sal_uInt16)aSize1NF->GetValue());
+        rHtmlOpt.SetFontSize(0, static_cast<sal_uInt16>(aSize1NF->GetValue()));
     if(aSize2NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(1, (sal_uInt16)aSize2NF->GetValue());
+        rHtmlOpt.SetFontSize(1, static_cast<sal_uInt16>(aSize2NF->GetValue()));
     if(aSize3NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(2, (sal_uInt16)aSize3NF->GetValue());
+        rHtmlOpt.SetFontSize(2, static_cast<sal_uInt16>(aSize3NF->GetValue()));
     if(aSize4NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(3, (sal_uInt16)aSize4NF->GetValue());
+        rHtmlOpt.SetFontSize(3, static_cast<sal_uInt16>(aSize4NF->GetValue()));
     if(aSize5NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(4, (sal_uInt16)aSize5NF->GetValue());
+        rHtmlOpt.SetFontSize(4, static_cast<sal_uInt16>(aSize5NF->GetValue()));
     if(aSize6NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(5, (sal_uInt16)aSize6NF->GetValue());
+        rHtmlOpt.SetFontSize(5, static_cast<sal_uInt16>(aSize6NF->GetValue()));
     if(aSize7NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(6, (sal_uInt16)aSize7NF->GetValue());
+        rHtmlOpt.SetFontSize(6, static_cast<sal_uInt16>(aSize7NF->GetValue()));
 
     if(aNumbersEnglishUSCB->IsValueChangedFromSaved())
         rHtmlOpt.SetNumbersEnglishUS(aNumbersEnglishUSCB->IsChecked());

@@ -109,7 +109,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
         }
         else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) // we can read out the RGB
         {
-            mnDstColors = (sal_uInt16)( mnColorMapSize / 3 );
+            mnDstColors = static_cast<sal_uInt16>( mnColorMapSize / 3 );
 
             if ( ( 1 << mnDstBitsPerPix ) < mnDstColors )
                 return false;
@@ -142,7 +142,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
             for ( sal_uInt16 i = 0; i < mnDstColors; i++ )
             {
                 sal_uLong nCount = 255 - ( 255 * i / ( mnDstColors - 1 ) );
-                aPalette[i] = BitmapColor((sal_uInt8)nCount, (sal_uInt8)nCount, (sal_uInt8)nCount);
+                aPalette[i] = BitmapColor(static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount));
             }
             bPalette = true;
         }
@@ -204,7 +204,7 @@ bool RASReader::ImplReadHeader()
         case 24 :
         case  8 :
         case  1 :
-            mnDstBitsPerPix = (sal_uInt16)mnDepth;
+            mnDstBitsPerPix = static_cast<sal_uInt16>(mnDepth);
             break;
         case 32 :
             mnDstBitsPerPix = 24;

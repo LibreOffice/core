@@ -488,23 +488,23 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderLineStyle nStyle, sal_uInt16 nOut
 
 sal_uInt16 SvxBorderLine::GetOutWidth() const
 {
-    sal_uInt16 nOut = (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
+    sal_uInt16 nOut = static_cast<sal_uInt16>(Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv ));
     if ( m_bMirrorWidths )
-        nOut = (sal_uInt16)Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv );
+        nOut = static_cast<sal_uInt16>(Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv ));
     return nOut;
 }
 
 sal_uInt16 SvxBorderLine::GetInWidth() const
 {
-    sal_uInt16 nIn = (sal_uInt16)Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv );
+    sal_uInt16 nIn = static_cast<sal_uInt16>(Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv ));
     if ( m_bMirrorWidths )
-        nIn = (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
+        nIn = static_cast<sal_uInt16>(Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv ));
     return nIn;
 }
 
 sal_uInt16 SvxBorderLine::GetDistance() const
 {
-    return (sal_uInt16)Scale( m_aWidthImpl.GetGap( m_nWidth ), m_nMult, m_nDiv );
+    return static_cast<sal_uInt16>(Scale( m_aWidthImpl.GetGap( m_nWidth ), m_nMult, m_nDiv ));
 }
 
 
@@ -644,15 +644,15 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
     else
     {
         OUString sMetric = EditResId(GetMetricId( eDestUnit ));
-        aStr += GetMetricText( (long)GetInWidth(), eSrcUnit, eDestUnit, pIntl );
+        aStr += GetMetricText( static_cast<long>(GetInWidth()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
         aStr += cpDelim;
-        aStr += GetMetricText( (long)GetOutWidth(), eSrcUnit, eDestUnit, pIntl );
+        aStr += GetMetricText( static_cast<long>(GetOutWidth()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
         aStr += cpDelim;
-        aStr += GetMetricText( (long)GetDistance(), eSrcUnit, eDestUnit, pIntl );
+        aStr += GetMetricText( static_cast<long>(GetDistance()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
     }

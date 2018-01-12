@@ -369,7 +369,7 @@ FormulaBuffer::SheetItem FormulaBuffer::getSheetItem( SCTAB nTab )
 
     SheetItem aItem;
 
-    if( (size_t) nTab >= maCellFormulas.size() )
+    if( static_cast<size_t>(nTab) >= maCellFormulas.size() )
     {
         SAL_WARN( "sc", "Tab " << nTab << " out of bounds " << maCellFormulas.size() );
         return aItem;
@@ -393,7 +393,7 @@ void FormulaBuffer::createSharedFormulaMapEntry(
     const ScAddress& rAddress,
     sal_Int32 nSharedId, const OUString& rTokens )
 {
-    assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maSharedFormulas.size() );
+    assert( rAddress.Tab() >= 0 && static_cast<size_t>(rAddress.Tab()) < maSharedFormulas.size() );
     std::vector<SharedFormulaEntry>& rSharedFormulas = maSharedFormulas[ rAddress.Tab() ];
     SharedFormulaEntry aEntry(rAddress, rTokens, nSharedId);
     rSharedFormulas.push_back( aEntry );
@@ -401,14 +401,14 @@ void FormulaBuffer::createSharedFormulaMapEntry(
 
 void FormulaBuffer::setCellFormula( const ScAddress& rAddress, const OUString& rTokenStr )
 {
-    assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maCellFormulas.size() );
+    assert( rAddress.Tab() >= 0 && static_cast<size_t>(rAddress.Tab()) < maCellFormulas.size() );
     maCellFormulas[ rAddress.Tab() ].emplace_back( rTokenStr, rAddress );
 }
 
 void FormulaBuffer::setCellFormula(
     const ScAddress& rAddress, sal_Int32 nSharedId, const OUString& rCellValue, sal_Int32 nValueType )
 {
-    assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maSharedFormulaIds.size() );
+    assert( rAddress.Tab() >= 0 && static_cast<size_t>(rAddress.Tab()) < maSharedFormulaIds.size() );
     maSharedFormulaIds[rAddress.Tab()].emplace_back(rAddress, nSharedId, rCellValue, nValueType);
 }
 
@@ -416,14 +416,14 @@ void FormulaBuffer::setCellArrayFormula( const ScRange& rRangeAddress, const ScA
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );
-    assert( rRangeAddress.aStart.Tab() >= 0 && (size_t)rRangeAddress.aStart.Tab() < maCellArrayFormulas.size() );
+    assert( rRangeAddress.aStart.Tab() >= 0 && static_cast<size_t>(rRangeAddress.aStart.Tab()) < maCellArrayFormulas.size() );
     maCellArrayFormulas[ rRangeAddress.aStart.Tab() ].emplace_back( tokenPair, rRangeAddress );
 }
 
 void FormulaBuffer::setCellFormulaValue(
         const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType )
 {
-    assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maCellFormulaValues.size() );
+    assert( rAddress.Tab() >= 0 && static_cast<size_t>(rAddress.Tab()) < maCellFormulaValues.size() );
     FormulaValue aVal;
     aVal.maAddress = rAddress;
     aVal.maValueStr = rValueStr;

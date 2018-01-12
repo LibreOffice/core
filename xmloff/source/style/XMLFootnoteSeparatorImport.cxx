@@ -99,7 +99,7 @@ void XMLFootnoteSeparatorImport::StartElement(
                 if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     nTmp, sAttrValue))
                 {
-                    nLineWeight = (sal_Int16)nTmp;
+                    nLineWeight = static_cast<sal_Int16>(nTmp);
                 }
             }
             else if (IsXMLToken( sLocalName, XML_DISTANCE_BEFORE_SEP ))
@@ -130,7 +130,7 @@ void XMLFootnoteSeparatorImport::StartElement(
             else if (IsXMLToken( sLocalName, XML_REL_WIDTH ))
             {
                 if (::sax::Converter::convertPercent(nTmp, sAttrValue))
-                    nLineRelWidth = (sal_uInt8)nTmp;
+                    nLineRelWidth = static_cast<sal_uInt8>(nTmp);
             }
             else if (IsXMLToken( sLocalName, XML_COLOR ))
             {

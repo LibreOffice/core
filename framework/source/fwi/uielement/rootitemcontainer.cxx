@@ -211,7 +211,7 @@ void SAL_CALL RootItemContainer::insertByIndex( sal_Int32 Index, const Any& aIte
 void SAL_CALL RootItemContainer::removeByIndex( sal_Int32 nIndex )
 {
     ShareGuard aLock( m_aShareMutex );
-    if ( (sal_Int32)m_aItemVector.size() <= nIndex )
+    if ( static_cast<sal_Int32>(m_aItemVector.size()) <= nIndex )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
     m_aItemVector.erase(m_aItemVector.begin() + nIndex);

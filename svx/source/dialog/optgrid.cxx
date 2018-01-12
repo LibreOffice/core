@@ -200,8 +200,8 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
         long nX =GetCoreValue(  *pMtrFldDrawX, eUnit );
         long nY = GetCoreValue( *pMtrFldDrawY, eUnit );
 
-        aGridItem.nFldDrawX    = (sal_uInt32) nX;
-        aGridItem.nFldDrawY    = (sal_uInt32) nY;
+        aGridItem.nFldDrawX    = static_cast<sal_uInt32>(nX);
+        aGridItem.nFldDrawY    = static_cast<sal_uInt32>(nY);
         aGridItem.nFldDivisionX = static_cast<long>(pNumFldDivisionX->GetValue()-1);
         aGridItem.nFldDivisionY = static_cast<long>(pNumFldDivisionY->GetValue()-1);
 
@@ -256,7 +256,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
-        FieldUnit eFUnit = (FieldUnit)(long)pItem->GetValue();
+        FieldUnit eFUnit = (FieldUnit)static_cast<long>(pItem->GetValue());
 
         if( eFUnit != pMtrFldDrawX->GetUnit() )
         {

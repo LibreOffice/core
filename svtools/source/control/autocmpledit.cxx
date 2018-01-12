@@ -39,7 +39,7 @@ IMPL_LINK_NOARG(AutocompleteEdit, AutoCompleteHdl_Impl, Edit&, void)
     if( aSelection.Max() != aCurText.getLength() )
         return;
 
-    sal_uInt16 nLen = ( sal_uInt16 )aSelection.Min();
+    sal_uInt16 nLen = static_cast<sal_uInt16>(aSelection.Min());
     aCurText = aCurText.copy( 0, nLen );
     if( aCurText.isEmpty() )
         return;
@@ -87,7 +87,7 @@ bool AutocompleteEdit::PreNotify( NotifyEvent& rNEvt )
         if( ( aCode == KEY_UP || aCode == KEY_DOWN ) && !rKey.IsMod2() )
         {
             Selection aSelection( GetSelection() );
-            sal_uInt16 nLen = ( sal_uInt16 )aSelection.Min();
+            sal_uInt16 nLen = static_cast<sal_uInt16>(aSelection.Min());
 
             if( m_aMatching.size() &&
                 ( ( aCode == KEY_DOWN && m_nCurrent + 1 < m_aMatching.size() )

@@ -586,7 +586,7 @@ void SdPage::createAnnotation( css::uno::Reference< css::office::XAnnotation >& 
 
 void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIndex )
 {
-    if( (nIndex == -1) || (nIndex > (int)maAnnotations.size()) )
+    if( (nIndex == -1) || (nIndex > static_cast<int>(maAnnotations.size())) )
     {
         maAnnotations.push_back( xAnnotation );
     }

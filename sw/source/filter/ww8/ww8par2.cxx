@@ -702,7 +702,7 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
     rNum.SetNumAdjust( eAdjA[ rAV.aBits1 & 0x3] );
 
     rNum.SetCharTextDistance( SVBT16ToShort( rAV.dxaSpace ) );
-    sal_Int16 nIndent = std::abs((sal_Int16)SVBT16ToShort( rAV.dxaIndent ));
+    sal_Int16 nIndent = std::abs(static_cast<sal_Int16>(SVBT16ToShort( rAV.dxaIndent )));
     if( rAV.aBits1 & 0x08 )      //fHang
     {
         rNum.SetFirstLineOffset( -nIndent );
@@ -1250,7 +1250,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
 
     const sal_uInt8* pT = &pS[1];
     for (int i = 0; i <= nCols; i++, pT+=2)
-        nCenter[i] = (sal_Int16)SVBT16ToShort( pT );    // X-borders
+        nCenter[i] = static_cast<sal_Int16>(SVBT16ToShort( pT ));    // X-borders
 
     if( nCols != nOldCols ) // different column count
     {
@@ -1432,7 +1432,7 @@ void WW8TabBandDesc::ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol)
     {
         sal_uInt8 nitcFirst= pParamsTDxaCol[0]; // first col to be changed
         sal_uInt8 nitcLim  = pParamsTDxaCol[1]; // (last col to be changed)+1
-        short nDxaCol = (sal_Int16)SVBT16ToShort( pParamsTDxaCol + 2 );
+        short nDxaCol = static_cast<sal_Int16>(SVBT16ToShort( pParamsTDxaCol + 2 ));
 
         for( int i = nitcFirst; (i < nitcLim) && (i < nWwCols); i++ )
         {
@@ -1975,10 +1975,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         m_bIsBiDi = SVBT16ToShort(pParams) != 0;
                         break;
                     case sprmTDxaGapHalf:
-                        pNewBand->nGapHalf = (sal_Int16)SVBT16ToShort( pParams );
+                        pNewBand->nGapHalf = static_cast<sal_Int16>(SVBT16ToShort( pParams ));
                         break;
                     case sprmTDyaRowHeight:
-                        pNewBand->nLineHeight = (sal_Int16)SVBT16ToShort( pParams );
+                        pNewBand->nLineHeight = static_cast<sal_Int16>(SVBT16ToShort( pParams ));
                         m_bClaimLineFormat = true;
                         break;
                     case sprmTDefTable:
@@ -1997,7 +1997,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         // parameter (meaning the left-most position) and then
                         // shift the whole table to that margin (see below)
                         {
-                            short nDxaNew = (sal_Int16)SVBT16ToShort( pParams );
+                            short nDxaNew = static_cast<sal_Int16>(SVBT16ToShort( pParams ));
                             if( nDxaNew < nTabeDxaNew )
                                 nTabeDxaNew = nDxaNew;
                         }
@@ -2393,7 +2393,7 @@ void WW8TabDesc::CalcDefaults()
         sal_uInt16 j = ( pR->bLEmptyCol ) ? 1 : 0;
         for (i = 0; i < pR->nWwCols; ++i)
         {
-            pR->nTransCell[i] = (sal_Int8)j;
+            pR->nTransCell[i] = static_cast<sal_Int8>(j);
             if ( pR->nCenter[i] < pR->nCenter[i+1] )
             {
                 pR->bExist[i] = true;
@@ -2422,8 +2422,8 @@ void WW8TabDesc::CalcDefaults()
                 pR->nTransCell[n] = pR->nTransCell[k];
         }
 
-        pR->nTransCell[i++] = (sal_Int8)(j++);  // Can exceed by 2 among other
-        pR->nTransCell[i] = (sal_Int8)j;        // things because of bREmptyCol
+        pR->nTransCell[i++] = static_cast<sal_Int8>(j++);  // Can exceed by 2 among other
+        pR->nTransCell[i] = static_cast<sal_Int8>(j);        // things because of bREmptyCol
 
         pR->nSwCols = pR->nSwCols + nAddCols;
         if( pR->nSwCols < nMinCols )
@@ -2665,9 +2665,9 @@ void WW8TabDesc::MergeCells()
 
                     // start a new merge group if appropriate
 
-                    OSL_ENSURE(nRow < (sal_uInt16)m_pTabLines->size(),
+                    OSL_ENSURE(nRow < static_cast<sal_uInt16>(m_pTabLines->size()),
                         "Too few lines, table ended early");
-                    if (nRow >= (sal_uInt16)m_pTabLines->size())
+                    if (nRow >= static_cast<sal_uInt16>(m_pTabLines->size()))
                         return;
                     m_pTabLine = (*m_pTabLines)[ nRow ];
                     m_pTabBoxes = &m_pTabLine->GetTabBoxes();
@@ -2788,7 +2788,7 @@ void WW8TabDesc::ParkPaM()
 {
     SwTableBox *pTabBox2 = nullptr;
     short nRow = m_nAktRow + 1;
-    if (nRow < (sal_uInt16)m_pTabLines->size())
+    if (nRow < static_cast<sal_uInt16>(m_pTabLines->size()))
     {
         if (SwTableLine *pLine = (*m_pTabLines)[nRow])
         {
@@ -2949,7 +2949,7 @@ bool WW8TabDesc::IsValidCell(short nCol) const
 {
     return (static_cast<size_t>(nCol) < SAL_N_ELEMENTS(m_pActBand->bExist)) &&
            m_pActBand->bExist[nCol] &&
-           (sal_uInt16)m_nAktRow < m_pTabLines->size();
+           static_cast<sal_uInt16>(m_nAktRow) < m_pTabLines->size();
 }
 
 bool WW8TabDesc::InFirstParaInCell() const
@@ -2992,7 +2992,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
     sal_uInt16 nCol = m_pActBand->transCell(nWwCol);
 
-    if ((sal_uInt16)m_nAktRow >= m_pTabLines->size())
+    if (static_cast<sal_uInt16>(m_nAktRow) >= m_pTabLines->size())
     {
         OSL_ENSURE(false, "Actual row bigger than expected." );
         if (bPam)
@@ -3254,7 +3254,7 @@ void WW8TabDesc::AdjustNewBand()
         InsertCells( m_pActBand->nSwCols - m_nDefaultSwCols );
 
     SetPamInCell( 0, false);
-    OSL_ENSURE( m_pTabBoxes && m_pTabBoxes->size() == (sal_uInt16)m_pActBand->nSwCols,
+    OSL_ENSURE( m_pTabBoxes && m_pTabBoxes->size() == static_cast<sal_uInt16>(m_pActBand->nSwCols),
         "Wrong column count in table" );
 
     if( m_bClaimLineFormat )

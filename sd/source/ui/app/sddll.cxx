@@ -164,8 +164,8 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
 
     ::sd::AnimationChildWindow::RegisterChildWindow(false, pMod);
-    ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::DrawViewShell::GetInterfaceId(), pMod );
-    ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::GraphicViewShell::GetInterfaceId(), pMod );
+    ::sd::NavigatorChildWindow::RegisterChildWindowContext( static_cast<sal_uInt16>(::sd::DrawViewShell::GetInterfaceId()), pMod );
+    ::sd::NavigatorChildWindow::RegisterChildWindowContext( static_cast<sal_uInt16>(::sd::GraphicViewShell::GetInterfaceId()), pMod );
 
     Svx3DChildWindow::RegisterChildWindow(false, pMod);
     SvxFontWorkChildWindow::RegisterChildWindow(false, pMod);

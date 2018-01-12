@@ -1484,7 +1484,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             {
                 aFormatCode.append( "][$-" );
                 // language code in upper hex:
-                aFormatCode.append(OUString::number((sal_uInt16)eLang, 16).toAsciiUpperCase());
+                aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
             }
             aFormatCode.append( ']' );
         }
@@ -1831,9 +1831,9 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     sal_uInt16 nPrec = 0;
     sal_uInt16 nLeading = 0;
     if ( rInfo.nDecimals >= 0 )                     //  < 0 : Default
-        nPrec = (sal_uInt16) rInfo.nDecimals;
+        nPrec = static_cast<sal_uInt16>(rInfo.nDecimals);
     if ( rInfo.nInteger >= 0 )                      //  < 0 : Default
-        nLeading = (sal_uInt16) rInfo.nInteger;
+        nLeading = static_cast<sal_uInt16>(rInfo.nInteger);
 
     if ( bAutoDec )
     {
@@ -1970,7 +1970,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         //  test for 1.0 is just for optimization - nSepCount would be 0
 
         //  one separator for each factor of 1000
-        sal_Int32 nSepCount = (sal_Int32) ::rtl::math::round( log10(rInfo.fDisplayFactor) / 3.0 );
+        sal_Int32 nSepCount = static_cast<sal_Int32>(::rtl::math::round( log10(rInfo.fDisplayFactor) / 3.0 ));
         if ( nSepCount > 0 )
         {
             OUString aSep = pData->GetLocaleData( nFormatLang ).getNumThousandSep();

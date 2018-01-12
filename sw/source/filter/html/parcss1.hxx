@@ -150,12 +150,12 @@ inline void CSS1Expression::Set( CSS1Token eTyp, const OUString &rVal,
 
 inline sal_uInt32 CSS1Expression::GetULength() const
 {
-    return nValue < 0. ? 0UL : (sal_uInt32)(nValue + .5);
+    return nValue < 0. ? 0UL : static_cast<sal_uInt32>(nValue + .5);
 }
 
 inline sal_Int32 CSS1Expression::GetSLength() const
 {
-    return (sal_Int32)(nValue + (nValue < 0. ? -.5 : .5 ));
+    return static_cast<sal_Int32>(nValue + (nValue < 0. ? -.5 : .5 ));
 }
 
 /** Parser of a style element/option

@@ -255,7 +255,7 @@ void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 sal_uInt16 SdrMeasureObj::GetObjIdentifier() const
 {
-    return (sal_uInt16)OBJ_MEASURE;
+    return sal_uInt16(OBJ_MEASURE);
 }
 
 struct ImpMeasureRec : public SdrDragStatUserData
@@ -337,7 +337,7 @@ long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPolyPolygon, lon
 {
     const basegfx::B2DRange aPolygonRange(rPolyPolygon.getB2DRange());
     const double fOldWidth(std::max(aPolygonRange.getWidth(), 1.0));
-    const double fScale((double)nNewWidth / fOldWidth);
+    const double fScale(static_cast<double>(nNewWidth) / fOldWidth);
     long nHeight(basegfx::fround(aPolygonRange.getHeight() * fScale));
 
     if(bCenter)
@@ -913,8 +913,8 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
                 if (!bHLin || !bVLin) { // else aPt1==aPt2
                     long ndx=aPt.X()-aFix.X();
                     long ndy=aPt.Y()-aFix.Y();
-                    double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
-                    double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
+                    double nXFact=0; if (!bVLin) nXFact=static_cast<double>(ndx)/static_cast<double>(ndx0);
+                    double nYFact=0; if (!bHLin) nYFact=static_cast<double>(ndy)/static_cast<double>(ndy0);
                     bool bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
                     bool bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
                     if (bHor) ndy=long(ndy0*nXFact);

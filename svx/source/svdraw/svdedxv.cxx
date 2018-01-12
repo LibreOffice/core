@@ -1236,7 +1236,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                     if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                     {
                         OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), nullptr);
-                        pTextEditOutliner->InsertView(pOutlView, (sal_uInt16)i);
+                        pTextEditOutliner->InsertView(pOutlView, static_cast<sal_uInt16>(i));
                     }
                 }
 
@@ -1689,7 +1689,7 @@ bool SdrObjEditView::IsTextEditHit(const Point& rHit) const
             if( pRef )
                 nHitTol = OutputDevice::LogicToLogic( nHitTol, MapUnit::Map100thMM, pRef->GetMapMode().GetMapUnit() );
 
-            bOk = pTextEditOutliner->IsTextPos( aPnt, (sal_uInt16)nHitTol );
+            bOk = pTextEditOutliner->IsTextPos( aPnt, static_cast<sal_uInt16>(nHitTol) );
         }
     }
     return bOk;

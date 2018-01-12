@@ -726,7 +726,7 @@ void SAL_CALL SlideShow::end()
                     // switch to the previously visible Slide
                     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>( pViewShell );
                     if( pDrawViewShell )
-                        pDrawViewShell->SwitchPage( (sal_uInt16)xController->getRestoreSlide() );
+                        pDrawViewShell->SwitchPage( static_cast<sal_uInt16>(xController->getRestoreSlide()) );
                     else
                     {
                         Reference<XDrawView> xDrawView (
@@ -1150,7 +1150,7 @@ sal_Int32 SlideShow::GetDisplay()
     if( nDisplay < 0 )
         nDisplay = -1;
     else if( nDisplay == 0)
-        nDisplay = (sal_Int32)Application::GetDisplayExternalScreen();
+        nDisplay = static_cast<sal_Int32>(Application::GetDisplayExternalScreen());
     else
         nDisplay--;
 

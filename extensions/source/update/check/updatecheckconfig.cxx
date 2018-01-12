@@ -157,7 +157,7 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
         OUString aUStr = getStringValue(
             OString(OStringLiteral(RELEASE_NOTE) + OString::number(n)).getStr());
         if( !aUStr.isEmpty() )
-            rInfo.ReleaseNotes.push_back(ReleaseNote((sal_Int8) n, aUStr));
+            rInfo.ReleaseNotes.push_back(ReleaseNote(static_cast<sal_Int8>(n), aUStr));
     }
 }
 

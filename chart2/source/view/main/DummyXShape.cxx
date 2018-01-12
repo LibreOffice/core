@@ -440,7 +440,7 @@ void DummyArea2D::render()
         for(sal_Int32 j = 0; j < nPointsCount; j++)
         {
             const css::awt::Point& p = points[j];
-            pChart->m_GLRender.SetArea2DShapePoint((float)p.X, (float)p.Y, nPointsCount);
+            pChart->m_GLRender.SetArea2DShapePoint(static_cast<float>(p.X), static_cast<float>(p.Y), nPointsCount);
         }
     }
 
@@ -598,7 +598,7 @@ void DummyLine2D::render()
         sal_uInt8 B = (nColorValue & 0x000000FF);
         pChart->m_GLRender.SetLine2DColor(R, G, B, nAlpha);
 
-        SAL_INFO("chart2.opengl", "line colorvalue = " << nColorValue << ", R = " << (int)R << ", G = " << (int)G << ", B = " << (int)B);
+        SAL_INFO("chart2.opengl", "line colorvalue = " << nColorValue << ", R = " << static_cast<int>(R) << ", G = " << static_cast<int>(G) << ", B = " << static_cast<int>(B));
     }
     else
         SAL_WARN("chart2.opengl", "no line color set");
@@ -624,7 +624,7 @@ void DummyLine2D::render()
         for(sal_Int32 j = 0; j < pointscount; j++)
         {
             css::awt::Point& p = points[j];
-            pChart->m_GLRender.SetLine2DShapePoint((float)p.X, (float)p.Y, pointscount);
+            pChart->m_GLRender.SetLine2DShapePoint(static_cast<float>(p.X), static_cast<float>(p.Y), pointscount);
         }
 
     }

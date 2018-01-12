@@ -408,7 +408,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 
     uno::Sequence<OUString> const cells = xTextTable->getCellNames();
     sal_Int32 nLength = cells.getLength();
-    CPPUNIT_ASSERT_EQUAL((sal_Int32)cellBorders.size(), nLength);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(cellBorders.size()), nLength);
 
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
@@ -704,7 +704,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkFont, "watermark-font.docx")
 
     // Check font size
     CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharHeight") >>= nFontSize);
-    CPPUNIT_ASSERT_EQUAL((float)72, nFontSize);
+    CPPUNIT_ASSERT_EQUAL(float(72), nFontSize);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")

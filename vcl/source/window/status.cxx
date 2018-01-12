@@ -929,7 +929,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     ImplStatusItem* pItem   = new ImplStatusItem;
     pItem->mnId             = nItemId;
     pItem->mnBits           = nBits;
-    pItem->mnWidth          = (long)nWidth+nFudge+STATUSBAR_OFFSET;
+    pItem->mnWidth          = static_cast<long>(nWidth)+nFudge+STATUSBAR_OFFSET;
     pItem->mnOffset         = nOffset;
     pItem->mpUserData       = nullptr;
     pItem->mbVisible        = true;
@@ -1031,7 +1031,7 @@ void StatusBar::Clear()
 
 sal_uInt16 StatusBar::GetItemCount() const
 {
-    return (sal_uInt16)mpItemList.size();
+    return static_cast<sal_uInt16>(mpItemList.size());
 }
 
 sal_uInt16 StatusBar::GetItemId( sal_uInt16 nPos ) const

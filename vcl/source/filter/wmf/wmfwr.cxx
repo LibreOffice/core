@@ -577,10 +577,10 @@ void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
     sal_Int32 nOriginalTextLen = rString.getLength();
     std::unique_ptr<sal_Int16[]> pConvertedDXAry(new sal_Int16[ nOriginalTextLen ]);
     sal_Int32 j = 0;
-    pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ 0 ] );
+    pConvertedDXAry[ j++ ] = static_cast<sal_Int16>(ScaleWidth( pDXAry[ 0 ] ));
     for (sal_Int32 i = 1; i < ( nOriginalTextLen - 1 ); ++i)
-        pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ i ] - pDXAry[ i - 1 ] );
-    pConvertedDXAry[ j ] = (sal_Int16)ScaleWidth( pDXAry[ nOriginalTextLen - 2 ] / ( nOriginalTextLen - 1 ) );
+        pConvertedDXAry[ j++ ] = static_cast<sal_Int16>(ScaleWidth( pDXAry[ i ] - pDXAry[ i - 1 ] ));
+    pConvertedDXAry[ j ] = static_cast<sal_Int16>(ScaleWidth( pDXAry[ nOriginalTextLen - 2 ] / ( nOriginalTextLen - 1 ) ));
 
     for (sal_Int32 i = 0; i < nOriginalTextLen; ++i)
     {
@@ -1214,8 +1214,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     else
                     {
                         for ( sal_Int32 i = 0; i < ( nLen - 1 ); i++ )
-                            pDXAry[ i ] = pDXAry[ i ] * (sal_Int32)pA->GetWidth() / nNormSize;
-                        if ( ( nLen <= 1 ) || ( (sal_Int32)pA->GetWidth() == nNormSize ) )
+                            pDXAry[ i ] = pDXAry[ i ] * static_cast<sal_Int32>(pA->GetWidth()) / nNormSize;
+                        if ( ( nLen <= 1 ) || ( static_cast<sal_Int32>(pA->GetWidth()) == nNormSize ) )
                             pDXAry.reset();
                         aSrcLineInfo = LineInfo();
                         SetAllAttr();
@@ -1421,7 +1421,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                                 else
                                     aX += BigInt( aScaleX.GetNumerator()/2 );
                             aX /= BigInt( aScaleX.GetNumerator() );
-                            aOrigin.X() = (long)aX + aMM.GetOrigin().X();
+                            aOrigin.X() = static_cast<long>(aX) + aMM.GetOrigin().X();
                             BigInt aY( aOrigin.Y() );
                             aY *= BigInt( aScaleY.GetDenominator() );
                             if( aOrigin.Y() >= 0 )
@@ -1435,7 +1435,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                                 else
                                     aY += BigInt( aScaleY.GetNumerator()/2 );
                             aY /= BigInt( aScaleY.GetNumerator() );
-                            aOrigin.Y() = (long)aY + aMM.GetOrigin().Y();
+                            aOrigin.Y() = static_cast<long>(aY) + aMM.GetOrigin().Y();
                             aSrcMapMode.SetOrigin( aOrigin );
 
                             aScaleX *= aSrcMapMode.GetScaleX();
@@ -1571,8 +1571,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const Size      aSrcSize( aTmpMtf.GetPrefSize() );
                     const Point     aDestPt( pA->GetPoint() );
                     const Size      aDestSize( pA->GetSize() );
-                    const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                    const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                    const double    fScaleX = aSrcSize.Width() ? static_cast<double>(aDestSize.Width()) / aSrcSize.Width() : 1.0;
+                    const double    fScaleY = aSrcSize.Height() ? static_cast<double>(aDestSize.Height()) / aSrcSize.Height() : 1.0;
                     long            nMoveX, nMoveY;
 
                     aSrcLineInfo = LineInfo();
@@ -1639,7 +1639,7 @@ void WMFWriter::WriteHeader( bool bPlaceable )
     {
         sal_uInt16  nCheckSum, nValue;
         Size    aSize( OutputDevice::LogicToLogic(Size(1,1),MapMode(MapUnit::MapInch), aTargetMapMode) );
-        sal_uInt16  nUnitsPerInch = (sal_uInt16) ( ( aSize.Width() + aSize.Height() ) >> 1 );
+        sal_uInt16  nUnitsPerInch = static_cast<sal_uInt16>( ( aSize.Width() + aSize.Height() ) >> 1 );
 
         nCheckSum=0;
         nValue=0xcdd7;                              nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
@@ -1647,8 +1647,8 @@ void WMFWriter::WriteHeader( bool bPlaceable )
         nValue=0x0000;                              nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
         nValue=0x0000;                              nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
         nValue=0x0000;                              nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
-        nValue=(sal_uInt16) aTargetSize.Width();        nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
-        nValue=(sal_uInt16) aTargetSize.Height();       nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
+        nValue=static_cast<sal_uInt16>(aTargetSize.Width());        nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
+        nValue=static_cast<sal_uInt16>(aTargetSize.Height());       nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
         nValue=nUnitsPerInch;                       nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
         nValue=0x0000;                              nCheckSum^=nValue; pWMF->WriteUInt16( nValue );
         nValue=0x0000;                              nCheckSum^=nValue; pWMF->WriteUInt16( nValue );

@@ -448,12 +448,12 @@ void LwpGraphicObject::CreateGrafObject()
     {
         if (m_aIPData.nBrightness != 50)
         {
-            sal_Int32 nSODCBrightness = (sal_Int32)m_aIPData.nBrightness*2 - 100;
+            sal_Int32 nSODCBrightness = static_cast<sal_Int32>(m_aIPData.nBrightness)*2 - 100;
             xImageStyle->SetBrightness(nSODCBrightness);
         }
         if (m_aIPData.nContrast != 50)
         {
-            sal_Int32 nSODCContrast = (sal_Int32)(80 - (double)m_aIPData.nContrast*1.6);
+            sal_Int32 nSODCContrast = static_cast<sal_Int32>(80 - static_cast<double>(m_aIPData.nContrast)*1.6);
             xImageStyle->SetContrast(nSODCContrast);
         }
     }
@@ -468,8 +468,8 @@ void LwpGraphicObject::CreateGrafObject()
         LwpLayoutGeometry* pFrameGeo = pMyFrameLayout->GetGeometry();
 
         // original image size
-        double fOrgGrafWidth = (double)m_Cache.Width/TWIPS_PER_CM;
-        double fOrgGrafHeight = (double)m_Cache.Height/TWIPS_PER_CM;
+        double fOrgGrafWidth = static_cast<double>(m_Cache.Width)/TWIPS_PER_CM;
+        double fOrgGrafHeight = static_cast<double>(m_Cache.Height)/TWIPS_PER_CM;
 
         // get margin values
         double fLeftMargin = pMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
@@ -503,7 +503,7 @@ void LwpGraphicObject::CreateGrafObject()
             }
             else if (nScalemode & LwpLayoutScale::PERCENTAGE)
             {
-                double fScalePercentage = (double)pMyScale->GetScalePercentage() / 1000;
+                double fScalePercentage = static_cast<double>(pMyScale->GetScalePercentage()) / 1000;
                 fSclGrafWidth = fScalePercentage * fOrgGrafWidth;
                 fSclGrafHeight = fScalePercentage * fOrgGrafHeight;
             }
@@ -730,8 +730,8 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 void LwpGraphicObject::GetGrafOrgSize(double & rWidth, double & rHeight)
 {
     // original image size
-    rWidth = (double)m_Cache.Width/TWIPS_PER_CM;
-    rHeight = (double)m_Cache.Height/TWIPS_PER_CM;
+    rWidth = static_cast<double>(m_Cache.Width)/TWIPS_PER_CM;
+    rHeight = static_cast<double>(m_Cache.Height)/TWIPS_PER_CM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

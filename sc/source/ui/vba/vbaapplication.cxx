@@ -597,10 +597,10 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll )
                 ScSplitPos eWhich = pShell->GetViewData().GetActivePart();
                 sal_Int32 nValueX = pShell->GetViewData().GetPosX(WhichH(eWhich));
                 sal_Int32 nValueY = pShell->GetViewData().GetPosY(WhichV(eWhich));
-                xWindow->SmallScroll( uno::makeAny( (sal_Int16)(xVbaSheetRange->getRow() - 1) ),
-                         uno::makeAny( (sal_Int16)nValueY ),
-                         uno::makeAny( (sal_Int16)(xVbaSheetRange->getColumn() - 1)  ),
-                         uno::makeAny( (sal_Int16)nValueX ) );
+                xWindow->SmallScroll( uno::makeAny( static_cast<sal_Int16>(xVbaSheetRange->getRow() - 1) ),
+                         uno::makeAny( static_cast<sal_Int16>(nValueY) ),
+                         uno::makeAny( static_cast<sal_Int16>(xVbaSheetRange->getColumn() - 1)  ),
+                         uno::makeAny( static_cast<sal_Int16>(nValueX) ) );
                 gridWindow->GrabFocus();
             }
             else
@@ -637,10 +637,10 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll )
                 ScSplitPos eWhich = pShell->GetViewData().GetActivePart();
                 sal_Int32 nValueX = pShell->GetViewData().GetPosX(WhichH(eWhich));
                 sal_Int32 nValueY = pShell->GetViewData().GetPosY(WhichV(eWhich));
-                xWindow->SmallScroll( uno::makeAny( (sal_Int16)(xVbaRange->getRow() - 1) ),
-                         uno::makeAny( (sal_Int16)nValueY ),
-                         uno::makeAny( (sal_Int16)(xVbaRange->getColumn() - 1)  ),
-                         uno::makeAny( (sal_Int16)nValueX ) );
+                xWindow->SmallScroll( uno::makeAny( static_cast<sal_Int16>(xVbaRange->getRow() - 1) ),
+                         uno::makeAny( static_cast<sal_Int16>(nValueY) ),
+                         uno::makeAny( static_cast<sal_Int16>(xVbaRange->getColumn() - 1)  ),
+                         uno::makeAny( static_cast<sal_Int16>(nValueX) ) );
                 gridWindow->GrabFocus();
             }
             else
@@ -941,7 +941,7 @@ ScVbaApplication::getTemplatesPath()
 OUString SAL_CALL
 ScVbaApplication::getPathSeparator()
 {
-    return OUString( (sal_Unicode) SAL_PATHDELIMITER );
+    return OUString( sal_Unicode(SAL_PATHDELIMITER) );
 }
 
 OUString SAL_CALL

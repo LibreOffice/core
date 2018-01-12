@@ -87,7 +87,7 @@ public:
 };
 
 
-#define PATTERN_FORMAT_EMPTYLITERALS    ((sal_uInt16)0x0001)
+#define PATTERN_FORMAT_EMPTYLITERALS    (sal_uInt16(0x0001))
 
 class VCL_DLLPUBLIC PatternFormatter : public FormatterBase
 {

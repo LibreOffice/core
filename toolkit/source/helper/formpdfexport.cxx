@@ -569,7 +569,7 @@ namespace toolkitform
                     for( sal_Int32 i = 0; i < aSelectIndices.getLength(); i++ )
                     {
                         sal_Int16 nIndex = aSelectIndices.getConstArray()[i];
-                        if( nIndex >= 0 && nIndex < (sal_Int16)pListWidget->Entries.size() )
+                        if( nIndex >= 0 && nIndex < static_cast<sal_Int16>(pListWidget->Entries.size()) )
                             pListWidget->SelectedEntries.push_back( nIndex );
                     }
                 }

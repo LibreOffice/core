@@ -399,7 +399,7 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
 
                     if ( iVersion >= 0 )
                     {
-                        sal_Int16   uVersion = (sal_Int16)iVersion;
+                        sal_Int16   uVersion = static_cast<sal_Int16>(iVersion);
 
                         aArgs.realloc( ++nArgs );
                         aArgs[nArgs-1].Name  = "Version";

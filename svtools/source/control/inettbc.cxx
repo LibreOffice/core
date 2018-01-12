@@ -415,7 +415,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                         sal_Unicode aDelimiter = '/';
                         if ( bSmart )
                             // when parsing is done "smart", the delimiter must be "guessed"
-                            aObj.getFSysPath( (FSysStyle)(FSysStyle::Detect & ~FSysStyle::Vos), &aDelimiter );
+                            aObj.getFSysPath( static_cast<FSysStyle>(FSysStyle::Detect & ~FSysStyle::Vos), &aDelimiter );
 
                         if ( bIsFolder )
                             aObj.setFinalSlash();
@@ -791,7 +791,7 @@ void SvtURLBox::TryAutoComplete()
     Selection aSelection( GetSelection() );
     if( aSelection.Max() != aCurText.getLength() )
         return;
-    sal_uInt16 nLen = (sal_uInt16)aSelection.Min();
+    sal_uInt16 nLen = static_cast<sal_uInt16>(aSelection.Min());
     aCurText = aCurText.copy( 0, nLen );
     if( !aCurText.isEmpty() && bIsAutoCompleteEnabled )
     {
@@ -1062,7 +1062,7 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
         else if( ( aCode == KEY_UP || aCode == KEY_DOWN ) && !rKey.IsMod2() )
         {
             Selection aSelection( GetSelection() );
-            sal_uInt16 nLen = (sal_uInt16)aSelection.Min();
+            sal_uInt16 nLen = static_cast<sal_uInt16>(aSelection.Min());
             GetSubEdit()->KeyInput( rEvent );
             SetSelection( Selection( nLen, GetText().getLength() ) );
             return true;

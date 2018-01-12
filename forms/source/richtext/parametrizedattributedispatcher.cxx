@@ -92,7 +92,7 @@ namespace frm
     {
         // get the real slot id. This may differ from our attribute id: for instance, both
         // SID_ATTR_CHAR_HEIGHT and SID_ATTR_CHAR_LATIN_HEIGHT are mapped to the same which id
-        SfxSlotId nSlotId = lcl_normalizeLatinScriptSlotId( (SfxSlotId)m_nAttributeId );
+        SfxSlotId nSlotId = lcl_normalizeLatinScriptSlotId( static_cast<SfxSlotId>(m_nAttributeId) );
 
         SfxAllItemSet aParameterSet( getEditView()->GetEmptyItemSet() );
         TransformParameters( nSlotId, _rArguments, aParameterSet );

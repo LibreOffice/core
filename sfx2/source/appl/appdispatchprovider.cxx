@@ -132,7 +132,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     SfxDispatcher* pAppDisp = SfxGetpApp()->GetAppDispatcher_Impl();
     if ( aURL.Protocol == "slot:" || aURL.Protocol == "commandId:" )
     {
-        nId = (sal_uInt16) aURL.Path.toInt32();
+        nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
         SfxShell* pShell;
         pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, true, true );
     }

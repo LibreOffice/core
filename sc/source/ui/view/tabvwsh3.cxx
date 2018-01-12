@@ -381,7 +381,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         // one-based row numbers
 
-                        aScAddress.SetRow( (SCROW)(nNumeric - 1) );
+                        aScAddress.SetRow( static_cast<SCROW>(nNumeric - 1) );
                         aScAddress.SetCol( rViewData.GetCurX() );
                         aScAddress.SetTab( nTab );
                         aScRange = ScRange( aScAddress, aScAddress );
@@ -692,7 +692,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 SvxZoomType eOldZoomType = GetZoomType();
                 SvxZoomType eNewZoomType = eOldZoomType;
                 const Fraction& rOldY = GetViewData().GetZoomY();  // Y is shown
-                sal_uInt16 nOldZoom = (sal_uInt16)long( rOldY * 100 );
+                sal_uInt16 nOldZoom = static_cast<sal_uInt16>(long( rOldY * 100 ));
                 sal_uInt16 nZoom = nOldZoom;
                 bool bCancel = false;
 

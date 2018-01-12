@@ -560,7 +560,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
         else
             pNewSlot->pNextSlot = pNewSlot;
 
-        pImpl->aSlotArr.insert(pImpl->aSlotArr.begin() + (sal_uInt16) n, std::unique_ptr<SfxSlot>(pNewSlot));
+        pImpl->aSlotArr.insert(pImpl->aSlotArr.begin() + static_cast<sal_uInt16>(n), std::unique_ptr<SfxSlot>(pNewSlot));
     }
 
     pImpl->aVerbList = aVerbs;

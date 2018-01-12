@@ -349,9 +349,9 @@ Reference< XNameAccess > const & BibliographyLoader::GetDataColumns() const
         xResultSetProps->setPropertyValue("CommandType", aCommandType);
         Any aTableName; aTableName <<= aBibDesc.sTableOrQuery;
         xResultSetProps->setPropertyValue("Command", aTableName);
-        Any aResultSetType; aResultSetType <<= (sal_Int32)ResultSetType::SCROLL_INSENSITIVE;
+        Any aResultSetType; aResultSetType <<= sal_Int32(ResultSetType::SCROLL_INSENSITIVE);
         xResultSetProps->setPropertyValue("ResultSetType", aResultSetType);
-        Any aResultSetCurrency; aResultSetCurrency <<= (sal_Int32)ResultSetConcurrency::UPDATABLE;
+        Any aResultSetCurrency; aResultSetCurrency <<= sal_Int32(ResultSetConcurrency::UPDATABLE);
         xResultSetProps->setPropertyValue("ResultSetConcurrency", aResultSetCurrency);
 
         bool bSuccess = false;
@@ -629,7 +629,7 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
     for(sal_uInt16 i = 0; i <= text::BibliographyDataField::ISBN ; i++)
     {
         pArray[i].Name = pConfig->GetDefColumnName(aInternalMapping[i]);
-        pArray[i].Value <<= (sal_Int16) i;
+        pArray[i].Value <<= static_cast<sal_Int16>(i);
     }
     aRet <<= aSeq;
     return aRet;

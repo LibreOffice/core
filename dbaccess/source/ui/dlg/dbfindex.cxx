@@ -124,10 +124,10 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableInde
             _rDisplay.RemoveEntry( _rName );
 
             // adjust selection if necessary
-            if ((sal_uInt32)nPos == _rList.size())
-                _rDisplay.SelectEntryPos((sal_uInt16)nPos-1);
+            if (static_cast<sal_uInt32>(nPos) == _rList.size())
+                _rDisplay.SelectEntryPos(static_cast<sal_uInt16>(nPos)-1);
             else
-                _rDisplay.SelectEntryPos((sal_uInt16)nPos);
+                _rDisplay.SelectEntryPos(static_cast<sal_uInt16>(nPos));
 
             break;
         }

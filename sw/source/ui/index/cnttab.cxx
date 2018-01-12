@@ -458,7 +458,7 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
         pDesc->SetIndexOptions(pCurTOX->GetOptions());
     pDesc->SetMainEntryCharStyle(pCurTOX->GetMainEntryCharStyle());
     if(pDesc->GetTOXType() != TOX_INDEX)
-        pDesc->SetLevel((sal_uInt8)pCurTOX->GetLevel());
+        pDesc->SetLevel(static_cast<sal_uInt8>(pCurTOX->GetLevel()));
     pDesc->SetCreateFromObjectNames(pCurTOX->IsFromObjectNames());
     pDesc->SetSequenceName(pCurTOX->GetSequenceName());
     pDesc->SetCaptionDisplay(pCurTOX->GetCaptionDisplay());
@@ -947,7 +947,7 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell const & rSh)
     if(nUserTypeCount > 1)
     {
         //insert all new user indexes names after the standard user index
-        sal_Int32 nPos = m_pTypeLB->GetEntryPos(reinterpret_cast<void*>((sal_uInt32)TO_USER)) + 1;
+        sal_Int32 nPos = m_pTypeLB->GetEntryPos(reinterpret_cast<void*>(sal_uInt32(TO_USER))) + 1;
         for(sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
         {
             nPos = m_pTypeLB->InsertEntry(rSh.GetTOXType(TOX_USER, nUser)->GetTypeName(), nPos);
@@ -1295,7 +1295,7 @@ DeactivateRC SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
         _pSet->Put(SfxUInt16Item(FN_PARAM_TOX_TYPE,
-            (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pTypeLB->GetSelectedEntryData())));
+            static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pTypeLB->GetSelectedEntryData()))));
     FillTOXDescription();
     return DeactivateRC::LeavePage;
 }
@@ -2142,7 +2142,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(0);
                         m_pFirstKeyLB->SelectEntryPos(
-                            m_pFirstKeyLB->GetEntryPos(reinterpret_cast<void*>((sal_uIntPtr)pKey->eField)));
+                            m_pFirstKeyLB->GetEntryPos(reinterpret_cast<void*>(static_cast<sal_uIntPtr>(pKey->eField))));
                         m_pFirstSortUpRB->Check(pKey->bSortAscending);
                         m_pFirstSortDownRB->Check(!pKey->bSortAscending);
                     }
@@ -2150,7 +2150,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(1);
                         m_pSecondKeyLB->SelectEntryPos(
-                            m_pSecondKeyLB->GetEntryPos(reinterpret_cast<void*>((sal_uIntPtr)pKey->eField)));
+                            m_pSecondKeyLB->GetEntryPos(reinterpret_cast<void*>(static_cast<sal_uIntPtr>(pKey->eField))));
                         m_pSecondSortUpRB->Check(pKey->bSortAscending);
                         m_pSecondSortDownRB->Check(!pKey->bSortAscending);
                     }
@@ -2158,7 +2158,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(2);
                         m_pThirdKeyLB->SelectEntryPos(
-                            m_pThirdKeyLB->GetEntryPos(reinterpret_cast<void*>((sal_uIntPtr)pKey->eField)));
+                            m_pThirdKeyLB->GetEntryPos(reinterpret_cast<void*>(static_cast<sal_uIntPtr>(pKey->eField))));
                         m_pThirdSortUpRB->Check(pKey->bSortAscending);
                         m_pThirdSortDownRB->Check(!pKey->bSortAscending);
                     }
@@ -2271,7 +2271,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, Button*, pButton, void)
         sal_Int32 nSelPos = m_pAuthFieldsLB->GetSelectedEntryPos();
         const OUString sToInsert(m_pAuthFieldsLB->GetSelectedEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
-        aInsert.nAuthorityField = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pAuthFieldsLB->GetEntryData(nSelPos));
+        aInsert.nAuthorityField = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>(m_pAuthFieldsLB->GetEntryData(nSelPos)));
         m_pTokenWIN->InsertAtSelection(SwForm::GetFormAuth(), aInsert);
         m_pAuthFieldsLB->RemoveEntry(sToInsert);
         m_pAuthFieldsLB->SelectEntryPos( nSelPos ? nSelPos - 1 : 0);
@@ -2296,7 +2296,7 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     //fill it into the ListBox
     sal_uInt32 nData = rToken.nAuthorityField;
     sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_ARY[nData]));
-    m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)nData));
+    m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(nData)));
 }
 
 void SwTOXEntryTabPage::SetFocus2theAllBtn()
@@ -2421,7 +2421,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox, void)
         for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
             sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_ARY[i]));
-            m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)i));
+            m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(i)));
         }
 
         // #i21237#
@@ -2434,7 +2434,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox, void)
             if(TOKEN_AUTHORITY == aToken.eTokenType)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
-                sal_Int32  nLstBoxPos = m_pAuthFieldsLB->GetEntryPos( reinterpret_cast<void*>((sal_uIntPtr)nSearch) );
+                sal_Int32  nLstBoxPos = m_pAuthFieldsLB->GetEntryPos( reinterpret_cast<void*>(static_cast<sal_uIntPtr>(nSearch)) );
                 OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
                 m_pAuthFieldsLB->RemoveEntry(nLstBoxPos);
             }
@@ -2569,7 +2569,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
 IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox&, rBox, void)
 {
     OUString sEntry = rBox.GetSelectedEntry();
-    const sal_uInt16 nId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rBox.GetSelectedEntryData());
+    const sal_uInt16 nId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rBox.GetSelectedEntryData()));
     const bool bEqualsNoCharStyle = sEntry == sNoCharStyle;
     m_pEditStylePB->Enable(!bEqualsNoCharStyle);
     if (bEqualsNoCharStyle)

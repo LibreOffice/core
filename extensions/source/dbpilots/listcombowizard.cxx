@@ -177,7 +177,7 @@ namespace dbp
             if (isListBox())
             {
                 // BoundColumn: 1
-                getContext().xObjectModel->setPropertyValue("BoundColumn", makeAny((sal_Int16)1));
+                getContext().xObjectModel->setPropertyValue("BoundColumn", makeAny(sal_Int16(1)));
 
                 // build the statement to set as list source
                 OUString sStatement = "SELECT " +

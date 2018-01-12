@@ -214,7 +214,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
         SwUndoDrawGroup *const pUndo = (!GetIDocumentUndoRedo().DoesUndo())
                                  ? nullptr
-                                 : new SwUndoDrawGroup( (sal_uInt16)rMrkList.GetMarkCount() , this);
+                                 : new SwUndoDrawGroup( static_cast<sal_uInt16>(rMrkList.GetMarkCount()) , this);
 
         // #i53320#
         bool bGroupMembersNotPositioned( false );
@@ -434,7 +434,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 SwUndoDrawDelete *const pUndo =
                     (!GetIDocumentUndoRedo().DoesUndo())
                         ? nullptr
-                            : new SwUndoDrawDelete( (sal_uInt16)rMrkList.GetMarkCount(), this );
+                            : new SwUndoDrawDelete( static_cast<sal_uInt16>(rMrkList.GetMarkCount()), this );
 
                 // Destroy ContactObjects, save formats.
                 for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )

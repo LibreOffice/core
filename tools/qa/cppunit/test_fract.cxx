@@ -36,7 +36,7 @@ public:
     {
         const Fraction aFract(1082130431,1073741824);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #1 not approximately equal to 1.007812499068677",
-                                rtl::math::approxEqual((double)aFract,1.007812499068677) );
+                                rtl::math::approxEqual(static_cast<double>(aFract),1.007812499068677) );
 
         Fraction aFract2( aFract );
         aFract2.ReduceInaccurate(8);

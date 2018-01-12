@@ -277,31 +277,31 @@ void PCDReader::ReadImage()
                 nXPair = nx >> 1;
                 if ( ndy == 0 )
                 {
-                    nL = (long)pL0[ nx ];
+                    nL = static_cast<long>(pL0[ nx ]);
                     if (( nx & 1 ) == 0 )
                     {
-                        nCb = (long)pCb[ nXPair ];
-                        nCr = (long)pCr[ nXPair ];
+                        nCb = static_cast<long>(pCb[ nXPair ]);
+                        nCr = static_cast<long>(pCr[ nXPair ]);
                     }
                     else
                     {
-                        nCb = ( ( (long)pCb[ nXPair ] ) + ( (long)pCb[ nXPair + 1 ] ) ) >> 1;
-                        nCr = ( ( (long)pCr[ nXPair ] ) + ( (long)pCr[ nXPair + 1 ] ) ) >> 1;
+                        nCb = ( static_cast<long>(pCb[ nXPair ]) + static_cast<long>(pCb[ nXPair + 1 ]) ) >> 1;
+                        nCr = ( static_cast<long>(pCr[ nXPair ]) + static_cast<long>(pCr[ nXPair + 1 ]) ) >> 1;
                     }
                 }
                 else {
                     nL = pL1[ nx ];
                     if ( ( nx & 1 ) == 0 )
                     {
-                        nCb = ( ( (long)pCb[ nXPair ] ) + ( (long)pCbN[ nXPair ] ) ) >> 1;
-                        nCr = ( ( (long)pCr[ nXPair ] ) + ( (long)pCrN[ nXPair ] ) ) >> 1;
+                        nCb = ( static_cast<long>(pCb[ nXPair ]) + static_cast<long>(pCbN[ nXPair ]) ) >> 1;
+                        nCr = ( static_cast<long>(pCr[ nXPair ]) + static_cast<long>(pCrN[ nXPair ]) ) >> 1;
                     }
                     else
                     {
-                        nCb = ( ( (long)pCb[ nXPair ] ) + ( (long)pCb[ nXPair + 1 ] ) +
-                               ( (long)pCbN[ nXPair ] ) + ( (long)pCbN[ nXPair + 1 ] ) ) >> 2;
-                        nCr = ( ( (long)pCr[ nXPair ] ) + ( (long)pCr[ nXPair + 1] ) +
-                               ( (long)pCrN[ nXPair ] ) + ( (long)pCrN[ nXPair + 1 ] ) ) >> 2;
+                        nCb = ( static_cast<long>(pCb[ nXPair ]) + static_cast<long>(pCb[ nXPair + 1 ]) +
+                               static_cast<long>(pCbN[ nXPair ]) + static_cast<long>(pCbN[ nXPair + 1 ]) ) >> 2;
+                        nCr = ( static_cast<long>(pCr[ nXPair ]) + static_cast<long>(pCr[ nXPair + 1]) +
+                               static_cast<long>(pCrN[ nXPair ]) + static_cast<long>(pCrN[ nXPair + 1 ]) ) >> 2;
                     }
                 }
                 // conversion of nL,nCb,nCr in nRed,nGreen,nBlue:
@@ -328,16 +328,16 @@ void PCDReader::ReadImage()
                 if ( nOrientation < 2 )
                 {
                     if ( nOrientation == 0 )
-                        mpAcc->SetPixel( ny, nx, BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
+                        mpAcc->SetPixel( ny, nx, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                     else
-                        mpAcc->SetPixel( nWidth - 1 - nx, ny, BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
+                        mpAcc->SetPixel( nWidth - 1 - nx, ny, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                 }
                 else
                 {
                     if ( nOrientation == 2 )
-                        mpAcc->SetPixel( nHeight - 1 - ny, ( nWidth - 1 - nx ), BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
+                        mpAcc->SetPixel( nHeight - 1 - ny, ( nWidth - 1 - nx ), BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                     else
-                        mpAcc->SetPixel( nx, ( nHeight - 1 - ny ), BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
+                        mpAcc->SetPixel( nx, ( nHeight - 1 - ny ), BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                 }
             }
         }

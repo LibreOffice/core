@@ -96,11 +96,11 @@ bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, const OUString&
 
     css::uno::Sequence< css::beans::PropertyValue > aFilterData( 3 );
     aFilterData[ 0 ].Name = "Interlaced";
-    aFilterData[ 0 ].Value <<= (sal_Int32) 0;
+    aFilterData[ 0 ].Value <<= sal_Int32(0);
     aFilterData[ 1 ].Name = "Compression";
-    aFilterData[ 1 ].Value <<= (sal_Int32) 9;
+    aFilterData[ 1 ].Value <<= sal_Int32(9);
     aFilterData[ 2 ].Name = "Quality";
-    aFilterData[ 2 ].Value <<= (sal_Int32) 90;
+    aFilterData[ 2 ].Value <<= sal_Int32(90);
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aType );
 

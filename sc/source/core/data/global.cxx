@@ -592,7 +592,7 @@ rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
         sal_Int32 nVal = rCharSet.toInt32();
         if ( nVal == RTL_TEXTENCODING_DONTKNOW )
             return osl_getThreadTextEncoding();
-        return (rtl_TextEncoding) nVal;
+        return static_cast<rtl_TextEncoding>(nVal);
     }
     // old CharSet values for compatibility
     else if (rCharSet.equalsIgnoreAsciiCase("ANSI")     ) return RTL_TEXTENCODING_MS_1252;

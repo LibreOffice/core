@@ -1281,7 +1281,7 @@ void SdrGrafObj::ImpSetAttrToGrafInfo()
     aGrafInfo.SetChannelG( rSet.Get( SDRATTR_GRAFGREEN ).GetValue() );
     aGrafInfo.SetChannelB( rSet.Get( SDRATTR_GRAFBLUE ).GetValue() );
     aGrafInfo.SetGamma( rSet.Get( SDRATTR_GRAFGAMMA ).GetValue() * 0.01 );
-    aGrafInfo.SetTransparency( (sal_uInt8) FRound( std::min( nTrans, (sal_uInt16) 100 )  * 2.55 ) );
+    aGrafInfo.SetTransparency( static_cast<sal_uInt8>(FRound( std::min( nTrans, sal_uInt16(100) )  * 2.55 )) );
     aGrafInfo.SetInvert( rSet.Get( SDRATTR_GRAFINVERT ).GetValue() );
     aGrafInfo.SetDrawMode( rSet.Get( SDRATTR_GRAFMODE ).GetValue() );
     aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
@@ -1311,21 +1311,21 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
              ( aSize.Width()  > aMaxSize.Width()  ) )&&
              aSize.Height() && aMaxSize.Height() )
         {
-            float fGrfWH =  (float)aSize.Width() /
-                            (float)aSize.Height();
-            float fWinWH =  (float)aMaxSize.Width() /
-                            (float)aMaxSize.Height();
+            float fGrfWH =  static_cast<float>(aSize.Width()) /
+                            static_cast<float>(aSize.Height());
+            float fWinWH =  static_cast<float>(aMaxSize.Width()) /
+                            static_cast<float>(aMaxSize.Height());
 
             // Scale graphic to page size
             if ( fGrfWH < fWinWH )
             {
-                aSize.Width() = (long)(aMaxSize.Height() * fGrfWH);
+                aSize.Width() = static_cast<long>(aMaxSize.Height() * fGrfWH);
                 aSize.Height()= aMaxSize.Height();
             }
             else if ( fGrfWH > 0.F )
             {
                 aSize.Width() = aMaxSize.Width();
-                aSize.Height()= (long)(aMaxSize.Width() / fGrfWH);
+                aSize.Height()= static_cast<long>(aMaxSize.Width() / fGrfWH);
             }
 
             aPos = rMaxRect.Center();
@@ -1504,7 +1504,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
                 sal_uInt8 * pBuffer = new sal_uInt8[ nSize ];
                 memcpy( pBuffer, pSourceData, nSize );
 
-                SvMemoryStream* pStream = new SvMemoryStream( static_cast<void*>(pBuffer), (std::size_t)nSize, StreamMode::READ );
+                SvMemoryStream* pStream = new SvMemoryStream( static_cast<void*>(pBuffer), static_cast<std::size_t>(nSize), StreamMode::READ );
                 pStream->ObjectOwnsMemory( true );
                 xStream.set( new utl::OInputStreamWrapper( pStream, true ) );
             }

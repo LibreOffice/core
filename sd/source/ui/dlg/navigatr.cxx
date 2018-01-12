@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
 
     if (ePage != PAGE_NONE)
     {
-        SfxUInt16Item aItem( SID_NAVIGATOR_PAGE, (sal_uInt16)ePage );
+        SfxUInt16Item aItem( SID_NAVIGATOR_PAGE, static_cast<sal_uInt16>(ePage) );
         mpBindings->GetDispatcher()->ExecuteList(SID_NAVIGATOR_PAGE,
                 SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
     }
@@ -276,7 +276,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
             meDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
         }
 
-        pMenu->CheckItem( (sal_uInt16)meDragType );
+        pMenu->CheckItem( static_cast<sal_uInt16>(meDragType) );
         pMenu->SetSelectHdl( LINK( this, SdNavigatorWin, MenuSelectHdl ) );
 
         pMenu->Execute( this, maToolbox->GetItemRect( nId ), PopupMenuFlags::ExecuteDown );

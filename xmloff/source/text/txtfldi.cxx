@@ -819,7 +819,7 @@ void XMLPageNumberImportContext::ProcessAttribute(
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(nTmp, sAttrValue))
             {
-                nPageAdjust = (sal_Int16)nTmp;
+                nPageAdjust = static_cast<sal_Int16>(nTmp);
             }
             break;
         }
@@ -1022,7 +1022,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
             if (::sax::Converter::convertDuration(fTmp, sAttrValue))
             {
                 // convert to minutes
-                nAdjust = (sal_Int32)::rtl::math::approxFloor(fTmp * 60 * 24);
+                nAdjust = static_cast<sal_Int32>(::rtl::math::approxFloor(fTmp * 60 * 24));
             }
             break;
         }
@@ -2182,7 +2182,7 @@ void XMLChapterImportContext::ProcessAttribute(
             if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
                                                 aChapterDisplayMap))
             {
-                nFormat = (sal_Int16)nTmp;
+                nFormat = static_cast<sal_Int16>(nTmp);
             }
             break;
         }
@@ -2195,7 +2195,7 @@ void XMLChapterImportContext::ProcessAttribute(
                 ))
             {
                 // API numbers 0..9, we number 1..10
-                nLevel = (sal_Int8)nTmp;
+                nLevel = static_cast<sal_Int8>(nTmp);
                 nLevel--;
             }
             break;
@@ -2393,7 +2393,7 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
         sal_Int32 nTmp(0);
         if (::sax::Converter::convertNumber(nTmp, sAttrValue))
         {
-            nAdjust = (sal_Int16)nTmp;
+            nAdjust = static_cast<sal_Int16>(nTmp);
         }
         break;
     }
@@ -3087,7 +3087,7 @@ void XMLBibliographyFieldImportContext::StartElement(
                     nTmp, xAttrList->getValueByIndex(i),
                     aBibliographyDataTypeMap))
                 {
-                    aAny <<= (sal_Int16)nTmp;
+                    aAny <<= static_cast<sal_Int16>(nTmp);
                     aValue.Value = aAny;
 
                     aValues.push_back(aValue);

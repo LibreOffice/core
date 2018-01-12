@@ -387,7 +387,7 @@ void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatas
             aIndirect != rMap.end();
             ++aIndirect
         )
-        getWriteOutputSet()->ClearItem( (sal_uInt16)aIndirect->first );
+        getWriteOutputSet()->ClearItem( static_cast<sal_uInt16>(aIndirect->first) );
 
     // extract all relevant data from the property set of the data source
     m_pImpl->translateProperties(_rxDatasource, *getWriteOutputSet());

@@ -157,7 +157,7 @@ namespace drawinglayer {
 /* ThumbnailView types */
 
 #define THUMBNAILVIEW_APPEND         ((sal_uInt16)-1)
-#define THUMBNAILVIEW_ITEM_NOTFOUND  ((sal_uInt16)-1)
+#define THUMBNAILVIEW_ITEM_NOTFOUND  (sal_uInt16(-1))
 
 // Display all the available items in the thumbnail.
 class ViewFilterAll

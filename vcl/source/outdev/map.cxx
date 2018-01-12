@@ -108,9 +108,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomX )
             rThresRes.mnThresPixToLogX = LONG_MAX;
         else if ( nProductX >= 0 )
-            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = static_cast<long>((sal_uLong(LONG_MAX) - static_cast<sal_uLong>( nProductX/2)) / nDenomX);
         else
-            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = static_cast<long>((sal_uLong(LONG_MAX) + static_cast<sal_uLong>(-nProductX/2)) / nDenomX);
     }
 
     if ( nDPIY && (LONG_MAX / nDPIY < std::abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
@@ -133,9 +133,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomY )
             rThresRes.mnThresPixToLogY = LONG_MAX;
         else if ( nProductY >= 0 )
-            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = static_cast<long>((sal_uLong(LONG_MAX) - static_cast<sal_uLong>( nProductY/2)) / nDenomY);
         else
-            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = static_cast<long>((sal_uLong(LONG_MAX) + static_cast<sal_uLong>(-nProductY/2)) / nDenomY);
     }
 
     rThresRes.mnThresLogToPixX /= 2;
@@ -275,7 +275,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                 aX += BigInt(nXNumerator / 2);
         }
         aX /= BigInt(nXNumerator);
-        rMapRes.mnMapOfsX = (long)aX + aOrigin.X();
+        rMapRes.mnMapOfsX = static_cast<long>(aX) + aOrigin.X();
         BigInt aY( rMapRes.mnMapOfsY );
         aY *= BigInt( aScaleY.GetDenominator() );
         if( rMapRes.mnMapOfsY >= 0 )
@@ -293,7 +293,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                 aY += BigInt(nYNumerator / 2);
         }
         aY /= BigInt(nYNumerator);
-        rMapRes.mnMapOfsY = (long)aY + aOrigin.Y();
+        rMapRes.mnMapOfsY = static_cast<long>(aY) + aOrigin.Y();
     }
 
     // calculate scaling factor according to MapMode
@@ -366,10 +366,10 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
         n64 *= nMapNum;
         n64 *= nDPI;
         if( nMapDenom == 1 )
-            n = (long)n64;
+            n = static_cast<long>(n64);
         else
         {
-            n = (long)(2 * n64 / nMapDenom);
+            n = static_cast<long>(2 * n64 / nMapDenom);
             if( n < 0 ) --n; else ++n;
             n /= 2;
         }
@@ -397,7 +397,7 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
     {
         sal_Int64 n64 = n;
         n64 *= nMapDenom;
-        n = (long)(2 * n64 / nDenom);
+        n = static_cast<long>(2 * n64 / nDenom);
     }
     if( n < 0 ) --n; else ++n;
     return (n / 2);
@@ -858,10 +858,10 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
         {
             mpOutDevData->mpViewTransform = new basegfx::B2DHomMatrix;
 
-            const double fScaleFactorX((double)mnDPIX * (double)maMapRes.mnMapScNumX / (double)maMapRes.mnMapScDenomX);
-            const double fScaleFactorY((double)mnDPIY * (double)maMapRes.mnMapScNumY / (double)maMapRes.mnMapScDenomY);
-            const double fZeroPointX(((double)maMapRes.mnMapOfsX * fScaleFactorX) + (double)mnOutOffOrigX);
-            const double fZeroPointY(((double)maMapRes.mnMapOfsY * fScaleFactorY) + (double)mnOutOffOrigY);
+            const double fScaleFactorX(static_cast<double>(mnDPIX) * static_cast<double>(maMapRes.mnMapScNumX) / static_cast<double>(maMapRes.mnMapScDenomX));
+            const double fScaleFactorY(static_cast<double>(mnDPIY) * static_cast<double>(maMapRes.mnMapScNumY) / static_cast<double>(maMapRes.mnMapScDenomY));
+            const double fZeroPointX((static_cast<double>(maMapRes.mnMapOfsX) * fScaleFactorX) + static_cast<double>(mnOutOffOrigX));
+            const double fZeroPointY((static_cast<double>(maMapRes.mnMapOfsY) * fScaleFactorY) + static_cast<double>(mnOutOffOrigY));
 
             mpOutDevData->mpViewTransform->set(0, 0, fScaleFactorX);
             mpOutDevData->mpViewTransform->set(1, 1, fScaleFactorY);
@@ -907,10 +907,10 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation( const MapMode& rMapMo
 
     basegfx::B2DHomMatrix aTransform;
 
-    const double fScaleFactorX((double)mnDPIX * (double)aMapRes.mnMapScNumX / (double)aMapRes.mnMapScDenomX);
-    const double fScaleFactorY((double)mnDPIY * (double)aMapRes.mnMapScNumY / (double)aMapRes.mnMapScDenomY);
-    const double fZeroPointX(((double)aMapRes.mnMapOfsX * fScaleFactorX) + (double)mnOutOffOrigX);
-    const double fZeroPointY(((double)aMapRes.mnMapOfsY * fScaleFactorY) + (double)mnOutOffOrigY);
+    const double fScaleFactorX(static_cast<double>(mnDPIX) * static_cast<double>(aMapRes.mnMapScNumX) / static_cast<double>(aMapRes.mnMapScDenomX));
+    const double fScaleFactorY(static_cast<double>(mnDPIY) * static_cast<double>(aMapRes.mnMapScNumY) / static_cast<double>(aMapRes.mnMapScDenomY));
+    const double fZeroPointX((static_cast<double>(aMapRes.mnMapOfsX) * fScaleFactorX) + static_cast<double>(mnOutOffOrigX));
+    const double fZeroPointY((static_cast<double>(aMapRes.mnMapOfsY) * fScaleFactorY) + static_cast<double>(mnOutOffOrigY));
 
     aTransform.set(0, 0, fScaleFactorX);
     aTransform.set(1, 1, fScaleFactorY);
@@ -1563,7 +1563,7 @@ static long fn5( const long n1,
 
             a7 /= n8;
         } // of else
-        return (long)a7;
+        return static_cast<long>(a7);
     } // of if
     else
     {
@@ -1599,7 +1599,7 @@ static long fn5( const long n1,
 
                 a7 /= n8;
             } // of else
-            return (long)a7;
+            return static_cast<long>(a7);
         } // of if
         else
         {
@@ -1619,7 +1619,7 @@ static long fn5( const long n1,
                     a7 += a9;
 
                 a7 /= a8;
-                return (long)a7;
+                return static_cast<long>(a7);
             } // of if
             else
             {
@@ -1656,7 +1656,7 @@ static long fn3( const long n1, const long n2, const long n3 )
             a4 += n3 / 2;
 
         a4 /= n3;
-        return (long)a4;
+        return static_cast<long>(a4);
     } // of if
     else
     {
@@ -1826,7 +1826,7 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
     {
         ENTER3(eUnitSource, eUnitDest);
 
-        const double fScaleFactor((double)nNumerator / (double)nDenominator);
+        const double fScaleFactor(static_cast<double>(nNumerator) / static_cast<double>(nDenominator));
         aTransform.set(0, 0, fScaleFactor);
         aTransform.set(1, 1, fScaleFactor);
     }
@@ -1923,7 +1923,7 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
 DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
 {
     if ( !mbMap )
-        return (DeviceCoordinate)nWidth;
+        return static_cast<DeviceCoordinate>(nWidth);
 
 #if VCL_FLOAT_DEVICE_PIXEL
     return (double)nWidth * maMapRes.mfScaleX * mnDPIX;

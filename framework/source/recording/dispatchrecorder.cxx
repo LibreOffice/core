@@ -224,7 +224,7 @@ void DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUStringBuff
 
                     // add the character constant
                     aArgumentBuffer.append("CHR$(");
-                    aArgumentBuffer.append( (sal_Int32) pChars[nChar] );
+                    aArgumentBuffer.append( static_cast<sal_Int32>(pChars[nChar]) );
                     aArgumentBuffer.append(")");
                 }
                 else
@@ -347,7 +347,7 @@ void DispatchRecorder::implts_recordMacro( const OUString& aURL,
         aScriptBuffer.append("dim ");
         aScriptBuffer.append     (sArrayName);
         aScriptBuffer.append("(");
-        aScriptBuffer.append     ((sal_Int32)(nValidArgs-1)); // 0 based!
+        aScriptBuffer.append     (static_cast<sal_Int32>(nValidArgs-1)); // 0 based!
         aScriptBuffer.append(") as new com.sun.star.beans.PropertyValue\n");
         aScriptBuffer.append     (aArgumentBuffer.makeStringAndClear());
         aScriptBuffer.append("\n");
@@ -390,7 +390,7 @@ sal_Int32 SAL_CALL DispatchRecorder::getCount()
 
 css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
 {
-    if (idx >= (sal_Int32)m_aStatements.size()) {
+    if (idx >= static_cast<sal_Int32>(m_aStatements.size())) {
         throw css::lang::IndexOutOfBoundsException( "Dispatch recorder out of bounds"  );
    }
 
@@ -409,7 +409,7 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::An
                           Reference< XInterface >(), 2 );
     }
 
-    if (idx >= (sal_Int32)m_aStatements.size()) {
+    if (idx >= static_cast<sal_Int32>(m_aStatements.size())) {
                 throw css::lang::IndexOutOfBoundsException(
                         "Dispatch recorder out of bounds"  );
 

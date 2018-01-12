@@ -522,26 +522,26 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
 
             case SUBTOTAL_FUNC_AVE:
                 if ( nCount > 0 )
-                    fResult = fVal / (double) nCount;
+                    fResult = fVal / static_cast<double>(nCount);
                 break;
 
             //TODO: use safe mul for fVal * fVal
 
             case SUBTOTAL_FUNC_STD:
                 if ( nCount >= 2 )
-                    fResult = sqrt((fAux - fVal*fVal/(double)(nCount)) / (double)(nCount-1));
+                    fResult = sqrt((fAux - fVal*fVal/static_cast<double>(nCount)) / static_cast<double>(nCount-1));
                 break;
             case SUBTOTAL_FUNC_VAR:
                 if ( nCount >= 2 )
-                    fResult = (fAux - fVal*fVal/(double)(nCount)) / (double)(nCount-1);
+                    fResult = (fAux - fVal*fVal/static_cast<double>(nCount)) / static_cast<double>(nCount-1);
                 break;
             case SUBTOTAL_FUNC_STDP:
                 if ( nCount > 0 )
-                    fResult = sqrt((fAux - fVal*fVal/(double)(nCount)) / (double)nCount);
+                    fResult = sqrt((fAux - fVal*fVal/static_cast<double>(nCount)) / static_cast<double>(nCount));
                 break;
             case SUBTOTAL_FUNC_VARP:
                 if ( nCount > 0 )
-                    fResult = (fAux - fVal*fVal/(double)(nCount)) / (double)nCount;
+                    fResult = (fAux - fVal*fVal/static_cast<double>(nCount)) / static_cast<double>(nCount);
                 break;
             case SUBTOTAL_FUNC_MED:
                 {
@@ -812,19 +812,19 @@ long ScDPResultData::GetRowStartMeasure() const
 
 ScSubTotalFunc ScDPResultData::GetMeasureFunction(long nMeasure) const
 {
-    OSL_ENSURE((size_t) nMeasure < maMeasureFuncs.size(), "bumm");
+    OSL_ENSURE(static_cast<size_t>(nMeasure) < maMeasureFuncs.size(), "bumm");
     return maMeasureFuncs[nMeasure];
 }
 
 const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(long nMeasure) const
 {
-    OSL_ENSURE((size_t) nMeasure < maMeasureRefs.size(), "bumm");
+    OSL_ENSURE(static_cast<size_t>(nMeasure) < maMeasureRefs.size(), "bumm");
     return maMeasureRefs[nMeasure];
 }
 
 sheet::DataPilotFieldOrientation ScDPResultData::GetMeasureRefOrient(long nMeasure) const
 {
-    OSL_ENSURE((size_t) nMeasure < maMeasureRefOrients.size(), "bumm");
+    OSL_ENSURE(static_cast<size_t>(nMeasure) < maMeasureRefOrients.size(), "bumm");
     return maMeasureRefOrients[nMeasure];
 }
 
@@ -846,7 +846,7 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
     }
     else
     {
-        OSL_ENSURE((size_t) nMeasure < maMeasureFuncs.size(), "bumm");
+        OSL_ENSURE(static_cast<size_t>(nMeasure) < maMeasureFuncs.size(), "bumm");
         const ScDPDimension* pDataDim = mrSource.GetDataDimension(nMeasure);
         if (pDataDim)
         {
@@ -2083,7 +2083,7 @@ void ScDPDataMember::FillDataRow(
             pDataChild->FillDataRow(pRefChild, rFilterCxt, rSequence, nMeasure, bIsSubTotalRow, rSubState);
             rFilterCxt.mnCol = nOldCol; // Revert to the old column value before the call.
         }
-        rFilterCxt.mnCol += (sal_uInt16)pRefMember->GetSize( nMeasure );
+        rFilterCxt.mnCol += static_cast<sal_uInt16>(pRefMember->GetSize( nMeasure ));
 
         if ( bTitleLine )           // title column is included in GetSize, so the following
             --rFilterCxt.mnCol;                 // positions are calculated with the normal values
@@ -3577,7 +3577,7 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
     long nCount = maMembers.size();
     for (long i=0; i<nCount; i++)
     {
-        ScDPDataMember* pMember = maMembers[(sal_uInt16)i];
+        ScDPDataMember* pMember = maMembers[static_cast<sal_uInt16>(i)];
 
         // always first member for data layout dim
         if ( bIsDataLayout || ( !aDataMembers.empty() && pMember->IsNamedItem(aDataMembers[0]) ) )
@@ -3635,7 +3635,7 @@ void ScDPDataDimension::FillDataRow(
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
         if ( pRefMember->IsVisible() )  //TODO: here or in ScDPDataMember::FillDataRow ???
         {
-            const ScDPDataMember* pDataMember = maMembers[(sal_uInt16)nMemberPos];
+            const ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(nMemberPos)];
             pDataMember->FillDataRow(pRefMember, rFilterCxt, rSequence, nMemberMeasure, bIsSubTotalRow, rSubState);
         }
     }
@@ -3663,7 +3663,7 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
 
         // Calculate must be called even if the member is not visible (for use as reference value)
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
-        ScDPDataMember* pDataMember = maMembers[(sal_uInt16)nMemberPos];
+        ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(nMemberPos)];
         pDataMember->UpdateDataRow( pRefMember, nMemberMeasure, bIsSubTotalRow, rSubState );
     }
 }
@@ -3698,7 +3698,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //TODO: here or in ScDPDataMember ???
         {
-            ScDPDataMember* pDataMember = maMembers[(sal_uInt16)i];
+            ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(i)];
             pDataMember->SortMembers( pRefMember );
         }
     }

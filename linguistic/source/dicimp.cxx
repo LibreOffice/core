@@ -726,14 +726,14 @@ bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry >& xDic
         Reference< XSpellAlternatives > xTmpRes;
         xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
         Sequence< css::beans::PropertyValue > aEmptySeq;
-        if (xSpell.is() && (xSpell->isValid( SPELLML_SUPPORT, (sal_uInt16)nLanguage, aEmptySeq )))
+        if (xSpell.is() && (xSpell->isValid( SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage), aEmptySeq )))
         {
             // "Grammar By" sample word is a Hunspell dictionary word?
-            if (xSpell->isValid( xDicEntry->getReplacementText(), (sal_uInt16)nLanguage, aEmptySeq ))
+            if (xSpell->isValid( xDicEntry->getReplacementText(), static_cast<sal_uInt16>(nLanguage), aEmptySeq ))
             {
                 xTmpRes = xSpell->spell( "<?xml?><query type='add'><word>" +
                     xDicEntry->getDictionaryWord() + "</word><word>" + xDicEntry->getReplacementText() +
-                    "</word></query>", (sal_uInt16)nLanguage, aEmptySeq );
+                    "</word></query>", static_cast<sal_uInt16>(nLanguage), aEmptySeq );
                 bRes = true;
             } else
                 bRes = false;
@@ -810,7 +810,7 @@ sal_Int32 SAL_CALL DictionaryNeo::getCount(  )
 
     if (bNeedEntries)
         loadEntries( aMainURL );
-    return (sal_Int32)aEntries.size();
+    return static_cast<sal_Int32>(aEntries.size());
 }
 
 Locale SAL_CALL DictionaryNeo::getLocale(  )
@@ -842,7 +842,7 @@ uno::Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
 
     sal_Int32 nPos;
     bool bFound = seekEntry( aWord, &nPos, true );
-    DBG_ASSERT(!bFound || nPos < (sal_Int32)aEntries.size(), "lng : index out of range");
+    DBG_ASSERT(!bFound || nPos < static_cast<sal_Int32>(aEntries.size()), "lng : index out of range");
 
     return bFound ? aEntries[ nPos ]
                     : uno::Reference< XDictionaryEntry >();
@@ -896,7 +896,7 @@ sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
 
         sal_Int32 nPos;
         bool bFound = seekEntry( aWord, &nPos );
-        DBG_ASSERT(!bFound || nPos < (sal_Int32)aEntries.size(), "lng : index out of range");
+        DBG_ASSERT(!bFound || nPos < static_cast<sal_Int32>(aEntries.size()), "lng : index out of range");
 
         // remove element if found
         if (bFound)

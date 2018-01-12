@@ -714,7 +714,7 @@ IMPL_STATIC_LINK(
             pNext = pBox->GetNextEntryInView(pNext);
             if(!pNext)
             {
-                pBox->ScrollOutputArea( -(short)(nChildCount - i + 1) );
+                pBox->ScrollOutputArea( -static_cast<short>(nChildCount - i + 1) );
                 break;
             }
             else
@@ -724,7 +724,7 @@ IMPL_STATIC_LINK(
                 Point aPos(pBox->GetEntryPosition(pNext));
                 if(aPos.Y()+nHeight > aSz.Height())
                 {
-                    pBox->ScrollOutputArea( -(short)(nChildCount - i + 1) );
+                    pBox->ScrollOutputArea( -static_cast<short>(nChildCount - i + 1) );
                     break;
                 }
             }
@@ -1123,10 +1123,10 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 if( SfxItemState::DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<const SfxUInt16Item*>(pItem)->GetValue() ) );
                 else
-                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
+                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<sal_uInt16>(aMisc.GetYear2000()) ) );
             }
             else
-                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
+                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<sal_uInt16>(aMisc.GetYear2000()) ) );
 
 
             // miscellaneous - Tabulator
@@ -1160,8 +1160,8 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 nMinLead = xProp->getHyphMinLeading();
                 nMinTrail = xProp->getHyphMinTrailing();
             }
-            aHyphen.GetMinLead()  = (sal_uInt8)nMinLead;
-            aHyphen.GetMinTrail() = (sal_uInt8)nMinTrail;
+            aHyphen.GetMinLead()  = static_cast<sal_uInt8>(nMinLead);
+            aHyphen.GetMinTrail() = static_cast<sal_uInt8>(nMinTrail);
 
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
@@ -1336,8 +1336,8 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     {
         const SfxHyphenRegionItem* pHyphenItem = static_cast<const SfxHyphenRegionItem*>(pItem);
 
-        xProp->setHyphMinLeading( (sal_Int16) pHyphenItem->GetMinLead() );
-        xProp->setHyphMinTrailing( (sal_Int16) pHyphenItem->GetMinTrail() );
+        xProp->setHyphMinLeading( static_cast<sal_Int16>(pHyphenItem->GetMinLead()) );
+        xProp->setHyphMinTrailing( static_cast<sal_Int16>(pHyphenItem->GetMinTrail()) );
         bSaveSpellCheck = true;
     }
 
@@ -1476,7 +1476,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         nGroup = AddGroup( CuiResId(SID_FILTER_DLG_RES[0].first), nullptr, nullptr, SID_FILTER_DLG );
         for ( sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_FILTER_DLG_RES); ++i )
         {
-            nPageId = (sal_uInt16)SID_FILTER_DLG_RES[i].second;
+            nPageId = static_cast<sal_uInt16>(SID_FILTER_DLG_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 AddTabPage( nPageId, CuiResId(SID_FILTER_DLG_RES[i].first), nGroup );
         }
@@ -1490,7 +1490,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         nGroup = AddGroup(CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first), nullptr, nullptr, SID_LANGUAGE_OPTIONS );
         for (sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_LANGUAGE_OPTIONS_RES); ++i)
         {
-            nPageId = (sal_uInt16)SID_LANGUAGE_OPTIONS_RES[i].second;
+            nPageId = static_cast<sal_uInt16>(SID_LANGUAGE_OPTIONS_RES[i].second);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
             if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nPageId || aLanguageOptions.IsJapaneseFindEnabled() ) &&
@@ -1522,7 +1522,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 nGroup = AddGroup(CuiResId(SID_SW_EDITOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
                 for ( sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_SW_EDITOPTIONS_RES); ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SW_EDITOPTIONS_RES[i].second;
+                    nPageId = static_cast<sal_uInt16>(SID_SW_EDITOPTIONS_RES[i].second);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
                     if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || aLanguageOptions.IsCJKFontEnabled() ) &&
@@ -1541,7 +1541,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 nGroup = AddGroup(CuiResId(SID_SW_ONLINEOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
                 for( sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_SW_ONLINEOPTIONS_RES); ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SW_ONLINEOPTIONS_RES[i].second;
+                    nPageId = static_cast<sal_uInt16>(SID_SW_ONLINEOPTIONS_RES[i].second);
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         AddTabPage(nPageId, CuiResId(SID_SW_ONLINEOPTIONS_RES[i].first), nGroup);
                 }
@@ -1565,7 +1565,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SC_EDITOPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SC_EDITOPTIONS_RES[i].second;
+                    nPageId = static_cast<sal_uInt16>(SID_SC_EDITOPTIONS_RES[i].second);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
@@ -1588,7 +1588,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SD_EDITOPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SD_EDITOPTIONS_RES[i].second;
+                    nPageId = static_cast<sal_uInt16>(SID_SD_EDITOPTIONS_RES[i].second);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
@@ -1610,7 +1610,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SD_GRAPHIC_OPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SD_GRAPHIC_OPTIONS_RES[i].second;
+                    nPageId = static_cast<sal_uInt16>(SID_SD_GRAPHIC_OPTIONS_RES[i].second);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
@@ -1632,7 +1632,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 nGroup = AddGroup(CuiResId(SID_SM_EDITOPTIONS_RES[0].first), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
                 for ( sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_SM_EDITOPTIONS_RES); ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SM_EDITOPTIONS_RES[i].second;
+                    nPageId = static_cast<sal_uInt16>(SID_SM_EDITOPTIONS_RES[i].second);
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         AddTabPage( nPageId, CuiResId(SID_SM_EDITOPTIONS_RES[i].first), nGroup );
                 }
@@ -1651,7 +1651,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         nGroup = AddGroup( CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first), nullptr, nullptr, SID_SB_STARBASEOPTIONS );
         for ( sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_SB_STARBASEOPTIONS_RES); ++i )
         {
-            nPageId = (sal_uInt16)SID_SB_STARBASEOPTIONS_RES[i].second;
+            nPageId = static_cast<sal_uInt16>(SID_SB_STARBASEOPTIONS_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 AddTabPage( nPageId, CuiResId(SID_SB_STARBASEOPTIONS_RES[i].first), nGroup );
         }
@@ -1664,7 +1664,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         nGroup = AddGroup( CuiResId(SID_SCH_EDITOPTIONS_RES[0].first), nullptr, nullptr, SID_SCH_EDITOPTIONS );
         for ( sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_SCH_EDITOPTIONS_RES); ++i )
         {
-            nPageId = (sal_uInt16)SID_SCH_EDITOPTIONS_RES[i].second;
+            nPageId = static_cast<sal_uInt16>(SID_SCH_EDITOPTIONS_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                AddTabPage( nPageId, CuiResId(SID_SCH_EDITOPTIONS_RES[i].first), nGroup );
         }
@@ -1678,7 +1678,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
         for ( sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_INET_DLG_RES); ++i )
         {
-            nPageId = (sal_uInt16)SID_INET_DLG_RES[i].second;
+            nPageId = static_cast<sal_uInt16>(SID_INET_DLG_RES[i].second);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 #if defined(_WIN32)

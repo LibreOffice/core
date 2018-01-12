@@ -38,7 +38,7 @@ OTableFieldDesc::OTableFieldDesc()
     ,m_eOrderDir( ORDER_NONE )
     ,m_nIndex(0)
     ,m_nColWidth(0)
-    ,m_nColumnId((sal_uInt16)-1)
+    ,m_nColumnId(sal_uInt16(-1))
     ,m_bGroupBy(false)
     ,m_bVisible(false)
 {
@@ -59,7 +59,7 @@ OTableFieldDesc::OTableFieldDesc(const OUString& rT, const OUString& rF )
     ,m_eOrderDir( ORDER_NONE )
     ,m_nIndex(0)
     ,m_nColWidth(0)
-    ,m_nColumnId((sal_uInt16)-1)
+    ,m_nColumnId(sal_uInt16(-1))
     ,m_bGroupBy(false)
     ,m_bVisible(false)
 {
@@ -169,8 +169,8 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
     o_rSettings.put( "FunctionName", m_aFunctionName );
     o_rSettings.put( "DataType", m_eDataType );
     o_rSettings.put( "FunctionType", m_eFunctionType );
-    o_rSettings.put( "FieldType", (sal_Int32)m_eFieldType );
-    o_rSettings.put( "OrderDir", (sal_Int32)m_eOrderDir );
+    o_rSettings.put( "FieldType", static_cast<sal_Int32>(m_eFieldType) );
+    o_rSettings.put( "OrderDir", static_cast<sal_Int32>(m_eOrderDir) );
     o_rSettings.put( "ColWidth", m_nColWidth );
     o_rSettings.put( "GroupBy", m_bGroupBy );
     o_rSettings.put( "Visible", m_bVisible );

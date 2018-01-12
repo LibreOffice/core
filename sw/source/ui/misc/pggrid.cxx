@@ -289,8 +289,8 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
                 m_bHRulerChanged = true;
             }
             m_bVRulerChanged = true;
-            pView->GetHRuler().SetCharWidth((long)(m_pCharWidthMF->GetValue(FUNIT_TWIP)/56.7));
-            pView->GetVRuler().SetLineHeight((long)(m_pTextSizeMF->GetValue(FUNIT_TWIP)/56.7));
+            pView->GetHRuler().SetCharWidth(static_cast<long>(m_pCharWidthMF->GetValue(FUNIT_TWIP)/56.7));
+            pView->GetVRuler().SetLineHeight(static_cast<long>(m_pTextSizeMF->GetValue(FUNIT_TWIP)/56.7));
         }
 }
 
@@ -386,7 +386,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
     {
         if(m_pCharsPerLineNF == &rField)
         {
-            long nWidth = (long)(m_aPageSize.Width() / m_pCharsPerLineNF->GetValue());
+            long nWidth = static_cast<long>(m_aPageSize.Width() / m_pCharsPerLineNF->GetValue());
             m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(nWidth), FUNIT_TWIP);
             //prevent rounding errors in the MetricField by saving the used value
             m_nRubyUserValue = nWidth;

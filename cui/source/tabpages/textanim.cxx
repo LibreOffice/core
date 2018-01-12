@@ -247,7 +247,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         m_pTsbEndless->EnableTriState( false );
-        long nValue = (long) static_cast<const SdrTextAniCountItem*>(pItem)->GetValue();
+        long nValue = static_cast<long>(static_cast<const SdrTextAniCountItem*>(pItem)->GetValue());
         m_pNumFldCount->SetValue( nValue );
         if( nValue == 0 )
         {
@@ -280,7 +280,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         m_pTsbAuto->EnableTriState( false );
-        long nValue = (long) static_cast<const SdrTextAniDelayItem*>(pItem)->GetValue();
+        long nValue = static_cast<long>(static_cast<const SdrTextAniDelayItem*>(pItem)->GetValue());
         m_pMtrFldDelay->SetValue( nValue );
         if( nValue == 0 )
         {
@@ -305,7 +305,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         m_pTsbPixel->EnableTriState( false );
-        long nValue = (long) static_cast<const SdrTextAniAmountItem*>(pItem)->GetValue();
+        long nValue = static_cast<long>(static_cast<const SdrTextAniAmountItem*>(pItem)->GetValue());
         if( nValue <= 0 )
         {
             m_pTsbPixel->SetState( TRISTATE_TRUE );
@@ -420,7 +420,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
             }
         }
         if( bModified )
-            rAttrs->Put( SdrTextAniCountItem( (sal_uInt16) nValue ) );
+            rAttrs->Put( SdrTextAniCountItem( static_cast<sal_uInt16>(nValue) ) );
     }
 
     // delay
@@ -441,7 +441,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
             }
         }
         if( bModified )
-            rAttrs->Put( SdrTextAniDelayItem( (sal_uInt16) nValue ) );
+            rAttrs->Put( SdrTextAniDelayItem( static_cast<sal_uInt16>(nValue) ) );
     }
 
     // step size
@@ -460,7 +460,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
         {
             nValue = GetCoreValue( *m_pMtrFldAmount, eUnit );
         }
-        rAttrs->Put( SdrTextAniAmountItem( (sal_Int16) nValue ) );
+        rAttrs->Put( SdrTextAniAmountItem( static_cast<sal_Int16>(nValue) ) );
 
         bModified = true;
     }

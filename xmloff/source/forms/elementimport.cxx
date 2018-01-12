@@ -1208,9 +1208,9 @@ namespace xmloff
             OSL_ENSURE(_rValue.getLength() == 1, "OPasswordImport::handleAttribute: invalid echo char attribute!");
                 // we ourself should not have written values other than of length 1
             if (_rValue.getLength() >= 1)
-                aEchoChar.Value <<= (sal_Int16)_rValue[0];
+                aEchoChar.Value <<= static_cast<sal_Int16>(_rValue[0]);
             else
-                aEchoChar.Value <<= (sal_Int16)0;
+                aEchoChar.Value <<= sal_Int16(0);
             implPushBackPropertyValue(aEchoChar);
             return true;
         }
@@ -1243,7 +1243,7 @@ namespace xmloff
                 // create and store a new PropertyValue
                 PropertyValue aNewValue;
                 aNewValue.Name = pProperty->sPropertyName;
-                aNewValue.Value <<= (sal_Int16)::cppu::any2bool(aBooleanValue);
+                aNewValue.Value <<= static_cast<sal_Int16>(::cppu::any2bool(aBooleanValue));
 
                 implPushBackPropertyValue(aNewValue);
             }
@@ -1714,7 +1714,7 @@ namespace xmloff
         OSL_ENSURE((m_aListSource.size() + m_nEmptyListItems) == (m_aValueList.size() + m_nEmptyValueItems),
             "OListAndComboImport::implSelectCurrentItem: inconsistence between labels and values!");
 
-        sal_Int16 nItemNumber = (sal_Int16)(m_aListSource.size() - 1 + m_nEmptyListItems);
+        sal_Int16 nItemNumber = static_cast<sal_Int16>(m_aListSource.size() - 1 + m_nEmptyListItems);
         m_aSelectedSeq.push_back(nItemNumber);
     }
 
@@ -1723,7 +1723,7 @@ namespace xmloff
         OSL_ENSURE((m_aListSource.size() + m_nEmptyListItems) == (m_aValueList.size() + m_nEmptyValueItems),
             "OListAndComboImport::implDefaultSelectCurrentItem: inconsistence between labels and values!");
 
-        sal_Int16 nItemNumber = (sal_Int16)(m_aListSource.size() - 1 + m_nEmptyListItems);
+        sal_Int16 nItemNumber = static_cast<sal_Int16>(m_aListSource.size() - 1 + m_nEmptyListItems);
         m_aDefaultSelectedSeq.push_back(nItemNumber);
     }
 

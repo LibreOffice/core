@@ -174,8 +174,8 @@ HeaderBarItemBits::CLICKABLE, but HeaderBarItemBits::FIXEDPOS.
 class Accelerator;
 class ImplHeadItem;
 
-#define WB_BOTTOMBORDER         ((WinBits)0x0400)
-#define WB_BUTTONSTYLE          ((WinBits)0x0800)
+#define WB_BOTTOMBORDER         (WinBits(0x0400))
+#define WB_BUTTONSTYLE          (WinBits(0x0800))
 #define WB_STDHEADERBAR         (WB_BUTTONSTYLE | WB_BOTTOMBORDER)
 
 enum class HeaderBarItemBits
@@ -203,9 +203,9 @@ namespace o3tl
     template<> struct typed_flags<HeaderBarItemBits> : is_typed_flags<HeaderBarItemBits, 0x3fff> {};
 }
 
-#define HEADERBAR_APPEND            ((sal_uInt16)0xFFFF)
-#define HEADERBAR_ITEM_NOTFOUND     ((sal_uInt16)0xFFFF)
-#define HEADERBAR_FULLSIZE          ((long)1000000000)
+#define HEADERBAR_APPEND            (sal_uInt16(0xFFFF))
+#define HEADERBAR_ITEM_NOTFOUND     (sal_uInt16(0xFFFF))
+#define HEADERBAR_FULLSIZE          (long(1000000000))
 
 #define HEADERBAR_TEXTOFF           2
 

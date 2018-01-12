@@ -247,14 +247,14 @@ namespace drawinglayer
 
                         if(rDash.GetDots() || rDash.GetDashes())
                         {
-                            fFullDotDashLen = rDash.CreateDotDashArray(aDotDashArray, (double)nWidth);
+                            fFullDotDashLen = rDash.CreateDotDashArray(aDotDashArray, static_cast<double>(nWidth));
                         }
                     }
 
                     return attribute::SdrLineAttribute(
                         LineJointToB2DLineJoin(eJoint),
-                        (double)nWidth,
-                        (double)nTransparence * 0.01,
+                        static_cast<double>(nWidth),
+                        static_cast<double>(nTransparence) * 0.01,
                         aColor.getBColor(),
                         eCap,
                         aDotDashArray,
@@ -284,11 +284,11 @@ namespace drawinglayer
             {
                 if(nTempStartWidth < 0)
                 {
-                    fStartWidth = ((double)(-nTempStartWidth) * fWidth) * 0.01;
+                    fStartWidth = (static_cast<double>(-nTempStartWidth) * fWidth) * 0.01;
                 }
                 else
                 {
-                    fStartWidth = (double)nTempStartWidth;
+                    fStartWidth = static_cast<double>(nTempStartWidth);
                 }
 
                 if(0.0 != fStartWidth)
@@ -307,11 +307,11 @@ namespace drawinglayer
             {
                 if(nTempEndWidth < 0)
                 {
-                    fEndWidth = ((double)(-nTempEndWidth) * fWidth) * 0.01;
+                    fEndWidth = (static_cast<double>(-nTempEndWidth) * fWidth) * 0.01;
                 }
                 else
                 {
-                    fEndWidth = (double)nTempEndWidth;
+                    fEndWidth = static_cast<double>(nTempEndWidth);
                 }
 
                 if(0.0 != fEndWidth)
@@ -371,11 +371,11 @@ namespace drawinglayer
                 if(100 != nTransparence)
                 {
                     const basegfx::B2DVector aOffset(
-                        (double)rSet.Get(SDRATTR_SHADOWXDIST).GetValue(),
-                        (double)rSet.Get(SDRATTR_SHADOWYDIST).GetValue());
+                        static_cast<double>(rSet.Get(SDRATTR_SHADOWXDIST).GetValue()),
+                        static_cast<double>(rSet.Get(SDRATTR_SHADOWYDIST).GetValue()));
                     const Color aColor(rSet.Get(SDRATTR_SHADOWCOLOR).GetColorValue());
 
-                    return attribute::SdrShadowAttribute(aOffset, (double)nTransparence * 0.01, aColor.getBColor());
+                    return attribute::SdrShadowAttribute(aOffset, static_cast<double>(nTransparence) * 0.01, aColor.getBColor());
                 }
             }
 
@@ -440,7 +440,7 @@ namespace drawinglayer
                             if(nStartIntens != 100)
                             {
                                 const basegfx::BColor aBlack;
-                                aStart = interpolate(aBlack, aStart, (double)nStartIntens * 0.01);
+                                aStart = interpolate(aBlack, aStart, static_cast<double>(nStartIntens) * 0.01);
                             }
 
                             const Color aEndColor(aXGradient.GetEndColor());
@@ -450,15 +450,15 @@ namespace drawinglayer
                             if(nEndIntens != 100)
                             {
                                 const basegfx::BColor aBlack;
-                                aEnd = interpolate(aBlack, aEnd, (double)nEndIntens * 0.01);
+                                aEnd = interpolate(aBlack, aEnd, static_cast<double>(nEndIntens) * 0.01);
                             }
 
                             aGradient = attribute::FillGradientAttribute(
                                 XGradientStyleToGradientStyle(aXGradient.GetGradientStyle()),
-                                (double)aXGradient.GetBorder() * 0.01,
-                                (double)aXGradient.GetXOffset() * 0.01,
-                                (double)aXGradient.GetYOffset() * 0.01,
-                                (double)aXGradient.GetAngle() * F_PI1800,
+                                static_cast<double>(aXGradient.GetBorder()) * 0.01,
+                                static_cast<double>(aXGradient.GetXOffset()) * 0.01,
+                                static_cast<double>(aXGradient.GetYOffset()) * 0.01,
+                                static_cast<double>(aXGradient.GetAngle()) * F_PI1800,
                                 aStart,
                                 aEnd,
                                 rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
@@ -472,8 +472,8 @@ namespace drawinglayer
 
                             aHatch = attribute::FillHatchAttribute(
                                 XHatchStyleToHatchStyle(rHatch.GetHatchStyle()),
-                                (double)rHatch.GetDistance(),
-                                (double)rHatch.GetAngle() * F_PI1800,
+                                static_cast<double>(rHatch.GetDistance()),
+                                static_cast<double>(rHatch.GetAngle()) * F_PI1800,
                                 aColorB.getBColor(),
                                 3, // same default as VCL, a minimum of three discrete units (pixels) offset
                                 rSet.Get(XATTR_FILLBACKGROUND).GetValue());
@@ -488,7 +488,7 @@ namespace drawinglayer
                     }
 
                     return attribute::SdrFillAttribute(
-                        (double)nTransparence * 0.01,
+                        static_cast<double>(nTransparence) * 0.01,
                         aColor.getBColor(),
                         aGradient,
                         aHatch,
@@ -617,10 +617,10 @@ namespace drawinglayer
 
                     return attribute::FillGradientAttribute(
                         XGradientStyleToGradientStyle(rGradient.GetGradientStyle()),
-                        (double)rGradient.GetBorder() * 0.01,
-                        (double)rGradient.GetXOffset() * 0.01,
-                        (double)rGradient.GetYOffset() * 0.01,
-                        (double)rGradient.GetAngle() * F_PI1800,
+                        static_cast<double>(rGradient.GetBorder()) * 0.01,
+                        static_cast<double>(rGradient.GetXOffset()) * 0.01,
+                        static_cast<double>(rGradient.GetYOffset()) * 0.01,
+                        static_cast<double>(rGradient.GetAngle()) * F_PI1800,
                         basegfx::BColor(fStartLum, fStartLum, fStartLum),
                         basegfx::BColor(fEndLum, fEndLum, fEndLum),
                         0);
@@ -691,14 +691,14 @@ namespace drawinglayer
 
             // get size
             const basegfx::B2DVector aSize(
-                (double) rSet.Get(XATTR_FILLBMP_SIZEX).GetValue(),
-                (double) rSet.Get(XATTR_FILLBMP_SIZEY).GetValue());
+                static_cast<double>(rSet.Get(XATTR_FILLBMP_SIZEX).GetValue()),
+                static_cast<double>(rSet.Get(XATTR_FILLBMP_SIZEY).GetValue()));
             const basegfx::B2DVector aOffset(
-                (double) rSet.Get(XATTR_FILLBMP_TILEOFFSETX).GetValue(),
-                (double) rSet.Get(XATTR_FILLBMP_TILEOFFSETY).GetValue());
+                static_cast<double>(rSet.Get(XATTR_FILLBMP_TILEOFFSETX).GetValue()),
+                static_cast<double>(rSet.Get(XATTR_FILLBMP_TILEOFFSETY).GetValue()));
             const basegfx::B2DVector aOffsetPosition(
-                (double) rSet.Get(XATTR_FILLBMP_POSOFFSETX).GetValue(),
-                (double) rSet.Get(XATTR_FILLBMP_POSOFFSETY).GetValue());
+                static_cast<double>(rSet.Get(XATTR_FILLBMP_POSOFFSETX).GetValue()),
+                static_cast<double>(rSet.Get(XATTR_FILLBMP_POSOFFSETY).GetValue()));
 
             return attribute::SdrFillGraphicAttribute(
                 aGraphic,
@@ -992,7 +992,7 @@ namespace drawinglayer
 
         void calculateRelativeCornerRadius(sal_Int32 nRadius, const basegfx::B2DRange& rObjectRange, double& rfCornerRadiusX, double& rfCornerRadiusY)
         {
-            rfCornerRadiusX = rfCornerRadiusY = (double)nRadius;
+            rfCornerRadiusX = rfCornerRadiusY = static_cast<double>(nRadius);
 
             if(0.0 != rfCornerRadiusX)
             {

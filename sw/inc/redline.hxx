@@ -140,7 +140,7 @@ public:
         {   return !operator==( rCmp ); }
 
     RedlineType_t GetType() const
-        { return ((RedlineType_t)(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
+        { return static_cast<RedlineType_t>(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK); }
 
     std::size_t GetAuthor() const                { return nAuthor; }
     const OUString& GetComment() const        { return sComment; }
@@ -151,7 +151,7 @@ public:
     void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }
 
     void SetAutoFormatFlag()
-        { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
+        { eType = static_cast<RedlineType_t>(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
     bool CanCombine( const SwRedlineData& rCmp ) const;
 
     // ExtraData gets copied, the pointer is therefore not taken over by
@@ -221,7 +221,7 @@ public:
     const DateTime& GetTimeStamp( sal_uInt16 nPos = 0) const;
     RedlineType_t GetRealType( sal_uInt16 nPos = 0 ) const;
     RedlineType_t GetType( sal_uInt16 nPos = 0) const
-        { return ( (RedlineType_t)(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
+        { return static_cast<RedlineType_t>(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK); }
     const OUString& GetComment( sal_uInt16 nPos = 0 ) const;
 
     void SetComment( const OUString& rS ) { pRedlineData->SetComment( rS ); }

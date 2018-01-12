@@ -517,7 +517,7 @@ void SAL_CALL SwXStringKeyMap::insertValue(const OUString & aKey, const uno::Any
 
 OUString SAL_CALL SwXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
 {
-    if ( (sal_uInt32)nIndex >= maMap.size() )
+    if ( static_cast<sal_uInt32>(nIndex) >= maMap.size() )
         throw lang::IndexOutOfBoundsException();
 
     return OUString();
@@ -525,7 +525,7 @@ OUString SAL_CALL SwXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
 
 uno::Any SAL_CALL SwXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 {
-    if ( (sal_uInt32)nIndex >= maMap.size() )
+    if ( static_cast<sal_uInt32>(nIndex) >= maMap.size() )
         throw lang::IndexOutOfBoundsException();
 
     return uno::Any();

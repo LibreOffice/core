@@ -58,7 +58,7 @@ X509Certificate_NssImpl::~X509Certificate_NssImpl() {
 sal_Int16 SAL_CALL X509Certificate_NssImpl::getVersion() {
     if( m_pCert != nullptr ) {
         if( m_pCert->version.len > 0 ) {
-            return ( char )*( m_pCert->version.data ) ;
+            return static_cast<char>(*( m_pCert->version.data )) ;
         } else
             return 0 ;
     } else {

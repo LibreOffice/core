@@ -406,7 +406,7 @@ sal_uInt16 BigPtrArray::Compress()
     sal_uInt16 nFirstChgPos = USHRT_MAX; // at which position was the 1st change?
 
     // convert fill percentage into number of remaining elements
-    short const nMax = MAXENTRY - (long) MAXENTRY * COMPRESSLVL / 100;
+    short const nMax = MAXENTRY - long(MAXENTRY) * COMPRESSLVL / 100;
 
     for( sal_uInt16 cur = 0; cur < m_nBlock; ++cur )
     {

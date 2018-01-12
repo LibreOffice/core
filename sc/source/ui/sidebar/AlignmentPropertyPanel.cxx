@@ -177,8 +177,8 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
 
     FormatDegrees(fTmp);
 
-    sal_Int64 nTmp = (sal_Int64)fTmp*100;
-    SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,(sal_uInt32) nTmp);
+    sal_Int64 nTmp = static_cast<sal_Int64>(fTmp)*100;
+    SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,static_cast<sal_uInt32>(nTmp));
 
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, { &aAngleItem });
@@ -193,8 +193,8 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl, Button*, void )
 IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
 {
     mpCBXWrapText->EnableTriState(false);
-    sal_uInt16 nVal = (sal_uInt16)mpMFLeftIndent->GetValue();
-    SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  (sal_uInt16)CalcToUnit( nVal,  MapUnit::MapTwip ) );
+    sal_uInt16 nVal = static_cast<sal_uInt16>(mpMFLeftIndent->GetValue());
+    SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  static_cast<sal_uInt16>(CalcToUnit( nVal,  MapUnit::MapTwip )) );
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_INDENT,
             SfxCallMode::RECORD, { &aItem });

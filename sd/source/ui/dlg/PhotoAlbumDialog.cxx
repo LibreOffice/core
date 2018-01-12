@@ -645,8 +645,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
         sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
         sal_Int32 nBmpHeight = aBmp.GetSizePixel().Height();
 
-        double nXRatio = (double) 200 / nBmpWidth;
-        double nYRatio = (double) 150 / nBmpHeight;
+        double nXRatio = double(200) / nBmpWidth;
+        double nYRatio = double(150) / nBmpHeight;
         if ( nXRatio < nYRatio )
             aBmp.Scale( nXRatio, nXRatio );
         else

@@ -104,7 +104,7 @@ namespace drawinglayer
                         fSmallStepX *= 2.0;
                     }
 
-                    nSmallStepsX = (sal_uInt32)(fStepX / fSmallStepX);
+                    nSmallStepsX = static_cast<sal_uInt32>(fStepX / fSmallStepX);
                 }
 
                 if(getSubdivisionsY())
@@ -115,7 +115,7 @@ namespace drawinglayer
                         fSmallStepY *= 2.0;
                     }
 
-                    nSmallStepsY = (sal_uInt32)(fStepY / fSmallStepY);
+                    nSmallStepsY = static_cast<sal_uInt32>(fStepY / fSmallStepY);
                 }
 
                 // calculate extended viewport in which grid points may lie at all

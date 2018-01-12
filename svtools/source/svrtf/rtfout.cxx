@@ -38,7 +38,7 @@ SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
     sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < nLen; ++n )
     {
-        *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
+        *(--pStr) = static_cast<sal_Char>(nHex & 0xf ) + 48;
         if( *pStr > '9' )
             *pStr += 39;
         nHex >>= 4;

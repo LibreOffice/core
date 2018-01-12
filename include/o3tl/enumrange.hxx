@@ -71,7 +71,7 @@ public:
 template< typename T >
 typename enumrange<T>::Iterator begin( enumrange<T> )
 {
-    return typename enumrange<T>::Iterator( (int)0 );
+    return typename enumrange<T>::Iterator( int(0) );
 }
 
 template< typename T >

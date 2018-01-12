@@ -722,8 +722,8 @@ sal_Int32 ScVbaControl::getBackColor()
 
 void ScVbaControl::setBackColor( sal_Int32 nBackColor )
 {
-    if ( ( (sal_uInt32)nBackColor >= (sal_uInt32)0x80000000 ) &&
-         ( (sal_uInt32)nBackColor <= (sal_uInt32)0x80000000 + SAL_N_ELEMENTS(nSysCols) ) )
+    if ( ( static_cast<sal_uInt32>(nBackColor) >= sal_uInt32(0x80000000) ) &&
+         ( static_cast<sal_uInt32>(nBackColor) <= sal_uInt32(0x80000000) + SAL_N_ELEMENTS(nSysCols) ) )
     {
         nBackColor = nSysCols[ nBackColor & 0x0FF];
     }

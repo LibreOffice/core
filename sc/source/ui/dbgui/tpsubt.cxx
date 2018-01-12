@@ -384,7 +384,7 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, SvTreeListBox*, pLb, void )
 
         if ( pEntry )
         {
-            mpLbColumns->SelectEntryPos( (sal_uInt16)mpLbColumns->GetModel()->GetAbsPos( pEntry ) );
+            mpLbColumns->SelectEntryPos( static_cast<sal_uInt16>(mpLbColumns->GetModel()->GetAbsPos( pEntry )) );
             SelectHdl( pLb );
         }
     }

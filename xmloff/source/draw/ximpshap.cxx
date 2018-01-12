@@ -1175,14 +1175,14 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
         {
             double dStartAngle;
             if (::sax::Converter::convertDouble( dStartAngle, rValue ))
-                mnStartAngle = (sal_Int32)(dStartAngle * 100.0);
+                mnStartAngle = static_cast<sal_Int32>(dStartAngle * 100.0);
             return;
         }
         if( IsXMLToken( rLocalName, XML_END_ANGLE ) )
         {
             double dEndAngle;
             if (::sax::Converter::convertDouble( dEndAngle, rValue ))
-                mnEndAngle = (sal_Int32)(dEndAngle * 100.0);
+                mnEndAngle = static_cast<sal_Int32>(dEndAngle * 100.0);
             return;
         }
     }

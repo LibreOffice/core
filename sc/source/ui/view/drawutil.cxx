@@ -38,7 +38,7 @@ void ScDrawUtil::CalcScale( const ScDocument* pDoc, SCTAB nTab,
     for (SCCOL i=nStartCol; i<nEndCol; i++)
     {
         sal_uInt16 nWidth = pDoc->GetColWidth(i,nTab);
-        nTwipsX += (long) nWidth;
+        nTwipsX += static_cast<long>(nWidth);
         nPixelX += ScViewData::ToPixel( nWidth, nPPTX );
     }
 
@@ -63,20 +63,20 @@ void ScDrawUtil::CalcScale( const ScDocument* pDoc, SCTAB nTab,
     //  because ReduceInaccurate is called later anyway.
 
     if ( aPixelLog.X() && nTwipsX )
-        rScaleX = Fraction( ((double)aPixelLog.X()) *
-                            ((double)rZoomX.GetNumerator()) /
-                            ((double)nTwipsX) /
+        rScaleX = Fraction( static_cast<double>(aPixelLog.X()) *
+                            static_cast<double>(rZoomX.GetNumerator()) /
+                            static_cast<double>(nTwipsX) /
                             HMM_PER_TWIPS /
-                            ((double)rZoomX.GetDenominator()) );
+                            static_cast<double>(rZoomX.GetDenominator()) );
     else
         rScaleX = Fraction( 1, 1 );
 
     if ( aPixelLog.Y() && nTwipsY )
-        rScaleY = Fraction( ((double)aPixelLog.Y()) *
-                            ((double)rZoomY.GetNumerator()) /
-                            ((double)nTwipsY) /
+        rScaleY = Fraction( static_cast<double>(aPixelLog.Y()) *
+                            static_cast<double>(rZoomY.GetNumerator()) /
+                            static_cast<double>(nTwipsY) /
                             HMM_PER_TWIPS /
-                            ((double)rZoomY.GetDenominator()) );
+                            static_cast<double>(rZoomY.GetDenominator()) );
     else
         rScaleY = Fraction( 1, 1 );
 

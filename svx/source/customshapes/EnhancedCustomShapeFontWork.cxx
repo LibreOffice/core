@@ -337,7 +337,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     pDXArry.reset(new long[ rText.getLength() ]);
                     pVirDev->GetTextArray( rText, pDXArry.get());
                     FontMetric aFontMetric( pVirDev->GetFontMetric() );
-                    aFont.SetAverageFontWidth( (sal_Int32)( (double)aFontMetric.GetAverageFontWidth() * ( (double)100 / (double)nCharScaleWidth ) ) );
+                    aFont.SetAverageFontWidth( static_cast<sal_Int32>( static_cast<double>(aFontMetric.GetAverageFontWidth()) * ( double(100) / static_cast<double>(nCharScaleWidth) ) ) );
                     pVirDev->SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
@@ -394,7 +394,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     {
                         tools::Rectangle aPolyPolyBoundRect( aOutlineIter->GetBoundRect() );
                         if (aPolyPolyBoundRect.GetHeight() != rParagraphBoundRect.GetHeight() && aPolyPolyBoundRect.GetHeight())
-                            aOutlineIter->Scale( 1.0, (double)rParagraphBoundRect.GetHeight() / aPolyPolyBoundRect.GetHeight() );
+                            aOutlineIter->Scale( 1.0, static_cast<double>(rParagraphBoundRect.GetHeight()) / aPolyPolyBoundRect.GetHeight() );
                         aPolyPolyBoundRect = aOutlineIter->GetBoundRect();
                         sal_Int32 nMove = aPolyPolyBoundRect.Top() - rParagraphBoundRect.Top();
                         if ( nMove )
@@ -421,7 +421,7 @@ bool GetFontWorkOutline(FWData& rFWData, const SdrObject* pCustomShape)
     std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
     std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();
 
-    rFWData.nSingleLineHeight = (sal_Int32)( ( (double)pCustomShape->GetLogicRect().GetHeight()
+    rFWData.nSingleLineHeight = static_cast<sal_Int32>( ( static_cast<double>(pCustomShape->GetLogicRect().GetHeight())
                                                 / rFWData.nMaxParagraphsPerTextArea ) * rFWData.fHorizontalTextScaling );
 
     if (rFWData.nSingleLineHeight == SAL_MIN_INT32)
@@ -448,7 +448,7 @@ bool GetFontWorkOutline(FWData& rFWData, const SdrObject* pCustomShape)
                 sal_Int32 nParaWidth = aParagraphIter->aBoundRect.GetWidth();
                 if ( nParaWidth )
                 {
-                    double fScale = (double)aTextAreaIter->aBoundRect.GetWidth() / nParaWidth;
+                    double fScale = static_cast<double>(aTextAreaIter->aBoundRect.GetWidth()) / nParaWidth;
 
                     std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
                     std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
@@ -574,7 +574,7 @@ void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
     for (sal_uInt16 i = 0; i < nSize; ++i)
     {
         Point& rPoint = rPoly[ i ];
-        double fDistance = (double)( rPoint.X() - rTextAreaBoundRect.Left() ) / (double)nTextWidth;
+        double fDistance = static_cast<double>( rPoint.X() - rTextAreaBoundRect.Left() ) / static_cast<double>(nTextWidth);
         if ( i )
         {
             if ( fDistance > fLastDistance )
@@ -586,7 +586,7 @@ void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
                     sal_Int32 fX = rPoint.X() - rPt0.X();
                     sal_Int32 fY = rPoint.Y() - rPt0.Y();
                     double fd = ( 1.0 / ( fDistance - fLastDistance ) ) * ( *aIter - fLastDistance );
-                    rPoly.Insert( i, Point( (sal_Int32)( rPt0.X() + fX * fd ), (sal_Int32)( rPt0.Y() + fY * fd ) ) );
+                    rPoly.Insert( i, Point( static_cast<sal_Int32>( rPt0.X() + fX * fd ), static_cast<sal_Int32>( rPt0.Y() + fY * fd ) ) );
                     fDistance = *aIter;
                 }
             }
@@ -602,7 +602,7 @@ void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
                         sal_Int32 fX = rPoint.X() - rPt0.X();
                         sal_Int32 fY = rPoint.Y() - rPt0.Y();
                         double fd = ( 1.0 / ( fDistance - fLastDistance ) ) * ( *aIter - fLastDistance );
-                        rPoly.Insert( i, Point( (sal_Int32)( rPt0.X() + fX * fd ), (sal_Int32)( rPt0.Y() + fY * fd ) ) );
+                        rPoly.Insert( i, Point( static_cast<sal_Int32>( rPt0.X() + fX * fd ), static_cast<sal_Int32>( rPt0.Y() + fY * fd ) ) );
                         fDistance = *aIter;
                     }
                 }
@@ -683,8 +683,8 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                 double fx1 = aBoundRect.Left() - nLeft;
                                 double fx2 = aBoundRect.Right() - nLeft;
                                 double fy1, fy2;
-                                double fM1 = fx1 / (double)nWidth;
-                                double fM2 = fx2 / (double)nWidth;
+                                double fM1 = fx1 / static_cast<double>(nWidth);
+                                double fM2 = fx2 / static_cast<double>(nWidth);
 
                                 GetPoint( rOutlinePoly, vDistances, fM1, fx1, fy1 );
                                 GetPoint( rOutlinePoly, vDistances, fM2, fx2, fy2 );
@@ -707,7 +707,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                 fvx *= fL;
                                 fvy *= fL;
                                 rPolyPoly.Rotate( Point( aBoundRect.Center().X(), aParagraphIter->aBoundRect.Center().Y() ), sin( fAngle ), cos( fAngle ) );
-                                rPolyPoly.Move( (sal_Int32)( ( fx1 + fvx )- aBoundRect.Center().X() ), (sal_Int32)( ( fy1 + fvy ) - aParagraphIter->aBoundRect.Center().Y() ) );
+                                rPolyPoly.Move( static_cast<sal_Int32>( ( fx1 + fvx )- aBoundRect.Center().X() ), static_cast<sal_Int32>( ( fy1 + fvy ) - aParagraphIter->aBoundRect.Center().Y() ) );
 
                                 ++aOutlineIter;
                             }
@@ -774,16 +774,16 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                         Point& rPoint = aLocalPoly[ j ];
                                         rPoint.X() -= nLeft;
                                         rPoint.Y() -= nTop;
-                                        double fX = (double)rPoint.X() / (double)nWidth;
-                                        double fY = (double)rPoint.Y() / (double)nHeight;
+                                        double fX = static_cast<double>(rPoint.X()) / static_cast<double>(nWidth);
+                                        double fY = static_cast<double>(rPoint.Y()) / static_cast<double>(nHeight);
 
                                         double fx1, fy1, fx2, fy2;
                                         GetPoint( rOutlinePoly, vDistances, fX, fx1, fy1 );
                                         GetPoint( rOutlinePoly2, vDistances2, fX, fx2, fy2 );
                                         double fWidth = fx2 - fx1;
                                         double fHeight= fy2 - fy1;
-                                        rPoint.X() = (sal_Int32)( fx1 + fWidth * fY );
-                                        rPoint.Y() = (sal_Int32)( fy1 + fHeight* fY );
+                                        rPoint.X() = static_cast<sal_Int32>( fx1 + fWidth * fY );
+                                        rPoint.Y() = static_cast<sal_Int32>( fy1 + fHeight* fY );
                                     }
                                 }
 

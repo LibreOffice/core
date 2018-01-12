@@ -918,7 +918,7 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
 void AxFontDataModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& /*rConv */)
 {
     rPropSet.getProperty( maFontData.maFontName, PROP_FontName );
-    float fontWeight = (float)0;
+    float fontWeight = float(0);
     if ( rPropSet.getProperty(fontWeight, PROP_FontWeight ) )
         setFlag( maFontData.mnFontEffects, AxFontFlags::Bold, ( fontWeight == awt::FontWeight::BOLD ) );
     FontSlant nSlant = FontSlant_NONE;

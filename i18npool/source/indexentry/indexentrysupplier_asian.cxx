@@ -117,7 +117,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     if (func) {
         sal_Int16 max_index;
         sal_uInt16** idx=func(&max_index);
-        if (((sal_Int16)(ch >> 8)) <= max_index) {
+        if (static_cast<sal_Int16>(ch >> 8) <= max_index) {
             sal_uInt16 address=idx[0][ch >> 8];
             if (address != 0xFFFF) {
                 address=idx[1][address+(ch & 0xFF)];
@@ -185,7 +185,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         sal_uInt16** idx=func(&max_index);
         for (sal_Int32 i=0,j=0; i < rIndexEntry.getLength(); i=j) {
             sal_uInt32 ch = rIndexEntry.iterateCodePoints(&j);
-            if (((sal_Int16)(ch>>8)) <= max_index) {
+            if (static_cast<sal_Int16>(ch>>8) <= max_index) {
                 sal_uInt16 address = idx[0][ch>>8];
                 if (address != 0xFFFF) {
                     address = idx[1][address + (ch & 0xFF)];

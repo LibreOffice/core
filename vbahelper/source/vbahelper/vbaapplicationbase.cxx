@@ -85,7 +85,7 @@ public:
         nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2
 
         long nDiffSeconds = aTimeNow.GetHour() * 3600 + aTimeNow.GetMin() * 60 + aTimeNow.GetSec();
-        return (double)nDiffDays + ((double)nDiffSeconds)/(double)(24*3600);
+        return static_cast<double>(nDiffDays) + static_cast<double>(nDiffSeconds)/double(24*3600);
     }
 
     static sal_Int32 GetTimerMiliseconds( double nFrom, double nTo )
@@ -96,7 +96,7 @@ public:
         else
             nResult = 50;
 
-        return (sal_Int32) nResult;
+        return static_cast<sal_Int32>(nResult);
     }
 
     void Start( const ::rtl::Reference< VbaApplicationBase >& xBase, const OUString& aFunction, double nFrom, double nTo )
@@ -140,9 +140,9 @@ struct VbaTimerInfoHash
 {
     size_t operator()( const VbaTimerInfo& rTimerInfo ) const
     {
-        return (size_t)rTimerInfo.first.hashCode()
-             + (size_t)rtl_str_hashCode_WithLength( reinterpret_cast<char const *>(&rTimerInfo.second.first), sizeof( double ) )
-             + (size_t)rtl_str_hashCode_WithLength( reinterpret_cast<char const *>(&rTimerInfo.second.second), sizeof( double ) );
+        return static_cast<size_t>(rTimerInfo.first.hashCode())
+             + static_cast<size_t>(rtl_str_hashCode_WithLength( reinterpret_cast<char const *>(&rTimerInfo.second.first), sizeof( double ) ))
+             + static_cast<size_t>(rtl_str_hashCode_WithLength( reinterpret_cast<char const *>(&rTimerInfo.second.second), sizeof( double ) ));
     }
 };
 

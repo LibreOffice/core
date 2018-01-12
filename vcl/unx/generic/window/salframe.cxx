@@ -548,8 +548,8 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                     const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
                     x = rGeom.nX;
                     y = rGeom.nY;
-                    if( x+(int)w+40 <= (int)aScreenSize.Width() &&
-                        y+(int)h+40 <= (int)aScreenSize.Height()
+                    if( x+static_cast<int>(w)+40 <= static_cast<int>(aScreenSize.Width()) &&
+                        y+static_cast<int>(h)+40 <= static_cast<int>(aScreenSize.Height())
                         )
                     {
                         y += 40;
@@ -1301,8 +1301,8 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
 
         if( maGeometry.nWidth > 0
             && maGeometry.nHeight > 0
-            && (   nWidth_  != (int)maGeometry.nWidth
-                || nHeight_ != (int)maGeometry.nHeight ) )
+            && (   nWidth_  != static_cast<int>(maGeometry.nWidth)
+                || nHeight_ != static_cast<int>(maGeometry.nHeight) ) )
         {
             nWidth_  = maGeometry.nWidth;
             nHeight_ = maGeometry.nHeight;
@@ -1569,15 +1569,15 @@ void X11SalFrame::Center( )
         else
         {
             // center the window relative to the top level frame
-            nX = (nScreenWidth  - (int)maGeometry.nWidth ) / 2 + nScreenX;
-            nY = (nScreenHeight - (int)maGeometry.nHeight) / 2 + nScreenY;
+            nX = (nScreenWidth  - static_cast<int>(maGeometry.nWidth) ) / 2 + nScreenX;
+            nY = (nScreenHeight - static_cast<int>(maGeometry.nHeight)) / 2 + nScreenY;
         }
     }
     else
     {
         // center the window relative to screen
-        nX = (nRealScreenWidth  - (int)maGeometry.nWidth ) / 2 + nScreenX;
-        nY = (nRealScreenHeight - (int)maGeometry.nHeight) / 2 + nScreenY;
+        nX = (nRealScreenWidth  - static_cast<int>(maGeometry.nWidth) ) / 2 + nScreenX;
+        nY = (nRealScreenHeight - static_cast<int>(maGeometry.nHeight)) / 2 + nScreenY;
     }
     nX = nX < 0 ? 0 : nX;
     nY = nY < 0 ? 0 : nY;
@@ -1773,14 +1773,14 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                 }
 
                 // adjust position so that frame fits onto screen
-                if( aPosSize.Right()+(long)aGeom.nRightDecoration > aScreenSize.Width()-1 )
-                    aPosSize.Move( aScreenSize.Width() - aPosSize.Right() - (long)aGeom.nRightDecoration, 0 );
-                if( aPosSize.Bottom()+(long)aGeom.nBottomDecoration > aScreenSize.Height()-1 )
-                    aPosSize.Move( 0, aScreenSize.Height() - aPosSize.Bottom() - (long)aGeom.nBottomDecoration );
-                if( aPosSize.Left() < (long)aGeom.nLeftDecoration )
-                    aPosSize.Move( (long)aGeom.nLeftDecoration - aPosSize.Left(), 0 );
-                if( aPosSize.Top() < (long)aGeom.nTopDecoration )
-                    aPosSize.Move( 0, (long)aGeom.nTopDecoration - aPosSize.Top() );
+                if( aPosSize.Right()+static_cast<long>(aGeom.nRightDecoration) > aScreenSize.Width()-1 )
+                    aPosSize.Move( aScreenSize.Width() - aPosSize.Right() - static_cast<long>(aGeom.nRightDecoration), 0 );
+                if( aPosSize.Bottom()+static_cast<long>(aGeom.nBottomDecoration) > aScreenSize.Height()-1 )
+                    aPosSize.Move( 0, aScreenSize.Height() - aPosSize.Bottom() - static_cast<long>(aGeom.nBottomDecoration) );
+                if( aPosSize.Left() < static_cast<long>(aGeom.nLeftDecoration) )
+                    aPosSize.Move( static_cast<long>(aGeom.nLeftDecoration) - aPosSize.Left(), 0 );
+                if( aPosSize.Top() < static_cast<long>(aGeom.nTopDecoration) )
+                    aPosSize.Move( 0, static_cast<long>(aGeom.nTopDecoration) - aPosSize.Top() );
             }
 
             SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
@@ -1963,7 +1963,7 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
     bool bSized = false;
     if( values.x != maGeometry.nX || values.y != maGeometry.nY )
         bMoved = true;
-    if( values.width != (int)maGeometry.nWidth || values.height != (int)maGeometry.nHeight )
+    if( values.width != static_cast<int>(maGeometry.nWidth) || values.height != static_cast<int>(maGeometry.nHeight) )
         bSized = true;
 
     // do net set WMNormalHints for ..
@@ -2213,9 +2213,9 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
     }
     else
     {
-        if( nScreen < 0 || nScreen >= (int)GetDisplay()->GetXScreenCount() )
+        if( nScreen < 0 || nScreen >= static_cast<int>(GetDisplay()->GetXScreenCount()) )
             nScreen = m_nXScreen.getXScreen();
-        if( nScreen != (int)m_nXScreen.getXScreen() )
+        if( nScreen != static_cast<int>(m_nXScreen.getXScreen()) )
         {
             bool bVisible = bMapped_;
             if( mbFullScreen )
@@ -2689,8 +2689,8 @@ bool X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         if( nVisibleFloats > 0 && mpParent )
         {
             Cursor aCursor = mpParent->GetCursor();
-            if( pEvent->xmotion.x >= 0 && pEvent->xmotion.x < (int)maGeometry.nWidth &&
-                pEvent->xmotion.y >= 0 && pEvent->xmotion.y < (int)maGeometry.nHeight )
+            if( pEvent->xmotion.x >= 0 && pEvent->xmotion.x < static_cast<int>(maGeometry.nWidth) &&
+                pEvent->xmotion.y >= 0 && pEvent->xmotion.y < static_cast<int>(maGeometry.nHeight) )
                 aCursor = None;
 
             XChangeActivePointerGrab( GetXDisplay(),
@@ -2718,9 +2718,9 @@ bool X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                 if( pFrame->IsFloatGrabWindow()                                     &&
                     pFrame->bMapped_                                                &&
                     pEvent->xbutton.x_root >= pFrame->maGeometry.nX                             &&
-                    pEvent->xbutton.x_root < pFrame->maGeometry.nX + (int)pFrame->maGeometry.nWidth &&
+                    pEvent->xbutton.x_root < pFrame->maGeometry.nX + static_cast<int>(pFrame->maGeometry.nWidth) &&
                     pEvent->xbutton.y_root >= pFrame->maGeometry.nY                             &&
-                    pEvent->xbutton.y_root < pFrame->maGeometry.nY + (int)pFrame->maGeometry.nHeight )
+                    pEvent->xbutton.y_root < pFrame->maGeometry.nY + static_cast<int>(pFrame->maGeometry.nHeight) )
                 {
                     bInside = true;
                     break;
@@ -3582,7 +3582,7 @@ bool X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     nHeight_    = pEvent->height;
 
     bool bMoved = ( pEvent->x != maGeometry.nX || pEvent->y != maGeometry.nY );
-    bool bSized = ( pEvent->width != (int)maGeometry.nWidth || pEvent->height != (int)maGeometry.nHeight );
+    bool bSized = ( pEvent->width != static_cast<int>(maGeometry.nWidth) || pEvent->height != static_cast<int>(maGeometry.nHeight) );
 
     maGeometry.nX       = pEvent->x;
     maGeometry.nY       = pEvent->y;
@@ -3849,18 +3849,18 @@ bool X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
     }
     else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::WM_PROTOCOLS ) )
     {
-        if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::NET_WM_PING ) )
+        if( static_cast<Atom>(pEvent->data.l[0]) == rWMAdaptor.getAtom( WMAdaptor::NET_WM_PING ) )
             rWMAdaptor.answerPing( this, pEvent );
         else if( ! ( nStyle_ & SalFrameStyleFlags::PLUG )
               && ! (( nStyle_ & SalFrameStyleFlags::FLOAT ) && (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION))
              )
         {
-            if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
+            if( static_cast<Atom>(pEvent->data.l[0]) == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
             {
                 Close();
                 return true;
             }
-            else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_TAKE_FOCUS ) )
+            else if( static_cast<Atom>(pEvent->data.l[0]) == rWMAdaptor.getAtom( WMAdaptor::WM_TAKE_FOCUS ) )
             {
                 // do nothing, we set the input focus in ToTop() if necessary
     #if OSL_DEBUG_LEVEL > 1

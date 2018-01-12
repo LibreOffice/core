@@ -90,10 +90,10 @@ namespace
                             if(nOpacity)
                             {
                                 pContent->SetPixel(y, x, BitmapColor(
-                                    (sal_uInt8)(nRed / nDivisor),
-                                    (sal_uInt8)(nGreen / nDivisor),
-                                    (sal_uInt8)(nBlue / nDivisor)));
-                                pAlpha->SetPixel(y, x, BitmapColor(255 - (sal_uInt8)nOpacity));
+                                    static_cast<sal_uInt8>(nRed / nDivisor),
+                                    static_cast<sal_uInt8>(nGreen / nDivisor),
+                                    static_cast<sal_uInt8>(nBlue / nDivisor)));
+                                pAlpha->SetPixel(y, x, BitmapColor(255 - static_cast<sal_uInt8>(nOpacity)));
                             }
                         }
                     }

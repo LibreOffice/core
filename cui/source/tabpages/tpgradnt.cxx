@@ -239,12 +239,12 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
                     m_pLbColorTo->GetSelectEntryColor(),
                     (css::awt::GradientStyle) m_pLbGradientType->GetSelectedEntryPos(),
                     static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                    (sal_uInt16) m_pMtrCenterX->GetValue(),
-                    (sal_uInt16) m_pMtrCenterY->GetValue(),
-                    (sal_uInt16) m_pMtrBorder->GetValue(),
-                    (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                    (sal_uInt16) m_pMtrColorTo->GetValue(),
-                    (sal_uInt16) m_pMtrIncrement->GetValue() ));
+                    static_cast<sal_uInt16>(m_pMtrCenterX->GetValue()),
+                    static_cast<sal_uInt16>(m_pMtrCenterY->GetValue()),
+                    static_cast<sal_uInt16>(m_pMtrBorder->GetValue()),
+                    static_cast<sal_uInt16>(m_pMtrColorFrom->GetValue()),
+                    static_cast<sal_uInt16>(m_pMtrColorTo->GetValue()),
+                    static_cast<sal_uInt16>(m_pMtrIncrement->GetValue()) ));
     }
 
     sal_uInt16 nValue = 0;
@@ -336,12 +336,12 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
                           m_pLbColorTo->GetSelectEntryColor(),
                           eXGS,
                           static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                          (sal_uInt16) m_pMtrCenterX->GetValue(),
-                          (sal_uInt16) m_pMtrCenterY->GetValue(),
-                          (sal_uInt16) m_pMtrBorder->GetValue(),
-                          (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                          (sal_uInt16) m_pMtrColorTo->GetValue(),
-                          (sal_uInt16) m_pMtrIncrement->GetValue() );
+                          static_cast<sal_uInt16>(m_pMtrCenterX->GetValue()),
+                          static_cast<sal_uInt16>(m_pMtrCenterY->GetValue()),
+                          static_cast<sal_uInt16>(m_pMtrBorder->GetValue()),
+                          static_cast<sal_uInt16>(m_pMtrColorFrom->GetValue()),
+                          static_cast<sal_uInt16>(m_pMtrColorTo->GetValue()),
+                          static_cast<sal_uInt16>(m_pMtrIncrement->GetValue()) );
 
     // enable/disable controls
     if( pControl == m_pLbGradientType || pControl == this )
@@ -349,7 +349,7 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
 
     sal_uInt16 nValue = 0;
     if(!m_pCbIncrement->IsChecked())
-        nValue = (sal_uInt16)m_pMtrIncrement->GetValue();
+        nValue = static_cast<sal_uInt16>(m_pMtrIncrement->GetValue());
     m_rXFSet.Put( XGradientStepCountItem( nValue ) );
 
     // displaying in XOutDev
@@ -412,12 +412,12 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
                               m_pLbColorTo->GetSelectEntryColor(),
                               (css::awt::GradientStyle) m_pLbGradientType->GetSelectedEntryPos(),
                               static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                              (sal_uInt16) m_pMtrCenterX->GetValue(),
-                              (sal_uInt16) m_pMtrCenterY->GetValue(),
-                              (sal_uInt16) m_pMtrBorder->GetValue(),
-                              (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                              (sal_uInt16) m_pMtrColorTo->GetValue(),
-                              (sal_uInt16) m_pMtrIncrement->GetValue() );
+                              static_cast<sal_uInt16>(m_pMtrCenterX->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrCenterY->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrBorder->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrColorFrom->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrColorTo->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrIncrement->GetValue()) );
 
         m_pGradientList->Insert(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nCount);
 
@@ -451,12 +451,12 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
                               m_pLbColorTo->GetSelectEntryColor(),
                               (css::awt::GradientStyle) m_pLbGradientType->GetSelectedEntryPos(),
                               static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                              (sal_uInt16) m_pMtrCenterX->GetValue(),
-                              (sal_uInt16) m_pMtrCenterY->GetValue(),
-                              (sal_uInt16) m_pMtrBorder->GetValue(),
-                              (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                              (sal_uInt16) m_pMtrColorTo->GetValue(),
-                              (sal_uInt16) m_pMtrIncrement->GetValue() );
+                              static_cast<sal_uInt16>(m_pMtrCenterX->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrCenterY->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrBorder->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrColorFrom->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrColorTo->GetValue()),
+                              static_cast<sal_uInt16>(m_pMtrIncrement->GetValue()) );
 
         m_pGradientList->Replace(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nPos);
 

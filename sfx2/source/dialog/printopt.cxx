@@ -232,7 +232,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
         {
             if( nDPI >= aDPIArray[ i ] )
             {
-                m_pReduceBitmapsResolutionLB->SelectEntryPos( (sal_uInt16) i );
+                m_pReduceBitmapsResolutionLB->SelectEntryPos( static_cast<sal_uInt16>(i) );
                 i = -1;
             }
         }
@@ -255,7 +255,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     pCurrentOptions->SetReducedTransparencyMode( m_pReduceTransparencyAutoRB->IsChecked() ? PrinterTransparencyMode::Auto : PrinterTransparencyMode::NONE );
     pCurrentOptions->SetReduceGradients( m_pReduceGradientsCB->IsChecked() );
     pCurrentOptions->SetReducedGradientMode( m_pReduceGradientsStripesRB->IsChecked() ? PrinterGradientMode::Stripes : PrinterGradientMode::Color  );
-    pCurrentOptions->SetReducedGradientStepCount( (sal_uInt16) m_pReduceGradientsStepCountNF->GetValue() );
+    pCurrentOptions->SetReducedGradientStepCount( static_cast<sal_uInt16>(m_pReduceGradientsStepCountNF->GetValue()) );
     pCurrentOptions->SetReduceBitmaps( m_pReduceBitmapsCB->IsChecked() );
     pCurrentOptions->SetReducedBitmapMode( m_pReduceBitmapsOptimalRB->IsChecked() ? PrinterBitmapMode::Optimal :
                                            ( m_pReduceBitmapsNormalRB->IsChecked() ? PrinterBitmapMode::Normal : PrinterBitmapMode::Resolution ) );

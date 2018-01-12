@@ -365,18 +365,18 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
         return;
     }
 
-    pCoord[0] = pCoord[2] = (maRect.Left() + rPosAry.mnSrcX) / (double) mpImpl->mnWidth;
-    pCoord[4] = pCoord[6] = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) mpImpl->mnWidth;
+    pCoord[0] = pCoord[2] = (maRect.Left() + rPosAry.mnSrcX) / static_cast<double>(mpImpl->mnWidth);
+    pCoord[4] = pCoord[6] = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / static_cast<double>(mpImpl->mnWidth);
 
     if( !bInverted )
     {
-        pCoord[3] = pCoord[5] = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) mpImpl->mnHeight;
-        pCoord[1] = pCoord[7] = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) mpImpl->mnHeight;
+        pCoord[3] = pCoord[5] = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / static_cast<double>(mpImpl->mnHeight);
+        pCoord[1] = pCoord[7] = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / static_cast<double>(mpImpl->mnHeight);
     }
     else
     {
-        pCoord[1] = pCoord[7] = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) mpImpl->mnHeight;
-        pCoord[3] = pCoord[5] = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) mpImpl->mnHeight;
+        pCoord[1] = pCoord[7] = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / static_cast<double>(mpImpl->mnHeight);
+        pCoord[3] = pCoord[5] = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / static_cast<double>(mpImpl->mnHeight);
     }
 }
 
@@ -441,10 +441,10 @@ void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
 {
     if( GetWidth() != mpImpl->mnWidth || GetHeight() != mpImpl->mnHeight )
     {
-        pCoord[0] = pCoord[2] = maRect.Left() / (double) mpImpl->mnWidth;
-        pCoord[4] = pCoord[6] = maRect.Right() / (double) mpImpl->mnWidth;
-        pCoord[3] = pCoord[5] = 1.0f - maRect.Top() / (double) mpImpl->mnHeight;
-        pCoord[1] = pCoord[7] = 1.0f - maRect.Bottom() / (double) mpImpl->mnHeight;
+        pCoord[0] = pCoord[2] = maRect.Left() / static_cast<double>(mpImpl->mnWidth);
+        pCoord[4] = pCoord[6] = maRect.Right() / static_cast<double>(mpImpl->mnWidth);
+        pCoord[3] = pCoord[5] = 1.0f - maRect.Top() / static_cast<double>(mpImpl->mnHeight);
+        pCoord[1] = pCoord[7] = 1.0f - maRect.Bottom() / static_cast<double>(mpImpl->mnHeight);
     }
     else
     {

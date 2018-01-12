@@ -130,7 +130,7 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm  ) const
 void IMapPolygonObject::WriteNCSA( SvStream& rOStm  ) const
 {
     OStringBuffer aStrBuf("poly ");
-    const sal_uInt16 nCount = std::min( aPoly.GetSize(), (sal_uInt16) 100 );
+    const sal_uInt16 nCount = std::min( aPoly.GetSize(), sal_uInt16(100) );
 
     AppendNCSAURL(aStrBuf);
 
@@ -418,8 +418,8 @@ void ImageMap::ImpReadNCSALine( const OString& rLine )
         const OUString  aURL( ImpReadNCSAURL( &pStr, "" ) );
         const Point     aCenter( ImpReadNCSACoords( &pStr ) );
         const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
-        long            nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
-                                               (double) aDX.Y() * aDX.Y() );
+        long            nRadius = static_cast<long>(sqrt( static_cast<double>(aDX.X()) * aDX.X() +
+                                               static_cast<double>(aDX.Y()) * aDX.Y() ));
 
         maList.emplace_back( new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }

@@ -1274,7 +1274,7 @@ std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts 
     Primitives_t aEnteringSlide;
     for( int i=0; i<parts; i++ ) {
         Primitive Slide;
-        double n = (i + 1)/(double)parts;
+        double n = (i + 1)/static_cast<double>(parts);
         if( vertical ) {
             Slide.pushTriangle (glm::vec2 (ln,0), glm::vec2 (n,0), glm::vec2 (ln,1));
             Slide.pushTriangle (glm::vec2 (n,0), glm::vec2 (ln,1), glm::vec2 (n,1));

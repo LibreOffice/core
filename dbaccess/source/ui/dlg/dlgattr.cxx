@@ -64,7 +64,7 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (nPageId == m_nNumberFormatId)
     {
-        aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), (sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
+        aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO)));
         rTabPage.PageCreated(aSet);
     }
 }

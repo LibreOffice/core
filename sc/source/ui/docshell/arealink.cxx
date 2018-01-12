@@ -292,7 +292,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         if( FindExtRange( aTokenRange, &rSrcDoc, aToken ) )
         {
             // columns: find maximum
-            nWidth = std::max( nWidth, (SCCOL)(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
+            nWidth = std::max( nWidth, static_cast<SCCOL>(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
             // rows: add row range + 1 empty row
             nHeight += aTokenRange.aEnd.Row() - aTokenRange.aStart.Row() + 2;
         }

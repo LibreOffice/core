@@ -172,7 +172,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
     aMargin.SetTextLeft( GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) );
     aMargin.SetRight( GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-    aMargin.SetTextFirstLineOfst( (short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
+    aMargin.SetTextFirstLineOfst( static_cast<short>(GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit )) );
 
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
@@ -183,8 +183,8 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
 IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl, Edit&, void)
 {
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
-    aMargin.SetUpper( (sal_uInt16)GetCoreValue( *mpTopDist, m_eULSpaceUnit ) );
-    aMargin.SetLower( (sal_uInt16)GetCoreValue( *mpBottomDist, m_eULSpaceUnit ) );
+    aMargin.SetUpper( static_cast<sal_uInt16>(GetCoreValue( *mpTopDist, m_eULSpaceUnit )) );
+    aMargin.SetLower( static_cast<sal_uInt16>(GetCoreValue( *mpBottomDist, m_eULSpaceUnit )) );
 
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, { &aMargin });
@@ -270,7 +270,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::Map100thMM, MapUnit::MapTwip );
 
         long nVal = OutputDevice::LogicToLogic( maTxtLeft, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nVal = (long)mpLeftIndent->Normalize( nVal );
+        nVal = static_cast<long>(mpLeftIndent->Normalize( nVal ));
 
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
@@ -280,7 +280,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         }
 
         long nrVal = OutputDevice::LogicToLogic( aTxtRight, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nrVal = (long)mpRightIndent->Normalize( nrVal );
+        nrVal = static_cast<long>(mpRightIndent->Normalize( nrVal ));
 
         switch (maContext.GetCombinedContext_DI())
         {
@@ -311,7 +311,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         mpRightIndent->SetValue( nrVal, FUNIT_100TH_MM );
 
         long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nfVal = (long)mpFLineIndent->Normalize( nfVal );
+        nfVal = static_cast<long>(mpFLineIndent->Normalize( nfVal ));
         mpFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
     }
     else if( eState == SfxItemState::DISABLED )

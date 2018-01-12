@@ -513,7 +513,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
         xAnnotation->setDateTime( getCurrentDateTime() );
 
         // set position
-        RealPoint2D aPos( ((double)x) / 100.0, ((double)y) / 100.0 );
+        RealPoint2D aPos( static_cast<double>(x) / 100.0, static_cast<double>(y) / 100.0 );
         xAnnotation->setPosition( aPos );
 
         if( mpDoc->IsUndoEnabled() )

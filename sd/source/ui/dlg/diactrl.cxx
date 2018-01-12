@@ -69,7 +69,7 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 {
     if( pItem )
     {
-        long nValue = (long) pItem->GetValue();
+        long nValue = static_cast<long>(pItem->GetValue());
         SetValue( nValue );
         if( nValue == 1 )
             SetCustomUnitText( SdResId( STR_SLIDE_SINGULAR ) );
@@ -82,7 +82,7 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 
 void SdPagesField::Modify()
 {
-    SfxUInt16Item aItem( SID_PAGES_PER_ROW, (sal_uInt16) GetValue() );
+    SfxUInt16Item aItem( SID_PAGES_PER_ROW, static_cast<sal_uInt16>(GetValue()) );
 
     ::uno::Any a;
     ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );

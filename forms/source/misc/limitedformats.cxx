@@ -301,7 +301,7 @@ namespace frm
             bool bModified = false;
             if (bFoundIt)
             {
-                _rConvertedValue <<= (sal_Int16)nTablePosition;
+                _rConvertedValue <<= static_cast<sal_Int16>(nTablePosition);
                 bModified = nTablePosition != nOldEnumValue;
             }
 

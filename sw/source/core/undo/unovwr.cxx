@@ -384,7 +384,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
 {
     long nOffsLen = rOffsets.getLength();
     UndoTransliterate_Data* pNew = new UndoTransliterate_Data(
-                        rTNd.GetIndex(), nStart, (sal_Int32)nOffsLen,
+                        rTNd.GetIndex(), nStart, static_cast<sal_Int32>(nOffsLen),
                         rTNd.GetText().copy(nStart, nLen));
 
     aChanges.push_back( std::unique_ptr<UndoTransliterate_Data>(pNew) );

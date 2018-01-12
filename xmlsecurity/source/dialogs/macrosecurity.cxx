@@ -125,7 +125,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(vcl::Window* _pParent, MacroSecurity*
     m_pHighRB->SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
     m_pVeryHighRB->SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
 
-    mnCurLevel = (sal_uInt16) mpDlg->maSecOptions.GetMacroSecurityLevel();
+    mnCurLevel = static_cast<sal_uInt16>(mpDlg->maSecOptions.GetMacroSecurityLevel());
     bool bReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::EOption::MacroSecLevel );
 
     RadioButton* pCheck = nullptr;

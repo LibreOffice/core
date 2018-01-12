@@ -226,7 +226,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                     pTemplate->AddEntry(enumXFIndexTemplatePage, "TOC Page Number Text Style");
                 }
 
-                xToc->AddTemplate(OUString::number((sal_Int32)i),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);
+                xToc->AddTemplate(OUString::number(static_cast<sal_Int32>(i)),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);
                 bInserted = true;
             }
 
@@ -370,7 +370,7 @@ sal_uInt16 LwpTocSuperLayout::GetSeparatorType(sal_uInt16 index)
     if (index >= MAX_LEVELS)
         return NONE;
 
-    sal_uInt16 Flag = (sal_uInt16)m_nFlags[index];
+    sal_uInt16 Flag = static_cast<sal_uInt16>(m_nFlags[index]);
 
     if (Flag & TS_LEADERDOTS)
         return LEADERDOTS;

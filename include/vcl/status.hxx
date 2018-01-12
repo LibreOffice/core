@@ -50,9 +50,9 @@ namespace o3tl
     template<> struct typed_flags<StatusBarItemBits> : is_typed_flags<StatusBarItemBits, 0x00ff> {};
 }
 
-#define STATUSBAR_APPEND            ((sal_uInt16)0xFFFF)
-#define STATUSBAR_ITEM_NOTFOUND     ((sal_uInt16)0xFFFF)
-#define STATUSBAR_OFFSET            ((long)5)
+#define STATUSBAR_APPEND            (sal_uInt16(0xFFFF))
+#define STATUSBAR_ITEM_NOTFOUND     (sal_uInt16(0xFFFF))
+#define STATUSBAR_OFFSET            (long(5))
 
 
 class VCL_DLLPUBLIC StatusBar : public vcl::Window

@@ -126,7 +126,7 @@ namespace sdr
                     const basegfx::B2DPoint aPosition(aPosLogic.X(), aPosLogic.Y());
 
                     const Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(Size(nDiscreteTolerance, nDiscreteTolerance)));
-                    return isHitLogic(aPosition, (double)aSizeLogic.Width());
+                    return isHitLogic(aPosition, static_cast<double>(aSizeLogic.Width()));
                 }
             }
 

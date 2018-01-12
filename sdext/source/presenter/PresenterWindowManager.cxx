@@ -173,7 +173,7 @@ void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
 
         mpPresenterController->GetPaintManager()->Invalidate(
             pDescriptor->mxContentWindow,
-            (sal_Int16)(awt::InvalidateStyle::TRANSPARENT
+            sal_Int16(awt::InvalidateStyle::TRANSPARENT
             | awt::InvalidateStyle::CHILDREN));
     }
 }

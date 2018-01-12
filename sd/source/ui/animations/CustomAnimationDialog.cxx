@@ -232,7 +232,7 @@ void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any ColorPropertyBox::getValue()
 {
-    return makeAny( (sal_Int32)mpControl->GetSelectEntryColor().GetRGBColor() );
+    return makeAny( static_cast<sal_Int32>(mpControl->GetSelectEntryColor().GetRGBColor()) );
 }
 
 Control* ColorPropertyBox::getControl()
@@ -467,13 +467,13 @@ void CharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
     {
         double fValue = 0.0;
         rValue >>= fValue;
-        mpMetric->SetValue( (long)(fValue * 100.0) );
+        mpMetric->SetValue( static_cast<long>(fValue * 100.0) );
     }
 }
 
 Any CharHeightPropertyBox::getValue()
 {
-    return makeAny( (double)mpMetric->GetValue() / 100.0 );
+    return makeAny( static_cast<double>(mpMetric->GetValue()) / 100.0 );
 }
 
 Control* CharHeightPropertyBox::getControl()
@@ -564,7 +564,7 @@ void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
     {
         double fValue = 0.0;
         rValue >>= fValue;
-        long nValue = (long)(fValue * 100);
+        long nValue = static_cast<long>(fValue * 100);
         mpMetric->SetValue( nValue );
         updateMenu();
     }
@@ -572,7 +572,7 @@ void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any TransparencyPropertyBox::getValue()
 {
-    return makeAny( ((double)mpMetric->GetValue()) / 100.0 );
+    return makeAny( static_cast<double>(mpMetric->GetValue()) / 100.0 );
 }
 
 Control* TransparencyPropertyBox::getControl()
@@ -683,7 +683,7 @@ void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
     {
         double fValue = 0.0;
         rValue >>= fValue;
-        long nValue = (long)fValue;
+        long nValue = static_cast<long>(fValue);
         mpMetric->SetValue( nValue );
         updateMenu();
     }
@@ -691,7 +691,7 @@ void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any RotationPropertyBox::getValue()
 {
-    return makeAny( (double)mpMetric->GetValue() );
+    return makeAny( static_cast<double>(mpMetric->GetValue()) );
 }
 
 Control* RotationPropertyBox::getControl()
@@ -839,9 +839,9 @@ void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 
         long nValue;
         if( fValue1 )
-            nValue = (long)(fValue1 * 100.0);
+            nValue = static_cast<long>(fValue1 * 100.0);
         else
-            nValue = (long)(fValue2 * 100.0);
+            nValue = static_cast<long>(fValue2 * 100.0);
         mpMetric->SetValue( nValue );
         updateMenu();
     }
@@ -849,7 +849,7 @@ void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any ScalePropertyBox::getValue()
 {
-    double fValue1 = (double)mpMetric->GetValue() / 100.0;
+    double fValue1 = static_cast<double>(mpMetric->GetValue()) / 100.0;
 
     // Shrink animation is represented by value < 1 (< 100%)
     // Shrink factor is calculated as (1 + $fValue)
@@ -1187,7 +1187,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
         {
             double fIterateInterval = 0.0;
             pSet->getPropertyValue( nHandleIterateInterval ) >>= fIterateInterval;
-            mpMFTextDelay->SetValue( (long)(fIterateInterval*10) );
+            mpMFTextDelay->SetValue( static_cast<long>(fIterateInterval*10) );
         }
     }
     else
@@ -1222,14 +1222,14 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
                     OUString aString = maSoundList[ i ];
                     if( aString == aSoundURL )
                     {
-                        nPos = (sal_Int32)i+2;
+                        nPos = static_cast<sal_Int32>(i)+2;
                         break;
                     }
                 }
 
                 if( nPos == 0 )
                 {
-                    nPos = (sal_Int32)maSoundList.size()+2;
+                    nPos = static_cast<sal_Int32>(maSoundList.size())+2;
                     maSoundList.push_back( aSoundURL );
                     INetURLObject aURL( aSoundURL );
                     nPos = mpLBSound->InsertEntry( aURL.GetBase(), nPos );
@@ -1381,7 +1381,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         if( nPos == 1 )
         {
             Color aSelectedColor = mpCLBDimColor->GetSelectEntryColor();
-            aDimColor <<= (sal_Int32)aSelectedColor.GetRGBColor();
+            aDimColor <<= static_cast<sal_Int32>(aSelectedColor.GetRGBColor());
         }
 
         if( (mpSet->getPropertyState( nHandleDimColor ) == STLPropertyState::Ambiguous) ||
@@ -1434,7 +1434,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
     nPos = mpLBSound->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        Any aNewSoundURL, aOldSoundURL( makeAny( (sal_Int32) 0 ) );
+        Any aNewSoundURL, aOldSoundURL( makeAny( sal_Int32(0) ) );
 
         if( nPos == 0 )
         {
@@ -1642,7 +1642,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
     {
         double fBegin = 0.0;
         pSet->getPropertyValue( nHandleBegin ) >>= fBegin;
-        mpMFStartDelay->SetValue( (long)(fBegin*10) );
+        mpMFStartDelay->SetValue( static_cast<long>(fBegin*10) );
     }
 
     if( pSet->getPropertyState( nHandleDuration ) != STLPropertyState::Ambiguous )
@@ -1752,7 +1752,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
             OUString aDescription( getShapeDescription( xShape, true ) );
             sal_Int32 nPos = mpLBTrigger->InsertEntry( aDescription );
 
-            mpLBTrigger->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nShape) );
+            mpLBTrigger->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nShape)) );
             if( xShape == xTrigger )
                 mpLBTrigger->SelectEntryPos( nPos );
         }
@@ -1936,7 +1936,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
         nPos = mpLBTrigger->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            sal_Int32 nShape = (sal_Int32)reinterpret_cast<sal_IntPtr>(mpLBTrigger->GetEntryData( nPos ));
+            sal_Int32 nShape = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(mpLBTrigger->GetEntryData( nPos )));
 
             Reference< XDrawPage > xCurrentPage;
             mpSet->getPropertyValue( nHandleCurrentPage ) >>= xCurrentPage;
@@ -2015,7 +2015,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(vcl::Window* pPar
         {
             maCBXGroupAuto->Check( fTextGroupingAuto >= 0.0 );
             if( fTextGroupingAuto >= 0.0 )
-                maMFGroupAuto->SetValue( (long)(fTextGroupingAuto*10) );
+                maMFGroupAuto->SetValue( static_cast<long>(fTextGroupingAuto*10) );
         }
     }
     else
@@ -2230,15 +2230,15 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     Any aEmpty;
 
     STLPropertySet* pSet = new STLPropertySet();
-    pSet->setPropertyDefaultValue( nHandleMaxParaDepth, makeAny( (sal_Int32)-1 ) );
+    pSet->setPropertyDefaultValue( nHandleMaxParaDepth, makeAny( sal_Int32(-1) ) );
 
     pSet->setPropertyDefaultValue( nHandleHasAfterEffect, makeAny( false ) );
     pSet->setPropertyDefaultValue( nHandleAfterEffectOnNextEffect, makeAny( false ) );
     pSet->setPropertyDefaultValue( nHandleDimColor, aEmpty );
-    pSet->setPropertyDefaultValue( nHandleIterateType, makeAny( (sal_Int16)0 ) );
+    pSet->setPropertyDefaultValue( nHandleIterateType, makeAny( sal_Int16(0) ) );
     pSet->setPropertyDefaultValue( nHandleIterateInterval, makeAny( 0.0 ) );
 
-    pSet->setPropertyDefaultValue( nHandleStart, makeAny( (sal_Int16)EffectNodeType::ON_CLICK ) );
+    pSet->setPropertyDefaultValue( nHandleStart, makeAny( sal_Int16(EffectNodeType::ON_CLICK) ) );
     pSet->setPropertyDefaultValue( nHandleBegin, makeAny( 0.0 ) );
     pSet->setPropertyDefaultValue( nHandleDuration, makeAny( 2.0 ) );
     pSet->setPropertyDefaultValue( nHandleRepeat, aEmpty );
@@ -2258,7 +2258,7 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
 
     pSet->setPropertyDefaultValue( nHandleHasText, makeAny( false ) );
     pSet->setPropertyDefaultValue( nHandleHasVisibleShape, makeAny( false ) );
-    pSet->setPropertyDefaultValue( nHandleTextGrouping, makeAny( (sal_Int32)-1 ) );
+    pSet->setPropertyDefaultValue( nHandleTextGrouping, makeAny( sal_Int32(-1) ) );
     pSet->setPropertyDefaultValue( nHandleAnimateForm, makeAny( true ) );
     pSet->setPropertyDefaultValue( nHandleTextGroupingAuto, makeAny( -1.0 ) );
     pSet->setPropertyDefaultValue( nHandleTextReverse, makeAny( false ) );
@@ -2267,9 +2267,9 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
 
     pSet->setPropertyDefaultValue( nHandleSoundURL, aEmpty );
     pSet->setPropertyDefaultValue( nHandleSoundVolumne, makeAny( 1.0) );
-    pSet->setPropertyDefaultValue( nHandleSoundEndAfterSlide, makeAny( (sal_Int32)0 ) );
+    pSet->setPropertyDefaultValue( nHandleSoundEndAfterSlide, makeAny( sal_Int32(0) ) );
 
-    pSet->setPropertyDefaultValue( nHandleCommand, makeAny( (sal_Int16)0 ) );
+    pSet->setPropertyDefaultValue( nHandleCommand, makeAny( sal_Int16(0) ) );
     return pSet;
 }
 

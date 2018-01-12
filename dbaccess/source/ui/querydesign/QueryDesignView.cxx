@@ -721,7 +721,7 @@ namespace
         OTableFields::const_iterator aEnd = _rFieldList.end();
         for(;aIter != aEnd;++aIter)
         {
-            nMaxCriteria = std::max<sal_uInt16>(nMaxCriteria,(sal_uInt16)(*aIter)->GetCriteria().size());
+            nMaxCriteria = std::max<sal_uInt16>(nMaxCriteria,static_cast<sal_uInt16>((*aIter)->GetCriteria().size()));
         }
         try
         {
@@ -936,7 +936,7 @@ namespace
                     {
                         aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote) + ::dbtools::quoteName(aQuote, aColumnName);
                     }
-                    aWorkStr += " " + OUString( ";ASC;DESC" ).getToken( (sal_uInt16)eOrder, ';' ) + ",";
+                    aWorkStr += " " + OUString( ";ASC;DESC" ).getToken( static_cast<sal_uInt16>(eOrder), ';' ) + ",";
                 }
             }
 
@@ -1945,7 +1945,7 @@ namespace
             try
             {
                 sal_Int32 nMax = xMetaData->getMaxTablesInSelect();
-                if ( nMax && nMax < (sal_Int32)aMap.size() )
+                if ( nMax && nMax < static_cast<sal_Int32>(aMap.size()) )
                 {
                     eErrorCode = eTooManyTables;
                     break;

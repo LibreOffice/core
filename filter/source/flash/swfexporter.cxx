@@ -502,7 +502,7 @@ void FlashExporter::exportShapes( const Reference< XShapes >& xShapes, bool bStr
 {
     OSL_ENSURE( (xShapes->getCount() <= 0xffff), "overflow in FlashExporter::exportDrawPageContents()" );
 
-    sal_uInt16 nShapeCount = (sal_uInt16)std::min( xShapes->getCount(), (sal_Int32)0xffff );
+    sal_uInt16 nShapeCount = static_cast<sal_uInt16>(std::min( xShapes->getCount(), sal_Int32(0xffff) ));
     sal_uInt16 nShape;
 
     Reference< XShape > xShape;
@@ -629,7 +629,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent > const &xComponent, GDIM
 
     Sequence< PropertyValue > aFilterData(bExportAsJPEG ? 3 : 2);
     aFilterData[0].Name = "Version";
-    aFilterData[0].Value <<= (sal_Int32)6000;
+    aFilterData[0].Value <<= sal_Int32(6000);
     aFilterData[1].Name = "PageNumber";
     aFilterData[1].Value <<= mnPageNumber;
 

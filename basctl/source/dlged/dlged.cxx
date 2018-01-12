@@ -278,8 +278,8 @@ void DlgEditor::InitScrollBars()
 
     pHScroll->SetRange( Range( 0, aPgSize.Width()  ));
     pVScroll->SetRange( Range( 0, aPgSize.Height() ));
-    pHScroll->SetVisibleSize( (sal_uLong)aOutSize.Width() );
-    pVScroll->SetVisibleSize( (sal_uLong)aOutSize.Height() );
+    pHScroll->SetVisibleSize( static_cast<sal_uLong>(aOutSize.Width()) );
+    pVScroll->SetVisibleSize( static_cast<sal_uLong>(aOutSize.Height()) );
 
     pHScroll->SetLineSize( aOutSize.Width() / 10 );
     pVScroll->SetLineSize( aOutSize.Height() / 10 );
@@ -654,7 +654,7 @@ void implCopyStreamToByteSequence( const Reference< XInputStream >& xStream,
 
         sal_Int32 nPos = bytes.getLength();
         bytes.realloc( nPos + nRead );
-        memcpy( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
+        memcpy( bytes.getArray() + nPos, readBytes.getConstArray(), static_cast<sal_uInt32>(nRead) );
     }
 }
 
@@ -934,7 +934,7 @@ void DlgEditor::Paste()
                         // set tabindex
                         Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
                            Sequence< OUString > aNames_ = xNA->getElementNames();
-                        xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) aNames_.getLength()) );
+                        xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames_.getLength())) );
 
                         if( bLocalized )
                         {
@@ -1173,13 +1173,13 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     Size aOutputSz;
     if( nBmpSzHeight * nScaleX <= nPaperSzHeight )
     {
-        aOutputSz.Width() = (long)(nBmpSzWidth * nScaleX);
-        aOutputSz.Height() = (long)(nBmpSzHeight * nScaleX);
+        aOutputSz.Width() = static_cast<long>(nBmpSzWidth * nScaleX);
+        aOutputSz.Height() = static_cast<long>(nBmpSzHeight * nScaleX);
     }
     else
     {
-        aOutputSz.Width() = (long)(nBmpSzWidth * nScaleY);
-        aOutputSz.Height() = (long)(nBmpSzHeight * nScaleY);
+        aOutputSz.Width() = static_cast<long>(nBmpSzWidth * nScaleY);
+        aOutputSz.Height() = static_cast<long>(nBmpSzHeight * nScaleY);
     }
 
     Point aPosOffs(

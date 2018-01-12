@@ -170,22 +170,22 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
         {
             try
             {
-                nFormat = _xTypes->getStandardFormat((sal_Int16)nNumberType, _rLocale);
+                nFormat = _xTypes->getStandardFormat(static_cast<sal_Int16>(nNumberType), _rLocale);
                 if(_nScale > 0)
                 {
                     // generate a new format if necessary
                     Reference< XNumberFormats > xFormats(_xTypes, UNO_QUERY);
-                    OUString sNewFormat = xFormats->generateFormat( 0, _rLocale, false, false, (sal_Int16)_nScale, 1);
+                    OUString sNewFormat = xFormats->generateFormat( 0, _rLocale, false, false, static_cast<sal_Int16>(_nScale), 1);
 
                     // and add it to the formatter if necessary
                     nFormat = xFormats->queryKey(sNewFormat, _rLocale, false);
-                    if (nFormat == (sal_Int32)-1)
+                    if (nFormat == sal_Int32(-1))
                         nFormat = xFormats->addNew(sNewFormat, _rLocale);
                 }
             }
             catch (Exception&)
             {
-                nFormat = _xTypes->getStandardFormat((sal_Int16)nNumberType, _rLocale);
+                nFormat = _xTypes->getStandardFormat(static_cast<sal_Int16>(nNumberType), _rLocale);
             }
         }   break;
         case DataType::CHAR:
@@ -1122,7 +1122,7 @@ try
 
             // ... and add at FormatsSupplier (if needed)
             sal_Int32 nKey = xFormats->queryKey(sNewFormat, _rLocale, false);
-            if (nKey == (sal_Int32)-1)
+            if (nKey == sal_Int32(-1))
             {   // not added yet in my formatter ...
                 nKey = xFormats->addNew(sNewFormat, _rLocale);
             }
@@ -1643,7 +1643,7 @@ namespace
         {
             if ( m_aSet.empty() )
                 return m_xSource->getByIndex(Index);
-            if ( m_aSet.size() < (size_t)Index )
+            if ( m_aSet.size() < static_cast<size_t>(Index) )
                 throw IndexOutOfBoundsException();
 
             std::vector<bool, std::allocator<bool> >::const_iterator aIter = m_aSet.begin();

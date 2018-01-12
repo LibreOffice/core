@@ -511,7 +511,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
                 aTmp.nSingle = 0;
                 return false;
             }
-            aTmp.nSingle = (float) d;
+            aTmp.nSingle = static_cast<float>(d);
             break;
         }
         case SbxDATE:
@@ -557,7 +557,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             return false;
         }
         pInfo = new SbxInfo;
-        pInfo->LoadData( rStrm, (sal_uInt16) cMark );
+        pInfo->LoadData( rStrm, static_cast<sal_uInt16>(cMark) );
     }
     Broadcast( SfxHintId::BasicDataChanged );
     nHash =  MakeHashCode( maName );

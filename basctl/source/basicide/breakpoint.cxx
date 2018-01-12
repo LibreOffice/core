@@ -75,7 +75,7 @@ void BreakPointList::SetBreakPointsInBasic(SbModule* pModule)
     for (BreakPoint* pBrk : maBreakPoints)
     {
         if ( pBrk->bEnabled )
-            pModule->SetBP( (sal_uInt16)pBrk->nLine );
+            pModule->SetBP( static_cast<sal_uInt16>(pBrk->nLine) );
     }
 }
 

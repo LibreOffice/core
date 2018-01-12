@@ -40,7 +40,7 @@ namespace pdfi
         static void append( sal_uInt32 i_nValue, OutputBuffer& o_rOutputBuf )
         {
             size_t nCur = o_rOutputBuf.size();
-            o_rOutputBuf.insert( o_rOutputBuf.end(), 4, (Output_t)0 );
+            o_rOutputBuf.insert( o_rOutputBuf.end(), 4, Output_t(0) );
             set( i_nValue, o_rOutputBuf, nCur );
         }
 

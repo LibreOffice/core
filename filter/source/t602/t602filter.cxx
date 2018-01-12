@@ -612,7 +612,7 @@ sal_Int16 T602ImportFilter::readnum(unsigned char *ch, bool show)
     buff[i]='\0';
 
     // mba: cast from unsigned char via int to sal_Int16 seems to be safe
-    return (sal_Int16) atoi(reinterpret_cast<char const *>(buff));
+    return static_cast<sal_Int16>(atoi(reinterpret_cast<char const *>(buff)));
 }
 
 unsigned char T602ImportFilter::Setformat602(const char *cmd)
@@ -658,14 +658,14 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
     char pcmd[2];
 
     // warning: uChar -> char
-    pcmd[0] = (char) rtl::toAsciiUpperCase(*ch); inschr(*ch);
+    pcmd[0] = static_cast<char>(rtl::toAsciiUpperCase(*ch)); inschr(*ch);
     *ch = Readchar602();
     if (!*ch) return tnode::EEND;
     if (*ch=='\n') return tnode::EOL;
     if (!rtl::isAsciiAlpha(*ch)) return (*ch<32) ? tnode::SETCH : tnode::WRITE;
 
     // warning: uChar -> char
-    pcmd[1] = (char) rtl::toAsciiUpperCase(*ch); inschr(*ch);
+    pcmd[1] = static_cast<char>(rtl::toAsciiUpperCase(*ch)); inschr(*ch);
 
          if (pcmd[0]=='P' && pcmd[1]=='A') { if (pst.pars) pst.willbeeop = true; }
     else if (pcmd[0]=='C' && pcmd[1]=='P') { if (pst.pars) pst.willbeeop = true; }
@@ -988,7 +988,7 @@ bool T602ImportFilterDialog::OptionsDlg()
     xPSetCodeLB->setPropertyValue("StringItemList", any);
 
     Sequence < sal_Int16 > shr(1);
-    shr[0] = ini.forcecode ? ((sal_Int16) ini.xcode) + 1 : 0;
+    shr[0] = ini.forcecode ? static_cast<sal_Int16>(ini.xcode) + 1 : 0;
     any <<= shr;
     xPSetCodeLB->setPropertyValue("SelectedItems", any);
 

@@ -877,7 +877,7 @@ namespace sfx2
 
     std::shared_ptr<const SfxFilter> TSortedFilterList::impl_getFilter(sal_Int32 nIndex)
     {
-        if (nIndex<0 || nIndex>=(sal_Int32)m_lFilters.size())
+        if (nIndex<0 || nIndex>=static_cast<sal_Int32>(m_lFilters.size()))
             return nullptr;
         const OUString& sFilterName = m_lFilters[nIndex];
         if (sFilterName.isEmpty())
@@ -1021,7 +1021,7 @@ namespace sfx2
             if ( !aImportantFilterGroup.empty() )
             {
                 Sequence< StringPair > aFilters( aImportantFilterGroup.size() );
-                for ( sal_Int32 i = 0; i < (sal_Int32)aImportantFilterGroup.size(); i++ )
+                for ( sal_Int32 i = 0; i < static_cast<sal_Int32>(aImportantFilterGroup.size()); i++ )
                 {
                     aFilters[i].First   = addExtension( aImportantFilterGroup[i].aUIName,
                                                         aImportantFilterGroup[i].aWildcard,
@@ -1041,7 +1041,7 @@ namespace sfx2
             if ( !aFilterGroup.empty() )
             {
                 Sequence< StringPair > aFilters( aFilterGroup.size() );
-                for ( sal_Int32 i = 0; i < (sal_Int32)aFilterGroup.size(); i++ )
+                for ( sal_Int32 i = 0; i < static_cast<sal_Int32>(aFilterGroup.size()); i++ )
                 {
                     aFilters[i].First   = addExtension( aFilterGroup[i].aUIName,
                                                         aFilterGroup[i].aWildcard,
@@ -1063,7 +1063,7 @@ namespace sfx2
             // Fallback solution just add both filter groups as single filters
             sal_Int32 n;
 
-            for ( n = 0; n < (sal_Int32)aImportantFilterGroup.size(); n++ )
+            for ( n = 0; n < static_cast<sal_Int32>(aImportantFilterGroup.size()); n++ )
             {
                 try
                 {
@@ -1081,7 +1081,7 @@ namespace sfx2
                 }
             }
 
-            for ( n = 0; n < (sal_Int32)aFilterGroup.size(); n++ )
+            for ( n = 0; n < static_cast<sal_Int32>(aFilterGroup.size()); n++ )
             {
                 try
                 {

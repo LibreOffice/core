@@ -293,7 +293,7 @@ namespace abp
 
             aAddressBookSettings.setNodeValue( OUString( "DataSourceName" ), makeAny( _rDataSourceName ) );
             aAddressBookSettings.setNodeValue( OUString( "Command" ), makeAny( _rTableName ) );
-            aAddressBookSettings.setNodeValue( OUString( "CommandType" ), makeAny( (sal_Int16)CommandType::TABLE ) );
+            aAddressBookSettings.setNodeValue( OUString( "CommandType" ), makeAny( sal_Int16(CommandType::TABLE) ) );
 
             // commit the changes done
             aAddressBookSettings.commit();

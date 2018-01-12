@@ -24,16 +24,16 @@
 #include <rtl/cipher.h>
 
 #define RTL_CIPHER_NTOHL(c, l) \
-    ((l)  = ((sal_uInt32)(*((c)++))) << 24, \
-     (l) |= ((sal_uInt32)(*((c)++))) << 16, \
-     (l) |= ((sal_uInt32)(*((c)++))) <<  8, \
-     (l) |= ((sal_uInt32)(*((c)++))))
+    ((l)  = (static_cast<sal_uInt32>(*((c)++))) << 24, \
+     (l) |= (static_cast<sal_uInt32>(*((c)++))) << 16, \
+     (l) |= (static_cast<sal_uInt32>(*((c)++))) <<  8, \
+     (l) |= (static_cast<sal_uInt32>(*((c)++))))
 
 #define RTL_CIPHER_HTONL(l, c) \
-    (*((c)++) = (sal_uInt8)(((l) >> 24) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >> 16) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >>  8) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l)       ) & 0xff))
+    (*((c)++) = static_cast<sal_uInt8>(((l) >> 24) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l) >> 16) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l) >>  8) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l)       ) & 0xff))
 
 #define RTL_CIPHER_NTOHL64(c, xl, xr, n) \
 { \
@@ -41,21 +41,21 @@
     (c) += (n);  \
     switch ((n)) \
     { \
-        case 8: (xr)  = ((sal_uInt32)(*(--(c)))); \
+        case 8: (xr)  = (static_cast<sal_uInt32>(*(--(c)))); \
             SAL_FALLTHROUGH; \
-        case 7: (xr) |= ((sal_uInt32)(*(--(c)))) <<  8; \
+        case 7: (xr) |= (static_cast<sal_uInt32>(*(--(c)))) <<  8; \
             SAL_FALLTHROUGH; \
-        case 6: (xr) |= ((sal_uInt32)(*(--(c)))) << 16; \
+        case 6: (xr) |= (static_cast<sal_uInt32>(*(--(c)))) << 16; \
             SAL_FALLTHROUGH; \
-        case 5: (xr) |= ((sal_uInt32)(*(--(c)))) << 24; \
+        case 5: (xr) |= (static_cast<sal_uInt32>(*(--(c)))) << 24; \
             SAL_FALLTHROUGH; \
-        case 4: (xl)  = ((sal_uInt32)(*(--(c)))); \
+        case 4: (xl)  = (static_cast<sal_uInt32>(*(--(c)))); \
             SAL_FALLTHROUGH; \
-        case 3: (xl) |= ((sal_uInt32)(*(--(c)))) <<  8; \
+        case 3: (xl) |= (static_cast<sal_uInt32>(*(--(c)))) <<  8; \
             SAL_FALLTHROUGH; \
-        case 2: (xl) |= ((sal_uInt32)(*(--(c)))) << 16; \
+        case 2: (xl) |= (static_cast<sal_uInt32>(*(--(c)))) << 16; \
             SAL_FALLTHROUGH; \
-        case 1: (xl) |= ((sal_uInt32)(*(--(c)))) << 24; \
+        case 1: (xl) |= (static_cast<sal_uInt32>(*(--(c)))) << 24; \
     } \
 }
 
@@ -64,21 +64,21 @@
     (c) += (n);  \
     switch ((n)) \
     { \
-        case 8: *(--(c)) = (sal_uInt8)(((xr)       ) & 0xff); \
+        case 8: *(--(c)) = static_cast<sal_uInt8>(((xr)       ) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 7: *(--(c)) = (sal_uInt8)(((xr) >>  8) & 0xff); \
+        case 7: *(--(c)) = static_cast<sal_uInt8>(((xr) >>  8) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 6: *(--(c)) = (sal_uInt8)(((xr) >> 16) & 0xff); \
+        case 6: *(--(c)) = static_cast<sal_uInt8>(((xr) >> 16) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 5: *(--(c)) = (sal_uInt8)(((xr) >> 24) & 0xff); \
+        case 5: *(--(c)) = static_cast<sal_uInt8>(((xr) >> 24) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 4: *(--(c)) = (sal_uInt8)(((xl)       ) & 0xff); \
+        case 4: *(--(c)) = static_cast<sal_uInt8>(((xl)       ) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 3: *(--(c)) = (sal_uInt8)(((xl) >>  8) & 0xff); \
+        case 3: *(--(c)) = static_cast<sal_uInt8>(((xl) >>  8) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 2: *(--(c)) = (sal_uInt8)(((xl) >> 16) & 0xff); \
+        case 2: *(--(c)) = static_cast<sal_uInt8>(((xl) >> 16) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 1: *(--(c)) = (sal_uInt8)(((xl) >> 24) & 0xff); \
+        case 1: *(--(c)) = static_cast<sal_uInt8>(((xl) >> 24) & 0xff); \
     } \
 }
 
@@ -916,13 +916,13 @@ static sal_uInt32 BF(CipherKeyBF *key, sal_uInt32 x)
     sal_uInt16 a, b, c, d;
     sal_uInt32 y;
 
-    d = (sal_uInt16)(x & 0x00ff);
+    d = static_cast<sal_uInt16>(x & 0x00ff);
     x >>= 8;
-    c = (sal_uInt16)(x & 0x00ff);
+    c = static_cast<sal_uInt16>(x & 0x00ff);
     x >>= 8;
-    b = (sal_uInt16)(x & 0x00ff);
+    b = static_cast<sal_uInt16>(x & 0x00ff);
     x >>= 8;
-    a = (sal_uInt16)(x & 0x00ff);
+    a = static_cast<sal_uInt16>(x & 0x00ff);
 
     y  = key->m_S[0][a];
     y += key->m_S[1][b];
@@ -1145,7 +1145,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
 
         /* Evaluate next key byte S[t]. */
         t = (S[x] + S[y]) % CIPHER_CBLOCK_ARCFOUR;
-        pBuffer[k] = pData[k] ^ ((sal_uInt8)(S[t] & 0xff));
+        pBuffer[k] = pData[k] ^ static_cast<sal_uInt8>(S[t] & 0xff);
     }
 
     return rtl_Cipher_E_None;

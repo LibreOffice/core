@@ -193,7 +193,7 @@ void FuMorph::DoExecute( SfxRequest& )
     {
         // length of step in dest poly
         ::basegfx::B2DPolygon aRetval;
-        const double fStep(::basegfx::utils::getLength(rCandidate) / (double)(rCandidate.isClosed() ? nNum : nNum - 1));
+        const double fStep(::basegfx::utils::getLength(rCandidate) / static_cast<double>(rCandidate.isClosed() ? nNum : nNum - 1));
         double fDestPos(0.0);
         double fSrcPos(0.0);
         sal_uInt32 nSrcPos(0);
@@ -420,7 +420,7 @@ void FuMorph::ImpInsertPolygons(
 
             // line width
             if ( bLineWidth )
-                aSet.Put( XLineWidthItem( nStartLineWidth + (long) ( fFactor * fDelta + 0.5 ) ) );
+                aSet.Put( XLineWidthItem( nStartLineWidth + static_cast<long>( fFactor * fDelta + 0.5 ) ) );
 
             pNewObj->SetMergedItemSetAndBroadcast(aSet);
 

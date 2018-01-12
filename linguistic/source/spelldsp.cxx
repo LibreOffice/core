@@ -401,7 +401,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
                 if (bTmpResValid)
                     bRes = bTmpRes;
 
-                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                pEntry->nLastTriedSvcIndex = static_cast<sal_Int16>(i);
                 ++i;
             }
 
@@ -603,7 +603,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     nNumSugestions = nTmpNumSugestions;
                 }
 
-                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                pEntry->nLastTriedSvcIndex = static_cast<sal_Int16>(i);
                 ++i;
             }
 

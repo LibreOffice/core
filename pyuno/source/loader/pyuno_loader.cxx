@@ -126,7 +126,7 @@ static void setPythonHome ( const OUString & pythonHome )
     // static because Py_SetPythonHome just copies the "wide" pointer
     static wchar_t wide[PATH_MAX + 1];
     size_t len = mbstowcs(wide, o.pData->buffer, PATH_MAX + 1);
-    if(len == (size_t)-1)
+    if(len == size_t(-1))
     {
         PyErr_SetString(PyExc_SystemError, "invalid multibyte sequence in python home path");
         return;

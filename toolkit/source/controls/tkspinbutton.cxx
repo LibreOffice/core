@@ -156,7 +156,7 @@ public:
             return makeAny( OUString("com.sun.star.awt.UnoControlSpinButton") );
 
         case BASEPROPERTY_BORDER:
-            return makeAny( (sal_Int16) 0 );
+            return makeAny( sal_Int16(0) );
 
         case BASEPROPERTY_REPEAT:
             return makeAny( true );

@@ -2198,7 +2198,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         else
             rBuffer.append( mxSymbols->getSymbol( eOp));
     }
-    else if( (sal_uInt16) eOp < mxSymbols->getSymbolCount())        // Keyword:
+    else if( static_cast<sal_uInt16>(eOp) < mxSymbols->getSymbolCount())        // Keyword:
         rBuffer.append( mxSymbols->getSymbol( eOp));
     else
     {

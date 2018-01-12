@@ -66,7 +66,7 @@ bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         if (!::sax::Converter::convertPercent( nNewEsc, aToken ))
             return false;
 
-        nVal = (sal_Int16) nNewEsc;
+        nVal = static_cast<sal_Int16>(nNewEsc);
     }
 
     rValue <<= nVal;
@@ -124,7 +124,7 @@ bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::A
         sal_Int32 nNewProp;
         if (!::sax::Converter::convertPercent( nNewProp, aToken ))
             return false;
-        nProp = (sal_Int8)nNewProp;
+        nProp = static_cast<sal_Int8>(nNewProp);
     }
     else
     {
@@ -135,7 +135,7 @@ bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::A
             nProp = 100; //if escapement position is zero and no escapement height is given the default height should be 100percent and not something smaller (#i91800#)
         }
         else
-            nProp = (sal_Int8) DFLT_ESC_PROP;
+            nProp = sal_Int8(DFLT_ESC_PROP);
     }
 
     rValue <<= nProp;

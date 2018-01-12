@@ -179,16 +179,16 @@ to be set (before Show) with SetStyle().
 
 typedef std::vector<ValueSetItem*> ValueItemList;
 
-#define WB_ITEMBORDER           ((WinBits)0x00010000)
-#define WB_DOUBLEBORDER         ((WinBits)0x00020000)
-#define WB_NAMEFIELD            ((WinBits)0x00040000)
-#define WB_NONEFIELD            ((WinBits)0x00080000)
-#define WB_FLATVALUESET         ((WinBits)0x02000000)
-#define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
-#define WB_MENUSTYLEVALUESET    ((WinBits)0x08000000)
+#define WB_ITEMBORDER           (WinBits(0x00010000))
+#define WB_DOUBLEBORDER         (WinBits(0x00020000))
+#define WB_NAMEFIELD            (WinBits(0x00040000))
+#define WB_NONEFIELD            (WinBits(0x00080000))
+#define WB_FLATVALUESET         (WinBits(0x02000000))
+#define WB_NO_DIRECTSELECT      (WinBits(0x04000000))
+#define WB_MENUSTYLEVALUESET    (WinBits(0x08000000))
 
-#define VALUESET_APPEND         ((size_t)-1)
-#define VALUESET_ITEM_NOTFOUND  ((size_t)-1)
+#define VALUESET_APPEND         (size_t(-1))
+#define VALUESET_ITEM_NOTFOUND  (size_t(-1))
 
 
 class SVT_DLLPUBLIC ValueSet : public Control

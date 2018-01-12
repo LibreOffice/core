@@ -723,10 +723,10 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                         (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
                        )
                     {
-                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pLeftMF, eCoreUnit ), SvxBoxItemLine::LEFT  );
-                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pRightMF, eCoreUnit ), SvxBoxItemLine::RIGHT );
-                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pTopMF, eCoreUnit ), SvxBoxItemLine::TOP   );
-                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pBottomMF, eCoreUnit ), SvxBoxItemLine::BOTTOM);
+                        aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_pLeftMF, eCoreUnit )), SvxBoxItemLine::LEFT  );
+                        aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_pRightMF, eCoreUnit )), SvxBoxItemLine::RIGHT );
+                        aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_pTopMF, eCoreUnit )), SvxBoxItemLine::TOP   );
+                        aBoxItem.SetDistance( static_cast<sal_uInt16>(GetCoreValue(*m_pBottomMF, eCoreUnit )), SvxBoxItemLine::BOTTOM);
                     }
                     else
                     {

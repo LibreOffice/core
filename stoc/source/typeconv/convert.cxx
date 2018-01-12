@@ -56,11 +56,11 @@ namespace stoc_tcv
 {
 
 static const sal_uInt64 SAL_UINT64_MAX =
-    ((((sal_uInt64)0xffffffff) << 32) | (sal_uInt64)0xffffffff);
+    (((sal_uInt64(0xffffffff)) << 32) | sal_uInt64(0xffffffff));
 static const sal_Int64 SAL_INT64_MAX =
-    (sal_Int64)((((sal_uInt64)0x7fffffff) << 32) | (sal_uInt64)0xffffffff);
+    sal_Int64(((sal_uInt64(0x7fffffff)) << 32) | sal_uInt64(0xffffffff));
 static const sal_Int64 SAL_INT64_MIN =
-    (sal_Int64)(((sal_uInt64)0x80000000) << 32);
+    sal_Int64((sal_uInt64(0x80000000)) << 32);
 
 /* MS Visual C++ no conversion from unsigned __int64 to double */
 #ifdef _MSC_VER
@@ -74,11 +74,11 @@ static inline double unsigned_int64_to_double( sal_uInt64 n )
 }
 #else
 static const double DOUBLE_SAL_UINT64_MAX =
-    (double)((((sal_uInt64)0xffffffff) << 32) | (sal_uInt64)0xffffffff);
+    double(((sal_uInt64(0xffffffff)) << 32) | sal_uInt64(0xffffffff));
 
 static inline double unsigned_int64_to_double( sal_uInt64 n )
 {
-    return (double)n;
+    return static_cast<double>(n);
 }
 #endif
 
@@ -142,7 +142,7 @@ static bool getNumericValue( double & rfVal, const OUString & rStr )
                 }
             }
 
-            rfVal = (bNeg ? -(double)nRet : (double)nRet);
+            rfVal = (bNeg ? -static_cast<double>(nRet) : static_cast<double>(nRet));
             return true;
         }
 
@@ -231,10 +231,10 @@ static bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
 
     double fVal;
     if (getNumericValue( fVal, rStr ) &&
-        fVal >= (double)SAL_INT64_MIN &&
+        fVal >= double(SAL_INT64_MIN) &&
         fVal <= DOUBLE_SAL_UINT64_MAX)
     {
-        rnVal = (sal_Int64)round( fVal );
+        rnVal = static_cast<sal_Int64>(round( fVal ));
         return true;
     }
     return false;
@@ -331,8 +331,8 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_UNSIGNED_HYPER:
     {
         nRet = static_cast<sal_Int64>(*o3tl::forceAccess<sal_uInt64>(rAny));
-        if ((min < 0 || (sal_uInt64)nRet >= (sal_uInt64)min) && // lower bound
-            (sal_uInt64)nRet <= max)                            // upper bound
+        if ((min < 0 || static_cast<sal_uInt64>(nRet) >= static_cast<sal_uInt64>(min)) && // lower bound
+            static_cast<sal_uInt64>(nRet) <= max)                            // upper bound
         {
             return nRet;
         }
@@ -345,7 +345,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_FLOAT:
     {
         double fVal = round( *o3tl::forceAccess<float>(rAny) );
-        nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
+        nRet = (fVal > SAL_INT64_MAX ? static_cast<sal_Int64>(static_cast<sal_uInt64>(fVal)) : static_cast<sal_Int64>(fVal));
         if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
         {
             return nRet;
@@ -357,7 +357,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_DOUBLE:
     {
         double fVal = round( *o3tl::forceAccess<double>(rAny) );
-        nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
+        nRet = (fVal > SAL_INT64_MAX ? static_cast<sal_Int64>(static_cast<sal_uInt64>(fVal)) : static_cast<sal_Int64>(fVal));
         if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
         {
             return nRet;
@@ -378,7 +378,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
         nRet = nVal;
-        if (nVal >= min && (nVal < 0 || ((sal_uInt64)nVal) <= max))
+        if (nVal >= min && (nVal < 0 || static_cast<sal_uInt64>(nVal) <= max))
             return nRet;
         throw CannotConvertException(
             "STRING value out of range!",
@@ -391,7 +391,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             Reference<XInterface>(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
-    if (nRet >= min && (nRet < 0 || (sal_uInt64)nRet <= max))
+    if (nRet >= min && (nRet < 0 || static_cast<sal_uInt64>(nRet) <= max))
         return nRet;
     throw CannotConvertException(
         "VALUE is out of range!",
@@ -439,7 +439,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
         break;
     // HYPER
     case TypeClass_HYPER:
-        fRet = (double)*o3tl::forceAccess<sal_Int64>(rAny);
+        fRet = static_cast<double>(*o3tl::forceAccess<sal_Int64>(rAny));
         break;
     // UNSIGNED HYPER
     case TypeClass_UNSIGNED_HYPER:
@@ -625,7 +625,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                  aSourceClass!=TypeClass_BOOLEAN &&
                  aSourceClass!=TypeClass_CHAR)
         {
-            sal_Int32 nEnumValue = (sal_Int32)toHyper( rVal, -(sal_Int64)0x80000000, 0x7fffffff );
+            sal_Int32 nEnumValue = static_cast<sal_Int32>(toHyper( rVal, -sal_Int64(0x80000000), 0x7fffffff ));
             for ( nPos = reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->nEnumValues; nPos--; )
             {
                 if (nEnumValue == reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->pEnumValues[nPos])
@@ -692,7 +692,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     default:
         throw IllegalArgumentException(
             "destination type is not simple!",
-            Reference< XInterface >(), (sal_Int16) 1 );
+            Reference< XInterface >(), sal_Int16(1) );
     }
 
     const Type& aSourceType = rVal.getValueType();
@@ -761,23 +761,23 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         break;
     }
     case TypeClass_BYTE:
-        aRet <<= (sal_Int8)( toHyper( rVal, -(sal_Int64)0x80, 0x7f ) );
+        aRet <<= static_cast<sal_Int8>( toHyper( rVal, -sal_Int64(0x80), 0x7f ) );
         break;
 
     // --- to SHORT, UNSIGNED SHORT -------------------------------------------------------------
     case TypeClass_SHORT:
-        aRet <<= (sal_Int16)( toHyper( rVal, -(sal_Int64)0x8000, 0x7fff ) );
+        aRet <<= static_cast<sal_Int16>( toHyper( rVal, -sal_Int64(0x8000), 0x7fff ) );
         break;
     case TypeClass_UNSIGNED_SHORT:
-        aRet <<= (sal_uInt16)( toHyper( rVal, 0, 0xffff ) );
+        aRet <<= static_cast<sal_uInt16>( toHyper( rVal, 0, 0xffff ) );
         break;
 
     // --- to LONG, UNSIGNED LONG ---------------------------------------------------------------
     case TypeClass_LONG:
-        aRet <<= (sal_Int32)( toHyper( rVal, -(sal_Int64)0x80000000, 0x7fffffff ) );
+        aRet <<= static_cast<sal_Int32>( toHyper( rVal, -sal_Int64(0x80000000), 0x7fffffff ) );
         break;
     case TypeClass_UNSIGNED_LONG:
-        aRet <<= (sal_uInt32)( toHyper( rVal, 0, 0xffffffff ) );
+        aRet <<= static_cast<sal_uInt32>( toHyper( rVal, 0, 0xffffffff ) );
         break;
 
     // --- to HYPER, UNSIGNED HYPER--------------------------------------------
@@ -785,12 +785,12 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         aRet <<= toHyper( rVal, SAL_INT64_MIN, SAL_INT64_MAX );
         break;
     case TypeClass_UNSIGNED_HYPER:
-        aRet <<= (sal_uInt64)( toHyper( rVal, 0 ) );
+        aRet <<= static_cast<sal_uInt64>( toHyper( rVal, 0 ) );
         break;
 
     // --- to FLOAT, DOUBLE ---------------------------------------------------------------------
     case TypeClass_FLOAT:
-        aRet <<= (float)( toDouble( rVal, -FLT_MAX, FLT_MAX ) );
+        aRet <<= static_cast<float>( toDouble( rVal, -FLT_MAX, FLT_MAX ) );
         break;
     case TypeClass_DOUBLE:
         aRet <<= toDouble( rVal, -DBL_MAX, DBL_MAX );

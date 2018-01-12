@@ -157,7 +157,7 @@ void ScChartPositioner::GlueState()
         eGlue = ScChartGlue::Cols;
         return;
     }
-    sal_uLong nCR = (sal_uLong)nC * nR;
+    sal_uLong nCR = static_cast<sal_uLong>(nC) * nR;
 
     /*
     TODO:
@@ -183,7 +183,7 @@ void ScChartPositioner::GlueState()
         nRow2 = pR->aEnd.Row() - nStartRow;
         for ( nCol = nCol1; nCol <= nCol2; nCol++ )
         {
-            p = pA.get() + (sal_uLong)nCol * nR + nRow1;
+            p = pA.get() + static_cast<sal_uLong>(nCol) * nR + nRow1;
             for ( nRow = nRow1; nRow <= nRow2; nRow++, p++ )
                 *p = CellState::Occupied;
         }
@@ -193,7 +193,7 @@ void ScChartPositioner::GlueState()
     bool bGlueCols = false;
     for ( nCol = 0; bGlue && nCol < nC; nCol++ )
     {   // iterate columns and try to mark as unused
-        p = pA.get() + (sal_uLong)nCol * nR;
+        p = pA.get() + static_cast<sal_uLong>(nCol) * nR;
         for ( nRow = 0; bGlue && nRow < nR; nRow++, p++ )
         {
             if ( *p == CellState::Occupied )
@@ -208,7 +208,7 @@ void ScChartPositioner::GlueState()
             else
                 *p = CellState::Free;
         }
-        if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nCol+1) * nR) - 1))) == CellState::Free )
+        if ( bGlue && *(p = (pA.get() + (((static_cast<sal_uLong>(nCol)+1) * nR) - 1))) == CellState::Free )
         {   // mark column as totally unused
             *p = CellState::Glue;
             bGlueCols = true; // one unused column at least
@@ -231,7 +231,7 @@ void ScChartPositioner::GlueState()
             else
                 *p = CellState::Free;
         }
-        if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nC-1) * nR) + nRow))) == CellState::Free )
+        if ( bGlue && *(p = (pA.get() + (((static_cast<sal_uLong>(nC)-1) * nR) + nRow))) == CellState::Free )
         {   // mark row as totally unused
             *p = CellState::Glue;
             bGlueRows = true; // one unused row at least
@@ -477,7 +477,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         ppData( new ScAddress* [ nChartCols * nChartRows ] ),
         ppColHeader( new ScAddress* [ nChartCols ] ),
         ppRowHeader( new ScAddress* [ nChartRows ] ),
-        nCount( (sal_uLong) nChartCols * nChartRows ),
+        nCount( static_cast<sal_uLong>(nChartCols) * nChartRows ),
         nColCount( nChartCols ),
         nRowCount( nChartRows )
 {

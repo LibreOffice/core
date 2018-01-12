@@ -914,9 +914,9 @@ SwSbxValue SwCalc::Term()
             {
                 GetToken();
                 SwSbxValue e = Prim();
-                sal_Int32 nYear = (sal_Int32) floor( left.GetDouble() );
+                sal_Int32 nYear = static_cast<sal_Int32>(floor( left.GetDouble() ));
                 nYear = nYear & 0x0000FFFF;
-                sal_Int32 nMonth = (sal_Int32) floor( e.GetDouble() );
+                sal_Int32 nMonth = static_cast<sal_Int32>(floor( e.GetDouble() ));
                 nMonth = ( nMonth & 0x000000FF ) << 16;
                 left.PutLong( nMonth + nYear );
                 m_eCurrOper = CALC_DAY;
@@ -926,9 +926,9 @@ SwSbxValue SwCalc::Term()
             {
                 GetToken();
                 SwSbxValue e = Prim();
-                sal_Int32 nYearMonth = (sal_Int32) floor( left.GetDouble() );
+                sal_Int32 nYearMonth = static_cast<sal_Int32>(floor( left.GetDouble() ));
                 nYearMonth = nYearMonth & 0x00FFFFFF;
-                sal_Int32 nDay = (sal_Int32) floor( e.GetDouble() );
+                sal_Int32 nDay = static_cast<sal_Int32>(floor( e.GetDouble() ));
                 nDay = ( nDay & 0x000000FF ) << 24;
                 left = lcl_ConvertToDateValue( m_rDoc, nDay + nYearMonth );
             }
@@ -940,7 +940,7 @@ SwSbxValue SwCalc::Term()
 
                 double fVal = 0;
                 double fFac = 1;
-                sal_Int32 nDec = (sal_Int32) floor( e.GetDouble() );
+                sal_Int32 nDec = static_cast<sal_Int32>(floor( e.GetDouble() ));
                 if( nDec < -20 || nDec > 20 )
                 {
                     m_eError = SwCalcError::Overflow;

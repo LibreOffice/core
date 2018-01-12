@@ -169,18 +169,18 @@ bool OComponentTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
             break;
         case IResultSetHelper::RELATIVE1:
             m_nFilePos = (m_nFilePos + nOffset < 0) ? 0
-                            : (sal_uInt32)(m_nFilePos + nOffset);
+                            : static_cast<sal_uInt32>(m_nFilePos + nOffset);
             break;
         case IResultSetHelper::ABSOLUTE1:
         case IResultSetHelper::BOOKMARK:
-            m_nFilePos = (sal_uInt32)nOffset;
+            m_nFilePos = static_cast<sal_uInt32>(nOffset);
             break;
     }
 
-    if (m_nFilePos > (sal_Int32)nNumberOfRecords)
-        m_nFilePos = (sal_Int32)nNumberOfRecords + 1;
+    if (m_nFilePos > static_cast<sal_Int32>(nNumberOfRecords))
+        m_nFilePos = static_cast<sal_Int32>(nNumberOfRecords) + 1;
 
-    if (m_nFilePos == 0 || m_nFilePos == (sal_Int32)nNumberOfRecords + 1)
+    if (m_nFilePos == 0 || m_nFilePos == static_cast<sal_Int32>(nNumberOfRecords) + 1)
     {
         switch(eCursorPosition)
         {

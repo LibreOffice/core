@@ -683,7 +683,7 @@ extern "C" {
             nDeltaSec -= 1;
         }
         // if the clock changes backwards we need to cope ...
-        if( (unsigned long) nDeltaSec > 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
+        if( static_cast<unsigned long>(nDeltaSec) > 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
         {
             sal_gtk_timeout_defer( pTSource );
             return TRUE;

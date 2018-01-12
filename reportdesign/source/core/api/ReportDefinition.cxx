@@ -216,7 +216,7 @@ void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDescripto
         _rxStatusIndicator = _rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_STATUSINDICATOR(), _rxStatusIndicator );
         if ( _rxStatusIndicator.is() )
         {
-            _rxStatusIndicator->start( OUString(), (sal_Int32)1000000 );
+            _rxStatusIndicator->start( OUString(), sal_Int32(1000000) );
 
             sal_Int32 nLength = _rCallArgs.getLength();
             _rCallArgs.realloc( nLength + 1 );

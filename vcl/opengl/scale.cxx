@@ -140,7 +140,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
 
         for( sal_uInt32 i = 0; i < 16; i++ )
         {
-            aOffsets[i * 2] = i / (double) mnWidth;
+            aOffsets[i * 2] = i / static_cast<double>(mnWidth);
             aOffsets[i * 2 + 1] = 0;
         }
         ImplCreateKernel( rScaleX, aKernel, pWeights, nKernelSize );
@@ -164,7 +164,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
         for( sal_uInt32 i = 0; i < 16; i++ )
         {
             aOffsets[i * 2] = 0;
-            aOffsets[i * 2 + 1] = i / (double) mnHeight;
+            aOffsets[i * 2 + 1] = i / static_cast<double>(mnHeight);
         }
         ImplCreateKernel( rScaleY, aKernel, pWeights, nKernelSize );
         pProgram->SetUniform1fv( "kernel", 16, pWeights );

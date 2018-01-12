@@ -245,7 +245,7 @@ IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
 
     Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
     if (xController.is())
-        xController->execute((sal_Int16)pToolBox->GetModifier());
+        xController->execute(static_cast<sal_Int16>(pToolBox->GetModifier()));
 }
 
 IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)

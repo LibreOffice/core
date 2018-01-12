@@ -198,7 +198,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, Button*, void)
 
     for ( sal_uLong i = 0; i < m_pAttrLB->GetEntryCount(); ++i )
     {
-        sal_uInt16 nSlot = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pAttrLB->GetEntryData(i));
+        sal_uInt16 nSlot = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pAttrLB->GetEntryData(i)));
         bool bChecked = m_pAttrLB->IsChecked(i);
 
         sal_uInt16 j;

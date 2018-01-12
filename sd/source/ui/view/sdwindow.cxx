@@ -156,34 +156,34 @@ void Window::CalcMinZoom()
             // area (also called application area) to completely fill the
             // window.
             Size aWinSize = PixelToLogic(GetOutputSizePixel());
-            sal_uLong nX = (sal_uLong) ((double) aWinSize.Width()
-                * (double) ZOOM_MULTIPLICATOR / (double) maViewSize.Width());
-            sal_uLong nY = (sal_uLong) ((double) aWinSize.Height()
-                * (double) ZOOM_MULTIPLICATOR / (double) maViewSize.Height());
+            sal_uLong nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
+                * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Width()));
+            sal_uLong nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
+                * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Height()));
 
             // Decide whether to take the larger or the smaller factor.
             sal_uLong nFact = std::min(nX, nY);
 
             // The factor is transformed according to the current zoom factor.
             nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
-            mnMinZoom = std::max((sal_uInt16) MIN_ZOOM, (sal_uInt16) nFact);
+            mnMinZoom = std::max(sal_uInt16(MIN_ZOOM), static_cast<sal_uInt16>(nFact));
         }
         // If the current zoom factor is smaller than the calculated minimal
         // zoom factor then set the new minimal factor as the current zoom
         // factor.
-        if ( nZoom < (long) mnMinZoom )
+        if ( nZoom < static_cast<long>(mnMinZoom) )
             SetZoomFactor(mnMinZoom);
     }
 }
 
 void Window::SetMinZoom (long int nMin)
 {
-    mnMinZoom = (sal_uInt16) nMin;
+    mnMinZoom = static_cast<sal_uInt16>(nMin);
 }
 
 void Window::SetMaxZoom (long int nMax)
 {
-    mnMaxZoom = (sal_uInt16) nMax;
+    mnMaxZoom = static_cast<sal_uInt16>(nMax);
 }
 
 long Window::GetZoom() const
@@ -333,7 +333,7 @@ long Window::SetZoomFactor(long nZoom)
     // calculated by CalcMinZoom() and the constant MAX_ZOOM.
     if ( nZoom > MAX_ZOOM )
         nZoom = MAX_ZOOM;
-    if ( nZoom < (long) mnMinZoom )
+    if ( nZoom < static_cast<long>(mnMinZoom) )
         nZoom = mnMinZoom;
 
     // Set the zoom factor at the window's map mode.
@@ -368,7 +368,7 @@ void Window::SetZoomIntegral(long nZoom)
     // MAX_ZOOM constant.
     if ( nZoom > MAX_ZOOM )
         nZoom = MAX_ZOOM;
-    if ( nZoom < (long) mnMinZoom )
+    if ( nZoom < static_cast<long>(mnMinZoom) )
         nZoom = mnMinZoom;
 
     // Calculate the window's new origin.
@@ -401,14 +401,14 @@ long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
         const Size aWinSize( PixelToLogic(GetOutputSizePixel()) );
         if(rZoomRect.GetHeight())
         {
-            nX = (sal_uLong) ((double) aWinSize.Height()
-               * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+            nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
+               * double(ZOOM_MULTIPLICATOR) / static_cast<double>(rZoomRect.GetHeight()));
         }
 
         if(rZoomRect.GetWidth())
         {
-            nY = (sal_uLong) ((double) aWinSize.Width()
-                * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
+            nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
+                * double(ZOOM_MULTIPLICATOR) / static_cast<double>(rZoomRect.GetWidth()));
         }
 
         // Use the smaller one of both so that the zoom rectangle will be
@@ -432,7 +432,7 @@ long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
             // MAX_ZOOM constant.
             if ( nRetZoom > MAX_ZOOM )
                 nRetZoom = MAX_ZOOM;
-            if ( nRetZoom < (long) mnMinZoom )
+            if ( nRetZoom < static_cast<long>(mnMinZoom) )
                 nRetZoom = mnMinZoom;
        }
     }
@@ -474,14 +474,14 @@ long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 
         if(rZoomRect.GetHeight())
         {
-            nX = (sal_uLong) ((double) aWinSize.Height()
-               * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+            nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
+               * double(ZOOM_MULTIPLICATOR) / static_cast<double>(rZoomRect.GetHeight()));
         }
 
         if(rZoomRect.GetWidth())
         {
-            nY = (sal_uLong) ((double) aWinSize.Width()
-                * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
+            nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
+                * double(ZOOM_MULTIPLICATOR) / static_cast<double>(rZoomRect.GetWidth()));
         }
 
         // Use the smaller one of both so that the zoom rectangle will be
@@ -507,9 +507,9 @@ long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 
             maWinPos = maViewOrigin + aPos;
 
-            aWinSize.Width() = (long) ((double) aWinSize.Width() * (double) ZOOM_MULTIPLICATOR / (double) nFact);
+            aWinSize.Width() = static_cast<long>(static_cast<double>(aWinSize.Width()) * double(ZOOM_MULTIPLICATOR) / static_cast<double>(nFact));
             maWinPos.X() += (rZoomRect.GetWidth() - aWinSize.Width()) / 2;
-            aWinSize.Height() = (long) ((double) aWinSize.Height() * (double) ZOOM_MULTIPLICATOR / (double) nFact);
+            aWinSize.Height() = static_cast<long>(static_cast<double>(aWinSize.Height()) * double(ZOOM_MULTIPLICATOR) / static_cast<double>(nFact));
             maWinPos.Y() += (rZoomRect.GetHeight() - aWinSize.Height()) / 2;
 
             if ( maWinPos.X() < 0 ) maWinPos.X() = 0;
@@ -630,7 +630,7 @@ void Window::UpdateMapMode()
  */
 double Window::GetVisibleX()
 {
-    return ((double) maWinPos.X() / maViewSize.Width());
+    return (static_cast<double>(maWinPos.X()) / maViewSize.Width());
 }
 
 /**
@@ -639,7 +639,7 @@ double Window::GetVisibleX()
  */
 double Window::GetVisibleY()
 {
-    return ((double) maWinPos.Y() / maViewSize.Height());
+    return (static_cast<double>(maWinPos.Y()) / maViewSize.Height());
 }
 
 /**
@@ -652,9 +652,9 @@ void Window::SetVisibleXY(double fX, double fY)
     long nOldY = maWinPos.Y();
 
     if ( fX >= 0 )
-        maWinPos.X() = (long) (fX * maViewSize.Width());
+        maWinPos.X() = static_cast<long>(fX * maViewSize.Width());
     if ( fY >= 0 )
-        maWinPos.Y() = (long) (fY * maViewSize.Height());
+        maWinPos.Y() = static_cast<long>(fY * maViewSize.Height());
     UpdateMapOrigin(false);
     Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), ScrollFlags::Children);
     Update();
@@ -669,7 +669,7 @@ double Window::GetVisibleWidth()
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
     if ( aWinSize.Width() > maViewSize.Width() )
         aWinSize.Width() = maViewSize.Width();
-    return ((double) aWinSize.Width() / maViewSize.Width());
+    return (static_cast<double>(aWinSize.Width()) / maViewSize.Width());
 }
 
 /**
@@ -681,7 +681,7 @@ double Window::GetVisibleHeight()
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
     if ( aWinSize.Height() > maViewSize.Height() )
         aWinSize.Height() = maViewSize.Height();
-    return ((double) aWinSize.Height() / maViewSize.Height());
+    return (static_cast<double>(aWinSize.Height()) / maViewSize.Height());
 }
 
 /**

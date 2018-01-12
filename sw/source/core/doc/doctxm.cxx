@@ -1838,7 +1838,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
     // Search for identical entries and remove the trailing one
     if(TOX_AUTHORITIES == SwTOXBase::GetType())
     {
-        for(short i = (short)aRange.Min(); i < (short)aRange.Max(); ++i)
+        for(short i = static_cast<short>(aRange.Min()); i < static_cast<short>(aRange.Max()); ++i)
         {
             SwTOXSortTabBase* pOld = aSortArr[i];
             if(*pOld == *pNew)

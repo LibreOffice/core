@@ -1041,8 +1041,8 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
 
         for ( int i = 0; i<nLength; ++i )
         {
-            aAttributes[i].sName = xAttribs->getNameByIndex((short)i);
-            aAttributes[i].sValue =xAttribs->getValueByIndex((short)i);
+            aAttributes[i].sName = xAttribs->getNameByIndex(static_cast<short>(i));
+            aAttributes[i].sValue =xAttribs->getValueByIndex(static_cast<short>(i));
         }
 
         m_xCompressedDocumentHandler->compressedStartElement(aName, aAttributes);

@@ -545,8 +545,8 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
                   // ynew = x * sin(alpha) + y * cos(alpha)
                   // Bottom Right is not rotated: the pages of aOutRect must
                   // remain parallel to the coordinate axes.
-        NewCenter.X() = (long) (Center.X() * cs - Center.Y() * sn);
-        NewCenter.Y() = (long) (Center.X() * sn + Center.Y() * cs);
+        NewCenter.X() = static_cast<long>(Center.X() * cs - Center.Y() * sn);
+        NewCenter.Y() = static_cast<long>(Center.X() * sn + Center.Y() * cs);
     }
 
     Size Differenz;

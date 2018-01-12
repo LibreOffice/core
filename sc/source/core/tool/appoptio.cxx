@@ -136,7 +136,7 @@ static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
             const sal_Int32* pArray = aSeq.getConstArray();
             std::unique_ptr<sal_uInt16[]> pUShorts(new sal_uInt16[nCount]);
             for (long i=0; i<nCount; i++)
-                pUShorts[i] = (sal_uInt16) pArray[i];
+                pUShorts[i] = static_cast<sal_uInt16>(pArray[i]);
 
             rOpt.SetLRUFuncList( pUShorts.get(), sal::static_int_cast<sal_uInt16>(nCount) );
         }
@@ -355,7 +355,7 @@ ScAppCfg::ScAppCfg() :
                             nStatusBarFuncMulti = nUIntValTmp;
                         break;
                     case SCLAYOUTOPT_ZOOMVAL:
-                        if (pValues[nProp] >>= nIntVal) SetZoom( (sal_uInt16) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetZoom( static_cast<sal_uInt16>(nIntVal) );
                         break;
                     case SCLAYOUTOPT_ZOOMTYPE:
                         if (pValues[nProp] >>= nIntVal) SetZoomType( (SvxZoomType) nIntVal );
@@ -426,16 +426,16 @@ ScAppCfg::ScAppCfg() :
                 switch(nProp)
                 {
                     case SCREVISOPT_CHANGE:
-                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( (sal_uInt32) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( static_cast<sal_uInt32>(nIntVal) );
                         break;
                     case SCREVISOPT_INSERTION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( (sal_uInt32) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( static_cast<sal_uInt32>(nIntVal) );
                         break;
                     case SCREVISOPT_DELETION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( (sal_uInt32) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( static_cast<sal_uInt32>(nIntVal) );
                         break;
                     case SCREVISOPT_MOVEDENTRY:
-                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( (sal_uInt32) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( static_cast<sal_uInt32>(nIntVal) );
                         break;
                 }
             }
@@ -551,13 +551,13 @@ ScAppCfg::ScAppCfg() :
         switch(nProp)
         {
             case SCLAYOUTOPT_MEASURE:
-                pValues[nProp] <<= (sal_Int32) GetAppMetric();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetAppMetric());
                 break;
             case SCLAYOUTOPT_STATUSBAR:
                 pValues[nProp] <<= lcl_ConvertStatusBarFuncSetToSingle( GetStatusFunc() );
                 break;
             case SCLAYOUTOPT_ZOOMVAL:
-                pValues[nProp] <<= (sal_Int32) GetZoom();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetZoom());
                 break;
             case SCLAYOUTOPT_ZOOMTYPE:
                 pValues[nProp] <<= (sal_Int32) GetZoomType();
@@ -608,16 +608,16 @@ IMPL_LINK_NOARG(ScAppCfg, RevisionCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCREVISOPT_CHANGE:
-                pValues[nProp] <<= (sal_Int32) GetTrackContentColor();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetTrackContentColor());
                 break;
             case SCREVISOPT_INSERTION:
-                pValues[nProp] <<= (sal_Int32) GetTrackInsertColor();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetTrackInsertColor());
                 break;
             case SCREVISOPT_DELETION:
-                pValues[nProp] <<= (sal_Int32) GetTrackDeleteColor();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetTrackDeleteColor());
                 break;
             case SCREVISOPT_MOVEDENTRY:
-                pValues[nProp] <<= (sal_Int32) GetTrackMoveColor();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetTrackMoveColor());
                 break;
         }
     }
@@ -635,7 +635,7 @@ IMPL_LINK_NOARG(ScAppCfg, ContentCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCCONTENTOPT_LINK:
-                pValues[nProp] <<= (sal_Int32) GetLinkMode();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetLinkMode());
                 break;
         }
     }

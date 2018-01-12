@@ -62,7 +62,7 @@ void RemoveSpareItemsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, un
 {
     sal_Int32 nSectionItems = g_lo_menu_get_n_items_from_section( pMenu, nSection );
 
-    while ( nSectionItems > (sal_Int32) nValidItems )
+    while ( nSectionItems > static_cast<sal_Int32>(nValidItems) )
     {
         gchar* aCommand = g_lo_menu_get_command_from_item_in_section( pMenu, nSection, --nSectionItems );
 
@@ -247,7 +247,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
     sal_Int32 validItems = 0;
     sal_Int32 nItem;
 
-    for ( nItem = 0; nItem < ( sal_Int32 ) GetItemCount(); nItem++ ) {
+    for ( nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++ ) {
         if ( !IsItemVisible( nItem ) )
             continue;
 

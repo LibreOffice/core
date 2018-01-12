@@ -79,12 +79,12 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
 // height separation line
 short SwColMgr::GetLineHeightPercent() const
 {
-    return (short)aFormatCol.GetLineHeight();
+    return static_cast<short>(aFormatCol.GetLineHeight());
 }
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
     OSL_ENSURE(nPercent <= 100, "line height may be at most 100%");
-    aFormatCol.SetLineHeight((sal_uInt8)nPercent);
+    aFormatCol.SetLineHeight(static_cast<sal_uInt8>(nPercent));
 }
 
 // column width
@@ -112,12 +112,12 @@ void SwColMgr::SetActualWidth(sal_uInt16 nW)
 SwColMgr::SwColMgr(const SfxItemSet& rSet) :
     aFormatCol(rSet.Get(RES_COL))
 {
-    nWidth = (sal_uInt16)rSet.Get(RES_FRM_SIZE).GetWidth();
+    nWidth = static_cast<sal_uInt16>(rSet.Get(RES_FRM_SIZE).GetWidth());
     if (nWidth < MINLAY)
         nWidth = USHRT_MAX;
     const SvxLRSpaceItem &rLR = rSet.Get(RES_LR_SPACE);
-    nWidth = nWidth - (sal_uInt16)rLR.GetLeft();
-    nWidth = nWidth - (sal_uInt16)rLR.GetRight();
+    nWidth = nWidth - static_cast<sal_uInt16>(rLR.GetLeft());
+    nWidth = nWidth - static_cast<sal_uInt16>(rLR.GetRight());
     ::FitToActualSize(aFormatCol, nWidth);
 }
 

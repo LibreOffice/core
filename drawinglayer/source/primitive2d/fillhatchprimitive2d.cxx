@@ -51,9 +51,9 @@ namespace drawinglayer
                 {
                     const double fDiscreteDistance(getFillHatch().getDistance() / getDiscreteUnit());
 
-                    if(fDiscreteDistance < (double)getFillHatch().getMinimalDiscreteDistance())
+                    if(fDiscreteDistance < static_cast<double>(getFillHatch().getMinimalDiscreteDistance()))
                     {
-                        fDistance = (double)getFillHatch().getMinimalDiscreteDistance() * getDiscreteUnit();
+                        fDistance = static_cast<double>(getFillHatch().getMinimalDiscreteDistance()) * getDiscreteUnit();
                     }
                 }
 

@@ -205,7 +205,7 @@ void OViewsWindow::impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Poin
         aSectionSize.Height() = nMinHeight;
     }
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    aSectionSize.Height() += (long)(rSettings.GetSplitSize() * (double)_rSectionWindow.GetMapMode().GetScaleY());
+    aSectionSize.Height() += static_cast<long>(rSettings.GetSplitSize() * static_cast<double>(_rSectionWindow.GetMapMode().GetScaleY()));
 
     if ( _bSet )
         _rSectionWindow.SetPosSizePixel(_rStartPoint,aSectionSize);

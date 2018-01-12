@@ -448,15 +448,15 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Referen
     DateTime aDateTime = DateTime::CreateFromUnixTime(time(nullptr));
     aDateTime.ConvertToLocalTime();
     OUStringBuffer rBuffer;
-    rBuffer.append((sal_Int32)aDateTime.GetYear());
+    rBuffer.append(static_cast<sal_Int32>(aDateTime.GetYear()));
     rBuffer.append('-');
     if (aDateTime.GetMonth() < 10)
         rBuffer.append('0');
-    rBuffer.append((sal_Int32)aDateTime.GetMonth());
+    rBuffer.append(static_cast<sal_Int32>(aDateTime.GetMonth()));
     rBuffer.append('-');
     if (aDateTime.GetDay() < 10)
         rBuffer.append('0');
-    rBuffer.append((sal_Int32)aDateTime.GetDay());
+    rBuffer.append(static_cast<sal_Int32>(aDateTime.GetDay()));
 
     // Now set the RDF on the paragraph, since that's what is preserved in .doc(x).
     const css::uno::Reference<css::rdf::XResource> xParaSubject(xParagraph, uno::UNO_QUERY);
@@ -1634,7 +1634,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
 
         // tdf#108494 the header height was switched to height of a watermark
         // and shape was moved to the lower part of a page
-        xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, uno::makeAny((sal_Int32)11));
+        xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, uno::makeAny(sal_Int32(11)));
         xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, uno::makeAny(nOldValue));
         xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT, uno::Any(bDynamicHeight));
     }

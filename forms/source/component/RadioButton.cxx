@@ -262,7 +262,7 @@ void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rx
 
     // Properties
     _rxOutStream << getReferenceValue();
-    _rxOutStream << (sal_Int16)getDefaultChecked();
+    _rxOutStream << static_cast<sal_Int16>(getDefaultChecked());
     writeHelpTextCompatibly(_rxOutStream);
 
     // from version 0x0003 : common properties
@@ -317,11 +317,11 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent)
 {
     if ( _rEvent.PropertyName == PROPERTY_STATE )
     {
-        if ( _rEvent.NewValue == (sal_Int16)1 )
+        if ( _rEvent.NewValue == sal_Int16(1) )
         {
             // If my status has changed to 'checked', I have to reset all my siblings, which are in the same group as I am
             Any aZero;
-            aZero <<= (sal_Int16)0;
+            aZero <<= sal_Int16(0);
             SetSiblingPropsTo( PROPERTY_STATE, aZero );
         }
     }
@@ -339,8 +339,7 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent)
 
 Any ORadioButtonModel::translateDbColumnToControlValue()
 {
-    return makeAny( (sal_Int16)
-        ( ( m_xColumn->getString() == getReferenceValue() ) ? TRISTATE_TRUE : TRISTATE_FALSE )
+    return makeAny( static_cast<sal_Int16>( ( m_xColumn->getString() == getReferenceValue() ) ? TRISTATE_TRUE : TRISTATE_FALSE )
     );
 }
 
@@ -351,7 +350,7 @@ Any ORadioButtonModel::translateExternalValueToControlValue( const Any& _rExtern
     sal_Int16 nState = TRISTATE_FALSE;
     if ( ( aControlValue >>= nState ) && ( nState == TRISTATE_INDET ) )
         // radio buttons do not have the DONTKNOW state
-        aControlValue <<= (sal_Int16)TRISTATE_FALSE;
+        aControlValue <<= sal_Int16(TRISTATE_FALSE);
     return aControlValue;
 }
 

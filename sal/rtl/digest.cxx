@@ -29,16 +29,16 @@
 #define RTL_DIGEST_ROTL(a,n) (((a) << (n)) | ((a) >> (32 - (n))))
 
 #define RTL_DIGEST_HTONL(l,c) \
-    (*((c)++) = (sal_uInt8)(((l) >> 24) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >> 16) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >>  8) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l)       ) & 0xff))
+    (*((c)++) = static_cast<sal_uInt8>(((l) >> 24) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l) >> 16) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l) >>  8) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l)       ) & 0xff))
 
 #define RTL_DIGEST_LTOC(l,c) \
-    (*((c)++) = (sal_uInt8)(((l)       ) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >>  8) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >> 16) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >> 24) & 0xff))
+    (*((c)++) = static_cast<sal_uInt8>(((l)       ) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l) >>  8) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l) >> 16) & 0xff), \
+     *((c)++) = static_cast<sal_uInt8>(((l) >> 24) & 0xff))
 
 typedef rtlDigestError (Digest_init_t) (
     void *ctx, const sal_uInt8 *Data, sal_uInt32 DatLen);
@@ -296,12 +296,12 @@ static void endMD2(DigestContextMD2 *ctx)
     n = DIGEST_CBLOCK_MD2 - ctx->m_nDatLen;
 
     for (i = ctx->m_nDatLen; i < DIGEST_CBLOCK_MD2; i++)
-        X[i] = (sal_uInt8)(n & 0xff);
+        X[i] = static_cast<sal_uInt8>(n & 0xff);
 
     updateMD2(ctx);
 
     for (i = 0; i < DIGEST_CBLOCK_MD2; i++)
-        X[i] = (sal_uInt8)(C[i] & 0xff);
+        X[i] = static_cast<sal_uInt8>(C[i] & 0xff);
     updateMD2(ctx);
 }
 
@@ -414,7 +414,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD2(
     endMD2(ctx);
     for (i = 0; i < DIGEST_CBLOCK_MD2; i++)
     {
-        pBuffer[i] = (sal_uInt8)(ctx->m_state[i] & 0xff);
+        pBuffer[i] = static_cast<sal_uInt8>(ctx->m_state[i] & 0xff);
     }
 
     initMD2(ctx);
@@ -494,10 +494,10 @@ static void initMD5(DigestContextMD5 *ctx)
 {
     memset(ctx, 0, sizeof(DigestContextMD5));
 
-    ctx->m_nA = (sal_uInt32)0x67452301L;
-    ctx->m_nB = (sal_uInt32)0xefcdab89L;
-    ctx->m_nC = (sal_uInt32)0x98badcfeL;
-    ctx->m_nD = (sal_uInt32)0x10325476L;
+    ctx->m_nA = sal_uInt32(0x67452301L);
+    ctx->m_nB = sal_uInt32(0xefcdab89L);
+    ctx->m_nC = sal_uInt32(0x98badcfeL);
+    ctx->m_nD = sal_uInt32(0x10325476L);
 }
 
 static void updateMD5(DigestContextMD5 *ctx)
@@ -612,13 +612,13 @@ static void endMD5(DigestContextMD5 *ctx)
 
     switch (ctx->m_nDatLen & 0x03)
     {
-        case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0;
+        case 0: X[i]  = static_cast<sal_uInt32>(*(p++)) <<  0;
             SAL_FALLTHROUGH;
-        case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8;
+        case 1: X[i] |= static_cast<sal_uInt32>(*(p++)) <<  8;
             SAL_FALLTHROUGH;
-        case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16;
+        case 2: X[i] |= static_cast<sal_uInt32>(*(p++)) << 16;
             SAL_FALLTHROUGH;
-        case 3: X[i] |= ((sal_uInt32)(*p)) << 24;
+        case 3: X[i] |= static_cast<sal_uInt32>(*p) << 24;
     }
 
     i += 1;
@@ -846,10 +846,10 @@ static void initSHA(
 static void updateSHA(DigestContextSHA *ctx);
 static void endSHA(DigestContextSHA *ctx);
 
-#define K_00_19 (sal_uInt32)0x5a827999L
-#define K_20_39 (sal_uInt32)0x6ed9eba1L
-#define K_40_59 (sal_uInt32)0x8f1bbcdcL
-#define K_60_79 (sal_uInt32)0xca62c1d6L
+#define K_00_19 sal_uInt32(0x5a827999L)
+#define K_20_39 sal_uInt32(0x6ed9eba1L)
+#define K_40_59 sal_uInt32(0x8f1bbcdcL)
+#define K_60_79 sal_uInt32(0xca62c1d6L)
 
 #define F_00_19(b,c,d) ((((c) ^ (d)) & (b)) ^ (d))
 #define F_20_39(b,c,d) ((b) ^ (c) ^ (d))
@@ -894,11 +894,11 @@ static void initSHA(
     memset(ctx, 0, sizeof(DigestContextSHA));
     ctx->m_update = fct;
 
-    ctx->m_nA = (sal_uInt32)0x67452301L;
-    ctx->m_nB = (sal_uInt32)0xefcdab89L;
-    ctx->m_nC = (sal_uInt32)0x98badcfeL;
-    ctx->m_nD = (sal_uInt32)0x10325476L;
-    ctx->m_nE = (sal_uInt32)0xc3d2e1f0L;
+    ctx->m_nA = sal_uInt32(0x67452301L);
+    ctx->m_nB = sal_uInt32(0xefcdab89L);
+    ctx->m_nC = sal_uInt32(0x98badcfeL);
+    ctx->m_nD = sal_uInt32(0x10325476L);
+    ctx->m_nE = sal_uInt32(0xc3d2e1f0L);
 }
 
 static void updateSHA(DigestContextSHA *ctx)
@@ -1034,13 +1034,13 @@ static void endSHA(DigestContextSHA *ctx)
 
     switch (ctx->m_nDatLen & 0x03)
     {
-        case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0;
+        case 0: X[i]  = static_cast<sal_uInt32>(*(p++)) <<  0;
             SAL_FALLTHROUGH;
-        case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8;
+        case 1: X[i] |= static_cast<sal_uInt32>(*(p++)) <<  8;
             SAL_FALLTHROUGH;
-        case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16;
+        case 2: X[i] |= static_cast<sal_uInt32>(*(p++)) << 16;
             SAL_FALLTHROUGH;
-        case 3: X[i] |= ((sal_uInt32)(*(p++))) << 24;
+        case 3: X[i] |= static_cast<sal_uInt32>(*(p++)) << 24;
     }
 
     swapLong(X, i + 1);

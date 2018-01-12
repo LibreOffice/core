@@ -2078,8 +2078,8 @@ void ScExportTest::testSheetProtectionXLSX()
     // check has
     if (aHash.getLength() >= 2)
     {
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(204), (sal_uInt8)aHash[0]);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(61), (sal_uInt8)aHash[1]);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(204), static_cast<sal_uInt8>(aHash[0]));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(61), static_cast<sal_uInt8>(aHash[1]));
     }
     // we could flesh out this check I guess
     CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
@@ -3815,8 +3815,8 @@ void ScExportTest::testHiddenRepeatedRowsODS()
     SCROW nLastRow = 0;
     bool bHidden = rDoc.RowHidden(0, 0, &nFirstRow, &nLastRow);
     CPPUNIT_ASSERT(bHidden);
-    CPPUNIT_ASSERT_EQUAL((SCROW)0, nFirstRow);
-    CPPUNIT_ASSERT_EQUAL((SCROW)20, nLastRow);
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), nFirstRow);
+    CPPUNIT_ASSERT_EQUAL(SCROW(20), nLastRow);
     xDocSh->DoClose();
 }
 

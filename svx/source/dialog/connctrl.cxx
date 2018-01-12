@@ -96,21 +96,21 @@ void SvxXConnectionPreview::AdaptSize()
     const long      nHeight = aWinSize.Height();
     if (aRect.GetHeight() == 0)
         return;
-    double          fRectWH = (double) aRect.GetWidth() / aRect.GetHeight();
+    double          fRectWH = static_cast<double>(aRect.GetWidth()) / aRect.GetHeight();
     if (nHeight == 0)
         return;
-    double          fWinWH = (double) nWidth / nHeight;
+    double          fWinWH = static_cast<double>(nWidth) / nHeight;
 
     // Adapt bitmap to Thumb size (not here!)
     if ( fRectWH < fWinWH)
     {
-        aNewSize.Width() = (long) ( (double) nHeight * fRectWH );
+        aNewSize.Width() = static_cast<long>( static_cast<double>(nHeight) * fRectWH );
         aNewSize.Height()= nHeight;
     }
     else
     {
         aNewSize.Width() = nWidth;
-        aNewSize.Height()= (long) ( (double) nWidth / fRectWH );
+        aNewSize.Height()= static_cast<long>( static_cast<double>(nWidth) / fRectWH );
     }
 
     Fraction aFrac1( aWinSize.Width(), aRect.GetWidth() );
@@ -280,8 +280,8 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 
         aXFrac *= *pMultFrac;
         aYFrac *= *pMultFrac;
-        if( (double)aXFrac > 0.001 && (double)aXFrac < 1000.0 &&
-            (double)aYFrac > 0.001 && (double)aYFrac < 1000.0 )
+        if( static_cast<double>(aXFrac) > 0.001 && static_cast<double>(aXFrac) < 1000.0 &&
+            static_cast<double>(aYFrac) > 0.001 && static_cast<double>(aYFrac) < 1000.0 )
         {
             aMapMode.SetScaleX( aXFrac );
             aMapMode.SetScaleY( aYFrac );
@@ -290,8 +290,8 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
             Size aOutSize( GetOutputSize() );
 
             Point aPt( aMapMode.GetOrigin() );
-            long nX = (long)( ( (double)aOutSize.Width() - ( (double)aOutSize.Width() * (double)*pMultFrac  ) ) / 2.0 + 0.5 );
-            long nY = (long)( ( (double)aOutSize.Height() - ( (double)aOutSize.Height() * (double)*pMultFrac  ) ) / 2.0 + 0.5 );
+            long nX = static_cast<long>( ( static_cast<double>(aOutSize.Width()) - ( static_cast<double>(aOutSize.Width()) * static_cast<double>(*pMultFrac)  ) ) / 2.0 + 0.5 );
+            long nY = static_cast<long>( ( static_cast<double>(aOutSize.Height()) - ( static_cast<double>(aOutSize.Height()) * static_cast<double>(*pMultFrac)  ) ) / 2.0 + 0.5 );
             aPt.X() +=  nX;
             aPt.Y() +=  nY;
 

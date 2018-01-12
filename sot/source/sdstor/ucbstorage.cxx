@@ -152,7 +152,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     checkError();
 
     // if read characters < MaxLength, adjust sequence
-    if ((sal_Int32)nRead < aData.getLength())
+    if (static_cast<sal_Int32>(nRead) < aData.getLength())
         aData.realloc( nRead );
 
     return nRead;
@@ -209,7 +209,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::available()
     m_pSvStream->Seek(STREAM_SEEK_TO_END);
     checkError();
 
-    sal_Int32 nAvailable = (sal_Int32)m_pSvStream->Tell() - nPos;
+    sal_Int32 nAvailable = static_cast<sal_Int32>(m_pSvStream->Tell()) - nPos;
     m_pSvStream->Seek(nPos);
     checkError();
 
@@ -241,7 +241,7 @@ void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
-    m_pSvStream->Seek((sal_uInt32)_nLocation);
+    m_pSvStream->Seek(static_cast<sal_uInt32>(_nLocation));
     checkError();
 }
 
@@ -256,7 +256,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  )
 
     sal_uInt32 nPos = m_pSvStream->Tell();
     checkError();
-    return (sal_Int64)nPos;
+    return static_cast<sal_Int64>(nPos);
 }
 
 
@@ -277,7 +277,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  )
 
     checkError();
 
-    return (sal_Int64)nEndPos;
+    return static_cast<sal_Int64>(nEndPos);
 }
 
 
@@ -1735,7 +1735,7 @@ void UCBStorage_Impl::ReadContent()
 
                 bool bIsFolder( xRow->getBoolean(2) );
                 sal_Int64 nSize = xRow->getLong(4);
-                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, (sal_uLong) nSize );
+                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, static_cast<sal_uLong>(nSize) );
                 m_aChildrenList.emplace_back( pElement );
 
                 bool bIsOfficeDocument = m_bIsLinked || ( m_aClassId != SvGlobalName() );

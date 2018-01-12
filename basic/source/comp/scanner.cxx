@@ -489,7 +489,7 @@ bool SbiScanner::NextSym()
             ++nCol;
         }
         sal_Int32 ls = static_cast<sal_Int32>(lu);
-        nVal = (double) ls;
+        nVal = static_cast<double>(ls);
         eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
         if( bOverflow )
             GenError( ERRCODE_BASIC_MATH_OVERFLOW );

@@ -950,7 +950,7 @@ uno::Reference< drawing::XShape >
 
             //depth
             xProp->setPropertyValue( UNO_NAME_3D_EXTRUDE_DEPTH
-                , uno::Any((sal_Int32)fDepth) );
+                , uno::Any(static_cast<sal_Int32>(fDepth)) );
 
             //PercentDiagonal
             xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL

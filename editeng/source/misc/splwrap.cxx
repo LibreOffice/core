@@ -184,7 +184,7 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
     if (SVX_LANG_NEED_CHECK == (nVal & 0x00FF))
     {
         sal_uInt16 nTmpVal = SVX_LANG_MISSING_DO_WARN;
-        if (xSpell.is()  &&  xSpell->hasLanguage( (sal_uInt16)nLang ))
+        if (xSpell.is()  &&  xSpell->hasLanguage( static_cast<sal_uInt16>(nLang) ))
             nTmpVal = SVX_LANG_OK;
         nVal &= 0xFF00;
         nVal |= nTmpVal;
@@ -192,7 +192,7 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
         rLCS[ nLang ] = nVal;
     }
 
-    return (sal_Int16) nVal;
+    return static_cast<sal_Int16>(nVal);
 }
 
 sal_Int16 SvxSpellWrapper::CheckHyphLang(
@@ -217,7 +217,7 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
         rLCS[ nLang ] = nVal;
     }
 
-    return (sal_Int16) nVal;
+    return static_cast<sal_Int16>(nVal);
 }
 
 

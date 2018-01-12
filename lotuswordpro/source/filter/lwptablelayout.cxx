@@ -653,11 +653,11 @@ void LwpTableLayout::RegisterRows()
     XFRowStyle * pRowStyle = new  XFRowStyle();
     if (m_nDirection & 0x0030)
     {
-        pRowStyle->SetMinRowHeight((float)pTable->GetHeight());
+        pRowStyle->SetMinRowHeight(static_cast<float>(pTable->GetHeight()));
     }
     else
     {
-        pRowStyle->SetRowHeight((float)pTable->GetHeight());
+        pRowStyle->SetRowHeight(static_cast<float>(pTable->GetHeight()));
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_DefaultRowStyleName =  pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName();
@@ -778,7 +778,7 @@ void LwpTableLayout::ParseTable()
     m_pXFTable->SetStyleName(m_StyleName);
 
     sal_uInt16 nRow = m_nRows;
-    sal_uInt8 nCol = (sal_uInt8)m_nCols;
+    sal_uInt8 nCol = static_cast<sal_uInt8>(m_nCols);
 
     //process header rows
     LwpTableHeadingLayout* pTableHeading;
@@ -904,11 +904,11 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     }
     if (m_nDirection & 0x0030)
     {
-        pRowStyle->SetMinRowHeight((float)fHeight);
+        pRowStyle->SetMinRowHeight(static_cast<float>(fHeight));
     }
     else
     {
-        pRowStyle->SetRowHeight((float)fHeight);
+        pRowStyle->SetRowHeight(static_cast<float>(fHeight));
     }
     pXFRow->SetStyleName(pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName());
 
@@ -1302,7 +1302,7 @@ void LwpTableLayout::SplitConflictCells()
         }
         else
         {
-            nEffectRows = i + pRowLayout->GetCurMaxSpannedRows(0,(sal_uInt8)nCol);
+            nEffectRows = i + pRowLayout->GetCurMaxSpannedRows(0,static_cast<sal_uInt8>(nCol));
 
             for (sal_uInt16 j = i+1; j<nEffectRows; j++)
             {
@@ -1424,7 +1424,7 @@ void LwpColumnLayout::Read()
     sal_uInt16 colid;
 
     colid = pStrm->QuickReaduInt16();   // forced to lushort
-    ccolid = (sal_uInt8)colid;
+    ccolid = static_cast<sal_uInt8>(colid);
     cwidth = pStrm->QuickReadInt32();
 
     pStrm->SkipExtra();

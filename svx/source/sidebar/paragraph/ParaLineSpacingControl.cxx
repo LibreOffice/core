@@ -352,7 +352,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
             break;
 
         case LLINESPACE_PROP:
-            SetLineSpace(aSpacing, nPos, mpLineDistAtPercentBox->Denormalize((long)mpLineDistAtPercentBox->GetValue()));
+            SetLineSpace(aSpacing, nPos, mpLineDistAtPercentBox->Denormalize(static_cast<long>(mpLineDistAtPercentBox->GetValue())));
             break;
 
         case LLINESPACE_MIN:
@@ -395,21 +395,21 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
 
         case LLINESPACE_PROP:
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
-            rLineSpace.SetPropLineSpace( (sal_uInt8)lValue );
+            rLineSpace.SetPropLineSpace( static_cast<sal_uInt8>(lValue) );
             break;
 
         case LLINESPACE_MIN:
-            rLineSpace.SetLineHeight( (sal_uInt16)lValue );
+            rLineSpace.SetLineHeight( static_cast<sal_uInt16>(lValue) );
             rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
             break;
 
         case LLINESPACE_DURCH:
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
-            rLineSpace.SetInterLineSpace( (sal_uInt16)lValue );
+            rLineSpace.SetInterLineSpace( static_cast<sal_uInt16>(lValue) );
             break;
 
         case LLINESPACE_FIX:
-            rLineSpace.SetLineHeight((sal_uInt16)lValue);
+            rLineSpace.SetLineHeight(static_cast<sal_uInt16>(lValue));
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Fix );
             rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         break;

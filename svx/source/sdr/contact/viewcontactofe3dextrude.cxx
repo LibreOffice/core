@@ -60,9 +60,9 @@ namespace sdr
             const basegfx::B2DVector aTextureSize(aRange.getWidth(), aRange.getHeight());
 
             // get more data
-            const double fDepth((double)GetE3dExtrudeObj().GetExtrudeDepth());
-            const double fDiagonal((double)GetE3dExtrudeObj().GetPercentDiagonal() / 100.0);
-            const double fBackScale((double)GetE3dExtrudeObj().GetPercentBackScale() / 100.0);
+            const double fDepth(static_cast<double>(GetE3dExtrudeObj().GetExtrudeDepth()));
+            const double fDiagonal(static_cast<double>(GetE3dExtrudeObj().GetPercentDiagonal()) / 100.0);
+            const double fBackScale(static_cast<double>(GetE3dExtrudeObj().GetPercentBackScale()) / 100.0);
             const bool bSmoothNormals(GetE3dExtrudeObj().GetSmoothNormals()); // Plane itself
             const bool bSmoothLids(GetE3dExtrudeObj().GetSmoothLids()); // Front/back
             const bool bCharacterMode(GetE3dExtrudeObj().GetCharacterMode());

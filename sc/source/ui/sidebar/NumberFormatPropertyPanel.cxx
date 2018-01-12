@@ -128,13 +128,13 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, Edit&, void )
                            || ( mpBtnEngineering->IsVisible() && mpBtnEngineering->IsEnabled() && mpBtnEngineering->IsChecked() );
     bool        bNegRed     =  mpBtnNegRed->IsEnabled() && mpBtnNegRed->IsChecked();
     sal_uInt16  nPrecision  = (mpEdDecimals->IsEnabled() && mpEdDecimals->IsVisible())
-                            ? (sal_uInt16)mpEdDecimals->GetValue()
+                            ? static_cast<sal_uInt16>(mpEdDecimals->GetValue())
                             : (mpEdDenominator->IsEnabled() && mpEdDenominator->IsVisible())
-                                ? (sal_uInt16)mpEdDenominator->GetValue()
-                                : (sal_uInt16)0;
+                                ? static_cast<sal_uInt16>(mpEdDenominator->GetValue())
+                                : sal_uInt16(0);
     sal_uInt16  nLeadZeroes = (mpEdLeadZeroes->IsEnabled())
-                            ? (sal_uInt16)mpEdLeadZeroes->GetValue()
-                            : (sal_uInt16)0;
+                            ? static_cast<sal_uInt16>(mpEdLeadZeroes->GetValue())
+                            : sal_uInt16(0);
 
     OUString sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
     OUString sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));

@@ -92,11 +92,11 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs const &rArgs)
         if (rArgs.mrStr[i] == '\n')
             s << "\\n";
         else if (rArgs.mrStr[i] < ' ' || (rArgs.mrStr[i] >= 0x7F && rArgs.mrStr[i] <= 0xFF))
-            s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) rArgs.mrStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
+            s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(rArgs.mrStr[i]) << std::setfill(' ') << std::setw(1) << std::dec;
         else if (rArgs.mrStr[i] < 0x7F)
-            s << (char) rArgs.mrStr[i];
+            s << static_cast<char>(rArgs.mrStr[i]);
         else
-            s << "\\u" << std::hex << std::setw(4) << std::setfill('0') << (int) rArgs.mrStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
+            s << "\\u" << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(rArgs.mrStr[i]) << std::setfill(' ') << std::setw(1) << std::dec;
     }
     if (nLength > lim)
         s << "...";
@@ -277,7 +277,7 @@ void ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 
 bool ImplLayoutRuns::PosIsInRun( int nCharPos ) const
 {
-    if( mnRunIndex >= (int)maRuns.size() )
+    if( mnRunIndex >= static_cast<int>(maRuns.size()) )
         return false;
 
     int nMinCharPos = maRuns[ mnRunIndex+0 ];
@@ -324,7 +324,7 @@ bool ImplLayoutRuns::GetNextPos( int* nCharPos, bool* bRightToLeft )
         mnRunIndex = 0;
 
     // return false when all runs completed
-    if( mnRunIndex >= (int)maRuns.size() )
+    if( mnRunIndex >= static_cast<int>(maRuns.size()) )
         return false;
 
     int nRunPos0 = maRuns[ mnRunIndex+0 ];
@@ -345,7 +345,7 @@ bool ImplLayoutRuns::GetNextPos( int* nCharPos, bool* bRightToLeft )
         // advance to next run if current run is completed
         if( *nCharPos == nRunPos1 )
         {
-            if( (mnRunIndex += 2) >= (int)maRuns.size() )
+            if( (mnRunIndex += 2) >= static_cast<int>(maRuns.size()) )
                 return false;
             nRunPos0 = maRuns[ mnRunIndex+0 ];
             nRunPos1 = maRuns[ mnRunIndex+1 ];
@@ -363,7 +363,7 @@ bool ImplLayoutRuns::GetNextPos( int* nCharPos, bool* bRightToLeft )
 
 bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLeft ) const
 {
-    if( mnRunIndex >= (int)maRuns.size() )
+    if( mnRunIndex >= static_cast<int>(maRuns.size()) )
         return false;
 
     int nRunPos0 = maRuns[ mnRunIndex+0 ];
@@ -794,13 +794,13 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     else // condensed case
     {
         // squeeze width by moving glyphs proportionally
-        double fSqueeze = (double)nNewWidth / nOldWidth;
+        double fSqueeze = static_cast<double>(nNewWidth) / nOldWidth;
         if(m_GlyphItems.size() > 1)
         {
             for( pGlyphIter = m_GlyphItems.begin(); ++pGlyphIter != pGlyphIterRight;)
             {
                 int nX = pGlyphIter->maLinearPos.X() - maBasePoint.X();
-                nX = (int)(nX * fSqueeze);
+                nX = static_cast<int>(nX * fSqueeze);
                 pGlyphIter->maLinearPos.X() = nX + maBasePoint.X();
             }
         }
@@ -918,7 +918,7 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
     }
 
     // return zero if no more glyph found
-    if( nStart >= (int)m_GlyphItems.size() )
+    if( nStart >= static_cast<int>(m_GlyphItems.size()) )
         return 0;
 
     if( pGlyphIter == pGlyphIterEnd )
@@ -937,7 +937,7 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
         *(pGlyphs++) = &(*pGlyphIter);
 
         // break at end of glyph list
-        if( ++nStart >= (int)m_GlyphItems.size() )
+        if( ++nStart >= static_cast<int>(m_GlyphItems.size()) )
             break;
         // break when enough glyphs
         if( nCount >= nLen )
@@ -970,7 +970,7 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
 
 void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
 {
-    if( nStart >= (int)m_GlyphItems.size() )
+    if( nStart >= static_cast<int>(m_GlyphItems.size()) )
         return;
 
     std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin();
@@ -995,7 +995,7 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
 
 void GenericSalLayout::DropGlyph( int nStart )
 {
-    if( nStart >= (int)m_GlyphItems.size())
+    if( nStart >= static_cast<int>(m_GlyphItems.size()))
         return;
 
     std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin();
@@ -1441,7 +1441,7 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
             if( pCharWidths[ i ] == 0 )
             {
                 DeviceCoordinate w = pCharWidths[ i + nCharCount ];
-                w = (DeviceCoordinate)(w * fUnitMul + 0.5);
+                w = static_cast<DeviceCoordinate>(w * fUnitMul + 0.5);
                 pCharWidths[ i ] = w;
             }
         }
@@ -1482,7 +1482,7 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
         // merge results from current level
         double fUnitMul = mnUnitsPerPixel;
         fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
-        nTextWidth = (DeviceCoordinate)(nTextWidth * fUnitMul + 0.5);
+        nTextWidth = static_cast<DeviceCoordinate>(nTextWidth * fUnitMul + 0.5);
         if( nMaxWidth < nTextWidth )
             nMaxWidth = nTextWidth;
         if( !pCharWidths )
@@ -1497,7 +1497,7 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
             DeviceCoordinate nCharWidth = pTempWidths[i];
             if( !nCharWidth )
                 continue;
-            nCharWidth = (DeviceCoordinate)(nCharWidth * fUnitMul + 0.5);
+            nCharWidth = static_cast<DeviceCoordinate>(nCharWidth * fUnitMul + 0.5);
             pCharWidths[i] = nCharWidth;
         }
     }

@@ -99,12 +99,12 @@ inline sal_uInt32 calcSeqMemSize(
     sal_Int32 nElementSize, sal_Int32 nElements )
 {
     sal_uInt64 nSize =
-        (sal_uInt64) SAL_SEQUENCE_HEADER_SIZE +
-        ((sal_uInt64) nElementSize * (sal_uInt64) nElements);
+        static_cast<sal_uInt64>(SAL_SEQUENCE_HEADER_SIZE) +
+        (static_cast<sal_uInt64>(nElementSize) * static_cast<sal_uInt64>(nElements));
     if (nSize > 0xffffffffU)
         return 0;
     else
-        return (sal_uInt32) nSize;
+        return static_cast<sal_uInt32>(nSize);
 }
 
 
@@ -127,7 +127,7 @@ inline typelib_TypeDescriptionReference * _getVoidType()
 inline void CONSTRUCT_EMPTY_ANY(uno_Any * pAny) {
     pAny->pType = _getVoidType();
 #if OSL_DEBUG_LEVEL > 0
-    pAny->pData = reinterpret_cast<void *>((uintptr_t)0xdeadbeef);
+    pAny->pData = reinterpret_cast<void *>(uintptr_t(0xdeadbeef));
 #else
     pAny->pData = pAny;
 #endif

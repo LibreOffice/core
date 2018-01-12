@@ -23,7 +23,7 @@
 namespace {
 
 constexpr BitmapColor BMCOL(sal_uInt32 _col) {
-    return BitmapColor( (sal_Int8)(_col >> 16 ), (sal_Int8)( _col >> 8 ), (sal_Int8)_col );
+    return BitmapColor( static_cast<sal_Int8>(_col >> 16 ), static_cast<sal_Int8>( _col >> 8 ), static_cast<sal_Int8>(_col) );
 }
 
 }
@@ -66,7 +66,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
     if (ImplGetDimensions(rDesc) && rDesc.mpBuf && isLegalBitsPerPixel(rDesc.mnDstBitsPerPixel))
     {
-        rDesc.mpBitmap = new Bitmap( Size( rDesc.mnX, rDesc.mnY ), (sal_uInt16)rDesc.mnDstBitsPerPixel );
+        rDesc.mpBitmap = new Bitmap( Size( rDesc.mnX, rDesc.mnY ), static_cast<sal_uInt16>(rDesc.mnDstBitsPerPixel) );
         if ( ( rDesc.mpAcc = rDesc.mpBitmap->AcquireWriteAccess() ) != nullptr )
         {
 
@@ -379,7 +379,7 @@ std::unique_ptr<CGMBitmap> CGMBitmap::GetNext()
     if (pCGMBitmapDescriptor->mpBitmap && pCGMBitmapDescriptor->mbStatus)
     {
         xCGMTempBitmap.reset(new CGMBitmap(*mpCGM));
-        if ( ( (long)xCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation == (long)pCGMBitmapDescriptor->mnOrientation ) &&
+        if ( ( static_cast<long>(xCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation) == static_cast<long>(pCGMBitmapDescriptor->mnOrientation) ) &&
             ( ( ( xCGMTempBitmap->pCGMBitmapDescriptor->mnR.X == pCGMBitmapDescriptor->mnQ.X ) &&
                     ( xCGMTempBitmap->pCGMBitmapDescriptor->mnR.Y == pCGMBitmapDescriptor->mnQ.Y ) ) ||
             ( ( xCGMTempBitmap->pCGMBitmapDescriptor->mnQ.X == pCGMBitmapDescriptor->mnR.X ) &&

@@ -395,7 +395,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
     {
         OSL_FAIL("OComboBoxModel::read : invalid (means unknown) version !");
         m_aListSource.clear();
-        m_aBoundColumn <<= (sal_Int16)0;
+        m_aBoundColumn <<= sal_Int16(0);
         m_aDefaultText.clear();
         m_eListSourceType = ListSourceType_TABLE;
         m_bEmptyIsNull = true;

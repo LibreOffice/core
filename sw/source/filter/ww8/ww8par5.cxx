@@ -3581,7 +3581,7 @@ static void lcl_ImportTox(SwDoc &rDoc, SwPaM const &rPaM, const OUString &rStr, 
                 // if NO String just ignore the \l
                 if( !sParams.isEmpty() && sParams[0]>'0' && sParams[0]<='9' )
                 {
-                    nLevel = (sal_uInt16)sParams.toInt32();
+                    nLevel = static_cast<sal_uInt16>(sParams.toInt32());
                 }
             }
             break;

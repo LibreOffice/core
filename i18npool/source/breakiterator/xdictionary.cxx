@@ -364,7 +364,7 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary const & 
     while (rCache.wordboundary[i] < rCache.length) {
         len = 0;
         // look the continuous white space as one word and cache it
-        while (u_isWhitespace((sal_uInt32)text[wordBoundary.startPos + rCache.wordboundary[i] + len]))
+        while (u_isWhitespace(static_cast<sal_uInt32>(text[wordBoundary.startPos + rCache.wordboundary[i] + len])))
             len ++;
 
         if (len == 0) {

@@ -121,7 +121,7 @@ bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
         sal_Int32 nValue = 0;
         if( rValue >>= nValue )
         {
-            fValue = (float)nValue;
+            fValue = static_cast<float>(nValue);
             bRet = true;
         }
     }

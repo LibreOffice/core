@@ -62,7 +62,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
-    ::Window aObjectParent      = (::Window)pEnv->aWindow;
+    ::Window aObjectParent      = static_cast<::Window>(pEnv->aWindow);
 
     // find out on which screen that window is
     XWindowAttributes aParentAttr;
@@ -200,10 +200,10 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
     {
         XRectangle& aRect = ClipRectangleList[numClipRectangles];
 
-        aRect.x     = (short) nX;
-        aRect.y     = (short) nY;
-        aRect.width = (unsigned short) nWidth;
-        aRect.height= (unsigned short) nHeight;
+        aRect.x     = static_cast<short>(nX);
+        aRect.y     = static_cast<short>(nY);
+        aRect.width = static_cast<unsigned short>(nWidth);
+        aRect.height= static_cast<unsigned short>(nHeight);
 
         numClipRectangles++;
     }
@@ -236,7 +236,7 @@ X11SalObject::~X11SalObject()
 
     GetGenericUnixSalData()->ErrorTrapPush();
     const SystemEnvData* pEnv   = mpParent->GetSystemData();
-    ::Window aObjectParent      = (::Window)pEnv->aWindow;
+    ::Window aObjectParent      = static_cast<::Window>(pEnv->aWindow);
     XSetWindowBackgroundPixmap(static_cast<Display*>(maSystemChildData.pDisplay), aObjectParent, None);
     if ( maSecondary )
         XDestroyWindow( static_cast<Display*>(maSystemChildData.pDisplay), maSecondary );
@@ -468,7 +468,7 @@ void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::A
     SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     const SystemEnvData* pEnv   = mpParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
-    ::Window aObjectParent      = (::Window)pEnv->aWindow;
+    ::Window aObjectParent      = static_cast<::Window>(pEnv->aWindow);
 
     bool bFreePixmap = false;
     Pixmap aPixmap = None;

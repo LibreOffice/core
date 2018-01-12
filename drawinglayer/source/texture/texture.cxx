@@ -623,7 +623,7 @@ namespace drawinglayer
                 for(sal_uInt32 a(1); a < mnSteps; a++)
                 {
                     // create matrix
-                    const double fOffset(mfDistance * (double)a);
+                    const double fOffset(mfDistance * static_cast<double>(a));
                     basegfx::B2DHomMatrix aNew;
                     aNew.set(1, 2, fOffset);
                     rMatrices.push_back(maTextureTransform * aNew);

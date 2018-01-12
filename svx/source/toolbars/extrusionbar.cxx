@@ -750,7 +750,7 @@ void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
     }
 
     if( bHasCustomShape )
-        rSet.Put( SfxInt32Item( SID_EXTRUSION_DIRECTION, (sal_Int32)fFinalSkewAngle ) );
+        rSet.Put( SfxInt32Item( SID_EXTRUSION_DIRECTION, static_cast<sal_Int32>(fFinalSkewAngle) ) );
     else
         rSet.DisableItem( SID_EXTRUSION_DIRECTION );
 }
@@ -949,7 +949,7 @@ void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
     if( pSdrView->GetModel() )
     {
         FieldUnit eUnit = pSdrView->GetModel()->GetUIUnit();
-        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)eUnit ) );
+        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast<sal_uInt16>(eUnit) ) );
     }
 
     if( bHasCustomShape )
@@ -1048,7 +1048,7 @@ void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxItemSet& r
     }
 
     if( bHasCustomShape )
-        rSet.Put( SfxInt32Item( SID_EXTRUSION_LIGHTING_DIRECTION, (sal_Int32)nFinalDirection ) );
+        rSet.Put( SfxInt32Item( SID_EXTRUSION_LIGHTING_DIRECTION, static_cast<sal_Int32>(nFinalDirection) ) );
     else
         rSet.DisableItem( SID_EXTRUSION_LIGHTING_DIRECTION );
 }

@@ -231,7 +231,7 @@ Any VCLXAccessibleRadioButton::getCurrentValue(  )
 
     VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
     if ( pVCLXRadioButton )
-        aValue <<= (sal_Int32) pVCLXRadioButton->getState();
+        aValue <<= static_cast<sal_Int32>(pVCLXRadioButton->getState());
 
     return aValue;
 }
@@ -267,7 +267,7 @@ Any VCLXAccessibleRadioButton::getMaximumValue(  )
     OExternalLockGuard aGuard( this );
 
     Any aValue;
-    aValue <<= (sal_Int32) 1;
+    aValue <<= sal_Int32(1);
 
     return aValue;
 }
@@ -278,7 +278,7 @@ Any VCLXAccessibleRadioButton::getMinimumValue(  )
     OExternalLockGuard aGuard( this );
 
     Any aValue;
-    aValue <<= (sal_Int32) 0;
+    aValue <<= sal_Int32(0);
 
     return aValue;
 }

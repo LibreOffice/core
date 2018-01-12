@@ -395,7 +395,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                                 nPntNum -= nMax;
                             }
 
-                            aReplaceSet.insert( (sal_uInt16)nPntNum );
+                            aReplaceSet.insert( static_cast<sal_uInt16>(nPntNum) );
                         }
                         rPts.swap(aReplaceSet);
 

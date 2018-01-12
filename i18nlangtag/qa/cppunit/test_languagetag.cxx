@@ -773,9 +773,9 @@ void TestLanguageTag::testAllIsoLangEntries()
                 OString aMessage( OUStringToOString( (*it).maBcp47, RTL_TEXTENCODING_ASCII_US));
                 aMessage += " " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US) + ": " +
                     OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US) + " " +
-                    OString::number( (sal_uInt16)aTagString.getLanguageType(), 16) +
+                    OString::number( static_cast<sal_uInt16>(aTagString.getLanguageType()), 16) +
                     " -> " + OUStringToOString( aTagBack.getBcp47(), RTL_TEXTENCODING_ASCII_US) + " " +
-                    OString::number( (sal_uInt16)aTagBack.getLanguageType(), 16);
+                    OString::number( static_cast<sal_uInt16>(aTagBack.getLanguageType()), 16);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), aTagBack.getLanguageType(), aTagString.getLanguageType());
             }
         }

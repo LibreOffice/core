@@ -366,7 +366,7 @@ namespace basegfx
 
         void incrementRasterConversionLineEntry3D(sal_uInt32 nStep, InterpolatorProvider3D& rProvider)
         {
-            const double fStep((double)nStep);
+            const double fStep(static_cast<double>(nStep));
             maX.increment(fStep);
             maZ.increment(fStep);
             mnY += nStep;

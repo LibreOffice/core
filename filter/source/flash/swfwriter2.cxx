@@ -315,8 +315,8 @@ void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ) 
     sal_uInt8 nTranslateBits = 16;
 
     aBits.writeUB( nTranslateBits, 5 );
-    aBits.writeSB( (sal_Int16)rMatrix.get(0, 2), nTranslateBits );      // Translate X
-    aBits.writeSB( (sal_Int16)rMatrix.get(1, 2), nTranslateBits );      // Translate Y
+    aBits.writeSB( static_cast<sal_Int16>(rMatrix.get(0, 2)), nTranslateBits );      // Translate X
+    aBits.writeSB( static_cast<sal_Int16>(rMatrix.get(1, 2)), nTranslateBits );      // Translate Y
 
     aBits.writeTo( rOut );
 }
@@ -374,10 +374,10 @@ void Sprite::addTag( Tag* pNewTag )
 
 sal_uInt32 swf::getFixed( double fValue )
 {
-    sal_Int16 nUpper = (sal_Int16)floor(fValue);
-    sal_uInt16 nLower = (sal_uInt16)((fValue - floor(fValue))*0x10000);
+    sal_Int16 nUpper = static_cast<sal_Int16>(floor(fValue));
+    sal_uInt16 nLower = static_cast<sal_uInt16>((fValue - floor(fValue))*0x10000);
 
-    sal_uInt32 temp = ((sal_Int32)nUpper)<<16;
+    sal_uInt32 temp = static_cast<sal_Int32>(nUpper)<<16;
     temp |= nLower;
 
     return temp;
@@ -563,8 +563,8 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
 
             double tx = ( maGradient.GetOfsX() * 32768.0 ) / 100.0;
             double ty = ( maGradient.GetOfsY() * 32768.0 ) / 100.0;
-            double scalex = (double)maBoundRect.GetWidth() / 32768.0;
-            double scaley = (double)maBoundRect.GetHeight() / 32768.0;
+            double scalex = static_cast<double>(maBoundRect.GetWidth()) / 32768.0;
+            double scaley = static_cast<double>(maBoundRect.GetHeight()) / 32768.0;
 
             m.scale( 1.2, 1.2 );
 
@@ -594,8 +594,8 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             aGradientRecords.emplace_back( 0x00, maGradient.GetEndColor() );
             aGradientRecords.emplace_back( 0x80, maGradient.GetStartColor() );
             aGradientRecords.emplace_back( 0xff, maGradient.GetEndColor() );
-            double scalex = (double)maBoundRect.GetWidth() / 32768.0;
-            double scaley = (double)maBoundRect.GetHeight() / 32768.0;
+            double scalex = static_cast<double>(maBoundRect.GetWidth()) / 32768.0;
+            double scaley = static_cast<double>(maBoundRect.GetHeight()) / 32768.0;
             m.translate( 32768.0 / 2.0, 32768.0 / 2.0 );
             m.scale( scalex, scaley );
         }
@@ -606,8 +606,8 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
         {
             aGradientRecords.emplace_back( 0x00, maGradient.GetStartColor() );
             aGradientRecords.emplace_back( 0xff, maGradient.GetEndColor() );
-            double scalex = (double)maBoundRect.GetWidth() / 32768.0;
-            double scaley = (double)maBoundRect.GetHeight() / 32768.0;
+            double scalex = static_cast<double>(maBoundRect.GetWidth()) / 32768.0;
+            double scaley = static_cast<double>(maBoundRect.GetHeight()) / 32768.0;
 
             m.scale( scalex, scaley );
 

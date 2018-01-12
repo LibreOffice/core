@@ -233,15 +233,15 @@ void extractDate(const css::util::DateTime& _rDateTime, css::util::Date& _rOut)
 OUString toISO8601(const css::util::DateTime& rDateTime)
 {
     OUStringBuffer rBuffer;
-    rBuffer.append((sal_Int32) rDateTime.Year);
+    rBuffer.append(static_cast<sal_Int32>(rDateTime.Year));
     rBuffer.append('-');
     if( rDateTime.Month < 10 )
         rBuffer.append('0');
-    rBuffer.append((sal_Int32) rDateTime.Month);
+    rBuffer.append(static_cast<sal_Int32>(rDateTime.Month));
     rBuffer.append('-');
     if( rDateTime.Day < 10 )
         rBuffer.append('0');
-    rBuffer.append((sal_Int32) rDateTime.Day);
+    rBuffer.append(static_cast<sal_Int32>(rDateTime.Day));
 
     if( rDateTime.NanoSeconds != 0 ||
         rDateTime.Seconds     != 0 ||
@@ -251,15 +251,15 @@ OUString toISO8601(const css::util::DateTime& rDateTime)
         rBuffer.append('T');
         if( rDateTime.Hours < 10 )
             rBuffer.append('0');
-        rBuffer.append((sal_Int32) rDateTime.Hours);
+        rBuffer.append(static_cast<sal_Int32>(rDateTime.Hours));
         rBuffer.append(':');
         if( rDateTime.Minutes < 10 )
             rBuffer.append('0');
-        rBuffer.append((sal_Int32) rDateTime.Minutes);
+        rBuffer.append(static_cast<sal_Int32>(rDateTime.Minutes));
         rBuffer.append(':');
         if( rDateTime.Seconds < 10 )
             rBuffer.append('0');
-        rBuffer.append((sal_Int32) rDateTime.Seconds);
+        rBuffer.append(static_cast<sal_Int32>(rDateTime.Seconds));
         if ( rDateTime.NanoSeconds > 0)
         {
             OSL_ENSURE(rDateTime.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
@@ -344,9 +344,9 @@ bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
 
     if (bSuccess)
     {
-        rDate.Year = (sal_uInt16)nYear;
-        rDate.Month = (sal_uInt16)nMonth;
-        rDate.Day = (sal_uInt16)nDay;
+        rDate.Year = static_cast<sal_uInt16>(nYear);
+        rDate.Month = static_cast<sal_uInt16>(nMonth);
+        rDate.Day = static_cast<sal_uInt16>(nDay);
     }
 
     return bSuccess;
@@ -480,9 +480,9 @@ bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
         if(!tokTz.isEmpty())
             rTime.IsUTC = (tokTz == "Z");
 
-        rTime.Hours = (sal_uInt16)nHour;
-        rTime.Minutes = (sal_uInt16)nMin;
-        rTime.Seconds = (sal_uInt16)nSec;
+        rTime.Hours = static_cast<sal_uInt16>(nHour);
+        rTime.Minutes = static_cast<sal_uInt16>(nMin);
+        rTime.Seconds = static_cast<sal_uInt16>(nSec);
         rTime.NanoSeconds = nNanoSec;
     }
 

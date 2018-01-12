@@ -488,8 +488,8 @@ SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     {
         // initialise scene
 
-        double fW = (double)aSize.Width;
-        double fH = (double)aSize.Height;
+        double fW = static_cast<double>(aSize.Width);
+        double fH = static_cast<double>(aSize.Height);
 
         Camera3D aCam(pScene->GetCamera());
         aCam.SetAutoAdjustProjection(false);
@@ -556,12 +556,12 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, SdrInventor& rInventor,
     else if(nTempType & E3D_INVENTOR_FLAG)
     {
         rInventor = SdrInventor::E3d;
-        rType = (sal_uInt16)(nTempType & ~E3D_INVENTOR_FLAG);
+        rType = static_cast<sal_uInt16>(nTempType & ~E3D_INVENTOR_FLAG);
     }
     else
     {
         rInventor = SdrInventor::Default;
-        rType = (sal_uInt16)nTempType;
+        rType = static_cast<sal_uInt16>(nTempType);
 
         switch( rType )
         {

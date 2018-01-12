@@ -533,7 +533,7 @@ void PresenterScrollBar::UpdateWidthOrHeight (
         if (xBitmap.is())
         {
             const geometry::IntegerSize2D aBitmapSize (xBitmap->getSize());
-            const sal_Int32 nBitmapSize = (sal_Int32)GetMinor(aBitmapSize.Width, aBitmapSize.Height);
+            const sal_Int32 nBitmapSize = static_cast<sal_Int32>(GetMinor(aBitmapSize.Width, aBitmapSize.Height));
             if (nBitmapSize > rSize)
                 rSize = nBitmapSize;
         }

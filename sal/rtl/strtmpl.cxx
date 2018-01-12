@@ -101,8 +101,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
     else
     {
         sal_Int32 nRet;
-        while ( ((nRet = ((sal_Int32)IMPL_RTL_USTRCODE(*pStr1))-
-                         ((sal_Int32)IMPL_RTL_USTRCODE(*pStr2))) == 0) &&
+        while ( ((nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr1))-
+                         static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr2))) == 0) &&
                 *pStr2 )
         {
             pStr1++;
@@ -148,8 +148,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
         while( (--nCount >= 0) && (*++pStr1 == *++pStr2) ) ;
 
         if( nCount >= 0 )
-            nRet = ((sal_Int32)IMPL_RTL_USTRCODE( *pStr1 ))
-                 - ((sal_Int32)IMPL_RTL_USTRCODE( *pStr2 ));
+            nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr1 ))
+                 - static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr2 ));
 
         return nRet;
     }
@@ -193,8 +193,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
         while ( (nShortenedLength > 0) &&
                 (pStr1 < pStr1End) && (pStr2 < pStr2End) )
         {
-            nRet = ((sal_Int32)IMPL_RTL_USTRCODE( *pStr1 ))-
-                   ((sal_Int32)IMPL_RTL_USTRCODE( *pStr2 ));
+            nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr1 ))-
+                   static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr2 ));
             if ( nRet )
                 return nRet;
 
@@ -227,8 +227,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( reverseCompare_WithLength )( const IMPL_RTL
     {
         pStr1Run--;
         pStr2Run--;
-        nRet = ((sal_Int32)IMPL_RTL_USTRCODE( *pStr1Run ))-
-               ((sal_Int32)IMPL_RTL_USTRCODE( *pStr2Run ));
+        nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr1Run ))-
+               static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr2Run ));
         if ( nRet )
             return nRet;
     }
@@ -359,7 +359,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar )( const IMPL_RTL_STRCODE* pStr
     if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
-        wchar_t const * p = wcschr(reinterpret_cast<wchar_t const *>(pStr), (wchar_t)c);
+        wchar_t const * p = wcschr(reinterpret_cast<wchar_t const *>(pStr), static_cast<wchar_t>(c));
         return p ? p - reinterpret_cast<wchar_t const *>(pStr) : -1;
     }
     else
@@ -420,7 +420,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar )( const IMPL_RTL_STRCODE* 
     if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
-        wchar_t const * p = wcsrchr(reinterpret_cast<wchar_t const *>(pStr), (wchar_t)c);
+        wchar_t const * p = wcsrchr(reinterpret_cast<wchar_t const *>(pStr), static_cast<wchar_t>(c));
         return p ? p - reinterpret_cast<wchar_t const *>(pStr) : -1;
     }
     else
@@ -841,7 +841,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
     /* create a recursive buffer with all values, except the last one */
     do
     {
-        sal_Char nDigit = (sal_Char)(nValue % nRadix);
+        sal_Char nDigit = static_cast<sal_Char>(nValue % nRadix);
         nValue /= nRadix;
         if ( nDigit > 9 )
             *pBuf = (nDigit-10) + 'a';
@@ -896,7 +896,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
     /* create a recursive buffer with all values, except the last one */
     do
     {
-        sal_Char nDigit = (sal_Char)(nValue % nRadix);
+        sal_Char nDigit = static_cast<sal_Char>(nValue % nRadix);
         nValue /= nRadix;
         if ( nDigit > 9 )
             *pBuf = (nDigit-10) + 'a';
@@ -942,7 +942,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfUInt64 )( IMPL_RTL_STRCODE* pStr,
     /* create a recursive buffer with all values, except the last one */
     do
     {
-        sal_Char nDigit = (sal_Char)(nValue % nRadix);
+        sal_Char nDigit = static_cast<sal_Char>(nValue % nRadix);
         nValue /= nRadix;
         if ( nDigit > 9 )
             *pBuf = (nDigit-10) + 'a';
@@ -1437,7 +1437,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThi
 #if IMPL_RTL_IS_USTRING
         assert(static_cast<unsigned char>(*pCharStr) < 0x80); // ASCII range
 #endif
-        SAL_WARN_IF( ((unsigned char)*pCharStr) == '\0', "rtl.string",
+        SAL_WARN_IF( (static_cast<unsigned char>(*pCharStr)) == '\0', "rtl.string",
                     "rtl_uString_newFromLiteral - Found embedded \\0 character" );
 
         *pBuffer = *pCharStr;

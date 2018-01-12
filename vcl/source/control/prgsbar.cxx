@@ -127,7 +127,7 @@ void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt1
         mnPrgsWidth = (mnPrgsHeight * 2) / 3;
         maPos.Y() = PROGRESSBAR_WIN_OFFSET;
         long nMaxWidth = (aSize.Width() - (PROGRESSBAR_WIN_OFFSET * 2) + PROGRESSBAR_OFFSET);
-        sal_uInt16 nMaxCount = (sal_uInt16)(nMaxWidth / (mnPrgsWidth+PROGRESSBAR_OFFSET));
+        sal_uInt16 nMaxCount = static_cast<sal_uInt16>(nMaxWidth / (mnPrgsWidth+PROGRESSBAR_OFFSET));
         if (nMaxCount <= 1)
         {
             nMaxCount = 1;

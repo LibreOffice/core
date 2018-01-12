@@ -5176,7 +5176,7 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
     SwRectFnSet aRectFnSet(this);
     SwTwips nPrtWidth = aRectFnSet.GetWidth(getFramePrintArea());
     Fraction aFract( nPrtWidth, 1 );
-    const SwTwips nWidth = (long)(aFract *= rInf.GetWidth());
+    const SwTwips nWidth = static_cast<long>(aFract *= rInf.GetWidth());
 
     SwTwips nX = aRectFnSet.GetPrtLeft(*this);
     switch ( rInf.GetAdj() )
@@ -6850,7 +6850,7 @@ void SwPageFrame::RefreshExtraData( const SwRect &rRect ) const
 {
     const SwLineNumberInfo &rInfo = GetFormat()->GetDoc()->GetLineNumberInfo();
     bool bLineInFly = (rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys())
-        || (sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE;
+        || static_cast<sal_Int16>(SW_MOD()->GetRedlineMarkPos()) != text::HoriOrientation::NONE;
 
     SwRect aRect( rRect );
     ::SwAlignRect( aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
@@ -6877,7 +6877,7 @@ void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
     const SwLineNumberInfo &rInfo = GetFormat()->GetDoc()->GetLineNumberInfo();
     bool bLineInBody = rInfo.IsPaintLineNumbers(),
              bLineInFly  = bLineInBody && rInfo.IsCountInFlys(),
-             bRedLine = (sal_Int16)SW_MOD()->GetRedlineMarkPos()!=text::HoriOrientation::NONE;
+             bRedLine = static_cast<sal_Int16>(SW_MOD()->GetRedlineMarkPos())!=text::HoriOrientation::NONE;
 
     const SwContentFrame *pCnt = ContainsContent();
     while ( pCnt && IsAnLower( pCnt ) )

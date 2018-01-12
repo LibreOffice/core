@@ -853,8 +853,8 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
 
     if(bExtrude)
     {
-        double fW = (double)aRect.GetWidth();
-        double fH = (double)aRect.GetHeight();
+        double fW = static_cast<double>(aRect.GetWidth());
+        double fH = static_cast<double>(aRect.GetHeight());
         fDepth = sqrt(fW*fW + fH*fH) / 6.0;
     }
     if(!bExtrude)
@@ -884,7 +884,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
         }
         else
         {
-            aLatheMat.translate((double)-aRect.Left(), 0.0);
+            aLatheMat.translate(static_cast<double>(-aRect.Left()), 0.0);
         }
 
         // Form the inverse matrix to determine the target expansion
@@ -904,28 +904,28 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
             aRot *= aLatheMat;
             aRot.setX(-aRot.getX());
             aRot *= aInvLatheMat;
-            aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
+            aRotPnt = Point(static_cast<long>(aRot.getX() + 0.5), static_cast<long>(-aRot.getY() - 0.5));
             aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
             aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Bottom());
             aRot *= aLatheMat;
             aRot.setX(-aRot.getX());
             aRot *= aInvLatheMat;
-            aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
+            aRotPnt = Point(static_cast<long>(aRot.getX() + 0.5), static_cast<long>(-aRot.getY() - 0.5));
             aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
             aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Top());
             aRot *= aLatheMat;
             aRot.setX(-aRot.getX());
             aRot *= aInvLatheMat;
-            aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
+            aRotPnt = Point(static_cast<long>(aRot.getX() + 0.5), static_cast<long>(-aRot.getY() - 0.5));
             aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
             aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Bottom());
             aRot *= aLatheMat;
             aRot.setX(-aRot.getX());
             aRot *= aInvLatheMat;
-            aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
+            aRotPnt = Point(static_cast<long>(aRot.getX() + 0.5), static_cast<long>(-aRot.getY() - 0.5));
             aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
         }
     }
@@ -956,7 +956,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
         // Initialize scene
         pScene->NbcSetSnapRect(aRect);
         basegfx::B3DRange aBoundVol = pScene->GetBoundVolume();
-        InitScene(pScene, (double)aRect.GetWidth(), (double)aRect.GetHeight(), aBoundVol.getDepth());
+        InitScene(pScene, static_cast<double>(aRect.GetWidth()), static_cast<double>(aRect.GetHeight()), aBoundVol.getDepth());
 
         // Insert scene instead of the first selected object and throw away
         // all the old objects
@@ -1139,7 +1139,7 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
         {
             // need to be arranged
             double fMinDepth = fDepth * 0.8;
-            double fStep = (fDepth - fMinDepth) / (double)nNumLayers;
+            double fStep = (fDepth - fMinDepth) / static_cast<double>(nNumLayers);
             pLayer = pBaseLayer;
 
             while(pLayer)
@@ -1294,7 +1294,7 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
 
-    tools::Rectangle aRect(0,0, (long) fW, (long) fH);
+    tools::Rectangle aRect(0,0, static_cast<long>(fW), static_cast<long>(fH));
 
     E3dScene* pScene = new E3dScene;
 

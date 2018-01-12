@@ -126,7 +126,7 @@ XPropertyList::XPropertyList(
 
 bool XPropertyList::isValidIdx(long nIndex) const
 {
-    return ((size_t)nIndex < maList.size() && nIndex >= 0);
+    return (static_cast<size_t>(nIndex) < maList.size() && nIndex >= 0);
 }
 
 

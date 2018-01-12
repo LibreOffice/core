@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-#define ACCESSIBLE_SELECTION_CHILD_ALL  ((sal_Int32)-1)
+#define ACCESSIBLE_SELECTION_CHILD_ALL  (sal_Int32(-1))
 #define ACCESSIBLE_SELECTION_CHILD_SELF ((sal_Int32)-2)
 
 

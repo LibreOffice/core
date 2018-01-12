@@ -89,7 +89,7 @@ public:
     BitmapColor GetBestMatchingColor(const BitmapColor& rBitmapColor)
     {
         if (HasPalette())
-            return BitmapColor((sal_uInt8) GetBestPaletteIndex(rBitmapColor));
+            return BitmapColor(static_cast<sal_uInt8>(GetBestPaletteIndex(rBitmapColor)));
         else
             return rBitmapColor;
     }

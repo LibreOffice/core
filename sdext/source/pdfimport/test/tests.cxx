@@ -87,7 +87,7 @@ namespace
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Width", 79400, m_aPageSize.Width, 0.00000001);
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Height", 59500, m_aPageSize.Height, 0.0000001 );
             CPPUNIT_ASSERT_MESSAGE( "endPage() called", m_bPageEnded );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Num pages equal one", (sal_Int32) 1, m_nNumPages );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Num pages equal one", sal_Int32(1), m_nNumPages );
             CPPUNIT_ASSERT_MESSAGE( "Correct hyperlink bounding box",
                                     rtl::math::approxEqual(m_aHyperlinkBounds.X1,34.7 ) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y1,386.0) &&
@@ -268,7 +268,7 @@ namespace
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 0",
                                     1, rContext.Flatness, 0.00000001 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
-                                    (sal_Int32) 0, rContext.FontId );
+                                    sal_Int32(0), rContext.FontId );
         }
 
         virtual void fillPath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) override
@@ -287,7 +287,7 @@ namespace
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 10",
                                     10, rContext.Flatness, 0.00000001 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
-                                    (sal_Int32) 0, rContext.FontId );
+                                    sal_Int32(0), rContext.FontId );
         }
 
         virtual void eoFillPath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) override
@@ -306,7 +306,7 @@ namespace
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 0",
                                     1, rContext.Flatness, 0.00000001 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
-                                    (sal_Int32) 0, rContext.FontId );
+                                    sal_Int32(0), rContext.FontId );
 
             const char sExportString[] = "m12050 49610c-4310 0-7800-3490-7800-7800 0-4300 "
                 "3490-7790 7800-7790 4300 0 7790 3490 7790 7790 0 4310-3490 7800-7790 7800z";
@@ -355,7 +355,7 @@ namespace
                               bool                                       /*bInvert*/ ) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask received two properties",
-                                    (sal_Int32) 3, xBitmap.getLength() );
+                                    sal_Int32(3), xBitmap.getLength() );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask got URL param",
                                     OUString("URL"), xBitmap[0].Name );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask got InputStream param",
@@ -365,7 +365,7 @@ namespace
         virtual void drawImage(const uno::Sequence<beans::PropertyValue>& xBitmap ) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage received two properties",
-                                    (sal_Int32) 3, xBitmap.getLength() );
+                                    sal_Int32(3), xBitmap.getLength() );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage got URL param",
                                     OUString("URL"), xBitmap[0].Name );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage got InputStream param",
@@ -377,7 +377,7 @@ namespace
                                           const uno::Sequence<uno::Any>&             /*xMaskColors*/ ) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage received two properties",
-                                    (sal_Int32) 3, xBitmap.getLength() );
+                                    sal_Int32(3), xBitmap.getLength() );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage got URL param",
                                     OUString("URL"), xBitmap[0].Name );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage got InputStream param",
@@ -389,14 +389,14 @@ namespace
                                      bool                                       /*bInvertMask*/) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #1",
-                                    (sal_Int32) 3, xBitmap.getLength() );
+                                    sal_Int32(3), xBitmap.getLength() );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage got URL param #1",
                                     OUString("URL"), xBitmap[0].Name );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage got InputStream param #1",
                                     OUString("InputStream"), xBitmap[1].Name );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #2",
-                                    (sal_Int32) 3, xMask.getLength() );
+                                    sal_Int32(3), xMask.getLength() );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage got URL param #2",
                                     OUString("URL"), xMask[0].Name );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage got InputStream param #2",
@@ -407,14 +407,14 @@ namespace
                                           const uno::Sequence<beans::PropertyValue>& xMask) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #1",
-                                    (sal_Int32) 3, xBitmap.getLength() );
+                                    sal_Int32(3), xBitmap.getLength() );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage got URL param #1",
                                     OUString("URL"), xBitmap[0].Name );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage got InputStream param #1",
                                     OUString("InputStream"), xBitmap[1].Name );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #2",
-                                    (sal_Int32) 3, xMask.getLength() );
+                                    sal_Int32(3), xMask.getLength() );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage got URL param #2",
                                     OUString("URL"), xMask[0].Name );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage got InputStream param #2",

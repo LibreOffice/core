@@ -65,7 +65,7 @@ bool SwCursorShell::GoNextCell( bool bAppendLine )
                     pTableNd = IsCursorInTable();
                 assert (pTableNd);
                 pTableBox = & pTableBox->FindEndOfRowSpan( pTableNd->GetTable(),
-                                                           (sal_uInt16)(pTableBox->getRowSpan() + pCursor->GetCursorRowSpanOffset() ) );
+                                                           static_cast<sal_uInt16>(pTableBox->getRowSpan() + pCursor->GetCursorRowSpanOffset() ) );
                 pTableBoxStartNode = pTableBox->GetSttNd();
             }
         }
@@ -150,7 +150,7 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
     const bool bCheckProtected = !IsReadOnlyAvailable();
 
     if( bCheckProtected )
-        eType = (SwTableSearchType)(eType | SwTableSearchType::Protect);
+        eType = static_cast<SwTableSearchType>(eType | SwTableSearchType::Protect);
 
     if ( !bRowSimple )
     {

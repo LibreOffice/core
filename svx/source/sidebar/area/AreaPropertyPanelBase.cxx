@@ -437,7 +437,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
         }
     }
 
-    meLastXFS = (sal_uInt16)nPos;
+    meLastXFS = static_cast<sal_uInt16>(nPos);
 
     if(eFillStyle::NONE != (eFillStyle)nPos)
     {
@@ -1229,7 +1229,7 @@ void AreaPropertyPanelBase::Update()
                     if(pSh && pSh->GetItem(SID_BITMAP_LIST) && eXFS == BITMAP)
                     {
                         mpBmpImport->Show();
-                        mpLbFillType->SelectEntryPos((sal_uInt32)BITMAP);
+                        mpLbFillType->SelectEntryPos(sal_uInt32(BITMAP));
                         const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
                         mpLbFillAttr->Fill(aItem.GetBitmapList());
 
@@ -1239,7 +1239,7 @@ void AreaPropertyPanelBase::Update()
                     else if(pSh && pSh->GetItem(SID_PATTERN_LIST) && eXFS == PATTERN)
                     {
                         mpBmpImport->Hide();
-                        mpLbFillType->SelectEntryPos((sal_uInt32)PATTERN);
+                        mpLbFillType->SelectEntryPos(sal_uInt32(PATTERN));
                         const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
                         mpLbFillAttr->Fill(aItem.GetPatternList());
 
@@ -1374,7 +1374,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransparentHdl_Impl, Edit&, void)
 {
-    const sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
+    const sal_uInt16 nTrans = static_cast<sal_uInt16>(mpMTRTransparent->GetValue());
     mnLastTransSolid = nTrans;
     SetTransparency(nTrans);
     const sal_Int32 nSelectType = mpLBTransType->GetSelectedEntryPos();

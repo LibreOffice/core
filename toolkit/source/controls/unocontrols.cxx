@@ -130,7 +130,7 @@ uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
     case BASEPROPERTY_LINE_END_FORMAT:
-        aReturn <<= (sal_Int16)awt::LineEndFormat::LINE_FEED;   // LF
+        aReturn <<= sal_Int16(awt::LineEndFormat::LINE_FEED);   // LF
         break;
     case BASEPROPERTY_DEFAULTCONTROL:
         aReturn <<= OUString::createFromAscii( szServiceName_UnoControlEdit );
@@ -719,7 +719,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     case BASEPROPERTY_TOGGLE:
         return uno::makeAny( false );
     case BASEPROPERTY_ALIGN:
-        return uno::makeAny( (sal_Int16)PROPERTY_ALIGN_CENTER );
+        return uno::makeAny( sal_Int16(PROPERTY_ALIGN_CENTER) );
     case BASEPROPERTY_FOCUSONCLICK:
         return uno::makeAny( true );
     }
@@ -865,7 +865,7 @@ void SAL_CALL UnoButtonControl::disposing( const lang::EventObject& Source )
 void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
 {
     // forward to model
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any((sal_Int16)rEvent.Selected), false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
 
     // multiplex
     ItemEvent aEvent( rEvent );
@@ -1123,7 +1123,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
         return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlRadioButton ) );
 
     case BASEPROPERTY_VISUALEFFECT:
-        return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
+        return uno::makeAny( sal_Int16(awt::VisualEffect::LOOK3D) );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -1282,7 +1282,7 @@ sal_Bool UnoRadioButtonControl::getState()
 
 void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any((sal_Int16)rEvent.Selected), false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
 
     // compatibility:
     // in OOo 1.0.x, when the user clicked a radio button in a group of buttons, this resulted
@@ -1370,7 +1370,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
         return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlCheckBox ) );
 
     case BASEPROPERTY_VISUALEFFECT:
-        return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
+        return uno::makeAny( sal_Int16(awt::VisualEffect::LOOK3D) );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -1506,7 +1506,7 @@ void UnoCheckBoxControl::setLabel( const OUString&  rLabel )
 
 void UnoCheckBoxControl::setState( short n )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any((sal_Int16) n), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(static_cast<sal_Int16>(n)), true );
 }
 
 short UnoCheckBoxControl::getState()
@@ -1524,7 +1524,7 @@ void UnoCheckBoxControl::enableTriState( sal_Bool b )
 
 void UnoCheckBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any((sal_Int16) rEvent.Selected), false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
 
     if ( maItemListeners.getLength() )
         maItemListeners.itemStateChanged( rEvent );
@@ -1589,7 +1589,7 @@ uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId 
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
-        return uno::Any((sal_Int16) 0);
+        return uno::Any(sal_Int16(0));
     }
     else if ( nPropId == BASEPROPERTY_URL )
     {
@@ -1684,7 +1684,7 @@ OUString UnoFixedHyperlinkControl::getURL(  )
 
 void UnoFixedHyperlinkControl::setAlignment( short nAlign )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any((sal_Int16) nAlign), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any(static_cast<sal_Int16>(nAlign)), true );
 }
 
 short UnoFixedHyperlinkControl::getAlignment()
@@ -1780,7 +1780,7 @@ uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
-        return uno::Any((sal_Int16)0);
+        return uno::Any(sal_Int16(0));
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -1875,7 +1875,7 @@ OUString UnoFixedTextControl::getText()
 
 void UnoFixedTextControl::setAlignment( short nAlign )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any((sal_Int16) nAlign), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any(static_cast<sal_Int16>(nAlign)), true );
 }
 
 short UnoFixedTextControl::getAlignment()
@@ -2732,8 +2732,8 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
-    sal_uInt16 nNewItems = (sal_uInt16)aItems.getLength();
-    sal_uInt16 nOldLen = (sal_uInt16)aSeq.getLength();
+    sal_uInt16 nNewItems = static_cast<sal_uInt16>(aItems.getLength());
+    sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
     sal_uInt16 nNewLen = nOldLen + nNewItems;
 
     uno::Sequence< OUString> aNewSeq( nNewLen );
@@ -2764,7 +2764,7 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
-    sal_uInt16 nOldLen = (sal_uInt16)aSeq.getLength();
+    sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
     if ( nOldLen && ( nPos < nOldLen ) )
     {
         if ( nCount > ( nOldLen-nPos ) )
@@ -2794,7 +2794,7 @@ sal_Int16 UnoListBoxControl::getItemCount()
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
-    return (sal_Int16)aSeq.getLength();
+    return static_cast<sal_Int16>(aSeq.getLength());
 }
 
 OUString UnoListBoxControl::getItem( sal_Int16 nPos )
@@ -3341,8 +3341,8 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
-    sal_uInt16 nNewItems = (sal_uInt16)aItems.getLength();
-    sal_uInt16 nOldLen = (sal_uInt16)aSeq.getLength();
+    sal_uInt16 nNewItems = static_cast<sal_uInt16>(aItems.getLength());
+    sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
     sal_uInt16 nNewLen = nOldLen + nNewItems;
 
     uno::Sequence< OUString> aNewSeq( nNewLen );
@@ -3373,7 +3373,7 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
-    sal_uInt16 nOldLen = (sal_uInt16)aSeq.getLength();
+    sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
     if ( nOldLen && ( nPos < nOldLen ) )
     {
         if ( nCount > ( nOldLen-nPos ) )
@@ -3403,7 +3403,7 @@ sal_Int16 UnoComboBoxControl::getItemCount()
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
-    return (sal_Int16)aSeq.getLength();
+    return static_cast<sal_Int16>(aSeq.getLength());
 }
 
 OUString UnoComboBoxControl::getItem( sal_Int16 nPos )

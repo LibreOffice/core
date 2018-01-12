@@ -135,7 +135,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
 
     // fill the other fields
 
-    for( unsigned int i = 1; i < (unsigned int)nSegments + 1; i++ )
+    for( unsigned int i = 1; i < static_cast<unsigned int>(nSegments) + 1; i++ )
     {
         if( i >= m_aLinks.size() )
             appendField();
@@ -210,7 +210,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
             }
         }
 
-        if( nSegments + i == (int)m_aLinks.size() )
+        if( nSegments + i == static_cast<int>(m_aLinks.size()) )
             bRight = false;
 
         if( i != 0 && bRight )

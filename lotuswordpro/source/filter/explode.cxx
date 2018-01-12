@@ -187,7 +187,7 @@ sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
             m_pBuffer = m_Buffer;
             if (m_nBytesLeft == 0)  return 1;
             }
-        val |= (sal_uInt32)(*m_pBuffer++) << m_nBitsLeft;       /* load eight bits */
+        val |= static_cast<sal_uInt32>(*m_pBuffer++) << m_nBitsLeft;       /* load eight bits */
         m_nBytesLeft --;
         m_nBitsLeft += 8;
     }
@@ -239,7 +239,7 @@ sal_Int32 Decompression::explode()
             sal_uInt32 symbol;
             if (0 != ReadBits(8, symbol))
                 break;
-            m_Output[m_nOutputBufferPos++] = (sal_uInt8)symbol;
+            m_Output[m_nOutputBufferPos++] = static_cast<sal_uInt8>(symbol);
             if (m_nOutputBufferPos == MAXWIN)
             {
                 m_pOutStream->WriteBytes(m_Output, m_nOutputBufferPos);
@@ -263,7 +263,7 @@ sal_Int32 Decompression::explode()
             //            read more (L1-7) bits -> L2
             //             LENGTH = L2 + M[L1-7] + 2
             sal_uInt32 L2;
-            if (0 != ReadBits((sal_uInt16)(L1 - 7), L2))
+            if (0 != ReadBits(static_cast<sal_uInt16>(L1 - 7), L2))
                 break;
             Length = L2 + 2 + m_iArrayOfM[L1 -7];
         }
@@ -291,7 +291,7 @@ sal_Int32 Decompression::explode()
             //               D1 = D1 << P2  // the parameter 2
             //               read P2 bits -> D2
             D1 = D1 << P2;
-            if (0 != ReadBits((sal_uInt16)P2, D2))
+            if (0 != ReadBits(static_cast<sal_uInt16>(P2), D2))
                 break;
         }
         // DISTANCE = (D1 | D2) + 1
@@ -309,7 +309,7 @@ sal_Int32 Decompression::explode()
 
         m_pOutStream->Flush();
         // point back to copy position and read bytes
-        m_pOutStream->SeekRel(-(long)distance);
+        m_pOutStream->SeekRel(-static_cast<long>(distance));
         sal_uInt8 sTemp[MAXWIN];
         sal_uInt32 nRead = distance > Length? Length:distance;
         m_pOutStream->ReadBytes(sTemp, nRead);
@@ -445,7 +445,7 @@ void Decompression::fillArray()
     m_iArrayOfM[0] = 7;
     for (int i=1; i < 16; i++)
     {
-        m_iArrayOfM[i]  = m_iArrayOfM[i - 1]+ (sal_uInt32)pow(2.0, i-1);//2
+        m_iArrayOfM[i]  = m_iArrayOfM[i - 1]+ static_cast<sal_uInt32>(pow(2.0, i-1));//2
     }
 }
 

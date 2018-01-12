@@ -2467,7 +2467,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
                 result[R_NON_UNIQUE] <<= isNonUnique;
                 result[R_TYPE] <<= indexType;
                 result[R_COLUMN_NAME] <<= rowColumn->getString(2);
-                sal_Int32 nPos = (sal_Int32)(findIt - columns.begin() +1); // MSVC++ nonsense
+                sal_Int32 nPos = static_cast<sal_Int32>(findIt - columns.begin() +1); // MSVC++ nonsense
                 result[R_ORDINAL_POSITION] <<= nPos;
                 vec.push_back( result );
             }

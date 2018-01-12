@@ -255,7 +255,7 @@ void SvxHtmlOptions::Notify( const css::uno::Sequence< OUString >& )
 sal_uInt16  SvxHtmlOptions::GetFontSize(sal_uInt16 nPos) const
 {
     if(nPos < HTML_FONT_COUNT)
-        return (sal_uInt16)pImpl->aFontSizeArr[nPos];
+        return static_cast<sal_uInt16>(pImpl->aFontSizeArr[nPos]);
     return 0;
 }
 
@@ -287,7 +287,7 @@ void SvxHtmlOptions::SetImportUnknown(bool bSet)
 
 sal_uInt16  SvxHtmlOptions::GetExportMode() const
 {
-    return (sal_uInt16)pImpl->nExportMode;
+    return static_cast<sal_uInt16>(pImpl->nExportMode);
 }
 
 
@@ -378,7 +378,7 @@ rtl_TextEncoding SvxHtmlOptions::GetTextEncoding() const
     if(pImpl->bIsEncodingDefault)
         eRet = SvtSysLocale::GetBestMimeEncoding();
     else
-        eRet = (rtl_TextEncoding)pImpl->eEncoding;
+        eRet = static_cast<rtl_TextEncoding>(pImpl->eEncoding);
     return eRet;
 }
 

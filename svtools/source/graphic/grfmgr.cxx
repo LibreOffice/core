@@ -269,19 +269,19 @@ bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Si
 
         if( aSize100.Width() > 0 && aSize100.Height() > 0 && nTotalWidth > 0 && nTotalHeight > 0 )
         {
-            double fScale = (double) aSize100.Width() / nTotalWidth;
+            double fScale = static_cast<double>(aSize100.Width()) / nTotalWidth;
             const long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
             const long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
 
-            fScale = (double) rSz.Width() / aSize100.Width();
+            fScale = static_cast<double>(rSz.Width()) / aSize100.Width();
             rPt.X() += FRound( nNewLeft * fScale );
             rSz.Width() = FRound( ( nNewRight - nNewLeft + 1 ) * fScale );
 
-            fScale = (double) aSize100.Height() / nTotalHeight;
+            fScale = static_cast<double>(aSize100.Height()) / nTotalHeight;
             const long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
             const long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
 
-            fScale = (double) rSz.Height() / aSize100.Height();
+            fScale = static_cast<double>(rSz.Height()) / aSize100.Height();
             rPt.Y() += FRound( nNewTop * fScale );
             rSz.Height() = FRound( ( nNewBottom - nNewTop + 1 ) * fScale );
 
@@ -535,9 +535,9 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea
                                   ::std::max( 1L, pOut->LogicToPixel( rSize, aOutMapMode ).Height() ) );
 
     //#i69780 clip final tile size to a sane max size
-    while (((sal_Int64)rSize.Width() * nTileCacheSize1D) > SAL_MAX_UINT16)
+    while ((static_cast<sal_Int64>(rSize.Width()) * nTileCacheSize1D) > SAL_MAX_UINT16)
         nTileCacheSize1D /= 2;
-    while (((sal_Int64)rSize.Height() * nTileCacheSize1D) > SAL_MAX_UINT16)
+    while ((static_cast<sal_Int64>(rSize.Height()) * nTileCacheSize1D) > SAL_MAX_UINT16)
         nTileCacheSize1D /= 2;
 
     ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, nullptr, nFlags, nTileCacheSize1D );
@@ -710,19 +710,19 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
             aMtf.AddAction( new MetaISectRectClipRegionAction( aClipRect ), 0 );
 
             // #104115# To crop the metafile, scale larger than the output rectangle
-            aMtf.Scale( (double)rDestSize.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()),
-                        (double)rDestSize.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) );
+            aMtf.Scale( static_cast<double>(rDestSize.Width()) / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()),
+                        static_cast<double>(rDestSize.Height()) / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) );
 
             // #104115# Adapt the pref size by hand (scale changes it
             // proportionally, but we want it to be smaller than the
             // former size, to crop the excess out)
-            aMtf.SetPrefSize( Size( (long)((double)rDestSize.Width() *  (1.0 + (aCropLeftTop.Width() + aCropRightBottom.Width()) / aSrcSize.Width())  + .5),
-                                    (long)((double)rDestSize.Height() * (1.0 + (aCropLeftTop.Height() + aCropRightBottom.Height()) / aSrcSize.Height()) + .5) ) );
+            aMtf.SetPrefSize( Size( static_cast<long>(static_cast<double>(rDestSize.Width()) *  (1.0 + (aCropLeftTop.Width() + aCropRightBottom.Width()) / aSrcSize.Width())  + .5),
+                                    static_cast<long>(static_cast<double>(rDestSize.Height()) * (1.0 + (aCropLeftTop.Height() + aCropRightBottom.Height()) / aSrcSize.Height()) + .5) ) );
 
             // #104115# Adapt the origin of the new mapmode, such that it
             // is shifted to the place where the cropped output starts
-            Point aNewOrigin( (long)((double)aMtfMapMode.GetOrigin().X() + rDestSize.Width() * aCropLeftTop.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()) + .5),
-                              (long)((double)aMtfMapMode.GetOrigin().Y() + rDestSize.Height() * aCropLeftTop.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) + .5) );
+            Point aNewOrigin( static_cast<long>(static_cast<double>(aMtfMapMode.GetOrigin().X()) + rDestSize.Width() * aCropLeftTop.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()) + .5),
+                              static_cast<long>(static_cast<double>(aMtfMapMode.GetOrigin().Y()) + rDestSize.Height() * aCropLeftTop.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) + .5) );
             MapMode aNewMap( rDestMap );
             aNewMap.SetOrigin( OutputDevice::LogicToLogic(aNewOrigin, aMtfMapMode, rDestMap) );
             aMtf.SetPrefMapMode( aNewMap );
@@ -783,8 +783,8 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 // another possibility is to adapt the values created so far with a factor; this
                 // will keep the original Bitmap untouched and thus quality will not change
                 // caution: convert to double first, else pretty big errors may occur
-                const double fFactorX((double)aBitmapEx.GetSizePixel().Width() / aSrcSizePixel.Width());
-                const double fFactorY((double)aBitmapEx.GetSizePixel().Height() / aSrcSizePixel.Height());
+                const double fFactorX(static_cast<double>(aBitmapEx.GetSizePixel().Width()) / aSrcSizePixel.Width());
+                const double fFactorY(static_cast<double>(aBitmapEx.GetSizePixel().Height()) / aSrcSizePixel.Height());
 
                 aCropLeftTop.Width() = basegfx::fround(aCropLeftTop.Width() * fFactorX);
                 aCropLeftTop.Height() = basegfx::fround(aCropLeftTop.Height() * fFactorY);

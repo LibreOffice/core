@@ -806,7 +806,7 @@ namespace
             if (::osl_getProcessInfo( nullptr, osl_Process_IDENTIFIER, &info ) ==
                 osl_Process_E_None)
             {
-                aRet.append( (sal_Int64)info.Ident, 16 );
+                aRet.append( static_cast<sal_Int64>(info.Ident), 16 );
             }
             else
             {
@@ -817,7 +817,7 @@ namespace
             ::rtl_getGlobalProcessId( ar );
             aRet.append( ';' );
             for (unsigned char i : ar)
-                aRet.append( (sal_Int32)i, 16 );
+                aRet.append( static_cast<sal_Int32>(i), 16 );
 
             m_sOidPart = aRet.makeStringAndClear();
         }

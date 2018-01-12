@@ -129,7 +129,7 @@ void XMLIndexTOCSourceContext::EndElement()
     rIndexPropertySet->setPropertyValue("CreateFromOutline", css::uno::Any(bUseOutline));
     rIndexPropertySet->setPropertyValue("CreateFromLevelParagraphStyles", css::uno::Any(bUseParagraphStyles));
 
-    rIndexPropertySet->setPropertyValue("Level", css::uno::Any((sal_Int16)nOutlineLevel));
+    rIndexPropertySet->setPropertyValue("Level", css::uno::Any(static_cast<sal_Int16>(nOutlineLevel)));
 
     // process common attributes
     XMLIndexSourceBaseContext::EndElement();

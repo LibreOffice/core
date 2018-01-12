@@ -245,7 +245,7 @@ namespace accessibility
 
                 if ( i < nCount )
                 {
-                    vcl::Window* pChild = m_pTabBar->GetAccessibleChildWindow( (sal_uInt16)i );
+                    vcl::Window* pChild = m_pTabBar->GetAccessibleChildWindow( static_cast<sal_uInt16>(i) );
                     if ( pChild )
                         xChild = pChild->GetAccessible();
                 }

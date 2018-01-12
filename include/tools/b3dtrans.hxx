@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLS_B3DTRANS_HXX
 #define INCLUDED_TOOLS_B3DTRANS_HXX
 
-#define ZBUFFER_DEPTH_RANGE         ((double)(256L * 256L * 256L))
+#define ZBUFFER_DEPTH_RANGE         (double(256L * 256L * 256L))
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b3drange.hxx>

@@ -621,7 +621,7 @@ namespace sw
 
                 for(a = 0; a < rPolyPoly.Count(); a++)
                 {
-                    nPointCount += (sal_uInt32)rPolyPoly[a].GetSize();
+                    nPointCount += static_cast<sal_uInt32>(rPolyPoly[a].GetSize());
                 }
 
                 if(nPointCount > 0x0000ffff)
@@ -630,7 +630,7 @@ namespace sw
                     nPointCount = 0x0000ffff;
                 }
 
-                tools::Polygon aRetval((sal_uInt16)nPointCount);
+                tools::Polygon aRetval(static_cast<sal_uInt16>(nPointCount));
                 sal_uInt32 nAppendIndex(0);
 
                 for(a = 0; a < rPolyPoly.Count(); a++)
@@ -639,7 +639,7 @@ namespace sw
 
                     for(sal_uInt16 b(0); nAppendIndex <= nPointCount && b < rCandidate.GetSize(); b++)
                     {
-                        aRetval[(sal_uInt16)nAppendIndex++] = rCandidate[b];
+                        aRetval[static_cast<sal_uInt16>(nAppendIndex++)] = rCandidate[b];
                     }
                 }
 

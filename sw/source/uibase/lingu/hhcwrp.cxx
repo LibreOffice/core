@@ -184,10 +184,10 @@ void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd 
     pCursor->DeleteMark();
 
     m_rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ false,
-                  (sal_uInt16) (m_nUnitOffset + nUnitStart), true );
+                  static_cast<sal_uInt16>(m_nUnitOffset + nUnitStart), true );
     pCursor->SetMark();
     m_rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ true,
-                  (sal_uInt16) (nUnitEnd - nUnitStart), true );
+                  static_cast<sal_uInt16>(nUnitEnd - nUnitStart), true );
     // end selection now. Otherwise SHIFT+HOME (extending the selection)
     // won't work when the dialog is closed without any replacement.
     // (see #116346#)

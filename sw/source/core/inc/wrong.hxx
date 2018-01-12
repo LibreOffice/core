@@ -237,7 +237,7 @@ public:
         return nIdx < maList.size() ? maList[nIdx].mnPos : 0;
     }
 
-    sal_uInt16 Count() const { return (sal_uInt16)maList.size(); }
+    sal_uInt16 Count() const { return static_cast<sal_uInt16>(maList.size()); }
 
     void Insert( const OUString& rType,
                         css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,

@@ -110,11 +110,11 @@ void VclFiltersTest::checkExportImport(const OUString& aFilterShortName)
 
     css::uno::Sequence< css::beans::PropertyValue > aFilterData( 3 );
     aFilterData[ 0 ].Name = "Interlaced";
-    aFilterData[ 0 ].Value <<= (sal_Int32) 0;
+    aFilterData[ 0 ].Value <<= sal_Int32(0);
     aFilterData[ 1 ].Name = "Compression";
-    aFilterData[ 1 ].Value <<= (sal_Int32) 1;
+    aFilterData[ 1 ].Value <<= sal_Int32(1);
     aFilterData[ 2 ].Name = "Quality";
-    aFilterData[ 2 ].Value <<= (sal_Int32) 90;
+    aFilterData[ 2 ].Value <<= sal_Int32(90);
 
     sal_uInt16 aFilterType = mGraphicFilter.GetExportFormatNumberForShortName(aFilterShortName);
     mGraphicFilter.ExportGraphic( aBitmap, OUString(), aStream, aFilterType, &aFilterData );

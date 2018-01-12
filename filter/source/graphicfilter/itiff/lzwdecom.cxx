@@ -39,7 +39,7 @@ LZWDecompressor::LZWDecompressor()
     {
         pTable[i].nPrevCode=0;
         pTable[i].nDataCount=1;
-        pTable[i].nData=(sal_uInt8)i;
+        pTable[i].nData=static_cast<sal_uInt8>(i);
     }
 }
 
@@ -85,8 +85,8 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
 
         if (pIStream->GetError()) break;
 
-        if (((sal_uLong)nOutBufDataLen)>=nMaxCount) {
-            nOutBufDataLen = nOutBufDataLen - (sal_uInt16)nMaxCount;
+        if (static_cast<sal_uLong>(nOutBufDataLen)>=nMaxCount) {
+            nOutBufDataLen = nOutBufDataLen - static_cast<sal_uInt16>(nMaxCount);
             nCount+=nMaxCount;
             while (nMaxCount>0) {
                 *(pTarget++)=*(pOutBufData++);
@@ -95,7 +95,7 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
             break;
         }
 
-        nMaxCount-=(sal_uLong)nOutBufDataLen;
+        nMaxCount-=static_cast<sal_uLong>(nOutBufDataLen);
         nCount+=nOutBufDataLen;
         while (nOutBufDataLen>0) {
             *(pTarget++)=*(pOutBufData++);

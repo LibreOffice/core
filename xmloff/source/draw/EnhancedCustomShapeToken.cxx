@@ -185,7 +185,7 @@ EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
     int i, nLen = rShapeType.getLength();
     std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
-        pBuf[ i ] = (char)rShapeType[ i ];
+        pBuf[ i ] = static_cast<char>(rShapeType[ i ]);
     pBuf[ i ] = 0;
     TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf.get() ) );
     if ( aHashIter != pHashMap->end() )
@@ -196,8 +196,8 @@ EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
 OUString EASGet( const EnhancedCustomShapeTokenEnum eToken )
 {
     sal_uInt32 i = eToken >= EAS_Last
-        ? (sal_uInt32)EAS_NotFound
-        : (sal_uInt32)eToken;
+        ? sal_uInt32(EAS_NotFound)
+        : static_cast<sal_uInt32>(eToken);
     return OUString::createFromAscii( pTokenTableArray[ i ].pS );
 }
 

@@ -401,7 +401,7 @@ void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, cons
             }
         }
         else
-            pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, SfxCallMode::SYNCHRON, aArgs );
+            pDispatcher->Execute( sal_uInt16(SID_PRINTDOC), SfxCallMode::SYNCHRON, aArgs );
     }
 
 

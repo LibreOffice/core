@@ -301,7 +301,7 @@ namespace vclcanvas
 
                     for( int i=0; i<aMarkerPoly.Count(); ++i )
                     {
-                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject((sal_uInt16)i) );
+                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject(static_cast<sal_uInt16>(i)) );
                     }
 
                     // paint sprite prio

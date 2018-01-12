@@ -120,7 +120,7 @@ namespace
     tools::Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, bool _bOnScreen,bool _bRowBar)
     {
         sal_Int32 nRow  = 0;
-        sal_uInt16 nCol =  (sal_uInt16)_nRowColIndex;
+        sal_uInt16 nCol =  static_cast<sal_uInt16>(_nRowColIndex);
         if ( _bRowBar )
         {
             nRow = _nRowColIndex + 1;

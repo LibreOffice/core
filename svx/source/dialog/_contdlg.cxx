@@ -156,7 +156,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
 
         if( aSizePix.Width() && aSizePix.Height() && ( aSizePix.Width() > 512 || aSizePix.Height() > 512 ) )
         {
-            double fWH = (double) aSizePix.Width() / aSizePix.Height();
+            double fWH = static_cast<double>(aSizePix.Width()) / aSizePix.Height();
 
             if( fWH <= 1.0 )
                 aSizePix.Width() = FRound( ( aSizePix.Height() = 512 ) * fWH );

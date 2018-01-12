@@ -80,36 +80,36 @@ void XBMReader::InitTable()
 {
     memset( pHexTable.get(), 0, sizeof( short ) * 256 );
 
-    pHexTable[(int)'0'] = 0;
-    pHexTable[(int)'1'] = 1;
-    pHexTable[(int)'2'] = 2;
-    pHexTable[(int)'3'] = 3;
-    pHexTable[(int)'4'] = 4;
-    pHexTable[(int)'5'] = 5;
-    pHexTable[(int)'6'] = 6;
-    pHexTable[(int)'7'] = 7;
-    pHexTable[(int)'8'] = 8;
-    pHexTable[(int)'9'] = 9;
-    pHexTable[(int)'A'] = 10;
-    pHexTable[(int)'B'] = 11;
-    pHexTable[(int)'C'] = 12;
-    pHexTable[(int)'D'] = 13;
-    pHexTable[(int)'E'] = 14;
-    pHexTable[(int)'F'] = 15;
-    pHexTable[(int)'X'] = 0;
-    pHexTable[(int)'a'] = 10;
-    pHexTable[(int)'b'] = 11;
-    pHexTable[(int)'c'] = 12;
-    pHexTable[(int)'d'] = 13;
-    pHexTable[(int)'e'] = 14;
-    pHexTable[(int)'f'] = 15;
-    pHexTable[(int)'x'] = 0;
-    pHexTable[(int)' '] = -1;
-    pHexTable[(int)','] = -1;
-    pHexTable[(int)'}'] = -1;
-    pHexTable[(int)'\n'] = -1;
-    pHexTable[(int)'\t'] = -1;
-    pHexTable[(int)'\0'] = -1;
+    pHexTable[int('0')] = 0;
+    pHexTable[int('1')] = 1;
+    pHexTable[int('2')] = 2;
+    pHexTable[int('3')] = 3;
+    pHexTable[int('4')] = 4;
+    pHexTable[int('5')] = 5;
+    pHexTable[int('6')] = 6;
+    pHexTable[int('7')] = 7;
+    pHexTable[int('8')] = 8;
+    pHexTable[int('9')] = 9;
+    pHexTable[int('A')] = 10;
+    pHexTable[int('B')] = 11;
+    pHexTable[int('C')] = 12;
+    pHexTable[int('D')] = 13;
+    pHexTable[int('E')] = 14;
+    pHexTable[int('F')] = 15;
+    pHexTable[int('X')] = 0;
+    pHexTable[int('a')] = 10;
+    pHexTable[int('b')] = 11;
+    pHexTable[int('c')] = 12;
+    pHexTable[int('d')] = 13;
+    pHexTable[int('e')] = 14;
+    pHexTable[int('f')] = 15;
+    pHexTable[int('x')] = 0;
+    pHexTable[int(' ')] = -1;
+    pHexTable[int(',')] = -1;
+    pHexTable[int('}')] = -1;
+    pHexTable[int('\n')] = -1;
+    pHexTable[int('\t')] = -1;
+    pHexTable[int('\0')] = -1;
 }
 
 OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,

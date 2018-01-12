@@ -95,15 +95,15 @@ DXFPalette::DXFPalette()
                     for (j=0; j<3; j++) nC[j]=(nC[j]>>1)+128;
                 }
                 for (j=0; j<3; j++) nC[j]=nC[j]*nVal/5;
-                SetColor((sal_uInt8)(i++),(sal_uInt8)nC[0],(sal_uInt8)nC[1],(sal_uInt8)nC[2]);
+                SetColor(static_cast<sal_uInt8>(i++),static_cast<sal_uInt8>(nC[0]),static_cast<sal_uInt8>(nC[1]),static_cast<sal_uInt8>(nC[2]));
             }
         }
     }
 
     // Farben 250 - 255 (shades of gray)
     for (i=0; i<6; i++) {
-        nV=(sal_uInt8)(i*38+65);
-        SetColor((sal_uInt8)(250+i),nV,nV,nV);
+        nV=static_cast<sal_uInt8>(i*38+65);
+        SetColor(static_cast<sal_uInt8>(250+i),nV,nV,nV);
     }
 }
 

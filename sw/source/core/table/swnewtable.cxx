@@ -1058,7 +1058,7 @@ SwTableBox& SwTableBox::FindEndOfRowSpan( const SwTable& rTable, sal_uInt16 nMax
         return *this;
 
     if( nMaxStep > --nAbsSpan )
-        nMaxStep = (sal_uInt16)nAbsSpan;
+        nMaxStep = static_cast<sal_uInt16>(nAbsSpan);
     const SwTableLine* pMyUpper = GetUpper();
     sal_uInt16 nLine = rTable.GetTabLines().GetPos( pMyUpper );
     nMaxStep = nLine + nMaxStep;
@@ -1387,7 +1387,7 @@ static sal_uInt16 lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes
                     nSpan = 0;
                 else if( nSpan )
                 {
-                    sal_uInt16 nEndOfRowSpan = (sal_uInt16)(nPos + nRowSpan - 1);
+                    sal_uInt16 nEndOfRowSpan = static_cast<sal_uInt16>(nPos + nRowSpan - 1);
                     if( nEndOfRowSpan > nSpan || nSpan == USHRT_MAX )
                         nSpan = nEndOfRowSpan;
                 }

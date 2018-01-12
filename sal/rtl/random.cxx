@@ -77,11 +77,11 @@ static double data(RandomData_Impl *pImpl)
     double random;
 
     RTL_RANDOM_RNG (pImpl->m_nX, pImpl->m_nY, pImpl->m_nZ);
-    random = (((double)(pImpl->m_nX) / 30328.0) +
-              ((double)(pImpl->m_nY) / 30269.0) +
-              ((double)(pImpl->m_nZ) / 30307.0)   );
+    random = ((static_cast<double>(pImpl->m_nX) / 30328.0) +
+              (static_cast<double>(pImpl->m_nY) / 30269.0) +
+              (static_cast<double>(pImpl->m_nZ) / 30307.0)   );
 
-    random -= ((double)((sal_uInt32)random));
+    random -= static_cast<double>(static_cast<sal_uInt32>(random));
     return random;
 }
 
@@ -115,9 +115,9 @@ static bool initPool(RandomPool_Impl *pImpl)
         tv.Nanosec = RTL_RANDOM_RNG_2(tv.Nanosec);
         seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&tv), sizeof(tv));
 
-        rd.m_nX = (sal_Int16)(((tid        >> 1) << 1) + 1);
-        rd.m_nY = (sal_Int16)(((tv.Seconds >> 1) << 1) + 1);
-        rd.m_nZ = (sal_Int16)(((tv.Nanosec >> 1) << 1) + 1);
+        rd.m_nX = static_cast<sal_Int16>(((tid        >> 1) << 1) + 1);
+        rd.m_nY = static_cast<sal_Int16>(((tv.Seconds >> 1) << 1) + 1);
+        rd.m_nZ = static_cast<sal_Int16>(((tv.Nanosec >> 1) << 1) + 1);
         seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&rd), sizeof(rd));
 
         while (pImpl->m_nData < RTL_RANDOM_SIZE_POOL)

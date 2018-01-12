@@ -48,8 +48,8 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     //  Additional tables are created by the first View, if bIsEmpty is still sal_True
     if( bRet )
     {
-        Size aSize( (long) ( STD_COL_WIDTH           * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
-                    (long) ( ScGlobal::nStdRowHeight * HMM_PER_TWIPS * OLE_STD_CELLS_Y ) );
+        Size aSize( long( STD_COL_WIDTH           * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
+                    static_cast<long>( ScGlobal::nStdRowHeight * HMM_PER_TWIPS * OLE_STD_CELLS_Y ) );
         // Also adjust start here
         SetVisAreaOrSize( tools::Rectangle( Point(), aSize ) );
     }

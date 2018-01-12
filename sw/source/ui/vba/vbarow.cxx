@@ -49,7 +49,7 @@ uno::Any SAL_CALL SwVbaRow::getHeight()
 
     sal_Int32 nHeight = 0;
     mxRowProps->getPropertyValue("Height") >>= nHeight;
-    return uno::makeAny( (float)Millimeter::getInPoints( nHeight ) );
+    return uno::makeAny( static_cast<float>(Millimeter::getInPoints( nHeight )) );
 }
 
 void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height )

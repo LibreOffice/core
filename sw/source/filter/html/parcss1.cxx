@@ -39,8 +39,8 @@
 #define LOOP_CHECK_RESTART \
     nOldInPos = SAL_MAX_INT32;
 #define LOOP_CHECK_CHECK( where ) \
-    OSL_ENSURE( nOldInPos!=nInPos || cNextCh==(sal_Unicode)EOF, where );    \
-    if( nOldInPos==nInPos && cNextCh!=(sal_Unicode)EOF )                    \
+    OSL_ENSURE( nOldInPos!=nInPos || cNextCh==sal_Unicode(EOF), where );    \
+    if( nOldInPos==nInPos && cNextCh!=sal_Unicode(EOF) )                    \
         break;                                                              \
     else                                                                    \
         nOldInPos = nInPos;
@@ -76,7 +76,7 @@ sal_Unicode CSS1Parser::GetNextChar()
     if( nInPos >= aIn.getLength() )
     {
         bEOF = true;
-        return (sal_Unicode)EOF;
+        return sal_Unicode(EOF);
     }
 
     sal_Unicode c = aIn[nInPos];
@@ -570,7 +570,7 @@ CSS1Token CSS1Parser::GetNextToken()
             bWhiteSpace = true;
             break;
 
-        case (sal_Unicode)EOF:
+        case sal_Unicode(EOF):
             if( IsEOF() )
             {
                 eState = CSS1_PAR_ACCEPTED;
@@ -1352,9 +1352,9 @@ bool CSS1Expression::GetColor( Color &rColor ) const
 
     if( bRet && nColor!=SAL_MAX_UINT32 )
     {
-        rColor.SetRed( (sal_uInt8)((nColor & 0x00ff0000UL) >> 16) );
-        rColor.SetGreen( (sal_uInt8)((nColor & 0x0000ff00UL) >> 8) );
-        rColor.SetBlue( (sal_uInt8)(nColor & 0x000000ffUL) );
+        rColor.SetRed( static_cast<sal_uInt8>((nColor & 0x00ff0000UL) >> 16) );
+        rColor.SetGreen( static_cast<sal_uInt8>((nColor & 0x0000ff00UL) >> 8) );
+        rColor.SetBlue( static_cast<sal_uInt8>(nColor & 0x000000ffUL) );
     }
 
     return bRet;

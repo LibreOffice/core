@@ -299,7 +299,7 @@ bool MorkParser::parseCell()
             std::string HexChar;
             HexChar += nextChar();
             HexChar += nextChar();
-            Text += (char)strtoul(HexChar.c_str(), nullptr, 16);
+            Text += static_cast<char>(strtoul(HexChar.c_str(), nullptr, 16));
         }
         break;
         default:

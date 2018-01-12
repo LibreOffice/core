@@ -125,7 +125,7 @@ sal_uInt16 DXFGroupReader::Read()
     if ( bStatus )
     {
         nGCount++;
-        nG = (sal_uInt16)ReadI();
+        nG = static_cast<sal_uInt16>(ReadI());
         if ( bStatus )
         {
             if      (nG<  10) ReadS();

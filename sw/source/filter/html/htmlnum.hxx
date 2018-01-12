@@ -110,7 +110,7 @@ inline void SwHTMLNumRuleInfo::Clear()
 inline sal_uInt8 SwHTMLNumRuleInfo::GetLevel() const
 {
     return
-        (sal_uInt8)( pNumRule!=nullptr && nDeep != 0
+        static_cast<sal_uInt8>( pNumRule!=nullptr && nDeep != 0
             ? ( nDeep<=MAXLEVEL ? nDeep-1 : MAXLEVEL - 1 )
             : 0 );
 }

@@ -635,9 +635,9 @@ SdPage* SlideSorterModel::GetPage (const sal_Int32 nSdIndex) const
     if (pModel != nullptr)
     {
         if (meEditMode == EditMode::Page)
-            return pModel->GetSdPage ((sal_uInt16)nSdIndex, PageKind::Standard);
+            return pModel->GetSdPage (static_cast<sal_uInt16>(nSdIndex), PageKind::Standard);
         else
-            return pModel->GetMasterSdPage ((sal_uInt16)nSdIndex, PageKind::Standard);
+            return pModel->GetMasterSdPage (static_cast<sal_uInt16>(nSdIndex), PageKind::Standard);
     }
     else
         return nullptr;

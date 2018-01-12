@@ -1158,7 +1158,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         RegistryTypeWriter writer(reader.getTypeClass(),
                                   reader.getTypeName(),
                                   reader.getSuperTypeName(),
-                                  (sal_uInt16)count);
+                                  static_cast<sal_uInt16>(count));
 
         for (sal_uInt32 i=0 ; i < reader.getFieldCount(); i++)
         {

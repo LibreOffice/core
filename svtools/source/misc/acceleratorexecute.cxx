@@ -215,7 +215,7 @@ css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const vcl::KeyCode& aVCL
 {
     css::awt::KeyEvent aAWTKey;
     aAWTKey.Modifiers = 0;
-    aAWTKey.KeyCode   = (sal_Int16)aVCLKey.GetCode();
+    aAWTKey.KeyCode   = static_cast<sal_Int16>(aVCLKey.GetCode());
 
     if (aVCLKey.IsShift())
         aAWTKey.Modifiers |= css::awt::KeyModifier::SHIFT;
@@ -235,7 +235,7 @@ vcl::KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWT
     bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
     bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
     bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
-    sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
+    sal_uInt16   nKey   = static_cast<sal_uInt16>(aAWTKey.KeyCode);
 
     return vcl::KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }

@@ -486,7 +486,7 @@ void Test::testSortInFormulaGroup()
 
     m_pDoc->InsertTab(0, "sorttest");
 
-    for ( SCROW i = 0; i < (SCROW) SAL_N_ELEMENTS( aEntries ); ++i )
+    for ( SCROW i = 0; i < SCROW(SAL_N_ELEMENTS( aEntries )); ++i )
         m_pDoc->SetString( aEntries[i].nCol, aEntries[i].nRow, 0,
                            OUString::createFromAscii( aEntries[i].pData) );
 
@@ -518,7 +518,7 @@ void Test::testSortInFormulaGroup()
         { 0, 9, 104.0 }, { 1, 9, 104.0 },
     };
 
-    for ( SCROW i = 0; i < (SCROW) SAL_N_ELEMENTS( aEntries ); ++i )
+    for ( SCROW i = 0; i < SCROW(SAL_N_ELEMENTS( aEntries )); ++i )
     {
         double val = m_pDoc->GetValue( aEntries[i].nCol, aEntries[i].nRow, 0 );
 //        fprintf(stderr, "value at %d %d is %g = %g\n",

@@ -498,12 +498,12 @@ void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
         BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nLine );
         if ( pBrk ) // remove
         {
-            m_xModule->ClearBP( (sal_uInt16)nLine );
+            m_xModule->ClearBP( static_cast<sal_uInt16>(nLine) );
             delete GetBreakPoints().remove( pBrk );
         }
         else // create one
         {
-            if ( m_xModule->SetBP( (sal_uInt16)nLine) )
+            if ( m_xModule->SetBP( static_cast<sal_uInt16>(nLine)) )
             {
                 GetBreakPoints().InsertSorted( new BreakPoint( nLine ) );
                 if ( StarBASIC::IsRunning() )
@@ -529,9 +529,9 @@ void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
         CheckCompileBasic();
 
         if ( rBrk.bEnabled )
-            m_xModule->SetBP( (sal_uInt16)rBrk.nLine );
+            m_xModule->SetBP( static_cast<sal_uInt16>(rBrk.nLine) );
         else
-            m_xModule->ClearBP( (sal_uInt16)rBrk.nLine );
+            m_xModule->ClearBP( static_cast<sal_uInt16>(rBrk.nLine) );
     }
 }
 
@@ -718,7 +718,7 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
                 {
                     long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;
                     long nOldStartY = pView->GetStartDocPos().Y();
-                    long nNewStartY = (long)nStart * pView->GetTextEngine()->GetCharHeight();
+                    long nNewStartY = static_cast<long>(nStart) * pView->GetTextEngine()->GetCharHeight();
                     nNewStartY = std::min( nNewStartY, nMaxY );
                     pView->Scroll( 0, -(nNewStartY-nOldStartY) );
                     pView->ShowCursor( false );

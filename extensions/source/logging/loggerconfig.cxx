@@ -96,15 +96,15 @@ namespace logging
             const size_t buffer_size = sizeof( buffer );
 
             snprintf( buffer, buffer_size, "%04i-%02i-%02i",
-                      (int)aDateTime.Year,
-                      (int)aDateTime.Month,
-                      (int)aDateTime.Day );
+                      static_cast<int>(aDateTime.Year),
+                      static_cast<int>(aDateTime.Month),
+                      static_cast<int>(aDateTime.Day) );
             rtl::OUString sDate = rtl::OUString::createFromAscii( buffer );
 
             snprintf( buffer, buffer_size, "%02i-%02i-%02i.%03i",
-                (int)aDateTime.Hours,
-                (int)aDateTime.Minutes,
-                (int)aDateTime.Seconds,
+                static_cast<int>(aDateTime.Hours),
+                static_cast<int>(aDateTime.Minutes),
+                static_cast<int>(aDateTime.Seconds),
                 ::sal::static_int_cast< sal_Int16 >( aDateTime.NanoSeconds / 10000000 ) );
             rtl::OUString sTime = rtl::OUString::createFromAscii( buffer );
 

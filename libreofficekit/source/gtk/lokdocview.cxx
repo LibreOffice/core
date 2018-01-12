@@ -960,7 +960,7 @@ static gboolean postDocumentLoad(gpointer pData)
     long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
     long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
     // Total number of columns in this document.
-    guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
 
     priv->m_pTileBuffer = std::unique_ptr<TileBuffer>(new TileBuffer(nColumns));
     gtk_widget_set_size_request(GTK_WIDGET(pLOKDocView),
@@ -1589,8 +1589,8 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
     long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom);
     long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom);
     // Total number of rows / columns in this document.
-    guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
-    guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+    guint nRows = ceil(static_cast<double>(nDocumentHeightPixels) / nTileSizePixels);
+    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
 
     gdk_cairo_get_clip_rectangle (pCairo, &aVisibleArea);
     aVisibleArea.x = pixelToTwip (aVisibleArea.x, priv->m_fZoom);
@@ -1672,7 +1672,7 @@ static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
         {
             const std::string& rName = rValue.second.get<std::string>("name");
             guint32 nColor = rValue.second.get<guint32>("color");
-            GdkRGBA aColor{((double)((guint8)(nColor>>16)))/255, ((double)((guint8)(((guint16)nColor) >> 8)))/255, ((double)((guint8)nColor))/255, 0};
+            GdkRGBA aColor{static_cast<double>(static_cast<guint8>(nColor>>16))/255, static_cast<double>(static_cast<guint8>(static_cast<guint16>(nColor) >> 8))/255, static_cast<double>(static_cast<guint8>(nColor))/255, 0};
             auto itAuthorViews = g_aAuthorViews.find(rName);
             if (itAuthorViews != g_aAuthorViews.end())
                 aColorMap[itAuthorViews->second] = aColor;
@@ -1683,15 +1683,15 @@ static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
         // Based on tools/colordata.hxx, COL_AUTHOR1_DARK..COL_AUTHOR9_DARK.
         static std::vector<GdkRGBA> aColors =
         {
-            {((double)198)/255, ((double)146)/255, ((double)0)/255, 0},
-            {((double)6)/255, ((double)70)/255, ((double)162)/255, 0},
-            {((double)87)/255, ((double)157)/255, ((double)28)/255, 0},
-            {((double)105)/255, ((double)43)/255, ((double)157)/255, 0},
-            {((double)197)/255, ((double)0)/255, ((double)11)/255, 0},
-            {((double)0)/255, ((double)128)/255, ((double)128)/255, 0},
-            {((double)140)/255, ((double)132)/255, ((double)0)/255, 0},
-            {((double)43)/255, ((double)85)/255, ((double)107)/255, 0},
-            {((double)209)/255, ((double)118)/255, ((double)0)/255, 0},
+            {(double(198))/255, (double(146))/255, (double(0))/255, 0},
+            {(double(6))/255, (double(70))/255, (double(162))/255, 0},
+            {(double(87))/255, (double(157))/255, (double(28))/255, 0},
+            {(double(105))/255, (double(43))/255, (double(157))/255, 0},
+            {(double(197))/255, (double(0))/255, (double(11))/255, 0},
+            {(double(0))/255, (double(128))/255, (double(128))/255, 0},
+            {(double(140))/255, (double(132))/255, (double(0))/255, 0},
+            {(double(43))/255, (double(85))/255, (double(107))/255, 0},
+            {(double(209))/255, (double(118))/255, (double(0))/255, 0},
         };
         static int nColorCounter = 0;
         GdkRGBA aColor = aColors[nColorCounter++ % aColors.size()];
@@ -1768,7 +1768,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         for (GdkRectangle& rRectangle : priv->m_aTextSelectionRectangles)
         {
             // Blue with 75% transparency.
-            cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
+            cairo_set_source_rgba(pCairo, (double(0x43))/255, (double(0xac))/255, (double(0xe8))/255, 0.25);
             cairo_rectangle(pCairo,
                             twipToPixel(rRectangle.x, priv->m_fZoom),
                             twipToPixel(rRectangle.y, priv->m_fZoom),
@@ -1917,9 +1917,9 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
     GError* error = nullptr;
 
     g_info("LOKDocView_Impl::signalButton: %d, %d (in twips: %d, %d)",
-           (int)pEvent->x, (int)pEvent->y,
-           (int)pixelToTwip(pEvent->x, priv->m_fZoom),
-           (int)pixelToTwip(pEvent->y, priv->m_fZoom));
+           static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),
+           static_cast<int>(pixelToTwip(pEvent->x, priv->m_fZoom)),
+           static_cast<int>(pixelToTwip(pEvent->y, priv->m_fZoom)));
     gtk_widget_grab_focus(GTK_WIDGET(pDocView));
 
     switch (pEvent->type)
@@ -3435,7 +3435,7 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, fZoom);
     long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, fZoom);
     // Total number of columns in this document.
-    guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+    guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
 
     priv->m_pTileBuffer = std::unique_ptr<TileBuffer>(new TileBuffer(nColumns));
     gtk_widget_set_size_request(GTK_WIDGET(pDocView),

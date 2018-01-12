@@ -544,7 +544,7 @@ static void printParameterPairData(int level, EnhancedCustomShapeParameterPair c
     printLevel (level + 1);
     fprintf (stderr, "%s,\n", lclGetEnhancedParameterType(pp.Second.Type));
     printLevel (level + 1);
-    fprintf (stderr, "%d, %d\n", (int)nFirstValue, (int)nSecondValue);
+    fprintf (stderr, "%d, %d\n", static_cast<int>(nFirstValue), static_cast<int>(nSecondValue));
     printLevel (level);
     fprintf (stderr, "}");
 }

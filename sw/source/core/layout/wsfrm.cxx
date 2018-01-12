@@ -3340,10 +3340,10 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
         }
     }
 
-    const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft(this);
+    const sal_uInt16 nLeft = static_cast<sal_uInt16>(pAttrs->CalcLeft(this));
     const sal_uInt16 nUpper = bHideWhitespace ? 0 : pAttrs->CalcTop();
 
-    const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight(this);
+    const sal_uInt16 nRight = static_cast<sal_uInt16>(pAttrs->CalcRight(this));
     const sal_uInt16 nLower = bHideWhitespace ? 0 : pAttrs->CalcBottom();
 
     const bool bVert = IsVertical() && !IsPageFrame();
@@ -3810,7 +3810,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         nDiff = nMinDiff;
                     // If we should grow more than by nMinDiff we split it over
                     // the columns
-                    if ( std::abs(nDiff - nMinDiff) > nNumCols && nDiff > (long)nNumCols )
+                    if ( std::abs(nDiff - nMinDiff) > nNumCols && nDiff > static_cast<long>(nNumCols) )
                         nDiff /= nNumCols;
 
                     if ( bMinDiff )

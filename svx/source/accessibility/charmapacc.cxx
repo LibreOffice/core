@@ -618,7 +618,7 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
     sal_UCS4 c_Shifted = c;
     for( int i = 0; i < tmp_len; ++i )
     {
-        char h = (char)(c_Shifted & 0x0F);
+        char h = static_cast<char>(c_Shifted & 0x0F);
         buf[tmp_len+1-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
         c_Shifted >>= 4;
     }

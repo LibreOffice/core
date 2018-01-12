@@ -52,7 +52,7 @@ SvStream& ReadFileList( SvStream& rIStm, FileList& rFileList )
         // read string till c==0
         while (c && !rIStm.eof())
         {
-            sBuf.append((sal_Unicode)c);
+            sBuf.append(static_cast<sal_Unicode>(c));
             rIStm.ReadUInt16( c );
         }
 

@@ -100,7 +100,7 @@ namespace canvas
         // XBufferController
         virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) override
         {
-            tools::verifyRange( nBuffers, (sal_Int32)1 );
+            tools::verifyRange( nBuffers, sal_Int32(1) );
 
             return 1;
         }

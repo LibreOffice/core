@@ -203,8 +203,8 @@ bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
     {
         if (ScDetectiveFunc::IsNonAlienArrow( pObject ))
         {
-            sal_uInt16 nHitLog = (sal_uInt16) pWindow->PixelToLogic(
-                                Size(pView->GetHitTolerancePixel(),0)).Width();
+            sal_uInt16 nHitLog = static_cast<sal_uInt16>(pWindow->PixelToLogic(
+                                Size(pView->GetHitTolerancePixel(),0)).Width());
             if(SdrObjectPrimitiveHit(*pObject, rLogicPos, nHitLog, *pPV, nullptr, false))
             {
                 bFound = true;

@@ -609,12 +609,12 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     {
         sal_Int64 nHandle = xTunnel->getSomething( ScTransferObj::getUnoTunnelId() );
         if ( nHandle )
-            pOwnClip = reinterpret_cast<ScTransferObj*>( (sal_IntPtr) nHandle);
+            pOwnClip = reinterpret_cast<ScTransferObj*>( static_cast<sal_IntPtr>(nHandle));
         else
         {
             nHandle = xTunnel->getSomething( ScDrawTransferObj::getUnoTunnelId() );
             if ( nHandle )
-                pDrawClip = reinterpret_cast<ScDrawTransferObj*>( (sal_IntPtr) nHandle );
+                pDrawClip = reinterpret_cast<ScDrawTransferObj*>( static_cast<sal_IntPtr>(nHandle) );
         }
     }
 

@@ -25,8 +25,8 @@
 #include <memory>
 #include <rtl/instance.hxx>
 
-#define JOBSET_FILE364_SYSTEM   ((sal_uInt16)0xFFFF)
-#define JOBSET_FILE605_SYSTEM   ((sal_uInt16)0xFFFE)
+#define JOBSET_FILE364_SYSTEM   (sal_uInt16(0xFFFF))
+#define JOBSET_FILE605_SYSTEM   (sal_uInt16(0xFFFE))
 
 struct ImplOldJobSetupData
 {
@@ -281,8 +281,8 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 rJobData.SetDuplexMode( DuplexMode::Unknown );
                 rJobData.SetPaperBin( SVBT16ToShort( pOldJobData->nPaperBin ) );
                 rJobData.SetPaperFormat( (Paper)SVBT16ToShort( pOldJobData->nPaperFormat ) );
-                rJobData.SetPaperWidth( (long)SVBT32ToUInt32( pOldJobData->nPaperWidth ) );
-                rJobData.SetPaperHeight( (long)SVBT32ToUInt32( pOldJobData->nPaperHeight ) );
+                rJobData.SetPaperWidth( static_cast<long>(SVBT32ToUInt32( pOldJobData->nPaperWidth )) );
+                rJobData.SetPaperHeight( static_cast<long>(SVBT32ToUInt32( pOldJobData->nPaperHeight )) );
                 if ( rJobData.GetDriverDataLen() )
                 {
                     const char* pDriverData = reinterpret_cast<const char*>(pOldJobData) + nOldJobDataSize;
@@ -348,9 +348,9 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             UInt32ToSVBT32( rJobData.GetDriverDataLen(), aOldJobData.nDriverDataLen );
             ShortToSVBT16( (sal_uInt16)(rJobData.GetOrientation()), aOldJobData.nOrientation );
             ShortToSVBT16( rJobData.GetPaperBin(), aOldJobData.nPaperBin );
-            ShortToSVBT16( (sal_uInt16)(rJobData.GetPaperFormat()), aOldJobData.nPaperFormat );
-            UInt32ToSVBT32( (sal_uLong)(rJobData.GetPaperWidth()), aOldJobData.nPaperWidth );
-            UInt32ToSVBT32( (sal_uLong)(rJobData.GetPaperHeight()), aOldJobData.nPaperHeight );
+            ShortToSVBT16( static_cast<sal_uInt16>(rJobData.GetPaperFormat()), aOldJobData.nPaperFormat );
+            UInt32ToSVBT32( static_cast<sal_uLong>(rJobData.GetPaperWidth()), aOldJobData.nPaperWidth );
+            UInt32ToSVBT32( static_cast<sal_uLong>(rJobData.GetPaperHeight()), aOldJobData.nPaperHeight );
 
             ImplOldJobSetupData aOldData;
             memset( &aOldData, 0, sizeof( aOldData ) );

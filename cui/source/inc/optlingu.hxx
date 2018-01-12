@@ -46,7 +46,7 @@ class SvxLinguData_Impl;
 
 // define ----------------------------------------------------------------
 
-#define GROUP_MODULES   ((sal_uInt16)0x0008)
+#define GROUP_MODULES   (sal_uInt16(0x0008))
 
 // forward ---------------------------------------------------------------
 

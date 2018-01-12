@@ -1472,7 +1472,7 @@ DECLARE_RTFEXPORT_TEST(testWatermark, "watermark.rtf")
 
     // Check font size
     CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharHeight") >>= nFontSize);
-    CPPUNIT_ASSERT_EQUAL((float)66, nFontSize);
+    CPPUNIT_ASSERT_EQUAL(float(66), nFontSize);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf109790, "tdf109790.rtf")

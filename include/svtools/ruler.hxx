@@ -459,8 +459,8 @@ Tips for the use of the ruler:
 *************************************************************************/
 
 
-#define WB_EXTRAFIELD     ((WinBits)0x00004000)
-#define WB_RIGHT_ALIGNED  ((WinBits)0x00008000)
+#define WB_EXTRAFIELD     (WinBits(0x00004000))
+#define WB_RIGHT_ALIGNED  (WinBits(0x00008000))
 #define WB_STDRULER       WB_HORZ
 
 
@@ -470,9 +470,9 @@ enum class RulerType { DontKnow, Outside,
 
 enum class RulerExtra { DontKnow, NullOffset, Tab };
 
-#define RULER_STYLE_HIGHLIGHT   ((sal_uInt16)0x8000)
-#define RULER_STYLE_DONTKNOW    ((sal_uInt16)0x4000)
-#define RULER_STYLE_INVISIBLE   ((sal_uInt16)0x2000)
+#define RULER_STYLE_HIGHLIGHT   (sal_uInt16(0x8000))
+#define RULER_STYLE_DONTKNOW    (sal_uInt16(0x4000))
+#define RULER_STYLE_INVISIBLE   (sal_uInt16(0x2000))
 
 enum class RulerDragSize {
     Move,
@@ -529,13 +529,13 @@ struct RulerIndent
 };
 
 
-#define RULER_TAB_LEFT          ((sal_uInt16)0x0000)
-#define RULER_TAB_RIGHT         ((sal_uInt16)0x0001)
-#define RULER_TAB_CENTER        ((sal_uInt16)0x0002)
-#define RULER_TAB_DECIMAL       ((sal_uInt16)0x0003)
-#define RULER_TAB_DEFAULT       ((sal_uInt16)0x0004)
-#define RULER_TAB_STYLE         ((sal_uInt16)0x000F)
-#define RULER_TAB_RTL           ((sal_uInt16)0x0010)
+#define RULER_TAB_LEFT          (sal_uInt16(0x0000))
+#define RULER_TAB_RIGHT         (sal_uInt16(0x0001))
+#define RULER_TAB_CENTER        (sal_uInt16(0x0002))
+#define RULER_TAB_DECIMAL       (sal_uInt16(0x0003))
+#define RULER_TAB_DEFAULT       (sal_uInt16(0x0004))
+#define RULER_TAB_STYLE         (sal_uInt16(0x000F))
+#define RULER_TAB_RTL           (sal_uInt16(0x0010))
 
 struct RulerTab
 {

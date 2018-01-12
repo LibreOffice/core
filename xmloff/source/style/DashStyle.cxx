@@ -130,7 +130,7 @@ void XMLDashStyleImport::importXML(
             }
             break;
         case XML_TOK_DASH_DOTS1:
-            aLineDash.Dots = (sal_Int16)rStrValue.toInt32();
+            aLineDash.Dots = static_cast<sal_Int16>(rStrValue.toInt32());
             break;
 
         case XML_TOK_DASH_DOTS1LEN:
@@ -149,7 +149,7 @@ void XMLDashStyleImport::importXML(
             break;
 
         case XML_TOK_DASH_DOTS2:
-            aLineDash.Dashes = (sal_Int16)rStrValue.toInt32();
+            aLineDash.Dashes = static_cast<sal_Int16>(rStrValue.toInt32());
             break;
 
         case XML_TOK_DASH_DOTS2LEN:

@@ -313,7 +313,7 @@ LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
         mpTable[i].mpBrother    = nullptr;
         mpTable[i].mpFirstChild = nullptr;
         mpTable[i].mnCode       = i;
-        mpTable[i].mnValue      = (sal_uInt8)mpTable[i].mnCode;
+        mpTable[i].mnValue      = static_cast<sal_uInt8>(mpTable[i].mnCode);
     }
 
     mpPrefix = nullptr;
@@ -336,12 +336,12 @@ LZWEncoder::WriteBits (sal_uInt16 nCode, sal_uInt16 nCodeLen)
     mnOffset -= nCodeLen;
     while (mnOffset < 24)
     {
-        WriteAscii ((sal_uInt8)(mdwShift >> 24));
+        WriteAscii (static_cast<sal_uInt8>(mdwShift >> 24));
         mdwShift <<= 8;
         mnOffset += 8;
     }
     if (nCode == 257 && mnOffset != 32)
-        WriteAscii ((sal_uInt8)(mdwShift >> 24));
+        WriteAscii (static_cast<sal_uInt8>(mdwShift >> 24));
 }
 
 void
@@ -384,7 +384,7 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
             }
             else
             {
-                if(mnTableSize == (sal_uInt16)((1 << mnCodeSize) - 1))
+                if(mnTableSize == static_cast<sal_uInt16>((1 << mnCodeSize) - 1))
                     mnCodeSize++;
 
                 p = mpTable.data() + (mnTableSize++);
@@ -409,15 +409,15 @@ void
 PrinterGfx::DrawBitmap (const tools::Rectangle& rDest, const tools::Rectangle& rSrc,
                         const PrinterBmp& rBitmap)
 {
-    double fScaleX = (double)rDest.GetWidth();
-    double fScaleY = (double)rDest.GetHeight();
+    double fScaleX = static_cast<double>(rDest.GetWidth());
+    double fScaleY = static_cast<double>(rDest.GetHeight());
     if(rSrc.GetWidth() > 0)
     {
-        fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
+        fScaleX = static_cast<double>(rDest.GetWidth()) / static_cast<double>(rSrc.GetWidth());
     }
     if(rSrc.GetHeight() > 0)
     {
-        fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
+        fScaleY = static_cast<double>(rDest.GetHeight()) / static_cast<double>(rSrc.GetHeight());
     }
     PSGSave ();
     PSTranslate (rDest.BottomLeft());

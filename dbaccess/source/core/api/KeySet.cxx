@@ -770,7 +770,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
 
         m_aKeyIter = m_aKeyMap.emplace( aKeyIter->first + 1, OKeySetValue(aKeyRow,std::pair<sal_Int32,Reference<XRow> >(1,Reference<XRow>())) ).first;
         // now we set the bookmark for this row
-        (_rInsertRow->get())[0] = makeAny((sal_Int32)m_aKeyIter->first);
+        (_rInsertRow->get())[0] = makeAny(static_cast<sal_Int32>(m_aKeyIter->first));
         tryRefetch(_rInsertRow,bRefetch);
     }
 }
@@ -1085,7 +1085,7 @@ bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
     }
     else
     {
-        if(row >= (sal_Int32)m_aKeyMap.size())
+        if(row >= static_cast<sal_Int32>(m_aKeyMap.size()))
         {
             // we don't have this row
             if(!m_bRowCountFinal)

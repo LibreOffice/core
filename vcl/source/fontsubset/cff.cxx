@@ -279,7 +279,7 @@ private:
     void    convertOneTypeOp();
     void    convertOneTypeEsc();
     void    callType2Subr( bool bGlobal, int nSubrNumber);
-    sal_Int32 getReadOfs() const { return (sal_Int32)(mpReadPtr - mpBasePtr);}
+    sal_Int32 getReadOfs() const { return static_cast<sal_Int32>(mpReadPtr - mpBasePtr);}
 
     const U8* mpBasePtr;
     const U8* mpBaseEnd;
@@ -704,7 +704,7 @@ void CffSubsetterContext::convertOneTypeOp()
             }
             if( !(nMaskByte & nMaskBit))
                 continue;
-            if( i >= 8*(int)sizeof(mnCntrMask))
+            if( i >= 8*int(sizeof(mnCntrMask)))
                 mbIgnoreHints = true;
             if( mbIgnoreHints)
                 continue;
@@ -726,7 +726,7 @@ void CffSubsetterContext::convertOneTypeOp()
             }
             if( !(nMaskByte & nMaskBit))
                 continue;
-            if( i >= 8*(int)sizeof(nHintMask))
+            if( i >= 8*int(sizeof(nHintMask)))
                 mbIgnoreHints = true;
             if( mbIgnoreHints)
                 continue;
@@ -1656,7 +1656,7 @@ inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const
 inline void Type1Emitter::emitAllRaw()
 {
     // writeout raw data
-    assert( (mpPtr - maBuffer) < (int)sizeof(maBuffer));
+    assert( (mpPtr - maBuffer) < int(sizeof(maBuffer)));
     emitRawData( maBuffer, mpPtr - maBuffer);
     // reset the raw buffer
     mpPtr = maBuffer;
@@ -1664,7 +1664,7 @@ inline void Type1Emitter::emitAllRaw()
 
 inline void Type1Emitter::emitAllHex()
 {
-    assert( (mpPtr - maBuffer) < (int)sizeof(maBuffer));
+    assert( (mpPtr - maBuffer) < int(sizeof(maBuffer)));
     for( const char* p = maBuffer; p < mpPtr;) {
         // convert binary chunk to hex
         char aHexBuf[0x4000];

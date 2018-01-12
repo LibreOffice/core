@@ -179,7 +179,7 @@ sal_Unicode ODataInputStream::readChar()
     }
 
     const sal_uInt8 * pBytes = reinterpret_cast<const sal_uInt8 *>(aTmp.getConstArray());
-    return ((sal_Unicode)pBytes[0] << 8) + pBytes[1];
+    return (static_cast<sal_Unicode>(pBytes[0]) << 8) + pBytes[1];
 }
 
 sal_Int16 ODataInputStream::readShort()
@@ -191,7 +191,7 @@ sal_Int16 ODataInputStream::readShort()
     }
 
     const sal_uInt8 * pBytes = reinterpret_cast<const sal_uInt8 *>(aTmp.getConstArray());
-    return ((sal_Int16)pBytes[0] << 8) + pBytes[1];
+    return (static_cast<sal_Int16>(pBytes[0]) << 8) + pBytes[1];
 }
 
 
@@ -204,7 +204,7 @@ sal_Int32 ODataInputStream::readLong()
     }
 
     const sal_uInt8 * pBytes = reinterpret_cast<const sal_uInt8 *>(aTmp.getConstArray());
-    return ((sal_Int32)pBytes[0] << 24) + ((sal_Int32)pBytes[1] << 16) + ((sal_Int32)pBytes[2] << 8) + pBytes[3];
+    return (static_cast<sal_Int32>(pBytes[0]) << 24) + (static_cast<sal_Int32>(pBytes[1]) << 16) + (static_cast<sal_Int32>(pBytes[2]) << 8) + pBytes[3];
 }
 
 
@@ -218,13 +218,13 @@ sal_Int64 ODataInputStream::readHyper()
 
     const sal_uInt8 * pBytes = reinterpret_cast<const sal_uInt8 *>(aTmp.getConstArray());
     return
-        (((sal_Int64)pBytes[0]) << 56) +
-        (((sal_Int64)pBytes[1]) << 48) +
-        (((sal_Int64)pBytes[2]) << 40) +
-        (((sal_Int64)pBytes[3]) << 32) +
-        (((sal_Int64)pBytes[4]) << 24) +
-        (((sal_Int64)pBytes[5]) << 16) +
-        (((sal_Int64)pBytes[6]) << 8) +
+        (static_cast<sal_Int64>(pBytes[0]) << 56) +
+        (static_cast<sal_Int64>(pBytes[1]) << 48) +
+        (static_cast<sal_Int64>(pBytes[2]) << 40) +
+        (static_cast<sal_Int64>(pBytes[3]) << 32) +
+        (static_cast<sal_Int64>(pBytes[4]) << 24) +
+        (static_cast<sal_Int64>(pBytes[5]) << 16) +
+        (static_cast<sal_Int64>(pBytes[6]) << 8) +
         pBytes[7];
 }
 
@@ -250,10 +250,10 @@ double ODataInputStream::readDouble()
 
 OUString ODataInputStream::readUTF()
 {
-    sal_uInt16              nShortLen = (sal_uInt16)readShort();
+    sal_uInt16              nShortLen = static_cast<sal_uInt16>(readShort());
     sal_Int32               nUTFLen;
 
-    if( ((sal_uInt16)0xffff) == nShortLen )
+    if( (sal_uInt16(0xffff)) == nShortLen )
     {
         // is interpreted as a sign, that string is longer than 64k
         // incompatible to older XDataInputStream-routines, when strings are exactly 64k
@@ -261,7 +261,7 @@ OUString ODataInputStream::readUTF()
     }
     else
     {
-        nUTFLen = ( sal_Int32 ) nShortLen;
+        nUTFLen = static_cast<sal_Int32>(nShortLen);
     }
 
     Sequence<sal_Unicode>   aBuffer( nUTFLen );
@@ -271,7 +271,7 @@ OUString ODataInputStream::readUTF()
     sal_Int32 nStrLen = 0;
     while( nCount < nUTFLen )
     {
-        sal_uInt8 c = (sal_uInt8)readByte();
+        sal_uInt8 c = static_cast<sal_uInt8>(readByte());
         sal_uInt8 char2, char3;
         switch( c >> 4 )
         {
@@ -289,7 +289,7 @@ OUString ODataInputStream::readUTF()
                     throw WrongFormatException( );
                 }
 
-                char2 = (sal_uInt8)readByte();
+                char2 = static_cast<sal_uInt8>(readByte());
                 if( (char2 & 0xC0) != 0x80 )
                 {
                     throw WrongFormatException( );
@@ -306,8 +306,8 @@ OUString ODataInputStream::readUTF()
                     throw WrongFormatException( );
                 }
 
-                char2 = (sal_uInt8)readByte();
-                char3 = (sal_uInt8)readByte();
+                char2 = static_cast<sal_uInt8>(readByte());
+                char3 = static_cast<sal_uInt8>(readByte());
 
                 if( ((char2 & 0xC0) != 0x80) || ((char3 & 0xC0) != 0x80) ) {
                     throw WrongFormatException( );
@@ -623,11 +623,11 @@ void ODataOutputStream::writeUTF(const OUString& Value)
     // that are exactly 64k long can not be read by older routines when written
     // with these routines and the other way round !!!!!
     if( nUTFLen >= 0xFFFF ) {
-        writeShort( (sal_Int16)-1 );
+        writeShort( sal_Int16(-1) );
         writeLong( nUTFLen );
     }
     else {
-        writeShort( (sal_uInt16)nUTFLen );
+        writeShort( static_cast<sal_uInt16>(nUTFLen) );
     }
     for( i = 0 ; i < nStrLen ; i++ )
     {
@@ -885,7 +885,7 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
     sal_Int32 nInfoLen = m_rMarkable->offsetToMark( nInfoLenMark );
     m_rMarkable->jumpToMark( nInfoLenMark );
     // write length of the info data
-    ODataOutputStream::writeShort( (sal_Int16)nInfoLen );
+    ODataOutputStream::writeShort( static_cast<sal_Int16>(nInfoLen) );
     // jump to the end of the stream
     m_rMarkable->jumpToFurthest();
 
@@ -1097,7 +1097,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
     // create Mark to skip newer versions
     sal_uInt32 nMark = m_rMarkable->createMark();
     // length of the data
-    sal_Int32 nLen = (sal_uInt16) ODataInputStream::readShort();
+    sal_Int32 nLen = static_cast<sal_uInt16>(ODataInputStream::readShort());
     if( nLen < 0xc )
     {
         throw WrongFormatException();
@@ -1135,7 +1135,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
                 {
                     // grow to the right size
                     Reference< XPersistObject > xEmpty;
-                    m_aPersistVector.insert( m_aPersistVector.end(), (long)(nId - nSize + 1), xEmpty );
+                    m_aPersistVector.insert( m_aPersistVector.end(), static_cast<long>(nId - nSize + 1), xEmpty );
                 }
 
                 m_aPersistVector[nId] = xLoadedObj;

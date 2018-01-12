@@ -79,10 +79,10 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellRef& xCell, const CellPo
             CellPos aPos( rPos );
 
             sal_Int32 nRowCount = getRowCount();
-            sal_Int32 nRowSpan = std::max( xCell->getRowSpan(), (sal_Int32)1 );
+            sal_Int32 nRowSpan = std::max( xCell->getRowSpan(), sal_Int32(1) );
             while( nRowSpan && (aPos.mnRow < nRowCount) )
             {
-                if( ((sal_Int32)maRows.size()) <= aPos.mnRow )
+                if( static_cast<sal_Int32>(maRows.size()) <= aPos.mnRow )
                     break;
 
                 height = o3tl::saturating_add(height, maRows[aPos.mnRow++].mnSize);
@@ -90,10 +90,10 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellRef& xCell, const CellPo
             }
 
             sal_Int32 nColCount = getColumnCount();
-            sal_Int32 nColSpan = std::max( xCell->getColumnSpan(), (sal_Int32)1 );
+            sal_Int32 nColSpan = std::max( xCell->getColumnSpan(), sal_Int32(1) );
             while( nColSpan && (aPos.mnCol < nColCount ) )
             {
-                if( ((sal_Int32)maColumns.size()) <= aPos.mnCol )
+                if( static_cast<sal_Int32>(maColumns.size()) <= aPos.mnCol )
                     break;
 
                 width = o3tl::saturating_add(width, maColumns[aPos.mnCol++].mnSize);
@@ -119,7 +119,7 @@ bool TableLayouter::getCellArea( const CellRef& xCell, const CellPos& rPos, base
             const basegfx::B2ITuple aCellSize( getCellSize( xCell, rPos ) );
             const bool bRTL = (mxTable->getSdrTableObj()->GetWritingMode() == WritingMode_RL_TB);
 
-            if( (rPos.mnCol < ((sal_Int32)maColumns.size())) && (rPos.mnRow < ((sal_Int32)maRows.size()) ) )
+            if( (rPos.mnCol < static_cast<sal_Int32>(maColumns.size())) && (rPos.mnRow < static_cast<sal_Int32>(maRows.size()) ) )
             {
                 const sal_Int32 y = maRows[rPos.mnRow].mnPos;
 
@@ -220,7 +220,7 @@ sal_Int32 TableLayouter::getHorizontalEdge( int nEdgeY, sal_Int32* pnMin /*= 0*/
     sal_Int32 nRet = 0;
     const sal_Int32 nRowCount = getRowCount();
     if( (nEdgeY >= 0) && (nEdgeY <= nRowCount ) )
-        nRet = maRows[std::min((sal_Int32)nEdgeY,nRowCount-1)].mnPos;
+        nRet = maRows[std::min(static_cast<sal_Int32>(nEdgeY),nRowCount-1)].mnPos;
 
     if( nEdgeY == nRowCount )
         nRet += maRows[nEdgeY - 1].mnSize;
@@ -251,7 +251,7 @@ sal_Int32 TableLayouter::getVerticalEdge( int nEdgeX, sal_Int32* pnMin /*= 0*/, 
 
     const sal_Int32 nColCount = getColumnCount();
     if( (nEdgeX >= 0) && (nEdgeX <= nColCount ) )
-        nRet = maColumns[std::min((sal_Int32)nEdgeX,nColCount-1)].mnPos;
+        nRet = maColumns[std::min(static_cast<sal_Int32>(nEdgeX),nColCount-1)].mnPos;
 
     const bool bRTL = (mxTable->getSdrTableObj()->GetWritingMode() == WritingMode_RL_TB);
     if( bRTL )

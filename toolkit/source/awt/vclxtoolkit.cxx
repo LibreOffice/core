@@ -1329,7 +1329,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::
 
         if ( aDescr.ParentIndex == -1 )
             aDescr.Parent = nullptr;
-        else if ( ( aDescr.ParentIndex >= 0 ) && ( aDescr.ParentIndex < (short)n ) )
+        else if ( ( aDescr.ParentIndex >= 0 ) && ( aDescr.ParentIndex < static_cast<short>(n) ) )
             aDescr.Parent = aSeq.getConstArray()[aDescr.ParentIndex];
         aSeq.getArray()[n] = createWindow( aDescr );
     }

@@ -28,7 +28,7 @@ OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
     sal_Char* pStr = aNToABuf + (sizeof(aNToABuf) - 1);
     for (sal_uInt8 n = 0; n < nLen; ++n)
     {
-        *(--pStr) = (sal_Char)(nHex & 0xf) + 48;
+        *(--pStr) = static_cast<sal_Char>(nHex & 0xf) + 48;
         if (*pStr > '9')
             *pStr += 39;
         nHex >>= 4;
@@ -68,7 +68,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
         case '}':
         case '{':
             aBuf.append('\\');
-            aBuf.append((sal_Char)c);
+            aBuf.append(static_cast<sal_Char>(c));
             break;
         case 0xa0:
             // non-breaking space
@@ -84,7 +84,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
             break;
         default:
             if (c >= ' ' && c <= '~')
-                aBuf.append((sal_Char)c);
+                aBuf.append(static_cast<sal_Char>(c));
             else
             {
                 OUString sBuf(&c, 1);
@@ -102,13 +102,13 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
                     if (*pUCMode != nLen)
                     {
                         aBuf.append("\\uc");
-                        aBuf.append((sal_Int32)nLen);
+                        aBuf.append(static_cast<sal_Int32>(nLen));
                         // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.
                         aBuf.append(' ');
                         *pUCMode = nLen;
                     }
                     aBuf.append("\\u");
-                    aBuf.append((sal_Int32)c);
+                    aBuf.append(static_cast<sal_Int32>(c));
                 }
 
                 for (sal_Int32 nI = 0; nI < nLen; ++nI)
@@ -144,7 +144,7 @@ OString OutString(const OUString& rStr, rtl_TextEncoding eDestEnc, bool bUnicode
     if (nUCMode != 1)
     {
         aBuf.append(OOO_STRING_SVTOOLS_RTF_UC);
-        aBuf.append((sal_Int32)1);
+        aBuf.append(sal_Int32(1));
         aBuf.append(
             " "); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     }

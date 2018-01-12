@@ -92,7 +92,7 @@ sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     if( mpEditSource && !maContents.empty() )
-        return (unsigned)mnNextParagraph < maContents.size();
+        return static_cast<unsigned>(mnNextParagraph) < maContents.size();
     else
         return false;
 }

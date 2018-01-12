@@ -1945,7 +1945,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
         xRowProperties->setPropertyValue("DataSourceName", uno::makeAny(sDataSource));
         xRowProperties->setPropertyValue("Command", uno::makeAny(rTableOrQuery));
         xRowProperties->setPropertyValue("CommandType", uno::makeAny(nCommandType));
-        xRowProperties->setPropertyValue("FetchSize", uno::makeAny((sal_Int32)10));
+        xRowProperties->setPropertyValue("FetchSize", uno::makeAny(sal_Int32(10)));
         xRowProperties->setPropertyValue("ActiveConnection", uno::makeAny(xConnection));
         xRowSet->execute();
         xRet.set( xRowSet, uno::UNO_QUERY );
@@ -2345,7 +2345,7 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
             try
             {
                 pFound->bScrollable = xMetaData
-                        ->supportsResultSetType((sal_Int32)sdbc::ResultSetType::SCROLL_INSENSITIVE);
+                        ->supportsResultSetType(sal_Int32(sdbc::ResultSetType::SCROLL_INSENSITIVE));
             }
             catch(const uno::Exception&)
             {

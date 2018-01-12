@@ -173,7 +173,7 @@ sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID )
 
 sal_uInt32 Get10ThSec()
 {
-    sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
+    sal_uInt32 n10Ticks = 10 * static_cast<sal_uInt32>(clock());
     return n10Ticks / CLOCKS_PER_SEC;
 }
 
@@ -777,7 +777,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             }
             else if ( aURL.Protocol == "slot:" )
             {
-                sal_uInt16 nId = (sal_uInt16) aURL.Path.toInt32();
+                sal_uInt16 nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 if (nId >= SID_VERB_START && nId <= SID_VERB_END)

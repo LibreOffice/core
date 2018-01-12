@@ -1954,7 +1954,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
             {
                 sal_Int32 nValue = 0;
                 aAny >>= nValue;
-                aAny <<= (sal_Int16)nValue;
+                aAny <<= static_cast<sal_Int16>(nValue);
             }
             else
             {
@@ -2023,7 +2023,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
             case XATTR_FILLHATCH:
             case XATTR_LINEDASH:
                 {
-                    const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>((sal_uInt16)pMap->nWID);
+                    const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(static_cast<sal_uInt16>(pMap->nWID));
                     if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
@@ -2038,7 +2038,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
             case XATTR_LINESTART:
             case XATTR_FILLFLOATTRANSPARENCE:
                 {
-                    const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>((sal_uInt16)pMap->nWID);
+                    const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(static_cast<sal_uInt16>(pMap->nWID));
                     if ( pItem == nullptr )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
@@ -2443,7 +2443,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             {
                 SdrModel* pModel = pPageObj->GetModel();
                 SdrPage* pNewPage = nullptr;
-                const sal_uInt16 nDestinationPageNum((sal_uInt16)((nPageNum << 1) - 1));
+                const sal_uInt16 nDestinationPageNum(static_cast<sal_uInt16>((nPageNum << 1) - 1));
 
                 if(pModel)
                 {
@@ -2546,7 +2546,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_ZORDER:
     {
-        rValue <<= (sal_Int32)mpObj->GetOrdNum();
+        rValue <<= static_cast<sal_Int32>(mpObj->GetOrdNum());
         break;
     }
 
@@ -2756,11 +2756,11 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
 
     case SDRATTR_ROTATEANGLE:
-        rValue <<= (sal_Int32)mpObj->GetRotateAngle();
+        rValue <<= static_cast<sal_Int32>(mpObj->GetRotateAngle());
         break;
 
     case SDRATTR_SHEARANGLE:
-        rValue <<= (sal_Int32)mpObj->GetShearAngle();
+        rValue <<= static_cast<sal_Int32>(mpObj->GetShearAngle());
         break;
 
     case OWN_ATTR_INTEROPGRABBAG:
@@ -2847,7 +2847,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                     if ( aLnk.GetType() == GfxLinkType::NativeWmf )
                     {
                         bIsWMF = true;
-                        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const *>(aLnk.GetData()), (sal_Int32) aLnk.GetDataSize());
+                        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const *>(aLnk.GetData()), static_cast<sal_Int32>(aLnk.GetDataSize()));
                         rValue <<= aSeq;
                     }
                 }
@@ -3786,7 +3786,7 @@ void SAL_CALL SvxShape::setActionLocks( sal_Int16 nLock )
     if( (mnLockCount != 0) && (nLock == 0) )
         lock();
 
-    mnLockCount = (sal_uInt16)nLock;
+    mnLockCount = static_cast<sal_uInt16>(nLock);
 }
 
 
@@ -3797,7 +3797,7 @@ sal_Int16 SAL_CALL SvxShape::resetActionLocks(  )
     if( mnLockCount != 0 )
         unlock();
 
-    sal_Int16 nOldLocks = (sal_Int16)mnLockCount;
+    sal_Int16 nOldLocks = static_cast<sal_Int16>(mnLockCount);
     mnLockCount = 0;
 
     return nOldLocks;

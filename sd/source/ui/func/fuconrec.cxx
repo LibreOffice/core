@@ -357,7 +357,7 @@ void FuConstructRectangle::Activate()
         break;
     }
 
-    mpView->SetCurrentObj((sal_uInt16)aObjKind);
+    mpView->SetCurrentObj(static_cast<sal_uInt16>(aObjKind));
 
     FuConstruct::Activate();
 }

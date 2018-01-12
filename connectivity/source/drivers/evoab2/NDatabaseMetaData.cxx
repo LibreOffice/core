@@ -175,7 +175,7 @@ namespace connectivity
 
     guint findEvoabField(const OUString& aColName)
     {
-        guint nRet = (guint)-1;
+        guint nRet = guint(-1);
         bool bFound = false;
         initFields();
         for (guint i=0;(i < nFields) && !bFound;i++)
@@ -278,7 +278,7 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     // DECIMAL_DIGITS.
     aRow[9] = new ORowSetValueDecorator(s_nDECIMAL_DIGITS);
     // NUM_PREC_RADIX
-    aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
+    aRow[10] = new ORowSetValueDecorator(sal_Int32(10));
     // NULLABLE
     aRow[11] = new ORowSetValueDecorator(s_nNULLABLE);
     // REMARKS
@@ -299,7 +299,7 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     ::osl::MutexGuard aGuard( m_aMutex );
 
     initFields();
-    for (sal_Int32 i = 0; i < (sal_Int32) nFields; i++)
+    for (sal_Int32 i = 0; i < static_cast<sal_Int32>(nFields); i++)
     {
         if( match( columnNamePattern, getFieldName( i ), '\0' ) )
         {
@@ -1027,14 +1027,14 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
         aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR")));
         aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
-        aRow.push_back(new ORowSetValueDecorator((sal_Int32)s_nCHAR_OCTET_LENGTH));
+        aRow.push_back(new ORowSetValueDecorator(sal_Int32(s_nCHAR_OCTET_LENGTH)));
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
         // aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnValue::NULLABLE));
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnSearch::FULL));
+        aRow.push_back(new ORowSetValueDecorator(sal_Int32(ColumnSearch::FULL)));
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
@@ -1043,13 +1043,13 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator((sal_Int32)10));
+        aRow.push_back(new ORowSetValueDecorator(sal_Int32(10)));
 
         aRows.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::VARCHAR);
-        aRow[3] = new ORowSetValueDecorator((sal_Int32)65535);
+        aRow[3] = new ORowSetValueDecorator(sal_Int32(65535));
         aRows.push_back(aRow);
     }
     pResultSet->setRows(aRows);

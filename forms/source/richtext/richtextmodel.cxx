@@ -426,13 +426,13 @@ namespace frm
             break;
 
         case PROPERTY_ID_LINEEND_FORMAT:
-            aDefault <<= (sal_Int16)LineEndFormat::LINE_FEED;
+            aDefault <<= sal_Int16(LineEndFormat::LINE_FEED);
             break;
 
         case PROPERTY_ID_ECHO_CHAR:
         case PROPERTY_ID_ALIGN:
         case PROPERTY_ID_MAXTEXTLEN:
-            aDefault <<= (sal_Int16)0;
+            aDefault <<= sal_Int16(0);
             break;
 
         case PROPERTY_ID_TABSTOP:
@@ -469,7 +469,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_BORDER:
-            aDefault <<= (sal_Int16)1;
+            aDefault <<= sal_Int16(1);
             break;
 
         default:

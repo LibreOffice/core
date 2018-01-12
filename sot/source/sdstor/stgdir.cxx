@@ -260,7 +260,7 @@ bool StgDirEntry::IsDirty()
 
 void StgDirEntry::OpenStream( StgIo& rIo )
 {
-    sal_Int32 nThreshold = (sal_uInt16) rIo.m_aHdr.GetThreshold();
+    sal_Int32 nThreshold = static_cast<sal_uInt16>(rIo.m_aHdr.GetThreshold());
     delete m_pStgStrm;
     if( m_aEntry.GetSize() < nThreshold )
         m_pStgStrm = new StgSmallStrm( rIo, *this );
@@ -336,13 +336,13 @@ bool StgDirEntry::SetSize( sal_Int32 nNewSize )
         if( nNewSize >= nThreshold && m_pStgStrm->IsSmallStrm() )
         {
             pOld = m_pStgStrm;
-            nOldSize = (sal_uInt16) pOld->GetSize();
+            nOldSize = static_cast<sal_uInt16>(pOld->GetSize());
             m_pStgStrm = new StgDataStrm( rIo, STG_EOF, 0 );
         }
         else if( nNewSize < nThreshold && !m_pStgStrm->IsSmallStrm() )
         {
             pOld = m_pStgStrm;
-            nOldSize = (sal_uInt16) nNewSize;
+            nOldSize = static_cast<sal_uInt16>(nNewSize);
             m_pStgStrm = new StgSmallStrm( rIo, STG_EOF );
         }
         // now set the new size
@@ -582,7 +582,7 @@ bool StgDirEntry::Strm2Tmp()
                         sal_uLong nn = n;
                         if( nn > 4096 )
                             nn = 4096;
-                        if( (sal_uLong) m_pStgStrm->Read( p, nn ) != nn )
+                        if( static_cast<sal_uLong>(m_pStgStrm->Read( p, nn )) != nn )
                             break;
                         if (m_pTmpStrm->WriteBytes( p, nn ) != nn)
                             break;
@@ -628,7 +628,7 @@ bool StgDirEntry::Tmp2Strm()
         sal_uInt64 n = m_pTmpStrm->GetSize();
         StgStrm* pNewStrm;
         StgIo& rIo = m_pStgStrm->GetIo();
-        sal_uLong nThreshold = (sal_uLong) rIo.m_aHdr.GetThreshold();
+        sal_uLong nThreshold = static_cast<sal_uLong>(rIo.m_aHdr.GetThreshold());
         if( n < nThreshold )
             pNewStrm = new StgSmallStrm( rIo, STG_EOF );
         else
@@ -644,7 +644,7 @@ bool StgDirEntry::Tmp2Strm()
                     nn = 4096;
                 if (m_pTmpStrm->ReadBytes( p, nn ) != nn)
                     break;
-                if( (sal_uLong) pNewStrm->Write( p, nn ) != nn )
+                if( static_cast<sal_uLong>(pNewStrm->Write( p, nn )) != nn )
                     break;
                 n -= nn;
             }

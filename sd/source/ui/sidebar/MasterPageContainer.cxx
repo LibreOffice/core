@@ -683,14 +683,14 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
 bool MasterPageContainer::Implementation::HasToken (Token aToken) const
 {
     return aToken>=0
-        && (unsigned)aToken<maContainer.size()
+        && static_cast<unsigned>(aToken)<maContainer.size()
         && maContainer[aToken].get()!=nullptr;
 }
 
 const SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (
     Token aToken) const
 {
-    if (aToken>=0 && (unsigned)aToken<maContainer.size())
+    if (aToken>=0 && static_cast<unsigned>(aToken)<maContainer.size())
         return maContainer[aToken];
     else
         return SharedMasterPageDescriptor();
@@ -698,7 +698,7 @@ const SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescrip
 
 SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (Token aToken)
 {
-    if (aToken>=0 && (unsigned)aToken<maContainer.size())
+    if (aToken>=0 && static_cast<unsigned>(aToken)<maContainer.size())
         return maContainer[aToken];
     else
         return SharedMasterPageDescriptor();
@@ -850,7 +850,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
                 if (xProperties.is())
                     xProperties->setPropertyValue(
                         "Layout",
-                        makeAny((sal_Int16)AUTOLAYOUT_TITLE));
+                        makeAny(sal_Int16(AUTOLAYOUT_TITLE)));
             }
         }
     }
@@ -978,7 +978,7 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
 
 void MasterPageContainer::Implementation::ReleaseDescriptor (Token aToken)
 {
-    if (aToken>=0 && (unsigned)aToken<maContainer.size())
+    if (aToken>=0 && static_cast<unsigned>(aToken)<maContainer.size())
     {
         maContainer[aToken].reset();
     }

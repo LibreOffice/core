@@ -352,7 +352,7 @@ short SwOutlineTabDialog::Ok()
             const SfxPoolItem & rItem =
                 rTextColl.GetFormatAttr(RES_PARATR_NUMRULE, false);
 
-           if ((sal_uInt8)GetLevel(rTextColl.GetName()) == MAXLEVEL)
+           if (static_cast<sal_uInt8>(GetLevel(rTextColl.GetName())) == MAXLEVEL)
             {
                 if(rTextColl.IsAssignedToListLevelOfOutlineStyle())
                 {
@@ -592,8 +592,8 @@ IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, Edit&, rEdit, void )
         if(nActLevel & nMask)
         {
             SwNumFormat aNumFormat(pNumRule->Get(i));
-            aNumFormat.SetIncludeUpperLevels( std::min( (sal_uInt8)static_cast<NumericField&>(rEdit).GetValue(),
-                                                (sal_uInt8)(i + 1)) );
+            aNumFormat.SetIncludeUpperLevels( std::min( static_cast<sal_uInt8>(static_cast<NumericField&>(rEdit).GetValue()),
+                                                static_cast<sal_uInt8>(i + 1)) );
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
@@ -692,7 +692,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, Edit&, rEdit, void )
         if(nActLevel & nMask)
         {
             SwNumFormat aNumFormat(pNumRule->Get(i));
-            aNumFormat.SetStart( (sal_uInt16)static_cast<NumericField&>(rEdit).GetValue() );
+            aNumFormat.SetStart( static_cast<sal_uInt16>(static_cast<NumericField&>(rEdit).GetValue()) );
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;

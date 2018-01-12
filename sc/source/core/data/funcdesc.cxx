@@ -1166,7 +1166,7 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
 void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-    sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
+    sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), sal_uInt16(LRU_MAX) );
     sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
     _rLastRUFunctions.clear();
 
@@ -1239,7 +1239,7 @@ ScFuncRes::ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc* pDesc, bool& rbSu
         pDesc->pDefArgFlags = new ScFuncDesc::ParameterFlags[nArgs];
         for (sal_uInt16 i = 0; i < nArgs; ++i)
         {
-            pDesc->pDefArgFlags[i].bOptional = (bool)rEntry.aOptionalArgs[i];
+            pDesc->pDefArgFlags[i].bOptional = static_cast<bool>(rEntry.aOptionalArgs[i]);
         }
     }
 

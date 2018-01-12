@@ -42,7 +42,7 @@ static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
-    os << (sal_Int32)id;
+    os << static_cast<sal_Int32>(id);
     return os;
 }
 

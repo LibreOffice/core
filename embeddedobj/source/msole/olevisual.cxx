@@ -69,7 +69,7 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
 
-    sal_Int32 nStreamLength = (sal_Int32)xSeekable->getLength();
+    sal_Int32 nStreamLength = static_cast<sal_Int32>(xSeekable->getLength());
     uno::Sequence< sal_Int8 > aRepresent( nStreamLength );
     xInStream->readBytes( aRepresent, nStreamLength );
     aVisualRepr.Data <<= aRepresent;

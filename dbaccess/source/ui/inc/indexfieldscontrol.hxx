@@ -80,7 +80,7 @@ namespace dbaui
         OUString GetRowCellText(const IndexFields::const_iterator& _rRow,sal_uInt16 nColId) const;
         bool implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos);
 
-        bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
+        bool isNewField() const { return GetCurRow() >= static_cast<sal_Int32>(m_aFields.size()); }
 
         DECL_LINK( OnListEntrySelected, DbaMouseDownListBoxController&, void );
 

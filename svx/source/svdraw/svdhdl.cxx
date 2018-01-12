@@ -871,17 +871,17 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
         {
             // AnchorTR for SW, take top right as (0,0)
             pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
-                (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
-                (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
+                static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1), 0,
+                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1), 0);
         }
         else
         {
             // create centered handle as default
             pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
-                (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
-                (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                (sal_uInt16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
+                static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
+                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
         }
     }
     else
@@ -911,12 +911,12 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
         {
             // AnchorTR for SW, take top right as (0,0)
             pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
-                (sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1), 0);
+                static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Width() - 1), 0);
         }
         else
         {
-            sal_uInt16 nCenX((sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1) >> 1);
-            sal_uInt16 nCenY((sal_uInt16)(aBmpEx.GetSizePixel().Height() - 1) >> 1);
+            sal_uInt16 nCenX(static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Width() - 1) >> 1);
+            sal_uInt16 nCenY(static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Height() - 1) >> 1);
 
             if(aMoveOutsideOffset.X() > 0)
             {
@@ -924,7 +924,7 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
             }
             else if(aMoveOutsideOffset.X() < 0)
             {
-                nCenX = (sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1);
+                nCenX = static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Width() - 1);
             }
 
             if(aMoveOutsideOffset.Y() > 0)
@@ -933,7 +933,7 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
             }
             else if(aMoveOutsideOffset.Y() < 0)
             {
-                nCenY = (sal_uInt16)(aBmpEx.GetSizePixel().Height() - 1);
+                nCenY = static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Height() - 1);
             }
 
             // create centered handle as default
@@ -986,7 +986,7 @@ Pointer SdrHdl::GetPointer() const
             while (nHdlAngle<0) nHdlAngle+=36000;
             while (nHdlAngle>=36000) nHdlAngle-=36000;
             nHdlAngle/=4500;
-            switch ((sal_uInt8)nHdlAngle) {
+            switch (static_cast<sal_uInt8>(nHdlAngle)) {
                 case 0: ePtr=PointerStyle::ESize;  break;
                 case 1: ePtr=PointerStyle::NESize; break;
                 case 2: ePtr=PointerStyle::NSize;  break;
@@ -1120,8 +1120,8 @@ void SdrHdlColor::CreateB2dIAObject()
                                 sdr::overlay::OverlayBitmapEx(
                                     aPosition,
                                     BitmapEx(aBmpCol),
-                                    (sal_uInt16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
-                                    (sal_uInt16)(aBmpCol.GetSizePixel().Height() - 1) >> 1
+                                    static_cast<sal_uInt16>(aBmpCol.GetSizePixel().Width() - 1) >> 1,
+                                    static_cast<sal_uInt16>(aBmpCol.GetSizePixel().Height() - 1) >> 1
                                 );
 
                             // OVERLAYMANAGER
@@ -1160,18 +1160,18 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
 
         // draw lighter UpperLeft
         const Color aLightColor(
-            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetRed() + (sal_Int16)0x0040), (sal_Int16)0x00ff)),
-            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetGreen() + (sal_Int16)0x0040), (sal_Int16)0x00ff)),
-            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetBlue() + (sal_Int16)0x0040), (sal_Int16)0x00ff)));
+            static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetRed()) + sal_Int16(0x0040)), sal_Int16(0x00ff))),
+            static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetGreen()) + sal_Int16(0x0040)), sal_Int16(0x00ff))),
+            static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetBlue()) + sal_Int16(0x0040)), sal_Int16(0x00ff))));
         pWrite->SetLineColor(aLightColor);
         pWrite->DrawLine(Point(1, 1), Point(1, nHeight - 2));
         pWrite->DrawLine(Point(2, 1), Point(nWidth - 2, 1));
 
         // draw darker LowerRight
         const Color aDarkColor(
-            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetRed() - (sal_Int16)0x0040), (sal_Int16)0x0000)),
-            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetGreen() - (sal_Int16)0x0040), (sal_Int16)0x0000)),
-            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetBlue() - (sal_Int16)0x0040), (sal_Int16)0x0000)));
+            static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetRed()) - sal_Int16(0x0040)), sal_Int16(0x0000))),
+            static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetGreen()) - sal_Int16(0x0040)), sal_Int16(0x0000))),
+            static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetBlue()) - sal_Int16(0x0040)), sal_Int16(0x0000))));
         pWrite->SetLineColor(aDarkColor);
         pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
         pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));
@@ -1276,8 +1276,8 @@ void SdrHdlGradient::CreateB2dIAObject()
                             double fHalfArrowWidth = (0.05 * 0.5) * fVecLen;
                             aVec.normalize();
                             basegfx::B2DVector aPerpend(-aVec.getY(), aVec.getX());
-                            sal_Int32 nMidX = (sal_Int32)(aPos.X() + aVec.getX() * fLongPercentArrow);
-                            sal_Int32 nMidY = (sal_Int32)(aPos.Y() + aVec.getY() * fLongPercentArrow);
+                            sal_Int32 nMidX = static_cast<sal_Int32>(aPos.X() + aVec.getX() * fLongPercentArrow);
+                            sal_Int32 nMidY = static_cast<sal_Int32>(aPos.Y() + aVec.getY() * fLongPercentArrow);
                             Point aMidPoint(nMidX, nMidY);
 
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
@@ -1294,10 +1294,10 @@ void SdrHdlGradient::CreateB2dIAObject()
                             maOverlayGroup.append(pNewOverlayObject);
 
                             // arrowhead
-                            Point aLeft(aMidPoint.X() + (sal_Int32)(aPerpend.getX() * fHalfArrowWidth),
-                                        aMidPoint.Y() + (sal_Int32)(aPerpend.getY() * fHalfArrowWidth));
-                            Point aRight(aMidPoint.X() - (sal_Int32)(aPerpend.getX() * fHalfArrowWidth),
-                                        aMidPoint.Y() - (sal_Int32)(aPerpend.getY() * fHalfArrowWidth));
+                            Point aLeft(aMidPoint.X() + static_cast<sal_Int32>(aPerpend.getX() * fHalfArrowWidth),
+                                        aMidPoint.Y() + static_cast<sal_Int32>(aPerpend.getY() * fHalfArrowWidth));
+                            Point aRight(aMidPoint.X() - static_cast<sal_Int32>(aPerpend.getX() * fHalfArrowWidth),
+                                        aMidPoint.Y() - static_cast<sal_Int32>(aPerpend.getY() * fHalfArrowWidth));
 
                             basegfx::B2DPoint aPositionLeft(aLeft.X(), aLeft.Y());
                             basegfx::B2DPoint aPositionRight(aRight.X(), aRight.Y());
@@ -2390,10 +2390,10 @@ void SdrCropHdl::CreateB2dIAObject()
                             aBmpEx1,
                             aBmpEx2,
                             nBlinkTime,
-                            (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                            (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
-                            (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                            (sal_uInt16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1,
+                            static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                            static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                            static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
+                            static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Height() - 1) >> 1,
                             mfShearX,
                             mfRotation);
                     }
@@ -2403,8 +2403,8 @@ void SdrCropHdl::CreateB2dIAObject()
                         pOverlayObject = new sdr::overlay::OverlayBitmapEx(
                             aPosition,
                             aBmpEx1,
-                            (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                            (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                            static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                            static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                             0.0,
                             mfShearX,
                             mfRotation);

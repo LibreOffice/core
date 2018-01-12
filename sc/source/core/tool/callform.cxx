@@ -188,7 +188,7 @@ bool InitExternalFunc(const OUString& rModuleName)
     if ( fpSetLanguage )
     {
         LanguageType eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
-        sal_uInt16 nLanguage = (sal_uInt16) eLanguage;
+        sal_uInt16 nLanguage = static_cast<sal_uInt16>(eLanguage);
         (*reinterpret_cast<SetLanguagePtr>(fpSetLanguage))( nLanguage );
     }
 

@@ -170,12 +170,12 @@ void rtl_uStringbuffer_insertUtf32(
     sal_Int32 len;
     OSL_ASSERT(rtl::isUnicodeScalarValue(c));
     if (c <= 0xFFFF) {
-        buf[0] = (sal_Unicode) c;
+        buf[0] = static_cast<sal_Unicode>(c);
         len = 1;
     } else {
         c -= 0x10000;
-        buf[0] = (sal_Unicode) ((c >> 10) | 0xD800);
-        buf[1] = (sal_Unicode) ((c & 0x3FF) | 0xDC00);
+        buf[0] = static_cast<sal_Unicode>((c >> 10) | 0xD800);
+        buf[1] = static_cast<sal_Unicode>((c & 0x3FF) | 0xDC00);
         len = 2;
     }
     rtl_uStringbuffer_insert(pThis, capacity, offset, buf, len);
@@ -217,7 +217,7 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
             /* Check ASCII range */
             OSL_ENSURE( (*str & 0x80) == 0, "Found ASCII char > 127");
 
-            pBuf[offset + n] = (sal_Unicode)*(str++);
+            pBuf[offset + n] = static_cast<sal_Unicode>(*(str++));
         }
 
         (*This)->length = nOldLen + len;

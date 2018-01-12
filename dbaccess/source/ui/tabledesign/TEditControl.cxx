@@ -286,8 +286,8 @@ bool OTableEditorCtrl::SetDataPtr( long nRow )
     if(nRow == -1)
         return false;
 
-    OSL_ENSURE(nRow < (long)m_pRowList->size(),"Row is greater than size!");
-    if(nRow >= (long)m_pRowList->size())
+    OSL_ENSURE(nRow < static_cast<long>(m_pRowList->size()),"Row is greater than size!");
+    if(nRow >= static_cast<long>(m_pRowList->size()))
         return false;
     pActRow = (*m_pRowList)[nRow];
     return pActRow != nullptr;

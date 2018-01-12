@@ -50,12 +50,12 @@ constexpr SdrLayerID RPT_LAYER_HIDDEN (2);
 
 
 
-#define OBJ_DLG_FIXEDTEXT       ((sal_uInt16) OBJ_MAXI + 1)
+#define OBJ_DLG_FIXEDTEXT       (sal_uInt16(OBJ_MAXI) + 1)
 #define OBJ_DLG_IMAGECONTROL    OBJ_FM_IMAGECONTROL
-#define OBJ_DLG_FORMATTEDFIELD  ((sal_uInt16) OBJ_MAXI + 3)
-#define OBJ_DLG_HFIXEDLINE      ((sal_uInt16) OBJ_MAXI + 4)
-#define OBJ_DLG_VFIXEDLINE      ((sal_uInt16) OBJ_MAXI + 5)
-#define OBJ_DLG_SUBREPORT       ((sal_uInt16) OBJ_MAXI + 6)
+#define OBJ_DLG_FORMATTEDFIELD  (sal_uInt16(OBJ_MAXI) + 3)
+#define OBJ_DLG_HFIXEDLINE      (sal_uInt16(OBJ_MAXI) + 4)
+#define OBJ_DLG_VFIXEDLINE      (sal_uInt16(OBJ_MAXI) + 5)
+#define OBJ_DLG_SUBREPORT       (sal_uInt16(OBJ_MAXI) + 6)
 
 // allows the alignment and resizing of controls
 enum class ControlModification

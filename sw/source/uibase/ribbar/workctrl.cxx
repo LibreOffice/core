@@ -487,7 +487,7 @@ void    SwZoomBox_Impl::Select()
             aZoom.SetType(SvxZoomType::WHOLEPAGE);
         else
         {
-            sal_uInt16 nZoom = (sal_uInt16)sEntry.toInt32();
+            sal_uInt16 nZoom = static_cast<sal_uInt16>(sEntry.toInt32());
             if(nZoom < MINZOOM)
                 nZoom = MINZOOM;
             if(nZoom > MAXZOOM)
@@ -619,7 +619,7 @@ void SwJumpToSpecificBox_Impl::Select()
 {
     OUString sEntry(GetText());
     SfxUInt16Item aPageNum(nSlotId);
-    aPageNum.SetValue((sal_uInt16)sEntry.toInt32());
+    aPageNum.SetValue(static_cast<sal_uInt16>(sEntry.toInt32()));
     SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
     pCurrentShell->GetDispatcher()->ExecuteList(nSlotId, SfxCallMode::ASYNCHRON,
             { &aPageNum });

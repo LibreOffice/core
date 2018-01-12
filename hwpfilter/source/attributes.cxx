@@ -48,7 +48,7 @@ struct AttributeListImpl_impl
 
 sal_Int16 SAL_CALL AttributeListImpl::getLength()
 {
-    return (sal_Int16)m_pImpl->vecAttribute.size();
+    return static_cast<sal_Int16>(m_pImpl->vecAttribute.size());
 }
 
 

@@ -417,7 +417,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     aItemSet.Put( SdrTextAniDirectionItem( SdrTextAniDirection::Left ) );
                     aItemSet.Put( SdrTextAniCountItem( 1 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
-                                    (sal_Int16)pWindow->PixelToLogic(Size(2,1)).Width()) );
+                                    static_cast<sal_Int16>(pWindow->PixelToLogic(Size(2,1)).Width())) );
                     pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
             }
@@ -683,7 +683,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectan
                 aSet.Put( SdrTextAniKindItem( SdrTextAniKind::Slide ) );
                 aSet.Put( SdrTextAniDirectionItem( SdrTextAniDirection::Left ) );
                 aSet.Put( SdrTextAniCountItem( 1 ) );
-                aSet.Put( SdrTextAniAmountItem( (sal_Int16)pWindow->PixelToLogic(Size(2,1)).Width()) );
+                aSet.Put( SdrTextAniAmountItem( static_cast<sal_Int16>(pWindow->PixelToLogic(Size(2,1)).Width())) );
 
                 pObj->SetMergedItemSetAndBroadcast(aSet);
             }

@@ -406,11 +406,11 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit&, rEdit, void )
     {
         OUString sShortName = rShortName.pEdit->GetText();
         // clear short name if it contains more characters than the number of initials
-        if ((unsigned)sShortName.getLength() > nInits)
+        if (static_cast<unsigned>(sShortName.getLength()) > nInits)
         {
             rShortName.pEdit->SetText(OUString());
         }
-        while ((unsigned)sShortName.getLength() < nInits)
+        while (static_cast<unsigned>(sShortName.getLength()) < nInits)
             sShortName += " ";
         OUString sName = rEdit.GetText();
         OUString sLetter = sName.isEmpty()

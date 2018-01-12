@@ -114,9 +114,9 @@ void ORTFReader::NextToken( int nToken )
                         {
                             switch(nTmpToken2)
                             {
-                                case RTF_RED:   aColor.SetRed((sal_uInt8)nTokenValue); break;
-                                case RTF_BLUE:  aColor.SetBlue((sal_uInt8)nTokenValue); break;
-                                case RTF_GREEN: aColor.SetGreen((sal_uInt8)nTokenValue); break;
+                                case RTF_RED:   aColor.SetRed(static_cast<sal_uInt8>(nTokenValue)); break;
+                                case RTF_BLUE:  aColor.SetBlue(static_cast<sal_uInt8>(nTokenValue)); break;
+                                case RTF_GREEN: aColor.SetGreen(static_cast<sal_uInt8>(nTokenValue)); break;
                                 default: break;
                             }
                             nTmpToken2 = GetNextToken();

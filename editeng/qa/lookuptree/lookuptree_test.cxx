@@ -45,35 +45,35 @@ void LookupTreeTest::testTrie()
     std::vector<OUString> suggestions;
 
     trie.findSuggestions( OUString(), suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 0, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(0), suggestions.size() );
 
     trie.insert( OUString() );
     trie.findSuggestions( OUString(), suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 0, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(0), suggestions.size() );
 
     trie.findSuggestions( "a", suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 0, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(0), suggestions.size() );
 
     trie.insert( "abc" );
     trie.insert( "abcdefghijklmnopqrstuvwxyz" );
     trie.findSuggestions( "a", suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 2, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(2), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("abc"), suggestions[0] );
     CPPUNIT_ASSERT_EQUAL( OUString("abcdefghijklmnopqrstuvwxyz"), suggestions[1] );
     suggestions.clear();
 
     trie.findSuggestions( "abc", suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 1, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(1), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("abcdefghijklmnopqrstuvwxyz"), suggestions[0] );
     suggestions.clear();
 
     trie.findSuggestions( "abe", suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 0, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(0), suggestions.size() );
     suggestions.clear();
 
     trie.insert( "abe" );
     trie.findSuggestions( "", suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 3, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(3), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("abc"), suggestions[0] );
     CPPUNIT_ASSERT_EQUAL( OUString("abcdefghijklmnopqrstuvwxyz"), suggestions[1] );
     CPPUNIT_ASSERT_EQUAL( OUString("abe"), suggestions[2] );
@@ -82,42 +82,42 @@ void LookupTreeTest::testTrie()
     trie.insert( "H31l0" );
     trie.findSuggestions( "H", suggestions);
 
-    CPPUNIT_ASSERT_EQUAL( (size_t) 1, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(1), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("H31l0"), suggestions[0] );
     suggestions.clear();
 
     trie.insert( "H1" );
     trie.findSuggestions( "H", suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 2, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(2), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("H31l0"), suggestions[0] );
     CPPUNIT_ASSERT_EQUAL( OUString("H1"), suggestions[1] );
     suggestions.clear();
 
     trie.findSuggestions( "H3", suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 1, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(1), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("H31l0"), suggestions[0] );
     suggestions.clear();
 
     trie.insert( OStringToOUString( "H\xC3\xA4llo", RTL_TEXTENCODING_UTF8 ) );
     trie.findSuggestions( "H", suggestions );
-    CPPUNIT_ASSERT_EQUAL( (size_t) 3, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(3), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("H31l0"), suggestions[0] );
     CPPUNIT_ASSERT_EQUAL( OUString("H1"), suggestions[1] );
     CPPUNIT_ASSERT_EQUAL( OStringToOUString( "H\xC3\xA4llo", RTL_TEXTENCODING_UTF8 ), suggestions[2] );
     suggestions.clear();
 
     trie.findSuggestions( "H3", suggestions );
-    CPPUNIT_ASSERT_EQUAL( (size_t) 1, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(1), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("H31l0"), suggestions[0] );
     suggestions.clear();
 
     trie.findSuggestions( OStringToOUString("H\xC3\xA4", RTL_TEXTENCODING_UTF8), suggestions );
-    CPPUNIT_ASSERT_EQUAL( (size_t) 1, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(1), suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OStringToOUString("H\xC3\xA4llo", RTL_TEXTENCODING_UTF8), suggestions[0] );
     suggestions.clear();
 
     trie.findSuggestions( "", suggestions);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 6, suggestions.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(6), suggestions.size() );
     suggestions.clear();
 }
 
@@ -125,18 +125,18 @@ void LookupTreeTest::testTrieGetAllEntries()
 {
     editeng::Trie trie;
 
-    CPPUNIT_ASSERT_EQUAL( (size_t) 0, trie.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(0), trie.size() );
 
     trie.insert("A");
-    CPPUNIT_ASSERT_EQUAL( (size_t) 1, trie.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(1), trie.size() );
 
     trie.insert("B");
     trie.insert("C");
-    CPPUNIT_ASSERT_EQUAL( (size_t) 3, trie.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(3), trie.size() );
 
     trie.insert("AA");
     trie.insert("AAA");
-    CPPUNIT_ASSERT_EQUAL( (size_t) 5, trie.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(5), trie.size() );
 }
 
 } // namespace end

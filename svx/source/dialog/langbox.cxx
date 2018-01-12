@@ -318,7 +318,7 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
               (bool(nLangList & SvxLanguageListFlags::THES_AVAIL) &&
                lcl_SeqHasLang(aThesAvailLang, nLangType)) ||
               (bool(nLangList & SvxLanguageListFlags::SPELL_USED) &&
-               lcl_SeqHasLang(aSpellUsedLang, (sal_uInt16)nLangType)) ||
+               lcl_SeqHasLang(aSpellUsedLang, static_cast<sal_uInt16>(nLangType))) ||
               (bool(nLangList & SvxLanguageListFlags::HYPH_USED) &&
                lcl_SeqHasLang(aHyphUsedLang, nLangType)) ||
               (bool(nLangList & SvxLanguageListFlags::THES_USED) &&
@@ -389,14 +389,14 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
                 m_pSpellUsedLang.reset( new Sequence< sal_Int16 >( xSpell->getLanguages() ) );
         }
         bFound = m_pSpellUsedLang &&
-            lcl_SeqHasLang( *m_pSpellUsedLang, (sal_uInt16)nRealLang );
+            lcl_SeqHasLang( *m_pSpellUsedLang, static_cast<sal_uInt16>(nRealLang) );
 
         nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }
     else
         nAt = ImplInsertEntry( aStrEntry, nPos );
 
-    ImplSetEntryData( nAt, reinterpret_cast<void*>((sal_uInt16)nLangType) );
+    ImplSetEntryData( nAt, reinterpret_cast<void*>(static_cast<sal_uInt16>(nLangType)) );
     return nAt;
 }
 
@@ -432,7 +432,7 @@ void SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
         aStrEntry = m_aAllString;
 
     sal_Int32 nAt = ImplInsertImgEntry( aStrEntry, LISTBOX_APPEND, bCheckEntry );
-    ImplSetEntryData( nAt, reinterpret_cast<void*>((sal_uInt16)nLang) );
+    ImplSetEntryData( nAt, reinterpret_cast<void*>(static_cast<sal_uInt16>(nLang)) );
 }
 
 
@@ -488,7 +488,7 @@ bool SvxLanguageBoxBase::IsLanguageSelected( const LanguageType eLangType ) cons
 
 sal_Int32 SvxLanguageBoxBase::ImplTypeToPos( LanguageType eType ) const
 {
-    return ImplGetEntryPos( reinterpret_cast<void*>((sal_uInt16)eType) );
+    return ImplGetEntryPos( reinterpret_cast<void*>(static_cast<sal_uInt16>(eType)) );
 }
 
 

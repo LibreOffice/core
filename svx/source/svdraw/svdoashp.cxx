@@ -308,23 +308,23 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
             if(aGradient.GetStartIntens() != 100)
             {
-                nStartLuminance = (sal_uInt8)(nStartLuminance * ((double)aGradient.GetStartIntens() / 100.0));
+                nStartLuminance = static_cast<sal_uInt8>(nStartLuminance * (static_cast<double>(aGradient.GetStartIntens()) / 100.0));
             }
 
             if(aGradient.GetEndIntens() != 100)
             {
-                nEndLuminance = (sal_uInt8)(nEndLuminance * ((double)aGradient.GetEndIntens() / 100.0));
+                nEndLuminance = static_cast<sal_uInt8>(nEndLuminance * (static_cast<double>(aGradient.GetEndIntens()) / 100.0));
             }
 
             ::Color aStartColor(
-                (sal_uInt8)((nStartLuminance * aShadowColor.GetRed()) / 256),
-                (sal_uInt8)((nStartLuminance * aShadowColor.GetGreen()) / 256),
-                (sal_uInt8)((nStartLuminance * aShadowColor.GetBlue()) / 256));
+                static_cast<sal_uInt8>((nStartLuminance * aShadowColor.GetRed()) / 256),
+                static_cast<sal_uInt8>((nStartLuminance * aShadowColor.GetGreen()) / 256),
+                static_cast<sal_uInt8>((nStartLuminance * aShadowColor.GetBlue()) / 256));
 
             ::Color aEndColor(
-                (sal_uInt8)((nEndLuminance * aShadowColor.GetRed()) / 256),
-                (sal_uInt8)((nEndLuminance * aShadowColor.GetGreen()) / 256),
-                (sal_uInt8)((nEndLuminance * aShadowColor.GetBlue()) / 256));
+                static_cast<sal_uInt8>((nEndLuminance * aShadowColor.GetRed()) / 256),
+                static_cast<sal_uInt8>((nEndLuminance * aShadowColor.GetGreen()) / 256),
+                static_cast<sal_uInt8>((nEndLuminance * aShadowColor.GetBlue()) / 256));
 
             aGradient.SetStartColor(aStartColor);
             aGradient.SetEndColor(aEndColor);
@@ -363,11 +363,11 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                         {
                             for(long x(0); x < pReadAccess->Width(); x++)
                             {
-                                sal_uInt16 nLuminance((sal_uInt16)pReadAccess->GetLuminance(y, x) + 1);
+                                sal_uInt16 nLuminance(static_cast<sal_uInt16>(pReadAccess->GetLuminance(y, x)) + 1);
                                 const BitmapColor aDestColor(
-                                    (sal_uInt8)((nLuminance * (sal_uInt16)aShadowColor.GetRed()) >> 8),
-                                    (sal_uInt8)((nLuminance * (sal_uInt16)aShadowColor.GetGreen()) >> 8),
-                                    (sal_uInt8)((nLuminance * (sal_uInt16)aShadowColor.GetBlue()) >> 8));
+                                    static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetRed())) >> 8),
+                                    static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetGreen())) >> 8),
+                                    static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetBlue())) >> 8));
                                 pWriteAccess->SetPixel(y, x, aDestColor);
                             }
                         }
@@ -689,8 +689,8 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
 
 
 // BaseProperties section
-#define DEFAULT_MINIMUM_SIGNED_COMPARE  ((sal_Int32)0x80000000)
-#define DEFAULT_MAXIMUM_SIGNED_COMPARE  ((sal_Int32)0x7fffffff)
+#define DEFAULT_MINIMUM_SIGNED_COMPARE  (sal_Int32(0x80000000))
+#define DEFAULT_MAXIMUM_SIGNED_COMPARE  (sal_Int32(0x7fffffff))
 
 static sal_Int32 GetNumberOfProperties ( const SvxMSDffHandle* pData )
 {
@@ -1406,8 +1406,8 @@ void SdrObjCustomShape::AdaptTextMinSize()
             {
                 const long nHDist(GetTextLeftDistance() + GetTextRightDistance());
                 const long nVDist(GetTextUpperDistance() + GetTextLowerDistance());
-                const long nTWdt(std::max(long(0), (long)(aTextBound.GetWidth() - 1 - nHDist)));
-                const long nTHgt(std::max(long(0), (long)(aTextBound.GetHeight() - 1 - nVDist)));
+                const long nTWdt(std::max(long(0), static_cast<long>(aTextBound.GetWidth() - 1 - nHDist)));
+                const long nTHgt(std::max(long(0), static_cast<long>(aTextBound.GetHeight() - 1 - nVDist)));
 
                 aSet.Put(makeSdrTextMinFrameWidthItem(nTWdt));
                 aSet.Put(makeSdrTextMinFrameHeightItem(nTHgt));
@@ -1570,7 +1570,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nAngle, double sn, do
     aGeo.nRotationAngle = 0;                                             // resetting aGeo data
     aGeo.RecalcSinCos();
 
-    long nW = (long)( fObjectRotation * 100 );                      // applying our object rotation
+    long nW = static_cast<long>( fObjectRotation * 100 );                      // applying our object rotation
     if ( bMirroredX )
         nW = 36000 - nW;
     if ( bMirroredY )
@@ -2057,7 +2057,7 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
         case SdrHdlKind::CustomShape1 :
         {
             rDrag.SetEndDragChangesGeoAndAttributes(true);
-            DragMoveCustomShapeHdl( rDrag.GetNow(), (sal_uInt16)pHdl->GetPointNum(), !rDrag.GetDragMethod()->IsShiftPressed() );
+            DragMoveCustomShapeHdl( rDrag.GetNow(), static_cast<sal_uInt16>(pHdl->GetPointNum()), !rDrag.GetDragMethod()->IsShiftPressed() );
             SetRectsDirty();
             InvalidateRenderGeometry();
             SetChanged();
@@ -2415,16 +2415,16 @@ tools::Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, cons
             aNewTextRect.GetWidth() && aNewTextRect.GetHeight())
         {
             aReturnValue = maRect;
-            double fXScale = (double)aOldTextRect.GetWidth() / (double)aNewTextRect.GetWidth();
-            double fYScale = (double)aOldTextRect.GetHeight() / (double)aNewTextRect.GetHeight();
-            double fRightDiff = (double)( aAdjustedTextRect.Right() - aNewTextRect.Right() ) * fXScale;
-            double fLeftDiff  = (double)( aAdjustedTextRect.Left()  - aNewTextRect.Left()  ) * fXScale;
-            double fTopDiff   = (double)( aAdjustedTextRect.Top()   - aNewTextRect.Top()   ) * fYScale;
-            double fBottomDiff= (double)( aAdjustedTextRect.Bottom()- aNewTextRect.Bottom()) * fYScale;
-            aReturnValue.Left() += (sal_Int32)fLeftDiff;
-            aReturnValue.Right() += (sal_Int32)fRightDiff;
-            aReturnValue.Top() += (sal_Int32)fTopDiff;
-            aReturnValue.Bottom() += (sal_Int32)fBottomDiff;
+            double fXScale = static_cast<double>(aOldTextRect.GetWidth()) / static_cast<double>(aNewTextRect.GetWidth());
+            double fYScale = static_cast<double>(aOldTextRect.GetHeight()) / static_cast<double>(aNewTextRect.GetHeight());
+            double fRightDiff = static_cast<double>( aAdjustedTextRect.Right() - aNewTextRect.Right() ) * fXScale;
+            double fLeftDiff  = static_cast<double>( aAdjustedTextRect.Left()  - aNewTextRect.Left()  ) * fXScale;
+            double fTopDiff   = static_cast<double>( aAdjustedTextRect.Top()   - aNewTextRect.Top()   ) * fYScale;
+            double fBottomDiff= static_cast<double>( aAdjustedTextRect.Bottom()- aNewTextRect.Bottom()) * fYScale;
+            aReturnValue.Left() += static_cast<sal_Int32>(fLeftDiff);
+            aReturnValue.Right() += static_cast<sal_Int32>(fRightDiff);
+            aReturnValue.Top() += static_cast<sal_Int32>(fTopDiff);
+            aReturnValue.Bottom() += static_cast<sal_Int32>(fBottomDiff);
         }
     }
     return aReturnValue;

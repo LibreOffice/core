@@ -168,10 +168,10 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= (nSubType & DATEFLD) != 0;
         break;
     case FIELD_PROP_FORMAT:
-        rVal <<= (sal_Int32)GetFormat();
+        rVal <<= static_cast<sal_Int32>(GetFormat());
         break;
     case FIELD_PROP_SUBTYPE:
-        rVal <<= (sal_Int32)nOffset;
+        rVal <<= static_cast<sal_Int32>(nOffset);
         break;
     case FIELD_PROP_DATE_TIME:
         {

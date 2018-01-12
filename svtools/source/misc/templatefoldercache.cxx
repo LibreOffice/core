@@ -439,10 +439,10 @@ namespace svt
     sal_Int32 TemplateFolderCacheImpl::getMagicNumber()
     {
         sal_Int32 nMagic = 0;
-        ( nMagic += (sal_Int8)'T' ) <<= 4;
-        ( nMagic += (sal_Int8)'D' ) <<= 4;
-        ( nMagic += (sal_Int8)'S' ) <<= 4;
-        ( nMagic += (sal_Int8)'C' ) <<= 0;
+        ( nMagic += sal_Int8('T') ) <<= 4;
+        ( nMagic += sal_Int8('D') ) <<= 4;
+        ( nMagic += sal_Int8('S') ) <<= 4;
+        ( nMagic += sal_Int8('C') ) <<= 0;
         return nMagic;
     }
 

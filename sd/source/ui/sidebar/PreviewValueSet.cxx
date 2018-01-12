@@ -94,7 +94,7 @@ sal_uInt16 PreviewValueSet::CalculateColumnCount (int nWidth) const
         else if (mnMaxColumnCount>0 && nColumnCount>mnMaxColumnCount)
             nColumnCount = mnMaxColumnCount;
     }
-    return (sal_uInt16)nColumnCount;
+    return static_cast<sal_uInt16>(nColumnCount);
 }
 
 sal_uInt16 PreviewValueSet::CalculateRowCount (sal_uInt16 nColumnCount) const
@@ -108,7 +108,7 @@ sal_uInt16 PreviewValueSet::CalculateRowCount (sal_uInt16 nColumnCount) const
             nRowCount = 1;
     }
 
-    return (sal_uInt16)nRowCount;
+    return static_cast<sal_uInt16>(nRowCount);
 }
 
 sal_Int32 PreviewValueSet::GetPreferredHeight (sal_Int32 nWidth)

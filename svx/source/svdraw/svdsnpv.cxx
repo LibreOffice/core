@@ -372,31 +372,31 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         double fSnapWidth(aSnapWdtX);
         if(dx == NOT_SNAPPED && fSnapWidth != 0.0)
         {
-            double fx = (double)x;
+            double fx = static_cast<double>(x);
 
             // round instead of trunc
-            if(fx - (double)pPV->GetPageOrigin().X() >= 0.0)
+            if(fx - static_cast<double>(pPV->GetPageOrigin().X()) >= 0.0)
                 fx += fSnapWidth / 2.0;
             else
                 fx -= fSnapWidth / 2.0;
 
-            x = (long)((fx - (double)pPV->GetPageOrigin().X()) / fSnapWidth);
-            x = (long)((double)x * fSnapWidth + (double)pPV->GetPageOrigin().X());
+            x = static_cast<long>((fx - static_cast<double>(pPV->GetPageOrigin().X())) / fSnapWidth);
+            x = static_cast<long>(static_cast<double>(x) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().X()));
             dx = 0;
         }
         fSnapWidth = double(aSnapWdtY);
         if(dy == NOT_SNAPPED && fSnapWidth)
         {
-            double fy = (double)y;
+            double fy = static_cast<double>(y);
 
             // round instead of trunc
-            if(fy - (double)pPV->GetPageOrigin().Y() >= 0.0)
+            if(fy - static_cast<double>(pPV->GetPageOrigin().Y()) >= 0.0)
                 fy += fSnapWidth / 2.0;
             else
                 fy -= fSnapWidth / 2.0;
 
-            y = (long)((fy - (double)pPV->GetPageOrigin().Y()) / fSnapWidth);
-            y = (long)((double)y * fSnapWidth + (double)pPV->GetPageOrigin().Y());
+            y = static_cast<long>((fy - static_cast<double>(pPV->GetPageOrigin().Y())) / fSnapWidth);
+            y = static_cast<long>(static_cast<double>(y) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().Y()));
             dy = 0;
         }
     }

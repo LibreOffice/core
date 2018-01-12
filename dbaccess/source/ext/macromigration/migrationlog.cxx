@@ -127,7 +127,7 @@ namespace dbmm
         OSL_ENSURE( !bAlreadyKnown, "MigrationLog::startedDocument: document is already known!" );
 #endif
 
-        DocumentID nID = (DocumentID)( m_pData->aDocumentLogs.size() + 1 );
+        DocumentID nID = static_cast<DocumentID>( m_pData->aDocumentLogs.size() + 1 );
         while ( m_pData->aDocumentLogs.find( nID ) != m_pData->aDocumentLogs.end() )
             ++nID;
 

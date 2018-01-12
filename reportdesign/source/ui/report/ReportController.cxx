@@ -2742,7 +2742,7 @@ uno::Any SAL_CALL OReportController::getViewData()
         OSectionWindow* pSectionWindow = getDesignView()->getMarkedSection();
         if ( pSectionWindow )
         {
-            aViewData.put( "MarkedSection", (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNum() );
+            aViewData.put( "MarkedSection", static_cast<sal_Int32>(pSectionWindow->getReportSection().getPage()->GetPageNum()) );
         }
     }
 

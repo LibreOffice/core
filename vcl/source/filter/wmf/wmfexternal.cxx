@@ -35,11 +35,11 @@ css::uno::Sequence< css::beans::PropertyValue > WmfExternal::getSequence() const
     {
         aSequence.realloc(3);
         aSequence[0].Name = "Width";
-        aSequence[0].Value <<= (sal_Int16)xExt;
+        aSequence[0].Value <<= static_cast<sal_Int16>(xExt);
         aSequence[1].Name = "Height";
-        aSequence[1].Value <<= (sal_Int16)yExt;
+        aSequence[1].Value <<= static_cast<sal_Int16>(yExt);
         aSequence[2].Name = "MapMode";
-        aSequence[2].Value <<= (sal_Int16)mapMode;
+        aSequence[2].Value <<= static_cast<sal_Int16>(mapMode);
     }
 
     return aSequence;

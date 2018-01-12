@@ -576,10 +576,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT, (sal_uInt16)nVal );
+                        pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
                         // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
-                        rReq.AppendItem( SfxUInt16Item( FID_ROW_HEIGHT, (sal_uInt16)TwipsToEvenHMM(nVal) ) );
+                        rReq.AppendItem( SfxUInt16Item( FID_ROW_HEIGHT, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
                         rReq.Done();
 
                     }
@@ -616,11 +616,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL, (sal_uInt16)nVal );
+                        pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
                         ScGlobal::nLastRowHeightExtra = nVal;
 
                         // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
-                        rReq.AppendItem( SfxUInt16Item( FID_ROW_OPT_HEIGHT, (sal_uInt16)TwipsToEvenHMM(nVal) ) );
+                        rReq.AppendItem( SfxUInt16Item( FID_ROW_OPT_HEIGHT, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
                         rReq.Done();
 
                     }
@@ -681,10 +681,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, (sal_uInt16)nVal );
+                        pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
                         // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
-                        rReq.AppendItem( SfxUInt16Item( FID_COL_WIDTH, (sal_uInt16)TwipsToEvenHMM(nVal)) );
+                        rReq.AppendItem( SfxUInt16Item( FID_COL_WIDTH, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal))) );
                         rReq.Done();
 
                     }
@@ -720,11 +720,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL, (sal_uInt16)nVal );
+                        pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
                         ScGlobal::nLastColWidthExtra = nVal;
 
                         // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
-                        rReq.AppendItem( SfxUInt16Item( FID_COL_OPT_WIDTH, (sal_uInt16)TwipsToEvenHMM(nVal) ) );
+                        rReq.AppendItem( SfxUInt16Item( FID_COL_OPT_WIDTH, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
                         rReq.Done();
                     }
                 }

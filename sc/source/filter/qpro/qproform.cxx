@@ -43,7 +43,7 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
 
     if( nRelBit & 0x2000 )
     {
-        SCROW nRelRow = (sal_Int16)(nTmp << 3); // This looks weird... Mistake?
+        SCROW nRelRow = static_cast<sal_Int16>(nTmp << 3); // This looks weird... Mistake?
         nRelRow /= 8;
         rSRD.SetRelRow(nRelRow);
     }
@@ -347,7 +347,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
             case FT_ConstInt:{
                 sal_uInt16 nVal;
                 nVal = nIntArray[ nIntCount ];
-                aStack << aPool.Store( ( double ) nVal );
+                aStack << aPool.Store( static_cast<double>(nVal) );
                 nIntCount++;
                 }
                 break;

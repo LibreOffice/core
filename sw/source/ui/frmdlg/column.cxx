@@ -172,20 +172,20 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     if (pCurrSection && (!rWrtShell.HasSelection() || 0 != nFullSectCnt))
     {
         m_pApplyToLB->RemoveEntry( m_pApplyToLB->GetEntryPos(
-                                        reinterpret_cast<void*>((sal_IntPtr)( 1 >= nFullSectCnt
+                                        reinterpret_cast<void*>(static_cast<sal_IntPtr>( 1 >= nFullSectCnt
                                                     ? LISTBOX_SECTIONS
                                                     : LISTBOX_SECTION ))));
     }
     else
     {
-        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>((sal_IntPtr)LISTBOX_SECTION) ));
-        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>((sal_IntPtr)LISTBOX_SECTIONS) ));
+        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(sal_IntPtr(LISTBOX_SECTION)) ));
+        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(sal_IntPtr(LISTBOX_SECTIONS)) ));
     }
 
     if (!( rWrtShell.HasSelection() && rWrtShell.IsInsRegionAvailable() &&
         ( !pCurrSection || ( 1 != nFullSectCnt &&
             IsMarkInSameSection( rWrtShell, pCurrSection ) ))))
-        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>((sal_IntPtr)LISTBOX_SELECTION) ));
+        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(sal_IntPtr(LISTBOX_SELECTION)) ));
 
     if (!rWrtShell.GetFlyFrameFormat())
         m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(LISTBOX_FRAME) ));
@@ -387,7 +387,7 @@ void SwColumnPage::ResetColWidth()
         const sal_uInt16 nWidth = GetMaxWidth( m_pColMgr, m_nCols ) / m_nCols;
 
         for(sal_uInt16 i = 0; i < m_nCols; ++i)
-            m_nColWidth[i] = (long) nWidth;
+            m_nColWidth[i] = static_cast<long>(nWidth);
     }
 
 }
@@ -594,8 +594,8 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     delete m_pColMgr;
     m_pColMgr = new SwColMgr(*rSet);
     m_nCols   = m_pColMgr->GetCount() ;
-    m_pCLNrEdt->SetMax(std::max((sal_uInt16)m_pCLNrEdt->GetMax(), m_nCols));
-    m_pCLNrEdt->SetLast(std::max(m_nCols,(sal_uInt16)m_pCLNrEdt->GetMax()));
+    m_pCLNrEdt->SetMax(std::max(static_cast<sal_uInt16>(m_pCLNrEdt->GetMax()), m_nCols));
+    m_pCLNrEdt->SetLast(std::max(m_nCols,static_cast<sal_uInt16>(m_pCLNrEdt->GetMax())));
 
     if(m_bFrame)
     {
@@ -605,7 +605,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
         {
             const SwFormatFrameSize& rSize = rSet->Get(RES_FRM_SIZE);
             const SvxBoxItem& rBox = rSet->Get(RES_BOX);
-            m_pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetSmallestDistance());
+            m_pColMgr->SetActualWidth(static_cast<sal_uInt16>(rSize.GetSize().Width()) - rBox.GetSmallestDistance());
         }
     }
     if(m_pBalanceColsCB->IsVisible())
@@ -744,7 +744,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, Edit&, void )
                     m_pLineColorDLB->GetSelectEntryColor() );
             m_pColMgr->SetAdjust( SwColLineAdj(
                                     m_pLinePosDLB->GetSelectedEntryPos() + 1) );
-            m_pColMgr->SetLineHeightPercent((short)m_pLineHeightEdit->GetValue());
+            m_pColMgr->SetLineHeightPercent(static_cast<short>(m_pLineHeightEdit->GetValue()));
             bEnable = m_pColMgr->GetLineHeightPercent() != 100;
         }
         m_pLinePosLbl->Enable( bEnable );
@@ -957,7 +957,7 @@ IMPL_LINK( SwColumnPage, ColModify, Edit&, rEdit, void )
 
 void SwColumnPage::ColModify(NumericField const * pNF)
 {
-    m_nCols = (sal_uInt16)m_pCLNrEdt->GetValue();
+    m_nCols = static_cast<sal_uInt16>(m_pCLNrEdt->GetValue());
     //#107890# the handler is also called from LoseFocus()
     //then no change has been made and thus no action should be taken
     // #i17816# changing the displayed types within the ValueSet
@@ -968,7 +968,7 @@ void SwColumnPage::ColModify(NumericField const * pNF)
         if(pNF)
             m_pDefaultVS->SetNoSelection();
         long nDist = static_cast< long >(m_aDistEd1.DenormalizePercent(m_aDistEd1.GetValue(FUNIT_TWIP)));
-        m_pColMgr->SetCount(m_nCols, (sal_uInt16)nDist);
+        m_pColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
         for(sal_uInt16 i = 0; i < m_nCols; i++)
             m_nColDist[i] = nDist;
         m_nFirstVis = 0;
@@ -1002,7 +1002,7 @@ IMPL_LINK( SwColumnPage, GapModify, Edit&, rEdit, void )
             nActValue = nMaxGap;
             m_aDistEd1.SetPrcntValue(m_aDistEd1.NormalizePercent(nMaxGap), FUNIT_TWIP);
         }
-        m_pColMgr->SetGutterWidth((sal_uInt16)nActValue);
+        m_pColMgr->SetGutterWidth(static_cast<sal_uInt16>(nActValue));
         for(sal_uInt16 i = 0; i < m_nCols; i++)
             m_nColDist[i] = nActValue;
 
@@ -1067,7 +1067,7 @@ IMPL_LINK( SwColumnPage, AutoWidthHdl, Button*, pButton, void )
 {
     CheckBox* pBox = static_cast<CheckBox*>(pButton);
     long nDist = static_cast< long >(m_aDistEd1.DenormalizePercent(m_aDistEd1.GetValue(FUNIT_TWIP)));
-    m_pColMgr->SetCount(m_nCols, (sal_uInt16)nDist);
+    m_pColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
     for(sal_uInt16 i = 0; i < m_nCols; i++)
         m_nColDist[i] = nDist;
     if(pBox->IsChecked())
@@ -1124,7 +1124,7 @@ void SwColumnPage::Timeout()
         if(nChanged == m_nCols - 1)
         {
             m_nColWidth[0] -= nDiff;
-            if(m_nColWidth[0] < (long)m_nMinWidth)
+            if(m_nColWidth[0] < static_cast<long>(m_nMinWidth))
             {
                 nNewWidth -= m_nMinWidth - m_nColWidth[0];
                 m_nColWidth[0] = m_nMinWidth;
@@ -1134,7 +1134,7 @@ void SwColumnPage::Timeout()
         else if(nDiff)
         {
             m_nColWidth[nChanged + 1] -= nDiff;
-            if(m_nColWidth[nChanged + 1] < (long) m_nMinWidth)
+            if(m_nColWidth[nChanged + 1] < static_cast<long>(m_nMinWidth))
             {
                 nNewWidth -= m_nMinWidth - m_nColWidth[nChanged + 1];
                 m_nColWidth[nChanged + 1] = m_nMinWidth;

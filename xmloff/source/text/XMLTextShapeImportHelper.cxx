@@ -109,7 +109,7 @@ void XMLTextShapeImportHelper::addShape(
             {
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertNumber(nTmp, rValue, 1, SHRT_MAX))
-                    nPage = (sal_Int16)nTmp;
+                    nPage = static_cast<sal_Int16>(nTmp);
             }
             break;
         case XML_TOK_TEXT_FRAME_Y:

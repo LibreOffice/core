@@ -707,7 +707,7 @@ void ColorSliderControl::UpdateBitmap()
         case RED:
             for (long y = 0; y <= nY; y++)
             {
-                aBitmapColor.SetRed(sal_uInt8(((long)255 * y) / nY));
+                aBitmapColor.SetRed(sal_uInt8((long(255) * y) / nY));
                 pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
             }
             break;
@@ -715,7 +715,7 @@ void ColorSliderControl::UpdateBitmap()
         case GREEN:
             for (long y = 0; y <= nY; y++)
             {
-                aBitmapColor.SetGreen(sal_uInt8(((long)255 * y) / nY));
+                aBitmapColor.SetGreen(sal_uInt8((long(255) * y) / nY));
                 pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
             }
             break;
@@ -723,7 +723,7 @@ void ColorSliderControl::UpdateBitmap()
         case BLUE:
             for (long y = 0; y <= nY; y++)
             {
-                aBitmapColor.SetBlue(sal_uInt8(((long)255 * y) / nY));
+                aBitmapColor.SetBlue(sal_uInt8((long(255) * y) / nY));
                 pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
             }
             break;
@@ -996,9 +996,9 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
         mpColorPrevious->Show();
     }
 
-    mdRed = ((double)aColor.GetRed()) / 255.0;
-    mdGreen = ((double)aColor.GetGreen()) / 255.0;
-    mdBlue = ((double)aColor.GetBlue()) / 255.0;
+    mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
+    mdGreen = static_cast<double>(aColor.GetGreen()) / 255.0;
+    mdBlue = static_cast<double>(aColor.GetBlue()) / 255.0;
 
     RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
     RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
@@ -1215,52 +1215,52 @@ IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 
     if (&rEdit == mpMFRed)
     {
-        setColorComponent( ColorComponent::Red, ((double)mpMFRed->GetValue()) / 255.0 );
+        setColorComponent( ColorComponent::Red, static_cast<double>(mpMFRed->GetValue()) / 255.0 );
         n = UpdateFlags::All & ~UpdateFlags::RGB;
     }
     else if (&rEdit == mpMFGreen)
     {
-        setColorComponent( ColorComponent::Green, ((double)mpMFGreen->GetValue()) / 255.0 );
+        setColorComponent( ColorComponent::Green, static_cast<double>(mpMFGreen->GetValue()) / 255.0 );
         n = UpdateFlags::All & ~UpdateFlags::RGB;
     }
     else if (&rEdit == mpMFBlue)
     {
-        setColorComponent( ColorComponent::Blue, ((double)mpMFBlue->GetValue()) / 255.0 );
+        setColorComponent( ColorComponent::Blue, static_cast<double>(mpMFBlue->GetValue()) / 255.0 );
         n = UpdateFlags::All & ~UpdateFlags::RGB;
     }
     else if (&rEdit == mpMFHue)
     {
-        setColorComponent( ColorComponent::Hue, (double)mpMFHue->GetValue() );
+        setColorComponent( ColorComponent::Hue, static_cast<double>(mpMFHue->GetValue()) );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == mpMFSaturation)
     {
-        setColorComponent( ColorComponent::Saturation, ((double)mpMFSaturation->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Saturation, static_cast<double>(mpMFSaturation->GetValue()) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == mpMFBrightness)
     {
-        setColorComponent( ColorComponent::Brightness, ((double)mpMFBrightness->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Brightness, static_cast<double>(mpMFBrightness->GetValue()) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == mpMFCyan)
     {
-        setColorComponent( ColorComponent::Cyan, ((double)mpMFCyan->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Cyan, static_cast<double>(mpMFCyan->GetValue()) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == mpMFMagenta)
     {
-        setColorComponent( ColorComponent::Magenta, ((double)mpMFMagenta->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Magenta, static_cast<double>(mpMFMagenta->GetValue()) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == mpMFYellow)
     {
-        setColorComponent( ColorComponent::Yellow, ((double)mpMFYellow->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Yellow, static_cast<double>(mpMFYellow->GetValue()) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == mpMFKey)
     {
-        setColorComponent( ColorComponent::Key, ((double)mpMFKey->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Key, static_cast<double>(mpMFKey->GetValue()) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == mpEDHex)
@@ -1273,9 +1273,9 @@ IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 
             if (aColor != GetColor())
             {
-                mdRed = ((double)aColor.GetRed()) / 255.0;
-                mdGreen = ((double)aColor.GetGreen()) / 255.0;
-                mdBlue = ((double)aColor.GetBlue()) / 255.0;
+                mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
+                mdGreen = static_cast<double>(aColor.GetGreen()) / 255.0;
+                mdBlue = static_cast<double>(aColor.GetBlue()) / 255.0;
 
                 RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
                 RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );

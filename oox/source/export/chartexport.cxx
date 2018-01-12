@@ -991,8 +991,8 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
 
         // awt::Size aSize = xShape->getSize();
         awt::Point aPos2 = xShape->getPosition();
-        double x = (double)aPos2.X / (double) aPageSize.Width;
-        double y = (double)aPos2.Y / (double) aPageSize.Height;
+        double x = static_cast<double>(aPos2.X) / static_cast<double>(aPageSize.Width);
+        double y = static_cast<double>(aPos2.Y) / static_cast<double>(aPageSize.Height);
         /*
         pFS->singleElement(FSNS(XML_c, XML_wMode),
                 XML_val, "edge",

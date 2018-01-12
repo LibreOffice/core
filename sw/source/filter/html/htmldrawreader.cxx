@@ -94,8 +94,8 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aTwipSpc =
             Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
                                                 MapMode(MapUnit::MapTwip) );
-        nLeftSpace = nRightSpace = (sal_uInt16)aTwipSpc.Width();
-        nUpperSpace = nLowerSpace = (sal_uInt16)aTwipSpc.Height();
+        nLeftSpace = nRightSpace = static_cast<sal_uInt16>(aTwipSpc.Width());
+        nUpperSpace = nLowerSpace = static_cast<sal_uInt16>(aTwipSpc.Height());
     }
 
     // set left/right border
@@ -308,11 +308,11 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 break;
 
             case HtmlOptionId::SCROLLAMOUNT:
-                nAmount = -((sal_Int16)rOption.GetNumber());
+                nAmount = - static_cast<sal_Int16>(rOption.GetNumber());
                 break;
 
             case HtmlOptionId::SCROLLDELAY:
-                nDelay = (sal_uInt16)rOption.GetNumber();
+                nDelay = static_cast<sal_uInt16>(rOption.GetNumber());
                 break;
 
             case HtmlOptionId::WIDTH:
@@ -525,7 +525,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // The global pTable also can't be used, because the marquee can also be
     // in a sub-table.
     if( pCurTable && bPrcWidth)
-        RegisterDrawObjectToTable( pCurTable, m_pMarquee, (sal_uInt8)nWidth );
+        RegisterDrawObjectToTable( pCurTable, m_pMarquee, static_cast<sal_uInt8>(nWidth) );
 }
 
 void SwHTMLParser::EndMarquee()

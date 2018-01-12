@@ -762,7 +762,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
                         }
                         else // Calculate initial percent value.
                         {
-                            sal_Int32 nPercent = (sal_Int32) (100 * nFileSize / nDownloadSize);
+                            sal_Int32 nPercent = static_cast<sal_Int32>(100 * nFileSize / nDownloadSize);
                             getUpdateHandler()->setProgress( nPercent );
                         }
                     }

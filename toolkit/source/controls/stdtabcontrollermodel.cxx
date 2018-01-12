@@ -31,7 +31,7 @@
 
 #include <tools/debug.hxx>
 
-#define UNOCONTROL_STREAMVERSION    (short)2
+#define UNOCONTROL_STREAMVERSION    short(2)
 
 
 //  class UnoControlModelEntryList
@@ -330,7 +330,7 @@ void StdTabControllerModel::getGroup( sal_Int32 nGroup, css::uno::Sequence< css:
         UnoControlModelEntry* pEntry = maControls[ n ];
         if ( pEntry->bGroup )
         {
-            if ( nG == (sal_uInt32)nGroup )
+            if ( nG == static_cast<sal_uInt32>(nGroup) )
             {
                 sal_uInt32 nCount = ImplGetControlCount( *pEntry->pGroup );
                 aSeq = css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >( nCount );

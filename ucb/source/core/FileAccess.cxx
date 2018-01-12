@@ -399,7 +399,7 @@ sal_Int32 OFileAccess::getSize( const OUString& FileURL )
     INetURLObject aObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
     aCnt.getPropertyValue( "Size" ) >>= nTemp;
-    nSize = (sal_Int32)nTemp;
+    nSize = static_cast<sal_Int32>(nTemp);
     return nSize;
 }
 

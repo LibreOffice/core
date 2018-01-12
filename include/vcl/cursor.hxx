@@ -31,7 +31,7 @@ struct ImplCursorData;
 namespace vcl { class Window; }
 
 // Cursor styles
-#define CURSOR_SHADOW                   ((sal_uInt16)0x0001)
+#define CURSOR_SHADOW                   (sal_uInt16(0x0001))
 
 enum class CursorDirection
 {

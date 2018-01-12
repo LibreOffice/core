@@ -1459,7 +1459,7 @@ void ScXMLImport::SetStyleToRanges()
                     {
                         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
                         pSheetData->AddCellStyle( sPrevStyleName,
-                            ScAddress( (SCCOL)rRange.StartColumn, (SCROW)rRange.StartRow, (SCTAB)rRange.Sheet ) );
+                            ScAddress( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), static_cast<SCTAB>(rRange.Sheet) ) );
                         pStyle->SetLastSheet(rRange.Sheet);
                     }
                 }
@@ -1935,7 +1935,7 @@ sal_Int32 ScXMLImport::GetByteOffset()
     uno::Reference<xml::sax::XLocator> xLocator = GetLocator();
     uno::Reference<io::XSeekable> xSeek( xLocator, uno::UNO_QUERY );        //! should use different interface
     if ( xSeek.is() )
-        nOffset = (sal_Int32)xSeek->getPosition();
+        nOffset = static_cast<sal_Int32>(xSeek->getPosition());
     return nOffset;
 }
 

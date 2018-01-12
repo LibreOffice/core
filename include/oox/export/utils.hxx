@@ -63,7 +63,7 @@ static constexpr const char* ToPsz10(bool b)
 
 static constexpr sal_Int64 PPTtoEMU( sal_Int32 nPPT )
 {
-    return (sal_Int64)( (double)nPPT * 1587.5 );
+    return static_cast<sal_Int64>( static_cast<double>(nPPT) * 1587.5 );
 }
 
 static constexpr sal_Int64 TwipsToEMU( sal_Int32 nTwips )

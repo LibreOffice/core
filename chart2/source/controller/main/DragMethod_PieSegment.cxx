@@ -94,7 +94,7 @@ void DragMethod_PieSegment::MoveSdrDrag(const Point& rPnt)
             m_fAdditionalOffset = 1.0 - m_fInitialOffset;
 
         B2DVector aNewPosVector = m_aStartVector + (m_aDragDirection * m_fAdditionalOffset);
-        Point aNewPos = Point( (long)(aNewPosVector.getX()), (long)(aNewPosVector.getY()) );
+        Point aNewPos = Point( static_cast<long>(aNewPosVector.getX()), static_cast<long>(aNewPosVector.getY()) );
         if( aNewPos != DragStat().GetNow() )
         {
             Hide();

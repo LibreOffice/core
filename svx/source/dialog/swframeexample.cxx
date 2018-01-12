@@ -149,7 +149,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     aTextLine.Move(0, nTTxtBorder);
 
     // Rectangle to edges including paragraph
-    sal_uInt16 nLines = (sal_uInt16)((aPagePrtArea.GetHeight() / 2 - nTTxtBorder - nBTxtBorder)
+    sal_uInt16 nLines = static_cast<sal_uInt16>((aPagePrtArea.GetHeight() / 2 - nTTxtBorder - nBTxtBorder)
              / (aTextLine.GetHeight() + 2));
     aPara = aPagePrtArea;
     aPara.SetSize(Size(aPara.GetWidth(),
@@ -224,7 +224,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
         sal_uInt32 nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(DEMOTEXT);
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
-        aDrawObj.SetSize(Size(std::max(5L, (long)nFreeWidth / 3L), std::max(5L, aFrmSize.Height() * 3L)));
+        aDrawObj.SetSize(Size(std::max(5L, static_cast<long>(nFreeWidth) / 3L), std::max(5L, aFrmSize.Height() * 3L)));
         aDrawObj.SetPos(Point(aParaPrtArea.Right() + 1, aParaPrtArea.Bottom() / 2));
         aParaPrtArea.Right() = aDrawObj.Right();
     }
@@ -619,13 +619,13 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
         aTxt.Bottom() = aTxt.Top() + aTextLine.GetHeight() - 1;
 
         nStep = aTxt.GetHeight() + 2;
-        nLines = (sal_uInt16)(((aFrameAtFrame.GetHeight() - 2 * FLYINFLY_BORDER) * 2 / 3)
+        nLines = static_cast<sal_uInt16>(((aFrameAtFrame.GetHeight() - 2 * FLYINFLY_BORDER) * 2 / 3)
                  / (aTxt.GetHeight() + 2));
     }
     else
     {
         nStep = aTxt.GetHeight() + 2;
-        nLines = (sal_uInt16)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
+        nLines = static_cast<sal_uInt16>(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
     }
 
     if (nAnchor != RndStdIds::FLY_AS_CHAR)

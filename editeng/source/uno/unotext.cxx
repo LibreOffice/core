@@ -1249,7 +1249,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
                 }
 
             case WID_NUMBERINGSTARTVALUE:
-                return uno::Any( (sal_Int16)-1 );
+                return uno::Any( sal_Int16(-1) );
 
             case WID_PARAISNUMBERINGRESTART:
                 return uno::Any( false );

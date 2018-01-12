@@ -106,7 +106,7 @@ sal_uInt16 SbxArray::Count() const
 {
     sal_uInt32 nCount = mVarEntries.size();
     DBG_ASSERT( nCount <= SBX_MAXINDEX, "SBX: Array-Index > SBX_MAXINDEX" );
-    return (sal_uInt16)nCount;
+    return static_cast<sal_uInt16>(nCount);
 }
 
 SbxVariableRef& SbxArray::GetRef32( sal_uInt32 nIdx )
@@ -608,8 +608,8 @@ bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
 {
     sal_Int32 rlb32, rub32;
     bool bRet = GetDim32( n, rlb32, rub32 );
-    rub = (short)rub32;
-    rlb = (short)rlb32;
+    rub = static_cast<short>(rub32);
+    rlb = static_cast<short>(rlb32);
     if( bRet )
     {
         if( rlb32 < -SBX_MAXINDEX || rub32 > SBX_MAXINDEX )
@@ -631,7 +631,7 @@ sal_uInt32 SbxDimArray::Offset32( const sal_Int32* pIdx )
         sal_Int32 nIdx = *pIdx++;
         if( nIdx < rDimension.nLbound || nIdx > rDimension.nUbound )
         {
-            nPos = (sal_uInt32)SBX_MAXINDEX32 + 1; break;
+            nPos = sal_uInt32(SBX_MAXINDEX32) + 1; break;
         }
         nPos = nPos * rDimension.nSize + nIdx - rDimension.nLbound;
     }
@@ -662,7 +662,7 @@ sal_uInt16 SbxDimArray::Offset( const short* pIdx )
         SetError( ERRCODE_BASIC_OUT_OF_RANGE );
         nPos = 0;
     }
-    return (sal_uInt16) nPos;
+    return static_cast<sal_uInt16>(nPos);
 }
 
 SbxVariable* SbxDimArray::Get( const short* pIdx )
@@ -705,12 +705,12 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
         sal_Int32 nIdx = pPar->Get( nOff++ )->GetLong();
         if( nIdx < it->nLbound || nIdx > it->nUbound )
         {
-            nPos = (sal_uInt32) SBX_MAXINDEX32+1;
+            nPos = sal_uInt32(SBX_MAXINDEX32)+1;
             break;
         }
         nPos = nPos * it->nSize + nIdx - it->nLbound;
     }
-    if( nPos > (sal_uInt32) SBX_MAXINDEX32 )
+    if( nPos > sal_uInt32(SBX_MAXINDEX32) )
     {
         SetError( ERRCODE_BASIC_OUT_OF_RANGE );
         nPos = 0;

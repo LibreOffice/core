@@ -112,7 +112,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC;
             else if (nChar < 0x80)
                 if (pDestBufPtr != pDestBufEnd)
-                    *pDestBufPtr++ = (sal_Unicode) nChar;
+                    *pDestBufPtr++ = static_cast<sal_Unicode>(nChar);
                 else
                     goto no_output;
             else
@@ -138,7 +138,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
                         nChar = 0xAF; // MACRON
                         break;
                     }
-                    *pDestBufPtr++ = (sal_Unicode) nChar;
+                    *pDestBufPtr++ = static_cast<sal_Unicode>(nChar);
                 }
                 else
                     goto no_output;
@@ -176,7 +176,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
                 if (nUnicode != 0)
                     if (pDestBufPtr != pDestBufEnd)
                     {
-                        *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                        *pDestBufPtr++ = static_cast<sal_Unicode>(nUnicode);
                         eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_0208;
                     }
                     else
@@ -360,7 +360,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
         {
             if (ImplIsHighSurrogate(nChar))
             {
-                nHighSurrogate = (sal_Unicode) nChar;
+                nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
         }

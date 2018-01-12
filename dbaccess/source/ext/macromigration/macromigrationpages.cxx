@@ -217,7 +217,7 @@ namespace dbmm
         m_pCurrentObject->SetText( _rObjectName );
         m_pCurrentAction->SetText( _rCurrentAction );
         m_aCurrentProgress.SetRange( _nRange );
-        m_aCurrentProgress.SetValue( (sal_uInt32)0 );
+        m_aCurrentProgress.SetValue( sal_uInt32(0) );
 
         // since this is currently called from the main thread, which does not have the chance
         // to re-schedule, we need to explicitly update the display

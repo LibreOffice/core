@@ -656,7 +656,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
         case PPT_TOKEN( tmPct ):
             if( mbIterate )
             {
-                double fPercent = (double)rAttribs.getUnsigned( XML_val, 0 ) / 100000.0;
+                double fPercent = static_cast<double>(rAttribs.getUnsigned( XML_val, 0 )) / 100000.0;
                 mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fPercent;
             }
             return this;

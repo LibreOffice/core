@@ -132,7 +132,7 @@ public:
 inline BigInt::operator sal_Int16() const
 {
     if ( !bIsBig && nVal >= SAL_MIN_INT16 && nVal <= SAL_MAX_INT16 )
-        return (sal_Int16)nVal;
+        return static_cast<sal_Int16>(nVal);
     assert(false && "out of range");
     return 0;
 }
@@ -140,7 +140,7 @@ inline BigInt::operator sal_Int16() const
 inline BigInt::operator sal_uInt16() const
 {
     if ( !bIsBig && nVal >= 0 && nVal <= SAL_MAX_UINT16 )
-        return (sal_uInt16)nVal;
+        return static_cast<sal_uInt16>(nVal);
     assert(false && "out of range");
     return 0;
 }
@@ -156,7 +156,7 @@ inline BigInt::operator sal_Int32() const
 inline BigInt::operator sal_uInt32() const
 {
     if ( !bIsBig && nVal >= 0 )
-        return (sal_uInt32)nVal;
+        return static_cast<sal_uInt32>(nVal);
     assert(false && "out of range");
     return 0;
 }

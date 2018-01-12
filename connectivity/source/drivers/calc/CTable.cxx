@@ -363,14 +363,14 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     if ( nIntTime ==  ::tools::Time::nanoSecPerDay)
                         nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
                     css::util::Time aTime;
-                    aTime.NanoSeconds = (sal_uInt32)( nIntTime % ::tools::Time::nanoSecPerSec );
+                    aTime.NanoSeconds = static_cast<sal_uInt32>( nIntTime % ::tools::Time::nanoSecPerSec );
                     nIntTime /= ::tools::Time::nanoSecPerSec;
-                    aTime.Seconds = (sal_uInt16)( nIntTime % 60 );
+                    aTime.Seconds = static_cast<sal_uInt16>( nIntTime % 60 );
                     nIntTime /= 60;
-                    aTime.Minutes = (sal_uInt16)( nIntTime % 60 );
+                    aTime.Minutes = static_cast<sal_uInt16>( nIntTime % 60 );
                     nIntTime /= 60;
                     OSL_ENSURE( nIntTime < 24, "error in time calculation" );
-                    aTime.Hours = (sal_uInt16) nIntTime;
+                    aTime.Hours = static_cast<sal_uInt16>(nIntTime);
                     rValue = aTime;
                 }
                 else
@@ -382,7 +382,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     double fCellVal = xCell->getValue();
                     double fDays = ::rtl::math::approxFloor( fCellVal );
                     double fTime = fCellVal - fDays;
-                    long nIntDays = (long)fDays;
+                    long nIntDays = static_cast<long>(fDays);
                     sal_Int64 nIntTime = ::rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) );
                     if ( nIntTime == ::tools::Time::nanoSecPerDay )
                     {
@@ -392,14 +392,14 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
 
                     css::util::DateTime aDateTime;
 
-                    aDateTime.NanoSeconds = (sal_uInt16)( nIntTime % ::tools::Time::nanoSecPerSec );
+                    aDateTime.NanoSeconds = static_cast<sal_uInt16>( nIntTime % ::tools::Time::nanoSecPerSec );
                     nIntTime /= ::tools::Time::nanoSecPerSec;
-                    aDateTime.Seconds = (sal_uInt16)( nIntTime % 60 );
+                    aDateTime.Seconds = static_cast<sal_uInt16>( nIntTime % 60 );
                     nIntTime /= 60;
-                    aDateTime.Minutes = (sal_uInt16)( nIntTime % 60 );
+                    aDateTime.Minutes = static_cast<sal_uInt16>( nIntTime % 60 );
                     nIntTime /= 60;
                     OSL_ENSURE( nIntTime < 24, "error in time calculation" );
-                    aDateTime.Hours = (sal_uInt16) nIntTime;
+                    aDateTime.Hours = static_cast<sal_uInt16>(nIntTime);
 
                     ::Date aDate( rNullDate );
                     aDate.AddDays( nIntDays );
@@ -422,13 +422,13 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
 static OUString lcl_GetColumnStr( sal_Int32 nColumn )
 {
     if ( nColumn < 26 )
-        return OUString( (sal_Unicode) ( 'A' + nColumn ) );
+        return OUString( static_cast<sal_Unicode>( 'A' + nColumn ) );
     else
     {
         OUStringBuffer aBuffer(2);
         aBuffer.setLength( 2 );
-        aBuffer[0] = (sal_Unicode) ( 'A' + ( nColumn / 26 ) - 1 );
-        aBuffer[1] = (sal_Unicode) ( 'A' + ( nColumn % 26 ) );
+        aBuffer[0] = static_cast<sal_Unicode>( 'A' + ( nColumn / 26 ) - 1 );
+        aBuffer[1] = static_cast<sal_Unicode>( 'A' + ( nColumn % 26 ) );
         return aBuffer.makeStringAndClear();
     }
 }

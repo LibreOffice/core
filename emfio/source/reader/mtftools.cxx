@@ -272,7 +272,7 @@ namespace emfio
         if( rFont.lfStrikeOut )
             aFont.SetStrikeout( STRIKEOUT_SINGLE );
 
-        aFont.SetOrientation( (short)rFont.lfEscapement );
+        aFont.SetOrientation( static_cast<short>(rFont.lfEscapement) );
 
         Size aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
         if ( rFont.lfHeight > 0 )
@@ -287,8 +287,8 @@ namespace emfio
             long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
             if (nHeight)
             {
-                double fHeight = ((double)aFontSize.Height() * rFont.lfHeight ) / nHeight;
-                aFontSize.Height() = (sal_Int32)( fHeight + 0.5 );
+                double fHeight = (static_cast<double>(aFontSize.Height()) * rFont.lfHeight ) / nHeight;
+                aFontSize.Height() = static_cast<sal_Int32>( fHeight + 0.5 );
             }
         }
 
@@ -303,7 +303,7 @@ namespace emfio
         sal_uInt32 nColor;
 
         mpInputStream->ReadUInt32( nColor );
-        return Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
+        return Color( static_cast<sal_uInt8>(nColor), static_cast<sal_uInt8>( nColor >> 8 ), static_cast<sal_uInt8>( nColor >> 16 ) );
     };
 
     Point MtfTools::ImplScale(const Point& rPoint) // Hack to set varying defaults for incompletely defined files.
@@ -394,8 +394,8 @@ namespace emfio
                             fY2 *= mnDevHeight;
                             fX2 += mnDevOrgX;
                             fY2 += mnDevOrgY;   // fX2, fY2 now in device units
-                            fX2 *= (double)mnMillX * 100.0 / (double)mnPixX;
-                            fY2 *= (double)mnMillY * 100.0 / (double)mnPixY;
+                            fX2 *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                            fY2 *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
                         }
                     }
                     break;
@@ -482,8 +482,8 @@ namespace emfio
                             fHeight /= mnWinExtY;
                             fWidth *= mnDevWidth;
                             fHeight *= mnDevHeight;
-                            fWidth *= (double)mnMillX * 100.0 / (double)mnPixX;
-                            fHeight *= (double)mnMillY * 100.0 / (double)mnPixY;
+                            fWidth *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                            fHeight *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
                         }
                     }
                     break;
@@ -558,7 +558,7 @@ namespace emfio
     {
         if ( nIndex & ENHMETA_STOCK_OBJECT )
         {
-            sal_uInt16 nStockId = (sal_uInt8)nIndex;
+            sal_uInt16 nStockId = static_cast<sal_uInt8>(nIndex);
             switch( nStockId )
             {
                 case WHITE_BRUSH :
@@ -617,7 +617,7 @@ namespace emfio
 
             GDIObj *pGDIObj = nullptr;
 
-            if ( (sal_uInt32)nIndex < mvGDIObj.size() )
+            if ( static_cast<sal_uInt32>(nIndex) < mvGDIObj.size() )
                 pGDIObj = mvGDIObj[ nIndex ].get();
 
             if ( pGDIObj )
@@ -760,7 +760,7 @@ namespace emfio
                     }
                 }
             }
-            if ( (sal_uInt32)nIndex >= mvGDIObj.size() )
+            if ( static_cast<sal_uInt32>(nIndex) >= mvGDIObj.size() )
                 ImplResizeObjectArry( nIndex + 16 );
 
             mvGDIObj[ nIndex ] = std::move(pObject);
@@ -776,7 +776,7 @@ namespace emfio
     {
         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
         {
-            if ( (sal_uInt32)nIndex < mvGDIObj.size() )
+            if ( static_cast<sal_uInt32>(nIndex) < mvGDIObj.size() )
             {
                 mvGDIObj[ nIndex ].reset();
             }
@@ -1738,7 +1738,7 @@ namespace emfio
                 pSave = rSaveList[i].get();
 
                 sal_uInt32  nWinRop = pSave->nWinRop;
-                sal_uInt8   nRasterOperation = (sal_uInt8)( nWinRop >> 16 );
+                sal_uInt8   nRasterOperation = static_cast<sal_uInt8>( nWinRop >> 16 );
 
                 sal_uInt32  nUsed =  0;
                 if ( ( nRasterOperation & 0xf )  != ( nRasterOperation >> 4 ) )

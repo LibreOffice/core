@@ -426,10 +426,10 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
                 // Check that word isn't correctly spelled before correcting:
                 css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller =
                     LinguMgr::GetSpellChecker();
-                if( xSpeller->hasLanguage((sal_uInt16)eLang) )
+                if( xSpeller->hasLanguage(static_cast<sal_uInt16>(eLang)) )
                 {
                     Sequence< css::beans::PropertyValue > aEmptySeq;
-                    if (xSpeller->isValid(sWord, (sal_uInt16)eLang, aEmptySeq))
+                    if (xSpeller->isValid(sWord, static_cast<sal_uInt16>(eLang), aEmptySeq))
                     {
                         return false;
                     }

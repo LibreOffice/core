@@ -147,9 +147,9 @@ namespace
     }
 }
 
-inline int PtTo10Mu( int nPoints ) { return (int)((((double)nPoints)*35.27777778)+0.5); }
+inline int PtTo10Mu( int nPoints ) { return static_cast<int>((static_cast<double>(nPoints)*35.27777778)+0.5); }
 
-inline int TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)+0.5); }
+inline int TenMuToPt( int nUnits ) { return static_cast<int>((static_cast<double>(nUnits)/35.27777778)+0.5); }
 
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
@@ -764,7 +764,7 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
     if( aData.m_pParser )
     {
         const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("InputSlot") ): nullptr;
-        if( ! pKey || nPaperBin >= (sal_uInt16)pKey->countValues() )
+        if( ! pKey || nPaperBin >= static_cast<sal_uInt16>(pKey->countValues()) )
             aRet = aData.m_pParser->getDefaultInputSlot();
         else
         {

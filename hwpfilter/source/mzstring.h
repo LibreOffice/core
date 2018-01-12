@@ -96,10 +96,10 @@ class MzString
 
         MzString  &operator << (const char *);
         MzString  &operator << (char);
-        MzString  &operator << (unsigned char c)  { return *this<<(char)c; }
+        MzString  &operator << (unsigned char c)  { return *this<<static_cast<char>(c); }
         MzString  &operator << (int);
         MzString  &operator << (long);
-        MzString  &operator << (short i)      { return *this<<(int)i; }
+        MzString  &operator << (short i)      { return *this<<static_cast<int>(i); }
         MzString  &operator << (MzString const &);
 /* MzString &operator << (MzString *s)  { return *this<<*s; }
 

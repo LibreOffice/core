@@ -730,7 +730,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetPlayFull(pInfo->mbPlayFull, bPlayFull);
                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
-                pAction->SetVerb(pInfo->mnVerb, (sal_uInt16)pInfo->GetBookmark().toInt32() );
+                pAction->SetVerb(pInfo->mnVerb, static_cast<sal_uInt16>(pInfo->GetBookmark().toInt32()) );
                 pAction->SetSecondEffect(pInfo->meSecondEffect, eSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, eSecondSpeed);
                 pAction->SetSecondSoundOn(pInfo->mbSecondSoundOn, bSecondSoundOn);
@@ -787,7 +787,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                     pInfo->mbSecondPlayFull = bSecondPlayFull;
 
                 if (eClickAction == presentation::ClickAction_VERB)
-                    pInfo->mnVerb = (sal_uInt16)aBookmark.toInt32();
+                    pInfo->mnVerb = static_cast<sal_uInt16>(aBookmark.toInt32());
             }
         }
         // Set the Undo Group in of the Undo Manager

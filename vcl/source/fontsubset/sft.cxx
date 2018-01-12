@@ -188,7 +188,7 @@ static sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset)
 #define Int32FromMOTA(a) (a)
 #else
 static sal_uInt16 Int16FromMOTA(sal_uInt16 a) {
-  return (sal_uInt16) (((sal_uInt8)(a >> 8)) | ((sal_uInt8)a << 8));
+  return static_cast<sal_uInt16>(static_cast<sal_uInt8>(a >> 8) | (static_cast<sal_uInt8>(a) << 8));
 }
 static sal_uInt32 Int32FromMOTA(sal_uInt32 a) {
   return ((a>>24)&0xFF) | (((a>>8)&0xFF00) | ((a&0xFF00)<<8) | ((a&0xFF)<<24));
@@ -427,7 +427,7 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
 
     i = 0;
     while (i <= lastPoint) {
-        pa[i++].flags = (sal_uInt32) (flag = *p++);
+        pa[i++].flags = static_cast<sal_uInt32>(flag = *p++);
         if (flag & 8) {                                     /*- repeat flag */
             n = *p++;
             for (j=0; j<n; j++) {
@@ -445,15 +445,15 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
     for (i = 0; i <= lastPoint; i++) {
         if (pa[i].flags & 0x02) {
             if (pa[i].flags & 0x10) {
-                z += (int) (*p++);
+                z += static_cast<int>(*p++);
             } else {
-                z -= (int) (*p++);
+                z -= static_cast<int>(*p++);
             }
         } else if ( !(pa[i].flags & 0x10)) {
             z += GetInt16(p, 0);
             p += 2;
         }
-        pa[i].x = (sal_Int16)z;
+        pa[i].x = static_cast<sal_Int16>(z);
     }
 
     /*- Process the Y coordinate */
@@ -469,7 +469,7 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
             z += GetInt16(p, 0);
             p += 2;
         }
-        pa[i].y = (sal_Int16)z;
+        pa[i].y = static_cast<sal_Int16>(z);
     }
 
     for (i=0; i<numberOfContours; i++) {
@@ -563,8 +563,8 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
             ptr += 4;
         } else {
             if (flags & ARGS_ARE_XY_VALUES) {     /* args are signed */
-                e = (sal_Int8) *ptr++;
-                f = (sal_Int8) *ptr++;
+                e = static_cast<sal_Int8>(*ptr++);
+                f = static_cast<sal_Int8>(*ptr++);
                 /* printf("ARGS_ARE_XY_VALUES: %d %d\n", e & 0xFF, f & 0xFF); */
             } else {                              /* args are unsigned */
                 /* printf("!ARGS_ARE_XY_VALUES\n"); */
@@ -618,9 +618,9 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
                 const sal_uInt16 x = nextComponent[i].x;
                 const sal_uInt16 y = nextComponent[i].y;
                 t = fixedMulDiv(a, x << 16, m) + fixedMulDiv(c, y << 16, m) + sal_Int32(sal_uInt16(e) << 16);
-                cp.x = (sal_Int16)(fixedMul(t, m) >> 16);
+                cp.x = static_cast<sal_Int16>(fixedMul(t, m) >> 16);
                 t = fixedMulDiv(b, x << 16, n) + fixedMulDiv(d, y << 16, n) + sal_Int32(sal_uInt16(f) << 16);
-                cp.y = (sal_Int16)(fixedMul(t, n) >> 16);
+                cp.y = static_cast<sal_Int16>(fixedMul(t, n) >> 16);
 
                 myPoints.push_back( cp );
             }
@@ -809,7 +809,7 @@ static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement
         }
     }
 
-    if( (nPathCount = (int)aPathList.size()) > 0)
+    if( (nPathCount = static_cast<int>(aPathList.size())) > 0)
     {
         *path = static_cast<PSPathElement*>(calloc(nPathCount, sizeof(PSPathElement)));
         assert(*path != nullptr);
@@ -1069,8 +1069,8 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     int k = -1;
     sal_uInt32 ToReturn;
 
-    theHighByte = (sal_uInt8)((c >> 8) & 0x00ff);
-    theLowByte = (sal_uInt8)(c & 0x00ff);
+    theHighByte = static_cast<sal_uInt8>((c >> 8) & 0x00ff);
+    theLowByte = static_cast<sal_uInt8>(c & 0x00ff);
     subHeader2Keys = CMAP2 + 3;
     subHeader2s = reinterpret_cast<subHeader2 const *>(subHeader2Keys + 256);
     if(reinterpret_cast<sal_uInt8 const *>(&subHeader2Keys[theHighByte]) - cmap < int(nMaxCmapSize - 2))
@@ -1133,8 +1133,8 @@ static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
 static sal_uInt16 GEbinsearch(sal_uInt16 const *ar, sal_uInt16 length, sal_uInt16 toSearch) {
     signed int low, high, lastfound = 0xffff;
     sal_uInt16 res;
-    if(length == (sal_uInt16)0 || length == (sal_uInt16)0xFFFF) {
-        return (sal_uInt16)0xFFFF;
+    if(length == sal_uInt16(0) || length == sal_uInt16(0xFFFF)) {
+        return sal_uInt16(0xFFFF);
     }
     low = 0;
     high = length - 1;
@@ -1148,7 +1148,7 @@ static sal_uInt16 GEbinsearch(sal_uInt16 const *ar, sal_uInt16 length, sal_uInt1
             low = ++mid;
         }
     }
-    return (sal_uInt16)lastfound;
+    return static_cast<sal_uInt16>(lastfound);
 }
 
 static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize, sal_uInt32 c) {
@@ -1166,9 +1166,9 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
 
     segCount = Int16FromMOTA(*(CMAP4 + 3))/2;
     endCode = CMAP4 + 7;
-    i = GEbinsearch(endCode, segCount, (sal_uInt16)c);
+    i = GEbinsearch(endCode, segCount, static_cast<sal_uInt16>(c));
 
-    if (i == (sal_uInt16) 0xFFFF) {
+    if (i == sal_uInt16(0xFFFF)) {
         return MISSING_GLYPH_INDEX;
     }
     startCode = endCode + segCount + 1;
@@ -1262,7 +1262,7 @@ static void FindCmap(TrueTypeFont *ttf)
         sal_uInt32 offset = GetUInt32(table, nLargestFixedOffsetPos);
 
          /* sanity check, cmap must lie within file */
-        if( (table - ttf->ptr) + offset > (sal_uInt32)ttf->fsize )
+        if( (table - ttf->ptr) + offset > static_cast<sal_uInt32>(ttf->fsize) )
             continue;
 
         /* Unicode tables in Apple fonts */
@@ -1552,7 +1552,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     assert(t->tlens != nullptr);
 
     /* parse the tables */
-    for (i=0; i<(int)t->ntables; i++) {
+    for (i=0; i<static_cast<int>(t->ntables); i++) {
         int nIndex;
         tag = GetUInt32(t->ptr + tdoffset + 12, 16 * i);
         switch( tag ) {
@@ -1585,7 +1585,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     }
 
     /* Fixup offsets when only a TTC extract was provided */
-    if( facenum == (sal_uInt32)~0 ) {
+    if( facenum == sal_uInt32(~0) ) {
         sal_uInt8* pHead = const_cast<sal_uInt8*>(t->tables[O_head]);
         if( !pHead )
             return SF_TTFORMAT;
@@ -1664,18 +1664,18 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     if( getTable(t, O_glyf) && getTable(t, O_loca) ) /* TTF or TTF-OpenType */
     {
         int k = (getTableSize(t, O_loca) / (indexfmt ? 4 : 2)) - 1;
-        if( k < (int)t->nglyphs )       /* Hack for broken Chinese fonts */
+        if( k < static_cast<int>(t->nglyphs) )       /* Hack for broken Chinese fonts */
             t->nglyphs = k;
 
         table = getTable(t, O_loca);
         t->goffsets = static_cast<sal_uInt32 *>(calloc(1+t->nglyphs, sizeof(sal_uInt32)));
         assert(t->goffsets != nullptr);
 
-        for( i = 0; i <= (int)t->nglyphs; ++i )
-            t->goffsets[i] = indexfmt ? GetUInt32(table, i << 2) : (sal_uInt32)GetUInt16(table, i << 1) << 1;
+        for( i = 0; i <= static_cast<int>(t->nglyphs); ++i )
+            t->goffsets[i] = indexfmt ? GetUInt32(table, i << 2) : static_cast<sal_uInt32>(GetUInt16(table, i << 1)) << 1;
     } else if( getTable(t, O_CFF) ) {           /* PS-OpenType */
         int k = (getTableSize(t, O_CFF) / 2) - 1; /* set a limit here, presumably much lower than the table size, but establishes some sort of physical bound */
-        if( k < (int)t->nglyphs )
+        if( k < static_cast<int>(t->nglyphs) )
             t->nglyphs = k;
         t->goffsets = static_cast<sal_uInt32 *>(calloc(1+t->nglyphs, sizeof(sal_uInt32)));
         /* TODO: implement to get subsetting */
@@ -2238,7 +2238,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     sal_uInt16* gID = static_cast<sal_uInt16*>(scalloc(nGlyphs, sizeof(sal_uInt32)));
 
     for (i = 0; i < nGlyphs; i++) {
-        gID[i] = (sal_uInt16)glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf);
+        gID[i] = static_cast<sal_uInt16>(glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf));
     }
 
     AddTable(ttcr, head); AddTable(ttcr, hhea); AddTable(ttcr, maxp); AddTable(ttcr, cvt);
@@ -2250,7 +2250,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
         return res;
     }
 
-    fprintf(outf, "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", (int)(ver>>16), (int)(ver & 0xFFFF), (int)(rev>>16), (int)(rev & 0xFFFF));
+    fprintf(outf, "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", static_cast<int>(ver>>16), static_cast<int>(ver & 0xFFFF), static_cast<int>(rev>>16), static_cast<int>(rev & 0xFFFF));
     fprintf(outf, "%%%%Creator: %s %s %s\n", modname, modver, modextra);
     fprintf(outf, "%%- Font subset generated from a source font file: '%s'\n", ttf->fname);
     fprintf(outf, "%%- Original font name: %s\n", ttf->psname);
@@ -2268,14 +2268,14 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     for (i = 1; i<nGlyphs; i++) {
         fprintf(outf, "Encoding %d /glyph%u put\n", encoding[i], gID[i]);
     }
-    fprintf(outf, "/XUID [103 0 1 16#%08X %u 16#%08X 16#%08X] def\n", (unsigned int)rtl_crc32(0, ttf->ptr, ttf->fsize), (unsigned int)nGlyphs, (unsigned int)rtl_crc32(0, glyphArray, nGlyphs * 2), (unsigned int)rtl_crc32(0, encoding, nGlyphs));
+    fprintf(outf, "/XUID [103 0 1 16#%08X %u 16#%08X 16#%08X] def\n", static_cast<unsigned int>(rtl_crc32(0, ttf->ptr, ttf->fsize)), static_cast<unsigned int>(nGlyphs), static_cast<unsigned int>(rtl_crc32(0, glyphArray, nGlyphs * 2)), static_cast<unsigned int>(rtl_crc32(0, encoding, nGlyphs)));
 
     DumpSfnts(outf, sfntP, sfntLen);
 
     /* dump charstrings */
     fprintf(outf, "/CharStrings %d dict dup begin\n", nGlyphs);
     fprintf(outf, "/.notdef 0 def\n");
-    for (i = 1; i < (int)glyfCount(glyf); i++) {
+    for (i = 1; i < static_cast<int>(glyfCount(glyf)); i++) {
         fprintf(outf,"/glyph%d %d def\n", i, i);
     }
     fprintf(outf, "end readonly def\n");
@@ -2506,7 +2506,7 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
     }
 
     d->glyphID = glyphID;
-    d->nbytes = (sal_uInt16)((length + 1) & ~1);
+    d->nbytes = static_cast<sal_uInt16>((length + 1) & ~1);
 
     /* now calculate npoints and ncontours */
     ControlPoint *cp;
@@ -2519,8 +2519,8 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
             if (cp[i].flags & 0x8000)
                 m++;
         }
-        d->npoints = (sal_uInt16)n;
-        d->ncontours = (sal_uInt16)m;
+        d->npoints = static_cast<sal_uInt16>(n);
+        d->ncontours = static_cast<sal_uInt16>(m);
         free(cp);
     } else {
         d->npoints = 0;

@@ -719,7 +719,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         sValue = sName + sDisplay ;
         sName = ";page-number:";
         sValue += sName;
-        sValue += OUString::number((sal_Int16)((sal_uInt16)((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1)) ;
+        sValue += OUString::number(static_cast<sal_Int16>(static_cast<sal_uInt16>((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1)) ;
         sName = ";total-pages:";
         sValue += sName;
         sValue += OUString::number(pDrViewSh->GetPageTabControl().GetPageCount()) ;
@@ -807,7 +807,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sValue = sName + sDisplay ;
             sName = ";page-number:";
             sValue += sName;
-            sValue += OUString::number((sal_Int16)((sal_uInt16)((pCurrPge->GetPageNum()-1)>>1) + 1)) ;
+            sValue += OUString::number(static_cast<sal_Int16>(static_cast<sal_uInt16>((pCurrPge->GetPageNum()-1)>>1) + 1)) ;
             sName = ";total-pages:";
             sValue += sName;
             sValue += OUString::number(pDoc->GetSdPageCount(PageKind::Standard)) ;

@@ -37,7 +37,7 @@ public:
     AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 
     sal_uInt32 nMembers() const
-        { return (sal_uInt32)(m_declarations.size()); }
+        { return static_cast<sal_uInt32>(m_declarations.size()); }
     DeclList::const_iterator getIteratorBegin() const
         { return m_declarations.begin(); }
     DeclList::const_iterator getIteratorEnd() const

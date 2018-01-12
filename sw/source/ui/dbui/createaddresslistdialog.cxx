@@ -673,7 +673,7 @@ IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, Button*, pButton, void)
     }
     else if(pButton == m_pNextPB)
     {
-        if(nValue < (sal_uInt32)m_pSetNoNF->GetMax())
+        if(nValue < static_cast<sal_uInt32>(m_pSetNoNF->GetMax()))
             ++nValue;
     }
     else //m_aEndPB
@@ -694,7 +694,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DBNumCursorHdl_Impl, Edit&, void)
 void SwCreateAddressListDialog::UpdateButtons()
 {
     sal_uInt32 nCurrent = static_cast< sal_uInt32 >(m_pSetNoNF->GetValue() );
-    sal_uInt32 nSize = (sal_uInt32 )m_pCSVData->aDBData.size();
+    sal_uInt32 nSize = static_cast<sal_uInt32>(m_pCSVData->aDBData.size());
     m_pStartPB->Enable(nCurrent != 1);
     m_pPrevPB->Enable(nCurrent != 1);
     m_pNextPB->Enable(nCurrent != nSize);
@@ -718,7 +718,7 @@ void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
         {
             std::vector< OUString> const & aData = m_pCSVData->aDBData[nPos];
             if(nColumn >=0)
-                bFound = -1 != aData[(sal_uInt32)nColumn].toAsciiLowerCase().indexOf(sSearch);
+                bFound = -1 != aData[static_cast<sal_uInt32>(nColumn)].toAsciiLowerCase().indexOf(sSearch);
             else
             {
                 for( nElement = 0; nElement < aData.size(); ++nElement)

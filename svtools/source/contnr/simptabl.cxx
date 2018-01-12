@@ -186,7 +186,7 @@ void SvSimpleTable::SetTabs()
     {
         sal_uInt16 nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
         aHeaderBar->SetItemSize( i, nNewSize );
-        nPos = (sal_uInt16)GetTab(i);
+        nPos = static_cast<sal_uInt16>(GetTab(i));
     }
 
     aHeaderBar->SetItemSize( i, HEADERBAR_FULLSIZE ); // because no tab for last entry

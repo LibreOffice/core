@@ -275,7 +275,7 @@ void SvtExpFileDlg_Impl::InitFilterList( )
         ;
 
     // add all following entries
-    while ( (sal_Int16)nPos >= 0 )
+    while ( static_cast<sal_Int16>(nPos) >= 0 )
         InsertFilterListEntry( m_aFilter[ nPos-- ].get() );
 }
 

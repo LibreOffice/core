@@ -591,7 +591,7 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32&
     sal_Unicode     cAkt = *pStart;
 
     if( IsNumber( cAkt ) )
-        rRet = ( sal_uInt32 ) ( cAkt - '0' );
+        rRet = static_cast<sal_uInt32>( cAkt - '0' );
     else
         return nullptr;
 
@@ -601,7 +601,7 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32&
     while( IsNumber( cAkt ) && rRet < ( 0xFFFFFFFF / 10 ) )
     {
         rRet *= 10;
-        rRet += ( sal_uInt32 ) ( cAkt - '0' );
+        rRet += static_cast<sal_uInt32>( cAkt - '0' );
 
         pStart++;
         cAkt = *pStart;

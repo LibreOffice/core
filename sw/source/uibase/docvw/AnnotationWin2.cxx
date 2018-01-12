@@ -152,7 +152,7 @@ namespace sw { namespace annotation {
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
 #define METABUTTON_AREA_WIDTH   30
-#define POSTIT_META_HEIGHT  (sal_Int32)     30
+#define POSTIT_META_HEIGHT  sal_Int32(30)
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
 

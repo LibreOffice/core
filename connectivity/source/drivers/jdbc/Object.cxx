@@ -291,7 +291,7 @@ sal_Int32 java_lang_Object::callIntMethod_ThrowSQL(const char* _pMethodName, jme
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
     ThrowSQLException( t.pEnv, nullptr );
-    return (sal_Int32)out;
+    return static_cast<sal_Int32>(out);
 }
 
 sal_Int32 java_lang_Object::callIntMethod_ThrowRuntime(const char* _pMethodName, jmethodID& _inout_MethodID) const
@@ -302,7 +302,7 @@ sal_Int32 java_lang_Object::callIntMethod_ThrowRuntime(const char* _pMethodName,
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
     ThrowRuntimeException(t.pEnv, nullptr);
-    return (sal_Int32)out;
+    return static_cast<sal_Int32>(out);
 }
 
 sal_Int32 java_lang_Object::callIntMethodWithIntArg_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID,sal_Int32 _nArgument ) const
@@ -313,7 +313,7 @@ sal_Int32 java_lang_Object::callIntMethodWithIntArg_ThrowSQL( const char* _pMeth
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID , _nArgument) );
     ThrowSQLException( t.pEnv, nullptr );
-    return (sal_Int32)out;
+    return static_cast<sal_Int32>(out);
 }
 
 sal_Int32 java_lang_Object::callIntMethodWithIntArg_ThrowRuntime( const char* _pMethodName, jmethodID& _inout_MethodID,sal_Int32 _nArgument ) const
@@ -324,7 +324,7 @@ sal_Int32 java_lang_Object::callIntMethodWithIntArg_ThrowRuntime( const char* _p
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID , _nArgument) );
     ThrowRuntimeException(t.pEnv, nullptr);
-    return (sal_Int32)out;
+    return static_cast<sal_Int32>(out);
 }
 
 void java_lang_Object::callVoidMethod_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID) const
@@ -460,7 +460,7 @@ sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName
     // call method
     jint out = t.pEnv->CallIntMethod( object, _inout_MethodID , str.get());
     ThrowSQLException( t.pEnv, nullptr );
-    return (sal_Int32)out;
+    return static_cast<sal_Int32>(out);
 }
 
 jclass java_lang_Object::findMyClass(const char* _pClassName)

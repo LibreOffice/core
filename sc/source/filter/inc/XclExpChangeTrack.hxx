@@ -411,16 +411,16 @@ public:
 
 inline void XclExpChTrAction::Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress )
 {
-    rStrm   << (sal_uInt16) rAddress.Row()
-            << (sal_uInt16) rAddress.Col();
+    rStrm   << static_cast<sal_uInt16>(rAddress.Row())
+            << static_cast<sal_uInt16>(rAddress.Col());
 }
 
 inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& rRange )
 {
-    rStrm   << (sal_uInt16) rRange.aStart.Row()
-            << (sal_uInt16) rRange.aEnd.Row()
-            << (sal_uInt16) rRange.aStart.Col()
-            << (sal_uInt16) rRange.aEnd.Col();
+    rStrm   << static_cast<sal_uInt16>(rRange.aStart.Row())
+            << static_cast<sal_uInt16>(rRange.aEnd.Row())
+            << static_cast<sal_uInt16>(rRange.aStart.Col())
+            << static_cast<sal_uInt16>(rRange.aEnd.Col());
 }
 
 inline sal_uInt16 XclExpChTrAction::GetTabId( SCTAB nTab ) const

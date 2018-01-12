@@ -295,7 +295,7 @@ sal_Int32 SAL_CALL ScAutoFormatsObj::getCount()
 uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< container::XNamed >  xFormat(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    uno::Reference< container::XNamed >  xFormat(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xFormat.is())
         throw lang::IndexOutOfBoundsException();
     return uno::makeAny(xFormat);
@@ -443,7 +443,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 
     if (IsInserted())
-        return uno::makeAny(uno::Reference< beans::XPropertySet >(GetObjectByIndex_Impl((sal_uInt16)nIndex)));
+        return uno::makeAny(uno::Reference< beans::XPropertySet >(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex))));
     return uno::Any();
 }
 

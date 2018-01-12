@@ -173,7 +173,7 @@ void Views::dropByName( const OUString& elementName )
 void Views::dropByIndex( sal_Int32 index )
 {
     osl::MutexGuard guard( m_xMutex->GetMutex() );
-    if( index < 0 ||  index >= (sal_Int32)m_values.size() )
+    if( index < 0 ||  index >= static_cast<sal_Int32>(m_values.size()) )
     {
         throw css::lang::IndexOutOfBoundsException(
             "VIEWS: Index out of range (allowed 0 to " + OUString::number(m_values.size() -1)

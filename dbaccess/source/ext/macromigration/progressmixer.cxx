@@ -102,10 +102,10 @@ namespace dbmm
                     ++phase
                 )
             {
-                phase->second.nGlobalStart = (sal_uInt32)( nRunningWeight * _rData.nOverallStretch );
+                phase->second.nGlobalStart = static_cast<sal_uInt32>( nRunningWeight * _rData.nOverallStretch );
                 nRunningWeight += phase->second.nWeight;
 
-                sal_uInt32 nNextPhaseStart = (sal_uInt32)( nRunningWeight * _rData.nOverallStretch );
+                sal_uInt32 nNextPhaseStart = static_cast<sal_uInt32>( nRunningWeight * _rData.nOverallStretch );
                 phase->second.nGlobalRange = nNextPhaseStart - phase->second.nGlobalStart;
             }
 
@@ -152,8 +152,7 @@ namespace dbmm
         const PhaseData& rPhase( m_pData->pCurrentPhase->second );
 
         double nLocalProgress = 1.0 * _nPhaseProgress / rPhase.nRange;
-        sal_uInt32 nOverallProgress = (sal_uInt32)
-            ( rPhase.nGlobalStart + nLocalProgress * rPhase.nGlobalRange );
+        sal_uInt32 nOverallProgress = static_cast<sal_uInt32>( rPhase.nGlobalStart + nLocalProgress * rPhase.nGlobalRange );
 
         m_pData->rConsumer.advance( nOverallProgress );
     }

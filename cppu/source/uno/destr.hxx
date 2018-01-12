@@ -132,7 +132,7 @@ inline void _destructAny(
         break;
     }
 #if OSL_DEBUG_LEVEL > 0
-    pAny->pData = reinterpret_cast<void *>((uintptr_t)0xdeadbeef);
+    pAny->pData = reinterpret_cast<void *>(uintptr_t(0xdeadbeef));
 #endif
 
     ::typelib_typedescriptionreference_release( pType );
@@ -146,24 +146,24 @@ inline sal_Int32 idestructElements(
     switch (pElementType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        return (sal_Int32)(sizeof(sal_Unicode));
+        return sal_Int32(sizeof(sal_Unicode));
     case typelib_TypeClass_BOOLEAN:
-        return (sal_Int32)(sizeof(sal_Bool));
+        return sal_Int32(sizeof(sal_Bool));
     case typelib_TypeClass_BYTE:
-        return (sal_Int32)(sizeof(sal_Int8));
+        return sal_Int32(sizeof(sal_Int8));
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        return (sal_Int32)(sizeof(sal_Int16));
+        return sal_Int32(sizeof(sal_Int16));
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        return (sal_Int32)(sizeof(sal_Int32));
+        return sal_Int32(sizeof(sal_Int32));
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        return (sal_Int32)(sizeof(sal_Int64));
+        return sal_Int32(sizeof(sal_Int64));
     case typelib_TypeClass_FLOAT:
-        return (sal_Int32)(sizeof(float));
+        return sal_Int32(sizeof(float));
     case typelib_TypeClass_DOUBLE:
-        return (sal_Int32)(sizeof(double));
+        return sal_Int32(sizeof(double));
 
     case typelib_TypeClass_STRING:
     {
@@ -172,7 +172,7 @@ inline sal_Int32 idestructElements(
         {
             ::rtl_uString_release( pDest[nPos] );
         }
-        return (sal_Int32)(sizeof(rtl_uString *));
+        return sal_Int32(sizeof(rtl_uString *));
     }
     case typelib_TypeClass_TYPE:
     {
@@ -181,7 +181,7 @@ inline sal_Int32 idestructElements(
         {
             ::typelib_typedescriptionreference_release( pDest[nPos] );
         }
-        return (sal_Int32)(sizeof(typelib_TypeDescriptionReference *));
+        return sal_Int32(sizeof(typelib_TypeDescriptionReference *));
     }
     case typelib_TypeClass_ANY:
     {
@@ -190,10 +190,10 @@ inline sal_Int32 idestructElements(
         {
             _destructAny( &pDest[nPos], release );
         }
-        return (sal_Int32)(sizeof(uno_Any));
+        return sal_Int32(sizeof(uno_Any));
     }
     case typelib_TypeClass_ENUM:
-        return (sal_Int32)(sizeof(sal_Int32));
+        return sal_Int32(sizeof(sal_Int32));
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
@@ -224,7 +224,7 @@ inline sal_Int32 idestructElements(
                 release );
         }
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-        return (sal_Int32)(sizeof(uno_Sequence *));
+        return sal_Int32(sizeof(uno_Sequence *));
     }
     case typelib_TypeClass_INTERFACE:
     {
@@ -250,7 +250,7 @@ inline sal_Int32 idestructElements(
                 }
             }
         }
-        return (sal_Int32)(sizeof(void *));
+        return sal_Int32(sizeof(void *));
     }
     default:
         OSL_ASSERT(false);

@@ -1562,7 +1562,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                     nTmpY = pPor->Height() - nTmpY;
                 if( nTmpY < 0 )
                     nTmpY = 0;
-                nX = (sal_uInt16)nTmpY;
+                nX = static_cast<sal_uInt16>(nTmpY);
             }
 
             if( static_cast<SwMultiPortion*>(pPor)->HasBrackets() )

@@ -472,10 +472,10 @@ void write_to_storage_stream( JNIEnv* env, jstring name, jstring key, jint v )
         if ( xOut.is() )
         {
             Sequence< ::sal_Int8 > oneByte(4);
-            oneByte[0] = (sal_Int8) ((v >> 24) & 0xFF);
-            oneByte[1] = (sal_Int8) ((v >> 16) & 0xFF);
-            oneByte[2] = (sal_Int8) ((v >>  8) & 0xFF);
-            oneByte[3] = (sal_Int8) ((v >>  0) & 0xFF);
+            oneByte[0] = static_cast<sal_Int8>((v >> 24) & 0xFF);
+            oneByte[1] = static_cast<sal_Int8>((v >> 16) & 0xFF);
+            oneByte[2] = static_cast<sal_Int8>((v >>  8) & 0xFF);
+            oneByte[3] = static_cast<sal_Int8>((v >>  0) & 0xFF);
 
             xOut->writeBytes(oneByte);
         }

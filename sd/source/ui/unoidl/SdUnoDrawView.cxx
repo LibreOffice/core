@@ -384,7 +384,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
             aValue <<= GetZoom();
             break;
         case DrawController::PROPERTY_ZOOMTYPE:
-            aValue <<= (sal_Int16)css::view::DocumentZoomType::BY_VALUE;
+            aValue <<= sal_Int16(css::view::DocumentZoomType::BY_VALUE);
             break;
         case DrawController::PROPERTY_VIEWOFFSET:
             aValue <<= GetViewOffset();
@@ -438,7 +438,7 @@ sal_Int16 SdUnoDrawView::GetZoom() const
 {
     if (mrDrawViewShell.GetActiveWindow() )
     {
-        return (sal_Int16)mrDrawViewShell.GetActiveWindow()->GetZoom();
+        return static_cast<sal_Int16>(mrDrawViewShell.GetActiveWindow()->GetZoom());
     }
     else
     {

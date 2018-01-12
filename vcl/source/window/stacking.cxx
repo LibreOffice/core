@@ -625,7 +625,7 @@ bool Window::IsTopWindow() const
         return false;
 
     ImplGetWinData();
-    if( mpWindowImpl->mpWinData->mnIsTopWindow == (sal_uInt16)~0)    // still uninitialized
+    if( mpWindowImpl->mpWinData->mnIsTopWindow == sal_uInt16(~0))    // still uninitialized
     {
         // #113722#, cache result of expensive queryInterface call
         vcl::Window *pThisWin = const_cast<vcl::Window*>(this);

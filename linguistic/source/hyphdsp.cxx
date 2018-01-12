@@ -110,7 +110,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                     if (!bSkip  &&  nHyphIdx >= 0)
                     {
                         if (nLeading <= nMaxLeading) {
-                            nHyphenationPos = (sal_Int16) nHyphIdx;
+                            nHyphenationPos = static_cast<sal_Int16>(nHyphIdx);
                             nOrigHyphPos = i;
                         }
                     }
@@ -220,7 +220,7 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
                 else
                 {
                     if (!bSkip  &&  nHyphIdx >= 0)
-                        pPos[ nHyphCount++ ] = (sal_Int16) nHyphIdx;
+                        pPos[ nHyphCount++ ] = static_cast<sal_Int16>(nHyphIdx);
                     bSkip = true;   //! multiple '=' should count as one only
                 }
             }
@@ -305,7 +305,7 @@ Reference< XHyphenatedWord > SAL_CALL
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             bWordModified |= RemoveControlChars( aChkWord );
-        sal_Int16 nChkMaxLeading = (sal_Int16) GetPosInWordToCheck( rWord, nMaxLeading );
+        sal_Int16 nChkMaxLeading = static_cast<sal_Int16>(GetPosInWordToCheck( rWord, nMaxLeading ));
 
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
@@ -379,7 +379,7 @@ Reference< XHyphenatedWord > SAL_CALL
                     xRes = xHyph->hyphenate( aChkWord, rLocale, nChkMaxLeading,
                                             rProperties );
 
-                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                pEntry->nLastTriedSvcIndex = static_cast<sal_Int16>(i);
                 ++i;
 
                 // if language is not supported by the services
@@ -440,7 +440,7 @@ Reference< XHyphenatedWord > SAL_CALL
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             bWordModified |= RemoveControlChars( aChkWord );
-        sal_Int16 nChkIndex = (sal_Int16) GetPosInWordToCheck( rWord, nIndex );
+        sal_Int16 nChkIndex = static_cast<sal_Int16>(GetPosInWordToCheck( rWord, nIndex ));
 
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
@@ -510,7 +510,7 @@ Reference< XHyphenatedWord > SAL_CALL
                     xRes = xHyph->queryAlternativeSpelling( aChkWord, rLocale,
                                 nChkIndex, rProperties );
 
-                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                pEntry->nLastTriedSvcIndex = static_cast<sal_Int16>(i);
                 ++i;
 
                 // if language is not supported by the services
@@ -631,7 +631,7 @@ Reference< XPossibleHyphens > SAL_CALL
                 if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
                     xRes = xHyph->createPossibleHyphens( aChkWord, rLocale, rProperties );
 
-                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                pEntry->nLastTriedSvcIndex = static_cast<sal_Int16>(i);
                 ++i;
 
                 // if language is not supported by the services

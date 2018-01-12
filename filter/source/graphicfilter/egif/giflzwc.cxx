@@ -53,7 +53,7 @@ inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
         if( nBlockBufSize==255 )
             FlushBlockBuf();
 
-        pBlockBuf[nBlockBufSize++] = (sal_uInt8) nBitsBuf;
+        pBlockBuf[nBlockBufSize++] = static_cast<sal_uInt8>(nBitsBuf);
         nBitsBuf >>= 8;
         nBitsBufSize -= 8;
     }
@@ -65,7 +65,7 @@ inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nC
     if( nBitsBufSize+nCodeLen>32 )
         FlushBitsBufsFullBytes();
 
-    nBitsBuf |= (sal_uInt32)nCode << nBitsBufSize;
+    nBitsBuf |= static_cast<sal_uInt32>(nCode) << nBitsBufSize;
     nBitsBufSize = nBitsBufSize + nCodeLen;
 }
 
@@ -139,13 +139,13 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
         nTableSize=nEOICode+1;
         nCodeSize=nDataSize+1;
 
-        pIDOS=new GIFImageDataOutputStream(rGIF,(sal_uInt8)nDataSize);
+        pIDOS=new GIFImageDataOutputStream(rGIF,static_cast<sal_uInt8>(nDataSize));
         pTable=new GIFLZWCTreeNode[4096];
 
         for (i=0; i<4096; i++)
         {
             pTable[i].pBrother = pTable[i].pFirstChild = nullptr;
-            pTable[i].nValue = (sal_uInt8) ( pTable[i].nCode = i );
+            pTable[i].nValue = static_cast<sal_uInt8>( pTable[i].nCode = i );
         }
 
         pPrefix = nullptr;
@@ -195,7 +195,7 @@ void GIFLZWCompressor::Compress(sal_uInt8* pSrc, sal_uInt32 nSize)
                 }
                 else
                 {
-                    if(nTableSize==(sal_uInt16)(1<<nCodeSize))
+                    if(nTableSize==static_cast<sal_uInt16>(1<<nCodeSize))
                         nCodeSize++;
 
                     p=pTable+(nTableSize++);

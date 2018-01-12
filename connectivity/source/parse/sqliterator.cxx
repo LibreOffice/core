@@ -712,7 +712,7 @@ namespace
         {
             if( _pColumnRef->count() > 1 )
             {
-                for ( sal_Int32 i=0; i<((sal_Int32)_pColumnRef->count())-2; ++i )
+                for ( sal_Int32 i=0; i<static_cast<sal_Int32>(_pColumnRef->count())-2; ++i )
                     _pColumnRef->getChild(i)->parseNodeToStr( _out_rTableRange, _rxConnection, nullptr, false, false );
                 _out_rColumnName = _pColumnRef->getChild( _pColumnRef->count()-1 )->getChild(0)->getTokenValue();
             }
@@ -1106,7 +1106,7 @@ namespace
     OUString lcl_generateParameterName( const OSQLParseNode& _rParentNode, const OSQLParseNode& _rParamNode )
     {
         OUString sColumnName(  "param"  );
-        const sal_Int32 nCount = (sal_Int32)_rParentNode.count();
+        const sal_Int32 nCount = static_cast<sal_Int32>(_rParentNode.count());
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             if ( _rParentNode.getChild(i) == &_rParamNode )

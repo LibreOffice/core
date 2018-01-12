@@ -55,7 +55,7 @@ AccessibleBrowseBoxTable::getAccessibleChild( sal_Int32 nChildIndex )
 
     ensureIsValidIndex( nChildIndex );
     return mpBrowseBox->CreateAccessibleCell(
-        implGetRow( nChildIndex ), (sal_Int16)implGetColumn( nChildIndex ) );
+        implGetRow( nChildIndex ), static_cast<sal_Int16>(implGetColumn( nChildIndex )) );
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
@@ -105,7 +105,7 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleColumnDescription( sal_
     ensureIsAlive();
 
     ensureIsValidColumn( nColumn );
-    return mpBrowseBox->GetColumnDescription( (sal_uInt16)nColumn );
+    return mpBrowseBox->GetColumnDescription( static_cast<sal_uInt16>(nColumn) );
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowHeaders()
@@ -167,7 +167,7 @@ Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTable::getAccessibleCellAt(
     ensureIsAlive();
 
     ensureIsValidAddress( nRow, nColumn );
-    return mpBrowseBox->CreateAccessibleCell( nRow, (sal_Int16)nColumn );
+    return mpBrowseBox->CreateAccessibleCell( nRow, static_cast<sal_Int16>(nColumn) );
 }
 
 sal_Bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleSelected(

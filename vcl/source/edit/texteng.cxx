@@ -1607,9 +1607,9 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
     aTmpLine.SetEnd( aTmpLine.GetStart() );
 
     if ( ImpGetAlign() == TxtAlign::Center )
-        aTmpLine.SetStartX( (short)(mnMaxTextWidth / 2) );
+        aTmpLine.SetStartX( static_cast<short>(mnMaxTextWidth / 2) );
     else if ( ImpGetAlign() == TxtAlign::Right )
-        aTmpLine.SetStartX( (short)mnMaxTextWidth );
+        aTmpLine.SetStartX( static_cast<short>(mnMaxTextWidth) );
     else
         aTmpLine.SetStartX( mpDoc->GetLeftMargin() );
 
@@ -2272,9 +2272,9 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
             if ( nSpace > 0 )
             {
                 if ( ImpGetAlign() == TxtAlign::Center )
-                    pLine->SetStartX( (sal_uInt16)(nSpace / 2) );
+                    pLine->SetStartX( static_cast<sal_uInt16>(nSpace / 2) );
                 else    // TxtAlign::Right
-                    pLine->SetStartX( (sal_uInt16)nSpace );
+                    pLine->SetStartX( static_cast<sal_uInt16>(nSpace) );
             }
         }
         else

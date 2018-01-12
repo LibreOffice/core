@@ -425,11 +425,11 @@ namespace drawinglayer
                 }
 
                 // create segments (a + 1 .. nSteps)
-                const double fStepSize(1.0 / (double)nSteps);
+                const double fStepSize(1.0 / static_cast<double>(nSteps));
 
                 for(sal_uInt32 a(0); a < nSteps; a++)
                 {
-                    const double fStep((double)(a + 1) * fStepSize);
+                    const double fStep(static_cast<double>(a + 1) * fStepSize);
                     basegfx::B2DPolyPolygon aNewPoly(bBackScale ? basegfx::utils::interpolate(aFront, aBack, fStep) : aFront);
                     basegfx::B3DHomMatrix aNewMat;
                     aNewMat.rotate(0.0, fRotation * fStep, 0.0);

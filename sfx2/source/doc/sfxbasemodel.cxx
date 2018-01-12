@@ -2925,7 +2925,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             // TODO/LATER: the sequence of PropertyValue should replace the hash completely in future
             sal_Int32 nMPHTmp = 0;
             pModifyPasswordInfoItem->GetValue() >>= nMPHTmp;
-            nModifyPasswordHash = (sal_uInt32)nMPHTmp;
+            nModifyPasswordHash = static_cast<sal_uInt32>(nMPHTmp);
             pModifyPasswordInfoItem->GetValue() >>= aModifyPasswordInfo;
         }
         pItemSet->ClearItem(SID_MODIFYPASSWORDINFO);

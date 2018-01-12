@@ -850,9 +850,9 @@ void SvxLineDefTabPage::FillDash_Impl()
         eXDS = css::drawing::DashStyle_RECT;
 
     aDash.SetDashStyle( eXDS );
-    aDash.SetDots( (sal_uInt8) m_pNumFldNumber1->GetValue() );
+    aDash.SetDots( static_cast<sal_uInt8>(m_pNumFldNumber1->GetValue()) );
     aDash.SetDotLen( m_pLbType1->GetSelectedEntryPos() == 0 ? 0 : GetCoreValue( *m_pMtrLength1, ePoolUnit ) );
-    aDash.SetDashes( (sal_uInt8) m_pNumFldNumber2->GetValue() );
+    aDash.SetDashes( static_cast<sal_uInt8>(m_pNumFldNumber2->GetValue()) );
     aDash.SetDashLen( m_pLbType2->GetSelectedEntryPos() == 0 ? 0 : GetCoreValue( *m_pMtrLength2, ePoolUnit ) );
     aDash.SetDistance( GetCoreValue( *m_pMtrDistance, ePoolUnit ) );
 

@@ -187,7 +187,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             {
                 sal_Int32 nScale;
                 if (::sax::Converter::convertPercent( nScale, sValue ))
-                    mnStartScale = (sal_Int16)nScale;
+                    mnStartScale = static_cast<sal_Int16>(nScale);
             }
             else if( IsXMLToken( aAttrLocalName, XML_SPEED ) )
             {

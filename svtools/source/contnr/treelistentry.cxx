@@ -200,12 +200,12 @@ void SvTreeListEntry::SetUserData( void* pPtr )
 
 bool SvTreeListEntry::HasChildrenOnDemand() const
 {
-    return (bool)(nEntryFlags & SvTLEntryFlags::CHILDREN_ON_DEMAND);
+    return static_cast<bool>(nEntryFlags & SvTLEntryFlags::CHILDREN_ON_DEMAND);
 }
 
 bool SvTreeListEntry::HasInUseEmphasis() const
 {
-    return (bool)(nEntryFlags & SvTLEntryFlags::IN_USE);
+    return static_cast<bool>(nEntryFlags & SvTLEntryFlags::IN_USE);
 }
 
 

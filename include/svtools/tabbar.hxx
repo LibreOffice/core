@@ -268,10 +268,10 @@ been carried out.
 
 class Button;
 
-#define WB_RANGESELECT      ((WinBits)0x00200000)
-#define WB_MULTISELECT      ((WinBits)0x00400000)
-#define WB_MINSCROLL        ((WinBits)0x20000000)
-#define WB_INSERTTAB        ((WinBits)0x40000000)
+#define WB_RANGESELECT      (WinBits(0x00200000))
+#define WB_MULTISELECT      (WinBits(0x00400000))
+#define WB_MINSCROLL        (WinBits(0x20000000))
+#define WB_INSERTTAB        (WinBits(0x40000000))
 #define WB_STDTABBAR        WB_BORDER
 
 // Page bits

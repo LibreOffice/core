@@ -291,7 +291,7 @@ bool SwEnvItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         case MID_ENV_SEND_FROM_TOP : rVal <<= m_nSendFromTop; break;
         case MID_ENV_WIDTH : rVal <<= m_nWidth; break;
         case MID_ENV_HEIGHT : rVal <<= m_nHeight; break;
-        case MID_ENV_ALIGN            : rVal <<= (sal_Int16) m_eAlign; break;
+        case MID_ENV_ALIGN            : rVal <<= static_cast<sal_Int16>(m_eAlign); break;
         case MID_ENV_PRINT_FROM_ABOVE  : rVal <<= m_bPrintFromAbove; break;
         case MID_ENV_SHIFT_RIGHT      : rVal <<= m_nShiftRight; break;
         case MID_ENV_SHIFT_DOWN       : rVal <<= m_nShiftDown; break;

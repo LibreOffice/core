@@ -87,7 +87,7 @@ bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
 
     Reference<XUnoTunnel> xTunnel(rVal, UNO_QUERY);
     if( xTunnel.is() )
-        pContainer = reinterpret_cast<SvUnoAttributeContainer*>((sal_uLong)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId()));
+        pContainer = reinterpret_cast<SvUnoAttributeContainer*>(static_cast<sal_uLong>(xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId())));
 
     if( pContainer )
     {
@@ -171,7 +171,7 @@ bool SvXMLAttrContainerItem::AddAttr( const OUString& rPrefix,
 
 sal_uInt16 SvXMLAttrContainerItem::GetAttrCount() const
 {
-    return (sal_uInt16)pImpl->GetAttrCount();
+    return static_cast<sal_uInt16>(pImpl->GetAttrCount());
 }
 
 OUString SvXMLAttrContainerItem::GetAttrNamespace( sal_uInt16 i ) const

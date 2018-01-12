@@ -105,7 +105,7 @@ class CommentList
         std::vector<Comment> cmLst;
         int getSize ()
         {
-            return (int)cmLst.size();
+            return static_cast<int>(cmLst.size());
         }
         const Comment& getCommentAtIndex (int index);
 };

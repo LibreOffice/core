@@ -623,8 +623,8 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
         {
             if(mbGeometrySelected)
             {
-                double fNewRotX = mfSaveActionStartVer - ((double)aDeltaPos.Y() * F_PI180);
-                double fNewRotY = mfSaveActionStartHor + ((double)aDeltaPos.X() * F_PI180);
+                double fNewRotX = mfSaveActionStartVer - (static_cast<double>(aDeltaPos.Y()) * F_PI180);
+                double fNewRotY = mfSaveActionStartHor + (static_cast<double>(aDeltaPos.X()) * F_PI180);
 
                 // cut horizontal
                 while(fNewRotY < 0.0)
@@ -658,8 +658,8 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 // interaction in progress
-                double fNewPosHor = mfSaveActionStartHor + ((double)aDeltaPos.X());
-                double fNewPosVer = mfSaveActionStartVer - ((double)aDeltaPos.Y());
+                double fNewPosHor = mfSaveActionStartHor + static_cast<double>(aDeltaPos.X());
+                double fNewPosVer = mfSaveActionStartVer - static_cast<double>(aDeltaPos.Y());
 
                 // cut horizontal
                 while(fNewPosHor < 0.0)
@@ -1221,8 +1221,8 @@ IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove, ScrollBar*, void)
     const sal_Int32 nVer(maVerScroller->GetThumbPos());
 
     maLightControl->SetPosition(
-        ((double)nHor) / 100.0,
-        ((double)((18000 - nVer) - 9000)) / 100.0);
+        static_cast<double>(nHor) / 100.0,
+        static_cast<double>((18000 - nVer) - 9000) / 100.0);
 
     if(maUserInteractiveChangeCallback.IsSet())
     {

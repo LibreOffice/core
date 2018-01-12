@@ -74,7 +74,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
     if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
         return 0;
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), rViewData.GetPPTX() );
+        return static_cast<sal_uInt16>(ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), rViewData.GetPPTX() ));
 }
 
 OUString ScColBar::GetEntryText( SCCOLROW nEntryNo ) const
@@ -97,7 +97,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (sal_uInt16) ( nNewSize / rViewData.GetPPTX() );
+        nSizeTwips = static_cast<sal_uInt16>( nNewSize / rViewData.GetPPTX() );
 
     const ScMarkData& rMark = rViewData.GetMarkData();
 
@@ -196,7 +196,7 @@ void ScColBar::DrawInvert( long nDragPosP )
 
 OUString ScColBar::GetDragHelp( long nVal )
 {
-    long nTwips = (long) ( nVal / pTabView->GetViewData().GetPPTX() );
+    long nTwips = static_cast<long>( nVal / pTabView->GetViewData().GetPPTX() );
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
@@ -234,8 +234,8 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
     if (pDoc->RowHidden(nEntryNo, nTab, nullptr, &nLastRow))
         return 0;
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
-                    nTab ), rViewData.GetPPTY() );
+        return static_cast<sal_uInt16>(ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
+                    nTab ), rViewData.GetPPTY() ));
 }
 
 OUString ScRowBar::GetEntryText( SCCOLROW nEntryNo ) const
@@ -256,7 +256,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (sal_uInt16) ( nNewSize / rViewData.GetPPTY() );
+        nSizeTwips = static_cast<sal_uInt16>( nNewSize / rViewData.GetPPTY() );
 
     const ScMarkData& rMark = rViewData.GetMarkData();
 
@@ -355,7 +355,7 @@ void ScRowBar::DrawInvert( long nDragPosP )
 
 OUString ScRowBar::GetDragHelp( long nVal )
 {
-    long nTwips = (long) ( nVal / pTabView->GetViewData().GetPPTY() );
+    long nTwips = static_cast<long>( nVal / pTabView->GetViewData().GetPPTY() );
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
 }
 

@@ -279,7 +279,7 @@ namespace xmloff
         bool const bSuccess = ::sax::Converter::convertMeasure(
                 nWidth, _rStrImpValue, util::MeasureUnit::POINT);
         if (bSuccess)
-            _rValue <<= (sal_Int16)nWidth;
+            _rValue <<= static_cast<sal_Int16>(nWidth);
 
         return bSuccess;
     }
@@ -311,7 +311,7 @@ namespace xmloff
         if (bSucces)
         {
             fValue *= 10;
-            _rValue <<= (float)fValue;
+            _rValue <<= static_cast<float>(fValue);
         }
 
         return bSucces;
@@ -325,7 +325,7 @@ namespace xmloff
         if (bSuccess)
         {
             OUStringBuffer sValue;
-            ::sax::Converter::convertDouble(sValue, ((double)fAngle) / 10);
+            ::sax::Converter::convertDouble(sValue, static_cast<double>(fAngle) / 10);
             _rStrExpValue = sValue.makeStringAndClear();
         }
 

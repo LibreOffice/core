@@ -256,8 +256,8 @@ void Calendar_jewish::mapFromGregorian()
 
     fieldValue[CalendarFieldIndex::ERA] = hd.GetYear() <= 0 ? 0 : 1;
     fieldValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>( hd.GetMonth() - 1 );
-    fieldValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)hd.GetDay();
-    fieldValue[CalendarFieldIndex::YEAR] = (sal_Int16)(hd.GetYear() <= 0 ? 1 - hd.GetYear() : hd.GetYear());
+    fieldValue[CalendarFieldIndex::DAY_OF_MONTH] = static_cast<sal_Int16>(hd.GetDay());
+    fieldValue[CalendarFieldIndex::YEAR] = static_cast<sal_Int16>(hd.GetYear() <= 0 ? 1 - hd.GetYear() : hd.GetYear());
 }
 
 #define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH))
@@ -273,8 +273,8 @@ void Calendar_jewish::mapToGregorian()
 
         fieldSetValue[CalendarFieldIndex::ERA] = gd.GetYear() <= 0 ? 0 : 1;
         fieldSetValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>( gd.GetMonth() - 1 );
-        fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)gd.GetDay();
-        fieldSetValue[CalendarFieldIndex::YEAR] = (sal_Int16)(gd.GetYear() <= 0 ? 1 - gd.GetYear() : gd.GetYear());
+        fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = static_cast<sal_Int16>(gd.GetDay());
+        fieldSetValue[CalendarFieldIndex::YEAR] = static_cast<sal_Int16>(gd.GetYear() <= 0 ? 1 - gd.GetYear() : gd.GetYear());
         fieldSet |= FIELDS;
     }
 }

@@ -39,7 +39,7 @@ void XMLElement::addSubElement( Reference< xml::sax::XAttributeList > const & xE
 
 Reference< xml::sax::XAttributeList > const & XMLElement::getSubElement( sal_Int32 nIndex )
 {
-    return _subElems[ (size_t)nIndex ];
+    return _subElems[ static_cast<size_t>(nIndex) ];
 }
 
 void XMLElement::dumpSubElements( Reference< xml::sax::XDocumentHandler > const & xOut )
@@ -69,13 +69,13 @@ sal_Int16 XMLElement::getLength()
 
 OUString XMLElement::getNameByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    OSL_ASSERT( static_cast<size_t>(nPos) < _attrNames.size() );
     return _attrNames[ nPos ];
 }
 
 OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    OSL_ASSERT( static_cast<size_t>(nPos) < _attrNames.size() );
     // xxx todo
     return OUString();
 }
@@ -88,7 +88,7 @@ OUString XMLElement::getTypeByName( OUString const & /*rName*/ )
 
 OUString XMLElement::getValueByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    OSL_ASSERT( static_cast<size_t>(nPos) < _attrNames.size() );
     return _attrValues[ nPos ];
 }
 

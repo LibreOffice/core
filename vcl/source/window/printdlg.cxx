@@ -147,7 +147,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
     // quality of the preview, e.g. when its height approaches the number of text lines
     // find a good scaling factor
 
-    double aAspectRatio = aScaledSize.Height() / (double) aScaledSize.Width();
+    double aAspectRatio = aScaledSize.Height() / static_cast<double>(aScaledSize.Width());
 
     aScaledSize.Width()  = PREVIEW_BITMAP_WIDTH;
     aScaledSize.Height() = PREVIEW_BITMAP_WIDTH * aAspectRatio;

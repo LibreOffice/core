@@ -221,7 +221,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
 
                     if (!bDone)
                         pViewData->GetViewShell()->
-                            InsertURL( rName, rURL, rTarget, (sal_uInt16) eMode );
+                            InsertURL( rName, rURL, rTarget, static_cast<sal_uInt16>(eMode) );
 
                     //  If "text" is received by InsertURL of ViewShell, then the DrawShell is turned off !!!
                 }

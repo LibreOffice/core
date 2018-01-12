@@ -224,7 +224,7 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
             RowInfo* pThisRowInfo = &pRowInfo[rArrRow];
             pThisRowInfo->pCellInfo = nullptr;                 // is loaded below
 
-            sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * fRowScale );
+            sal_uInt16 nHeight = static_cast<sal_uInt16>( nDocHeight * fRowScale );
             if (!nHeight)
                 nHeight = 1;
 
@@ -276,7 +276,7 @@ void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, 
         {
             if (!pDoc->ColHidden(nX, nTab))
             {
-                sal_uInt16 nThisWidth = (sal_uInt16) (pDoc->GetColWidth( nX, nTab ) * fColScale);
+                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(pDoc->GetColWidth( nX, nTab ) * fColScale);
                 if (!nThisWidth)
                     nThisWidth = 1;
 
@@ -453,7 +453,7 @@ void ScDocument::FillInfo(
             // TODO: Optimize this loop.
             if (!ColHidden(nX, nTab))
             {
-                sal_uInt16 nThisWidth = (sal_uInt16) (GetColWidth( nX, nTab ) * fColScale);
+                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(GetColWidth( nX, nTab ) * fColScale);
                 if (!nThisWidth)
                     nThisWidth = 1;
 

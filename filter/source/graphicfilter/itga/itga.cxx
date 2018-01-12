@@ -312,9 +312,9 @@ bool TGAReader::ImplReadBody()
                             m_rTGA.ReadUInt16( nRGB16 );
                             if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                 return false;
-                            nRed = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 16 );
-                            nGreen = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 8 );
-                            nBlue = (sal_uInt8)( mpColorMap[ nRGB16 ] );
+                            nRed = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 16 );
+                            nGreen = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 8 );
+                            nBlue = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] );
                             if ( !m_rTGA.good())
                                 return false;
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
@@ -343,9 +343,9 @@ bool TGAReader::ImplReadBody()
                                     return false;
                                 if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                     return false;
-                                nRed = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 16 );
-                                nGreen = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 8 );
-                                nBlue = (sal_uInt8)( mpColorMap[ nRGB16 ] );
+                                nRed = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 16 );
+                                nGreen = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 8 );
+                                nBlue = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] );
                                 if ( !m_rTGA.good())
                                     return false;
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
@@ -554,9 +554,9 @@ bool TGAReader::ImplReadBody()
                             m_rTGA.ReadUInt16( nRGB16 );
                             if ( !m_rTGA.good())
                                 return false;
-                            nRed = (sal_uInt8)( nRGB16 >> 7 ) & 0xf8;
-                            nGreen = (sal_uInt8)( nRGB16 >> 2 ) & 0xf8;
-                            nBlue = (sal_uInt8)( nRGB16 << 3 ) & 0xf8;
+                            nRed = static_cast<sal_uInt8>( nRGB16 >> 7 ) & 0xf8;
+                            nGreen = static_cast<sal_uInt8>( nRGB16 >> 2 ) & 0xf8;
+                            nBlue = static_cast<sal_uInt8>( nRGB16 << 3 ) & 0xf8;
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
@@ -581,9 +581,9 @@ bool TGAReader::ImplReadBody()
                                 m_rTGA.ReadUInt16( nRGB16 );
                                 if ( !m_rTGA.good())
                                     return false;
-                                nRed = (sal_uInt8)( nRGB16 >> 7 ) & 0xf8;
-                                nGreen = (sal_uInt8)( nRGB16 >> 2 ) & 0xf8;
-                                nBlue = (sal_uInt8)( nRGB16 << 3 ) & 0xf8;
+                                nRed = static_cast<sal_uInt8>( nRGB16 >> 7 ) & 0xf8;
+                                nGreen = static_cast<sal_uInt8>( nRGB16 >> 2 ) & 0xf8;
+                                nBlue = static_cast<sal_uInt8>( nRGB16 << 3 ) & 0xf8;
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                                 nX += nXAdd;
                                 nXCount++;
@@ -627,9 +627,9 @@ bool TGAReader::ImplReadBody()
                                 return false;
                             if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                 return false;
-                            nRed = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 16 );
-                            nGreen = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 8 );
-                            nBlue = (sal_uInt8)( mpColorMap[ nRGB16 ] );
+                            nRed = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 16 );
+                            nGreen = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 8 );
+                            nBlue = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] );
                             mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         break;
@@ -685,9 +685,9 @@ bool TGAReader::ImplReadBody()
                             m_rTGA.ReadUInt16( nRGB16 );
                             if ( !m_rTGA.good())
                                 return false;
-                            nRed = (sal_uInt8)( nRGB16 >> 7 ) & 0xf8;
-                            nGreen = (sal_uInt8)( nRGB16 >> 2 ) & 0xf8;
-                            nBlue = (sal_uInt8)( nRGB16 << 3 ) & 0xf8;
+                            nRed = static_cast<sal_uInt8>( nRGB16 >> 7 ) & 0xf8;
+                            nGreen = static_cast<sal_uInt8>( nRGB16 >> 2 ) & 0xf8;
+                            nBlue = static_cast<sal_uInt8>( nRGB16 << 3 ) & 0xf8;
                             mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         break;
@@ -775,8 +775,8 @@ bool TGAReader::ImplReadPalette()
             mpAcc->SetPaletteEntryCount( nColors );
             for ( sal_uInt16 i = 0; i < nColors; i++ )
             {
-                mpAcc->SetPaletteColor( i, Color( (sal_uInt8)( mpColorMap[ i ] >> 16 ),
-                    (sal_uInt8)( mpColorMap[ i ] >> 8 ), (sal_uInt8)(mpColorMap[ i ] ) ) );
+                mpAcc->SetPaletteColor( i, Color( static_cast<sal_uInt8>( mpColorMap[ i ] >> 16 ),
+                    static_cast<sal_uInt8>( mpColorMap[ i ] >> 8 ), static_cast<sal_uInt8>(mpColorMap[ i ] ) ) );
             }
         }
     }

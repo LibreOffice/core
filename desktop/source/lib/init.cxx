@@ -2075,7 +2075,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                 {
                     if (pViewShell->getPart() == nPart)
                     {
-                        nViewId = (sal_Int32)pViewShell->GetViewShellId();
+                        nViewId = static_cast<sal_Int32>(pViewShell->GetViewShellId());
                         doc_setView(pThis, nViewId);
                         break;
                     }
@@ -2636,7 +2636,7 @@ static char* getFonts (const char* pCommand)
             while (pAry[nSizeCount])
             {
                 boost::property_tree::ptree aChild;
-                aChild.put("", (float)pAry[nSizeCount] / 10);
+                aChild.put("", static_cast<float>(pAry[nSizeCount]) / 10);
                 aChildren.push_back(std::make_pair("", aChild));
                 nSizeCount++;
             }

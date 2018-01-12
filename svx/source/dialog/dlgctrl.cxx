@@ -810,10 +810,10 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
         for (i = 1; i < nLines; i++)
         {
             // horizontal
-            nTmp = (sal_uInt16) (aRectSize.Height() * i / nLines);
+            nTmp = static_cast<sal_uInt16>(aRectSize.Height() * i / nLines);
             rRenderContext.DrawLine(Point(0, nTmp), Point(aRectSize.Width(), nTmp));
             // vertically
-            nTmp = (sal_uInt16) ( aRectSize.Width() * i / nLines );
+            nTmp = static_cast<sal_uInt16>( aRectSize.Width() * i / nLines );
             rRenderContext.DrawLine(Point(nTmp, 0), Point(nTmp, aRectSize.Height()));
         }
 

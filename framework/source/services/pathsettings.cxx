@@ -1076,7 +1076,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
     // SAFE ->
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    sal_Int32 c = (sal_Int32)m_lPaths.size();
+    sal_Int32 c = static_cast<sal_Int32>(m_lPaths.size());
     sal_Int32 i = 0;
     m_lPropDesc.realloc(c*IDGROUP_COUNT);
 

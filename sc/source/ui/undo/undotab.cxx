@@ -277,7 +277,7 @@ void ScUndoDeleteTab::SetChangeTrack()
             aRange.aStart.SetTab( theTabs[i] );
             aRange.aEnd.SetTab( theTabs[i] );
             pChangeTrack->AppendDeleteRange( aRange, pRefUndoDoc,
-                nTmpChangeAction, nEndChangeAction, (short) i );
+                nTmpChangeAction, nEndChangeAction, static_cast<short>(i) );
         }
     }
     else

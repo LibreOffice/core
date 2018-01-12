@@ -47,7 +47,7 @@ using namespace ::com::sun::star::accessibility;
 
 FrameBorderType GetFrameBorderTypeFromIndex( size_t nIndex )
 {
-    DBG_ASSERT( nIndex < (size_t)FRAMEBORDERTYPE_COUNT,
+    DBG_ASSERT( nIndex < size_t(FRAMEBORDERTYPE_COUNT),
         "svx::GetFrameBorderTypeFromIndex - invalid index" );
     return static_cast< FrameBorderType >( nIndex + 1 );
 }

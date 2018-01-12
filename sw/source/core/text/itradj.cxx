@@ -467,7 +467,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                 else
                     nCompress = 10000 - nCompress;
 
-                ( pCurrent->GetKanaComp() )[ nKanaIdx ] = (sal_uInt16)nCompress;
+                ( pCurrent->GetKanaComp() )[ nKanaIdx ] = static_cast<sal_uInt16>(nCompress);
                 nKanaDiffSum = 0;
             }
 

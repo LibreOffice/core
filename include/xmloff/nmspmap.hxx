@@ -56,7 +56,7 @@ struct QNamePairHash
 {
     size_t operator()( const QNamePair &r1 ) const
     {
-        return (size_t) r1.second.hashCode() + r1.first;
+        return static_cast<size_t>(r1.second.hashCode()) + r1.first;
     }
 };
 

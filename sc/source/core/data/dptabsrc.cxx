@@ -1542,9 +1542,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_POSITION )
-        aRet <<= (sal_Int32) pSource->GetPosition( nDim );
+        aRet <<= static_cast<sal_Int32>(pSource->GetPosition( nDim ));
     else if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
-        aRet <<= (sal_Int32) getUsedHierarchy();
+        aRet <<= static_cast<sal_Int32>(getUsedHierarchy());
     else if ( aPropertyName == SC_UNO_DP_ORIENTATION )
     {
         sheet::DataPilotFieldOrientation eVal = getOrientation();
@@ -2225,7 +2225,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                 case SC_DAPI_LEVEL_YEAR:
                     {
                         const ScDPItemData* pLastNumData = nullptr;
-                        for ( SCROW n = 0; n < (SCROW) pSource->GetData()->GetColumnEntries(nDim).size(); n-- )
+                        for ( SCROW n = 0; n < static_cast<SCROW>(pSource->GetData()->GetColumnEntries(nDim).size()); n-- )
                         {
                             const ScDPItemData* pData  = GetSrcItemDataByIndex( n );
                             if ( pData && pData->HasStringData() )
@@ -2241,10 +2241,10 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                             double fLastVal = pLastNumData->GetValue();
 
                             long nFirstYear = pSource->GetData()->GetDatePart(
-                                        (long)::rtl::math::approxFloor( fFirstVal ),
+                                        static_cast<long>(::rtl::math::approxFloor( fFirstVal )),
                                         nHier, nLev );
                             long nLastYear = pSource->GetData()->GetDatePart(
-                                        (long)::rtl::math::approxFloor( fLastVal ),
+                                        static_cast<long>(::rtl::math::approxFloor( fLastVal )),
                                         nHier, nLev );
 
                             nMbrCount = nLastYear + 1 - nFirstYear;
@@ -2420,7 +2420,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
 
                     double fFirstVal = pSource->GetData()->GetMemberByIndex( nSrcDim, 0 )->GetValue();
                     long nFirstYear = pSource->GetData()->GetDatePart(
-                                        (long)::rtl::math::approxFloor( fFirstVal ),
+                                        static_cast<long>(::rtl::math::approxFloor( fFirstVal )),
                                         nHier, nLev );
 
                     nVal = nFirstYear + nIndex;
@@ -2511,7 +2511,7 @@ bool ScDPMember::IsNamedItem(SCROW nIndex) const
         if (pData->IsValue())
         {
             long nComp = pSource->GetData()->GetDatePart(
-                (long)::rtl::math::approxFloor( pData->GetValue() ),
+                static_cast<long>(::rtl::math::approxFloor( pData->GetValue() )),
                 nHier, nLev );
             //  fValue is converted from integer, so simple comparison works
             const ScDPItemData* pData2 = GetItemData();
@@ -2658,7 +2658,7 @@ const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)
 const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex(SCROW nIndex)
 {
     const std::vector< SCROW >& memberIds = pSource->GetData()->GetColumnEntries( nDim );
-    if ( nIndex >= (long )(memberIds.size()) || nIndex < 0 )
+    if ( nIndex >= static_cast<long>(memberIds.size()) || nIndex < 0 )
         return nullptr;
     SCROW nId =  memberIds[ nIndex ];
     return pSource->GetItemDataById( nDim, nId );

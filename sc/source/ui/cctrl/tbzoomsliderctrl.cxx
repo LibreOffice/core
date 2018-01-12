@@ -353,7 +353,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
        for ( sal_Int32 j = 0; j < rSnappingPoints.getLength(); ++j )
        {
            const sal_Int32 nSnappingPoint = rSnappingPoints[j];
-           aTmpSnappingPoints.insert( (sal_uInt16)nSnappingPoint );
+           aTmpSnappingPoints.insert( static_cast<sal_uInt16>(nSnappingPoint) );
        }
 
        // remove snapping points that are to close to each other:

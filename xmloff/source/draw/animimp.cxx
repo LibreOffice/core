@@ -506,7 +506,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
             {
                 sal_Int32 nScale;
                 if (::sax::Converter::convertPercent( nScale, sValue ))
-                    mnStartScale = (sal_Int16)nScale;
+                    mnStartScale = static_cast<sal_Int16>(nScale);
             }
             else if( IsXMLToken( aLocalName, XML_SPEED ) )
             {

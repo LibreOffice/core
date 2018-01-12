@@ -225,12 +225,12 @@ size_t ImpSdrGDIMetaFileImport::DoImport(
 
         if(aMtfSize.Width() != (maScaleRect.GetWidth() - 1))
         {
-            mfScaleX = (double)( maScaleRect.GetWidth() - 1 ) / (double)aMtfSize.Width();
+            mfScaleX = static_cast<double>( maScaleRect.GetWidth() - 1 ) / static_cast<double>(aMtfSize.Width());
         }
 
         if(aMtfSize.Height() != (maScaleRect.GetHeight() - 1))
         {
-            mfScaleY = (double)( maScaleRect.GetHeight() - 1 ) / (double)aMtfSize.Height();
+            mfScaleY = static_cast<double>( maScaleRect.GetHeight() - 1 ) / static_cast<double>(aMtfSize.Height());
         }
     }
 
@@ -579,8 +579,8 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                             basegfx::fround(floor(std::max(0.0, aPixel.getMinX()))),
                             basegfx::fround(floor(std::max(0.0, aPixel.getMinY()))));
                         const Size aClipSize(
-                            basegfx::fround(ceil(std::min((double)aOrigSizePixel.Width(), aPixel.getWidth()))),
-                            basegfx::fround(ceil(std::min((double)aOrigSizePixel.Height(), aPixel.getHeight()))));
+                            basegfx::fround(ceil(std::min(static_cast<double>(aOrigSizePixel.Width()), aPixel.getWidth()))),
+                            basegfx::fround(ceil(std::min(static_cast<double>(aOrigSizePixel.Height()), aPixel.getHeight()))));
                         const BitmapEx aClippedBitmap(
                             aBitmapEx,
                             aClipTopLeft,
@@ -977,8 +977,8 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     vcl::Font aFnt( mpVD->GetFont() );
     FontAlign eAlg( aFnt.GetAlignment() );
 
-    sal_Int32 nTextWidth = (sal_Int32)( mpVD->GetTextWidth( rStr ) * mfScaleX );
-    sal_Int32 nTextHeight = (sal_Int32)( mpVD->GetTextHeight() * mfScaleY );
+    sal_Int32 nTextWidth = static_cast<sal_Int32>( mpVD->GetTextWidth( rStr ) * mfScaleX );
+    sal_Int32 nTextHeight = static_cast<sal_Int32>( mpVD->GetTextHeight() * mfScaleY );
 
     Point aPos( FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()) );
     Size aSize( nTextWidth, nTextHeight );
@@ -1490,12 +1490,12 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
 
     if(100 != rGradient.GetStartIntensity())
     {
-        aStart *= (double)rGradient.GetStartIntensity() / 100.0;
+        aStart *= static_cast<double>(rGradient.GetStartIntensity()) / 100.0;
     }
 
     if(100 != rGradient.GetEndIntensity())
     {
-        aEnd *= (double)rGradient.GetEndIntensity() / 100.0;
+        aEnd *= static_cast<double>(rGradient.GetEndIntensity()) / 100.0;
     }
 
     const bool bEqualColors(aStart == aEnd);

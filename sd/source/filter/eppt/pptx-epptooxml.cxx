@@ -878,7 +878,7 @@ void PowerPointExport::WriteAnimateValues(const FSHelperPtr& pFS, const Referenc
         {
             pFS->startElementNS(XML_p, XML_tav,
                                 XML_fmla, sFormula.isEmpty() ? nullptr : USS(sFormula),
-                                XML_tm, I32S((sal_Int32)(aKeyTimes[ i ]*100000.0)),
+                                XML_tm, I32S(static_cast<sal_Int32>(aKeyTimes[ i ]*100000.0)),
                                 FSEND);
             pFS->startElementNS(XML_p, XML_val, FSEND);
             ValuePair aPair;
@@ -1229,12 +1229,12 @@ void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, const cha
     {
         if (!pEvent)
             pFS->singleElementNS(XML_p, XML_cond,
-                                 XML_delay, bHasFDelay ? I64S((sal_uInt32)(fDelay*1000.0)) : pDelay,
+                                 XML_delay, bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay*1000.0)) : pDelay,
                                  FSEND);
         else
         {
             pFS->startElementNS(XML_p, XML_cond,
-                                XML_delay, bHasFDelay ? I64S((sal_uInt32)(fDelay*1000.0)) : pDelay,
+                                XML_delay, bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay*1000.0)) : pDelay,
                                 XML_evt, pEvent,
                                 FSEND);
 
@@ -1483,7 +1483,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
 
     pFS->startElementNS(XML_p, XML_cTn,
                         XML_id, I64S(mnAnimationNodeIdMax ++),
-                        XML_dur, fDuration != 0 ? I32S((sal_Int32)(fDuration * 1000.0)) : pDuration,
+                        XML_dur, fDuration != 0 ? I32S(static_cast<sal_Int32>(fDuration * 1000.0)) : pDuration,
                         XML_restart, pRestart,
                         XML_nodeType, pNodeType,
                         XML_fill, pFill,
@@ -1809,7 +1809,7 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
         {
             FSHelperPtr pFS = openFragmentStreamWithSerializer(OUStringBuffer()
                               .append("ppt/comments/comment")
-                              .append((sal_Int32) nPageNum + 1)
+                              .append(static_cast<sal_Int32>(nPageNum) + 1)
                               .append(".xml")
                               .makeStringAndClear(),
                               "application/vnd.openxmlformats-officedocument.presentationml.comments+xml");
@@ -1837,8 +1837,8 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
                                     FSEND);
 
                 pFS->singleElementNS(XML_p, XML_pos,
-                                     XML_x, I64S(((sal_Int64)(57600*aRealPoint2D.X + 1270)/2540.0)),
-                                     XML_y, I64S(((sal_Int64)(57600*aRealPoint2D.Y + 1270)/2540.0)),
+                                     XML_x, I64S((static_cast<sal_Int64>(57600*aRealPoint2D.X + 1270)/2540.0)),
+                                     XML_y, I64S((static_cast<sal_Int64>(57600*aRealPoint2D.Y + 1270)/2540.0)),
                                      FSEND);
 
                 pFS->startElementNS(XML_p, XML_text,
@@ -1900,7 +1900,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
                                   oox::getRelationship(Relationship::SLIDE),
                                   OUStringBuffer()
                                   .append("slides/slide")
-                                  .append((sal_Int32) nPageNum + 1)
+                                  .append(static_cast<sal_Int32>(nPageNum) + 1)
                                   .append(".xml")
                                   .makeStringAndClear());
 
@@ -1914,7 +1914,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(OUStringBuffer()
                       .append("ppt/slides/slide")
-                      .append((sal_Int32) nPageNum + 1)
+                      .append(static_cast<sal_Int32>(nPageNum) + 1)
                       .append(".xml")
                       .makeStringAndClear(),
                       "application/vnd.openxmlformats-officedocument.presentationml.slide+xml");
@@ -1968,7 +1968,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
                     oox::getRelationship(Relationship::COMMENTS),
                     OUStringBuffer()
                     .append("../comments/comment")
-                    .append((sal_Int32) nPageNum + 1)
+                    .append(static_cast<sal_Int32>(nPageNum) + 1)
                     .append(".xml")
                     .makeStringAndClear());
 
@@ -1984,7 +1984,7 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(OUStringBuffer()
                       .append("ppt/notesSlides/notesSlide")
-                      .append((sal_Int32) nPageNum + 1)
+                      .append(static_cast<sal_Int32>(nPageNum) + 1)
                       .append(".xml")
                       .makeStringAndClear(),
                       "application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml");
@@ -2004,7 +2004,7 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
                 oox::getRelationship(Relationship::SLIDE),
                 OUStringBuffer()
                 .append("../slides/slide")
-                .append((sal_Int32) nPageNum + 1)
+                .append(static_cast<sal_Int32>(nPageNum) + 1)
                 .append(".xml")
                 .makeStringAndClear());
 
@@ -2014,7 +2014,7 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
                     oox::getRelationship(Relationship::NOTESSLIDE),
                     OUStringBuffer()
                     .append("../notesSlides/notesSlide")
-                    .append((sal_Int32) nPageNum + 1)
+                    .append(static_cast<sal_Int32>(nPageNum) + 1)
                     .append(".xml")
                     .makeStringAndClear());
 
@@ -2055,7 +2055,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                                   oox::getRelationship(Relationship::SLIDEMASTER),
                                   OUStringBuffer()
                                   .append("slideMasters/slideMaster")
-                                  .append((sal_Int32) nPageNum + 1)
+                                  .append(static_cast<sal_Int32>(nPageNum) + 1)
                                   .append(".xml")
                                   .makeStringAndClear());
 
@@ -2070,7 +2070,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     FSHelperPtr pFS =
         openFragmentStreamWithSerializer(OUStringBuffer()
                                          .append("ppt/slideMasters/slideMaster")
-                                         .append((sal_Int32) nPageNum + 1)
+                                         .append(static_cast<sal_Int32>(nPageNum) + 1)
                                          .append(".xml")
                                          .makeStringAndClear(),
                                          "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml");
@@ -2083,7 +2083,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                 oox::getRelationship(Relationship::THEME),
                 OUStringBuffer()
                 .append("../theme/theme")
-                .append((sal_Int32) nPageNum + 1)
+                .append(static_cast<sal_Int32>(nPageNum) + 1)
                 .append(".xml")
                 .makeStringAndClear());
 
@@ -2196,7 +2196,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
                 oox::getRelationship(Relationship::SLIDEMASTER),
                 OUStringBuffer()
                 .append("../slideMasters/slideMaster")
-                .append((sal_Int32) nMasterNum + 1)
+                .append(static_cast<sal_Int32>(nMasterNum) + 1)
                 .append(".xml")
                 .makeStringAndClear());
 
@@ -2734,7 +2734,7 @@ bool PowerPointExport::WriteNotesMaster()
                 oox::getRelationship(Relationship::THEME),
                 OUStringBuffer()
                 .append("../theme/theme")
-                .append((sal_Int32) mnMasterPages + 1)
+                .append(static_cast<sal_Int32>(mnMasterPages) + 1)
                 .append(".xml")
                 .makeStringAndClear());
 

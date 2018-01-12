@@ -26,7 +26,7 @@
 #include <tools/tenccvt.hxx>
 #include <vcl/dibtools.hxx>
 
-#define BULITEM_VERSION     ((sal_uInt16)2)
+#define BULITEM_VERSION     (sal_uInt16(2))
 
 
 SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )

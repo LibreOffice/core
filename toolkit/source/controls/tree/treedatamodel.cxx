@@ -325,7 +325,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
-    if( (nChildIndex < 0) || (nChildIndex > (sal_Int32)maChildren.size()) )
+    if( (nChildIndex < 0) || (nChildIndex > static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
 
     Reference< XTreeNode > xNode( xChildNode.get() );
@@ -349,7 +349,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
-    if( (nChildIndex < 0) || (nChildIndex >= (sal_Int32)maChildren.size()) )
+    if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
 
     MutableTreeNodeRef xImpl;
@@ -439,7 +439,7 @@ Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildInd
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
-    if( (nChildIndex < 0) || (nChildIndex >= (sal_Int32)maChildren.size()) )
+    if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
     return getReference( maChildren[nChildIndex].get() );
 }
@@ -447,7 +447,7 @@ Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildInd
 sal_Int32 SAL_CALL MutableTreeNode::getChildCount(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
-    return (sal_Int32)maChildren.size();
+    return static_cast<sal_Int32>(maChildren.size());
 }
 
 Reference< XTreeNode > SAL_CALL MutableTreeNode::getParent(  )

@@ -90,7 +90,7 @@ uno::Any SAL_CALL
 ScVbaFont::getColorIndex()
 {
     if(mbFormControl)
-        return uno::Any( (sal_Int32) 0 );
+        return uno::Any( sal_Int32(0) );
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR) == SfxItemState::DONTCARE )
             return aNULL();

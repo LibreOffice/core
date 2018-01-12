@@ -205,8 +205,8 @@ bool PDFString::emit( EmitContext& rWriteContext ) const
         // check for string or hex string
         const sal_Char* pStr = aFiltered.getStr();
         if( aFiltered.getLength() > 1 &&
-           ( ((unsigned char)pStr[0] == 0xff && (unsigned char)pStr[1] == 0xfe) ||
-             ((unsigned char)pStr[0] == 0xfe && (unsigned char)pStr[1] == 0xff) ) )
+           ( (static_cast<unsigned char>(pStr[0]) == 0xff && static_cast<unsigned char>(pStr[1]) == 0xfe) ||
+             (static_cast<unsigned char>(pStr[0]) == 0xfe && static_cast<unsigned char>(pStr[1]) == 0xff) ) )
         {
             static const char pHexTab[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
                                               '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -351,8 +351,8 @@ bool PDFNumber::emit( EmitContext& rWriteContext ) const
         fValue=-fValue;
     }
 
-    sal_Int64 nInt = (sal_Int64)fValue;
-    fValue -= (double)nInt;
+    sal_Int64 nInt = static_cast<sal_Int64>(fValue);
+    fValue -= static_cast<double>(nInt);
     // optimizing hardware may lead to a value of 1.0 after the subtraction
     if( fValue == 1.0 || log10( 1.0-fValue ) <= -nPrecision )
     {
@@ -362,8 +362,8 @@ bool PDFNumber::emit( EmitContext& rWriteContext ) const
     sal_Int64 nFrac = 0;
     if( fValue )
     {
-        fValue *= pow( 10.0, (double)nPrecision );
-        nFrac = (sal_Int64)fValue;
+        fValue *= pow( 10.0, static_cast<double>(nPrecision) );
+        nFrac = static_cast<sal_Int64>(fValue);
     }
     if( bNeg && ( nInt || nFrac ) )
         aBuf.append( '-' );
@@ -372,7 +372,7 @@ bool PDFNumber::emit( EmitContext& rWriteContext ) const
     {
         int i;
         aBuf.append( '.' );
-        sal_Int64 nBound = (sal_Int64)(pow( 10.0, nPrecision - 1.0 )+0.5);
+        sal_Int64 nBound = static_cast<sal_Int64>(pow( 10.0, nPrecision - 1.0 )+0.5);
         for ( i = 0; ( i < nPrecision ) && nFrac; i++ )
         {
             sal_Int64 nNumb = nFrac / nBound;
@@ -817,7 +817,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
             {
                 // nothing to deflate, but decryption has happened
                 pOutBytes = reinterpret_cast<sal_uInt8*>(pStream);
-                nOutBytes = (sal_uInt32)nBytes;
+                nOutBytes = static_cast<sal_uInt32>(nBytes);
             }
 
             if( nOutBytes )
@@ -1282,7 +1282,7 @@ PDFFileImplData* PDFFile::impl_getData() const
 #if OSL_DEBUG_LEVEL > 0
                     OUString aTmp;
                     for( int i = 0; i < m_pData->m_aDocID.getLength(); i++ )
-                        aTmp += OUString::number((unsigned int)sal_uInt8(m_pData->m_aDocID[i]), 16);
+                        aTmp += OUString::number(static_cast<unsigned int>(sal_uInt8(m_pData->m_aDocID[i])), 16);
                     SAL_INFO("sdext.pdfimport.pdfparse", "DocId is <" << aTmp << ">");
 #endif
                 }
@@ -1346,9 +1346,9 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUString aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt[i]), 16);
+                                        aTmp += " " + OUString::number(static_cast<unsigned int>(sal_uInt8(aEnt[i])), 16);
                                     SAL_WARN("sdext.pdfimport.pdfparse",
-                                             "O entry has length " << (int)aEnt.getLength() << ", should be 32 <" << aTmp << ">" );
+                                             "O entry has length " << static_cast<int>(aEnt.getLength()) << ", should be 32 <" << aTmp << ">" );
                                 }
 #endif
                             }
@@ -1366,9 +1366,9 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUString aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt[i]), 16);
+                                        aTmp += " " + OUString::number(static_cast<unsigned int>(sal_uInt8(aEnt[i])), 16);
                                     SAL_WARN("sdext.pdfimport.pdfparse",
-                                             "U entry has length " << (int)aEnt.getLength() << ", should be 32 <" << aTmp << ">" );
+                                             "U entry has length " << static_cast<int>(aEnt.getLength()) << ", should be 32 <" << aTmp << ">" );
                                 }
 #endif
                             }
@@ -1387,7 +1387,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                             SAL_INFO("sdext.pdfimport.pdfparse", "p entry is " << m_pData->m_nPEntry );
                         }
 
-                        SAL_INFO("sdext.pdfimport.pdfparse", "Encryption dict: sec handler: " << (pFilter ? pFilter->getFilteredName() : OUString("<unknown>")) << ", version = " << (int)m_pData->m_nAlgoVersion << ", revision = " << (int)m_pData->m_nStandardRevision << ", key length = " << m_pData->m_nKeyLength );
+                        SAL_INFO("sdext.pdfimport.pdfparse", "Encryption dict: sec handler: " << (pFilter ? pFilter->getFilteredName() : OUString("<unknown>")) << ", version = " << static_cast<int>(m_pData->m_nAlgoVersion) << ", revision = " << static_cast<int>(m_pData->m_nStandardRevision) << ", key length = " << m_pData->m_nKeyLength );
                         break;
                     }
                 }

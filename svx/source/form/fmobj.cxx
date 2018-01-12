@@ -456,7 +456,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     do
     {
         OUString aToken = sAccessPath.getToken( 0, '\\', nTokIndex );
-        sal_uInt16 nIndex = (sal_uInt16)aToken.toInt32();
+        sal_uInt16 nIndex = static_cast<sal_uInt16>(aToken.toInt32());
 
         // get the DSS of the source form (we have to find an equivalent for)
         DBG_ASSERT(nIndex<xSourceContainer->getCount(), "FmFormObj::ensureModelEnv : invalid access path !");

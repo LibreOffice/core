@@ -453,7 +453,7 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
             aVirtOutputSize.Height() < aRealOutputSize.Height() )
         {
             sal_uLong nGridCount = IcnGridMap_Impl::GetGridCount(
-                aRealOutputSize, (sal_uInt16)nGridDX, (sal_uInt16)nGridDY );
+                aRealOutputSize, static_cast<sal_uInt16>(nGridDX), static_cast<sal_uInt16>(nGridDY) );
             if( nGridCount < nCount )
             {
                 if( nWinBits & WB_ALIGN_TOP )
@@ -991,7 +991,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 
     bool bMod2 = rKEvt.GetKeyCode().IsMod2();
     sal_Unicode cChar = rKEvt.GetCharCode();
-    sal_uLong nPos = (sal_uLong)-1;
+    sal_uLong nPos = sal_uLong(-1);
     if ( bMod2 && cChar && IsMnemonicChar( cChar, nPos ) )
     {
         // shortcut is clicked
@@ -2075,7 +2075,7 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
                 }
                 else
                 {
-                    nScrollDY = pData->GetNotchDelta() * (long)nScrollLines;
+                    nScrollDY = pData->GetNotchDelta() * static_cast<long>(nScrollLines);
                     nScrollDY *= GetScrollBarLineSize();
                 }
             }

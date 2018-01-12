@@ -50,7 +50,7 @@ void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
     css::uno::Sequence< sal_Int8 > aSeq;
     if( rAny >>= aSeq )
     {
-        sal_Int16 nCount = (sal_Int16)aSeq.getLength();
+        sal_Int16 nCount = static_cast<sal_Int16>(aSeq.getLength());
         if( nCount > 32 )
             nCount = 32;
 
@@ -99,7 +99,7 @@ SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
 
 void SdrLayer::SetStandardLayer()
 {
-    nType=(sal_uInt16)true;
+    nType=sal_uInt16(true);
     maName = ImpGetResStr(STR_StandardLayerName);
     if (pModel!=nullptr) {
         SdrHint aHint(SdrHintKind::LayerChange);

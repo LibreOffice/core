@@ -244,7 +244,7 @@ void ScRangeData::GuessPosition()
         }
     }
 
-    aPos = ScAddress( (SCCOL)(-nMinCol), (SCROW)(-nMinRow), (SCTAB)(-nMinTab) );
+    aPos = ScAddress( static_cast<SCCOL>(-nMinCol), static_cast<SCROW>(-nMinRow), static_cast<SCTAB>(-nMinTab) );
 }
 
 void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
@@ -641,9 +641,9 @@ void ScRangeData::InitCode()
 extern "C"
 int ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 {
-    return (int) ScGlobal::GetCollator()->compareString(
+    return static_cast<int>(ScGlobal::GetCollator()->compareString(
             (*static_cast<const ScRangeData* const *>(p1))->GetName(),
-            (*static_cast<const ScRangeData* const *>(p2))->GetName() );
+            (*static_cast<const ScRangeData* const *>(p2))->GetName() ));
 }
 
 namespace {

@@ -50,7 +50,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-#define COLUMN_POSITION_NOT_FOUND   ((sal_Int32)-1)
+#define COLUMN_POSITION_NOT_FOUND   (sal_Int32(-1))
 
 class SvNumberFormatter;
 namespace dbaui

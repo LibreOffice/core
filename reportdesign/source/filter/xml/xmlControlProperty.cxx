@@ -217,7 +217,7 @@ Any OXMLControlProperty::convertString(const css::uno::Type& _rExpectedType, con
                     append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                     append("\" into an integer!").getStr());
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
-                    aReturn <<= (sal_Int16)nValue;
+                    aReturn <<= static_cast<sal_Int16>(nValue);
                 else
                     aReturn <<= nValue;
                 break;
@@ -271,14 +271,14 @@ Any OXMLControlProperty::convertString(const css::uno::Type& _rExpectedType, con
                     {
                         case TYPE_DATE:
                         {
-                            OSL_ENSURE(((sal_uInt32)nValue) - nValue == 0,
+                            OSL_ENSURE((static_cast<sal_uInt32>(nValue)) - nValue == 0,
                                 "OPropertyImport::convertString: a Date value with a fractional part?");
                             aReturn <<= implGetDate(nValue);
                         }
                         break;
                         case TYPE_TIME:
                         {
-                            OSL_ENSURE(((sal_uInt32)nValue) == 0,
+                            OSL_ENSURE((static_cast<sal_uInt32>(nValue)) == 0,
                                 "OPropertyImport::convertString: a tools::Time value with more than a fractional part?");
                             aReturn <<= implGetTime(nValue);
                         }
@@ -318,11 +318,11 @@ css::util::Time OXMLControlProperty::implGetTime(double _nValue)
 {
     css::util::Time aTime;
     sal_uInt64 nIntValue = ::rtl::math::round(_nValue * 86400000000000.0);
-    aTime.NanoSeconds = (sal_uInt16)( nIntValue % 1000000000 );
+    aTime.NanoSeconds = static_cast<sal_uInt16>( nIntValue % 1000000000 );
     nIntValue /= 1000000000;
-    aTime.Seconds = (sal_uInt16)( nIntValue % 60 );
+    aTime.Seconds = static_cast<sal_uInt16>( nIntValue % 60 );
     nIntValue /= 60;
-    aTime.Minutes = (sal_uInt16)( nIntValue % 60 );
+    aTime.Minutes = static_cast<sal_uInt16>( nIntValue % 60 );
     nIntValue /= 60;
     OSL_ENSURE(nIntValue < 24, "OPropertyImport::implGetTime: more than a day?");
     aTime.Hours = static_cast< sal_uInt16 >( nIntValue );
@@ -333,7 +333,7 @@ css::util::Time OXMLControlProperty::implGetTime(double _nValue)
 
 css::util::Date OXMLControlProperty::implGetDate(double _nValue)
 {
-    Date aToolsDate((sal_uInt32)_nValue);
+    Date aToolsDate(static_cast<sal_uInt32>(_nValue));
     css::util::Date aDate;
     ::utl::typeConvert(aToolsDate, aDate);
     return aDate;

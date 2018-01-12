@@ -366,7 +366,7 @@ void SbRtl_CLng(StarBASIC *, SbxArray & rPar, bool)  // JSM
 
 void SbRtl_CSng(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
-    float nVal = (float)0.0;
+    float nVal = float(0.0);
     if ( rPar.Count() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get(1);
@@ -380,7 +380,7 @@ void SbRtl_CSng(StarBASIC *, SbxArray & rPar, bool)  // JSM
             {
                 StarBASIC::Error( Error );
             }
-            nVal = (float)dVal;
+            nVal = static_cast<float>(dVal);
         }
         else
         {
@@ -504,7 +504,7 @@ void SbRtl_Red(StarBASIC *, SbxArray & rPar, bool)
         sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x00FF0000;
         nRGB >>= 16;
-        rPar.Get(0)->PutInteger( (sal_Int16)nRGB );
+        rPar.Get(0)->PutInteger( static_cast<sal_Int16>(nRGB) );
     }
 }
 
@@ -519,7 +519,7 @@ void SbRtl_Green(StarBASIC *, SbxArray & rPar, bool)
         sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x0000FF00;
         nRGB >>= 8;
-        rPar.Get(0)->PutInteger( (sal_Int16)nRGB );
+        rPar.Get(0)->PutInteger( static_cast<sal_Int16>(nRGB) );
     }
 }
 
@@ -533,7 +533,7 @@ void SbRtl_Blue(StarBASIC *, SbxArray & rPar, bool)
     {
         sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x000000FF;
-        rPar.Get(0)->PutInteger( (sal_Int16)nRGB );
+        rPar.Get(0)->PutInteger( static_cast<sal_Int16>(nRGB) );
     }
 }
 
@@ -574,7 +574,7 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
         double dWait = rPar.Get(1)->GetDouble();
         double dNow = Now_Impl();
         double dSecs = ( dWait - dNow ) * 24.0 * 3600.0;
-        nWait = (long)( dSecs * 1000 ); // wait in thousands of sec
+        nWait = static_cast<long>( dSecs * 1000 ); // wait in thousands of sec
     }
     else
     {
@@ -1051,7 +1051,7 @@ static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
         {
             sal_uInt32 aInt;
             pStrm->ReadUInt32( aInt );
-            rVar.PutInt64( (sal_Int64)aInt );
+            rVar.PutInt64( static_cast<sal_Int64>(aInt) );
         }
         break;
     case SbxSINGLE:
@@ -1387,7 +1387,7 @@ void SbRtl_TypeLen(StarBASIC *, SbxArray & rPar, bool)
         case SbxLPWSTR:
         case SbxCoreSTRING:
         case SbxSTRING:
-            nLen = (sal_Int16)rPar.Get(1)->GetOUString().getLength();
+            nLen = static_cast<sal_Int16>(rPar.Get(1)->GetOUString().getLength());
             break;
 
         default:
@@ -1715,7 +1715,7 @@ void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
     }
 
     Sequence< CalendarItem2 > aDaySeq = xCalendar->getDays2();
-    sal_Int16 nDayCount = (sal_Int16)aDaySeq.getLength();
+    sal_Int16 nDayCount = static_cast<sal_Int16>(aDaySeq.getLength());
     sal_Int16 nDay = rPar.Get(1)->GetInteger();
     sal_Int16 nFirstDay = 0;
     if( nParCount == 4 )
@@ -1853,7 +1853,7 @@ inline sal_Int16 limitDate( sal_Int32 n32Year, sal_Int16& rMonth, sal_Int16& rDa
         rMonth = 1;
         rDay = 1;
     }
-    return (sal_Int16)n32Year;
+    return static_cast<sal_Int16>(n32Year);
 }
 
 void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
@@ -1912,12 +1912,12 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
                 if( pInfo->meInterval == INTERVAL_Q )
                 {
                     nYearsAdd = lNumber / 4;
-                    nMonthAdd = (sal_Int16)( 3 * (lNumber % 4) );
+                    nMonthAdd = static_cast<sal_Int16>( 3 * (lNumber % 4) );
                 }
                 else
                 {
                     nYearsAdd = lNumber / 12;
-                    nMonthAdd = (sal_Int16)( lNumber % 12 );
+                    nMonthAdd = static_cast<sal_Int16>( lNumber % 12 );
                 }
 
                 sal_Int32 nTargetYear;
@@ -1929,7 +1929,7 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
                         nTargetMonth += 12;
                         nYearsAdd++;
                     }
-                    nTargetYear = (sal_Int32)nYear - nYearsAdd;
+                    nTargetYear = static_cast<sal_Int32>(nYear) - nYearsAdd;
                 }
                 else
                 {
@@ -1939,7 +1939,7 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
                         nTargetMonth -= 12;
                         nYearsAdd++;
                     }
-                    nTargetYear = (sal_Int32)nYear + nYearsAdd;
+                    nTargetYear = static_cast<sal_Int32>(nYear) + nYearsAdd;
                 }
                 nTargetYear16 = limitDate( nTargetYear, nTargetMonth, nDay );
                 /* TODO: should the result be error if the date was limited? It never was. */
@@ -3043,13 +3043,13 @@ void SbRtl_Me(StarBASIC *, SbxArray & rPar, bool)
 sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay )
 {
     Date aRefDate( 1,1,1900 );
-    sal_Int32 nDays = (sal_Int32) aDate;
+    sal_Int32 nDays = static_cast<sal_Int32>(aDate);
     nDays -= 2; // normalize: 1.1.1900 => 0
     aRefDate.AddDays( nDays);
     DayOfWeek aDay = aRefDate.GetDayOfWeek();
     sal_Int16 nDay;
     if ( aDay != SUNDAY )
-        nDay = (sal_Int16)aDay + 2;
+        nDay = static_cast<sal_Int16>(aDay) + 2;
     else
         nDay = 1;   // 1 == Sunday
 

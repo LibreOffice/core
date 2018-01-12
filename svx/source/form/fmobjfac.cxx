@@ -202,12 +202,12 @@ IMPL_STATIC_LINK(
 
             case OBJ_FM_SCROLLBAR:
                 sServiceSpecifier = FM_SUN_COMPONENT_SCROLLBAR;
-                aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( (sal_Int16)0 ) );
+                aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( sal_Int16(0) ) );
                 break;
 
             case OBJ_FM_SPINBUTTON:
                 sServiceSpecifier = FM_SUN_COMPONENT_SPINBUTTON;
-                aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( (sal_Int16)0 ) );
+                aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( sal_Int16(0) ) );
                 break;
         }
 

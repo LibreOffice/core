@@ -39,10 +39,10 @@ struct rtl_arena_stat_type
 /** rtl_arena_segment_type
  *  @internal
  */
-#define RTL_ARENA_SEGMENT_TYPE_HEAD ((sal_Size)(0x01))
-#define RTL_ARENA_SEGMENT_TYPE_SPAN ((sal_Size)(0x02))
-#define RTL_ARENA_SEGMENT_TYPE_FREE ((sal_Size)(0x04))
-#define RTL_ARENA_SEGMENT_TYPE_USED ((sal_Size)(0x08))
+#define RTL_ARENA_SEGMENT_TYPE_HEAD (sal_Size(0x01))
+#define RTL_ARENA_SEGMENT_TYPE_SPAN (sal_Size(0x02))
+#define RTL_ARENA_SEGMENT_TYPE_FREE (sal_Size(0x04))
+#define RTL_ARENA_SEGMENT_TYPE_USED (sal_Size(0x08))
 
 struct rtl_arena_segment_type
 {

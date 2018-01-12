@@ -271,7 +271,7 @@ void ExtrusionDirectionWindow::SelectHdl(void const * pControl)
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(g_sExtrusionDirection).copy(5);
-        aArgs[0].Value <<= (sal_Int32)gSkewList[mpDirectionSet->GetSelectItemId()-1];
+        aArgs[0].Value <<= static_cast<sal_Int32>(gSkewList[mpDirectionSet->GetSelectItemId()-1]);
 
         mrController.dispatchCommand( g_sExtrusionDirection, aArgs );
     }
@@ -282,7 +282,7 @@ void ExtrusionDirectionWindow::SelectHdl(void const * pControl)
         {
             Sequence< PropertyValue > aArgs( 1 );
             aArgs[0].Name = OUString(g_sExtrusionProjection).copy(5);
-            aArgs[0].Value <<= (sal_Int32)nProjection;
+            aArgs[0].Value <<= static_cast<sal_Int32>(nProjection);
 
             mrController.dispatchCommand( g_sExtrusionProjection, aArgs );
             implSetProjection( nProjection, true );
@@ -357,7 +357,7 @@ ExtrusionDepthDialog::ExtrusionDepthDialog( vcl::Window* pParent, double fDepth,
 {
     get(m_pMtrDepth, "depth");
     m_pMtrDepth->SetUnit( eDefaultUnit );
-    m_pMtrDepth->SetValue( (int) fDepth * 100, FUNIT_100TH_MM );
+    m_pMtrDepth->SetValue( static_cast<int>(fDepth) * 100, FUNIT_100TH_MM );
 }
 
 ExtrusionDepthDialog::~ExtrusionDepthDialog()
@@ -373,7 +373,7 @@ void ExtrusionDepthDialog::dispose()
 
 double ExtrusionDepthDialog::getDepth() const
 {
-    return (double)( m_pMtrDepth->GetValue( FUNIT_100TH_MM ) ) / 100.0;
+    return static_cast<double>( m_pMtrDepth->GetValue( FUNIT_100TH_MM ) ) / 100.0;
 }
 
 double const aDepthListInch[] = { 0, 1270,2540,5080,10160 };
@@ -697,7 +697,7 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
         {
             mpLightingSet->SetItemImage(
                 nItemId + 1,
-                (sal_uInt16)nDirection == nItemId ? maImgLightingOn[nItemId] : maImgLightingOff[nItemId]
+                static_cast<sal_uInt16>(nDirection) == nItemId ? maImgLightingOn[nItemId] : maImgLightingOff[nItemId]
             );
         }
     }
@@ -775,7 +775,7 @@ void ExtrusionLightingWindow::SelectHdl(void const * pControl)
             {
                 Sequence< PropertyValue > aArgs( 1 );
                 aArgs[0].Name = OUString(g_sExtrusionLightingIntensity).copy(5);
-                aArgs[0].Value <<= (sal_Int32)nLevel;
+                aArgs[0].Value <<= static_cast<sal_Int32>(nLevel);
 
                 mrController.dispatchCommand( g_sExtrusionLightingIntensity, aArgs );
 

@@ -401,12 +401,12 @@ void SvxLineEndWindow::FillValueSet()
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
         pVD->DrawBitmap( aPt0, aBmp );
-        mpLineEndSet->InsertItem((sal_uInt16)((i+1)*2L+1),
+        mpLineEndSet->InsertItem(static_cast<sal_uInt16>((i+1)*2L+1),
                 Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
-        mpLineEndSet->InsertItem((sal_uInt16)((i+2)*2L),
+        mpLineEndSet->InsertItem(static_cast<sal_uInt16>((i+2)*2L),
                 Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
     }
-    mnLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
+    mnLines = std::min( static_cast<sal_uInt16>(nCount + 1), sal_uInt16(MAX_LINES) );
     mpLineEndSet->SetLineCount( mnLines );
 
     SetSize();

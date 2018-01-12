@@ -207,7 +207,7 @@ ScTransferObj* ScTransferObj::GetOwnClipboard( vcl::Window* pUIWin )
     {
         sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
         if ( nHandle )
-            pObj = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( (sal_IntPtr) nHandle ));
+            pObj = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle) ));
     }
 
     return pObj;
@@ -727,8 +727,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         for (nCol=0; nCol<nStartX; nCol++)
             nPosX += rDestDoc.GetColWidth( nCol, 0 );
         nPosY += rDestDoc.GetRowHeight( 0, nStartY-1, 0 );
-        nPosX = (long) ( nPosX * HMM_PER_TWIPS );
-        nPosY = (long) ( nPosY * HMM_PER_TWIPS );
+        nPosX = static_cast<long>( nPosX * HMM_PER_TWIPS );
+        nPosY = static_cast<long>( nPosY * HMM_PER_TWIPS );
 
         aPaperSize.Width()  *= 2;       // limit OLE object to double of page size
         aPaperSize.Height() *= 2;
@@ -749,8 +749,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
                 break;
             nSizeY += nAdd;
         }
-        nSizeX = (long) ( nSizeX * HMM_PER_TWIPS );
-        nSizeY = (long) ( nSizeY * HMM_PER_TWIPS );
+        nSizeX = static_cast<long>( nSizeX * HMM_PER_TWIPS );
+        nSizeY = static_cast<long>( nSizeY * HMM_PER_TWIPS );
 
 //      pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
 

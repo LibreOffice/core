@@ -770,7 +770,7 @@ SvTreeListEntry* SvTreeList::PrevVisible( const SvListView* pView, SvTreeListEnt
     // example: 0,1,2,3,4,5,6,7,8,9 nVisPos=8 nDelta=20
     //           nNewDelta = nNewVisPos
     if (  nDelta > nVisPos )
-        nDelta = (sal_uInt16)nVisPos;
+        nDelta = static_cast<sal_uInt16>(nVisPos);
     sal_uInt16 nDeltaTmp = nDelta;
     while( nDeltaTmp )
     {

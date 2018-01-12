@@ -1547,7 +1547,7 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
         ScDocument* pDoc ) const
 {
     nListCount = maPairs.size();
-    OSL_ENSURE( nListCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
+    OSL_ENSURE( nListCount * sizeof(ScRangePairNameSort) <= size_t(~0x1F),
         "ScRangePairList::CreateNameSortedArray nListCount * sizeof(ScRangePairNameSort) > (size_t)~0x1F" );
     ScRangePairNameSort* pSortArray = reinterpret_cast<ScRangePairNameSort*>(
         new sal_uInt8 [ nListCount * sizeof(ScRangePairNameSort) ]);

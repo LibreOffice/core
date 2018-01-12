@@ -421,7 +421,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                 tools::Polygon aPoly( SAL_N_ELEMENTS( aAccentPos ) / 2,
                                       reinterpret_cast<const Point*>(aAccentPos),
                                       aAccentPolyFlags );
-                double dScale = ((double)nDotSize)/1000.0;
+                double dScale = static_cast<double>(nDotSize)/1000.0;
                 aPoly.Scale( dScale, dScale );
                 tools::Polygon aTemp;
                 aPoly.AdaptiveSubdivide( aTemp );
@@ -1139,9 +1139,9 @@ bool OutputDevice::ImplNewFont() const
     if( mbMap && !aSize.Width() )
     {
         int nOrigWidth = pFontInstance->mxFontMetric->GetWidth();
-        float fStretch = (float)maMapRes.mnMapScNumX * maMapRes.mnMapScDenomY;
-        fStretch /= (float)maMapRes.mnMapScNumY * maMapRes.mnMapScDenomX;
-        int nNewWidth = (int)(nOrigWidth * fStretch + 0.5);
+        float fStretch = static_cast<float>(maMapRes.mnMapScNumX) * maMapRes.mnMapScDenomY;
+        fStretch /= static_cast<float>(maMapRes.mnMapScNumY) * maMapRes.mnMapScDenomX;
+        int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
         if( (nNewWidth != nOrigWidth) && (nNewWidth != 0) )
         {
             Size aOrigSize = maFont.GetFontSize();
@@ -1462,7 +1462,7 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
         rVector.push_back( aRect );
     }
 
-    return (nLen == (int)rVector.size());
+    return (nLen == static_cast<int>(rVector.size()));
 }
 
 sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& rStr,

@@ -42,7 +42,7 @@ public:
     virtual void dispose() override;
 
     void            SaveSettings() const;
-    sal_uInt16      GetFadeSteps() const { return (sal_uInt16) m_pMtfSteps->GetValue(); }
+    sal_uInt16      GetFadeSteps() const { return static_cast<sal_uInt16>(m_pMtfSteps->GetValue()); }
     bool            IsAttributeFade() const { return m_pCbxAttributes->IsChecked(); }
     bool            IsOrientationFade() const { return m_pCbxOrientation->IsChecked(); }
 

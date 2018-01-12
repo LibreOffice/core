@@ -584,7 +584,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             if ( aCommand.startsWith("slot:") )
             {
-                sal_uInt16 nSlotId = (sal_uInt16) aCommand.copy(5).toInt32();
+                sal_uInt16 nSlotId = static_cast<sal_uInt16>(aCommand.copy(5).toInt32());
                 if ( nSlotId == SID_OPENDOC )
                     pFileNameItem = nullptr;
             }

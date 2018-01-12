@@ -935,7 +935,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
                 AddFormat( SotClipboardFormatId::PNG );
                 AddFormat( SotClipboardFormatId::BITMAP );
             }
-            m_eBufferType = (TransferBufferType)( TransferBufferType::Graphic | m_eBufferType );
+            m_eBufferType = static_cast<TransferBufferType>( TransferBufferType::Graphic | m_eBufferType );
 
             m_pClpGraphic.reset(new Graphic);
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
@@ -3613,7 +3613,7 @@ SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper&
     {
         sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
         if ( nHandle )
-            pSwTransferable = reinterpret_cast<SwTransferable*>( (sal_IntPtr) nHandle );
+            pSwTransferable = reinterpret_cast<SwTransferable*>( static_cast<sal_IntPtr>(nHandle) );
     }
 
     return pSwTransferable;

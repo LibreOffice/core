@@ -92,7 +92,7 @@ namespace pcr
                 bool bHasHScroll = false;
                 m_xComponent->getPropertyValue( PROPERTY_HSCROLL ) >>= bHasHScroll;
 
-                aReturn <<= (sal_Int32)( ( bHasVScroll ? 2 : 0 ) + ( bHasHScroll ? 1 : 0 ) );
+                aReturn <<= static_cast<sal_Int32>( ( bHasVScroll ? 2 : 0 ) + ( bHasHScroll ? 1 : 0 ) );
             }
             break;
 

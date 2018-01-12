@@ -385,7 +385,7 @@ namespace pcr
             {
                 ::utl::OConfigurationTreeRoot aConfigTree( ::utl::OConfigurationTreeRoot::createWithComponentContext(
                     m_xContext, sConfigurationLocation, -1, ::utl::OConfigurationTreeRoot::CM_READONLY ) );
-                sal_Int32 nUnitAsInt = (sal_Int32)FUNIT_NONE;
+                sal_Int32 nUnitAsInt = sal_Int32(FUNIT_NONE);
                 aConfigTree.getNodeValue( sConfigurationProperty ) >>= nUnitAsInt;
 
                 // if this denotes a valid (and accepted) unit, then use it

@@ -51,7 +51,7 @@ GIFLZWDecompressor::GIFLZWDecompressor(sal_uInt8 cDataSize)
     {
         pTable[i].pPrev = nullptr;
         pTable[i].pFirst = pTable.get() + i;
-        pTable[i].nData = (sal_uInt8) i;
+        pTable[i].nData = static_cast<sal_uInt8>(i);
     }
 
     memset(pTable.get() + nTableSize, 0, sizeof(GIFLZWTableEntry) * (4098 - nTableSize));
@@ -118,7 +118,7 @@ bool GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirst
         pE->nData = pEntry->nData;
         nTableSize++;
 
-        if ( ( nTableSize == (sal_uInt16) (1 << nCodeSize) ) && ( nTableSize < 4096 ) )
+        if ( ( nTableSize == static_cast<sal_uInt16>(1 << nCodeSize) ) && ( nTableSize < 4096 ) )
             nCodeSize++;
     }
     return true;
@@ -138,7 +138,7 @@ bool GIFLZWDecompressor::ProcessOneCode()
             break;
         }
 
-        nInputBitsBuf |= ( (sal_uLong) pBlockBuf[ nBlockBufPos++ ] ) << nInputBitsBufSize;
+        nInputBitsBuf |= static_cast<sal_uLong>(pBlockBuf[ nBlockBufPos++ ]) << nInputBitsBufSize;
         nInputBitsBufSize += 8;
     }
 
@@ -146,7 +146,7 @@ bool GIFLZWDecompressor::ProcessOneCode()
     {
         // fetch code from input buffer
         nCode = sal::static_int_cast< sal_uInt16 >(
-            ( (sal_uInt16) nInputBitsBuf ) & ( ~( 0xffff << nCodeSize ) ));
+            static_cast<sal_uInt16>(nInputBitsBuf) & ( ~( 0xffff << nCodeSize ) ));
         nInputBitsBuf >>= nCodeSize;
         nInputBitsBufSize = nInputBitsBufSize - nCodeSize;
 

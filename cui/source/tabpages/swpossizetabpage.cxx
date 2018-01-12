@@ -1025,12 +1025,12 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     }
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_WIDTH );
-    sal_Int32 nWidth = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, (sal_uInt32)1 );
+    sal_Int32 nWidth = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, sal_uInt32(1) );
 
     m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FUNIT_TWIP);
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HEIGHT );
-    sal_Int32 nHeight = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, (sal_uInt32)1 );
+    sal_Int32 nHeight = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, sal_uInt32(1) );
     m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
     m_fWidthHeightRatio = double(nWidth) / double(nHeight);
 
@@ -1165,8 +1165,8 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
         sal_uInt16 nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriToLB);
         sal_uInt16 nRel = GetRelation(*m_pHoriToLB);
 
-        aVal.nHoriOrient = (short)nAlign;
-        aVal.nHRelOrient = (short)nRel;
+        aVal.nHoriOrient = static_cast<short>(nAlign);
+        aVal.nHRelOrient = static_cast<short>(nRel);
     }
     else
         aVal.nHoriOrient = HoriOrientation::NONE;
@@ -1178,8 +1178,8 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
         sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertToLB);
         sal_uInt16 nRel = GetRelation(*m_pVertToLB);
 
-        aVal.nVertOrient = (short)nAlign;
-        aVal.nVRelOrient = (short)nRel;
+        aVal.nVertOrient = static_cast<short>(nAlign);
+        aVal.nVRelOrient = static_cast<short>(nRel);
     }
     else
         aVal.nVertOrient = VertOrientation::NONE;
@@ -1378,12 +1378,12 @@ IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
     {
         if ( &rEdit == m_pWidthMF )
         {
-            nHeight = sal_Int64((double)nWidth / m_fWidthHeightRatio);
+            nHeight = sal_Int64(static_cast<double>(nWidth) / m_fWidthHeightRatio);
             m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
         }
         else if(&rEdit == m_pHeightMF)
         {
-            nWidth = sal_Int64((double)nHeight * m_fWidthHeightRatio);
+            nWidth = sal_Int64(static_cast<double>(nHeight) * m_fWidthHeightRatio);
             m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FUNIT_TWIP);
         }
     }

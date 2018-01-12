@@ -630,7 +630,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
                 sal_Int32 nIndex = sString.toInt32();
                 if (nIndex > 0 && nIndex <= 64)
                 {
-                    pResult = pFormatter->GetUserDefColor((sal_uInt16)nIndex-1);
+                    pResult = pFormatter->GetUserDefColor(static_cast<sal_uInt16>(nIndex)-1);
                 }
             }
         }
@@ -1243,9 +1243,9 @@ void ImpSvNumberformatScan::Reset()
     bThousand = false;
     nThousand = 0;
     bDecSep = false;
-    nDecPos = (sal_uInt16)-1;
-    nExpPos = (sal_uInt16)-1;
-    nBlankPos = (sal_uInt16)-1;
+    nDecPos = sal_uInt16(-1);
+    nExpPos = sal_uInt16(-1);
+    nBlankPos = sal_uInt16(-1);
     nCntPre = 0;
     nCntPost = 0;
     nCntExp = 0;
@@ -1634,7 +1634,7 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
     }
     else
     {
-        if ((size_t) (nStringsCnt + 1) >= NF_MAX_FORMAT_SYMBOLS)
+        if (static_cast<size_t>(nStringsCnt + 1) >= NF_MAX_FORMAT_SYMBOLS)
         {
             return false;
         }

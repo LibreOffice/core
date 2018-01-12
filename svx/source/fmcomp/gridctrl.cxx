@@ -416,7 +416,7 @@ namespace
     {
         _rButton.SetPosPixel( _rPos );
         _rButton.SetSizePixel( _rSize );
-        _rPos.X() += (sal_uInt16)_rSize.Width();
+        _rPos.X() += static_cast<sal_uInt16>(_rSize.Width());
     }
 }
 
@@ -959,7 +959,7 @@ DbGridControl::DbGridControl(
             ,m_nDeleteEvent(nullptr)
             ,m_nOptions(DbGridControlOptions::Readonly)
             ,m_nOptionMask(DbGridControlOptions::Insert | DbGridControlOptions::Update | DbGridControlOptions::Delete)
-            ,m_nLastColId((sal_uInt16)-1)
+            ,m_nLastColId(sal_uInt16(-1))
             ,m_nLastRowId(-1)
             ,m_bDesignMode(false)
             ,m_bRecordCountFinal(false)
@@ -1061,8 +1061,8 @@ void DbGridControl::StateChanged( StateChangedType nType )
 
             // and give it a chance to rearrange
             Point aPoint = GetControlArea().TopLeft();
-            sal_uInt16 nX = (sal_uInt16)aPoint.X();
-            ArrangeControls(nX, (sal_uInt16)aPoint.Y());
+            sal_uInt16 nX = static_cast<sal_uInt16>(aPoint.X());
+            ArrangeControls(nX, static_cast<sal_uInt16>(aPoint.Y()));
             ReserveControlArea(nX);
         }
         break;
@@ -1266,9 +1266,9 @@ void DbGridControl::EnableNavigationBar(bool bEnable)
 
         // get size of the reserved ControlArea
         Point aPoint = GetControlArea().TopLeft();
-        sal_uInt16 nX = (sal_uInt16)aPoint.X();
+        sal_uInt16 nX = static_cast<sal_uInt16>(aPoint.X());
 
-        ArrangeControls(nX, (sal_uInt16)aPoint.Y());
+        ArrangeControls(nX, static_cast<sal_uInt16>(aPoint.Y()));
         ReserveControlArea(nX);
     }
     else
@@ -1720,7 +1720,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     // remove the col from the model
     sal_uInt16 nOldModelPos = GetModelColumnPos(nId);
 #ifdef DBG_UTIL
-    DbGridColumn* pCol = m_aColumns[ (sal_uInt32)nOldModelPos ];
+    DbGridColumn* pCol = m_aColumns[ static_cast<sal_uInt32>(nOldModelPos) ];
     DBG_ASSERT(!pCol->IsHidden(), "DbGridControl::ColumnMoved : moved a hidden col ? how this ?");
 #endif
 
@@ -1976,7 +1976,7 @@ void DbGridControl::AdjustRows()
 
     if (nRecordCount != GetRowCount())
     {
-        long nDelta = GetRowCount() - (long)nRecordCount;
+        long nDelta = GetRowCount() - static_cast<long>(nRecordCount);
         if (nDelta > 0) // too many
         {
             RowRemoved(GetRowCount() - nDelta, nDelta, false);
@@ -2542,7 +2542,7 @@ void DbGridControl::MoveToPosition(sal_uInt32 nPos)
     if (!m_pSeekCursor)
         return;
 
-    if (m_nTotalCount < 0 && (long)nPos >= GetRowCount())
+    if (m_nTotalCount < 0 && static_cast<long>(nPos) >= GetRowCount())
     {
         try
         {
@@ -2812,9 +2812,9 @@ void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredP
     VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/rowsmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
-    PreExecuteRowContextMenu( (sal_uInt16)_nRow, *aContextMenu.get() );
+    PreExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu.get() );
     aContextMenu->RemoveDisabledEntries( true, true );
-    PostExecuteRowContextMenu( (sal_uInt16)_nRow, *aContextMenu.get(), aContextMenu->Execute( this, _rPreferredPos ) );
+    PostExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu.get(), aContextMenu->Execute( this, _rPreferredPos ) );
 }
 
 void DbGridControl::Command(const CommandEvent& rEvt)
@@ -3561,7 +3561,7 @@ void DbGridControl::DisconnectFromFields()
     {
         sal_Int32 nOldSize = pListeners->size();
         pListeners->begin()->second->dispose();
-        DBG_ASSERT(nOldSize > (sal_Int32)pListeners->size(), "DbGridControl::DisconnectFromFields : dispose on a listener should result in a removal from my list !");
+        DBG_ASSERT(nOldSize > static_cast<sal_Int32>(pListeners->size()), "DbGridControl::DisconnectFromFields : dispose on a listener should result in a removal from my list !");
     }
 
     delete pListeners;

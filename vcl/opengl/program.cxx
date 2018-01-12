@@ -238,9 +238,9 @@ void OpenGLProgram::SetColor( const OString& rName, SalColor nColor, sal_uInt8 n
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform4f( nUniform,
-                 ((float) SALCOLOR_RED( nColor )) / 255,
-                 ((float) SALCOLOR_GREEN( nColor )) / 255,
-                 ((float) SALCOLOR_BLUE( nColor )) / 255,
+                 static_cast<float>(SALCOLOR_RED( nColor )) / 255,
+                 static_cast<float>(SALCOLOR_GREEN( nColor )) / 255,
+                 static_cast<float>(SALCOLOR_BLUE( nColor )) / 255,
                  (100 - nTransparency) * (1.0 / 100) );
     CHECK_GL_ERROR();
 
@@ -252,9 +252,9 @@ void OpenGLProgram::SetColorf( const OString& rName, SalColor nColor, double fTr
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform4f( nUniform,
-                 ((float) SALCOLOR_RED( nColor )) / 255,
-                 ((float) SALCOLOR_GREEN( nColor )) / 255,
-                 ((float) SALCOLOR_BLUE( nColor )) / 255,
+                 static_cast<float>(SALCOLOR_RED( nColor )) / 255,
+                 static_cast<float>(SALCOLOR_GREEN( nColor )) / 255,
+                 static_cast<float>(SALCOLOR_BLUE( nColor )) / 255,
                  (1.0f - fTransparency) );
     CHECK_GL_ERROR();
 
@@ -266,10 +266,10 @@ void OpenGLProgram::SetColor( const OString& rName, const Color& rColor )
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform4f( nUniform,
-                 ((float) rColor.GetRed()) / 255,
-                 ((float) rColor.GetGreen()) / 255,
-                 ((float) rColor.GetBlue()) / 255,
-                 1.0f - ((float) rColor.GetTransparency()) / 255 );
+                 static_cast<float>(rColor.GetRed()) / 255,
+                 static_cast<float>(rColor.GetGreen()) / 255,
+                 static_cast<float>(rColor.GetBlue()) / 255,
+                 1.0f - static_cast<float>(rColor.GetTransparency()) / 255 );
     CHECK_GL_ERROR();
 
     if( rColor.GetTransparency() > 0 )
@@ -280,9 +280,9 @@ void OpenGLProgram::SetColorWithIntensity( const OString& rName, const Color& rC
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform4f( nUniform,
-                 ((float) rColor.GetRed()) * nFactor / 25500.0,
-                 ((float) rColor.GetGreen()) * nFactor / 25500.0,
-                 ((float) rColor.GetBlue()) * nFactor / 25500.0,
+                 static_cast<float>(rColor.GetRed()) * nFactor / 25500.0,
+                 static_cast<float>(rColor.GetGreen()) * nFactor / 25500.0,
+                 static_cast<float>(rColor.GetBlue()) * nFactor / 25500.0,
                  1.0f );
     CHECK_GL_ERROR();
 }
@@ -317,10 +317,10 @@ void OpenGLProgram::SetTransform(
     const basegfx::B2DVector aXRel = rX - rNull;
     const basegfx::B2DVector aYRel = rY - rNull;
     const float aValues[] = {
-        (float) aXRel.getX()/nTexWidth,  (float) aXRel.getY()/nTexWidth,  0, 0,
-        (float) aYRel.getX()/nTexHeight, (float) aYRel.getY()/nTexHeight, 0, 0,
+        static_cast<float>(aXRel.getX())/nTexWidth,  static_cast<float>(aXRel.getY())/nTexWidth,  0, 0,
+        static_cast<float>(aYRel.getX())/nTexHeight, static_cast<float>(aYRel.getY())/nTexHeight, 0, 0,
         0,                               0,                               1, 0,
-        (float) rNull.getX(),            (float) rNull.getY(),            0, 1 };
+        static_cast<float>(rNull.getX()),            static_cast<float>(rNull.getY()),            0, 1 };
     glm::mat4 aMatrix = glm::make_mat4( aValues );
     glUniformMatrix4fv( nUniform, 1, GL_FALSE, glm::value_ptr( aMatrix ) );
     CHECK_GL_ERROR();

@@ -345,7 +345,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
             for ( sal_Int32 i=0; i<nOrderedCount; ++i )
             m_aEventLogger.log( LogLevel::CONFIG,
                 "configuration's driver order: driver $1$ of $2$: $3$",
-                (sal_Int32)(i + 1), nOrderedCount, aDriverOrder[i]
+                static_cast<sal_Int32>(i + 1), nOrderedCount, aDriverOrder[i]
             );
         }
 

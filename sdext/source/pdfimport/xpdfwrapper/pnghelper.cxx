@@ -123,7 +123,7 @@ void PngHelper::appendFileHeader( OutputBuffer& o_rOutputBuf )
 size_t PngHelper::startChunk( const char* pChunkName, OutputBuffer& o_rOutputBuf )
 {
     size_t nIndex = sal_uInt32( o_rOutputBuf.size() );
-    o_rOutputBuf.insert( o_rOutputBuf.end(), 4, (Output_t)0 );
+    o_rOutputBuf.insert( o_rOutputBuf.end(), 4, Output_t(0) );
     o_rOutputBuf.push_back( pChunkName[0] );
     o_rOutputBuf.push_back( pChunkName[1] );
     o_rOutputBuf.push_back( pChunkName[2] );

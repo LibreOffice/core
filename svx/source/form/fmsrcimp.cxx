@@ -280,7 +280,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
 
 OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 {
-    DBG_ASSERT((sal_uInt32)nWhich < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
+    DBG_ASSERT(static_cast<sal_uInt32>(nWhich) < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
     DBG_ASSERT(m_aControlTexts[nWhich], "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
     DBG_ASSERT(m_aControlTexts[nWhich]->getControl().is(), "FmSearchEngine::FormatField : invalid control !");
 
@@ -291,7 +291,7 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
         nWhich = m_nCurrentFieldIndex;
     }
 
-    DBG_ASSERT((nWhich >= 0) && ((sal_uInt32)nWhich < m_aControlTexts.size()),
+    DBG_ASSERT((nWhich >= 0) && (static_cast<sal_uInt32>(nWhich) < m_aControlTexts.size()),
         "FmSearchEngine::FormatField : invalid argument nWhich !");
     return m_aControlTexts[m_nCurrentFieldIndex == -1 ? nWhich : m_nCurrentFieldIndex]->getCurrentText();
 }

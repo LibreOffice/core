@@ -176,7 +176,7 @@ bool SharedFormulaUtil::joinFormulaCells(
         else
         {
             // neither cells are shared.
-            assert(rCell1.aPos.Row() == (SCROW)(rPos.first->position + rPos.second));
+            assert(rCell1.aPos.Row() == static_cast<SCROW>(rPos.first->position + rPos.second));
             xGroup1 = rCell1.CreateCellGroup(2, eState == ScFormulaCell::EqualInvariant);
             rCell2.SetCellGroup(xGroup1);
         }

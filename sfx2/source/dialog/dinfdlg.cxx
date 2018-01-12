@@ -1712,7 +1712,7 @@ void CustomPropertiesWindow::Resize()
 sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
 {
     sal_Int32 nScrollOffset = GetLineHeight();
-    sal_uInt16 nCount = ceil((double)GetSizePixel().Height() / nScrollOffset);
+    sal_uInt16 nCount = ceil(static_cast<double>(GetSizePixel().Height()) / nScrollOffset);
     return nCount;
 }
 
@@ -2496,7 +2496,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( sValue, nIndex, dValue );
                     if ( bIsNum )
-                        seqValue[k] = (sal_Int64) dValue;
+                        seqValue[k] = static_cast<sal_Int64>(dValue);
                 }
                 aPropertiesSeq[i].Value <<= seqValue;
             }

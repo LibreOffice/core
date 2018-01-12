@@ -741,10 +741,10 @@ void FormController::impl_setTextOnAllFilter_throw()
         return;
 
     // set the text for all filters
-    OSL_ENSURE( m_aFilterRows.size() > (size_t)m_nCurrentFilterPosition,
+    OSL_ENSURE( m_aFilterRows.size() > static_cast<size_t>(m_nCurrentFilterPosition),
         "FormController::impl_setTextOnAllFilter_throw: m_nCurrentFilterPosition too big" );
 
-    if ( (size_t)m_nCurrentFilterPosition < m_aFilterRows.size() )
+    if ( static_cast<size_t>(m_nCurrentFilterPosition) < m_aFilterRows.size() )
     {
         FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
         for (   FmFilterRow::const_iterator iter2 = rRow.begin();
@@ -1083,7 +1083,7 @@ Any SAL_CALL FormController::getByIndex(sal_Int32 Index)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (Index < 0 ||
-        Index >= (sal_Int32)m_aChildren.size())
+        Index >= static_cast<sal_Int32>(m_aChildren.size()))
         throw IndexOutOfBoundsException();
 
     return makeAny( m_aChildren[ Index ] );
@@ -1452,7 +1452,7 @@ void SAL_CALL FormController::textChanged(const TextEvent& e)
         appendEmptyDisjunctiveTerm();
 
     // find the current row
-    if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
+    if ( ( static_cast<size_t>(m_nCurrentFilterPosition) >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
     {
         OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
         return;
@@ -1582,7 +1582,7 @@ void FormController::impl_appendEmptyFilterRow( ::osl::ClearableMutexGuard& _rCl
     // notify the listeners
     FilterEvent aEvent;
     aEvent.Source = *this;
-    aEvent.DisjunctiveTerm = (sal_Int32)m_aFilterRows.size() - 1;
+    aEvent.DisjunctiveTerm = static_cast<sal_Int32>(m_aFilterRows.size()) - 1;
     _rClearBeforeNotify.clear();
     // <-- SYNCHRONIZED
     m_aFilterListeners.notifyEach( &XFilterControllerListener::disjunctiveTermAdded, aEvent );
@@ -3087,8 +3087,8 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
          * works for ASCII separators, but
          * pParseNode->parseNodeToPredicateStr() expects a sal_Char. Fix it
          * there. */
-        sal_Char cDecimalSeparator = (sal_Char)rLocaleWrapper.getNumDecimalSep()[0];
-        SAL_WARN_IF( (sal_Unicode)cDecimalSeparator != rLocaleWrapper.getNumDecimalSep()[0],
+        sal_Char cDecimalSeparator = static_cast<sal_Char>(rLocaleWrapper.getNumDecimalSep()[0]);
+        SAL_WARN_IF( static_cast<sal_Unicode>(cDecimalSeparator) != rLocaleWrapper.getNumDecimalSep()[0],
                 "svx.form", "FormController::setFilter: wrong cast of decimal separator to sal_Char!");
 
         // retrieving the filter

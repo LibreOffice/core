@@ -496,7 +496,7 @@ void ImportExcel::Columndefault()
     nColMic = aIn.ReaduInt16();
     nColMac = aIn.ReaduInt16();
 
-    OSL_ENSURE( aIn.GetRecLeft() == (std::size_t)(nColMac - nColMic) * 3 + 2,
+    OSL_ENSURE( aIn.GetRecLeft() == static_cast<std::size_t>(nColMac - nColMic) * 3 + 2,
                 "ImportExcel::Columndefault - wrong record size" );
 
     nColMac--;

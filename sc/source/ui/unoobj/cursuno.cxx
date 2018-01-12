@@ -218,8 +218,8 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
         if ( nEndY > MAXROW ) nEndY = MAXROW;
         //! error/exception or so, if too big/small
 
-        aNewRange.aEnd.SetCol((SCCOL)nEndX);
-        aNewRange.aEnd.SetRow((SCROW)nEndY);
+        aNewRange.aEnd.SetCol(static_cast<SCCOL>(nEndX));
+        aNewRange.aEnd.SetRow(static_cast<SCROW>(nEndY));
 
         aNewRange.PutInOrder();    //! really?
 
@@ -398,11 +398,11 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
          aOneRange.aStart.Row() + nRowOffset    >= 0 &&
          aOneRange.aEnd.Row()   + nRowOffset    <= MAXROW )
     {
-        ScRange aNew( (SCCOL)(aOneRange.aStart.Col() + nColumnOffset),
-                      (SCROW)(aOneRange.aStart.Row() + nRowOffset),
+        ScRange aNew( static_cast<SCCOL>(aOneRange.aStart.Col() + nColumnOffset),
+                      static_cast<SCROW>(aOneRange.aStart.Row() + nRowOffset),
                       aOneRange.aStart.Tab(),
-                      (SCCOL)(aOneRange.aEnd.Col() + nColumnOffset),
-                      (SCROW)(aOneRange.aEnd.Row() + nRowOffset),
+                      static_cast<SCCOL>(aOneRange.aEnd.Col() + nColumnOffset),
+                      static_cast<SCROW>(aOneRange.aEnd.Row() + nRowOffset),
                       aOneRange.aEnd.Tab() );
         SetNewRange( aNew );
     }

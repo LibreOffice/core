@@ -354,7 +354,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
             break;
         case HtmlOptionId::SIZE :
             {
-                sal_Int16 nSize = (sal_Int16) rOption.GetNumber();
+                sal_Int16 nSize = static_cast<sal_Int16>(rOption.GetNumber());
                 if ( nSize == 0 )
                     nSize = 1;
                 else if ( nSize < DBAUI_HTML_FONTSIZES )
@@ -374,7 +374,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
     if ( rOptVal.indexOf('%') != -1 )
     {   // percentage
         OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 and Width%" );
-        return (sal_Int16)((rOption.GetNumber() * m_nColumnWidth) / 100);
+        return static_cast<sal_Int16>((rOption.GetNumber() * m_nColumnWidth) / 100);
     }
     else
     {
@@ -384,7 +384,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
             return 0;
         }
         else
-            return (sal_Int16)rOption.GetNumber();  // pixel
+            return static_cast<sal_Int16>(rOption.GetNumber());  // pixel
     }
 }
 

@@ -181,7 +181,7 @@ inline double stringToDouble(rtl::OString const & rString,
                                              cDecSeparator, cGroupSeparator,
                                              pStatus, &pEnd);
     if (pParsedEnd != NULL)
-        *pParsedEnd = (sal_Int32)(pEnd - pBegin);
+        *pParsedEnd = static_cast<sal_Int32>(pEnd - pBegin);
     return fResult;
 }
 
@@ -200,7 +200,7 @@ inline double stringToDouble(rtl::OUString const & rString,
                                               cDecSeparator, cGroupSeparator,
                                               pStatus, &pEnd);
     if (pParsedEnd != NULL)
-        *pParsedEnd = (sal_Int32)(pEnd - pBegin);
+        *pParsedEnd = static_cast<sal_Int32>(pEnd - pBegin);
     return fResult;
 }
 

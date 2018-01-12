@@ -131,7 +131,7 @@ namespace pcr
 
         sal_Int32 nValue(_nDefault);
         ::cppu::enum2int(nValue, aValue);
-        return (sal_Int16)nValue;
+        return static_cast<sal_Int16>(nValue);
     }
 
 
@@ -207,7 +207,7 @@ namespace pcr
             OUString aFontStyleName  = aPropExtractor.getStringFontProperty(PROPERTY_FONT_STYLENAME, aDefaultFont.StyleName);
             sal_Int16   nFontFamily         = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_FAMILY, aDefaultFont.Family);
             sal_Int16   nFontCharset        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
-            float   nFontHeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
+            float   nFontHeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, static_cast<float>(aDefaultFont.Height));
             float   nFontWeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
             css::awt::FontSlant nFontSlant  = static_cast<css::awt::FontSlant>(aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, (sal_Int16)aDefaultFont.Slant));
             sal_Int16 nFontLineStyle        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
@@ -224,8 +224,8 @@ namespace pcr
             // build SfxItems with the values
             SvxFontItem aFontItem((FontFamily)nFontFamily, aFontName, aFontStyleName, PITCH_DONTKNOW, nFontCharset, CFID_FONT);
 
-            nFontHeight = (float)OutputDevice::LogicToLogic(Size(0, (sal_Int32)nFontHeight), MapMode(MapUnit::MapPoint), MapMode(MapUnit::MapTwip)).Height();
-            SvxFontHeightItem aSvxFontHeightItem((sal_uInt32)nFontHeight,100,CFID_HEIGHT);
+            nFontHeight = static_cast<float>(OutputDevice::LogicToLogic(Size(0, static_cast<sal_Int32>(nFontHeight)), MapMode(MapUnit::MapPoint), MapMode(MapUnit::MapTwip)).Height());
+            SvxFontHeightItem aSvxFontHeightItem(static_cast<sal_uInt32>(nFontHeight),100,CFID_HEIGHT);
 
             FontWeight      eWeight=vcl::unohelper::ConvertFontWeight(nFontWeight);
             FontItalic      eItalic=vcl::unohelper::ConvertFontSlant(nFontSlant);
@@ -315,8 +315,8 @@ namespace pcr
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_NAME     , makeAny(rFontItem.GetFamilyName()));
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STYLENAME, makeAny(rFontItem.GetStyleName()));
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_FAMILY   , makeAny((sal_Int16)rFontItem.GetFamily()));
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , makeAny((sal_Int16)rFontItem.GetCharSet()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_FAMILY   , makeAny(static_cast<sal_Int16>(rFontItem.GetFamily())));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , makeAny(static_cast<sal_Int16>(rFontItem.GetCharSet())));
             }
 
 
@@ -328,7 +328,7 @@ namespace pcr
                 const SvxFontHeightItem& rSvxFontHeightItem =
                     static_cast<const SvxFontHeightItem&>(_rSet.Get(CFID_HEIGHT));
 
-                float nHeight = (float)OutputDevice::LogicToLogic(Size(0, rSvxFontHeightItem.GetHeight()), MapMode(MapUnit::MapTwip), MapMode(MapUnit::MapPoint)).Height();
+                float nHeight = static_cast<float>(OutputDevice::LogicToLogic(Size(0, rSvxFontHeightItem.GetHeight()), MapMode(MapUnit::MapTwip), MapMode(MapUnit::MapPoint)).Height());
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_HEIGHT,makeAny(nHeight));
 
             }
@@ -368,14 +368,14 @@ namespace pcr
                 const SvxUnderlineItem& rUnderlineItem =
                     static_cast<const SvxUnderlineItem&>(_rSet.Get(CFID_UNDERLINE));
 
-                sal_Int16 nUnderline = (sal_Int16)rUnderlineItem.GetLineStyle();
+                sal_Int16 nUnderline = static_cast<sal_Int16>(rUnderlineItem.GetLineStyle());
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
 
                 // the text line color is transported in this item, too
                 sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != (sal_uInt32)nColor)
+                if (COL_AUTO != static_cast<sal_uInt32>(nColor))
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
@@ -390,7 +390,7 @@ namespace pcr
                 const SvxCrossedOutItem& rCrossedOutItem =
                     static_cast<const SvxCrossedOutItem&>(_rSet.Get(CFID_STRIKEOUT));
 
-                sal_Int16 nStrikeout = (sal_Int16)rCrossedOutItem.GetStrikeout();
+                sal_Int16 nStrikeout = static_cast<sal_Int16>(rCrossedOutItem.GetStrikeout());
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STRIKEOUT,makeAny(nStrikeout));
             }
 
@@ -418,7 +418,7 @@ namespace pcr
                 sal_Int32 nColor = rColorItem.GetValue().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != (sal_uInt32)nColor)
+                if (COL_AUTO != static_cast<sal_uInt32>(nColor))
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );

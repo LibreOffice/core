@@ -726,7 +726,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
             aText[ nTmpIdx ] = aStr;
             aWishedHeight[ nTmpIdx ] = sal_uInt16(nWishedHeight);
             // save initial scaling factor
-            aFactor[ nTmpIdx ] = (sal_uInt16)nFactor;
+            aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
         }
 
         bool bGrow = ( pDrop->GetLen() != 0 );
@@ -876,7 +876,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                 else
                 {
                     if ( bUseCache )
-                        aFactor[ nTmpIdx ] = (sal_uInt16)nFactor;
+                        aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
                     nMin = nFactor;
                 }
 
@@ -927,13 +927,13 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
 
         pCurrPart = pCurrPart->GetFollow();
     }
-    pDrop->SetY( (short)nDescent );
+    pDrop->SetY( static_cast<short>(nDescent) );
 }
 
 bool SwDropPortion::Format( SwTextFormatInfo &rInf )
 {
     bool bFull = false;
-    nFix = (sal_uInt16)rInf.X();
+    nFix = static_cast<sal_uInt16>(rInf.X());
 
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
     aLayoutModeModifier.SetAuto();
@@ -971,7 +971,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
                         Width();
 
                 // set values
-                pCurrPart->SetWidth( (sal_uInt16)nTmpWidth );
+                pCurrPart->SetWidth( static_cast<sal_uInt16>(nTmpWidth) );
 
                 // Move
                 rInf.SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
@@ -980,7 +980,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
             }
             SetJoinBorderWithNext(false);
             SetJoinBorderWithPrev(false);
-            Width( (sal_uInt16)(rInf.X() - nOldX) );
+            Width( static_cast<sal_uInt16>(rInf.X() - nOldX) );
         }
 
         // reset my length
@@ -1018,7 +1018,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
     else
     {
         const sal_uInt16 nWant = Width() + GetDistance();
-        const sal_uInt16 nRest = (sal_uInt16)(rInf.Width() - rInf.X());
+        const sal_uInt16 nRest = static_cast<sal_uInt16>(rInf.Width() - rInf.X());
         if( ( nWant > nRest ) ||
             lcl_IsDropFlyInter( rInf, Width() + GetDistance(), nDropHeight ) )
             nDistance = 0;

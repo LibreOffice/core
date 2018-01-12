@@ -340,13 +340,13 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
                                 sal_Int16 nMinimumNumberOfDaysInWeek ) const
 {
     short nWeek;
-    short n1WDay = (short)Date( 1, 1, GetYear() ).GetDayOfWeek();
-    short nDayOfYear = (short)GetDayOfYear();
+    short n1WDay = static_cast<short>(Date( 1, 1, GetYear() ).GetDayOfWeek());
+    short nDayOfYear = static_cast<short>(GetDayOfYear());
 
     // weekdays start at 0, thus decrement one
     nDayOfYear--;
     // account for StartDay
-    n1WDay = (n1WDay+(7-(short)eStartDay)) % 7;
+    n1WDay = (n1WDay+(7-static_cast<short>(eStartDay))) % 7;
 
     if (nMinimumNumberOfDaysInWeek < 1 || 7 < nMinimumNumberOfDaysInWeek)
     {
@@ -363,9 +363,9 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
             nWeek = 1;
         else if ( nWeek == 53 )
         {
-            short nDaysInYear = (short)GetDaysInYear();
-            short nDaysNextYear = (short)Date( 1, 1, GetNextYear() ).GetDayOfWeek();
-            nDaysNextYear = (nDaysNextYear+(7-(short)eStartDay)) % 7;
+            short nDaysInYear = static_cast<short>(GetDaysInYear());
+            short nDaysNextYear = static_cast<short>(Date( 1, 1, GetNextYear() ).GetDayOfWeek());
+            nDaysNextYear = (nDaysNextYear+(7-static_cast<short>(eStartDay))) % 7;
             if ( nDayOfYear > (nDaysInYear-nDaysNextYear-1) )
                 nWeek = 1;
         }
@@ -413,13 +413,13 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
                 // == still the same week!
                 sal_Int32 nTempDays = GetAsNormalizedDays();
 
-                nTempDays +=  6 - (GetDayOfWeek()+(7-(short)eStartDay)) % 7;
+                nTempDays +=  6 - (GetDayOfWeek()+(7-static_cast<short>(eStartDay))) % 7;
                 nWeek = lcl_DaysToDate( nTempDays ).GetWeekOfYear( eStartDay, nMinimumNumberOfDaysInWeek );
             }
         }
     }
 
-    return (sal_uInt16)nWeek;
+    return static_cast<sal_uInt16>(nWeek);
 }
 
 sal_uInt16 Date::GetDaysInMonth() const

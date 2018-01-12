@@ -242,8 +242,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         // Borders
         SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
         SvxULSpaceItem aULMargin( RES_UL_SPACE );
-        aLRMargin.SetLeft ((sal_uInt16) rItem.m_lLeft );
-        aULMargin.SetUpper((sal_uInt16) rItem.m_lUpper);
+        aLRMargin.SetLeft (static_cast<sal_uInt16>(rItem.m_lLeft) );
+        aULMargin.SetUpper(static_cast<sal_uInt16>(rItem.m_lUpper));
         aLRMargin.SetRight( 0 );
         aULMargin.SetLower( 0 );
         rFormat.SetFormatAttr(aLRMargin);
@@ -273,7 +273,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
         pPrt = pSh->getIDocumentDeviceAccess().getPrinter( true );
         SvxPaperBinItem aItem( RES_PAPER_BIN );
-        aItem.SetValue((sal_Int8)pPrt->GetPaperBin());
+        aItem.SetValue(static_cast<sal_Int8>(pPrt->GetPaperBin()));
         rFormat.SetFormatAttr(aItem);
 
         // Determine orientation of the resulting page

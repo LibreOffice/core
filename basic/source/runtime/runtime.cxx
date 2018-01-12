@@ -998,7 +998,7 @@ SbxVariable* SbiRuntime::GetTOS()
         return new SbxVariable;
     }
 #endif
-    return refExprStk->Get( (sal_uInt16) n );
+    return refExprStk->Get( static_cast<sal_uInt16>(n) );
 }
 
 
@@ -2923,7 +2923,7 @@ void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
     }
     if( n < 1 || static_cast<sal_uInt32>(n) > nOp1 )
         n = static_cast<sal_Int16>( nOp1 + 1 );
-    nOp1 = (sal_uInt32) ( reinterpret_cast<const char*>(pCode) - pImg->GetCode() ) + 5 * --n;
+    nOp1 = static_cast<sal_uInt32>( reinterpret_cast<const char*>(pCode) - pImg->GetCode() ) + 5 * --n;
     StepJUMP( nOp1 );
 }
 
@@ -3798,7 +3798,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                         {
                             if( xIndexAccess.is() )
                             {
-                                sal_uInt32 nParamCount = (sal_uInt32)pPar->Count() - 1;
+                                sal_uInt32 nParamCount = static_cast<sal_uInt32>(pPar->Count()) - 1;
                                 if( nParamCount != 1 )
                                 {
                                     StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -4038,7 +4038,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                 if( pParam && ( pParam->nFlags & SbxFlagBits::Optional ) )
                 {
                     // Default value?
-                    sal_uInt16 nDefaultId = (sal_uInt16)(pParam->nUserData & 0x0ffff);
+                    sal_uInt16 nDefaultId = static_cast<sal_uInt16>(pParam->nUserData & 0x0ffff);
                     if( nDefaultId > 0 )
                     {
                         OUString aDefaultStr = pImg->GetString( nDefaultId );

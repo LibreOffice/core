@@ -46,7 +46,7 @@ void SbRtl_Err(StarBASIC *, SbxArray & rPar, bool bWrite)
         {
             sal_Int32 nVal = rPar.Get( 0 )->GetLong();
             if( nVal <= 65535 )
-                StarBASIC::Error( StarBASIC::GetSfxFromVBError( (sal_uInt16) nVal ) );
+                StarBASIC::Error( StarBASIC::GetSfxFromVBError( static_cast<sal_uInt16>(nVal) ) );
         }
         else
             rPar.Get( 0 )->PutLong( StarBASIC::GetVBErrorCode( StarBASIC::GetErrBasic() ) );

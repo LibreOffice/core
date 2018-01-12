@@ -277,10 +277,10 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 {
     if(!(nSpanCount & 0x0001))
     {
-        if(nLine >= 0 && nLine < (sal_Int32)mrBuffer.getHeight())
+        if(nLine >= 0 && nLine < static_cast<sal_Int32>(mrBuffer.getHeight()))
         {
-            sal_uInt32 nXA(std::min(mrBuffer.getWidth(), (sal_uInt32)std::max((sal_Int32)0, basegfx::fround(rA.getX().getVal()))));
-            const sal_uInt32 nXB(std::min(mrBuffer.getWidth(), (sal_uInt32)std::max((sal_Int32)0, basegfx::fround(rB.getX().getVal()))));
+            sal_uInt32 nXA(std::min(mrBuffer.getWidth(), static_cast<sal_uInt32>(std::max(sal_Int32(0), basegfx::fround(rA.getX().getVal())))));
+            const sal_uInt32 nXB(std::min(mrBuffer.getWidth(), static_cast<sal_uInt32>(std::max(sal_Int32(0), basegfx::fround(rB.getX().getVal())))));
 
             if(nXA < nXB)
             {
@@ -299,14 +299,14 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
                 while(nXA < nXB)
                 {
                     // early-test Z values if we need to do anything at all
-                    const double fNewZ(std::max(0.0, std::min((double)0xffff, maIntZ.getVal())));
+                    const double fNewZ(std::max(0.0, std::min(double(0xffff), maIntZ.getVal())));
                     const sal_uInt16 nNewZ(static_cast< sal_uInt16 >(fNewZ));
                     sal_uInt16& rOldZ(mrBuffer.getZ(nScanlineIndex));
 
                     if(nNewZ > rOldZ)
                     {
                         // detect color and opacity for this pixel
-                        const sal_uInt16 nOpacity(std::max((sal_Int16)0, static_cast< sal_Int16 >(decideColorAndOpacity(aNewColor) * 255.0)));
+                        const sal_uInt16 nOpacity(std::max(sal_Int16(0), static_cast< sal_Int16 >(decideColorAndOpacity(aNewColor) * 255.0)));
 
                         if(nOpacity > 0)
                         {
@@ -328,21 +328,21 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
                                     // mix new color by using
                                     // color' = color * (1 - opacity) + newcolor * opacity
                                     const sal_uInt16 nTransparence(0x0100 - nOpacity);
-                                    rDest.setRed((sal_uInt8)(((rDest.getRed() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getRed()) * nOpacity)) >> 8));
-                                    rDest.setGreen((sal_uInt8)(((rDest.getGreen() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getGreen()) * nOpacity)) >> 8));
-                                    rDest.setBlue((sal_uInt8)(((rDest.getBlue() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getBlue()) * nOpacity)) >> 8));
+                                    rDest.setRed(static_cast<sal_uInt8>(((rDest.getRed() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getRed()) * nOpacity)) >> 8));
+                                    rDest.setGreen(static_cast<sal_uInt8>(((rDest.getGreen() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getGreen()) * nOpacity)) >> 8));
+                                    rDest.setBlue(static_cast<sal_uInt8>(((rDest.getBlue() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getBlue()) * nOpacity)) >> 8));
 
                                     if(0xff != rDest.getOpacity())
                                     {
                                         // both are transparent, mix new opacity by using
                                         // opacity = newopacity * (1 - oldopacity) + oldopacity
-                                        rDest.setOpacity(((sal_uInt8)((nOpacity * (0x0100 - rDest.getOpacity())) >> 8)) + rDest.getOpacity());
+                                        rDest.setOpacity(static_cast<sal_uInt8>((nOpacity * (0x0100 - rDest.getOpacity())) >> 8) + rDest.getOpacity());
                                     }
                                 }
                                 else
                                 {
                                     // dest is unused, set color
-                                    rDest = basegfx::BPixel(aNewColor, (sal_uInt8)nOpacity);
+                                    rDest = basegfx::BPixel(aNewColor, static_cast<sal_uInt8>(nOpacity));
                                 }
                             }
                         }

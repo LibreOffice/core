@@ -408,7 +408,7 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
     sal_Int32 nMask = ~( m_nPageSize - 1 );
     sal_Int32 nOld = m_nPos & nMask;
     sal_Int32 nNew = nBytePos & nMask;
-    m_nOffset = (short) ( nBytePos & ~nMask );
+    m_nOffset = static_cast<short>( nBytePos & ~nMask );
     m_nPos = nBytePos;
     if( nOld == nNew )
         return true;
@@ -586,9 +586,9 @@ bool StgFATStrm::Pos2Page( sal_Int32 nBytePos )
     if( nBytePos < 0 || nBytePos >= m_nSize  )
         nBytePos = m_nSize ? m_nSize - 1 : 0;
     m_nPage   = nBytePos / m_nPageSize;
-    m_nOffset = (short) ( nBytePos % m_nPageSize );
+    m_nOffset = static_cast<short>( nBytePos % m_nPageSize );
     m_nPos    = nBytePos;
-    m_nPage   = GetPage( (short) m_nPage, false );
+    m_nPage   = GetPage( static_cast<short>(m_nPage), false );
     return m_nPage >= 0;
 }
 
@@ -624,7 +624,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
                 pMaster = m_rIo.Copy( nFAT );
                 if ( pMaster.is() )
                 {
-                    for( short k = 0; k < (short)( m_nPageSize >> 2 ); k++ )
+                    for( short k = 0; k < static_cast<short>( m_nPageSize >> 2 ); k++ )
                         m_rIo.SetToPage( pMaster, k, STG_FREE );
                     // chaining
                     if( !pOldPage.is() )
@@ -731,8 +731,8 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
     m_aPagesCache.clear();
 
     // Set the number of entries to a multiple of the page size
-    short nOld = (short) ( ( m_nSize + ( m_nPageSize - 1 ) ) / m_nPageSize );
-    short nNew = (short) (
+    short nOld = static_cast<short>( ( m_nSize + ( m_nPageSize - 1 ) ) / m_nPageSize );
+    short nNew = static_cast<short>(
         ( nBytes + ( m_nPageSize - 1 ) ) / m_nPageSize ) ;
     if( nNew < nOld )
     {
@@ -776,7 +776,7 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
             rtl::Reference< StgPage > pPg = m_rIo.Copy( nNewPage );
             if ( !pPg.is() )
                 return false;
-            for( short j = 0; j < (short)( m_nPageSize >> 2 ); j++ )
+            for( short j = 0; j < static_cast<short>( m_nPageSize >> 2 ); j++ )
                 m_rIo.SetToPage( pPg, j, STG_FREE );
 
             // store the page number into the master FAT
@@ -808,7 +808,7 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
             nOld++;
             // We have used up 4 bytes for the STG_FAT entry
             nBytes += 4;
-            nNew = (short) (
+            nNew = static_cast<short>(
                 ( nBytes + ( m_nPageSize - 1 ) ) / m_nPageSize );
         }
     }
@@ -921,8 +921,8 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
     {
         short nBytes = m_nPageSize - m_nOffset;
         rtl::Reference< StgPage > pPg;
-        if( (sal_Int32) nBytes > n )
-            nBytes = (short) n;
+        if( static_cast<sal_Int32>(nBytes) > n )
+            nBytes = static_cast<short>(n);
         if( nBytes )
         {
             short nRes;
@@ -938,7 +938,7 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
                 }
                 else
                     // do a direct (unbuffered) read
-                    nRes = (short) m_rIo.Read( m_nPage, p ) * m_nPageSize;
+                    nRes = static_cast<short>(m_rIo.Read( m_nPage, p )) * m_nPageSize;
             }
             else
             {
@@ -980,8 +980,8 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
     {
         short nBytes = m_nPageSize - m_nOffset;
         rtl::Reference< StgPage > pPg;
-        if( (sal_Int32) nBytes > n )
-            nBytes = (short) n;
+        if( static_cast<sal_Int32>(nBytes) > n )
+            nBytes = static_cast<short>(n);
         if( nBytes )
         {
             short nRes;
@@ -998,7 +998,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 }
                 else
                     // do a direct (unbuffered) write
-                    nRes = (short) m_rIo.Write( m_nPage, p ) * m_nPageSize;
+                    nRes = static_cast<short>(m_rIo.Write( m_nPage, p )) * m_nPageSize;
             }
             else
             {
@@ -1070,8 +1070,8 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
     while( n )
     {
         short nBytes = m_nPageSize - m_nOffset;
-        if( (sal_Int32) nBytes > n )
-            nBytes = (short) n;
+        if( static_cast<sal_Int32>(nBytes) > n )
+            nBytes = static_cast<short>(n);
         if( nBytes )
         {
             if (!m_pData)
@@ -1082,7 +1082,7 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
             if (!m_pData->Pos2Page(nPos + m_nOffset))
                 break;
             // all reading through the stream
-            short nRes = (short) m_pData->Read( static_cast<sal_uInt8*>(pBuf) + nDone, nBytes );
+            short nRes = static_cast<short>(m_pData->Read( static_cast<sal_uInt8*>(pBuf) + nDone, nBytes ));
             nDone = nDone + nRes;
             m_nPos += nRes;
             n -= nRes;
@@ -1113,8 +1113,8 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
     while( n )
     {
         short nBytes = m_nPageSize - m_nOffset;
-        if( (sal_Int32) nBytes > n )
-            nBytes = (short) n;
+        if( static_cast<sal_Int32>(nBytes) > n )
+            nBytes = static_cast<short>(n);
         if( nBytes )
         {
             // all writing goes through the stream
@@ -1125,7 +1125,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
                 break;
             if( !m_pData->Pos2Page( nDataPos ) )
                 break;
-            short nRes = (short) m_pData->Write( static_cast<sal_uInt8 const *>(pBuf) + nDone, nBytes );
+            short nRes = static_cast<short>(m_pData->Write( static_cast<sal_uInt8 const *>(pBuf) + nDone, nBytes ));
             nDone = nDone + nRes;
             m_nPos += nRes;
             n -= nRes;
@@ -1268,7 +1268,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
             }
             m_pStrm = s;
             // Shrink the memory to 16 bytes, which seems to be the minimum
-            ReAllocateMemory( - ( (long) nEndOfData - 16 ) );
+            ReAllocateMemory( - ( static_cast<long>(nEndOfData) - 16 ) );
         }
         else
         {

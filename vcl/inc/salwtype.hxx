@@ -139,7 +139,7 @@ struct SalPaintEvent
     {}
 };
 
-#define SAL_WHEELMOUSE_EVENT_PAGESCROLL     ((sal_uLong)0xFFFFFFFF)
+#define SAL_WHEELMOUSE_EVENT_PAGESCROLL     (sal_uLong(0xFFFFFFFF))
 struct SalWheelMouseEvent
 {
     sal_uInt64      mnTime;         // Time in ms, when event is created

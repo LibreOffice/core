@@ -184,7 +184,7 @@ size_t gz_read(gz_stream * file, voidp buf, unsigned len)
         if (s->z_err == Z_STREAM_END)
         {
 /* Check CRC and original size */
-            s->crc = crc32(s->crc, start, (uInt) (s->stream.next_out - start));
+            s->crc = crc32(s->crc, start, static_cast<uInt>(s->stream.next_out - start));
             start = s->stream.next_out;
 
             if (getLong(s) != s->crc || getLong(s) != s->stream.total_out)
@@ -200,7 +200,7 @@ size_t gz_read(gz_stream * file, voidp buf, unsigned len)
         if (s->z_err != Z_OK || s->z_eof)
             break;
     }
-    s->crc = crc32(s->crc, start, (uInt) (s->stream.next_out - start));
+    s->crc = crc32(s->crc, start, static_cast<uInt>(s->stream.next_out - start));
     return len - s->stream.avail_out;
 }
 
@@ -256,11 +256,11 @@ int gz_flush(gz_stream * file, int flush)
 */
 static uLong getLong(gz_stream * s)
 {
-    uLong x = (unsigned char) get_byte(s);
+    uLong x = static_cast<unsigned char>(get_byte(s));
 
-    x += ((unsigned char) get_byte(s)) << 8;
-    x += ((unsigned char) get_byte(s)) << 16;
-    x += ((unsigned char) get_byte(s)) << 24;
+    x += static_cast<unsigned char>(get_byte(s)) << 8;
+    x += static_cast<unsigned char>(get_byte(s)) << 16;
+    x += static_cast<unsigned char>(get_byte(s)) << 24;
     if (s->z_eof)
     {
         s->z_err = Z_DATA_ERROR;

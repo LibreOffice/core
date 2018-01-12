@@ -646,7 +646,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
     }
 
     // prepend some new items
-    bool bColAttrs = (nColId != (sal_uInt16)-1) && (nColId != 0);
+    bool bColAttrs = (nColId != sal_uInt16(-1)) && (nColId != 0);
     if ( bColAttrs && !bDBIsReadOnly)
     {
         sal_uInt16 nPos = 0;
@@ -785,7 +785,7 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
     sal_uInt16 nModelPos = GetModelColumnPos(nColId);
     Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
     Reference< XPropertySet >  xAffectedCol;
-    if (xCols.is() && (nModelPos != (sal_uInt16)-1))
+    if (xCols.is() && (nModelPos != sal_uInt16(-1)))
         xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
 
     if (xAffectedCol.is())
@@ -827,7 +827,7 @@ void SbaGridControl::SetRowHeight()
     {
         sal_Int32 nValue = aDlgRowHeight->GetValue();
         Any aNewHeight;
-        if ((sal_Int16)-1 == nValue)
+        if (sal_Int16(-1) == nValue)
         {   // set to default
             Reference< XPropertyState >  xPropState(xCols, UNO_QUERY);
             if (xPropState.is())
@@ -864,7 +864,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
     // get the (UNO) column model
     Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
     Reference< XPropertySet >  xAffectedCol;
-    if (xCols.is() && (nModelPos != (sal_uInt16)-1))
+    if (xCols.is() && (nModelPos != sal_uInt16(-1)))
         xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
 
     // get the field the column is bound to
@@ -1008,10 +1008,10 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
 {
     long nRow = GetRowAtYPosPixel(rMEvt.GetPosPixel().Y());
     sal_uInt16 nColPos = GetColumnAtXPosPixel(rMEvt.GetPosPixel().X());
-    sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? (sal_uInt16)-1 : nColPos-1;
+    sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? sal_uInt16(-1) : nColPos-1;
         // 'the handle column' and 'no valid column' will both result in a view position of -1 !
 
-    bool bHitEmptySpace = (nRow > GetRowCount()) || (nViewPos == (sal_uInt16)-1);
+    bool bHitEmptySpace = (nRow > GetRowCount()) || (nViewPos == sal_uInt16(-1));
 
     if (bHitEmptySpace && (rMEvt.GetClicks() == 2) && rMEvt.IsMod1())
         Control::MouseButtonDown(rMEvt);
@@ -1034,7 +1034,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // my laziness says 'do it here'...)
         long nRow = GetRowAtYPosPixel(_rPosPixel.Y());
         sal_uInt16 nColPos = GetColumnAtXPosPixel(_rPosPixel.X());
-        sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? (sal_uInt16)-1 : nColPos-1;
+        sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? sal_uInt16(-1) : nColPos-1;
             // 'the handle column' and 'no valid column' will both result in a view position of -1 !
 
         bool bCurrentRowVirtual = IsCurrentAppending() && IsModified();
@@ -1076,7 +1076,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
                 SelectAll();
 
             getMouseEvent().Clear();
-            implTransferSelectedRows((sal_Int16)nRow, false);
+            implTransferSelectedRows(static_cast<sal_Int16>(nRow), false);
 
             bHandled = true;
         }
@@ -1101,7 +1101,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
                 GetDataWindow().ReleaseMouse();
 
             getMouseEvent().Clear();
-            DoFieldDrag(nViewPos, (sal_Int16)nRow);
+            DoFieldDrag(nViewPos, static_cast<sal_Int16>(nRow));
 
             bHandled = true;
         }
@@ -1150,7 +1150,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 void SbaGridControl::CopySelectedRowsToClipboard()
 {
     OSL_ENSURE( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
-    implTransferSelectedRows( (sal_Int16)FirstSelectedRow(), true );
+    implTransferSelectedRows( static_cast<sal_Int16>(FirstSelectedRow()), true );
 }
 
 void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
@@ -1166,7 +1166,7 @@ void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfC
     if ((GetSelectRowCount() == 0) && (nRowPos >= 0))
     {
         aSelectedRows.realloc( 1 );
-        aSelectedRows[0] <<= (sal_Int32)(nRowPos + 1);
+        aSelectedRows[0] <<= static_cast<sal_Int32>(nRowPos + 1);
         bSelectionBookmarks = false;
     }
     else if ( !IsAllSelected() && GetSelectRowCount() )

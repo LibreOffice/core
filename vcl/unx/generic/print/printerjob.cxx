@@ -418,15 +418,15 @@ PrinterJob::EndJob()
     OStringBuffer aTrailer(512);
     aTrailer.append( "%%Trailer\n" );
     aTrailer.append( "%%BoundingBox: 0 0 " );
-    aTrailer.append( (sal_Int32)mnMaxWidthPt );
+    aTrailer.append( static_cast<sal_Int32>(mnMaxWidthPt) );
     aTrailer.append( " " );
-    aTrailer.append( (sal_Int32)mnMaxHeightPt );
+    aTrailer.append( static_cast<sal_Int32>(mnMaxHeightPt) );
     if( mnLandscapes > mnPortraits )
         aTrailer.append("\n%%Orientation: Landscape");
     else
         aTrailer.append("\n%%Orientation: Portrait");
     aTrailer.append( "\n%%Pages: " );
-    aTrailer.append( (sal_Int32)maPageVector.size() );
+    aTrailer.append( static_cast<sal_Int32>(maPageVector.size()) );
     aTrailer.append( "\n%%EOF\n" );
     WritePS (mpJobTrailer, aTrailer.getStr());
 
@@ -561,8 +561,8 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
     mnTMarginPt     = nUpper;
     mnBMarginPt     = nLower;
 
-    mfXScale        = 72.0 / (double)mnResolution;
-    mfYScale        = -1.0 * 72.0 / (double)mnResolution;
+    mfXScale        = 72.0 / static_cast<double>(mnResolution);
+    mfYScale        = -1.0 * 72.0 / static_cast<double>(mnResolution);
 }
 
 void
@@ -570,7 +570,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
 {
     InitPaperSize (rJobSetup);
 
-    OUString aPageNo = OUString::number ((sal_Int32)maPageVector.size()+1); // sequential page number must start with 1
+    OUString aPageNo = OUString::number (static_cast<sal_Int32>(maPageVector.size())+1); // sequential page number must start with 1
     OUString aExt    = aPageNo + ".ps";
 
     osl::File* pPageHeader = CreateSpoolFile ( "psp_pghead", aExt);
@@ -689,7 +689,7 @@ static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* 
     aFeature.append( "\n} stopped cleartomark\n" );
     sal_uInt64 nWritten = 0;
     return !(pFile->write( aFeature.getStr(), aFeature.getLength(), nWritten )
-        || nWritten != (sal_uInt64)aFeature.getLength());
+        || nWritten != static_cast<sal_uInt64>(aFeature.getLength()));
 }
 
 bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool bDocumentSetup )

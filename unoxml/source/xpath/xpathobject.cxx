@@ -108,7 +108,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        return (sal_Int8) xmlXPathCastToNumber(m_pXPathObj.get());
+        return static_cast<sal_Int8>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
 
     /**
@@ -118,7 +118,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        return (sal_Int16) xmlXPathCastToNumber(m_pXPathObj.get());
+        return static_cast<sal_Int16>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
 
     /**
@@ -128,7 +128,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        return (sal_Int32) xmlXPathCastToNumber(m_pXPathObj.get());
+        return static_cast<sal_Int32>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
 
     /**
@@ -138,7 +138,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        return (sal_Int64) xmlXPathCastToNumber(m_pXPathObj.get());
+        return static_cast<sal_Int64>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
 
     /**
@@ -148,7 +148,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        return (float) xmlXPathCastToNumber(m_pXPathObj.get());
+        return static_cast<float>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
 
     /**

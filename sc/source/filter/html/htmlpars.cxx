@@ -367,13 +367,13 @@ void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
     OSL_ENSURE( pOffset, "ScHTMLLayoutParser::MakeCol - illegal call" );
     SCCOL nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
-        nOffset = (sal_uInt16)(*pOffset)[nPos];
+        nOffset = static_cast<sal_uInt16>((*pOffset)[nPos]);
     else
         pOffset->insert( nOffset );
     if ( nWidth )
     {
         if ( SeekOffset( pOffset, nOffset + nWidth, &nPos, nWidthTol ) )
-            nWidth = (sal_uInt16)(*pOffset)[nPos] - nOffset;
+            nWidth = static_cast<sal_uInt16>((*pOffset)[nPos]) - nOffset;
         else
             pOffset->insert( nOffset + nWidth );
     }
@@ -385,7 +385,7 @@ void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOff
     OSL_ENSURE( pOffset, "ScHTMLLayoutParser::MakeColNoRef - illegal call" );
     SCCOL nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
-        nOffset = (sal_uInt16)(*pOffset)[nPos];
+        nOffset = static_cast<sal_uInt16>((*pOffset)[nPos]);
     else
         pOffset->insert( nOffset );
     if ( nWidth )
@@ -403,16 +403,16 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
     if ( !SeekOffset( pOffset, nOldOffset, &nPos, nOffsetTol ) )
     {
         if ( SeekOffset( pOffset, nNewOffset, &nPos, nOffsetTol ) )
-            nNewOffset = (sal_uInt16)(*pOffset)[nPos];
+            nNewOffset = static_cast<sal_uInt16>((*pOffset)[nPos]);
         else
             pOffset->insert( nNewOffset );
         return ;
     }
-    nOldOffset = (sal_uInt16)(*pOffset)[nPos];
+    nOldOffset = static_cast<sal_uInt16>((*pOffset)[nPos]);
     SCCOL nPos2;
     if ( SeekOffset( pOffset, nNewOffset, &nPos2, nOffsetTol ) )
     {
-        nNewOffset = (sal_uInt16)(*pOffset)[nPos2];
+        nNewOffset = static_cast<sal_uInt16>((*pOffset)[nPos2]);
         return ;
     }
     long nDiff = nNewOffset - nOldOffset;
@@ -428,7 +428,7 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
         do
         {
             const_cast<sal_uLong&>((*pOffset)[nPos]) += nDiff;
-        } while ( ++nPos < (sal_uInt16)pOffset->size() );
+        } while ( ++nPos < static_cast<sal_uInt16>(pOffset->size()) );
     }
 }
 
@@ -477,7 +477,7 @@ void ScHTMLLayoutParser::Adjust()
     SCCOL nLastCol = SCCOL_MAX;
     SCROW nNextRow = 0;
     SCROW nCurRow = 0;
-    sal_uInt16 nPageWidth = (sal_uInt16) aPageSize.Width();
+    sal_uInt16 nPageWidth = static_cast<sal_uInt16>(aPageSize.Width());
     InnerMap* pTab = nullptr;
     for (auto& pE : maList)
     {
@@ -581,15 +581,15 @@ void ScHTMLLayoutParser::Adjust()
         SkipLocked(pE.get(), false);
         if ( pE->nCol != nColBeforeSkip )
         {
-            SCCOL nCount = (SCCOL)maColOffset.size();
+            SCCOL nCount = static_cast<SCCOL>(maColOffset.size());
             if ( nCount <= pE->nCol )
             {
-                pE->nOffset = (sal_uInt16) maColOffset[nCount-1];
+                pE->nOffset = static_cast<sal_uInt16>(maColOffset[nCount-1]);
                 MakeCol( &maColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
             }
             else
             {
-                pE->nOffset = (sal_uInt16) maColOffset[pE->nCol];
+                pE->nOffset = static_cast<sal_uInt16>(maColOffset[pE->nCol]);
             }
         }
         SCCOL nPos;
@@ -625,7 +625,7 @@ sal_uInt16 ScHTMLLayoutParser::GetWidth( const ScEEParseEntry* pE )
                 nColCntStart + pE->nColOverlap),
             static_cast<sal_Int32>( pLocalColOffset->size() - 1));
     SCCOL nPos = (nTmp < 0 ? 0 : static_cast<SCCOL>(nTmp));
-    sal_uInt16 nOff2 = (sal_uInt16) (*pLocalColOffset)[nPos];
+    sal_uInt16 nOff2 = static_cast<sal_uInt16>((*pLocalColOffset)[nPos]);
     if ( pE->nOffset < nOff2 )
         return nOff2 - pE->nOffset;
     return 0;
@@ -635,7 +635,7 @@ void ScHTMLLayoutParser::SetWidths()
 {
     SCCOL nCol;
     if ( !nTableWidth )
-        nTableWidth = (sal_uInt16) aPageSize.Width();
+        nTableWidth = static_cast<sal_uInt16>(aPageSize.Width());
     SCCOL nColsPerRow = nMaxCol - nColCntStart;
     if ( nColsPerRow <= 0 )
         nColsPerRow = 1;
@@ -648,13 +648,13 @@ void ScHTMLLayoutParser::SetWidths()
         {
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
-        nTableWidth = (sal_uInt16)(pLocalColOffset->back() - pLocalColOffset->front());
+        nTableWidth = static_cast<sal_uInt16>(pLocalColOffset->back() - pLocalColOffset->front());
         for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
         {
             auto& pE = maList[ i ];
             if ( pE->nTab == nTable )
             {
-                pE->nOffset = (sal_uInt16) (*pLocalColOffset)[pE->nCol - nColCntStart];
+                pE->nOffset = static_cast<sal_uInt16>((*pLocalColOffset)[pE->nCol - nColCntStart]);
                 pE->nWidth = 0; // to be recalculated later
             }
         }
@@ -761,7 +761,7 @@ void ScHTMLLayoutParser::SetWidths()
     }
     if ( !pLocalColOffset->empty() )
     {
-        sal_uInt16 nMax = (sal_uInt16) pLocalColOffset->back();
+        sal_uInt16 nMax = static_cast<sal_uInt16>(pLocalColOffset->back());
         if ( aPageSize.Width() < nMax )
             aPageSize.Width() = nMax;
     }
@@ -794,9 +794,9 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
         nCol = pE->nCol - nColCntStart;
         SCCOL nCount = static_cast<SCCOL>(pLocalColOffset->size());
         if ( nCol < nCount )
-            nColOffset = (sal_uInt16) (*pLocalColOffset)[nCol];
+            nColOffset = static_cast<sal_uInt16>((*pLocalColOffset)[nCol]);
         else
-            nColOffset = (sal_uInt16) (*pLocalColOffset)[nCount - 1];
+            nColOffset = static_cast<sal_uInt16>((*pLocalColOffset)[nCount - 1]);
     }
     pE->nOffset = nColOffset;
     sal_uInt16 nWidth = GetWidth( pE );
@@ -818,7 +818,7 @@ void ScHTMLLayoutParser::CloseEntry( const HtmlImportInfo* pInfo )
         return ;
     }
     if (mxActEntry->nTab == 0)
-        mxActEntry->nWidth = (sal_uInt16) aPageSize.Width();
+        mxActEntry->nWidth = static_cast<sal_uInt16>(aPageSize.Width());
     Colonize(mxActEntry.get());
     nColCnt = mxActEntry->nCol + mxActEntry->nColOverlap;
     if ( nMaxCol < nColCnt )
@@ -933,12 +933,12 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
         {
             case HtmlOptionId::COLSPAN:
             {
-                mxActEntry->nColOverlap = (SCCOL)rOption.GetString().toInt32();
+                mxActEntry->nColOverlap = static_cast<SCCOL>(rOption.GetString().toInt32());
             }
             break;
             case HtmlOptionId::ROWSPAN:
             {
-                mxActEntry->nRowOverlap = (SCROW)rOption.GetString().toInt32();
+                mxActEntry->nRowOverlap = static_cast<SCROW>(rOption.GetString().toInt32());
             }
             break;
             case HtmlOptionId::ALIGN:
@@ -1319,22 +1319,22 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
             break;
             case HtmlOptionId::WIDTH:
             {
-                pImage->aSize.Width() = (long)rOption.GetNumber();
+                pImage->aSize.Width() = static_cast<long>(rOption.GetNumber());
             }
             break;
             case HtmlOptionId::HEIGHT:
             {
-                pImage->aSize.Height() = (long)rOption.GetNumber();
+                pImage->aSize.Height() = static_cast<long>(rOption.GetNumber());
             }
             break;
             case HtmlOptionId::HSPACE:
             {
-                pImage->aSpace.X() = (long)rOption.GetNumber();
+                pImage->aSpace.X() = static_cast<long>(rOption.GetNumber());
             }
             break;
             case HtmlOptionId::VSPACE:
             {
-                pImage->aSpace.Y() = (long)rOption.GetNumber();
+                pImage->aSpace.Y() = static_cast<long>(rOption.GetNumber());
             }
             break;
             default: break;
@@ -1404,8 +1404,8 @@ sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption& rOption )
     const OUString& rOptVal = rOption.GetString();
     if ( rOptVal.indexOf('%') != -1 )
     {   // Percent
-        sal_uInt16 nW = (nTableWidth ? nTableWidth : (sal_uInt16) aPageSize.Width());
-        return (sal_uInt16)((rOption.GetNumber() * nW) / 100);
+        sal_uInt16 nW = (nTableWidth ? nTableWidth : static_cast<sal_uInt16>(aPageSize.Width()));
+        return static_cast<sal_uInt16>((rOption.GetNumber() * nW) / 100);
     }
     else
     {
@@ -1415,7 +1415,7 @@ sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption& rOption )
             return 0;
         }
         else
-            return (sal_uInt16)rOption.GetNumber(); // Pixel
+            return static_cast<sal_uInt16>(rOption.GetNumber()); // Pixel
     }
 }
 
@@ -1469,7 +1469,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                 break;
                 case HtmlOptionId::SIZE :
                 {
-                    sal_uInt16 nSize = (sal_uInt16) rOption.GetNumber();
+                    sal_uInt16 nSize = static_cast<sal_uInt16>(rOption.GetNumber());
                     if ( nSize == 0 )
                         nSize = 1;
                     else if ( nSize > SC_HTML_FONTSIZES )

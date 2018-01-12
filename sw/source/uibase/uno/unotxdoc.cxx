@@ -779,11 +779,11 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
         bool bCancel;
-        nResult = (sal_Int32)pUnoCursor->Find( aSearch, !pSearch->m_bStyles,
+        nResult = static_cast<sal_Int32>(pUnoCursor->Find( aSearch, !pSearch->m_bStyles,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
                     !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr,
-                    &aReplace );
+                    &aReplace ));
     }
     else if(pSearch->m_bStyles)
     {
@@ -805,7 +805,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
             (FindRanges)eRanges,
             true );
     }
-    return (sal_Int32)nResult;
+    return static_cast<sal_Int32>(nResult);
 
 }
 
@@ -908,10 +908,10 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                     RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
             pSearch->FillSearchItemSet(aSearch);
             bool bCancel;
-            nResult = (sal_Int32)pUnoCursor->Find( aSearch, !pSearch->m_bStyles,
+            nResult = static_cast<sal_Int32>(pUnoCursor->Find( aSearch, !pSearch->m_bStyles,
                         eStart, eEnd, bCancel,
                         eRanges,
-                        !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr );
+                        !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr ));
         }
         else if(pSearch->m_bStyles)
         {
@@ -919,17 +919,17 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
             //pSearch->sReplaceText
             SwTextFormatColl *pReplaceColl = nullptr;
             bool bCancel;
-            nResult = (sal_Int32)pUnoCursor->Find( *pSearchColl,
+            nResult = static_cast<sal_Int32>(pUnoCursor->Find( *pSearchColl,
                         eStart, eEnd, bCancel,
-                        eRanges, pReplaceColl );
+                        eRanges, pReplaceColl ));
         }
         else
         {
             //todo/mba: assuming that notes should be omitted
             bool bCancel;
-            nResult = (sal_Int32)pUnoCursor->Find( aSearchOpt, false/*bSearchInNotes*/,
+            nResult = static_cast<sal_Int32>(pUnoCursor->Find( aSearchOpt, false/*bSearchInNotes*/,
                     eStart, eEnd, bCancel,
-                    eRanges );
+                    eRanges ));
         }
         if(nResult || (eRanges&(FindRanges::InSelAll|FindRanges::InOther)))
             break;
@@ -1010,21 +1010,21 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
     if(pData)
         aData = *pData;
     Any aVal;
-    aVal <<= (sal_Int16)aData.GetRow();
+    aVal <<= static_cast<sal_Int16>(aData.GetRow());
     pArray[0] = beans::PropertyValue("PageRows", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= (sal_Int16)aData.GetCol();
+    aVal <<= static_cast<sal_Int16>(aData.GetCol());
     pArray[1] = beans::PropertyValue("PageColumns", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetLeftSpace());
+    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetLeftSpace()));
     pArray[2] = beans::PropertyValue("LeftMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetRightSpace());
+    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetRightSpace()));
     pArray[3] = beans::PropertyValue("RightMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetTopSpace());
+    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetTopSpace()));
     pArray[4] = beans::PropertyValue("TopMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetBottomSpace());
+    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetBottomSpace()));
     pArray[5] = beans::PropertyValue("BottomMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetHorzSpace());
+    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetHorzSpace()));
     pArray[6] = beans::PropertyValue("HoriMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetVertSpace());
+    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetVertSpace()));
     pArray[7] = beans::PropertyValue("VertMargin", -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= aData.GetLandscape();
     pArray[8] = beans::PropertyValue("IsLandscape", -1, aVal, PropertyState_DIRECT_VALUE);
@@ -1045,7 +1045,7 @@ static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, bool& bException)
          sal_Int32 nVal=0;
          bException = !(rValue >>= nVal);
          if( !bException )
-            nRet = (sal_uInt32)nVal;
+            nRet = static_cast<sal_uInt32>(nVal);
     }
 
     return nRet;
@@ -1096,13 +1096,13 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
         {
             if(!nVal || nVal > 0xff)
                 throw RuntimeException("Invalid value");
-            aData.SetRow((sal_uInt8)nVal);
+            aData.SetRow(static_cast<sal_uInt8>(nVal));
         }
         else if(sName == "PageColumns")
         {
             if(!nVal  || nVal > 0xff)
                 throw RuntimeException("Invalid value");
-            aData.SetCol((sal_uInt8)nVal);
+            aData.SetCol(static_cast<sal_uInt8>(nVal));
         }
         else if(sName == "LeftMargin")
         {
@@ -1183,7 +1183,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
         {
             sal_Int32 nCopies = 0;
             aValue >>= nCopies;
-            aReq.AppendItem(SfxInt16Item( SID_PRINT_COPIES, (sal_Int16)nCopies ) );
+            aReq.AppendItem(SfxInt16Item( SID_PRINT_COPIES, static_cast<sal_Int16>(nCopies) ) );
         }
 
         // Collate-Property

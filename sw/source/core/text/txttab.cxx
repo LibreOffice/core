@@ -151,7 +151,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                 const SvxTabStopItem& rTab =
                     m_pFrame->GetAttrSet()->GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
                 if( rTab.Count() )
-                    nDefTabDist = (sal_uInt16)rTab[0].GetTabPos();
+                    nDefTabDist = static_cast<sal_uInt16>(rTab[0].GetTabPos());
                 else
                     nDefTabDist = SVX_TAB_DEFDIST;
                 m_aLineInf.SetDefTabStop( nDefTabDist );

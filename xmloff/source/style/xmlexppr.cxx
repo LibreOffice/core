@@ -850,7 +850,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                     // we export it later
                     if( pIndexArray )
                     {
-                        pIndexArray->push_back( (sal_uInt16)nIndex );
+                        pIndexArray->push_back( static_cast<sal_uInt16>(nIndex) );
                     }
                 }
                 else

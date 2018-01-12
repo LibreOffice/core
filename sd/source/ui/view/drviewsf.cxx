@@ -582,7 +582,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 {
                     sal_uInt16 nMask = 1;
                     sal_uInt16 nCount = 0;
-                    sal_uInt16 nCurLevel = (sal_uInt16)0xFFFF;
+                    sal_uInt16 nCurLevel = sal_uInt16(0xFFFF);
                     for(sal_uInt16 i = 0; i < pNumRule->GetLevelCount(); i++)
                     {
                         if(nActNumLvl & nMask)
@@ -609,8 +609,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                                     bBullets = false;
                             }
 
-                            rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
-                            rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                            rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,sal_uInt16(0xFFFF)));
+                            rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,sal_uInt16(0xFFFF)));
                             if ( bBullets )
                             {
                                 NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(NBOType::Bullets);

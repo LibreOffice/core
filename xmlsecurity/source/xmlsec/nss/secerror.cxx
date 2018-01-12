@@ -59,7 +59,7 @@ getCertError(PRErrorCode errNum)
 void
 printChainFailure(CERTVerifyLog *log)
 {
-    unsigned int       depth  = (unsigned int)-1;
+    unsigned int       depth  = static_cast<unsigned int>(-1);
     CERTVerifyLogNode *node   = nullptr;
 
     if (log->count > 0)

@@ -162,7 +162,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_PAGE_NUMTYPE:
         {
             //! constants aren't in IDLs any more ?!?
-            rVal <<= (sal_Int16)( eNumType );
+            rVal <<= static_cast<sal_Int16>( eNumType );
         }
         break;
         case MID_PAGE_ORIENTATION:

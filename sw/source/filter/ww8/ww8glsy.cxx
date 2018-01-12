@@ -156,7 +156,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 sal_Int32 nStart = 0;
                 sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
                 sal_Int32 nLen = sShortcut.getLength();
-                while( (sal_uInt16)-1 != nCurPos )
+                while( sal_uInt16(-1) != nCurPos )
                 {
                     sShortcut = sShortcut.copy( 0, nLen );
                     sShortcut += OUString::number(++nStart);    // add an Number to it

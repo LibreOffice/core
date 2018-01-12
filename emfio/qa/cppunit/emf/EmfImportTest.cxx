@@ -88,7 +88,7 @@ void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 void Test::testWorking()
 {
     Primitive2DSequence aSequenceRect = parseEmf("/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
-    CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRect.getLength());
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRect.getLength()));
     checkRectPrimitive(aSequenceRect);
 }
 
@@ -99,7 +99,7 @@ void Test::TestDrawString()
 
     // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawString.emf");
-    CPPUNIT_ASSERT_EQUAL(1, (int) aSequence.getLength());
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     Primitive2dXmlDump dumper;
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
@@ -120,7 +120,7 @@ void Test::TestDrawLine()
 
     // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
-    CPPUNIT_ASSERT_EQUAL(1, (int) aSequence.getLength());
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     Primitive2dXmlDump dumper;
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);

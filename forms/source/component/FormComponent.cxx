@@ -863,10 +863,10 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             aReturn <<= OUString();
             break;
         case PROPERTY_ID_CLASSID:
-            aReturn <<= (sal_Int16)FormComponentType::CONTROL;
+            aReturn <<= sal_Int16(FormComponentType::CONTROL);
             break;
         case PROPERTY_ID_TABINDEX:
-            aReturn <<= (sal_Int16)FRM_DEFAULT_TABINDEX;
+            aReturn <<= sal_Int16(FRM_DEFAULT_TABINDEX);
             break;
         case PROPERTY_ID_NATIVE_LOOK:
             aReturn <<= true;
@@ -876,10 +876,10 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             break;
         // added for exporting OCX control
         case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
-            aReturn <<= (sal_Int16)0;
+            aReturn <<= sal_Int16(0);
             break;
         case PROPERTY_ID_OBJ_ID_IN_MSO:
-            aReturn <<= (sal_uInt16)INVALID_OBJ_ID_IN_MSO;
+            aReturn <<= sal_uInt16(INVALID_OBJ_ID_IN_MSO);
             break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
@@ -914,10 +914,10 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
             break;
         // added for exporting OCX control
         case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
-            _rValue <<= (sal_Int16)m_nControlTypeinMSO;
+            _rValue <<= static_cast<sal_Int16>(m_nControlTypeinMSO);
             break;
         case PROPERTY_ID_OBJ_ID_IN_MSO:
-            _rValue <<= (sal_uInt16)m_nObjIDinMSO;
+            _rValue <<= static_cast<sal_uInt16>(m_nObjIDinMSO);
             break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )

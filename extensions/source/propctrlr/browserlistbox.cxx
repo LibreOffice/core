@@ -433,7 +433,7 @@ namespace pcr
 
         UpdateVScroll();
 
-        bool bNeedScrollbar = m_aLines.size() > (sal_uInt32)CalcVisibleLines();
+        bool bNeedScrollbar = m_aLines.size() > static_cast<sal_uInt32>(CalcVisibleLines());
         if ( !bNeedScrollbar )
         {
             if ( m_aVScroll->IsVisible() )
@@ -523,7 +523,7 @@ namespace pcr
         Size aSize(m_aLinesPlayground->GetOutputSizePixel());
         sal_uInt16 nResult = 0;
         if (0 != m_nRowHeight)
-            nResult = (sal_uInt16) aSize.Height()/m_nRowHeight;
+            nResult = static_cast<sal_uInt16>(aSize.Height())/m_nRowHeight;
 
         return nResult;
     }
@@ -646,7 +646,7 @@ namespace pcr
         {
             if ( linePos->aName == _rEntryName )
             {
-                nRet = (sal_uInt16)( linePos - m_aLines.begin() );
+                nRet = static_cast<sal_uInt16>( linePos - m_aLines.begin() );
                 break;
             }
         }
@@ -914,7 +914,7 @@ namespace pcr
                 return sal_uInt16( search - m_aLines.begin() );
 
         OSL_FAIL( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
-        return (sal_uInt16)-1;
+        return sal_uInt16(-1);
     }
 
 
@@ -1079,7 +1079,7 @@ namespace pcr
             rLine.pLine->SetTitle(_rPropertyData.DisplayName);
             rLine.xHandler = _rPropertyData.xPropertyHandler;
 
-            sal_uInt16 nTextWidth = (sal_uInt16)m_aLinesPlayground->GetTextWidth(_rPropertyData.DisplayName);
+            sal_uInt16 nTextWidth = static_cast<sal_uInt16>(m_aLinesPlayground->GetTextWidth(_rPropertyData.DisplayName));
             if (m_nTheNameSize< nTextWidth)
                 m_nTheNameSize = nTextWidth;
 
@@ -1183,9 +1183,9 @@ namespace pcr
                     sal_uInt16 nFocusControlPos = 0;
                     sal_uInt16 nActiveControlPos = impl_getControlPos( m_xActiveControl );
                     if ( nActiveControlPos < nNewThumbPos )
-                        nFocusControlPos = (sal_uInt16)nNewThumbPos;
+                        nFocusControlPos = static_cast<sal_uInt16>(nNewThumbPos);
                     else if ( nActiveControlPos >= nNewThumbPos + CalcVisibleLines() )
-                        nFocusControlPos = (sal_uInt16)nNewThumbPos + CalcVisibleLines() - 1;
+                        nFocusControlPos = static_cast<sal_uInt16>(nNewThumbPos) + CalcVisibleLines() - 1;
                     if ( nFocusControlPos )
                     {
                         if ( nFocusControlPos < m_aLines.size() )

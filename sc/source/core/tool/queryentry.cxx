@@ -27,8 +27,8 @@
  * conjunctions with the flag bQueryByString = FALSE.
  */
 
-#define SC_EMPTYFIELDS      ((double)0x0042)
-#define SC_NONEMPTYFIELDS   ((double)0x0043)
+#define SC_EMPTYFIELDS      (double(0x0042))
+#define SC_NONEMPTYFIELDS   (double(0x0043))
 
 bool ScQueryEntry::Item::operator== (const Item& r) const
 {

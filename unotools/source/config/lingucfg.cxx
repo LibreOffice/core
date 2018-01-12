@@ -394,7 +394,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
     else if (pnVal)
         aRes <<= *pnVal;
     else if (plVal)
-        aRes <<= (sal_Int16)(sal_uInt16)*plVal;
+        aRes <<= static_cast<sal_Int16>(static_cast<sal_uInt16>(*plVal));
     else if (pnInt32Val)
         aRes <<= *pnInt32Val;
 
@@ -522,7 +522,7 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
         sal_Int16 nNew = sal_Int16();
         if (rValue >>= nNew)
         {
-            if (nNew != (sal_uInt16)*plVal)
+            if (nNew != static_cast<sal_uInt16>(*plVal))
             {
                 *plVal = LanguageType(static_cast<sal_uInt16>(nNew));
                 bMod = true;

@@ -42,7 +42,7 @@ PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
                 {
                     OUString aStr = SvxResId(RID_SVXSTRARY_NUMBERINGTYPE[i].first);
                     sal_Int32 nPos = InsertEntry( aStr );
-                    SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)nData) );
+                    SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(nData)) );
                 }
         }
     }
@@ -58,7 +58,7 @@ void PageNumberListBox::SetSelection( sal_uInt16 nPos )
 
     for (sal_Int32 i = 0; i < nEntryCount; ++i )
     {
-        sal_uInt16 nTmp = (sal_uInt16)reinterpret_cast<sal_uLong>(GetEntryData(i));
+        sal_uInt16 nTmp = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(GetEntryData(i)));
 
         if ( nTmp == nPos )
         {

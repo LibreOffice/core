@@ -679,7 +679,7 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
     if (bInResize)
     {
         // detect direction
-        long nResizeThreshold = ((long)TBX_WINDOW_HEIGHT * 0.7);
+        long nResizeThreshold = (long(TBX_WINDOW_HEIGHT) * 0.7);
         bool bResetPointerPos = false;
 
         // Detect attempt to expand toolbar too much

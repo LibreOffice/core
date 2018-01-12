@@ -349,17 +349,17 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
         {
             case SdrHelpLineKind::Point:
                 aLines.append( 'P' );
-                aLines.append( (sal_Int32)rPos.X() );
+                aLines.append( static_cast<sal_Int32>(rPos.X()) );
                 aLines.append( ',' );
-                aLines.append( (sal_Int32)rPos.Y() );
+                aLines.append( static_cast<sal_Int32>(rPos.Y()) );
                 break;
             case SdrHelpLineKind::Vertical:
                 aLines.append( 'V' );
-                aLines.append( (sal_Int32)rPos.X() );
+                aLines.append( static_cast<sal_Int32>(rPos.X()) );
                 break;
             case SdrHelpLineKind::Horizontal:
                 aLines.append( 'H' );
-                aLines.append( (sal_Int32)rPos.Y() );
+                aLines.append( static_cast<sal_Int32>(rPos.Y()) );
                 break;
             default:
                 OSL_FAIL( "Unsupported helpline Kind!" );
@@ -385,7 +385,7 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.addValue( sUNO_View_IsPlusHandlesAlwaysVisible, makeAny( IsPlusHandlesAlwaysVisible() ) );
     aUserData.addValue( sUNO_View_IsFrameDragSingles, makeAny( IsFrameDragSingles() ) );
 
-    aUserData.addValue( sUNO_View_EliminatePolyPointLimitAngle, makeAny( (sal_Int32)GetEliminatePolyPointLimitAngle() ) );
+    aUserData.addValue( sUNO_View_EliminatePolyPointLimitAngle, makeAny( static_cast<sal_Int32>(GetEliminatePolyPointLimitAngle()) ) );
     aUserData.addValue( sUNO_View_IsEliminatePolyPoints, makeAny( IsEliminatePolyPoints() ) );
 
     Any aAny;
@@ -412,13 +412,13 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
 
     aUserData.addValue( sUNO_View_RulerIsVisible, makeAny( HasRuler() ) );
     aUserData.addValue( sUNO_View_PageKind, makeAny( (sal_Int16)GetPageKind() ) );
-    aUserData.addValue( sUNO_View_SelectedPage, makeAny( (sal_Int16)GetSelectedPage() ) );
+    aUserData.addValue( sUNO_View_SelectedPage, makeAny( static_cast<sal_Int16>(GetSelectedPage()) ) );
     aUserData.addValue( sUNO_View_IsLayerMode, makeAny( IsLayerMode() ) );
 
     aUserData.addValue( sUNO_View_IsDoubleClickTextEdit,  makeAny( IsDoubleClickTextEdit() ) );
     aUserData.addValue( sUNO_View_IsClickChangeRotation, makeAny( IsClickChangeRotation() ) );
 
-    aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( (sal_Int16)GetSlidesPerRow() ) );
+    aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( static_cast<sal_Int16>(GetSlidesPerRow()) ) );
     aUserData.addValue( sUNO_View_EditMode, makeAny( (sal_Int32)GetViewShEditMode() ) );
     // aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Standard ) ) );
     // aUserData.addValue( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Notes ) ) );
@@ -427,22 +427,22 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     {
         const ::tools::Rectangle aVisArea = GetVisArea();
 
-        aUserData.addValue( sUNO_View_VisibleAreaTop, makeAny( (sal_Int32)aVisArea.Top() ) );
-        aUserData.addValue( sUNO_View_VisibleAreaLeft, makeAny( (sal_Int32)aVisArea.Left() ) );
-        aUserData.addValue( sUNO_View_VisibleAreaWidth, makeAny( (sal_Int32)aVisArea.GetWidth() ) );
-        aUserData.addValue( sUNO_View_VisibleAreaHeight, makeAny( (sal_Int32)aVisArea.GetHeight() ) );
+        aUserData.addValue( sUNO_View_VisibleAreaTop, makeAny( static_cast<sal_Int32>(aVisArea.Top()) ) );
+        aUserData.addValue( sUNO_View_VisibleAreaLeft, makeAny( static_cast<sal_Int32>(aVisArea.Left()) ) );
+        aUserData.addValue( sUNO_View_VisibleAreaWidth, makeAny( static_cast<sal_Int32>(aVisArea.GetWidth()) ) );
+        aUserData.addValue( sUNO_View_VisibleAreaHeight, makeAny( static_cast<sal_Int32>(aVisArea.GetHeight()) ) );
     }
 
-    aUserData.addValue( sUNO_View_GridCoarseWidth, makeAny( (sal_Int32)GetGridCoarse().Width() ) );
-    aUserData.addValue( sUNO_View_GridCoarseHeight, makeAny( (sal_Int32)GetGridCoarse().Height() ) );
-    aUserData.addValue( sUNO_View_GridFineWidth, makeAny( (sal_Int32)GetGridFine().Width() ) );
-    aUserData.addValue( sUNO_View_GridFineHeight, makeAny( (sal_Int32)GetGridFine().Height() ) );
+    aUserData.addValue( sUNO_View_GridCoarseWidth, makeAny( static_cast<sal_Int32>(GetGridCoarse().Width()) ) );
+    aUserData.addValue( sUNO_View_GridCoarseHeight, makeAny( static_cast<sal_Int32>(GetGridCoarse().Height()) ) );
+    aUserData.addValue( sUNO_View_GridFineWidth, makeAny( static_cast<sal_Int32>(GetGridFine().Width()) ) );
+    aUserData.addValue( sUNO_View_GridFineHeight, makeAny( static_cast<sal_Int32>(GetGridFine().Height()) ) );
     aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( GetSnapGridWidthX().GetNumerator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( GetSnapGridWidthX().GetDenominator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( GetSnapGridWidthY().GetNumerator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthYDenominator, makeAny( GetSnapGridWidthY().GetDenominator() ) );
     aUserData.addValue( sUNO_View_IsAngleSnapEnabled, makeAny( IsAngleSnapEnabled() ) );
-    aUserData.addValue( sUNO_View_SnapAngle, makeAny( (sal_Int32)GetSnapAngle() ) );
+    aUserData.addValue( sUNO_View_SnapAngle, makeAny( static_cast<sal_Int32>(GetSnapAngle()) ) );
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc( nOldLength + aUserData.size() );
@@ -597,9 +597,9 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetSelectedPage( (sal_uInt16)nInt16 );
+                        SetSelectedPage( static_cast<sal_uInt16>(nInt16) );
 
-                    SetSelectedPageOnLoad( (sal_uInt16)nInt16 );
+                    SetSelectedPageOnLoad( static_cast<sal_uInt16>(nInt16) );
                 }
             }
             else if ( pValue->Name == sUNO_View_IsLayerMode )
@@ -627,7 +627,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
             {
                 if( pValue->Value >>= nInt16 )
                 {
-                    SetSlidesPerRow( (sal_uInt16)nInt16 );
+                    SetSlidesPerRow( static_cast<sal_uInt16>(nInt16) );
                 }
             }
             else if ( pValue->Name == sUNO_View_EditMode )

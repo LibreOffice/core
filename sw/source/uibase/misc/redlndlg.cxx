@@ -698,7 +698,7 @@ void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedli
     }
 
     // clear TLB from behind
-    long nIdx = (long)aLBoxArr.size() - 1;
+    long nIdx = static_cast<long>(aLBoxArr.size()) - 1;
     while (nIdx >= 0)
         m_pTable->RemoveEntry(aLBoxArr[ static_cast< sal_uInt16 >(nIdx--) ]);
 

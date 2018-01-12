@@ -217,7 +217,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl, Button*, void)
             uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
                 task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-            sal_Int32 nPos = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
+            sal_Int32 nPos = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()));
             if ( nPos < m_nPos )
             {
                 xPasswdContainer->removePersistent( aURL, aUserName );
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl, SvTreeListBox*, void)
 
         // url container entries (-> use system credentials) have
         // no password
-        sal_Int32 nPos = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
+        sal_Int32 nPos = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()));
         m_pChangeBtn->Enable( nPos < m_nPos );
     }
 }

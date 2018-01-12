@@ -188,7 +188,7 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< css::xml::sa
             r->getValueByIndex( i ));
     }
 
-    OSL_ASSERT( nTotalSize == (SvXMLAttributeList_Impl::size_type)getLength());
+    OSL_ASSERT( nTotalSize == static_cast<SvXMLAttributeList_Impl::size_type>(getLength()));
 }
 
 void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,

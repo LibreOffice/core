@@ -181,10 +181,10 @@ namespace o3tl
 #define SbxMAXBYTE  ( 255)
 #define SbxMAXINT   ( 32767)
 #define SbxMININT   (-32768)
-#define SbxMAXUINT  ((sal_uInt16) 65535)
+#define SbxMAXUINT  (sal_uInt16(65535))
 #define SbxMAXLNG   ( 2147483647)
-#define SbxMINLNG   ((sal_Int32)(-2147483647-1))
-#define SbxMAXULNG  ((sal_uInt32) 0xffffffff)
+#define SbxMINLNG   (sal_Int32(-2147483647-1))
+#define SbxMAXULNG  (sal_uInt32(0xffffffff))
 
         // Currency stored as SbxSALINT64 == sal_Int64
         // value range limits are ~(2^63 - 1)/10000

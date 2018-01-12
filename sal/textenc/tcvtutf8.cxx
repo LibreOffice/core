@@ -187,13 +187,13 @@ sal_Size ImplConvertUtf8ToUnicode(
             }
             if (nUtf32 <= 0xFFFF)
                 if (pDestBufPtr != pDestBufEnd)
-                    *pDestBufPtr++ = (sal_Unicode) nUtf32;
+                    *pDestBufPtr++ = static_cast<sal_Unicode>(nUtf32);
                 else
                     goto no_output;
             else if (pDestBufEnd - pDestBufPtr >= 2)
             {
-                *pDestBufPtr++ = (sal_Unicode) ImplGetHighSurrogate(nUtf32);
-                *pDestBufPtr++ = (sal_Unicode) ImplGetLowSurrogate(nUtf32);
+                *pDestBufPtr++ = static_cast<sal_Unicode>(ImplGetHighSurrogate(nUtf32));
+                *pDestBufPtr++ = static_cast<sal_Unicode>(ImplGetLowSurrogate(nUtf32));
             }
             else
                 goto no_output;
@@ -333,7 +333,7 @@ sal_Size ImplConvertUnicodeToUtf8(
         {
             if (ImplIsHighSurrogate(nChar) && !bJavaUtf8)
             {
-                nHighSurrogate = (sal_Unicode) nChar;
+                nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
         }

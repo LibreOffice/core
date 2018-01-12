@@ -561,7 +561,7 @@ void setupMethodStubs( functor_vector_type& res )
     add(res,
         "DrawTransparent",
         [&] (OutputDevice * pDev) {
-            return pDev->DrawTransparent(aPoly3, (sal_uInt16)50);
+            return pDev->DrawTransparent(aPoly3, sal_uInt16(50));
         });
 
     /* void DrawTransparent( const GDIMetaFile& rMtf,
@@ -596,8 +596,8 @@ void grindFunc( OutputDevice&                       rTarget,
 
     fprintf( stdout,
              "Duration: %d ms (%d repetitions)\tOperation: %s\tSetup: %s\n",
-             (int)(osl_getGlobalTimer() - nStartTime),
-             (int)nTurns,
+             static_cast<int>(osl_getGlobalTimer() - nStartTime),
+             static_cast<int>(nTurns),
              iter->first,
              pMsg );
 }

@@ -58,8 +58,8 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     aRect.Top()  = aRect.Bottom() = -aOffset.Y();
 
     Point aMMOffset( aOffset );
-    aMMOffset.X() = (long)(aMMOffset.X() * HMM_PER_TWIPS);
-    aMMOffset.Y() = (long)(aMMOffset.Y() * HMM_PER_TWIPS);
+    aMMOffset.X() = static_cast<long>(aMMOffset.X() * HMM_PER_TWIPS);
+    aMMOffset.Y() = static_cast<long>(aMMOffset.Y() * HMM_PER_TWIPS);
 
     if (!bMetaFile)
         aMMOffset += Point( nLogStX, nLogStY );
@@ -68,10 +68,10 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
         aRect.Right() += mpDoc->GetColWidth( nCol, nTab );
     aRect.Bottom() += mpDoc->GetRowHeight( nY1, nY2, nTab );
 
-    aRect.Left()   = (long) (aRect.Left()   * HMM_PER_TWIPS);
-    aRect.Top()    = (long) (aRect.Top()    * HMM_PER_TWIPS);
-    aRect.Right()  = (long) (aRect.Right()  * HMM_PER_TWIPS);
-    aRect.Bottom() = (long) (aRect.Bottom() * HMM_PER_TWIPS);
+    aRect.Left()   = static_cast<long>(aRect.Left()   * HMM_PER_TWIPS);
+    aRect.Top()    = static_cast<long>(aRect.Top()    * HMM_PER_TWIPS);
+    aRect.Right()  = static_cast<long>(aRect.Right()  * HMM_PER_TWIPS);
+    aRect.Bottom() = static_cast<long>(aRect.Bottom() * HMM_PER_TWIPS);
 
     if(pViewShell || pDrawView)
     {

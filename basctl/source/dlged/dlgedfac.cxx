@@ -156,7 +156,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
                     uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
                     if (xPSet.is())
                     {
-                        xPSet->setPropertyValue( DLGED_PROP_ORIENTATION, uno::Any((sal_Int32) css::awt::ScrollBarOrientation::VERTICAL) );
+                        xPSet->setPropertyValue( DLGED_PROP_ORIENTATION, uno::Any(sal_Int32(css::awt::ScrollBarOrientation::VERTICAL)) );
                     }
                  }
                  catch(...)
@@ -176,7 +176,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
                     uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
                     if (xPSet.is())
                     {
-                        xPSet->setPropertyValue( DLGED_PROP_ORIENTATION, uno::Any((sal_Int32) 1) );
+                        xPSet->setPropertyValue( DLGED_PROP_ORIENTATION, uno::Any(sal_Int32(1)) );
                     }
                  }
                  catch(...)

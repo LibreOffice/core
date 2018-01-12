@@ -102,9 +102,9 @@ int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMes
             aWarn->AddButton( button, nButton+1, (nButton == 0) ? ButtonDialogFlags::Default : ButtonDialogFlags::NONE );
             nButton++;
     }
-    aWarn->SetFocusButton( (sal_uInt16)1 );
+    aWarn->SetFocusButton( sal_uInt16(1) );
 
-    nRet = ((int)aWarn->Execute()) - 1;
+    nRet = static_cast<int>(aWarn->Execute()) - 1;
 
     // normalize behaviour, actually this should never happen
     if( nRet < -1 || nRet >= int(rButtons.size()) )

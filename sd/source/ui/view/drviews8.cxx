@@ -79,8 +79,8 @@ void DrawViewShell::ScannerEvent()
 
                     if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
-                        double fGrfWH = (double) aBmpSize.Width() / aBmpSize.Height();
-                        double fWinWH = (double) aPageSize.Width() / aPageSize.Height();
+                        double fGrfWH = static_cast<double>(aBmpSize.Width()) / aBmpSize.Height();
+                        double fWinWH = static_cast<double>(aPageSize.Width()) / aPageSize.Height();
 
                         if( fGrfWH < fWinWH )
                         {

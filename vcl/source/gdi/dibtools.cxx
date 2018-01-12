@@ -802,7 +802,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     {
         if(aHeader.nColsUsed)
         {
-            nColors = (sal_uInt16)aHeader.nColsUsed;
+            nColors = static_cast<sal_uInt16>(aHeader.nColsUsed);
         }
         else
         {
@@ -1135,7 +1135,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
 
             if ( nCount > 1 )
             {
-                *pTmp++ = (sal_uInt8) nCount;
+                *pTmp++ = static_cast<sal_uInt8>(nCount);
                 *pTmp++ = ( bRLE4 ? ( ( cPix << 4 ) | cPix ) : cPix );
                 nBufCount += 2;
             }
@@ -1159,7 +1159,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
                 if ( nCount > 3 )
                 {
                     *pTmp++ = 0;
-                    *pTmp++ = (sal_uInt8) --nCount;
+                    *pTmp++ = static_cast<sal_uInt8>(--nCount);
 
                     if( bRLE4 )
                     {
@@ -1395,7 +1395,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
 
                             if(bWriteAlpha)
                             {
-                                *pTmp++ = (sal_uInt8)0xff - pAccAlpha->GetPixelIndex( nY, nX );
+                                *pTmp++ = sal_uInt8(0xff) - pAccAlpha->GetPixelIndex( nY, nX );
                             }
                         }
 
@@ -1478,8 +1478,8 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
         // especially if maPrefSize is small. Trying to circumvent
         // that by performing part of the math in floating point.
         const Size aScale100000(OutputDevice::LogicToLogic(Size(100000, 100000), MapMode(MapUnit::Map100thMM), rBitmap.GetPrefMapMode()));
-        const double fBmpWidthM((double)rBitmap.GetPrefSize().Width() / aScale100000.Width());
-        const double fBmpHeightM((double)rBitmap.GetPrefSize().Height() / aScale100000.Height());
+        const double fBmpWidthM(static_cast<double>(rBitmap.GetPrefSize().Width()) / aScale100000.Width());
+        const double fBmpHeightM(static_cast<double>(rBitmap.GetPrefSize().Height()) / aScale100000.Height());
 
         if(!basegfx::fTools::equalZero(fBmpWidthM) && !basegfx::fTools::equalZero(fBmpHeightM))
         {

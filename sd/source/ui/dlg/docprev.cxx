@@ -95,17 +95,17 @@ void SdDocPreviewWin::CalcSizeAndPos( Size& rSize, Point& rPoint )
     if( nHeight < 0 ) nHeight = 0;
 
     double dRatio = 1;
-    double dRatioPreV = nHeight ? (((double) nWidth ) / nHeight) : 0.0;
+    double dRatioPreV = nHeight ? (static_cast<double>(nWidth) / nHeight) : 0.0;
 
     if (dRatio > dRatioPreV)
     {
-        rSize=Size(nWidth, (sal_uInt16)(nWidth/dRatio));
-        rPoint=Point( 0, (sal_uInt16)((nHeight-rSize.Height())/2));
+        rSize=Size(nWidth, static_cast<sal_uInt16>(nWidth/dRatio));
+        rPoint=Point( 0, static_cast<sal_uInt16>((nHeight-rSize.Height())/2));
     }
     else
     {
-        rSize=Size((sal_uInt16)(nHeight*dRatio), nHeight);
-        rPoint=Point((sal_uInt16)((nWidth-rSize.Width())/2),0);
+        rSize=Size(static_cast<sal_uInt16>(nHeight*dRatio), nHeight);
+        rPoint=Point(static_cast<sal_uInt16>((nWidth-rSize.Width())/2),0);
     }
 }
 

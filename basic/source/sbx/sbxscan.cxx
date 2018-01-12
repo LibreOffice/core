@@ -258,7 +258,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         }
         if( *p == '&' )
             p++;
-        nVal = (double) l;
+        nVal = static_cast<double>(l);
         if( l >= SbxMININT && l <= SbxMAXINT )
             eScanType = SbxINTEGER;
     }
@@ -270,7 +270,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     }
 #endif
     if( pLen )
-        *pLen = (sal_uInt16) ( p - pStart );
+        *pLen = static_cast<sal_uInt16>( p - pStart );
     if( !bRes )
         return ERRCODE_BASIC_CONVERSION;
     if( bMinus )
@@ -294,7 +294,7 @@ ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle
     if( bSingle )
     {
         SbxValues aValues( nVal );
-        nVal = (double)ImpGetSingle( &aValues );    // here error at overflow
+        nVal = static_cast<double>(ImpGetSingle( &aValues ));    // here error at overflow
     }
     return nRetError;
 }
@@ -365,7 +365,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         {
             // #41691: also a 0 at bFix
             *pBuf++ = '0';
-            if( nPrec ) *pBuf++ = (char)cDecimalSep;
+            if( nPrec ) *pBuf++ = static_cast<char>(cDecimalSep);
             i = -nExp - 1;
             if( nDig <= 0 ) i = nPrec;
             while( i-- )    *pBuf++ = '0';
@@ -385,7 +385,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         {
             if( i < 16 )
             {
-                digit = (int) nNum;
+                digit = static_cast<int>(nNum);
                 *pBuf++ = sal::static_int_cast< char >(digit + '0');
                 nNum =( nNum - digit ) * 10.0;
             } else
@@ -395,7 +395,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
             {
                 nDec--;
                 if( !nDec )
-                    *pBuf++ = (char)cDecimalSep;
+                    *pBuf++ = static_cast<char>(cDecimalSep);
             }
         }
     }
@@ -550,7 +550,7 @@ static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUStr
         break;
     }
     rRes = aTemp.makeStringAndClear();
-    return (sal_uInt16) ( pFmt - pFmtStart );
+    return static_cast<sal_uInt16>( pFmt - pFmtStart );
 }
 
 

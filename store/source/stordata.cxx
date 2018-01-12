@@ -601,7 +601,7 @@ OStoreDirectoryPageObject::scope (
         index0 = nPage;
 
         // Setup LinkDescriptor indices.
-        rDescr.m_nIndex0 = (sal_uInt16)(index0 & 0xffff);
+        rDescr.m_nIndex0 = static_cast<sal_uInt16>(index0 & 0xffff);
 
         // Done.
         return page::SCOPE_DIRECT;
@@ -630,8 +630,8 @@ OStoreDirectoryPageObject::scope (
         }
 
         // Setup LinkDescriptor indices.
-        rDescr.m_nIndex0 = (sal_uInt16)(index0 & 0xffff);
-        rDescr.m_nIndex1 = (sal_uInt16)(index1 & 0xffff);
+        rDescr.m_nIndex0 = static_cast<sal_uInt16>(index0 & 0xffff);
+        rDescr.m_nIndex1 = static_cast<sal_uInt16>(index1 & 0xffff);
 
         // Done.
         return page::SCOPE_SINGLE;
@@ -664,9 +664,9 @@ OStoreDirectoryPageObject::scope (
         }
 
         // Setup LinkDescriptor indices.
-        rDescr.m_nIndex0 = (sal_uInt16)(index0 & 0xffff);
-        rDescr.m_nIndex1 = (sal_uInt16)(index1 & 0xffff);
-        rDescr.m_nIndex2 = (sal_uInt16)(index2 & 0xffff);
+        rDescr.m_nIndex0 = static_cast<sal_uInt16>(index0 & 0xffff);
+        rDescr.m_nIndex1 = static_cast<sal_uInt16>(index1 & 0xffff);
+        rDescr.m_nIndex2 = static_cast<sal_uInt16>(index2 & 0xffff);
 
         // Done.
         return page::SCOPE_DOUBLE;
@@ -704,10 +704,10 @@ OStoreDirectoryPageObject::scope (
         }
 
         // Setup LinkDescriptor indices.
-        rDescr.m_nIndex0 = (sal_uInt16)(index0 & 0xffff);
-        rDescr.m_nIndex1 = (sal_uInt16)(index1 & 0xffff);
-        rDescr.m_nIndex2 = (sal_uInt16)(index2 & 0xffff);
-        rDescr.m_nIndex3 = (sal_uInt16)(index3 & 0xffff);
+        rDescr.m_nIndex0 = static_cast<sal_uInt16>(index0 & 0xffff);
+        rDescr.m_nIndex1 = static_cast<sal_uInt16>(index1 & 0xffff);
+        rDescr.m_nIndex2 = static_cast<sal_uInt16>(index2 & 0xffff);
+        rDescr.m_nIndex3 = static_cast<sal_uInt16>(index3 & 0xffff);
 
         // Done.
         return page::SCOPE_TRIPLE;

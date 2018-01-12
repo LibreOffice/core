@@ -3526,8 +3526,8 @@ bool ScCompiler::IsColRowName( const OUString& rName )
     if ( !bInList && pDoc->GetDocOptions().IsLookUpColRowNames() )
     {   // search in current sheet
         long nDistance = 0, nMax = 0;
-        long nMyCol = (long) aPos.Col();
-        long nMyRow = (long) aPos.Row();
+        long nMyCol = static_cast<long>(aPos.Col());
+        long nMyRow = static_cast<long>(aPos.Row());
         bool bTwo = false;
         ScAddress aOne( 0, 0, aPos.Tab() );
         ScAddress aTwo( MAXCOL, MAXROW, aPos.Tab() );
@@ -3550,7 +3550,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
 
                 if ( bFound )
                 {   // stop if everything else is further away
-                    if ( nMax < (long)aAddress.Col() )
+                    if ( nMax < static_cast<long>(aAddress.Col()) )
                         break;      // aIter
                 }
                 if ( aAddress != aPos )
@@ -3573,7 +3573,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                                 nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                                 nDistance = nD;
                             }
-                            else if ( !(nRow < aOne.Row() && nMyRow >= (long)aOne.Row()) )
+                            else if ( !(nRow < aOne.Row() && nMyRow >= static_cast<long>(aOne.Row())) )
                             {
                                 // upper left, only if not further up than the
                                 // current entry and nMyRow is below (CellIter
@@ -3603,7 +3603,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             {
                 if ( bFound )
                 {   // stop if everything else is further away
-                    if ( nMax < (long)aIter.GetPos().Col() )
+                    if ( nMax < static_cast<long>(aIter.GetPos().Col()) )
                         break;      // aIter
                 }
                 CellType eType = aIter.getType();
@@ -3637,7 +3637,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                                     nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                                     nDistance = nD;
                                 }
-                                else if ( !(nRow < aOne.Row() && nMyRow >= (long)aOne.Row()) )
+                                else if ( !(nRow < aOne.Row() && nMyRow >= static_cast<long>(aOne.Row())) )
                                 {
                                     // upper left, only if not further up than the
                                     // current entry and nMyRow is below (CellIter
@@ -3666,13 +3666,13 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             ScAddress aAdr;
             if ( bTwo )
             {
-                if ( nMyCol >= (long)aOne.Col() && nMyRow >= (long)aOne.Row() )
+                if ( nMyCol >= static_cast<long>(aOne.Col()) && nMyRow >= static_cast<long>(aOne.Row()) )
                     aAdr = aOne;        // upper left takes precedence
                 else
                 {
-                    if ( nMyCol < (long)aOne.Col() )
+                    if ( nMyCol < static_cast<long>(aOne.Col()) )
                     {   // two to the right
-                        if ( nMyRow >= (long)aTwo.Row() )
+                        if ( nMyRow >= static_cast<long>(aTwo.Row()) )
                             aAdr = aTwo;        // directly right
                         else
                             aAdr = aOne;
@@ -4111,7 +4111,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     {
         ScRawToken aToken;
         aToken.SetOpCode( ocSpaces );
-        aToken.sbyte.cByte = (sal_uInt8) ( nSpaces > 255 ? 255 : nSpaces );
+        aToken.sbyte.cByte = static_cast<sal_uInt8>( nSpaces > 255 ? 255 : nSpaces );
         if( !static_cast<ScTokenArray*>(pArr)->AddRawToken( aToken ) )
         {
             SetError(FormulaError::CodeOverflow);

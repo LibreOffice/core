@@ -1144,7 +1144,7 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
                     if( nDiff < 0 )
                     {
                         nLastLeft = pQuo->GetAscent();
-                        nQuoWidth = (sal_uInt16)(-nDiff + nLastLeft);
+                        nQuoWidth = static_cast<sal_uInt16>(-nDiff + nLastLeft);
                     }
                     else
                     {

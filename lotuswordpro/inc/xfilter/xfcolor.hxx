@@ -69,12 +69,12 @@
 class XFColor
 {
 public:
-    XFColor():m_nRed((sal_Int8)0),m_nGreen((sal_Int8)0),m_nBlue((sal_Int8)0)
+    XFColor():m_nRed(sal_Int8(0)),m_nGreen(sal_Int8(0)),m_nBlue(sal_Int8(0))
     {
         m_bValid = false;
     }
     XFColor(sal_Int32 red, sal_Int32 green, sal_Int32 blue)
-        :m_nRed((sal_Int8)red),m_nGreen((sal_Int8)green),m_nBlue((sal_Int8)blue)
+        :m_nRed(static_cast<sal_Int8>(red)),m_nGreen(static_cast<sal_Int8>(green)),m_nBlue(static_cast<sal_Int8>(blue))
     {
         m_bValid = true;
     }

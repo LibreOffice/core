@@ -51,7 +51,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
             bFixedWidth = true;
         else
             nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
-        nTextSepCode  = (sal_Unicode) rStr.getToken(1,',').toInt32();
+        nTextSepCode  = static_cast<sal_Unicode>(rStr.getToken(1,',').toInt32());
         aStrFont      = rStr.getToken(2,',');
         eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
 

@@ -58,7 +58,7 @@ sal::detail::textenc::handleBadInputTextToUnicodeConversion(
         if (*pDestBufPtr != pDestBufEnd)
         {
             *(*pDestBufPtr)++ = RTL_TEXTCVT_BYTE_PRIVATE_START
-                | ((unsigned char) cByte);
+                | static_cast<unsigned char>(cByte);
             return BAD_INPUT_CONTINUE;
         }
         else
@@ -141,7 +141,7 @@ sal::detail::textenc::handleBadInputUnicodeToTextConversion(
         cReplace = '_';
         break;
     }
-    if ((sal_Size) (pDestBufEnd - *pDestBufPtr) > nPrefixLen)
+    if (static_cast<sal_Size>(pDestBufEnd - *pDestBufPtr) > nPrefixLen)
     {
         while (nPrefixLen-- > 0)
             *(*pDestBufPtr)++ = *pPrefix++;

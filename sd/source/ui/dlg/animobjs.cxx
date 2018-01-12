@@ -85,8 +85,8 @@ void SdDisplay::Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Re
     Point aPt;
     Size aSize = GetOutputSize();
     Size aBmpSize = aBitmapEx.GetBitmap().GetSizePixel();
-    aBmpSize.Width() = (long) ( (double) aBmpSize.Width() * (double) aScale );
-    aBmpSize.Height() = (long) ( (double) aBmpSize.Height() * (double) aScale );
+    aBmpSize.Width() = static_cast<long>( static_cast<double>(aBmpSize.Width()) * static_cast<double>(aScale) );
+    aBmpSize.Height() = static_cast<long>( static_cast<double>(aBmpSize.Height()) * static_cast<double>(aScale) );
 
     if( aBmpSize.Width() < aSize.Width() )
         aPt.X() = ( aSize.Width() - aBmpSize.Width() ) / 2;
@@ -662,8 +662,8 @@ Fraction AnimationWindow::GetScale()
 
         Size aDisplaySize(m_pCtlDisplay->GetOutputSize());
 
-        aFrac = Fraction( std::min( (double)aDisplaySize.Width() / (double)aBmpSize.Width(),
-                             (double)aDisplaySize.Height() / (double)aBmpSize.Height() ) );
+        aFrac = Fraction( std::min( static_cast<double>(aDisplaySize.Width()) / static_cast<double>(aBmpSize.Width()),
+                             static_cast<double>(aDisplaySize.Height()) / static_cast<double>(aBmpSize.Height()) ) );
     }
     return aFrac;
 }

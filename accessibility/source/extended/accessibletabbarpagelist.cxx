@@ -77,7 +77,7 @@ namespace accessibility
     {
         NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
 
-        if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
+        if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         {
             Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
             if ( xChild.is() )
@@ -92,7 +92,7 @@ namespace accessibility
 
     void AccessibleTabBarPageList::UpdatePageText( sal_Int32 i )
     {
-        if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
+        if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         {
             Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
             if ( xChild.is() )
@@ -102,7 +102,7 @@ namespace accessibility
                 {
                     if ( m_pTabBar )
                     {
-                        OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( (sal_uInt16)i ) );
+                        OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( static_cast<sal_uInt16>(i) ) );
                         pAccessibleTabBarPage->SetPageText( sPageText );
                     }
                 }
@@ -113,7 +113,7 @@ namespace accessibility
 
     void AccessibleTabBarPageList::InsertChild( sal_Int32 i )
     {
-        if ( i >= 0 && i <= (sal_Int32)m_aAccessibleChildren.size() )
+        if ( i >= 0 && i <= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         {
             // insert entry in child list
             m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
@@ -132,7 +132,7 @@ namespace accessibility
 
     void AccessibleTabBarPageList::RemoveChild( sal_Int32 i )
     {
-        if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
+        if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         {
             // get the accessible of the removed page
             Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
@@ -157,8 +157,8 @@ namespace accessibility
 
     void AccessibleTabBarPageList::MoveChild( sal_Int32 i, sal_Int32 j )
     {
-        if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() &&
-             j >= 0 && j <= (sal_Int32)m_aAccessibleChildren.size() )
+        if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) &&
+             j >= 0 && j <= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         {
             if ( i < j )
                 --j;
@@ -222,7 +222,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                     UpdateSelected( nPagePos, true );
                 }
@@ -232,7 +232,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                     UpdateSelected( nPagePos, false );
                 }
@@ -242,7 +242,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                     InsertChild( nPagePos );
                 }
@@ -252,7 +252,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
 
                     if ( nPageId == TabBar::PAGE_NOT_FOUND )
                     {
@@ -287,7 +287,7 @@ namespace accessibility
             break;
             case VclEventId::TabbarPageTextChanged:
             {
-                sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                sal_uInt16 nPageId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
                 sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                 UpdatePageText( nPagePos );
             }
@@ -417,7 +417,7 @@ namespace accessibility
         {
             if ( m_pTabBar )
             {
-                sal_uInt16 nPageId = m_pTabBar->GetPageId( (sal_uInt16)i );
+                sal_uInt16 nPageId = m_pTabBar->GetPageId( static_cast<sal_uInt16>(i) );
 
                 xChild = new AccessibleTabBarPage( m_pTabBar, nPageId, this );
 
@@ -621,7 +621,7 @@ namespace accessibility
 
         if ( m_pTabBar )
         {
-            m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) );
+            m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( static_cast<sal_uInt16>(nChildIndex) ) );
             m_pTabBar->Update();
             m_pTabBar->ActivatePage();
             m_pTabBar->Select();
@@ -637,7 +637,7 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         bool bSelected = false;
-        if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) )
+        if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( static_cast<sal_uInt16>(nChildIndex) ) )
             bSelected = true;
 
         return bSelected;

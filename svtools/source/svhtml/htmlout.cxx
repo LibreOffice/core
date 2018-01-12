@@ -571,7 +571,7 @@ SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nL
     sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < nLen; ++n )
     {
-        *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
+        *(--pStr) = static_cast<sal_Char>(nHex & 0xf ) + 48;
         if( *pStr > '9' )
             *pStr += 39;
         nHex >>= 4;
@@ -953,8 +953,8 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
         aStrTD.append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_SDnum).
             append("=\"").
-            append((sal_Int32)static_cast<sal_uInt16>(
-                Application::GetSettings().GetLanguageTag().getLanguageType())).
+            append(static_cast<sal_Int32>(static_cast<sal_uInt16>(
+                Application::GetSettings().GetLanguageTag().getLanguageType()))).
             append(';'); // Language for Format 0
         if ( nFormat )
         {
@@ -969,7 +969,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             }
             else
                 nLang = LANGUAGE_SYSTEM;
-            aStrTD.append((sal_Int32)static_cast<sal_uInt16>(nLang)).append(';').
+            aStrTD.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(nLang))).append(';').
                 append(aNumStr);
         }
         aStrTD.append('\"');

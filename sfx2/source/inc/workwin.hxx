@@ -112,8 +112,8 @@ struct SfxChildWin_Impl
     bool                            bEnable;
 
     SfxChildWin_Impl( sal_uInt32 nID ) :
-        nSaveId((sal_uInt16) (nID & 0xFFFF) ),
-        nInterfaceId((sal_uInt16) (nID >> 16)),
+        nSaveId(static_cast<sal_uInt16>(nID & 0xFFFF) ),
+        nInterfaceId(static_cast<sal_uInt16>(nID >> 16)),
         nId(nSaveId),
         pWin(nullptr),
         bCreate(false),

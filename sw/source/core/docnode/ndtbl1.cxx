@@ -306,7 +306,7 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew )
             }
 
             std::vector<SwTableFormatCmp*> aFormatCmp;
-            aFormatCmp.reserve( std::max( 255, (int)aRowArr.size() ) );
+            aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
 
             for( auto pLn : aRowArr )
                 ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
@@ -379,7 +379,7 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFormatFrameSize &rNew
             }
 
             std::vector<SwTableFormatCmp*> aFormatCmp;
-            aFormatCmp.reserve( std::max( 255, (int)aRowArr.size() ) );
+            aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
             for ( auto pLn : aRowArr )
                 ::lcl_ProcessRowSize( aFormatCmp, pLn, rNew );
             SwTableFormatCmp::Delete( aFormatCmp );
@@ -454,7 +454,7 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly )
                 }
 
                 std::vector<SwTableFormatCmp*> aFormatCmp;
-                aFormatCmp.reserve( std::max( 255, (int)aRowArr.size() ) );
+                aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
                 for( auto pLn : aRowArr )
                     ::lcl_ProcessRowSize( aFormatCmp, pLn, aNew );
                 SwTableFormatCmp::Delete( aFormatCmp );
@@ -483,7 +483,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
             }
 
             std::vector<SwTableFormatCmp*> aFormatCmp;
-            aFormatCmp.reserve( std::max( 255, (int)aRowArr.size() ) );
+            aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
 
             for( auto pLn : aRowArr )
                 ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
@@ -1293,7 +1293,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
     nRet += COLFUZZY;
-    return (sal_uInt16)std::max( long(MINLAY), nRet );
+    return static_cast<sal_uInt16>(std::max( long(MINLAY), nRet ));
 }
 
 /* The Line is within the Selection but not outlined by the TabCols.

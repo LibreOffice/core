@@ -1006,7 +1006,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
         long nDX = nEndX - nStartX;
         double nO = atan2( -nEndY + nStartY, ((nDX == 0) ? 0.000000001 : nDX) );
         nO /= F_PI1800;
-        nOrientation = (short)nO;
+        nOrientation = static_cast<short>(nO);
         aStartPt.RotateAround( nEndX, nEndY, -nOrientation );
     }
 

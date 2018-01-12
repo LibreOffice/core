@@ -26,11 +26,11 @@
 
 namespace {
 
-#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<7)+nFrac*((long)(cVal1)-(cVal0)))>>7))
+#define MAP( cVal0, cVal1, nFrac )  (static_cast<sal_uInt8>(((static_cast<long>(cVal0)<<7)+nFrac*(static_cast<long>(cVal1)-(cVal0)))>>7))
 
 void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
 {
-    const double fRevScaleX = (nDstW > 1) ? (double) (nW - 1) / (nDstW - 1) : 0.0;
+    const double fRevScaleX = (nDstW > 1) ? static_cast<double>(nW - 1) / (nDstW - 1) : 0.0;
 
     long nTemp = nW - 2;
     long nTempX = nW - 1;
@@ -39,8 +39,8 @@ void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
         double fTemp = nX * fRevScaleX;
         if (bHMirr)
             fTemp = nTempX - fTemp;
-        pMapIX[nX] = MinMax((long) fTemp, 0, nTemp);
-        pMapFX[nX] = (long) ((fTemp - pMapIX[nX]) * 128.0);
+        pMapIX[nX] = MinMax(static_cast<long>(fTemp), 0, nTemp);
+        pMapFX[nX] = static_cast<long>((fTemp - pMapIX[nX]) * 128.0);
     }
 }
 
@@ -402,7 +402,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nSumB /= nTotalWeightY;
             }
 
-            BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
+            BitmapColor aColRes(static_cast<sal_uInt8>(nSumR), static_cast<sal_uInt8>(nSumG), static_cast<sal_uInt8>(nSumB));
             rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
@@ -529,7 +529,7 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nSumB /= nTotalWeightY;
             }
 
-            BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
+            BitmapColor aColRes(static_cast<sal_uInt8>(nSumR), static_cast<sal_uInt8>(nSumG), static_cast<sal_uInt8>(nSumB));
             rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
@@ -652,7 +652,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nSumG /= nTotalWeightY;
                 nSumB /= nTotalWeightY;
             }
-            BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
+            BitmapColor aColRes(static_cast<sal_uInt8>(nSumR), static_cast<sal_uInt8>(nSumG), static_cast<sal_uInt8>(nSumB));
             rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
@@ -773,7 +773,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nSumG /= nTotalWeightY;
                 nSumB /= nTotalWeightY;
             }
-            BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
+            BitmapColor aColRes(static_cast<sal_uInt8>(nSumR), static_cast<sal_uInt8>(nSumG), static_cast<sal_uInt8>(nSumB));
             rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
@@ -899,7 +899,7 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nSumB /= nTotalWeightY;
             }
 
-            BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
+            BitmapColor aColRes(static_cast<sal_uInt8>(nSumR), static_cast<sal_uInt8>(nSumG), static_cast<sal_uInt8>(nSumB));
             rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }

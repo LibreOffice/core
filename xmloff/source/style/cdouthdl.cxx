@@ -119,11 +119,11 @@ bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any
                 break;
             }
             if( eNewStrikeout != eStrikeout )
-                rValue <<= (sal_Int16)eNewStrikeout;
+                rValue <<= static_cast<sal_Int16>(eNewStrikeout);
         }
         else
         {
-            rValue <<= (sal_Int16)eNewStrikeout;
+            rValue <<= static_cast<sal_Int16>(eNewStrikeout);
         }
     }
 
@@ -171,7 +171,7 @@ bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::An
         }
         else
         {
-            rValue <<= (sal_Int16)eNewStrikeout;
+            rValue <<= static_cast<sal_Int16>(eNewStrikeout);
         }
     }
 
@@ -237,11 +237,11 @@ bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::An
                 break;
             }
             if( eNewStrikeout != eStrikeout )
-                rValue <<= (sal_Int16)eNewStrikeout;
+                rValue <<= static_cast<sal_Int16>(eNewStrikeout);
         }
         else
         {
-            rValue <<= (sal_Int16)eNewStrikeout;
+            rValue <<= static_cast<sal_Int16>(eNewStrikeout);
         }
     }
 

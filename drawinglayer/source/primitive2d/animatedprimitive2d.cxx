@@ -70,7 +70,7 @@ namespace drawinglayer
             {
                 const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
                 const sal_uInt32 nLen(getChildren().size());
-                sal_uInt32 nIndex(basegfx::fround(fState * (double)nLen));
+                sal_uInt32 nIndex(basegfx::fround(fState * static_cast<double>(nLen)));
 
                 if(nIndex >= nLen)
                 {
@@ -158,9 +158,9 @@ namespace drawinglayer
                     fState = 1.0;
                 }
 
-                const double fIndex(fState * (double)(nSize - 1));
+                const double fIndex(fState * static_cast<double>(nSize - 1));
                 const sal_uInt32 nIndA(sal_uInt32(floor(fIndex)));
-                const double fOffset(fIndex - (double)nIndA);
+                const double fOffset(fIndex - static_cast<double>(nIndA));
                 basegfx::B2DHomMatrix aTargetTransform;
                 std::vector< basegfx::utils::B2DHomMatrixBufferedDecompose >::const_iterator aMatA(maMatrixStack.begin() + nIndA);
 

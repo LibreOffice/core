@@ -590,7 +590,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         if (bDateNTimeCol)
         {
             aElement <<= xSecondCol;
-            xCols->insertByIndex(nPos == (sal_uInt16)-1 ? nPos : ++nPos, aElement);
+            xCols->insertByIndex(nPos == sal_uInt16(-1) ? nPos : ++nPos, aElement);
         }
 
         // is the component::Form tied to the database?
@@ -613,13 +613,13 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                 switch (nCommandType)
                 {
                     case CommandType::TABLE:
-                        aCommandType <<= (sal_Int32)CommandType::TABLE;
+                        aCommandType <<= sal_Int32(CommandType::TABLE);
                         break;
                     case CommandType::QUERY:
-                        aCommandType <<= (sal_Int32)CommandType::QUERY;
+                        aCommandType <<= sal_Int32(CommandType::QUERY);
                         break;
                     default:
-                        aCommandType <<= (sal_Int32)CommandType::COMMAND;
+                        aCommandType <<= sal_Int32(CommandType::COMMAND);
                         xForm->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, css::uno::Any(2 == nCommandType));
                         break;
                 }
@@ -756,7 +756,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
 
     // allow the 'hide column' item ?
     bool bAllowHide = bMarked;                                          // a column is marked
-    bAllowHide = bAllowHide || (!bDesignMode && (nPos != (sal_uInt16)-1));  // OR we are in alive mode and have hit a column
+    bAllowHide = bAllowHide || (!bDesignMode && (nPos != sal_uInt16(-1)));  // OR we are in alive mode and have hit a column
     bAllowHide = bAllowHide && xCols.is();                              // AND we have a column container
     bAllowHide = bAllowHide && (xCols->getCount()-nHiddenCols > 1);     // AND there are at least two visible columns
     rMenu.EnableItem(rMenu.GetItemId("hide"), bAllowHide);
@@ -1516,7 +1516,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
         sal_Int32 nColumnWidth = GetColumnWidth(nId);
         nColumnWidth = CalcReverseZoom(nColumnWidth);
         // convert to 10THMM
-        aWidth <<= (sal_Int32)PixelToLogic(Point(nColumnWidth, 0), MapMode(MapUnit::Map10thMM)).X();
+        aWidth <<= static_cast<sal_Int32>(PixelToLogic(Point(nColumnWidth, 0), MapMode(MapUnit::Map10thMM)).X());
         xColModel->setPropertyValue(FM_PROP_WIDTH, aWidth);
     }
 }
@@ -1611,7 +1611,7 @@ void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexC
         if (aWidth >>= nWidth)
             nWidth = LogicToPixel(Point(nWidth, 0), MapMode(MapUnit::Map10thMM)).X();
 
-        AppendColumn(aName, (sal_uInt16)nWidth);
+        AppendColumn(aName, static_cast<sal_uInt16>(nWidth));
         DbGridColumn* pCol = DbGridControl::GetColumns().at( i );
         pCol->setModel(xCol);
     }
@@ -1626,7 +1626,7 @@ void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexC
         Reference< css::beans::XPropertySet > xCol( xColumns->getByIndex(i), css::uno::UNO_QUERY);
         aHidden = xCol->getPropertyValue(FM_PROP_HIDDEN);
         if (::comphelper::getBOOL(aHidden))
-            HideColumn(GetColumnIdFromModelPos((sal_uInt16)i));
+            HideColumn(GetColumnIdFromModelPos(static_cast<sal_uInt16>(i)));
     }
 
     SetUpdateMode(true);
@@ -1685,7 +1685,7 @@ void FmGridControl::InitColumnByField(
 
         if ( bIllegalType )
         {
-            _pColumn->SetObject( (sal_Int16)nFieldPos );
+            _pColumn->SetObject( static_cast<sal_Int16>(nFieldPos) );
             return;
         }
     }
@@ -1733,7 +1733,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
     DbGridControl::HideColumn(nId);
 
     sal_uInt16 nPos = GetModelColumnPos(nId);
-    if (nPos == (sal_uInt16)-1)
+    if (nPos == sal_uInt16(-1))
         return;
 
     DbGridColumn* pColumn = GetColumns().at( nPos );
@@ -1741,7 +1741,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
         GetPeer()->columnHidden(pColumn);
 
     if (nId == m_nMarkedColumnId)
-        m_nMarkedColumnId = (sal_uInt16)-1;
+        m_nMarkedColumnId = sal_uInt16(-1);
 }
 
 bool FmGridControl::isColumnSelected(DbGridColumn const * _pColumn)
@@ -1764,7 +1764,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
     DbGridControl::ShowColumn(nId);
 
     sal_uInt16 nPos = GetModelColumnPos(nId);
-    if (nPos == (sal_uInt16)-1)
+    if (nPos == sal_uInt16(-1))
         return;
 
     DbGridColumn* pColumn = GetColumns().at( nPos );
@@ -1843,7 +1843,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
         while (nIdx != BROWSER_ENDOFSELECTION)
         {
             // (we misuse the bookmarks array for this ...)
-            pBookmarks[i++] <<= (sal_Int32)nIdx;
+            pBookmarks[i++] <<= static_cast<sal_Int32>(nIdx);
             nIdx = NextSelectedRow();
         }
         DBG_ASSERT(i == nSelectedRows, "FmGridControl::DeleteSelectedRows : could not collect the row indices !");

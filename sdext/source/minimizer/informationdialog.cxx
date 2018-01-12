@@ -68,7 +68,7 @@ OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString&
         Any( bMultiLine ),
         Any( nXPos ),
         Any( nYPos ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( nTabIndex ),
         Any( nWidth ) };
 
@@ -138,7 +138,7 @@ OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& 
         Any( rLabel ),
         Any( nXPos ),
         Any( nYPos ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( nTabIndex ),
         Any( nWidth ) };
 
@@ -175,7 +175,7 @@ OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rC
         Any( nXPos ),
         Any( nYPos ),
         Any( static_cast< sal_Int16 >( PushButtonType_OK ) ),
-        Any( (sal_Int16)0 ),
+        Any( sal_Int16(0) ),
         Any( nTabIndex ),
         Any( nWidth ) };
 
@@ -301,7 +301,7 @@ void InformationDialog::InitDialog()
     InsertButton( *this, "button", mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 2, STR_OK );
 
     bool bOpenNewDocument = mrbOpenNewDocument;
-    setControlProperty( "OpenNewDocument", "State", Any( (sal_Int16)bOpenNewDocument ) );
+    setControlProperty( "OpenNewDocument", "State", Any( static_cast<sal_Int16>(bOpenNewDocument) ) );
 }
 
 

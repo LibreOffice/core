@@ -305,7 +305,7 @@ static bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
     if ( !lcl_FunctionKnown( nOpCode ) )
         return false;                           // not in function list -> no change
 
-    sal_uInt16 nNewCount = std::min( (sal_uInt16)(nOldCount + 1), (sal_uInt16)LRU_MAX );
+    sal_uInt16 nNewCount = std::min( static_cast<sal_uInt16>(nOldCount + 1), sal_uInt16(LRU_MAX) );
     sal_uInt16 nNewList[LRU_MAX];
     nNewList[0] = nOpCode;
     for (nPos=1; nPos<nNewCount; nPos++)
@@ -2372,7 +2372,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                         nMargin = sal::static_int_cast<sal_uInt16>(
                             nMargin + pPattern->GetItem(ATTR_INDENT).GetValue() );
 
-                    nWidth = (sal_uInt16)(nEdit * pDocSh->GetOutputFactor() / HMM_PER_TWIPS)
+                    nWidth = static_cast<sal_uInt16>(nEdit * pDocSh->GetOutputFactor() / HMM_PER_TWIPS)
                                 + nMargin + STD_EXTRA_WIDTH;
                 }
             }
@@ -2393,7 +2393,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 
                 long nPixel = rDoc.GetNeededSize( nCol, nRow, nTab, aProv.GetDevice(),
                                             nPPTX, nPPTY, aZoomX, aZoomY, true );
-                sal_uInt16 nTwips = (sal_uInt16)( nPixel / nPPTX );
+                sal_uInt16 nTwips = static_cast<sal_uInt16>( nPixel / nPPTX );
                 if (nTwips != 0)
                     nWidth = nTwips + STD_EXTRA_WIDTH;
                 else

@@ -665,11 +665,11 @@ namespace
         // note that order matters:
         // lcl_convertTextAlignmentToParaAdjustment and lcl_convertParaAdjustmentToTextAlignment search this map from the _beginning_
         // and use the first matching entry
-        {style::ParagraphAdjust_LEFT,           (sal_Int16)awt::TextAlign::LEFT},
-        {style::ParagraphAdjust_CENTER,         (sal_Int16)awt::TextAlign::CENTER},
-        {style::ParagraphAdjust_RIGHT,          (sal_Int16)awt::TextAlign::RIGHT},
-        {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::RIGHT},
-        {style::ParagraphAdjust_STRETCH,        (sal_Int16)awt::TextAlign::LEFT},
+        {style::ParagraphAdjust_LEFT,           sal_Int16(awt::TextAlign::LEFT)},
+        {style::ParagraphAdjust_CENTER,         sal_Int16(awt::TextAlign::CENTER)},
+        {style::ParagraphAdjust_RIGHT,          sal_Int16(awt::TextAlign::RIGHT)},
+        {style::ParagraphAdjust_BLOCK,          sal_Int16(awt::TextAlign::RIGHT)},
+        {style::ParagraphAdjust_STRETCH,        sal_Int16(awt::TextAlign::LEFT)},
         {(style::ParagraphAdjust)-1,-1}
     };
 
@@ -1031,7 +1031,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
 
 void B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
 {
-    if( (sal_uInt32)rRetval.getLength() != rPolyPoly.count() )
+    if( static_cast<sal_uInt32>(rRetval.getLength()) != rPolyPoly.count() )
         rRetval.realloc( rPolyPoly.count() );
 
     // get pointer to external arrays
@@ -1907,7 +1907,7 @@ bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
     {
         double fAngle = static_cast<SdrObjCustomShape*>(mpObj.get())->GetObjectRotation();
         fAngle *= 100;
-        rValue <<= (sal_Int32)fAngle;
+        rValue <<= static_cast<sal_Int32>(fAngle);
         return true;
     }
     default:

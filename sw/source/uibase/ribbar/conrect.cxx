@@ -103,7 +103,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     aItemSet.Put( SdrTextAniDirectionItem( SdrTextAniDirection::Left ) );
                     aItemSet.Put( SdrTextAniCountItem( 0 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
-                            (sal_Int16)m_pWin->PixelToLogic(Size(2,1)).Width()) );
+                            static_cast<sal_Int16>(m_pWin->PixelToLogic(Size(2,1)).Width())) );
 
                     pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }

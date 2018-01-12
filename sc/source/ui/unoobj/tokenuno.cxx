@@ -372,7 +372,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                 case svByte:
                     // Only the count of spaces is stored as "long". Parameter count is ignored.
                     if ( eOpCode == ocSpaces )
-                        rAPI.Data <<= (sal_Int32) rToken.GetByte();
+                        rAPI.Data <<= static_cast<sal_Int32>(rToken.GetByte());
                     else
                         rAPI.Data.clear();      // no data
                     break;

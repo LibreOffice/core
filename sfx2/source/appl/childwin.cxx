@@ -392,7 +392,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
         // Read version
         char cToken = ',';
         sal_Int32 nPos = aWinData.indexOf( cToken );
-        sal_uInt16 nActVersion = (sal_uInt16)aWinData.copy( 0, nPos + 1 ).toInt32();
+        sal_uInt16 nActVersion = static_cast<sal_uInt16>(aWinData.copy( 0, nPos + 1 ).toInt32());
         if ( nActVersion != nVersion )
             return;
 
@@ -408,12 +408,12 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
             if ( nNextPos != -1 )
             {
                 // there is extra information
-                rInfo.nFlags = static_cast<SfxChildWindowFlags>((sal_uInt16)aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32());
+                rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32()));
                 aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, "" );
                 rInfo.aExtraString = aWinData;
             }
             else
-                rInfo.nFlags = static_cast<SfxChildWindowFlags>((sal_uInt16)aWinData.copy( nPos+1 ).toInt32());
+                rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1 ).toInt32()));
         }
     }
 }
@@ -581,7 +581,7 @@ bool SfxChildWinInfo::GetExtraData_Impl
     if ( aStr.isEmpty() )
         return false;
     if ( pAlign )
-        *pAlign = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
+        *pAlign = (SfxChildAlignment) static_cast<sal_uInt16>(aStr.toInt32());
 
     // then the LastAlignment
     nPos = aStr.indexOf(',');

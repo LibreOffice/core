@@ -273,13 +273,13 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         nScrBarWidth = mpScrBar->GetSizePixel().Width();
 
     // calculate maximum number of visible columns
-    mnCols = (sal_uInt16)((aWinSize.Width()-nScrBarWidth) / (mnItemWidth));
+    mnCols = static_cast<sal_uInt16>((aWinSize.Width()-nScrBarWidth) / (mnItemWidth));
 
     if (!mnCols)
         mnCols = 1;
 
     // calculate maximum number of visible rows
-    mnVisLines = (sal_uInt16)(aWinSize.Height() / mnItemHeight);
+    mnVisLines = static_cast<sal_uInt16>(aWinSize.Height() / mnItemHeight);
 
     // calculate empty space
     long nHSpace = aWinSize.Width()-nScrBarWidth - mnCols*mnItemWidth;
@@ -296,8 +296,8 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
 
     if ( mnLines <= mnVisLines )
         mnFirstLine = 0;
-    else if ( mnFirstLine > (sal_uInt16)(mnLines-mnVisLines) )
-        mnFirstLine = (sal_uInt16)(mnLines-mnVisLines);
+    else if ( mnFirstLine > static_cast<sal_uInt16>(mnLines-mnVisLines) )
+        mnFirstLine = static_cast<sal_uInt16>(mnLines-mnVisLines);
 
     mbHasVisibleItems = true;
 
@@ -400,7 +400,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         mpScrBar->SetRangeMax( (nCurCount+mnCols-1)*mnFineness/mnCols);
         mpScrBar->SetVisibleSize( mnVisLines );
         if (!bScrollBarUsed)
-            mpScrBar->SetThumbPos( (long)mnFirstLine*mnFineness );
+            mpScrBar->SetThumbPos( static_cast<long>(mnFirstLine)*mnFineness );
         long nPageSize = mnVisLines;
         if ( nPageSize < 1 )
             nPageSize = 1;
@@ -1077,14 +1077,14 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         // if necessary scroll to the visible area
         if (mbScroll && nItemId && mnCols)
         {
-            sal_uInt16 nNewLine = (sal_uInt16)(nItemPos / mnCols);
+            sal_uInt16 nNewLine = static_cast<sal_uInt16>(nItemPos / mnCols);
             if ( nNewLine < mnFirstLine )
             {
                 mnFirstLine = nNewLine;
             }
-            else if ( nNewLine > (sal_uInt16)(mnFirstLine+mnVisLines-1) )
+            else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
             {
-                mnFirstLine = (sal_uInt16)(nNewLine-mnVisLines+1);
+                mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
             }
         }
 

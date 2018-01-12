@@ -113,9 +113,9 @@ bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
-        case MID_DROPCAP_LINES : rVal <<= (sal_Int16)nLines; break;
-        case MID_DROPCAP_COUNT : rVal <<= (sal_Int16)nChars; break;
-        case MID_DROPCAP_DISTANCE : rVal <<= (sal_Int16) convertTwipToMm100(nDistance); break;
+        case MID_DROPCAP_LINES : rVal <<= static_cast<sal_Int16>(nLines); break;
+        case MID_DROPCAP_COUNT : rVal <<= static_cast<sal_Int16>(nChars); break;
+        case MID_DROPCAP_DISTANCE : rVal <<= static_cast<sal_Int16>(convertTwipToMm100(nDistance)); break;
         case MID_DROPCAP_FORMAT:
         {
              style::DropCapFormat aDrop;
@@ -150,7 +150,7 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int8 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nLines = (sal_uInt8)nTemp;
+                nLines = static_cast<sal_uInt8>(nTemp);
         }
         break;
         case MID_DROPCAP_COUNT :
@@ -158,14 +158,14 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nChars = (sal_uInt8)nTemp;
+                nChars = static_cast<sal_uInt8>(nTemp);
         }
         break;
         case MID_DROPCAP_DISTANCE :
         {
             sal_Int16 nVal = 0;
             if ( rVal >>= nVal )
-                nDistance = (sal_Int16) convertMm100ToTwip((sal_Int32)nVal);
+                nDistance = static_cast<sal_Int16>(convertMm100ToTwip(static_cast<sal_Int32>(nVal)));
             else
                 return false;
             break;

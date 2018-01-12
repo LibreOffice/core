@@ -284,7 +284,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(1));
     long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(2));
 
-    for( sal_uInt16 i = 0; i <= (sal_uInt16)SvtPathOptions::PATH_CLASSIFICATION; ++i )
+    for( sal_uInt16 i = 0; i <= sal_uInt16(SvtPathOptions::PATH_CLASSIFICATION); ++i )
     {
         // only writer uses autotext
         if ( i == SvtPathOptions::PATH_AUTOTEXT
@@ -502,7 +502,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     if ( bChanged )
     {
         pPathBox->SetEntryText( Convert_Impl( sNewPathStr ), pEntry, 1 );
-        sal_uInt16 nPos = (sal_uInt16)pPathBox->GetModel()->GetAbsPos( pEntry );
+        sal_uInt16 nPos = static_cast<sal_uInt16>(pPathBox->GetModel()->GetAbsPos( pEntry ));
         pPathImpl = static_cast<PathUserData_Impl*>(pPathBox->GetEntry(nPos)->GetUserData());
         pPathImpl->eState = SfxItemState::SET;
         pPathImpl->sWritablePath = sNewPathStr;

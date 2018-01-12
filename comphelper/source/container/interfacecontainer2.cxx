@@ -105,7 +105,7 @@ void OInterfaceIteratorHelper2::remove()
     if( bIsList )
     {
         OSL_ASSERT( nRemain >= 0 &&
-                    nRemain < (sal_Int32)aData.pAsVector->size() );
+                    nRemain < static_cast<sal_Int32>(aData.pAsVector->size()) );
         rCont.removeInterface(  (*aData.pAsVector)[nRemain] );
     }
     else

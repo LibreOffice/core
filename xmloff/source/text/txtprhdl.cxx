@@ -853,7 +853,7 @@ bool XMLTextEmphasizePropHdl_Impl::importXML(
     {
         if( FontEmphasis::NONE != nVal && bBelow )
             nVal += 10;
-        rValue <<= (sal_Int16)nVal;
+        rValue <<= static_cast<sal_Int16>(nVal);
     }
 
     return bRet;
@@ -955,7 +955,7 @@ bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
     sal_Int32 nValue;
     bool const bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
     if( bRet )
-        rValue <<= (sal_Int16)nValue;
+        rValue <<= static_cast<sal_Int16>(nValue);
 
     return bRet;
 }

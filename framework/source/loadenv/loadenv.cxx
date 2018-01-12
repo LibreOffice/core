@@ -805,7 +805,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         try
         {
             ::comphelper::SequenceAsHashMap lFilterProps(xFilterCont->getByName(sFilter));
-            sal_Int32 nFlags         = lFilterProps.getUnpackedValueOrDefault("Flags", (sal_Int32)0);
+            sal_Int32 nFlags         = lFilterProps.getUnpackedValueOrDefault("Flags", sal_Int32(0));
                       bIsOwnTemplate = ((nFlags & FILTERFLAG_TEMPLATEPATH) == FILTERFLAG_TEMPLATEPATH);
         }
         catch(const css::container::NoSuchElementException&)
@@ -1249,7 +1249,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // Note: To detect if a document was already loaded before
     // we check URLs here only. But might the existing and the required
     // document has different versions! Then its URLs are the same ...
-    sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), (sal_Int16)-1);
+    sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), sal_Int16(-1));
 
     // will be used to save the first hidden frame referring the searched model
     // Normally we are interested on visible frames ... but if there is no such visible
@@ -1298,7 +1298,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // or must not have any file revision set (-1 == -1!)
             utl::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
 
-            if (lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), (sal_Int32)-1) != nNewVersion)
+            if (lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), sal_Int32(-1)) != nNewVersion)
             {
                 xTask.clear ();
                 continue;

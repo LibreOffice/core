@@ -1428,12 +1428,12 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
 
         // handle colormap request
         if( target == XA_COLORMAP )
-            nValue = (XID)pPixmap->getColormap();
+            nValue = static_cast<XID>(pPixmap->getColormap());
         else if( target == XA_VISUALID )
-            nValue = (XID)pPixmap->getVisualID();
+            nValue = static_cast<XID>(pPixmap->getVisualID());
         else if( target == XA_PIXMAP || target == XA_BITMAP )
         {
-            nValue = (XID)pPixmap->getPixmap();
+            nValue = static_cast<XID>(pPixmap->getPixmap());
             if( nValue == None )
             {
                 // first conversion
@@ -1459,13 +1459,13 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                     // get pixmap again since clearing the guard could have invalidated
                     // the pixmap in another thread
                     pPixmap = getPixmapHolder( selection );
-                    nValue = (XID)pPixmap->setBitmapData( reinterpret_cast<const sal_uInt8*>(aData.getConstArray()) );
+                    nValue = static_cast<XID>(pPixmap->setBitmapData( reinterpret_cast<const sal_uInt8*>(aData.getConstArray()) ));
                 }
                 if( nValue == None )
                     return false;
             }
             if( target == XA_BITMAP )
-                nValue = (XID)pPixmap->getBitmap();
+                nValue = static_cast<XID>(pPixmap->getBitmap());
         }
 
         XChangeProperty( m_pDisplay,
@@ -1609,7 +1609,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         }
         else if( rRequest.target == m_nTIMESTAMPAtom )
         {
-            long nTimeStamp = (long)m_aSelections[rRequest.selection]->m_nOrigTimestamp;
+            long nTimeStamp = static_cast<long>(m_aSelections[rRequest.selection]->m_nOrigTimestamp);
             XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
                              XA_INTEGER, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&nTimeStamp), 1 );
             aNotify.xselection.property = rRequest.property;

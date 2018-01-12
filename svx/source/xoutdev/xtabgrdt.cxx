@@ -104,7 +104,7 @@ Bitmap XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
         if(nStartIntens != 100)
         {
             const basegfx::BColor aBlack;
-            aStart = interpolate(aBlack, aStart, (double)nStartIntens * 0.01);
+            aStart = interpolate(aBlack, aStart, static_cast<double>(nStartIntens) * 0.01);
         }
 
         const sal_uInt16 nEndIntens(rGradient.GetEndIntens());
@@ -113,7 +113,7 @@ Bitmap XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
         if(nEndIntens != 100)
         {
             const basegfx::BColor aBlack;
-            aEnd = interpolate(aBlack, aEnd, (double)nEndIntens * 0.01);
+            aEnd = interpolate(aBlack, aEnd, static_cast<double>(nEndIntens) * 0.01);
         }
 
         drawinglayer::attribute::GradientStyle aGradientStyle(drawinglayer::attribute::GradientStyle::Rect);
@@ -155,10 +155,10 @@ Bitmap XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
         const sal_uInt16 nSteps((rSize.Width() + rSize.Height()) / 3);
         const drawinglayer::attribute::FillGradientAttribute aFillGradient(
             aGradientStyle,
-            (double)rGradient.GetBorder() * 0.01,
-            (double)rGradient.GetXOffset() * 0.01,
-            (double)rGradient.GetYOffset() * 0.01,
-            (double)rGradient.GetAngle() * F_PI1800,
+            static_cast<double>(rGradient.GetBorder()) * 0.01,
+            static_cast<double>(rGradient.GetXOffset()) * 0.01,
+            static_cast<double>(rGradient.GetYOffset()) * 0.01,
+            static_cast<double>(rGradient.GetAngle()) * F_PI1800,
             aStart,
             aEnd,
             nSteps);

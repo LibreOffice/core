@@ -348,7 +348,7 @@ public:
     SwMinMaxArgs( OutputDevice* pOutI, SwViewShell const * pShI, sal_uLong& rMinI, sal_uLong &rAbsI )
         : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rAbsMin( rAbsI )
         { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = COMPLETE_STRING; }
-    void Minimum( long nNew ) const { if( (long)rMin < nNew ) rMin = nNew; }
+    void Minimum( long nNew ) const { if( static_cast<long>(rMin) < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 
@@ -382,7 +382,7 @@ static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &
         else
         {
             rArg.nWordWidth += nAktWidth;
-            if( (long)rArg.rAbsMin < rArg.nWordWidth )
+            if( static_cast<long>(rArg.rAbsMin) < rArg.nWordWidth )
                 rArg.rAbsMin = rArg.nWordWidth;
             rArg.Minimum( rArg.nWordWidth + rArg.nWordAdd );
             bRet = true;
@@ -628,7 +628,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
         {
             case CH_BREAK  :
             {
-                if( (long)rMax < aArg.nRowWidth )
+                if( static_cast<long>(rMax) < aArg.nRowWidth )
                     rMax = aArg.nRowWidth;
                 aArg.nRowWidth = 0;
                 aArg.NewWord();
@@ -653,7 +653,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                 nAktWidth = aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
                 aArg.nRowWidth += nAktWidth;
-                if( (long)rAbsMin < aArg.nWordWidth )
+                if( static_cast<long>(rAbsMin) < aArg.nWordWidth )
                     rAbsMin = aArg.nWordWidth;
                 aArg.Minimum( aArg.nWordWidth + aArg.nWordAdd );
                 aArg.nNoLineBreak = nIdx++;
@@ -694,7 +694,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                                 // It were cleaner and maybe necessary later on to iterate over the content
                                 // of the text frame and call GetMinMaxSize recursively
                                 nAktWidth = FLYINCNT_MIN_WIDTH; // 0.5 cm
-                                if( (long)rMax < USHRT_MAX )
+                                if( static_cast<long>(rMax) < USHRT_MAX )
                                     rMax = USHRT_MAX;
                             }
                             else
@@ -705,7 +705,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                         aArg.nWordAdd = nOldWidth + nOldAdd;
                         aArg.nWordWidth = nAktWidth;
                         aArg.nRowWidth += nAktWidth;
-                        if( (long)rAbsMin < aArg.nWordWidth )
+                        if( static_cast<long>(rAbsMin) < aArg.nWordWidth )
                             rAbsMin = aArg.nWordWidth;
                         aArg.Minimum( aArg.nWordWidth + aArg.nWordAdd );
                         break;
@@ -738,7 +738,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
             break;
         }
     }
-    if( (long)rMax < aArg.nRowWidth )
+    if( static_cast<long>(rMax) < aArg.nRowWidth )
         rMax = aArg.nRowWidth;
 
     nLROffset += rSpace.GetRight();
@@ -747,9 +747,9 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
     rAbsMin += nAdd;
     rMin += nLROffset;
     rMin += nAdd;
-    if( (long)rMin < aNodeArgs.nMinWidth )
+    if( static_cast<long>(rMin) < aNodeArgs.nMinWidth )
         rMin = aNodeArgs.nMinWidth;
-    if( (long)rAbsMin < aNodeArgs.nMinWidth )
+    if( static_cast<long>(rAbsMin) < aNodeArgs.nMinWidth )
         rAbsMin = aNodeArgs.nMinWidth;
     rMax += aNodeArgs.nMaxWidth;
     rMax += nLROffset;
@@ -959,7 +959,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         SwTextIter aLine( pFrame, &aInf );
         aLine.CharToLine( nStt );
         pOut->SetMapMode( aOldMap );
-        return (sal_uInt16)( nWidth ?
+        return static_cast<sal_uInt16>( nWidth ?
             ( ( 100 * aLine.GetCurr()->Height() ) / nWidth ) : 0 );
     }
     // no frame or no paragraph, we take the height of the character
@@ -969,8 +969,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
     pOut->SetMapMode( aOldMap );
 
     SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, GetText(), nStt, 1 );
-    return (sal_uInt16)
-           ( nWidth ? ((100 * aIter.GetFnt()->GetTextSize_( aDrawInf ).Height()) / nWidth ) : 0 );
+    return static_cast<sal_uInt16>( nWidth ? ((100 * aIter.GetFnt()->GetTextSize_( aDrawInf ).Height()) / nWidth ) : 0 );
 }
 
 SwTwips SwTextNode::GetWidthOfLeadingTabs() const

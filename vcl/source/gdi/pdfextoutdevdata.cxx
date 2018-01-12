@@ -113,7 +113,7 @@ sal_Int32 GlobalSyncData::GetMappedId()
      */
     if( nLinkId >= 0 )
     {
-        if ( (sal_uInt32)nLinkId < mParaIds.size() )
+        if ( static_cast<sal_uInt32>(nLinkId) < mParaIds.size() )
             nLinkId = mParaIds[ nLinkId ];
         else
             nLinkId = -1;
@@ -126,7 +126,7 @@ sal_Int32 GlobalSyncData::GetMappedId()
 
 sal_Int32 GlobalSyncData::GetMappedStructId( sal_Int32 nStructId )
 {
-    if ( (sal_uInt32)nStructId < mStructIdMap.size() )
+    if ( static_cast<sal_uInt32>(nStructId) < mStructIdMap.size() )
         nStructId = mStructIdMap[ nStructId ];
     else
         nStructId = -1;

@@ -54,7 +54,7 @@ BitmapChecksum AnimationBitmap::GetChecksum() const
     UInt32ToSVBT32( (long) eDisposal, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( (long) bUserInput, aBT32 );
+    UInt32ToSVBT32( static_cast<long>(bUserInput), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     return nCrc;
@@ -319,7 +319,7 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
 void Animation::ImplRestartTimer( sal_uLong nTimeout )
 {
-    maTimer.SetTimeout( std::max( nTimeout, (sal_uLong)(MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT) ) * 10 );
+    maTimer.SetTimeout( std::max( nTimeout, static_cast<sal_uLong>(MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT) ) * 10 );
     maTimer.Start();
 }
 

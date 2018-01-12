@@ -153,11 +153,11 @@ bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any&
                 break;
             }
             if( eNewUnderline != eUnderline )
-                rValue <<= (sal_Int16)eNewUnderline;
+                rValue <<= static_cast<sal_Int16>(eNewUnderline);
         }
         else
         {
-            rValue <<= (sal_Int16)eNewUnderline;
+            rValue <<= static_cast<sal_Int16>(eNewUnderline);
         }
     }
 
@@ -245,11 +245,11 @@ bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any
                 break;
             }
             if( eNewUnderline != eUnderline )
-                rValue <<= (sal_Int16)eNewUnderline;
+                rValue <<= static_cast<sal_Int16>(eNewUnderline);
         }
         else
         {
-            rValue <<= (sal_Int16)eNewUnderline;
+            rValue <<= static_cast<sal_Int16>(eNewUnderline);
         }
     }
 
@@ -336,11 +336,11 @@ bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any
                 break;
             }
             if( eNewUnderline != eUnderline )
-                rValue <<= (sal_Int16)eNewUnderline;
+                rValue <<= static_cast<sal_Int16>(eNewUnderline);
         }
         else
         {
-            rValue <<= (sal_Int16)eNewUnderline;
+            rValue <<= static_cast<sal_Int16>(eNewUnderline);
         }
     }
 

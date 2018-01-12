@@ -46,7 +46,7 @@ sal_Int32 SAL_CALL XMLSecurityContextGpg::getSecurityEnvironmentNumber()
 
 Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnvironmentByIndex(sal_Int32 index)
 {
-    if (index < 0 || index >= ( sal_Int32 )m_vSecurityEnvironments.size())
+    if (index < 0 || index >= static_cast<sal_Int32>(m_vSecurityEnvironments.size()))
         throw RuntimeException("Invalid index");
 
     return m_vSecurityEnvironments[index];
@@ -54,7 +54,7 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnv
 
 Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnvironment()
 {
-    if (m_nDefaultEnvIndex < 0 || m_nDefaultEnvIndex >= (sal_Int32) m_vSecurityEnvironments.size())
+    if (m_nDefaultEnvIndex < 0 || m_nDefaultEnvIndex >= static_cast<sal_Int32>(m_vSecurityEnvironments.size()))
         throw RuntimeException("Invalid index");
 
     return getSecurityEnvironmentByIndex(m_nDefaultEnvIndex);

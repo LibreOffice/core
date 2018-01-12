@@ -941,7 +941,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
 
     // Go through all formatted paragraphs, and store format items.
     std::vector<editeng::Section>::iterator itAttr = aAttrs.begin();
-    for (sal_Int32 nPara = 0; nPara < (sal_Int32)aContents.size(); ++nPara)
+    for (sal_Int32 nPara = 0; nPara < static_cast<sal_Int32>(aContents.size()); ++nPara)
     {
         const ContentInfo& rC = *aContents[nPara].get();
 

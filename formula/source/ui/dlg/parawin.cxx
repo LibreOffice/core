@@ -269,14 +269,14 @@ void ParaWin::SetActiveLine(sal_uInt16 no)
     {
         long nOffset = GetSliderPos();
         nActiveLine=no;
-        long nNewEdPos=(long)nActiveLine-nOffset;
+        long nNewEdPos=static_cast<long>(nActiveLine)-nOffset;
         if(nNewEdPos<0 || nNewEdPos>3)
         {
             nOffset+=nNewEdPos;
-            SetSliderPos((sal_uInt16) nOffset);
+            SetSliderPos(static_cast<sal_uInt16>(nOffset));
             nOffset=GetSliderPos();
         }
-        nEdFocus=no-(sal_uInt16)nOffset;
+        nEdFocus=no-static_cast<sal_uInt16>(nOffset);
         UpdateArgDesc( nEdFocus );
     }
 }
@@ -481,7 +481,7 @@ void ParaWin::UpdateParas()
 
 sal_uInt16 ParaWin::GetSliderPos()
 {
-    return (sal_uInt16) m_pSlider->GetThumbPos();
+    return static_cast<sal_uInt16>(m_pSlider->GetThumbPos());
 }
 
 void ParaWin::SetSliderPos(sal_uInt16 nSliderPos)

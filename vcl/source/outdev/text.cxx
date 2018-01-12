@@ -1286,7 +1286,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         mpFontInstance->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
         pLayoutCache = nullptr; // don't use cache with modified string!
     }
-    DeviceCoordinate nPixelWidth = (DeviceCoordinate)nLogicalWidth;
+    DeviceCoordinate nPixelWidth = static_cast<DeviceCoordinate>(nLogicalWidth);
     std::unique_ptr<DeviceCoordinate[]> xDXPixelArray;
     DeviceCoordinate* pDXPixelArray(nullptr);
     if( nLogicalWidth && mbMap )
@@ -1554,7 +1554,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         if ( nTextHeight )
         {
             long nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
-            nLines = (sal_Int32)(nHeight/nTextHeight);
+            nLines = static_cast<sal_Int32>(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if (nLines <= 0)
                 nLines = 1;
@@ -1847,7 +1847,7 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
         nFormatLines = aMultiLineInfo.Count();
         if ( !nTextHeight )
             nTextHeight = 1;
-        nLines = (sal_uInt16)(aRect.GetHeight()/nTextHeight);
+        nLines = static_cast<sal_uInt16>(aRect.GetHeight()/nTextHeight);
         if ( pInfo )
             pInfo->mnLineCount = nFormatLines;
         if ( !nLines )
@@ -2147,7 +2147,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray.get(), nIndex, nLen );
             long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
-            nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
+            nMnemonicWidth = ::abs(static_cast<int>(lc_x1 - lc_x2));
 
             Point aTempPos( std::min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
             if( bInvalidPos )  // #106952#, place behind the (last) character
@@ -2235,7 +2235,7 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr ) const
     {
         if ( nMnemonicPos < nIndex )
             nIndex--;
-        else if ( (nMnemonicPos >= nIndex) && ((sal_uLong)nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
+        else if ( (nMnemonicPos >= nIndex) && (static_cast<sal_uLong>(nMnemonicPos) < static_cast<sal_uLong>(nIndex+nLen)) )
             nLen--;
     }
     return GetTextWidth( aStr, nIndex, nLen );

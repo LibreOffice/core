@@ -75,7 +75,7 @@ struct AlignSize_Impl
 #endif
 
 // the value of the maximal alignment
-static sal_Int32 nMaxAlignment = (sal_Int32)( reinterpret_cast<sal_Size>(&reinterpret_cast<AlignSize_Impl *>(16)->dDouble) - 16);
+static sal_Int32 nMaxAlignment = static_cast<sal_Int32>( reinterpret_cast<sal_Size>(&reinterpret_cast<AlignSize_Impl *>(16)->dDouble) - 16);
 
 static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
 {
@@ -110,35 +110,35 @@ static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
     switch( eTypeClass )
     {
         case typelib_TypeClass_SEQUENCE:
-            nSize = (sal_Int32)sizeof( typelib_IndirectTypeDescription );
+            nSize = sal_Int32(sizeof( typelib_IndirectTypeDescription ));
         break;
 
         case typelib_TypeClass_STRUCT:
-            nSize = (sal_Int32)sizeof( typelib_StructTypeDescription );
+            nSize = sal_Int32(sizeof( typelib_StructTypeDescription ));
         break;
 
         case typelib_TypeClass_EXCEPTION:
-            nSize = (sal_Int32)sizeof( typelib_CompoundTypeDescription );
+            nSize = sal_Int32(sizeof( typelib_CompoundTypeDescription ));
         break;
 
         case typelib_TypeClass_ENUM:
-            nSize = (sal_Int32)sizeof( typelib_EnumTypeDescription );
+            nSize = sal_Int32(sizeof( typelib_EnumTypeDescription ));
         break;
 
         case typelib_TypeClass_INTERFACE:
-            nSize = (sal_Int32)sizeof( typelib_InterfaceTypeDescription );
+            nSize = sal_Int32(sizeof( typelib_InterfaceTypeDescription ));
         break;
 
         case typelib_TypeClass_INTERFACE_METHOD:
-            nSize = (sal_Int32)sizeof( typelib_InterfaceMethodTypeDescription );
+            nSize = sal_Int32(sizeof( typelib_InterfaceMethodTypeDescription ));
         break;
 
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-            nSize = (sal_Int32)sizeof( typelib_InterfaceAttributeTypeDescription );
+            nSize = sal_Int32(sizeof( typelib_InterfaceAttributeTypeDescription ));
         break;
 
         default:
-            nSize = (sal_Int32)sizeof( typelib_TypeDescription );
+            nSize = sal_Int32(sizeof( typelib_TypeDescription ));
     }
     return nSize;
 }
@@ -505,7 +505,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
             MutexGuard aGuard( rInit.getMutex() );
             if( !rInit.pCache )
                 rInit.pCache = new TypeDescriptionList_Impl;
-            if( (sal_Int32)rInit.pCache->size() >= nCacheSize )
+            if( static_cast<sal_Int32>(rInit.pCache->size()) >= nCacheSize )
             {
                 typelib_typedescription_release( rInit.pCache->front() );
                 rInit.pCache->pop_front();
@@ -1622,10 +1622,10 @@ extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
         {
             case typelib_TypeClass_INTERFACE:
                 // FEATURE_INTERFACE
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( void * ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( void * ));
                 break;
             case typelib_TypeClass_ENUM:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( typelib_TypeClass ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( typelib_TypeClass ));
                 break;
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
@@ -1648,7 +1648,7 @@ extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
                     if (pMemberRef->eTypeClass == typelib_TypeClass_INTERFACE
                         || pMemberRef->eTypeClass == typelib_TypeClass_SEQUENCE)
                     {
-                        nMaxIntegral = (sal_Int32)(sizeof(void *));
+                        nMaxIntegral = sal_Int32(sizeof(void *));
                         nStructSize = newAlignedSize( nStructSize, nMaxIntegral, nMaxIntegral );
                     }
                     else
@@ -1677,28 +1677,28 @@ extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
                 }
                 break;
             case typelib_TypeClass_SEQUENCE:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( void * ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( void * ));
                 break;
             case typelib_TypeClass_ANY:
                 // FEATURE_ANY
-                nSize = (sal_Int32)(sizeof( uno_Any ));
-                rMaxIntegralTypeSize = (sal_Int32)(sizeof( void * ));
+                nSize = sal_Int32(sizeof( uno_Any ));
+                rMaxIntegralTypeSize = sal_Int32(sizeof( void * ));
                 break;
             case typelib_TypeClass_TYPE:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( typelib_TypeDescriptionReference * ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( typelib_TypeDescriptionReference * ));
                 break;
             case typelib_TypeClass_BOOLEAN:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Bool ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( sal_Bool ));
                 break;
             case typelib_TypeClass_CHAR:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Unicode ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( sal_Unicode ));
                 break;
             case typelib_TypeClass_STRING:
                 // FEATURE_STRING
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( rtl_uString * ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( rtl_uString * ));
                 break;
             case typelib_TypeClass_FLOAT:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( float ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( float ));
                 break;
             case typelib_TypeClass_DOUBLE:
 #ifdef AIX
@@ -1706,23 +1706,23 @@ extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
                 nSize = (sal_Int32)(sizeof(double));
                 rMaxIntegralTypeSize = (sal_Int32)(sizeof(void*));
 #else
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( double ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( double ));
 #endif
                 break;
             case typelib_TypeClass_BYTE:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int8 ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( sal_Int8 ));
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int16 ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( sal_Int16 ));
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int32 ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( sal_Int32 ));
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int64 ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( sal_Int64 ));
                 break;
             case typelib_TypeClass_UNKNOWN:
             case typelib_TypeClass_SERVICE:
@@ -2002,7 +2002,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
                 MutexGuard aGuard( rInit.getMutex() );
                 if( !rInit.pCache )
                     rInit.pCache = new TypeDescriptionList_Impl;
-                if( (sal_Int32)rInit.pCache->size() >= nCacheSize )
+                if( static_cast<sal_Int32>(rInit.pCache->size()) >= nCacheSize )
                 {
                     typelib_typedescription_release( rInit.pCache->front() );
                     rInit.pCache->pop_front();
@@ -2060,7 +2060,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
                 MutexGuard aGuard( rInit.getMutex() );
                 if( !rInit.pCache )
                     rInit.pCache = new TypeDescriptionList_Impl;
-                if( (sal_Int32)rInit.pCache->size() >= nCacheSize )
+                if( static_cast<sal_Int32>(rInit.pCache->size()) >= nCacheSize )
                 {
                     typelib_typedescription_release( rInit.pCache->front() );
                     rInit.pCache->pop_front();
@@ -2279,7 +2279,7 @@ extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
         MutexGuard aGuard( rInit.getMutex() );
         if ((nNewSize < nCacheSize) && rInit.pCache)
         {
-            while ((sal_Int32)rInit.pCache->size() != nNewSize)
+            while (static_cast<sal_Int32>(rInit.pCache->size()) != nNewSize)
             {
                 typelib_typedescription_release( rInit.pCache->front() );
                 rInit.pCache->pop_front();

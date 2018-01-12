@@ -104,7 +104,7 @@ extern "C" void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
 
 extern "C" sal_Int32 rtl_hashfunc(RTL_HASHTABLE* table, sal_Int32 key)
 {
-    return ((sal_uInt32) key % table->Size);
+    return (static_cast<sal_uInt32>(key) % table->Size);
 }
 
 extern "C" sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table);
@@ -143,7 +143,7 @@ sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table)
     RTL_HASHTABLE* pNewTable = nullptr;
     sal_Int32 i = 0;
 
-    rtl_hashtable_init(&pNewTable, (sal_Int8)((*table)->iSize + 1));
+    rtl_hashtable_init(&pNewTable, static_cast<sal_Int8>((*table)->iSize + 1));
 
     while (i < (*table)->Size)
     {

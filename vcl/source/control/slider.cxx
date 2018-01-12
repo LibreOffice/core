@@ -24,9 +24,9 @@
 
 #include "thumbpos.hxx"
 
-#define SLIDER_STATE_CHANNEL1_DOWN  ((sal_uInt16)0x0001)
-#define SLIDER_STATE_CHANNEL2_DOWN  ((sal_uInt16)0x0002)
-#define SLIDER_STATE_THUMB_DOWN     ((sal_uInt16)0x0004)
+#define SLIDER_STATE_CHANNEL1_DOWN  (sal_uInt16(0x0001))
+#define SLIDER_STATE_CHANNEL2_DOWN  (sal_uInt16(0x0002))
+#define SLIDER_STATE_THUMB_DOWN     (sal_uInt16(0x0004))
 
 #define SLIDER_THUMB_SIZE           9
 #define SLIDER_THUMB_HALFSIZE       4

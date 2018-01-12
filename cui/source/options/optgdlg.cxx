@@ -364,7 +364,7 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     }
 
     const SfxUInt16Item* pUInt16Item = dynamic_cast< const SfxUInt16Item* >( GetOldItem( *rSet, SID_ATTR_YEAR2000 ) );
-    sal_uInt16 nNum = (sal_uInt16)m_pYearValueField->GetText().toInt32();
+    sal_uInt16 nNum = static_cast<sal_uInt16>(m_pYearValueField->GetText().toInt32());
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
     {
         bModified = true;
@@ -1204,7 +1204,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
             sal_Int32 d = 0;
             for (sal_Int32 i=0; i < m_pUserInterfaceLB->GetEntryCount(); i++)
             {
-                d = (sal_Int32)reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetEntryData(i));
+                d = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetEntryData(i)));
                 if ( d > 0 && seqInstalledLanguages.getLength() > d-1 && seqInstalledLanguages[d-1] == m_sUserLocaleValue)
                     m_pUserInterfaceLB->SelectEntryPos(i);
             }
@@ -1362,7 +1362,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         // handle settings for UI Language
         // a change of setting needs to bring up a warning message
         OUString aLangString;
-        sal_Int32 d = (sal_Int32)reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetSelectedEntryData());
+        sal_Int32 d = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetSelectedEntryData()));
         if( d > 0 && seqInstalledLanguages.getLength() > d-1)
             aLangString = seqInstalledLanguages[d-1];
 

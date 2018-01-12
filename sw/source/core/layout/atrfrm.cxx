@@ -225,13 +225,13 @@ bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_FRMSIZE_REL_HEIGHT:
-            rVal <<= (sal_Int16)(GetHeightPercent() != SwFormatFrameSize::SYNCED ? GetHeightPercent() : 0);
+            rVal <<= static_cast<sal_Int16>(GetHeightPercent() != SwFormatFrameSize::SYNCED ? GetHeightPercent() : 0);
         break;
         case MID_FRMSIZE_REL_HEIGHT_RELATION:
             rVal <<= GetHeightPercentRelation();
         break;
         case MID_FRMSIZE_REL_WIDTH:
-            rVal <<= (sal_Int16)(GetWidthPercent() != SwFormatFrameSize::SYNCED ? GetWidthPercent() : 0);
+            rVal <<= static_cast<sal_Int16>(GetWidthPercent() != SwFormatFrameSize::SYNCED ? GetWidthPercent() : 0);
         break;
         case MID_FRMSIZE_REL_WIDTH_RELATION:
             rVal <<= GetWidthPercentRelation();
@@ -243,23 +243,23 @@ bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= SwFormatFrameSize::SYNCED == GetWidthPercent();
         break;
         case MID_FRMSIZE_WIDTH :
-            rVal <<= (sal_Int32)convertTwipToMm100(m_aSize.Width());
+            rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_aSize.Width()));
         break;
         case MID_FRMSIZE_HEIGHT:
             // #95848# returned size should never be zero.
             // (there was a bug that allowed for setting height to 0.
             // Thus there some documents existing with that not allowed
             // attribute value which may cause problems on import.)
-            rVal <<= (sal_Int32)convertTwipToMm100(m_aSize.Height() < MINLAY ? MINLAY : m_aSize.Height() );
+            rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_aSize.Height() < MINLAY ? MINLAY : m_aSize.Height() ));
         break;
         case MID_FRMSIZE_SIZE_TYPE:
-            rVal <<= (sal_Int16)GetHeightSizeType();
+            rVal <<= static_cast<sal_Int16>(GetHeightSizeType());
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
             rVal <<= ATT_FIX_SIZE != GetHeightSizeType();
         break;
         case MID_FRMSIZE_WIDTH_TYPE:
-            rVal <<= (sal_Int16)GetWidthSizeType();
+            rVal <<= static_cast<sal_Int16>(GetWidthSizeType());
         break;
     }
     return true;
@@ -294,7 +294,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet < SwFormatFrameSize::SYNCED)
-                SetHeightPercent((sal_uInt8)nSet);
+                SetHeightPercent(static_cast<sal_uInt8>(nSet));
             else
                 bRet = false;
         }
@@ -311,7 +311,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet < SwFormatFrameSize::SYNCED)
-                SetWidthPercent((sal_uInt8)nSet);
+                SetWidthPercent(static_cast<sal_uInt8>(nSet));
             else
                 bRet = false;
         }
@@ -554,7 +554,7 @@ void SwFormatContent::SetNewContentIdx( const SwNodeIndex *pIdx )
 bool SwFormatContent::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    if( (bool)m_pStartNode != (bool)static_cast<const SwFormatContent&>(rAttr).m_pStartNode )
+    if( static_cast<bool>(m_pStartNode) != static_cast<bool>(static_cast<const SwFormatContent&>(rAttr).m_pStartNode) )
         return false;
     if( m_pStartNode )
         return ( *m_pStartNode == *static_cast<const SwFormatContent&>(rAttr).GetContentIdx() );
@@ -695,7 +695,7 @@ bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 ::boost::optional<sal_uInt16> oOffset = GetNumOffset();
                 if (oOffset)
                 {
-                    rVal <<= (sal_Int16)oOffset.get();
+                    rVal <<= static_cast<sal_Int16>(oOffset.get());
                 }
                 else
                 {
@@ -1064,8 +1064,8 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             const text::TextColumn* pArray = aSetColumns.getConstArray();
             m_aColumns.clear();
             //max count is 64k here - this is something the array can't do
-            sal_uInt16 nCount = std::min( (sal_uInt16)aSetColumns.getLength(),
-                                     (sal_uInt16) 0x3fff );
+            sal_uInt16 nCount = std::min( static_cast<sal_uInt16>(aSetColumns.getLength()),
+                                     sal_uInt16(0x3fff) );
             sal_uInt16 nWidthSum = 0;
             // #101224# one column is no column
 
@@ -1319,14 +1319,14 @@ bool SwFormatVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_VERTORIENT_ORIENT:
         {
-            rVal <<= (sal_Int16)m_eOrient;
+            rVal <<= static_cast<sal_Int16>(m_eOrient);
         }
         break;
         case MID_VERTORIENT_RELATION:
-                rVal <<= (sal_Int16)m_eRelation;
+                rVal <<= static_cast<sal_Int16>(m_eRelation);
         break;
         case MID_VERTORIENT_POSITION:
-                rVal <<= (sal_Int32)convertTwipToMm100(GetPos());
+                rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetPos()));
                 break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1413,14 +1413,14 @@ bool SwFormatHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_HORIORIENT_ORIENT:
         {
-            rVal <<= (sal_Int16)m_eOrient;
+            rVal <<= static_cast<sal_Int16>(m_eOrient);
         }
         break;
         case MID_HORIORIENT_RELATION:
-            rVal <<= (sal_Int16)m_eRelation;
+            rVal <<= static_cast<sal_Int16>(m_eRelation);
         break;
         case MID_HORIORIENT_POSITION:
-                rVal <<= (sal_Int32)convertTwipToMm100(GetPos());
+                rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetPos()));
                 break;
         case MID_HORIORIENT_PAGETOGGLE:
             rVal <<= IsPosToggle();
@@ -1592,7 +1592,7 @@ bool SwFormatAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= eRet;
         break;
         case MID_ANCHOR_PAGENUM:
-            rVal <<= (sal_Int16)GetPageNum();
+            rVal <<= static_cast<sal_Int16>(GetPageNum());
         break;
         case MID_ANCHOR_ANCHORFRAME:
         {
@@ -1927,11 +1927,11 @@ bool SwFormatFootnoteEndAtTextEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMember
         case MID_RESTART_NUM :
             rVal <<= GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ;
         break;
-        case MID_NUM_START_AT: rVal <<= (sal_Int16) nOffset; break;
+        case MID_NUM_START_AT: rVal <<= static_cast<sal_Int16>(nOffset); break;
         case MID_OWN_NUM     :
             rVal <<= GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT;
         break;
-        case MID_NUM_TYPE    : rVal <<= (sal_Int16)aFormat.GetNumberingType(); break;
+        case MID_NUM_TYPE    : rVal <<= static_cast<sal_Int16>(aFormat.GetNumberingType()); break;
         case MID_PREFIX      : rVal <<= sPrefix; break;
         case MID_SUFFIX      : rVal <<= sSuffix; break;
         default: return false;
@@ -2126,7 +2126,7 @@ bool SwFormatLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= IsCount();
             break;
         case MID_LINENUMBER_STARTVALUE:
-            rVal <<= (sal_Int32)GetStartValue();
+            rVal <<= static_cast<sal_Int32>(GetStartValue());
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -2236,17 +2236,17 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_GRID_BASEHEIGHT:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32) convertTwipToMm100(m_nBaseHeight);
+            rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_nBaseHeight));
             break;
         case MID_GRID_BASEWIDTH:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32) convertTwipToMm100(m_nBaseWidth);
+            rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_nBaseWidth));
             break;
         case MID_GRID_RUBYHEIGHT:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32)convertTwipToMm100(m_nRubyHeight);
+            rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_nRubyHeight));
             break;
         case MID_GRID_TYPE:
             switch( GetGridType() )
@@ -2299,7 +2299,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTmp = 0;
             bRet = (rVal >>= nTmp);
             if( bRet && (nTmp >= 0) )
-                SetLines( (sal_uInt16)nTmp );
+                SetLines( static_cast<sal_uInt16>(nTmp) );
             else
                 bRet = false;
         }
@@ -2331,15 +2331,15 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEHEIGHT )
                 {
                     nTmp = std::max<sal_Int32>(nTmp, MIN_TEXTGRID_SIZE);
-                    SetBaseHeight( (sal_uInt16)nTmp );
+                    SetBaseHeight( static_cast<sal_uInt16>(nTmp) );
                 }
                 else if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEWIDTH )
                 {
                     nTmp = std::max<sal_Int32>(nTmp, MIN_TEXTGRID_SIZE);
-                    SetBaseWidth( (sal_uInt16)nTmp );
+                    SetBaseWidth( static_cast<sal_uInt16>(nTmp) );
                 }
                 else
-                    SetRubyHeight( (sal_uInt16)nTmp );
+                    SetRubyHeight( static_cast<sal_uInt16>(nTmp) );
             }
             else
                 bRet = false;

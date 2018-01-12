@@ -740,7 +740,7 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex )
         {
             checkSelection_Impl(nChildIndex,*m_pListBoxHelper,false);
 
-            m_pListBoxHelper->SelectEntryPos( (sal_uInt16)nChildIndex );
+            m_pListBoxHelper->SelectEntryPos( static_cast<sal_uInt16>(nChildIndex) );
             // call the select handler, don't handle events in this time
             m_bDisableProcessEvent = true;
             m_pListBoxHelper->Select();
@@ -763,7 +763,7 @@ sal_Bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int32 nChil
     {
         checkSelection_Impl(nChildIndex,*m_pListBoxHelper,false);
 
-        bRet = m_pListBoxHelper->IsEntryPosSelected( (sal_uInt16)nChildIndex );
+        bRet = m_pListBoxHelper->IsEntryPosSelected( static_cast<sal_uInt16>(nChildIndex) );
     }
     return bRet;
 }
@@ -831,7 +831,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild
     if ( m_pListBoxHelper )
     {
         checkSelection_Impl(nSelectedChildIndex,*m_pListBoxHelper,true);
-        return getAccessibleChild( m_pListBoxHelper->GetSelectedEntryPos( (sal_uInt16)nSelectedChildIndex ) );
+        return getAccessibleChild( m_pListBoxHelper->GetSelectedEntryPos( static_cast<sal_uInt16>(nSelectedChildIndex) ) );
     }
 
     return nullptr;
@@ -849,7 +849,7 @@ void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedCh
         {
             checkSelection_Impl(nSelectedChildIndex,*m_pListBoxHelper,false);
 
-            m_pListBoxHelper->SelectEntryPos( (sal_uInt16)nSelectedChildIndex, false );
+            m_pListBoxHelper->SelectEntryPos( static_cast<sal_uInt16>(nSelectedChildIndex), false );
             // call the select handler, don't handle events in this time
             m_bDisableProcessEvent = true;
             m_pListBoxHelper->Select();

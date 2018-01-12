@@ -381,7 +381,7 @@ bool ScRawToken::IsValidReference() const
 
 FormulaToken* ScRawToken::CreateToken() const
 {
-#define IF_NOT_OPCODE_ERROR(o,c) SAL_WARN_IF((eOp!=o), "sc.core", #c "::ctor: OpCode " << (int)eOp << " lost, converted to " #o "; maybe inherit from FormulaToken instead!")
+#define IF_NOT_OPCODE_ERROR(o,c) SAL_WARN_IF((eOp!=o), "sc.core", #c "::ctor: OpCode " << static_cast<int>(eOp) << " lost, converted to " #o "; maybe inherit from FormulaToken instead!")
     switch ( GetType() )
     {
         case svByte :

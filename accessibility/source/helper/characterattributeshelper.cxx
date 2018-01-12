@@ -29,17 +29,17 @@ CharacterAttributesHelper::CharacterAttributesHelper( const vcl::Font& rFont, sa
 {
     m_aAttributeMap.emplace( OUString( "CharBackColor" ),     Any( nBackColor ) );
     m_aAttributeMap.emplace( OUString( "CharColor" ),         Any( nColor ) );
-    m_aAttributeMap.emplace( OUString( "CharFontCharSet" ),   Any( (sal_Int16) rFont.GetCharSet() ) );
-    m_aAttributeMap.emplace( OUString( "CharFontFamily" ),    Any( (sal_Int16) rFont.GetFamilyType() ) );
+    m_aAttributeMap.emplace( OUString( "CharFontCharSet" ),   Any( static_cast<sal_Int16>(rFont.GetCharSet()) ) );
+    m_aAttributeMap.emplace( OUString( "CharFontFamily" ),    Any( static_cast<sal_Int16>(rFont.GetFamilyType()) ) );
     m_aAttributeMap.emplace( OUString( "CharFontName" ),      Any( rFont.GetFamilyName() ) );
-    m_aAttributeMap.emplace( OUString( "CharFontPitch" ),     Any( (sal_Int16) rFont.GetPitch() ) );
+    m_aAttributeMap.emplace( OUString( "CharFontPitch" ),     Any( static_cast<sal_Int16>(rFont.GetPitch()) ) );
     m_aAttributeMap.emplace( OUString( "CharFontStyleName" ), Any( rFont.GetStyleName() ) );
-    m_aAttributeMap.emplace( OUString( "CharHeight" ),        Any( (sal_Int16) rFont.GetFontSize().Height() ) );
-    m_aAttributeMap.emplace( OUString( "CharScaleWidth" ),    Any( (sal_Int16) rFont.GetFontSize().Width() ) );
-    m_aAttributeMap.emplace( OUString( "CharStrikeout" ),     Any( (sal_Int16) rFont.GetStrikeout() ) );
-    m_aAttributeMap.emplace( OUString( "CharUnderline" ),     Any( (sal_Int16) rFont.GetUnderline() ) );
-    m_aAttributeMap.emplace( OUString( "CharWeight" ),        Any( (float) rFont.GetWeight() ) );
-    m_aAttributeMap.emplace( OUString( "CharPosture" ),       Any( (sal_Int16)rFont.GetItalic() ) );
+    m_aAttributeMap.emplace( OUString( "CharHeight" ),        Any( static_cast<sal_Int16>(rFont.GetFontSize().Height()) ) );
+    m_aAttributeMap.emplace( OUString( "CharScaleWidth" ),    Any( static_cast<sal_Int16>(rFont.GetFontSize().Width()) ) );
+    m_aAttributeMap.emplace( OUString( "CharStrikeout" ),     Any( static_cast<sal_Int16>(rFont.GetStrikeout()) ) );
+    m_aAttributeMap.emplace( OUString( "CharUnderline" ),     Any( static_cast<sal_Int16>(rFont.GetUnderline()) ) );
+    m_aAttributeMap.emplace( OUString( "CharWeight" ),        Any( static_cast<float>(rFont.GetWeight()) ) );
+    m_aAttributeMap.emplace( OUString( "CharPosture" ),       Any( static_cast<sal_Int16>(rFont.GetItalic()) ) );
 }
 
 
@@ -50,7 +50,7 @@ std::vector< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes()
 
     for ( const auto& aIt : m_aAttributeMap)
     {
-        aValues.emplace_back(aIt.first, (sal_Int32) -1, aIt.second, PropertyState_DIRECT_VALUE);
+        aValues.emplace_back(aIt.first, sal_Int32(-1), aIt.second, PropertyState_DIRECT_VALUE);
     }
 
     return aValues;
@@ -68,7 +68,7 @@ Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes( con
     {
         AttributeMap::iterator aFound = m_aAttributeMap.find( aRequestedAttribute );
         if ( aFound != m_aAttributeMap.end() )
-            aValues.emplace_back(aFound->first, (sal_Int32) -1, aFound->second, PropertyState_DIRECT_VALUE);
+            aValues.emplace_back(aFound->first, sal_Int32(-1), aFound->second, PropertyState_DIRECT_VALUE);
     }
 
     return comphelper::containerToSequence(aValues);

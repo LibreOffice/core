@@ -780,7 +780,7 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame const * pNew)
             {
                 for (size_t n=0; n<xImp->aChildWins.size();)
                 {
-                    SfxChildWindow *pWin = pWorkWin->GetChildWindow_Impl( (sal_uInt16) ( xImp->aChildWins[n] & 0xFFFF ) );
+                    SfxChildWindow *pWin = pWorkWin->GetChildWindow_Impl( static_cast<sal_uInt16>( xImp->aChildWins[n] & 0xFFFF ) );
                     if (!pWin || pWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT)
                         xImp->aChildWins.erase(xImp->aChildWins.begin()+n);
                     else
@@ -1370,7 +1370,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         for ( nNo=0; pIFace && nNo<pIFace->GetChildWindowCount(); nNo++ )
         {
             sal_uInt32 nId = pIFace->GetChildWindowId(nNo);
-            const SfxSlot *pSlot = pSlotPool->GetSlot( (sal_uInt16) nId );
+            const SfxSlot *pSlot = pSlotPool->GetSlot( static_cast<sal_uInt16>(nId) );
             SAL_WARN_IF( !pSlot, "sfx.control", "Childwindow slot missing: " << nId );
             if ( bReadOnlyShell )
             {
@@ -1401,7 +1401,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
 
             if ( bUIActive || bIsActive )
                 pWorkWin->SetChildWindowVisible_Impl( nId, true, nMode );
-            if ( bUIActive || bIsActive || !pWorkWin->IsFloating( (sal_uInt16) ( nId & 0xFFFF ) ) )
+            if ( bUIActive || bIsActive || !pWorkWin->IsFloating( static_cast<sal_uInt16>( nId & 0xFFFF ) ) )
                 xImp->aChildWins.push_back( nId );
         }
 
@@ -1630,7 +1630,7 @@ void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
 
 extern "C" int SfxCompareSIDs_Impl(const void* pSmaller, const void* pBigger)
 {
-    return ( (long) *static_cast<sal_uInt16 const *>(pSmaller) ) - ( (long) *static_cast<sal_uInt16 const *>(pBigger) );
+    return static_cast<long>(*static_cast<sal_uInt16 const *>(pSmaller)) - static_cast<long>(*static_cast<sal_uInt16 const *>(pBigger));
 }
 
 /** Searches for 'nSID' in the Filter set by <SetSlotFilter()> and
@@ -2064,7 +2064,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
                 sal_uInt16 nWhich = rPool.GetWhich( nSID );
                 if ( rPool.GetMetric( nWhich ) == MapUnit::MapTwip )
                     nSubId |= CONVERT_TWIPS;
-                pItem->QueryValue( aState, (sal_uInt8)nSubId );
+                pItem->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );
             }
             rAny = aState;
 

@@ -248,7 +248,7 @@ void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
     pImpl->nSelectedAddress = nSelect;
     // now make it visible..
     sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
-    sal_uInt16 nStartRow = (sal_uInt16)aVScrollBar->GetThumbPos();
+    sal_uInt16 nStartRow = static_cast<sal_uInt16>(aVScrollBar->GetThumbPos());
     if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + pImpl->nRows) ))
         aVScrollBar->SetThumbPos( nSelectRow );
 }
@@ -292,7 +292,7 @@ void SwAddressPreview::UpdateScrollBar()
     if(pImpl->nColumns)
     {
         aVScrollBar->SetVisibleSize(pImpl->nRows);
-        sal_uInt16 nResultingRows = (sal_uInt16)(pImpl->aAddresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
+        sal_uInt16 nResultingRows = static_cast<sal_uInt16>(pImpl->aAddresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
         ++nResultingRows;
         aVScrollBar->Show(pImpl->bEnableScrollBar && nResultingRows > pImpl->nRows);
         aVScrollBar->SetRange(Range(0, nResultingRows));
@@ -318,7 +318,7 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     if(aVScrollBar->IsVisible())
     {
         aSize.Width() -= aVScrollBar->GetSizePixel().Width();
-        nStartRow = (sal_uInt16)aVScrollBar->GetThumbPos();
+        nStartRow = static_cast<sal_uInt16>(aVScrollBar->GetThumbPos());
     }
     Size aPartSize(aSize.Width() / pImpl->nColumns,
                    aSize.Height() / pImpl->nRows);
@@ -359,15 +359,15 @@ void SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
         sal_uInt32 nRow = rMousePos.Y() / aPartSize.Height() ;
         if(aVScrollBar->IsVisible())
         {
-            nRow += (sal_uInt16)aVScrollBar->GetThumbPos();
+            nRow += static_cast<sal_uInt16>(aVScrollBar->GetThumbPos());
         }
         sal_uInt32 nCol = rMousePos.X() / aPartSize.Width();
         sal_uInt32 nSelect = nRow * pImpl->nColumns + nCol;
 
         if( nSelect < pImpl->aAddresses.size() &&
-                pImpl->nSelectedAddress != (sal_uInt16)nSelect)
+                pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
         {
-            pImpl->nSelectedAddress = (sal_uInt16)nSelect;
+            pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
             m_aSelectHdl.Call(nullptr);
         }
         Invalidate();
@@ -408,9 +408,9 @@ void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
         }
         sal_uInt32 nSelect = nSelectedRow * pImpl->nColumns + nSelectedColumn;
         if( nSelect < pImpl->aAddresses.size() &&
-                pImpl->nSelectedAddress != (sal_uInt16)nSelect)
+                pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
         {
-            pImpl->nSelectedAddress = (sal_uInt16)nSelect;
+            pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
             m_aSelectHdl.Call(nullptr);
             Invalidate();
         }
@@ -640,7 +640,7 @@ uno::Any SwConnectionContext::getValueByName( const OUString& rName )
     if( rName == "ServerName" )
         aRet <<= m_sMailServer;
     else if( rName == "Port" )
-        aRet <<= (sal_Int32) m_nPort;
+        aRet <<= static_cast<sal_Int32>(m_nPort);
     else if( rName == "ConnectionType" )
         aRet <<= m_sConnectionType;
     return aRet;

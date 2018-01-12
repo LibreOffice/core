@@ -198,7 +198,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
         case XML_TOK_LINENUMBERING_INCREMENT:
             if (::sax::Converter::convertNumber(nTmp, sValue, 0))
             {
-                nIncrement = (sal_Int16)nTmp;
+                nIncrement = static_cast<sal_Int16>(nTmp);
             }
             break;
     }

@@ -49,13 +49,13 @@ struct PageDesc
 };
 
 #define PT2MM100( v ) \
-    (long)(((v) * 35.27777778) + 0.5)
+    long(((v) * 35.27777778) + 0.5)
 
 #define IN2MM100( v ) \
-    ((long)(((v) * 2540) + 0.5))
+    (long(((v) * 2540) + 0.5))
 
 #define MM2MM100( v ) \
-    ((long)((v) * 100))
+    (long((v) * 100))
 
 //PostScript Printer Description File Format Specification
 //http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf

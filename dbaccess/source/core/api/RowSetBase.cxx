@@ -1188,7 +1188,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
 
 void ORowSetBase::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
 {
-    OSL_ENSURE(_nPos < (sal_Int32)m_aDataColumns.size(),"nPos is invalid!");
+    OSL_ENSURE(_nPos < static_cast<sal_Int32>(m_aDataColumns.size()),"nPos is invalid!");
     m_aDataColumns[_nPos]->fireValueChange(_rOldValue);
 }
 

@@ -63,7 +63,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  )
         out = t.pEnv->CallLongMethod( object, mID );
         ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
-    return (sal_Int64)out;
+    return static_cast<sal_Int64>(out);
 }
 css::uno::Sequence< sal_Int8 > SAL_CALL java_sql_Blob::getBytes( sal_Int64 pos, sal_Int32 count )
 {
@@ -127,7 +127,7 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const css::uno::Sequence< sal_Int8 >
         t.pEnv->DeleteLocalRef(pByteArray);
         ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
-    return (sal_Int64)out;
+    return static_cast<sal_Int64>(out);
 }
 
 sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& /*pattern*/, sal_Int64 /*start*/ )

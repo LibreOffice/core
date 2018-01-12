@@ -704,8 +704,8 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             const SfxItemSet *pArgs = rReq.GetArgs();
             if( pArgs && pArgs->Count() >= 2 )
             {
-                sal_uInt8 nCols = (sal_uInt8)pArgs->Get(SID_ATTR_TABLE_COLUMN).GetValue();
-                sal_uInt8 nRows = (sal_uInt8)pArgs->Get(SID_ATTR_TABLE_ROW).GetValue();
+                sal_uInt8 nCols = static_cast<sal_uInt8>(pArgs->Get(SID_ATTR_TABLE_COLUMN).GetValue());
+                sal_uInt8 nRows = static_cast<sal_uInt8>(pArgs->Get(SID_ATTR_TABLE_ROW).GetValue());
                 m_pViewWin->CalcWish( nRows, nCols );
 
             }
@@ -1460,7 +1460,7 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
         if ( GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow() )
         {
             // Scroll how many pages ??
-            const sal_uInt16 nThmbPos = (sal_uInt16)pScrollbar->GetThumbPos();
+            const sal_uInt16 nThmbPos = static_cast<sal_uInt16>(pScrollbar->GetThumbPos());
             // adjust to new preview functionality
             if( nThmbPos != m_pViewWin->SelectedPage() )
             {
