@@ -32,6 +32,7 @@
 #define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 "PackageSHA256UTF8EncryptionKey"
 #define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   "PackageSHA1UTF8EncryptionKey"
 #define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 "PackageSHA1MS1252EncryptionKey"
+#define PACKAGE_ENCRYPTIONDATA_SHA1CORRECT "PackageSHA1CorrectEncryptionKey"
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct NamedValue; }
