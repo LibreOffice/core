@@ -137,7 +137,7 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
 
     g_info("lok_dialog_signal_button (type: %s): %d, %d",
            aEventType.c_str(),
-           (int)pEvent->x, (int)pEvent->y);
+           static_cast<int>(pEvent->x), static_cast<int>(pEvent->y));
     gtk_widget_grab_focus(pDialogDrawingArea);
 
     switch (pEvent->type)
@@ -219,9 +219,9 @@ gtv_lok_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
     g_info("lok_dialog_signal_motion: %d, %d (in twips: %d, %d)",
-           (int)pEvent->x, (int)pEvent->y,
-           (int)pixelToTwip(pEvent->x),
-           (int)pixelToTwip(pEvent->y));
+           static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),
+           static_cast<int>(pixelToTwip(pEvent->x)),
+           static_cast<int>(pixelToTwip(pEvent->y)));
 
     pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->dialogid,
@@ -515,9 +515,9 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
 
     g_info("lok_dialog_floating_win_signal_button (type: %s): %d, %d (in twips: %d, %d)",
            aEventType.c_str(),
-           (int)pEvent->x, (int)pEvent->y,
-           (int)pixelToTwip(pEvent->x),
-           (int)pixelToTwip(pEvent->y));
+           static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),
+           static_cast<int>(pixelToTwip(pEvent->x)),
+           static_cast<int>(pixelToTwip(pEvent->y)));
 
     switch (pEvent->type)
     {
@@ -598,9 +598,9 @@ gtv_lok_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
     g_info("lok_dialog_floating_win_signal_motion: %d, %d (in twips: %d, %d)",
-           (int)pEvent->x, (int)pEvent->y,
-           (int)pixelToTwip(pEvent->x),
-           (int)pixelToTwip(pEvent->y));
+           static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),
+           static_cast<int>(pixelToTwip(pEvent->x)),
+           static_cast<int>(pixelToTwip(pEvent->y)));
 
     pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->m_nChildId,
