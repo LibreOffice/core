@@ -243,7 +243,7 @@ SwDoc::SwDoc()
     mpStyleAccess( nullptr ),
     mpLayoutCache( nullptr ),
     mpGrammarContact(createGrammarContact()),
-    mpTableStyles(new SwTableAutoFormatTable),
+    m_pTableStyles(nullptr),
     mpCellStyles(new SwCellStyleTable),
     m_pXmlIdRegistry(),
     mReferenceCount(0),
@@ -361,8 +361,6 @@ SwDoc::SwDoc()
         mnRsid = comphelper::rng::uniform_uint_distribution(1, (1 << 21) - 1);
     }
     mnRsidRoot = mnRsid;
-
-    mpTableStyles->Load();
 
     getIDocumentState().ResetModified();
 }
