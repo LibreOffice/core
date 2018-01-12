@@ -50,6 +50,7 @@
 #include <ucbhelper/content.hxx>
 
 #include <comphelper/fileformat.h>
+#include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -400,7 +401,8 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         // MS_1252 encoding was used for SO60 document format password encoding,
         // this encoding supports only a minor subset of nonascii characters,
         // but for compatibility reasons it has to be used for old document formats
-        aEncryptionData.realloc( nSha1Ind + 2 );
+        aEncryptionData.realloc( nSha1Ind + 3 );
+        // these are StarOffice not-quite-SHA1
         aEncryptionData[nSha1Ind].Name = PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
         aEncryptionData[nSha1Ind + 1].Name = PACKAGE_ENCRYPTIONDATA_SHA1MS1252;
 
@@ -424,6 +426,15 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 
             aEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
         }
+
+        // actual SHA1
+        aEncryptionData[nSha1Ind + 2].Name = PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
+        OString aByteStrPass = OUStringToOString(aPassword, RTL_TEXTENCODING_UTF8);
+        std::vector<unsigned char> const sha1(::comphelper::Hash::calculateHash(
+                reinterpret_cast<unsigned char const*>(aByteStrPass.getStr()), aByteStrPass.getLength(),
+                ::comphelper::HashType::SHA1));
+        aEncryptionData[nSha1Ind + 2].Value <<= uno::Sequence<sal_Int8>(
+                reinterpret_cast<sal_Int8 const*>(sha1.data()), sha1.size());
     }
 
     return aEncryptionData;

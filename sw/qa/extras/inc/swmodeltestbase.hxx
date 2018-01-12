@@ -688,11 +688,18 @@ protected:
             aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
         if (pPassword)
         {
-            OUString sPassword = OUString::createFromAscii(pPassword);
-            css::uno::Sequence<css::beans::NamedValue> aEncryptionData {
-                { "OOXPassword", css::uno::makeAny(sPassword) }
-            };
-            aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;
+            if (strcmp(pFilter, "Office Open XML Text"))
+            {
+                aMediaDescriptor["Password"] <<= OUString::createFromAscii(pPassword);
+            }
+            else
+            {
+                OUString sPassword = OUString::createFromAscii(pPassword);
+                css::uno::Sequence<css::beans::NamedValue> aEncryptionData {
+                    { "OOXPassword", css::uno::makeAny(sPassword) }
+                };
+                aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;
+            }
         }
         xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);

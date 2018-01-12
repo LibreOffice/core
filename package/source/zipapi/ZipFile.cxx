@@ -144,7 +144,16 @@ uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextFor
         xDigestContext.set( xDigestContextSupplier->getDigestContext( xEncryptionData->m_nCheckAlg, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
     }
     else if ( xEncryptionData->m_nCheckAlg == xml::crypto::DigestID::SHA1_1K )
-        xDigestContext.set( SHA1DigestContext::Create(), uno::UNO_SET_THROW );
+    {
+        if (xEncryptionData->m_bTryWrongSHA1)
+        {
+            xDigestContext.set(StarOfficeSHA1DigestContext::Create(), uno::UNO_SET_THROW);
+        }
+        else
+        {
+            xDigestContext.set(CorrectSHA1DigestContext::Create(), uno::UNO_SET_THROW);
+        }
+    }
 
     return xDigestContext;
 }

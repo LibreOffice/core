@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/hash.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <rtl/digest.h>
 #include <rtl/ref.hxx>
@@ -28,9 +29,9 @@
 using namespace ::com::sun::star;
 
 // static
-uno::Reference< xml::crypto::XDigestContext > SHA1DigestContext::Create()
+uno::Reference<xml::crypto::XDigestContext> StarOfficeSHA1DigestContext::Create()
 {
-    ::rtl::Reference< SHA1DigestContext > xResult = new SHA1DigestContext();
+    ::rtl::Reference<StarOfficeSHA1DigestContext> xResult = new StarOfficeSHA1DigestContext();
     xResult->m_pDigest = rtl_digest_createSHA1();
     if ( !xResult->m_pDigest )
         throw uno::RuntimeException("Can not create cipher!" );
@@ -38,7 +39,7 @@ uno::Reference< xml::crypto::XDigestContext > SHA1DigestContext::Create()
     return uno::Reference< xml::crypto::XDigestContext >( xResult.get() );
 }
 
-SHA1DigestContext::~SHA1DigestContext()
+StarOfficeSHA1DigestContext::~StarOfficeSHA1DigestContext()
 {
     if ( m_pDigest )
     {
@@ -47,7 +48,7 @@ SHA1DigestContext::~SHA1DigestContext()
     }
 }
 
-void SAL_CALL SHA1DigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& aData )
+void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& aData)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pDigest )
@@ -62,7 +63,7 @@ void SAL_CALL SHA1DigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >
     }
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL SHA1DigestContext::finalizeDigestAndDispose()
+uno::Sequence<::sal_Int8> SAL_CALL StarOfficeSHA1DigestContext::finalizeDigestAndDispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pDigest )
@@ -81,6 +82,47 @@ uno::Sequence< ::sal_Int8 > SAL_CALL SHA1DigestContext::finalizeDigestAndDispose
     m_pDigest = nullptr;
 
     return aResult;
+}
+
+uno::Reference<xml::crypto::XDigestContext> CorrectSHA1DigestContext::Create()
+{
+    return new CorrectSHA1DigestContext();
+}
+
+struct CorrectSHA1DigestContext::Impl
+{
+    ::osl::Mutex m_Mutex;
+    ::comphelper::Hash m_Hash{::comphelper::HashType::SHA1};
+    bool m_bDisposed{false};
+};
+
+CorrectSHA1DigestContext::CorrectSHA1DigestContext()
+    : m_pImpl(new Impl)
+{
+}
+
+CorrectSHA1DigestContext::~CorrectSHA1DigestContext()
+{
+}
+
+void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& rData)
+{
+    ::osl::MutexGuard aGuard(m_pImpl->m_Mutex);
+    if (m_pImpl->m_bDisposed)
+        throw lang::DisposedException();
+
+    m_pImpl->m_Hash.update(reinterpret_cast<unsigned char const*>(rData.getConstArray()), rData.getLength());
+}
+
+uno::Sequence<::sal_Int8> SAL_CALL CorrectSHA1DigestContext::finalizeDigestAndDispose()
+{
+    ::osl::MutexGuard aGuard(m_pImpl->m_Mutex);
+    if (m_pImpl->m_bDisposed)
+        throw lang::DisposedException();
+
+    m_pImpl->m_bDisposed = true;
+    std::vector<unsigned char> const sha1(m_pImpl->m_Hash.finalize());
+    return uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const*>(sha1.data()), sha1.size());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

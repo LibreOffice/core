@@ -198,26 +198,27 @@ sal_Int32 ZipPackageStream::GetBlockSize() const
     return GetEncryptionAlgorithm() == css::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 8;
 }
 
-::rtl::Reference< EncryptionData > ZipPackageStream::GetEncryptionData( bool bUseWinEncoding )
+::rtl::Reference<EncryptionData> ZipPackageStream::GetEncryptionData(Bugs const bugs)
 {
     ::rtl::Reference< EncryptionData > xResult;
     if ( m_xBaseEncryptionData.is() )
         xResult = new EncryptionData(
             *m_xBaseEncryptionData,
-            GetEncryptionKey( bUseWinEncoding ),
+            GetEncryptionKey(bugs),
             GetEncryptionAlgorithm(),
             m_nImportedChecksumAlgorithm ? m_nImportedChecksumAlgorithm : m_rZipPackage.GetChecksumAlgID(),
             m_nImportedDerivedKeySize ? m_nImportedDerivedKeySize : m_rZipPackage.GetDefaultDerivedKeySize(),
-            GetStartKeyGenID() );
+            GetStartKeyGenID(),
+            bugs != Bugs::None);
 
     return xResult;
 }
 
-uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncoding )
+uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
 {
     uno::Sequence< sal_Int8 > aResult;
     sal_Int32 nKeyGenID = GetStartKeyGenID();
-    bUseWinEncoding = ( bUseWinEncoding || m_bUseWinEncoding );
+    bool const bUseWinEncoding = (bugs == Bugs::WinEncodingWrongSHA1 || m_bUseWinEncoding);
 
     if ( m_bHaveOwnKey && m_aStorageEncryptionKeys.getLength() )
     {
@@ -226,7 +227,11 @@ uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncodi
             aNameToFind = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
         else if ( nKeyGenID == xml::crypto::DigestID::SHA1 )
         {
-            aNameToFind = bUseWinEncoding ? OUString(PACKAGE_ENCRYPTIONDATA_SHA1MS1252) : OUString(PACKAGE_ENCRYPTIONDATA_SHA1UTF8);
+            aNameToFind = bUseWinEncoding
+                ? OUString(PACKAGE_ENCRYPTIONDATA_SHA1MS1252)
+                : (bugs == Bugs::WrongSHA1)
+                    ? OUString(PACKAGE_ENCRYPTIONDATA_SHA1UTF8)
+                    : OUString(PACKAGE_ENCRYPTIONDATA_SHA1CORRECT);
         }
         else
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
@@ -1007,12 +1012,23 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         uno::Reference< io::XInputStream > xResult;
         try
         {
-            xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData(), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
+            xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData(Bugs::WrongSHA1), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
         }
         catch( const packages::WrongPasswordException& )
         {
             if ( m_rZipPackage.GetStartKeyGenID() == xml::crypto::DigestID::SHA1 )
             {
+                SAL_WARN("package", "ZipPackageStream::getDataStream(): SHA1 mismatch, trying fallbacks...");
+                try
+                {   // tdf#114939 try without legacy StarOffice SHA1 bug
+                    xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData(Bugs::None), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
+                    return xResult;
+                }
+                catch (const packages::WrongPasswordException&)
+                {
+                    /* ignore and try next... */
+                }
+
                 try
                 {
                     // rhbz#1013844 / fdo#47482 workaround for the encrypted
@@ -1035,7 +1051,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
                 // workaround for the encrypted documents generated with the old OOo1.x bug.
                 if ( !m_bUseWinEncoding )
                 {
-                    xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData( true ), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
+                    xResult = m_rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData(Bugs::WinEncodingWrongSHA1), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
                     m_bUseWinEncoding = true;
                 }
                 else
