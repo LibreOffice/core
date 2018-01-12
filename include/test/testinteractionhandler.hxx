@@ -100,6 +100,7 @@ public:
     {
         bool bPasswordRequestFound = false;
         bool bIsRequestPasswordToModify = false;
+        css::task::PasswordRequestMode mode{};
 
         OString sUrl;
 
@@ -108,6 +109,7 @@ public:
         {
             bIsRequestPasswordToModify = passwordRequest2.IsRequestPasswordToModify;
             sUrl = passwordRequest2.Name.toUtf8();
+            mode = passwordRequest2.Mode;
             bPasswordRequestFound = true;
         }
         css::task::DocumentMSPasswordRequest2 passwordMSRequest2;
@@ -115,6 +117,7 @@ public:
         {
             bIsRequestPasswordToModify = passwordMSRequest2.IsRequestPasswordToModify;
             sUrl = passwordMSRequest2.Name.toUtf8();
+            mode = passwordMSRequest2.Mode;
             bPasswordRequestFound = true;
         }
 
@@ -127,7 +130,13 @@ public:
 
         for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
         {
-            if (bIsRequestPasswordToModify)
+            if (mode == css::task::PasswordRequestMode_PASSWORD_REENTER)
+            {   // cancel re-enter of wrong password, to avoid infinite loop
+                css::uno::Reference<css::task::XInteractionAbort> const xAbort(rContinuations[i], css::uno::UNO_QUERY);
+                if (xAbort.is())
+                    xAbort->select();
+            }
+            else if (bIsRequestPasswordToModify)
             {
                 css::uno::Reference<css::task::XInteractionPassword2> const xIPW2(rContinuations[i], css::uno::UNO_QUERY);
                 xIPW2->setPasswordToModify(msPassword);
