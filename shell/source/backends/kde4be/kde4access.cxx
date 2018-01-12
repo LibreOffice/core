@@ -288,7 +288,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
             nProxyType = 0;
         }
         return css::beans::Optional< css::uno::Any >(
-            true, uno::makeAny( (sal_Int32) nProxyType ) );
+            true, uno::makeAny( static_cast<sal_Int32>(nProxyType) ) );
     } else {
         OSL_ASSERT(false); // this cannot happen
     }
