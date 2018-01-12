@@ -158,7 +158,7 @@ inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString co
     }
 
     numDevices = 0;
-    for (i = 0; i < (unsigned int)numPlatforms; i++)
+    for (i = 0; i < static_cast<unsigned int>(numPlatforms); i++)
     {
         cl_uint num = 0;
         cl_int err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, 0, nullptr, &num);
@@ -182,7 +182,7 @@ inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString co
     rProfile->devices.resize(numDevices + 1); // +1 to numDevices to include the native CPU
 
     next = 0;
-    for (i = 0; i < (unsigned int)numPlatforms; i++)
+    for (i = 0; i < static_cast<unsigned int>(numPlatforms); i++)
     {
         cl_uint num = 0;
         unsigned j;
