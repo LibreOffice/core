@@ -1359,12 +1359,12 @@ void ChartController::executeDispatch_SourceData()
         // Ask parent document to create new data provider
         css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(
             rModel.getParent(), uno::UNO_QUERY );
-        OSL_ENSURE( xCreatorDoc.is(), "Invalid XDataProviderAccess" );
+        SAL_WARN_IF( !xCreatorDoc.is(), "chart2.main", "Invalid XDataProviderAccess" );
 
         if ( xCreatorDoc.is() )
         {
             uno::Reference< data::XDataProvider > xDataProvider = xCreatorDoc->createDataProvider();
-            OSL_ENSURE( xCreatorDoc.is(), "Data provider was not created" );
+            SAL_WARN_IF( !xDataProvider.is(), "chart2.main", "Data provider was not created" );
             if ( xDataProvider.is() )
             {
                 rModel.attachDataProvider(xDataProvider);
