@@ -1953,15 +1953,21 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                             INetURLObject aGalleryUserSound( aGalleryDir.getToken( nTokenCount - 1, ';' ) );
 
                             aGalleryUserSound.Append( aRetval );
+                            const auto nRemainingSize = rStCtrl.remainingSize();
                             sal_uInt32 nSoundDataLen = aSoundDataRecHd.nRecLen;
-                            std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nSoundDataLen ] );
+                            if (nSoundDataLen > nRemainingSize)
+                            {
+                                SAL_WARN("filter.ms", "sound data len longer than remaining stream size");
+                                nSoundDataLen = nRemainingSize;
+                            }
+                            std::vector<sal_uInt8> aBuf(nSoundDataLen);
 
-                            rStCtrl.ReadBytes(pBuf.get(), nSoundDataLen);
+                            rStCtrl.ReadBytes(aBuf.data(), nSoundDataLen);
                             SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC );
 
                             if( pOStm )
                             {
-                                pOStm->WriteBytes(pBuf.get(), nSoundDataLen);
+                                pOStm->WriteBytes(aBuf.data(), nSoundDataLen);
 
                                 if( pOStm->GetError() == ERRCODE_NONE )
                                 {
