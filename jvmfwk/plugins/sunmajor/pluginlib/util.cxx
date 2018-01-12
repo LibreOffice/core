@@ -377,12 +377,12 @@ void AsynchReader::execute()
             std::unique_ptr<sal_Char[]> arTmp( new sal_Char[m_nDataSize]);
             memcpy(arTmp.get(), m_arData.get(), m_nDataSize);
             //Enlarge m_arData to hold the newly read data
-            m_arData.reset(new sal_Char[(size_t)(m_nDataSize + nRead)]);
+            m_arData.reset(new sal_Char[static_cast<size_t>(m_nDataSize + nRead)]);
             //Copy back the data that was already in m_arData
             memcpy(m_arData.get(), arTmp.get(), m_nDataSize);
             //Add the newly read data to m_arData
-            memcpy(m_arData.get() + m_nDataSize, aBuffer, (size_t) nRead);
-            m_nDataSize += (size_t) nRead;
+            memcpy(m_arData.get() + m_nDataSize, aBuffer, static_cast<size_t>(nRead));
+            m_nDataSize += static_cast<size_t>(nRead);
         }
     }
 }
@@ -564,7 +564,7 @@ bool decodeOutput(const OString& s, OUString* out)
                 if (aToken[i] < '0' || aToken[i] > '9')
                     return false;
             }
-            sal_Unicode value = (sal_Unicode)(aToken.toInt32());
+            sal_Unicode value = static_cast<sal_Unicode>(aToken.toInt32());
             buff.append(value);
         }
     } while (nIndex >= 0);
