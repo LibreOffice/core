@@ -411,17 +411,17 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     // initialize defaults
     PaperInfo aLetter( PAPER_LETTER );
     // page height, 1/100mm
-    Insert( PROP_HEIGHT, uno::makeAny( (sal_Int32)aLetter.getHeight() ) );
+    Insert( PROP_HEIGHT, uno::makeAny( static_cast<sal_Int32>(aLetter.getHeight()) ) );
     // page width, 1/100mm
-    Insert( PROP_WIDTH, uno::makeAny( (sal_Int32)aLetter.getWidth() ) );
+    Insert( PROP_WIDTH, uno::makeAny( static_cast<sal_Int32>(aLetter.getWidth()) ) );
     // page left margin, default 0x708 (1800) twip -> 3175 1/100 mm
-    Insert( PROP_LEFT_MARGIN, uno::makeAny( (sal_Int32)3175 ) );
+    Insert( PROP_LEFT_MARGIN, uno::makeAny( sal_Int32(3175) ) );
     // page right margin, default 0x708 (1800) twip -> 3175 1/100 mm
-    Insert( PROP_RIGHT_MARGIN, uno::makeAny( (sal_Int32)3175 ) );
+    Insert( PROP_RIGHT_MARGIN, uno::makeAny( sal_Int32(3175) ) );
     // page top margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_TOP_MARGIN, uno::makeAny( (sal_Int32)2540 ) );
+    Insert( PROP_TOP_MARGIN, uno::makeAny( sal_Int32(2540) ) );
     // page bottom margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_BOTTOM_MARGIN, uno::makeAny( (sal_Int32)2540 ) );
+    Insert( PROP_BOTTOM_MARGIN, uno::makeAny( sal_Int32(2540) ) );
     // page style layout
     Insert( PROP_PAGE_STYLE_LAYOUT, uno::makeAny( style::PageStyleLayout_ALL ) );
     uno::Any aFalse( uno::makeAny( false ) );
@@ -1287,7 +1287,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 double fHeight = 0;
                 if ( pPropHeight->second >>= fHeight )
-                    nCharWidth = ConversionHelper::convertTwipToMM100( (long)(fHeight * 20.0 + 0.5) );
+                    nCharWidth = ConversionHelper::convertTwipToMM100( static_cast<long>(fHeight * 20.0 + 0.5) );
             }
         }
 

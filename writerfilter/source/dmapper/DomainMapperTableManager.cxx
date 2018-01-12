@@ -77,26 +77,26 @@ bool DomainMapperTableManager::attribute(Id nName, Value const & rValue)
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
         pPropMap->Insert(PROP_TBL_LOOK, uno::makeAny<sal_Int32>(rValue.getInt()));
         insertTableProps(pPropMap);
-        m_aTableLook["val"] <<= (sal_Int32)rValue.getInt();
+        m_aTableLook["val"] <<= static_cast<sal_Int32>(rValue.getInt());
     }
     break;
     case NS_ooxml::LN_CT_TblLook_noVBand:
-        m_aTableLook["noVBand"] <<= (sal_Int32)rValue.getInt();
+        m_aTableLook["noVBand"] <<= static_cast<sal_Int32>(rValue.getInt());
     break;
     case NS_ooxml::LN_CT_TblLook_noHBand:
-        m_aTableLook["noHBand"] <<= (sal_Int32)rValue.getInt();
+        m_aTableLook["noHBand"] <<= static_cast<sal_Int32>(rValue.getInt());
     break;
     case NS_ooxml::LN_CT_TblLook_lastColumn:
-        m_aTableLook["lastColumn"] <<= (sal_Int32)rValue.getInt();
+        m_aTableLook["lastColumn"] <<= static_cast<sal_Int32>(rValue.getInt());
     break;
     case NS_ooxml::LN_CT_TblLook_lastRow:
-        m_aTableLook["lastRow"] <<= (sal_Int32)rValue.getInt();
+        m_aTableLook["lastRow"] <<= static_cast<sal_Int32>(rValue.getInt());
     break;
     case NS_ooxml::LN_CT_TblLook_firstColumn:
-        m_aTableLook["firstColumn"] <<= (sal_Int32)rValue.getInt();
+        m_aTableLook["firstColumn"] <<= static_cast<sal_Int32>(rValue.getInt());
     break;
     case NS_ooxml::LN_CT_TblLook_firstRow:
-        m_aTableLook["firstRow"] <<= (sal_Int32)rValue.getInt();
+        m_aTableLook["firstRow"] <<= static_cast<sal_Int32>(rValue.getInt());
     break;
     default:
         bRet = false;

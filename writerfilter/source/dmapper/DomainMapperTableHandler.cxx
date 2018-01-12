@@ -613,7 +613,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             lcl_extractHoriOrient( rFrameProperties, nHoriOrient );
         m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::makeAny( sal_Int16(nHoriOrient) ) );
         //fill default value - if not available
-        m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( (sal_Int32)0), false);
+        m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( sal_Int32(0)), false);
 
         // if table is only a single row, and row is set as don't split, set the same value for the whole table.
         if( m_aRowProperties.size() == 1 && m_aRowProperties[0].get() )
