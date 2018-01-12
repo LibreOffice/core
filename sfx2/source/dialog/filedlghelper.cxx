@@ -60,6 +60,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/saveopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
@@ -2668,7 +2669,25 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
     ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, css::task::PasswordRequestMode_PASSWORD_CREATE, aURL, bool( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY ) ) );
 
     uno::Reference< css::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
-    xInteractionHandler->handle( rRequest );
+    do {
+        xInteractionHandler->handle( rRequest );
+        if (pPasswordRequest->isPassword() && !bMSType)
+        {
+            OString const utf8Pwd(OUStringToOString(pPasswordRequest->getPassword(), RTL_TEXTENCODING_UTF8));
+            OString const utf8Ptm(OUStringToOString(pPasswordRequest->getPasswordToModify(), RTL_TEXTENCODING_UTF8));
+            if (!(52 <= utf8Pwd.getLength() && utf8Pwd.getLength() <= 55
+                    && SvtSaveOptions().GetODFDefaultVersion() < SvtSaveOptions::ODFVER_012)
+                && !(52 <= utf8Ptm.getLength() && utf8Ptm.getLength() <= 55))
+            {
+                break;
+            }
+            ScopedVclPtrInstance<MessBox>(Application::GetDefDialogParent(),
+                MessBoxStyle::Ok, 0, "Password length",
+                "The password you have entered causes interoperability issues. Please enter a password that is shorter than 52 bytes, or longer than 55 bytes."
+                )->Execute();
+
+        }
+    } while (true);
     if ( pPasswordRequest->isPassword() )
     {
         if ( pPasswordRequest->getPassword().getLength() )

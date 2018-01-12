@@ -438,6 +438,9 @@ executeMasterPasswordDialog(
     }
 
     sal_uInt8 aKey[RTL_DIGEST_LENGTH_MD5];
+    // FIXME this is subject to the SHA1-bug tdf#114939 - but this
+    // MasterPassword stuff is just stored in the UserInstallation,
+    // so no interop concerns
     rtl_digest_PBKDF2(aKey,
                       RTL_DIGEST_LENGTH_MD5,
                       reinterpret_cast< sal_uInt8 const * >(aMaster.getStr()),

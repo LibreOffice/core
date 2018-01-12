@@ -49,6 +49,8 @@ static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, 
     if ( !aPassword.isEmpty() && aSalt.getLength() && nCount && nHashLength )
     {
         OString aBytePass = OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
+        // FIXME this is subject to the SHA1-bug tdf#114939 - see also
+        // RequestPassword() in filedlghelper.cxx
         aResult.realloc( 16 );
         rtl_digest_PBKDF2( reinterpret_cast < sal_uInt8 * > ( aResult.getArray() ),
                            aResult.getLength(),
