@@ -421,7 +421,7 @@ ScVbaShape::ZOrder( sal_Int32 ZOrderCmd )
         m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( SAL_MAX_INT32 ) );
         break;
     case office::MsoZOrderCmd::msoSendToBack:
-        m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( (sal_Int32)0 ) );
+        m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( sal_Int32(0) ) );
         break;
     case office::MsoZOrderCmd::msoBringForward:
         nOrderPosition += 1;
