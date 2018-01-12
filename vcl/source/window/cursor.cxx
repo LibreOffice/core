@@ -151,7 +151,7 @@ void vcl::Cursor::ImplDraw()
             mpData->maPixSize.Width() = pWindow->GetSettings().GetStyleSettings().GetCursorSize();
 
         // calculate output area and display
-        ImplCursorInvert( mpData );
+        ImplCursorInvert( mpData.get() );
         mpData->mbCurVisible = true;
     }
 }
@@ -160,7 +160,7 @@ void vcl::Cursor::ImplRestore()
 {
     assert( mpData && mpData->mbCurVisible );
 
-    ImplCursorInvert( mpData );
+    ImplCursorInvert( mpData.get() );
     mpData->mbCurVisible = false;
 }
 
@@ -185,7 +185,7 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
         {
             if ( !mpData )
             {
-                mpData = new ImplCursorData;
+                mpData.reset( new ImplCursorData );
                 mpData->mbCurVisible = false;
                 mpData->maTimer.SetInvokeHandler( LINK( this, Cursor, ImplTimerHdl ) );
                 mpData->maTimer.SetDebugName( "vcl ImplCursorData maTimer" );
@@ -333,13 +333,8 @@ vcl::Cursor::Cursor( const Cursor& rCursor ) :
 
 vcl::Cursor::~Cursor()
 {
-    if ( mpData )
-    {
-        if ( mpData->mbCurVisible )
-            ImplRestore();
-
-        delete mpData;
-    }
+    if (mpData && mpData->mbCurVisible)
+        ImplRestore();
 }
 
 void vcl::Cursor::SetStyle( sal_uInt16 nStyle )

@@ -112,4 +112,16 @@ class Foo9 {
             delete m_pbar3; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
     }
 };
+// no warning expected
+class Foo10 {
+    XXX* m_pbar1;
+    ~Foo10()
+    {
+        if (m_pbar1 != getOther())
+        {
+            delete m_pbar1;
+        }
+    }
+    XXX* getOther() { return nullptr; }
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
