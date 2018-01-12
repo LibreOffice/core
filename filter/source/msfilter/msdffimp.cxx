@@ -3862,7 +3862,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 nContrast = 0;
             else
             {
-                if (o3tl::checked_multiply(nContrast, 101, nContrast))  //100 + 1 to round
+                if (o3tl::checked_multiply<sal_Int32>(nContrast, 101, nContrast))  //100 + 1 to round
                 {
                     SAL_WARN("filter.ms", "bad Contrast value:" << nContrast);
                     nContrast = 0;
