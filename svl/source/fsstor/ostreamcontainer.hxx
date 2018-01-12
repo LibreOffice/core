@@ -33,6 +33,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <osl/mutex.hxx>
+#include <memory>
 
 class OFSStreamContainer : public cppu::OWeakObject,
                      public css::lang::XTypeProvider,
@@ -56,7 +57,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
     bool m_bInputClosed;
     bool m_bOutputClosed;
 
-    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
 
 public:

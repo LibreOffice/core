@@ -46,11 +46,6 @@ SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const
 
 SvNumberFormatsSupplierServiceObject::~SvNumberFormatsSupplierServiceObject()
 {
-    if (m_pOwnFormatter)
-    {
-        delete m_pOwnFormatter;
-        m_pOwnFormatter = nullptr;
-    }
 }
 
 Any SAL_CALL SvNumberFormatsSupplierServiceObject::queryAggregation( const Type& _rType )
@@ -76,9 +71,8 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
         // you should use XMultiServiceFactory::createInstanceWithArguments to avoid that
     if (m_pOwnFormatter)
     {   // !!! this is only a emergency handling, normally this should not occur !!!
-        delete m_pOwnFormatter;
-        m_pOwnFormatter = nullptr;
-        SetNumberFormatter(m_pOwnFormatter);
+        m_pOwnFormatter.reset();
+        SetNumberFormatter(m_pOwnFormatter.get());
     }
 
     Type aExpectedArgType = ::cppu::UnoType<css::lang::Locale>::get();
@@ -102,9 +96,9 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 #endif
     }
 
-    m_pOwnFormatter = new SvNumberFormatter( m_xORB, eNewFormatterLanguage);
+    m_pOwnFormatter.reset( new SvNumberFormatter( m_xORB, eNewFormatterLanguage) );
     m_pOwnFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
-    SetNumberFormatter(m_pOwnFormatter);
+    SetNumberFormatter(m_pOwnFormatter.get());
 }
 
 OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  )
