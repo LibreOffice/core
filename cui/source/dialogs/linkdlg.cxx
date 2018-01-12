@@ -628,7 +628,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
 
     if( aFileName.getLength() > aTxt.getLength() )
         aTxt = aFileName;
-    else if( aTxt.indexOf( aFileName, aTxt.getLength() - aFileName.getLength() ) == -1 )
+    else if (!aFileName.isEmpty() && aTxt.indexOf(aFileName, aTxt.getLength() - aFileName.getLength()) == -1)
         // filename not in string
         aTxt = aFileName;
 
