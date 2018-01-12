@@ -264,8 +264,8 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
 
     if ( G_PARAM_SPEC_VALUE_TYPE (pSpec) != nType )
     {
-        SAL_WARN("connectivity.evoab2", "Wrong type (0x" << std::hex << (int)G_PARAM_SPEC_VALUE_TYPE(pSpec) << ") (0x"
-                  << std::hex << (int) nType << ") " <<  (pSpec->name ? pSpec->name : "<noname>"));
+        SAL_WARN("connectivity.evoab2", "Wrong type (0x" << std::hex << static_cast<int>(G_PARAM_SPEC_VALUE_TYPE(pSpec)) << ") (0x"
+                  << std::hex << static_cast<int>(nType) << ") " <<  (pSpec->name ? pSpec->name : "<noname>"));
         return false;
     }
 

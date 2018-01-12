@@ -176,7 +176,7 @@ void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, 
 
 void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x )
 {
-    m_aLogger.log( LogLevel::FINER, STR_LOG_BYTE_PARAMETER, parameterIndex, (sal_Int32)x );
+    m_aLogger.log( LogLevel::FINER, STR_LOG_BYTE_PARAMETER, parameterIndex, static_cast<sal_Int32>(x) );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 

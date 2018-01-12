@@ -1124,7 +1124,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
-                            (SQLSMALLINT)scope,
+                            static_cast<SQLSMALLINT>(scope),
                             nullable ? SQL_NULLABLE : SQL_NO_NULLS);
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();

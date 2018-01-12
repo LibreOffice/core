@@ -96,7 +96,7 @@ css::uno::Reference< css::sdbc::XResultSet > Array::getResultSetAtIndex(
     for( int i = 0 ; i < count ; i ++ )
     {
         std::vector< Any > row( 2 );
-        row[0] <<= (sal_Int32) ( i + index );
+        row[0] <<= static_cast<sal_Int32>( i + index );
         row[1] = m_data[i+index-1];
         ret[i] = row;
     }
@@ -108,7 +108,7 @@ css::uno::Reference< css::sdbc::XResultSet > Array::getResultSetAtIndex(
 
 void Array::checkRange( sal_Int32 index, sal_Int32 count )
 {
-    if( index >= 1 && index -1 + count <= (sal_Int32)m_data.size() )
+    if( index >= 1 && index -1 + count <= static_cast<sal_Int32>(m_data.size()) )
         return;
     throw SQLException(
         "Array::getArrayAtIndex(): allowed range for index + count "

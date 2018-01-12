@@ -570,7 +570,7 @@ isc_svc_handle Connection::attachServiceManager()
     *pSPB++ = isc_spb_current_version;
     *pSPB++ = isc_spb_user_name;
     OUString sUserName("SYSDBA");
-    char aLength = (char) sUserName.getLength();
+    char aLength = static_cast<char>(sUserName.getLength());
     *pSPB++ = aLength;
     strncpy(pSPB,
             OUStringToOString(sUserName,
@@ -620,23 +620,23 @@ void Connection::runBackupService(const short nAction)
     OStringBuffer aRequest; // byte array
 
 
-    aRequest.append((char) nAction);
+    aRequest.append(static_cast<char>(nAction));
 
-    aRequest.append((char) isc_spb_dbname); // .fdb
+    aRequest.append(char(isc_spb_dbname)); // .fdb
     sal_uInt16 nFDBLength = sFDBPath.getLength();
-    aRequest.append((char) (nFDBLength & 0xFF)); // least significant byte first
-    aRequest.append((char) ((nFDBLength >> 8) & 0xFF));
+    aRequest.append(static_cast<char>(nFDBLength & 0xFF)); // least significant byte first
+    aRequest.append(static_cast<char>((nFDBLength >> 8) & 0xFF));
     aRequest.append(sFDBPath);
 
-    aRequest.append((char) isc_spb_bkp_file); // .fbk
+    aRequest.append(char(isc_spb_bkp_file)); // .fbk
     sal_uInt16 nFBKLength = sFBKPath.getLength();
-    aRequest.append((char) (nFBKLength & 0xFF));
-    aRequest.append((char) ((nFBKLength >> 8) & 0xFF));
+    aRequest.append(static_cast<char>(nFBKLength & 0xFF));
+    aRequest.append(static_cast<char>((nFBKLength >> 8) & 0xFF));
     aRequest.append(sFBKPath);
 
     if (nAction == isc_action_svc_restore)
     {
-        aRequest.append((char) isc_spb_options); // 4-Byte bitmask
+        aRequest.append(char(isc_spb_options)); // 4-Byte bitmask
         char sOptions[4];
         char * pOptions = sOptions;
         ADD_SPB_NUMERIC(pOptions, isc_spb_res_create);

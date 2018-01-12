@@ -1219,7 +1219,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
         // 9. Decimal digits (scale)
         // fb stores a negative number
-        aCurrentRow[9] = new ORowSetValueDecorator( (sal_Int16) -aScale );
+        aCurrentRow[9] = new ORowSetValueDecorator( static_cast<sal_Int16>(-aScale) );
 
         // 11. Nullable
         if (xRow->getShort(11))
@@ -1236,7 +1236,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
             uno::Reference< XBlob > xDescriptionBlob = xRow->getBlob(3);
             if (xDescriptionBlob.is())
             {
-                sal_Int32 aBlobLength = (sal_Int32) xDescriptionBlob->length();
+                sal_Int32 aBlobLength = static_cast<sal_Int32>(xDescriptionBlob->length());
                 aDescription = OUString(reinterpret_cast<char*>(xDescriptionBlob->getBytes(0, aBlobLength).getArray()),
                                         aBlobLength,
                                         RTL_TEXTENCODING_UTF8);
@@ -1403,7 +1403,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             {
                 // TODO: we should actually be using CLOB here instead.
                 // However we haven't implemented CLOB yet, so use BLOB.
-                sal_Int32 aBlobLength = (sal_Int32) xBlob->length();
+                sal_Int32 aBlobLength = static_cast<sal_Int32>(xBlob->length());
                 sDescription = OUString(reinterpret_cast<char*>(xBlob->getBytes(0, aBlobLength).getArray()),
                                         aBlobLength,
                                         RTL_TEXTENCODING_UTF8);
@@ -1684,9 +1684,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
             aCurrentRow[10] = new ORowSetValueDecorator(OUString("A"));
         // TODO: double check this^^^, doesn't seem to be officially documented anywhere.
         // 11. CARDINALITY
-        aCurrentRow[11] = new ORowSetValueDecorator((sal_Int32)0); // TODO: determine how to do this
+        aCurrentRow[11] = new ORowSetValueDecorator(sal_Int32(0)); // TODO: determine how to do this
         // 12. PAGES
-        aCurrentRow[12] = new ORowSetValueDecorator((sal_Int32)0); // TODO: determine how to do this
+        aCurrentRow[12] = new ORowSetValueDecorator(sal_Int32(0)); // TODO: determine how to do this
 
         aResults.push_back(aCurrentRow);
     }

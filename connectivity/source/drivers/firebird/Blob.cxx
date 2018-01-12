@@ -94,7 +94,7 @@ void Blob::ensureBlobIsOpened()
     while( *pIt != isc_info_end ) // info is in clusters
     {
         char item = *pIt++;
-        short aResultLength = (short) isc_vax_integer(pIt, 2);
+        short aResultLength = static_cast<short>(isc_vax_integer(pIt, 2));
 
         pIt += 2;
         switch(item)

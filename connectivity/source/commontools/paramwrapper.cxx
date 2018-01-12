@@ -310,7 +310,7 @@ namespace param
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_checkDisposed_throw();
 
-        if ( ( _nIndex < 0 ) || ( _nIndex >= (sal_Int32)m_aParameters.size() ) )
+        if ( ( _nIndex < 0 ) || ( _nIndex >= static_cast<sal_Int32>(m_aParameters.size()) ) )
             throw IndexOutOfBoundsException();
 
         return makeAny( Reference< XPropertySet >( m_aParameters[ _nIndex ].get() ) );

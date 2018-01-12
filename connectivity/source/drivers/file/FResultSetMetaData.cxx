@@ -51,7 +51,7 @@ OResultSetMetaData::~OResultSetMetaData()
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 column)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->get().size())
+    if(column <= 0 || column > static_cast<sal_Int32>(m_xColumns->get().size()))
         throwInvalidIndexException(*this);
 }
 

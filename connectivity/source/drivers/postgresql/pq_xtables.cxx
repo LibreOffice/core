@@ -120,8 +120,7 @@ void Tables::refresh()
                 st.DESCRIPTION , makeAny( xRow->getString( TABLE_INDEX_REMARKS+1) ) );
             pTable->setPropertyValue_NoBroadcast_public(
                 st.PRIVILEGES ,
-                makeAny( (sal_Int32)
-                         ( css::sdbcx::Privilege::SELECT |
+                makeAny( sal_Int32( css::sdbcx::Privilege::SELECT |
                            css::sdbcx::Privilege::INSERT |
                            css::sdbcx::Privilege::UPDATE |
                            css::sdbcx::Privilege::DELETE |
@@ -312,7 +311,7 @@ void Tables::appendByDescriptor(
 void Tables::dropByIndex( sal_Int32 index )
 {
     osl::MutexGuard guard( m_xMutex->GetMutex() );
-    if( index < 0 ||  index >= (sal_Int32)m_values.size() )
+    if( index < 0 ||  index >= static_cast<sal_Int32>(m_values.size()) )
     {
         throw css::lang::IndexOutOfBoundsException(
             "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.size() -1)

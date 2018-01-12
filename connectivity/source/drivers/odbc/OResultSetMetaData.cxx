@@ -33,15 +33,15 @@ OResultSetMetaData::~OResultSetMetaData()
 OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
 {
     sal_Int32 column = _column;
-    if(_column <(sal_Int32) m_vMapping.size()) // use mapping
+    if(_column <static_cast<sal_Int32>(m_vMapping.size())) // use mapping
         column = m_vMapping[_column];
 
     SQLSMALLINT BUFFER_LEN = 128;
     char *pName = new char[BUFFER_LEN+1];
     SQLSMALLINT nRealLen=0;
     SQLRETURN nRet = N3SQLColAttribute(m_aStatementHandle,
-                                    (SQLUSMALLINT)column,
-                                    (SQLUSMALLINT)ident,
+                                    static_cast<SQLUSMALLINT>(column),
+                                    static_cast<SQLUSMALLINT>(ident),
                                     static_cast<SQLPOINTER>(pName),
                                     BUFFER_LEN,
                                     &nRealLen,
@@ -60,8 +60,8 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
     {
         pName = new char[nRealLen+1];
         nRet = N3SQLColAttribute(m_aStatementHandle,
-                                    (SQLUSMALLINT)column,
-                                    (SQLUSMALLINT)ident,
+                                    static_cast<SQLUSMALLINT>(column),
+                                    static_cast<SQLUSMALLINT>(ident),
                                     static_cast<SQLPOINTER>(pName),
                                     nRealLen,
                                     &nRealLen,
@@ -84,8 +84,8 @@ SQLLEN OResultSetMetaData::getNumColAttrib(OConnection const * _pConnection
 {
     SQLLEN nValue=0;
     OTools::ThrowException(_pConnection,(*reinterpret_cast<T3SQLColAttribute>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::ColAttribute)))(_aStatementHandle,
-                                         (SQLUSMALLINT)_column,
-                                         (SQLUSMALLINT)_ident,
+                                         static_cast<SQLUSMALLINT>(_column),
+                                         static_cast<SQLUSMALLINT>(_ident),
                                          nullptr,
                                          0,
                                          nullptr,
@@ -96,7 +96,7 @@ SQLLEN OResultSetMetaData::getNumColAttrib(OConnection const * _pConnection
 sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident)
 {
     sal_Int32 column = _column;
-    if(_column < (sal_Int32)m_vMapping.size()) // use mapping
+    if(_column < static_cast<sal_Int32>(m_vMapping.size())) // use mapping
         column = m_vMapping[_column];
 
     return getNumColAttrib(m_pConnection,m_aStatementHandle,*this,column,ident);
@@ -115,13 +115,13 @@ SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection const * _pConnecti
     SQLSMALLINT nType = 0;
     try
     {
-        nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE);
+        nType = static_cast<SQLSMALLINT>(getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE));
         if(nType == SQL_UNKNOWN_TYPE)
-            nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column, SQL_DESC_TYPE);
+            nType = static_cast<SQLSMALLINT>(getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column, SQL_DESC_TYPE));
     }
     catch(SQLException& ) // in this case we have an odbc 2.0 driver
     {
-        nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE );
+        nType = static_cast<SQLSMALLINT>(getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE ));
     }
 
     return nType;

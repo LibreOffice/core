@@ -62,7 +62,7 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  )
         out = t.pEnv->CallLongMethod( object, mID );
         ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
-    return (sal_Int64)out;
+    return static_cast<sal_Int64>(out);
 }
 
 OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStringLength )
@@ -113,7 +113,7 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32
         ThrowSQLException(t.pEnv,*this);
         t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
     } //t.pEnv
-    return (sal_Int64)out;
+    return static_cast<sal_Int64>(out);
 }
 
 sal_Int64 SAL_CALL java_sql_Clob::positionOfClob( const css::uno::Reference< css::sdbc::XClob >& /*pattern*/, sal_Int64 /*start*/ )

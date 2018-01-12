@@ -148,7 +148,7 @@ bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, s
         const sal_Int32 nDriverPos = m_pHelper->getDriverPos();
         if ( m_bDeletedVisible )
         {
-            if ( nDriverPos > (sal_Int32)m_aBookmarksPositions.size() )
+            if ( nDriverPos > static_cast<sal_Int32>(m_aBookmarksPositions.size()) )
                 m_aBookmarksPositions.push_back(nDriverPos);
         }
         else if ( std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
@@ -167,7 +167,7 @@ bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,bool _bRetrieveData)
     sal_Int32 nNewPos = _nPos;
     if(nNewPos > 0)
     {
-        if((sal_Int32)m_aBookmarksPositions.size() < nNewPos)
+        if(static_cast<sal_Int32>(m_aBookmarksPositions.size()) < nNewPos)
         {
             // bookmark isn't known yet
             // start at the last known position

@@ -497,7 +497,7 @@ void Columns::appendByDescriptor(
 void Columns::dropByIndex( sal_Int32 index )
 {
     osl::MutexGuard guard( m_xMutex->GetMutex() );
-    if( index < 0 ||  index >= (sal_Int32)m_values.size() )
+    if( index < 0 ||  index >= static_cast<sal_Int32>(m_values.size()) )
     {
         throw css::lang::IndexOutOfBoundsException(
             "COLUMNS: Index out of range (allowed 0 to "

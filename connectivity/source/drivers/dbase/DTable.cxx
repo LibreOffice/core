@@ -128,18 +128,18 @@ void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime, const css:
     /* calculate julian date    */
     if ( aDateTime.Year <= 0 )
     {
-        _nJulianDate = (sal_Int32) ((365.25 * iy0) - 0.75)
-            + (sal_Int32) (30.6001 * (im0 + 1) )
+        _nJulianDate = static_cast<sal_Int32>((365.25 * iy0) - 0.75)
+            + static_cast<sal_Int32>(30.6001 * (im0 + 1) )
             + aDateTime.Day + 1720994;
     } // if ( rDateTime.Year <= 0 )
     else
     {
         _nJulianDate = static_cast<sal_Int32>( ((365.25 * iy0)
-            + (sal_Int32) (30.6001 * (im0 + 1))
+            + static_cast<sal_Int32>(30.6001 * (im0 + 1))
             + aDateTime.Day + 1720994));
     }
     double JD = _nJulianDate + 0.5;
-    _nJulianDate = (sal_Int32)( JD + 0.5);
+    _nJulianDate = static_cast<sal_Int32>( JD + 0.5);
     const double gyr = aDateTime.Year + (0.01 * aDateTime.Month) + (0.0001 * aDateTime.Day);
     if ( gyr >= 1582.1015 ) /* on or after 15 October 1582  */
         _nJulianDate += ib;
@@ -156,14 +156,14 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
         sal_Int32 ka = _nJulianDate;
         if ( _nJulianDate >= 2299161 )
         {
-            ialp = (sal_Int32)( ((double) _nJulianDate - 1867216.25 ) / 36524.25 );
+            ialp = static_cast<sal_Int32>( (static_cast<double>(_nJulianDate) - 1867216.25 ) / 36524.25 );
             ka = _nJulianDate + 1 + ialp - ( ialp >> 2 );
         }
         sal_Int32 kb = ka + 1524;
-        sal_Int32 kc =  (sal_Int32) ( ((double) kb - 122.1 ) / 365.25 );
-        sal_Int32 kd = (sal_Int32) ((double) kc * 365.25);
-        sal_Int32 ke = (sal_Int32) ((double) ( kb - kd ) / 30.6001 );
-        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - ((sal_Int32) ( (double) ke * 30.6001 )));
+        sal_Int32 kc =  static_cast<sal_Int32>( (static_cast<double>(kb) - 122.1 ) / 365.25 );
+        sal_Int32 kd = static_cast<sal_Int32>(static_cast<double>(kc) * 365.25);
+        sal_Int32 ke = static_cast<sal_Int32>(static_cast<double>( kb - kd ) / 30.6001 );
+        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - static_cast<sal_Int32>( static_cast<double>(ke) * 30.6001 ));
         if ( ke > 13 )
             _rDateTime.Month = static_cast<sal_uInt16>(ke - 13);
         else
@@ -183,9 +183,9 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
         double d_s = _nJulianTime / 1000.0;
         double d_m = d_s / 60.0;
         double d_h  = d_m / 60.0;
-        _rDateTime.Hours = (sal_uInt16) d_h;
-        _rDateTime.Minutes = (sal_uInt16) d_m;
-        _rDateTime.Seconds = static_cast<sal_uInt16>(( d_m - (double) _rDateTime.Minutes ) * 60.0);
+        _rDateTime.Hours = static_cast<sal_uInt16>(d_h);
+        _rDateTime.Minutes = static_cast<sal_uInt16>(d_m);
+        _rDateTime.Seconds = static_cast<sal_uInt16>(( d_m - static_cast<double>(_rDateTime.Minutes) ) * 60.0);
     }
 }
 
@@ -567,7 +567,7 @@ bool ODbaseTable::ReadMemoHeader()
                 m_pMemoStream->Seek(m_aMemoHeader.db_size);
                 m_pMemoStream->ReadBytes(sHeader, 4);
 
-                if ((m_pMemoStream->GetErrorCode() != ERRCODE_NONE) || ((sal_uInt8)sHeader[0]) != 0xFF || ((sal_uInt8)sHeader[1]) != 0xFF || ((sal_uInt8)sHeader[2]) != 0x08)
+                if ((m_pMemoStream->GetErrorCode() != ERRCODE_NONE) || static_cast<sal_uInt8>(sHeader[0]) != 0xFF || static_cast<sal_uInt8>(sHeader[1]) != 0xFF || static_cast<sal_uInt8>(sHeader[2]) != 0x08)
                     m_aMemoHeader.db_typ  = MemodBaseIII;
                 else
                     m_aMemoHeader.db_typ  = MemodBaseIV;
@@ -756,7 +756,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         return false;
 
     // Read the data
-    bool bIsCurRecordDeleted = (char)m_pBuffer[0] == '*';
+    bool bIsCurRecordDeleted = static_cast<char>(m_pBuffer[0]) == '*';
 
     // only read the bookmark
 
@@ -869,9 +869,9 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 memcpy(&nValue, pData, nLen);
 
                 if ( m_aScales[i-1] )
-                    d = (nValue / pow(10.0,(int)m_aScales[i-1]));
+                    d = (nValue / pow(10.0,static_cast<int>(m_aScales[i-1])));
                 else
-                    d = (double)nValue;
+                    d = static_cast<double>(nValue);
             }
             else
             {
@@ -921,9 +921,9 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                         (_rRow->get())[i]->setNull();
                         break;
                     }
-                    const sal_uInt16  nYear   = (sal_uInt16)aStr.copy( 0, 4 ).toInt32();
-                    const sal_uInt16  nMonth  = (sal_uInt16)aStr.copy( 4, 2 ).toInt32();
-                    const sal_uInt16  nDay    = (sal_uInt16)aStr.copy( 6, 2 ).toInt32();
+                    const sal_uInt16  nYear   = static_cast<sal_uInt16>(aStr.copy( 0, 4 ).toInt32());
+                    const sal_uInt16  nMonth  = static_cast<sal_uInt16>(aStr.copy( 4, 2 ).toInt32());
+                    const sal_uInt16  nDay    = static_cast<sal_uInt16>(aStr.copy( 6, 2 ).toInt32());
 
                     const css::util::Date aDate(nDay,nMonth,nYear);
                     *(_rRow->get())[i] = aDate;
@@ -1280,8 +1280,8 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                     {
                         throwInvalidColumnType(STR_INVALID_COLUMN_PRECISION, aName);
                     }
-                    (*m_pFileStream).WriteUChar( std::min((unsigned)nPrecision, 255U) );      // field length
-                    nRecLength = nRecLength + (sal_uInt16)std::min((sal_uInt16)nPrecision, (sal_uInt16)255UL);
+                    (*m_pFileStream).WriteUChar( std::min(static_cast<unsigned>(nPrecision), 255U) );      // field length
+                    nRecLength = nRecLength + static_cast<sal_uInt16>(std::min(static_cast<sal_uInt16>(nPrecision), sal_uInt16(255UL)));
                     (*m_pFileStream).WriteUChar( 0 );                                                                // decimals
                     break;
                 case 'F':
@@ -1304,7 +1304,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 
                         (*m_pFileStream).WriteUChar( nPrec );
                         (*m_pFileStream).WriteUChar( nScale );
-                        nRecLength += (sal_uInt16)nPrec;
+                        nRecLength += static_cast<sal_uInt16>(nPrec);
                     }
                     break;
                 case 'L':
@@ -1341,7 +1341,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
         }
 
         (*m_pFileStream).WriteUChar( FIELD_DESCRIPTOR_TERMINATOR );              // end of header
-        (*m_pFileStream).WriteChar( (char)DBF_EOL );
+        (*m_pFileStream).WriteChar( char(DBF_EOL) );
         m_pFileStream->Seek(10);
         (*m_pFileStream).WriteUInt16( nRecLength );                                     // set record length afterwards
 
@@ -1467,7 +1467,7 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, const Reference<XIndexAccess>
     // ... and add at the end as new Record:
     std::size_t nTempPos = m_nFilePos;
 
-    m_nFilePos = (std::size_t)m_aHeader.nbRecords + 1;
+    m_nFilePos = static_cast<std::size_t>(m_aHeader.nbRecords) + 1;
     bool bInsertRow = UpdateBuffer( rRow, nullptr, _xCols, true );
     if ( bInsertRow )
     {
@@ -1491,7 +1491,7 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, const Reference<XIndexAccess>
         }
         else
         {
-            (*m_pFileStream).WriteChar( (char)DBF_EOL ); // write EOL
+            (*m_pFileStream).WriteChar( char(DBF_EOL) ); // write EOL
             // raise number of datasets in the header:
             m_pFileStream->Seek( 4 );
             (*m_pFileStream).WriteUInt32( m_aHeader.nbRecords + 1 );
@@ -1518,7 +1518,7 @@ bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const 
         return false;
 
     // position on desired record:
-    std::size_t nPos = m_aHeader.headerLength + (long)(m_nFilePos-1) * m_aHeader.recordLength;
+    std::size_t nPos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nPos);
     m_pFileStream->ReadBytes(m_pBuffer, m_aHeader.recordLength);
 
@@ -1545,7 +1545,7 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 {
     // Set the Delete-Flag (be it set or not):
     // Position on desired record:
-    std::size_t nFilePos = m_aHeader.headerLength + (long)(m_nFilePos-1) * m_aHeader.recordLength;
+    std::size_t nFilePos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nFilePos);
 
     OValueRefRow aRow = new OValueRefVector(_rCols.get().size());
@@ -1831,9 +1831,9 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                     snprintf(s,
                         sizeof(s),
                         "%04d%02d%02d",
-                        (int)aDate.Year,
-                        (int)aDate.Month,
-                        (int)aDate.Day);
+                        static_cast<int>(aDate.Year),
+                        static_cast<int>(aDate.Month),
+                        static_cast<int>(aDate.Day));
 
                     // Exactly 8 bytes to copy:
                     strncpy(pData,s,sizeof s - 1);
@@ -1855,9 +1855,9 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         {
                             sal_Int64 nValue = 0;
                             if ( m_aScales[i] )
-                                nValue = (sal_Int64)(d * pow(10.0,(int)m_aScales[i]));
+                                nValue = static_cast<sal_Int64>(d * pow(10.0,static_cast<int>(m_aScales[i])));
                             else
-                                nValue = (sal_Int64)d;
+                                nValue = static_cast<sal_Int64>(d);
                             if (static_cast<size_t>(nLen) > sizeof(nValue))
                                 return false;
                             memcpy(pData,&nValue,nLen);
@@ -2009,15 +2009,15 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
 
                 std::size_t nOldSize;
                 if (m_aMemoHeader.db_typ == MemoFoxPro)
-                    nOldSize = ((((unsigned char)sHeader[0]) * 256 +
-                                 (unsigned char)sHeader[1]) * 256 +
-                                 (unsigned char)sHeader[2]) * 256 +
-                                 (unsigned char)sHeader[3];
+                    nOldSize = ((static_cast<unsigned char>(sHeader[0]) * 256 +
+                                 static_cast<unsigned char>(sHeader[1])) * 256 +
+                                 static_cast<unsigned char>(sHeader[2])) * 256 +
+                                 static_cast<unsigned char>(sHeader[3]);
                 else
-                    nOldSize = ((((unsigned char)sHeader[3]) * 256 +
-                                 (unsigned char)sHeader[2]) * 256 +
-                                 (unsigned char)sHeader[1]) * 256 +
-                                 (unsigned char)sHeader[0]  - 8;
+                    nOldSize = ((static_cast<unsigned char>(sHeader[3]) * 256 +
+                                 static_cast<unsigned char>(sHeader[2])) * 256 +
+                                 static_cast<unsigned char>(sHeader[1])) * 256 +
+                                 static_cast<unsigned char>(sHeader[0])  - 8;
 
                 // fits the new length in the used blocks
                 std::size_t nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
@@ -2045,7 +2045,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
     {
         case MemodBaseIII: // dBase III-Memofield, ends with Ctrl-Z
         {
-            const char cEOF = (char) DBF_EOL;
+            const char cEOF = char(DBF_EOL);
             nSize++;
             m_pMemoStream->WriteBytes(aStr.getStr(), aStr.getLength());
             m_pMemoStream->WriteChar( cEOF ).WriteChar( cEOF );
@@ -2070,14 +2070,14 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
                 else
                     (*m_pMemoStream).WriteUChar( 0x01 ); // Memo
                 for (int i = 4; i > 0; nWriteSize >>= 8)
-                    nHeader[--i] = (sal_uInt8) (nWriteSize % 256);
+                    nHeader[--i] = static_cast<sal_uInt8>(nWriteSize % 256);
             }
             else
             {
                 (*m_pMemoStream).WriteUChar( 0x00 );
                 nWriteSize += 8;
                 for (int i = 0; i < 4; nWriteSize >>= 8)
-                    nHeader[i++] = (sal_uInt8) (nWriteSize % 256);
+                    nHeader[i++] = static_cast<sal_uInt8>(nWriteSize % 256);
             }
 
             m_pMemoStream->WriteBytes(nHeader, 4);
@@ -2482,7 +2482,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 
     // we only have to bind the values which we need to copy into the new table
     std::for_each(aRow->get().begin(),aRow->get().end(),TSetRefBound(true));
-    if(_nPos && (_nPos < (sal_Int32)aRow->get().size()))
+    if(_nPos && (_nPos < static_cast<sal_Int32>(aRow->get().size())))
         (aRow->get())[nPos]->setBound(false);
 
 
@@ -2569,25 +2569,25 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
             break;
         case IResultSetHelper::RELATIVE1:
             m_nFilePos = (m_nFilePos + nOffset < 0) ? 0
-                            : (sal_uInt32)(m_nFilePos + nOffset);
+                            : static_cast<sal_uInt32>(m_nFilePos + nOffset);
             break;
         case IResultSetHelper::ABSOLUTE1:
         case IResultSetHelper::BOOKMARK:
-            m_nFilePos = (sal_uInt32)nOffset;
+            m_nFilePos = static_cast<sal_uInt32>(nOffset);
             break;
     }
 
-    if (m_nFilePos > (sal_Int32)nNumberOfRecords)
-        m_nFilePos = (sal_Int32)nNumberOfRecords + 1;
+    if (m_nFilePos > static_cast<sal_Int32>(nNumberOfRecords))
+        m_nFilePos = static_cast<sal_Int32>(nNumberOfRecords) + 1;
 
-    if (m_nFilePos == 0 || m_nFilePos == (sal_Int32)nNumberOfRecords + 1)
+    if (m_nFilePos == 0 || m_nFilePos == static_cast<sal_Int32>(nNumberOfRecords) + 1)
         goto Error;
     else
     {
         std::size_t nEntryLen = m_aHeader.recordLength;
 
         OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: invalid record position");
-        std::size_t nPos = m_aHeader.headerLength + (std::size_t)(m_nFilePos-1) * nEntryLen;
+        std::size_t nPos = m_aHeader.headerLength + static_cast<std::size_t>(m_nFilePos-1) * nEntryLen;
 
         m_pFileStream->Seek(nPos);
         if (m_pFileStream->GetError() != ERRCODE_NONE)
@@ -2637,7 +2637,7 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
     {
         case MemodBaseIII: // dBase III-Memofield, ends with Ctrl-Z
         {
-            const char cEOF = (char) DBF_EOL;
+            const char cEOF = char(DBF_EOL);
             OStringBuffer aBStr;
             static char aBuf[514];
             aBuf[512] = 0;          // avoid random value
@@ -2672,7 +2672,7 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
             {
                 bIsText = sHeader[3] != 0;
             }
-            else if (((sal_uInt8)sHeader[0]) != 0xFF || ((sal_uInt8)sHeader[1]) != 0xFF || ((sal_uInt8)sHeader[2]) != 0x08)
+            else if (static_cast<sal_uInt8>(sHeader[0]) != 0xFF || static_cast<sal_uInt8>(sHeader[1]) != 0xFF || static_cast<sal_uInt8>(sHeader[2]) != 0x08)
             {
                 return false;
             }
@@ -2731,7 +2731,7 @@ bool ODbaseTable::WriteBuffer()
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: invalid record position");
 
     // position on desired record:
-    std::size_t nPos = m_aHeader.headerLength + (long)(m_nFilePos-1) * m_aHeader.recordLength;
+    std::size_t nPos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nPos);
     return m_pFileStream->WriteBytes(m_pBuffer, m_aHeader.recordLength) > 0;
 }

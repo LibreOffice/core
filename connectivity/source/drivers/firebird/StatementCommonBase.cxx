@@ -373,8 +373,8 @@ short OStatementCommonBase::getSqlInfoItem(char aInfoItem)
 
     if (!aErr && aResultsBuffer[0] == aInfoItem)
     {
-        const short aBytes = (short) isc_vax_integer(aResultsBuffer+1, 2);
-        return (short) isc_vax_integer(aResultsBuffer+3, aBytes);
+        const short aBytes = static_cast<short>(isc_vax_integer(aResultsBuffer+1, 2));
+        return static_cast<short>(isc_vax_integer(aResultsBuffer+3, aBytes));
     }
 
     evaluateStatusVector(aStatusVector,
@@ -438,7 +438,7 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
     }
 
     char* pResults = aResultsBuffer;
-    if (((short) *pResults++) == isc_info_sql_records)
+    if (static_cast<short>(*pResults++) == isc_info_sql_records)
     {
 //         const short aTotalLength = (short) isc_vax_integer(pResults, 2);
         pResults += 2;
@@ -447,7 +447,7 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
         while (*pResults != isc_info_rsb_end)
         {
             const char aToken = *pResults;
-            const short aLength =  (short) isc_vax_integer(pResults+1, 2);
+            const short aLength =  static_cast<short>(isc_vax_integer(pResults+1, 2));
 
             if (aToken == aDesiredInfoType)
             {

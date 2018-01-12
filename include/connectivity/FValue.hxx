@@ -332,7 +332,7 @@ namespace connectivity
         operator sal_Int64() const  {   return isNull() ? 0         : getLong();    }
         operator sal_uInt64() const {   return isNull() ? 0         : getULong();   }
 
-        operator float() const      {   return isNull() ? (float)0.0: getFloat();   }
+        operator float() const      {   return isNull() ? float(0.0): getFloat();   }
         operator double() const     {   return isNull() ? 0.0       : getDouble();  }
 
         operator OUString() const
