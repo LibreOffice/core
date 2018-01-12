@@ -1970,7 +1970,7 @@ css::uno::Sequence< css::beans::Property > SAL_CALL Frame::getProperties()
 
     SolarMutexGuard g;
 
-    sal_Int32 c = (sal_Int32)m_lProps.size();
+    sal_Int32 c = static_cast<sal_Int32>(m_lProps.size());
     css::uno::Sequence< css::beans::Property > lProps(c);
     TPropInfoHash::const_iterator pIt;
 
@@ -3048,7 +3048,7 @@ void Frame::implts_setIconOnWindow()
                 )
             {
                 WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
-                pWorkWindow->SetIcon( (sal_uInt16)nIcon );
+                pWorkWindow->SetIcon( static_cast<sal_uInt16>(nIcon) );
             }
         }
         /* UNSAFE AREA --------------------------------------------------------------------------------------------- */

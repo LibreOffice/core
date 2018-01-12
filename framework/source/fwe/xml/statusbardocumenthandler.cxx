@@ -148,7 +148,7 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     m_aStatusBarItems( rStatusBarItems )
 {
     // create hash map
-    for ( int i = 0; i < (int)SB_XML_ENTRY_COUNT; i++ )
+    for ( int i = 0; i < int(SB_XML_ENTRY_COUNT); i++ )
     {
         if ( StatusBarEntries[i].nNamespace == SB_NS_STATUSBAR )
         {
@@ -334,13 +334,13 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
 
                             case SB_ATTRIBUTE_WIDTH:
                             {
-                                nWidth = (sal_Int16)(xAttribs->getValueByIndex( n ).toInt32());
+                                nWidth = static_cast<sal_Int16>(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
                             case SB_ATTRIBUTE_OFFSET:
                             {
-                                nOffset = (sal_Int16)(xAttribs->getValueByIndex( n ).toInt32());
+                                nOffset = static_cast<sal_Int16>(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 

@@ -1185,7 +1185,7 @@ DispatchParams::DispatchParams()
 DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
                                const css::uno::Reference< css::uno::XInterface >& xOwner)
 {
-    m_nWorkingEntryID         = lArgs.getUnpackedValueOrDefault(PROP_ENTRY_ID, (sal_Int32)-1                                       );
+    m_nWorkingEntryID         = lArgs.getUnpackedValueOrDefault(PROP_ENTRY_ID, sal_Int32(-1)                                       );
     m_xProgress               = lArgs.getUnpackedValueOrDefault(PROP_PROGRESS, css::uno::Reference< css::task::XStatusIndicator >());
     m_sSavePath               = lArgs.getUnpackedValueOrDefault(PROP_SAVEPATH, OUString()                                   );
     m_xHoldRefForAsyncOpAlive = xOwner;
@@ -2007,7 +2007,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
 
         OUStringBuffer sIDBuf;
         sIDBuf.append(RECOVERY_ITEM_BASE_IDENTIFIER);
-        sIDBuf.append((sal_Int32)rInfo.ID);
+        sIDBuf.append(static_cast<sal_Int32>(rInfo.ID));
         OUString sID = sIDBuf.makeStringAndClear();
 
         // remove
@@ -4074,7 +4074,7 @@ bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
     }
 
     sal_uInt64 nFreeMB = (nFreeSpace/1048576);
-    return (nFreeMB >= (sal_uInt64)nRequiredSpace);
+    return (nFreeMB >= static_cast<sal_uInt64>(nRequiredSpace));
 #endif // SIMULATE_FULL_DISC
 }
 

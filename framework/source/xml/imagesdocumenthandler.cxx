@@ -112,7 +112,7 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     m_nHashMaskModeColor    = OUString( ATTRIBUTE_MASKMODE_COLOR ).hashCode();
 
     // create hash map to speed up lookup
-    for ( int i = 0; i < (int)IMG_XML_ENTRY_COUNT; i++ )
+    for ( int i = 0; i < int(IMG_XML_ENTRY_COUNT); i++ )
     {
         OUStringBuffer temp( 20 );
 

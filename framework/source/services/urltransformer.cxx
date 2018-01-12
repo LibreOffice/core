@@ -70,7 +70,7 @@ namespace
         _rURL.User      = _rParser.GetUser  ( INetURLObject::DecodeMechanism::WithCharset );
         _rURL.Password  = _rParser.GetPass  ( INetURLObject::DecodeMechanism::WithCharset );
         _rURL.Server        = _rParser.GetHost  ( INetURLObject::DecodeMechanism::WithCharset );
-        _rURL.Port      = (sal_Int16)_rParser.GetPort();
+        _rURL.Port      = static_cast<sal_Int16>(_rParser.GetPort());
 
         sal_Int32 nCount = _rParser.getSegmentCount( false );
         if ( nCount > 0 )
