@@ -170,7 +170,7 @@ void VBACompressionChunk::PackCompressedChunkSize(size_t nSize, sal_uInt16& rHea
 void VBACompressionChunk::PackCompressedChunkFlag(bool bCompressed, sal_uInt16& rHeader)
 {
     sal_uInt16 nTemp1 = rHeader & 0x7FFF;
-    sal_uInt16 nTemp2 = ((sal_uInt16)bCompressed) << 15;
+    sal_uInt16 nTemp2 = static_cast<sal_uInt16>(bCompressed) << 15;
     rHeader = nTemp1 | nTemp2;
 }
 
@@ -237,7 +237,7 @@ void VBACompressionChunk::compressToken(size_t index, sal_uInt8& nFlagByte)
 // section 2.4.1.3.18
 void VBACompressionChunk::SetFlagBit(size_t index, bool bVal, sal_uInt8& rFlag)
 {
-    size_t nTemp1 = ((int)bVal) << index;
+    size_t nTemp1 = static_cast<int>(bVal) << index;
     sal_uInt8 nTemp2 = rFlag & (~nTemp1);
     rFlag = nTemp2 | nTemp1;
 }

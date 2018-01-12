@@ -144,7 +144,7 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
     TypeId eTypeId = TYPEID_UNKNOWN;
     switch( mrModel.mnTypeId )
     {
-#define ENSURE_AXESCOUNT( min, max ) OSL_ENSURE( (min <= (int)mrModel.maAxisIds.size()) && ((int)mrModel.maAxisIds.size() <= max), "TypeGroupConverter::TypeGroupConverter - invalid axes count" )
+#define ENSURE_AXESCOUNT( min, max ) OSL_ENSURE( (min <= static_cast<int>(mrModel.maAxisIds.size())) && (static_cast<int>(mrModel.maAxisIds.size()) <= max), "TypeGroupConverter::TypeGroupConverter - invalid axes count" )
         case C_TOKEN( area3DChart ):    ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_AREA;      mb3dChart = true;   break;
         case C_TOKEN( areaChart ):      ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_AREA;      mb3dChart = false;  break;
         case C_TOKEN( bar3DChart ):     ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_BAR;       mb3dChart = true;   break;
