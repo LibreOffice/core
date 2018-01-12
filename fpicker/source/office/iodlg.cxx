@@ -1433,7 +1433,7 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTreeListBox*, pBox, void )
             {
                 if ( !pUserData->mbIsFolder )
                     aObj.removeSegment();
-                OUString aName = aObj.getFSysPath( (FSysStyle)(FSysStyle::Detect & ~FSysStyle::Vos) );
+                OUString aName = aObj.getFSysPath( static_cast<FSysStyle>(FSysStyle::Detect & ~FSysStyle::Vos) );
                 pImpl->_pEdFileName->SetText( aName );
                 pImpl->_pEdFileName->SetSelection( Selection( 0, aName.getLength() ) );
                 _aPath = pUserData->maURL;

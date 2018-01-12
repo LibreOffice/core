@@ -737,7 +737,7 @@ namespace svt
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
                     aReturn <<= static_cast< ListBox const * >( _pControl )->GetSelectedEntryPos();
                 else
-                    aReturn <<= (sal_Int32)-1;
+                    aReturn <<= sal_Int32(-1);
             }
             break;
 
