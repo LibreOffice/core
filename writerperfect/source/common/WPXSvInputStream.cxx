@@ -513,7 +513,7 @@ long WPXSvInputStreamImpl::tell()
         const sal_Int64 tmpPosition = mxSeekable->getPosition();
         if ((tmpPosition < 0) || (tmpPosition > LONG_MAX))
             return -1;
-        return (long)tmpPosition;
+        return static_cast<long>(tmpPosition);
     }
 }
 
@@ -732,7 +732,7 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
 {
     if (mpReadBuffer)
     {
-        seek(tell() + (long)mnReadBufferPos - (long)mnReadBufferLength);
+        seek(tell() + static_cast<long>(mnReadBufferPos) - static_cast<long>(mnReadBufferLength));
         mpReadBuffer = nullptr;
         mnReadBufferPos = 0;
         mnReadBufferLength = 0;
@@ -848,12 +848,12 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
         mpImpl->invalidateReadBuffer();
     }
 
-    unsigned long curpos = (unsigned long) mpImpl->tell();
-    if (curpos == (unsigned long)-1)  // returned ERROR
+    unsigned long curpos = static_cast<unsigned long>(mpImpl->tell());
+    if (curpos == static_cast<unsigned long>(-1))  // returned ERROR
         return nullptr;
 
     if ((curpos + numBytes < curpos) /*overflow*/ ||
-            (curpos + numBytes >= (sal_uInt64)mpImpl->mnLength))  /*reading more than available*/
+            (curpos + numBytes >= static_cast<sal_uInt64>(mpImpl->mnLength)))  /*reading more than available*/
     {
         numBytes = mpImpl->mnLength - curpos;
     }
@@ -886,7 +886,7 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
 long WPXSvInputStream::tell()
 {
     long retVal = mpImpl->tell();
-    return retVal - (long)mpImpl->mnReadBufferLength + (long)mpImpl->mnReadBufferPos;
+    return retVal - static_cast<long>(mpImpl->mnReadBufferLength) + static_cast<long>(mpImpl->mnReadBufferPos);
 }
 
 int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
@@ -909,9 +909,9 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
         retVal = -1;
     }
 
-    if (tmpOffset < mpImpl->tell() && (unsigned long)tmpOffset >= (unsigned long)mpImpl->tell() - mpImpl->mnReadBufferLength)
+    if (tmpOffset < mpImpl->tell() && static_cast<unsigned long>(tmpOffset) >= static_cast<unsigned long>(mpImpl->tell()) - mpImpl->mnReadBufferLength)
     {
-        mpImpl->mnReadBufferPos = (unsigned long)(tmpOffset + (long) mpImpl->mnReadBufferLength - mpImpl->tell());
+        mpImpl->mnReadBufferPos = static_cast<unsigned long>(tmpOffset + static_cast<long>(mpImpl->mnReadBufferLength) - mpImpl->tell());
         return retVal;
     }
 
