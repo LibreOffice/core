@@ -96,7 +96,7 @@ bool Converter::convertMeasure( sal_Int32& rValue,
         {
             // TODO: check overflow!
             nDiv *= 10;
-            nVal += ( ((double)(rString[nPos] - '0')) / nDiv );
+            nVal += ( static_cast<double>(rString[nPos] - '0') / nDiv );
             nPos++;
         }
     }
@@ -255,12 +255,12 @@ bool Converter::convertMeasure( sal_Int32& rValue,
     if( bNeg )
         nVal = -nVal;
 
-    if( nVal <= (double)nMin )
+    if( nVal <= static_cast<double>(nMin) )
         rValue = nMin;
-    else if( nVal >= (double)nMax )
+    else if( nVal >= static_cast<double>(nMax) )
         rValue = nMax;
     else
-        rValue = (sal_Int32)nVal;
+        rValue = static_cast<sal_Int32>(nVal);
 
     return true;
 }
@@ -511,15 +511,15 @@ void Converter::convertColor( OUStringBuffer& rBuffer, sal_Int32 nColor )
 {
     rBuffer.append( '#' );
 
-    sal_uInt8 nCol = (sal_uInt8)(nColor >> 16);
+    sal_uInt8 nCol = static_cast<sal_uInt8>(nColor >> 16);
     rBuffer.append( sal_Unicode( aHexTab[ nCol >> 4 ] ) );
     rBuffer.append( sal_Unicode( aHexTab[ nCol & 0xf ] ) );
 
-    nCol = (sal_uInt8)(nColor >> 8);
+    nCol = static_cast<sal_uInt8>(nColor >> 8);
     rBuffer.append( sal_Unicode( aHexTab[ nCol >> 4 ] ) );
     rBuffer.append( sal_Unicode( aHexTab[ nCol & 0xf ] ) );
 
-    nCol = (sal_uInt8)nColor;
+    nCol = static_cast<sal_uInt8>(nColor);
     rBuffer.append( sal_Unicode( aHexTab[ nCol >> 4 ] ) );
     rBuffer.append( sal_Unicode( aHexTab[ nCol & 0xf ] ) );
 }

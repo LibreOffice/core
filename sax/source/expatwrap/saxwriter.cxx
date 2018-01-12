@@ -141,7 +141,7 @@ public:
                         bool bNormalizeWhitespace);
 
     sal_uInt32 GetLastColumnCount() const throw()
-        { return (sal_uInt32)(nCurrentPos - nLastLineFeedPos); }
+        { return static_cast<sal_uInt32>(nCurrentPos - nLastLineFeedPos); }
 
     /// @throws SAXException
     inline void startDocument();
@@ -380,7 +380,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                     break;
                     default:
                     {
-                        pTarget[rPos] = (sal_Int8)c;
+                        pTarget[rPos] = static_cast<sal_Int8>(c);
                         rPos ++;
                     }
                     break;
@@ -388,8 +388,8 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
             }
             else
             {
-                pTarget[rPos] = (sal_Int8)c;
-                if ((sal_Int8)c == LINEFEED)
+                pTarget[rPos] = static_cast<sal_Int8>(c);
+                if (static_cast<sal_Int8>(c) == LINEFEED)
                     nLastLineFeedPos = rPos;
                 rPos ++;
             }

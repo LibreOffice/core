@@ -316,7 +316,7 @@ sal_Int32 DummyTokenHandler::getTokenDirect( const char* pToken, sal_Int32 nLeng
     for( sal_uInt16  i = 0; i < SAL_N_ELEMENTS(tokens); i++ )
     {
         if ( tokens[i] == sToken )
-            return (sal_Int32)i;
+            return static_cast<sal_Int32>(i);
     }
     return FastToken::DONTKNOW;
 }
