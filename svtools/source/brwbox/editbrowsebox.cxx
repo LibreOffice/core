@@ -1102,9 +1102,9 @@ return;
 
         // the size of the control area
         Point aPoint(GetControlArea().TopLeft());
-        sal_uInt16 nX = (sal_uInt16)aPoint.X();
+        sal_uInt16 nX = static_cast<sal_uInt16>(aPoint.X());
 
-        ArrangeControls(nX, (sal_uInt16)aPoint.Y());
+        ArrangeControls(nX, static_cast<sal_uInt16>(aPoint.Y()));
 
         if (!nX)
             nX = USHRT_MAX;
@@ -1115,8 +1115,8 @@ return;
         //chance to adapt to the new size
         if (bChanged)
         {
-            nX = (sal_uInt16)aPoint.X();
-            ArrangeControls(nX, (sal_uInt16)aPoint.Y());
+            nX = static_cast<sal_uInt16>(aPoint.X());
+            ArrangeControls(nX, static_cast<sal_uInt16>(aPoint.Y()));
         }
     }
 

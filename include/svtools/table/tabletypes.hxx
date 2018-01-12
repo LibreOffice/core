@@ -37,14 +37,14 @@ namespace svt { namespace table
     typedef sal_Int32   TableMetrics;
 
 /// denotes the column containing the row headers
-#define COL_ROW_HEADERS         ((::svt::table::ColPos)-1)
+#define COL_ROW_HEADERS         (::svt::table::ColPos(-1))
 /// denotes the row containing the column headers
-#define ROW_COL_HEADERS         ((::svt::table::RowPos)-1)
+#define ROW_COL_HEADERS         (::svt::table::RowPos(-1))
 
 /// denotes an invalid column index
-#define COL_INVALID             ((::svt::table::ColPos)-2)
+#define COL_INVALID             (::svt::table::ColPos(-2))
 /// denotes an invalid row index
-#define ROW_INVALID             ((::svt::table::RowPos)-2)
+#define ROW_INVALID             (::svt::table::RowPos(-2))
 
 
 } } // namespace svt::table

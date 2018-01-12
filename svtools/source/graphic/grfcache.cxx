@@ -125,16 +125,16 @@ OString GraphicID::GetIDString() const
     aHexStr.setLength(24 + (2 * BITMAP_CHECKSUM_SIZE));
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        aHexStr[nIndex++] = aHexData[ ( mnID1 >> (sal_uInt32) nShift ) & 0xf ];
+        aHexStr[nIndex++] = aHexData[ ( mnID1 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        aHexStr[nIndex++] = aHexData[ ( mnID2 >> (sal_uInt32) nShift ) & 0xf ];
+        aHexStr[nIndex++] = aHexData[ ( mnID2 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        aHexStr[nIndex++] = aHexData[ ( mnID3 >> (sal_uInt32) nShift ) & 0xf ];
+        aHexStr[nIndex++] = aHexData[ ( mnID3 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];
 
     for( nShift = ( 8 * BITMAP_CHECKSUM_SIZE ) - 4; nShift >= 0; nShift -= 4 )
-        aHexStr[nIndex++] = aHexData[ ( mnID4 >> (sal_uInt32) nShift ) & 0xf ];
+        aHexStr[nIndex++] = aHexData[ ( mnID4 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];
 
     return aHexStr.makeStringAndClear();
 }

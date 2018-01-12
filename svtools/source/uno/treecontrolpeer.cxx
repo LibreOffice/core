@@ -1258,7 +1258,7 @@ void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aVal
         {
             sal_Int32 nHeight = 0;
             if( aValue >>= nHeight )
-                rTree.SetEntryHeight( (short)nHeight );
+                rTree.SetEntryHeight( static_cast<short>(nHeight) );
             break;
         }
         case BASEPROPERTY_TREE_EDITABLE:
@@ -1337,7 +1337,7 @@ Any TreeControlPeer::getProperty( const OUString& PropertyName )
             return Any( eSelectionType );
         }
         case BASEPROPERTY_ROW_HEIGHT:
-            return Any( (sal_Int32)rTree.GetEntryHeight() );
+            return Any( static_cast<sal_Int32>(rTree.GetEntryHeight()) );
         case BASEPROPERTY_TREE_DATAMODEL:
             return Any( mxDataModel );
         case BASEPROPERTY_TREE_EDITABLE:

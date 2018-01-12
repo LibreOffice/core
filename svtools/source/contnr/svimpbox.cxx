@@ -78,8 +78,8 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     aHorSBar->SetPageSize( 24 ); // pixels
     aHorSBar->SetLineSize( 8 ); // pixels
 
-    nHorSBarHeight = (short)aHorSBar->GetSizePixel().Height();
-    nVerSBarWidth = (short)aVerSBar->GetSizePixel().Width();
+    nHorSBarHeight = static_cast<short>(aHorSBar->GetSizePixel().Height());
+    nVerSBarWidth = static_cast<short>(aVerSBar->GetSizePixel().Width());
 
     pStartEntry = nullptr;
     pCursor             = nullptr;
@@ -183,8 +183,8 @@ void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEnt
     DBG_ASSERT( pEntry, "Moved Entry is invalid!" );
 
     SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem(SvLBoxItemType::ContextBmp) );
-    short nExpWidth = (short)pBmpItem->GetBitmap1().GetSizePixel().Width();
-    short nColWidth = (short)pBmpItem->GetBitmap2().GetSizePixel().Width();
+    short nExpWidth = static_cast<short>(pBmpItem->GetBitmap1().GetSizePixel().Width());
+    short nColWidth = static_cast<short>(pBmpItem->GetBitmap2().GetSizePixel().Width());
     short nMax = std::max(nExpWidth, nColWidth);
     UpdateContextBmpWidthVector( pEntry, nMax );
 
@@ -329,7 +329,7 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
         if( nDelta == 1 )
             CursorDown();
         else
-            PageDown( (sal_uInt16) nDelta );
+            PageDown( static_cast<sal_uInt16>(nDelta) );
     }
     else
     {
@@ -337,7 +337,7 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
         if( nDelta == 1 )
             CursorUp();
         else
-            PageUp( (sal_uInt16) nDelta );
+            PageUp( static_cast<sal_uInt16>(nDelta) );
     }
     bInVScrollHdl = false;
 }
@@ -484,7 +484,7 @@ void SvImpLBox::KeyUp( bool bPageUp )
 
     aVerSBar->SetThumbPos( nThumbPos - nDelta );
     if( bPageUp )
-        PageUp( (short)nDelta );
+        PageUp( static_cast<short>(nDelta) );
     else
         CursorUp();
 
@@ -519,7 +519,7 @@ void SvImpLBox::KeyDown( bool bPageDown )
 
     aVerSBar->SetThumbPos( nThumbPos+nDelta );
     if( bPageDown )
-        PageDown( (short)nDelta );
+        PageDown( static_cast<short>(nDelta) );
     else
         CursorDown();
 
@@ -763,7 +763,7 @@ SvTreeListEntry* SvImpLBox::GetClickedEntry( const Point& rPoint ) const
     if( pView->GetEntryCount() == 0 || !pStartEntry || !pView->GetEntryHeight())
         return nullptr;
 
-    sal_uInt16 nClickedEntry = (sal_uInt16)(rPoint.Y() / pView->GetEntryHeight() );
+    sal_uInt16 nClickedEntry = static_cast<sal_uInt16>(rPoint.Y() / pView->GetEntryHeight() );
     sal_uInt16 nTemp = nClickedEntry;
     SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
     return pEntry;
@@ -803,7 +803,7 @@ SvTreeListEntry* SvImpLBox::GetEntry( const Point& rPoint ) const
         || !pView->GetEntryHeight())
         return nullptr;
 
-    sal_uInt16 nClickedEntry = (sal_uInt16)(rPoint.Y() / pView->GetEntryHeight() );
+    sal_uInt16 nClickedEntry = static_cast<sal_uInt16>(rPoint.Y() / pView->GetEntryHeight() );
     sal_uInt16 nTemp = nClickedEntry;
     SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
     if( nTemp != nClickedEntry )
@@ -975,7 +975,7 @@ void SvImpLBox::MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop )
     pStartEntry = pEntry;
     ShowCursor( false );
     FillView();
-    aVerSBar->SetThumbPos( (long)(pView->GetVisiblePos( pStartEntry )) );
+    aVerSBar->SetThumbPos( static_cast<long>(pView->GetVisiblePos( pStartEntry )) );
     ShowCursor( true );
     pView->Invalidate();
 }
@@ -1226,7 +1226,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
     aSelEng.SetVisibleArea( aRect );
 
     // vertical scrollbar
-    long nTemp = (long)nVisibleCount;
+    long nTemp = static_cast<long>(nVisibleCount);
     nTemp--;
     if( nTemp != aVerSBar->GetVisibleSize() )
     {
@@ -1312,8 +1312,8 @@ void SvImpLBox::FillView()
 {
     if( !pStartEntry )
     {
-        sal_uInt16 nVisibleViewCount = (sal_uInt16)(pView->GetVisibleCount());
-        sal_uInt16 nTempThumb = (sal_uInt16)aVerSBar->GetThumbPos();
+        sal_uInt16 nVisibleViewCount = static_cast<sal_uInt16>(pView->GetVisibleCount());
+        sal_uInt16 nTempThumb = static_cast<sal_uInt16>(aVerSBar->GetThumbPos());
         if( nTempThumb >= nVisibleViewCount )
             nTempThumb = nVisibleViewCount - 1;
         pStartEntry = pView->GetEntryAtVisPos(nTempThumb);
@@ -1321,8 +1321,8 @@ void SvImpLBox::FillView()
     if( !pStartEntry )
         return;
 
-    sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
-    sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
+    sal_uInt16 nLast = static_cast<sal_uInt16>(pView->GetVisiblePos(pView->LastVisible()));
+    sal_uInt16 nThumb = static_cast<sal_uInt16>(pView->GetVisiblePos( pStartEntry ));
     sal_uLong nCurDispEntries = nLast-nThumb+1;
     if( nCurDispEntries >=  nVisibleCount )
         return;
@@ -1357,7 +1357,7 @@ void SvImpLBox::ShowVerSBar()
     sal_uLong nVis = 0;
     if( !bVerBar )
         nVis = pView->GetVisibleCount();
-    if( bVerBar || (nVisibleCount && nVis > (sal_uLong)(nVisibleCount-1)) )
+    if( bVerBar || (nVisibleCount && nVis > static_cast<sal_uLong>(nVisibleCount-1)) )
     {
         if( !aVerSBar->IsVisible() )
         {
@@ -1515,7 +1515,7 @@ void SvImpLBox::EntryCollapsed( SvTreeListEntry* pEntry )
         if( nNewThumbPos != nOldThumbPos  )
         {
             pStartEntry = pView->First();
-            sal_uInt16 nDistance = (sal_uInt16)nNewThumbPos;
+            sal_uInt16 nDistance = static_cast<sal_uInt16>(nNewThumbPos);
             if( nDistance )
                 pStartEntry = pView->NextVisible(pStartEntry, nDistance);
             if( GetUpdateMode() )
@@ -1767,8 +1767,8 @@ void SvImpLBox::EntryMoved( SvTreeListEntry* pEntry )
         pStartEntry = pView->First();
 
     aVerSBar->SetRange( Range(0, pView->GetVisibleCount()-1));
-    sal_uInt16 nFirstPos = (sal_uInt16)pTree->GetAbsPos( pStartEntry );
-    sal_uInt16 nNewPos = (sal_uInt16)pTree->GetAbsPos( pEntry );
+    sal_uInt16 nFirstPos = static_cast<sal_uInt16>(pTree->GetAbsPos( pStartEntry ));
+    sal_uInt16 nNewPos = static_cast<sal_uInt16>(pTree->GetAbsPos( pEntry ));
     FindMostRight(nullptr);
     if( nNewPos < nFirstPos ) // HACK!
         pStartEntry = pEntry;
@@ -1823,8 +1823,8 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
     {
         // Check if the view is filled completely. If not, then adjust
         // pStartEntry and the Cursor (automatic scrolling).
-        sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
-        sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
+        sal_uInt16 nLast = static_cast<sal_uInt16>(pView->GetVisiblePos(pView->LastVisible()));
+        sal_uInt16 nThumb = static_cast<sal_uInt16>(pView->GetVisiblePos( pStartEntry ));
         sal_uInt16 nCurDispEntries = nLast-nThumb+1;
         if( nCurDispEntries < nVisibleCount )
         {
@@ -2099,7 +2099,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
     bool bKeyUsed = true;
 
-    sal_uInt16  nDelta = (sal_uInt16)aVerSBar->GetPageSize();
+    sal_uInt16  nDelta = static_cast<sal_uInt16>(aVerSBar->GetPageSize());
     sal_uInt16  aCode = rKeyCode.GetCode();
 
     bool    bShift = rKeyCode.IsShift();

@@ -216,7 +216,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         break;
     case IMAP_OBJ_CIRCLE:
         {
-            mnRadius = (sal_Int32)static_cast<const IMapCircleObject*>(&rMapObject)->GetRadius(false);
+            mnRadius = static_cast<sal_Int32>(static_cast<const IMapCircleObject*>(&rMapObject)->GetRadius(false));
             const Point aPoint( static_cast<const IMapCircleObject*>(&rMapObject)->GetCenter(false) );
 
             maCenter.X = aPoint.X();
@@ -275,7 +275,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
     case IMAP_OBJ_POLYGON:
     default:
         {
-            const sal_uInt16 nCount = (sal_uInt16)maPolygon.getLength();
+            const sal_uInt16 nCount = static_cast<sal_uInt16>(maPolygon.getLength());
 
             tools::Polygon aPoly( nCount );
             for( sal_uInt16 nPoint = 0; nPoint < nCount; nPoint++ )

@@ -47,7 +47,7 @@ namespace svt
 
 
 // wizard states
-#define WZS_INVALID_STATE       ((WizardState)-1)
+#define WZS_INVALID_STATE       (WizardState(-1))
 
 
     //= WizardTypes

@@ -561,7 +561,7 @@ sal_Int32 LineListBox::GetEntryPos( SvxBorderLineStyle nStyle ) const
             size_t nPos = i;
             if (!m_sNone.isEmpty())
                 nPos ++;
-            return (sal_Int32)nPos;
+            return static_cast<sal_Int32>(nPos);
         }
     }
     return LISTBOX_ENTRY_NOTFOUND;

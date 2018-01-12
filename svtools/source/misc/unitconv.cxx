@@ -168,7 +168,7 @@ long CalcToUnit( float nIn, MapUnit eUnit )
     }
 
     nTmp *= 20;
-    long nRet = (long)nTmp;
+    long nRet = static_cast<long>(nTmp);
     return nRet;
 //! return (long)(nTmp * 20);
 }

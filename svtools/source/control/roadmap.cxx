@@ -328,7 +328,7 @@ void ORoadmap::SetRoadmapComplete(bool _bComplete)
 void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
 {
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    if ( _nIndex < (ItemIndex)rItems.size() )
+    if ( _nIndex < static_cast<ItemIndex>(rItems.size()) )
     {
         for (   HL_Vector::const_iterator i = rItems.begin() + _nIndex;
                 i != rItems.end();
@@ -450,7 +450,7 @@ const RoadmapItem* ORoadmap::GetByID(ItemId _nID) const
 RoadmapItem* ORoadmap::GetByIndex(ItemIndex _nItemIndex)
 {
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    if ( ( _nItemIndex > -1 ) && ( _nItemIndex < (ItemIndex)rItems.size() ) )
+    if ( ( _nItemIndex > -1 ) && ( _nItemIndex < static_cast<ItemIndex>(rItems.size()) ) )
     {
         return rItems.at( _nItemIndex );
     }

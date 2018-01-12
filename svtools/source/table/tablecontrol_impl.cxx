@@ -1383,7 +1383,7 @@ namespace svt { namespace table
 
         case cursorPageUp:
         {
-            RowPos nNewRow = ::std::max( (RowPos)0, m_nCurRow - impl_getVisibleRows( false ) );
+            RowPos nNewRow = ::std::max( RowPos(0), m_nCurRow - impl_getVisibleRows( false ) );
             bSuccess = goTo( m_nCurColumn, nNewRow );
         }
         break;
@@ -2026,8 +2026,8 @@ namespace svt { namespace table
         // compute new top row
         RowPos nNewTopRow =
             ::std::max(
-                ::std::min( (RowPos)( m_nTopRow + _nRowDelta ), (RowPos)( m_nRowCount - 1 ) ),
-                (RowPos)0
+                ::std::min( static_cast<RowPos>( m_nTopRow + _nRowDelta ), static_cast<RowPos>( m_nRowCount - 1 ) ),
+                RowPos(0)
             );
 
         RowPos nOldTopRow = m_nTopRow;
@@ -2050,7 +2050,7 @@ namespace svt { namespace table
                 &&  std::abs( nPixelDelta ) < aDataArea.GetHeight()
                 )
             {
-                m_pDataWindow->Scroll( 0, (long)-nPixelDelta, aDataArea, ScrollFlags::Clip | ScrollFlags::Update | ScrollFlags::Children);
+                m_pDataWindow->Scroll( 0, static_cast<long>(-nPixelDelta), aDataArea, ScrollFlags::Clip | ScrollFlags::Update | ScrollFlags::Children);
             }
             else
             {
@@ -2075,7 +2075,7 @@ namespace svt { namespace table
         if ( m_nTopRow == 0 )
             m_rAntiImpl.PostUserEvent( LINK( this, TableControl_Impl, OnUpdateScrollbars ) );
 
-        return (TableSize)( m_nTopRow - nOldTopRow );
+        return static_cast<TableSize>( m_nTopRow - nOldTopRow );
     }
 
 
@@ -2090,8 +2090,8 @@ namespace svt { namespace table
         // compute new left column
         const ColPos nNewLeftColumn =
             ::std::max(
-                ::std::min( (ColPos)( m_nLeftColumn + _nColumnDelta ), (ColPos)( m_nColumnCount - 1 ) ),
-                (ColPos)0
+                ::std::min( static_cast<ColPos>( m_nLeftColumn + _nColumnDelta ), static_cast<ColPos>( m_nColumnCount - 1 ) ),
+                ColPos(0)
             );
 
         const ColPos nOldLeftColumn = m_nLeftColumn;
@@ -2147,7 +2147,7 @@ namespace svt { namespace table
         if ( m_nLeftColumn == 0 )
             m_rAntiImpl.PostUserEvent( LINK( this, TableControl_Impl, OnUpdateScrollbars ) );
 
-        return (TableSize)( m_nLeftColumn - nOldLeftColumn );
+        return static_cast<TableSize>( m_nLeftColumn - nOldLeftColumn );
     }
 
 

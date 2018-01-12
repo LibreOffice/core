@@ -158,7 +158,7 @@ int SvRTFParser::GetNextToken_()
                         case RTF_UC:
                             if( 0 <= nTokenValue )
                             {
-                                nUCharOverread = (sal_uInt8)nTokenValue;
+                                nUCharOverread = static_cast<sal_uInt8>(nTokenValue);
                                 if (!aParserStates.empty())
                                 {
                                     //cmc: other ifdef breaks #i3584
@@ -186,7 +186,7 @@ int SvRTFParser::GetNextToken_()
                             if( !bRTF_InTextRead )
                             {
                                 nRet = RTF_TEXTTOKEN;
-                                aToken = OUString( (sal_Unicode)nTokenValue );
+                                aToken = OUString( static_cast<sal_Unicode>(nTokenValue) );
 
                                 // overread the next n "RTF" characters. This
                                 // can be also \{, \}, \'88
@@ -326,7 +326,7 @@ void SvRTFParser::ScanText()
                         OStringBuffer aByteString;
                         while (true)
                         {
-                            char c = (char)GetHexValue();
+                            char c = static_cast<char>(GetHexValue());
                             /*
                              * Note: \'00 is a valid internal character in  a
                              * string in RTF. OStringBuffer supports
@@ -349,13 +349,13 @@ void SvRTFParser::ScanText()
                                 {
                                     if (!aByteString.isEmpty())
                                         aStrBuffer.append( OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding()) );
-                                    aStrBuffer.append((sal_Unicode)next);
+                                    aStrBuffer.append(static_cast<sal_Unicode>(next));
 
                                     continue;
                                 }
-                                nSlash = (sal_Char)next;
+                                nSlash = static_cast<sal_Char>(next);
                                 while (nSlash == 0xD || nSlash == 0xA)
-                                    nSlash = (sal_Char)GetNextChar();
+                                    nSlash = static_cast<sal_Char>(GetNextChar());
 
                                 switch (nSlash)
                                 {

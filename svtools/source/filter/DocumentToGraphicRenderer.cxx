@@ -167,8 +167,8 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     assert( aDocumentSizePixel.Width() > 0 && aDocumentSizePixel.Height() > 0 &&
             aTargetSizePixel.Width() > 0 && aTargetSizePixel.Height() > 0);
 
-    double fScaleX = aTargetSizePixel.Width()  / (double) aDocumentSizePixel.Width();
-    double fScaleY = aTargetSizePixel.Height() / (double) aDocumentSizePixel.Height();
+    double fScaleX = aTargetSizePixel.Width()  / static_cast<double>(aDocumentSizePixel.Width());
+    double fScaleY = aTargetSizePixel.Height() / static_cast<double>(aDocumentSizePixel.Height());
 
     PropertyValues renderProps;
     renderProps.realloc( 4 );

@@ -51,8 +51,8 @@ public:
 
 #define HEADERBAR_DRAGOUTOFF        15
 
-#define HEAD_HITTEST_ITEM           ((sal_uInt16)0x0001)
-#define HEAD_HITTEST_DIVIDER        ((sal_uInt16)0x0002)
+#define HEAD_HITTEST_ITEM           (sal_uInt16(0x0001))
+#define HEAD_HITTEST_DIVIDER        (sal_uInt16(0x0002))
 
 void HeaderBar::ImplInit( WinBits nWinStyle )
 {
@@ -154,7 +154,7 @@ tools::Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
 sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
                                long& nMouseOff, sal_uInt16& nPos ) const
 {
-    size_t          nCount = (sal_uInt16)mvItemList.size();
+    size_t          nCount = static_cast<sal_uInt16>(mvItemList.size());
     bool            bLastFixed = true;
     long            nX = -mnOffset;
 
@@ -1169,7 +1169,7 @@ void HeaderBar::SetOffset( long nNewOffset )
 
 sal_uInt16 HeaderBar::GetItemCount() const
 {
-    return (sal_uInt16)mvItemList.size();
+    return static_cast<sal_uInt16>(mvItemList.size());
 }
 
 sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
@@ -1177,7 +1177,7 @@ sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
     for ( size_t i = 0, n = mvItemList.size(); i < n; ++i ) {
         auto& pItem = mvItemList[ i ];
         if ( pItem->mnId == nItemId )
-            return (sal_uInt16)i;
+            return static_cast<sal_uInt16>(i);
     }
     return HEADERBAR_ITEM_NOTFOUND;
 }
