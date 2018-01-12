@@ -254,6 +254,7 @@ public:
     void testTdf113790();
     void testTdf114536();
     void testTdf113877();
+    void testTdf113877NoMerge();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -395,6 +396,7 @@ public:
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST(testTdf113877);
+    CPPUNIT_TEST(testTdf113877NoMerge);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5034,6 +5036,8 @@ void SwUiWriterTest::testTdf113790()
     CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument *>(mxComponent.get()));
 }
 
+// During insert of the document with list inside into the main document inside the list
+// we should merge both lists into one, when they have the same list properties
 void SwUiWriterTest::testTdf113877()
 {
     load(DATA_DIRECTORY, "tdf113877_insert_numbered_list.odt");
@@ -5051,13 +5055,52 @@ void SwUiWriterTest::testTdf113877()
         lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
     }
 
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
+    const OUString listId4 = getProperty<OUString>(getParagraph(4), "ListId");
+    const OUString listId5 = getProperty<OUString>(getParagraph(5), "ListId");
+    const OUString listId6 = getProperty<OUString>(getParagraph(6), "ListId");
+    const OUString listId7 = getProperty<OUString>(getParagraph(7), "ListId");
+
     // the initial list with 4 list items
-    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(1), "ListId"), getProperty<OUString>(getParagraph(4), "ListId"));
+    CPPUNIT_ASSERT_EQUAL(listId1, listId4);
 
     // the last of the first list, and the first of the inserted list
-    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(4), "ListId"), getProperty<OUString>(getParagraph(5), "ListId"));
-    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(5), "ListId"), getProperty<OUString>(getParagraph(6), "ListId"));
-    CPPUNIT_ASSERT_EQUAL(getProperty<OUString>(getParagraph(6), "ListId"), getProperty<OUString>(getParagraph(7), "ListId"));
+    CPPUNIT_ASSERT_EQUAL(listId4, listId5);
+    CPPUNIT_ASSERT_EQUAL(listId5, listId6);
+    CPPUNIT_ASSERT_EQUAL(listId6, listId7);
+}
+
+// The same test as testTdf113877() but merging of two list should not be performed.
+void SwUiWriterTest::testTdf113877NoMerge()
+{
+    load(DATA_DIRECTORY, "tdf113877_insert_numbered_list.odt");
+
+    // set a page cursor into the end of the document
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    // insert the same document at current cursor position
+    {
+        const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list_abcd.odt";
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
+        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    }
+
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
+    const OUString listId4 = getProperty<OUString>(getParagraph(4), "ListId");
+    const OUString listId5 = getProperty<OUString>(getParagraph(5), "ListId");
+    const OUString listId6 = getProperty<OUString>(getParagraph(6), "ListId");
+    const OUString listId7 = getProperty<OUString>(getParagraph(7), "ListId");
+
+    // the initial list with 4 list items
+    CPPUNIT_ASSERT_EQUAL(listId1, listId4);
+
+    // the last of the first list, and the first of the inserted list
+    CPPUNIT_ASSERT(listId4 != listId5);
+    CPPUNIT_ASSERT_EQUAL(listId5, listId6);
+    CPPUNIT_ASSERT(listId6 != listId7);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

@@ -168,6 +168,7 @@ public:
     bool FindAutomaticStyle( sal_uInt16 nFamily,
                              const OUString& rName,
                              const SfxItemSet **ppItemSet ) const;
+    void MergeListsAtDocumentInsertPosition(SwDoc *pDoc);
 
     virtual void SetStatistics(
         const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
