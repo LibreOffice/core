@@ -626,7 +626,7 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
 // Helper method to adjust the size of the vectors
 void IntrospectionAccessStatic_Impl::checkPropertyArraysSize( sal_Int32 iNextIndex )
 {
-    sal_Int32 nLen = (sal_Int32)maAllPropertySeq.size();
+    sal_Int32 nLen = static_cast<sal_Int32>(maAllPropertySeq.size());
     if( iNextIndex >= nLen )
     {
         maAllPropertySeq.resize( nLen + ARRAY_SIZE_STEP );
@@ -1308,7 +1308,7 @@ Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyCo
     // Go through all the properties and apply according to the concept
     const std::vector<Property>&  rPropSeq = mpStaticImpl->getProperties();
     const std::vector<sal_Int32>& rConcepts = mpStaticImpl->getPropertyConcepts();
-    sal_Int32 nLen = (sal_Int32)rPropSeq.size();
+    sal_Int32 nLen = static_cast<sal_Int32>(rPropSeq.size());
 
     sal_Int32 iDest = 0;
     for( sal_Int32 i = 0 ; i < nLen ; i++ )
@@ -1379,7 +1379,7 @@ Sequence< Reference<XIdlMethod> > ImplIntrospectionAccess::getMethods(sal_Int32 
 
     // Get method sequences
     const std::vector< Reference<XIdlMethod> >& aMethodSeq = mpStaticImpl->getMethods();
-    sal_Int32 nLen = (sal_Int32)aMethodSeq.size();
+    sal_Int32 nLen = static_cast<sal_Int32>(aMethodSeq.size());
 
     // Realloc sequence according to the required number
     // Unlike Properties, the number can not be determined by counters in
@@ -1687,7 +1687,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         {
             SupportedClassSeq.resize( nTypeCount );
 
-            for( i = 0 ; i < (sal_Int32)nTypeCount ; i++ )
+            for( i = 0 ; i < static_cast<sal_Int32>(nTypeCount) ; i++ )
                 SupportedClassSeq[i] = reflection->forName( SupportedTypesSeq[i].getTypeName() );
         }
 
@@ -1767,7 +1767,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         bool bFoundXInterface = false;
 
         size_t nClassCount = SupportedClassSeq.size();
-        for( sal_Int32 nIdx = 0 ; nIdx < (sal_Int32)nClassCount; nIdx++ )
+        for( sal_Int32 nIdx = 0 ; nIdx < static_cast<sal_Int32>(nClassCount); nIdx++ )
         {
             Reference<XIdlClass> xImplClass2 = SupportedClassSeq[nIdx];
             while( xImplClass2.is() )

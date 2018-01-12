@@ -663,7 +663,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                         + " expected: \"" + OUString(pTD->pTypeName)
                         + "\" actual: \"" + OUString(pCppArgs[nPos].getValueTypeRef()->pTypeName)
                         + "\"",
-                        *o3tl::doAccess<Reference<XInterface>>(rObj), (sal_Int16)nPos );
+                        *o3tl::doAccess<Reference<XInterface>>(rObj), static_cast<sal_Int16>(nPos) );
 
                     // cleanup
                     while (nPos--)
