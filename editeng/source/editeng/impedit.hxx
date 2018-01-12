@@ -404,7 +404,7 @@ public:
 
     //  If possible invalidate more than OutputArea, for the DrawingEngine text frame
     void            SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
-    sal_uInt16      GetInvalidateMore() const { return (sal_uInt16)nInvMore; }
+    sal_uInt16      GetInvalidateMore() const { return static_cast<sal_uInt16>(nInvMore); }
 };
 
 
@@ -1181,7 +1181,7 @@ inline short ImpEditEngine::GetXValue( short nXValue ) const
     if ( !aStatus.DoStretch() || ( nStretchX == 100 ) )
         return nXValue;
 
-    return (short) ((long)nXValue*nStretchX/100);
+    return static_cast<short>(static_cast<long>(nXValue)*nStretchX/100);
 }
 
 
@@ -1198,7 +1198,7 @@ inline short ImpEditEngine::GetYValue( short nYValue ) const
     if ( !aStatus.DoStretch() || ( nStretchY == 100 ) )
         return nYValue;
 
-    return (short) ((long)nYValue*nStretchY/100);
+    return static_cast<short>(static_cast<long>(nYValue)*nStretchY/100);
 }
 
 inline sal_uInt16 ImpEditEngine::GetYValue( sal_uInt16 nYValue ) const
@@ -1206,7 +1206,7 @@ inline sal_uInt16 ImpEditEngine::GetYValue( sal_uInt16 nYValue ) const
     if ( !aStatus.DoStretch() || ( nStretchY == 100 ) )
         return nYValue;
 
-    return (sal_uInt16) ((long)nYValue*nStretchY/100);
+    return static_cast<sal_uInt16>(static_cast<long>(nYValue)*nStretchY/100);
 }
 
 inline const Pointer& ImpEditView::GetPointer()

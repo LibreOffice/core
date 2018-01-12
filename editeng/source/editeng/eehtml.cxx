@@ -632,8 +632,8 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
         if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
         {
             SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
-            aULSpaceItem.SetUpper( (sal_uInt16)OutputDevice::LogicToLogic( 42, MapUnit::Map10thMM, eUnit ) );
-            aULSpaceItem.SetLower( (sal_uInt16)OutputDevice::LogicToLogic( 35, MapUnit::Map10thMM, eUnit ) );
+            aULSpaceItem.SetUpper( static_cast<sal_uInt16>(OutputDevice::LogicToLogic( 42, MapUnit::Map10thMM, eUnit )) );
+            aULSpaceItem.SetLower( static_cast<sal_uInt16>(OutputDevice::LogicToLogic( 35, MapUnit::Map10thMM, eUnit )) );
             aItems.Put( aULSpaceItem );
         }
     }

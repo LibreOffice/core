@@ -125,7 +125,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             if(eInterLineSpaceRule == SvxInterLineSpaceRule::Fix)
             {
                 aLSp.Mode = style::LineSpacingMode::LEADING;
-                aLSp.Height = ( bConvert ? (short)convertTwipToMm100(nInterLineSpace) : nInterLineSpace);
+                aLSp.Height = ( bConvert ? static_cast<short>(convertTwipToMm100(nInterLineSpace)) : nInterLineSpace);
             }
             else if(eInterLineSpaceRule == SvxInterLineSpaceRule::Off)
             {
@@ -141,7 +141,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case SvxLineSpaceRule::Fix :
         case SvxLineSpaceRule::Min :
             aLSp.Mode = eLineSpaceRule == SvxLineSpaceRule::Fix ? style::LineSpacingMode::FIX : style::LineSpacingMode::MINIMUM;
-            aLSp.Height = ( bConvert ? (short)convertTwipToMm100(nLineHeight) : nLineHeight );
+            aLSp.Height = ( bConvert ? static_cast<short>(convertTwipToMm100(nLineHeight)) : nLineHeight );
         break;
         default:
             ;//prevent warning about SvxLineSpaceRule::End
@@ -188,14 +188,14 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 eLineSpaceRule = SvxLineSpaceRule::Auto;
                 nInterLineSpace = aLSp.Height;
                 if(bConvert)
-                    nInterLineSpace = (short)convertMm100ToTwip(nInterLineSpace);
+                    nInterLineSpace = static_cast<short>(convertMm100ToTwip(nInterLineSpace));
 
             }
             break;
             case style::LineSpacingMode::PROP:
             {
                 eLineSpaceRule = SvxLineSpaceRule::Auto;
-                nPropLineSpace = (sal_Int16)aLSp.Height;
+                nPropLineSpace = static_cast<sal_Int16>(aLSp.Height);
                 if(100 == aLSp.Height)
                     eInterLineSpaceRule = SvxInterLineSpaceRule::Off;
                 else
@@ -209,7 +209,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 eLineSpaceRule = aLSp.Mode == style::LineSpacingMode::FIX ? SvxLineSpaceRule::Fix : SvxLineSpaceRule::Min;
                 nLineHeight = aLSp.Height;
                 if(bConvert)
-                    nLineHeight = (sal_uInt16)convertMm100ToTwip(nLineHeight);
+                    nLineHeight = static_cast<sal_uInt16>(convertMm100ToTwip(nLineHeight));
             }
             break;
         }
@@ -577,13 +577,13 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
             rVal <<= bHyphen;
         break;
         case MID_HYPHEN_MIN_LEAD:
-            rVal <<= (sal_Int16)nMinLead;
+            rVal <<= static_cast<sal_Int16>(nMinLead);
         break;
         case MID_HYPHEN_MIN_TRAIL:
-            rVal <<= (sal_Int16)nMinTrail;
+            rVal <<= static_cast<sal_Int16>(nMinTrail);
         break;
         case MID_HYPHEN_MAX_HYPHENS:
-            rVal <<= (sal_Int16)nMaxHyphens;
+            rVal <<= static_cast<sal_Int16>(nMaxHyphens);
         break;
     }
     return true;
@@ -604,13 +604,13 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bHyphen = Any2Bool(rVal);
         break;
         case MID_HYPHEN_MIN_LEAD:
-            nMinLead = (sal_uInt8)nNewVal;
+            nMinLead = static_cast<sal_uInt8>(nNewVal);
         break;
         case MID_HYPHEN_MIN_TRAIL:
-            nMinTrail = (sal_uInt8)nNewVal;
+            nMinTrail = static_cast<sal_uInt8>(nNewVal);
         break;
         case MID_HYPHEN_MAX_HYPHENS:
-            nMaxHyphens = (sal_uInt8)nNewVal;
+            nMaxHyphens = static_cast<sal_uInt8>(nNewVal);
         break;
     }
     return true;
@@ -865,7 +865,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
             maTabStops.clear();
             const style::TabStop* pArr = aSeq.getConstArray();
-            const sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
+            const sal_uInt16 nCount = static_cast<sal_uInt16>(aSeq.getLength());
             for(sal_uInt16 i = 0; i < nCount ; i++)
             {
                 SvxTabAdjust eAdjust = SvxTabAdjust::Default;

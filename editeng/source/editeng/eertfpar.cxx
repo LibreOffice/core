@@ -325,7 +325,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             {
                 sal_uInt32 nHeight  = static_cast<const SvxFontHeightItem*>(pItem)->GetHeight();
                 long nNewHeight;
-                nNewHeight = OutputDevice::LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
+                nNewHeight = OutputDevice::LogicToLogic( static_cast<long>(nHeight), eSrcUnit, eDestUnit );
 
                 SvxFontHeightItem aFntHeightItem( nNewHeight, 100, aFntHeightIem );
                 aFntHeightItem.SetProp(
@@ -352,7 +352,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         {
             nEsc = nEsc * 100 / nEscFontHeight;
 
-            SvxEscapementItem aEscItem( (short) nEsc, static_cast<const SvxEscapementItem*>(pItem)->GetProportionalHeight(), EE_CHAR_ESCAPEMENT );
+            SvxEscapementItem aEscItem( static_cast<short>(nEsc), static_cast<const SvxEscapementItem*>(pItem)->GetProportionalHeight(), EE_CHAR_ESCAPEMENT );
             rSet.GetAttrSet().Put( aEscItem );
         }
     }

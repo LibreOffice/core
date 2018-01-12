@@ -826,7 +826,7 @@ public:
 
 inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int32 nAttr)
 {
-    return (nAttr < (sal_Int32)rAttribs.size()) ? rAttribs[nAttr].get() : nullptr;
+    return (nAttr < static_cast<sal_Int32>(rAttribs.size())) ? rAttribs[nAttr].get() : nullptr;
 }
 
 void CheckOrderedList(const CharAttribList::AttribsType& rAttribs);

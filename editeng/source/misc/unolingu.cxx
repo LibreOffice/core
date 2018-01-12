@@ -680,8 +680,8 @@ SvxAlternativeSpelling SvxGetAltSpelling(
                  aAltWord( rHyphWord->getHyphenatedWord() );
         sal_Int16   nHyphenationPos     = rHyphWord->getHyphenationPos(),
                 nHyphenPos          = rHyphWord->getHyphenPos();
-        sal_Int16   nLen    = (sal_Int16)aWord.getLength();
-        sal_Int16   nAltLen = (sal_Int16)aAltWord.getLength();
+        sal_Int16   nLen    = static_cast<sal_Int16>(aWord.getLength());
+        sal_Int16   nAltLen = static_cast<sal_Int16>(aAltWord.getLength());
         const sal_Unicode *pWord    = aWord.getStr(),
                           *pAltWord = aAltWord.getStr();
 

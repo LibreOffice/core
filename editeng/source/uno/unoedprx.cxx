@@ -207,7 +207,7 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwa
             break;
         }
 
-        mnIndex += std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0);
+        mnIndex += std::max(aFieldInfo.aCurrentText.getLength()-1, sal_Int32(0));
     }
 }
 
@@ -260,13 +260,13 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
         if( aFieldInfo.aPosition.nIndex > mnEEIndex )
             break;
 
-        mnEEIndex -= std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0);
+        mnEEIndex -= std::max(aFieldInfo.aCurrentText.getLength()-1, sal_Int32(0));
 
         // we're within a field
         if( aFieldInfo.aPosition.nIndex >= mnEEIndex )
         {
             AreInField();
-            SetFieldOffset( std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0) - (aFieldInfo.aPosition.nIndex - mnEEIndex),
+            SetFieldOffset( std::max(aFieldInfo.aCurrentText.getLength()-1, sal_Int32(0)) - (aFieldInfo.aPosition.nIndex - mnEEIndex),
                             aFieldInfo.aCurrentText.getLength() );
             mnEEIndex = aFieldInfo.aPosition.nIndex ;
             break;

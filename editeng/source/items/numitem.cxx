@@ -130,7 +130,7 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
                         Sequence< PropertyValue > aProperties(2);
                         PropertyValue* pValues = aProperties.getArray();
                         pValues[0].Name = "NumberingType";
-                        pValues[0].Value <<= (sal_uInt16)nNumType;
+                        pValues[0].Value <<= static_cast<sal_uInt16>(nNumType);
                         pValues[1].Name = "Value";
                         pValues[1].Value <<= nNo;
 
@@ -194,7 +194,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( nTmp16 ); eNumAdjust = ( SvxAdjust )nTmp16;
     rStream.ReadUInt16( nTmp16 ); nInclUpperLevels = nTmp16;
     rStream.ReadUInt16( nStart );
-    rStream.ReadUInt16( nTmp16 ); cBullet = (sal_Unicode)nTmp16;
+    rStream.ReadUInt16( nTmp16 ); cBullet = static_cast<sal_Unicode>(nTmp16);
 
     rStream.ReadInt16( nFirstLineOffset );
     rStream.ReadInt16( nAbsLSpace );
@@ -893,7 +893,7 @@ void SvxNumRule::UnLinkGraphics()
                 aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );
             }
         }
-        else if((SVX_NUM_BITMAP|LINK_TOKEN) == (int)aFmt.GetNumberingType())
+        else if((SVX_NUM_BITMAP|LINK_TOKEN) == static_cast<int>(aFmt.GetNumberingType()))
             aFmt.SetNumberingType(SVX_NUM_BITMAP);
         SetLevel(i, aFmt);
     }

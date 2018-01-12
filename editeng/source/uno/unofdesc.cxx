@@ -44,9 +44,9 @@ void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, vcl:
     rFont.SetStyleName( rDesc.StyleName );
     rFont.SetFontSize( Size( rDesc.Width, rDesc.Height ) );
     rFont.SetFamily( (FontFamily)rDesc.Family );
-    rFont.SetCharSet( (rtl_TextEncoding)rDesc.CharSet );
+    rFont.SetCharSet( static_cast<rtl_TextEncoding>(rDesc.CharSet) );
     rFont.SetPitch( (FontPitch)rDesc.Pitch );
-    rFont.SetOrientation( (short)(rDesc.Orientation*10) );
+    rFont.SetOrientation( static_cast<short>(rDesc.Orientation*10) );
     rFont.SetKerning( rDesc.Kerning ? FontKerning::FontSpecific : FontKerning::NONE );
     rFont.SetWeight( vcl::unohelper::ConvertFontWeight(rDesc.Weight) );
     rFont.SetItalic( (FontItalic)rDesc.Slant );
@@ -89,7 +89,7 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
 
     {
         SvxFontHeightItem aFontHeightItem( 0, 100, EE_CHAR_FONTHEIGHT );
-        aTemp <<= (float)rDesc.Height;
+        aTemp <<= static_cast<float>(rDesc.Height);
         static_cast<SfxPoolItem*>(&aFontHeightItem)->PutValue( aTemp, MID_FONTHEIGHT|CONVERT_TWIPS );
         rSet.Put(aFontHeightItem);
     }
@@ -103,7 +103,7 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
 
     {
         SvxUnderlineItem aUnderlineItem( LINESTYLE_NONE, EE_CHAR_UNDERLINE );
-        aTemp <<= (sal_Int16)rDesc.Underline;
+        aTemp <<= static_cast<sal_Int16>(rDesc.Underline);
         static_cast<SfxPoolItem*>(&aUnderlineItem)->PutValue( aTemp, MID_TL_STYLE );
         rSet.Put( aUnderlineItem );
     }

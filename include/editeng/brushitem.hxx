@@ -32,7 +32,7 @@
 class Graphic;
 class GraphicObject;
 
-#define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
+#define BRUSH_GRAPHIC_VERSION   (sal_uInt16(0x0001))
 
 enum SvxGraphicPosition
 {

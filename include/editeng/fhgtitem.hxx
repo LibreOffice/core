@@ -33,8 +33,8 @@ class SvXMLUnitConverter;
     This item describes the font height
 */
 
-#define FONTHEIGHT_16_VERSION   ((sal_uInt16)0x0001)
-#define FONTHEIGHT_UNIT_VERSION ((sal_uInt16)0x0002)
+#define FONTHEIGHT_16_VERSION   (sal_uInt16(0x0001))
+#define FONTHEIGHT_UNIT_VERSION (sal_uInt16(0x0002))
 
 class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
 {

@@ -1088,7 +1088,7 @@ void OutlinerView::ApplyBulletsNumbering(
         }
     }
 
-    const sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
+    const sal_uInt16 nParaCount = static_cast<sal_uInt16>(pOwner->pParaList->GetParagraphCount());
     pOwner->ImplCheckParagraphs( nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
@@ -1139,7 +1139,7 @@ void OutlinerView::SwitchOffBulletsNumbering(
         }
     }
 
-    const sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
+    const sal_uInt16 nParaCount = static_cast<sal_uInt16>(pOwner->pParaList->GetParagraphCount());
     pOwner->ImplCheckParagraphs( nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 

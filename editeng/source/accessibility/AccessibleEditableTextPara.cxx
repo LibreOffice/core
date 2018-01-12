@@ -1529,7 +1529,7 @@ namespace accessibility
                 const SvxNumBulletItem& rNumBullet = rCacheTF.GetParaAttribs(GetParagraphIndex()).Get(EE_PARA_NUMBULLET);
                 if(rNumBullet.GetNumRule()->GetLevelCount()==0)
                 {
-                    rRes.Value <<= (sal_Int16)-1;
+                    rRes.Value <<= sal_Int16(-1);
                     rRes.Handle = -1;
                     rRes.State = PropertyState_DIRECT_VALUE;
                 }
@@ -1554,7 +1554,7 @@ namespace accessibility
                 bool bVis = aAttribs.Get( EE_PARA_BULLETSTATE ).GetValue();
                 if(bVis)
                 {
-                    rRes.Value <<= (sal_Int16)-1;
+                    rRes.Value <<= sal_Int16(-1);
                     rRes.Handle = -1;
                     rRes.State = PropertyState_DIRECT_VALUE;
                 }

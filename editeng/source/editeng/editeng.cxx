@@ -273,8 +273,8 @@ void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, 
     {
         // Clip only if necessary...
         if ( rStartDocPos.X() || rStartDocPos.Y() ||
-             ( rOutRect.GetHeight() < (long)GetTextHeight() ) ||
-             ( rOutRect.GetWidth() < (long)CalcTextWidth() ) )
+             ( rOutRect.GetHeight() < static_cast<long>(GetTextHeight()) ) ||
+             ( rOutRect.GetWidth() < static_cast<long>(CalcTextWidth()) ) )
         {
             // Some printer drivers cause problems if characters graze the
             // ClipRegion, therefore rather add a pixel more ...
@@ -1964,7 +1964,7 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
 // TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst()) );
             sal_Int32 nSpaceBefore = 0;
             pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
-            short nX = (short)(rLRItem.GetTextLeft()
+            short nX = static_cast<short>(rLRItem.GetTextLeft()
                             + rLRItem.GetTextFirstLineOfst()
                             + nSpaceBefore);
             aPoint.X() = pImpEditEngine->GetXValue( nX
@@ -1997,7 +1997,7 @@ bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
     // take unrotated positions for calculation here
     Point aDocPos = GetDocPos( rPaperPos );
 
-    if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < (long)pImpEditEngine->GetTextHeight() ) )
+    if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < static_cast<long>(pImpEditEngine->GetTextHeight()) ) )
     {
         EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, false );
         if ( aPaM.GetNode() )

@@ -85,9 +85,9 @@ void Paragraph::SetParaIsNumberingRestart( bool bParaIsNumberingRestart )
 void Paragraph::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("Paragraph"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nDepth"), "%" SAL_PRIdINT32, (sal_Int32)nDepth);
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, (sal_Int32)mnNumberingStartValue);
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbParaIsNumberingRestart"), "%" SAL_PRIdINT32, (sal_Int32)mbParaIsNumberingRestart);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nDepth"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(nDepth));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingStartValue));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbParaIsNumberingRestart"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mbParaIsNumberingRestart));
     xmlTextWriterEndElement(pWriter);
 }
 

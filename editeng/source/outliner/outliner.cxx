@@ -230,7 +230,7 @@ void Outliner::SetMaxDepth( sal_Int16 nDepth )
 {
     if( nMaxDepth != nDepth )
     {
-        nMaxDepth = std::min( nDepth, (sal_Int16)(SVX_MAX_NUM-1) );
+        nMaxDepth = std::min( nDepth, sal_Int16(SVX_MAX_NUM-1) );
     }
 }
 
@@ -940,8 +940,8 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     // Translation...
                     aTextPos -= rOrigin;
                     // Rotation...
-                    aRotatedPos.X()=(long)   (nCos*aTextPos.X() + nSin*aTextPos.Y());
-                    aRotatedPos.Y()=(long) - (nSin*aTextPos.X() - nCos*aTextPos.Y());
+                    aRotatedPos.X()=static_cast<long>(nCos*aTextPos.X() + nSin*aTextPos.Y());
+                    aRotatedPos.Y()=static_cast<long>(- (nSin*aTextPos.X() - nCos*aTextPos.Y()));
                     aTextPos = aRotatedPos;
                     // Translation...
                     aTextPos += rOrigin;
@@ -1067,7 +1067,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
 
 void Outliner::InvalidateBullet(sal_Int32 nPara)
 {
-    long nLineHeight = (long)pEditEngine->GetLineHeight(nPara );
+    long nLineHeight = static_cast<long>(pEditEngine->GetLineHeight(nPara ));
     for (OutlinerView* pView : aViewList)
     {
         Point aPos( pView->pEditView->GetWindowPosTopLeft(nPara ) );
@@ -1522,7 +1522,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         const SvxLRSpaceItem& rLR = pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
         aTopLeft.X() = rLR.GetTextLeft() + rLR.GetTextFirstLineOfst() + nSpaceBefore;
 
-        long nBulletWidth = std::max( (long) -rLR.GetTextFirstLineOfst(), (long) ((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
+        long nBulletWidth = std::max( static_cast<long>(-rLR.GetTextFirstLineOfst()), static_cast<long>((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
         if ( nBulletWidth < aBulletSize.Width() )   // The Bullet creates its space
             nBulletWidth = aBulletSize.Width();
 

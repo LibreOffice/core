@@ -659,7 +659,7 @@ void SvxDoDrawCapital::DoSpace( const bool bDraw )
 {
     if ( bDraw || pFont->IsWordLineMode() )
     {
-        sal_uLong nDiff = (sal_uLong)(aPos.X() - aSpacePos.X());
+        sal_uLong nDiff = static_cast<sal_uLong>(aPos.X() - aSpacePos.X());
         if ( nDiff )
         {
             bool bWordWise = pFont->IsWordLineMode();
