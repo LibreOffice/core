@@ -2187,7 +2187,7 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
     SbxVariable* pRes = nullptr;
     SbxVariable* p = pPar_->Get( 1 );
     sal_Int32 nIndex = implGetIndex( p );
-    if( nIndex >= 0 && nIndex < (sal_Int32)xItemArray->Count32() )
+    if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(xItemArray->Count32()) )
     {
         pRes = xItemArray->Get32( nIndex );
     }
@@ -2211,7 +2211,7 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
 
     SbxVariable* p = pPar_->Get( 1 );
     sal_Int32 nIndex = implGetIndex( p );
-    if( nIndex >= 0 && nIndex < (sal_Int32)xItemArray->Count32() )
+    if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(xItemArray->Count32()) )
     {
         xItemArray->Remove( nIndex );
 

@@ -129,7 +129,7 @@ void SbxBasicFormater::AppendDigit( OUStringBuffer& sStrg, short nDigit )
 {
     if( nDigit>=0 && nDigit<=9 )
     {
-        sStrg.append((sal_Unicode)(nDigit+'0'));
+        sStrg.append(static_cast<sal_Unicode>(nDigit+'0'));
     }
 }
 
@@ -243,10 +243,10 @@ void SbxBasicFormater::InitScan( double _dNum )
 void SbxBasicFormater::InitExp( double _dNewExp )
 {
     char sBuffer[ MAX_DOUBLE_BUFFER_LENGTH ];
-    nNumExp = (short)_dNewExp;
+    nNumExp = static_cast<short>(_dNewExp);
     /*int nCount =*/ sprintf( sBuffer,"%+i",nNumExp );
     sNumExpStrg = OUString::createFromAscii( sBuffer );
-    nExpExp = (short)get_number_of_digits( (double)nNumExp );
+    nExpExp = static_cast<short>(get_number_of_digits( static_cast<double>(nNumExp) ));
 }
 
 
@@ -270,7 +270,7 @@ short SbxBasicFormater::GetDigitAtPosScan( short nPos, bool& bFoundFirstDigit )
     // query of the number's first valid digit --> set flag
     if( nPos==nNumExp )
         bFoundFirstDigit = true;
-    return (short)(sSciNumStrg[ no ] - '0');
+    return static_cast<short>(sSciNumStrg[ no ] - '0');
 }
 
 short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit )
@@ -283,7 +283,7 @@ short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit
 
     if( nPos==nExpExp )
         bFoundFirstDigit = true;
-    return (short)(sNumExpStrg[ no ] - '0');
+    return static_cast<short>(sNumExpStrg[ no ] - '0');
 }
 
 // a value for the exponent can be given because the number maybe shall
@@ -634,13 +634,13 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
     dExponent = get_number_of_digits( dNumber );
     nExponentPos = 0;
     nMaxExponentDigit = 0;
-    nMaxDigit = (short)dExponent;
+    nMaxDigit = static_cast<short>(dExponent);
     bDigitPosNegative = false;
     if( bScientific )
     {
-        dExponent = dExponent - (double)(nNoOfDigitsLeft-1);
+        dExponent = dExponent - static_cast<double>(nNoOfDigitsLeft-1);
         nDigitPos = nMaxDigit;
-        nMaxExponentDigit = (short)get_number_of_digits( dExponent );
+        nMaxExponentDigit = static_cast<short>(get_number_of_digits( dExponent ));
         nExponentPos = nNoOfExponentDigits - 1 - nNoOfOptionalExponentDigits;
     }
     else

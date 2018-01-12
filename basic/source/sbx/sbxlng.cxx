@@ -54,7 +54,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
             }
             else
-                nRes = (sal_Int32) p->nULong;
+                nRes = static_cast<sal_Int32>(p->nULong);
             break;
         case SbxSINGLE:
             if( p->nSingle > SbxMAXLNG )
@@ -66,7 +66,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
             }
             else
-                nRes = (sal_Int32) rtl::math::round( p->nSingle );
+                nRes = static_cast<sal_Int32>(rtl::math::round( p->nSingle ));
             break;
         case SbxSALINT64:
             nRes = p->nInt64;
@@ -77,7 +77,7 @@ start:
         case SbxCURRENCY:
         {
             sal_Int64  tstVal = p->nInt64 / CURRENCY_FACTOR;
-            nRes = (sal_Int32) tstVal;
+            nRes = static_cast<sal_Int32>(tstVal);
             if( tstVal < SbxMINLNG || SbxMAXLNG < tstVal )  SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
             if( SbxMAXLNG < tstVal ) nRes = SbxMAXLNG;
             if( tstVal < SbxMINLNG ) nRes = SbxMINLNG;
@@ -107,7 +107,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
             }
             else
-                nRes = (sal_Int32) rtl::math::round( dVal );
+                nRes = static_cast<sal_Int32>(rtl::math::round( dVal ));
             break;
             }
         case SbxBYREF | SbxSTRING:
@@ -130,7 +130,7 @@ start:
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
                 }
                 else
-                    nRes = (sal_Int32) rtl::math::round( d );
+                    nRes = static_cast<sal_Int32>(rtl::math::round( d ));
             }
             break;
         case SbxOBJECT:
@@ -212,7 +212,7 @@ start:
         case SbxLONG:
             p->nLong = n; break;
         case SbxSINGLE:
-            p->nSingle = (float) n; break;
+            p->nSingle = static_cast<float>(n); break;
         case SbxDATE:
         case SbxDOUBLE:
             p->nDouble = n; break;
@@ -230,7 +230,7 @@ start:
         case SbxLPSTR:
             if( !p->pOUString )
                 p->pOUString = new OUString;
-            ImpCvtNum( (double) n, 0, *p->pOUString );
+            ImpCvtNum( static_cast<double>(n), 0, *p->pOUString );
             break;
         case SbxOBJECT:
         {
@@ -250,7 +250,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMINCHAR;
             }
-            *p->pChar = (sal_Unicode) n; break;
+            *p->pChar = static_cast<sal_Unicode>(n); break;
         case SbxBYREF | SbxBYTE:
             if( n > SbxMAXBYTE )
             {
@@ -260,7 +260,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
             }
-            *p->pByte = (sal_uInt8) n; break;
+            *p->pByte = static_cast<sal_uInt8>(n); break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             if( n > SbxMAXINT )
@@ -271,7 +271,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMININT;
             }
-            *p->pInteger = (sal_Int16) n; break;
+            *p->pInteger = static_cast<sal_Int16>(n); break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( n > SbxMAXUINT )
@@ -282,7 +282,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
             }
-            *p->pUShort = (sal_uInt16) n; break;
+            *p->pUShort = static_cast<sal_uInt16>(n); break;
         case SbxBYREF | SbxLONG:
             *p->pLong = n; break;
         case SbxBYREF | SbxULONG:
@@ -290,7 +290,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
             }
-            *p->pULong = (sal_uInt32) n; break;
+            *p->pULong = static_cast<sal_uInt32>(n); break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
@@ -302,12 +302,12 @@ start:
                 *p->puInt64 = n;
             break;
         case SbxBYREF | SbxSINGLE:
-            *p->pSingle = (float) n; break;
+            *p->pSingle = static_cast<float>(n); break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
-            *p->pDouble = (double) n; break;
+            *p->pDouble = static_cast<double>(n); break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = (sal_Int64)n * (sal_Int64)CURRENCY_FACTOR; break;
+            *p->pnInt64 = static_cast<sal_Int64>(n) * sal_Int64(CURRENCY_FACTOR); break;
         default:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     }

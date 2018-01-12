@@ -42,10 +42,10 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (sal_uInt8) p->nChar;
+                nRes = static_cast<sal_uInt8>(p->nChar);
             break;
         case SbxBYTE:
-            nRes = (sal_uInt8) p->nByte;    break;
+            nRes = static_cast<sal_uInt8>(p->nByte);    break;
         case SbxINTEGER:
         case SbxBOOL:
             if( p->nInteger > SbxMAXBYTE )
@@ -57,16 +57,16 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (sal_uInt8) p->nInteger;
+                nRes = static_cast<sal_uInt8>(p->nInteger);
             break;
         case SbxERROR:
         case SbxUSHORT:
-            if( p->nUShort > (sal_uInt16) SbxMAXBYTE )
+            if( p->nUShort > sal_uInt16(SbxMAXBYTE) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXBYTE;
             }
             else
-                nRes = (sal_uInt8) p->nUShort;
+                nRes = static_cast<sal_uInt8>(p->nUShort);
             break;
         case SbxLONG:
             if( p->nLong > SbxMAXBYTE )
@@ -78,7 +78,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (sal_uInt8) p->nLong;
+                nRes = static_cast<sal_uInt8>(p->nLong);
             break;
         case SbxULONG:
             if( p->nULong > SbxMAXBYTE )
@@ -86,7 +86,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXBYTE;
             }
             else
-                nRes = (sal_uInt8) p->nULong;
+                nRes = static_cast<sal_uInt8>(p->nULong);
             break;
         case SbxCURRENCY:
         case SbxSALINT64:
@@ -103,7 +103,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (sal_uInt8) val;
+                nRes = static_cast<sal_uInt8>(val);
             break;
         }
         case SbxSALUINT64:
@@ -112,7 +112,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXBYTE;
             }
             else
-                nRes = (sal_uInt8) p->uInt64;
+                nRes = static_cast<sal_uInt8>(p->uInt64);
             break;
         case SbxSINGLE:
             if( p->nSingle > SbxMAXBYTE )
@@ -124,7 +124,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (sal_uInt8) rtl::math::round( p->nSingle );
+                nRes = static_cast<sal_uInt8>(rtl::math::round( p->nSingle ));
             break;
         case SbxDATE:
         case SbxDOUBLE:
@@ -150,7 +150,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (sal_uInt8) rtl::math::round( dVal );
+                nRes = static_cast<sal_uInt8>(rtl::math::round( dVal ));
             break;
             }
         case SbxBYREF | SbxSTRING:
@@ -173,7 +173,7 @@ start:
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
                 }
                 else
-                    nRes = (sal_uInt8) ( d + 0.5 );
+                    nRes = static_cast<sal_uInt8>( d + 0.5 );
             }
             break;
         case SbxOBJECT:
@@ -257,14 +257,14 @@ void ImpPutByte( SbxValues* p, sal_uInt8 n )
             break;
 
         case SbxCHAR:
-            p->nChar = (sal_Unicode) n; break;
+            p->nChar = static_cast<sal_Unicode>(n); break;
 
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
             if( !p->pOUString )
                 p->pOUString = new OUString;
-            ImpCvtNum( (double) n, 0, *p->pOUString );
+            ImpCvtNum( static_cast<double>(n), 0, *p->pOUString );
             break;
         case SbxOBJECT:
         {
@@ -276,7 +276,7 @@ void ImpPutByte( SbxValues* p, sal_uInt8 n )
             break;
         }
         case SbxBYREF | SbxCHAR:
-            *p->pChar = (sal_Unicode) n; break;
+            *p->pChar = static_cast<sal_Unicode>(n); break;
         case SbxBYREF | SbxBYTE:
             *p->pByte = n; break;
         case SbxBYREF | SbxINTEGER:

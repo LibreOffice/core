@@ -144,19 +144,19 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
     switch( +p->eType )
     {
         case SbxCHAR:
-            p->nChar = (sal_Unicode) n; break;
+            p->nChar = static_cast<sal_Unicode>(n); break;
         case SbxUINT:
-            p->nByte = (sal_uInt8) n; break;
+            p->nByte = static_cast<sal_uInt8>(n); break;
         case SbxINTEGER:
         case SbxBOOL:
             p->nInteger = n; break;
         case SbxLONG:
             p->nLong = n; break;
         case SbxULONG:
-            p->nULong = (sal_uInt32) n; break;
+            p->nULong = static_cast<sal_uInt32>(n); break;
         case SbxERROR:
         case SbxUSHORT:
-            p->nUShort = (sal_uInt16) n; break;
+            p->nUShort = static_cast<sal_uInt16>(n); break;
         case SbxSINGLE:
             p->nSingle = n; break;
         case SbxDATE:
@@ -164,9 +164,9 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
             p->nDouble = n; break;
         case SbxCURRENCY:
         case SbxSALINT64:
-            p->nInt64 = (sal_Int64) n; break;
+            p->nInt64 = static_cast<sal_Int64>(n); break;
         case SbxSALUINT64:
-            p->uInt64 = (sal_uInt64) n; break;
+            p->uInt64 = static_cast<sal_uInt64>(n); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             ImpCreateDecimal( p )->setInt( n );
@@ -191,19 +191,19 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
             break;
         }
         case SbxBYREF | SbxCHAR:
-            *p->pChar = (sal_Unicode) n; break;
+            *p->pChar = static_cast<sal_Unicode>(n); break;
         case SbxBYREF | SbxBYTE:
-            *p->pByte = (sal_uInt8) n; break;
+            *p->pByte = static_cast<sal_uInt8>(n); break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             *p->pInteger = n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            *p->pUShort = (sal_uInt16) n; break;
+            *p->pUShort = static_cast<sal_uInt16>(n); break;
         case SbxBYREF | SbxLONG:
             *p->pLong = n; break;
         case SbxBYREF | SbxULONG:
-            *p->pULong = (sal_uInt32) n; break;
+            *p->pULong = static_cast<sal_uInt32>(n); break;
         case SbxBYREF | SbxSINGLE:
             *p->pSingle = n; break;
         case SbxBYREF | SbxDATE:
@@ -211,9 +211,9 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
             *p->pDouble = n; break;
         case SbxBYREF | SbxCURRENCY:
         case SbxBYREF | SbxSALINT64:
-            *p->pnInt64 = (sal_Int64) n; break;
+            *p->pnInt64 = static_cast<sal_Int64>(n); break;
         case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = (sal_uInt64) n; break;
+            *p->puInt64 = static_cast<sal_uInt64>(n); break;
         default:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     }

@@ -442,13 +442,13 @@ start:
             }
         case SbxSALINT64:
             {
-                if( !pnDecRes->setDouble( (double)p->nInt64 ) )
+                if( !pnDecRes->setDouble( static_cast<double>(p->nInt64) ) )
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 break;
             }
         case SbxSALUINT64:
             {
-                if( !pnDecRes->setDouble( (double)p->uInt64 ) )
+                if( !pnDecRes->setDouble( static_cast<double>(p->uInt64) ) )
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 break;
             }

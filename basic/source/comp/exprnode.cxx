@@ -155,7 +155,7 @@ void SbiExprNode::ConvertToIntConstIfPossible()
             double n;
             if( nVal >= SbxMININT && nVal <= SbxMAXINT && modf( nVal, &n ) == 0 )
             {
-                nVal = (double) (short) nVal;
+                nVal = static_cast<double>(static_cast<short>(nVal));
                 eType = SbxINTEGER;
             }
         }
@@ -393,15 +393,15 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                     } else nVal = llMod - lrMod * (llMod/lrMod);
                     eType = SbxLONG; break;
                 case AND:
-                    nVal = (double) ( ll & lr ); eType = SbxLONG; break;
+                    nVal = static_cast<double>( ll & lr ); eType = SbxLONG; break;
                 case OR:
-                    nVal = (double) ( ll | lr ); eType = SbxLONG; break;
+                    nVal = static_cast<double>( ll | lr ); eType = SbxLONG; break;
                 case XOR:
-                    nVal = (double) ( ll ^ lr ); eType = SbxLONG; break;
+                    nVal = static_cast<double>( ll ^ lr ); eType = SbxLONG; break;
                 case EQV:
-                    nVal = (double) ( ~ll ^ lr ); eType = SbxLONG; break;
+                    nVal = static_cast<double>( ~ll ^ lr ); eType = SbxLONG; break;
                 case IMP:
-                    nVal = (double) ( ~ll | lr ); eType = SbxLONG; break;
+                    nVal = static_cast<double>( ~ll | lr ); eType = SbxLONG; break;
                 default: break;
             }
 
@@ -413,7 +413,7 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
              && nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
             {
                 // Decimal place away
-                long n = (long) nVal;
+                long n = static_cast<long>(nVal);
                 nVal = n;
                 eType = ( n >= SbxMININT && n <= SbxMAXINT )
                       ? SbxINTEGER : SbxLONG;
@@ -453,7 +453,7 @@ void SbiExprNode::FoldConstantsUnaryNode(SbiParser* pParser)
                     pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
                     bError = true;
                 }
-                nVal = (double) ~((long) nVal);
+                nVal = static_cast<double>(~static_cast<long>(nVal));
                 eType = SbxLONG;
                 } break;
             default: break;

@@ -137,7 +137,7 @@ public:
     SbiSymDef* GetRealVar();        // last variable in x.y.z
     SbiExprNode* GetRealNode();     // last node in x.y.z
     const OUString& GetString()     { return aStrVal; }
-    short GetNumber()               { return (short)nVal; }
+    short GetNumber()               { return static_cast<short>(nVal); }
     SbiExprList* GetParameters()    { return aVar.pPar; }
 
     void Optimize(SbiParser*);                // tree matching

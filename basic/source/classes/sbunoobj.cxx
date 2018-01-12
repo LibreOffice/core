@@ -364,7 +364,7 @@ OUString implGetExceptionMsg( const EXCEPTION& e )
 
 void implHandleBasicErrorException( BasicErrorException const & e )
 {
-    ErrCode nError = StarBASIC::GetSfxFromVBError( (sal_uInt16)e.ErrorCode );
+    ErrCode nError = StarBASIC::GetSfxFromVBError( static_cast<sal_uInt16>(e.ErrorCode) );
     StarBASIC::Error( nError, e.ErrorMessageArgument );
 }
 
@@ -391,7 +391,7 @@ void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
         // special handling for BasicErrorException errors
         if ( aWrapped.TargetException >>= aBasicError )
         {
-            nError = StarBASIC::GetSfxFromVBError( (sal_uInt16)aBasicError.ErrorCode );
+            nError = StarBASIC::GetSfxFromVBError( static_cast<sal_uInt16>(aBasicError.ErrorCode) );
             aMessageBuf.append( aBasicError.ErrorMessageArgument );
             aExamine.clear();
             break;
@@ -540,7 +540,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
         sal_Int32 nLen = xIdlArray->getLen( aValue );
         for ( sal_Int32 index = 0; index < nLen; ++index )
         {
-            Any aElementAny = xIdlArray->get( aValue, (sal_uInt32)index );
+            Any aElementAny = xIdlArray->get( aValue, static_cast<sal_uInt32>(index) );
             // This detects the dimension were currently processing
             if ( dimCopy == dimension )
             {
@@ -767,7 +767,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                 for( i = 0 ; i < nLen ; i++ )
                 {
                     // convert elements
-                    Any aElementAny = xIdlArray->get( aValue, (sal_uInt32)i );
+                    Any aElementAny = xIdlArray->get( aValue, static_cast<sal_uInt32>(i) );
                     auto xVar = tools::make_ref<SbxVariable>( eSbxElementType );
                     unoToSbxValue( xVar.get(), aElementAny );
 
@@ -1432,7 +1432,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
             if( bOverflow )
                    StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
 
-            sal_Int8 nByteVal = (sal_Int8)nVal;
+            sal_Int8 nByteVal = static_cast<sal_Int8>(nVal);
             aRetVal <<= nByteVal;
             break;
         }
@@ -1463,7 +1463,7 @@ void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, sal_uInt
         Any aValAny;
         for( i = 0 ; i < nParamCount ; i++ )
         {
-            sal_uInt16 iSbx = (sal_uInt16)(i+1);
+            sal_uInt16 iSbx = static_cast<sal_uInt16>(i+1);
 
             aValAny = sbxToUnoValueImpl( pParams->Get( iSbx ),
             bBlockConversionToSmallestType );
@@ -1486,7 +1486,7 @@ void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, sal_uInt
     {
         for( i = 0 ; i < nParamCount ; i++ )
         {
-            pAnyArgs[i] = sbxToUnoValueImpl( pParams->Get( (sal_uInt16)(i+1) ),
+            pAnyArgs[i] = sbxToUnoValueImpl( pParams->Get( static_cast<sal_uInt16>(i+1) ),
             bBlockConversionToSmallestType );
         }
     }
@@ -1526,9 +1526,9 @@ Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const & args, 
         for( sal_uInt32 j = 0 ; j < nLen ; j++ )
         {
             sal_Int16 iTarget = pIndices[ j ];
-            if( iTarget >= (sal_Int16)nParamCount )
+            if( iTarget >= static_cast<sal_Int16>(nParamCount) )
                 break;
-            unoToSbxValue( pParams->Get( (sal_uInt16)(j+1) ), pNewValues[ j ] );
+            unoToSbxValue( pParams->Get( static_cast<sal_uInt16>(j+1) ), pNewValues[ j ] );
         }
     }
     return aRetAny;
@@ -2061,7 +2061,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     try
                     {
-                        sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
+                        sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
                         bool bCanBeConsideredAMethod = mxInvocation->hasMethod( pProp->GetName() );
                         Any aRetAny;
                         if ( bCanBeConsideredAMethod && nParamCount )
@@ -2147,7 +2147,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {
                 // number of Parameter -1 because of Param0 == this
-                sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
+                sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
                 Sequence<Any> args;
                 bool bOutParams = false;
                 sal_uInt32 i;
@@ -2200,7 +2200,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             css::uno::Type aType( rxClass->getTypeClass(), rxClass->getName() );
 
                             // ATTENTION: Don't forget for Sbx-Parameter the offset!
-                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( (sal_uInt16)(i+1) ), aType );
+                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( static_cast<sal_uInt16>(i+1) ), aType );
 
                             // If it is not certain check whether the out-parameter are available.
                             if( !bOutParams )
@@ -2243,7 +2243,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                 const ParamInfo& rInfo = pParamInfos[j];
                                 ParamMode aParamMode = rInfo.aMode;
                                 if( aParamMode != ParamMode_IN )
-                                    unoToSbxValue( pParams->Get( (sal_uInt16)(j+1) ), pAnyArgs[ j ] );
+                                    unoToSbxValue( pParams->Get( static_cast<sal_uInt16>(j+1) ), pAnyArgs[ j ] );
                             }
                         }
                     }
@@ -3518,7 +3518,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if( pUnoCtor && pHint->GetId() == SfxHintId::BasicDataWanted )
         {
             // Parameter count -1 because of Param0 == this
-            sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
+            sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
             Sequence<Any> args;
 
             Reference< XServiceConstructorDescription > xCtor = pUnoCtor->getServiceCtorDesc();
@@ -3585,7 +3585,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     Any* pAnyArgs = args.getArray();
                     for( sal_uInt32 i = 0 ; i < nEffectiveParamCount ; i++ )
                     {
-                        sal_uInt16 iSbx = (sal_uInt16)(i + nSbxParameterOffset + nParameterOffsetByContext);
+                        sal_uInt16 iSbx = static_cast<sal_uInt16>(i + nSbxParameterOffset + nParameterOffsetByContext);
 
                         // bRestParameterMode allows nEffectiveParamCount > nUnoParamCount
                         Reference< XParameter > xParam;
@@ -3650,7 +3650,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             continue;
 
                         if( xParam->isOut() )
-                            unoToSbxValue( pParams->Get( (sal_uInt16)(j+1) ), pAnyArgs[ j ] );
+                            unoToSbxValue( pParams->Get( static_cast<sal_uInt16>(j+1) ), pAnyArgs[ j ] );
                     }
                 }
             }
@@ -3727,7 +3727,7 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pParams = pVar->GetParameters();
-        sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
+        sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
         sal_uInt32 nAllowedParamCount = 1;
 
         Reference < XComponentContext > xContextToUse;

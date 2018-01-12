@@ -59,7 +59,7 @@ short SbiStringPool::Add( const OUString& rVal )
     }
 
     aData.push_back(rVal);
-    return (short) ++n;
+    return static_cast<short>(++n);
 }
 
 short SbiStringPool::Add( double n, SbxDataType t )
@@ -67,9 +67,9 @@ short SbiStringPool::Add( double n, SbxDataType t )
     char buf[ 40 ];
     switch( t )
     {
-        case SbxINTEGER: snprintf( buf, sizeof(buf), "%d", (short) n ); break;
-        case SbxLONG:    snprintf( buf, sizeof(buf), "%ld", (long) n ); break;
-        case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g", (float) n ); break;
+        case SbxINTEGER: snprintf( buf, sizeof(buf), "%d", static_cast<short>(n) ); break;
+        case SbxLONG:    snprintf( buf, sizeof(buf), "%ld", static_cast<long>(n) ); break;
+        case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g", static_cast<float>(n) ); break;
         case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break;
         default: break;
     }
@@ -90,7 +90,7 @@ SbiSymPool::~SbiSymPool()
 
 SbiSymDef* SbiSymPool::First()
 {
-    nCur = (sal_uInt16) -1;
+    nCur = sal_uInt16(-1);
     return Next();
 }
 
@@ -303,7 +303,7 @@ void SbiSymDef::SetType( SbxDataType t )
         sal_Unicode cu = aName[0];
         if( cu < 256 )
         {
-            unsigned char ch = (unsigned char)cu;
+            unsigned char ch = static_cast<unsigned char>(cu);
             if( ch == '_' )
             {
                 ch = 'Z';

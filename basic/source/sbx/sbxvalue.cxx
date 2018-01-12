@@ -313,10 +313,10 @@ bool SbxValue::Get( SbxValues& rRes ) const
                 case SbxCoreSTRING: p->aPic = ImpGetCoreString( &p->aData );
                                     rRes.pOUString = &p->aPic; break;
                 case SbxINT:
-                    rRes.nInt = (int) ImpGetLong( &p->aData );
+                    rRes.nInt = static_cast<int>(ImpGetLong( &p->aData ));
                     break;
                 case SbxUINT:
-                    rRes.nUInt = (int) ImpGetULong( &p->aData );
+                    rRes.nUInt = static_cast<int>(ImpGetULong( &p->aData ));
                     break;
                 case SbxOBJECT:
                     if( p->aData.eType == SbxOBJECT )
@@ -453,10 +453,10 @@ bool SbxValue::Put( const SbxValues& rVal )
                 case SbxLPSTR:
                 case SbxSTRING:     ImpPutString( &p->aData, rVal.pOUString ); break;
                 case SbxINT:
-                    ImpPutLong( &p->aData, (sal_Int32) rVal.nInt );
+                    ImpPutLong( &p->aData, static_cast<sal_Int32>(rVal.nInt) );
                     break;
                 case SbxUINT:
-                    ImpPutULong( &p->aData, (sal_uInt32) rVal.nUInt );
+                    ImpPutULong( &p->aData, static_cast<sal_uInt32>(rVal.nUInt) );
                     break;
                 case SbxOBJECT:
                     if( !p->IsFixed() || p->aData.eType == SbxOBJECT )
@@ -1047,7 +1047,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                     case SbxMUL:
                         {
                             // first overflow check: see if product will fit - test real value of product (hence 2 curr factors)
-                            double dTest = (double)aL.nInt64 * (double)aR.nInt64 / (double)CURRENCY_FACTOR_SQUARE;
+                            double dTest = static_cast<double>(aL.nInt64) * static_cast<double>(aR.nInt64) / double(CURRENCY_FACTOR_SQUARE);
                             if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
                             {
                                 aL.nInt64 = SAL_MAX_INT64;
@@ -1056,10 +1056,10 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                                 break;
                             }
                             // second overflow check: see if unscaled product overflows - if so use doubles
-                            dTest = (double)aL.nInt64 * (double)aR.nInt64;
+                            dTest = static_cast<double>(aL.nInt64) * static_cast<double>(aR.nInt64);
                             if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
                             {
-                                aL.nInt64 = (sal_Int64)( dTest / (double)CURRENCY_FACTOR );
+                                aL.nInt64 = static_cast<sal_Int64>( dTest / double(CURRENCY_FACTOR) );
                                 break;
                             }
                             // precise calc: multiply then scale back (move decimal pt)
@@ -1076,17 +1076,17 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                                 break;
                             }
                             // first overflow check: see if quotient will fit - calc real value of quotient (curr factors cancel)
-                            double dTest = (double)aL.nInt64 / (double)aR.nInt64;
+                            double dTest = static_cast<double>(aL.nInt64) / static_cast<double>(aR.nInt64);
                             if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
                             {
                                 SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                                 break;
                             }
                             // second overflow check: see if scaled dividend overflows - if so use doubles
-                            dTest = (double)aL.nInt64 * (double)CURRENCY_FACTOR;
+                            dTest = static_cast<double>(aL.nInt64) * double(CURRENCY_FACTOR);
                             if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
                             {
-                                aL.nInt64 = (sal_Int64)(dTest / (double)aR.nInt64);
+                                aL.nInt64 = static_cast<sal_Int64>(dTest / static_cast<double>(aR.nInt64));
                                 break;
                             }
                             // precise calc: scale (move decimal pt) then divide
@@ -1097,7 +1097,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 
                     case SbxPLUS:
                         {
-                            double dTest = ( (double)aL.nInt64 + (double)aR.nInt64 ) / (double)CURRENCY_FACTOR;
+                            double dTest = ( static_cast<double>(aL.nInt64) + static_cast<double>(aR.nInt64) ) / double(CURRENCY_FACTOR);
                             if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
                             {
                                 SetError( ERRCODE_BASIC_MATH_OVERFLOW );
@@ -1109,7 +1109,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 
                     case SbxMINUS:
                         {
-                            double dTest = ( (double)aL.nInt64 - (double)aR.nInt64 ) / (double)CURRENCY_FACTOR;
+                            double dTest = ( static_cast<double>(aL.nInt64) - static_cast<double>(aR.nInt64) ) / double(CURRENCY_FACTOR);
                             if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
                             {
                                 SetError( ERRCODE_BASIC_MATH_OVERFLOW );
@@ -1382,7 +1382,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 aData.nSingle = 0.0F;
                 return false;
             }
-            aData.nSingle = (float) d;
+            aData.nSingle = static_cast<float>(d);
             break;
         }
         case SbxDATE:
@@ -1410,8 +1410,8 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             sal_uInt32 tmpHi = 0;
             sal_uInt32 tmpLo = 0;
             r.ReadUInt32( tmpHi ).ReadUInt32( tmpLo );
-            aData.nInt64 = ((sal_Int64)tmpHi << 32);
-            aData.nInt64 |= (sal_Int64)tmpLo;
+            aData.nInt64 = (static_cast<sal_Int64>(tmpHi) << 32);
+            aData.nInt64 |= static_cast<sal_Int64>(tmpLo);
             break;
         }
         case SbxSTRING:
@@ -1541,7 +1541,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxCURRENCY:
             {
                 sal_Int32 tmpHi = ( (aData.nInt64 >> 32) &  0xFFFFFFFF );
-                sal_Int32 tmpLo = ( sal_Int32 )aData.nInt64;
+                sal_Int32 tmpLo = static_cast<sal_Int32>(aData.nInt64);
                 r.WriteInt32( tmpHi ).WriteInt32( tmpLo );
                 break;
             }

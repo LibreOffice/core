@@ -766,7 +766,7 @@ void SbiParser::Option()
             {
                 if( nVal == 0 || nVal == 1 )
                 {
-                    nBase = (short) nVal;
+                    nBase = static_cast<short>(nVal);
                     break;
                 }
             }

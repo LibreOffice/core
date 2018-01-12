@@ -119,7 +119,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
         eCharSet = nCharSet;
         eCharSet = GetSOLoadTextEncoding( eCharSet );
         bBadVer  = ( nVersion > B_CURVERSION );
-        nDimBase = (sal_uInt16) lDimBase;
+        nDimBase = static_cast<sal_uInt16>(lDimBase);
     }
 
     bool bLegacy = ( nVersion < B_EXT_IMG_VERSION );
@@ -170,7 +170,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 if ( bLegacy )
                 {
                     ReleaseLegacyBuffer(); // release any previously held buffer
-                    nLegacyCodeSize = (sal_uInt16) nCodeSize;
+                    nLegacyCodeSize = static_cast<sal_uInt16>(nCodeSize);
                     pLegacyPCode = pCode;
 
                     PCodeBuffConvertor< sal_uInt16, sal_uInt32 > aLegacyToNew( reinterpret_cast<sal_uInt8*>(pLegacyPCode), nLegacyCodeSize );
@@ -209,20 +209,20 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 for( i = 0; i < nStrings && SbiGood( r ); i++ )
                 {
                     r.ReadUInt32( nOff );
-                    pStringOff[ i ] = (sal_uInt16) nOff;
+                    pStringOff[ i ] = static_cast<sal_uInt16>(nOff);
                 }
                 r.ReadUInt32( nLen );
                 if( SbiGood( r ) )
                 {
                     delete [] pStrings;
                     pStrings = new sal_Unicode[ nLen ];
-                    nStringSize = (sal_uInt16) nLen;
+                    nStringSize = static_cast<sal_uInt16>(nLen);
 
                     std::unique_ptr<char[]> pByteStrings(new char[ nLen ]);
                     r.ReadBytes(pByteStrings.get(), nStringSize);
                     for( short j = 0; j < nStrings; j++ )
                     {
-                        sal_uInt16 nOff2 = (sal_uInt16) pStringOff[ j ];
+                        sal_uInt16 nOff2 = static_cast<sal_uInt16>(pStringOff[ j ]);
                         OUString aStr( pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet );
                         memcpy( pStrings + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof( sal_Unicode ) );
                     }
@@ -439,7 +439,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         std::unique_ptr<char[]> pByteStrings(new char[ nStringSize ]);
         for( i = 0; i < nStrings; i++ )
         {
-            sal_uInt16 nOff = (sal_uInt16) pStringOff[ i ];
+            sal_uInt16 nOff = static_cast<sal_uInt16>(pStringOff[ i ]);
             OString aStr(OUStringToOString(OUString(pStrings + nOff), eCharSet));
             memcpy( pByteStrings.get() + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
