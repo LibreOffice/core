@@ -187,8 +187,8 @@ namespace basegfx
                 for(sal_uInt32 a(0); a < nTempPointCount; a++)
                 {
                     const temporaryPoint& rTempPoint = rPointVector[a];
-                    const double fCutPosInPolygon((double)rTempPoint.getIndex() + rTempPoint.getCut());
-                    const double fRelativeCutPos(fCutPosInPolygon / (double)nEdgeCount);
+                    const double fCutPosInPolygon(static_cast<double>(rTempPoint.getIndex()) + rTempPoint.getCut());
+                    const double fRelativeCutPos(fCutPosInPolygon / static_cast<double>(nEdgeCount));
                     rTempPoints.emplace_back(rTempPoint.getPoint(), nInd, fRelativeCutPos);
                 }
             }

@@ -637,11 +637,11 @@ namespace basegfx
             const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource)
         {
             B2DPolyPolygon aRetval;
-            const sal_uInt32 nSequenceCount((sal_uInt32)rPolyPolygonBezierCoordsSource.Coordinates.getLength());
+            const sal_uInt32 nSequenceCount(static_cast<sal_uInt32>(rPolyPolygonBezierCoordsSource.Coordinates.getLength()));
 
             if(nSequenceCount)
             {
-                OSL_ENSURE(nSequenceCount == (sal_uInt32)rPolyPolygonBezierCoordsSource.Flags.getLength(),
+                OSL_ENSURE(nSequenceCount == static_cast<sal_uInt32>(rPolyPolygonBezierCoordsSource.Flags.getLength()),
                     "UnoPolyPolygonBezierCoordsToB2DPolyPolygon: unequal number of Points and Flags (!)");
                 const css::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsSource.Coordinates.getConstArray();
                 const css::drawing::FlagSequence* pFlagSequence = rPolyPolygonBezierCoordsSource.Flags.getConstArray();
@@ -671,8 +671,8 @@ namespace basegfx
             if(nCount)
             {
                 // prepare return value memory
-                rPolyPolygonBezierCoordsRetval.Coordinates.realloc((sal_Int32)nCount);
-                rPolyPolygonBezierCoordsRetval.Flags.realloc((sal_Int32)nCount);
+                rPolyPolygonBezierCoordsRetval.Coordinates.realloc(static_cast<sal_Int32>(nCount));
+                rPolyPolygonBezierCoordsRetval.Flags.realloc(static_cast<sal_Int32>(nCount));
 
                 // get pointers to arrays
                 css::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsRetval.Coordinates.getArray();

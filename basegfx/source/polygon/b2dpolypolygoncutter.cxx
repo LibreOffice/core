@@ -861,8 +861,8 @@ namespace basegfx
                                 else
                                 {
                                     // poly and hole. They neutralize, so get rid of both. Move securely below zero.
-                                    rHelperA.mnDepth = -((sal_Int32)nCount);
-                                    rHelperB.mnDepth = -((sal_Int32)nCount);
+                                    rHelperA.mnDepth = - static_cast<sal_Int32>(nCount);
+                                    rHelperB.mnDepth = - static_cast<sal_Int32>(nCount);
                                 }
                             }
                             else
