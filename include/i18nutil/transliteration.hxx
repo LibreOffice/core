@@ -59,19 +59,19 @@ enum class TransliterationFlags {
 
     /** The first character of the sentence is put in upper case
      */
-    SENTENCE_CASE                  = (int)css::i18n::TransliterationModulesExtra::SENTENCE_CASE,
+    SENTENCE_CASE                  = int(css::i18n::TransliterationModulesExtra::SENTENCE_CASE),
 
 
     /** The first character of the word is put in upper case.
      * This one is part
      */
-    TITLE_CASE                     = (int)css::i18n::TransliterationModulesExtra::TITLE_CASE,
+    TITLE_CASE                     = int(css::i18n::TransliterationModulesExtra::TITLE_CASE),
 
 
     /** All characters of the word are to change their case from small letters
      * to capital letters and vice versa.
      */
-    TOGGLE_CASE                    = (int)css::i18n::TransliterationModulesExtra::TOGGLE_CASE,
+    TOGGLE_CASE                    = int(css::i18n::TransliterationModulesExtra::TOGGLE_CASE),
 
     NON_IGNORE_MASK                = (int)css::i18n::TransliterationModules_NON_IGNORE_MASK,
     IGNORE_MASK                    = 0x7fffff00,
@@ -119,8 +119,8 @@ enum class TransliterationFlags {
     /// transliterate Japanese normal sized character to small sized character
     largeToSmall_ja_JP             = (int)css::i18n::TransliterationModules_largeToSmall_ja_JP,
 
-    IGNORE_DIACRITICS_CTL          = (int)css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL,
-    IGNORE_KASHIDA_CTL             = (int)css::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL
+    IGNORE_DIACRITICS_CTL          = int(css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL),
+    IGNORE_KASHIDA_CTL             = int(css::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL)
 };
 namespace o3tl {
     template<> struct typed_flags<TransliterationFlags> : is_typed_flags<TransliterationFlags, 0x7fffffff> {};
