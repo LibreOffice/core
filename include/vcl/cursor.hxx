@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 #include <rtl/ustring.hxx>
+#include <memory>
 
 class Timer;
 struct ImplCursorData;
@@ -44,7 +45,7 @@ namespace vcl
 class VCL_DLLPUBLIC Cursor
 {
 private:
-    ImplCursorData* mpData;
+    std::unique_ptr<ImplCursorData> mpData;
     VclPtr<vcl::Window> mpWindow;           // only for shadow cursor
     long            mnSlant;
     Size            maSize;

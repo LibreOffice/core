@@ -88,6 +88,8 @@ void UseUniquePtr::CheckForUnconditionalDelete(const CXXDestructorDecl* destruct
         {
             if (!isa<MemberExpr>(binaryOp->getLHS()->IgnoreImpCasts()))
                 continue;
+            if (!isa<CXXNullPtrLiteralExpr>(binaryOp->getRHS()->IgnoreImpCasts()))
+                continue;
         }
         else
             continue;
@@ -109,6 +111,9 @@ void UseUniquePtr::CheckForUnconditionalDelete(const CXXDestructorDecl* destruct
     }
 }
 
+/**
+ * Check the delete expression in a destructor.
+ */
 void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, const CXXDeleteExpr* deleteExpr)
 {
     const ImplicitCastExpr* pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
