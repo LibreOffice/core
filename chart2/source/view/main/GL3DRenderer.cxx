@@ -399,7 +399,7 @@ void OpenGL3DRenderer::init()
     CHECK_GL_ERROR();
 
     m_fViewAngle = 30.0f;
-    m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 6000.0f);
+    m_3DProjection = glm::perspective(m_fViewAngle, static_cast<float>(m_iWidth) / static_cast<float>(m_iHeight), 0.01f, 6000.0f);
 
     maResources.m_b330Support = epoxy_gl_version() >= 33;
     CHECK_GL_ERROR();
@@ -1852,14 +1852,14 @@ void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt
     glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, m_TextInfoBatch.texture[index].subTextureNum, bmpWidth, bmpHeight, 1, GL_RGB, GL_UNSIGNED_BYTE, bitmapBuf.get());
     CHECK_GL_ERROR();
         //calc texture coordinate
-    m_TextInfoBatch.textureCoordList.emplace_back((float)bmpWidth / (float)m_TextInfoBatch.texture[index].textureArrayWidth,
+    m_TextInfoBatch.textureCoordList.emplace_back(static_cast<float>(bmpWidth) / static_cast<float>(m_TextInfoBatch.texture[index].textureArrayWidth),
                                                          0,
                                                          m_TextInfoBatch.texture[index].subTextureNum);
-    m_TextInfoBatch.textureCoordList.emplace_back((float)bmpWidth / (float)m_TextInfoBatch.texture[index].textureArrayWidth,
-                                                         (float)bmpHeight/ (float)m_TextInfoBatch.texture[index].textureArrayHeight,
+    m_TextInfoBatch.textureCoordList.emplace_back(static_cast<float>(bmpWidth) / static_cast<float>(m_TextInfoBatch.texture[index].textureArrayWidth),
+                                                         static_cast<float>(bmpHeight)/ static_cast<float>(m_TextInfoBatch.texture[index].textureArrayHeight),
                                                          m_TextInfoBatch.texture[index].subTextureNum);
     m_TextInfoBatch.textureCoordList.emplace_back(0,
-                                                         (float)bmpHeight/ (float)m_TextInfoBatch.texture[index].textureArrayHeight,
+                                                         static_cast<float>(bmpHeight)/ static_cast<float>(m_TextInfoBatch.texture[index].textureArrayHeight),
                                                          m_TextInfoBatch.texture[index].subTextureNum);
     m_TextInfoBatch.textureCoordList.emplace_back(0,
                                                          0,

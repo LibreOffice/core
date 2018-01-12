@@ -664,7 +664,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         && !rMEvt.IsRight() )
     {
         //start drag
-        sal_uInt16  nDrgLog = (sal_uInt16)pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width();
+        sal_uInt16  nDrgLog = static_cast<sal_uInt16>(pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width());
         SdrDragMethod* pDragMethod = nullptr;
 
         //change selection to 3D scene if rotate mode

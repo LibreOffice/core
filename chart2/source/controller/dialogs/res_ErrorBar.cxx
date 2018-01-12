@@ -220,7 +220,7 @@ void ErrorBarResources::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorS
     else
     {
         m_nConstDecimalDigits = 0;
-        m_nConstSpinSize = static_cast< sal_Int64 >( pow( 10.0, (int)nExponent ));
+        m_nConstSpinSize = static_cast< sal_Int64 >( pow( 10.0, static_cast<int>(nExponent) ));
     }
 }
 

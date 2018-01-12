@@ -156,13 +156,13 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     long nTmp;
     if (rInAttrs->GetItemState(SCHATTR_BAR_GAPWIDTH, true, &pPoolItem) == SfxItemState::SET)
     {
-        nTmp = (long)static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        nTmp = static_cast<long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
         m_pMTGap->SetValue(nTmp);
     }
 
     if (rInAttrs->GetItemState(SCHATTR_BAR_OVERLAP, true, &pPoolItem) == SfxItemState::SET)
     {
-        nTmp = (long)static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        nTmp = static_cast<long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
         m_pMTOverlap->SetValue(nTmp);
     }
 

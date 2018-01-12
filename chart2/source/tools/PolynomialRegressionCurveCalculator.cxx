@@ -79,7 +79,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         for(sal_Int32 i = 0; i < aNoValues; i++)
         {
             double xValue = aValues.first[i];
-            aQRTransposed[i + aColumnIndex] = std::pow(xValue, (int) aPower);
+            aQRTransposed[i + aColumnIndex] = std::pow(xValue, static_cast<int>(aPower));
         }
     }
 
@@ -206,7 +206,7 @@ double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
         return fResult;
     }
 
-    sal_Int32 aNoCoefficients = (sal_Int32) mCoefficients.size();
+    sal_Int32 aNoCoefficients = static_cast<sal_Int32>(mCoefficients.size());
 
     // Horner's method
     fResult = 0.0;

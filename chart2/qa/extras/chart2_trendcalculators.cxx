@@ -87,7 +87,7 @@ void Chart2TrendCalculators::loadCalculatorFromSheet(sal_Int32 nSheet)
     CPPUNIT_ASSERT( xRegressionCurveContainer.is() );
 
     Sequence< Reference< chart2::XRegressionCurve > > xRegressionCurveSequence = xRegressionCurveContainer->getRegressionCurves();
-    CPPUNIT_ASSERT_EQUAL((sal_Int32) 1, xRegressionCurveSequence.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xRegressionCurveSequence.getLength());
 
     m_xCurve = xRegressionCurveSequence[0];
     CPPUNIT_ASSERT(m_xCurve.is());
@@ -116,7 +116,7 @@ void Chart2TrendCalculators::testPotentialRegression1()
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
     {
-        const double d = (double) i;
+        const double d = static_cast<double>(i);
         xValues[i] = d;
         yValues[i] = 2.0 * pow ( d, 3 );
     }
@@ -132,7 +132,7 @@ void Chart2TrendCalculators::testPotentialRegression2()
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
     {
-        const double d = (double) i;
+        const double d = static_cast<double>(i);
         xValues[i] = d;
         yValues[i] = -2.0 * pow ( d, 3 );
     }
@@ -148,7 +148,7 @@ void Chart2TrendCalculators::testLinearRegression1()
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
     {
-        const double d = (double) i;
+        const double d = static_cast<double>(i);
         xValues[i] = d;
         yValues[i] = - 2.0 * d - 5.0 ;
     }
@@ -164,7 +164,7 @@ void Chart2TrendCalculators::testPolynomialRegression1()
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
     {
-        const double d = (double) i;
+        const double d = static_cast<double>(i);
         xValues[i] = d;
         yValues[i] =  - 2.0 * d * d + 4 * d - 5;
     }
@@ -180,7 +180,7 @@ void Chart2TrendCalculators::testExponentialRegression1()
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
     {
-        const double d = (double) i;
+        const double d = static_cast<double>(i);
         xValues[i] = d;
         yValues[i] = 2.0 * exp ( 0.3 * d );
     }
@@ -195,7 +195,7 @@ void Chart2TrendCalculators::testExponentialRegression2()
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
     {
-        const double d = (double) i;
+        const double d = static_cast<double>(i);
         xValues[i] = d;
         yValues[i] = -2.0 * exp ( 0.3 * d );
     }
