@@ -2166,8 +2166,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, pStyleTable) : -1;
             if( pStyleSheetProperties && nListId >= 0 )
             {
-                rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(
-                            ListDef::GetStyleName( nListId ) ), false);
+                if ( !pEntry->bIsChapterNumbering )
+                    rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
 
                 // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
                 sal_Int32 nParaRightMargin = 0;
