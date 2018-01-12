@@ -396,8 +396,8 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
 
     cairo_pattern_t* maskpattern = cairo_pattern_create_for_surface(mask);
     cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
-    double fXScale = (double)(rTR.mnDestWidth)/rTR.mnSrcWidth;
-    double fYScale = ((double)rTR.mnDestHeight)/rTR.mnSrcHeight;
+    double fXScale = static_cast<double>(rTR.mnDestWidth)/rTR.mnSrcWidth;
+    double fYScale = static_cast<double>(rTR.mnDestHeight)/rTR.mnSrcHeight;
     cairo_scale(cr, fXScale, fYScale);
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
 
@@ -1130,8 +1130,8 @@ static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
     double fXScale = 1.0f;
     double fYScale = 1.0f;
     if (rTR.mnSrcWidth != 0 && rTR.mnSrcHeight != 0) {
-        fXScale = (double)(rTR.mnDestWidth)/rTR.mnSrcWidth;
-        fYScale = ((double)rTR.mnDestHeight)/rTR.mnSrcHeight;
+        fXScale = static_cast<double>(rTR.mnDestWidth)/rTR.mnSrcWidth;
+        fYScale = static_cast<double>(rTR.mnDestHeight)/rTR.mnSrcHeight;
         cairo_scale(cr, fXScale, fYScale);
     }
 
@@ -1279,8 +1279,8 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     cairo_clip(cr);
 
     cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
-    double fXScale = (double)(rTR.mnDestWidth)/rTR.mnSrcWidth;
-    double fYScale = ((double)rTR.mnDestHeight)/rTR.mnSrcHeight;
+    double fXScale = static_cast<double>(rTR.mnDestWidth)/rTR.mnSrcWidth;
+    double fYScale = static_cast<double>(rTR.mnDestHeight)/rTR.mnSrcHeight;
     cairo_scale(cr, fXScale, fYScale);
     cairo_set_source_surface(cr, aSurface.getSurface(), -rTR.mnSrcX, -rTR.mnSrcY);
     if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))

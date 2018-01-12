@@ -45,8 +45,8 @@ struct ConvertData;
 
 #define GRFILTER_OUTHINT_GREY       1
 
-#define GRFILTER_FORMAT_NOTFOUND    ((sal_uInt16)0xFFFF)
-#define GRFILTER_FORMAT_DONTKNOW    ((sal_uInt16)0xFFFF)
+#define GRFILTER_FORMAT_NOTFOUND    (sal_uInt16(0xFFFF))
+#define GRFILTER_FORMAT_DONTKNOW    (sal_uInt16(0xFFFF))
 
 enum class GraphicFilterImportFlags
 {

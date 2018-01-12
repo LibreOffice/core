@@ -160,7 +160,7 @@ void checkAndInsert(CRCHash &rHash, sal_uInt64 nCRC, const char *pLocation)
         aBuf.append(" and ");
         aBuf.append(it->second);
         aBuf.append(" hash is 0x");
-        aBuf.append((sal_Int64)nCRC, 16);
+        aBuf.append(static_cast<sal_Int64>(nCRC), 16);
         CPPUNIT_FAIL(aBuf.toString().getStr());
     }
     rHash[nCRC] = pLocation;

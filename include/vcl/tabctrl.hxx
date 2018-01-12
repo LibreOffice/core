@@ -34,8 +34,8 @@ class PushButton;
 class ListBox;
 
 #ifndef TAB_APPEND
-#define TAB_APPEND          ((sal_uInt16)0xFFFF)
-#define TAB_PAGE_NOTFOUND   ((sal_uInt16)0xFFFF)
+#define TAB_APPEND          (sal_uInt16(0xFFFF))
+#define TAB_PAGE_NOTFOUND   (sal_uInt16(0xFFFF))
 #endif /* !TAB_APPEND */
 
 #define TAB_OFFSET          3

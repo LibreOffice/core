@@ -224,7 +224,7 @@ void Application::DeInit()
 
 sal_uInt16 Application::GetCommandLineParamCount()
 {
-    return (sal_uInt16)osl_getCommandArgCount();
+    return static_cast<sal_uInt16>(osl_getCommandArgCount());
 }
 
 OUString Application::GetCommandLineParam( sal_uInt16 nParam )
@@ -1130,8 +1130,7 @@ OUString Application::GetHWOSConfInfo()
     OUStringBuffer aDetails;
 
     aDetails.append( VclResId(SV_APP_CPUTHREADS) );
-    aDetails.append( (sal_Int32)
-        std::thread::hardware_concurrency() );
+    aDetails.append( static_cast<sal_Int32>(std::thread::hardware_concurrency()) );
     aDetails.append( "; " );
 
     OUString aVersion;

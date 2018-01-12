@@ -606,7 +606,7 @@ void Menu::Clear()
 
 sal_uInt16 Menu::GetItemCount() const
 {
-    return (sal_uInt16)pItemList->size();
+    return static_cast<sal_uInt16>(pItemList->size());
 }
 
 sal_uInt16 Menu::ImplGetVisibleItemCount() const
@@ -677,7 +677,7 @@ sal_uInt16 Menu::GetItemPos( sal_uInt16 nItemId ) const
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( pData )
-        return (sal_uInt16)nPos;
+        return static_cast<sal_uInt16>(nPos);
     else
         return MENU_ITEM_NOTFOUND;
 }
@@ -1585,15 +1585,15 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         if( nMaxWidth > nScreenWidth/2 )
             nMaxWidth = nScreenWidth/2;
 
-        sal_uInt16 gfxExtra = (sal_uInt16) std::max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
-        nImgOrChkPos = (sal_uInt16)nExtra;
+        sal_uInt16 gfxExtra = static_cast<sal_uInt16>(std::max( nExtra, 7L )); // #107710# increase space between checkmarks/images/text
+        nImgOrChkPos = static_cast<sal_uInt16>(nExtra);
         long nImgOrChkWidth = 0;
         if( aMaxSize.Height() > 0 ) // NWF case
             nImgOrChkWidth = aMaxSize.Height() + nExtra;
         else // non NWF case
             nImgOrChkWidth = nFontHeight/2 + gfxExtra;
         nImgOrChkWidth = std::max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
-        nTextPos = (sal_uInt16)(nImgOrChkPos + nImgOrChkWidth);
+        nTextPos = static_cast<sal_uInt16>(nImgOrChkPos + nImgOrChkWidth);
         nTextPos = nTextPos + gfxExtra;
 
         aSz.Width() = nTextPos + nMaxWidth + nExtra;
@@ -1604,7 +1604,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     }
     else
     {
-        nTextPos = (sal_uInt16)(2*nExtra);
+        nTextPos = static_cast<sal_uInt16>(2*nExtra);
         aSz.Height() = nFontHeight+6;
 
         // get menubar height from native methods if supported
@@ -3047,7 +3047,7 @@ long PopupMenu::ImplCalcHeight( sal_uInt16 nEntries ) const
     sal_uInt16 nFound = 0;
     for ( size_t n = 0; ( nFound < nEntries ) && ( n < pItemList->size() ); n++ )
     {
-        if ( ImplIsVisible( (sal_uInt16) n ) )
+        if ( ImplIsVisible( static_cast<sal_uInt16>(n) ) )
         {
             MenuItemData* pData = pItemList->GetDataFromPos( n );
             nHeight += pData->aSz.Height();

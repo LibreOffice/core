@@ -324,7 +324,7 @@ KeysymToUnicode (KeySym nKeySym)
         // strip off group indicator and iso10646 plane
         // FIXME can't handle chars from surrogate area.
         if (! (nKeySym & 0x00ff0000) )
-            return (sal_Unicode)(nKeySym & 0x0000ffff);
+            return static_cast<sal_Unicode>(nKeySym & 0x0000ffff);
     }
     // legacy keysyms, switch to appropriate codeset
     else

@@ -84,8 +84,8 @@ using namespace com::sun::star::lang;
 
 inline sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
 {
-    sal_uInt16 nRet = (sal_uInt16)pBuffer[1] |
-        (((sal_uInt16)pBuffer[0]) << 8);
+    sal_uInt16 nRet = static_cast<sal_uInt16>(pBuffer[1]) |
+        (static_cast<sal_uInt16>(pBuffer[0]) << 8);
     pBuffer+=2;
     return nRet;
 }
@@ -363,7 +363,7 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
         OUStringBuffer aName( pNameRecord->slen/2 );
         const sal_uInt8* pNameBuffer = pNameRecord->sptr;
         for(int n = 0; n < pNameRecord->slen/2; n++ )
-            aName.append( (sal_Unicode)getUInt16BE( pNameBuffer ) );
+            aName.append( static_cast<sal_Unicode>(getUInt16BE( pNameBuffer )) );
         aValue = aName.makeStringAndClear();
     }
     else if( pNameRecord->platformID == 3 )
@@ -380,7 +380,7 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
             const sal_uInt8* pNameBuffer = pNameRecord->sptr;
             for(int n = 0; n < pNameRecord->slen/2; n++ )
             {
-                sal_Unicode aCode = (sal_Unicode)getUInt16BE( pNameBuffer );
+                sal_Unicode aCode = static_cast<sal_Unicode>(getUInt16BE( pNameBuffer ));
                 sal_Char aChar = aCode >> 8;
                 if( aChar )
                     aName.append( aChar );
@@ -531,7 +531,7 @@ void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vecto
             }
             else if (pNameRecords[i].platformID == 1)
             {
-                AppleLanguageId aAppleId = static_cast<AppleLanguageId>((sal_uInt16)pNameRecords[i].languageID);
+                AppleLanguageId aAppleId = static_cast<AppleLanguageId>(static_cast<sal_uInt16>(pNameRecords[i].languageID));
                 LanguageTag aApple(makeLanguageTagFromAppleLanguageId(aAppleId));
                 if (aApple == aSystem)
                     nMatch = 8000;
@@ -1009,10 +1009,10 @@ bool PrintFontManager::createFontSubset(
         else
         {
             SAL_WARN_IF( (pGlyphIds[i] & 0x007f0000), "vcl", "overlong glyph id" );
-            SAL_WARN_IF( (int)pNewEncoding[i] >= nGlyphs, "vcl", "encoding wrong" );
+            SAL_WARN_IF( static_cast<int>(pNewEncoding[i]) >= nGlyphs, "vcl", "encoding wrong" );
             SAL_WARN_IF( pEnc[pNewEncoding[i]] != 0 || pGID[pNewEncoding[i]] != 0, "vcl", "duplicate encoded glyph" );
             pEnc[ pNewEncoding[i] ] = pNewEncoding[i];
-            pGID[ pNewEncoding[i] ] = (sal_uInt16)pGlyphIds[ i ];
+            pGID[ pNewEncoding[i] ] = static_cast<sal_uInt16>(pGlyphIds[ i ]);
             pOldIndex[ pNewEncoding[i] ] = i;
             nChar++;
         }
@@ -1164,13 +1164,13 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                         break;
                     cOld = c;
 #if 1 // TODO: remove when sal_Unicode covers all of unicode
-                    if (c > (sal_Unicode)~0)
+                    if (c > sal_Unicode(~0))
                         break;
 #endif
                     // get the matching glyph index
                     const sal_GlyphId aGlyphId = xFontCharMap->GetGlyphIndex(c);
                     // update the requested map
-                    rUnicodeEnc[(sal_Unicode)c] = aGlyphId;
+                    rUnicodeEnc[static_cast<sal_Unicode>(c)] = aGlyphId;
                 }
             }
         }
@@ -1186,7 +1186,7 @@ SAL_DLLPUBLIC_EXPORT const char * unit_online_get_fonts(void)
     PrintFontManager &rMgr = PrintFontManager::get();
     rMgr.getFontList(aFontIDs);
     OStringBuffer aBuf;
-    aBuf.append( (sal_Int32)aFontIDs.size() );
+    aBuf.append( static_cast<sal_Int32>(aFontIDs.size()) );
     aBuf.append( " PS fonts.\n" );
     for( auto nId : aFontIDs )
     {

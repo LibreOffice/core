@@ -2579,10 +2579,10 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
         aEditBoxRect.SetPos( Point( x + buttonRect.GetWidth() , y ) );
 
     #define ARROW_EXTENT        0.7
-    arrowRect.SetSize( Size( (gint)(MIN_ARROW_SIZE * ARROW_EXTENT),
-                             (gint)(MIN_ARROW_SIZE * ARROW_EXTENT) ) );
-    arrowRect.SetPos( Point( buttonRect.Left() + (gint)((buttonRect.GetWidth() - arrowRect.GetWidth()) / 2),
-                             buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
+    arrowRect.SetSize( Size( gint(MIN_ARROW_SIZE * ARROW_EXTENT),
+                             gint(MIN_ARROW_SIZE * ARROW_EXTENT) ) );
+    arrowRect.SetPos( Point( buttonRect.Left() + static_cast<gint>((buttonRect.GetWidth() - arrowRect.GetWidth()) / 2),
+                             buttonRect.Top() + static_cast<gint>((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
 
     for( std::vector< tools::Rectangle >::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {

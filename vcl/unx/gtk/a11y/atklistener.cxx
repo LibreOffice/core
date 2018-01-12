@@ -576,16 +576,16 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                 g_object_set_data( G_OBJECT(atk_obj), "ooo::text_changed::delete", &aDeletedText);
 
                 g_signal_emit_by_name( atk_obj, "text_changed::delete",
-                                       (gint) aDeletedText.SegmentStart,
-                                       (gint)( aDeletedText.SegmentEnd - aDeletedText.SegmentStart ) );
+                                       static_cast<gint>(aDeletedText.SegmentStart),
+                                       static_cast<gint>( aDeletedText.SegmentEnd - aDeletedText.SegmentStart ) );
 
                 g_object_steal_data( G_OBJECT(atk_obj), "ooo::text_changed::delete" );
             }
 
             if( aEvent.NewValue >>= aInsertedText )
                 g_signal_emit_by_name( atk_obj, "text_changed::insert",
-                                       (gint) aInsertedText.SegmentStart,
-                                       (gint)( aInsertedText.SegmentEnd - aInsertedText.SegmentStart ) );
+                                       static_cast<gint>(aInsertedText.SegmentStart),
+                                       static_cast<gint>( aInsertedText.SegmentEnd - aInsertedText.SegmentStart ) );
             break;
         }
 

@@ -83,7 +83,7 @@ static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLe
     sal_Unicode* pTempBuf = aTempBuf;
     do
     {
-        *pTempBuf = (sal_Unicode)(nNumber % 10) + '0';
+        *pTempBuf = static_cast<sal_Unicode>(nNumber % 10) + '0';
         pTempBuf++;
         nNumber /= 10;
         if ( nMinLen )
@@ -1324,7 +1324,7 @@ void DateField::ImplDateSpinArea( bool bUp )
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
         OUString aText( GetText() );
-        if ( (sal_Int32)aSelection.Len() == aText.getLength() )
+        if ( static_cast<sal_Int32>(aSelection.Len()) == aText.getLength() )
             ImplDateIncrementDay( aDate, bUp );
         else
         {
@@ -1344,7 +1344,7 @@ void DateField::ImplDateSpinArea( bool bUp )
                 for ( sal_Int8 i = 1; i <= 3; i++ )
                 {
                     nPos = aText.indexOf( aDateSep, nPos );
-                    if (nPos < 0 || nPos >= (sal_Int32)aSelection.Max())
+                    if (nPos < 0 || nPos >= static_cast<sal_Int32>(aSelection.Max()))
                     {
                         nDateArea = i;
                         break;
@@ -1585,7 +1585,7 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
         OUString aText = GetField()->GetText();
 
         // If selected until the end then keep it that way
-        if ( (sal_Int32)aSelection.Max() == aText.getLength() )
+        if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;
@@ -1961,7 +1961,7 @@ static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, bool 
 
     if ( !ImplIsValidTimePortion( _bSkipInvalidCharacters, sPortion ) )
         return false;
-    *_pPortion = (short)sPortion.toInt32();
+    *_pPortion = static_cast<short>(sPortion.toInt32());
     return true;
 }
 
@@ -2030,14 +2030,14 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
                 nNanoSec = aStr.toString().toInt64();
             }
             else
-                nSecond = (short)aStr.toString().toInt32();
+                nSecond = static_cast<short>(aStr.toString().toInt32());
         }
         else
-            nMinute = (short)aStr.toString().toInt32();
+            nMinute = static_cast<short>(aStr.toString().toInt32());
     }
     else if ( nSepPos < 0 )
     {
-        nSecond = (short)aStr.toString().toInt32();
+        nSecond = static_cast<short>(aStr.toString().toInt32());
         nMinute += nSecond / 60;
         nSecond %= 60;
         nHour += nMinute / 60;
@@ -2045,7 +2045,7 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
     }
     else
     {
-        nSecond = (short)aStr.copy( 0, nSepPos ).toString().toInt32();
+        nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).toString().toInt32());
         aStr.remove( 0, nSepPos+1 );
 
         nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
@@ -2054,7 +2054,7 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
         if ( nSepPos >= 0 )
         {
             nMinute = nSecond;
-            nSecond = (short)aStr.copy( 0, nSepPos ).toString().toInt32();
+            nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).toString().toInt32());
             aStr.remove( 0, nSepPos+1 );
 
             nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
@@ -2064,7 +2064,7 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
             {
                 nHour   = nMinute;
                 nMinute = nSecond;
-                nSecond = (short)aStr.copy( 0, nSepPos ).toString().toInt32();
+                nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).toString().toInt32());
                 aStr.remove( 0, nSepPos+1 );
             }
             else
@@ -2130,8 +2130,8 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
         if ( (nHour == 12) && ( ( aUpperCaseStr.indexOf( "AM" ) >= 0 ) || ( aUpperCaseStr.indexOf( aAMlocalised ) >= 0 ) ) )
             nHour = 0;
 
-        aTime = tools::Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
-                      (sal_uInt32)nNanoSec );
+        aTime = tools::Time( static_cast<sal_uInt16>(nHour), static_cast<sal_uInt16>(nMinute), static_cast<sal_uInt16>(nSecond),
+                      static_cast<sal_uInt32>(nNanoSec) );
     }
     else
     {
@@ -2148,8 +2148,8 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
             nNanoSec    = nNanoSec < 0 ? -nNanoSec : nNanoSec;
         }
 
-        aTime = tools::Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
-                      (sal_uInt32)nNanoSec );
+        aTime = tools::Time( static_cast<sal_uInt16>(nHour), static_cast<sal_uInt16>(nMinute), static_cast<sal_uInt16>(nSecond),
+                      static_cast<sal_uInt32>(nNanoSec) );
         if ( bNegative )
             aTime = -aTime;
     }
@@ -2364,7 +2364,7 @@ void TimeFormatter::ImplNewFieldValue( const tools::Time& rTime )
         OUString aText = GetField()->GetText();
 
         // If selected until the end then keep it that way
-        if ( (sal_Int32)aSelection.Max() == aText.getLength() )
+        if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;

@@ -96,7 +96,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                         for( sal_uInt16 nB = 0; nB < 256; nB += 51 )
                             for( sal_uInt16 nG = 0; nG < 256; nG += 51 )
                                 for( sal_uInt16 nR = 0; nR < 256; nR += 51 )
-                                    aPal[ nActCol++ ] = BitmapColor( (sal_uInt8) nR, (sal_uInt8) nG, (sal_uInt8) nB );
+                                    aPal[ nActCol++ ] = BitmapColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
 
                         // Set standard Office colors
                         aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
@@ -172,7 +172,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
                 aGreyPalette256.SetEntryCount( 256 );
 
                 for( sal_uInt16 i = 0; i < 256; i++ )
-                    aGreyPalette256[ i ] = BitmapColor( (sal_uInt8) i, (sal_uInt8) i, (sal_uInt8) i );
+                    aGreyPalette256[ i ] = BitmapColor( static_cast<sal_uInt8>(i), static_cast<sal_uInt8>(i), static_cast<sal_uInt8>(i) );
             }
 
             return aGreyPalette256;
@@ -647,7 +647,7 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                 Point       aTmpPoint;
                 tools::Rectangle   aTmpRectangle( aTmpPoint, aSizePix );
                 tools::Polygon aPoly( aTmpRectangle );
-                aPoly.Rotate( aTmpPoint, (sal_uInt16) nAngle10 );
+                aPoly.Rotate( aTmpPoint, static_cast<sal_uInt16>(nAngle10) );
 
                 tools::Rectangle           aNewBound( aPoly.GetBoundRect() );
                 const Size          aNewSizePix( aNewBound.GetSize() );
@@ -816,13 +816,13 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
 
                         for (int i = 0; ( i < nSrcCount ) && ( nNextIndex < nSrcCount ); ++i)
                         {
-                            const BitmapColor& rSrcCol = pSrcAcc->GetPaletteColor( (sal_uInt16) i );
+                            const BitmapColor& rSrcCol = pSrcAcc->GetPaletteColor( static_cast<sal_uInt16>(i) );
 
                             bool bFound = false;
 
                             for (int j = 0; j < nDstCount; ++j)
                             {
-                                if( rSrcCol == pDstAcc->GetPaletteColor( (sal_uInt16) j ) )
+                                if( rSrcCol == pDstAcc->GetPaletteColor( static_cast<sal_uInt16>(j) ) )
                                 {
                                     bFound = true;
                                     break;
@@ -830,7 +830,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                             }
 
                             if( !bFound )
-                                pDstAcc->SetPaletteColor( (sal_uInt16) nNextIndex++, rSrcCol );
+                                pDstAcc->SetPaletteColor( static_cast<sal_uInt16>(nNextIndex++), rSrcCol );
                         }
                     }
                 }
@@ -862,7 +862,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                             // Create index map for the color table, as the bitmap should be copied
                             // retaining it's color information relatively well
                             for( sal_uInt16 i = 0; i < nCount; i++ )
-                                pMap[ i ] = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( pReadAcc->GetPaletteColor( i ) );
+                                pMap[ i ] = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex( pReadAcc->GetPaletteColor( i ) ));
 
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
                                 for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
@@ -1451,7 +1451,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                 {
                     pAcc->SetPaletteEntryCount( nActColors + 1 );
                     pAcc->SetPaletteColor( nActColors, rReplaceColor );
-                    aReplace = BitmapColor( (sal_uInt8) nActColors );
+                    aReplace = BitmapColor( static_cast<sal_uInt8>(nActColors) );
                 }
                 else
                 {
@@ -1470,7 +1470,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                         if( !pFlags[ i ] )
                         {
                             pAcc->SetPaletteColor( i, rReplaceColor );
-                            aReplace = BitmapColor( (sal_uInt8) i );
+                            aReplace = BitmapColor( static_cast<sal_uInt8>(i) );
                         }
                     }
                 }

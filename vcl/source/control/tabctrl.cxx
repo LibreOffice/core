@@ -453,7 +453,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
                 nLineHeightAry[i] = nIH*(i-nCurLine-1) + GetItemsOffset().Y();
         }
 
-        nLinePosAry[nLines+1] = (sal_uInt16)mpTabCtrlData->maItemList.size();
+        nLinePosAry[nLines+1] = static_cast<sal_uInt16>(mpTabCtrlData->maItemList.size());
 
         long nDX = 0;
         long nModDX = 0;
@@ -1761,7 +1761,7 @@ void TabControl::EnablePage( sal_uInt16 i_nPageId, bool i_bEnable )
 
 sal_uInt16 TabControl::GetPageCount() const
 {
-    return (sal_uInt16)mpTabCtrlData->maItemList.size();
+    return static_cast<sal_uInt16>(mpTabCtrlData->maItemList.size());
 }
 
 sal_uInt16 TabControl::GetPageId( sal_uInt16 nPos ) const
@@ -1777,7 +1777,7 @@ sal_uInt16 TabControl::GetPagePos( sal_uInt16 nPageId ) const
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
         if ( it->mnId == nPageId )
-            return (sal_uInt16)(it - mpTabCtrlData->maItemList.begin());
+            return static_cast<sal_uInt16>(it - mpTabCtrlData->maItemList.begin());
     }
 
     return TAB_PAGE_NOTFOUND;
@@ -2030,7 +2030,7 @@ tools::Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, long nIndex
 
     if( HasLayoutData() )
     {
-        std::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPageId );
+        std::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( static_cast<int>(nPageId) );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
         {
             Pair aPair = mpControlData->mpLayoutData->GetLineStartEnd( it->second );
@@ -2063,7 +2063,7 @@ long TabControl::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) co
                 if( aPair.A() <= nIndex && aPair.B() >= nIndex )
                 {
                     nRet = nIndex - aPair.A();
-                    rPageId = (sal_uInt16)mpTabCtrlData->maLayoutLineToPageId[ nLine ];
+                    rPageId = static_cast<sal_uInt16>(mpTabCtrlData->maLayoutLineToPageId[ nLine ]);
                     break;
                 }
             }

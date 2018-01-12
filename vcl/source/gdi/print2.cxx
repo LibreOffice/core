@@ -1122,8 +1122,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 tools::Rectangle aBoundRect( currentItem.aBounds );
                 aBoundRect.Intersection( aOutputRect );
 
-                const double fBmpArea( (double) aBoundRect.GetWidth() * aBoundRect.GetHeight() );
-                const double fOutArea( (double) aOutputRect.GetWidth() * aOutputRect.GetHeight() );
+                const double fBmpArea( static_cast<double>(aBoundRect.GetWidth()) * aBoundRect.GetHeight() );
+                const double fOutArea( static_cast<double>(aOutputRect.GetWidth()) * aOutputRect.GetHeight() );
 
                 // check if output doesn't exceed given size
                 if( bReduceTransparency && bTransparencyAutoMode && ( fBmpArea > ( 0.25 * fOutArea ) ) )
@@ -1350,13 +1350,13 @@ void Printer::DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
         {
             const Color&    rStartColor = rGradient.GetStartColor();
             const Color&    rEndColor = rGradient.GetEndColor();
-            const long      nR = ( ( (long) rStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 +
-                                   ( (long) rEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
-            const long      nG = ( ( (long) rStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100 +
-                                   ( (long) rEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
-            const long      nB = ( ( (long) rStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100 +
-                                   ( (long) rEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
-            const Color     aColor( (sal_uInt8) nR, (sal_uInt8) nG, (sal_uInt8) nB );
+            const long      nR = ( ( static_cast<long>(rStartColor.GetRed()) * rGradient.GetStartIntensity() ) / 100 +
+                                   ( static_cast<long>(rEndColor.GetRed()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const long      nG = ( ( static_cast<long>(rStartColor.GetGreen()) * rGradient.GetStartIntensity() ) / 100 +
+                                   ( static_cast<long>(rEndColor.GetGreen()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const long      nB = ( ( static_cast<long>(rStartColor.GetBlue()) * rGradient.GetStartIntensity() ) / 100 +
+                                   ( static_cast<long>(rEndColor.GetBlue()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const Color     aColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
 
             pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             pOut->SetLineColor( aColor );

@@ -75,12 +75,12 @@
 
 #define TB_WBLINESIZING         (WB_SIZEABLE | WB_DOCKABLE | WB_SCROLL)
 
-#define DOCK_LINEHSIZE          ((sal_uInt16)0x0001)
-#define DOCK_LINEVSIZE          ((sal_uInt16)0x0002)
-#define DOCK_LINERIGHT          ((sal_uInt16)0x1000)
-#define DOCK_LINEBOTTOM         ((sal_uInt16)0x2000)
-#define DOCK_LINELEFT           ((sal_uInt16)0x4000)
-#define DOCK_LINETOP            ((sal_uInt16)0x8000)
+#define DOCK_LINEHSIZE          (sal_uInt16(0x0001))
+#define DOCK_LINEVSIZE          (sal_uInt16(0x0002))
+#define DOCK_LINERIGHT          (sal_uInt16(0x1000))
+#define DOCK_LINEBOTTOM         (sal_uInt16(0x2000))
+#define DOCK_LINELEFT           (sal_uInt16(0x4000))
+#define DOCK_LINETOP            (sal_uInt16(0x8000))
 #define DOCK_LINEOFFSET         3
 
 class ImplTBDragMgr
@@ -266,7 +266,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
 
     if (eAlign == WindowAlign::Top || eAlign == WindowAlign::Bottom)
     {
-        int height = (int) (0.6 * aSz.Height() + 0.5);
+        int height = static_cast<int>(0.6 * aSz.Height() + 0.5);
         int i = (aSz.Height() - height) / 2;
         height += i;
         while (i <= height)
@@ -278,7 +278,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
     }
     else
     {
-        int width = (int) (0.6 * aSz.Width() + 0.5);
+        int width = static_cast<int>(0.6 * aSz.Width() + 0.5);
         int i = (aSz.Width() - width) / 2;
         width += i;
         while (i <= width)
@@ -4360,7 +4360,7 @@ Size ToolBox::CalcPopupWindowSizePixel()
     else
     {
         // no breaks found: use quadratic layout
-        nLines = (ImplToolItems::size_type) ceil( sqrt( (double) GetItemCount() ) );
+        nLines = static_cast<ImplToolItems::size_type>(ceil( sqrt( static_cast<double>(GetItemCount()) ) ));
     }
 
     bool bPopup = mpData->mbAssumePopupMode;

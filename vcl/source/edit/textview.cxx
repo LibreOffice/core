@@ -1159,9 +1159,9 @@ TextSelection const & TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case KEY_PAGEDOWN:  aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM );
                             break;
-        case KEY_LEFT:      aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCHARACTER : (sal_uInt16)css::i18n::CharacterIteratorMode::SKIPCELL );
+        case KEY_LEFT:      aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? sal_uInt16(css::i18n::CharacterIteratorMode::SKIPCHARACTER) : sal_uInt16(css::i18n::CharacterIteratorMode::SKIPCELL) );
                             break;
-        case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCHARACTER : (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCELL );
+        case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? sal_uInt16(css::i18n::CharacterIteratorMode::SKIPCHARACTER) : sal_uInt16(css::i18n::CharacterIteratorMode::SKIPCELL) );
                             break;
         case css::awt::Key::SELECT_WORD_FORWARD:
                             bSelect = true;
@@ -1344,7 +1344,7 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
     {
         if ( nDelMode == DELMODE_SIMPLE )
         {
-            aEndPaM = CursorLeft( aEndPaM, (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCHARACTER );
+            aEndPaM = CursorLeft( aEndPaM, sal_uInt16(css::i18n::CharacterIteratorMode::SKIPCHARACTER) );
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
@@ -1372,7 +1372,7 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
     {
         if ( nDelMode == DELMODE_SIMPLE )
         {
-            aEndPaM = CursorRight( aEndPaM, (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCELL );
+            aEndPaM = CursorRight( aEndPaM, sal_uInt16(css::i18n::CharacterIteratorMode::SKIPCELL) );
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
@@ -1407,7 +1407,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
     if ( mpImpl->mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = mpImpl->mpTextEngine->GetEditCursor( rPaM, false ).Left();
-        mpImpl->mnTravelXPos = (sal_uInt16)nX+1;
+        mpImpl->mnTravelXPos = static_cast<sal_uInt16>(nX)+1;
     }
     else
         nX = mpImpl->mnTravelXPos;
@@ -1443,7 +1443,7 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
     if ( mpImpl->mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = mpImpl->mpTextEngine->GetEditCursor( rPaM, false ).Left();
-        mpImpl->mnTravelXPos = (sal_uInt16)nX+1;
+        mpImpl->mnTravelXPos = static_cast<sal_uInt16>(nX)+1;
     }
     else
         nX = mpImpl->mnTravelXPos;
@@ -1611,7 +1611,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
             }
             else
             {
-                TextPaM aNext = CursorRight( TextPaM( aPaM.GetPara(), aPaM.GetIndex() ), (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCELL );
+                TextPaM aNext = CursorRight( TextPaM( aPaM.GetPara(), aPaM.GetIndex() ), sal_uInt16(css::i18n::CharacterIteratorMode::SKIPCELL) );
                 aEditCursor.Right() = mpImpl->mpTextEngine->GetEditCursor( aNext, true ).Left();
             }
         }

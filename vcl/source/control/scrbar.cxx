@@ -46,20 +46,20 @@
 
 #include "thumbpos.hxx"
 
-#define SCRBAR_DRAW_BTN1            ((sal_uInt16)0x0001)
-#define SCRBAR_DRAW_BTN2            ((sal_uInt16)0x0002)
-#define SCRBAR_DRAW_PAGE1           ((sal_uInt16)0x0004)
-#define SCRBAR_DRAW_PAGE2           ((sal_uInt16)0x0008)
-#define SCRBAR_DRAW_THUMB           ((sal_uInt16)0x0010)
-#define SCRBAR_DRAW_BACKGROUND      ((sal_uInt16)0x0020)
+#define SCRBAR_DRAW_BTN1            (sal_uInt16(0x0001))
+#define SCRBAR_DRAW_BTN2            (sal_uInt16(0x0002))
+#define SCRBAR_DRAW_PAGE1           (sal_uInt16(0x0004))
+#define SCRBAR_DRAW_PAGE2           (sal_uInt16(0x0008))
+#define SCRBAR_DRAW_THUMB           (sal_uInt16(0x0010))
+#define SCRBAR_DRAW_BACKGROUND      (sal_uInt16(0x0020))
 
-#define SCRBAR_STATE_BTN1_DOWN      ((sal_uInt16)0x0001)
-#define SCRBAR_STATE_BTN1_DISABLE   ((sal_uInt16)0x0002)
-#define SCRBAR_STATE_BTN2_DOWN      ((sal_uInt16)0x0004)
-#define SCRBAR_STATE_BTN2_DISABLE   ((sal_uInt16)0x0008)
-#define SCRBAR_STATE_PAGE1_DOWN     ((sal_uInt16)0x0010)
-#define SCRBAR_STATE_PAGE2_DOWN     ((sal_uInt16)0x0020)
-#define SCRBAR_STATE_THUMB_DOWN     ((sal_uInt16)0x0040)
+#define SCRBAR_STATE_BTN1_DOWN      (sal_uInt16(0x0001))
+#define SCRBAR_STATE_BTN1_DISABLE   (sal_uInt16(0x0002))
+#define SCRBAR_STATE_BTN2_DOWN      (sal_uInt16(0x0004))
+#define SCRBAR_STATE_BTN2_DISABLE   (sal_uInt16(0x0008))
+#define SCRBAR_STATE_PAGE1_DOWN     (sal_uInt16(0x0010))
+#define SCRBAR_STATE_PAGE2_DOWN     (sal_uInt16(0x0020))
+#define SCRBAR_STATE_THUMB_DOWN     (sal_uInt16(0x0040))
 
 #define SCRBAR_VIEW_STYLE           (WB_3DLOOK | WB_HORZ | WB_VERT)
 

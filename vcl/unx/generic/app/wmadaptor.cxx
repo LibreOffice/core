@@ -455,7 +455,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                                        &nBytesLeft,
                                        &pProperty
                                        ) == 0
-                && nItems == 4*(unsigned)m_nDesktops
+                && nItems == 4*static_cast<unsigned>(m_nDesktops)
                 )
             {
                 m_aWMWorkAreas = ::std::vector< tools::Rectangle > ( m_nDesktops );
@@ -996,7 +996,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
     int nBytes = aProp.nitems ? aProp.nitems : aTitle.getLength();
     const SystemEnvData* pEnv = pFrame->GetSystemData();
     XChangeProperty( m_pDisplay,
-                     (::Window)pEnv->aShellWindow,
+                     static_cast<::Window>(pEnv->aShellWindow),
                      XA_WM_NAME,
                      nType,
                      nFormat,
@@ -1004,7 +1004,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                      pData,
                      nBytes );
     XChangeProperty( m_pDisplay,
-                     (::Window)pEnv->aShellWindow,
+                     static_cast<::Window>(pEnv->aShellWindow),
                      XA_WM_ICON_NAME,
                      nType,
                      nFormat,
@@ -1012,7 +1012,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                      pData,
                      nBytes );
     XChangeProperty( m_pDisplay,
-                     (::Window)pEnv->aShellWindow,
+                     static_cast<::Window>(pEnv->aShellWindow),
                      m_aWMAtoms[ WM_LOCALE_NAME ],
                      XA_STRING,
                      8,
@@ -1038,7 +1038,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
     const SystemEnvData* pEnv = pFrame->GetSystemData();
     if( m_aWMAtoms[ NET_WM_NAME ] )
         XChangeProperty( m_pDisplay,
-                         (::Window)pEnv->aShellWindow,
+                         static_cast<::Window>(pEnv->aShellWindow),
                          m_aWMAtoms[ NET_WM_NAME ],
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
@@ -1047,7 +1047,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
                          aTitle.getLength() );
     if( m_aWMAtoms[ NET_WM_ICON_NAME ] )
         XChangeProperty( m_pDisplay,
-                         (::Window)pEnv->aShellWindow,
+                         static_cast<::Window>(pEnv->aShellWindow),
                          m_aWMAtoms[ NET_WM_ICON_NAME ],
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
@@ -2234,7 +2234,7 @@ void WMAdaptor::setPID( X11SalFrame const * i_pFrame ) const
 {
     if( m_aWMAtoms[NET_WM_PID] )
     {
-        long nPID = (long)getpid();
+        long nPID = static_cast<long>(getpid());
         XChangeProperty( m_pDisplay,
                          i_pFrame->GetShellWindow(),
                          m_aWMAtoms[NET_WM_PID],
@@ -2261,7 +2261,7 @@ void WMAdaptor::answerPing( X11SalFrame const * i_pFrame, XClientMessageEvent co
 {
     if( m_aWMAtoms[NET_WM_PING] &&
         i_pEvent->message_type == m_aWMAtoms[ WM_PROTOCOLS ] &&
-        (Atom)i_pEvent->data.l[0] == m_aWMAtoms[ NET_WM_PING ] )
+        static_cast<Atom>(i_pEvent->data.l[0]) == m_aWMAtoms[ NET_WM_PING ] )
     {
         XEvent aEvent;
         aEvent.xclient = *i_pEvent;

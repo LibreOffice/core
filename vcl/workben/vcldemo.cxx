@@ -71,8 +71,8 @@ namespace {
     {
         TimeValue aValue;
         osl_getSystemTime(&aValue);
-        return (double)aValue.Seconds * 1000 +
-            (double)aValue.Nanosec / (1000*1000);
+        return static_cast<double>(aValue.Seconds) * 1000 +
+            static_cast<double>(aValue.Nanosec) / (1000*1000);
     }
 
 }
@@ -1087,7 +1087,7 @@ public:
         {
             ScopedVclPtr<VirtualDevice> pNested;
 
-            if ((int)eType < RENDER_AS_BITMAPEX)
+            if (static_cast<int>(eType) < RENDER_AS_BITMAPEX)
                 pNested = VclPtr<VirtualDevice>::Create(rDev).get();
             else
                 pNested = VclPtr<VirtualDevice>::Create(rDev,DeviceFormat::DEFAULT,DeviceFormat::DEFAULT).get();
@@ -1244,16 +1244,16 @@ public:
                     switch (i % 4)
                     {
                     case 2:
-                        aTransform.shearX((double)((i >> 2) % 8) / 8);
-                        aTransform.shearY((double)((i >> 4) % 8) / 8);
+                        aTransform.shearX(static_cast<double>((i >> 2) % 8) / 8);
+                        aTransform.shearY(static_cast<double>((i >> 4) % 8) / 8);
                         break;
                     case 3:
                         aTransform.translate(-aSize.Width()/2, -aSize.Height()/2);
                         aTransform.rotate(i);
                         if (i & 0x100)
                         {
-                            aTransform.shearX((double)((i >> 2) % 8) / 8);
-                            aTransform.shearY((double)((i >> 4) % 8) / 8);
+                            aTransform.shearX(static_cast<double>((i >> 2) % 8) / 8);
+                            aTransform.shearY(static_cast<double>((i >> 4) % 8) / 8);
                         }
                         aTransform.translate(aSize.Width()/2,  aSize.Height()/2);
                         break;
@@ -1313,9 +1313,9 @@ public:
                     {
                         BitmapColor aColW = pAccW->GetPixel(y,x);
                         BitmapColor aColB = pAccB->GetPixel(y,x);
-                        long nAR = (long)(aColW.GetRed() - aColB.GetRed()); // (1-a)
-                        long nAG = (long)(aColW.GetGreen() - aColB.GetGreen()); // (1-a)
-                        long nAB = (long)(aColW.GetBlue() - aColB.GetBlue()); // (1-a)
+                        long nAR = static_cast<long>(aColW.GetRed() - aColB.GetRed()); // (1-a)
+                        long nAG = static_cast<long>(aColW.GetGreen() - aColB.GetGreen()); // (1-a)
+                        long nAB = static_cast<long>(aColW.GetBlue() - aColB.GetBlue()); // (1-a)
 
 #define CLAMP(a,b,c) (((a)<=(b))?(b):(((a)>=(c))?(c):(a)))
 
@@ -1324,7 +1324,7 @@ public:
                         nInverseAlpha = CLAMP(nInverseAlpha, 0, 255);
                         long nAlpha = 255 - nInverseAlpha;
 
-                        pMaskAcc->SetPixel(y,x,BitmapColor((sal_Int8)CLAMP(nInverseAlpha,0,255)));
+                        pMaskAcc->SetPixel(y,x,BitmapColor(static_cast<sal_Int8>(CLAMP(nInverseAlpha,0,255))));
                         // now recover the pixels
                         long nR = (aColW.GetRed() + aColB.GetRed() - nInverseAlpha) * 128;
                         long nG = (aColW.GetGreen() + aColB.GetGreen() - nInverseAlpha) * 128;
@@ -1338,9 +1338,9 @@ public:
                             nR /= nAlpha; nG /= nAlpha; nB /= nAlpha;
                         }
                         pRecAcc->SetPixel(y,x,BitmapColor(
-                                                (sal_uInt8)CLAMP(nR,0,255),
-                                                (sal_uInt8)CLAMP(nG,0,255),
-                                                (sal_uInt8)CLAMP(nB,0,255)));
+                                                static_cast<sal_uInt8>(CLAMP(nR,0,255)),
+                                                static_cast<sal_uInt8>(CLAMP(nG,0,255)),
+                                                static_cast<sal_uInt8>(CLAMP(nB,0,255))));
 #undef CLAMP
                     }
                 }
@@ -1693,7 +1693,7 @@ void DemoRenderer::selectRenderer(const OUString &rName )
 int DemoRenderer::selectNextRenderer()
 {
     mnSelectedRenderer++;
-    if (mnSelectedRenderer == (signed) maRenderers.size())
+    if (mnSelectedRenderer == static_cast<signed>(maRenderers.size()))
         mnSelectedRenderer = -1;
     Invalidate();
     return mnSelectedRenderer;

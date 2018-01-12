@@ -438,7 +438,7 @@ void Window::SetZoom( const Fraction& rZoom )
 
 inline long WinFloatRound( double fVal )
 {
-    return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
+    return( fVal > 0.0 ? static_cast<long>( fVal + 0.5 ) : -static_cast<long>( -fVal + 0.5 ) );
 }
 
 void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
@@ -663,7 +663,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
             else if ( fVal > LONG_MAX )
                 nNewPos = LONG_MAX;
             else
-                nNewPos = (long)fVal;
+                nNewPos = static_cast<long>(fVal);
         }
 
         pScrl->DoScroll( nNewPos );

@@ -707,15 +707,15 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                         if( std::abs(g.nX-aState.mnX) < 2 && std::abs(g.nY-aState.mnY) < 5 )
                         {
                             long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
-                            if( (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.Right() ||
-                                (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.Bottom() )
+                            if( static_cast<unsigned long>(aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > static_cast<unsigned long>(aDesktop.Right()) ||
+                                static_cast<unsigned long>(aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > static_cast<unsigned long>(aDesktop.Bottom()) )
                             {
                                 // displacing would leave screen
                                 aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
                                 aState.mnY = displacement;
                                 if( bWrapped ||
-                                    (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.Right() ||
-                                    (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.Bottom() )
+                                    static_cast<unsigned long>(aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > static_cast<unsigned long>(aDesktop.Right()) ||
+                                    static_cast<unsigned long>(aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > static_cast<unsigned long>(aDesktop.Bottom()) )
                                     break;  // further displacement not possible -> break
                                 // avoid endless testing
                                 bWrapped = true;
@@ -775,11 +775,11 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         const SalFrameGeometry& rGeom = pWindow->mpWindowImpl->mpFrame->GetGeometry();
         if( nX < 0 )
             nX = 0;
-        if( nX + nWidth > (long) rGeom.nWidth )
+        if( nX + nWidth > static_cast<long>(rGeom.nWidth) )
             nX = rGeom.nWidth - nWidth;
         if( nY < 0 )
             nY = 0;
-        if( nY + nHeight > (long) rGeom.nHeight )
+        if( nY + nHeight > static_cast<long>(rGeom.nHeight) )
             nY = rGeom.nHeight - nHeight;
         setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
         maOrgSize = Size( nWidth, nHeight );

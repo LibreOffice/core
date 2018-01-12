@@ -945,7 +945,7 @@ short Dialog::Execute()
 
     long nRet = mpDialogImpl->mnResult;
     mpDialogImpl->mnResult = -1;
-    return (short)nRet;
+    return static_cast<short>(nRet);
 
 #else
 

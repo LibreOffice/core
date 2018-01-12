@@ -206,8 +206,8 @@ void EMFWriter::ImplWritePlusColor( const Color& rColor, sal_uInt32 nTrans )
     sal_uInt32 nAlpha = ((100-nTrans)*0xFF)/100;
     sal_uInt32 nCol = rColor.GetBlue();
 
-    nCol |= ( (sal_uInt32) rColor.GetGreen() ) << 8;
-    nCol |= ( (sal_uInt32) rColor.GetRed() ) << 16;
+    nCol |= static_cast<sal_uInt32>(rColor.GetGreen()) << 8;
+    nCol |= static_cast<sal_uInt32>(rColor.GetRed()) << 16;
     nCol |= ( nAlpha << 24 );
     m_rStm.WriteUInt32( nCol );
 }
@@ -562,8 +562,8 @@ void EMFWriter::ImplWriteColor( const Color& rColor )
 {
     sal_uInt32 nCol = rColor.GetRed();
 
-    nCol |= ( (sal_uInt32) rColor.GetGreen() ) << 8;
-    nCol |= ( (sal_uInt32) rColor.GetBlue() ) << 16;
+    nCol |= static_cast<sal_uInt32>(rColor.GetGreen()) << 8;
+    nCol |= static_cast<sal_uInt32>(rColor.GetBlue()) << 16;
 
     m_rStm.WriteUInt32( nCol );
 }
@@ -810,7 +810,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         if (nColsUsed)
             nPalCount = nColsUsed;
         else
-            nPalCount = 1 << (sal_uInt32)nBitCount;
+            nPalCount = 1 << static_cast<sal_uInt32>(nBitCount);
     }
     else
     {
@@ -864,7 +864,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
 
         if( nWidth && nNormWidth && ( nWidth != nNormWidth ) )
         {
-            const double fFactor = (double) nWidth / nNormWidth;
+            const double fFactor = static_cast<double>(nWidth) / nNormWidth;
 
             for( i = 0; i < ( nLen - 1 ); i++ )
                 pDX[ i ] = FRound( pDX[ i ] * fFactor );
@@ -1180,8 +1180,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const Size      aSrcSize( aTmpMtf.GetPrefSize() );
                 const Point     aDestPt( pA->GetPoint() );
                 const Size      aDestSize( pA->GetSize() );
-                const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                const double    fScaleX = aSrcSize.Width() ? static_cast<double>(aDestSize.Width()) / aSrcSize.Width() : 1.0;
+                const double    fScaleY = aSrcSize.Height() ? static_cast<double>(aDestSize.Height()) / aSrcSize.Height() : 1.0;
                 long            nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )

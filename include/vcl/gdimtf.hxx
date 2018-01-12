@@ -40,7 +40,7 @@ namespace tools {
 class Gradient;
 
 
-#define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
+#define GDI_METAFILE_END                (size_t(0xFFFFFFFF))
 #define GDI_METAFILE_LABEL_NOTFOUND     ((size_t)0xFFFFFFFF)
 
 enum class MtfConversion

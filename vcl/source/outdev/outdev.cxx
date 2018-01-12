@@ -382,7 +382,7 @@ sal_uLong OutputDevice::GetColorCount() const
 {
 
     const sal_uInt16 nBitCount = GetBitCount();
-    return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (sal_uLong) 1 ) << nBitCount) );
+    return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( sal_uLong(1) ) << nBitCount) );
 }
 
 css::uno::Reference< css::awt::XGraphics > OutputDevice::CreateUnoGraphics()

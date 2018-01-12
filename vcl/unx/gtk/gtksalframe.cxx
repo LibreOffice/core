@@ -1322,7 +1322,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     {
         XReparentWindow( getDisplay()->GetDisplay(),
                          widget_get_xid(m_pWindow),
-                         (::Window)pSysData->aWindow,
+                         static_cast<::Window>(pSysData->aWindow),
                          0, 0 );
     }
 }
@@ -1432,8 +1432,8 @@ void GtkSalFrame::Center()
 
     if( m_pParent )
     {
-        nX = ((long)m_pParent->maGeometry.nWidth - (long)maGeometry.nWidth)/2;
-        nY = ((long)m_pParent->maGeometry.nHeight - (long)maGeometry.nHeight)/2;
+        nX = (static_cast<long>(m_pParent->maGeometry.nWidth) - static_cast<long>(maGeometry.nWidth))/2;
+        nY = (static_cast<long>(m_pParent->maGeometry.nHeight) - static_cast<long>(maGeometry.nHeight))/2;
     }
     else
     {
@@ -1450,8 +1450,8 @@ void GtkSalFrame::Center()
         GdkRectangle aMonitor;
         gdk_screen_get_monitor_geometry( pScreen, nMonitor, &aMonitor );
 
-        nX = aMonitor.x + (aMonitor.width - (long)maGeometry.nWidth)/2;
-        nY = aMonitor.y + (aMonitor.height - (long)maGeometry.nHeight)/2;
+        nX = aMonitor.x + (aMonitor.width - static_cast<long>(maGeometry.nWidth))/2;
+        nY = aMonitor.y + (aMonitor.height - static_cast<long>(maGeometry.nHeight))/2;
     }
     SetPosSize( nX, nY, 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
 }
@@ -1694,7 +1694,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     {
         m_bDefaultSize = false;
 
-        if( (unsigned long)nWidth != maGeometry.nWidth || (unsigned long)nHeight != maGeometry.nHeight )
+        if( static_cast<unsigned long>(nWidth) != maGeometry.nWidth || static_cast<unsigned long>(nHeight) != maGeometry.nHeight )
             bSized = true;
         maGeometry.nWidth   = nWidth;
         maGeometry.nHeight  = nHeight;
@@ -1894,7 +1894,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     GdkScreen *pScreen = nullptr;
     GdkRectangle aNewMonitor;
 
-    bool bSpanAllScreens = nNewScreen == (unsigned int)-1;
+    bool bSpanAllScreens = nNewScreen == static_cast<unsigned int>(-1);
     m_bSpanMonitorsWhenFullscreen = bSpanAllScreens && getDisplay()->getSystem()->GetDisplayScreenCount() > 1;
 
     if (m_bSpanMonitorsWhenFullscreen)   //span all screens
@@ -2477,7 +2477,7 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     if( bWasVisible )
         Show( false );
 
-    if( (int)nXScreen.getXScreen() >= getDisplay()->GetXScreenCount() )
+    if( static_cast<int>(nXScreen.getXScreen()) >= getDisplay()->GetXScreenCount() )
         nXScreen = m_nXScreen;
 
     SystemParentData aParentData;
@@ -2708,8 +2708,8 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         default: return false;
     }
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+    aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
+    aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
 
     bool bClosePopups = false;
@@ -2758,8 +2758,8 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 
         if( ! aDel.isDeleted() )
         {
-            int frame_x = (int)(pEvent->x_root - pEvent->x);
-            int frame_y = (int)(pEvent->y_root - pEvent->y);
+            int frame_x = static_cast<int>(pEvent->x_root - pEvent->x);
+            int frame_y = static_cast<int>(pEvent->y_root - pEvent->y);
             if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
             {
                 pThis->maGeometry.nX = frame_x;
@@ -2789,8 +2789,8 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEvent* pInEvent, gpointer fram
     bool bNeg = (rEvent.direction == GDK_SCROLL_DOWN || rEvent.direction == GDK_SCROLL_RIGHT );
     SalWheelMouseEvent aEvent;
     aEvent.mnTime           = rEvent.time;
-    aEvent.mnX              = (sal_uLong)rEvent.x;
-    aEvent.mnY              = (sal_uLong)rEvent.y;
+    aEvent.mnX              = static_cast<sal_uLong>(rEvent.x);
+    aEvent.mnY              = static_cast<sal_uLong>(rEvent.y);
     aEvent.mnDelta          = bNeg ? -120 : 120;
     aEvent.mnNotchDelta     = bNeg ? -1 : 1;
     aEvent.mnScrollLines    = nLines;
@@ -2811,8 +2811,8 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+    aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
+    aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
@@ -2825,8 +2825,8 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     if( ! aDel.isDeleted() )
     {
-        int frame_x = (int)(pEvent->x_root - pEvent->x);
-        int frame_y = (int)(pEvent->y_root - pEvent->y);
+        int frame_x = static_cast<int>(pEvent->x_root - pEvent->x);
+        int frame_y = static_cast<int>(pEvent->y_root - pEvent->y);
         if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
         {
             pThis->maGeometry.nX = frame_x;
@@ -2851,8 +2851,8 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+    aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
+    aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
@@ -2915,7 +2915,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      */
     if( pThis->m_bFullscreen || (pThis->m_nStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::PLUG)) == SalFrameStyleFlags::SIZEABLE )
     {
-        if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
+        if( pEvent->width != static_cast<int>(pThis->maGeometry.nWidth) || pEvent->height != static_cast<int>(pThis->maGeometry.nHeight) )
         {
             bSized = true;
             pThis->maGeometry.nWidth    = pEvent->width;
@@ -3026,8 +3026,8 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
             if (osl::FileBase::getSystemPathFromFileURL(sProgramURL, sProgram) == osl::File::E_None)
             {
                 OString sFinalProgram(OUStringToOString(sProgram, osl_getThreadTextEncoding())
-                    + " " + OString::number((int)GDK_WINDOW_XID(gdkwin))
-                    + " " + OString::number((int)pThis->m_bSpanMonitorsWhenFullscreen));
+                    + " " + OString::number(static_cast<int>(GDK_WINDOW_XID(gdkwin)))
+                    + " " + OString::number(static_cast<int>(pThis->m_bSpanMonitorsWhenFullscreen)));
                 OString sDisplay(getDisplayString());
                 if (!sDisplay.isEmpty())
                 {
@@ -3641,7 +3641,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
     pThis->m_aInputEvent.mnCursorFlags      = 0;
 
-    pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, (int)pThis->m_aInputEvent.maText.getLength() ), ExtTextInputAttr::NONE );
+    pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, static_cast<int>(pThis->m_aInputEvent.maText.getLength()) ), ExtTextInputAttr::NONE );
 
     PangoAttrIterator *iter = pango_attr_list_get_iterator(pAttrs);
     do

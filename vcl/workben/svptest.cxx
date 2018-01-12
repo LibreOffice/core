@@ -107,13 +107,13 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     {
         for( int nY = 0; nY < 256; nY++ )
         {
-            double fRed = 255.0-1.5*sqrt((double)(nX*nX+nY*nY));
+            double fRed = 255.0-1.5*sqrt(static_cast<double>(nX*nX+nY*nY));
             if( fRed < 0.0 )
                 fRed = 0.0;
-            double fGreen = 255.0-1.5*sqrt((double)((255-nX)*(255-nX)+nY*nY));
+            double fGreen = 255.0-1.5*sqrt(static_cast<double>((255-nX)*(255-nX)+nY*nY));
             if( fGreen < 0.0 )
                 fGreen = 0.0;
-            double fBlue = 255.0-1.5*sqrt((double)((128-nX)*(128-nX)+(255-nY)*(255-nY)));
+            double fBlue = 255.0-1.5*sqrt(static_cast<double>((128-nX)*(128-nX)+(255-nY)*(255-nY)));
             if( fBlue < 0.0 )
                 fBlue = 0.0;
             pAcc->SetPixel( nY, nX, BitmapColor( sal_uInt8(fRed), sal_uInt8(fGreen), sal_uInt8(fBlue) ) );
@@ -141,7 +141,7 @@ static Point project( const Point& rPoint )
     //double y2 = y1 * cos( angle_z ) - x1 * sin( angle_z );
     double z2 = z1;
 
-    return Point( (sal_Int32)x2, (sal_Int32)z2 );
+    return Point( static_cast<sal_Int32>(x2), static_cast<sal_Int32>(z2) );
 }
 
 static Color approachColor( const Color& rFrom, const Color& rTo )
@@ -310,11 +310,11 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
         rRenderContext.DrawLine(project(aP1) + aCenter,
                                 project(aP2) + aCenter,
                                 aLineInfo);
-        aPoint.X() = (int)((((double)aP1.X())*cosd - ((double)aP1.Y())*sind)*factor);
-        aPoint.Y() = (int)((((double)aP1.Y())*cosd + ((double)aP1.X())*sind)*factor);
+        aPoint.X() = static_cast<int>((static_cast<double>(aP1.X())*cosd - static_cast<double>(aP1.Y())*sind)*factor);
+        aPoint.Y() = static_cast<int>((static_cast<double>(aP1.Y())*cosd + static_cast<double>(aP1.X())*sind)*factor);
         aP1 = aPoint;
-        aPoint.X() = (int)((((double)aP2.X())*cosd - ((double)aP2.Y())*sind)*factor);
-        aPoint.Y() = (int)((((double)aP2.Y())*cosd + ((double)aP2.X())*sind)*factor);
+        aPoint.X() = static_cast<int>((static_cast<double>(aP2.X())*cosd - static_cast<double>(aP2.Y())*sind)*factor);
+        aPoint.Y() = static_cast<int>((static_cast<double>(aP2.Y())*cosd + static_cast<double>(aP2.X())*sind)*factor);
         aP2 = aPoint;
     }
     rRenderContext.Pop();

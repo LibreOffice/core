@@ -186,7 +186,7 @@ private:
     {
         size_t operator()( const rtl::OString& aDigest ) const
         {
-            return (size_t)( rtl_crc32( 0, aDigest.getStr(), aDigest.getLength() ) );
+            return static_cast<size_t>( rtl_crc32( 0, aDigest.getStr(), aDigest.getLength() ) );
         }
     };
 

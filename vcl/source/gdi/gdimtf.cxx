@@ -54,7 +54,7 @@
 
 using namespace com::sun::star;
 
-#define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255))
+#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
 
 struct ImplColAdjustParam
 {
@@ -696,8 +696,8 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
             {
                 aOffset = aMapVDev->LogicToPixel( aBaseOffset, GetPrefMapMode() );
                 MapMode aMap( aMapVDev->GetMapMode() );
-                aOffset.Width() = static_cast<long>(aOffset.Width() * (double)aMap.GetScaleX());
-                aOffset.Height() = static_cast<long>(aOffset.Height() * (double)aMap.GetScaleY());
+                aOffset.Width() = static_cast<long>(aOffset.Width() * static_cast<double>(aMap.GetScaleX()));
+                aOffset.Height() = static_cast<long>(aOffset.Height() * static_cast<double>(aMap.GetScaleY()));
             }
             else
                 aOffset = OutputDevice::LogicToLogic( aBaseOffset, GetPrefMapMode(), aMapVDev->GetMapMode() );
@@ -730,7 +730,7 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
 
 void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
 {
-    Scale( (double) rScaleX, (double) rScaleY );
+    Scale( static_cast<double>(rScaleX), static_cast<double>(rScaleY) );
 }
 
 void GDIMetaFile::Clip( const tools::Rectangle& i_rClipRect )
@@ -1150,7 +1150,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 MetaHatchAction*    pAct = static_cast<MetaHatchAction*>(pAction);
                 Hatch               aHatch( pAct->GetHatch() );
 
-                aHatch.SetAngle( aHatch.GetAngle() + (sal_uInt16) nAngle10 );
+                aHatch.SetAngle( aHatch.GetAngle() + static_cast<sal_uInt16>(nAngle10) );
                 aMtf.AddAction( new MetaHatchAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
                                                                                 aHatch ) );
             }
@@ -1240,7 +1240,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 MetaFontAction* pAct = static_cast<MetaFontAction*>(pAction);
                 vcl::Font       aFont( pAct->GetFont() );
 
-                aFont.SetOrientation( aFont.GetOrientation() + (sal_uInt16) nAngle10 );
+                aFont.SetOrientation( aFont.GetOrientation() + static_cast<sal_uInt16>(nAngle10) );
                 aMtf.AddAction( new MetaFontAction( aFont ) );
             }
             break;
@@ -2133,15 +2133,15 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
     {
         if(!msoBrightness)
         {
-            aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0, 255 );
-            aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0, 255 );
-            aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0, 255 );
+            aColParam.pMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
+            aColParam.pMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
+            aColParam.pMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
         }
         else
         {
-            aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 );
-            aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 );
-            aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 );
+            aColParam.pMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
+            aColParam.pMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
+            aColParam.pMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
         }
         if( bGamma )
         {
@@ -2198,16 +2198,16 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
         long        nVal;
 
         nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = (sal_uLong) std::max( nVal, 0L );
-        aColParam.pMaxR[ i ] = (sal_uLong) std::min( nVal, 255L );
+        aColParam.pMinR[ i ] = static_cast<sal_uLong>(std::max( nVal, 0L ));
+        aColParam.pMaxR[ i ] = static_cast<sal_uLong>(std::min( nVal, 255L ));
 
         nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = (sal_uLong) std::max( nVal, 0L );
-        aColParam.pMaxG[ i ] = (sal_uLong) std::min( nVal, 255L );
+        aColParam.pMinG[ i ] = static_cast<sal_uLong>(std::max( nVal, 0L ));
+        aColParam.pMaxG[ i ] = static_cast<sal_uLong>(std::min( nVal, 255L ));
 
         nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = (sal_uLong) std::max( nVal, 0L );
-        aColParam.pMaxB[ i ] = (sal_uLong) std::min( nVal, 255L );
+        aColParam.pMinB[ i ] = static_cast<sal_uLong>(std::max( nVal, 0L ));
+        aColParam.pMaxB[ i ] = static_cast<sal_uLong>(std::min( nVal, 255L ));
     }
 
     aColParam.pDstCols = pReplaceColors;
@@ -2556,7 +2556,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                         }
                     }
 
-                    sal_uInt8 tmp = (sal_uInt8)rAct.IsClipping();
+                    sal_uInt8 tmp = static_cast<sal_uInt8>(rAct.IsClipping());
                     nCrc = vcl_get_checksum(nCrc, &tmp, 1);
                 }
                 else

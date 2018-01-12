@@ -41,8 +41,8 @@ namespace o3tl
     template<> struct typed_flags<SplitWindowItemFlags> : is_typed_flags<SplitWindowItemFlags, 0x1f> {};
 }
 
-#define SPLITWINDOW_APPEND          ((sal_uInt16)0xFFFF)
-#define SPLITWINDOW_ITEM_NOTFOUND   ((sal_uInt16)0xFFFF)
+#define SPLITWINDOW_APPEND          (sal_uInt16(0xFFFF))
+#define SPLITWINDOW_ITEM_NOTFOUND   (sal_uInt16(0xFFFF))
 
 class VCL_DLLPUBLIC SplitWindow : public DockingWindow
 {

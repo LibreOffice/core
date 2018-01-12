@@ -31,7 +31,7 @@ struct ImplBtnDlgItem;
 class PushButton;
 class Button;
 
-#define BUTTONDIALOG_BUTTON_NOTFOUND            ((sal_uInt16)0xFFFF)
+#define BUTTONDIALOG_BUTTON_NOTFOUND            (sal_uInt16(0xFFFF))
 
 enum class ButtonDialogFlags
 {

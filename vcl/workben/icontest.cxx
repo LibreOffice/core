@@ -52,8 +52,8 @@ namespace {
     {
         TimeValue aValue;
         osl_getSystemTime(&aValue);
-        return (double)aValue.Seconds +
-            (double)aValue.Nanosec / (1000*1000*1000);
+        return static_cast<double>(aValue.Seconds) +
+            static_cast<double>(aValue.Nanosec) / (1000*1000*1000);
     }
 
 }
@@ -103,9 +103,9 @@ void MyWorkWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     std::cout << "==> Paint! " << mnPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
 
     Size aGraphicSize( maGraphic.GetSizePixel() );
-    float aspect = ((float) aGraphicSize.Width()) / aGraphicSize.Height();
+    float aspect = static_cast<float>(aGraphicSize.Width()) / aGraphicSize.Height();
     Size aSize;
-    if( aspect >= ((float) WIDTH) / HEIGHT )
+    if( aspect >= (float(WIDTH)) / HEIGHT )
         aSize = Size( WIDTH, HEIGHT/aspect );
     else
         aSize = Size( WIDTH * aspect, HEIGHT );

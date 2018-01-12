@@ -38,9 +38,9 @@ public:
     }
 
     ImpErrorQuad( const BitmapColor& rColor )
-        : nRed( (long) rColor.GetRed() << 5 )
-        , nGreen( (long) rColor.GetGreen() << 5 )
-        , nBlue( (long) rColor.GetBlue() << 5 )
+        : nRed( static_cast<long>(rColor.GetRed()) << 5 )
+        , nGreen( static_cast<long>(rColor.GetGreen()) << 5 )
+        , nBlue( static_cast<long>(rColor.GetBlue()) << 5 )
     {
     }
 
@@ -57,16 +57,16 @@ public:
 
 inline void ImpErrorQuad::operator=( const BitmapColor& rColor )
 {
-    nRed = (long) rColor.GetRed() << 5;
-    nGreen = (long) rColor.GetGreen() << 5;
-    nBlue = (long) rColor.GetBlue() << 5;
+    nRed = static_cast<long>(rColor.GetRed()) << 5;
+    nGreen = static_cast<long>(rColor.GetGreen()) << 5;
+    nBlue = static_cast<long>(rColor.GetBlue()) << 5;
 }
 
 inline ImpErrorQuad& ImpErrorQuad::operator-=( const BitmapColor& rColor )
 {
-    nRed -= ( (long) rColor.GetRed() << 5 );
-    nGreen -= ( (long) rColor.GetGreen() << 5 );
-    nBlue -= ( (long) rColor.GetBlue() << 5 );
+    nRed -= ( static_cast<long>(rColor.GetRed()) << 5 );
+    nGreen -= ( static_cast<long>(rColor.GetGreen()) << 5 );
+    nBlue -= ( static_cast<long>(rColor.GetBlue()) << 5 );
 
     return *this;
 }
@@ -101,9 +101,9 @@ inline void ImpErrorQuad::ImplAddColorError7( const ImpErrorQuad& rErrQuad )
 
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
-    return BitmapColor( (sal_uInt8) ( ( nRed < 0 ? 0L : nRed > 8160 ? 8160L : nRed ) >> 5 ),
-                        (sal_uInt8) ( ( nGreen < 0 ? 0L : nGreen > 8160 ? 8160L : nGreen ) >> 5 ),
-                        (sal_uInt8) ( ( nBlue < 0 ? 0L : nBlue > 8160 ? 8160L : nBlue ) >> 5 ) );
+    return BitmapColor( static_cast<sal_uInt8>( ( nRed < 0 ? 0L : nRed > 8160 ? 8160L : nRed ) >> 5 ),
+                        static_cast<sal_uInt8>( ( nGreen < 0 ? 0L : nGreen > 8160 ? 8160L : nGreen ) >> 5 ),
+                        static_cast<sal_uInt8>( ( nBlue < 0 ? 0L : nBlue > 8160 ? 8160L : nBlue ) >> 5 ) );
 }
 
 class ImpNodeCache

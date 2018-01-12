@@ -94,16 +94,16 @@ inline const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
 
 inline double Hypothenuse( long w, long h )
-{ return sqrt( (double)((w*w)+(h*h)) ); }
+{ return sqrt( static_cast<double>((w*w)+(h*h)) ); }
 #endif
 
 inline int ColorDiff( int r, int g, int b )
 { return (r*r)+(g*g)+(b*b); }
 
 inline int ColorDiff( SalColor c1, int r, int g, int b )
-{ return ColorDiff( (int)SALCOLOR_RED  (c1)-r,
-                    (int)SALCOLOR_GREEN(c1)-g,
-                    (int)SALCOLOR_BLUE (c1)-b ); }
+{ return ColorDiff( static_cast<int>(SALCOLOR_RED  (c1))-r,
+                    static_cast<int>(SALCOLOR_GREEN(c1))-g,
+                    static_cast<int>(SALCOLOR_BLUE (c1))-b ); }
 
 static int sal_Shift( Pixel nMask )
 {
@@ -588,7 +588,7 @@ void SalDisplay::Init()
     if( pValStr != nullptr )
     {
         const OString aValStr( pValStr );
-        const long nDPI = (long) aValStr.toDouble();
+        const long nDPI = static_cast<long>(aValStr.toDouble());
         // guard against insane resolution
         if( sal_ValidDPI(nDPI) )
         {
@@ -605,8 +605,8 @@ void SalDisplay::Init()
         long xDPI = 96;
         long yDPI = 96;
         if (m_aScreens.size() == 1) {
-            xDPI = (long)round(DisplayWidth(pDisp_, 0)*25.4/DisplayWidthMM(pDisp_, 0));
-            yDPI = (long)round(DisplayHeight(pDisp_, 0)*25.4/DisplayHeightMM(pDisp_, 0));
+            xDPI = static_cast<long>(round(DisplayWidth(pDisp_, 0)*25.4/DisplayWidthMM(pDisp_, 0)));
+            yDPI = static_cast<long>(round(DisplayHeight(pDisp_, 0)*25.4/DisplayHeightMM(pDisp_, 0)));
             // if either is invalid set it equal to the other
             if (!sal_ValidDPI(xDPI) && sal_ValidDPI(yDPI))
                 xDPI = yDPI;
@@ -1026,22 +1026,22 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
     sal_uInt16 nKey = 0;
 
     if( XK_a <= keysym && XK_z >= keysym )
-        nKey = (sal_uInt16)(KEY_A + (keysym - XK_a));
+        nKey = static_cast<sal_uInt16>(KEY_A + (keysym - XK_a));
     else if( XK_A <= keysym && XK_Z >= keysym )
-        nKey = (sal_uInt16)(KEY_A + (keysym - XK_A));
+        nKey = static_cast<sal_uInt16>(KEY_A + (keysym - XK_A));
     else if( XK_0 <= keysym && XK_9 >= keysym )
-        nKey = (sal_uInt16)(KEY_0 + (keysym - XK_0));
+        nKey = static_cast<sal_uInt16>(KEY_0 + (keysym - XK_0));
     else if( IsModifierKey( keysym ) )
         ;
     else if( IsKeypadKey( keysym ) )
     {
         if( (keysym >= XK_KP_0) && (keysym <= XK_KP_9) )
         {
-            nKey = (sal_uInt16)(KEY_0 + (keysym - XK_KP_0));
+            nKey = static_cast<sal_uInt16>(KEY_0 + (keysym - XK_KP_0));
             *pcPrintable = '0' + nKey - KEY_0;
         }
         else if( IsPFKey( keysym ) )
-            nKey = (sal_uInt16)(KEY_F1 + (keysym - XK_KP_F1));
+            nKey = static_cast<sal_uInt16>(KEY_F1 + (keysym - XK_KP_F1));
         else switch( keysym )
         {
             case XK_KP_Space:
@@ -1120,7 +1120,7 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
         if( bNumLockFromXS_ )
         {
             if( keysym >= XK_F1 && keysym <= XK_F26 )
-                nKey = (sal_uInt16)(KEY_F1 + keysym - XK_F1);
+                nKey = static_cast<sal_uInt16>(KEY_F1 + keysym - XK_F1);
         }
         else switch( keysym )
         {
@@ -1189,7 +1189,7 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
                 break;
             default:
                 if( keysym >= XK_F1 && keysym <= XK_F26 )
-                    nKey = (sal_uInt16)(KEY_F1 + keysym - XK_F1);
+                    nKey = static_cast<sal_uInt16>(KEY_F1 + keysym - XK_F1);
                 break;
         }
     }
@@ -1463,7 +1463,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
                 if ( (XK_space <= nKeySym) && (XK_asciitilde >= nKeySym) )
                 {
                     *pLen = 1;
-                    pPrintable[ 0 ] = (char)nKeySym;
+                    pPrintable[ 0 ] = static_cast<char>(nKeySym);
                 }
                 break;
             case XLookupBoth:
@@ -1869,7 +1869,7 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
     if( !pEnv || !*pEnv )
     {
         int ret = XGrabPointer( GetDisplay(),
-                                (::Window)pEnvData->aWindow,
+                                static_cast<::Window>(pEnvData->aWindow),
                                 False,
                                 PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
                                 GrabModeAsync,
@@ -2455,7 +2455,7 @@ SalVisual::~SalVisual()
 SalColor SalVisual::GetTCColor( Pixel nPixel ) const
 {
     if( SALCOLOR == eRGBMode_ )
-        return (SalColor)nPixel;
+        return static_cast<SalColor>(nPixel);
 
     if( SALCOLORREVERSE == eRGBMode_ )
         return MAKE_SALCOLOR( (nPixel & 0x0000FF),
@@ -2488,11 +2488,11 @@ SalColor SalVisual::GetTCColor( Pixel nPixel ) const
 Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
 {
     if( SALCOLOR == eRGBMode_ )
-        return (Pixel)nSalColor;
+        return static_cast<Pixel>(nSalColor);
 
-    Pixel r = (Pixel)SALCOLOR_RED( nSalColor );
-    Pixel g = (Pixel)SALCOLOR_GREEN( nSalColor );
-    Pixel b = (Pixel)SALCOLOR_BLUE( nSalColor );
+    Pixel r = static_cast<Pixel>(SALCOLOR_RED( nSalColor ));
+    Pixel g = static_cast<Pixel>(SALCOLOR_GREEN( nSalColor ));
+    Pixel b = static_cast<Pixel>(SALCOLOR_BLUE( nSalColor ));
 
     if( SALCOLORREVERSE == eRGBMode_ )
         return (b << 16) | (g << 8) | r;
@@ -2612,7 +2612,7 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
                                &aVI ) )
         {
             aVI.visual          = new Visual;
-            aVI.visualid        = (VisualID)0; // beware of temporary destructor below
+            aVI.visualid        = VisualID(0); // beware of temporary destructor below
             aVI.screen          = 0;
             aVI.depth           = nDepth;
             aVI.c_class         = TrueColor;
@@ -2667,7 +2667,7 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
             m_aVisual = SalVisual( &aVI );
             // give ownership of constructed Visual() to m_aVisual
             // see SalVisual destructor
-            m_aVisual.visualid        = (VisualID)-1;
+            m_aVisual.visualid        = VisualID(-1);
             m_aVisual.screen          = -1;
         }
         else

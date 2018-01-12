@@ -152,13 +152,13 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
                     if( xSet->getPropertyValue("ReducedGradientMode") >>= nValue )
                         SetReducedGradientMode( (PrinterGradientMode)nValue );
                     if( xSet->getPropertyValue("ReducedGradientStepCount") >>= nValue )
-                        SetReducedGradientStepCount( (sal_uInt16)nValue );
+                        SetReducedGradientStepCount( static_cast<sal_uInt16>(nValue) );
                     if( xSet->getPropertyValue("ReduceBitmaps") >>= bValue )
                         SetReduceBitmaps( bValue );
                     if( xSet->getPropertyValue("ReducedBitmapMode") >>= nValue )
                         SetReducedBitmapMode( (PrinterBitmapMode)nValue );
                     if( xSet->getPropertyValue("ReducedBitmapResolution") >>= nValue )
-                        SetReducedBitmapResolution( (sal_uInt16)nValue );
+                        SetReducedBitmapResolution( static_cast<sal_uInt16>(nValue) );
                     if( xSet->getPropertyValue("ReducedBitmapIncludesTransparency") >>= bValue )
                         SetReducedBitmapIncludesTransparency( bValue );
                     if( xSet->getPropertyValue("ConvertToGreyscales") >>= bValue )
@@ -792,10 +792,10 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 
     // create forward mapping tables
     for( nX = 0; nX <= nSrcWidth; nX++ )
-        pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
+        pMapX[ nX ] = aDestPt.X() + FRound( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
 
     for( nY = 0; nY <= nSrcHeight; nY++ )
-        pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
+        pMapY[ nY ] = aDestPt.Y() + FRound( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
 
     // walk through all rectangles of mask
     const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
@@ -1535,7 +1535,7 @@ OUString Printer::GetPaperName( Paper ePaper )
             (*pSVData->mpPaperNames)[PaperIndex[i]] = VclResId(RID_STR_PAPERNAMES[i]);
     }
 
-    std::unordered_map<int,OUString>::const_iterator it = pSVData->mpPaperNames->find( (int)ePaper );
+    std::unordered_map<int,OUString>::const_iterator it = pSVData->mpPaperNames->find( static_cast<int>(ePaper) );
     return (it != pSVData->mpPaperNames->end()) ? it->second : OUString();
 }
 

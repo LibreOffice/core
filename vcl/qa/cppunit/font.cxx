@@ -111,16 +111,16 @@ void VclFontTest::testQuality()
 {
     vcl::Font aFont;
 
-    CPPUNIT_ASSERT_EQUAL( (int)0, aFont.GetQuality() );
+    CPPUNIT_ASSERT_EQUAL( int(0), aFont.GetQuality() );
 
     aFont.SetQuality( 100 );
-    CPPUNIT_ASSERT_EQUAL( (int)100, aFont.GetQuality() );
+    CPPUNIT_ASSERT_EQUAL( int(100), aFont.GetQuality() );
 
     aFont.IncreaseQualityBy( 50 );
-    CPPUNIT_ASSERT_EQUAL( (int)150, aFont.GetQuality() );
+    CPPUNIT_ASSERT_EQUAL( int(150), aFont.GetQuality() );
 
     aFont.DecreaseQualityBy( 100 );
-    CPPUNIT_ASSERT_EQUAL( (int)50, aFont.GetQuality() );
+    CPPUNIT_ASSERT_EQUAL( int(50), aFont.GetQuality() );
 }
 
 

@@ -50,9 +50,9 @@ static long ImplIndexFromColor( const BitmapColor& rCol )
 {
 #if TC_TO_PAL_COLORS == 4096
 
-    return( ( ( (long) rCol.GetBlue() >> 4) << 8 ) |
-            ( ( (long) rCol.GetGreen() >> 4 ) << 4 ) |
-            ( (long) rCol.GetRed() >> 4 ) );
+    return( ( ( static_cast<long>(rCol.GetBlue()) >> 4) << 8 ) |
+            ( ( static_cast<long>(rCol.GetGreen()) >> 4 ) << 4 ) |
+            ( static_cast<long>(rCol.GetRed()) >> 4 ) );
 
 #elif TC_TO_PAL_COLORS == 32768
 
@@ -239,7 +239,7 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rD
                 BitmapColor aCol( sal::static_int_cast<sal_uInt8>(nR << 4),
                                   sal::static_int_cast<sal_uInt8>(nG << 4),
                                   sal::static_int_cast<sal_uInt8>(nB << 4) );
-                pColToPalMap[ ImplIndexFromColor( aCol ) ] = (sal_uInt8) rDstBuffer.maPalette.GetBestIndex( aCol );
+                pColToPalMap[ ImplIndexFromColor( aCol ) ] = static_cast<sal_uInt8>(rDstBuffer.maPalette.GetBestIndex( aCol ));
             }
         }
     }
@@ -416,7 +416,7 @@ BitmapBuffer* StretchAndConvert(
     // horizontal mapping table
     if( (pDstBuffer->mnWidth != rTwoRect.mnSrcWidth) && (pDstBuffer->mnWidth != 0) )
     {
-        const double fFactorX = (double)rTwoRect.mnSrcWidth / pDstBuffer->mnWidth;
+        const double fFactorX = static_cast<double>(rTwoRect.mnSrcWidth) / pDstBuffer->mnWidth;
 
         for (long i = 0; i < pDstBuffer->mnWidth; ++i)
             pMapX[ i ] = rTwoRect.mnSrcX + static_cast<int>( i * fFactorX );
@@ -430,7 +430,7 @@ BitmapBuffer* StretchAndConvert(
     // vertical mapping table
     if( (pDstBuffer->mnHeight != rTwoRect.mnSrcHeight) && (pDstBuffer->mnHeight != 0) )
     {
-        const double fFactorY = (double)rTwoRect.mnSrcHeight / pDstBuffer->mnHeight;
+        const double fFactorY = static_cast<double>(rTwoRect.mnSrcHeight) / pDstBuffer->mnHeight;
 
         for (long i = 0; i < pDstBuffer->mnHeight; ++i)
             pMapY[ i ] = rTwoRect.mnSrcY + static_cast<int>( i * fFactorY );

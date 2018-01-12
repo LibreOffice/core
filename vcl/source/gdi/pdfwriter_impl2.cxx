@@ -438,8 +438,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             if ( nMaxBmpDPI > i_rContext.m_nMaxImageResolution )
                                 nMaxBmpDPI = i_rContext.m_nMaxImageResolution;
                         }
-                        const sal_Int32 nPixelX = (sal_Int32)((double)aDstSizeTwip.Width() * (double)nMaxBmpDPI / 1440.0);
-                        const sal_Int32 nPixelY = (sal_Int32)((double)aDstSizeTwip.Height() * (double)nMaxBmpDPI / 1440.0);
+                        const sal_Int32 nPixelX = static_cast<sal_Int32>(static_cast<double>(aDstSizeTwip.Width()) * static_cast<double>(nMaxBmpDPI) / 1440.0);
+                        const sal_Int32 nPixelY = static_cast<sal_Int32>(static_cast<double>(aDstSizeTwip.Height()) * static_cast<double>(nMaxBmpDPI) / 1440.0);
                         if ( nPixelX && nPixelY )
                         {
                             Size aDstSizePixel( nPixelX, nPixelY );
@@ -458,8 +458,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 Point   aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
                                 if ( aMtfOrigin.X() || aMtfOrigin.Y() )
                                     aTmpMtf.Move( -aMtfOrigin.X(), -aMtfOrigin.Y() );
-                                double  fScaleX = (double)aDstSize.Width() / (double)aTmpMtf.GetPrefSize().Width();
-                                double  fScaleY = (double)aDstSize.Height() / (double)aTmpMtf.GetPrefSize().Height();
+                                double  fScaleX = static_cast<double>(aDstSize.Width()) / static_cast<double>(aTmpMtf.GetPrefSize().Width());
+                                double  fScaleY = static_cast<double>(aDstSize.Height()) / static_cast<double>(aTmpMtf.GetPrefSize().Height());
                                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                                     aTmpMtf.Scale( fScaleX, fScaleY );
                                 aTmpMtf.SetPrefMapMode( aMapMode );
@@ -1175,9 +1175,9 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
     {
         m_bEncryptThisStream = true;
         sal_Int32 i = m_nKeyLength;
-        m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)nObject;
-        m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)( nObject >> 8 );
-        m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)( nObject >> 16 );
+        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
+        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
+        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
         // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
         // do the MD5 hash
         sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
@@ -1194,9 +1194,9 @@ void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
     if( m_aContext.Encryption.Encrypt() )
     {
         sal_Int32 i = m_nKeyLength;
-        m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)nObject;
-        m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)( nObject >> 8 );
-        m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)( nObject >> 16 );
+        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
+        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
+        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
         // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
         // do the MD5 hash
         sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
@@ -1312,7 +1312,7 @@ void PDFWriterImpl::padPassword( const OUString& i_rPassword, sal_uInt8* o_pPadd
     sal_Int32 nCurrentChar;
 
     for( nCurrentChar = 0; nCurrentChar < nToCopy; nCurrentChar++ )
-        o_pPaddedPW[nCurrentChar] = (sal_uInt8)( aString[nCurrentChar] );
+        o_pPaddedPW[nCurrentChar] = static_cast<sal_uInt8>( aString[nCurrentChar] );
 
     //pad it with standard byte string
     sal_Int32 i,y;
@@ -1348,10 +1348,10 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
         //Step 4
         sal_uInt8 nPerm[4];
 
-        nPerm[0] = (sal_uInt8)i_nAccessPermissions;
-        nPerm[1] = (sal_uInt8)( i_nAccessPermissions >> 8 );
-        nPerm[2] = (sal_uInt8)( i_nAccessPermissions >> 16 );
-        nPerm[3] = (sal_uInt8)( i_nAccessPermissions >> 24 );
+        nPerm[0] = static_cast<sal_uInt8>(i_nAccessPermissions);
+        nPerm[1] = static_cast<sal_uInt8>( i_nAccessPermissions >> 8 );
+        nPerm[2] = static_cast<sal_uInt8>( i_nAccessPermissions >> 16 );
+        nPerm[3] = static_cast<sal_uInt8>( i_nAccessPermissions >> 24 );
 
         if( nError == rtl_Digest_E_None )
             nError = rtl_digest_updateMD5( aDigest, nPerm , sizeof( nPerm ) );
@@ -1458,7 +1458,7 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
                 for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
                 {
                     for( y = 0; y < sizeof( nLocalKey ); y++ )
-                        nLocalKey[y] = (sal_uInt8)( nMD5Sum[y] ^ i );
+                        nLocalKey[y] = static_cast<sal_uInt8>( nMD5Sum[y] ^ i );
 
                     rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
                                             nLocalKey, SECUR_128BIT_KEY, nullptr, 0 ); //destination data area, on init can be NULL
@@ -1533,7 +1533,7 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
             for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
             {
                 for( y = 0; y < sizeof( nLocalKey ) ; y++ )
-                    nLocalKey[y] = (sal_uInt8)( io_rProperties.EncryptionKey[y] ^ i );
+                    nLocalKey[y] = static_cast<sal_uInt8>( io_rProperties.EncryptionKey[y] ^ i );
 
                 rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
                                         nLocalKey, SECUR_128BIT_KEY, // key and key length

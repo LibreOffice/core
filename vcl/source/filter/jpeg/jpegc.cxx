@@ -363,8 +363,8 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     aOwner.set(&cinfo);
     jpeg_svstream_dest( &cinfo, pOutputStream );
 
-    cinfo.image_width = (JDIMENSION) nWidth;
-    cinfo.image_height = (JDIMENSION) nHeight;
+    cinfo.image_width = static_cast<JDIMENSION>(nWidth);
+    cinfo.image_height = static_cast<JDIMENSION>(nHeight);
     if ( bGreys )
     {
         cinfo.input_components = 1;
@@ -377,7 +377,7 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     }
 
     jpeg_set_defaults( &cinfo );
-    jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
+    jpeg_set_quality( &cinfo, static_cast<int>(nQualityPercent), FALSE );
 
     cinfo.density_unit = 1;
     cinfo.X_density = rPPI.getX();

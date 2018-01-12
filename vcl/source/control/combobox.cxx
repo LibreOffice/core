@@ -145,7 +145,7 @@ void ComboBox::ImplCalcEditHeight()
 {
     sal_Int32 nLeft, nTop, nRight, nBottom;
     GetBorder( nLeft, nTop, nRight, nBottom );
-    m_pImpl->m_nDDHeight = (sal_uInt16)(m_pImpl->m_pSubEdit->GetTextHeight() + nTop + nBottom + 4);
+    m_pImpl->m_nDDHeight = static_cast<sal_uInt16>(m_pImpl->m_pSubEdit->GetTextHeight() + nTop + nBottom + 4);
     if ( !IsDropDownBox() )
         m_pImpl->m_nDDHeight += 4;
 
@@ -311,7 +311,7 @@ IMPL_LINK(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
 
     {
         OUString    aFullText = rEdit.GetText();
-        OUString    aStartText = aFullText.copy( 0, (sal_Int32)aSel.Max() );
+        OUString    aStartText = aFullText.copy( 0, static_cast<sal_Int32>(aSel.Max()) );
         sal_Int32   nStart = m_pImplLB->GetCurrentPos();
 
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
@@ -1127,13 +1127,13 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     if ( !IsDropDownBox() )
     {
         Size aOutSz = m_pImpl->m_pImplLB->GetMainWindow()->GetOutputSizePixel();
-        rnCols = (nCharWidth > 0) ? (sal_uInt16)(aOutSz.Width()/nCharWidth) : 1;
-        rnLines = (sal_uInt16)(aOutSz.Height()/m_pImpl->m_pImplLB->GetEntryHeight());
+        rnCols = (nCharWidth > 0) ? static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth) : 1;
+        rnLines = static_cast<sal_uInt16>(aOutSz.Height()/m_pImpl->m_pImplLB->GetEntryHeight());
     }
     else
     {
         Size aOutSz = m_pImpl->m_pSubEdit->GetOutputSizePixel();
-        rnCols = (nCharWidth > 0) ? (sal_uInt16)(aOutSz.Width()/nCharWidth) : 1;
+        rnCols = (nCharWidth > 0) ? static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth) : 1;
         rnLines = 1;
     }
 }

@@ -541,14 +541,14 @@ void ImplListBoxWindow::ImplCalcMetrics()
     mnMaxImgTxtWidth= 0;
     mnMaxImgHeight  = 0;
 
-    mnTextHeight = (sal_uInt16)GetTextHeight();
+    mnTextHeight = static_cast<sal_uInt16>(GetTextHeight());
     mnMaxTxtHeight = mnTextHeight + mnBorder;
     mnMaxHeight = mnMaxTxtHeight;
 
     if ( maUserItemSize.Height() > mnMaxHeight )
-        mnMaxHeight = (sal_uInt16) maUserItemSize.Height();
+        mnMaxHeight = static_cast<sal_uInt16>(maUserItemSize.Height());
     if ( maUserItemSize.Width() > mnMaxWidth )
-        mnMaxWidth= (sal_uInt16) maUserItemSize.Width();
+        mnMaxWidth= static_cast<sal_uInt16>(maUserItemSize.Width());
 
     for ( sal_Int32 n = mpEntryList->GetEntryCount(); n; )
     {
@@ -637,7 +637,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
         else
         {
             // normal single line case
-            aMetrics.nTextWidth = (sal_uInt16)GetTextWidth( rEntry.maStr );
+            aMetrics.nTextWidth = static_cast<sal_uInt16>(GetTextWidth( rEntry.maStr ));
             if( aMetrics.nTextWidth > mnMaxTxtWidth )
                 mnMaxTxtWidth = aMetrics.nTextWidth;
             aMetrics.nEntryWidth = mnMaxTxtWidth;
@@ -647,8 +647,8 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
     if ( aMetrics.bImage )
     {
         Size aImgSz = rEntry.maImage.GetSizePixel();
-        aMetrics.nImgWidth  = (sal_uInt16) CalcZoom( aImgSz.Width() );
-        aMetrics.nImgHeight = (sal_uInt16) CalcZoom( aImgSz.Height() );
+        aMetrics.nImgWidth  = static_cast<sal_uInt16>(CalcZoom( aImgSz.Width() ));
+        aMetrics.nImgHeight = static_cast<sal_uInt16>(CalcZoom( aImgSz.Height() ));
 
         if( aMetrics.nImgWidth > mnMaxImgWidth )
             mnMaxImgWidth = aMetrics.nImgWidth;
@@ -897,7 +897,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 if( nSelect == LISTBOX_ENTRY_NOTFOUND )
                     nSelect = mpEntryList->GetEntryCount() - 1;
                 nSelect = std::min( nSelect, GetLastVisibleEntry() );
-                nSelect = std::min( nSelect, (sal_Int32) ( mpEntryList->GetEntryCount() - 1 ) );
+                nSelect = std::min( nSelect, static_cast<sal_Int32>( mpEntryList->GetEntryCount() - 1 ) );
                 // Select only visible Entries with MouseMove, otherwise Tracking...
                 if ( IsVisible( nSelect ) &&
                     mpEntryList->IsEntrySelectable( nSelect ) &&
@@ -1230,16 +1230,16 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             {
                 if ( mnCurrentPos != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    nSelect = std::min(  (sal_Int32)(mnCurrentPos+1), (sal_Int32)(mpEntryList->GetEntryCount()-1) );
+                    nSelect = std::min(  static_cast<sal_Int32>(mnCurrentPos+1), static_cast<sal_Int32>(mpEntryList->GetEntryCount()-1) );
                     if( nSelect >= GetLastVisibleEntry() )
                         SetTopEntry( mnTop+1 );
                 }
             }
             else
             {
-                nSelect = (sal_Int32) ( ( aPt.Y() + mnBorder ) / mnMaxHeight ) + mnTop;
+                nSelect = static_cast<sal_Int32>( ( aPt.Y() + mnBorder ) / mnMaxHeight ) + mnTop;
                 nSelect = std::min( nSelect, GetLastVisibleEntry() );
-                nSelect = std::min( nSelect, (sal_Int32) ( mpEntryList->GetEntryCount() - 1 ) );
+                nSelect = std::min( nSelect, static_cast<sal_Int32>( mpEntryList->GetEntryCount() - 1 ) );
             }
 
             if ( bInside )
@@ -1450,10 +1450,10 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                     nTmp += mnTop - 1;
                     if( mnCurrentPos == nTmp && mnCurrentPos != nCount - 1 )
                     {
-                        long nTmp2 = std::min( (long)(nCount-nCurVis), (long)((long)mnTop+(long)nCurVis-1) );
-                        nTmp2 = std::max( (long)0 , nTmp2 );
-                        nTmp = (sal_Int32)(nTmp2+(nCurVis-1) );
-                        SetTopEntry( (sal_Int32)nTmp2 );
+                        long nTmp2 = std::min( static_cast<long>(nCount-nCurVis), static_cast<long>(static_cast<long>(mnTop)+static_cast<long>(nCurVis)-1) );
+                        nTmp2 = std::max( long(0) , nTmp2 );
+                        nTmp = static_cast<sal_Int32>(nTmp2+(nCurVis-1) );
+                        SetTopEntry( static_cast<sal_Int32>(nTmp2) );
                     }
                     // find first selectable starting from nTmp looking backwards
                     nSelect = mpEntryList->FindFirstSelectable( nTmp, false );
@@ -2237,7 +2237,7 @@ IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled, ImplListBoxWindow*, void)
 
 IMPL_LINK( ImplListBox, ScrollBarHdl, ScrollBar*, pSB, void )
 {
-    sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
+    sal_uInt16 nPos = static_cast<sal_uInt16>(pSB->GetThumbPos());
     if( pSB == mpVScrollBar )
         SetTopEntry( nPos );
     else if( pSB == mpHScrollBar )
@@ -2250,7 +2250,7 @@ void ImplListBox::ImplCheckScrollBars()
 
     Size aOutSz = GetOutputSizePixel();
     sal_Int32 nEntries = GetEntryList()->GetEntryCount();
-    sal_uInt16 nMaxVisEntries = (sal_uInt16) (aOutSz.Height() / GetEntryHeight());
+    sal_uInt16 nMaxVisEntries = static_cast<sal_uInt16>(aOutSz.Height() / GetEntryHeight());
 
     // vertical ScrollBar
     if( nEntries > nMaxVisEntries )
@@ -2277,7 +2277,7 @@ void ImplListBox::ImplCheckScrollBars()
     // horizontal ScrollBar
     if( mbAutoHScroll )
     {
-        long nWidth = (sal_uInt16) aOutSz.Width();
+        long nWidth = static_cast<sal_uInt16>(aOutSz.Width());
         if ( mbVScroll )
             nWidth -= mpVScrollBar->GetSizePixel().Width();
 
@@ -2290,7 +2290,7 @@ void ImplListBox::ImplCheckScrollBars()
 
             if ( !mbVScroll )   // maybe we do need one now
             {
-                nMaxVisEntries = (sal_uInt16) ( ( aOutSz.Height() - mpHScrollBar->GetSizePixel().Height() ) / GetEntryHeight() );
+                nMaxVisEntries = static_cast<sal_uInt16>( ( aOutSz.Height() - mpHScrollBar->GetSizePixel().Height() ) / GetEntryHeight() );
                 if( nEntries > nMaxVisEntries )
                 {
                     bArrange = true;
@@ -2306,7 +2306,7 @@ void ImplListBox::ImplCheckScrollBars()
             }
 
             // check of the scrolled-out region
-            sal_uInt16 nMaxLI = (sal_uInt16) (nMaxWidth - nWidth);
+            sal_uInt16 nMaxLI = static_cast<sal_uInt16>(nMaxWidth - nWidth);
             if ( nMaxLI < GetLeftIndent() )
                 SetLeftIndent( nMaxLI );
         }
@@ -2332,7 +2332,7 @@ void ImplListBox::ImplInitScrollBars()
     if ( mbVScroll )
     {
         sal_Int32 nEntries = GetEntryList()->GetEntryCount();
-        sal_uInt16 nVisEntries = (sal_uInt16) (aOutSz.Height() / GetEntryHeight());
+        sal_uInt16 nVisEntries = static_cast<sal_uInt16>(aOutSz.Height() / GetEntryHeight());
         mpVScrollBar->SetRangeMax( nEntries );
         mpVScrollBar->SetVisibleSize( nVisEntries );
         mpVScrollBar->SetPageSize( nVisEntries - 1 );
@@ -2341,7 +2341,7 @@ void ImplListBox::ImplInitScrollBars()
     if ( mbHScroll )
     {
         mpHScrollBar->SetRangeMax( GetMaxEntryWidth() + HORZ_SCROLL );
-        mpHScrollBar->SetVisibleSize( (sal_uInt16)aOutSz.Width() );
+        mpHScrollBar->SetVisibleSize( static_cast<sal_uInt16>(aOutSz.Width()) );
         mpHScrollBar->SetLineSize( HORZ_SCROLL );
         mpHScrollBar->SetPageSize( aOutSz.Width() - HORZ_SCROLL );
     }

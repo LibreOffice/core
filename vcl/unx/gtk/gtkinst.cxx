@@ -67,7 +67,7 @@ extern "C"
         if( gtk_major_version < 2 || // very unlikely sanity check
             ( gtk_major_version == 2 && gtk_minor_version < 4 ) )
         {
-            g_warning("require a newer gtk than %d.%d for gdk_threads_set_lock_functions", (int) gtk_major_version, gtk_minor_version);
+            g_warning("require a newer gtk than %d.%d for gdk_threads_set_lock_functions", static_cast<int>(gtk_major_version), gtk_minor_version);
             return nullptr;
         }
 

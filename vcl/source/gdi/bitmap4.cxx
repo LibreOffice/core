@@ -36,7 +36,7 @@ static inline sal_uInt8 lcl_getDuotoneColorComponent( sal_uInt8 base, sal_uInt16
     color2 = color2*base/0xFF;
     color1 = color1*(0xFF-base)/0xFF;
 
-    return (sal_uInt8) (color1+color2);
+    return static_cast<sal_uInt8>(color1+color2);
 }
 
 bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
@@ -209,9 +209,9 @@ bool Bitmap::ImplConvolute3( const long* pMatrix )
                     nSumB += pTmp[ pColor->GetBlue() ];
 
                     // calculate destination color
-                    pWriteAcc->SetPixel( nY, nX, BitmapColor( (sal_uInt8) MinMax( nSumR / nDivisor, 0, 255 ),
-                                                              (sal_uInt8) MinMax( nSumG / nDivisor, 0, 255 ),
-                                                              (sal_uInt8) MinMax( nSumB / nDivisor, 0, 255 ) ) );
+                    pWriteAcc->SetPixel( nY, nX, BitmapColor( static_cast<sal_uInt8>(MinMax( nSumR / nDivisor, 0, 255 )),
+                                                              static_cast<sal_uInt8>(MinMax( nSumG / nDivisor, 0, 255 )),
+                                                              static_cast<sal_uInt8>(MinMax( nSumB / nDivisor, 0, 255 )) ) );
                 }
 
                 if( ++nY < nHeight )
@@ -371,7 +371,7 @@ bool Bitmap::ImplMedianFilter()
                     MNMX3( nB9, nB2, nB3 );
 
                     // set destination color
-                    pWriteAcc->SetPixel( nY, nX, BitmapColor( (sal_uInt8) nR2, (sal_uInt8) nG2, (sal_uInt8) nB2 ) );
+                    pWriteAcc->SetPixel( nY, nX, BitmapColor( static_cast<sal_uInt8>(nR2), static_cast<sal_uInt8>(nG2), static_cast<sal_uInt8>(nB2) ) );
                 }
 
                 if( ++nY < nHeight )
@@ -445,7 +445,7 @@ bool Bitmap::ImplSobelGrey()
 
             if( pWriteAcc )
             {
-                BitmapColor aGrey( (sal_uInt8) 0 );
+                BitmapColor aGrey( sal_uInt8(0) );
                 const long  nWidth = pWriteAcc->Width();
                 const long  nHeight = pWriteAcc->Height();
                 const long  nMask111 = -1, nMask121 =  0, nMask131 =  1;
@@ -515,8 +515,8 @@ bool Bitmap::ImplSobelGrey()
                         nSum1 += nMask331 * nGrey33;
                         nSum2 += nMask332 * nGrey33;
 
-                        nSum1 = (long) sqrt( (double)( nSum1 * nSum1 + nSum2 * nSum2 ) );
-                        aGrey.SetIndex( ~(sal_uInt8) SAL_BOUND( nSum1, 0, 255 ) );
+                        nSum1 = static_cast<long>(sqrt( static_cast<double>( nSum1 * nSum1 + nSum2 * nSum2 ) ));
+                        aGrey.SetIndex( ~static_cast<sal_uInt8>(SAL_BOUND( nSum1, 0, 255 )) );
                         pWriteAcc->SetPixel( nY, nX, aGrey );
 
                         if( nX < ( nWidth - 1 ) )
@@ -571,7 +571,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
 
             if( pWriteAcc )
             {
-                BitmapColor aGrey( (sal_uInt8) 0 );
+                BitmapColor aGrey( sal_uInt8(0) );
                 const long  nWidth = pWriteAcc->Width();
                 const long  nHeight = pWriteAcc->Height();
                 long        nGrey11, nGrey12, nGrey13;
@@ -589,7 +589,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
                 const long  nLz = FRound( sin( fElev ) * 255.0 );
                 const auto  nZ2 = ( ( 6 * 255 ) / 4 ) * ( ( 6 * 255 ) / 4 );
                 const long  nNzLz = ( ( 6 * 255 ) / 4 ) * nLz;
-                const sal_uInt8 cLz = (sal_uInt8) SAL_BOUND( nLz, 0, 255 );
+                const sal_uInt8 cLz = static_cast<sal_uInt8>(SAL_BOUND( nLz, 0, 255 ));
 
                 // fill mapping tables
                 pHMap[ 0 ] = 0;
@@ -625,8 +625,8 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
                             aGrey.SetIndex( 0 );
                         else
                         {
-                            const double fGrey = nDotL / sqrt( (double)(nNx * nNx + nNy * nNy + nZ2) );
-                            aGrey.SetIndex( (sal_uInt8) SAL_BOUND( fGrey, 0, 255 ) );
+                            const double fGrey = nDotL / sqrt( static_cast<double>(nNx * nNx + nNy * nNy + nZ2) );
+                            aGrey.SetIndex( static_cast<sal_uInt8>(SAL_BOUND( fGrey, 0, 255 )) );
                         }
 
                         pWriteAcc->SetPixel( nY, nX, aGrey );
@@ -729,9 +729,9 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
         for( sal_uInt16 i = 0; i < 256; i++ )
         {
             BitmapColor&    rCol = aSepiaPal[ i ];
-            const sal_uInt8 cSepiaValue = (sal_uInt8) ( nSepia * i / 10000 );
+            const sal_uInt8 cSepiaValue = static_cast<sal_uInt8>( nSepia * i / 10000 );
 
-            rCol.SetRed( (sal_uInt8) i );
+            rCol.SetRed( static_cast<sal_uInt8>(i) );
             rCol.SetGreen( cSepiaValue );
             rCol.SetBlue( cSepiaValue );
         }
@@ -741,7 +741,7 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
 
         if( pWriteAcc )
         {
-            BitmapColor aCol( (sal_uInt8) 0 );
+            BitmapColor aCol( sal_uInt8(0) );
             const long  nWidth = pWriteAcc->Width();
             const long  nHeight = pWriteAcc->Height();
 
@@ -872,9 +872,9 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
                             }
                         }
 
-                        aCol.SetRed( (sal_uInt8) ( nSumR * fArea_1 ) );
-                        aCol.SetGreen( (sal_uInt8) ( nSumG * fArea_1 ) );
-                        aCol.SetBlue( (sal_uInt8) ( nSumB * fArea_1 ) );
+                        aCol.SetRed( static_cast<sal_uInt8>( nSumR * fArea_1 ) );
+                        aCol.SetGreen( static_cast<sal_uInt8>( nSumG * fArea_1 ) );
+                        aCol.SetBlue( static_cast<sal_uInt8>( nSumB * fArea_1 ) );
 
                         for( nY = nY1; nY <= nY2; nY++ )
                             for( nX = nX1; nX <= nX2; nX++ )
@@ -905,9 +905,9 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
                             }
                         }
 
-                        aCol.SetRed( (sal_uInt8) ( nSumR * fArea_1 ) );
-                        aCol.SetGreen( (sal_uInt8) ( nSumG * fArea_1 ) );
-                        aCol.SetBlue( (sal_uInt8) ( nSumB * fArea_1 ) );
+                        aCol.SetRed( static_cast<sal_uInt8>( nSumR * fArea_1 ) );
+                        aCol.SetGreen( static_cast<sal_uInt8>( nSumG * fArea_1 ) );
+                        aCol.SetBlue( static_cast<sal_uInt8>( nSumB * fArea_1 ) );
 
                         for( nY = nY1; nY <= nY2; nY++ )
                             for( nX = nX1; nX <= nX2; nX++ )
@@ -1003,7 +1003,7 @@ bool Bitmap::ImplPopArt()
             for( n = 0; n < nEntryCount; n++ )
             {
                 PopArtEntry& rEntry = pPopArtTable[ n ];
-                rEntry.mnIndex = (sal_uInt16) n;
+                rEntry.mnIndex = static_cast<sal_uInt16>(n);
                 rEntry.mnCount = 0;
             }
 
@@ -1043,7 +1043,7 @@ bool Bitmap::ImplPopArt()
 }
 
 double* MakeBlurKernel(const double radius, int& rows) {
-    int intRadius = (int) radius + 1.0;
+    int intRadius = static_cast<int>(radius) + 1.0;
     rows = intRadius * 2 + 1;
     double* matrix = new double[rows];
 
@@ -1209,9 +1209,9 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
             aColor = pReadAcc->GetColor( y , x );
 
             BitmapColor aResultColor(
-                (sal_uInt8) MinMax( aColor.GetRed()   + (aColor.GetRed()   - aColorBlur.GetRed())   * aAmount, 0, 255 ),
-                (sal_uInt8) MinMax( aColor.GetGreen() + (aColor.GetGreen() - aColorBlur.GetGreen()) * aAmount, 0, 255 ),
-                (sal_uInt8) MinMax( aColor.GetBlue()  + (aColor.GetBlue()  - aColorBlur.GetBlue())  * aAmount, 0, 255 ) );
+                static_cast<sal_uInt8>(MinMax( aColor.GetRed()   + (aColor.GetRed()   - aColorBlur.GetRed())   * aAmount, 0, 255 )),
+                static_cast<sal_uInt8>(MinMax( aColor.GetGreen() + (aColor.GetGreen() - aColorBlur.GetGreen()) * aAmount, 0, 255 )),
+                static_cast<sal_uInt8>(MinMax( aColor.GetBlue()  + (aColor.GetBlue()  - aColorBlur.GetBlue())  * aAmount, 0, 255 )) );
 
             pWriteAcc->SetPixel( y, x, aResultColor );
         }
