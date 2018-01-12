@@ -104,7 +104,7 @@ namespace rptui
         {
             bool bIsDark = false;
             const sal_Int32 nBackColor( xFixedText->getControlBackground() );
-            if ((sal_uInt32)nBackColor == COL_TRANSPARENT)
+            if (static_cast<sal_uInt32>(nBackColor) == COL_TRANSPARENT)
             {
                 uno::Reference <report::XSection> xSection(xFixedText->getParent(), uno::UNO_QUERY_THROW);
 

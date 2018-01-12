@@ -358,8 +358,8 @@ void Condition::impl_setCondition( const OUString& _rConditionFormula )
     }
 
     // update UI
-    m_pConditionType->SelectEntryPos( (sal_uInt16)eType );
-    m_pOperationList->SelectEntryPos( (sal_uInt16)eOperation );
+    m_pConditionType->SelectEntryPos( static_cast<sal_uInt16>(eType) );
+    m_pOperationList->SelectEntryPos( static_cast<sal_uInt16>(eOperation) );
     m_pCondLHS->SetText( sLHS );
     m_pCondRHS->SetText( sRHS );
 
