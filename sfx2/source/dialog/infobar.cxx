@@ -36,27 +36,25 @@ const long INFO_BAR_BASE_HEIGHT = 40;
 
 void GetInfoBarColors(InfoBarType ibType, BColor&  rBackgroundColor, BColor& rForegroundColor, BColor& rMessageColor)
 {
+    rMessageColor = basegfx::BColor(0.0, 0.0, 0.0);
+
     switch (ibType)
     {
     case InfoBarType::Info: // blue; #00529B/0,82,155; #BDE5F8/189,229,248
         rBackgroundColor = basegfx::BColor(0.741, 0.898, 0.973);
         rForegroundColor = basegfx::BColor(0.0, 0.322, 0.608);
-        rMessageColor = basegfx::BColor(0.0, 0.322, 0.608);
         break;
     case InfoBarType::Success: // green; #4F8A10/79,138,16; #DFF2BF/223,242,191
         rBackgroundColor = basegfx::BColor(0.874,0.949,0.749);
         rForegroundColor = basegfx::BColor(0.31,0.541,0.063);
-        rMessageColor = basegfx::BColor(0.31,0.541,0.063);
         break;
     case InfoBarType::Warning: // orange; #9F6000/159,96,0; #FEEFB3/254,239,179
         rBackgroundColor = basegfx::BColor(0.996,0.937,0.702);
         rForegroundColor = basegfx::BColor(0.623,0.376,0.0);
-        rMessageColor = basegfx::BColor(0.623,0.376,0.0);
         break;
     case InfoBarType::Danger: // red; #D8000C/216,0,12; #FFBABA/255,186,186
         rBackgroundColor = basegfx::BColor(1.0,0.729,0.729);
         rForegroundColor = basegfx::BColor(0.847,0.0,0.047);
-        rMessageColor = basegfx::BColor(0.847,0.0,0.047);
         break;
     }//switch
 
