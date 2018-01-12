@@ -93,8 +93,8 @@ namespace cppcanvas
             const ::Size aSizePixel( rVDev.LogicToPixel( aSizeLogic ) );
 
             o_rMatrix = basegfx::utils::createScaleB2DHomMatrix(
-                aSizePixel.Width() / (double)aSizeLogic.Width(),
-                aSizePixel.Height() / (double)aSizeLogic.Height() );
+                aSizePixel.Width() / static_cast<double>(aSizeLogic.Width()),
+                aSizePixel.Height() / static_cast<double>(aSizeLogic.Height()) );
 
             return o_rMatrix;
         }
@@ -170,10 +170,10 @@ namespace cppcanvas
                     ::basegfx::B2DPolygon aLocalClip(
                         ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRectangle(
-                                    (double)(aLocalClipRect.Left()),
-                                    (double)(aLocalClipRect.Top()),
-                                    (double)(aLocalClipRect.Right()),
-                                    (double)(aLocalClipRect.Bottom()) ) ) );
+                                    static_cast<double>(aLocalClipRect.Left()),
+                                    static_cast<double>(aLocalClipRect.Top()),
+                                    static_cast<double>(aLocalClipRect.Right()),
+                                    static_cast<double>(aLocalClipRect.Bottom()) ) ) );
                     ::basegfx::B2DHomMatrix aTransform;
 
                     if( bOffsetting )
