@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2199726f",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-12T08:16:52Z",
+      "side": 1,
+      "message": "#include \u003costream\u003e missing",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e18e7a26",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-12T08:16:52Z",
+      "side": 1,
+      "message": "probably better to make it LIBO_INTERNAL_ONLY then (which implies C++11)\n(and then, don\u0027t forget the /// @cond INTERNAL wrapper)",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_81a05e92",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-12T08:16:52Z",
+      "side": 1,
+      "message": "this should be a named namespace (so non-inlined definitions emitted by the compiler can be shared across TUs); uno::detail is problematic because it could clash with UNOIDL entities, maybe uno_detail or uno::ns_detail or something like that",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_c1aa5670",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-12T08:16:52Z",
+      "side": 1,
+      "message": "why?",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e1b59ad0",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-12T08:16:52Z",
+      "side": 1,
+      "message": "use\n\n auto const flags \u003d os.setf(std::ios_base::hex);\n ...\n os.setf(flags);\n\nto change back to the original state",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a1ad628a",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-12T08:16:52Z",
+      "side": 1,
+      "message": "as with the other classes\u0027 output operators:\n\n* abstract over std::basic_ostream\u003ccharT, traits\u003e\n\n* probably better put this into css::uno",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_01bb8ec5",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-12T08:16:52Z",
+      "side": 1,
+      "message": "sal_uInt8 is not a (mapping of a) UNO type, there\u0027s no Sequence\u003csal_uInt8\u003e",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_21b092dd",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-12T08:16:52Z",
+      "side": 1,
+      "message": "with two adjacent #endif lines (w/o intervening whitespace) I\u0027d expect to find the two #if lines also adjacent, which is not the case here",
+      "revId": "09aa6cfa82a0c6d742cb202b7af5356b4307c181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
