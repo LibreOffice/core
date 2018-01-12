@@ -449,7 +449,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
     {
         try
         {
-            sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
+            sal_uInt16 nSelected = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() ));
             maSignatureManager.remove(nSelected);
 
             mbSignaturesChanged = true;
@@ -728,7 +728,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
     if( m_pSignaturesLB->FirstSelected() )
     {
-        sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
+        sal_uInt16 nSelected = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() ));
         const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[ nSelected ];
         uno::Reference<security::XCertificate> xCert = getCertificate(rInfo);
 

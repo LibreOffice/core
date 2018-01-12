@@ -430,7 +430,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::getCertificate( const OUS
 
         // Create cert info from issue and serial
         OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
-        chIssuer = PL_strndup( ostr.getStr(), ( int )ostr.getLength() ) ;
+        chIssuer = PL_strndup( ostr.getStr(), static_cast<int>(ostr.getLength()) ) ;
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == nullptr ) {
             PL_strfree( chIssuer ) ;
@@ -547,7 +547,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::createCertificateFromRaw(
 Reference< XCertificate > SecurityEnvironment_NssImpl::createCertificateFromAscii( const OUString& asciiCertificate )
 {
     OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
-    xmlChar* chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), ( int )oscert.getLength() ) ;
+    xmlChar* chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), static_cast<int>(oscert.getLength()) ) ;
     int certSize = xmlSecBase64Decode( chCert, reinterpret_cast<xmlSecByte*>(chCert), xmlStrlen( chCert ) ) ;
     if (certSize > 0)
     {
@@ -723,7 +723,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
             SAL_INFO("xmlsecurity.xmlsec", "Testing usage " << i+1 <<
                      " of " << numUsages << ": " <<
                      arUsages[i].description <<
-                     " (0x" << std::hex << (int) arUsages[i].usage << ")" << std::dec);
+                     " (0x" << std::hex << static_cast<int>(arUsages[i].usage) << ")" << std::dec);
 
             status = CERT_PKIXVerifyCert(const_cast<CERTCertificate *>(cert), arUsages[i].usage,
                                          cvin, cvout, nullptr);
