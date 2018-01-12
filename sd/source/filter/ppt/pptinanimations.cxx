@@ -300,7 +300,7 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
             if( is_random( aNode, aSet, nPresetClass ) )
             {
                 // create a random animation node with the given preset class
-                xNode.set( sd::RandomAnimationNode_createInstance( (sal_Int16)nPresetClass ), UNO_QUERY );
+                xNode.set( sd::RandomAnimationNode_createInstance( static_cast<sal_Int16>(nPresetClass) ), UNO_QUERY );
             }
 
             if( !xNode.is() )
@@ -723,14 +723,14 @@ bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttr
         {
             OUString aString;
             rValue >>= aString;
-            rValue <<= (sal_Int16)aString.toDouble();
+            rValue <<= static_cast<sal_Int16>(aString.toDouble());
             bRet = true;
         }
         else if( rValue.getValueType() == cppu::UnoType<double>::get() )
         {
             double fValue = 0.0;
             rValue >>= fValue;
-            rValue <<= (sal_Int16)fValue;
+            rValue <<= static_cast<sal_Int16>(fValue);
             bRet = true;
         }
     }
@@ -747,10 +747,10 @@ bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttr
             if( aString.getLength() >= 7 && aString[0] == '#' )
             {
                 Color aColor;
-                aColor.SetRed( (sal_uInt8)(lcl_gethex( aString[1] ) * 16 + lcl_gethex( aString[2] )) );
-                aColor.SetGreen( (sal_uInt8)(lcl_gethex( aString[3] ) * 16 + lcl_gethex( aString[4] )) );
-                aColor.SetBlue( (sal_uInt8)(lcl_gethex( aString[5] ) * 16 + lcl_gethex( aString[6] )) );
-                rValue <<= (sal_Int32)aColor.GetColor();
+                aColor.SetRed( static_cast<sal_uInt8>(lcl_gethex( aString[1] ) * 16 + lcl_gethex( aString[2] )) );
+                aColor.SetGreen( static_cast<sal_uInt8>(lcl_gethex( aString[3] ) * 16 + lcl_gethex( aString[4] )) );
+                aColor.SetBlue( static_cast<sal_uInt8>(lcl_gethex( aString[5] ) * 16 + lcl_gethex( aString[6] )) );
+                rValue <<= static_cast<sal_Int32>(aColor.GetColor());
                 bRet = true;
             }
             else if( aString.startsWith( "rgb(" ) )
@@ -758,10 +758,10 @@ bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttr
                 aString = aString.copy( 4, aString.getLength() - 5 );
                 Color aColor;
                 sal_Int32 index = 0;
-                aColor.SetRed( (sal_uInt8)aString.getToken( 0, ',', index ).toInt32() );
-                aColor.SetGreen( (sal_uInt8)aString.getToken( 0, ',', index ).toInt32() );
-                aColor.SetRed( (sal_uInt8)aString.getToken( 0, ',', index ).toInt32() );
-                rValue <<= (sal_Int32)aColor.GetColor();
+                aColor.SetRed( static_cast<sal_uInt8>(aString.getToken( 0, ',', index ).toInt32()) );
+                aColor.SetGreen( static_cast<sal_uInt8>(aString.getToken( 0, ',', index ).toInt32()) );
+                aColor.SetRed( static_cast<sal_uInt8>(aString.getToken( 0, ',', index ).toInt32()) );
+                rValue <<= static_cast<sal_Int32>(aColor.GetColor());
                 bRet = true;
             }
             else if( aString.startsWith( "hsl(" ) )
@@ -845,7 +845,7 @@ bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttr
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= (float)aString.toDouble();
+            rValue <<= static_cast<float>(aString.toDouble());
             bRet = true;
         }
     }
@@ -1215,7 +1215,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
                             case 2: nIterateType = TextAnimationType::BY_LETTER; break;
                             }
                             xIter->setIterateType( nIterateType );
-                            xIter->setIterateInterval( (double)fInterval );
+                            xIter->setIterateInterval( static_cast<double>(fInterval) );
                         }
 
                         nNodes++;
@@ -1398,7 +1398,7 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
                 break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
 
             }
@@ -1530,7 +1530,7 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
             break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -1576,8 +1576,8 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             dump( "rgb(%ld", nA );
             dump( ",%ld", nB );
             dump( ",%ld)", nC );
-            Color aColor( (sal_uInt8)nA, (sal_uInt8)nB, (sal_uInt8)nC );
-            return makeAny( (sal_Int32)aColor.GetRGBColor() );
+            Color aColor( static_cast<sal_uInt8>(nA), static_cast<sal_uInt8>(nB), static_cast<sal_uInt8>(nC) );
+            return makeAny( static_cast<sal_Int32>(aColor.GetRGBColor()) );
         }
     case 1: // hsl
         {
@@ -1594,12 +1594,12 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
     case 2: // index
         {
             Color aColor;
-            mpPPTImport->GetColorFromPalette((sal_uInt16)nA, aColor );
+            mpPPTImport->GetColorFromPalette(static_cast<sal_uInt16>(nA), aColor );
             dump( "index(%ld", nA );
-            dump( " [%ld", (sal_Int32)aColor.GetRed() );
-            dump( ",%ld", (sal_Int32)aColor.GetGreen() );
-            dump( ",%ld])", (sal_Int32)aColor.GetBlue() );
-            return makeAny( (sal_Int32)aColor.GetRGBColor() );
+            dump( " [%ld", static_cast<sal_Int32>(aColor.GetRed()) );
+            dump( ",%ld", static_cast<sal_Int32>(aColor.GetGreen()) );
+            dump( ",%ld])", static_cast<sal_Int32>(aColor.GetBlue()) );
+            return makeAny( static_cast<sal_Int32>(aColor.GetRGBColor()) );
         }
 
     default:
@@ -1677,7 +1677,7 @@ void AnimationImporter::importAnimateColorContainer( const Atom* pAtom, const Re
                 break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -1734,7 +1734,7 @@ void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Refe
                 break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -1811,7 +1811,7 @@ void AnimationImporter::importAnimateContainer( const Atom* pAtom, const Referen
                 }
                 break;
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -1891,7 +1891,7 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
                 break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -1955,7 +1955,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                 break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -2078,7 +2078,7 @@ int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference<
             break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -2127,24 +2127,24 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
                 // 'from' value
                 if( nBits & 2 )
                 {
-                    aPair.First <<= (double)fFromX / 100.0;
-                    aPair.Second <<= (double)fFromY / 100.0;
+                    aPair.First <<= static_cast<double>(fFromX) / 100.0;
+                    aPair.Second <<= static_cast<double>(fFromY) / 100.0;
                     xTransform->setFrom( makeAny( aPair ) );
                 }
 
                 // 'to' value
                 if( nBits & 4 )
                 {
-                    aPair.First <<= (double)fToX / 100.0;
-                    aPair.Second <<= (double)fToY / 100.0;
+                    aPair.First <<= static_cast<double>(fToX) / 100.0;
+                    aPair.Second <<= static_cast<double>(fToY) / 100.0;
                     xTransform->setTo( makeAny( aPair ) );
                 }
 
                 // 'by' value
                 if( nBits & 1 )
                 {
-                    aPair.First <<= (double)fByX / 100.0;
-                    aPair.Second <<= (double)fByY / 100.0;
+                    aPair.First <<= static_cast<double>(fByX) / 100.0;
+                    aPair.Second <<= static_cast<double>(fByY) / 100.0;
 
                     if( nBits & 2 )
                     {
@@ -2183,7 +2183,7 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
                 break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -2222,13 +2222,13 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
                 mrStCtrl.ReadUInt32( nBits ).ReadFloat( fBy ).ReadFloat( fFrom ).ReadFloat( fTo ).ReadUInt32( nU1 );
 
                 if( nBits & 1 )
-                    xTransform->setBy( makeAny( (double) fBy ) );
+                    xTransform->setBy( makeAny( static_cast<double>(fBy) ) );
 
                 if( nBits & 2 )
-                    xTransform->setFrom( makeAny( (double) fFrom ) );
+                    xTransform->setFrom( makeAny( static_cast<double>(fFrom) ) );
 
                 if( nBits & 4 )
-                    xTransform->setTo( makeAny( (double) fTo ) );
+                    xTransform->setTo( makeAny( static_cast<double>(fTo) ) );
 
 #ifdef DBG_ANIM_LOG
                 if( nBits & 1 )
@@ -2251,7 +2251,7 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
                 break;
 
             default:
-                dump( " unknown_atom=\"%ld\"", (sal_Int32)pChildAtom->getType() );
+                dump( " unknown_atom=\"%ld\"", static_cast<sal_Int32>(pChildAtom->getType()) );
                 break;
             }
 
@@ -2313,7 +2313,7 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
             {
                 float fRepeat;
                 mrStCtrl.ReadFloat( fRepeat );
-                xNode->setRepeatCount( (fRepeat < ((float)3.40282346638528860e+38)) ? makeAny( (double)fRepeat ) : makeAny( Timing_INDEFINITE ) );
+                xNode->setRepeatCount( (fRepeat < (float(3.40282346638528860e+38))) ? makeAny( static_cast<double>(fRepeat) ) : makeAny( Timing_INDEFINITE ) );
 
 #ifdef DBG_ANIM_LOG
                 if( (fRepeat < ((float)3.40282346638528860e+38)) )
@@ -2333,7 +2333,7 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
                 float faccelerate;
                 mrStCtrl.ReadFloat( faccelerate );
                 xNode->setAcceleration( faccelerate );
-                dump( " accelerate=\"%g\"", (double)faccelerate );
+                dump( " accelerate=\"%g\"", static_cast<double>(faccelerate) );
             }
             break;
 
@@ -2342,7 +2342,7 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
                 float fdecelerate;
                 mrStCtrl.ReadFloat( fdecelerate );
                 xNode->setDecelerate( fdecelerate );
-                dump( " decelerate=\"%g\"", (double)fdecelerate );
+                dump( " decelerate=\"%g\"", static_cast<double>(fdecelerate) );
             }
             break;
 
@@ -2398,7 +2398,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
             if( pIter->seekToContent() )
             {
                 mrStCtrl.ReadInt32( nTemp );
-                double fTemp = (double)nTemp / 1000.0;
+                double fTemp = static_cast<double>(nTemp) / 1000.0;
                 aKeyTimes[nKeyTime] = fTemp;
 
                 const Atom* pValue = Atom::findNextChildAtom(pIter);
@@ -2550,7 +2550,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
                     {
                         float fFloat;
                         mrStCtrl.ReadFloat( fFloat );
-                        rAny <<= (double)fFloat;
+                        rAny <<= static_cast<double>(fFloat);
 
                         bOk = true;
                     }

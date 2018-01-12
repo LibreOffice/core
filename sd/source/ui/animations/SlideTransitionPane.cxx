@@ -307,7 +307,7 @@ OUString lcl_getSoundFileURL(
         // the first three entries are no actual sounds
         if( nPos >= 3 )
         {
-            DBG_ASSERT( (sal_uInt32)(rListBox->GetEntryCount() - 3) == rSoundList.size(),
+            DBG_ASSERT( static_cast<sal_uInt32>(rListBox->GetEntryCount() - 3) == rSoundList.size(),
                         "Sound list-box is not synchronized to sound list" );
             nPos -= 3;
             if( rSoundList.size() > static_cast<size_t>(nPos) )

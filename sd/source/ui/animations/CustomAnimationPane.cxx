@@ -1158,11 +1158,11 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
 
         // convert absolute time to percentage value
         // This calculation is done in float to avoid some rounding artifacts.
-        float fIterateInterval = (float)pEffect->getIterateInterval();
+        float fIterateInterval = static_cast<float>(pEffect->getIterateInterval());
         if( pEffect->getDuration() )
-            fIterateInterval = (float)(fIterateInterval / pEffect->getDuration() );
+            fIterateInterval = static_cast<float>(fIterateInterval / pEffect->getDuration() );
         fIterateInterval *= 100.0;
-        addValue( pSet, nHandleIterateInterval, makeAny( (double)fIterateInterval ) );
+        addValue( pSet, nHandleIterateInterval, makeAny( static_cast<double>(fIterateInterval) ) );
 
         addValue( pSet, nHandleBegin, makeAny( pEffect->getBegin() ) );
         addValue( pSet, nHandleDuration, makeAny( pEffect->getDuration() ) );
@@ -1196,7 +1196,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         if( nGroupId != -1 )
             pTextGroup = pEffectSequence->findGroup( nGroupId );
 
-        addValue( pSet, nHandleTextGrouping, makeAny( pTextGroup.get() ? pTextGroup->getTextGrouping() : (sal_Int32)-1 ) );
+        addValue( pSet, nHandleTextGrouping, makeAny( pTextGroup.get() ? pTextGroup->getTextGrouping() : sal_Int32(-1) ) );
         addValue( pSet, nHandleAnimateForm, makeAny( pTextGroup.get() == nullptr || pTextGroup->getAnimateForm() ) );
         addValue( pSet, nHandleTextGroupingAuto, makeAny( pTextGroup.get() ? pTextGroup->getTextGroupingAuto() : -1.0 ) );
         addValue( pSet, nHandleTextReverse, makeAny( pTextGroup.get() && pTextGroup->getTextReverse() ) );

@@ -421,13 +421,13 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     **********************************************************************/
 
     // this page is exemplary
-    SdPage* pExample = mrDoc.GetSdPage((sal_uInt16)nExample, PageKind::Standard);
+    SdPage* pExample = mrDoc.GetSdPage(static_cast<sal_uInt16>(nExample), PageKind::Standard);
     SdPage* pPage = mrDoc.AllocSdPage(false);
 
     pPage->SetLayoutName(pExample->GetLayoutName());
 
     // insert (page)
-    mrDoc.InsertPage(pPage, (sal_uInt16)nTarget * 2 + 1);
+    mrDoc.InsertPage(pPage, static_cast<sal_uInt16>(nTarget) * 2 + 1);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
@@ -458,7 +458,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     /**********************************************************************
     |* now the notes page
     \*********************************************************************/
-    pExample = mrDoc.GetSdPage((sal_uInt16)nExample, PageKind::Notes);
+    pExample = mrDoc.GetSdPage(static_cast<sal_uInt16>(nExample), PageKind::Notes);
     SdPage* pNotesPage = mrDoc.AllocSdPage(false);
 
     pNotesPage->SetLayoutName(pExample->GetLayoutName());
@@ -466,7 +466,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     pNotesPage->SetPageKind(PageKind::Notes);
 
     // insert (notes page)
-    mrDoc.InsertPage(pNotesPage, (sal_uInt16)nTarget * 2 + 2);
+    mrDoc.InsertPage(pNotesPage, static_cast<sal_uInt16>(nTarget) * 2 + 2);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
@@ -509,13 +509,13 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aPa
         }
 
         // delete page and notes page
-        sal_uInt16 nAbsPos = (sal_uInt16)nPos * 2 + 1;
+        sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
         SdrPage* pPage = mrDoc.GetPage(nAbsPos);
         if( isRecordingUndo() )
             AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         mrDoc.RemovePage(nAbsPos);
 
-        nAbsPos = (sal_uInt16)nPos * 2 + 1;
+        nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
         pPage = mrDoc.GetPage(nAbsPos);
         if( isRecordingUndo() )
             AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
@@ -639,13 +639,13 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         }
         // delete page and notes page
 
-        sal_uInt16 nAbsPos = (sal_uInt16)nPos * 2 + 1;
+        sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
         SdrPage* pPage = mrDoc.GetPage(nAbsPos);
         if( isRecordingUndo() )
             AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         mrDoc.RemovePage(nAbsPos);
 
-        nAbsPos = (sal_uInt16)nPos * 2 + 1;
+        nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
         pPage = mrDoc.GetPage(nAbsPos);
         if( isRecordingUndo() )
             AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
@@ -690,7 +690,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
 
         if(nPos >= 0)
         {
-            SdPage*pPage = mrDoc.GetSdPage( (sal_uInt16) nPos, PageKind::Standard);
+            SdPage*pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard);
 
             if(pPage && pPage->GetPresObj(PRESOBJ_TEXT))
                 pOutliner->SetDepth( pPara, 0 );
@@ -710,7 +710,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
 
     if( nPos >= 0 )
     {
-        SdPage* pPage = mrDoc.GetSdPage( (sal_uInt16) nPos, PageKind::Standard );
+        SdPage* pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard );
 
         if( pPage )
         {
@@ -867,7 +867,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
     sal_uInt16 nPos = nPosNewOrder;     // don't change nPosNewOrder
     if (nPos == 0)
     {
-        nPos = (sal_uInt16)-1;          // insert before the first page
+        nPos = sal_uInt16(-1);          // insert before the first page
     }
     else
     {
@@ -887,7 +887,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
     mrDoc.MovePages(nPos);
 
     // deselect the pages again
-    sal_uInt16 nPageCount = (sal_uInt16)maSelectedParas.size();
+    sal_uInt16 nPageCount = static_cast<sal_uInt16>(maSelectedParas.size());
     while (nPageCount)
     {
         SdPage* pPage = mrDoc.GetSdPage(nPosNewOrder, PageKind::Standard);
@@ -1219,8 +1219,8 @@ SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
             nPageToSelect++;
     }
 
-    if( nPageToSelect < (sal_uInt32)mrDoc.GetSdPageCount( PageKind::Standard ) )
-        return mrDoc.GetSdPage( (sal_uInt16)nPageToSelect, PageKind::Standard );
+    if( nPageToSelect < static_cast<sal_uInt32>(mrDoc.GetSdPageCount( PageKind::Standard )) )
+        return mrDoc.GetSdPage( static_cast<sal_uInt16>(nPageToSelect), PageKind::Standard );
 
     return nullptr;
 }
@@ -1491,7 +1491,7 @@ void OutlineView::UpdateDocument()
     sal_uInt32 nPage;
     for (nPage = 0; nPage < nPageCount; nPage++)
     {
-        SdPage* pPage = mrDoc.GetSdPage( (sal_uInt16)nPage, PageKind::Standard);
+        SdPage* pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard);
         mrDoc.SetSelected(pPage, false);
 
         mrOutlineViewShell.UpdateTitleObject( pPage, pPara );
@@ -1609,7 +1609,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
                 nPage++;
         }
 
-        long nBulletHeight = (long)mrOutliner.GetLineHeight( pInfo->mnPara );
+        long nBulletHeight = static_cast<long>(mrOutliner.GetLineHeight( pInfo->mnPara ));
         long nFontHeight = 0;
         if ( !rEditEngine.IsFlatMode() )
         {
@@ -1624,13 +1624,13 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
 
         Size aOutSize( 2000, nBulletHeight );
 
-        const float fImageHeight = ((float)aOutSize.Height() * (float)4) / (float)7;
+        const float fImageHeight = (static_cast<float>(aOutSize.Height()) * float(4)) / float(7);
         if (aImageSize.Width() != 0)
         {
-            const float fImageRatio  = (float)aImageSize.Height() / (float)aImageSize.Width();
-            aImageSize.Width() = (long)( fImageRatio * fImageHeight );
+            const float fImageRatio  = static_cast<float>(aImageSize.Height()) / static_cast<float>(aImageSize.Width());
+            aImageSize.Width() = static_cast<long>( fImageRatio * fImageHeight );
         }
-        aImageSize.Height() = (long)fImageHeight;
+        aImageSize.Height() = static_cast<long>(fImageHeight);
 
         Point aImagePos( pInfo->mrStartPos );
         aImagePos.X() += aOutSize.Width() - aImageSize.Width() - aOffset.Width() ;

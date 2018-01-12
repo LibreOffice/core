@@ -63,7 +63,7 @@ void ConfigurationAccess::Initialize (
         Sequence<Any> aCreationArguments(comphelper::InitAnyPropertySequence(
         {
             {"nodepath", makeAny(rsRootName)},
-            {"depth", makeAny((sal_Int32)-1)}
+            {"depth", makeAny(sal_Int32(-1))}
         }));
 
         OUString sAccessService;

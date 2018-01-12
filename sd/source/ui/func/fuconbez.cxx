@@ -263,7 +263,7 @@ void FuConstructBezierPolygon::Activate()
         break;
     }
 
-    mpView->SetCurrentObj((sal_uInt16)eKind);
+    mpView->SetCurrentObj(static_cast<sal_uInt16>(eKind));
 
     FuConstruct::Activate();
 }

@@ -63,7 +63,7 @@ sal_Int32 BufferedStreamSocket::write( const void* pBuffer, sal_uInt32 n )
 #else
             pBuffer,
 #endif
-            (size_t) n, 0 );
+            static_cast<size_t>(n), 0 );
 }
 
 void BufferedStreamSocket::close()

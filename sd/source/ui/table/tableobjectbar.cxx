@@ -167,10 +167,10 @@ void TableObjectBar::Execute( SfxRequest& rReq )
                 else
                     nSlotId = SID_TABLE_INSERT_COL;
 
-                rReq.AppendItem(SfxInt16Item((sal_uInt16)nSlotId, nCount));
+                rReq.AppendItem(SfxInt16Item(static_cast<sal_uInt16>(nSlotId), nCount));
                 rReq.AppendItem(SfxBoolItem(SID_TABLE_PARAM_INSERT_AFTER, bInsertAfter));
 
-                rReq.SetSlot( (sal_uInt16)nSlotId );
+                rReq.SetSlot( static_cast<sal_uInt16>(nSlotId) );
             }
             }
 

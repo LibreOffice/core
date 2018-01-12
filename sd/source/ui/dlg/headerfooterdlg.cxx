@@ -326,7 +326,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
             int nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
-                SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PageKind::Standard );
+                SdPage* pPage = mpDoc->GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard );
                 change( pUndoGroup, pPage, aNewSettings );
             }
         }
@@ -367,7 +367,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         int nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
-            SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PageKind::Notes );
+            SdPage* pPage = mpDoc->GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Notes );
 
             change( pUndoGroup, pPage, aNewSettings );
         }
@@ -727,8 +727,8 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
 
     // build complete transformation by adding view transformation from
     // logic page coordinates to local pixel coordinates
-    const double fScaleX((double)maOutRect.getWidth() / (double)maPageSize.Width());
-    const double fScaleY((double)maOutRect.getHeight() / (double)maPageSize.Height());
+    const double fScaleX(static_cast<double>(maOutRect.getWidth()) / static_cast<double>(maPageSize.Width()));
+    const double fScaleY(static_cast<double>(maOutRect.getHeight()) / static_cast<double>(maPageSize.Height()));
     aObjectTransform.scale(fScaleX, fScaleY);
     aObjectTransform.translate(maOutRect.TopLeft().X(), maOutRect.TopLeft().Y());
 
@@ -774,12 +774,12 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     if( maPageSize.Width() > maPageSize.Height() )
     {
         nWidth = maOutRect.GetWidth();
-        nHeight = maPageSize.Width() == 0 ? 0 : long( (double)(nWidth * maPageSize.Height()) / (double)maPageSize.Width() );
+        nHeight = maPageSize.Width() == 0 ? 0 : long( static_cast<double>(nWidth * maPageSize.Height()) / static_cast<double>(maPageSize.Width()) );
     }
     else
     {
         nHeight = maOutRect.GetHeight();
-        nWidth = maPageSize.Height() == 0 ? 0 : long( (double)(nHeight * maPageSize.Width()) / (double)maPageSize.Height() );
+        nWidth = maPageSize.Height() == 0 ? 0 : long( static_cast<double>(nHeight * maPageSize.Width()) / static_cast<double>(maPageSize.Height()) );
     }
 
     maOutRect.Left() += (maOutRect.GetWidth() - nWidth) >> 1;

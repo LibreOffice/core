@@ -1035,10 +1035,10 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= GetPage()->GetLowerBorder();
         break;
     case WID_PAGE_WIDTH:
-        aAny <<= (sal_Int32)( GetPage()->GetSize().getWidth() );
+        aAny <<= static_cast<sal_Int32>( GetPage()->GetSize().getWidth() );
         break;
     case WID_PAGE_HEIGHT:
-        aAny <<= (sal_Int32)( GetPage()->GetSize().getHeight() );
+        aAny <<= static_cast<sal_Int32>( GetPage()->GetSize().getHeight() );
         break;
     case WID_PAGE_ORIENT:
         aAny <<= view::PaperOrientation(
@@ -1050,7 +1050,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= GetPage()->GetFadeEffect();
         break;
     case WID_PAGE_CHANGE:
-        aAny <<= (sal_Int32)( GetPage()->GetPresChange() );
+        aAny <<= static_cast<sal_Int32>( GetPage()->GetPresChange() );
         break;
     case WID_PAGE_SPEED:
         {
@@ -1060,7 +1060,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         }
         break;
     case WID_PAGE_LAYOUT:
-        aAny <<= (sal_Int16)( GetPage()->GetAutoLayout() );
+        aAny <<= static_cast<sal_Int16>( GetPage()->GetAutoLayout() );
         break;
     case WID_PAGE_NUMBER:
         {
@@ -1069,7 +1069,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             if(nPageNumber > 0)
             {
                 // for all other pages calculate the number
-                aAny <<= (sal_Int16)((sal_uInt16)((nPageNumber-1)>>1) + 1);
+                aAny <<= static_cast<sal_Int16>(static_cast<sal_uInt16>((nPageNumber-1)>>1) + 1);
             }
             else
             {
@@ -1078,7 +1078,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         }
         break;
     case WID_PAGE_DURATION:
-        aAny <<= (sal_Int32)( GetPage()->GetTime() + .5 );
+        aAny <<= static_cast<sal_Int32>( GetPage()->GetTime() + .5 );
         break;
     case WID_PAGE_HIGHRESDURATION:
         aAny <<= GetPage()->GetTime();
@@ -1109,7 +1109,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                 {
                     sal_uInt16 nPgNum = 0;
                     sal_uInt16 nPageCount = pDoc->GetSdPageCount( PageKind::Standard );
-                    sal_uInt16 nPageNumber = (sal_uInt16)( ( GetPage()->GetPageNum() - 1 ) >> 1 );
+                    sal_uInt16 nPageNumber = static_cast<sal_uInt16>( ( GetPage()->GetPageNum() - 1 ) >> 1 );
                     while( nPgNum < nPageCount )
                     {
                         pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PageKind::Standard ), nPgNum == nPageNumber );
@@ -1150,7 +1150,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                 {
                     sal_uInt16 nPgNum = 0;
                     sal_uInt16 nPageCount = pDoc->GetSdPageCount( PageKind::Standard );
-                    sal_uInt16 nPageNumber = (sal_uInt16)( ( GetPage()->GetPageNum() - 1 ) >> 1 );
+                    sal_uInt16 nPageNumber = static_cast<sal_uInt16>( ( GetPage()->GetPageNum() - 1 ) >> 1 );
                     while( nPgNum < nPageCount )
                     {
                         pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PageKind::Standard ), nPgNum == nPageNumber );

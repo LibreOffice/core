@@ -731,7 +731,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
 {
     AccessibleSlideSorterObject* pChild = nullptr;
 
-    if (nIndex>=0 && (sal_uInt32)nIndex<maPageObjects.size())
+    if (nIndex>=0 && static_cast<sal_uInt32>(nIndex)<maPageObjects.size())
     {
         if (maPageObjects[nIndex] == nullptr)
         {
@@ -756,7 +756,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
     }
     else
     {
-        OSL_ASSERT(nIndex>=0 && (sal_uInt32)nIndex<maPageObjects.size());
+        OSL_ASSERT(nIndex>=0 && static_cast<sal_uInt32>(nIndex)<maPageObjects.size());
     }
 
     return pChild;

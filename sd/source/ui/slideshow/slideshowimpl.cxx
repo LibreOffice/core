@@ -150,7 +150,7 @@ private:
     bool getSlideAPI( sal_Int32 nSlideNumber, Reference< XDrawPage >& xSlide, Reference< XAnimationNode >& xAnimNode );
     sal_Int32 findSlideIndex( sal_Int32 nSlideNumber ) const;
 
-    bool isValidIndex( sal_Int32 nIndex ) const { return (nIndex >= 0) && (nIndex < (sal_Int32)maSlideNumbers.size()); }
+    bool isValidIndex( sal_Int32 nIndex ) const { return (nIndex >= 0) && (nIndex < static_cast<sal_Int32>(maSlideNumbers.size())); }
     bool isValidSlideNumber( sal_Int32 nSlideNumber ) const { return (nSlideNumber >= 0) && (nSlideNumber < mnSlideCount); }
 
 private:
@@ -1107,7 +1107,7 @@ void SlideshowImpl::onFirstPaint()
     }
 
     SolarMutexGuard aSolarGuard;
-    maUpdateTimer.SetTimeout( (sal_uLong)100 );
+    maUpdateTimer.SetTimeout( sal_uLong(100) );
     maUpdateTimer.Start();
 }
 
@@ -1978,12 +1978,12 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
             {
                 if( mpSlideController->isVisibleSlideNumber( nPageNumber ) )
                 {
-                    SdPage* pPage = mpDoc->GetSdPage((sal_uInt16)nPageNumber, PageKind::Standard);
+                    SdPage* pPage = mpDoc->GetSdPage(static_cast<sal_uInt16>(nPageNumber), PageKind::Standard);
                     if (pPage)
                     {
-                        pPageMenu->InsertItem( (sal_uInt16)(CM_SLIDES + nPageNumber), pPage->GetName() );
+                        pPageMenu->InsertItem( static_cast<sal_uInt16>(CM_SLIDES + nPageNumber), pPage->GetName() );
                         if( nPageNumber == nCurrentSlideNumber )
-                            pPageMenu->CheckItem( (sal_uInt16)(CM_SLIDES + nPageNumber) );
+                            pPageMenu->CheckItem( static_cast<sal_uInt16>(CM_SLIDES + nPageNumber) );
                     }
                 }
             }
@@ -2244,7 +2244,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
                 for( nSlide = 0, nFirstVisibleSlide = -1;
                     ( nSlide < nSlideCount ) && ( -1 == nFirstVisibleSlide ); nSlide++ )
                 {
-                    SdPage* pTestSlide = mpDoc->GetSdPage( (sal_uInt16)nSlide, PageKind::Standard );
+                    SdPage* pTestSlide = mpDoc->GetSdPage( static_cast<sal_uInt16>(nSlide), PageKind::Standard );
 
                     if( pTestSlide->GetName() == rPresSlide )
                     {
@@ -2263,7 +2263,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 
             for( sal_Int32 i = 0; i < nSlideCount; i++ )
             {
-                bool bVisible = ! mpDoc->GetSdPage( (sal_uInt16)i, PageKind::Standard )->IsExcluded();
+                bool bVisible = ! mpDoc->GetSdPage( static_cast<sal_uInt16>(i), PageKind::Standard )->IsExcluded();
                 if( bVisible || (eMode == AnimationSlideController::ALL) )
                     mpSlideController->insertSlideNumber( i, bVisible );
             }
@@ -2276,11 +2276,11 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
             {
                 sal_Int32 nSlide;
                 for( nSlide = 0; nSlide < nSlideCount; nSlide++ )
-                    if( rPresSlide == mpDoc->GetSdPage( (sal_uInt16) nSlide, PageKind::Standard )->GetName() )
+                    if( rPresSlide == mpDoc->GetSdPage( static_cast<sal_uInt16>(nSlide), PageKind::Standard )->GetName() )
                         break;
 
                 if( nSlide < nSlideCount )
-                    mpSlideController->insertSlideNumber( (sal_uInt16) nSlide );
+                    mpSlideController->insertSlideNumber( static_cast<sal_uInt16>(nSlide) );
             }
 
             sal_Int32 nSlideIndex = 0;

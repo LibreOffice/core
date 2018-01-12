@@ -108,7 +108,7 @@ static SdPage* GetCurrentPage( sd::ViewShell const * pViewSh, EditFieldInfo cons
                 nPgNum++;
         }
 
-        pPage = pViewSh->GetDoc()->GetSdPage( (sal_uInt16)nPgNum, PageKind::Standard );
+        pPage = pViewSh->GetDoc()->GetSdPage( static_cast<sal_uInt16>(nPgNum), PageKind::Standard );
     }
     else
     {
@@ -246,7 +246,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
             {
                 nPgNum = (pPage->GetPageNum() - 1) / 2 + 1;
             }
-            aRepresentation = pDoc->CreatePageNumValue((sal_uInt16)nPgNum);
+            aRepresentation = pDoc->CreatePageNumValue(static_cast<sal_uInt16>(nPgNum));
         }
         else
             aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_NUMBER);
@@ -489,7 +489,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     if( nMetric == (FieldUnit)0xffff )
         nMetric = GetFieldUnit();
 
-    pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nMetric ) );
+    pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast<sal_uInt16>(nMetric) ) );
 
     // TP_OPTIONS_MISC:
     SdOptionsMiscItem aSdOptionsMiscItem( pOptions, pFrameView );
@@ -497,7 +497,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     {
         aSdOptionsMiscItem.GetOptionsMisc().SetSummationOfParagraphs( pDoc->IsSummationOfParagraphs() );
         aSdOptionsMiscItem.GetOptionsMisc().SetPrinterIndependentLayout (
-            (sal_uInt16)pDoc->GetPrinterIndependentLayout());
+            static_cast<sal_uInt16>(pDoc->GetPrinterIndependentLayout()));
     }
     pRet->Put( aSdOptionsMiscItem );
 

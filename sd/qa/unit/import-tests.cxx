@@ -1325,9 +1325,9 @@ void SdImportTest::testTdf93124()
 
     uno::Sequence< beans::PropertyValue > aFilterData(2);
     aFilterData[0].Name = "PixelWidth";
-    aFilterData[0].Value <<= (sal_Int32)320;
+    aFilterData[0].Value <<= sal_Int32(320);
     aFilterData[1].Name = "PixelHeight";
-    aFilterData[1].Value <<= (sal_Int32)180;
+    aFilterData[1].Value <<= sal_Int32(180);
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -1401,9 +1401,9 @@ void SdImportTest::testTdf99729()
 
         uno::Sequence< beans::PropertyValue > aFilterData(2);
         aFilterData[0].Name = "PixelWidth";
-        aFilterData[0].Value <<= (sal_Int32)320;
+        aFilterData[0].Value <<= sal_Int32(320);
         aFilterData[1].Name = "PixelHeight";
-        aFilterData[1].Value <<= (sal_Int32)240;
+        aFilterData[1].Value <<= sal_Int32(240);
 
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();

@@ -98,7 +98,7 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
 
     aBuffer.append( "slide_preview\n" );
 
-    aBuffer.append( (sal_Int32)aSlideNumber );
+    aBuffer.append( static_cast<sal_Int32>(aSlideNumber) );
     aBuffer.append( "\n" );
 
     aBuffer.append( aEncodedShortString.getStr() );
@@ -183,7 +183,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 
     aBuffer.append( "slide_notes\n" );
 
-    aBuffer.append( (sal_Int32) aSlideNumber );
+    aBuffer.append( static_cast<sal_Int32>(aSlideNumber) );
     aBuffer.append( "\n" );
 
     aBuffer.append( "<html><body>" );

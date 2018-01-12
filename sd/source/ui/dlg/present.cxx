@@ -209,7 +209,7 @@ sal_Int32 SdStartPresentationDlg::InsertDisplayEntry(const rtl::OUString &aName,
 {
     maLBMonitor->InsertEntry( aName );
     const sal_uInt32 nEntryIndex = maLBMonitor->GetEntryCount() - 1;
-    maLBMonitor->SetEntryData( nEntryIndex, reinterpret_cast<void*>((sal_IntPtr)nDisplay) );
+    maLBMonitor->SetEntryData( nEntryIndex, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nDisplay)) );
 
     return nEntryIndex;
 }
@@ -308,7 +308,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 
     sal_Int32 nPos = maLBMonitor->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, (sal_Int32)reinterpret_cast<sal_IntPtr>(maLBMonitor->GetEntryData(nPos))) );
+        rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(maLBMonitor->GetEntryData(nPos)))) );
 
     nPos = aLbCustomshow->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )

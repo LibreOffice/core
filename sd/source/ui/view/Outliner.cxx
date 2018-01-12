@@ -164,7 +164,7 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       mpParaObj(nullptr),
       meStartViewMode(PageKind::Standard),
       meStartEditMode(EditMode::Page),
-      mnStartPageIndex((sal_uInt16)-1),
+      mnStartPageIndex(sal_uInt16(-1)),
       mpStartEditedObject(nullptr),
       maStartSelection(),
       mpSearchItem(nullptr),
@@ -354,7 +354,7 @@ void SdOutliner::EndSpelling()
     mpWeakViewShell.reset();
     mpView = nullptr;
     mpWindow = nullptr;
-    mnStartPageIndex = (sal_uInt16) -1;
+    mnStartPageIndex = sal_uInt16(-1);
 }
 
 bool SdOutliner::SpellNextDocument()
@@ -500,7 +500,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
                 if (nCommand == SvxSearchCmd::FIND)
                     bEndOfSearch = false;
             }
-            mnStartPageIndex = (sal_uInt16)-1;
+            mnStartPageIndex = sal_uInt16(-1);
         }
 
         SfxChildWindow *pChildWin =
@@ -630,7 +630,7 @@ bool SdOutliner::SearchAndReplaceAll()
         if( !mbStringFound  )
         {
             RestoreStartPosition ();
-            mnStartPageIndex = (sal_uInt16)-1;
+            mnStartPageIndex = sal_uInt16(-1);
             return true;
         }
 
@@ -642,7 +642,7 @@ bool SdOutliner::SearchAndReplaceAll()
             if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::LibreOfficeKit::isActive() && bFoundMatch && aSelections.size() == 1)
             {
                 // Without this, RememberStartPosition() will think it already has a remembered position.
-                mnStartPageIndex = (sal_uInt16)-1;
+                mnStartPageIndex = sal_uInt16(-1);
 
                 RememberStartPosition();
 
@@ -698,7 +698,7 @@ bool SdOutliner::SearchAndReplaceAll()
         rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangles.getStr());
     }
 
-    mnStartPageIndex = (sal_uInt16)-1;
+    mnStartPageIndex = sal_uInt16(-1);
 
     return bRet;
 }
@@ -956,7 +956,7 @@ void SdOutliner::RememberStartPosition()
         return;
     }
 
-    if ( mnStartPageIndex != (sal_uInt16) -1 )
+    if ( mnStartPageIndex != sal_uInt16(-1) )
         return;
 
     if( nullptr != dynamic_cast< const sd::DrawViewShell *>( pViewShell.get() ))
@@ -996,7 +996,7 @@ void SdOutliner::RememberStartPosition()
     }
     else
     {
-        mnStartPageIndex = (sal_uInt16)-1;
+        mnStartPageIndex = sal_uInt16(-1);
     }
 }
 
@@ -1005,7 +1005,7 @@ void SdOutliner::RestoreStartPosition()
     bool bRestore = true;
     // Take a negative start page index as inidicator that restoring the
     // start position is not requested.
-    if (mnStartPageIndex == (sal_uInt16)-1 )
+    if (mnStartPageIndex == sal_uInt16(-1) )
         bRestore = false;
     // Don't restore when the view shell is not valid.
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
@@ -1506,7 +1506,7 @@ SdrObject* SdOutliner::SetObject (
     const sd::outliner::IteratorPosition& rPosition)
 {
     SetViewMode (rPosition.mePageKind);
-    SetPage (rPosition.meEditMode, (sal_uInt16)rPosition.mnPageIndex);
+    SetPage (rPosition.meEditMode, static_cast<sal_uInt16>(rPosition.mnPageIndex));
     mnText = rPosition.mnText;
     return rPosition.mxObject.get();
 }

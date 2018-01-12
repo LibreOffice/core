@@ -511,10 +511,10 @@ VclPtr<SvxRuler> DrawViewShell::CreateHRuler (::sd::Window* pWin)
         GetViewFrame()->GetBindings(), aWBits);
 
     // Metric ...
-    sal_uInt16 nMetric = (sal_uInt16)GetDoc()->GetUIUnit();
+    sal_uInt16 nMetric = static_cast<sal_uInt16>(GetDoc()->GetUIUnit());
 
     if( nMetric == 0xffff )
-        nMetric = (sal_uInt16)GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit();
+        nMetric = static_cast<sal_uInt16>(GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit());
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
@@ -542,10 +542,10 @@ VclPtr<SvxRuler> DrawViewShell::CreateVRuler(::sd::Window* pWin)
         GetViewFrame()->GetBindings(), aWBits);
 
     // Metric same as HRuler, use document setting
-    sal_uInt16 nMetric = (sal_uInt16)GetDoc()->GetUIUnit();
+    sal_uInt16 nMetric = static_cast<sal_uInt16>(GetDoc()->GetUIUnit());
 
     if( nMetric == 0xffff )
-        nMetric = (sal_uInt16)GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit();
+        nMetric = static_cast<sal_uInt16>(GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit());
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
@@ -595,7 +595,7 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
         - maTabControl->GetPosPixel().X() ;
 
     Size aTabSize = maTabControl->GetSizePixel();
-    aTabSize.Width() = std::min(pTab->GetSplitSize(), (long)(nMax-1));
+    aTabSize.Width() = std::min(pTab->GetSplitSize(), static_cast<long>(nMax-1));
 
     maTabControl->SetSizePixel(aTabSize);
 
@@ -625,11 +625,11 @@ SdPage* DrawViewShell::getCurrentPage() const
 
     if (meEditMode == EditMode::Page)
     {
-        return GetDoc()->GetSdPage((sal_uInt16)nCurrentPage, mePageKind);
+        return GetDoc()->GetSdPage(static_cast<sal_uInt16>(nCurrentPage), mePageKind);
     }
     else // EditMode::MasterPage
     {
-        return GetDoc()->GetMasterSdPage((sal_uInt16)nCurrentPage, mePageKind);
+        return GetDoc()->GetMasterSdPage(static_cast<sal_uInt16>(nCurrentPage), mePageKind);
     }
 }
 

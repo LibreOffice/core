@@ -536,7 +536,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         else
         {
             std::unique_ptr<SvxZoomItem> pZoomItem;
-            sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
+            sal_uInt16 nZoom = static_cast<sal_uInt16>(GetActiveWindow()->GetZoom());
 
             if( mbZoomOnPage )
                 pZoomItem.reset(new SvxZoomItem( SvxZoomType::WHOLEPAGE, nZoom ));
@@ -566,7 +566,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         else
         {
             sd::Window * pActiveWindow = GetActiveWindow();
-            SvxZoomSliderItem aZoomItem( (sal_uInt16) pActiveWindow->GetZoom(), (sal_uInt16)pActiveWindow->GetMinZoom(), (sal_uInt16)pActiveWindow->GetMaxZoom() ) ;
+            SvxZoomSliderItem aZoomItem( static_cast<sal_uInt16>(pActiveWindow->GetZoom()), static_cast<sal_uInt16>(pActiveWindow->GetMinZoom()), static_cast<sal_uInt16>(pActiveWindow->GetMaxZoom()) ) ;
 
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
             if( pPageView )
@@ -575,10 +575,10 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 Size aPageSize = pPageView->GetPage()->GetSize();
 
                 aPagePos.X() += aPageSize.Width()  / 2;
-                aPageSize.Width() = (long) (aPageSize.Width() * 1.03);
+                aPageSize.Width() = static_cast<long>(aPageSize.Width() * 1.03);
 
                 aPagePos.Y() += aPageSize.Height() / 2;
-                aPageSize.Height() = (long) (aPageSize.Height() * 1.03);
+                aPageSize.Height() = static_cast<long>(aPageSize.Height() * 1.03);
                 aPagePos.Y() -= aPageSize.Height() / 2;
 
                 aPagePos.X() -= aPageSize.Width()  / 2;

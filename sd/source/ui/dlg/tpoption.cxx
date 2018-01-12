@@ -67,9 +67,9 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
     aOptsItem.GetOptionsSnap().SetOrtho( pCbxOrtho->IsChecked() );
     aOptsItem.GetOptionsSnap().SetBigOrtho( pCbxBigOrtho->IsChecked() );
     aOptsItem.GetOptionsSnap().SetRotate( pCbxRotate->IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapArea( (sal_Int16) pMtrFldSnapArea->GetValue() );
-    aOptsItem.GetOptionsSnap().SetAngle( (sal_Int16) pMtrFldAngle->GetValue() );
-    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( (sal_Int16) pMtrFldBezAngle->GetValue() );
+    aOptsItem.GetOptionsSnap().SetSnapArea( static_cast<sal_Int16>(pMtrFldSnapArea->GetValue()) );
+    aOptsItem.GetOptionsSnap().SetAngle( static_cast<sal_Int16>(pMtrFldAngle->GetValue()) );
+    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( static_cast<sal_Int16>(pMtrFldBezAngle->GetValue()) );
 
     rAttrs->Put( aOptsItem );
 
@@ -327,7 +327,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     {
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
-        FieldUnit eFUnit = (FieldUnit)(long)pItem->GetValue();
+        FieldUnit eFUnit = (FieldUnit)static_cast<long>(pItem->GetValue());
 
         if( eFUnit != m_pMtrFldOriginalWidth->GetUnit() )
         {
@@ -417,7 +417,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
     const sal_Int32 nMPos = m_pLbMetric->GetSelectedEntryPos();
     if ( m_pLbMetric->IsValueChangedFromSaved() )
     {
-        sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nMPos ));
+        sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nMPos )));
         rAttrs->Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ), nFieldUnit ) );
         bModified = true;
     }
@@ -427,7 +427,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
         MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWh );
-        SfxUInt16Item aDef( nWh,(sal_uInt16)GetCoreValue( *m_pMtrFldTabstop, eUnit ) );
+        SfxUInt16Item aDef( nWh,static_cast<sal_uInt16>(GetCoreValue( *m_pMtrFldTabstop, eUnit )) );
         rAttrs->Put( aDef );
         bModified = true;
     }
@@ -478,7 +478,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     if ( rAttrs->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich ));
-        long nFieldUnit = (long)rItem.GetValue();
+        long nFieldUnit = static_cast<long>(rItem.GetValue());
 
         for ( sal_Int32 i = 0; i < m_pLbMetric->GetEntryCount(); ++i )
         {
@@ -590,7 +590,7 @@ bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return false;
 
-    rX = (long) aTmp.toInt32();
+    rX = static_cast<long>(aTmp.toInt32());
     if( rX == 0 )
         return false;
 
@@ -598,7 +598,7 @@ bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return false;
 
-    rY = (long) aTmp.toInt32();
+    rY = static_cast<long>(aTmp.toInt32());
     return rY != 0;
 }
 

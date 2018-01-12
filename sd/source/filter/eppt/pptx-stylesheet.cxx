@@ -243,21 +243,21 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
             {
                 const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
                 if ( pDesc )
-                    nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+                    nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) * pDesc->Scaling + 0.5 );
             }
         }
         else
         {
-            if ( rCharLevel.mnFontHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+            if ( rCharLevel.mnFontHeight > static_cast<sal_uInt16>( static_cast<double>(-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
             {
                 const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
                 if ( pDesc )
-                     nLineSpacing = (sal_Int16)( 100.0 * pDesc->Scaling + 0.5 );
+                     nLineSpacing = static_cast<sal_Int16>( 100.0 * pDesc->Scaling + 0.5 );
                 else
                     nLineSpacing = 100;
             }
             else
-                nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
+                nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) / 4.40972 );
         }
         rLev.mnLineFeed = nLineSpacing;
     }
@@ -294,11 +294,11 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
                 if ( i )
                     aParagraphObj.ImplGetNumberingLevel( pBuProv, i, false, false );
                 rLevel.mnTextOfs = aParagraphObj.nTextOfs;
-                rLevel.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
+                rLevel.mnBulletOfs = static_cast<sal_uInt16>(aParagraphObj.nBulletOfs);
                 rLevel.mnBulletChar = aParagraphObj.cBulletId;
                 FontCollectionEntry aFontDescEntry( aParagraphObj.aFontDesc.Name, aParagraphObj.aFontDesc.Family,
                                                         aParagraphObj.aFontDesc.Pitch, aParagraphObj.aFontDesc.CharSet );
-                rLevel.mnBulletFont = (sal_uInt16)rFontCollection.GetId( aFontDescEntry );
+                rLevel.mnBulletFont = static_cast<sal_uInt16>(rFontCollection.GetId( aFontDescEntry ));
                 rLevel.mnBulletHeight = aParagraphObj.nBulletRealSize;
                 rLevel.mnBulletColor = aParagraphObj.nBulletColor;
 

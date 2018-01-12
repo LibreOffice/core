@@ -437,20 +437,20 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
             if(!aTmp.isEmpty())
             {
                 aTmp = aTmp.replaceFirst("%", "");
-                mnCompression = (sal_Int16)aTmp.toInt32();
+                mnCompression = static_cast<sal_Int16>(aTmp.toInt32());
             }
         }
         else if ( pParams->Name == "Width" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
-            mnWidthPixel = (sal_uInt16)temp;
+            mnWidthPixel = static_cast<sal_uInt16>(temp);
         }
         else if ( pParams->Name == "UseButtonSet" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
-            mnButtonThema = (sal_Int16)temp;
+            mnButtonThema = static_cast<sal_Int16>(temp);
         }
         else if ( pParams->Name == "IsExportNotes" )
         {
@@ -599,9 +599,9 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     // calculate image sizes
     SdPage* pPage = mpDoc->GetSdPage(0, PageKind::Standard);
     Size aTmpSize( pPage->GetSize() );
-    double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
+    double dRatio=static_cast<double>(aTmpSize.Width())/aTmpSize.Height();
 
-    mnHeightPixel = (sal_uInt16)(mnWidthPixel/dRatio);
+    mnHeightPixel = static_cast<sal_uInt16>(mnWidthPixel/dRatio);
 
     // we come up with a destination...
 
@@ -978,13 +978,13 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 
         Sequence< PropertyValue > aFilterData(((meFormat==FORMAT_JPG)&&(mnCompression != -1))? 3 : 2);
         aFilterData[0].Name = "PixelWidth";
-        aFilterData[0].Value <<= (sal_Int32)(bThumbnail ? PUB_THUMBNAIL_WIDTH : mnWidthPixel );
+        aFilterData[0].Value <<= static_cast<sal_Int32>(bThumbnail ? PUB_THUMBNAIL_WIDTH : mnWidthPixel );
         aFilterData[1].Name = "PixelHeight";
-        aFilterData[1].Value <<= (sal_Int32)(bThumbnail ? PUB_THUMBNAIL_HEIGHT : mnHeightPixel);
+        aFilterData[1].Value <<= static_cast<sal_Int32>(bThumbnail ? PUB_THUMBNAIL_HEIGHT : mnHeightPixel);
         if((meFormat==FORMAT_JPG)&&(mnCompression != -1))
         {
             aFilterData[2].Name = "Quality";
-            aFilterData[2].Value <<= (sal_Int32)mnCompression;
+            aFilterData[2].Value <<= static_cast<sal_Int32>(mnCompression);
         }
 
         Sequence< PropertyValue > aDescriptor( 3 );
@@ -1335,7 +1335,7 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
         if(pParagraph == nullptr)
             continue;
 
-        const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth(nIndex);
+        const sal_Int16 nDepth = static_cast<sal_uInt16>(pOutliner->GetDepth(nIndex));
         OUString aParaText = ParagraphToHTMLString(pOutliner, nIndex, rBackgroundColor);
 
         if (aParaText.isEmpty())
@@ -1696,11 +1696,11 @@ bool HtmlExport::CreateHtmlForPresPages()
                 // origin of ordinates
                 aRect.Move(-pPage->GetLeftBorder(), -pPage->GetUpperBorder());
 
-                double fLogicToPixel = ((double)mnWidthPixel) / nPageWidth;
-                aRect.Left()   = (long)(aRect.Left() * fLogicToPixel);
-                aRect.Top()    = (long)(aRect.Top() * fLogicToPixel);
-                aRect.Right()  = (long)(aRect.Right() * fLogicToPixel);
-                aRect.Bottom() = (long)(aRect.Bottom() * fLogicToPixel);
+                double fLogicToPixel = static_cast<double>(mnWidthPixel) / nPageWidth;
+                aRect.Left()   = static_cast<long>(aRect.Left() * fLogicToPixel);
+                aRect.Top()    = static_cast<long>(aRect.Top() * fLogicToPixel);
+                aRect.Right()  = static_cast<long>(aRect.Right() * fLogicToPixel);
+                aRect.Bottom() = static_cast<long>(aRect.Bottom() * fLogicToPixel);
                 long nRadius = aRect.GetWidth() / 2;
 
                 /**
@@ -1746,10 +1746,10 @@ bool HtmlExport::CreateHtmlForPresPages()
                                 // conversion into pixel coordinates
                                 aArea.Move(aLogPos.X() - pPage->GetLeftBorder(),
                                            aLogPos.Y() - pPage->GetUpperBorder());
-                                aArea.Left()   = (long)(aArea.Left() * fLogicToPixel);
-                                aArea.Top()    = (long)(aArea.Top() * fLogicToPixel);
-                                aArea.Right()  = (long)(aArea.Right() * fLogicToPixel);
-                                aArea.Bottom() = (long)(aArea.Bottom() * fLogicToPixel);
+                                aArea.Left()   = static_cast<long>(aArea.Left() * fLogicToPixel);
+                                aArea.Top()    = static_cast<long>(aArea.Top() * fLogicToPixel);
+                                aArea.Right()  = static_cast<long>(aArea.Right() * fLogicToPixel);
+                                aArea.Bottom() = static_cast<long>(aArea.Bottom() * fLogicToPixel);
 
                                 aStr.append(CreateHTMLRectArea(aArea, aURL));
                             }
@@ -1761,12 +1761,12 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                  GetCenter(false));
                                 aCenter += Point(aLogPos.X() - pPage->GetLeftBorder(),
                                                  aLogPos.Y() - pPage->GetUpperBorder());
-                                aCenter.X() = (long)(aCenter.X() * fLogicToPixel);
-                                aCenter.Y() = (long)(aCenter.Y() * fLogicToPixel);
+                                aCenter.X() = static_cast<long>(aCenter.X() * fLogicToPixel);
+                                aCenter.Y() = static_cast<long>(aCenter.Y() * fLogicToPixel);
 
                                 sal_uLong nCircleRadius = static_cast<IMapCircleObject*>(pArea)->
                                                  GetRadius(false);
-                                nCircleRadius = (sal_uLong)(nCircleRadius * fLogicToPixel);
+                                nCircleRadius = static_cast<sal_uLong>(nCircleRadius * fLogicToPixel);
                                 aStr.append(CreateHTMLCircleArea(nCircleRadius,
                                                             aCenter.X(), aCenter.Y(),
                                                             aURL));
@@ -1835,7 +1835,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                             else
                                 nPage = nSdPage - 1;
 
-                            aHRef = CreatePageURL( (sal_uInt16) nPage);
+                            aHRef = CreatePageURL( static_cast<sal_uInt16>(nPage));
                         }
                         break;
 
@@ -1847,7 +1847,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                             else
                                 nPage = nSdPage + 1;
 
-                            aHRef = CreatePageURL( (sal_uInt16) nPage);
+                            aHRef = CreatePageURL( static_cast<sal_uInt16>(nPage));
                         }
                         break;
 
@@ -2353,7 +2353,7 @@ bool HtmlExport::CreateFrames()
     if(mbNotes)
     {
         aStr.append("  <frameset rows=\"42,");
-        aStr.append(OUString::number((int)((double)mnWidthPixel * 0.75) + 16));
+        aStr.append(OUString::number(static_cast<int>(static_cast<double>(mnWidthPixel) * 0.75) + 16));
         aStr.append(",*\">\r\n");
     }
     else
@@ -2805,8 +2805,8 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
             // origin of ordinates
             aPnt.Move(aShift.Width(), aShift.Height());
 
-            aPnt.X() = (long)(aPnt.X() * fFactor);
-            aPnt.Y() = (long)(aPnt.Y() * fFactor);
+            aPnt.X() = static_cast<long>(aPnt.X() * fFactor);
+            aPnt.Y() = static_cast<long>(aPnt.Y() * fFactor);
             aStr.append(OUString::number(aPnt.X()) + "," + OUString::number(aPnt.Y()));
 
             if (nPoint < nNoOfPoints - 1)
@@ -2838,7 +2838,7 @@ OUString HtmlExport::StringToHTMLString( const OUString& rString )
 {
     SvMemoryStream aMemStm;
     HTMLOutFuncs::Out_String( aMemStm, rString, RTL_TEXTENCODING_UTF8 );
-    aMemStm.WriteChar( (char) 0 );
+    aMemStm.WriteChar( char(0) );
     sal_Int32 nLength = strlen(static_cast<char const *>(aMemStm.GetData()));
     return OUString( static_cast<char const *>(aMemStm.GetData()), nLength, RTL_TEXTENCODING_UTF8 );
 }
@@ -2892,7 +2892,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
     if( nErr != ERRCODE_NONE )
     {
         ErrorHandler::HandleError( nErr );
-        return (bool) nErr;
+        return static_cast<bool>(nErr);
     }
 
     OUString aScript(aScriptBuf.makeStringAndClear());

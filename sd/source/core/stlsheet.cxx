@@ -537,7 +537,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
             const SvxBulletItem& rBItem = pCurSet->Get(EE_PARA_BULLET);
             double fBulletFraction = double(rBItem.GetWidth()) / nOldHeight;
             SvxBulletItem aNewBItem(rBItem);
-            aNewBItem.SetWidth((sal_uInt32)(fBulletFraction * nNewHeight));
+            aNewBItem.SetWidth(static_cast<sal_uInt32>(fBulletFraction * nNewHeight));
             rSet.Put(aNewBItem);
         }
 
@@ -548,7 +548,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
             SvxLRSpaceItem aNewLRItem(rLRItem);
             aNewLRItem.SetTextLeft(fIndentFraction * nNewHeight);
             double fFirstIndentFraction = double(rLRItem.GetTextFirstLineOfst()) / nOldHeight;
-            aNewLRItem.SetTextFirstLineOfst((short)(fFirstIndentFraction * nNewHeight));
+            aNewLRItem.SetTextFirstLineOfst(static_cast<short>(fFirstIndentFraction * nNewHeight));
             rSet.Put(aNewLRItem);
         }
 
@@ -557,9 +557,9 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
             const SvxULSpaceItem& rULItem = pCurSet->Get(EE_PARA_ULSPACE);
             SvxULSpaceItem aNewULItem(rULItem);
             double fLowerFraction = double(rULItem.GetLower()) / nOldHeight;
-            aNewULItem.SetLower((sal_uInt16)(fLowerFraction * nNewHeight));
+            aNewULItem.SetLower(static_cast<sal_uInt16>(fLowerFraction * nNewHeight));
             double fUpperFraction = double(rULItem.GetUpper()) / nOldHeight;
-            aNewULItem.SetUpper((sal_uInt16)(fUpperFraction * nNewHeight));
+            aNewULItem.SetUpper(static_cast<sal_uInt16>(fUpperFraction * nNewHeight));
             rSet.Put(aNewULItem);
         }
     }
@@ -1105,7 +1105,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
         {
             sal_Int32 nValue = 0;
             aAny >>= nValue;
-            aAny <<= (sal_Int16)nValue;
+            aAny <<= static_cast<sal_Int16>(nValue);
         }
         else
         {
@@ -1190,7 +1190,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
             case XATTR_LINESTART:
             case XATTR_LINEDASH:
                 {
-                    const NameOrIndex* pItem = rStyleSet.GetItem<NameOrIndex>((sal_uInt16)pEntry->nWID);
+                    const NameOrIndex* pItem = rStyleSet.GetItem<NameOrIndex>(static_cast<sal_uInt16>(pEntry->nWID));
                     if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
                         eState = PropertyState_DEFAULT_VALUE;
                 }
@@ -1294,7 +1294,7 @@ void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase const * pStyleS
     {
         OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " ");
 
-        for( sal_uInt16 n = (sal_uInt16)(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
+        for( sal_uInt16 n = static_cast<sal_uInt16>(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
         {
             OUString aName( sStyleName + OUString::number(n) );
 

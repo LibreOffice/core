@@ -131,7 +131,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             if(SlideShow::IsRunning(GetViewShellBase()) && rReq.GetArgs())
             {
                 const SfxUInt32Item* pWhatPage = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE);
-                SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber((sal_Int32)((pWhatPage->GetValue()-1)>>1));
+                SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber(static_cast<sal_Int32>((pWhatPage->GetValue()-1)>>1));
             }
             else
             {
@@ -147,7 +147,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     const SfxUInt32Item* pWhatPage = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE);
                     const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
 
-                    sal_Int32 nWhatPage = (sal_Int32)pWhatPage->GetValue ();
+                    sal_Int32 nWhatPage = static_cast<sal_Int32>(pWhatPage->GetValue ());
                     PageKind nWhatKind = (PageKind)pWhatKind->GetValue ();
                     if (! (nWhatKind >= PageKind::Standard && nWhatKind <= PageKind::Handout))
                     {
@@ -168,7 +168,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                             break;
                         }
 
-                        nSelectedPage = (short) nWhatPage;
+                        nSelectedPage = static_cast<short>(nWhatPage);
                         mePageKind    = nWhatKind;
                     }
                 }
@@ -216,7 +216,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                 if(pWhatLayer)
                 {
-                    nCurPage = (short)pWhatLayer->GetValue();
+                    nCurPage = static_cast<short>(pWhatLayer->GetValue());
                     bCurPageValid = true;
                 }
             }
@@ -1023,8 +1023,8 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 {
     SdrPageView* pPV;
     Point   aMPos = GetActiveWindow()->PixelToLogic(maMousePos);
-    sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic(
-        Size(FuPoor::HITPIX,0)).Width();
+    sal_uInt16  nHitLog = static_cast<sal_uInt16>(GetActiveWindow()->PixelToLogic(
+        Size(FuPoor::HITPIX,0)).Width());
     sal_uInt16  nHelpLine;
 
     if ( mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )

@@ -1019,7 +1019,7 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, bool bDimPrevious )
     Any aColor;
 
     if( bDimPrevious )
-        aColor <<= (sal_Int32)COL_LIGHTGRAY;
+        aColor <<= static_cast<sal_Int32>(COL_LIGHTGRAY);
 
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
@@ -1146,7 +1146,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
         std::vector< CustomAnimationEffectPtr >::iterator aTempIter( aEffects.begin() );
         std::vector< CustomAnimationEffectPtr >::iterator aTempEnd( aEffects.end() );
 
-        if( nNewPos == (sal_Int32)aEffectVector.size() )
+        if( nNewPos == static_cast<sal_Int32>(aEffectVector.size()) )
         {
             while( aTempIter != aTempEnd )
             {

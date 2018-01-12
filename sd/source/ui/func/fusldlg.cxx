@@ -68,7 +68,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
     for( nPage = mpDoc->GetSdPageCount( PageKind::Standard ) - 1; nPage >= 0; nPage-- )
     {
-        pPage = mpDoc->GetSdPage( (sal_uInt16) nPage, PageKind::Standard );
+        pPage = mpDoc->GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard );
         OUString aStr( pPage->GetName() );
 
         if ( aStr.isEmpty() )

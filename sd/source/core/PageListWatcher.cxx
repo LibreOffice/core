@@ -87,7 +87,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
     {
         case PageKind::Standard:
         {
-            if( nPgNum < (sal_uInt32)maPageVectorStandard.size() )
+            if( nPgNum < static_cast<sal_uInt32>(maPageVectorStandard.size()) )
                 pRetval = maPageVectorStandard[nPgNum];
             else
             {
@@ -98,7 +98,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
         }
         case PageKind::Notes:
         {
-            if( nPgNum < (sal_uInt32)maPageVectorNotes.size() )
+            if( nPgNum < static_cast<sal_uInt32>(maPageVectorNotes.size()) )
                 pRetval = maPageVectorNotes[nPgNum];
             else
             {
@@ -177,12 +177,12 @@ sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount()
 
 sal_uInt32 ImpDrawPageListWatcher::ImpGetPageCount() const
 {
-    return (sal_uInt32)mrModel.GetPageCount();
+    return static_cast<sal_uInt32>(mrModel.GetPageCount());
 }
 
 SdPage* ImpDrawPageListWatcher::ImpGetPage(sal_uInt32 nIndex) const
 {
-    return const_cast<SdPage*>(static_cast<const SdPage*>(mrModel.GetPage((sal_uInt16)nIndex)));
+    return const_cast<SdPage*>(static_cast<const SdPage*>(mrModel.GetPage(static_cast<sal_uInt16>(nIndex))));
 }
 
 ImpDrawPageListWatcher::ImpDrawPageListWatcher(const SdrModel& rModel)
@@ -196,12 +196,12 @@ ImpDrawPageListWatcher::~ImpDrawPageListWatcher()
 
 sal_uInt32 ImpMasterPageListWatcher::ImpGetPageCount() const
 {
-    return (sal_uInt32)mrModel.GetMasterPageCount();
+    return static_cast<sal_uInt32>(mrModel.GetMasterPageCount());
 }
 
 SdPage* ImpMasterPageListWatcher::ImpGetPage(sal_uInt32 nIndex) const
 {
-    return const_cast<SdPage*>(static_cast<const SdPage*>(mrModel.GetMasterPage((sal_uInt16)nIndex)));
+    return const_cast<SdPage*>(static_cast<const SdPage*>(mrModel.GetMasterPage(static_cast<sal_uInt16>(nIndex))));
 }
 
 ImpMasterPageListWatcher::ImpMasterPageListWatcher(const SdrModel& rModel)

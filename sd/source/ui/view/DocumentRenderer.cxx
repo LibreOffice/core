@@ -1776,8 +1776,8 @@ private:
             const Size aPageSize (rHandoutPage.GetSize());
             const Size aPrintSize (rInfo.mpPrinter->GetOutputSize());
 
-            const double fHorz = (double) aPrintSize.Width()    / aPageSize.Width();
-            const double fVert = (double) aPrintSize.Height() / aPageSize.Height();
+            const double fHorz = static_cast<double>(aPrintSize.Width())    / aPageSize.Width();
+            const double fVert = static_cast<double>(aPrintSize.Height()) / aPageSize.Height();
 
             Fraction    aFract;
             if ( fHorz < fVert )
@@ -1904,8 +1904,8 @@ private:
 
             if (mpOptions->IsPageSize())
             {
-                const double fHorz ((double) rInfo.maPrintSize.Width()  / aPageSize.Width());
-                const double fVert ((double) rInfo.maPrintSize.Height() / aPageSize.Height());
+                const double fHorz (static_cast<double>(rInfo.maPrintSize.Width())  / aPageSize.Width());
+                const double fVert (static_cast<double>(rInfo.maPrintSize.Height()) / aPageSize.Height());
 
                 Fraction aFract;
                 if (fHorz < fVert)
@@ -1974,18 +1974,18 @@ private:
         else
             aPrintSize_2.Height() >>= 1;
 
-        const double fPageWH = (double) aPageSize_2.Width() / aPageSize_2.Height();
-        const double fPrintWH = (double) aPrintSize_2.Width() / aPrintSize_2.Height();
+        const double fPageWH = static_cast<double>(aPageSize_2.Width()) / aPageSize_2.Height();
+        const double fPrintWH = static_cast<double>(aPrintSize_2.Width()) / aPrintSize_2.Height();
 
         if( fPageWH < fPrintWH )
         {
-            aPageSize_2.Width() = (long) ( aPrintSize_2.Height() * fPageWH );
+            aPageSize_2.Width() = static_cast<long>( aPrintSize_2.Height() * fPageWH );
             aPageSize_2.Height()= aPrintSize_2.Height();
         }
         else
         {
             aPageSize_2.Width() = aPrintSize_2.Width();
-            aPageSize_2.Height() = (long) ( aPrintSize_2.Width() / fPageWH );
+            aPageSize_2.Height() = static_cast<long>( aPrintSize_2.Width() / fPageWH );
         }
 
         MapMode aMap (rInfo.maMap);
@@ -2033,7 +2033,7 @@ private:
             sal_uInt32 nFirstIndex = 0, nLastIndex = aPageVector.size() - 1;
 
             if( aPageVector.size() & 1 )
-                aPairVector.emplace_back( (sal_uInt16) 65535, aPageVector[ nFirstIndex++ ] );
+                aPairVector.emplace_back( sal_uInt16(65535), aPageVector[ nFirstIndex++ ] );
             else
                 aPairVector.emplace_back( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] );
 

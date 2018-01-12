@@ -296,7 +296,7 @@ void LayoutToolbarMenu::SelectHdl(void const * pControl)
     {
         aArgs = Sequence< PropertyValue >(1);
         aArgs[0].Name = "WhatLayout";
-        aArgs[0].Value <<= (sal_Int32)eLayout;
+        aArgs[0].Value <<= static_cast<sal_Int32>(eLayout);
     }
     else if( mbInsertPage )
     {

@@ -76,9 +76,9 @@ void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (nId == mnPage)
     {
-        aSet.Put (SfxAllEnumItem((sal_uInt16)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_PRESENTATION));
-        aSet.Put (SfxAllEnumItem((sal_uInt16)SID_PAPER_START, PAPER_A0));
-        aSet.Put (SfxAllEnumItem((sal_uInt16)SID_PAPER_END, PAPER_E));
+        aSet.Put (SfxAllEnumItem(sal_uInt16(SID_ENUM_PAGE_MODE), SVX_PAGE_MODE_PRESENTATION));
+        aSet.Put (SfxAllEnumItem(sal_uInt16(SID_PAPER_START), PAPER_A0));
+        aSet.Put (SfxAllEnumItem(sal_uInt16(SID_PAPER_END), PAPER_E));
         rPage.PageCreated(aSet);
     }
     else if (nId == mnArea)

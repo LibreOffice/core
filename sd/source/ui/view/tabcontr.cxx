@@ -196,9 +196,9 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
             sal_Int32 nPageId = GetPageId( aPos ) - 1;
 
-            if( ( nPageId >= 0 ) && pDoc->GetPage( (sal_uInt16)nPageId ) )
+            if( ( nPageId >= 0 ) && pDoc->GetPage( static_cast<sal_uInt16>(nPageId) ) )
             {
-                nRet = pDrViewSh->AcceptDrop( rEvt, *this, nullptr, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
+                nRet = pDrViewSh->AcceptDrop( rEvt, *this, nullptr, static_cast<sal_uInt16>(nPageId), SDRLAYER_NOTFOUND );
                 SwitchPage( aPos );
             }
         }
@@ -245,14 +245,14 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     // Adapt target page id when necessary, i.e. page copy
                     // has been inserted in front of the target page.
                     sal_uInt16 nPageNum = nPageId;
-                    if ((nPageNumOfCopy <= nPageNum) && (nPageNum != (sal_uInt16)-1))
+                    if ((nPageNumOfCopy <= nPageNum) && (nPageNum != sal_uInt16(-1)))
                         nPageNum += 1;
                     if (pDoc->MovePages(nPageNum))
                     {
                         // 3. Switch to the copy that has been moved to its
                         // final destination.  Use an asynchron slot call to
                         // be executed after the still pending ones.
-                        if (nPageNumOfCopy >= nPageNum || (nPageNum == (sal_uInt16)-1))
+                        if (nPageNumOfCopy >= nPageNum || (nPageNum == sal_uInt16(-1)))
                             nPageNum += 1;
                         SetCurPageId (GetPageId(nPageNum));
                         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
@@ -271,9 +271,9 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         sal_Int32 nPageId = GetPageId( aPos ) - 1;
 
-        if( ( nPageId >= 0 ) && pDoc->GetPage( (sal_uInt16)nPageId ) )
+        if( ( nPageId >= 0 ) && pDoc->GetPage( static_cast<sal_uInt16>(nPageId) ) )
         {
-            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, nullptr, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
+            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, nullptr, static_cast<sal_uInt16>(nPageId), SDRLAYER_NOTFOUND );
         }
     }
 

@@ -84,21 +84,21 @@ void ViewShell::UpdateScrollBars()
 {
     if (mpHorizontalScrollBar.get() != nullptr)
     {
-        long nW = (long)(mpContentWindow->GetVisibleWidth() * 32000);
-        long nX = (long)(mpContentWindow->GetVisibleX() * 32000);
+        long nW = static_cast<long>(mpContentWindow->GetVisibleWidth() * 32000);
+        long nX = static_cast<long>(mpContentWindow->GetVisibleX() * 32000);
         mpHorizontalScrollBar->SetVisibleSize(nW);
         mpHorizontalScrollBar->SetThumbPos(nX);
         nW = 32000 - nW;
-        long nLine = (long) (mpContentWindow->GetScrlLineWidth() * nW);
-        long nPage = (long) (mpContentWindow->GetScrlPageWidth() * nW);
+        long nLine = static_cast<long>(mpContentWindow->GetScrlLineWidth() * nW);
+        long nPage = static_cast<long>(mpContentWindow->GetScrlPageWidth() * nW);
         mpHorizontalScrollBar->SetLineSize(nLine);
         mpHorizontalScrollBar->SetPageSize(nPage);
     }
 
     if (mpVerticalScrollBar.get() != nullptr)
     {
-        long nH = (long)(mpContentWindow->GetVisibleHeight() * 32000);
-        long nY = (long)(mpContentWindow->GetVisibleY() * 32000);
+        long nH = static_cast<long>(mpContentWindow->GetVisibleHeight() * 32000);
+        long nY = static_cast<long>(mpContentWindow->GetVisibleY() * 32000);
 
         if(IsPageFlipMode()) // ie in zoom mode where no panning
         {
@@ -117,8 +117,8 @@ void ViewShell::UpdateScrollBars()
             mpVerticalScrollBar->SetVisibleSize(nH);
             mpVerticalScrollBar->SetThumbPos(nY);
             nH = 32000 - nH;
-            long nLine = (long) (mpContentWindow->GetScrlLineHeight() * nH);
-            long nPage = (long) (mpContentWindow->GetScrlPageHeight() * nH);
+            long nLine = static_cast<long>(mpContentWindow->GetScrlLineHeight() * nH);
+            long nPage = static_cast<long>(mpContentWindow->GetScrlPageHeight() * nH);
             mpVerticalScrollBar->SetLineSize(nLine);
             mpVerticalScrollBar->SetPageSize(nPage);
         }
@@ -148,7 +148,7 @@ void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
     if (nDelta != 0)
     {
-        double fX = (double) pHScroll->GetThumbPos() / pHScroll->GetRange().Len();
+        double fX = static_cast<double>(pHScroll->GetThumbPos()) / pHScroll->GetRange().Len();
 
         // scroll all windows of the column
         ::sd::View* pView = GetView();
@@ -202,13 +202,13 @@ void ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     {
         SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
         sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) >> 1;
-        sal_uInt16 nNewPage = (sal_uInt16)pVScroll->GetThumbPos()/256;
+        sal_uInt16 nNewPage = static_cast<sal_uInt16>(pVScroll->GetThumbPos())/256;
         if( nCurPage != nNewPage )
             static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
     }
     else //panning mode
     {
-        double fY = (double) pVScroll->GetThumbPos() / pVScroll->GetRange().Len();
+        double fY = static_cast<double>(pVScroll->GetThumbPos()) / pVScroll->GetRange().Len();
 
         ::sd::View* pView = GetView();
         OutlinerView* pOLV = nullptr;
@@ -292,9 +292,9 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
         long nNewThumb = mpVerticalScrollBar->GetThumbPos() + nScrollY;
         mpVerticalScrollBar->SetThumbPos(nNewThumb);
     }
-    double  fX = (double) mpHorizontalScrollBar->GetThumbPos() /
+    double  fX = static_cast<double>(mpHorizontalScrollBar->GetThumbPos()) /
                             mpHorizontalScrollBar->GetRange().Len();
-    double  fY = (double) mpVerticalScrollBar->GetThumbPos() /
+    double  fY = static_cast<double>(mpVerticalScrollBar->GetThumbPos()) /
                             mpVerticalScrollBar->GetRange().Len();
 
     GetActiveWindow()->SetVisibleXY(fX, fY);
@@ -632,7 +632,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
  */
 void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 {
-    long nZoom = (long)((double) rZoomX * 100);
+    long nZoom = static_cast<long>(static_cast<double>(rZoomX) * 100);
     SetZoom(nZoom);
 }
 

@@ -372,7 +372,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     basegfx::B3DRange aVolume(aObjVol);
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
-    ::tools::Rectangle a3DRect(0, 0, (long)fW, (long)fH);
+    ::tools::Rectangle a3DRect(0, 0, static_cast<long>(fW), static_cast<long>(fH));
     E3dScene* pScene = new E3dScene;
 
     // copied code from E3dView::InitScene

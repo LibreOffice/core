@@ -759,7 +759,7 @@ void SdExportTest::testTextRotation()
     auto it = aCustomShapeGeometry.find("TextRotateAngle");
     CPPUNIT_ASSERT(it != aCustomShapeGeometry.end());
 
-    CPPUNIT_ASSERT_EQUAL((double)(-90), aCustomShapeGeometry["TextRotateAngle"].get<double>());
+    CPPUNIT_ASSERT_EQUAL(double(-90), aCustomShapeGeometry["TextRotateAngle"].get<double>());
 
     xDocShRef->DoClose();
 }

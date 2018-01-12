@@ -71,7 +71,7 @@ void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEnt
             if( rValue >>= aLocale )
                 mpDrawModel->SetLanguage(
                     SdUnoGetLanguage( aLocale ),
-                    (sal_uInt16)pEntry->mnHandle );
+                    static_cast<sal_uInt16>(pEntry->mnHandle) );
         }
     }
     SvxUnoDrawPool::putAny( pPool, pEntry, rValue );

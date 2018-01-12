@@ -74,7 +74,7 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
         {
             m_pLbCustomShows->InsertEntry( pCustomShow->GetName() );
         }
-        m_pLbCustomShows->SelectEntryPos( (sal_Int32)nPosToSelect );
+        m_pLbCustomShows->SelectEntryPos( static_cast<sal_Int32>(nPosToSelect) );
         pCustomShowList->Seek( nPosToSelect );
     }
 
@@ -317,7 +317,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
          nPage < rDoc.GetSdPageCount( PageKind::Standard );
          nPage++ )
     {
-        SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) nPage, PageKind::Standard );
+        SdPage* pPage = rDoc.GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard );
         OUString aStr( pPage->GetName() );
         m_pLbPages->InsertEntry( aStr );
     }
@@ -418,8 +418,8 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
                                             nullptr, false, nPosCP );
 
                 m_pLbCustomPages->Select( pEntry );
-                SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) m_pLbPages->
-                                    GetSelectedEntryPos( i ), PageKind::Standard );
+                SdPage* pPage = rDoc.GetSdPage( static_cast<sal_uInt16>(m_pLbPages->
+                                    GetSelectedEntryPos( i )), PageKind::Standard );
                 pEntry->SetUserData( pPage );
 
                 if( nPosCP != TREELIST_APPEND )

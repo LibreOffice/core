@@ -102,7 +102,7 @@ void SdPresLayoutDlg::Reset()
     }
     DBG_ASSERT(nName < mnLayoutCount, "Layout not found");
 
-    m_pVS->SelectItem((sal_uInt16)nName + 1);  // Indices of the ValueSets start at 1
+    m_pVS->SelectItem(static_cast<sal_uInt16>(nName) + 1);  // Indices of the ValueSets start at 1
 
 }
 
@@ -159,7 +159,7 @@ void SdPresLayoutDlg::FillValueSet()
             maLayoutNames.push_back(aLayoutName);
 
             Image aBitmap(mpDocSh->GetPagePreviewBitmap(pMaster));
-            m_pVS->InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
+            m_pVS->InsertItem(static_cast<sal_uInt16>(maLayoutNames.size()), aBitmap, aLayoutName);
         }
     }
 
@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
                             maLayoutNames.push_back(aLayoutName);
 
                             Image aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster));
-                            m_pVS->InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
+                            m_pVS->InsertItem(static_cast<sal_uInt16>(maLayoutNames.size()), aBitmap, aLayoutName);
                         }
                     }
                 }
@@ -272,14 +272,14 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
             {
                 // empty layout
                 maLayoutNames.push_back(maStrNone);
-                m_pVS->InsertItem( (sal_uInt16) maLayoutNames.size(),
+                m_pVS->InsertItem( static_cast<sal_uInt16>(maLayoutNames.size()),
                         Image(BMP_FOIL_NONE), maStrNone );
             }
 
             if (!bCancel)
             {
                 // select template
-                m_pVS->SelectItem( (sal_uInt16) maLayoutNames.size() );
+                m_pVS->SelectItem( static_cast<sal_uInt16>(maLayoutNames.size()) );
             }
         }
     }

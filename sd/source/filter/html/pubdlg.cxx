@@ -60,7 +60,7 @@ using namespace com::sun::star::beans;
 #define NOOFPAGES 6
 
 //ID for the config-data with the HTML-settings
-const sal_uInt16 nMagic = (sal_uInt16)0x1977;
+const sal_uInt16 nMagic = sal_uInt16(0x1977);
 
 // Key for the soffice.ini
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
@@ -773,7 +773,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     else
         ePublishMode  = PUBLISH_HTML;
 
-    aValue.Value <<= (sal_Int32) ePublishMode;
+    aValue.Value <<= static_cast<sal_Int32>(ePublishMode);
     aProps.push_back( aValue );
 
     aValue.Name = "IsExportContentsPage";
@@ -811,7 +811,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     if( pPage2_Kiosk->IsChecked() && pPage2_ChgAuto->IsChecked() )
     {
         aValue.Name = "KioskSlideDuration";
-        aValue.Value <<= (sal_uInt32)pPage2_Duration->GetTime().GetMSFromTime() / 1000;
+        aValue.Value <<= static_cast<sal_uInt32>(pPage2_Duration->GetTime().GetMSFromTime()) / 1000;
         aProps.push_back( aValue );
 
         aValue.Name = "KioskEndless";
@@ -887,7 +887,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     if( !pPage5_TextOnly->IsChecked() )
     {
         aValue.Name = "UseButtonSet";
-        aValue.Value <<= (sal_Int32)(pPage5_Buttons->GetSelectItemId() - 1);
+        aValue.Value <<= static_cast<sal_Int32>(pPage5_Buttons->GetSelectItemId() - 1);
         aProps.push_back( aValue );
     }
 
@@ -895,23 +895,23 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     if( pPage6_User->IsChecked() )
     {
         aValue.Name = "BackColor";
-        aValue.Value <<= (sal_Int32)m_aBackColor.GetColor();
+        aValue.Value <<= static_cast<sal_Int32>(m_aBackColor.GetColor());
         aProps.push_back( aValue );
 
         aValue.Name = "TextColor";
-        aValue.Value <<= (sal_Int32)m_aTextColor.GetColor();
+        aValue.Value <<= static_cast<sal_Int32>(m_aTextColor.GetColor());
         aProps.push_back( aValue );
 
         aValue.Name = "LinkColor";
-        aValue.Value <<= (sal_Int32)m_aLinkColor.GetColor();
+        aValue.Value <<= static_cast<sal_Int32>(m_aLinkColor.GetColor());
         aProps.push_back( aValue );
 
         aValue.Name = "VLinkColor";
-        aValue.Value <<= (sal_Int32)m_aVLinkColor.GetColor();
+        aValue.Value <<= static_cast<sal_Int32>(m_aVLinkColor.GetColor());
         aProps.push_back( aValue );
 
         aValue.Name = "ALinkColor";
-        aValue.Value <<= (sal_Int32)m_aALinkColor.GetColor();
+        aValue.Value <<= static_cast<sal_Int32>(m_aALinkColor.GetColor());
         aProps.push_back( aValue );
     }
 
@@ -1341,7 +1341,7 @@ void SdPublishingDlg::LoadPreviewButtons()
         {
             if( mpButtonSet->getPreview( nSet, aButtonNames, aImage ) )
             {
-                pPage5_Buttons->InsertItem( (sal_uInt16)nSet+1, aImage );
+                pPage5_Buttons->InsertItem( static_cast<sal_uInt16>(nSet)+1, aImage );
                 if( nHeight < aImage.GetSizePixel().Height() )
                     nHeight = aImage.GetSizePixel().Height();
             }
@@ -1493,7 +1493,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aURL = pPage2_URL->GetText();
 
     pDesign->m_bAutoSlide = pPage2_ChgAuto->IsChecked();
-    pDesign->m_nSlideDuration = (sal_uInt32)pPage2_Duration->GetTime().GetMSFromTime() / 1000;
+    pDesign->m_nSlideDuration = static_cast<sal_uInt32>(pPage2_Duration->GetTime().GetMSFromTime()) / 1000;
     pDesign->m_bEndless = pPage2_Endless->IsChecked();
 }
 
@@ -1571,7 +1571,7 @@ bool SdPublishingDlg::Save()
     {
         SdIOCompat aIO(*pStream, StreamMode::WRITE, 0);
 
-        sal_uInt16 nDesigns = (sal_uInt16) m_aDesignList.size();
+        sal_uInt16 nDesigns = static_cast<sal_uInt16>(m_aDesignList.size());
         pStream->WriteUInt16( nDesigns );
 
         for( sal_uInt16 nIndex = 0;

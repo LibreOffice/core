@@ -340,7 +340,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         OUString aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
                         // determine number, mind the blank between name and number
                         OUString aNumStr(aName.copy(aOutlineStr.getLength() + 1));
-                        sal_uInt16 nLevel = (sal_uInt16)aNumStr.toInt32();
+                        sal_uInt16 nLevel = static_cast<sal_uInt16>(aNumStr.toInt32());
                         switch (nLevel)
                         {
                             case 1: ePO = PO_OUTLINE_1; break;

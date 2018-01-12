@@ -143,7 +143,7 @@ void ScrollBarManager::PlaceHorizontalScrollBar (const ::tools::Rectangle& aAvai
 
     // Restore the relative position.
     mpHorizontalScrollBar->SetThumbPos(
-        (long)(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
+        static_cast<long>(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
 }
 
 void ScrollBarManager::PlaceVerticalScrollBar (const ::tools::Rectangle& aArea)
@@ -278,8 +278,8 @@ void ScrollBarManager::SetWindowOrigin (
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     Size aViewSize (pWindow->GetViewSize());
     Point aOrigin (
-        (long int) (mnHorizontalPosition * aViewSize.Width()),
-        (long int) (mnVerticalPosition * aViewSize.Height()));
+        static_cast<long int>(mnHorizontalPosition * aViewSize.Width()),
+        static_cast<long int>(mnVerticalPosition * aViewSize.Height()));
 
     pWindow->SetWinViewPos (aOrigin);
     pWindow->UpdateMapMode ();
@@ -448,14 +448,14 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
         if (rMouseWindowPosition.X() < maScrollBorder.Width()
             && aWindowArea.Left() > aViewPixelArea.Left())
         {
-            nDx = -1 + (int)(mnHorizontalScrollFactor
+            nDx = -1 + static_cast<int>(mnHorizontalScrollFactor
                 * (rMouseWindowPosition.X() - maScrollBorder.Width()));
         }
 
         if (rMouseWindowPosition.X() >= (aWindowSize.Width() - maScrollBorder.Width())
             && aWindowArea.Right() < aViewPixelArea.Right())
         {
-            nDx = 1 + (int)(mnHorizontalScrollFactor
+            nDx = 1 + static_cast<int>(mnHorizontalScrollFactor
                 * (rMouseWindowPosition.X() - aWindowSize.Width()
                     + maScrollBorder.Width()));
         }
@@ -467,14 +467,14 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
         if (rMouseWindowPosition.Y() < maScrollBorder.Height()
             && aWindowArea.Top() > aViewPixelArea.Top())
         {
-            nDy = -1 + (int)(mnVerticalScrollFactor
+            nDy = -1 + static_cast<int>(mnVerticalScrollFactor
                 * (rMouseWindowPosition.Y() - maScrollBorder.Height()));
         }
 
         if (rMouseWindowPosition.Y() >= (aWindowSize.Height() - maScrollBorder.Height())
             && aWindowArea.Bottom() < aViewPixelArea.Bottom())
         {
-            nDy = 1 + (int)(mnVerticalScrollFactor
+            nDy = 1 + static_cast<int>(mnVerticalScrollFactor
                 * (rMouseWindowPosition.Y() - aWindowSize.Height()
                     + maScrollBorder.Height()));
         }

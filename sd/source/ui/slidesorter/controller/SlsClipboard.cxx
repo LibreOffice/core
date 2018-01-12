@@ -307,7 +307,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
         const std::vector<OUString> &rBookmarkList = pClipTransferable->GetPageBookmarks();
         const SolarMutexGuard aGuard;
 
-        nInsertPageCount = (sal_uInt16) rBookmarkList.size();
+        nInsertPageCount = static_cast<sal_uInt16>(rBookmarkList.size());
         rModel.GetDocument()->InsertBookmarkAsPage(
             rBookmarkList,
             nullptr,

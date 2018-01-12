@@ -794,7 +794,7 @@ bool PPTWriter::ImplCreateDocument()
                         {
                             nStartSlide = pIter - maSlideNameList.begin() + 1;
                             nFlags |= 4;
-                            nEndSlide = (sal_uInt16)mnPages;
+                            nEndSlide = static_cast<sal_uInt16>(mnPages);
                         }
                     }
                 }

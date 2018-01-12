@@ -1547,7 +1547,7 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
             if( pPage )
             {
                 const Size aPageSize( pPage->GetSize() );
-                aPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix((double)aPageSize.Width(), (double)aPageSize.Height()));
+                aPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(static_cast<double>(aPageSize.Width()), static_cast<double>(aPageSize.Height())));
             }
 
             const ::tools::Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
@@ -1575,8 +1575,8 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
         if(!aRange.isEmpty())
         {
             aBoundRect = ::tools::Rectangle(
-                    (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
-                    (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
+                    static_cast<sal_Int32>(floor(aRange.getMinX())), static_cast<sal_Int32>(floor(aRange.getMinY())),
+                    static_cast<sal_Int32>(ceil(aRange.getMaxX())), static_cast<sal_Int32>(ceil(aRange.getMaxY())));
         }
 
         const Point aCenter( aBoundRect.Center() );
@@ -1588,7 +1588,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
         {
             const Size aPageSize( pPage->GetSize() );
             aPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(
-                1.0 / (double)aPageSize.Width(), 1.0 / (double)aPageSize.Height()));
+                1.0 / static_cast<double>(aPageSize.Width()), 1.0 / static_cast<double>(aPageSize.Height())));
         }
     }
 
@@ -2263,7 +2263,7 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr const & pEffe
             if( mnDepthFlags[nParaDepth] == 0 )
             {
                 // so set it to the first found
-                mnDepthFlags[nParaDepth] = (sal_Int8)pEffect->getNodeType();
+                mnDepthFlags[nParaDepth] = static_cast<sal_Int8>(pEffect->getNodeType());
             }
             else if( mnDepthFlags[nParaDepth] != pEffect->getNodeType() )
             {

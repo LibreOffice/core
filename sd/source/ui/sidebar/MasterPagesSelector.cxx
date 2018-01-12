@@ -415,9 +415,9 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
             if (nIndex >= 0)
             {
                 PreviewValueSet::SetItemImage (
-                    (sal_uInt16)nIndex,
+                    static_cast<sal_uInt16>(nIndex),
                     mpContainer->GetPreviewForToken(rEvent.maChildToken));
-                PreviewValueSet::Invalidate(PreviewValueSet::GetItemRect((sal_uInt16)nIndex));
+                PreviewValueSet::Invalidate(PreviewValueSet::GetItemRect(static_cast<sal_uInt16>(nIndex)));
             }
         }
         break;
@@ -446,7 +446,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
     const ::osl::MutexGuard aGuard (maMutex);
 
     if (nIndex>0 && static_cast<unsigned int>(nIndex)<=PreviewValueSet::GetItemCount())
-        return static_cast<UserData*>(PreviewValueSet::GetItemData((sal_uInt16)nIndex));
+        return static_cast<UserData*>(PreviewValueSet::GetItemData(static_cast<sal_uInt16>(nIndex)));
     else
         return nullptr;
 }
@@ -460,7 +460,7 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
         UserData* pOldData = GetUserData(nIndex);
         if (pOldData!=nullptr && pOldData!=pData)
             delete pOldData;
-        PreviewValueSet::SetItemData((sal_uInt16)nIndex, pData);
+        PreviewValueSet::SetItemData(static_cast<sal_uInt16>(nIndex), pData);
     }
 }
 
