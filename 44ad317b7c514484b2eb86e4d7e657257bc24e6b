@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_8c4975d3",
+        "filename": "sc/qa/uitest/calc_tests/tdf81351.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-12T22:25:39Z",
+      "side": 1,
+      "message": "Trailing whitespace.",
+      "revId": "44ad317b7c514484b2eb86e4d7e657257bc24e6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
