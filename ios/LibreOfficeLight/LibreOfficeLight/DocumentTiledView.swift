@@ -18,24 +18,10 @@ class DocumentTiledLayer : CATiledLayer
     }
 }
 
-open class CachedRender
-{
-    open let x: CGFloat
-    open let y: CGFloat
-    open let scale: CGFloat
-    open let image: CGImage
-
-    public init(x: CGFloat, y: CGFloat, scale: CGFloat, image: CGImage)
-    {
-        self.x = x
-        self.y = y
-        self.scale = scale
-        self.image = image
-    }
-}
 
 
-class DocumentTiledView: UIView
+
+public class DocumentTiledView: UIView
 {
     var myScale: CGFloat
 
@@ -47,7 +33,7 @@ class DocumentTiledView: UIView
 
     var drawCount = 0
 
-    let drawLock = NSLock()
+
 
     // Create a new view with the desired frame and scale.
     public init(frame: CGRect, document: DocumentHolder, scale: CGFloat)
@@ -89,20 +75,29 @@ class DocumentTiledView: UIView
 
     }
 
-    required init?(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public func twipsToPixels(rect: CGRect) -> CGRect
+    {
+        return rect.applying(CGAffineTransform(scaleX: 1.0/initialScaleFactor, y: 1.0/initialScaleFactor ))
+    }
+
+    public func pixelsToTwips(rect: CGRect) -> CGRect
+    {
+        return rect.applying(CGAffineTransform(scaleX: initialScaleFactor, y: initialScaleFactor ))
+    }
 
 
-    override class var layerClass : AnyClass
+    override public class var layerClass : AnyClass
     {
         return DocumentTiledLayer.self
     }
 
 
-    override func draw(_ r: CGRect)
+    override public func draw(_ r: CGRect)
     {
         // UIView uses the existence of -drawRect: to determine if it should allow its CALayer
         // to be invalidated, which would then lead to the layer creating a backing store and
@@ -112,7 +107,7 @@ class DocumentTiledView: UIView
     }
 
     // Draw the CGPDFPageRef into the layer at the correct scale.
-    override func draw(_ layer: CALayer, in context: CGContext)
+    override public func draw(_ layer: CALayer, in context: CGContext)
     {
 //        if self.superview == nil
 //        {
@@ -132,9 +127,6 @@ class DocumentTiledView: UIView
         let box: CGRect = context.boundingBoxOfClipPath
         let ctm: CGAffineTransform = context.ctm
 
-        drawLock.lock()
-        defer { drawLock.unlock() }
-
         drawCount += 1
         let filename = "tile\(drawCount).png"
 
@@ -150,7 +142,7 @@ class DocumentTiledView: UIView
 
         // This is where the magic happens
 
-        let pageRect = box.applying(CGAffineTransform(scaleX: initialScaleFactor, y: initialScaleFactor ))
+        let pageRect = pixelsToTwips(rect: box)
         print("  pageRect: \(pageRect.desc)")
 
         // Figure out how many pixels we need for the dimensions of our tile
@@ -164,9 +156,8 @@ class DocumentTiledView: UIView
 
         // we have to do the call synchronously, as the tile has to be painted now, on the current thread
         // TODO - cache the image, and check the cache before we do the sync call
-        let image = document.sync {
-            $0.paintTileToImage(canvasSize: canvasSize, tileRect: pageRect)
-        }
+        let image = document.paintTileToImage(canvasSize: canvasSize, tileRect: pageRect)
+
 
         if let img = image
         {
@@ -191,23 +182,6 @@ class DocumentTiledView: UIView
 
     }
 
-
-
-    /*
-    fileprivate func emptyCache()
-    {
-        cachedRenders.removeAll()
-    }
-
-    fileprivate func pruneCache()
-    {
-        let max = hasReceivedMemoryWarning ? CACHE_LOWMEM : CACHE_NORMAL
-        while cachedRenders.count > max
-        {
-            cachedRenders.popFirst()
-        }
-    }
- */
 
     deinit
     {
