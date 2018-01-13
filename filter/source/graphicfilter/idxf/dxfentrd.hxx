@@ -25,6 +25,7 @@
 
 #include <deque>
 #include <memory>
+#include <vector>
 
 enum DXFEntityType {
     DXF_LINE,
@@ -323,16 +324,16 @@ protected:
 class DXFLWPolyLineEntity : public DXFBasicEntity
 {
         sal_Int32   nIndex;
+        sal_Int32   nCount;         // 90
 
     public:
 
-        sal_Int32   nCount;         // 90
         sal_Int32   nFlags;         // 70   1 = closed, 128 = plinegen
         double      fConstantWidth; // 43   (optional - default: 0, not used if fStartWidth and/or fEndWidth is used)
         double      fStartWidth;    // 40
         double      fEndWidth;      // 41
 
-        std::unique_ptr<DXFVector[]>  pP;
+        std::vector<DXFVector>  aP;
 
         DXFLWPolyLineEntity();
 
@@ -400,10 +401,12 @@ struct DXFEdgeTypeSpline : public DXFEdgeType
 
 struct DXFBoundaryPathData
 {
+private:
+    sal_Int32           nPointCount;            // 93
+public:
     sal_Int32           nFlags;                 // 92
     sal_Int32           nHasBulgeFlag;          // 72
     sal_Int32           nIsClosedFlag;          // 73
-    sal_Int32           nPointCount;            // 93
     double              fBulge;                 // 42
     sal_Int32           nSourceBoundaryObjects; // 97
     sal_Int32           nEdgeCount;             // 93
@@ -411,7 +414,7 @@ struct DXFBoundaryPathData
     bool                bIsPolyLine;
     sal_Int32           nPointIndex;
 
-    std::unique_ptr<DXFVector[]> pP;
+    std::vector<DXFVector> aP;
     std::deque<std::unique_ptr<DXFEdgeType>> aEdges;
 
     DXFBoundaryPathData();
