@@ -1124,7 +1124,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
 
     if ( ImplGetPropertyValue( "ParaTabStops", bGetPropStateValue ) )
         maTabStop = *o3tl::doAccess<css::uno::Sequence<css::style::TabStop>>(mAny);
-    sal_Int16 eTextAdjust( (sal_Int16)css::style::ParagraphAdjust_LEFT );
+    sal_Int16 eTextAdjust = (sal_Int16)css::style::ParagraphAdjust_LEFT;
     if ( GetPropertyValue( aAny, mXPropSet, "ParaAdjust", bGetPropStateValue ) )
         aAny >>= eTextAdjust;
     switch ( (css::style::ParagraphAdjust)eTextAdjust )
