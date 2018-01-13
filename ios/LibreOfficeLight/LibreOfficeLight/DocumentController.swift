@@ -17,6 +17,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     var document: DocumentHolder? = nil
 
     var documentView: DocumentTiledView? = nil
+    var documentOverlaysView: DocumentOverlaysView? = nil
 
     // *** Handling of DocumentController
     // this is normal functions every controller must implement
@@ -29,6 +30,11 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     @IBOutlet weak var mask: UIView!
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var searchBar: UISearchBar!
+
+    deinit
+    {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // called once controller is loaded
     override func viewDidLoad()
@@ -46,8 +52,15 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         LOKitThread.instance.progressDelegate = self
     }
 
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        registerKeyboardNotifications()
+    }
+
     override func viewDidAppear(_ animated: Bool)
     {
+        super.viewDidAppear(animated)
         let res = Bundle.main.url(forResource: "example", withExtension: "odt")
         //let res = Bundle.main.url(forResource: "example2", withExtension: "docx")
 
@@ -370,7 +383,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     /// Sets the document to use and set's up it's view. Should be called on the main thread
     public func setDocument(doc: DocumentHolder)
     {
-        if let existingDoc = self.document
+        if let _ = self.document
         {
             // TODO - cleanup
             self.document = nil
@@ -380,9 +393,13 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
             exisitingView.removeFromSuperview()
             self.documentView = nil // forces the close of the view and it's held documents before we setup the new one
         }
+        // also remove current overlays and start fresh
+        documentOverlaysView?.removeFromSuperview()
 
         // setup the new doc view
         self.document = doc
+        // setup delegates
+        doc.searchDelegate = self
 
         let frameToUse = self.scrollView.frame
 
@@ -391,6 +408,11 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         self.scrollView.addSubview(docView)
         self.scrollView.contentSize = docView.frame.size
         self.documentView = docView
+
+        // overlay view
+        let overlay = DocumentOverlaysView(docTiledView: docView)
+        docView.addSubview(overlay)
+        self.documentOverlaysView = overlay
 
         // debugging view borders
         /*
@@ -493,3 +515,53 @@ extension DocumentController: UISearchBarDelegate
     }
 }
 
+extension DocumentController: SearchDelegate
+{
+    func searchNotFound()
+    {
+        // TODO: tell user somehow
+        self.documentOverlaysView?.clearSearchResults()
+    }
+
+    func searchResultSelection(searchResults: SearchResults)
+    {
+        self.documentOverlaysView?.setSearchResults(searchResults: searchResults)
+    }
+}
+
+/// Keyboard notifications
+extension DocumentController
+{
+
+    func registerKeyboardNotifications()
+    {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillShow,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               object: nil)
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification)
+    {
+
+        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
+        guard let keyboardInfo = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
+        print(userInfo)
+        let keyboardSize = keyboardInfo.cgRectValue.size
+        print("keyboardWillShow \(keyboardSize)")
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification)
+    {
+        print("keyboardWillHide")
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
+    }
+}

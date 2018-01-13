@@ -33,6 +33,7 @@
 		39B091CE1E5F0BB800682A59 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9C1E5F0BB600682A59 /* unorc */; };
 		39E950531FC9842000D82C49 /* source in Resources */ = {isa = PBXBuildFile; fileRef = 39E950521FC9842000D82C49 /* source */; };
 		39EF4E2F1FA500C9001914AC /* PropertiesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF4E2E1FA500C9001914AC /* PropertiesController.swift */; };
+		FCAB1CB82009DB6900F1CC34 /* DocumentOverlaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAB1CB72009DB6900F1CC34 /* DocumentOverlaysView.swift */; };
 		FCC2E3FA2004A01500CEB504 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E3F62004A01400CEB504 /* Document.swift */; };
 		FCC2E3FC2004A01500CEB504 /* LibreOfficeKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E3F82004A01400CEB504 /* LibreOfficeKitWrapper.swift */; };
 		FCC2E3FD2004A01500CEB504 /* LOKitThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E3F92004A01400CEB504 /* LOKitThread.swift */; };
@@ -76,6 +77,7 @@
 		39E950521FC9842000D82C49 /* source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = source; path = ../source; sourceTree = "<group>"; };
 		39EE81531FA644E800B73AB8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39EF4E2E1FA500C9001914AC /* PropertiesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertiesController.swift; sourceTree = "<group>"; };
+		FCAB1CB72009DB6900F1CC34 /* DocumentOverlaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentOverlaysView.swift; sourceTree = "<group>"; };
 		FCC2E3F62004A01400CEB504 /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		FCC2E3F82004A01400CEB504 /* LibreOfficeKitWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibreOfficeKitWrapper.swift; sourceTree = "<group>"; };
 		FCC2E3F92004A01400CEB504 /* LOKitThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LOKitThread.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
 				3992D8591E5B762A00BEA987 /* DocumentController.swift */,
+				FCAB1CB72009DB6900F1CC34 /* DocumentOverlaysView.swift */,
 				FCC2E3FE2004B59B00CEB504 /* DocumentTiledView.swift */,
 				39284DB21FA5F207006F43E4 /* DocumentActions.swift */,
 				39EF4E2E1FA500C9001914AC /* PropertiesController.swift */,
@@ -303,6 +306,7 @@
 			files = (
 				FCC2E4032004B72700CEB504 /* Util.swift in Sources */,
 				392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */,
+				FCAB1CB82009DB6900F1CC34 /* DocumentOverlaysView.swift in Sources */,
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
 				FCC2E3FC2004A01500CEB504 /* LibreOfficeKitWrapper.swift in Sources */,
 				39284DB31FA5F207006F43E4 /* DocumentActions.swift in Sources */,

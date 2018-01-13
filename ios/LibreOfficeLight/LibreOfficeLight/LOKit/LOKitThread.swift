@@ -119,6 +119,71 @@ public class LOKitThread
     }
 }
 
+
+open class CachedRender
+{
+    open let canvasSize: CGSize
+    open let tileRect: CGRect
+    open let image: UIImage
+
+    public init(canvasSize: CGSize, tileRect: CGRect, image: UIImage)
+    {
+        self.canvasSize = canvasSize
+        self.tileRect = tileRect
+        self.image = image
+    }
+}
+
+class RenderCache
+{
+    let CACHE_LOWMEM = 4
+    let CACHE_NORMAL = 20
+
+    var cachedRenders: [CachedRender] = []
+    var hasReceivedMemoryWarning = false
+
+    let lock = NSRecursiveLock()
+
+    func emptyCache()
+    {
+        lock.lock(); defer { lock.unlock() }
+
+        cachedRenders.removeAll()
+
+    }
+
+    func pruneCache()
+    {
+        lock.lock(); defer { lock.unlock() }
+
+        let max = hasReceivedMemoryWarning ? CACHE_LOWMEM : CACHE_NORMAL
+        while cachedRenders.count > max
+        {
+            cachedRenders.remove(at: 0)
+        }
+    }
+
+    func add(cachedRender: CachedRender)
+    {
+        lock.lock(); defer { lock.unlock() }
+
+        cachedRenders.append(cachedRender)
+        pruneCache()
+    }
+
+    func get(canvasSize: CGSize, tileRect: CGRect) -> UIImage?
+    {
+        lock.lock(); defer { lock.unlock() }
+
+        if let cr = cachedRenders.first(where: { $0.canvasSize == canvasSize && $0.tileRect == tileRect })
+        {
+            return cr.image
+        }
+        return nil
+    }
+
+}
+
 /**
  * Holds the document object so to enforce access in a thread safe way.
  */
@@ -127,6 +192,9 @@ public class DocumentHolder
     private let doc: Document
 
     public weak var delegate: DocumentUIDelegate? = nil
+    public weak var searchDelegate: SearchDelegate? = nil
+
+    private let cache = RenderCache()
 
     init(doc: Document)
     {
@@ -156,6 +224,27 @@ public class DocumentHolder
         }
     }
 
+    /// Paints a tile and return synchronously, using a cached version if it can
+    public func paintTileToImage(canvasSize: CGSize,
+                                 tileRect: CGRect) -> UIImage?
+    {
+        if let cached = cache.get(canvasSize: canvasSize, tileRect: tileRect)
+        {
+            return cached
+        }
+
+        let img = sync {
+            $0.paintTileToImage(canvasSize: canvasSize, tileRect: tileRect)
+        }
+        if let image = img
+        {
+            cache.add(cachedRender: CachedRender(canvasSize: canvasSize, tileRect: tileRect, image: image))
+        }
+
+        return img
+    }
+
+
     private func onDocumentEvent(type: LibreOfficeKitCallbackType, payload: String?)
     {
         print("onDocumentEvent type:\(type) payload:\(payload ?? "")")
@@ -182,8 +271,49 @@ public class DocumentHolder
             runOnMain {
                 self.delegate?.textSelectionEnd( rects: decodeRects(payload) )
             }
+
+        case LOK_CALLBACK_SEARCH_NOT_FOUND:
+            runOnMain {
+                self.searchDelegate?.searchNotFound()
+            }
+        case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+            runOnMain {
+                self.searchResults(payload: payload)
+            }
+
+
         default:
             print("onDocumentEvent type:\(type) not handled!")
+        }
+    }
+
+    private func searchResults(payload: String?)
+    {
+        if let d = payload, let data = d.data(using: .utf8)
+        {
+            let decoder = JSONDecoder()
+
+            do
+            {
+                let searchResults = try decoder.decode(SearchResults.self, from: data )
+
+                /*
+                if let srs = searchResults.searchResultSelection
+                {
+                    for par in srs
+                    {
+                        print("\(par.rectsAsCGRects)")
+                    }
+                }
+                */
+
+                self.searchDelegate?.searchResultSelection(searchResults: searchResults)
+            }
+            catch
+            {
+                print("Error decoding payload: \(error)")
+            }
+
         }
     }
 
@@ -192,10 +322,10 @@ public class DocumentHolder
         var rootJson = JSONObject()
 
         addProperty(&rootJson, "SearchItem.SearchString", "string", searchString);
-        addProperty(&rootJson, "SearchItem.Backward", "boolean", String(forwardDirection) );
+        addProperty(&rootJson, "SearchItem.Backward", "boolean", String(!forwardDirection) );
         addProperty(&rootJson, "SearchItem.SearchStartPointX", "long", String(describing: from.x) );
         addProperty(&rootJson, "SearchItem.SearchStartPointY", "long", String(describing: from.y) );
-        addProperty(&rootJson, "SearchItem.Command", "long", "1") // String.valueOf(0)); // search all == 1
+        addProperty(&rootJson, "SearchItem.Command", "long", "0") // String.valueOf(0)); // search all == 1
 
         if let jsonStr = encode(json: rootJson)
         {
@@ -240,7 +370,7 @@ public func decodeRects(_ payload: String?) -> [CGRect]?
     var ret = [CGRect]()
     for rectStr in pl.split(separator: ";")
     {
-        let coords = rectStr.split(separator: ",").flatMap { Double($0) }
+        let coords = rectStr.split(separator: ",").flatMap { Double($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
         if coords.count == 4
         {
             let rect = CGRect(x: coords[0],
@@ -281,7 +411,69 @@ public protocol DocumentUIDelegate: class
     func textSelection(rects: [CGRect]? )
     func textSelectionStart(rects: [CGRect]? )
     func textSelectionEnd(rects: [CGRect]? )
+}
 
+public protocol SearchDelegate: class
+{
+    func searchNotFound()
 
+    func searchResultSelection(searchResults: SearchResults)
+}
 
+/**
+ Encodes this example json:
+ {
+ "searchString": "Office",
+ "highlightAll": "true",
+ "searchResultSelection": [
+ {
+ "part": "0",
+ "rectangles": "1951, 10743, 627, 239"
+ },
+ {
+ "part": "0",
+ "rectangles": "5343, 9496, 627, 287"
+ },
+ {
+ "part": "0",
+ "rectangles": "1951, 9256, 627, 239"
+ },
+ {
+ "part": "0",
+ "rectangles": "6502, 5946, 626, 287"
+ },
+ {
+ "part": "0",
+ "rectangles": "6686, 5658, 627, 287"
+ },
+ {
+ "part": "0",
+ "rectangles": "4103, 5418, 573, 239"
+ },
+ {
+ "part": "0",
+ "rectangles": "1951, 5418, 627, 239"
+ },
+ {
+ "part": "0",
+ "rectangles": "4934, 1658, 1586, 559"
+ }
+ ]
+ }
+*/
+public struct SearchResults: Codable
+{
+    public var searchString: String?
+    public var highlightAll: String?
+    public var searchResultSelection: Array<PartAndRectangles>?
+}
+
+public struct PartAndRectangles: Codable
+{
+    public var part: String?
+    public var rectangles: String?
+
+    public var rectsAsCGRects: [CGRect]? {
+        return decodeRects(self.rectangles)
+    }
 }

@@ -228,6 +228,7 @@ open class Document
      * @param pCallback the callback to invoke
      * @param pData the user data, will be passed to the callback on invocation
      */
+    @discardableResult
     public func registerCallback( callback: @escaping LibreOfficeCallback ) -> Int
     {
         let ret = Callbacks.register(callback: callback)
@@ -570,15 +571,9 @@ public extension Document
     public func paintTileToImage(canvasSize: CGSize,
                                  tileRect: CGRect) -> UIImage?
     {
-        // the scaling etc here is all black magic.
-        // I don't really understand whats going on, other than that this combination works...
 
         UIGraphicsBeginImageContextWithOptions(canvasSize, false, 1.0)
-        let ctx = UIGraphicsGetCurrentContext()!
-
-        //        print(ctx)
-        //        print(ctx.ctm)
-        //        print(ctx.userSpaceToDeviceSpaceTransform)
+        let _ = UIGraphicsGetCurrentContext()!
 
         self.paintTileToCurrentContext(canvasSize: canvasSize, tileRect: tileRect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
