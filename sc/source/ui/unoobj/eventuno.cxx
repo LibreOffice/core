@@ -146,7 +146,7 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
 uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames()
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aNames((int)ScSheetEventId::COUNT);
+    auto aNames = uno::Sequence<OUString>((int)ScSheetEventId::COUNT);
     for (sal_Int32 nEvent=0; nEvent<(int)ScSheetEventId::COUNT; ++nEvent)
         aNames[nEvent] = ScSheetEvents::GetEventName((ScSheetEventId)nEvent);
     return aNames;
