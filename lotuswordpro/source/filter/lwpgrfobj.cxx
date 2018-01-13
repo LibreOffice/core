@@ -557,6 +557,8 @@ void LwpGraphicObject::CreateGrafObject()
                 bool sal_bCropped = false;
                 if (fSclGrafWidth > fDisFrameWidth)
                 {
+                    if (fXRatio == 0.0)
+                        throw o3tl::divide_by_zero();
                     fClipWidth = (fSclGrafWidth-fDisFrameWidth ) / 2 / fXRatio;
                     sal_bCropped = true;
                 }
@@ -564,6 +566,8 @@ void LwpGraphicObject::CreateGrafObject()
                 // need vertical crop?
                 if (fSclGrafHeight > fDisFrameHeight)
                 {
+                    if (fYRatio == 0.0)
+                        throw o3tl::divide_by_zero();
                     fClipHeight = (fSclGrafHeight-fDisFrameHeight ) / 2 / fYRatio;
                     sal_bCropped = true;
                 }
