@@ -46,14 +46,6 @@
 #include <scabstdlg.hxx>
 #include <clipparam.hxx>
 
-struct AreaLink_Impl
-{
-    ScDocShell* m_pDocSh;
-    VclPtr<AbstractScLinkedAreaDlg> m_pDialog;
-
-    AreaLink_Impl() : m_pDocSh( nullptr ), m_pDialog() {}
-};
-
 
 ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                         const OUString& rFilter, const OUString& rOpt,
@@ -61,7 +53,7 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                         sal_uLong nRefresh ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer  ( nRefresh ),
-    pImpl           ( new AreaLink_Impl() ),
+    m_pDocSh(static_cast<ScDocShell*>(pShell)),
     aFileName       (rFile),
     aFilterName     (rFilter),
     aOptions        (rOpt),
@@ -72,9 +64,8 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
     bDoInsert       (true)
 {
     OSL_ENSURE(dynamic_cast< const ScDocShell *>( pShell ) !=  nullptr, "ScAreaLink with wrong ObjectShell");
-    pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
-    SetRefreshControl( &pImpl->m_pDocSh->GetDocument().GetRefreshTimerControlAddress() );
+    SetRefreshControl( &m_pDocSh->GetDocument().GetRefreshTimerControlAddress() );
 }
 
 ScAreaLink::~ScAreaLink()
@@ -91,19 +82,17 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEn
     ScopedVclPtr<AbstractScLinkedAreaDlg> pDlg(pFact->CreateScLinkedAreaDlg(pParent));
     OSL_ENSURE(pDlg, "Dialog create fail!");
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
-    pImpl->m_pDialog = pDlg;
     if ( pDlg->Execute() == RET_OK )
     {
-        aOptions = pImpl->m_pDialog->GetOptions();
-        Refresh( pImpl->m_pDialog->GetURL(), pImpl->m_pDialog->GetFilter(),
-                 pImpl->m_pDialog->GetSource(), pImpl->m_pDialog->GetRefresh() );
+        aOptions = pDlg->GetOptions();
+        Refresh( pDlg->GetURL(), pDlg->GetFilter(),
+                 pDlg->GetSource(), pDlg->GetRefresh() );
 
         //  copy source data from members (set in Refresh) into link name for dialog
         OUString aNewLinkName;
         sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
         SetName( aNewLinkName );
     }
-    pImpl->m_pDialog.clear();    // dialog is deleted with parent
 }
 
 ::sfx2::SvBaseLink::UpdateResult ScAreaLink::DataChanged(
@@ -115,7 +104,7 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEn
     if (bInCreate)
         return SUCCESS;
 
-    sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument().GetLinkManager();
+    sfx2::LinkManager* pLinkManager=m_pDocSh->GetDocument().GetLinkManager();
     if (pLinkManager!=nullptr)
     {
         OUString aFile, aArea, aFilter;
@@ -149,11 +138,11 @@ void ScAreaLink::Closed()
 {
     // delete link: Undo
 
-    ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
+    ScDocument& rDoc = m_pDocSh->GetDocument();
     bool bUndo (rDoc.IsUndoEnabled());
     if (bAddUndo && bUndo)
     {
-        pImpl->m_pDocSh->GetUndoManager()->AddUndoAction( new ScUndoRemoveAreaLink( pImpl->m_pDocSh,
+        m_pDocSh->GetUndoManager()->AddUndoAction( new ScUndoRemoveAreaLink( m_pDocSh,
                                                         aFileName, aFilterName, aOptions,
                                                         aSourceArea, aDestArea, GetRefreshDelay() ) );
 
@@ -240,14 +229,14 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     if (rNewFile.isEmpty() || rNewFilter.isEmpty())
         return false;
 
-    OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
+    OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, m_pDocSh ) );
     bool bNewUrlName = (aNewUrl != aFileName);
 
-    std::shared_ptr<const SfxFilter> pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
+    std::shared_ptr<const SfxFilter> pFilter = m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
         return false;
 
-    ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
+    ScDocument& rDoc = m_pDocSh->GetDocument();
 
     bool bUndo (rDoc.IsUndoEnabled());
     rDoc.SetInLinkUpdate( true );
@@ -318,7 +307,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                   rDoc.CanFitBlock( aOldRange, aNewRange );
     if (bCanDo)
     {
-        ScDocShellModificator aModificator( *pImpl->m_pDocSh );
+        ScDocShellModificator aModificator( *m_pDocSh );
 
         SCCOL nOldEndX = aOldRange.aEnd.Col();
         SCROW nOldEndY = aOldRange.aEnd.Row();
@@ -416,8 +405,8 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
             pRedoDoc->InitUndo( &rDoc, nDestTab, nDestTab );
             rDoc.CopyToDocument(aNewRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pRedoDoc);
 
-            pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoUpdateAreaLink( pImpl->m_pDocSh,
+            m_pDocSh->GetUndoManager()->AddUndoAction(
+                new ScUndoUpdateAreaLink( m_pDocSh,
                                             aFileName, aFilterName, aOptions,
                                             aSourceArea, aOldRange, GetRefreshDelay(),
                                             aNewUrl, rNewFilter, aNewOpt,
@@ -450,8 +439,8 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         if ( aOldRange.aEnd.Row() != aNewRange.aEnd.Row() )
             nPaintEndY = MAXROW;
 
-        if ( !pImpl->m_pDocSh->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
-            pImpl->m_pDocSh->PostPaint(
+        if ( !m_pDocSh->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
+            m_pDocSh->PostPaint(
                 ScRange(aDestPos.Col(), aDestPos.Row(), nDestTab, nPaintEndX, nPaintEndY, nDestTab),
                 PaintPartFlags::Grid);
         aModificator.SetDocumentModified();
