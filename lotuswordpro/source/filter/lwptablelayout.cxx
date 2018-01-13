@@ -71,7 +71,6 @@
 
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xftablestyle.hxx>
-#include <xfilter/xftable.hxx>
 #include <xfilter/xfrow.hxx>
 #include <xfilter/xfrowstyle.hxx>
 #include <xfilter/xfcell.hxx>
@@ -415,20 +414,7 @@ LwpTableLayout::LwpTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm
     , m_nRows(0)
     , m_nCols(0)
     , m_pDefaultCellLayout(nullptr)
-    , m_pColumns(nullptr)
 {
-    m_CellsMap.clear();
-}
-
-LwpTableLayout::~LwpTableLayout()
-{
-    m_CellsMap.clear();
-
-    if (m_pColumns)
-    {
-        delete [] m_pColumns;
-        m_pColumns = nullptr;
-    }
 }
 
 /**
@@ -533,7 +519,7 @@ OUString LwpTableLayout::GetColumnWidth(sal_uInt16 nCol)
         return m_DefaultColumnStyleName;
     }
 
-    LwpColumnLayout * pCol = m_pColumns[nCol];
+    LwpColumnLayout * pCol = m_aColumns[nCol];
     if (pCol)
     {
         return pCol->GetStyleName();
@@ -553,12 +539,12 @@ void LwpTableLayout::RegisterColumns()
 
     sal_uInt16 nCols = m_nCols;
 
-    m_pColumns = new LwpColumnLayout *[nCols];
+    m_aColumns.resize(nCols);
     std::unique_ptr<bool[]> pWidthCalculated( new bool[nCols] );
     for(sal_uInt16 i=0;i<nCols; i++)
     {
         pWidthCalculated[i] = false;
-        m_pColumns[i] = nullptr;
+        m_aColumns[i] = nullptr;
     }
 
     double dDefaultColumn = pTable->GetWidth();
@@ -577,7 +563,7 @@ void LwpTableLayout::RegisterColumns()
         {
             throw std::range_error("corrupt LwpTableLayout");
         }
-        m_pColumns[nColId] = pColumnLayout;
+        m_aColumns[nColId] = pColumnLayout;
         if (!pColumnLayout->IsJustifiable())
         {
             pWidthCalculated[nColId] = true;
@@ -593,10 +579,10 @@ void LwpTableLayout::RegisterColumns()
     if (nJustifiableColumn == 0 && nCols != 0)
     {
         nJustifiableColumn ++;
-        if (m_pColumns[nCols - 1])
+        if (m_aColumns[nCols - 1])
         {
             pWidthCalculated[nCols-1] = false;
-            dTableWidth += m_pColumns[nCols-1]->GetWidth();
+            dTableWidth += m_aColumns[nCols-1]->GetWidth();
         }
         else
         {
@@ -620,18 +606,18 @@ void LwpTableLayout::RegisterColumns()
     sal_uInt16 i=0;
     for( i=0;i<nCols; i++)
     {
-        if(m_pColumns[i])
+        if (m_aColumns[i])
         {
-            m_pColumns[i]->SetFoundry(m_pFoundry);
+            m_aColumns[i]->SetFoundry(m_pFoundry);
             if(!pWidthCalculated[i])
             {
                 // justifiable ----register style with calculated value
-                m_pColumns[i]->SetStyleName(m_DefaultColumnStyleName);
+                m_aColumns[i]->SetStyleName(m_DefaultColumnStyleName);
             }
             else
             {
                 // not justifiable ---- register style with original value
-                m_pColumns[i]->RegisterStyle(m_pColumns[i]->GetWidth());
+                m_aColumns[i]->RegisterStyle(m_aColumns[i]->GetWidth());
             }
         }
     }

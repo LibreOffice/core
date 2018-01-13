@@ -62,6 +62,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLELAYOUT_HXX
 
 #include "lwplayout.hxx"
+#include <xfilter/xftable.hxx>
 
 #include <vector>
 #include <map>
@@ -88,7 +89,6 @@ class LwpTableLayout: public LwpLayout
 {
 public:
     LwpTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpTableLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_TABLE_LAYOUT;}
     LwpObjectID& GetColumnLayoutHead(){return m_ColumnLayout;}
     void RegisterStyle() override;
@@ -123,9 +123,9 @@ private:
     OUString m_DefaultRowStyleName;
 
     // wordpro cell  map
-    std::vector<LwpCellLayout *> m_WordProCellsMap;
+    std::vector<LwpCellLayout*> m_WordProCellsMap;
     // column vector
-    LwpColumnLayout ** m_pColumns;
+    std::vector<LwpColumnLayout*> m_aColumns;
 
 public:
     void XFConvert(XFContentContainer* pCont) override;
