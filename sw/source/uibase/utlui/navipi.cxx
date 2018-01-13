@@ -57,6 +57,8 @@
 #include <unomid.h>
 #include <memory>
 
+#include <uiobject.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -431,6 +433,11 @@ void SwNavigationPI::CreateNavigationTool(const tools::Rectangle& rRect, bool bS
         pPopup->EndPopupMode(FloatWinPopupEndFlags::TearOff);
         pPopup->GrabFocus();
     }
+}
+
+FactoryFunction SwNavigationPI::GetUITestFactory() const
+{
+    return SwNavigationPIUIObject::create;
 }
 
 void SwNavHelpToolBox::RequestHelp(const HelpEvent& rHEvt)
