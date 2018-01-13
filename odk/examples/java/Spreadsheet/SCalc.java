@@ -38,7 +38,7 @@
 //          Step 2: open an empty calc document
 //          Step 3: create cell styles
 //          Step 4: get the sheet an insert some data
-//          Step 5: apply the created cell syles
+//          Step 5: apply the created cell styles
 //          Step 6: insert a 3D Chart
 
 
