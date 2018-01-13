@@ -146,7 +146,7 @@ const sal_uInt32 EXC_XFID_NOTFOUND          = 0xFFFFFFFF;
 const sal_uInt16 EXC_XF_LOCKED              = 0x0001;
 const sal_uInt16 EXC_XF_HIDDEN              = 0x0002;
 const sal_uInt16 EXC_XF_STYLE               = 0x0004;
-const sal_uInt16 EXC_XF_STYLEPARENT         = 0x0FFF;   /// Syles don't have a parent.
+const sal_uInt16 EXC_XF_STYLEPARENT         = 0x0FFF;   /// Styles don't have a parent.
 const sal_uInt16 EXC_XF_LINEBREAK           = 0x0008;   /// Automatic line break.
 const sal_uInt16 EXC_XF_SHRINK              = 0x0010;   /// Shrink to fit into cell.
 
