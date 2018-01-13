@@ -423,7 +423,7 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
             nCount = rDGR.GetI();
             // limit alloc to max reasonable size based on remaining data in stream
             if (nCount > 0 && static_cast<sal_uInt32>(nCount) <= rDGR.remainingSize())
-                pP.reset( new DXFVector[ nCount ] );
+                aP.reserve(nCount);
             else
                 nCount = 0;
         }
@@ -434,14 +434,21 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 41: fEndWidth = rDGR.GetF(); break;
         case 10:
         {
-            if ( pP && ( nIndex < nCount ) )
-                pP[ nIndex ].fx = rDGR.GetF();
+            if (nIndex < nCount)
+            {
+                aP.resize(nIndex+1);
+                aP[nIndex].fx = rDGR.GetF();
+            }
         }
         break;
         case 20:
         {
-            if ( pP && ( nIndex < nCount ) )
-                pP[ nIndex++ ].fy = rDGR.GetF();
+            if (nIndex < nCount)
+            {
+                aP.resize(nIndex+1);
+                aP[nIndex].fy = rDGR.GetF();
+                ++nIndex;
+            }
         }
         break;
         default: DXFBasicEntity::EvaluateGroup(rDGR);
@@ -548,10 +555,10 @@ bool DXFEdgeTypeSpline::EvaluateGroup( DXFGroupReader & rDGR )
 }
 
 DXFBoundaryPathData::DXFBoundaryPathData() :
+    nPointCount( 0 ),
     nFlags( 0 ),
     nHasBulgeFlag( 0 ),
     nIsClosedFlag( 0 ),
-    nPointCount( 0 ),
     fBulge( 0.0 ),
     nSourceBoundaryObjects( 0 ),
     nEdgeCount( 0 ),
@@ -583,7 +590,7 @@ bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
                 nPointCount = rDGR.GetI();
                 // limit alloc to max reasonable size based on remaining data in stream
                 if (nPointCount > 0 && static_cast<sal_uInt32>(nPointCount) <= rDGR.remainingSize())
-                    pP.reset( new DXFVector[ nPointCount ] );
+                    aP.reserve(nPointCount);
                 else
                     nPointCount = 0;
             }
@@ -594,14 +601,21 @@ bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             case 42 : fBulge = rDGR.GetF(); break;
             case 10:
             {
-                if ( pP && ( nPointIndex < nPointCount ) )
-                    pP[ nPointIndex ].fx = rDGR.GetF();
+                if (nPointIndex < nPointCount)
+                {
+                    aP.resize(nPointIndex+1);
+                    aP[nPointIndex].fx = rDGR.GetF();
+                }
             }
             break;
             case 20:
             {
-                if ( pP && ( nPointIndex < nPointCount ) )
-                    pP[ nPointIndex++ ].fy = rDGR.GetF();
+                if (nPointIndex < nPointCount)
+                {
+                    aP.resize(nPointIndex+1);
+                    aP[nPointIndex].fy = rDGR.GetF();
+                    ++nPointIndex;
+                }
             }
             break;
 

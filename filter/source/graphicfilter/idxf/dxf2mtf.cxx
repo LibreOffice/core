@@ -531,13 +531,13 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
 
 void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform )
 {
-    sal_Int32 i, nPolySize = rE.nCount;
-    if ( nPolySize && rE.pP )
+    sal_Int32 nPolySize = rE.aP.size();
+    if (nPolySize)
     {
         tools::Polygon aPoly( static_cast<sal_uInt16>(nPolySize));
-        for ( i = 0; i < nPolySize; i++ )
+        for (sal_Int32 i = 0; i < nPolySize; ++i)
         {
-            rTransform.Transform( rE.pP[ static_cast<sal_uInt16>(i) ], aPoly[ static_cast<sal_uInt16>(i) ] );
+            rTransform.Transform( rE.aP[ static_cast<sal_uInt16>(i) ], aPoly[ static_cast<sal_uInt16>(i) ] );
         }
         if ( SetLineAttribute( rE ) )
         {
@@ -562,11 +562,10 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
             const DXFBoundaryPathData& rPathData = rE.pBoundaryPathData[ j ];
             if ( rPathData.bIsPolyLine )
             {
-                sal_Int32 i;
-                for( i = 0; i < rPathData.nPointCount; i++ )
+                for (const auto& a : rPathData.aP)
                 {
                     Point aPt;
-                    rTransform.Transform( rPathData.pP[ i ], aPt );
+                    rTransform.Transform(a, aPt);
                     aPtAry.push_back( aPt );
                 }
             }
