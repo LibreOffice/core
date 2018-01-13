@@ -50,7 +50,7 @@ inline bool isUnicodeVariationSequenceSelector( sal_uInt32 nCode )
         || ( nCode >= 0xE0100 && nCode <= 0xE01EF );// Variation Selectors Supplement block
 }
 
-// Return if the chracter might be a base character of a CJK ideographic varaiation sequence
+// Return if the character might be a base character of a CJK ideographic variation sequence
 inline bool isCJKIVSCharacters( sal_uInt32 nCode )
 {
     return ( nCode >= 0x4E00 && nCode <= 0x9FFF )       // CJK Unified Ideographs
