@@ -141,6 +141,7 @@ open class LibreOffice
      * @param pCallback the callback to invoke
      * @param pData the user data, will be passed to the callback on invocation
      */
+    @discardableResult
     public func registerCallback( callback: @escaping LibreOfficeCallback ) -> Int
     {
         let ret = Callbacks.register(callback: callback)
