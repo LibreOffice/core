@@ -351,6 +351,10 @@ void WindowUIObject::execute(const OUString& rAction,
             return;
         }
     }
+    else if (rAction == "FOCUS")
+    {
+        mxWindow->GrabFocus();
+    }
     else
     {
         bHandled = false;
