@@ -65,6 +65,7 @@ class SwNavigationPI : public PanelLayout,
     friend class SwNavigationChild;
     friend class SwContentTree;
     friend class SwGlobalTree;
+    friend class SwNavigationPIUIObject;
 
     VclPtr<SwNavHelpToolBox>    m_aContentToolBox;
     VclPtr<ToolBox>             m_aGlobalToolBox;
@@ -157,6 +158,8 @@ public:
 
     SwView*         GetCreateView() const;
     void            CreateNavigationTool(const tools::Rectangle& rRect, bool bSetFocus, vcl::Window *pParent);
+
+    FactoryFunction GetUITestFactory() const override;
 };
 
 class SwNavigationChild : public SfxChildWindowContext
