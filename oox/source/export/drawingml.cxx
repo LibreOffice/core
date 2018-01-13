@@ -2145,7 +2145,7 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
 
-    sal_Int16 nTmp( (sal_Int16)style::ParagraphAdjust_LEFT );
+    sal_Int16 nTmp = (sal_Int16)style::ParagraphAdjust_LEFT;
     GET( nTmp, ParaAdjust );
     style::ParagraphAdjust nAlignment = (style::ParagraphAdjust)nTmp;
 
