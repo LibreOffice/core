@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_47d116fb",
+        "filename": "compilerplugins/clang/unnecessaryparen.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-13T21:59:59Z",
+      "side": 1,
+      "message": "Why adding a quote here?",
+      "range": {
+        "startLine": 497,
+        "startChar": 69,
+        "endLine": 497,
+        "endChar": 70
+      },
+      "revId": "aa9076574a75738c933bc41adccfe4cae9652634",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
