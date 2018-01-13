@@ -57,6 +57,7 @@
 #include <strings.hrc>
 #include <unoport.hxx>
 #include <wrtsh.hxx>
+#include <viewimp.hxx>
 
 #include <flowfrm.hxx>
 
@@ -393,6 +394,21 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
         aRedline.put("textRange", sRects.getStr());
 
         lcl_LOKInvalidateStartEndFrames(aCursor);
+    }
+
+
+    // When this notify method is called text invalidation is not done yet
+    // Calling FillRects updates the text area so invalidation will not run on the correct rects
+    // So we need to do an own invalidation here. It invalidates text frames continging the redlining
+    SwDoc* pDoc = pRedline->GetDoc();
+    SwViewShell* pSh;
+    if( pDoc && !pDoc->IsInDtor() &&
+        nullptr != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()) )
+    {
+        for(SwNodeIndex nIdx = pStartPos->nNode; nIdx <= pEndPos->nNode; ++nIdx)
+        {
+            pSh->InvalidateWindows( nIdx.GetNode().GetContentNode()->FindLayoutRect() );
+        }
     }
 
     boost::property_tree::ptree aTree;
