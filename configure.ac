@@ -8706,6 +8706,10 @@ if test "$with_system_boost" = "yes"; then
        [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
     AC_CHECK_HEADER(boost/spirit/include/classic_core.hpp, [],
        [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.36)], [])
+if test "x$enable_gtk3_kde5" = "xyes"; then
+    AC_CHECK_HEADER(boost/process/child.hpp, [],
+       [AC_MSG_ERROR(boost/process/child.hpp not found. install boost >= 1.64)], [])
+fi
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
     # this is in m4/ax_boost_base.m4
