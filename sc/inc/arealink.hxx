@@ -27,13 +27,12 @@
 #include <memory>
 
 class SfxObjectShell;
-struct AreaLink_Impl;
 class Dialog;
 
 class SC_DLLPUBLIC ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
-    std::unique_ptr<AreaLink_Impl> pImpl;
+    ScDocShell*     m_pDocSh;
     OUString        aFileName;
     OUString        aFilterName;
     OUString        aOptions;
