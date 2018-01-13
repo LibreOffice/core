@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4713d65c",
+        "filename": "android/source/src/java/org/libreoffice/LOKitTileProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-13T09:54:28Z",
+      "side": 1,
+      "message": "not sure this is a good place - code only selects a shape, not necessarily changes it?",
+      "revId": "6f4b9e30580f3cb91591b0e33f799da2a69b1ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
