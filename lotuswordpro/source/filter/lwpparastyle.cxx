@@ -453,9 +453,9 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
         sal_Int32 Amount = pParentIndent->GetMAll();
 
         if (relative == LwpIndentOverride::RELATIVE_FIRST)
-            Amount += pParentIndent->GetMFirst();
+            Amount = o3tl::saturating_add(Amount, pParentIndent->GetMFirst());
         else if (relative == LwpIndentOverride::RELATIVE_REST)
-            Amount += pParentIndent->GetMRest();
+            Amount = o3tl::saturating_add(Amount, pParentIndent->GetMRest());
         pTotalIndent->SetMAll(o3tl::saturating_add(Amount, pTotalIndent->GetMAll()));
         pTotalIndent->SetMRight(o3tl::saturating_add(pParentIndent->GetMRight(), pTotalIndent->GetMRight()));
 
