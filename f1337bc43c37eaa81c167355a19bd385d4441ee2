@@ -46,6 +46,30 @@
       "revId": "f1337bc43c37eaa81c167355a19bd385d4441ee2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_d281464f",
+        "filename": "vcl/source/window/splitwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-14T19:00:46Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "fa31d9ce_92b98e31",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 21
+      },
+      "revId": "f1337bc43c37eaa81c167355a19bd385d4441ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
