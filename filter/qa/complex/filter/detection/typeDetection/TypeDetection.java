@@ -299,7 +299,7 @@ public class TypeDetection extends ComplexTestCase {
                    "'\n\texpected type: '" + fileType + "'",fileTypeOK ,ContinueWithTest.YES);
     }
 
-    /** Filles a MediaDescriptor with a <code>XInputStream</code> of the test
+    /** Fills a MediaDescriptor with a <code>XInputStream</code> of the test
      * file given by URL.
      * Then the MediaDescriptor was used as parameter for TypeDetection.
      * The TypeDetection must return expected type

@@ -167,7 +167,7 @@ enum FieldId
         imports a ShowVariable (bookmarkname)?
         \h hyperlink to paragraph
         \p relative to para above/below
-        \f refenence number
+        \f reference number
         \d separator number separator
         \n paragraph number
         \r paragraph number in relative context
