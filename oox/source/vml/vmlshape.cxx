@@ -1410,9 +1410,11 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     {
     }
 
+    uno::Reference<beans::XPropertySet> xPropertySet;
     if (!maTypeModel.maEditAs.isEmpty())
+        xPropertySet = uno::Reference<beans::XPropertySet>(xGroupShape, uno::UNO_QUERY);
+    if (xPropertySet.is())
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xGroupShape, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aGrabBag;
         xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
         beans::PropertyValue aPair;
