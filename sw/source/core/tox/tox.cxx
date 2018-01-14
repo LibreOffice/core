@@ -733,15 +733,12 @@ OUString SwFormToken::GetString() const
    Returns the type of a token.
 
    @param sToken     the string representation of the token
-   @param pTokenLen  return parameter the length of the head of the token
-
-   If pTokenLen is non-NULL the length of the token's head is
-   written to *pTokenLen
+   @param rTokenLen  return parameter the length of the head of the token
 
    @return the type of the token
 */
 static FormTokenType lcl_GetTokenType(const OUString & sToken,
-                                      sal_Int32 *const pTokenLen)
+                                      sal_Int32 & rTokenLen)
 {
     static struct
     {
@@ -765,8 +762,7 @@ static FormTokenType lcl_GetTokenType(const OUString & sToken,
     {
         if( sToken.startsWith( i.sTokenStart ) )
         {
-            if (pTokenLen)
-                *pTokenLen = i.nTokenLength;
+            rTokenLen = i.nTokenLength;
             return i.eTokenType;
         }
     }
@@ -827,7 +823,7 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
     OUString sToken( lcl_SearchNextToken(sPattern, nCurPatternPos) );
     nCurPatternPos += sToken.getLength();
     sal_Int32 nTokenLen = 0;
-    FormTokenType const eTokenType = lcl_GetTokenType(sToken, &nTokenLen);
+    FormTokenType const eTokenType = lcl_GetTokenType(sToken, nTokenLen);
     if (TOKEN_END == eTokenType) // invalid input? skip it
     {
         nCurPatternPos = sPattern.getLength();
