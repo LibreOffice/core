@@ -697,14 +697,14 @@ Any SAL_CALL UniversalContentBroker::execute(
 // virtual
 void SAL_CALL UniversalContentBroker::releaseCommandIdentifier(sal_Int32 /*aCommandId*/)
 {
-    // @@@ Not implemeted ( yet).
+    // @@@ Not implemented ( yet).
 }
 
 
 // virtual
 void SAL_CALL UniversalContentBroker::abort( sal_Int32 )
 {
-    // @@@ Not implemeted ( yet).
+    // @@@ Not implemented ( yet).
 }
 
 

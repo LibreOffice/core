@@ -135,7 +135,7 @@ OUString SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
     return OUString();
 }
 
-// each field refences a field type that is unique for each document
+// each field references a field type that is unique for each document
 SwFieldType::SwFieldType( SwFieldIds nWhichId )
     : SwModify(nullptr)
     , m_nWhich(nWhichId)
