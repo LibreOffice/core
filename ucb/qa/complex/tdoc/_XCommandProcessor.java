@@ -66,7 +66,7 @@ import share.LogWriter;
 public class _XCommandProcessor {
 
     /**
-     * Conatins the tested object.
+     * Contains the tested object.
      */
     public XCommandProcessor oObj;
     private final LogWriter log = null;

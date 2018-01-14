@@ -143,7 +143,7 @@ private:
         const std::shared_ptr<BitmapCache>& rpCache);
 
     /** This method is used internally to initialize a newly created
-        BitmapCache with already exisiting previews.
+        BitmapCache with already existing previews.
     */
     void Recycle (
         const std::shared_ptr<BitmapCache>& rpCache,

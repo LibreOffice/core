@@ -36,7 +36,7 @@ The COM components also call into the same global AccObjectWinManager
 as the UNO components do so both have to be synchronized in the same way.
 So we use the SolarMutex for all synchronization since anything else
 would be rather difficult to make work.  Unfortunately there is a
-pre-exising problem in vcl with Win32 Window creation and destruction
+pre-existing problem in vcl with Win32 Window creation and destruction
 on non-main threads where a synchronous SendMessage is used while
 the SolarMutex is locked that can cause deadlocks if the main thread is
 waiting on the SolarMutex itself at that time and thus not handing the

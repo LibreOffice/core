@@ -374,7 +374,7 @@ void SlideSorterModel::SetDocumentSlides (
     mxSlides = nullptr;
     ClearDescriptorList ();
 
-    // Reset the current page to cause everbody to release references to it.
+    // Reset the current page to cause everybody to release references to it.
     mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(-1);
 
     // Set the new set of pages.

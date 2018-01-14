@@ -25,7 +25,7 @@ import com.sun.star.ucb.XCommandProcessor2;
 
 public class _XCommandProcessor2 extends MultiMethodTest {
     /**
-     * Conatins the tested object.
+     * Contains the tested object.
      */
     public XCommandProcessor2 oObj;
 

@@ -48,7 +48,7 @@ import com.sun.star.uno.UnoRuntime;
 public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
 
     /**
-     * Conatins the tested object.
+     * Contains the tested object.
      */
     public XCachedDynamicResultSetStubFactory oObj;
     private XDynamicResultSet resSet = null ;
