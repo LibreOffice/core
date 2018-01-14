@@ -1071,7 +1071,7 @@ void ImageManagerImpl::reload()
                 if ( pInsertedImages != nullptr )
                 {
                     ConfigurationEvent aInsertEvent;
-                    aInsertEvent.aInfo           <<=(sal_uInt16)i;
+                    aInsertEvent.aInfo           <<=static_cast<sal_uInt16>(i);
                     aInsertEvent.Accessor        <<= xOwner;
                     aInsertEvent.Source          = xOwner;
                     aInsertEvent.ResourceURL     = m_aResourceString;
@@ -1082,7 +1082,7 @@ void ImageManagerImpl::reload()
                 if ( pReplacedImages != nullptr )
                 {
                     ConfigurationEvent aReplaceEvent;
-                    aReplaceEvent.aInfo           <<= (sal_uInt16)i;
+                    aReplaceEvent.aInfo           <<= static_cast<sal_uInt16>(i);
                     aReplaceEvent.Accessor        <<= xOwner;
                     aReplaceEvent.Source          = xOwner;
                     aReplaceEvent.ResourceURL     = m_aResourceString;
@@ -1094,7 +1094,7 @@ void ImageManagerImpl::reload()
                 if ( pRemovedImages != nullptr )
                 {
                     ConfigurationEvent aRemoveEvent;
-                    aRemoveEvent.aInfo           <<= (sal_uInt16)i;
+                    aRemoveEvent.aInfo           <<= static_cast<sal_uInt16>(i);
                     aRemoveEvent.Accessor        <<= xOwner;
                     aRemoveEvent.Source          = xOwner;
                     aRemoveEvent.ResourceURL     = m_aResourceString;

@@ -231,8 +231,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
         else if (aPropName == SC_UNONAME_SRCTYPE)
         {
             //! test for correct enum type?
-            sheet::DataImportMode eMode = (sheet::DataImportMode)
-                                ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
+            sheet::DataImportMode eMode = static_cast<sheet::DataImportMode>(ScUnoHelpFunctions::GetEnumFromAny( rProp.Value ));
             switch (eMode)
             {
                 case sheet::DataImportMode_NONE:
@@ -336,8 +335,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         if (aPropName == SC_UNONAME_ORIENT)
         {
             //! test for correct enum type?
-            table::TableOrientation eOrient = (table::TableOrientation)
-                                ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
+            table::TableOrientation eOrient = static_cast<table::TableOrientation>(ScUnoHelpFunctions::GetEnumFromAny( rProp.Value ));
             rParam.bByRow = ( eOrient != table::TableOrientation_COLUMNS );
         }
         else if (aPropName == SC_UNONAME_ISSORTCOLUMNS)
@@ -518,7 +516,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
             for (SCCOL i=0; i<nCount; i++)
             {
                 aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc((ScGeneralFunction)pAry[i].Function);
+                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(pAry[i].Function));
             }
         }
         else
@@ -599,7 +597,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
         for (SCCOL i=0; i<nCount; i++)
         {
             aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-            aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc((ScGeneralFunction)pAry[i].Function);
+            aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(pAry[i].Function));
         }
     }
     else
@@ -839,7 +837,7 @@ sheet::GeneralFunction SAL_CALL ScConsolidationDescriptor::getFunction()
 void SAL_CALL ScConsolidationDescriptor::setFunction( sheet::GeneralFunction nFunction )
 {
     SolarMutexGuard aGuard;
-    aParam.eFunction = ScDPUtil::toSubTotalFunc((ScGeneralFunction)nFunction);
+    aParam.eFunction = ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(nFunction));
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScConsolidationDescriptor::getSources()
@@ -1414,8 +1412,7 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
     else if (aPropertyName == SC_UNONAME_ORIENT)
     {
         //! test for correct enum type?
-        table::TableOrientation eOrient = (table::TableOrientation)
-                                ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        table::TableOrientation eOrient = static_cast<table::TableOrientation>(ScUnoHelpFunctions::GetEnumFromAny( aValue ));
         aParam.bByRow = ( eOrient != table::TableOrientation_COLUMNS );
     }
     else if (aPropertyName == SC_UNONAME_OUTPOS)

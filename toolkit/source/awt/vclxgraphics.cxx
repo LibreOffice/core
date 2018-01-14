@@ -220,7 +220,7 @@ void VCLXGraphics::setRasterOp( awt::RasterOperation eROP )
 {
     SolarMutexGuard aGuard;
 
-    meRasterOp = (RasterOp)eROP;
+    meRasterOp = static_cast<RasterOp>(eROP);
 }
 
 void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion )
@@ -460,7 +460,7 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::COLORS );
-        Gradient aGradient((GradientStyle)rGradient.Style, rGradient.StartColor, rGradient.EndColor);
+        Gradient aGradient(static_cast<GradientStyle>(rGradient.Style), rGradient.StartColor, rGradient.EndColor);
         aGradient.SetAngle(rGradient.Angle);
         aGradient.SetBorder(rGradient.Border);
         aGradient.SetOfsX(rGradient.XOffset);

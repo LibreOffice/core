@@ -228,7 +228,7 @@ namespace svx
         // build the property value
         PropertyValue aReturn;
         aReturn.Name    = pProperty->maName;
-        aReturn.Handle  = (sal_Int32)pProperty->mnHandle;
+        aReturn.Handle  = static_cast<sal_Int32>(pProperty->mnHandle);
         aReturn.Value   = _rPos->second;
         aReturn.State   = PropertyState_DIRECT_VALUE;
 

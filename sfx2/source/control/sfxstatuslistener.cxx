@@ -198,7 +198,7 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
         {
             ItemStatus aItemStatus;
             rEvent.State >>= aItemStatus;
-            eState = (SfxItemState) aItemStatus.State;
+            eState = static_cast<SfxItemState>(aItemStatus.State);
             pItem = new SfxVoidItem( m_nSlotID );
         }
         else if ( aType == cppu::UnoType< css::frame::status::Visibility >::get() )

@@ -411,7 +411,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
 void OutlineViewShell::FuSupport(SfxRequest &rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
-        GetDocSh()->SetStyleFamily((SfxStyleFamily) static_cast<const SfxUInt16Item&>(rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
+        GetDocSh()->SetStyleFamily(static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item&>(rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue()));
 
     bool bPreviewState = false;
     sal_uLong nSlot = rReq.GetSlot();

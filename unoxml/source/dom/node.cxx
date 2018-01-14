@@ -368,7 +368,7 @@ namespace DOM
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMNodeInserted"), UNO_QUERY);
         event->initMutationEvent("DOMNodeInserted", true, false, this,
-            OUString(), OUString(), OUString(), (AttrChangeType)0 );
+            OUString(), OUString(), OUString(), AttrChangeType(0) );
 
         // the following dispatch functions use only UNO interfaces
         // and call event listeners, so release mutex to prevent deadlocks.
@@ -786,7 +786,7 @@ namespace DOM
             true,
             false,
             this,
-            OUString(), OUString(), OUString(), (AttrChangeType)0 );
+            OUString(), OUString(), OUString(), AttrChangeType(0) );
 
         // the following dispatch functions use only UNO interfaces
         // and call event listeners, so release mutex to prevent deadlocks.
@@ -915,7 +915,7 @@ namespace DOM
         event->initMutationEvent(
             "DOMSubtreeModified", true,
             false, Reference< XNode >(),
-            OUString(), OUString(), OUString(), (AttrChangeType)0 );
+            OUString(), OUString(), OUString(), AttrChangeType(0) );
         dispatchEvent(event);
     }
 

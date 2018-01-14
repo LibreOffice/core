@@ -114,7 +114,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     {
         for(int i=1; i< elem.Text.getLength(); i++)
         {
-            css::i18n::DirectionProperty nType = (css::i18n::DirectionProperty)xCC->getCharacterDirection( str, i );
+            css::i18n::DirectionProperty nType = static_cast<css::i18n::DirectionProperty>(xCC->getCharacterDirection( str, i ));
             if ( nType == css::i18n::DirectionProperty_RIGHT_TO_LEFT           ||
                  nType == css::i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC    ||
                  nType == css::i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING ||

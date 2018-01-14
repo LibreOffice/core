@@ -936,7 +936,7 @@ ScSplitPos ScTabView::FindWindow( const vcl::Window* pWindow ) const
     ScSplitPos eVal = SC_SPLIT_BOTTOMLEFT;      // Default
     for (sal_uInt16 i=0; i<4; i++)
         if ( pGridWin[i] == pWindow )
-            eVal = (ScSplitPos) i;
+            eVal = static_cast<ScSplitPos>(i);
 
     return eVal;
 }

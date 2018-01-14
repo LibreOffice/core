@@ -168,7 +168,7 @@ Any PyEnum2Enum( PyObject *obj )
     if(desc.get()->eTypeClass != typelib_TypeClass_ENUM )
     {
         throw RuntimeException( "pyuno.checkEnum: " + strTypeName +  "is a " +
-            OUString::createFromAscii(typeClassToString( (css::uno::TypeClass) desc.get()->eTypeClass)) +
+            OUString::createFromAscii(typeClassToString( static_cast<css::uno::TypeClass>(desc.get()->eTypeClass))) +
             ", expected ENUM" );
     }
 
@@ -217,7 +217,7 @@ Type PyType2Type( PyObject * o )
     if( static_cast<css::uno::TypeClass>(desc.get()->eTypeClass) != tc )
     {
         throw RuntimeException( "pyuno.checkType: " + name + " is a " +
-            OUString::createFromAscii( typeClassToString( (TypeClass) desc.get()->eTypeClass) ) +
+            OUString::createFromAscii( typeClassToString( static_cast<TypeClass>(desc.get()->eTypeClass)) ) +
             ", but type got construct with typeclass " +
             OUString::createFromAscii( typeClassToString( tc ) ) );
     }

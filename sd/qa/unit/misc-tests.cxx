@@ -222,7 +222,7 @@ void SdMiscTest::testTdf99396TextEdit()
         uno::Reference<table::XTable> xTable = pTableObject->getTable();
         uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
         drawing::TextVerticalAdjust eAdjust = xCell->getPropertyValue("TextVerticalAdjust").get<drawing::TextVerticalAdjust>();
-        CPPUNIT_ASSERT_EQUAL((int)drawing::TextVerticalAdjust_BOTTOM, (int)eAdjust);
+        CPPUNIT_ASSERT_EQUAL(int(drawing::TextVerticalAdjust_BOTTOM), static_cast<int>(eAdjust));
     }
     {
         const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
@@ -240,7 +240,7 @@ void SdMiscTest::testTdf99396TextEdit()
         uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
         drawing::TextVerticalAdjust eAdjust = xCell->getPropertyValue("TextVerticalAdjust").get<drawing::TextVerticalAdjust>();
         // This failed: Undo() did not change it from drawing::TextVerticalAdjust_BOTTOM.
-        CPPUNIT_ASSERT_EQUAL((int)drawing::TextVerticalAdjust_TOP, (int)eAdjust);
+        CPPUNIT_ASSERT_EQUAL(int(drawing::TextVerticalAdjust_TOP), static_cast<int>(eAdjust));
     }
     {
         const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
@@ -292,7 +292,7 @@ void SdMiscTest::testFillGradient()
     drawing::FillStyle eFillStyle;
     awt::Gradient aGradient2;
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillStyle") >>= eFillStyle);
-    CPPUNIT_ASSERT_EQUAL((int)drawing::FillStyle_GRADIENT, (int)eFillStyle);
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_GRADIENT), static_cast<int>(eFillStyle));
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(RGB_COLORDATA(255, 0, 0)),aGradient2.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(RGB_COLORDATA(0, 255, 0)),aGradient2.EndColor);

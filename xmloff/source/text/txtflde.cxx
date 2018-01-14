@@ -243,7 +243,7 @@ SvXMLEnumStringMapEntry<FieldIdEnum> const aFieldServiceNameMapping[] =
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_TABLE_FORMULA, FIELD_ID_TABLE_FORMULA ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DROP_DOWN, FIELD_ID_DROP_DOWN ),
 
-    { nullptr, 0, (FieldIdEnum)0 }
+    { nullptr, 0, FieldIdEnum(0) }
 };
 
 

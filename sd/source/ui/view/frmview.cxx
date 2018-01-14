@@ -411,7 +411,7 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
         aUserData.addValue( sUNO_View_SnapLinesHandout, makeAny( createHelpLinesString( GetHandoutHelpLines() ) ) );
 
     aUserData.addValue( sUNO_View_RulerIsVisible, makeAny( HasRuler() ) );
-    aUserData.addValue( sUNO_View_PageKind, makeAny( (sal_Int16)GetPageKind() ) );
+    aUserData.addValue( sUNO_View_PageKind, makeAny( static_cast<sal_Int16>(GetPageKind()) ) );
     aUserData.addValue( sUNO_View_SelectedPage, makeAny( static_cast<sal_Int16>(GetSelectedPage()) ) );
     aUserData.addValue( sUNO_View_IsLayerMode, makeAny( IsLayerMode() ) );
 
@@ -419,7 +419,7 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.addValue( sUNO_View_IsClickChangeRotation, makeAny( IsClickChangeRotation() ) );
 
     aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( static_cast<sal_Int16>(GetSlidesPerRow()) ) );
-    aUserData.addValue( sUNO_View_EditMode, makeAny( (sal_Int32)GetViewShEditMode() ) );
+    aUserData.addValue( sUNO_View_EditMode, makeAny( static_cast<sal_Int32>(GetViewShEditMode()) ) );
     // aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Standard ) ) );
     // aUserData.addValue( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Notes ) ) );
     // aUserData.addValue( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Handout ) ) );
@@ -586,9 +586,9 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetPageKind( (PageKind)nInt16 );
+                        SetPageKind( static_cast<PageKind>(nInt16) );
 
-                    SetPageKindOnLoad( (PageKind)nInt16 );
+                    SetPageKindOnLoad( static_cast<PageKind>(nInt16) );
                 }
             }
             else if ( pValue->Name == sUNO_View_SelectedPage )
@@ -636,7 +636,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetViewShEditMode( (EditMode)nInt32 );
+                        SetViewShEditMode( static_cast<EditMode>(nInt32) );
                 }
             }
             // This one is kept for compatibility. Old value read from sUNO_View_EditModeStandard
@@ -648,7 +648,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetViewShEditMode( (EditMode)nInt32 );
+                        SetViewShEditMode( static_cast<EditMode>(nInt32) );
                 }
             }
             else if ( pValue->Name == sUNO_View_VisibleAreaTop )

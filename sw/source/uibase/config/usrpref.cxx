@@ -296,7 +296,7 @@ void SwLayoutViewConfig::ImplCommit()
             break;
             case  8: rVal <<= rParent.IsSmoothScroll(); break;                      // "Window/SmoothScroll",
             case  9: rVal <<= static_cast<sal_Int32>(rParent.GetZoom()); break;                  // "Zoom/Value",
-            case 10: rVal <<= (sal_Int32)rParent.GetZoomType(); break;              // "Zoom/Type",
+            case 10: rVal <<= static_cast<sal_Int32>(rParent.GetZoomType()); break;              // "Zoom/Type",
             case 11: rVal <<= rParent.IsAlignMathObjectsToBaseline(); break;        // "Other/IsAlignMathObjectsToBaseline"
             case 12: rVal <<= static_cast<sal_Int32>(rParent.GetMetric()); break;                // "Other/MeasureUnit",
             case 13: rVal <<= static_cast<sal_Int32>(convertTwipToMm100(rParent.GetDefTab())); break;// "Other/TabStop",
@@ -339,20 +339,20 @@ void SwLayoutViewConfig::Load()
                     case  6:
                     {
                         rParent.m_bIsHScrollMetricSet = true;
-                        rParent.m_eHScrollMetric = ((FieldUnit)nInt32Val);  // "Window/HorizontalRulerUnit"
+                        rParent.m_eHScrollMetric = static_cast<FieldUnit>(nInt32Val);  // "Window/HorizontalRulerUnit"
                     }
                     break;
                     case  7:
                     {
                         rParent.m_bIsVScrollMetricSet = true;
-                        rParent.m_eVScrollMetric = ((FieldUnit)nInt32Val); // "Window/VerticalRulerUnit"
+                        rParent.m_eVScrollMetric = static_cast<FieldUnit>(nInt32Val); // "Window/VerticalRulerUnit"
                     }
                     break;
                     case  8: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
                     case  9: rParent.SetZoom( static_cast< sal_uInt16 >(nInt32Val) ); break;// "Zoom/Value",
                     case 10: rParent.SetZoomType( static_cast< SvxZoomType >(nInt32Val) ); break;// "Zoom/Type",
                     case 11: rParent.SetAlignMathObjectsToBaseline(bSet); break;// "Other/IsAlignMathObjectsToBaseline"
-                    case 12: rParent.SetMetric((FieldUnit)nInt32Val, true); break;// "Other/MeasureUnit",
+                    case 12: rParent.SetMetric(static_cast<FieldUnit>(nInt32Val), true); break;// "Other/MeasureUnit",
                     case 13: rParent.SetDefTab(convertMm100ToTwip(nInt32Val), true); break;// "Other/TabStop",
                     case 14: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
                     case 15: rParent.SetViewLayoutColumns( static_cast<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",

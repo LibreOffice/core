@@ -66,7 +66,7 @@ void ParaULSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
     if(nSID == SID_ATTR_METRIC && pState && eState >= SfxItemState::DEFAULT)
     {
         const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pState);
-        pWindow->SetUnit((FieldUnit)pMetricItem->GetValue());
+        pWindow->SetUnit(static_cast<FieldUnit>(pMetricItem->GetValue()));
     }
     else if((nSID == SID_ATTR_PARA_ULSPACE
         || nSID == SID_ATTR_PARA_ABOVESPACE
@@ -153,7 +153,7 @@ void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
     if(nSID == SID_ATTR_METRIC && pState && eState >= SfxItemState::DEFAULT)
     {
         const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pState);
-        pWindow->SetUnit((FieldUnit)pMetricItem->GetValue());
+        pWindow->SetUnit(static_cast<FieldUnit>(pMetricItem->GetValue()));
     }
     else if(nSID == SID_ATTR_PARA_LRSPACE
          || nSID == SID_ATTR_PARA_LEFTSPACE

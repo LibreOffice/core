@@ -655,7 +655,7 @@ void SwFEShell::SetDragMode( SdrDragMode eDragMode )
 
 SdrDragMode SwFEShell::GetDragMode() const
 {
-    SdrDragMode nRet = (SdrDragMode)0;
+    SdrDragMode nRet = SdrDragMode(0);
     if ( Imp()->HasDrawView() )
     {
         nRet = Imp()->GetDrawView()->GetDragMode();
@@ -2197,7 +2197,7 @@ void SwFEShell::BreakMark()
 
 RndStdIds SwFEShell::GetAnchorId() const
 {
-    RndStdIds nRet = (RndStdIds)SHRT_MAX;
+    RndStdIds nRet = RndStdIds(SHRT_MAX);
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
@@ -2211,7 +2211,7 @@ RndStdIds SwFEShell::GetAnchorId() const
             }
             SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
             RndStdIds nId = pContact->GetFormat()->GetAnchor().GetAnchorId();
-            if ( nRet == (RndStdIds)SHRT_MAX )
+            if ( nRet == RndStdIds(SHRT_MAX) )
                 nRet = nId;
             else if ( nRet != nId )
             {
@@ -2220,7 +2220,7 @@ RndStdIds SwFEShell::GetAnchorId() const
             }
         }
     }
-    if ( nRet == (RndStdIds)SHRT_MAX )
+    if ( nRet == RndStdIds(SHRT_MAX) )
         nRet = RndStdIds::UNKNOWN;
     return nRet;
 }

@@ -481,7 +481,7 @@ static PyObject *getTypeByName(
             {
                 Runtime runtime;
                 ret = PyUNO_Type_new(
-                    name, (css::uno::TypeClass)typeDesc.get()->eTypeClass, runtime );
+                    name, static_cast<css::uno::TypeClass>(typeDesc.get()->eTypeClass), runtime );
             }
             else
             {

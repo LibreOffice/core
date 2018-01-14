@@ -228,22 +228,22 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
         aFont.SetStyleName( rDescr.StyleName );
     if ( rDescr.Height )
         aFont.SetFontSize( Size( rDescr.Width, rDescr.Height ) );
-    if ( (FontFamily)rDescr.Family != FAMILY_DONTKNOW )
-        aFont.SetFamily( (FontFamily)rDescr.Family );
+    if ( static_cast<FontFamily>(rDescr.Family) != FAMILY_DONTKNOW )
+        aFont.SetFamily( static_cast<FontFamily>(rDescr.Family) );
     if ( static_cast<rtl_TextEncoding>(rDescr.CharSet) != RTL_TEXTENCODING_DONTKNOW )
         aFont.SetCharSet( static_cast<rtl_TextEncoding>(rDescr.CharSet) );
-    if ( (FontPitch)rDescr.Pitch != PITCH_DONTKNOW )
-        aFont.SetPitch( (FontPitch)rDescr.Pitch );
+    if ( static_cast<FontPitch>(rDescr.Pitch) != PITCH_DONTKNOW )
+        aFont.SetPitch( static_cast<FontPitch>(rDescr.Pitch) );
     if ( rDescr.CharacterWidth )
         aFont.SetWidthType(vcl::unohelper::ConvertFontWidth(rDescr.CharacterWidth));
     if ( rDescr.Weight )
         aFont.SetWeight(vcl::unohelper::ConvertFontWeight(rDescr.Weight));
     if ( rDescr.Slant != css::awt::FontSlant_DONTKNOW )
         aFont.SetItalic(vcl::unohelper::ConvertFontSlant(rDescr.Slant));
-    if ( (FontLineStyle)rDescr.Underline != LINESTYLE_DONTKNOW )
-        aFont.SetUnderline( (FontLineStyle)rDescr.Underline );
-    if ( (FontStrikeout)rDescr.Strikeout != STRIKEOUT_DONTKNOW )
-        aFont.SetStrikeout( (FontStrikeout)rDescr.Strikeout );
+    if ( static_cast<FontLineStyle>(rDescr.Underline) != LINESTYLE_DONTKNOW )
+        aFont.SetUnderline( static_cast<FontLineStyle>(rDescr.Underline) );
+    if ( static_cast<FontStrikeout>(rDescr.Strikeout) != STRIKEOUT_DONTKNOW )
+        aFont.SetStrikeout( static_cast<FontStrikeout>(rDescr.Strikeout) );
 
     // Not DONTKNOW
     aFont.SetOrientation( static_cast<short>(rDescr.Orientation) );
@@ -385,7 +385,7 @@ namespace
         {
             if ( eDirection == FieldUnitToMeasurementUnit )
             {
-                if ( ( aUnit.eFieldUnit == (FieldUnit)_nUnit ) && ( aUnit.nFieldToMeasureFactor == _rFieldToUNOValueFactor ) )
+                if ( ( aUnit.eFieldUnit == static_cast<FieldUnit>(_nUnit) ) && ( aUnit.nFieldToMeasureFactor == _rFieldToUNOValueFactor ) )
                     return aUnit.nMeasurementUnit;
             }
             else
@@ -416,7 +416,7 @@ sal_Int16 VCLUnoHelper::ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int
 
 FieldUnit VCLUnoHelper::ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor )
 {
-    return (FieldUnit)convertMeasurementUnit( _nMeasurementUnit, MeasurementUnitToFieldUnit, _rFieldToUNOValueFactor );
+    return static_cast<FieldUnit>(convertMeasurementUnit( _nMeasurementUnit, MeasurementUnitToFieldUnit, _rFieldToUNOValueFactor ));
 }
 
 

@@ -67,7 +67,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                 {
                     short nTmp;
                     if (*pValues >>= nTmp)
-                        nDragMode = (DragMode)nTmp;
+                        nDragMode = static_cast<DragMode>(nTmp);
                     break;
                 }
                 case  1: bMenuMouseFollow = *o3tl::doAccess<bool>(*pValues); break; //"Menu/FollowMouse",
@@ -75,7 +75,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                 {
                     short nTmp;
                     if (*pValues >>= nTmp)
-                        nSnapMode = (SnapType)nTmp; //"Dialog/MousePositioning",
+                        nSnapMode = static_cast<SnapType>(nTmp); //"Dialog/MousePositioning",
                     break;
                 }
                 case  3: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
@@ -129,9 +129,9 @@ void  SvtTabAppearanceCfg::ImplCommit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= (short)nDragMode; break;        // "Window/Drag",
+            case  0: pValues[nProp] <<= static_cast<short>(nDragMode); break;        // "Window/Drag",
             case  1: pValues[nProp] <<= bMenuMouseFollow; break;        // "Menu/FollowMouse",
-            case  2: pValues[nProp] <<= (short)nSnapMode; break;        // "Dialog/MousePositioning",
+            case  2: pValues[nProp] <<= static_cast<short>(nSnapMode); break;        // "Dialog/MousePositioning",
             case  3: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break; // "Dialog/MiddleMouseButton",
 #if defined( UNX )
             case  4: pValues[nProp] <<= bFontAntialiasing; break;       // "FontAntialising/Enabled",

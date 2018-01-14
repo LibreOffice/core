@@ -984,7 +984,7 @@ bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
         if(!(rVal >>= nEnum))
             return false;
 
-        eFS = (drawing::TextFitToSizeType) nEnum;
+        eFS = static_cast<drawing::TextFitToSizeType>(nEnum);
     }
 
     SetValue(eFS);
@@ -1017,7 +1017,7 @@ bool SdrTextVertAdjustItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrTextVertAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (drawing::TextVerticalAdjust)GetValue();
+    rVal <<= static_cast<drawing::TextVerticalAdjust>(GetValue());
     return true;
 }
 
@@ -1030,10 +1030,10 @@ bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
         if(!(rVal >>= nEnum))
             return false;
 
-        eAdj = (drawing::TextVerticalAdjust)nEnum;
+        eAdj = static_cast<drawing::TextVerticalAdjust>(nEnum);
     }
 
-    SetValue( (SdrTextVertAdjust)eAdj );
+    SetValue( static_cast<SdrTextVertAdjust>(eAdj) );
 
     return true;
 }
@@ -1070,7 +1070,7 @@ bool SdrTextHorzAdjustItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrTextHorzAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (drawing::TextHorizontalAdjust)GetValue();
+    rVal <<= static_cast<drawing::TextHorizontalAdjust>(GetValue());
     return true;
 }
 
@@ -1083,10 +1083,10 @@ bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
         if(!(rVal >>= nEnum))
             return false;
 
-        eAdj = (drawing::TextHorizontalAdjust)nEnum;
+        eAdj = static_cast<drawing::TextHorizontalAdjust>(nEnum);
     }
 
-    SetValue( (SdrTextHorzAdjust)eAdj );
+    SetValue( static_cast<SdrTextHorzAdjust>(eAdj) );
 
     return true;
 }
@@ -1116,7 +1116,7 @@ bool SdrTextAniKindItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrTextAniKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (drawing::TextAnimationKind)GetValue();
+    rVal <<= static_cast<drawing::TextAnimationKind>(GetValue());
     return true;
 }
 
@@ -1128,10 +1128,10 @@ bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return false;
-        eKind = (drawing::TextAnimationKind)nEnum;
+        eKind = static_cast<drawing::TextAnimationKind>(nEnum);
     }
 
-    SetValue( (SdrTextAniKind)eKind );
+    SetValue( static_cast<SdrTextAniKind>(eKind) );
 
     return true;
 }
@@ -1161,7 +1161,7 @@ bool SdrTextAniDirectionItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrTextAniDirectionItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (drawing::TextAnimationDirection)GetValue();
+    rVal <<= static_cast<drawing::TextAnimationDirection>(GetValue());
     return true;
 }
 
@@ -1174,10 +1174,10 @@ bool SdrTextAniDirectionItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMembe
         if(!(rVal >>= nEnum))
             return false;
 
-        eDir = (drawing::TextAnimationDirection)nEnum;
+        eDir = static_cast<drawing::TextAnimationDirection>(nEnum);
     }
 
-    SetValue( (SdrTextAniDirection)eDir );
+    SetValue( static_cast<SdrTextAniDirection>(eDir) );
 
     return true;
 }
@@ -1349,7 +1349,7 @@ bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
         if(!(rVal >>= nEnum))
             return false;
 
-        eCT = (drawing::ConnectorType)nEnum;
+        eCT = static_cast<drawing::ConnectorType>(nEnum);
     }
 
     SdrEdgeKind eEK = SdrEdgeKind::OrthoLines;
@@ -1485,7 +1485,7 @@ bool SdrMeasureKindItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrMeasureKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (drawing::MeasureKind)GetValue();
+    rVal <<= static_cast<drawing::MeasureKind>(GetValue());
     return true;
 }
 
@@ -1498,10 +1498,10 @@ bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
         if(!(rVal >>= nEnum))
             return false;
 
-        eKind = (drawing::MeasureKind)nEnum;
+        eKind = static_cast<drawing::MeasureKind>(nEnum);
     }
 
-    SetValue( (SdrMeasureKind)eKind );
+    SetValue( static_cast<SdrMeasureKind>(eKind) );
     return true;
 }
 
@@ -1543,7 +1543,7 @@ bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMember
         if(!(rVal >>= nEnum))
             return false;
 
-        ePos = (drawing::MeasureTextHorzPos)nEnum;
+        ePos = static_cast<drawing::MeasureTextHorzPos>(nEnum);
     }
 
     SetValue(ePos);
@@ -1588,7 +1588,7 @@ bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMember
         if(!(rVal >>= nEnum))
             return false;
 
-        ePos = (drawing::MeasureTextVertPos)nEnum;
+        ePos = static_cast<drawing::MeasureTextVertPos>(nEnum);
     }
 
     SetValue(ePos);
@@ -1603,10 +1603,10 @@ OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     OUString aRetval;
 
-    if((FieldUnit)nPos == FUNIT_NONE)
+    if(static_cast<FieldUnit>(nPos) == FUNIT_NONE)
         aRetval = "default";
     else
-        SdrFormatter::TakeUnitStr((FieldUnit)nPos, aRetval);
+        SdrFormatter::TakeUnitStr(static_cast<FieldUnit>(nPos), aRetval);
 
     return aRetval;
 }
@@ -1636,7 +1636,7 @@ bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     if(!(rVal >>= nMeasure))
         return false;
 
-    SetValue( (FieldUnit)nMeasure );
+    SetValue( static_cast<FieldUnit>(nMeasure) );
     return true;
 }
 
@@ -1665,7 +1665,7 @@ bool SdrCircKindItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrCircKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (drawing::CircleKind)GetValue();
+    rVal <<= static_cast<drawing::CircleKind>(GetValue());
     return true;
 }
 
@@ -1678,10 +1678,10 @@ bool SdrCircKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
         if(!(rVal >>= nEnum))
             return false;
 
-        eKind = (drawing::CircleKind)nEnum;
+        eKind = static_cast<drawing::CircleKind>(nEnum);
     }
 
-    SetValue( (SdrCircKind)eKind );
+    SetValue( static_cast<SdrCircKind>(eKind) );
     return true;
 }
 

@@ -67,7 +67,7 @@ const SvXMLEnumMapEntry<XMLEffect> aXML_AnimationEffect_EnumMap[] =
     { XML_CHECKERBOARD, EK_checkerboard },
     { XML_ROTATE,       EK_rotate },
     { XML_STRETCH,      EK_stretch },
-    { XML_TOKEN_INVALID, (XMLEffect)0 }
+    { XML_TOKEN_INVALID, XMLEffect(0) }
 };
 
 const SvXMLEnumMapEntry<XMLEffectDirection> aXML_AnimationDirection_EnumMap[] =
@@ -100,7 +100,7 @@ const SvXMLEnumMapEntry<XMLEffectDirection> aXML_AnimationDirection_EnumMap[] =
     { XML_TO_CENTER,        ED_to_center },
     { XML_CLOCKWISE,        ED_clockwise },
     { XML_COUNTER_CLOCKWISE,ED_cclockwise },
-    { XML_TOKEN_INVALID, (XMLEffectDirection)0 }
+    { XML_TOKEN_INVALID, XMLEffectDirection(0) }
 };
 
 const SvXMLEnumMapEntry<AnimationSpeed> aXML_AnimationSpeed_EnumMap[] =
@@ -108,7 +108,7 @@ const SvXMLEnumMapEntry<AnimationSpeed> aXML_AnimationSpeed_EnumMap[] =
     { XML_SLOW,     AnimationSpeed_SLOW },
     { XML_MEDIUM,   AnimationSpeed_MEDIUM },
     { XML_FAST,     AnimationSpeed_FAST },
-    { XML_TOKEN_INVALID, (AnimationSpeed)0 }
+    { XML_TOKEN_INVALID, AnimationSpeed(0) }
 };
 
 AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, bool /*bIn*/ )

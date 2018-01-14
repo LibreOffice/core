@@ -2717,8 +2717,8 @@ void ScDPObject::ConvertOrientation(
             sal_uInt16 nMask = 1;
             for (sal_uInt16 nBit=0; nBit<16; nBit++)
             {
-                if ( nFuncs & (PivotFunc)nMask )
-                    nSubTotalFuncs.push_back( ScDataPilotConversion::FirstFunc( (PivotFunc)nMask ) );
+                if ( nFuncs & static_cast<PivotFunc>(nMask) )
+                    nSubTotalFuncs.push_back( ScDataPilotConversion::FirstFunc( static_cast<PivotFunc>(nMask) ) );
                 nMask *= 2;
             }
             pDim->SetSubTotals( nSubTotalFuncs );

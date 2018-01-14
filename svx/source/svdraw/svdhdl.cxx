@@ -1846,7 +1846,7 @@ static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
                 {
                     if (eKind1==eKind2)
                         return lhs<rhs; // Hack, to always get to the same sorting
-                    return (sal_uInt16)eKind1<(sal_uInt16)eKind2;
+                    return static_cast<sal_uInt16>(eKind1)<static_cast<sal_uInt16>(eKind2);
                 }
                 else
                     return nNum1<nNum2;

@@ -124,7 +124,7 @@ public:
     sal_Int32   Compare( const StgEntry& ) const;   // compare two entries
     bool        Load( const void* pBuffer, sal_uInt32 nBufSize, sal_uInt64 nUnderlyingStreamSize );
     void        Store( void* );
-    StgEntryType GetType() const            { return (StgEntryType) m_cType;  }
+    StgEntryType GetType() const            { return static_cast<StgEntryType>(m_cType);  }
     sal_Int32   GetStartPage() const        { return m_nPage1; }
     void        SetType( StgEntryType t )   { m_cType = static_cast<sal_uInt8>(t); }
     sal_Int32   GetSize() const             { return m_nSize; }

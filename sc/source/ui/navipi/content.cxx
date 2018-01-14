@@ -65,7 +65,7 @@ using namespace com::sun::star;
 
 //  order of the categories in navigator -------------------------------------
 
-static const ScContentId pTypeList[(int)ScContentId::LAST + 1] =
+static const ScContentId pTypeList[int(ScContentId::LAST) + 1] =
 {
     ScContentId::ROOT,            // ROOT (0) has to be at the front
     ScContentId::TABLE,
@@ -132,12 +132,12 @@ ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg
     , bisInNavigatoeDlg(false)
 {
     SetQuickSearch(true);
-    for (sal_uInt16 i = 0; i <= (int)ScContentId::LAST; ++i)
+    for (sal_uInt16 i = 0; i <= int(ScContentId::LAST); ++i)
         pPosList[pTypeList[i]] = i;         // inverse for searching
 
     pRootNodes[ScContentId::ROOT] = nullptr;
-    for (sal_uInt16 i = 1; i < (int)ScContentId::LAST; ++i)
-        InitRoot((ScContentId)i);
+    for (sal_uInt16 i = 1; i < int(ScContentId::LAST); ++i)
+        InitRoot(static_cast<ScContentId>(i));
 
     SetNodeDefaultImages();
 
@@ -249,9 +249,9 @@ void ScContentTree::InitRoot( ScContentId nType )
         return;
     }
 
-    BitmapEx aBitmap(aContentBmps[(int)nType - 1]);
+    BitmapEx aBitmap(aContentBmps[static_cast<int>(nType) - 1]);
     Image aImage(aBitmap);
-    OUString aName(ScResId(SCSTR_CONTENT_ARY[(int)nType]));
+    OUString aName(ScResId(SCSTR_CONTENT_ARY[static_cast<int>(nType)]));
     // back to the correct position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
     SvTreeListEntry* pNew = InsertEntry( aName, aImage, aImage, nullptr, false, nPos );
@@ -270,8 +270,8 @@ void ScContentTree::ClearAll()
     Control::SetUpdateMode(false);
     Clear();
     Control::SetUpdateMode(bOldUpdate);
-    for (sal_uInt16 i=1; i<=(int)ScContentId::LAST; i++)
-        InitRoot((ScContentId)i);
+    for (sal_uInt16 i=1; i<=int(ScContentId::LAST); i++)
+        InitRoot(static_cast<ScContentId>(i));
 }
 
 void ScContentTree::ClearType(ScContentId nType)
@@ -311,9 +311,9 @@ void ScContentTree::GetEntryIndexes( ScContentId& rnRootIndex, sal_uLong& rnChil
 
     SvTreeListEntry* pParent = GetParent( pEntry );
     bool bFound = false;
-    for( int i = 1; !bFound && (i <= (int)ScContentId::LAST); ++i )
+    for( int i = 1; !bFound && (i <= int(ScContentId::LAST)); ++i )
     {
-        ScContentId nRoot = (ScContentId)i;
+        ScContentId nRoot = static_cast<ScContentId>(i);
         if( pEntry == pRootNodes[ nRoot ] )
         {
             rnRootIndex = nRoot;
@@ -1522,9 +1522,9 @@ void ScContentTree::ToggleRoot()        // after selection
         if (pEntry)
         {
             SvTreeListEntry* pParent = GetParent(pEntry);
-            for (sal_uInt16 i=1; i<=(int)ScContentId::LAST; i++)
-                if ( pEntry == pRootNodes[(ScContentId)i] || pParent == pRootNodes[(ScContentId)i] )
-                    nNew = (ScContentId)i;
+            for (sal_uInt16 i=1; i<=int(ScContentId::LAST); i++)
+                if ( pEntry == pRootNodes[static_cast<ScContentId>(i)] || pParent == pRootNodes[static_cast<ScContentId>(i)] )
+                    nNew = static_cast<ScContentId>(i);
         }
     }
 
@@ -1671,9 +1671,9 @@ void ScContentTree::ApplyNavigatorSettings()
         ScContentId nRootSel = pSettings->GetRootSelected();
         sal_uLong nChildSel = pSettings->GetChildSelected();
 
-        for( int i = 1; i <= (int)ScContentId::LAST; ++i )
+        for( int i = 1; i <= int(ScContentId::LAST); ++i )
         {
-            ScContentId nEntry = (ScContentId)i;
+            ScContentId nEntry = static_cast<ScContentId>(i);
             if( pRootNodes[ nEntry ] )
             {
                 // expand
@@ -1704,9 +1704,9 @@ void ScContentTree::StoreNavigatorSettings() const
     ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();
     if( pSettings )
     {
-        for( int i = 1; i <= (int)ScContentId::LAST; ++i )
+        for( int i = 1; i <= int(ScContentId::LAST); ++i )
         {
-            ScContentId nEntry = (ScContentId)i;
+            ScContentId nEntry = static_cast<ScContentId>(i);
             bool bExp = pRootNodes[ nEntry ] && IsExpanded( pRootNodes[ nEntry ] );
             pSettings->SetExpanded( nEntry, bExp );
         }

@@ -59,7 +59,7 @@ void ShapeParagraphDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
         SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
         TabulatorDisableFlags const nFlags(( TabulatorDisableFlags::TypeMask &~TabulatorDisableFlags::TypeLeft ) |
                                      ( TabulatorDisableFlags::FillMask &~TabulatorDisableFlags::FillNone ));
-        aSet.Put( SfxUInt16Item( SID_SVXTABULATORTABPAGE_DISABLEFLAGS, (sal_uInt16)nFlags) );
+        aSet.Put( SfxUInt16Item( SID_SVXTABULATORTABPAGE_DISABLEFLAGS, static_cast<sal_uInt16>(nFlags)) );
         rPage.PageCreated( aSet );
     }
 }

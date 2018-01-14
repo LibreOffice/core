@@ -823,7 +823,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     // Mouse Snap Mode
     SnapType eOldSnap = pAppearanceCfg->GetSnapMode();
-    SnapType eNewSnap = (SnapType)m_pMousePosLB->GetSelectedEntryPos();
+    SnapType eNewSnap = static_cast<SnapType>(m_pMousePosLB->GetSelectedEntryPos());
     if(eNewSnap > SnapType::NONE)
         eNewSnap = SnapType::NONE;
 
@@ -1001,7 +1001,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_pIconStyleLB->SaveValue();
 
     // Mouse Snap
-    m_pMousePosLB->SelectEntryPos((sal_Int32)pAppearanceCfg->GetSnapMode());
+    m_pMousePosLB->SelectEntryPos(static_cast<sal_Int32>(pAppearanceCfg->GetSnapMode()));
     m_pMousePosLB->SaveValue();
 
     // Mouse Snap

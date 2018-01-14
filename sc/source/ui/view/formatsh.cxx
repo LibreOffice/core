@@ -279,7 +279,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             SfxStyleFamily eFamily = SfxStyleFamily::Para;
             const SfxPoolItem* pFamItem;
             if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY, true, &pFamItem ) )
-                eFamily = (SfxStyleFamily) static_cast<const SfxUInt16Item*>(pFamItem)->GetValue();
+                eFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item*>(pFamItem)->GetValue());
             const SfxPoolItem* pNameItem;
             OUString aStyleName;
             if (pArgs && SfxItemState::SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
@@ -359,7 +359,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         SfxStyleFamily eFamily = SfxStyleFamily::Para;
         const SfxPoolItem* pFamItem;
         if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY, true, &pFamItem ) )
-            eFamily = (SfxStyleFamily) static_cast<const SfxUInt16Item*>(pFamItem)->GetValue();
+            eFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item*>(pFamItem)->GetValue());
         else if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, true, &pFamItem ) )
         {
             OUString sFamily = static_cast<const SfxStringItem*>(pFamItem)->GetValue();

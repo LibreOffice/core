@@ -680,7 +680,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
 
     for(nIndex=eOffsetStart;nIndex<=eOffsetEnd;nIndex++)
     {
-        nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
+        nNFEntry=pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex),eCurLanguage);
 
         const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
 
@@ -714,7 +714,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
 
     for (long nIndex = NF_DATETIME_START; nIndex <= NF_DATETIME_END; ++nIndex)
     {
-        nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
+        nNFEntry=pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex),eCurLanguage);
 
         const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
         if(pNumEntry!=nullptr)
@@ -789,7 +789,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
     for(long nIndex=NF_CURRENCY_START; nIndex<=NF_CURRENCY_END; nIndex++)
     {
-        nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
+        nNFEntry=pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex),eCurLanguage);
 
         const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
 

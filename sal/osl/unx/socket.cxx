@@ -95,13 +95,13 @@ static const unsigned long FamilyMap[]= {
 
 static oslAddrFamily osl_AddrFamilyFromNative(sal_uInt32 nativeType)
 {
-    oslAddrFamily i= (oslAddrFamily)0;
+    oslAddrFamily i= oslAddrFamily(0);
 
     while(i != osl_Socket_FamilyInvalid)
     {
         if(FamilyMap[i] == nativeType)
             return i;
-        i = (oslAddrFamily) ( i + 1 );
+        i = static_cast<oslAddrFamily>( i + 1 );
     }
 
     return i;
@@ -131,13 +131,13 @@ static const sal_uInt32 TypeMap[]= {
 
 static oslSocketType osl_SocketTypeFromNative(sal_uInt32 nativeType)
 {
-    oslSocketType i= (oslSocketType)0;
+    oslSocketType i= oslSocketType(0);
 
     while(i != osl_Socket_TypeInvalid)
     {
         if(TypeMap[i] == nativeType)
             return i;
-        i = (oslSocketType)(i + 1);
+        i = static_cast<oslSocketType>(i + 1);
     }
 
     return i;

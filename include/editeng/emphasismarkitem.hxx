@@ -61,7 +61,7 @@ public:
 
     // enum cast
     FontEmphasisMark        GetEmphasisMark() const
-                                { return (FontEmphasisMark)GetValue(); }
+                                { return static_cast<FontEmphasisMark>(GetValue()); }
 };
 
 #endif // INCLUDED_EDITENG_EMPHASISMARKITEM_HXX

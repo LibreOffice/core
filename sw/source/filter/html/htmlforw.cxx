@@ -1088,7 +1088,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                         {
                             auto aTmp2 = xPropSet->getPropertyValue( "FontFamily" );
                             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp2) )
-                                eFamily = (FontFamily)*n;
+                                eFamily = static_cast<FontFamily>(*n);
                         }
                         SvxFontItem aItem( eFamily, *aFName, aEmptyOUStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                         aItemSet.Put( aItem );
@@ -1112,7 +1112,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             aTmp = xPropSet->getPropertyValue( "FontSlant" );
             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
             {
-                FontItalic eItalic = (FontItalic)*n;
+                FontItalic eItalic = static_cast<FontItalic>(*n);
                 if( eItalic != ITALIC_DONTKNOW && eItalic != ITALIC_NONE )
                     aItemSet.Put( SvxPostureItem( eItalic, RES_CHRATR_POSTURE ) );
             }
@@ -1122,7 +1122,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             aTmp = xPropSet->getPropertyValue( "FontLineStyle" );
             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
             {
-                FontLineStyle eUnderline = (FontLineStyle)*n;
+                FontLineStyle eUnderline = static_cast<FontLineStyle>(*n);
                 if( eUnderline != LINESTYLE_DONTKNOW  &&
                     eUnderline != LINESTYLE_NONE )
                     aItemSet.Put( SvxUnderlineItem( eUnderline, RES_CHRATR_UNDERLINE ) );
@@ -1133,7 +1133,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             aTmp = xPropSet->getPropertyValue( "FontStrikeout" );
             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
             {
-                FontStrikeout eStrikeout = (FontStrikeout)*n;
+                FontStrikeout eStrikeout = static_cast<FontStrikeout>(*n);
                 if( eStrikeout != STRIKEOUT_DONTKNOW &&
                     eStrikeout != STRIKEOUT_NONE )
                     aItemSet.Put( SvxCrossedOutItem( eStrikeout, RES_CHRATR_CROSSEDOUT ) );

@@ -272,7 +272,7 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
     if ( !GetEntryData( nPos )->m_sLicenseText.isEmpty() )
         aPopup->InsertItem( CMD_SHOW_LICENSE, DpResId( RID_STR_SHOW_LICENSE_CMD ) );
 
-    return (MENU_COMMAND) aPopup->Execute( this, rPos );
+    return static_cast<MENU_COMMAND>(aPopup->Execute( this, rPos ));
 }
 
 

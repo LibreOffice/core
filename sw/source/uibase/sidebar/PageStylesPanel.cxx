@@ -168,7 +168,7 @@ void PageStylesPanel::Initialize()
 
 void PageStylesPanel::Update()
 {
-    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectedEntryPos();
+    const eFillStyle eXFS = static_cast<eFillStyle>(mpBgFillType->GetSelectedEntryPos());
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(eXFS)
     {
@@ -481,7 +481,7 @@ IMPL_LINK_NOARG( PageStylesPanel, ModifyLayoutHdl, ListBox&, void )
 
 IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
 {
-    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectedEntryPos();
+    const eFillStyle eXFS = static_cast<eFillStyle>(mpBgFillType->GetSelectedEntryPos());
     Update();
 
     switch (eXFS)
@@ -530,7 +530,7 @@ IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
 
 void PageStylesPanel::ModifyFillColor()
 {
-    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectedEntryPos();
+    const eFillStyle eXFS = static_cast<eFillStyle>(mpBgFillType->GetSelectedEntryPos());
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(eXFS)
     {

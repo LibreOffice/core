@@ -858,7 +858,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         aHLinkItem.SetName(rSh.GetFlyName());
                     }
 
-                    aHLinkItem.SetInsertMode((SvxLinkInsertMode)(aHLinkItem.GetInsertMode() |
+                    aHLinkItem.SetInsertMode(static_cast<SvxLinkInsertMode>(aHLinkItem.GetInsertMode() |
                         (bHtmlMode ? HLINK_HTMLMODE : 0)));
 
                     rSet.Put(aHLinkItem);

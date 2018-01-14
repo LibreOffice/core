@@ -1537,11 +1537,11 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
 
             for (sal_uLong nBit = 1; nBit < 0x80000000; nBit <<= 1)
             {
-                if (nLBRelations & (LB)nBit)
+                if (nLBRelations & static_cast<LB>(nBit))
                 {
                     for (RelationMap & rMap : aRelationMap)
                     {
-                        if (rMap.nLBRelation == (LB)nBit)
+                        if (rMap.nLBRelation == static_cast<LB>(nBit))
                         {
                             SvxSwFramePosString::StringId eStrId1 = m_pMirrorPagesCB->IsChecked() ?
                                             rMap.eMirrorStrId : rMap.eStrId;

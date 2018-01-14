@@ -41,7 +41,7 @@ const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFormat )
 {
     const sal_Char *pFormatStr = nullptr;
 
-    switch( (SvxNumType)nFormat )
+    switch( static_cast<SvxNumType>(nFormat) )
     {
     case SVX_NUM_CHARS_UPPER_LETTER:    pFormatStr = OOO_STRING_SW_HTML_FF_uletter;    break;
     case SVX_NUM_CHARS_LOWER_LETTER:    pFormatStr = OOO_STRING_SW_HTML_FF_lletter;    break;
@@ -83,7 +83,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     {
         case SwFieldIds::ExtUser:
             pTypeStr = OOO_STRING_SW_HTML_FT_sender;
-            switch( (SwExtUserSubType)pField->GetSubType() )
+            switch( static_cast<SwExtUserSubType>(pField->GetSubType()) )
             {
                 case EU_COMPANY:    pSubStr = OOO_STRING_SW_HTML_FS_company;        break;
                 case EU_FIRSTNAME:  pSubStr = OOO_STRING_SW_HTML_FS_firstname;  break;
@@ -109,7 +109,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
         case SwFieldIds::Author:
             pTypeStr = OOO_STRING_SW_HTML_FT_author;
-            switch( (SwAuthorFormat)nFormat & 0xff)
+            switch( static_cast<SwAuthorFormat>(nFormat) & 0xff)
             {
                 case AF_NAME:     pFormatStr = OOO_STRING_SW_HTML_FF_name;     break;
                 case AF_SHORTCUT:  pFormatStr = OOO_STRING_SW_HTML_FF_shortcut;    break;
@@ -131,7 +131,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         case SwFieldIds::PageNumber:
             {
                 pTypeStr = OOO_STRING_SW_HTML_FT_page;
-                SwPageNumSubType eSubType = (SwPageNumSubType)pField->GetSubType();
+                SwPageNumSubType eSubType = static_cast<SwPageNumSubType>(pField->GetSubType());
                 switch( eSubType )
                 {
                     case PG_RANDOM:     pSubStr = OOO_STRING_SW_HTML_FS_random;     break;
@@ -141,7 +141,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 OSL_ENSURE( pSubStr, "unknown sub type for SwPageNumberField" );
                 pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFormat) );
 
-                if( (SvxNumType)nFormat==SVX_NUM_CHAR_SPECIAL )
+                if( static_cast<SvxNumType>(nFormat)==SVX_NUM_CHAR_SPECIAL )
                 {
                     aValue = static_cast<const SwPageNumberField *>(pField)->GetUserString();
                 }
@@ -240,7 +240,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
         case SwFieldIds::Filename:
             pTypeStr = OOO_STRING_SW_HTML_FT_filename;
-            switch( (SwFileNameFormat)(nFormat & ~FF_FIXED) )
+            switch( static_cast<SwFileNameFormat>(nFormat & ~FF_FIXED) )
             {
                 case FF_NAME:       pFormatStr = OOO_STRING_SW_HTML_FF_name;       break;
                 case FF_PATHNAME:   pFormatStr = OOO_STRING_SW_HTML_FF_pathname;   break;

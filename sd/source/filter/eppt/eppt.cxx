@@ -245,7 +245,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         {
             css::presentation::AnimationSpeed aAs;
             aAny >>= aAs;
-            nSpeed = (sal_uInt8)aAs;
+            nSpeed = static_cast<sal_uInt8>(aAs);
         }
         sal_Int16 nTT = 0;
         if ( GetPropertyValue( aAny, mXPagePropSet, "TransitionType" )
@@ -615,8 +615,8 @@ void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPrope
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "DateTimeFormat", true ) )
         {
             sal_Int32 nFormat = *o3tl::doAccess<sal_Int32>(aAny);
-            SvxDateFormat eDateFormat = (SvxDateFormat)( nFormat & 0xf );
-            SvxTimeFormat eTimeFormat = (SvxTimeFormat)( ( nFormat >> 4 ) & 0xf );
+            SvxDateFormat eDateFormat = static_cast<SvxDateFormat>( nFormat & 0xf );
+            SvxTimeFormat eTimeFormat = static_cast<SvxTimeFormat>( ( nFormat >> 4 ) & 0xf );
             switch( eDateFormat )
             {
                 case SvxDateFormat::F :

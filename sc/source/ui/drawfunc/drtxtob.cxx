@@ -724,8 +724,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         case SID_SET_SUPER_SCRIPT:
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement)
-                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
+                SvxEscapement eEsc = static_cast<SvxEscapement>(aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
 
                 if( eEsc == SvxEscapement::Superscript )
                     aItem.SetEscapement( SvxEscapement::Off );
@@ -738,8 +737,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         case SID_SET_SUB_SCRIPT:
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement)
-                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
+                SvxEscapement eEsc = static_cast<SvxEscapement>(aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
 
                 if( eEsc == SvxEscapement::Subscript )
                     aItem.SetEscapement( SvxEscapement::Off );
@@ -1096,7 +1094,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  super-/subscript
 
-    SvxEscapement eEsc = (SvxEscapement) aAttrSet.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
+    SvxEscapement eEsc = static_cast<SvxEscapement>(aAttrSet.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
     if( eEsc == SvxEscapement::Superscript )
         rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
     else if( eEsc == SvxEscapement::Subscript )

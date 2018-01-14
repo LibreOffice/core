@@ -801,7 +801,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
     rRenderContext.SetFont(aSaveFont);
 
-    RubyAdjust nAdjust = (RubyAdjust)m_pParentDlg->m_pAdjustLB->GetSelectedEntryPos();
+    RubyAdjust nAdjust = static_cast<RubyAdjust>(m_pParentDlg->m_pAdjustLB->GetSelectedEntryPos());
     //use center if no adjustment is available
     if (nAdjust > RubyAdjust_INDENT_BLOCK)
         nAdjust = RubyAdjust_CENTER;

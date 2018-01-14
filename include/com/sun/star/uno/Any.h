@@ -168,7 +168,7 @@ public:
         @return the type class of the set value
      */
     TypeClass SAL_CALL getValueTypeClass() const
-        { return (TypeClass)pType->eTypeClass; }
+        { return static_cast<TypeClass>(pType->eTypeClass); }
 
     /** Gets the type name of the set value.
 

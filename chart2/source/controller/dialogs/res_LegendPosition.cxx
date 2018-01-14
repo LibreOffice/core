@@ -181,7 +181,7 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
     const SfxPoolItem* pPoolItem = nullptr;
     if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SfxItemState::SET )
     {
-        chart2::LegendPosition nLegendPosition = (chart2::LegendPosition) static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        chart2::LegendPosition nLegendPosition = static_cast<chart2::LegendPosition>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
         switch( nLegendPosition )
         {
             case chart2::LegendPosition_LINE_START:
@@ -219,7 +219,7 @@ void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
         nLegendPosition = chart2::LegendPosition_LINE_END;
     else if( m_pRbtBottom->IsChecked() )
         nLegendPosition = chart2::LegendPosition_PAGE_END;
-    rOutAttrs.Put( SfxInt32Item(SCHATTR_LEGEND_POS, (sal_Int32)nLegendPosition ) );
+    rOutAttrs.Put( SfxInt32Item(SCHATTR_LEGEND_POS, static_cast<sal_Int32>(nLegendPosition) ) );
 
     rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, m_pCbxShow == nullptr || m_pCbxShow->IsChecked()) );
 }

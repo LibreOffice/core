@@ -122,7 +122,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         }
         else
         {
-            ePO = (PresentationObjects) ( PO_OUTLINE_1 + nDepth - 1 );
+            ePO = static_cast<PresentationObjects>( PO_OUTLINE_1 + nDepth - 1 );
             aStyleName += STR_LAYOUT_OUTLINE " "
                 + OUString::number(nDepth);
         }

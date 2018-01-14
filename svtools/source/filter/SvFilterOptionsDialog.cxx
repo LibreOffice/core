@@ -273,7 +273,7 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
             aPropertyName = "Metric";
         else
             aPropertyName = "NonMetric";
-        meFieldUnit = (FieldUnit)aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
+        meFieldUnit = static_cast<FieldUnit>(aConfigItem.ReadInt32( aPropertyName, FUNIT_CM ));
     }
 }
 

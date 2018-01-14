@@ -207,7 +207,7 @@ SvXMLEnumMapEntry<TemplateTokenType> const aTemplateTokenTypeMap[] =
     { XML_INDEX_ENTRY_LINK_START,   XML_TOK_INDEX_TYPE_LINK_START },
     { XML_INDEX_ENTRY_LINK_END,     XML_TOK_INDEX_TYPE_LINK_END },
     { XML_INDEX_ENTRY_BIBLIOGRAPHY, XML_TOK_INDEX_TYPE_BIBLIOGRAPHY },
-    { XML_TOKEN_INVALID, (TemplateTokenType)0 }
+    { XML_TOKEN_INVALID, TemplateTokenType(0) }
 };
 
 SvXMLImportContextRef XMLIndexTemplateContext::CreateChildContext(

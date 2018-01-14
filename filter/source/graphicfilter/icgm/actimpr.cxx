@@ -655,7 +655,7 @@ void CGMImpressOutAct::DrawPolybezier( tools::Polygon& rPolygon )
         for( sal_uInt16 i = 0; i < nPoints; i++ )
         {
             *pInnerSequence++ = awt::Point( rPolygon[ i ].X(), rPolygon[ i ].Y() );
-            *pInnerFlags++ = (drawing::PolygonFlags)rPolygon.GetFlags( i );
+            *pInnerFlags++ = static_cast<drawing::PolygonFlags>(rPolygon.GetFlags( i ));
         }
         uno::Any aParam;
         aParam <<= aRetval;
@@ -695,7 +695,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon const & rPolyPolygon 
             for( sal_uInt32 b = 0; b < nNumPoints; b++ )
             {
                 *pInnerSequence++ = awt::Point( aPolygon.GetPoint( b ).X(), aPolygon.GetPoint( b ).Y() ) ;
-                *pInnerFlags++ = (drawing::PolygonFlags)aPolygon.GetFlags( b );
+                *pInnerFlags++ = static_cast<drawing::PolygonFlags>(aPolygon.GetFlags( b ));
             }
             pOuterSequence++;
             pOuterFlags++;
@@ -816,15 +816,15 @@ void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size const & 
                             switch ( mpCGM->pElement->eTextAlignmentH )
                             {
                                 case TAH_RIGHT :
-                                    aAny <<= (sal_Int16)style::HorizontalAlignment_RIGHT;
+                                    aAny <<= sal_Int16(style::HorizontalAlignment_RIGHT);
                                 break;
                                 case TAH_LEFT :
                                 case TAH_CONT :
                                 case TAH_NORMAL :
-                                    aAny <<= (sal_Int16)style::HorizontalAlignment_LEFT;
+                                    aAny <<= sal_Int16(style::HorizontalAlignment_LEFT);
                                 break;
                                 case TAH_CENTER :
-                                    aAny <<= (sal_Int16)style::HorizontalAlignment_CENTER;
+                                    aAny <<= sal_Int16(style::HorizontalAlignment_CENTER);
                                 break;
                             }
                             aCursorPropSet->setPropertyValue( "ParaAdjust", aAny );

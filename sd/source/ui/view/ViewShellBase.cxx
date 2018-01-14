@@ -889,7 +889,7 @@ OUString ViewShellBase::GetInitialViewShellType()
             {
                 sal_Int16 nPageKind = 0;
                 rProperty.Value >>= nPageKind;
-                switch ((PageKind)nPageKind)
+                switch (static_cast<PageKind>(nPageKind))
                 {
                     case PageKind::Standard:
                         sRequestedView = FrameworkHelper::msImpressViewURL;

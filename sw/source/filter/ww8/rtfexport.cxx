@@ -639,7 +639,7 @@ void RtfExport::WritePageDescTable()
             .WriteChar('{')
             .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSC);
         OutULong(n).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCUSE);
-        OutULong((sal_uLong)rPageDesc.ReadUseOn());
+        OutULong(static_cast<sal_uLong>(rPageDesc.ReadUseOn()));
 
         OutPageDescription(rPageDesc, false);
 

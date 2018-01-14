@@ -856,7 +856,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             if ( nColors )  // graphic conversion necessary ?
             {
                 BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
-                aBmpEx.Convert( (BmpConversion)nColors );   // the entries in the xml section have the same meaning as
+                aBmpEx.Convert( static_cast<BmpConversion>(nColors) );   // the entries in the xml section have the same meaning as
                 aGraphic = aBmpEx;                          // they have in the BmpConversion enum, so it should be
             }                                               // allowed to cast them
         }
@@ -1984,7 +1984,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             if( aFilterName.equalsIgnoreAsciiCase( EXP_BMP ) )
             {
                 Bitmap aBmp( aGraphic.GetBitmap() );
-                BmpConversion nColorRes = (BmpConversion) aConfigItem.ReadInt32( "Colors", 0 );
+                BmpConversion nColorRes = static_cast<BmpConversion>(aConfigItem.ReadInt32( "Colors", 0 ));
                 if ( nColorRes != BmpConversion::NNONE && ( nColorRes <= BmpConversion::N24Bit) )
                 {
                     if( !aBmp.Convert( nColorRes ) )

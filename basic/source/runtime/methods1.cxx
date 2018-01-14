@@ -1004,7 +1004,7 @@ static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     {
         sal_uInt16 nTemp;
         pStrm->ReadUInt16( nTemp );
-        eSrcType = (SbxDataType)nTemp;
+        eSrcType = static_cast<SbxDataType>(nTemp);
     }
 
     switch( eSrcType )

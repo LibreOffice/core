@@ -376,7 +376,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nType = 0;
             if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
             {
-                SetHeightSizeType((SwFrameSize)nType);
+                SetHeightSizeType(static_cast<SwFrameSize>(nType));
             }
             else
                 bRet = false;
@@ -393,7 +393,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nType = 0;
             if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
             {
-                SetWidthSizeType((SwFrameSize)nType);
+                SetWidthSizeType(static_cast<SwFrameSize>(nType));
             }
             else
                 bRet = false;
@@ -1124,7 +1124,7 @@ void SwFormatCol::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatCol"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLineStyle"), BAD_CAST(OString::number((sal_Int16)m_eLineStyle).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLineStyle"), BAD_CAST(OString::number(static_cast<sal_Int16>(m_eLineStyle)).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLineWidth"), BAD_CAST(OString::number(m_nLineWidth).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aLineColor"), BAD_CAST(m_aLineColor.AsRGBHexString().toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLineHeight"), BAD_CAST(OString::number(m_nLineHeight).getStr()));
@@ -1202,7 +1202,7 @@ bool SwFormatSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_SURROUND_SURROUNDTYPE:
         {
-            css::text::WrapTextMode eVal = (css::text::WrapTextMode) SWUnoHelper::GetEnumAsInt32( rVal );
+            css::text::WrapTextMode eVal = static_cast<css::text::WrapTextMode>(SWUnoHelper::GetEnumAsInt32( rVal ));
             if( eVal >= css::text::WrapTextMode_NONE && eVal <= css::text::WrapTextMode_RIGHT )
                 SetValue( eVal );
             else {
@@ -1232,7 +1232,7 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatSurround"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((sal_Int32)GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(static_cast<sal_Int32>(GetValue())).getStr()));
 
     OUString aPresentation;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
@@ -1625,7 +1625,7 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ANCHOR_ANCHORTYPE:
         {
             RndStdIds   eAnchor;
-            switch( (text::TextContentAnchorType) SWUnoHelper::GetEnumAsInt32( rVal ) )
+            switch( static_cast<text::TextContentAnchorType>(SWUnoHelper::GetEnumAsInt32( rVal )) )
             {
                 case  text::TextContentAnchorType_AS_CHARACTER:
                     eAnchor = RndStdIds::FLY_AS_CHAR;
@@ -1696,7 +1696,7 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
     else
         xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pContentAnchor"), "%p", m_pContentAnchor.get());
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eAnchorType"), BAD_CAST(OString::number((int)m_eAnchorId).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eAnchorType"), BAD_CAST(OString::number(static_cast<int>(m_eAnchorId)).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nPageNumber"), BAD_CAST(OString::number(m_nPageNumber).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrder"), BAD_CAST(OString::number(m_nOrder).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrderCounter"), BAD_CAST(OString::number(m_nOrderCounter).getStr()));
@@ -1990,7 +1990,7 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
                 (nVal <= SVX_NUM_ARABIC ||
                     SVX_NUM_CHARS_UPPER_LETTER_N == nVal ||
                         SVX_NUM_CHARS_LOWER_LETTER_N == nVal ))
-                aFormat.SetNumberingType((SvxNumType)nVal);
+                aFormat.SetNumberingType(static_cast<SvxNumType>(nVal));
             else
                 bRet = false;
         }

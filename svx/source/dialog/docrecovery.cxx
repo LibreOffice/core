@@ -397,7 +397,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     TURLInfo                        aNew;
 
     aNew.ID          = lInfo.getUnpackedValueOrDefault(STATEPROP_ID         , sal_Int32(0)     );
-    aNew.DocState    = (EDocStates)lInfo.getUnpackedValueOrDefault(STATEPROP_STATE      , sal_Int32(0)     );
+    aNew.DocState    = static_cast<EDocStates>(lInfo.getUnpackedValueOrDefault(STATEPROP_STATE      , sal_Int32(0)     ));
     aNew.OrgURL      = lInfo.getUnpackedValueOrDefault(STATEPROP_ORGURL     , OUString());
     aNew.TempURL     = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPURL    , OUString());
     aNew.FactoryURL  = lInfo.getUnpackedValueOrDefault(STATEPROP_FACTORYURL , OUString());

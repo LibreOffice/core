@@ -649,7 +649,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
         {
             if( pItem )
             {
-                aSet.Put( SdrGrafModeItem( (GraphicDrawMode) static_cast<const SfxUInt16Item*>(pItem)->GetValue() ));
+                aSet.Put( SdrGrafModeItem( static_cast<GraphicDrawMode>(static_cast<const SfxUInt16Item*>(pItem)->GetValue()) ));
                 if( bUndo )
                     aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFMODE );
             }

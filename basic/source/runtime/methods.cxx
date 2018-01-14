@@ -2971,15 +2971,15 @@ void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
                     bool bDirectory = xSFI->isFolder( aPath );
                     if( bReadOnly )
                     {
-                        nFlags |= (sal_uInt16)SbAttributes::READONLY;
+                        nFlags |= sal_uInt16(SbAttributes::READONLY);
                     }
                     if( bHidden )
                     {
-                        nFlags |= (sal_uInt16)SbAttributes::HIDDEN;
+                        nFlags |= sal_uInt16(SbAttributes::HIDDEN);
                     }
                     if( bDirectory )
                     {
-                        nFlags |= (sal_uInt16)SbAttributes::DIRECTORY;
+                        nFlags |= sal_uInt16(SbAttributes::DIRECTORY);
                     }
                 }
                 catch(const Exception & )
@@ -3001,11 +3001,11 @@ void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
             bool bDirectory = isFolder( aType );
             if( bReadOnly )
             {
-                nFlags |= (sal_uInt16)SbAttributes::READONLY;
+                nFlags |= sal_uInt16(SbAttributes::READONLY);
             }
             if( bDirectory )
             {
-                nFlags |= (sal_uInt16)SbAttributes::DIRECTORY;
+                nFlags |= sal_uInt16(SbAttributes::DIRECTORY);
             }
         }
         rPar.Get(0)->PutInteger( nFlags );
@@ -3150,7 +3150,7 @@ void SbRtl_FileAttr(StarBASIC *, SbxArray & rPar, bool)
         sal_Int16 nRet;
         if ( rPar.Get(2)->GetInteger() == 1 )
         {
-            nRet = (sal_Int16)(pSbStrm->GetMode());
+            nRet = static_cast<sal_Int16>(pSbStrm->GetMode());
         }
         else
         {

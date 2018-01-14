@@ -95,7 +95,7 @@ inline static typelib_TypeDescription * createCTD(
         for ( nPos = nMembers; nPos--; )
         {
             typelib_CompoundMember_Init & rInit = pMemberInits[nPos];
-            rInit.eTypeClass = (typelib_TypeClass)pMemberTypes[nPos]->getTypeClass();
+            rInit.eTypeClass = static_cast<typelib_TypeClass>(pMemberTypes[nPos]->getTypeClass());
 
             OUString aMemberTypeName( pMemberTypes[nPos]->getName() );
             rtl_uString_acquire( rInit.pTypeName = aMemberTypeName.pData );
@@ -106,7 +106,7 @@ inline static typelib_TypeDescription * createCTD(
 
         typelib_typedescription_new(
             &pRet,
-            (typelib_TypeClass)xType->getTypeClass(),
+            static_cast<typelib_TypeClass>(xType->getTypeClass()),
             aTypeName.pData,
             (pBaseType ? pBaseType->pWeakRef : nullptr),
             nMembers, pMemberInits );
@@ -167,7 +167,7 @@ inline static typelib_TypeDescription * createCTD(
         {
             typelib_StructMember_Init & rInit = pMemberInits[nPos];
             rInit.aBase.eTypeClass
-                = (typelib_TypeClass)pMemberTypes[nPos]->getTypeClass();
+                = static_cast<typelib_TypeClass>(pMemberTypes[nPos]->getTypeClass());
 
             OUString aMemberTypeName( pMemberTypes[nPos]->getName() );
             rtl_uString_acquire(
@@ -227,7 +227,7 @@ inline static typelib_TypeDescription * createCTD(
             reinterpret_cast<typelib_InterfaceAttributeTypeDescription **>(&pRet),
             xAttribute->getPosition(),
             aMemberName.pData, // name
-            (typelib_TypeClass)xType->getTypeClass(),
+            static_cast<typelib_TypeClass>(xType->getTypeClass()),
             aMemberTypeName.pData, // type name
             xAttribute->isReadOnly(),
             getExc.size(), getExc.data(),
@@ -259,7 +259,7 @@ static typelib_TypeDescription * createCTD(
             const Reference< XTypeDescription > & xType  = xParam->getType();
             typelib_Parameter_Init & rInit = pParamInit[xParam->getPosition()];
 
-            rInit.eTypeClass = (typelib_TypeClass)xType->getTypeClass();
+            rInit.eTypeClass = static_cast<typelib_TypeClass>(xType->getTypeClass());
             OUString aParamTypeName( xType->getName() );
             rtl_uString_acquire( rInit.pTypeName = aParamTypeName.pData );
             OUString aParamName( xParam->getName() );
@@ -289,7 +289,7 @@ static typelib_TypeDescription * createCTD(
             xMethod->getPosition(),
             xMethod->isOneway(),
             aTypeName.pData,
-            (typelib_TypeClass)xReturnType->getTypeClass(),
+            static_cast<typelib_TypeClass>(xReturnType->getTypeClass()),
             aReturnTypeName.pData,
             nParams, pParamInit,
             nExceptions, ppExceptionNames );
@@ -349,7 +349,7 @@ inline static typelib_TypeDescription * createCTD(
             ppMemberRefs[nPos] = nullptr;
             typelib_typedescriptionreference_new(
                 ppMemberRefs + nPos,
-                (typelib_TypeClass)pMembers[nPos]->getTypeClass(),
+                static_cast<typelib_TypeClass>(pMembers[nPos]->getTypeClass()),
                 aMemberTypeName.pData );
         }
 
@@ -407,7 +407,7 @@ inline static typelib_TypeDescription * createCTD(
 
         typelib_typedescription_new(
             &pRet,
-            (typelib_TypeClass)xType->getTypeClass(),
+            static_cast<typelib_TypeClass>(xType->getTypeClass()),
             aTypeName.pData,
             pRefType->pWeakRef,
             0, nullptr );

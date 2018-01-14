@@ -1039,8 +1039,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_SET_SUPER_SCRIPT:
             {
-                SvxEscapement eOld = (SvxEscapement)
-                        pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT).GetEnumValue();
+                SvxEscapement eOld = static_cast<SvxEscapement>(pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT).GetEnumValue());
                 SvxEscapement eNew = (eOld == SvxEscapement::Superscript) ?
                                         SvxEscapement::Off : SvxEscapement::Superscript;
                 aSet.Put( SvxEscapementItem( eNew, EE_CHAR_ESCAPEMENT ) );
@@ -1049,8 +1048,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             break;
         case SID_SET_SUB_SCRIPT:
             {
-                SvxEscapement eOld = (SvxEscapement)
-                        pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT).GetEnumValue();
+                SvxEscapement eOld = static_cast<SvxEscapement>(pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT).GetEnumValue());
                 SvxEscapement eNew = (eOld == SvxEscapement::Subscript) ?
                                         SvxEscapement::Off : SvxEscapement::Subscript;
                 aSet.Put( SvxEscapementItem( eNew, EE_CHAR_ESCAPEMENT ) );
@@ -1161,7 +1159,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     if ( pHdl && pHdl->IsFormulaMode() )
         rSet.ClearItem( EE_CHAR_WEIGHT );   // Highlighted brace not here
 
-    SvxEscapement eEsc = (SvxEscapement) aAttribs.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
+    SvxEscapement eEsc = static_cast<SvxEscapement>(aAttribs.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
     if( eEsc == SvxEscapement::Superscript )
     {
         rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );

@@ -175,7 +175,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     const SfxUInt16Item* pPageTypeItem = rSet.GetItem<SfxUInt16Item>(SID_PAGE_TYPE, false);
     if (pPageTypeItem)
-        SetPageType((PageType) pPageTypeItem->GetValue());
+        SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
 
     if( m_nDlgType == 0 )
     {
@@ -324,7 +324,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE, (sal_uInt16)m_nPageType));
+    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE, static_cast<sal_uInt16>(m_nPageType)));
 
     return bModified;
 }
@@ -506,7 +506,7 @@ void SvxShadowTabPage::PageCreated(const SfxAllItemSet& aSet)
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());
     if (pPageTypeItem)
-        SetPageType((PageType) pPageTypeItem->GetValue());
+        SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
 }

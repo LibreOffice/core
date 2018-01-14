@@ -1679,7 +1679,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     GetSelectedEntry());
                 Execute_Impl(
                     SID_STYLE_WATERCAN, aTemplName, "",
-                    (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+                    static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
                 bCheck = true;
             }
             else
@@ -1717,7 +1717,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     const OUString aTemplName(pDlg->GetName());
                     Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE,
                                  aTemplName, "",
-                                 (sal_uInt16)GetFamilyItem_Impl()->GetFamily(),
+                                 static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()),
                                  nFilter);
                 }
                 pStyleSheetPool->SetSearchMask( eFam, nFilter );
@@ -1728,7 +1728,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
         {
             Execute_Impl(SID_STYLE_UPDATE_BY_EXAMPLE,
                     "", "",
-                    (sal_uInt16)GetFamilyItem_Impl()->GetFamily());
+                    static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()));
             break;
         }
         case SID_TEMPLATE_LOAD:
@@ -1829,7 +1829,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl()
 
         Execute_Impl(SID_STYLE_NEW,
                      "", GetSelectedEntry(),
-                     ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
+                     static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()),
                      nMask);
     }
 }
@@ -1843,7 +1843,7 @@ void SfxCommonTemplateDialog_Impl::EditHdl()
         OUString aTemplName(GetSelectedEntry());
         GetSelectedStyle(); // -Wall required??
         if ( Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),
-                          (sal_uInt16)GetFamilyItem_Impl()->GetFamily(), 0, &nFilter ) )
+                          static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()), 0, &nFilter ) )
         {
         }
     }
@@ -1907,7 +1907,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
                 const OUString aTemplName(pTreeBox ? pTreeBox->GetEntryText(*it) : aFmtLb->GetEntryText(*it));
                 bDontUpdate = true; // To prevent the Treelistbox to shut down while deleting
                 Execute_Impl( SID_STYLE_DELETE, aTemplName,
-                              OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+                              OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
 
                 if ( pTreeBox )
                 {
@@ -1932,7 +1932,7 @@ void SfxCommonTemplateDialog_Impl::HideHdl()
             OUString aTemplName = pTreeBox ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry);
 
             Execute_Impl( SID_STYLE_HIDE, aTemplName,
-                          OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+                          OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
 
             pEntry = pTreeBox ? pTreeBox->NextSelected(pEntry) : aFmtLb->NextSelected(pEntry);
         }
@@ -1951,7 +1951,7 @@ void SfxCommonTemplateDialog_Impl::ShowHdl()
             OUString aTemplName = pTreeBox ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry);
 
             Execute_Impl( SID_STYLE_SHOW, aTemplName,
-                          OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+                          OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
 
             pEntry = pTreeBox ? pTreeBox->NextSelected(pEntry) : aFmtLb->NextSelected(pEntry);
         }
@@ -2006,7 +2006,7 @@ IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, ApplyHdl, LinkParamNone*, void )
         sal_uInt16 nModifier = aFmtLb->GetModifier();
         Execute_Impl(SID_STYLE_APPLY,
                      GetSelectedEntry(), OUString(),
-                     ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
+                     static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()),
                      0, nullptr, &nModifier );
     }
     // After selecting a focused item if possible again on the app window
@@ -2060,7 +2060,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
                          "", "", 0);
             Execute_Impl(SID_STYLE_WATERCAN,
                          GetSelectedEntry(), "",
-                         ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily());
+                         static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()));
         }
         EnableItem(SID_STYLE_WATERCAN, !bWaterDisabled);
         EnableDelete();

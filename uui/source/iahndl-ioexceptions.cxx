@@ -109,7 +109,7 @@ UUIInteractionHelper::handleInteractiveIOException(
         ErrCode nErrorCode;
         std::vector< OUString > aArguments;
         static ErrCode const
-            aErrorCode[(sal_Int32)ucb::IOErrorCode_WRONG_VERSION + 1][2]
+            aErrorCode[sal_Int32(ucb::IOErrorCode_WRONG_VERSION) + 1][2]
             = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
                 { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
                 // ACCESS_DENIED
@@ -201,7 +201,7 @@ UUIInteractionHelper::handleInteractiveIOException(
                     }
                 }
                 else
-                    nErrorCode = aErrorCode[(sal_Int32)aIoException.Code][0];
+                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
                 break;
             }
 
@@ -225,7 +225,7 @@ UUIInteractionHelper::handleInteractiveIOException(
                     aArguments.push_back(aArgUri);
                 }
                 else
-                    nErrorCode = aErrorCode[(sal_Int32)aIoException.Code][0];
+                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
                 break;
             }
 
@@ -237,13 +237,13 @@ UUIInteractionHelper::handleInteractiveIOException(
                     && getStringRequestArgument(aRequestArguments, "OtherVolume",
                         &aArgOtherVolume))
                 {
-                    nErrorCode = aErrorCode[(sal_Int32)aIoException.Code][1];
+                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][1];
                     aArguments.reserve(2);
                     aArguments.push_back(aArgVolume);
                     aArguments.push_back(aArgOtherVolume);
                 }
                 else
-                    nErrorCode = aErrorCode[(sal_Int32)aIoException.Code][0];
+                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
                 break;
         }
 
@@ -264,7 +264,7 @@ UUIInteractionHelper::handleInteractiveIOException(
                     aArguments.push_back(aArgUri);
                 }
                 else
-                    nErrorCode = aErrorCode[(sal_Int32)aIoException.Code][0];
+                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
                 break;
             }
 
@@ -274,11 +274,11 @@ UUIInteractionHelper::handleInteractiveIOException(
                 if (getResourceNameRequestArgument(aRequestArguments,
                                                    &aArgUri))
                 {
-                    nErrorCode = aErrorCode[(sal_Int32)aIoException.Code][1];
+                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][1];
                     aArguments.push_back(aArgUri);
                 }
                 else
-                    nErrorCode = aErrorCode[(sal_Int32)aIoException.Code][0];
+                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
                 break;
             }
         }

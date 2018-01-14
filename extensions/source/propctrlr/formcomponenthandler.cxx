@@ -2489,9 +2489,9 @@ namespace pcr
         // read out ListSourceTypes
         Any aListSourceType( m_xComponent->getPropertyValue( PROPERTY_LISTSOURCETYPE ) );
 
-        sal_Int32 nListSourceType = (sal_Int32)ListSourceType_VALUELIST;
+        sal_Int32 nListSourceType = sal_Int32(ListSourceType_VALUELIST);
         ::cppu::enum2int( nListSourceType, aListSourceType );
-        ListSourceType eListSourceType = (ListSourceType)nListSourceType;
+        ListSourceType eListSourceType = static_cast<ListSourceType>(nListSourceType);
 
         _out_rDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( PROPERTY_ID_LISTSOURCE );
         _out_rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_LISTSOURCE ) );

@@ -823,7 +823,7 @@ namespace emfio
                     case EMR_SETROP2 :
                     {
                         mpInputStream->ReadUInt32( nDat32 );
-                        SetRasterOp( (WMFRasterOp)nDat32 );
+                        SetRasterOp( static_cast<WMFRasterOp>(nDat32) );
                     }
                     break;
 

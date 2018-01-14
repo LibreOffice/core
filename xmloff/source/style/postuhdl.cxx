@@ -34,7 +34,7 @@ SvXMLEnumMapEntry<FontItalic> const aPostureGenericMapping[] =
     { XML_POSTURE_NORMAL,       ITALIC_NONE     },
     { XML_POSTURE_ITALIC,       ITALIC_NORMAL   },
     { XML_POSTURE_OBLIQUE,      ITALIC_OBLIQUE  },
-    { XML_TOKEN_INVALID,        (FontItalic)0   }
+    { XML_TOKEN_INVALID,        FontItalic(0)   }
 };
 
 
@@ -67,7 +67,7 @@ bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
         if( !( rValue >>= nValue ) )
             return false;
 
-        eSlant = (awt::FontSlant)nValue;
+        eSlant = static_cast<awt::FontSlant>(nValue);
     }
 
     OUStringBuffer aOut;

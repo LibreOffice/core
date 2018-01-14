@@ -344,7 +344,7 @@ ScAppCfg::ScAppCfg() :
                 switch(nProp)
                 {
                     case SCLAYOUTOPT_MEASURE:
-                        if (pValues[nProp] >>= nIntVal) SetAppMetric( (FieldUnit) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetAppMetric( static_cast<FieldUnit>(nIntVal) );
                         break;
                     case SCLAYOUTOPT_STATUSBAR:
                         if ( pValues[SCLAYOUTOPT_STATUSBAR] >>= nUIntValTmp )
@@ -358,7 +358,7 @@ ScAppCfg::ScAppCfg() :
                         if (pValues[nProp] >>= nIntVal) SetZoom( static_cast<sal_uInt16>(nIntVal) );
                         break;
                     case SCLAYOUTOPT_ZOOMTYPE:
-                        if (pValues[nProp] >>= nIntVal) SetZoomType( (SvxZoomType) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetZoomType( static_cast<SvxZoomType>(nIntVal) );
                         break;
                     case SCLAYOUTOPT_SYNCZOOM:
                         SetSynchronizeZoom( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
@@ -458,7 +458,7 @@ ScAppCfg::ScAppCfg() :
                 switch(nProp)
                 {
                     case SCCONTENTOPT_LINK:
-                        if (pValues[nProp] >>= nIntVal) SetLinkMode( (ScLkUpdMode) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetLinkMode( static_cast<ScLkUpdMode>(nIntVal) );
                         break;
                 }
             }
@@ -560,7 +560,7 @@ ScAppCfg::ScAppCfg() :
                 pValues[nProp] <<= static_cast<sal_Int32>(GetZoom());
                 break;
             case SCLAYOUTOPT_ZOOMTYPE:
-                pValues[nProp] <<= (sal_Int32) GetZoomType();
+                pValues[nProp] <<= static_cast<sal_Int32>(GetZoomType());
                 break;
             case SCLAYOUTOPT_SYNCZOOM:
                 pValues[nProp] <<= GetSynchronizeZoom();

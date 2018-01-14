@@ -1071,7 +1071,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     if( !bAssertionFired )
                     {
                         bAssertionFired = true;
-                        SAL_WARN( "vcl", "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered " << (int)nType );
+                        SAL_WARN( "vcl", "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered " << static_cast<int>(nType) );
                     }
                 break;
             }

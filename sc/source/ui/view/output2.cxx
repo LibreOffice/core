@@ -1250,7 +1250,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
     rParam.maClipRect = rParam.maAlignRect;
     if ( nNeeded > nMergeSizeX )
     {
-        SvxCellHorJustify eHorJust = (SvxCellHorJustify)nHorJustify;
+        SvxCellHorJustify eHorJust = static_cast<SvxCellHorJustify>(nHorJustify);
 
         long nMissing = nNeeded - nMergeSizeX;
         long nLeftMissing = 0;

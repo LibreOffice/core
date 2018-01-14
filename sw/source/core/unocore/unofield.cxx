@@ -1508,7 +1508,7 @@ void SAL_CALL SwXTextField::attach(
         {
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo);
             sal_uInt16 nSubType = aDocInfoSubTypeFromService[
-                    (sal_uInt16)m_pImpl->m_nServiceId - (sal_uInt16)SwServiceType::FieldTypeDocInfoChangeAuthor];
+                    static_cast<sal_uInt16>(m_pImpl->m_nServiceId) - sal_uInt16(SwServiceType::FieldTypeDocInfoChangeAuthor)];
             if (SwServiceType::FieldTypeDocInfoChangeDateTime == m_pImpl->m_nServiceId ||
                 SwServiceType::FieldTypeDocInfoCreateDateTime == m_pImpl->m_nServiceId ||
                 SwServiceType::FieldTypeDocInfoPrintDateTime == m_pImpl->m_nServiceId ||

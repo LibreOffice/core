@@ -114,7 +114,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     gint64 gst_position = llround( fMediaTime * GST_SECOND );
     gst_element_seek_simple(
         mpPipeline, GST_FORMAT_TIME,
-        (GstSeekFlags)(GST_SEEK_FLAG_KEY_UNIT | GST_SEEK_FLAG_FLUSH),
+        GstSeekFlags(GST_SEEK_FLAG_KEY_UNIT | GST_SEEK_FLAG_FLUSH),
         gst_position );
 
     GstElement *pSink = gst_bin_get_by_name( GST_BIN( mpPipeline ), "sink" );

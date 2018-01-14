@@ -91,7 +91,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             else
                 eType = SvxDateType::Var;
 
-            eFormat = (SvxDateFormat) ( m_pLbFormat->GetSelectedEntryPos() + 2 );
+            eFormat = static_cast<SvxDateFormat>( m_pLbFormat->GetSelectedEntryPos() + 2 );
 
             pNewField = new SvxDateField( *pDateField );
             static_cast<SvxDateField*>( pNewField )->SetType( eType );
@@ -108,7 +108,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             else
                 eType = SvxTimeType::Var;
 
-            eFormat = (SvxTimeFormat) ( m_pLbFormat->GetSelectedEntryPos() + 2 );
+            eFormat = static_cast<SvxTimeFormat>( m_pLbFormat->GetSelectedEntryPos() + 2 );
 
             pNewField = new SvxExtTimeField( *pTimeField );
             static_cast<SvxExtTimeField*>( pNewField )->SetType( eType );
@@ -125,7 +125,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             else
                 eType = SvxFileType::Var;
 
-            eFormat = (SvxFileFormat) ( m_pLbFormat->GetSelectedEntryPos() );
+            eFormat = static_cast<SvxFileFormat>( m_pLbFormat->GetSelectedEntryPos() );
 
             ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell* >(SfxObjectShell::Current() );
 
@@ -153,7 +153,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             else
                 eType = SvxAuthorType::Var;
 
-            eFormat = (SvxAuthorFormat) ( m_pLbFormat->GetSelectedEntryPos() );
+            eFormat = static_cast<SvxAuthorFormat>( m_pLbFormat->GetSelectedEntryPos() );
 
             // Get current state of address, not the old one
             SvtUserOptions aUserOptions;
@@ -236,7 +236,7 @@ void SdModifyFieldDlg::FillFormatList()
         m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_PATH ) );
         m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_NAME ) );
 
-        m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pFileField->GetFormat() ) );
+        m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>( pFileField->GetFormat() ) );
     }
     else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
     {
@@ -245,11 +245,11 @@ void SdModifyFieldDlg::FillFormatList()
 
         for( sal_uInt16 i = 0; i < 4; i++ )
         {
-            aAuthorField.SetFormat( (SvxAuthorFormat) i );
+            aAuthorField.SetFormat( static_cast<SvxAuthorFormat>(i) );
             m_pLbFormat->InsertEntry( aAuthorField.GetFormatted() );
         }
 
-        m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pAuthorField->GetFormat() ) );
+        m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>( pAuthorField->GetFormat() ) );
 
     }
 

@@ -94,7 +94,7 @@ void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream
 
     // Version
     _rxOutStream->writeShort(0x0003);
-    _rxOutStream->writeShort((sal_uInt16)m_eButtonType);
+    _rxOutStream->writeShort(static_cast<sal_uInt16>(m_eButtonType));
 
     OUString sTmp(INetURLObject::decode( m_sTargetURL, INetURLObject::DecodeMechanism::Unambiguous));
     _rxOutStream << sTmp;
@@ -113,19 +113,19 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
     {
         case 0x0001:
         {
-            m_eButtonType = (FormButtonType)_rxInStream->readShort();
+            m_eButtonType = static_cast<FormButtonType>(_rxInStream->readShort());
         }
         break;
         case 0x0002:
         {
-            m_eButtonType = (FormButtonType)_rxInStream->readShort();
+            m_eButtonType = static_cast<FormButtonType>(_rxInStream->readShort());
             _rxInStream >> m_sTargetURL;
             _rxInStream >> m_sTargetFrame;
         }
         break;
         case 0x0003:
         {
-            m_eButtonType = (FormButtonType)_rxInStream->readShort();
+            m_eButtonType = static_cast<FormButtonType>(_rxInStream->readShort());
             _rxInStream >> m_sTargetURL;
             _rxInStream >> m_sTargetFrame;
             readHelpTextCompatibly(_rxInStream);

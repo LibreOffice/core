@@ -150,7 +150,7 @@ void XMLFootnoteSeparatorExport::exportXML(
         { XML_LEFT,     text::HorizontalAdjust_LEFT },
         { XML_CENTER,   text::HorizontalAdjust_CENTER },
         { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
-        { XML_TOKEN_INVALID, (text::HorizontalAdjust)0 }
+        { XML_TOKEN_INVALID, text::HorizontalAdjust(0) }
     };
 
     if (SvXMLUnitConverter::convertEnum(

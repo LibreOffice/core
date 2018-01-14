@@ -251,7 +251,7 @@ static ErrCode GetSvError( oslFileError nErrno )
         { osl_File_E_NOTDIR,      SVSTREAM_PATH_NOT_FOUND },
         { osl_File_E_EXIST,       SVSTREAM_CANNOT_MAKE    },
         { osl_File_E_NOSPC,       SVSTREAM_DISK_FULL      },
-        { (oslFileError)0xFFFF,   SVSTREAM_GENERALERROR }
+        { oslFileError(0xFFFF),   SVSTREAM_GENERALERROR }
     };
 
     ErrCode nRetVal = SVSTREAM_GENERALERROR; // default error
@@ -265,7 +265,7 @@ static ErrCode GetSvError( oslFileError nErrno )
         }
         ++i;
     }
-    while( errArr[i].nErr != (oslFileError)0xFFFF );
+    while( errArr[i].nErr != oslFileError(0xFFFF) );
     return nRetVal;
 }
 

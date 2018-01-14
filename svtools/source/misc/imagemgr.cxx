@@ -365,7 +365,7 @@ static SvImageId GetImageId_Impl( const INetURLObject& rObject, bool bDetectFold
             return nImage;
         }
         else if ( aType == "image" )
-            nImage = (SvImageId)aURLPath.getToken( 1, '/' ).toInt32();
+            nImage = static_cast<SvImageId>(aURLPath.getToken( 1, '/' ).toInt32());
     }
     else
     {

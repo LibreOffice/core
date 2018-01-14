@@ -458,7 +458,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 void ScTabView::InvertHorizontal( ScVSplitPos eWhich, long nDragPos )
 {
     for (sal_uInt16 i=0; i<4; i++)
-        if (WhichV((ScSplitPos)i)==eWhich)
+        if (WhichV(static_cast<ScSplitPos>(i))==eWhich)
         {
             ScGridWindow* pWin = pGridWin[i].get();
             if (pWin)
@@ -473,7 +473,7 @@ void ScTabView::InvertHorizontal( ScVSplitPos eWhich, long nDragPos )
 void ScTabView::InvertVertical( ScHSplitPos eWhich, long nDragPos )
 {
     for (sal_uInt16 i=0; i<4; i++)
-        if (WhichH((ScSplitPos)i)==eWhich)
+        if (WhichH(static_cast<ScSplitPos>(i))==eWhich)
         {
             ScGridWindow* pWin = pGridWin[i].get();
             if (pWin)

@@ -276,7 +276,7 @@ static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
         case  SID_ATTR_CHAR_STRIKEOUT: nRet = 3; break;
         case  SID_ATTR_CHAR_CASEMAP:
         {
-            switch((SvxCaseMap)rAttr.m_nAttr)
+            switch(static_cast<SvxCaseMap>(rAttr.m_nAttr))
             {
                 case  SvxCaseMap::Uppercase : nRet = 5;break;
                 case  SvxCaseMap::Lowercase : nRet = 6;break;
@@ -337,10 +337,10 @@ static void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, bool bDe
                 }
         break;
         case 4: rAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;rAttr.m_nAttr = LINESTYLE_DOUBLE         ; break;
-        case 5: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = (sal_uInt16)SvxCaseMap::Uppercase; break;
-        case 6: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = (sal_uInt16)SvxCaseMap::Lowercase; break;
-        case 7: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = (sal_uInt16)SvxCaseMap::SmallCaps; break;
-        case 8: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = (sal_uInt16)SvxCaseMap::Capitalize; break;
+        case 5: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = sal_uInt16(SvxCaseMap::Uppercase); break;
+        case 6: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = sal_uInt16(SvxCaseMap::Lowercase); break;
+        case 7: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = sal_uInt16(SvxCaseMap::SmallCaps); break;
+        case 8: rAttr.m_nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.m_nAttr = sal_uInt16(SvxCaseMap::Capitalize); break;
         case 9: rAttr.m_nItemId = SID_ATTR_BRUSH; break;
     }
 }
@@ -1155,7 +1155,7 @@ void SwTableConfig::ImplCommit()
             case 1 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableVMove)); break;     //"Shift/Column",
             case 2 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableHInsert)); break;   //"Insert/Row",
             case 3 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableVInsert)); break;   //"Insert/Column",
-            case 4 : pValues[nProp] <<= (sal_Int32)eTableChgMode; break;   //"Change/Effect",
+            case 4 : pValues[nProp] <<= static_cast<sal_Int32>(eTableChgMode); break;   //"Change/Effect",
             case 5 : pValues[nProp] <<= bInsTableFormatNum; break;  //"Input/NumberRecognition",
             case 6 : pValues[nProp] <<= bInsTableChangeNumFormat; break;  //"Input/NumberFormatRecognition",
             case 7 : pValues[nProp] <<= bInsTableAlignNum; break;  //"Input/Alignment"
@@ -1181,7 +1181,7 @@ void SwTableConfig::Load()
                 case 1 : pValues[nProp] >>= nTemp; nTableVMove = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;     //"Shift/Column",
                 case 2 : pValues[nProp] >>= nTemp; nTableHInsert = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Row",
                 case 3 : pValues[nProp] >>= nTemp; nTableVInsert = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Column",
-                case 4 : pValues[nProp] >>= nTemp; eTableChgMode = (TableChgMode)nTemp; break;   //"Change/Effect",
+                case 4 : pValues[nProp] >>= nTemp; eTableChgMode = static_cast<TableChgMode>(nTemp); break;   //"Change/Effect",
                 case 5 : bInsTableFormatNum = *o3tl::doAccess<bool>(pValues[nProp]);  break;  //"Input/NumberRecognition",
                 case 6 : bInsTableChangeNumFormat = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/NumberFormatRecognition",
                 case 7 : bInsTableAlignNum = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/Alignment"
@@ -1347,7 +1347,7 @@ void SwCompareConfig::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    pValues[0] <<= (sal_Int32) eCmpMode;
+    pValues[0] <<= static_cast<sal_Int32>(eCmpMode);
     pValues[1] <<= bUseRsid;
     pValues[2] <<= bIgnorePieces;
     pValues[3] <<= static_cast<sal_Int32>(nPieceLen);
@@ -1371,7 +1371,7 @@ void SwCompareConfig::Load()
 
             switch(nProp)
             {
-                case 0 : eCmpMode = (SwCompareMode) nVal; break;
+                case 0 : eCmpMode = static_cast<SwCompareMode>(nVal); break;
                 case 1 : bUseRsid = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 2 : bIgnorePieces = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 3 : nPieceLen = nVal; break;

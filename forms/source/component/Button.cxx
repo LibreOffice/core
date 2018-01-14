@@ -143,7 +143,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         OStreamSection aSection( _rxOutStream.get() );
             // this will allow readers to skip unknown bytes in their dtor
 
-        _rxOutStream->writeShort( (sal_uInt16)m_eButtonType );
+        _rxOutStream->writeShort( static_cast<sal_uInt16>(m_eButtonType) );
 
         OUString sTmp = INetURLObject::decode( m_sTargetURL, INetURLObject::DecodeMechanism::Unambiguous);
         _rxOutStream << sTmp;
@@ -163,7 +163,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
     {
         case 0x0001:
         {
-            m_eButtonType = (FormButtonType)_rxInStream->readShort();
+            m_eButtonType = static_cast<FormButtonType>(_rxInStream->readShort());
 
             _rxInStream >> m_sTargetURL;
             _rxInStream >> m_sTargetFrame;
@@ -172,7 +172,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
 
         case 0x0002:
         {
-            m_eButtonType = (FormButtonType)_rxInStream->readShort();
+            m_eButtonType = static_cast<FormButtonType>(_rxInStream->readShort());
 
             _rxInStream >> m_sTargetURL;
             _rxInStream >> m_sTargetFrame;
@@ -186,7 +186,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
             // this will skip any unknown bytes in its dtor
 
             // button type
-            m_eButtonType = (FormButtonType)_rxInStream->readShort();
+            m_eButtonType = static_cast<FormButtonType>(_rxInStream->readShort());
 
             // URL
             _rxInStream >> m_sTargetURL;
@@ -267,7 +267,7 @@ void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle
     {
         sal_Int16 nDefaultState = sal_Int16(TRISTATE_FALSE);
         OSL_VERIFY( _rValue >>= nDefaultState );
-        m_eDefaultState = (ToggleState)nDefaultState;
+        m_eDefaultState = static_cast<ToggleState>(nDefaultState);
         impl_resetNoBroadcast_nothrow();
     }
     break;

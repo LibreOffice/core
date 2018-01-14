@@ -517,7 +517,7 @@ void VCLXButton::setProperty( const OUString& PropertyName, const css::uno::Any&
                 {
                     sal_Int16 n = sal_Int16();
                     if ( Value >>= n )
-                        static_cast<PushButton*>(pButton.get())->SetState( (TriState)n );
+                        static_cast<PushButton*>(pButton.get())->SetState( static_cast<TriState>(n) );
                 }
             }
             break;
@@ -4813,7 +4813,7 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::A
             {
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
-                    GetAs< DateField >()->SetExtDateFormat( (ExtDateFieldFormat) n );
+                    GetAs< DateField >()->SetExtDateFormat( static_cast<ExtDateFieldFormat>(n) );
             }
             break;
             case BASEPROPERTY_DATESHOWCENTURY:
@@ -5296,7 +5296,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const css::uno::A
             {
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
-                    GetAs< TimeField >()->SetExtFormat( (ExtTimeFieldFormat) n );
+                    GetAs< TimeField >()->SetExtFormat( static_cast<ExtTimeFieldFormat>(n) );
             }
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
@@ -5772,7 +5772,7 @@ IMPL_XTYPEPROVIDER_START( VCLXMetricField )
 IMPL_XTYPEPROVIDER_END
 
 // FIXME: later ...
-#define MetricUnitUnoToVcl(a) ((FieldUnit)(a))
+#define MetricUnitUnoToVcl(a) (static_cast<FieldUnit>(a))
 
 #define METRIC_MAP_PAIR(method,parent) \
     sal_Int64 VCLXMetricField::get##method( sal_Int16 nUnit ) \
@@ -5896,7 +5896,7 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const css::uno:
             {
                 sal_uInt16 nVal = 0;
                 if ( Value >>= nVal )
-                    GetAs< MetricField >()->SetUnit( (FieldUnit) nVal );
+                    GetAs< MetricField >()->SetUnit( static_cast<FieldUnit>(nVal) );
                 break;
             }
             case BASEPROPERTY_CUSTOMUNITTEXT:

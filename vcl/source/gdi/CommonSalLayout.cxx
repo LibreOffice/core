@@ -663,7 +663,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             hb_buffer_set_direction(pHbBuffer, aSubRun.maDirection);
             hb_buffer_set_script(pHbBuffer, aSubRun.maScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
-            hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
+            hb_buffer_set_flags(pHbBuffer, static_cast<hb_buffer_flags_t>(nHbFlags));
             hb_buffer_add_utf16(
                 pHbBuffer, reinterpret_cast<uint16_t const *>(pStr), nLength,
                 nMinRunPos, nRunLen);

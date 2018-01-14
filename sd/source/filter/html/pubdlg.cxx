@@ -240,14 +240,14 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     rDesign.m_aDesignName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn,
         RTL_TEXTENCODING_UTF8);
     rIn.ReadUInt16( nTemp16 );
-    rDesign.m_eMode = (HtmlPublishMode)nTemp16;
+    rDesign.m_eMode = static_cast<HtmlPublishMode>(nTemp16);
     rIn.ReadCharAsBool( rDesign.m_bContentPage );
     rIn.ReadCharAsBool( rDesign.m_bNotes );
     rIn.ReadUInt16( rDesign.m_nResolution );
     rDesign.m_aCompression = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn,
         RTL_TEXTENCODING_UTF8);
     rIn.ReadUInt16( nTemp16 );
-    rDesign.m_eFormat = (PublishingFormat)nTemp16;
+    rDesign.m_eFormat = static_cast<PublishingFormat>(nTemp16);
     rDesign.m_aAuthor = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn,
         RTL_TEXTENCODING_UTF8);
     rDesign.m_aEMail = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn,
@@ -269,7 +269,7 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     rIn.ReadCharAsBool( rDesign.m_bUseColor );
 
     rIn.ReadUInt16( nTemp16 );
-    rDesign.m_eScript = (PublishingScript)nTemp16;
+    rDesign.m_eScript = static_cast<PublishingScript>(nTemp16);
     rDesign.m_aURL = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn,
         RTL_TEXTENCODING_UTF8);
     rDesign.m_aCGI = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn,

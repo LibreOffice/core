@@ -1353,7 +1353,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if ( pLinkItem )
                             bAsLink = pLinkItem->GetValue();
                         if ( pMoveItem )
-                            eMoveMode = (InsCellCmd) pMoveItem->GetValue();
+                            eMoveMode = static_cast<InsCellCmd>(pMoveItem->GetValue());
                     }
                     else
                     {

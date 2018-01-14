@@ -299,7 +299,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         SfxGetpApp()->SetOptions(rSet);
         PutItem(*pItem);
         const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pItem);
-        ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
+        ::SetDfltMetric(static_cast<FieldUnit>(pMetricItem->GetValue()), !bTextDialog);
     }
     if( SfxItemState::SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT,
                                                     false, &pItem ) )
@@ -312,7 +312,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState(FN_HSCROLL_METRIC, false, &pItem ) )
     {
         const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pItem);
-        FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
+        FieldUnit eUnit = static_cast<FieldUnit>(pMetricItem->GetValue());
         pPref->SetHScrollMetric(eUnit);
         if(pAppView)
             pAppView->ChangeTabMetric(eUnit);
@@ -321,7 +321,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState(FN_VSCROLL_METRIC, false, &pItem ) )
     {
         const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pItem);
-        FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
+        FieldUnit eUnit = static_cast<FieldUnit>(pMetricItem->GetValue());
         pPref->SetVScrollMetric(eUnit);
         if(pAppView)
             pAppView->ChangeVRulerMetric(eUnit);

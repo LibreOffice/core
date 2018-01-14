@@ -670,7 +670,7 @@ namespace
         {style::ParagraphAdjust_RIGHT,          sal_Int16(awt::TextAlign::RIGHT)},
         {style::ParagraphAdjust_BLOCK,          sal_Int16(awt::TextAlign::RIGHT)},
         {style::ParagraphAdjust_STRETCH,        sal_Int16(awt::TextAlign::LEFT)},
-        {(style::ParagraphAdjust)-1,-1}
+        {style::ParagraphAdjust(-1),-1}
     };
 
     void lcl_convertTextAlignmentToParaAdjustment( Any& _rValue )
@@ -681,7 +681,7 @@ namespace
         for ( auto const & rEntry : aMapAdjustToAlign )
             if ( nValue == rEntry.nFormValue )
             {
-                _rValue <<= (sal_uInt16)rEntry.nAPIValue;
+                _rValue <<= static_cast<sal_uInt16>(rEntry.nAPIValue);
                 return;
             }
     }
@@ -692,7 +692,7 @@ namespace
         OSL_VERIFY( _rValue >>= nValue );
 
         for ( auto const & rEntry : aMapAdjustToAlign )
-            if ( (style::ParagraphAdjust)nValue == rEntry.nAPIValue )
+            if ( static_cast<style::ParagraphAdjust>(nValue) == rEntry.nAPIValue )
             {
                 _rValue <<= rEntry.nFormValue;
                 return;
@@ -751,7 +751,7 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
                     awt::FontSlant nSlant;
                     if( !(aValue >>= nSlant ) )
                         throw lang::IllegalArgumentException();
-                    aConvertedValue <<= (sal_Int16)nSlant;
+                    aConvertedValue <<= static_cast<sal_Int16>(nSlant);
                 }
                 else if ( aFormsName == "Align" )
                 {
@@ -792,7 +792,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
                     sal_Int16 nSlant = sal_Int16();
                     if ( aValue >>= nSlant )
                     {
-                        eSlant = (awt::FontSlant)nSlant;
+                        eSlant = static_cast<awt::FontSlant>(nSlant);
                     }
                     else
                     {
@@ -883,7 +883,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const OUString& aProperty
             {
                 sal_Int16 nSlant( 0 );
                 aDefault >>= nSlant;
-                aDefault <<= (awt::FontSlant)nSlant;
+                aDefault <<= static_cast<awt::FontSlant>(nSlant);
             }
             else if ( aFormsName == "Align" )
             {

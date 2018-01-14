@@ -101,7 +101,7 @@ void ScHighlightChgDlg::Init()
     m_pFilterCtr->SetFirstTime(aChangeViewSet.GetTheFirstDateTime());
     m_pFilterCtr->SetLastDate(aChangeViewSet.GetTheLastDateTime());
     m_pFilterCtr->SetLastTime(aChangeViewSet.GetTheLastDateTime());
-    m_pFilterCtr->SetDateMode((sal_uInt16)aChangeViewSet.GetTheDateMode());
+    m_pFilterCtr->SetDateMode(static_cast<sal_uInt16>(aChangeViewSet.GetTheDateMode()));
     m_pFilterCtr->CheckAuthor(aChangeViewSet.HasAuthor());
     m_pFilterCtr->CheckComment(aChangeViewSet.HasComment());
     m_pFilterCtr->SetComment(aChangeViewSet.GetTheComment());

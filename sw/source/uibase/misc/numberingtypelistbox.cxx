@@ -169,7 +169,7 @@ SvxNumType   SwNumberingTypeListBox::GetSelectedNumberingType()
     SvxNumType nRet = SVX_NUM_CHARS_UPPER_LETTER;
     sal_Int32 nSelPos = GetSelectedEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
-        nRet = (SvxNumType)reinterpret_cast<sal_uLong>(GetEntryData(nSelPos));
+        nRet = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(GetEntryData(nSelPos)));
 #if OSL_DEBUG_LEVEL > 0
     else
         OSL_FAIL("SwNumberingTypeListBox not selected");

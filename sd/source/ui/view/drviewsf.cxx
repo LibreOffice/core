@@ -191,11 +191,11 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
     {
-        const sal_uLong nMode = (sal_Int32)GetActiveWindow()->GetDrawMode();
-        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_COLOR, (sal_uLong)OUTPUT_DRAWMODE_COLOR == nMode ) );
-        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_GRAYSCALE, (sal_uLong)OUTPUT_DRAWMODE_GRAYSCALE == nMode ) );
-        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_BLACKWHITE, (sal_uLong)OUTPUT_DRAWMODE_BLACKWHITE == nMode ) );
-        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_CONTRAST, (sal_uLong)OUTPUT_DRAWMODE_CONTRAST == nMode ) );
+        const sal_uLong nMode = static_cast<sal_Int32>(GetActiveWindow()->GetDrawMode());
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_COLOR, sal_uLong(OUTPUT_DRAWMODE_COLOR) == nMode ) );
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_GRAYSCALE, static_cast<sal_uLong>(OUTPUT_DRAWMODE_GRAYSCALE) == nMode ) );
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_BLACKWHITE, static_cast<sal_uLong>(OUTPUT_DRAWMODE_BLACKWHITE) == nMode ) );
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_CONTRAST, static_cast<sal_uLong>(OUTPUT_DRAWMODE_CONTRAST) == nMode ) );
     }
 
     if ( SfxItemState::DEFAULT == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
@@ -718,8 +718,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             rSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
         }
 
-        SvxEscapement eEsc = (SvxEscapement)
-                        pSet->Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
+        SvxEscapement eEsc = static_cast<SvxEscapement>(pSet->Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
         if( eEsc == SvxEscapement::Superscript )
         {
             rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );

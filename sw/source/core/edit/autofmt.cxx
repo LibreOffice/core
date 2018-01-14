@@ -1530,7 +1530,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFormat.SetCharFormat( pCFormat );
 
                     if( !aNumTypes.isEmpty() )
-                        aFormat.SetNumberingType((SvxNumType)(aNumTypes[ 0 ] - '0'));
+                        aFormat.SetNumberingType(static_cast<SvxNumType>(aNumTypes[ 0 ] - '0'));
 
                     if( bRTL )
                         aFormat.SetNumAdjust( SvxAdjust::Right );
@@ -1551,7 +1551,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFormat.SetSuffix( aPostfix.getToken( n, u'\x0001' ));
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );
                         if( n < aNumTypes.getLength() )
-                            aFormat.SetNumberingType((SvxNumType)(aNumTypes[ n ] - '0'));
+                            aFormat.SetNumberingType(static_cast<SvxNumType>(aNumTypes[ n ] - '0'));
 
                         aFormat.SetAbsLSpace( sal_uInt16( nSpaceSteps * n )
                                             + lNumIndent );

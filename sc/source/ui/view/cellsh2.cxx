@@ -882,9 +882,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
                         if ( pOutSet->GetItemState( FID_VALID_MODE, true, &pItem ) == SfxItemState::SET )
-                            eMode = (ScValidationMode) static_cast<const SfxAllEnumItem*>(pItem)->GetValue();
+                            eMode = static_cast<ScValidationMode>(static_cast<const SfxAllEnumItem*>(pItem)->GetValue());
                         if ( pOutSet->GetItemState( FID_VALID_CONDMODE, true, &pItem ) == SfxItemState::SET )
-                            eOper = (ScConditionMode) static_cast<const SfxAllEnumItem*>(pItem)->GetValue();
+                            eOper = static_cast<ScConditionMode>(static_cast<const SfxAllEnumItem*>(pItem)->GetValue());
                         if ( pOutSet->GetItemState( FID_VALID_VALUE1, true, &pItem ) == SfxItemState::SET )
                         {
                             OUString aTemp1 = static_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -951,7 +951,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pOutSet->GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SfxItemState::SET )
                             bShowError = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pOutSet->GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SfxItemState::SET )
-                            eErrStyle = (ScValidErrorStyle) static_cast<const SfxAllEnumItem*>(pItem)->GetValue();
+                            eErrStyle = static_cast<ScValidErrorStyle>(static_cast<const SfxAllEnumItem*>(pItem)->GetValue());
                         if ( pOutSet->GetItemState( FID_VALID_ERRTITLE, true, &pItem ) == SfxItemState::SET )
                             aErrTitle = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SfxItemState::SET )

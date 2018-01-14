@@ -891,7 +891,7 @@ void Test::testRedlineFlags()
         // tdf#97103 check that redline mode is properly restored
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OString(OString("redline mode not restored in ") + aFilterNames[nFilter]).getStr(),
-            (int)nRedlineFlags, (int)rIDRA.GetRedlineFlags());
+            static_cast<int>(nRedlineFlags), static_cast<int>(rIDRA.GetRedlineFlags()));
     }
 }
 

@@ -3364,7 +3364,7 @@ bool PDFWriterImpl::emitFonts()
                 }
                 else
                 {
-                    SAL_INFO("vcl.pdfwriter", "PDF: CreateFontSubset result in not yet supported format=" << (int)aSubsetInfo.m_nFontType);
+                    SAL_INFO("vcl.pdfwriter", "PDF: CreateFontSubset result in not yet supported format=" << static_cast<int>(aSubsetInfo.m_nFontType));
                     aLine.append( "0 >>\nstream\n" );
                 }
 

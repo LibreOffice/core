@@ -1178,7 +1178,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         SvTreeListEntry *pEntry = m_pLinguOptionsCLB->GetEntry( j );
 
         OptionsUserData aData( reinterpret_cast<sal_uLong>(pEntry->GetUserData()) );
-        OUString aPropName( lcl_GetPropertyName( (EID_OPTIONS) aData.GetEntryId() ) );
+        OUString aPropName( lcl_GetPropertyName( static_cast<EID_OPTIONS>(aData.GetEntryId()) ) );
 
         Any aAny;
         if (aData.IsCheckable())

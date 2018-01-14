@@ -49,13 +49,13 @@ const SvXMLEnumMapEntry<FormSubmitEncoding> aSubmitEncodingMap[] =
     { XML_APPLICATION_X_WWW_FORM_URLENCODED, FormSubmitEncoding_URL },
     { XML_MULTIPART_FORMDATA, FormSubmitEncoding_MULTIPART },
     { XML_APPLICATION_TEXT, FormSubmitEncoding_TEXT },
-    { XML_TOKEN_INVALID, (FormSubmitEncoding)0 }
+    { XML_TOKEN_INVALID, FormSubmitEncoding(0) }
 };
 const SvXMLEnumMapEntry<FormSubmitMethod> aSubmitMethodMap[] =
 {
     { XML_GET, FormSubmitMethod_GET },
     { XML_POST, FormSubmitMethod_POST },
-    { XML_TOKEN_INVALID, (FormSubmitMethod)0 }
+    { XML_TOKEN_INVALID, FormSubmitMethod(0) }
 };
 const SvXMLEnumMapEntry<sal_Int32> aCommandTypeMap[] =
 {
@@ -69,14 +69,14 @@ const SvXMLEnumMapEntry<NavigationBarMode> aNavigationTypeMap[] =
     { XML_NONE, NavigationBarMode_NONE },
     { XML_CURRENT, NavigationBarMode_CURRENT },
     { XML_PARENT, NavigationBarMode_PARENT },
-    { XML_TOKEN_INVALID, (NavigationBarMode)0 }
+    { XML_TOKEN_INVALID, NavigationBarMode(0) }
 };
 const SvXMLEnumMapEntry<TabulatorCycle> aTabulatorCycleMap[] =
 {
     { XML_RECORDS, TabulatorCycle_RECORDS },
     { XML_CURRENT, TabulatorCycle_CURRENT },
     { XML_PAGE, TabulatorCycle_PAGE },
-    { XML_TOKEN_INVALID, (TabulatorCycle)0 }
+    { XML_TOKEN_INVALID, TabulatorCycle(0) }
 };
 const SvXMLEnumMapEntry<FormButtonType> aFormButtonTypeMap[] =
 {
@@ -84,7 +84,7 @@ const SvXMLEnumMapEntry<FormButtonType> aFormButtonTypeMap[] =
     { XML_SUBMIT, FormButtonType_SUBMIT },
     { XML_RESET, FormButtonType_RESET },
     { XML_URL, FormButtonType_URL },
-    { XML_TOKEN_INVALID, (FormButtonType)0 }
+    { XML_TOKEN_INVALID, FormButtonType(0) }
 };
 const SvXMLEnumMapEntry<ListSourceType> aListSourceTypeMap[] =
 {
@@ -94,7 +94,7 @@ const SvXMLEnumMapEntry<ListSourceType> aListSourceTypeMap[] =
     { XML_SQL, ListSourceType_SQL },
     { XML_SQL_PASS_THROUGH, ListSourceType_SQLPASSTHROUGH },
     { XML_TABLE_FIELDS, ListSourceType_TABLEFIELDS },
-    { XML_TOKEN_INVALID, (ListSourceType)0 }
+    { XML_TOKEN_INVALID, ListSourceType(0) }
 };
 // check state of a checkbox
 const SvXMLEnumMapEntry<TriState> aCheckStateMap[] =
@@ -102,7 +102,7 @@ const SvXMLEnumMapEntry<TriState> aCheckStateMap[] =
     { XML_UNCHECKED,     TRISTATE_FALSE },
     { XML_CHECKED,       TRISTATE_TRUE },
     { XML_UNKNOWN,       TRISTATE_INDET },
-    { XML_TOKEN_INVALID, (TriState)0 }
+    { XML_TOKEN_INVALID, TriState(0) }
 };
 const SvXMLEnumMapEntry<sal_Int16> aTextAlignMap[] =
 {

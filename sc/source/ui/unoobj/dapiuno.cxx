@@ -1806,13 +1806,12 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     if ( aPropertyName == SC_UNONAME_FUNCTION )
     {
         // #i109350# use GetEnumFromAny because it also allows sal_Int32
-        ScGeneralFunction eFunction = (ScGeneralFunction)
-                            ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        ScGeneralFunction eFunction = static_cast<ScGeneralFunction>(ScUnoHelpFunctions::GetEnumFromAny( aValue ));
         setFunction( eFunction );
     }
     else if ( aPropertyName == SC_UNONAME_FUNCTION2 )
     {
-        ScGeneralFunction eFunction = (ScGeneralFunction)ScUnoHelpFunctions::GetInt16FromAny( aValue );
+        ScGeneralFunction eFunction = static_cast<ScGeneralFunction>(ScUnoHelpFunctions::GetInt16FromAny( aValue ));
         setFunction( eFunction );
     }
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
@@ -1845,8 +1844,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     else if ( aPropertyName == SC_UNONAME_ORIENT )
     {
         //! test for correct enum type?
-        DataPilotFieldOrientation eOrient = (DataPilotFieldOrientation)
-                            ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        DataPilotFieldOrientation eOrient = static_cast<DataPilotFieldOrientation>(ScUnoHelpFunctions::GetEnumFromAny( aValue ));
         setOrientation( eOrient );
     }
     else if ( aPropertyName == SC_UNONAME_SELPAGE )

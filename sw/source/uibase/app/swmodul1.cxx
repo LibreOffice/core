@@ -493,7 +493,7 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
     {
     case SID_ATTR_CHAR_WEIGHT:
         {
-            SvxWeightItem aW( (FontWeight)rAttr.m_nAttr, RES_CHRATR_WEIGHT );
+            SvxWeightItem aW( static_cast<FontWeight>(rAttr.m_nAttr), RES_CHRATR_WEIGHT );
             rSet.Put( aW );
             aW.SetWhich( RES_CHRATR_CJK_WEIGHT );
             rSet.Put( aW );
@@ -504,7 +504,7 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
 
     case SID_ATTR_CHAR_POSTURE:
         {
-            SvxPostureItem aP( (FontItalic)rAttr.m_nAttr, RES_CHRATR_POSTURE );
+            SvxPostureItem aP( static_cast<FontItalic>(rAttr.m_nAttr), RES_CHRATR_POSTURE );
             rSet.Put( aP );
             aP.SetWhich( RES_CHRATR_CJK_POSTURE );
             rSet.Put( aP );
@@ -514,17 +514,17 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
         break;
 
     case SID_ATTR_CHAR_UNDERLINE:
-        rSet.Put( SvxUnderlineItem( (FontLineStyle)rAttr.m_nAttr,
+        rSet.Put( SvxUnderlineItem( static_cast<FontLineStyle>(rAttr.m_nAttr),
                                     RES_CHRATR_UNDERLINE));
         break;
 
     case SID_ATTR_CHAR_STRIKEOUT:
-        rSet.Put(SvxCrossedOutItem( (FontStrikeout)rAttr.m_nAttr,
+        rSet.Put(SvxCrossedOutItem( static_cast<FontStrikeout>(rAttr.m_nAttr),
                                     RES_CHRATR_CROSSEDOUT));
         break;
 
     case SID_ATTR_CHAR_CASEMAP:
-        rSet.Put( SvxCaseMapItem( (SvxCaseMap)rAttr.m_nAttr,
+        rSet.Put( SvxCaseMapItem( static_cast<SvxCaseMap>(rAttr.m_nAttr),
                                     RES_CHRATR_CASEMAP));
         break;
 

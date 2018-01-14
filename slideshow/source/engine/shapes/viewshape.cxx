@@ -141,7 +141,7 @@ namespace slideshow
                     if( rAttr->isCharPostureValid() )
                     {
                         aParms.maFontLetterForm =
-                            rAttr->getCharPosture() == (sal_Int16)awt::FontSlant_NONE ?
+                            rAttr->getCharPosture() == sal_Int16(awt::FontSlant_NONE) ?
                             rendering::PanoseLetterForm::ANYTHING :
                             rendering::PanoseLetterForm::OBLIQUE_CONTACT;
                     }

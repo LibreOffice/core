@@ -1353,7 +1353,7 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
 
     SCCOL nMoveX = 0;
     SCROW nMoveY = 0;
-    switch ((ScDirection)rOpt.GetMoveDir())
+    switch (static_cast<ScDirection>(rOpt.GetMoveDir()))
     {
         case DIR_BOTTOM:
             nMoveY = bShift ? -1 : 1;
@@ -2036,8 +2036,8 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
     {
         if (pGridWin[i] && pGridWin[i]->IsVisible() && !aViewData.HasEditView(ScSplitPos(i)))
         {
-            ScHSplitPos eHWhich = WhichH( (ScSplitPos) i );
-            ScVSplitPos eVWhich = WhichV( (ScSplitPos) i );
+            ScHSplitPos eHWhich = WhichH( static_cast<ScSplitPos>(i) );
+            ScVSplitPos eVWhich = WhichV( static_cast<ScSplitPos>(i) );
             SCCOL nScrX = aViewData.GetPosX( eHWhich );
             SCROW nScrY = aViewData.GetPosY( eVWhich );
 
@@ -2049,8 +2049,8 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
             //  so input isn't lost (and the edit view may be scrolled into the visible area)
 
             //  #i26433# during spelling, the spelling view must be active
-            if ( bPosVisible || aViewData.GetActivePart() == (ScSplitPos) i ||
-                 ( pSpellingView && aViewData.GetEditView((ScSplitPos) i) == pSpellingView ) )
+            if ( bPosVisible || aViewData.GetActivePart() == static_cast<ScSplitPos>(i) ||
+                 ( pSpellingView && aViewData.GetEditView(static_cast<ScSplitPos>(i)) == pSpellingView ) )
             {
                 pGridWin[i]->HideCursor();
 
@@ -2064,7 +2064,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                 // MapMode must be set after HideCursor
                 pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
 
-                aViewData.SetEditEngine( (ScSplitPos) i, pEngine, pGridWin[i], nCol, nRow );
+                aViewData.SetEditEngine( static_cast<ScSplitPos>(i), pEngine, pGridWin[i], nCol, nRow );
 
                 if ( !bPosVisible )
                 {
@@ -2115,12 +2115,12 @@ void ScTabView::KillEditView( bool bNoPaint )
                      nRow1 == aViewData.GetCurY();
     for (sal_uInt16 i = 0; i < 4; i++)
     {
-        bPaint[i] = aViewData.HasEditView( (ScSplitPos) i );
+        bPaint[i] = aViewData.HasEditView( static_cast<ScSplitPos>(i) );
         if (bPaint[i])
         {
             bNotifyAcc = true;
 
-            EditView* pView = aViewData.GetEditView( (ScSplitPos) i );
+            EditView* pView = aViewData.GetEditView( static_cast<ScSplitPos>(i) );
             aRectangle[i] = pView->GetInvalidateRect();
         }
     }
@@ -2250,8 +2250,8 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         if (!pGridWin[i] || !pGridWin[i]->IsVisible())
             continue;
 
-        ScHSplitPos eHWhich = WhichH( (ScSplitPos) i );
-        ScVSplitPos eVWhich = WhichV( (ScSplitPos) i );
+        ScHSplitPos eHWhich = WhichH( static_cast<ScSplitPos>(i) );
+        ScVSplitPos eVWhich = WhichV( static_cast<ScSplitPos>(i) );
         bool bOut = false;
 
         nCol1 = nStartCol;
@@ -2306,8 +2306,8 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        Point aStart = aViewData.GetScrPos( nCol1, nRow1, (ScSplitPos) i );
-        Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, (ScSplitPos) i );
+        Point aStart = aViewData.GetScrPos( nCol1, nRow1, static_cast<ScSplitPos>(i) );
+        Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, static_cast<ScSplitPos>(i) );
         if ( eMode == ScUpdateMode::All )
         {
             if (bIsTiledRendering)
@@ -2748,7 +2748,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
                     {
                         if ( pGridWin[i] )
                         {
-                            eWin = (ScSplitPos) i;
+                            eWin = static_cast<ScSplitPos>(i);
                             break;  // for
                         }
                     }

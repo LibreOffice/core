@@ -89,7 +89,7 @@ public:
 
     SfxPoolItem * Clone(SfxItemPool * pPool = nullptr) const override;
 
-    ScMF    GetValue() const { return (ScMF) SfxInt16Item::GetValue(); }
+    ScMF    GetValue() const { return static_cast<ScMF>(SfxInt16Item::GetValue()); }
 
     bool    IsHorOverlapped() const     { return bool( GetValue() & ScMF::Hor );  }
     bool    IsVerOverlapped() const     { return bool( GetValue() & ScMF::Ver );  }

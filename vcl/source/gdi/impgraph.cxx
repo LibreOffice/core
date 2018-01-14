@@ -1015,12 +1015,12 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         }
 
         aSize = Size( nWidth, nHeight );
-        aMapMode = MapMode( (MapUnit) nMapMode, Point( nOffsX, nOffsY ),
+        aMapMode = MapMode( static_cast<MapUnit>(nMapMode), Point( nOffsX, nOffsY ),
                             Fraction( nScaleNumX, nScaleDenomX ),
                             Fraction( nScaleNumY, nScaleDenomY ) );
     }
 
-    meType = (GraphicType) nType;
+    meType = static_cast<GraphicType>(nType);
 
     if( meType != GraphicType::NONE )
     {
@@ -1114,7 +1114,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             // write new style header
             std::unique_ptr<VersionCompat> pCompat( new VersionCompat( rOStm, StreamMode::WRITE, 1 ) );
 
-            rOStm.WriteInt32( (sal_Int32)meType );
+            rOStm.WriteInt32( static_cast<sal_Int32>(meType) );
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
@@ -1126,14 +1126,14 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         else
         {
             // write old style (<=4.0) header
-            rOStm.WriteInt32( (sal_Int32)meType );
+            rOStm.WriteInt32( static_cast<sal_Int32>(meType) );
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
             rOStm.WriteInt32( 0 );
             rOStm.WriteInt32( aSize.Width() );
             rOStm.WriteInt32( aSize.Height() );
-            rOStm.WriteInt32( (sal_uInt16)aMapMode.GetMapUnit() );
+            rOStm.WriteInt32( static_cast<sal_uInt16>(aMapMode.GetMapUnit()) );
             rOStm.WriteInt32( aMapMode.GetScaleX().GetNumerator() );
             rOStm.WriteInt32( aMapMode.GetScaleX().GetDenominator() );
             rOStm.WriteInt32( aMapMode.GetScaleY().GetNumerator() );

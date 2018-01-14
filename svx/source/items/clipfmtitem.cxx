@@ -59,7 +59,7 @@ bool SvxClipboardFormatItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMembe
     aClipFormats.Names.realloc( nCount );
     for ( sal_uInt16 n=0; n < nCount; n++ )
     {
-        aClipFormats.Identifiers[n] = (sal_Int64)GetClipbrdFormatId( n );
+        aClipFormats.Identifiers[n] = static_cast<sal_Int64>(GetClipbrdFormatId( n ));
         aClipFormats.Names[n] = GetClipbrdFormatName( n );
     }
 

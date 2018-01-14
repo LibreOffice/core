@@ -173,7 +173,7 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     static const sal_uInt32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
 
-    rOut.WriteUInt32( nInventor ).WriteUInt16( 0x0004 ).WriteUInt16( GetVersion() ).WriteUInt16( (sal_uInt16)GetObjKind() );
+    rOut.WriteUInt32( nInventor ).WriteUInt16( 0x0004 ).WriteUInt16( GetVersion() ).WriteUInt16( static_cast<sal_uInt16>(GetObjKind()) );
     rOut.WriteBool( bIsThumbBmp );
 
     if( bIsThumbBmp )
@@ -353,7 +353,7 @@ void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
     {
         sal_uInt16      nTmp16;
 
-        rIn.ReadUInt16( nTmp16 ); eSoundType = (GalSoundType) nTmp16;
+        rIn.ReadUInt16( nTmp16 ); eSoundType = static_cast<GalSoundType>(nTmp16);
 
         if( rReadVersion >= 6 )
             aTitle = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);

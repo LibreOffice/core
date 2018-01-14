@@ -1084,7 +1084,7 @@ static SvXMLEnumMapEntry<ValueType> const aValueTypeMap[] =
     { XML_TIME,         XML_VALUE_TYPE_TIME },
     { XML_BOOLEAN,      XML_VALUE_TYPE_BOOLEAN },
     { XML_STRING,       XML_VALUE_TYPE_STRING },
-    { XML_TOKEN_INVALID, (ValueType)0 }
+    { XML_TOKEN_INVALID, ValueType(0) }
 };
 
 XMLValueImportHelper::XMLValueImportHelper(

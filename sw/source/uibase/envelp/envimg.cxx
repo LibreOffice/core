@@ -198,7 +198,7 @@ SwEnvCfgItem::SwEnvCfgItem() :
                     case  9:
                     {
                         sal_Int32 nTemp = 0;
-                        pValues[nProp] >>= nTemp; aEnvItem.m_eAlign = (SwEnvAlign)nTemp; break;// "Print/Alignment",
+                        pValues[nProp] >>= nTemp; aEnvItem.m_eAlign = static_cast<SwEnvAlign>(nTemp); break;// "Print/Alignment",
                     }
                     case 10: aEnvItem.m_bPrintFromAbove = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Print/FromAbove",
                     case 11:

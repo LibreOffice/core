@@ -70,7 +70,7 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
     const SfxUInt32Item* pInventorItem = rReq.GetArg<SfxUInt32Item>(SID_FM_CONTROL_INVENTOR);
     const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
     if( pInventorItem )
-        nInventor = (SdrInventor)pInventorItem->GetValue();
+        nInventor = static_cast<SdrInventor>(pInventorItem->GetValue());
     if( pIdentifierItem )
         nIdentifier = pIdentifierItem->GetValue();
 

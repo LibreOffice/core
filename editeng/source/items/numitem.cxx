@@ -190,8 +190,8 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     sal_Int32  nTmp32(0);
     rStream.ReadUInt16( nTmp16 ); // Version number
 
-    rStream.ReadUInt16( nTmp16 ); SetNumberingType( (SvxNumType)nTmp16 );
-    rStream.ReadUInt16( nTmp16 ); eNumAdjust = ( SvxAdjust )nTmp16;
+    rStream.ReadUInt16( nTmp16 ); SetNumberingType( static_cast<SvxNumType>(nTmp16) );
+    rStream.ReadUInt16( nTmp16 ); eNumAdjust = static_cast<SvxAdjust>(nTmp16);
     rStream.ReadUInt16( nTmp16 ); nInclUpperLevels = nTmp16;
     rStream.ReadUInt16( nStart );
     rStream.ReadUInt16( nTmp16 ); cBullet = static_cast<sal_Unicode>(nTmp16);
@@ -230,8 +230,8 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( nBulletRelSize );
     rStream.ReadUInt16( nTmp16 ); SetShowSymbol( nTmp16 );
 
-    rStream.ReadUInt16( nTmp16 ); mePositionAndSpaceMode = ( SvxNumPositionAndSpaceMode )nTmp16;
-    rStream.ReadUInt16( nTmp16 ); meLabelFollowedBy = ( LabelFollowedBy )nTmp16;
+    rStream.ReadUInt16( nTmp16 ); mePositionAndSpaceMode = static_cast<SvxNumPositionAndSpaceMode>(nTmp16);
+    rStream.ReadUInt16( nTmp16 ); meLabelFollowedBy = static_cast<LabelFollowedBy>(nTmp16);
     rStream.ReadInt32( nTmp32 ); mnListtabPos = nTmp32;
     rStream.ReadInt32( nTmp32 ); mnFirstLineIndent = nTmp32;
     rStream.ReadInt32( nTmp32 ); mnIndentAt = nTmp32;
@@ -255,7 +255,7 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     rStream.WriteUInt16( NUMITEM_VERSION_04 );
 
     rStream.WriteUInt16( GetNumberingType() );
-    rStream.WriteUInt16( (sal_uInt16)eNumAdjust );
+    rStream.WriteUInt16( static_cast<sal_uInt16>(eNumAdjust) );
     rStream.WriteUInt16( nInclUpperLevels );
     rStream.WriteUInt16( nStart );
     rStream.WriteUInt16( cBullet );
@@ -630,7 +630,7 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     // first nFeatureFlags of old Versions
     rStream.ReadUInt16( nTmp16 ); nFeatureFlags = static_cast<SvxNumRuleFlags>(nTmp16);
     rStream.ReadUInt16( nTmp16 ); bContinuousNumbering = nTmp16;
-    rStream.ReadUInt16( nTmp16 ); eNumberingType = ( SvxNumRuleType )nTmp16;
+    rStream.ReadUInt16( nTmp16 ); eNumberingType = static_cast<SvxNumRuleType>(nTmp16);
 
     for (sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
@@ -688,8 +688,8 @@ void SvxNumRule::dumpAsXml(struct _xmlTextWriter* pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxNumRule"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("levelCount"), BAD_CAST(OUString::number(nLevelCount).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("continuousNumbering"), BAD_CAST(OUString::boolean(bContinuousNumbering).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("numberingType"), BAD_CAST(OUString::number((int)eNumberingType).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("featureFlags"), BAD_CAST(OUString::number((int)nFeatureFlags).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("numberingType"), BAD_CAST(OUString::number(static_cast<int>(eNumberingType)).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("featureFlags"), BAD_CAST(OUString::number(static_cast<int>(nFeatureFlags)).getStr()));
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         if(aFmts[i])

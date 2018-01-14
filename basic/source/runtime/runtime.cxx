@@ -661,10 +661,10 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             if( p )
             {
                 bByVal |= ( p->eType & SbxBYREF ) == 0;
-                t = (SbxDataType) ( p->eType & 0x0FFF );
+                t = static_cast<SbxDataType>( p->eType & 0x0FFF );
 
                 if( !bByVal && t != SbxVARIANT &&
-                    (!v->IsFixed() || (SbxDataType)(v->GetType() & 0x0FFF ) != t) )
+                    (!v->IsFixed() || static_cast<SbxDataType>(v->GetType() & 0x0FFF ) != t) )
                 {
                     bByVal = true;
                 }
@@ -748,7 +748,7 @@ bool SbiRuntime::Step()
             }
         }
 
-        SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
+        SbiOpcode eOp = static_cast<SbiOpcode>( *pCode++ );
         sal_uInt32 nOp1, nOp2;
         if (eOp <= SbiOpcode::SbOP0_END)
         {
@@ -2813,7 +2813,7 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
     else
     {
         bool bByVal = (nOp1 & 0x8000) != 0;         // Is BYVAL requested?
-        SbxDataType t = (SbxDataType) (nOp1 & 0x7FFF);
+        SbxDataType t = static_cast<SbxDataType>(nOp1 & 0x7FFF);
         SbxVariable* pVar = refArgv->Get( refArgv->Count() - 1 );   // last Arg
 
         // check BYVAL
@@ -3310,7 +3310,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
     else
     {
         bool bFatalError = false;
-        SbxDataType t = (SbxDataType) nOp2;
+        SbxDataType t = static_cast<SbxDataType>(nOp2);
         OUString aName( pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) ) );
         // Hacky capture of Evaluate [] syntax
         // this should be tackled I feel at the pcode level
@@ -3991,7 +3991,7 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     sal_uInt16 i = static_cast<sal_uInt16>( nOp1 & 0x7FFF );
-    SbxDataType t = (SbxDataType) nOp2;
+    SbxDataType t = static_cast<SbxDataType>(nOp2);
     SbxVariable* p;
 
     // #57915 solve missing in a cleaner way
@@ -4055,7 +4055,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             Error( ERRCODE_BASIC_NOT_OPTIONAL );
         }
     }
-    else if( t != SbxVARIANT && (SbxDataType)(p->GetType() & 0x0FFF ) != t )
+    else if( t != SbxVARIANT && static_cast<SbxDataType>(p->GetType() & 0x0FFF ) != t )
     {
         SbxVariable* q = new SbxVariable( t );
         aRefSaved.emplace_back(q );
@@ -4082,7 +4082,7 @@ void SbiRuntime::StepCASEIS( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         SbxVariableRef xComp = PopVar();
         SbxVariableRef xCase = refCaseStk->Get( refCaseStk->Count() - 1 );
-        if( xCase->Compare( (SbxOperator) nOp2, *xComp ) )
+        if( xCase->Compare( static_cast<SbxOperator>(nOp2), *xComp ) )
         {
             StepJUMP( nOp1 );
         }
@@ -4100,7 +4100,7 @@ void SbiRuntime::StepCALL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         pArgs = refArgv.get();
     }
-    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, false );
+    DllCall( aName, aLibName, pArgs, static_cast<SbxDataType>(nOp2), false );
     aLibName.clear();
     if( nOp1 & 0x8000 )
     {
@@ -4118,7 +4118,7 @@ void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         pArgs = refArgv.get();
     }
-    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, true );
+    DllCall( aName, aLibName, pArgs, static_cast<SbxDataType>(nOp2), true );
     aLibName.clear();
     if( nOp1 & 0x8000 )
     {
@@ -4458,7 +4458,7 @@ void SbiRuntime::StepLOCAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     if( refLocals->Find( aName, SbxClassType::DontCare ) == nullptr )
     {
-        SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
+        SbxDataType t = static_cast<SbxDataType>(nOp2 & 0xffff);
         SbxVariable* p = new SbxVariable( t );
         p->SetName( aName );
         implHandleSbxFlags( p, t, nOp2 );
@@ -4471,7 +4471,7 @@ void SbiRuntime::StepLOCAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 void SbiRuntime::StepPUBLIC_Impl( sal_uInt32 nOp1, sal_uInt32 nOp2, bool bUsedForClassModule )
 {
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
+    SbxDataType t = static_cast<SbxDataType>(nOp2 & 0xffff);
     bool bFlag = pMod->IsSet( SbxFlagBits::NoModify );
     pMod->SetFlag( SbxFlagBits::NoModify );
     SbxVariableRef p = pMod->Find( aName, SbxClassType::Property );
@@ -4523,7 +4523,7 @@ void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         StepPUBLIC_Impl( nOp1, nOp2, true );
     }
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
+    SbxDataType t = static_cast<SbxDataType>(nOp2 & 0xffff);
 
     // Store module scope variables at module scope
     // in non vba mode these are stored at the library level :/
@@ -4581,7 +4581,7 @@ void SbiRuntime::StepFIND_G( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     else
     {
         // Return dummy variable
-        SbxDataType t = (SbxDataType) nOp2;
+        SbxDataType t = static_cast<SbxDataType>(nOp2);
         OUString aName( pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) ) );
 
         SbxVariable* pDummyVar = new SbxVariable( t );
@@ -4616,7 +4616,7 @@ SbxVariable* SbiRuntime::StepSTATIC_Impl(
 void SbiRuntime::StepSTATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType) (nOp2 & 0xffff);
+    SbxDataType t = static_cast<SbxDataType>(nOp2 & 0xffff);
     StepSTATIC_Impl( aName, t, nOp2 );
 }
 

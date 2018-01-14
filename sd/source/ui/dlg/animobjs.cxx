@@ -894,7 +894,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     const Point         aWindowCenter( pOutWin->PixelToLogic( Point( aTemp.Width() >> 1, aTemp.Height() >> 1 ) ) );
     const OutputDevice* pDefDev = Application::GetDefaultDevice();
     const size_t nCount = m_FrameList.size();
-    BitmapAdjustment    eBA = (BitmapAdjustment) m_pLbAdjustment->GetSelectedEntryPos();
+    BitmapAdjustment    eBA = static_cast<BitmapAdjustment>(m_pLbAdjustment->GetSelectedEntryPos());
 
     // find biggest bitmap
     for (size_t i = 0; i < nCount; ++i)

@@ -1326,7 +1326,7 @@ DECLARE_RTFEXPORT_TEST(testFooterPara, "footer-para.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("All Rights Reserved."),
                          uno::Reference<text::XTextRange>(xParagraph, uno::UNO_QUERY)->getString());
     CPPUNIT_ASSERT_EQUAL(
-        (sal_Int16)style::ParagraphAdjust_CENTER,
+        sal_Int16(style::ParagraphAdjust_CENTER),
         getProperty</*style::ParagraphAdjust*/ sal_Int16>(xParagraph, "ParaAdjust"));
 }
 

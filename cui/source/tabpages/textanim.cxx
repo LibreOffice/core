@@ -73,7 +73,7 @@ void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             if (rMarkList.GetMarkCount() == 1)
             {
                 const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                eKind = (SdrObjKind)pObj->GetObjIdentifier();
+                eKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
             }
         }
         static_cast<SvxTextAttrPage&>(rPage).SetObjKind(eKind);
@@ -371,7 +371,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
         m_pLbEffect->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( SdrTextAniKindItem( (SdrTextAniKind) nPos ) );
+        rAttrs->Put( SdrTextAniKindItem( static_cast<SdrTextAniKind>(nPos) ) );
         bModified = true;
     }
 
@@ -381,7 +381,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
         m_aRightState != m_pBtnRight->GetState() ||
         m_aDownState != m_pBtnDown->GetState())
     {
-        SdrTextAniDirection eValue = (SdrTextAniDirection) GetSelectedDirection();
+        SdrTextAniDirection eValue = static_cast<SdrTextAniDirection>(GetSelectedDirection());
         rAttrs->Put( SdrTextAniDirectionItem( eValue ) );
         bModified = true;
     }
@@ -485,7 +485,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void)
     sal_Int32 nPos = m_pLbEffect->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        eAniKind = (SdrTextAniKind) nPos;
+        eAniKind = static_cast<SdrTextAniKind>(nPos);
         switch( eAniKind )
         {
             case SdrTextAniKind::NONE:
@@ -637,7 +637,7 @@ sal_uInt16 SvxTextAnimationPage::GetSelectedDirection()
     else if( m_pBtnDown->IsChecked() )
         nValue = SdrTextAniDirection::Down;
 
-    return (sal_uInt16)nValue;
+    return static_cast<sal_uInt16>(nValue);
 }
 
 

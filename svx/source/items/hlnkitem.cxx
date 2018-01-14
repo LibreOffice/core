@@ -175,7 +175,7 @@ bool SvxHyperlinkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId 
         case MID_HLINK_TYPE:
             if(!(rVal >>= nVal))
                 return false;
-            eType = (SvxLinkInsertMode) static_cast<sal_uInt16>(nVal);
+            eType = static_cast<SvxLinkInsertMode>(static_cast<sal_uInt16>(nVal));
         break;
         default:
             return false;

@@ -1081,7 +1081,7 @@ bool T602ImportFilterDialog::OptionsDlg()
         any = propGet_(xPSetCodeLB,   "SelectedItems"); any >>= shr;
 
         if( shr[0] > 0 ) {
-            ini.xcode = (tcode)(shr[0]-1);
+            ini.xcode = static_cast<tcode>(shr[0]-1);
             ini.forcecode = true;
         } else {
             ini.forcecode = false;

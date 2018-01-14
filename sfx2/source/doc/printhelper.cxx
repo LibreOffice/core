@@ -55,7 +55,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/event.hxx>
 
-#define SFX_PRINTABLESTATE_CANCELJOB    (css::view::PrintableState)-2
+#define SFX_PRINTABLESTATE_CANCELJOB    css::view::PrintableState(-2)
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -297,7 +297,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
     aPrinter.getArray()[2].Value <<= eFormat;
 
     aPrinter.getArray()[1].Name = "PaperOrientation";
-    view::PaperOrientation eOrient = (view::PaperOrientation)pPrinter->GetOrientation();
+    view::PaperOrientation eOrient = static_cast<view::PaperOrientation>(pPrinter->GetOrientation());
     aPrinter.getArray()[1].Value <<= eOrient;
 
     aPrinter.getArray()[0].Name = "Name";
@@ -369,12 +369,12 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             {
                 if ( !( rProp.Value >>= lDummy ) )
                     throw css::lang::IllegalArgumentException();
-                eOrient = ( view::PaperOrientation) lDummy;
+                eOrient = static_cast<view::PaperOrientation>(lDummy);
             }
 
-            if ( (Orientation) eOrient != pPrinter->GetOrientation() )
+            if ( static_cast<Orientation>(eOrient) != pPrinter->GetOrientation() )
             {
-                pPrinter->SetOrientation( (Orientation) eOrient );
+                pPrinter->SetOrientation( static_cast<Orientation>(eOrient) );
                 nChangeFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;
             }
         }
@@ -386,7 +386,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             {
                 if ( !( rProp.Value >>= lDummy ) )
                     throw css::lang::IllegalArgumentException();
-                nPaperFormat = ( view::PaperFormat ) lDummy;
+                nPaperFormat = static_cast<view::PaperFormat>(lDummy);
             }
 
             if ( convertToPaper(nPaperFormat) != pPrinter->GetPaper() )

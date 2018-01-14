@@ -1012,7 +1012,7 @@ SwSbxValue SwCalc::Term()
         if( USHRT_MAX != nSbxOper )
         {
             // #i47706: cast to SbxOperator AFTER comparing to USHRT_MAX
-            SbxOperator eSbxOper = (SbxOperator)nSbxOper;
+            SbxOperator eSbxOper = static_cast<SbxOperator>(nSbxOper);
 
             GetToken();
             if( SbxEQ <= eSbxOper && eSbxOper <= SbxGE )

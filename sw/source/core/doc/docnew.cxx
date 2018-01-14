@@ -961,21 +961,21 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
     SwPaM aCpyPam( aSourceIdx, aSourceEndIdx );
 
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType()
+    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << static_cast<int>(aSourceIdx.GetNode().GetNodeType())
                               << std::dec << " " << aSourceIdx.GetNode().GetIndex() );
     aSourceIdx++;
-    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType()
+    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << static_cast<int>(aSourceIdx.GetNode().GetNodeType())
                                             << std::dec << " " << aSourceIdx.GetNode().GetIndex() );
     if ( aSourceIdx.GetNode().GetNodeType() != SwNodeType::End ) {
         aSourceIdx++;
-        SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType() << std::dec );
+        SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << static_cast<int>(aSourceIdx.GetNode().GetNodeType()) << std::dec );
         aSourceIdx--;
     }
     aSourceIdx--;
     SAL_INFO( "sw.docappend", ".." );
-    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceEndIdx.GetNode().GetNodeType()
+    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << static_cast<int>(aSourceEndIdx.GetNode().GetNodeType())
                               << std::dec << " " << aSourceEndIdx.GetNode().GetIndex() );
-    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceEndIdx.GetNode().GetNodeType()
+    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << static_cast<int>(aSourceEndIdx.GetNode().GetNodeType())
                               << std::dec << " " << aSourceEndIdx.GetNode().GetIndex() );
     SAL_INFO( "sw.docappend", "Src-Nd: " << CNTNT_DOC( &rSource ) );
     SAL_INFO( "sw.docappend", "Nd: " << CNTNT_DOC( this ) );
@@ -1087,9 +1087,9 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "Pam-Nd: " << aCpyPam.GetNode().GetIndex() - aCpyPam.GetNode( false ).GetIndex() + 1
-                              << " (0x" << std::hex << (int) aCpyPam.GetNode( false ).GetNodeType() << std::dec
+                              << " (0x" << std::hex << static_cast<int>(aCpyPam.GetNode( false ).GetNodeType()) << std::dec
                               << " " << aCpyPam.GetNode( false ).GetIndex()
-                              << " - 0x" << std::hex << (int) aCpyPam.GetNode().GetNodeType() << std::dec
+                              << " - 0x" << std::hex << static_cast<int>(aCpyPam.GetNode().GetNodeType()) << std::dec
                               << " " << aCpyPam.GetNode().GetIndex() << ")" );
 #endif
 

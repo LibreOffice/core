@@ -74,14 +74,14 @@ static const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushHoriPos[] =
 {
     { XML_LEFT,         GraphicLocation_LEFT_MIDDLE },
     { XML_RIGHT,        GraphicLocation_RIGHT_MIDDLE    },
-    { XML_TOKEN_INVALID,                    (GraphicLocation)0           }
+    { XML_TOKEN_INVALID,                    GraphicLocation(0)           }
 };
 
 static const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushVertPos[] =
 {
     { XML_TOP,          GraphicLocation_MIDDLE_TOP  },
     { XML_BOTTOM,       GraphicLocation_MIDDLE_BOTTOM   },
-    { XML_TOKEN_INVALID,                    (GraphicLocation)0           }
+    { XML_TOKEN_INVALID,                    GraphicLocation(0)           }
 };
 
 static void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,
@@ -288,7 +288,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     { XML_BACKGROUND_REPEAT,    GraphicLocation_TILED   },
                     { XML_BACKGROUND_NO_REPEAT, GraphicLocation_MIDDLE_MIDDLE       },
                     { XML_BACKGROUND_STRETCH,   GraphicLocation_AREA    },
-                    { XML_TOKEN_INVALID,        (GraphicLocation)0      }
+                    { XML_TOKEN_INVALID,        GraphicLocation(0)      }
                 };
                 if( SvXMLUnitConverter::convertEnum( nPos, rValue,
                                                 psXML_BrushRepeat ) )

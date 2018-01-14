@@ -480,7 +480,7 @@ void DataPointProperties::AddDefaultsToMap(
 
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_TEXT_WORD_WRAP, false );
     PropertyHelper::setPropertyValueDefault< OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, " " );
-    PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_STYLE, (sal_Int32)drawing::LineStyle_NONE);
+    PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_STYLE, sal_Int32(drawing::LineStyle_NONE));
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_COLOR);
     PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_WIDTH, 0);
     PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH, drawing::LineDash());

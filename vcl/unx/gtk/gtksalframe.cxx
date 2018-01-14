@@ -334,7 +334,7 @@ static guint GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 g
 {
     guint updated_keyval = 0;
     gdk_keymap_translate_keyboard_state(pKeyMap, hardware_keycode,
-        (GdkModifierType)0, group, &updated_keyval, nullptr, nullptr, nullptr);
+        GdkModifierType(0), group, &updated_keyval, nullptr, nullptr, nullptr);
     return updated_keyval;
 }
 
@@ -906,7 +906,7 @@ ooo_fixed_get_type()
         };
 
         type = g_type_register_static( GTK_TYPE_FIXED, "OOoFixed",
-                                       &tinfo, (GTypeFlags) 0);
+                                       &tinfo, GTypeFlags(0));
     }
 
     return type;
@@ -2188,7 +2188,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
         if( bUseGdkGrab )
         {
             gdk_pointer_grab( widget_get_window( m_pWindow ), bOwnerEvents,
-                              (GdkEventMask) nMask, nullptr, m_pCurrentCursor,
+                              GdkEventMask(nMask), nullptr, m_pCurrentCursor,
                               GDK_CURRENT_TIME );
         }
         else
@@ -2281,16 +2281,16 @@ void GtkSalFrame::KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
         return;
 
     // Get GDK key modifiers
-    GdkModifierType nModifiers = (GdkModifierType) 0;
+    GdkModifierType nModifiers = GdkModifierType(0);
 
     if ( rKeyCode.IsShift() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_SHIFT_MASK );
+        nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_SHIFT_MASK );
 
     if ( rKeyCode.IsMod1() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_CONTROL_MASK );
+        nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_CONTROL_MASK );
 
     if ( rKeyCode.IsMod2() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_MOD1_MASK );
+        nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_MOD1_MASK );
 
     *pGdkModifiers = nModifiers;
 

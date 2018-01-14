@@ -723,7 +723,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     }
 
     nPos = m_pPaperSizeBox->GetSelectedEntryPos();
-    Paper ePaper = (Paper)reinterpret_cast<sal_uLong>(m_pPaperSizeBox->GetEntryData( nPos ));
+    Paper ePaper = static_cast<Paper>(reinterpret_cast<sal_uLong>(m_pPaperSizeBox->GetEntryData( nPos )));
     const sal_Int32 nOld = m_pPaperSizeBox->GetSavedValue();
     bool bChecked = m_pLandscapeBtn->IsChecked();
 
@@ -1652,12 +1652,12 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
 
     if (pModeItem)
     {
-        eMode = (SvxModeType)pModeItem->GetEnumValue();
+        eMode = static_cast<SvxModeType>(pModeItem->GetEnumValue());
     }
 
     if(pPaperStartItem && pPaperEndItem)
     {
-        SetPaperFormatRanges((Paper)pPaperStartItem->GetEnumValue());
+        SetPaperFormatRanges(static_cast<Paper>(pPaperStartItem->GetEnumValue()));
     }
 
     if(pCollectListItem)

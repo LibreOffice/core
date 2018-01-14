@@ -269,9 +269,9 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm)
 
     collator->loadCollatorAlgorithm(algorithm, rLocale, CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT);
     sal_Int16 j=0;
-    sal_Unicode start = unicode::getUnicodeScriptStart((UnicodeScript)0);
-    sal_Unicode end = unicode::getUnicodeScriptEnd((UnicodeScript)0);
-    for (sal_Int32 i= (scriptList[0] == (UnicodeScript)0) ? 1 : 0; i< scriptList.getLength(); i++) {
+    sal_Unicode start = unicode::getUnicodeScriptStart(UnicodeScript(0));
+    sal_Unicode end = unicode::getUnicodeScriptEnd(UnicodeScript(0));
+    for (sal_Int32 i= (scriptList[0] == UnicodeScript(0)) ? 1 : 0; i< scriptList.getLength(); i++) {
         if (unicode::getUnicodeScriptStart(scriptList[i]) != end+1) {
             tables[j++].init(start, end, keys, key_count, this);
             start = unicode::getUnicodeScriptStart(scriptList[i]);

@@ -148,7 +148,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
 
                     sal_Int32 nWhatPage = static_cast<sal_Int32>(pWhatPage->GetValue ());
-                    PageKind nWhatKind = (PageKind)pWhatKind->GetValue ();
+                    PageKind nWhatKind = static_cast<PageKind>(pWhatKind->GetValue ());
                     if (! (nWhatKind >= PageKind::Standard && nWhatKind <= PageKind::Handout))
                     {
 #if HAVE_FEATURE_SCRIPTING
@@ -242,7 +242,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 const SfxBoolItem* pIsActive = rReq.GetArg<SfxBoolItem>(ID_VAL_ISACTIVE);
                 const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
 
-                PageKind nWhatKind = (PageKind)pWhatKind->GetValue();
+                PageKind nWhatKind = static_cast<PageKind>(pWhatKind->GetValue());
                 if ( nWhatKind >= PageKind::Standard && nWhatKind <= PageKind::Handout)
                 {
                     mbIsLayerModeActive = pIsActive->GetValue();
@@ -268,7 +268,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             if (pArgs && pArgs->Count() == 2)
             {
                 const SfxUInt32Item* pWhatLayer = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYER);
-                EditMode nWhatLayer = (EditMode)pWhatLayer->GetValue();
+                EditMode nWhatLayer = static_cast<EditMode>(pWhatLayer->GetValue());
                 if (nWhatLayer == EditMode::Page || nWhatLayer == EditMode::MasterPage)
                 {
                     mbIsLayerModeActive = rReq.GetArg<SfxBoolItem>(ID_VAL_ISACTIVE)->GetValue();

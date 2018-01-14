@@ -540,7 +540,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatIndex( sal_Int16 nIndex, const l
         throw uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
-    sal_Int32 nRet = pFormatter->GetFormatIndex( (NfIndexTableOffset)nIndex, eLang );
+    sal_Int32 nRet = pFormatter->GetFormatIndex( static_cast<NfIndexTableOffset>(nIndex), eLang );
     return nRet;
 }
 
@@ -632,7 +632,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
     }
     else if (aPropertyName == PROPERTYNAME_TYPE)
     {
-        aRet <<= (sal_Int16)( pFormat->GetType() );
+        aRet <<= static_cast<sal_Int16>( pFormat->GetType() );
     }
     else if (aPropertyName == PROPERTYNAME_COMMENT)
     {

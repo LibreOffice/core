@@ -66,7 +66,7 @@ namespace dbaccess
 
             SQLPartCount
         };
-        static void incSQLPart( SQLPart& e ) { e = (SQLPart)(1 + static_cast<size_t>(e)); }
+        static void incSQLPart( SQLPart& e ) { e = static_cast<SQLPart>(1 + static_cast<size_t>(e)); }
         enum EColumnType
         {
             SelectColumns       = 0,

@@ -91,7 +91,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 
         Activate();  // sets aObjKind
         SdrCircObj* pNewCircle =
-        new SdrCircObj((SdrObjKind) mpView->GetCurrentObjIdentifier(),
+        new SdrCircObj(static_cast<SdrObjKind>(mpView->GetCurrentObjIdentifier()),
                        aNewRectangle,
                        static_cast<long>(pPhiStart->GetValue () * 10.0),
                        static_cast<long>(pPhiEnd->GetValue () * 10.0));

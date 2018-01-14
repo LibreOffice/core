@@ -208,7 +208,7 @@ namespace
                 sal_Int16 nTextAlign = 0;
                 sal_Int16 eParagraphAdjust = 0;
                 lhs >>= eParagraphAdjust;
-                switch((style::ParagraphAdjust)eParagraphAdjust)
+                switch(static_cast<style::ParagraphAdjust>(eParagraphAdjust))
                 {
                     case style::ParagraphAdjust_LEFT:
                     case style::ParagraphAdjust_BLOCK:

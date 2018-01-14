@@ -159,7 +159,7 @@ void getRememberModes(
                 bHasRememberModePersistent = true;
                 break;
             default:
-                SAL_WARN( "uui", "Unsupported RememberAuthentication value" << (sal_Int32)rRememberModes[i] );
+                SAL_WARN( "uui", "Unsupported RememberAuthentication value" << static_cast<sal_Int32>(rRememberModes[i]) );
                 break;
             }
         }

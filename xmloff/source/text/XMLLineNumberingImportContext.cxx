@@ -117,7 +117,7 @@ void XMLLineNumberingImportContext::StartElement(
             GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
 
         ProcessAttribute(
-            (enum LineNumberingToken)aTokenMap.Get(nPrefix, sLocalName),
+            static_cast<enum LineNumberingToken>(aTokenMap.Get(nPrefix, sLocalName)),
             xAttrList->getValueByIndex(i));
     }
 }

@@ -1513,7 +1513,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         bChgHgt=true;
     }
     if (bChgSiz) {
-        eSizePoint=(RectPoint)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT).GetValue();
+        eSizePoint=static_cast<RectPoint>(rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT).GetValue());
     }
 
     // rotation

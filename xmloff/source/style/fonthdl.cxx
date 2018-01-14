@@ -41,7 +41,7 @@ static const SvXMLEnumMapEntry<FontFamily>* lcl_getFontFamilyGenericMapping()
         { XML_SCRIPT,           FAMILY_SCRIPT   },
         { XML_SWISS,            FAMILY_SWISS    },
         { XML_SYSTEM,           FAMILY_SYSTEM   },
-        { XML_TOKEN_INVALID,    (FontFamily)0   }
+        { XML_TOKEN_INVALID,    FontFamily(0)   }
     };
     return aFontFamilyGenericMapping;
 }
@@ -50,7 +50,7 @@ static SvXMLEnumMapEntry<FontPitch> const aFontPitchMapping[] =
 {
     { XML_FIXED,            PITCH_FIXED     },
     { XML_VARIABLE,         PITCH_VARIABLE  },
-    { XML_TOKEN_INVALID,    (FontPitch)0    }
+    { XML_TOKEN_INVALID,    FontPitch(0)    }
 };
 
 // class XMLFontFamilyNamePropHdl
@@ -209,7 +209,7 @@ bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     sal_Int16 nFamily = sal_Int16();
     if( rValue >>= nFamily )
     {
-        FontFamily eFamily = (FontFamily)nFamily;
+        FontFamily eFamily = static_cast<FontFamily>(nFamily);
         if( eFamily != FAMILY_DONTKNOW )
             bRet = SvXMLUnitConverter::convertEnum( aOut, eFamily, lcl_getFontFamilyGenericMapping() );
     }
@@ -278,7 +278,7 @@ bool XMLFontPitchPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rVa
 
     FontPitch ePitch = PITCH_DONTKNOW;
     if( rValue >>= nPitch )
-        ePitch =  (FontPitch)nPitch;
+        ePitch =  static_cast<FontPitch>(nPitch);
 
     if( PITCH_DONTKNOW != ePitch )
     {

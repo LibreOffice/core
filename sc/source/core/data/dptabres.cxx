@@ -739,7 +739,7 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
 
         if ( nFuncNo >= 0 && nFuncNo < nSequence )
         {
-            ScGeneralFunction eUser = (ScGeneralFunction)aSeq.getConstArray()[nFuncNo];
+            ScGeneralFunction eUser = static_cast<ScGeneralFunction>(aSeq.getConstArray()[nFuncNo]);
             if (eUser != ScGeneralFunction::AUTO)
                 eRet = ScDPUtil::toSubTotalFunc(eUser);
         }

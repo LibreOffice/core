@@ -173,7 +173,7 @@ bool PaperInfo::doSloppyFit()
         {
             m_nPaperWidth = aDinTab[i].m_nWidth;
             m_nPaperHeight = aDinTab[i].m_nHeight;
-            m_eType = (Paper)i;
+            m_eType = static_cast<Paper>(i);
             return true;
         }
     }

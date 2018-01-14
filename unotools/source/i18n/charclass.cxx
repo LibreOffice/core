@@ -302,7 +302,7 @@ css::i18n::DirectionProperty CharClass::getCharacterDirection( const OUString& r
     try
     {
         if ( xCC.is() )
-            return (css::i18n::DirectionProperty)xCC->getCharacterDirection( rStr, nPos );
+            return static_cast<css::i18n::DirectionProperty>(xCC->getCharacterDirection( rStr, nPos ));
     }
     catch ( const Exception& )
     {
@@ -316,7 +316,7 @@ css::i18n::UnicodeScript CharClass::getScript( const OUString& rStr, sal_Int32 n
     try
     {
         if ( xCC.is() )
-            return (css::i18n::UnicodeScript) xCC->getScript( rStr, nPos );
+            return static_cast<css::i18n::UnicodeScript>(xCC->getScript( rStr, nPos ));
     }
     catch ( const Exception& )
     {

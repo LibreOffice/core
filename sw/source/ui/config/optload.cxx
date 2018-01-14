@@ -325,7 +325,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rSet->Get( SID_ATTR_METRIC ));
-        FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
+        FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
 
         for ( sal_Int32 i = 0; i < m_pMetricLB->GetEntryCount(); ++i )
         {
@@ -382,7 +382,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, ListBox&, void)
     if(nMPos != LISTBOX_ENTRY_NOTFOUND)
     {
         // Double-Cast for VA3.0
-        FieldUnit eFieldUnit = (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos ));
+        FieldUnit eFieldUnit = static_cast<FieldUnit>(reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos )));
         bool bModified = m_pTabMF->IsModified();
         long nVal = bModified ?
             sal::static_int_cast<sal_Int32, sal_Int64 >( m_pTabMF->Denormalize( m_pTabMF->GetValue( FUNIT_TWIP ) )) :

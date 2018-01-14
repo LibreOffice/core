@@ -38,7 +38,7 @@ static HTMLOptionEnum<ScrollingMode> const aScrollingTable[] =
     { sHTML_SC_yes,     ScrollingMode::Yes    },
     { sHTML_SC_no,      ScrollingMode::No     },
     { sHTML_SC_auto,    ScrollingMode::Auto   },
-    { nullptr,          (ScrollingMode)0 }
+    { nullptr,          ScrollingMode(0) }
 };
 
 void SfxFrameHTMLParser::ParseFrameOptions(

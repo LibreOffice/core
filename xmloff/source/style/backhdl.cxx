@@ -31,14 +31,14 @@ SvXMLEnumMapEntry<style::GraphicLocation> const pXML_BrushHorizontalPos[] =
 {
     { XML_LEFT,             style::GraphicLocation_LEFT_MIDDLE   },
     { XML_RIGHT,            style::GraphicLocation_RIGHT_MIDDLE },
-    { XML_TOKEN_INVALID,    (style::GraphicLocation)0       }
+    { XML_TOKEN_INVALID,    style::GraphicLocation(0)       }
 };
 
 SvXMLEnumMapEntry<style::GraphicLocation> const pXML_BrushVerticalPos[] =
 {
     { XML_TOP,              style::GraphicLocation_MIDDLE_TOP   },
     { XML_BOTTOM,           style::GraphicLocation_MIDDLE_BOTTOM    },
-    { XML_TOKEN_INVALID,    (style::GraphicLocation)0       }
+    { XML_TOKEN_INVALID,    style::GraphicLocation(0)       }
 };
 
 
@@ -130,7 +130,7 @@ bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno
 
     bRet &= style::GraphicLocation_NONE != ePos;
     if( bRet )
-        rValue <<= (style::GraphicLocation)(sal_uInt16)ePos;
+        rValue <<= static_cast<style::GraphicLocation>(static_cast<sal_uInt16>(ePos));
 
     return bRet;
 }
@@ -145,7 +145,7 @@ bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const uno
     {
         sal_Int32 nValue = 0;
         if( rValue >>= nValue )
-            eLocation = (style::GraphicLocation)nValue;
+            eLocation = static_cast<style::GraphicLocation>(nValue);
         else
             bRet = false;
     }

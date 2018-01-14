@@ -991,7 +991,7 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
                 nTemp16 = 0;
                 rStm.ReadUInt16( nTemp16 );
                 aLogSize = OutputDevice::LogicToLogic( aLogSize,
-                                                       MapMode( (MapUnit) nTemp16 ),
+                                                       MapMode( static_cast<MapUnit>(nTemp16) ),
                                                        MapMode( MapUnit::Map100thMM ) );
             }
         }

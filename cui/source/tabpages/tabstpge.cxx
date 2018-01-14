@@ -679,7 +679,7 @@ void SvxTabulatorTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SfxUInt16Item* pControlItem = aSet.GetItem<SfxUInt16Item>(SID_SVXTABULATORTABPAGE_DISABLEFLAGS, false);
     if (pControlItem)
-        DisableControls((TabulatorDisableFlags)pControlItem->GetValue());
+        DisableControls(static_cast<TabulatorDisableFlags>(pControlItem->GetValue()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

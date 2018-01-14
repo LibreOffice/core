@@ -185,7 +185,7 @@ void XMLImageMapObjectContext::StartElement(
         OUString sValue = xAttrList->getValueByIndex(nAttr);
 
         ProcessAttribute(
-            (enum XMLImageMapToken)aMap.Get(nPrefix, sLocalName), sValue);
+            static_cast<enum XMLImageMapToken>(aMap.Get(nPrefix, sLocalName)), sValue);
     }
 }
 

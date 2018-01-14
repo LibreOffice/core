@@ -97,7 +97,7 @@ namespace xmloff
     {
         if ( s_sElementTranslations.empty() )
         {   // initialize
-            for (ElementType eType=(ElementType)0; eType<UNKNOWN; ++eType)
+            for (ElementType eType=ElementType(0); eType<UNKNOWN; ++eType)
                 s_sElementTranslations[OUString::createFromAscii(getElementName(eType))] = eType;
         }
         MapString2Element::const_iterator aPos = s_sElementTranslations.find(_rName);

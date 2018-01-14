@@ -187,7 +187,7 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
     std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStream, StreamMode::WRITE, 2 ));
 
     // Version 1
-    rOStream.WriteUInt16( (sal_uInt16)rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
+    rOStream.WriteUInt16( static_cast<sal_uInt16>(rGfxLink.GetType()) ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
 
     // Version 2
     WritePair( rOStream, rGfxLink.GetPrefSize() );
@@ -236,7 +236,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSize ]);
     rIStream.ReadBytes( pBuf.get(), nSize );
 
-    rGfxLink = GfxLink( std::move(pBuf), nSize, (GfxLinkType) nType );
+    rGfxLink = GfxLink( std::move(pBuf), nSize, static_cast<GfxLinkType>(nType) );
     rGfxLink.SetUserId( nUserId );
 
     if( bMapAndSizeValid )

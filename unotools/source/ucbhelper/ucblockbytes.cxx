@@ -1226,7 +1226,7 @@ ErrCode UcbLockBytes::Flush() const
 ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
 {
     SvLockBytesStat aStat;
-    Stat( &aStat, (SvLockBytesStatFlag) 0 );
+    Stat( &aStat, SvLockBytesStatFlag(0) );
     std::size_t nSize = aStat.nSize;
 
     if ( nSize > nNewSize )

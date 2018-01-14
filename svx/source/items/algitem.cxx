@@ -101,7 +101,7 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
         sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
             return false;
-        eOrient = (table::CellOrientation)nValue;
+        eOrient = static_cast<table::CellOrientation>(nValue);
     }
     SvxCellOrientation eSvx = SvxCellOrientation::Standard;
     switch (eOrient)
@@ -133,7 +133,7 @@ SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStream.ReadUInt16( nVal );
-    return new SvxOrientationItem( (SvxCellOrientation)nVal, Which() );
+    return new SvxOrientationItem( static_cast<SvxCellOrientation>(nVal), Which() );
 }
 
 

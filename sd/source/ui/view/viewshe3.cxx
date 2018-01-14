@@ -243,11 +243,11 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         {
             if (ePageKind == PageKind::Notes)
             {
-                eNotesLayout   = (AutoLayout) pLayout->GetValue ();
+                eNotesLayout   = static_cast<AutoLayout>(pLayout->GetValue ());
             }
             else
             {
-                eStandardLayout   = (AutoLayout) pLayout->GetValue ();
+                eStandardLayout   = static_cast<AutoLayout>(pLayout->GetValue ());
             }
         }
     }
@@ -261,17 +261,17 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         const SfxBoolItem* pIsPageBack = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEBACK);
         const SfxBoolItem* pIsPageObj = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEOBJ);
 
-        if (CHECK_RANGE (AUTOLAYOUT_START, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT_END))
+        if (CHECK_RANGE (AUTOLAYOUT_START, static_cast<AutoLayout>(pLayout->GetValue ()), AUTOLAYOUT_END))
         {
             if (ePageKind == PageKind::Notes)
             {
                 aNotesPageName = pPageName->GetValue ();
-                eNotesLayout   = (AutoLayout) pLayout->GetValue ();
+                eNotesLayout   = static_cast<AutoLayout>(pLayout->GetValue ());
             }
             else
             {
                 aStandardPageName = pPageName->GetValue ();
-                eStandardLayout   = (AutoLayout) pLayout->GetValue ();
+                eStandardLayout   = static_cast<AutoLayout>(pLayout->GetValue ());
             }
 
             bIsPageBack = pIsPageBack->GetValue ();

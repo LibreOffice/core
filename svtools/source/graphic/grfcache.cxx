@@ -64,7 +64,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
 {
     const Graphic& rGraphic = rObj.GetGraphic();
 
-    mnID1 = ( (sal_uLong) rGraphic.GetType() ) << 28;
+    mnID1 = static_cast<sal_uLong>(rGraphic.GetType()) << 28;
 
     switch( rGraphic.GetType() )
     {
@@ -93,7 +93,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
             {
                 const BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-                mnID1 |= ( ( ( (sal_uLong) aBmpEx.GetTransparentType() << 8 ) | ( aBmpEx.IsAlpha() ? 1 : 0 ) ) & 0x0fffffff );
+                mnID1 |= ( ( ( static_cast<sal_uLong>(aBmpEx.GetTransparentType()) << 8 ) | ( aBmpEx.IsAlpha() ? 1 : 0 ) ) & 0x0fffffff );
                 mnID2 = aBmpEx.GetSizePixel().Width();
                 mnID3 = aBmpEx.GetSizePixel().Height();
                 mnID4 = rGraphic.GetChecksum();

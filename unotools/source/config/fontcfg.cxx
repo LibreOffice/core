@@ -930,7 +930,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const css::uno::Reference< XN
     catch (const WrappedTargetException&)
     {
     }
-    return (FontWeight)( weight >= 0 ? pWeightNames[weight].nEnum : WEIGHT_DONTKNOW );
+    return static_cast<FontWeight>( weight >= 0 ? pWeightNames[weight].nEnum : WEIGHT_DONTKNOW );
 }
 
 FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNameAccess >& rFont,
@@ -957,7 +957,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNam
     catch (const WrappedTargetException&)
     {
     }
-    return (FontWidth)( width >= 0 ? pWidthNames[width].nEnum : WIDTH_DONTKNOW );
+    return static_cast<FontWidth>( width >= 0 ? pWidthNames[width].nEnum : WIDTH_DONTKNOW );
 }
 
 ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< XNameAccess >& rFont,

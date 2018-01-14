@@ -89,7 +89,7 @@ SvXMLEnumMapEntry<IndexTypeEnum> const aIndexTypeMap[] =
     { XML_BIBLIOGRAPHY,         TEXT_INDEX_BIBLIOGRAPHY },
     { XML_USER_INDEX,           TEXT_INDEX_USER },
     { XML_ILLUSTRATION_INDEX,   TEXT_INDEX_ILLUSTRATION },
-    { XML_TOKEN_INVALID,        (IndexTypeEnum)0 }
+    { XML_TOKEN_INVALID,        IndexTypeEnum(0) }
 };
 
 

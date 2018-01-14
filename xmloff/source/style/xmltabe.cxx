@@ -39,7 +39,7 @@ SvXMLEnumMapEntry<style::TabAlign> const pXML_tabstop_style[] =
     { XML_RIGHT,    style::TabAlign_RIGHT   },
     { XML_CHAR,     style::TabAlign_DECIMAL },
     { XML_DEFAULT,  style::TabAlign_DEFAULT  }, // ?????????????????????????????????????
-    { XML_TOKEN_INVALID,        (style::TabAlign)0 }
+    { XML_TOKEN_INVALID,        style::TabAlign(0) }
 };
 
 void SvxXMLTabStopExport::exportTabStop( const css::style::TabStop* pTabStop )

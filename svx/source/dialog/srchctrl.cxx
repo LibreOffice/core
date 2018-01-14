@@ -54,7 +54,7 @@ void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         else if ( SID_SEARCH_OPTIONS == nSID )
         {
             DBG_ASSERT( dynamic_cast<const SfxUInt16Item* >(pState) !=  nullptr, "wrong item type" );
-            SearchOptionFlags nFlags = (SearchOptionFlags) static_cast<const SfxUInt16Item*>(pState)->GetValue();
+            SearchOptionFlags nFlags = static_cast<SearchOptionFlags>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
             rSrchDlg.EnableControls_Impl( nFlags );
         }
         else if ( SID_SEARCH_ITEM == nSID )

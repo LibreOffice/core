@@ -243,7 +243,7 @@ SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient )
     VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16;
 
-    rIStm.ReadUInt16( nTmp16 ); rGradient.mpImplGradient->meStyle = (GradientStyle) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rGradient.mpImplGradient->meStyle = static_cast<GradientStyle>(nTmp16);
 
     ReadColor( rIStm, rGradient.mpImplGradient->maStartColor );
     ReadColor( rIStm, rGradient.mpImplGradient->maEndColor );
@@ -262,7 +262,7 @@ SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( (sal_uInt16)rGradient.mpImplGradient->meStyle );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rGradient.mpImplGradient->meStyle) );
     WriteColor( rOStm, rGradient.mpImplGradient->maStartColor );
     WriteColor( rOStm, rGradient.mpImplGradient->maEndColor );
     rOStm.WriteUInt16( rGradient.mpImplGradient->mnAngle )

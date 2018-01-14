@@ -482,8 +482,8 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                 eGender <= SwMailMergeConfigItem::NEUTRAL; ++eGender)
             {
                 Sequence< OUString > aEntries =
-                            rConfigItem.GetGreetings((SwMailMergeConfigItem::Gender)eGender);
-                sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting((SwMailMergeConfigItem::Gender)eGender);
+                            rConfigItem.GetGreetings(static_cast<SwMailMergeConfigItem::Gender>(eGender));
+                sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting(static_cast<SwMailMergeConfigItem::Gender>(eGender));
                 if( nCurrent >= 0 && nCurrent < aEntries.getLength())
                 {
                     // Greeting
@@ -522,8 +522,8 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
                 eGender <= SwMailMergeConfigItem::NEUTRAL; ++eGender)
             {
-                Sequence< OUString> aEntries = rConfigItem.GetGreetings((SwMailMergeConfigItem::Gender)eGender);
-                sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting((SwMailMergeConfigItem::Gender)eGender);
+                Sequence< OUString> aEntries = rConfigItem.GetGreetings(static_cast<SwMailMergeConfigItem::Gender>(eGender));
+                sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting(static_cast<SwMailMergeConfigItem::Gender>(eGender));
                 if( nCurrent >= 0 && nCurrent < aEntries.getLength())
                 {
                     const OUString sGreeting = aEntries[nCurrent];

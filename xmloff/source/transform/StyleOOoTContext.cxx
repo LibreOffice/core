@@ -411,7 +411,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             {
                 pContext->AddAttribute( sAttrName, sAttrValue );
                 XMLTypedPropertiesOOoTContext_Impl *pContext2 =
-                    GetPropContext( (XMLPropType)aAction.m_nParam1 );
+                    GetPropContext( static_cast<XMLPropType>(aAction.m_nParam1) );
                 if( pContext2 )
                     pContext2->AddAttribute( sAttrName, sAttrValue );
             }
@@ -468,7 +468,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue );
                 pContext->AddAttribute( sAttrName, aAttrValue );
                 XMLTypedPropertiesOOoTContext_Impl *pContext2 =
-                    GetPropContext( (XMLPropType)aAction.m_nParam1 );
+                    GetPropContext( static_cast<XMLPropType>(aAction.m_nParam1) );
                 if( pContext2 )
                     pContext2->AddAttribute( sAttrName, aAttrValue );
             }

@@ -220,7 +220,7 @@ void ScAcceptChgDlg::Init()
     pTPFilter->SetFirstTime(aChangeViewSet.GetTheFirstDateTime());
     pTPFilter->SetLastDate(aChangeViewSet.GetTheLastDateTime());
     pTPFilter->SetLastTime(aChangeViewSet.GetTheLastDateTime());
-    pTPFilter->SetDateMode((sal_uInt16)aChangeViewSet.GetTheDateMode());
+    pTPFilter->SetDateMode(static_cast<sal_uInt16>(aChangeViewSet.GetTheDateMode()));
     pTPFilter->CheckComment(aChangeViewSet.HasComment());
     pTPFilter->SetComment(aChangeViewSet.GetTheComment());
 

@@ -486,7 +486,7 @@ static void ImplWindowStateFromStr(WindowStateData& rData,
     {
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        WindowStateState nState = (WindowStateState)aTokenStr.toInt32();
+        WindowStateState nState = static_cast<WindowStateState>(aTokenStr.toInt32());
         //nState &= ~(WindowStateState::Minimized);
         rData.SetState( nState );
         nValidMask |= WindowStateMask::State;

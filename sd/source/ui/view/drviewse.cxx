@@ -693,7 +693,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
 void DrawViewShell::FuSupport(SfxRequest& rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
-        GetDocSh()->SetStyleFamily((SfxStyleFamily) static_cast<const SfxUInt16Item&>(rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
+        GetDocSh()->SetStyleFamily(static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item&>(rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue()));
 
     // We do not execute a thing during a native slide show
     if(SlideShow::IsRunning(GetViewShellBase()) &&

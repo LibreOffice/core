@@ -490,7 +490,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
-                    SfxItemState tmpState = (SfxItemState) aItemStatus.State;
+                    SfxItemState tmpState = static_cast<SfxItemState>(aItemStatus.State);
                     // make sure no-one tries to send us a combination of states
                     if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
                         tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&

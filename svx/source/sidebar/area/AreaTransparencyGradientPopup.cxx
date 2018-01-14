@@ -126,7 +126,7 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
     XGradient aTmpGradient(
         Color(nStartCol, nStartCol, nStartCol),
         Color(nEndCol, nEndCol, nEndCol),
-        (css::awt::GradientStyle)(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
+        static_cast<css::awt::GradientStyle>(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
         static_cast<sal_uInt16>(maMtrTrgrAngle->GetValue()) * 10,
         static_cast<sal_uInt16>(maMtrTrgrCenterX->GetValue()),
         static_cast<sal_uInt16>(maMtrTrgrCenterY->GetValue()),

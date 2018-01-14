@@ -196,13 +196,13 @@ void CGM::ImplDoClass1()
                 if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
-                pElement->aFontList.InsertCharSet( (CharSetType)nCharSetType, mpSource + mnParaSize, nSize );
+                pElement->aFontList.InsertCharSet( static_cast<CharSetType>(nCharSetType), mpSource + mnParaSize, nSize );
                 mnParaSize += nSize;
             }
         }
         break;
         case 0x0f : /*Character Coding Announcer*/
-            pElement->eCharacterCodingA = (CharacterCodingA)ImplGetUI16();
+            pElement->eCharacterCodingA = static_cast<CharacterCodingA>(ImplGetUI16());
         break;
         case 0x10 : /*Name Precision */break;                   // NS
         case 0x11 : /*Maximum VDC Extent */break;               // NS

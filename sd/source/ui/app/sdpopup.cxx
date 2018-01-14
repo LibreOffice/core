@@ -85,7 +85,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         aDateField.SetFormat( SvxDateFormat::F );    // Dienstag, 13.Februar 1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
-        CheckItem( (sal_uInt16) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
+        CheckItem( static_cast<sal_uInt16>( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
     else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
     {
@@ -119,7 +119,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         //SvxTimeFormat::HH12_MM_SS_AMPM, // 01:49:38 PM
         //SvxTimeFormat::HH12_MM_SS_00_AMPM // 01:49:38.78 PM
 
-        CheckItem( (sal_uInt16) ( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
+        CheckItem( static_cast<sal_uInt16>( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
     else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
     {
@@ -136,7 +136,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         InsertItem( nID++, SdResId( STR_FILEFORMAT_PATH ), nStyle );
         InsertItem( nID++, SdResId( STR_FILEFORMAT_NAME ), nStyle );
 
-        CheckItem( (sal_uInt16) ( pFileField->GetFormat() ) + 3 );
+        CheckItem( static_cast<sal_uInt16>( pFileField->GetFormat() ) + 3 );
     }
     else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
     {
@@ -150,10 +150,10 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 
         for( sal_uInt16 i = 0; i < 4; i++ )
         {
-            aAuthorField.SetFormat( (SvxAuthorFormat) i );
+            aAuthorField.SetFormat( static_cast<SvxAuthorFormat>(i) );
             InsertItem( nID++, aAuthorField.GetFormatted(), nStyle );
         }
-        CheckItem( (sal_uInt16) ( pAuthorField->GetFormat() ) + 3 );
+        CheckItem( static_cast<sal_uInt16>( pAuthorField->GetFormat() ) + 3 );
     }
 }
 
@@ -183,7 +183,7 @@ SvxFieldData* SdFieldPopup::GetField()
             if( IsItemChecked( i ) )
                 break;
         }
-        eFormat = (SvxDateFormat) ( i - 1 );
+        eFormat = static_cast<SvxDateFormat>( i - 1 );
 
         if( pDateField->GetFormat() != eFormat ||
             pDateField->GetType() != eType )
@@ -216,7 +216,7 @@ SvxFieldData* SdFieldPopup::GetField()
             if( IsItemChecked( i ) )
                 break;
         }
-        eFormat = (SvxTimeFormat) ( i - 1 );
+        eFormat = static_cast<SvxTimeFormat>( i - 1 );
 
         if( pTimeField->GetFormat() != eFormat ||
             pTimeField->GetType() != eType )
@@ -250,7 +250,7 @@ SvxFieldData* SdFieldPopup::GetField()
             if( IsItemChecked( i ) )
                 break;
         }
-        eFormat = (SvxFileFormat) ( i - 3 );
+        eFormat = static_cast<SvxFileFormat>( i - 3 );
 
         if( pFileField->GetFormat() != eFormat ||
             pFileField->GetType() != eType )
@@ -289,7 +289,7 @@ SvxFieldData* SdFieldPopup::GetField()
             if( IsItemChecked( i ) )
                 break;
         }
-        eFormat = (SvxAuthorFormat) ( i - 3 );
+        eFormat = static_cast<SvxAuthorFormat>( i - 3 );
 
         if( pAuthorField->GetFormat() != eFormat ||
             pAuthorField->GetType() != eType )

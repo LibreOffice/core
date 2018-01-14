@@ -106,7 +106,7 @@ SvXMLEnumMapEntry<drawing::Alignment> const aXML_GlueAlignment_EnumMap[] =
     { XML_BOTTOM_LEFT,  drawing::Alignment_BOTTOM_LEFT },
     { XML_BOTTOM,       drawing::Alignment_BOTTOM },
     { XML_BOTTOM_RIGHT, drawing::Alignment_BOTTOM_RIGHT },
-    { XML_TOKEN_INVALID, (drawing::Alignment)0 }
+    { XML_TOKEN_INVALID, drawing::Alignment(0) }
 };
 
 SvXMLEnumMapEntry<drawing::EscapeDirection> const aXML_GlueEscapeDirection_EnumMap[] =
@@ -118,7 +118,7 @@ SvXMLEnumMapEntry<drawing::EscapeDirection> const aXML_GlueEscapeDirection_EnumM
     { XML_DOWN,         drawing::EscapeDirection_DOWN },
     { XML_HORIZONTAL,   drawing::EscapeDirection_HORIZONTAL },
     { XML_VERTICAL,     drawing::EscapeDirection_VERTICAL },
-    { XML_TOKEN_INVALID, (drawing::EscapeDirection)0 }
+    { XML_TOKEN_INVALID, drawing::EscapeDirection(0) }
 };
 
 static bool ImpIsEmptyURL( const OUString& rURL )

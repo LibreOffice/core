@@ -430,7 +430,7 @@ bool SbxValue::Put( const SbxValues& rVal )
         {
             if( !p->CanWrite() )
                 SetError( ERRCODE_BASIC_PROP_READONLY );
-            else if( p->IsFixed() || p->SetType( (SbxDataType) ( rVal.eType & 0x0FFF ) ) )
+            else if( p->IsFixed() || p->SetType( static_cast<SbxDataType>( rVal.eType & 0x0FFF ) ) )
               switch( rVal.eType & 0x0FFF )
             {
                 case SbxEMPTY:
@@ -1525,9 +1525,9 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 r.WriteInt32( aData.nLong ); break;
             case SbxDATE:
                 // #49935: Save as double, otherwise an error during the read in
-                const_cast<SbxValue*>(this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
+                const_cast<SbxValue*>(this)->aData.eType = static_cast<SbxDataType>( ( nType & 0xF000 ) | SbxDOUBLE );
                 write_uInt16_lenPrefixed_uInt8s_FromOUString(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
-                const_cast<SbxValue*>(this)->aData.eType = (SbxDataType)nType;
+                const_cast<SbxValue*>(this)->aData.eType = static_cast<SbxDataType>(nType);
                 break;
             case SbxSINGLE:
             case SbxDOUBLE:

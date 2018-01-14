@@ -858,7 +858,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 ::sal_Int16 nParaAdjust = 0;
                 if ( aReturn.aValue >>= nParaAdjust )
                 {
-                    switch((style::ParagraphAdjust)nParaAdjust)
+                    switch(static_cast<style::ParagraphAdjust>(nParaAdjust))
                     {
                         case style::ParagraphAdjust_LEFT:
                             aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_LEFT;
@@ -1496,7 +1496,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                         eParagraphAdjust = style::ParagraphAdjust_BLOCK;
                         break;
                 }
-                impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::makeAny((sal_Int16)eParagraphAdjust),aArgs);
+                impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::makeAny(static_cast<sal_Int16>(eParagraphAdjust)),aArgs);
 
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_LEFT);
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_CENTER);
@@ -2423,7 +2423,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 uno::Reference<beans::XPropertySet> xProp(xPageStyle,uno::UNO_QUERY_THROW);
                 aPageItem.PutValue(xProp->getPropertyValue(PROPERTY_PAGESTYLELAYOUT),MID_PAGE_LAYOUT);
                 aPageItem.SetLandscape(getStyleProperty<bool>(m_xReportDefinition,PROPERTY_ISLANDSCAPE));
-                aPageItem.SetNumType((SvxNumType)getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE));
+                aPageItem.SetNumType(static_cast<SvxNumType>(getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE)));
                 pDescriptor->Put(aPageItem);
                 pDescriptor->Put(SvxBrushItem(::Color(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
             }

@@ -56,7 +56,7 @@ bool SvxHorJustifyItem::GetPresentation
     MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper&)    const
 {
-    rText = GetValueText( (sal_uInt16)GetValue() );
+    rText = GetValueText( static_cast<sal_uInt16>(GetValue()) );
     return true;
 }
 
@@ -97,7 +97,7 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                     case SvxCellHorJustify::Right:  nAdjust = style::ParagraphAdjust_RIGHT;  break;
                     case SvxCellHorJustify::Block:  nAdjust = style::ParagraphAdjust_BLOCK;  break;
                 }
-                rVal <<= (sal_Int16)nAdjust;       // as sal_Int16
+                rVal <<= static_cast<sal_Int16>(nAdjust);       // as sal_Int16
             }
             break;
     }
@@ -117,7 +117,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     sal_Int32 nValue = 0;
                     if(!(rVal >>= nValue))
                         return false;
-                    eUno = (table::CellHoriJustify)nValue;
+                    eUno = static_cast<table::CellHoriJustify>(nValue);
                 }
                 SvxCellHorJustify eSvx = SvxCellHorJustify::Standard;
                 switch (eUno)
@@ -141,7 +141,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     return false;
 
                 SvxCellHorJustify eSvx = SvxCellHorJustify::Standard;
-                switch ((style::ParagraphAdjust)nVal)
+                switch (static_cast<style::ParagraphAdjust>(nVal))
                 {
                     //  STRETCH is treated as BLOCK
                     case style::ParagraphAdjust_LEFT:    eSvx = SvxCellHorJustify::Left;   break;
@@ -160,7 +160,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 OUString SvxHorJustifyItem::GetValueText( sal_uInt16 nVal )
 {
-    DBG_ASSERT( nVal <= (sal_uInt16)SvxCellHorJustify::Repeat, "enum overflow!" );
+    DBG_ASSERT( nVal <= sal_uInt16(SvxCellHorJustify::Repeat), "enum overflow!" );
     return EditResId(RID_SVXITEMS_HORJUST_STANDARD + nVal);
 }
 
@@ -175,13 +175,13 @@ SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStream.ReadUInt16( nVal );
-    return new SvxHorJustifyItem( (SvxCellHorJustify)nVal, Which() );
+    return new SvxHorJustifyItem( static_cast<SvxCellHorJustify>(nVal), Which() );
 }
 
 
 sal_uInt16 SvxHorJustifyItem::GetValueCount() const
 {
-    return (sal_uInt16)SvxCellHorJustify::Repeat + 1;  // Last Enum value + 1
+    return sal_uInt16(SvxCellHorJustify::Repeat) + 1;  // Last Enum value + 1
 }
 
 
@@ -311,7 +311,7 @@ SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStream.ReadUInt16( nVal );
-    return new SvxVerJustifyItem( (SvxCellVerJustify)nVal, Which() );
+    return new SvxVerJustifyItem( static_cast<SvxCellVerJustify>(nVal), Which() );
 }
 
 

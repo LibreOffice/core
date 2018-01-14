@@ -146,17 +146,17 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
                     if( xSet->getPropertyValue("ReduceTransparency") >>= bValue )
                         SetReduceTransparency( bValue );
                     if( xSet->getPropertyValue("ReducedTransparencyMode") >>= nValue )
-                        SetReducedTransparencyMode( (PrinterTransparencyMode)nValue );
+                        SetReducedTransparencyMode( static_cast<PrinterTransparencyMode>(nValue) );
                     if( xSet->getPropertyValue("ReduceGradients") >>= bValue )
                         SetReduceGradients( bValue );
                     if( xSet->getPropertyValue("ReducedGradientMode") >>= nValue )
-                        SetReducedGradientMode( (PrinterGradientMode)nValue );
+                        SetReducedGradientMode( static_cast<PrinterGradientMode>(nValue) );
                     if( xSet->getPropertyValue("ReducedGradientStepCount") >>= nValue )
                         SetReducedGradientStepCount( static_cast<sal_uInt16>(nValue) );
                     if( xSet->getPropertyValue("ReduceBitmaps") >>= bValue )
                         SetReduceBitmaps( bValue );
                     if( xSet->getPropertyValue("ReducedBitmapMode") >>= nValue )
-                        SetReducedBitmapMode( (PrinterBitmapMode)nValue );
+                        SetReducedBitmapMode( static_cast<PrinterBitmapMode>(nValue) );
                     if( xSet->getPropertyValue("ReducedBitmapResolution") >>= nValue )
                         SetReducedBitmapResolution( static_cast<sal_uInt16>(nValue) );
                     if( xSet->getPropertyValue("ReducedBitmapIncludesTransparency") >>= bValue )

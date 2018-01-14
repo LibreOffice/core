@@ -261,7 +261,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
     else
     {
         pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
-                    (css::drawing::HatchStyle) m_pLbLineType->GetSelectedEntryPos(),
+                    static_cast<css::drawing::HatchStyle>(m_pLbLineType->GetSelectedEntryPos()),
                     GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
                     static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
     }
@@ -362,7 +362,7 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void const * p )
         m_pMtrAngle->SetValue( m_pSliderAngle->GetThumbPos() );
 
     XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                    (css::drawing::HatchStyle) m_pLbLineType->GetSelectedEntryPos(),
+                    static_cast<css::drawing::HatchStyle>(m_pLbLineType->GetSelectedEntryPos()),
                     GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
                     static_cast<long>(m_pMtrAngle->GetValue() * 10) );
 
@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
     if( !nError )
     {
         XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                        (css::drawing::HatchStyle) m_pLbLineType->GetSelectedEntryPos(),
+                        static_cast<css::drawing::HatchStyle>(m_pLbLineType->GetSelectedEntryPos()),
                         GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
                         static_cast<long>(m_pMtrAngle->GetValue() * 10) );
 
@@ -507,7 +507,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
         OUString aName( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetName() );
 
         XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                        (css::drawing::HatchStyle) m_pLbLineType->GetSelectedEntryPos(),
+                        static_cast<css::drawing::HatchStyle>(m_pLbLineType->GetSelectedEntryPos()),
                          GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
                         static_cast<long>(m_pMtrAngle->GetValue() * 10) );
 

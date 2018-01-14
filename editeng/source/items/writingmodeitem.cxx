@@ -28,7 +28,7 @@ using namespace ::com::sun::star::text;
 
 
 SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, sal_uInt16 _nWhich )
-    : SfxUInt16Item( _nWhich, (sal_uInt16)eValue )
+    : SfxUInt16Item( _nWhich, static_cast<sal_uInt16>(eValue) )
 {
 }
 
@@ -59,7 +59,7 @@ bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
         OUString &rText,
         const IntlWrapper& ) const
 {
-    rText = EditResId(getFrmDirResId((int)GetValue()));
+    rText = EditResId(getFrmDirResId(static_cast<int>(GetValue())));
     return true;
 }
 
@@ -75,13 +75,13 @@ bool SvxWritingModeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 
         if( bRet )
         {
-            nVal = (sal_Int32)eMode;
+            nVal = static_cast<sal_Int32>(eMode);
         }
     }
 
     if( bRet )
     {
-        switch( (WritingMode)nVal )
+        switch( static_cast<WritingMode>(nVal) )
         {
             case WritingMode_LR_TB:
             case WritingMode_RL_TB:
@@ -107,7 +107,7 @@ bool SvxWritingModeItem::QueryValue( css::uno::Any& rVal,
 
 SvxWritingModeItem& SvxWritingModeItem::operator=( const SvxWritingModeItem& rItem )
 {
-    SetValue( (sal_uInt16)rItem.GetValue() );
+    SetValue( static_cast<sal_uInt16>(rItem.GetValue()) );
     return *this;
 }
 

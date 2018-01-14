@@ -154,7 +154,7 @@ namespace
         if(1 == rMarkList.GetMarkCount())
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
+            const SdrObjKind eKind(static_cast<SdrObjKind>(pObj->GetObjIdentifier()));
 
             if((pObj->GetObjInventor() == SdrInventor::Default) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind))
             {
@@ -743,7 +743,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
         case 1:
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
+            const SdrObjKind eKind(static_cast<SdrObjKind>(pObj->GetObjIdentifier()));
 
             if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::Draw)
                || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject)
@@ -767,7 +767,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             while(isNoEdge && rMarkList.GetMark(nMarkObj))
             {
                 const SdrObject* pObj = rMarkList.GetMark(nMarkObj)->GetMarkedSdrObj();
-                const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
+                const SdrObjKind eKind(static_cast<SdrObjKind>(pObj->GetObjIdentifier()));
 
                 if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::Draw)
                   || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject)
@@ -835,7 +835,7 @@ void PosSizePropertyPanel::executeSize()
     // put Width & Height to itemset
     SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, static_cast<sal_uInt32>(lWidth));
     SfxUInt32Item aHeightItem( SID_ATTR_TRANSFORM_HEIGHT, static_cast<sal_uInt32>(lHeight));
-    SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, (sal_uInt16)RectPoint::LT);
+    SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, sal_uInt16(RectPoint::LT));
     const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
 
     if( nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context::Graphic)
@@ -904,7 +904,7 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
 
     if ( pState && eState >= SfxItemState::DEFAULT )
     {
-        eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pState)->GetValue();
+        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
     }
     else
     {
@@ -919,7 +919,7 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
             {
                 const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
                 if ( pItem )
-                    eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             }
             else
             {

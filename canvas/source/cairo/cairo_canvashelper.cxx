@@ -379,7 +379,7 @@ namespace cairocanvas
                 }
                 break;
             default:
-                SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << (int)pAlphaReadAcc->GetScanlineFormat() );
+                SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << static_cast<int>(pAlphaReadAcc->GetScanlineFormat()) );
                 for( nX = 0; nX < nWidth; nX++ )
                 {
                     nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
@@ -603,7 +603,7 @@ namespace cairocanvas
                         }
                         break;
                     default:
-                        SAL_INFO( "canvas.cairo", "fallback to GetColor - slow, format: " << (int)pBitmapReadAcc->GetScanlineFormat() );
+                        SAL_INFO( "canvas.cairo", "fallback to GetColor - slow, format: " << static_cast<int>(pBitmapReadAcc->GetScanlineFormat()) );
 
                         if( pAlphaReadAcc )
                             if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )

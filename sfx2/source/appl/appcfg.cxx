@@ -643,7 +643,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(SID_BASIC_ENABLED, true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "SfxInt16Item expected");
-        aSecurityOptions.SetBasicMode( (EBasicSecurityMode)static_cast<const SfxUInt16Item*>( pItem )->GetValue() );
+        aSecurityOptions.SetBasicMode( static_cast<EBasicSecurityMode>(static_cast<const SfxUInt16Item*>( pItem )->GetValue()) );
     }
 
     // Execute PlugIns

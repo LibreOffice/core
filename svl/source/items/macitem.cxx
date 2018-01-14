@@ -132,7 +132,7 @@ void SvxMacroTableDtor::Read( SvStream& rStrm )
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStrm.ReadUInt16( eType );
 
-        aSvxMacroTable.emplace( SvMacroItemId(nCurKey), SvxMacro( aMacName, aLibName, (ScriptType)eType ) );
+        aSvxMacroTable.emplace( SvMacroItemId(nCurKey), SvxMacro( aMacName, aLibName, static_cast<ScriptType>(eType) ) );
     }
 }
 
@@ -152,7 +152,7 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
     while( it != aSvxMacroTable.end() && rStream.GetError() == ERRCODE_NONE )
     {
         const SvxMacro& rMac = it->second;
-        rStream.WriteUInt16( (sal_uInt16)it->first );
+        rStream.WriteUInt16( static_cast<sal_uInt16>(it->first) );
         writeByteString(rStream, rMac.GetLibName());
         writeByteString(rStream, rMac.GetMacName());
 

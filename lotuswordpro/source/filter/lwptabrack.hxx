@@ -115,12 +115,12 @@ inline sal_uInt32 LwpTab::GetPosition()
 
 inline LwpTab::TabType LwpTab::GetTabType()
 {
-    return (LwpTab::TabType)m_nType;
+    return static_cast<LwpTab::TabType>(m_nType);
 }
 
 inline LwpTab::LeaderType LwpTab::GetLeaderType()
 {
-    return (LwpTab::LeaderType)m_nLeader;
+    return static_cast<LwpTab::LeaderType>(m_nLeader);
 }
 
 inline sal_uInt16 LwpTab::GetAlignChar()

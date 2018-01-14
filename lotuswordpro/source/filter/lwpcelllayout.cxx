@@ -625,7 +625,7 @@ void LwpCellLayout::Read()
 
         type = pStrm->QuickReaduInt16();
         pStrm->SkipExtra();
-        cType = (LeaderDotType)type;
+        cType = static_cast<LeaderDotType>(type);
 
         cLayNumerics.ReadIndexed(pStrm);
         cLayDiagonalLine.ReadIndexed(pStrm);

@@ -350,7 +350,7 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
 
     SfxDispatcher &rDispatcher = *SfxViewShell::Current()->GetDispatcher();
     SfxStringItem aItem(nId, rStr);
-    SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)nFamily);
+    SfxUInt16Item aFamily(SID_STYLE_FAMILY, static_cast<sal_uInt16>(nFamily));
     SfxStringItem aRefName( SID_STYLE_REFERENCE, rRefStr );
     const SfxPoolItem* pItems[ 6 ];
     sal_uInt16 nCount = 0;

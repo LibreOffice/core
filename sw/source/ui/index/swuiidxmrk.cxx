@@ -1187,7 +1187,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
             const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : nullptr;
             for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
-                            pEntry->GetAuthorField((ToxAuthorityField)i) : OUString();
+                            pEntry->GetAuthorField(static_cast<ToxAuthorityField>(i)) : OUString();
         }
     }
     if (rBox.GetSelectedEntry().isEmpty())
@@ -1216,7 +1216,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, Button*, void)
         if(pEntry)
         {
             for(int i = 0; i < AUTH_FIELD_END && !bDifferent; i++)
-                bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
+                bDifferent |= m_sFields[i] != pEntry->GetAuthorField(static_cast<ToxAuthorityField>(i));
             if(bDifferent)
             {
                 ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SwResId(STR_QUERY_CHANGE_AUTH_ENTRY), VclMessageType::Question, VclButtonsType::YesNo);
@@ -1237,7 +1237,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, Button*, void)
             {
                 SwAuthEntry aNewData;
                 for(int i = 0; i < AUTH_FIELD_END; i++)
-                    aNewData.SetAuthorField((ToxAuthorityField)i, m_sFields[i]);
+                    aNewData.SetAuthorField(static_cast<ToxAuthorityField>(i), m_sFields[i]);
                 pSh->ChangeAuthorityData(&aNewData);
             }
             SwInsertField_Data aData(TYP_AUTHORITY, 0, sFields, OUString(), 0 );
@@ -1273,7 +1273,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, Button*, pButton, void)
         }
         for(int i = 0; i < AUTH_FIELD_END; i++)
         {
-            m_sFields[i] = aDlg->GetEntryText((ToxAuthorityField)i);
+            m_sFields[i] = aDlg->GetEntryText(static_cast<ToxAuthorityField>(i));
             m_sCreatedEntry[i] = m_sFields[i];
         }
         if(bNewEntry && !m_pFromDocContentRB->IsChecked())
@@ -1415,7 +1415,7 @@ void SwAuthorMarkPane::InitControls()
     if(!pEntry)
         return;
     for(int i = 0; i < AUTH_FIELD_END; i++)
-        m_sFields[i] = pEntry->GetAuthorField((ToxAuthorityField)i);
+        m_sFields[i] = pEntry->GetAuthorField(static_cast<ToxAuthorityField>(i));
 
     m_pEntryED->SetText(pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER));
     m_pAuthorFI->SetText(pEntry->GetAuthorField(AUTH_FIELD_AUTHOR));

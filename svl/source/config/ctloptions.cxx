@@ -271,8 +271,8 @@ void SvtCTLOptions_Impl::Load()
                 {
                     switch ( nProp )
                     {
-                        case 2: { m_eCTLCursorMovement = (SvtCTLOptions::CursorMovement)nValue; m_bROCTLCursorMovement = pROStates[nProp]; } break;
-                        case 3: { m_eCTLTextNumerals = (SvtCTLOptions::TextNumerals)nValue; m_bROCTLTextNumerals = pROStates[nProp]; } break;
+                        case 2: { m_eCTLCursorMovement = static_cast<SvtCTLOptions::CursorMovement>(nValue); m_bROCTLCursorMovement = pROStates[nProp]; } break;
+                        case 3: { m_eCTLTextNumerals = static_cast<SvtCTLOptions::TextNumerals>(nValue); m_bROCTLTextNumerals = pROStates[nProp]; } break;
                     }
                 }
             }

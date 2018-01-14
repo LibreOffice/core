@@ -334,7 +334,7 @@ static guint GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 g
 {
     guint updated_keyval = 0;
     gdk_keymap_translate_keyboard_state(pKeyMap, hardware_keycode,
-        (GdkModifierType)0, group, &updated_keyval, nullptr, nullptr, nullptr);
+        GdkModifierType(0), group, &updated_keyval, nullptr, nullptr, nullptr);
     return updated_keyval;
 }
 
@@ -948,7 +948,7 @@ ooo_fixed_get_type()
         };
 
         type = g_type_register_static( GTK_TYPE_FIXED, "OOoFixed",
-                                       &tinfo, (GTypeFlags) 0);
+                                       &tinfo, GTypeFlags(0));
     }
 
     return type;
@@ -1021,7 +1021,7 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
 
     //Drop Target Stuff
-    gtk_drag_dest_set(GTK_WIDGET(pEventWidget), (GtkDestDefaults)0, nullptr, 0, (GdkDragAction)0);
+    gtk_drag_dest_set(GTK_WIDGET(pEventWidget), GtkDestDefaults(0), nullptr, 0, GdkDragAction(0));
     gtk_drag_dest_set_track_motion(GTK_WIDGET(pEventWidget), true);
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-motion", G_CALLBACK(signalDragMotion), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-drop", G_CALLBACK(signalDragDrop), this ));
@@ -2108,7 +2108,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     if (bGrab)
     {
         gdk_device_grab(pPointer, widget_get_window(getMouseEventWidget()), GDK_OWNERSHIP_NONE,
-                        bOwnerEvents, (GdkEventMask) nMask, m_pCurrentCursor, gtk_get_current_event_time());
+                        bOwnerEvents, GdkEventMask(nMask), m_pCurrentCursor, gtk_get_current_event_time());
     }
     else
     {
@@ -2159,16 +2159,16 @@ void GtkSalFrame::KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
         return;
 
     // Get GDK key modifiers
-    GdkModifierType nModifiers = (GdkModifierType) 0;
+    GdkModifierType nModifiers = GdkModifierType(0);
 
     if ( rKeyCode.IsShift() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_SHIFT_MASK );
+        nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_SHIFT_MASK );
 
     if ( rKeyCode.IsMod1() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_CONTROL_MASK );
+        nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_CONTROL_MASK );
 
     if ( rKeyCode.IsMod2() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_MOD1_MASK );
+        nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_MOD1_MASK );
 
     *pGdkModifiers = nModifiers;
 

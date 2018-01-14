@@ -1094,7 +1094,7 @@ void SwView::WriteUserData( OUString &rUserData, bool bBrowse )
     rUserData += OUString::number( bBrowse ? SAL_MIN_INT32 : rVis.Bottom());
     rUserData += ";";
     rUserData += OUString::number(
-            (sal_uInt16)m_pWrtShell->GetViewOptions()->GetZoomType());//eZoom;
+            static_cast<sal_uInt16>(m_pWrtShell->GetViewOptions()->GetZoomType()));//eZoom;
     rUserData += ";";
     rUserData += FrameTypeFlags::NONE == m_pWrtShell->GetSelFrameType() ? OUString("0") : OUString("1");
 }
@@ -1152,7 +1152,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
             sal_Int32 nOff = 0;
             SvxZoomType eZoom;
             if( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
-                eZoom = (SvxZoomType) static_cast<sal_uInt16>(rUserData.getToken(nOff, ';', nPos ).toInt32());
+                eZoom = static_cast<SvxZoomType>(static_cast<sal_uInt16>(rUserData.getToken(nOff, ';', nPos ).toInt32()));
             else
             {
                 eZoom = SvxZoomType::PERCENT;

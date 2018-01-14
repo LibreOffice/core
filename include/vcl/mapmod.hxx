@@ -79,7 +79,7 @@ template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & rStream, const MapMode& rMode)
 {
-    rStream << "MapMode(" << (unsigned)rMode.GetMapUnit() << ",(" << rMode.GetScaleX() << "," << rMode.GetScaleY() << ")@(" << rMode.GetOrigin() << "))";
+    rStream << "MapMode(" << static_cast<unsigned>(rMode.GetMapUnit()) << ",(" << rMode.GetScaleX() << "," << rMode.GetScaleY() << ")@(" << rMode.GetOrigin() << "))";
     return rStream;
 }
 

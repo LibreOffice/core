@@ -698,7 +698,7 @@ bool lcl_hasEditView(const ScViewData& rViewData)
     bool bResult = false;
     for (unsigned int i=0; i<4; i++)
     {
-        bResult = rViewData.HasEditView( (ScSplitPos) i );
+        bResult = rViewData.HasEditView( static_cast<ScSplitPos>(i) );
         if (bResult) break;
     }
     return bResult;

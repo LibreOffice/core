@@ -117,7 +117,7 @@ void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     if (pModOpt->IsInsWithCaption(bWeb))
     {
-        const InsCaptionOpt *pOpt = pModOpt->GetCapOption(bWeb, (SwCapObjType)nType, pOleId);
+        const InsCaptionOpt *pOpt = pModOpt->GetCapOption(bWeb, static_cast<SwCapObjType>(nType), pOleId);
         if (pOpt && pOpt->UseCaption())
             InsertCaption(pOpt);
     }

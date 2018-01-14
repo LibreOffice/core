@@ -1472,13 +1472,13 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     {
         sheet::GeneralFunction eEnum;
         if (aValue >>= eEnum)
-            setFunction( (ScGeneralFunction)eEnum );
+            setFunction( static_cast<ScGeneralFunction>(eEnum) );
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION2 )
     {
         sal_Int16 eEnum;
         if (aValue >>= eEnum)
-            setFunction( (ScGeneralFunction)eEnum );
+            setFunction( static_cast<ScGeneralFunction>(eEnum) );
     }
     else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aValue >>= aReferenceValue;
@@ -1556,14 +1556,14 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
         if (nVal == ScGeneralFunction::MEDIAN)
             nVal = ScGeneralFunction::NONE;
         const int nValAsInt = static_cast<int>(nVal);
-        assert(nValAsInt >= (int)css::sheet::GeneralFunction_NONE &&
-               nValAsInt <= (int)css::sheet::GeneralFunction_VARP);
-        aRet <<= (sheet::GeneralFunction)nValAsInt;
+        assert(nValAsInt >= int(css::sheet::GeneralFunction_NONE) &&
+               nValAsInt <= int(css::sheet::GeneralFunction_VARP));
+        aRet <<= static_cast<sheet::GeneralFunction>(nValAsInt);
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION2 )
     {
         ScGeneralFunction eVal = getFunction();
-        aRet <<= (sal_Int16)eVal;
+        aRet <<= static_cast<sal_Int16>(eVal);
     }
     else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aRet <<= aReferenceValue;

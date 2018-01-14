@@ -711,10 +711,10 @@ void    SwTOXAuthority::FillText( SwTextNode& rNd,
     {
         sal_uInt16 nLevel = GetLevel();
         if(nLevel)
-            sText = SwAuthorityFieldType::GetAuthTypeName((ToxAuthorityType) --nLevel);
+            sText = SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(--nLevel));
     }
     else
-        sText = pField->GetFieldText((ToxAuthorityField) nAuthField);
+        sText = pField->GetFieldText(static_cast<ToxAuthorityField>(nAuthField));
     rNd.InsertText( sText, rInsPos );
 }
 

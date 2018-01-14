@@ -54,7 +54,7 @@ static HTMLOptionEnum<SwFieldIds> aHTMLFieldTypeTable[] =
     { OOO_STRING_SW_HTML_FT_docinfo,  SwFieldIds::DocInfo     },
     { OOO_STRING_SW_HTML_FT_docstat,  SwFieldIds::DocStat     },
     { OOO_STRING_SW_HTML_FT_filename, SwFieldIds::Filename    },
-    { nullptr,                        (SwFieldIds)0           }
+    { nullptr,                        SwFieldIds(0)           }
 };
 
 static HTMLNumFormatTableEntry aHTMLDateFieldFormatTable[] =
@@ -99,7 +99,7 @@ static HTMLOptionEnum<SvxNumType> aHTMLPageNumFieldFormatTable[] =
     { OOO_STRING_SW_HTML_FF_page,        SVX_NUM_PAGEDESC },
     { OOO_STRING_SW_HTML_FF_ulettern,    SVX_NUM_CHARS_UPPER_LETTER_N },
     { OOO_STRING_SW_HTML_FF_llettern,    SVX_NUM_CHARS_LOWER_LETTER_N },
-    { nullptr,                           (SvxNumType)0 }
+    { nullptr,                           SvxNumType(0) }
 };
 
 static HTMLOptionEnum<SwExtUserSubType> aHTMLExtUsrFieldSubTable[] =
@@ -119,14 +119,14 @@ static HTMLOptionEnum<SwExtUserSubType> aHTMLExtUsrFieldSubTable[] =
     { OOO_STRING_SW_HTML_FS_fax,         EU_FAX },
     { OOO_STRING_SW_HTML_FS_email,       EU_EMAIL },
     { OOO_STRING_SW_HTML_FS_state,       EU_STATE },
-    { nullptr,                           (SwExtUserSubType)0 }
+    { nullptr,                           SwExtUserSubType(0) }
 };
 
 static HTMLOptionEnum<SwAuthorFormat> aHTMLAuthorFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,        AF_NAME },
     { OOO_STRING_SW_HTML_FF_shortcut,    AF_SHORTCUT },
-    { nullptr,                           (SwAuthorFormat)0 }
+    { nullptr,                           SwAuthorFormat(0) }
 };
 
 static HTMLOptionEnum<SwPageNumSubType> aHTMLPageNumFieldSubTable[] =
@@ -134,7 +134,7 @@ static HTMLOptionEnum<SwPageNumSubType> aHTMLPageNumFieldSubTable[] =
     { OOO_STRING_SW_HTML_FS_random,      PG_RANDOM },
     { OOO_STRING_SW_HTML_FS_next,        PG_NEXT },
     { OOO_STRING_SW_HTML_FS_prev,        PG_PREV },
-    { nullptr,                           (SwPageNumSubType)0  }
+    { nullptr,                           SwPageNumSubType(0)  }
 };
 
 // UGLY: these are extensions of nsSwDocInfoSubType (in inc/docufld.hxx)
@@ -178,7 +178,7 @@ static HTMLOptionEnum<SwDocStatSubType> aHTMLDocStatFieldSubTable[] =
     { OOO_STRING_SW_HTML_FS_tbl,     DS_TBL },
     { OOO_STRING_SW_HTML_FS_grf,     DS_GRF },
     { OOO_STRING_SW_HTML_FS_ole,     DS_OLE },
-    { nullptr,                       (SwDocStatSubType)0 }
+    { nullptr,                       SwDocStatSubType(0) }
 };
 
 static HTMLOptionEnum<SwFileNameFormat> aHTMLFileNameFieldFormatTable[] =
@@ -187,7 +187,7 @@ static HTMLOptionEnum<SwFileNameFormat> aHTMLFileNameFieldFormatTable[] =
     { OOO_STRING_SW_HTML_FF_pathname,   FF_PATHNAME },
     { OOO_STRING_SW_HTML_FF_path,       FF_PATH },
     { OOO_STRING_SW_HTML_FF_name_noext, FF_NAME_NOEXT },
-    { nullptr,                          (SwFileNameFormat)0 }
+    { nullptr,                          SwFileNameFormat(0) }
 };
 
 SvxNumType SwHTMLParser::GetNumType( const OUString& rStr, SvxNumType nDfltType )
@@ -308,7 +308,7 @@ void SwHTMLParser::NewField()
                 pFormatOption->GetEnum( nFormat, aHTMLAuthorFieldFormatTable );
             if( bFixed )
             {
-                nFormat = (SwAuthorFormat)(static_cast<int>(nFormat) | AF_FIXED);
+                nFormat = static_cast<SwAuthorFormat>(static_cast<int>(nFormat) | AF_FIXED);
                 bInsOnEndTag = true;
             }
 
@@ -502,7 +502,7 @@ void SwHTMLParser::NewField()
                 pFormatOption->GetEnum( nFormat, aHTMLFileNameFieldFormatTable );
             if( bFixed )
             {
-                nFormat = (SwFileNameFormat)(static_cast<int>(nFormat) | FF_FIXED);
+                nFormat = static_cast<SwFileNameFormat>(static_cast<int>(nFormat) | FF_FIXED);
                 bInsOnEndTag = true;
             }
 

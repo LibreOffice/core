@@ -1652,28 +1652,28 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXT_TOC_MARK_START:
         pContext = new XMLTOCMarkImportContext_Impl(
             rImport, nPrefix, rLocalName,
-            (enum XMLTextPElemTokens)nToken, rHints);
+            static_cast<enum XMLTextPElemTokens>(nToken), rHints);
         break;
 
     case XML_TOK_TEXT_USER_INDEX_MARK:
     case XML_TOK_TEXT_USER_INDEX_MARK_START:
         pContext = new XMLUserIndexMarkImportContext_Impl(
             rImport, nPrefix, rLocalName,
-            (enum XMLTextPElemTokens)nToken, rHints);
+            static_cast<enum XMLTextPElemTokens>(nToken), rHints);
         break;
 
     case XML_TOK_TEXT_ALPHA_INDEX_MARK:
     case XML_TOK_TEXT_ALPHA_INDEX_MARK_START:
         pContext = new XMLAlphaIndexMarkImportContext_Impl(
             rImport, nPrefix, rLocalName,
-            (enum XMLTextPElemTokens)nToken, rHints);
+            static_cast<enum XMLTextPElemTokens>(nToken), rHints);
         break;
 
     case XML_TOK_TEXT_TOC_MARK_END:
     case XML_TOK_TEXT_USER_INDEX_MARK_END:
     case XML_TOK_TEXT_ALPHA_INDEX_MARK_END:
         pContext = new XMLIndexMarkImportContext_Impl(
-            rImport, nPrefix, rLocalName, (enum XMLTextPElemTokens)nToken,
+            rImport, nPrefix, rLocalName, static_cast<enum XMLTextPElemTokens>(nToken),
             rHints);
         break;
 

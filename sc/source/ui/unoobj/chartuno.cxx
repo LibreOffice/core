@@ -464,7 +464,7 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
                     if (aPropName == "CellRangeRepresentation")
                         rProp.Value >>= aRanges;
                     else if (aPropName == "DataRowSource")
-                        eDataRowSource = (chart::ChartDataRowSource)ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
+                        eDataRowSource = static_cast<chart::ChartDataRowSource>(ScUnoHelpFunctions::GetEnumFromAny( rProp.Value ));
                     else if (aPropName == "HasCategories")
                         bHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
                     else if (aPropName == "FirstCellAsLabel")

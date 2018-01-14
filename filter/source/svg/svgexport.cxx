@@ -220,7 +220,7 @@ public:
     {
         VariableTextField::elementExport( pSVGExport );
         OUString sDateFormat, sTimeFormat;
-        SvxDateFormat eDateFormat = (SvxDateFormat)( format & 0x0f );
+        SvxDateFormat eDateFormat = static_cast<SvxDateFormat>( format & 0x0f );
         if( eDateFormat != SvxDateFormat::AppDefault )
         {
             switch( eDateFormat )
@@ -250,7 +250,7 @@ public:
             }
         }
 
-        SvxTimeFormat eTimeFormat = (SvxTimeFormat)( ( format >> 4 ) & 0x0f );
+        SvxTimeFormat eTimeFormat = static_cast<SvxTimeFormat>( ( format >> 4 ) & 0x0f );
         if( eTimeFormat != SvxTimeFormat::AppDefault )
         {
             switch( eTimeFormat )
@@ -1731,11 +1731,11 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
 
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
 
-                            sal_uInt16 nTextAdjust = (sal_uInt16)ParagraphAdjust_LEFT;
+                            sal_uInt16 nTextAdjust = sal_uInt16(ParagraphAdjust_LEFT);
                             OUString sTextAdjust;
                             xShapePropSet->getPropertyValue( "ParaAdjust" ) >>= nTextAdjust;
 
-                            switch( (ParagraphAdjust)nTextAdjust )
+                            switch( static_cast<ParagraphAdjust>(nTextAdjust) )
                             {
                                 case ParagraphAdjust_LEFT:
                                         sTextAdjust = "left";
@@ -2172,7 +2172,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                     // we look for the most verbose date format
                     for( ; aChar != aCharSet.end(); ++aChar )
                     {
-                        eCurDateFormat = (SvxDateFormat)( static_cast<int>( *aChar ) & 0x0f );
+                        eCurDateFormat = static_cast<SvxDateFormat>( static_cast<int>( *aChar ) & 0x0f );
                         switch( eDateFormat )
                         {
                             case SvxDateFormat::StdSmall:

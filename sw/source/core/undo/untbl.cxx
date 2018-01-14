@@ -1844,7 +1844,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             SwTable& rTable = pTableNd->GetTable();
             SwTableBox* pBox = rTable.GetTableBox( nCurrBox );
             TableChgMode eOldMode = rTable.GetTableChgMode();
-            rTable.SetTableChgMode( (TableChgMode)nCount );
+            rTable.SetTableChgMode( static_cast<TableChgMode>(nCount) );
             rDoc.SetColRowWidthHeight( *pBox, nSetColType, nAbsDiff, nRelDiff );
             rTable.SetTableChgMode( eOldMode );
         }
@@ -1876,7 +1876,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             SwTableBox* pBox = rTable.GetTableBox( nCurrBox );
             TableChgMode eOldMode = rTable.GetTableChgMode();
-            rTable.SetTableChgMode( (TableChgMode)nCount );
+            rTable.SetTableChgMode( static_cast<TableChgMode>(nCount) );
 
             // need the SaveSections!
             rDoc.GetIDocumentUndoRedo().DoUndo( true );

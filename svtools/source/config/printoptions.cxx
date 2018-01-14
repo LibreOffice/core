@@ -648,12 +648,12 @@ void SvtBasePrintOptions::SetPDFAsStandardPrintJobFormat( bool bState )
 void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
 {
     rOptions.SetReduceTransparency( IsReduceTransparency() );
-    rOptions.SetReducedTransparencyMode( (PrinterTransparencyMode) GetReducedTransparencyMode() );
+    rOptions.SetReducedTransparencyMode( static_cast<PrinterTransparencyMode>(GetReducedTransparencyMode()) );
     rOptions.SetReduceGradients( IsReduceGradients() );
-    rOptions.SetReducedGradientMode( (PrinterGradientMode) GetReducedGradientMode() );
+    rOptions.SetReducedGradientMode( static_cast<PrinterGradientMode>(GetReducedGradientMode()) );
     rOptions.SetReducedGradientStepCount( GetReducedGradientStepCount() );
     rOptions.SetReduceBitmaps( IsReduceBitmaps() );
-    rOptions.SetReducedBitmapMode( (PrinterBitmapMode) GetReducedBitmapMode() );
+    rOptions.SetReducedBitmapMode( static_cast<PrinterBitmapMode>(GetReducedBitmapMode()) );
     rOptions.SetReducedBitmapResolution( aDPIArray[ std::min( static_cast<sal_uInt16>(GetReducedBitmapResolution()), sal_uInt16( DPI_COUNT - 1 ) ) ] );
     rOptions.SetReducedBitmapIncludesTransparency( IsReducedBitmapIncludesTransparency() );
     rOptions.SetConvertToGreyscales( IsConvertToGreyscales() );

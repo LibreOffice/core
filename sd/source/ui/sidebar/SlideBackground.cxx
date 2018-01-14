@@ -306,7 +306,7 @@ void SlideBackground::HandleContextChange(
 
 void SlideBackground::Update()
 {
-    eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectedEntryPos();
+    eFillStyle nPos = static_cast<eFillStyle>(mpFillStyle->GetSelectedEntryPos());
 
     if(maContext == maImpressHandoutContext)
         nPos = NONE;
@@ -939,7 +939,7 @@ void SlideBackground::NotifyItemUpdate(
 
 IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 {
-    const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectedEntryPos();
+    const eFillStyle nPos = static_cast<eFillStyle>(mpFillStyle->GetSelectedEntryPos());
     Update();
 
     switch (nPos)
@@ -1006,7 +1006,7 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectedEntryPos();
+    const drawing::FillStyle eXFS = static_cast<drawing::FillStyle>(mpFillStyle->GetSelectedEntryPos());
     switch(eXFS)
     {
         case drawing::FillStyle_SOLID:
@@ -1034,7 +1034,7 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
 
 IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
 {
-    const eFillStyle nFillPos = (eFillStyle)mpFillStyle->GetSelectedEntryPos();
+    const eFillStyle nFillPos = static_cast<eFillStyle>(mpFillStyle->GetSelectedEntryPos());
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(nFillPos)
     {

@@ -407,7 +407,7 @@ SbiToken SbiTokenizer::Next()
         sal_Unicode ch = aSym[0];
         if( !BasicCharClass::isAlpha( ch, bCompatible ) && !bSymbol )
         {
-            return eCurTok = (SbiToken) (ch & 0x00FF);
+            return eCurTok = static_cast<SbiToken>(ch & 0x00FF);
         }
         return eCurTok = SYMBOL;
     }

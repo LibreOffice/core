@@ -81,7 +81,7 @@ bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
         if( !( rValue >>= nValue ) )
             return false;
 
-        eBreak = (style::BreakType) nValue;
+        eBreak = static_cast<style::BreakType>(nValue);
     }
 
     sal_uInt16 nEnum = 0;
@@ -151,7 +151,7 @@ bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
         if( !( rValue >>= nValue ) )
             return false;
 
-        eBreak = (style::BreakType) nValue;
+        eBreak = static_cast<style::BreakType>(nValue);
     }
 
     sal_uInt16 nEnum = 0;

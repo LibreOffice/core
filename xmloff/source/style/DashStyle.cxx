@@ -69,7 +69,7 @@ SvXMLEnumMapEntry<drawing::DashStyle> const pXML_DashStyle_Enum[] =
     { XML_ROUND,        drawing::DashStyle_ROUND },
     { XML_RECT,         drawing::DashStyle_RECTRELATIVE },
     { XML_ROUND,        drawing::DashStyle_ROUNDRELATIVE },
-    { XML_TOKEN_INVALID, (drawing::DashStyle)0 }
+    { XML_TOKEN_INVALID, drawing::DashStyle(0) }
 };
 
 // Import

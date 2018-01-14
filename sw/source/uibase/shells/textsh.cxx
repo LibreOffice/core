@@ -267,8 +267,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 try
                 {
                     ScrollingMode eScroll = ScrollingMode::Auto;
-                    if( pScrollingItem && pScrollingItem->GetValue() <= (int)ScrollingMode::Auto )
-                        eScroll = (ScrollingMode) pScrollingItem->GetValue();
+                    if( pScrollingItem && pScrollingItem->GetValue() <= int(ScrollingMode::Auto) )
+                        eScroll = static_cast<ScrollingMode>(pScrollingItem->GetValue());
 
                     Size aMargin;
                     if ( pMarginItem )
@@ -438,7 +438,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Point aPos = aMgr.GetPos();
             RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
             if(pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
-                eAnchor = (RndStdIds)static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+                eAnchor = static_cast<RndStdIds>(static_cast<const SfxUInt16Item *>(pItem)->GetValue());
             if(pArgs->GetItemState(FN_PARAM_1, false, &pItem)  == SfxItemState::SET)
                 aPos = static_cast<const SfxPointItem *>(pItem)->GetValue();
             if(pArgs->GetItemState(FN_PARAM_2, false, &pItem)  == SfxItemState::SET)
@@ -498,7 +498,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 if ( xRecorder.is() )
                 {
                     //FN_INSERT_FRAME
-                    sal_uInt16 nAnchor = (sal_uInt16)aMgr.GetAnchor();
+                    sal_uInt16 nAnchor = static_cast<sal_uInt16>(aMgr.GetAnchor());
                         rReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
                         rReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
                         rReq.AppendItem(SvxSizeItem(FN_PARAM_2, rShell.GetObjSize()));
@@ -676,7 +676,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
                     }
 
-                    aHLinkItem.SetInsertMode((SvxLinkInsertMode)(aHLinkItem.GetInsertMode() |
+                    aHLinkItem.SetInsertMode(static_cast<SvxLinkInsertMode>(aHLinkItem.GetInsertMode() |
                         (bHtmlModeOn ? HLINK_HTMLMODE : 0)));
                     aHLinkItem.SetMacroEvents ( HyperDialogEvent::MouseOverObject|
                         HyperDialogEvent::MouseClickObject | HyperDialogEvent::MouseOutObject );

@@ -1,3 +1,4 @@
+//#include<iostream>
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -232,16 +233,15 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_ToVoid ) {
         return true;
     }
-    // ignore integral-type conversions for now, there is insufficient agreement about
-    // the merits of C++ style casting in this case
-    if( expr->getCastKind() == CK_IntegralCast ) {
-        return true;
-    }
     if (isSharedCAndCppCode(expr->getLocStart())) {
         return true;
     }
     char const * perf = nullptr;
-    if( expr->getCastKind() == CK_NoOp ) {
+    if( expr->getCastKind() == CK_IntegralCast ) {
+        if (rewriteArithmeticCast(expr, &perf)) {
+            return true;
+        }
+    } else if( expr->getCastKind() == CK_NoOp ) {
         if (!((expr->getSubExpr()->getType()->isPointerType()
                && expr->getType()->isPointerType())
               || expr->getTypeAsWritten()->isReferenceType()))
@@ -408,6 +408,9 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
     }
     auto third = sub->getLocStart();
     auto fourth = sub->getLocEnd();
+// std::cerr<<"SBSBSB.1:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
     bool macro = false;
     // Ensure that
     //
@@ -435,6 +438,9 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
         auto const range = compiler.getSourceManager().getImmediateExpansionRange(third);
         third = range.first;
         fourth = range.second;
+// std::cerr<<"SBSBSB.2:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
         macro = true;
         assert(third.isValid());
     }
@@ -445,6 +451,9 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
     {
         third = compiler.getSourceManager().getImmediateSpellingLoc(third);
         fourth = compiler.getSourceManager().getImmediateSpellingLoc(fourth);
+// std::cerr<<"SBSBSB.3:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
     }
     if (isa<ParenExpr>(sub)) {
         // Ensure that with
@@ -515,6 +524,9 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
             auto const range = compiler.getSourceManager().getImmediateExpansionRange(third);
             third = range.first;
             fourth = range.second;
+// std::cerr<<"SBSBSB.4:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
         }
         // ...and additionally asymmetrically unwind macros only at the start or end, for code like
         //
@@ -529,14 +541,33 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
         if (!fourth.isMacroID()) {
             while (compiler.getSourceManager().isMacroBodyExpansion(third)
                    && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third, &third))
-            {}
+            {
+// std::cerr<<"SBSBSB.5:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
+}
+        } else if (compiler.getSourceManager().isMacroBodyExpansion(fourth)) {
+            while (compiler.getSourceManager().isMacroArgExpansion(third)
+                   && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third, &third)) {
+// std::cerr<<"SBSBSB.10:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
+}
         }
         if (!third.isMacroID()) {
             while (compiler.getSourceManager().isMacroBodyExpansion(fourth)
                    && isLastTokenOfImmediateMacroBodyExpansion(fourth, &fourth))
-            {}
+            {
+// std::cerr<<"SBSBSB.6:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
+}
         } else if (compiler.getSourceManager().isMacroBodyExpansion(third)) {
-            while (compiler.getSourceManager().isMacroArgExpansion(fourth, &fourth)) {}
+            while (compiler.getSourceManager().isMacroArgExpansion(fourth, &fourth)) {
+// std::cerr<<"SBSBSB.7:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
+}
         }
         if (compiler.getSourceManager().isMacroBodyExpansion(third)
             && compiler.getSourceManager().isMacroBodyExpansion(fourth)
@@ -545,6 +576,9 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
         {
             third = compiler.getSourceManager().getSpellingLoc(third);
             fourth = compiler.getSourceManager().getSpellingLoc(fourth);
+// std::cerr<<"SBSBSB.8:"<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
         }
         assert(third.isValid());
     }
@@ -552,6 +586,11 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
         || (fourth.isValid() && fourth.isMacroID()))
     {
         if (isDebugMode()) {
+// std::cerr<<"SBSBSB.9:"<<std::endl;
+// firstBegin.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// secondBegin.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// third.dump(compiler.getSourceManager());std::cerr<<std::endl;
+// fourth.dump(compiler.getSourceManager());std::cerr<<std::endl;
             report(
                 DiagnosticsEngine::Fatal,
                 "TODO: cannot rewrite C-style cast in macro, needs investigation",

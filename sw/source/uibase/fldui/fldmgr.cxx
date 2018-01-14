@@ -1654,7 +1654,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             SwAuthorityFieldType* pAuthorityType = static_cast<SwAuthorityFieldType*>(pType);
             SwAuthEntry aTempEntry;
             for( sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i )
-                aTempEntry.SetAuthorField( (ToxAuthorityField)i,
+                aTempEntry.SetAuthorField( static_cast<ToxAuthorityField>(i),
                                 rPar1.getToken( i, TOX_STYLE_DELIMITER ));
             if( pAuthorityType->ChangeEntryContent( &aTempEntry ) )
             {

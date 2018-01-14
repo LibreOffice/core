@@ -309,7 +309,7 @@ void VCLXMenu::insertItem(
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( mpMenu )
-        mpMenu->InsertItem(nItemId, aText, (MenuItemBits)nItemStyle, OString(), nPos);
+        mpMenu->InsertItem(nItemId, aText, static_cast<MenuItemBits>(nItemStyle), OString(), nPos);
 }
 
 void VCLXMenu::removeItem(
@@ -657,7 +657,7 @@ css::awt::MenuItemType SAL_CALL VCLXMenu::getItemType(
         css::awt::MenuItemType_DONTKNOW;
     if ( mpMenu )
     {
-        aMenuItemType = ( (css::awt::MenuItemType) mpMenu->GetItemType( nItemPos ) );
+        aMenuItemType = static_cast<css::awt::MenuItemType>(mpMenu->GetItemType( nItemPos ));
     }
 
     return aMenuItemType;

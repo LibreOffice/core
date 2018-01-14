@@ -2391,7 +2391,7 @@ sal_Bool SAL_CALL ODatabaseForm::getGroupControl()
     {
         sal_Int32 nCycle = 0;
         ::cppu::enum2int(nCycle, m_aCycle);
-        return (TabulatorCycle)nCycle != TabulatorCycle_PAGE;
+        return static_cast<TabulatorCycle>(nCycle) != TabulatorCycle_PAGE;
     }
 
     if (isLoaded() && getConnection().is())
@@ -3801,7 +3801,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
             default : OSL_FAIL("ODatabaseForm::write : wrong CommandType !");
         }
     }
-    _rxOutStream->writeShort((sal_Int16)eTranslated); // former DataSelectionType
+    _rxOutStream->writeShort(static_cast<sal_Int16>(eTranslated)); // former DataSelectionType
 
     // very old versions expect a CursorType here
     _rxOutStream->writeShort(2); // DatabaseCursorType_KEYSET
@@ -3821,22 +3821,22 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     // html form stuff
     OUString sTmp = INetURLObject::decode( m_aTargetURL, INetURLObject::DecodeMechanism::Unambiguous);
     _rxOutStream << sTmp;
-    _rxOutStream->writeShort( (sal_Int16)m_eSubmitMethod );
-    _rxOutStream->writeShort( (sal_Int16)m_eSubmitEncoding );
+    _rxOutStream->writeShort( static_cast<sal_Int16>(m_eSubmitMethod) );
+    _rxOutStream->writeShort( static_cast<sal_Int16>(m_eSubmitEncoding) );
     _rxOutStream << m_aTargetFrame;
 
     // version 2 didn't know some options and the "default" state
-    sal_Int32 nCycle = (sal_Int32)TabulatorCycle_RECORDS;
+    sal_Int32 nCycle = sal_Int32(TabulatorCycle_RECORDS);
     if (m_aCycle.hasValue())
     {
         ::cppu::enum2int(nCycle, m_aCycle);
         if (m_aCycle == TabulatorCycle_PAGE)
                 // unknown in earlier versions
-            nCycle = (sal_Int32)TabulatorCycle_RECORDS;
+            nCycle = sal_Int32(TabulatorCycle_RECORDS);
     }
     _rxOutStream->writeShort(static_cast<sal_Int16>(nCycle));
 
-    _rxOutStream->writeShort((sal_Int16)m_eNavigation);
+    _rxOutStream->writeShort(static_cast<sal_Int16>(m_eNavigation));
 
     OUString sFilter;
     OUString sHaving;
@@ -3895,7 +3895,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
 
     sal_Int16 nCursorSourceType = _rxInStream->readShort();
     sal_Int32 nCommandType = 0;
-    switch ((DataSelectionType)nCursorSourceType)
+    switch (static_cast<DataSelectionType>(nCursorSourceType))
     {
         case DataSelectionType_TABLE : nCommandType = CommandType::TABLE; break;
         case DataSelectionType_QUERY : nCommandType = CommandType::QUERY; break;
@@ -3903,7 +3903,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
         case DataSelectionType_SQLPASSTHROUGH:
         {
             nCommandType = CommandType::COMMAND;
-            bool bEscapeProcessing = ((DataSelectionType)nCursorSourceType) != DataSelectionType_SQLPASSTHROUGH;
+            bool bEscapeProcessing = static_cast<DataSelectionType>(nCursorSourceType) != DataSelectionType_SQLPASSTHROUGH;
             m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(bEscapeProcessing));
         }
         break;
@@ -3933,15 +3933,15 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     OUString sTmp;
     _rxInStream >> sTmp;
     m_aTargetURL = INetURLObject::decode( sTmp, INetURLObject::DecodeMechanism::Unambiguous);
-    m_eSubmitMethod     = (FormSubmitMethod)_rxInStream->readShort();
-    m_eSubmitEncoding       = (FormSubmitEncoding)_rxInStream->readShort();
+    m_eSubmitMethod     = static_cast<FormSubmitMethod>(_rxInStream->readShort());
+    m_eSubmitEncoding       = static_cast<FormSubmitEncoding>(_rxInStream->readShort());
     _rxInStream >> m_aTargetFrame;
 
     if (nVersion > 1)
     {
         sal_Int32 nCycle = _rxInStream->readShort();
         m_aCycle <<= TabulatorCycle(nCycle);
-        m_eNavigation = (NavigationBarMode)_rxInStream->readShort();
+        m_eNavigation = static_cast<NavigationBarMode>(_rxInStream->readShort());
 
         _rxInStream >> sAggregateProp;
         setPropertyValue(PROPERTY_FILTER, makeAny(sAggregateProp));

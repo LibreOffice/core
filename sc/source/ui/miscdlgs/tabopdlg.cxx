@@ -305,7 +305,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
         }
 
         if (nError)
-            RaiseError( (ScTabOpErr) nError );
+            RaiseError( static_cast<ScTabOpErr>(nError) );
         else
         {
             ScTabOpParam aOutParam(theFormulaCell, theFormulaEnd, theRowCell, theColCell, eMode);

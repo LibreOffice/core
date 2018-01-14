@@ -1551,7 +1551,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             if ( Value >>= n )
             {
                 vcl::Font aFont = pWindow->GetControlFont();
-                aFont.SetRelief( (FontRelief)n );
+                aFont.SetRelief( static_cast<FontRelief>(n) );
                 pWindow->SetControlFont( aFont );
             }
         }
@@ -1562,7 +1562,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             if ( Value >>= n )
             {
                 vcl::Font aFont = pWindow->GetControlFont();
-                aFont.SetEmphasisMark( (FontEmphasisMark)n );
+                aFont.SetEmphasisMark( static_cast<FontEmphasisMark>(n) );
                 pWindow->SetControlFont( aFont );
             }
         }
@@ -2007,10 +2007,10 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                 aProp <<= static_cast<sal_Int32>(GetWindow()->GetDisplayBackground().GetColor().GetColor());
             break;
             case BASEPROPERTY_FONTRELIEF:
-                aProp <<= (sal_Int16) GetWindow()->GetControlFont().GetRelief();
+                aProp <<= static_cast<sal_Int16>(GetWindow()->GetControlFont().GetRelief());
             break;
             case BASEPROPERTY_FONTEMPHASISMARK:
-                aProp <<= (sal_Int16) GetWindow()->GetControlFont().GetEmphasisMark();
+                aProp <<= static_cast<sal_Int16>(GetWindow()->GetControlFont().GetEmphasisMark());
             break;
             case BASEPROPERTY_TEXTCOLOR:
                 aProp <<= static_cast<sal_Int32>(GetWindow()->GetControlForeground().GetColor());

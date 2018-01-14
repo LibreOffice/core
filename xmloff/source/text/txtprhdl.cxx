@@ -195,7 +195,7 @@ static SvXMLEnumMapEntry<RubyAdjust> const pXML_RubyAdjust_Enum[] =
     { XML_RIGHT,                RubyAdjust_RIGHT },
     { XML_DISTRIBUTE_LETTER,    RubyAdjust_BLOCK },
     { XML_DISTRIBUTE_SPACE,     RubyAdjust_INDENT_BLOCK },
-    { XML_TOKEN_INVALID,        (RubyAdjust)0 }
+    { XML_TOKEN_INVALID,        RubyAdjust(0) }
 };
 
 static SvXMLEnumMapEntry<sal_uInt16> const pXML_FontRelief_Enum[] =
@@ -232,7 +232,7 @@ static SvXMLEnumMapEntry<drawing::TextVerticalAdjust> const pXML_VerticalAlign_E
     { XML_MIDDLE,       drawing::TextVerticalAdjust_CENTER },
     { XML_BOTTOM,       drawing::TextVerticalAdjust_BOTTOM },
     { XML_JUSTIFY,      drawing::TextVerticalAdjust_BLOCK },
-    { XML_TOKEN_INVALID, (drawing::TextVerticalAdjust)0 }
+    { XML_TOKEN_INVALID, drawing::TextVerticalAdjust(0) }
 };
 
 class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
@@ -428,7 +428,7 @@ SvXMLEnumMapEntry<WrapTextMode> const pXML_Wrap_Enum[] =
     { XML_DYNAMIC,      WrapTextMode_DYNAMIC },
     { XML_LEFT,         WrapTextMode_LEFT },
     { XML_RIGHT,        WrapTextMode_RIGHT },
-    { XML_TOKEN_INVALID, (WrapTextMode)0 }
+    { XML_TOKEN_INVALID, WrapTextMode(0) }
 };
 
 class XMLWrapPropHdl_Impl : public XMLPropertyHandler
@@ -554,7 +554,7 @@ SvXMLEnumMapEntry<TextContentAnchorType> const pXML_Anchor_Enum[] =
     { XML_FRAME,         TextContentAnchorType_AT_FRAME },
     { XML_PARAGRAPH,     TextContentAnchorType_AT_PARAGRAPH },
     { XML_AS_CHAR,       TextContentAnchorType_AS_CHARACTER },
-    { XML_TOKEN_INVALID, (TextContentAnchorType)0 }
+    { XML_TOKEN_INVALID, TextContentAnchorType(0) }
 };
 
 bool XMLAnchorTypePropHdl::importXML(

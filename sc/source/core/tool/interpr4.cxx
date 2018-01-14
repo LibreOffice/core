@@ -1738,13 +1738,13 @@ formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, SvN
         if (p && p->GetRef() == 1)
         {
             p->GetDoubleAsReference() = fVal;
-            p->SetDoubleType( (sal_Int16)nFmt );
+            p->SetDoubleType( static_cast<sal_Int16>(nFmt) );
             return p;
         }
     }
 
     // Allocate a new token
-    auto p = new FormulaTypedDoubleToken( fVal, (sal_Int16)nFmt );
+    auto p = new FormulaTypedDoubleToken( fVal, static_cast<sal_Int16>(nFmt) );
     if ( mrContext.maTokens[mrContext.mnTokenCachePos] )
         mrContext.maTokens[mrContext.mnTokenCachePos]->DecRef();
     mrContext.maTokens[mrContext.mnTokenCachePos] = p;

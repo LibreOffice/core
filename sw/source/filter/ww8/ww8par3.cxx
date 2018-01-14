@@ -2548,7 +2548,7 @@ bool SwMSConvertControls::InsertControl(
     else
         nTemp = text::TextContentAnchorType_AS_CHARACTER;
 
-    xShapePropSet->setPropertyValue("AnchorType", uno::Any((sal_Int16)nTemp) );
+    xShapePropSet->setPropertyValue("AnchorType", uno::Any(static_cast<sal_Int16>(nTemp)) );
 
     xShapePropSet->setPropertyValue("VertOrient", uno::Any(sal_Int16(text::VertOrientation::TOP)) );
 

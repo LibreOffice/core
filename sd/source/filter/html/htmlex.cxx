@@ -417,7 +417,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
-            meMode = (HtmlPublishMode)temp;
+            meMode = static_cast<HtmlPublishMode>(temp);
         }
         else if ( pParams->Name == "IndexURL" )
         {
@@ -428,7 +428,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
-            meFormat = (PublishingFormat)temp;
+            meFormat = static_cast<PublishingFormat>(temp);
         }
         else if ( pParams->Name == "Compression" )
         {

@@ -147,7 +147,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
     pJumpTable2 = nullptr;
     maWildcardReversePattern.clear();
     maWildcardReversePattern2.clear();
-    TransliterationFlags transliterateFlags = (TransliterationFlags) aSrchPara.transliterateFlags;
+    TransliterationFlags transliterateFlags = static_cast<TransliterationFlags>(aSrchPara.transliterateFlags);
 
     // Create Transliteration class
     if( isSimpleTrans( transliterateFlags) )
@@ -155,7 +155,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
         if( !xTranslit.is() )
             xTranslit.set( Transliteration::create( m_xContext ) );
         xTranslit->loadModule(
-             (TransliterationModules)maskSimpleTrans(transliterateFlags),
+             static_cast<TransliterationModules>(maskSimpleTrans(transliterateFlags)),
              aSrchPara.Locale);
     }
     else if( xTranslit.is() )
@@ -168,7 +168,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
             xTranslit2.set( Transliteration::create( m_xContext ) );
         // Load transliteration module
         xTranslit2->loadModule(
-             (TransliterationModules) maskComplexTrans(transliterateFlags),
+             static_cast<TransliterationModules>(maskComplexTrans(transliterateFlags)),
              aSrchPara.Locale);
     }
 
@@ -190,7 +190,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
                 if (xTranslitPattern.is())
                 {
                     xTranslitPattern->loadModule(
-                            (TransliterationModules) maskSimpleRegexTrans(transliterateFlags),
+                            static_cast<TransliterationModules>(maskSimpleRegexTrans(transliterateFlags)),
                             aSrchPara.Locale);
                     sSrchStr = xTranslitPattern->transliterateString2String(
                             aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
@@ -837,7 +837,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
 
 void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
 {
-    TransliterationFlags transliterateFlags = (TransliterationFlags)rOptions.transliterateFlags;
+    TransliterationFlags transliterateFlags = static_cast<TransliterationFlags>(rOptions.transliterateFlags);
     // select the transliterated pattern string
     const OUString& rPatternStr =
         (isSimpleTrans(transliterateFlags) ? sSrchStr

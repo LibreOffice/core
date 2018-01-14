@@ -427,10 +427,10 @@ void SvxHyperlinkTabPageBase::GetDataFromCommonFields( OUString& aStrName,
     aStrIntName = mpEdText->GetText();
     aStrName    = mpEdIndication->GetText();
     aStrFrame   = mpCbbFrame->GetText();
-    eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectedEntryPos()+1);
+    eMode       = static_cast<SvxLinkInsertMode>(mpLbForm->GetSelectedEntryPos()+1);
     // Ask dialog whether the current doc is a HTML-doc
     if (static_cast<SvxHpLinkDlg*>(mpDialog.get())->IsHTMLDoc())
-        eMode = (SvxLinkInsertMode) ( sal_uInt16(eMode) | HLINK_HTMLMODE );
+        eMode = static_cast<SvxLinkInsertMode>( sal_uInt16(eMode) | HLINK_HTMLMODE );
 }
 
 // reset dialog-fields

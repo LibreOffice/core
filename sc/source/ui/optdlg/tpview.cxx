@@ -528,11 +528,11 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     if ( rCoreSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rCoreSet->Get( SID_ATTR_METRIC ));
-        FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
+        FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
 
         for ( sal_Int32 i = 0; i < m_pUnitLB->GetEntryCount(); ++i )
         {
-            if ( (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( i )) == eFieldUnit )
+            if ( static_cast<FieldUnit>(reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( i ))) == eFieldUnit )
             {
                 m_pUnitLB->SelectEntryPos( i );
                 break;
@@ -639,7 +639,7 @@ IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl, ListBox&, void)
     const sal_Int32 nMPos = m_pUnitLB->GetSelectedEntryPos();
     if(nMPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        FieldUnit eFieldUnit = (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos ));
+        FieldUnit eFieldUnit = static_cast<FieldUnit>(reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos )));
         sal_Int64 nVal =
             m_pTabMF->Denormalize( m_pTabMF->GetValue( FUNIT_TWIP ) );
         ::SetFieldUnit( *m_pTabMF, eFieldUnit );

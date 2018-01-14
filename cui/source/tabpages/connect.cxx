@@ -367,7 +367,7 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet* rAttrs)
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            rAttrs->Put( SdrEdgeKindItem( (SdrEdgeKind) nPos ) );
+            rAttrs->Put( SdrEdgeKindItem( static_cast<SdrEdgeKind>(nPos) ) );
             bModified = true;
         }
     }
@@ -453,7 +453,7 @@ void SvxConnectionPage::ChangeAttrHdl_Impl(void const * p)
         sal_Int32 nPos = m_pLbType->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            aAttrSet.Put( SdrEdgeKindItem( (SdrEdgeKind) nPos ) );
+            aAttrSet.Put( SdrEdgeKindItem( static_cast<SdrEdgeKind>(nPos) ) );
         }
     }
 

@@ -766,7 +766,7 @@ const char * dbg_out(SwNodes & rNodes)
 
 static OUString lcl_dbg_out(const SwUndo & rUndo)
 {
-    return "[ " + OUString::number((int)rUndo.GetId())
+    return "[ " + OUString::number(static_cast<int>(rUndo.GetId()))
                 + ": " + rUndo.GetComment() + " ]";
 }
 

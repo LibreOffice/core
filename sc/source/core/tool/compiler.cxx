@@ -2903,7 +2903,7 @@ bool ScCompiler::IsOpCode2( const OUString& rName )
 
     if (bFound)
     {
-        maRawToken.SetOpCode( (OpCode) --i );
+        maRawToken.SetOpCode( static_cast<OpCode>(--i) );
     }
     return bFound;
 }

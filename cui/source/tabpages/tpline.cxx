@@ -543,7 +543,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     const CntUInt16Item* pPageTypeItem = rSet.GetItem<CntUInt16Item>(SID_PAGE_TYPE, false);
     if (pPageTypeItem)
-        SetPageType((PageType) pPageTypeItem->GetValue());
+        SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
     if( m_nDlgType == 0 && m_pDashList.is() )
     {
         sal_Int32 nPos;
@@ -954,7 +954,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             }
         }
     }
-    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE, (sal_uInt16)m_nPageType));
+    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE, static_cast<sal_uInt16>(m_nPageType)));
     return bModified;
 }
 
@@ -1781,7 +1781,7 @@ void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
     if (pLineEndListItem)
         SetLineEndList(pLineEndListItem->GetLineEndList());
     if (pPageTypeItem)
-        SetPageType((PageType) pPageTypeItem->GetValue());
+        SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
     Construct();

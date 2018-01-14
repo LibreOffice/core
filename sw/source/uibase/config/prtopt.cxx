@@ -143,7 +143,7 @@ void SwPrintOptions::ImplCommit()
             case  2: pValues[nProp] <<= m_bPrintControl; break;
             case  3: pValues[nProp] <<= m_bPrintPageBackground; break;
             case  4: pValues[nProp] <<= m_bPrintBlackFont; break;
-            case  5: pValues[nProp] <<=  (sal_Int32)m_nPrintPostIts       ; break;
+            case  5: pValues[nProp] <<=  static_cast<sal_Int32>(m_nPrintPostIts)       ; break;
             case  6: pValues[nProp] <<= m_bPrintReverse; break;
             case  7: pValues[nProp] <<= m_bPrintProspect; break;
             case  8: pValues[nProp] <<= m_bPrintProspectRTL; break;

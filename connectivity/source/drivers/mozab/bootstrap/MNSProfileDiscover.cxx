@@ -67,7 +67,7 @@ namespace connectivity
         //Thunderbird and firefox profiles are saved in profiles.ini
         void ProfileAccess::LoadXPToolkitProfiles(MozillaProductType product)
         {
-            sal_Int32 index=(sal_Int32)product;
+            sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];
 
             OUString regDir = getRegistryDir(product);
@@ -142,7 +142,7 @@ namespace connectivity
 
         OUString ProfileAccess::getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName )
         {
-            sal_Int32 index=(sal_Int32)product;
+            sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];
             if (rProduct.mProfileList.empty() || rProduct.mProfileList.find(profileName) == rProduct.mProfileList.end())
             {
@@ -155,13 +155,13 @@ namespace connectivity
 
         ::sal_Int32 ProfileAccess::getProfileCount( css::mozilla::MozillaProductType product)
         {
-            sal_Int32 index=(sal_Int32)product;
+            sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];
             return static_cast< ::sal_Int32 >(rProduct.mProfileList.size());
         }
         ::sal_Int32 ProfileAccess::getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list )
         {
-            sal_Int32 index=(sal_Int32)product;
+            sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];
             list.realloc(static_cast<sal_Int32>(rProduct.mProfileList.size()));
             sal_Int32 i=0;
@@ -179,7 +179,7 @@ namespace connectivity
 
         OUString ProfileAccess::getDefaultProfile( css::mozilla::MozillaProductType product )
         {
-            sal_Int32 index=(sal_Int32)product;
+            sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];
             if (!rProduct.mCurrentProfileName.isEmpty())
             {
@@ -197,7 +197,7 @@ namespace connectivity
 
         bool ProfileAccess::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName )
         {
-            sal_Int32 index=(sal_Int32)product;
+            sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];
             if (rProduct.mProfileList.empty() || rProduct.mProfileList.find(profileName) == rProduct.mProfileList.end())
             {

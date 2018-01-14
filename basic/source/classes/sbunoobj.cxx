@@ -488,7 +488,7 @@ SbxDataType unoToSbxType( TypeClass eType )
 
         case TypeClass_ENUM:            eRetType = SbxLONG;     break;
         case TypeClass_SEQUENCE:
-            eRetType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
+            eRetType = SbxDataType( SbxOBJECT | SbxARRAY );
             break;
 
 
@@ -867,7 +867,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
         if( auto pArray = dynamic_cast<SbxDimArray*>( xObj.get() ) )
         {
             short nDims = pArray->GetDims();
-            Type aElementType = getUnoTypeForSbxBaseType( (SbxDataType)(pArray->GetType() & 0xfff) );
+            Type aElementType = getUnoTypeForSbxBaseType( static_cast<SbxDataType>(pArray->GetType() & 0xfff) );
             TypeClass eElementTypeClass = aElementType.getTypeClass();
 
             // Normal case: One dimensional array
@@ -1861,7 +1861,7 @@ OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
                 {
                     Type aType = rProp.Type;
                     if( aType.getTypeClass() == TypeClass_SEQUENCE )
-                        eType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
+                        eType = SbxDataType( SbxOBJECT | SbxARRAY );
                 }
             }
             aPropStr.append( Dbg_SbxDataType2String( eType ) );
@@ -1930,7 +1930,7 @@ OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
             {
                 Reference< XIdlClass > xClass = rxMethod->getReturnType();
                 if( xClass.is() && xClass->getTypeClass() == TypeClass_SEQUENCE )
-                    eType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
+                    eType = SbxDataType( SbxOBJECT | SbxARRAY );
             }
             // output the name and the type
             aRet.append( Dbg_SbxDataType2String( eType ) );
@@ -4793,7 +4793,7 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
                 {
                     if( rPropInfo.getTypeClass() == TypeClass_SEQUENCE )
                     {
-                        eType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
+                        eType = SbxDataType( SbxOBJECT | SbxARRAY );
                     }
                 }
             }

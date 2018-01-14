@@ -172,7 +172,7 @@ namespace dbp
             }
 
             // ListSourceType: SQL
-            getContext().xObjectModel->setPropertyValue("ListSourceType", makeAny((sal_Int32)ListSourceType_SQL));
+            getContext().xObjectModel->setPropertyValue("ListSourceType", makeAny(sal_Int32(ListSourceType_SQL)));
 
             if (isListBox())
             {

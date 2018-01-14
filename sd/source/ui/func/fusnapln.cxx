@@ -173,8 +173,8 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
         pPV = mpView->GetSdrPageView();
 
-        switch ( (SnapKind) static_cast<const SfxAllEnumItem&>(
-                 pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue() )
+        switch ( static_cast<SnapKind>(static_cast<const SfxAllEnumItem&>(
+                 pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue()) )
         {
             case SK_HORIZONTAL  : eKind = SdrHelpLineKind::Horizontal;   break;
             case SK_VERTICAL    : eKind = SdrHelpLineKind::Vertical;     break;

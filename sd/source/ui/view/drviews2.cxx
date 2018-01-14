@@ -2955,7 +2955,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SfxStringItem aStyleNameItem( SID_STYLE_EDIT, pStyleSheet->GetName() );
                 aSet.Put(aStyleNameItem);
 
-                SfxUInt16Item aStyleFamilyItem( SID_STYLE_FAMILY, (sal_uInt16)pStyleSheet->GetFamily() );
+                SfxUInt16Item aStyleFamilyItem( SID_STYLE_FAMILY, static_cast<sal_uInt16>(pStyleSheet->GetFamily()) );
                 aSet.Put(aStyleFamilyItem);
 
                 rReq.SetArgs(aSet);
@@ -3441,7 +3441,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_SET_SUB_SCRIPT:
         {
             SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
-            SvxEscapement eEsc = (SvxEscapement ) aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
+            SvxEscapement eEsc = static_cast<SvxEscapement>(aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
             if( eEsc == SvxEscapement::Subscript )
                 aItem.SetEscapement( SvxEscapement::Off );
             else
@@ -3452,7 +3452,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_SET_SUPER_SCRIPT:
         {
             SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
-            SvxEscapement eEsc = (SvxEscapement ) aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
+            SvxEscapement eEsc = static_cast<SvxEscapement>(aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
             if( eEsc == SvxEscapement::Superscript )
                 aItem.SetEscapement( SvxEscapement::Off );
             else

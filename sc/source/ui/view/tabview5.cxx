@@ -171,8 +171,8 @@ ScTabView::~ScTabView()
                     ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
                     for (int k = 0; k < 4; ++k)
                     {
-                        if (rOtherViewData.HasEditView((ScSplitPos)k))
-                            pThisViewShell->RemoveWindowFromForeignEditView(pOtherViewShell, (ScSplitPos)k);
+                        if (rOtherViewData.HasEditView(static_cast<ScSplitPos>(k)))
+                            pThisViewShell->RemoveWindowFromForeignEditView(pOtherViewShell, static_cast<ScSplitPos>(k));
                     }
                 };
 
@@ -234,7 +234,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
         for (i=0; i<4; i++)
             if (pGridWin[i])
             {
-                if ( SC_SPLIT_BOTTOMLEFT != (ScSplitPos)i )
+                if ( SC_SPLIT_BOTTOMLEFT != static_cast<ScSplitPos>(i) )
                     pDrawView->AddWindowToPaintView(pGridWin[i], nullptr);
             }
         pDrawView->RecalcScale();

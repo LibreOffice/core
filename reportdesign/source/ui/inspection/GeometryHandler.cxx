@@ -1249,12 +1249,12 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
                 style::VerticalAlignment nParagraphVertAlign = style::VerticalAlignment_TOP;
                 aPropertyValue >>= nParagraphVertAlign;
                 if (sal_uInt32(nParagraphVertAlign) < SAL_N_ELEMENTS(RID_STR_VERTICAL_ALIGN_CONST) - 1)
-                    aControlValue <<= RptResId(RID_STR_VERTICAL_ALIGN_CONST[(sal_uInt32)nParagraphVertAlign]);
+                    aControlValue <<= RptResId(RID_STR_VERTICAL_ALIGN_CONST[static_cast<sal_uInt32>(nParagraphVertAlign)]);
             }
             break;
         case PROPERTY_ID_PARAADJUST:
             {
-                sal_Int16 nParagraphAdjust = (sal_Int16)style::ParagraphAdjust_LEFT;
+                sal_Int16 nParagraphAdjust = sal_Int16(style::ParagraphAdjust_LEFT);
                 aPropertyValue >>= nParagraphAdjust;
                 if (static_cast<sal_uInt32>(nParagraphAdjust) < SAL_N_ELEMENTS(RID_STR_PARAADJUST_CONST) - 1)
                     aControlValue <<= RptResId(RID_STR_VERTICAL_ALIGN_CONST[nParagraphAdjust]);
