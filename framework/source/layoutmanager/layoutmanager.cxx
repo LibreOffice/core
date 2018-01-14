@@ -910,7 +910,7 @@ void LayoutManager::implts_backupProgressBarWrapper()
     m_xProgressBarBackup = m_aProgressBarElement.m_xUIElement;
 
     // remove the relation between this old progress bar and our old status bar.
-    // Otherwhise we work on disposed items ...
+    // Otherwise we work on disposed items ...
     // The internal used ProgressBarWrapper can handle a NULL reference.
     if ( m_xProgressBarBackup.is() )
     {

@@ -170,7 +170,7 @@ void ConfigAccess::close()
                     aReadLock.unlock();
 
     @attention  During this time it's not allowed to call the methods open() or close()!
-                Otherwhise you will change your own referenced config access. Anything will
+                Otherwise you will change your own referenced config access. Anything will
                 be possible then.
 
     @return A c++(!) reference to the uno instance of the configuration access point.

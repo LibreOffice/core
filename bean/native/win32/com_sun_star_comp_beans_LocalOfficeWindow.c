@@ -126,7 +126,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
     awt.FreeDrawingSurface(ds);
 
     /* Register own window procedure
-       Do it one times only! Otherwhise
+       Do it one times only! Otherwise
        multiple instances will be registered
        and calls on such construct produce
        a stack overflow.

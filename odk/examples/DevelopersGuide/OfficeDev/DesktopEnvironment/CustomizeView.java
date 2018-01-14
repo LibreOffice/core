@@ -169,7 +169,7 @@ public class CustomizeView extends    JPanel
      * Note: Because we are listener status events too - hopefully
      * we get a notification, if toggling was successfully or not.
      * We use this information to update our check boxes again.
-     * But such update doesn't force (hopefully) an action event. Otherwhise
+     * But such update doesn't force (hopefully) an action event. Otherwise
      * we can produce a never ending recursion!
      */
     private class ClickListener implements ActionListener,
@@ -248,7 +248,7 @@ public class CustomizeView extends    JPanel
          *
          * @param aEvent
          *          describes the source which fire this event
-         *          Must be our internal saved frame. Otherwhise
+         *          Must be our internal saved frame. Otherwise
          *          somewhere know us without a registration ...
          */
         public void disposing(com.sun.star.lang.EventObject aEvent)
@@ -264,7 +264,7 @@ public class CustomizeView extends    JPanel
 
     /**
      * If this java application shutdown - we must cancel all current existing
-     * listener connections. Otherwhise the office will run into some
+     * listener connections. Otherwise the office will run into some
      * DisposedExceptions if it tries to use these forgotten listener references.
      * And of course it can die doing that.
      * We are registered at a central object to be informed if the VM will exit.

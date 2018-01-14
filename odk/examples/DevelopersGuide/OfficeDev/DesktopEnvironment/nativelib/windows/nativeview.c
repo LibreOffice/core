@@ -115,7 +115,7 @@ JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
     awt.FreeDrawingSurface(ds);
 
     /* Register own window procedure
-       Do it one times only! Otherwhise
+       Do it one times only! Otherwise
        multiple instances will be registered
        and calls on such construct produce
        a stack overflow.

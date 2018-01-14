@@ -698,7 +698,7 @@ void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent&  )
 void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
 {
     /* Attention
-        Please use keyPressed() instead of this method. Otherwhise it would be possible, that
+        Please use keyPressed() instead of this method. Otherwise it would be possible, that
         - a key input may be first switch to the backing mode
         - and this component register itself as key listener too
         - and it's first event will be a keyRealeased() for the already well known event, which switched to the backing mode!

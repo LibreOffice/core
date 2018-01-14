@@ -227,7 +227,7 @@ bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
     bool bPartFound = sPart.matchIgnoreAsciiCaseAsciiL(pPartIdentifier,nPartLength);
 
     // If it exist - we can split the part and return sal_True.
-    // Otherwhise we do nothing and return sal_False.
+    // Otherwise we do nothing and return sal_False.
     if (bPartFound)
     {
         // But may the part has optional arguments - separated by a "?".

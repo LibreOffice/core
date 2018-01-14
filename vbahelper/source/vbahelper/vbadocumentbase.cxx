@@ -178,7 +178,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
             try {
                 // If close is not supported by this model - try to dispose it.
                 // But if the model disagree with a reset request for the modify state
-                // we shouldn't do so. Otherwhise some strange things can happen.
+                // we shouldn't do so. Otherwise some strange things can happen.
                 uno::Reference< lang::XComponent > xDisposable ( xModel, uno::UNO_QUERY_THROW );
                 xDisposable->dispose();
             }
