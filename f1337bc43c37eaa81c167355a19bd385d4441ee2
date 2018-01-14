@@ -22,6 +22,30 @@
       "revId": "f1337bc43c37eaa81c167355a19bd385d4441ee2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_92b98e31",
+        "filename": "vcl/source/window/splitwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-14T18:59:51Z",
+      "side": 1,
+      "message": "because I\u0027m not sure if these objects have ordering dependencies in their destruction (vcl objects frequently have links to each other and like to fire listeners all over the place)",
+      "parentUuid": "fa31d9ce_076d5e04",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 21
+      },
+      "revId": "f1337bc43c37eaa81c167355a19bd385d4441ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
