@@ -307,7 +307,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     bool bOneliner = m_bStartedParaSdt && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() && lcl_isOnelinerSdt(m_aStartedParagraphSdtPrAlias);
     if (bEndParaSdt || (m_bStartedParaSdt && m_bHadSectPr) || bOneliner)
     {
-        // This is the common case: "close sdt before the current paragraph" was requrested by the next paragraph.
+        // This is the common case: "close sdt before the current paragraph" was requested by the next paragraph.
         EndSdtBlock();
         m_bStartedParaSdt = false;
         m_aStartedParagraphSdtPrAlias.clear();
@@ -1149,7 +1149,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
 
     if (m_bEndCharSdt)
     {
-        // This is the common case: "close sdt before the current run" was requrested by the next run.
+        // This is the common case: "close sdt before the current run" was requested by the next run.
 
         // if another sdt starts in this run, then wait
         // as closing the sdt now, might cause nesting of sdts

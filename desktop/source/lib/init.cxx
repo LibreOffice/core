@@ -946,7 +946,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
                                 if (rcNew.m_nPart == -1)
                                 {
-                                    // Don't merge unless fully overlaped.
+                                    // Don't merge unless fully overlapped.
                                     SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString() << "?");
                                     if (rcNew.m_aRectangle.IsInside(rcOld.m_aRectangle))
                                     {
@@ -956,7 +956,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                 }
                                 else if (rcOld.m_nPart == -1)
                                 {
-                                    // Don't merge unless fully overlaped.
+                                    // Don't merge unless fully overlapped.
                                     SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString() << "?");
                                     if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
                                     {

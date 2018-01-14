@@ -1725,7 +1725,7 @@ sub collect_directories_with_create_flag_from_directoryarray
                         $directoryhash{'HostName'} = $directoryname;
                         $directoryhash{'specificlanguage'} = $onedir->{'specificlanguage'};
                         $directoryhash{'Dir'} = $onedir->{'gid'};
-                        if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; } # Exeception for Windows?
+                        if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; } # Exception for Windows?
 
                         # saving also the modules
                         $directoryhash{'modules'} = $onedir->{'modules'};
