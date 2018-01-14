@@ -92,7 +92,7 @@ public:
     // Maps the UCB property names contained in rProps with their DAV property
     // counterparts, if possible. All unmappable properties will be included
     // unchanged in resulting vector.
-    // The vector filles by this method can directly be handed over to
+    // The vector filled by this method can directly be handed over to
     // DAVResourceAccess::PROPFIND. The result from PROPFIND
     // (vector< DAVResource >) can be used to create a ContentProperties
     // instance which can map DAV properties back to UCB properties.
@@ -102,7 +102,7 @@ public:
     // Maps the UCB property names contained in rProps with their HTTP header
     // counterparts, if possible. All unmappable properties will be included
     // unchanged in resulting vector.
-    // The vector filles by this method can directly be handed over to
+    // The vector filled by this method can directly be handed over to
     // DAVResourceAccess::HEAD. The result from HEAD (vector< DAVResource >)
     // can be used to create a ContentProperties instance which can map header
     // names back to UCB properties.
