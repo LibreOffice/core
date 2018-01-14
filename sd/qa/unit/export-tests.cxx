@@ -76,7 +76,7 @@ using namespace css::animations;
 class SdExportTest : public SdModelTestBaseXML
 {
 public:
-    void testN821567();
+    void testBackgroundImage();
     void testMediaEmbedding();
     void testFdo84043();
     void testTdf97630();
@@ -96,7 +96,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
-    CPPUNIT_TEST(testN821567);
+    CPPUNIT_TEST(testBackgroundImage);
     CPPUNIT_TEST(testMediaEmbedding);
     CPPUNIT_TEST(testFdo84043);
     CPPUNIT_TEST(testTdf97630);
@@ -144,27 +144,70 @@ public:
 
 };
 
-void SdExportTest::testN821567()
+void SdExportTest::testBackgroundImage()
 {
-    OUString bgImage;
-    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/n821567.pptx"), PPTX );
+    // Initial bug: N821567
 
-    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "not exactly one page", static_cast<sal_Int32>(1), xDoc->getDrawPages()->getCount() );
-    uno::Reference< drawing::XDrawPage > xPage( getPage( 0, xDocShRef ) );
+    // Check if Slide background image is imported from PPTX and exported to PPTX, PPT and ODP correctly
 
-    uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
-    uno::Any aAny = xPropSet->getPropertyValue( "Background" );
-    if(aAny.hasValue())
+    OUString bgImageName;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/n821567.pptx"), PPTX);
+
+    // Check that imported background image from PPTX exists
     {
-        uno::Reference< beans::XPropertySet > aXBackgroundPropSet;
-        aAny >>= aXBackgroundPropSet;
-        aAny = aXBackgroundPropSet->getPropertyValue( "FillBitmapName" );
-        aAny >>= bgImage;
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1), xDoc->getDrawPages()->getCount());
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+
+        uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
+        uno::Any aAny = xPropertySet->getPropertyValue("Background");
+        if (aAny.has<uno::Reference<beans::XPropertySet>>())
+        {
+            uno::Reference<beans::XPropertySet> xBackgroundPropSet;
+            aAny >>= xBackgroundPropSet;
+            aAny = xBackgroundPropSet->getPropertyValue("FillBitmapName");
+            aAny >>= bgImageName;
+        }
+        CPPUNIT_ASSERT_MESSAGE("Slide Background is not imported from PPTX correctly", !bgImageName.isEmpty());
     }
-    CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported properly", !bgImage.isEmpty());
+
+    // Save as PPTX, reload and check again so we make sure exporting to PPTX is working correctly
+    {
+        xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1), xDoc->getDrawPages()->getCount());
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+
+        uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
+        uno::Any aAny = xPropertySet->getPropertyValue("Background");
+        if (aAny.hasValue())
+        {
+            uno::Reference<beans::XPropertySet> xBackgroundPropSet;
+            aAny >>= xBackgroundPropSet;
+            aAny = xBackgroundPropSet->getPropertyValue("FillBitmapName");
+            aAny >>= bgImageName;
+        }
+        CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported to PPTX correctly", !bgImageName.isEmpty());
+    }
+
+    // Save as ODP, reload and check again so we make sure exporting and importing to ODP is working correctly
+    {
+        xDocShRef = saveAndReload(xDocShRef.get(), ODP);
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1), xDoc->getDrawPages()->getCount());
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+
+        uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
+        uno::Any aAny = xPropertySet->getPropertyValue("Background");
+        if (aAny.hasValue())
+        {
+            uno::Reference<beans::XPropertySet> xBackgroundPropSet;
+            aAny >>= xBackgroundPropSet;
+            aAny = xBackgroundPropSet->getPropertyValue("FillBitmapName");
+            aAny >>= bgImageName;
+        }
+        CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported or imported to ODP correctly", !bgImageName.isEmpty());
+    }
 
     xDocShRef->DoClose();
 }
