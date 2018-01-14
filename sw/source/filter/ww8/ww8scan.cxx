@@ -3415,6 +3415,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 if (bFail)
                 {
                     SAL_WARN("sw.ww8", "broken offset, ignoring");
+                    p->nStartPos = p->nEndPos = WW8_FC_MAX;
                     pPieceIter->SetIdx(nOldPos);
                     return;
                 }
@@ -3425,6 +3426,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                     if (bFail)
                     {
                         SAL_WARN("sw.ww8", "broken offset, ignoring");
+                        p->nStartPos = p->nEndPos = WW8_FC_MAX;
                         pPieceIter->SetIdx(nOldPos);
                         return;
                     }
@@ -3434,6 +3436,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 if (bFail)
                 {
                     SAL_WARN("sw.ww8", "broken offset, ignoring");
+                    p->nStartPos = p->nEndPos = WW8_FC_MAX;
                     pPieceIter->SetIdx(nOldPos);
                     return;
                 }
@@ -3444,6 +3447,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                     if (bFail)
                     {
                         SAL_WARN("sw.ww8", "broken offset, ignoring");
+                        p->nStartPos = p->nEndPos = WW8_FC_MAX;
                         pPieceIter->SetIdx(nOldPos);
                         return;
                     }
@@ -3454,6 +3458,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                     if (bFail)
                     {
                         SAL_WARN("sw.ww8", "broken offset, ignoring");
+                        p->nStartPos = p->nEndPos = WW8_FC_MAX;
                         pPieceIter->SetIdx(nOldPos);
                         return;
                     }
@@ -3506,6 +3511,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                             if (bFail)
                             {
                                 SAL_WARN("sw.ww8", "broken offset, ignoring");
+                                p->nStartPos = p->nEndPos = WW8_FC_MAX;
                                 continue;
                             }
 
@@ -3515,6 +3521,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                 if (bFail)
                                 {
                                     SAL_WARN("sw.ww8", "broken offset, ignoring");
+                                    p->nStartPos = p->nEndPos = WW8_FC_MAX;
                                     continue;
                                 }
                             }
@@ -3523,6 +3530,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                             if (bFail)
                             {
                                 SAL_WARN("sw.ww8", "broken offset, ignoring");
+                                p->nStartPos = p->nEndPos = WW8_FC_MAX;
                                 continue;
                             }
 
@@ -3541,6 +3549,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                 if (bFail)
                                 {
                                     SAL_WARN("sw.ww8", "broken offset, ignoring");
+                                    p->nStartPos = p->nEndPos = WW8_FC_MAX;
                                     continue;
                                 }
                                 if (bIsUnicode)
@@ -3551,6 +3560,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                 if (bFail)
                                 {
                                     SAL_WARN("sw.ww8", "broken offset, ignoring");
+                                    p->nStartPos = p->nEndPos = WW8_FC_MAX;
                                     continue;
                                 }
 
