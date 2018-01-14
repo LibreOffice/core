@@ -1434,7 +1434,7 @@ void SvTreeListBox::SetSublistOpenWithLeftRight()
     pImpl->bSubLstOpLR = true;
 }
 
-void SvTreeListBox::SetSublistNotOpenWithDoubleClick()
+void SvTreeListBox::SetSublistDontOpenWithDoubleClick()
 {
     pImpl->bSubLstOpDblClick = false;
 }
