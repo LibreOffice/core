@@ -19,11 +19,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,iOS_kitBridge))
 
-$(eval $(call gb_StaticLibrary_set_include,iOS_kitBridge,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/ios/generated \
-))
-
 $(eval $(call gb_StaticLibrary_add_cobjects,iOS_kitBridge,\
     ios/source/LibreOfficeKit \
 ))
