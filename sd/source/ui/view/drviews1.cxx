@@ -1124,7 +1124,7 @@ void DrawViewShell::ResetActualLayer()
     LayerTabBar* pLayerBar = GetLayerTabControl();
     if (pLayerBar != nullptr)
     {
-        // remember old layer cound and current layer id
+        // remember old layer count and current layer id
         // this is needed when one layer is renamed to
         // restore current layer
         sal_uInt16 nOldLayerCnt = pLayerBar->GetPageCount();

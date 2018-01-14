@@ -328,7 +328,7 @@ void ScTabView::InvalidateAttribs()
 
 // SetCursor - Cursor, set, draw, update InputWin
 // or send reference
-// Optimising breaks the funtionality
+// Optimising breaks the functionality
 
 void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 {
