@@ -20,7 +20,7 @@ $(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSGEN)/native-code.h
 
 
 #- Generate dynamic files  ---------------------------------------------------
-$(IOSGEN)/native-code.h: $(WORKDIR)/ios $(BUILDDIR)/config_host.mk \
+$(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
                          $(SRCDIR)/ios/CustomTarget_iOS_setup.mk \
 	                 $(SRCDIR)/solenv/bin/native-code.py
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
