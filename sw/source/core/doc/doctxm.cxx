@@ -639,7 +639,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         if (rSect.GetType()==TOX_CONTENT_SECTION)
         {
             const OUString rNm = rSect.GetSectionName();
-            if ( aName.startsWith(rNm) )
+            if ( rNm.startsWith(aName) )
             {
                 // Calculate number and set the Flag
                 nNum = rNm.copy( nNmLen ).toInt32();
