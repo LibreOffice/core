@@ -169,7 +169,7 @@ class OfficeDocument(object):
             traceback.print_exc()
 
         xFrame.initialize(xPeer)
-        #from now this frame is useable ...
+        #from now this frame is usable ...
         #and not part of the desktop tree.
         #You are alone with him .-)
         if listener is not None:

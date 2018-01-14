@@ -350,7 +350,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     }
                 }
 
-                // Notify controller implementation to its listeners. Controller is now useable from outside.
+                // Notify controller implementation to its listeners. Controller is now usable from outside.
                 Reference< XUpdatable > xUpdatable( xController, UNO_QUERY );
                 if ( xUpdatable.is() )
                 {

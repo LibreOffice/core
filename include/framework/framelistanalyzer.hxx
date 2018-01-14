@@ -29,7 +29,7 @@
 /** These enums can be combined as flags to enable/disable
     special search algorithm during analyze phase.
     see impl_analyze() for further information.
-    But note: To be useable as flags, these enums
+    But note: To be usable as flags, these enums
     must be values of range [2^n]! */
 enum class FrameAnalyzerFlags
 {

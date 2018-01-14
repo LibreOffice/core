@@ -26,7 +26,7 @@
 #include <vector>
 
 
-// helper class, only useable by OFilterContainer
+// helper class, only usable by OFilterContainer
 
 
 class CFilterContainer

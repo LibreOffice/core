@@ -558,7 +558,7 @@ SalI18N_InputContext::UpdateSpotLocation()
 }
 
 // set and unset the focus for the Input Context
-// the context may be NULL despite it is useable if the framewindow is
+// the context may be NULL despite it is usable if the framewindow is
 // in unmapped state
 
 void
