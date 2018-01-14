@@ -139,7 +139,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
 
     // This reference indicates, that we was already called before and
     // our asynchronous process was not finished yet.
-    // We have to reject double calls. Otherwhise we risk,
+    // We have to reject double calls. Otherwise we risk,
     // that we try to close an already closed resource ...
     // And its no problem to do nothing then. The UI user will try it again, if
     // non of these jobs was successfully.
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             bTerminateApp = true;
     }
 
-    // d) Otherwhise we have to: close all views to the same document, close the
+    // d) Otherwise we have to: close all views to the same document, close the
     //    document inside our own frame and decide then again, what has to be done!
     else
     {

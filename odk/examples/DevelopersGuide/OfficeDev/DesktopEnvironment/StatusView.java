@@ -239,7 +239,7 @@ public class StatusView extends    JPanel
 
     /**
      * If this java application shutdown - we must cancel all current existing
-     * listener connections. Otherwhise the office will run into some
+     * listener connections. Otherwise the office will run into some
      * DisposedExceptions if it tries to use these forgotten listener references.
      * And of course it can die doing that.
      * We are registered at a central object to be informed if the VM will exit.

@@ -364,7 +364,7 @@ public class FunctionHelper
 
             // pass the window the frame as his new container window.
             // It's necessary to do it first  - before you call anything else there.
-            // Otherwhise the frame throws some exceptions for "uninitialized state".
+            // Otherwise the frame throws some exceptions for "uninitialized state".
             xFrame.initialize( xWindow );
 
             // Insert the new frame in desktop hierarchy.
@@ -440,7 +440,7 @@ public class FunctionHelper
      *                      (Note: Deregistration is part of this listener himself!)
      *
      * @return  [XDispatch] It's the used dispatch object and can be used for deregistration of an optional listener.
-     *                      Otherwhise caller can ignore it.
+     *                      Otherwise caller can ignore it.
      */
     public static com.sun.star.frame.XDispatch execute(com.sun.star.frame.XFrame          xFrame     ,
                                                        com.sun.star.util.URL              aURL       ,

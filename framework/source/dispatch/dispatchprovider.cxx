@@ -393,7 +393,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         {
             // Attention: Found target is our own owner frame!
             // Don't ask him for his dispatcher. We know it already - it's our self dispatch helper.
-            // Otherwhise we can start a never ending recursiv call. Why?
+            // Otherwise we can start a never ending recursiv call. Why?
             // Somewere called our owner frame - he called some interceptor objects - and may by this dispatch provider
             // is called. If wa use queryDispatch() on our owner frame again - we start this call stack again ... and again.
             if (xFoundFrame==xFrame)

@@ -193,7 +193,7 @@ public class checkdispatchapi
     @Test public void checkInterceptorLifeTime() throws Exception
     {
         // Note: It's important for the following test, that aInterceptor will be hold alive by the uno reference
-        // xInterceptor. Otherwhise we can't check some internal states of aInterceptor at the end of this method, because
+        // xInterceptor. Otherwise we can't check some internal states of aInterceptor at the end of this method, because
         // it was already killed .-)
 
         Interceptor aInterceptor = new Interceptor(m_xMSF);

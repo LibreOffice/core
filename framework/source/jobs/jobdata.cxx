@@ -109,7 +109,7 @@ JobData::~JobData()
 void JobData::setAlias( const OUString& sAlias )
 {
     SolarMutexGuard g;
-    // delete all old information! Otherwhise we mix it with the new one ...
+    // delete all old information! Otherwise we mix it with the new one ...
     impl_reset();
 
     // take over the new information
@@ -175,7 +175,7 @@ void JobData::setAlias( const OUString& sAlias )
 void JobData::setService( const OUString& sService )
 {
     SolarMutexGuard g;
-    // delete all old information! Otherwhise we mix it with the new one ...
+    // delete all old information! Otherwise we mix it with the new one ...
     impl_reset();
     // take over the new information
     m_sService = sService;
@@ -291,7 +291,7 @@ void JobData::setResult( const JobResult& aResult )
     @short  set a new environment descriptor for this job
     @descr  It must(!) be done every time this container is initialized
             with new job datas e.g.: setAlias()/setEvent()/setService() ...
-            Otherwhise the environment will be unknown!
+            Otherwise the environment will be unknown!
  */
 void JobData::setEnvironment( EEnvironment eEnvironment )
 {
@@ -446,7 +446,7 @@ bool isEnabled( const OUString& sAdminTime ,
 {
     /*Attention!
         To prevent interpreting of TriGraphs inside next const string value,
-        we have to encode all '?' signs. Otherwhise e.g. "??-" will be translated
+        we have to encode all '?' signs. Otherwise e.g. "??-" will be translated
         to "~" ...
      */
     WildCard aISOPattern("\?\?\?\?-\?\?-\?\?*");
@@ -569,7 +569,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
     @short      reset all internal structures
     @descr      If someone recycles this instance, he can switch from one
                 using mode to another one. But then we have to reset all currently
-                used information. Otherwhise we mix it and they can make trouble.
+                used information. Otherwise we mix it and they can make trouble.
 
                 But note: that does not set defaults for internal used members, which
                 does not relate to any job property! e.g. the reference to the global
