@@ -37,7 +37,7 @@ protected:
 public:
 
     /** Does not create a pipe. Use assignment operator to
-        make this a useable pipe.
+        make this a usable pipe.
     */
     inline Pipe();
 

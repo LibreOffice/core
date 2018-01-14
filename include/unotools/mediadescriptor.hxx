@@ -42,7 +42,7 @@ namespace utl {
     @descr  It wraps a unordered_map around the Sequence< css::beans::PropertyValue >, which
             represent the MediaDescriptor item.
             Further this helper defines often used functions (as e.g. open of the required streams,
-            consistent checks etcpp.) and it defines all useable property names.
+            consistent checks etcpp.) and it defines all usable property names.
 
     @attention  This class isn't threadsafe and must be guarded from outside!
  */

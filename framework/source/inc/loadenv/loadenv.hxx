@@ -369,7 +369,7 @@ public:
                 close the frame if it was created before in case loading failed.
 
         @throw  A LoadEnvException only in cases, where an internal error indicates,
-                that the complete load environment seems to be not useable in general.
+                that the complete load environment seems to be not usable in general.
                 In such cases a RuntimeException would be to hard for the outside code :-)
 
         @throw  A RuntimeException in case any internal process indicates, that
@@ -454,7 +454,7 @@ private:
                 and could be activated successfully. An empty reference otherwise.
 
         @throw  A LoadEnvException only in cases, where an internal error indicates,
-                that the complete load environment seems to be not useable in general.
+                that the complete load environment seems to be not usable in general.
                 In such cases a RuntimeException would be to hard for the outside code :-)
 
         @throw  A RuntimeException in case any internal process indicates, that
@@ -462,7 +462,7 @@ private:
      */
     css::uno::Reference< css::frame::XFrame > impl_searchAlreadyLoaded();
 
-    /** @short  search for any target frame, which seems to be useable
+    /** @short  search for any target frame, which seems to be usable
                 for this load request.
 
         @descr  Because this special feature is bound to the target specifier "_default"
@@ -479,12 +479,12 @@ private:
                 </ul>
 
                 If a suitable target is located it will be locked. That's why the last rule
-                exists! If this method returns a valid frame reference, it was locked to be useable
+                exists! If this method returns a valid frame reference, it was locked to be usable
                 for this load request only. (Don't forget to reset this state later!)
                 Concurrent LoadEnv instances can synchronize her work be using such locks :-) HOPEFULLY
 
         @throw  A LoadEnvException only in cases, where an internal error indicates,
-                that the complete load environment seems to be not useable in general.
+                that the complete load environment seems to be not usable in general.
                 In such cases a RuntimeException would be to hard for the outside code :-)
 
         @throw  A RuntimeException in case any internal process indicates, that

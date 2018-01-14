@@ -130,7 +130,7 @@ public class OfficeDocument
             xFrame = UnoRuntime.queryInterface(XFrame.class, xMSF.createInstance("com.sun.star.frame.Frame"));
             xFrame.initialize(xWindow);
 
-            //from now this frame is useable ...
+            //from now this frame is usable ...
             //and not part of the desktop tree.
             //You are alone with him .-)
 

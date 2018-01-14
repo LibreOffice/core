@@ -176,7 +176,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     const css::uno::Type&                                                                                             aType         );
 
 
-    // useable for derived classes
+    // usable for derived classes
     protected:
 
 

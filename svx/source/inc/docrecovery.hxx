@@ -86,7 +86,7 @@ enum class EDocStates
 
     /* FINAL STATES */
 
-    /// the Auto/Emergency saved document isn't useable any longer
+    /// the Auto/Emergency saved document isn't usable any longer
     Damaged           = 0x040,
     /// the Auto/Emergency saved document is not really up-to-date (some changes can be missing)
     Incomplete        = 0x080,

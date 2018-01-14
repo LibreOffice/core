@@ -82,7 +82,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     // may a dispatch request before is still in progress (?!).
     // Then we should wait a little bit and block this new request.
     // In case we run into the timeout, we should reject this new request
-    // and return "FAILED" as result. Otherwhise we can start this new operation.
+    // and return "FAILED" as result. Otherwise we can start this new operation.
     if (!m_aLoader.waitWhileLoading(2000)) // => 2 sec.
     {
         if (xListener.is())
@@ -98,7 +98,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                 css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
     }
 
-    // OK ... now the internal loader seems to be useable for new requests
+    // OK ... now the internal loader seems to be usable for new requests
     // and our owner frame seems to be valid for such operations.
     // Initialize it with all new but needed properties and start the loading.
     css::uno::Reference< css::lang::XComponent > xComponent;

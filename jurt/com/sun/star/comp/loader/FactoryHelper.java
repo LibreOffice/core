@@ -136,8 +136,8 @@ public class FactoryHelper {
                 }
             }
 
-            if(_constructor == null) // have not found a useable constructor
-                throw new com.sun.star.uno.RuntimeException(getClass().getName() + " can not find a useable constructor");
+            if(_constructor == null) // have not found a usable constructor
+                throw new com.sun.star.uno.RuntimeException(getClass().getName() + " can not find a usable constructor");
         }
 
         private final XMultiServiceFactory getSMgr( XComponentContext xContext )
