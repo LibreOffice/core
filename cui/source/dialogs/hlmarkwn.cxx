@@ -551,7 +551,7 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 
 /*************************************************************************
 |*
-|* Click on Apply-Button / Doubleclick on item in tree
+|* Click on Apply-Button / Double-click on item in tree
 |*
 |************************************************************************/
 

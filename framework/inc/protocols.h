@@ -40,7 +40,7 @@ namespace framework{
 #define SPECIALPROTOCOL_PRIVATE_STREAM    "private:stream"
 // indicates creation of empty documents
 #define SPECIALPROTOCOL_PRIVATE_FACTORY   "private:factory"
-// internal protocol of the sfx project for generic dispatch funtionality
+// internal protocol of the sfx project for generic dispatch functionality
 #define SPECIALPROTOCOL_SLOT              "slot:"
 // external representation of the slot protocol using names instead of id's
 #define SPECIALPROTOCOL_UNO               ".uno:"

@@ -1001,7 +1001,7 @@ bool PNGReaderImpl::ImplPreparePass()
     mnYAdd      = pParam->mnYAdd;
 
     // in Interlace mode the size of scanline is not constant
-    // so first we calculate the number of entrys
+    // so first we calculate the number of entries
     long nScanWidth = (maOrigSize.Width() - mnXStart + mnXAdd - 1) / mnXAdd;
     mnScansize = nScanWidth;
 

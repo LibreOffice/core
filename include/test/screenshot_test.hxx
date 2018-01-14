@@ -78,7 +78,7 @@ public:
     /// as known dialog first. If not successful, it will then use the
     /// fallback version to dump the dialog.
     /// The syntax of the input file is as follows:
-    /// - emty lines are allowed
+    /// - empty lines are allowed
     /// - lines starting with '#' are treated as comment
     /// - all other lines should contain a *.ui filename in the same
     ///   notation as in the dialog constructors(see code)

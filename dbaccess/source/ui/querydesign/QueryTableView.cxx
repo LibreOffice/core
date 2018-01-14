@@ -613,7 +613,7 @@ void OQueryTableView::createNewConnection()
         }
         else
         {
-            // create a new conenction and append it
+            // create a new connection and append it
             VclPtrInstance<OQueryTableConnection> pQConn(this, pData);
             GetConnection(pQConn);
             pConn = pQConn;

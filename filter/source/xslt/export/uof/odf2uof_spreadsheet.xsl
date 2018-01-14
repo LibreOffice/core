@@ -690,7 +690,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <!-- In case a cell is being repeated, the cell will be created
-                        in a variabel, which is as many times given out, as being repeated -->
+                        in a variable, which is as many times given out, as being repeated -->
                         <xsl:variable name="tableRow">
                             <xsl:call-template name="write-table-row">
                                 <xsl:with-param name="table-name" select="$table-name"/>

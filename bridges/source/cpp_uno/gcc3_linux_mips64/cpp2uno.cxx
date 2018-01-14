@@ -111,7 +111,7 @@ namespace
   {
     /*  Most MIPS ABIs view the arguments as a struct, of which the
         first N words go in registers and the rest go on the stack.  If I < N, the
-        Ith word might go in Ith integer argument register or the Ith
+        With word might go in With integer argument register or the With
         floating-point one.  For these ABIs, we only need to remember the number
         of words passed so far.  We are interested only in n64 ABI,so it is the
         case.

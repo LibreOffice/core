@@ -37,12 +37,12 @@ import string
 class Parser:
     """
     This parser extracts comments from source files, tries to guess
-    their language and then prints out the german ones.
+    their language and then prints out the German ones.
     """
     def __init__(self):
         self.strip = string.punctuation + " \n"
         self.text_cat = self.start_text_cat()
-        parser = argparse.ArgumentParser(description='Searches for german comments in cxx/hxx source files inside a given root directory recursively.')
+        parser = argparse.ArgumentParser(description='Searches for German comments in cxx/hxx source files inside a given root directory recursively.')
         parser.add_argument("-f", "--filenames-only", action="store_true",
             help="Only print the filenames of files containing German comments")
         parser.add_argument("-v", "--verbose", action="store_true",
@@ -138,7 +138,7 @@ class Parser:
 
     def is_german(self, s):
         """
-        determines if a string is german or not
+        determines if a string is German or not
         """
         # for short strings we can't do reliable recognition, so skip
         # short strings and less than 4 words

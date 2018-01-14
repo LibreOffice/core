@@ -2892,7 +2892,7 @@ void ScExportTest::testCeilingFloorXLSX()
 
 void ScExportTest::testCeilingFloorODSToXLSX()
 {
-    // tdf#100011 - Cannot open sheet containg FLOOR/CEILING functions by MS Excel, after export to .xlsx
+    // tdf#100011 - Cannot open sheet containing FLOOR/CEILING functions by MS Excel, after export to .xlsx
     ScDocShellRef xShell = loadDoc("ceiling-floor.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
 
