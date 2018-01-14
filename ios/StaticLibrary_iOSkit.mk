@@ -23,4 +23,6 @@ $(eval $(call gb_StaticLibrary_add_cobjects,iOS_kitBridge,\
     ios/source/LibreOfficeKit \
 ))
 
+$(call gb_StaticLibrary_get_target,ios/iOS_kitBridge): $(call gb_CustomTarget_get_target,ios/iOS_setup)
+
 # vim: set noet sw=4 ts=4:
