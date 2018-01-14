@@ -1418,18 +1418,18 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
         beans::PropertyValue aPair;
         aPair.Name = "mso-edit-as";
         aPair.Value <<= maTypeModel.maEditAs;
-       if (aGrabBag.hasElements())
-       {
+        if (aGrabBag.hasElements())
+        {
             sal_Int32 nLength = aGrabBag.getLength();
             aGrabBag.realloc(nLength + 1);
             aGrabBag[nLength] = aPair;
-       }
-       else
-       {
-           aGrabBag.realloc(1);
-           aGrabBag[0] = aPair;
-       }
-       xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+        }
+        else
+        {
+            aGrabBag.realloc(1);
+            aGrabBag[0] = aPair;
+        }
+        xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
     }
     // Make sure group shapes are inline as well, unless there is an explicit different style.
     PropertySet aPropertySet(xGroupShape);
