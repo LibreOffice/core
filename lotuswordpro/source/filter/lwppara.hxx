@@ -271,7 +271,7 @@ private:
     void RegisterNewSectionStyle(LwpPageLayout* pLayout);
 
     void ParseDropcapContent();
-    XFContentContainer* AddBulletList(XFContentContainer* pCont);
+    rtl::Reference<XFContentContainer> AddBulletList(XFContentContainer* pCont);
     void AddBreakAfter(XFContentContainer* pCont);
     void AddBreakBefore(XFContentContainer* pCont);
     XFSection* CreateXFSection();

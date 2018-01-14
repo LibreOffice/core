@@ -278,10 +278,10 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
 
     if (m_bHasBullet && m_pSilverBullet)
     {
-        XFContentContainer* pListItem = AddBulletList(m_pXFContainer);
-        if (pListItem)
+        rtl::Reference<XFContentContainer> xListItem = AddBulletList(m_pXFContainer);
+        if (xListItem)
         {
-            pListItem->Add(pPara);
+            xListItem->Add(pPara);
         }
     }
     else if (m_pXFContainer)
@@ -879,13 +879,13 @@ LwpBulletStyleMgr* LwpPara::GetBulletStyleMgr()
     return nullptr;
 }
 
-XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
+rtl::Reference<XFContentContainer> LwpPara::AddBulletList(XFContentContainer* pCont)
 {
     LwpBulletStyleMgr* pBulletStyleMgr = GetBulletStyleMgr();
     if (!pBulletStyleMgr)
     {
         assert(false);
-        return nullptr;
+        return rtl::Reference<XFContentContainer>();
     }
 
     sal_uInt16 nLevel = m_nLevel;

@@ -110,7 +110,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
     LwpPara* pBulletPara = pSilverBullet->GetBulletPara();
     if (!pBulletPara)
     {
-        assert(false);
+        SAL_WARN("lwp", "missing bullet para");
         return OUString();
     }
 
@@ -245,7 +245,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
 
 //Create nested XFList and XFItems and then add it to XFContentContainer(pCont)
 //Return the inner XFItem created.
-XFContentContainer* LwpBulletStyleMgr::AddBulletList(
+rtl::Reference<XFContentContainer> LwpBulletStyleMgr::AddBulletList(
         XFContentContainer* pCont, bool bIsOrdered,
         const OUString& rStyleName, sal_Int16 nLevel, bool bIsBulletSkiped)
 {
@@ -256,13 +256,12 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
     //todo: need judge here.
     bool bContinue = m_bContinue;
 
-    XFList* theList;
-    XFList* prevList = nullptr;
+    rtl::Reference<XFList> prevList;
     XFListItem* theItem;
     XFListItem* InnerItem = nullptr;
     for (sal_Int8 nC = nLevel-1; nC >= 0; nC--)
     {
-        theList = new XFList();
+        rtl::Reference<XFList> theList(new XFList);
         theItem = new XFListItem();
         theList->Add(theItem);
 
@@ -284,7 +283,7 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
         if (nC == 0 && pCont)
         {
             theList->SetStyleName(rStyleName);
-            pCont->Add(theList);
+            pCont->Add(theList.get());
         }
 
         if ((nC == nLevel-1) && bIsBulletSkiped)
@@ -301,7 +300,7 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
 
         if(prevList)
         {
-            theItem->Add(prevList);
+            theItem->Add(prevList.get());
         }
         prevList = theList;
     }

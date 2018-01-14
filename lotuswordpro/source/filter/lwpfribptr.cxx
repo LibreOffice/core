@@ -240,10 +240,10 @@ void LwpFribPtr::XFConvert()
             break;
         case FRIB_TAG_COLBREAK:
         {
-            XFParagraph *pPara = new XFParagraph();
-            pPara->SetStyleName(pFrib->GetStyleName());
-            SetXFPara(pPara);
-            m_pPara->AddXFContent(pPara);
+            rtl::Reference<XFParagraph> xPara(new XFParagraph);
+            xPara->SetStyleName(pFrib->GetStyleName());
+            SetXFPara(xPara.get());
+            m_pPara->AddXFContent(xPara.get());
         }
             break;
         case FRIB_TAG_LINEBREAK:

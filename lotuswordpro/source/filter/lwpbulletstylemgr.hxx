@@ -84,7 +84,7 @@ public:
         LwpIndentOverride const * pIndent);
     inline void SetFoundry(LwpFoundry* pFoundry);
     inline void SetContinueFlag(bool bFlag);
-    XFContentContainer* AddBulletList(XFContentContainer* pCont, bool bIsOrdered,
+    rtl::Reference<XFContentContainer> AddBulletList(XFContentContainer* pCont, bool bIsOrdered,
         const OUString& rStyleName, sal_Int16 nLevel, bool bIsBulletSkiped);
     inline void SetCurrentSilverBullet(const LwpObjectID& rNewID);
 
