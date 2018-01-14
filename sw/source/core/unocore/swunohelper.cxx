@@ -69,7 +69,7 @@ bool UCB_DeleteFile( const OUString& rURL )
     catch( css::uno::Exception& )
     {
         bRemoved = false;
-        OSL_FAIL( "Exeception from executeCommand( delete )" );
+        OSL_FAIL( "Exception from executeCommand( delete )" );
     }
     return bRemoved;
 }
@@ -97,7 +97,7 @@ bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, bool bCopyIsMo
     }
     catch( css::uno::Exception& )
     {
-        OSL_FAIL( "Exeception from executeCommand( transfer )" );
+        OSL_FAIL( "Exception from executeCommand( transfer )" );
         bCopyCompleted = false;
     }
     return bCopyCompleted;
@@ -126,7 +126,7 @@ bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
     catch( css::uno::Exception& )
     {
         bCaseSensitive = false;
-        OSL_FAIL( "Exeception from compareContentIds()" );
+        OSL_FAIL( "Exception from compareContentIds()" );
     }
     return bCaseSensitive;
 }

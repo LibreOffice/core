@@ -280,7 +280,7 @@ namespace connectivity
         // helper to implement getColumnTableRange
         bool impl_getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const;
 
-        /** traverses the list of table names, and filles _rTables
+        /** traverses the list of table names, and fills _rTables
         */
         bool traverseTableNames( OSQLTables& _rTables );
 

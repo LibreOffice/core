@@ -3254,7 +3254,7 @@ void SAL_CALL ODatabaseForm::executeWithCompletion( const Reference< XInteractio
         if ( !impl_approveRowChange_throw( event, true, aGuard ) )
             return;
 
-        // we're loaded and somebody want's to execute ourself -> this means a reload
+        // we're loaded and somebody wants to execute ourself -> this means a reload
         reload_impl(false, _rxHandler);
     }
 }
@@ -3280,7 +3280,7 @@ void SAL_CALL ODatabaseForm::execute()
         if ( !impl_approveRowChange_throw( event, true, aGuard ) )
             return;
 
-        // we're loaded and somebody want's to execute ourself -> this means a reload
+        // we're loaded and somebody wants to execute ourself -> this means a reload
         reload_impl(false);
     }
 }
