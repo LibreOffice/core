@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f22aca7d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6365,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-14T15:35:18Z",
+      "side": 1,
+      "message": "rather \"should contain\"?",
+      "range": {
+        "startLine": 6364,
+        "startChar": 10,
+        "endLine": 6365,
+        "endChar": 27
+      },
+      "revId": "f3c0ee7ad0a3f082fd94fd2a79e89e345692bf73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
