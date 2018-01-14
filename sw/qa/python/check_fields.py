@@ -29,8 +29,7 @@ class CheckFields(unittest.TestCase):
         xDoc = self.__class__._xDoc
         xEnumerationAccess = xDoc.getTextFields()
         xFieldEnum = xEnumerationAccess.createEnumeration()
-        while xFieldEnum.hasMoreElements():
-            xField = xFieldEnum.nextElement()
+        for xField in xFieldEnum:
             if xField.supportsService("com.sun.star.text.TextField.JumpEdit"):
                 xAnchor = xField.getAnchor()
                 read_content = xAnchor.getString()
