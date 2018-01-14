@@ -387,7 +387,7 @@ published service Content
                         because it is not directly supported by the IMAP protocol.
                         On the other hand, moving a message from one folder to
                         another folder on the same IMAP server should work, because it can
-                        be implemeted efficiently.<br>
+                        be implemented efficiently.<br>
                         If an implementation is not able to handle a given source URL,
                         it should indicate this by issuing a
                         InteractiveBadTransferURLException interaction request.<br>
@@ -419,7 +419,7 @@ published service Content
                     <td>void</td>
                     <td>void</td>
                     <td>
-                        This command obtains an exlusive write lock for the resource. The
+                        This command obtains an exclusive write lock for the resource. The
                         lock is active until command "unlock" is executed, or the OOo
                         session that obtained the lock ends, or until the lock is released by
                         a third party (e.g. a system administrator).<br>

@@ -544,7 +544,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->SetSelection( aNewSel );
                         }
 
-                        // refenence is being selected -> do not overwrite when typing
+                        // reference is being selected -> do not overwrite when typing
                         bSetSelIsRef = true;
                     }
                 }

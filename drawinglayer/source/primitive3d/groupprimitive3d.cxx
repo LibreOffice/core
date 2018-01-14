@@ -35,7 +35,7 @@ namespace drawinglayer
         }
 
         /** The compare opertator uses the Sequence::==operator, so only checking if
-            the rererences are equal. All non-equal references are interpreted as
+            the references are equal. All non-equal references are interpreted as
             non-equal.
          */
         bool GroupPrimitive3D::operator==( const BasePrimitive3D& rPrimitive ) const

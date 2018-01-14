@@ -33,7 +33,7 @@ namespace dbaui
     {
     public:
 
-        /** filles the IDs of the settings which are reflected in indirect data source properties
+        /** fills the IDs of the settings which are reflected in indirect data source properties
             (aka properties in the css.sdb.DataSource.Info sequence)
 
             @param  _eType
