@@ -450,7 +450,7 @@ class HTMLTable
     HTMLTableRules m_eRules;          // frame in the table
     bool m_bTopCaption;               // Caption of the table
 
-    void InitCtor( const HTMLTableOptions *pOptions );
+    void InitCtor(const HTMLTableOptions& rOptions);
 
     // Correction of the Row-Spans for all cells above the chosen cell and the cell itself for the indicated content. The chosen cell gets the Row-Span 1
     void FixRowSpan( sal_uInt16 nRow, sal_uInt16 nCol, const HTMLTableCnts *pCnts );
@@ -518,10 +518,10 @@ public:
 
     bool m_bFirstCell;                // is there a cell created already?
 
-    HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
-               bool bParHead, bool bHasParentSec,
-               bool bHasToFly,
-               const HTMLTableOptions *pOptions );
+    HTMLTable(SwHTMLParser* pPars, HTMLTable *pTopTab,
+              bool bParHead, bool bHasParentSec,
+              bool bHasToFly,
+              const HTMLTableOptions& rOptions);
 
     ~HTMLTable();
 
@@ -900,7 +900,7 @@ inline SwFrameFormat *HTMLTableColumn::GetFrameFormat( bool bBorderLine,
     return aFrameFormats[GetFrameFormatIdx(bBorderLine,eVertOrient)];
 }
 
-void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
+void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
 {
     m_pResizeDrawObjects = nullptr;
     m_pDrawObjectPrcWidths = nullptr;
@@ -927,9 +927,9 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     m_nLeftMargin = 0;
     m_nRightMargin = 0;
 
-    const Color& rBorderColor = pOptions->aBorderColor;
+    const Color& rBorderColor = rOptions.aBorderColor;
 
-    long nBorderOpt = static_cast<long>(pOptions->nBorder);
+    long nBorderOpt = static_cast<long>(rOptions.nBorder);
     long nPWidth = nBorderOpt==USHRT_MAX ? NETSCAPE_DFLT_BORDER
                                          : nBorderOpt;
     long nPHeight = nBorderOpt==USHRT_MAX ? 0 : nBorderOpt;
@@ -942,7 +942,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     if( nBorderOpt==USHRT_MAX )
         nPWidth = 0;
 
-    if ( pOptions->nCellSpacing != 0 )
+    if ( rOptions.nCellSpacing != 0 )
     {
         m_aTopBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
     }
@@ -956,7 +956,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     }
     else
     {
-        if ( pOptions->nCellSpacing != 0 )
+        if ( rOptions.nCellSpacing != 0 )
         {
             m_aLeftBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
         }
@@ -965,7 +965,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     }
     m_aRightBorderLine = m_aLeftBorderLine;
 
-    if( pOptions->nCellSpacing != 0 )
+    if( rOptions.nCellSpacing != 0 )
     {
         m_aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
         m_aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
@@ -994,8 +994,8 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
         m_nCellSpacing = SwHTMLParser::ToTwips( m_nCellSpacing );
     }
 
-    nPWidth = pOptions->nHSpace;
-    nPHeight = pOptions->nVSpace;
+    nPWidth = rOptions.nHSpace;
+    nPHeight = rOptions.nVSpace;
     SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
     m_nHSpace = static_cast<sal_uInt16>(nPWidth);
     m_nVSpace = static_cast<sal_uInt16>(nPHeight);
@@ -1003,47 +1003,47 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     m_bColSpec = false;
 
     m_xBackgroundBrush.reset(m_pParser->CreateBrushItem(
-                    pOptions->bBGColor ? &(pOptions->aBGColor) : nullptr,
-                    pOptions->aBGImage, aEmptyOUStr, aEmptyOUStr, aEmptyOUStr));
+                    rOptions.bBGColor ? &(rOptions.aBGColor) : nullptr,
+                    rOptions.aBGImage, aEmptyOUStr, aEmptyOUStr, aEmptyOUStr));
 
     m_pContext = nullptr;
     m_xParentContents.reset();
 
-    m_aId = pOptions->aId;
-    m_aClass = pOptions->aClass;
-    m_aStyle = pOptions->aStyle;
-    m_aDir = pOptions->aDir;
+    m_aId = rOptions.aId;
+    m_aClass = rOptions.aClass;
+    m_aStyle = rOptions.aStyle;
+    m_aDir = rOptions.aDir;
 }
 
-HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
-                      bool bParHead,
-                      bool bHasParentSec, bool bHasToFlw,
-                      const HTMLTableOptions *pOptions ) :
-    m_aColumns(pOptions->nCols),
-    m_nCols( pOptions->nCols ),
+HTMLTable::HTMLTable(SwHTMLParser* pPars, HTMLTable *pTopTab,
+                     bool bParHead,
+                     bool bHasParentSec, bool bHasToFlw,
+                     const HTMLTableOptions& rOptions) :
+    m_aColumns(rOptions.nCols),
+    m_nCols(rOptions.nCols),
     m_nFilledColumns( 0 ),
-    m_nCellPadding( pOptions->nCellPadding ),
-    m_nCellSpacing( pOptions->nCellSpacing ),
+    m_nCellPadding(rOptions.nCellPadding),
+    m_nCellSpacing(rOptions.nCellSpacing),
     m_nBoxes( 1 ),
     m_pCaptionStartNode( nullptr ),
-    m_bTableAdjustOfTag( !pTopTab && pOptions->bTableAdjust ),
+    m_bTableAdjustOfTag( !pTopTab && rOptions.bTableAdjust ),
     m_bIsParentHead( bParHead ),
     m_bHasParentSection( bHasParentSec ),
     m_bHasToFly( bHasToFlw ),
-    m_bFixedCols( pOptions->nCols>0 ),
-    m_bPrcWidth( pOptions->bPrcWidth ),
+    m_bFixedCols( rOptions.nCols>0 ),
+    m_bPrcWidth( rOptions.bPrcWidth ),
     m_pParser( pPars ),
     m_pTopTable( pTopTab ? pTopTab : this ),
-    m_nWidth( pOptions->nWidth ),
-    m_nHeight( pTopTab ? 0 : pOptions->nHeight ),
-    m_eTableAdjust( pOptions->eAdjust ),
-    m_eVertOrientation( pOptions->eVertOri ),
-    m_eFrame( pOptions->eFrame ),
-    m_eRules( pOptions->eRules ),
+    m_nWidth( rOptions.nWidth ),
+    m_nHeight( pTopTab ? 0 : rOptions.nHeight ),
+    m_eTableAdjust( rOptions.eAdjust ),
+    m_eVertOrientation( rOptions.eVertOri ),
+    m_eFrame( rOptions.eFrame ),
+    m_eRules( rOptions.eRules ),
     m_bTopCaption( false ),
     m_bFirstCell( !pTopTab )
 {
-    InitCtor( pOptions );
+    InitCtor(rOptions);
     m_pParser->RegisterHTMLTable(this);
 }
 
@@ -4614,11 +4614,11 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         return;
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
-    CaptionSaveStruct* pSaveStruct;
+    std::unique_ptr<CaptionSaveStruct> xSaveStruct;
 
     if( m_pPendStack )
     {
-        pSaveStruct = static_cast<CaptionSaveStruct*>(m_pPendStack->pData);
+        xSaveStruct.reset(static_cast<CaptionSaveStruct*>(m_pPendStack->pData));
 
         SwPendingStack* pTmp = m_pPendStack->pNext;
         delete m_pPendStack;
@@ -4652,7 +4652,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         }
 
         // Remember old PaM position
-        pSaveStruct = new CaptionSaveStruct( *this, *m_pPam->GetPoint() );
+        xSaveStruct.reset(new CaptionSaveStruct(*this, *m_pPam->GetPoint()));
 
         // Add a text section in the icon section as a container for the header
         // and set the PaM there
@@ -4695,8 +4695,8 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         case HtmlTokenId::TABLE_ON:
             if( !m_pPendStack )
             {
-                pSaveStruct->m_xTable = m_xTable;
-                bool bHasToFly = pSaveStruct->m_xTable.get() != pCurTable;
+                xSaveStruct->m_xTable = m_xTable;
+                bool bHasToFly = xSaveStruct->m_xTable.get() != pCurTable;
                 BuildTable( pCurTable->GetTableAdjust( true ),
                             false, true, bHasToFly );
             }
@@ -4706,7 +4706,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             }
             if( SvParserState::Pending != GetStatus() )
             {
-                m_xTable = pSaveStruct->m_xTable;
+                m_xTable = xSaveStruct->m_xTable;
             }
             break;
         case HtmlTokenId::TABLE_OFF:
@@ -4747,7 +4747,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     if( SvParserState::Pending==GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HtmlTokenId::CAPTION_ON, m_pPendStack );
-        m_pPendStack->pData = pSaveStruct;
+        m_pPendStack->pData = xSaveStruct.release();
         return;
     }
 
@@ -4785,12 +4785,10 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     SetAttr( false );
 
     // Recover stack and attribute table
-    pSaveStruct->RestoreAll( *this );
+    xSaveStruct->RestoreAll(*this);
 
     // Recover PaM
-    *m_pPam->GetPoint() = pSaveStruct->GetPos();
-
-    delete pSaveStruct;
+    *m_pPam->GetPoint() = xSaveStruct->GetPos();
 }
 
 class TableSaveStruct : public SwPendingStackData
@@ -4800,7 +4798,8 @@ public:
 
     explicit TableSaveStruct(const std::shared_ptr<HTMLTable>& rCurTable)
         : m_xCurrentTable(rCurTable)
-    {}
+    {
+    }
 
     // Initiate creation of the table and put the table in a text frame if
     // needed. If it returns true, we need to insert a paragraph.
@@ -5132,23 +5131,20 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
     else
     {
         m_xTable.reset();
-        HTMLTableOptions *pTableOptions =
-            new HTMLTableOptions( GetOptions(), eParentAdjust );
+        HTMLTableOptions aTableOptions(GetOptions(), eParentAdjust);
 
-        if( !pTableOptions->aId.isEmpty() )
-            InsertBookmark( pTableOptions->aId );
+        if (!aTableOptions.aId.isEmpty())
+            InsertBookmark(aTableOptions.aId);
 
-        std::shared_ptr<HTMLTable> xCurTable(new HTMLTable(this, m_xTable.get(),
+        std::shared_ptr<HTMLTable> xCurTable(std::make_shared<HTMLTable>(this, m_xTable.get(),
                                               bIsParentHead,
                                               bHasParentSection,
                                               bHasToFly,
-                                              pTableOptions));
+                                              aTableOptions));
         if (!m_xTable)
             m_xTable = xCurTable;
 
         xSaveStruct.reset(new TableSaveStruct(xCurTable));
-
-        delete pTableOptions;
 
         // Is pending on the first GetNextToken, needs to be re-read on each construction
         SaveState( HtmlTokenId::NONE );
