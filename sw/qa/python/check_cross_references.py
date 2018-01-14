@@ -59,8 +59,7 @@ class CheckCrossReferences(unittest.TestCase):
             if (self.xPortionEnum is None):
                 break
 
-            while self.xPortionEnum.hasMoreElements():
-                xPortionProps = self.xPortionEnum.nextElement()
+            for xPortionProps in self.xPortionEnum:
                 sPortionType = str(xPortionProps.getPropertyValue("TextPortionType"))
                 if (sPortionType == "TextField"):
                     xField = xPortionProps.getPropertyValue("TextField")
@@ -185,8 +184,7 @@ class CheckCrossReferences(unittest.TestCase):
         self.xParaEnum = xParaEnumAccess.createEnumeration()
 
         # iterate on the paragraphs to find certain paragraph to insert the bookmark
-        while self.xParaEnum.hasMoreElements():
-            xParaTextRange = self.xParaEnum.nextElement()
+        for xParaTextRange in self.xParaEnum:
 
             if xParaTextRange.getString() == "J":
                 break
