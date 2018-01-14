@@ -612,7 +612,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 {
                                     const ScDPObject& rDPObj = (*pDPs)[i];
                                     const ScSheetSourceDesc* pSheetSourceDesc = rDPObj.GetSheetDesc();
-                                    if (pSheetSourceDesc->GetSourceRange().aStart.Tab() == nSelTab)
+                                    if (pSheetSourceDesc && pSheetSourceDesc->GetSourceRange().aStart.Tab() == nSelTab)
                                         bTabWithPivotTable = true;
                                 }
                             }
