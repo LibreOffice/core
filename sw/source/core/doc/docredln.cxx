@@ -396,7 +396,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
 
         // When this notify method is called text invalidation is not done yet
         // Calling FillRects updates the text area so invalidation will not run on the correct rects
-        // So we need to do an own invalidation here. It invalidates text frames continging the redlining
+        // So we need to do an own invalidation here. It invalidates text frames containing the redlining
         SwDoc* pDoc = pRedline->GetDoc();
         SwViewShell* pSh;
         if( pDoc && !pDoc->IsInDtor() &&
