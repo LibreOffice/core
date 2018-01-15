@@ -1482,7 +1482,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
               && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator"
               && aSeqArgs[nInd].Name != "VersionMajor"
               && aSeqArgs[nInd].Name != "FailOnWarning"
-              && aSeqArgs[nInd].Name != "CheckIn" )
+              && aSeqArgs[nInd].Name != "CheckIn"
+              && aSeqArgs[nInd].Name != "NoFileSync" )
             {
                 OUString aMessage( "Unexpected MediaDescriptor parameter: "  );
                 aMessage += aSeqArgs[nInd].Name;
