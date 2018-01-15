@@ -863,7 +863,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     {
                         // btLr, so map ParagraphAdjust_CENTER to VertOrientation::CENTER.
                         uno::Reference<beans::XPropertySet> xPropertySet(m_aTableRanges[nRow][nCell][0], uno::UNO_QUERY);
-                        if (xPropertySet->getPropertyValue("ParaAdjust").get<sal_Int16>() == (sal_Int16)style::ParagraphAdjust_CENTER)
+                        if (xPropertySet->getPropertyValue("ParaAdjust").get<sal_Int16>() == sal_Int16(style::ParagraphAdjust_CENTER))
                             (*aCellIterator)->Insert(PROP_VERT_ORIENT, uno::makeAny(text::VertOrientation::CENTER));
                     }
                     (*aCellIterator)->Erase(PROP_CELL_DIRECTION);

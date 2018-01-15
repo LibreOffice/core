@@ -833,7 +833,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xShapeProps->setPropertyValue("SurroundContour", uno::makeAny(m_pImpl->bContour));
                         m_pImpl->applyMargins(xShapeProps);
                         xShapeProps->setPropertyValue("Opaque", uno::makeAny(m_pImpl->bOpaque));
-                        xShapeProps->setPropertyValue("Surround", uno::makeAny((sal_Int32)m_pImpl->nWrap));
+                        xShapeProps->setPropertyValue("Surround", uno::makeAny(static_cast<sal_Int32>(m_pImpl->nWrap)));
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
 
@@ -1253,7 +1253,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny(m_pImpl->bOpaque));
                 }
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
-                    uno::makeAny((sal_Int32)m_pImpl->nWrap));
+                    uno::makeAny(static_cast<sal_Int32>(m_pImpl->nWrap)));
                 if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGH )
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::makeAny(true));

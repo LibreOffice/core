@@ -307,7 +307,7 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
 
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
 
-    sal_uInt16 nTmp = (sal_uInt16)text::TextContentAnchorType_AS_CHARACTER;
+    sal_uInt16 nTmp = sal_uInt16(text::TextContentAnchorType_AS_CHARACTER);
     xShapeProps->setPropertyValue("AnchorType", uno::makeAny<sal_uInt16>(nTmp));
 
     nTmp = text::VertOrientation::CENTER;

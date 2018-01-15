@@ -2796,7 +2796,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             rContext->Insert(PROP_RUBY_TEXT, uno::makeAny(aInfo.sRubyText));
             rContext->Insert(PROP_RUBY_STYLE, uno::makeAny(aInfo.sRubyStyle));
-            rContext->Insert(PROP_RUBY_ADJUST, uno::makeAny((sal_Int16)ConversionHelper::convertRubyAlign(aInfo.nRubyAlign)));
+            rContext->Insert(PROP_RUBY_ADJUST, uno::makeAny(static_cast<sal_Int16>(ConversionHelper::convertRubyAlign(aInfo.nRubyAlign))));
             m_pImpl->SetRubySprmId(0);
         }
     }

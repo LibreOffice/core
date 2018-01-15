@@ -167,7 +167,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 
                     xShapeProps->setPropertyValue(
                         getPropertyName( PROP_SURROUND ),
-                        uno::makeAny( (sal_Int32)m_nWrapMode ) );
+                        uno::makeAny( static_cast<sal_Int32>(m_nWrapMode) ) );
 
                     // Through shapes in the header or footer(that spill into the body) should be in the background.
                     // It is just assumed that all shapes will spill into the body.

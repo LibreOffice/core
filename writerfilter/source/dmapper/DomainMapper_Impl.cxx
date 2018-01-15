@@ -3183,7 +3183,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
         pCharContext->InsertProps(m_pLastCharacterContext);
     pCharContext->InsertProps(pContext->getProperties());
     pCharContext->Insert(PROP_RUBY_TEXT, uno::makeAny( aInfo.sRubyText ) );
-    pCharContext->Insert(PROP_RUBY_ADJUST, uno::makeAny((sal_Int16)ConversionHelper::convertRubyAlign(aInfo.nRubyAlign)));
+    pCharContext->Insert(PROP_RUBY_ADJUST, uno::makeAny(static_cast<sal_Int16>(ConversionHelper::convertRubyAlign(aInfo.nRubyAlign))));
     pCharContext->Insert(PROP_RUBY_STYLE, uno::makeAny(aInfo.sRubyStyle));
     appendTextPortion(sPart2, pCharContext);
 

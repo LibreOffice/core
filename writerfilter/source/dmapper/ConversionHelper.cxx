@@ -264,7 +264,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
     // object size
     SvxBorderLineStyle const nLineStyle(
             ::editeng::ConvertBorderStyleFromWord(nLineType));
-    rToFill.LineStyle = (sal_Int16)nLineStyle;
+    rToFill.LineStyle = static_cast<sal_Int16>(nLineStyle);
     double const fConverted( (SvxBorderLineStyle::NONE == nLineStyle) ? 0.0 :
         ::editeng::ConvertBorderWidthFromWord(nLineStyle, nLineThickness,
             nLineType));
