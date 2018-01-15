@@ -1127,7 +1127,7 @@ namespace accessibility
                 else if ( nValue > nValueMax )
                     nValue = nValueMax;
 
-                pBox->SetCheckButtonState(pEntry,  (SvButtonState) nValue );
+                pBox->SetCheckButtonState(pEntry,  static_cast<SvButtonState>(nValue) );
                 bReturn = true;
             }
         }

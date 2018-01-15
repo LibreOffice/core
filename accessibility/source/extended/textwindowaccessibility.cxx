@@ -1001,7 +1001,7 @@ Document::retrieveCharacterAttributes(
     //character alignment
     aAttribs[i].Name = "ParaAdjust";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= (sal_Int16)m_rEngine.GetTextAlign();
+    aAttribs[i].Value <<= static_cast<sal_Int16>(m_rEngine.GetTextAlign());
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
