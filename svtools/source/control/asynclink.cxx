@@ -30,7 +30,7 @@ namespace svtools {
 
 void AsynchronLink::CreateMutex()
 {
-    if( !_pMutex ) _pMutex = new osl::Mutex;
+    if( !_pMutex ) _pMutex.reset( new osl::Mutex );
 }
 
 void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
@@ -55,9 +55,9 @@ AsynchronLink::~AsynchronLink()
     {
         Application::RemoveUserEvent( _nEventId );
     }
-    delete _pIdle;
+    _pIdle.reset();
     if( _pDeleted ) *_pDeleted = true;
-    delete _pMutex;
+    _pMutex.reset();
 }
 
 IMPL_LINK_NOARG( AsynchronLink, HandleCall_Idle, Timer*, void )
