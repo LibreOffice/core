@@ -171,8 +171,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
 
 X11SalVirtualDevice::~X11SalVirtualDevice()
 {
-    delete pGraphics_;
-    pGraphics_ = nullptr;
+    pGraphics_.reset();
 
     if( GetDrawable() && !bExternPixmap_ )
         XFreePixmap( GetXDisplay(), GetDrawable() );
@@ -186,7 +185,7 @@ SalGraphics* X11SalVirtualDevice::AcquireGraphics()
     if( pGraphics_ )
         bGraphics_ = true;
 
-    return pGraphics_;
+    return pGraphics_.get();
 }
 
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
