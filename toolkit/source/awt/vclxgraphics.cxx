@@ -79,7 +79,7 @@ VCLXGraphics::~VCLXGraphics()
         }
     }
 
-    delete mpClipRegion;
+    mpClipRegion.reset();
 
     SolarMutexGuard g;
     mpOutputDevice.reset();
@@ -227,11 +227,10 @@ void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion
 {
     SolarMutexGuard aGuard;
 
-    delete mpClipRegion;
     if ( rxRegion.is() )
-        mpClipRegion = new vcl::Region( VCLUnoHelper::GetRegion( rxRegion ) );
+        mpClipRegion.reset( new vcl::Region( VCLUnoHelper::GetRegion( rxRegion ) ) );
     else
-        mpClipRegion = nullptr;
+        mpClipRegion.reset();
 }
 
 void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rxRegion )
@@ -242,7 +241,7 @@ void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rx
     {
         vcl::Region aRegion( VCLUnoHelper::GetRegion( rxRegion ) );
         if ( !mpClipRegion )
-            mpClipRegion = new vcl::Region( aRegion );
+            mpClipRegion.reset( new vcl::Region( aRegion ) );
         else
             mpClipRegion->Intersect( aRegion );
     }
