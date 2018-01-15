@@ -159,7 +159,7 @@ protected:
     fd_set          aExceptionFDS_;
 
     Display             *m_pDisplay;
-    SalI18N_InputMethod *m_pInputMethod;
+    std::unique_ptr<SalI18N_InputMethod> m_pInputMethod;
 
 public:
     SalXLib();
@@ -181,7 +181,7 @@ public:
 
     virtual bool    CheckTimeout( bool bExecuteTimers = true );
 
-    SalI18N_InputMethod* GetInputMethod() const { return m_pInputMethod; }
+    SalI18N_InputMethod* GetInputMethod() const { return m_pInputMethod.get(); }
     Display*             GetDisplay() const { return m_pDisplay; }
 };
 
