@@ -252,6 +252,7 @@ public:
     void testCreateDocxAnnotation();
     void testTdf107976();
     void testTdf113790();
+    void testTdf114536();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -391,6 +392,7 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf113790);
+    CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4998,6 +5000,13 @@ void SwUiWriterTest::testTdf107976()
     // This failed: the first shell had a pointer to the deleted shell.
     CPPUNIT_ASSERT(!pTransferable->GetShell());
     CPPUNIT_ASSERT(!pTransferable2->GetShell());
+}
+
+void SwUiWriterTest::testTdf114536()
+{
+    // This crashed in SwTextFormatter::MergeCharacterBorder() due to a
+    // use after free.
+    createDoc("tdf114536.odt");
 }
 
 void SwUiWriterTest::testTdf113790()
