@@ -50,7 +50,7 @@ static bool cased_letter(sal_Unicode ch)
     if (cmi < 0)
         return false;
     int cmv_idx = (cmi << 8) + (ch & 0xff);
-    return bool(((MappingType)CaseMappingValue[cmv_idx].type) & MappingType::CasedLetterMask);
+    return bool(static_cast<MappingType>(CaseMappingValue[cmv_idx].type) & MappingType::CasedLetterMask);
 }
 
 // for Lithuanian, condition to make explicit dot above when lowercasing capital I's and J's
@@ -95,16 +95,16 @@ Mapping& casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 
 
     if (address >= 0) {
         address = (address << 8) + (str[pos] & 0xFF);
-        if ((MappingType)CaseMappingValue[address].type & nMappingType) {
-            MappingType type = (MappingType) CaseMappingValue[address].type;
+        if (static_cast<MappingType>(CaseMappingValue[address].type) & nMappingType) {
+            MappingType type = static_cast<MappingType>(CaseMappingValue[address].type);
             if (type & MappingType::NotValue) {
                 if (CaseMappingValue[address].value == 0)
                     return getConditionalValue(str, pos, len, aLocale, nMappingType);
                 else {
                     for (int map = CaseMappingValue[address].value;
                             map < CaseMappingValue[address].value + MaxCaseMappingExtras; map++) {
-                        if ((MappingType)CaseMappingExtra[map].type & nMappingType) {
-                            if ((MappingType)CaseMappingExtra[map].type & MappingType::NotValue)
+                        if (static_cast<MappingType>(CaseMappingExtra[map].type) & nMappingType) {
+                            if (static_cast<MappingType>(CaseMappingExtra[map].type) & MappingType::NotValue)
                                 return getConditionalValue(str, pos, len, aLocale, nMappingType);
                             else
                                 return CaseMappingExtra[map];

@@ -41,7 +41,7 @@ T getScriptType( const sal_Unicode ch, const L* typeList, T unknownType ) {
 
     sal_Int16 i = 0;
     css::i18n::UnicodeScript type = typeList[0].to;
-    while (type < UnicodeScript_kScriptCount && ch > UnicodeScriptType[(int)type][UnicodeScriptTypeTo]) {
+    while (type < UnicodeScript_kScriptCount && ch > UnicodeScriptType[static_cast<int>(type)][UnicodeScriptTypeTo]) {
         type = typeList[++i].to;
     }
 
@@ -57,12 +57,12 @@ unicode::getUnicodeScriptType( const sal_Unicode ch, const ScriptTypeList* typeL
 
 sal_Unicode
 unicode::getUnicodeScriptStart( UnicodeScript type) {
-    return UnicodeScriptType[(int)type][UnicodeScriptTypeFrom];
+    return UnicodeScriptType[static_cast<int>(type)][UnicodeScriptTypeFrom];
 }
 
 sal_Unicode
 unicode::getUnicodeScriptEnd( UnicodeScript type) {
-    return UnicodeScriptType[(int)type][UnicodeScriptTypeTo];
+    return UnicodeScriptType[static_cast<int>(type)][UnicodeScriptTypeTo];
 }
 
 sal_Int16
