@@ -489,12 +489,12 @@ bool badCombinationChar(char c) {
 }
 
 bool UnnecessaryParen::badCombination(SourceLocation loc, int prevOffset, int nextOffset) {
-    //TODO: check for start/end of file; take backslash-newline line concatentation into account
+    //TODO: check for start/end of file; take backslash-newline line concatenation into account
     auto const c1
         = compiler.getSourceManager().getCharacterData(loc.getLocWithOffset(prevOffset))[0];
     auto const c2
         = compiler.getSourceManager().getCharacterData(loc.getLocWithOffset(nextOffset))[0];
-    // An approximation of avoiding whatever combinations that would cause two ajacent tokens to be
+    // An approximation of avoiding whatever combinations that would cause two adjacent tokens to be
     // lexed differently, using, for now, letters (TODO: non-ASCII ones) and digits and '_'; '+' and
     // '-' (to avoid ++, etc.); '\'' and '"' (to avoid u'x' or "foo"bar, etc.):
     return badCombinationChar(c1) && badCombinationChar(c2);
