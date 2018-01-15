@@ -21,6 +21,7 @@
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_OUTACT_HXX
 
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -64,6 +65,7 @@ class CGMImpressOutAct
 
     css::uno::Reference< css::beans::XPropertySet >               maXPropSet;
     css::uno::Reference< css::drawing::XShapes >                  maXShapes;
+    std::vector<css::uno::Reference<css::document::XActionLockable>> maLockedNewXShapes;
 
     sal_uInt32                      nFinalTextCount;
 

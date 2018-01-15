@@ -50,7 +50,6 @@
 #include "main.hxx"
 #include "outact.hxx"
 
-
 using namespace ::com::sun::star;
 
 CGMImpressOutAct::CGMImpressOutAct(CGM& rCGM, const uno::Reference< frame::XModel > & rModel)
@@ -86,6 +85,8 @@ CGMImpressOutAct::CGMImpressOutAct(CGM& rCGM, const uno::Reference< frame::XMode
 
 CGMImpressOutAct::~CGMImpressOutAct()
 {
+    for (auto &a : maLockedNewXShapes)
+        a->removeActionLock();
 }
 
 bool CGMImpressOutAct::ImplInitPage()
@@ -111,6 +112,12 @@ bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
     if ( maXShape.is() && maXPropSet.is() )
     {
         maXShapes->add( maXShape );
+        uno::Reference<document::XActionLockable> xLockable(maXShape, uno::UNO_QUERY);
+        if (xLockable)
+        {
+            xLockable->addActionLock();
+            maLockedNewXShapes.push_back(xLockable);
+        }
         return true;
     }
     return false;
@@ -797,7 +804,7 @@ void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size const & 
         uno::Any aFirstQuery( maXShape->queryInterface( cppu::UnoType<text::XText>::get()));
         if( aFirstQuery >>= xText )
         {
-            OUString aStr(pString, rtl_str_getLength(pString), RTL_TEXTENCODING_ASCII_US);
+            OUString aStr(pString, strlen(pString), RTL_TEXTENCODING_ASCII_US);
 
             uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
             {
