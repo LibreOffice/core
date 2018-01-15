@@ -220,6 +220,7 @@ public:
     void testTdf113877_default_style();
     void testTdf113877_Standard_style();
     void testInconsistentBookmark();
+    void testTdf114536();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -338,6 +339,7 @@ public:
     CPPUNIT_TEST(testTdf113877_default_style);
     CPPUNIT_TEST(testTdf113877_Standard_style);
     CPPUNIT_TEST(testInconsistentBookmark);
+    CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4007,6 +4009,13 @@ void SwUiWriterTest::testTdf113877NoMerge()
     CPPUNIT_ASSERT(listId4 != listId5);
     CPPUNIT_ASSERT_EQUAL(listId5, listId6);
     CPPUNIT_ASSERT(listId6 != listId7);
+}
+
+void SwUiWriterTest::testTdf114536()
+{
+    // This crashed in SwTextFormatter::MergeCharacterBorder() due to a
+    // use after free.
+    createDoc("tdf114536.odt");
 }
 
 // Related test to testTdf113877(): Inserting into empty document a new document with list.
