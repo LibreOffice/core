@@ -744,8 +744,8 @@ WindowImpl::WindowImpl( WindowType nType )
 
 WindowImpl::~WindowImpl()
 {
-    delete mpChildClipRegion;
-    delete mpAccessibleInfos;
+    mpChildClipRegion.reset();
+    mpAccessibleInfos.reset();
 }
 
 ImplWinData::ImplWinData() :

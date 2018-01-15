@@ -265,16 +265,12 @@ void Window::ImplInitWinChildClipRegion()
 {
     if ( !mpWindowImpl->mpFirstChild )
     {
-        if ( mpWindowImpl->mpChildClipRegion )
-        {
-            delete mpWindowImpl->mpChildClipRegion;
-            mpWindowImpl->mpChildClipRegion = nullptr;
-        }
+        mpWindowImpl->mpChildClipRegion.reset();
     }
     else
     {
         if ( !mpWindowImpl->mpChildClipRegion )
-            mpWindowImpl->mpChildClipRegion = new vcl::Region( mpWindowImpl->maWinClipRegion );
+            mpWindowImpl->mpChildClipRegion.reset( new vcl::Region( mpWindowImpl->maWinClipRegion ) );
         else
             *mpWindowImpl->mpChildClipRegion = mpWindowImpl->maWinClipRegion;
 
@@ -291,7 +287,7 @@ Region* Window::ImplGetWinChildClipRegion()
     if ( mpWindowImpl->mbInitChildRegion )
         ImplInitWinChildClipRegion();
     if ( mpWindowImpl->mpChildClipRegion )
-        return mpWindowImpl->mpChildClipRegion;
+        return mpWindowImpl->mpChildClipRegion.get();
     else
         return &mpWindowImpl->maWinClipRegion;
 }
