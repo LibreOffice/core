@@ -297,22 +297,15 @@ public:
         sal_Int32           m_nObject;
         sal_Int32           m_nExtGStateObject;
         double              m_fAlpha;
-        tools::Rectangle           m_aBoundRect;
-        SvMemoryStream*     m_pContentStream;
-        SvMemoryStream*     m_pSoftMaskStream;
+        tools::Rectangle    m_aBoundRect;
+        std::unique_ptr<SvMemoryStream>  m_pContentStream;
+        std::unique_ptr<SvMemoryStream>  m_pSoftMaskStream;
 
         TransparencyEmit()
                 : m_nObject( 0 ),
                   m_nExtGStateObject( -1 ),
-                  m_fAlpha( 0.0 ),
-                  m_pContentStream( nullptr ),
-                  m_pSoftMaskStream( nullptr )
+                  m_fAlpha( 0.0 )
         {}
-        ~TransparencyEmit()
-        {
-            delete m_pContentStream;
-            delete m_pSoftMaskStream;
-        }
     };
 
     // font subsets

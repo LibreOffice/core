@@ -2283,8 +2283,7 @@ void PDFWriterImpl::endPage()
         if( item.m_pContentStream )
         {
             writeTransparentObject(item);
-            delete item.m_pContentStream;
-            item.m_pContentStream = nullptr;
+            item.m_pContentStream.reset();
         }
     }
 
@@ -7760,7 +7759,7 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
     m_aTransparentObjects.back().m_nObject          = createObject();
     m_aTransparentObjects.back().m_nExtGStateObject = createObject();
     m_aTransparentObjects.back().m_fAlpha           = static_cast<double>(100-nTransparentPercent) / 100.0;
-    m_aTransparentObjects.back().m_pContentStream   = new SvMemoryStream( 256, 256 );
+    m_aTransparentObjects.back().m_pContentStream.reset(new SvMemoryStream( 256, 256 ));
     // create XObject's content stream
     OStringBuffer aContent( 256 );
     m_aPages.back().appendPolyPolygon( rPolyPoly, aContent );
@@ -7904,7 +7903,7 @@ void PDFWriterImpl::endTransparencyGroup( const tools::Rectangle& rBoundingBox, 
     m_aTransparentObjects.back().m_nObject      = createObject();
     m_aTransparentObjects.back().m_fAlpha       = static_cast<double>(100-nTransparentPercent) / 100.0;
     // get XObject's content stream
-    m_aTransparentObjects.back().m_pContentStream = static_cast<SvMemoryStream*>(endRedirect());
+    m_aTransparentObjects.back().m_pContentStream.reset( static_cast<SvMemoryStream*>(endRedirect()) );
     m_aTransparentObjects.back().m_nExtGStateObject = createObject();
 
     OStringBuffer aObjName( 16 );
@@ -8486,7 +8485,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
 {
     CHECK_RETURN2( updateObject( rObject.m_nObject ) );
 
-    bool bFlateFilter = compressStream( rObject.m_pContentStream );
+    bool bFlateFilter = compressStream( rObject.m_pContentStream.get() );
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
     sal_uLong nSize = rObject.m_pContentStream->Tell();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
