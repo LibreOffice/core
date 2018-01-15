@@ -131,7 +131,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
 
                 sal_Int32 nMode = SvtExtendedSecurityOptions::OPEN_WITHSECURITYCHECK;
                 if ( seqValues[nProperty] >>= nMode )
-                    m_eOpenHyperlinkMode = (SvtExtendedSecurityOptions::OpenHyperlinkMode)nMode;
+                    m_eOpenHyperlinkMode = static_cast<SvtExtendedSecurityOptions::OpenHyperlinkMode>(nMode);
                 else {
                     OSL_FAIL("Wrong type for Open mode!");
                 }

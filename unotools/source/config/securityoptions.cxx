@@ -377,7 +377,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         {
             sal_Int32 nMode = 0;
             rValue >>= nMode;
-            m_eBasicMode = (EBasicSecurityMode)nMode;
+            m_eBasicMode = static_cast<EBasicSecurityMode>(nMode);
             m_bROBasicMode = bRO;
         }
         break;

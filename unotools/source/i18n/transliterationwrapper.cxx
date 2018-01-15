@@ -144,7 +144,7 @@ void TransliterationWrapper::loadModuleImpl() const
     try
     {
         if ( xTrans.is() )
-            xTrans->loadModule( (TransliterationModules)nType, aLanguageTag.getLocale() );
+            xTrans->loadModule( static_cast<TransliterationModules>(nType), aLanguageTag.getLocale() );
     }
     catch ( const Exception& e )
     {

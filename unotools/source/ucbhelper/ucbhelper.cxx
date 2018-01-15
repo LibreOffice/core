@@ -277,7 +277,7 @@ bool utl::UCBContentHelper::MakeFolder(
                 "unotools.ucbhelper",
                 "UCBContentHelper::MakeFolder(" << title
                     << ") InteractiveIOException \"" << e
-                    << "\", code " << + (sal_Int32)e.Code);
+                    << "\", code " << + static_cast<sal_Int32>(e.Code));
         }
     } catch (css::ucb::NameClashException const &) {
         exists = true;
