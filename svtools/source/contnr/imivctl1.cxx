@@ -116,7 +116,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     bHighlightFramePressed = false;
     eSelectionMode = SelectionMode::Multiple;
     pView = pCurView;
-    pZOrderList = new SvxIconChoiceCtrlEntryList_impl;
+    pZOrderList.reset( new SvxIconChoiceCtrlEntryList_impl );
     ePositionMode = SvxIconChoiceCtrlPositionMode::Free;
     SetStyle( nWinStyle );
     nFlags = IconChoiceFlags::NONE;
@@ -128,8 +128,8 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pDDBufDev = nullptr;
     pDDTempDev = nullptr;
     eTextMode = SvxIconChoiceCtrlTextMode::Short;
-    pImpCursor = new IcnCursor_Impl( this );
-    pGridMap = new IcnGridMap_Impl( this );
+    pImpCursor.reset( new IcnCursor_Impl( this ) );
+    pGridMap.reset( new IcnGridMap_Impl( this ) );
 
     aVerSBar->SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollUpDownHdl ) );
     aHorSBar->SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl ) );
@@ -173,9 +173,9 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     Clear(false);
     StopEditTimer();
     CancelUserEvents();
-    delete pZOrderList;
-    delete pImpCursor;
-    delete pGridMap;
+    pZOrderList.reset();
+    pImpCursor.reset();
+    pGridMap.reset();
     pDDDev.disposeAndClear();
     pDDBufDev.disposeAndClear();
     pDDTempDev.disposeAndClear();
@@ -658,7 +658,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
     rRenderContext.Push(PushFlags::CLIPREGION);
     rRenderContext.SetClipRegion(vcl::Region(rRect));
 
-    SvxIconChoiceCtrlEntryList_impl* pNewZOrderList = new SvxIconChoiceCtrlEntryList_impl;
+    std::unique_ptr<SvxIconChoiceCtrlEntryList_impl> pNewZOrderList( new SvxIconChoiceCtrlEntryList_impl );
     std::unique_ptr<SvxIconChoiceCtrlEntryList_impl> pPaintedEntries(new SvxIconChoiceCtrlEntryList_impl);
 
     size_t nPos = 0;
@@ -678,8 +678,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
         nCount--;
         nPos++;
     }
-    delete pZOrderList;
-    pZOrderList = pNewZOrderList;
+    pZOrderList = std::move( pNewZOrderList );
     nCount = pPaintedEntries->size();
     if (nCount)
     {
