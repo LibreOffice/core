@@ -36,17 +36,15 @@ GlyphCache::GlyphCache()
     mnBytesUsed(sizeof(GlyphCache)),
     mnLruIndex(0),
     mnGlyphCount(0),
-    mpCurrentGCFont(nullptr),
-    mpFtManager(nullptr)
+    mpCurrentGCFont(nullptr)
 {
     pInstance = this;
-    mpFtManager = new FreetypeManager;
+    mpFtManager.reset( new FreetypeManager );
 }
 
 GlyphCache::~GlyphCache()
 {
     InvalidateAllGlyphs();
-    delete mpFtManager;
 }
 
 void GlyphCache::InvalidateAllGlyphs()
