@@ -41,8 +41,6 @@ IdlDll::IdlDll()
 
 IdlDll::~IdlDll()
 {
-    delete pGlobalNames;
-    delete pHashTable;
 }
 
 inline SvStringHashEntry * INS( const OString& rName )

@@ -54,8 +54,6 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
 SvIdlDataBase::~SvIdlDataBase()
 {
     aIdFileList.clear();
-
-    delete pIdTable;
 }
 
 #define ADD_TYPE( Name )            \
@@ -126,7 +124,7 @@ bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )
 void SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
 {
     if( !pIdTable )
-        pIdTable = new SvStringHashTable;
+        pIdTable.reset( new SvStringHashTable );
 
     sal_uInt32 nHash;
     pIdTable->Insert( rIdName, &nHash )->SetValue( nVal );

@@ -71,7 +71,7 @@ class SvIdlDataBase
     sal_uInt32                  nUniqueId;
     sal_uInt32                  nVerbosity;
     StringList                  aIdFileList;
-    SvStringHashTable *         pIdTable;
+    std::unique_ptr<SvStringHashTable> pIdTable;
 
     SvRefMemberList<SvMetaType *>      aTypeList;
     SvRefMemberList<SvMetaClass *>     aClassList;
