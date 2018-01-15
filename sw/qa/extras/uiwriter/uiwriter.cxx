@@ -296,6 +296,7 @@ public:
     void testTdf114306();
     void testTdf113481();
     void testTdf115013();
+    void testTdf114536();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -471,6 +472,7 @@ public:
     CPPUNIT_TEST(testTdf114306);
     CPPUNIT_TEST(testTdf113481);
     CPPUNIT_TEST(testTdf115013);
+    CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5544,6 +5546,13 @@ void SwUiWriterTest::testSectionInTableInTable()
     // page boundary.
     // This crashed the layout later in SwFrame::IsFootnoteAllowed().
     createDoc("tdf112109.fodt");
+}
+
+void SwUiWriterTest::testTdf114536()
+{
+    // This crashed in SwTextFormatter::MergeCharacterBorder() due to a
+    // use after free.
+    createDoc("tdf114536.odt");
 }
 
 void SwUiWriterTest::testSectionInTableInTable2()
