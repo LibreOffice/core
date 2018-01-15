@@ -885,7 +885,7 @@ PPDParser::~PPDParser()
 {
     for( PPDParser::hash_type::iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
         delete it->second;
-    delete m_pTranslator;
+    m_pTranslator.reset();
 }
 
 void PPDParser::insertKey( const OUString& rKey, PPDKey* pKey )
