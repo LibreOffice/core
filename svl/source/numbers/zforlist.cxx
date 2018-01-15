@@ -3253,7 +3253,7 @@ NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) 
     for ( sal_uInt16 j = 0; j < NF_INDEX_TABLE_ENTRIES; j++ )
     {
         if (indexTable[j] == nOffset)
-            return (NfIndexTableOffset) j;
+            return static_cast<NfIndexTableOffset>(j);
     }
     return NF_INDEX_TABLE_ENTRIES;      // bad luck
 }

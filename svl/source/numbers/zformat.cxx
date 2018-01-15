@@ -823,11 +823,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 if ( nIndex == 0 && !bCondition )
                 {
                     bCondition = true;
-                    eOp1 = (SvNumberformatLimitOps) eSymbolType;
+                    eOp1 = static_cast<SvNumberformatLimitOps>(eSymbolType);
                 }
                 else if ( nIndex == 1 && bCondition )
                 {
-                    eOp2 = (SvNumberformatLimitOps) eSymbolType;
+                    eOp2 = static_cast<SvNumberformatLimitOps>(eSymbolType);
                 }
                 else                                // error
                 {
