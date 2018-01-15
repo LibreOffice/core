@@ -232,16 +232,15 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_ToVoid ) {
         return true;
     }
-    // ignore integral-type conversions for now, there is insufficient agreement about
-    // the merits of C++ style casting in this case
-    if( expr->getCastKind() == CK_IntegralCast ) {
-        return true;
-    }
     if (isSharedCAndCppCode(expr->getLocStart())) {
         return true;
     }
     char const * perf = nullptr;
-    if( expr->getCastKind() == CK_NoOp ) {
+    if( expr->getCastKind() == CK_IntegralCast ) {
+        if (rewriteArithmeticCast(expr, &perf)) {
+            return true;
+        }
+    } else if( expr->getCastKind() == CK_NoOp ) {
         if (!((expr->getSubExpr()->getType()->isPointerType()
                && expr->getType()->isPointerType())
               || expr->getTypeAsWritten()->isReferenceType()))
@@ -530,6 +529,9 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
             while (compiler.getSourceManager().isMacroBodyExpansion(third)
                    && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third, &third))
             {}
+        } else if (compiler.getSourceManager().isMacroBodyExpansion(fourth)) {
+            while (compiler.getSourceManager().isMacroArgExpansion(third)
+                   && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third, &third)) {}
         }
         if (!third.isMacroID()) {
             while (compiler.getSourceManager().isMacroBodyExpansion(fourth)
