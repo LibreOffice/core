@@ -64,7 +64,7 @@ static HTMLOptionEnum<HTMLInputType> const aInputTypeOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_IT_image,     HTMLInputType::Image       },
     { OOO_STRING_SVTOOLS_HTML_IT_reset,     HTMLInputType::Reset       },
     { OOO_STRING_SVTOOLS_HTML_IT_button,    HTMLInputType::Button      },
-    { nullptr,                              (HTMLInputType)0    }
+    { nullptr,                              HTMLInputType(0)    }
 };
 
 // <TABLE FRAME=xxx>
@@ -79,7 +79,7 @@ static HTMLOptionEnum<HTMLTableFrame> const aTableFrameOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_TF_vsides,  HTMLTableFrame::VSides  },
     { OOO_STRING_SVTOOLS_HTML_TF_box,     HTMLTableFrame::Box     },
     { OOO_STRING_SVTOOLS_HTML_TF_border,  HTMLTableFrame::Box     },
-    { nullptr,                            (HTMLTableFrame)0 }
+    { nullptr,                            HTMLTableFrame(0) }
 };
 
 // <TABLE RULES=xxx>
@@ -90,7 +90,7 @@ static HTMLOptionEnum<HTMLTableRules> const aTableRulesOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_TR_rows,   HTMLTableRules::Rows      },
     { OOO_STRING_SVTOOLS_HTML_TR_cols,   HTMLTableRules::Cols      },
     { OOO_STRING_SVTOOLS_HTML_TR_all,    HTMLTableRules::All       },
-    { nullptr,                           (HTMLTableRules)0 }
+    { nullptr,                           HTMLTableRules(0) }
 };
 
 
@@ -1081,7 +1081,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                          if( nRet >= HtmlTokenId::ONOFF_START )
                          {
                             // and there is an off token, return off token instead
-                            nRet = (HtmlTokenId)((int)nRet + 1);
+                            nRet = static_cast<HtmlTokenId>(static_cast<int>(nRet) + 1);
                          }
                          else if( HtmlTokenId::LINEBREAK!=nRet )
                          {
@@ -1152,7 +1152,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                         // which lead to fdo#56772.
                         if ((nRet >= HtmlTokenId::ONOFF_START) && aToken.endsWith("/"))
                         {
-                            mnPendingOffToken = (HtmlTokenId)((int)nRet + 1);       // HtmlTokenId::<TOKEN>_ON -> HtmlTokenId::<TOKEN>_OFF
+                            mnPendingOffToken = static_cast<HtmlTokenId>(static_cast<int>(nRet) + 1);       // HtmlTokenId::<TOKEN>_ON -> HtmlTokenId::<TOKEN>_OFF
                             aToken = aToken.replaceAt( aToken.getLength()-1, 1, "");   // remove trailing '/'
                         }
                         if( sal_Unicode(EOF) == nNextCh && rInput.eof() )
@@ -1873,7 +1873,7 @@ static HTMLOptionEnum<HtmlMeta> const aHTMLMetaNameTable[] =
     { OOO_STRING_SVTOOLS_HTML_META_refresh,       HtmlMeta::Refresh       },
     { OOO_STRING_SVTOOLS_HTML_META_sdendnote,     HtmlMeta::SDEndnote     },
     { OOO_STRING_SVTOOLS_HTML_META_sdfootnote,    HtmlMeta::SDFootnote    },
-    { nullptr,                                    (HtmlMeta)0             }
+    { nullptr,                                    HtmlMeta(0)             }
 };
 
 

@@ -89,8 +89,8 @@ public:
 
     SvTreeListEntry*        GetActEntry() const;
 
-    void                    SetImage(SvBmp nIndex, const Image& aImage) { aBmps[(int)nIndex] = aImage; }
-    Image&                  GetImage(SvBmp nIndex) { return aBmps[(int)nIndex]; }
+    void                    SetImage(SvBmp nIndex, const Image& aImage) { aBmps[static_cast<int>(nIndex)] = aImage; }
+    Image&                  GetImage(SvBmp nIndex) { return aBmps[static_cast<int>(nIndex)]; }
 
     void                    SetDefaultImages( const Control* pControlForSettings );
                                 // set images according to the color scheme of the Control

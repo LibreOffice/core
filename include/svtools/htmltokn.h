@@ -283,14 +283,14 @@ enum class HtmlTokenId : sal_Int16
 constexpr bool isOffToken(HtmlTokenId nToken)
 {
     return (nToken == HtmlTokenId::NONE || nToken >= HtmlTokenId::ONOFF_START)
-      ? (1 & (int)nToken)
+      ? (1 & static_cast<int>(nToken))
       : throw std::logic_error("Assertion failed!"); // C++11 does not do assert in constexpr
 }
 
 constexpr HtmlTokenId getOnToken(HtmlTokenId nToken)
 {
     return (nToken == HtmlTokenId::NONE || nToken >= HtmlTokenId::ONOFF_START)
-      ? HtmlTokenId(~1 & (int)nToken)
+      ? HtmlTokenId(~1 & static_cast<int>(nToken))
       : throw std::logic_error("Assertion failed!"); // C++11 does not do assert in constexpr
 }
 

@@ -39,7 +39,7 @@ void SvLBoxButtonData::InitData( bool _bRadioBtn, const Control* pCtrl )
 {
     nWidth = nHeight = 0;
 
-    aBmps.resize((int)SvBmp::STATICIMAGE+1);
+    aBmps.resize(int(SvBmp::STATICIMAGE)+1);
 
     bDataOk = false;
     pImpl->bDefaultImages = true;
@@ -91,7 +91,7 @@ SvBmp SvLBoxButtonData::GetIndex( SvItemStateFlags nItemState )
 
 void SvLBoxButtonData::SetWidthAndHeight()
 {
-    Size aSize = aBmps[(int)SvBmp::UNCHECKED].GetSizePixel();
+    Size aSize = aBmps[int(SvBmp::UNCHECKED)].GetSizePixel();
     nWidth = aSize.Width();
     nHeight = aSize.Height();
     bDataOk = true;

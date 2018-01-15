@@ -305,7 +305,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                 {
                     OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
                 } else
-                    m_nSidebarIconSize = (ToolBoxButtonSize)nTmp;
+                    m_nSidebarIconSize = static_cast<ToolBoxButtonSize>(nTmp);
                 m_bIsSidebarIconSizeRO = seqRO[nProperty];
                 break;
             }
@@ -317,7 +317,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                 {
                     OSL_FAIL("Wrong type of \"Misc\\NotebookbarIconSize\"!" );
                 } else
-                    m_nNotebookbarIconSize = (ToolBoxButtonSize)nTmp;
+                    m_nNotebookbarIconSize = static_cast<ToolBoxButtonSize>(nTmp);
                 m_bIsNotebookbarIconSizeRO = seqRO[nProperty];
                 break;
             }
@@ -457,7 +457,7 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             {
                                                                 OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
                                                             } else
-                                                                m_nSidebarIconSize = (ToolBoxButtonSize)nTmp;
+                                                                m_nSidebarIconSize = static_cast<ToolBoxButtonSize>(nTmp);
                                                         }
                                                     break;
             case PROPERTYHANDLE_NOTEBOOKBARICONSIZE     :   {
@@ -466,7 +466,7 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             {
                                                                 OSL_FAIL("Wrong type of \"Misc\\NotebookbarIconSize\"!" );
                                                             } else
-                                                                m_nNotebookbarIconSize = (ToolBoxButtonSize)nTmp;
+                                                                m_nNotebookbarIconSize = static_cast<ToolBoxButtonSize>(nTmp);
                                                         }
                                                     break;
             case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
@@ -628,14 +628,14 @@ void SvtMiscOptions_Impl::ImplCommit()
             case PROPERTYHANDLE_SIDEBARICONSIZE :
             {
                 if ( !m_bIsSidebarIconSizeRO )
-                   seqValues[nProperty] <<= (sal_uInt16)m_nSidebarIconSize;
+                   seqValues[nProperty] <<= static_cast<sal_uInt16>(m_nSidebarIconSize);
                 break;
             }
 
             case PROPERTYHANDLE_NOTEBOOKBARICONSIZE :
             {
                 if ( !m_bIsNotebookbarIconSizeRO )
-                   seqValues[nProperty] <<= (sal_uInt16)m_nNotebookbarIconSize;
+                   seqValues[nProperty] <<= static_cast<sal_uInt16>(m_nNotebookbarIconSize);
                 break;
             }
 
