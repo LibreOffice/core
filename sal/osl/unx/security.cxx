@@ -263,7 +263,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
                                OUSTRING_TO_OSTRING_CVTFLAGS);
             if (pStrValue && pStrValue->length > 0)
             {
-                sal_Int32 nCopy = (sal_Int32)std::min(nMax-1, pStrValue->length) ;
+                sal_Int32 nCopy = (sal_Int32)std::min<sal_uInt32>(nMax-1, pStrValue->length) ;
                 strncpy (pszDirectory, pStrValue->buffer, nCopy);
                 pszDirectory[nCopy] = '\0';
                 bRet = (std::size_t)pStrValue->length < nMax;
