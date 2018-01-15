@@ -268,6 +268,19 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
             pPor = m_pCurr;
         }
     }
+
+    // Make sure that m_pFirstOfBorderMerge does not point to a portion which
+    // will be deleted by Truncate() below.
+    SwLinePortion* pNext = pPor->GetPortion();
+    while (pNext)
+    {
+        if (pNext == m_pFirstOfBorderMerge)
+        {
+            m_pFirstOfBorderMerge = nullptr;
+            break;
+        }
+        pNext = pNext->GetPortion();
+    }
     pPor->Truncate();
     SwLinePortion *const pRest( rInf.GetRest() );
     if (pRest && pRest->InFieldGrp() &&
