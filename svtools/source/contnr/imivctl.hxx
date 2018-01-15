@@ -168,11 +168,11 @@ class SvxIconChoiceCtrl_Impl
     Size                    aDefaultTextSize;
     Size                    aOutputSize; // Pixel
     VclPtr<SvtIconChoiceCtrl>  pView;
-    IcnCursor_Impl*         pImpCursor;
-    IcnGridMap_Impl*        pGridMap;
+    std::unique_ptr<IcnCursor_Impl> pImpCursor;
+    std::unique_ptr<IcnGridMap_Impl> pGridMap;
     long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
     long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
-    SvxIconChoiceCtrlEntryList_impl*    pZOrderList;
+    std::unique_ptr<SvxIconChoiceCtrlEntryList_impl> pZOrderList;
     SvxIconChoiceCtrlColumnInfoMap* m_pColumns;
     VclPtr<IcnViewEdit_Impl>   pEdit;
     WinBits                 nWinBits;
