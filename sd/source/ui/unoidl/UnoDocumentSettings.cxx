@@ -328,7 +328,7 @@ uno::Sequence<beans::PropertyValue>
     SdDrawDocument* pDoc = mxModel->GetDoc();
     for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ )
     {
-        XPropertyListRef pList = pDoc->GetPropertyList( (XPropertyListType) i );
+        XPropertyListRef pList = pDoc->GetPropertyList( static_cast<XPropertyListType>(i) );
         bHasEmbed = pList.is() && pList->IsEmbedInDocument();
         if( bHasEmbed )
             break;
@@ -708,7 +708,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                     sal_Int32 nValue = 0;
                     if( (*pValues >>= nValue ) && (nValue >= css::style::NumberingType::CHARS_UPPER_LETTER ) && (nValue <= css::style::NumberingType::PAGE_DESCRIPTOR) )
                     {
-                        pDoc->SetPageNumType((SvxNumType)nValue);
+                        pDoc->SetPageNumType(static_cast<SvxNumType>(nValue));
                         bOk = true;
                         bChanged = true;
                     }
@@ -831,19 +831,19 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                 {
                     bOk = true;
 
-                    pDoc->SetCharCompressType( (CharCompressType)nCharCompressType );
+                    pDoc->SetCharCompressType( static_cast<CharCompressType>(nCharCompressType) );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
                     SdrOutliner& rOutl = pDocument->GetDrawOutliner();
-                    rOutl.SetAsianCompressionMode( (CharCompressType)nCharCompressType );
+                    rOutl.SetAsianCompressionMode( static_cast<CharCompressType>(nCharCompressType) );
                     SdOutliner* pOutl = pDocument->GetOutliner( false );
                     if( pOutl )
                     {
-                        pOutl->SetAsianCompressionMode( (CharCompressType)nCharCompressType );
+                        pOutl->SetAsianCompressionMode( static_cast<CharCompressType>(nCharCompressType) );
                     }
                     pOutl = pDocument->GetInternalOutliner( false );
                     if( pOutl )
                     {
-                        pOutl->SetAsianCompressionMode( (CharCompressType)nCharCompressType );
+                        pOutl->SetAsianCompressionMode( static_cast<CharCompressType>(nCharCompressType) );
                     }
                 }
                 break;
@@ -1158,7 +1158,7 @@ DocumentSettings::_getPropertyValues(
 
             case HANDLE_CHARCOMPRESS:
             {
-                *pValue <<= (sal_Int16)pDoc->GetCharCompressType();
+                *pValue <<= static_cast<sal_Int16>(pDoc->GetCharCompressType());
                 break;
             }
 

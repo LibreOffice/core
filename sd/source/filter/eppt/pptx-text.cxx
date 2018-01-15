@@ -822,7 +822,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                 {
                     OUString aPropName( pPropValue[ i ].Name );
                     if ( aPropName == "NumberingType" )
-                        nNumberingType = (SvxNumType)*o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                        nNumberingType = static_cast<SvxNumType>(*o3tl::doAccess<sal_Int16>(pPropValue[i].Value));
                     else if ( aPropName == "Adjust" )
                         nHorzAdjust = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
                     else if ( aPropName == "BulletChar" )
@@ -1124,10 +1124,10 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
 
     if ( ImplGetPropertyValue( "ParaTabStops", bGetPropStateValue ) )
         maTabStop = *o3tl::doAccess<css::uno::Sequence<css::style::TabStop>>(mAny);
-    sal_Int16 eTextAdjust = (sal_Int16)css::style::ParagraphAdjust_LEFT;
+    sal_Int16 eTextAdjust = sal_Int16(css::style::ParagraphAdjust_LEFT);
     if ( GetPropertyValue( aAny, mXPropSet, "ParaAdjust", bGetPropStateValue ) )
         aAny >>= eTextAdjust;
-    switch ( (css::style::ParagraphAdjust)eTextAdjust )
+    switch ( static_cast<css::style::ParagraphAdjust>(eTextAdjust) )
     {
         case css::style::ParagraphAdjust_CENTER :
             mnTextAdjust = 1;

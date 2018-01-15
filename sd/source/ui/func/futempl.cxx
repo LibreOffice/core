@@ -103,11 +103,11 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     SfxStyleSheetBase* pStyleSheet = nullptr;
 
     const SfxPoolItem* pItem;
-    SfxStyleFamily nFamily = (SfxStyleFamily)USHRT_MAX;
+    SfxStyleFamily nFamily = SfxStyleFamily(USHRT_MAX);
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY,
         false, &pItem ))
     {
-        nFamily = (SfxStyleFamily) static_cast<const SfxUInt16Item &>( pArgs->Get( SID_STYLE_FAMILY ) ).GetValue();
+        nFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item &>( pArgs->Get( SID_STYLE_FAMILY ) ).GetValue());
     }
     else if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
         false, &pItem ))

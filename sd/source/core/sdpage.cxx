@@ -1932,7 +1932,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
 
                 if (mbScaleObjects)
                 {
-                    SdrObjKind eObjKind = (SdrObjKind) pObj->GetObjIdentifier();
+                    SdrObjKind eObjKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
 
                     if (bIsPresObjOnMaster)
                     {

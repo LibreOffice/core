@@ -282,7 +282,7 @@ bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
 
     if( m_pLbAction->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( SfxAllEnumItem( ATTR_ACTION, (sal_uInt16)eCA ) );
+        rAttrs->Put( SfxAllEnumItem( ATTR_ACTION, static_cast<sal_uInt16>(eCA) ) );
         bModified = true;
     }
     else
@@ -323,8 +323,8 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
     // m_pLbAction
     if( rAttrs->GetItemState( ATTR_ACTION ) != SfxItemState::DONTCARE )
     {
-        eCA = (presentation::ClickAction) static_cast<const SfxAllEnumItem&>( rAttrs->
-                    Get( ATTR_ACTION ) ).GetValue();
+        eCA = static_cast<presentation::ClickAction>(static_cast<const SfxAllEnumItem&>( rAttrs->
+                    Get( ATTR_ACTION ) ).GetValue());
         SetActualClickAction( eCA );
     }
     else

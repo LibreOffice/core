@@ -480,13 +480,13 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
         nDefTab = pOptions->GetDefTab();
     pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, nDefTab ) );
 
-    FieldUnit nMetric = (FieldUnit)0xffff;
+    FieldUnit nMetric = FieldUnit(0xffff);
     if( pFrameView)
         nMetric = pDoc->GetUIUnit();
     else
-        nMetric = (FieldUnit)pOptions->GetMetric();
+        nMetric = static_cast<FieldUnit>(pOptions->GetMetric());
 
-    if( nMetric == (FieldUnit)0xffff )
+    if( nMetric == FieldUnit(0xffff) )
         nMetric = GetFieldUnit();
 
     pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast<sal_uInt16>(nMetric) ) );
@@ -719,7 +719,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     // Only if also the document type matches...
     if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
     {
-        FieldUnit eUIUnit = (FieldUnit) pOptions->GetMetric();
+        FieldUnit eUIUnit = static_cast<FieldUnit>(pOptions->GetMetric());
         pDoc->SetUIUnit(eUIUnit);
 
         if (pViewShell)

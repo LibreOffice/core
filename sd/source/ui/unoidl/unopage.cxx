@@ -638,10 +638,10 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 SetLowerBorder( nValue );
                 break;
             case WID_PAGE_CHANGE:
-                GetPage()->SetPresChange( (PresChange)nValue );
+                GetPage()->SetPresChange( static_cast<PresChange>(nValue) );
                 break;
             case WID_PAGE_LAYOUT:
-                GetPage()->SetAutoLayout( (AutoLayout)nValue, true );
+                GetPage()->SetAutoLayout( static_cast<AutoLayout>(nValue), true );
                 break;
             case WID_PAGE_DURATION:
                 GetPage()->SetTime(nValue);
@@ -682,7 +682,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if(!::cppu::enum2int( nEnum, aValue ))
                 throw lang::IllegalArgumentException();
 
-            Orientation eOri = (((view::PaperOrientation)nEnum) == view::PaperOrientation_PORTRAIT)?Orientation::Portrait:Orientation::Landscape;
+            Orientation eOri = (static_cast<view::PaperOrientation>(nEnum) == view::PaperOrientation_PORTRAIT)?Orientation::Portrait:Orientation::Landscape;
 
             if( eOri != GetPage()->GetOrientation() )
             {
@@ -712,7 +712,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if(!::cppu::enum2int( nEnum, aValue ))
                 throw lang::IllegalArgumentException();
 
-            GetPage()->SetFadeEffect( (presentation::FadeEffect)nEnum );
+            GetPage()->SetFadeEffect( static_cast<presentation::FadeEffect>(nEnum) );
             break;
         }
         case WID_PAGE_BACK:

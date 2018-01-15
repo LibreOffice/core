@@ -258,7 +258,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 
         for (sal_uInt16 nID = NAVIGATOR_DRAGTYPE_URL; nID < NAVIGATOR_DRAGTYPE_COUNT; ++nID)
         {
-            const char* pRId = GetDragTypeSdStrId((NavigatorDragType)nID);
+            const char* pRId = GetDragTypeSdStrId(static_cast<NavigatorDragType>(nID));
             if (pRId)
             {
                 DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
@@ -399,7 +399,7 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu, bool )
 
     if( nMenuId != USHRT_MAX ) // Necessary ?
     {
-        NavigatorDragType eDT = (NavigatorDragType) nMenuId;
+        NavigatorDragType eDT = static_cast<NavigatorDragType>(nMenuId);
         if( meDragType != eDT )
         {
             meDragType = eDT;
@@ -753,7 +753,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
     if( eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_STATE )
     {
         const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
-        NavState nState = (NavState)rStateItem.GetValue();
+        NavState nState = static_cast<NavState>(rStateItem.GetValue());
 
         // only if doc in LB is the active
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();

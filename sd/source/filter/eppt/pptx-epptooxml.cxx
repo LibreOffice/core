@@ -1322,7 +1322,7 @@ void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, Any const
         {
             if (eTiming == Timing_INDEFINITE)
                 pDelay = "indefinite";
-            SAL_INFO("sd.eppt", "event offset timing: " << (int)eTiming);
+            SAL_INFO("sd.eppt", "event offset timing: " << static_cast<int>(eTiming));
         }
     }
     else if (rAny >>= xShape)

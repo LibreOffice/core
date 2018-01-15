@@ -227,7 +227,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
     if ( rInAttrs.GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rInAttrs.Get( nWhich ));
-        eFUnit = (FieldUnit)rItem.GetValue();
+        eFUnit = static_cast<FieldUnit>(rItem.GetValue());
     }
     else
         eFUnit = SfxModule::GetCurrentFieldUnit();
@@ -327,7 +327,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     {
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
-        FieldUnit eFUnit = (FieldUnit)static_cast<long>(pItem->GetValue());
+        FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
 
         if( eFUnit != m_pMtrFldOriginalWidth->GetUnit() )
         {
@@ -534,7 +534,7 @@ IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox&, void)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        FieldUnit eUnit = (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nPos ));
+        FieldUnit eUnit = static_cast<FieldUnit>(reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nPos )));
         sal_Int64 nVal =
             m_pMtrFldTabstop->Denormalize( m_pMtrFldTabstop->GetValue( FUNIT_TWIP ) );
         SetFieldUnit( *m_pMtrFldTabstop, eUnit );

@@ -217,10 +217,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (pArgs->Count () == 1)
                 {
                     const SfxUInt32Item* pFillStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
-                    if (CHECK_RANGE (drawing::FillStyle_NONE, (drawing::FillStyle)pFillStyle->GetValue (), drawing::FillStyle_BITMAP))
+                    if (CHECK_RANGE (drawing::FillStyle_NONE, static_cast<drawing::FillStyle>(pFillStyle->GetValue ()), drawing::FillStyle_BITMAP))
                     {
                         pAttr->ClearItem (XATTR_FILLSTYLE);
-                        XFillStyleItem aStyleItem((drawing::FillStyle) pFillStyle->GetValue ());
+                        XFillStyleItem aStyleItem(static_cast<drawing::FillStyle>(pFillStyle->GetValue ()));
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
                         pAttr->Put (aStyleItem);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
@@ -242,10 +242,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (pArgs->Count () == 1)
                 {
                     const SfxUInt32Item* pLineStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
-                    if (CHECK_RANGE ((sal_Int32)drawing::LineStyle_NONE, static_cast<sal_Int32>(pLineStyle->GetValue()), (sal_Int32)drawing::LineStyle_DASH))
+                    if (CHECK_RANGE (sal_Int32(drawing::LineStyle_NONE), static_cast<sal_Int32>(pLineStyle->GetValue()), sal_Int32(drawing::LineStyle_DASH)))
                     {
                         pAttr->ClearItem (XATTR_LINESTYLE);
-                        XLineStyleItem aStyleItem((drawing::LineStyle) pLineStyle->GetValue());
+                        XLineStyleItem aStyleItem(static_cast<drawing::LineStyle>(pLineStyle->GetValue()));
                         aStyleItem.SetWhich(XATTR_LINESTYLE);
                         pAttr->Put(aStyleItem);
                         rBindings.Invalidate (SID_ATTR_LINE_STYLE);
@@ -475,9 +475,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pDashLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHLEN);
                     const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
 
-                    if (CHECK_RANGE ((sal_Int32)css::drawing::DashStyle_RECT, static_cast<sal_Int32>(pStyle->GetValue()), (sal_Int32)css::drawing::DashStyle_ROUNDRELATIVE))
+                    if (CHECK_RANGE (sal_Int32(css::drawing::DashStyle_RECT), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::drawing::DashStyle_ROUNDRELATIVE)))
                     {
-                        XDash aNewDash ((css::drawing::DashStyle) pStyle->GetValue (), static_cast<short>(pDots->GetValue ()), pDotLen->GetValue (),
+                        XDash aNewDash (static_cast<css::drawing::DashStyle>(pStyle->GetValue ()), static_cast<short>(pDots->GetValue ()), pDotLen->GetValue (),
                                         static_cast<short>(pDashes->GetValue ()), pDashLen->GetValue (), pDistance->GetValue ());
 
                         pAttr->ClearItem (XATTR_LINEDASH);
@@ -530,7 +530,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_STARTINTENS);
                     const SfxUInt32Item* pEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ENDINTENS);
 
-                    if (CHECK_RANGE ((sal_Int32)css::awt::GradientStyle_LINEAR, static_cast<sal_Int32>(pStyle->GetValue()), (sal_Int32)css::awt::GradientStyle_RECT) &&
+                    if (CHECK_RANGE (sal_Int32(css::awt::GradientStyle_LINEAR), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::awt::GradientStyle_RECT)) &&
                         CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360) &&
                         CHECK_RANGE (0, static_cast<sal_Int32>(pBorder->GetValue ()), 100) &&
                         CHECK_RANGE (0, static_cast<sal_Int32>(pCenterX->GetValue ()), 100) &&
@@ -553,7 +553,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             {
                                 XGradient aGradient(pEntry->GetGradient());
 
-                                aGradient.SetGradientStyle ((css::awt::GradientStyle) pStyle->GetValue ());
+                                aGradient.SetGradientStyle (static_cast<css::awt::GradientStyle>(pStyle->GetValue ()));
                                 aGradient.SetAngle (pAngle->GetValue () * 10);
                                 aGradient.SetBorder (static_cast<short>(pBorder->GetValue ()));
                                 aGradient.SetXOffset (static_cast<short>(pCenterX->GetValue ()));
@@ -574,7 +574,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         if (i >= nCounts)
                         {
                             Color aBlack (0, 0, 0);
-                            XGradient aGradient (aBlack, aBlack, (css::awt::GradientStyle) pStyle->GetValue (),
+                            XGradient aGradient (aBlack, aBlack, static_cast<css::awt::GradientStyle>(pStyle->GetValue ()),
                                                  pAngle->GetValue () * 10, static_cast<short>(pCenterX->GetValue ()),
                                                  static_cast<short>(pCenterY->GetValue ()), static_cast<short>(pBorder->GetValue ()),
                                                  static_cast<short>(pStart->GetValue ()), static_cast<short>(pEnd->GetValue ()));
@@ -613,7 +613,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
                     const SfxUInt32Item* pAngle = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLE);
 
-                    if (CHECK_RANGE ((sal_Int32)css::drawing::HatchStyle_SINGLE, static_cast<sal_Int32>(pStyle->GetValue()), (sal_Int32)css::drawing::HatchStyle_TRIPLE) &&
+                    if (CHECK_RANGE (sal_Int32(css::drawing::HatchStyle_SINGLE), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::drawing::HatchStyle_TRIPLE)) &&
                         CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360))
                     {
                         pAttr->ClearItem (XATTR_FILLHATCH);
@@ -631,7 +631,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             {
                                 XHatch aHatch(pEntry->GetHatch());
 
-                                aHatch.SetHatchStyle ((css::drawing::HatchStyle) pStyle->GetValue ());
+                                aHatch.SetHatchStyle (static_cast<css::drawing::HatchStyle>(pStyle->GetValue ()));
                                 aHatch.SetDistance (pDistance->GetValue ());
                                 aHatch.SetAngle (pAngle->GetValue () * 10);
 
@@ -648,7 +648,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         if (i >= nCounts)
                         {
                             Color  aBlack (0, 0, 0);
-                            XHatch aHatch (aBlack, (css::drawing::HatchStyle) pStyle->GetValue (), pDistance->GetValue (),
+                            XHatch aHatch (aBlack, static_cast<css::drawing::HatchStyle>(pStyle->GetValue ()), pDistance->GetValue (),
                                            pAngle->GetValue () * 10);
 
                             pHatchList->Insert(o3tl::make_unique<XHatchEntry>(aHatch, pName->GetValue()));
@@ -814,7 +814,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XFillStyleItem &rFillStyleItem = aAttr.Get (XATTR_FILLSTYLE);
 
-                rSet.Put (SfxUInt32Item (nWhich, (long) rFillStyleItem.GetValue ()));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<long>(rFillStyleItem.GetValue ())));
                 break;
             }
 
@@ -822,7 +822,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XLineStyleItem &rLineStyleItem = aAttr.Get (XATTR_LINESTYLE);
 
-                rSet.Put (SfxUInt32Item (nWhich, (long) rLineStyleItem.GetValue ()));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<long>(rLineStyleItem.GetValue ())));
                 break;
             }
 

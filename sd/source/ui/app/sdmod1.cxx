@@ -124,7 +124,7 @@ void SdModule::Execute(SfxRequest& rReq)
             const SfxPoolItem* pItem;
             if ( pSet && SfxItemState::SET == pSet->GetItemState( SID_ATTR_METRIC, true, &pItem ) )
             {
-                FieldUnit eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                FieldUnit eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
                 switch( eUnit )
                 {
                     case FUNIT_MM:      // only the units which are also in the dialog

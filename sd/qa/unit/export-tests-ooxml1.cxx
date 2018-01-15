@@ -516,12 +516,12 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillStyle") >>= aFillStyle;
-    CPPUNIT_ASSERT_EQUAL((int)drawing::FillStyle_BITMAP, (int)aFillStyle);
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_BITMAP), static_cast<int>(aFillStyle));
 
     // Test Gradient fill type for cell
     xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillStyle") >>= aFillStyle;
-    CPPUNIT_ASSERT_EQUAL((int)drawing::FillStyle_GRADIENT, (int)aFillStyle);
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_GRADIENT), static_cast<int>(aFillStyle));
 
     xDocShRef->DoClose();
 }
@@ -552,7 +552,7 @@ void SdOOXMLExportTest1::testLineStyle()
 
     const XLineStyleItem& rStyleItem = dynamic_cast<const XLineStyleItem&>(
                 pShape->GetMergedItem(XATTR_LINESTYLE));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong style", (int)drawing::LineStyle_SOLID, (int)rStyleItem.GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong style", int(drawing::LineStyle_SOLID), static_cast<int>(rStyleItem.GetValue()));
 
     xDocShRef->DoClose();
 }
