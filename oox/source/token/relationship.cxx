@@ -24,7 +24,7 @@ OUString getRelationship(Relationship eRelationship)
     if (itr != aMap.end())
         return itr->second;
 
-    SAL_WARN("oox", "could not find an entry for the relationship: " << (int) eRelationship);
+    SAL_WARN("oox", "could not find an entry for the relationship: " << static_cast<int>(eRelationship));
     return OUString();
 }
 

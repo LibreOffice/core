@@ -1920,7 +1920,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         SAL_INFO("oox.shape", "pro name: " << aPropName);
         if ( aPropName == "NumberingType" )
         {
-            nNumberingType = (SvxNumType)*o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+            nNumberingType = static_cast<SvxNumType>(*o3tl::doAccess<sal_Int16>(pPropValue[i].Value));
         }
         else if ( aPropName == "Prefix" )
         {
@@ -2145,9 +2145,9 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
 
-    sal_Int16 nTmp = (sal_Int16)style::ParagraphAdjust_LEFT;
+    sal_Int16 nTmp = sal_Int16(style::ParagraphAdjust_LEFT);
     GET( nTmp, ParaAdjust );
-    style::ParagraphAdjust nAlignment = (style::ParagraphAdjust)nTmp;
+    style::ParagraphAdjust nAlignment = static_cast<style::ParagraphAdjust>(nTmp);
 
     bool bHasLinespacing = false;
     LineSpacing aLineSpacing;
