@@ -328,12 +328,12 @@ void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window const * pWi
 VCLXWindow::VCLXWindow( bool _bWithDefaultProps )
     :mpImpl( nullptr )
 {
-    mpImpl = new VCLXWindowImpl( *this, _bWithDefaultProps );
+    mpImpl.reset( new VCLXWindowImpl( *this, _bWithDefaultProps ) );
 }
 
 VCLXWindow::~VCLXWindow()
 {
-    delete mpImpl;
+    mpImpl.reset();
 
     if ( GetWindow() )
     {

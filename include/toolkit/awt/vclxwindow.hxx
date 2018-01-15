@@ -44,6 +44,7 @@
 #include <tools/link.hxx>
 
 #include <stdarg.h>
+#include <memory>
 #include <vector>
 #include <functional>
 
@@ -76,7 +77,7 @@ typedef cppu::ImplInheritanceHelper< VCLXDevice,
 class TOOLKIT_DLLPUBLIC VCLXWindow : public VCLXWindow_Base
 {
 private:
-    VCLXWindowImpl*                 mpImpl;
+    std::unique_ptr<VCLXWindowImpl>  mpImpl;
 
     UnoPropertyArrayHelper *GetPropHelper();
 
