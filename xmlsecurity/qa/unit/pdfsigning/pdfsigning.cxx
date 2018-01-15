@@ -433,7 +433,7 @@ void PDFSigningTest::testGood()
         std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, 1, /*rExpectedSubFilter=*/OString());
         CPPUNIT_ASSERT(!aInfos.empty());
         SignatureInformation& rInformation = aInfos[0];
-        CPPUNIT_ASSERT_EQUAL((int)xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED, (int)rInformation.nStatus);
+        CPPUNIT_ASSERT_EQUAL(int(xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED), static_cast<int>(rInformation.nStatus));
     }
 }
 
