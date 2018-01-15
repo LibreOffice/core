@@ -43,7 +43,7 @@ Transliteration_caseignore::Transliteration_caseignore()
 void SAL_CALL
 Transliteration_caseignore::loadModule( TransliterationModules modName, const Locale& rLocale )
 {
-    moduleLoaded |= (TransliterationFlags)modName;
+    moduleLoaded |= static_cast<TransliterationFlags>(modName);
     aLocale = rLocale;
 }
 
@@ -63,8 +63,8 @@ Transliteration_caseignore::transliterateRange( const OUString& str1, const OUSt
     static rtl::Reference< Transliteration_u2l > u2l(new Transliteration_u2l);
     static rtl::Reference< Transliteration_l2u > l2u(new Transliteration_l2u);
 
-    u2l->loadModule((TransliterationModules)0, aLocale);
-    l2u->loadModule((TransliterationModules)0, aLocale);
+    u2l->loadModule(TransliterationModules(0), aLocale);
+    l2u->loadModule(TransliterationModules(0), aLocale);
 
     OUString l1 = u2l->transliterateString2String(str1, 0, str1.getLength());
     OUString u1 = l2u->transliterateString2String(str1, 0, str1.getLength());

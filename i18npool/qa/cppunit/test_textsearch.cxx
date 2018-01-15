@@ -149,7 +149,7 @@ void TestTextSearch::testWildcardSearch()
     aOptions.WildcardEscapeCharacter = '~';
     // aOptions.searchFlag = ::css::util::SearchFlags::WILD_MATCH_SELECTION;
     // is not set, so substring match is allowed.
-    aOptions.transliterateFlags = (sal_Int32)::css::i18n::TransliterationModules::TransliterationModules_IGNORE_CASE;
+    aOptions.transliterateFlags = sal_Int32(::css::i18n::TransliterationModules::TransliterationModules_IGNORE_CASE);
     aText = "abAca";
 
     aOptions.searchString = "a";

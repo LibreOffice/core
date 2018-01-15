@@ -48,7 +48,7 @@ namespace i18npool {
   {TransliterationModules_##name, TransliterationModulesNew_##name, #name}
 
 #define TmItem2( name ) \
-  {(TransliterationModules)0, TransliterationModulesNew_##name, #name}
+  {TransliterationModules(0), TransliterationModulesNew_##name, #name}
 
 // Ignore Module list
 static struct TMlist {
@@ -131,7 +131,7 @@ static struct TMlist {
 //  TmItem2 (NumToCharEstern_Arabic_Indic),// () (68)
 //  TmItem2 (NumToCharIndic),           // () (69)
 //  TmItem2 (NumToCharThai),            // () (70)
-  {(TransliterationModules)0, (TransliterationModulesNew)0,  nullptr}
+  {TransliterationModules(0), TransliterationModulesNew(0),  nullptr}
 };
 
 // Constructor/Destructor
@@ -199,12 +199,12 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
                     numCascade++;
         }
         // additional transliterations from TranslationModuleExtra (we cannot extend TransliterationModule)
-        if (bool(modType & (TransliterationModules)TransliterationModulesExtra::IGNORE_DIACRITICS_CTL))
+        if (bool(modType & TransliterationModules(TransliterationModulesExtra::IGNORE_DIACRITICS_CTL)))
         {
             if (loadModuleByName("ignoreDiacritics_CTL", bodyCascade[numCascade], rLocale))
                 numCascade++;
         }
-        if (bool(modType & (TransliterationModules)TransliterationModulesExtra::IGNORE_KASHIDA_CTL))
+        if (bool(modType & TransliterationModules(TransliterationModulesExtra::IGNORE_KASHIDA_CTL)))
             if (loadModuleByName("ignoreKashida_CTL", bodyCascade[numCascade], rLocale))
                 numCascade++;
 
@@ -617,7 +617,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
     OUString cname = TRLT_IMPLNAME_PREFIX + implName;
     loadBody(cname, body);
     if (body.is()) {
-        body->loadModule((TransliterationModules)0, rLocale); // toUpper/toLoad need rLocale
+        body->loadModule(TransliterationModules(0), rLocale); // toUpper/toLoad need rLocale
 
         // if the module is ignore case/kana/width, load caseignore for equals/compareString mothed
         for (sal_Int16 i = 0; i < 3; i++) {
