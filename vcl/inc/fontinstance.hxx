@@ -25,6 +25,7 @@
 #include "PhysicalFontFace.hxx"
 
 #include <unordered_map>
+#include <memory>
 
 class ConvertChar;
 class ImplFontCache;
@@ -65,7 +66,7 @@ private:
     // TODO: a fallback map can be shared with many other ImplFontEntries
     // TODO: at least the ones which just differ in orientation, stretching or height
     typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
-    UnicodeFallbackList* mpUnicodeFallbackList;
+    std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
     ImplFontCache * mpFontCache;
     sal_uInt32      mnRefCount;
 };
