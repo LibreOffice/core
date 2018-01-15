@@ -330,23 +330,23 @@ SwFieldType* SwAuthorFieldType::Copy() const
 SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFormat)
     : SwField(pTyp, nFormat)
 {
-    aContent = SwAuthorFieldType::Expand(GetFormat());
+    m_aContent = SwAuthorFieldType::Expand(GetFormat());
 }
 
 OUString SwAuthorField::Expand() const
 {
     if (!IsFixed())
-        const_cast<SwAuthorField*>(this)->aContent =
+        const_cast<SwAuthorField*>(this)->m_aContent =
                     SwAuthorFieldType::Expand(GetFormat());
 
-    return aContent;
+    return m_aContent;
 }
 
 SwField* SwAuthorField::Copy() const
 {
     SwAuthorField *pTmp = new SwAuthorField( static_cast<SwAuthorFieldType*>(GetTyp()),
                                                 GetFormat());
-    pTmp->SetExpansion(aContent);
+    pTmp->SetExpansion(m_aContent);
     return pTmp;
 }
 
@@ -363,7 +363,7 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_PAR1:
-        rAny <<= aContent;
+        rAny <<= m_aContent;
         break;
 
     default:
@@ -388,7 +388,7 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
 
     case FIELD_PROP_PAR1:
-        rAny >>= aContent;
+        rAny >>= m_aContent;
         break;
 
     default:
@@ -2539,29 +2539,29 @@ SwFieldType* SwCombinedCharFieldType::Copy() const
 SwCombinedCharField::SwCombinedCharField( SwCombinedCharFieldType* pFTyp,
                                             const OUString& rChars )
     : SwField( pFTyp, 0 ),
-    sCharacters( rChars.copy( 0, std::min<sal_Int32>(rChars.getLength(), MAX_COMBINED_CHARACTERS) ))
+    m_sCharacters( rChars.copy( 0, std::min<sal_Int32>(rChars.getLength(), MAX_COMBINED_CHARACTERS) ))
 {
 }
 
 OUString SwCombinedCharField::Expand() const
 {
-    return sCharacters;
+    return m_sCharacters;
 }
 
 SwField* SwCombinedCharField::Copy() const
 {
     return new SwCombinedCharField( static_cast<SwCombinedCharFieldType*>(GetTyp()),
-                                        sCharacters );
+                                        m_sCharacters );
 }
 
 OUString SwCombinedCharField::GetPar1() const
 {
-    return sCharacters;
+    return m_sCharacters;
 }
 
 void SwCombinedCharField::SetPar1(const OUString& rStr)
 {
-    sCharacters = rStr.copy(0, std::min<sal_Int32>(rStr.getLength(), MAX_COMBINED_CHARACTERS));
+    m_sCharacters = rStr.copy(0, std::min<sal_Int32>(rStr.getLength(), MAX_COMBINED_CHARACTERS));
 }
 
 bool SwCombinedCharField::QueryValue( uno::Any& rAny,
@@ -2570,7 +2570,7 @@ bool SwCombinedCharField::QueryValue( uno::Any& rAny,
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= sCharacters;
+        rAny <<= m_sCharacters;
         break;
     default:
         assert(false);

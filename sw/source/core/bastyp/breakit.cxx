@@ -54,7 +54,7 @@ SwBreakIt * SwBreakIt::Get()
 SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
     : m_xContext(rxContext)
     , m_xBreak(i18n::BreakIterator::create(m_xContext))
-    , aForbiddenLang(LANGUAGE_DONTKNOW)
+    , m_aForbiddenLang(LANGUAGE_DONTKNOW)
 {
 }
 
@@ -78,7 +78,7 @@ void SwBreakIt::GetForbidden_( const LanguageType aLang )
 {
     LocaleDataWrapper aWrap(m_xContext, GetLanguageTag(aLang));
 
-    aForbiddenLang = aLang;
+    m_aForbiddenLang = aLang;
     m_xForbidden.reset(new i18n::ForbiddenCharacters(aWrap.getForbiddenCharacters()));
 }
 

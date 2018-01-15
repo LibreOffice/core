@@ -181,7 +181,7 @@ public:
 
 class SwAuthorField : public SwField
 {
-    OUString aContent;
+    OUString m_aContent;
 
 public:
     SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFormat);
@@ -189,7 +189,7 @@ public:
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
 
-    void         SetExpansion(const OUString& rStr) { aContent = rStr; }
+    void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
@@ -718,7 +718,7 @@ public:
 
 class SW_DLLPUBLIC SwCombinedCharField : public SwField
 {
-    OUString sCharacters;    ///< combine these characters
+    OUString m_sCharacters;    ///< combine these characters
 
 public:
     SwCombinedCharField( SwCombinedCharFieldType*, const OUString& rChars );
