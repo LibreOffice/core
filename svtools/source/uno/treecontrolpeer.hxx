@@ -165,7 +165,7 @@ private:
     OUString msDefaultExpandedGraphicURL;
     Image maDefaultExpandedImage;
     Image maDefaultCollapsedImage;
-    TreeNodeMap* mpTreeNodeMap;
+    std::unique_ptr<TreeNodeMap> mpTreeNodeMap;
     css::uno::Reference< css::graphic::XGraphicProvider > mxGraphicProvider;
 };
 
