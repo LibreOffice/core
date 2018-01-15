@@ -109,6 +109,17 @@ sub check_whitespaces($)
     }
 }
 
+sub check_author()
+{
+    my $author = `git var GIT_AUTHOR_IDENT`;
+    chomp $author;
+    if ($author =~ /^Your Name <you\@example.com>/)
+    {
+        print("ERROR: You have a suspicious author identity: '$author'\n");
+        exit(1);
+    }
+}
+
 sub check_style($)
 {
     if (! -e "solenv/clang-format/ClangFormat.pm")
@@ -265,6 +276,9 @@ check_whitespaces( $against);
 
 # fix style in code
 check_style($against);
+
+# catch missing author info
+check_author();
 
 # all OK
 exit( 0 );
