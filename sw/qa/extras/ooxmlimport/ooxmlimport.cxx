@@ -1567,6 +1567,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
     CPPUNIT_ASSERT_EQUAL( OUString("30624"), aTop );
 
 }
+
+DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
+{
+    OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
+    CPPUNIT_ASSERT_EQUAL( OUString("1696"), aTop );
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
