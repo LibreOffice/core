@@ -314,7 +314,7 @@ void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
     {
         if ( rEvent.ActionCommand == msButtonIDs[i] )
         {
-            eButton = (DialogControls) i;
+            eButton = static_cast<DialogControls>(i);
             break;
         }
     }

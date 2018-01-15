@@ -630,7 +630,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                             aParams.format)
                 > 4 )
             {
-                aParams.format = (SANE_Frame)5;
+                aParams.format = SANE_Frame(5);
             }
             fprintf( stderr, "format:           %s\n", ppFormats[ static_cast<int>(aParams.format) ] );
             fprintf( stderr, "last_frame:       %s\n", aParams.last_frame ? "TRUE" : "FALSE" );

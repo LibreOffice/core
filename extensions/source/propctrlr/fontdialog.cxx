@@ -209,28 +209,28 @@ namespace pcr
             sal_Int16   nFontCharset        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
             float   nFontHeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, static_cast<float>(aDefaultFont.Height));
             float   nFontWeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
-            css::awt::FontSlant nFontSlant  = static_cast<css::awt::FontSlant>(aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, (sal_Int16)aDefaultFont.Slant));
+            css::awt::FontSlant nFontSlant  = static_cast<css::awt::FontSlant>(aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, static_cast<sal_Int16>(aDefaultFont.Slant)));
             sal_Int16 nFontLineStyle        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
             sal_Int16 nFontStrikeout        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
 
             sal_Int32 nTextLineColor        = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTLINECOLOR, COL_AUTO);
-            sal_Int16 nFontRelief           = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_RELIEF, (sal_Int16)aDefaultVCLFont.GetRelief());
-            sal_Int16 nFontEmphasisMark     = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_EMPHASIS_MARK, (sal_uInt16)aDefaultVCLFont.GetEmphasisMark());
+            sal_Int16 nFontRelief           = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_RELIEF, static_cast<sal_Int16>(aDefaultVCLFont.GetRelief()));
+            sal_Int16 nFontEmphasisMark     = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_EMPHASIS_MARK, static_cast<sal_uInt16>(aDefaultVCLFont.GetEmphasisMark()));
 
             Any aValue;
             bool bWordLineMode          = aPropExtractor.getCheckFontProperty(PROPERTY_WORDLINEMODE, aValue) ? aDefaultFont.WordLineMode : ::cppu::any2bool(aValue);
             sal_Int32 nColor32              = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTCOLOR, 0);
 
             // build SfxItems with the values
-            SvxFontItem aFontItem((FontFamily)nFontFamily, aFontName, aFontStyleName, PITCH_DONTKNOW, nFontCharset, CFID_FONT);
+            SvxFontItem aFontItem(static_cast<FontFamily>(nFontFamily), aFontName, aFontStyleName, PITCH_DONTKNOW, nFontCharset, CFID_FONT);
 
             nFontHeight = static_cast<float>(OutputDevice::LogicToLogic(Size(0, static_cast<sal_Int32>(nFontHeight)), MapMode(MapUnit::MapPoint), MapMode(MapUnit::MapTwip)).Height());
             SvxFontHeightItem aSvxFontHeightItem(static_cast<sal_uInt32>(nFontHeight),100,CFID_HEIGHT);
 
             FontWeight      eWeight=vcl::unohelper::ConvertFontWeight(nFontWeight);
             FontItalic      eItalic=vcl::unohelper::ConvertFontSlant(nFontSlant);
-            FontLineStyle    eUnderline=(FontLineStyle)nFontLineStyle;
-            FontStrikeout   eStrikeout=(FontStrikeout)nFontStrikeout;
+            FontLineStyle    eUnderline=static_cast<FontLineStyle>(nFontLineStyle);
+            FontStrikeout   eStrikeout=static_cast<FontStrikeout>(nFontStrikeout);
 
             SvxWeightItem       aWeightItem(eWeight,CFID_WEIGHT);
             SvxPostureItem      aPostureItem(eItalic,CFID_POSTURE);
@@ -245,8 +245,8 @@ namespace pcr
             SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_LANGUAGE);
 
             // the 2 CJK props
-            SvxCharReliefItem aFontReliefItem((FontRelief)nFontRelief, CFID_RELIEF);
-            SvxEmphasisMarkItem aEmphasisMarkitem((FontEmphasisMark)nFontEmphasisMark, CFID_EMPHASIS);
+            SvxCharReliefItem aFontReliefItem(static_cast<FontRelief>(nFontRelief), CFID_RELIEF);
+            SvxEmphasisMarkItem aEmphasisMarkitem(static_cast<FontEmphasisMark>(nFontEmphasisMark), CFID_EMPHASIS);
 
             _pSet->Put(aFontItem);
             _pSet->Put(aSvxFontHeightItem);
@@ -356,7 +356,7 @@ namespace pcr
                     static_cast<const SvxPostureItem&>(_rSet.Get(CFID_POSTURE));
 
                 css::awt::FontSlant eSlant = vcl::unohelper::ConvertFontSlant(rPostureItem.GetPosture());
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, makeAny(static_cast<sal_Int16>(eSlant)));
             }
 
 
@@ -433,7 +433,7 @@ namespace pcr
                 const SvxCharReliefItem& rReliefItem =
                     static_cast<const SvxCharReliefItem&>(_rSet.Get(CFID_RELIEF));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_RELIEF, makeAny((sal_Int16)rReliefItem.GetValue()) );
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_RELIEF, makeAny(static_cast<sal_Int16>(rReliefItem.GetValue())) );
             }
 
 
@@ -445,7 +445,7 @@ namespace pcr
                 const SvxEmphasisMarkItem& rEmphMarkItem =
                     static_cast<const SvxEmphasisMarkItem&>(_rSet.Get(CFID_EMPHASIS));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_EMPHASIS_MARK, makeAny((sal_Int16)rEmphMarkItem.GetEmphasisMark()) );
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_EMPHASIS_MARK, makeAny(static_cast<sal_Int16>(rEmphMarkItem.GetEmphasisMark())) );
             }
         }
         catch (const Exception& )
