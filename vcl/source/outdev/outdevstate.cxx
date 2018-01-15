@@ -52,16 +52,16 @@ OutDevState::OutDevState()
 
 OutDevState::~OutDevState()
 {
-    delete mpLineColor;
-    delete mpFillColor;
-    delete mpFont;
-    delete mpTextColor;
-    delete mpTextFillColor;
-    delete mpTextLineColor;
-    delete mpOverlineColor;
-    delete mpMapMode;
-    delete mpClipRegion;
-    delete mpRefPoint;
+    mpLineColor.reset();
+    mpFillColor.reset();
+    mpFont.reset();
+    mpTextColor.reset();
+    mpTextFillColor.reset();
+    mpTextLineColor.reset();
+    mpOverlineColor.reset();
+    mpMapMode.reset();
+    mpClipRegion.reset();
+    mpRefPoint.reset();
 }
 
 void OutputDevice::Push( PushFlags nFlags )
@@ -76,27 +76,27 @@ void OutputDevice::Push( PushFlags nFlags )
 
     if (nFlags & PushFlags::LINECOLOR && mbLineColor)
     {
-        pState->mpLineColor = new Color( maLineColor );
+        pState->mpLineColor.reset( new Color( maLineColor ) );
     }
     if (nFlags & PushFlags::FILLCOLOR && mbFillColor)
     {
-        pState->mpFillColor = new Color( maFillColor );
+        pState->mpFillColor.reset( new Color( maFillColor ) );
     }
     if ( nFlags & PushFlags::FONT )
-        pState->mpFont = new vcl::Font( maFont );
+        pState->mpFont.reset( new vcl::Font( maFont ) );
     if ( nFlags & PushFlags::TEXTCOLOR )
-        pState->mpTextColor = new Color( GetTextColor() );
+        pState->mpTextColor.reset( new Color( GetTextColor() ) );
     if (nFlags & PushFlags::TEXTFILLCOLOR && IsTextFillColor())
     {
-        pState->mpTextFillColor = new Color( GetTextFillColor() );
+        pState->mpTextFillColor.reset( new Color( GetTextFillColor() ) );
     }
     if (nFlags & PushFlags::TEXTLINECOLOR && IsTextLineColor())
     {
-        pState->mpTextLineColor = new Color( GetTextLineColor() );
+        pState->mpTextLineColor.reset( new Color( GetTextLineColor() ) );
     }
     if (nFlags & PushFlags::OVERLINECOLOR && IsOverlineColor())
     {
-        pState->mpOverlineColor = new Color( GetOverlineColor() );
+        pState->mpOverlineColor.reset( new Color( GetOverlineColor() ) );
     }
     if ( nFlags & PushFlags::TEXTALIGN )
         pState->meTextAlign = GetTextAlign();
@@ -108,16 +108,16 @@ void OutputDevice::Push( PushFlags nFlags )
         pState->meRasterOp = GetRasterOp();
     if ( nFlags & PushFlags::MAPMODE )
     {
-        pState->mpMapMode = new MapMode( maMapMode );
+        pState->mpMapMode.reset( new MapMode( maMapMode ) );
         pState->mbMapActive = mbMap;
     }
     if (nFlags & PushFlags::CLIPREGION && mbClipRegion)
     {
-        pState->mpClipRegion = new vcl::Region( maRegion );
+        pState->mpClipRegion.reset( new vcl::Region( maRegion ) );
     }
     if (nFlags & PushFlags::REFPOINT && mbRefPoint)
     {
-        pState->mpRefPoint = new Point( maRefPoint );
+        pState->mpRefPoint.reset( new Point( maRefPoint ) );
     }
 
     mpOutDevStateStack->push_back( pState );
@@ -213,7 +213,7 @@ void OutputDevice::Pop()
     }
 
     if ( rState.mnFlags & PushFlags::CLIPREGION )
-        SetDeviceClipRegion( rState.mpClipRegion );
+        SetDeviceClipRegion( rState.mpClipRegion.get() );
 
     if ( rState.mnFlags & PushFlags::REFPOINT )
     {
