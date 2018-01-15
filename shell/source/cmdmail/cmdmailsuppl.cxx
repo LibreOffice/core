@@ -145,7 +145,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     OUString aProgram;
     if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
     {
-        throw css::uno::Exception("Cound not convert executable path",
+        throw css::uno::Exception("Could not convert executable path",
             static_cast < XSimpleMailClient * > (this));
     }
 

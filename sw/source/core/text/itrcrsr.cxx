@@ -1832,7 +1832,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                         }
                         // If we get a right position and if the left position
                         // is not the same like the left position of the line before
-                        // which cound happen e.g. for field portions or fly frames
+                        // which could happen e.g. for field portions or fly frames
                         // a SwPaM will be inserted with these positions
                         if( GetCursorOfst( &aPosR, aPoint, &aState ) &&
                             nOld != aPosL.nContent.GetIndex() )

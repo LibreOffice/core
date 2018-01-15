@@ -1764,7 +1764,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
 {
     LanguageTag aLanguageTag( eLang);
 
-    /* TODO-BCP47: again horrible uglyness */
+    /* TODO-BCP47: again horrible ugliness */
 
     // First search for eLang, then primary language of eLang
     // and last in LANGUAGE_UNDETERMINED
@@ -1841,7 +1841,7 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 {
     LanguageTag aLanguageTag( eLang);
 
-    /* TODO-BCP47: did I mention terrible horrible uglyness? */
+    /* TODO-BCP47: did I mention terrible horrible ugliness? */
 
     // First search for eLang, then primary language of eLang
     // and last in LANGUAGE_UNDETERMINED

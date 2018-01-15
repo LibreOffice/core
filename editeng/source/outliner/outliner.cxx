@@ -2026,7 +2026,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
     sal_Int32 nOverflowLine = pEditEngine->GetOverflowingLineNum(); // XXX: Unused for now
 
-    // Defensive check: oveflowing para index beyond actual # of paragraphs?
+    // Defensive check: overflowing para index beyond actual # of paragraphs?
     if ( nCount > GetParagraphCount()-1) {
         SAL_INFO("editeng.chaining",
                  "[Overflowing] Ops, trying to retrieve para "
@@ -2133,7 +2133,7 @@ OverflowingText *Outliner::GetOverflowingText() const
         return nullptr;
 
 
-    // Defensive check: oveflowing para index beyond actual # of paragraphs?
+    // Defensive check: overflowing para index beyond actual # of paragraphs?
     if ( pEditEngine->GetOverflowingParaNum() > GetParagraphCount()-1) {
         SAL_INFO("editeng.chaining",
                  "[Overflowing] Ops, trying to retrieve para "

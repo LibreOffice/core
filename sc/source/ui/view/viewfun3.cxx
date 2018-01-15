@@ -1334,7 +1334,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     pDoc->ExtendMergeSel( nStartCol, nStartRow, nEndCol, nEndRow, aFilteredMark, true );    // refresh
                                                                                     // new range
 
-    if ( pMixDoc )              // calculate with originial data ?
+    if ( pMixDoc )              // calculate with original data?
     {
         pDoc->MixDocument( aUserRange, nFunction, bSkipEmpty, pMixDoc.get() );
     }
