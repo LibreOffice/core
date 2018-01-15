@@ -512,7 +512,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( nPos )));
-            FieldUnit _eUnit = (FieldUnit) nFieldUnit;
+            FieldUnit _eUnit = static_cast<FieldUnit>(nFieldUnit);
             rAttrs->Put( SdrMeasureUnitItem( _eUnit ) );
             bModified = true;
         }
@@ -738,7 +738,7 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( nPos )));
-            FieldUnit _eUnit = (FieldUnit) nFieldUnit;
+            FieldUnit _eUnit = static_cast<FieldUnit>(nFieldUnit);
             aAttrSet.Put( SdrMeasureUnitItem( _eUnit ) );
         }
     }

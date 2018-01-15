@@ -194,7 +194,7 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
         OUString sCompress(cCharacterCompressionType);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sCompress))
         {
-            pImpl->xPrSet->setPropertyValue(sCompress, Any((sal_uInt16)nSet));
+            pImpl->xPrSet->setPropertyValue(sCompress, Any(static_cast<sal_uInt16>(nSet)));
         }
     }
     pImpl->aConfig.Commit();
@@ -253,7 +253,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
             Any aVal = pImpl->xPrSet->getPropertyValue(sCompress);
             sal_uInt16 nTmp;
             if (aVal >>= nTmp)
-                nCompress = (CharCompressType)nTmp;
+                nCompress = static_cast<CharCompressType>(nTmp);
         }
         OUString sPunct(cIsKernAsianPunctuation);
         if(pImpl->xPrSetInfo->hasPropertyByName(sPunct))

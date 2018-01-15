@@ -897,7 +897,7 @@ void SvxStdParagraphTabPage::UpdateExample_Impl()
         case LLINESPACE_MIN:
         case LLINESPACE_DURCH:
         case LLINESPACE_FIX:
-            m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos );
+            m_pExampleWin->SetLineSpace( static_cast<SvxPrevLineSpace>(nPos) );
             break;
     }
     m_pExampleWin->Invalidate();
@@ -1153,7 +1153,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
     }
     if(m_pVertAlignLB->IsValueChangedFromSaved())
     {
-        rOutSet->Put(SvxParaVertAlignItem((SvxParaVertAlignItem::Align)m_pVertAlignLB->GetSelectedEntryPos(), GetWhich( SID_PARA_VERTALIGN )));
+        rOutSet->Put(SvxParaVertAlignItem(static_cast<SvxParaVertAlignItem::Align>(m_pVertAlignLB->GetSelectedEntryPos()), GetWhich( SID_PARA_VERTALIGN )));
         bModified = true;
     }
 
@@ -1242,7 +1242,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 
         const SvxParaVertAlignItem& rAlign = static_cast<const SvxParaVertAlignItem&>(rSet->Get( _nWhich ));
 
-        m_pVertAlignLB->SelectEntryPos((sal_Int32)rAlign.GetValue());
+        m_pVertAlignLB->SelectEntryPos(static_cast<sal_Int32>(rAlign.GetValue()));
     }
 
     _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );

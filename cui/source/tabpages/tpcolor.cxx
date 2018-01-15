@@ -299,7 +299,7 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 
     // set color model
     OUString aStr = GetUserData();
-    eCM = (ColorModel)aStr.toInt32();
+    eCM = static_cast<ColorModel>(aStr.toInt32());
     SetColorModel( eCM );
     ChangeColorModel();
 
@@ -760,7 +760,7 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 void SvxColorTabPage::FillUserData()
 {
     // the color model is saved in the Ini-file
-    SetUserData( OUString::number( (int)eCM ) );
+    SetUserData( OUString::number( static_cast<int>(eCM) ) );
 }
 
 

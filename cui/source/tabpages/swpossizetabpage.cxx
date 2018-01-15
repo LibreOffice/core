@@ -773,7 +773,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     bool bModified = false;
     if(bAnchorChanged)
     {
-        rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, (sal_Int16)nAnchor));
+        rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, static_cast<sal_Int16>(nAnchor)));
         bModified = true;
     }
     if ( m_pPositionCB->IsValueChangedFromSaved() )
@@ -911,7 +911,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
         rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), nWidth ) );
         rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), nHeight ) );
         //this item is required by SdrEditView::SetGeoAttrToMarked()
-        rSet->Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), (sal_uInt16)RectPoint::LT ) );
+        rSet->Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal_uInt16(RectPoint::LT) ) );
 
         bModified = true;
     }
@@ -926,7 +926,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA;
     if(pItem)
     {
-        nAnchorType = (RndStdIds) static_cast<const SfxInt16Item*>(pItem)->GetValue();
+        nAnchorType = static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
         switch(nAnchorType)
         {
             case RndStdIds::FLY_AT_PAGE:   m_pToPageRB->Check();  break;
@@ -1734,13 +1734,13 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                 nLBRelations = pMap[nMapPos].nLBRelations;
             }
 
-            for (sal_uLong nBit = 1; nBit < (sal_uLong)LB::LAST; nBit <<= 1)
+            for (sal_uLong nBit = 1; nBit < sal_uLong(LB::LAST); nBit <<= 1)
             {
-                if (nLBRelations & (LB)nBit)
+                if (nLBRelations & static_cast<LB>(nBit))
                 {
                     for (sal_uInt16 nRelPos = 0; nRelPos < SAL_N_ELEMENTS(aRelationMap); nRelPos++)
                     {
-                        if (aRelationMap[nRelPos].nLBRelation == (LB)nBit)
+                        if (aRelationMap[nRelPos].nLBRelation == static_cast<LB>(nBit))
                         {
                             SvxSwFramePosString::StringId sStrId1 = m_pHoriMirrorCB->IsChecked() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);

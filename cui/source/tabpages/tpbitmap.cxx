@@ -210,7 +210,7 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
         rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
     }
 
-    BitmapStyle eStylePos = (BitmapStyle)m_pBitmapStyleLB->GetSelectedEntryPos();        bool bIsStretched( eStylePos == STRETCHED );
+    BitmapStyle eStylePos = static_cast<BitmapStyle>(m_pBitmapStyleLB->GetSelectedEntryPos());        bool bIsStretched( eStylePos == STRETCHED );
     bool bIsTiled( eStylePos == TILED );
 
     rAttrs->Put( XFillBmpTileItem(bIsTiled) );
@@ -644,7 +644,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, Button*, void )
 
 IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
 {
-    BitmapStyle eStylePos = (BitmapStyle)m_pBitmapStyleLB->GetSelectedEntryPos();
+    BitmapStyle eStylePos = static_cast<BitmapStyle>(m_pBitmapStyleLB->GetSelectedEntryPos());
     bool bIsStretched( eStylePos == STRETCHED );
     bool bIsTiled( eStylePos == TILED );
 

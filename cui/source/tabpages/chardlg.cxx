@@ -1489,11 +1489,11 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCTLFont.SetColor(GetPreviewFontColor(rSelectedColor));
 
     sal_Int32 nPos = m_pUnderlineLB->GetSelectedEntryPos();
-    FontLineStyle eUnderline = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos ));
+    FontLineStyle eUnderline = static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos )));
     nPos = m_pOverlineLB->GetSelectedEntryPos();
-    FontLineStyle eOverline = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos ));
+    FontLineStyle eOverline = static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos )));
     nPos = m_pStrikeoutLB->GetSelectedEntryPos();
-    FontStrikeout eStrikeout = (FontStrikeout)reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData( nPos ));
+    FontStrikeout eStrikeout = static_cast<FontStrikeout>(reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData( nPos )));
     rFont.SetUnderline( eUnderline );
     rCJKFont.SetUnderline( eUnderline );
     rCTLFont.SetUnderline( eUnderline );
@@ -1511,7 +1511,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     if (nEmphasis != LISTBOX_ENTRY_NOTFOUND)
     {
         bool bUnder = ( CHRDLG_POSITION_UNDER == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData( nPos )) );
-        FontEmphasisMark eMark = (FontEmphasisMark)nEmphasis;
+        FontEmphasisMark eMark = static_cast<FontEmphasisMark>(nEmphasis);
         eMark |= bUnder ? FontEmphasisMark::PosBelow : FontEmphasisMark::PosAbove;
         rFont.SetEmphasisMark( eMark );
         rCJKFont.SetEmphasisMark( eMark );
@@ -1521,9 +1521,9 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     sal_Int32 nRelief = m_pReliefLB->GetSelectedEntryPos();
     if (LISTBOX_ENTRY_NOTFOUND != nRelief)
     {
-        rFont.SetRelief( (FontRelief)nRelief );
-        rCJKFont.SetRelief( (FontRelief)nRelief );
-        rCTLFont.SetRelief( (FontRelief)nRelief );
+        rFont.SetRelief( static_cast<FontRelief>(nRelief) );
+        rCJKFont.SetRelief( static_cast<FontRelief>(nRelief) );
+        rCTLFont.SetRelief( static_cast<FontRelief>(nRelief) );
     }
 
     rFont.SetOutline( StateToAttr( m_pOutlineBtn->GetState() ) );
@@ -1537,7 +1537,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     sal_Int32 nCapsPos = m_pEffectsLB->GetSelectedEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        SvxCaseMap eCaps = (SvxCaseMap)nCapsPos;
+        SvxCaseMap eCaps = static_cast<SvxCaseMap>(nCapsPos);
         rFont.SetCaseMap( eCaps );
         rCJKFont.SetCaseMap( eCaps );
         // #i78474# small caps do not exist in CTL fonts
@@ -1758,7 +1758,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             {
                 for ( sal_Int32 i = 0; i < m_pUnderlineLB->GetEntryCount(); ++i )
                 {
-                    if ( (FontLineStyle)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData(i)) == eUnderline )
+                    if ( static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData(i))) == eUnderline )
                     {
                         m_pUnderlineLB->SelectEntryPos(i);
                         bEnable = true;
@@ -1802,7 +1802,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             {
                 for ( sal_Int32 i = 0; i < m_pOverlineLB->GetEntryCount(); ++i )
                 {
-                    if ( (FontLineStyle)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData(i)) == eOverline )
+                    if ( static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData(i))) == eOverline )
                     {
                         m_pOverlineLB->SelectEntryPos(i);
                         bEnable = true;
@@ -1846,7 +1846,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             {
                 for ( sal_Int32 i = 0; i < m_pStrikeoutLB->GetEntryCount(); ++i )
                 {
-                    if ( (FontStrikeout)reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData(i)) == eStrikeout )
+                    if ( static_cast<FontStrikeout>(reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData(i))) == eStrikeout )
                     {
                         m_pStrikeoutLB->SelectEntryPos(i);
                         bEnable = true;
@@ -1900,7 +1900,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         rCJKFont.SetEmphasisMark( eMark );
         rCTLFont.SetEmphasisMark( eMark );
 
-        m_pEmphasisLB->SelectEntryPos( (sal_Int32)FontEmphasisMark( eMark & FontEmphasisMark::Style ) );
+        m_pEmphasisLB->SelectEntryPos( static_cast<sal_Int32>(FontEmphasisMark( eMark & FontEmphasisMark::Style )) );
         eMark &= ~FontEmphasisMark::Style;
         sal_uLong nEntryData = ( eMark == FontEmphasisMark::PosAbove )
             ? CHRDLG_POSITION_OVER
@@ -1998,7 +1998,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>(rSet->Get( nWhich ));
-            m_pReliefLB->SelectEntryPos((sal_Int32)rItem.GetValue());
+            m_pReliefLB->SelectEntryPos(static_cast<sal_Int32>(rItem.GetValue()));
             SelectHdl_Impl(m_pReliefLB);
             break;
         }
@@ -2026,7 +2026,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxContourItem& rItem = static_cast<const SvxContourItem&>(rSet->Get( nWhich ));
-            m_pOutlineBtn->SetState( (TriState)rItem.GetValue() );
+            m_pOutlineBtn->SetState( static_cast<TriState>(rItem.GetValue()) );
             m_pOutlineBtn->EnableTriState( false );
             break;
         }
@@ -2055,7 +2055,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxShadowedItem& rItem = static_cast<const SvxShadowedItem&>(rSet->Get( nWhich ));
-            m_pShadowBtn->SetState( (TriState)rItem.GetValue() );
+            m_pShadowBtn->SetState( static_cast<TriState>(rItem.GetValue()) );
             m_pShadowBtn->EnableTriState( false );
             break;
         }
@@ -2084,7 +2084,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxBlinkItem& rItem = static_cast<const SvxBlinkItem&>(rSet->Get( nWhich ));
-            m_pBlinkingBtn->SetState( (TriState)rItem.GetValue() );
+            m_pBlinkingBtn->SetState( static_cast<TriState>(rItem.GetValue()) );
             m_pBlinkingBtn->EnableTriState( false );
             break;
         }
@@ -2112,7 +2112,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxCharHiddenItem& rItem = static_cast<const SvxCharHiddenItem&>(rSet->Get( nWhich ));
-            m_pHiddenBtn->SetState( (TriState)rItem.GetValue() );
+            m_pHiddenBtn->SetState( static_cast<TriState>(rItem.GetValue()) );
             m_pHiddenBtn->EnableTriState( false );
             break;
         }
@@ -2155,7 +2155,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_UNDERLINE );
     sal_Int32 nPos = m_pUnderlineLB->GetSelectedEntryPos();
-    FontLineStyle eUnder = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos ));
+    FontLineStyle eUnder = static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos )));
 
     if ( pOld )
     {
@@ -2189,7 +2189,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_OVERLINE );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_OVERLINE );
     nPos = m_pOverlineLB->GetSelectedEntryPos();
-    FontLineStyle eOver = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos ));
+    FontLineStyle eOver = static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos )));
 
     if ( pOld )
     {
@@ -2223,7 +2223,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_STRIKEOUT );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_STRIKEOUT );
     nPos = m_pStrikeoutLB->GetSelectedEntryPos();
-    FontStrikeout eStrike = (FontStrikeout)reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData( nPos ));
+    FontStrikeout eStrike = static_cast<FontStrikeout>(reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData( nPos )));
 
     if ( pOld )
     {
@@ -2280,7 +2280,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_EMPHASISMARK );
     sal_Int32 nMarkPos = m_pEmphasisLB->GetSelectedEntryPos();
     sal_Int32 nPosPos = m_pPositionLB->GetSelectedEntryPos();
-    FontEmphasisMark eMark = (FontEmphasisMark)nMarkPos;
+    FontEmphasisMark eMark = static_cast<FontEmphasisMark>(nMarkPos);
     if ( m_pPositionLB->IsEnabled() )
     {
         eMark |= ( CHRDLG_POSITION_UNDER == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData( nPosPos )) )
@@ -2319,7 +2319,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     sal_Int32 nCapsPos = m_pEffectsLB->GetSelectedEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        eCaseMap = (SvxCaseMap)nCapsPos;
+        eCaseMap = static_cast<SvxCaseMap>(nCapsPos);
         bChecked = true;
     }
 
@@ -2352,7 +2352,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     if(m_pReliefLB->IsValueChangedFromSaved())
     {
         m_pReliefLB->SaveValue();
-        SvxCharReliefItem aRelief((FontRelief)m_pReliefLB->GetSelectedEntryPos(), nWhich);
+        SvxCharReliefItem aRelief(static_cast<FontRelief>(m_pReliefLB->GetSelectedEntryPos()), nWhich);
         rSet->Put(aRelief);
     }
 

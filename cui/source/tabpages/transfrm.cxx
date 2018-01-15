@@ -620,7 +620,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     if (rMarkList.GetMarkCount() == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
+        SdrObjKind eKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
         if (eKind == OBJ_CUSTOMSHAPE)
         {
             //save geometry
@@ -872,7 +872,7 @@ void SvxPositionSizeTabPage::Construct()
     if(1 == rMarkList.GetMarkCount())
     {
         const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
+        const SdrObjKind eKind(static_cast<SdrObjKind>(pObj->GetObjIdentifier()));
 
         if((pObj->GetObjInventor() == SdrInventor::Default) &&
             (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind) &&

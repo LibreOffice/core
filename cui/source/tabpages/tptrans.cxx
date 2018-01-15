@@ -152,7 +152,7 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void const * pControl)
 {
     if(pControl == m_pLbTrgrGradientType || pControl == this)
     {
-        css::awt::GradientStyle eXGS = (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos();
+        css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_pLbTrgrGradientType->GetSelectedEntryPos());
         SetControlState_Impl( eXGS );
     }
 
@@ -162,7 +162,7 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void const * pControl)
     XGradient aTmpGradient(
                 Color(nStartCol, nStartCol, nStartCol),
                 Color(nEndCol, nEndCol, nEndCol),
-                (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos(),
+                static_cast<css::awt::GradientStyle>(m_pLbTrgrGradientType->GetSelectedEntryPos()),
                 static_cast<sal_uInt16>(m_pMtrTrgrAngle->GetValue()) * 10,
                 static_cast<sal_uInt16>(m_pMtrTrgrCenterX->GetValue()),
                 static_cast<sal_uInt16>(m_pMtrTrgrCenterY->GetValue()),
@@ -181,7 +181,7 @@ void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
 
     if(bActivate)
     {
-        css::awt::GradientStyle eXGS = (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos();
+        css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_pLbTrgrGradientType->GetSelectedEntryPos());
         SetControlState_Impl( eXGS );
     }
 }
@@ -346,7 +346,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
             XGradient aTmpGradient(
                         Color(nStartCol, nStartCol, nStartCol),
                         Color(nEndCol, nEndCol, nEndCol),
-                        (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos(),
+                        static_cast<css::awt::GradientStyle>(m_pLbTrgrGradientType->GetSelectedEntryPos()),
                         static_cast<sal_uInt16>(m_pMtrTrgrAngle->GetValue()) * 10,
                         static_cast<sal_uInt16>(m_pMtrTrgrCenterX->GetValue()),
                         static_cast<sal_uInt16>(m_pMtrTrgrCenterY->GetValue()),
@@ -393,7 +393,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
         rAttrs->Put(aShadowItem);
         bModified = true;
     }
-    rAttrs->Put(CntUInt16Item(SID_PAGE_TYPE, (sal_uInt16)nPageType));
+    rAttrs->Put(CntUInt16Item(SID_PAGE_TYPE, static_cast<sal_uInt16>(nPageType)));
     return bModified;
 }
 
@@ -470,7 +470,7 @@ void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     const CntUInt16Item* pPageTypeItem = rSet.GetItem<CntUInt16Item>(SID_PAGE_TYPE, false);
     if (pPageTypeItem)
-        SetPageType((PageType) pPageTypeItem->GetValue());
+        SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
 
     if(nDlgType == 0) // area dialog
         nPageType = PageType::Transparence;
@@ -566,7 +566,7 @@ void SvxTransparenceTabPage::PageCreated(const SfxAllItemSet& aSet)
     const SfxUInt16Item* pDlgTypeItem = aSet.GetItem<SfxUInt16Item>(SID_DLG_TYPE, false);
 
     if (pPageTypeItem)
-        SetPageType((PageType) pPageTypeItem->GetValue());
+        SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
 }

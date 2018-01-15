@@ -171,7 +171,7 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 
     MapUnit      eUnit;
 
-    nCaptionType = (SdrCaptionType) (m_pCT_CAPTTYPE->GetSelectItemId()-1);
+    nCaptionType = static_cast<SdrCaptionType>(m_pCT_CAPTTYPE->GetSelectItemId()-1);
 
     _rOutAttrs->Put( SdrCaptionTypeItem( nCaptionType ) );
 
@@ -349,7 +349,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     m_pLB_ANSATZ->SelectEntryPos( nAnsatzTypePos );
 
     SetupAnsatz_Impl( nAnsatzTypePos );
-    m_pCT_CAPTTYPE->SelectItem( (int)nCaptionType+1 ); // Enum starts at 0!
+    m_pCT_CAPTTYPE->SelectItem( static_cast<int>(nCaptionType)+1 ); // Enum starts at 0!
     SetupType_Impl( nCaptionType );
 }
 
@@ -454,7 +454,7 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton, void )
 
 IMPL_LINK_NOARG(SvxCaptionTabPage, SelectCaptTypeHdl_Impl, ValueSet*, void)
 {
-    SetupType_Impl( (SdrCaptionType) m_pCT_CAPTTYPE->GetSelectItemId() );
+    SetupType_Impl( static_cast<SdrCaptionType>(m_pCT_CAPTTYPE->GetSelectItemId()) );
 }
 
 void SvxCaptionTabPage::SetupType_Impl( SdrCaptionType nType )
