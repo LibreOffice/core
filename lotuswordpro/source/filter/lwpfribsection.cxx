@@ -259,9 +259,9 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     m_bNewSection = false;
     //sal_Bool bSectionColumns = sal_False;
 
-    XFParaStyle* pOverStyle = new XFParaStyle;
-    *pOverStyle = *(m_pPara->GetXFParaStyle());
-    pOverStyle->SetStyleName("");
+    std::unique_ptr<XFParaStyle> xOverStyle(new XFParaStyle);
+    *xOverStyle = *(m_pPara->GetXFParaStyle());
+    xOverStyle->SetStyleName("");
 
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
     switch(eUserType)
@@ -289,7 +289,7 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
                 m_pLayout = pStory->GetCurrentLayout();
                 m_bNewSection = IsNeedSection();
                 //bSectionColumns = m_bNewSection;
-                pOverStyle->SetMasterPage( m_pLayout->GetStyleName());
+                xOverStyle->SetMasterPage(m_pLayout->GetStyleName());
                 RegisterFillerPageStyle();
             }
             break;
@@ -304,10 +304,10 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
         return;
 
     pStory->SetTabLayout(m_pLayout);
-    m_pPara->RegisterTabStyle(pOverStyle);
+    m_pPara->RegisterTabStyle(xOverStyle.get());
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
     //register section style here
     if(m_bNewSection)
     {
