@@ -63,7 +63,7 @@ const css::uno::Reference<css::io::XObjectInputStream>& operator >> (
     _rFont.Pitch = _rxInStream->readShort();
     _rFont.CharacterWidth = static_cast< float >(_rxInStream->readDouble());
     _rFont.Weight = static_cast< float >(_rxInStream->readDouble());
-    _rFont.Slant = (css::awt::FontSlant)_rxInStream->readShort();
+    _rFont.Slant = static_cast<css::awt::FontSlant>(_rxInStream->readShort());
     _rFont.Underline = _rxInStream->readShort();
     _rFont.Strikeout = _rxInStream->readShort();
     _rFont.Orientation = static_cast< float >(_rxInStream->readDouble());
