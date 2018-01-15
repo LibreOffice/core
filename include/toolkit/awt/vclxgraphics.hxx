@@ -32,6 +32,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class OutputDevice;
 namespace vcl { class Region; }
@@ -68,7 +69,7 @@ private:
     Color           maLineColor;
     Color           maFillColor;
     RasterOp        meRasterOp;
-    vcl::Region*    mpClipRegion;
+    std::unique_ptr<vcl::Region> mpClipRegion;
 
     void initAttrs();
 
