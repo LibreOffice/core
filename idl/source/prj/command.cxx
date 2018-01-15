@@ -108,9 +108,9 @@ char const CommandLineSyntax[] =
 void Init()
 {
     if( !GetIdlApp().pHashTable )
-        GetIdlApp().pHashTable      = new SvStringHashTable;
+        GetIdlApp().pHashTable.reset( new SvStringHashTable );
     if( !GetIdlApp().pGlobalNames )
-        GetIdlApp().pGlobalNames    = new SvGlobalHashNames();
+        GetIdlApp().pGlobalNames.reset( new SvGlobalHashNames() );
 }
 
 bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
