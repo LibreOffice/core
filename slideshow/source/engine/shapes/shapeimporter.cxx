@@ -355,7 +355,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         getPropertyValue( nRotation, xPropSet, "RotateAngle" );
 
         GraphicAttr aGraphAttrs;
-        aGraphAttrs.SetDrawMode( (GraphicDrawMode)eColorMode );
+        aGraphAttrs.SetDrawMode( static_cast<GraphicDrawMode>(eColorMode) );
         aGraphAttrs.SetLuminance( nLuminance );
         aGraphAttrs.SetContrast( nContrast );
         aGraphAttrs.SetChannelR( nRed );

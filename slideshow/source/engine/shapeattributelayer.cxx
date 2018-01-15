@@ -571,7 +571,7 @@ namespace slideshow
         void ShapeAttributeLayer::setFillStyle( const sal_Int16& rStyle )
         {
             // TODO(Q1): Check range here.
-            meFillStyle = (drawing::FillStyle)rStyle;
+            meFillStyle = static_cast<drawing::FillStyle>(rStyle);
             mbFillStyleValid = true;
             ++mnContentState;
         }
@@ -596,7 +596,7 @@ namespace slideshow
         void ShapeAttributeLayer::setLineStyle( const sal_Int16& rStyle )
         {
             // TODO(Q1): Check range here.
-            meLineStyle = (drawing::LineStyle)rStyle;
+            meLineStyle = static_cast<drawing::LineStyle>(rStyle);
             mbLineStyleValid = true;
             ++mnContentState;
         }
@@ -762,7 +762,7 @@ namespace slideshow
         void ShapeAttributeLayer::setCharPosture( const sal_Int16& rStyle )
         {
             // TODO(Q1): Check range here.
-            meCharPosture = (awt::FontSlant)rStyle;
+            meCharPosture = static_cast<awt::FontSlant>(rStyle);
             mbCharPostureValid = true;
             ++mnContentState;
         }
