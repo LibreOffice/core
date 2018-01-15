@@ -43,9 +43,7 @@
     700       -500       200       700         -500
 */
 
-#define LRSPACE_16_VERSION      ((sal_uInt16)0x0001)
 #define LRSPACE_TXTLEFT_VERSION (sal_uInt16(0x0002))
-#define LRSPACE_AUTOFIRST_VERSION ((sal_uInt16)0x0003)
 #define LRSPACE_NEGATIVE_VERSION (sal_uInt16(0x0004))
 
 class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
