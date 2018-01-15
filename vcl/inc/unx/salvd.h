@@ -32,7 +32,7 @@ class X11SalGraphics;
 class X11SalVirtualDevice : public SalVirtualDevice
 {
     SalDisplay      *pDisplay_;
-    X11SalGraphics  *pGraphics_;
+    std::unique_ptr<X11SalGraphics> pGraphics_;
 
     Pixmap          hDrawable_;
     SalX11Screen    m_nXScreen;
