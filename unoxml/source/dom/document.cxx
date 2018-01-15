@@ -884,7 +884,7 @@ namespace DOM
                 "DOMNodeInsertedIntoDocument"), UNO_QUERY_THROW);
             event->initMutationEvent(
                 "DOMNodeInsertedIntoDocument", true, false, Reference< XNode >(),
-                OUString(), OUString(), OUString(), (AttrChangeType)0 );
+                OUString(), OUString(), OUString(), AttrChangeType(0) );
             Reference< XEventTarget > const xDocET(xDocument, UNO_QUERY);
             xDocET->dispatchEvent(event);
         }

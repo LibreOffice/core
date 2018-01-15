@@ -52,7 +52,7 @@ namespace DOM
         event->initMutationEvent(
                 "DOMCharacterDataModified",
                 true, false, Reference< XNode >(),
-                prevValue, newValue, OUString(), (AttrChangeType)0 );
+                prevValue, newValue, OUString(), AttrChangeType(0) );
         dispatchEvent(event);
         dispatchSubtreeModified();
     }
