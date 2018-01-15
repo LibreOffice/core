@@ -243,10 +243,10 @@ struct ImplAllSettingsData
     LanguageTag                             maLocale;
     AllSettingsFlags                        mnWindowUpdate;
     LanguageTag                             maUILocale;
-    LocaleDataWrapper*                      mpLocaleDataWrapper;
-    LocaleDataWrapper*                      mpUILocaleDataWrapper;
-    vcl::I18nHelper*                        mpI18nHelper;
-    vcl::I18nHelper*                        mpUII18nHelper;
+    std::unique_ptr<LocaleDataWrapper>      mpLocaleDataWrapper;
+    std::unique_ptr<LocaleDataWrapper>      mpUILocaleDataWrapper;
+    std::unique_ptr<vcl::I18nHelper>        mpI18nHelper;
+    std::unique_ptr<vcl::I18nHelper>        mpUII18nHelper;
     SvtSysLocale                            maSysLocale;
 };
 
@@ -2680,10 +2680,10 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
 
 ImplAllSettingsData::~ImplAllSettingsData()
 {
-    delete mpLocaleDataWrapper;
-    delete mpUILocaleDataWrapper;
-    delete mpI18nHelper;
-    delete mpUII18nHelper;
+    mpLocaleDataWrapper.reset();
+    mpUILocaleDataWrapper.reset();
+    mpI18nHelper.reset();
+    mpUII18nHelper.reset();
 }
 
 AllSettings::AllSettings()
@@ -2801,13 +2801,11 @@ void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
 
         if ( mxData->mpLocaleDataWrapper )
         {
-            delete mxData->mpLocaleDataWrapper;
-            mxData->mpLocaleDataWrapper = nullptr;
+            mxData->mpLocaleDataWrapper.reset();
         }
         if ( mxData->mpI18nHelper )
         {
-            delete mxData->mpI18nHelper;
-            mxData->mpI18nHelper = nullptr;
+            mxData->mpI18nHelper.reset();
         }
     }
 }
@@ -2911,24 +2909,24 @@ const LanguageTag& AllSettings::GetUILanguageTag() const
 const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
     if ( !mxData->mpLocaleDataWrapper )
-        const_cast<AllSettings*>(this)->mxData->mpLocaleDataWrapper = new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), GetLanguageTag() );
+        const_cast<AllSettings*>(this)->mxData->mpLocaleDataWrapper.reset( new LocaleDataWrapper(
+            comphelper::getProcessComponentContext(), GetLanguageTag() ) );
     return *mxData->mpLocaleDataWrapper;
 }
 
 const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 {
     if ( !mxData->mpUILocaleDataWrapper )
-        const_cast<AllSettings*>(this)->mxData->mpUILocaleDataWrapper = new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), GetUILanguageTag() );
+        const_cast<AllSettings*>(this)->mxData->mpUILocaleDataWrapper.reset( new LocaleDataWrapper(
+            comphelper::getProcessComponentContext(), GetUILanguageTag() ) );
     return *mxData->mpUILocaleDataWrapper;
 }
 
 const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 {
     if ( !mxData->mpI18nHelper ) {
-        const_cast<AllSettings*>(this)->mxData->mpI18nHelper = new vcl::I18nHelper(
-            comphelper::getProcessComponentContext(), GetLanguageTag() );
+        const_cast<AllSettings*>(this)->mxData->mpI18nHelper.reset( new vcl::I18nHelper(
+            comphelper::getProcessComponentContext(), GetLanguageTag() ) );
     }
     return *mxData->mpI18nHelper;
 }
@@ -2936,8 +2934,8 @@ const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
 {
     if ( !mxData->mpUII18nHelper ) {
-        const_cast<AllSettings*>(this)->mxData->mpUII18nHelper = new vcl::I18nHelper(
-            comphelper::getProcessComponentContext(), GetUILanguageTag() );
+        const_cast<AllSettings*>(this)->mxData->mpUII18nHelper.reset( new vcl::I18nHelper(
+            comphelper::getProcessComponentContext(), GetUILanguageTag() ) );
     }
     return *mxData->mpUII18nHelper;
 }
