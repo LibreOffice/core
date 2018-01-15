@@ -654,7 +654,7 @@ atk_object_wrapper_get_type()
       } ;
       type = g_type_register_static (ATK_TYPE_OBJECT,
                                      "OOoAtkObj",
-                                     &typeInfo, (GTypeFlags)0) ;
+                                     &typeInfo, GTypeFlags(0)) ;
     }
   return type;
 }
@@ -763,7 +763,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
         } ;
         nType = g_type_register_static( ATK_TYPE_OBJECT_WRAPPER,
                                         aTypeName.getStr(), &aTypeInfo,
-                                        (GTypeFlags)0 ) ;
+                                        GTypeFlags(0) ) ;
 
         for( int j = 0; j < aTypeTableSize; j++ )
             if( bTypes[j] )

@@ -781,7 +781,7 @@ ooo_atk_util_get_type()
             nullptr
         } ;
 
-        type = g_type_register_static (parent_type, "OOoUtil", &typeInfo, (GTypeFlags)0) ;
+        type = g_type_register_static (parent_type, "OOoUtil", &typeInfo, GTypeFlags(0)) ;
   }
 
   return type;

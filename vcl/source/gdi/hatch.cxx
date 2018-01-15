@@ -99,7 +99,7 @@ SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
     sal_uInt16          nTmp16;
     sal_Int32       nTmp32(0);
 
-    rIStm.ReadUInt16( nTmp16 ); rHatch.mpImplHatch->meStyle = (HatchStyle) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rHatch.mpImplHatch->meStyle = static_cast<HatchStyle>(nTmp16);
     ReadColor( rIStm, rHatch.mpImplHatch->maColor ).ReadInt32( nTmp32 ).ReadUInt16(
       rHatch.mpImplHatch->mnAngle );
     rHatch.mpImplHatch->mnDistance = nTmp32;
@@ -111,7 +111,7 @@ SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( (sal_uInt16)rHatch.mpImplHatch->meStyle );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rHatch.mpImplHatch->meStyle) );
     WriteColor( rOStm, rHatch.mpImplHatch->maColor );
     rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteUInt16( rHatch.mpImplHatch->mnAngle );
 

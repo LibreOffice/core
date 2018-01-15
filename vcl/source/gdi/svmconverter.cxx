@@ -171,14 +171,14 @@ bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
         return false;
     }
 
-    rMapMode = MapMode((MapUnit) nUnit, aOrg, Fraction(nXNum, nXDenom), Fraction(nYNum, nYDenom));
+    rMapMode = MapMode(static_cast<MapUnit>(nUnit), aOrg, Fraction(nXNum, nXDenom), Fraction(nYNum, nYDenom));
 
     return true;
 }
 
 void ImplWriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
-    rOStm.WriteInt16( (sal_uInt16)rMapMode.GetMapUnit() );
+    rOStm.WriteInt16( static_cast<sal_uInt16>(rMapMode.GetMapUnit()) );
     WritePair( rOStm, rMapMode.GetOrigin() );
     rOStm.WriteInt32( rMapMode.GetScaleX().GetNumerator() );
     rOStm.WriteInt32( rMapMode.GetScaleX().GetDenominator() );
@@ -407,7 +407,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygo
 
                         for(sal_uInt16 c(0); c < nPointCount; c++)
                         {
-                            rOStm.WriteUChar( (sal_uInt8)rCandidate.GetFlags(c) );
+                            rOStm.WriteUChar( static_cast<sal_uInt8>(rCandidate.GetFlags(c)) );
                         }
                     }
                     else
@@ -475,7 +475,7 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPol
                 for(sal_uInt16 c(0); c < nPointCount; c++)
                 {
                     rIStm.ReadUChar( aPolyFlags );
-                    aCandidate.SetFlags(c, (PolyFlags)aPolyFlags);
+                    aCandidate.SetFlags(c, static_cast<PolyFlags>(aPolyFlags));
                 }
             }
         }
@@ -619,7 +619,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 sal_Int16 nLineJoin(0);
                 rIStm.ReadInt16( nLineJoin );
-                aLineInfo.SetLineJoin((basegfx::B2DLineJoin)nLineJoin);
+                aLineInfo.SetLineJoin(static_cast<basegfx::B2DLineJoin>(nLineJoin));
             }
             break;
 
@@ -627,7 +627,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 sal_Int16 nLineCap(0);
                 rIStm.ReadInt16( nLineCap );
-                aLineInfo.SetLineCap((css::drawing::LineCap)nLineCap);
+                aLineInfo.SetLineCap(static_cast<css::drawing::LineCap>(nLineCap));
             }
             break;
 
@@ -891,13 +891,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 aFont.SetFontSize( Size( nWidth, nHeight ) );
                 aFont.SetCharSet( static_cast<rtl_TextEncoding>(nCharSet) );
-                aFont.SetFamily( (FontFamily) nFamily );
-                aFont.SetPitch( (FontPitch) nPitch );
-                aFont.SetAlignment( (FontAlign) nAlign );
+                aFont.SetFamily( static_cast<FontFamily>(nFamily) );
+                aFont.SetPitch( static_cast<FontPitch>(nPitch) );
+                aFont.SetAlignment( static_cast<FontAlign>(nAlign) );
                 aFont.SetWeight( ( nWeight == 1 ) ? WEIGHT_LIGHT : ( nWeight == 2 ) ? WEIGHT_NORMAL :
                                  ( nWeight == 3 ) ? WEIGHT_BOLD : WEIGHT_DONTKNOW );
-                aFont.SetUnderline( (FontLineStyle) nUnderline );
-                aFont.SetStrikeout( (FontStrikeout) nStrikeout );
+                aFont.SetUnderline( static_cast<FontLineStyle>(nUnderline) );
+                aFont.SetStrikeout( static_cast<FontStrikeout>(nStrikeout) );
                 aFont.SetItalic( bItalic ? ITALIC_NORMAL : ITALIC_NONE );
                 aFont.SetOutline( bOutline );
                 aFont.SetShadow( bShadow );
@@ -1297,7 +1297,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 ImplReadColor( rIStm, aEndCol );
                 rIStm.ReadInt16( nAngle ).ReadInt16( nBorder ).ReadInt16( nOfsX ).ReadInt16( nOfsY ).ReadInt16( nIntensityStart ).ReadInt16( nIntensityEnd );
 
-                Gradient aGrad( (GradientStyle) nStyle, aStartCol, aEndCol );
+                Gradient aGrad( static_cast<GradientStyle>(nStyle), aStartCol, aEndCol );
 
                 aGrad.SetAngle( nAngle );
                 aGrad.SetBorder( nBorder );
@@ -1408,8 +1408,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 rIStm.ReadInt32(nWidth ).ReadUInt32(nStrikeout).ReadUInt32(nUnderline).ReadInt32(nFollowingActionCount);
                 ImplSkipActions(rIStm, nFollowingActionCount);
                 rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
-                                                        (FontStrikeout) nStrikeout,
-                                                        (FontLineStyle) nUnderline,
+                                                        static_cast<FontStrikeout>(nStrikeout),
+                                                        static_cast<FontLineStyle>(nUnderline),
                                                         LINESTYLE_NONE ) );
 
                 i = SkipActions(i, nFollowingActionCount, nActions);
@@ -1587,7 +1587,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                     {
                         rOStm.WriteInt16( GDI_LINECAP_ACTION );
                         rOStm.WriteInt32( 6 );
-                        rOStm.WriteInt16( (sal_Int16)rInfo.GetLineCap() );
+                        rOStm.WriteInt16( static_cast<sal_Int16>(rInfo.GetLineCap()) );
                     }
                 }
 
@@ -1743,7 +1743,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                     {
                         rOStm.WriteInt16( GDI_LINECAP_ACTION );
                         rOStm.WriteInt32( 6 );
-                        rOStm.WriteInt16( (sal_Int16)rInfo.GetLineCap() );
+                        rOStm.WriteInt16( static_cast<sal_Int16>(rInfo.GetLineCap()) );
                     }
                 }
 
@@ -2016,7 +2016,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                 rOStm.WriteInt16( GDI_GRADIENT_ACTION );
                 rOStm.WriteInt32( 46 );
                 ImplWriteRect( rOStm, pAct->GetRect() );
-                rOStm.WriteInt16( (sal_Int16)rGrad.GetStyle() );
+                rOStm.WriteInt16( static_cast<sal_Int16>(rGrad.GetStyle()) );
                 ImplWriteColor( rOStm, rGrad.GetStartColor() );
                 ImplWriteColor( rOStm, rGrad.GetEndColor() );
                 rOStm.WriteInt16( rGrad.GetAngle() );

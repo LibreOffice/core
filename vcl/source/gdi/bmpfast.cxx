@@ -420,7 +420,7 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     static int nNotAccelerated = 0;
     SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
                  "vcl.gdi",
-                 "ImplConvertFromBitmap for not accelerated case (" << std::hex << (int)rSrc.mnFormat << "->" << (int)rDst.mnFormat << ")" );
+                 "ImplConvertFromBitmap for not accelerated case (" << std::hex << static_cast<int>(rSrc.mnFormat) << "->" << static_cast<int>(rDst.mnFormat) << ")" );
 
     return false;
 }
@@ -528,7 +528,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     static int nNotAccelerated = 0;
     SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
                  "vcl.gdi",
-                 "ImplFastBitmapConversion for not accelerated case (" << std::hex << (int)rSrc.mnFormat << "->" << (int)rDst.mnFormat << ")" );
+                 "ImplFastBitmapConversion for not accelerated case (" << std::hex << static_cast<int>(rSrc.mnFormat) << "->" << static_cast<int>(rDst.mnFormat) << ")" );
 
     return false;
 }
@@ -655,7 +655,7 @@ bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const Bi
     static int nNotAccelerated = 0;
     SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
                  "vcl.gdi",
-                 "ImplBlendFromBitmap for not accelerated case (" << std::hex << (int)rSrc.mnFormat << "*" << (int)rMsk.mnFormat << "->" << (int)rDst.mnFormat );
+                 "ImplBlendFromBitmap for not accelerated case (" << std::hex << static_cast<int>(rSrc.mnFormat) << "*" << static_cast<int>(rMsk.mnFormat) << "->" << static_cast<int>(rDst.mnFormat) );
     return false;
 }
 
@@ -770,7 +770,7 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
     static int nNotAccelerated = 0;
     SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
                  "vcl.gdi",
-                 "ImplFastBlend for not accelerated case (" << std::hex << (int)rSrc.mnFormat << "*" << (int)rMsk.mnFormat << "->" << (int)rDst.mnFormat << ")" );
+                 "ImplFastBlend for not accelerated case (" << std::hex << static_cast<int>(rSrc.mnFormat) << "*" << static_cast<int>(rMsk.mnFormat) << "->" << static_cast<int>(rDst.mnFormat) << ")" );
 
     return false;
 }

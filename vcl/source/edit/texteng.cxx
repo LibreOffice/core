@@ -1740,7 +1740,7 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
     {
-        ExtTextInputAttr nLastAttr = (ExtTextInputAttr)0xffff;
+        ExtTextInputAttr nLastAttr = ExtTextInputAttr(0xffff);
         for( sal_Int32 n = 0; n < mpIMEInfos->nLen; n++ )
         {
             if ( mpIMEInfos->pAttribs[n] != nLastAttr )

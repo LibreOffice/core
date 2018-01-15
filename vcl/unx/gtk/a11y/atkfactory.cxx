@@ -69,7 +69,7 @@ atk_noop_object_wrapper_get_type()
             nullptr
         } ;
 
-        type = g_type_register_static (ATK_TYPE_OBJECT, "OOoAtkNoOpObj", &typeInfo, (GTypeFlags)0) ;
+        type = g_type_register_static (ATK_TYPE_OBJECT, "OOoAtkNoOpObj", &typeInfo, GTypeFlags(0)) ;
   }
   return type;
 }
@@ -184,7 +184,7 @@ wrapper_factory_get_type()
 
     t = g_type_register_static (
         ATK_TYPE_OBJECT_FACTORY, "OOoAtkObjectWrapperFactory",
-        &tinfo, (GTypeFlags) 0);
+        &tinfo, GTypeFlags(0));
   }
 
   return t;

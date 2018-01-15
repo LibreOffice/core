@@ -156,7 +156,7 @@ SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )
     VersionCompat aCompat( rIStm, StreamMode::READ );
     sal_uInt16    nTmp16;
 
-    rIStm.ReadUInt16( nTmp16 ); rMapMode.mpImplMapMode->meUnit = (MapUnit) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rMapMode.mpImplMapMode->meUnit = static_cast<MapUnit>(nTmp16);
     ReadPair( rIStm, rMapMode.mpImplMapMode->maOrigin );
     ReadFraction( rIStm, rMapMode.mpImplMapMode->maScaleX );
     ReadFraction( rIStm, rMapMode.mpImplMapMode->maScaleY );
@@ -169,7 +169,7 @@ SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( (sal_uInt16)rMapMode.mpImplMapMode->meUnit );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rMapMode.mpImplMapMode->meUnit) );
     WritePair( rOStm, rMapMode.mpImplMapMode->maOrigin );
     WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleX );
     WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleY );

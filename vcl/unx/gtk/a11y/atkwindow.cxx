@@ -304,7 +304,7 @@ ooo_window_wrapper_get_type()
             nullptr
         } ;
 
-        type = g_type_register_static (parent_type, "OOoWindowAtkObject", &typeInfo, (GTypeFlags)0) ;
+        type = g_type_register_static (parent_type, "OOoWindowAtkObject", &typeInfo, GTypeFlags(0)) ;
     }
 
     return type;

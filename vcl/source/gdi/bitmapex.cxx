@@ -303,7 +303,7 @@ BitmapChecksum BitmapEx::GetChecksum() const
     SVBT32      aBT32;
     BitmapChecksumOctetArray aBCOA;
 
-    UInt32ToSVBT32( (long) eTransparent, aBT32 );
+    UInt32ToSVBT32( static_cast<long>(eTransparent), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     UInt32ToSVBT32( static_cast<long>(bAlpha), aBT32 );

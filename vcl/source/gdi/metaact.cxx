@@ -1437,17 +1437,17 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
     sal_uInt32 nTempStrikeout(0);
     rIStm.ReadUInt32( nTempStrikeout );
-    meStrikeout = (FontStrikeout)nTempStrikeout;
+    meStrikeout = static_cast<FontStrikeout>(nTempStrikeout);
 
     sal_uInt32 nTempUnderline(0);
     rIStm.ReadUInt32( nTempUnderline );
-    meUnderline = (FontLineStyle)nTempUnderline;
+    meUnderline = static_cast<FontLineStyle>(nTempUnderline);
 
     if (aCompat.GetVersion() >= 2)
     {
         sal_uInt32 nTempOverline(0);
         rIStm.ReadUInt32(nTempOverline);
-        meOverline = (FontLineStyle)nTempOverline;
+        meOverline = static_cast<FontLineStyle>(nTempOverline);
     }
 }
 
@@ -2709,7 +2709,7 @@ void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
     sal_uInt16 nTmp16(0);
 
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt16( nTmp16 ); maAlign = (TextAlign) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); maAlign = static_cast<TextAlign>(nTmp16);
 }
 
 MetaMapModeAction::MetaMapModeAction() :
@@ -2918,7 +2918,7 @@ void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt16( (sal_uInt16)meRasterOp );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(meRasterOp) );
 }
 
 void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -2926,7 +2926,7 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
     sal_uInt16 nTmp16(0);
 
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt16( nTmp16 ); meRasterOp = (RasterOp) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); meRasterOp = static_cast<RasterOp>(nTmp16);
 }
 
 MetaTransparentAction::MetaTransparentAction() :
@@ -3399,7 +3399,7 @@ void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt32( (sal_uInt32)mnLayoutMode );
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(mnLayoutMode) );
 }
 
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )

@@ -166,7 +166,7 @@ SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
     sal_uInt16          nTmp16(0);
     sal_Int32       nTmp32(0);
 
-    rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meStyle = (LineStyle) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meStyle = static_cast<LineStyle>(nTmp16);
     rIStm.ReadInt32( nTmp32 );
     rLineInfo.mpImplLineInfo->mnWidth = nTmp32;
 
@@ -184,13 +184,13 @@ SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
     if( aCompat.GetVersion() >= 3 )
     {
         // version 3
-        rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meLineJoin = (basegfx::B2DLineJoin) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meLineJoin = static_cast<basegfx::B2DLineJoin>(nTmp16);
     }
 
     if( aCompat.GetVersion() >= 4 )
     {
         // version 4
-        rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meLineCap = (css::drawing::LineCap) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meLineCap = static_cast<css::drawing::LineCap>(nTmp16);
     }
 
     return rIStm;
@@ -201,7 +201,7 @@ SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 4 );
 
     // version 1
-    rOStm.WriteUInt16( (sal_uInt16)rLineInfo.mpImplLineInfo->meStyle )
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rLineInfo.mpImplLineInfo->meStyle) )
          .WriteInt32( rLineInfo.mpImplLineInfo->mnWidth );
 
     // since version2
@@ -215,7 +215,7 @@ SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rLineInfo.mpImplLineInfo->meLineJoin) );
 
     // since version4
-    rOStm.WriteUInt16( (sal_uInt16)rLineInfo.mpImplLineInfo->meLineCap );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rLineInfo.mpImplLineInfo->meLineCap) );
 
     return rOStm;
 }

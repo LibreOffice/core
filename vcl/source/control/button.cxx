@@ -148,7 +148,7 @@ OUString Button::GetStandardText(StandardButtonType eButton)
         SV_BUTTONTEXT_LESS,
     };
 
-    return VclResId(aResIdAry[(sal_uInt16)eButton]);
+    return VclResId(aResIdAry[static_cast<sal_uInt16>(eButton)]);
 }
 
 bool Button::SetModeImage( const Image& rImage )

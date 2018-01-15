@@ -133,7 +133,7 @@ void EMFWriter::ImplBeginPlusRecord( EmfPlusRecordType nType, sal_uInt16 nFlags 
         mbRecordPlusOpen = true;
         mnRecordPlusPos = m_rStm.Tell();
 
-        m_rStm.WriteUInt16( (sal_uInt16)nType ).WriteUInt16( nFlags );
+        m_rStm.WriteUInt16( static_cast<sal_uInt16>(nType) ).WriteUInt16( nFlags );
         m_rStm.SeekRel( 8 );
     }
 }
@@ -174,7 +174,7 @@ void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSiz
     if (nDivY)
         nDPIY /= nDivY; // DPI Y
 
-    m_rStm.WriteInt16( (sal_Int16)EmfPlusRecordType::Header );
+    m_rStm.WriteInt16( sal_Int16(EmfPlusRecordType::Header) );
     m_rStm.WriteInt16( 0x01 )  // Flags - Dual Mode // TODO: Check this
           .WriteInt32( 0x1C )  // Size
           .WriteInt32( 0x10 )  // Data Size

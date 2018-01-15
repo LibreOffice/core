@@ -179,7 +179,7 @@ hyper_link_get_type()
 
         type = g_type_register_static (ATK_TYPE_HYPERLINK,
                                        "OOoAtkObjHyperLink", &tinfo,
-                                       (GTypeFlags)0);
+                                       GTypeFlags(0));
         g_type_add_interface_static (type, ATK_TYPE_ACTION,
                                      &atk_action_info);
     }

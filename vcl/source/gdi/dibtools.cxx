@@ -1733,7 +1733,7 @@ bool ReadDIBBitmapEx(
         {
             sal_uInt8 tmp = 0;
             rIStm.ReadUChar( tmp );
-            TransparentType transparent = (TransparentType)tmp;
+            TransparentType transparent = static_cast<TransparentType>(tmp);
             bRetval = !rIStm.GetError();
 
             if(bRetval)
@@ -1822,7 +1822,7 @@ bool WriteDIBBitmapEx(
     {
         rOStm.WriteUInt32( 0x25091962 );
         rOStm.WriteUInt32( 0xACB20201 );
-        rOStm.WriteUChar( (sal_uChar)rSource.eTransparent );
+        rOStm.WriteUChar( static_cast<sal_uChar>(rSource.eTransparent) );
 
         if(TransparentType::Bitmap == rSource.eTransparent)
         {

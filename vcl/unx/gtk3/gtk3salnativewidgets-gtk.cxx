@@ -107,27 +107,27 @@ static GtkStateFlags NWConvertVCLStateToGTKState(ControlState nVCLState)
 
     if ( nVCLState & ControlState::PRESSED )
     {
-        nGTKState = (GtkStateFlags) (nGTKState | GTK_STATE_FLAG_ACTIVE);
+        nGTKState = static_cast<GtkStateFlags>(nGTKState | GTK_STATE_FLAG_ACTIVE);
     }
 
     if ( nVCLState & ControlState::ROLLOVER )
     {
-        nGTKState = (GtkStateFlags) (nGTKState | GTK_STATE_FLAG_PRELIGHT);
+        nGTKState = static_cast<GtkStateFlags>(nGTKState | GTK_STATE_FLAG_PRELIGHT);
     }
 
     if ( nVCLState & ControlState::SELECTED )
-        nGTKState = (GtkStateFlags) (nGTKState | GTK_STATE_FLAG_SELECTED);
+        nGTKState = static_cast<GtkStateFlags>(nGTKState | GTK_STATE_FLAG_SELECTED);
 
     if ( nVCLState & ControlState::FOCUSED )
-        nGTKState = (GtkStateFlags) (nGTKState | GTK_STATE_FLAG_FOCUSED);
+        nGTKState = static_cast<GtkStateFlags>(nGTKState | GTK_STATE_FLAG_FOCUSED);
 
     if (AllSettings::GetLayoutRTL())
     {
-        nGTKState = (GtkStateFlags) (nGTKState | GTK_STATE_FLAG_DIR_RTL);
+        nGTKState = static_cast<GtkStateFlags>(nGTKState | GTK_STATE_FLAG_DIR_RTL);
     }
     else
     {
-        nGTKState = (GtkStateFlags) (nGTKState | GTK_STATE_FLAG_DIR_LTR);
+        nGTKState = static_cast<GtkStateFlags>(nGTKState | GTK_STATE_FLAG_DIR_LTR);
     }
 
     return nGTKState;
@@ -735,7 +735,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         {
             stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
             if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
-                stateFlags = (GtkStateFlags) (stateFlags | GTK_STATE_PRELIGHT);
+                stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_PRELIGHT);
 
             GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
                                                       mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
@@ -919,7 +919,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     {
         stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
         if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
-            stateFlags = (GtkStateFlags) (stateFlags | GTK_STATE_PRELIGHT);
+            stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_PRELIGHT);
 
         GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
                                                   mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
@@ -2209,8 +2209,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
         // map selected menu entries in vcl parlance to gtk prelight
         if (nPart >= ControlPart::MenuItem && nPart <= ControlPart::SubmenuArrow && (nState & ControlState::SELECTED))
-            flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_PRELIGHT);
-        flags = (GtkStateFlags)(flags & ~GTK_STATE_FLAG_ACTIVE);
+            flags = static_cast<GtkStateFlags>(flags | GTK_STATE_FLAG_PRELIGHT);
+        flags = static_cast<GtkStateFlags>(flags & ~GTK_STATE_FLAG_ACTIVE);
         switch(nPart)
         {
         case ControlPart::MenuItem:
@@ -2229,7 +2229,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             nType = ControlType::Checkbox;
             if (nState & ControlState::PRESSED)
             {
-                flags = (GtkStateFlags)(flags | GTK_STATE_FLAG_CHECKED);
+                flags = static_cast<GtkStateFlags>(flags | GTK_STATE_FLAG_CHECKED);
             }
             break;
         case ControlPart::MenuItemRadioMark:
@@ -2244,12 +2244,12 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             nType = ControlType::Radiobutton;
             if (nState & ControlState::PRESSED)
             {
-                flags = (GtkStateFlags)(flags | GTK_STATE_FLAG_CHECKED);
+                flags = static_cast<GtkStateFlags>(flags | GTK_STATE_FLAG_CHECKED);
             }
             break;
         case ControlPart::Separator:
             context = mpSeparatorMenuItemSeparatorStyle;
-            flags = (GtkStateFlags)(GTK_STATE_FLAG_BACKDROP | GTK_STATE_FLAG_INSENSITIVE); //GTK_STATE_FLAG_BACKDROP hack ?
+            flags = GtkStateFlags(GTK_STATE_FLAG_BACKDROP | GTK_STATE_FLAG_INSENSITIVE); //GTK_STATE_FLAG_BACKDROP hack ?
             renderType = RenderType::MenuSeparator;
             break;
         case ControlPart::SubmenuArrow:
@@ -2278,7 +2278,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             break;
         case ControlPart::Button:
             /* For all checkbuttons in the toolbars */
-            flags = (GtkStateFlags)(flags |
+            flags = static_cast<GtkStateFlags>(flags |
                     ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
             context = mpToolButtonStyle;
             break;
@@ -2291,13 +2291,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
         break;
     case ControlType::Radiobutton:
-        flags = (GtkStateFlags)(flags |
+        flags = static_cast<GtkStateFlags>(flags |
                 ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_CHECKED : GTK_STATE_FLAG_NORMAL));
         context = mpRadioButtonRadioStyle;
         renderType = nPart == ControlPart::Focus ? RenderType::Focus : RenderType::Radio;
         break;
     case ControlType::Checkbox:
-        flags = (GtkStateFlags)(flags |
+        flags = static_cast<GtkStateFlags>(flags |
                 ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_CHECKED :
                   (rValue.getTristateVal() == ButtonValue::Mixed) ? GTK_STATE_FLAG_INCONSISTENT :
                   GTK_STATE_FLAG_NORMAL));
@@ -2334,7 +2334,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case ControlType::TabItem:
         context = mpNotebookHeaderTabsTabStyle;
         if (nState & ControlState::SELECTED)
-            flags = (GtkStateFlags) (flags | ACTIVE_TAB());
+            flags = static_cast<GtkStateFlags>(flags | ACTIVE_TAB());
         renderType = RenderType::TabItem;
         break;
     case ControlType::WindowBackground:
@@ -2356,7 +2356,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
             flags = (!(nState & ControlState::ENABLED)) ? GTK_STATE_FLAG_INSENSITIVE : GTK_STATE_FLAG_NORMAL;
             if (nState & ControlState::SELECTED)
-                flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_PRELIGHT);
+                flags = static_cast<GtkStateFlags>(flags | GTK_STATE_FLAG_PRELIGHT);
         }
         else
         {
@@ -2372,7 +2372,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         context = mpTreeHeaderButtonStyle;
         ButtonValue aButtonValue = rValue.getTristateVal();
         if (aButtonValue == ButtonValue::On)
-            flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_CHECKED);
+            flags = static_cast<GtkStateFlags>(flags | GTK_STATE_FLAG_CHECKED);
         renderType = RenderType::Expander;
         break;
     }
@@ -3259,7 +3259,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         default: break;
     }
 
-    SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << (int)nType << ", Part" << (int)nPart);
+    SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << static_cast<int>(nType) << ", Part" << static_cast<int>(nPart));
 
     return false;
 }

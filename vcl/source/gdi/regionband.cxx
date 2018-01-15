@@ -202,7 +202,7 @@ void RegionBand::load(SvStream& rIStrm)
     sal_uInt16 nTmp16(STREAMENTRY_END);
     rIStrm.ReadUInt16(nTmp16);
 
-    if (STREAMENTRY_END == (StreamEntryType)nTmp16)
+    if (STREAMENTRY_END == static_cast<StreamEntryType>(nTmp16))
         return;
 
     size_t nRecordsPossible = rIStrm.remainingSize() / (2*sizeof(sal_Int32));
@@ -216,7 +216,7 @@ void RegionBand::load(SvStream& rIStrm)
     do
     {
         // insert new band or new separation?
-        if(STREAMENTRY_BANDHEADER == (StreamEntryType)nTmp16)
+        if(STREAMENTRY_BANDHEADER == static_cast<StreamEntryType>(nTmp16))
         {
             sal_Int32 nYTop(0);
             sal_Int32 nYBottom(0);
@@ -265,7 +265,7 @@ void RegionBand::load(SvStream& rIStrm)
         // get next header
         rIStrm.ReadUInt16( nTmp16 );
     }
-    while (STREAMENTRY_END != (StreamEntryType)nTmp16 && rIStrm.good());
+    while (STREAMENTRY_END != static_cast<StreamEntryType>(nTmp16) && rIStrm.good());
 }
 
 void RegionBand::save(SvStream& rOStrm) const

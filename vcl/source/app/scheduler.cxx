@@ -44,7 +44,7 @@ template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Task& task )
 {
-    stream << "a: " << task.IsActive() << " p: " << (int) task.GetPriority();
+    stream << "a: " << task.IsActive() << " p: " << static_cast<int>(task.GetPriority());
     const sal_Char *name = task.GetDebugName();
     if( nullptr == name )
         return stream << " (nullptr)";
@@ -65,7 +65,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 {
     bool bIsIdle = (dynamic_cast<const Idle*>( &timer ) != nullptr);
     stream << (bIsIdle ? "Idle " : "Timer")
-           << " a: " << timer.IsActive() << " p: " << (int) timer.GetPriority();
+           << " a: " << timer.IsActive() << " p: " << static_cast<int>(timer.GetPriority());
     const sal_Char *name = timer.GetDebugName();
     if ( nullptr == name )
         stream << " (nullptr)";

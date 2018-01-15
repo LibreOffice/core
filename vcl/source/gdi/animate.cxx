@@ -51,7 +51,7 @@ BitmapChecksum AnimationBitmap::GetChecksum() const
     UInt32ToSVBT32( nWait, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( (long) eDisposal, aBT32 );
+    UInt32ToSVBT32( static_cast<long>(eDisposal), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     UInt32ToSVBT32( static_cast<long>(bUserInput), aBT32 );
@@ -684,7 +684,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
             WritePair( rOStm, rAnimBmp.aSizePix );
             WritePair( rOStm, rAnimation.maGlobalSize );
             rOStm.WriteUInt16( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait );
-            rOStm.WriteUInt16( (sal_uInt16)rAnimBmp.eDisposal );
+            rOStm.WriteUInt16( static_cast<sal_uInt16>(rAnimBmp.eDisposal) );
             rOStm.WriteBool( rAnimBmp.bUserInput );
             rOStm.WriteUInt32( rAnimation.mnLoopCount );
             rOStm.WriteUInt32( nDummy32 ); // Unused
@@ -746,7 +746,7 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
             ReadPair( rIStm, aAnimBmp.aSizePix );
             ReadPair( rIStm, rAnimation.maGlobalSize );
             rIStm.ReadUInt16( nTmp16 ); aAnimBmp.nWait = ( ( 65535 == nTmp16 ) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16 );
-            rIStm.ReadUInt16( nTmp16 ); aAnimBmp.eDisposal = ( Disposal) nTmp16;
+            rIStm.ReadUInt16( nTmp16 ); aAnimBmp.eDisposal = static_cast<Disposal>(nTmp16);
             rIStm.ReadCharAsBool( cTmp ); aAnimBmp.bUserInput = cTmp;
             rIStm.ReadUInt32( rAnimation.mnLoopCount );
             rIStm.ReadUInt32( nTmp32 ); // Unused

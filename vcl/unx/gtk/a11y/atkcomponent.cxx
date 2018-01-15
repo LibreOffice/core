@@ -287,7 +287,7 @@ component_wrapper_add_focus_handler (AtkComponent    *component,
     gulong ret;
     guint signal_id;
 
-    match_type = (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC);
+    match_type = GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC);
     signal_id = g_signal_lookup( "focus-event", ATK_TYPE_OBJECT );
 
     ret = g_signal_handler_find( component, match_type, signal_id, 0, nullptr,
