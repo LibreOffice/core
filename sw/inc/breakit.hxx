@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwBreakIt
     std::unique_ptr<LanguageTag> m_xLanguageTag;   ///< language tag of the current locale
     std::unique_ptr<css::i18n::ForbiddenCharacters> m_xForbidden;
 
-    LanguageType aForbiddenLang; ///< language of the current forbiddenChar struct
+    LanguageType m_aForbiddenLang; ///< language of the current forbiddenChar struct
 
     void GetLocale_( const LanguageType aLang );
     void GetLocale_( const LanguageTag& rLanguageTag );
@@ -103,7 +103,7 @@ public:
 
     const css::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
     {
-        if (!m_xForbidden || aForbiddenLang != aLang)
+        if (!m_xForbidden || m_aForbiddenLang != aLang)
             GetForbidden_( aLang );
         return *m_xForbidden;
     }
