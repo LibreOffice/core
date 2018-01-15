@@ -320,18 +320,11 @@ struct TransferDataContainer_Impl
 {
     TDataCntnrEntryList aFmtList;
     Link<sal_Int8,void> aFinshedLnk;
-    INetBookmark* pBookmk;
-    Graphic* pGrf;
+    std::unique_ptr<INetBookmark> pBookmk;
+    std::unique_ptr<Graphic> pGrf;
 
     TransferDataContainer_Impl()
-        : pBookmk( nullptr ), pGrf( nullptr )
     {
-    }
-
-    ~TransferDataContainer_Impl()
-    {
-        delete pBookmk;
-        delete pGrf;
     }
 };
 
@@ -402,7 +395,7 @@ bool TransferDataContainer::GetData(
 void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
 {
     if( !pImpl->pBookmk )
-        pImpl->pBookmk = new INetBookmark( rBkmk );
+        pImpl->pBookmk.reset( new INetBookmark( rBkmk ) );
     else
         *pImpl->pBookmk = rBkmk;
 
@@ -466,7 +459,7 @@ void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
         return;
 
     if( !pImpl->pGrf )
-        pImpl->pGrf = new Graphic( rGrf );
+        pImpl->pGrf.reset( new Graphic( rGrf ) );
     else
         *pImpl->pGrf = rGrf;
 
