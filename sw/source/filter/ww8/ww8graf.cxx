@@ -2607,7 +2607,13 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     OSL_ENSURE(pRecord, "how did that happen?");
     if (!pRecord)
+    {
+        // remove old object from the Z-Order list
+        m_xMSDffManager->RemoveFromShapeOrder(pObject);
+        // and delete the object
+        SdrObject::Free(pObject);
         return nullptr;
+    }
 
     const bool bLayoutInTableCell =
         m_nInTable && IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell );
