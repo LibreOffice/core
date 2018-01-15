@@ -94,13 +94,17 @@ struct ImplWinData
                         mpExtOldText;
     std::unique_ptr<ExtTextInputAttr[]>
                         mpExtOldAttrAry;
-    tools::Rectangle*   mpCursorRect;
+    std::unique_ptr<tools::Rectangle>
+                        mpCursorRect;
     long                mnCursorExtWidth;
     bool                mbVertical;
-    tools::Rectangle*   mpCompositionCharRects;
+    std::unique_ptr<tools::Rectangle[]>
+                        mpCompositionCharRects;
     long                mnCompositionCharRects;
-    tools::Rectangle*   mpFocusRect;
-    tools::Rectangle*   mpTrackRect;
+    std::unique_ptr<tools::Rectangle>
+                        mpFocusRect;
+    std::unique_ptr<tools::Rectangle>
+                        mpTrackRect;
     ShowTrackFlags      mnTrackFlags;
     sal_uInt16          mnIsTopWindow;
     bool                mbMouseOver;            //< tracks mouse over for native widget paint effect
