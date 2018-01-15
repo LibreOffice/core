@@ -178,7 +178,7 @@ void LegendItemConverter::FillSpecialItem(
         {
             chart2::LegendPosition eLegendPos( chart2::LegendPosition_LINE_END );
             GetPropertySet()->getPropertyValue( "AnchorPosition" ) >>= eLegendPos;
-            rOutItemSet.Put( SfxInt32Item(SCHATTR_LEGEND_POS, (sal_Int32)eLegendPos ) );
+            rOutItemSet.Put( SfxInt32Item(SCHATTR_LEGEND_POS, static_cast<sal_Int32>(eLegendPos) ) );
         }
         break;
    }

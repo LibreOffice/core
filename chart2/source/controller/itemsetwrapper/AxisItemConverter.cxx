@@ -338,7 +338,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         {
             css::chart::ChartAxisPosition eAxisPos( css::chart::ChartAxisPosition_ZERO );
             GetPropertySet()->getPropertyValue( "CrossoverPosition" ) >>= eAxisPos;
-            rOutItemSet.Put( SfxInt32Item( nWhichId, (sal_Int32)eAxisPos ) );
+            rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast<sal_Int32>(eAxisPos) ) );
         }
         break;
 
@@ -371,7 +371,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         {
             css::chart::ChartAxisLabelPosition ePos( css::chart::ChartAxisLabelPosition_NEAR_AXIS );
             GetPropertySet()->getPropertyValue( "LabelPosition" ) >>= ePos;
-            rOutItemSet.Put( SfxInt32Item( nWhichId, (sal_Int32)ePos ) );
+            rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast<sal_Int32>(ePos) ) );
         }
         break;
 
@@ -379,7 +379,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         {
             css::chart::ChartAxisMarkPosition ePos( css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
             GetPropertySet()->getPropertyValue( "MarkPosition" ) >>= ePos;
-            rOutItemSet.Put( SfxInt32Item( nWhichId, (sal_Int32)ePos ) );
+            rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast<sal_Int32>(ePos) ) );
         }
         break;
 
@@ -741,8 +741,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         case SCHATTR_AXIS_POSITION:
         {
             css::chart::ChartAxisPosition eAxisPos =
-                (css::chart::ChartAxisPosition)
-                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                static_cast<css::chart::ChartAxisPosition>(static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue());
 
             css::chart::ChartAxisPosition eOldAxisPos( css::chart::ChartAxisPosition_ZERO );
             bool bPropExisted = ( GetPropertySet()->getPropertyValue( "CrossoverPosition" ) >>= eOldAxisPos );
@@ -813,8 +812,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         case SCHATTR_AXIS_LABEL_POSITION:
         {
             css::chart::ChartAxisLabelPosition ePos =
-                (css::chart::ChartAxisLabelPosition)
-                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                static_cast<css::chart::ChartAxisLabelPosition>(static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue());
 
             css::chart::ChartAxisLabelPosition eOldPos( css::chart::ChartAxisLabelPosition_NEAR_AXIS );
             bool bPropExisted = ( GetPropertySet()->getPropertyValue( "LabelPosition" ) >>= eOldPos );
@@ -851,8 +849,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         case SCHATTR_AXIS_MARK_POSITION:
         {
             css::chart::ChartAxisMarkPosition ePos =
-                (css::chart::ChartAxisMarkPosition)
-                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                static_cast<css::chart::ChartAxisMarkPosition>(static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue());
 
             css::chart::ChartAxisMarkPosition eOldPos( css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
             bool bPropExisted = ( GetPropertySet()->getPropertyValue( "MarkPosition" ) >>= eOldPos );

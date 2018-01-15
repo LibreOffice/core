@@ -1133,7 +1133,7 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
     css::chart::ChartDataRowSource eChartDataRowSource = css::chart::ChartDataRowSource_ROWS;
     if( ! (rOuterValue >>= eChartDataRowSource) )
     {
-        sal_Int32 nNew = (sal_Int32)css::chart::ChartDataRowSource_ROWS;
+        sal_Int32 nNew = sal_Int32(css::chart::ChartDataRowSource_ROWS);
         if( !(rOuterValue >>= nNew) )
             throw lang::IllegalArgumentException( "Property DataRowSource requires css::chart::ChartDataRowSource value", nullptr, 0 );
         eChartDataRowSource = css::chart::ChartDataRowSource(nNew);
