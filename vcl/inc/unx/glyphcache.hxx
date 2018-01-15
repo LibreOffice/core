@@ -93,7 +93,7 @@ private:
     mutable int             mnGlyphCount;
     FreetypeFont*           mpCurrentGCFont;
 
-    FreetypeManager*        mpFtManager;
+    std::unique_ptr<FreetypeManager>  mpFtManager;
 };
 
 class GlyphData
