@@ -24,6 +24,7 @@
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <osl/mutex.hxx>
+#include <memory>
 
 class Idle;
 class Timer;
@@ -35,11 +36,11 @@ class SVT_DLLPUBLIC AsynchronLink
 {
     Link<void*,void> _aLink;
     ImplSVEvent*     _nEventId;
-    Idle*            _pIdle;
+    std::unique_ptr<Idle> _pIdle;
     bool             _bInCall;
     bool*            _pDeleted;
     void*            _pArg;
-    ::osl::Mutex*    _pMutex;
+    std::unique_ptr<::osl::Mutex> _pMutex;
 
     DECL_DLLPRIVATE_LINK( HandleCall_Idle, Timer*, void );
     DECL_DLLPRIVATE_LINK( HandleCall_PostUserEvent, void*, void );
