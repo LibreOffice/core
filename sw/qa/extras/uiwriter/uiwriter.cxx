@@ -5741,10 +5741,13 @@ void SwUiWriterTest::testTdf113481()
     pWrtShell->Down(false);
     pWrtShell->EndPara();
     // Before: U+4E2D U+2205 U+FE00. After: U+4E2D U+2205
-    pWrtShell->DelLeft();
-    const uno::Reference< text::XTextRange > xPara2 = getParagraph(2);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPara2->getString().getLength());
-    CPPUNIT_ASSERT_EQUAL(u'\x2205', xPara2->getString()[1]);
+    if ( pWrtShell->GetScriptType() == SvtScriptType::ASIAN )
+    {
+        pWrtShell->DelLeft();
+        const uno::Reference< text::XTextRange > xPara2 = getParagraph(2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPara2->getString().getLength());
+        CPPUNIT_ASSERT_EQUAL(u'\x2205', xPara2->getString()[1]);
+    }
 
     // Characters of other scripts, remove one character.
     pWrtShell->Down(false);
