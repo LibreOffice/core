@@ -21,6 +21,7 @@ interface CellSelection
 {
     // slots which are disabled in the DrawShell {
     FID_DEFINE_NAME             [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_DEFINE_CURRENT_NAME     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_ADD_NAME                [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DEFINE_COLROWNAMERANGES [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OPENDLG_SOLVE           [ ExecMethod = Execute; StateMethod = GetState; ]

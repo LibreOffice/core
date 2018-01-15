@@ -208,6 +208,32 @@ void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
     pRangeName = pNewRangeName;
 }
 
+bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddress )
+{
+    ScRangeName* pRangeNames;
+    ScRange aNameRange;
+    bool bRet = false;
+
+    if (eScope == RangeNameScope::GLOBAL)
+        pRangeNames= GetRangeName();
+    else
+        pRangeNames= GetRangeName(rAddress.Tab());
+
+    ScRangeName::iterator itrBegin = pRangeNames->begin(), itrEnd = pRangeNames->end();
+
+    for (ScRangeName::iterator itr = itrBegin; itr != itrEnd; ++itr)
+    {
+        itr->second->IsValidReference(aNameRange);
+        bRet = aNameRange.In(rAddress);
+        if (!bRet)
+            continue;
+        else
+            break;
+    }
+
+    return bRet;
+}
+
 bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPos, const OUString& rExpr )
 {
     ScRangeName* pGlobalNames = GetRangeName();
