@@ -25,11 +25,11 @@ class VclFiltersTest :
     public test::FiltersTest,
     public test::BootstrapFixture
 {
-    GraphicFilter mGraphicFilter;
+    std::unique_ptr<GraphicFilter> mpGraphicFilter;
 public:
     VclFiltersTest() :
         BootstrapFixture(true, false),
-        mGraphicFilter(GraphicFilter(false))
+        mpGraphicFilter(new GraphicFilter(false))
     {}
 
     virtual bool load(const OUString &,
@@ -59,7 +59,7 @@ bool VclFiltersTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    bool bRetval(ERRCODE_NONE == mGraphicFilter.ImportGraphic(aGraphic, rURL, aFileStream));
+    bool bRetval(ERRCODE_NONE == mpGraphicFilter->ImportGraphic(aGraphic, rURL, aFileStream));
 
     if (!bRetval)
     {
@@ -116,15 +116,15 @@ void VclFiltersTest::checkExportImport(const OUString& aFilterShortName)
     aFilterData[ 2 ].Name = "Quality";
     aFilterData[ 2 ].Value <<= sal_Int32(90);
 
-    sal_uInt16 aFilterType = mGraphicFilter.GetExportFormatNumberForShortName(aFilterShortName);
-    mGraphicFilter.ExportGraphic( aBitmap, OUString(), aStream, aFilterType, &aFilterData );
+    sal_uInt16 aFilterType = mpGraphicFilter->GetExportFormatNumberForShortName(aFilterShortName);
+    mpGraphicFilter->ExportGraphic( aBitmap, OUString(), aStream, aFilterType, &aFilterData );
 
     CPPUNIT_ASSERT(aStream.Tell() > 0);
 
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
 
     Graphic aLoadedGraphic;
-    mGraphicFilter.ImportGraphic( aLoadedGraphic, OUString(), aStream );
+    mpGraphicFilter->ImportGraphic( aLoadedGraphic, OUString(), aStream );
 
     BitmapEx aLoadedBitmapEx = aLoadedGraphic.GetBitmapEx();
     Size aSize = aLoadedBitmapEx.GetSizePixel();

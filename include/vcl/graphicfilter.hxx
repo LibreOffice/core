@@ -30,6 +30,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <memory>
 
 class FilterConfigCache;
 class SvStream;
@@ -310,7 +311,7 @@ private:
 
                     DECL_LINK( FilterCallback, ConvertData&, bool );
 
-    FilterErrorEx*      pErrorEx;
+    std::unique_ptr<FilterErrorEx> pErrorEx;
     bool                bUseConfig;
 };
 
