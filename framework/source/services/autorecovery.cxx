@@ -202,7 +202,7 @@ public:
 
         /* FINAL STATES */
 
-        /// the Auto/Emergency saved document is not useable any longer
+        /// the Auto/Emergency saved document is not usable any longer
         E_DAMAGED = 64,
         /// the Auto/Emergency saved document is not really up-to-date (some changes can be missing)
         E_INCOMPLETE = 128,
@@ -1580,7 +1580,7 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
     }
     // If saving of a document failed by an error ... we have to save this document
     // by ourself next time AutoSave or EmergencySave is triggered.
-    // But we can reset the state "used for other save requests". Otherwhise
+    // But we can reset the state "used for other save requests". Otherwise
     // these documents will never be saved!
     else if (
         (aEvent.EventName == EVENT_ON_SAVEFAILED) ||
@@ -2398,7 +2398,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     if (bNoAutoSave)
         return;
 
-    // Check if doc is well known on the desktop. Otherwhise ignore it!
+    // Check if doc is well known on the desktop. Otherwise ignore it!
     // Other frames mostly are used from external programs - e.g. the bean ...
     css::uno::Reference< css::frame::XController > xController = xDocument->getCurrentController();
     if (!xController.is())
@@ -2510,7 +2510,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
 
     // Sometimes we close documents by ourself.
     // And these documents can't be deregistered.
-    // Otherwhise we lose our configuration data... but need it !
+    // Otherwise we lose our configuration data... but need it !
     // see SessionSave !
     if (aInfo.IgnoreClosing)
         return;
@@ -2766,7 +2766,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
         // Prevent us from deregistration of these documents.
         // Because we close these documents by ourself (see XClosable below) ...
         // it's fact, that we reach our deregistration method. There we
-        // must not(!) update our configuration ... Otherwhise all
+        // must not(!) update our configuration ... Otherwise all
         // session data are lost !!!
         rInfo.IgnoreClosing = true;
 
@@ -3030,7 +3030,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
         lNewArgs[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;
 
     // Further it must be saved using the default file format of that application.
-    // Otherwhise we will some data lost.
+    // Otherwise we will some data lost.
     if (!rInfo.DefaultFilter.isEmpty())
         lNewArgs[utl::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.DefaultFilter;
 
@@ -3325,7 +3325,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         /* Normally we listen as XModifyListener on a document to know if a document was changed
            since our last AutoSave. And we deregister us in case we know this state.
            But directly after one document as recovered ... we must start listening.
-           Otherwhise the first "modify" doesn't reach us. Because we ourself called setModified()
+           Otherwise the first "modify" doesn't reach us. Because we ourself called setModified()
            on the document via API. And currently we don't listen for any events (not at theGlobalEventBroadcaster
            nor at any document!).
         */
@@ -4057,7 +4057,7 @@ bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 #else  // SIMULATE_FULL_DISC
     // In case an error occurs and we are not able to retrieve the needed information
     // it's better to "disable" the feature ShowErrorOnFullDisc !
-    // Otherwhise we start a confusing process of error handling ...
+    // Otherwise we start a confusing process of error handling ...
 
     sal_uInt64 nFreeSpace = SAL_MAX_UINT64;
 

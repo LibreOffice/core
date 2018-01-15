@@ -51,7 +51,7 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
     sal_Int32 nChildren=1;
     if( rAtom.iterator().mnPtType == XML_node )
     {
-        // cound child data nodes - check all child Atoms for "name"
+        // count child data nodes - check all child Atoms for "name"
         // attribute that is contained in diagram's
         // getPointsPresNameMap()
         ShallowPresNameVisitor aVisitor(mrDgm);

@@ -1832,7 +1832,7 @@ DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
     // xmlDocPtr pXmlDoc = parseXmlStream(&aStream);
 
     // Check amount of paths required to draw an arrow.
-    // Since there are still some emty paths in output test can fail later. There are just two
+    // Since there are still some empty paths in output test can fail later. There are just two
     // really used and visible paths.
     //assertXPath(pXmlDoc, "/svg/path", 4);
 }

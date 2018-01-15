@@ -1227,7 +1227,7 @@ void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
     // that this line does not exist anymore!
     if ( nPara < pEditEngine->GetParagraphCount() )
     {
-        // unfortunately I'm not sure that excactly this line does Modified() ...
+        // unfortunately I'm not sure that exactly this line does Modified()...
         if ( pProgress )
             pProgress->StepProgress();
         ImpDoHighlight( nPara );

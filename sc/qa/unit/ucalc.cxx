@@ -6362,7 +6362,7 @@ void Test::testCopyPasteMatrixFormula()
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, "=COUNTIF(ISBLANK(B1:D1);TRUE())");
     m_pDoc->CalcAll();
-    // A1 should containg 0
+    // A1 should contain 0
     CPPUNIT_ASSERT_EQUAL( 0.0, m_pDoc->GetValue(ScAddress(0,0,0)) ); // A1
 
     // Copy cell A1 to clipboard.

@@ -985,7 +985,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
     // I.III) "_top"
     //  If we are not the top frame in this hierarchy, we must forward request to our parent.
-    //  Otherwhise we must return ourself.
+    //  Otherwise we must return ourself.
 
     else if ( sTargetFrameName==SPECIALTARGET_TOP )
     {
@@ -1404,7 +1404,7 @@ void SAL_CALL Frame::contextChanged()
                     May <NULL/> for releasing.
     @param      xController
                     reference to new component controller
-                    (may <NULL/> for relasing or setting of a simple component)
+                    (may <NULL/> for releasing or setting of a simple component)
 
     @return     <TRUE/> if operation was successful, <FALSE/> otherwise.
 
@@ -1626,7 +1626,7 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
 
     @param      bDeliverOwnership
                     If parameter is set to <FALSE/> the original caller will be the owner after thrown
-                    veto exception and must try to close this frame at later time again. Otherwhise the
+                    veto exception and must try to close this frame at later time again. Otherwise the
                     source of throwed exception is the right one. May it will be the frame himself.
 
     @throws     CloseVetoException
@@ -2105,7 +2105,7 @@ void SAL_CALL Frame::disposing()
 
     // Don't show any dialogs, errors or something else any more!
     // If somewhere called dispose() whitout close() before - normally no dialogs
-    // should exist. Otherwhise it's the problem of the outside caller.
+    // should exist. Otherwise it's the problem of the outside caller.
     // Note:
     //      (a) Do it after stopWindowListening(). May that force some active/deactive
     //          notifications which we don't need here really.
@@ -2529,7 +2529,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& )
 
     /*ATTENTION!
         Don't try to suspend the controller here! Because it's done inside used dispatch().
-        Otherwhise the dialog "would you save your changes?" will be shown more than once ...
+        Otherwise the dialog "would you save your changes?" will be shown more than once ...
      */
 
     css::util::URL aURL;

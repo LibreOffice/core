@@ -4793,7 +4793,7 @@ OUString SAL_CALL SwXTextCellStyle::getParentStyle()
 void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& /*sParentStyle*/)
 {
     SolarMutexGuard aGuard;
-    // Changing parent to one which is unaware of it will lead to a something unexcpected. getName() rely on a parent.
+    // Changing parent to one which is unaware of it will lead to a something unexpected. getName() rely on a parent.
     SAL_INFO("sw.uno", "Changing SwXTextCellStyle parent");
 }
 
