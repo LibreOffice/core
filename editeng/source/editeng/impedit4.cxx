@@ -998,7 +998,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
     EditTextObject* pTxtObj = new EditTextObject(pPool);
     pTxtObj->SetVertical( IsVertical(), IsTopToBottom());
     MapUnit eMapUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
-    pTxtObj->mpImpl->SetMetric( (sal_uInt16) eMapUnit );
+    pTxtObj->mpImpl->SetMetric( static_cast<sal_uInt16>(eMapUnit) );
     if ( pTxtObj->mpImpl->IsOwnerOfPool() )
         pTxtObj->mpImpl->GetPool()->SetDefaultMetric( eMapUnit );
 
@@ -1196,7 +1196,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     MapUnit eSourceUnit = MapUnit(), eDestUnit = MapUnit();
     if (rTextObject.mpImpl->HasMetric())
     {
-        eSourceUnit = (MapUnit)rTextObject.mpImpl->GetMetric();
+        eSourceUnit = static_cast<MapUnit>(rTextObject.mpImpl->GetMetric());
         eDestUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
         if ( eSourceUnit != eDestUnit )
             bConvertMetricOfItems = true;

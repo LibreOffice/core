@@ -485,7 +485,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
             else if ( !isOffToken(nToken) )
             {
                 DBG_ASSERT( !isOffToken( nToken ), "No Start-Token ?!" );
-                SkipGroup( static_cast<HtmlTokenId>((int)nToken + 1) );
+                SkipGroup( static_cast<HtmlTokenId>(static_cast<int>(nToken) + 1) );
             }
         }
     }
@@ -801,7 +801,7 @@ void EditHTMLParser::HeadingStart( HtmlTokenId nToken )
         ImpInsertParaBreak();
 
     sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(
-        1 + ( ( (int)nToken - (int)HtmlTokenId::HEAD1_ON ) / 2 ) );
+        1 + ( ( static_cast<int>(nToken) - int(HtmlTokenId::HEAD1_ON) ) / 2 ) );
     DBG_ASSERT( (nId >= 1) && (nId <= 9), "HeadingStart: ID can not be correct!" );
     ImpSetStyleSheet( nId );
 }

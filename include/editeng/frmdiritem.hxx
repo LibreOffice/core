@@ -50,7 +50,7 @@ public:
 
     virtual sal_uInt16      GetValueCount() const override
     {
-        return (sal_uInt16)SvxFrameDirection::Environment + 1;
+        return sal_uInt16(SvxFrameDirection::Environment) + 1;
     }
     SvxFrameDirectionItem& operator=( const SvxFrameDirectionItem& rItem )
     {

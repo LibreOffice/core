@@ -43,15 +43,15 @@ void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, vcl:
     rFont.SetFamilyName( rDesc.Name );
     rFont.SetStyleName( rDesc.StyleName );
     rFont.SetFontSize( Size( rDesc.Width, rDesc.Height ) );
-    rFont.SetFamily( (FontFamily)rDesc.Family );
+    rFont.SetFamily( static_cast<FontFamily>(rDesc.Family) );
     rFont.SetCharSet( static_cast<rtl_TextEncoding>(rDesc.CharSet) );
-    rFont.SetPitch( (FontPitch)rDesc.Pitch );
+    rFont.SetPitch( static_cast<FontPitch>(rDesc.Pitch) );
     rFont.SetOrientation( static_cast<short>(rDesc.Orientation*10) );
     rFont.SetKerning( rDesc.Kerning ? FontKerning::FontSpecific : FontKerning::NONE );
     rFont.SetWeight( vcl::unohelper::ConvertFontWeight(rDesc.Weight) );
-    rFont.SetItalic( (FontItalic)rDesc.Slant );
-    rFont.SetUnderline( (FontLineStyle)rDesc.Underline );
-    rFont.SetStrikeout( (FontStrikeout)rDesc.Strikeout );
+    rFont.SetItalic( static_cast<FontItalic>(rDesc.Slant) );
+    rFont.SetUnderline( static_cast<FontLineStyle>(rDesc.Underline) );
+    rFont.SetStrikeout( static_cast<FontStrikeout>(rDesc.Strikeout) );
     rFont.SetWordLineMode( rDesc.WordLineMode );
 }
 
@@ -81,9 +81,9 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
         SvxFontItem aFontItem( EE_CHAR_FONTINFO );
         aFontItem.SetFamilyName( rDesc.Name);
         aFontItem.SetStyleName( rDesc.StyleName);
-        aFontItem.SetFamily( (FontFamily)rDesc.Family);
+        aFontItem.SetFamily( static_cast<FontFamily>(rDesc.Family));
         aFontItem.SetCharSet( rDesc.CharSet );
-        aFontItem.SetPitch( (FontPitch)rDesc.Pitch);
+        aFontItem.SetPitch( static_cast<FontPitch>(rDesc.Pitch));
         rSet.Put(aFontItem);
     }
 

@@ -79,7 +79,7 @@ SvxAdjust ConvertUnoAdjust( unsigned short nAdjust )
 
 unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
 {
-    DBG_ASSERT( (int)eAdjust <= 6, "Enum has changed! [CL]" );
+    DBG_ASSERT( static_cast<int>(eAdjust) <= 6, "Enum has changed! [CL]" );
     return aSvxToUnoAdjust[eAdjust];
 }
 
@@ -282,7 +282,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             // There is no reason to limit numbering types.
             if ( nSet>=0 )
             {
-                aFmt.SetNumberingType((SvxNumType)nSet);
+                aFmt.SetNumberingType(static_cast<SvxNumType>(nSet));
                 continue;
             }
         }

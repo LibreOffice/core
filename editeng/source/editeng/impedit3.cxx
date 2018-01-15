@@ -2434,7 +2434,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
 
     if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
     {
-        ExtTextInputAttr nLastAttr = (ExtTextInputAttr)0xFFFF;
+        ExtTextInputAttr nLastAttr = ExtTextInputAttr(0xFFFF);
         for( sal_Int32 n = 0; n < mpIMEInfos->nLen; n++ )
         {
             if ( mpIMEInfos->pAttribs[n] != nLastAttr )

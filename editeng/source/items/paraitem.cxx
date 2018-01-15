@@ -244,7 +244,7 @@ bool SvxLineSpacingItem::GetPresentation
 
 sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 {
-    return (sal_uInt16)SvxSpecialLineSpace::End;   // SvxSpecialLineSpace::TwoLines + 1
+    return sal_uInt16(SvxSpecialLineSpace::End);   // SvxSpecialLineSpace::TwoLines + 1
 }
 
 
@@ -252,7 +252,7 @@ OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     //! load strings from resource
     OUString aText;
-    switch ( (SvxSpecialLineSpace)nPos )
+    switch ( static_cast<SvxSpecialLineSpace>(nPos) )
     {
         case SvxSpecialLineSpace::User:
             aText = "User";
@@ -282,13 +282,13 @@ sal_uInt16 SvxLineSpacingItem::GetEnumValue() const
         case 200:   nVal = SvxSpecialLineSpace::TwoLines;           break;
         default:    nVal = SvxSpecialLineSpace::User;               break;
     }
-    return (sal_uInt16)nVal;
+    return static_cast<sal_uInt16>(nVal);
 }
 
 
 void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 {
-    switch ( (SvxSpecialLineSpace)nVal )
+    switch ( static_cast<SvxSpecialLineSpace>(nVal) )
     {
         case SvxSpecialLineSpace::OneLine:           nPropLineSpace = 100; break;
         case SvxSpecialLineSpace::OnePointFiveLines: nPropLineSpace = 150; break;
@@ -323,8 +323,8 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        case MID_PARA_ADJUST      : rVal <<= (sal_Int16)GetAdjust(); break;
-        case MID_LAST_LINE_ADJUST : rVal <<= (sal_Int16)GetLastBlock(); break;
+        case MID_PARA_ADJUST      : rVal <<= static_cast<sal_Int16>(GetAdjust()); break;
+        case MID_LAST_LINE_ADJUST : rVal <<= static_cast<sal_Int16>(GetLastBlock()); break;
         case MID_EXPAND_SINGLE    :
         {
             rVal <<= bOneBlock;
@@ -347,7 +347,7 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             ::cppu::enum2int(eVal,rVal);
             if(eVal >= 0 && eVal <= 4)
             {
-                SvxAdjust eAdjust = (SvxAdjust)eVal;
+                SvxAdjust eAdjust = static_cast<SvxAdjust>(eVal);
                 if(MID_LAST_LINE_ADJUST == nMemberId &&
                     eAdjust != SvxAdjust::Left &&
                     eAdjust != SvxAdjust::Block &&
@@ -383,7 +383,7 @@ bool SvxAdjustItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         case SfxItemPresentation::Complete:
-            rText = GetValueTextByPos( (sal_uInt16)GetAdjust() );
+            rText = GetValueTextByPos( static_cast<sal_uInt16>(GetAdjust()) );
             return true;
         default: ;//prevent warning
     }
@@ -393,7 +393,7 @@ bool SvxAdjustItem::GetPresentation
 
 sal_uInt16 SvxAdjustItem::GetValueCount() const
 {
-    return (sal_uInt16)SvxAdjust::End;  // SvxAdjust::BlockLine + 1
+    return sal_uInt16(SvxAdjust::End);  // SvxAdjust::BlockLine + 1
 }
 
 OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
@@ -406,20 +406,20 @@ OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
         RID_SVXITEMS_ADJUST_CENTER,
         RID_SVXITEMS_ADJUST_BLOCKLINE
     };
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_ADJUST) - 1 == (size_t)SvxAdjust::BlockLine, "unexpected size");
-    assert(nPos <= (sal_uInt16)SvxAdjust::BlockLine && "enum overflow!");
+    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_ADJUST) - 1 == size_t(SvxAdjust::BlockLine), "unexpected size");
+    assert(nPos <= sal_uInt16(SvxAdjust::BlockLine) && "enum overflow!");
     return EditResId(RID_SVXITEMS_ADJUST[nPos]);
 }
 
 sal_uInt16 SvxAdjustItem::GetEnumValue() const
 {
-    return (sal_uInt16)GetAdjust();
+    return static_cast<sal_uInt16>(GetAdjust());
 }
 
 
 void SvxAdjustItem::SetEnumValue( sal_uInt16 nVal )
 {
-    SetAdjust( (SvxAdjust)nVal );
+    SetAdjust( static_cast<SvxAdjust>(nVal) );
 }
 
 
@@ -434,7 +434,7 @@ SfxPoolItem* SvxAdjustItem::Create(SvStream& rStrm, sal_uInt16 nVersion) const
 {
     char eAdjustment;
     rStrm.ReadChar( eAdjustment );
-    SvxAdjustItem *pRet = new SvxAdjustItem( (SvxAdjust)eAdjustment, Which() );
+    SvxAdjustItem *pRet = new SvxAdjustItem( static_cast<SvxAdjust>(eAdjustment), Which() );
     if( nVersion >= ADJUST_LASTBLOCK_VERSION )
     {
         sal_Int8 nFlags;
@@ -449,7 +449,7 @@ SfxPoolItem* SvxAdjustItem::Create(SvStream& rStrm, sal_uInt16 nVersion) const
 
 SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
 {
-    rStrm.WriteChar( (char)GetAdjust() );
+    rStrm.WriteChar( static_cast<char>(GetAdjust()) );
     if ( nItemVersion >= ADJUST_LASTBLOCK_VERSION )
     {
         sal_Int8 nFlags = 0;
@@ -837,7 +837,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         {
                             sal_Int32 nVal = 0;
                             if (rAnySeq[1] >>= nVal)
-                                aSeq[n].Alignment = (css::style::TabAlign) nVal;
+                                aSeq[n].Alignment = static_cast<css::style::TabAlign>(nVal);
                             else
                                 return false;
                         }
@@ -1188,7 +1188,7 @@ bool SvxForbiddenRuleItem::GetPresentation(
 
 SvxParaVertAlignItem::SvxParaVertAlignItem( Align nValue,
     const sal_uInt16 nW )
-    : SfxUInt16Item( nW, (sal_uInt16)nValue )
+    : SfxUInt16Item( nW, static_cast<sal_uInt16>(nValue) )
 {
 }
 
@@ -1223,7 +1223,7 @@ bool SvxParaVertAlignItem::GetPresentation(
 bool SvxParaVertAlignItem::QueryValue( css::uno::Any& rVal,
                                            sal_uInt8 /*nMemberId*/ ) const
 {
-    rVal <<= (sal_Int16)GetValue();
+    rVal <<= static_cast<sal_Int16>(GetValue());
     return true;
 }
 
@@ -1231,9 +1231,9 @@ bool SvxParaVertAlignItem::PutValue( const css::uno::Any& rVal,
                                          sal_uInt8 /*nMemberId*/ )
 {
     sal_Int16 nVal = sal_Int16();
-    if((rVal >>= nVal) && nVal >=0 && nVal <= (sal_uInt16)Align::Bottom )
+    if((rVal >>= nVal) && nVal >=0 && nVal <= sal_uInt16(Align::Bottom) )
     {
-        SetValue( (Align)nVal );
+        SetValue( static_cast<Align>(nVal) );
         return true;
     }
     else

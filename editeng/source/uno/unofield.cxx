@@ -422,7 +422,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
             pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SvxDateType::Fix:SvxDateType::Var );
             if( mpImpl->mnInt32 >= static_cast<sal_Int32>(SvxDateFormat::AppDefault) &&
                 mpImpl->mnInt32 <= static_cast<sal_Int32>(SvxDateFormat::F) )
-                static_cast<SvxDateField*>(pData)->SetFormat( (SvxDateFormat)mpImpl->mnInt32 );
+                static_cast<SvxDateField*>(pData)->SetFormat( static_cast<SvxDateFormat>(mpImpl->mnInt32) );
         }
         else
         {
@@ -433,7 +433,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
                 if( static_cast<SvxTimeFormat>(mpImpl->mnInt32) >= SvxTimeFormat::AppDefault &&
                     static_cast<SvxTimeFormat>(mpImpl->mnInt32) <= SvxTimeFormat::HH12_MM_SS_00_AMPM )
-                    static_cast<SvxExtTimeField*>(pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt32 );
+                    static_cast<SvxExtTimeField*>(pData)->SetFormat( static_cast<SvxTimeFormat>(mpImpl->mnInt32) );
             }
             else
             {
@@ -449,7 +449,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         static_cast<SvxURLField*>(pData)->SetTargetFrame( mpImpl->msString2 );
         if( static_cast<SvxURLFormat>(mpImpl->mnInt16) >= SvxURLFormat::AppDefault &&
             static_cast<SvxURLFormat>(mpImpl->mnInt16) <= SvxURLFormat::Repr )
-            static_cast<SvxURLField*>(pData)->SetFormat( (SvxURLFormat)mpImpl->mnInt16 );
+            static_cast<SvxURLField*>(pData)->SetFormat( static_cast<SvxURLFormat>(mpImpl->mnInt16) );
         break;
 
     case text::textfield::Type::PAGE:
@@ -514,7 +514,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         else if( static_cast<SvxAuthorFormat>(mpImpl->mnInt16) >= SvxAuthorFormat::FullName &&
                  static_cast<SvxAuthorFormat>(mpImpl->mnInt16) <= SvxAuthorFormat::ShortName )
         {
-            static_cast<SvxAuthorField*>(pData)->SetFormat( (SvxAuthorFormat) mpImpl->mnInt16 );
+            static_cast<SvxAuthorField*>(pData)->SetFormat( static_cast<SvxAuthorFormat>(mpImpl->mnInt16) );
         }
 
         break;
@@ -523,8 +523,8 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case text::textfield::Type::MEASURE:
     {
         SdrMeasureFieldKind eKind = SdrMeasureFieldKind::Value;
-        if( mpImpl->mnInt16 == (sal_Int16)SdrMeasureFieldKind::Unit || mpImpl->mnInt16 == (sal_Int16)SdrMeasureFieldKind::Rotate90Blanks )
-            eKind = (SdrMeasureFieldKind) mpImpl->mnInt16;
+        if( mpImpl->mnInt16 == sal_Int16(SdrMeasureFieldKind::Unit) || mpImpl->mnInt16 == sal_Int16(SdrMeasureFieldKind::Rotate90Blanks) )
+            eKind = static_cast<SdrMeasureFieldKind>(mpImpl->mnInt16);
         pData = new SdrMeasureField( eKind);
         break;
     }
