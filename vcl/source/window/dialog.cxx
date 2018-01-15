@@ -350,8 +350,6 @@ struct DialogImpl
 void Dialog::ImplInitDialogData()
 {
     mpWindowImpl->mbDialog  = true;
-    mpPrevExecuteDlg        = nullptr;
-    mpNextExecuteDlg        = nullptr;
     mbInExecute             = false;
     mbInClose               = false;
     mbModalMode             = false;
@@ -373,19 +371,17 @@ vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
     if (pParent && (!pParent->IsInputEnabled() || pParent->IsInModalMode()))
     {
         ImplSVData* pSVData = ImplGetSVData();
-        Dialog*     pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
-        while (pExeDlg)
+        auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
+        for (auto it = rExecuteDialogs.rbegin(); it != rExecuteDialogs.rend(); ++it)
         {
             // only if visible and enabled
-            if (pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(pExeDlg, true) &&
-                pExeDlg->IsReallyVisible() &&
-                pExeDlg->IsEnabled() && pExeDlg->IsInputEnabled() && !pExeDlg->IsInModalMode())
+            if (pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(*it, true) &&
+                (*it)->IsReallyVisible() &&
+                (*it)->IsEnabled() && (*it)->IsInputEnabled() && !(*it)->IsInModalMode())
             {
-                pParent = pExeDlg;
+                pParent = it->get();
                 break;
             }
-
-            pExeDlg = pExeDlg->mpPrevExecuteDlg;
         }
     }
 
@@ -586,8 +582,6 @@ void Dialog::dispose()
 {
     mpDialogImpl.reset();
     RemoveFromDlgList();
-    mpPrevExecuteDlg.clear();
-    mpNextExecuteDlg.clear();
     mpActionArea.clear();
     mpContentArea.clear();
 
@@ -831,10 +825,7 @@ bool Dialog::ImplStartExecuteModal()
     ImplSVData* pSVData = ImplGetSVData();
 
      // link all dialogs which are being executed
-    mpPrevExecuteDlg = pSVData->maWinData.mpLastExecuteDlg;
-    if (mpPrevExecuteDlg)
-        mpPrevExecuteDlg->mpNextExecuteDlg = this;
-    pSVData->maWinData.mpLastExecuteDlg = this;
+    pSVData->maWinData.mpExecuteDialogs.push_back(this);
 
     // stop capturing, in order to have control over the dialog
     if ( pSVData->maWinData.mpTrackWin )
@@ -993,21 +984,11 @@ bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
 
 void Dialog::RemoveFromDlgList()
 {
-    // remove dialog from the list of dialogs which are being executed
     ImplSVData* pSVData = ImplGetSVData();
-    if (pSVData->maWinData.mpLastExecuteDlg == this)
-    {
-        if (mpPrevExecuteDlg)
-            pSVData->maWinData.mpLastExecuteDlg = mpPrevExecuteDlg;
-        else
-            pSVData->maWinData.mpLastExecuteDlg = mpNextExecuteDlg;
-    }
-    if (mpPrevExecuteDlg)
-        mpPrevExecuteDlg->mpNextExecuteDlg = mpNextExecuteDlg;
-    if (mpNextExecuteDlg)
-        mpNextExecuteDlg->mpPrevExecuteDlg = mpPrevExecuteDlg;
-    mpPrevExecuteDlg.clear();
-    mpNextExecuteDlg.clear();
+    auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
+
+    // remove dialog from the list of dialogs which are being executed
+    rExecuteDialogs.erase(std::remove_if(rExecuteDialogs.begin(), rExecuteDialogs.end(), [=](VclPtr<Dialog>& dialog){ return dialog.get() == this; }), rExecuteDialogs.end());
 }
 
 void Dialog::EndDialog( long nResult )
@@ -1021,19 +1002,20 @@ void Dialog::EndDialog( long nResult )
 
     // set focus to previous modal dialogue if it is modal for
     // the same frame parent (or NULL)
-    if( mpPrevExecuteDlg )
+    ImplSVData* pSVData = ImplGetSVData();
+    if (!pSVData->maWinData.mpExecuteDialogs.empty())
     {
+        VclPtr<Dialog> pPrevious = pSVData->maWinData.mpExecuteDialogs.back();
+
         vcl::Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
-        vcl::Window* pPrevFrameParent = mpPrevExecuteDlg->ImplGetFrameWindow()? mpPrevExecuteDlg->ImplGetFrameWindow()->ImplGetParent(): nullptr;
+        vcl::Window* pPrevFrameParent = pPrevious->ImplGetFrameWindow()? pPrevious->ImplGetFrameWindow()->ImplGetParent(): nullptr;
         if( ( !pFrameParent && !pPrevFrameParent ) ||
             ( pFrameParent && pPrevFrameParent && pFrameParent->ImplGetFrame() == pPrevFrameParent->ImplGetFrame() )
             )
         {
-            mpPrevExecuteDlg->GrabFocus();
+            pPrevious->GrabFocus();
         }
     }
-    mpPrevExecuteDlg = nullptr;
-    mpNextExecuteDlg = nullptr;
 
     Hide();
     if ( GetParent() )
@@ -1069,17 +1051,15 @@ long Dialog::GetResult() const
 void Dialog::EndAllDialogs( vcl::Window const * pParent )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Dialog* pTempModDialog;
-    Dialog* pModDialog = pSVData->maWinData.mpLastExecuteDlg;
-    while (pModDialog)
+    auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
+
+    for (auto it = rExecuteDialogs.rbegin(); it != rExecuteDialogs.rend(); ++it)
     {
-        pTempModDialog = pModDialog->mpPrevExecuteDlg;
-        if(!pParent || pParent->IsWindowOrChild(pModDialog,true))
+        if (!pParent || pParent->IsWindowOrChild(*it, true))
         {
-            pModDialog->EndDialog();
-            pModDialog->PostUserEvent( Link<void*,void>() );
+            (*it)->EndDialog();
+            (*it)->PostUserEvent(Link<void*, void>());
         }
-        pModDialog = pTempModDialog;
     }
 }
 
@@ -1097,14 +1077,21 @@ void Dialog::ImplSetModalInputMode( bool bModal )
     if ( bModal == mbModalMode )
         return;
 
+    // previously Execute()'d dialog - the one below the top-most one
+    VclPtr<Dialog> pPrevious;
+    ImplSVData* pSVData = ImplGetSVData();
+    auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
+    if (rExecuteDialogs.size() > 1)
+        pPrevious = rExecuteDialogs[rExecuteDialogs.size() - 2];
+
     mbModalMode = bModal;
     if ( bModal )
     {
         // Disable the prev Modal Dialog, because our dialog must close at first,
         // before the other dialog can be closed (because the other dialog
         // is on stack since our dialog returns)
-        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, true ) )
-            mpPrevExecuteDlg->EnableInput( false, this );
+        if (pPrevious && !pPrevious->IsWindowOrChild(this, true))
+            pPrevious->EnableInput(false, this);
 
         // determine next overlap dialog parent
         vcl::Window* pParent = GetParent();
@@ -1128,24 +1115,18 @@ void Dialog::ImplSetModalInputMode( bool bModal )
         }
 
         // Enable the prev Modal Dialog
-        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, true ) )
+        if (pPrevious && !pPrevious->IsWindowOrChild(this, true))
         {
-            mpPrevExecuteDlg->EnableInput( true, this );
+            pPrevious->EnableInput(true, this);
+
             // ensure continued modality of prev dialog
             // do not change modality counter
 
             // #i119994# need find the last modal dialog before reactive it
-            Dialog * pPrevModalDlg = mpPrevExecuteDlg;
-
-            while( pPrevModalDlg && !pPrevModalDlg->IsModalInputMode() )
-                pPrevModalDlg = pPrevModalDlg->mpPrevExecuteDlg;
-
-            if( pPrevModalDlg &&
-            ( pPrevModalDlg == mpPrevExecuteDlg.get()
-                || !pPrevModalDlg->IsWindowOrChild( this, true ) ) )
+            if (pPrevious->IsModalInputMode() || !pPrevious->IsWindowOrChild(this, true))
             {
-                mpPrevExecuteDlg->ImplSetModalInputMode( false );
-                mpPrevExecuteDlg->ImplSetModalInputMode( true );
+                pPrevious->ImplSetModalInputMode(false);
+                pPrevious->ImplSetModalInputMode(true);
             }
         }
     }

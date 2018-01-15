@@ -204,7 +204,7 @@ struct ImplSVWinData
     VclPtr<vcl::Window>     mpCaptureWin;                   // window, that has the mouse capture
     VclPtr<vcl::Window>     mpLastDeacWin;                  // Window, that need a deactivate (FloatingWindow-Handling)
     VclPtr<FloatingWindow>  mpFirstFloat;                   // First FloatingWindow in PopupMode
-    VclPtr<Dialog>          mpLastExecuteDlg;               // First Dialog that is in Execute
+    std::vector<VclPtr<Dialog>> mpExecuteDialogs;           ///< Stack of dialogs that are Execute()'d - the last one is the top most one.
     VclPtr<vcl::Window>     mpExtTextInputWin;              // Window, which is in ExtTextInput
     VclPtr<vcl::Window>     mpTrackWin;                     // window, that is in tracking mode
     AutoTimer*              mpTrackTimer = nullptr;         // tracking timer
