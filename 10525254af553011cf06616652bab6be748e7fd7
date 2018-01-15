@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_d22a26e7",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3554,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-01-15T08:17:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa31d9ce_f2780a92",
+      "range": {
+        "startLine": 3554,
+        "startChar": 15,
+        "endLine": 3554,
+        "endChar": 25
+      },
+      "revId": "10525254af553011cf06616652bab6be748e7fd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_924b4e59",
         "filename": "dbaccess/source/ui/inc/JoinTableView.hxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-14T16:46:07Z",
       "side": 1,
       "message": "rather \"Hard\"",
+      "range": {
+        "startLine": 219,
+        "startChar": 12,
+        "endLine": 219,
+        "endChar": 17
+      },
+      "revId": "10525254af553011cf06616652bab6be748e7fd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_f22f2af4",
+        "filename": "dbaccess/source/ui/inc/JoinTableView.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-01-15T08:17:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa31d9ce_924b4e59",
       "range": {
         "startLine": 219,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_12359e45",
+        "filename": "filter/source/xslt/export/spreadsheetml/formular.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-01-15T08:17:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa31d9ce_b248525d",
+      "range": {
+        "startLine": 121,
+        "startChar": 38,
+        "endLine": 121,
+        "endChar": 45
+      },
+      "revId": "10525254af553011cf06616652bab6be748e7fd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_d27306b3",
         "filename": "filter/source/xslt/export/spreadsheetml/table.xsl",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-14T16:46:07Z",
       "side": 1,
       "message": "\"an empty cell\" ?",
+      "range": {
+        "startLine": 585,
+        "startChar": 33,
+        "endLine": 585,
+        "endChar": 47
+      },
+      "revId": "10525254af553011cf06616652bab6be748e7fd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_323aa237",
+        "filename": "filter/source/xslt/export/spreadsheetml/table.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-01-15T08:17:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa31d9ce_d27306b3",
       "range": {
         "startLine": 585,
         "startChar": 33,
