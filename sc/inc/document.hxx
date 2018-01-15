@@ -252,6 +252,12 @@ enum CommentCaptionState
     MIXED                       // There are comments in shown and hidden.
 };
 
+enum RangeNameScope
+{
+    GLOBAL,                    // A range name can be defined
+    SHEET                      // with two scope on Manage Names dialog.
+};
+
 struct ScDocStat
 {
     OUString  aDocName;
@@ -606,6 +612,7 @@ public:
     SC_DLLPUBLIC ScRangeName*  GetRangeName() const;
     void                       SetRangeName(SCTAB nTab, ScRangeName* pNew);
     void                       SetRangeName( ScRangeName* pNewRangeName );
+    bool                       IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddress);
 
     /** Find a named expression / range name in either global or a local scope.
         @param  nTab
