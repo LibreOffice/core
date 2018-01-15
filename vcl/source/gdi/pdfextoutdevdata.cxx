@@ -511,16 +511,15 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbExportNDests          ( false ),
     mnPage                  ( -1 ),
     mnCompressionQuality    ( 90 ),
-    mpPageSyncData          ( nullptr ),
     mpGlobalSyncData        ( new GlobalSyncData() )
 {
-    mpPageSyncData = new PageSyncData( mpGlobalSyncData );
+    mpPageSyncData.reset( new PageSyncData( mpGlobalSyncData.get() ) );
 }
 
 PDFExtOutDevData::~PDFExtOutDevData()
 {
-    delete mpPageSyncData;
-    delete mpGlobalSyncData;
+    mpPageSyncData.reset();
+    mpGlobalSyncData.reset();
 }
 
 const Graphic& PDFExtOutDevData::GetCurrentGraphic() const
@@ -582,7 +581,7 @@ void PDFExtOutDevData::SetIsExportNamedDestinations( const bool bExportNDests )
 }
 void PDFExtOutDevData::ResetSyncData()
 {
-    *mpPageSyncData = PageSyncData( mpGlobalSyncData );
+    *mpPageSyncData = PageSyncData( mpGlobalSyncData.get() );
 }
 bool PDFExtOutDevData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rIdx )
 {
