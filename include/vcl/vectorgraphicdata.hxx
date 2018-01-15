@@ -26,6 +26,7 @@
 #include <vcl/wmfexternal.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>
+#include <memory>
 
 
 typedef css::uno::Sequence<sal_Int8> VectorGraphicDataArray;
@@ -65,7 +66,7 @@ private:
     VectorGraphicDataType       meVectorGraphicDataType;
 
     // extra:
-    WmfExternal*         mpExternalHeader;
+    std::unique_ptr<WmfExternal> mpExternalHeader;
 
     // on demand creators
     void ensureReplacement();
