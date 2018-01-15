@@ -22,6 +22,30 @@
       "revId": "f3c0ee7ad0a3f082fd94fd2a79e89e345692bf73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_92f26e99",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6365,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-01-15T08:16:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa31d9ce_f22aca7d",
+      "range": {
+        "startLine": 6364,
+        "startChar": 10,
+        "endLine": 6365,
+        "endChar": 27
+      },
+      "revId": "f3c0ee7ad0a3f082fd94fd2a79e89e345692bf73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
