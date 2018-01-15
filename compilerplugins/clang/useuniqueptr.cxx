@@ -290,6 +290,9 @@ void UseUniquePtr::CheckForRangedLoopDelete(const CXXDestructorDecl* destructorD
         auto tc = loplugin::TypeCheck(fieldDecl->getType());
         if (tc.Class("map").StdNamespace() || tc.Class("unordered_map").StdNamespace())
             continue;
+        // there is a loop in ~ImplPrnQueueList deleting stuff on a global data structure
+        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/inc/print.h"))
+            return;
 
         report(
             DiagnosticsEngine::Warning,

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_VCL_PPDPARSER_HXX
 #define INCLUDED_VCL_PPDPARSER_HXX
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -172,7 +173,7 @@ private:
     const PPDKey*                               m_pFontList;
 
     // translations
-    PPDTranslator*                              m_pTranslator;
+    std::unique_ptr<PPDTranslator>              m_pTranslator;
 
     PPDParser( const OUString& rFile );
     PPDParser( const OUString& rFile, std::vector<PPDKey*> keys );
