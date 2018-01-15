@@ -60,7 +60,7 @@ private:
     NODE*                       pTree;
     NODE*                       pReduce[ OCTREE_BITS + 1 ];
     BitmapColor const *         pColor;
-    ImpNodeCache*               pNodeCache;
+    std::unique_ptr<ImpNodeCache> pNodeCache;
     const BitmapReadAccess*     pAcc;
     sal_uInt16                  nPalIndex;
 
