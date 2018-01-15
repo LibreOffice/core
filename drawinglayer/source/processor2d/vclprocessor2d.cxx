@@ -431,7 +431,7 @@ namespace drawinglayer
                             // only do something when bitmap fill has a size in discrete units
                             if(nBWidth > 0 && nBHeight > 0)
                             {
-                                // nBWidth, nBHeight is the pixel size of the neede bitmap. To not need to scale it
+                                // nBWidth, nBHeight is the pixel size of the needed bitmap. To not need to scale it
                                 // in vcl many times, create a size-optimized version
                                 const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
                                 BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());

@@ -644,7 +644,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 
 //M-------------------------------------------------------------------------
 //  Method:     COooFilter::GetSizeMax      (IPersistStream::GetSizeMax)
-//  Summary:    Returns the size in bytes of the stream neede to save the object.
+//  Summary:    Returns the size in bytes of the stream needed to save the object.
 //  Arguments:  pcbSize
 //                  [out] Pointer to a 64 bit unsigned int indicating the size needed
 //  Returns:    E_NOTIMPL

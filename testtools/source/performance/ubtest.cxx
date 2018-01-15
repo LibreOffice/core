@@ -893,7 +893,7 @@ static void benchmark(
 //      while (i--)
 //          xBench->setSequence( aSeq );
 //      tEnd = getSystemTicks();
-//      rSheet.insert( "transfer of exisiting objects", nLoop, tEnd - tStart );
+//      rSheet.insert( "transfer of existing objects", nLoop, tEnd - tStart );
 
     // exceptions
     i = nLoop;

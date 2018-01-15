@@ -107,7 +107,7 @@ void CGM::ImplDoClass4()
     if ( mbFirstOutPut )
         mpOutAct->FirstOutPut();
 
-    if ( mpBitmapInUse && ( mnElementID != 9 ) )    // process existend graphic
+    if ( mpBitmapInUse && ( mnElementID != 9 ) )    // process existed graphic
     {                                               // because there are now no pending bitmap actions
         CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
         // do anything with the bitmap

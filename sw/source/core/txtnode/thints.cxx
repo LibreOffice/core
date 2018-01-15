@@ -341,7 +341,7 @@ after the CH_TXTATR).
 It would probably be a bad idea to add another nesting hint without
 CH_TXTATR; on the other hand, it would be difficult adding a CH_TXTATR to
 RES_TXTATR_INETFMT and RES_TXTATR_CJK_RUBY, due to the overwriting and
-splitting of exising hints that is necessary for backward compatibility.
+splitting of existing hints that is necessary for backward compatibility.
 
     @param rNode    the text node
     @param rHint    the hint to be inserted
@@ -546,7 +546,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
         {
            assert((nOtherStart < nNewStart) || (nNewEnd < nOtherEnd));
         // scenario: there is a RUBY, and contained within that a META;
-        // now a RUBY is inserted within the META => the exising RUBY is split:
+        // now a RUBY is inserted within the META => the existing RUBY is split:
         // here it is not possible to simply insert the left/right fragment
         // of the existing RUBY because they <em>overlap</em> with the META!
             Delete( *itOther ); // this also does NoteInHistory!

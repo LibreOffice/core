@@ -179,7 +179,7 @@ void SAL_CALL OConnectionPool::disposing( const css::lang::EventObject& Source )
     {
         MutexGuard aGuard(m_aMutex);
         TActiveConnectionMap::iterator aIter = m_aActiveConnections.find(xConnection);
-        OSL_ENSURE(aIter != m_aActiveConnections.end(),"OConnectionPool::disposing: Conenction wasn't in pool");
+        OSL_ENSURE(aIter != m_aActiveConnections.end(),"OConnectionPool::disposing: Connection wasn't in pool");
         if(aIter != m_aActiveConnections.end())
         { // move the pooled connection back to the pool
             aIter->second.aPos->second.nALiveCount = m_nALiveCount;
@@ -195,7 +195,7 @@ void SAL_CALL OConnectionPool::disposing( const css::lang::EventObject& Source )
 
 Reference< XConnection> OConnectionPool::createNewConnection(const OUString& _rURL,const Sequence< PropertyValue >& _rInfo)
 {
-    // create new pooled conenction
+    // create new pooled connection
     Reference< XPooledConnection > xPooledConnection = new ::connectivity::OPooledConnection(m_xDriver->connect(_rURL,_rInfo),m_xProxyFactory);
     // get the new connection from the pooled connection
     Reference<XConnection> xConnection = xPooledConnection->getConnection();

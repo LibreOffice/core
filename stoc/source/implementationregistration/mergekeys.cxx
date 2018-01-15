@@ -108,7 +108,7 @@ static void mergeKeys(
 
         if (xSource->getKeyType( name ) == registry::RegistryKeyType_KEY)
         {
-            // try to open exisiting dest key or create new one
+            // try to open existing dest key or create new one
             Reference< registry::XRegistryKey > xDestKey( xDest->createKey( name ) );
             Reference< registry::XRegistryKey > xSourceKey( xSource->openKey( name ) );
             mergeKeys( xDestKey, xSourceKey, links );

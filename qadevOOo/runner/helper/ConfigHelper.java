@@ -148,7 +148,7 @@ public class ConfigHelper
 
     /**
      * Insert a structured node (group) in a name container (set)
-     * or else update it and retrun the <CODE>XNameReplace</CODE> of it.<P>
+     * or else update it and return the <CODE>XNameReplace</CODE> of it.<P>
      * The <CODE>XSingleServiceFacttory</CODE> of the <CODE>set</CODE> will be used
      * to create a new group. This group is specific to its set and
      * creates defined entries.
@@ -156,7 +156,7 @@ public class ConfigHelper
      * @param groupName The name of the goup which should be returned
      * @param setName The name of the set
      * @throws com.sun.star.uno.Exception throws
-     *         <CODE>com.sun.star.uno.Exeception</CODE> on any error.
+     *         <CODE>com.sun.star.uno.Exception</CODE> on any error.
      */
     public XNameReplace getOrInsertGroup(String setName, String groupName)
         throws  com.sun.star.uno.Exception
@@ -193,7 +193,7 @@ public class ConfigHelper
      * @param groupName the name of the <CODE>group</CODE> which property should be changed
      * @param propName the name of the property which should be changed
      * @param propValue the value the property should get
-     * @throws com.sun.star.uno.Exception throws <CODE>com.sun.star.uno.Exeception</CODE> on any error.
+     * @throws com.sun.star.uno.Exception throws <CODE>com.sun.star.uno.Exception</CODE> on any error.
      */
     public void updateGroupProperty(String setName,
                                     String groupName,
@@ -227,12 +227,12 @@ public class ConfigHelper
     /**
      * Insert a property in an extensible group container or else update it
      * @param setName the name of the <CODE>set</CODE> which contains the <CODE>group</CODE>
-     * @param group The name of the <CODE>group</CODE> which conatins the <CODE>extensible group</CODE>.
+     * @param group The name of the <CODE>group</CODE> which contains the <CODE>extensible group</CODE>.
      * @param extGroup The name of the <CODE>extensible group</CODE> which
      *                  [should] contain the property
      * @param propName The name of the property.
      * @param propValue The value of the property.
-     * @throws com.sun.star.uno.Exception throws <CODE>com.sun.star.uno.Exeception</CODE> on any error.
+     * @throws com.sun.star.uno.Exception throws <CODE>com.sun.star.uno.Exception</CODE> on any error.
      */
     public void insertOrUpdateExtensibleGroupProperty(
                     String setName,

@@ -569,7 +569,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo81492, "fdo81492.docx")
 DECLARE_OOXMLEXPORT_TEST(testEditTime, "fdo81341.docx")
 {
     /* Issue was LO was not able to Import and Export EditTime in seconds format.
-     * It was supporting Time in "HH:MM" format. But if DOCX conatins Time in seconds,
+     * It was supporting Time in "HH:MM" format. But if DOCX contains Time in seconds,
      * then LO was not able to display time in "HH:MM:SS" format.
      * While exporting LO was writing plain text instead of field entry.
      */

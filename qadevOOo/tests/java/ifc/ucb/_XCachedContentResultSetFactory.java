@@ -44,7 +44,7 @@ import com.sun.star.ucb.XCachedContentResultSetFactory;
 public class _XCachedContentResultSetFactory extends MultiMethodTest {
 
     /**
-     * Conatins the tested object.
+     * Contains the tested object.
      */
     public XCachedContentResultSetFactory oObj;
     private XResultSet resSetStub = null ;
