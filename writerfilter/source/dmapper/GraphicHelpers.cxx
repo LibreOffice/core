@@ -63,57 +63,59 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
     {
         case NS_ooxml::LN_CT_PosV_relativeFrom:
             {
-                // TODO There are some other unhandled values
-                static const Id pVertRelValues[] =
+                switch ( nIntValue )
                 {
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_margin,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_paragraph,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_line
-                };
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_margin:
+                        m_nRelation = text::RelOrientation::PAGE_PRINT_AREA;
+                        break;
 
-                static const sal_Int16 pVertRelations[] =
-                {
-                    text::RelOrientation::PAGE_PRINT_AREA,
-                    text::RelOrientation::PAGE_FRAME,
-                    text::RelOrientation::FRAME,
-                    text::RelOrientation::TEXT_LINE
-                };
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page:
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_topMargin: // fallthrough intended
+                        m_nRelation =  text::RelOrientation::PAGE_FRAME;
+                        break;
 
-                for ( int i = 0; i < 4; i++ )
-                {
-                    if ( pVertRelValues[i] == sal_uInt32( nIntValue ) )
-                        m_nRelation = pVertRelations[i];
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_paragraph:
+                        m_nRelation = text::RelOrientation::FRAME;
+                        break;
+
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_line:
+                        m_nRelation = text::RelOrientation::TEXT_LINE;
+                        break;
+
+                    // TODO There are some other unhandled values
                 }
             }
             break;
+
         case NS_ooxml::LN_CT_PosH_relativeFrom:
             {
-                // TODO There are some other unhandled values
-                static const Id pHoriRelValues[] =
+                switch ( nIntValue )
                 {
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_margin,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_column,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_character,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_leftMargin,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_rightMargin
-                };
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_margin:
+                        m_nRelation = text::RelOrientation::PAGE_PRINT_AREA;
+                        break;
 
-                static const sal_Int16 pHoriRelations[] =
-                {
-                    text::RelOrientation::PAGE_PRINT_AREA,
-                    text::RelOrientation::PAGE_FRAME,
-                    text::RelOrientation::FRAME,
-                    text::RelOrientation::CHAR,
-                    text::RelOrientation::PAGE_LEFT,
-                    text::RelOrientation::PAGE_RIGHT,
-                };
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page:
+                        m_nRelation =  text::RelOrientation::PAGE_FRAME;
+                        break;
 
-                for ( int i = 0; i < 6; i++ )
-                {
-                    if ( pHoriRelValues[i] == sal_uInt32( nIntValue ) )
-                        m_nRelation = pHoriRelations[i];
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_column:
+                        m_nRelation = text::RelOrientation::FRAME;
+                        break;
+
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_character:
+                        m_nRelation = text::RelOrientation::CHAR;
+                        break;
+
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_leftMargin:
+                        m_nRelation = text::RelOrientation::PAGE_LEFT;
+                        break;
+
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_rightMargin:
+                        m_nRelation = text::RelOrientation::PAGE_RIGHT;
+                        break;
+
+                    // TODO There are some other unhandled values
                 }
             }
             break;
