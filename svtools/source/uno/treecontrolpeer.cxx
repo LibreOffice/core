@@ -150,7 +150,6 @@ TreeControlPeer::~TreeControlPeer()
 {
     if( mpTreeImpl )
         mpTreeImpl->Clear();
-    delete mpTreeNodeMap;
 }
 
 
@@ -160,7 +159,7 @@ void TreeControlPeer::addEntry( UnoTreeListEntry* pEntry )
     {
         if( !mpTreeNodeMap )
         {
-            mpTreeNodeMap = new TreeNodeMap;
+            mpTreeNodeMap.reset( new TreeNodeMap );
         }
 
         (*mpTreeNodeMap)[ pEntry->mxNode ] = pEntry;
@@ -207,8 +206,7 @@ vcl::Window* TreeControlPeer::createVclControl( vcl::Window* pParent, sal_Int64 
 /** called from the UnoTreeListBoxImpl when it gets deleted */
 void TreeControlPeer::disposeControl()
 {
-    delete mpTreeNodeMap;
-    mpTreeNodeMap = nullptr;
+    mpTreeNodeMap.reset();
     mpTreeImpl = nullptr;
 }
 
