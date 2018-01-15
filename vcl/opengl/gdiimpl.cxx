@@ -94,7 +94,7 @@ OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
     if( !IsOffscreen() && mnDrawCountAtFlush != mnDrawCount )
         VCL_GL_INFO( "Destroying un-flushed on-screen graphics" );
 
-    delete mpFlush;
+    mpFlush.reset();
 
     ReleaseContext();
 }
