@@ -38,11 +38,11 @@ private:
     OUString           maJobTitle;
     int                     mnFileMode;
 
-    osl::File*              mpJobHeader;
-    osl::File*              mpJobTrailer;
+    std::unique_ptr<osl::File> mpJobHeader;
+    std::unique_ptr<osl::File> mpJobTrailer;
 
-    std::vector< osl::File* > maPageVector;
-    std::vector< osl::File* > maHeaderVector;
+    std::vector< std::unique_ptr<osl::File> > maPageVector;
+    std::vector< std::unique_ptr<osl::File> > maHeaderVector;
 
     JobData                 m_aDocumentJobData;
     JobData                 m_aLastJobData;
@@ -69,7 +69,7 @@ private:
     bool            m_bQuickJob;
 
 private:
-    osl::File*      CreateSpoolFile (const OUString& rName,
+    std::unique_ptr<osl::File> CreateSpoolFile (const OUString& rName,
                                      const OUString& rExtension);
     void            InitPaperSize (const JobData& rJobSetup);
 
