@@ -203,7 +203,7 @@ namespace emfio
             {
                 sal_uInt16 nROP2 = 0;
                 mpInputStream->ReadUInt16( nROP2 );
-                SetRasterOp( (WMFRasterOp)nROP2 );
+                SetRasterOp( static_cast<WMFRasterOp>(nROP2) );
             }
             break;
 
@@ -986,7 +986,7 @@ namespace emfio
                 WMFRasterOp nOldROP = WMFRasterOp::NONE;
                 mpInputStream->ReadUInt32( nROP );
                 Size aSize = ReadYXExt();
-                nOldROP = SetRasterOp( (WMFRasterOp)nROP );
+                nOldROP = SetRasterOp( static_cast<WMFRasterOp>(nROP) );
                 DrawRect( tools::Rectangle( ReadYX(), aSize ), false );
                 SetRasterOp( nOldROP );
             }
