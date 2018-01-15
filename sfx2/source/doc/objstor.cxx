@@ -2481,6 +2481,10 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
         pMediumTmp->GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny( xInteract ) ) );
 
+    const SfxBoolItem* pNoFileSync = pArgs->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
+    if (pNoFileSync && pNoFileSync->GetValue())
+        pMediumTmp->DisableFileSync(true);
+
     bool bSaved = false;
     if( !GetError() && SaveTo_Impl( *pMediumTmp, pArgs ) )
     {
