@@ -1001,7 +1001,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *p
     ScopedVclPtrInstance<NameClashDialog> aDialog(pParent, aResLocale, rTargetFolderURL,
                                                   rClashingName, rProposedNewName, bAllowOverwrite);
 
-    NameClashResolveDialogResult eResult = (NameClashResolveDialogResult) aDialog->Execute();
+    NameClashResolveDialogResult eResult = static_cast<NameClashResolveDialogResult>(aDialog->Execute());
     rProposedNewName = aDialog->getNewName();
     return eResult;
 }
