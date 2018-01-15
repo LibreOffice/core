@@ -542,7 +542,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     default:
     {
-        throw RuntimeException( "Unknown UNO type class " + OUString::number((int)a.getValueTypeClass()) );
+        throw RuntimeException( "Unknown UNO type class " + OUString::number(static_cast<int>(a.getValueTypeClass())) );
     }
     }
 }

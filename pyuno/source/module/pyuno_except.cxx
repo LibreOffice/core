@@ -91,7 +91,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     if( !isStruct  && !isExc && ! isInterface )
     {
         throw RuntimeException( "pyuno.getClass: " + name + "is a " +
-                    OUString::createFromAscii( typeClassToString( (css::uno::TypeClass) desc.get()->eTypeClass) ) +
+                    OUString::createFromAscii( typeClassToString( static_cast<css::uno::TypeClass>(desc.get()->eTypeClass)) ) +
                     ", expected EXCEPTION, STRUCT or INTERFACE" );
     }
 
