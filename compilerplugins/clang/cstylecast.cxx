@@ -381,7 +381,7 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
     }
     // Two or four ranges to replace:
     // First is the CStyleCast's LParen, plus following whitespace, replaced with either "" or
-    // "static_cast<".  (TOOD: insert space before "static_cast<" when converting "else(int)...".)
+    // "static_cast<".  (TODO: insert space before "static_cast<" when converting "else(int)...".)
     // Second is the CStyleCast's RParen, plus preceding and following whitespace, replaced with
     // either "" or ">".
     // If the sub expr is not a ParenExpr, third is the sub expr's begin, inserting "(", and fourth

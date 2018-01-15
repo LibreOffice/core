@@ -5730,7 +5730,7 @@ void SwUiWriterTest::testTdf113481()
     SwDoc* pDoc = createDoc("tdf113481-IVS.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    // One backspace should completely remove the CJK ideograph varation sequence
+    // One backspace should completely remove the CJK ideograph variation sequence
     pWrtShell->EndPara();
     // Before: U+8FBA U+E0102. After: empty
     pWrtShell->DelLeft();
