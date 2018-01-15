@@ -129,7 +129,7 @@ void VectorGraphicData::setWmfExternalHeader(const WmfExternal& aExtHeader)
 {
     if (!mpExternalHeader)
     {
-        mpExternalHeader = new WmfExternal;
+        mpExternalHeader.reset( new WmfExternal );
     }
 
     *mpExternalHeader = aExtHeader;
@@ -269,10 +269,6 @@ VectorGraphicData::VectorGraphicData(
 
 VectorGraphicData::~VectorGraphicData()
 {
-    if (mpExternalHeader)
-    {
-        delete mpExternalHeader;
-    };
 }
 
 const basegfx::B2DRange& VectorGraphicData::getRange() const
