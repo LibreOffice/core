@@ -256,7 +256,11 @@ void UseUniquePtr::CheckForRangedLoopDelete(const CXXDestructorDecl* destructorD
         auto cxxForRangeStmt = dyn_cast<CXXForRangeStmt>(*i);
         if (!cxxForRangeStmt)
             continue;
-        auto deleteExpr = dyn_cast<CXXDeleteExpr>(cxxForRangeStmt->getBody());
+        CXXDeleteExpr const * deleteExpr = nullptr;
+        if (auto compoundStmt = dyn_cast<CompoundStmt>(cxxForRangeStmt->getBody()))
+            deleteExpr = dyn_cast<CXXDeleteExpr>(*compoundStmt->body_begin());
+        else
+            deleteExpr = dyn_cast<CXXDeleteExpr>(cxxForRangeStmt->getBody());
         if (!deleteExpr)
             continue;
         auto memberExpr = dyn_cast<MemberExpr>(cxxForRangeStmt->getRangeInit());
