@@ -49,13 +49,12 @@ class ODocumentCloser : public ::cppu::WeakImplHelper< css::lang::XComponent,
 {
     ::osl::Mutex m_aMutex;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
-    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
 
     bool m_bDisposed;
 
 public:
     explicit ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments);
-    virtual ~ODocumentCloser() override;
 
 // XComponent
     virtual void SAL_CALL dispose() override;
@@ -165,15 +164,6 @@ ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArg
 }
 
 
-ODocumentCloser::~ODocumentCloser()
-{
-    if ( m_pListenersContainer )
-    {
-        delete m_pListenersContainer;
-        m_pListenersContainer = nullptr;
-    }
-}
-
 // XComponent
 
 void SAL_CALL ODocumentCloser::dispose()
@@ -206,7 +196,7 @@ void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEv
         throw lang::DisposedException(); // TODO
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
+        m_pListenersContainer.reset( new ::comphelper::OInterfaceContainerHelper2( m_aMutex ) );
 
     m_pListenersContainer->addInterface( xListener );
 }
