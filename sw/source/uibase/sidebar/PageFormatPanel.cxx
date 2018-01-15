@@ -285,7 +285,7 @@ FieldUnit PageFormatPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolIte
     FieldUnit eUnit = FUNIT_NONE;
 
     if ( pState && eState >= SfxItemState::DEFAULT )
-        eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pState)->GetValue();
+        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
     else
     {
         SfxViewFrame* pFrame = SfxViewFrame::Current();
@@ -299,7 +299,7 @@ FieldUnit PageFormatPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolIte
             {
                 const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
                 if ( pItem )
-                    eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             }
             else
             {

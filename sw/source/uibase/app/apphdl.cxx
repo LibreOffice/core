@@ -707,7 +707,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case SID_ATTR_METRIC:
         if(pArgs && SfxItemState::SET == pArgs->GetItemState(nWhich, false, &pItem))
         {
-            FieldUnit eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            FieldUnit eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             switch( eUnit )
             {
                 case FUNIT_MM:

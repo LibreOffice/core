@@ -2967,7 +2967,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
     // if they are equal, it means that they were style-defined and there is
     // no need to write them.
     if( rStyleProps != nullptr && pBorderLine && !pBorderLine->isEmpty() &&
-            pBorderLine->GetBorderLineStyle() == (SvxBorderLineStyle)rStyleProps->LineStyle &&
+            pBorderLine->GetBorderLineStyle() == static_cast<SvxBorderLineStyle>(rStyleProps->LineStyle) &&
             pBorderLine->GetColor() == rStyleProps->Color &&
             pBorderLine->GetWidth() == convertMm100ToTwip( rStyleProps->LineWidth ) )
         return;
@@ -4689,7 +4689,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     if ( pGrfNode && SfxItemState::SET == pGrfNode->GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE, true, &pItem))
     {
-        nMode = (GraphicDrawMode)static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
+        nMode = static_cast<GraphicDrawMode>(static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue());
         if (nMode == GraphicDrawMode::Greys)
             m_pSerializer->singleElementNS (XML_a, XML_grayscl, FSEND);
         else if (nMode == GraphicDrawMode::Mono) //black/white has a 0,5 threshold in LibreOffice

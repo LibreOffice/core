@@ -1773,8 +1773,8 @@ bool SwScriptInfo::IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int3
 {
     using namespace ::com::sun::star::i18n;
     static const ScriptTypeList typeList[] = {
-        { UnicodeScript_kArabic, UnicodeScript_kArabic, (sal_Int16)UnicodeScript_kArabic },        // 11,
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, (sal_Int16)UnicodeScript_kScriptCount }    // 88
+        { UnicodeScript_kArabic, UnicodeScript_kArabic, sal_Int16(UnicodeScript_kArabic) },        // 11,
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, sal_Int16(UnicodeScript_kScriptCount) }    // 88
     };
 
     // go forward if current position does not hold a regular character:
@@ -1799,8 +1799,8 @@ bool SwScriptInfo::IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int3
     if( nIdx >= 0 )
     {
         const sal_Unicode cCh = rText[nIdx];
-        const sal_Int16 type = unicode::getUnicodeScriptType( cCh, typeList, (sal_Int16)UnicodeScript_kScriptCount );
-        return type == (sal_Int16)UnicodeScript_kArabic;
+        const sal_Int16 type = unicode::getUnicodeScriptType( cCh, typeList, sal_Int16(UnicodeScript_kScriptCount) );
+        return type == sal_Int16(UnicodeScript_kArabic);
     }
     return false;
 }

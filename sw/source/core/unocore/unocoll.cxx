@@ -475,8 +475,8 @@ OUString SwXServiceProvider::GetProviderName(SwServiceType nObjectType)
     SolarMutexGuard aGuard;
     OUString sRet;
     const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
-    if((sal_uInt16)nObjectType < nEntries)
-        sRet = OUString::createFromAscii(aProvNamesId[(sal_uInt16)nObjectType].pName);
+    if(static_cast<sal_uInt16>(nObjectType) < nEntries)
+        sRet = OUString::createFromAscii(aProvNamesId[static_cast<sal_uInt16>(nObjectType)].pName);
     return sRet;
 }
 

@@ -232,7 +232,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                     }
                 }
                 sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
-                aHLinkItem.SetInsertMode((SvxLinkInsertMode)(aHLinkItem.GetInsertMode() |
+                aHLinkItem.SetInsertMode(static_cast<SvxLinkInsertMode>(aHLinkItem.GetInsertMode() |
                     ((nHtmlMode & HTMLMODE_ON) != 0 ? HLINK_HTMLMODE : 0)));
 
                 rSet.Put(aHLinkItem);

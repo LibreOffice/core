@@ -91,7 +91,7 @@ static HTMLOptionEnum<FormSubmitMethod> aHTMLFormMethodTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_METHOD_get,   FormSubmitMethod_GET    },
     { OOO_STRING_SVTOOLS_HTML_METHOD_post,  FormSubmitMethod_POST   },
-    { nullptr,                              (FormSubmitMethod)0     }
+    { nullptr,                              FormSubmitMethod(0)     }
 };
 
 static HTMLOptionEnum<FormSubmitEncoding> aHTMLFormEncTypeTable[] =
@@ -99,7 +99,7 @@ static HTMLOptionEnum<FormSubmitEncoding> aHTMLFormEncTypeTable[] =
     { OOO_STRING_SVTOOLS_HTML_ET_url,       FormSubmitEncoding_URL          },
     { OOO_STRING_SVTOOLS_HTML_ET_multipart, FormSubmitEncoding_MULTIPART    },
     { OOO_STRING_SVTOOLS_HTML_ET_text,      FormSubmitEncoding_TEXT         },
-    { nullptr,                              (FormSubmitEncoding)0           }
+    { nullptr,                              FormSubmitEncoding(0)           }
 };
 
 enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
@@ -111,7 +111,7 @@ static HTMLOptionEnum<HTMLWordWrapMode> aHTMLTextAreaWrapTable[] =
     { OOO_STRING_SVTOOLS_HTML_WW_soft,     HTML_WM_SOFT    },
     { OOO_STRING_SVTOOLS_HTML_WW_physical, HTML_WM_HARD    },
     { OOO_STRING_SVTOOLS_HTML_WW_virtual,  HTML_WM_SOFT    },
-    { nullptr,                             (HTMLWordWrapMode)0 }
+    { nullptr,                             HTMLWordWrapMode(0) }
 };
 
 static SvMacroItemId aEventTypeTable[] =

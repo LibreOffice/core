@@ -443,7 +443,7 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
     switch( nMemberId )
     {
         case MID_RUBY_TEXT: rVal <<= m_sRubyText;                    break;
-        case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)m_eAdjustment;    break;
+        case MID_RUBY_ADJUST:  rVal <<= static_cast<sal_Int16>(m_eAdjustment);    break;
         case MID_RUBY_CHARSTYLE:
         {
             OUString aString;
@@ -475,8 +475,8 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
         {
             sal_Int16 nSet = 0;
             rVal >>= nSet;
-            if(nSet >= (sal_Int16)text::RubyAdjust_LEFT && nSet <= (sal_Int16)text::RubyAdjust_INDENT_BLOCK)
-                m_eAdjustment = (text::RubyAdjust)nSet;
+            if(nSet >= sal_Int16(text::RubyAdjust_LEFT) && nSet <= sal_Int16(text::RubyAdjust_INDENT_BLOCK))
+                m_eAdjustment = static_cast<text::RubyAdjust>(nSet);
             else
                 bRet = false;
         }

@@ -60,14 +60,14 @@ static HTMLOptionEnum<SdrTextAniKind> aHTMLMarqBehaviorTable[] =
     { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,    SdrTextAniKind::Scroll       },
     { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate, SdrTextAniKind::Alternate    },
     { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,     SdrTextAniKind::Slide        },
-    { nullptr,                                 (SdrTextAniKind)0       }
+    { nullptr,                                 SdrTextAniKind(0)       }
 };
 
 static HTMLOptionEnum<SdrTextAniDirection> aHTMLMarqDirectionTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,  SdrTextAniDirection::Left   },
     { OOO_STRING_SVTOOLS_HTML_AL_right, SdrTextAniDirection::Right  },
-    { nullptr,                          (SdrTextAniDirection)0      }
+    { nullptr,                          SdrTextAniDirection(0)      }
 };
 
 void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,

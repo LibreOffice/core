@@ -199,7 +199,7 @@ void NumFormatListBox::SetFormatType(const SvNumFormatType nFormatType)
     for( long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex )
     {
         const sal_uInt32 nFormat = pFormatter->GetFormatIndex(
-                        (NfIndexTableOffset)nIndex, eCurLanguage );
+                        static_cast<NfIndexTableOffset>(nIndex), eCurLanguage );
         pFormat = pFormatter->GetEntry( nFormat );
 
         if( nFormat == pFormatter->GetFormatIndex( NF_NUMBER_STANDARD,

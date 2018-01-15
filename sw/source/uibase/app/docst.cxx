@@ -93,7 +93,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 {
     SfxWhichIter aIter(rSet);
     sal_uInt16  nWhich  = aIter.FirstWhich();
-    SfxStyleFamily nActualFamily = (SfxStyleFamily)USHRT_MAX;
+    SfxStyleFamily nActualFamily = SfxStyleFamily(USHRT_MAX);
 
     SwWrtShell* pShell = pSh ? pSh : GetWrtShell();
     if(!pShell)
@@ -242,7 +242,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             {
                 SwEditWin& rEdtWin = pShell->GetView().GetEditWin();
                 SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-                rSet.Put(SfxBoolItem(nWhich, pApply && pApply->eType != (SfxStyleFamily)0));
+                rSet.Put(SfxBoolItem(nWhich, pApply && pApply->eType != SfxStyleFamily(0)));
             }
             break;
             case SID_STYLE_UPDATE_BY_EXAMPLE:
@@ -305,7 +305,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY,
             false, &pItem ))
         {
-            const SfxStyleFamily nFamily = (SfxStyleFamily) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            const SfxStyleFamily nFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
 
             OUString sName;
             sal_uInt16 nMask = 0;
@@ -423,7 +423,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
                 if( SfxItemState::SET == pArgs->GetItemState(SID_STYLE_FAMILY,
                     false, &pItem ))
-                    nFamily = (SfxStyleFamily) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    nFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
 
                 if( SfxItemState::SET == pArgs->GetItemState(SID_STYLE_FAMILYNAME, false, &pItem ))
                 {
@@ -512,16 +512,16 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         break;
                     case SID_STYLE_APPLY:
                         // Shell-switch in ApplyStyles
-                        nRet = (sal_uInt16) ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() );
+                        nRet = static_cast<sal_uInt16>(ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() ));
                         break;
                     case SID_STYLE_WATERCAN:
-                        nRet = (sal_uInt16) DoWaterCan(aParam, nFamily);
+                        nRet = static_cast<sal_uInt16>(DoWaterCan(aParam, nFamily));
                         break;
                     case SID_STYLE_UPDATE_BY_EXAMPLE:
-                        nRet = (sal_uInt16) UpdateStyle(aParam, nFamily, pActShell);
+                        nRet = static_cast<sal_uInt16>(UpdateStyle(aParam, nFamily, pActShell));
                         break;
                     case SID_STYLE_NEW_BY_EXAMPLE:
-                        nRet = (sal_uInt16) MakeByExample(aParam, nFamily, nMask, pActShell );
+                        nRet = static_cast<sal_uInt16>(MakeByExample(aParam, nFamily, nMask, pActShell ));
                         break;
 
                     default:
@@ -1020,7 +1020,7 @@ SfxStyleFamily SwDocShell::DoWaterCan(const OUString &rName, SfxStyleFamily nFam
 
     SwEditWin& rEdtWin = m_pView->GetEditWin();
     SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-    bool bWaterCan = !(pApply && pApply->eType != (SfxStyleFamily)0);
+    bool bWaterCan = !(pApply && pApply->eType != SfxStyleFamily(0));
 
     if( rName.isEmpty() )
         bWaterCan = false;
@@ -1060,7 +1060,7 @@ SfxStyleFamily SwDocShell::DoWaterCan(const OUString &rName, SfxStyleFamily nFam
         }
     }
     else
-        aTemplate.eType = (SfxStyleFamily)0;
+        aTemplate.eType = SfxStyleFamily(0);
 
     m_pView->GetEditWin().SetApplyTemplate(aTemplate);
 

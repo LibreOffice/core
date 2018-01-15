@@ -235,7 +235,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
 
             case TOKEN_AUTHORITY:
                 {
-                    ToxAuthorityField eField = (ToxAuthorityField)aToken.nAuthorityField;
+                    ToxAuthorityField eField = static_cast<ToxAuthorityField>(aToken.nAuthorityField);
                     SwIndex aIdx( pTOXNd, rText.getLength() );
                     rBase.FillText( *pTOXNd, aIdx, static_cast<sal_uInt16>(eField) );
                 }

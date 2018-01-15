@@ -625,7 +625,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
                     throw lang::IllegalArgumentException();
                 }
 
-                eMode = (drawing::BitmapMode)nMode;
+                eMode = static_cast<drawing::BitmapMode>(nMode);
             }
 
             rToSet.Put(XFillBmpStretchItem(drawing::BitmapMode_STRETCH == eMode));
@@ -1818,7 +1818,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         throw lang::IllegalArgumentException();
                     }
 
-                    eMode = (drawing::BitmapMode)nMode;
+                    eMode = static_cast<drawing::BitmapMode>(nMode);
                 }
 
                 aSet.Put(XFillBmpStretchItem(drawing::BitmapMode_STRETCH == eMode));

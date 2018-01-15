@@ -564,7 +564,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                     nFlags = pNewFileDlg->GetTemplateFlags();
                     rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aFileName ) );
-                    rReq.AppendItem( SfxInt32Item( SID_TEMPLATE_LOAD, (long) nFlags ) );
+                    rReq.AppendItem( SfxInt32Item( SID_TEMPLATE_LOAD, static_cast<long>(nFlags) ) );
                 }
 
                 if( !aFileName.isEmpty() )

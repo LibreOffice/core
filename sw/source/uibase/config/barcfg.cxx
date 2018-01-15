@@ -86,7 +86,7 @@ void SwToolbarConfigItem::SetTopToolbar(SelectionType nSelType, ToolbarId eBarId
     sal_Int32 nProp = lcl_getArrayIndex(nSelType);
     if(nProp >= 0)
     {
-        aTbxIdArray[nProp] = (sal_Int32)eBarId;
+        aTbxIdArray[nProp] = static_cast<sal_Int32>(eBarId);
         SetModified();
     }
 }

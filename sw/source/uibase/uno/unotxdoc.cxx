@@ -781,7 +781,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         bool bCancel;
         nResult = static_cast<sal_Int32>(pUnoCursor->Find( aSearch, !pSearch->m_bStyles,
                     eStart, eEnd, bCancel,
-                    (FindRanges)eRanges,
+                    static_cast<FindRanges>(eRanges),
                     !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr,
                     &aReplace ));
     }
@@ -793,7 +793,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         bool bCancel;
         nResult = pUnoCursor->Find( *pSearchColl,
                     eStart, eEnd, bCancel,
-                    (FindRanges)eRanges, pReplaceColl );
+                    static_cast<FindRanges>(eRanges), pReplaceColl );
 
     }
     else
@@ -802,7 +802,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         bool bCancel;
         nResult = pUnoCursor->Find( aSearchOpt, false/*bSearchInNotes*/,
             eStart, eEnd, bCancel,
-            (FindRanges)eRanges,
+            static_cast<FindRanges>(eRanges),
             true );
     }
     return static_cast<sal_Int32>(nResult);

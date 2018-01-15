@@ -367,7 +367,7 @@ void SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         static_cast<SwTOXSelectTabPage&>(rPage).SetWrtShell(m_rWrtShell);
         if(USHRT_MAX != m_nInitialTOXType)
-            static_cast<SwTOXSelectTabPage&>(rPage).SelectType((TOXTypes)m_nInitialTOXType);
+            static_cast<SwTOXSelectTabPage&>(rPage).SelectType(static_cast<TOXTypes>(m_nInitialTOXType));
     }
 }
 
@@ -1192,7 +1192,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         case TOX_TABLES :
             rDesc.SetCreateFromObjectNames(m_pFromObjectNamesRB->IsChecked());
             rDesc.SetSequenceName(m_pCaptionSequenceLB->GetSelectedEntry());
-            rDesc.SetCaptionDisplay((SwCaptionDisplay)m_pDisplayTypeLB->GetSelectedEntryPos());
+            rDesc.SetCaptionDisplay(static_cast<SwCaptionDisplay>(m_pDisplayTypeLB->GetSelectedEntryPos()));
         break;
         case TOX_OBJECTS:
         {
@@ -1903,7 +1903,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAt
     m_pLevelLB->SetHighlightRange();   // select full width
     m_pLevelLB->Show();
 
-    aLastTOXType.eType = (TOXTypes)USHRT_MAX;
+    aLastTOXType.eType = TOXTypes(USHRT_MAX);
     aLastTOXType.nIndex = 0;
 
     SetExchangeSupport();
@@ -2114,7 +2114,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         {
             if(bToxIsAuthorities)
                 m_pLevelLB->InsertEntry( SwAuthorityFieldType::GetAuthTypeName(
-                                            (ToxAuthorityType) (i - 1)) );
+                                            static_cast<ToxAuthorityType>(i - 1)) );
             else if( bToxIsIndex )
             {
                 if(i == 1)
@@ -2221,11 +2221,11 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     {
         rDesc.SetSortByDocument(m_pSortDocPosRB->IsChecked());
         SwTOXSortKey aKey1, aKey2, aKey3;
-        aKey1.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pFirstKeyLB->GetSelectedEntryData());
+        aKey1.eField = static_cast<ToxAuthorityField>(reinterpret_cast<sal_uIntPtr>(m_pFirstKeyLB->GetSelectedEntryData()));
         aKey1.bSortAscending = m_pFirstSortUpRB->IsChecked();
-        aKey2.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pSecondKeyLB->GetSelectedEntryData());
+        aKey2.eField = static_cast<ToxAuthorityField>(reinterpret_cast<sal_uIntPtr>(m_pSecondKeyLB->GetSelectedEntryData()));
         aKey2.bSortAscending = m_pSecondSortUpRB->IsChecked();
-        aKey3.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pThirdKeyLB->GetSelectedEntryData());
+        aKey3.eField = static_cast<ToxAuthorityField>(reinterpret_cast<sal_uIntPtr>(m_pThirdKeyLB->GetSelectedEntryData()));
         aKey3.bSortAscending = m_pThirdSortUpRB->IsChecked();
 
         rDesc.SetSortKeys(aKey1, aKey2, aKey3);
@@ -2255,7 +2255,7 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, EditStyleHdl, Button*, void)
     if( LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectedEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pCharStyleLB->GetSelectedEntry());
-        SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)SfxStyleFamily::Char);
+        SfxUInt16Item aFamily(SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Char));
         static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell().
         GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
                 SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
@@ -2986,7 +2986,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         {
             //use the first two chars as symbol
             OUString sTmp(SwAuthorityFieldType::GetAuthFieldName(
-                        (ToxAuthorityField)rToken.nAuthorityField));
+                        static_cast<ToxAuthorityField>(rToken.nAuthorityField)));
             pButton->SetText(sTmp.copy(0, 2));
         }
 
@@ -3194,7 +3194,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     {
         //use the first two chars as symbol
         OUString sTmp(SwAuthorityFieldType::GetAuthFieldName(
-                    (ToxAuthorityField)aToInsertToken.nAuthorityField));
+                    static_cast<ToxAuthorityField>(aToInsertToken.nAuthorityField)));
         pButton->SetText(sTmp.copy(0, 2));
     }
 
@@ -3478,7 +3478,7 @@ bool SwTokenWindow::CreateQuickHelp(Control const * pCtrl,
         if(rToken.eTokenType == TOKEN_AUTHORITY )
         {
              sEntry += SwAuthorityFieldType::GetAuthFieldName(
-                                (ToxAuthorityField) rToken.nAuthorityField);
+                                static_cast<ToxAuthorityField>(rToken.nAuthorityField));
         }
 
         Point aPos = OutputToScreenPixel(pCtrl->GetPosPixel());
@@ -3783,7 +3783,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EditStyleHdl, Button *, void)
     if( LISTBOX_ENTRY_NOTFOUND != m_pParaLayLB->GetSelectedEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pParaLayLB->GetSelectedEntry());
-        SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)SfxStyleFamily::Para);
+        SfxUInt16Item aFamily(SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Para));
         SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
         rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
                 SfxCallMode::SYNCHRON|SfxCallMode::MODAL,

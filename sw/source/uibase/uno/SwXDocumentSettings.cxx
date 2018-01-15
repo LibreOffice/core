@@ -465,7 +465,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Int16 nMode = 0;
             rValue >>= nMode;
-            switch ((CharCompressType)nMode)
+            switch (static_cast<CharCompressType>(nMode))
             {
                 case CharCompressType::NONE:
                 case CharCompressType::PunctuationOnly:
@@ -474,7 +474,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 default:
                     throw IllegalArgumentException();
             }
-            mpDoc->getIDocumentSettingAccess().setCharacterCompressionType((CharCompressType)nMode);
+            mpDoc->getIDocumentSettingAccess().setCharacterCompressionType(static_cast<CharCompressType>(nMode));
         }
         break;
         case HANDLE_APPLY_USER_DATA:

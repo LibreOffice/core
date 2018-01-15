@@ -176,7 +176,7 @@ SwEnvFormatPage::SwEnvFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     {
         if (i != PAPER_USER)
         {
-            const OUString aPaperName = SvxPaperInfo::GetName((Paper) i);
+            const OUString aPaperName = SvxPaperInfo::GetName(static_cast<Paper>(i));
 
             if (aPaperName.isEmpty())
                 continue;
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, ListBox&, void)
     const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectedEntryPos()];
     if (nPaper != sal_uInt16(PAPER_USER))
     {
-        Size aSz = SvxPaperInfo::GetPaperSize((Paper)nPaper);
+        Size aSz = SvxPaperInfo::GetPaperSize(static_cast<Paper>(nPaper));
         lWidth  = std::max(aSz.Width(), aSz.Height());
         lHeight = std::min(aSz.Width(), aSz.Height());
     }
@@ -495,8 +495,8 @@ void SwEnvFormatPage::FillItem(SwEnvItem& rItem)
     }
     else
     {
-        long lWVal = SvxPaperInfo::GetPaperSize((Paper)nPaper).Width ();
-        long lHVal = SvxPaperInfo::GetPaperSize((Paper)nPaper).Height();
+        long lWVal = SvxPaperInfo::GetPaperSize(static_cast<Paper>(nPaper)).Width ();
+        long lHVal = SvxPaperInfo::GetPaperSize(static_cast<Paper>(nPaper)).Height();
         rItem.m_nWidth  = std::max(lWVal, lHVal);
         rItem.m_nHeight = std::min(lWVal, lHVal);
     }

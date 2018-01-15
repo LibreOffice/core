@@ -288,7 +288,7 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
         if (const SwView* pView = m_pDocShell->GetView())
             nViewShellId = pView->GetViewShellId();
     }
-    SdrUndoManager::EnterListAction(comment, comment, (sal_uInt16)eUndoId, nViewShellId);
+    SdrUndoManager::EnterListAction(comment, comment, static_cast<sal_uInt16>(eUndoId), nViewShellId);
 
     return eUndoId;
 }
@@ -320,7 +320,7 @@ UndoManager::EndUndo(SwUndoId eUndoId, SwRewriter const*const pRewriter)
         assert(pListAction);
         if (SwUndoId::END != eUndoId)
         {
-            OSL_ENSURE((SwUndoId)pListAction->GetId() == eUndoId,
+            OSL_ENSURE(static_cast<SwUndoId>(pListAction->GetId()) == eUndoId,
                     "EndUndo(): given ID different from StartUndo()");
             // comment set by caller of EndUndo
             OUString comment = GetUndoComment(eUndoId);
@@ -330,7 +330,7 @@ UndoManager::EndUndo(SwUndoId eUndoId, SwRewriter const*const pRewriter)
             }
             pListAction->SetComment(comment);
         }
-        else if (SwUndoId::START != (SwUndoId)pListAction->GetId())
+        else if (SwUndoId::START != static_cast<SwUndoId>(pListAction->GetId()))
         {
             // comment set by caller of StartUndo: nothing to do here
         }
@@ -386,7 +386,7 @@ UndoManager::GetLastUndoInfo(
     if (o_pId)
     {
         if (auto pListAction = dynamic_cast<const SfxListUndoAction*>(pAction))
-            *o_pId = (SwUndoId)pListAction->GetId();
+            *o_pId = static_cast<SwUndoId>(pListAction->GetId());
         else if (auto pSwAction = dynamic_cast<const SwUndo*>(pAction))
             *o_pId = pSwAction->GetId();
         else
@@ -449,7 +449,7 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
     if (o_pId)
     {
         if (auto pListAction = dynamic_cast<const SfxListUndoAction*>(pAction))
-            *o_pId = (SwUndoId)pListAction->GetId();
+            *o_pId = static_cast<SwUndoId>(pListAction->GetId());
         else if (auto pSwAction = dynamic_cast<const SwUndo*>(pAction))
             *o_pId = pSwAction->GetId();
         else
@@ -690,7 +690,7 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
             if (const SwView* pView = m_pDocShell->GetView())
                 nViewShellId = pView->GetViewShellId();
         }
-        EnterListAction(comment, rcomment, (sal_uInt16)nId, nViewShellId);
+        EnterListAction(comment, rcomment, static_cast<sal_uInt16>(nId), nViewShellId);
     }
 
     SwPaM* pTmp = rContext.m_pCurrentPaM;

@@ -242,21 +242,21 @@ const struct SvXMLEnumMapEntry<SvxGraphicPosition> psXML_BrushRepeat[] =
     { XML_BACKGROUND_REPEAT,        GPOS_TILED  },
     { XML_BACKGROUND_NO_REPEAT,     GPOS_MM     },
     { XML_BACKGROUND_STRETCH,       GPOS_AREA   },
-    { XML_TOKEN_INVALID, (SvxGraphicPosition)0 }
+    { XML_TOKEN_INVALID, SvxGraphicPosition(0) }
 };
 
 const struct SvXMLEnumMapEntry<SvxGraphicPosition> psXML_BrushHoriPos[] =
 {
     { XML_LEFT,         GPOS_LM },
     { XML_RIGHT,        GPOS_RM },
-    { XML_TOKEN_INVALID, (SvxGraphicPosition)0 }
+    { XML_TOKEN_INVALID, SvxGraphicPosition(0) }
 };
 
 const struct SvXMLEnumMapEntry<SvxGraphicPosition> psXML_BrushVertPos[] =
 {
     { XML_TOP,          GPOS_MT },
     { XML_BOTTOM,       GPOS_MB },
-    { XML_TOKEN_INVALID, (SvxGraphicPosition)0 }
+    { XML_TOKEN_INVALID, SvxGraphicPosition(0) }
 };
 
 void sw_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,

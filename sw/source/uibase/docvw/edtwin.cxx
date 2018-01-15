@@ -4240,7 +4240,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 {
                     SwRect aRect;
                     sal_Int16 eOrient;
-                    SwFillMode eMode = (SwFillMode)rSh.GetViewOptions()->GetShdwCursorFillMode();
+                    SwFillMode eMode = static_cast<SwFillMode>(rSh.GetViewOptions()->GetShdwCursorFillMode());
                     if( rSh.GetShadowCursorPos( aDocPt, eMode, aRect, eOrient ))
                     {
                         if( !m_pShadCursor )
@@ -4737,7 +4737,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     rSh.Undo();
                                 }
                             }
-                            SwFillMode eMode = (SwFillMode)rSh.GetViewOptions()->GetShdwCursorFillMode();
+                            SwFillMode eMode = static_cast<SwFillMode>(rSh.GetViewOptions()->GetShdwCursorFillMode());
                             rSh.SetShadowCursorPos( aDocPt, eMode );
                         }
                     }
@@ -4905,7 +4905,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     SfxRequest aReq( m_rView.GetViewFrame(), SID_STYLE_APPLY );
                     aReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aStyleName ) );
-                    aReq.AppendItem( SfxUInt16Item( SID_STYLE_FAMILY, (sal_uInt16) m_pApplyTempl->eType ) );
+                    aReq.AppendItem( SfxUInt16Item( SID_STYLE_FAMILY, static_cast<sal_uInt16>(m_pApplyTempl->eType) ) );
                     aReq.Done();
                 }
             }

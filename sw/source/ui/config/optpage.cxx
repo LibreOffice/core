@@ -205,7 +205,7 @@ static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemS
     const SfxPoolItem* pItem;
     if( rSet.GetItemState( nSID, false, &pItem ) >= SfxItemState::DEFAULT )
     {
-        FieldUnit eFieldUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        FieldUnit eFieldUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
         for ( sal_Int32 i = 0; i < rMetric->GetEntryCount(); ++i )
         {
             if ( static_cast<int>(reinterpret_cast<sal_IntPtr>(rMetric->GetEntryData( i ))) == static_cast<int>(eFieldUnit) )
@@ -1240,7 +1240,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rSet->Get( SID_ATTR_METRIC ));
-        FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
+        FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
         ::SetFieldUnit( *m_pRowMoveMF, eFieldUnit );
         ::SetFieldUnit( *m_pColMoveMF, eFieldUnit );
         ::SetFieldUnit( *m_pRowInsertMF, eFieldUnit );
@@ -1539,16 +1539,16 @@ struct CharAttr
 // Edit corresponds to Paste-attributes
 static CharAttr aRedlineAttr[] =
 {
-    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::NotMapped },
+    { SID_ATTR_CHAR_CASEMAP,        sal_uInt16(SvxCaseMap::NotMapped) },
     { SID_ATTR_CHAR_WEIGHT,         WEIGHT_BOLD },
     { SID_ATTR_CHAR_POSTURE,        ITALIC_NORMAL },
     { SID_ATTR_CHAR_UNDERLINE,      LINESTYLE_SINGLE },
     { SID_ATTR_CHAR_UNDERLINE,      LINESTYLE_DOUBLE },
     { SID_ATTR_CHAR_STRIKEOUT,      STRIKEOUT_SINGLE },
-    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::Uppercase },
-    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::Lowercase },
-    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::SmallCaps },
-    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::Capitalize },
+    { SID_ATTR_CHAR_CASEMAP,        sal_uInt16(SvxCaseMap::Uppercase) },
+    { SID_ATTR_CHAR_CASEMAP,        sal_uInt16(SvxCaseMap::Lowercase) },
+    { SID_ATTR_CHAR_CASEMAP,        sal_uInt16(SvxCaseMap::SmallCaps) },
+    { SID_ATTR_CHAR_CASEMAP,        sal_uInt16(SvxCaseMap::Capitalize) },
     { SID_ATTR_BRUSH,               0 }
 };
 // Items from aRedlineAttr relevant for InsertAttr: strikethrough is
@@ -2013,28 +2013,28 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
     switch (pAttr->nItemId)
     {
         case SID_ATTR_CHAR_WEIGHT:
-            rFont.SetWeight( ( FontWeight ) pAttr->nAttr );
-            rCJKFont.SetWeight( ( FontWeight ) pAttr->nAttr );
+            rFont.SetWeight( static_cast<FontWeight>(pAttr->nAttr) );
+            rCJKFont.SetWeight( static_cast<FontWeight>(pAttr->nAttr) );
             break;
 
         case SID_ATTR_CHAR_POSTURE:
-            rFont.SetItalic( ( FontItalic ) pAttr->nAttr );
-            rCJKFont.SetItalic( ( FontItalic ) pAttr->nAttr );
+            rFont.SetItalic( static_cast<FontItalic>(pAttr->nAttr) );
+            rCJKFont.SetItalic( static_cast<FontItalic>(pAttr->nAttr) );
             break;
 
         case SID_ATTR_CHAR_UNDERLINE:
-            rFont.SetUnderline( ( FontLineStyle ) pAttr->nAttr );
-            rCJKFont.SetUnderline( ( FontLineStyle ) pAttr->nAttr );
+            rFont.SetUnderline( static_cast<FontLineStyle>(pAttr->nAttr) );
+            rCJKFont.SetUnderline( static_cast<FontLineStyle>(pAttr->nAttr) );
             break;
 
         case SID_ATTR_CHAR_STRIKEOUT:
-            rFont.SetStrikeout( ( FontStrikeout ) pAttr->nAttr );
-            rCJKFont.SetStrikeout( ( FontStrikeout ) pAttr->nAttr );
+            rFont.SetStrikeout( static_cast<FontStrikeout>(pAttr->nAttr) );
+            rCJKFont.SetStrikeout( static_cast<FontStrikeout>(pAttr->nAttr) );
             break;
 
         case SID_ATTR_CHAR_CASEMAP:
-            rFont.SetCaseMap( ( SvxCaseMap ) pAttr->nAttr );
-            rCJKFont.SetCaseMap( ( SvxCaseMap ) pAttr->nAttr );
+            rFont.SetCaseMap( static_cast<SvxCaseMap>(pAttr->nAttr) );
+            rCJKFont.SetCaseMap( static_cast<SvxCaseMap>(pAttr->nAttr) );
             break;
 
         case SID_ATTR_BRUSH:

@@ -205,7 +205,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
         else if( pNd->IsOLENode() )
         {
             // applet, plugin, floating frame
-            eType = (SwHTMLFrameType)GuessOLENodeFrameType( *pNd );
+            eType = static_cast<SwHTMLFrameType>(GuessOLENodeFrameType( *pNd ));
         }
         else
         {
@@ -301,7 +301,7 @@ void SwHTMLWriter::CollectFlyFrames()
         const SdrObject *pSdrObj = nullptr;
         const SwPosition *pAPos;
         const SwContentNode *pACNd;
-        SwHTMLFrameType eType = (SwHTMLFrameType)GuessFrameType( rFrameFormat, pSdrObj );
+        SwHTMLFrameType eType = static_cast<SwHTMLFrameType>(GuessFrameType( rFrameFormat, pSdrObj ));
 
         AllHtmlFlags nMode;
         const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();

@@ -252,9 +252,9 @@ const o3tl::enumarray<SvxAdjust, unsigned short> aSvxToUnoAdjust
 const unsigned short aUnoToSvxAdjust[] =
 {
     USHRT_MAX,
-    (unsigned short)SvxAdjust::Right,       // 1
-    (unsigned short)SvxAdjust::Center,      // 3
-    (unsigned short)SvxAdjust::Left,        // 0
+    static_cast<unsigned short>(SvxAdjust::Right),       // 1
+    static_cast<unsigned short>(SvxAdjust::Center),      // 3
+    static_cast<unsigned short>(SvxAdjust::Left),        // 0
     USHRT_MAX,
     USHRT_MAX
 };
@@ -330,7 +330,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                     nTmp > SVX_NUM_BITMAP)))
                 throw lang::IllegalArgumentException();
 
-            aFootnoteInfo.aFormat.SetNumberingType((SvxNumType)nTmp);
+            aFootnoteInfo.aFormat.SetNumberingType(static_cast<SvxNumType>(nTmp));
 
         }
         break;
@@ -613,7 +613,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
             {
                 sal_Int16 nTmp = 0;
                 aValue >>= nTmp;
-                aEndInfo.aFormat.SetNumberingType((SvxNumType)nTmp);
+                aEndInfo.aFormat.SetNumberingType(static_cast<SvxNumType>(nTmp));
             }
             break;
             case  WID_START_AT:
@@ -828,7 +828,7 @@ void SwXLineNumberingProperties::setPropertyValue(
             SvxNumberType aNumType(aFontMetric.GetNumType());
             sal_Int16 nTmp = 0;
             aValue >>= nTmp;
-            aNumType.SetNumberingType((SvxNumType)nTmp);
+            aNumType.SetNumberingType(static_cast<SvxNumType>(nTmp));
             aFontMetric.SetNumType(aNumType);
         }
         break;
@@ -1648,7 +1648,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                         nValue <= text::HoriOrientation::LEFT &&
                         USHRT_MAX != aUnoToSvxAdjust[nValue])
                     {
-                        aFormat.SetNumAdjust((SvxAdjust)aUnoToSvxAdjust[nValue]);
+                        aFormat.SetNumAdjust(static_cast<SvxAdjust>(aUnoToSvxAdjust[nValue]));
                     }
                     else
                         bWrongArg = true;
@@ -1837,7 +1837,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     sal_Int16 nSet = 0;
                     pProp->Value >>= nSet;
                     if(nSet >= 0)
-                        aFormat.SetNumberingType((SvxNumType)nSet);
+                        aFormat.SetNumberingType(static_cast<SvxNumType>(nSet));
                     else
                         bWrongArg = true;
                 }
@@ -2446,7 +2446,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
                 sal_Int8 nTmp = 0;
                 if (! ( aValue >>= nTmp ) )
                     throw IllegalArgumentException();
-                nSepLineVertAlign = (style::VerticalAlignment)nTmp;
+                nSepLineVertAlign = static_cast<style::VerticalAlignment>(nTmp);
             }
             else
                 nSepLineVertAlign = eAlign;

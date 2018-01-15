@@ -1255,7 +1255,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
 
         // move the content from UndoNodes array into Fly
         SwStartNode* pSttNd = SwNodes::MakeEmptySection( aSttIdx,
-                                                (SwStartNodeType)nSectType );
+                                                static_cast<SwStartNodeType>(nSectType) );
 
         RestoreSection( pDoc, SwNodeIndex( *pSttNd->EndOfSectionNode() ));
 

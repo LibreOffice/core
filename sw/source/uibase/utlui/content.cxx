@@ -247,8 +247,8 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
     SwTypeNumber(CTYPE_CTT),
     pWrtShell(pShell),
     pMember(nullptr),
-    sContentTypeName(SwResId(STR_CONTENT_TYPE_ARY[(int)nType])),
-    sSingleContentTypeName(SwResId(STR_CONTENT_TYPE_SINGLE_ARY[(int)nType])),
+    sContentTypeName(SwResId(STR_CONTENT_TYPE_ARY[static_cast<int>(nType)])),
+    sSingleContentTypeName(SwResId(STR_CONTENT_TYPE_SINGLE_ARY[static_cast<int>(nType)])),
     nMemberCount(0),
     nContentType(nType),
     nOutlineLevel(nLevel),
@@ -1452,7 +1452,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
         if(lcl_IsContentType(pParent))
         {
             SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
-            const sal_Int32 nOr = 1 << (int)pCntType->GetType(); //linear -> Bitposition
+            const sal_Int32 nOr = 1 << static_cast<int>(pCntType->GetType()); //linear -> Bitposition
             if (State::HIDDEN != m_eState)
             {
                 m_nActiveBlock |= nOr;
@@ -1512,7 +1512,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
             if(m_bIsRoot)
                 return false;
             SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
-            const sal_Int32 nAnd = ~(1 << (int)pCntType->GetType());
+            const sal_Int32 nAnd = ~(1 << static_cast<int>(pCntType->GetType()));
             if (State::HIDDEN != m_eState)
             {
                 m_nActiveBlock &= nAnd;
@@ -1685,7 +1685,7 @@ void SwContentTree::Display( bool bActive )
                 sal_Int32 nExpandOptions = (State::HIDDEN == m_eState)
                                             ? m_nHiddenBlock
                                             : m_nActiveBlock;
-                if(nExpandOptions & (1 << (int)nCntType))
+                if(nExpandOptions & (1 << static_cast<int>(nCntType)))
                 {
                     Expand(pEntry);
                     if(nEntryRelPos && nCntType == m_nLastSelType)
@@ -2588,7 +2588,7 @@ DragDropMode SwContentTree::NotifyStartDrag(
                 TransferDataContainer& rContainer,
                 SvTreeListEntry* pEntry )
 {
-    DragDropMode eMode = (DragDropMode)0;
+    DragDropMode eMode = DragDropMode(0);
     if (State::ACTIVE == m_eState && m_nRootType == ContentTypeId::OUTLINE &&
             GetModel()->GetAbsPos( pEntry ) > 0
             && !GetWrtShell()->GetView().GetDocShell()->IsReadOnly())
@@ -3528,7 +3528,7 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 
     OString sStrBuf(OUStringToOString(aUrl, eSysCSet) + OString(NAVI_BOOKMARK_DELIM) +
                     OUStringToOString(aDescr, eSysCSet) + OString(NAVI_BOOKMARK_DELIM) +
-                    OString::number((int)nDefDrag) + OString(NAVI_BOOKMARK_DELIM) +
+                    OString::number(static_cast<int>(nDefDrag)) + OString(NAVI_BOOKMARK_DELIM) +
                     OString::number(nDocSh));
     rData.CopyByteString(SotClipboardFormatId::SONLK, sStrBuf);
 }

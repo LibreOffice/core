@@ -138,7 +138,7 @@ HTMLOptionEnum<SvxAdjust> aHTMLPAlignTable[] =
     { OOO_STRING_SVTOOLS_HTML_AL_right,   SvxAdjust::Right    },
     { OOO_STRING_SVTOOLS_HTML_AL_justify, SvxAdjust::Block    },
     { OOO_STRING_SVTOOLS_HTML_AL_char,    SvxAdjust::Left     },
-    { nullptr,                            (SvxAdjust)0        }
+    { nullptr,                            SvxAdjust(0)        }
 };
 
 // <SPACER TYPE=...>

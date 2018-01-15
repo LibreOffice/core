@@ -874,7 +874,7 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
 
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number((sal_uInt8)GetNodeType()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
     xmlTextWriterEndElement(pWriter);
@@ -958,7 +958,7 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number((sal_uInt8)GetNodeType()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
     if (IsTableNode())

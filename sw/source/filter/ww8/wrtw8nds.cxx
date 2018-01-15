@@ -2418,7 +2418,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         {
                             OUString sFieldId;
                             it->second >>= sFieldId;
-                            eFieldId = (ww::eField)sFieldId.toInt32();
+                            eFieldId = static_cast<ww::eField>(sFieldId.toInt32());
                         }
 
                         it = pFieldmark->GetParameters()->find( ODF_CODE_PARAM );
@@ -2465,7 +2465,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         {
                             OUString sFieldId;
                             it->second >>= sFieldId;
-                            eFieldId = (ww::eField)sFieldId.toInt32();
+                            eFieldId = static_cast<ww::eField>(sFieldId.toInt32());
                         }
                     }
 
@@ -3331,7 +3331,7 @@ void MSWordExportBase::OutputContentNode( SwContentNode& rNode )
             OutputOLENode( *rNode.GetOLENode() );
             break;
         default:
-            SAL_WARN("sw.ww8", "Unhandled node, type == " << (int)rNode.GetNodeType() );
+            SAL_WARN("sw.ww8", "Unhandled node, type == " << static_cast<int>(rNode.GetNodeType()) );
             break;
     }
 }

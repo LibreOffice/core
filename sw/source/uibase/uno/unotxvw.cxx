@@ -543,7 +543,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         SwStyleNameMapper::FillProgName(rAttr.GetCharFormatName(), aString, SwGetPoolIdFromName::ChrFmt );
         pValues[2].Value <<= aString;
         pValues[3].Name = UNO_NAME_RUBY_ADJUST;
-        pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
+        pValues[3].Value <<= static_cast<sal_Int16>(rAttr.GetAdjustment());
         pValues[4].Name = UNO_NAME_RUBY_IS_ABOVE;
         pValues[4].Value <<= !rAttr.GetPosition();
     }
@@ -603,7 +603,7 @@ void SAL_CALL SwXTextView::setRubyList(
             {
                 sal_Int16 nTmp = 0;
                 if(pProperties[nProp].Value >>= nTmp)
-                    pEntry->GetRubyAttr().SetAdjustment((css::text::RubyAdjust)nTmp);
+                    pEntry->GetRubyAttr().SetAdjustment(static_cast<css::text::RubyAdjust>(nTmp));
             }
             else if(pProperties[nProp].Name == UNO_NAME_RUBY_IS_ABOVE)
             {

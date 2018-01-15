@@ -508,7 +508,7 @@ bool SwCursorShell::UpDown( bool bUp, sal_uInt16 nCnt )
         {
             CursorFlag eUpdateMode = SwCursorShell::SCROLLWIN;
             if( !bTableMode )
-                eUpdateMode = (CursorFlag) (eUpdateMode
+                eUpdateMode = static_cast<CursorFlag>(eUpdateMode
                             | SwCursorShell::UPDOWN | SwCursorShell::CHKRANGE);
             UpdateCursor( static_cast<sal_uInt16>(eUpdateMode) );
         }

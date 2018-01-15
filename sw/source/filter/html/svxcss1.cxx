@@ -103,24 +103,24 @@ static CSS1PropertyEnum const aFontStyleTable[] =
 
 static CSS1PropertyEnum const aFontVariantTable[] =
 {
-    { "normal",      (sal_uInt16)SvxCaseMap::NotMapped      },
-    { "small-caps",  (sal_uInt16)SvxCaseMap::SmallCaps    },
+    { "normal",      sal_uInt16(SvxCaseMap::NotMapped)      },
+    { "small-caps",  sal_uInt16(SvxCaseMap::SmallCaps)    },
     { nullptr,                    0                   }
 };
 
 static CSS1PropertyEnum const aTextTransformTable[] =
 {
-    { "uppercase",  (sal_uInt16)SvxCaseMap::Uppercase },
-    { "lowercase",  (sal_uInt16)SvxCaseMap::Lowercase   },
-    { "capitalize", (sal_uInt16)SvxCaseMap::Capitalize     },
+    { "uppercase",  sal_uInt16(SvxCaseMap::Uppercase) },
+    { "lowercase",  sal_uInt16(SvxCaseMap::Lowercase)   },
+    { "capitalize", sal_uInt16(SvxCaseMap::Capitalize)     },
     { nullptr,                   0                     }
 };
 
 static CSS1PropertyEnum const aDirectionTable[] =
 {
-    { "ltr",         (sal_uInt16)SvxFrameDirection::Horizontal_LR_TB  },
-    { "rtl",         (sal_uInt16)SvxFrameDirection::Horizontal_RL_TB  },
-    { "inherit",     (sal_uInt16)SvxFrameDirection::Environment       },
+    { "ltr",         sal_uInt16(SvxFrameDirection::Horizontal_LR_TB)  },
+    { "rtl",         sal_uInt16(SvxFrameDirection::Horizontal_RL_TB)  },
+    { "inherit",     sal_uInt16(SvxFrameDirection::Environment)       },
     { nullptr,                    0                   }
 };
 
@@ -151,10 +151,10 @@ static CSS1PropertyEnum const aBGVertPosTable[] =
 
 static CSS1PropertyEnum const aTextAlignTable[] =
 {
-    { "left",        (sal_uInt16)SvxAdjust::Left     },
-    { "center",      (sal_uInt16)SvxAdjust::Center   },
-    { "right",       (sal_uInt16)SvxAdjust::Right    },
-    { "justify",     (sal_uInt16)SvxAdjust::Block    },
+    { "left",        sal_uInt16(SvxAdjust::Left)     },
+    { "center",      sal_uInt16(SvxAdjust::Center)   },
+    { "right",       sal_uInt16(SvxAdjust::Right)    },
+    { "justify",     sal_uInt16(SvxAdjust::Block)    },
     { nullptr,                    0                   }
 };
 
@@ -184,9 +184,9 @@ static CSS1PropertyEnum const aBorderStyleTable[] =
 
 static CSS1PropertyEnum const aFloatTable[] =
 {
-    { "left",    (sal_uInt16)SvxAdjust::Left         },
-    { "right",   (sal_uInt16)SvxAdjust::Right        },
-    { "none",    (sal_uInt16)SvxAdjust::End          },
+    { "left",    sal_uInt16(SvxAdjust::Left)         },
+    { "right",   sal_uInt16(SvxAdjust::Right)        },
+    { "none",    sal_uInt16(SvxAdjust::End)          },
     { nullptr,                0                       }
 };
 
@@ -1162,7 +1162,7 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
             if( SvxCSS1Parser::GetEnum( aFontWeightTable, pExpr->GetString(),
                                         nWeight ) )
             {
-                SvxWeightItem aWeight( (FontWeight)nWeight, aItemIds.nWeight );
+                SvxWeightItem aWeight( static_cast<FontWeight>(nWeight), aItemIds.nWeight );
                 if( rParser.IsSetWesternProps() )
                     rItemSet.Put( aWeight );
                 if( rParser.IsSetCJKProps() )
@@ -1230,7 +1230,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
             sal_uInt16 nItalic;
             if( SvxCSS1Parser::GetEnum( aFontStyleTable, rValue, nItalic ) )
             {
-                eItalic = (FontItalic)nItalic;
+                eItalic = static_cast<FontItalic>(nItalic);
                 if( !bCaseMap && ITALIC_NONE==eItalic )
                 {
                     // for 'normal' we must also exclude case-map
@@ -1288,7 +1288,7 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
             if( SvxCSS1Parser::GetEnum( aFontVariantTable, pExpr->GetString(),
                                         nCaseMap ) )
             {
-                rItemSet.Put( SvxCaseMapItem( (SvxCaseMap)nCaseMap,
+                rItemSet.Put( SvxCaseMapItem( static_cast<SvxCaseMap>(nCaseMap),
                                                 aItemIds.nCaseMap ) );
             }
             break;
@@ -1315,7 +1315,7 @@ static void ParseCSS1_text_transform( const CSS1Expression *pExpr,
             if( SvxCSS1Parser::GetEnum( aTextTransformTable, pExpr->GetString(),
                                         nCaseMap ) )
             {
-                rItemSet.Put( SvxCaseMapItem( (SvxCaseMap)nCaseMap,
+                rItemSet.Put( SvxCaseMapItem( static_cast<SvxCaseMap>(nCaseMap),
                                                 aItemIds.nCaseMap ) );
             }
             break;
@@ -1532,17 +1532,17 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
                 }
                 if( SvxCSS1Parser::GetEnum( aBGRepeatTable, rValue, nEnum ) )
                 {
-                    eRepeat = (SvxGraphicPosition)nEnum;
+                    eRepeat = static_cast<SvxGraphicPosition>(nEnum);
                 }
                 else if( SvxCSS1Parser::GetEnum( aBGHoriPosTable, rValue, nEnum ) )
                 {
                     // <position>, horizontal
-                    MergeHori( ePos, (SvxGraphicPosition)nEnum );
+                    MergeHori( ePos, static_cast<SvxGraphicPosition>(nEnum) );
                 }
                 else if( SvxCSS1Parser::GetEnum( aBGVertPosTable, rValue, nEnum ) )
                 {
                     // <position>, vertical
-                    MergeVert( ePos, (SvxGraphicPosition)nEnum );
+                    MergeVert( ePos, static_cast<SvxGraphicPosition>(nEnum) );
                 }
                 else if( !bColor )
                 {
@@ -1719,7 +1719,7 @@ static void ParseCSS1_list_style_type( const CSS1Expression *pExpr,
         if( SvxCSS1Parser::GetEnum( aNumberStyleTable, rValue, nEnum ) )
         {
             rPropInfo.m_bNumbering = true;
-            rPropInfo.m_nNumberingType = (SvxNumType)nEnum;
+            rPropInfo.m_nNumberingType = static_cast<SvxNumType>(nEnum);
         }
         if( SvxCSS1Parser::GetEnum( aBulletStyleTable, rValue, nEnum ) )
         {
@@ -1755,15 +1755,15 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
 
             if( SvxCSS1Parser::GetEnum( aFontStyleTable, rValue, nEnum ) )
             {
-                eItalic = (FontItalic)nEnum;
+                eItalic = static_cast<FontItalic>(nEnum);
             }
             else if( SvxCSS1Parser::GetEnum( aFontVariantTable, rValue, nEnum ) )
             {
-                eCaseMap = (SvxCaseMap)nEnum;
+                eCaseMap = static_cast<SvxCaseMap>(nEnum);
             }
             else if( SvxCSS1Parser::GetEnum( aFontWeightTable, rValue, nEnum ) )
             {
-                eWeight = (FontWeight)nEnum;
+                eWeight = static_cast<FontWeight>(nEnum);
             }
         }
         else
@@ -2000,7 +2000,7 @@ static void ParseCSS1_text_align( const CSS1Expression *pExpr,
         if( SvxCSS1Parser::GetEnum( aTextAlignTable, pExpr->GetString(),
                                     nAdjust ) )
         {
-            rItemSet.Put( SvxAdjustItem( (SvxAdjust)nAdjust,
+            rItemSet.Put( SvxAdjustItem( static_cast<SvxAdjust>(nAdjust),
                                          aItemIds.nAdjust ) );
         }
     }
@@ -2582,7 +2582,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
                 }
                 else if( SvxCSS1Parser::GetEnum( aBorderStyleTable, rValue, nValue ) )
                 {
-                    eStyle = (CSS1BorderStyle)nValue;
+                    eStyle = static_cast<CSS1BorderStyle>(nValue);
                 }
                 else if( pExpr->GetColor( aColor ) )
                 {
@@ -2782,7 +2782,7 @@ static void ParseCSS1_border_style( const CSS1Expression *pExpr,
             SvxCSS1Parser::GetEnum( aBorderStyleTable, pExpr->GetString(),
                                     nValue ) )
         {
-            rPropInfo.GetBorderInfo( nLine )->eStyle = (CSS1BorderStyle)nValue;
+            rPropInfo.GetBorderInfo( nLine )->eStyle = static_cast<CSS1BorderStyle>(nValue);
         }
         rPropInfo.CopyBorderInfo( n, SVX_CSS1_BORDERINFO_STYLE );
 
@@ -2842,7 +2842,7 @@ static void ParseCSS1_float( const CSS1Expression *pExpr,
     {
         sal_uInt16 nFloat;
         if( SvxCSS1Parser::GetEnum( aFloatTable, pExpr->GetString(), nFloat ) )
-            rPropInfo.m_eFloat = (SvxAdjust)nFloat;
+            rPropInfo.m_eFloat = static_cast<SvxAdjust>(nFloat);
     }
 }
 
@@ -2857,7 +2857,7 @@ static void ParseCSS1_position( const CSS1Expression *pExpr,
     {
         sal_uInt16 nPos;
         if( SvxCSS1Parser::GetEnum( aPositionTable, pExpr->GetString(), nPos ) )
-            rPropInfo.m_ePosition = (SvxCSS1Position)nPos;
+            rPropInfo.m_ePosition = static_cast<SvxCSS1Position>(nPos);
     }
 }
 
@@ -2958,7 +2958,7 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
                 if( SvxCSS1Parser::GetEnum( aSizeTable, pExpr->GetString(),
                                             nValue ) )
                 {
-                    rPropInfo.m_eSizeType = (SvxCSS1SizeType)nValue;
+                    rPropInfo.m_eSizeType = static_cast<SvxCSS1SizeType>(nValue);
                 }
             }
             break;
@@ -3000,7 +3000,7 @@ static void ParseCSS1_page_break_xxx( const CSS1Expression *pExpr,
         if( SvxCSS1Parser::GetEnum( aPageBreakTable, pExpr->GetString(),
                                     nValue ) )
         {
-            rPBreak = (SvxCSS1PageBreak)nValue;
+            rPBreak = static_cast<SvxCSS1PageBreak>(nValue);
         }
     }
 }

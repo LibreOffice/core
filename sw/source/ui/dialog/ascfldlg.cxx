@@ -324,7 +324,7 @@ LineEnd SwAsciiFilterDlg::GetCRLF() const
 IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, ListBox&, rListBox, void )
 {
     SvxTextEncodingBox* pBox = static_cast<SvxTextEncodingBox*>(&rListBox);
-    LineEnd eOldEnd = GetCRLF(), eEnd = (LineEnd)-1;
+    LineEnd eOldEnd = GetCRLF(), eEnd = LineEnd(-1);
     LanguageType nLng = m_pFontLB->IsVisible()
                     ? m_pLanguageLB->GetSelectLanguage()
                     : LANGUAGE_SYSTEM,
@@ -378,7 +378,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, ListBox&, rListBox, void )
     }
 
     m_bSaveLineStatus = false;
-    if( eEnd != (LineEnd)-1 )       // changed?
+    if( eEnd != LineEnd(-1) )       // changed?
     {
         if( eOldEnd != eEnd )
             SetCRLF( eEnd );

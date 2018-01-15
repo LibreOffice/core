@@ -159,13 +159,13 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
 
                 sal_uInt16 nVirtNum = pFrame->GetVirtPageNum();
                 sal_uInt16 nNumPages = pTmpRootFrame->GetPageNum();
-                SvxNumType nNumFormat = (SvxNumType)-1;
+                SvxNumType nNumFormat = SvxNumType(-1);
                 if(SVX_NUM_PAGEDESC == pField->GetFormat())
                     nNumFormat = pFrame->FindPageFrame()->GetPageDesc()->GetNumType().GetNumberingType();
                 static_cast<SwPageNumberField*>(pField)
                     ->ChangeExpansion(nVirtNum, nNumPages);
                 pPageNr->ChangeExpansion(pDoc,
-                                            bVirt, nNumFormat != (SvxNumType)-1 ? &nNumFormat : nullptr);
+                                            bVirt, nNumFormat != SvxNumType(-1) ? &nNumFormat : nullptr);
             }
             {
                 OUString const aStr( bName

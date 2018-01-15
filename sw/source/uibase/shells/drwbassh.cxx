@@ -217,7 +217,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         if (bCaption)
                             pSdrView->GetAttributes( aSet );
 
-                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, (sal_Int16)nAnchor));
+                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, static_cast<sal_Int16>(nAnchor)));
                         bool bRTL;
                         bool bVertL2R;
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrameVertical(true, bRTL, bVertL2R)));
@@ -270,12 +270,12 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                 SID_ATTR_TRANSFORM_ANCHOR, false, &pAnchorItem))
                             {
                                 if(!bSingleSelection)
-                                    pSh->ChgAnchor((RndStdIds)static_cast<const SfxInt16Item*>(pAnchorItem)
-                                            ->GetValue(), false, bPosCorr );
+                                    pSh->ChgAnchor(static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pAnchorItem)
+                                            ->GetValue()), false, bPosCorr );
                                 else
                                 {
                                     SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
-                                    aAnchor.SetType((RndStdIds)static_cast<const SfxInt16Item*>(pAnchorItem)->GetValue());
+                                    aAnchor.SetType(static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pAnchorItem)->GetValue()));
                                     aFrameAttrSet.Put( aAnchor );
                                 }
                             }
