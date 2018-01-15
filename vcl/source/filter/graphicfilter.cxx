@@ -1100,7 +1100,7 @@ GraphicFilter::~GraphicFilter()
         }
     }
 
-    delete pErrorEx;
+    pErrorEx.reset();
 }
 
 void GraphicFilter::ImplInit()
@@ -1126,7 +1126,7 @@ void GraphicFilter::ImplInit()
         osl::FileBase::getSystemPathFromFileURL(url, aFilterPath);
     }
 
-    pErrorEx = new FilterErrorEx;
+    pErrorEx.reset( new FilterErrorEx );
 }
 
 ErrCode GraphicFilter::ImplSetError( ErrCode nError, const SvStream* pStm )
