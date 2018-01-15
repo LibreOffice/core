@@ -76,7 +76,7 @@ void Window::ShowFocus( const tools::Rectangle& rRect )
             ImplInvertFocus( rRect );
         }
         if ( !pWinData->mpFocusRect )
-            pWinData->mpFocusRect = new tools::Rectangle( rRect );
+            pWinData->mpFocusRect.reset( new tools::Rectangle( rRect ) );
         else
             *(pWinData->mpFocusRect) = rRect;
         mpWindowImpl->mbFocusVisible = true;
@@ -145,7 +145,7 @@ void Window::ShowTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlags 
     }
 
     if ( !pWinData->mpTrackRect )
-        pWinData->mpTrackRect = new tools::Rectangle( rRect );
+        pWinData->mpTrackRect.reset(new tools::Rectangle( rRect ));
     else
         *(pWinData->mpTrackRect) = rRect;
     pWinData->mnTrackFlags      = nFlags;
