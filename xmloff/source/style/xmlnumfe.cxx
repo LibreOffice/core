@@ -1031,8 +1031,8 @@ static bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, bool bSystem
         return false;                       // additional elements
     else
     {
-        NfIndexTableOffset eFound = (NfIndexTableOffset) SvXMLNumFmtDefaults::GetDefaultDateFormat(
-                eDateDOW, eDateDay, eDateMonth, eDateYear, eDateHours, eDateMins, eDateSecs, bSystemDate );
+        NfIndexTableOffset eFound = static_cast<NfIndexTableOffset>(SvXMLNumFmtDefaults::GetDefaultDateFormat(
+                eDateDOW, eDateDay, eDateMonth, eDateYear, eDateHours, eDateMins, eDateSecs, bSystemDate ));
 
         return ( eFound == eBuiltIn );
     }

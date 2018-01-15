@@ -100,7 +100,7 @@ namespace xmloff
             const AlignmentTranslationEntry* pTranslation = AlignmentTranslations;
             while ( ParagraphAdjust::ParagraphAdjust_MAKE_FIXED_SIZE != pTranslation->nParagraphValue)
             {
-                if ( (ParagraphAdjust)nValue == pTranslation->nParagraphValue)
+                if ( static_cast<ParagraphAdjust>(nValue) == pTranslation->nParagraphValue)
                 {
                     rValue <<= pTranslation->nControlValue;
                     return;

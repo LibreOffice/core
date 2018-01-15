@@ -175,7 +175,7 @@ void XMLIndexSourceBaseContext::StartElement(
         sal_uInt16 nToken = aTokenMap.Get(nPrefix, sLocalName);
 
         // process attribute
-        ProcessAttribute((enum IndexSourceParamEnum)nToken,
+        ProcessAttribute(static_cast<enum IndexSourceParamEnum>(nToken),
                          xAttrList->getValueByIndex(i));
     }
 }

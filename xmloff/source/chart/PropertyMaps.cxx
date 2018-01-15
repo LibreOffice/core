@@ -74,7 +74,7 @@ SvXMLEnumMapEntry<drawing::LineStyle> const aLineStyleMap[] =
     { XML_NONE,     drawing::LineStyle_NONE },
     { XML_SOLID,    drawing::LineStyle_SOLID },
     { XML_DASH,     drawing::LineStyle_DASH },
-    { XML_TOKEN_INVALID, (drawing::LineStyle)0 }
+    { XML_TOKEN_INVALID, drawing::LineStyle(0) }
 };
 
 }

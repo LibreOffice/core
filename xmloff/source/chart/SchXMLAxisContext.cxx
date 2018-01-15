@@ -56,7 +56,7 @@ static const SvXMLEnumMapEntry<SchXMLAxisDimension> aXMLAxisDimensionMap[] =
     { XML_X,  SCH_XML_AXIS_X  },
     { XML_Y,  SCH_XML_AXIS_Y  },
     { XML_Z,  SCH_XML_AXIS_Z  },
-    { XML_TOKEN_INVALID, (SchXMLAxisDimension)0 }
+    { XML_TOKEN_INVALID, SchXMLAxisDimension(0) }
 };
 
 static const SvXMLEnumMapEntry<sal_uInt16> aXMLAxisTypeMap[] =

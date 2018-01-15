@@ -65,7 +65,7 @@ static SvXMLEnumMapEntry<drawing::ColorMode> const aXML_ColorMode_EnumMap[] =
     { XML_MONO,         drawing::ColorMode_MONO },
     { XML_WATERMARK,    drawing::ColorMode_WATERMARK },
     { XML_STANDARD,     drawing::ColorMode_STANDARD },
-    { XML_TOKEN_INVALID, (drawing::ColorMode)0 }
+    { XML_TOKEN_INVALID, drawing::ColorMode(0) }
 };
 
 static SvXMLEnumMapEntry<text::HorizontalAdjust> const aXML_HorizontalAdjust_Enum[] =
@@ -73,7 +73,7 @@ static SvXMLEnumMapEntry<text::HorizontalAdjust> const aXML_HorizontalAdjust_Enu
     { XML_LEFT,     text::HorizontalAdjust_LEFT },
     { XML_CENTER,   text::HorizontalAdjust_CENTER },
     { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
-    { XML_TOKEN_INVALID, (text::HorizontalAdjust)0 }
+    { XML_TOKEN_INVALID, text::HorizontalAdjust(0) }
 };
 
 // aXML_WritingDirection_Enum is used with and without 'page'

@@ -122,7 +122,7 @@ static SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
     { XML_FIELDMARK,              TypeFieldmark },
     { XML_FIELDMARK_START,        TypeFieldmarkStart },
     { XML_FIELDMARK_END,          TypeFieldmarkEnd },
-    { XML_TOKEN_INVALID,          (lcl_MarkType)0 },
+    { XML_TOKEN_INVALID,          lcl_MarkType(0) },
 };
 
 

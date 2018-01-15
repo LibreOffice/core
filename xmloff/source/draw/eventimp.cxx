@@ -66,7 +66,7 @@ SvXMLEnumMapEntry<ClickAction> const aXML_EventActions_EnumMap[] =
     { XML_VERB,             ClickAction_VERB },
     { XML_FADE_OUT,         ClickAction_VANISH },
     { XML_SOUND,            ClickAction_SOUND },
-    { XML_TOKEN_INVALID, (ClickAction)0 }
+    { XML_TOKEN_INVALID, ClickAction(0) }
 };
 
 class SdXMLEventContext : public SvXMLImportContext

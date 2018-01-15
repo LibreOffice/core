@@ -725,7 +725,7 @@ static SvXMLEnumMapEntry<PageNumberType> const lcl_aSelectPageAttrMap[] =
     { XML_PREVIOUS,      PageNumberType_PREV },
     { XML_CURRENT,       PageNumberType_CURRENT },
     { XML_NEXT,          PageNumberType_NEXT },
-    { XML_TOKEN_INVALID, (PageNumberType)0 },
+    { XML_TOKEN_INVALID, PageNumberType(0) },
 };
 
 XMLPageContinuationImportContext::XMLPageContinuationImportContext(

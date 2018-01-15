@@ -88,7 +88,7 @@ static SvXMLEnumMapEntry<VerticalAlignment> const pXML_Sep_Align_Enum[] =
     { XML_TOP,           VerticalAlignment_TOP   },
     { XML_MIDDLE,        VerticalAlignment_MIDDLE },
     { XML_BOTTOM,        VerticalAlignment_BOTTOM },
-    { XML_TOKEN_INVALID, (VerticalAlignment)0 }
+    { XML_TOKEN_INVALID, VerticalAlignment(0) }
 };
 
 class XMLTextColumnContext_Impl: public SvXMLImportContext

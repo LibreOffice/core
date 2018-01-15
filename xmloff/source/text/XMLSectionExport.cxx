@@ -328,7 +328,7 @@ SvXMLEnumStringMapEntry<SectionTypeEnum> const aIndexTypeMap[] =
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.Bibliography", TEXT_SECTION_TYPE_BIBLIOGRAPHY ),
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.UserIndex", TEXT_SECTION_TYPE_USER ),
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.IllustrationsIndex", TEXT_SECTION_TYPE_ILLUSTRATION ),
-    { nullptr, 0, (SectionTypeEnum)0 }
+    { nullptr, 0, SectionTypeEnum(0) }
 };
 
 enum SectionTypeEnum XMLSectionExport::MapSectionType(
@@ -1080,7 +1080,7 @@ SvXMLEnumStringMapEntry<TemplateTypeEnum> const aTemplateTypeMap[] =
     ENUM_STRING_MAP_ENTRY( "TokenHyperlinkStart", TOK_TTYPE_HYPERLINK_START ),
     ENUM_STRING_MAP_ENTRY( "TokenHyperlinkEnd", TOK_TTYPE_HYPERLINK_END ),
     ENUM_STRING_MAP_ENTRY( "TokenBibliographyDataField", TOK_TTYPE_BIBLIOGRAPHY ),
-    { nullptr, 0, (TemplateTypeEnum)0}
+    { nullptr, 0, TemplateTypeEnum(0)}
 };
 
 SvXMLEnumStringMapEntry<TemplateParamEnum> const aTemplateParamMap[] =
@@ -1096,7 +1096,7 @@ SvXMLEnumStringMapEntry<TemplateParamEnum> const aTemplateParamMap[] =
     ENUM_STRING_MAP_ENTRY( "ChapterFormat",         TOK_TPARAM_CHAPTER_FORMAT ),
     ENUM_STRING_MAP_ENTRY( "ChapterLevel",          TOK_TPARAM_CHAPTER_LEVEL ),//i53420
     ENUM_STRING_MAP_ENTRY( "BibliographyDataField", TOK_TPARAM_BIBLIOGRAPHY_DATA ),
-    { nullptr, 0, (TemplateParamEnum)0}
+    { nullptr, 0, TemplateParamEnum(0)}
 };
 
 SvXMLEnumMapEntry<sal_Int16> const aBibliographyDataFieldMap[] =
