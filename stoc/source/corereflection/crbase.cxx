@@ -54,7 +54,7 @@ IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
                             typelib_TypeDescription * pTypeDescr )
     : m_xReflection( pReflection )
     , _aName( rName )
-    , _eTypeClass( (TypeClass)eTypeClass )
+    , _eTypeClass( static_cast<TypeClass>(eTypeClass) )
     , _pTypeDescr( pTypeDescr )
 {
     if (_pTypeDescr)
@@ -131,7 +131,7 @@ sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
         if (eAssign > TypeClass_VOID && eAssign < TypeClass_STRING &&
             eFrom > TypeClass_VOID && eFrom < TypeClass_STRING)
         {
-            return s_aAssignableFromTab[(int)eAssign-1][(int)eFrom-1];
+            return s_aAssignableFromTab[static_cast<int>(eAssign)-1][static_cast<int>(eFrom)-1];
         }
     }
     return false;
