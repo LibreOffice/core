@@ -606,7 +606,7 @@ void DeInitVCL()
     pSVData->maWinData.mpCaptureWin = nullptr;
     pSVData->maWinData.mpLastDeacWin = nullptr;
     pSVData->maWinData.mpFirstFloat = nullptr;
-    pSVData->maWinData.mpLastExecuteDlg = nullptr;
+    pSVData->maWinData.mpExecuteDialogs.clear();
     pSVData->maWinData.mpExtTextInputWin = nullptr;
     pSVData->maWinData.mpTrackWin = nullptr;
     pSVData->maWinData.mpAutoScrollWin = nullptr;

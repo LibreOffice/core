@@ -38,9 +38,9 @@ std::unique_ptr<UIObject> UITest::getFocusTopWindow()
     ImplSVData* pSVData = ImplGetSVData();
     ImplSVWinData& rWinData = pSVData->maWinData;
 
-    if (rWinData.mpLastExecuteDlg)
+    if (!rWinData.mpExecuteDialogs.empty())
     {
-        return rWinData.mpLastExecuteDlg->GetUITestFactory()(rWinData.mpLastExecuteDlg);
+        return rWinData.mpExecuteDialogs.back()->GetUITestFactory()(rWinData.mpExecuteDialogs.back());
     }
 
     return rWinData.mpFirstFrame->GetUITestFactory()(rWinData.mpFirstFrame);
