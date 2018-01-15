@@ -108,7 +108,7 @@ namespace frm
                      " 0--2"),
                     css::uno::Reference<css::uno::XInterface>(), -1);
             }
-            m_eDefaultChecked = (ToggleState)nDefaultChecked;
+            m_eDefaultChecked = static_cast<ToggleState>(nDefaultChecked);
             resetNoBroadcast();
         }
         break;

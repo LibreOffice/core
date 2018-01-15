@@ -304,7 +304,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
     }
 
     setReferenceValue( sReferenceValue );
-    setDefaultChecked( (ToggleState)nDefaultChecked );
+    setDefaultChecked( static_cast<ToggleState>(nDefaultChecked) );
 
     // Display default values after read
     if ( !getControlSource().isEmpty() )

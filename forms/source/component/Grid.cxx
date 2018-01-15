@@ -929,7 +929,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     if ( nAnyMask & FONTATTRIBS )
     {
         aFont.Weight = static_cast<float>(vcl::unohelper::ConvertFontWeight( _rxInStream->readShort() ));
-        aFont.Slant = (FontSlant)_rxInStream->readShort();
+        aFont.Slant = static_cast<FontSlant>(_rxInStream->readShort());
         aFont.Underline = _rxInStream->readShort();
         aFont.Strikeout = _rxInStream->readShort();
         aFont.Orientation = static_cast<float>(_rxInStream->readShort()) / 10;

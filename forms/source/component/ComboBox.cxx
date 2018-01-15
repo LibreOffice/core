@@ -351,7 +351,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<css::io::XObjectOutputStream
 
     css::uno::Sequence<OUString> aListSourceSeq(&m_aListSource, 1);
     _rxOutStream << aListSourceSeq;
-    _rxOutStream << (sal_Int16)m_eListSourceType;
+    _rxOutStream << static_cast<sal_Int16>(m_eListSourceType);
 
     if ((nAnyMask & BOUNDCOLUMN) == BOUNDCOLUMN)
     {
@@ -423,7 +423,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
 
     sal_Int16 nListSourceType;
     _rxInStream >> nListSourceType;
-    m_eListSourceType = (ListSourceType)nListSourceType;
+    m_eListSourceType = static_cast<ListSourceType>(nListSourceType);
 
     if ((nAnyMask & BOUNDCOLUMN) == BOUNDCOLUMN)
     {

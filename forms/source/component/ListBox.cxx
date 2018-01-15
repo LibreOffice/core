@@ -571,7 +571,7 @@ namespace frm
         _rxOutStream << nAnyMask;
 
         _rxOutStream << lcl_convertToStringSequence( m_aListSourceValues );
-        _rxOutStream << (sal_Int16)m_eListSourceType;
+        _rxOutStream << static_cast<sal_Int16>(m_eListSourceType);
         _rxOutStream << aDummySeq;
         _rxOutStream << m_aDefaultSelectSeq;
 
@@ -657,7 +657,7 @@ namespace frm
 
         sal_Int16 nListSourceType;
         _rxInStream >> nListSourceType;
-        m_eListSourceType = (ListSourceType)nListSourceType;
+        m_eListSourceType = static_cast<ListSourceType>(nListSourceType);
         Any aListSourceSeqAny;
         aListSourceSeqAny <<= aListSourceSeq;
 
