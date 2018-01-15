@@ -281,7 +281,7 @@ vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
 void Window::SetAccessibleRole( sal_uInt16 nRole )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
-        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+        mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
     SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->nAccessibleRole != 0xFFFF, "vcl", "AccessibleRole already set!" );
     mpWindowImpl->mpAccessibleInfos->nAccessibleRole = nRole;
@@ -418,7 +418,7 @@ sal_uInt16 Window::GetAccessibleRole() const
 void Window::SetAccessibleName( const OUString& rName )
 {
    if ( !mpWindowImpl->mpAccessibleInfos )
-        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+        mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
     OUString oldName = GetAccessibleName();
 
@@ -500,7 +500,7 @@ OUString Window::getDefaultAccessibleName() const
 void Window::SetAccessibleDescription( const OUString& rDescription )
 {
    if ( ! mpWindowImpl->mpAccessibleInfos )
-        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+        mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
     SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->pAccessibleDescription, "vcl", "AccessibleDescription already set!" );
     mpWindowImpl->mpAccessibleInfos->pAccessibleDescription.reset( new OUString( rDescription ) );
@@ -530,21 +530,21 @@ OUString Window::GetAccessibleDescription() const
 void Window::SetAccessibleRelationLabeledBy( vcl::Window* pLabeledBy )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
-        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+        mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
     mpWindowImpl->mpAccessibleInfos->pLabeledByWindow = pLabeledBy;
 }
 
 void Window::SetAccessibleRelationLabelFor( vcl::Window* pLabelFor )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
-        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+        mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
     mpWindowImpl->mpAccessibleInfos->pLabelForWindow = pLabelFor;
 }
 
 void Window::SetAccessibleRelationMemberOf( vcl::Window* pMemberOfWin )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
-        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+        mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
     mpWindowImpl->mpAccessibleInfos->pMemberOfWindow = pMemberOfWin;
 }
 
