@@ -717,15 +717,7 @@ sal_Bool SAL_CALL ChartController::suspend( sal_Bool bSuspend )
     }
 
     //change suspend mode
-    if(bSuspend)
-    {
-        m_bSuspended = bSuspend;
-        return true;
-    }
-    else
-    {
-        m_bSuspended = bSuspend;
-    }
+    m_bSuspended = bSuspend;
     return true;
 }
 
