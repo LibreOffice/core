@@ -205,6 +205,7 @@ public:
     void testTdf78727();
     void testTdf104814();
     void testTdf105417();
+    void testTdf114536();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -310,6 +311,7 @@ public:
     CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf105417);
+    CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3791,6 +3793,13 @@ void SwUiWriterTest::testTdf105417()
     // This never returned, it kept trying to hyphenate the last word
     // (greenbacks) again and again.
     aWrap.SpellDocument();
+}
+
+void SwUiWriterTest::testTdf114536()
+{
+    // This crashed in SwTextFormatter::MergeCharacterBorder() due to a
+    // use after free.
+    createDoc("tdf114536.odt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
