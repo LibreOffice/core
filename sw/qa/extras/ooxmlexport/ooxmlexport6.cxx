@@ -620,7 +620,7 @@ DECLARE_OOXMLEXPORT_TEST(testBehinddoc, "behinddoc.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testSmartArtAnchoredInline, "fdo73227.docx")
 {
-    /* Given file conatins 3 DrawingML objects as 1Picture,1SmartArt and 1Shape.
+    /* Given file contains 3 DrawingML objects as 1Picture,1SmartArt and 1Shape.
      * Check for SmartArt.
     *  SmartArt should get written as "Floating Object" i.e. inside <wp:anchor> tag.
     *  Also check for value of attribute "id" of <wp:docPr>. It should be unique for

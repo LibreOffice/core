@@ -130,7 +130,7 @@ private:
 };
 
 
-// Entity binds all information neede for a single file
+// Entity binds all information needed for a single file
 struct Entity
 {
     InputSource         structSource;

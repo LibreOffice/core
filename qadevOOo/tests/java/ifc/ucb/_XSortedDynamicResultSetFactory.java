@@ -55,7 +55,7 @@ import com.sun.star.uno.Type;
 public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
 
     /**
-     * Conatins the tested object.
+     * Contains the tested object.
      */
     public XSortedDynamicResultSetFactory oObj;
 

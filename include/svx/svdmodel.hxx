@@ -423,7 +423,7 @@ public:
     //                                   from rSourceModel
     //                             sal_False= the MasterPageDescriptors of
     //                                   the pages of the rSourceModel will be
-    //                                   mapped on the exisiting  MasterPages.
+    //                                   mapped on the existing  MasterPages.
     // bUndo.....................: An undo action is generated for the merging.
     //                             Undo is only for the target model, not for the
     //                             rSourceModel.

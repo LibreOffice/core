@@ -40,7 +40,7 @@ namespace drawingml {
 
 void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSourceProps )
 {
-    // overwrite all properties exisiting in rSourceProps
+    // overwrite all properties existing in rSourceProps
     maHyperlinkPropertyMap.assignUsed( rSourceProps.maHyperlinkPropertyMap );
     maLatinFont.assignIfUsed( rSourceProps.maLatinFont );
     maLatinThemeFont.assignIfUsed( rSourceProps.maLatinThemeFont );

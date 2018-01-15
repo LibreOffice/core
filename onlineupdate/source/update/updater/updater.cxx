@@ -3351,7 +3351,7 @@ int NS_main(int argc, NS_tchar **argv)
             // on our own.
 
             // If we still want to use the service try to launch the service
-            // comamnd for the update.
+            // command for the update.
             if (useService)
             {
                 // If the update couldn't be started, then set useService to false so

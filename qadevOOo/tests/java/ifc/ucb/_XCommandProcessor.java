@@ -65,7 +65,7 @@ import lib.StatusException;
 public class _XCommandProcessor extends MultiMethodTest {
 
     /**
-     * Conatins the tested object.
+     * Contains the tested object.
      */
     public XCommandProcessor oObj;
 

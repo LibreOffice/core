@@ -33,7 +33,7 @@ void CGM::ImplDoClass0()
         break;
         case 0x02 : /*End MetaFile*/
         {
-            if ( mpBitmapInUse )                            // process existend graphic
+            if ( mpBitmapInUse )                            // process existing graphic
             {
                 CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
                 // do anything with the bitmap
@@ -70,7 +70,7 @@ void CGM::ImplDoClass0()
         {
             if ( mbPicture )
             {
-                if ( mpBitmapInUse )                            // process existend graphic
+                if ( mpBitmapInUse )                            // process existing graphic
                 {
                     CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
                     // do anything with the bitmap

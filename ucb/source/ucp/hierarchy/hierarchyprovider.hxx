@@ -109,7 +109,7 @@ public:
     css::uno::Reference< css::container::XHierarchicalNameAccess >
     getRootConfigReadNameAccess( const OUString & rServiceSpecifier );
 
-    // Note: may retrun an empty reference.
+    // Note: may return an empty reference.
     css::uno::Reference< css::util::XOfficeInstallationDirectories >
     getOfficeInstallationDirectories();
 };

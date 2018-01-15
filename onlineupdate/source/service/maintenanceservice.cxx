@@ -298,7 +298,7 @@ SvcMain(DWORD argc, LPWSTR *argv)
     ReportSvcStatus(SERVICE_START_PENDING, NO_ERROR, 3000);
 
     // This event will be used to tell the SvcCtrlHandler when the work is
-    // done for when a stop comamnd is manually issued.
+    // done for when a stop command is manually issued.
     gWorkDoneEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
     if (!gWorkDoneEvent)
     {

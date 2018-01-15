@@ -4458,7 +4458,7 @@ void DocxAttributeOutput::DefaultStyle()
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::DefaultStyle()");
 }
 
-/* Writes <a:srcRect> tag back to document.xml if a file conatins a cropped image.
+/* Writes <a:srcRect> tag back to document.xml if a file contains a cropped image.
 *  NOTE : Tested on images of type JPEG,EMF/WMF,BMP, PNG and GIF.
 */
 void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat )
