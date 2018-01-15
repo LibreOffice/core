@@ -226,7 +226,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     {
         //  Read Configuration
         OUString aWindowId("SplitWindow");
-        aWindowId += OUString::number( (sal_Int32) eTbxAlign );
+        aWindowId += OUString::number( static_cast<sal_Int32>(eTbxAlign) );
         SvtViewOptions aWinOpt( EViewType::Window, aWindowId );
         OUString aWinData;
         Any aUserItem = aWinOpt.GetUserItem( USERITEM_NAME );
@@ -329,7 +329,7 @@ void SfxSplitWindow::SaveConfig_Impl()
     }
 
     OUString aWindowId("SplitWindow");
-    aWindowId += OUString::number( (sal_Int32) GetAlign() );
+    aWindowId += OUString::number( static_cast<sal_Int32>(GetAlign()) );
     SvtViewOptions aWinOpt( EViewType::Window, aWindowId );
     aWinOpt.SetUserItem( USERITEM_NAME, makeAny( aWinData.makeStringAndClear() ) );
 }

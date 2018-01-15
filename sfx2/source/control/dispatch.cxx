@@ -1760,7 +1760,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
         const SfxSlot *pSlot = pIFace->GetSlot(nSlot);
 
         if ( pSlot && pSlot->nDisableFlags != SfxDisableFlags::NONE &&
-             ( (int)pSlot->nDisableFlags & (int)pObjShell->GetDisableFlags() ) != 0 )
+             ( static_cast<int>(pSlot->nDisableFlags) & static_cast<int>(pObjShell->GetDisableFlags()) ) != 0 )
             return false;
 
         if ( pSlot && !( pSlot->nFlags & SfxSlotMode::READONLYDOC ) && bReadOnly )

@@ -284,7 +284,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFl
     if (nFlags == SfxVisibilityFlags::Invisible)
         nFlags |= SfxVisibilityFlags::Standard;
 
-    return new SfxObjectUI_Impl(nPos, nFlags, (sal_uInt32)eId, nFeature);
+    return new SfxObjectUI_Impl(nPos, nFlags, static_cast<sal_uInt32>(eId), nFeature);
 }
 
 ToolbarId SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
@@ -303,7 +303,7 @@ ToolbarId SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
 
     assert( nNo<pImplData->aObjectBars.size() );
 
-    return (ToolbarId)pImplData->aObjectBars[nNo]->nObjId;
+    return static_cast<ToolbarId>(pImplData->aObjectBars[nNo]->nObjId);
 }
 
 sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const

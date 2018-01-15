@@ -83,8 +83,8 @@ bool SvxZoomItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
 
         case MID_VALUE: rVal <<= static_cast<sal_Int32>(GetValue()); break;
-        case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
-        case MID_TYPE: rVal <<= (sal_Int16) eType; break;
+        case MID_VALUESET: rVal <<= static_cast<sal_Int16>(nValueSet); break;
+        case MID_TYPE: rVal <<= static_cast<sal_Int16>(eType); break;
         default:
             OSL_FAIL("sfx2::SvxZoomItem::QueryValue(), Wrong MemberId!");
             return false;

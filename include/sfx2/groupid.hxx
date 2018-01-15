@@ -61,7 +61,7 @@ namespace std
   {
     std::size_t operator()(const SfxGroupId& k) const
     {
-      return std::hash<sal_uInt16>()((sal_uInt16)k);
+      return std::hash<sal_uInt16>()(static_cast<sal_uInt16>(k));
     }
   };
 }

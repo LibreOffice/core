@@ -581,7 +581,7 @@ bool SfxChildWinInfo::GetExtraData_Impl
     if ( aStr.isEmpty() )
         return false;
     if ( pAlign )
-        *pAlign = (SfxChildAlignment) static_cast<sal_uInt16>(aStr.toInt32());
+        *pAlign = static_cast<SfxChildAlignment>(static_cast<sal_uInt16>(aStr.toInt32()));
 
     // then the LastAlignment
     nPos = aStr.indexOf(',');

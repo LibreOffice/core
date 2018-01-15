@@ -263,7 +263,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
                 {
                     frame::status::ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
-                    eState = (SfxItemState) aItemStatus.State;
+                    eState = static_cast<SfxItemState>(aItemStatus.State);
                     pItem = new SfxVoidItem( nSlotID );
                 }
                 else
