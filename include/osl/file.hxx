@@ -1755,7 +1755,7 @@ public:
             osl_releaseDirectoryItem( rItem._pData );
             rItem._pData = NULL;
         }
-        return ( RC) osl_getNextDirectoryItem( _pData, &rItem._pData, nHint );
+        return static_cast<RC>(osl_getNextDirectoryItem( _pData, &rItem._pData, nHint ));
     }
 
 

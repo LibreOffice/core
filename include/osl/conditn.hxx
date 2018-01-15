@@ -116,7 +116,7 @@ namespace osl
         */
         Result wait(const TimeValue *pTimeout = NULL)
         {
-            return (Result) osl_waitCondition(condition, pTimeout);
+            return static_cast<Result>(osl_waitCondition(condition, pTimeout));
         }
 
 #if defined LIBO_INTERNAL_ONLY
