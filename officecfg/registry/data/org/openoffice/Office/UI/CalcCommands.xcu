@@ -1289,6 +1289,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:DefineCurrentName" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Manage Names...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertName" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Insert Named Range or Expression...</value>
