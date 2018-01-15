@@ -144,7 +144,7 @@ void CGM::ImplDoClass2()
         {
             LineBundle  aTempLineBundle;
             aTempLineBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
-            aTempLineBundle.eLineType = (LineType)ImplGetI( pElement->nIndexPrecision );
+            aTempLineBundle.eLineType = static_cast<LineType>(ImplGetI( pElement->nIndexPrecision ));
             aTempLineBundle.nLineWidth = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempLineBundle.SetColor( ImplGetBitmapColor() );
             const bool bUpdateLineBundle = aTempLineBundle.GetIndex() == pElement->pLineBundle->GetIndex();
@@ -157,7 +157,7 @@ void CGM::ImplDoClass2()
         {
             MarkerBundle aTempMarkerBundle;
             aTempMarkerBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
-            aTempMarkerBundle.eMarkerType = (MarkerType)ImplGetI( pElement->nIndexPrecision );
+            aTempMarkerBundle.eMarkerType = static_cast<MarkerType>(ImplGetI( pElement->nIndexPrecision ));
             aTempMarkerBundle.nMarkerSize = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempMarkerBundle.SetColor( ImplGetBitmapColor() );
             const bool bUpdateMarkerBundle = aTempMarkerBundle.GetIndex() == pElement->pMarkerBundle->GetIndex();
@@ -171,7 +171,7 @@ void CGM::ImplDoClass2()
             TextBundle aTempTextBundle;
             aTempTextBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
             aTempTextBundle.nTextFontIndex = ImplGetI( pElement->nIndexPrecision );
-            aTempTextBundle.eTextPrecision = (TextPrecision)ImplGetI( pElement->nIndexPrecision );
+            aTempTextBundle.eTextPrecision = static_cast<TextPrecision>(ImplGetI( pElement->nIndexPrecision ));
             aTempTextBundle.nCharacterSpacing = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempTextBundle.nCharacterExpansion = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempTextBundle.SetColor( ImplGetBitmapColor() );
@@ -185,7 +185,7 @@ void CGM::ImplDoClass2()
         {
             FillBundle aTempFillBundle;
             aTempFillBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
-            aTempFillBundle.eFillInteriorStyle = (FillInteriorStyle)ImplGetI( pElement->nIndexPrecision );
+            aTempFillBundle.eFillInteriorStyle = static_cast<FillInteriorStyle>(ImplGetI( pElement->nIndexPrecision ));
             aTempFillBundle.SetColor( ImplGetBitmapColor() );
             aTempFillBundle.nFillPatternIndex = ImplGetI( pElement->nIndexPrecision );
             aTempFillBundle.nFillHatchIndex = ImplGetI( pElement->nIndexPrecision );
@@ -199,7 +199,7 @@ void CGM::ImplDoClass2()
         {
             EdgeBundle aTempEdgeBundle;
             aTempEdgeBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
-            aTempEdgeBundle.eEdgeType = (EdgeType)ImplGetI( pElement->nIndexPrecision );
+            aTempEdgeBundle.eEdgeType = static_cast<EdgeType>(ImplGetI( pElement->nIndexPrecision ));
             aTempEdgeBundle.nEdgeWidth = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempEdgeBundle.SetColor( ImplGetBitmapColor() );
             const bool bUpdateEdgeBundle = aTempEdgeBundle.GetIndex() == pElement->pEdgeBundle->GetIndex();

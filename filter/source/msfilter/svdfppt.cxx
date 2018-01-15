@@ -291,7 +291,7 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
     // clamp dodgy data to avoid overflow in later calculations
     rAtom.aNotesPageSize.Width() = std::min<sal_Int32>(nNoticeX, 65536);
     rAtom.aNotesPageSize.Height() = std::min<sal_Int32>(nNoticeY, 65536);
-    rAtom.eSlidesPageFormat = (PptPageFormat)nSlidePageFormat;
+    rAtom.eSlidesPageFormat = static_cast<PptPageFormat>(nSlidePageFormat);
     rAtom.bEmbeddedTrueType = nEmbeddedTrueType;
     rAtom.bTitlePlaceholdersOmitted = nTitlePlaceHoldersOmitted;
     rAtom.bRightToLeft = nRightToLeft;
@@ -810,7 +810,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 sal_Int32 nTextRotationAngle = 0;
                 if ( IsProperty( DFF_Prop_txflTextFlow ) )
                 {
-                    MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
+                    MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
                     switch( eTextFlow )
                     {
                         case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
@@ -871,7 +871,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     eTHA = SDRTEXTHORZADJUST_CENTER;
 
                     // read text anchor
-                    MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+                    MSO_Anchor eTextAnchor = static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop ));
 
                     switch( eTextAnchor )
                     {
@@ -926,7 +926,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     eTHA = SDRTEXTHORZADJUST_BLOCK;
 
                     // read text anchor
-                    MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+                    MSO_Anchor eTextAnchor = static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop ));
 
                     switch( eTextAnchor )
                     {
@@ -998,8 +998,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         rPersistEntry.pPresentationObjects.reset( new sal_uInt32[ PPT_STYLESHEETENTRYS ] );
                         memset( rPersistEntry.pPresentationObjects.get(), 0, PPT_STYLESHEETENTRYS * 4 );
                     }
-                    if ( !rPersistEntry.pPresentationObjects[ (int)nDestinationInstance ] )
-                        rPersistEntry.pPresentationObjects[ (int)nDestinationInstance ] = rObjData.rSpHd.GetRecBegFilePos();
+                    if ( !rPersistEntry.pPresentationObjects[ static_cast<int>(nDestinationInstance) ] )
+                        rPersistEntry.pPresentationObjects[ static_cast<int>(nDestinationInstance) ] = rObjData.rSpHd.GetRecBegFilePos();
                 }
                 switch ( nDestinationInstance )
                 {
@@ -1041,7 +1041,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                 }
                 SdrObject* pTObj = nullptr;
-                bool bWordWrap = (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone;
+                bool bWordWrap = static_cast<MSO_WrapMode>(GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare )) != mso_wrapNone;
                 bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0;
 
                 if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr && ( eTextKind == OBJ_RECT ) )
@@ -1286,7 +1286,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
         if ( GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ) & 0x10 )
         {
-            if ( (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ) == mso_fillBackground )
+            if ( static_cast<MSO_FillType>(GetPropertyValue( DFF_Prop_fillType, mso_fillSolid )) == mso_fillBackground )
             {
                 rData.aBackgroundColoredObjects.push_back( pRet );
             }
@@ -2609,16 +2609,16 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
                                 switch ( aTextObj.GetInstance() )
                                 {
                                     case TSS_Type::Title :
-                                        nShapePos = rPersist.pPresentationObjects[ (int)TSS_Type::PageTitle ];
+                                        nShapePos = rPersist.pPresentationObjects[ int(TSS_Type::PageTitle) ];
                                     break;
                                     case TSS_Type::PageTitle :
-                                        nShapePos = rPersist.pPresentationObjects[ (int)TSS_Type::PageTitle ];
+                                        nShapePos = rPersist.pPresentationObjects[ int(TSS_Type::PageTitle) ];
                                     break;
                                     case TSS_Type::Subtitle :
                                     case TSS_Type::HalfBody :
                                     case TSS_Type::QuarterBody :
                                     case TSS_Type::Body :
-                                        nShapePos = rPersist.pPresentationObjects[ (int)TSS_Type::Body ];
+                                        nShapePos = rPersist.pPresentationObjects[ int(TSS_Type::Body) ];
                                     break;
                                     default: break;
                                 }
@@ -3327,7 +3327,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                         while ( ( rSt.GetError() == ERRCODE_NONE ) && ( rSt.Tell() < nHdEndRecPos ) && ( i < nDepth ) )
                         {
                             bStyles = true;
-                            ReadPPTExtParaLevel( rSt, aExtParaSheet[ (TSS_Type)aHd.nRecInstance ].aExtParaLevel[ i++ ] );
+                            ReadPPTExtParaLevel( rSt, aExtParaSheet[ static_cast<TSS_Type>(aHd.nRecInstance) ].aExtParaLevel[ i++ ] );
                         }
 #ifdef DBG_UTIL
                         if ( rSt.Tell() != aHd.GetRecEndFilePos() )
@@ -4157,7 +4157,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     }
     while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < nEndRecPos ) ) //TODO: aTxMasterStyleHd may be used without having been properly initialized
     {
-        TSS_Type nInstance = (TSS_Type)aTxMasterStyleHd.nRecInstance;
+        TSS_Type nInstance = static_cast<TSS_Type>(aTxMasterStyleHd.nRecInstance);
         if ( ( nInstance <= TSS_Type::LAST ) &&
             ( ( nInstance != TSS_Type::TextInShape ) || !bFoundTxMasterStyleAtom04 ) )
         {
@@ -5648,7 +5648,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
         Color aDefColor( COL_BLACK );
         MSO_FillType eFillType = mso_fillSolid;
         if ( rManager.GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ) & 0x10 )
-            eFillType = (MSO_FillType)rManager.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
+            eFillType = static_cast<MSO_FillType>(rManager.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ));
         else
             eFillType = mso_fillBackground;
         switch( eFillType )
@@ -6662,7 +6662,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                     rIn.ReadUInt16( nTmp );   // this number tells us the TxMasterStyleAtom Instance
                     if ( nTmp > 8 )
                         nTmp = 4;
-                    TSS_Type nInstance = (TSS_Type)nTmp;
+                    TSS_Type nInstance = static_cast<TSS_Type>(nTmp);
                     aTextHd.SeekToEndOfRecord( rIn );
                     mxImplTextObj->mnInstance = nInstance;
 
@@ -7719,7 +7719,7 @@ bool SdrPowerPointImport::IsVerticalText() const
     bool bVerticalText = false;
     if ( IsProperty( DFF_Prop_txflTextFlow ) )
     {
-        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
+        MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
         switch( eTextFlow )
         {
         case mso_txflTtoBA :                    // Top to Bottom @-font, above -> below
@@ -7750,7 +7750,7 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj const & rText
         eTHA = SDRTEXTHORZADJUST_CENTER;
 
         // read text anchor
-        MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+        MSO_Anchor eTextAnchor = static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop ));
 
         switch( eTextAnchor )
         {
@@ -7802,7 +7802,7 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj const & rText
         eTHA = SDRTEXTHORZADJUST_BLOCK;
 
         // read text anchor
-        MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+        MSO_Anchor eTextAnchor = static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop ));
 
         switch( eTextAnchor )
         {

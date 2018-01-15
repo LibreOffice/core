@@ -1367,7 +1367,7 @@ GraphicObject* lclDrawHatch( const drawing::Hatch& rHatch, const Color& rBackCol
     pVDev->SetLineColor();
     pVDev->SetFillColor(bFillBackground ? rBackColor : Color(COL_TRANSPARENT));
     pVDev->DrawRect(rRect);
-    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, static_cast<sal_uInt16>(rHatch.Angle)));
+    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch(static_cast<HatchStyle>(rHatch.Style), Color(rHatch.Color), rHatch.Distance, static_cast<sal_uInt16>(rHatch.Angle)));
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
@@ -3961,7 +3961,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
                                     || pGraphicAttr->IsAdjusted() )
             {
                 SvMemoryStream aSt( sizeof( GraphicAttr ) );
-                aSt.WriteUInt16( (sal_uInt16)pGraphicAttr->GetDrawMode() )
+                aSt.WriteUInt16( static_cast<sal_uInt16>(pGraphicAttr->GetDrawMode()) )
                    .WriteUInt32( static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags()) )
                    .WriteInt32( pGraphicAttr->GetLeftCrop() )
                    .WriteInt32( pGraphicAttr->GetTopCrop() )

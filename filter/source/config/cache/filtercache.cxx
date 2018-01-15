@@ -1362,7 +1362,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     }
 
     // update fill state. Note: it's a bit field, which combines different parts.
-    m_eFillState = (EFillState) (static_cast<sal_Int32>(m_eFillState) | static_cast<sal_Int32>(eRequiredState));
+    m_eFillState = static_cast<EFillState>(static_cast<sal_Int32>(m_eFillState) | static_cast<sal_Int32>(eRequiredState));
 
     // any data readed?
     // yes! => validate it and update optimized structures.
@@ -1637,7 +1637,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
                         // int representation ...
                         css::uno::Sequence< OUString > lFlagNames;
                         if (aValues[i] >>= lFlagNames)
-                            aItem[rPropName] <<= (sal_Int32) FilterCache::impl_convertFlagNames2FlagField(lFlagNames);
+                            aItem[rPropName] <<= static_cast<sal_Int32>(FilterCache::impl_convertFlagNames2FlagField(lFlagNames));
                     }
                 }
             }

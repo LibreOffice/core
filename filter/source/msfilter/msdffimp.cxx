@@ -906,7 +906,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         sal_Int32 nLineWidth = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_lineWidth, 9525 ));
 
         // support LineCap
-        const MSO_LineCap eLineCap((MSO_LineCap)GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare));
+        const MSO_LineCap eLineCap(static_cast<MSO_LineCap>(GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare)));
 
         switch(eLineCap)
         {
@@ -928,7 +928,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             }
         }
 
-        MSO_LineDashing eLineDashing = (MSO_LineDashing)GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid );
+        MSO_LineDashing eLineDashing = static_cast<MSO_LineDashing>(GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid ));
         if (eLineDashing == mso_lineSolid || nLineWidth < 0)
             rSet.Put(XLineStyleItem( drawing::LineStyle_SOLID ) );
         else
@@ -1008,7 +1008,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         MSO_LineJoin eLineJointDefault = mso_lineJoinMiter;
         if ( eShapeType == mso_sptMin )
             eLineJointDefault = mso_lineJoinRound;
-        MSO_LineJoin eLineJoint = (MSO_LineJoin)GetPropertyValue( DFF_Prop_lineJoinStyle, eLineJointDefault );
+        MSO_LineJoin eLineJoint = static_cast<MSO_LineJoin>(GetPropertyValue( DFF_Prop_lineJoinStyle, eLineJointDefault ));
         css::drawing::LineJoint eXLineJoint( css::drawing::LineJoint_MITER );
         if ( eLineJoint == mso_lineJoinBevel )
             eXLineJoint = css::drawing::LineJoint_BEVEL;
@@ -1024,9 +1024,9 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
             if ( IsProperty( DFF_Prop_lineStartArrowhead ) )
             {
-                MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineStartArrowhead, 0 );
-                MSO_LineEndWidth    eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineStartArrowWidth, mso_lineMediumWidthArrow );
-                MSO_LineEndLength   eLength = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineStartArrowLength, mso_lineMediumLenArrow );
+                MSO_LineEnd         eLineEnd = static_cast<MSO_LineEnd>(GetPropertyValue( DFF_Prop_lineStartArrowhead, 0 ));
+                MSO_LineEndWidth    eWidth = static_cast<MSO_LineEndWidth>(GetPropertyValue( DFF_Prop_lineStartArrowWidth, mso_lineMediumWidthArrow ));
+                MSO_LineEndLength   eLength = static_cast<MSO_LineEndLength>(GetPropertyValue( DFF_Prop_lineStartArrowLength, mso_lineMediumLenArrow ));
 
                 sal_Int32   nArrowWidth;
                 bool        bArrowCenter;
@@ -1042,9 +1042,9 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
             if ( IsProperty( DFF_Prop_lineEndArrowhead ) )
             {
-                MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineEndArrowhead, 0 );
-                MSO_LineEndWidth    eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineEndArrowWidth, mso_lineMediumWidthArrow );
-                MSO_LineEndLength   eLength = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineEndArrowLength, mso_lineMediumLenArrow );
+                MSO_LineEnd         eLineEnd = static_cast<MSO_LineEnd>(GetPropertyValue( DFF_Prop_lineEndArrowhead, 0 ));
+                MSO_LineEndWidth    eWidth = static_cast<MSO_LineEndWidth>(GetPropertyValue( DFF_Prop_lineEndArrowWidth, mso_lineMediumWidthArrow ));
+                MSO_LineEndLength   eLength = static_cast<MSO_LineEndLength>(GetPropertyValue( DFF_Prop_lineEndArrowLength, mso_lineMediumLenArrow ));
 
                 sal_Int32   nArrowWidth;
                 bool        bArrowCenter;
@@ -1285,7 +1285,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
 
     if ( nFillFlags & 0x10 )
     {
-        MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
+        MSO_FillType eMSO_FillType = static_cast<MSO_FillType>(GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ));
         drawing::FillStyle eXFill = drawing::FillStyle_NONE;
         switch( eMSO_FillType )
         {
@@ -1430,7 +1430,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
 
     if ( IsProperty( DFF_Prop_txflTextFlow ) )
     {
-        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
+        MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
         switch( eTextFlow )
         {
             case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
@@ -1543,7 +1543,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( makeSdrTextUpperDistItem( nTextTop ) );
     rSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
 
-    rSet.Put( makeSdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) );
+    rSet.Put( makeSdrTextWordWrapItem( static_cast<MSO_WrapMode>(GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare )) != mso_wrapNone ) );
     rSet.Put( makeSdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0 ) );
 }
 
@@ -1593,7 +1593,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     if ( IsProperty( DFF_Prop_txflTextFlow ) || IsProperty( DFF_Prop_cdirFont ) )
     {
         sal_Int32 nTextRotateAngle = 0;
-        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
+        MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
 
         if ( eTextFlow == mso_txflBtoT )    // Bottom to Top non-@
             nTextRotateAngle += 90;
@@ -2654,7 +2654,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
                 nFillFlags &= ~0x10;
             if ( nFillFlags & 0x10 )
             {
-                MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
+                MSO_FillType eMSO_FillType = static_cast<MSO_FillType>(GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ));
                 switch( eMSO_FillType )
                 {
                     case mso_fillSolid :
@@ -3771,7 +3771,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     OUString    aLinkFileName, aLinkFilterName;
     tools::Rectangle   aVisArea;
 
-    MSO_BlipFlags eFlags = (MSO_BlipFlags)GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault );
+    MSO_BlipFlags eFlags = static_cast<MSO_BlipFlags>(GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault ));
     sal_uInt32 nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
     bool bGrfRead = false,
 
@@ -4213,7 +4213,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         rSt.ReadUInt32( aObjData.nShapeId )
            .ReadUInt32( temp );
         aObjData.nSpFlags = ShapeFlag(temp);
-        aObjData.eShapeType = (MSO_SPT)maShapeRecords.Current()->nRecInstance;
+        aObjData.eShapeType = static_cast<MSO_SPT>(maShapeRecords.Current()->nRecInstance);
     }
     else
     {
@@ -4397,7 +4397,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             ReadObjText( aObjectText, pRet );
                         }
 
-                        eGeoTextAlign = ( (MSO_GeoTextAlign)GetPropertyValue( DFF_Prop_gtextAlign, mso_alignTextCenter ) );
+                        eGeoTextAlign = static_cast<MSO_GeoTextAlign>(GetPropertyValue( DFF_Prop_gtextAlign, mso_alignTextCenter ));
                         {
                             SdrTextHorzAdjust eHorzAdjust;
                             switch( eGeoTextAlign )
@@ -4743,7 +4743,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         pRet->SetMergedItemSet(aSet);
 
                         // connectors
-                        MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
+                        MSO_ConnectorStyle eConnectorStyle = static_cast<MSO_ConnectorStyle>(GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight ));
 
                         static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(true, nullptr);
                         static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(false, nullptr);
@@ -5052,9 +5052,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         pImpRec->nShapeId   = rObjData.nShapeId;
         pImpRec->eShapeType = rObjData.eShapeType;
 
-        MSO_WrapMode eWrapMode( (MSO_WrapMode)GetPropertyValue(
+        MSO_WrapMode eWrapMode( static_cast<MSO_WrapMode>(GetPropertyValue(
                                                             DFF_Prop_WrapText,
-                                                            mso_wrapSquare ) );
+                                                            mso_wrapSquare )) );
         rObjData.bClientAnchor = maShapeRecords.SeekToContent( rSt,
                                             DFF_msofbtClientAnchor,
                                             SEEK_FROM_CURRENT_AND_RESTART );
@@ -5167,7 +5167,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             bool bVerticalText = false;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
-                MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
+                MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>(GetPropertyValue(
                     DFF_Prop_txflTextFlow, 0) & 0xFFFF);
                 switch( eTextFlow )
                 {
@@ -5277,8 +5277,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
             }
 
-            switch ( (MSO_WrapMode)
-                GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
+            switch ( static_cast<MSO_WrapMode>(GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare )) )
             {
                 case mso_wrapNone :
                     aSet.Put( makeSdrTextAutoGrowWidthItem( true ) );
@@ -5308,7 +5307,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if ( IsProperty( DFF_Prop_anchorText ) )
             {
                 MSO_Anchor eTextAnchor =
-                    (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, 0 );
+                    static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, 0 ));
 
                 SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
                 bool bTVASet(false);
@@ -5499,14 +5498,14 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
         sal_uInt32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash, 0 );
         pImpRec->eLineStyle = (nLineFlags & 8)
-                            ? (MSO_LineStyle)GetPropertyValue(
+                            ? static_cast<MSO_LineStyle>(GetPropertyValue(
                                                 DFF_Prop_lineStyle,
-                                                mso_lineSimple )
+                                                mso_lineSimple ))
                             : MSO_LineStyle_NONE;
         pTextImpRec->eLineStyle = pImpRec->eLineStyle;
 
-        pImpRec->eLineDashing = (MSO_LineDashing)GetPropertyValue(
-                DFF_Prop_lineDashing, mso_lineSolid );
+        pImpRec->eLineDashing = static_cast<MSO_LineDashing>(GetPropertyValue(
+                DFF_Prop_lineDashing, mso_lineSolid ));
         pTextImpRec->eLineDashing = pImpRec->eLineDashing;
 
         if( pImpRec->nShapeId )
@@ -6101,7 +6100,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         if( ( DFF_msofbtSp == nFbt ) && ( 4 <= nLength ) )
         {
             // we've found the FSP: note Shape Type and Id!
-            eShapeType = (MSO_SPT)nInst;
+            eShapeType = static_cast<MSO_SPT>(nInst);
             rSt.ReadUInt32( aInfo.nShapeId );
             rSt.SeekRel( nLength - 4 );
             nReadSpCont += nLength;
