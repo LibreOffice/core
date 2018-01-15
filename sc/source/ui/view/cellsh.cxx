@@ -1185,6 +1185,19 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
+            case FID_DEFINE_CURRENT_NAME:
+            {
+                ScAddress aCurrentAddress = ScAddress( nPosX, nPosY, nTab );
+
+                if ( pDoc &&
+                     !pDoc->IsAddressInRangeName( RangeNameScope::GLOBAL, aCurrentAddress ) &&
+                     !pDoc->IsAddressInRangeName( RangeNameScope::SHEET, aCurrentAddress ))
+                {
+                    rSet.DisableItem( nWhich );
+                }
+            }
+            break;
+
             case SID_SPELL_DIALOG:
                 {
                     if ( pDoc && pData && pDoc->IsTabProtected( pData->GetTabNo() ) )

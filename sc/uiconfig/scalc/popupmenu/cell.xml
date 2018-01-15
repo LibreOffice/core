@@ -40,4 +40,5 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:DataSelect"/>
   <menu:menuitem menu:id=".uno:CurrentValidation"/>
+  <menu:menuitem menu:id=".uno:DefineCurrentName"/>
 </menu:menupopup>
