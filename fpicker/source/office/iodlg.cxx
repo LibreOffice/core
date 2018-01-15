@@ -596,7 +596,6 @@ void SvtFileDialog::Init_Impl
     bool bSaveMode = ( FILEDLG_MODE_SAVE == pImpl->_eMode );
     pImpl->_pEdFileName->SetNoURLSelection( bSaveMode );
 
-    pImpl->_pBtnNewFolder->SetStyle( pImpl->_pBtnNewFolder->GetStyle() | WB_NOPOINTERFOCUS );
     pImpl->_pBtnUp->SetAccessibleName( pImpl->_pBtnUp->GetQuickHelpText() );
 
     if ( nStyle & PickerFlags::MultiSelection )

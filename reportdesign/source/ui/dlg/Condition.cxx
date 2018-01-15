@@ -146,11 +146,6 @@ Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction,
     m_pAddCondition->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
     m_pRemoveCondition->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
 
-    m_pMoveUp->SetStyle( m_pMoveUp->GetStyle() | WB_NOPOINTERFOCUS );
-    m_pMoveDown->SetStyle( m_pMoveDown->GetStyle() | WB_NOPOINTERFOCUS );
-    m_pAddCondition->SetStyle( m_pAddCondition->GetStyle() | WB_NOPOINTERFOCUS );
-    m_pRemoveCondition->SetStyle( m_pRemoveCondition->GetStyle() | WB_NOPOINTERFOCUS );
-
     vcl::Font aFont( m_pAddCondition->GetFont() );
     aFont.SetWeight( WEIGHT_BOLD );
     m_pAddCondition->SetFont( aFont );
