@@ -315,7 +315,7 @@ void SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         SbxFlagBits nFlags = static_cast<SbxFlagBits>(nFlagsTmp);
         if( nVer > 1 )
             rStrm.ReadUInt32( nUserData );
-        AddParam( aName, (SbxDataType) nType, nFlags );
+        AddParam( aName, static_cast<SbxDataType>(nType), nFlags );
         SbxParamInfo& p(*m_Params.back());
         p.nUserData = nUserData;
     }

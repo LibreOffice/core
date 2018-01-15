@@ -89,7 +89,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
         pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE1" );
 #endif
     GenStmnt();
-    aCode += (sal_uInt8) eOpcode;
+    aCode += static_cast<sal_uInt8>(eOpcode);
     return GetPC();
 }
 
@@ -103,7 +103,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd )
         pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE2" );
 #endif
     GenStmnt();
-    aCode += (sal_uInt8) eOpcode;
+    aCode += static_cast<sal_uInt8>(eOpcode);
     sal_uInt32 n = GetPC();
     aCode += nOpnd;
     return n;
@@ -119,7 +119,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOp
         pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE3" );
 #endif
     GenStmnt();
-    aCode += (sal_uInt8) eOpcode;
+    aCode += static_cast<sal_uInt8>(eOpcode);
     sal_uInt32 n = GetPC();
     aCode += nOpnd1;
     aCode += nOpnd2;
@@ -306,11 +306,11 @@ void SbiCodeGen::Save()
                         SbxDataType t = pPar->GetType();
                         if( !pPar->IsByVal() )
                         {
-                            t = (SbxDataType) ( t | SbxBYREF );
+                            t = static_cast<SbxDataType>( t | SbxBYREF );
                         }
                         if( pPar->GetDims() )
                         {
-                            t = (SbxDataType) ( t | SbxARRAY );
+                            t = static_cast<SbxDataType>( t | SbxARRAY );
                         }
                         // #33677 hand-over an Optional-Info
                         SbxFlagBits nFlags = SbxFlagBits::Read;
@@ -428,7 +428,7 @@ public:
         T nOp1 = 0, nOp2 = 0;
         for( ; pCode < pEnd; )
         {
-            SbiOpcode eOp = (SbiOpcode)(*pCode++);
+            SbiOpcode eOp = static_cast<SbiOpcode>(*pCode++);
 
             if ( eOp <= SbiOpcode::SbOP0_END )
                 visitor.processOpCode0( eOp );
@@ -498,11 +498,11 @@ public:
     virtual void start( const sal_uInt8* pStart ) override { m_pStart = pStart; }
     virtual void processOpCode0( SbiOpcode eOp ) override
     {
-        m_ConvertedBuf += (sal_uInt8)eOp;
+        m_ConvertedBuf += static_cast<sal_uInt8>(eOp);
     }
     virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) override
     {
-        m_ConvertedBuf += (sal_uInt8)eOp;
+        m_ConvertedBuf += static_cast<sal_uInt8>(eOp);
         switch( eOp )
         {
             case SbiOpcode::JUMP_:
@@ -527,7 +527,7 @@ public:
     }
     virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) override
     {
-        m_ConvertedBuf += (sal_uInt8)eOp;
+        m_ConvertedBuf += static_cast<sal_uInt8>(eOp);
         if ( eOp == SbiOpcode::CASEIS_ )
                 if ( nOp1 )
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );

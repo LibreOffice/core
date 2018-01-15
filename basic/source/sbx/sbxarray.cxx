@@ -84,7 +84,7 @@ SbxArray::~SbxArray()
 
 SbxDataType SbxArray::GetType() const
 {
-    return (SbxDataType) ( eType | SbxARRAY );
+    return static_cast<SbxDataType>( eType | SbxARRAY );
 }
 
 SbxClassType SbxArray::GetClass() const

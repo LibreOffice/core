@@ -215,7 +215,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
         "basic.sbx",
         "search" << std::setw(nLvl) << " "
             << (t >= SbxClassType::DontCare && t <= SbxClassType::Object
-                ? pCls[(int)t - 1] : "Unknown class")
+                ? pCls[static_cast<int>(t) - 1] : "Unknown class")
             << " " << rName << " in " << SbxVariable::GetName());
     ++nLvl;
 #endif
@@ -470,7 +470,7 @@ void SbxObject::Insert( SbxVariable* pVar )
             "insert "
                 << ((pVar->GetClass() >= SbxClassType::DontCare
                      && pVar->GetClass() <= SbxClassType::Object)
-                    ? pCls[(int)pVar->GetClass() - 1] : "Unknown class")
+                    ? pCls[static_cast<int>(pVar->GetClass()) - 1] : "Unknown class")
                 << " " << aVarName << " in " << SbxVariable::GetName());
 #endif
     }
@@ -514,7 +514,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
             "insert "
                 << ((pVar->GetClass() >= SbxClassType::DontCare
                      && pVar->GetClass() <= SbxClassType::Object)
-                    ? pCls[(int)pVar->GetClass() - 1] : "Unknown class")
+                    ? pCls[static_cast<int>(pVar->GetClass()) - 1] : "Unknown class")
                 << " " << aVarName << " in " << SbxVariable::GetName());
 #endif
     }

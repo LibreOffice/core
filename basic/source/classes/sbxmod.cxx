@@ -1451,7 +1451,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
     sal_uInt32 nPC = static_cast<sal_uInt32>( p - reinterpret_cast<const sal_uInt8*>(pImage->GetCode()) );
     while( nPC < pImage->GetCodeSize() )
     {
-        SbiOpcode eOp = (SbiOpcode ) ( *p++ );
+        SbiOpcode eOp = static_cast<SbiOpcode>( *p++ );
         nPC++;
         if( bFollowJumps && eOp == SbiOpcode::JUMP_ && pImg )
         {
