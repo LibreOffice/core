@@ -146,7 +146,7 @@ bool LOKInteractionHandler::handleIOException(const css::uno::Sequence<css::uno:
     if (!(rRequest >>= aIoException))
         return false;
 
-    static ErrCode const aErrorCode[(int)ucb::IOErrorCode_WRONG_VERSION + 1] =
+    static ErrCode const aErrorCode[int(ucb::IOErrorCode_WRONG_VERSION) + 1] =
     {
         ERRCODE_IO_ABORT,
         ERRCODE_IO_ACCESSDENIED,
@@ -186,7 +186,7 @@ bool LOKInteractionHandler::handleIOException(const css::uno::Sequence<css::uno:
         ERRCODE_IO_WRONGVERSION,
     };
 
-    postError(aIoException.Classification, "io", aErrorCode[(int)aIoException.Code], "");
+    postError(aIoException.Classification, "io", aErrorCode[static_cast<int>(aIoException.Code)], "");
     selectApproved(rContinuations);
 
     return true;
