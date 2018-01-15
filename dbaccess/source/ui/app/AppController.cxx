@@ -1871,14 +1871,14 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
 
 IMPL_LINK( OApplicationController, OnSelectContainer, void*, _pType, void )
 {
-    ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
+    ElementType eType = static_cast<ElementType>(reinterpret_cast< sal_IntPtr >( _pType ));
     if (getContainer())
         getContainer()->selectContainer(eType);
 }
 
 IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType, void )
 {
-    ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
+    ElementType eType = static_cast<ElementType>(reinterpret_cast< sal_IntPtr >( _pType ));
     newElementWithPilot( eType );
 }
 

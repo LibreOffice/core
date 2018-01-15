@@ -127,7 +127,7 @@ namespace dbaui
             _rStr.WriteInt32( pFieldDesc->GetScale() );
             _rStr.WriteInt32( pFieldDesc->GetIsNullable() );
             _rStr.WriteInt32( pFieldDesc->GetFormatKey() );
-            _rStr.WriteInt32( (sal_Int32)pFieldDesc->GetHorJustify() );
+            _rStr.WriteInt32( static_cast<sal_Int32>(pFieldDesc->GetHorJustify()) );
             _rStr.WriteInt32( pFieldDesc->IsAutoIncrement() ? 1 : 0 );
             _rStr.WriteInt32( pFieldDesc->IsPrimaryKey() ? 1 : 0 );
             _rStr.WriteInt32( pFieldDesc->IsCurrency() ? 1 : 0 );
@@ -179,7 +179,7 @@ namespace dbaui
             _rStr.ReadInt32( nValue );
             pFieldDesc->SetFormatKey(nValue);
             _rStr.ReadInt32( nValue );
-            pFieldDesc->SetHorJustify((SvxCellHorJustify)nValue);
+            pFieldDesc->SetHorJustify(static_cast<SvxCellHorJustify>(nValue));
 
             _rStr.ReadInt32( nValue );
             pFieldDesc->SetAutoIncrement(nValue != 0);
