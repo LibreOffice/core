@@ -54,8 +54,6 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 #define EXCHG_IN_ACTION_MOVE                    (sal_uInt8(css::datatransfer::dnd::DNDConstants::ACTION_MOVE))
 #define EXCHG_IN_ACTION_COPY                    (sal_uInt8(css::datatransfer::dnd::DNDConstants::ACTION_COPY))
 #define EXCHG_IN_ACTION_LINK                    (sal_uInt8(css::datatransfer::dnd::DNDConstants::ACTION_LINK))
-#define EXCHG_OUT_ACTION_INSERT_OBJ             ((sal_uInt8)17)
-#define EXCHG_OUT_ACTION_INSERT_BOOKMARK        ((sal_uInt8)18)
 #define EXCHG_OUT_ACTION_INSERT_FILE            (sal_uInt8(20))
 #define EXCHG_OUT_ACTION_INSERT_IMAGEMAP        (sal_uInt8(22))
 #define EXCHG_OUT_ACTION_INSERT_OLE             (sal_uInt8(23))
