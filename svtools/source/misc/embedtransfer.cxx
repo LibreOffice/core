@@ -59,11 +59,6 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
 
 SvEmbedTransferHelper::~SvEmbedTransferHelper()
 {
-    if ( m_pGraphic )
-    {
-        delete m_pGraphic;
-        m_pGraphic = nullptr;
-    }
 }
 
 void SvEmbedTransferHelper::SetParentShellID( const OUString& rShellID )
@@ -95,7 +90,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                 if( nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
                 {
                     TransferableObjectDescriptor aDesc;
-                    FillTransferableObjectDescriptor( aDesc, m_xObj, m_pGraphic, m_nAspect );
+                    FillTransferableObjectDescriptor( aDesc, m_xObj, m_pGraphic.get(), m_nAspect );
                     bRet = SetTransferableObjectDescriptor( aDesc );
                 }
                 else if( nFormat == SotClipboardFormatId::EMBED_SOURCE )
