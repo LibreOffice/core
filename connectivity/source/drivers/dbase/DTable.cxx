@@ -236,7 +236,7 @@ void ODbaseTable::readHeader()
     else
     {
         // Consistency check of the header:
-        m_aHeader.type = (DBFType)nType;
+        m_aHeader.type = static_cast<DBFType>(nType);
         switch (m_aHeader.type)
         {
             case dBaseIII:

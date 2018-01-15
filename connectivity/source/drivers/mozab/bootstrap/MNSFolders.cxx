@@ -95,7 +95,7 @@ namespace
 
     OUString const & lcl_guessProfileRoot( MozillaProductType _product )
     {
-        size_t productIndex = (int)_product - 1;
+        size_t productIndex = static_cast<int>(_product) - 1;
 
         static OUString s_productDirectories[NB_PRODUCTS];
 
