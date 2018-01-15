@@ -1831,7 +1831,7 @@ double SAL_CALL ScCellRangesBase::computeFunction( sheet::GeneralFunction nFunct
 
     ScAddress aDummy;                   // if not marked, ignored if it is negative
     double fVal;
-    ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc((ScGeneralFunction)nFunction);
+    ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(nFunction));
     ScDocument& rDoc = pDocShell->GetDocument();
     if ( !rDoc.GetSelectionFunction( eFunc, aDummy, aMark, fVal ) )
     {
@@ -6436,7 +6436,7 @@ sal_Int32 SAL_CALL ScCellObj::getError()
     if (aCell.meType == CELLTYPE_FORMULA)
         nError = aCell.mpFormula->GetErrCode();
 
-    return (sal_Int32)nError;
+    return static_cast<sal_Int32>(nError);
 }
 
 // XFormulaTokens

@@ -71,7 +71,7 @@ static void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument
             if ( aPropName == "CellRangeRepresentation" )
                 rProp.Value >>= rRanges;
             else if ( aPropName == "DataRowSource" )
-                rDataRowSource = (chart::ChartDataRowSource)ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
+                rDataRowSource = static_cast<chart::ChartDataRowSource>(ScUnoHelpFunctions::GetEnumFromAny( rProp.Value ));
             else if ( aPropName == "HasCategories" )
                 rHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
             else if ( aPropName == "FirstCellAsLabel" )

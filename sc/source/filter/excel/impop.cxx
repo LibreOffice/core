@@ -1188,7 +1188,7 @@ void ImportExcel::Bof5()
     }
 
     if( nVers == 0x0600 && (GetBiff() == EXC_BIFF8) )
-        eDatei = ( BiffTyp ) ( eDatei - Biff5 + Biff8 );
+        eDatei = static_cast<BiffTyp>( eDatei - Biff5 + Biff8 );
 
     pExcRoot->eDateiTyp = eDatei;
 }

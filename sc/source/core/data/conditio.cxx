@@ -1421,7 +1421,7 @@ ScFormatEntry* ScConditionEntry::Clone(ScDocument* pDoc) const
 ScConditionMode ScConditionEntry::GetModeFromApi(css::sheet::ConditionOperator nOperation)
 {
     ScConditionMode eMode = ScConditionMode::NONE;
-    switch ((sal_Int32)nOperation)
+    switch (static_cast<sal_Int32>(nOperation))
     {
         case css::sheet::ConditionOperator2::EQUAL:
             eMode = ScConditionMode::Equal;

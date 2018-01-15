@@ -875,7 +875,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
             else
             {
                 FormulaError nErr = GetDoubleErrorValue( pMat->GetDouble(0,0));
-                SAL_WARN("sc.ui","ScExternalRefCache::setCellRangeData - matrix error value is " << (int)nErr <<
+                SAL_WARN("sc.ui","ScExternalRefCache::setCellRangeData - matrix error value is " << static_cast<int>(nErr) <<
                         (nErr == FormulaError::MatrixSize ? ", ok" : ", not ok"));
             }
         }

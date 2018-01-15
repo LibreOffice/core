@@ -2215,7 +2215,7 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
             lcl_RowAbsFlagDiffer( nFlags ))
         {
             // move flags of end reference to start reference, mask with BITS to exclude FORCE_DOC flag
-            nFlags = ScRefFlags::VALID | (ScRefFlags((std::underlying_type<ScRefFlags>::type)nFlags >> 4) & ScRefFlags::BITS);
+            nFlags = ScRefFlags::VALID | (ScRefFlags(static_cast<std::underlying_type<ScRefFlags>::type>(nFlags) >> 4) & ScRefFlags::BITS);
             if ( bOneTab )
                 pDoc = nullptr;
             else

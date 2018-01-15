@@ -2310,7 +2310,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
         FormulaError nErr = m_pDoc->GetErrCode(ScAddress(4,i,1));
-        CPPUNIT_ASSERT_EQUAL((sal_uInt16)FormulaError::NONE, (sal_uInt16)nErr);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(FormulaError::NONE), static_cast<sal_uInt16>(nErr));
         double fVal = m_pDoc->GetValue(ScAddress(4,i,1));
         CPPUNIT_ASSERT_EQUAL(aChecks[i].mfResult, fVal);
     }

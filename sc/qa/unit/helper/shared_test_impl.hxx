@@ -263,7 +263,7 @@ void testFunctionsExcel2010_Impl( ScDocument& rDoc )
 
             ScFormulaCell* pFC = rDoc.GetFormulaCell( ScAddress( 1, nRow, 0) );
             if ( pFC && pFC->GetErrCode() != FormulaError::NONE )
-                aStr += ", error code =" + OString::number( (int)pFC->GetErrCode() );
+                aStr += ", error code =" + OString::number( static_cast<int>(pFC->GetErrCode()) );
 
             CPPUNIT_ASSERT_MESSAGE( OString( "Expected a formula cell without error at row " +
                     aStr ).getStr(), isFormulaWithoutError( rDoc, ScAddress( 1, nRow, 0)));

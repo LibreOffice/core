@@ -832,7 +832,7 @@ bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
 
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl, ListBox&, void)
 {
-    ScValidErrorStyle eStyle = (ScValidErrorStyle) m_pLbAction->GetSelectedEntryPos();
+    ScValidErrorStyle eStyle = static_cast<ScValidErrorStyle>(m_pLbAction->GetSelectedEntryPos());
     bool bMacro = ( eStyle == SC_VALERR_MACRO );
 
     m_pBtnSearch->Enable( bMacro );

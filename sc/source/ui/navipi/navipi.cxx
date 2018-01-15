@@ -556,7 +556,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     aLbEntries->SetNavigatorDlgFlag(true);
 
     // if scenario was active, switch on
-    NavListMode eNavMode = (NavListMode) rCfg.GetListMode();
+    NavListMode eNavMode = static_cast<NavListMode>(rCfg.GetListMode());
     if (eNavMode == NAV_LMODE_SCENARIOS)
         aTbxCmd->CheckItem(nScenarioId);
     else

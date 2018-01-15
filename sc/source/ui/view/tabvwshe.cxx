@@ -121,7 +121,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                                 sal_uInt16 nMode )
 {
-    SvxLinkInsertMode eMode = (SvxLinkInsertMode) nMode;
+    SvxLinkInsertMode eMode = static_cast<SvxLinkInsertMode>(nMode);
     bool bAsText = ( eMode != HLINK_BUTTON );       // default is now text
 
     if ( bAsText )

@@ -263,7 +263,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         if ( rProp.Name == SC_UNONAME_OPERATOR )
         {
             sal_Int32 eOper = ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-            aEntry.meMode = ScConditionEntry::GetModeFromApi( (sheet::ConditionOperator)eOper );
+            aEntry.meMode = ScConditionEntry::GetModeFromApi( static_cast<sheet::ConditionOperator>(eOper) );
         }
         else if ( rProp.Name == SC_UNONAME_FORMULA1 )
         {
@@ -521,7 +521,7 @@ sal_Int32 SAL_CALL ScTableConditionalEntry::getConditionOperator()
 void SAL_CALL ScTableConditionalEntry::setConditionOperator( sal_Int32 nOperator )
 {
     SolarMutexGuard aGuard;
-    aData.meMode = ScConditionEntry::GetModeFromApi( (sheet::ConditionOperator)nOperator );
+    aData.meMode = ScConditionEntry::GetModeFromApi( static_cast<sheet::ConditionOperator>(nOperator) );
 }
 
 OUString SAL_CALL ScTableConditionalEntry::getFormula1()
@@ -625,7 +625,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
     FormulaGrammar::Grammar eGrammar1 = lclResolveGrammar( eGrammar, meGrammar1 );
     FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, meGrammar2 );
 
-    ScValidationData* pRet = new ScValidationData( (ScValidationMode)nValMode,
+    ScValidationData* pRet = new ScValidationData( static_cast<ScValidationMode>(nValMode),
                                                    nMode,
                                                    aExpr1, aExpr2, pDoc, aSrcPos,
                                                    maExprNmsp1, maExprNmsp2,
@@ -651,7 +651,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
     pRet->SetInput( aInputTitle, aInputMessage );
     if (!bShowInput)
         pRet->ResetInput();
-    pRet->SetError( aErrorTitle, aErrorMessage, (ScValidErrorStyle)nErrorStyle );
+    pRet->SetError( aErrorTitle, aErrorMessage, static_cast<ScValidErrorStyle>(nErrorStyle) );
     if (!bShowError)
         pRet->ResetError();
 
@@ -709,7 +709,7 @@ sal_Int32 SAL_CALL ScTableValidationObj::getConditionOperator()
 void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
 {
     SolarMutexGuard aGuard;
-    nMode = ScConditionEntry::GetModeFromApi( (css::sheet::ConditionOperator)nOperator );
+    nMode = ScConditionEntry::GetModeFromApi( static_cast<css::sheet::ConditionOperator>(nOperator) );
 }
 
 OUString SAL_CALL ScTableValidationObj::getFormula1()
@@ -827,8 +827,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
     else if ( aPropertyName == SC_UNONAME_TYPE )
     {
-        sheet::ValidationType eType = (sheet::ValidationType)
-                                ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        sheet::ValidationType eType = static_cast<sheet::ValidationType>(ScUnoHelpFunctions::GetEnumFromAny( aValue ));
         switch (eType)
         {
             case sheet::ValidationType_ANY:      nValMode = SC_VALID_ANY;     break;
@@ -847,8 +846,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
     else if ( aPropertyName == SC_UNONAME_ERRALSTY )
     {
-        sheet::ValidationAlertStyle eStyle = (sheet::ValidationAlertStyle)
-                                ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        sheet::ValidationAlertStyle eStyle = static_cast<sheet::ValidationAlertStyle>(ScUnoHelpFunctions::GetEnumFromAny( aValue ));
         switch (eStyle)
         {
             case sheet::ValidationAlertStyle_STOP:    nErrorStyle = SC_VALERR_STOP;    break;

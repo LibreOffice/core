@@ -176,11 +176,11 @@ namespace o3tl
 }
 inline void applyStartToEndFlags(ScRefFlags &target,const ScRefFlags source)
 {
-    target |= ScRefFlags((std::underlying_type<ScRefFlags>::type)source << 4);
+    target |= ScRefFlags(static_cast<std::underlying_type<ScRefFlags>::type>(source) << 4);
 }
 inline void applyStartToEndFlags(ScRefFlags &target)
 {
-    target |= ScRefFlags((std::underlying_type<ScRefFlags>::type)target << 4);
+    target |= ScRefFlags(static_cast<std::underlying_type<ScRefFlags>::type>(target) << 4);
 }
 
 //  ScAddress

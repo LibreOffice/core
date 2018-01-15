@@ -358,7 +358,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     for ( SCSIZE i=0; i<3; i++ )
     {
         const sal_Int32 nField = aFieldLbArr[i]->GetSelectedEntryPos();
-        ScQueryOp   eOp     = (ScQueryOp)aCondLbArr[i]->GetSelectedEntryPos();
+        ScQueryOp   eOp     = static_cast<ScQueryOp>(aCondLbArr[i]->GetSelectedEntryPos());
 
         bool bDoThis = (aFieldLbArr[i]->GetSelectedEntryPos() != 0);
         theParam.GetEntry(i).bDoQuery = bDoThis;
@@ -399,10 +399,10 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     }
 
     theParam.GetEntry(1).eConnect = (nConnect1 != LISTBOX_ENTRY_NOTFOUND)
-                                    ? (ScQueryConnect)nConnect1
+                                    ? static_cast<ScQueryConnect>(nConnect1)
                                     : SC_AND;
     theParam.GetEntry(2).eConnect = (nConnect2 != LISTBOX_ENTRY_NOTFOUND)
-                                    ? (ScQueryConnect)nConnect2
+                                    ? static_cast<ScQueryConnect>(nConnect2)
                                     : SC_AND;
 
     theParam.bInplace   = false;

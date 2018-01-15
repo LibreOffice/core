@@ -1765,7 +1765,7 @@ void ScViewData::ResetEditView()
         {
             if (bEditActive[i])
             {
-                lcl_LOKRemoveWindow(GetViewShell(), (ScSplitPos)i);
+                lcl_LOKRemoveWindow(GetViewShell(), static_cast<ScSplitPos>(i));
                 pEngine = pEditView[i]->GetEditEngine();
                 pEngine->RemoveView(pEditView[i]);
                 pEditView[i]->SetOutputArea( tools::Rectangle() );
@@ -2749,8 +2749,8 @@ void ScViewData::ReadUserData(const OUString& rData)
         {
             maTabData[nPos]->nCurX = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0,cTabSep).toInt32()));
             maTabData[nPos]->nCurY = SanitizeRow( aTabOpt.getToken(1,cTabSep).toInt32());
-            maTabData[nPos]->eHSplitMode = (ScSplitMode) aTabOpt.getToken(2,cTabSep).toInt32();
-            maTabData[nPos]->eVSplitMode = (ScSplitMode) aTabOpt.getToken(3,cTabSep).toInt32();
+            maTabData[nPos]->eHSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(2,cTabSep).toInt32());
+            maTabData[nPos]->eVSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(3,cTabSep).toInt32());
 
             if ( maTabData[nPos]->eHSplitMode == SC_SPLIT_FIX )
             {
@@ -2768,7 +2768,7 @@ void ScViewData::ReadUserData(const OUString& rData)
             else
                 maTabData[nPos]->nVSplitPos = aTabOpt.getToken(5,cTabSep).toInt32();
 
-            maTabData[nPos]->eWhichActive = (ScSplitPos) aTabOpt.getToken(6,cTabSep).toInt32();
+            maTabData[nPos]->eWhichActive = static_cast<ScSplitPos>(aTabOpt.getToken(6,cTabSep).toInt32());
             maTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(7,cTabSep).toInt32()));
             maTabData[nPos]->nPosX[1] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(8,cTabSep).toInt32()));
             maTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.getToken(9,cTabSep).toInt32());

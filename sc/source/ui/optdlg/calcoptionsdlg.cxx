@@ -143,7 +143,7 @@ IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, Button*, pCheckBox, void )
 
 IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox&, rConv, void )
 {
-    maConfig.meStringConversion = (ScCalcConfig::StringConversion)rConv.GetSelectedEntryPos();
+    maConfig.meStringConversion = static_cast<ScCalcConfig::StringConversion>(rConv.GetSelectedEntryPos());
     CoupleEmptyAsZeroToStringConversion();
 }
 

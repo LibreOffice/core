@@ -306,7 +306,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     }
     else if (aPropertyName == SC_UNONAME_METRIC)
     {
-        aAppOpt.SetAppMetric( (FieldUnit) ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
+        aAppOpt.SetAppMetric( static_cast<FieldUnit>(ScUnoHelpFunctions::GetInt16FromAny( aValue )) );
         bSaveApp = true;
     }
     else if (aPropertyName == SC_UNONAME_MOVEDIR)

@@ -408,7 +408,7 @@ void ScModule::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
                 {
-                    FieldUnit eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    FieldUnit eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
                     switch( eUnit )
                     {
                         case FUNIT_MM:      // Just the units that are also in the dialog
@@ -952,7 +952,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     if (rOptSet.HasItem(SID_ATTR_METRIC, &pItem))
     {
         PutItem( *pItem );
-        pAppCfg->SetAppMetric( (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
+        pAppCfg->SetAppMetric( static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue()) );
         bSaveAppOptions = true;
     }
 

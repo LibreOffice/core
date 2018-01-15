@@ -1045,7 +1045,7 @@ void Test::testValueIterator()
         {
             CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
             CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos], fVal);
-            CPPUNIT_ASSERT_EQUAL(0, (int)nErr);
+            CPPUNIT_ASSERT_EQUAL(0, static_cast<int>(nErr));
         }
     }
 
@@ -1667,7 +1667,7 @@ struct AllZeroMatrix
 {
     void operator() (SCSIZE /*nCol*/, SCSIZE /*nRow*/, const ScMatrixValue& rVal) const
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of numeric type", (int)ScMatValType::Value, (int)rVal.nType);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of numeric type", int(ScMatValType::Value), static_cast<int>(rVal.nType));
         ASSERT_DOUBLES_EQUAL_MESSAGE("element value must be zero", 0.0, rVal.fVal);
     }
 };
@@ -1676,7 +1676,7 @@ struct PartiallyFilledZeroMatrix
 {
     void operator() (SCSIZE nCol, SCSIZE nRow, const ScMatrixValue& rVal) const
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of numeric type", (int)ScMatValType::Value, (int)rVal.nType);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of numeric type", int(ScMatValType::Value), static_cast<int>(rVal.nType));
         if (1 <= nCol && nCol <= 2 && 2 <= nRow && nRow <= 8)
         {
             ASSERT_DOUBLES_EQUAL_MESSAGE("element value must be 3.0", 3.0, rVal.fVal);
@@ -1692,7 +1692,7 @@ struct AllEmptyMatrix
 {
     void operator() (SCSIZE /*nCol*/, SCSIZE /*nRow*/, const ScMatrixValue& rVal) const
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty type", (int)ScMatValType::Empty, (int)rVal.nType);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty type", int(ScMatValType::Empty), static_cast<int>(rVal.nType));
         ASSERT_DOUBLES_EQUAL_MESSAGE("value of \"empty\" element is expected to be zero", 0.0, rVal.fVal);
     }
 };
@@ -1703,27 +1703,27 @@ struct PartiallyFilledEmptyMatrix
     {
         if (nCol == 1 && nRow == 1)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of boolean type", (int)ScMatValType::Boolean, (int)rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of boolean type", int(ScMatValType::Boolean), static_cast<int>(rVal.nType));
             ASSERT_DOUBLES_EQUAL_MESSAGE("element value is not what is expected", 1.0, rVal.fVal);
         }
         else if (nCol == 4 && nRow == 5)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of value type", (int)ScMatValType::Value, (int)rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of value type", int(ScMatValType::Value), static_cast<int>(rVal.nType));
             ASSERT_DOUBLES_EQUAL_MESSAGE("element value is not what is expected", -12.5, rVal.fVal);
         }
         else if (nCol == 8 && nRow == 2)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of value type", (int)ScMatValType::String, (int)rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of value type", int(ScMatValType::String), static_cast<int>(rVal.nType));
             CPPUNIT_ASSERT_EQUAL_MESSAGE("element value is not what is expected", OUString("Test"), rVal.aStr.getString());
         }
         else if (nCol == 8 && nRow == 11)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty path type", (int)ScMatValType::EmptyPath, (int)rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty path type", int(ScMatValType::EmptyPath), static_cast<int>(rVal.nType));
             ASSERT_DOUBLES_EQUAL_MESSAGE("value of \"empty\" element is expected to be zero", 0.0, rVal.fVal);
         }
         else
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty type", (int)ScMatValType::Empty, (int)rVal.nType);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("element is not of empty type", int(ScMatValType::Empty), static_cast<int>(rVal.nType));
             ASSERT_DOUBLES_EQUAL_MESSAGE("value of \"empty\" element is expected to be zero", 0.0, rVal.fVal);
         }
     }
@@ -6512,7 +6512,7 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetCellCount() );
     CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetFormulaGroupCount() );
     CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetCodeCount() );
-    CPPUNIT_ASSERT_EQUAL( (int)CharCompressType::NONE, (int)m_pDoc->GetAsianCompression() );
+    CPPUNIT_ASSERT_EQUAL( int(CharCompressType::NONE), static_cast<int>(m_pDoc->GetAsianCompression()) );
 
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasPrintRange() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInVBAMode() );

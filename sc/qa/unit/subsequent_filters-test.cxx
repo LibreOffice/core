@@ -1009,7 +1009,7 @@ struct Border
     column(col), row(r), leftWidth(lW), topWidth(tW), rightWidth(rW), bottomWidth(bW), lOutWidth(lOutW), lInWidth(lInW), lDistance(lDist),
     tOutWidth(tOutW), tInWidth(tInW), tDistance(tDist), rOutWidth(rOutW), rInWidth(rInW), rDistance(rDist), bOutWidth(bOutW), bInWidth(bInW),
     bDistance(bDist),
-    lStyle((SvxBorderLineStyle)lSt), tStyle((SvxBorderLineStyle)tSt), rStyle((SvxBorderLineStyle)rSt), bStyle((SvxBorderLineStyle)bSt) {};
+    lStyle(static_cast<SvxBorderLineStyle>(lSt)), tStyle(static_cast<SvxBorderLineStyle>(tSt)), rStyle(static_cast<SvxBorderLineStyle>(rSt)), bStyle(static_cast<SvxBorderLineStyle>(bSt)) {};
 };
 
 void ScFiltersTest::testBordersOoo33()
@@ -3179,7 +3179,7 @@ void ScFiltersTest::testVBAUserFunctionXLSM()
 
     // Check the formula state after the load.
     FormulaError nErrCode = pFC->GetErrCode();
-    CPPUNIT_ASSERT_EQUAL(0, (int)nErrCode);
+    CPPUNIT_ASSERT_EQUAL(0, static_cast<int>(nErrCode));
 
     // Check the result.
     CPPUNIT_ASSERT_EQUAL(42.0, rDoc.GetValue(ScAddress(0,0,0)));
@@ -3223,7 +3223,7 @@ void ScFiltersTest::testErrorOnExternalReferences()
 
     ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,0,0));
     CPPUNIT_ASSERT(pFC);
-    CPPUNIT_ASSERT_EQUAL((int)FormulaError::NoName, (int)pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoName), static_cast<int>(pFC->GetErrCode()));
 
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A", "Formula changed");
 

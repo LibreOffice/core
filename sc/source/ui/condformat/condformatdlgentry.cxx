@@ -480,7 +480,7 @@ void StyleSelect( ListBox& rLbStyle, const ScDocument* pDoc, SvxFontPrevWindow& 
     if(rLbStyle.GetSelectedEntryPos() == 0)
     {
         // call new style dialog
-        SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, (sal_uInt16) SfxStyleFamily::Para );
+        SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Para) );
         SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
         // unlock the dispatcher so SID_STYLE_NEW can be executed

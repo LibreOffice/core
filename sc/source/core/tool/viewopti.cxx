@@ -399,7 +399,7 @@ ScViewCfg::ScViewCfg() :
                             //#i80528# adapt to new range eventually
                             if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
-                            SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode)nIntVal);
+                            SetObjMode( VOBJ_TYPE_OLE, static_cast<ScVObjMode>(nIntVal));
                         }
                         break;
                     case SCDISPLAYOPT_CHART:
@@ -408,7 +408,7 @@ ScViewCfg::ScViewCfg() :
                             //#i80528# adapt to new range eventually
                             if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
-                            SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode)nIntVal);
+                            SetObjMode( VOBJ_TYPE_CHART, static_cast<ScVObjMode>(nIntVal));
                         }
                         break;
                     case SCDISPLAYOPT_DRAWING:
@@ -417,7 +417,7 @@ ScViewCfg::ScViewCfg() :
                             //#i80528# adapt to new range eventually
                             if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
-                            SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode)nIntVal);
+                            SetObjMode( VOBJ_TYPE_DRAW, static_cast<ScVObjMode>(nIntVal));
                         }
                         break;
                 }

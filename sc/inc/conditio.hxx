@@ -171,7 +171,7 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
         stream << "NONE";
         break;
     default:
-        stream << "?(" << (int)rMode << ")";
+        stream << "?(" << static_cast<int>(rMode) << ")";
         break;
     }
 
@@ -274,7 +274,7 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
         stream << "Data";
         break;
     default:
-        stream << "?(" << (int)rType << ")";
+        stream << "?(" << static_cast<int>(rType) << ")";
         break;
     }
     return stream;

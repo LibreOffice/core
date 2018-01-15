@@ -598,7 +598,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                 {
                     uno::Sequence<sal_Int16> aSeq(maSubTotalFuncs.size());
                     for(size_t i = 0; i < maSubTotalFuncs.size(); ++i)
-                        aSeq.getArray()[i] = (sal_Int16)maSubTotalFuncs[i];
+                        aSeq.getArray()[i] = static_cast<sal_Int16>(maSubTotalFuncs[i]);
                     xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL2, uno::Any(aSeq) );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
@@ -720,7 +720,7 @@ void ScDPSaveDimension::Dump(int nIndent) const
 
     cout << aIndent << "    + orientation: ";
     if (nOrientation <= DataPilotFieldOrientation_DATA)
-        cout << pOrientNames[(int)nOrientation];
+        cout << pOrientNames[static_cast<int>(nOrientation)];
     else
         cout << "(invalid)";
     cout << endl;

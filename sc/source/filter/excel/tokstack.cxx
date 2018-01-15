@@ -398,7 +398,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
             }
         }
         else    // elementary SC_Token
-            pScToken->AddOpCode( ( DefTokenId ) ( *pAkt - nScTokenOff ) );
+            pScToken->AddOpCode( static_cast<DefTokenId>( *pAkt - nScTokenOff ) );
     }
 
 #ifdef DBG_UTIL
@@ -707,7 +707,7 @@ bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
                     sal_uInt16 nSecId = pP_Id[ nPid ];
                     if( nSecId >= nScTokenOff )
                     {// Default-Token?
-                        return ( DefTokenId ) ( nSecId - nScTokenOff ) == eId;  // wanted?
+                        return static_cast<DefTokenId>( nSecId - nScTokenOff ) == eId;  // wanted?
                     }
                 }
             }

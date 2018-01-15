@@ -185,7 +185,7 @@ sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleColumn()
         ScViewData& rViewData = pViewShell->GetViewData();
         ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
                                 rViewData.GetActivePart() :
-                                (ScSplitPos) nPane;
+                                static_cast<ScSplitPos>(nPane);
         ScHSplitPos eWhichH = WhichH( eWhich );
 
         return rViewData.GetPosX( eWhichH );
@@ -202,7 +202,7 @@ void SAL_CALL ScViewPaneBase::setFirstVisibleColumn(sal_Int32 nFirstVisibleColum
         ScViewData& rViewData = pViewShell->GetViewData();
         ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
                                 rViewData.GetActivePart() :
-                                (ScSplitPos) nPane;
+                                static_cast<ScSplitPos>(nPane);
         ScHSplitPos eWhichH = WhichH( eWhich );
 
         long nDeltaX = static_cast<long>(nFirstVisibleColumn) - rViewData.GetPosX( eWhichH );
@@ -218,7 +218,7 @@ sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleRow()
         ScViewData& rViewData = pViewShell->GetViewData();
         ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
                                 rViewData.GetActivePart() :
-                                (ScSplitPos) nPane;
+                                static_cast<ScSplitPos>(nPane);
         ScVSplitPos eWhichV = WhichV( eWhich );
 
         return rViewData.GetPosY( eWhichV );
@@ -235,7 +235,7 @@ void SAL_CALL ScViewPaneBase::setFirstVisibleRow( sal_Int32 nFirstVisibleRow )
         ScViewData& rViewData = pViewShell->GetViewData();
         ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
                                 rViewData.GetActivePart() :
-                                (ScSplitPos) nPane;
+                                static_cast<ScSplitPos>(nPane);
         ScVSplitPos eWhichV = WhichV( eWhich );
 
         long nDeltaY = static_cast<long>(nFirstVisibleRow) - rViewData.GetPosY( eWhichV );
@@ -252,7 +252,7 @@ table::CellRangeAddress SAL_CALL ScViewPaneBase::getVisibleRange()
         ScViewData& rViewData = pViewShell->GetViewData();
         ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
                                 rViewData.GetActivePart() :
-                                (ScSplitPos) nPane;
+                                static_cast<ScSplitPos>(nPane);
         ScHSplitPos eWhichH = WhichH( eWhich );
         ScVSplitPos eWhichV = WhichV( eWhich );
 
@@ -304,7 +304,7 @@ namespace
         ScViewData& rViewData = _pViewShell->GetViewData();
         ScSplitPos eWhich = ( _nPane == SC_VIEWPANE_ACTIVE ) ?
                                 rViewData.GetActivePart() :
-                                (ScSplitPos) _nPane;
+                                static_cast<ScSplitPos>(_nPane);
         _rpWindow = _pViewShell->GetWindowByPos( eWhich );
         _rpSdrView = _pViewShell->GetSdrView();
         _rpFormShell = _pViewShell->GetFormShell();
@@ -380,7 +380,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
     {
         ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
                                 pViewShell->GetViewData().GetActivePart() :
-                                (ScSplitPos) nPane;
+                                static_cast<ScSplitPos>(nPane);
         ScGridWindow* pWindow = static_cast<ScGridWindow*>(pViewShell->GetWindowByPos(eWhich));
         ScDocument* pDoc = pViewShell->GetViewData().GetDocument();
         if (pWindow && pDoc)
@@ -1801,7 +1801,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                 //#i80528# adapt to new range eventually
                 if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
-                aNewOpt.SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode)nIntVal);
+                aNewOpt.SetObjMode( VOBJ_TYPE_OLE, static_cast<ScVObjMode>(nIntVal));
             }
         }
         else if ( aPropertyName == SC_UNO_SHOWCHARTS )
@@ -1812,7 +1812,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                 //#i80528# adapt to new range eventually
                 if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
-                aNewOpt.SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode)nIntVal);
+                aNewOpt.SetObjMode( VOBJ_TYPE_CHART, static_cast<ScVObjMode>(nIntVal));
             }
         }
         else if ( aPropertyName == SC_UNO_SHOWDRAW )
@@ -1823,7 +1823,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                 //#i80528# adapt to new range eventually
                 if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
-                aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode)nIntVal);
+                aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, static_cast<ScVObjMode>(nIntVal));
             }
         }
         else if ( aPropertyName == SC_UNO_GRIDCOLOR )

@@ -344,7 +344,7 @@ OUString ScGlobal::GetErrorString(FormulaError nErr)
         case FormulaError::IllegalFPOperation:
             return ScCompiler::GetNativeSymbol(ocErrNum);
         default:
-            return GetRscString(STR_ERROR_STR) + OUString::number( (int)nErr );
+            return GetRscString(STR_ERROR_STR) + OUString::number( static_cast<int>(nErr) );
     }
     return GetRscString(pErrNumber);
 }
