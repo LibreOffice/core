@@ -186,6 +186,7 @@
           <object class="GtkButton" id="upButton">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
             <property name="receives_default">True</property>
             <property name="image">image1</property>
           </object>
@@ -342,6 +343,7 @@
           <object class="GtkButton" id="downButton">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
             <property name="receives_default">True</property>
             <property name="valign">start</property>
             <property name="image">image2</property>
@@ -371,6 +373,7 @@
             <property name="label" translatable="yes" context="conditionwin|removeButton">-</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
             <property name="receives_default">True</property>
           </object>
           <packing>
@@ -385,6 +388,7 @@
             <property name="label" translatable="yes" context="conditionwin|addButton">+</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
             <property name="receives_default">True</property>
             <property name="halign">end</property>
           </object>

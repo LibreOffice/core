@@ -669,6 +669,18 @@ namespace
         return bIsStock;
     }
 
+    bool extractFocusOnClick(VclBuilder::stringmap &rMap)
+    {
+        bool bFocusOnClick = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("focus-on-click"));
+        if (aFind != rMap.end())
+        {
+            bFocusOnClick = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bFocusOnClick;
+    }
+
     WinBits extractRelief(VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_3DLOOK;
@@ -780,12 +792,12 @@ namespace
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER;
 
         nBits |= extractRelief(rMap);
-
-        bool bIsStock = extractStock(rMap);
+        if (!extractFocusOnClick(rMap))
+            nBits |= WB_NOPOINTERFOCUS;
 
         VclPtr<Button> xWindow;
 
-        if (bIsStock)
+        if (extractStock(rMap))
         {
             OUString sType = extractLabel(rMap);
             if (sType == "gtk-ok")
@@ -813,6 +825,8 @@ namespace
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
         nBits |= extractRelief(rMap);
+        if (!extractFocusOnClick(rMap))
+            nBits |= WB_NOPOINTERFOCUS;
 
         VclPtr<Button> xWindow = VclPtr<MenuButton>::Create(pParent, nBits);
 
@@ -829,6 +843,8 @@ namespace
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
         nBits |= extractRelief(rMap);
+        if (!extractFocusOnClick(rMap))
+            nBits |= WB_NOPOINTERFOCUS;
 
         VclPtr<Button> xWindow = VclPtr<MenuToggleButton>::Create(pParent, nBits);
 
@@ -1260,6 +1276,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OUString sWrap = BuilderUtils::extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
+        if (!extractFocusOnClick(rMap))
+            nBits |= WB_NOPOINTERFOCUS;
         VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, nBits);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         xWindow = xButton;
@@ -1275,6 +1293,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OUString sWrap = BuilderUtils::extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
+        if (!extractFocusOnClick(rMap))
+            nBits |= WB_NOPOINTERFOCUS;
         //maybe always import as TriStateBox and enable/disable tristate
         bool bIsTriState = extractInconsistent(rMap);
         VclPtr<CheckBox> xCheckBox;
@@ -1656,12 +1676,18 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 VclPtr<vcl::Window> xParent(pParent);
                 pFunction(xWindow, xParent, rMap);
                 if (xWindow->GetType() == WindowType::PUSHBUTTON)
+                {
+                    if (!extractFocusOnClick(rMap))
+                        xWindow->SetStyle(xWindow->GetStyle() | WB_NOPOINTERFOCUS);
                     setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
+                }
                 else if (xWindow->GetType() == WindowType::MENUBUTTON)
                 {
                     OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
                     if (!sMenu.isEmpty())
                         m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
+                    if (!extractFocusOnClick(rMap))
+                        xWindow->SetStyle(xWindow->GetStyle() | WB_NOPOINTERFOCUS);
                     setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
                 }
             }
