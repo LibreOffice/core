@@ -28,7 +28,6 @@ class Point;
 namespace tools { class Rectangle; }
 class SvStream;
 
-#define IMAP_OBJ_NONE       ((sal_uInt16)0x0000)
 #define IMAP_OBJ_RECTANGLE  (sal_uInt16(0x0001))
 #define IMAP_OBJ_CIRCLE     (sal_uInt16(0x0002))
 #define IMAP_OBJ_POLYGON    (sal_uInt16(0x0003))
