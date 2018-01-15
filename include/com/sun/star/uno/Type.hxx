@@ -47,13 +47,13 @@ inline Type::Type()
 inline Type::Type( TypeClass eTypeClass, const ::rtl::OUString & rTypeName )
     : _pType( NULL )
 {
-    ::typelib_typedescriptionreference_new( &_pType, (typelib_TypeClass)eTypeClass, rTypeName.pData );
+    ::typelib_typedescriptionreference_new( &_pType, static_cast<typelib_TypeClass>(eTypeClass), rTypeName.pData );
 }
 
 inline Type::Type( TypeClass eTypeClass, const sal_Char * pTypeName )
     : _pType( NULL )
 {
-    ::typelib_typedescriptionreference_newByAsciiName( &_pType, (typelib_TypeClass)eTypeClass, pTypeName );
+    ::typelib_typedescriptionreference_newByAsciiName( &_pType, static_cast<typelib_TypeClass>(eTypeClass), pTypeName );
 }
 
 inline Type::Type( typelib_TypeDescriptionReference * pType )
