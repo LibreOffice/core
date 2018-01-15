@@ -49,6 +49,7 @@
 #include <svx/svdotable.hxx>
 #include <cell.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <unotools/configmgr.hxx>
 
 
 // SvxTextEditSourceImpl
@@ -579,15 +580,18 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                 const_cast<EditEngine*>(&(mpOutliner->GetEditEngine()))->EnableUndo( false );
             }
 
-            if ( !m_xLinguServiceManager.is() )
+            if (!utl::ConfigManager::IsFuzzing())
             {
-                css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                m_xLinguServiceManager.set(css::linguistic2::LinguServiceManager::create(xContext));
-            }
+                if ( !m_xLinguServiceManager.is() )
+                {
+                    css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    m_xLinguServiceManager.set(css::linguistic2::LinguServiceManager::create(xContext));
+                }
 
-            css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( m_xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
-            if( xHyphenator.is() )
-                mpOutliner->SetHyphenator( xHyphenator );
+                css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( m_xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
+                if( xHyphenator.is() )
+                    mpOutliner->SetHyphenator( xHyphenator );
+            }
         }
 
 
