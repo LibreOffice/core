@@ -30,7 +30,7 @@ class GenPspGraphics;
 class VCL_DLLPUBLIC PspSalInfoPrinter : public SalInfoPrinter
 {
 public:
-    GenPspGraphics*         m_pGraphics;
+    std::unique_ptr<GenPspGraphics> m_pGraphics;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
 
