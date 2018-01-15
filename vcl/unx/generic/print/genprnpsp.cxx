@@ -480,11 +480,6 @@ PspSalInfoPrinter::PspSalInfoPrinter()
 
 PspSalInfoPrinter::~PspSalInfoPrinter()
 {
-    if( m_pGraphics )
-    {
-        delete m_pGraphics;
-        m_pGraphics = nullptr;
-    }
 }
 
 void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
@@ -524,19 +519,18 @@ SalGraphics* PspSalInfoPrinter::AcquireGraphics()
     SalGraphics* pRet = nullptr;
     if( ! m_pGraphics )
     {
-        m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
+        m_pGraphics.reset( GetGenericInstance()->CreatePrintGraphics() );
         m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx);
-        pRet = m_pGraphics;
+        pRet = m_pGraphics.get();
     }
     return pRet;
 }
 
 void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
 {
-    if( pGraphics == m_pGraphics )
+    if( m_pGraphics.get() == pGraphics )
     {
-        delete pGraphics;
-        m_pGraphics = nullptr;
+        m_pGraphics.reset();
     }
 }
 
