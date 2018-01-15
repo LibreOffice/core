@@ -252,14 +252,15 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
  * @short   Get child endnote layout
  * @return pointer to endnote layout
  */
- LwpVirtualLayout* LwpEnSuperTableLayout::GetMainTableLayout()
+LwpVirtualLayout* LwpEnSuperTableLayout::GetMainTableLayout()
 {
     LwpObjectID& rID = GetChildTail();
 
+    LwpVirtualLayout *pPrevLayout = nullptr;
     while(!rID.IsNull())
     {
-        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout*>(rID.obj().get());
-        if(!pLayout)
+        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(rID.obj().get());
+        if (!pLayout || pLayout == pPrevLayout)
         {
             break;
         }
@@ -268,6 +269,7 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
             return pLayout;
         }
         rID = pLayout->GetPrevious();
+        pPrevLayout = pLayout;
     }
 
     return nullptr;
