@@ -94,16 +94,16 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     friend class        TextUndoInsertChars;
     friend class        TextUndoRemoveChars;
 
-    TextDoc*            mpDoc;
-    TEParaPortions*     mpTEParaPortions;
+    std::unique_ptr<TextDoc>          mpDoc;
+    std::unique_ptr<TEParaPortions>   mpTEParaPortions;
     VclPtr<OutputDevice> mpRefDev;
 
-    TextViews*          mpViews;
+    std::unique_ptr<TextViews>        mpViews;
     TextView*           mpActiveView;
 
-    TextUndoManager*    mpUndoManager;
+    std::unique_ptr<TextUndoManager>  mpUndoManager;
 
-    IdleFormatter*      mpIdleFormatter;
+    std::unique_ptr<IdleFormatter>    mpIdleFormatter;
 
     std::unique_ptr<TEIMEInfos> mpIMEInfos;
 
@@ -113,7 +113,7 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
 
     tools::Rectangle           maInvalidRect;
 
-    LocaleDataWrapper*  mpLocaleDataWrapper;
+    std::unique_ptr<LocaleDataWrapper> mpLocaleDataWrapper;
 
     vcl::Font           maFont;
     Color               maTextColor;

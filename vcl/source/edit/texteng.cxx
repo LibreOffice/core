@@ -89,9 +89,9 @@ TextEngine::TextEngine()
     , mbRightToLeft {false}
     , mbHasMultiLineParas {false}
 {
-    mpViews = new TextViews;
+    mpViews.reset( new TextViews );
 
-    mpIdleFormatter = new IdleFormatter;
+    mpIdleFormatter.reset( new IdleFormatter );
     mpIdleFormatter->SetInvokeHandler( LINK( this, TextEngine, IdleFormatHdl ) );
     mpIdleFormatter->SetDebugName( "vcl::TextEngine mpIdleFormatter" );
 
@@ -113,14 +113,14 @@ TextEngine::~TextEngine()
 {
     mbDowning = true;
 
-    delete mpIdleFormatter;
-    delete mpDoc;
-    delete mpTEParaPortions;
-    delete mpViews; // only the list, not the Views
+    mpIdleFormatter.reset();
+    mpDoc.reset();
+    mpTEParaPortions.reset();
+    mpViews.reset(); // only the list, not the Views
     mpRefDev.disposeAndClear();
-    delete mpUndoManager;
+    mpUndoManager.reset();
     mpIMEInfos.reset();
-    delete mpLocaleDataWrapper;
+    mpLocaleDataWrapper.reset();
 }
 
 void TextEngine::InsertView( TextView* pTextView )
@@ -375,10 +375,9 @@ void TextEngine::ImpInitDoc()
     if ( mpDoc )
         mpDoc->Clear();
     else
-        mpDoc = new TextDoc;
+        mpDoc.reset( new TextDoc );
 
-    delete mpTEParaPortions;
-    mpTEParaPortions = new TEParaPortions;
+    mpTEParaPortions.reset(new TEParaPortions);
 
     TextNode* pNode = new TextNode( OUString() );
     mpDoc->GetNodes().insert( mpDoc->GetNodes().begin(), pNode );
@@ -1305,7 +1304,7 @@ void TextEngine::EnableUndo( bool bEnable )
 ::svl::IUndoManager& TextEngine::GetUndoManager()
 {
     if ( !mpUndoManager )
-        mpUndoManager = new TextUndoManager( this );
+        mpUndoManager.reset( new TextUndoManager( this ) );
     return *mpUndoManager;
 }
 
@@ -2719,8 +2718,7 @@ uno::Reference< i18n::XBreakIterator > const & TextEngine::GetBreakIterator()
 void TextEngine::SetLocale( const css::lang::Locale& rLocale )
 {
     maLocale = rLocale;
-    delete mpLocaleDataWrapper;
-    mpLocaleDataWrapper = nullptr;
+    mpLocaleDataWrapper.reset();
 }
 
 css::lang::Locale const & TextEngine::GetLocale()
@@ -2735,9 +2733,9 @@ css::lang::Locale const & TextEngine::GetLocale()
 LocaleDataWrapper* TextEngine::ImpGetLocaleDataWrapper()
 {
     if ( !mpLocaleDataWrapper )
-        mpLocaleDataWrapper = new LocaleDataWrapper( LanguageTag( GetLocale()) );
+        mpLocaleDataWrapper.reset( new LocaleDataWrapper( LanguageTag( GetLocale()) ) );
 
-    return mpLocaleDataWrapper;
+    return mpLocaleDataWrapper.get();
 }
 
 void TextEngine::SetRightToLeft( bool bR2L )
