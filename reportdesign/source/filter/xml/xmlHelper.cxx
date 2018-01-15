@@ -82,7 +82,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
                     { XML_TOP,          style::VerticalAlignment_TOP },
                     { XML_MIDDLE,       style::VerticalAlignment_MIDDLE },
                     { XML_BOTTOM,       style::VerticalAlignment_BOTTOM },
-                    { XML_TOKEN_INVALID, (style::VerticalAlignment)0 }
+                    { XML_TOKEN_INVALID, style::VerticalAlignment(0) }
                 };
 
                 pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum );
