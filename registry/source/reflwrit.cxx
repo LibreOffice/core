@@ -830,7 +830,7 @@ void TypeWriter::createBlop()
 
             if (m_fields[i].m_constValueType != RT_TYPE_NONE)
             {
-                pInfo = new CPInfo((CPInfoTag)m_fields[i].m_constValueType, pInfo);
+                pInfo = new CPInfo(static_cast<CPInfoTag>(m_fields[i].m_constValueType), pInfo);
                 pInfo->m_value.aConst = m_fields[i].m_constValue;
                 cpIndexValue = pInfo->m_index;
             }

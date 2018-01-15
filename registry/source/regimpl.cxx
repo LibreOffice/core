@@ -953,7 +953,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 
     RegError _ret = RegError::NO_ERROR;
     sal_uInt8   type = *pBuffer;
-    valueType = (RegValueType)type;
+    valueType = static_cast<RegValueType>(type);
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
     rtl_freeMemory(pBuffer);
 
@@ -1041,7 +1041,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
         (rwBytes == VALUE_HEADERSIZE))
     {
         sal_uInt8 type = *pBuffer;
-        valueType = (RegValueType)type;
+        valueType = static_cast<RegValueType>(type);
         readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
         rtl_freeMemory(pBuffer);
 
@@ -1189,7 +1189,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         const sal_uInt8*    pBlop = writer.getBlop();
         sal_uInt32          aBlopSize = writer.getBlopSize();
 
-        sal_uInt8   type = (sal_uInt8)RegValueType::BINARY;
+        sal_uInt8   type = sal_uInt8(RegValueType::BINARY);
         sal_uInt8*  pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + aBlopSize));
 
         memcpy(pBuffer, &type, 1);
@@ -1363,7 +1363,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     }
 
     sal_uInt8 type = *pBuffer;
-    valueType = (RegValueType)type;
+    valueType = static_cast<RegValueType>(type);
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
 
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(valueSize));

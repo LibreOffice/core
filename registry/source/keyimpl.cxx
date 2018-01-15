@@ -256,7 +256,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
     sal_uInt8   type = *pBuffer;
     readUINT32(pBuffer+VALUE_TYPEOFFSET, size);
 
-    *pValueType = (RegValueType)type;
+    *pValueType = static_cast<RegValueType>(type);
 //    if (*pValueType == RegValueType::UNICODE)
 //    {
 //        *pValueSize = (size / 2) * sizeof(sal_Unicode);
@@ -308,7 +308,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 
     sal_uInt32 size = vSize;
 
-    sal_uInt8 type = (sal_uInt8)vType;
+    sal_uInt8 type = static_cast<sal_uInt8>(vType);
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
@@ -380,7 +380,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
 
     size += len * 4;
 
-    sal_uInt8 type = (sal_uInt8)RegValueType::LONGLIST;
+    sal_uInt8 type = sal_uInt8(RegValueType::LONGLIST);
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
@@ -443,7 +443,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
         size +=  4 + strlen(pValueList[i]) + 1;
     }
 
-    sal_uInt8 type = (sal_uInt8)RegValueType::STRINGLIST;
+    sal_uInt8 type = sal_uInt8(RegValueType::STRINGLIST);
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
@@ -511,7 +511,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         size +=  4 + ((rtl_ustr_getLength(pValueList[i]) +1) * 2);
     }
 
-    sal_uInt8 type = (sal_uInt8)RegValueType::UNICODELIST;
+    sal_uInt8 type = sal_uInt8(RegValueType::UNICODELIST);
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
@@ -589,7 +589,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
     }
 
     sal_uInt8   type = *pBuffer;
-    valueType = (RegValueType)type;
+    valueType = static_cast<RegValueType>(type);
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
 
     rtl_freeMemory(pBuffer);
@@ -689,7 +689,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     }
 
     sal_uInt8   type = *pBuffer;
-    valueType = (RegValueType)type;
+    valueType = static_cast<RegValueType>(type);
 
     if (valueType != RegValueType::LONGLIST)
     {
@@ -803,7 +803,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     }
 
     sal_uInt8   type = *pBuffer;
-    valueType = (RegValueType)type;
+    valueType = static_cast<RegValueType>(type);
 
     if (valueType != RegValueType::STRINGLIST)
     {
@@ -909,7 +909,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     }
 
     sal_uInt8   type = *pBuffer;
-    valueType = (RegValueType)type;
+    valueType = static_cast<RegValueType>(type);
 
     if (valueType != RegValueType::UNICODELIST)
     {
