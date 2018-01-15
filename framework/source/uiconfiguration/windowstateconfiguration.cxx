@@ -625,7 +625,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                         if (( nDockingArea >= 0 ) &&
                             ( nDockingArea <= sal_Int32( DockingArea_DOCKINGAREA_RIGHT )))
                         {
-                            aWindowStateInfo.aDockingArea = (DockingArea)nDockingArea;
+                            aWindowStateInfo.aDockingArea = static_cast<DockingArea>(nDockingArea);
                             nMask |= WINDOWSTATE_MASK_DOCKINGAREA;
                             a <<= aWindowStateInfo.aDockingArea;
                             bAddToSeq = true;
@@ -820,7 +820,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                         if (( nDockingArea >= 0 ) &&
                             ( nDockingArea <= sal_Int32( DockingArea_DOCKINGAREA_RIGHT )))
                         {
-                            aWindowStateInfo.aDockingArea = (DockingArea)nDockingArea;
+                            aWindowStateInfo.aDockingArea = static_cast<DockingArea>(nDockingArea);
                             nMask |= WINDOWSTATE_MASK_DOCKINGAREA;
                         }
                     }

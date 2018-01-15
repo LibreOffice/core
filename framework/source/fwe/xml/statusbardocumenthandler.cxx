@@ -155,14 +155,14 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
             OUString temp( XMLNS_STATUSBAR );
             temp += XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( StatusBarEntries[i].aEntryName );
-            m_aStatusBarMap.emplace( temp, (StatusBar_XML_Entry)i );
+            m_aStatusBarMap.emplace( temp, static_cast<StatusBar_XML_Entry>(i) );
         }
         else
         {
             OUString temp( XMLNS_XLINK );
             temp += XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( StatusBarEntries[i].aEntryName );
-            m_aStatusBarMap.emplace( temp, (StatusBar_XML_Entry)i );
+            m_aStatusBarMap.emplace( temp, static_cast<StatusBar_XML_Entry>(i) );
         }
     }
 
