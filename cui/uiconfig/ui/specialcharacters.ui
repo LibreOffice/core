@@ -202,17 +202,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkDrawingArea" id="drawingarea">
+                  <object class="cuilo-DrawingAreaOcr" id="drawingarea">
                     <property name="width_request">80</property>
                     <property name="height_request">150</property>
                     <property name="visible">False</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
                   </packing>
