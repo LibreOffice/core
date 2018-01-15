@@ -69,7 +69,8 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_margin,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_paragraph,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_line
+                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_line,
+                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_topMargin
                 };
 
                 static const sal_Int16 pVertRelations[] =
@@ -77,10 +78,11 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                     text::RelOrientation::PAGE_PRINT_AREA,
                     text::RelOrientation::PAGE_FRAME,
                     text::RelOrientation::FRAME,
-                    text::RelOrientation::TEXT_LINE
+                    text::RelOrientation::TEXT_LINE,
+                    text::RelOrientation::PAGE_FRAME // indeed same as for LN_Value_wordprocessingDrawing_ST_RelFromV_page
                 };
 
-                for ( int i = 0; i < 4; i++ )
+                for ( int i = 0; i < 5; i++ )
                 {
                     if ( pVertRelValues[i] == sal_uInt32( nIntValue ) )
                         m_nRelation = pVertRelations[i];
