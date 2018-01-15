@@ -142,7 +142,6 @@ namespace o3tl {
 #define CSS1_OUTMODE_SPAN_TAG_OFF   (sal_uInt16(0x0001U << 3))
 #define CSS1_OUTMODE_STYLE_OPT_OFF  (sal_uInt16(0x0002U << 3))
 #define CSS1_OUTMODE_RULE_OFF       (sal_uInt16(0x0003U << 3))
-#define CSS1_OUTMODE_SPAN_TAG1_OFF  ((sal_uInt16)(0x0004U << 3))
 #define CSS1_OUTMODE_ANY_OFF        (sal_uInt16(0x0007U << 3))
 
 #define CSS1_OUTMODE_ONOFF(a) (CSS1_OUTMODE_##a##_ON|CSS1_OUTMODE_##a##_OFF)
