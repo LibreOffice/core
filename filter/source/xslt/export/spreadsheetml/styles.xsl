@@ -135,7 +135,7 @@
     </xsl:template>
 
     <!-- resolving the style inheritance by starting from uppermost parent and
-         overriding exisiting style properties by new found child properties -->
+         overriding existing style properties by new found child properties -->
     <xsl:template name="merge-all-parent-styles">
         <xsl:param name="currentStyle" />
 

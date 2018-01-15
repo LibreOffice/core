@@ -217,7 +217,7 @@ System::String^ mapUnoPolymorphicName(System::String^ unoName)
         gcnew System::Text::StringBuilder(unoName->Substring(0, index +1 ));
 
     //Find the first occurrence of ','
-    //If the parameter is a polymorphic struct then we neede to ignore everything
+    //If the parameter is a polymorphic struct then we need to ignore everything
     //between the brackets because it can also contain commas
     //get the type list within < and >
     int endIndex = unoName->Length - 1;

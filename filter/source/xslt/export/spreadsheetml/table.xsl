@@ -336,7 +336,7 @@
                 </xsl:call-template>
                 <xsl:if test="@table:number-rows-repeated &gt; 2 and (table:table-cell/@office:value-type or $firstDefaultCellStyle != '')">
                     <!-- In case a cell is being repeated, the cell will be created
-                    in a variabel, which is as many times given out, as being repeated -->
+                    in a variable, which is as many times given out, as being repeated -->
                     <xsl:variable name="tableRow">
                         <xsl:call-template name="write-table-row">
                             <xsl:with-param name="columnNodes" select="$columnNodes" />
@@ -518,7 +518,7 @@
                             b) cells, which start with ss:Index (as ss:Index is not allowed to be repeated) -->
                     <xsl:when test="not(@table:formula) and not($setIndex)">
                         <!-- In case a non-empty cell is being repeated, the cell will be created
-                            in a variabel, which is as many times given out, as being repeated -->
+                            in a variable, which is as many times given out, as being repeated -->
                         <xsl:variable name="tableCell">
                             <xsl:call-template name="create-table-cell">
                                 <xsl:with-param name="setIndex" select="false()" /><!-- copied cells may not have indices -->
@@ -582,7 +582,7 @@
             <xsl:otherwise>
                 <!-- in case no repetition took place -->
                 <xsl:choose>
-                    <!-- neglect en empty cells by using ss:Index Attribut  -->
+                    <!-- neglect an empty cell by using ss:Index Attribute  -->
                     <xsl:when test="not(text()) and not(*) and not(@*)">
                         <xsl:choose>
                             <!-- if it is the last cell, write this cell -->

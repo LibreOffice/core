@@ -42,7 +42,7 @@ struct BaseLock
 {
     public:
 
-        // must be mutable to be useable in const environments too!
+        // must be mutable to be usable in const environments too!
         mutable ::osl::Mutex m_aLock;
 };
 

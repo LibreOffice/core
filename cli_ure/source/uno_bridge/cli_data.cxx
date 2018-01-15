@@ -557,7 +557,7 @@ System::String^ mapPolymorphicName(System::String^ unoName, bool bCliToUno)
     builder->Append(unoName->Substring(0, index +1 ));
 
     //Find the first occurrence of ','
-    //If the parameter is a polymorphic struct then we neede to ignore everything
+    //If the parameter is a polymorphic struct then we need to ignore everything
     //between the brackets because it can also contain commas
     //get the type list within < and >
     int endIndex = unoName->Length - 1;
@@ -1445,7 +1445,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
        cli_data.
        true - cli_data already contains the newly constructed object. This is the case if
        a struct is converted then on the first call to map_to_cli the new object is created.
-       If the struct inherits another struct then this function is called recursivly while the
+       If the struct inherits another struct then this function is called recursively while the
        newly created object is passed in cli_data.
  */
 void Bridge::map_to_cli(
@@ -1545,7 +1545,7 @@ void Bridge::map_to_cli(
 
         //create the type
         System::Type^ cliType= loadCliType(td.get()->pTypeName);
-        //detect if we recursivly convert inherited structures
+        //detect if we recursively convert inherited structures
         //If this point is reached because of a recursive call during covering a
         //struct then we must not create a new object rather we use the one in
         // cli_data argument.

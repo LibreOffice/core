@@ -7259,8 +7259,8 @@ if test "$enable_epm" = "yes"; then
                     else
                         _pt="pkg"
                     fi
-                    AC_MSG_WARN([the ${_pt}s will not be relocateable])
-                    add_warning "the ${_pt}s will not be relocateable"
+                    AC_MSG_WARN([the ${_pt}s will not be relocatable])
+                    add_warning "the ${_pt}s will not be relocatable"
                     AC_MSG_WARN([if you want to make sure installation without --nodeps and
                                  relocation will work, you need to patch your epm with the
                                  patch in epm/epm-3.7.patch or build with
@@ -9184,7 +9184,7 @@ if test -z "$enable_cve_tests"; then
     case "$OS" in
     WNT)
         # Default cves off for windows with its wild and wonderful
-        # varienty of AV software kicking in and panicing
+        # varienty of AV software kicking in and panicking
         enable_cve_tests=no
         ;;
     *)

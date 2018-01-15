@@ -249,7 +249,7 @@ namespace pcr
         */
         bool impl_dialogListSelection_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
-        /** executes a dialog for chosing a filter or sort criterion for a database form
+        /** executes a dialog for choosing a filter or sort criterion for a database form
             @param _bFilter
                 <TRUE/> if the Filter property should be used, <FALSE/> if it's the Order
                 property
@@ -273,7 +273,7 @@ namespace pcr
         bool impl_dialogLinkedFormFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows the user to modify the FormatKey
-            property of our component, by chosing a (number) format.
+            property of our component, by choosing a (number) format.
             @precond
                 Our component actually has a FormatKey property.
             @param _out_rNewValue

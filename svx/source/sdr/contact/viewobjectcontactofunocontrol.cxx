@@ -66,7 +66,7 @@ verify those issues are still fixed. (Whenever you have some additional time, yo
 an automatic test for one or more of those issues for which this is possible :)
 
 http://www.openoffice.org/issues/show_bug.cgi?id=105992
-zooming documents containg (alive) form controls improperly positions the controls
+zooming documents containing (alive) form controls improperly positions the controls
 
 http://www.openoffice.org/issues/show_bug.cgi?id=104362
 crash when copy a control

@@ -467,7 +467,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
 
             if( !bStorage && !pImplLib->mbDoc50Password )
             {
-                // Store application basic uncrypted
+                // Store application basic unencrypted
                 uno::Reference< embed::XStorage > xStorage;
                 storeLibraries_Impl( xStorage, false );
                 bKillCryptedFiles = true;

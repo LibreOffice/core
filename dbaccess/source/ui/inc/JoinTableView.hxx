@@ -46,7 +46,7 @@ namespace dbaui
     class OTableWindowData;
     class OJoinDesignViewAccess;
 
-    // this class conatins only the scrollbars to avoid that
+    // this class contains only the scrollbars to avoid that
     // the tablewindows clip the scrollbars
     class OJoinTableView;
     class OScrollWindowHelper : public vcl::Window
@@ -216,7 +216,7 @@ namespace dbaui
             corresponding Wins and Conns */
         virtual void ReSync() { }
 
-        /** Hart deletion
+        /** Hard deletion
 
             That means that all Conns and Wins are deleted from their respective
             lists and the corresponding Datas removed from the document */

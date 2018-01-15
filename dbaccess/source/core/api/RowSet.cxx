@@ -569,7 +569,7 @@ void ORowSet::freeResources( bool _bComplete )
         m_xColumns      = nullptr;
         if ( m_pColumns )
             m_pColumns->disposing();
-        // dispose the composer to avoid that everbody knows that the querycomposer is eol
+        // dispose the composer to avoid that everybody knows that the querycomposer is eol
         try { ::comphelper::disposeComponent( m_xComposer ); }
         catch(Exception&)
         {
