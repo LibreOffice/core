@@ -56,7 +56,7 @@ GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize
 GraphicManager::~GraphicManager()
 {
     assert(maObjList.empty());
-    delete mpCache;
+    mpCache.reset();
 }
 
 void GraphicManager::SetMaxCacheSize( sal_uLong nNewCacheSize )
