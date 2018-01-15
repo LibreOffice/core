@@ -64,6 +64,8 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet, 
     get(m_pShowSet, "showcharset");
     get(m_pSearchSet, "searchcharset");
     get(m_pShowChar, "showchar");
+    get(m_pDrawChk, "drawcheckbutton");
+    get(m_pDrawingArea, "drawingarea");
     m_pShowChar->SetCentered(true);
     if (m_bHasInsert) get(m_pOKBtn, "insert");
     else get(m_pOKBtn, "ok");
@@ -188,6 +190,8 @@ void SvxCharacterMap::dispose()
     m_pSubsetText.clear();
     m_pSubsetLB.clear();
     m_pShowChar.clear();
+    m_pDrawChk.clear();
+    m_pDrawingArea.clear();
     m_pHexCodeText.clear();
     m_pDecimalCodeText.clear();
     m_pCharName.clear();
@@ -485,6 +489,8 @@ void SvxCharacterMap::init()
     m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
     m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
     m_pShowSet->SetFavClickHdl( LINK( this, SvxCharacterMap, FavClickHdl ) );
+
+    m_pDrawChk->SetClickHdl( LINK( this, SvxCharacterMap, DrawToggleHdl ) );
 
     m_pSearchSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, SearchCharDoubleClickHdl ) );
     m_pSearchSet->SetSelectHdl( LINK( this, SvxCharacterMap, SearchCharSelectHdl ) );
@@ -939,6 +945,19 @@ IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, Button*, void)
    EndDialog(RET_OK);
 }
 
+IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
+{
+    if (m_pDrawChk->IsChecked())
+    {
+        m_pDrawingArea->Show();
+        m_pShowChar->Hide();
+    }
+    else
+    {
+        m_pDrawingArea->Hide();
+        m_pShowChar->Show();
+    }
+}
 
 IMPL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, pItem, void)
 {

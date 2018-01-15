@@ -78,6 +78,8 @@ private:
     VclPtr<FixedText>      m_pSubsetText;
     VclPtr<ListBox>        m_pSubsetLB;
     VclPtr<SvxShowText>    m_pShowChar;
+    VclPtr<CheckBox>       m_pDrawChk;
+    VclPtr<vcl::Window>    m_pDrawingArea;
     VclPtr<Edit>           m_pSearchText;
     VclPtr<Edit>           m_pHexCodeText;
     VclPtr<Edit>           m_pDecimalCodeText;
@@ -105,6 +107,7 @@ private:
     DECL_LINK(SubsetSelectHdl, ListBox&, void);
     DECL_LINK(CharDoubleClickHdl, SvxShowCharSet*,void);
     DECL_LINK(CharSelectHdl, SvxShowCharSet*, void);
+    DECL_LINK(DrawToggleHdl, Button*, void);
     DECL_LINK(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
     DECL_LINK(FavClickHdl, SvxShowCharSet*,void);
