@@ -498,7 +498,7 @@ private:
 
     std::unordered_set< GraphicObject* >    maObjList;
     sal_uLong               mnUsedSize; // currently used memory footprint of all swapped in graphics
-    GraphicCache*           mpCache;
+    std::unique_ptr<GraphicCache> mpCache;
 
                         GraphicManager( const GraphicManager& ) = delete;
     GraphicManager&     operator=( const GraphicManager& ) = delete;
