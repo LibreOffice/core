@@ -3068,4 +3068,5 @@ max-numerator-digits
 zeros-numerator-digits
 zeros-denominator-digits
 integer-fraction-delimiter
+signatureline
 TOKEN_END_DUMMY

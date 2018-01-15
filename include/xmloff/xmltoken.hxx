@@ -1940,6 +1940,7 @@ namespace xmloff { namespace token {
         XML_DOT_DASH,
         XML_DOT_DOT_DASH,
         XML_LONG_DASH,
+        XML_SIGNATURELINE,
         XML_SINGLE,
         XML_SMALL_WAVE,
         XML_WAVE,

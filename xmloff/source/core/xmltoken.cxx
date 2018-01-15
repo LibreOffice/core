@@ -1677,6 +1677,7 @@ namespace xmloff { namespace token {
         TOKEN( "show-value",                      XML_SHOW_VALUE ),
         TOKEN( "shows",                           XML_SHOWS ),
         TOKEN( "side-by-side",                    XML_SIDE_BY_SIDE ),
+        TOKEN( "signatureline",                   XML_SIGNATURELINE ),
         TOKEN( "silver",                          XML_SILVER ),
         TOKEN( "simple",                          XML_SIMPLE ),
         TOKEN( "sin",                             XML_SIN ),

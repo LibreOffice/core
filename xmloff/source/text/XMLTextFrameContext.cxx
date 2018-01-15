@@ -1408,6 +1408,12 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
 
     if( !m_xImplContext.is() )
     {
+        if (XML_NAMESPACE_LO_EXT == p_nPrefix)
+        {
+            SAL_DEBUG("found loext");
+            if (IsXMLToken(rLocalName, XML_SIGNATURELINE))
+                SAL_DEBUG("found signatureline");
+        }
         // no child exists
         if( XML_NAMESPACE_DRAW == p_nPrefix )
         {
