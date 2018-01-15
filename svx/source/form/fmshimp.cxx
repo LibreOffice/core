@@ -505,7 +505,7 @@ bool IsSearchableControl( const css::uno::Reference< css::uno::XInterface>& _rxC
     {
         if ( _pCurrentText )
         {
-            switch ( (::TriState)xCheckBox->getState() )
+            switch ( static_cast<::TriState>(xCheckBox->getState()) )
             {
                 case TRISTATE_FALSE: *_pCurrentText = "0"; break;
                 case TRISTATE_TRUE: *_pCurrentText = "1"; break;

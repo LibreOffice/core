@@ -256,7 +256,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
-        FieldUnit eFUnit = (FieldUnit)static_cast<long>(pItem->GetValue());
+        FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
 
         if( eFUnit != pMtrFldDrawX->GetUnit() )
         {

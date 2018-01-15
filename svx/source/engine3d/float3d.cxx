@@ -1577,7 +1577,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_PERSPECTIVE);
     if( eState != SfxItemState::DONTCARE )
     {
-        ProjectionType ePT = (ProjectionType)rAttrs.Get(SDRATTR_3DSCENE_PERSPECTIVE).GetValue();
+        ProjectionType ePT = static_cast<ProjectionType>(rAttrs.Get(SDRATTR_3DSCENE_PERSPECTIVE).GetValue());
         if( ( !m_pBtnPerspective->IsChecked() && ePT == ProjectionType::Perspective ) ||
             ( m_pBtnPerspective->IsChecked() && ePT == ProjectionType::Parallel ) )
         {

@@ -77,7 +77,7 @@ VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
             OUString aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
             if (aFmtStr.isEmpty())
               aFmtStr = SvPasteObjectHelper::GetSotFormatUIName( nFmtID );
-            pPopup->InsertItem( (sal_uInt16)nFmtID, aFmtStr );
+            pPopup->InsertItem( static_cast<sal_uInt16>(nFmtID), aFmtStr );
         }
 
         ToolBox& rBox = GetToolBox();

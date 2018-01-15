@@ -366,7 +366,7 @@ bool XLineStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
         sal_Int32 nLS = 0;
         if(!(rVal >>= nLS))
             return false;
-        eLS = (css::drawing::LineStyle)nLS;
+        eLS = static_cast<css::drawing::LineStyle>(nLS);
     }
 
     SetValue( eLS );
@@ -615,7 +615,7 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             css::drawing::LineDash aLineDash;
 
             const XDash& rXD = GetDashValue();
-            aLineDash.Style = (css::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
+            aLineDash.Style = static_cast<css::drawing::DashStyle>(static_cast<sal_uInt16>(rXD.GetDashStyle()));
             aLineDash.Dots = rXD.GetDots();
             aLineDash.DotLen = rXD.GetDotLen();
             aLineDash.Dashes = rXD.GetDashes();
@@ -642,7 +642,7 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 
             css::drawing::LineDash aLineDash;
 
-            aLineDash.Style = (css::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
+            aLineDash.Style = static_cast<css::drawing::DashStyle>(static_cast<sal_uInt16>(rXD.GetDashStyle()));
             aLineDash.Dots = rXD.GetDots();
             aLineDash.DotLen = rXD.GetDotLen();
             aLineDash.Dashes = rXD.GetDashes();
@@ -656,7 +656,7 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_LINEDASH_STYLE:
         {
             const XDash& rXD = GetDashValue();
-            rVal <<= (css::drawing::DashStyle)((sal_Int16)rXD.GetDashStyle());
+            rVal <<= static_cast<css::drawing::DashStyle>(static_cast<sal_Int16>(rXD.GetDashStyle()));
             break;
         }
 
@@ -732,7 +732,7 @@ bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     XDash aXDash;
 
-                    aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)(aLineDash.Style)));
+                    aXDash.SetDashStyle(static_cast<css::drawing::DashStyle>(static_cast<sal_uInt16>(aLineDash.Style)));
                     aXDash.SetDots(aLineDash.Dots);
                     aXDash.SetDotLen(aLineDash.DotLen);
                     aXDash.SetDashes(aLineDash.Dashes);
@@ -768,7 +768,7 @@ bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
             XDash aXDash;
 
-            aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)(aLineDash.Style)));
+            aXDash.SetDashStyle(static_cast<css::drawing::DashStyle>(static_cast<sal_uInt16>(aLineDash.Style)));
             aXDash.SetDots(aLineDash.Dots);
             aXDash.SetDotLen(aLineDash.DotLen);
             aXDash.SetDashes(aLineDash.Dashes);
@@ -789,7 +789,7 @@ bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
 
             XDash aXDash = GetDashValue();
-            aXDash.SetDashStyle((css::drawing::DashStyle)static_cast<sal_uInt16>(nVal));
+            aXDash.SetDashStyle(static_cast<css::drawing::DashStyle>(static_cast<sal_uInt16>(nVal)));
 
             if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
                 aXDash.SetDots(1);
@@ -1814,7 +1814,7 @@ bool XFillStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
         sal_Int32 nFS = 0;
         if(!(rVal >>= nFS))
             return false;
-        eFS = (css::drawing::FillStyle)nFS;
+        eFS = static_cast<css::drawing::FillStyle>(nFS);
     }
 
     SetValue( eFS );
@@ -1826,7 +1826,7 @@ void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("XFillStyleItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((sal_Int16)GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(static_cast<sal_Int16>(GetValue())).getStr()));
 
     OUString aPresentation;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
@@ -2090,7 +2090,7 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
             break;
         }
 
-        case MID_GRADIENT_STYLE: rVal <<= (sal_Int16)GetGradientValue().GetGradientStyle(); break;
+        case MID_GRADIENT_STYLE: rVal <<= static_cast<sal_Int16>(GetGradientValue().GetGradientStyle()); break;
         case MID_GRADIENT_STARTCOLOR: rVal <<= static_cast<sal_Int32>(GetGradientValue().GetStartColor().GetColor()); break;
         case MID_GRADIENT_ENDCOLOR: rVal <<= static_cast<sal_Int32>(GetGradientValue().GetEndColor().GetColor()); break;
         case MID_GRADIENT_ANGLE: rVal <<= static_cast<sal_Int16>(GetGradientValue().GetAngle()); break;
@@ -2225,7 +2225,7 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
             switch ( nMemberId )
             {
                 case MID_GRADIENT_STYLE:
-                    aXGradient.SetGradientStyle( (css::awt::GradientStyle)nVal ); break;
+                    aXGradient.SetGradientStyle( static_cast<css::awt::GradientStyle>(nVal) ); break;
                 case MID_GRADIENT_ANGLE:
                     aXGradient.SetAngle( nVal ); break;
                 case MID_GRADIENT_BORDER:
@@ -2575,7 +2575,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nVal = sal_Int16();
             if (!(rVal >>= nVal ))
                 return false;
-            aHatch.SetHatchStyle( (css::drawing::HatchStyle)nVal );
+            aHatch.SetHatchStyle( static_cast<css::drawing::HatchStyle>(nVal) );
             break;
         }
 
@@ -2646,7 +2646,7 @@ sal_uInt16 XFormTextStyleItem::GetValueCount() const
 
 bool XFormTextStyleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetValue();
+    rVal <<= static_cast<sal_Int32>(GetValue());
     return true;
 }
 
@@ -2654,7 +2654,7 @@ bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue((XFormTextStyle)nValue);
+    SetValue(static_cast<XFormTextStyle>(nValue));
 
     return true;
 }
@@ -2679,7 +2679,7 @@ sal_uInt16 XFormTextAdjustItem::GetValueCount() const
 
 bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetValue();
+    rVal <<= static_cast<sal_Int32>(GetValue());
     return true;
 }
 
@@ -2687,7 +2687,7 @@ bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue((XFormTextAdjust)nValue);
+    SetValue(static_cast<XFormTextAdjust>(nValue));
 
     return true;
 }
@@ -2763,7 +2763,7 @@ sal_uInt16 XFormTextShadowItem::GetValueCount() const
 
 bool XFormTextShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetValue();
+    rVal <<= static_cast<sal_Int32>(GetValue());
     return true;
 }
 
@@ -2771,7 +2771,7 @@ bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue((XFormTextShadow)nValue);
+    SetValue(static_cast<XFormTextShadow>(nValue));
 
     return true;
 }

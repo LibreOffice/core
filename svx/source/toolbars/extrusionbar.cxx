@@ -568,7 +568,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
                 (rReq.GetArgs()->GetItemState( SID_ATTR_METRIC ) == SfxItemState::SET))
             {
                 double fDepth = rReq.GetArgs()->GetItem<SvxDoubleItem>(SID_EXTRUSION_DEPTH)->GetValue();
-                FieldUnit eUnit = (FieldUnit)rReq.GetArgs()->GetItem<SfxUInt16Item>(SID_ATTR_METRIC)->GetValue();
+                FieldUnit eUnit = static_cast<FieldUnit>(rReq.GetArgs()->GetItem<SfxUInt16Item>(SID_ATTR_METRIC)->GetValue());
 
                 ScopedVclPtrInstance< ExtrusionDepthDialog > aDlg(nullptr, fDepth, eUnit);
                 sal_uInt16 nRet = aDlg->Execute();
@@ -645,7 +645,7 @@ void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, "ProjectionMode" );
             sal_Int16 nProjectionMode = sal_Int16();
             if( pAny && ( *pAny >>= nProjectionMode ) )
-                bParallel = (ProjectionMode)nProjectionMode == ProjectionMode_PARALLEL;
+                bParallel = static_cast<ProjectionMode>(nProjectionMode) == ProjectionMode_PARALLEL;
 
             if( bParallel )
             {

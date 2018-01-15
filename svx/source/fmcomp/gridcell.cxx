@@ -2190,13 +2190,13 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast<DateField*>( m_pPainter.get() )->SetShowDateCentury( bShowDateCentury );
     }
 
-    static_cast< DateField* >( m_pWindow.get() )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
+    static_cast< DateField* >( m_pWindow.get() )->SetExtDateFormat( static_cast<ExtDateFieldFormat>(nFormat) );
     static_cast< DateField* >( m_pWindow.get() )->SetMin( aMin );
     static_cast< DateField* >( m_pWindow.get() )->SetMax( aMax );
     static_cast< DateField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
     static_cast< DateField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
 
-    static_cast< DateField* >( m_pPainter.get() )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
+    static_cast< DateField* >( m_pPainter.get() )->SetExtDateFormat( static_cast<ExtDateFieldFormat>(nFormat) );
     static_cast< DateField* >( m_pPainter.get() )->SetMin( aMin );
     static_cast< DateField* >( m_pPainter.get() )->SetMax( aMax );
     static_cast< DateField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
@@ -2298,13 +2298,13 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) >>= aMax );
     bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
-    static_cast< TimeField* >( m_pWindow.get() )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
+    static_cast< TimeField* >( m_pWindow.get() )->SetExtFormat( static_cast<ExtTimeFieldFormat>(nFormat) );
     static_cast< TimeField* >( m_pWindow.get() )->SetMin( aMin );
     static_cast< TimeField* >( m_pWindow.get() )->SetMax( aMax );
     static_cast< TimeField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
     static_cast< TimeField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
 
-    static_cast< TimeField* >( m_pPainter.get() )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
+    static_cast< TimeField* >( m_pPainter.get() )->SetExtFormat( static_cast<ExtTimeFieldFormat>(nFormat) );
     static_cast< TimeField* >( m_pPainter.get() )->SetMin( aMin );
     static_cast< TimeField* >( m_pPainter.get() )->SetMax( aMax );
     static_cast< TimeField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
@@ -3883,7 +3883,7 @@ void SAL_CALL FmXCheckBoxCell::setState( short n )
     if (m_pBox)
     {
         UpdateFromColumn();
-        m_pBox->SetState( (TriState)n );
+        m_pBox->SetState( static_cast<TriState>(n) );
     }
 }
 

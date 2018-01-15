@@ -35,7 +35,7 @@ void SdrTextObjTest::AllFamiliesCanBeRestoredFromSavedString() {
       OUString styleName = "styleName";
       SdrTextObj::AppendFamilyToStyleName(styleName, family);
       SfxStyleFamily readFamily = SdrTextObj::ReadFamilyFromStyleName(styleName);
-      CPPUNIT_ASSERT_EQUAL((int)family, (int)readFamily);
+      CPPUNIT_ASSERT_EQUAL(static_cast<int>(family), static_cast<int>(readFamily));
     }
 }
 

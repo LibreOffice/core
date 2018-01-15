@@ -173,7 +173,7 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< css::awt::XCheckBox > & _xBox)
 
 OUString CheckBoxWrapper::getCurrentText() const
 {
-    switch ((TriState)m_xBox->getState())
+    switch (static_cast<TriState>(m_xBox->getState()))
     {
         case TRISTATE_FALSE: return OUString("0");
         case TRISTATE_TRUE: return OUString("1");

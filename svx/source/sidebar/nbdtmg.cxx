@@ -103,7 +103,7 @@ NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& 
         {
             sal_Int16 nTmp;
             if (pValues[j].Value >>= nTmp)
-                pNew->nNumberType = (SvxNumType)nTmp;
+                pNew->nNumberType = static_cast<SvxNumType>(nTmp);
         }
         else if(pValues[j].Name == "Prefix")
             pValues[j].Value >>= pNew->sPrefix;

@@ -104,7 +104,7 @@ public:
 
     // Perspective: enum ProjectionType { ProjectionType::Parallel, ProjectionType::Perspective }
     ProjectionType GetPerspective() const
-        { return (ProjectionType) GetObjectItemSet().Get(SDRATTR_3DSCENE_PERSPECTIVE).GetValue(); }
+        { return static_cast<ProjectionType>(GetObjectItemSet().Get(SDRATTR_3DSCENE_PERSPECTIVE).GetValue()); }
 
     // Distance:
     double GetDistance() const

@@ -108,14 +108,14 @@ vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
     aFont.SetFamilyName( rDescr.Name );
     aFont.SetStyleName( rDescr.StyleName );
     aFont.SetFontSize( ::Size( rDescr.Width, rDescr.Height ) );
-    aFont.SetFamily( (FontFamily)rDescr.Family );
+    aFont.SetFamily( static_cast<FontFamily>(rDescr.Family) );
     aFont.SetCharSet( static_cast<rtl_TextEncoding>(rDescr.CharSet) );
-    aFont.SetPitch( (FontPitch)rDescr.Pitch );
+    aFont.SetPitch( static_cast<FontPitch>(rDescr.Pitch) );
     aFont.SetWidthType( vcl::unohelper::ConvertFontWidth( rDescr.CharacterWidth ) );
     aFont.SetWeight( vcl::unohelper::ConvertFontWeight( rDescr.Weight ) );
-    aFont.SetItalic( (FontItalic)rDescr.Slant );
-    aFont.SetUnderline( (::FontLineStyle)rDescr.Underline );
-    aFont.SetStrikeout( (::FontStrikeout)rDescr.Strikeout );
+    aFont.SetItalic( static_cast<FontItalic>(rDescr.Slant) );
+    aFont.SetUnderline( static_cast<::FontLineStyle>(rDescr.Underline) );
+    aFont.SetStrikeout( static_cast<::FontStrikeout>(rDescr.Strikeout) );
     aFont.SetOrientation( static_cast<sal_Int16>(rDescr.Orientation) );
     aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
     aFont.SetWordLineMode( rDescr.WordLineMode );
@@ -1857,14 +1857,14 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
     {
         vcl::Font aGridFont = pGrid->GetControlFont();
         sal_Int16 nValue = ::comphelper::getINT16(Value);
-        aGridFont.SetEmphasisMark( (FontEmphasisMark)nValue );
+        aGridFont.SetEmphasisMark( static_cast<FontEmphasisMark>(nValue) );
         pGrid->SetControlFont( aGridFont );
     }
     else if ( PropertyName == FM_PROP_FONTRELIEF )
     {
         vcl::Font aGridFont = pGrid->GetControlFont();
         sal_Int16 nValue = ::comphelper::getINT16(Value);
-        aGridFont.SetRelief( (FontRelief)nValue );
+        aGridFont.SetRelief( static_cast<FontRelief>(nValue) );
         pGrid->SetControlFont( aGridFont );
     }
     else if ( PropertyName == FM_PROP_HELPURL )

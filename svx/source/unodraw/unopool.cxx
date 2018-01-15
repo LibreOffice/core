@@ -171,7 +171,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
                     if(!(aValue >>= nMode))
                         throw lang::IllegalArgumentException();
 
-                    eMode = (drawing::BitmapMode)nMode;
+                    eMode = static_cast<drawing::BitmapMode>(nMode);
                 }
 
                 pPool->SetPoolDefaultItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );

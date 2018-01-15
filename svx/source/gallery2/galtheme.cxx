@@ -1337,7 +1337,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
 
         rOStm.WriteBool( bRel );
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
-        rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( (sal_uInt16)pObj->eObjKind );
+        rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( static_cast<sal_uInt16>(pObj->eObjKind) );
     }
 
     // more recently, a 512-byte reserve buffer is written,
@@ -1407,7 +1407,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             rIStm.ReadCharAsBool( bRel );
             OString aTempFileName = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
             rIStm.ReadUInt32( pObj->nOffset );
-            rIStm.ReadUInt16( nTemp ); pObj->eObjKind = (SgaObjKind) nTemp;
+            rIStm.ReadUInt16( nTemp ); pObj->eObjKind = static_cast<SgaObjKind>(nTemp);
 
             aFileName = OStringToOUString(aTempFileName, osl_getThreadTextEncoding());
 

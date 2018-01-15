@@ -38,7 +38,7 @@ enum class SvxChartTextOrder
     Auto
 };
 
-#define CHTXTORDER_COUNT    ((sal_uInt16)SvxChartTextOrder::Auto + 1)
+#define CHTXTORDER_COUNT    (sal_uInt16(SvxChartTextOrder::Auto) + 1)
 
 enum class SvxChartKindError
 {
@@ -52,7 +52,7 @@ enum class SvxChartKindError
     Range
 };
 
-#define CHERROR_COUNT   ((sal_uInt16)SvxChartKindError::Range + 1)
+#define CHERROR_COUNT   (sal_uInt16(SvxChartKindError::Range) + 1)
 
 enum class SvxChartIndicate
 {
@@ -62,7 +62,7 @@ enum class SvxChartIndicate
     Down
 };
 
-#define CHINDICATE_COUNT    ((sal_uInt16)SvxChartIndicate::Down + 1)
+#define CHINDICATE_COUNT    (sal_uInt16(SvxChartIndicate::Down) + 1)
 
 enum class SvxChartRegress
 {
@@ -77,7 +77,7 @@ enum class SvxChartRegress
     Unknown
 };
 
-#define CHREGRESS_COUNT ((sal_uInt16)SvxChartRegress::Unknown + 1)
+#define CHREGRESS_COUNT (sal_uInt16(SvxChartRegress::Unknown) + 1)
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem<SvxChartRegress>
 {

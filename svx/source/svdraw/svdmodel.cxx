@@ -162,9 +162,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbDisableTextEditUsesCommonUndoManager = false;
 
     if (!utl::ConfigManager::IsFuzzing())
-        mnCharCompressType = (CharCompressType)
-            officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
-            get();
+        mnCharCompressType = static_cast<CharCompressType>(officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
+            get());
     else
         mnCharCompressType = CharCompressType::NONE;
 

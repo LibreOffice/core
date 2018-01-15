@@ -570,7 +570,7 @@ void FillControl::dispose()
 
 IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectedEntryPos();
+    const drawing::FillStyle eXFS = static_cast<drawing::FillStyle>(mpLbFillType->GetSelectedEntryPos());
 
     if(meLastXFS != eXFS)
     {
@@ -745,7 +745,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectedEntryPos();
+    const drawing::FillStyle eXFS = static_cast<drawing::FillStyle>(mpLbFillType->GetSelectedEntryPos());
     const XFillStyleItem aXFillStyleItem(eXFS);
     SfxObjectShell* pSh = SfxObjectShell::Current();
 

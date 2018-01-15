@@ -1211,7 +1211,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaF
                     SfxItemSet aGradAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
                     XGradient aXGradient;
 
-                    aXGradient.SetGradientStyle((css::awt::GradientStyle)rGrad.GetStyle());
+                    aXGradient.SetGradientStyle(static_cast<css::awt::GradientStyle>(rGrad.GetStyle()));
                     aXGradient.SetStartColor(rGrad.GetStartColor());
                     aXGradient.SetEndColor(rGrad.GetEndColor());
                     aXGradient.SetAngle(rGrad.GetAngle());

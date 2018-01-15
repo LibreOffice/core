@@ -153,14 +153,14 @@ OUString AccFrameSelector::getAccessibleDescription(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return SvxResId(RID_SVXSTR_FRMSEL_DESCRIPTIONS[(sal_uInt32)meBorder].first);
+    return SvxResId(RID_SVXSTR_FRMSEL_DESCRIPTIONS[static_cast<sal_uInt32>(meBorder)].first);
 }
 
 OUString AccFrameSelector::getAccessibleName(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return SvxResId(RID_SVXSTR_FRMSEL_TEXTS[(sal_uInt32)meBorder].first);
+    return SvxResId(RID_SVXSTR_FRMSEL_TEXTS[static_cast<sal_uInt32>(meBorder)].first);
 }
 
 Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet(  )

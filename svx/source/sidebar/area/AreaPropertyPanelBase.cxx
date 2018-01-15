@@ -240,7 +240,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
 {
-    sal_Int32 nPos = (eFillStyle)mpLbFillType->GetSelectedEntryPos();
+    sal_Int32 nPos = static_cast<eFillStyle>(mpLbFillType->GetSelectedEntryPos());
     mpLbFillAttr->Clear();
     SfxObjectShell* pSh = SfxObjectShell::Current();
     if(!pSh)
@@ -439,7 +439,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
 
     meLastXFS = static_cast<sal_uInt16>(nPos);
 
-    if(eFillStyle::NONE != (eFillStyle)nPos)
+    if(eFillStyle::NONE != static_cast<eFillStyle>(nPos))
     {
         mpLbFillType->Selected();
     }
@@ -467,12 +467,12 @@ void AreaPropertyPanelBase::DataChanged(
 
 void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 {
-    sal_Int32 nPosFillStyle = (eFillStyle)mpLbFillType->GetSelectedEntryPos();
+    sal_Int32 nPosFillStyle = static_cast<eFillStyle>(mpLbFillType->GetSelectedEntryPos());
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     // #i122676# dependent from bFillStyleChange, do execute a single or two
     // changes in one Execute call
-    const bool bFillStyleChange((eFillStyle) meLastXFS != (eFillStyle)nPosFillStyle);
+    const bool bFillStyleChange(static_cast<eFillStyle>(meLastXFS) != static_cast<eFillStyle>(nPosFillStyle));
 
     switch(nPosFillStyle)
     {
@@ -502,7 +502,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             {
                 XGradient aGradient;
                 aGradient.SetAngle(mpMTRAngle->GetValue() * 10);
-                aGradient.SetGradientStyle((css::awt::GradientStyle)mpGradientStyle->GetSelectedEntryPos());
+                aGradient.SetGradientStyle(static_cast<css::awt::GradientStyle>(mpGradientStyle->GetSelectedEntryPos()));
                 aGradient.SetStartColor(mpLbFillGradFrom->GetSelectEntryColor());
                 aGradient.SetEndColor(mpLbFillGradTo->GetSelectEntryColor());
 
@@ -1104,7 +1104,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
 
 void AreaPropertyPanelBase::Update()
 {
-        const eFillStyle eXFS = (eFillStyle)mpLbFillType->GetSelectedEntryPos();
+        const eFillStyle eXFS = static_cast<eFillStyle>(mpLbFillType->GetSelectedEntryPos());
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         switch( eXFS )
@@ -1161,7 +1161,7 @@ void AreaPropertyPanelBase::Update()
                         mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
                         mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
                         mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( aGradient.GetGradientStyle() ));
-                        if(mpGradientStyle->GetSelectedEntryPos() == (sal_Int32)GradientStyle::Radial)
+                        if(mpGradientStyle->GetSelectedEntryPos() == sal_Int32(GradientStyle::Radial))
                             mpMTRAngle->Disable();
                         else
                             mpMTRAngle->SetValue( aGradient.GetAngle() /10 );
@@ -1344,7 +1344,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)
 
     XGradient aTmpGradient;
 
-    switch((css::awt::GradientStyle)nSelectType)
+    switch(static_cast<css::awt::GradientStyle>(nSelectType))
     {
         case css::awt::GradientStyle_LINEAR:
             aTmpGradient = maGradientLinear;

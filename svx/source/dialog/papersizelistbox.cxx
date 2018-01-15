@@ -41,7 +41,7 @@ void PaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
         OUString aStr = SvxResId(pPaperAry[i].first);
-        Paper eSize = (Paper)pPaperAry[i].second;
+        Paper eSize = static_cast<Paper>(pPaperAry[i].second);
         sal_Int32 nPos = InsertEntry( aStr );
         SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(eSize)) );
     }
@@ -55,7 +55,7 @@ void PaperSizeListBox::SetSelection( Paper ePreselectPaper )
 
     for (sal_Int32 i = 0; i < nEntryCount; ++i )
     {
-        Paper eTmp = (Paper)reinterpret_cast<sal_uLong>(GetEntryData(i));
+        Paper eTmp = static_cast<Paper>(reinterpret_cast<sal_uLong>(GetEntryData(i)));
 
         if ( eTmp == ePreselectPaper )
         {
@@ -74,7 +74,7 @@ void PaperSizeListBox::SetSelection( Paper ePreselectPaper )
 Paper PaperSizeListBox::GetSelection() const
 {
     const sal_Int32 nPos = GetSelectedEntryPos();
-    Paper ePaper = (Paper)reinterpret_cast<sal_uLong>(GetEntryData( nPos ));
+    Paper ePaper = static_cast<Paper>(reinterpret_cast<sal_uLong>(GetEntryData( nPos )));
 
     return ePaper;
 }

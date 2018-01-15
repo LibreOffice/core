@@ -2281,7 +2281,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                 if(!(rValue >>= nMode))
                     break;
 
-                eMode = (drawing::BitmapMode)nMode;
+                eMode = static_cast<drawing::BitmapMode>(nMode);
             }
             mpObj->SetMergedItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
             mpObj->SetMergedItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );

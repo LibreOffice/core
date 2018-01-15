@@ -1286,8 +1286,8 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
         sal_uInt16 nIdent;
         SdrInventor nInvent;
         pView->TakeCurrentObj(nIdent,nInvent);
-        if (nInvent==SdrInventor::Default && pU->eAktKind!=(SdrObjKind)nIdent) {
-            SdrObjKind eNewKind=(SdrObjKind)nIdent;
+        if (nInvent==SdrInventor::Default && pU->eAktKind!=static_cast<SdrObjKind>(nIdent)) {
+            SdrObjKind eNewKind=static_cast<SdrObjKind>(nIdent);
             switch (eNewKind) {
                 case OBJ_CARC:
                 case OBJ_CIRC:

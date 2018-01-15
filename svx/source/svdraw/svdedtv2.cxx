@@ -1523,7 +1523,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
             if(!bMakeLines || nPointCount < 2)
             {
-                SdrPathObj* pPath = new SdrPathObj((SdrObjKind)pSrcPath->GetObjIdentifier(), basegfx::B2DPolyPolygon(rCandidate));
+                SdrPathObj* pPath = new SdrPathObj(static_cast<SdrObjKind>(pSrcPath->GetObjIdentifier()), basegfx::B2DPolyPolygon(rCandidate));
                 ImpCopyAttributes(pSrcPath, pPath);
                 pLast = pPath;
                 rOL.InsertObject(pPath, rPos);

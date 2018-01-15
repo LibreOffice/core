@@ -199,7 +199,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nValue))
                 return false;
 
-            eNumType = (SvxNumType)nValue;
+            eNumType = static_cast<SvxNumType>(nValue);
         }
         break;
         case MID_PAGE_ORIENTATION:
@@ -213,7 +213,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return false;
-                eLayout = (style::PageStyleLayout)nValue;
+                eLayout = static_cast<style::PageStyleLayout>(nValue);
             }
             switch( eLayout )
             {

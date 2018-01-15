@@ -370,7 +370,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     FieldUnit eUnit = FUNIT_NONE;
 
     if ( pState && eState >= SfxItemState::DEFAULT )
-        eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pState)->GetValue();
+        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
     else
     {
         SfxViewFrame* pFrame = SfxViewFrame::Current();
@@ -384,7 +384,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
             {
                 const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
                 if ( pItem )
-                    eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             }
             else
             {

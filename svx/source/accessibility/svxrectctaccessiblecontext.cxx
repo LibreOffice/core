@@ -87,13 +87,13 @@ static const ChildIndexToPointData* IndexToPoint( long nIndex )
 
 static long PointToIndex( RectPoint ePoint )
 {
-    long    nRet( (long) ePoint );
+    long    nRet( static_cast<long>(ePoint) );
     // corner control
     // corners are counted from left to right and top to bottom
-    DBG_ASSERT( (int)RectPoint::LT == 0 && (int)RectPoint::MT == 1 && (int)RectPoint::RT == 2 && (int)RectPoint::LM == 3 && (int)RectPoint::MM == 4 && (int)RectPoint::RM == 5 &&
-                (int)RectPoint::LB == 6 && (int)RectPoint::MB == 7 && (int)RectPoint::RB == 8, "*PointToIndex(): unexpected enum value!" );
+    DBG_ASSERT( int(RectPoint::LT) == 0 && int(RectPoint::MT) == 1 && int(RectPoint::RT) == 2 && int(RectPoint::LM) == 3 && int(RectPoint::MM) == 4 && int(RectPoint::RM) == 5 &&
+                int(RectPoint::LB) == 6 && int(RectPoint::MB) == 7 && int(RectPoint::RB) == 8, "*PointToIndex(): unexpected enum value!" );
 
-    nRet = ( long ) ePoint;
+    nRet = static_cast<long>(ePoint);
 
     return nRet;
 }

@@ -144,7 +144,7 @@ bool XLineJointItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
         sal_Int32 nLJ = 0;
         if(!(rVal >>= nLJ))
             return false;
-        eUnoJoint = (css::drawing::LineJoint)nLJ;
+        eUnoJoint = static_cast<css::drawing::LineJoint>(nLJ);
     }
 
     SetValue( eUnoJoint );
@@ -298,7 +298,7 @@ bool XLineCapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
             return false;
         }
 
-        eUnoCap = (css::drawing::LineCap)nLJ;
+        eUnoCap = static_cast<css::drawing::LineCap>(nLJ);
     }
 
     OSL_ENSURE(css::drawing::LineCap_BUTT == eUnoCap
@@ -470,7 +470,7 @@ void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpPosItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((int)GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(static_cast<int>(GetValue())).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 

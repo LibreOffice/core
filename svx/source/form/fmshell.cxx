@@ -483,7 +483,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             SfxUInt16Item aIdentifierItem( SID_FM_CONTROL_IDENTIFIER, nIdentifier );
-            SfxUInt32Item aInventorItem( SID_FM_CONTROL_INVENTOR, (sal_uInt32) SdrInventor::FmForm );
+            SfxUInt32Item aInventorItem( SID_FM_CONTROL_INVENTOR, sal_uInt32(SdrInventor::FmForm) );
             const SfxPoolItem* pArgs[] =
             {
                 &aIdentifierItem, &aInventorItem, nullptr

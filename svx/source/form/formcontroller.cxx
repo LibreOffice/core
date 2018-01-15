@@ -2544,7 +2544,7 @@ void FormController::loaded(const EventObject& rEvent)
             Any aVal        = xSet->getPropertyValue(FM_PROP_CYCLE);
             sal_Int32 aVal2 = 0;
             ::cppu::enum2int(aVal2,aVal);
-            m_bCycle        = !aVal.hasValue() || (form::TabulatorCycle)aVal2 == TabulatorCycle_RECORDS;
+            m_bCycle        = !aVal.hasValue() || static_cast<form::TabulatorCycle>(aVal2) == TabulatorCycle_RECORDS;
             m_bCanUpdate    = canUpdate(xSet);
             m_bCanInsert    = canInsert(xSet);
             m_bCurrentRecordModified = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));

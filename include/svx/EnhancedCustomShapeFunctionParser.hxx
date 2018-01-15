@@ -126,7 +126,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
     case ExpressionFunct::TernaryIf : return stream << "if";
 
-    default: return stream << "?(" << (int)eFunc << ")";
+    default: return stream << "?(" << static_cast<int>(eFunc) << ")";
     }
 }
 
