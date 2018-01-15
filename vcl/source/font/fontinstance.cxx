@@ -45,7 +45,6 @@ LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData 
     , mnOwnOrientation( 0 )
     , mnOrientation( 0 )
     , mbInit( false )
-    , mpUnicodeFallbackList( nullptr )
     , mpFontCache( nullptr )
     , mnRefCount( 1 )
 {
@@ -54,7 +53,7 @@ LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData 
 
 LogicalFontInstance::~LogicalFontInstance()
 {
-    delete mpUnicodeFallbackList;
+    mpUnicodeFallbackList.reset();
     mpFontCache = nullptr;
     mxFontMetric = nullptr;
 }
@@ -83,7 +82,7 @@ void LogicalFontInstance::Release()
 void LogicalFontInstance::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
 {
     if( !mpUnicodeFallbackList )
-        mpUnicodeFallbackList = new UnicodeFallbackList;
+        mpUnicodeFallbackList.reset(new UnicodeFallbackList);
     (*mpUnicodeFallbackList)[ std::pair< sal_UCS4, FontWeight >(cChar,eWeight) ] = rFontName;
 }
 
