@@ -27,6 +27,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/mapmod.hxx>
 #include <vector>
+#include <memory>
 
 class Graphic;
 
@@ -87,8 +88,8 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     sal_Int32                   mnCompressionQuality;
     css::lang::Locale           maDocLocale;
 
-    PageSyncData*               mpPageSyncData;
-    GlobalSyncData*             mpGlobalSyncData;
+    std::unique_ptr<PageSyncData> mpPageSyncData;
+    std::unique_ptr<GlobalSyncData> mpGlobalSyncData;
 
     std::vector< PDFExtOutDevBookmarkEntry > maBookmarks;
 
