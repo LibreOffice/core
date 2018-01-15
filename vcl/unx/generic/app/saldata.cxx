@@ -376,7 +376,7 @@ SalXLib::~SalXLib()
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
 
-    delete m_pInputMethod;
+    m_pInputMethod.reset();
 }
 
 static Display *OpenX11Display(OString& rDisplay)
@@ -433,7 +433,7 @@ static Display *OpenX11Display(OString& rDisplay)
 
 void SalXLib::Init()
 {
-    m_pInputMethod = new SalI18N_InputMethod;
+    m_pInputMethod.reset( new SalI18N_InputMethod );
     m_pInputMethod->SetLocale();
     XrmInitialize();
 
