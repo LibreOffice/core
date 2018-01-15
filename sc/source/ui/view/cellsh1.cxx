@@ -1883,6 +1883,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case FID_DEFINE_NAME:
+        case FID_DEFINE_CURRENT_NAME:
             if ( pReqArgs )
             {
                 const SfxPoolItem* pItem;

@@ -1184,6 +1184,24 @@ SfxVoidItem DefineName FID_DEFINE_NAME
 ]
 
 
+SfxVoidItem DefineCurrentName FID_DEFINE_CURRENT_NAME
+(SfxStringItem Name FID_DEFINE_CURRENT_NAME,SfxStringItem Symbol FN_PARAM_1,SfxStringItem Options FN_PARAM_2)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
+
 SfxVoidItem DefinePrintArea SID_DEFINE_PRINTAREA
 ()
 [
