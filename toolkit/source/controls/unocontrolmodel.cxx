@@ -85,7 +85,7 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
         case BASEPROPERTY_FONTDESCRIPTORPART_WEIGHT:        rValue >>= rFD.Weight;
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         if ( rValue >>= nExtractShort )
-                                                                rFD.Slant = (css::awt::FontSlant)nExtractShort;
+                                                                rFD.Slant = static_cast<css::awt::FontSlant>(nExtractShort);
                                                             else
                                                                 rValue >>= rFD.Slant;
                                                             break;
@@ -176,7 +176,7 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             case BASEPROPERTY_FONTDESCRIPTORPART_CHARSET:       aDefault <<= aFD.CharSet;           break;
             case BASEPROPERTY_FONTDESCRIPTORPART_HEIGHT:        aDefault <<= static_cast<float>(aFD.Height);     break;
             case BASEPROPERTY_FONTDESCRIPTORPART_WEIGHT:        aDefault <<= aFD.Weight;            break;
-            case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         aDefault <<= (sal_Int16)aFD.Slant;  break;
+            case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         aDefault <<= static_cast<sal_Int16>(aFD.Slant);  break;
             case BASEPROPERTY_FONTDESCRIPTORPART_UNDERLINE:     aDefault <<= aFD.Underline;         break;
             case BASEPROPERTY_FONTDESCRIPTORPART_STRIKEOUT:     aDefault <<= aFD.Strikeout;         break;
             case BASEPROPERTY_FONTDESCRIPTORPART_WIDTH:         aDefault <<= aFD.Width;             break;
@@ -840,7 +840,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                     aFD.Pitch = InStream->readShort();
                     aFD.CharacterWidth = static_cast<float>(InStream->readDouble());
                     aFD.Weight = static_cast<float>(InStream->readDouble());
-                    aFD.Slant =  (css::awt::FontSlant)InStream->readShort();
+                    aFD.Slant =  static_cast<css::awt::FontSlant>(InStream->readShort());
                     aFD.Underline = InStream->readShort();
                     aFD.Strikeout = InStream->readShort();
                     aFD.Orientation = static_cast<float>(InStream->readDouble());
@@ -951,8 +951,8 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                             if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
                                 maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
                         }
-                        pFD->Weight = vcl::unohelper::ConvertFontWeight((FontWeight) InStream->readShort());
-                        pFD->Slant =  (css::awt::FontSlant)InStream->readShort();
+                        pFD->Weight = vcl::unohelper::ConvertFontWeight(static_cast<FontWeight>(InStream->readShort()));
+                        pFD->Slant =  static_cast<css::awt::FontSlant>(InStream->readShort());
                         pFD->Underline = InStream->readShort();
                         pFD->Strikeout = InStream->readShort();
                         pFD->Orientation = static_cast<float>(static_cast<double>(InStream->readShort())) / 10;
@@ -1201,7 +1201,7 @@ void UnoControlModel::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nPr
                                                                 break;
             case BASEPROPERTY_FONTDESCRIPTORPART_WEIGHT:        rValue <<= aFD.Weight;
                                                                 break;
-            case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         rValue <<= (sal_Int16)aFD.Slant;
+            case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         rValue <<= static_cast<sal_Int16>(aFD.Slant);
                                                                 break;
             case BASEPROPERTY_FONTDESCRIPTORPART_UNDERLINE:     rValue <<= aFD.Underline;
                                                                 break;
