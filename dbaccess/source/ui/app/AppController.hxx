@@ -310,7 +310,7 @@ namespace dbaui
                                     ,bool _bCollection = true
                                     ,const css::uno::Reference< css::ucb::XContent>& _xContent = css::uno::Reference< css::ucb::XContent>()
                                     ,bool _bMove = false);
-        /** checks if delete command or rename comamnd is allowed
+        /** checks if delete command or rename command is allowed
             @param  _eType
                 The element type.
             @param  _bDelete

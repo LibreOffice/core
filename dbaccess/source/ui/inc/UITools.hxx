@@ -357,7 +357,7 @@ namespace dbaui
                                             ,OUString& _rsDatabaseName);
 
     /** returns the standard database filter
-        @retrun
+        @return
             the filter
     */
     std::shared_ptr<const SfxFilter> getStandardDatabaseFilter();

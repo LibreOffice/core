@@ -245,7 +245,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
                     has to be closed itself (target=_self) ... sometimes its parent frame
                     has to be closed - BUT(!) it means a parent frame containing a top level
                     window. _top can't be used then for dispatch - because it address TopFrames
-                    not frames containg top level windows. So normally _magic (which btw does not
+                    not frames containing top level windows. So normally _magic (which btw does not
                     exists at the moment .-) ) should be used. So we interpret target=<empty>
                     as _magic !
 

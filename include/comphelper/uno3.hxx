@@ -88,7 +88,7 @@ namespace comphelper
 
     //= deriving from multiple XInterface-derived classes
 
-    //= forwarding/merging XInterface funtionality
+    //= forwarding/merging XInterface functionality
 
     #define DECLARE_XINTERFACE( )   \
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override; \
@@ -124,7 +124,7 @@ namespace comphelper
         }
 
 
-    //= forwarding/merging XTypeProvider funtionality
+    //= forwarding/merging XTypeProvider functionality
 
     #define DECLARE_XTYPEPROVIDER( )    \
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override; \

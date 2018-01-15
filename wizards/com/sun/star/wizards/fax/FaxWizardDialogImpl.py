@@ -108,7 +108,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             #Greeting/Salutation/CommunicationType yet choose a default
             self.__setDefaultForGreetingAndSalutationAndCommunication()
 
-            #disable funtionality that is not supported by the template:
+            #disable functionality that is not supported by the template:
             self.initializeElements()
 
             #disable the document, so that the user cannot change anything:

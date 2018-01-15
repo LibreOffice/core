@@ -196,7 +196,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPage::createV
 
             // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
             // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
-            // MasterPages should have a StyleSheet excactly for this reason, but historically
+            // MasterPages should have a StyleSheet exactly for this reason, but historically
             // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
             if(rPage.getSdrPageProperties().GetStyleSheet())
             {

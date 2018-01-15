@@ -2358,7 +2358,7 @@ public:
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clFinish", err, __FILE__, __LINE__);
 
-                SAL_INFO("sc.opencl", "Relasing kernel " << redKernel);
+                SAL_INFO("sc.opencl", "Releasing kernel " << redKernel);
                 err = clReleaseKernel(redKernel);
                 SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << openclwrapper::errorString(err));
 

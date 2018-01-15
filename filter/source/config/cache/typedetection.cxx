@@ -374,7 +374,7 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
 OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                               sal_Bool                                         bAllowDeep )
 {
-    // make the descriptor more useable :-)
+    // make the descriptor more usable :-)
     utl::MediaDescriptor stlDescriptor(lDescriptor);
     OUString sType, sURL;
 

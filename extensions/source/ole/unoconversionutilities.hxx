@@ -2072,7 +2072,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
 /* The argument unotype is the type that is expected by the currently called UNO function.
    For example: []long, [][]long. If the function calls itself recursively then the element type
    is passed on. For example a two dimensional SAFEARRAY of type VT_I4 is to be converted. Then
-   unotype has to be either void or [][]long. When the function calls itself recursivly then
+   unotype has to be either void or [][]long. When the function calls itself recursively then
    it passes the element type which is []long.
 */
 template<class T>

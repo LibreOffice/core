@@ -48,7 +48,7 @@ static typelib_TypeClass cpp2uno_call(
 {
         int ng = 0; //number of gpr registers used
 #ifndef __NO_FPRS__
-        int nf = 0; //number of fpr regsiters used
+        int nf = 0; //number of fpr registers used
 #endif
         void ** pCppStack; //temporary stack pointer
 

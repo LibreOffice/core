@@ -320,7 +320,7 @@ namespace dbaui
             @param  _eMode
                 the mode to set for the preview
             @param  _bForce
-                Force the preview to be resetted
+                Force the preview to be reset
         */
         void switchPreview(PreviewMode _eMode,bool _bForce = false);
 

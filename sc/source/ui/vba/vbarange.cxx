@@ -4633,7 +4633,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                 if ( rEntry.bDoQuery )
                     lcl_SetAllQueryForField( pShell, rEntry.nField, nSheet );
             }
-            // remove exising filters
+            // remove existing filters
             uno::Reference< sheet::XSheetFilterDescriptor2 > xSheetFilterDescriptor(
                     xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY );
             if( xSheetFilterDescriptor.is() )
@@ -4921,7 +4921,7 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail)
     }
 
     // #FIXME, seems there is a different behavior between MSO and OOo.
-    //  In OOo, the showDetail will show all the level entrys, while only show the first level entry in MSO
+    //  In OOo, the showDetail will show all the level entries, while only show the first level entry in MSO
     uno::Reference< sheet::XSheetOutline > xSheetOutline( helper.getSpreadSheet(), uno::UNO_QUERY_THROW );
     if( bShowDetail )
         xSheetOutline->showDetail( aOutlineAddress );

@@ -806,7 +806,7 @@ namespace
                                 aWhereStr += C_AND;
 
                             aWhereStr += " ";
-                            // aCriteria could have some german numbers so I have to be sure here
+                            // aCriteria could have some German numbers so I have to be sure here
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
                             std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(pEntryField,aCriteria,aErrorMsg,xColumn));

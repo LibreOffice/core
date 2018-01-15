@@ -199,7 +199,7 @@
 <!ATTLIST FormatElement    type     (short|medium|long) #REQUIRED >
 <!--
     There may be up to three groups (type="short", type="medium", type="long")
-    for each usage category defined. Each group, if defined, needs excactly one
+    for each usage category defined. Each group, if defined, needs exactly one
     default. The type roughly determines the display string length, for example
     short, medium, and long date formats.
 

@@ -965,7 +965,7 @@ public class TextDocuments {
                     ++nDepth;
                 }
                 while ( nDepth < 200 && aBlockNames.length == 0 );
-                // If we managed to find a group containg blocks...
+                // If we managed to find a group containing blocks...
                 if ( aBlockNames.length > 0 )
                 {
                     // Pick a random block in this group and get its

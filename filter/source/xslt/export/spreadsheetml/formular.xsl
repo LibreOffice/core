@@ -118,7 +118,7 @@
                                 contains($expression, 'FLOOR(') or
                                 contains($expression, 'IF(') or
                                 contains($expression, 'ROUND('))">
-                <!-- simply translate possily exisiting column & row references -->
+                <!-- simply translate possibly existing column & row references -->
                 <xsl:call-template name="translate-oooc-expression">
                     <xsl:with-param name="rowPos" select="$rowPos" />
                     <xsl:with-param name="columnPos" select="$columnPos" />
