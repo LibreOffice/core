@@ -29,6 +29,7 @@
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class Color;
 
@@ -79,17 +80,17 @@ public:
     OutDevState();
     ~OutDevState();
 
-    MapMode*        mpMapMode;
+    std::unique_ptr<MapMode>        mpMapMode;
     bool            mbMapActive;
-    vcl::Region*    mpClipRegion;
-    Color*          mpLineColor;
-    Color*          mpFillColor;
-    vcl::Font*      mpFont;
-    Color*          mpTextColor;
-    Color*          mpTextFillColor;
-    Color*          mpTextLineColor;
-    Color*          mpOverlineColor;
-    Point*          mpRefPoint;
+    std::unique_ptr<vcl::Region>    mpClipRegion;
+    std::unique_ptr<Color>          mpLineColor;
+    std::unique_ptr<Color>          mpFillColor;
+    std::unique_ptr<vcl::Font>      mpFont;
+    std::unique_ptr<Color>          mpTextColor;
+    std::unique_ptr<Color>          mpTextFillColor;
+    std::unique_ptr<Color>          mpTextLineColor;
+    std::unique_ptr<Color>          mpOverlineColor;
+    std::unique_ptr<Point>          mpRefPoint;
     TextAlign       meTextAlign;
     RasterOp        meRasterOp;
     ComplexTextLayoutFlags  mnTextLayoutMode;
