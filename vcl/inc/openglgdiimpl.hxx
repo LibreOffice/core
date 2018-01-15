@@ -74,7 +74,7 @@ protected:
     OpenGLProgram* mpProgram;
 
     /// This idle handler is used to swap buffers after rendering.
-    OpenGLFlushIdle *mpFlush;
+    std::unique_ptr<OpenGLFlushIdle> mpFlush;
 
     // clipping
     vcl::Region maClipRegion;
