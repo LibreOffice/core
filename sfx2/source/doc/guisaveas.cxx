@@ -699,6 +699,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     const OUString aInteractionHandlerString("InteractionHandler");
     const OUString aStatusIndicatorString("StatusIndicator");
     const OUString aFailOnWarningString("FailOnWarning");
+    const OUString aNoFileSync("NoFileSync");
 
     if ( GetMediaDescr().find( aVersionCommentString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aVersionCommentString ] = GetMediaDescr()[ aVersionCommentString ];
@@ -712,6 +713,8 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
         aAcceptedArgs[ aStatusIndicatorString ] = GetMediaDescr()[ aStatusIndicatorString ];
     if ( GetMediaDescr().find( aFailOnWarningString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aFailOnWarningString ] = GetMediaDescr()[ aFailOnWarningString ];
+    if (GetMediaDescr().find(aNoFileSync) != GetMediaDescr().end())
+        aAcceptedArgs[aNoFileSync] = GetMediaDescr()[aNoFileSync];
 
     // remove unacceptable entry if there is any
     DBG_ASSERT( GetMediaDescr().size() == aAcceptedArgs.size(),
