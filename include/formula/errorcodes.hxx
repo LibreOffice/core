@@ -110,7 +110,7 @@ inline FormulaError GetDoubleErrorValue( double fVal )
         // Another NAN, e.g. -nan(0x8000000000000) from calculating with -inf
         return FormulaError::IllegalFPOperation;
     // Any other error known to us as error code.
-    return (FormulaError)(nErr & 0x0000ffff);
+    return static_cast<FormulaError>(nErr & 0x0000ffff);
 }
 
 /** Error values that are accepted as detailed "#ERRxxx!" constants.

@@ -457,7 +457,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
             const OUString aString = xParser->printFormula( aArgs, aRefPos);
             const sheet::FormulaToken* pNextToken = pIter + 1;
 
-            if ( !m_bUserMatrixFlag && FormulaCompiler::IsMatrixFunction((OpCode)eOp) )
+            if ( !m_bUserMatrixFlag && FormulaCompiler::IsMatrixFunction(static_cast<OpCode>(eOp)) )
             {
                 m_pBtnMatrix->Check();
             }
