@@ -82,8 +82,6 @@ namespace emfplushelper
 
     EMFPPen::~EMFPPen()
     {
-        delete customStartCap;
-        delete customEndCap;
     }
 
     void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData const & rR, const ::basegfx::B2DHomMatrix& mapModeTransform)
@@ -297,7 +295,7 @@ namespace emfplushelper
             SAL_INFO("drawinglayer", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
             sal_uInt64 const pos = s.Tell();
 
-            customStartCap = new EMFPCustomLineCap();
+            customStartCap.reset( new EMFPCustomLineCap() );
             customStartCap->Read(s, rR);
 
             // maybe we don't read everything yet, play it safe ;-)
@@ -314,7 +312,7 @@ namespace emfplushelper
             SAL_INFO("drawinglayer", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
             sal_uInt64 const pos = s.Tell();
 
-            customEndCap = new EMFPCustomLineCap();
+            customEndCap.reset( new EMFPCustomLineCap() );
             customEndCap->Read(s, rR);
 
             // maybe we don't read everything yet, play it safe ;-)
