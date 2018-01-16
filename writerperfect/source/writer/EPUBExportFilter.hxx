@@ -36,7 +36,7 @@ class EPUBExportFilter : public cppu::WeakImplHelper
     css::uno::Reference<css::lang::XComponent> mxSourceDocument;
 
 public:
-    EPUBExportFilter(const css::uno::Reference<css::uno::XComponentContext> &xContext);
+    EPUBExportFilter(css::uno::Reference<css::uno::XComponentContext> xContext);
 
     // XFilter
     sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor) override;
@@ -47,7 +47,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString &ServiceName) override;
+    sal_Bool SAL_CALL supportsService(const OUString &rServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /// Gives the default EPUB version.

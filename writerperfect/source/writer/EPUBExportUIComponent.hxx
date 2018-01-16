@@ -30,7 +30,7 @@ class EPUBExportUIComponent : public cppu::WeakImplHelper
     >
 {
 public:
-    EPUBExportUIComponent(const css::uno::Reference<css::uno::XComponentContext> &xContext);
+    EPUBExportUIComponent(css::uno::Reference<css::uno::XComponentContext> xContext);
 
     // XPropertyAccess
     css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getPropertyValues() override;
@@ -38,7 +38,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString &ServiceName) override;
+    sal_Bool SAL_CALL supportsService(const OUString &rServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XExecutableDialog

@@ -34,8 +34,8 @@ using namespace com::sun::star;
 namespace writerperfect
 {
 
-EPUBExportFilter::EPUBExportFilter(const uno::Reference<uno::XComponentContext> &xContext)
-    : mxContext(xContext)
+EPUBExportFilter::EPUBExportFilter(uno::Reference<uno::XComponentContext> xContext)
+    : mxContext(std::move(xContext))
 {
 }
 
@@ -143,7 +143,7 @@ void EPUBExportFilter::CreateMetafiles(std::vector<std::pair<uno::Sequence<sal_I
         // Get the CSS pixel size of the page (mm100 -> pixel using 96 DPI, independent from system DPI).
         Size aCss(static_cast<double>(aLogic.getWidth()) / 26.4583, static_cast<double>(aLogic.getHeight()) / 26.4583);
         Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aCss, COL_WHITE);
-        GDIMetaFile &rGDIMetaFile = const_cast<GDIMetaFile &>(aGraphic.GetGDIMetaFile());
+        auto &rGDIMetaFile = const_cast<GDIMetaFile &>(aGraphic.GetGDIMetaFile());
 
         // Set preferred map unit and size on the metafile, so the SVG size
         // will be correct in MM.
@@ -188,7 +188,7 @@ uno::Sequence<OUString> EPUBExportFilter::getSupportedServiceNames()
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(uno::XComponentContext *pContext, uno::Sequence<uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(uno::XComponentContext *pContext, uno::Sequence<uno::Any> const &/*rSeq*/)
 {
     return cppu::acquire(new EPUBExportFilter(pContext));
 }

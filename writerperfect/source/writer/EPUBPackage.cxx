@@ -24,8 +24,8 @@ using namespace com::sun::star;
 namespace writerperfect
 {
 
-EPUBPackage::EPUBPackage(const uno::Reference<uno::XComponentContext> &xContext, const uno::Sequence<beans::PropertyValue> &rDescriptor)
-    : mxContext(xContext)
+EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext, const uno::Sequence<beans::PropertyValue> &rDescriptor)
+    : mxContext(std::move(xContext))
 {
     // Extract the output stream from the descriptor.
     utl::MediaDescriptor aMediaDesc(rDescriptor);
