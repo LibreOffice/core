@@ -80,8 +80,8 @@ struct SbiGlobals
 {
     static SbiGlobals* pGlobals;
     SbiInstance*    pInst;          // all active runtime instances
-    SbiFactory*     pSbFac;         // StarBASIC-Factory
-    SbUnoFactory*   pUnoFac;        // Factory for Uno-Structs at DIM AS NEW
+    std::unique_ptr<SbiFactory>   pSbFac;    // StarBASIC-Factory
+    std::unique_ptr<SbUnoFactory> pUnoFac;   // Factory for Uno-Structs at DIM AS NEW
     SbTypeFactory*  pTypeFac;       // Factory for user defined types
     SbClassFactory* pClassFac;      // Factory for user defined classes (based on class modules)
     SbOLEFactory*   pOLEFac;        // Factory for OLE types
@@ -98,7 +98,7 @@ struct SbiGlobals
     bool            bGlobalInitErr;
     bool            bRunInit;       // true, if RunInit active from the Basic
     OUString        aErrMsg;        // buffer for GetErrorText()
-    ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
+    std::unique_ptr<::utl::TransliterationWrapper> pTransliterationWrapper;    // For StrComp
     bool            bBlockCompilerError;
     BasicManager*   pAppBasMgr;
     StarBASIC*      pMSOMacroRuntimLib; // Lib containing MSO Macro Runtime API entry symbols
