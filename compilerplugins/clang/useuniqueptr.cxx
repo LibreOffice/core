@@ -235,6 +235,9 @@ void UseUniquePtr::CheckForForLoopDelete(const CXXDestructorDecl* destructorDecl
         StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
         if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
             continue;
+        // the std::vector is being passed to another class
+        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sfx2/source/explorer/nochaos.cxx"))
+            return;
 
         report(
             DiagnosticsEngine::Warning,
