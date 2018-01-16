@@ -122,11 +122,11 @@ SfxAppData_Impl::SfxAppData_Impl()
 SfxAppData_Impl::~SfxAppData_Impl()
 {
     DeInitDDE();
-    delete pBasicManager;
+    pBasicManager.reset();
 
 #if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::revokeCreationListener( *pBasMgrListener );
-    delete pBasMgrListener;
+    pBasMgrListener.reset();
 #endif
 }
 

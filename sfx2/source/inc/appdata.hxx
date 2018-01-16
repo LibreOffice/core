@@ -106,8 +106,9 @@ public:
     SfxViewFrameArr_Impl*       pViewFrames;
     SfxViewShellArr_Impl*       pViewShells;
     SfxObjectShellArr_Impl*     pObjShells;
-    SfxBasicManagerHolder*      pBasicManager;
-    SfxBasicManagerCreationListener*
+    std::unique_ptr<SfxBasicManagerHolder>
+                                pBasicManager;
+    std::unique_ptr<SfxBasicManagerCreationListener>
                                 pBasMgrListener;
     SfxViewFrame*               pViewFrame;
     SfxSlotPool*                pSlotPool;
