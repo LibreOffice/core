@@ -61,8 +61,8 @@ HWPFile::HWPFile()
 
 HWPFile::~HWPFile()
 {
-    delete oledata;
-    delete hiodev;
+    oledata.reset();
+    hiodev.reset();
 }
 
 int HWPFile::ReadHwpFile(HStream * stream)
@@ -185,9 +185,9 @@ void HWPFile::SetCompressed(bool flag)
 
 HIODev *HWPFile::SetIODevice(HIODev * new_hiodev)
 {
-    HIODev *old_hiodev = hiodev;
+    HIODev *old_hiodev = hiodev.release();
 
-    hiodev = new_hiodev;
+    hiodev.reset( new_hiodev );
 
     return old_hiodev;
 }
@@ -316,8 +316,7 @@ void HWPFile::TagsRead()
             }
             break;
             case FILETAG_OLE_OBJECT:
-                delete oledata;
-                oledata = new OlePicture(size);
+                oledata.reset( new OlePicture(size) );
                 oledata->Read(*this);
                 break;
             case FILETAG_HYPERTEXT:

@@ -427,12 +427,12 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
     while( hdo )
     {
         if( hdo->child )
-            makeDrawMiscStyle( hdo->child );
+            makeDrawMiscStyle( hdo->child.get() );
 
         HWPDOProperty *prop = &hdo->property;
         if( hdo->type == HWPDO_CONTAINER )
         {
-            hdo = hdo->next;
+            hdo = hdo->next.get();
             continue;
         }
 
@@ -694,7 +694,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 rendEl( "draw:hatch");
             }
         }
-        hdo = hdo->next;
+        hdo = hdo->next.get();
     }
 }
 
@@ -2205,9 +2205,9 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 
         if( hdo->type == 0 )
         {
-            makeDrawStyle( hdo->child, fstyle );
+            makeDrawStyle( hdo->child.get(), fstyle );
         }
-        hdo = hdo->next;
+        hdo = hdo->next.get();
     }
 }
 
@@ -4016,7 +4016,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
         {
             rstartEl("draw:g", mxList.get());
             mxList->clear();
-            makePictureDRAW(drawobj->child, hbox);
+            makePictureDRAW(drawobj->child.get(), hbox);
             rendEl("draw:g");
         }
         else
@@ -4574,7 +4574,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
             }
         }
         mxList->clear();
-        drawobj = drawobj->next;
+        drawobj = drawobj->next.get();
     }
 }
 
