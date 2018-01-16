@@ -1,0 +1,8 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Noel Grandin <noel.grandin@collabora.co.uk>
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Submitted-by: Eike Rathke <erack@redhat.com>
+Submitted-at: Tue, 16 Jan 2018 12:34:03 +0100
+Reviewed-on: https://gerrit.libreoffice.org/47843
+Project: core
+Branch: refs/heads/libreoffice-6-0
