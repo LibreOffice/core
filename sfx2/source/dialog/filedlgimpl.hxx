@@ -50,7 +50,7 @@ namespace sfx2
         std::vector< css::beans::StringPair >   maFilters;
 
         SfxFilterMatcher*           mpMatcher;
-        GraphicFilter*              mpGraphicFilter;
+        std::unique_ptr<GraphicFilter> mpGraphicFilter;
         FileDialogHelper*           mpAntiImpl;
         VclPtr<vcl::Window>         mpPreferredParentWindow;
 
