@@ -978,7 +978,7 @@ void SwXMLImport::endDocument()
 //
 void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
 {
-    // 1. check enviroment
+    // 1. check environment
     if (! pDoc)
         return;
 
