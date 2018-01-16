@@ -1012,12 +1012,13 @@ void SmCursor::InsertSpecial(const OUString& _aString)
 
 void SmCursor::InsertCommandText(const OUString& aCommandText) {
     //Parse the sub expression
-    SmNode* pSubExpr = SmParser().ParseExpression(aCommandText);
+    auto xSubExpr = SmParser().ParseExpression(aCommandText);
 
     //Prepare the subtree
-    pSubExpr->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
+    xSubExpr->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Convert subtree to list
+    SmNode* pSubExpr = xSubExpr.release();
     SmNodeList* pLineList = NodeToList(pSubExpr);
 
     BeginEdit();

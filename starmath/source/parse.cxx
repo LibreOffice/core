@@ -989,7 +989,7 @@ SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
             return DoError(SmParseError::DoubleAlign);
     }
 
-    std::unique_ptr<SmNode> pNode(DoExpression(bUseExtraSpaces));
+    auto pNode = DoExpression(bUseExtraSpaces);
 
     if (xSNode)
     {
@@ -1015,7 +1015,7 @@ SmLineNode *SmParser::DoLine()
         ExpressionArray.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
-        ExpressionArray.emplace_back(std::unique_ptr<SmNode>(DoExpression()));
+        ExpressionArray.push_back(DoExpression());
 
     //If there's no expression, add an empty one.
     //this is to avoid a formula tree without any caret
@@ -1032,7 +1032,7 @@ SmLineNode *SmParser::DoLine()
     return xSNode.release();
 }
 
-SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
+std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
@@ -1048,12 +1048,14 @@ SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
         std::unique_ptr<SmExpressionNode> xSNode(new SmExpressionNode(m_aCurToken));
         xSNode->SetSubNodes(buildNodeArray(RelationArray));
         xSNode->SetUseExtraSpaces(bUseExtraSpaces);
-        return xSNode.release();
+        // the following explicit move can be omitted since C++14:
+        // https://stackoverflow.com/questions/22018115/converting-stdunique-ptrderived-to-stdunique-ptrbase
+        return std::move(xSNode);
     }
     else
     {
         // This expression has only one node so just push this node.
-        return RelationArray[0].release();
+        return std::move(RelationArray[0]);
     }
 }
 
@@ -2329,7 +2331,7 @@ SmTableNode *SmParser::Parse(const OUString &rBuffer)
     return DoTable();
 }
 
-SmNode *SmParser::ParseExpression(const OUString &rBuffer)
+std::unique_ptr<SmNode> SmParser::ParseExpression(const OUString &rBuffer)
 {
     m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;
