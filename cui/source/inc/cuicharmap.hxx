@@ -54,7 +54,7 @@ public:
     void ToFile(std::ofstream &file);
     void ToFann(fann_type *out_data);
 
-    static const int SIZE = 15;
+    static const int SIZE = 20;
 
 private:
     Bitmap m_bitmap;
