@@ -1233,6 +1233,14 @@ sal_Bool SwCrsrShell::GoPrevCrsr()
 }
 
 
+sal_Bool SwCrsrShell::GetCharRectAt( SwRect& rOrig, const SwPosition& rPos,
+                                     SwCrsrMoveState* pCMS ) const
+{
+    SwCntntFrm * pFrm = GetCurrFrm();
+    return pFrm ? pFrm->GetCharRect( rOrig, rPos, pCMS ) : sal_False;
+}
+
+
 void SwCrsrShell::Paint( const Rectangle &rRect)
 {
     SET_CURR_SHELL( this );

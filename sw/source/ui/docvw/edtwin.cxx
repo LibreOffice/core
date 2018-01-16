@@ -5059,8 +5059,40 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     }
     break;
     case COMMAND_CURSORPOS:
-        // will be handled by the base class
-        break;
+    {
+        sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+                              rSh.IsCrsrReadonly();
+        if ( !bIsDocReadOnly )
+        {
+            if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
+            {
+                bCallBase = sal_False;
+                rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
+            }
+            else
+            {
+                const SwExtTextInput* pExtInp = rSh.GetDoc()->GetExtTextInput();
+                if ( pExtInp )
+                {
+                    // The carret placed at the end of the preedit.
+                    if ( POS_COLLIDE_START == ComparePosition( *pExtInp->End(), *pExtInp->End(),
+                                        *rSh.GetCrsr()->End(), *rSh.GetCrsr()->End() ) )
+                    {
+                        SwRect aInputRect;
+                        if ( rSh.GetCharRectAt( aInputRect, *pExtInp->Start() ) )
+                        {
+                            Rectangle aRect( aInputRect.SVRect() );
+                            SetCursorRect( &aRect, 1 );
+                            bCallBase = sal_False;
+                        }
+                    }
+                    if ( bCallBase )
+                        SetCursorRect();
+                }
+            }
+        }
+    }
+    break;
 
     case COMMAND_PASTESELECTION:
         if( !rView.GetDocShell()->IsReadOnly() )

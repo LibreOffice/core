@@ -550,6 +550,11 @@ public:
      * liefert das SRectangle, auf dem der Cursor steht.
      */
     const SwRect &GetCharRect() const { return aCharRect; }
+
+    // Obtains character rectangle at the position.
+    sal_Bool GetCharRectAt( SwRect& rOrig, const SwPosition& rPos,
+                                  SwCrsrMoveState *pCMS = 0 ) const;
+
     /*
      * liefert zurueck, ob der Cursor sich ganz oder teilweise im
      * sichtbaren Bereich befindet.

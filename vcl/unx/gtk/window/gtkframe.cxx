@@ -3344,7 +3344,9 @@ void GtkSalFrame::IMHandler::updateIMSpotLocation()
     SalExtTextInputPosEvent aPosEvent;
     m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
     GdkRectangle aArea;
-    aArea.x = aPosEvent.mnX;
+    // Positive aPosEvent.mnExtWidth means ahead of the carret,
+    // negative value means behind of the carret.
+    aArea.x = aPosEvent.mnX + (aPosEvent.mnExtWidth < 0 ? aPosEvent.mnExtWidth : 0);
     aArea.y = aPosEvent.mnY;
     aArea.width = aPosEvent.mnWidth;
     aArea.height = aPosEvent.mnHeight;

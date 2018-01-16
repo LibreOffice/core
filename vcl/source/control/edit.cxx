@@ -2313,8 +2313,11 @@ void Edit::Command( const CommandEvent& rCEvt )
         if ( mpIMEInfos )
         {
             xub_StrLen nCursorPos = (sal_uInt16)GetSelection().Max();
-            SetCursorRect( NULL, GetTextWidth(
-                maText, nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
+            long nWidth = GetTextWidth( maText, mpIMEInfos->nPos, mpIMEInfos->nLen );
+            if ( nCursorPos == ( mpIMEInfos->nPos + mpIMEInfos->nLen ) ) {
+                nWidth = -nWidth;
+            }
+            SetCursorRect( NULL, nWidth );
         }
         else
         {

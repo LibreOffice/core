@@ -1048,6 +1048,10 @@ void TextView::Command( const CommandEvent& rCEvt )
 
             long nWidth = aR2.Left()-aR1.Right();
             aR1.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
+            if ( nWidth == 0 ) {
+                Rectangle aR3 = mpImpl->mpTextEngine->PaMtoEditCursor( mpImpl->mpTextEngine->mpIMEInfos->aPos );
+                nWidth = -(aR1.Left() - aR3.Left());
+            }
             GetWindow()->SetCursorRect( &aR1, nWidth );
         }
         else

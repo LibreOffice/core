@@ -622,7 +622,12 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 nInputEnd = pLine->GetEnd();
             Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GETCRSR_ENDOFLINE );
             Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
-            pView->GetWindow()->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
+            long nWidth = aR2.Left()-aR1.Right();
+            if ( nWidth == 0 ) {
+                Rectangle aR3 = PaMtoEditCursor( mpIMEInfos->aPos );
+                nWidth = -(aR1.Left() - aR3.Left());
+            }
+            pView->GetWindow()->SetCursorRect( &aRect, nWidth );
         }
         else
         {
