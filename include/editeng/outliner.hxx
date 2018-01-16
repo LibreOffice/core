@@ -500,8 +500,8 @@ private:
     Outliner*           pOutliner;
     const SvxFieldItem& rFldItem;
 
-    Color*              pTxtColor;
-    Color*              pFldColor;
+    std::unique_ptr<Color> pTxtColor;
+    std::unique_ptr<Color> pFldColor;
 
     OUString            aRepresentation;
 
@@ -518,28 +518,22 @@ public:
                     {
                         pOutliner = pOutl;
                         nPara = nPa; nPos = nPo;
-                        pTxtColor = nullptr; pFldColor = nullptr;
                         mpSdrPage = nullptr;
-                    }
-                    ~EditFieldInfo()
-                    {
-                        delete pTxtColor;
-                        delete pFldColor;
                     }
 
     Outliner*       GetOutliner() const { return pOutliner; }
 
     const SvxFieldItem& GetField() const { return rFldItem; }
 
-    Color*          GetTextColor() const { return pTxtColor; }
+    Color*          GetTextColor() const { return pTxtColor.get(); }
     void            SetTextColor( const Color& rColor )
-                        { delete pTxtColor; pTxtColor = new Color( rColor ); }
+                        { pTxtColor.reset( new Color( rColor ) ); }
 
-    Color*          GetFieldColor() const { return pFldColor; }
+    Color*          GetFieldColor() const { return pFldColor.get(); }
     void            SetFieldColor( const Color& rColor )
-                        { delete pFldColor; pFldColor = new Color( rColor ); }
+                        { pFldColor.reset( new Color( rColor ) ); }
     void            ClearFieldColor()
-                        { delete pFldColor; pFldColor = nullptr; }
+                        { pFldColor.reset(); }
 
     sal_Int32       GetPara() const { return nPara; }
     sal_Int32       GetPos() const { return nPos; }
