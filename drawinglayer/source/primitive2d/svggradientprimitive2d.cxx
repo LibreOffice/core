@@ -1049,7 +1049,7 @@ namespace drawinglayer
             // check and evtl. set translations
             if(!rTranslateA.equal(rTranslateB))
             {
-                mpTranslate = new VectorPair(rTranslateA, rTranslateB);
+                mpTranslate.reset( new VectorPair(rTranslateA, rTranslateB) );
             }
 
             // scale A and B have to be positive
@@ -1093,11 +1093,6 @@ namespace drawinglayer
 
         SvgRadialAtomPrimitive2D::~SvgRadialAtomPrimitive2D()
         {
-            if(mpTranslate)
-            {
-                delete mpTranslate;
-                mpTranslate = nullptr;
-            }
         }
 
         bool SvgRadialAtomPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
