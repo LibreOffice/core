@@ -1138,7 +1138,7 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
         bool bShowDialog = officecfg::Office::Calc::Compatibility::MergeCells::ShowDialog::get();
         if (!bApi && bShowDialog)
         {
-            VclPtr<ScMergeCellsDialog> aBox = VclPtr<ScMergeCellsDialog>::Create( GetViewData().GetDialogParent() );
+            ScopedVclPtr<ScMergeCellsDialog> aBox( VclPtr<ScMergeCellsDialog>::Create( GetViewData().GetDialogParent() ) );
             sal_uInt16 nRetVal = aBox->Execute();
 
             if ( nRetVal == RET_OK )

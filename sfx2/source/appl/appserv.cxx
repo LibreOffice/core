@@ -1550,11 +1550,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             OUString aLang( aLanguage );
             SAL_INFO("sfx.appl", "SfxApplication::OfaExec_Impl: about to create dialog for: " << aLang);
             // not sure about the vcl::Window*
-            VclPtr<VclAbstractDialog> pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
+            ScopedVclPtr<VclAbstractDialog> pDlg( pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage ) );
             if( pDlg )
             {
                 pDlg->Execute();
-                pDlg.disposeAndClear();
             }
             else
             {
