@@ -185,7 +185,7 @@ class SfxDocTplService_Impl
     Sequence< OUString >        maTemplateDirs;
     Sequence< OUString >        maInternalTemplateDirs;
     OUString                    maRootURL;
-    std::vector< NamePair_Impl* > maNames;
+    std::vector< std::unique_ptr<NamePair_Impl> > maNames;
     lang::Locale                maLocale;
     Content                     maRootContent;
     bool                        mbIsInitialized : 1;
@@ -506,11 +506,11 @@ void SfxDocTplService_Impl::readFolderList()
     const size_t nCount = std::min(SAL_N_ELEMENTS(TEMPLATE_SHORT_NAMES_ARY), SAL_N_ELEMENTS(TEMPLATE_LONG_NAMES_ARY));
     for (size_t i = 0; i < nCount; ++i)
     {
-        NamePair_Impl* pPair = new NamePair_Impl;
+        std::unique_ptr<NamePair_Impl> pPair( new NamePair_Impl );
         pPair->maShortName  = OUString::createFromAscii(TEMPLATE_SHORT_NAMES_ARY[i]);
         pPair->maLongName   = SfxResId(TEMPLATE_LONG_NAMES_ARY[i]);
 
-        maNames.push_back( pPair );
+        maNames.push_back( std::move(pPair) );
     }
 }
 
@@ -519,7 +519,7 @@ OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
 {
     OUString         aRet;
 
-    for (NamePair_Impl* pPair : maNames)
+    for (auto const & pPair : maNames)
     {
         if ( pPair->maShortName == rShortName )
         {
@@ -1086,9 +1086,6 @@ SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentCo
 SfxDocTplService_Impl::~SfxDocTplService_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
-
-    for (NamePair_Impl* p : maNames)
-        delete p;
     maNames.clear();
 }
 
