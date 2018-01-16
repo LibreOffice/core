@@ -212,11 +212,10 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
 
         if (!aLine.isEmpty())
         {
-            const sal_Int32 nCount = comphelper::string::getTokenCount(aLine, ',');
-
-            for( sal_Int32 i = 0; ( i < nCount ) && ( nRow < nHeight ); ++i )
+            sal_Int32 nIndex = 0;
+            while (nRow < nHeight)
             {
-                const OString aToken(aLine.getToken(i, ','));
+                const OString aToken(aLine.getToken(0, ',', nIndex));
                 const sal_Int32 nLen = aToken.getLength();
                 bool bProcessed = false;
 
@@ -251,6 +250,9 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
                         nRow++;
                     }
                 }
+
+                if (nIndex == -1)
+                    break;
             }
         }
     }
