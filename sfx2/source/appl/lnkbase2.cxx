@@ -125,7 +125,7 @@ SvBaseLink::SvBaseLink()
       m_bIsReadOnly(false)
 {
     nObjType = OBJECT_CLIENT_SO;
-    pImplData = new ImplBaseLinkData;
+    pImplData.reset( new ImplBaseLinkData );
     bVisible = bSynchron = true;
     bWasLastEditOK = false;
 }
@@ -136,7 +136,7 @@ SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nCon
      m_bIsReadOnly(false)
 {
     nObjType = OBJECT_CLIENT_SO;
-    pImplData = new ImplBaseLinkData;
+    pImplData.reset( new ImplBaseLinkData );
     bVisible = bSynchron = true;
     bWasLastEditOK = false;
 
@@ -231,7 +231,7 @@ SvBaseLink::~SvBaseLink()
         break;
     }
 
-    delete pImplData;
+    pImplData.reset();
 }
 
 IMPL_LINK( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
