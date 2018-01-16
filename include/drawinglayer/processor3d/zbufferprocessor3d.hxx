@@ -24,6 +24,7 @@
 
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
 #include <vcl/bitmapex.hxx>
+#include <memory>
 
 namespace basegfx {
     class BZPixelRaster;
@@ -62,7 +63,7 @@ namespace drawinglayer
             basegfx::B3DHomMatrix maInvEyeToView;
 
             /// The raster converter for Z-Buffer
-            ZBufferRasterConverter3D* mpZBufferRasterConverter3D;
+            std::unique_ptr<ZBufferRasterConverter3D> mpZBufferRasterConverter3D;
 
             /*  AA value. Defines how many oversamples will be used in X and Y. Values 0, 1
                 will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
@@ -72,7 +73,7 @@ namespace drawinglayer
             /*  remembered RasterPrimitive3D's which need to be painted back to front
                 for transparent 3D parts
              */
-            std::vector< RasterPrimitive3D >* mpRasterPrimitive3Ds;
+            std::unique_ptr<std::vector< RasterPrimitive3D >> mpRasterPrimitive3Ds;
 
             sal_uInt32 mnStartLine;
             sal_uInt32 mnStopLine;

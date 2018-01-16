@@ -430,7 +430,7 @@ namespace drawinglayer
                 // back to front
                 if(!mpRasterPrimitive3Ds)
                 {
-                    const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
+                    const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds.reset( new std::vector< RasterPrimitive3D > );
                 }
 
                 mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
@@ -494,7 +494,7 @@ namespace drawinglayer
                 // back to front
                 if(!mpRasterPrimitive3Ds)
                 {
-                    const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
+                    const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds.reset( new std::vector< RasterPrimitive3D > );
                 }
 
                 mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
@@ -598,18 +598,18 @@ namespace drawinglayer
             maRasterRange.expand(basegfx::B2DPoint(mrBZPixelRaster.getWidth(), nStopLine));
 
             // create the raster converter
-            mpZBufferRasterConverter3D = new ZBufferRasterConverter3D(mrBZPixelRaster, *this);
+            mpZBufferRasterConverter3D.reset( new ZBufferRasterConverter3D(mrBZPixelRaster, *this) );
         }
 
         ZBufferProcessor3D::~ZBufferProcessor3D()
         {
-            delete mpZBufferRasterConverter3D;
+            mpZBufferRasterConverter3D.reset();
 
             if(mpRasterPrimitive3Ds)
             {
                 OSL_FAIL("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
-                delete mpRasterPrimitive3Ds;
             }
+            mpRasterPrimitive3Ds.reset();
         }
 
         void ZBufferProcessor3D::finish()
@@ -653,8 +653,7 @@ namespace drawinglayer
 
                 // delete them to signal the destructor that all is done and
                 // to allow asserting there
-                delete mpRasterPrimitive3Ds;
-                mpRasterPrimitive3Ds = nullptr;
+                mpRasterPrimitive3Ds.reset();
             }
         }
     } // end of namespace processor3d
