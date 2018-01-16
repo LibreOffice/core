@@ -201,7 +201,11 @@ SfxInterface::~SfxInterface()
     if ( bRegistered )
     {
         if ( pMod )
-            pMod->GetSlotPool()->ReleaseInterface(*this);
+        {
+            // can return nullptr if we are called from the SfxSlotPool destructor
+            if (pMod->GetSlotPool())
+                pMod->GetSlotPool()->ReleaseInterface(*this);
+        }
         else
             SfxGetpApp()->GetAppSlotPool_Impl().ReleaseInterface(*this);
     }
