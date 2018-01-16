@@ -284,9 +284,9 @@ bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
     {
         OUString aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        VclPtr<AbstractSvxNameDialog> aNameDlg = pFact ? pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc ) : nullptr;
-        if( aNameDlg )
+        if( pFact )
         {
+            ScopedVclPtr<AbstractSvxNameDialog> aNameDlg( pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc ) );
             aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
             aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
@@ -300,7 +300,6 @@ bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
                 aNameDlg->GetName( rName );
                 bIsNameValid = IsNewPageNameValid( rName );
             }
-            aNameDlg.disposeAndClear();
         }
     }
 
