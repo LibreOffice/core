@@ -62,8 +62,8 @@ struct SfxShell_Impl: public SfxBroadcaster
     SfxRepeatTarget*            pRepeatTarget; // SbxObjectRef xParent;
     bool                        bActive;
     SfxDisableFlags             nDisableFlags;
-    svtools::AsynchronLink*     pExecuter;
-    svtools::AsynchronLink*     pUpdater;
+    std::unique_ptr<svtools::AsynchronLink> pExecuter;
+    std::unique_ptr<svtools::AsynchronLink> pUpdater;
     std::vector<std::unique_ptr<SfxSlot> >  aSlotArr;
 
     css::uno::Sequence < css::embed::VerbDescriptor > aVerbList;
@@ -80,7 +80,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     {
     }
 
-    virtual ~SfxShell_Impl() override { delete pExecuter; delete pUpdater;}
+    virtual ~SfxShell_Impl() override { pExecuter.reset(); pUpdater.reset();}
 };
 
 
@@ -400,8 +400,8 @@ void SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
     else
     {
         if( !pImpl->pExecuter )
-            pImpl->pExecuter = new svtools::AsynchronLink(
-                Link<void*,void>( this, ShellCall_Impl ) );
+            pImpl->pExecuter.reset( new svtools::AsynchronLink(
+                Link<void*,void>( this, ShellCall_Impl ) ) );
         pImpl->pExecuter->Call( new SfxRequest( rReq ) );
     }
 }
@@ -654,7 +654,7 @@ void SfxShell::UIFeatureChanged()
         // something my get stuck in the bunkered tools. Asynchronous call to
         // prevent recursion.
         if ( !pImpl->pUpdater )
-            pImpl->pUpdater = new svtools::AsynchronLink( Link<void*,void>( this, DispatcherUpdate_Impl ) );
+            pImpl->pUpdater.reset( new svtools::AsynchronLink( Link<void*,void>( this, DispatcherUpdate_Impl ) ) );
 
         // Multiple views allowed
         pImpl->pUpdater->Call( pFrame->GetDispatcher(), true );
