@@ -2548,6 +2548,21 @@ endef
 
 endif # ENABLE_GIO
 
+define gb_LinkTarget__use_fann
+$(call gb_LinkTarget_set_include,$(1),\
+       $$(INCLUDE) \
+       $(FANN_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(FANN_LIBS))
+
+endef
+
+define gb_ExternalProject__use_fann
+$(call gb_ExternalProject_use_package,$(1),fann)
+endef
+
+
 ifeq ($(ENABLE_AVAHI),TRUE)
 
 define gb_LinkTarget__use_avahi
