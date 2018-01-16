@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cd17e752",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2018-01-16T08:22:45Z",
+      "side": 1,
+      "message": "This is superfluous, no? GetParentWithLOKNotifier will return the window only if there\u0027s a notifier set on it. So you can just SetLOKNotifier(pWin-\u003eGetLOKNotifier())",
+      "range": {
+        "startLine": 500,
+        "startChar": 10,
+        "endLine": 503,
+        "endChar": 13
+      },
+      "revId": "b53e1ce47e011df517434f3d6c5bdd9809a51b2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_4d0cd742",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2018-01-16T08:22:45Z",
+      "side": 1,
+      "message": "After kendy\u0027s changes here ( https://gerrit.libreoffice.org/47722), you should move this block to ImplStartExecuteModal so that \"created\" callback is emitted even if we execute the modal asynchronously. Sorry for the trouble.",
+      "range": {
+        "startLine": 954,
+        "startChar": 1,
+        "endLine": 966,
+        "endChar": 5
+      },
+      "revId": "b53e1ce47e011df517434f3d6c5bdd9809a51b2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
