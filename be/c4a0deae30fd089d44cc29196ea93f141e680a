@@ -1,0 +1,7 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Noel Grandin <noel.grandin@collabora.co.uk>
+Submitted-by: Julien Nabet <serval2412@yahoo.fr>
+Submitted-at: Tue, 16 Jan 2018 16:22:52 +0100
+Reviewed-on: https://gerrit.libreoffice.org/47977
+Project: core
+Branch: refs/heads/feature/useuniqueptr-2
