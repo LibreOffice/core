@@ -122,6 +122,7 @@
 #include <chpfld.hxx>
 #include <fmthdft.hxx>
 #include <authfld.hxx>
+#include <dbfld.hxx>
 
 #include "sprmids.hxx"
 
@@ -2756,7 +2757,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case SwFieldIds::Database:
         {
-            OUString sStr = FieldString(ww::eMERGEFIELD) + pField->GetPar1() + " ";
+            OUString sStr = FieldString(ww::eMERGEFIELD) + static_cast<SwDBFieldType *>(pField->GetTyp())->GetColumnName() + " ";
             GetExport().OutputField(pField, ww::eMERGEFIELD, sStr);
         }
         break;

@@ -60,6 +60,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <reffld.hxx>
+#include <dbfld.hxx>
 #include <txatbase.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
@@ -289,6 +290,7 @@ public:
     void testTdf113790();
     void testTdf114306();
     void testTdf114536();
+    void testTdf115013();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -459,6 +461,7 @@ public:
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testTdf114306);
     CPPUNIT_TEST(testTdf114536);
+    CPPUNIT_TEST(testTdf115013);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5605,6 +5608,50 @@ void SwUiWriterTest::testTdf113790()
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "tdf113790.docx");
     CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument *>(mxComponent.get()));
+}
+
+void SwUiWriterTest::testTdf115013()
+{
+    //create new writer document
+    SwDoc* pDoc = createDoc();
+
+    {
+        // Load and register data source
+        const OUString aDataSourceURI(m_directories.getURLFromSrc(DATA_DIRECTORY) + "datasource.ods");
+        OUString sDataSource = SwDBManager::LoadAndRegisterDataSource(aDataSourceURI, nullptr);
+        CPPUNIT_ASSERT(!sDataSource.isEmpty());
+
+        // Insert a new field type for the mailmerge field
+        SwDBData aDBData;
+        aDBData.sDataSource = sDataSource;
+        aDBData.sCommand = "Sheet1";
+        SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        CPPUNIT_ASSERT(pWrtShell);
+        SwDBFieldType* pFieldType = static_cast<SwDBFieldType*>(pWrtShell->InsertFieldType(
+            SwDBFieldType(pDoc, "Name", aDBData)));
+        CPPUNIT_ASSERT(pFieldType);
+
+        // Insert the field into document
+        SwDBField aField(pFieldType);
+        pWrtShell->Insert(aField);
+    }
+    // Save it as DOCX & load it again
+    reload("Office Open XML Text", "mm-field.docx");
+
+    CPPUNIT_ASSERT(mxComponent.get());
+    pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get())->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    CPPUNIT_ASSERT(pCursor);
+
+    // Get the field at the beginning of the document
+    SwDBField* pField = dynamic_cast<SwDBField*>(SwCursorShell::GetFieldAtCursor(pCursor, true));
+    CPPUNIT_ASSERT(pField);
+    OUString sColumn = static_cast<SwDBFieldType*>(pField->GetTyp())->GetColumnName();
+    // The column name must come correct after round trip
+    CPPUNIT_ASSERT_EQUAL(OUString("Name"), sColumn);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
