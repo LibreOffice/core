@@ -327,36 +327,33 @@ namespace drawinglayer
             const double fAngleA(rHatch.getAngle());
             maColor = rHatch.getColor();
             mbFillBackground = rHatch.isFillBackground();
-            mp0 = new GeoTexSvxHatch(
+            mp0.reset( new GeoTexSvxHatch(
                 aOutlineRange,
                 aOutlineRange,
                 rHatch.getDistance(),
-                fAngleA);
+                fAngleA) );
 
             if(attribute::HatchStyle::Double == rHatch.getStyle() || attribute::HatchStyle::Triple == rHatch.getStyle())
             {
-                mp1 = new GeoTexSvxHatch(
+                mp1.reset( new GeoTexSvxHatch(
                     aOutlineRange,
                     aOutlineRange,
                     rHatch.getDistance(),
-                    fAngleA + F_PI2);
+                    fAngleA + F_PI2) );
             }
 
             if(attribute::HatchStyle::Triple == rHatch.getStyle())
             {
-                mp2 = new GeoTexSvxHatch(
+                mp2.reset( new GeoTexSvxHatch(
                     aOutlineRange,
                     aOutlineRange,
                     rHatch.getDistance(),
-                    fAngleA + F_PI4);
+                    fAngleA + F_PI4) );
             }
         }
 
         GeoTexSvxMultiHatch::~GeoTexSvxMultiHatch()
         {
-            delete mp0;
-            delete mp1;
-            delete mp2;
         }
 
         bool GeoTexSvxMultiHatch::impIsOnHatch(const basegfx::B2DPoint& rUV) const
