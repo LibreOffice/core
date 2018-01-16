@@ -523,7 +523,7 @@ void SmElementsControl::DoScroll(long nDelta)
 
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
-    std::unique_ptr<SmNode> pNode(SmParser().ParseExpression(aElementVisual));
+    auto pNode = SmParser().ParseExpression(aElementVisual);
 
     pNode->Prepare(maFormat, *mpDocShell, 0);
     pNode->SetSize(Fraction(10,8));

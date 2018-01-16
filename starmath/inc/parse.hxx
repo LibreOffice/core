@@ -80,7 +80,7 @@ class SmParser
     // grammar
     SmTableNode *DoTable();
     SmLineNode *DoLine();
-    SmNode *DoExpression(bool bUseExtraSpaces = true);
+    std::unique_ptr<SmNode> DoExpression(bool bUseExtraSpaces = true);
     SmNode *DoRelation();
     SmNode *DoSum();
     SmNode *DoProduct();
@@ -116,7 +116,7 @@ public:
     /** Parse rBuffer to formula tree */
     SmTableNode *Parse(const OUString &rBuffer);
     /** Parse rBuffer to formula subtree that constitutes an expression */
-    SmNode      *ParseExpression(const OUString &rBuffer);
+    std::unique_ptr<SmNode> ParseExpression(const OUString &rBuffer);
 
     const OUString & GetText() const { return m_aBufferString; };
 
