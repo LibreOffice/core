@@ -355,7 +355,6 @@ class GroupData_Impl
 
 public:
     explicit            GroupData_Impl( const OUString& rTitle );
-                        ~GroupData_Impl();
 
     void                setInUse() { mbInUse = true; }
     void                setHierarchy( bool bInHierarchy ) { mbInHierarchy = bInHierarchy; }
@@ -2641,11 +2640,6 @@ GroupData_Impl::GroupData_Impl( const OUString& rTitle )
 }
 
 
-GroupData_Impl::~GroupData_Impl()
-{
-}
-
-
 DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
                                           const OUString& rTargetURL,
                                           const OUString& rType,
@@ -2656,7 +2650,7 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
 
     for (auto const & p : maEntries)
     {
-        pData = p;
+        pData = p.get();
         if ( pData->getTitle() == rTitle )
         {
             EntryFound = true;
