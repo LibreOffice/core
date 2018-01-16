@@ -173,7 +173,7 @@ short SvxCharacterMap::Execute()
         m_pOKBtn->Enable();
     }
 
-    return ModalDialog::Execute();
+    return SfxModalDialog::Execute();
 }
 
 void SvxCharacterMap::dispose()
