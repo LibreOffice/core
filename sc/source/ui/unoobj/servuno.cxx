@@ -266,6 +266,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.sheet.TableAutoFormats",            Type::AUTOFORMATS },
     { "com.sun.star.sheet.SheetCellRanges",             Type::CELLRANGES },
     { "com.sun.star.sheet.FunctionDescriptions",        Type::FUNCTIONDESCRIPTIONS },
+    { "com.sun.star.sheet.GlobalSheetSettings",         Type::GLOBALSHEETSETTINGS },
     { "com.sun.star.sheet.RecentFunctions",             Type::RECENTFUNCTIONS },
     { "com.sun.star.drawing.GradientTable",             Type::GRADTAB },
     { "com.sun.star.drawing.HatchTable",                Type::HATCHTAB },
@@ -435,6 +436,9 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
         case Type::FUNCTIONDESCRIPTIONS:
             xRet.set(static_cast<sheet::XFunctionDescriptions*>(new ScFunctionListObj()));
+            break;
+        case Type::GLOBALSHEETSETTINGS:
+            xRet.set(static_cast<sheet::XGlobalSheetSettings*>(new ScSpreadsheetSettings()));
             break;
         case Type::RECENTFUNCTIONS:
             xRet.set(static_cast<sheet::XRecentFunctions*>(new ScRecentFunctionsObj()));
