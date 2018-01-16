@@ -105,14 +105,14 @@ namespace cppcanvas
             XForm brush_transformation;
             bool hasTransformation;
             sal_Int32 blendPoints;
-            float* blendPositions;
+            std::unique_ptr<float[]> blendPositions;
             float* blendFactors;
             sal_Int32 colorblendPoints;
-            float* colorblendPositions;
-            ::Color* colorblendColors;
+            std::unique_ptr<float[]> colorblendPositions;
+            std::unique_ptr<::Color[]> colorblendColors;
             sal_Int32 surroundColorsNumber;
-            ::Color* surroundColors;
-            EMFPPath *path;
+            std::unique_ptr<::Color[]> surroundColors;
+            std::unique_ptr<EMFPPath> path;
             EmfPlusHatchStyle hatchStyle;
 
             EMFPBrush();
