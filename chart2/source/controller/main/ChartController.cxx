@@ -1333,8 +1333,9 @@ void ChartController::executeDispatch_SourceData()
     if ( rModel.hasInternalDataProvider() )
     {
         // Check if we will able to create data provider later
-        Reference< lang::XServiceInfo > xParentServiceInfo( rModel.getParent(), uno::UNO_QUERY );
-        if ( !xParentServiceInfo.is() || !xParentServiceInfo->supportsService("com.sun.star.chart2.XDataProviderAccess") )
+        css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(
+            rModel.getParent(), uno::UNO_QUERY);
+        if (!xCreatorDoc.is())
             return;
 
         SolarMutexGuard aSolarGuard;
@@ -1349,18 +1350,12 @@ void ChartController::executeDispatch_SourceData()
         rModel.removeDataProviders();
 
         // Ask parent document to create new data provider
-        css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(
-            rModel.getParent(), uno::UNO_QUERY );
-        SAL_WARN_IF( !xCreatorDoc.is(), "chart2.main", "Invalid XDataProviderAccess" );
 
-        if ( xCreatorDoc.is() )
+        uno::Reference< data::XDataProvider > xDataProvider = xCreatorDoc->createDataProvider();
+        SAL_WARN_IF( !xDataProvider.is(), "chart2.main", "Data provider was not created" );
+        if (xDataProvider.is())
         {
-            uno::Reference< data::XDataProvider > xDataProvider = xCreatorDoc->createDataProvider();
-            SAL_WARN_IF( !xDataProvider.is(), "chart2.main", "Data provider was not created" );
-            if ( xDataProvider.is() )
-            {
-                rModel.attachDataProvider(xDataProvider);
-            }
+            rModel.attachDataProvider(xDataProvider);
         }
     }
 
