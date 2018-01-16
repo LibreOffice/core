@@ -1141,7 +1141,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
         Application::RemoveUserEvent( mnPostUserEventId );
     mnPostUserEventId = nullptr;
 
-    delete mpGraphicFilter;
+    mpGraphicFilter.reset();
 
     if ( mbDeleteMatcher )
         delete mpMatcher;
@@ -1841,7 +1841,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         return;
 
     // create the list of filters
-    mpGraphicFilter = new GraphicFilter;
+    mpGraphicFilter.reset( new GraphicFilter );
     sal_uInt16 i, j, nCount = mpGraphicFilter->GetImportFormatCount();
 
     // compute the extension string for all known import filters
