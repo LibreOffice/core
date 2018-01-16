@@ -26,7 +26,7 @@
 
 class SfxItemDisruptor_Impl
 {
-    SfxPoolItem *           pItem;
+    std::unique_ptr<SfxPoolItem> pItem;
     Idle m_Idle;
 
 private:
@@ -64,7 +64,7 @@ SfxItemDisruptor_Impl::~SfxItemDisruptor_Impl()
     // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
     pItem->SetRefCount( 0 );
 
-    delete pItem;
+    pItem.reset();
 }
 
 IMPL_LINK_NOARG(SfxItemDisruptor_Impl, Delete, Timer*, void)
