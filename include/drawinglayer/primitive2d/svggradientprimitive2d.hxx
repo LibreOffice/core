@@ -377,7 +377,7 @@ namespace drawinglayer
             };
 
             /// Only used when focal is set
-            VectorPair*                 mpTranslate;
+            std::unique_ptr<VectorPair> mpTranslate;
 
         protected:
 
