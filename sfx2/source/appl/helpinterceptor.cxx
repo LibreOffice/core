@@ -47,29 +47,20 @@ HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
 HelpInterceptor_Impl::~HelpInterceptor_Impl()
 {
-    if ( m_pHistory )
-    {
-        for (HelpHistoryEntry_Impl* p : *m_pHistory)
-            delete p;
-        delete m_pHistory;
-    }
 }
 
 
 void HelpInterceptor_Impl::addURL( const OUString& rURL )
 {
   if ( !m_pHistory )
-        m_pHistory = new HelpHistoryList_Impl;
+        m_pHistory.reset( new std::vector<std::unique_ptr<HelpHistoryEntry_Impl>> );
 
     size_t nCount = m_pHistory->size();
     if ( nCount && m_nCurPos < ( nCount - 1 ) )
     {
         for ( size_t i = nCount - 1; i > m_nCurPos; i-- )
         {
-            delete m_pHistory->at( i );
-            HelpHistoryList_Impl::iterator it = m_pHistory->begin();
-            ::std::advance( it, i );
-            m_pHistory->erase( it );
+            m_pHistory->erase( m_pHistory->begin() + i );
         }
     }
     Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
@@ -83,7 +74,7 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
 
     m_aCurrentURL = rURL;
     Any aEmptyViewData;
-    m_pHistory->push_back( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ) );
+    m_pHistory->emplace_back( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ) );
     m_nCurPos = m_pHistory->size() - 1;
 // TODO ?
     if ( m_xListener.is() )
@@ -229,9 +220,8 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
 
             if ( nPos < ULONG_MAX )
             {
-                HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos );
-                if ( pEntry )
-                    m_pWindow->loadHelpContent(pEntry->aURL, false); // false => don't add item to history again!
+                HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos ).get();
+                m_pWindow->loadHelpContent(pEntry->aURL, false); // false => don't add item to history again!
             }
 
             m_pWindow->UpdateToolbox();
