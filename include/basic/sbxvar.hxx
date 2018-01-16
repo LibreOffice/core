@@ -224,7 +224,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
     friend class SbMethod;
 
     std::unique_ptr<SbxVariableImpl> mpImpl; // Impl data
-    SfxBroadcaster*  pCst;              // Broadcaster, if needed
+    std::unique_ptr<SfxBroadcaster>  mpBroadcaster; // Broadcaster, if needed
     OUString         maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     sal_uInt16       nHash;             // Hash-ID for search
@@ -268,7 +268,7 @@ public:
     // Sfx-Broadcasting-Support:
     // Due to data reduction and better DLL-hierarchy currently via casting
     SfxBroadcaster& GetBroadcaster();
-    bool IsBroadcaster() const { return pCst != nullptr; }
+    bool IsBroadcaster() const { return mpBroadcaster != nullptr; }
     virtual void Broadcast( SfxHintId nHintId ) override;
 
     const SbxObject* GetParent() const { return pParent; }

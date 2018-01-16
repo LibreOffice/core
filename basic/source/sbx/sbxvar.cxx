@@ -56,7 +56,6 @@ class SbxVariableImpl
 
 SbxVariable::SbxVariable() : SbxValue()
 {
-    pCst = nullptr;
     pParent = nullptr;
     nUserData = 0;
     nHash = 0;
@@ -78,7 +77,6 @@ SbxVariable::SbxVariable( const SbxVariable& r )
         }
 #endif
     }
-    pCst = nullptr;
     if( r.CanRead() )
     {
         pParent = r.pParent;
@@ -111,7 +109,6 @@ void SbxEnsureParentVariable::SetParent(SbxObject* p)
 
 SbxVariable::SbxVariable( SbxDataType t ) : SbxValue( t )
 {
-    pCst = nullptr;
     pParent = nullptr;
     nUserData = 0;
     nHash = 0;
@@ -125,18 +122,18 @@ SbxVariable::~SbxVariable()
         removeDimAsNewRecoverItem( this );
     }
 #endif
-    delete pCst;
+    mpBroadcaster.reset();
 }
 
 // Broadcasting
 
 SfxBroadcaster& SbxVariable::GetBroadcaster()
 {
-    if( !pCst )
+    if( !mpBroadcaster )
     {
-        pCst = new SfxBroadcaster;
+        mpBroadcaster.reset( new SfxBroadcaster );
     }
-    return *pCst;
+    return *mpBroadcaster;
 }
 
 SbxArray* SbxVariable::GetParameters() const
@@ -150,7 +147,7 @@ SbxArray* SbxVariable::GetParameters() const
 
 void SbxVariable::Broadcast( SfxHintId nHintId )
 {
-    if( pCst && !IsSet( SbxFlagBits::NoBroadcast ) )
+    if( mpBroadcaster && !IsSet( SbxFlagBits::NoBroadcast ) )
     {
         // Because the method could be called from outside, check the
         // rights here again
@@ -174,8 +171,7 @@ void SbxVariable::Broadcast( SfxHintId nHintId )
         SbxVariableRef aBroadcastGuard(this);
 
         // Avoid further broadcasting
-        SfxBroadcaster* pSave = pCst;
-        pCst = nullptr;
+        std::unique_ptr<SfxBroadcaster> pSave = std::move(mpBroadcaster);
         SbxFlagBits nSaveFlags = GetFlags();
         SetFlag( SbxFlagBits::ReadWrite );
         if( mpPar.is() )
@@ -184,8 +180,7 @@ void SbxVariable::Broadcast( SfxHintId nHintId )
             mpPar->GetRef( 0 ) = this;
         }
         pSave->Broadcast( SbxHint( nHintId, this ) );
-        delete pCst; // who knows already, onto which thoughts someone comes?
-        pCst = pSave;
+        mpBroadcaster = std::move(pSave);
         SetFlags( nSaveFlags );
     }
 }

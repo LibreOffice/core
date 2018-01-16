@@ -2080,7 +2080,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 // #100883 Own Broadcast for SbMethod
 void SbMethod::Broadcast( SfxHintId nHintId )
 {
-    if( pCst && !IsSet( SbxFlagBits::NoBroadcast ) )
+    if( mpBroadcaster && !IsSet( SbxFlagBits::NoBroadcast ) )
     {
         // Because the method could be called from outside, test here once again
         // the authorisation
@@ -2095,8 +2095,7 @@ void SbMethod::Broadcast( SfxHintId nHintId )
             pMod->Compile();
 
         // Block broadcasts while creating new method
-        SfxBroadcaster* pSave = pCst;
-        pCst = nullptr;
+        std::unique_ptr<SfxBroadcaster> pSaveBroadcaster = std::move(mpBroadcaster);
         SbMethod* pThisCopy = new SbMethod( *this );
         SbMethodRef xHolder = pThisCopy;
         if( mpPar.is() )
@@ -2108,14 +2107,14 @@ void SbMethod::Broadcast( SfxHintId nHintId )
             SetParameters( nullptr );
         }
 
-        pCst = pSave;
-        pSave->Broadcast( SbxHint( nHintId, pThisCopy ) );
+        mpBroadcaster = std::move(pSaveBroadcaster);
+        mpBroadcaster->Broadcast( SbxHint( nHintId, pThisCopy ) );
 
         SbxFlagBits nSaveFlags = GetFlags();
         SetFlag( SbxFlagBits::ReadWrite );
-        pCst = nullptr;
+        pSaveBroadcaster = std::move(mpBroadcaster);
         Put( pThisCopy->GetValues_Impl() );
-        pCst = pSave;
+        mpBroadcaster = std::move(pSaveBroadcaster);
         SetFlags( nSaveFlags );
     }
 }
