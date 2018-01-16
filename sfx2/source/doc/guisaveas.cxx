@@ -275,8 +275,8 @@ class ModelData_Impl
     uno::Reference< frame::XStorable2 > m_xStorable2;
 
     OUString m_aModuleName;
-    ::comphelper::SequenceAsHashMap* m_pDocumentPropsHM;
-    ::comphelper::SequenceAsHashMap* m_pModulePropsHM;
+    std::unique_ptr<::comphelper::SequenceAsHashMap> m_pDocumentPropsHM;
+    std::unique_ptr<::comphelper::SequenceAsHashMap> m_pModulePropsHM;
 
     ::comphelper::SequenceAsHashMap m_aMediaDescrHM;
 
@@ -381,18 +381,14 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 ModelData_Impl::~ModelData_Impl()
 {
     FreeDocumentProps();
-    delete m_pDocumentPropsHM;
-    delete m_pModulePropsHM;
+    m_pDocumentPropsHM.reset();
+    m_pModulePropsHM.reset();
 }
 
 
 void ModelData_Impl::FreeDocumentProps()
 {
-    if ( m_pDocumentPropsHM )
-    {
-        delete m_pDocumentPropsHM;
-        m_pDocumentPropsHM = nullptr;
-    }
+    m_pDocumentPropsHM.reset();
 }
 
 
@@ -430,7 +426,7 @@ uno::Reference< frame::XStorable2 > const & ModelData_Impl::GetStorable2()
 const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetDocProps()
 {
     if ( !m_pDocumentPropsHM )
-        m_pDocumentPropsHM = new ::comphelper::SequenceAsHashMap( GetModel()->getArgs() );
+        m_pDocumentPropsHM.reset( new ::comphelper::SequenceAsHashMap( GetModel()->getArgs() ) );
 
     return *m_pDocumentPropsHM;
 }
@@ -457,7 +453,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
         m_pOwner->GetModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
         if ( !aModuleProps.getLength() )
             throw uno::RuntimeException(); // TODO;
-        m_pModulePropsHM = new ::comphelper::SequenceAsHashMap( aModuleProps );
+        m_pModulePropsHM.reset( new ::comphelper::SequenceAsHashMap( aModuleProps ) );
     }
 
     return *m_pModulePropsHM;
