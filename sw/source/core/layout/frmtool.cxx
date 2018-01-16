@@ -2331,7 +2331,7 @@ SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart )
             return nullptr;
     }
 
-    // Tables should be saved as a whole, expection:
+    // Tables should be saved as a whole, exception:
     // The contents of a section or a cell inside a table should be saved
     if ( pSav->IsInTab() && !( ( pLay->IsSctFrame() || pLay->IsCellFrame() ) && pLay->IsInTab() ) )
         while ( !pSav->IsTabFrame() )

@@ -37,7 +37,7 @@ Author: Rüdiger Timm <rt@openoffice.org>
 Date:   Wed Jul 2 07:52:44 2008 +0000
 
     INTEGRATION: CWS i18n41 (1.9.12); FILE MERGED
-    2008/06/17 20:22:30 khong 1.9.12.2: i83229 fix the problem of leading hyphen for nubmers
+    2008/06/17 20:22:30 khong 1.9.12.2: i83229 fix the problem of leading hyphen for numbers
     2008/04/23 06:20:16 khong 1.9.12.1: i72868, i80891, i83229, fix Chinese punctuations and hyphen for line breakiterator
 
 commit 55dff22611659a1567c968fbf9e512a2765ab62e

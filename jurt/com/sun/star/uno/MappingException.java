@@ -33,14 +33,14 @@ package com.sun.star.uno;
  */
 public class MappingException extends com.sun.star.uno.RuntimeException {
     /**
-     * Contructs an empty <code>MappingException</code>.
+     * Constructs an empty <code>MappingException</code>.
      */
     public MappingException() {
         super();
     }
 
     /**
-     * Contructs an <code>MappingException</code> with a detail message.
+     * Constructs an <code>MappingException</code> with a detail message.
      *
      * @param  message   the detail message.
      */
@@ -49,7 +49,7 @@ public class MappingException extends com.sun.star.uno.RuntimeException {
     }
 
     /**
-     * Contructs an <code>MappingException</code> with a detail message and a
+     * Constructs an <code>MappingException</code> with a detail message and a
      * context.
      *
      * @param  message   the detail message.

@@ -104,7 +104,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
     }
 
     /*
-     * gets one phonetic canidate for the chinese local
+     * gets one phonetic candidate for the chinese local
      * is ok if 'yi' is returned as expected.
      */
     public void _getPhoneticCandidate() {

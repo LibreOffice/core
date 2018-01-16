@@ -1166,7 +1166,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
             {
                 WW8_CP nStart, nLen;
                 mrReader.m_xHdFt->GetTextPosExact( static_cast< short >(nI + ( maSegments.size() + 1) * 6), nStart, nLen);
-                //No header or footer, inherit pervious one, or set to zero
+                //No header or footer, inherit previous one, or set to zero
                 //if no previous one
                 if (!nLen)
                 {

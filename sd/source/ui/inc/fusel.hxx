@@ -80,7 +80,7 @@ private:
     sal_uInt16      nEditMode;
     css::uno::Reference< css::media::XPlayer > mxPlayer;
 
-    /** This pointer stores a canidate for assigning a style in the water
+    /** This pointer stores a candidate for assigning a style in the water
         can mode between mouse button down and mouse button up.
     */
     SdrObject* pWaterCanCandidate;

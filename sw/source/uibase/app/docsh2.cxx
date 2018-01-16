@@ -1401,7 +1401,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     bool bModified = IsModified();
 
     // The HTTP-Header fields have to be removed, otherwise
-    // there are some from Meta-Tags dublicated or triplicated afterwards.
+    // there are some from Meta-Tags duplicated or triplicated afterwards.
     ClearHeaderAttributesForSourceViewHack();
 
 #if HAVE_FEATURE_SCRIPTING

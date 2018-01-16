@@ -86,7 +86,7 @@ public:
 
     StarBASIC( StarBASIC* pParent = nullptr, bool bIsDocBasic = false );
 
-    // #51727 SetModified overridden so that the Modfied-State is
+    // #51727 SetModified overridden so that the Modified-State is
         // not delivered to Parent.
     virtual void SetModified( bool ) override;
 
