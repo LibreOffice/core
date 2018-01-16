@@ -27,7 +27,7 @@ class SbStdFactory;
 
 class SbiStdObject : public SbxObject
 {
-    SbStdFactory* pStdFactory;
+    std::unique_ptr<SbStdFactory> pStdFactory;
 
     virtual ~SbiStdObject() override;
     using SbxVariable::GetInfo;
