@@ -30,7 +30,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <osl/file.hxx>
 #include <rtl/cipher.h>
-#include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -41,6 +40,7 @@
 #include <vcl/pdfwriter.hxx>
 #include <vcl/wall.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <comphelper/hash.hxx>
 
 #include <sallayout.hxx>
 #include <outdata.hxx>
@@ -769,7 +769,7 @@ private:
     std::vector< PDFAddStream >             m_aAdditionalStreams;
     std::set< PDFWriter::ErrorCode >        m_aErrors;
 
-    rtlDigest                               m_aDocDigest;
+    ::comphelper::Hash                      m_DocDigest;
 
 /*
 variables for PDF security
@@ -777,7 +777,6 @@ i12626
 */
 /* used to cipher the stream data and for password management */
     rtlCipher                               m_aCipher;
-    rtlDigest                               m_aDigest;
     /* pad string used for password in Standard security handler */
     static const sal_uInt8                  s_nPadString[ENCRYPTED_PWD_SIZE];
 

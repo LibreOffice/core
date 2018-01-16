@@ -1702,9 +1702,8 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_aContext(rContext),
         m_aFile(m_aContext.URL),
         m_bOpen(false),
-        m_aDocDigest( rtl_digest_createMD5() ),
+        m_DocDigest(::comphelper::HashType::MD5),
         m_aCipher( nullptr ),
-        m_aDigest( nullptr ),
         m_nKeyLength(0),
         m_nRC4KeyLength(0),
         m_bEncryptThisStream( false ),
@@ -1755,7 +1754,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
 
     /* prepare the cypher engine, can be done in CTOR, free in DTOR */
     m_aCipher = rtl_cipher_createARCFOUR( rtl_Cipher_ModeStream );
-    m_aDigest = rtl_digest_createMD5();
 
     /* the size of the Codec default maximum */
     /* is this 0x4000 required to be the same as MAX_SIGNATURE_CONTENT_LENGTH or just coincidentally the same at the moment? */
@@ -1818,14 +1816,10 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
 
 PDFWriterImpl::~PDFWriterImpl()
 {
-    if( m_aDocDigest )
-        rtl_digest_destroyMD5( m_aDocDigest );
     m_pReferenceDevice.disposeAndClear();
 
     if( m_aCipher )
         rtl_cipher_destroyARCFOUR( m_aCipher );
-    if( m_aDigest )
-        rtl_digest_destroyMD5( m_aDigest );
 
     rtl_freeMemory( m_pEncryptionBuffer );
 }
@@ -1977,21 +1971,11 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     aInfoValuesOut = aID.makeStringAndClear();
     o_rCString2 = aCreationMetaDateString.makeStringAndClear();
 
-    rtlDigest aDigest = rtl_digest_createMD5();
-    OSL_ENSURE( aDigest != nullptr, "PDFWriterImpl::computeDocumentIdentifier: cannot obtain a digest object !" );
-    if( aDigest )
-    {
-        rtlDigestError nError = rtl_digest_updateMD5( aDigest, &aGMT, sizeof( aGMT ) );
-        if( nError == rtl_Digest_E_None )
-            nError = rtl_digest_updateMD5( aDigest, aInfoValuesOut.getStr(), aInfoValuesOut.getLength() );
-        if( nError == rtl_Digest_E_None )
-        {
-            o_rIdentifier = std::vector< sal_uInt8 >( 16, 0 );
-            //the binary form of the doc id is needed for encryption stuff
-            rtl_digest_getMD5( aDigest, &o_rIdentifier[0], 16 );
-        }
-        rtl_digest_destroyMD5(aDigest);
-    }
+    ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
+    aDigest.update(reinterpret_cast<unsigned char const*>(&aGMT), sizeof(aGMT));
+    aDigest.update(reinterpret_cast<unsigned char const*>(aInfoValuesOut.getStr()), aInfoValuesOut.getLength());
+    //the binary form of the doc id is needed for encryption stuff
+    o_rIdentifier = aDigest.finalize();
 }
 
 /* i12626 methods */
@@ -2172,8 +2156,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
         }
 
         const void* pWriteBuffer = ( m_bEncryptThisStream && buffOK ) ? m_pEncryptionBuffer  : pBuffer;
-        if( m_aDocDigest )
-            rtl_digest_updateMD5( m_aDocDigest, pWriteBuffer, static_cast<sal_uInt32>(nBytes) );
+        m_DocDigest.update(static_cast<unsigned char const*>(pWriteBuffer), static_cast<sal_uInt32>(nBytes));
 
         if (m_aFile.write(pWriteBuffer, nBytes, nWritten) != osl::File::E_None)
             nWritten = 0;
@@ -5894,13 +5877,9 @@ bool PDFWriterImpl::emitTrailer()
 
     // prepare document checksum
     OStringBuffer aDocChecksum( 2*RTL_DIGEST_LENGTH_MD5+1 );
-    if( m_aDocDigest )
-    {
-        sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
-        rtl_digest_getMD5( m_aDocDigest, nMD5Sum, sizeof(nMD5Sum) );
-        for(sal_uInt8 i : nMD5Sum)
-            appendHex( i, aDocChecksum );
-    }
+    ::std::vector<unsigned char> const nMD5Sum(m_DocDigest.finalize());
+    for (sal_uInt8 i : nMD5Sum)
+        appendHex( i, aDocChecksum );
     // document id set in setDocInfo method
     // emit trailer
     aLine.setLength( 0 );

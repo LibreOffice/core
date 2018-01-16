@@ -34,6 +34,7 @@
 #include <tools/stream.hxx>
 
 #include <comphelper/fileformat.h>
+#include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -1082,23 +1083,23 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
 // Encryption methods
 
-/* a crutch to transport an rtlDigest safely though UNO API
+/* a crutch to transport a ::comphelper::Hash safely though UNO API
    this is needed for the PDF export dialog, which otherwise would have to pass
    clear text passwords down till they can be used in PDFWriter. Unfortunately
    the MD5 sum of the password (which is needed to create the PDF encryption key)
-   is not sufficient, since an rtl MD5 digest cannot be created in an arbitrary state
+   is not sufficient, since an MD5 digest cannot be created in an arbitrary state
    which would be needed in PDFWriterImpl::computeEncryptionKey.
 */
 class EncHashTransporter : public cppu::WeakImplHelper < css::beans::XMaterialHolder >
 {
-    rtlDigest                   maUDigest;
+    ::std::unique_ptr<::comphelper::Hash> m_pDigest;
     sal_IntPtr                  maID;
     std::vector< sal_uInt8 >    maOValue;
 
     static std::map< sal_IntPtr, EncHashTransporter* >      sTransporters;
 public:
     EncHashTransporter()
-    : maUDigest( rtl_digest_createMD5() )
+        : m_pDigest(new ::comphelper::Hash(::comphelper::HashType::MD5))
     {
         maID = reinterpret_cast< sal_IntPtr >(this);
         while( sTransporters.find( maID ) != sTransporters.end() ) // paranoia mode
@@ -1109,20 +1110,14 @@ public:
     virtual ~EncHashTransporter() override
     {
         sTransporters.erase( maID );
-        if( maUDigest )
-            rtl_digest_destroyMD5( maUDigest );
         SAL_INFO( "vcl", "EncHashTransporter freed" );
     }
 
-    rtlDigest getUDigest() const { return maUDigest; };
+    ::comphelper::Hash* getUDigest() { return m_pDigest.get(); };
     std::vector< sal_uInt8 >& getOValue() { return maOValue; }
     void invalidate()
     {
-        if( maUDigest )
-        {
-            rtl_digest_destroyMD5( maUDigest );
-            maUDigest = nullptr;
-        }
+        m_pDigest.reset();
     }
 
     // XMaterialHolder
@@ -1180,12 +1175,12 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
         m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
         // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
         // do the MD5 hash
-        sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
+        ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
+            &m_aContext.Encryption.EncryptionKey[0], i+2, ::comphelper::HashType::MD5));
         // the i+2 to take into account the generation number, always zero
-        rtl_digest_MD5( &m_aContext.Encryption.EncryptionKey[0], i+2, nMD5Sum, sizeof(nMD5Sum) );
         // initialize the RC4 with the key
         // key length: see algorithm 3.1, step 4: (N+5) max 16
-        rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum, m_nRC4KeyLength, nullptr, 0 );
+        rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
     }
 }
 
@@ -1199,12 +1194,12 @@ void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
         m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
         // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
         // do the MD5 hash
-        sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
         // the i+2 to take into account the generation number, always zero
-        rtl_digest_MD5( &m_aContext.Encryption.EncryptionKey[0], i+2, nMD5Sum, sizeof(nMD5Sum) );
+        ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
+            &m_aContext.Encryption.EncryptionKey[0], i+2, ::comphelper::HashType::MD5));
         // initialize the RC4 with the key
         // key length: see algorithm 3.1, step 4: (N+5) max 16
-        rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum, m_nRC4KeyLength, nullptr, 0 );
+        rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
     }
 }
 
@@ -1233,9 +1228,7 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OU
 
         if( computeODictionaryValue( aPadOPW, aPadUPW, pTransporter->getOValue(), nKeyLength ) )
         {
-            rtlDigest aDig = pTransporter->getUDigest();
-            if( rtl_digest_updateMD5( aDig, aPadUPW, ENCRYPTED_PWD_SIZE ) != rtl_Digest_E_None )
-                xResult.clear();
+            pTransporter->getUDigest()->update(aPadUPW, ENCRYPTED_PWD_SIZE);
         }
         else
             xResult.clear();
@@ -1333,16 +1326,15 @@ TODO: in pdf ver 1.5 and 1.6 the step 6 is different, should be implemented. See
 bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vcl::PDFWriter::PDFEncryptionProperties& io_rProperties, sal_Int32 i_nAccessPermissions )
 {
     bool bSuccess = true;
-    sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
+    ::std::vector<unsigned char> nMD5Sum;
 
     // transporter contains an MD5 digest with the padded user password already
-    rtlDigest aDigest = i_pTransporter->getUDigest();
-    rtlDigestError nError = rtl_Digest_E_None;
-    if( aDigest )
+    ::comphelper::Hash *const pDigest = i_pTransporter->getUDigest();
+    if (pDigest)
     {
         //step 3
         if( ! io_rProperties.OValue.empty() )
-            nError = rtl_digest_updateMD5( aDigest, &io_rProperties.OValue[0] , sal_Int32(io_rProperties.OValue.size()) );
+            pDigest->update(&io_rProperties.OValue[0], io_rProperties.OValue.size());
         else
             bSuccess = false;
         //Step 4
@@ -1353,32 +1345,17 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
         nPerm[2] = static_cast<sal_uInt8>( i_nAccessPermissions >> 16 );
         nPerm[3] = static_cast<sal_uInt8>( i_nAccessPermissions >> 24 );
 
-        if( nError == rtl_Digest_E_None )
-            nError = rtl_digest_updateMD5( aDigest, nPerm , sizeof( nPerm ) );
+        pDigest->update(nPerm, sizeof(nPerm));
 
         //step 5, get the document ID, binary form
-        if( nError == rtl_Digest_E_None )
-            nError = rtl_digest_updateMD5( aDigest, &io_rProperties.DocumentIdentifier[0], sal_Int32(io_rProperties.DocumentIdentifier.size()) );
+        pDigest->update(&io_rProperties.DocumentIdentifier[0], io_rProperties.DocumentIdentifier.size());
         //get the digest
-        if( nError == rtl_Digest_E_None )
-        {
-            rtl_digest_getMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
+        nMD5Sum = pDigest->finalize();
 
-            //step 6, only if 128 bit
-            for( sal_Int32 i = 0; i < 50; i++ )
-            {
-                nError = rtl_digest_updateMD5( aDigest, &nMD5Sum, sizeof( nMD5Sum ) );
-                if( nError != rtl_Digest_E_None )
-                {
-                    bSuccess =  false;
-                    break;
-                }
-                rtl_digest_getMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
-            }
-        }
-        else
+        //step 6, only if 128 bit
+        for (sal_Int32 i = 0; i < 50; i++)
         {
-            bSuccess = false;
+            nMD5Sum = ::comphelper::Hash::calculateHash(nMD5Sum.data(), nMD5Sum.size(), ::comphelper::HashType::MD5);
         }
     }
     else
@@ -1413,69 +1390,53 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
 
     io_rOValue.resize( ENCRYPTED_PWD_SIZE );
 
-    rtlDigest aDigest = rtl_digest_createMD5();
     rtlCipher aCipher = rtl_cipher_createARCFOUR( rtl_Cipher_ModeStream );
-    if( aDigest && aCipher)
+    if (aCipher)
     {
         //step 1 already done, data is in i_pPaddedOwnerPassword
         //step 2
 
-        rtlDigestError nError = rtl_digest_updateMD5( aDigest, i_pPaddedOwnerPassword, ENCRYPTED_PWD_SIZE );
-        if( nError == rtl_Digest_E_None )
+        ::std::vector<unsigned char> nMD5Sum(::comphelper::Hash::calculateHash(
+            i_pPaddedOwnerPassword, ENCRYPTED_PWD_SIZE, ::comphelper::HashType::MD5));
+        //step 3, only if 128 bit
+        if (i_nKeyLength == SECUR_128BIT_KEY)
         {
-            sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
-
-            rtl_digest_getMD5( aDigest, nMD5Sum, sizeof(nMD5Sum) );
-//step 3, only if 128 bit
-            if( i_nKeyLength == SECUR_128BIT_KEY )
+            sal_Int32 i;
+            for (i = 0; i < 50; i++)
             {
-                sal_Int32 i;
-                for( i = 0; i < 50; i++ )
-                {
-                    nError = rtl_digest_updateMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
-                    if( nError != rtl_Digest_E_None )
-                    {
-                        bSuccess = false;
-                        break;
-                    }
-                    rtl_digest_getMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
-                }
-            }
-            //Step 4, the key is in nMD5Sum
-            //step 5 already done, data is in i_pPaddedUserPassword
-            //step 6
-            rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                     nMD5Sum, i_nKeyLength , nullptr, 0 );
-            // encrypt the user password using the key set above
-            rtl_cipher_encodeARCFOUR( aCipher, i_pPaddedUserPassword, ENCRYPTED_PWD_SIZE, // the data to be encrypted
-                                      &io_rOValue[0], sal_Int32(io_rOValue.size()) ); //encrypted data
-            //Step 7, only if 128 bit
-            if( i_nKeyLength == SECUR_128BIT_KEY )
-            {
-                sal_uInt32 i, y;
-                sal_uInt8 nLocalKey[ SECUR_128BIT_KEY ]; // 16 = 128 bit key
-
-                for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
-                {
-                    for( y = 0; y < sizeof( nLocalKey ); y++ )
-                        nLocalKey[y] = static_cast<sal_uInt8>( nMD5Sum[y] ^ i );
-
-                    rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                            nLocalKey, SECUR_128BIT_KEY, nullptr, 0 ); //destination data area, on init can be NULL
-                    rtl_cipher_encodeARCFOUR( aCipher, &io_rOValue[0], sal_Int32(io_rOValue.size()), // the data to be encrypted
-                                              &io_rOValue[0], sal_Int32(io_rOValue.size()) ); // encrypted data, can be the same as the input, encrypt "in place"
-                    //step 8, store in class data member
-                }
+                nMD5Sum = ::comphelper::Hash::calculateHash(nMD5Sum.data(), nMD5Sum.size(), ::comphelper::HashType::MD5);
             }
         }
-        else
-            bSuccess = false;
+        //Step 4, the key is in nMD5Sum
+        //step 5 already done, data is in i_pPaddedUserPassword
+        //step 6
+        rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
+                                 nMD5Sum.data(), i_nKeyLength , nullptr, 0 );
+        // encrypt the user password using the key set above
+        rtl_cipher_encodeARCFOUR( aCipher, i_pPaddedUserPassword, ENCRYPTED_PWD_SIZE, // the data to be encrypted
+                                  &io_rOValue[0], sal_Int32(io_rOValue.size()) ); //encrypted data
+        //Step 7, only if 128 bit
+        if( i_nKeyLength == SECUR_128BIT_KEY )
+        {
+            sal_uInt32 i, y;
+            sal_uInt8 nLocalKey[ SECUR_128BIT_KEY ]; // 16 = 128 bit key
+
+            for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
+            {
+                for( y = 0; y < sizeof( nLocalKey ); y++ )
+                    nLocalKey[y] = static_cast<sal_uInt8>( nMD5Sum[y] ^ i );
+
+                rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
+                                        nLocalKey, SECUR_128BIT_KEY, nullptr, 0 ); //destination data area, on init can be NULL
+                rtl_cipher_encodeARCFOUR( aCipher, &io_rOValue[0], sal_Int32(io_rOValue.size()), // the data to be encrypted
+                                          &io_rOValue[0], sal_Int32(io_rOValue.size()) ); // encrypted data, can be the same as the input, encrypt "in place"
+                //step 8, store in class data member
+            }
+        }
     }
     else
         bSuccess = false;
 
-    if( aDigest )
-        rtl_digest_destroyMD5( aDigest );
     if( aCipher )
         rtl_cipher_destroyARCFOUR( aCipher );
 
@@ -1497,9 +1458,9 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
 
     io_rProperties.UValue.resize( ENCRYPTED_PWD_SIZE );
 
-    rtlDigest aDigest = rtl_digest_createMD5();
+    ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
     rtlCipher aCipher = rtl_cipher_createARCFOUR( rtl_Cipher_ModeStream );
-    if( aDigest && aCipher )
+    if (aCipher)
     {
         //step 1, common to both 3.4 and 3.5
         if( computeEncryptionKey( i_pTransporter, io_rProperties, i_nAccessPermissions ) )
@@ -1513,19 +1474,15 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
             for(sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
                 io_rProperties.UValue[i] = 0;
             //steps 2 and 3
-            if (rtl_digest_updateMD5( aDigest, s_nPadString, sizeof( s_nPadString ) ) != rtl_Digest_E_None
-                || rtl_digest_updateMD5( aDigest, &io_rProperties.DocumentIdentifier[0], sal_Int32(io_rProperties.DocumentIdentifier.size()) ) != rtl_Digest_E_None)
-            {
-                bSuccess = false;
-            }
+            aDigest.update(s_nPadString, sizeof(s_nPadString));
+            aDigest.update(&io_rProperties.DocumentIdentifier[0], io_rProperties.DocumentIdentifier.size());
 
-            sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
-            rtl_digest_getMD5( aDigest, nMD5Sum, sizeof(nMD5Sum) );
+            ::std::vector<unsigned char> const nMD5Sum(aDigest.finalize());
             //Step 4
             rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
                                     &io_rProperties.EncryptionKey[0], SECUR_128BIT_KEY, nullptr, 0 ); //destination data area
-            rtl_cipher_encodeARCFOUR( aCipher, nMD5Sum, sizeof( nMD5Sum ), // the data to be encrypted
-                                      &io_rProperties.UValue[0], sizeof( nMD5Sum ) ); //encrypted data, stored in class data member
+            rtl_cipher_encodeARCFOUR( aCipher, nMD5Sum.data(), nMD5Sum.size(), // the data to be encrypted
+                                      &io_rProperties.UValue[0], SECUR_128BIT_KEY ); //encrypted data, stored in class data member
             //step 5
             sal_uInt32 i, y;
             sal_uInt8 nLocalKey[SECUR_128BIT_KEY];
@@ -1548,8 +1505,6 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
     else
         bSuccess = false;
 
-    if( aDigest )
-        rtl_digest_destroyMD5( aDigest );
     if( aCipher )
         rtl_cipher_destroyARCFOUR( aCipher );
 
