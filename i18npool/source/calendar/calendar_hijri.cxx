@@ -176,17 +176,16 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     sal_Int32 syndiff;
     sal_Int32 newsyn;
     double newjd;
-    double julday;
     sal_Int32 synmonth;
 
     // Get Julian Day from Gregorian
-    julday = getJulianDay(*day, *month, *year);
+    sal_Int32 const julday = getJulianDay(*day, *month, *year);
 
     // obtain approx. of how many Synodic months since the beginning of the year 1900
     synmonth = static_cast<sal_Int32>(0.5 + (julday - jd1900)/SynPeriod);
 
     newsyn = synmonth;
-    prevday = static_cast<sal_Int32>(julday) - 0.5;
+    prevday = julday - 0.5;
 
     do {
         newjd = NewMoon(newsyn);
@@ -200,7 +199,7 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     syndiff = newsyn - SynRef;
 
     // Round up the day
-    *day = static_cast<sal_Int32>(static_cast<sal_Int32>(julday) - newjd + 0.5);
+    *day = static_cast<sal_Int32>(julday - newjd + 0.5);
     *month =  (syndiff % 12) + 1;
 
     // currently not supported
@@ -293,17 +292,17 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
         (*pnYear)--;
 }
 
-double
+sal_Int32
 Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
 {
     double jy, jm;
 
     if( year == 0 ) {
-    return -1.0;
+    return -1;
     }
 
     if( year == 1582 && month == 10 && day > 4 && day < 15 ) {
-    return -1.0;
+    return -1;
     }
 
     if( month > 2 ) {
@@ -325,7 +324,7 @@ Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
         intgr += static_cast<sal_Int32>(2 - ja + static_cast<sal_Int32>(0.25 * ja));
     }
 
-    return static_cast<double>(intgr);
+    return intgr;
 }
 
 }
