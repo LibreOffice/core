@@ -623,7 +623,7 @@ static void endMD5(DigestContextMD5 *ctx)
 
     i += 1;
 
-    if (i >= (DIGEST_LBLOCK_MD5 - 2))
+    if (i > (DIGEST_LBLOCK_MD5 - 2))
     {
         for (; i < DIGEST_LBLOCK_MD5; i++)
         {
