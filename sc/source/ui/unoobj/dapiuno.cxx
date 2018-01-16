@@ -18,6 +18,8 @@
  */
 
 #include <algorithm>
+#include <cmath>
+
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 
@@ -2704,7 +2706,7 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
         aInfo.mbAutoEnd = rInfo.HasAutoEnd;
         aInfo.mfStart = rInfo.Start;
         aInfo.mfEnd = rInfo.End;
-        aInfo.mfStep = static_cast< sal_Int32 >( rInfo.Step );
+        aInfo.mfStep = std::trunc( rInfo.Step );
 
         // create a local copy of the entire save data (will be written back below)
         ScDPSaveData aSaveData = *pDPObj->GetSaveData();
