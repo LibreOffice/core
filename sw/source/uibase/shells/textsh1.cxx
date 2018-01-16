@@ -125,11 +125,13 @@ using namespace ::com::sun::star::container;
 using namespace com::sun::star::style;
 using namespace svx::sidebar;
 
-void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
+void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq);
+
+void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const SfxItemSet *pArgs, SfxRequest *pReq )
 {
     FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rWrtSh.GetView()) != nullptr );
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
-    SfxItemSet aCoreSet(
+    std::shared_ptr<SfxItemSet> pCoreSet(new SfxItemSet(
         rWrtSh.GetView().GetPool(),
         svl::Items<
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
@@ -138,8 +140,9 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
             SID_HTML_MODE, SID_HTML_MODE,
             SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-            FN_PARAM_SELECTION, FN_PARAM_SELECTION>{} );
-    rWrtSh.GetCurAttr( aCoreSet );
+            FN_PARAM_SELECTION, FN_PARAM_SELECTION>{}));
+    rWrtSh.GetCurAttr(*pCoreSet);
+
     bool bSel = rWrtSh.HasSelection();
     bool bSelectionPut = false;
     if(bSel || rWrtSh.IsInWord())
@@ -151,7 +154,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
             if(!rWrtSh.SelectTextAttr( RES_TXTATR_INETFMT ))
                 rWrtSh.SelWrd();
         }
-        aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelText()));
+        pCoreSet->Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelText()));
         bSelectionPut = true;
         if(!bSel)
         {
@@ -159,54 +162,63 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
             rWrtSh.EndAction();
         }
     }
-        aCoreSet.Put( SfxUInt16Item( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-                    rWrtSh.GetScalingOfSelectedText() ) );
+    pCoreSet->Put(SfxUInt16Item(SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, rWrtSh.GetScalingOfSelectedText()));
 
-    ::ConvertAttrCharToGen(aCoreSet, CONV_ATTR_STD);
+    ::ConvertAttrCharToGen(*pCoreSet, CONV_ATTR_STD);
 
     // Setting the BoxInfo
-    ::PrepareBoxInfo( aCoreSet, rWrtSh );
+    ::PrepareBoxInfo(*pCoreSet, rWrtSh);
 
-    aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(rWrtSh.GetView().GetDocShell())));
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg;
+    pCoreSet->Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(rWrtSh.GetView().GetDocShell())));
+    VclPtr<SfxAbstractTabDialog> pDlg;
     if ( bUseDialog && GetActiveView() )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        pDlg.disposeAndReset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, SwCharDlgMode::Std));
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
-        if( FN_INSERT_HYPERLINK == nSlot )
+        pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), *pCoreSet, SwCharDlgMode::Std));
+        if (!pDlg)
+        {
+            SAL_WARN("sw.ui", "Dialog creation failed!");
+            return;
+        }
+
+        if (nSlot == FN_INSERT_HYPERLINK)
             pDlg->SetCurPageId("hyperlink");
-    }
-    if (pDlg && nSlot == SID_CHAR_DLG_EFFECT)
-    {
-        pDlg->SetCurPageId("fonteffects");
-    }
-    else if (pDlg && (nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_CHAR_DLG_FOR_PARAGRAPH))
-    {
-        pDlg->SetCurPageId("font");
-    }
-    else if (pDlg && pReq)
-    {
-        const SfxStringItem* pItem = (*pReq).GetArg<SfxStringItem>(FN_PARAM_1);
-        if (pItem)
-            pDlg->SetCurPageId(OUStringToOString(pItem->GetValue(), RTL_TEXTENCODING_UTF8));
+        else if (nSlot == SID_CHAR_DLG_EFFECT)
+            pDlg->SetCurPageId("fonteffects");
+        else if (nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
+            pDlg->SetCurPageId("font");
+        else if (pReq)
+        {
+            const SfxStringItem* pItem = (*pReq).GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pItem)
+                pDlg->SetCurPageId(OUStringToOString(pItem->GetValue(), RTL_TEXTENCODING_UTF8));
+        }
     }
 
-    const SfxItemSet* pSet = nullptr;
-    if ( !bUseDialog )
-        pSet = pArgs;
-    else if ( pDlg && pDlg->Execute() == RET_OK ) /* #110771# pDlg can be NULL */
+    if (bUseDialog)
     {
-        pSet = pDlg->GetOutputItemSet();
+        std::shared_ptr<SfxRequest> pRequest(new SfxRequest(*pReq));
+        pReq->Ignore(); // the 'old' request is not relevant any more
+
+        pDlg->StartExecuteAsync([pDlg, &rWrtSh, pCoreSet, bSel, bSelectionPut, pRequest](sal_Int32 nResult){
+            if (nResult == RET_OK)
+            {
+                sw_CharDialogResult(pDlg->GetOutputItemSet(), rWrtSh, pCoreSet, bSel, bSelectionPut, pRequest.get());
+            }
+        }, pDlg);
     }
+    else if (pArgs)
+    {
+        sw_CharDialogResult(pArgs, rWrtSh, pCoreSet, bSel, bSelectionPut, pReq);
+    }
+}
 
-    if ( !pSet)
-        return;
-
+void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq)
+{
     SfxItemSet aTmpSet( *pSet );
-    ::ConvertAttrGenToChar(aTmpSet, aCoreSet, CONV_ATTR_STD);
+    ::ConvertAttrGenToChar(aTmpSet, *pCoreSet, CONV_ATTR_STD);
 
     const SfxPoolItem* pSelectionItem;
     bool bInsert = false;
