@@ -32,6 +32,7 @@
 #include "bspatch.h"
 #include "errors.h"
 
+#include <algorithm>
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <stdio.h>
