@@ -125,7 +125,7 @@ using namespace ::com::sun::star::container;
 using namespace com::sun::star::style;
 using namespace svx::sidebar;
 
-void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq);
+static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq);
 
 void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const SfxItemSet *pArgs, SfxRequest *pReq )
 {
@@ -215,7 +215,7 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
     }
 }
 
-void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq)
+static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq)
 {
     SfxItemSet aTmpSet( *pSet );
     ::ConvertAttrGenToChar(aTmpSet, *pCoreSet, CONV_ATTR_STD);
@@ -289,6 +289,73 @@ static short lcl_AskRedlineFlags(vcl::Window *pWin)
     aQBox->SetButtonHelpText( RET_OK, OUString() );
 
     return aQBox->Execute();
+}
+
+static void sw_ParagraphDialogResult(SfxItemSet* pSet, SwWrtShell &rWrtSh, SfxRequest& rReq, SwPaM* pPaM)
+{
+    if (!pSet)
+        return;
+
+    rReq.Done( *pSet );
+    ::SfxToSwPageDescAttr( rWrtSh, *pSet );
+    // #i56253#
+    // enclose all undos.
+    // Thus, check conditions, if actions will be performed.
+    const bool bUndoNeeded( pSet->Count() ||
+            SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART) ||
+            SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) );
+    if ( bUndoNeeded )
+    {
+        rWrtSh.StartUndo( SwUndoId::INSATTR );
+    }
+    if( pSet->Count() )
+    {
+        rWrtSh.StartAction();
+        const SfxPoolItem* pItem = nullptr;
+        if ( SfxItemState::SET == pSet->GetItemState(FN_DROP_TEXT, false, &pItem) )
+        {
+            if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
+                rWrtSh.ReplaceDropText(static_cast<const SfxStringItem*>(pItem)->GetValue(), pPaM);
+        }
+        rWrtSh.SetAttrSet(*pSet, SetAttrMode::DEFAULT, pPaM);
+        rWrtSh.EndAction();
+        SwTextFormatColl* pColl = rWrtSh.GetPaMTextFormatColl(pPaM);
+        if(pColl && pColl->IsAutoUpdateFormat())
+        {
+            rWrtSh.AutoUpdatePara(pColl, *pSet, pPaM);
+        }
+    }
+
+    if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
+    {
+        //SetNumRuleStart(true) restarts the numbering at the value
+        //that is defined at the starting point of the numbering level
+        //otherwise the SetNodeNumStart() value determines the start
+        //if it's set to something different than USHRT_MAX
+
+        bool bStart = static_cast<const SfxBoolItem&>(pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+
+        // Default value for restart value has to be USHRT_MAX
+        // in order to indicate that the restart value of the list
+        // style has to be used on restart.
+        sal_uInt16 nNumStart = USHRT_MAX;
+        if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
+        {
+            nNumStart = static_cast<const SfxUInt16Item&>(pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+        }
+        rWrtSh.SetNumRuleStart(bStart, pPaM);
+        rWrtSh.SetNodeNumStart(nNumStart);
+    }
+    else if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
+    {
+        rWrtSh.SetNodeNumStart(static_cast<const SfxUInt16Item&>(pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue());
+        rWrtSh.SetNumRuleStart(false, pPaM);
+    }
+    // #i56253#
+    if ( bUndoNeeded )
+    {
+        rWrtSh.EndUndo( SwUndoId::INSATTR );
+    }
 }
 
 void SwTextShell::Execute(SfxRequest &rReq)
@@ -990,7 +1057,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                         rWrtSh.GetNodeNumStart( pPaM ) );
                 aCoreSet.Put(aStartAt);
             }
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg;
+            VclPtr<SfxAbstractTabDialog> pDlg;
 
             if ( bUseDialog && GetActiveView() )
             {
@@ -1001,10 +1068,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.disposeAndReset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, false, sDefPage ));
+                pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, false, sDefPage ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
             }
-            SfxItemSet* pSet = nullptr;
+
             if ( !bUseDialog )
             {
                 if ( nSlot == SID_ATTR_PARA_LRSPACE)
@@ -1012,102 +1079,50 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     SvxLRSpaceItem aParaMargin(static_cast<const SvxLRSpaceItem&>(pArgs->Get(nSlot)));
                     aParaMargin.SetWhich( RES_LR_SPACE);
                     aCoreSet.Put(aParaMargin);
-                    pSet = &aCoreSet;
 
-                } else
-                    pSet = const_cast<SfxItemSet*>(pArgs);
-
+                    sw_ParagraphDialogResult(&aCoreSet, rWrtSh, rReq, pPaM);
+                }
+                else
+                    sw_ParagraphDialogResult(const_cast<SfxItemSet*>(pArgs), rWrtSh, rReq, pPaM);
             }
-            else if ( pDlg && pDlg->Execute() == RET_OK )
+            else if (pDlg)
             {
-                // Apply defaults if necessary.
-                pSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
-                sal_uInt16 nNewDist;
-                if( SfxItemState::SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, false, &pItem ) &&
-                    nDefDist != (nNewDist = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
-                {
-                    SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
-                    MakeDefTabs( nNewDist, aDefTabs );
-                    rWrtSh.SetDefault( aDefTabs );
-                    pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
-                }
+                std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+                rReq.Ignore(); // the 'old' request is not relevant any more
 
-                if ( SfxItemState::SET == pSet->GetItemState(FN_PARAM_1,false,&pItem) )
-                {
-                    pSet->Put(SfxStringItem(FN_DROP_TEXT, static_cast<const SfxStringItem*>(pItem)->GetValue()));
-                    pSet->ClearItem(FN_PARAM_1);
-                }
-
-                if( SfxItemState::SET == pSet->GetItemState( RES_PARATR_DROP, false, &pItem ))
-                {
-                    OUString sCharStyleName;
-                    if(static_cast<const SwFormatDrop*>(pItem)->GetCharFormat())
-                        sCharStyleName = static_cast<const SwFormatDrop*>(pItem)->GetCharFormat()->GetName();
-                    pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
-                }
-            }
-
-            if ( pSet )
-            {
-                rReq.Done( *pSet );
-                ::SfxToSwPageDescAttr( rWrtSh, *pSet );
-                // #i56253#
-                // enclose all undos.
-                // Thus, check conditions, if actions will be performed.
-                const bool bUndoNeeded( pSet->Count() ||
-                        SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART) ||
-                        SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) );
-                if ( bUndoNeeded )
-                {
-                    rWrtSh.StartUndo( SwUndoId::INSATTR );
-                }
-                if( pSet->Count() )
-                {
-                    rWrtSh.StartAction();
-                    if ( SfxItemState::SET == pSet->GetItemState(FN_DROP_TEXT, false, &pItem) )
+                pDlg->StartExecuteAsync([pDlg, &rWrtSh, pRequest, nDefDist, pPaM](sal_Int32 nResult){
+                    if (nResult == RET_OK)
                     {
-                        if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
-                            rWrtSh.ReplaceDropText(static_cast<const SfxStringItem*>(pItem)->GetValue(), pPaM);
-                    }
-                    rWrtSh.SetAttrSet( *pSet, SetAttrMode::DEFAULT, pPaM );
-                    rWrtSh.EndAction();
-                    SwTextFormatColl* pColl = rWrtSh.GetPaMTextFormatColl( pPaM );
-                    if(pColl && pColl->IsAutoUpdateFormat())
-                    {
-                        rWrtSh.AutoUpdatePara(pColl, *pSet, pPaM);
-                    }
-                }
+                        // Apply defaults if necessary.
+                        SfxItemSet* pSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
+                        sal_uInt16 nNewDist;
+                        const SfxPoolItem* pItem2 = nullptr;
+                        if (SfxItemState::SET == pSet->GetItemState(SID_ATTR_TABSTOP_DEFAULTS, false, &pItem2) &&
+                            nDefDist != (nNewDist = static_cast<const SfxUInt16Item*>(pItem2)->GetValue()) )
+                        {
+                            SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
+                            MakeDefTabs( nNewDist, aDefTabs );
+                            rWrtSh.SetDefault( aDefTabs );
+                            pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
+                        }
 
-                if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
-                {
-                    //SetNumRuleStart(true) restarts the numbering at the value
-                    //that is defined at the starting point of the numbering level
-                    //otherwise the SetNodeNumStart() value determines the start
-                    //if it's set to something different than USHRT_MAX
+                        if (SfxItemState::SET == pSet->GetItemState(FN_PARAM_1, false, &pItem2))
+                        {
+                            pSet->Put(SfxStringItem(FN_DROP_TEXT, static_cast<const SfxStringItem*>(pItem2)->GetValue()));
+                            pSet->ClearItem(FN_PARAM_1);
+                        }
 
-                    bool bStart = static_cast<const SfxBoolItem&>(pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+                        if (SfxItemState::SET == pSet->GetItemState(RES_PARATR_DROP, false, &pItem2))
+                        {
+                            OUString sCharStyleName;
+                            if (static_cast<const SwFormatDrop*>(pItem2)->GetCharFormat())
+                                sCharStyleName = static_cast<const SwFormatDrop*>(pItem2)->GetCharFormat()->GetName();
+                            pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
+                        }
 
-                    // Default value for restart value has to be USHRT_MAX
-                    // in order to indicate that the restart value of the list
-                    // style has to be used on restart.
-                    sal_uInt16 nNumStart = USHRT_MAX;
-                    if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
-                    {
-                        nNumStart = static_cast<const SfxUInt16Item&>(pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+                        sw_ParagraphDialogResult(pSet, rWrtSh, *pRequest, pPaM);
                     }
-                    rWrtSh.SetNumRuleStart(bStart, pPaM);
-                    rWrtSh.SetNodeNumStart(nNumStart);
-                }
-                else if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
-                {
-                    rWrtSh.SetNodeNumStart(static_cast<const SfxUInt16Item&>(pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue());
-                    rWrtSh.SetNumRuleStart(false, pPaM);
-                }
-                // #i56253#
-                if ( bUndoNeeded )
-                {
-                    rWrtSh.EndUndo( SwUndoId::INSATTR );
-                }
+                }, pDlg);
             }
         }
         break;
