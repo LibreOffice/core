@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_COMPHELPER_HASH_HXX
+#define INCLUDED_COMPHELPER_HASH_HXX
+
 #include <comphelper/comphelperdllapi.h>
 
 #include <memory>
@@ -44,5 +47,7 @@ public:
 };
 
 }
+
+#endif // INCLUDED_COMPHELPER_HASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
