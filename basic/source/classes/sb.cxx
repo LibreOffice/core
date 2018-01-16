@@ -626,8 +626,8 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 {
     aOUSource = pClassModule->aOUSource;
     aComment = pClassModule->aComment;
-    pImage = pClassModule->pImage;
-    pBreaks = pClassModule->pBreaks;
+    pImage = std::move(pClassModule->pImage);
+    pBreaks = std::move(pClassModule->pBreaks);
 
     SetClassName( pClassModule->GetName() );
 
