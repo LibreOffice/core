@@ -123,9 +123,9 @@ namespace drawinglayer
         {
             basegfx::BColor                 maColor;
             double                          mfLogicPixelSize;
-            GeoTexSvxHatch*                 mp0;
-            GeoTexSvxHatch*                 mp1;
-            GeoTexSvxHatch*                 mp2;
+            std::unique_ptr<GeoTexSvxHatch> mp0;
+            std::unique_ptr<GeoTexSvxHatch> mp1;
+            std::unique_ptr<GeoTexSvxHatch> mp2;
 
             bool                            mbFillBackground : 1;
 
