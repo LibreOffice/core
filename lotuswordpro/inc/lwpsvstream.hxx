@@ -70,7 +70,8 @@ public:
     sal_Int32 Read( void* bytes, sal_Int32 nBytesToRead );
     void SeekRel( sal_Int64 pos );
     sal_Int64 Tell();
-    sal_Int64 Seek( sal_Int64 pos );
+    sal_Int64 Seek(sal_Int64 pos);
+    bool CheckSeek(sal_Int64 pos);
 
     LwpSvStream& ReadUInt8( sal_uInt8& rUInt8 );
     LwpSvStream& ReadUInt16( sal_uInt16& rUInt16 );
