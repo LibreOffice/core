@@ -42,6 +42,7 @@
 
 #include <dialmgr.hxx>
 #include <cuicharmap.hxx>
+#include <neuralnetwork.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
@@ -215,46 +216,6 @@ void Ocr::ScaleBitmap(long width, long height)
     h_ = height;
 }
 
-void Ocr::ToFile(std::ofstream &file)
-{
-    BitmapReadAccess * r = m_bitmap.AcquireReadAccess ();
-
-    std::cout << "2r->Width () != w_" << r->Width () << " vs " << w_ << std::endl;
-    std::cout << "2r->Height() != h_" << r->Height () << " vs " << h_ << std::endl;
-    for (long j = 0; j < h_; j++)
-    {
-        for (long i = 0; i < w_; i++)
-        {
-            if (i >= r->Width () || j >= r->Height())
-            {
-                file << "0 ";
-                std::cout << "-1 ";
-            }
-            else
-            {
-                Color c = r->GetPixel(j, i);
-                if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
-                {
-                    file << "0 ";
-                    std::cout << "-1 ";
-                }
-                else if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
-                {
-                    file << " 1 ";
-                    std::cout << " 1 ";
-                }
-                else
-                {
-                    file << " 1 ";
-                    std::cout << " 1 ";
-                }
-            }
-        }
-        std::cout << std::endl;
-    }
-    file << std::endl;
-}
-
 void Ocr::ToFann(fann_type *out_data)
 {
     BitmapReadAccess * r = m_bitmap.AcquireReadAccess ();
@@ -269,7 +230,7 @@ void Ocr::ToFann(fann_type *out_data)
         {
             if (i >= r->Width () || j >= r->Height())
             {
-                out_data[idata] = 0;
+                out_data[idata] = 0.;
                 std::cout << "-1 ";
             }
             else
@@ -277,17 +238,17 @@ void Ocr::ToFann(fann_type *out_data)
                 Color c = r->GetPixel(j, i);
                 if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
                 {
-                    out_data[idata] = 0;
+                    out_data[idata] = 0.;
                     std::cout << "-1 ";
                 }
                 else if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
                 {
-                    out_data[idata] = 1;
+                    out_data[idata] = 1.;
                     std::cout << " 1 ";
                 }
                 else
                 {
-                    out_data[idata] = 1;
+                    out_data[idata] = 1.;
                     std::cout << " 1 ";
                 }
             }
@@ -1224,8 +1185,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
         // Deep learning. Take about 30-60 minutes
         if (access( "/tmp/fann.net", F_OK ) == -1)
         {
-
-
             // One input for each pixel.
             const unsigned int num_input = Ocr::SIZE*Ocr::SIZE;
             // One ouput for each possible char.
@@ -1234,21 +1193,18 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
             const unsigned int num_layers = 6;
             // Number of neurons for each layer is usually between number of input and number on output.
             const unsigned int num_neurons_hidden = std::max(num_input, num_output);
-            const float desired_error = (const float) 0.001;
+            const float desired_error = (const float) 0.0001;
             const unsigned int max_epochs = 500;
             // To see progression. It's take time...
             const unsigned int epochs_between_reports = 1;
 
-            std::ofstream file;
-            // Write in /tmp/xor.data all database of example.
-            // TODO: MUST be replace by the memory stream.
-            file.open("/tmp/xor.data");
-
-            // First line of the file.
-            file << num_output << " " << num_input << " " << num_output << std::endl;
-            // Then, the current char :
-            //     - For each pixel : -1 if blank, 1 if not blank.
-            //     - For each possible char : -1 if not the current char, 1 if it is the current char.
+//          First possibility: fixed internal layer.
+            sal_uInt32 layers[num_layers] = {num_input, /*num_neurons_hidden, num_neurons_hidden, */num_neurons_hidden, num_neurons_hidden, num_neurons_hidden, num_neurons_hidden, num_output};
+            AbstractNeuralNetwork * ann = AbstractNeuralNetwork::CreateFactory(num_layers, layers);
+            ann->SetActivationFunction(AbstractNeuralNetwork::ActivationFunction::SIGMOID);
+            ann->SetTrainingAlgorithm(AbstractNeuralNetwork::TrainingAlgorithm::INCREMENTAL);
+            ann->SetLearningRate(0.07);
+            ann->InitTraining(num_output);
 
             long i = 0;
             sal_UCS4 sChar = xFontCharMap->GetFirstChar();
@@ -1299,21 +1255,21 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
                 o2.CropBitmap();
                 o2.ScaleBitmap(Ocr::SIZE, Ocr::SIZE);
                 // Write the draw of the current char to the file.
-                o2.ToFile(file);
+                o2.ToFann(ann->GetInput(i));
 
                 // Write that the current char is the only one good.
+                fann_type *output = ann->GetOutput(i);
                 for (long j = 0; j < i; j++)
                 {
-                    file << "0 ";
+                    output[j] = 0;
                 }
 
-                file << "1 ";
+                output[i] = 1;
 
                 for (long j = i + 1; j < num_output; j++)
                 {
-                    file << "0 ";
+                    output[j] = 0;
                 }
-                file << std::endl;
 
                 sChar = xFontCharMap->GetNextChar(sChar);
                 i++;
@@ -1322,19 +1278,10 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
                     break;
             }
 
-            file.close();
             // Creating the database of example done.
             std::cout << "DONE" << std::endl;
 
-
-//          First possibility: fixed internal layer.
-            struct fann *ann = fann_create_standard(num_layers, num_input, num_neurons_hidden, num_neurons_hidden, num_neurons_hidden, num_neurons_hidden, num_output); // TODO
-            // Default function. Usually works well.
-            fann_set_activation_function_hidden(ann, FANN_SIGMOID_SYMMETRIC);
-            fann_set_activation_function_output(ann, FANN_SIGMOID_SYMMETRIC);
-            fann_set_training_algorithm(ann, FANN_TRAIN_INCREMENTAL);
-            fann_set_learning_rate(ann, 0.2);
-            fann_train_on_file(ann, "/tmp/xor.data", max_epochs, epochs_between_reports, desired_error);
+            ann->Train(max_epochs, desired_error);
 
 //          Second possibility: none predictive internal layer.
 //          Can't find convergence for Total error:900,0000. Start at iteration around 370.
@@ -1345,41 +1292,41 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
             // fann_set_cascade_max_cand_epochs(ann, std::max(2U*num_input, 150U));
             // fann_set_cascade_min_out_epochs(ann, std::max(num_input/5U, 150U/2));
             // fann_set_cascade_min_cand_epochs(ann, std::max(num_input/5U, 150U/2));
-            // fann_set_cascade_output_change_fraction(ann, 0.15);
-            // fann_set_cascade_candidate_change_fraction(ann, 0.15);
-            // fann_set_cascade_output_stagnation_epochs(ann, 5);
-            // fann_set_cascade_candidate_stagnation_epochs(ann, 5);
-            // fann_set_cascade_weight_multiplier(ann, 0.2);
+            fann_set_cascade_output_change_fraction(ann, 0.001);
+            fann_set_cascade_candidate_change_fraction(ann, 0.001);
+            fann_set_cascade_output_stagnation_epochs(ann, 3);
+            fann_set_cascade_candidate_stagnation_epochs(ann, 3);
+            fann_set_cascade_weight_multiplier(ann, 0.01);
+            fann_set_cascade_candidate_limit(ann, 1000000000.);
             fann_cascadetrain_on_file(ann, "/tmp/xor.data", 100000, epochs_between_reports, desired_error);
             */
 
             // Save the result. Huge !!!
-            fann_save(ann, "/tmp/fann.net");
-
-            fann_destroy(ann);
+            ann->Save("/tmp/fann.net");
+            delete ann;
         }
 
         fann_type *calc_out;
         fann_type input[Ocr::SIZE*Ocr::SIZE];
 
         std::cout << "Starting loading fann" << std::endl;
-        struct fann *ann = fann_create_from_file("/tmp/fann.net");
+        AbstractNeuralNetwork * ann = AbstractNeuralNetwork::CreateFactory("/tmp/fann.net");
 
         o.ToFann(&input[0]);
         std::cout << "Starting finding best result" << std::endl;
-        calc_out = fann_run(ann, input);
+        calc_out = ann->Run(input);
         std::cout << "End of fann" << std::endl;
 
         std::multimap<float, sal_UCS4> sorted_results;
-        std::cout << fann_get_num_output(ann) << std::endl;
-        for (long i = 0; i < fann_get_num_output(ann); i++)
+        std::cout << ann->GetNumOutput() << std::endl;
+        for (long i = 0; i < ann->GetNumOutput(); i++)
         {
             // -1.-x: the minimum will be at end.
             sorted_results.insert(std::pair<float, sal_UCS4>(-1.-calc_out[i], i));
             std::cout << static_cast<char>(xFontCharMap->GetCharFromIndex(i)) << " : " << calc_out[i] << " " << std::endl;
         }
 
-        fann_destroy(ann);
+        delete ann;
 
         // TODO : sort the output and write the better char at first.
         for (auto it = sorted_results.begin(); it != sorted_results.end(); ++it)
