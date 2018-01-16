@@ -307,21 +307,16 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
         {
             for (sal_uLong i = 0; i < mnWidth; ++i)
             {
-                for (sal_uLong j = 0; j < mnColors; ++j)
+                OString aKey(reinterpret_cast<sal_Char*>(pString), mnCpp);
+                auto it = maColMap.find(aKey);
+                if (it != maColMap.end())
                 {
-                    OString aKey(reinterpret_cast<sal_Char*>(pString), mnCpp);
-                    auto it = maColMap.find(aKey);
-                    if (it != maColMap.end())
-                    {
-                        if (mnColors > 256)
-                            mpAcc->SetPixel(nY, i, Color(it->second[1], it->second[2], it->second[3]));
-                        else
-                            mpAcc->SetPixel(nY, i, BitmapColor(it->second[1]));
-                        if (mpMaskAcc)
-                            mpMaskAcc->SetPixel(nY, i, it->second[0] ? aWhite : aBlack);
-
-                        break;
-                    }
+                    if (mnColors > 256)
+                        mpAcc->SetPixel(nY, i, Color(it->second[1], it->second[2], it->second[3]));
+                    else
+                        mpAcc->SetPixel(nY, i, BitmapColor(it->second[1]));
+                    if (mpMaskAcc)
+                        mpMaskAcc->SetPixel(nY, i, it->second[0] ? aWhite : aBlack);
                 }
                 pString += mnCpp;
             }
