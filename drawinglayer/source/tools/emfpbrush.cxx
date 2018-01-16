@@ -64,35 +64,6 @@ namespace emfplushelper
 
     EMFPBrush::~EMFPBrush()
     {
-        if (blendPositions != nullptr)
-        {
-            delete[] blendPositions;
-            blendPositions = nullptr;
-        }
-
-        if (colorblendPositions != nullptr)
-        {
-            delete[] colorblendPositions;
-            colorblendPositions = nullptr;
-        }
-
-        if (colorblendColors != nullptr)
-        {
-            delete[] colorblendColors;
-            colorblendColors = nullptr;
-        }
-
-        if (surroundColors != nullptr)
-        {
-            delete[] surroundColors;
-            surroundColors = nullptr;
-        }
-
-        if (path)
-        {
-            delete path;
-            path = nullptr;
-        }
     }
 
     void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
@@ -153,7 +124,7 @@ namespace emfplushelper
                     surroundColorsNumber = SAL_MAX_INT32 / sizeof(::Color);
                 }
 
-                surroundColors = new ::Color[surroundColorsNumber];
+                surroundColors.reset( new ::Color[surroundColorsNumber] );
 
                 for (int i = 0; i < surroundColorsNumber; i++)
                 {
@@ -180,7 +151,7 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer", "EMF+\tpath (brush path gradient)");
                     SAL_INFO("drawinglayer", "EMF+\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
-                    path = new EMFPPath(pathPoints);
+                    path.reset( new EMFPPath(pathPoints) );
                     path->Read(s, pathFlags);
 
                     s.Seek(pos + pathLength);
@@ -197,7 +168,7 @@ namespace emfplushelper
 
                     sal_uInt64 const pos = s.Tell();
                     SAL_INFO("drawinglayer", "EMF+\t use boundary, points: " << boundaryPointCount);
-                    path = new EMFPPath(boundaryPointCount);
+                    path.reset( new EMFPPath(boundaryPointCount) );
                     path->Read(s, 0x0);
 
                     s.Seek(pos + 8 * boundaryPointCount);
@@ -221,8 +192,8 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer", "EMF+\tuse blend, points: " << blendPoints);
                     if (blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
                         blendPoints = SAL_MAX_INT32 / (2 * sizeof(float));
-                    blendPositions = new float[2 * blendPoints];
-                    blendFactors = blendPositions + blendPoints;
+                    blendPositions.reset( new float[2 * blendPoints] );
+                    blendFactors = blendPositions.get() + blendPoints;
 
                     for (int i = 0; i < blendPoints; i++)
                     {
@@ -252,8 +223,8 @@ namespace emfplushelper
                         colorblendPoints = SAL_MAX_INT32 / sizeof(::Color);
                     }
 
-                    colorblendPositions = new float[colorblendPoints];
-                    colorblendColors = new ::Color[colorblendPoints];
+                    colorblendPositions.reset( new float[colorblendPoints] );
+                    colorblendColors.reset( new ::Color[colorblendPoints] );
 
                     for (int i = 0; i < colorblendPoints; i++)
                     {
@@ -302,8 +273,8 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer", "EMF+\tuse blend, points: " << blendPoints);
                     if (blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
                         blendPoints = SAL_MAX_INT32 / (2 * sizeof(float));
-                    blendPositions = new float[2 * blendPoints];
-                    blendFactors = blendPositions + blendPoints;
+                    blendPositions.reset( new float[2 * blendPoints] );
+                    blendFactors = blendPositions.get() + blendPoints;
 
                     for (int i = 0; i < blendPoints; i++)
                     {
@@ -333,8 +304,8 @@ namespace emfplushelper
                         colorblendPoints = sal_uInt32(SAL_MAX_INT32) / sizeof(::Color);
                     }
 
-                    colorblendPositions = new float[colorblendPoints];
-                    colorblendColors = new ::Color[colorblendPoints];
+                    colorblendPositions.reset( new float[colorblendPoints] );
+                    colorblendColors.reset( new ::Color[colorblendPoints] );
 
                     for (int i = 0; i < colorblendPoints; i++)
                     {
