@@ -123,7 +123,7 @@ SfxRequest::~SfxRequest()
         pImpl->Record( uno::Sequence < beans::PropertyValue >() );
 
     // Clear object
-    delete pArgs;
+    pArgs.reset();
     if ( pImpl->pRetVal )
         DeleteItemOnIdle(pImpl->pRetVal);
 }
@@ -408,8 +408,7 @@ void SfxRequest::Record_Impl
 
 void SfxRequest::SetArgs( const SfxAllItemSet& rArgs )
 {
-    delete pArgs;
-    pArgs = new SfxAllItemSet(rArgs);
+    pArgs.reset(new SfxAllItemSet(rArgs));
     pImpl->SetPool( pArgs->GetPool() );
 }
 
@@ -417,7 +416,7 @@ void SfxRequest::SetArgs( const SfxAllItemSet& rArgs )
 void SfxRequest::AppendItem(const SfxPoolItem &rItem)
 {
     if(!pArgs)
-        pArgs = new SfxAllItemSet(*pImpl->pPool);
+        pArgs.reset( new SfxAllItemSet(*pImpl->pPool) );
     pArgs->Put(rItem, rItem.Which());
 }
 
@@ -428,7 +427,7 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
     {
         pArgs->ClearItem(nID);
         if ( !pArgs->Count() )
-            DELETEZ(pArgs);
+            pArgs.reset();
     }
 }
 
@@ -480,7 +479,7 @@ void SfxRequest::Done
     // Keep items if possible, so they can be queried by StarDraw.
     if ( !pArgs )
     {
-        pArgs = new SfxAllItemSet( rSet );
+        pArgs.reset( new SfxAllItemSet( rSet ) );
         pImpl->SetPool( pArgs->GetPool() );
     }
     else
@@ -500,15 +499,15 @@ void SfxRequest::Done
 void SfxRequest::Done( bool bRelease )
 //  [<SfxRequest::Done(SfxItemSet&)>]
 {
-    Done_Impl( pArgs );
+    Done_Impl( pArgs.get() );
     if( bRelease )
-        DELETEZ( pArgs );
+        pArgs.reset();
 }
 
 
 void SfxRequest::ForgetAllArgs()
 {
-    DELETEZ( pArgs );
+    pArgs.reset();
     pImpl->pInternalArgs.reset();
 }
 
@@ -530,7 +529,7 @@ void SfxRequest::Cancel()
 {
     pImpl->bCancelled = true;
     pImpl->SetPool( nullptr );
-    DELETEZ( pArgs );
+    pArgs.reset();
 }
 
 
@@ -757,7 +756,7 @@ bool SfxRequest::AllowsRecording() const
 
 void SfxRequest::ReleaseArgs()
 {
-    DELETEZ( pArgs );
+    pArgs.reset();
     pImpl->pInternalArgs.reset();
 }
 

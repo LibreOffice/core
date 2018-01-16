@@ -51,7 +51,7 @@ class SFX2_DLLPUBLIC SfxRequest: public SfxHint
 friend struct SfxRequest_Impl;
 
     sal_uInt16          nSlot;
-    SfxAllItemSet*      pArgs;
+    std::unique_ptr<SfxAllItemSet>        pArgs;
     std::unique_ptr< SfxRequest_Impl >    pImpl;
 
 public:
@@ -78,7 +78,7 @@ public:
     void                SetModifier( sal_uInt16 nModi );
     SAL_DLLPRIVATE void SetInternalArgs_Impl( const SfxAllItemSet& rArgs );
     SAL_DLLPRIVATE const SfxItemSet* GetInternalArgs_Impl() const;
-    const SfxItemSet*   GetArgs() const { return pArgs; }
+    const SfxItemSet*   GetArgs() const { return pArgs.get(); }
     void                SetArgs( const SfxAllItemSet& rArgs );
     void                AppendItem(const SfxPoolItem &);
     void                RemoveItem( sal_uInt16 nSlotId );
