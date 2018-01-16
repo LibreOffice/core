@@ -144,14 +144,12 @@ namespace svgio
 
         SvgDocHdl::~SvgDocHdl()
         {
-#ifdef DBG_UTIL
             if(mpTarget)
             {
                 OSL_ENSURE(false, "SvgDocHdl destructed with active target (!)");
                 delete mpTarget;
             }
             OSL_ENSURE(!maCssContents.size(), "SvgDocHdl destructed with active css style stack entry (!)");
-#endif
         }
 
         void SvgDocHdl::startDocument(  )
