@@ -27,7 +27,7 @@ namespace cppcanvas
         struct EMFPRegion : public EMFPObject
         {
             sal_Int32 parts;
-            sal_Int32 *combineMode;
+            std::unique_ptr<sal_Int32[]> combineMode;
             sal_Int32 initialState;
             float ix, iy, iw, ih;
 
