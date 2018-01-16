@@ -176,7 +176,7 @@ protected:
     VclPtr<PopupMenu> mxMenu;
     OString sLastItemIdent;
     SfxModule* pModule;
-    Idle* pIdle;
+    std::unique_ptr<Idle> pIdle;
 
     SfxStyleFamilies* pStyleFamilies;
     SfxTemplateItem* pFamilyState[MAX_FAMILIES];
