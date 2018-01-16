@@ -2080,10 +2080,18 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
         break;
     case CSS1_PIXLENGTH:
         {
-            nLeft = static_cast<long>(pExpr->GetNumber());
-            long nPHeight = 0;
-            SvxCSS1Parser::PixelToTwip( nLeft, nPHeight );
-            bSet = true;
+            double fLeft = pExpr->GetNumber();
+            if (fLeft < SAL_MAX_INT32/2.0 && fLeft > SAL_MIN_INT32/2.0)
+            {
+                nLeft = static_cast<long>(fLeft);
+                long nPHeight = 0;
+                SvxCSS1Parser::PixelToTwip( nLeft, nPHeight );
+                bSet = true;
+            }
+            else
+            {
+                SAL_WARN("sw.html", "out-of-size pxlength: " << fLeft);
+            }
         }
         break;
     case CSS1_PERCENTAGE:
