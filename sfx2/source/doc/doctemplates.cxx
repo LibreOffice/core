@@ -346,7 +346,7 @@ public:
 
 class GroupData_Impl
 {
-    vector< DocTemplates_EntryData_Impl* > maEntries;
+    std::vector< std::unique_ptr<DocTemplates_EntryData_Impl> > maEntries;
     OUString            maTitle;
     OUString            maHierarchyURL;
     OUString            maTargetURL;
@@ -355,7 +355,6 @@ class GroupData_Impl
 
 public:
     explicit            GroupData_Impl( const OUString& rTitle );
-                        ~GroupData_Impl();
 
     void                setInUse() { mbInUse = true; }
     void                setHierarchy( bool bInHierarchy ) { mbInHierarchy = bInHierarchy; }
@@ -373,7 +372,7 @@ public:
                                   const OUString& rType,
                                   const OUString& rHierURL );
     size_t                          count() { return maEntries.size(); }
-    DocTemplates_EntryData_Impl*    getEntry( size_t nPos ) { return maEntries[ nPos ]; }
+    DocTemplates_EntryData_Impl*    getEntry( size_t nPos ) { return maEntries[ nPos ].get(); }
 };
 
 
@@ -2641,14 +2640,6 @@ GroupData_Impl::GroupData_Impl( const OUString& rTitle )
 }
 
 
-GroupData_Impl::~GroupData_Impl()
-{
-    for (DocTemplates_EntryData_Impl* p : maEntries)
-        delete p;
-    maEntries.clear();
-}
-
-
 DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
                                           const OUString& rTargetURL,
                                           const OUString& rType,
@@ -2657,9 +2648,9 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
     DocTemplates_EntryData_Impl* pData = nullptr;
     bool EntryFound = false;
 
-    for (DocTemplates_EntryData_Impl* p : maEntries)
+    for (auto const & p : maEntries)
     {
-        pData = p;
+        pData = p.get();
         if ( pData->getTitle() == rTitle )
         {
             EntryFound = true;
@@ -2677,7 +2668,7 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
             pData->setHierarchyURL( rHierURL );
             pData->setHierarchy( true );
         }
-        maEntries.push_back( pData );
+        maEntries.emplace_back( pData );
     }
     else
     {
