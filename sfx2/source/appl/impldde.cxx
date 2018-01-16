@@ -126,9 +126,9 @@ SvDDEObject::SvDDEObject()
 
 SvDDEObject::~SvDDEObject()
 {
-    delete pLink;
-    delete pRequest;
-    delete pConnection;
+    pLink.reset();
+    pRequest.reset();
+    pConnection.reset();
 }
 
 bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
@@ -143,8 +143,7 @@ bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
         OUString sServer( pConnection->GetServiceName() );
         OUString sTopic( pConnection->GetTopicName() );
 
-        delete pConnection;
-        pConnection = new DdeConnection( sServer, sTopic );
+        pConnection.reset( new DdeConnection( sServer, sTopic ) );
     }
 
     if( bWaitForData ) // we are in an rekursive loop, get out again
@@ -172,9 +171,7 @@ bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
     {
         // otherwise it will be executed asynchronously
         {
-            delete pRequest;
-
-            pRequest = new DdeRequest( *pConnection, sItem );
+            pRequest.reset( new DdeRequest( *pConnection, sItem ) );
             pRequest->SetDataHdl( LINK( this, SvDDEObject, ImplGetDDEData ) );
             pRequest->SetDoneHdl( LINK( this, SvDDEObject, ImplDoneDDEData ) );
             pRequest->SetFormat( SotExchange::GetFormatIdFromMimeType(
@@ -213,7 +210,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     if( sServer.isEmpty() || sTopic.isEmpty() || sItem.isEmpty() )
         return false;
 
-    pConnection = new DdeConnection( sServer, sTopic );
+    pConnection.reset( new DdeConnection( sServer, sTopic ) );
     if( pConnection->GetError() )
     {
         // check if the DDE server knows the "SYSTEM" topic
@@ -234,7 +231,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     if( SfxLinkUpdateMode::ALWAYS == nLinkType && !pLink && !pConnection->GetError() )
     {
         // Setting up Hot Link, Data will be available at some point later on
-        pLink = new DdeHotLink( *pConnection, sItem );
+        pLink.reset( new DdeHotLink( *pConnection, sItem ) );
         pLink->SetDataHdl( LINK( this, SvDDEObject, ImplGetDDEData ) );
         pLink->SetDoneHdl( LINK( this, SvDDEObject, ImplDoneDDEData ) );
         pLink->SetFormat( pSvLink->GetContentType() );
@@ -347,9 +344,9 @@ IMPL_LINK( SvDDEObject, ImplDoneDDEData, bool, bValid, void )
     {
         DdeTransaction* pReq = nullptr;
         if( !pLink || ( pLink && pLink->IsBusy() ))
-            pReq = pRequest;  // only the one that is ready
+            pReq = pRequest.get();  // only the one that is ready
         else if( pRequest && pRequest->IsBusy() )
-            pReq = pLink;  // only the one that is ready
+            pReq = pLink.get();  // only the one that is ready
 
         if( pReq )
         {
@@ -357,7 +354,7 @@ IMPL_LINK( SvDDEObject, ImplDoneDDEData, bool, bValid, void )
             {
                 pReq->Execute();
             }
-            else if( pReq == pRequest )
+            else if( pReq == pRequest.get() )
             {
                 bWaitForData = false;
             }
