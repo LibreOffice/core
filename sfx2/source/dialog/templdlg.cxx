@@ -861,7 +861,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         EndListening(*pStyleSheetPool);
     pStyleSheetPool = nullptr;
     pTreeBox.disposeAndClear();
-    delete pIdle;
+    pIdle.reset();
     if ( m_pDeletionWatcher )
         m_pDeletionWatcher->signal();
     aFmtLb.disposeAndClear();
@@ -1402,7 +1402,7 @@ IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, void )
             }
         }
         bDontUpdate=false;
-        DELETEZ(pIdle);
+        pIdle.reset();
     }
     else
         pIdle->Start();
@@ -1488,7 +1488,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
     {
         if(!pIdle)
         {
-            pIdle=new Idle("SfxCommonTemplate");
+            pIdle.reset(new Idle("SfxCommonTemplate"));
             pIdle->SetPriority(TaskPriority::LOWEST);
             pIdle->SetInvokeHandler(LINK(this,SfxCommonTemplateDialog_Impl,TimeOut));
         }
