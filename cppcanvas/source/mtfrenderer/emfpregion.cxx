@@ -58,10 +58,6 @@ namespace cppcanvas
 
         EMFPRegion::~EMFPRegion()
         {
-            if (combineMode) {
-                delete[] combineMode;
-                combineMode = nullptr;
-            }
         }
 
         void EMFPRegion::Read(SvStream& s)
@@ -77,7 +73,7 @@ namespace cppcanvas
                 if (parts<0 || sal_uInt32(parts)>SAL_MAX_INT32 / sizeof(sal_Int32))
                     parts = SAL_MAX_INT32 / sizeof(sal_Int32);
 
-                combineMode = new sal_Int32[parts];
+                combineMode.reset( new sal_Int32[parts] );
 
                 for (int i = 0; i < parts; i++) {
                     s.ReadInt32(combineMode[i]);
