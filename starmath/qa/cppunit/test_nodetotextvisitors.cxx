@@ -431,18 +431,17 @@ void Test::SimpleSpecialChars()
 void Test::parseandparseagain(const char *formula, const char *test_name)
 {
     OUString output1, output2;
-    SmNode *pNode1, *pNode2;
 
     // parse 1
     OUString input = OUString::createFromAscii(formula);
-    pNode1 = SmParser().ParseExpression(input);
+    auto pNode1 = SmParser().ParseExpression(input);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
-    SmNodeToTextVisitor(pNode1, output1);
+    SmNodeToTextVisitor(pNode1.get(), output1);
 
     // parse 2
-    pNode2 = SmParser().ParseExpression(output1);
+    auto pNode2 = SmParser().ParseExpression(output1);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
-    SmNodeToTextVisitor(pNode2, output2);
+    SmNodeToTextVisitor(pNode2.get(), output2);
 
     // compare
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
@@ -453,21 +452,17 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
     std::unique_ptr<MockVisitor> mv(new MockVisitor);
     pNode1->Accept(mv.get());
     pNode2->Accept(mv.get());
-
-    delete pNode1;
-    delete pNode2;
 }
 
 void Test::ParseAndCheck(const char *formula, const char * expected, const char *test_name)
 {
     OUString sOutput;
-    SmNode *pNode;
 
     // parse
     OUString sInput = OUString::createFromAscii(formula);
-    pNode = SmParser().ParseExpression(sInput);
+    auto pNode = SmParser().ParseExpression(sInput);
     pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
-    SmNodeToTextVisitor(pNode, sOutput);
+    SmNodeToTextVisitor(pNode.get(), sOutput);
 
     // compare
     OUString sExpected = OUString::createFromAscii(expected);
@@ -478,27 +473,24 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
     // auxiliary test for Accept()
     std::unique_ptr<MockVisitor> mv(new MockVisitor);
     pNode->Accept(mv.get());
-
-    delete pNode;
 }
 
 // Parse two formula commands and verify that they give the same output
 void Test::ParseAndCompare(const char *formula1, const char *formula2, const char *test_name)
 {
     OUString sOutput1, sOutput2;
-    SmNode *pNode1, *pNode2;
 
     // parse formula1
     OUString sInput1 = OUString(formula1, strlen(formula1), RTL_TEXTENCODING_UTF8);
-    pNode1 = SmParser().ParseExpression(sInput1);
+    auto pNode1 = SmParser().ParseExpression(sInput1);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
-    SmNodeToTextVisitor(pNode1, sOutput1);
+    SmNodeToTextVisitor(pNode1.get(), sOutput1);
 
     // parse formula2
     OUString sInput2 = OUString(formula2, strlen(formula2), RTL_TEXTENCODING_UTF8);
-    pNode2 = SmParser().ParseExpression(sInput2);
+    auto pNode2 = SmParser().ParseExpression(sInput2);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
-    SmNodeToTextVisitor(pNode2, sOutput2);
+    SmNodeToTextVisitor(pNode2.get(), sOutput2);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, sOutput1, sOutput2);
 
@@ -506,9 +498,6 @@ void Test::ParseAndCompare(const char *formula1, const char *formula2, const cha
     std::unique_ptr<MockVisitor> mv(new MockVisitor);
     pNode1->Accept(mv.get());
     pNode2->Accept(mv.get());
-
-    delete pNode1;
-    delete pNode2;
 }
 
 void Test::testBinomInBinHor()
@@ -670,7 +659,7 @@ void Test::testParser()
     OUString sOutput;
     OUString sInput(u"{ \U0001D44E }"); // non-BMP Unicode
     OUString sExpected(u"\U0001D44E");
-    std::unique_ptr<SmNode> pNode(SmParser().ParseExpression(sInput));
+    auto pNode = SmParser().ParseExpression(sInput);
     pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode.get(), sOutput);
     CPPUNIT_ASSERT_EQUAL(sExpected, sOutput);
