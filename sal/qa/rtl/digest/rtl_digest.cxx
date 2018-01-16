@@ -415,6 +415,97 @@ public:
         }
     }
 
+    void testMD5()
+    {
+        unsigned char const data[] = {
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+        };
+        OString const expected[] = {
+            "d41d8cd98f00b204e9800998ecf8427e",
+            "cfcd208495d565ef66e7dff9f98764da",
+            "b4b147bc522828731f1a016bfa72c073",
+            "c6f057b86584942e415435ffb1fa93d4",
+            "4a7d1ed414474e4033ac29ccb8653d9b",
+            "dcddb75469b4b4875094e14561e573d8",
+            "670b14728ad9902aecba32e22fa4f6bd",
+            "29c3eea3f305d6b823f562ac4be35217",
+            "dd4b21e9ef71e1291183a46b913ae6f2",
+            "4c93008615c2d041e33ebac605d14b5b",
+            "f1b708bba17f1ce948dc979f4d7092bc",
+            "645a8aca5a5b84527c57ee2f153f1946",
+            "35b9ab5a36f3234dd26db357fd4a0dc1",
+            "4aad0d9ff11812ebdd5e376fdbef6222",
+            "c47532bbb1e2883c902071591ae1ec9b",
+            "5284047f4ffb4e04824a2fd1d1f0cd62",
+            "1e4a1b03d1b6cd8a174a826f76e009f4",
+            "0e7b9f29a828b6f953b482fc299e536b",
+            "3ea032bf79e8c116b05f4698d5a8e044",
+            "15f47c8a3e5e9685307dd65a653b8dc0",
+            "cc545187d0745132de1e9941db0ef6ce",
+            "0585e303e79acd837c3a3e2a2bec8b18",
+            "b28ccfdee4b9f39ba18b58a4f61a03d1",
+            "d018229b1183c926c10ea688350afec8",
+            "660719b4a7591769583a7c8d20c6dfa4",
+            "1e2432adacf481836265fcc62ee8f3e3",
+            "6e88e2af74c1d9d7d7d652b90d03751e",
+            "780ca685003cec1d617beaa6f346e1be",
+            "7f2e1dcfd6e2a3f5c38f31e640136ff6",
+            "1a3dee46117aeb8010cf365b8653faa8",
+            "1d0064395af3c745f6c3194e92373d7a",
+            "b52582043219f2deb2d3c9cb05d6448a",
+            "cd9e459ea708a948d5c2f5a6ca8838cf",
+            "00de800ecd7a4fb2813986c987e46d51",
+            "15336d4b38561a82bd24c9398b781aed",
+            "5fe699d3c461ab5a795505f59d5adf15",
+            "c5e0eb03cbb4bea95ce3f8f48fca77d5",
+            "355c1410373ef02fff2b03844d72c7d4",
+            "02df97da8207de2b3afa69c151ca8958",
+            "82c66dbf3e73f87ffc9564b2098d6a4f",
+            "b373e3ddc3438d7c10c76f3ad9d4c401",
+            "fac901a4a3dbc4461541731a33a31d15",
+            "f573e011b414bf3f9dd284f7dad29592",
+            "11694570cc5dda099669f2ba3660a70d",
+            "60997cc8aef7fedd9995e6b3ca89ce26",
+            "63c5fcf83c2275fe64e880dd8dfc5cd6",
+            "c7a0a100057ebbfc63ee169562026aea",
+            "42c2dec247919384edece38033458627",
+            "b505acf9fc996902b0c547a2abfc62b2",
+            "2fa7a1321d6b5fa0e04ad46785f574f3",
+            "86d2bfc0bab44eecf21e1432be7b3efc",
+            "7ca318f12a0955a3e637dc5645a2f96e",
+            "3eda02765b8fb8bb9b20c735f4537827",
+            "26dead12262c9a5c115b01e0a3c805b6",
+            "978b0444e93c5f7d714575f28a77dca1",
+            "d7fe636bd28e2ee2ba4d6c5898318699",
+            "ce992c2ad906967c63c3f9ab0c2294a9",
+            "1f3b814e9d417e9fd8750299982feb1f",
+            "1a2f42174eaa78ce6a67d75e98a59cb6",
+            "17c772c45c9a09f6e56b7228ddd161a7",
+            "5b19445b70b493c78f3bc06eb7962315",
+            "e590c24cc612bdedd522dfe23bb29b42",
+            "4d78c699a0167bc0cfce8a5c5a715c0e",
+            "5703db92acb9d45e3975822c9206453f",
+            "10eab6008d5642cf42abd2aa41f847cb",
+        };
+        rtlDigest digest = rtl_digest_createMD5();
+        for (size_t i = 0; i < sizeof(data); ++i)
+        {
+            rtl_digest_updateMD5(digest, &data, i);
+            sal_uInt8 buf[RTL_DIGEST_LENGTH_MD5];
+            rtl_digest_getMD5(digest, &buf[0], sizeof(buf));
+            OString const sResult = createHex(&buf[0], sizeof(buf));
+            CPPUNIT_ASSERT_EQUAL(expected[i], sResult);
+        }
+        rtl_digest_destroyMD5(digest);
+    }
+
     CPPUNIT_TEST_SUITE(DigestTest);
     CPPUNIT_TEST(testCreate);
     CPPUNIT_TEST(testQuery);
@@ -426,6 +517,7 @@ public:
     CPPUNIT_TEST(testUpdate);
     CPPUNIT_TEST(testGet);
     CPPUNIT_TEST(testSHA1SumForBiggerInputData);
+    CPPUNIT_TEST(testMD5);
 
     CPPUNIT_TEST_SUITE_END();
 };
