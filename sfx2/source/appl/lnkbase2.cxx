@@ -125,7 +125,7 @@ SvBaseLink::SvBaseLink()
       m_bIsReadOnly(false)
 {
     nObjType = OBJECT_CLIENT_SO;
-    pImplData = new ImplBaseLinkData;
+    pImplData.reset( new ImplBaseLinkData );
     bVisible = bSynchron = true;
     bWasLastEditOK = false;
 }
@@ -136,7 +136,7 @@ SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nCon
      m_bIsReadOnly(false)
 {
     nObjType = OBJECT_CLIENT_SO;
-    pImplData = new ImplBaseLinkData;
+    pImplData.reset( new ImplBaseLinkData );
     bVisible = bSynchron = true;
     bWasLastEditOK = false;
 
@@ -187,7 +187,7 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
     bVisible = bSynchron = true;
     bWasLastEditOK = false;
     aLinkName = rLinkName;
-    pImplData = new ImplBaseLinkData;
+    pImplData.reset( new ImplBaseLinkData );
     nObjType = nObjectType;
 
     if( !pObj )
@@ -231,7 +231,7 @@ SvBaseLink::~SvBaseLink()
         break;
     }
 
-    delete pImplData;
+    pImplData.reset();
 }
 
 IMPL_LINK( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )

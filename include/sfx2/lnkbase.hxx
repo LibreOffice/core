@@ -88,7 +88,7 @@ protected:
     // Set LinkSourceName without action
     void            SetName( const OUString & rLn );
 
-    ImplBaseLinkData* pImplData;
+    std::unique_ptr<ImplBaseLinkData> pImplData;
 
     bool            m_bIsReadOnly;
     css::uno::Reference<css::io::XInputStream>
