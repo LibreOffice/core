@@ -33,6 +33,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/fileurl.hxx>
+#include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>
 #include <string.h>
@@ -429,16 +430,15 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
     }
 
     // open file and calculate actual checksum up to index nBytes
-    sal_uInt8 nActualChecksum[ RTL_DIGEST_LENGTH_MD5 ];
-    memset( nActualChecksum, 0, sizeof(nActualChecksum) );
-    rtlDigest aActualDigest = rtl_digest_createMD5();
+    ::std::vector<unsigned char> nChecksum;
+    ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
     oslFileHandle aRead = nullptr;
     oslFileError aErr = osl_File_E_None;
     if( (aErr = osl_openFile(rInPDFFileURL.pData,
                              &aRead,
                              osl_File_OpenFlag_Read )) == osl_File_E_None )
     {
-        sal_Int8 aBuf[4096];
+        sal_uInt8 aBuf[4096];
         sal_uInt32 nCur = 0;
         sal_uInt64 nBytesRead = 0;
         while( nCur < nBytes )
@@ -451,15 +451,16 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
             }
             nPass = static_cast<sal_uInt32>(nBytesRead);
             nCur += nPass;
-            rtl_digest_updateMD5( aActualDigest, aBuf, nPass );
+            aDigest.update(aBuf, nPass);
         }
-        rtl_digest_getMD5( aActualDigest, nActualChecksum, sizeof(nActualChecksum) );
+
+        nChecksum = aDigest.finalize();
         osl_closeFile( aRead );
     }
-    rtl_digest_destroyMD5( aActualDigest );
 
     // compare the contents
-    return (0 == memcmp( nActualChecksum, nTestChecksum, sizeof( nActualChecksum ) ));
+    return nChecksum.size() == RTL_DIGEST_LENGTH_MD5
+        && (0 == memcmp(nChecksum.data(), nTestChecksum, nChecksum.size()));
 }
 
 uno::Reference< io::XStream > getAdditionalStream( const OUString&                          rInPDFFileURL,

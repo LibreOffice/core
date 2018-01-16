@@ -20,6 +20,8 @@
 
 #include <pdfparse.hxx>
 
+#include <comphelper/hash.hxx>
+
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -1013,7 +1015,6 @@ struct PDFFileImplData
     sal_uInt32  m_nPEntry;
     OString     m_aDocID;
     rtlCipher   m_aCipher;
-    rtlDigest   m_aDigest;
 
     sal_uInt8   m_aDecryptionKey[ENCRYPTION_KEY_LEN+5]; // maximum handled key length
 
@@ -1024,8 +1025,7 @@ struct PDFFileImplData
         m_nStandardRevision( 0 ),
         m_nKeyLength( 0 ),
         m_nPEntry( 0 ),
-        m_aCipher( nullptr ),
-        m_aDigest( nullptr )
+        m_aCipher( nullptr )
     {
         memset( m_aOEntry, 0, sizeof( m_aOEntry ) );
         memset( m_aUEntry, 0, sizeof( m_aUEntry ) );
@@ -1036,8 +1036,6 @@ struct PDFFileImplData
     {
         if( m_aCipher )
             rtl_cipher_destroyARCFOUR( m_aCipher );
-        if( m_aDigest )
-            rtl_digest_destroyMD5( m_aDigest );
     }
 };
 }
@@ -1073,16 +1071,15 @@ bool PDFFile::decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen, sal_uInt8* p
     m_pData->m_aDecryptionKey[i++] = sal_uInt8(nGeneration&0xff);
     m_pData->m_aDecryptionKey[i++] = sal_uInt8((nGeneration>>8)&0xff);
 
-    sal_uInt8 aSum[ENCRYPTION_KEY_LEN];
-    rtl_digest_updateMD5( m_pData->m_aDigest, m_pData->m_aDecryptionKey, i );
-    rtl_digest_getMD5( m_pData->m_aDigest, aSum, sizeof( aSum ) );
+    ::std::vector<unsigned char> const aSum(::comphelper::Hash::calculateHash(
+                m_pData->m_aDecryptionKey, i, ::comphelper::HashType::MD5));
 
     if( i > 16 )
         i = 16;
 
     rtlCipherError aErr = rtl_cipher_initARCFOUR( m_pData->m_aCipher,
                                                   rtl_Cipher_DirectionDecode,
-                                                  aSum, i,
+                                                  aSum.data(), i,
                                                   nullptr, 0 );
     if( aErr == rtl_Cipher_E_None )
         aErr = rtl_cipher_decodeARCFOUR( m_pData->m_aCipher,
@@ -1116,32 +1113,32 @@ static sal_uInt32 password_to_key( const OString& rPwd, sal_uInt8* pOutKey, PDFF
     // encrypt pad string
     sal_Char aPadPwd[ENCRYPTION_BUF_LEN];
     pad_or_truncate_to_32( rPwd, aPadPwd );
-    rtl_digest_updateMD5( pData->m_aDigest, aPadPwd, sizeof( aPadPwd ) );
+    ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
+    aDigest.update(reinterpret_cast<unsigned char const*>(aPadPwd), sizeof(aPadPwd));
     if( ! bComputeO )
     {
-        rtl_digest_updateMD5( pData->m_aDigest, pData->m_aOEntry, 32 );
+        aDigest.update(pData->m_aOEntry, 32);
         sal_uInt8 aPEntry[4];
         aPEntry[0] = static_cast<sal_uInt8>(pData->m_nPEntry & 0xff);
         aPEntry[1] = static_cast<sal_uInt8>((pData->m_nPEntry >> 8 ) & 0xff);
         aPEntry[2] = static_cast<sal_uInt8>((pData->m_nPEntry >> 16) & 0xff);
         aPEntry[3] = static_cast<sal_uInt8>((pData->m_nPEntry >> 24) & 0xff);
-        rtl_digest_updateMD5( pData->m_aDigest, aPEntry, sizeof(aPEntry) );
-        rtl_digest_updateMD5( pData->m_aDigest, pData->m_aDocID.getStr(), pData->m_aDocID.getLength() );
+        aDigest.update(aPEntry, sizeof(aPEntry));
+        aDigest.update(reinterpret_cast<unsigned char const*>(pData->m_aDocID.getStr()), pData->m_aDocID.getLength());
     }
-    sal_uInt8 nSum[RTL_DIGEST_LENGTH_MD5];
-    rtl_digest_getMD5( pData->m_aDigest, nSum, sizeof(nSum) );
+    ::std::vector<unsigned char> nSum(aDigest.finalize());
     if( pData->m_nStandardRevision == 3 )
     {
         for( int i = 0; i < 50; i++ )
         {
-            rtl_digest_updateMD5( pData->m_aDigest, nSum, sizeof(nSum) );
-            rtl_digest_getMD5( pData->m_aDigest, nSum, sizeof(nSum) );
+            nSum = ::comphelper::Hash::calculateHash(nSum.data(), nSum.size(),
+                    ::comphelper::HashType::MD5);
         }
     }
     sal_uInt32 nLen = pData->m_nKeyLength;
     if( nLen > RTL_DIGEST_LENGTH_MD5 )
         nLen = RTL_DIGEST_LENGTH_MD5;
-    memcpy( pOutKey, nSum, nLen );
+    memcpy( pOutKey, nSum.data(), nLen );
     return nLen;
 }
 
@@ -1150,13 +1147,13 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
     // see PDF reference 1.4 Algorithm 3.6
     bool bValid = false;
     sal_uInt8 aKey[ENCRYPTION_KEY_LEN];
-    sal_uInt8 nEncryptedEntry[ENCRYPTION_BUF_LEN];
-    memset( nEncryptedEntry, 0, sizeof(nEncryptedEntry) );
     sal_uInt32 nKeyLen = password_to_key( rPwd, aKey, pData, false );
     // save (at this time potential) decryption key for later use
     memcpy( pData->m_aDecryptionKey, aKey, nKeyLen );
     if( pData->m_nStandardRevision == 2 )
     {
+        sal_uInt8 nEncryptedEntry[ENCRYPTION_BUF_LEN];
+        memset( nEncryptedEntry, 0, sizeof(nEncryptedEntry) );
         // see PDF reference 1.4 Algorithm 3.4
         // encrypt pad string
         rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
@@ -1169,14 +1166,15 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
     else if( pData->m_nStandardRevision == 3 )
     {
         // see PDF reference 1.4 Algorithm 3.5
-        rtl_digest_updateMD5( pData->m_aDigest, nPadString, sizeof( nPadString ) );
-        rtl_digest_updateMD5( pData->m_aDigest, pData->m_aDocID.getStr(), pData->m_aDocID.getLength() );
-        rtl_digest_getMD5( pData->m_aDigest, nEncryptedEntry, sizeof(nEncryptedEntry) );
+        ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
+        aDigest.update(nPadString, sizeof(nPadString));
+        aDigest.update(reinterpret_cast<unsigned char const*>(pData->m_aDocID.getStr()), pData->m_aDocID.getLength());
+        ::std::vector<unsigned char> nEncryptedEntry(aDigest.finalize());
         rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
                                 aKey, sizeof(aKey), nullptr, 0 );
         rtl_cipher_encodeARCFOUR( pData->m_aCipher,
-                                  nEncryptedEntry, 16,
-                                  nEncryptedEntry, 16 ); // encrypt in place
+                                  nEncryptedEntry.data(), 16,
+                                  nEncryptedEntry.data(), 16 ); // encrypt in place
         for( int i = 1; i <= 19; i++ ) // do it 19 times, start with 1
         {
             sal_uInt8 aTempKey[ENCRYPTION_KEY_LEN];
@@ -1186,10 +1184,10 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
             rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
                                     aTempKey, sizeof(aTempKey), nullptr, 0 );
             rtl_cipher_encodeARCFOUR( pData->m_aCipher,
-                                      nEncryptedEntry, 16,
-                                      nEncryptedEntry, 16 ); // encrypt in place
+                                      nEncryptedEntry.data(), 16,
+                                      nEncryptedEntry.data(), 16 ); // encrypt in place
         }
-        bValid = (memcmp( nEncryptedEntry, pData->m_aUEntry, 16 ) == 0);
+        bValid = (memcmp( nEncryptedEntry.data(), pData->m_aUEntry, 16 ) == 0);
     }
     return bValid;
 }
@@ -1214,8 +1212,6 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
 
     if( ! m_pData->m_aCipher )
         m_pData->m_aCipher = rtl_cipher_createARCFOUR(rtl_Cipher_ModeStream);
-    if( ! m_pData->m_aDigest )
-        m_pData->m_aDigest = rtl_digest_createMD5();
 
     // first try user password
     bool bValid = check_user_password( rPwd, m_pData.get() );
