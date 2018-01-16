@@ -75,20 +75,22 @@ Lwp9Reader::Lwp9Reader (LwpSvStream* pInputStream, IXFStream* pStream)
 /**
  * @descr   The entrance of Word Pro 9 import filter.
  **/
-void Lwp9Reader::Read()
+bool Lwp9Reader::Read()
 {
+    bool bRet = true;
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance(m_pDocStream);
     try
     {
         m_pObjMgr = pGlobal->GetLwpObjFactory();
 
-        ReadFileHeader();
         //Does not support Word Pro 96 and previous versions
-        if(LwpFileHeader::m_nFileRevision>=0x000B)
+        if (ReadFileHeader() && LwpFileHeader::m_nFileRevision>=0x000B)
         {
             ReadIndex();
-            ParseDocument();
+            bRet = ParseDocument();
         }
+        else
+            bRet = false;
     }
     catch(...)
     {
@@ -96,14 +98,16 @@ void Lwp9Reader::Read()
         throw;
     }
     LwpGlobalMgr::DeleteInstance();
+    return bRet;
 }
 
 /**
  * @descr   Read the LWP7 object.
  */
-void Lwp9Reader::ReadFileHeader()
+bool Lwp9Reader::ReadFileHeader()
 {
-    m_pDocStream->Seek(LwpSvStream::LWP_STREAM_BASE);
+    if (!m_pDocStream->CheckSeek(LwpSvStream::LWP_STREAM_BASE))
+        return false;
 
     //Remember to initialize the LwpFileHeader::m_nFileRevision first.
     LwpFileHeader::m_nFileRevision = 0;
@@ -112,8 +116,7 @@ void Lwp9Reader::ReadFileHeader()
     objHdr.Read(*m_pDocStream);
     sal_Int64 pos = m_pDocStream->Tell();
     m_LwpFileHdr.Read(m_pDocStream);
-    m_pDocStream->Seek(pos+objHdr.GetSize());
-
+    return m_pDocStream->CheckSeek(pos + objHdr.GetSize());
 }
 
 /**
@@ -131,7 +134,7 @@ void Lwp9Reader::ReadIndex()
 /**
  * @descr       Parse all document content
 */
-void Lwp9Reader::ParseDocument()
+bool Lwp9Reader::ParseDocument()
 {
     WriteDocHeader();
 
@@ -139,7 +142,7 @@ void Lwp9Reader::ParseDocument()
     LwpDocument* doc = dynamic_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID().obj().get() );
 
     if (!doc)
-        return;
+        return false;
 
     //Parse Doc Data
     LwpDocData *pDocData = dynamic_cast<LwpDocData*>(doc->GetDocData().obj().get());
@@ -165,6 +168,7 @@ void Lwp9Reader::ParseDocument()
     m_pStream->EndElement("office:body");
 
     WriteDocEnd();
+    return true;
 }
 
 /**

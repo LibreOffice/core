@@ -101,14 +101,19 @@ void LwpSvStream::SeekRel(sal_Int64 pos)
 */
 sal_Int64 LwpSvStream::Tell()
 {
-        return m_pStream->Tell();
+    return m_pStream->Tell();
 }
 /**
  * @descr       Seek to pos
 */
 sal_Int64 LwpSvStream::Seek(sal_Int64 pos)
 {
-        return m_pStream->Seek(pos);
+    return m_pStream->Seek(pos);
+}
+
+bool LwpSvStream::CheckSeek(sal_Int64 pos)
+{
+    return checkSeek(*m_pStream, pos);
 }
 /**
  * @descr       Return the stream data length

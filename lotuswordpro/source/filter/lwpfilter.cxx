@@ -183,6 +183,7 @@ bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 }
 int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHandler> const & xHandler)
 {
+    int nRet = 0;
     try
     {
         LwpSvStream *pRawLwpSvStream = nullptr;
@@ -211,13 +212,15 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHa
         Lwp9Reader reader(aLwpSvStream.get(), pStrm.get());
         //Reset all static objects,because this function may be called many times.
         XFGlobalReset();
-        reader.Read();
+        const bool bOk = reader.Read();
+        if (!bOk)
+            nRet = 1;
     }
     catch (...)
     {
         return 1;
     }
-    return 0;
+    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

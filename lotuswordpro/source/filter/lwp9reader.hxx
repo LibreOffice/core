@@ -74,13 +74,13 @@ private:
     IXFStream*        m_pStream;
     LwpObjectFactory* m_pObjMgr;
     LwpFileHeader     m_LwpFileHdr;             //LWP7 object
-    void ReadFileHeader();
+    bool ReadFileHeader();
     void ReadIndex();
-    void ParseDocument();
+    bool ParseDocument();
     void WriteDocHeader();
     void WriteDocEnd();
 public:
-    void Read();
+    bool Read();
 };
 #endif
 
