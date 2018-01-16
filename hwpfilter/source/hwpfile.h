@@ -323,7 +323,7 @@ public:
     }
     bool toodeep() const
     {
-        return m_rFile.readdepth == 1024;
+        return m_rFile.readdepth == 512;
     }
     ~DepthGuard()
     {
