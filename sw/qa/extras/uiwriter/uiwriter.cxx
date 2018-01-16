@@ -5548,13 +5548,6 @@ void SwUiWriterTest::testSectionInTableInTable()
     createDoc("tdf112109.fodt");
 }
 
-void SwUiWriterTest::testTdf114536()
-{
-    // This crashed in SwTextFormatter::MergeCharacterBorder() due to a
-    // use after free.
-    createDoc("tdf114536.odt");
-}
-
 void SwUiWriterTest::testSectionInTableInTable2()
 {
     createDoc("split-section-in-nested-table.fodt");
@@ -5660,6 +5653,13 @@ void SwUiWriterTest::testTdf112160()
     CPPUNIT_ASSERT_EQUAL(OUString("Table1.D2"), pDoc->GetNodes()[nD2CellNode]->GetTextNode()->GetText());
 }
 #endif
+
+void SwUiWriterTest::testTdf114536()
+{
+    // This crashed in SwTextFormatter::MergeCharacterBorder() due to a
+    // use after free.
+    createDoc("tdf114536.odt");
+}
 
 void SwUiWriterTest::testParagraphOfTextRange()
 {
