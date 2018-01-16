@@ -228,7 +228,6 @@ using sc::TwipsToHMM;
 #define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
 #define SCDOC_SERVICE               "com.sun.star.document.OfficeDocument"
-#define SCDATAPROVIDERACCESS_SERVICE "com.sun.star.chart2.XDataProviderAccess"
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, "ScAnnotationsObj", "com.sun.star.sheet.CellAnnotations" )
 SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, "ScDrawPagesObj", "com.sun.star.drawing.DrawPages" )
@@ -2855,7 +2854,7 @@ sal_Bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
 
 uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
 {
-    return {SCMODELOBJ_SERVICE, SCDOCSETTINGS_SERVICE, SCDOC_SERVICE, SCDATAPROVIDERACCESS_SERVICE};
+    return {SCMODELOBJ_SERVICE, SCDOCSETTINGS_SERVICE, SCDOC_SERVICE};
 }
 
 // XUnoTunnel

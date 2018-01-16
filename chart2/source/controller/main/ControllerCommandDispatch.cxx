@@ -41,6 +41,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
+#include <com/sun/star/chart2/XDataProviderAccess.hpp>
 
 // only needed until #i68864# is fixed
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -555,7 +556,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
             OSL_ENSURE(xParentServiceInfo.is(), "Invalid XServiceInfo");
             if ( xParentServiceInfo.is() )
             {
-                bCanCreateDataProvider = xParentServiceInfo->supportsService("com.sun.star.chart2.XDataProviderAccess");
+                css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(rModel.getParent(), uno::UNO_QUERY);
+                bCanCreateDataProvider = xCreatorDoc.is();
             }
         }
     }
