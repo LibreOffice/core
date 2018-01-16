@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_bf581a58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-16T12:57:44Z",
+      "side": 1,
+      "message": "In \"previous commit\" is volatile, rather state the commit-sha, i.e. here \"commit 0074951704022d173a5fdb9df933f47be1dcbb91\".",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "06703db5b88e55e022f4456fc2fab04b75a0d70b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
