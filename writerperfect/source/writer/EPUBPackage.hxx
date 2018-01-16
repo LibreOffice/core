@@ -30,7 +30,7 @@ class EPUBPackage : public libepubgen::EPUBPackage
     css::uno::Reference<css::xml::sax::XWriter> mxOutputWriter;
 
 public:
-    explicit EPUBPackage(const css::uno::Reference<css::uno::XComponentContext> &xContext, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor);
+    explicit EPUBPackage(css::uno::Reference<css::uno::XComponentContext> xContext, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor);
 
     ~EPUBPackage() override;
 

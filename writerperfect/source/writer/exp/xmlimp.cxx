@@ -131,8 +131,8 @@ OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, c
                 // File exists.
                 return aRet;
             }
-            else
-                aRet.clear();
+
+            aRet.clear();
         }
     }
 
@@ -260,17 +260,15 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
     {
         if (mrImport.GetPageMetafiles().empty())
             return new XMLBodyContext(mrImport);
-        else
+
+        // Ignore text from doc model in the fixed layout case, instead
+        // insert the page metafiles.
+        bool bFirst = true;
+        for (const auto &rPage : mrImport.GetPageMetafiles())
         {
-            // Ignore text from doc model in the fixed layout case, instead
-            // insert the page metafiles.
-            bool bFirst = true;
-            for (const auto &rPage : mrImport.GetPageMetafiles())
-            {
-                HandleFixedLayoutPage(rPage.first, rPage.second, bFirst);
-                if (bFirst)
-                    bFirst = false;
-            }
+            HandleFixedLayoutPage(rPage.first, rPage.second, bFirst);
+            if (bFirst)
+                bFirst = false;
         }
     }
     return nullptr;

@@ -118,7 +118,7 @@ private:
 class XMLFontFaceFormatContext : public XMLImportContext
 {
 public:
-    XMLFontFaceFormatContext(XMLImport &rImport, XMLFontFaceUriContext &rFontUri);
+    XMLFontFaceFormatContext(XMLImport &rImport, XMLFontFaceUriContext &rFontFaceUri);
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
 private:

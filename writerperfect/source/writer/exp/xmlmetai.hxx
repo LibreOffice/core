@@ -40,24 +40,24 @@ class XMPParser: public cppu::WeakImplHelper
 {
 public:
     explicit XMPParser(librevenge::RVNGPropertyList &rMetaData);
-    virtual ~XMPParser() override;
+    ~XMPParser() override;
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() override;
+    void SAL_CALL startDocument() override;
 
-    virtual void SAL_CALL endDocument() override;
+    void SAL_CALL endDocument() override;
 
-    virtual void SAL_CALL startElement(const OUString &aName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
-    virtual void SAL_CALL endElement(const OUString &aName) override;
+    void SAL_CALL endElement(const OUString &rName) override;
 
-    virtual void SAL_CALL characters(const OUString &aChars) override;
+    void SAL_CALL characters(const OUString &rChars) override;
 
-    virtual void SAL_CALL ignorableWhitespace(const OUString &aWhitespaces) override;
+    void SAL_CALL ignorableWhitespace(const OUString &aWhitespaces) override;
 
-    virtual void SAL_CALL processingInstruction(const OUString &aTarget, const OUString &aData) override;
+    void SAL_CALL processingInstruction(const OUString &aTarget, const OUString &aData) override;
 
-    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &xLocator) override;
+    void SAL_CALL setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &xLocator) override;
 
 private:
     librevenge::RVNGPropertyList &mrMetaData;
