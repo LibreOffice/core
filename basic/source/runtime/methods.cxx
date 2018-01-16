@@ -1536,15 +1536,16 @@ void SbRtl_StrComp(StarBASIC *, SbxArray & rPar, bool)
     sal_Int32 nRetValue = 0;
     if( bTextCompare )
     {
-        ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
+        ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper.get();
         if( !pTransliterationWrapper )
         {
             uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
-            pTransliterationWrapper = GetSbData()->pTransliterationWrapper =
+            GetSbData()->pTransliterationWrapper.reset(
                 new ::utl::TransliterationWrapper( xContext,
                     TransliterationFlags::IGNORE_CASE |
                     TransliterationFlags::IGNORE_KANA |
-                    TransliterationFlags::IGNORE_WIDTH );
+                    TransliterationFlags::IGNORE_WIDTH ) );
+            pTransliterationWrapper = GetSbData()->pTransliterationWrapper.get();
         }
 
         LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();

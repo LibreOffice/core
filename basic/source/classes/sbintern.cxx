@@ -60,9 +60,9 @@ SbiGlobals::SbiGlobals()
 
 SbiGlobals::~SbiGlobals()
 {
-    delete pSbFac;
-    delete pUnoFac;
-    delete pTransliterationWrapper;
+    pSbFac.reset();
+    pUnoFac.reset();
+    pTransliterationWrapper.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -915,8 +915,8 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
 
     if( !GetSbData()->nInst++ )
     {
-        GetSbData()->pSbFac = new SbiFactory;
-        AddFactory( GetSbData()->pSbFac );
+        GetSbData()->pSbFac.reset( new SbiFactory );
+        AddFactory( GetSbData()->pSbFac.get() );
         GetSbData()->pTypeFac = new SbTypeFactory;
         AddFactory( GetSbData()->pTypeFac );
         GetSbData()->pClassFac = new SbClassFactory;
@@ -925,8 +925,8 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
         AddFactory( GetSbData()->pOLEFac );
         GetSbData()->pFormFac = new SbFormFactory;
         AddFactory( GetSbData()->pFormFac );
-        GetSbData()->pUnoFac = new SbUnoFactory;
-        AddFactory( GetSbData()->pUnoFac );
+        GetSbData()->pUnoFac.reset( new SbUnoFactory );
+        AddFactory( GetSbData()->pUnoFac.get() );
     }
     pRtl = new SbiStdObject(RTLNAME, this );
     // Search via StarBasic is always global
@@ -954,10 +954,10 @@ StarBASIC::~StarBASIC()
 
     if( !--GetSbData()->nInst )
     {
-        RemoveFactory( GetSbData()->pSbFac );
-        delete GetSbData()->pSbFac; GetSbData()->pSbFac = nullptr;
-        RemoveFactory( GetSbData()->pUnoFac );
-        delete GetSbData()->pUnoFac; GetSbData()->pUnoFac = nullptr;
+        RemoveFactory( GetSbData()->pSbFac.get() );
+        GetSbData()->pSbFac.reset();
+        RemoveFactory( GetSbData()->pUnoFac.get() );
+        GetSbData()->pUnoFac.reset();
         RemoveFactory( GetSbData()->pTypeFac );
         delete GetSbData()->pTypeFac; GetSbData()->pTypeFac = nullptr;
         RemoveFactory( GetSbData()->pClassFac );
