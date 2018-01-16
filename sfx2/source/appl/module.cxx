@@ -44,10 +44,10 @@ class SfxModule_Impl
 {
 public:
 
-    SfxSlotPool*                pSlotPool;
-    SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
-    SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
-    SfxChildWinFactArr_Impl*    pFactArr;
+    std::unique_ptr<SfxSlotPool>              pSlotPool;
+    std::unique_ptr<SfxTbxCtrlFactArr_Impl>   pTbxCtrlFac;
+    std::unique_ptr<SfxStbCtrlFactArr_Impl>   pStbCtrlFac;
+    std::unique_ptr<SfxChildWinFactArr_Impl>  pFactArr;
     OString                     maResName;
 
                                 SfxModule_Impl();
@@ -61,10 +61,10 @@ SfxModule_Impl::SfxModule_Impl()
 
 SfxModule_Impl::~SfxModule_Impl()
 {
-    delete pSlotPool;
-    delete pTbxCtrlFac;
-    delete pStbCtrlFac;
-    delete pFactArr;
+    pSlotPool.reset();
+    pTbxCtrlFac.reset();
+    pStbCtrlFac.reset();
+    pFactArr.reset();
 }
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
@@ -84,11 +84,7 @@ void SfxModule::Construct_Impl(const OString& rResName)
 {
     SfxApplication *pApp = SfxApplication::GetOrCreate();
     pImpl = new SfxModule_Impl;
-    pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());
-
-    pImpl->pTbxCtrlFac=nullptr;
-    pImpl->pStbCtrlFac=nullptr;
-    pImpl->pFactArr=nullptr;
+    pImpl->pSlotPool.reset( new SfxSlotPool(&pApp->GetAppSlotPool_Impl()) );
     pImpl->maResName = rResName;
 
     SetPool( &pApp->GetPool() );
@@ -110,7 +106,7 @@ std::locale SfxModule::GetResLocale() const
 
 SfxSlotPool* SfxModule::GetSlotPool() const
 {
-    return pImpl->pSlotPool;
+    return pImpl->pSlotPool.get();
 }
 
 
@@ -119,7 +115,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
     DBG_ASSERT( pImpl, "No real Module!" );
 
     if (!pImpl->pFactArr)
-        pImpl->pFactArr = new SfxChildWinFactArr_Impl;
+        pImpl->pFactArr.reset( new SfxChildWinFactArr_Impl );
 
     for (size_t nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
     {
@@ -138,7 +134,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 {
     if (!pImpl->pTbxCtrlFac)
-        pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
+        pImpl->pTbxCtrlFac.reset( new SfxTbxCtrlFactArr_Impl );
 
 #ifdef DBG_UTIL
     for ( size_t n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
@@ -159,7 +155,7 @@ void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 {
     if (!pImpl->pStbCtrlFac)
-        pImpl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
+        pImpl->pStbCtrlFac.reset( new SfxStbCtrlFactArr_Impl );
 
 #ifdef DBG_UTIL
     for ( size_t n=0; n<pImpl->pStbCtrlFac->size(); n++ )
@@ -179,18 +175,18 @@ void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 
 SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
 {
-    return pImpl->pTbxCtrlFac;
+    return pImpl->pTbxCtrlFac.get();
 }
 
 
 SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
 {
-    return pImpl->pStbCtrlFac;
+    return pImpl->pStbCtrlFac.get();
 }
 
 SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 {
-    return pImpl->pFactArr;
+    return pImpl->pFactArr.get();
 }
 
 VclPtr<SfxTabPage> SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const SfxItemSet& )
