@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <cmath>
 #include <stdlib.h>
 #include <math.h>
 
@@ -236,7 +238,7 @@ Calendar_hijri::ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     jday = NewMoon(nmonth) + *day;
 
     // Round-up
-    jday = static_cast<double>(static_cast<sal_Int32>(jday + 0.5));
+    jday = std::trunc(jday + 0.5);
 
     // Use algorithm from "Numerical Recipes in C"
     getGregorianDay(static_cast<sal_Int32>(jday), day, month, year);
@@ -320,8 +322,8 @@ Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
 
     if( day + 31 * (month + 12 * year) >= gregcal ) {
         double ja;
-        ja = static_cast<sal_Int32>(0.01 * jy);
-        intgr += static_cast<sal_Int32>(2 - ja + static_cast<sal_Int32>(0.25 * ja));
+        ja = std::trunc(0.01 * jy);
+        intgr += static_cast<sal_Int32>(2 - ja + std::trunc(0.25 * ja));
     }
 
     return intgr;
