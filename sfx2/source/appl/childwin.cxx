@@ -193,8 +193,7 @@ void SfxChildWindow::ClearWorkwin()
 
 SfxChildWindow::~SfxChildWindow()
 {
-    delete pContext;
-    pContext = nullptr;
+    pContext.reset();
     ClearWorkwin();
     pWindow.disposeAndClear();
 }
@@ -420,7 +419,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
 
 void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBindings )
 {
-    SfxChildWindowContext *pCon = nullptr;
+    std::unique_ptr<SfxChildWindowContext> pCon;
     SfxChildWinFactory* pFact=nullptr;
     SfxApplication *pApp = SfxGetpApp();
     SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
@@ -447,7 +446,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
                         if ( pConFact->nContextId == nContextId )
                         {
                             SfxChildWinInfo aInfo = pFact->aInfo;
-                            pCon = pConFact->pCtor( GetWindow(), &rBindings, &aInfo );
+                            pCon.reset( pConFact->pCtor( GetWindow(), &rBindings, &aInfo ) );
                             pCon->nContextId = pConFact->nContextId;
                             pImpl->pContextModule = pMod;
                         }
@@ -478,7 +477,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
                     if ( pConFact->nContextId == nContextId )
                     {
                         SfxChildWinInfo aInfo = pFact->aInfo;
-                        pCon = pConFact->pCtor( GetWindow(), &rBindings, &aInfo );
+                        pCon.reset( pConFact->pCtor( GetWindow(), &rBindings, &aInfo ) );
                         pCon->nContextId = pConFact->nContextId;
                         pImpl->pContextModule = nullptr;
                     }
@@ -495,9 +494,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
         return;
     }
 
-    if ( pContext )
-        delete( pContext );
-    pContext = pCon;
+    pContext = std::move( pCon );
     pContext->GetWindow()->SetSizePixel( pWindow->GetOutputSizePixel() );
     pContext->GetWindow()->Show();
 }
