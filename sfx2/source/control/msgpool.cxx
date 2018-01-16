@@ -44,7 +44,10 @@ SfxSlotPool::SfxSlotPool(SfxSlotPool *pParent)
 SfxSlotPool::~SfxSlotPool()
 {
     _pParentPool = nullptr;
-    for ( SfxInterface *pIF = FirstInterface(); pIF; pIF = FirstInterface() )
+    // swap out _vInterfaces because ~SfxInterface() might call ReleaseInterface()
+    std::vector<SfxInterface*> tmpInterfaces;
+    tmpInterfaces.swap(_vInterfaces);
+    for ( SfxInterface *pIF : tmpInterfaces )
         delete pIF;
 }
 
