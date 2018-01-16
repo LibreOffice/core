@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_ff629215",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-16T12:34:16Z",
+      "side": 1,
+      "message": "Please provide a short commit summary what the commit does, not just the bug number.",
+      "revId": "1eaf02599a03e03d2731aa07d75d1fcce23511de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
