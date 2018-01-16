@@ -104,7 +104,7 @@ namespace
 
 inline long lcl_hmm2px(long nPixel)
 {
-    return static_cast<long>(nPixel*PIXEL_PER_INCH/1000.0/CM_PER_INCH)+0.5;
+    return static_cast<long>(nPixel*PIXEL_PER_INCH/1000.0/CM_PER_INCH + 0.5);
 }
 
 const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
