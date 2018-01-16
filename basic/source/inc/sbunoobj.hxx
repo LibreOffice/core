@@ -154,7 +154,7 @@ class SbUnoMethod : public SbxMethod
     friend void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
     css::uno::Reference< css::reflection::XIdlMethod > m_xUnoMethod;
-    css::uno::Sequence< css::reflection::ParamInfo >* pParamInfoSeq;
+    std::unique_ptr<css::uno::Sequence< css::reflection::ParamInfo >> pParamInfoSeq;
 
     // #67781 reference to the previous and the next method in the method list
     SbUnoMethod* pPrev;

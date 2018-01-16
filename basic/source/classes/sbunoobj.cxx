@@ -2493,7 +2493,7 @@ SbUnoMethod::SbUnoMethod
 
 SbUnoMethod::~SbUnoMethod()
 {
-    delete pParamInfoSeq;
+    pParamInfoSeq.reset();
 
     if( this == pFirst )
         pFirst = pNext;
@@ -2535,7 +2535,7 @@ const Sequence<ParamInfo>& SbUnoMethod::getParamInfos()
         Sequence<ParamInfo> aTmp;
         if (m_xUnoMethod.is())
             aTmp = m_xUnoMethod->getParameterInfos();
-        pParamInfoSeq = new Sequence<ParamInfo>(aTmp);
+        pParamInfoSeq.reset( new Sequence<ParamInfo>(aTmp) );
     }
     return *pParamInfoSeq;
 }
