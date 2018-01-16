@@ -724,16 +724,16 @@ SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
 
     SetParent( pb );
 
-    pStdFactory = new SbStdFactory;
-    SbxBase::AddFactory( pStdFactory );
+    pStdFactory.reset( new SbStdFactory );
+    SbxBase::AddFactory( pStdFactory.get() );
 
     Insert( new SbStdClipboard );
 }
 
 SbiStdObject::~SbiStdObject()
 {
-    SbxBase::RemoveFactory( pStdFactory );
-    delete pStdFactory;
+    SbxBase::RemoveFactory( pStdFactory.get() );
+    pStdFactory.reset();
 }
 
 // Finding an element:
