@@ -67,7 +67,7 @@ private:
     static void getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
     static void ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
     static void getGregorianDay(sal_Int32 jd, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear);
-    static double getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year);
+    static sal_Int32 getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year);
 };
 
 }
