@@ -218,7 +218,6 @@ using sc::TwipsToHMM;
 #define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
 #define SCDOC_SERVICE               "com.sun.star.document.OfficeDocument"
-#define SCDATAPROVIDERACCESS_SERVICE "com.sun.star.chart2.XDataProviderAccess"
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, "ScAnnotationsObj", "com.sun.star.sheet.CellAnnotations" )
 SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, "ScDrawPagesObj", "com.sun.star.drawing.DrawPages" )
@@ -2613,11 +2612,10 @@ sal_Bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(4);
+    uno::Sequence<OUString> aRet(3);
     aRet[0] = SCMODELOBJ_SERVICE;
     aRet[1] = SCDOCSETTINGS_SERVICE;
     aRet[2] = SCDOC_SERVICE;
-    aRet[3] = SCDATAPROVIDERACCESS_SERVICE;
     return aRet;
 }
 
