@@ -281,6 +281,12 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     output is subject to change.  The log output is printed to stderr without
     further text encoding conversion.
 
+    On some systems, log output can be redirected to other log sinks,
+    notably a file provided as a system path and filename via
+    environment variable SAL_LOG_FILE; or to a syslog facility if
+    LibreOffice is suitably built, by setting environment variable
+    SAL_LOG_SYSLOG.
+
     @see @ref sal_log_areas
 
     @attention For now, this functionality should only be used internally within
