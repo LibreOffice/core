@@ -35,9 +35,9 @@ class SvDDEObject : public SvLinkSource
 {
     OUString sItem;
 
-    DdeConnection* pConnection;
-    DdeLink* pLink;
-    DdeRequest* pRequest;
+    std::unique_ptr<DdeConnection> pConnection;
+    std::unique_ptr<DdeLink> pLink;
+    std::unique_ptr<DdeRequest> pRequest;
     css::uno::Any * pGetData;
 
     bool bWaitForData;  // waiting for data?
