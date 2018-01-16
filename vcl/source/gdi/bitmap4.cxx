@@ -1043,7 +1043,7 @@ bool Bitmap::ImplPopArt()
 }
 
 double* MakeBlurKernel(const double radius, int& rows) {
-    int intRadius = static_cast<int>(radius) + 1.0;
+    int intRadius = static_cast<int>(radius + 1.0);
     rows = intRadius * 2 + 1;
     double* matrix = new double[rows];
 
