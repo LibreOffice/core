@@ -91,8 +91,6 @@ namespace cppcanvas
 
         EMFPPen::~EMFPPen()
         {
-            delete customStartCap;
-            delete customEndCap;
         }
 
         void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer const & rR, const OutDevState& rState)
@@ -267,7 +265,7 @@ namespace cppcanvas
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
                 sal_uInt64 const pos = s.Tell();
 
-                customStartCap = new EMFPCustomLineCap();
+                customStartCap.reset( new EMFPCustomLineCap() );
                 customStartCap->Read(s, rR);
 
                 // maybe we don't read everything yet, play it safe ;-)
@@ -282,7 +280,7 @@ namespace cppcanvas
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
                 sal_uInt64 const pos = s.Tell();
 
-                customEndCap = new EMFPCustomLineCap();
+                customEndCap.reset( new EMFPCustomLineCap() );
                 customEndCap->Read(s, rR);
 
                 // maybe we don't read everything yet, play it safe ;-)

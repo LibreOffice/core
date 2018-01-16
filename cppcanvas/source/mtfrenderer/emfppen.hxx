@@ -52,9 +52,9 @@ namespace cppcanvas
             sal_Int32 alignment;
             std::vector<float> compoundArray;
             sal_Int32 customStartCapLen;
-            EMFPCustomLineCap *customStartCap;
+            std::unique_ptr<EMFPCustomLineCap> customStartCap;
             sal_Int32 customEndCapLen;
-            EMFPCustomLineCap *customEndCap;
+            std::unique_ptr<EMFPCustomLineCap> customEndCap;
 
             EMFPPen();
 
