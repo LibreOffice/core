@@ -967,7 +967,7 @@
                 <xsl:with-param name="value" select="key('page-layout',$pagemaster)/style:page-layout-properties/@fo:margin-top"/>
             </xsl:call-template>
         </xsl:variable>
-        <!-- addjust the x and y values of the page archored objects-->
+        <!-- adjust the x and y values of the page archored objects-->
         <xsl:variable name="x">
             <xsl:choose>
                 <xsl:when test="@text:anchor-type='page' or ancestor::draw:*/@text:anchor-type='page'">

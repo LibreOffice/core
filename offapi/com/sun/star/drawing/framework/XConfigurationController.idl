@@ -152,7 +152,7 @@ interface XConfigurationController
         @param eMode
             <p>When eMode is REPLACE then, before adding the
             resource activation to the request queue, similar resources
-            linked to the same anchor are removed.  This makes it easer to
+            linked to the same anchor are removed.  This make it easier to
             switch between resources whose activation is mutually exclusive.
             For example, there can only be one view per pane, so before
             activating a new view the old one has to be deactivated.</p>

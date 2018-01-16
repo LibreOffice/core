@@ -412,7 +412,7 @@ class VolumeInfo
 
     VolumeInfo( VolumeInfo& ) SAL_DELETED_FUNCTION;
 
-    /** Assginment operator.
+    /** Assignment operator.
     */
 
     VolumeInfo& operator = ( VolumeInfo& ) SAL_DELETED_FUNCTION;
@@ -460,7 +460,7 @@ public:
         return (_aInfo.uAttributes & osl_Volume_Attribute_Remote) != 0;
     }
 
-    /** Check the removeable flag.
+    /** Check the removable flag.
 
         @return
         true if attributes are valid and the volume is removable else false.
@@ -896,7 +896,7 @@ class File: public FileBase
 
     File( File& ) SAL_DELETED_FUNCTION;
 
-    /** Assginment operator.
+    /** Assignment operator.
     */
 
     File& operator = ( File& ) SAL_DELETED_FUNCTION;
