@@ -32,6 +32,7 @@ SlideTransitionPanel::SlideTransitionPanel (
     : PanelBase(pParentWindow, rViewShellBase),
       mxFrame( rxFrame )
 {
+    SetStyle( GetStyle() | WB_DIALOGCONTROL );
 #ifdef DEBUG
     SetText(OUString("sd:SlideTransitionPanel"));
 #endif
