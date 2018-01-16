@@ -21,6 +21,7 @@
 #define INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
 
 #include "hwplib.h"
+#include <memory>
 
 class HWPPara;
 
@@ -228,11 +229,11 @@ struct HWPDrawingObject
         HWPDOArc arc;
     }
     u;
-    struct HWPDrawingObject *next;
+    std::unique_ptr<struct HWPDrawingObject> next;
 /**
  * This exists for container object
  */
-    struct HWPDrawingObject *child;
+    std::unique_ptr<struct HWPDrawingObject> child;
     int index;
     HWPDrawingObject();
     ~HWPDrawingObject();

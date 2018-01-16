@@ -355,7 +355,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
         }
         if (link_info & HDOFILE_HAS_CHILD)
         {
-            hdo->child = LoadDrawingObject();
+            hdo->child.reset( LoadDrawingObject() );
             if (hdo->child == nullptr)
             {
                 goto error;
@@ -364,7 +364,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
         if (prev == nullptr)
             head = hdo;
         else
-            prev->next = hdo;
+            prev->next.reset( hdo );
         prev = hdo;
     }
     while (link_info & HDOFILE_HAS_NEXT);
@@ -682,12 +682,6 @@ HWPDrawingObject::HWPDrawingObject()
 
 HWPDrawingObject::~HWPDrawingObject()
 {
-    if (child)
-        delete child;
-
-    if (next)
-        delete next;
-
     if (property.pPara)
         FreeParaList(property.pPara);
 

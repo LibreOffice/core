@@ -273,7 +273,7 @@ class DLLEXPORT HWPFile
         unsigned char linenumber;
         int   info_block_len;
         int   error_code;
-        OlePicture *oledata;
+        std::unique_ptr<OlePicture> oledata;
         unsigned char scratch[SAL_MAX_UINT16];
         int readdepth;
 
@@ -281,7 +281,7 @@ class DLLEXPORT HWPFile
 /* hwp 파일 이름 */
         int m_nCurrentPage;
         int m_nMaxSettedPage;
-        HIODev    *hiodev;
+        std::unique_ptr<HIODev> hiodev;
 // read hwp contents
         HWPInfo   _hwpInfo;
         HWPFont   _hwpFont;
