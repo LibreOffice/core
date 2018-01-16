@@ -20,15 +20,18 @@
 #include <neuralnetwork.hxx>
 
 #include "neuralnetworkfann.hxx"
+#include "neuralnetworkinternal.hxx"
 
 AbstractNeuralNetwork * AbstractNeuralNetwork::CreateFactory(sal_uInt32 nLayers, const sal_uInt32* nLayer)
 {
-    return new NeuralNetworkFann(nLayers, nLayer);
+//    return new NeuralNetworkFann(nLayers, nLayer);
+    return new NeuralNetworkInternal(nLayers, nLayer);
 }
 
 AbstractNeuralNetwork * AbstractNeuralNetwork::CreateFactory(const OUString& file)
 {
-    return new NeuralNetworkFann(file);
+//    return new NeuralNetworkFann(file);
+    return new NeuralNetworkInternal(file);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

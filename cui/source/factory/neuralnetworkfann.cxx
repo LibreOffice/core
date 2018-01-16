@@ -39,6 +39,11 @@ void NeuralNetworkFann::SetActivationFunction(ActivationFunction function)
     {
         case ActivationFunction::SIGMOID:
         {
+            func = FANN_SIGMOID;
+            break;
+        }
+        case ActivationFunction::SIGMOID_SYMMETRIC:
+        {
             func = FANN_SIGMOID_SYMMETRIC;
             break;
         }
@@ -75,8 +80,6 @@ void NeuralNetworkFann::SetLearningRate(float rate)
    fann_set_learning_rate(ann.get(), rate);
 }
 
-#include <iostream>
-
 void NeuralNetworkFann::InitTraining(sal_uInt32 nExamples)
 {
     data.reset(fann_create_train(nExamples, fann_get_num_input(ann.get()), fann_get_num_output(ann.get())));
@@ -108,9 +111,18 @@ float* NeuralNetworkFann::GetOutput(sal_uInt32 nIeme)
     return &data->output[nIeme][0];
 }
 
-float* NeuralNetworkFann::Run(float *data_input)
+void NeuralNetworkFann::Run(float *data_input, float *result)
 {
-    return fann_run(ann.get(), data_input);
+    float * fann_result = fann_run(ann.get(), data_input);
+
+    if (result == nullptr)
+    {
+        return;
+    }
+    for (sal_uInt32 i = 0; i < GetNumOutput(); i++)
+    {
+        result[i] = fann_result[i];
+    }
 }
 
 void NeuralNetworkFann::Train(sal_uInt32 nEpochs, float error)

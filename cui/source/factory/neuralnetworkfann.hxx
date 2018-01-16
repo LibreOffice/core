@@ -41,10 +41,12 @@ public:
     float* GetOutput(sal_uInt32 nIeme) override;
 
     void Train(sal_uInt32 nEpochs, float error) override;
-    float* Run(float *data_input) override;
+    void Run(float *data_input, float* result) override;
     void Save(const OUString& file) override;
 
     virtual ~NeuralNetworkFann(){}
+
+    virtual void * GetTrain(){return data.get();}
 
 private:
     std::unique_ptr<struct fann, void(*)(struct fann *)> ann;
