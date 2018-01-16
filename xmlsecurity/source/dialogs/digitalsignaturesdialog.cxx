@@ -683,7 +683,7 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
     uno::Reference<security::XCertificate> xCert;
 
     //First we try to get the certificate which is embedded in the XML Signature
-    if (!rInfo.ouX509Certificate.isEmpty())
+    if (xSecEnv.is() && !rInfo.ouX509Certificate.isEmpty())
         xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
     else {
         //There must be an embedded certificate because we use it to get the
@@ -696,9 +696,9 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
     }
 
     //In case there is no embedded certificate we try to get it from a local store
-    if (!xCert.is())
+    if (!xCert.is() && xSecEnv.is())
         xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-    if (!xCert.is())
+    if (!xCert.is() && xGpgSecEnv.is())
         xCert = xGpgSecEnv->getCertificate( rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger("") );
 
     SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );
