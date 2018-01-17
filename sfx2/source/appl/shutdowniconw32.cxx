@@ -65,6 +65,7 @@ using ::com::sun::star::beans::PropertyValue;
 #define IDM_TEMPLATE                9
 #define IDM_MATH                    12
 #define IDM_INSTALL                 10
+#define IDM_STARTCENTER             14
 
 
 #define ICON_LO_DEFAULT                 1
@@ -306,9 +307,9 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
         case SFX_TASKBAR_NOTIFICATION:
             switch( lParam )
             {
-                case WM_LBUTTONDBLCLK:
+                case WM_LBUTTONDOWN:
                 {
-                    BOOL const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, reinterpret_cast<LPARAM>(hWnd));
+                    BOOL const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_STARTCENTER, reinterpret_cast<LPARAM>(hWnd));
                     SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     break;
                 }
@@ -422,6 +423,9 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 break;
                 case IDM_MATH:
                     ShutdownIcon::OpenURL( MATH_URL, "_default" );
+                break;
+                case IDM_STARTCENTER:
+                    ShutdownIcon::OpenURL( STARTMODULE_URL, "_default" );
                 break;
                 case IDM_TEMPLATE:
                     if ( !ShutdownIcon::bModalMode )
