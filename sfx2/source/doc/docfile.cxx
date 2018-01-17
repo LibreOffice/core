@@ -3398,6 +3398,27 @@ bool SfxMedium::SetWritableForUserOnly( const OUString& aURL )
     return bResult;
 }
 
+namespace
+{
+/// Get the parent directory of a temporary file for output purposes.
+OUString GetLogicBase(std::unique_ptr<SfxMedium_Impl>& pImpl)
+{
+    OUString aLogicBase;
+
+    if (comphelper::isFileUrl(pImpl->m_aLogicName) && !pImpl->m_pInStream)
+    {
+        // Try to create the temp file in the same directory when storing.
+        sal_Int32 nOffset = pImpl->m_aLogicName.lastIndexOf("/");
+        if (nOffset != -1)
+            aLogicBase = pImpl->m_aLogicName.copy(0, nOffset);
+        if (aLogicBase == "file://")
+            // Doesn't make sense.
+            aLogicBase.clear();
+    }
+
+    return aLogicBase;
+}
+}
 
 void SfxMedium::CreateTempFile( bool bReplace )
 {
@@ -3410,17 +3431,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
         pImpl->m_aName.clear();
     }
 
-    OUString aLogicBase;
-    if (comphelper::isFileUrl(pImpl->m_aLogicName) && !pImpl->m_pInStream)
-    {
-        // Try to create the temp file in the same directory when storing.
-        sal_Int32 nOffset = pImpl->m_aLogicName.lastIndexOf("/");
-        if (nOffset != -1)
-            aLogicBase = pImpl->m_aLogicName.copy(0, nOffset);
-        if (aLogicBase == "file://")
-            // Doesn't make sense.
-            aLogicBase.clear();
-    }
+    OUString aLogicBase = GetLogicBase(pImpl);
     pImpl->pTempFile = new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase);
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
@@ -3519,7 +3530,8 @@ void SfxMedium::CreateTempFileNoCopy()
     // this call always replaces the existing temporary file
     delete pImpl->pTempFile;
 
-    pImpl->pTempFile = new ::utl::TempFile();
+    OUString aLogicBase = GetLogicBase(pImpl);
+    pImpl->pTempFile = new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase);
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     if ( pImpl->m_aName.isEmpty() )
