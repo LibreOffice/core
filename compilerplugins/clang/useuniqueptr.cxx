@@ -39,9 +39,13 @@ public:
     bool VisitCompoundStmt(const CompoundStmt* );
 private:
     void CheckForUnconditionalDelete(const CXXDestructorDecl*, const CompoundStmt* );
-    void CheckDeleteExpr(const CXXDestructorDecl*, const CXXDeleteExpr* );
-    void CheckForForLoopDelete(const CXXDestructorDecl*, const CompoundStmt* );
-    void CheckForRangedLoopDelete(const CXXDestructorDecl*, const CompoundStmt* );
+    void CheckForSimpleDelete(const CXXDestructorDecl*, const CompoundStmt* );
+    void CheckRangedLoopDelete(const CXXDestructorDecl*, const CXXForRangeStmt* );
+    void CheckLoopDelete(const CXXDestructorDecl*, const Stmt* );
+    void CheckLoopDelete(const CXXDestructorDecl*, const CXXDeleteExpr* );
+    void CheckDeleteExpr(const CXXDestructorDecl*, const CXXDeleteExpr*);
+    void CheckDeleteExpr(const CXXDestructorDecl*, const CXXDeleteExpr*,
+        const MemberExpr*, StringRef message);
 };
 
 bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDecl)
@@ -55,14 +59,25 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
     if (!compoundStmt || compoundStmt->size() == 0)
         return true;
 
-    CheckForUnconditionalDelete(destructorDecl, compoundStmt);
-    CheckForForLoopDelete(destructorDecl, compoundStmt);
-    CheckForRangedLoopDelete(destructorDecl, compoundStmt);
+    CheckForSimpleDelete(destructorDecl, compoundStmt);
+
+    for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
+    {
+        if (auto cxxForRangeStmt = dyn_cast<CXXForRangeStmt>(*i))
+            CheckRangedLoopDelete(destructorDecl, cxxForRangeStmt);
+        else if (auto forStmt = dyn_cast<ForStmt>(*i))
+            CheckLoopDelete(destructorDecl, forStmt->getBody());
+        else if (auto whileStmt = dyn_cast<WhileStmt>(*i))
+            CheckLoopDelete(destructorDecl, whileStmt->getBody());
+    }
 
     return true;
 }
 
-void UseUniquePtr::CheckForUnconditionalDelete(const CXXDestructorDecl* destructorDecl, const CompoundStmt* compoundStmt)
+/**
+ * check for simple call to delete in a destructor i.e. direct unconditional call, or if-guarded call
+ */
+void UseUniquePtr::CheckForSimpleDelete(const CXXDestructorDecl* destructorDecl, const CompoundStmt* compoundStmt)
 {
     for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
     {
@@ -83,6 +98,7 @@ void UseUniquePtr::CheckForUnconditionalDelete(const CXXDestructorDecl* destruct
             // ignore "if (bMine)"
             if (!loplugin::TypeCheck(ifCondMemberExpr->getType()).Pointer())
                 continue;
+            // good
         }
         else if (auto binaryOp = dyn_cast<BinaryOperator>(cond))
         {
@@ -90,15 +106,18 @@ void UseUniquePtr::CheckForUnconditionalDelete(const CXXDestructorDecl* destruct
                 continue;
             if (!isa<CXXNullPtrLiteralExpr>(binaryOp->getRHS()->IgnoreImpCasts()))
                 continue;
+            // good
         }
-        else
+        else // ignore anything more complicated
             continue;
+
         deleteExpr = dyn_cast<CXXDeleteExpr>(ifStmt->getThen());
         if (deleteExpr)
         {
             CheckDeleteExpr(destructorDecl, deleteExpr);
             continue;
         }
+
         auto ifThenCompoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen());
         if (!ifThenCompoundStmt)
             continue;
@@ -116,29 +135,38 @@ void UseUniquePtr::CheckForUnconditionalDelete(const CXXDestructorDecl* destruct
  */
 void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, const CXXDeleteExpr* deleteExpr)
 {
-    const ImplicitCastExpr* pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
-    if (!pCastExpr)
+    const ImplicitCastExpr* castExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
+    if (!castExpr)
         return;
-    const MemberExpr* pMemberExpr = dyn_cast<MemberExpr>(pCastExpr->getSubExpr());
-    if (!pMemberExpr)
+    const MemberExpr* memberExpr = dyn_cast<MemberExpr>(castExpr->getSubExpr());
+    if (!memberExpr)
         return;
+    CheckDeleteExpr(destructorDecl, deleteExpr, memberExpr,
+        "unconditional call to delete on a member, should be using std::unique_ptr");
+}
 
+/**
+ * Check the delete expression in a destructor.
+ */
+void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, const CXXDeleteExpr* deleteExpr,
+    const MemberExpr* memberExpr, StringRef message)
+{
     // ignore union games
-    const FieldDecl* pFieldDecl = dyn_cast<FieldDecl>(pMemberExpr->getMemberDecl());
-    if (!pFieldDecl)
+    const FieldDecl* fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
+    if (!fieldDecl)
         return;
-    TagDecl const * td = dyn_cast<TagDecl>(pFieldDecl->getDeclContext());
+    TagDecl const * td = dyn_cast<TagDecl>(fieldDecl->getDeclContext());
     if (td->isUnion())
         return;
 
     // ignore calling delete on someone else's field
-    if (pFieldDecl->getParent() != destructorDecl->getParent() )
+    if (fieldDecl->getParent() != destructorDecl->getParent() )
         return;
 
-    if (ignoreLocation(pFieldDecl))
+    if (ignoreLocation(fieldDecl))
         return;
     // to ignore things like the CPPUNIT macros
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(pFieldDecl->getLocStart()));
+    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
     if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
         return;
     // passes and stores pointers to member fields
@@ -169,145 +197,92 @@ void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, cons
         return;
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/sot/"))
         return;
+    // the std::vector is being passed to another class
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sfx2/source/explorer/nochaos.cxx"))
+        return;
+    // ignore std::map and std::unordered_map, MSVC 2015 has problems with mixing these with std::unique_ptr
+    auto tc = loplugin::TypeCheck(fieldDecl->getType());
+    if (tc.Class("map").StdNamespace() || tc.Class("unordered_map").StdNamespace())
+        return;
+    // there is a loop in ~ImplPrnQueueList deleting stuff on a global data structure
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/inc/print.h"))
+        return;
+    // painful linked list
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/basic/source/inc/runtime.hxx"))
+        return;
 
     report(
         DiagnosticsEngine::Warning,
-        "unconditional call to delete on a member, should be using std::unique_ptr",
+        message,
         deleteExpr->getLocStart())
         << deleteExpr->getSourceRange();
     report(
         DiagnosticsEngine::Note,
         "member is here",
-        pFieldDecl->getLocStart())
-        << pFieldDecl->getSourceRange();
+        fieldDecl->getLocStart())
+        << fieldDecl->getSourceRange();
 }
 
-void UseUniquePtr::CheckForForLoopDelete(const CXXDestructorDecl* destructorDecl, const CompoundStmt* compoundStmt)
+void UseUniquePtr::CheckLoopDelete(const CXXDestructorDecl* destructorDecl, const Stmt* bodyStmt)
 {
-    for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
+    if (auto deleteExpr = dyn_cast<CXXDeleteExpr>(bodyStmt))
+        CheckLoopDelete(destructorDecl, deleteExpr);
+    else if (auto compoundStmt = dyn_cast<CompoundStmt>(bodyStmt))
     {
-        auto forStmt = dyn_cast<ForStmt>(*i);
-        if (!forStmt)
-            continue;
-        auto deleteExpr = dyn_cast<CXXDeleteExpr>(forStmt->getBody());
-        if (!deleteExpr)
-            continue;
-
-        const MemberExpr* memberExpr = nullptr;
-        const Expr* subExpr = deleteExpr->getArgument();
-        for (;;)
+        for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
         {
-            subExpr = subExpr->IgnoreImpCasts();
-            if ((memberExpr = dyn_cast<MemberExpr>(subExpr)))
-                break;
-            else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(subExpr))
-                subExpr = arraySubscriptExpr->getBase();
-            else if (auto cxxOperatorCallExpr = dyn_cast<CXXOperatorCallExpr>(subExpr))
+            if (auto deleteExpr = dyn_cast<CXXDeleteExpr>(*i))
+                CheckLoopDelete(destructorDecl, deleteExpr);
+        }
+    }
+}
+
+void UseUniquePtr::CheckLoopDelete(const CXXDestructorDecl* destructorDecl, const CXXDeleteExpr* deleteExpr)
+{
+    const MemberExpr* memberExpr = nullptr;
+    const Expr* subExpr = deleteExpr->getArgument();
+    for (;;)
+    {
+        subExpr = subExpr->IgnoreImpCasts();
+        if ((memberExpr = dyn_cast<MemberExpr>(subExpr)))
+            break;
+        else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(subExpr))
+            subExpr = arraySubscriptExpr->getBase();
+        else if (auto cxxOperatorCallExpr = dyn_cast<CXXOperatorCallExpr>(subExpr))
+        {
+            if (cxxOperatorCallExpr->getOperator() == OO_Subscript)
             {
-                if (cxxOperatorCallExpr->getOperator() == OO_Subscript)
-                {
-                    memberExpr = dyn_cast<MemberExpr>(cxxOperatorCallExpr->getArg(0));
-                    break;
-                }
+                memberExpr = dyn_cast<MemberExpr>(cxxOperatorCallExpr->getArg(0));
                 break;
             }
-            else
-                break;
+            break;
         }
-        if (!memberExpr)
-            continue;
-
-        // ignore union games
-        const FieldDecl* fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
-        if (!fieldDecl)
-            continue;
-        TagDecl const * td = dyn_cast<TagDecl>(fieldDecl->getDeclContext());
-        if (td->isUnion())
-            continue;
-
-        // ignore calling delete on someone else's field
-        if (fieldDecl->getParent() != destructorDecl->getParent() )
-            continue;
-
-        if (ignoreLocation(fieldDecl))
-            continue;
-        // to ignore things like the CPPUNIT macros
-        StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
-        if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
-            continue;
-        // the std::vector is being passed to another class
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sfx2/source/explorer/nochaos.cxx"))
-            return;
-
-        report(
-            DiagnosticsEngine::Warning,
-            "rather manage with std::some_container<std::unique_ptr<T>>",
-            deleteExpr->getLocStart())
-            << deleteExpr->getSourceRange();
-        report(
-            DiagnosticsEngine::Note,
-            "member is here",
-            fieldDecl->getLocStart())
-            << fieldDecl->getSourceRange();
+        else
+           break;
     }
+    if (!memberExpr)
+        return;
+
+    CheckDeleteExpr(destructorDecl, deleteExpr, memberExpr, "rather manage with std::some_container<std::unique_ptr<T>>");
 }
 
-void UseUniquePtr::CheckForRangedLoopDelete(const CXXDestructorDecl* destructorDecl, const CompoundStmt* compoundStmt)
+void UseUniquePtr::CheckRangedLoopDelete(const CXXDestructorDecl* destructorDecl, const CXXForRangeStmt* cxxForRangeStmt)
 {
-    for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
-    {
-        auto cxxForRangeStmt = dyn_cast<CXXForRangeStmt>(*i);
-        if (!cxxForRangeStmt)
-            continue;
-        CXXDeleteExpr const * deleteExpr = nullptr;
-        if (auto compoundStmt = dyn_cast<CompoundStmt>(cxxForRangeStmt->getBody()))
-            deleteExpr = dyn_cast<CXXDeleteExpr>(*compoundStmt->body_begin());
-        else
-            deleteExpr = dyn_cast<CXXDeleteExpr>(cxxForRangeStmt->getBody());
-        if (!deleteExpr)
-            continue;
-        auto memberExpr = dyn_cast<MemberExpr>(cxxForRangeStmt->getRangeInit());
-        if (!memberExpr)
-            continue;
-        auto fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
-        if (!fieldDecl)
-            continue;
+    CXXDeleteExpr const * deleteExpr = nullptr;
+    if (auto compoundStmt = dyn_cast<CompoundStmt>(cxxForRangeStmt->getBody()))
+        deleteExpr = dyn_cast<CXXDeleteExpr>(*compoundStmt->body_begin());
+    else
+        deleteExpr = dyn_cast<CXXDeleteExpr>(cxxForRangeStmt->getBody());
+    if (!deleteExpr)
+        return;
+    auto memberExpr = dyn_cast<MemberExpr>(cxxForRangeStmt->getRangeInit());
+    if (!memberExpr)
+        return;
+    auto fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
+    if (!fieldDecl)
+        return;
 
-        // ignore union games
-        TagDecl const * td = dyn_cast<TagDecl>(fieldDecl->getDeclContext());
-        if (td->isUnion())
-            continue;
-
-        // ignore calling delete on someone else's field
-        if (fieldDecl->getParent() != destructorDecl->getParent() )
-            continue;
-
-        if (ignoreLocation(fieldDecl))
-            continue;
-
-        // to ignore things like the CPPUNIT macros
-        StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
-        if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
-            continue;
-        // ignore std::map and std::unordered_map, MSVC 2015 has problems with mixing these with std::unique_ptr
-        auto tc = loplugin::TypeCheck(fieldDecl->getType());
-        if (tc.Class("map").StdNamespace() || tc.Class("unordered_map").StdNamespace())
-            continue;
-        // there is a loop in ~ImplPrnQueueList deleting stuff on a global data structure
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/inc/print.h"))
-            return;
-
-        report(
-            DiagnosticsEngine::Warning,
-            "rather manage with std::some_container<std::unique_ptr<T>>",
-            deleteExpr->getLocStart())
-            << deleteExpr->getSourceRange();
-        report(
-            DiagnosticsEngine::Note,
-            "member is here",
-            fieldDecl->getLocStart())
-            << fieldDecl->getSourceRange();
-    }
+    CheckDeleteExpr(destructorDecl, deleteExpr, memberExpr, "rather manage with std::some_container<std::unique_ptr<T>>");
 }
 
 bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)

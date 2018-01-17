@@ -99,6 +99,7 @@ class Foo9 {
     XXX* m_pbar1; // expected-note {{member is here [loplugin:useuniqueptr]}}
     XXX* m_pbar2; // expected-note {{member is here [loplugin:useuniqueptr]}}
     XXX* m_pbar3; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    XXX* m_pbar4; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo9()
     {
         if (m_pbar1)
@@ -111,6 +112,12 @@ class Foo9 {
         }
         if (m_pbar3 != nullptr)
             delete m_pbar3; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        if (m_pbar4 != nullptr)
+        {
+            int x = 1;
+            (void)x;
+            delete m_pbar4; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        }
     }
 };
 // no warning expected
@@ -133,6 +140,15 @@ class Foo11 {
         {
             delete p; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
         }
+    }
+};
+class Foo12 {
+    std::array<int*,10> m_pbar; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    ~Foo12()
+    {
+        int i = 0;
+        while (i < 10)
+            delete m_pbar[i++]; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
