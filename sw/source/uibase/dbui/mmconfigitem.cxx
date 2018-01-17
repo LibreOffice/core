@@ -59,7 +59,7 @@ const char cDataSourceName[]         = "DataSource/DataSourceName";
 const char cDataTableName[]          = "DataSource/DataTableName" ;
 const char cDataCommandType[]        = "DataSource/DataCommandType";
 
-#define SECURE_PORT     465
+#define SECURE_PORT     587
 #define DEFAULT_PORT    25
 #define POP_PORT        110
 
@@ -196,7 +196,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         m_nMailPort(0),
         m_bIsMailReplyTo(false),
         m_bIsDefaultPort(false),
-        m_bIsSecureConnection(false),
+        m_bIsSecureConnection(true),
         m_bIsAuthentication(false),
 
         m_bIsEMailSupported(false),
