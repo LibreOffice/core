@@ -101,6 +101,8 @@ char const * getEnvironmentVariable(const char* env) {
 }
 
 #ifdef WNT
+# define INI_STRINGBUF_SIZE 1024
+
 bool getValueFromLoggingIniFile(const char* key, char* value) {
     char buffer[MAX_PATH];
     GetModuleFileName(NULL, buffer, MAX_PATH);
@@ -126,7 +128,7 @@ bool getValueFromLoggingIniFile(const char* key, char* value) {
             if (aKey != sWantedKey)
                 continue;
             aValue = sLine.substr(n+1, sLine.length());
-            sprintf(value, "%s", aValue.c_str());
+            snprintf(value, INI_STRINGBUF_SIZE, "%s", aValue.c_str());
             return true;
         }
     }
@@ -142,7 +144,7 @@ char const * getLogLevel() {
         return env;
 
 #ifdef WNT
-    static char logLevel[1024];
+    static char logLevel[INI_STRINGBUF_SIZE];
     if (getValueFromLoggingIniFile("LogLevel", logLevel))
         return logLevel;
 #endif
@@ -157,7 +159,7 @@ std::ofstream * getLogFile() {
         return nullptr;
 
 #ifdef WNT
-    static char logFilePath[1024];
+    static char logFilePath[INI_STRINGBUF_SIZE];
     if (getValueFromLoggingIniFile("LogFilePath", logFilePath))
         logFile = logFilePath;
     else
@@ -196,7 +198,7 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                 tm.tm_year = dateTime.Year - 1900;
                 strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
                 char milliSecs[11];
-                sprintf(milliSecs, "%03u", static_cast<unsigned>(dateTime.NanoSeconds/1000000));
+                snprintf(milliSecs, sizeof(milliSecs), "%03u", static_cast<unsigned>(dateTime.NanoSeconds/1000000));
                 s << ts << '.' << milliSecs << ':';
             }
             if (outputRelativeTimer) {
@@ -217,7 +219,7 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                 else
                     milliSeconds = (now.Nanosec-first.Nanosec)/1000000;
                 char relativeTimestamp[100];
-                sprintf(relativeTimestamp, "%d.%03d", seconds, milliSeconds);
+                snprintf(relativeTimestamp, sizeof(relativeTimestamp), "%d.%03d", seconds, milliSeconds);
                 s << relativeTimestamp << ':';
             }
             return;
