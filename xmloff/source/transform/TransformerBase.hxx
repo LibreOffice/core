@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <vector>
+#include <memory>
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
@@ -32,8 +33,11 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ref.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/nmspmap.hxx>
 
 #include "Transformer.hxx"
+#include "TransformerActions.hxx"
+#include "TransformerTokenMap.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace i18n { class XCharacterClassification; }
@@ -45,7 +49,6 @@ class XMLTransformerActions;
 struct XMLTransformerActionInit;
 struct TransformerAction_Impl;
 class XMLMutableAttributeList;
-class XMLTransformerTokenMap;
 
 const sal_uInt16 INVALID_ACTIONS = 0xffff;
 
@@ -61,11 +64,11 @@ class XMLTransformerBase : public XMLTransformer
     OUString m_aExtPathPrefix;
     OUString m_aClass;
 
-    SvXMLNamespaceMap           *m_pNamespaceMap;
-    SvXMLNamespaceMap           *m_pReplaceNamespaceMap;
-    std::vector<rtl::Reference<XMLTransformerContext>> m_pContexts;
-    XMLTransformerActions       *m_pElemActions;
-    XMLTransformerTokenMap      *m_pTokenMap;
+    std::unique_ptr<SvXMLNamespaceMap> m_pNamespaceMap;
+    SvXMLNamespaceMap           m_vReplaceNamespaceMap;
+    std::vector<rtl::Reference<XMLTransformerContext>> m_vContexts;
+    XMLTransformerActions       m_ElemActions;
+    XMLTransformerTokenMap      m_TokenMap;
 
 protected:
     css::uno::Reference< css::frame::XModel >     mxModel;
@@ -111,9 +114,9 @@ public:
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *m_pNamespaceMap; }
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *m_pNamespaceMap; }
-    SvXMLNamespaceMap& GetReplaceNamespaceMap() { return *m_pReplaceNamespaceMap; }
+    SvXMLNamespaceMap& GetReplaceNamespaceMap() { return m_vReplaceNamespaceMap; }
 
-    XMLTransformerActions& GetElemActions() { return *m_pElemActions; }
+    XMLTransformerActions& GetElemActions() { return m_ElemActions; }
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n );
     virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
