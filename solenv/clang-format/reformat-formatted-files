@@ -7,6 +7,7 @@
 
 # Reformat files which are not blacklisted. This is interesting if the
 # clang-format version or config changes.
+# -n allows just listing the formatted files.
 
 use strict;
 use warnings;
@@ -17,6 +18,7 @@ my $clang_format = ClangFormat::find();
 my $src = ClangFormat::get_extension_regex();
 my $blacklist_names = ClangFormat::get_blacklist();
 my @filenames = ();
+my $dry_run = 0;
 
 # Get a list of files.
 open (FILES, "git ls-files |") ||  die "Cannot run git ls-files.";
@@ -29,7 +31,19 @@ while (my $filename = <FILES>)
     }
 }
 
-print("$clang_format -i " . join(" ", @filenames) . "\n");
-system("$clang_format -i " . join(" ", @filenames) . "\n");
+if ($#ARGV ge 0 && $ARGV[0] eq "-n")
+{
+    $dry_run = 1;
+}
+
+foreach my $filename (@filenames)
+{
+    my $command = $clang_format . " -i " . $filename;
+    print($filename . "\n");
+    if (!$dry_run)
+    {
+        system($command);
+    }
+}
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
