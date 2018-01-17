@@ -88,6 +88,7 @@
 #include "stringutil.hxx"
 #include <documentlinkmgr.hxx>
 #include <scopetools.hxx>
+#include <tokenarray.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -1156,6 +1157,15 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                 ++nFirstIndex;
         }
     }
+}
+
+void ScDocument::CheckLinkFormulaNeedingCheck( const ScTokenArray& rCode )
+{
+    if (HasLinkFormulaNeedingCheck())
+        return;
+
+    if (rCode.HasOpCodeRPN(ocDde) || rCode.HasOpCodeRPN(ocWebservice))
+        SetLinkFormulaNeedingCheck(true);
 }
 
 // TimerDelays etc.
