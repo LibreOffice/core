@@ -262,7 +262,7 @@ namespace dxcanvas
                 else
                 {
                     // no control points -> no curves, simply add
-                    // straigt lines to GraphicsPath
+                    // straight lines to GraphicsPath
                     rPoints.resize( nPoints );
 
                     for( sal_uInt32 nCurrPoint=0; nCurrPoint<nPoints; ++nCurrPoint )

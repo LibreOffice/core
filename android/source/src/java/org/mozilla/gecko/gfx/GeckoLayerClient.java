@@ -38,7 +38,7 @@ public class GeckoLayerClient implements PanZoomTarget {
      * 1) reading mViewportMetrics from any thread is fine without synchronization
      * 2) writing to mViewportMetrics requires synchronizing on the layer controller object
      * 3) whenever reading multiple fields from mViewportMetrics without synchronization (i.e. in
-     *    case 1 above) you should always frist grab a local copy of the reference, and then use
+     *    case 1 above) you should always first grab a local copy of the reference, and then use
      *    that because mViewportMetrics might get reassigned in between reading the different
      *    fields. */
     private volatile ImmutableViewportMetrics mViewportMetrics;
