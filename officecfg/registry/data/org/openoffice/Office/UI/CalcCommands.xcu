@@ -893,6 +893,11 @@
           <value xml:lang="en-US">~Validity...</value>
         </prop>
       </node>
+      <node oor:name=".uno:CurrentValidation" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Data ~Validation...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:DeleteRows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete Rows</value>

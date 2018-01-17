@@ -1135,6 +1135,7 @@ public:
 
     /** Returns true, if there is any data to create a selection list for rPos. */
     bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    bool            HasValidationData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     /**
      * Check if the specified range contains either: 1) one non-empty cell, 2)
