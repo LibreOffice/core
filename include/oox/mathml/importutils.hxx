@@ -191,7 +191,7 @@ public:
     Tag checkOpeningTag( int token );
     /**
      Ensures that a closing tag with the given token is read. Like ensureOpeningTag(),
-     if not, writes out a warning and tries to recover by skiping tags until found (or until the current element would end).
+     if not, writes out a warning and tries to recover by skipping tags until found (or until the current element would end).
      If found, the position in the stream is afterwards moved to the next tag.
     */
     void ensureClosingTag( int token );

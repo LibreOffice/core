@@ -73,7 +73,7 @@ namespace rptui
         */
         void impl_setCounterFunction_throw();
 
-        /** executes a dialog for chosing a filter criterion for a database report
+        /** executes a dialog for choosing a filter criterion for a database report
             @param _out_rSelectedClause
                 the filter or order clause as chosen by the user
             @precond

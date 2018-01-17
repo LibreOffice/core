@@ -199,7 +199,7 @@ namespace slideshow
                 This method checks whether the Shape is currently
                 detached from the slide background, i.e. whether shape
                 updates affect the underlying slide background or
-                not. A shape that returnes true here must not alter
+                not. A shape that returns true here must not alter
                 slide content in any way when called render() or
                 update() (this is normally achieved by making this
                 shape a sprite).
