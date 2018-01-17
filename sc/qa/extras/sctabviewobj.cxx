@@ -27,8 +27,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 4
-
 class ScTabViewObj : public CalcUnoApiTest,
                      public apitest::SpreadsheetViewSettings,
                      public apitest::XSpreadsheetView,
@@ -59,13 +57,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScTabViewObj::nTest = 0;
-uno::Reference< lang::XComponent > ScTabViewObj::mxComponent;
 
 ScTabViewObj::ScTabViewObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -74,9 +67,6 @@ ScTabViewObj::ScTabViewObj()
 
 uno::Reference< uno::XInterface > ScTabViewObj::init()
 {
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xSheetDoc.is());
 
@@ -87,19 +77,13 @@ uno::Reference< uno::XInterface > ScTabViewObj::init()
 
 void ScTabViewObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScTabViewObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
