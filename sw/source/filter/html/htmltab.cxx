@@ -3956,8 +3956,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         }
 
         // Remove LFs at the paragraph end
-        if( StripTrailingLF()==0 && !m_pPam->GetPoint()->nContent.GetIndex() )
-            StripTrailingPara();
+        if (StripTrailingLF() == 0 && !m_pPam->GetPoint()->nContent.GetIndex())
+        {
+            HTMLTableContext* pTableContext = m_xTable ? m_xTable->GetContext() : nullptr;
+            SwPosition* pSavedPos = pTableContext ? pTableContext->GetPos() : nullptr;
+            const bool bDeleteSafe = !pSavedPos || pSavedPos->nNode != m_pPam->GetPoint()->nNode;
+            if (bDeleteSafe)
+                StripTrailingPara();
+        }
 
         // If there was an adjustment set for the cell, we need to close it
         std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
