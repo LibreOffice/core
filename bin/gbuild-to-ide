@@ -904,7 +904,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_rebuild_node = ET.SubElement(conf_node, '{%s}NMakeReBuildCommandLine' % ns)
             nmake_rebuild_node.text = cfg_targets['rebuild'] % nmake_params
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
-            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.exe')
+            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.bin')
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
             nmake_defs_node.text = ';'.join(self.defs_list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
