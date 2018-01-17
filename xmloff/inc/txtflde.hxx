@@ -151,9 +151,9 @@ class XMLTextFieldExport final
     SvXMLExport& rExport;
 
     /// store used text field master names (NULL means: don't collect)
-    ::std::map<
+    std::unique_ptr< ::std::map<
             css::uno::Reference< css::text::XText >,
-            ::std::set< OUString > > *
+            ::std::set< OUString > > >
         pUsedMasters;
 
 public:
@@ -481,7 +481,7 @@ private:
     const OUString sPropertyTooltip;
     const OUString sPropertyTextRange;
 
-    XMLPropertyState* pCombinedCharactersPropertyState;
+    std::unique_ptr<XMLPropertyState> pCombinedCharactersPropertyState;
 
 };
 
