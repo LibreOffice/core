@@ -2612,7 +2612,7 @@ void ScFiltersTest::testFormulaDependency()
     nVal = rDoc.GetValue(0,0,0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 2.0, 1e-10);
 
-    // check that the number format is implicity inherited
+    // check that the number format is implicitly inherited
     // CPPUNIT_ASSERT_EQUAL(rDoc.GetString(0,4,0), rDoc.GetString(0,5,0));
 
     xDocSh->DoClose();

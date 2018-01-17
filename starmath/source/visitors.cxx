@@ -1269,7 +1269,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinDiagonalNode* pNode )
     mpRightMost = right;
 }
 
-//Straigt forward ( I think )
+//Straight forward ( I think )
 void SmCaretPosGraphBuildingVisitor::Visit( SmBinHorNode* pNode )
 {
     for( auto pChild : *pNode )

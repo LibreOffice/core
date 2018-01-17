@@ -902,7 +902,7 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
     const basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::utils::solveCrossovers( rPolyPolygon );
     basegfx::B2DTrapezoidVector aB2DTrapVector;
     basegfx::utils::trapezoidSubdivide( aB2DTrapVector, aSimplePolyPolygon );
-    // draw tesselation result
+    // draw tessellation result
     if( aB2DTrapVector.size())
     {
         for(basegfx::B2DTrapezoid & i : aB2DTrapVector)

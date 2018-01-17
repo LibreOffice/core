@@ -317,7 +317,7 @@ sal_Int32 Decompression::explode()
         m_pOutStream->ReadBytes(sTemp, nRead);
         if (nRead != Length)
         {
-            // fill the buffer with read content repeatly until full
+            // fill the buffer with read content repeatedly until full
             for (sal_uInt32 i=nRead; i<Length; i++)
             {
                 sTemp[i] = sTemp[i-nRead];

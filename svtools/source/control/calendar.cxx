@@ -902,7 +902,7 @@ void Calendar::ImplUpdate( bool bCalcNew )
 
 void Calendar::ImplInvertDropPos()
 {
-    tools::Rectangle aRect = GetDateRect( maDropDate );//this is one Pixel to width and one to heigh
+    tools::Rectangle aRect = GetDateRect( maDropDate );//this is one Pixel to width and one to height
     aRect.Bottom() = aRect.Top()+mnDayHeight-1;
     aRect.Right() = aRect.Left()+mnDayWidth-1;
     Invert( aRect );

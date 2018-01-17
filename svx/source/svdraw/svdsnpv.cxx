@@ -39,7 +39,7 @@ class ImplPageOriginOverlay
     // The OverlayObjects
     sdr::overlay::OverlayObjectList               maObjects;
 
-    // The current position in logical coodinates
+    // The current position in logical coordinates
     basegfx::B2DPoint                               maPosition;
 
 public:
@@ -97,7 +97,7 @@ class ImplHelpLineOverlay
     // The OverlayObjects
     sdr::overlay::OverlayObjectList               maObjects;
 
-    // The current position in logical coodinates
+    // The current position in logical coordinates
     basegfx::B2DPoint                               maPosition;
 
     // HelpLine specific stuff

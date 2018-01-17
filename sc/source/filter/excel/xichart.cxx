@@ -1730,7 +1730,7 @@ Reference< XPropertySet > XclImpChSerErrorBar::CreateErrorBar( const XclImpChSer
             case EXC_CHSERERR_CUSTOM:
             {
                 aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle::FROM_DATA );
-                // attach data sequences to erorr bar
+                // attach data sequences to error bar
                 Reference< XDataSink > xDataSink( xErrorBar, UNO_QUERY );
                 if( xDataSink.is() )
                 {

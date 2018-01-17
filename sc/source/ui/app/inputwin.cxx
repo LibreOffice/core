@@ -719,7 +719,7 @@ void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
             CaptureMouse();
             bInResize = true;
 
-            // find the height of the gridwin, we don't wan't to be
+            // find the height of the gridwin, we don't want to be
             // able to expand the toolbar too far so we need to
             // calculate an upper limit
             // I'd prefer to leave at least a single column header and a
