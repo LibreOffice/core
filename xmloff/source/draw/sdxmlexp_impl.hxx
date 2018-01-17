@@ -38,7 +38,6 @@ class XMLShapeExportPropertyMapper;
 class XMLPageExportPropertyMapper;
 
 typedef ::std::vector< ImpXMLEXPPageMasterInfo* > ImpXMLEXPPageMasterList;
-typedef ::std::vector< ImpXMLAutoLayoutInfo*    > ImpXMLAutoLayoutInfoList;
 
 enum XmlPlaceholder
 {
@@ -82,11 +81,11 @@ class SdXMLExport : public SvXMLExport
     sal_uInt32                  mnObjectCount;
 
     // temporary infos
-    ImpXMLEXPPageMasterList*    mpPageMasterInfoList;
-    ImpXMLEXPPageMasterList*    mpPageMasterUsageList;
-    ImpXMLEXPPageMasterList*    mpNotesPageMasterUsageList;
+    std::vector< std::unique_ptr<ImpXMLEXPPageMasterInfo> > mvPageMasterInfoList;
+    ImpXMLEXPPageMasterList     mvPageMasterUsageList;
+    ImpXMLEXPPageMasterList     mvNotesPageMasterUsageList;
     ImpXMLEXPPageMasterInfo*    mpHandoutPageMaster;
-    ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
+    std::vector< std::unique_ptr<ImpXMLAutoLayoutInfo> >    mvAutoLayoutInfoList;
 
     css::uno::Sequence< OUString > maDrawPagesAutoLayoutNames;
 
