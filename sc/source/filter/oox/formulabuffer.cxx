@@ -223,6 +223,10 @@ void applyCellFormulas(
             continue;
 
         aCompiler.CompileTokenArray(); // Generate RPN tokens.
+
+        // Check if ocDde/ocWebservice is in any formula for external links warning.
+        rDoc.getDoc().CheckLinkFormulaNeedingCheck(*pCode);
+
         ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pCode);
         rDoc.setFormulaCell(aPos, pCell);
         rCache.store(aPos, pCell);
