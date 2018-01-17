@@ -93,6 +93,7 @@ public:
     bool VisitConditionalOperator(ConditionalOperator const * expr);
     bool VisitBinaryConditionalOperator(BinaryConditionalOperator const * expr);
     bool VisitMemberExpr(const MemberExpr *f);
+    bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
 private:
     void VisitSomeStmt(Stmt const * stmt, const Expr* cond, StringRef stmtName);
 
@@ -333,6 +334,28 @@ bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
         return true;
     report(
         DiagnosticsEngine::Warning, "parentheses immediately inside single-arg call",
+        parenExpr->getLocStart())
+        << parenExpr->getSourceRange();
+    handled_.insert(parenExpr);
+    return true;
+}
+
+bool UnnecessaryParen::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
+{
+    if (ignoreLocation(deleteExpr))
+        return true;
+
+    auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(deleteExpr->getArgument()));
+    if (!parenExpr)
+        return true;
+    if (parenExpr->getLocStart().isMacroID())
+        return true;
+    // assignments need extra parentheses or they generate a compiler warning
+    auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
+    if (binaryOp && binaryOp->getOpcode() == BO_Assign)
+        return true;
+    report(
+        DiagnosticsEngine::Warning, "parentheses immediately inside delete expr",
         parenExpr->getLocStart())
         << parenExpr->getSourceRange();
     handled_.insert(parenExpr);

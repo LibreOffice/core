@@ -1420,7 +1420,7 @@ SdrUndoPageList::~SdrUndoPageList()
 {
     if(bItsMine)
     {
-        delete (&mrPage);
+        delete &mrPage;
     }
 }
 

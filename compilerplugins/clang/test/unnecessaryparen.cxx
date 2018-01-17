@@ -91,6 +91,9 @@ int main()
     // "throw(x);"); it is unlikely that there are any actual occurrences of code like "-(-1)" that
     // would benefit from the parentheses readability-wise, compared to "- -1":
     (void) -(-1); // expected-error {{unnecessary parentheses around signed numeric literal [loplugin:unnecessaryparen]}}
+
+    char *p = nullptr;
+    delete (p); // expected-error {{parentheses immediately inside delete expr [loplugin:unnecessaryparen]}}
 };
 
 struct S2 {

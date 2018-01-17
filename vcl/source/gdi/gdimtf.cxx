@@ -2694,7 +2694,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
         {
             // to avoid possible compiler optimizations => new/delete
             rIStm.Seek( nStmPos );
-            delete( new SVMConverter( rIStm, rGDIMetaFile, CONVERT_FROM_SVM1 ) );
+            delete new SVMConverter( rIStm, rGDIMetaFile, CONVERT_FROM_SVM1 );
         }
     }
     catch (...)
@@ -2727,7 +2727,7 @@ SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile )
         }
         else
         {
-            delete( new SVMConverter( rOStm, const_cast< GDIMetaFile& >( rGDIMetaFile ), CONVERT_TO_SVM1 ) );
+            delete new SVMConverter( rOStm, const_cast< GDIMetaFile& >( rGDIMetaFile ), CONVERT_TO_SVM1 );
         }
 
 #ifdef DEBUG

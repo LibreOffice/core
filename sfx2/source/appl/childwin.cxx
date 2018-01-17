@@ -495,8 +495,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
         return;
     }
 
-    if ( pContext )
-        delete( pContext );
+    delete pContext;
     pContext = pCon;
     pContext->GetWindow()->SetSizePixel( pWindow->GetOutputSizePixel() );
     pContext->GetWindow()->Show();

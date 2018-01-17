@@ -142,7 +142,7 @@ FmParentData::~FmParentData()
 {
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
          i != m_aChildren.end(); ++i)
-        delete (*i);
+        delete *i;
 }
 
 Image FmFormItem::GetImage() const
@@ -509,7 +509,7 @@ void FmFilterModel::Clear()
 
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
          i != m_aChildren.end(); ++i)
-        delete (*i);
+        delete *i;
 
     m_aChildren.clear();
 }

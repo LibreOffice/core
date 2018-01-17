@@ -3305,21 +3305,21 @@ void XMLShapeExport::ImpExportMediaShape(
     xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
-    delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
+    delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     bool bMute = false;
     const OUString aMuteStr(  "Mute"  );
     xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
-    delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
+    delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     sal_Int16 nVolumeDB = 0;
     const OUString aVolumeDBStr(  "VolumeDB"  );
     xPropSet->getPropertyValue("VolumeDB") >>= nVolumeDB;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aVolumeDBStr );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, OUString::number( nVolumeDB ) );
-    delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
+    delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     media::ZoomLevel eZoom;
     const OUString aZoomStr(  "Zoom"  );
@@ -3344,7 +3344,7 @@ void XMLShapeExport::ImpExportMediaShape(
     {
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aZoomStr );
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aZoomValue );
-        delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
+        delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
     }
 
 }

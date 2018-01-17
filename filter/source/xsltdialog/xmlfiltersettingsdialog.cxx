@@ -1001,7 +1001,7 @@ void XMLFilterSettingsDialog::disposeFilterList()
     std::vector< filter_info_impl* >::iterator aIter( maFilterVector.begin() );
     while( aIter != maFilterVector.end() )
     {
-        delete (*aIter++);
+        delete *aIter++;
     }
     maFilterVector.clear();
 

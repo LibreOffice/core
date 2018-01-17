@@ -735,7 +735,7 @@ void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
             pItemArr->bIsCustomized = true;
         }else if ((eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP ) {
             if (_pSet->pBrushItem) {
-                delete (_pSet->pBrushItem);
+                delete _pSet->pBrushItem;
                 _pSet->pBrushItem=nullptr;
             }
             if (aFmt.GetBrush())

@@ -617,7 +617,7 @@ bool Gallery::CreateTheme( const OUString& rThemeName )
                 false, true, 0, false );
 
         aThemeList.push_back( pNewEntry );
-        delete( new GalleryTheme( this, pNewEntry ) );
+        delete new GalleryTheme( this, pNewEntry );
         Broadcast( GalleryHint( GalleryHintType::THEME_CREATED, rThemeName ) );
         bRet = true;
     }

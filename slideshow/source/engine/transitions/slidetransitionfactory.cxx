@@ -221,7 +221,7 @@ public:
             if( ( *aIter )->mpView == rView )
             {
                 SAL_INFO("slideshow", "view removed" );
-                delete ( *aIter );
+                delete *aIter;
                 maTransitions.erase( aIter );
                 break;
             }

@@ -2657,7 +2657,7 @@ TaskManager::notifyInsert( std::vector< ContentEventNotifier* >* listeners,const
     while( it != listeners->end() )
     {
         (*it)->notifyChildInserted( aChildName );
-        delete (*it);
+        delete *it;
         ++it;
     }
     delete listeners;
@@ -2671,7 +2671,7 @@ TaskManager::notifyContentDeleted( std::vector< ContentEventNotifier* >* listene
     while( it != listeners->end() )
     {
         (*it)->notifyDeleted();
-        delete (*it);
+        delete *it;
         ++it;
     }
     delete listeners;
@@ -2686,7 +2686,7 @@ TaskManager::notifyContentRemoved( std::vector< ContentEventNotifier* >* listene
     while( it != listeners->end() )
     {
         (*it)->notifyRemoved( aChildName );
-        delete (*it);
+        delete *it;
         ++it;
     }
     delete listeners;
@@ -2724,7 +2724,7 @@ TaskManager::notifyPropertyAdded( std::vector< PropertySetInfoChangeNotifier* >*
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyAdded( aPropertyName );
-        delete (*it);
+        delete *it;
         ++it;
     }
     delete listeners;
@@ -2739,7 +2739,7 @@ TaskManager::notifyPropertyRemoved( std::vector< PropertySetInfoChangeNotifier* 
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyRemoved( aPropertyName );
-        delete (*it);
+        delete *it;
         ++it;
     }
     delete listeners;
@@ -2853,7 +2853,7 @@ TaskManager::notifyContentExchanged( std::vector< std::vector< ContentEventNotif
         while( it != listeners->end() )
         {
             (*it)->notifyExchanged();
-            delete (*it);
+            delete *it;
             ++it;
         }
         delete listeners;
@@ -2892,7 +2892,7 @@ void TaskManager::notifyPropertyChanges( std::vector< PropertyChangeNotifier* >*
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyChanged( seqChanged );
-        delete (*it);
+        delete *it;
         ++it;
     }
     delete listeners;

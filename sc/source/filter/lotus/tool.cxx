@@ -391,7 +391,7 @@ LotusRangeList::~LotusRangeList ()
 {
     std::vector<LotusRange*>::iterator pIter;
     for (pIter = maRanges.begin(); pIter != maRanges.end(); ++pIter)
-        delete (*pIter);
+        delete *pIter;
 }
 
 LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )

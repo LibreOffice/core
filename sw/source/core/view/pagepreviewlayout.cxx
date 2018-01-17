@@ -109,7 +109,7 @@ void SwPagePreviewLayout::ClearPreviewPageData()
           aPageDelIter != maPreviewPages.end();
           ++aPageDelIter )
     {
-        delete (*aPageDelIter);
+        delete *aPageDelIter;
     }
     maPreviewPages.clear();
 }

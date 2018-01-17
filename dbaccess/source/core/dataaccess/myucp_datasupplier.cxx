@@ -80,7 +80,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
     while ( it != end )
     {
-        delete (*it);
+        delete *it;
         ++it;
     }
 }

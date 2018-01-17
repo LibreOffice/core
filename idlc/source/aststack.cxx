@@ -35,7 +35,7 @@ AstStack::~AstStack()
     for(sal_uInt32 i=0; i < m_top; i++)
     {
         if (m_stack[i])
-            delete(m_stack[i]);
+            delete m_stack[i];
     }
 
     rtl_freeMemory(m_stack);

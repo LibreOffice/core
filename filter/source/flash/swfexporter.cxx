@@ -65,7 +65,7 @@ PageInfo::~PageInfo()
     const std::vector<ShapeInfo*>::iterator aEnd( maShapesVector.end() );
     while( aIter != aEnd )
     {
-        delete (*aIter++);
+        delete *aIter++;
     }
 }
 

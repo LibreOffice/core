@@ -714,7 +714,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
     if(rPaintWindow.getTemporaryTarget())
     {
         // get rid of temp target again
-        delete (&rPaintWindow);
+        delete &rPaintWindow;
     }
     else
     {

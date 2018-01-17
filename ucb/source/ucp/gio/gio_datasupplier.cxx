@@ -90,7 +90,7 @@ DataSupplier::~DataSupplier()
 
     while ( it != end )
     {
-        delete (*it);
+        delete *it;
         ++it;
     }
 }

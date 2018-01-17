@@ -549,11 +549,11 @@ void UpdateDialog::dispose()
 
     for ( std::vector< UpdateDialog::Index* >::iterator i( m_ListboxEntries.begin() ); i != m_ListboxEntries.end(); ++i )
     {
-        delete (*i);
+        delete *i;
     }
     for ( std::vector< UpdateDialog::IgnoredUpdate* >::iterator i( m_ignoredUpdates.begin() ); i != m_ignoredUpdates.end(); ++i )
     {
-        delete (*i);
+        delete *i;
     }
     m_pUpdates.disposeAndClear();
     m_pchecking.clear();

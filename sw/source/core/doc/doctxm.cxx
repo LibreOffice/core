@@ -490,7 +490,7 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
     }
     if (!prBase)
         return;
-    delete (*prBase);
+    delete *prBase;
     (*prBase) = new SwTOXBase(rBase);
 }
 
