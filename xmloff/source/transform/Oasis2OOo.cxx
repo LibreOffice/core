@@ -1634,202 +1634,202 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
         {
             if( n<MAX_OASIS_PROP_ACTIONS )
             {
-                m_aActions[n] =
-                    XMLStyleOASISTContext::CreateTransformerActions( n );
+                m_aActions[n].reset(
+                    XMLStyleOASISTContext::CreateTransformerActions( n ) );
             }
             else switch( n )
             {
             case OASIS_STYLE_ACTIONS:
-                m_aActions[OASIS_STYLE_ACTIONS] =
-                    new XMLTransformerActions( aStyleActionTable );
+                m_aActions[OASIS_STYLE_ACTIONS].reset(
+                    new XMLTransformerActions( aStyleActionTable ) );
                 break;
             case OASIS_FONT_FACE_ACTIONS:
-                m_aActions[OASIS_FONT_FACE_ACTIONS] =
-                    new XMLTransformerActions( aFontFaceActionTable );
+                m_aActions[OASIS_FONT_FACE_ACTIONS].reset(
+                    new XMLTransformerActions( aFontFaceActionTable ) );
                 break;
             case OASIS_SHAPE_ACTIONS:
-                m_aActions[OASIS_SHAPE_ACTIONS] =
-                    new XMLTransformerActions( aShapeActionTable );
+                m_aActions[OASIS_SHAPE_ACTIONS].reset(
+                    new XMLTransformerActions( aShapeActionTable ) );
                 break;
             case OASIS_CONNECTOR_ACTIONS:
-                m_aActions[OASIS_CONNECTOR_ACTIONS] =
-                    new XMLTransformerActions( aConnectorActionTable );
+                m_aActions[OASIS_CONNECTOR_ACTIONS].reset(
+                    new XMLTransformerActions( aConnectorActionTable ) );
                 break;
             case OASIS_INDEX_ENTRY_TAB_STOP_ACTIONS:
-                m_aActions[OASIS_INDEX_ENTRY_TAB_STOP_ACTIONS] =
-                    new XMLTransformerActions( aIndexEntryTabStopActionTable );
+                m_aActions[OASIS_INDEX_ENTRY_TAB_STOP_ACTIONS].reset(
+                    new XMLTransformerActions( aIndexEntryTabStopActionTable ) );
                 break;
             case OASIS_TAB_STOP_ACTIONS:
-                m_aActions[OASIS_TAB_STOP_ACTIONS] =
-                    new XMLTransformerActions( aTabStopActionTable );
+                m_aActions[OASIS_TAB_STOP_ACTIONS].reset(
+                    new XMLTransformerActions( aTabStopActionTable ) );
                 break;
             case OASIS_LINENUMBERING_ACTIONS:
-                m_aActions[OASIS_LINENUMBERING_ACTIONS] =
-                    new XMLTransformerActions( aLineNumberingActionTable );
+                m_aActions[OASIS_LINENUMBERING_ACTIONS].reset(
+                    new XMLTransformerActions( aLineNumberingActionTable ) );
                 break;
             case OASIS_FOOTNOTE_SEP_ACTIONS:
-                m_aActions[OASIS_FOOTNOTE_SEP_ACTIONS] =
-                    new XMLTransformerActions( aFootnoteSepActionTable );
+                m_aActions[OASIS_FOOTNOTE_SEP_ACTIONS].reset(
+                    new XMLTransformerActions( aFootnoteSepActionTable ) );
                 break;
             case OASIS_DROP_CAP_ACTIONS:
-                m_aActions[OASIS_DROP_CAP_ACTIONS] =
-                    new XMLTransformerActions( aDropCapActionTable );
+                m_aActions[OASIS_DROP_CAP_ACTIONS].reset(
+                    new XMLTransformerActions( aDropCapActionTable ) );
                 break;
             case OASIS_COLUMNS_ACTIONS:
-                m_aActions[OASIS_COLUMNS_ACTIONS] =
-                    new XMLTransformerActions( aColumnsActionTable );
+                m_aActions[OASIS_COLUMNS_ACTIONS].reset(
+                    new XMLTransformerActions( aColumnsActionTable ) );
                 break;
             case OASIS_TEXT_VALUE_TYPE_ACTIONS:
-                m_aActions[OASIS_TEXT_VALUE_TYPE_ACTIONS] =
-                    new XMLTransformerActions( aTextValueTypeActionTable );
+                m_aActions[OASIS_TEXT_VALUE_TYPE_ACTIONS].reset(
+                    new XMLTransformerActions( aTextValueTypeActionTable ) );
                 break;
             case OASIS_TABLE_VALUE_TYPE_ACTIONS:
-                m_aActions[OASIS_TABLE_VALUE_TYPE_ACTIONS] =
-                    new XMLTransformerActions( aTableValueTypeActionTable );
+                m_aActions[OASIS_TABLE_VALUE_TYPE_ACTIONS].reset(
+                    new XMLTransformerActions( aTableValueTypeActionTable ) );
                 break;
             case OASIS_PARA_ACTIONS:
-                m_aActions[OASIS_PARA_ACTIONS] =
-                    new XMLTransformerActions( aParaActionTable );
+                m_aActions[OASIS_PARA_ACTIONS].reset(
+                    new XMLTransformerActions( aParaActionTable ) );
                 break;
             case OASIS_LIST_STYLE_REF_ACTIONS:
-                m_aActions[OASIS_LIST_STYLE_REF_ACTIONS] =
-                    new XMLTransformerActions( aListStyleRefActionTable );
+                m_aActions[OASIS_LIST_STYLE_REF_ACTIONS].reset(
+                    new XMLTransformerActions( aListStyleRefActionTable ) );
                 break;
             case OASIS_TEXT_STYLE_REF_ACTIONS:
-                m_aActions[OASIS_TEXT_STYLE_REF_ACTIONS] =
-                    new XMLTransformerActions( aTextStyleRefActionTable );
+                m_aActions[OASIS_TEXT_STYLE_REF_ACTIONS].reset(
+                    new XMLTransformerActions( aTextStyleRefActionTable ) );
                 break;
             case OASIS_PARA_STYLE_REF_ACTIONS:
-                m_aActions[OASIS_PARA_STYLE_REF_ACTIONS] =
-                    new XMLTransformerActions( aParaStyleRefActionTable );
+                m_aActions[OASIS_PARA_STYLE_REF_ACTIONS].reset(
+                    new XMLTransformerActions( aParaStyleRefActionTable ) );
                 break;
             case OASIS_MASTER_PAGE_REF_ACTIONS:
-                m_aActions[OASIS_MASTER_PAGE_REF_ACTIONS] =
-                    new XMLTransformerActions( aMasterPageRefActionTable );
+                m_aActions[OASIS_MASTER_PAGE_REF_ACTIONS].reset(
+                    new XMLTransformerActions( aMasterPageRefActionTable ) );
                 break;
             case OASIS_MAP_STYLE_REF_ACTIONS:
-                m_aActions[OASIS_MAP_STYLE_REF_ACTIONS] =
-                    new XMLTransformerActions( aMapStyleRefActionTable );
+                m_aActions[OASIS_MAP_STYLE_REF_ACTIONS].reset(
+                    new XMLTransformerActions( aMapStyleRefActionTable ) );
                 break;
             case OASIS_MASTER_PAGE_ACTIONS:
-                m_aActions[OASIS_MASTER_PAGE_ACTIONS] =
-                    new XMLTransformerActions( aMasterPageActionTable );
+                m_aActions[OASIS_MASTER_PAGE_ACTIONS].reset(
+                    new XMLTransformerActions( aMasterPageActionTable ) );
                 break;
             case OASIS_NOTES_ACTIONS:
-                m_aActions[OASIS_NOTES_ACTIONS] =
-                    new XMLTransformerActions( aNotesActionTable );
+                m_aActions[OASIS_NOTES_ACTIONS].reset(
+                    new XMLTransformerActions( aNotesActionTable ) );
                 break;
             case OASIS_ANNOTATION_ACTIONS:
-                m_aActions[OASIS_ANNOTATION_ACTIONS] =
-                    new XMLTransformerActions( aAnnotationActionTable );
+                m_aActions[OASIS_ANNOTATION_ACTIONS].reset(
+                    new XMLTransformerActions( aAnnotationActionTable ) );
                 break;
             case OASIS_CHANGE_INFO_ACTIONS:
-                m_aActions[OASIS_CHANGE_INFO_ACTIONS] =
-                    new XMLTransformerActions( aChangeInfoActionTable );
+                m_aActions[OASIS_CHANGE_INFO_ACTIONS].reset(
+                    new XMLTransformerActions( aChangeInfoActionTable ) );
                 break;
             case OASIS_FRAME_ELEM_ACTIONS:
-                m_aActions[OASIS_FRAME_ELEM_ACTIONS] =
-                    new XMLTransformerActions( aFrameActionTable );
+                m_aActions[OASIS_FRAME_ELEM_ACTIONS].reset(
+                    new XMLTransformerActions( aFrameActionTable ) );
                 break;
             case OASIS_BACKGROUND_IMAGE_ACTIONS:
-                m_aActions[OASIS_BACKGROUND_IMAGE_ACTIONS] =
-                    new XMLTransformerActions( aBackgroundImageActionTable );
+                m_aActions[OASIS_BACKGROUND_IMAGE_ACTIONS].reset(
+                    new XMLTransformerActions( aBackgroundImageActionTable ) );
                 break;
             case OASIS_DDE_CONNECTION_DECL_ACTIONS:
-                m_aActions[OASIS_DDE_CONNECTION_DECL_ACTIONS] =
-                    new XMLTransformerActions( aDDEConnectionDeclActionTable );
+                m_aActions[OASIS_DDE_CONNECTION_DECL_ACTIONS].reset(
+                    new XMLTransformerActions( aDDEConnectionDeclActionTable ) );
                 break;
             case OASIS_EVENT_ACTIONS:
-                m_aActions[OASIS_EVENT_ACTIONS] =
-                    new XMLTransformerActions( aEventActionTable );
+                m_aActions[OASIS_EVENT_ACTIONS].reset(
+                    new XMLTransformerActions( aEventActionTable ) );
                 break;
             case OASIS_DLG_ACTIONS:
-                m_aActions[OASIS_DLG_ACTIONS] =
-                    new XMLTransformerActions( aDlgActionTable );
+                m_aActions[OASIS_DLG_ACTIONS].reset(
+                    new XMLTransformerActions( aDlgActionTable ) );
                 break;
             case OASIS_FORM_CONTROL_ACTIONS:
-                m_aActions[OASIS_FORM_CONTROL_ACTIONS] =
-                    new XMLTransformerActions( aFormControlActionTable );
+                m_aActions[OASIS_FORM_CONTROL_ACTIONS].reset(
+                    new XMLTransformerActions( aFormControlActionTable ) );
                 break;
             case OASIS_FORM_COLUMN_ACTIONS:
-                m_aActions[OASIS_FORM_COLUMN_ACTIONS] =
-                    new XMLTransformerActions( aFormColumnActionTable );
+                m_aActions[OASIS_FORM_COLUMN_ACTIONS].reset(
+                    new XMLTransformerActions( aFormColumnActionTable ) );
                 break;
             case OASIS_FORM_PROP_ACTIONS:
-                m_aActions[OASIS_FORM_PROP_ACTIONS] =
-                    new XMLTransformerActions( aFormPropActionTable );
+                m_aActions[OASIS_FORM_PROP_ACTIONS].reset(
+                    new XMLTransformerActions( aFormPropActionTable ) );
                 break;
             case OASIS_XLINK_ACTIONS:
-                m_aActions[OASIS_XLINK_ACTIONS] =
-                    new XMLTransformerActions( aXLinkActionTable );
+                m_aActions[OASIS_XLINK_ACTIONS].reset(
+                    new XMLTransformerActions( aXLinkActionTable ) );
                 break;
             case OASIS_CONFIG_ITEM_SET_ACTIONS:
-                m_aActions[OASIS_CONFIG_ITEM_SET_ACTIONS] =
-                    new XMLTransformerActions( aConfigItemSetActionTable );
+                m_aActions[OASIS_CONFIG_ITEM_SET_ACTIONS].reset(
+                    new XMLTransformerActions( aConfigItemSetActionTable ) );
                 break;
             case OASIS_FORMULA_ACTIONS:
-                m_aActions[OASIS_FORMULA_ACTIONS] =
-                    new XMLTransformerActions( aFormulaActionTable );
+                m_aActions[OASIS_FORMULA_ACTIONS].reset(
+                    new XMLTransformerActions( aFormulaActionTable ) );
                 break;
             case OASIS_CHART_ACTIONS:
-                m_aActions[OASIS_CHART_ACTIONS] =
-                    new XMLTransformerActions( aChartActionTable );
+                m_aActions[OASIS_CHART_ACTIONS].reset(
+                    new XMLTransformerActions( aChartActionTable ) );
                 break;
             case OASIS_FORM_ACTIONS:
-                m_aActions[OASIS_FORM_ACTIONS] =
-                    new XMLTransformerActions( aFormActionTable );
+                m_aActions[OASIS_FORM_ACTIONS].reset(
+                    new XMLTransformerActions( aFormActionTable ) );
                 break;
             case OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS:
-                m_aActions[OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS] =
+                m_aActions[OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS].reset(
                     new XMLTransformerActions(
-                        aAlphabeticalIndexMarkActionTable );
+                        aAlphabeticalIndexMarkActionTable ) );
                 break;
             case OASIS_CONTENT_VALIDATION_ACTIONS:
-                m_aActions[OASIS_CONTENT_VALIDATION_ACTIONS] =
-                    new XMLTransformerActions( aContentValidationActionTable );
+                m_aActions[OASIS_CONTENT_VALIDATION_ACTIONS].reset(
+                    new XMLTransformerActions( aContentValidationActionTable ) );
                 break;
             case OASIS_DDE_CONV_MODE_ACTIONS:
-                m_aActions[OASIS_DDE_CONV_MODE_ACTIONS] =
-                    new XMLTransformerActions( aDDEConvModeActionTable );
+                m_aActions[OASIS_DDE_CONV_MODE_ACTIONS].reset(
+                    new XMLTransformerActions( aDDEConvModeActionTable ) );
                 break;
             case OASIS_DATAPILOT_MEMBER_ACTIONS:
-                m_aActions[OASIS_DATAPILOT_MEMBER_ACTIONS] =
-                    new XMLTransformerActions( aDataPilotMemberActionTable );
+                m_aActions[OASIS_DATAPILOT_MEMBER_ACTIONS].reset(
+                    new XMLTransformerActions( aDataPilotMemberActionTable ) );
                 break;
             case OASIS_DATAPILOT_LEVEL_ACTIONS:
-                m_aActions[OASIS_DATAPILOT_LEVEL_ACTIONS] =
-                    new XMLTransformerActions( aDataPilotLevelActionTable );
+                m_aActions[OASIS_DATAPILOT_LEVEL_ACTIONS].reset(
+                    new XMLTransformerActions( aDataPilotLevelActionTable ) );
                 break;
             case OASIS_SOURCE_SERVICE_ACTIONS:
-                m_aActions[OASIS_SOURCE_SERVICE_ACTIONS] =
-                    new XMLTransformerActions( aSourceServiceActionTable );
+                m_aActions[OASIS_SOURCE_SERVICE_ACTIONS].reset(
+                    new XMLTransformerActions( aSourceServiceActionTable ) );
                 break;
             case OASIS_DRAW_AREA_POLYGON_ACTIONS:
-                m_aActions[OASIS_DRAW_AREA_POLYGON_ACTIONS] =
-                    new XMLTransformerActions( aShapeActionTable );
+                m_aActions[OASIS_DRAW_AREA_POLYGON_ACTIONS].reset(
+                    new XMLTransformerActions( aShapeActionTable ) );
                 m_aActions[OASIS_DRAW_AREA_POLYGON_ACTIONS]
                     ->Add( aDrawAreaPolygonActionTable );
                 break;
             case OASIS_SCRIPT_ACTIONS:
-                m_aActions[OASIS_SCRIPT_ACTIONS] =
-                    new XMLTransformerActions( aScriptActionTable );
+                m_aActions[OASIS_SCRIPT_ACTIONS].reset(
+                    new XMLTransformerActions( aScriptActionTable ) );
                 break;
             case OASIS_DATETIME_ACTIONS:
-                m_aActions[OASIS_DATETIME_ACTIONS] =
-                    new XMLTransformerActions( aDateTimeActionTable );
+                m_aActions[OASIS_DATETIME_ACTIONS].reset(
+                    new XMLTransformerActions( aDateTimeActionTable ) );
                 break;
             // Bugdoc with table won't load correctly (#i40011#, #i40015#)
             case OASIS_TABLE_STYLE_REF_ACTIONS:
-                m_aActions[OASIS_TABLE_STYLE_REF_ACTIONS] =
-                    new XMLTransformerActions( aTableStyleRefActionTable );
+                m_aActions[OASIS_TABLE_STYLE_REF_ACTIONS].reset(
+                    new XMLTransformerActions( aTableStyleRefActionTable ) );
                 break;
             case OASIS_ANIMATION_ACTIONS:
-                m_aActions[OASIS_ANIMATION_ACTIONS] =
-                    new XMLTransformerActions( aAnimationActionTable );
+                m_aActions[OASIS_ANIMATION_ACTIONS].reset(
+                    new XMLTransformerActions( aAnimationActionTable ) );
                 break;
             }
         }
-        pActions = m_aActions[n];
+        pActions = m_aActions[n].get();
     }
 
     return pActions;
@@ -1905,14 +1905,14 @@ Oasis2OOoTransformer::Oasis2OOoTransformer() throw() :
     GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
 
-    for(XMLTransformerActions* & rp : m_aActions)
-        rp = nullptr;
+    for(auto & rp : m_aActions)
+        rp.reset();
 }
 
 Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
 {
-    for(XMLTransformerActions* p : m_aActions)
-        delete p;
+    for(auto & rp : m_aActions)
+        rp.reset();
     XMLEventOASISTransformerContext::FlushEventMap( m_pEventMap );
     XMLEventOASISTransformerContext::FlushEventMap( m_pFormEventMap );
 }
