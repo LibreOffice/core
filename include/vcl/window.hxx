@@ -470,9 +470,14 @@ enum class WindowExtendedStyle {
     NONE        = 0x0000,
     Document    = 0x0001,
     DocModified = 0x0002,
+    /**
+     * This is a frame window that is requested to be hidden (not just "not yet
+     * shown").
+     */
+    DocHidden   = 0x0004,
 };
 namespace o3tl {
-    template<> struct typed_flags<WindowExtendedStyle> : is_typed_flags<WindowExtendedStyle, 0x0003> {};
+    template<> struct typed_flags<WindowExtendedStyle> : is_typed_flags<WindowExtendedStyle, 0x0007> {};
 };
 
 namespace vcl {
