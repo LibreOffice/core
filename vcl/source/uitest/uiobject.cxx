@@ -708,6 +708,10 @@ void MultiLineEditUIObject::execute(const OUString& rAction,
             mxEdit->SetSelection(aSelection);
         }
     }
+    else
+    {
+        bHandled = false;
+    }
 
     if (!bHandled)
         WindowUIObject::execute(rAction, rParameters);
