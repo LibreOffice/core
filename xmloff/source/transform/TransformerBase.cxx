@@ -175,9 +175,8 @@ XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
                                     ::xmloff::token::XMLTokenEnum *pTKMapInit )
     throw () :
     m_pNamespaceMap( new SvXMLNamespaceMap ),
-    m_pReplaceNamespaceMap( new SvXMLNamespaceMap ),
-    m_pElemActions( new XMLTransformerActions( pInit ) ),
-    m_pTokenMap( new XMLTransformerTokenMap( pTKMapInit ) )
+    m_ElemActions( pInit ),
+    m_TokenMap( pTKMapInit )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
@@ -190,10 +189,6 @@ XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
 
 XMLTransformerBase::~XMLTransformerBase() throw ()
 {
-    delete m_pNamespaceMap;
-    delete m_pReplaceNamespaceMap;
-    delete m_pElemActions;
-    delete m_pTokenMap;
 }
 
 void SAL_CALL XMLTransformerBase::startDocument()
@@ -209,7 +204,7 @@ void SAL_CALL XMLTransformerBase::endDocument()
 void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
                                          const Reference< XAttributeList >& rAttrList )
 {
-    SvXMLNamespaceMap *pRewindMap = nullptr;
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
 
     // Process namespace attributes. This must happen before creating the
     // context, because namespace declaration apply to the element name itself.
@@ -225,8 +220,8 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
         {
             if( !pRewindMap )
             {
-                pRewindMap = m_pNamespaceMap;
-                m_pNamespaceMap = new SvXMLNamespaceMap( *m_pNamespaceMap );
+                pRewindMap = std::move(m_pNamespaceMap);
+                m_pNamespaceMap.reset( new SvXMLNamespaceMap( *pRewindMap ) );
             }
             const OUString& rAttrValue = xAttrList->getValueByIndex( i );
 
@@ -247,7 +242,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
             if( XML_NAMESPACE_UNKNOWN == nKey  )
                 nKey = m_pNamespaceMap->Add( aPrefix, rAttrValue );
 
-            const OUString& rRepName = m_pReplaceNamespaceMap->GetNameByKey( nKey );
+            const OUString& rRepName = m_vReplaceNamespaceMap.GetNameByKey( nKey );
             if( !rRepName.isEmpty() )
             {
                 if( !pMutableAttrList )
@@ -269,9 +264,9 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     // If there are contexts already, call a CreateChildContext at the topmost
     // context. Otherwise, create a default context.
     ::rtl::Reference < XMLTransformerContext > xContext;
-    if( !m_pContexts.empty() )
+    if( !m_vContexts.empty() )
     {
-        xContext = m_pContexts.back()->CreateChildContext( nPrefix,
+        xContext = m_vContexts.back()->CreateChildContext( nPrefix,
                                                           aLocalName,
                                                           rName,
                                                           xAttrList );
@@ -287,10 +282,10 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 
     // Remember old namespace map.
     if( pRewindMap )
-        xContext->PutRewindMap( pRewindMap );
+        xContext->PutRewindMap( pRewindMap.release() );
 
     // Push context on stack.
-    m_pContexts.push_back( xContext );
+    m_vContexts.push_back( xContext );
 
     // Call a startElement at the new context.
     xContext->StartElement( xAttrList );
@@ -302,10 +297,10 @@ rName
 #endif
 )
 {
-    if( !m_pContexts.empty() )
+    if( !m_vContexts.empty() )
     {
         // Get topmost context
-        ::rtl::Reference< XMLTransformerContext > xContext = m_pContexts.back();
+        ::rtl::Reference< XMLTransformerContext > xContext = m_vContexts.back();
 
 #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( xContext->GetQName() == rName,
@@ -316,7 +311,7 @@ rName
         xContext->EndElement();
 
         // and remove it from the stack.
-        m_pContexts.pop_back();
+        m_vContexts.pop_back();
 
         // Get a namespace map to rewind.
         SvXMLNamespaceMap *pRewindMap = xContext->TakeRewindMap();
@@ -327,17 +322,16 @@ rName
         // Rewind a namespace map.
         if( pRewindMap )
         {
-            delete m_pNamespaceMap;
-            m_pNamespaceMap = pRewindMap;
+            m_pNamespaceMap.reset( pRewindMap );
         }
     }
 }
 
 void SAL_CALL XMLTransformerBase::characters( const OUString& rChars )
 {
-    if( !m_pContexts.empty() )
+    if( !m_vContexts.empty() )
     {
-        m_pContexts.back()->Characters( rChars );
+        m_vContexts.back()->Characters( rChars );
     }
 }
 
@@ -827,7 +821,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                 case XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY:
                     {
                         // determine, if it's the transparency of a document style
-                        XMLTransformerContext* pFirstContext = m_pContexts[0].get();
+                        XMLTransformerContext* pFirstContext = m_vContexts[0].get();
                         OUString aFirstContextLocalName;
                         /* sal_uInt16 nFirstContextPrefix = */
                             GetNamespaceMap().GetKeyByAttrName( pFirstContext->GetQName(),
@@ -1391,8 +1385,8 @@ bool XMLTransformerBase::ConvertRNGDateTimeToISO( OUString& rDateTime )
 XMLTokenEnum XMLTransformerBase::GetToken( const OUString& rStr ) const
 {
     XMLTransformerTokenMap::const_iterator aIter =
-        m_pTokenMap->find( rStr );
-    if( aIter == m_pTokenMap->end() )
+        m_TokenMap.find( rStr );
+    if( aIter == m_TokenMap.end() )
         return XML_TOKEN_END;
     else
         return (*aIter).second;
@@ -1401,20 +1395,20 @@ XMLTokenEnum XMLTransformerBase::GetToken( const OUString& rStr ) const
 
 const XMLTransformerContext *XMLTransformerBase::GetCurrentContext() const
 {
-    OSL_ENSURE( !m_pContexts.empty(), "empty stack" );
+    OSL_ENSURE( !m_vContexts.empty(), "empty stack" );
 
 
-    return m_pContexts.empty() ? nullptr : m_pContexts.back().get();
+    return m_vContexts.empty() ? nullptr : m_vContexts.back().get();
 }
 
 const XMLTransformerContext *XMLTransformerBase::GetAncestorContext(
                                                         sal_uInt32 n ) const
 {
-    auto nSize = m_pContexts.size();
+    auto nSize = m_vContexts.size();
 
     OSL_ENSURE( nSize > n + 2 , "invalid context" );
 
-    return nSize > n + 2 ? m_pContexts[nSize - (n + 2)].get() : nullptr;
+    return nSize > n + 2 ? m_vContexts[nSize - (n + 2)].get() : nullptr;
 }
 
 bool XMLTransformerBase::isWriter() const
