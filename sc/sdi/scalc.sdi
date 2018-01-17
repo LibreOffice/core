@@ -5618,6 +5618,24 @@ SfxVoidItem Validation FID_VALIDATION
 ]
 
 
+SfxVoidItem CurrentValidation FID_CURRENTVALIDATION
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
+
 ScDoubleItem Value SID_RANGE_VALUE
 
 [
