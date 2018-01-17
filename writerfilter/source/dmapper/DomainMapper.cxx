@@ -3044,13 +3044,12 @@ void DomainMapper::lcl_startParagraphGroup()
     if (!(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) == m_pImpl->GetTopContext()))
         m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
 
-    static const char sDefault[] = "Standard";
     if (m_pImpl->GetTopContext())
     {
         if (!m_pImpl->IsInShape())
         {
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( OUString(sDefault) ) );
-            m_pImpl->SetCurrentParaStyleId(sDefault);
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( OUString("Standard") ) ); //ConvertedStyleName
+            m_pImpl->SetCurrentParaStyleId("Normal"); //WW8 name
         }
         if (m_pImpl->isBreakDeferred(PAGE_BREAK))
             m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
