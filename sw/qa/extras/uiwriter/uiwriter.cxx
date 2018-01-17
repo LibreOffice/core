@@ -5651,7 +5651,9 @@ void SwUiWriterTest::testTdf115065()
 
 void SwUiWriterTest::testTdf115013()
 {
-    //create new writer document
+   const OUString sColumnName("Name with spaces, \"quotes\" and \\backslashes");
+
+   //create new writer document
     SwDoc* pDoc = createDoc();
 
     {
@@ -5667,7 +5669,7 @@ void SwUiWriterTest::testTdf115013()
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
         CPPUNIT_ASSERT(pWrtShell);
         SwDBFieldType* pFieldType = static_cast<SwDBFieldType*>(pWrtShell->InsertFieldType(
-            SwDBFieldType(pDoc, "Name", aDBData)));
+            SwDBFieldType(pDoc, sColumnName, aDBData)));
         CPPUNIT_ASSERT(pFieldType);
 
         // Insert the field into document
@@ -5690,7 +5692,7 @@ void SwUiWriterTest::testTdf115013()
     CPPUNIT_ASSERT(pField);
     OUString sColumn = static_cast<SwDBFieldType*>(pField->GetTyp())->GetColumnName();
     // The column name must come correct after round trip
-    CPPUNIT_ASSERT_EQUAL(OUString("Name"), sColumn);
+    CPPUNIT_ASSERT_EQUAL(sColumnName, sColumn);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
