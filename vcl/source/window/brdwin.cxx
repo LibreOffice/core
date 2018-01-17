@@ -36,6 +36,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -153,7 +154,7 @@ void ImplBorderWindowView::ImplInitTitle(ImplBorderFrameData* pData)
     {
         const StyleSettings& rStyleSettings = pData->mpOutDev->GetSettings().GetStyleSettings();
         if (pData->mnTitleType == BorderWindowTitleType::Tearoff)
-            pData->mnTitleHeight = rStyleSettings.GetTearOffTitleHeight();
+            pData->mnTitleHeight = ToolBox::ImplGetDragWidth(*pData->mpBorderWindow.get(), false) + 2;
         else
         {
             if (pData->mnTitleType == BorderWindowTitleType::Small)
@@ -279,6 +280,9 @@ bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
         pData->mnCloseState |= DrawButtonFlags::Highlight;
     else if ( nHitTest & BorderWindowHitTest::Menu )
         pData->mnMenuState |= DrawButtonFlags::Highlight;
+    else if ( nHitTest & BorderWindowHitTest::Title &&
+              pData->mnTitleType == BorderWindowTitleType::Tearoff && !rMEvt.IsLeaveWindow() )
+        ePtrStyle = PointerStyle::Move;
     pData->mpBorderWindow->SetPointer( Pointer( ePtrStyle ) );
 
     if( pData->mnCloseState != oldCloseState )
@@ -1310,7 +1314,8 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     if (pData->mnTitleHeight)
     {
         // to improve symbol display force a minimum title height
-        if( pData->mnTitleHeight < MIN_CAPTION_HEIGHT )
+        if (pData->mnTitleType != BorderWindowTitleType::Tearoff &&
+            pData->mnTitleHeight < MIN_CAPTION_HEIGHT)
             pData->mnTitleHeight = MIN_CAPTION_HEIGHT;
 
         // set a proper background for drawing
@@ -1418,7 +1423,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
     vcl::Region oldClipRgn(rRenderContext.GetClipRegion());
 
     // for popups, don't draw part of the frame
-    if (pData->mnTitleType >= BorderWindowTitleType::Popup)
+    if (pData->mnTitleType >= BorderWindowTitleType::Tearoff)
     {
         FloatingWindow* pWin = dynamic_cast<FloatingWindow*>(pData->mpBorderWindow->GetWindow(GetWindowType::Client));
         if (pWin)
@@ -1444,7 +1449,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
     --aInRect.Bottom();
 
     // restore
-    if (pData->mnTitleType >= BorderWindowTitleType::Popup)
+    if (pData->mnTitleType >= BorderWindowTitleType::Tearoff)
         rRenderContext.SetClipRegion(oldClipRgn);
 
     // Draw Border
@@ -1469,10 +1474,12 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
         aInRect = pData->maTitleRect;
 
         // use no gradient anymore, just a static titlecolor
-        if (pData->mnTitleType != BorderWindowTitleType::Popup)
-            rRenderContext.SetFillColor(aFrameColor);
-        else
+        if (pData->mnTitleType == BorderWindowTitleType::Tearoff)
+            rRenderContext.SetFillColor(rStyleSettings.GetFaceGradientColor());
+        else if (pData->mnTitleType == BorderWindowTitleType::Popup)
             rRenderContext.SetFillColor(aFaceColor);
+        else
+            rRenderContext.SetFillColor(aFrameColor);
 
         rRenderContext.SetTextColor(rStyleSettings.GetButtonTextColor());
         tools::Rectangle aTitleRect(pData->maTitleRect);
@@ -1509,6 +1516,11 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
             pData->mbTitleClipped = aInfo.IsEllipses();
 
             rRenderContext.DrawText(aInRect, pBorderWindow->GetText(), nTextStyle);
+        }
+        else
+        {
+            ToolBox::ImplDrawGrip(rRenderContext, aTitleRect, ToolBox::ImplGetDragWidth(rRenderContext, false),
+                                  WindowAlign::Left, false);
         }
     }
 

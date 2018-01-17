@@ -483,8 +483,6 @@ public:
     void                            SetFloatTitleHeight( long nSize );
     long                            GetFloatTitleHeight() const;
 
-    long                            GetTearOffTitleHeight() const;
-
     void                            SetScrollBarSize( long nSize );
     long                            GetScrollBarSize() const;
 
