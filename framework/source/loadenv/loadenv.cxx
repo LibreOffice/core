@@ -84,6 +84,7 @@
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <classes/taskcreator.hxx>
 
 const char PROP_TYPES[] = "Types";
 const char PROP_NAME[] = "Name";
@@ -985,7 +986,8 @@ bool LoadEnv::impl_loadContent()
         {
             if (! impl_furtherDocsAllowed())
                 return false;
-            m_xTargetFrame       = m_xBaseFrame->findFrame(SPECIALTARGET_BLANK, 0);
+            TaskCreator aCreator(m_xContext);
+            m_xTargetFrame = aCreator.createTask(SPECIALTARGET_BLANK, m_lMediaDescriptor);
             m_bCloseFrameOnError = m_xTargetFrame.is();
         }
         else

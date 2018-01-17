@@ -129,6 +129,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(ARGUMENT_CONTAINERWINDOW              , css::uno::Reference< css::awt::XWindow >() );
     bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE , false );
     bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(ARGUMENT_ENABLE_TITLEBARUPDATE        , true );
+    // If the frame is explicitly requested to be hidden.
+    bool bHidden = lArgs.getUnpackedValueOrDefault("Hidden", false);
 
     // We use FrameName property to set it as API name of the new created frame later.
     // But those frame names must be different from the set of special target names as e.g. _blank, _self etcpp !
@@ -167,6 +169,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     //------------------->
 
     // create the new frame
+    VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+    if (pContainerWindow && bHidden)
+    {
+        WindowExtendedStyle eStyle = pContainerWindow->GetExtendedStyle();
+        eStyle |= WindowExtendedStyle::DocHidden;
+        pContainerWindow->SetExtendedStyle(eStyle);
+    }
     css::uno::Reference< css::frame::XFrame2 > xFrame = implts_createFrame(xParentFrame, xContainerWindow, sRightName);
 
     // special freature:
