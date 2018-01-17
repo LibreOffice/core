@@ -548,7 +548,7 @@ def generate_multi_threading():
 
         # Create a job for every mimetype for a bugzilla
         for (mimetype,extension) in mimetypes.items():
-            # It seems that bugzilla has problems returing that many results
+            # It seems that bugzilla has problems returning that many results
             # (10000 results is probably a limit set somewhere) so we always
             # end processing the complete list.
             if mimetype == 'text/html' and prefix == 'moz':

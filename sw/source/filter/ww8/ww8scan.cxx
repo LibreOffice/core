@@ -2647,7 +2647,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
                                 if (aEntry.mnLen >= 6)
                                 {
                                     aEntry.mnLen-=6; //PHE
-                                    //skipi stc, len byte + 6 byte PHE
+                                    //skip stc, len byte + 6 byte PHE
                                     unsigned int nOffset = nOfs + 8;
                                     if (nOffset >= 511) //Bad offset
                                         aEntry.mnLen=0;
