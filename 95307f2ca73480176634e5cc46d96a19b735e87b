@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_75db21ee",
+        "filename": "test/source/sheet/spreadsheetviewsettings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-17T15:57:40Z",
+      "side": 1,
+      "message": "where does that value 116 come from?  my Windows builds keep failing because they produce 230 instead (and the original Java test doesn\u0027t appear to have checked for 116, either)",
+      "revId": "95307f2ca73480176634e5cc46d96a19b735e87b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
