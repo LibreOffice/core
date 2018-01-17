@@ -50,7 +50,7 @@ XMLEventImportHelper::~XMLEventImportHelper()
     aFactoryMap.clear();
 
     // delete name map
-    delete pEventNameMap;
+    pEventNameMap.reset();
 }
 
 void XMLEventImportHelper::RegisterFactory(
@@ -91,8 +91,8 @@ void XMLEventImportHelper::AddTranslationTable(
 void XMLEventImportHelper::PushTranslationTable()
 {
     // save old map and install new one
-    aEventNameMapVector.push_back(pEventNameMap);
-    pEventNameMap = new NameMap;
+    aEventNameMapVector.push_back(std::move(pEventNameMap));
+    pEventNameMap.reset( new NameMap );
 }
 
 void XMLEventImportHelper::PopTranslationTable()
@@ -102,8 +102,7 @@ void XMLEventImportHelper::PopTranslationTable()
     if ( !aEventNameMapVector.empty() )
     {
         // delete current and install old map
-        delete pEventNameMap;
-        pEventNameMap = aEventNameMapVector.back();
+        pEventNameMap = std::move(aEventNameMapVector.back());
         aEventNameMapVector.pop_back();
     }
 }
