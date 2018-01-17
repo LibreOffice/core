@@ -53,8 +53,7 @@ typedef ::std::map< OUString, OUString> StringPairMap_t;
 
 
 StyleSheetEntry::StyleSheetEntry() :
-        sStyleIdentifierI()
-        ,sStyleIdentifierD()
+        sStyleIdentifierD()
         ,bIsDefaultStyle(false)
         ,bIsChapterNumbering(false)
         ,bInvalidHeight(false)
@@ -83,7 +82,6 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry ):
     sNextStyleIdentifier = rEntry.sNextStyleIdentifier;
     sStyleName = rEntry.sStyleName;
     sStyleName1 = rEntry.sStyleName1;
-    sStyleIdentifierI = rEntry.sStyleIdentifierI;
     sStyleIdentifierD = rEntry.sStyleIdentifierD;
 }
 
@@ -152,7 +150,7 @@ beans::PropertyValues StyleSheetEntry::GetInteropGrabBagSeq()
 beans::PropertyValue StyleSheetEntry::GetInteropGrabBag()
 {
     beans::PropertyValue aRet;
-    aRet.Name = sStyleIdentifierI;
+    aRet.Name = sStyleIdentifierD;
 
     beans::PropertyValues aSeq = GetInteropGrabBagSeq();
     aRet.Value <<= aSeq;
@@ -477,7 +475,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_Style_styleId:
-            m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = sValue;
             if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
             {
