@@ -60,7 +60,6 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_eDockOperation( DOCKOP_ON_COLROW ),
     m_ePreviewDetection( PREVIEWFRAME_UNKNOWN ),
     m_pAddonOptions( nullptr ),
-    m_pGlobalSettings( nullptr ),
     m_bComponentAttached( false ),
     m_bLayoutDirty( false ),
     m_bGlobalSettings( false ),
@@ -75,8 +74,8 @@ ToolbarLayoutManager::ToolbarLayoutManager(
 
 ToolbarLayoutManager::~ToolbarLayoutManager()
 {
-    delete m_pGlobalSettings;
-    delete m_pAddonOptions;
+    m_pGlobalSettings.reset();
+    m_pAddonOptions.reset();
 }
 
 //  XInterface
@@ -1079,7 +1078,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
 {
     SolarMutexClearableGuard aWriteLock;
     if ( !m_pAddonOptions )
-        m_pAddonOptions = new AddonsOptions;
+        m_pAddonOptions.reset( new AddonsOptions );
 
     uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
     uno::Reference< frame::XFrame > xFrame( m_xFrame );

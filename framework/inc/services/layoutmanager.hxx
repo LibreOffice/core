@@ -165,7 +165,7 @@ namespace framework
             /// Reading of settings - shared with ToolbarLayoutManager.
             static bool readWindowStateData( const OUString& rName, UIElement& rElementData,
                     const css::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
-                    GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
+                    std::unique_ptr<GlobalSettings> &rGlobalSettings, bool &bInGlobalSettings,
                     const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
 
         private:
@@ -269,7 +269,7 @@ namespace framework
             css::uno::Reference< css::ui::XUIElementFactoryManager >       m_xUIElementFactoryManager;
             css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowStateSupplier;
-            GlobalSettings*                                                m_pGlobalSettings;
+            std::unique_ptr<GlobalSettings>                                m_pGlobalSettings;
             OUString                                                       m_aModuleIdentifier;
             Timer                                                          m_aAsyncLayoutTimer;
             ::cppu::OMultiTypeInterfaceContainerHelper                     m_aListenerContainer; // container for ALL Listener
