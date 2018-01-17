@@ -2546,7 +2546,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 OUString sStyleName;
                 pParagraphProps->getProperty(PROP_PARA_STYLE_NAME)->second >>= sStyleName;
                 if( !sStyleName.isEmpty() && GetStyleSheetTable() )
-                    pStyle = GetStyleSheetTable()->FindStyleSheetByStyleName( sStyleName );
+                    pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( sStyleName );
 
                 if( pStyle && pStyle->pProperties
                     && pStyle->pProperties->isSet(PROP_BREAK_TYPE)
