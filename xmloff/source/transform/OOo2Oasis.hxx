@@ -35,7 +35,7 @@ class OOo2OasisTransformer :
     OUString m_aImplName;
     OUString m_aSubServiceName;
 
-    XMLTransformerActions       *m_aActions[MAX_OOO_ACTIONS];
+    std::unique_ptr<XMLTransformerActions> m_aActions[MAX_OOO_ACTIONS];
     XMLTransformerOOoEventMap_Impl *m_pEventMap;
 protected:
 
