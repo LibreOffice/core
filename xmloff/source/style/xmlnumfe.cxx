@@ -229,17 +229,17 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( pFormatter )
     {
-        pCharClass = new CharClass( pFormatter->GetComponentContext(),
-            pFormatter->GetLanguageTag() );
-        pLocaleData = new LocaleDataWrapper( pFormatter->GetComponentContext(),
-            pFormatter->GetLanguageTag() );
+        pCharClass.reset( new CharClass( pFormatter->GetComponentContext(),
+            pFormatter->GetLanguageTag() ) );
+        pLocaleData.reset( new LocaleDataWrapper( pFormatter->GetComponentContext(),
+            pFormatter->GetLanguageTag() ) );
     }
     else
     {
         LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
 
-        pCharClass = new CharClass( rExport.getComponentContext(), aLanguageTag );
-        pLocaleData = new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag );
+        pCharClass.reset( new CharClass( rExport.getComponentContext(), aLanguageTag ) );
+        pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag ) );
     }
 
     pUsedList.reset(new SvXMLNumUsedList_Impl);
@@ -263,17 +263,17 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( pFormatter )
     {
-        pCharClass = new CharClass( pFormatter->GetComponentContext(),
-            pFormatter->GetLanguageTag() );
-        pLocaleData = new LocaleDataWrapper( pFormatter->GetComponentContext(),
-            pFormatter->GetLanguageTag() );
+        pCharClass.reset( new CharClass( pFormatter->GetComponentContext(),
+            pFormatter->GetLanguageTag() ) );
+        pLocaleData.reset( new LocaleDataWrapper( pFormatter->GetComponentContext(),
+            pFormatter->GetLanguageTag() ) );
     }
     else
     {
         LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
 
-        pCharClass = new CharClass( rExport.getComponentContext(), aLanguageTag );
-        pLocaleData = new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag );
+        pCharClass.reset( new CharClass( rExport.getComponentContext(), aLanguageTag ) );
+        pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag ) );
     }
 
     pUsedList.reset(new SvXMLNumUsedList_Impl);
@@ -281,8 +281,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
 SvXMLNumFmtExport::~SvXMLNumFmtExport()
 {
-    delete pLocaleData;
-    delete pCharClass;
 }
 
 //  helper methods
