@@ -16,6 +16,24 @@
       "revId": "b2e0b4339a288782cbefa19eee4283948750d1a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_58cf34b0",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-17T20:15:29Z",
+      "side": 1,
+      "message": "good point, addressed separately in I0fe7029991052a59ee56cef1897cf6688bfa24b9",
+      "parentUuid": "fa31d9ce_c2817191",
+      "revId": "b2e0b4339a288782cbefa19eee4283948750d1a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
