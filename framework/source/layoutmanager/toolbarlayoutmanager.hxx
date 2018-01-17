@@ -277,8 +277,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         DockingOperation                                                     m_eDockOperation;
         PreviewFrameDetection                                                m_ePreviewDetection;
 
-        AddonsOptions*                                                       m_pAddonOptions;
-        GlobalSettings*                                                      m_pGlobalSettings;
+        std::unique_ptr<AddonsOptions>                                       m_pAddonOptions;
+        std::unique_ptr<GlobalSettings>                                      m_pGlobalSettings;
 
         bool                                                                 m_bComponentAttached;
         bool                                                                 m_bLayoutDirty;

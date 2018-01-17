@@ -152,7 +152,7 @@ LayoutManager::~LayoutManager()
 {
     m_aAsyncLayoutTimer.Stop();
     setDockingAreaAcceptor(nullptr);
-    delete m_pGlobalSettings;
+    m_pGlobalSettings.reset();
 }
 
 // Internal helper function
@@ -472,7 +472,7 @@ bool LayoutManager::implts_readWindowStateData( const OUString& aName, UIElement
 
 bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElementData,
         const Reference< XNameAccess > &rPersistentWindowState,
-        GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
+        std::unique_ptr<GlobalSettings> &rGlobalSettings, bool &bInGlobalSettings,
         const Reference< XComponentContext > &rComponentContext )
 {
     if ( rPersistentWindowState.is() )
@@ -484,10 +484,10 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
         GlobalSettings* pGlobalSettings( nullptr );
         if ( rGlobalSettings == nullptr )
         {
-            rGlobalSettings = new GlobalSettings( rComponentContext );
+            rGlobalSettings.reset( new GlobalSettings( rComponentContext ) );
             bGetSettingsState = true;
         }
-        pGlobalSettings = rGlobalSettings;
+        pGlobalSettings = rGlobalSettings.get();
         aWriteLock.clear();
 
         try
@@ -2776,8 +2776,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
         m_xDocCfgMgr.clear();
         m_xModuleCfgMgr.clear();
         m_xFrame.clear();
-        delete m_pGlobalSettings;
-        m_pGlobalSettings = nullptr;
+        m_pGlobalSettings.reset();
 
         bDisposeAndClear = true;
     }
