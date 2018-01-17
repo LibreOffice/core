@@ -53,8 +53,7 @@ class StyleSheetEntry
 {
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 public:
-    OUString sStyleIdentifierI;
-    OUString sStyleIdentifierD;
+    OUString sStyleIdentifierD;   // WW8 name
     bool            bIsDefaultStyle;
     bool            bInvalidHeight;
     bool            bHasUPE; //universal property expansion
