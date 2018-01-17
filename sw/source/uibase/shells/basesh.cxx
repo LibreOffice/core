@@ -2450,6 +2450,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
                 rTempView.GetDocShell()->FormatPage(rPageDesc.GetName(), sPageId, rSh, &rReq);
                 rTempView.InvalidateRulerPos();
+
+                bDone = true; // FormatPage() takes care of calling Done()
             }
         }
         break;

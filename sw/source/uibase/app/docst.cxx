@@ -322,15 +322,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             if (sName.isEmpty() && m_xBasePool.get())
                 sName = SfxStyleDialog::GenerateUnusedName(*m_xBasePool);
 
-            Edit(sName, sParent, nFamily, nMask, true, OString(), nullptr, &rReq);
-
-            // Update Watermark if new page style was created
-            if( nFamily == SfxStyleFamily::Page )
-            {
-                SwWrtShell* pShell = GetWrtShell();
-                const SfxWatermarkItem aWatermark = pShell->GetWatermark();
-                pShell->SetWatermark( aWatermark );
-            }
+            Edit(sName, sParent, nFamily, nMask, true, OString(), nullptr, &rReq, nSlot);
         }
         break;
 
@@ -657,10 +649,11 @@ void SwDocShell::Edit(
     const bool bNew,
     const OString& sPage,
     SwWrtShell* pActShell,
-    SfxRequest* pRequest)
+    SfxRequest* pReq,
+    sal_uInt16 nSlot)
 {
     assert( GetWrtShell() );
-    const bool bBasic = pRequest && pRequest->IsAPI();
+    const bool bBasic = pReq && pReq->IsAPI();
     SfxStyleSheetBase *pStyle = nullptr;
 
     bool bModified = m_xDoc->getIDocumentState().IsModified();
@@ -830,36 +823,52 @@ void SwDocShell::Edit(
                                                     *(xTmp.get()), nFamily, sPage,
                                                     pActShell ? pActShell : m_pWrtShell, bNew));
         assert( pDlg );
-        ApplyStyle aApplyStyleHelper(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified);
-        pDlg->SetApplyHdl(LINK(&aApplyStyleHelper, ApplyStyle, ApplyHdl));
+        std::shared_ptr<ApplyStyle> pApplyStyleHelper(new ApplyStyle(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified));
+        pDlg->SetApplyHdl(LINK(pApplyStyleHelper.get(), ApplyStyle, ApplyHdl));
 
-        short nDlgRet = pDlg->Execute();
-
-        if (RET_OK == nDlgRet)
+        std::shared_ptr<SfxRequest> pRequest;
+        if (pReq)
         {
-            aApplyStyleHelper.apply();
+            pRequest.reset(new SfxRequest(*pReq));
+            pReq->Ignore(); // the 'old' request is not relevant any more
         }
 
-        if (bNew)
-        {
-            SwRewriter aRewriter;
-            aRewriter.AddRule(UndoArg1, xTmp->GetName());
-            //Group the create style and change style operations together under the
-            //one "create style" comment
-            m_pWrtShell->EndUndo(nNewStyleUndoId, &aRewriter);
-        }
+        pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+            if (RET_OK == nResult)
+                pApplyStyleHelper->apply();
 
-        if (RET_OK != nDlgRet)
-        {
-            if( bNew )
+            if (bNew)
             {
-                GetWrtShell()->Undo();
-                m_xDoc->GetIDocumentUndoRedo().ClearRedo();
+                SwRewriter aRewriter;
+                aRewriter.AddRule(UndoArg1, xTmp->GetName());
+                //Group the create style and change style operations together under the
+                //one "create style" comment
+                m_pWrtShell->EndUndo(nNewStyleUndoId, &aRewriter);
             }
 
-            if( !bModified )
-                m_xDoc->getIDocumentState().ResetModified();
-        }
+            if (RET_OK != nResult)
+            {
+                if (bNew)
+                {
+                    GetWrtShell()->Undo();
+                    m_xDoc->GetIDocumentUndoRedo().ClearRedo();
+                }
+
+                if (!bModified)
+                    m_xDoc->getIDocumentState().ResetModified();
+            }
+
+            // Update Watermark if new page style was created
+            if (nSlot == SID_STYLE_NEW && nFamily == SfxStyleFamily::Page)
+            {
+                SwWrtShell* pShell = GetWrtShell();
+                const SfxWatermarkItem aWatermark = pShell->GetWatermark();
+                pShell->SetWatermark(aWatermark);
+            }
+
+            if (pRequest)
+                pRequest->Done();
+        }, pDlg);
     }
     else
     {
