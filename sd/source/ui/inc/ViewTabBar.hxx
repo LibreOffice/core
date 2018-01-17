@@ -111,7 +111,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
     /** The returned value is calculated as the difference between the
-        total height of the control and the heigh of its first tab page.
+        total height of the control and the height of its first tab page.
         This can be considered a hack.
         This procedure works only when the control is visible.  Calling this
         method when the control is not visible results in returning a

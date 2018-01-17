@@ -729,7 +729,7 @@ private:
     SAL_DLLPRIVATE tools::Rectangle     ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
 
-    // retrieves the list of owner draw decorated windows for this window hiearchy
+    // retrieves the list of owner draw decorated windows for this window hierarchy
     SAL_DLLPRIVATE ::std::vector<VclPtr<vcl::Window> >& ImplGetOwnerDrawList();
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow();
@@ -1006,7 +1006,7 @@ public:
 
     @param bCall
     Enable/Disable calling event handlers for this disabled, modal or input disabled window.
-    This call is implicity done recursively for possible child windows.
+    This call is implicitly done recursively for possible child windows.
     */
     void                                SetCallHandlersOnInputDisabled( bool bCall );
     /** get state of SetCallHandlersOnInputDisabled

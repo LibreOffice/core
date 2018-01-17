@@ -1250,7 +1250,7 @@ static sal_Int32 lcl_ExportFrames(
 
     // find first Frame in (sorted) i_rFrames at current position
     while (!i_rFrames.empty() && (i_rFrames.front().nIndex == i_nCurrentIndex))
-    // do not check for i_nEnd here; this is done implicity by lcl_MoveCursor
+    // do not check for i_nEnd here; this is done implicitly by lcl_MoveCursor
     {
         const SwModify * const pFrame =
             i_rFrames.front().pFrameClient->GetRegisteredIn();

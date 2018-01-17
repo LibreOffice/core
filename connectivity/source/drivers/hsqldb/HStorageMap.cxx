@@ -55,7 +55,7 @@ namespace connectivity
                     m_xInputStream->closeInput();
                     m_xInputStream.clear();
                 }
-                // this is done implicity by the closing of the input stream
+                // this is done implicitly by the closing of the input stream
                 else if ( m_xOutputStream.is() )
                 {
                     m_xOutputStream->closeOutput();
