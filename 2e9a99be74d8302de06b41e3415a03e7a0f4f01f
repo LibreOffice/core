@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_786878bb",
+        "filename": "svtools/source/control/valueacc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-17T19:23:36Z",
+      "side": 1,
+      "message": "or here",
+      "revId": "2e9a99be74d8302de06b41e3415a03e7a0f4f01f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_5873b4b1",
+        "filename": "svtools/source/control/valueacc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-17T19:23:36Z",
+      "side": 1,
+      "message": "I don\u0027t think this constructor call is necessary here",
+      "revId": "2e9a99be74d8302de06b41e3415a03e7a0f4f01f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
