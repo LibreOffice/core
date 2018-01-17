@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c206d11f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-17T07:04:17Z",
+      "side": 1,
+      "message": "The header should tell what the patch does, not the previous state. Better use \"Open Start Center on Quickstarter left-click\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 69
+      },
+      "revId": "ad2c45f6ab44f4a210eee37cb6a1ad616192fe1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
