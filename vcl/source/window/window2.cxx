@@ -856,7 +856,7 @@ void Window::EnableDocking( bool bEnable )
         ImplGetDockingManager()->RemoveWindow( this );
 }
 
-// retrieves the list of owner draw decorated windows for this window hiearchy
+// retrieves the list of owner draw decorated windows for this window hierarchy
 ::std::vector<VclPtr<vcl::Window> >& Window::ImplGetOwnerDrawList()
 {
     return ImplGetTopmostFrameWindow()->mpWindowImpl->mpFrameData->maOwnerDrawList;

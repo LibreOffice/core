@@ -122,7 +122,7 @@ void XMLLineNumberingExport::Export()
                                      sBuf.makeStringAndClear());
             }
 
-            // NumeringType
+            // NumberingType
             OUStringBuffer sNumPosBuf;
             aAny = xLineNumbering->getPropertyValue("NumberingType");
             sal_Int16 nFormat = 0;
