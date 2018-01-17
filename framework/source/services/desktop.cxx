@@ -967,7 +967,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator( m_xContext );
-        xTarget = aCreator.createTask(sTargetFrameName);
+        xTarget = aCreator.createTask(sTargetFrameName, utl::MediaDescriptor());
     }
 
     // I.II) "_top"
@@ -1051,7 +1051,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
            )
         {
             TaskCreator aCreator( m_xContext );
-            xTarget = aCreator.createTask(sTargetFrameName);
+            xTarget = aCreator.createTask(sTargetFrameName, utl::MediaDescriptor());
         }
     }
 

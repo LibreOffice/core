@@ -57,7 +57,7 @@ TaskCreator::~TaskCreator()
 /*-****************************************************************************************************
     TODO document me
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName )
+css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor )
 {
     css::uno::Reference< css::lang::XSingleServiceFactory > xCreator;
     OUString sCreator = IMPLEMENTATIONNAME_FWK_TASKCREATOR;
@@ -86,7 +86,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     if ( ! xCreator.is())
         xCreator = css::frame::TaskCreator::create(m_xContext);
 
-    css::uno::Sequence< css::uno::Any > lArgs(5);
+    css::uno::Sequence< css::uno::Any > lArgs(6);
     css::beans::NamedValue              aArg;
 
     aArg.Name    = ARGUMENT_PARENTFRAME;
@@ -108,6 +108,12 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     aArg.Name    = ARGUMENT_FRAMENAME;
     aArg.Value <<= sName;
     lArgs[4]   <<= aArg;
+
+    bool bHidden
+        = rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
+    aArg.Name = "Hidden";
+    aArg.Value <<= bHidden;
+    lArgs[5] <<= aArg;
 
     css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     return xTask;
