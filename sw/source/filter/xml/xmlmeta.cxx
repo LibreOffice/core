@@ -146,7 +146,7 @@ void SwXMLImport::SetStatistics(
     // guesstimate PROGRESS_BAR_STEPS each for meta+settings, styles,
     // and autostyles.
     bool bSetFallback = true;
-    sal_Int32 nProgressReference;
+    sal_Int32 nProgressReference = sal_Int32(); // silence C4701
     if (nTokens & XML_TOK_META_STAT_PARA)
     {
         nProgressReference = static_cast<sal_Int32>(aDocStat.nPara);
