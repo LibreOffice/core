@@ -44,9 +44,6 @@ public:
 
     CPPUNIT_TEST_SUITE(ScTabViewObj);
 
-    // SpreadsheetViewSettings
-    CPPUNIT_TEST(testSpreadsheetViewSettingsProperties);
-
     // XSpreadsheetView
     CPPUNIT_TEST(testGetSetActiveSheet);
 
@@ -55,6 +52,9 @@ public:
 
     // XViewSplitable
     CPPUNIT_TEST(testSplit);
+
+    // SpreadsheetViewSettings
+    CPPUNIT_TEST(testSpreadsheetViewSettingsProperties);
 
     CPPUNIT_TEST_SUITE_END();
 
