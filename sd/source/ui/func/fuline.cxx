@@ -60,44 +60,54 @@ rtl::Reference<FuPoor> FuLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuLine::DoExecute( SfxRequest& rReq )
 {
-    bool        bHasMarked = mpView->AreObjectsMarked();
+    rReq.Ignore();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
-
-    if( !pArgs )
+    if (pArgs)
     {
-        const SdrObject* pObj = nullptr;
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        if( rMarkList.GetMarkCount() == 1 )
-            pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-        std::unique_ptr<SfxItemSet> pNewAttr(new SfxItemSet( mpDoc->GetPool() ));
-        mpView->GetAttributes( *pNewAttr );
-
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(nullptr,pNewAttr.get(),mpDoc,pObj,bHasMarked) : nullptr);
-        if( pDlg && (pDlg->Execute() == RET_OK) )
-        {
-            mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
-        }
-
-        // some attributes are changed, we have to update the listboxes in the objectbars
-        static sal_uInt16 SidArray[] = {
-            SID_ATTR_LINE_STYLE,                // ( SID_SVX_START + 169 )
-            SID_ATTR_LINE_DASH,                 // ( SID_SVX_START + 170 )
-            SID_ATTR_LINE_WIDTH,                // ( SID_SVX_START + 171 )
-            SID_ATTR_LINE_COLOR,                // ( SID_SVX_START + 172 )
-            SID_ATTR_LINE_START,                // ( SID_SVX_START + 173 )
-            SID_ATTR_LINE_END,                  // ( SID_SVX_START + 174 )
-            SID_ATTR_LINE_TRANSPARENCE,         // (SID_SVX_START+1107)
-            SID_ATTR_LINE_JOINT,                // (SID_SVX_START+1110)
-            SID_ATTR_LINE_CAP,                  // (SID_SVX_START+1111)
-            0 };
-
-        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        mpViewShell->Cancel();
+        return;
     }
 
-    rReq.Ignore ();
+    const SdrObject* pObj = nullptr;
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 1 )
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+    std::unique_ptr<SfxItemSet> pNewAttr(new SfxItemSet( mpDoc->GetPool() ));
+    mpView->GetAttributes( *pNewAttr );
+
+    bool bHasMarked = mpView->AreObjectsMarked();
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(nullptr,pNewAttr.get(),mpDoc,pObj,bHasMarked) : nullptr);
+    if (!pDlg)
+    {
+        mpViewShell->Cancel();
+        return;
+    }
+
+    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        if (nResult == RET_OK)
+        {
+            mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
+
+            // some attributes are changed, we have to update the listboxes in the objectbars
+            static const sal_uInt16 SidArray[] = {
+                SID_ATTR_LINE_STYLE,                // ( SID_SVX_START + 169 )
+                SID_ATTR_LINE_DASH,                 // ( SID_SVX_START + 170 )
+                SID_ATTR_LINE_WIDTH,                // ( SID_SVX_START + 171 )
+                SID_ATTR_LINE_COLOR,                // ( SID_SVX_START + 172 )
+                SID_ATTR_LINE_START,                // ( SID_SVX_START + 173 )
+                SID_ATTR_LINE_END,                  // ( SID_SVX_START + 174 )
+                SID_ATTR_LINE_TRANSPARENCE,         // (SID_SVX_START+1107)
+                SID_ATTR_LINE_JOINT,                // (SID_SVX_START+1110)
+                SID_ATTR_LINE_CAP,                  // (SID_SVX_START+1111)
+                0 };
+
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        }
+        mpViewShell->Cancel();
+    }, pDlg);
 }
 
 void FuLine::Activate()
