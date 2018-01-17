@@ -20,6 +20,9 @@
 #include <math.h>
 
 #if defined(ANDROID)
+#include <string>
+#include <sstream>
+
 namespace std
 {
 
