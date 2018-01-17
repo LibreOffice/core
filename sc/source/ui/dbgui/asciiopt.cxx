@@ -302,7 +302,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         bQuotedFieldAsText = aToken.EqualsAscii("true") ? true : false;
     }
 
-    // Detect special nubmers.
+    // Detect special numbers.
     if (nCount >= 8)
     {
         aToken = rString.GetToken(7, ',');
@@ -396,7 +396,7 @@ String ScAsciiOptions::WriteToString() const
     aOutStr += String::CreateFromAscii(bQuotedFieldAsText ? "true" : "false");
     aOutStr += ',';
 
-    // Detect special nubmers.
+    // Detect special numbers.
     aOutStr += String::CreateFromAscii(bDetectSpecialNumber ? "true" : "false");
 
     // 9th token is used for "Save as shown" in export options
