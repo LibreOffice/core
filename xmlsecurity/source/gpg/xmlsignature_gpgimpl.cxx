@@ -425,8 +425,8 @@ SAL_CALL XMLSignature_GpgImpl::validate(
             xmlFree(pKeyPacket);
 
             // and re-run (rewind text and signature streams to position 0)
-            data_text.seek(0,SEEK_SET);
-            data_signature.seek(0,SEEK_SET);
+            (void)data_text.seek(0,SEEK_SET);
+            (void)data_signature.seek(0,SEEK_SET);
             verify_res=rCtx.verifyDetachedSignature(data_signature, data_text);
 
             // TODO: needs some more error handling, needs checking _all_ signatures
