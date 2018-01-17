@@ -1381,8 +1381,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_TRANSFORM:
         {
             SetCurrentFunction( FuTransform::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-            Invalidate(SID_RULER_OBJECT);
-            Cancel();
+            // Cancel() and Invalidate() called directly in FuTransform::Create()
         }
         break;
 
