@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_95797532",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-01-17T12:51:10Z",
+      "side": 1,
+      "message": "Note that sdi files aren\u0027t good indication here, as nowadays the types specified there are only about the slot type used for status updates (for both property and method slots).",
+      "revId": "bca443a14d1787d812b90bede0a0d000434f71c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
