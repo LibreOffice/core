@@ -427,7 +427,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
     aPos = pW->AbsoluteScreenToOutputPixel( aPos );
 
     // store a cliprect that can be used to clip the common edge of the itemrect and the floating window
-    if( pFloatingWindow )
+    if( pFloatingWindow && pFloatingWindow->mpImplData->mpBox )
     {
         pFloatingWindow->mpImplData->maItemEdgeClipRect =
             tools::Rectangle( e1, e2 );
