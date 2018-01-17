@@ -867,6 +867,7 @@ void ImportExcel::Shrfmla()
 
     ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, *pErgebnis);
     pCell->GetCode()->WrapReference(aPos, EXC_MAXCOL8, EXC_MAXROW8);
+    rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());
     rDoc.getDoc().EnsureTable(aPos.Tab());
     rDoc.setFormulaCell(aPos, pCell);
     pCell->SetNeedNumberFormat(false);
