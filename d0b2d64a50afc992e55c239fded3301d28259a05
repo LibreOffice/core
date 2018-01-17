@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f8e8e818",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-17T20:02:14Z",
+      "side": 1,
+      "message": "seems weird and inefficient to hold these via shared_ptr when they already have an embedded ref count",
+      "revId": "d0b2d64a50afc992e55c239fded3301d28259a05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
