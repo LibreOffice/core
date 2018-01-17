@@ -55,7 +55,7 @@ class SwPageNumAndTypeOfAnchors
             for ( std::vector< tEntry* >::iterator aIter = maObjList.begin();
                   aIter != maObjList.end(); ++aIter )
             {
-                delete (*aIter);
+                delete *aIter;
             }
             maObjList.clear();
         }

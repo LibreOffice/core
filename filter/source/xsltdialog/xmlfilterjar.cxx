@@ -284,7 +284,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                         else
                         {
                             // failed to copy all files
-                            delete (*aIter);
+                            delete *aIter;
                         }
                         ++aIter;
                     }

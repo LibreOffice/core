@@ -76,13 +76,13 @@ void TypeDetectionImporter::fillFilterVector(  XMLFilterVector& rFilters )
         if( pFilter )
             rFilters.push_back( pFilter );
 
-        delete (*aIter++);
+        delete *aIter++;
     }
 
     // now delete type nodes
     aIter = maTypeNodes.begin();
     while( aIter != maTypeNodes.end() )
-        delete (*aIter++);
+        delete *aIter++;
 }
 
 static OUString getSubdata( int index, sal_Unicode delimiter, const OUString& rData )

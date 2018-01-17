@@ -99,7 +99,7 @@ void MQueryHelper::clear_results()
 {
     resultsArray::iterator iter = m_aResults.begin();
     while ( iter != m_aResults.end() ) {
-        delete (*iter);
+        delete *iter;
         ++iter;
     }
     m_aResults.clear();

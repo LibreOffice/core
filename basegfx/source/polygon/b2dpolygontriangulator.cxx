@@ -371,7 +371,7 @@ namespace basegfx
 
             while(aIter != maNewEdgeEntries.end())
             {
-                delete (*aIter++);
+                delete *aIter++;
             }
         }
 

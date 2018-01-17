@@ -864,7 +864,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             else
             {
                 if (*aItr)
-                    delete (*aItr);
+                    delete *aItr;
                 aItr = aActions.erase(aItr);
             }
         }
@@ -876,7 +876,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             OSL_ENSURE((*aItr)->nActionType == SC_CAT_CONTENT, "wrong action type");
             SetNewCell(static_cast<ScMyContentAction*>(*aItr));
             if (*aItr)
-                delete (*aItr);
+                delete *aItr;
             aItr = aActions.erase(aItr);
         }
         if (aProtect.getLength())
