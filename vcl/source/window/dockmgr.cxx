@@ -408,42 +408,24 @@ tools::Rectangle DockingManager::GetPosSizePixel( const vcl::Window *pWindow )
 class ImplPopupFloatWin : public FloatingWindow
 {
 private:
-    bool                        mbMoving;
-    bool                        mbTrackingEnabled;
-    Point                       maDelta;
-    bool                        mbHasGrip;
-    void                        ImplSetBorder();
+    bool mbToolBox;
 
 public:
-    ImplPopupFloatWin( vcl::Window* pParent, bool bHasGrip );
+    ImplPopupFloatWin( vcl::Window* pParent, bool bToolBox );
     virtual ~ImplPopupFloatWin() override;
-
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void        Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void        Resize() override;
-
-    tools::Rectangle           GetDragRect() const;
-    Point               GetToolboxPosition() const;
-    void                DrawGrip(vcl::RenderContext& rRenderContext);
-    void                DrawBorder(vcl::RenderContext& rRenderContext);
-
-    bool                hasGrip() const { return mbHasGrip; }
 };
 
-ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, bool bHasGrip ) :
-    FloatingWindow( pParent, WB_NOBORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )
+ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, bool bToolBox ) :
+    FloatingWindow( pParent, bToolBox ? WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_NOSHADOW : WB_STDPOPUP ),
+    mbToolBox( bToolBox )
 {
-    mpWindowImpl->mbToolbarFloatingWindow = true;   // indicate window type, required for accessibility
-                                                    // which should not see this window as a toplevel window
-    mbMoving = false;
-    mbTrackingEnabled = false;
-    mbHasGrip = bHasGrip;
-
-    ImplSetBorder();
+    if ( bToolBox )
+    {
+        // indicate window type, required for accessibility
+        // which should not see this window as a toplevel window
+        mpWindowImpl->mbToolbarFloatingWindow = true;
+    }
 }
 
 ImplPopupFloatWin::~ImplPopupFloatWin()
@@ -453,6 +435,9 @@ ImplPopupFloatWin::~ImplPopupFloatWin()
 
 css::uno::Reference< css::accessibility::XAccessible > ImplPopupFloatWin::CreateAccessible()
 {
+    if ( !mbToolBox )
+        return FloatingWindow::CreateAccessible();
+
     // switch off direct accessibility support for this window
 
     // this is to avoid appearance of this window as standalone window in the accessibility hierarchy
@@ -460,166 +445,6 @@ css::uno::Reference< css::accessibility::XAccessible > ImplPopupFloatWin::Create
     // has to provide accessibility support (as implemented in the toolkit)
     // so the contained toolbar should appear as child of the corresponding toolbar item of the parent toolbar
     return css::uno::Reference< css::accessibility::XAccessible >();
-}
-
-void ImplPopupFloatWin::ImplSetBorder()
-{
-    // although we have no border in the sense of a borderwindow
-    //  we're using a special border for the grip
-    // by setting those members the method SetOutputSizePixel() can
-    //  be used to set the proper window size
-    mpWindowImpl->mnTopBorder     = 1;
-    if( hasGrip() )
-        mpWindowImpl->mnTopBorder += 1 + ToolBox::ImplGetDragWidth( *this, false );
-    mpWindowImpl->mnBottomBorder  = 1;
-    mpWindowImpl->mnLeftBorder    = 1;
-    mpWindowImpl->mnRightBorder   = 1;
-}
-
-void ImplPopupFloatWin::Resize()
-{
-    // the borderview overwrites the border during resize so restore it
-    ImplSetBorder();
-}
-
-tools::Rectangle ImplPopupFloatWin::GetDragRect() const
-{
-    if( !hasGrip() )
-        return tools::Rectangle();
-    return tools::Rectangle( 1, 1, GetOutputSizePixel().Width() - 1,
-                      2 + ToolBox::ImplGetDragWidth( *this, false ) );
-}
-
-Point ImplPopupFloatWin::GetToolboxPosition() const
-{
-    // return inner position where a toolbox could be placed
-    return Point( 1, 1 + ( hasGrip() ? GetDragRect().getHeight() : 0 ) );    // grip + border
-}
-
-void ImplPopupFloatWin::DrawBorder(vcl::RenderContext& rRenderContext)
-{
-    rRenderContext.SetFillColor();
-    tools::Rectangle aRect( Point(), GetOutputSizePixel() );
-
-    vcl::Region oldClipRgn( GetClipRegion( ) );
-    vcl::Region aClipRgn( aRect );
-    tools::Rectangle aItemClipRect( ImplGetItemEdgeClipRect() );
-    if( !aItemClipRect.IsEmpty() )
-    {
-        aItemClipRect.SetPos( AbsoluteScreenToOutputPixel( aItemClipRect.TopLeft() ) );
-
-        // draw the excluded border part with the background color of a toolbox
-        rRenderContext.SetClipRegion( vcl::Region( aItemClipRect ) );
-        rRenderContext.SetLineColor( GetSettings().GetStyleSettings().GetFaceColor() );
-        rRenderContext.DrawRect( aRect );
-
-        aClipRgn.Exclude( aItemClipRect );
-        SetClipRegion( aClipRgn );
-    }
-    rRenderContext.SetLineColor( rRenderContext.GetSettings().GetStyleSettings().GetShadowColor() );
-    rRenderContext.DrawRect( aRect );
-    rRenderContext.SetClipRegion( oldClipRgn );
-}
-
-void ImplPopupFloatWin::DrawGrip(vcl::RenderContext& rRenderContext)
-{
-    bool bLinecolor     = rRenderContext.IsLineColor();
-    Color aLinecolor    = rRenderContext.GetLineColor();
-    bool bFillcolor     = rRenderContext.IsFillColor();
-    Color aFillcolor    = rRenderContext.GetFillColor();
-
-    if (!ToolBox::AlwaysLocked())  // no grip if toolboxes are locked
-    {
-        ToolBox::ImplDrawGrip(rRenderContext, GetDragRect(),
-                              ToolBox::ImplGetDragWidth( *this, false ), WindowAlign::Left, false );
-    }
-
-    if (bLinecolor)
-        rRenderContext.SetLineColor(aLinecolor);
-    else
-        rRenderContext.SetLineColor();
-    if (bFillcolor)
-        rRenderContext.SetFillColor(aFillcolor);
-    else
-        rRenderContext.SetFillColor();
-}
-
-void ImplPopupFloatWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
-{
-    DrawBorder(rRenderContext);
-    if (hasGrip())
-        DrawGrip(rRenderContext);
-}
-
-void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
-{
-    Point aMousePos = rMEvt.GetPosPixel();
-
-    if( !ToolBox::AlwaysLocked() )  // no tear off if locking is enabled
-    {
-        if( mbTrackingEnabled && rMEvt.IsLeft() && GetDragRect().IsInside( aMousePos ) )
-        {
-            // start window move
-            mbMoving = true;
-            StartTracking( StartTrackingFlags::NoKeyCancel );
-            return;
-        }
-        if( GetDragRect().IsInside( aMousePos ) )
-        {
-            if( GetPointer().GetStyle() != PointerStyle::Move )
-                SetPointer( Pointer( PointerStyle::Move ) );
-        }
-        if( rMEvt.IsLeaveWindow() || !GetDragRect().IsInside( aMousePos ) )
-        {
-            if( GetPointer().GetStyle() != PointerStyle::Arrow )
-                SetPointer( Pointer( PointerStyle::Arrow ) );
-        }
-    }
-}
-
-void ImplPopupFloatWin::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    mbTrackingEnabled = false;
-    FloatingWindow::MouseButtonUp( rMEvt );
-}
-
-void ImplPopupFloatWin::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    Point aMousePos = rMEvt.GetPosPixel();
-    if( GetDragRect().IsInside( aMousePos ) )
-    {
-        // get mouse pos at a static window to have a fixed reference point
-        PointerState aState = GetParent()->GetPointerState();
-        if (HasMirroredGraphics() && IsRTLEnabled())
-            ImplMirrorFramePos(aState.maPos);
-        maDelta = aState.maPos - GetWindow( GetWindowType::Border )->GetPosPixel();
-        mbTrackingEnabled = true;
-    }
-    else
-    {
-        mbTrackingEnabled = false;
-    }
-}
-
-void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
-{
-    if( mbMoving )
-    {
-        if ( rTEvt.IsTrackingEnded() )
-        {
-            mbMoving = false;
-            EndPopupMode( FloatWinPopupEndFlags::TearOff );
-        }
-        else if ( !rTEvt.GetMouseEvent().IsSynthetic() )
-        {
-            // move the window according to mouse pos
-            PointerState aState = GetParent()->GetPointerState();
-            const OutputDevice *pOutDev = GetOutDev();
-            if (pOutDev->HasMirroredGraphics() && IsRTLEnabled())
-                ImplMirrorFramePos(aState.maPos);
-            GetWindow( GetWindowType::Border )->SetPosPixel( aState.maPos - maDelta );
-        }
-    }
 }
 
 ImplDockingWindowWrapper::ImplDockingWindowWrapper( const vcl::Window *pWindow )
@@ -922,7 +747,7 @@ void ImplDockingWindowWrapper::ShowTitleButton( TitleButton nButton, bool bVisib
     }
 }
 
-void ImplDockingWindowWrapper::ImplPreparePopupMode( FloatWinPopupFlags nFlags )
+void ImplDockingWindowWrapper::ImplPreparePopupMode()
 {
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
@@ -932,15 +757,8 @@ void ImplDockingWindowWrapper::ImplPreparePopupMode( FloatWinPopupFlags nFlags )
     if( mpOldBorderWin.get() == GetWindow() )
         mpOldBorderWin = nullptr;  // no border window found
 
-    bool bAllowTearOff = bool( nFlags & FloatWinPopupFlags::AllowTearOff );
-    bool bUseStdPopup = GetWindow()->GetType() != WindowType::TOOLBOX;
-
     // the new parent for popup mode
-    VclPtr<FloatingWindow> pWin;
-    if ( bUseStdPopup )
-        pWin = VclPtr<FloatingWindow>::Create( mpParent, WB_STDPOPUP );
-    else
-        pWin = VclPtr<ImplPopupFloatWin>::Create( mpParent, bAllowTearOff );
+    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, GetWindow()->GetType() == WindowType::TOOLBOX );
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
 
     // At least for DockingWindow, GetText() has a side effect of setting deferred
@@ -956,10 +774,6 @@ void ImplDockingWindowWrapper::ImplPreparePopupMode( FloatWinPopupFlags nFlags )
     GetWindow()->mpWindowImpl->mnTopBorder     = 0;
     GetWindow()->mpWindowImpl->mnRightBorder   = 0;
     GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
-
-    // position toolbox below the drag grip
-    if ( !bUseStdPopup )
-        GetWindow()->SetPosPixel( static_cast<ImplPopupFloatWin*>( pWin.get() )->GetToolboxPosition() );
 
     // reparent borderwindow and window
     if ( mpOldBorderWin )
@@ -982,7 +796,11 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     if( IsFloatingMode() )
         return;
 
-    ImplPreparePopupMode( nFlags );
+    ImplPreparePopupMode();
+
+    // don't allow tearoff, if globally disabled
+    if( GetWindow()->GetType() == WindowType::TOOLBOX && ToolBox::AlwaysLocked() )
+        nFlags &= ~FloatWinPopupFlags::AllowTearOff;
 
     // if the subtoolbar was opened via keyboard make sure that key events
     // will go into subtoolbar
@@ -1006,7 +824,7 @@ void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, Fl
     if( IsFloatingMode() )
         return;
 
-    ImplPreparePopupMode( nFlags );
+    ImplPreparePopupMode();
     mpFloatWin->StartPopupMode( rRect, nFlags );
     GetWindow()->Show();
 }

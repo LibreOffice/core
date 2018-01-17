@@ -156,7 +156,6 @@ struct ImplStyleData
     long                            mnBorderSize;
     long                            mnTitleHeight;
     long                            mnFloatTitleHeight;
-    long                            mnTearOffTitleHeight;
     long                            mnScrollBarSize;
     long                            mnSplitSize;
     long                            mnSpinSize;
@@ -632,7 +631,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnBorderSize                = rData.mnBorderSize;
     mnTitleHeight               = rData.mnTitleHeight;
     mnFloatTitleHeight          = rData.mnFloatTitleHeight;
-    mnTearOffTitleHeight        = rData.mnTearOffTitleHeight;
     mnScrollBarSize             = rData.mnScrollBarSize;
     mnMinThumbSize              = rData.mnMinThumbSize;
     mnSplitSize                 = rData.mnSplitSize;
@@ -752,7 +750,6 @@ void ImplStyleData::SetStandardStyles()
     mnBorderSize                = 1;
     mnTitleHeight               = 18;
     mnFloatTitleHeight          = 13;
-    mnTearOffTitleHeight        = 8;
     mbHighContrast              = false;
     mbUseSystemUIFonts          = true;
     mnUseFlatBorders            = false;
@@ -1755,12 +1752,6 @@ StyleSettings::GetFloatTitleHeight() const
     return mxData->mnFloatTitleHeight;
 }
 
-long
-StyleSettings::GetTearOffTitleHeight() const
-{
-    return mxData->mnTearOffTitleHeight;
-}
-
 void
 StyleSettings::SetScrollBarSize( long nSize )
 {
@@ -2286,7 +2277,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mnBorderSize              == rSet.mxData->mnBorderSize)               &&
          (mxData->mnTitleHeight             == rSet.mxData->mnTitleHeight)              &&
          (mxData->mnFloatTitleHeight        == rSet.mxData->mnFloatTitleHeight)         &&
-         (mxData->mnTearOffTitleHeight      == rSet.mxData->mnTearOffTitleHeight)       &&
          (mxData->mnScrollBarSize           == rSet.mxData->mnScrollBarSize)            &&
          (mxData->mnMinThumbSize            == rSet.mxData->mnMinThumbSize)             &&
          (mxData->mnSplitSize               == rSet.mxData->mnSplitSize)                &&
