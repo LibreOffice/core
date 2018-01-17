@@ -483,7 +483,6 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
     ctx->setArmor(false);
 
-    // TODO: add self-encryption key from user config
     const uno::Reference< security::XCertificate >* pCerts=xSignCertificates.getConstArray();
     for (sal_uInt32 i = 0, nNum = xSignCertificates.getLength(); i < nNum; i++, pCerts++)
     {
