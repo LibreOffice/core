@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c2817191",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-17T01:51:23Z",
+      "side": 1,
+      "message": "I think you need here a check that the length is less than 1024 to avoid a buffer overrun.",
+      "revId": "b2e0b4339a288782cbefa19eee4283948750d1a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
