@@ -534,6 +534,7 @@ public:
         sal_uInt8 mnIdx;         // Pos marker
         ePLCFT ePLCF;
         sal_uInt8 mnIMax;         // number of entries
+        int mnMustRemainCached;  // after SaveAllPLCFx, before RestoreAllPLCFx
 
         wwSprmParser maSprmParser;
 
@@ -574,13 +575,19 @@ public:
         void HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult);
 
         const wwSprmParser &GetSprmParser() const { return maSprmParser; }
+
+        void IncMustRemainCache() { ++mnMustRemainCached; }
+        bool IsMustRemainCache() const { return mnMustRemainCached > 0; }
+        void DecMustRemainCache() { --mnMustRemainCached; }
     };
 
 private:
     SvStream* pFKPStrm;         // input file
     SvStream* pDataStrm;        // input file
     WW8PLCF* pPLCF;
+protected:
     WW8Fkp* pFkp;
+private:
 
     /*
         Keep a cache of eMaxCache entries of previously seen pFkps, which
@@ -596,7 +603,7 @@ private:
     */
     typedef std::list<WW8Fkp*>::iterator myiter;
     std::list<WW8Fkp*> maFkpCache;
-    enum Limits {eMaxCache = 5};
+    enum Limits {eMaxCache = 50000};
 
     bool NewFkp();
 
