@@ -729,6 +729,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                                         << nMerk0 << ocClose;
                                 aPool >> aStack;
                                 pExtName->CreateDdeData( GetDoc(), aApplic, aTopic );
+                                GetDoc().SetLinkFormulaNeedingCheck(true);
                             }
                         }
                         break;
