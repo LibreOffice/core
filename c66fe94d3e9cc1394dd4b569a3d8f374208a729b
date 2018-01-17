@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_552b7d30",
+        "filename": "offapi/com/sun/star/drawing/framework/XConfigurationController.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-17T11:13:54Z",
+      "side": 1,
+      "message": "really change \"makes\" -\u003e \"make\"?  I\u0027m not a native English speaker, but that looks wrong to me",
+      "revId": "c66fe94d3e9cc1394dd4b569a3d8f374208a729b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
