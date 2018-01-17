@@ -22,6 +22,7 @@
 #include "idlctypes.hxx"
 #include "aststack.hxx"
 #include "options.hxx"
+#include <memory>
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'
@@ -51,9 +52,9 @@ public:
     Options* getOptions()
         { return m_pOptions; }
     AstStack* scopes()
-        { return m_pScopes; }
+        { return m_pScopes.get(); }
     AstModule* getRoot()
-        { return m_pRoot; }
+        { return m_pRoot.get(); }
     const OString& getFileName() const
         { return m_fileName; }
     void setFileName(const OString& fileName)
@@ -115,8 +116,8 @@ public:
     void reset();
 private:
     Options*            m_pOptions;
-    AstStack*           m_pScopes;
-    AstModule*          m_pRoot;
+    std::unique_ptr<AstStack>  m_pScopes;
+    std::unique_ptr<AstModule> m_pRoot;
     OString      m_fileName;
     OString      m_mainFileName;
     OString      m_realFileName;

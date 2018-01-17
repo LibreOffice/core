@@ -209,7 +209,7 @@ Idlc::Idlc(Options* pOptions)
     , m_offsetEnd(0)
     , m_parseState(PS_NoState)
 {
-    m_pScopes = new AstStack();
+    m_pScopes.reset( new AstStack() );
     // init root object after construction
     m_pRoot = nullptr;
     m_bGenerateDoc = m_pOptions->isValid("-C");
@@ -221,13 +221,12 @@ Idlc::~Idlc()
 
 void Idlc::init()
 {
-    delete m_pRoot;
-    m_pRoot = new AstModule(NT_root, OString(), nullptr);
+    m_pRoot.reset(new AstModule(NT_root, OString(), nullptr));
 
     // push the root node on the stack
-    m_pScopes->push(m_pRoot);
-    initializePredefinedTypes(m_pRoot);
-    predefineXInterface(m_pRoot);
+    m_pScopes->push(m_pRoot.get());
+    initializePredefinedTypes(m_pRoot.get());
+    predefineXInterface(m_pRoot.get());
 }
 
 void Idlc::reset()
@@ -247,13 +246,11 @@ void Idlc::reset()
     m_documentation.clear();
 
     m_pScopes->clear();
-    delete m_pRoot;
-
-    m_pRoot = new AstModule(NT_root, OString(), nullptr);
+    m_pRoot.reset( new AstModule(NT_root, OString(), nullptr) );
 
     // push the root node on the stack
-    m_pScopes->push(m_pRoot);
-    initializePredefinedTypes(m_pRoot);
+    m_pScopes->push(m_pRoot.get());
+    initializePredefinedTypes(m_pRoot.get());
 
     m_includes.clear();
 }
