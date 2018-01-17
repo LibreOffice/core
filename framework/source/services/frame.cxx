@@ -412,6 +412,8 @@ private:
     bool                                                                    m_bSelfClose;
     /// indicates, if this frame is used in hidden mode or not
     bool                                                                    m_bIsHidden;
+    /// The container window has WindowExtendedStyle::DocHidden set.
+    bool                                                                    m_bDocHidden = false;
     /// is used to layout the child windows of the frame.
     css::uno::Reference< css::frame::XLayoutManager2 >                      m_xLayoutManager;
     css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper;
@@ -772,8 +774,13 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     // if window is initially visible, we will never get a windowShowing event
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
-    if (pWindow && pWindow->IsVisible())
-        m_bIsHidden = false;
+    if (pWindow)
+    {
+        if (pWindow->IsVisible())
+            m_bIsHidden = false;
+        m_bDocHidden
+            = static_cast<bool>(pWindow->GetExtendedStyle() & WindowExtendedStyle::DocHidden);
+    }
 
     css::uno::Reference< css::frame::XLayoutManager2 >  xLayoutManager = m_xLayoutManager;
 
@@ -782,7 +789,9 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if (xLayoutManager.is())
+    // Avoid enabling the layout manager for hidden frames: it's expensive and
+    // provides little value.
+    if (xLayoutManager.is() && !m_bDocHidden)
         lcl_enableLayoutManager(xLayoutManager, this);
 
     // create progress helper
@@ -971,7 +980,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator(m_xContext);
-        xTarget = aCreator.createTask(sTargetFrameName);
+        xTarget = aCreator.createTask(sTargetFrameName, utl::MediaDescriptor());
     }
 
     // I.II) "_parent"
@@ -1171,7 +1180,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
            )
         {
             TaskCreator aCreator(m_xContext);
-            xTarget = aCreator.createTask(sTargetFrameName);
+            xTarget = aCreator.createTask(sTargetFrameName, utl::MediaDescriptor());
         }
     }
 
@@ -1825,7 +1834,7 @@ void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInter
         m_xLayoutManager = xNewLayoutManager;
         if (xOldLayoutManager.is())
             disableLayoutManager(xOldLayoutManager);
-        if (xNewLayoutManager.is())
+        if (xNewLayoutManager.is() && !m_bDocHidden)
             lcl_enableLayoutManager(xNewLayoutManager, this);
     }
 }
@@ -2738,7 +2747,7 @@ void Frame::impl_setPropertyValue(sal_Int32 nHandle,
                         m_xLayoutManager = xNewLayoutManager;
                         if (xOldLayoutManager.is())
                             disableLayoutManager(xOldLayoutManager);
-                        if (xNewLayoutManager.is())
+                        if (xNewLayoutManager.is() && !m_bDocHidden)
                             lcl_enableLayoutManager(xNewLayoutManager, this);
                     }
                 }
