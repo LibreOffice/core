@@ -274,7 +274,6 @@ inline Sequence<OUString> const GetStringSequenceProperty(
 XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
                                         XMLPropertyState* pCombinedCharState)
     : rExport(rExp),
-      pUsedMasters(nullptr),
       sServicePrefix("com.sun.star.text.textfield."),
       sFieldMasterPrefix("com.sun.star.text.FieldMaster."),
       sPresentationServicePrefix("com.sun.star.presentation.TextField."),
@@ -352,8 +351,6 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
 
 XMLTextFieldExport::~XMLTextFieldExport()
 {
-    delete pCombinedCharactersPropertyState;
-    delete pUsedMasters;
 }
 
 /// get the field ID (as in FieldIDEnum) from XTextField
@@ -882,7 +879,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         // export text style with the addition of the combined characters
         DBG_ASSERT(nullptr != pCombinedCharactersPropertyState,
                    "need proper PropertyState for combined characters");
-        const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState, nullptr };
+        const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState.get(), nullptr };
         GetExport().GetTextParagraphExport()->Add(
             XML_STYLE_FAMILY_TEXT_TEXT, xRangePropSet,
             aStates);
@@ -969,7 +966,7 @@ void XMLTextFieldExport::ExportField(
 
     // special treatment for combined characters field, because it is
     // exported as a style
-    const XMLPropertyState* aStates[] = { pCombinedCharactersPropertyState, nullptr };
+    const XMLPropertyState* aStates[] = { pCombinedCharactersPropertyState.get(), nullptr };
     const XMLPropertyState **pStates =
                 FIELD_ID_COMBINED_CHARACTERS == nToken
                     ? aStates
@@ -2189,12 +2186,11 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 void XMLTextFieldExport::SetExportOnlyUsedFieldDeclarations(
     bool bExportOnlyUsed)
 {
-    delete pUsedMasters;
-    pUsedMasters = nullptr;
+    pUsedMasters.reset();
 
     // create used masters set (if none is used)
     if (bExportOnlyUsed)
-        pUsedMasters = new map<Reference<XText>, set<OUString> > ;
+        pUsedMasters.reset( new map<Reference<XText>, set<OUString> > );
 }
 
 void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
