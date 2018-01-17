@@ -1554,171 +1554,171 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
         {
             if( n<MAX_OOO_PROP_ACTIONS )
             {
-                m_aActions[n] =
-                    XMLStyleOOoTContext::CreateTransformerActions( n );
+                m_aActions[n].reset(
+                    XMLStyleOOoTContext::CreateTransformerActions( n ) );
             }
             else switch( n )
             {
                 case OOO_STYLE_ACTIONS:
-                    m_aActions[OOO_STYLE_ACTIONS] =
-                        new XMLTransformerActions( aStyleActionTable );
+                    m_aActions[OOO_STYLE_ACTIONS].reset(
+                        new XMLTransformerActions( aStyleActionTable ) );
                     break;
                 case OOO_FONT_DECL_ACTIONS:
-                    m_aActions[OOO_FONT_DECL_ACTIONS] =
-                        new XMLTransformerActions( aFontDeclActionTable );
+                    m_aActions[OOO_FONT_DECL_ACTIONS].reset(
+                        new XMLTransformerActions( aFontDeclActionTable ) );
                     break;
                 case OOO_SHAPE_ACTIONS:
-                    m_aActions[OOO_SHAPE_ACTIONS] =
-                        new XMLTransformerActions( aShapeActionTable );
+                    m_aActions[OOO_SHAPE_ACTIONS].reset(
+                        new XMLTransformerActions( aShapeActionTable ) );
                     break;
                 case OOO_CONNECTOR_ACTIONS:
-                    m_aActions[OOO_CONNECTOR_ACTIONS] =
-                        new XMLTransformerActions( aConnectorActionTable );
+                    m_aActions[OOO_CONNECTOR_ACTIONS].reset(
+                        new XMLTransformerActions( aConnectorActionTable ) );
                     break;
                 case OOO_TAB_STOP_ACTIONS:
-                    m_aActions[OOO_TAB_STOP_ACTIONS] =
-                        new XMLTransformerActions( aTabStopActionTable );
+                    m_aActions[OOO_TAB_STOP_ACTIONS].reset(
+                        new XMLTransformerActions( aTabStopActionTable ) );
                     break;
                 case OOO_INDEX_ENTRY_TAB_STOP_ACTIONS:
-                    m_aActions[OOO_INDEX_ENTRY_TAB_STOP_ACTIONS] =
-                        new XMLTransformerActions( aIndexEntryTabStopActionTable );
+                    m_aActions[OOO_INDEX_ENTRY_TAB_STOP_ACTIONS].reset(
+                        new XMLTransformerActions( aIndexEntryTabStopActionTable ) );
                     break;
                 case OOO_LINENUMBERING_ACTIONS:
-                    m_aActions[OOO_LINENUMBERING_ACTIONS] =
-                        new XMLTransformerActions( aLineNumberingActionTable );
+                    m_aActions[OOO_LINENUMBERING_ACTIONS].reset(
+                        new XMLTransformerActions( aLineNumberingActionTable ) );
                     break;
                 case OOO_FOOTNOTE_SEP_ACTIONS:
-                    m_aActions[OOO_FOOTNOTE_SEP_ACTIONS] =
-                        new XMLTransformerActions( aFootnoteSepActionTable );
+                    m_aActions[OOO_FOOTNOTE_SEP_ACTIONS].reset(
+                        new XMLTransformerActions( aFootnoteSepActionTable ) );
                     break;
                 case OOO_DROP_CAP_ACTIONS:
-                    m_aActions[OOO_DROP_CAP_ACTIONS] =
-                        new XMLTransformerActions( aDropCapActionTable );
+                    m_aActions[OOO_DROP_CAP_ACTIONS].reset(
+                        new XMLTransformerActions( aDropCapActionTable ) );
                     break;
                 case OOO_COLUMNS_ACTIONS:
-                    m_aActions[OOO_COLUMNS_ACTIONS] =
-                        new XMLTransformerActions( aColumnsActionTable );
+                    m_aActions[OOO_COLUMNS_ACTIONS].reset(
+                        new XMLTransformerActions( aColumnsActionTable ) );
                     break;
                 case OOO_TEXT_VALUE_TYPE_ACTIONS:
-                    m_aActions[OOO_TEXT_VALUE_TYPE_ACTIONS] =
-                        new XMLTransformerActions( aTextValueTypeActionTable );
+                    m_aActions[OOO_TEXT_VALUE_TYPE_ACTIONS].reset(
+                        new XMLTransformerActions( aTextValueTypeActionTable ) );
                     break;
                 case OOO_TABLE_VALUE_TYPE_ACTIONS:
-                    m_aActions[OOO_TABLE_VALUE_TYPE_ACTIONS] =
-                        new XMLTransformerActions( aTableValueTypeActionTable );
+                    m_aActions[OOO_TABLE_VALUE_TYPE_ACTIONS].reset(
+                        new XMLTransformerActions( aTableValueTypeActionTable ) );
                     break;
                 case OOO_PARA_ACTIONS:
-                    m_aActions[OOO_PARA_ACTIONS] =
-                        new XMLTransformerActions( aParaActionTable );
+                    m_aActions[OOO_PARA_ACTIONS].reset(
+                        new XMLTransformerActions( aParaActionTable ) );
                     break;
                 case OOO_STYLE_REF_ACTIONS:
-                    m_aActions[OOO_STYLE_REF_ACTIONS] =
-                        new XMLTransformerActions( aStyleRefActionTable );
+                    m_aActions[OOO_STYLE_REF_ACTIONS].reset(
+                        new XMLTransformerActions( aStyleRefActionTable ) );
                     break;
                 case OOO_MASTER_PAGE_ACTIONS:
-                    m_aActions[OOO_MASTER_PAGE_ACTIONS] =
-                        new XMLTransformerActions( aMasterPageActionTable );
+                    m_aActions[OOO_MASTER_PAGE_ACTIONS].reset(
+                        new XMLTransformerActions( aMasterPageActionTable ) );
                     break;
                 case OOO_ANNOTATION_ACTIONS:
-                    m_aActions[OOO_ANNOTATION_ACTIONS] =
-                        new XMLTransformerActions( aAnnotationActionTable );
+                    m_aActions[OOO_ANNOTATION_ACTIONS].reset(
+                        new XMLTransformerActions( aAnnotationActionTable ) );
                     break;
                 case OOO_CHANGE_INFO_ACTIONS:
-                    m_aActions[OOO_CHANGE_INFO_ACTIONS] =
-                        new XMLTransformerActions( aChangeInfoActionTable );
+                    m_aActions[OOO_CHANGE_INFO_ACTIONS].reset(
+                        new XMLTransformerActions( aChangeInfoActionTable ) );
                     break;
                 case OOO_FRAME_ELEM_ACTIONS:
-                    m_aActions[OOO_FRAME_ELEM_ACTIONS] =
-                        new XMLTransformerActions( aFrameElemActionTable );
+                    m_aActions[OOO_FRAME_ELEM_ACTIONS].reset(
+                        new XMLTransformerActions( aFrameElemActionTable ) );
                     break;
                 case OOO_FRAME_ATTR_ACTIONS:
-                    m_aActions[OOO_FRAME_ATTR_ACTIONS] =
-                        new XMLTransformerActions( aFrameAttrActionTable );
+                    m_aActions[OOO_FRAME_ATTR_ACTIONS].reset(
+                        new XMLTransformerActions( aFrameAttrActionTable ) );
                     break;
                 case OOO_BACKGROUND_IMAGE_ACTIONS:
                     // Use special actions for Writer documents. (#i50322#)
-                    m_aActions[OOO_BACKGROUND_IMAGE_ACTIONS] =
+                    m_aActions[OOO_BACKGROUND_IMAGE_ACTIONS].reset(
                         isWriter()
                         ? new XMLTransformerActions( aWriterBackgroundImageActionTable )
-                        : new XMLTransformerActions( aBackgroundImageActionTable );
+                        : new XMLTransformerActions( aBackgroundImageActionTable ) );
                     break;
                 case OOO_DDE_CONNECTION_DECL_ACTIONS:
-                    m_aActions[OOO_DDE_CONNECTION_DECL_ACTIONS] =
-                        new XMLTransformerActions( aDDEConnectionDeclActionTable );
+                    m_aActions[OOO_DDE_CONNECTION_DECL_ACTIONS].reset(
+                        new XMLTransformerActions( aDDEConnectionDeclActionTable ) );
                     break;
                 case OOO_EVENT_ACTIONS:
-                    m_aActions[OOO_EVENT_ACTIONS] =
-                        new XMLTransformerActions( aEventActionTable );
+                    m_aActions[OOO_EVENT_ACTIONS].reset(
+                        new XMLTransformerActions( aEventActionTable ) );
                     break;
                 case OOO_FORM_CONTROL_ACTIONS:
-                    m_aActions[OOO_FORM_CONTROL_ACTIONS] =
-                        new XMLTransformerActions( aFormControlActionTable );
+                    m_aActions[OOO_FORM_CONTROL_ACTIONS].reset(
+                        new XMLTransformerActions( aFormControlActionTable ) );
                     break;
                 case OOO_FORM_COLUMN_ACTIONS:
-                    m_aActions[OOO_FORM_COLUMN_ACTIONS] =
-                        new XMLTransformerActions( aFormColumnActionTable );
+                    m_aActions[OOO_FORM_COLUMN_ACTIONS].reset(
+                        new XMLTransformerActions( aFormColumnActionTable ) );
                     break;
                 case OOO_FORM_PROP_ACTIONS:
-                    m_aActions[OOO_FORM_PROP_ACTIONS] =
-                        new XMLTransformerActions( aFormPropActionTable );
+                    m_aActions[OOO_FORM_PROP_ACTIONS].reset(
+                        new XMLTransformerActions( aFormPropActionTable ) );
                     break;
                 case OOO_XLINK_ACTIONS:
-                    m_aActions[OOO_XLINK_ACTIONS] =
-                        new XMLTransformerActions( aXLinkActionTable );
+                    m_aActions[OOO_XLINK_ACTIONS].reset(
+                        new XMLTransformerActions( aXLinkActionTable ) );
                     break;
                 case OOO_CONFIG_ITEM_SET_ACTIONS:
-                    m_aActions[OOO_CONFIG_ITEM_SET_ACTIONS] =
-                        new XMLTransformerActions( aConfigItemSetActionTable );
+                    m_aActions[OOO_CONFIG_ITEM_SET_ACTIONS].reset(
+                        new XMLTransformerActions( aConfigItemSetActionTable ) );
                     break;
                 case OOO_FORMULA_ACTIONS:
-                    m_aActions[OOO_FORMULA_ACTIONS] =
-                        new XMLTransformerActions( aFormulaActionTable );
+                    m_aActions[OOO_FORMULA_ACTIONS].reset(
+                        new XMLTransformerActions( aFormulaActionTable ) );
                     break;
                 case OOO_CHART_ACTIONS:
-                    m_aActions[OOO_CHART_ACTIONS] =
-                        new XMLTransformerActions( aChartActionTable );
+                    m_aActions[OOO_CHART_ACTIONS].reset(
+                        new XMLTransformerActions( aChartActionTable ) );
                     break;
                 case OOO_ERROR_MACRO_ACTIONS:
-                    m_aActions[OOO_ERROR_MACRO_ACTIONS] =
-                        new XMLTransformerActions( aErrorMacroActionTable );
+                    m_aActions[OOO_ERROR_MACRO_ACTIONS].reset(
+                        new XMLTransformerActions( aErrorMacroActionTable ) );
                     break;
                 case OOO_DDE_CONV_MODE_ACTIONS:
-                    m_aActions[OOO_DDE_CONV_MODE_ACTIONS] =
-                        new XMLTransformerActions( aDDEConvModeActionTable );
+                    m_aActions[OOO_DDE_CONV_MODE_ACTIONS].reset(
+                        new XMLTransformerActions( aDDEConvModeActionTable ) );
                     break;
                 case OOO_ALPHABETICAL_INDEX_MARK_ACTIONS:
-                    m_aActions[OOO_ALPHABETICAL_INDEX_MARK_ACTIONS] =
-                        new XMLTransformerActions( aAlphabeticalIndexMarkActionTable );
+                    m_aActions[OOO_ALPHABETICAL_INDEX_MARK_ACTIONS].reset(
+                        new XMLTransformerActions( aAlphabeticalIndexMarkActionTable ) );
                     break;
                 case OOO_DATAPILOT_MEMBER_ACTIONS:
-                    m_aActions[OOO_DATAPILOT_MEMBER_ACTIONS] =
-                        new XMLTransformerActions( aDataPilotMemberActionTable );
+                    m_aActions[OOO_DATAPILOT_MEMBER_ACTIONS].reset(
+                        new XMLTransformerActions( aDataPilotMemberActionTable ) );
                     break;
                 case OOO_DATAPILOT_LEVEL_ACTIONS:
-                    m_aActions[OOO_DATAPILOT_LEVEL_ACTIONS] =
-                        new XMLTransformerActions( aDataPilotLevelActionTable );
+                    m_aActions[OOO_DATAPILOT_LEVEL_ACTIONS].reset(
+                        new XMLTransformerActions( aDataPilotLevelActionTable ) );
                     break;
                 case OOO_SOURCE_SERVICE_ACTIONS:
-                    m_aActions[OOO_SOURCE_SERVICE_ACTIONS] =
-                        new XMLTransformerActions( aSourceServiceActionTable );
+                    m_aActions[OOO_SOURCE_SERVICE_ACTIONS].reset(
+                        new XMLTransformerActions( aSourceServiceActionTable ) );
                     break;
                 case OOO_DRAW_AREA_POLYGON_ACTIONS:
-                    m_aActions[OOO_DRAW_AREA_POLYGON_ACTIONS] =
-                        new XMLTransformerActions( aShapeActionTable );
+                    m_aActions[OOO_DRAW_AREA_POLYGON_ACTIONS].reset(
+                        new XMLTransformerActions( aShapeActionTable ) );
                     m_aActions[OOO_DRAW_AREA_POLYGON_ACTIONS]
                         ->Add( aDrawAreaPolygonActionTable );
                     break;
                 case OOO_SCRIPT_ACTIONS:
-                    m_aActions[OOO_SCRIPT_ACTIONS] =
-                        new XMLTransformerActions( aScriptActionTable );
+                    m_aActions[OOO_SCRIPT_ACTIONS].reset(
+                        new XMLTransformerActions( aScriptActionTable ) );
                     break;
                 case OOO_ANIMATION_ACTIONS:
-                    m_aActions[OOO_ANIMATION_ACTIONS] =
-                        new XMLTransformerActions( aAnimationsActionTable );
+                    m_aActions[OOO_ANIMATION_ACTIONS].reset(
+                        new XMLTransformerActions( aAnimationsActionTable ) );
                     break;
             }
         }
-        pActions = m_aActions[n];
+        pActions = m_aActions[n].get();
     }
 
     return pActions;
@@ -1798,14 +1798,14 @@ OOo2OasisTransformer::OOo2OasisTransformer( const sal_Char *pImplName,
     GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
 
-    for(XMLTransformerActions*& rp : m_aActions)
-        rp = nullptr;
+    for(auto & rp : m_aActions)
+        rp.reset();
 }
 
 OOo2OasisTransformer::~OOo2OasisTransformer() throw()
 {
-    for(XMLTransformerActions* p : m_aActions)
-        delete p;
+    for(auto & rp : m_aActions)
+        rp.reset();
     XMLEventOOoTransformerContext::FlushEventMap( m_pEventMap );
 }
 
