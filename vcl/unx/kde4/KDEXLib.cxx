@@ -94,7 +94,7 @@ KDEXLib::~KDEXLib()
 
 void KDEXLib::Init()
 {
-    m_pInputMethod = new SalI18N_InputMethod;
+    m_pInputMethod.reset(new SalI18N_InputMethod);
     m_pInputMethod->SetLocale();
     XrmInitialize();
 
