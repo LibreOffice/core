@@ -105,7 +105,7 @@ MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
     unsigned char *wb = buf;
     while (r)
     {
-        const size_t count = std::min(r, SSIZE_MAX);
+        const size_t count = std::min(r, size_t(SSIZE_MAX));
         size_t c = fread(wb, 1, count, patchFile);
         if (c != count)
         {
