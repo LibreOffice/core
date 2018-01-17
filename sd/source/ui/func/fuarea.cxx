@@ -52,19 +52,28 @@ rtl::Reference<FuPoor> FuArea::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuArea::DoExecute( SfxRequest& rReq )
 {
+    rReq.Ignore ();
+
     const SfxItemSet* pArgs = rReq.GetArgs();
-
-    if( !pArgs )
+    if (pArgs)
     {
-        SfxItemSet aNewAttr( mpDoc->GetPool() );
-        mpView->GetAttributes( aNewAttr );
+        mpViewShell->Cancel();
+        return;
+    }
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog( nullptr,
-                                                                        &aNewAttr,
-                                                                        mpDoc,
-                                                                        true) : nullptr);
-        if( pDlg && (pDlg->Execute() == RET_OK) )
+    SfxItemSet aNewAttr( mpDoc->GetPool() );
+    mpView->GetAttributes( aNewAttr );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog(nullptr, &aNewAttr, mpDoc, true) : nullptr);
+    if (!pDlg)
+    {
+        mpViewShell->Cancel();
+        return;
+    }
+
+    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        if (nResult == RET_OK)
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
 
@@ -81,10 +90,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
 
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
-    }
-
-    rReq.Ignore ();
-
+    }, pDlg);
 }
 
 void FuArea::Activate()
