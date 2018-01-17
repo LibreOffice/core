@@ -25,6 +25,7 @@
 #include <editeng/editengdllapi.h>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 
 // class SvxBoxItem ------------------------------------------------------
@@ -52,10 +53,11 @@ serializing to stream.
 
 class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
 {
-    editeng::SvxBorderLine  *pTop,
-                            *pBottom,
-                            *pLeft,
-                            *pRight;
+    std::unique_ptr<editeng::SvxBorderLine>
+                    pTop,
+                    pBottom,
+                    pLeft,
+                    pRight;
     sal_uInt16      nTopDist,
                     nBottomDist,
                     nLeftDist,
@@ -88,10 +90,10 @@ public:
     virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
-    const   editeng::SvxBorderLine* GetTop()    const { return pTop; }
-    const   editeng::SvxBorderLine* GetBottom() const { return pBottom; }
-    const   editeng::SvxBorderLine* GetLeft()   const { return pLeft; }
-    const   editeng::SvxBorderLine* GetRight()  const { return pRight; }
+    const   editeng::SvxBorderLine* GetTop()    const { return pTop.get(); }
+    const   editeng::SvxBorderLine* GetBottom() const { return pBottom.get(); }
+    const   editeng::SvxBorderLine* GetLeft()   const { return pLeft.get(); }
+    const   editeng::SvxBorderLine* GetRight()  const { return pRight.get(); }
 
     const   editeng::SvxBorderLine* GetLine( SvxBoxItemLine nLine ) const;
 
@@ -158,8 +160,8 @@ namespace o3tl
 
 class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
 {
-    editeng::SvxBorderLine* pHori;   //inner horizontal Line
-    editeng::SvxBorderLine* pVert;   //inner vertical Line
+    std::unique_ptr<editeng::SvxBorderLine> pHori;   //inner horizontal Line
+    std::unique_ptr<editeng::SvxBorderLine> pVert;   //inner vertical Line
 
     bool                mbEnableHor;   /// true = Enable inner horizontal line.
     bool                mbEnableVer;   /// true = Enable inner vertical line.
@@ -201,8 +203,8 @@ public:
     virtual void            ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool            HasMetrics() const override;
 
-    const editeng::SvxBorderLine*   GetHori() const { return pHori; }
-    const editeng::SvxBorderLine*   GetVert() const { return pVert; }
+    const editeng::SvxBorderLine*   GetHori() const { return pHori.get(); }
+    const editeng::SvxBorderLine*   GetVert() const { return pVert.get(); }
 
     //The Pointers are being copied!
     void                    SetLine( const editeng::SvxBorderLine* pNew, SvxBoxInfoItemLine nLine );

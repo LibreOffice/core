@@ -1356,20 +1356,15 @@ SvxBoxItem::SvxBoxItem( const SvxBoxItem& rCpy ) :
     bRemoveAdjCellBorder ( rCpy.bRemoveAdjCellBorder )
 
 {
-    pTop    = rCpy.GetTop()     ? new SvxBorderLine( *rCpy.GetTop() )    : nullptr;
-    pBottom = rCpy.GetBottom()  ? new SvxBorderLine( *rCpy.GetBottom() ) : nullptr;
-    pLeft   = rCpy.GetLeft()    ? new SvxBorderLine( *rCpy.GetLeft() )   : nullptr;
-    pRight  = rCpy.GetRight()   ? new SvxBorderLine( *rCpy.GetRight() )  : nullptr;
+    pTop.reset(    rCpy.GetTop()     ? new SvxBorderLine( *rCpy.GetTop() )    : nullptr );
+    pBottom.reset( rCpy.GetBottom()  ? new SvxBorderLine( *rCpy.GetBottom() ) : nullptr );
+    pLeft.reset(   rCpy.GetLeft()    ? new SvxBorderLine( *rCpy.GetLeft() )   : nullptr );
+    pRight.reset(  rCpy.GetRight()   ? new SvxBorderLine( *rCpy.GetRight() )  : nullptr );
 }
 
 
 SvxBoxItem::SvxBoxItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
-
-    pTop        ( nullptr ),
-    pBottom     ( nullptr ),
-    pLeft       ( nullptr ),
-    pRight      ( nullptr ),
     nTopDist    ( 0 ),
     nBottomDist ( 0 ),
     nLeftDist   ( 0 ),
@@ -1381,10 +1376,6 @@ SvxBoxItem::SvxBoxItem( const sal_uInt16 nId ) :
 
 SvxBoxItem::~SvxBoxItem()
 {
-    delete pTop;
-    delete pBottom;
-    delete pLeft;
-    delete pRight;
 }
 
 
@@ -1403,9 +1394,9 @@ SvxBoxItem& SvxBoxItem::operator=( const SvxBoxItem& rBox )
 }
 
 
-inline bool CmpBrdLn( const SvxBorderLine* pBrd1, const SvxBorderLine* pBrd2 )
+inline bool CmpBrdLn( const std::unique_ptr<SvxBorderLine> & pBrd1, const SvxBorderLine* pBrd2 )
 {
-    if( pBrd1 == pBrd2 )
+    if( pBrd1.get() == pBrd2 )
         return true;
     if( pBrd1 == nullptr || pBrd2 == nullptr)
         return false;
@@ -2075,16 +2066,16 @@ const SvxBorderLine *SvxBoxItem::GetLine( SvxBoxItemLine nLine ) const
     switch ( nLine )
     {
         case SvxBoxItemLine::TOP:
-            pRet = pTop;
+            pRet = pTop.get();
             break;
         case SvxBoxItemLine::BOTTOM:
-            pRet = pBottom;
+            pRet = pBottom.get();
             break;
         case SvxBoxItemLine::LEFT:
-            pRet = pLeft;
+            pRet = pLeft.get();
             break;
         case SvxBoxItemLine::RIGHT:
-            pRet = pRight;
+            pRet = pRight.get();
             break;
         default:
             OSL_FAIL( "wrong line" );
@@ -2097,28 +2088,23 @@ const SvxBorderLine *SvxBoxItem::GetLine( SvxBoxItemLine nLine ) const
 
 void SvxBoxItem::SetLine( const SvxBorderLine* pNew, SvxBoxItemLine nLine )
 {
-    SvxBorderLine* pTmp = pNew ? new SvxBorderLine( *pNew ) : nullptr;
+    std::unique_ptr<SvxBorderLine> pTmp( pNew ? new SvxBorderLine( *pNew ) : nullptr );
 
     switch ( nLine )
     {
         case SvxBoxItemLine::TOP:
-            delete pTop;
-            pTop = pTmp;
+            pTop = std::move( pTmp );
             break;
         case SvxBoxItemLine::BOTTOM:
-            delete pBottom;
-            pBottom = pTmp;
+            pBottom = std::move( pTmp );
             break;
         case SvxBoxItemLine::LEFT:
-            delete pLeft;
-            pLeft = pTmp;
+            pLeft = std::move( pTmp );
             break;
         case SvxBoxItemLine::RIGHT:
-            delete pRight;
-            pRight = pTmp;
+            pRight = std::move( pTmp );
             break;
         default:
-            delete pTmp;
             OSL_FAIL( "wrong line" );
     }
 }
@@ -2192,16 +2178,16 @@ sal_uInt16 SvxBoxItem::CalcLineWidth( SvxBoxItemLine nLine ) const
     switch ( nLine )
     {
     case SvxBoxItemLine::TOP:
-        pTmp = pTop;
+        pTmp = pTop.get();
         break;
     case SvxBoxItemLine::BOTTOM:
-        pTmp = pBottom;
+        pTmp = pBottom.get();
         break;
     case SvxBoxItemLine::LEFT:
-        pTmp = pLeft;
+        pTmp = pLeft.get();
         break;
     case SvxBoxItemLine::RIGHT:
-        pTmp = pRight;
+        pTmp = pRight.get();
         break;
     default:
         OSL_FAIL( "wrong line" );
@@ -2220,19 +2206,19 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine )
     switch ( nLine )
     {
     case SvxBoxItemLine::TOP:
-        pTmp = pTop;
+        pTmp = pTop.get();
         nDist = nTopDist;
         break;
     case SvxBoxItemLine::BOTTOM:
-        pTmp = pBottom;
+        pTmp = pBottom.get();
         nDist = nBottomDist;
         break;
     case SvxBoxItemLine::LEFT:
-        pTmp = pLeft;
+        pTmp = pLeft.get();
         nDist = nLeftDist;
         break;
     case SvxBoxItemLine::RIGHT:
-        pTmp = pRight;
+        pTmp = pRight.get();
         nDist = nRightDist;
         break;
     default:
@@ -2276,8 +2262,8 @@ SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCpy ) :
     mbEnableHor( rCpy.mbEnableHor ),
     mbEnableVer( rCpy.mbEnableVer )
 {
-    pHori       = rCpy.GetHori() ? new SvxBorderLine( *rCpy.GetHori() ) : nullptr;
-    pVert       = rCpy.GetVert() ? new SvxBorderLine( *rCpy.GetVert() ) : nullptr;
+    pHori.reset( rCpy.GetHori() ? new SvxBorderLine( *rCpy.GetHori() ) : nullptr );
+    pVert.reset( rCpy.GetVert() ? new SvxBorderLine( *rCpy.GetVert() ) : nullptr );
     bDist       = rCpy.IsDist();
     bMinDist    = rCpy.IsMinDist();
     nValidFlags = rCpy.nValidFlags;
@@ -2287,17 +2273,13 @@ SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCpy ) :
 
 SvxBoxInfoItem::~SvxBoxInfoItem()
 {
-    delete pHori;
-    delete pVert;
 }
 
 
 SvxBoxInfoItem &SvxBoxInfoItem::operator=( const SvxBoxInfoItem& rCpy )
 {
-    delete pHori;
-    delete pVert;
-    pHori       = rCpy.GetHori() ? new SvxBorderLine( *rCpy.GetHori() ) : nullptr;
-    pVert       = rCpy.GetVert() ? new SvxBorderLine( *rCpy.GetVert() ) : nullptr;
+    pHori.reset( rCpy.GetHori() ? new SvxBorderLine( *rCpy.GetHori() ) : nullptr );
+    pVert.reset( rCpy.GetVert() ? new SvxBorderLine( *rCpy.GetVert() ) : nullptr );
     mbEnableHor = rCpy.mbEnableHor;
     mbEnableVer = rCpy.mbEnableVer;
     bDist       = rCpy.IsDist();
@@ -2328,21 +2310,18 @@ bool SvxBoxInfoItem::operator==( const SfxPoolItem& rAttr ) const
 
 void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, SvxBoxInfoItemLine nLine )
 {
-    SvxBorderLine* pTmp = pNew ? new SvxBorderLine( *pNew ) : nullptr;
+    std::unique_ptr<SvxBorderLine> pTmp( pNew ? new SvxBorderLine( *pNew ) : nullptr );
 
     if ( SvxBoxInfoItemLine::HORI == nLine )
     {
-        delete pHori;
-        pHori = pTmp;
+        pHori = std::move(pTmp);
     }
     else if ( SvxBoxInfoItemLine::VERT == nLine )
     {
-        delete pVert;
-        pVert = pTmp;
+        pVert = std::move(pTmp);
     }
     else
     {
-        delete pTmp;
         OSL_FAIL( "wrong line" );
     }
 }
@@ -2399,8 +2378,8 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             // 2 BorderLines, flags, valid flags and distance
             css::uno::Sequence< css::uno::Any > aSeq( 5 );
-            aSeq[0] <<= SvxBoxItem::SvxLineToLine( pHori, bConvert);
-            aSeq[1] <<= SvxBoxItem::SvxLineToLine( pVert, bConvert);
+            aSeq[0] <<= SvxBoxItem::SvxLineToLine( pHori.get(), bConvert);
+            aSeq[1] <<= SvxBoxItem::SvxLineToLine( pVert.get(), bConvert);
             if ( IsTable() )
                 nVal |= 0x01;
             if ( IsDist() )
@@ -2415,10 +2394,10 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
 
         case MID_HORIZONTAL:
-            aRetLine = SvxBoxItem::SvxLineToLine( pHori, bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine( pHori.get(), bConvert);
             break;
         case MID_VERTICAL:
-            aRetLine = SvxBoxItem::SvxLineToLine( pVert, bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine( pVert.get(), bConvert);
             break;
         case MID_FLAGS:
             bIntMember = true;
@@ -2811,7 +2790,7 @@ bool SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    return CmpBrdLn( pLine.get(), static_cast<const SvxLineItem&>(rAttr).GetLine() );
+    return CmpBrdLn( pLine, static_cast<const SvxLineItem&>(rAttr).GetLine() );
 }
 
 
