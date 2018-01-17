@@ -829,21 +829,16 @@ OUString SAL_CALL ValueItemAcc::getAccessibleDescription()
 OUString SAL_CALL ValueItemAcc::getAccessibleName()
 {
     const SolarMutexGuard aSolarGuard;
-    OUString aRet;
 
     if( mpParent )
     {
-        aRet = mpParent->maText;
-
-        if( aRet.isEmpty() )
-        {
-            OUStringBuffer aBuffer("Item ");
-            aBuffer.append(static_cast<sal_Int32>(mpParent->mnId));
-            aRet = aBuffer.makeStringAndClear();
-        }
+        if (mpParent->maText.isEmpty())
+            return "Item " +  OUString::number(static_cast<sal_Int32>(mpParent->mnId));
+        else
+            return mpParent->maText;
     }
 
-    return aRet;
+    return OUString();
 }
 
 
