@@ -61,7 +61,6 @@ public:
     OUString sBaseStyleIdentifier;
     OUString sNextStyleIdentifier;
     OUString sStyleName;
-    OUString sStyleName1;
     PropertyMapPtr  pProperties;
     OUString sConvertedStyleName;
     std::vector<css::beans::PropertyValue> aLatentStyles; ///< Attributes of latentStyles
