@@ -67,12 +67,17 @@ public:                                             \
     explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
-    virtual short   Execute() override ;
+    virtual short   Execute() override;             \
+    virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
 short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
+}                                                   \
+bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) \
+{                                                   \
+    return pDlg->StartExecuteAsync(rCtx);           \
 }
 
 class VclAbstractDialog2_Impl : public VclAbstractDialog2
