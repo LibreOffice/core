@@ -52,8 +52,8 @@ private:
     SvNumberFormatter*          pFormatter;
     OUStringBuffer       sTextContent;
     std::unique_ptr<SvXMLNumUsedList_Impl>      pUsedList;
-    CharClass*                  pCharClass;
-    LocaleDataWrapper*          pLocaleData;
+    std::unique_ptr<CharClass>                  pCharClass;
+    std::unique_ptr<LocaleDataWrapper>          pLocaleData;
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );
