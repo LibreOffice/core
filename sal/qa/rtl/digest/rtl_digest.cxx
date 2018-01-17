@@ -26,6 +26,7 @@
 #include <memory>
 
 #include <rtl/digest.h>
+#include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
@@ -387,31 +388,17 @@ public:
             CPPUNIT_ASSERT_EQUAL(sExpected, sKey);
         }
 
+        // tdf#114939, verify that rtl_digest_SHA1 computes broken results for certain input (which
+        // is not fixed for compatibility reasons):
         {
-#if 0 // Don't remove, but instead fix the test or something
-
-            // With this test case rtl_digest_SHA1 computes the wrong sum. This was confirmed
-            // by decryption of a MSO encrypted document. Replacing the rtl_digest_SHA1 calculation
-            // with sha1 calculation from NSS was able to decrypt the document.
-
-            const unsigned char aData[] = {
-                    0x37, 0x5f, 0x47, 0x7a, 0xd2, 0x13, 0xbe, 0xd2, 0x3c, 0x23, 0x33, 0x39,
-                    0x68, 0x21, 0x03, 0x6d, 0x31, 0x00, 0x32, 0x00, 0x33, 0x00, 0x34, 0x00,
-                    0x35, 0x00, 0x36, 0x00, 0x37, 0x00, 0x38, 0x00, 0x39, 0x00, 0x30, 0x00,
-                    0x31, 0x00, 0x32, 0x00, 0x33, 0x00, 0x34, 0x00, 0x35, 0x00, 0x36, 0x00,
-                    0x37, 0x00, 0x38, 0x00
-            };
-
-            std::unique_ptr<sal_uInt8[]> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
-
-            OString sExpected = "0bfe41eb7fb3edf5f5a6de57192de4ba1b925758";
-
-            rtl_digest_SHA1(aData, sizeof(aData), pResult.get(), RTL_DIGEST_LENGTH_SHA1);
-
-            OString sKey = createHex(pResult.get(), RTL_DIGEST_LENGTH_SHA1);
-
-            CPPUNIT_ASSERT_EQUAL(sExpected, sKey);
-#endif
+            sal_uInt8 result[RTL_DIGEST_LENGTH_SHA1];
+            rtl_digest_SHA1(
+                RTL_CONSTASCII_STRINGPARAM("1012345678901234567890123456789012345678901234567890"),
+                result, RTL_DIGEST_LENGTH_SHA1);
+            // Rather than correct "9cb1dab34448c1ea460da1f8736869c8852f212f":
+            CPPUNIT_ASSERT_EQUAL(
+                OString("90a461ee9cc69cedaeb25c2dc5cc62544ebd5241"),
+                createHex(result, RTL_DIGEST_LENGTH_SHA1));
         }
     }
 
