@@ -80,6 +80,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     filter/source/svg/svgfilter \
     filter/source/xmlfilteradaptor/xmlfa \
 	filter/source/xmlfilterdetect/xmlfd \
+	filter/source/storagefilterdetect/storagefd \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \

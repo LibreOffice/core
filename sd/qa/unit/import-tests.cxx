@@ -70,6 +70,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
@@ -99,6 +100,8 @@ std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
 class SdImportTest : public SdModelTestBase
 {
 public:
+    virtual void setUp() override;
+
     void testDocumentLayout();
     void testSmoketest();
     void testN759180();
@@ -243,6 +246,12 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 };
+
+void SdImportTest::setUp()
+{
+    SdModelTestBase::setUp();
+    mxDesktop.set(frame::Desktop::create(getComponentContext()));
+}
 
 /** Test document against a reference XML dump of shapes.
 
@@ -1376,25 +1385,11 @@ void SdImportTest::testTdf99729()
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(filenames); ++i)
     {
         // 1st check for new behaviour - having AnchoredTextOverflowLegacy compatibility flag set to false in settings.xml
-        sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(filenames[i]), ODP);
+        uno::Reference<lang::XComponent> xComponent
+            = loadFromDesktop(m_directories.getURLFromSrc(filenames[i]),
+                              "com.sun.star.presentation.PresentationDocument");
 
-        const css::uno::Reference< css::frame::XFrame > xFrame = SfxFrame::CreateBlankFrame();
-        CPPUNIT_ASSERT(xFrame.is());
-        const css::uno::Reference< css::frame::XModel2 > xModel(xDocShRef->GetModel(), css::uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xModel.is());
-        const css::uno::Reference< css::frame::XController2 > xController(xModel->createViewController(
-            "Default",
-            css::uno::Sequence< css::beans::PropertyValue >(),
-            xFrame
-            ), css::uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xController.is());
-        xController->attachModel(xModel.get());
-        xModel->connectController(xController.get());
-        xFrame->setComponent(xController->getComponentWindow(), xController.get());
-        xController->attachFrame(xFrame);
-        xModel->setCurrentController(xController.get());
-
-        uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        uno::Reference<uno::XComponentContext> xContext = getComponentContext();
         CPPUNIT_ASSERT(xContext.is());
         uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
         CPPUNIT_ASSERT(xGraphicExporter.is());
@@ -1416,7 +1411,10 @@ void SdImportTest::testTdf99729()
         aDescriptor[2].Name = "FilterData";
         aDescriptor[2].Value <<= aFilterData;
 
-        uno::Reference< lang::XComponent > xPage(getPage(0, xDocShRef), uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
+        uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                               uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xPage.is());
         xGraphicExporter->setSourceDocument(xPage);
         xGraphicExporter->filter(aDescriptor);
 
@@ -1434,8 +1432,7 @@ void SdImportTest::testTdf99729()
                     ++nonwhitecounts[i];
             }
         }
-        xController->dispose();
-        xFrame->dispose();
+        xComponent->dispose();
     }
     // The numbers 1-9 should be above the Text Box in rectangle 154,16 - 170,112.
     // If text alignment is wrong, the rectangle will be white.
