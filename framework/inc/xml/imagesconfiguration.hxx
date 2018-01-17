@@ -76,12 +76,10 @@ typedef std::vector<std::unique_ptr<ImageListItemDescriptor> > ImageListDescript
 
 struct ImageListsDescriptor
 {
-    ImageListsDescriptor() : pImageList( nullptr ),
-                     pExternalImageList( nullptr ) {}
-    ~ImageListsDescriptor() { delete pImageList; delete pExternalImageList; }
+    ImageListsDescriptor() {}
 
-    ImageListDescriptor*            pImageList;
-    ExternalImageItemListDescriptor*    pExternalImageList;
+    std::unique_ptr<ImageListDescriptor> pImageList;
+    std::unique_ptr<ExternalImageItemListDescriptor> pExternalImageList;
 };
 
 class ImagesConfiguration

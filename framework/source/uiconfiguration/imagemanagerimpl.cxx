@@ -400,7 +400,7 @@ bool ImageManagerImpl::implts_storeUserImages(
         if ( pImageList->GetImageCount() > 0 )
         {
             ImageListsDescriptor aUserImageListInfo;
-            aUserImageListInfo.pImageList = new ImageListDescriptor;
+            aUserImageListInfo.pImageList.reset( new ImageListDescriptor );
 
             ImageListItemDescriptor* pList = new ImageListItemDescriptor;
             aUserImageListInfo.pImageList->push_back( std::unique_ptr<ImageListItemDescriptor>(pList) );
