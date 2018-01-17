@@ -1942,6 +1942,8 @@ public:
 
     bool            HasLinkFormulaNeedingCheck() const      { return bLinkFormulaNeedingCheck; }
     void            SetLinkFormulaNeedingCheck(bool bSet)   { bLinkFormulaNeedingCheck = bSet; }
+    /** Check token array and set link check if ocDde/ocWebservice is contained. */
+    SC_DLLPUBLIC void CheckLinkFormulaNeedingCheck( const ScTokenArray& rCode );
 
     void            SetRangeOverflowType(sal_uInt32 nType)  { nRangeOverflowType = nType; }
     bool            HasRangeOverflow() const                { return nRangeOverflowType != 0; }
