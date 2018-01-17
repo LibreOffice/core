@@ -157,6 +157,7 @@ void ImportExcel::Formula(
     {
         pCell = new ScFormulaCell(&rDoc.getDoc(), aScPos, *pResult);
         pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
+        rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());
         rDoc.getDoc().EnsureTable(aScPos.Tab());
         rDoc.setFormulaCell(aScPos, pCell);
         SetLastFormula(aScPos.Col(), aScPos.Row(), fCurVal, nXF, pCell);
