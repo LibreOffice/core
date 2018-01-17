@@ -60,23 +60,34 @@ rtl::Reference<FuPoor> FuLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuLine::DoExecute( SfxRequest& rReq )
 {
-    bool        bHasMarked = mpView->AreObjectsMarked();
+    rReq.Ignore();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
-
-    if( !pArgs )
+    if (pArgs)
     {
-        const SdrObject* pObj = nullptr;
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        if( rMarkList.GetMarkCount() == 1 )
-            pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        mpViewShell->Cancel();
+        return;
+    }
 
-        std::unique_ptr<SfxItemSet> pNewAttr(new SfxItemSet( mpDoc->GetPool() ));
-        mpView->GetAttributes( *pNewAttr );
+    const SdrObject* pObj = nullptr;
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 1 )
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(nullptr,pNewAttr.get(),mpDoc,pObj,bHasMarked) : nullptr);
-        if( pDlg && (pDlg->Execute() == RET_OK) )
+    std::unique_ptr<SfxItemSet> pNewAttr(new SfxItemSet( mpDoc->GetPool() ));
+    mpView->GetAttributes( *pNewAttr );
+
+    bool bHasMarked = mpView->AreObjectsMarked();
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(nullptr,pNewAttr.get(),mpDoc,pObj,bHasMarked) : nullptr);
+    if (!pDlg)
+    {
+        mpViewShell->Cancel();
+        return;
+    }
+
+    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        if (nResult == RET_OK)
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
 
@@ -95,9 +106,8 @@ void FuLine::DoExecute( SfxRequest& rReq )
 
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
-    }
-
-    rReq.Ignore ();
+        mpViewShell->Cancel();
+    }, pDlg);
 }
 
 void FuLine::Activate()
