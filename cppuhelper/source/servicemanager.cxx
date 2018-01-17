@@ -738,7 +738,7 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
         assert(i->second[0].get() != nullptr);
         SAL_INFO_IF(
             i->second.size() > 1, "cppuhelper",
-            "Arbitrarily chosing " << i->second[0]->info->name
+            "Arbitrarily choosing " << i->second[0]->info->name
                 << " among multiple implementations for " << i->first);
         entries->push_back(
             cppu::ContextEntry_Init(
@@ -1641,7 +1641,7 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
             assert(i->second[0].get() != nullptr);
             SAL_INFO_IF(
                 i->second.size() > 1, "cppuhelper",
-                "Arbitrarily chosing " << i->second[0]->info->name
+                "Arbitrarily choosing " << i->second[0]->info->name
                     << " among multiple implementations for singleton "
                     << i->first);
             try {
@@ -1792,7 +1792,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
             assert(!i->second.empty());
             SAL_INFO_IF(
                 i->second.size() > 1, "cppuhelper",
-                "Arbitrarily chosing " << i->second[0]->info->name
+                "Arbitrarily choosing " << i->second[0]->info->name
                     << " among multiple implementations for " << i->first);
             impl = i->second[0];
         }

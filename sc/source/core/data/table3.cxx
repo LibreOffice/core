@@ -147,7 +147,7 @@ bool SplitString( const OUString &sWhole,
     @param pCW
     Pointer to collator wrapper for normal string comparison
 
-    @return Returnes 1 if sInput1 is greater, 0 if sInput1 == sInput2, and -1 if
+    @return Returns 1 if sInput1 is greater, 0 if sInput1 == sInput2, and -1 if
     sInput2 is greater.
 */
 short Compare( const OUString &sInput1, const OUString &sInput2,

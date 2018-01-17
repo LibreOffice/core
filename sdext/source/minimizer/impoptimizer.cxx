@@ -422,7 +422,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 
                                 if ( aGraphicUserIter->maGraphicCropLogic.Left || aGraphicUserIter->maGraphicCropLogic.Top
                                 || aGraphicUserIter->maGraphicCropLogic.Right || aGraphicUserIter->maGraphicCropLogic.Bottom )
-                                {   // removing crop area was not possible or should't been applied
+                                {   // removing crop area was not possible or shouldn't been applied
                                     text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
                                     if ( !aGraphicSettings.mbRemoveCropArea )
                                     {

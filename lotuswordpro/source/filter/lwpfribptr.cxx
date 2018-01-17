@@ -127,7 +127,7 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
             {
                 pCurFrib->SetNext(pFrib);
             }
-            else//frist frib in the para
+            else//first frib in the para
             {
                 if (pFrib->GetType() == FRIB_TAG_TEXT)
                 {

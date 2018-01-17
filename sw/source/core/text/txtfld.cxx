@@ -531,7 +531,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 }
 
                 // Apply the explicit attributes from the character style
-                // associated with the numering to the new bullet font.
+                // associated with the numbering to the new bullet font.
                 if( pFormat )
                     pNumFnt->SetDiffFnt( pFormat, pIDSA );
 
@@ -587,7 +587,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     }
 
                     // Apply the explicit attributes from the character style
-                    // associated with the numering to the new bullet font.
+                    // associated with the numbering to the new bullet font.
                     if( pFormat )
                         pNumFnt->SetDiffFnt( pFormat, pIDSA );
 

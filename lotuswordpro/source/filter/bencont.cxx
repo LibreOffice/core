@@ -164,7 +164,7 @@ LtcBenContainer::LtcBenContainer(LwpSvStream * pStream)
 }
 
 /**
-*   Read buffer fro bento file with specified buffer
+*   Read buffer for bento file with specified buffer
 *   @param  buffer pointer
 *   @param  buffer size
 *   @param  number of bytes read

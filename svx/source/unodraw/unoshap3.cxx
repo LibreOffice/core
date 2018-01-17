@@ -289,7 +289,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // pach transformation matrix to the object
+        // patch transformation matrix to the object
         if( ConvertHomogenMatrixToObject( static_cast< E3dObject* >( mpObj.get() ), rValue ) )
             return true;
         break;
@@ -401,7 +401,7 @@ bool Svx3DSceneObject::getPropertyValueImpl(const OUString& rName, const SfxItem
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // pach object to a homogeneous 4x4 matrix
+        // patch object to a homogeneous 4x4 matrix
         ConvertObjectToHomogenMatric( static_cast< E3dObject* >( mpObj.get() ), rValue );
         break;
     }
