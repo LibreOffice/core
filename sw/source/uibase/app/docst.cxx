@@ -295,7 +295,6 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 {
     sal_uInt16  nSlot   = rReq.GetSlot();
-    sal_uInt16  nRet    = SFXSTYLEBIT_ALL;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
@@ -323,7 +322,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             if (sName.isEmpty() && m_xBasePool.get())
                 sName = SfxStyleDialog::GenerateUnusedName(*m_xBasePool);
 
-            nRet = Edit( sName, sParent, nFamily, nMask, true, OString(), nullptr, rReq.IsAPI() );
+            Edit(sName, sParent, nFamily, nMask, true, OString(), nullptr, rReq.IsAPI());
 
             // Update Watermark if new page style was created
             if( nFamily == SfxStyleFamily::Page )
@@ -498,34 +497,47 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             }
             if (!aParam.isEmpty() || nSlot == SID_STYLE_WATERCAN )
             {
+                sal_uInt16 nRet = SFXSTYLEBIT_ALL;
+                bool bReturns = false;
+
                 switch(nSlot)
                 {
                     case SID_STYLE_EDIT:
-                        nRet = Edit(aParam, aEmptyOUStr, nFamily, nMask, false, OString(), pActShell );
+                        Edit(aParam, aEmptyOUStr, nFamily, nMask, false, OString(), pActShell);
                         break;
                     case SID_STYLE_DELETE:
-                        nRet = sal_uInt16(Delete(aParam, nFamily));
+                        Delete(aParam, nFamily);
                         break;
                     case SID_STYLE_HIDE:
                     case SID_STYLE_SHOW:
-                        nRet = sal_uInt16(Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE));
+                        Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE);
                         break;
                     case SID_STYLE_APPLY:
                         // Shell-switch in ApplyStyles
                         nRet = static_cast<sal_uInt16>(ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() ));
+                        bReturns = true;
                         break;
                     case SID_STYLE_WATERCAN:
                         nRet = static_cast<sal_uInt16>(DoWaterCan(aParam, nFamily));
+                        bReturns = true;
                         break;
                     case SID_STYLE_UPDATE_BY_EXAMPLE:
-                        nRet = static_cast<sal_uInt16>(UpdateStyle(aParam, nFamily, pActShell));
+                        UpdateStyle(aParam, nFamily, pActShell);
                         break;
                     case SID_STYLE_NEW_BY_EXAMPLE:
-                        nRet = static_cast<sal_uInt16>(MakeByExample(aParam, nFamily, nMask, pActShell ));
+                        MakeByExample(aParam, nFamily, nMask, pActShell);
                         break;
 
                     default:
                         OSL_FAIL("Invalid SlotId");
+                }
+
+                if (bReturns)
+                {
+                    if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
+                        rReq.SetReturnValue(SfxUInt16Item(nSlot, sal_uInt16(nRet !=0)));
+                    else
+                        rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
                 }
 
                 rReq.Done();
@@ -534,11 +546,6 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             break;
         }
     }
-
-        if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
-            rReq.SetReturnValue(SfxUInt16Item(nSlot, sal_uInt16(nRet !=0)));
-        else
-            rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
 }
 
 class ApplyStyle
