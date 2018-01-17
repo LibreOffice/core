@@ -1247,21 +1247,6 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& s
 }
 
 
-const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const OUString& sIndex)
-{
-    StyleSheetEntryPtr pRet;
-    for(StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
-    {
-        if( rpEntry->sStyleName == sIndex)
-        {
-            pRet = rpEntry;
-            break;
-        }
-    }
-    return pRet;
-}
-
-
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
