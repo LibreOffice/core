@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5581bd49",
+        "filename": "writerfilter/source/dmapper/GraphicHelpers.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-01-17T09:06:57Z",
+      "side": 1,
+      "message": "Did you consider SAL_N_ELEMENTS() here to avoid the need to count the items manually?",
+      "revId": "42340a2d80390a2c3f7d885be434e493fcf2bad2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
