@@ -409,7 +409,7 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
 {
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
-    Color aBackgroundColor( 0xec, 0xec, 0xec );
+    Color aBackgroundColor( 0xef, 0xef, 0xef );
     aStyleSettings.BatchSetBackgrounds( aBackgroundColor, false );
     aStyleSettings.SetMenuColor( aBackgroundColor );
     aStyleSettings.SetMenuBarColor( aBackgroundColor );
