@@ -1771,7 +1771,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             SET_CURR_SHELL( this );
             SwRootFrame::SetNoVirDev( true );
 
-            //We don't want to Clip to and fro, we trust that all are limited
+            //We don't want to Clip to and from, we trust that all are limited
             //to the rectangle and only need to calculate the clipping once.
             //The ClipRect is removed here once and not recovered, as externally
             //no one needs it anymore anyway.

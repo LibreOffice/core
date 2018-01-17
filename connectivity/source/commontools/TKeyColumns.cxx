@@ -55,7 +55,7 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= aSchema;
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= aTable;
 
-    // frist get the related column to _rName
+    // first get the related column to _rName
     Reference< XResultSet > xResult = m_pKey->getTable()->getMetaData()->getImportedKeys(
             Catalog, aSchema, aTable);
 

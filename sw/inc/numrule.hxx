@@ -135,7 +135,7 @@ private:
     bool mbInvalidRuleFlag : 1;
     bool mbContinusNum : 1;  ///< Continuous numbering without levels.
     bool mbAbsSpaces : 1;    ///< Levels represent absolute indents.
-    bool mbHidden : 1;       ///< Is the numering rule to be hidden in the UI?
+    bool mbHidden : 1;       ///< Is the numbering rule to be hidden in the UI?
     bool mbCountPhantoms;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;

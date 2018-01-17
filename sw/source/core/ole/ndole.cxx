@@ -1032,7 +1032,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
 
         if(aXModel.is())
         {
-            // disabled fro now, need to check deeper
+            // disabled for now, need to check deeper
             static bool bAsynchronousLoadingAllowed = false;
 
             if(bSynchron ||

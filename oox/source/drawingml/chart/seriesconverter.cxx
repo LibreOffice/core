@@ -316,7 +316,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
             {
                 // #i87806# manual error bars
                 aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::FROM_DATA );
-                // attach data sequences to erorr bar
+                // attach data sequences to error bar
                 Reference< XDataSink > xDataSink( xErrorBar, UNO_QUERY );
                 if( xDataSink.is() )
                 {

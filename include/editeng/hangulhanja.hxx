@@ -162,7 +162,7 @@ namespace editeng
 
             <p>This will be called whenever it is necessary to interactively ask the user for
             a conversion. In such a case, a range within the current portion (see <member>GetNextPortion</member>)
-            is presented to the user for chosing a substitution. Additionally, this method is called,
+            is presented to the user for choosing a substitution. Additionally, this method is called,
             so that derived classes can e.g. highlight this text range in a document view.</p>
 
             <p>Note that the indexes are relative to the most recent replace action. See
