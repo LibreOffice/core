@@ -2472,7 +2472,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
             return NULL;
     }
 
-    // Tables should be saved as a whole, expection:
+    // Tables should be saved as a whole, exception:
     // The contents of a section or a cell inside a table should be saved
     if ( pSav->IsInTab() && !( ( pLay->IsSctFrm() || pLay->IsCellFrm() ) && pLay->IsInTab() ) )
         while ( !pSav->IsTabFrm() )

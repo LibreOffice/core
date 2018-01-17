@@ -89,7 +89,7 @@ protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 
 private:
-    /** This pointer stores a canidate for assigning a style in the water
+    /** This pointer stores a candidate for assigning a style in the water
         can mode between mouse button down and mouse button up.
     */
     SdrObject* pWaterCanCandidate;
