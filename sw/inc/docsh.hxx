@@ -119,7 +119,7 @@ class SW_DLLPUBLIC SwDocShell
     /// @param nSlot
     /// Only used for nFamily == SfxStyleFamily::Page. Identifies optional Slot by which the edit is triggered.
     /// Used to activate certain dialog pane
-    SAL_DLLPRIVATE sal_uInt16 Edit(
+    SAL_DLLPRIVATE void Edit(
         const OUString &rName,
         const OUString& rParent,
         const SfxStyleFamily nFamily,
@@ -127,17 +127,17 @@ class SW_DLLPUBLIC SwDocShell
         const bool bNew,
         const OString& sPageId,
         SwWrtShell* pActShell,
-        const bool bBasic = false );
+        SfxRequest* pRequest = nullptr);
 
-    SAL_DLLPRIVATE bool                  Delete(const OUString &rName, SfxStyleFamily nFamily);
-    SAL_DLLPRIVATE bool                  Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden);
+    SAL_DLLPRIVATE void                  Delete(const OUString &rName, SfxStyleFamily nFamily);
+    SAL_DLLPRIVATE void                  Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden);
     SAL_DLLPRIVATE SfxStyleFamily        ApplyStyles(const OUString &rName,
         const SfxStyleFamily nFamily,
         SwWrtShell* pShell,
         sal_uInt16 nMode);
     SAL_DLLPRIVATE SfxStyleFamily        DoWaterCan( const OUString &rName, SfxStyleFamily nFamily);
-    SAL_DLLPRIVATE SfxStyleFamily        UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell);
-    SAL_DLLPRIVATE SfxStyleFamily        MakeByExample(const OUString &rName,
+    SAL_DLLPRIVATE void                  UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell);
+    SAL_DLLPRIVATE void                  MakeByExample(const OUString &rName,
                                                SfxStyleFamily nFamily, sal_uInt16 nMask, SwWrtShell* pShell);
 
     SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
@@ -257,7 +257,8 @@ public:
     void FormatPage(
         const OUString& rPage,
         const OString& rPageId,
-        SwWrtShell& rActShell );
+        SwWrtShell& rActShell,
+        SfxRequest* pRequest = nullptr);
 
     // #i59688#
     /** linked graphics are now loaded on demand.

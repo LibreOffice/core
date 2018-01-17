@@ -322,7 +322,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             if (sName.isEmpty() && m_xBasePool.get())
                 sName = SfxStyleDialog::GenerateUnusedName(*m_xBasePool);
 
-            Edit(sName, sParent, nFamily, nMask, true, OString(), nullptr, rReq.IsAPI());
+            Edit(sName, sParent, nFamily, nMask, true, OString(), nullptr, &rReq);
 
             // Update Watermark if new page style was created
             if( nFamily == SfxStyleFamily::Page )
@@ -551,15 +551,13 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 class ApplyStyle
 {
 public:
-    ApplyStyle(SwDocShell &rDocSh, bool bNew, SfxStyleSheetBase* pStyle,
-        sal_uInt16 nRet, rtl::Reference< SwDocStyleSheet > const & xTmp,
+    ApplyStyle(SwDocShell &rDocSh, bool bNew,
+        rtl::Reference< SwDocStyleSheet > const & xTmp,
         SfxStyleFamily nFamily, SfxAbstractApplyTabDialog *pDlg,
         rtl::Reference< SfxStyleSheetBasePool > const & xBasePool,
         bool bModified)
         : m_rDocSh(rDocSh)
         , m_bNew(bNew)
-        , m_pStyle(pStyle)
-        , m_nRet(nRet)
         , m_xTmp(xTmp)
         , m_nFamily(nFamily)
         , m_pDlg(pDlg)
@@ -572,12 +570,9 @@ public:
     {
         ApplyHdl(nullptr);
     }
-    sal_uInt16 getRet() const { return m_nRet; }
 private:
     SwDocShell &m_rDocSh;
     bool m_bNew;
-    SfxStyleSheetBase* m_pStyle;
-    sal_uInt16 m_nRet;
     rtl::Reference< SwDocStyleSheet > m_xTmp;
     SfxStyleFamily m_nFamily;
     VclPtr<SfxAbstractApplyTabDialog> m_pDlg;
@@ -592,16 +587,6 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
     SwView* pView = m_rDocSh.GetView();
 
     pWrtShell->StartAllAction();
-
-    // newly set the mask only with paragraph-templates
-    if( m_bNew )
-    {
-        m_nRet = SfxStyleFamily::Para == m_pStyle->GetFamily()
-                ? m_xTmp->GetMask()
-                : SFXSTYLEBIT_USERDEF;
-    }
-    else if( m_pStyle->GetMask() != m_xTmp->GetMask() )
-        m_nRet = m_xTmp->GetMask();
 
     if( SfxStyleFamily::Para == m_nFamily )
     {
@@ -664,7 +649,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
     pWrtShell->EndAllAction();
 }
 
-sal_uInt16 SwDocShell::Edit(
+void SwDocShell::Edit(
     const OUString &rName,
     const OUString &rParent,
     const SfxStyleFamily nFamily,
@@ -672,12 +657,12 @@ sal_uInt16 SwDocShell::Edit(
     const bool bNew,
     const OString& sPage,
     SwWrtShell* pActShell,
-    const bool bBasic )
+    SfxRequest* pRequest)
 {
     assert( GetWrtShell() );
+    const bool bBasic = pRequest && pRequest->IsAPI();
     SfxStyleSheetBase *pStyle = nullptr;
 
-    sal_uInt16 nRet = nMask;
     bool bModified = m_xDoc->getIDocumentState().IsModified();
 
     SwUndoId nNewStyleUndoId(SwUndoId::EMPTY);
@@ -793,7 +778,7 @@ sal_uInt16 SwDocShell::Edit(
     }
 
     if(!pStyle)
-        return 0;
+        return;
 
     // put dialogues together
     rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pStyle) ) );
@@ -845,7 +830,7 @@ sal_uInt16 SwDocShell::Edit(
                                                     *(xTmp.get()), nFamily, sPage,
                                                     pActShell ? pActShell : m_pWrtShell, bNew));
         assert( pDlg );
-        ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified);
+        ApplyStyle aApplyStyleHelper(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified);
         pDlg->SetApplyHdl(LINK(&aApplyStyleHelper, ApplyStyle, ApplyHdl));
 
         short nDlgRet = pDlg->Execute();
@@ -875,8 +860,6 @@ sal_uInt16 SwDocShell::Edit(
             if( !bModified )
                 m_xDoc->getIDocumentState().ResetModified();
         }
-
-        nRet = aApplyStyleHelper.getRet();
     }
     else
     {
@@ -884,16 +867,6 @@ sal_uInt16 SwDocShell::Edit(
         PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(this)));
 
         GetWrtShell()->StartAllAction();
-
-        // newly set the mask only with paragraph-templates
-        if( bNew )
-        {
-            nRet = SfxStyleFamily::Para == pStyle->GetFamily()
-                    ? xTmp->GetMask()
-                    : SFXSTYLEBIT_USERDEF;
-        }
-        else if( pStyle->GetMask() != xTmp->GetMask() )
-            nRet = xTmp->GetMask();
 
         if( SfxStyleFamily::Para == nFamily )
             ::SfxToSwPageDescAttr( *GetWrtShell(), xTmp->GetItemSet() );
@@ -914,11 +887,9 @@ sal_uInt16 SwDocShell::Edit(
         }
         GetWrtShell()->EndAllAction();
     }
-
-    return nRet;
 }
 
-bool SwDocShell::Delete(const OUString &rName, SfxStyleFamily nFamily)
+void SwDocShell::Delete(const OUString &rName, SfxStyleFamily nFamily)
 {
     SfxStyleSheetBase *pStyle = m_xBasePool->Find(rName, nFamily);
 
@@ -929,13 +900,10 @@ bool SwDocShell::Delete(const OUString &rName, SfxStyleFamily nFamily)
         GetWrtShell()->StartAllAction();
         m_xBasePool->Remove(pStyle);
         GetWrtShell()->EndAllAction();
-
-        return true;
     }
-    return false;
 }
 
-bool SwDocShell::Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden)
+void SwDocShell::Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden)
 {
     SfxStyleSheetBase *pStyle = m_xBasePool->Find(rName, nFamily);
 
@@ -947,10 +915,7 @@ bool SwDocShell::Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidde
         rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pStyle) ) );
         xTmp->SetHidden( bHidden );
         GetWrtShell()->EndAllAction();
-
-        return true;
     }
-    return false;
 }
 
 // apply template
@@ -1075,7 +1040,7 @@ SfxStyleFamily SwDocShell::DoWaterCan(const OUString &rName, SfxStyleFamily nFam
 }
 
 // update template
-SfxStyleFamily SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell)
+void SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell)
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
     assert( pCurrWrtShell );
@@ -1083,8 +1048,8 @@ SfxStyleFamily SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFa
     SwDocStyleSheet* pStyle =
         static_cast<SwDocStyleSheet*>( m_xBasePool->Find(rName, nFamily) );
 
-    if(!pStyle)
-        return nFamily;
+    if (!pStyle)
+        return;
 
     switch(nFamily)
     {
@@ -1170,11 +1135,10 @@ SfxStyleFamily SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFa
         break;
         default: break;
     }
-    return nFamily;
 }
 
 // NewByExample
-SfxStyleFamily SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
+void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
                                     sal_uInt16 nMask, SwWrtShell* pShell )
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
@@ -1334,7 +1298,6 @@ SfxStyleFamily SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily 
 
         default: break;
     }
-    return nFamily;
 }
 
 std::set<Color> SwDocShell::GetDocColors()
@@ -1401,9 +1364,10 @@ void SwDocShell::LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocu
 void SwDocShell::FormatPage(
     const OUString& rPage,
     const OString& rPageId,
-    SwWrtShell& rActShell )
+    SwWrtShell& rActShell,
+    SfxRequest* pRequest)
 {
-    Edit( rPage, aEmptyOUStr, SfxStyleFamily::Page, 0, false, rPageId, &rActShell);
+    Edit(rPage, aEmptyOUStr, SfxStyleFamily::Page, 0, false, rPageId, &rActShell, pRequest);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
