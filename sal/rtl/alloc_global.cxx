@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 
+#include <algorithm>
 #include <cassert>
 #include <string.h>
 #include <stdio.h>

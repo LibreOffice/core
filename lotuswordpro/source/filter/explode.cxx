@@ -56,6 +56,8 @@
 
 #include "explode.hxx"
 #include <tools/stream.hxx>
+
+#include <algorithm>
 #include <assert.h>
 #include <math.h>
 

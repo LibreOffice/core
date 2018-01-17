@@ -58,6 +58,10 @@
  *  For LWP filter architecture prototype - table object
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
  #include "lwptable.hxx"
 
  LwpSuperTable::LwpSuperTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpContent(objHdr, pStrm)
