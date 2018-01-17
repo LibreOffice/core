@@ -2680,6 +2680,46 @@ void WW8AttributeOutput::WriteExpand( const SwField* pField )
     SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sExpand, false );
 }
 
+namespace
+{
+// Escapes a token string for storing in Word formats. Its import counterpart
+// is lcl_ExtractToken in writerfilter/source/dmapper/DomainMapper_Impl.cxx
+OUString EscapeToken(const OUString& rCommand)
+{
+    bool bWasEscaped = false;
+
+    const int nBufferLen = rCommand.getLength()*1.5;
+    OUStringBuffer sResult(nBufferLen);
+    sResult.append('"'); // opening quote
+    for (sal_Int32 i = 0; i < rCommand.getLength(); ++i)
+    {
+        sal_Unicode ch = rCommand[i];
+        switch (ch)
+        {
+        case '\\':
+        case '"':
+            // Backslashes and doublequotes must be escaped
+            bWasEscaped = true;
+            sResult.append('\\');
+            break;
+        case ' ':
+            // Spaces require quotation
+            bWasEscaped = true;
+            break;
+        }
+        sResult.append(ch);
+    }
+
+    if (bWasEscaped)
+    {
+        sResult.append('"'); // closing quote
+        return sResult.makeStringAndClear();
+    }
+    // No escapement/quotation was required
+    return rCommand;
+}
+}
+
 void AttributeOutputBase::TextField( const SwFormatField& rField )
 {
     const SwField* pField = rField.GetField();
@@ -2757,7 +2797,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case SwFieldIds::Database:
         {
-            OUString sStr = FieldString(ww::eMERGEFIELD) + static_cast<SwDBFieldType *>(pField->GetTyp())->GetColumnName() + " ";
+            OUString sStr = FieldString(ww::eMERGEFIELD)
+                + EscapeToken(static_cast<SwDBFieldType *>(pField->GetTyp())->GetColumnName()) + " ";
             GetExport().OutputField(pField, ww::eMERGEFIELD, sStr);
         }
         break;
