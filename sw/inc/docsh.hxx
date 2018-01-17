@@ -127,7 +127,8 @@ class SW_DLLPUBLIC SwDocShell
         const bool bNew,
         const OString& sPageId,
         SwWrtShell* pActShell,
-        SfxRequest* pRequest = nullptr);
+        SfxRequest* pRequest = nullptr,
+        sal_uInt16 nSlot = 0);
 
     SAL_DLLPRIVATE void                  Delete(const OUString &rName, SfxStyleFamily nFamily);
     SAL_DLLPRIVATE void                  Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden);
