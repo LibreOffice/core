@@ -25,6 +25,7 @@
 
 #include <map>
 #include <vector>
+#include <memory>
 
 
 namespace com { namespace sun { namespace star {
@@ -57,10 +58,10 @@ class XMLEventImportHelper
     FactoryMap aFactoryMap;
 
     /// map from XML to API names
-    NameMap* pEventNameMap;
+    std::unique_ptr<NameMap> pEventNameMap;
 
     /// stack of previous aEventNameMap
-    std::vector< NameMap* > aEventNameMapVector;
+    std::vector< std::unique_ptr<NameMap> > aEventNameMapVector;
 
 public:
     XMLEventImportHelper();
