@@ -992,7 +992,7 @@ void XMLTextParagraphExport::exportListChange(
                 GetExport().StartElement(aElem, false);
 
                 if(!pListElements)
-                    pListElements = new std::vector<OUString>;
+                    pListElements.reset( new std::vector<OUString> );
                 pListElements->push_back(aElem);
 
                 mpTextListsHelper->PushListOnStack( sListId,
@@ -1298,12 +1298,12 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                               GetExport() );
 
-    pSectionExport = new XMLSectionExport( rExp, *this );
-    pIndexMarkExport = new XMLIndexMarkExport( rExp );
+    pSectionExport.reset( new XMLSectionExport( rExp, *this ) );
+    pIndexMarkExport.reset( new XMLIndexMarkExport( rExp ) );
 
     if( ! IsBlockMode() &&
         Reference<XRedlinesSupplier>( GetExport().GetModel(), UNO_QUERY ).is())
-        pRedlineExport = new XMLRedlineExport( rExp );
+        pRedlineExport.reset( new XMLRedlineExport( rExp ) );
 
     // The text field helper needs a pre-constructed XMLPropertyState
     // to export the combined characters field. We construct that
@@ -1313,17 +1313,17 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sal_Int32 nIndex = xTextPropMapper->getPropertySetMapper()->FindEntryIndex(
                                 "", XML_NAMESPACE_STYLE,
                                 GetXMLToken(XML_TEXT_COMBINE));
-    pFieldExport = new XMLTextFieldExport( rExp, new XMLPropertyState( nIndex, uno::makeAny(true) ) );
+    pFieldExport.reset( new XMLTextFieldExport( rExp, new XMLPropertyState( nIndex, uno::makeAny(true) ) ) );
     PushNewTextListsHelper();
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
 {
-    delete pRedlineExport;
-    delete pIndexMarkExport;
-    delete pSectionExport;
-    delete pFieldExport;
-    delete pListElements;
+    pRedlineExport.reset();
+    pIndexMarkExport.reset();
+    pSectionExport.reset();
+    pFieldExport.reset();
+    pListElements.reset();
 #ifdef DBG_UTIL
     txtparae_bContainsIllegalCharacters = false;
 #endif

@@ -90,14 +90,14 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     rtl::Reference < SvXMLExportPropertyMapper > xRubyPropMapper;
 
     const ::std::unique_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
-    XMLTextFieldExport          *pFieldExport;
-    std::vector<OUString>  *pListElements;
-    XMLTextListAutoStylePool    maListAutoPool;
-    XMLSectionExport            *pSectionExport;
-    XMLIndexMarkExport          *pIndexMarkExport;
+    std::unique_ptr<XMLTextFieldExport>          pFieldExport;
+    std::unique_ptr<std::vector<OUString>>       pListElements;
+    XMLTextListAutoStylePool                     maListAutoPool;
+    std::unique_ptr<XMLSectionExport>            pSectionExport;
+    std::unique_ptr<XMLIndexMarkExport>          pIndexMarkExport;
 
     /// may be NULL (if no redlines should be exported; e.g. in block mode)
-    XMLRedlineExport            *pRedlineExport;
+    std::unique_ptr<XMLRedlineExport> pRedlineExport;
 
     bool                        bProgress;
 
