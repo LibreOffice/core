@@ -203,13 +203,12 @@ void OTableEditorDelUndoAct::Undo()
 void OTableEditorDelUndoAct::Redo()
 {
     // delete line again
-    sal_uLong nPos;
     std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
     for (auto const& deletedRow : m_aDeletedRows)
     {
-        nPos = deletedRow->GetPos();
-        pOriginalRows->erase( pOriginalRows->begin()+nPos );
+        auto it = pOriginalRows->begin() + deletedRow->GetPos();
+        pOriginalRows->erase(it);
     }
 
     pTabEdCtrl->DisplayData(pTabEdCtrl->GetCurRow());
