@@ -3820,6 +3820,18 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     return HasStringCells( ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ) );
 }
 
+bool ScDocument::HasValidationData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+{
+    sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ) )->GetValue();
+    if( nValidation )
+    {
+        const ScValidationData* pData = GetValidationEntry( nValidation );
+        if( pData && pData->GetDataMode() != ScValidationMode::SC_VALID_ANY )
+            return true;
+    }
+    return false;
+}
+
 void ScDocument::CheckVectorizationState()
 {
     bool bOldAutoCalc = GetAutoCalc();

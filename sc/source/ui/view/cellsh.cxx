@@ -301,7 +301,6 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                     }
                 }
                 break;
-
             case SID_TRANSLITERATE_HALFWIDTH:
             case SID_TRANSLITERATE_FULLWIDTH:
             case SID_TRANSLITERATE_HIRAGANA:
@@ -833,6 +832,11 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 // page fields have to be checked separately.
                 if ( !pDoc->HasSelectionData( nPosX, nPosY, nTab ) &&
                      !pTabViewShell->HasPageFieldDataAtCursor() )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_CURRENTVALIDATION:
+                if ( !pDoc->HasValidationData( nPosX, nPosY, nTab ))
                     rSet.DisableItem( nWhich );
                 break;
 

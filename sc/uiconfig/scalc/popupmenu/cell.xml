@@ -39,4 +39,5 @@
   <menu:menuitem menu:id=".uno:HideNote"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:DataSelect"/>
+  <menu:menuitem menu:id=".uno:CurrentValidation"/>
 </menu:menupopup>

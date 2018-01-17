@@ -806,6 +806,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             ExecuteXMLSourceDialog();
         break;
         case FID_VALIDATION:
+        case FID_CURRENTVALIDATION:
             {
                 const SfxPoolItem* pItem;
                 const SfxItemSet* pArgs = rReq.GetArgs();
