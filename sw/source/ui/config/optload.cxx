@@ -776,9 +776,11 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
                 m_pPosBox->InsertEntry(m_sEnd);
                 break;
         }
-        m_pPosBox->SelectEntryPos(pOpt->GetPos());
         m_pPosBox->Enable( m_pPosBox->IsEnabled() );
-        m_pPosBox->SelectEntryPos(pOpt->GetPos());
+        if (m_pPosBox->IsEnabled())
+            m_pPosBox->SelectEntryPos(pOpt->GetPos());
+        else
+            m_pPosBox->SelectEntryPos(0);
 
         sal_Int32 nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;
         m_pLbLevel->SelectEntryPos( nLevelPos );
