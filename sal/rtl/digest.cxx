@@ -1047,6 +1047,8 @@ static void endSHA(DigestContextSHA *ctx)
 
     i += 1;
 
+    // tdf#114939 NB: this is WRONG and should be ">" not ">=" but is not
+    // fixed as this buggy SHA1 implementation is needed for compatibility
     if (i >= (DIGEST_LBLOCK_SHA - 2))
     {
         for (; i < DIGEST_LBLOCK_SHA; i++)
