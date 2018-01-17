@@ -145,11 +145,17 @@ void SwXMLImport::SetStatistics(
     // use #pages*10, or guesstimate 250 paragraphs. Additionally
     // guesstimate PROGRESS_BAR_STEPS each for meta+settings, styles,
     // and autostyles.
-    sal_Int32 nProgressReference = 250;
-    if( nTokens & XML_TOK_META_STAT_PARA )
+    bool bSetFallback = true;
+    sal_Int32 nProgressReference;
+    if (nTokens & XML_TOK_META_STAT_PARA)
+    {
         nProgressReference = static_cast<sal_Int32>(aDocStat.nPara);
-    else if ( nTokens & XML_TOK_META_STAT_PAGE )
-        o3tl::checked_multiply<sal_Int32>(aDocStat.nPage, 10, nProgressReference);
+        bSetFallback = false;
+    }
+    else if (nTokens & XML_TOK_META_STAT_PAGE)
+        bSetFallback = o3tl::checked_multiply<sal_Int32>(aDocStat.nPage, 10, nProgressReference);
+    if (bSetFallback)
+        nProgressReference = 250;
     ProgressBarHelper* pProgress = GetProgressBarHelper();
     pProgress->SetReference( nProgressReference + 3*PROGRESS_BAR_STEP );
     pProgress->SetValue( 0 );
