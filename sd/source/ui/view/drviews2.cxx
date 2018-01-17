@@ -1018,7 +1018,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTRIBUTES_AREA:  // BASIC
         {
             SetCurrentFunction( FuArea::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-            Cancel();
+            // Cancel() called directly in FuTransform::Create()
         }
         break;
 

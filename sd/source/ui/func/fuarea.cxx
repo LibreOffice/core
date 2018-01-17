@@ -52,39 +52,45 @@ rtl::Reference<FuPoor> FuArea::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuArea::DoExecute( SfxRequest& rReq )
 {
-    const SfxItemSet* pArgs = rReq.GetArgs();
-
-    if( !pArgs )
-    {
-        SfxItemSet aNewAttr( mpDoc->GetPool() );
-        mpView->GetAttributes( aNewAttr );
-
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog( nullptr,
-                                                                        &aNewAttr,
-                                                                        mpDoc,
-                                                                        true) : nullptr);
-        if( pDlg && (pDlg->Execute() == RET_OK) )
-        {
-            mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
-        }
-
-        // attributes changed, update Listboxes in Objectbars
-        static sal_uInt16 SidArray[] = {
-                        SID_ATTR_FILL_STYLE,
-                        SID_ATTR_FILL_COLOR,
-                        SID_ATTR_FILL_GRADIENT,
-                        SID_ATTR_FILL_HATCH,
-                        SID_ATTR_FILL_BITMAP,
-                        SID_ATTR_FILL_TRANSPARENCE,
-                        SID_ATTR_FILL_FLOATTRANSPARENCE,
-                        0 };
-
-        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
-    }
-
     rReq.Ignore ();
 
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    if (pArgs)
+    {
+        mpViewShell->Cancel();
+        return;
+    }
+
+    SfxItemSet aNewAttr( mpDoc->GetPool() );
+    mpView->GetAttributes( aNewAttr );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog(nullptr, &aNewAttr, mpDoc, true) : nullptr);
+    if (!pDlg)
+    {
+        mpViewShell->Cancel();
+        return;
+    }
+
+    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        if (nResult == RET_OK)
+        {
+            mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
+
+            // attributes changed, update Listboxes in Objectbars
+            static const sal_uInt16 SidArray[] = {
+                            SID_ATTR_FILL_STYLE,
+                            SID_ATTR_FILL_COLOR,
+                            SID_ATTR_FILL_GRADIENT,
+                            SID_ATTR_FILL_HATCH,
+                            SID_ATTR_FILL_BITMAP,
+                            SID_ATTR_FILL_TRANSPARENCE,
+                            SID_ATTR_FILL_FLOATTRANSPARENCE,
+                            0 };
+
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        }
+    }, pDlg);
 }
 
 void FuArea::Activate()
