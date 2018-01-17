@@ -81,7 +81,6 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry ):
     sBaseStyleIdentifier = rEntry.sBaseStyleIdentifier;
     sNextStyleIdentifier = rEntry.sNextStyleIdentifier;
     sStyleName = rEntry.sStyleName;
-    sStyleName1 = rEntry.sStyleName1;
     sStyleIdentifierD = rEntry.sStyleIdentifierD;
 }
 
@@ -530,7 +529,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_name:
             //this is only a UI name!
             m_pImpl->m_pCurrentEntry->sStyleName = sStringValue;
-            m_pImpl->m_pCurrentEntry->sStyleName1 = sStringValue;
             if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
             {
                 TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
