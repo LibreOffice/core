@@ -27,7 +27,7 @@ class XMLTransformerOASISEventMap_Impl;
 
 class Oasis2OOoTransformer : public XMLTransformerBase
 {
-    XMLTransformerActions       *m_aActions[MAX_OASIS_ACTIONS];
+    std::unique_ptr<XMLTransformerActions> m_aActions[MAX_OASIS_ACTIONS];
     XMLTransformerOASISEventMap_Impl *m_pEventMap;
     XMLTransformerOASISEventMap_Impl *m_pFormEventMap;
 
