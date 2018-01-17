@@ -5413,7 +5413,7 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
     try
     {
         OUString aStyle = GetCurrentParaStyleId();
-        if (aStyle.isEmpty() || GetTopContextType() != CONTEXT_PARAGRAPH)
+        if (aStyle.isEmpty())
             return xRet;
         const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByISTD(aStyle);
         if (!pEntry)
@@ -5450,7 +5450,9 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
     try
     {
         sal_Int32 nListLevel = -1;
-        uno::Reference<container::XIndexAccess> xLevels = GetCurrentNumberingRules(&nListLevel);
+        uno::Reference<container::XIndexAccess> xLevels;
+        if ( GetTopContextType() == CONTEXT_PARAGRAPH )
+            xLevels = GetCurrentNumberingRules(&nListLevel);
         if (!xLevels.is())
         {
             PropertyMapPtr pContext = m_pTopContext;
