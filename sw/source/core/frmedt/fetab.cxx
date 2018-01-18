@@ -1215,9 +1215,6 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
 
     SwSelBoxes aBoxes;
 
-    if ( !IsTableMode() )       // if cursors are not current
-        GetCursor();
-
     // whole table or only current selection
     if( IsTableMode() )
         ::GetTableSelCrs( *this, aBoxes );
