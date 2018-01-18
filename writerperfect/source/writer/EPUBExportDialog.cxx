@@ -13,6 +13,7 @@
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/opengrf.hxx>
 
@@ -68,10 +69,11 @@ sal_Int32 PositionToVersion(sal_Int32 nPosition)
 namespace writerperfect
 {
 
-EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, uno::Reference<uno::XComponentContext> xContext)
+EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, uno::Reference<uno::XComponentContext> xContext, const css::uno::Reference<css::lang::XComponent> &xDocument)
     : ModalDialog(pParent, "EpubDialog", "writerperfect/ui/exportepub.ui"),
       mxContext(std::move(xContext)),
-      mrFilterData(rFilterData)
+      mrFilterData(rFilterData),
+      mxSourceDocument(xDocument)
 {
     get(m_pVersion, "versionlb");
     assert(PositionToVersion(m_pVersion->GetSelectedEntryPos()) == EPUBExportFilter::GetDefaultVersion());
@@ -124,7 +126,15 @@ EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsH
     m_pMediaButton->SetClickHdl(LINK(this, EPUBExportDialog, MediaClickHdl));
 
     get(m_pIdentifier, "identifier");
+
     get(m_pTitle, "title");
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mxSourceDocument, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDP;
+    if (xDPS.is())
+        xDP = xDPS->getDocumentProperties();
+    if (xDP.is())
+        m_pTitle->SetText(xDP->getTitle());
+
     get(m_pInitialCreator, "author");
     get(m_pLanguage, "language");
     get(m_pDate, "date");

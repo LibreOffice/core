@@ -14,6 +14,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -26,7 +27,8 @@ class EPUBExportUIComponent : public cppu::WeakImplHelper
     <
     css::beans::XPropertyAccess,
     css::lang::XServiceInfo,
-    css::ui::dialogs::XExecutableDialog
+    css::ui::dialogs::XExecutableDialog,
+    css::document::XExporter
     >
 {
 public:
@@ -45,6 +47,9 @@ public:
     void SAL_CALL setTitle(const OUString &rTitle) override;
     sal_Int16 SAL_CALL execute() override;
 
+    // XExporter
+    void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent> &xDocument) override;
+
 private:
     /// The full set of property values.
     comphelper::SequenceAsHashMap maMediaDescriptor;
@@ -52,6 +57,7 @@ private:
     comphelper::SequenceAsHashMap maFilterData;
     /// UNO context.
     css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<css::lang::XComponent> mxSourceDocument;
 };
 
 } // namespace writerperfect

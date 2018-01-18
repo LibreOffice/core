@@ -76,10 +76,15 @@ sal_Int16 EPUBExportUIComponent::execute()
 {
     SolarMutexGuard aGuard;
 
-    ScopedVclPtrInstance<EPUBExportDialog> pDialog(Application::GetDefDialogParent(), maFilterData, mxContext);
+    ScopedVclPtrInstance<EPUBExportDialog> pDialog(Application::GetDefDialogParent(), maFilterData, mxContext, mxSourceDocument);
     if (pDialog->Execute() == RET_OK)
         return ui::dialogs::ExecutableDialogResults::OK;
     return ui::dialogs::ExecutableDialogResults::CANCEL;
+}
+
+void SAL_CALL EPUBExportUIComponent::setSourceDocument(const css::uno::Reference<css::lang::XComponent> &xDocument)
+{
+    mxSourceDocument = xDocument;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(uno::XComponentContext *pCtx, uno::Sequence<uno::Any> const &/*rSeq*/)

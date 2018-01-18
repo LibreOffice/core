@@ -27,7 +27,7 @@ namespace writerperfect
 class EPUBExportDialog : public ModalDialog
 {
 public:
-    EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, css::uno::Reference<css::uno::XComponentContext> xContext);
+    EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, css::uno::Reference<css::uno::XComponentContext> xContext, const css::uno::Reference<css::lang::XComponent> &xDocument);
     ~EPUBExportDialog() override;
     void dispose() override;
 
@@ -41,6 +41,7 @@ private:
 
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     comphelper::SequenceAsHashMap &mrFilterData;
+    css::uno::Reference<css::lang::XComponent> mxSourceDocument;
     VclPtr<ListBox> m_pVersion;
     VclPtr<ListBox> m_pSplit;
     VclPtr<ListBox> m_pLayout;

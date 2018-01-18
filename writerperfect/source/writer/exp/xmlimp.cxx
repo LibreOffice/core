@@ -370,7 +370,7 @@ const librevenge::RVNGPropertyList &XMLImport::GetMetaData()
 namespace
 {
 /// Finds out if a file URL exists.
-bool FileURLExists(const OUString& rURL)
+bool FileURLExists(const OUString &rURL)
 {
     SvFileStream aStream(rURL, StreamMode::READ);
     return aStream.IsOpen();
