@@ -1020,7 +1020,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         ResizeRect( aOutRect, rRef, xFact, yFact );
     }
 
-    // Position may also change, remember old one. This ois now already
+    // Position may also change, remember old one. This is now already
     // the one in the unrotated, old coordinate system
     Point aOldPos(bUseRightEdge ? GetFlyFrame()->getFrameArea().TopRight() : GetFlyFrame()->getFrameArea().Pos());
 

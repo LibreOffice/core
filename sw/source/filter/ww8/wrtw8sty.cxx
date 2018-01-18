@@ -1500,7 +1500,7 @@ void WW8Export::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     pSepx->OutHeaderFooter( *this, false, rFormat, nCpPos, nHeadFootFlags, WW8_FOOTER_ODD, nBreakCode );
 
     //#i24344# Drawing objects cannot be directly shared between main hd/ft
-    //and title hd/ft so we need to differenciate them
+    //and title hd/ft so we need to differentiate them
     IncrementHdFtIndex();
     pSepx->OutHeaderFooter( *this, true, rFirstPageFormat, nCpPos, nHeadFootFlags, WW8_HEADER_FIRST, nBreakCode );
     pSepx->OutHeaderFooter( *this, false, rFirstPageFormat, nCpPos, nHeadFootFlags, WW8_FOOTER_FIRST, nBreakCode );

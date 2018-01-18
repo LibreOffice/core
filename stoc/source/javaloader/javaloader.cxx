@@ -88,7 +88,7 @@ class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServic
     /** Do not use m_javaLoader directly. Instead use getJavaLoader.
      */
     css::uno::Reference<XImplementationLoader> m_javaLoader;
-    /** The retured Reference contains a null pointer if the office is not configured
+    /** The returned Reference contains a null pointer if the office is not configured
         to run java.
 
         @exception css::uno::RuntimeException
