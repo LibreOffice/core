@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <stdlib.h>
+
 #include <signalshared.hxx>
 
 #include <osl/diagnose.h>
