@@ -27,6 +27,10 @@
 #include "sal/macros.h"
 #include "sal/typesizes.h"
 
+#if defined LIBO_INTERNAL_ONLY
+#include "config_global.h"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

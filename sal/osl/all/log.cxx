@@ -21,6 +21,7 @@
 #include <string.h>
 #include <fstream>
 
+#include <config_global.h>
 #include <osl/thread.hxx>
 #include <rtl/string.h>
 #include <sal/detail/log.h>

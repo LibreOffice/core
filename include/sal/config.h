@@ -20,10 +20,6 @@
 #ifndef INCLUDED_SAL_CONFIG_H
 #define INCLUDED_SAL_CONFIG_H
 
-#if defined LIBO_INTERNAL_ONLY
-#include "config_global.h"
-#endif
-
 #include <stdlib.h>
 
 #ifdef _WIN32

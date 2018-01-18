@@ -19,6 +19,7 @@
 
 #include <rtl/math.h>
 
+#include <config_global.h>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>

@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #endif
 
+#include <config_global.h>
 #include <osl/process.h>
 #include <sal/main.h>
 #include <sal/types.h>
