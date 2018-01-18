@@ -309,7 +309,12 @@ protected:
 
 public:
     // Internal
-    const ESelection&       GetSelection() const throw() { CheckSelection( const_cast<SvxUnoTextRangeBase*>(this)->maSelection, mpEditSource->GetTextForwarder() ); return maSelection; };
+    const ESelection& GetSelection() const throw()
+    {
+        const SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
+        CheckSelection(const_cast<SvxUnoTextRangeBase*>(this)->maSelection, pForwarder);
+        return maSelection;
+    }
     void                    SetSelection( const ESelection& rSelection ) throw();
 
     void            CollapseToStart() throw();
