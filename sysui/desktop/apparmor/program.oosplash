@@ -1,18 +1,20 @@
 # ------------------------------------------------------------------
 #
 #    Copyright (C) 2016 Canonical Ltd.
+#    Copyright (C) 2018 Software in the Public Interest, Inc.
 #
 #    This Source Code Form is subject to the terms of the Mozilla Public
 #    License, v. 2.0. If a copy of the MPL was not distributed with this
 #    file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 #    Author: Bryan Quigley <bryan.quigley@canonical.com>
+#            Rene Engelhard <rene@debian.org>
 #
 # ------------------------------------------------------------------
 
 #include <tunables/global>
 
-profile libreoffice-oopslash INSTDIR-program/oosplash {
+profile libreoffice-oopslash INSTDIR-program/oosplash flags=(complain) {
   #include <abstractions/base>
   #include <abstractions/X>
 
