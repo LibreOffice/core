@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_787798d4",
+        "filename": "shell/source/backends/kde5be/kde5access.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-18T11:12:45Z",
+      "side": 1,
+      "message": "Pointy brackets \u003c\u003e \nThe convention seems to be: \"foo.h\" for includes in this folder, \u003cfoo.h\u003e for everything else, internal or external",
+      "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_98744cd0",
+        "filename": "shell/source/backends/kde5be/kde5access.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-18T11:12:45Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_5872d4e6",
+        "filename": "shell/source/backends/kde5be/kde5access.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-18T11:12:45Z",
+      "side": 1,
+      "message": "Oh dear, did clang-format insist on this formatting? (b/c new file)",
+      "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_b31db168",
+        "filename": "shell/source/backends/kde5be/kde5backend.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-18T11:12:45Z",
+      "side": 1,
+      "message": "You may want to use unique pointers: std::unique_ptr\u003cchar*[]\u003e",
+      "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_d31a256e",
+        "filename": "shell/source/backends/kde5be/kde5backend.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-18T11:12:45Z",
+      "side": 1,
+      "message": "consequently o3tl::make_unique\u003cchar*[]\u003e(nFakeArgc+2)",
+      "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_733a59cf",
+        "filename": "shell/source/backends/kde5be/kde5backend.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-18T11:12:45Z",
+      "side": 1,
+      "message": "Is this leaking or did I miss the place where those arguments are freed?",
+      "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
