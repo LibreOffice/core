@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3382a101",
+        "filename": "cui/source/tabpages/transfrm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-01-18T14:09:04Z",
+      "side": 1,
+      "message": "At these places it might be better to use the first parameter of Enable() method instead of calling Enable and Disable. e.g. Enable (bPosProtect-\u003eGetValue()). It\u0027s more shorter.",
+      "range": {
+        "startLine": 721,
+        "startChar": 21,
+        "endLine": 721,
+        "endChar": 31
+      },
+      "revId": "79366f4a1ea64f926ec87e1ae13bf5c08313ce21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
