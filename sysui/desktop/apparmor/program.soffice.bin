@@ -124,6 +124,8 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /usr/bin/lpr                          rmPUx,
   /usr/bin/paperconf                    rmix,
   /usr/bin/gpgconf                      rmix,
+  /usr/bin/gpg                          rmix,
+  /usr/bin/gpgsm                        rmix,
 
   /dev/tty                              rw,
 
