@@ -367,7 +367,7 @@ const librevenge::RVNGPropertyList &XMLImport::GetMetaData()
     return maMetaData;
 }
 
-bool XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList)
+PopupState XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList)
 {
     uno::Reference<uri::XUriReference> xUriRef;
     try
@@ -378,32 +378,33 @@ bool XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList
     {
         SAL_WARN("writerperfect", "XMLImport::FillPopupData: XUriReference::parse() failed:" << rException.Message);
     }
-    bool bRelative = false;
+    bool bAbsolute = true;
     if (xUriRef.is())
-        bRelative = !xUriRef->isAbsolute();
-    if (!bRelative)
-        return false;
+        bAbsolute = xUriRef->isAbsolute();
+    if (bAbsolute)
+        return PopupState::NotConsumed;
 
     OUString aAbs = maMediaDir + rURL;
     if (aAbs.isEmpty())
-        return false;
+        return PopupState::NotConsumed;
 
     SvFileStream aStream(aAbs, StreamMode::READ);
-    if (aStream.IsOpen())
-    {
-        librevenge::RVNGBinaryData aBinaryData;
-        SvMemoryStream aMemoryStream;
-        aMemoryStream.WriteStream(aStream);
-        aBinaryData.append(static_cast<const unsigned char *>(aMemoryStream.GetBuffer()), aMemoryStream.GetSize());
-        rPropList.insert("office:binary-data", aBinaryData);
+    if (!aStream.IsOpen())
+        // Relative link, but points to non-existing file: don't emit that to
+        // librevenge, since it will be invalid anyway.
+        return PopupState::Ignore;
 
-        INetURLObject aAbsURL(aAbs);
-        OUString aMimeType = GetMimeType(aAbsURL.GetExtension());
-        rPropList.insert("librevenge:mime-type", aMimeType.toUtf8().getStr());
-        return true;
-    }
+    librevenge::RVNGBinaryData aBinaryData;
+    SvMemoryStream aMemoryStream;
+    aMemoryStream.WriteStream(aStream);
+    aBinaryData.append(static_cast<const unsigned char *>(aMemoryStream.GetBuffer()), aMemoryStream.GetSize());
+    rPropList.insert("office:binary-data", aBinaryData);
 
-    return false;
+    INetURLObject aAbsURL(aAbs);
+    OUString aMimeType = GetMimeType(aAbsURL.GetExtension());
+    rPropList.insert("librevenge:mime-type", aMimeType.toUtf8().getStr());
+
+    return PopupState::Consumed;
 }
 
 const std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> &XMLImport::GetPageMetafiles() const

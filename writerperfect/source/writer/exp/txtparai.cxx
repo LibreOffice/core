@@ -237,6 +237,7 @@ public:
 
 private:
     librevenge::RVNGPropertyList m_aPropertyList;
+    PopupState m_ePopupState = PopupState::NONE;
 };
 
 XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
@@ -265,8 +266,12 @@ void XMLTextFrameHyperlinkContext::startElement(const OUString &/*rName*/, const
             FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aPropertyList);
         else
         {
-            if (rAttributeName == "xlink:href" && mrImport.FillPopupData(rAttributeValue, aPropertyList))
-                continue;
+            if (rAttributeName == "xlink:href")
+            {
+                m_ePopupState = mrImport.FillPopupData(rAttributeValue, aPropertyList);
+                if (m_ePopupState != PopupState::NotConsumed)
+                    continue;
+            }
 
             // This affects the link's properties.
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
@@ -275,12 +280,14 @@ void XMLTextFrameHyperlinkContext::startElement(const OUString &/*rName*/, const
         }
     }
 
-    mrImport.GetGenerator().openLink(aPropertyList);
+    if (m_ePopupState != PopupState::Ignore)
+        mrImport.GetGenerator().openLink(aPropertyList);
 }
 
 void XMLTextFrameHyperlinkContext::endElement(const OUString &/*rName*/)
 {
-    mrImport.GetGenerator().closeLink();
+    if (m_ePopupState != PopupState::Ignore)
+        mrImport.GetGenerator().closeLink();
 }
 
 void XMLTextFrameHyperlinkContext::characters(const OUString &rChars)
@@ -306,6 +313,7 @@ public:
 
 private:
     librevenge::RVNGPropertyList m_aPropertyList;
+    PopupState m_ePopupState = PopupState::NONE;
 };
 
 XMLHyperlinkContext::XMLHyperlinkContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
@@ -334,8 +342,12 @@ void XMLHyperlinkContext::startElement(const OUString &/*rName*/, const css::uno
             FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aPropertyList);
         else
         {
-            if (rAttributeName == "xlink:href" && mrImport.FillPopupData(rAttributeValue, aPropertyList))
-                continue;
+            if (rAttributeName == "xlink:href")
+            {
+                m_ePopupState = mrImport.FillPopupData(rAttributeValue, aPropertyList);
+                if (m_ePopupState != PopupState::NotConsumed)
+                    continue;
+            }
 
             // This affects the link's properties.
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
@@ -344,12 +356,14 @@ void XMLHyperlinkContext::startElement(const OUString &/*rName*/, const css::uno
         }
     }
 
-    mrImport.GetGenerator().openLink(aPropertyList);
+    if (m_ePopupState != PopupState::Ignore)
+        mrImport.GetGenerator().openLink(aPropertyList);
 }
 
 void XMLHyperlinkContext::endElement(const OUString &/*rName*/)
 {
-    mrImport.GetGenerator().closeLink();
+    if (m_ePopupState != PopupState::Ignore)
+        mrImport.GetGenerator().closeLink();
 }
 
 void XMLHyperlinkContext::characters(const OUString &rChars)

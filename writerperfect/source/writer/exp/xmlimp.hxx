@@ -33,6 +33,19 @@ namespace exp
 
 class XMLImportContext;
 
+/// States describing the result of a link -> popup conversion.
+enum class PopupState
+{
+    /// Conversion did not happen yet.
+    NONE,
+    /// The relative link was converted to a popup.
+    Consumed,
+    /// The absolute link was not handled.
+    NotConsumed,
+    /// The relative link is invalid and should be ignored.
+    Ignore
+};
+
 /// ODT export feeds this class to make librevenge calls.
 class XMLImport : public cppu::WeakImplHelper
     <
@@ -85,7 +98,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetGraphicStyles();
     const librevenge::RVNGPropertyListVector &GetCoverImages();
     const librevenge::RVNGPropertyList &GetMetaData();
-    bool FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
+    PopupState FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
     const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &GetPageMetafiles() const;
     const css::uno::Reference<css::uno::XComponentContext> &GetComponentContext() const;
 

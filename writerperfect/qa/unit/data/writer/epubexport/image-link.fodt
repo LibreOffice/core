@@ -16,7 +16,7 @@
   </office:master-styles>
   <office:body>
     <office:text>
-      <text:p text:style-name="Standard"><draw:a xlink:type="simple" xlink:href="meta.cover-image.png"><draw:frame draw:style-name="fr1" draw:name="Image1" text:anchor-type="as-char" svg:width="1.806cm" svg:height="1.806cm" draw:z-index="0"><draw:image loext:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+      <text:p text:style-name="Standard"><draw:a xlink:type="simple" xlink:href="http://libreoffice.org/"><draw:frame draw:style-name="fr1" draw:name="Image1" text:anchor-type="as-char" svg:width="1.806cm" svg:height="1.806cm" draw:z-index="0"><draw:image loext:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
         UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
         AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
         AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
