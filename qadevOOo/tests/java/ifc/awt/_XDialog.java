@@ -109,7 +109,7 @@ public class _XDialog extends MultiMethodTest {
     * finished. If <code>execute</code> method didn't return
     * and still running then thread interrupted. <p>
     * Has <b>OK</b> status if <code>execute</code> method
-    * call successfully retured.
+    * call successfully returned.
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> execute </code> </li>

@@ -113,7 +113,7 @@ public:
     // should not consider the setting when the split is performed
     // (we should be able to keep on first page as little as required).
     // When IsInSplit is true, lcl_CalcMinRowHeight will ignore the
-    // mininum height setting. It is set in lcl_RecalcSplitLine around
+    // minimum height setting. It is set in lcl_RecalcSplitLine around
     // lcl_RecalcRow and SwRowFrame::Calc that decide if it's possible
     // to keep part of row's content on first page, and update table's
     // height to fit the rest of space.

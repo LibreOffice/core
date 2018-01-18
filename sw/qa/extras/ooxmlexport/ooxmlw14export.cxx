@@ -226,7 +226,7 @@ DECLARE_OOXMLEXPORT_TEST(Test_TextEffects_Props3d_Ligatures_NumForm_NumSpacing, 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:rPr/w14:ligatures", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:rPr/w14:ligatures", "val", "standardContextual");
 
-    // Paragraph 3 - w14:numFurm and w14:numSpacing
+    // Paragraph 3 - w14:numForm and w14:numSpacing
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numForm", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numForm", "val", "lining");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numSpacing", 1);

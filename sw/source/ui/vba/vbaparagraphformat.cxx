@@ -307,7 +307,7 @@ uno::Any SAL_CALL SwVbaParagraphFormat::getWidowControl()
     sal_Int8 nOrphan = 0;
     mxParaProps->getPropertyValue("ParaOrphans") >>= nOrphan;
     // if the amount of single lines on one page > 1 and the same of start and end of the paragraph,
-    // true is retured.
+    // true is returned.
     bool bWidow = ( nWidow > 1 && nOrphan == nWidow );
     return uno::makeAny( bWidow );
 }

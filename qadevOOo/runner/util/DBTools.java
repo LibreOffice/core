@@ -225,7 +225,7 @@ public class DBTools {
     * Convert system pathname to SOffice URL string
     * (for example 'C:\Temp\DBDir\' -> 'file:///C|/Temp/DBDir/').
     * (for example '\\server\Temp\DBDir\' -> 'file://server/Temp/DBDir/').
-    * Already converted string retured unchanged.
+    * Already converted string returned unchanged.
     */
     public static String dirToUrl(String dir) {
         String retVal = null;

@@ -2167,7 +2167,7 @@ SwTwips SwTextFrame::CalcFitToContent()
     SwTextFormatter  aLine( this, &aInf );
     SwHookOut aHook( aInf );
 
-    // i#54031 - assure mininum of MINLAY twips.
+    // i#54031 - assure minimum of MINLAY twips.
     const SwTwips nMax = std::max( SwTwips(MINLAY), aLine.CalcFitToContent_() + 1 );
 
     {

@@ -2432,7 +2432,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
             sal_Int32 nExtraAbs =
                     nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : sal_Int32(0L);
 
-            bool bMin = false;      // Do all columns get the mininum width?
+            bool bMin = false;      // Do all columns get the minimum width?
             bool bMinExtra = false; // Do all columns get the minimum width plus
                                     // some extra space?
 
