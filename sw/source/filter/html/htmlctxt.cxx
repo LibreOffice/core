@@ -163,6 +163,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
             {
                 m_pPam->Move( fnMoveForward );
                 nOldEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
+                bMoveBack = false;
             }
 
             if( (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
