@@ -561,6 +561,7 @@
 #define UNO_NAME_RUBY_ADJUST "RubyAdjust"
 #define UNO_NAME_RUBY_CHAR_STYLE_NAME "RubyCharStyleName"
 #define UNO_NAME_RUBY_IS_ABOVE "RubyIsAbove"
+#define UNO_NAME_RUBY_POSITION "RubyPosition"
 #define UNO_NAME_FOOTNOTE_HEIGHT "FootnoteHeight"
 #define UNO_NAME_FOOTNOTE_LINE_WEIGHT "FootnoteLineWeight"
 #define UNO_NAME_FOOTNOTE_LINE_COLOR "FootnoteLineColor"

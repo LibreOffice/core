@@ -1267,6 +1267,18 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                         }
                     }
 
+                    if ( !pRubyPos )
+                    {
+                        const SwFormatRuby& rRuby = pCreate->pAttr->GetRuby();
+                        RubyPosition ePosition = static_cast<RubyPosition>(rRuby.GetPosition());
+
+                        if ( ePosition == RubyPosition::RIGHT && rInf.GetTextFrame()->IsVertical() )
+                        {
+                            bRubyTop = true;
+                            pRubyPos = &bRubyTop;
+                        }
+                    }
+
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
                                               *GetTextFrame()->GetTextNode()->getIDocumentSettingAccess(),
                                               nEnd, 0, pRubyPos );

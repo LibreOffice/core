@@ -351,6 +351,7 @@
                     <items>
                       <item translatable="yes" context="asianphoneticguidedialog|positionlb">Top</item>
                       <item translatable="yes" context="asianphoneticguidedialog|positionlb">Bottom</item>
+                      <item translatable="yes" context="asianphoneticguidedialog|positionlb">Right</item>
                     </items>
                   </object>
                   <packing>
