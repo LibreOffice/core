@@ -69,6 +69,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <unotools/ucbhelper.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/docpasswordrequest.hxx>
@@ -2313,6 +2314,10 @@ OUString SfxViewFrame::GetActualPresentationURL_Impl() const
 
 void SfxViewFrame::SetModalMode( bool bModal )
 {
+    // no real modality for LOK
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     m_pImpl->bModal = bModal;
     if ( m_xObjSh.Is() )
     {
