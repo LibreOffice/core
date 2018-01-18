@@ -179,48 +179,6 @@ SwTBC* SwCTBWrapper::GetTBCAtOffset( sal_uInt32 nStreamOffset )
     return nullptr;
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void SwCTBWrapper::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp,"[ 0x%x ] SwCTBWrapper - dump\n", nOffSet );
-    bool bRes = ( ch == 0x12 && reserved2 == 0x0 && reserved3 == 0x7 && reserved4 == 0x6 && reserved5 == 0xC );
-    if ( bRes )
-        indent_printf(fp,"  sanity check ( first 8 bytes conform )\n");
-    else
-    {
-        indent_printf(fp,"    reserved1(0x%x)\n",ch);
-        indent_printf(fp,"    reserved2(0x%x)\n",reserved2);
-        indent_printf(fp,"    reserved3(0x%x)\n",reserved3);
-        indent_printf(fp,"    reserved4(0x%x)\n",reserved4);
-        indent_printf(fp,"    reserved5(0x%x)\n",reserved5);
-        indent_printf(fp,"Quitting dump");
-        return;
-    }
-    indent_printf(fp,"  size of TBDelta structures 0x%x\n", cbTBD );
-    indent_printf(fp,"  cCust: no. of cCust structures 0x%x\n",cCust);
-    indent_printf(fp,"  cbDTBC: no. of bytes in rtbdc array 0x%x\n", static_cast< unsigned int >( cbDTBC ));
-
-    sal_Int32 index = 0;
-
-    for ( std::vector< SwTBC >::iterator it = rtbdc.begin(); it != rtbdc.end(); ++it, ++index )
-    {
-        indent_printf(fp,"  Dumping rtbdc[%d]\n", static_cast< int >( index ));
-        Indent b;
-        it->Print( fp );
-    }
-
-    index = 0;
-
-    for ( std::vector< Customization >::iterator it = rCustomizations.begin(); it != rCustomizations.end(); ++it, ++index )
-    {
-        indent_printf(fp,"  Dumping customization [%d]\n", static_cast< int >( index ));
-        Indent c;
-        it->Print(fp);
-    }
-}
-#endif
-
 bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
     for ( std::vector< Customization >::iterator it = rCustomizations.begin(); it != rCustomizations.end(); ++it )
@@ -291,40 +249,6 @@ bool Customization::Read( SvStream &rS)
     }
     return rS.good();
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void Customization::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf( fp,"[ 0x%x ] Customization -- dump \n", nOffSet );
-    indent_printf( fp,"  tbidForTBD 0x%x ( should be 0 for CTBs )\n", static_cast< unsigned int >( tbidForTBD ));
-    indent_printf( fp,"  reserved1 0x%x \n", reserved1);
-    indent_printf( fp,"  ctbds - number of customisations %d(0x%x) \n", ctbds, ctbds );
-    if ( !tbidForTBD && !ctbds )
-        customizationDataCTB->Print( fp );
-    else
-    {
-        const char* pToolBar = NULL;
-        switch ( tbidForTBD )
-        {
-            case 0x9:
-                pToolBar = "Standard";
-                break;
-            case 0x25:
-                pToolBar = "Builtin-Menu";
-                break;
-            default:
-                pToolBar = "Unknown toolbar";
-                break;
-        }
-
-        indent_printf( fp,"  TBDelta(s) are associated with %s toolbar.\n", pToolBar);
-        std::vector< TBDelta >::iterator it = customizationDataTBDelta.begin();
-        for (sal_uInt16 index = 0; index < ctbds; ++it, ++index)
-            it->Print( fp );
-    }
-}
-#endif
 
 bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
@@ -452,28 +376,6 @@ bool TBDelta::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void TBDelta::Print( FILE* fp )
-{
-    // Like most of the debug output, it's raw and little ( no )
-    // interpretation of the data is output ( e.g. flag values etc. )
-    indent_printf( fp, "[ 0x%x ] TBDelta -- dump\n", nOffSet );
-    indent_printf( fp, " doprfatendFlags 0x%x\n",doprfatendFlags );
-
-    indent_printf( fp, " ibts 0x%x\n",ibts );
-    indent_printf( fp, " cidNext 0x%x\n", static_cast< unsigned int >( cidNext ) );
-    indent_printf( fp, " cid 0x%x\n", static_cast< unsigned int >( cid ) );
-    indent_printf( fp, " fc 0x%x\n", static_cast< unsigned int >( fc ) );
-    indent_printf( fp, " CiTBDE 0x%x\n",CiTBDE );
-    indent_printf( fp, " cbTBC 0x%x\n", cbTBC );
-    if ( ControlDropsToolBar() )
-    {
-        indent_printf( fp, " this delta is associated with a control that drops a menu toolbar\n", cbTBC );
-        indent_printf( fp, " the menu toolbar drops the toolbar defined at index[%d] in the rCustomizations array of the CTBWRAPPER that contains this TBDelta\n", CustomizationIndex() );
-    }
-}
-#endif
-
 SwCTB::SwCTB() : cbTBData( 0 )
 ,iWCTBl( 0 )
 ,reserved( 0 )
@@ -521,35 +423,6 @@ bool SwCTB::Read( SvStream &rS)
     }
     return rS.good();
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void
-SwCTB::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp, "[ 0x%x ] SwCTB - dump\n", nOffSet );
-    indent_printf(fp, "  name %s\n", OUStringToOString( name.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    indent_printf(fp, "  cbTBData size, in bytes, of this structure excluding the name, cCtls, and rTBC fields.  %x\n", static_cast< unsigned int >( cbTBData ) );
-
-    tb.Print(fp);
-    for ( short counter = 0; counter < nVisualData; ++counter )
-    {
-        indent_printf( fp, "  TBVisualData [%d]\n", counter);
-        Indent b;
-        rVisualData[ counter ].Print( fp );
-    }
-    indent_printf(fp, "  iWCTBl 0x%x reserved 0x%x unused 0x%x cCtls( toolbar controls ) 0x%x \n", static_cast< unsigned int >( iWCTBl ), reserved, unused, static_cast< unsigned int >( cCtls ) );
-    if ( cCtls )
-    {
-        for ( sal_Int32 index = 0; index < cCtls; ++index )
-        {
-
-            indent_printf(fp, "  dumping toolbar control 0x%x\n", static_cast< unsigned int >( index ) );
-            rTBC[ index ].Print( fp );
-        }
-    }
-}
-#endif
 
 bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
@@ -634,23 +507,6 @@ bool SwTBC::Read( SvStream &rS )
     }
     return rS.good();
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void SwTBC::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp,"[ 0x%x ] SwTBC -- dump\n", nOffSet );
-    indent_printf(fp,"  dumping header ( TBCHeader )\n");
-    tbch.Print( fp );
-    if ( cid.get() )
-        indent_printf(fp,"  cid = 0x%x\n", static_cast< unsigned int >( *cid ) );
-    if ( tbcd.get() )
-    {
-        indent_printf(fp,"  dumping toolbar data TBCData \n");
-        tbcd->Print(fp);
-    }
-}
-#endif
 
 bool
 SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar )
@@ -769,16 +625,6 @@ Xst::Read( SvStream& rS )
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void
-Xst::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf( fp, "[ 0x%x ] Xst -- dump\n", nOffSet );
-    indent_printf( fp, " %s",  OUStringToOString( sString, RTL_TEXTENCODING_UTF8 ).getStr() );
-}
-#endif
-
 Tcg::Tcg() : nTcgVer( -1 )
 {
 }
@@ -793,17 +639,6 @@ bool Tcg::Read(SvStream &rS)
     tcg.reset( new Tcg255() );
     return tcg->Read( rS );
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void Tcg::Print( FILE* fp )
-{
-    Indent a(true);
-    indent_printf(fp, "[ 0x%x ] Tcg - dump %d\n", nOffSet, nTcgVer);
-    indent_printf(fp,"  nTcgVer %d\n", nTcgVer);
-    if ( tcg.get() )
-        tcg->Print( fp );
-}
-#endif
 
 bool Tcg::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
@@ -906,24 +741,6 @@ bool Tcg255::Read(SvStream &rS)
     // Peek at
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void Tcg255::Print( FILE* fp)
-{
-    Indent a;
-    indent_printf(fp, "[ 0x%x ] Tcg255 - dump\n", nOffSet );
-    indent_printf(fp, "  contains %d sub records\n", rgtcgData.size() );
-    std::vector< Tcg255SubStruct* >::iterator it = rgtcgData.begin();
-    std::vector< Tcg255SubStruct* >::iterator it_end = rgtcgData.end();
-
-    for( sal_Int32 count = 1; it != it_end ; ++it, ++count )
-    {
-        Indent b;
-        indent_printf(fp, "  [%d] Tcg255SubStruct \n", static_cast< unsigned int >( count ) );
-        (*it)->Print(fp);
-    }
-}
-#endif
-
 Tcg255SubStruct::Tcg255SubStruct( ) : ch(0)
 {
 }
@@ -966,21 +783,6 @@ bool PlfMcd::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void PlfMcd::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp, "[ 0x%x ] PlfMcd ( Tcg255SubStruct ) - dump\n", nOffSet );
-    indent_printf(fp, " contains %d MCD records\n", static_cast<int>( iMac ) );
-    for ( sal_Int32 count=0; count < iMac; ++count )
-    {
-        Indent b;
-        indent_printf(fp, "[%d] MCD\n", static_cast< int >( count ) );
-        rgmcd[ count ].Print( fp );
-    }
-}
-#endif
-
 PlfAcd::PlfAcd() :
  iMac(0)
 ,rgacd(nullptr)
@@ -1017,21 +819,6 @@ bool PlfAcd::Read( SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void PlfAcd::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp, "[ 0x%x ] PlfAcd ( Tcg255SubStruct ) - dump\n", nOffSet );
-    indent_printf(fp, " contains %d ACD records\n", static_cast< int >( iMac ) );
-    for ( sal_Int32 count=0; count < iMac; ++count )
-    {
-        Indent b;
-        indent_printf(fp, "[%d] ACD\n", static_cast< int >( count ) );
-        rgacd[ count ].Print( fp );
-    }
-}
-#endif
-
 PlfKme::PlfKme() :
  iMac( 0 )
 ,rgkme( nullptr )
@@ -1065,21 +852,6 @@ bool PlfKme::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void PlfKme::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp, "[ 0x%x ] PlfKme ( Tcg255SubStruct ) - dump\n", nOffSet );
-    indent_printf(fp, " contains %d Kme records\n", static_cast< int >( iMac ) );
-    for ( sal_Int32 count=0; count < iMac; ++count )
-    {
-        Indent b;
-        indent_printf(fp, "[%d] Kme\n", static_cast< int >( count ) );
-        rgkme[ count ].Print( fp );
-    }
-}
-#endif
-
 TcgSttbf::TcgSttbf()
 {
 }
@@ -1091,15 +863,6 @@ bool TcgSttbf::Read( SvStream &rS)
     Tcg255SubStruct::Read( rS );
     return sttbf.Read( rS );
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void TcgSttbf::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp,"[ 0x%x ] TcgSttbf - dump\n", nOffSet );
-    sttbf.Print( fp );
-}
-#endif
 
 TcgSttbfCore::TcgSttbfCore() : fExtend( 0 )
 ,cData( 0 )
@@ -1131,23 +894,6 @@ bool TcgSttbfCore::Read( SvStream& rS )
     }
     return rS.good();
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void TcgSttbfCore::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf( fp, "[ 0x%x ] TcgSttbfCore - dump\n");
-    indent_printf( fp, " fExtend 0x%x [expected 0xFFFF ]\n", fExtend );
-    indent_printf( fp, " cbExtra 0x%x [expected 0x02 ]\n", cbExtra );
-    indent_printf( fp, " cData no. or string data items %d (0x%x)\n", cData, cData );
-
-    if ( cData )
-    {
-        for ( sal_Int32 index = 0; index < cData; ++index )
-            indent_printf(fp,"   string dataItem[ %d(0x%x) ] has name %s and if referenced %d times.\n", static_cast< int >( index ), static_cast< unsigned int >( index ), OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr(), dataItems[ index ].extraData );
-    }
-}
-#endif
 
 MacroNames::MacroNames() :
  iMac( 0 )
@@ -1181,21 +927,6 @@ bool MacroNames::Read( SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void MacroNames::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp, "[ 0x%x ] MacroNames ( Tcg255SubStruct ) - dump\n");
-    indent_printf(fp, " contains %d MacroName records\n", iMac );
-    for ( sal_Int32 count=0; count < iMac; ++count )
-    {
-        Indent b;
-        indent_printf(fp, "[%d] MacroName\n", static_cast<int>( count ) );
-        rgNames[ count ].Print( fp );
-    }
-}
-#endif
-
 MacroName::MacroName():ibst(0)
 {
 }
@@ -1207,16 +938,6 @@ bool MacroName::Read(SvStream &rS)
     rS.ReadUInt16( ibst );
     return xstz.Read( rS );
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void MacroName::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf( fp, "[ 0x%x ] MacroName - dump");
-    indent_printf( fp,"  index - 0x%x has associated following record\n", ibst );
-    xstz.Print( fp );
-}
-#endif
 
 Xstz::Xstz():chTerm(0)
 {
@@ -1234,17 +955,6 @@ Xstz::Read(SvStream &rS)
         return false;
     return rS.good();
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void Xstz::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf(fp,"[ 0x%x ] Xstz -- dump\n", nOffSet );
-    indent_printf(fp,"  Xst\n");
-    xst.Print( fp );
-    indent_printf(fp,"  chterm 0x%x ( should be zero )\n", chTerm);
-}
-#endif
 
 Kme::Kme() : reserved1(0)
 ,reserved2(0)
@@ -1268,21 +978,6 @@ Kme::Read(SvStream &rS)
     return rS.good();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void Kme::Print( FILE* fp )
-{
-   Indent a;
-
-   indent_printf( fp, "[ 0x%x ] Kme - dump\n", nOffSet );
-   indent_printf( fp, " reserved1 0x%x [expected 0x0 ]\n", reserved1 );
-   indent_printf( fp, " reserved2 0x%x [expected 0x0 ]\n", reserved2 );
-   indent_printf( fp, " kcm1 0x%x [shortcut key]\n", kcm1 );
-   indent_printf( fp, " kcm2 0x%x [shortcut key]\n", kcm2 );
-   indent_printf( fp, " kt 0x%x \n", kt );
-   indent_printf( fp, " param 0x%x \n", static_cast< unsigned int >( param ) );
-}
-#endif
-
 Acd::Acd() : ibst( 0 )
 , fciBasedOnABC( 0 )
 {
@@ -1295,17 +990,6 @@ bool Acd::Read(SvStream &rS)
     rS.ReadInt16( ibst ).ReadUInt16( fciBasedOnABC );
     return rS.good();
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void Acd::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf( fp,"[ 0x%x ] ACD - dump\n", nOffSet );
-    // #TODO flesh out interpretation of these values
-    indent_printf( fp,"  ibst 0x%x\n", ibst);
-    indent_printf( fp,"  fciBaseObABC 0x%x\n", fciBasedOnABC);
-}
-#endif
 
 MCD::MCD() :  reserved1(0x56)
 ,reserved2( 0 )
@@ -1327,23 +1011,5 @@ bool MCD::Read(SvStream &rS)
     rS.ReadUInt32( reserved4 ).ReadUInt32( reserved5 ).ReadUInt32( reserved6 ).ReadUInt32( reserved7 );
     return rS.good();
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void MCD::Print( FILE* fp )
-{
-    Indent a;
-    indent_printf( fp, "[ 0x%x ] MCD - dump\n", nOffSet );
-    indent_printf( fp, " reserved1 0x%x [expected 0x56 ]\n", reserved1 );
-    indent_printf( fp, " reserved2 0x%x [expected 0x0 ]\n", reserved2 );
-    indent_printf( fp, " ibst 0x%x specifies macro with MacroName.xstz = 0x%x\n", ibst, ibst );
-    indent_printf( fp, " ibstName 0x%x index into command string table ( TcgSttbf.sttbf )\n", ibstName );
-
-    indent_printf( fp, " reserved3 0x%x [expected 0xFFFF ]\n", reserved3 );
-    indent_printf( fp, " reserved4 0x%x\n", static_cast< unsigned int >( reserved4 ) );
-    indent_printf( fp, " reserved5 0x%x [expected 0x0 ]\n", static_cast< unsigned int >( reserved5 ) );
-    indent_printf( fp, " reserved6 0x%x\n", static_cast< unsigned int >( reserved6 ) );
-    indent_printf( fp, " reserved7 0x%x\n", static_cast< unsigned int >( reserved7 ) );
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
