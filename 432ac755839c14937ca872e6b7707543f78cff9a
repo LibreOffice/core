@@ -22,6 +22,29 @@
       "revId": "432ac755839c14937ca872e6b7707543f78cff9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_383b60ed",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-18T10:30:52Z",
+      "side": 1,
+      "message": "Instead of moving the nResCount up, and checking its value here, maybe it\u0027s enough to check if aRowVector.size() \u003e 0?",
+      "range": {
+        "startLine": 2147,
+        "startChar": 32,
+        "endLine": 2147,
+        "endChar": 42
+      },
+      "revId": "432ac755839c14937ca872e6b7707543f78cff9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
