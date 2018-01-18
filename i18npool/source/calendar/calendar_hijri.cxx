@@ -23,8 +23,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <android/compatibility.hxx>
-
 #include <calendar_hijri.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -19,7 +19,7 @@
 
 #include <math.h>
 
-#if defined(ANDROID) && defined(ARM)
+#if defined(ARM)
 #include <string>
 #include <sstream>
 

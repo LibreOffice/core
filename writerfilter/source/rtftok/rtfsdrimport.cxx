@@ -42,7 +42,6 @@
 #include <oox/helper/propertyset.hxx>
 #include <boost/logic/tribool.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <android/compatibility.hxx>
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include "rtfdocumentimpl.hxx"
 
