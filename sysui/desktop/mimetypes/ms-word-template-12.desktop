@@ -22,5 +22,5 @@ Hidden=false
 Icon=
 Type=MimeType
 Patterns=*.dotm
-MimeType=application/vnd.ms-word.template.macroenabled.12
+MimeType=application/vnd.ms-word.template.macroEnabled.12
 Comment=Microsoft Word Document Template

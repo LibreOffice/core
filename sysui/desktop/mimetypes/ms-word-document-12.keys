@@ -1,4 +1,4 @@
-application/vnd.ms-word.document.macroenabled.12
+application/vnd.ms-word.document.macroEnabled.12
 	description=Microsoft Word Document
 	default_action_type=application
 	short_list_application_ids_for_novice_user_level=
