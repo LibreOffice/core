@@ -430,6 +430,10 @@ public:
     inline void expand(long nExpandBy);
     inline void shrink(long nShrinkBy);
 
+    /**
+     * Sanitizing variants for handling data from the outside
+     */
+    void                SaturatingSetSize(const Size& rSize);
 private:
     long                nLeft;
     long                nTop;
