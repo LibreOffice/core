@@ -320,18 +320,18 @@
 				<string>com.microsoft.excel.xls</string>
 				<string>com.microsoft.powerpoint.ppt</string>
 				<string>org.openxmlformats.wordprocessingml.document</string>
-				<string>org.openxmlformats.wordprocessingml.document.macroenabled</string>
+				<string>org.openxmlformats.wordprocessingml.document.macroEnabled</string>
 				<string>org.openxmlformats.wordprocessingml.template</string>
-				<string>org.openxmlformats.wordprocessingml.template.macroenabled</string>
+				<string>org.openxmlformats.wordprocessingml.template.macroEnabled</string>
 				<string>org.openxmlformats.spreadsheetml.sheet</string>
-				<string>org.openxmlformats.spreadsheetml.sheet.macroenabled</string>
-				<string>com.microsoft.excel.sheet.binary.macroenabled</string>
+				<string>org.openxmlformats.spreadsheetml.sheet.macroEnabled</string>
+				<string>com.microsoft.excel.sheet.binary.macroEnabled</string>
 				<string>org.openxmlformats.spreadsheetml.template</string>
-				<string>org.openxmlformats.spreadsheetml.template.macroenabled</string>
+				<string>org.openxmlformats.spreadsheetml.template.macroEnabled</string>
 				<string>org.openxmlformats.presentationml.presentation</string>
-				<string>org.openxmlformats.presentationml.presentation.macroenabled</string>
+				<string>org.openxmlformats.presentationml.presentation.macroEnabled</string>
 				<string>org.openxmlformats.presentationml.template</string>
-				<string>org.openxmlformats.presentationml.template.macroenabled</string>
+				<string>org.openxmlformats.presentationml.template.macroEnabled</string>
 				<string>org.libreoffice.pdb-document</string>
 				<string>org.libreoffice.wpd-document</string>
 				<string>org.libreoffice.hwp-document</string>
@@ -1124,7 +1124,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			<key>UTTypeDescription</key>
 			<string>Office Open XML word processing document (macros enabled)</string>
 			<key>UTTypeIdentifier</key>
-			<string>org.openxmlformats.wordprocessingml.document.macroenabled</string>
+			<string>org.openxmlformats.wordprocessingml.document.macroEnabled</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1169,7 +1169,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			<key>UTTypeDescription</key>
 			<string>Office Open XML word processing template (macros enabled)</string>
 			<key>UTTypeIdentifier</key>
-			<string>org.openxmlformats.wordprocessingml.template.macroenabled</string>
+			<string>org.openxmlformats.wordprocessingml.template.macroEnabled</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1214,7 +1214,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			<key>UTTypeDescription</key>
 			<string>Office Open XML spreadsheet template (macros enabled)</string>
 			<key>UTTypeIdentifier</key>
-			<string>org.openxmlformats.spreadsheetml.template.macroenabled</string>
+			<string>org.openxmlformats.spreadsheetml.template.macroEnabled</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1259,7 +1259,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			<key>UTTypeDescription</key>
 			<string>Microsoft Excel 2007 spreadsheet (macros enabled)</string>
 			<key>UTTypeIdentifier</key>
-			<string>com.microsoft.excel.sheet.binary.macroenabled</string>
+			<string>com.microsoft.excel.sheet.binary.macroEnabled</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1282,7 +1282,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			<key>UTTypeDescription</key>
 			<string>Office Open XML spreadsheet (macros enabled)</string>
 			<key>UTTypeIdentifier</key>
-			<string>org.openxmlformats.spreadsheetml.sheet.macroenabled</string>
+			<string>org.openxmlformats.spreadsheetml.sheet.macroEnabled</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1327,7 +1327,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			<key>UTTypeDescription</key>
 			<string>Office Open XML presentation (macros enabled)</string>
 			<key>UTTypeIdentifier</key>
-			<string>org.openxmlformats.presentationml.presentation.macroenabled</string>
+			<string>org.openxmlformats.presentationml.presentation.macroEnabled</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1373,7 +1373,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			<key>UTTypeDescription</key>
 			<string>Office Open XML presentation template (macros enabled)</string>
 			<key>UTTypeIdentifier</key>
-			<string>org.openxmlformats.presentationml.template.macroenabled</string>
+			<string>org.openxmlformats.presentationml.template.macroEnabled</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
