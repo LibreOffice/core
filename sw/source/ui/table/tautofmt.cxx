@@ -720,7 +720,7 @@ MAKENUMSTR:
         SvtScriptedTextHelper aScriptedText(rRenderContext);
         Size aStrSize;
         sal_uInt8 nFormatIndex = GetFormatIndex( nCol, nRow );
-        const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+        const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
         const Rectangle cellRect(
             basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
             basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
@@ -822,7 +822,7 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(aBrushItem.GetColor());
-            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
             rRenderContext.DrawRect(
                 Rectangle(
                     basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),

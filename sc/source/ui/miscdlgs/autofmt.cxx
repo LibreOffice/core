@@ -251,7 +251,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         Size aStrSize;
         sal_uInt16 nFmtIndex = GetFormatIndex( nCol, nRow );
-        const basegfx::B2DRange cellRange(maArray.GetCellRange( nCol, nRow ));
+        const basegfx::B2DRange cellRange(maArray.GetCellRange( nCol, nRow, true ));
         Point aPos = Point(basegfx::fround(cellRange.getMinX()), basegfx::fround(cellRange.getMinY()));
         sal_uInt16 nRightX = 0;
         bool bJustify = pCurData->GetIncludeJustify();
@@ -383,7 +383,7 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
                 rRenderContext.SetLineColor();
                 rRenderContext.SetFillColor( pItem->GetColor() );
 
-                const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+                const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
                 rRenderContext.DrawRect(
                     Rectangle(
                         basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
