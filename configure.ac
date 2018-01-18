@@ -481,7 +481,7 @@ if test -n "$with_android_ndk"; then
 
     ANDROIDCFLAGS="$ANDROIDCFLAGS -gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT -target $LLVM_TRIPLE$ANDROID_API_LEVEL -no-canonical-prefixes"
     # android is using different sysroots for compilation and linking, but as
-    # there is no full separation in configure and elsewehere, use isystem for
+    # there is no full separation in configure and elsewhere, use isystem for
     # compilation stuff and sysroot for linking
     ANDROIDCFLAGS="$ANDROIDCFLAGS -D__ANDROID_API__=$ANDROID_API_LEVEL -isystem $ANDROID_NDK_HOME/sysroot/usr/include"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -isystem $ANDROID_NDK_HOME/sysroot/usr/include/$android_gnu_prefix"
