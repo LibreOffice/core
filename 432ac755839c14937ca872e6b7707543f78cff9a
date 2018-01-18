@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_58bbb472",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2033,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-18T10:15:43Z",
+      "side": 1,
+      "message": "This may set nResCount to 0 (see check at 2037); and if this happens last, then this would mean that all the lower block would be skipped.",
+      "range": {
+        "startLine": 2033,
+        "startChar": 8,
+        "endLine": 2033,
+        "endChar": 17
+      },
+      "revId": "432ac755839c14937ca872e6b7707543f78cff9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
