@@ -77,6 +77,7 @@ sub read_args($)
     open ($fh, $file) || die "can't open file: $file";
     while (<$fh>) {
         chomp();
+        s/^\s+//;
         s/\s+$//;
         # migrate from the old system
         if ( substr($_, 0, 1) eq "'" ) {
