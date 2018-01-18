@@ -145,7 +145,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     // the formulas are _xlA1 based ( need to hook into calc work this should
     // address this )
     // [*] reason: getA1Formula method below is just a hook and just
-    // returns whats it gets ( e.g. doesn't convert anything )
+    // returns what it gets ( e.g. doesn't convert anything )
     uno::Reference< excel::XStyle > xStyle( _xStyle );
     uno::Reference< excel::XFormatCondition > xFormatCondition;
     try

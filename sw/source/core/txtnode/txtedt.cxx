@@ -890,7 +890,7 @@ bool SwScanner::NextWord()
     }
     else
     {
-        // we have to differenciate between these cases:
+        // we have to differentiate between these cases:
         if ( aBound.startPos <= m_nBegin )
         {
             OSL_ENSURE( aBound.endPos >= m_nBegin, "Unexpected aBound result" );

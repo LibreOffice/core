@@ -530,7 +530,7 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
     for (sal_Int32 i = 0; i < FieldLen; i++)
     {
         // I wonder why comparing lexicographically is done
-        // when it's a match is whats interesting?
+        // when it's a match, is it interesting?
         if ( SearchList[i] == SearchString )
         {
             retvalue = i;
