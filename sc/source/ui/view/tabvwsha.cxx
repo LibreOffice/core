@@ -551,8 +551,6 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
-                assert(pOutSet);
-
                 const SfxPoolItem* pItem=nullptr;
                 if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
                 {
@@ -561,7 +559,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
                 ApplyAttributes(pOutSet, pOldSet.get());
 
-                pRequest->Done(pOutSet);
+                pRequest->Done(*pOutSet);
             }
         }, pDlg);
 }
