@@ -48,6 +48,7 @@
 #include <vector>
 #include <set>
 #include <string.h>
+#include <o3tl/make_unique.hxx>
 
 using namespace utl;
 using namespace osl;
@@ -69,28 +70,19 @@ using namespace linguistic;
 #endif
 
 SpellChecker::SpellChecker() :
-    m_aDicts(nullptr),
-    m_aDEncs(nullptr),
-    m_aDLocs(nullptr),
-    m_aDNames(nullptr),
-    m_nNumDict(0),
     m_aEvtListeners(GetLinguMutex()),
     m_pPropHelper(nullptr),
     m_bDisposing(false)
 {
 }
 
+SpellChecker::DictItem::DictItem(OUString i_DName, Locale i_DLoc, rtl_TextEncoding i_DEnc):
+    m_aDName(i_DName), m_aDLoc(i_DLoc), m_aDEnc(i_DEnc)
+{
+}
+
 SpellChecker::~SpellChecker()
 {
-    if (m_aDicts)
-    {
-       for (int i = 0; i < m_nNumDict; ++i)
-       {
-            delete m_aDicts[i];
-       }
-       delete[] m_aDicts;
-    }
-    delete[] m_aDLocs;
     if (m_pPropHelper)
     {
         m_pPropHelper->RemoveAsPropListener();
@@ -116,7 +108,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 
     // this routine should return the locales supported by the installed
     // dictionaries.
-    if (!m_nNumDict)
+    if (m_DictItems.empty())
     {
         SvtLinguConfig aLinguCfg;
 
@@ -150,7 +142,6 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             uno::Reference< lang::XMultiServiceFactory > xServiceFactory(comphelper::getProcessServiceFactory());
             uno::Reference< ucb::XSimpleFileAccess > xAccess(xServiceFactory->createInstance("com.sun.star.ucb.SimpleFileAccess"), uno::UNO_QUERY);
             // get supported locales from the dictionaries-to-use...
-            sal_Int32 k = 0;
             std::set<OUString> aLocaleNamesSet;
             for (auto const& dict : aDics)
             {
@@ -178,7 +169,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             }
             // ... and add them to the resulting sequence
             m_aSuppLocales.realloc( aLocaleNamesSet.size() );
-            k = 0;
+            sal_Int32 k = 0;
             for (auto const& localeName : aLocaleNamesSet)
             {
                 Locale aTmp( LanguageTag::convertToLocale(localeName));
@@ -190,16 +181,12 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             //! it is undefined which dictionary gets used.
             //! In the future the implementation should support using several dictionaries
             //! for one locale.
-            m_nNumDict = 0;
+            sal_uInt32 nDictSize = 0;
             for (auto const& dict : aDics)
-                m_nNumDict = m_nNumDict + dict.aLocaleNames.getLength();
+                nDictSize += dict.aLocaleNames.getLength();
 
             // add dictionary information
-            m_aDicts  = new Hunspell* [m_nNumDict];
-            m_aDEncs.reset( new rtl_TextEncoding [m_nNumDict] );
-            m_aDLocs  = new Locale [m_nNumDict];
-            m_aDNames.reset( new OUString [m_nNumDict] );
-            k = 0;
+            m_DictItems.reserve(nDictSize);
             for (auto const& dict : aDics)
             {
                 if (dict.aLocaleNames.getLength() > 0 &&
@@ -212,33 +199,22 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     // Once for each of its supported locales.
                     for (auto const& localeName : aLocaleNames)
                     {
-                        m_aDicts[k]  = nullptr;
-                        m_aDEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
-                        m_aDLocs[k]  = LanguageTag::convertToLocale(localeName);
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.
                         OUString aLocation = dict.aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
-                        m_aDNames[k] = aLocation;
 
-                        ++k;
+                        m_DictItems.emplace_back(aLocation, LanguageTag::convertToLocale(localeName), RTL_TEXTENCODING_DONTKNOW);
                     }
                 }
             }
-            DBG_ASSERT( k == m_nNumDict, "index mismatch?" );
+            DBG_ASSERT( nDictSize == m_DictItems.size(), "index mismatch?" );
         }
         else
         {
             // no dictionary found so register no dictionaries
-            m_nNumDict = 0;
-            delete[] m_aDicts;
-            m_aDicts  = nullptr;
-            m_aDEncs.reset();
-            delete[] m_aDLocs;
-            m_aDLocs  = nullptr;
-            m_aDNames.reset();
             m_aSuppLocales.realloc(0);
         }
     }
@@ -303,17 +279,17 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
 
     if (n)
     {
-        for (sal_Int32 i = 0; i < m_nNumDict; ++i)
+        for (auto& currDict : m_DictItems)
         {
             pMS = nullptr;
             eEnc = RTL_TEXTENCODING_DONTKNOW;
 
-            if (rLocale == m_aDLocs[i])
+            if (rLocale == currDict.m_aDLoc)
             {
-                if (!m_aDicts[i])
+                if (!currDict.m_pDict)
                 {
-                    OUString dicpath = m_aDNames[i] + ".dic";
-                    OUString affpath = m_aDNames[i] + ".aff";
+                    OUString dicpath = currDict.m_aDName + ".dic";
+                    OUString affpath = currDict.m_aDName + ".aff";
                     OUString dict;
                     OUString aff;
                     osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
@@ -331,15 +307,15 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
                     OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
 #endif
 
-                    m_aDicts[i] = new Hunspell(aTmpaff.getStr(),aTmpdict.getStr());
+                    currDict.m_pDict = o3tl::make_unique<Hunspell>(aTmpaff.getStr(),aTmpdict.getStr());
 #if defined(H_DEPRECATED)
-                    m_aDEncs[i] = getTextEncodingFromCharset(m_aDicts[i]->get_dict_encoding().c_str());
+                    currDict.m_aDEnc = getTextEncodingFromCharset(currDict.m_pDict->get_dict_encoding().c_str());
 #else
-                    m_aDEncs[i] = getTextEncodingFromCharset(m_aDicts[i]->get_dic_encoding());
+                    currDict.m_aDEnc = getTextEncodingFromCharset(currDict.m_pDict->get_dic_encoding());
 #endif
                 }
-                pMS = m_aDicts[i];
-                eEnc = m_aDEncs[i];
+                pMS  = currDict.m_pDict.get();
+                eEnc = currDict.m_aDEnc;
             }
 
             if (pMS)
@@ -466,15 +442,15 @@ Reference< XSpellAlternatives >
         int numsug = 0;
 
         Sequence< OUString > aStr( 0 );
-        for (int i = 0; i < m_nNumDict; i++)
+        for (const auto& currDict : m_DictItems)
         {
             pMS = nullptr;
             eEnc = RTL_TEXTENCODING_DONTKNOW;
 
-            if (rLocale == m_aDLocs[i])
+            if (rLocale == currDict.m_aDLoc)
             {
-                pMS = m_aDicts[i];
-                eEnc = m_aDEncs[i];
+                pMS  = currDict.m_pDict.get();
+                eEnc = currDict.m_aDEnc;
             }
 
             if (pMS)

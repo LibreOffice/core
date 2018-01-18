@@ -54,12 +54,19 @@ class SpellChecker :
         XServiceDisplayName
     >
 {
+    struct DictItem
+    {
+        OUString                  m_aDName;
+        Locale                    m_aDLoc;
+        std::unique_ptr<Hunspell> m_pDict;
+        rtl_TextEncoding          m_aDEnc;
+
+        DictItem(OUString i_DName, Locale i_DLoc, rtl_TextEncoding i_DEnc);
+    };
+
+    std::vector<DictItem> m_DictItems;
+
     Sequence< Locale >                 m_aSuppLocales;
-    Hunspell **                        m_aDicts;
-    std::unique_ptr<rtl_TextEncoding[]> m_aDEncs;
-    Locale *                           m_aDLocs;
-    std::unique_ptr<OUString[]>        m_aDNames;
-    sal_Int32                          m_nNumDict;
 
     ::comphelper::OInterfaceContainerHelper2       m_aEvtListeners;
     linguistic::PropertyHelper_Spelling*    m_pPropHelper;
