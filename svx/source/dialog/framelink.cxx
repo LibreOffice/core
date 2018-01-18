@@ -51,14 +51,12 @@ void Style::implEnsureImplStyle()
 }
 
 Style::Style() :
-    maImplStyle(),
-    mpUsingCell(nullptr)
+    maImplStyle()
 {
 }
 
 Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale ) :
-    maImplStyle(new implStyle()),
-    mpUsingCell(nullptr)
+    maImplStyle(new implStyle())
 {
     maImplStyle->mnType = nType;
     maImplStyle->mfPatternScale = fScale;
@@ -66,8 +64,7 @@ Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double 
 }
 
 Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale ) :
-    maImplStyle(new implStyle()),
-    mpUsingCell(nullptr)
+    maImplStyle(new implStyle())
 {
     maImplStyle->mnType = nType;
     maImplStyle->mfPatternScale = fScale;
@@ -75,8 +72,7 @@ Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rCo
 }
 
 Style::Style( const editeng::SvxBorderLine* pBorder, double fScale ) :
-    maImplStyle(),
-    mpUsingCell(nullptr)
+    maImplStyle()
 {
     if(nullptr != pBorder)
     {
