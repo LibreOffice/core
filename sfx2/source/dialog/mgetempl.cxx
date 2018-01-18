@@ -348,9 +348,7 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox&, voi
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
 {
     OUString aTemplName(m_pFollowLb->GetSelectedEntry());
-    if (Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),static_cast<sal_uInt16>(pStyle->GetFamily()) ))
-    {
-    }
+    Execute_Impl(SID_STYLE_EDIT, aTemplName, OUString(), static_cast<sal_uInt16>(pStyle->GetFamily()));
 }
 
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, ListBox&, void )
