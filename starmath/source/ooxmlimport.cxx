@@ -208,9 +208,11 @@ OUString SmOoxmlImport::handleAcc()
             acc = "widehat";
             break;
         case MS_DOT:
+        case MS_COMBDOT:
             acc = "dot";
             break;
         case MS_DDOT:
+        case MS_COMBDDOT:
             acc = "ddot";
             break;
         case MS_DDDOT:
