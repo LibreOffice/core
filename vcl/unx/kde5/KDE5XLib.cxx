@@ -208,7 +208,7 @@ static GPollFunc old_gpoll = nullptr;
 
 static gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
-    SalYieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
+    SolarMutexReleaser release; // release YieldMutex (and re-acquire at block end)
     return old_gpoll( ufds, nfds, timeout );
 }
 #endif
@@ -304,7 +304,7 @@ bool KDE5XLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // release the yield lock to prevent deadlock with the main thread
         // (it's ok to release it here, since even normal processYield() would
         // temporarily do it while checking for new events)
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
         return false;
     }
@@ -370,10 +370,10 @@ void KDE5XLib::Wakeup()
     QAbstractEventDispatcher::instance( qApp->thread())->wakeUp(); // main thread event loop
 }
 
-void KDE5XLib::PostUserEvent()
+void KDE5XLib::TriggerUserEventProcessing()
 {
     if( !m_isGlibEventLoopType )
-        return SalXLib::PostUserEvent();
+        return SalXLib::TriggerUserEventProcessing();
     QApplication::postEvent(this, new QEvent(QEvent::Type( m_postUserEventId )));
 }
 
@@ -394,9 +394,11 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDE5XLib::createFilePicker(
 {
 #if QT5_HAVE_GLIB
     if( qApp->thread() != QThread::currentThread()) {
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT createFilePickerSignal( xMSF );
     }
+
+    return nullptr;
     //return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF ) );
 #else
     (void)xMSF;

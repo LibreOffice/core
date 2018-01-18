@@ -84,7 +84,7 @@ class KDE5XLib : public QObject, public QAbstractNativeEventFilter, public SalXL
         virtual void StartTimer( sal_uLong nMS ) override;
         virtual void StopTimer() override;
         virtual void Wakeup() override;
-        virtual void PostUserEvent() override;
+        virtual void TriggerUserEventProcessing();
 
         void doStartup();
         bool allowKdeDialogs() { return m_allowKdeDialogs; }
