@@ -69,9 +69,9 @@ using namespace linguistic;
 #endif
 
 SpellChecker::SpellChecker() :
-    m_aDicts(nullptr),
+    m_aDicts(0),
     m_aDEncs(nullptr),
-    m_aDLocs(nullptr),
+    m_aDLocs(0),
     m_aDNames(nullptr),
     m_nNumDict(0),
     m_aEvtListeners(GetLinguMutex()),
@@ -82,15 +82,15 @@ SpellChecker::SpellChecker() :
 
 SpellChecker::~SpellChecker()
 {
-    if (m_aDicts)
+    if (!m_aDicts.empty())
     {
        for (int i = 0; i < m_nNumDict; ++i)
        {
             delete m_aDicts[i];
        }
-       delete[] m_aDicts;
+       m_aDicts.clear();
     }
-    delete[] m_aDLocs;
+    m_aDLocs.clear();
     if (m_pPropHelper)
     {
         m_pPropHelper->RemoveAsPropListener();
@@ -195,9 +195,9 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 m_nNumDict = m_nNumDict + dict.aLocaleNames.getLength();
 
             // add dictionary information
-            m_aDicts  = new Hunspell* [m_nNumDict];
+            m_aDicts.resize(m_nNumDict);
             m_aDEncs.reset( new rtl_TextEncoding [m_nNumDict] );
-            m_aDLocs  = new Locale [m_nNumDict];
+            m_aDLocs.resize(m_nNumDict);
             m_aDNames.reset( new OUString [m_nNumDict] );
             k = 0;
             for (auto const& dict : aDics)
@@ -233,11 +233,9 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         {
             // no dictionary found so register no dictionaries
             m_nNumDict = 0;
-            delete[] m_aDicts;
-            m_aDicts  = nullptr;
+            m_aDicts.clear();
             m_aDEncs.reset();
-            delete[] m_aDLocs;
-            m_aDLocs  = nullptr;
+            m_aDLocs.clear();
             m_aDNames.reset();
             m_aSuppLocales.realloc(0);
         }

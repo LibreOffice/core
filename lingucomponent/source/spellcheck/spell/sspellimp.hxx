@@ -55,9 +55,9 @@ class SpellChecker :
     >
 {
     Sequence< Locale >                 m_aSuppLocales;
-    Hunspell **                        m_aDicts;
+    std::vector<Hunspell *>            m_aDicts;
     std::unique_ptr<rtl_TextEncoding[]> m_aDEncs;
-    Locale *                           m_aDLocs;
+    std::vector<Locale>                m_aDLocs;
     std::unique_ptr<OUString[]>        m_aDNames;
     sal_Int32                          m_nNumDict;
 
