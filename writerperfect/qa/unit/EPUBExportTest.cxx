@@ -94,6 +94,7 @@ public:
     void testImageLink();
     void testFootnote();
     void testPopup();
+    void testPopupMedia();
     void testPopupAPI();
     void testPageSize();
     void testSVG();
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST(testImageLink);
     CPPUNIT_TEST(testFootnote);
     CPPUNIT_TEST(testPopup);
+    CPPUNIT_TEST(testPopupMedia);
     CPPUNIT_TEST(testPopupAPI);
     CPPUNIT_TEST(testPageSize);
     CPPUNIT_TEST(testSVG);
@@ -789,6 +791,18 @@ void EPUBExportTest::testPopup()
     // Test text popup content.
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[2]", "type", "footnote");
     assertXPath(mpXmlDoc, "//xhtml:body/xhtml:aside[2]/xhtml:img", 1);
+}
+
+void EPUBExportTest::testPopupMedia()
+{
+    // This is the same as testPopup(), but the links point to images in the
+    // default media directory, not in the document directory.
+    createDoc("popup-media.odt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // Test image popup anchor. This failed, number of XPath nodes was 0.
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:p[1]/xhtml:a", "type", "noteref");
+    assertXPath(mpXmlDoc, "//xhtml:body/xhtml:p[1]/xhtml:a/xhtml:img", 1);
 }
 
 void EPUBExportTest::testPopupAPI()

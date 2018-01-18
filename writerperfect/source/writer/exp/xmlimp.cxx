@@ -367,6 +367,16 @@ const librevenge::RVNGPropertyList &XMLImport::GetMetaData()
     return maMetaData;
 }
 
+namespace
+{
+/// Finds out if a file URL exists.
+bool FileURLExists(const OUString& rURL)
+{
+    SvFileStream aStream(rURL, StreamMode::READ);
+    return aStream.IsOpen();
+}
+}
+
 PopupState XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList)
 {
     uno::Reference<uri::XUriReference> xUriRef;
@@ -384,16 +394,20 @@ PopupState XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGProper
     if (bAbsolute)
         return PopupState::NotConsumed;
 
+    // Default case: relative URL, popup data was in the same directory as the
+    // document at insertion time.
     OUString aAbs = maMediaDir + rURL;
-    if (aAbs.isEmpty())
-        return PopupState::NotConsumed;
+    if (!FileURLExists(aAbs))
+        // Fallback case: relative URL, popup data was in the default media
+        // directory at insertion time.
+        aAbs = maMediaDir + "../" + rURL;
 
-    SvFileStream aStream(aAbs, StreamMode::READ);
-    if (!aStream.IsOpen())
+    if (!FileURLExists(aAbs))
         // Relative link, but points to non-existing file: don't emit that to
         // librevenge, since it will be invalid anyway.
         return PopupState::Ignore;
 
+    SvFileStream aStream(aAbs, StreamMode::READ);
     librevenge::RVNGBinaryData aBinaryData;
     SvMemoryStream aMemoryStream;
     aMemoryStream.WriteStream(aStream);
