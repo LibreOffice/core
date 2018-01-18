@@ -536,6 +536,12 @@ open class Document
     {
         docClass.setViewLanguage(pDoc, id, language);
     }
+    
+    public func invokeHandlers()
+    {
+        temporaryHackToInvokeCallbackHandlers(pDoc)
+        
+    }
 
 }
 
