@@ -73,6 +73,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     desktop/source/deployment/deployment \
+    drawinglayer/drawinglayer \
     embeddedobj/util/embobj \
     emfio/emfio \
     filter/source/config/cache/filterconfig1 \
@@ -108,6 +109,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    xmlscript/util/xmlscript \
     xmloff/util/xo \
     xmlsecurity/util/xmlsecurity \
 ))
