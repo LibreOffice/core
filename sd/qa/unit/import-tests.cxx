@@ -73,6 +73,7 @@
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/graphicmimetype.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
 
@@ -137,6 +138,7 @@ public:
     void testTdf104015();
     void testTdf104201();
     void testTdf104445();
+    void testTdf114488();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -195,6 +197,7 @@ public:
     CPPUNIT_TEST(testTdf104015);
     CPPUNIT_TEST(testTdf104201);
     CPPUNIT_TEST(testTdf104445);
+    CPPUNIT_TEST(testTdf114488);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1695,6 +1698,18 @@ void SdImportTest::testTdf104445()
         }
     }
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf114488()
+{
+    // This doc has two images - one WMF and the other PNG (fallback image).
+    // When loading this doc, the WMF image should be prefered over the PNG image.
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odg/tdf114488.fodg"), FODG);
+    uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    OUString sGraphicUrl;
+    xShape->getPropertyValue("GraphicURL") >>= sGraphicUrl;
+    OUString sMimeType(comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(sGraphicUrl));
+    CPPUNIT_ASSERT_EQUAL(OUString("image/x-wmf"), sMimeType);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
