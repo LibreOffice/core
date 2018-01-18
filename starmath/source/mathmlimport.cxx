@@ -516,9 +516,9 @@ void SmXMLImport::endDocument()
             SmParser &rParser = pDocShell->GetParser();
             bool bVal = rParser.IsImportSymbolNames();
             rParser.SetImportSymbolNames( true );
-            SmNode *pTmpTree = rParser.Parse( aText );
+            auto pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
-            delete pTmpTree;
+            pTmpTree.reset();
             rParser.SetImportSymbolNames( bVal );
 
             pDocShell->SetText( aText );

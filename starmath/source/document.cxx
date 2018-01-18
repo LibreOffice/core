@@ -213,7 +213,7 @@ OUString const & SmDocShell::GetAccessibleText()
 
 void SmDocShell::Parse()
 {
-    delete mpTree;
+    mpTree.reset();
     ReplaceBadChars();
     mpTree = maParser.Parse(maText);
     mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
@@ -412,11 +412,11 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     //Set selection if any
     if(mpCursor && bDrawSelection){
         mpCursor->AnnotateSelection();
-        SmSelectionDrawingVisitor(rDev, mpTree, rPosition);
+        SmSelectionDrawingVisitor(rDev, mpTree.get(), rPosition);
     }
 
     //Drawing using visitor
-    SmDrawingVisitor(rDev, rPosition, mpTree);
+    SmDrawingVisitor(rDev, rPosition, mpTree.get());
 
 
     rDev.SetLayoutMode( nLayoutMode );
@@ -459,7 +459,7 @@ void SmDocShell::InvalidateCursor(){
 
 SmCursor& SmDocShell::GetCursor(){
     if(!mpCursor)
-        mpCursor.reset(new SmCursor(mpTree, this));
+        mpCursor.reset(new SmCursor(mpTree.get(), this));
     return *mpCursor;
 }
 
@@ -611,7 +611,6 @@ void SmDocShell::Repaint()
 
 SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     : SfxObjectShell(i_nSfxCreationFlags)
-    , mpTree(nullptr)
     , mpEditEngineItemPool(nullptr)
     , mpEditEngine(nullptr)
     , mpPrinter(nullptr)
@@ -642,7 +641,6 @@ SmDocShell::~SmDocShell()
     mpCursor.reset();
     delete mpEditEngine;
     SfxItemPool::Free(mpEditEngineItemPool);
-    delete mpTree;
     mpPrinter.disposeAndClear();
 }
 
@@ -657,8 +655,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
     {
         if (mpTree)
         {
-            delete mpTree;
-            mpTree = nullptr;
+            mpTree.reset();
             InvalidateCursor();
         }
         Reference<css::frame::XModel> xModel(GetModel());
@@ -867,7 +864,7 @@ void SmDocShell::writeFormulaOoxml(
         Parse();
     if( mpTree )
         ArrangeFormula();
-    SmOoxmlExport aEquation(mpTree, version, documentType);
+    SmOoxmlExport aEquation(mpTree.get(), version, documentType);
     aEquation.ConvertFromStarMath( pSerializer );
 }
 
@@ -877,7 +874,7 @@ void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncod
         Parse();
     if (mpTree)
         ArrangeFormula();
-    SmRtfExport aEquation(mpTree);
+    SmRtfExport aEquation(mpTree.get());
     aEquation.ConvertFromStarMath(rBuffer, nEncoding);
 }
 
@@ -1287,7 +1284,7 @@ void SmDocShell::SetModified(bool bModified)
 
 bool SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
 {
-    MathType aEquation( maText, mpTree );
+    MathType aEquation( maText, mpTree.get() );
     return aEquation.ConvertFromStarMath( rMedium );
 }
 

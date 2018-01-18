@@ -950,7 +950,7 @@ namespace
 
 // grammar
 
-SmTableNode *SmParser::DoTable()
+std::unique_ptr<SmTableNode> SmParser::DoTable()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
@@ -966,7 +966,7 @@ SmTableNode *SmParser::DoTable()
     assert(m_aCurToken.eType == TEND);
     std::unique_ptr<SmTableNode> xSNode(new SmTableNode(m_aCurToken));
     xSNode->SetSubNodes(buildNodeArray(aLineArray));
-    return xSNode.release();
+    return xSNode;
 }
 
 SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
@@ -2314,7 +2314,7 @@ SmParser::SmParser()
 {
 }
 
-SmTableNode *SmParser::Parse(const OUString &rBuffer)
+std::unique_ptr<SmTableNode> SmParser::Parse(const OUString &rBuffer)
 {
     m_aUsedSymbols.clear();
 

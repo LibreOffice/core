@@ -482,9 +482,9 @@ void SmXMLExport::ExportContent_()
             SmParser &rParser = pDocShell->GetParser();
             bool bVal = rParser.IsExportSymbolNames();
             rParser.SetExportSymbolNames( true );
-            SmNode *pTmpTree = rParser.Parse( aText );
+            auto pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
-            delete pTmpTree;
+            pTmpTree.reset();
             rParser.SetExportSymbolNames( bVal );
         }
 
