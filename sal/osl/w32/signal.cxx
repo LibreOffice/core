@@ -18,6 +18,9 @@
  */
 
 #include <sal/config.h>
+
+#include <stdlib.h>
+
 #include <config_features.h>
 
 #include <signalshared.hxx>

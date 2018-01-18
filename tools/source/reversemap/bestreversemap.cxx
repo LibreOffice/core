@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <rtl/textcvt.h>
 
+#include <cstdlib>
 #include <stdio.h>
 
 struct Encoder

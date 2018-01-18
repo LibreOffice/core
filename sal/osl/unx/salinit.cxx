@@ -37,6 +37,7 @@
 #include <salusesyslog.hxx>
 
 #if HAVE_SYSLOG_H
+#include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
 #endif
