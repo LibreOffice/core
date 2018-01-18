@@ -27,7 +27,6 @@
 #include <limits>
 #include <salgdi.hxx>
 #include <unicode/uchar.h>
-#include <android/compatibility.hxx>
 
 #if ENABLE_QT5
 #include <qt5/Qt5Font.hxx>

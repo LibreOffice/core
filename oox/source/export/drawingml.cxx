@@ -101,7 +101,6 @@
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
-#include <android/compatibility.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;

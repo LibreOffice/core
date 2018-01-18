@@ -38,7 +38,6 @@
 #include <thread>
 #include <comphelper/threadpool.hxx>
 #include <oox/export/utils.hxx>
-#include <android/compatibility.hxx>
 
 using namespace ::oox;
 

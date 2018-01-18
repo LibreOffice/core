@@ -19,7 +19,6 @@
 
 #include <math.h>
 
-#if defined(ANDROID)
 #include <string>
 #include <sstream>
 
@@ -68,4 +67,3 @@ template <typename T> std::string to_string(const T& rNumber)
     return aStream.str();
 }
 }
-#endif

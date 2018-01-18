@@ -34,8 +34,6 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
-#include <android/compatibility.hxx>
-
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

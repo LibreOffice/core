@@ -22,6 +22,9 @@
 
 #if defined LIBO_INTERNAL_ONLY
 #include "config_global.h"
+#if defined ANDROID && defined __cplusplus
+#include <android/compatibility.hxx>
+#endif
 #endif
 
 #include <stdlib.h>
