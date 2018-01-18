@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_b376913c",
+        "filename": "android/source/src/java/org/libreoffice/ui/LibreOfficeUIActivity.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-01-18T13:22:33Z",
+      "side": 1,
+      "message": "FYI: concatenating stings with values is not translation friendly - in future please use string resources with placeholders instead.",
+      "revId": "55ecc98376dbeffc366820e718fd906b8935a17b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
