@@ -134,6 +134,7 @@ SwMailConfigPage::SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet
     m_pReplyToCB->SetClickHdl(LINK(this, SwMailConfigPage, ReplyToHdl));
     m_pServerAuthenticationPB->SetClickHdl(LINK(this, SwMailConfigPage, AuthenticationHdl));
     m_pTestPB->SetClickHdl(LINK(this, SwMailConfigPage, TestHdl));
+    m_pSecureCB->SetClickHdl(LINK(this, SwMailConfigPage, SecureHdl));
 }
 
 SwMailConfigPage::~SwMailConfigPage()
@@ -225,6 +226,13 @@ IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl, Button*, void)
 IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, Button*, void)
 {
     ScopedVclPtrInstance<SwTestAccountSettingsDialog>(this)->Execute();
+}
+
+IMPL_LINK(SwMailConfigPage, SecureHdl, Button*, pBox, void)
+{
+    bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
+    m_pConfigItem->SetSecureConnection(bEnable);
+    m_pPortNF->SetValue(m_pConfigItem->GetMailPort());
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)

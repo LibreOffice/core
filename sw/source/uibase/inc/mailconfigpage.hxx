@@ -53,6 +53,7 @@ class SwMailConfigPage : public SfxTabPage
     DECL_LINK(ReplyToHdl, Button*, void);
     DECL_LINK(AuthenticationHdl, Button*, void);
     DECL_LINK(TestHdl, Button*, void);
+    DECL_LINK(SecureHdl, Button*, void);
 
 public:
     SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet );
