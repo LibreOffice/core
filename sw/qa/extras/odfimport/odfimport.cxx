@@ -862,5 +862,10 @@ DECLARE_ODFIMPORT_TEST(testTdf94882, "tdf94882.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header"), headertext);
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf115079, "tdf115079.odt")
+{
+    // This document caused segfault when layouting
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
