@@ -38,14 +38,14 @@ class ScRefHandlerHelper
 protected:
     VclPtr<ScRefHandlerCaller>  m_pHandler;
 // workaround VS2013 issue with pointers to things that contain virtual base class
-#ifdef SAL_W32
+#ifdef _WIN32
     #pragma pack(push, 16)
 #endif
     void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , const ScDocument* );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, const formula::RefButton* pButton );
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
-#if defined( SAL_W32)
+#if defined( _WIN32)
    #pragma pack(pop)
 #endif
 

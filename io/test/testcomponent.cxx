@@ -94,7 +94,7 @@ int main (int argc, char **argv)
         sTestName = "test";
         sTestName += argv[2];
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
         OUString aDllName = OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
 #else
         OUString aDllName("lib");

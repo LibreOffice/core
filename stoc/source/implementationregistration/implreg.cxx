@@ -47,7 +47,7 @@
 
 #include "mergekeys.hxx"
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
 #include <io.h>
 #else
 #include <unistd.h>

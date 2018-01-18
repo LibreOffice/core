@@ -26,7 +26,7 @@
 #include <string.h>
 #include <errno.h>
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
 #   include <io.h>
 #   include <direct.h>
 #endif

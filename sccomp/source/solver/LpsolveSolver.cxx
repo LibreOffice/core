@@ -40,7 +40,7 @@
 #include <config_lgpl.h>
 
 #undef LANGUAGE_NONE
-#if defined SAL_W32
+#if defined _WIN32
 #define WINAPI __stdcall
 #endif
 #define LoadInverseLib FALSE

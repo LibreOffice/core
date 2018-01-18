@@ -29,7 +29,7 @@
 extern "C" {
 #endif
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #   pragma pack(push, 8)
 #endif
 
@@ -59,7 +59,7 @@ typedef struct _rtl_Locale
     sal_Int32       HashCode;
 } rtl_Locale;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(pop)
 #endif
 

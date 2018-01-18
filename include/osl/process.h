@@ -69,7 +69,7 @@ typedef enum {
     osl_Process_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslProcessError;
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #   pragma pack(push, 8)
 #endif
 
@@ -83,7 +83,7 @@ typedef struct {
     sal_uInt32              HeapUsage;
 } oslProcessInfo;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #   pragma pack(pop)
 #endif
 

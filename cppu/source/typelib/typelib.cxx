@@ -47,7 +47,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OString;
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #pragma pack(push, 8)
 #endif
 
@@ -70,7 +70,7 @@ struct AlignSize_Impl
 #endif
 };
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #pragma pack(pop)
 #endif
 

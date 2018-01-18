@@ -32,7 +32,7 @@
 #include <osl/conditn.hxx>
 #include <osl/time.h>
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
@@ -84,7 +84,7 @@ namespace benchmark_test
 
 static inline sal_uInt32 getSystemTicks()
 {
-#ifdef SAL_W32
+#ifdef _WIN32
     return (sal_uInt32)GetTickCount();
 #else // only UNX supported for now
     static sal_uInt32   nImplTicksPerSecond = 0;

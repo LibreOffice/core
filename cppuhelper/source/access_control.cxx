@@ -71,7 +71,7 @@ AccessControl::AccessControl( AccessControl const & ac )
 
 namespace {
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #pragma pack(push, 8)
 #endif
     // binary comp. to all Permission structs
@@ -80,7 +80,7 @@ namespace {
         rtl_uString * m_str1;
         rtl_uString * m_str2;
     };
-#ifdef SAL_W32
+#ifdef _WIN32
 #pragma pack(pop)
 #endif
 

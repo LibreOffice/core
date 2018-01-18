@@ -52,7 +52,7 @@ typedef void (SAL_CALL * uno_DispatchMethod)(
     void * pArgs[],
     uno_Any ** ppException );
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(push, 8)
 #endif
 
@@ -75,7 +75,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Interface
     uno_DispatchMethod pDispatcher;
 } uno_Interface;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(pop)
 #endif
 

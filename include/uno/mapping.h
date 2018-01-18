@@ -55,7 +55,7 @@ typedef void (SAL_CALL * uno_MapInterfaceFunc)(
     struct _typelib_InterfaceTypeDescription * pInterfaceTypeDescr );
 
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(push, 8)
 #endif
 
@@ -76,7 +76,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Mapping
     uno_MapInterfaceFunc mapInterface;
 } uno_Mapping;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(pop)
 #endif
 

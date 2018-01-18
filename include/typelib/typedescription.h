@@ -31,7 +31,7 @@ extern "C"
 
 struct _typelib_TypeDescription;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(push, 8)
 #endif
 
@@ -477,7 +477,7 @@ typedef struct _typelib_Parameter_Init
     sal_Bool            bOut;
 } typelib_Parameter_Init;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(pop)
 #endif
 

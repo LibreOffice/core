@@ -25,7 +25,7 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
 #include <io.h>
 #endif
 
@@ -122,7 +122,7 @@ OString makeTempName(const OString& prefix)
     {
         if ( osl_getEnvironment(OUString("TEMP").pData, &uTmpPath.pData) != osl_Process_E_None )
         {
-#if defined(SAL_W32)
+#if defined(_WIN32)
             tmpPath = OString("c:\\temp");
 #else
             tmpPath = OString("/tmp");
@@ -133,7 +133,7 @@ OString makeTempName(const OString& prefix)
     if ( !uTmpPath.isEmpty() )
         tmpPath = OUStringToOString(uTmpPath, RTL_TEXTENCODING_UTF8);
 
-#if defined(SAL_W32) || defined(SAL_UNX)
+#if defined(_WIN32) || defined(SAL_UNX)
 
     OSL_ASSERT( sizeof(tmpFilePattern) >
                 static_cast<size_t>( tmpPath.getLength()
@@ -302,7 +302,7 @@ sal_Int32 compileFile(const OString * pathname)
     sal_Int32 idx= cpp.lastIndexOf("idlc");
     cpp = cpp.copy(0, idx);
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
     cpp += "ucpp.exe";
 #else
     cpp += "ucpp";

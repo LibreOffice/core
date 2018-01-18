@@ -23,7 +23,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
 #include <io.h>
 #include <direct.h>
 #include <errno.h>
