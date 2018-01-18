@@ -171,11 +171,6 @@ void ExtConditionalFormattingContext::onEndElement()
             rExtFormats.push_back(o3tl::make_unique<ExtCfCondFormat>(aRange, maEntries));
         }
         break;
-        case XLS14_TOKEN(cfRule):
-            if (mpCurrentRule)
-            {
-            }
-        break;
         default:
         break;
     }

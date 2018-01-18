@@ -261,9 +261,7 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
             pList->SetLabels(m_Keylist);
             pXFPara->Add(pList);
         }
-        else if (nType == MARKER_END)//skip
-        {
-        }
+        // else skip MARKER_END
     }
     else
     {

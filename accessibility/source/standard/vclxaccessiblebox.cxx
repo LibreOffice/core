@@ -489,10 +489,6 @@ sal_Bool VCLXAccessibleBox::setCurrentValue( const Any& aNumber )
 
     OUString  fValue;
     bool bValid = (aNumber >>= fValue);
-    if( bValid )
-    {
-
-    }
     return bValid;
 
 }

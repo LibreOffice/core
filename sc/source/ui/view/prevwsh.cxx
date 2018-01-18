@@ -543,15 +543,6 @@ void ScPreviewShell::Activate(bool bMDI)
     }
 }
 
-void ScPreviewShell::Deactivate(bool bMDI)
-{
-    SfxViewShell::Deactivate(bMDI);
-
-    if (bMDI)
-    {
-    }
-}
-
 void ScPreviewShell::Execute( SfxRequest& rReq )
 {
     sal_uInt16 nSlot = rReq.GetSlot();

@@ -1842,10 +1842,8 @@ void SfxCommonTemplateDialog_Impl::EditHdl()
         sal_uInt16 nFilter = nActFilter;
         OUString aTemplName(GetSelectedEntry());
         GetSelectedStyle(); // -Wall required??
-        if ( Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),
-                          static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()), 0, &nFilter ) )
-        {
-        }
+        Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),
+                          static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()), 0, &nFilter );
     }
 }
 

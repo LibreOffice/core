@@ -1156,9 +1156,7 @@ void OpExponDist::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -1245,9 +1243,7 @@ void OpFdist::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -3198,9 +3194,7 @@ void OpNegbinomdist::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -3694,9 +3688,7 @@ void OpConfidence::GenSlidingWindowFunction(std::stringstream& ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -3768,9 +3760,7 @@ void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -3996,9 +3986,7 @@ void OpChiInv::GenSlidingWindowFunction(
             {
                 ss << "{\n";
             }
-            else
-            {
-            }
+
             if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
             {
                 ss << "if (isnan(";
@@ -4121,9 +4109,7 @@ void OpNormsdist::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -4181,9 +4167,7 @@ void OpPermut::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -4291,9 +4275,7 @@ void OpPhi::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -4350,9 +4332,7 @@ void OpNorminv::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -4562,9 +4542,7 @@ void OpNormsinv:: GenSlidingWindowFunction
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -5761,9 +5739,7 @@ void OpChiDist::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -5871,9 +5847,7 @@ void OpBinomdist::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -6803,9 +6777,7 @@ void OpPoisson::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -7347,10 +7319,7 @@ void OpBetainv::GenSlidingWindowFunction(
         {
             ss << "{\n";
         }
-        else
-        {
 
-        }
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "    if (isnan(";
@@ -7771,9 +7740,6 @@ void OpMinA::GenSlidingWindowFunction(
             ss << "    {\n";
             isMixed = svDoubleDouble;
         }
-        else
-        {
-        }
 
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
@@ -7921,9 +7887,6 @@ vSubArguments)
             ss << "    {\n";
             isMixed = svDoubleDouble;
         }
-        else
-        {
-        }
 
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
@@ -8059,9 +8022,6 @@ vSubArguments)
         {
             ss << "    {\n";
             isMixed = svDoubleDouble;
-        }
-        else
-        {
         }
 
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
@@ -8209,9 +8169,6 @@ vSubArguments)
         {
             ss << "    {\n";
             isMixed = svDoubleDouble;
-        }
-        else
-        {
         }
 
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())

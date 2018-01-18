@@ -453,13 +453,10 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
             // will automatically close if it was the las reference
         VclPtr<SwCreateAddressListDialog> pDlg(
                 VclPtr<SwCreateAddressListDialog>::Create(
-
                         pButton,
                         pUserData->sURL,
                         m_pAddressPage->GetWizard()->GetConfigItem()));
-        if(RET_OK == pDlg->Execute())
-        {
-        }
+        pDlg->Execute();
     }
 };
 

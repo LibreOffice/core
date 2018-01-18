@@ -1603,10 +1603,6 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
             TETextPortion* pTextPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {
-                if ( mpImpl->mpTextEngine->IsRightToLeft() )
-                {
-
-                }
                 aEditCursor.Right() += pTextPortion->GetWidth();
             }
             else
