@@ -560,7 +560,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
                 ApplyAttributes(pOutSet, pOldSet.get());
 
-                pRequest->Done(pOutSet);
+                pRequest->Done(*pOutSet);
             }
         });
 }
