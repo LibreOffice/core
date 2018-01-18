@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_933eedb6",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T11:26:56Z",
+      "side": 1,
+      "message": "if we used a std::shared_ptr (prolly easier than a unique_ptr to start with cf. std::move) here then we could loose this loop and these would be auto-deleted on destruction \u003d)",
+      "revId": "1f9e9c78c9b65df6f1a662ebacb51039bc2a35b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_33570104",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T11:26:56Z",
+      "side": 1,
+      "message": "don\u0027t think we need that \u003d) the normal destructor should work fine \u003d)",
+      "revId": "1f9e9c78c9b65df6f1a662ebacb51039bc2a35b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_1352fd13",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T11:26:56Z",
+      "side": 1,
+      "message": "do we really need this member to count these ? \u003d) can we not push these as we read them ? \u003d)",
+      "revId": "1f9e9c78c9b65df6f1a662ebacb51039bc2a35b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_b34bf158",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T11:26:56Z",
+      "side": 1,
+      "message": "my hope would be that we could push_back as we build these lists rather than sizing them initially and using these [i] type indicees (which are less reliable potentially).",
+      "revId": "1f9e9c78c9b65df6f1a662ebacb51039bc2a35b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_73417939",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T11:26:56Z",
+      "side": 1,
+      "message": "Wow - this is weird. Why do we have all of these separately ? are the indicees we use here all constant ? if so surely we should have a std::vector\u003c\u003e of a struct DictItem { OUString maName; Locale maLocale; Hunspell *mpHunspell; }\n\nSo we don\u0027t get confused with indicees and the code is cleaner ? \u003d)",
+      "revId": "1f9e9c78c9b65df6f1a662ebacb51039bc2a35b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
