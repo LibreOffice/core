@@ -84,6 +84,8 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   #include <abstractions/ibus>
   #include <abstractions/nameservice>
   #include <abstractions/gnome>
+# GnuPG1 only...
+# #include <abstractions/gnupg>
   #include <abstractions/python>
   #include <abstractions/p11-kit>
 
@@ -166,4 +168,8 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   owner @{HOME}/.icons/*/cursors/*      r,
   /usr/share/*-fonts/conf.avail/*.conf  r,
   /usr/share/fonts-config/conf.avail/*.conf r,
+
+  owner @{HOME}/.mozilla/firefox/** r,
+  # there is abstractions/gnupg but that's just for gpg1...
+  owner @{HOME}/.gnupg/* r,
 }
