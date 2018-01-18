@@ -210,7 +210,13 @@ OUString SmOoxmlImport::handleAcc()
         case MS_DOT:
             acc = "dot";
             break;
+        case MS_COMBDOT:
+            acc = "dot";
+            break;
         case MS_DDOT:
+            acc = "ddot";
+            break;
+        case MS_COMBDDOT:
             acc = "ddot";
             break;
         case MS_DDDOT:
