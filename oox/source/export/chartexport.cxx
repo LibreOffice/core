@@ -862,13 +862,9 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                     XML_val, "edge",
                     FSEND);
             chart2::RelativePosition aPos = aRelativePos.get<chart2::RelativePosition>();
-            uno::Any aRelativeSize = xProp->getPropertyValue("RelativeSize");
-            chart2::RelativeSize aSize = aRelativeSize.get<chart2::RelativeSize>();
 
             const double x = aPos.Primary;
             const double y = aPos.Secondary;
-            const double w = aSize.Primary;
-            const double h = aSize.Secondary;
 
             pFS->singleElement(FSNS(XML_c, XML_x),
                     XML_val, IS(x),
@@ -877,13 +873,23 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                     XML_val, IS(y),
                     FSEND);
 
-            pFS->singleElement(FSNS(XML_c, XML_w),
-                    XML_val, IS(w),
-                    FSEND);
+            uno::Any aRelativeSize = xProp->getPropertyValue("RelativeSize");
+            if (aRelativeSize.hasValue())
+            {
+                chart2::RelativeSize aSize = aRelativeSize.get<chart2::RelativeSize>();
 
-            pFS->singleElement(FSNS(XML_c, XML_h),
-                    XML_val, IS(h),
-                    FSEND);
+                const double w = aSize.Primary;
+                const double h = aSize.Secondary;
+
+                pFS->singleElement(FSNS(XML_c, XML_w),
+                        XML_val, IS(w),
+                        FSEND);
+
+                pFS->singleElement(FSNS(XML_c, XML_h),
+                        XML_val, IS(h),
+                        FSEND);
+            }
+
             SAL_WARN_IF(aPos.Anchor != css::drawing::Alignment_TOP_LEFT, "oox", "unsupported anchor position");
 
             pFS->endElement(FSNS(XML_c, XML_manualLayout));
