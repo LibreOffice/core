@@ -230,17 +230,17 @@ application/vnd.sun.xml.base odb
 application/vnd.stardivision.math smf
 application/vnd.openofficeorg.extension oxt
 application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
-application/vnd.ms-word.document.macroenabled.12 docm
+application/vnd.ms-word.document.macroEnabled.12 docm
 application/vnd.openxmlformats-officedocument.wordprocessingml.template dotx
-application/vnd.ms-word.template.macroenabled.12 dotm
+application/vnd.ms-word.template.macroEnabled.12 dotm
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet xlsx
-application/vnd.ms-excel.sheet.macroenabled.12 xlsm
+application/vnd.ms-excel.sheet.macroEnabled.12 xlsm
 application/vnd.openxmlformats-officedocument.spreadsheetml.template xltx
-application/vnd.ms-excel.template.macroenabled.12 xltm
+application/vnd.ms-excel.template.macroEnabled.12 xltm
 application/vnd.openxmlformats-officedocument.presentationml.presentation pptx
-application/vnd.ms-powerpoint.presentation.macroenabled.12 pptm
+application/vnd.ms-powerpoint.presentation.macroEnabled.12 pptm
 application/vnd.openxmlformats-officedocument.presentationml.template potx
-application/vnd.ms-powerpoint.template.macroenabled.12 potm
+application/vnd.ms-powerpoint.template.macroEnabled.12 potm
 END
 
 # and replace the original file
@@ -319,17 +319,17 @@ application/vnd.oasis.opendocument.database; %unixfilename -view %s
 application/vnd.sun.xml.base; %unixfilename -view %s
 application/vnd.openofficeorg.extension; %unixfilename %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.document; %unixfilename -view %s
-application/vnd.ms-word.document.macroenabled.12;%unixfilename -view %s
+application/vnd.ms-word.document.macroEnabled.12;%unixfilename -view %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.template; %unixfilename -view %s
-application/vnd.ms-word.template.macroenabled.12; %unixfilename -view %s
+application/vnd.ms-word.template.macroEnabled.12; %unixfilename -view %s
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; %unixfilename -view %s
-application/vnd.ms-excel.sheet.macroenabled.12; %unixfilename -view %s
+application/vnd.ms-excel.sheet.macroEnabled.12; %unixfilename -view %s
 application/vnd.openxmlformats-officedocument.spreadsheetml.template; %unixfilename -view %s
-application/vnd.ms-excel.template.macroenabled.12; %unixfilename -view %s
+application/vnd.ms-excel.template.macroEnabled.12; %unixfilename -view %s
 application/vnd.openxmlformats-officedocument.presentationml.presentation; %unixfilename -view %s
-application/vnd.ms-powerpoint.presentation.macroenabled.12; %unixfilename -view %s
+application/vnd.ms-powerpoint.presentation.macroEnabled.12; %unixfilename -view %s
 application/vnd.openxmlformats-officedocument.presentationml.template; %unixfilename -view %s
-application/vnd.ms-powerpoint.template.macroenabled.12; %unixfilename -view %s
+application/vnd.ms-powerpoint.template.macroEnabled.12; %unixfilename -view %s
 END
 
   # and replace the original file
