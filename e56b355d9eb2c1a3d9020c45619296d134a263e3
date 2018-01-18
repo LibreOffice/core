@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_aee7063f",
+        "filename": "cui/source/inc/swpossizetabpage.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-01-18T20:16:43Z",
+      "side": 1,
+      "message": "Better to use m_nProtectSizeState here to have consistent naming at least inside this class.",
+      "range": {
+        "startLine": 96,
+        "startChar": 24,
+        "endLine": 96,
+        "endChar": 42
+      },
+      "revId": "e56b355d9eb2c1a3d9020c45619296d134a263e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_6edd0e70",
+        "filename": "cui/source/tabpages/transfrm.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-01-18T20:16:43Z",
+      "side": 1,
+      "message": "Too much spaces here for indentation.",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 335,
+        "endChar": 12
+      },
+      "revId": "e56b355d9eb2c1a3d9020c45619296d134a263e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_8eda4277",
+        "filename": "cui/source/tabpages/transfrm.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-01-18T20:16:43Z",
+      "side": 1,
+      "message": "Here too",
+      "range": {
+        "startLine": 711,
+        "startChar": 12,
+        "endLine": 711,
+        "endChar": 22
+      },
+      "revId": "e56b355d9eb2c1a3d9020c45619296d134a263e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
