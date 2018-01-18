@@ -167,3 +167,33 @@ index bc9c1b7..59ded90 100644
 -- 
 2.13.6
 
+From 51e17dc87d85f1dc71b380906f9260de4cd0371c Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 18 Jan 2018 14:54:06 +0100
+Subject: [PATCH] EPUBImageManager: handle relative and absolute width
+
+---
+ src/lib/EPUBImageManager.cpp       |  6 +++++
+ src/test/EPUBTextGeneratorTest.cpp | 54 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 60 insertions(+)
+
+diff --git a/src/lib/EPUBImageManager.cpp b/src/lib/EPUBImageManager.cpp
+index bdf3bf0..cb4efee 100644
+--- a/src/lib/EPUBImageManager.cpp
++++ b/src/lib/EPUBImageManager.cpp
+@@ -171,6 +171,12 @@ void EPUBImageManager::extractImageProperties(librevenge::RVNGPropertyList const
+       continue;
+     cssProps[type[i]] =  pList[field.c_str()]->getStr().cstr();
+   }
++
++  // Extract size.
++  if (auto pRelWidth = pList["style:rel-width"])
++    cssProps["width"] = pRelWidth->getStr().cstr();
++  else if (auto pWidth = pList["svg:width"])
++    cssProps["width"] = pWidth->getStr().cstr();
+ }
+ 
+ std::string EPUBImageManager::getWrapStyle(librevenge::RVNGPropertyList const &pList)
+-- 
+2.13.6
+
