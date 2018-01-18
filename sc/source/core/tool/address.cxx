@@ -1851,9 +1851,7 @@ void ScRange::ParseRows( const OUString& rStr,
         {
             if( p[0] == ':')
             {
-                if( nullptr != (p = lcl_a1_get_row( p+1, &aEnd, &ignored, nullptr)))
-                {
-                }
+                p = lcl_a1_get_row( p+1, &aEnd, &ignored, nullptr);
             }
             else
             {
@@ -1868,9 +1866,9 @@ void ScRange::ParseRows( const OUString& rStr,
         {
             if( p[0] == ':')
             {
-                if( (p[1] == 'R' || p[1] == 'r') &&
-                    nullptr != (p = lcl_r1c1_get_row( p+1, rDetails, &aEnd, &ignored )))
+                if( p[1] == 'R' || p[1] == 'r' )
                 {
+                    p = lcl_r1c1_get_row( p+1, rDetails, &aEnd, &ignored );
                 }
             }
             else

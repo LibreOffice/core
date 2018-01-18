@@ -491,9 +491,6 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         OUString aStr(SdResId(STR_LAYER_MEASURELINES));
         pObj->SetLayer(rAdmin.GetLayerID(aStr));
     }
-    else if (nSlotId == OBJ_CUSTOMSHAPE )
-    {
-    }
 }
 
 /**

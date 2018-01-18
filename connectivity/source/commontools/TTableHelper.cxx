@@ -382,11 +382,6 @@ void OTableHelper::refreshForeignKeys(::std::vector< OUString>& _rNames)
             const sal_Int32 nDeleteRule = xRow->getInt(11);
             const OUString sFkName = xRow->getString(12);
 
-                if ( pKeyProps.get() )
-                {
-                }
-
-
             if ( !sFkName.isEmpty() && !xRow->wasNull() )
             {
                 if ( sOldFKName != sFkName )

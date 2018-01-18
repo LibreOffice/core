@@ -832,7 +832,7 @@ void TabPageUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-
+        /* code */
     }
 }
 
@@ -999,6 +999,7 @@ void SpinUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "DOWN")
     {
+        /* code */
     }
 }
 

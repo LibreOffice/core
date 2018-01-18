@@ -125,23 +125,11 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const css::awt::MouseEvent
 
 void SAL_CALL MediaEventListenersImpl::mouseEntered( const css::awt::MouseEvent& )
 {
-    const ::osl::MutexGuard aGuard( maMutex );
-    const SolarMutexGuard aAppGuard;
-
-    if( mpNotifyWindow )
-    {
-    }
 }
 
 
 void SAL_CALL MediaEventListenersImpl::mouseExited( const css::awt::MouseEvent& )
 {
-    const ::osl::MutexGuard aGuard( maMutex );
-    const SolarMutexGuard aAppGuard;
-
-    if( mpNotifyWindow )
-    {
-    }
 }
 
 

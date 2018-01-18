@@ -305,13 +305,6 @@ namespace dbtools
             OUString sSql = "SELECT * FROM x WHERE " + sField + _rPredicateValue;
             std::unique_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, true ) );
             nType = DataType::DOUBLE;
-            if ( pParseNode.get() )
-            {
-                OSQLParseNode* pColumnRef = pParseNode->getByRule(OSQLParseNode::column_ref);
-                if ( pColumnRef )
-                {
-                }
-            }
         }
 
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();

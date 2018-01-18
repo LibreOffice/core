@@ -843,9 +843,6 @@ namespace
                 // continue with children
                 traverse(xStorage, rBuf);
             }
-            else
-            {
-            }
         }
     }
 }

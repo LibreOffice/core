@@ -812,9 +812,6 @@ bool NavElementBox_Impl::EventNotify( NotifyEvent& rNEvt )
                 break;
         }
     }
-    else if( MouseNotifyEvent::LOSEFOCUS == rNEvt.GetType() )
-    {
-    }
 
     return bHandled || ListBox::EventNotify( rNEvt );
 }

@@ -113,10 +113,6 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
 
         SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
    }
-   else
-   {
-
-   }
 }
 
 VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(

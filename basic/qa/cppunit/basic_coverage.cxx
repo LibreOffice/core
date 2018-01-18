@@ -127,9 +127,6 @@ void Coverage::process_directory(const OUString& sDirName)
             }
         }
     }
-    else
-    {
-    }
     fprintf(stderr,"end process directory\n");
 }
 

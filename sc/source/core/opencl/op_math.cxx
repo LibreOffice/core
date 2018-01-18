@@ -159,9 +159,7 @@ void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        tmp=";

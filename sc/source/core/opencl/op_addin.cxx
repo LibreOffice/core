@@ -220,9 +220,7 @@ void OpGestep::GenSlidingWindowFunction(
         {
             ss << "    {\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        if (isnan(";

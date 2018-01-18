@@ -59,9 +59,6 @@ namespace oox { namespace ppt {
             }
             return this;
         case PPT_TOKEN( bldSub ):
-            if( mbInBldGraphic )
-            {
-            }
             return this;
         case PPT_TOKEN( bldGraphic ):
         {

@@ -977,11 +977,6 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
             {
                 maFrameData.mnHelpState &= ~DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
-
-                // do not call a Click-Handler when aborting
-                if ( !rTEvt.IsTrackingCanceled() )
-                {
-                }
             }
         }
         else

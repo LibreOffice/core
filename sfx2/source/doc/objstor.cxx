@@ -821,9 +821,6 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             )
             FinishedLoading( SfxLoadedFlags::MAINDOCUMENT );
 
-        if( IsOwnStorageFormat(*pMed) && pMed->GetFilter() )
-        {
-        }
         Broadcast( SfxHint(SfxHintId::NameChanged) );
 
         if ( SfxObjectCreateMode::EMBEDDED != eCreateMode )

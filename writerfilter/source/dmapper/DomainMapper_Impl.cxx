@@ -3462,11 +3462,7 @@ void DomainMapper_Impl::handleToc
         }
     }
 //                  \p Defines the separator between the table entry and its page number
-    if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
-        {  }
 //                  \s  Builds a table of contents by using a sequence type
-    if( lcl_FindInCommand( pContext->GetCommand(), 's', sValue ))
-        {  }
 //                  \t  Builds a table of contents by using style names other than the standard outline styles
     if( lcl_FindInCommand( pContext->GetCommand(), 't', sValue ))
     {

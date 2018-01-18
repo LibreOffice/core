@@ -343,11 +343,6 @@ SdPage* SlideSorterViewShell::GetActualPage()
             pCurrentPage = pDescriptor->GetPage();
     }
 
-    if (pCurrentPage == nullptr)
-    {
-
-    }
-
     return pCurrentPage;
 }
 

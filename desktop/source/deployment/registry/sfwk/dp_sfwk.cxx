@@ -166,9 +166,6 @@ BackendImpl::BackendImpl(
                        "Scripting Framework Script Library"
                        ) )
 {
-    if (! transientMode())
-    {
-    }
 }
 
 
