@@ -85,6 +85,7 @@ public:
     void testTableCellWidth();
     void testTableRowHeight();
     void testLink();
+    void testLinkInvalid();
     void testLinkCharFormat();
     void testLinkNamedCharFormat();
     void testTableWidth();
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testTableCellWidth);
     CPPUNIT_TEST(testTableRowHeight);
     CPPUNIT_TEST(testLink);
+    CPPUNIT_TEST(testLinkInvalid);
     CPPUNIT_TEST(testLinkCharFormat);
     CPPUNIT_TEST(testLinkNamedCharFormat);
     CPPUNIT_TEST(testTableWidth);
@@ -660,6 +662,15 @@ void EPUBExportTest::testLink()
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "https://libreoffice.org/");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "https://libreoffice.org/");
+}
+
+void EPUBExportTest::testLinkInvalid()
+{
+    createDoc("link-invalid.odt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This was 1, invalid relative link was not filtered out.
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", 0);
 }
 
 void EPUBExportTest::testLinkCharFormat()
