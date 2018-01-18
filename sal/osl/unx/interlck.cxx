@@ -19,6 +19,7 @@
 
 #include "system.hxx"
 
+#include <config_global.h>
 #include <osl/interlck.h>
 
 #if  ( defined (__sun) || defined ( NETBSD ) ) && defined ( SPARC )

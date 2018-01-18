@@ -27,6 +27,7 @@
 #include <type_traits>
 #include <memory>
 
+#include <config_global.h>
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <svl/typedwhich.hxx>

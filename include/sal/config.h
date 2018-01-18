@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SAL_CONFIG_H
 #define INCLUDED_SAL_CONFIG_H
 
-#if defined LIBO_INTERNAL_ONLY
-#include "config_global.h"
-#if defined ANDROID && defined __cplusplus
+#if defined LIBO_INTERNAL_ONLY && defined ANDROID && defined __cplusplus
 #include <android/compatibility.hxx>
-#endif
 #endif
 
 #include <stdlib.h>
