@@ -12,9 +12,12 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
 
+#include <sal/config.h>
+
 #if defined(_WIN32)
         typedef __int64 libvlc_time_t;
 #else
+#include <stdint.h>
         typedef int64_t libvlc_time_t;
 #endif
 
