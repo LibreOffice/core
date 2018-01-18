@@ -1132,7 +1132,7 @@ void OTableController::alterColumns()
     // first look for columns where something other than the name changed
     for (auto const& row : m_vRowList)
     {
-        OSL_ENSURE(*aIter,"OTableRow is null!");
+        OSL_ENSURE(row,"OTableRow is null!");
         OFieldDescription* pField = row->GetActFieldDescr();
         if ( !pField )
             continue;
