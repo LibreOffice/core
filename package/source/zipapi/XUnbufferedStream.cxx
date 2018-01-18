@@ -210,7 +210,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
                 nRead = mxZipStream->readBytes (
                                         aData,
-                                        std::min<sal_Int32>(nDiff, nRequestedBytes) );
+                                        std::min<sal_Int64>(nDiff, nRequestedBytes) );
 
                 mnZipCurrent += nRead;
 
