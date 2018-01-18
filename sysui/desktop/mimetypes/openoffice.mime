@@ -49,40 +49,40 @@ application/vnd.sun.xml.base:
 application/vnd.openxmlformats-officedocument.wordprocessingml.document
     ext: docx
 
-application/vnd.ms-word.document.macroenabled.12
+application/vnd.ms-word.document.macroEnabled.12
     ext: docm
 
 application/vnd.openxmlformats-officedocument.wordprocessingml.template
     ext: dotx
 
-application/vnd.ms-word.template.macroenabled.12
+application/vnd.ms-word.template.macroEnabled.12
     ext: dotm
 
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
     ext: xlsx
 
-application/vnd.ms-excel.sheet.macroenabled.12
+application/vnd.ms-excel.sheet.macroEnabled.12
     ext: xlsm
 
 application/vnd.openxmlformats-officedocument.spreadsheetml.template
     ext: xltx
     
-application/vnd.ms-excel.template.macroenabled.12
+application/vnd.ms-excel.template.macroEnabled.12
     ext: xltm
     
 application/vnd.openxmlformats-officedocument.presentationml.presentation
     ext: pptx
     
-application/vnd.ms-powerpoint.presentation.macroenabled.12
+application/vnd.ms-powerpoint.presentation.macroEnabled.12
     ext: pptm
     
 application/vnd.openxmlformats-officedocument.presentationml.template
     ext: potx
     
-application/vnd.ms-powerpoint.template.macroenabled.12
+application/vnd.ms-powerpoint.template.macroEnabled.12
     ext: potm
 
-application/vnd.ms-excel.sheet.binary.macroenabled.12
+application/vnd.ms-excel.sheet.binary.macroEnabled.12
     ext: xlsb
 
 application/vnd.ms-word
