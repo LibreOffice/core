@@ -24,8 +24,6 @@
 #include "config_global.h"
 #endif
 
-#include <stdlib.h>
-
 #ifdef _WIN32
 #define SAL_W32
 #define SAL_DLLEXTENSION ".dll"
