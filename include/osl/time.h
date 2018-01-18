@@ -29,7 +29,7 @@
 #include "sal/saldllapi.h"
 #include "sal/types.h"
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #   pragma pack(push, 8)
 #endif
 
@@ -74,7 +74,7 @@ typedef struct {
 
 #endif
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
 #   pragma pack(pop)
 #endif
 

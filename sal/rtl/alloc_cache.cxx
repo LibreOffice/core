@@ -44,10 +44,10 @@ struct rtl_cache_list_st
 #if defined(SAL_UNX)
     pthread_t            m_update_thread;
     pthread_cond_t       m_update_cond;
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
     HANDLE               m_update_thread;
     HANDLE               m_update_cond;
-#endif /* SAL_UNX || SAL_W32 */
+#endif /* SAL_UNX || _WIN32 */
     int                  m_update_done;
 };
 
@@ -1225,7 +1225,7 @@ static void rtl_cache_wsupdate_fini()
         pthread_join (g_cache_list.m_update_thread, nullptr);
 }
 
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
 
 void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
@@ -1267,7 +1267,7 @@ static void rtl_cache_wsupdate_fini()
     WaitForSingleObject (g_cache_list.m_update_thread, INFINITE);
 }
 
-#endif /* SAL_UNX || SAL_W32 */
+#endif /* SAL_UNX || _WIN32 */
 
 /**
     update depot stats and purge excess magazines.
@@ -1317,9 +1317,9 @@ static void rtl_cache_wsupdate(rtl_cache_type * cache)
 
 #if defined(SAL_UNX)
 static void *
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
 static DWORD WINAPI
-#endif /* SAL_UNX || SAL_W32 */
+#endif /* SAL_UNX || _WIN32 */
 rtl_cache_wsupdate_all(void * arg)
 {
     osl::Thread::setName("rtl_cache_wsupdate_all");
@@ -1347,7 +1347,7 @@ rtl_cache_wsupdate_all(void * arg)
 
 #if defined(SAL_UNX)
     return nullptr;
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
     return 0;
 #endif
 }

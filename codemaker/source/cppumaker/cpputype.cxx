@@ -1813,7 +1813,7 @@ private:
 
 void PlainStructType::dumpDeclaration(FileStream & out)
 {
-    out << "\n#ifdef SAL_W32\n#   pragma pack(push, 8)\n#endif\n\n" << indent();
+    out << "\n#ifdef _WIN32\n#   pragma pack(push, 8)\n#endif\n\n" << indent();
     out << "struct SAL_DLLPUBLIC_RTTI ";
     if (canBeWarnUnused(name_))
         out << "SAL_WARN_UNUSED ";
@@ -1856,7 +1856,7 @@ void PlainStructType::dumpDeclaration(FileStream & out)
         }
     }
     dec();
-    out << "};\n\n#ifdef SAL_W32\n#   pragma pack(pop)\n#endif\n\n";
+    out << "};\n\n#ifdef _WIN32\n#   pragma pack(pop)\n#endif\n\n";
 }
 
 void PlainStructType::dumpHppFile(
@@ -2212,7 +2212,7 @@ private:
 
 void PolyStructType::dumpDeclaration(FileStream & out)
 {
-    out << "\n#ifdef SAL_W32\n#   pragma pack(push, 8)\n#endif\n\n" << indent();
+    out << "\n#ifdef _WIN32\n#   pragma pack(push, 8)\n#endif\n\n" << indent();
     dumpTemplateHead(out);
     out << "struct SAL_DLLPUBLIC_RTTI " << id_ << " {\n";
     inc();
@@ -2248,7 +2248,7 @@ void PolyStructType::dumpDeclaration(FileStream & out)
         }
     }
     dec();
-    out << "};\n\n#ifdef SAL_W32\n#   pragma pack(pop)\n#endif\n\n";
+    out << "};\n\n#ifdef _WIN32\n#   pragma pack(pop)\n#endif\n\n";
 }
 
 void PolyStructType::dumpHppFile(

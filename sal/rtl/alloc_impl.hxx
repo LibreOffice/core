@@ -190,7 +190,7 @@ typedef pthread_mutex_t rtl_memory_lock_type;
 #define RTL_MEMORY_LOCK_ACQUIRE(lock) pthread_mutex_lock((lock))
 #define RTL_MEMORY_LOCK_RELEASE(lock) pthread_mutex_unlock((lock))
 
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
 
 #define WIN32_LEAN_AND_MEAN
 #ifdef _MSC_VER
@@ -211,7 +211,7 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 
 #else
 #error Unknown platform
-#endif /* SAL_UNX | SAL_W32 */
+#endif /* SAL_UNX | _WIN32 */
 
 /** Cache creation flags.
     @internal

@@ -29,7 +29,7 @@
 
 namespace {
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(push, 8)
 #endif
 
@@ -143,7 +143,7 @@ enum Enum
     v = SAL_MAX_ENUM
 };
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #   pragma pack(pop)
 #endif
 

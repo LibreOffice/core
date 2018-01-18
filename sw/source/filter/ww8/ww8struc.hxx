@@ -28,7 +28,7 @@
 #include <editeng/borderline.hxx>
 #include <filter/msfilter/util.hxx>
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #   pragma pack(push, 2)
 #endif
 
@@ -987,7 +987,7 @@ struct WW8_WKB
     SVBT16 reserved5;
 };
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #   pragma pack(pop)
 #endif
 

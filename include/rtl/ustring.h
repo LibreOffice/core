@@ -1166,7 +1166,7 @@ SAL_DLLPUBLIC double SAL_CALL rtl_ustr_toDouble(
 
 /* ======================================================================= */
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
 #pragma pack(push, 4)
 #endif
 
@@ -1181,7 +1181,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _rtl_uString
 } rtl_uString;
 /** @endcond */
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
 #pragma pack(pop)
 #endif
 

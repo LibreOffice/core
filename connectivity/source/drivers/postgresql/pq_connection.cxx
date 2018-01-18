@@ -668,7 +668,7 @@ void log(ConnectionSettings *settings, LogLevel nLevel, const char *str)
 
         time_t t = ::time( nullptr );
         char *pString;
-#ifdef SAL_W32
+#ifdef _WIN32
         pString = asctime( localtime( &t ) );
 #else
         struct tm timestruc;

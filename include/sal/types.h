@@ -135,7 +135,7 @@ typedef unsigned char sal_uChar;
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef char16_t sal_Unicode;
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
     typedef wchar_t sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
@@ -315,7 +315,7 @@ typedef void *                   sal_Handle;
 #   define SAL_NO_VTABLE
 #endif
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #   pragma pack(push, 8)
 #endif
 
@@ -337,7 +337,7 @@ typedef struct _sal_Sequence
 
 #define SAL_SEQUENCE_HEADER_SIZE ((sal_Size) offsetof(sal_Sequence,elements))
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(pop)
 #endif
 

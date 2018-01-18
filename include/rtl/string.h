@@ -836,7 +836,7 @@ SAL_DLLPUBLIC double SAL_CALL rtl_str_toDouble(
 
 /* ======================================================================= */
 
-#ifdef SAL_W32
+#ifdef _WIN32
 #   pragma pack(push, 8)
 #endif
 
@@ -851,7 +851,7 @@ typedef struct _rtl_String
 } rtl_String;
 /** @endcond */
 
-#if defined(SAL_W32)
+#if defined(_WIN32)
 #pragma pack(pop)
 #endif
 

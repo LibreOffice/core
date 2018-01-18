@@ -27,7 +27,7 @@ extern "C"
 {
 #endif
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(push, 8)
 #endif
 
@@ -52,7 +52,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Any
     void * pReserved;
 } uno_Any;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(pop)
 #endif
 

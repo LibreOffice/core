@@ -43,7 +43,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/mman.h>
-#elif defined SAL_W32
+#elif defined _WIN32
 #define WIN32_LEAN_AND_MEAN
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
@@ -74,7 +74,7 @@ extern "C" void * allocExec(
 #else
     pagesize = sysconf(_SC_PAGESIZE);
 #endif
-#elif defined SAL_W32
+#elif defined _WIN32
     SYSTEM_INFO info;
     GetSystemInfo(&info);
     pagesize = info.dwPageSize;
@@ -95,7 +95,7 @@ extern "C" void * allocExec(
         munmap (p, n);
         p = nullptr;
     }
-#elif defined SAL_W32
+#elif defined _WIN32
     p = VirtualAlloc(nullptr, n, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 #endif
     if (p != nullptr) {
@@ -109,7 +109,7 @@ extern "C" void freeExec(
 {
 #if defined SAL_UNX
     munmap(address, size);
-#elif defined SAL_W32
+#elif defined _WIN32
     (void) size; // unused
     VirtualFree(address, 0, MEM_RELEASE);
 #endif

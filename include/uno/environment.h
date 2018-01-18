@@ -32,7 +32,7 @@ extern "C"
 struct _uno_ExtEnvironment;
 struct _typelib_InterfaceTypeDescription;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(push, 8)
 #endif
 
@@ -245,7 +245,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
 
 } uno_ExtEnvironment;
 
-#if defined( SAL_W32)
+#if defined( _WIN32)
 #pragma pack(pop)
 #endif
 

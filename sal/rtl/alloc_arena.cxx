@@ -1020,9 +1020,9 @@ void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn, void *u
 
 #if defined(SAL_UNX)
 #include <sys/mman.h>
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
 #define MAP_FAILED nullptr
-#endif /* SAL_UNX || SAL_W32 */
+#endif /* SAL_UNX || _WIN32 */
 
 namespace
 {
@@ -1061,9 +1061,9 @@ void * rtl_machdep_alloc(
 
 #if defined(SAL_UNX)
     addr = mmap (nullptr, static_cast<size_t>(size), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
     addr = VirtualAlloc (nullptr, (SIZE_T)size, MEM_COMMIT, PAGE_READWRITE);
-#endif /* (SAL_UNX || SAL_W32) */
+#endif /* (SAL_UNX || _WIN32) */
 
     if (addr != MAP_FAILED)
     {
@@ -1091,9 +1091,9 @@ void rtl_machdep_free(
 
 #if defined(SAL_UNX)
     (void) munmap(pAddr, nSize);
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
     (void) VirtualFree (pAddr, (SIZE_T)0, MEM_RELEASE);
-#endif /* (SAL_UNX || SAL_W32) */
+#endif /* (SAL_UNX || _WIN32) */
 }
 
 sal_Size rtl_machdep_pagesize()
@@ -1104,11 +1104,11 @@ sal_Size rtl_machdep_pagesize()
 #else  /* POSIX */
     return static_cast<sal_Size>(sysconf(_SC_PAGESIZE));
 #endif /* xBSD || POSIX */
-#elif defined(SAL_W32)
+#elif defined(_WIN32)
     SYSTEM_INFO info;
     GetSystemInfo (&info);
     return (sal_Size)info.dwPageSize;
-#endif /* (SAL_UNX || SAL_W32) */
+#endif /* (SAL_UNX || _WIN32) */
 }
 
 } //namespace

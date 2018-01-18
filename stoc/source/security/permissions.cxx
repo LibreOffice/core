@@ -332,7 +332,7 @@ FilePermission::FilePermission(
                 getWorkingDir().pData, perm.URL.pData, &out.pData );
             m_url = (osl_File_E_None == rc ? out : perm.URL); // fallback
         }
-#ifdef SAL_W32
+#ifdef _WIN32
         // correct win drive letters
         if (9 < m_url.getLength() && '|' == m_url[ 9 ]) // file:///X|
         {
@@ -361,7 +361,7 @@ bool FilePermission::implies( Permission const & perm ) const
     if (demanded.m_allFiles)
         return false;
 
-#ifdef SAL_W32
+#ifdef _WIN32
     if (m_url.equalsIgnoreAsciiCase( demanded.m_url ))
         return true;
 #else
@@ -375,7 +375,7 @@ bool FilePermission::implies( Permission const & perm ) const
     {
         // demanded url must start with granted path (including path trailing path sep)
         sal_Int32 len = m_url.getLength() -1;
-#ifdef SAL_W32
+#ifdef _WIN32
         return (0 == ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
                     demanded.m_url.pData->buffer, len, m_url.pData->buffer, len ));
 #else
@@ -388,7 +388,7 @@ bool FilePermission::implies( Permission const & perm ) const
     {
         // demanded url must start with granted path (including path trailing path sep)
         sal_Int32 len = m_url.getLength() -1;
-#ifdef SAL_W32
+#ifdef _WIN32
         return ((0 == ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
                      demanded.m_url.pData->buffer, len, m_url.pData->buffer, len )) &&
                 (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper paths
