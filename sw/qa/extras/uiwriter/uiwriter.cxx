@@ -290,6 +290,7 @@ public:
     void testTdf114306();
     void testTdf114306_2();
     void testTdf114536();
+    void testTdf115065();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -461,6 +462,7 @@ public:
     CPPUNIT_TEST(testTdf114306);
     CPPUNIT_TEST(testTdf114306_2);
     CPPUNIT_TEST(testTdf114536);
+    CPPUNIT_TEST(testTdf115065);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5617,6 +5619,31 @@ void SwUiWriterTest::testTdf113790()
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "tdf113790.docx");
     CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument *>(mxComponent.get()));
+}
+
+void SwUiWriterTest::testTdf115065()
+{
+    // In the document, the tables have table style assigned
+    // Source table (first one) has two rows;
+    // destination (second one) has only one row
+    SwDoc* pDoc = createDoc("tdf115065.odt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    pWrtShell->GotoTable("Table2");
+    SwRect aRect = pWrtShell->GetCurrFrame()->getFrameArea();
+    // Destination point is the middle of the first cell of second table
+    Point ptTo = Point(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
+
+    pWrtShell->GotoTable("Table1");
+    aRect = pWrtShell->GetCurrFrame()->getFrameArea();
+    // Source point is the middle of the first cell of first table
+    Point ptFrom = Point(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
+
+    pWrtShell->SelTableCol();
+    // The copy operation (or closing document after that) segfaulted
+    pWrtShell->Copy(pWrtShell, ptFrom, ptTo);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
