@@ -150,11 +150,6 @@ private:
     /// call to set maImplStyle on demand
     void implEnsureImplStyle();
 
-    /// need information which cell this style info comes from due to needed
-    /// rotation info (which is in the cell). Rotation depends on the cell.
-    friend class Cell;
-    void SetUsingCell(const Cell* pCell) { mpUsingCell = pCell; }
-
 public:
     /** Constructs an invisible frame style. */
     explicit Style();
@@ -202,9 +197,6 @@ public:
 
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
     Style& MirrorSelf();
-
-    /** return the Cell using this style (if set) */
-    const Cell* GetUsingCell() const { return mpUsingCell; }
 
     bool operator==( const Style& rOther) const;
     bool operator<( const Style& rOther) const;

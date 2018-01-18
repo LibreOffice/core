@@ -45,10 +45,8 @@ public:
     long                mnAddTop;
     long                mnAddBottom;
 
-    SvxRotateMode           meRotMode;
-    double                  mfOrientation;
-    basegfx::B2DHomMatrix   maCoordinateSystem;
-    size_t                  maCellIndex;
+    SvxRotateMode       meRotMode;
+    double              mfOrientation;
 
     bool                mbMergeOrig;
     bool                mbOverlapX;
@@ -57,12 +55,12 @@ public:
 public:
     explicit            Cell();
 
-    void SetStyleLeft(const Style& rStyle) { maLeft = rStyle; maLeft.SetUsingCell(this); }
-    void SetStyleRight(const Style& rStyle) { maRight = rStyle; maRight.SetUsingCell(this); }
-    void SetStyleTop(const Style& rStyle) { maTop = rStyle; maTop.SetUsingCell(this); }
-    void SetStyleBottom(const Style& rStyle) { maBottom = rStyle; maBottom.SetUsingCell(this); }
-    void SetStyleTLBR(const Style& rStyle) { maTLBR = rStyle; maTLBR.SetUsingCell(this); }
-    void SetStyleBLTR(const Style& rStyle) { maBLTR = rStyle; maBLTR.SetUsingCell(this); }
+    void SetStyleLeft(const Style& rStyle) { maLeft = rStyle; }
+    void SetStyleRight(const Style& rStyle) { maRight = rStyle; }
+    void SetStyleTop(const Style& rStyle) { maTop = rStyle; }
+    void SetStyleBottom(const Style& rStyle) { maBottom = rStyle; }
+    void SetStyleTLBR(const Style& rStyle) { maTLBR = rStyle; }
+    void SetStyleBLTR(const Style& rStyle) { maBLTR = rStyle; }
 
     const Style& GetStyleLeft() const { return maLeft; }
     const Style& GetStyleRight() const { return maRight; }
@@ -76,74 +74,54 @@ public:
 
     void                MirrorSelfX();
 
-    basegfx::B2DHomMatrix const & CreateCoordinateSystem(const Array& rArray) const;
-    size_t GetCellIndex(const Array& rArray) const;
+    basegfx::B2DHomMatrix CreateCoordinateSystem(const Array& rArray, size_t nCol, size_t nRow, bool bExpandMerged) const;
 };
 
 typedef std::vector< long >     LongVec;
 typedef std::vector< Cell >     CellVec;
 
-size_t Cell::GetCellIndex(const Array& rArray) const
+basegfx::B2DHomMatrix Cell::CreateCoordinateSystem(const Array& rArray, size_t nCol, size_t nRow, bool bExpandMerged) const
 {
-    if(static_cast<size_t>(-1) == maCellIndex)
+    basegfx::B2DHomMatrix aRetval;
+    const basegfx::B2DRange aRange(rArray.GetCellRange(nCol, nRow, bExpandMerged));
+
+    if(!aRange.isEmpty())
     {
-        rArray.AddCellIndices();
-    }
+        basegfx::B2DPoint aOrigin(aRange.getMinimum());
+        basegfx::B2DVector aX(aRange.getWidth(), 0.0);
+        basegfx::B2DVector aY(0.0, aRange.getHeight());
 
-    return maCellIndex;
-}
-
-basegfx::B2DHomMatrix const & Cell::CreateCoordinateSystem(const Array& rArray) const
-{
-    if(!maCoordinateSystem.isIdentity())
-    {
-        return maCoordinateSystem;
-    }
-
-    const size_t nCellIndex(GetCellIndex(rArray));
-
-    if(static_cast<size_t>(-1) != nCellIndex)
-    {
-        const basegfx::B2DRange aRange(rArray.GetCellRange(nCellIndex));
-
-        if(!aRange.isEmpty())
+        if (IsRotated() && SvxRotateMode::SVX_ROTATE_MODE_STANDARD != meRotMode)
         {
-            basegfx::B2DPoint aOrigin(aRange.getMinimum());
-            basegfx::B2DVector aX(aRange.getWidth(), 0.0);
-            basegfx::B2DVector aY(0.0, aRange.getHeight());
+            // when rotated, adapt values. Get Skew (cos/sin == 1/tan)
+            const double fSkew(aY.getY() * (cos(mfOrientation) / sin(mfOrientation)));
 
-            if (IsRotated() && SvxRotateMode::SVX_ROTATE_MODE_STANDARD != meRotMode)
+            switch (meRotMode)
             {
-                // when rotated, adapt values. Get Skew (cos/sin == 1/tan)
-                const double fSkew(aY.getY() * (cos(mfOrientation) / sin(mfOrientation)));
-
-                switch (meRotMode)
-                {
-                case SvxRotateMode::SVX_ROTATE_MODE_TOP:
-                    // shear Y-Axis
-                    aY.setX(-fSkew);
-                    break;
-                case SvxRotateMode::SVX_ROTATE_MODE_CENTER:
-                    // shear origin half, Y full
-                    aOrigin.setX(aOrigin.getX() + (fSkew * 0.5));
-                    aY.setX(-fSkew);
-                    break;
-                case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
-                    // shear origin full, Y full
-                    aOrigin.setX(aOrigin.getX() + fSkew);
-                    aY.setX(-fSkew);
-                    break;
-                default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
-                    break;
-                }
+            case SvxRotateMode::SVX_ROTATE_MODE_TOP:
+                // shear Y-Axis
+                aY.setX(-fSkew);
+                break;
+            case SvxRotateMode::SVX_ROTATE_MODE_CENTER:
+                // shear origin half, Y full
+                aOrigin.setX(aOrigin.getX() + (fSkew * 0.5));
+                aY.setX(-fSkew);
+                break;
+            case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
+                // shear origin full, Y full
+                aOrigin.setX(aOrigin.getX() + fSkew);
+                aY.setX(-fSkew);
+                break;
+            default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
+                break;
             }
-
-            // use column vectors as coordinate axes, homogen column for translation
-            const_cast<Cell*>(this)->maCoordinateSystem = basegfx::utils::createCoordinateSystemTransform(aOrigin, aX, aY);
         }
+
+        // use column vectors as coordinate axes, homogen column for translation
+        aRetval = basegfx::utils::createCoordinateSystemTransform(aOrigin, aX, aY);
     }
 
-    return maCoordinateSystem;
+    return aRetval;
 }
 
 Cell::Cell() :
@@ -153,8 +131,6 @@ Cell::Cell() :
     mnAddBottom( 0 ),
     meRotMode(SvxRotateMode::SVX_ROTATE_MODE_STANDARD ),
     mfOrientation( 0.0 ),
-    maCoordinateSystem(),
-    maCellIndex(static_cast<size_t>(-1)),
     mbMergeOrig( false ),
     mbOverlapX( false ),
     mbOverlapY( false )
@@ -168,8 +144,6 @@ void Cell::MirrorSelfX()
     maLeft.MirrorSelf();
     maRight.MirrorSelf();
     mfOrientation = -mfOrientation;
-    maCoordinateSystem.identity();
-    maCellIndex = static_cast<size_t>(-1);
 }
 
 
@@ -864,17 +838,12 @@ long Array::GetHeight() const
     return GetRowPosition( mxImpl->mnHeight ) - GetRowPosition( 0 );
 }
 
-basegfx::B2DRange Array::GetCellRange( size_t nCellIndex ) const
+basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow, bool bExpandMerged ) const
 {
-    return GetCellRange(nCellIndex % GetColCount(), nCellIndex / GetColCount());
-}
-
-basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow ) const
-{
-    size_t nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
-    size_t nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
-    size_t nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
-    size_t nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
+    size_t nFirstCol = bExpandMerged ? mxImpl->GetMergedFirstCol( nCol, nRow ) : nCol;
+    size_t nFirstRow = bExpandMerged ? mxImpl->GetMergedFirstRow( nCol, nRow ) : nRow;
+    size_t nLastCol = bExpandMerged ? mxImpl->GetMergedLastCol( nCol, nRow ) : nCol;
+    size_t nLastRow = bExpandMerged ? mxImpl->GetMergedLastRow( nCol, nRow ) : nRow;
     const Point aPoint( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
     const Size aSize( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
     tools::Rectangle aRect(aPoint, aSize);
@@ -1023,45 +992,6 @@ void HelperCreateVerticalEntry(
     );
 }
 
-void HelperCreateEntry(const Array& rArray, const Style& rStyle, drawinglayer::primitive2d::Primitive2DContainer& rSequence, const Color* pForceColor)
-{
-    const Cell* pCell = rStyle.GetUsingCell();
-
-    if(nullptr != pCell)
-    {
-        const size_t nCellIndex(pCell->GetCellIndex(rArray));
-
-        if(static_cast<size_t>(-1) != nCellIndex)
-        {
-            size_t col(nCellIndex % rArray.GetColCount());
-            size_t row(nCellIndex / rArray.GetColCount());
-            const bool bL(&rStyle == &pCell->GetStyleLeft());
-            const bool bR(&rStyle == &pCell->GetStyleRight());
-            const bool bT(&rStyle == &pCell->GetStyleTop());
-            const bool bB(&rStyle == &pCell->GetStyleBottom());
-
-            if(bL || bR || bT || bB)
-            {
-                const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(rArray));
-                const basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
-                const basegfx::B2DVector aY(basegfx::utils::getColumn(aCoordinateSystem, 1));
-                const basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
-
-                if(bL || bR)
-                {
-                    // left/right
-                    HelperCreateVerticalEntry(rArray, rStyle, bL ? col : col + 1, row, aOrigin, aX, aY, rSequence, bL, pForceColor);
-                }
-                else if(bT || bB)
-                {
-                    // top/bottom
-                    HelperCreateHorizontalEntry(rArray, rStyle, col, bT ? row : row + 1, aOrigin, aX, aY, rSequence, bT, pForceColor);
-                }
-            }
-        }
-    }
-}
-
 void HelperMergeInB2DPrimitiveArray(
     const drawinglayer::primitive2d::Primitive2DContainer& rSource,
     drawinglayer::primitive2d::Primitive2DContainer& rTarget)
@@ -1116,23 +1046,27 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     std::vector< drawinglayer::primitive2d::Primitive2DContainer > aVerticalSequences(nLastCol - nFirstCol + 1);
     drawinglayer::primitive2d::Primitive2DContainer aCrossSequence;
 
+    // remember for which merged cells crossed lines were already created. To
+    // do so, hold the size_t cell index in a set for fast check
+    std::set< size_t > aMergedCells;
+
     for (size_t nRow = nFirstRow; nRow <= nLastRow; ++nRow)
     {
         for (size_t nCol = nFirstCol; nCol <= nLastCol; ++nCol)
         {
+            // get Cell and CoordinateSystem (*only* for this Cell), check if used (not empty)
             const Cell& rCell = CELL(nCol, nRow);
-            const basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this));
-            const basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
-            const basegfx::B2DVector aY(basegfx::utils::getColumn(aCoordinateSystem, 1));
+            basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this, nCol, nRow, false));
+            basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
+            basegfx::B2DVector aY(basegfx::utils::getColumn(aCoordinateSystem, 1));
 
             if(!aX.equalZero() && !aY.equalZero())
             {
-                size_t _nFirstCol = mxImpl->GetMergedFirstCol(nCol, nRow);
-                size_t _nFirstRow = mxImpl->GetMergedFirstRow(nCol, nRow);
-                size_t _nLastCol = mxImpl->GetMergedLastCol(nCol, nRow);
-                size_t _nLastRow = mxImpl->GetMergedLastRow(nCol, nRow);
-                const basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
-
+                // for getting correct Style(s) for merged Cells, we need the First(Col/Row)
+                // for access (see accessing Styles below)
+                const size_t _nFirstCol(mxImpl->GetMergedFirstCol(nCol, nRow));
+                const size_t _nFirstRow(mxImpl->GetMergedFirstRow(nCol, nRow));
+                basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
                 const bool bOverlapX(rCell.mbOverlapX);
                 const bool bOverlapY(rCell.mbOverlapY);
                 const bool bFirstCol(nCol == nFirstCol);
@@ -1140,116 +1074,152 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 const bool bFirstRow(nRow == nFirstRow);
                 const bool bLastRow(nRow == nLastRow);
 
-                if (!bOverlapX || bFirstRow)
+                // create upper line for this Cell
+                if (!bOverlapY      // true for first line in merged cells or cells
+                    || bFirstRow)   // true for non_Calc usages of this tooling
                 {
                     const Style& rTop = GetCellStyleTop(_nFirstCol, _nFirstRow);
 
                     if(rTop.IsUsed())
                     {
-                        HelperCreateEntry(*this, rTop, aHorizontalSequence, pForceColor);
+                        HelperCreateHorizontalEntry(*this, rTop, nCol, nRow, aOrigin, aX, aY, aHorizontalSequence, true, pForceColor);
                     }
                 }
 
-                if (bLastRow)
+                // create lower line for this Cell
+                if (bLastRow)       // true for non_Calc usages of this tooling
                 {
                     const Style& rBottom = GetCellStyleBottom(_nFirstCol, _nFirstRow);
 
                     if(rBottom.IsUsed())
                     {
-                        HelperCreateEntry(*this, rBottom, aHorizontalSequence, pForceColor);
+                        HelperCreateHorizontalEntry(*this, rBottom, nCol, nRow + 1, aOrigin, aX, aY, aHorizontalSequence, false, pForceColor);
                     }
                 }
 
-                if (!bOverlapY || bFirstCol)
+                // create left line for this Cell
+                if (!bOverlapX      // true for first column in merged cells or cells
+                    || bFirstCol)   // true for non_Calc usages of this tooling
                 {
                     const Style& rLeft(GetCellStyleLeft(_nFirstCol, _nFirstRow));
 
                     if(rLeft.IsUsed())
                     {
-                        HelperCreateEntry(*this, rLeft, aVerticalSequences[nCol - nFirstCol], pForceColor);
+                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, aVerticalSequences[nCol - nFirstCol], true, pForceColor);
                     }
                 }
 
-                if (bLastCol)
+                // create right line for this Cell
+                if (bLastCol)       // true for non_Calc usages of this tooling
                 {
                     const Style& rRight(GetCellStyleRight(_nFirstCol, _nFirstRow));
 
                     if(rRight.IsUsed())
                     {
-                        HelperCreateEntry(*this, rRight, aVerticalSequences[nCol - nFirstCol], pForceColor);
+                        HelperCreateVerticalEntry(*this, rRight, nCol + 1, nRow, aOrigin, aX, aY, aVerticalSequences[nCol - nFirstCol], false, pForceColor);
                     }
                 }
 
-                if ((!bOverlapX && !bOverlapY) || (bFirstCol && bFirstRow) || (!bOverlapY && bFirstCol) || (!bOverlapX && bFirstRow))
+                // check for crossed lines, these need special treatment, especially
+                // for merged cells, see below
+                const Style& rTLBR = GetCellStyleTLBR(_nFirstCol, _nFirstRow);
+                const Style& rBLTR = GetCellStyleBLTR(_nFirstCol, _nFirstRow);
+
+                if(rTLBR.IsUsed() || rBLTR.IsUsed())
                 {
-                    const Style& rTLBR = GetCellStyleTLBR(_nFirstCol, _nFirstRow);
-                    if(rTLBR.IsUsed())
+                    bool bContinue(true);
+
+                    if(rCell.IsMerged())
                     {
-                        /// top-left and bottom-right Style Tables
-                        /// Fill top-left Style Table
-                        const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
-                        const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
-                        StyleVectorTable aStart;
-                        const basegfx::B2DVector aAxisA(aX + aY);
+                        // first check if this merged cell was already handled
+                        const size_t nIndexOfMergedCell(mxImpl->GetIndex(_nFirstCol, _nFirstRow));
+                        bContinue = (aMergedCells.end() == aMergedCells.find(nIndexOfMergedCell));
 
-                        aStart.add(rTLFromRight, aAxisA, aX, false);
-                        aStart.add(rTLFromBottom, aAxisA, aY, false);
-                        aStart.sort();
+                        if(bContinue)
+                        {
+                            // not found, add now to mark as handled
+                            aMergedCells.insert(nIndexOfMergedCell);
 
-                        /// Fill bottom-right Style Table
-                        const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
-                        const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
-                        StyleVectorTable aEnd;
-                        const basegfx::B2DVector aAxisB(-aX -aY);
-
-                        aEnd.add(rBRFromBottom, aAxisB, -aY, true);
-                        aEnd.add(rBRFromLeft, aAxisB, -aX, true);
-                        aEnd.sort();
-
-                        CreateBorderPrimitives(
-                            aCrossSequence,
-                            aOrigin,
-                            aX + aY,
-                            rTLBR,
-                            aStart,
-                            aEnd,
-                            pForceColor
-                        );
+                            // when merged, get extended coordinate system and dependent values
+                            aCoordinateSystem = rCell.CreateCoordinateSystem(*this, nCol, nRow, true);
+                            aX = basegfx::utils::getColumn(aCoordinateSystem, 0);
+                            aY = basegfx::utils::getColumn(aCoordinateSystem, 1);
+                            aOrigin = basegfx::utils::getColumn(aCoordinateSystem, 2);
+                        }
                     }
 
-                    const Style& rBLTR = GetCellStyleBLTR(_nFirstCol, _nFirstRow);
-                    if(rBLTR.IsUsed())
+                    if(bContinue)
                     {
-                        /// bottom-left and top-right Style Tables
-                        /// Fill bottom-left Style Table
-                        const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
-                        const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
-                        StyleVectorTable aStart;
-                        const basegfx::B2DVector aAxisA(aX - aY);
+                        const size_t _nLastCol(mxImpl->GetMergedLastCol(nCol, nRow));
+                        const size_t _nLastRow(mxImpl->GetMergedLastRow(nCol, nRow));
 
-                        aStart.add(rBLFromTop, aAxisA, -aY, true);
-                        aStart.add(rBLFromBottom, aAxisA, aX, false);
-                        aStart.sort();
+                        if(rTLBR.IsUsed())
+                        {
+                            /// top-left and bottom-right Style Tables
+                            /// Fill top-left Style Table
+                            const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
+                            const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
+                            StyleVectorTable aStart;
+                            const basegfx::B2DVector aAxisA(aX + aY);
 
-                        /// Fill top-right Style Table
-                        const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
-                        const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
-                        StyleVectorTable aEnd;
-                        const basegfx::B2DVector aAxisB(aY - aX);
+                            aStart.add(rTLFromRight, aAxisA, aX, false);
+                            aStart.add(rTLFromBottom, aAxisA, aY, false);
+                            aStart.sort();
 
-                        aEnd.add(rTRFromLeft, aAxisB, -aX, true);
-                        aEnd.add(rTRFromBottom, aAxisB, aY, false);
-                        aEnd.sort();
+                            /// Fill bottom-right Style Table
+                            const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
+                            const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
+                            StyleVectorTable aEnd;
+                            const basegfx::B2DVector aAxisB(-aX -aY);
 
-                        CreateBorderPrimitives(
-                            aCrossSequence,
-                            aOrigin + aY,
-                            aX - aY,
-                            rBLTR,
-                            aStart,
-                            aEnd,
-                            pForceColor
-                        );
+                            aEnd.add(rBRFromBottom, aAxisB, -aY, true);
+                            aEnd.add(rBRFromLeft, aAxisB, -aX, true);
+                            aEnd.sort();
+
+                            CreateBorderPrimitives(
+                                aCrossSequence,
+                                aOrigin,
+                                aX + aY,
+                                rTLBR,
+                                aStart,
+                                aEnd,
+                                pForceColor
+                            );
+                        }
+
+                        if(rBLTR.IsUsed())
+                        {
+                            /// bottom-left and top-right Style Tables
+                            /// Fill bottom-left Style Table
+                            const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
+                            const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
+                            StyleVectorTable aStart;
+                            const basegfx::B2DVector aAxisA(aX - aY);
+
+                            aStart.add(rBLFromTop, aAxisA, -aY, true);
+                            aStart.add(rBLFromBottom, aAxisA, aX, false);
+                            aStart.sort();
+
+                            /// Fill top-right Style Table
+                            const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
+                            const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
+                            StyleVectorTable aEnd;
+                            const basegfx::B2DVector aAxisB(aY - aX);
+
+                            aEnd.add(rTRFromLeft, aAxisB, -aX, true);
+                            aEnd.add(rTRFromBottom, aAxisB, aY, false);
+                            aEnd.sort();
+
+                            CreateBorderPrimitives(
+                                aCrossSequence,
+                                aOrigin + aY,
+                                aX - aY,
+                                rBLTR,
+                                aStart,
+                                aEnd,
+                                pForceColor
+                            );
+                        }
                     }
                 }
             }
@@ -1259,6 +1229,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     // to stay compatible, create order as it was formally. Also try to
     // merge primitives as far as possible
     HelperMergeInB2DPrimitiveArray(aHorizontalSequence, aCrossSequence);
+
     for(const auto& aVert : aVerticalSequences)
     {
         HelperMergeInB2DPrimitiveArray(aVert, aCrossSequence);
@@ -1279,26 +1250,15 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveArray()
     return aPrimitives;
 }
 
-void Array::AddCellIndices() const
-{
-    for (size_t a(0); a < mxImpl->maCells.size(); a++)
-    {
-        const_cast<Array*>(this)->mxImpl->maCells[a].maCellIndex = a;
-    }
-}
-
 #undef ORIGCELL
 #undef CELLACC
 #undef CELL
-
-
 #undef DBG_FRAME_CHECK_ROW_1
 #undef DBG_FRAME_CHECK_COL_1
 #undef DBG_FRAME_CHECK_COLROW
 #undef DBG_FRAME_CHECK_ROW
 #undef DBG_FRAME_CHECK_COL
 #undef DBG_FRAME_CHECK
-
 
 }
 }

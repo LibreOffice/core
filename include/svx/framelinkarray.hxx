@@ -291,8 +291,7 @@ public:
 
     /** Returns the output range of the cell (nCol,nRow).
         Returns total output range of merged ranges. */
-    basegfx::B2DRange GetCellRange( size_t nCol, size_t nRow ) const;
-    basegfx::B2DRange GetCellRange( size_t nCellIndex ) const;
+    basegfx::B2DRange GetCellRange( size_t nCol, size_t nRow, bool bExpandMerged ) const;
 
     // mirroring --------------------------------------------------------------
 
@@ -311,9 +310,6 @@ public:
 
     /** Draws the part of the array, that is inside the clipping range. */
     drawinglayer::primitive2d::Primitive2DContainer CreateB2DPrimitiveArray() const;
-
-    // fill the Cell::maCellIndex entries to allow referencing back from Cell to Array Col/Row coordinates
-    void AddCellIndices() const;
 
 private:
     std::unique_ptr<ArrayImpl>        mxImpl;
