@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_98f52c85",
+        "filename": "sd/source/ui/func/fuline.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T08:58:45Z",
+      "side": 1,
+      "message": "didn\u0027t follow this - but do we really want to do this before we clone it ?",
+      "revId": "ff31ce56d66f7d51c1fc740ab08c8be1a2f384cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
