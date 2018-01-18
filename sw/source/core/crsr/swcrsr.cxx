@@ -2265,8 +2265,8 @@ void SwTableCursor::DeleteBox(size_t const nPos)
 bool SwTableCursor::NewTableSelection()
 {
     bool bRet = false;
-    const SwNode *pStart = GetContentNode()->FindTableBoxStartNode();
-    const SwNode *pEnd = GetContentNode(false)->FindTableBoxStartNode();
+    const SwNode *pStart = GetNode().FindTableBoxStartNode();
+    const SwNode *pEnd = GetNode(false).FindTableBoxStartNode();
     if( pStart && pEnd )
     {
         const SwTableNode *pTableNode = pStart->FindTableNode();
