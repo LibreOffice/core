@@ -2723,12 +2723,13 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
         if ( nEnd > nStart )
         {
             OUString aLine = aText.copy( nStart, nEnd-nStart );
-            sal_Int32 nChars = aPaM.GetNode()->Len() + aLine.getLength();
-            if ( nChars > MAXCHARSINPARA )
+            sal_Int32 nExistingChars = aPaM.GetNode()->Len();
+            sal_Int32 nChars = nExistingChars + aLine.getLength();
+            if (nChars > MAXCHARSINPARA)
             {
-                sal_Int32 nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
+                sal_Int32 nMaxNewChars = std::max<sal_Int32>(0, MAXCHARSINPARA - nExistingChars);
                 nEnd -= ( aLine.getLength() - nMaxNewChars ); // Then the characters end up in the next paragraph.
-                aLine = aLine.copy( 0, nMaxNewChars );            // Delete the Rest...
+                aLine = aLine.copy( 0, nMaxNewChars );        // Delete the Rest...
             }
             if ( IsUndoEnabled() && !IsInUndo() )
                 InsertUndo(new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), aLine));
