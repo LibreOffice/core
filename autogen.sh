@@ -257,11 +257,6 @@ for my $arg (@cmdline_args) {
         push @args, $arg;
     }
 }
-for my $arg (@args) {
-    if ($arg =~ /^([A-Z]+)=(.*)/) {
-        $ENV{$1} = $2;
-    }
-}
 
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
