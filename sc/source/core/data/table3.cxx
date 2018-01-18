@@ -2139,48 +2139,51 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         }
     }
 
-    // generate global total
-    SCROW nGlobalStartRow = aRowVector[0].nSubStartRow;
-    SCROW nGlobalStartFunc = aRowVector[0].nFuncStart;
-    SCROW nGlobalEndRow = 0;
-    SCROW nGlobalEndFunc = 0;
-    for ( ::std::vector< RowEntry >::const_iterator iEntry( aRowVector.begin());
-            iEntry != aRowVector.end(); ++iEntry)
+    if (aRowVector.size() > 0)
     {
-        nGlobalEndRow = (nGlobalEndRow < iEntry->nDestRow) ? iEntry->nDestRow : nGlobalEndRow;
-        nGlobalEndFunc = (nGlobalEndFunc < iEntry->nFuncEnd) ? iEntry->nFuncEnd : nGlobalEndRow;
-    }
-
-    for (sal_uInt16 nLevel=0; nLevel<nLevelCount; nLevel++)
-    {
-        // increment end row
-        nGlobalEndRow++;
-
-        // add row entry for formula
-        aRowEntry.nGroupNo = nLevelCount-nLevel-1;
-        aRowEntry.nSubStartRow = nGlobalStartRow;
-        aRowEntry.nFuncStart = nGlobalStartFunc;
-        aRowEntry.nDestRow = nGlobalEndRow;
-        aRowEntry.nFuncEnd = nGlobalEndFunc;
-
-        // increment row
-        nGlobalEndFunc++;
-
-        bSpaceLeft = pDocument->InsertRow( 0, nTab, MAXCOL, nTab, aRowEntry.nDestRow, 1 );
-
-        if (bSpaceLeft)
+        // generate global total
+        SCROW nGlobalStartRow = aRowVector[0].nSubStartRow;
+        SCROW nGlobalStartFunc = aRowVector[0].nFuncStart;
+        SCROW nGlobalEndRow = 0;
+        SCROW nGlobalEndFunc = 0;
+        for (::std::vector< RowEntry >::const_iterator iEntry(aRowVector.begin());
+             iEntry != aRowVector.end(); ++iEntry)
         {
-            aRowVector.push_back( aRowEntry );
-            nEndRow++;
-            DBShowRow(aRowEntry.nDestRow, true);
+            nGlobalEndRow = (nGlobalEndRow < iEntry->nDestRow) ? iEntry->nDestRow : nGlobalEndRow;
+            nGlobalEndFunc = (nGlobalEndFunc < iEntry->nFuncEnd) ? iEntry->nFuncEnd : nGlobalEndRow;
+        }
 
-            // insert label
-            ScSubTotalFunc* eResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
-            OUString label = ScGlobal::GetRscString( STR_TABLE_GRAND );
-            label += " ";
-            label += ScGlobal::GetRscString(lcl_GetSubTotalStrId(eResFunc[0]));
-            SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, label );
-            ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );
+        for (sal_uInt16 nLevel = 0; nLevel<nLevelCount; nLevel++)
+        {
+            // increment end row
+            nGlobalEndRow++;
+
+            // add row entry for formula
+            aRowEntry.nGroupNo = nLevelCount - nLevel - 1;
+            aRowEntry.nSubStartRow = nGlobalStartRow;
+            aRowEntry.nFuncStart = nGlobalStartFunc;
+            aRowEntry.nDestRow = nGlobalEndRow;
+            aRowEntry.nFuncEnd = nGlobalEndFunc;
+
+            // increment row
+            nGlobalEndFunc++;
+
+            bSpaceLeft = pDocument->InsertRow(0, nTab, MAXCOL, nTab, aRowEntry.nDestRow, 1);
+
+            if (bSpaceLeft)
+            {
+                aRowVector.push_back(aRowEntry);
+                nEndRow++;
+                DBShowRow(aRowEntry.nDestRow, true);
+
+                // insert label
+                ScSubTotalFunc* eResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
+                OUString label = ScGlobal::GetRscString(STR_TABLE_GRAND);
+                label += " ";
+                label += ScGlobal::GetRscString(lcl_GetSubTotalStrId(eResFunc[0]));
+                SetString(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, label);
+                ApplyStyle(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle);
+            }
         }
     }
 
