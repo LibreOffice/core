@@ -179,8 +179,6 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nChars      = pDrop->Count;
                 nDistance   = convertMm100ToTwip(pDrop->Distance);
             }
-            else {
-            }
         }
         break;
         case MID_DROPCAP_WHOLE_WORD:

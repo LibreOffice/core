@@ -1578,11 +1578,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_EXPORTDOC:
         case SID_EXPORTDOCASPDF:
-            break;
         case SID_PRINTPREVIEW:
-            if ( m_xReportDefinition.is() )
-            {
-            }
             break;
         case SID_EDITDOC:
             if(isEditable())

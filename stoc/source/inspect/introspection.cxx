@@ -1000,20 +1000,17 @@ Any SAL_CALL ImplIntrospectionAccess::queryInterface( const Type& rType )
     if( !aRet.hasValue() )
     {
         // Wrapper for the object interfaces
-        if(   ( mpStaticImpl->mbElementAccess && (aRet = ::cppu::queryInterface
+        ( mpStaticImpl->mbElementAccess && (aRet = ::cppu::queryInterface
                     ( rType, static_cast< XElementAccess* >( static_cast< XNameAccess* >( this ) ) ) ).hasValue() )
-            || ( mpStaticImpl->mbNameAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XNameAccess* >( this ) ) ).hasValue() )
-            || ( mpStaticImpl->mbNameReplace && (aRet = ::cppu::queryInterface( rType, static_cast< XNameReplace* >( this ) ) ).hasValue() )
-            || ( mpStaticImpl->mbNameContainer && (aRet = ::cppu::queryInterface( rType, static_cast< XNameContainer* >( this ) ) ).hasValue() )
-            || ( mpStaticImpl->mbIndexAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexAccess* >( this ) ) ).hasValue() )
-            || ( mpStaticImpl->mbIndexReplace && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexReplace* >( this ) ) ).hasValue() )
-            || ( mpStaticImpl->mbIndexContainer && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexContainer* >( this ) ) ).hasValue() )
-            || ( mpStaticImpl->mbEnumerationAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XEnumerationAccess* >( this ) ) ).hasValue() )
-            || ( mpStaticImpl->mbIdlArray && (aRet = ::cppu::queryInterface( rType, static_cast< XIdlArray* >( this ) ) ).hasValue() )
-            || ( mpStaticImpl->mbUnoTunnel && (aRet = ::cppu::queryInterface( rType, static_cast< XUnoTunnel* >( this ) ) ).hasValue() )
-          )
-        {
-        }
+        || ( mpStaticImpl->mbNameAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XNameAccess* >( this ) ) ).hasValue() )
+        || ( mpStaticImpl->mbNameReplace && (aRet = ::cppu::queryInterface( rType, static_cast< XNameReplace* >( this ) ) ).hasValue() )
+        || ( mpStaticImpl->mbNameContainer && (aRet = ::cppu::queryInterface( rType, static_cast< XNameContainer* >( this ) ) ).hasValue() )
+        || ( mpStaticImpl->mbIndexAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexAccess* >( this ) ) ).hasValue() )
+        || ( mpStaticImpl->mbIndexReplace && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexReplace* >( this ) ) ).hasValue() )
+        || ( mpStaticImpl->mbIndexContainer && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexContainer* >( this ) ) ).hasValue() )
+        || ( mpStaticImpl->mbEnumerationAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XEnumerationAccess* >( this ) ) ).hasValue() )
+        || ( mpStaticImpl->mbIdlArray && (aRet = ::cppu::queryInterface( rType, static_cast< XIdlArray* >( this ) ) ).hasValue() )
+        || ( mpStaticImpl->mbUnoTunnel && (aRet = ::cppu::queryInterface( rType, static_cast< XUnoTunnel* >( this ) ) ).hasValue() );
     }
     return aRet;
 }

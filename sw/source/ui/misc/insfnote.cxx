@@ -72,10 +72,6 @@ void SwInsFootNoteDlg::Apply()
         rSh.EndUndo( SwUndoId::END );
         rSh.EndAction();
     }
-    else
-    {
-
-    }
 
     bFootnote = m_pFootnoteBtn->IsChecked();
 }

@@ -285,11 +285,7 @@ namespace basctl
         ,m_bDocumentClosed( false )
     {
         if ( _rxDocument.is() )
-        {
-            if ( impl_initDocument_nothrow( _rxDocument ) )
-            {
-            }
-        }
+            impl_initDocument_nothrow( _rxDocument );
     }
 
     ScriptDocument::Impl::~Impl()

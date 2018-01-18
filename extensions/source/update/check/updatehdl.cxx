@@ -498,9 +498,6 @@ void UpdateHandler::updateState( UpdateState eState )
     if ( meLastState == eState )
         return;
 
-    if ( isVisible() )
-        {} // ToTop();
-
     OUString sText;
 
     switch ( eState )

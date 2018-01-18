@@ -398,9 +398,6 @@ void ScTabControl::UpdateStatus()
             for (i=0; i<nCount; i++)
                 SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
     }
-    else
-    {
-    }
 }
 
 void ScTabControl::SetSheetLayoutRTL( bool bSheetRTL )

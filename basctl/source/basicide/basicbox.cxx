@@ -484,12 +484,6 @@ bool LanguageBox::PreNotify( NotifyEvent& rNEvt )
             break;
         }
     }
-    else if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
-    {
-    }
-    else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
-    {
-    }
 
     return bDone || ListBox::PreNotify( rNEvt );
 }

@@ -890,9 +890,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             {
                                 eToken = XML_SUB_DOCUMENT;
                             }
-                            else if ( xSection.is() )
-                            {
-                            }
 
                             if ( bExportData )
                             {
