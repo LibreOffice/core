@@ -58,7 +58,7 @@ void SalKDE5Display::Yield()
     if (XEventsQueued( pDisp_, QueuedAfterReading ) == 0)
         return;
 
-    DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
+    DBG_ASSERT( GetSalData()->m_pInstance->GetYieldMutex()->IsCurrentThread() ==
                 osl::Thread::getCurrentIdentifier(),
                 "will crash soon since solar mutex not locked in SalKDE5Display::Yield" );
 

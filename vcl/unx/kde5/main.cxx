@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 #include "KDE5Data.hxx"
 #include "KDE5SalInstance.hxx"
