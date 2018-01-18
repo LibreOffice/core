@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT long basicide_handle_basic_error( void const * pPtr )
+    SAL_DLLPUBLIC_EXPORT long basicide_handle_basic_error( void * pPtr )
     {
         return HandleBasicError( static_cast<StarBASIC const *>(pPtr) );
     }
