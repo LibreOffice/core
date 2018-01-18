@@ -217,7 +217,7 @@ OUString SmOoxmlImport::handleAcc()
             acc = "dddot";
             break;
         default:
-            acc = "acute";
+            acc = "dot";
             SAL_WARN( "starmath.ooxml", "Unknown m:chr in m:acc \'" << accChr << "\'" );
             break;
     }
