@@ -199,9 +199,12 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
 
     if (bUseDialog)
     {
-        std::shared_ptr<SfxRequest> pRequest(new SfxRequest(*pReq));
-        pReq->Ignore(); // the 'old' request is not relevant any more
-
+        std::shared_ptr<SfxRequest> pRequest;
+        if (pReq)
+        {
+            pRequest.reset(new SfxRequest(*pReq));
+            pReq->Ignore(); // the 'old' request is not relevant any more
+        }
         pDlg->StartExecuteAsync([pDlg, &rWrtSh, pCoreSet, bSel, bSelectionPut, pRequest](sal_Int32 nResult){
             if (nResult == RET_OK)
             {
