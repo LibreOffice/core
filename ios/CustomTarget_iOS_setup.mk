@@ -20,19 +20,22 @@ $(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSGEN)/native-code.h
 
 
 #- Generate dynamic files  ---------------------------------------------------
-$(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
-                         $(SRCDIR)/ios/CustomTarget_iOS_setup.mk \
-	                 $(SRCDIR)/solenv/bin/native-code.py
+$(IOSGEN) $(WORKDIR)/ios:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
-
-	# prepare directories
 	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
 	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
 	         $(IOSGEN)/simulator \
 	         $(IOSGEN)/debug \
 	         $(IOSGEN)/release \
 	         $(IOSGEN) $(WORKDIR)/ios;
-	# generate file with call declarations
+
+
+
+$(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
+                         $(SRCDIR)/ios/CustomTarget_iOS_setup.mk \
+	                 $(SRCDIR)/solenv/bin/native-code.py
+	                 $(IOSGEN)/ios:
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	$(SRCDIR)/solenv/bin/native-code.py \
 	    -C -g core -g writer -g calc -g draw -g edit \
 	    > $(IOSGEN)/native-code.h
