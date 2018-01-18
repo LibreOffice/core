@@ -472,7 +472,10 @@ ErrCode SwASCIIParser::ReadChars()
         {
             // We found a CR/LF, thus save the text
             InsertText( OUString( pLastStt ));
-            pDoc->getIDocumentContentOperations().AppendTextNode( *pPam->GetPoint() );
+            if(bNewDoc)
+                pDoc->getIDocumentContentOperations().AppendTextNode( *pPam->GetPoint() );
+            else
+                pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
             pLastStt = pStt;
             nLineLen = 0;
         }
