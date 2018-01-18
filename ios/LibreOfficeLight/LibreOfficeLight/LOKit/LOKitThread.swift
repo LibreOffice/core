@@ -212,6 +212,15 @@ public class DocumentHolder
         {
             closure(self.doc)
         }
+        self.invokeHandlers()
+    }
+
+    public func invokeHandlers()
+    {
+        LOKitThread.instance.async
+        {
+            self.doc.invokeHandlers()
+        }
     }
 
     /// Gives sync access to the document - blocks until the closure runs.
@@ -220,6 +229,7 @@ public class DocumentHolder
     {
         return LOKitThread.instance.sync
         {
+            self.invokeHandlers()
             return closure(self.doc)
         }
     }
