@@ -863,7 +863,9 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                     FSEND);
             chart2::RelativePosition aPos = aRelativePos.get<chart2::RelativePosition>();
             uno::Any aRelativeSize = xProp->getPropertyValue("RelativeSize");
-            chart2::RelativeSize aSize = aRelativeSize.get<chart2::RelativeSize>();
+            chart2::RelativeSize aSize;
+            if (aRelativeSize.hasValue())
+                aSize = aRelativeSize.get<chart2::RelativeSize>();
 
             const double x = aPos.Primary;
             const double y = aPos.Secondary;
@@ -877,13 +879,17 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                     XML_val, IS(y),
                     FSEND);
 
-            pFS->singleElement(FSNS(XML_c, XML_w),
-                    XML_val, IS(w),
-                    FSEND);
+            if (aRelativeSize.hasValue())
+            {
+                pFS->singleElement(FSNS(XML_c, XML_w),
+                        XML_val, IS(w),
+                        FSEND);
 
-            pFS->singleElement(FSNS(XML_c, XML_h),
-                    XML_val, IS(h),
-                    FSEND);
+                pFS->singleElement(FSNS(XML_c, XML_h),
+                        XML_val, IS(h),
+                        FSEND);
+            }
+
             SAL_WARN_IF(aPos.Anchor != css::drawing::Alignment_TOP_LEFT, "oox", "unsupported anchor position");
 
             pFS->endElement(FSNS(XML_c, XML_manualLayout));
