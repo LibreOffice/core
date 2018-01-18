@@ -8162,7 +8162,7 @@ LanguageType WW8DopTypography::GetConvertedLang() const
     //I have assumed peoples republic/taiwan == simplified/traditional
 
     //This isn't a documented issue, so we might have it all wrong,
-    //i.e. i.e. whats with the powers of two ?
+    //i.e. i.e. what's with the powers of two ?
 
     /*
     One example of 3 for reserved1 which was really Japanese, perhaps last bit

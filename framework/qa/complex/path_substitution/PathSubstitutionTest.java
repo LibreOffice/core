@@ -198,7 +198,7 @@ public class PathSubstitutionTest
             return true;
         }
         else
-        {                             // hard: been resubstituted with a differernt variable.
+        {                             // hard: been resubstituted with a different variable.
             for (int i = 0; i < substVars.size(); i++)
             {
                 String var = substVars.getVariable(i);

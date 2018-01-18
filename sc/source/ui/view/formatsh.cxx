@@ -2197,7 +2197,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 
                 if(SID_FRAME_LINECOLOR == nWhich)
                 {
-                    if(bColDisable) // if different lines have differernt colors
+                    if(bColDisable) // if different lines have different colors
                     {
                         aCol = COL_TRANSPARENT;
                         rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );

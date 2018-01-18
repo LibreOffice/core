@@ -742,7 +742,7 @@ class JavaPanZoomController
 
         ZoomConstraints constraints = mTarget.getZoomConstraints();
         if (null == constraints) {
-            Log.e(LOGTAG, "zoomConstraits not available - too impatient?");
+            Log.e(LOGTAG, "ZoomConstraints not available - too impatient?");
             return viewportMetrics;
 
         }

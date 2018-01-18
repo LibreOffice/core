@@ -219,7 +219,7 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
                 aRet=SchResId(STR_OBJECT_LEGEND);
                 break;
         case OBJECTTYPE_LEGEND_ENTRY:
-                aRet=SchResId(STR_OBJECT_LEGEND_SYMBOL);//@todo change string if we do differenciate symbol and legend entry in future
+                aRet=SchResId(STR_OBJECT_LEGEND_SYMBOL);//@todo change string if we do differentiate symbol and legend entry in future
                 break;
         case OBJECTTYPE_DIAGRAM:
                 aRet=SchResId(STR_OBJECT_DIAGRAM);

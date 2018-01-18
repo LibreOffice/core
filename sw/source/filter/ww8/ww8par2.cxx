@@ -2534,7 +2534,7 @@ void WW8TabDesc::CreateSwTable()
 
     // Check if the node into which the table should be inserted already
     // contains a Pagedesc. If so that Pagedesc would be moved to the
-    // row after the table, whats wrong. So delete and
+    // row after the table, that would be wrong. So delete and
     // set later to the table format.
     if (SwTextNode *const pNd = m_pTmpPos->nNode.GetNode().GetTextNode())
     {

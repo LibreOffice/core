@@ -91,7 +91,7 @@ public:
 
     // XInterface
 
-    // (XInterface methods need to be implemented to disambigouate
+    // (XInterface methods need to be implemented to disambiguate
     // between those inherited through SwAccessibleContext and
     // XAccessibleTable).
 
