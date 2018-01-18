@@ -440,8 +440,8 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
         {
             if (pPara->GetBulletFlag())
             {
-                pTotalIndent->SetMAll(pParentIndent->GetMAll() + pTotalIndent->GetMAll());
-                pTotalIndent->SetMRight(pParentIndent->GetMRight()+ pTotalIndent->GetMRight());
+                pTotalIndent->SetMAll(o3tl::saturating_add(pParentIndent->GetMAll(), pTotalIndent->GetMAll()));
+                pTotalIndent->SetMRight(o3tl::saturating_add(pParentIndent->GetMRight(), pTotalIndent->GetMRight()));
                 pParaStyle->SetMargins(LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(
                     pTotalIndent->GetMAll())), pTotalIndent->GetRight());
                 pPara->SetIndent(pTotalIndent.release());
