@@ -3802,4 +3802,22 @@ static void lo_destroy(LibreOfficeKit* pThis)
 
 }
 
+#ifdef IOS
+extern "C"
+{
+__attribute__((visibility("default")))
+{
+    SolarMutexGuard aGuard;
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    int nOrigViewId = doc_getView(pThis);
+
+    if (nOrigViewId >= 0 && pDocument->mpCallbackFlushHandlers[nOrigViewId])
+    {
+        pDocument->mpCallbackFlushHandlers[nOrigViewId]->Invoke();
+    }
+}
+}
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
