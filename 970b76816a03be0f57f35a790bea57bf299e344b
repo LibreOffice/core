@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_d89084ef",
+        "filename": "i18npool/source/breakiterator/data/README",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-18T10:14:46Z",
+      "side": 1,
+      "message": "This is apparently quoting original, mis-spelled material.  I\u0027d not chagne it beyond possibly adding an editorial \"[sic!]\", and would even refrain from that here, as it would not be too obvious that it was not part of the original commit message.",
+      "revId": "970b76816a03be0f57f35a790bea57bf299e344b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
