@@ -533,7 +533,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         const OUString& rEntryText = pEntry->GetText();
         const SwFormatRuby& rAttr = pEntry->GetRubyAttr();
 
-        pRet[n].realloc(5);
+        pRet[n].realloc(6);
         PropertyValue* pValues = pRet[n].getArray();
         pValues[0].Name = UNO_NAME_RUBY_BASE_TEXT;
         pValues[0].Value <<= rEntryText;
@@ -546,6 +546,8 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pValues[3].Value <<= static_cast<sal_Int16>(rAttr.GetAdjustment());
         pValues[4].Name = UNO_NAME_RUBY_IS_ABOVE;
         pValues[4].Value <<= !rAttr.GetPosition();
+        pValues[5].Name = UNO_NAME_RUBY_POSITION;
+        pValues[5].Value <<= rAttr.GetPosition();
     }
     return aRet;
 }
@@ -610,6 +612,12 @@ void SAL_CALL SwXTextView::setRubyList(
                 bool bValue = !pProperties[nProp].Value.hasValue() ||
                     *o3tl::doAccess<bool>(pProperties[nProp].Value);
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
+            }
+            else if(pProperties[nProp].Name == UNO_NAME_RUBY_POSITION)
+            {
+                sal_Int16 nTmp = 0;
+                if(pProperties[nProp].Value >>= nTmp)
+                    pEntry->GetRubyAttr().SetPosition( nTmp );
             }
         }
         aList.insert(aList.begin() + nPos, std::move(pEntry));
