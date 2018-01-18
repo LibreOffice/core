@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------
 #
 #    Copyright (C) 2016 Canonical Ltd.
-#    Copyright (C) 2017 Software in the Public Interest, Inc.
+#    Copyright (C) 2018 Software in the Public Interest, Inc.
 #
 #    This Source Code Form is subject to the terms of the Mozilla Public
 #    License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -74,6 +74,8 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   #include <abstractions/ibus>
   #include <abstractions/nameservice>
   #include <abstractions/gnome>
+# GnuPG1 only...
+# #include <abstractions/gnupg>
   #include <abstractions/python>
   #include <abstractions/p11-kit>
 
@@ -114,6 +116,8 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /usr/bin/lpr                          rmPUx,
   /usr/bin/paperconf                    rmix,
   /usr/bin/gpgconf                      rmix,
+  /usr/bin/gpg                          rmCx -> gpg,
+  /usr/bin/gpgsm                        rmCx -> gpg,
 
   /dev/tty                              rw,
 
@@ -154,4 +158,15 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   owner @{HOME}/.icons/*/cursors/*      r,
   /usr/share/*-fonts/conf.avail/*.conf  r,
   /usr/share/fonts-config/conf.avail/*.conf r,
+
+  # there is abstractions/gnupg but that's just for gpg1...
+  profile gpg {
+    #include <abstractions/base>
+
+   /usr/bin/gpgconf rm,
+   /usr/bin/gpg rm,
+   /usr/bin/gpgsm rm,
+
+    owner @{HOME}/.gnupg/* r,
+  }
 }
