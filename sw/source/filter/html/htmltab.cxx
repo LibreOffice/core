@@ -433,7 +433,6 @@ class HTMLTable
     bool m_bPrcWidth;                 // width is declared in %
 
     SwHTMLParser *m_pParser;          // the current parser
-    HTMLTable *m_pTopTable;           // the table on the Top-Level
     std::unique_ptr<HTMLTableCnts> m_xParentContents;
 
     HTMLTableContext *m_pContext;    // the context of the table
@@ -518,7 +517,7 @@ public:
 
     bool m_bFirstCell;                // is there a cell created already?
 
-    HTMLTable(SwHTMLParser* pPars, HTMLTable *pTopTab,
+    HTMLTable(SwHTMLParser* pPars,
               bool bParHead, bool bHasParentSec,
               bool bHasToFly,
               const HTMLTableOptions& rOptions);
@@ -1015,7 +1014,7 @@ void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
     m_aDir = rOptions.aDir;
 }
 
-HTMLTable::HTMLTable(SwHTMLParser* pPars, HTMLTable *pTopTab,
+HTMLTable::HTMLTable(SwHTMLParser* pPars,
                      bool bParHead,
                      bool bHasParentSec, bool bHasToFlw,
                      const HTMLTableOptions& rOptions) :
@@ -1026,22 +1025,21 @@ HTMLTable::HTMLTable(SwHTMLParser* pPars, HTMLTable *pTopTab,
     m_nCellSpacing(rOptions.nCellSpacing),
     m_nBoxes( 1 ),
     m_pCaptionStartNode( nullptr ),
-    m_bTableAdjustOfTag( !pTopTab && rOptions.bTableAdjust ),
+    m_bTableAdjustOfTag( rOptions.bTableAdjust ),
     m_bIsParentHead( bParHead ),
     m_bHasParentSection( bHasParentSec ),
     m_bHasToFly( bHasToFlw ),
     m_bFixedCols( rOptions.nCols>0 ),
     m_bPrcWidth( rOptions.bPrcWidth ),
     m_pParser( pPars ),
-    m_pTopTable( pTopTab ? pTopTab : this ),
     m_nWidth( rOptions.nWidth ),
-    m_nHeight( pTopTab ? 0 : rOptions.nHeight ),
+    m_nHeight( rOptions.nHeight ),
     m_eTableAdjust( rOptions.eAdjust ),
     m_eVertOrientation( rOptions.eVertOri ),
     m_eFrame( rOptions.eFrame ),
     m_eRules( rOptions.eRules ),
     m_bTopCaption( false ),
-    m_bFirstCell( !pTopTab )
+    m_bFirstCell(true)
 {
     InitCtor(rOptions);
     m_pParser->RegisterHTMLTable(this);
@@ -1270,18 +1268,9 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         if( !pBGBrushItem )
         {
             // If a cell spans multiple rows, a background to that row should be copied to the cell.
-            // If it's a table in a table and that cell goes over the whole height of that table,
-            // the row's background has to be copied to the cell as well,
-            // since the line is gonna be GC-ed (correctly).
-            if( nRowSpan > 1 || (this != m_pTopTable && nRowSpan==m_nRows) )
+            if (nRowSpan > 1)
             {
                 pBGBrushItem = m_aRows[nRow].GetBGBrush().get();
-                if( !pBGBrushItem && this != m_pTopTable )
-                {
-                    pBGBrushItem = GetBGBrush().get();
-                    if( !pBGBrushItem )
-                        pBGBrushItem = GetInhBGBrush().get();
-                }
             }
         }
 
@@ -1507,10 +1496,10 @@ SwTableBox *HTMLTable::NewTableBox( const SwStartNode *pStNd,
 {
     SwTableBox *pBox;
 
-    if (m_pTopTable->m_xBox1 && m_pTopTable->m_xBox1->GetSttNd() == pStNd)
+    if (m_xBox1 && m_xBox1->GetSttNd() == pStNd)
     {
         // If the StartNode is the StartNode of the initially created box, we take that box
-        pBox = m_pTopTable->m_xBox1.release();
+        pBox = const_cast<HTMLTable*>(this)->m_xBox1.release();
         pBox->SetUpper(pUpper);
     }
     else
@@ -1534,7 +1523,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                                        sal_uInt16 nBottomRow, sal_uInt16 nRightCol )
 {
     SwTableLine *pLine;
-    if( this==m_pTopTable && !pUpper && 0==nTopRow )
+    if (!pUpper && 0 == nTopRow)
         pLine = (m_pSwTable->GetTabLines())[0];
     else
         pLine = new SwTableLine( m_pLineFrameFormatNoHeight ? m_pLineFrameFormatNoHeight
@@ -1544,20 +1533,11 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     const HTMLTableRow& rTopRow = m_aRows[nTopRow];
     sal_uInt16 nRowHeight = rTopRow.GetHeight();
     const SvxBrushItem *pBGBrushItem = nullptr;
-    if( this == m_pTopTable || nTopRow>0 || nBottomRow<m_nRows )
+    if (nTopRow > 0 || nBottomRow < m_nRows)
     {
         // It doesn't make sense to set a color on a line,
         // if it's the outermost and simultaneously sole line of a table in a table
         pBGBrushItem = rTopRow.GetBGBrush().get();
-
-        if( !pBGBrushItem && this != m_pTopTable )
-        {
-            // A background that's set on a table in a table is set on the rows.
-            // It's the same for the background of the cell where that table is
-            pBGBrushItem = GetBGBrush().get();
-            if( !pBGBrushItem )
-                pBGBrushItem = GetInhBGBrush().get();
-        }
     }
     if( nTopRow==nBottomRow-1 && (nRowHeight || pBGBrushItem) )
     {
@@ -1795,7 +1775,7 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
 
     // The child table has to inherit the color of the cell it's contained in, if it doesn't have one
     const SvxBrushItem *pInhBG = pParent->GetCell(nRow, nCol).GetBGBrush().get();
-    if( !pInhBG && pParent != m_pTopTable &&
+    if( !pInhBG && pParent != this &&
         pParent->GetCell(nRow,nCol).GetRowSpan() == pParent->m_nRows )
     {
         // the whole surrounding table is a table in a table and consists only of a single line
@@ -2292,22 +2272,18 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     OSL_ENSURE( m_nRows>0 && m_nCols>0 && m_nCurrentRow==m_nRows,
             "Was CloseTable not called?" );
 
-    OSL_ENSURE( (m_xLayoutInfo.get()==nullptr) == (this==m_pTopTable),
-            "Top-Table has no layout info or vice versa" );
+    OSL_ENSURE(m_xLayoutInfo.get() == nullptr, "Table already has layout info");
 
-    if( this==m_pTopTable )
-    {
-        // Calculate borders of the table and all contained tables
-        SetBorders();
+    // Calculate borders of the table and all contained tables
+    SetBorders();
 
-        // Step 1: needed layout structures are created (including tables in tables)
-        CreateLayoutInfo();
+    // Step 1: needed layout structures are created (including tables in tables)
+    CreateLayoutInfo();
 
-        // Step 2: the minimal and maximal column width is calculated
-        // (including tables in tables). Since we don't have boxes yet,
-        // we'll work on the start nodes
-        m_xLayoutInfo->AutoLayoutPass1();
-    }
+    // Step 2: the minimal and maximal column width is calculated
+    // (including tables in tables). Since we don't have boxes yet,
+    // we'll work on the start nodes
+    m_xLayoutInfo->AutoLayoutPass1();
 
     // Step 3: the actual column widths of this table are calculated (not tables in tables)
     // We need this now to decide if we need filler cells
@@ -2315,184 +2291,70 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     m_xLayoutInfo->AutoLayoutPass2( nAbsAvail, nRelAvail, nAbsLeftSpace,
                                   nAbsRightSpace, nInhAbsSpace );
 
-    if( this!=m_pTopTable )
+    // Set adjustment for the top table
+    sal_Int16 eHoriOri;
+    if (m_bForceFrame)
     {
-        // the right and left border of this table can be finally defined
-        if (m_xLayoutInfo->GetRelRightFill() == 0)
-        {
-            if( !m_bRightBorder )
-            {
-                // inherit left border of the outer table
-                if( m_bInheritedRightBorder )
-                {
-                    m_bRightBorder = true;
-                    m_aRightBorderLine = m_aInheritedRightBorderLine;
-                }
-            }
-            else
-            {
-                // Only set border if allowed
-                m_bRightBorder = m_bRightAllowed;
-            }
-        }
+        // The table should go in a text frame and it's narrower than the
+        // available space and not 100% wide. So it gets a border
+        eHoriOri = m_bPrcWidth ? text::HoriOrientation::FULL : text::HoriOrientation::LEFT;
+    }
+    else switch (m_eTableAdjust)
+    {
+        // The table either fits the page but shouldn't get a text frame,
+        // or it's wider than the page so it doesn't need a text frame
 
-        if( m_xLayoutInfo->GetRelLeftFill() == 0 &&
-            !m_aColumns[0].bLeftBorder &&
-            m_bInheritedLeftBorder )
-        {
-            // If applicable, inherit right border of outer table
-            m_aColumns[0].bLeftBorder = true;
-            m_aLeftBorderLine = m_aInheritedLeftBorderLine;
-        }
+    case SvxAdjust::Right:
+        // Don't be considerate of the right margin in right-adjusted tables
+        eHoriOri = text::HoriOrientation::RIGHT;
+        break;
+    case SvxAdjust::Center:
+        // Centred tables are not considerate of margins
+        eHoriOri = text::HoriOrientation::CENTER;
+        break;
+    case SvxAdjust::Left:
+    default:
+        // left-adjusted tables are only considerate of the left margin
+        eHoriOri = m_nLeftMargin ? text::HoriOrientation::LEFT_AND_WIDTH : text::HoriOrientation::LEFT;
+        break;
     }
 
-    // Set adjustment for the top table
-    if( this==m_pTopTable )
+    // get the table format and adapt it
+    SwFrameFormat *pFrameFormat = m_pSwTable->GetFrameFormat();
+    pFrameFormat->SetFormatAttr( SwFormatHoriOrient(0, eHoriOri) );
+    if (text::HoriOrientation::LEFT_AND_WIDTH == eHoriOri)
     {
-        sal_Int16 eHoriOri;
-        if( m_bForceFrame )
-        {
-            // The table should go in a text frame and it's narrower than the
-            // available space and not 100% wide. So it gets a border
-            eHoriOri = m_bPrcWidth ? text::HoriOrientation::FULL : text::HoriOrientation::LEFT;
-        }
-        else switch( m_eTableAdjust )
-        {
-            // The table either fits the page but shouldn't get a text frame,
-            // or it's wider than the page so it doesn't need a text frame
+        OSL_ENSURE( m_nLeftMargin || m_nRightMargin,
+                "There are still leftovers from relative margins" );
 
-        case SvxAdjust::Right:
-            // Don't be considerate of the right margin in right-adjusted tables
-            eHoriOri = text::HoriOrientation::RIGHT;
-            break;
-        case SvxAdjust::Center:
-            // Centred tables are not considerate of margins
-            eHoriOri = text::HoriOrientation::CENTER;
-            break;
-        case SvxAdjust::Left:
-        default:
-            // left-adjusted tables are only considerate of the left margin
-            eHoriOri = m_nLeftMargin ? text::HoriOrientation::LEFT_AND_WIDTH : text::HoriOrientation::LEFT;
-            break;
-        }
+        // The right margin will be ignored anyway.
+        SvxLRSpaceItem aLRItem( m_pSwTable->GetFrameFormat()->GetLRSpace() );
+        aLRItem.SetLeft( m_nLeftMargin );
+        aLRItem.SetRight( m_nRightMargin );
+        pFrameFormat->SetFormatAttr( aLRItem );
+    }
 
-        // get the table format and adapt it
-        SwFrameFormat *pFrameFormat = m_pSwTable->GetFrameFormat();
-        pFrameFormat->SetFormatAttr( SwFormatHoriOrient(0,eHoriOri) );
-        if( text::HoriOrientation::LEFT_AND_WIDTH==eHoriOri )
-        {
-            OSL_ENSURE( m_nLeftMargin || m_nRightMargin,
-                    "There are still leftovers from relative margins" );
-
-            // The right margin will be ignored anyway.
-            SvxLRSpaceItem aLRItem( m_pSwTable->GetFrameFormat()->GetLRSpace() );
-            aLRItem.SetLeft( m_nLeftMargin );
-            aLRItem.SetRight( m_nRightMargin );
-            pFrameFormat->SetFormatAttr( aLRItem );
-        }
-
-        if( m_bPrcWidth && text::HoriOrientation::FULL!=eHoriOri )
-        {
-            pFrameFormat->LockModify();
-            SwFormatFrameSize aFrameSize( pFrameFormat->GetFrameSize() );
-            aFrameSize.SetWidthPercent( static_cast<sal_uInt8>(m_nWidth) );
-            pFrameFormat->SetFormatAttr( aFrameSize );
-            pFrameFormat->UnlockModify();
-        }
+    if (m_bPrcWidth && text::HoriOrientation::FULL != eHoriOri)
+    {
+        pFrameFormat->LockModify();
+        SwFormatFrameSize aFrameSize( pFrameFormat->GetFrameSize() );
+        aFrameSize.SetWidthPercent( static_cast<sal_uInt8>(m_nWidth) );
+        pFrameFormat->SetFormatAttr( aFrameSize );
+        pFrameFormat->UnlockModify();
     }
 
     // get the default line and box format
-    if( this==m_pTopTable )
-    {
-        // remember the first box and unlist it from the first row
-        SwTableLine *pLine1 = (m_pSwTable->GetTabLines())[0];
-        m_xBox1.reset((pLine1->GetTabBoxes())[0]);
-        pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
+    // remember the first box and unlist it from the first row
+    SwTableLine *pLine1 = (m_pSwTable->GetTabLines())[0];
+    m_xBox1.reset((pLine1->GetTabBoxes())[0]);
+    pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
-        m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
-        m_pBoxFormat = static_cast<SwTableBoxFormat*>(m_xBox1->GetFrameFormat());
-    }
-    else
-    {
-        m_pLineFormat = m_pTopTable->m_pLineFormat;
-        m_pBoxFormat = m_pTopTable->m_pBoxFormat;
-    }
+    m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
+    m_pBoxFormat = static_cast<SwTableBoxFormat*>(m_xBox1->GetFrameFormat());
 
-    // If applicable, add filler cells for tables in tables
-    if( this != m_pTopTable &&
-        ( m_xLayoutInfo->GetRelLeftFill() > 0  ||
-          m_xLayoutInfo->GetRelRightFill() > 0 ) )
-    {
-        OSL_ENSURE( pBox, "No TableBox for table in table" );
-
-        SwTableLines& rLines = pBox->GetTabLines();
-
-        // first, we need a new table line in the box
-        SwTableLine *pLine =
-            new SwTableLine( m_pLineFrameFormatNoHeight ? m_pLineFrameFormatNoHeight
-                                                 : m_pLineFormat, 0, pBox );
-        rLines.push_back( pLine );
-
-        // Check that we have a format without height
-        if( !m_pLineFrameFormatNoHeight )
-        {
-            // Otherwise, we need to remove the height from the attributes
-            // and remember that format
-            m_pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
-
-            ResetLineFrameFormatAttrs( m_pLineFrameFormatNoHeight );
-        }
-
-        SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        SwTableBox *pNewBox;
-
-        // If applicable, add a cell to the left
-        if (m_xLayoutInfo->GetRelLeftFill() > 0)
-        {
-            // pPrevStNd is the predecessor start node of the table
-            // We'll add the filler node just behind
-            m_pPrevStartNode = m_pParser->InsertTableSection( m_pPrevStartNode );
-
-            pNewBox = NewTableBox( m_pPrevStartNode, pLine );
-            rBoxes.push_back( pNewBox );
-            FixFillerFrameFormat( pNewBox, false );
-            m_xLayoutInfo->SetLeftFillerBox(pNewBox);
-        }
-
-        // modify the table now
-        pNewBox = new SwTableBox( m_pBoxFormat, 0, pLine );
-        rBoxes.push_back( pNewBox );
-
-        SwFrameFormat *pFrameFormat = pNewBox->ClaimFrameFormat();
-        pFrameFormat->ResetFormatAttr( RES_BOX );
-        pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
-        pFrameFormat->ResetFormatAttr( RES_VERT_ORIENT );
-        pFrameFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
-
-        MakeTable_( pNewBox );
-
-        // and add a cell to the right if applicable
-        if (m_xLayoutInfo->GetRelRightFill() > 0)
-        {
-            const SwStartNode *pStNd =
-                GetPrevBoxStartNode( USHRT_MAX, USHRT_MAX );
-            pStNd = m_pParser->InsertTableSection( pStNd );
-
-            pNewBox = NewTableBox( pStNd, pLine );
-            rBoxes.push_back( pNewBox );
-
-            FixFillerFrameFormat( pNewBox, true );
-            m_xLayoutInfo->SetRightFillerBox( pNewBox );
-        }
-    }
-    else
-    {
-        MakeTable_( pBox );
-    }
+    MakeTable_( pBox );
 
     // Finally, we'll do a garbage collection for the top level table
-    if( this!=m_pTopTable )
-        return;
 
     if( 1==m_nRows && m_nHeight && 1==m_pSwTable->GetTabLines().size() )
     {
@@ -5142,13 +5004,12 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
         if (!aTableOptions.aId.isEmpty())
             InsertBookmark(aTableOptions.aId);
 
-        std::shared_ptr<HTMLTable> xCurTable(std::make_shared<HTMLTable>(this, m_xTable.get(),
+        std::shared_ptr<HTMLTable> xCurTable(std::make_shared<HTMLTable>(this,
                                               bIsParentHead,
                                               bHasParentSection,
                                               bHasToFly,
                                               aTableOptions));
-        if (!m_xTable)
-            m_xTable = xCurTable;
+        m_xTable = xCurTable;
 
         xSaveStruct.reset(new TableSaveStruct(xCurTable));
 
