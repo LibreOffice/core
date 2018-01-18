@@ -4083,7 +4083,7 @@ static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow)
         {
             // We've found another row frame that is part of the same table row
             const SwTabFrame* pCurTab = pCurRow->FindTabFrame();
-            if (pCurTab->IsAnFollow(pTab))
+            if (pCurTab && pCurTab->IsAnFollow(pTab))
             {
                 // The found row frame belongs to a table frame that precedes
                 // (above) this one in chain. So, include it in the sum
