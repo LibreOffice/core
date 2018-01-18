@@ -107,6 +107,7 @@ class SwAuthenticationSettingsDialog : public SfxModalDialog
     DECL_LINK(OKHdl_Impl, Button*, void);
     DECL_LINK( CheckBoxHdl_Impl, Button*, void);
     DECL_LINK(RadioButtonHdl_Impl, Button*, void);
+    DECL_LINK(InServerHdl_Impl, Button*, void);
 
 public:
     SwAuthenticationSettingsDialog(SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem);
@@ -423,6 +424,9 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     m_pSeparateAuthenticationRB->SetClickHdl( aRBLink );
     m_pSMTPAfterPOPRB->SetClickHdl( aRBLink );
     m_pOKPB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
+    Link<Button*,void> aInServerLink = LINK( this, SwAuthenticationSettingsDialog, InServerHdl_Impl );
+    m_pPOP3RB->SetClickHdl( aInServerLink );
+    m_pIMAPRB->SetClickHdl( aInServerLink );
 
     m_pAuthenticationCB->Check( rConfigItem.IsAuthentication() );
     if(rConfigItem.IsSMTPAfterPOP())
@@ -533,6 +537,13 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, Button*, vo
     m_pIMAPRB->Enable(bNotSeparate);
     m_pInPasswordFT->Enable(bNotSeparate);
     m_pInPasswordED->Enable(bNotSeparate);
+}
+
+IMPL_LINK_NOARG( SwAuthenticationSettingsDialog, InServerHdl_Impl, Button*, void)
+{
+    bool bPOP = m_pPOP3RB->IsChecked();
+    rConfigItem.SetInServerPOP(bPOP);
+    m_pPortNF->SetValue(rConfigItem.GetInServerPort());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
