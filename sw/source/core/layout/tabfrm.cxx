@@ -4083,7 +4083,14 @@ static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow)
         {
             // We've found another row frame that is part of the same table row
             const SwTabFrame* pCurTab = pCurRow->FindTabFrame();
-            if (pCurTab->IsAnFollow(pTab))
+            // A row frame may not belong to a table frame, when it is being cut, e.g., in
+            // lcl_PostprocessRowsInCells().
+            // Its SwRowFrame::Cut() has been called; it in turn called SwLayoutFrame::Cut(),
+            // which nullified row's upper in RemoveFromLayout(), and then called Shrink()
+            // for its former upper.
+            // Regardless of whether it will be pasted back, or destroyed, currently it's not
+            // part of layout, and its height does not count
+            if (pCurTab && pCurTab->IsAnFollow(pTab))
             {
                 // The found row frame belongs to a table frame that precedes
                 // (above) this one in chain. So, include it in the sum
