@@ -12,3 +12,5 @@
 // as its own xCode project.
 #define LOK_USE_UNSTABLE_API
 #import "../../source/LibreOfficeKit.h"
+
+void temporaryHackToInvokeCallbackHandlers(LibreOfficeKitDocument* pThis);

@@ -125,7 +125,7 @@ open class CachedRender
     open let canvasSize: CGSize
     open let tileRect: CGRect
     open let image: UIImage
-    
+
     public init(canvasSize: CGSize, tileRect: CGRect, image: UIImage)
     {
         self.canvasSize = canvasSize
@@ -138,43 +138,43 @@ class RenderCache
 {
     let CACHE_LOWMEM = 4
     let CACHE_NORMAL = 20
-    
+
     var cachedRenders: [CachedRender] = []
     var hasReceivedMemoryWarning = false
-    
+
     let lock = NSRecursiveLock()
-    
+
     func emptyCache()
     {
         lock.lock(); defer { lock.unlock() }
-        
+
         cachedRenders.removeAll()
 
     }
-    
+
     func pruneCache()
     {
         lock.lock(); defer { lock.unlock() }
-        
+
         let max = hasReceivedMemoryWarning ? CACHE_LOWMEM : CACHE_NORMAL
         while cachedRenders.count > max
         {
             cachedRenders.remove(at: 0)
         }
     }
-    
+
     func add(cachedRender: CachedRender)
     {
         lock.lock(); defer { lock.unlock() }
-        
+
         cachedRenders.append(cachedRender)
         pruneCache()
     }
-    
+
     func get(canvasSize: CGSize, tileRect: CGRect) -> UIImage?
     {
         lock.lock(); defer { lock.unlock() }
-        
+
         if let cr = cachedRenders.first(where: { $0.canvasSize == canvasSize && $0.tileRect == tileRect })
         {
             return cr.image
@@ -193,7 +193,7 @@ public class DocumentHolder
 
     public weak var delegate: DocumentUIDelegate? = nil
     public weak var searchDelegate: SearchDelegate? = nil
-    
+
     private let cache = RenderCache()
 
     init(doc: Document)
@@ -212,6 +212,15 @@ public class DocumentHolder
         {
             closure(self.doc)
         }
+        self.invokeHandlers()
+    }
+
+    public func invokeHandlers()
+    {
+        LOKitThread.instance.async
+        {
+            self.doc.invokeHandlers()
+        }
     }
 
     /// Gives sync access to the document - blocks until the closure runs.
@@ -220,10 +229,11 @@ public class DocumentHolder
     {
         return LOKitThread.instance.sync
         {
+            self.invokeHandlers()
             return closure(self.doc)
         }
     }
-    
+
     /// Paints a tile and return synchronously, using a cached version if it can
     public func paintTileToImage(canvasSize: CGSize,
                                  tileRect: CGRect) -> UIImage?
@@ -232,7 +242,7 @@ public class DocumentHolder
         {
             return cached
         }
-        
+
         let img = sync {
             $0.paintTileToImage(canvasSize: canvasSize, tileRect: tileRect)
         }
@@ -240,10 +250,10 @@ public class DocumentHolder
         {
             cache.add(cachedRender: CachedRender(canvasSize: canvasSize, tileRect: tileRect, image: image))
         }
-        
+
         return img
     }
-    
+
 
     private func onDocumentEvent(type: LibreOfficeKitCallbackType, payload: String?)
     {
@@ -271,7 +281,6 @@ public class DocumentHolder
             runOnMain {
                 self.delegate?.textSelectionEnd( rects: decodeRects(payload) )
             }
-            
         case LOK_CALLBACK_SEARCH_NOT_FOUND:
             runOnMain {
                 self.searchDelegate?.searchNotFound()
@@ -280,8 +289,8 @@ public class DocumentHolder
             runOnMain {
                 self.searchResults(payload: payload)
             }
-            
-            
+
+
         default:
             print("onDocumentEvent type:\(type) not handled!")
         }
@@ -292,11 +301,11 @@ public class DocumentHolder
         if let d = payload, let data = d.data(using: .utf8)
         {
             let decoder = JSONDecoder()
-            
+
             do
             {
                 let searchResults = try decoder.decode(SearchResults.self, from: data )
-                
+
                 /*
                 if let srs = searchResults.searchResultSelection
                 {
@@ -306,7 +315,7 @@ public class DocumentHolder
                     }
                 }
                 */
-                
+
                 self.searchDelegate?.searchResultSelection(searchResults: searchResults)
             }
             catch
@@ -316,7 +325,7 @@ public class DocumentHolder
 
         }
     }
-    
+
     public func search(searchString: String, forwardDirection: Bool = true, from: CGPoint)
     {
         var rootJson = JSONObject()
@@ -416,7 +425,7 @@ public protocol DocumentUIDelegate: class
 public protocol SearchDelegate: class
 {
     func searchNotFound()
-    
+
     func searchResultSelection(searchResults: SearchResults)
 }
 
@@ -472,7 +481,7 @@ public struct PartAndRectangles: Codable
 {
     public var part: String?
     public var rectangles: String?
-    
+
     public var rectsAsCGRects: [CGRect]? {
         return decodeRects(self.rectangles)
     }
