@@ -95,7 +95,6 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
-#include <android/compatibility.hxx>
 
 #include <app.hxx>
 

@@ -55,7 +55,6 @@
 #include <vcl/window.hxx>
 #include <svtools/borderhelper.hxx>
 #include <editeng/borderline.hxx>
-#include <android/compatibility.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 

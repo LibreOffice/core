@@ -30,7 +30,6 @@
 #include <rtl/ustring.h>
 #include <sal/mathconf.h>
 #include <sal/types.h>
-#include <android/compatibility.hxx>
 
 #include <algorithm>
 #include <cassert>
