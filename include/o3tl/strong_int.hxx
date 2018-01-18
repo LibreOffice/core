@@ -25,6 +25,8 @@
 #include <cassert>
 #include <type_traits>
 
+#include <config_global.h>
+
 namespace o3tl
 {
 
