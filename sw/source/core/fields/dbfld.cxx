@@ -868,8 +868,6 @@ bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= nSet;
             if(nSet < css::style::NumberingType::NUMBER_NONE )
                 SetFormat(nSet);
-            else {
-            }
         }
         break;
     case FIELD_PROP_FORMAT:

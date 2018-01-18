@@ -1533,7 +1533,7 @@ jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
    * But to avoid confusion, we do not output JFIF and Adobe APP14 markers
    * if the encoder library already wrote one.
    */
-   if (option) {}
+  (void)option;
 
   for (marker = srcinfo->marker_list; marker != NULL; marker = marker->next) {
     if (dstinfo->write_JFIF_header &&

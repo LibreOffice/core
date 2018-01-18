@@ -2008,10 +2008,6 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
             m_aOutlineMarks.insert( m_aOutlineMarks.begin()+nIns, aURL );
         }
     }
-    else if( sCmp == "text" )
-    {
-
-    }
 }
 
 void SwHTMLWriter::CollectLinkTargets()

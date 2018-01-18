@@ -365,9 +365,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), bBackground, *pStyleSheet, ePO, pSSPool ) : nullptr);
                     }
                 }
-                else if (eFamily == SD_STYLE_FAMILY_CELL)
-                {
-                }
 
                 sal_uInt16 nResult = RET_CANCEL;
                 const SfxItemSet* pOutSet = nullptr;

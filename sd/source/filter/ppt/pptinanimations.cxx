@@ -915,13 +915,6 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
     }
 
     // TODO: DFF_ANIM_PATH_EDIT_MODE
-    if( rSet.hasProperty( DFF_ANIM_PATH_EDIT_MODE ) )
-    {
-        sal_Int32 nPathEditMode ;
-        if( rSet.getProperty( DFF_ANIM_PATH_EDIT_MODE ) >>= nPathEditMode )
-        {
-        }
-    }
 
     // set user data
     Sequence< NamedValue > aUserData;

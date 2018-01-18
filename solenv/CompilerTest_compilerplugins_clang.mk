@@ -20,6 +20,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/cstylecast \
     compilerplugins/clang/test/datamembershadow \
     compilerplugins/clang/test/dodgyswitch \
+    compilerplugins/clang/test/emptyif \
     compilerplugins/clang/test/externvar \
     compilerplugins/clang/test/expressionalwayszero \
     compilerplugins/clang/test/faileddyncast \

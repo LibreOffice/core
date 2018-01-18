@@ -62,7 +62,6 @@ private:
 
 protected:
     virtual void    Activate(bool bMDI) override;
-    virtual void    Deactivate(bool bMDI) override;
     virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize ) override;
 
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override;

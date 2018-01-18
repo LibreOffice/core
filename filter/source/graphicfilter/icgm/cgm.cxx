@@ -457,11 +457,6 @@ void CGM::ImplMapDouble( double& nNumb )
                 break;
         }
     }
-    else
-    {
-
-
-    }
 }
 
 void CGM::ImplMapX( double& nNumb )
@@ -497,11 +492,6 @@ void CGM::ImplMapX( double& nNumb )
                 break;
         }
     }
-    else
-    {
-
-
-    }
 }
 
 void CGM::ImplMapY( double& nNumb )
@@ -536,11 +526,6 @@ void CGM::ImplMapY( double& nNumb )
 
                 break;
         }
-    }
-    else
-    {
-
-
     }
 }
 
@@ -581,11 +566,6 @@ void CGM::ImplMapPoint( FloatPoint& rFloatPoint )
 
                 break;
         }
-    }
-    else
-    {
-
-
     }
 }
 

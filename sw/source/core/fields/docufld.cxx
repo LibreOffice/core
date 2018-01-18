@@ -275,8 +275,6 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         // TODO: where do the defines come from?
         if(nSet <= SVX_NUM_PAGEDESC )
             SetFormat(nSet);
-        else {
-        }
         break;
     case FIELD_PROP_USHORT1:
         rAny >>= nSet;
@@ -2381,8 +2379,6 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= nSet;
             if(nSet <= SVX_NUM_PAGEDESC )
                 SetFormat(nSet);
-            else {
-            }
         }
         break;
         case FIELD_PROP_PAR1:

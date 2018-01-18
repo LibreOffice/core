@@ -124,9 +124,7 @@ vSubArguments)
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss <<"    temp="<<vSubArguments[i]->GenSlidingWindowDeclRef();
@@ -2334,9 +2332,7 @@ void OpPMT::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss <<"    temp="<<vSubArguments[i]->GenSlidingWindowDeclRef();
@@ -2528,9 +2524,7 @@ void OpPrice::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        if (isnan(";
@@ -2626,9 +2620,7 @@ void OpOddlprice::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        if (isnan(";
@@ -2725,9 +2717,7 @@ void OpOddlyield::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        if (isnan(";
@@ -2805,9 +2795,7 @@ void OpPriceDisc::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        if (isnan(";
@@ -2867,9 +2855,7 @@ void OpNper::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        if (isnan(";
@@ -2944,9 +2930,7 @@ void OpPPMT::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "{\n";
         }
-        else
-        {
-        }
+
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        arg=";
