@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <android/compatibility.hxx>
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 
