@@ -68,8 +68,6 @@ ScTabViewObj::ScTabViewObj()
 uno::Reference< uno::XInterface > ScTabViewObj::init()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xSheetDoc.is());
-
     uno::Reference< frame::XModel > xModel(xSheetDoc, uno::UNO_QUERY_THROW);
 
     return xModel->getCurrentController();
