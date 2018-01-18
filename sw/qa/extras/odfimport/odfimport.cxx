@@ -882,5 +882,10 @@ DECLARE_ODFIMPORT_TEST(testBlankBeforeFirstPage, "tdf94882.odt")
     );
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf115079, "tdf115079.odt")
+{
+    // This document caused segfault when layouting
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
