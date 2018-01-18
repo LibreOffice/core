@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_6ee7ce12",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T21:33:43Z",
+      "side": 1,
+      "message": "Empty is the initial state; we don\u0027t need this \u003d)",
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ceeefaeb",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T21:33:43Z",
+      "side": 1,
+      "message": "nice \u003d)",
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_eeb9feed",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T21:33:43Z",
+      "side": 1,
+      "message": "normally no spaces around operators: so currDict-\u003em_aDLoc \u003d)",
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_aef1c6cf",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T21:33:43Z",
+      "side": 1,
+      "message": "We only prefix members with m_ - not structs; so \u0027DictItem\u0027 would be perfectly good for the name - thanks \u003d)",
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_8ee4020e",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-01-18T21:33:43Z",
+      "side": 1,
+      "message": "Best to have an in-line m_DictItem - which we don\u0027t then need to allocate \u003d) so drop the \u0027*\u0027 pointer in here.",
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
