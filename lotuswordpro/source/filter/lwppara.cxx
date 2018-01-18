@@ -117,7 +117,6 @@ LwpPara::LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     , m_nChars(0)
     , m_pDropcapLayout(nullptr)
     , m_BelowSpacing(0)
-    , m_pXFContainer(nullptr)
 {
 }
 
@@ -236,19 +235,18 @@ void LwpPara::Read()
 
 void LwpPara::Parse(IXFStream* pOutputStream)
 {
-    m_pXFContainer = new XFContentContainer;
-    XFConvert(m_pXFContainer);
-    if (!m_pXFContainer)
+    m_xXFContainer.set(new XFContentContainer);
+    XFConvert(m_xXFContainer.get());
+    if (!m_xXFContainer)
         return;
-    m_pXFContainer->ToXml(pOutputStream);
-    m_pXFContainer->Reset();
-    delete m_pXFContainer;
-    m_pXFContainer = nullptr;
+    m_xXFContainer->ToXml(pOutputStream);
+    m_xXFContainer->Reset();
+    m_xXFContainer.clear();
 }
 
 void LwpPara::XFConvert(XFContentContainer* pCont)
 {
-    m_pXFContainer = pCont;
+    m_xXFContainer.set(pCont);
 
     LwpStory *pStory = dynamic_cast<LwpStory*>(m_Story.obj().get());
 
@@ -272,19 +270,18 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         XFSection* pSection = CreateXFSection();
         if (pStory)
             pStory->AddXFContent(pSection);
-        //pSection->Add(pPara);
-        m_pXFContainer = pSection;
+        m_xXFContainer.set(pSection);
     }
 
     if (m_bHasBullet && m_pSilverBullet)
     {
-        rtl::Reference<XFContentContainer> xListItem = AddBulletList(m_pXFContainer);
+        rtl::Reference<XFContentContainer> xListItem = AddBulletList(m_xXFContainer.get());
         if (xListItem)
         {
             xListItem->Add(pPara);
         }
     }
-    else if (m_pXFContainer)
+    else if (m_xXFContainer)
     {
         LwpBulletStyleMgr* pBulletStyleMgr = GetBulletStyleMgr();
         if (pBulletStyleMgr)
@@ -292,14 +289,14 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
             pBulletStyleMgr->SetCurrentSilverBullet(LwpObjectID());
             pBulletStyleMgr->SetContinueFlag(false);
         }
-        m_pXFContainer->Add(pPara);
+        m_xXFContainer->Add(pPara);
     }
 
     m_Fribs.SetXFPara(pPara);
     m_Fribs.XFConvert();
 
-    if (m_pBreaks && m_pXFContainer)
-        AddBreakAfter(m_pXFContainer);
+    if (m_pBreaks && m_xXFContainer)
+        AddBreakAfter(m_xXFContainer.get());
 }
 
 void LwpPara::RegisterMasterPage(XFParaStyle const * pBaseStyle)

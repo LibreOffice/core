@@ -231,7 +231,7 @@ protected:
     LwpDropcapLayout* m_pDropcapLayout;
     double m_BelowSpacing;
 
-    XFContentContainer* m_pXFContainer; //Current container for VO_PARA
+    rtl::Reference<XFContentContainer> m_xXFContainer; //Current container for VO_PARA
 
     enum
     {
@@ -309,7 +309,7 @@ inline LwpFribPtr& LwpPara::GetFribs()
 }
 inline XFContentContainer* LwpPara::GetXFContainer()
 {
-    return m_pXFContainer;
+    return m_xXFContainer.get();
 }
 inline const OUString& LwpPara::GetBulletStyleName() const
 {
@@ -317,13 +317,13 @@ inline const OUString& LwpPara::GetBulletStyleName() const
 }
 inline void LwpPara::AddXFContent(XFContent* pCont)
 {
-    if (!m_pXFContainer)
+    if (!m_xXFContainer)
         throw std::runtime_error("paragraph lacks container");
-    m_pXFContainer->Add(pCont);
+    m_xXFContainer->Add(pCont);
 }
 inline void LwpPara::SetXFContainer(XFContentContainer* pCont)
 {
-    m_pXFContainer = pCont;
+    m_xXFContainer.set(pCont);
 }
 inline LwpIndentOverride* LwpPara::GetIndent()
 {
