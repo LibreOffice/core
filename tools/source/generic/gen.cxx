@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <sstream>
-
+#include <o3tl/safeint.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
@@ -64,6 +64,23 @@ void tools::Rectangle::SetSize( const Size& rSize )
         nBottom  = nTop + rSize.Height() +1;
     else if ( rSize.Height() > 0 )
         nBottom  = nTop + rSize.Height() -1;
+    else
+        nBottom = RECT_EMPTY;
+}
+
+void tools::Rectangle::SaturatingSetSize(const Size& rSize)
+{
+    if (rSize.Width() < 0)
+        nRight = o3tl::saturating_add(nLeft, (rSize.Width() + 1));
+    else if ( rSize.Width() > 0 )
+        nRight = o3tl::saturating_add(nLeft, (rSize.Width() - 1));
+    else
+        nRight = RECT_EMPTY;
+
+    if ( rSize.Height() < 0 )
+        nBottom = o3tl::saturating_add(nTop, (rSize.Height() + 1));
+    else if ( rSize.Height() > 0 )
+        nBottom = o3tl::saturating_add(nTop, (rSize.Height() - 1));
     else
         nBottom = RECT_EMPTY;
 }

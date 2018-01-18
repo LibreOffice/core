@@ -497,7 +497,10 @@ namespace emfio
 
     tools::Rectangle MtfTools::ImplMap( const tools::Rectangle& rRect )
     {
-        return tools::Rectangle( ImplMap( rRect.TopLeft() ), ImplMap( rRect.GetSize() ) );
+        tools::Rectangle aRect;
+        aRect.SetPos(ImplMap(rRect.TopLeft()));
+        aRect.SaturatingSetSize(ImplMap(rRect.GetSize()));
+        return aRect;
     }
 
     void MtfTools::ImplMap( vcl::Font& rFont )
