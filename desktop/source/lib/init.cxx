@@ -3806,6 +3806,7 @@ static void lo_destroy(LibreOfficeKit* pThis)
 extern "C"
 {
 __attribute__((visibility("default")))
+void temporaryHackToInvokeCallbackHandlers(LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
