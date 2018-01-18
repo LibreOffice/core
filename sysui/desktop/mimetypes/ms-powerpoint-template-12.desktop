@@ -22,5 +22,5 @@ Hidden=false
 Icon=
 Type=MimeType
 Patterns=*.potm
-MimeType=application/vnd.ms-powerpoint.template.macroenabled.12
+MimeType=application/vnd.ms-powerpoint.template.macroEnabled.12
 Comment=Microsoft PowerPoint Presentation Template
