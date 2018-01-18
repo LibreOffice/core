@@ -62,7 +62,7 @@ namespace
 static const sal_Char cRubyBaseText[] = "RubyBaseText";
 static const sal_Char cRubyText[] = "RubyText";
 static const sal_Char cRubyAdjust[] = "RubyAdjust";
-static const sal_Char cRubyIsAbove[] = "RubyIsAbove";
+static const sal_Char cRubyPosition[] = "RubyPosition";
 static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 
 } // end anonymous namespace
@@ -195,7 +195,7 @@ void SvxRubyData_Impl::AssertOneEntry()
         pValues[0].Name = cRubyBaseText;
         pValues[1].Name = cRubyText;
         pValues[2].Name = cRubyAdjust;
-        pValues[3].Name = cRubyIsAbove;
+        pValues[3].Name = cRubyPosition;
         pValues[4].Name = cRubyCharStyleName;
     }
 }
@@ -476,12 +476,13 @@ void SvxRubyDialog::Update()
                 else if(nAdjust != nTmp)
                     nAdjust = -2;
             }
-            if (nPosition > -2 && pProps[nProp].Name == cRubyIsAbove)
+            if (nPosition > -2 && pProps[nProp].Name == cRubyPosition )
             {
-                bool bTmp = *o3tl::doAccess<bool>(pProps[nProp].Value);
+                sal_Int16 nTmp = sal_Int16();
+                pProps[nProp].Value >>= nTmp;
                 if (!nRuby)
-                    nPosition = bTmp ? 0 : 1;
-                else if ((!nPosition && !bTmp) || (nPosition == 1 && bTmp))
+                    nPosition = nTmp;
+                else if(nPosition != nTmp)
                     nPosition = -2;
             }
             if (bCharStyleEqual && pProps[nProp].Name == cRubyCharStyleName)
@@ -611,14 +612,14 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
 IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
 {
     AssertOneEntry();
-    bool bAbove = !rBox.GetSelectedEntryPos();
+    sal_Int16 nPosition = rBox.GetSelectedEntryPos();
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     for (PropertyValues & rProps : aRubyValues)
     {
         for (PropertyValue & propVal : rProps)
         {
-            if (propVal.Name == cRubyIsAbove)
-                propVal.Value <<= bAbove;
+            if (propVal.Name == cRubyPosition)
+                propVal.Value <<= nPosition;
         }
         SetModified(true);
     }
@@ -810,19 +811,37 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     bool bRubyStretch = nBaseWidth >= nRubyWidth;
 
     long nCenter = aWinSize.Width() / 2;
-    long nLeftStart = nCenter - (bRubyStretch ? (nBaseWidth / 2) : (nRubyWidth / 2));
-    long nRightEnd = nCenter + (bRubyStretch ? (nBaseWidth / 2) : (nRubyWidth / 2));
+    long nHalfWidth = std::max( nBaseWidth, nRubyWidth ) /2;
+    long nLeftStart = nCenter - nHalfWidth;
+    long nRightEnd = nCenter + nHalfWidth;
 
+    // Deafult values for TOP or no selection
     long nYRuby = aWinSize.Height() / 4 - nTextHeight / 2;
     long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
 
-    //use above also if no selection is set
-    bool bAbove = m_pParentDlg->m_pPositionLB->GetSelectedEntryPos() != 1;
-    if (!bAbove)
+    sal_Int16 nRubyPos = m_pParentDlg->m_pPositionLB->GetSelectedEntryPos();
+    if ( nRubyPos == 1 )    // BOTTOM
     {
         long nTmp = nYRuby;
         nYRuby = nYBase;
         nYBase = nTmp;
+    }
+    else if ( nRubyPos == 2 ) // RIGHT ( vertically )
+    {
+        // Align the ruby text and base text to the vertical center.
+        nYBase =  ( aWinSize.Height() - nTextHeight ) / 2;
+        nYRuby = ( aWinSize.Height() - nRubyWidth ) / 2;
+
+        // Align the ruby text at the right side of the base text
+        nAdjust = RubyAdjust_RIGHT;
+        nHalfWidth = nBaseWidth / 2;
+        nLeftStart = nCenter - nHalfWidth;
+        nRightEnd = nCenter + nHalfWidth + nRubyWidth + nTextHeight;
+        // Render base text first, then render ruby text on the right.
+        bRubyStretch = true;
+
+        aRubyFont.SetVertical(true);
+        aRubyFont.SetOrientation(2700);
     }
 
     long nYOutput;
