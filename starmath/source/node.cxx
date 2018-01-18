@@ -2097,7 +2097,7 @@ void SmTextNode::CreateTextFromNode(OUString &rText)
     else
     {
         SmParser aParseTest;
-        std::unique_ptr<SmTableNode> pTable(aParseTest.Parse(GetToken().aText));
+        auto pTable = aParseTest.Parse(GetToken().aText);
         assert(pTable->GetType() == SmNodeType::Table);
         bQuoted=true;
         if (pTable->GetNumSubNodes() == 1)

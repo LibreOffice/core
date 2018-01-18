@@ -503,14 +503,13 @@ void Test::ParseAndCompare(const char *formula1, const char *formula2, const cha
 void Test::testBinomInBinHor()
 {
     OUString sInput, sExpected;
-    SmNode* pTree;
 
     // set up a binom (table) node
     sInput += "binom a b + c";
-    pTree = SmParser().Parse(sInput);
+    auto pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
-    SmCursor aCursor(pTree, xDocShRef.get());
+    SmCursor aCursor(pTree.get(), xDocShRef.get());
     ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
 
     // move forward (more than) enough places to be at the end
@@ -524,21 +523,18 @@ void Test::testBinomInBinHor()
 
     sExpected += " { { binom a b + c } + d } ";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
-
-    delete pTree;
 }
 
 void Test::testBinVerInUnary()
 {
     OUString sInput, sExpected;
-    SmNode* pTree;
 
     // set up a unary operator with operand
     sInput += "- 1";
-    pTree = SmParser().Parse(sInput);
+    auto pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
-    SmCursor aCursor(pTree, xDocShRef.get());
+    SmCursor aCursor(pTree.get(), xDocShRef.get());
     ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
 
     // move forward (more than) enough places to be at the end
@@ -555,17 +551,15 @@ void Test::testBinVerInUnary()
 
     sExpected += " - { 1 over 2 } ";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, xDocShRef->GetText());
-
-    delete pTree;
 }
 
 void Test::testBinHorInSubSup()
 {
     // set up a blank formula
-    SmNode* pTree = SmParser().Parse(OUString());
+    auto pTree = SmParser().Parse(OUString());
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
-    SmCursor aCursor(pTree, xDocShRef.get());
+    SmCursor aCursor(pTree.get(), xDocShRef.get());
     ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
 
     // Insert an RSup expression with a BinHor for the exponent
@@ -582,18 +576,16 @@ void Test::testBinHorInSubSup()
 
     OUString sExpected = " { a ^ { b + c } + d } ";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", sExpected, xDocShRef->GetText());
-
-    delete pTree;
 }
 
 void Test::testUnaryInMixedNumberAsNumerator()
 {
     // set up a unary operator
     OUString sInput = "- 1";
-    SmNode* pTree = SmParser().Parse(sInput);
+    auto pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
-    SmCursor aCursor(pTree, xDocShRef.get());
+    SmCursor aCursor(pTree.get(), xDocShRef.get());
     ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
 
     // move forward (more than) enough places to be at the end
@@ -625,8 +617,6 @@ void Test::testUnaryInMixedNumberAsNumerator()
 
     OUString sExpected = " { 2 { - 1 over 2 } + 4 } ";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, xDocShRef->GetText());
-
-    delete pTree;
 }
 
 void Test::testMiscEquivalent()

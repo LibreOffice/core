@@ -64,10 +64,10 @@ void NodeTest::testTdf47813()
 {
     SmParser aParser;
 #define MATRIX "matrix {-2#33##4#-5##6,0#7}"
-    std::unique_ptr<SmTableNode> pNodeA(aParser.Parse(MATRIX));
-    std::unique_ptr<SmTableNode> pNodeC(aParser.Parse("alignc " MATRIX));
-    std::unique_ptr<SmTableNode> pNodeL(aParser.Parse("alignl " MATRIX));
-    std::unique_ptr<SmTableNode> pNodeR(aParser.Parse("alignr " MATRIX));
+    auto pNodeA = aParser.Parse(MATRIX);
+    auto pNodeC = aParser.Parse("alignc " MATRIX);
+    auto pNodeL = aParser.Parse("alignl " MATRIX);
+    auto pNodeR = aParser.Parse("alignr " MATRIX);
 #undef MATRIX
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     SmFormat aFmt;

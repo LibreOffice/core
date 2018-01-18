@@ -78,7 +78,7 @@ class SmParser
     inline bool     TokenInGroup( TG nGroup );
 
     // grammar
-    SmTableNode *DoTable();
+    std::unique_ptr<SmTableNode> DoTable();
     SmLineNode *DoLine();
     std::unique_ptr<SmNode> DoExpression(bool bUseExtraSpaces = true);
     SmNode *DoRelation();
@@ -114,7 +114,7 @@ public:
                  SmParser();
 
     /** Parse rBuffer to formula tree */
-    SmTableNode *Parse(const OUString &rBuffer);
+    std::unique_ptr<SmTableNode> Parse(const OUString &rBuffer);
     /** Parse rBuffer to formula subtree that constitutes an expression */
     std::unique_ptr<SmNode> ParseExpression(const OUString &rBuffer);
 
