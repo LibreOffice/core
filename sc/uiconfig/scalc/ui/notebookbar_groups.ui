@@ -380,6 +380,7 @@
                       <object class="GtkButton" id="newb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -399,6 +400,7 @@
                       <object class="GtkButton" id="openb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -431,6 +433,7 @@
                         <property name="width_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="vexpand">True</property>
                         <property name="action_name">.uno:Save</property>
@@ -462,6 +465,7 @@
                       <object class="GtkButton" id="pdfb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -481,6 +485,7 @@
                       <object class="GtkButton" id="printb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -583,6 +588,7 @@
                         <property name="width_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
@@ -615,6 +621,7 @@
                       <object class="GtkButton" id="redob">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -634,6 +641,7 @@
                       <object class="GtkButton" id="undob">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -730,6 +738,7 @@
                     <property name="width_request">70</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:DesignerDialog</property>
                     <property name="image">paragraphstylei</property>
@@ -973,6 +982,7 @@
                             <property name="height_request">30</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="halign">end</property>
                             <property name="valign">center</property>
@@ -995,6 +1005,7 @@
                             <property name="height_request">30</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="halign">end</property>
                             <property name="valign">center</property>
@@ -1035,10 +1046,10 @@
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:AlignLeft</property>
                         <property name="relief">none</property>
-                        <property name="focus_on_click">False</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -1053,6 +1064,7 @@
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:AlignHorizontalCenter</property>
                         <property name="relief">none</property>
@@ -1070,6 +1082,7 @@
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:AlignRight</property>
                         <property name="relief">none</property>
@@ -1099,11 +1112,11 @@
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Bold</property>
                         <property name="image">boldi</property>
                         <property name="relief">none</property>
-                        <property name="focus_on_click">False</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -1117,6 +1130,7 @@
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Italic</property>
                         <property name="image">italicsi</property>
@@ -1134,6 +1148,7 @@
                         <property name="height_request">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Underline</property>
                         <property name="relief">none</property>
@@ -1329,6 +1344,7 @@
                           <object class="svtlo-ManagedMenuButton" id="tablerowsb">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -1346,6 +1362,7 @@
                           <object class="svtlo-ManagedMenuButton" id="tablecolumnsb">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -1376,6 +1393,7 @@
                             <property name="label" translatable="yes" context="notebookbar_groups|mergeb">Merge</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -1394,6 +1412,7 @@
                             <property name="label" translatable="yes" context="notebookbar_groups|splitb">Split</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -1425,6 +1444,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataSort</property>
                             <property name="relief">none</property>
@@ -1441,6 +1461,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataFilterAutoFilter</property>
                             <property name="relief">none</property>
@@ -1458,6 +1479,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ConditionalFormatMenu</property>
                             <property name="relief">none</property>
@@ -1584,6 +1606,7 @@
                             <property name="height_request">25</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:AlignTop</property>
                             <property name="relief">none</property>
@@ -1601,6 +1624,7 @@
                             <property name="height_request">25</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:AlignVCenter</property>
                             <property name="relief">none</property>
@@ -1618,6 +1642,7 @@
                             <property name="height_request">25</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:AlignBottom</property>
                             <property name="relief">none</property>
@@ -1757,6 +1782,7 @@
                             <property name="height_request">26</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="image">linksi</property>
                             <property name="relief">none</property>
@@ -1786,6 +1812,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:InsertGraphic</property>
                             <property name="relief">none</property>
@@ -1802,6 +1829,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:InsertObjectChart</property>
                             <property name="image">charti</property>
@@ -1819,6 +1847,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:InsertAnnotation</property>
                             <property name="relief">none</property>
@@ -1902,6 +1931,7 @@
                         <property name="height_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="image">paragraphstylei</property>
                         <property name="relief">none</property>
@@ -1923,6 +1953,7 @@
                             <property name="height_request">36</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -1941,6 +1972,7 @@
                             <property name="height_request">36</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -1969,6 +2001,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:InsertCaptionDialog</property>
                             <property name="relief">none</property>
@@ -1985,6 +2018,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="relief">none</property>
                           </object>
@@ -2000,6 +2034,7 @@
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="relief">none</property>
                           </object>

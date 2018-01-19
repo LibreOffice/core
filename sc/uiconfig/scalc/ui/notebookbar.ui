@@ -216,6 +216,7 @@
                   <object class="vcllo-SmallButton" id="OpenFromCalc">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:OpenFromCalc</property>
                     <property name="image">OpenImg</property>
@@ -232,6 +233,7 @@
                   <object class="vcllo-SmallButton" id="Save">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:Save</property>
                     <property name="image">SaveImg</property>
@@ -248,6 +250,7 @@
                   <object class="vcllo-SmallButton" id="SaveAs">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:SaveAs</property>
                     <property name="image">SaveAsImg</property>
@@ -264,6 +267,7 @@
                   <object class="vcllo-SmallButton" id="OpenRemote">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:OpenRemote</property>
                     <property name="image">OpenRemoteImg</property>
@@ -284,6 +288,7 @@
                       <object class="vcllo-SmallButton" id="ExportTo">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:ExportTo</property>
                         <property name="image">ExportToImg</property>
@@ -314,6 +319,7 @@
                       <object class="GtkButton" id="ExportToPDF">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:ExportToPDF</property>
                         <property name="image">ExportToPDFImg</property>
@@ -340,6 +346,7 @@
                   <object class="vcllo-SmallButton" id="Print">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:Print</property>
                     <property name="image">PrintImg</property>
@@ -360,6 +367,7 @@
                       <object class="GtkButton" id="Signature">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Signature</property>
                         <property name="image">SignatureImg</property>
@@ -404,6 +412,7 @@
                   <object class="vcllo-SmallButton" id="Paste">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:Paste</property>
                     <property name="image">PasteImg</property>
@@ -426,6 +435,7 @@
                       <object class="GtkButton" id="Cut">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Cut</property>
                         <property name="relief">none</property>
@@ -441,6 +451,7 @@
                       <object class="GtkButton" id="Copy">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Copy</property>
                         <property name="relief">none</property>
@@ -468,6 +479,7 @@
                         <property name="label" translatable="yes" context="notebookbar|FormatPaintbrush">Clone</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:FormatPaintbrush</property>
                         <property name="image">FormatPaintbrushImg1</property>
@@ -1397,6 +1409,7 @@
                               <object class="svtlo-ManagedMenuButton" id="ConditionalFormatMenu">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">True</property>
                                 <property name="action_name">.uno:ConditionalFormatMenu</property>
                                 <property name="relief">none</property>
@@ -1412,6 +1425,7 @@
                               <object class="GtkButton" id="ToggleMergeCells">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">True</property>
                                 <property name="action_name">.uno:ToggleMergeCells</property>
                                 <property name="relief">none</property>
@@ -1615,6 +1629,7 @@
                               <object class="GtkButton" id="SearchDialog">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">True</property>
                                 <property name="action_name">.uno:SearchDialog</property>
                                 <property name="relief">none</property>
@@ -1630,6 +1645,7 @@
                               <object class="GtkButton" id="DataSort">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">True</property>
                                 <property name="action_name">.uno:DataSort</property>
                                 <property name="relief">none</property>
@@ -1699,6 +1715,7 @@
                       <object class="vcllo-SmallButton" id="DataDataPilotRun">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:DataDataPilotRun</property>
                         <property name="relief">none</property>
@@ -1742,6 +1759,7 @@
                           <object class="vcllo-SmallButton" id="InsertGraphic">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:InsertGraphic</property>
                             <property name="image">InsertGraphicImg</property>
@@ -1758,6 +1776,7 @@
                           <object class="vcllo-SmallButton" id="InsertAVMedia">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="notebookbar|InsertAVMedia|tooltip_text">Insert Audio or Video</property>
                             <property name="action_name">.uno:InsertAVMedia</property>
@@ -1792,6 +1811,7 @@
                   <object class="vcllo-SmallButton" id="InsertObjectChart">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:InsertObjectChart</property>
                     <property name="image">InsertObjectChartImg</property>
@@ -1808,6 +1828,7 @@
                   <object class="GtkButton" id="FunctionDialog">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:FunctionDialog</property>
                     <property name="image">PlaceholderImg</property>
@@ -1841,6 +1862,7 @@
                       <object class="vcllo-SmallButton" id="EditHeaderAndFooter">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:EditHeaderAndFooter</property>
                         <property name="image">EditHeaderAndFooterImg</property>
@@ -1867,6 +1889,7 @@
                   <object class="vcllo-SmallButton" id="InsertAnnotation">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:InsertAnnotation</property>
                     <property name="image">InsertAnnotationImg</property>
@@ -1887,6 +1910,7 @@
                       <object class="vcllo-SmallButton" id="HyperlinkDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:HyperlinkDialog</property>
                         <property name="image">HyperlinkDialogImg</property>
@@ -1918,6 +1942,7 @@
                         <property name="label" translatable="yes" context="notebookbar|InsertSymbol">Symbol</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:InsertSymbol</property>
                         <property name="image">InsertSymbolImg</property>
@@ -1944,6 +1969,7 @@
                   <object class="vcllo-SmallButton" id="InsertObjectStarMath">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:InsertObjectStarMath</property>
                     <property name="image">InsertObjectStarMathImg</property>
@@ -1981,6 +2007,7 @@
                           <object class="vcllo-SmallButton" id="DrawText">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DrawText</property>
                             <property name="image">DrawTextImg</property>
@@ -2039,6 +2066,7 @@
                       <object class="vcllo-SmallButton" id="PageFormatDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:PageFormatDialog</property>
                         <property name="image">PageFormatDialogImg</property>
@@ -2055,6 +2083,7 @@
                       <object class="vcllo-SmallButton" id="EditPrintArea">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:EditPrintArea</property>
                         <property name="image">EditPrintAreaImg</property>
@@ -2090,6 +2119,7 @@
                             <property name="label" translatable="yes" context="notebookbar|ToggleSheetGrid">Toggle Grid Lines</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ToggleSheetGrid</property>
                             <property name="relief">none</property>
@@ -2105,6 +2135,7 @@
                           <object class="GtkButton" id="ViewRowColumnHeaders">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ViewRowColumnHeaders</property>
                             <property name="relief">none</property>
@@ -2150,6 +2181,7 @@
                   <object class="vcllo-SmallButton" id="BringToFront">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:BringToFront</property>
                     <property name="image">BringToFrontImg</property>
@@ -2166,6 +2198,7 @@
                   <object class="vcllo-SmallButton" id="SendToBack">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:SendToBack</property>
                     <property name="image">SendToBackImg</property>
@@ -2190,6 +2223,7 @@
                           <object class="vcllo-SmallButton" id="FormatGroup">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:FormatGroup</property>
                             <property name="image">FormatGroupImg</property>
@@ -2206,6 +2240,7 @@
                           <object class="vcllo-SmallButton" id="FormatUngroup">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:FormatUngroup</property>
                             <property name="image">FormatUngroupImg</property>
@@ -2268,6 +2303,7 @@
                           <object class="GtkButton" id="ManageXMLSource">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ManageXMLSource</property>
                             <property name="image">PlaceholderImg</property>
@@ -2284,6 +2320,7 @@
                           <object class="GtkButton" id="DataStreams">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataStreams</property>
                             <property name="image">PlaceholderImg</property>
@@ -2330,6 +2367,7 @@
                   <object class="GtkButton" id="Calculate">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:Calculate</property>
                     <property name="image">PlaceholderImg</property>
@@ -2370,6 +2408,7 @@
                           <object class="GtkButton" id="SortAscending">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:SortAscending</property>
                             <property name="relief">none</property>
@@ -2385,6 +2424,7 @@
                           <object class="GtkButton" id="SortDescending">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:SortDescending</property>
                             <property name="relief">none</property>
@@ -2417,6 +2457,7 @@
                   <object class="vcllo-SmallButton" id="DataSort1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:DataSort</property>
                     <property name="image">DataSortImg</property>
@@ -2433,6 +2474,7 @@
                   <object class="vcllo-SmallButton" id="DataFilterAutoFilter">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:DataFilterAutoFilter</property>
                     <property name="image">DataFilterAutoFilterImg</property>
@@ -2455,6 +2497,7 @@
                       <object class="GtkButton" id="DataFilterStandardFilter">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:DataFilterStandardFilter</property>
                         <property name="relief">none</property>
@@ -2470,6 +2513,7 @@
                       <object class="GtkButton" id="DataFilterSpecialFilter">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:DataFilterSpecialFilter</property>
                         <property name="relief">none</property>
@@ -2510,6 +2554,7 @@
                       <object class="GtkButton" id="DataFilterRemoveFilter">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:DataFilterRemoveFilter</property>
                         <property name="relief">none</property>
@@ -2525,6 +2570,7 @@
                       <object class="GtkButton" id="DataFilterHideAutoFilter">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:DataFilterHideAutoFilter</property>
                         <property name="relief">none</property>
@@ -2555,6 +2601,7 @@
                           <object class="GtkButton" id="TextToColumns">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:TextToColumns</property>
                             <property name="image">PlaceholderImg</property>
@@ -2571,6 +2618,7 @@
                           <object class="GtkButton" id="Validation">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:Validation</property>
                             <property name="image">PlaceholderImg</property>
@@ -2612,6 +2660,7 @@
                           <object class="GtkButton" id="DataConsolidate">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataConsolidate</property>
                             <property name="image">PlaceholderImg</property>
@@ -2628,6 +2677,7 @@
                           <object class="GtkButton" id="DataSubTotals">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataSubTotals</property>
                             <property name="image">PlaceholderImg</property>
@@ -2669,6 +2719,7 @@
                           <object class="GtkButton" id="DataForm">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataForm</property>
                             <property name="image">PlaceholderImg</property>
@@ -2685,6 +2736,7 @@
                           <object class="GtkButton" id="TableOperationDialog">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:TableOperationDialog</property>
                             <property name="image">PlaceholderImg</property>
@@ -2739,6 +2791,7 @@
                   <object class="vcllo-SmallButton" id="SpellDialog">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:SpellDialog</property>
                     <property name="image">SpellDialogImg</property>
@@ -2756,6 +2809,7 @@
                     <property name="label" translatable="yes" context="notebookbar|SpellOnline">Auto Spellcheck</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:SpellOnline</property>
                     <property name="image">SpellOnlineImg</property>
@@ -2776,6 +2830,7 @@
                       <object class="vcllo-SmallButton" id="ThesaurusDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:ThesaurusDialog</property>
                         <property name="image">ThesaurusDialogImg</property>
@@ -2815,6 +2870,7 @@
                   <object class="vcllo-SmallButton" id="InsertAnnotation1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:InsertAnnotation</property>
                     <property name="image">InsertAnnotationImg1</property>
@@ -2842,6 +2898,7 @@
                           <object class="GtkButton" id="EditAnnotation">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:EditAnnotation</property>
                             <property name="relief">none</property>
@@ -2857,6 +2914,7 @@
                           <object class="GtkButton" id="DeleteNote">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DeleteNote</property>
                             <property name="relief">none</property>
@@ -2900,6 +2958,7 @@
                           <object class="GtkButton" id="HideNote">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:HideNote</property>
                             <property name="relief">none</property>
@@ -2915,6 +2974,7 @@
                           <object class="GtkButton" id="ShowNote">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ShowNote</property>
                             <property name="relief">none</property>
@@ -2968,6 +3028,7 @@
                           <object class="vcllo-SmallButton" id="Protect">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:Protect</property>
                             <property name="image">ProtectImg</property>
@@ -2984,6 +3045,7 @@
                           <object class="vcllo-SmallButton" id="ToolProtectionDocument">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ToolProtectionDocument</property>
                             <property name="image">ToolProtectionDocumentImg</property>
@@ -3000,6 +3062,7 @@
                           <object class="GtkButton" id="ShareDocument">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ShareDocument</property>
                             <property name="image">PlaceholderImg</property>
@@ -3058,6 +3121,7 @@
                       <object class="GtkButton" id="NormalViewMode">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:NormalViewMode</property>
                         <property name="image">PlaceholderImg</property>
@@ -3074,6 +3138,7 @@
                       <object class="GtkButton" id="PagebreakMode">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:PagebreakMode</property>
                         <property name="image">PlaceholderImg</property>
@@ -3119,6 +3184,7 @@
                             <property name="label" translatable="yes" context="notebookbar|ToggleSheetGrid2">Toggle Grid Lines</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ToggleSheetGrid</property>
                             <property name="image">ToggleSheetGridImg</property>
@@ -3135,6 +3201,7 @@
                           <object class="GtkButton" id="ViewValueHighlighting">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ViewValueHighlighting</property>
                             <property name="image">PlaceholderImg</property>
@@ -3151,6 +3218,7 @@
                           <object class="GtkButton" id="ViewRowColumnHeaders1">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ViewRowColumnHeaders</property>
                             <property name="image">PlaceholderImg</property>
@@ -3201,6 +3269,7 @@
                       <object class="vcllo-SmallButton" id="Zoom">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Zoom</property>
                         <property name="image">ZoomImg</property>
@@ -3223,6 +3292,7 @@
                           <object class="GtkButton" id="Zoom100Percent">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:Zoom100Percent</property>
                             <property name="relief">none</property>
@@ -3238,6 +3308,7 @@
                           <object class="GtkButton" id="ZoomPageWidth">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ZoomPageWidth</property>
                             <property name="relief">none</property>
@@ -3288,6 +3359,7 @@
                           <object class="vcllo-SmallButton" id="SplitWindow">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:SplitWindow</property>
                             <property name="image">SplitWindowImg</property>
@@ -3304,6 +3376,7 @@
                           <object class="vcllo-SmallButton" id="FreezePanes">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:FreezePanes</property>
                             <property name="image">FreezePanesImg</property>

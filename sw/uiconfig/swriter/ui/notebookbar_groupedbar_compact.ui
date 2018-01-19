@@ -4006,6 +4006,7 @@
                             <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|menub">_Menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -4061,6 +4062,7 @@
                             <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|toolsb">_Tools</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
@@ -4149,6 +4151,7 @@
                             <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|fileb">_File</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -4303,6 +4306,7 @@
                             <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|editb">_Edit</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -4441,6 +4445,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphstyleb">St_yles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -4618,6 +4623,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|formatb">F_ormat</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -4867,6 +4873,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphb">_Paragraph</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -5038,6 +5045,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|insertb">_Insert</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="valign">center</property>
                                     <property name="vexpand">True</property>
@@ -5185,6 +5193,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|referenceb">Reference_s</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="valign">center</property>
                                 <property name="vexpand">True</property>
@@ -5291,6 +5300,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|reviewb">_Review</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="valign">center</property>
                                     <property name="vexpand">True</property>
@@ -5404,6 +5414,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewb">_View</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -5507,6 +5518,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphstylet">St_yles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -5685,6 +5697,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|formatt">F_ormat</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -5900,6 +5913,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragrapht">_Paragraph</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -6028,6 +6042,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|tableT">T_able</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -6167,6 +6182,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|merged">_Merge</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -6292,6 +6308,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|rowscolumnst">R_ows</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -6420,6 +6437,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|selectt">Selec_t</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -6534,6 +6552,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|calculatet">_Calc</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -6672,6 +6691,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|graphicB">_Graphic</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -6787,6 +6807,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|colorb">C_olor</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -7110,6 +7131,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrange">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -7273,6 +7295,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|GridB">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -7396,6 +7419,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|languageb">_Language</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
@@ -7525,6 +7549,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|revieb">_Review</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -7662,6 +7687,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|commentsb">_Comments</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
@@ -7762,6 +7788,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|compareb">Com_pare</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
@@ -7865,6 +7892,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewA">_View</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
@@ -8052,6 +8080,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|editdrawb">St_yles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -8268,6 +8297,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|drawb">D_raw</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -8498,6 +8528,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrangeD">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -8637,6 +8668,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Grid">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -8749,6 +8781,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewDrawb">Grou_p</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -8860,6 +8893,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|3Db">3_D</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -9046,6 +9080,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|oleB">F_rame</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -9253,6 +9288,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrangeO">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -9365,6 +9401,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|GridO">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -9478,6 +9515,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewO">_View</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -9586,6 +9624,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphstyles">St_yles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -9764,6 +9803,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|formats">F_ormat</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -10025,6 +10065,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphs">_Paragraph</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
@@ -10187,6 +10228,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewc">_View</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
