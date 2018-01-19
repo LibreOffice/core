@@ -2789,9 +2789,7 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    const bool bImmediate = OpenGLHelper::isVCLOpenGLEnabled() || pThis->m_bFullscreen;
-
-    struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height, bImmediate );
+    struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height, OpenGLHelper::isVCLOpenGLEnabled() );
 
     pThis->CallCallback( SalEvent::Paint, &aEvent );
 
