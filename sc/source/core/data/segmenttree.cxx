@@ -295,7 +295,7 @@ ScFlatBoolRowSegments::ForwardIterator::ForwardIterator(ScFlatBoolRowSegments& r
 {
 }
 
-bool ScFlatBoolRowSegments::ForwardIterator::getValue(SCROW nPos, bool& rVal)
+void ScFlatBoolRowSegments::ForwardIterator::getValue(SCROW nPos, bool& rVal)
 {
     if (nPos >= mnCurPos)
         // It can only go in a forward direction.
@@ -306,14 +306,13 @@ bool ScFlatBoolRowSegments::ForwardIterator::getValue(SCROW nPos, bool& rVal)
         // position not in the current segment.  Update the current value.
         ScFlatBoolRowSegments::RangeData aData;
         if (!mrSegs.getRangeData(mnCurPos, aData))
-            return false;
+            return;
 
         mbCurValue = aData.mbValue;
         mnLastPos = aData.mnRow2;
     }
 
     rVal = mbCurValue;
-    return true;
 }
 
 ScFlatBoolRowSegments::RangeIterator::RangeIterator(ScFlatBoolRowSegments& rSegs) :

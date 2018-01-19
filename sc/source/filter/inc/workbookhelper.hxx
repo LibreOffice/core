@@ -251,7 +251,7 @@ public:
         the full path to the fragment stream. */
     bool importOoxFragment( const rtl::Reference<oox::core::FragmentHandler>& rxHandler );
 
-    bool importOoxFragment( const rtl::Reference<oox::core::FragmentHandler>& rxHandler, oox::core::FastParser& rParser );
+    void importOoxFragment( const rtl::Reference<oox::core::FragmentHandler>& rxHandler, oox::core::FastParser& rParser );
 
     // BIFF2-BIFF8 specific (MUST NOT be called in OOXML/BIFF12 filter) -------
 

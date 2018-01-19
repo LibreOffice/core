@@ -2406,7 +2406,7 @@ static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans
     }
 }
 
-bool ScDPObject::FillLabelDataForDimension(
+void ScDPObject::FillLabelDataForDimension(
     const uno::Reference<container::XIndexAccess>& xDims, sal_Int32 nDim, ScDPLabelData& rLabelData)
 {
     uno::Reference<uno::XInterface> xIntDim =
@@ -2415,7 +2415,7 @@ bool ScDPObject::FillLabelDataForDimension(
     uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
 
     if (!xDimName.is() || !xDimProp.is())
-        return false;
+        return;
 
     bool bData = ScUnoHelpFunctions::GetBoolProperty(
         xDimProp, SC_UNO_DP_ISDATALAYOUT);
@@ -2465,7 +2465,6 @@ bool ScDPObject::FillLabelDataForDimension(
         rLabelData.mnFlags = ScUnoHelpFunctions::GetLongProperty(
             xDimProp, SC_UNO_DP_FLAGS );
     }
-    return true;
 }
 
 void ScDPObject::FillLabelData(sal_Int32 nDim, ScDPLabelData& rLabels)

@@ -780,13 +780,12 @@ SdrCaptionObj* ScCaptionPtr::release()
     return pTmp;
 }
 
-bool ScCaptionPtr::forget()
+void ScCaptionPtr::forget()
 {
-    bool bRet = decRef();
+    decRef();
     removeFromList();
     mpCaption = nullptr;
     mbNotOwner = false;
-    return bRet;
 }
 
 void ScCaptionPtr::dissolve()

@@ -2570,7 +2570,7 @@ void ScInterpreter::ScZTest()
     }
 }
 
-bool ScInterpreter::CalculateTest(bool _bTemplin
+void ScInterpreter::CalculateTest(bool _bTemplin
                                   ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                                   ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
                                   ,double& fT,double& fF)
@@ -2608,7 +2608,7 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
         PushNoValue();
-        return false;
+        return;
     } // if (fCount1 < 2.0 || fCount2 < 2.0)
     if ( _bTemplin )
     {
@@ -2617,7 +2617,7 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
         if (fS1 + fS2 == 0.0)
         {
             PushNoValue();
-            return false;
+            return;
         }
         fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
@@ -2635,7 +2635,6 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
              sqrt( fCount1*fCount2*(fCount1+fCount2-2)/(fCount1+fCount2) );
         fF = fCount1 + fCount2 - 2;
     }
-    return true;
 }
 void ScInterpreter::ScTTest()
 {

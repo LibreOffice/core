@@ -952,9 +952,9 @@ bool WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& r
     return getOoxFilter().importFragment( rxHandler );
 }
 
-bool WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& rxHandler, oox::core::FastParser& rParser )
+void WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& rxHandler, oox::core::FastParser& rParser )
 {
-    return getOoxFilter().importFragment(rxHandler, rParser);
+    getOoxFilter().importFragment(rxHandler, rParser);
 }
 
 // BIFF specific --------------------------------------------------------------

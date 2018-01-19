@@ -84,9 +84,8 @@ public:
     /** Forget the SdrCaptionObj pointer in this one instance.
         Decrements a use count but does not destroy the object, it's up to the
         caller to manage this mess..
-        @returns <TRUE/> if the last reference was decremented.
      */
-    bool forget();
+    void forget();
 
     /** Flag that this instance is in Undo, so drawing layer owns it. */
     void setNotOwner();

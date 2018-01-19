@@ -136,7 +136,7 @@ bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, SfxMedium& rMedium) const
     return loadFileContent(rMedium, filter);
 }
 
-bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) const
+void ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) const
 {
     OString aUrl = OUStringToOString(aPath, RTL_TEXTENCODING_UTF8);
     const char* path = aUrl.getStr();
@@ -150,10 +150,7 @@ bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) con
     catch (const std::exception& e)
     {
         SAL_WARN("sc", "Unable to load styles from xml file! " << e.what());
-        return false;
     }
-
-    return true;
 }
 
 ScOrcusXMLContext* ScOrcusFiltersImpl::createXMLContext(ScDocument& rDoc, const OUString& rPath) const

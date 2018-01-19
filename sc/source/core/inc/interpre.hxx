@@ -831,7 +831,7 @@ private:
     void CalculateSlopeIntercept(bool bSlope);
     void CalculateSmallLarge(bool bSmall);
     void CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _bSample );  //fdo#70000 argument _bSample is ignored if _bPearson == true
-    bool CalculateTest( bool _bTemplin
+    void CalculateTest( bool _bTemplin
                        ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                        ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
                        ,double& fT,double& fF);
