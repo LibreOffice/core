@@ -2224,13 +2224,18 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
     }
 }
 
-bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+bool ScTable::HasBlockMatrixFragment( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2 ) const
 {
     using namespace sc;
 
+    if ( !IsColValid( nCol1 ) )
+        return false;
+
+    const SCCOL nMaxCol2 = std::min<SCCOL>( nCol2, aCol.size() - 1 );
+
     MatrixEdge nEdges = MatrixEdge::Nothing;
 
-    if ( nCol1 == nCol2 )
+    if ( nCol1 == nMaxCol2 )
     {   // left and right column
         const MatrixEdge n = MatrixEdge::Left | MatrixEdge::Right;
         nEdges = aCol[nCol1].GetBlockMatrixEdges( nRow1, nRow2, n );
@@ -2243,7 +2248,7 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
         if ((nEdges != MatrixEdge::Nothing) && ((!(nEdges & MatrixEdge::Left)) || (nEdges & (MatrixEdge::Inside|MatrixEdge::Open))))
             return true;        // left edge missing or open
         // right column
-        nEdges = aCol[nCol2].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdge::Right);
+        nEdges = aCol[nMaxCol2].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdge::Right);
         if ((nEdges != MatrixEdge::Nothing) && ((!(nEdges & MatrixEdge::Right)) || (nEdges & (MatrixEdge::Inside|MatrixEdge::Open))))
             return true;        // right edge is missing or open
     }
@@ -2252,7 +2257,7 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     {   // Row on top and on bottom
         bool bOpen = false;
         const MatrixEdge n = MatrixEdge::Bottom | MatrixEdge::Top;
-        for ( SCCOL i=nCol1; i<=nCol2; i++)
+        for ( SCCOL i=nCol1; i<=nMaxCol2; i++)
         {
             nEdges = aCol[i].GetBlockMatrixEdges( nRow1, nRow1, n );
             if (nEdges != MatrixEdge::Nothing)
@@ -2280,7 +2285,7 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
               j++, n = MatrixEdge::Bottom, nR=nRow2)
         {
             bool bOpen = false;
-            for ( SCCOL i=nCol1; i<=nCol2; i++)
+            for ( SCCOL i=nCol1; i<=nMaxCol2; i++)
             {
                 nEdges = aCol[i].GetBlockMatrixEdges( nR, nR, n );
                 if ( nEdges != MatrixEdge::Nothing)
