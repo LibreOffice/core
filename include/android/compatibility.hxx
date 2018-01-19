@@ -20,6 +20,7 @@
 #include <math.h>
 
 #if defined(ARM)
+#include <stdlib.h>
 #include <string>
 #include <sstream>
 
