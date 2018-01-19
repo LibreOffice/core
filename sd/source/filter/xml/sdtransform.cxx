@@ -122,8 +122,8 @@ void SdTransformOOo2xDocument::transformDrawPages()
 
 void SdTransformOOo2xDocument::transformStyles()
 {
-    transformStyles( SD_STYLE_FAMILY_GRAPHICS );
-    transformStyles( SD_STYLE_FAMILY_MASTERPAGE );
+    transformStyles( SfxStyleFamily::Para );
+    transformStyles( SfxStyleFamily::Page );
 }
 
 void SdTransformOOo2xDocument::transformStyles( SfxStyleFamily eFam )

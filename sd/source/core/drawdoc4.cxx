@@ -134,7 +134,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     sal_uInt16 nMask = SFXSTYLEBIT_AUTO;
 
     OUString aName(aStdName);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetHelpId( aHelpFile, HID_STANDARD_STYLESHEET_NAME );
     SfxItemSet& rISet = pSheet->GetItemSet();
 
@@ -254,7 +254,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Object with arrowhead
     aName = SdResId(STR_POOLSHEET_OBJWITHARROW);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHARROW );
     pISet = &pSheet->GetItemSet();
@@ -276,7 +276,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Object with Shadow
     aName = SdResId(STR_POOLSHEET_OBJWITHSHADOW);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHSHADOW );
     pISet = &pSheet->GetItemSet();
@@ -288,7 +288,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Object without filling
     aName = SdResId(STR_POOLSHEET_OBJWITHOUTFILL);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHOUTFILL );
     pISet = &pSheet->GetItemSet();
@@ -299,7 +299,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // Object no fill no line
 
     aName = SdResId(STR_POOLSHEET_OBJNOLINENOFILL);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJNOLINENOFILL );
     pISet = &pSheet->GetItemSet();
@@ -310,7 +310,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // Text
 
     aName = SdResId(STR_POOLSHEET_TEXT);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXT );
     pISet = &pSheet->GetItemSet();
@@ -320,7 +320,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Text body
     aName = SdResId(STR_POOLSHEET_TEXTBODY);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY );
     pISet = &pSheet->GetItemSet();
@@ -332,7 +332,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Text body, justified
     aName = SdResId(STR_POOLSHEET_TEXTBODY_JUSTIFY);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_JUSTIFY );
     pISet = &pSheet->GetItemSet();
@@ -344,7 +344,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Text body, indented
     aName = SdResId(STR_POOLSHEET_TEXTBODY_INDENT);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_INDENT );
     pISet = &pSheet->GetItemSet();
@@ -359,7 +359,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // Title
 
     aName = SdResId(STR_POOLSHEET_TITLE);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE );
     pISet = &pSheet->GetItemSet();
@@ -371,7 +371,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Title1
     aName = SdResId(STR_POOLSHEET_TITLE1);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE1 );
     pISet = &pSheet->GetItemSet();
@@ -392,7 +392,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // Title2
 
     aName = SdResId(STR_POOLSHEET_TITLE2);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE2 );
     pISet = &pSheet->GetItemSet();
@@ -421,7 +421,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // Headline
 
     aName = SdResId(STR_POOLSHEET_HEADLINE);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE );
     pISet = &pSheet->GetItemSet();
@@ -436,7 +436,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Headline1
     aName = SdResId(STR_POOLSHEET_HEADLINE1);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE1 );
     pISet = &pSheet->GetItemSet();
@@ -453,7 +453,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Headline2
     aName = SdResId(STR_POOLSHEET_HEADLINE2);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE2 );
     pISet = &pSheet->GetItemSet();
@@ -471,7 +471,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Measurements
     aName = SdResId(STR_POOLSHEET_MEASURE);
-    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_MEASURE );
     pISet = &pSheet->GetItemSet();
@@ -495,7 +495,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
 static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rName, const OUString& rParent, const Color& rColor )
 {
-    SfxStyleSheetBase* pSheet = &(pSSPool->Make(rName, SD_STYLE_FAMILY_CELL, SFXSTYLEBIT_AUTO));
+    SfxStyleSheetBase* pSheet = &(pSSPool->Make(rName, SfxStyleFamily::Frame, SFXSTYLEBIT_AUTO));
     pSheet->SetParent(rParent);
     SfxItemSet* pISet = &pSheet->GetItemSet();
     pISet->Put(XFillStyleItem(drawing::FillStyle_SOLID));
@@ -540,7 +540,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     OUString aDefaultCellStyleName( "default" );
 
-    pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, SFXSTYLEBIT_AUTO));
+    pSheet = &(pSSPool->Make(aDefaultCellStyleName, SfxStyleFamily::Frame, SFXSTYLEBIT_AUTO));
     pSheet->SetHelpId( OUString(), HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
 
@@ -1067,7 +1067,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
         aOldName = aOldName.copy(0, nPos + aSep.getLength());
 
     std::vector<StyleReplaceData> aReplList;
-    SfxStyleSheetIterator aIter(mxStyleSheetPool.get(), SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetIterator aIter(mxStyleSheetPool.get(), SfxStyleFamily::Page);
     SfxStyleSheetBase* pSheet = aIter.First();
 
     while (pSheet)

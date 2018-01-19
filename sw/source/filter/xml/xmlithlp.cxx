@@ -40,40 +40,26 @@ using ::editeng::SvxBorderLine;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
-#define API_LINE_NONE 0x7FFF
-#define API_LINE_SOLID 0
-#define API_LINE_DOTTED 1
-#define API_LINE_DASHED 2
-#define API_LINE_DOUBLE 3
-#define API_LINE_EMBOSSED 10
-#define API_LINE_ENGRAVED 11
-#define API_LINE_OUTSET 12
-#define API_LINE_INSET 13
-#define API_LINE_FINE_DASHED table::BorderLineStyle::FINE_DASHED
-#define API_LINE_DASH_DOT table::BorderLineStyle::DASH_DOT
-#define API_LINE_DASH_DOT_DOT table::BorderLineStyle::DASH_DOT_DOT
-#define API_LINE_DOUBLE_THIN table::BorderLineStyle::DOUBLE_THIN
-
 #define SVX_XML_BORDER_WIDTH_THIN 0
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
 #define SVX_XML_BORDER_WIDTH_THICK 2
 
 const struct SvXMLEnumMapEntry<sal_uInt16> psXML_BorderStyles[] =
 {
-    { XML_NONE,         API_LINE_NONE },
-    { XML_HIDDEN,       API_LINE_NONE },
-    { XML_SOLID,        API_LINE_SOLID },
-    { XML_DOUBLE,       API_LINE_DOUBLE },
-    { XML_DOUBLE_THIN,  API_LINE_DOUBLE_THIN },
-    { XML_DOTTED,       API_LINE_DOTTED },
-    { XML_DASHED,       API_LINE_DASHED },
-    { XML_FINE_DASHED,  API_LINE_FINE_DASHED },
-    { XML_DASH_DOT,     API_LINE_DASH_DOT },
-    { XML_DASH_DOT_DOT, API_LINE_DASH_DOT_DOT },
-    { XML_GROOVE,       API_LINE_ENGRAVED },
-    { XML_RIDGE,        API_LINE_EMBOSSED },
-    { XML_INSET,        API_LINE_INSET },
-    { XML_OUTSET,       API_LINE_OUTSET },
+    { XML_NONE,         table::BorderLineStyle::NONE },
+    { XML_HIDDEN,       table::BorderLineStyle::NONE },
+    { XML_SOLID,        table::BorderLineStyle::SOLID },
+    { XML_DOUBLE,       table::BorderLineStyle::DOUBLE },
+    { XML_DOUBLE_THIN,  table::BorderLineStyle::DOUBLE_THIN },
+    { XML_DOTTED,       table::BorderLineStyle::DOTTED },
+    { XML_DASHED,       table::BorderLineStyle::DASHED },
+    { XML_FINE_DASHED,  table::BorderLineStyle::FINE_DASHED },
+    { XML_DASH_DOT,     table::BorderLineStyle::DASH_DOT },
+    { XML_DASH_DOT_DOT, table::BorderLineStyle::DASH_DOT_DOT },
+    { XML_GROOVE,       table::BorderLineStyle::ENGRAVED },
+    { XML_RIDGE,        table::BorderLineStyle::EMBOSSED },
+    { XML_INSET,        table::BorderLineStyle::INSET },
+    { XML_OUTSET,       table::BorderLineStyle::OUTSET },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -150,7 +136,7 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
 void sw_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 {
     SvxBorderLineStyle eStyle = SvxBorderLineStyle::NONE;
-    if ( nStyle != API_LINE_NONE )
+    if ( nStyle != table::BorderLineStyle::NONE )
         eStyle = SvxBorderLineStyle( nStyle );
     rLine.SetBorderLineStyle(eStyle);
 }
@@ -162,7 +148,7 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                                     bool bHasColor, const Color& rColor )
 {
     // first of all, delete an empty line
-    if( (bHasStyle && API_LINE_NONE == nStyle) ||
+    if( (bHasStyle && table::BorderLineStyle::NONE == nStyle) ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
         bool bRet = nullptr != rpLine;
@@ -186,10 +172,10 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( ( bHasWidth &&
           (USHRT_MAX != nNamedWidth || (nWidth != rpLine->GetWidth() ) ) ) ||
         ( bHasStyle &&
-          ((API_LINE_SOLID == nStyle && rpLine->GetDistance()) ||
-            (API_LINE_DOUBLE == nStyle && !rpLine->GetDistance())) ) )
+          ((table::BorderLineStyle::SOLID == nStyle && rpLine->GetDistance()) ||
+            (table::BorderLineStyle::DOUBLE == nStyle && !rpLine->GetDistance())) ) )
    {
-       bool bDouble = (bHasWidth && API_LINE_DOUBLE == nStyle ) ||
+       bool bDouble = (bHasWidth && table::BorderLineStyle::DOUBLE == nStyle ) ||
            rpLine->GetDistance();
 
        // fdo#38542: for double borders, do not override the width

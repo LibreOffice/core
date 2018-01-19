@@ -443,16 +443,16 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                     else
                     {
-                        if (pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
+                        if (pStyleSheet->GetFamily() == SfxStyleFamily::Page)
                             pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
 
                         if( pStyleSheet )
                         {
                             SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
-                            if ((eFamily == SD_STYLE_FAMILY_GRAPHICS &&     nSlotId == SID_STYLE_FAMILY2)       ||
-                                (eFamily == SD_STYLE_FAMILY_CELL     && nSlotId == SID_STYLE_FAMILY3)       ||
-                                (eFamily == SD_STYLE_FAMILY_PSEUDO &&   nSlotId == SID_STYLE_FAMILY5))
+                            if ((eFamily == SfxStyleFamily::Para &&     nSlotId == SID_STYLE_FAMILY2)       ||
+                                (eFamily == SfxStyleFamily::Frame     && nSlotId == SID_STYLE_FAMILY3)       ||
+                                (eFamily == SfxStyleFamily::Pseudo &&   nSlotId == SID_STYLE_FAMILY5))
                             {
                                 SfxTemplateItem aTmpItem ( nWhich, pStyleSheet->GetName() );
                                 aAllSet.Put( aTmpItem, aTmpItem.Which()  );
@@ -486,7 +486,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 std::unique_ptr<SfxPoolItem> pItem;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
-                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SfxStyleFamily::Pseudo)
                     rSet.Put(SfxBoolItem(nWhich,false));
                 else
                 {
@@ -501,7 +501,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 std::unique_ptr<SfxPoolItem> pItem;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
-                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SfxStyleFamily::Pseudo)
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -513,7 +513,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 std::unique_ptr<SfxPoolItem> pItem;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
-                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SfxStyleFamily::Pseudo)
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -528,11 +528,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
                 if (pFamilyItem)
                 {
-                    if (static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                    if (static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SfxStyleFamily::Pseudo)
                     {
                         rSet.DisableItem(nWhich);
                     }
-                    else if (static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_GRAPHICS)
+                    else if (static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SfxStyleFamily::Para)
                     {
                         if (!mpDrawView->AreObjectsMarked())
                         {

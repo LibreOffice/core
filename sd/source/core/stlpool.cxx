@@ -114,8 +114,8 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pD
         rtl::Reference< SfxStyleSheetPool > xPool( this );
 
         // create graphics family
-        mxGraphicFamily = new SdStyleFamily( xPool, SD_STYLE_FAMILY_GRAPHICS );
-        mxCellFamily = new SdStyleFamily( xPool, SD_STYLE_FAMILY_CELL );
+        mxGraphicFamily = new SdStyleFamily( xPool, SfxStyleFamily::Para );
+        mxCellFamily = new SdStyleFamily( xPool, SfxStyleFamily::Frame );
 
         mxTableFamily = sdr::table::CreateTableDesignFamily();
         Reference< XNamed > xNamed( mxTableFamily, UNO_QUERY );
@@ -145,7 +145,7 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const OUString& rLayoutName)
     OUString aName(rLayoutName);
     aName += SD_LT_SEPARATOR;
     aName += STR_LAYOUT_TITLE;
-    SfxStyleSheetBase* pResult = Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetBase* pResult = Find(aName, SfxStyleFamily::Page);
     return pResult;
 }
 
@@ -165,7 +165,7 @@ void SdStyleSheetPool::CreateOutlineSheetList (const OUString& rLayoutName, std:
     for (sal_Int32 nSheet = 1; nSheet < 10; nSheet++)
     {
         OUString aFullName(aName + " " + OUString::number( nSheet ) );
-        SfxStyleSheetBase* pSheet = Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
+        SfxStyleSheetBase* pSheet = Find(aFullName, SfxStyleFamily::Page);
 
         if (pSheet)
             rOutlineStyles.push_back(pSheet);
@@ -217,10 +217,10 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     {
         OUString aLevelName( aPrefix + aName + " " + OUString::number( nLevel ) ) ;
 
-        if (!Find(aLevelName, SD_STYLE_FAMILY_MASTERPAGE))
+        if (!Find(aLevelName, SfxStyleFamily::Page))
         {
             bCreated = true;
-            pSheet = &Make(aLevelName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
+            pSheet = &Make(aLevelName, SfxStyleFamily::Page,nUsedMask);
             pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
 
             pSheet->SetParent( OUString() );
@@ -314,7 +314,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         {
             OUString aLevelName( aPrefix + aName + " " + OUString::number( nLevel ) );
 
-            pSheet = Find(aLevelName, SD_STYLE_FAMILY_MASTERPAGE);
+            pSheet = Find(aLevelName, SfxStyleFamily::Page);
 
             DBG_ASSERT( pSheet, "missing layout style!");
 
@@ -332,11 +332,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     **************************************************************************/
     aName = aPrefix + STR_LAYOUT_TITLE;
 
-    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
+    if (!Find(aName, SfxStyleFamily::Page))
     {
         bCreated = true;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Page,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
         pSheet->SetParent( OUString() );
         SfxItemSet& rTitleSet = pSheet->GetItemSet();
@@ -378,11 +378,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     **************************************************************************/
     aName = aPrefix + STR_LAYOUT_SUBTITLE;
 
-    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
+    if (!Find(aName, SfxStyleFamily::Page))
     {
         bCreated = true;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Page,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
         pSheet->SetParent( OUString() );
         SfxItemSet& rSubtitleSet = pSheet->GetItemSet();
@@ -427,11 +427,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     **************************************************************************/
     aName = aPrefix + STR_LAYOUT_NOTES;
 
-    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
+    if (!Find(aName, SfxStyleFamily::Page))
     {
         bCreated = true;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Page,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
         pSheet->SetParent( OUString() );
         SfxItemSet& rNotesSet = pSheet->GetItemSet();
@@ -472,11 +472,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     **************************************************************************/
     aName = aPrefix + STR_LAYOUT_BACKGROUNDOBJECTS;
 
-    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
+    if (!Find(aName, SfxStyleFamily::Page))
     {
         bCreated = true;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Page,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
         pSheet->SetParent( OUString() );
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
@@ -494,11 +494,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     **************************************************************************/
     aName = aPrefix + STR_LAYOUT_BACKGROUND;
 
-    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
+    if (!Find(aName, SfxStyleFamily::Page))
     {
         bCreated = true;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Page,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
         pSheet->SetParent( OUString() );
         SfxItemSet& rBackgroundSet = pSheet->GetItemSet();
@@ -521,12 +521,12 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
 
 void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
 {
-    CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS );
+    CopySheets( rSourcePool, SfxStyleFamily::Para );
 }
 
 void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool)
 {
-    CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL );
+    CopySheets( rSourcePool, SfxStyleFamily::Frame );
 }
 
 void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
@@ -588,12 +588,12 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
 
 void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets)
 {
-    CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL, rCreatedSheets );
+    CopySheets( rSourcePool, SfxStyleFamily::Frame, rCreatedSheets );
 }
 
 void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString const &rRenameSuffix)
 {
-    CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rCreatedSheets, rRenameSuffix );
+    CopySheets( rSourcePool, SfxStyleFamily::Para, rCreatedSheets, rRenameSuffix );
 }
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily )
@@ -740,15 +740,15 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
 
     for (std::vector<OUString>::const_iterator it = aNameList.begin(); it != aNameList.end(); ++it)
     {
-        pSheet = Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = Find(*it, SfxStyleFamily::Page);
         if (!pSheet)
         {
-            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
+            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*it, SfxStyleFamily::Page);
             DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Style sheet missing");
             if (pSourceSheet)
             {
                 // In the case one comes with Methusalem-Docs.
-                SfxStyleSheetBase& rNewSheet = Make(*it, SD_STYLE_FAMILY_MASTERPAGE);
+                SfxStyleSheetBase& rNewSheet = Make(*it, SfxStyleFamily::Page);
                 OUString file;
                 rNewSheet.SetHelpId( file, pSourceSheet->GetHelpId( file ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
@@ -816,7 +816,7 @@ void SdStyleSheetPool::CreateLayoutSheetList(const OUString& rLayoutName, SdStyl
 {
     OUString aLayoutNameWithSep(rLayoutName + SD_LT_SEPARATOR);
 
-    SfxStyleSheetIterator aIter(this, SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetIterator aIter(this, SfxStyleFamily::Page);
     SfxStyleSheetBase* pSheet = aIter.First();
 
     while (pSheet)
@@ -843,60 +843,60 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     sal_uInt16 nUsedMask = SFXSTYLEBIT_USED;
 
     aName = SdResId(STR_PSEUDOSHEET_TITLE);
-    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
+    if( (pSheet = Find(aName, SfxStyleFamily::Pseudo)) == nullptr )
     {
-        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Pseudo, nUsedMask);
         pSheet->SetParent( OUString() );
         static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
 
     aName = SdResId(STR_PSEUDOSHEET_SUBTITLE);
-    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
+    if( (pSheet = Find(aName, SfxStyleFamily::Pseudo)) == nullptr )
     {
-        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Pseudo, nUsedMask);
         pSheet->SetParent( OUString() );
         static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
 
     aName = SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
-    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
+    if( (pSheet = Find(aName, SfxStyleFamily::Pseudo)) == nullptr )
     {
-        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Pseudo, nUsedMask);
         pSheet->SetParent( OUString() );
         static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
 
     aName = SdResId(STR_PSEUDOSHEET_BACKGROUND);
-    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
+    if( (pSheet = Find(aName, SfxStyleFamily::Pseudo)) == nullptr )
     {
-        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Pseudo, nUsedMask);
         pSheet->SetParent( OUString() );
         static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
 
     aName = SdResId(STR_PSEUDOSHEET_NOTES);
-    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
+    if( (pSheet = Find(aName, SfxStyleFamily::Pseudo)) == nullptr )
     {
-        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SfxStyleFamily::Pseudo, nUsedMask);
         pSheet->SetParent( OUString() );
         static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
 
     pParent = nullptr;
-    SetSearchMask(SD_STYLE_FAMILY_PSEUDO);
+    SetSearchMask(SfxStyleFamily::Pseudo);
     aName = SdResId(STR_PSEUDOSHEET_OUTLINE);
     for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
     {
         OUString aLevelName( aName + " " + OUString::number( nLevel ) );
 
-        if( (pSheet = Find(aLevelName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
+        if( (pSheet = Find(aLevelName, SfxStyleFamily::Pseudo)) == nullptr )
         {
-            pSheet = &Make(aLevelName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
+            pSheet = &Make(aLevelName, SfxStyleFamily::Pseudo, nUsedMask);
 
             if (pSheet)
             {

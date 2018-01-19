@@ -2908,7 +2908,7 @@ void SdMasterPage::setBackground( const Any& rValue )
                 OUString aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
                 aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4);
                 aLayoutName += STR_LAYOUT_BACKGROUND;
-                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
+                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SfxStyleFamily::Page );
 
                 if( pStyleSheet )
                 {
@@ -2952,7 +2952,7 @@ void SdMasterPage::getBackground( Any& rValue )
                 OUString aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
                 aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4);
                 aLayoutName += STR_LAYOUT_BACKGROUND;
-                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
+                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SfxStyleFamily::Page );
 
                 if( pStyleSheet )
                 {

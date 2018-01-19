@@ -55,7 +55,7 @@ GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
                                      DocumentType eDocType) :
     DrawDocShell(eMode, bDataObject, eDocType)
 {
-    SetStyleFamily( SD_STYLE_FAMILY_GRAPHICS );
+    SetStyleFamily( SfxStyleFamily::Para );
 }
 
 GraphicDocShell::GraphicDocShell(SfxModelFlags nModelCreationFlags,
@@ -63,7 +63,7 @@ GraphicDocShell::GraphicDocShell(SfxModelFlags nModelCreationFlags,
                                      DocumentType eDocType) :
     DrawDocShell(nModelCreationFlags, bDataObject, eDocType)
 {
-    SetStyleFamily( SD_STYLE_FAMILY_GRAPHICS );
+    SetStyleFamily( SfxStyleFamily::Para );
 }
 
 GraphicDocShell::~GraphicDocShell()

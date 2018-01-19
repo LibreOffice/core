@@ -601,7 +601,7 @@ bool ImplSdPPTImport::Import()
                     if ( nMasterNum == 1 )
                     {
                         // standardsheet
-                        pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SdResId(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS ));
+                        pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SdResId(STR_STANDARD_STYLESHEET_NAME), SfxStyleFamily::Para ));
                         if ( pSheet )
                         {
                             SfxItemSet& rItemSet = pSheet->GetItemSet();
@@ -614,7 +614,7 @@ bool ImplSdPPTImport::Import()
                     }
 
                     // PSEUDO
-                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SD_STYLE_FAMILY_PSEUDO ));
+                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SfxStyleFamily::Pseudo ));
                     if ( pSheet )
                     {
                         SfxItemSet& rItemSet = pSheet->GetItemSet();
@@ -679,7 +679,7 @@ bool ImplSdPPTImport::Import()
                             OUString aName( pPage->GetLayoutName() );
                             aName += " ";
                             aName += OUString::number( nLevel + 1 );
-                            SfxStyleSheet* pOutlineSheet = static_cast<SfxStyleSheet*>( mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE ) );
+                            SfxStyleSheet* pOutlineSheet = static_cast<SfxStyleSheet*>( mpDoc->GetStyleSheetPool()->Find( aName, SfxStyleFamily::Page ) );
                             DBG_ASSERT( pOutlineSheet, "Template for outline object not found" );
                             if ( pOutlineSheet )
                             {
@@ -2249,7 +2249,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 OUString aName( pPage->GetLayoutName() );
                 aName += " ";
                 aName += OUString::number( nLevel );
-                pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE ));
+                pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find( aName, SfxStyleFamily::Page ));
                 if ( pSheet )
                     pText->StartListening( *pSheet );
                 pStyleSheetAry[ nLevel - 1 ] = pSheet;
@@ -2288,10 +2288,10 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 case PRESOBJ_SLIDENUMBER :
                 case PRESOBJ_FOOTER :
                 case PRESOBJ_HEADER :
-                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SD_STYLE_FAMILY_PSEUDO ));
+                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SfxStyleFamily::Pseudo ));
                 break;
                 default :
-                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SdResId(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS ));
+                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SdResId(STR_STANDARD_STYLESHEET_NAME), SfxStyleFamily::Para ));
             }
         }
         break;

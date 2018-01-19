@@ -114,9 +114,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     {
         OUString sFamily = static_cast<const SfxStringItem &>( pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
         if (sFamily == "graphics")
-            nFamily = SD_STYLE_FAMILY_GRAPHICS;
+            nFamily = SfxStyleFamily::Para;
         else
-            nFamily = SD_STYLE_FAMILY_PSEUDO;
+            nFamily = SfxStyleFamily::Pseudo;
     }
 
     OUString aStyleName;
@@ -226,7 +226,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             pStyleSheet = pSSPool->Find( aStyleName, nFamily);
 
             // do not set presentation styles, they will be set implicit
-            if ( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
+            if ( pStyleSheet && pStyleSheet->GetFamily() != SfxStyleFamily::Pseudo )
             {
                 SfxStyleSheet* pOldStyleSheet = mpView->GetStyleSheet();
                 OUString aStr;
@@ -238,10 +238,10 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     pStyleSheet->GetFamily() == pOldStyleSheet->GetFamily() ||
 
                     // allow if old was background objects and new is graphics
-                    (pStyleSheet->GetFamily() == SD_STYLE_FAMILY_GRAPHICS && pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS) ||
+                    (pStyleSheet->GetFamily() == SfxStyleFamily::Para && pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS) ||
 
                     // allow if old was presentation and we are a drawing document
-                    (pOldStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE && mpDoc->GetDocumentType() == DocumentType::Draw) )
+                    (pOldStyleSheet->GetFamily() == SfxStyleFamily::Page && mpDoc->GetDocumentType() == DocumentType::Draw) )
                 {
                     mpView->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet));
                     mpDoc->SetChanged();
@@ -261,7 +261,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     pStyleSheet = pSSPool->Find( aStyleName, nFamily);
                 }
                 // no presentation object templates, they are only allowed implicitly
-                if( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
+                if( pStyleSheet && pStyleSheet->GetFamily() != SfxStyleFamily::Pseudo )
                 {
                     static_cast<SdStyleSheetPool*>( pSSPool )->SetActualStyleSheet( pStyleSheet );
 
@@ -302,11 +302,11 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
-                if (eFamily == SD_STYLE_FAMILY_GRAPHICS)
+                if (eFamily == SfxStyleFamily::Para)
                 {
                     pStdDlg.disposeAndReset(pFact ? pFact->CreateSdTabTemplateDlg(mpViewShell->GetActiveWindow(), mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView) : nullptr);
                 }
-                else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
+                else if (eFamily == SfxStyleFamily::Pseudo)
                 {
                     OUString aName(pStyleSheet->GetName());
                     bool bBackground = false;
@@ -385,7 +385,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     {
                         nRetMask = pStyleSheet->GetMask();
 
-                        if (eFamily == SD_STYLE_FAMILY_PSEUDO)
+                        if (eFamily == SfxStyleFamily::Pseudo)
                         {
                             SfxItemSet aTempSet(*pOutSet);
                             /* Extract SvxBrushItem out of set and insert SvxBackgroundColorItem */
@@ -413,7 +413,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                     SvxNumRule aRule(*aTempSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET)->GetNumRule());
 
                                     OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
-                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SD_STYLE_FAMILY_PSEUDO);
+                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SfxStyleFamily::Pseudo);
 
                                     if(pFirstStyleSheet)
                                     {

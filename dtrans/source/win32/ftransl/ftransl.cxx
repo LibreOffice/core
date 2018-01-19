@@ -43,7 +43,6 @@
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 #define CPPUTYPE_OUSTR            cppu::UnoType<OUString>::get()
 #define CPPUTYPE_SALINT32         cppu::UnoType<sal_Int32>::get()
-#define EMPTY_OUSTR               OUString()
 
 const OUString Windows_FormatName ("windows_formatname");
 const css::uno::Type CppuType_ByteSequence = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
@@ -528,7 +527,7 @@ DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( c
 {
     OSL_PRECOND( aSysDataType.hasValue( ), "Empty system data type delivered" );
 
-    DataFlavor aFlavor = mkDataFlv( EMPTY_OUSTR, EMPTY_OUSTR, CPPUTYPE_SEQSALINT8 );
+    DataFlavor aFlavor = mkDataFlv( OUString(), OUString(), CPPUTYPE_SEQSALINT8 );
 
     if ( aSysDataType.getValueType( ) == CPPUTYPE_SALINT32 )
     {

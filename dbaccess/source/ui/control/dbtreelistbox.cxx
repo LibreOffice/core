@@ -191,7 +191,7 @@ void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )
 
     if (m_aSelectedEntries.find(_pEntry) != m_aSelectedEntries.end())
     {
-        SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+        SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SvLBoxItemType::String);
         if ( pTextItem && !static_cast< OBoldListboxString* >( pTextItem )->isEmphasized() )
         {
             implStopSelectionTimer();

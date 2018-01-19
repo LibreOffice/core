@@ -1034,7 +1034,7 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny )
     const SfxStyleSheet* pOldStyleSheet = pObj->GetStyleSheet();
     if( pOldStyleSheet != pStyleSheet )
     {
-        if( pStyleSheet == nullptr || (pStyleSheet->GetFamily() != SD_STYLE_FAMILY_GRAPHICS && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_MASTERPAGE) )
+        if( pStyleSheet == nullptr || (pStyleSheet->GetFamily() != SfxStyleFamily::Para && pStyleSheet->GetFamily() != SfxStyleFamily::Page) )
             throw lang::IllegalArgumentException();
 
         pObj->SetStyleSheet( pStyleSheet, false );
@@ -1060,7 +1060,7 @@ uno::Any SdXShape::GetStyleSheet() const
     SfxStyleSheet* pStyleSheet = pObj->GetStyleSheet();
     // it is possible for shapes inside a draw to have a presentation style
     // but we don't want this for the api
-    if( (pStyleSheet == nullptr) || ((pStyleSheet->GetFamily() != SD_STYLE_FAMILY_GRAPHICS) && !mpModel->IsImpressDocument()) )
+    if( (pStyleSheet == nullptr) || ((pStyleSheet->GetFamily() != SfxStyleFamily::Para) && !mpModel->IsImpressDocument()) )
         return Any();
 
     return Any( uno::Reference< style::XStyle >( dynamic_cast< SfxUnoStyleSheet* >( pStyleSheet ) ) );

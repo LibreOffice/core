@@ -165,11 +165,11 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                                 OUString::number( (i <= 0 ) ? 1 : i + 1 );
                     aFullName = maLayoutName + " " +
                                 OUString::number( (i <= 0 ) ? 1 : i + 1);
-                    pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
+                    pSheet = pStShPool->Find(aOldFullName, SfxStyleFamily::Page);
                     DBG_ASSERT(pSheet, "Old outline style sheet not found");
                     aOldOutlineStyles.push_back(pSheet);
 
-                    pSheet = pStShPool->Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
+                    pSheet = pStShPool->Find(aFullName, SfxStyleFamily::Page);
                     DBG_ASSERT(pSheet, "New outline style sheet not found");
                     aOutlineStyles.push_back(pSheet);
 
@@ -188,7 +188,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                         OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
 
                         if( pOPO )
-                            pOPO->SetStyleSheets( i,  aFullName, SD_STYLE_FAMILY_MASTERPAGE );
+                            pOPO->SetStyleSheets( i,  aFullName, SfxStyleFamily::Page );
                     }
                 }
 

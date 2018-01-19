@@ -74,7 +74,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
             maStyleSheets.clear();
 
             // The iterator will return only style sheets of family master page
-            std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), SD_STYLE_FAMILY_MASTERPAGE);
+            std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), SfxStyleFamily::Page);
             for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
                                      pStyle = aSSSIterator->Next() )
             {
@@ -98,7 +98,7 @@ SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, 
 }
 
 SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, const SdPage* pMasterPage )
-: mnFamily( SD_STYLE_FAMILY_MASTERPAGE )
+: mnFamily( SfxStyleFamily::Page )
 , mxPool( xPool )
 , mpImpl( new SdStyleFamilyImpl )
 {
@@ -133,7 +133,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
     SdStyleSheet* pRet = nullptr;
     if( !rName.isEmpty() )
     {
-        if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
+        if( mnFamily == SfxStyleFamily::Page )
         {
             PresStyleMap& rStyleMap = mpImpl->getStyleSheets();
             PresStyleMap::iterator iter( rStyleMap.find(rName) );
@@ -183,7 +183,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames()
 // XNamed
 OUString SAL_CALL SdStyleFamily::getName()
 {
-    if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
+    if( mnFamily == SfxStyleFamily::Page )
     {
         SdPage* pPage = static_cast< SdPage* >( mpImpl->mxMasterPage.get() );
         if( pPage == nullptr )
@@ -222,7 +222,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
 
     throwIfDisposed();
 
-    if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
+    if( mnFamily == SfxStyleFamily::Page )
     {
         PresStyleMap& rStyleMap = mpImpl->getStyleSheets();
         Sequence< OUString > aNames( rStyleMap.size() );
@@ -265,7 +265,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
 
     if( !aName.isEmpty() )
     {
-        if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
+        if( mnFamily == SfxStyleFamily::Page )
         {
             PresStyleMap& rStyleSheets = mpImpl->getStyleSheets();
             PresStyleMap::iterator iter( rStyleSheets.find(aName) );
@@ -305,7 +305,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements()
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
+    if( mnFamily == SfxStyleFamily::Page )
     {
         return true;
     }
@@ -329,7 +329,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount()
     throwIfDisposed();
 
     sal_Int32 nCount = 0;
-    if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
+    if( mnFamily == SfxStyleFamily::Page )
     {
         return mpImpl->getStyleSheets().size();
     }
@@ -353,7 +353,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
 
     if( Index >= 0 )
     {
-        if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
+        if( mnFamily == SfxStyleFamily::Page )
         {
             PresStyleMap& rStyleSheets = mpImpl->getStyleSheets();
             if( !rStyleSheets.empty() )
@@ -437,7 +437,7 @@ Reference< XInterface > SAL_CALL SdStyleFamily::createInstance()
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
+    if( mnFamily == SfxStyleFamily::Page )
     {
         throw IllegalAccessException();
     }
@@ -491,8 +491,8 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName )
     OUString sDisplayName;
     switch( mnFamily )
     {
-        case SD_STYLE_FAMILY_MASTERPAGE:    sDisplayName = getName(); break;
-        case SD_STYLE_FAMILY_CELL:          sDisplayName = SdResId(STR_CELL_STYLE_FAMILY); break;
+        case SfxStyleFamily::Page:    sDisplayName = getName(); break;
+        case SfxStyleFamily::Frame:          sDisplayName = SdResId(STR_CELL_STYLE_FAMILY); break;
         default:                            sDisplayName = SdResId(STR_GRAPHICS_STYLE_FAMILY); break;
     }
     return Any( sDisplayName );

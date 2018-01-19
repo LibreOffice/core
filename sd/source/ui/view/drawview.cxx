@@ -195,7 +195,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         sal_Int16 nDepth = pOutliner->GetDepth( nParaPos );
                         OUString aName = rPage.GetLayoutName() + " " +
                             OUString::number((nDepth <= 0) ? 1 : nDepth + 1);
-                        SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
+                        SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->Find(aName, SfxStyleFamily::Page));
                         //We have no stylesheet if we access outline level 10
                         //in the master preview, there is no true style backing
                         //that entry
@@ -225,7 +225,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             {
                                 OUString aSheetName = rPage.GetLayoutName() + " " +
                                     OUString::number((nChild <= 0) ? 1 : nChild + 1);
-                                SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_STYLE_FAMILY_MASTERPAGE));
+                                SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SfxStyleFamily::Page));
 
                                 if( pOutlSheet )
                                     pOutlSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
@@ -304,7 +304,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             OUString aName = rPage.GetLayoutName() + " " +
                                 OUString::number(nLevel);
                             SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->
-                                                Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
+                                                Find(aName, SfxStyleFamily::Page));
                             DBG_ASSERT(pSheet, "StyleSheet not found");
 
                             SfxItemSet aTempSet( pSheet->GetItemSet() );

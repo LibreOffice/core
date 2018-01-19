@@ -99,7 +99,7 @@ void StyleSheetUndoAction::Undo()
     SdrModel::MigrateItemSet( mpOldSet.get(), &aNewSet, mpDoc );
 
     mpStyleSheet->GetItemSet().Set(aNewSet);
-    if( mpStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
+    if( mpStyleSheet->GetFamily() == SfxStyleFamily::Pseudo )
         static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SfxHintId::DataChanged));
     else
         mpStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
@@ -111,7 +111,7 @@ void StyleSheetUndoAction::Redo()
     SdrModel::MigrateItemSet( mpNewSet.get(), &aNewSet, mpDoc );
 
     mpStyleSheet->GetItemSet().Set(aNewSet);
-    if( mpStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
+    if( mpStyleSheet->GetFamily() == SfxStyleFamily::Pseudo )
         static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SfxHintId::DataChanged));
     else
         mpStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));

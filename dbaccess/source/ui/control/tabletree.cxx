@@ -318,7 +318,7 @@ bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry)
 {
     if (_pEntry)
     {
-        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
+        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SvLBoxItemType::String));
         if (pTextItem)
             return pTextItem->isEmphasized();
     }
@@ -359,7 +359,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, 
         ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
         )
     {
-        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
+        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SvLBoxItemType::String));
         if (pTextItem)
             pTextItem->emphasize(_bChecked);
 

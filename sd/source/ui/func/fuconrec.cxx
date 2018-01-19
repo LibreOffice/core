@@ -479,7 +479,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         OUString aName(SdResId(STR_POOLSHEET_MEASURE));
         SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pPage->GetModel()->
                                      GetStyleSheetPool()->
-                                     Find(aName, SD_STYLE_FAMILY_GRAPHICS));
+                                     Find(aName, SfxStyleFamily::Para));
         DBG_ASSERT(pSheet, "StyleSheet missing");
 
         if (pSheet)

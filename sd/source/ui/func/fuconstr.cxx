@@ -320,7 +320,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         aName = aName.copy(0, n) + STR_LAYOUT_BACKGROUNDOBJECTS;
         SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pPage->GetModel()->
                                                 GetStyleSheetPool()->
-                                                Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
+                                                Find(aName, SfxStyleFamily::Page));
         DBG_ASSERT(pSheet, "StyleSheet missing");
         if (pSheet)
         {
@@ -350,7 +350,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             OUString aName(SdResId(STR_POOLSHEET_OBJWITHOUTFILL));
             SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pPage->GetModel()->
                                          GetStyleSheetPool()->
-                                         Find(aName, SD_STYLE_FAMILY_GRAPHICS));
+                                         Find(aName, SfxStyleFamily::Para));
             DBG_ASSERT(pSheet, "Stylesheet missing");
             if (pSheet)
             {

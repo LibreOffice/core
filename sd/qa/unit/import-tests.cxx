@@ -495,7 +495,7 @@ void SdImportTest::testMasterPageStyleParent()
     SdStyleSheetPool *const pPool(pDoc->GetSdStyleSheetPool());
 
     int parents(0);
-    SfxStyleSheetIterator iter(pPool, SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetIterator iter(pPool, SfxStyleFamily::Page);
     for (SfxStyleSheetBase * pStyle = iter.First(); pStyle; pStyle = iter.Next())
     {
         OUString const name(pStyle->GetName());
@@ -505,7 +505,7 @@ void SdImportTest::testMasterPageStyleParent()
             ++parents;
             // check that parent exists
             SfxStyleSheetBase *const pParentStyle(
-                    pPool->Find(parent, SD_STYLE_FAMILY_MASTERPAGE));
+                    pPool->Find(parent, SfxStyleFamily::Page));
             CPPUNIT_ASSERT(pParentStyle);
             CPPUNIT_ASSERT_EQUAL(pParentStyle->GetName(), parent);
             // check that parent has the same master page as pStyle
