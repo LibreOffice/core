@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_a91aa015",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-01-19T10:27:08Z",
+      "side": 1,
+      "message": "Generally we should set w and h variables only if (aRelativeSize.hasValue()) is true.",
+      "revId": "c74614ef7ae98cfe28541a7ac294f4c72970b286",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
