@@ -129,7 +129,7 @@ public class ExtsdDocumentsProvider implements IExternalDocumentProvider,
     }
 
     private RuntimeException buildRuntimeExceptionForInvalidFileURI(Context context) {
-        // ToDo: discarding the original excpeption / catch-all handling is bad style
+        // ToDo: discarding the original exception / catch-all handling is bad style
         return new RuntimeException(context.getString(R.string.ext_document_provider_error));
     }
 

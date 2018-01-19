@@ -50,7 +50,7 @@ public class LocalDocumentsDirectoryProvider extends LocalDocumentsProvider {
         if (!documentsDirectory.exists()) {
             // might be a little counter-intuitive: if we were granted READ permission already, we're also granted the write-permission
             // when we ask for it, since they are both in the same storage group (for 5.1 and lower it is granted at install-time already)
-            // seehttps://developer.android.com/guide/topics/permissions/requesting.html#perm-groups
+            // see https://developer.android.com/guide/topics/permissions/requesting.html#perm-groups
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 if(!documentsDirectory.mkdirs()) {
                     // fallback to the toplevel dir - might be due to the dir not mounted/used as USB-Mass-Storage or similar
