@@ -175,7 +175,7 @@ bool SdStyleSheet::SetParent(const OUString& rParentName)
     if (SfxStyleSheet::SetParent(rParentName))
     {
         // PseudoStyleSheets do not have their own ItemSets
-        if (nFamily != SD_STYLE_FAMILY_PSEUDO)
+        if (nFamily != SfxStyleFamily::Pseudo)
         {
             if( !rParentName.isEmpty() )
             {
@@ -208,7 +208,7 @@ bool SdStyleSheet::SetParent(const OUString& rParentName)
  */
 SfxItemSet& SdStyleSheet::GetItemSet()
 {
-    if (nFamily == SD_STYLE_FAMILY_GRAPHICS || nFamily == SD_STYLE_FAMILY_MASTERPAGE)
+    if (nFamily == SfxStyleFamily::Para || nFamily == SfxStyleFamily::Page)
     {
         // we create the ItemSet 'on demand' if necessary
         if (!pSet)
@@ -229,7 +229,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         return *pSet;
     }
 
-    else if( nFamily == SD_STYLE_FAMILY_CELL )
+    else if( nFamily == SfxStyleFamily::Frame )
     {
         if (!pSet)
         {
@@ -367,7 +367,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         {
             /* no page available yet. This can happen when actualizing the
                document templates.  */
-            SfxStyleSheetIterator aIter(pPool, SD_STYLE_FAMILY_MASTERPAGE);
+            SfxStyleSheetIterator aIter(pPool, SfxStyleFamily::Page);
             SfxStyleSheetBase* pSheet = aIter.First();
             if( pSheet )
                 aRealStyle = pSheet->GetName();
@@ -417,12 +417,12 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     }
 
     aRealStyle += aInternalName;
-    pRealStyle = static_cast< SdStyleSheet* >( pPool->Find(aRealStyle, SD_STYLE_FAMILY_MASTERPAGE) );
+    pRealStyle = static_cast< SdStyleSheet* >( pPool->Find(aRealStyle, SfxStyleFamily::Page) );
 
 #ifdef DBG_UTIL
     if( !pRealStyle )
     {
-        SfxStyleSheetIterator aIter(pPool, SD_STYLE_FAMILY_MASTERPAGE);
+        SfxStyleSheetIterator aIter(pPool, SfxStyleFamily::Page);
         if( aIter.Count() > 0 )
             // StyleSheet not found, but pool already loaded
             DBG_ASSERT(pRealStyle, "Internal StyleSheet not found");
@@ -479,7 +479,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
         }
     }
 
-    pPseudoStyle = static_cast<SdStyleSheet*>(pPool->Find(aStyleName, SD_STYLE_FAMILY_PSEUDO));
+    pPseudoStyle = static_cast<SdStyleSheet*>(pPool->Find(aStyleName, SfxStyleFamily::Pseudo));
     DBG_ASSERT(pPseudoStyle, "PseudoStyleSheet missing");
 
     return pPseudoStyle;
@@ -490,7 +490,7 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     // first, base class functionality
     SfxStyleSheet::Notify(rBC, rHint);
 
-    if (nFamily != SD_STYLE_FAMILY_PSEUDO)
+    if (nFamily != SfxStyleFamily::Pseudo)
         return;
 
     /* if the dummy gets a notify about a changed attribute, he takes care that
@@ -517,14 +517,14 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
        height. */
     SfxStyleFamily eFamily = nFamily;
     OUString aStyleName(aName);
-    if (eFamily == SD_STYLE_FAMILY_PSEUDO)
+    if (eFamily == SfxStyleFamily::Pseudo)
     {
         SfxStyleSheet* pRealStyle = GetRealStyleSheet();
         eFamily = pRealStyle->GetFamily();
         aStyleName = pRealStyle->GetName();
     }
 
-    if (eFamily == SD_STYLE_FAMILY_MASTERPAGE &&
+    if (eFamily == SfxStyleFamily::Page &&
         aStyleName.indexOf(STR_LAYOUT_OUTLINE) != -1 &&
         rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET)
     {
@@ -635,12 +635,12 @@ OUString SdStyleSheet::GetFamilyString( SfxStyleFamily eFamily )
 {
     switch( eFamily )
     {
-    case SD_STYLE_FAMILY_CELL:
+    case SfxStyleFamily::Frame:
         return OUString( "cell" );
     default:
         OSL_FAIL( "SdStyleSheet::GetFamilyString(), illegal family!" );
         SAL_FALLTHROUGH;
-    case SD_STYLE_FAMILY_GRAPHICS:
+    case SfxStyleFamily::Para:
         return OUString( "graphics" );
     }
 }
@@ -951,7 +951,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     if( pEntry->nWID == WID_STYLE_FAMILY )
         throw PropertyVetoException();
 
-    if( (pEntry->nWID == EE_PARA_NUMBULLET) && (GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) )
+    if( (pEntry->nWID == EE_PARA_NUMBULLET) && (GetFamily() == SfxStyleFamily::Page) )
     {
         OUString aStr;
         const sal_uInt32 nTempHelpId = GetHelpId( aStr );
@@ -1028,7 +1028,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
 
     if( pEntry->nWID == WID_STYLE_FAMILY )
     {
-        if( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
+        if( nFamily == SfxStyleFamily::Page )
         {
             const OUString aLayoutName( GetName() );
             aAny <<= aLayoutName.copy( 0, aLayoutName.indexOf( SD_LT_SEPARATOR) );
@@ -1041,7 +1041,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
     else if( pEntry->nWID == WID_STYLE_DISPNAME )
     {
         OUString aDisplayName;
-        if ( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
+        if ( nFamily == SfxStyleFamily::Page )
         {
             const SdStyleSheet* pStyleSheet = GetPseudoStyleSheet();
             if (pStyleSheet != nullptr)
@@ -1298,7 +1298,7 @@ void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase const * pStyleS
         {
             OUString aName( sStyleName + OUString::number(n) );
 
-            SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SD_STYLE_FAMILY_PSEUDO);
+            SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SfxStyleFamily::Pseudo);
 
             if(pSheet)
             {

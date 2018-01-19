@@ -982,7 +982,7 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
     {
         const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
         pTransliteration = new ::utl::TransliterationWrapper(
-            ::comphelper::getProcessComponentContext(), SC_TRANSLITERATION_IGNORECASE );
+            ::comphelper::getProcessComponentContext(), TransliterationFlags::IGNORE_CASE );
         pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     }
     OSL_ENSURE(
@@ -1030,7 +1030,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
     if ( !pCaseTransliteration )
     {
         const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
-        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessComponentContext(), SC_TRANSLITERATION_CASESENSE );
+        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
         pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     }
     return pCaseTransliteration;

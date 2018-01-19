@@ -553,7 +553,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
                 OUString aName( maLayoutName + " " + OUString::number( nLevel ) );
-                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
+                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pModel->GetStyleSheetPool()->Find(aName, SfxStyleFamily::Page));
                 DBG_ASSERT(pSheet, "StyleSheet for outline object not found");
                 if (pSheet)
                     pSdrObj->StartListening(*pSheet);
@@ -615,7 +615,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
     aName += STR_LAYOUT_BACKGROUND;
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
-    SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SfxStyleFamily::Page);
     return static_cast<SfxStyleSheet*>(pResult);
 }
 
@@ -662,7 +662,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
     }
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
-    SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SfxStyleFamily::Page);
     return static_cast<SfxStyleSheet*>(pResult);
 }
 
@@ -707,7 +707,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
     }
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
-    SfxStyleSheetBase*     pResult   = pStShPool->Find(aStyleName, SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetBase*     pResult   = pStShPool->Find(aStyleName, SfxStyleFamily::Page);
     return dynamic_cast<SdStyleSheet*>(pResult);
 }
 
@@ -1501,7 +1501,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                 if( std::find( rShapes.begin(), rShapes.end(), pObj ) != rShapes.end() )
                     continue;
 
-                bool bPresStyle = pObj->GetStyleSheet() && (pObj->GetStyleSheet()->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE);
+                bool bPresStyle = pObj->GetStyleSheet() && (pObj->GetStyleSheet()->GetFamily() == SfxStyleFamily::Page);
                 SdrObjKind eSdrObjKind = static_cast< SdrObjKind >( pObj->GetObjIdentifier() );
 
                 switch( eKind )
@@ -1980,7 +1980,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                             for (sal_Int32 i=1; i<=9; i++)
                             {
                                 OUString sLayoutName( aName + OUString::number( i ) );
-                                SfxStyleSheet* pOutlineSheet = static_cast<SfxStyleSheet*>(static_cast<SdDrawDocument*>(pModel)->GetStyleSheetPool()->Find(sLayoutName, SD_STYLE_FAMILY_MASTERPAGE));
+                                SfxStyleSheet* pOutlineSheet = static_cast<SfxStyleSheet*>(static_cast<SdDrawDocument*>(pModel)->GetStyleSheetPool()->Find(sLayoutName, SfxStyleFamily::Page));
 
                                 if (pOutlineSheet)
                                 {
@@ -2132,7 +2132,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
             {
                 // assign new template
                 OUString aName( rPage.GetLayoutName() + " " + OUString::number( nLevel ) );
-                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE) );
+                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pModel->GetStyleSheetPool()->Find(aName, SfxStyleFamily::Page) );
 
                 if (pSheet)
                 {
@@ -2141,7 +2141,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
                         SfxStyleSheet* pSubtitleSheet = rPage.GetStyleSheetForPresObj(PRESOBJ_TEXT);
 
                         if (pSubtitleSheet)
-                            pOutlParaObj->ChangeStyleSheetName(SD_STYLE_FAMILY_MASTERPAGE, pSubtitleSheet->GetName(), pSheet->GetName());
+                            pOutlParaObj->ChangeStyleSheetName(SfxStyleFamily::Page, pSubtitleSheet->GetName(), pSheet->GetName());
                     }
 
                     pNewObj->StartListening(*pSheet);

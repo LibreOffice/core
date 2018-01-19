@@ -1545,8 +1545,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             // only worry about presentation templates
             OUString aName;
             SdStyleSheetPool* pSourceStyleSheetPool = static_cast<SdStyleSheetPool*>( pSourceDoc->GetStyleSheetPool() );
-            pSourceStyleSheetPool->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
-            static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
+            pSourceStyleSheetPool->SetSearchMask(SfxStyleFamily::Page);
+            static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SfxStyleFamily::Page);
 
             SdStyleSheetVector aCreatedStyles;          // List of created stylesheets
             SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First();
@@ -1566,7 +1566,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         aName = aTargetNewLayoutName + aName.copy(nPos);
                     }
 
-                    SfxStyleSheet* pMySheet = static_cast<SfxStyleSheet*>( mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE) );
+                    SfxStyleSheet* pMySheet = static_cast<SfxStyleSheet*>( mxStyleSheetPool->Find(aName, SfxStyleFamily::Page) );
 
                     if (pMySheet)
                     {
@@ -1588,7 +1588,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     {
                         // create new style
                         OUString aHelpFile;
-                        pMySheet = static_cast<SfxStyleSheet*>( &mxStyleSheetPool->Make(aName, SD_STYLE_FAMILY_MASTERPAGE, pHisSheet->GetMask()) );
+                        pMySheet = static_cast<SfxStyleSheet*>( &mxStyleSheetPool->Make(aName, SfxStyleFamily::Page, pHisSheet->GetMask()) );
                         pMySheet->SetHelpId( aHelpFile, pHisSheet->GetHelpId(aHelpFile) );
                         pMySheet->GetItemSet().ClearItem();  // Delete all
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());

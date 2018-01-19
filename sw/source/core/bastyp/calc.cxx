@@ -52,9 +52,6 @@
 
 using namespace ::com::sun::star;
 
-// shortcut
-#define RESOURCE SwViewShell::GetShellRes()
-
 const sal_Char sCalc_Add[]  =   "add";
 const sal_Char sCalc_Sub[]  =   "sub";
 const sal_Char sCalc_Mul[]  =   "mul";
@@ -408,12 +405,12 @@ OUString SwCalc::GetStrResult( double nValue )
     if( nValue >= DBL_MAX )
         switch( m_eError )
         {
-        case SwCalcError::Syntax          :   return RESOURCE->aCalc_Syntax;
-        case SwCalcError::DivByZero       :   return RESOURCE->aCalc_ZeroDiv;
-        case SwCalcError::FaultyBrackets  :   return RESOURCE->aCalc_Brack;
-        case SwCalcError::OverflowInPower :   return RESOURCE->aCalc_Pow;
-        case SwCalcError::Overflow        :   return RESOURCE->aCalc_Overflow;
-        default                           :   return RESOURCE->aCalc_Default;
+        case SwCalcError::Syntax          :   return SwViewShell::GetShellRes()->aCalc_Syntax;
+        case SwCalcError::DivByZero       :   return SwViewShell::GetShellRes()->aCalc_ZeroDiv;
+        case SwCalcError::FaultyBrackets  :   return SwViewShell::GetShellRes()->aCalc_Brack;
+        case SwCalcError::OverflowInPower :   return SwViewShell::GetShellRes()->aCalc_Pow;
+        case SwCalcError::Overflow        :   return SwViewShell::GetShellRes()->aCalc_Overflow;
+        default                           :   return SwViewShell::GetShellRes()->aCalc_Default;
         }
 
     const sal_Int32 nDecPlaces = 15;

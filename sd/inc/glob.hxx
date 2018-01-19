@@ -47,12 +47,6 @@
 #define SD_ANIMATIONINFO_ID 1
 #define SD_IMAPINFO_ID      2
 
-// FamilyId of presentation templates
-#define SD_STYLE_FAMILY_GRAPHICS        SfxStyleFamily::Para
-#define SD_STYLE_FAMILY_PSEUDO          SfxStyleFamily::Pseudo
-#define SD_STYLE_FAMILY_CELL            SfxStyleFamily::Frame
-#define SD_STYLE_FAMILY_MASTERPAGE      SfxStyleFamily::Page       // ex LT_FAMILY
-
 // Separator between layout name and template name of presentation templates
 #define SD_LT_SEPARATOR "~LT~"
 

@@ -42,9 +42,6 @@ enum class SvNumFormatType : sal_Int16;
 
 #define SC_COLLATOR_IGNORES css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE
 
-#define SC_TRANSLITERATION_IGNORECASE TransliterationFlags::IGNORE_CASE
-#define SC_TRANSLITERATION_CASESENSE  TransliterationFlags::NONE
-
 //  Calc has lots of names...
 //  Clipboard names are in so3/soapp.hxx now
 //  STRING_SCAPP was "scalc3", "scalc4", now just "scalc"

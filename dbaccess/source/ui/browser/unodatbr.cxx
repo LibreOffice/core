@@ -2141,7 +2141,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent, bool)
     DBTreeListUserData* pData = static_cast< DBTreeListUserData* >(_pParent->GetUserData());
     assert(pData && "SbaTableQueryBrowser::OnExpandEntry: No user data!");
 #if OSL_DEBUG_LEVEL > 0
-    SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
+    SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SvLBoxItemType::String));
     OSL_ENSURE(pString,"SbaTableQueryBrowser::OnExpandEntry: No string item!");
 #endif
 
@@ -2266,7 +2266,7 @@ bool SbaTableQueryBrowser::ensureEntryObject( SvTreeListEntry* _pEntry )
                 SvTreeListEntry* pParent = m_pTreeView->getListBox().GetParent(_pEntry);
                 if ( pParent != pDataSourceEntry )
                 {
-                    SvLBoxString* pString = static_cast<SvLBoxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
+                    SvLBoxString* pString = static_cast<SvLBoxString*>(_pEntry->GetFirstItem(SvLBoxItemType::String));
                     OSL_ENSURE(pString,"There must be a string item!");
                     OUString aName(pString->GetText());
                     DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pParent->GetUserData());
@@ -2517,7 +2517,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
     Reference<XConnection> xOldConnection(xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
 
     // the name of the table or query
-    SvLBoxString* pString = static_cast<SvLBoxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
+    SvLBoxString* pString = static_cast<SvLBoxString*>(_pEntry->GetFirstItem(SvLBoxItemType::String));
     OSL_ENSURE(pString,"There must be a string item!");
     const OUString sSimpleName = pString->GetText();
     OUStringBuffer sNameBuffer(sSimpleName);
@@ -2527,7 +2527,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
         while( m_pTreeModel->GetParent(pTemp) != pConnection )
         {
             sNameBuffer.insert(0,'/');
-            pString = static_cast<SvLBoxString*>(pTemp->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
+            pString = static_cast<SvLBoxString*>(pTemp->GetFirstItem(SvLBoxItemType::String));
             OSL_ENSURE(pString,"There must be a string item!");
             sNameBuffer.insert(0,pString->GetText());
             pTemp = m_pTreeModel->GetParent(pTemp);

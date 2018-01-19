@@ -363,7 +363,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         const SvxNumBulletItem *pItem = nullptr;
                         SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
                         OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
-                        SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find(sStyleName, SD_STYLE_FAMILY_PSEUDO);
+                        SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find(sStyleName, SfxStyleFamily::Pseudo);
                         if( pFirstStyleSheet )
                             pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pItem));
 

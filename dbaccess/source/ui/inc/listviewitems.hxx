@@ -25,8 +25,6 @@
 namespace dbaui
 {
 
-    #define SV_ITEM_ID_BOLDLBSTRING SvLBoxItemType::String
-
     // OBoldListboxString
     class OBoldListboxString : public SvLBoxString
     {

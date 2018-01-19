@@ -128,7 +128,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         }
 
         SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName, SD_STYLE_FAMILY_MASTERPAGE );
+        SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName, SfxStyleFamily::Page );
         DBG_ASSERT(pStyleSheet, "StyleSheet missing");
 
         if( pStyleSheet )

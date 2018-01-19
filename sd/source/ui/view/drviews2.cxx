@@ -2931,7 +2931,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rReq.GetSlot() == SID_STYLE_EDIT && !rReq.GetArgs() )
             {
                 SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
-                if( pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
+                if( pStyleSheet && pStyleSheet->GetFamily() == SfxStyleFamily::Page)
                     pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
 
                 if( (pStyleSheet == nullptr) && GetView()->IsTextEdit() )
@@ -2939,7 +2939,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     GetView()->SdrEndTextEdit();
 
                     pStyleSheet = mpDrawView->GetStyleSheet();
-                    if(pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
+                    if(pStyleSheet && pStyleSheet->GetFamily() == SfxStyleFamily::Page)
                         pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
                 }
 
