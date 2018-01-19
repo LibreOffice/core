@@ -1,42 +1,3 @@
---- boost/date_time/filetime_functions.hpp
-+++ boost/date_time/filetime_functions.hpp
-@@ -27,6 +27,16 @@
- #include <boost/date_time/time.hpp>
- #include <boost/date_time/date_defs.hpp>
- 
-+#if !defined(BOOST_USE_WINDOWS_H)
-+extern "C" {
-+    struct _FILETIME; // Windows Kits/8.1/Include/shared/minwindef.h
-+    struct _SYSTEMTIME; // Windows Kits/8.1/Include/um/minwinbase.h
-+    __declspec(dllimport) void __stdcall GetSystemTimeAsFileTime(_FILETIME* lpFileTime);
-+    __declspec(dllimport) int __stdcall FileTimeToLocalFileTime(const _FILETIME* lpFileTime, _FILETIME* lpLocalFileTime);
-+    __declspec(dllimport) void __stdcall GetSystemTime(_SYSTEMTIME* lpSystemTime);
-+    __declspec(dllimport) int __stdcall SystemTimeToFileTime(const _SYSTEMTIME* lpSystemTime, _FILETIME* lpFileTime);
-+}
-+#endif
- namespace boost {
- 
- namespace date_time {
-@@ -54,10 +64,6 @@
-             boost::uint16_t wMilliseconds;
-         };
- 
--        __declspec(dllimport) void __stdcall GetSystemTimeAsFileTime(FILETIME* lpFileTime);
--        __declspec(dllimport) int __stdcall FileTimeToLocalFileTime(const FILETIME* lpFileTime, FILETIME* lpLocalFileTime);
--        __declspec(dllimport) void __stdcall GetSystemTime(SYSTEMTIME* lpSystemTime);
--        __declspec(dllimport) int __stdcall SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime, FILETIME* lpFileTime);
- 
-     } // extern "C"
- 
-@@ -74,7 +80,7 @@
-         GetSystemTimeAsFileTime(&ft_utc);
-         FileTimeToLocalFileTime(&ft_utc, &ft);
- #elif defined(BOOST_HAS_GETSYSTEMTIMEASFILETIME)
--        GetSystemTimeAsFileTime(&ft);
-+        GetSystemTimeAsFileTime(reinterpret_cast<::_FILETIME *>(&ft));
- #else
-         system_time st;
-         GetSystemTime(&st);
 --- boost/multi_array/base.hpp
 +++ boost/multi_array/base.hpp
 @@ -222,7 +222,7 @@
@@ -57,17 +18,6 @@
    // Deal with VC 2010 output_iterator_tag requirement
    typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
                           mutable_iterator_tag> iterator;
---- boost/multi_array/iterator.hpp
-+++ boost/multi_array/iterator.hpp
-@@ -60,7 +60,7 @@
-     , private
-           value_accessor_generator<T,NumDims>::type
- {
--  friend class iterator_core_access;
-+  friend class boost::iterators::iterator_core_access;
-   typedef detail::multi_array::associated_types<T,NumDims> access_t;
- 
-   typedef iterator_facade<
 
 # workdir/UnpackedTarball/boost\boost/smart_ptr/detail/yield_k.hpp(63,29) :  error: 'Sleep' redeclared without 'dllimport' attribute: previous 'dll# import' ignored [-Werror,-Winconsistent-dllimport]
 #   extern "C" void __stdcall Sleep( unsigned long ms );
