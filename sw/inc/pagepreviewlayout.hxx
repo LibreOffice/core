@@ -180,10 +180,8 @@ private:
 
         @param _opPreviewPage
         output parameter - calculated preview data.
-
-        @return boolean, indicating, if calculation was successful.
     */
-    bool CalcPreviewDataForPage( const SwPageFrame& _rPage,
+    void CalcPreviewDataForPage( const SwPageFrame& _rPage,
                                   const Point& _rPreviewOffset,
                                   PreviewPage* _opPreviewPage );
 
@@ -266,10 +264,8 @@ public:
         @param _rPxWinSize
         input parameter - window size in which the preview will be displayed and
         for which the scaling will be calculated.
-
-        @return boolean, indicating, if preview layout is successful initialized.
     */
-    bool Init( const sal_uInt16 _nCols,
+    void Init( const sal_uInt16 _nCols,
                const sal_uInt16 _nRows,
                const Size&      _rPxWinSize
               );
@@ -277,10 +273,8 @@ public:
     /** method to adjust page preview layout to document changes
 
         @author OD
-
-        @return boolean, indicating, if preview layout is successful initialized.
     */
-    bool ReInit();
+    void ReInit();
 
     /** prepare paint of page preview
 
@@ -427,10 +421,8 @@ public:
 
         @param _orNewStartPos
         output parameter - new start position in document preview
-
-        @return boolean - indicating, that move was successful.
     */
-    bool CalcStartValuesForSelectedPageMove( const sal_Int16  _nHoriMove,
+    void CalcStartValuesForSelectedPageMove( const sal_Int16  _nHoriMove,
                                              const sal_Int16  _nVertMove,
                                              sal_uInt16&      _orNewSelectedPage,
                                              sal_uInt16&      _orNewStartPage,

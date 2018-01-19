@@ -463,7 +463,7 @@ const SwContentFrame* SwTextFly::GetMaster_()
     return pMaster;
 }
 
-bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
+void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
 {
     SwSaveClip aClipSave( rInf.GetpOut() );
     SwRect aRect( rInf.GetPos(), rInf.GetSize() );
@@ -564,7 +564,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
         else
             rInf.GetFont()->DrawText_( rInf );
         rInf.SetPos(aOldPos);
-        return false;
+        return;
     }
     else if( !aRegion.empty() )
     {
@@ -582,7 +582,6 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
         }
     }
     rInf.SetPos(aOldPos);
-    return true;
 }
 
 void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )

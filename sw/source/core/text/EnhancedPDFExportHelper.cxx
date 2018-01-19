@@ -384,7 +384,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
     return bRet && !bContinue;
 }
 
-bool SwTaggedPDFHelper::CheckRestoreTag() const
+void SwTaggedPDFHelper::CheckRestoreTag() const
 {
     bool bRet = false;
     if ( nRestoreCurrentTag != -1 )
@@ -398,8 +398,6 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
 
         bRet = true;
     }
-
-    return bRet;
 }
 
 void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUString& rString )

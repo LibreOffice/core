@@ -157,7 +157,7 @@ class SwTaggedPDFHelper
     void EndStructureElements();
 
     bool CheckReopenTag();
-    bool CheckRestoreTag() const;
+    void CheckRestoreTag() const;
 
     public:
 

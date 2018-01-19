@@ -83,7 +83,7 @@
 using namespace ::com::sun::star;
 
 // Copy for the internal clipboard. Copies all selections to the clipboard.
-bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
+void SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
 {
     OSL_ENSURE( pClpDoc, "No Clipboard document"  );
 
@@ -125,12 +125,11 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
     if( pNewClpText )
     {
         pTextNd->InsertText( *pNewClpText, SwIndex( pTextNd ) );
-        return true;                // that's it
+        return;                // that's it
     }
 
     pClpDoc->getIDocumentFieldsAccess().LockExpFields();
     pClpDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::DeleteRedlines );
-    bool bRet;
 
     // do we want to copy a FlyFrame?
     if( IsFrameSelected() )
@@ -182,7 +181,6 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
                 pTextNd->EraseText( rIdx, 1 );
             }
         }
-        bRet = true;
     }
     else if ( IsObjSelected() )
     {
@@ -223,17 +221,14 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
                 pClpDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, true, true );
             }
         }
-        bRet = true;
     }
     else
-        bRet = CopySelToDoc( pClpDoc );     // copy the selections
+        CopySelToDoc( pClpDoc );     // copy the selections
 
     pClpDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::NONE );
     pClpDoc->getIDocumentFieldsAccess().UnlockExpFields();
     if( !pClpDoc->getIDocumentFieldsAccess().IsExpFieldsLocked() )
         pClpDoc->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
-
-    return bRet;
 }
 
 static const Point &lcl_FindBasePos( const SwFrame *pFrame, const Point &rPt )
@@ -1099,13 +1094,13 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
     return bRet;
 }
 
-bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage)
+void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage)
 {
     Push();
     if(!GotoPage(nStartPage))
     {
         Pop(PopMode::DeleteCurrent);
-        return false;
+        return;
     }
     MovePage( GetThisFrame, GetFirstSub );
     SwPaM aCpyPam( *GetCursor()->GetPoint() );
@@ -1117,7 +1112,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     if(!GotoPage(nEndPage))
     {
         Pop(PopMode::DeleteCurrent);
-        return false;
+        return;
     }
     //if the page starts with a table a paragraph has to be inserted before
     SwNode* pTableNode = aCpyPam.GetNode().FindTableNode();
@@ -1181,8 +1176,6 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
     Pop(PopMode::DeleteCurrent);
     EndAllAction();
-
-    return true;
 }
 
 bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf ) const

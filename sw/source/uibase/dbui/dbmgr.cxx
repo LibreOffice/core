@@ -2201,7 +2201,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
     return true;
 }
 
-bool SwDBManager::ToNextRecord(
+void SwDBManager::ToNextRecord(
     const OUString& rDataSource, const OUString& rCommand)
 {
     SwDSParam* pFound = nullptr;
@@ -2219,7 +2219,7 @@ bool SwDBManager::ToNextRecord(
         aData.nCommandType = -1;
         pFound = FindDSData(aData, false);
     }
-    return lcl_ToNextRecord( pFound );
+    lcl_ToNextRecord( pFound );
 }
 
 static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )

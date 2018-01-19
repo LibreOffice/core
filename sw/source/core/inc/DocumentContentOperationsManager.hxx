@@ -41,7 +41,7 @@ public:
 
     void DeleteSection(SwNode* pNode) override;
 
-    bool DeleteRange(SwPaM&) override;
+    void DeleteRange(SwPaM&) override;
 
     bool DelFullPara(SwPaM&) override;
 
@@ -89,7 +89,7 @@ public:
     bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
                                 const SetAttrMode nFlags = SetAttrMode::DEFAULT, bool bExpandCharToPara=false) override;
 
-    bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
+    void InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
         const SetAttrMode nFlags = SetAttrMode::DEFAULT) override;
 
     void RemoveLeadingWhiteSpace(const SwPosition & rPos ) override;
