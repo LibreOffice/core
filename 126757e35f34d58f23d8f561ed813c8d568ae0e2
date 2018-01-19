@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_a44ba558",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2573,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-19T16:01:45Z",
+      "side": 1,
+      "message": "Seeing this it\u0027s wrong that the caller does not check the return because in the false case there\u0027s already a result pushed. It doesn\u0027t harm attempting to push a second result but technically is wrong. I\u0027d rather fix that.",
+      "revId": "126757e35f34d58f23d8f561ed813c8d568ae0e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

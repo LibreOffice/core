@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c448995e",
+        "filename": "sc/inc/orcusfilters.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-19T16:01:45Z",
+      "side": 0,
+      "message": "I believe this is Markus\u0027 ongoing work, let\u0027s ask him.",
+      "revId": "02c60ce71564c0fd2f2daaf9ea98e874446caffa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e473ddb2",
+        "filename": "sc/source/filter/oox/workbookhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-19T16:01:45Z",
+      "side": 0,
+      "message": "Keep this instead of suppressing the return.",
+      "revId": "02c60ce71564c0fd2f2daaf9ea98e874446caffa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
