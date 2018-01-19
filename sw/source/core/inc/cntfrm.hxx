@@ -55,7 +55,7 @@ class SAL_DLLPUBLIC_RTTI SwContentFrame: public SwFrame, public SwFlowFrame
     const SwContentFrame* ImplGetNextContentFrame( bool bFwd ) const;
 
 protected:
-    bool MakePrtArea( const SwBorderAttrs & );
+    void MakePrtArea( const SwBorderAttrs & );
 
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;

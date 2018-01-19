@@ -1006,10 +1006,8 @@ bool SwFrame::IsCollapse() const
     return pTextNode && pTextNode->IsCollapse();
 }
 
-bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
+void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
-    bool bSizeChgd = false;
-
     if ( !isFramePrintAreaValid() )
     {
         setFramePrintAreaValid(true);
@@ -1138,10 +1136,8 @@ bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 GrowFrame( nUpper );
             else
                 ShrinkFrame( -nUpper );
-            bSizeChgd = true;
         }
     }
-    return bSizeChgd;
 }
 
 #define STOP_FLY_FORMAT 10

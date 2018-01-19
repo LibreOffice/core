@@ -363,7 +363,7 @@ public:
     virtual sal_Int32 GetResult() override;
 
     virtual OUString            GetReloadDocument() const override;
-    virtual bool                ShowPage( sal_uInt16 nLevel ) override;
+    virtual void                ShowPage( sal_uInt16 nLevel ) override;
     virtual sal_uInt16          GetRestartPage() const override;
 };
 

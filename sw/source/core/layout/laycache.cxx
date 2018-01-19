@@ -1056,9 +1056,8 @@ SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
                 .ReadUInt16( nMinorVersion );
 }
 
-bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
+void SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 {
-    bool bRes = true;
     sal_uInt32 nPos = pStream->Tell();
     if( bWriteMode )
     {
@@ -1075,7 +1074,6 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
             OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );
             aRecords.emplace_back(0, pStream->Tell() );
-            bRes = false;
             bError = true;
         }
         else
@@ -1084,11 +1082,10 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
             aRecords.emplace_back(cRecTyp, nPos+nSize );
         }
     }
-    return bRes;
 }
 
 // Close record
-bool SwLayCacheIoImpl::CloseRec()
+void SwLayCacheIoImpl::CloseRec()
 {
     bool bRes = true;
     OSL_ENSURE( !aRecords.empty(), "CloseRec: no levels" );
@@ -1124,8 +1121,6 @@ bool SwLayCacheIoImpl::CloseRec()
 
     if( !bRes )
         bError = true;
-
-    return bRes;
 }
 
 sal_uInt32 SwLayCacheIoImpl::BytesLeft()
