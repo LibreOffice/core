@@ -340,7 +340,7 @@ public:
     bool InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pInsPos = nullptr);
 
     void Remove( size_type nPos );
-    bool Remove( const SwRangeRedline* p );
+    void Remove( const SwRangeRedline* p );
     void DeleteAndDestroy( size_type nPos, size_type nLen = 1 );
     void DeleteAndDestroyAll();
 
@@ -383,7 +383,7 @@ private:
 public:
     ~SwExtraRedlineTable();
 
-    bool Insert( SwExtraRedline* p );
+    void Insert( SwExtraRedline* p );
 
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();

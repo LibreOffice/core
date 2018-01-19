@@ -313,7 +313,7 @@ void SwDDEFieldType::RefCntChgd()
     }
 }
 
-bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
+void SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     sal_Int32 nPart = -1;
     switch( nWhichId )
@@ -332,10 +332,9 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     }
     if ( nPart>=0 )
         rVal <<= GetCmd().getToken(nPart, sfx2::cTokenSeparator);
-    return true;
 }
 
-bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
+void SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
     sal_Int32 nPart = -1;
     switch( nWhichId )
@@ -371,7 +370,6 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         }
         SetCmd( sNewCmd );
     }
-    return true;
 }
 
 SwDDEField::SwDDEField( SwDDEFieldType* pInitType )

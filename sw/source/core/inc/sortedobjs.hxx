@@ -70,7 +70,7 @@ class SwSortedObjs
 
         bool Insert( SwAnchoredObject& _rAnchoredObj );
 
-        bool Remove( SwAnchoredObject& _rAnchoredObj );
+        void Remove( SwAnchoredObject& _rAnchoredObj );
 
         bool Contains( const SwAnchoredObject& _rAnchoredObj ) const;
 
@@ -79,7 +79,7 @@ class SwSortedObjs
 
             @return boolean, indicating success of the update.
         */
-        bool Update(SwAnchoredObject& _rAnchoredObj);
+        void Update(SwAnchoredObject& _rAnchoredObj);
         void UpdateAll();
 
         /** Position of object <_rAnchoredObj> in sorted list

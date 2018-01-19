@@ -1757,9 +1757,9 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
     m_rDoc.GetNodes().DelNodes( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() + 1 );
 }
 
-bool DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
+void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
-    return lcl_DoWithBreaks( *this, rPam, &DocumentContentOperationsManager::DeleteRangeImpl );
+    lcl_DoWithBreaks( *this, rPam, &DocumentContentOperationsManager::DeleteRangeImpl );
 }
 
 bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
@@ -3103,7 +3103,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
     return bRet;
 }
 
-bool DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
+void DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
                             const SetAttrMode nFlags )
 {
     SwDataChanged aTmp( rRg );
@@ -3123,7 +3123,6 @@ bool DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const S
 
     if( bRet )
         m_rDoc.getIDocumentState().SetModified();
-    return bRet;
 }
 
 void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(const SwPosition & rPos )

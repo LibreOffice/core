@@ -124,7 +124,7 @@ uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
 }
 
 
-bool SwDropDownField::SetSelectedItem(const OUString & rItem)
+void SwDropDownField::SetSelectedItem(const OUString & rItem)
 {
     vector<OUString>::const_iterator aIt =
         std::find(aValues.begin(), aValues.end(), rItem);
@@ -133,8 +133,6 @@ bool SwDropDownField::SetSelectedItem(const OUString & rItem)
         aSelectedItem = *aIt;
     else
         aSelectedItem.clear();
-
-    return (aIt != aValues.end());
 }
 
 void SwDropDownField::SetName(const OUString & rName)
