@@ -2633,6 +2633,20 @@
           <value xml:lang="en-US">Smart ~Tag Options...</value>
         </prop>
       </node>
+      <node oor:name=".uno:FormatPaintbrush" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Clone</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Clone Formatting</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Clone Formatting (double click and Ctrl or Cmd to alter behavior)</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:TableMenu" oor:op="replace">
@@ -3267,11 +3281,6 @@
       <node oor:name=".uno:FormMoreFieldsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">More Fields</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:FormatPaintbrush" oor:op="replace">
-        <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Clone Formatting (double click and Ctrl or Cmd to alter behavior)</value>
         </prop>
       </node>
     </node>
