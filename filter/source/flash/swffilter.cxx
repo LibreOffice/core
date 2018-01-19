@@ -156,8 +156,8 @@ public:
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
 
-    bool ExportAsMultipleFiles( const Sequence< PropertyValue >& aDescriptor );
-    bool ExportAsSingleFile( const Sequence< PropertyValue >& aDescriptor );
+    void ExportAsMultipleFiles( const Sequence< PropertyValue >& aDescriptor );
+    void ExportAsSingleFile( const Sequence< PropertyValue >& aDescriptor );
 
     virtual void SAL_CALL cancel( ) override;
 
@@ -302,21 +302,21 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const css::uno::Sequence< css::bean
 // AS: HACK!  Right now, I create a directory as a sibling to the swf file selected in the Export
 //  dialog.  This directory is called presentation.sxi-swf-files.  The name of the swf file selected
 //  in the Export dialog has no impact on this.  All files created are placed in this directory.
-bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& aDescriptor)
+void FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& aDescriptor)
 {
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(mxDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
-        return false;
+        return;
 
     Reference< XIndexAccess > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
     if(!xDrawPages.is())
-        return false;
+        return;
 
     Reference< XDesktop2 > rDesktop = Desktop::create( mxContext );
 
     Reference< XStorable > xStorable(rDesktop->getCurrentComponent(), UNO_QUERY);
     if (!xStorable.is())
-        return false;
+        return;
 
     Reference< XDrawPage > xDrawPage;
 
@@ -438,11 +438,9 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
 
     if (bExportAll)
         osl_closeFile(aBackgroundConfig);
-
-    return true;
 }
 
-bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDescriptor)
+void FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDescriptor)
 {
     Reference < XOutputStream > xOutputStream = findPropertyValue<Reference<XOutputStream> >(aDescriptor, "OutputStream", nullptr);
     Sequence< PropertyValue > aFilterData;
@@ -450,7 +448,7 @@ bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDes
     if (!xOutputStream.is() )
     {
         OSL_ASSERT ( false );
-        return false;
+        return;
     }
 
     FlashExporter aFlashExporter(
@@ -460,7 +458,7 @@ bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDes
         findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
         findPropertyValue<bool>(aFilterData, "ExportOLEAsJPEG", false));
 
-    return aFlashExporter.exportAll( mxDoc, xOutputStream, mxStatusIndicator );
+    aFlashExporter.exportAll( mxDoc, xOutputStream, mxStatusIndicator );
 }
 
 

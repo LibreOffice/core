@@ -56,8 +56,6 @@ public:
 
 OUString PlainTextFilterDetect_getImplementationName();
 
-bool PlainTextFilterDetect_supportsService(const OUString& ServiceName);
-
 css::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames();
 
 #endif
