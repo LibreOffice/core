@@ -1149,7 +1149,7 @@ void ScColumn::CopyStaticToDocument(
             break;
     }
 
-    // Dont' forget to copy the number formats over.  Charts may reference them.
+    // Don't forget to copy the number formats over. Charts may reference them.
     for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
     {
         sal_uInt32 nNumFmt = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
