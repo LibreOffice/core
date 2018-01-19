@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_externals,pdfimport,\
 
 $(eval $(call gb_Library_add_defs,pdfimport, \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
+    -DBOOST_ALL_NO_LIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,pdfimport,\
