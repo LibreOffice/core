@@ -174,6 +174,7 @@ const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
 struct RowInfo
 {
     RowInfo() = default;
+    RowInfo(const RowInfo&) = delete;
     const RowInfo& operator=(const RowInfo&) = delete;
 
     CellInfo*           pCellInfo;
