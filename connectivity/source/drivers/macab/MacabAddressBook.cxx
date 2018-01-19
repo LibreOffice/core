@@ -99,7 +99,7 @@ MacabAddressBook::~MacabAddressBook()
         iter = m_xMacabGroups.begin();
         end = m_xMacabGroups.end();
         for( ; iter != end; ++iter)
-            delete (*iter);
+            delete *iter;
     }
 
     m_bRetrievedGroups = false;
