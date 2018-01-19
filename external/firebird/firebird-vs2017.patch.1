@@ -1,13 +1,11 @@
 diff -ru firebird.orig/src/common/os/win32/mod_loader.cpp firebird/src/common/os/win32/mod_loader.cpp
 --- firebird.orig/src/common/os/win32/mod_loader.cpp	2017-02-15 22:11:48.939042400 +0100
 +++ firebird/src/common/os/win32/mod_loader.cpp	2017-02-15 22:12:30.062262700 +0100
-@@ -103,6 +103,10 @@
+@@ -103,6 +103,8 @@
  					"msvcr120.dll",
  #elif _MSC_VER == 1900
  					"vcruntime140.dll",
-+#elif _MSC_VER == 1910
-+					"vcruntime140.dll",
-+#elif _MSC_VER == 1911
++#elif _MSC_VER == 1910 || _MSC_VER == 1911 || _MSC_VER == 1912
 +					"vcruntime140.dll",
  #else
                      #error Specify CRT DLL name here !
