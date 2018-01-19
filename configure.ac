@@ -6741,7 +6741,12 @@ if test $_os = "WINNT"; then
     MSVC_DLL_PATH="$msvcdllpath"
     MSVC_DLLS="$msvcdlls"
     MSM_PATH="$msmdir"
-    SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
+    # MSVC 15.3 changed it to VC141
+    if echo "$MSVC_DLL_PATH" | grep -q "VC141.CRT$"; then
+        SCPDEFS="$SCPDEFS -DWITH_VC141_REDIST"
+    else
+        SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
+    fi
     if test "$UCRT_REDISTDIR" = "no"; then
         dnl explicitly disabled
         UCRT_REDISTDIR=""
