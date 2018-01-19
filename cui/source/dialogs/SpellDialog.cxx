@@ -489,8 +489,9 @@ IMPL_LINK( SpellDialog, CheckGrammarHdl, Button*, pBox, void )
 void SpellDialog::StartSpellOptDlg_Impl()
 {
     SfxItemSet aSet( SfxGetpApp()->GetPool(), svl::Items<SID_AUTOSPELL_CHECK,SID_AUTOSPELL_CHECK>{});
-    VclPtr<SfxSingleTabDialog> pDlg(
-        VclPtr<SfxSingleTabDialog>::Create(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui"));
+    ScopedVclPtr<SfxSingleTabDialog> pDlg(
+        VclPtr<SfxSingleTabDialog>::Create(
+            this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui"));
     VclPtr<SfxTabPage> pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), &aSet );
     static_cast<SvxLinguTabPage*>(pPage.get())->HideGroups( GROUP_MODULES );
     pDlg->SetTabPage( pPage );

@@ -357,8 +357,8 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, Button*, void)
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
 {
     OUString sInputURL;
-    VclPtr<SwCreateAddressListDialog> pDlg(
-            VclPtr<SwCreateAddressListDialog>::Create(
+    ScopedVclPtr<SwCreateAddressListDialog> pDlg(
+        VclPtr<SwCreateAddressListDialog>::Create(
                     pButton,
                     sInputURL,
                     m_pAddressPage->GetWizard()->GetConfigItem()));
@@ -450,16 +450,12 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
         pUserData->xSource.clear();
         pUserData->xColumnsSupplier.clear();
         pUserData->xConnection.clear();
-            // will automatically close if it was the las reference
-        VclPtr<SwCreateAddressListDialog> pDlg(
-                VclPtr<SwCreateAddressListDialog>::Create(
-
+        ScopedVclPtr<SwCreateAddressListDialog> pDlg(
+            VclPtr<SwCreateAddressListDialog>::Create(
                         pButton,
                         pUserData->sURL,
                         m_pAddressPage->GetWizard()->GetConfigItem()));
-        if(RET_OK == pDlg->Execute())
-        {
-        }
+        pDlg->Execute();
     }
 };
 
