@@ -73,7 +73,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
        @retval true            putting of value was successful
        @retval false           else
     */
-    virtual bool PutValueToField(const SwPosition & rPos, const css::uno::Any& rVal, sal_uInt16 nWhich) = 0;
+    virtual void PutValueToField(const SwPosition & rPos, const css::uno::Any& rVal, sal_uInt16 nWhich) = 0;
 
     // Call update of expression fields. All expressions are re-evaluated.
 

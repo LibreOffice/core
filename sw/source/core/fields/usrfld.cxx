@@ -275,7 +275,7 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
     }
 }
 
-bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+void SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -291,10 +291,9 @@ bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     default:
         assert(false);
     }
-    return true;
 }
 
-bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+void SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -328,7 +327,6 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     default:
         assert(false);
     }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

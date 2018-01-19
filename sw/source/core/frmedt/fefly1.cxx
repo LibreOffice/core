@@ -1125,7 +1125,7 @@ bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 }
 
 // Reset attributes contained in the set.
-bool SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
+void SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
 {
     bool bRet = false;
 
@@ -1154,7 +1154,6 @@ bool SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
         EndAllActionAndCall();
         GetDoc()->getIDocumentState().SetModified();
     }
-    return bRet;
 }
 
 // Returns frame-format if frame, otherwise 0
@@ -1743,7 +1742,7 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection() const
     return eType;
 }
 
-bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
+void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
 {
     SET_CURR_SHELL( this );
 
@@ -1796,7 +1795,6 @@ bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
         EndAllAction();
         bRet = true;
     }
-    return bRet;
 }
 
 static sal_uInt16 SwFormatGetPageNum(const SwFlyFrameFormat * pFormat)

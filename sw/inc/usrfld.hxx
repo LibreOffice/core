@@ -58,8 +58,8 @@ public:
     bool                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( bool b )    { bDeleted = b; }
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
+    virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
+    virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;

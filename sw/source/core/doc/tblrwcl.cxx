@@ -1994,7 +1994,7 @@ lcl_CopyLineToDoc(const FndLine_& rFndLine, CpyPara *const pCpyPara)
         ++pCpyPara->nLnIdx;
 }
 
-bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
+void SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
 {
     // Find all Boxes/Lines
     SwSelBoxes aSelBoxes;
@@ -2008,7 +2008,7 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
         ForEach_FndLineCopyCol( GetTabLines(), &aPara );
     }
     if( aFndBox.GetLines().empty() )
-        return false;
+        return;
 
     {
         // Convert Table formulas to their relative representation
@@ -2037,8 +2037,6 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
             pTableBox->setRowSpan( 1 );
         }
     }
-
-    return true;
 }
 
 bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,

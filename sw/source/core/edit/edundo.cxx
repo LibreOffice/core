@@ -94,7 +94,7 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
     }
 }
 
-bool SwEditShell::Undo(sal_uInt16 const nCount)
+void SwEditShell::Undo(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
@@ -148,11 +148,9 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         SaveTableBoxContent();
     }
     EndAllAction();
-
-    return bRet;
 }
 
-bool SwEditShell::Redo(sal_uInt16 const nCount)
+void SwEditShell::Redo(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
@@ -200,27 +198,22 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
     }
 
     EndAllAction();
-
-    return bRet;
 }
 
-bool SwEditShell::Repeat(sal_uInt16 const nCount)
+void SwEditShell::Repeat(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
-    bool bRet = false;
     StartAllAction();
 
     try {
         ::sw::RepeatContext context(*GetDoc(), *GetCursor());
-        bRet = GetDoc()->GetIDocumentUndoRedo().Repeat( context, nCount )
-            || bRet;
+        GetDoc()->GetIDocumentUndoRedo().Repeat( context, nCount );
     } catch (const css::uno::Exception & e) {
         SAL_WARN("sw.core", "SwEditShell::Repeat(): exception caught: " << e);
     }
 
     EndAllAction();
-    return bRet;
 }
 
 static void lcl_SelectSdrMarkList( SwEditShell* pShell,

@@ -617,9 +617,9 @@ OUString AbstractMailMergeWizard_Impl::GetReloadDocument() const
     return pDlg->GetReloadDocument();
 }
 
-bool AbstractMailMergeWizard_Impl::ShowPage( sal_uInt16 nLevel )
+void AbstractMailMergeWizard_Impl::ShowPage( sal_uInt16 nLevel )
 {
-    return pDlg->skipUntil(nLevel);
+    pDlg->skipUntil(nLevel);
 }
 
 sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const

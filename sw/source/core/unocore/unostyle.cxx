@@ -1118,15 +1118,15 @@ public:
         m_vPropertyValues[rName] = rValue;
         return true;
     }
-    bool GetProperty(const OUString& rName, const uno::Any*& pAny)
+    void GetProperty(const OUString& rName, const uno::Any*& pAny)
     {
         if(!AllowsKey(rName))
         {
             pAny = nullptr;
-            return false;
+            return;
         }
         pAny = &m_vPropertyValues[rName];
-        return true;
+        return;
     }
     bool ClearProperty( const OUString& rName )
     {

@@ -321,7 +321,7 @@ public:
     bool    DeleteBox( const SwTableBox &rBox );
 
     void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;
-    bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
+    void        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
     std::vector< css::uno::Reference< css::table::XCell > > GetCells();
 };
 

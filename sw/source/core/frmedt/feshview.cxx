@@ -2635,13 +2635,13 @@ bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
     return true;
 }
 
-bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
+void SwFEShell::SetObjAttr( const SfxItemSet& rSet )
 {
     SET_CURR_SHELL( this );
 
     if ( !rSet.Count() )
     { OSL_ENSURE( false, "SetObjAttr, empty set." );
-        return false;
+        return;
     }
 
     StartAllAction();
@@ -2658,7 +2658,6 @@ bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
     EndUndo( SwUndoId::INSATTR );
     EndAllActionAndCall();
     GetDoc()->getIDocumentState().SetModified();
-    return true;
 }
 
 bool SwFEShell::IsAlignPossible() const

@@ -392,7 +392,7 @@ bool SwEditShell::CanSpecialInsert() const
 /** check whether a node can be special-inserted (alt-Enter), and do so. Return
     whether insertion was possible.
  */
-bool SwEditShell::DoSpecialInsert()
+void SwEditShell::DoSpecialInsert()
 {
     bool bRet = false;
 
@@ -418,8 +418,6 @@ bool SwEditShell::DoSpecialInsert()
 
         EndAllAction();
     }
-
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

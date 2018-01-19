@@ -115,7 +115,7 @@ public:
 
     /** Delete a range SwFlyFrameFormat.
     */
-    virtual bool DeleteRange(SwPaM&) = 0;
+    virtual void DeleteRange(SwPaM&) = 0;
 
     /** Delete full paragraphs.
     */
@@ -214,7 +214,7 @@ public:
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
                                 const SetAttrMode nFlags = SetAttrMode::DEFAULT, bool bExpandCharToPara=false) = 0;
 
-    virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
+    virtual void InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
         const SetAttrMode nFlags = SetAttrMode::DEFAULT) = 0;
 
     /** Removes any leading white space from the paragraph

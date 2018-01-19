@@ -633,7 +633,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rField, const SwNode& rNd )
     }
 }
 
-bool SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+void SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -655,10 +655,9 @@ bool SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     default:
         assert(false);
     }
-    return true;
 }
 
-bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+void SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -692,7 +691,6 @@ bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     default:
         assert(false);
     }
-    return true;
 }
 
 bool SwSeqFieldList::InsertSort( SeqFieldLstElem* pNew )

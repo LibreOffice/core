@@ -49,7 +49,7 @@ public:
     // For graphics only.
     bool SwapIn( bool bWaitForData = false, bool bNativFormat = false );
 
-    bool Connect() { return nullptr != SvBaseLink::GetRealObject(); }
+    void Connect() { SvBaseLink::GetRealObject(); }
 
     // Only for graphics-links (for switching between DDE / Grf-link).
     using SvBaseLink::SetObjType;

@@ -139,8 +139,8 @@ public:
     // logging
     void Record( const SwFrame* pFrame, PROT nFunction, DbgAction nAct, void* pParam )
         { if( pStream ) Record_( pFrame, nFunction, nAct, pParam ); }
-    bool InsertFrame( sal_uInt16 nFrameId );    // take FrameId for logging
-    bool DeleteFrame( sal_uInt16 nFrameId );    // remove FrameId; don't log him anymore
+    void InsertFrame( sal_uInt16 nFrameId );    // take FrameId for logging
+    void DeleteFrame( sal_uInt16 nFrameId );    // remove FrameId; don't log him anymore
     void FileInit();                    // read the INI file
     void ChkStream() { if( !pStream ) NewStream(); }
 };
@@ -705,22 +705,21 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void const * 
  * @param nId new FrameId for logging
  * @return TRUE if newly added, FALSE if FrameId is already under control
  */
-bool SwImplProtocol::InsertFrame( sal_uInt16 nId )
+void SwImplProtocol::InsertFrame( sal_uInt16 nId )
 {
     if( !pFrameIds )
         pFrameIds = new std::set<sal_uInt16>;
     if( pFrameIds->count( nId ) )
-        return false;
+        return;
     pFrameIds->insert( nId );
-    return true;
 }
 
 /// Removes a FrameId from the pFrameIds array, so that it won't be logged anymore.
-bool SwImplProtocol::DeleteFrame( sal_uInt16 nId )
+void SwImplProtocol::DeleteFrame( sal_uInt16 nId )
 {
     if( !pFrameIds )
-        return false;
-    return pFrameIds->erase(nId) != 0;
+        return;
+    pFrameIds->erase(nId);
 }
 
 /* SwEnterLeave::Ctor(..) is called from the (inline-)CTor if the function should

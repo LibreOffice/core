@@ -175,9 +175,9 @@ bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
     return GetPaMAttr( GetCursor(), rSet, bMergeIndentValuesOfNumRule );
 }
 
-bool SwEditShell::GetCurParAttr( SfxItemSet& rSet) const
+void SwEditShell::GetCurParAttr( SfxItemSet& rSet) const
 {
-    return GetPaMParAttr( GetCursor(), rSet );
+    GetPaMParAttr( GetCursor(), rSet );
 }
 
 bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const

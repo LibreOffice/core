@@ -188,7 +188,7 @@ public:
 
     bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    void SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
 /*
@@ -366,7 +366,7 @@ public:
     /// Find table style with the provided name, return nullptr when not found.
     SwTableAutoFormat* FindAutoFormat(const OUString& rName) const;
 
-    bool Load();
+    void Load();
     bool Save() const;
 };
 

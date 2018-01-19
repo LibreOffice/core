@@ -231,7 +231,7 @@ protected:
      * @param rIn the style option as string
      * @return true if ???
      */
-    bool ParseStyleOption( const OUString& rIn );
+    void ParseStyleOption( const OUString& rIn );
 
     /** Called after a selector was parsed.
      *

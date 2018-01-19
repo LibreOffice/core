@@ -372,7 +372,7 @@ public:
                                       OUString &rResult, double *pNumber);
     bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
                                           LanguageType nLanguage, SwCalc &aCalc);
-    bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery);
+    void            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery);
 
     sal_uInt32      GetSelectedRecordId();
     bool            ToRecordId(sal_Int32 nSet);

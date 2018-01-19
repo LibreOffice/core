@@ -188,8 +188,8 @@ public:
     const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
     void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 inline void SwSetExpFieldType::SetType( sal_uInt16 nTyp )

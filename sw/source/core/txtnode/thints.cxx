@@ -1783,23 +1783,23 @@ bool lcl_IsIgnoredCharFormatForBullets(const sal_uInt16 nWhich)
 //The node should be counted in a list, if not, make it to be;
 //The item should not conflict to any exist and non-default item inside the character of specified number rule level;
 //The item should not be ignored depend on the exact number rule type;
-bool SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
+void SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
 {
     bool bRet = false;
     SfxItemIter aIter( aCharSet );
     const SfxPoolItem* pItem = aIter.FirstItem();
     if (!pItem)
-        return bRet;
+        return;
     const sal_uInt16 nWhich = pItem->Which();
 
     const SfxPoolItem& rInnerItem = GetAttr(nWhich,false);
 
     if (!IsDefaultItem(&rInnerItem) &&  !IsInvalidItem(&rInnerItem))
-        return bRet;
+        return;
 
     if (!IsInList() && GetNumRule() && !GetListId().isEmpty())
     {
-        return bRet;
+        return;
     }
 
     SwNumRule* pCurrNum = GetNumRule(false);
@@ -1812,9 +1812,9 @@ bool SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
         if (pCurrNumFormat)
         {
             if (pCurrNumFormat->IsItemize() && lcl_IsIgnoredCharFormatForBullets(nWhich))
-                return bRet;
+                return;
             if (pCurrNumFormat->IsEnumeration() && SwTextNode::IsIgnoredCharFormatForNumbering(nWhich))
-                return bRet;
+                return;
             SwCharFormat* pCurrCharFormat =pCurrNumFormat->GetCharFormat();
 
             if (pCurrCharFormat && pCurrCharFormat->GetItemState(nWhich,false) != SfxItemState::SET)
@@ -1827,8 +1827,6 @@ bool SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
             }
         }
     }
-
-    return bRet;
 }
 
 // Set these attributes on SwTextNode.  If they apply to the entire paragraph

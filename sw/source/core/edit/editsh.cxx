@@ -694,12 +694,11 @@ void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 
 /// If the cursor is in a INetAttribute then it will be deleted completely (incl. hint text, the
 /// latter is needed for drag & drop)
-bool SwEditShell::DelINetAttrWithText()
+void SwEditShell::DelINetAttrWithText()
 {
     bool bRet = SelectTextAttr( RES_TXTATR_INETFMT, false );
     if( bRet )
         DeleteSel( *GetCursor() );
-    return bRet;
 }
 
 /// Set the DontExpand flag at the text character attributes

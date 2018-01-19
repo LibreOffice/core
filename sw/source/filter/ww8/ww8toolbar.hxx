@@ -390,7 +390,7 @@ class Tcg: public TBBase
 public:
     Tcg();
     bool Read(SvStream &rS) override;
-    bool ImportCustomToolBar( SfxObjectShell& rDocSh );
+    void ImportCustomToolBar( SfxObjectShell& rDocSh );
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
 #endif

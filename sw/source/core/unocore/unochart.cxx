@@ -2486,12 +2486,12 @@ void SwChartDataSequence::FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const
  * @param   nFirstNew - index of first new row/col to be included in data-sequence
  * @param   nLastNew - index of last new row/col to be included in data-sequence
  */
-bool SwChartDataSequence::ExtendTo( bool bExtendCol,
+void SwChartDataSequence::ExtendTo( bool bExtendCol,
         sal_Int32 nFirstNew, sal_Int32 nCount )
 {
     SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(&(*m_pTableCursor));
     if (!pUnoTableCursor)
-        return false;
+        return;
 
     const SwStartNode *pStartNd  = nullptr;
     const SwTableBox  *pStartBox = nullptr;
@@ -2500,7 +2500,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
     OSL_ENSURE( !pTable->IsTableComplex(), "table too complex" );
     if (nCount < 1 || nFirstNew < 0 || pTable->IsTableComplex())
-        return false;
+        return;
 
     // get range descriptor (cell range) for current data-sequence
 
@@ -2567,8 +2567,6 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         pUnoTableCursor->Move( fnMoveForward, GoInNode );
         pUnoTableCursor->MakeBoxSels();
     }
-
-    return bChanged;
 }
 
 SwChartLabeledDataSequence::SwChartLabeledDataSequence() :

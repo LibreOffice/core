@@ -544,19 +544,15 @@ void SwConditionTextFormatColl::InsertCondition( const SwCollCondition& rCond )
     m_CondColls.push_back( o3tl::make_unique<SwCollCondition> (rCond) );
 }
 
-bool SwConditionTextFormatColl::RemoveCondition( const SwCollCondition& rCond )
+void SwConditionTextFormatColl::RemoveCondition( const SwCollCondition& rCond )
 {
-    bool bRet = false;
     for (SwFormatCollConditions::size_type n = 0; n < m_CondColls.size(); ++n)
     {
         if (*m_CondColls[ n ] == rCond)
         {
             m_CondColls.erase( m_CondColls.begin() + n );
-            bRet = true;
         }
     }
-
-    return bRet;
 }
 
 void SwConditionTextFormatColl::SetConditions( const SwFormatCollConditions& rCndClls )

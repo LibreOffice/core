@@ -108,20 +108,18 @@ void SwCursorShell::MoveCursorToNum()
 }
 
 /// go to next/previous point on the same level
-bool SwCursorShell::GotoNextNum()
+void SwCursorShell::GotoNextNum()
 {
     if (!SwDoc::GotoNextNum( *m_pCurrentCursor->GetPoint() ))
-        return false;
+        return;
     MoveCursorToNum();
-    return true;
 }
 
-bool SwCursorShell::GotoPrevNum()
+void SwCursorShell::GotoPrevNum()
 {
     if (!SwDoc::GotoPrevNum( *m_pCurrentCursor->GetPoint() ))
-        return false;
+        return;
     MoveCursorToNum();
-    return true;
 }
 
 /// jump from content to header
@@ -362,7 +360,7 @@ bool SwCursorShell::GotoPrevTOXBase( const OUString* pName )
 }
 
 /// jump to index of TOXMark
-bool SwCursorShell::GotoTOXMarkBase()
+void SwCursorShell::GotoTOXMarkBase()
 {
     bool bRet = false;
 
@@ -406,7 +404,6 @@ bool SwCursorShell::GotoTOXMarkBase()
             }
     }
     }
-    return bRet;
 }
 
 /// Jump to next/previous table formula

@@ -289,7 +289,7 @@ public:
     bool InsNewTable( const SwTable& rCpyTable, const SwSelBoxes&,
                       SwUndoTableCpyTable* pUndo );
     // Copy headline of table (with content!) into an other one.
-    bool CopyHeadlineIntoTable( SwTableNode& rTableNd );
+    void CopyHeadlineIntoTable( SwTableNode& rTableNd );
 
     // Get box, whose start index is set on nBoxStt.
           SwTableBox* GetTableBox( sal_uLong nSttIdx );

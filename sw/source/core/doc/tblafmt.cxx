@@ -556,7 +556,7 @@ bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     return ERRCODE_NONE == rStream.GetError();
 }
 
-bool SwBoxAutoFormat::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
+void SwBoxAutoFormat::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     rStream.WriteUInt16( m_aFont.GetVersion( fileVersion ) );
     rStream.WriteUInt16( m_aHeight.GetVersion( fileVersion ) );
@@ -591,8 +591,6 @@ bool SwBoxAutoFormat::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion )
     rStream.WriteUInt16( m_aRotateMode.GetVersion( fileVersion ) );
 
     rStream.WriteUInt16( 0 );       // NumberFormat
-
-    return ERRCODE_NONE == rStream.GetError();
 }
 
 SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
@@ -1256,21 +1254,17 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     m_pImpl->m_AutoFormats.push_back(std::move(pNew));
 }
 
-bool SwTableAutoFormatTable::Load()
+void SwTableAutoFormatTable::Load()
 {
     if (utl::ConfigManager::IsFuzzing())
-        return false;
-    bool bRet = false;
+        return;
     OUString sNm(AUTOTABLE_FORMAT_NAME);
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm ))
     {
         SfxMedium aStream( sNm, StreamMode::STD_READ );
-        bRet = Load( *aStream.GetInStream() );
+        Load( *aStream.GetInStream() );
     }
-    else
-        bRet = false;
-    return bRet;
 }
 
 bool SwTableAutoFormatTable::Save() const

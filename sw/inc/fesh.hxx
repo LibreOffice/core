@@ -255,11 +255,11 @@ public:
     virtual ~SwFEShell() override;
 
     /// Copy and Paste methods for internal clipboard.
-    bool Copy( SwDoc* pClpDoc, const OUString* pNewClpText = nullptr );
+    void Copy( SwDoc* pClpDoc, const OUString* pNewClpText = nullptr );
     bool Paste( SwDoc* pClpDoc );
 
     /// Paste some pages into another doc - used in mailmerge.
-    bool PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
+    void PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
 
     /// Copy-Method for Drag&Drop
     bool Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
@@ -382,7 +382,7 @@ public:
     bool GetFlyFrameAttr( SfxItemSet &rSet ) const;
     bool SetFlyFrameAttr( SfxItemSet &rSet );
     static SfxItemSet makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor);
-    bool ResetFlyFrameAttr( const SfxItemSet* pSet );
+    void ResetFlyFrameAttr( const SfxItemSet* pSet );
     const SwFrameFormat *NewFlyFrame( const SfxItemSet &rSet, bool bAnchValid = false,
                          SwFrameFormat *pParent = nullptr );
     void SetFlyPos( const Point &rAbsPos);
@@ -494,7 +494,7 @@ public:
 
     /// Attention: Ambiguities if multiple selections.
     bool GetObjAttr( SfxItemSet &rSet ) const;
-    bool SetObjAttr( const SfxItemSet &rSet );
+    void SetObjAttr( const SfxItemSet &rSet );
 
     const SdrObject* GetBestObject( bool bNext, GotoObjFlags eType, bool bFlat = true, const svx::ISdrObjectFilter* pFilter = nullptr );
     bool GotoObj( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny);
@@ -579,7 +579,7 @@ public:
     void InsertDrawObj( SdrObject& rDrawObj,
                         const Point& rInsertPosition );
 
-    bool ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf );
+    void ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf );
 
     // --> #i972#
     /** for starmath formulas anchored 'as char' it aligns it baseline to baseline
@@ -635,10 +635,10 @@ public:
     /// Is content of a table cell or at least a table cell completely selected?
     bool HasBoxSelection() const;
 
-    bool InsertRow( sal_uInt16 nCnt, bool bBehind );
-    bool InsertCol( sal_uInt16 nCnt, bool bBehind );  // 0 == at the end.
+    void InsertRow( sal_uInt16 nCnt, bool bBehind );
+    void InsertCol( sal_uInt16 nCnt, bool bBehind );  // 0 == at the end.
     bool DeleteCol();
-    bool DeleteTable();
+    void DeleteTable();
     bool DeleteRow(bool bCompleteTable = false);
 
     bool DeleteTableSel();        ///< Current selection, may be whole table.
@@ -646,7 +646,7 @@ public:
     TableMergeErr MergeTab();          /**< Merge selected parts of table */
 
     /// Split cell vertically or horizontally.
-    bool SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight );
+    void SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight );
     bool Sort(const SwSortOptions&);    //Sortieren.
 
     void SetRowHeight( const SwFormatFrameSize &rSz );
@@ -733,9 +733,9 @@ public:
 
     bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 
-    bool SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 nDiff );
+    void SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 nDiff );
 
-    bool GetAutoSum( OUString& rFormula ) const;
+    void GetAutoSum( OUString& rFormula ) const;
 
     /** Phy: real page count.
      Virt: consider offset that may have been set by user. */

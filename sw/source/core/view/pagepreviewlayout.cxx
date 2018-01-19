@@ -174,7 +174,7 @@ void SwPagePreviewLayout::CalcPreviewLayoutSizes()
     scaling is set at the output device and the zoom at the view options of
     the given view shell is set with the calculated scaling.
 */
-bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
+void SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
                                 const sal_uInt16 _nRows,
                                 const Size&      _rPxWinSize
                               )
@@ -184,13 +184,13 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
         bool bColsRowsValid = (_nCols != 0) && (_nRows != 0);
         OSL_ENSURE( bColsRowsValid, "preview layout parameters not correct - preview layout can *not* be initialized" );
         if ( !bColsRowsValid )
-            return false;
+            return;
 
         bool bPxWinSizeValid = (_rPxWinSize.Width() >= 0) &&
                                (_rPxWinSize.Height() >= 0);
         OSL_ENSURE( bPxWinSizeValid, "no window size - preview layout can *not* be initialized" );
         if ( !bPxWinSizeValid )
-            return false;
+            return;
     }
 
     // environment and parameters ok
@@ -236,8 +236,6 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     maWinSize = mrParentViewShell.GetOut()->PixelToLogic( _rPxWinSize );
     // validate layout sizes
     mbLayoutSizesValid = true;
-
-    return true;
 }
 
 /** apply new zoom at given view shell */
@@ -256,7 +254,7 @@ void SwPagePreviewLayout::ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
 /** method to adjust page preview layout to document changes
 
 */
-bool SwPagePreviewLayout::ReInit()
+void SwPagePreviewLayout::ReInit()
 {
     // check environment and parameters
     {
@@ -264,13 +262,11 @@ bool SwPagePreviewLayout::ReInit()
         OSL_ENSURE( bLayoutSettingsValid,
                 "no valid preview layout info/sizes - no re-init of page preview layout");
         if ( !bLayoutSettingsValid )
-            return false;
+            return;
     }
 
     ClearPreviewLayoutSizes();
     CalcPreviewLayoutSizes();
-
-    return true;
 }
 
 // methods to prepare paint of page preview
@@ -649,7 +645,7 @@ void SwPagePreviewLayout::CalcPreviewPages()
 
     OD 13.12.2002 #103492#
 */
-bool SwPagePreviewLayout::CalcPreviewDataForPage( const SwPageFrame& _rPage,
+void SwPagePreviewLayout::CalcPreviewDataForPage( const SwPageFrame& _rPage,
                                                    const Point& _rPreviewOffset,
                                                    PreviewPage* _opPreviewPage )
 {
@@ -683,8 +679,6 @@ bool SwPagePreviewLayout::CalcPreviewDataForPage( const SwPageFrame& _rPage,
         _opPreviewPage->aLogicPos = _rPage.getFrameArea().Pos();
         _opPreviewPage->aMapOffset = _opPreviewPage->aPreviewWinPos - _opPreviewPage->aLogicPos;
     }
-
-    return true;
 }
 
 /** enable/disable book preview
@@ -799,7 +793,7 @@ bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 
     @note IN/OUT parameters are absolute page numbers!!!
 */
-bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
+void SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
                                 const sal_Int16  _nHoriMove,
                                 const sal_Int16  _nVertMove,
                                 sal_uInt16&      _orNewSelectedPage,
@@ -843,7 +837,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
         if ( _nHoriMove != 0 && _nVertMove != 0 )
         {
             OSL_FAIL( "missing implementation for moving preview selected page horizontal AND vertical");
-            return false;
+            return;
         }
 
         // new selected page has to be brought into view considering current
@@ -877,8 +871,6 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     _orNewSelectedPage = nNewAbsSelectedPageNum;
     _orNewStartPage = nNewStartPage;
     _orNewStartPos = aNewStartPos;
-
-    return true;
 }
 
 /** checks, if given position is inside a shown document page */

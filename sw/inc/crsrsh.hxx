@@ -303,7 +303,7 @@ public:
 
     SwPaM * CreateCursor();
     ///< delete the current cursor and make the following into the current
-    bool DestroyCursor();
+    void DestroyCursor();
     ///< transform TableCursor to normal cursor, nullify Tablemode
     void TableCursorToCursor();
     ///< enter block mode, change normal cursor into block cursor
@@ -358,7 +358,7 @@ public:
     bool MovePara( SwWhichPara, SwMoveFnCollection const & );
     bool MoveSection( SwWhichSection, SwMoveFnCollection const & );
     bool MoveTable( SwWhichTable, SwMoveFnCollection const & );
-    bool MoveColumn( SwWhichColumn, SwPosColumn );
+    void MoveColumn( SwWhichColumn, SwPosColumn );
     bool MoveRegion( SwWhichRegion, SwMoveFnCollection const & );
 
     sal_uLong Find( const i18nutil::SearchOptions2& rSearchOpt,
@@ -518,7 +518,7 @@ public:
     /*
      * Returns SwRect, at which the character is located.
      */
-    bool GetCharRectAt(SwRect& rRect, const SwPosition* pPos);
+    void GetCharRectAt(SwRect& rRect, const SwPosition* pPos);
 
     // Return current page number:
     // true:  in which cursor is located.
@@ -593,8 +593,8 @@ public:
 
     bool SelTable();
 
-    bool GotoNextNum();
-    bool GotoPrevNum();
+    void GotoNextNum();
+    void GotoPrevNum();
 
     bool GotoOutline( const OUString& rName );
     // to the next/previous or the given OutlineNode
@@ -641,7 +641,7 @@ public:
     bool GotoPrevFootnoteAnchor();
     bool GotoNextFootnoteAnchor();
 
-    bool GotoFlyAnchor();       ///< jump from the frame to the anchor
+    void GotoFlyAnchor();       ///< jump from the frame to the anchor
     bool GotoHeaderText();       ///< jump from the content to the header
     bool GotoFooterText();       ///< jump from the content to the footer
     // jump to the header/footer of the given or current PageDesc
@@ -652,7 +652,7 @@ public:
 
     bool GotoNextTOXBase( const OUString* = nullptr );
     bool GotoPrevTOXBase( const OUString* = nullptr );
-    bool GotoTOXMarkBase();
+    void GotoTOXMarkBase();
     // jump to the next or previous index entry
     bool GotoNxtPrvTOXMark( bool bNext = true );
     // jump to the next/previous index mark of this type
@@ -714,7 +714,7 @@ public:
     bool GoStartSentence();
     bool GoEndSentence();
     bool SelectWord( const Point* pPt );
-    bool ExpandToSentenceBorders();
+    void ExpandToSentenceBorders();
 
     // get position from current cursor
     bool IsStartWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES )const;
