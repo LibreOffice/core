@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_e95d78ed",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T09:39:36Z",
+      "side": 1,
+      "message": "Oh! btw: make_unique isn\u0027t required here, and would be an unnecessary overhead. Use currDict.m_pDict(new Hunspell(...)) instead.",
+      "range": {
+        "startLine": 313,
+        "startChar": 39,
+        "endLine": 313,
+        "endChar": 55
+      },
+      "revId": "5343de15fd7a4a4d523c4b38d34d0161b9d7b777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
