@@ -19,6 +19,52 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_eebbbe73",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T06:13:28Z",
+      "side": 1,
+      "message": "redundant check: the next `for` would not do a single pass if the condition is false, anyway",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 29
+      },
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0ec1f2e4",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T06:13:28Z",
+      "side": 1,
+      "message": "Range-based loops are good; and would eliminate the need for sz var (well; I understand that all the nitpicks in this sections are irrelevant, if you follow Michael\u0027s advice and store structs in vector, instead of pointers - that will remove all this entirely)",
+      "range": {
+        "startLine": 83,
+        "startChar": 8,
+        "endLine": 83,
+        "endChar": 36
+      },
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_8e86c2b7",
         "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
         "patchSetId": 2
@@ -58,6 +104,29 @@
         "startChar": 4,
         "endLine": 86,
         "endChar": 26
+      },
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ce90baef",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T06:13:28Z",
+      "side": 1,
+      "message": "By the way: this most probably needs to happen before clearing the vector - because otherwise it\u0027s possible that an event will ask for access to already deleted dictionary before the listener is unregistered",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 22
       },
       "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
