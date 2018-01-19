@@ -218,8 +218,9 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, Button*, pButton, void)
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
-    VclPtr<SwAssignFieldsDialog> pDlg(
-            VclPtr<SwAssignFieldsDialog>::Create(pButton, m_pWizard->GetConfigItem(), aBlocks[nSel], true));
+    ScopedVclPtr<SwAssignFieldsDialog> pDlg(
+        VclPtr<SwAssignFieldsDialog>::Create(
+            pButton, m_pWizard->GetConfigItem(), aBlocks[nSel], true));
     if(RET_OK == pDlg->Execute())
     {
         //preview update
@@ -447,8 +448,9 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, Button*, pButton, vo
     SwCustomizeAddressBlockDialog::DialogType nType = bCustomize ?
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT :
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW;
-    VclPtr<SwCustomizeAddressBlockDialog> pDlg(
-        VclPtr<SwCustomizeAddressBlockDialog>::Create(pButton,m_rConfig,nType));
+    ScopedVclPtr<SwCustomizeAddressBlockDialog> pDlg(
+        VclPtr<SwCustomizeAddressBlockDialog>::Create(
+            pButton,m_rConfig,nType));
     if(bCustomize)
     {
         pDlg->SetAddress(m_aAddressBlocks[m_pPreview->GetSelectedAddress()]);

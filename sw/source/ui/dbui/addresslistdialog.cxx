@@ -357,8 +357,8 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, Button*, void)
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
 {
     OUString sInputURL;
-    VclPtr<SwCreateAddressListDialog> pDlg(
-            VclPtr<SwCreateAddressListDialog>::Create(
+    ScopedVclPtr<SwCreateAddressListDialog> pDlg(
+        VclPtr<SwCreateAddressListDialog>::Create(
                     pButton,
                     sInputURL,
                     m_pAddressPage->GetWizard()->GetConfigItem()));
