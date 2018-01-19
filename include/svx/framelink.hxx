@@ -143,10 +143,6 @@ private:
     /// the impl class holding the data
     std::shared_ptr< implStyle >        maImplStyle;
 
-    /// pointer to Cell using this style. Not member of the
-    /// impl class since multiple Cells may use the same style
-    const Cell*                         mpUsingCell;
-
     /// call to set maImplStyle on demand
     void implEnsureImplStyle();
 

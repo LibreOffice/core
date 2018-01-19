@@ -1055,17 +1055,14 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
         for (size_t nCol = nFirstCol; nCol <= nLastCol; ++nCol)
         {
             // get Cell and CoordinateSystem (*only* for this Cell), check if used (not empty)
-            const Cell& rCell = CELL(nCol, nRow);
+            const Cell& rCell(CELL(nCol, nRow));
             basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this, nCol, nRow, false));
             basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
             basegfx::B2DVector aY(basegfx::utils::getColumn(aCoordinateSystem, 1));
 
             if(!aX.equalZero() && !aY.equalZero())
             {
-                // for getting correct Style(s) for merged Cells, we need the First(Col/Row)
-                // for access (see accessing Styles below)
-                const size_t _nFirstCol(mxImpl->GetMergedFirstCol(nCol, nRow));
-                const size_t _nFirstRow(mxImpl->GetMergedFirstRow(nCol, nRow));
+                // get needed local values
                 basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
                 const bool bOverlapX(rCell.mbOverlapX);
                 const bool bOverlapY(rCell.mbOverlapY);
@@ -1078,7 +1075,9 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 if (!bOverlapY      // true for first line in merged cells or cells
                     || bFirstRow)   // true for non_Calc usages of this tooling
                 {
-                    const Style& rTop = GetCellStyleTop(_nFirstCol, _nFirstRow);
+                    // get CellStyle - method will take care to get the correct one, e.g.
+                    // for merged cells (it uses ORIGCELL that works with topLeft's of these)
+                    const Style& rTop(GetCellStyleTop(nCol, nRow));
 
                     if(rTop.IsUsed())
                     {
@@ -1089,7 +1088,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 // create lower line for this Cell
                 if (bLastRow)       // true for non_Calc usages of this tooling
                 {
-                    const Style& rBottom = GetCellStyleBottom(_nFirstCol, _nFirstRow);
+                    const Style& rBottom(GetCellStyleBottom(nCol, nRow));
 
                     if(rBottom.IsUsed())
                     {
@@ -1101,7 +1100,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 if (!bOverlapX      // true for first column in merged cells or cells
                     || bFirstCol)   // true for non_Calc usages of this tooling
                 {
-                    const Style& rLeft(GetCellStyleLeft(_nFirstCol, _nFirstRow));
+                    const Style& rLeft(GetCellStyleLeft(nCol, nRow));
 
                     if(rLeft.IsUsed())
                     {
@@ -1112,7 +1111,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 // create right line for this Cell
                 if (bLastCol)       // true for non_Calc usages of this tooling
                 {
-                    const Style& rRight(GetCellStyleRight(_nFirstCol, _nFirstRow));
+                    const Style& rRight(GetCellStyleRight(nCol, nRow));
 
                     if(rRight.IsUsed())
                     {
@@ -1122,8 +1121,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                 // check for crossed lines, these need special treatment, especially
                 // for merged cells, see below
-                const Style& rTLBR = GetCellStyleTLBR(_nFirstCol, _nFirstRow);
-                const Style& rBLTR = GetCellStyleBLTR(_nFirstCol, _nFirstRow);
+                const Style& rTLBR(GetCellStyleTLBR(nCol, nRow));
+                const Style& rBLTR(GetCellStyleBLTR(nCol, nRow));
 
                 if(rTLBR.IsUsed() || rBLTR.IsUsed())
                 {
@@ -1131,8 +1130,11 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rCell.IsMerged())
                     {
-                        // first check if this merged cell was already handled
-                        const size_t nIndexOfMergedCell(mxImpl->GetIndex(_nFirstCol, _nFirstRow));
+                        // first check if this merged cell was already handled. To do so,
+                        // calculate and use the index of the TopLeft cell
+                        const size_t _nMergedFirstCol(mxImpl->GetMergedFirstCol(nCol, nRow));
+                        const size_t _nMergedFirstRow(mxImpl->GetMergedFirstRow(nCol, nRow));
+                        const size_t nIndexOfMergedCell(mxImpl->GetIndex(_nMergedFirstCol, _nMergedFirstRow));
                         bContinue = (aMergedCells.end() == aMergedCells.find(nIndexOfMergedCell));
 
                         if(bContinue)
@@ -1140,7 +1142,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                             // not found, add now to mark as handled
                             aMergedCells.insert(nIndexOfMergedCell);
 
-                            // when merged, get extended coordinate system and dependent values
+                            // when merged, get extended coordinate system and derived values
+                            // for the full range of this merged cell
                             aCoordinateSystem = rCell.CreateCoordinateSystem(*this, nCol, nRow, true);
                             aX = basegfx::utils::getColumn(aCoordinateSystem, 0);
                             aY = basegfx::utils::getColumn(aCoordinateSystem, 1);
@@ -1157,8 +1160,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                         {
                             /// top-left and bottom-right Style Tables
                             /// Fill top-left Style Table
-                            const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
-                            const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
+                            const Style& rTLFromRight(GetCellStyleTop(nCol, nRow));
+                            const Style& rTLFromBottom(GetCellStyleLeft(nCol, nRow));
                             StyleVectorTable aStart;
                             const basegfx::B2DVector aAxisA(aX + aY);
 
@@ -1167,8 +1170,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                             aStart.sort();
 
                             /// Fill bottom-right Style Table
-                            const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
-                            const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
+                            const Style& rBRFromBottom(GetCellStyleRight(nCol, nRow));
+                            const Style& rBRFromLeft(GetCellStyleBottom(nCol, nRow));
                             StyleVectorTable aEnd;
                             const basegfx::B2DVector aAxisB(-aX -aY);
 
@@ -1191,8 +1194,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                         {
                             /// bottom-left and top-right Style Tables
                             /// Fill bottom-left Style Table
-                            const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
-                            const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
+                            const Style& rBLFromTop(GetCellStyleLeft(nCol, nRow));
+                            const Style& rBLFromBottom(GetCellStyleBottom(nCol, nRow));
                             StyleVectorTable aStart;
                             const basegfx::B2DVector aAxisA(aX - aY);
 
@@ -1201,8 +1204,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                             aStart.sort();
 
                             /// Fill top-right Style Table
-                            const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
-                            const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
+                            const Style& rTRFromLeft(GetCellStyleTop(nCol, nRow));
+                            const Style& rTRFromBottom(GetCellStyleRight(nCol, nRow));
                             StyleVectorTable aEnd;
                             const basegfx::B2DVector aAxisB(aY - aX);
 
