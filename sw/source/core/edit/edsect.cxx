@@ -392,10 +392,8 @@ bool SwEditShell::CanSpecialInsert() const
 /** check whether a node can be special-inserted (alt-Enter), and do so. Return
     whether insertion was possible.
  */
-bool SwEditShell::DoSpecialInsert()
+void SwEditShell::DoSpecialInsert()
 {
-    bool bRet = false;
-
     // get current node
     SwPosition* pCursorPos = GetCursor()->GetPoint();
     const SwNode* pInsertNode = lcl_SpecialInsertNode( pCursorPos );
@@ -410,7 +408,7 @@ bool SwEditShell::DoSpecialInsert()
         SwPosition aInsertPos( aInsertIndex );
 
         // insert a new text node, and set the cursor
-        bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aInsertPos );
+         GetDoc()->getIDocumentContentOperations().AppendTextNode( aInsertPos );
         *pCursorPos = aInsertPos;
 
         // call AttrChangeNotify for the UI
@@ -418,8 +416,6 @@ bool SwEditShell::DoSpecialInsert()
 
         EndAllAction();
     }
-
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

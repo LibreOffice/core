@@ -72,7 +72,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
     return pRet;
 }
 
-bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
+void SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 {
     ErrCode eErr = ERRCODE_NONE;
     switch( rMacro.GetScriptType() )
@@ -125,8 +125,6 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
             break;
         }
     }
-
-    return ERRCODE_NONE == eErr;
 }
 
 sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCallEvent,

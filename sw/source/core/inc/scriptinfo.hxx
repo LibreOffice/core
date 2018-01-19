@@ -288,7 +288,7 @@ public:
 /** Marks nCnt kashida positions as invalid
    pKashidaPositions: array of char indices relative to the paragraph
 */
-    bool MarkKashidasInvalid(sal_Int32 nCnt, const sal_Int32* pKashidaPositions);
+    void MarkKashidasInvalid(sal_Int32 nCnt, const sal_Int32* pKashidaPositions);
 
 /** Marks nCnt kashida positions as invalid
     in the given text range

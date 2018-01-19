@@ -63,17 +63,15 @@ SwScriptIterator::SwScriptIterator(
                 m_rText, nStt, nCurScript);
 }
 
-bool SwScriptIterator::Next()
+void SwScriptIterator::Next()
 {
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
-    bool bRet = false;
     if (bForward && m_nChgPos >= 0 && m_nChgPos < m_rText.getLength())
     {
         nCurScript =
             g_pBreakIt->GetBreakIter()->getScriptType(m_rText, m_nChgPos);
         m_nChgPos = g_pBreakIt->GetBreakIter()->endOfScript(
                                         m_rText, m_nChgPos, nCurScript);
-        bRet = true;
     }
     else if (!bForward && m_nChgPos > 0)
     {
@@ -82,9 +80,7 @@ bool SwScriptIterator::Next()
             g_pBreakIt->GetBreakIter()->getScriptType(m_rText, m_nChgPos);
         m_nChgPos = g_pBreakIt->GetBreakIter()->beginOfScript(
                                             m_rText, m_nChgPos, nCurScript);
-        bRet = true;
     }
-    return bRet;
 }
 
 SwLanguageIterator::SwLanguageIterator( const SwTextNode& rTNd,

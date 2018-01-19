@@ -142,21 +142,20 @@ SwPaM * SwCursorShell::CreateCursor()
  * Note, this function does not delete anything if there is no other cursor.
  * @return - returns true if there was another cursor and we deleted one.
  */
-bool SwCursorShell::DestroyCursor()
+void SwCursorShell::DestroyCursor()
 {
     // don't delete Cursor with active table Selection
     assert(!IsTableMode());
 
     // Is there a next one? Don't do anything if not.
     if(!m_pCurrentCursor->IsMultiSelection())
-        return false;
+        return;
 
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursor* pNextCursor = static_cast<SwCursor*>(m_pCurrentCursor->GetNext());
     delete m_pCurrentCursor;
     m_pCurrentCursor = dynamic_cast<SwShellCursor*>(pNextCursor);
     UpdateCursor();
-    return true;
 }
 
 /**
@@ -1084,10 +1083,10 @@ bool SwCursorShell::GotoPage( sal_uInt16 nPage )
     return bRet;
 }
 
-bool SwCursorShell::GetCharRectAt(SwRect& rRect, const SwPosition* pPos)
+void SwCursorShell::GetCharRectAt(SwRect& rRect, const SwPosition* pPos)
 {
     SwContentFrame* pFrame = GetCurrFrame();
-    return pFrame->GetCharRect( rRect, *pPos );
+    pFrame->GetCharRect( rRect, *pPos );
 }
 
 void SwCursorShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,

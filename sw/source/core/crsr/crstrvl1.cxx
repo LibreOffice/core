@@ -80,9 +80,9 @@ bool SwCursorShell::SelectWord( const Point* pPt )
     return m_pCurrentCursor->SelectWord( this, pPt );
 }
 
-bool SwCursorShell::ExpandToSentenceBorders()
+void SwCursorShell::ExpandToSentenceBorders()
 {
-    return m_pCurrentCursor->ExpandToSentenceBorders();
+    m_pCurrentCursor->ExpandToSentenceBorders();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

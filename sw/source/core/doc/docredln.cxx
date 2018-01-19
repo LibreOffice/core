@@ -579,13 +579,12 @@ SwRedlineTable::size_type SwRedlineTable::GetPos(const SwRangeRedline* p) const
     return it - maVector.begin();
 }
 
-bool SwRedlineTable::Remove( const SwRangeRedline* p )
+void SwRedlineTable::Remove( const SwRangeRedline* p )
 {
     const size_type nPos = GetPos(p);
     if (nPos == npos)
-        return false;
+        return;
     Remove(nPos);
-    return true;
 }
 
 void SwRedlineTable::Remove( size_type nP )
@@ -1848,11 +1847,10 @@ void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-bool SwExtraRedlineTable::Insert( SwExtraRedline* p )
+void SwExtraRedlineTable::Insert( SwExtraRedline* p )
 {
     m_aExtraRedlines.push_back( p );
     //p->CallDisplayFunc();
-    return true;
 }
 
 void SwExtraRedlineTable::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )

@@ -224,25 +224,20 @@ bool SwSortedObjs::Insert( SwAnchoredObject& _rAnchoredObj )
     return Contains( _rAnchoredObj );
 }
 
-bool SwSortedObjs::Remove( SwAnchoredObject& _rAnchoredObj )
+void SwSortedObjs::Remove( SwAnchoredObject& _rAnchoredObj )
 {
-    bool bRet = true;
-
     std::vector< SwAnchoredObject* >::iterator aDelPosIter =
         std::find( maSortedObjLst.begin(), maSortedObjLst.end(), &_rAnchoredObj );
 
     if ( aDelPosIter == maSortedObjLst.end() )
     {
         // object not found.
-        bRet = false;
         OSL_FAIL( "<SwSortedObjs::Remove()> - object not found" );
     }
     else
     {
         maSortedObjLst.erase( aDelPosIter );
     }
-
-    return bRet;
 }
 
 bool SwSortedObjs::Contains( const SwAnchoredObject& _rAnchoredObj ) const
@@ -253,25 +248,23 @@ bool SwSortedObjs::Contains( const SwAnchoredObject& _rAnchoredObj ) const
     return aIter != maSortedObjLst.end();
 }
 
-bool SwSortedObjs::Update( SwAnchoredObject& _rAnchoredObj )
+void SwSortedObjs::Update( SwAnchoredObject& _rAnchoredObj )
 {
     if ( !Contains( _rAnchoredObj ) )
     {
         // given anchored object not found in list
         OSL_FAIL( "<SwSortedObjs::Update(..) - sorted list doesn't contain given anchored object" );
-        return false;
+        return;
     }
 
     if ( size() == 1 )
     {
         // given anchored object is the only one in the list.
-        return true;
+        return;
     }
 
     Remove( _rAnchoredObj );
     Insert( _rAnchoredObj );
-
-    return Contains( _rAnchoredObj );
 }
 
 void SwSortedObjs::UpdateAll()
