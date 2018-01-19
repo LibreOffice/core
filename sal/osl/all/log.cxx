@@ -155,7 +155,7 @@ char const * getLogLevel() {
 
 std::ofstream * getLogFile() {
     // First check the environment variable, then the setting in logging.ini
-    char const * logFile = getEnvironmentVariable("SAL_LOG_FILE");
+    static char const * logFile = getEnvironmentVariable("SAL_LOG_FILE");
     if (!logFile)
         return nullptr;
 
