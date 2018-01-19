@@ -594,6 +594,14 @@ bool Button::set_property(const OString &rKey, const OUString &rValue)
             eAlign = ImageAlign::Bottom;
         SetImageAlign(eAlign);
     }
+    else if (rKey == "focus-on-click")
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~WB_NOPOINTERFOCUS;
+        if (!toBool(rValue))
+            nBits |= WB_NOPOINTERFOCUS;
+        SetStyle(nBits);
+    }
     else
         return Control::set_property(rKey, rValue);
     return true;
