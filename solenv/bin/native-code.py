@@ -424,7 +424,7 @@ opts.add_option("-C", "--pure-c", action="store_true", help="do not print extern
 
 (options, args) = opts.parse_args()
 
-# dict of all the contructors that we need according to -g's
+# dict of all the constructors that we need according to -g's
 full_constructor_map = {}
 if options.groups:
     for constructor_group in options.groups:
