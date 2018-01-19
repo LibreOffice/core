@@ -217,7 +217,7 @@ public:
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;
     const SwFormatCollConditions& GetCondColls() const { return m_CondColls; }
     void InsertCondition( const SwCollCondition& rCond );
-    bool RemoveCondition( const SwCollCondition& rCond );
+    void RemoveCondition( const SwCollCondition& rCond );
 
     void SetConditions( const SwFormatCollConditions& );
 };

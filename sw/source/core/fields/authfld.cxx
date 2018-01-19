@@ -134,7 +134,7 @@ sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
     return nRet;
 }
 
-bool SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
+void SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
 {
     for (auto &rpTemp : m_DataArr)
     {
@@ -144,11 +144,10 @@ bool SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
             rpTemp->AddRef();
             //re-generate positions of the fields
             DelSequenceArray();
-            return true;
+            return;
         }
     }
     OSL_FAIL("SwAuthorityFieldType::AddField(sal_IntPtr) failed");
-    return false;
 }
 
 const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(sal_IntPtr nHandle) const
@@ -336,7 +335,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
     return 0;
 }
 
-bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
+void SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -386,10 +385,9 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
     default:
         assert(false);
     }
-    return true;
 }
 
-bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
+void SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch( nWhichId )
@@ -464,7 +462,6 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
     default:
         assert(false);
     }
-    return bRet;
 }
 
 void SwAuthorityFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )

@@ -41,7 +41,7 @@ public:
     SwScriptIterator( const OUString& rStr, sal_Int32 nStart,
                       bool bFrwrd = true );
 
-    bool Next();
+    void Next();
 
     sal_uInt16 GetCurrScript() const { return nCurScript; }
     sal_Int32 GetScriptChgPos() const { return (m_nChgPos == -1) ? COMPLETE_STRING : m_nChgPos; }
