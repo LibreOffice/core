@@ -489,7 +489,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../include/**",
+					"$(PROJECT_DIR)/../../include",
 				);
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
@@ -522,7 +522,7 @@
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../include/**",
+					"$(PROJECT_DIR)/../../include",
 				);
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
@@ -624,7 +624,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../include/**",
+					"$(PROJECT_DIR)/../../include",
 				);
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
