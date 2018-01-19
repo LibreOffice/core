@@ -1,0 +1,169 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004a4b = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004a6b;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004a4c;
+   productRefGroup = X0004a4f;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004a51;
+  };
+  X0004a4c = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004a4d = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004a50 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004a51 = {
+   buildConfigurationList = X0004a6c;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004a4e;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004a52 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/abpfinalpage.cxx";
+  };
+  X0004a53 = {
+   fileRef = X0004a52;
+   isa = PBXBuildFile;
+  };
+  X0004a54 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/abspage.cxx";
+  };
+  X0004a55 = {
+   fileRef = X0004a54;
+   isa = PBXBuildFile;
+  };
+  X0004a56 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/abspilot.cxx";
+  };
+  X0004a57 = {
+   fileRef = X0004a56;
+   isa = PBXBuildFile;
+  };
+  X0004a58 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/admininvokationimpl.cxx";
+  };
+  X0004a59 = {
+   fileRef = X0004a58;
+   isa = PBXBuildFile;
+  };
+  X0004a5a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/admininvokationpage.cxx";
+  };
+  X0004a5b = {
+   fileRef = X0004a5a;
+   isa = PBXBuildFile;
+  };
+  X0004a5c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/datasourcehandling.cxx";
+  };
+  X0004a5d = {
+   fileRef = X0004a5c;
+   isa = PBXBuildFile;
+  };
+  X0004a5e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/fieldmappingimpl.cxx";
+  };
+  X0004a5f = {
+   fileRef = X0004a5e;
+   isa = PBXBuildFile;
+  };
+  X0004a60 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/fieldmappingpage.cxx";
+  };
+  X0004a61 = {
+   fileRef = X0004a60;
+   isa = PBXBuildFile;
+  };
+  X0004a62 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/moduleabp.cxx";
+  };
+  X0004a63 = {
+   fileRef = X0004a62;
+   isa = PBXBuildFile;
+  };
+  X0004a64 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/tableselectionpage.cxx";
+  };
+  X0004a65 = {
+   fileRef = X0004a64;
+   isa = PBXBuildFile;
+  };
+  X0004a66 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/typeselectionpage.cxx";
+  };
+  X0004a67 = {
+   fileRef = X0004a66;
+   isa = PBXBuildFile;
+  };
+  X0004a68 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/abpilot/unodialogabp.cxx";
+  };
+  X0004a69 = {
+   fileRef = X0004a68;
+   isa = PBXBuildFile;
+  };
+  X0004a6a = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004a4b;
+}

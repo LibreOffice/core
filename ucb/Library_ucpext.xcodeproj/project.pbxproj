@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002401 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002413;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002402;
+   productRefGroup = X0002405;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002407;
+  };
+  X0002402 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002403 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002406 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002407 = {
+   buildConfigurationList = X0002414;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002404;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002408 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/ext/ucpext_content.cxx";
+  };
+  X0002409 = {
+   fileRef = X0002408;
+   isa = PBXBuildFile;
+  };
+  X000240a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/ext/ucpext_datasupplier.cxx";
+  };
+  X000240b = {
+   fileRef = X000240a;
+   isa = PBXBuildFile;
+  };
+  X000240c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/ext/ucpext_provider.cxx";
+  };
+  X000240d = {
+   fileRef = X000240c;
+   isa = PBXBuildFile;
+  };
+  X000240e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/ext/ucpext_resultset.cxx";
+  };
+  X000240f = {
+   fileRef = X000240e;
+   isa = PBXBuildFile;
+  };
+  X0002410 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/ext/ucpext_services.cxx";
+  };
+  X0002411 = {
+   fileRef = X0002410;
+   isa = PBXBuildFile;
+  };
+  X0002412 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002401;
+}

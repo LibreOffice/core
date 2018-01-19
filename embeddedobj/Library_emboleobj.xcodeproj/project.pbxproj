@@ -1,0 +1,133 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0000b39 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0000b51;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0000b3a;
+   productRefGroup = X0000b3d;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0000b3f;
+  };
+  X0000b3a = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0000b3b = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0000b3e = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0000b3f = {
+   buildConfigurationList = X0000b52;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0000b3c;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0000b40 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/msole/closepreventer.cxx";
+  };
+  X0000b41 = {
+   fileRef = X0000b40;
+   isa = PBXBuildFile;
+  };
+  X0000b42 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/msole/oleembed.cxx";
+  };
+  X0000b43 = {
+   fileRef = X0000b42;
+   isa = PBXBuildFile;
+  };
+  X0000b44 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/msole/olemisc.cxx";
+  };
+  X0000b45 = {
+   fileRef = X0000b44;
+   isa = PBXBuildFile;
+  };
+  X0000b46 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/msole/olepersist.cxx";
+  };
+  X0000b47 = {
+   fileRef = X0000b46;
+   isa = PBXBuildFile;
+  };
+  X0000b48 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/msole/oleregister.cxx";
+  };
+  X0000b49 = {
+   fileRef = X0000b48;
+   isa = PBXBuildFile;
+  };
+  X0000b4a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/msole/olevisual.cxx";
+  };
+  X0000b4b = {
+   fileRef = X0000b4a;
+   isa = PBXBuildFile;
+  };
+  X0000b4c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/msole/ownview.cxx";
+  };
+  X0000b4d = {
+   fileRef = X0000b4c;
+   isa = PBXBuildFile;
+  };
+  X0000b4e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/msole/xolefactory.cxx";
+  };
+  X0000b4f = {
+   fileRef = X0000b4e;
+   isa = PBXBuildFile;
+  };
+  X0000b50 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0000b39;
+}

@@ -1,0 +1,268 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00033a7 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00033dd;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00033a8;
+   productRefGroup = X00033ab;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00033ad;
+  };
+  X00033a8 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00033a9 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00033ac = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00033ad = {
+   buildConfigurationList = X00033de;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00033aa;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00033ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/attributes.cxx";
+  };
+  X00033af = {
+   fileRef = X00033ae;
+   isa = PBXBuildFile;
+  };
+  X00033b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/cspline.cxx";
+  };
+  X00033b1 = {
+   fileRef = X00033b0;
+   isa = PBXBuildFile;
+  };
+  X00033b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/fontmap.cxx";
+  };
+  X00033b3 = {
+   fileRef = X00033b2;
+   isa = PBXBuildFile;
+  };
+  X00033b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/formula.cxx";
+  };
+  X00033b5 = {
+   fileRef = X00033b4;
+   isa = PBXBuildFile;
+  };
+  X00033b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/grammar.cxx";
+  };
+  X00033b7 = {
+   fileRef = X00033b6;
+   isa = PBXBuildFile;
+  };
+  X00033b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hbox.cxx";
+  };
+  X00033b9 = {
+   fileRef = X00033b8;
+   isa = PBXBuildFile;
+  };
+  X00033ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hcode.cxx";
+  };
+  X00033bb = {
+   fileRef = X00033ba;
+   isa = PBXBuildFile;
+  };
+  X00033bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hfont.cxx";
+  };
+  X00033bd = {
+   fileRef = X00033bc;
+   isa = PBXBuildFile;
+  };
+  X00033be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hgzip.cxx";
+  };
+  X00033bf = {
+   fileRef = X00033be;
+   isa = PBXBuildFile;
+  };
+  X00033c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hinfo.cxx";
+  };
+  X00033c1 = {
+   fileRef = X00033c0;
+   isa = PBXBuildFile;
+  };
+  X00033c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hiodev.cxx";
+  };
+  X00033c3 = {
+   fileRef = X00033c2;
+   isa = PBXBuildFile;
+  };
+  X00033c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hpara.cxx";
+  };
+  X00033c5 = {
+   fileRef = X00033c4;
+   isa = PBXBuildFile;
+  };
+  X00033c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hstream.cxx";
+  };
+  X00033c7 = {
+   fileRef = X00033c6;
+   isa = PBXBuildFile;
+  };
+  X00033c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hstyle.cxx";
+  };
+  X00033c9 = {
+   fileRef = X00033c8;
+   isa = PBXBuildFile;
+  };
+  X00033ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/htags.cxx";
+  };
+  X00033cb = {
+   fileRef = X00033ca;
+   isa = PBXBuildFile;
+  };
+  X00033cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hutil.cxx";
+  };
+  X00033cd = {
+   fileRef = X00033cc;
+   isa = PBXBuildFile;
+  };
+  X00033ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hwpeq.cxx";
+  };
+  X00033cf = {
+   fileRef = X00033ce;
+   isa = PBXBuildFile;
+  };
+  X00033d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hwpfile.cxx";
+  };
+  X00033d1 = {
+   fileRef = X00033d0;
+   isa = PBXBuildFile;
+  };
+  X00033d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hwpread.cxx";
+  };
+  X00033d3 = {
+   fileRef = X00033d2;
+   isa = PBXBuildFile;
+  };
+  X00033d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/hwpreader.cxx";
+  };
+  X00033d5 = {
+   fileRef = X00033d4;
+   isa = PBXBuildFile;
+  };
+  X00033d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/lexer.cxx";
+  };
+  X00033d7 = {
+   fileRef = X00033d6;
+   isa = PBXBuildFile;
+  };
+  X00033d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/mzstring.cxx";
+  };
+  X00033d9 = {
+   fileRef = X00033d8;
+   isa = PBXBuildFile;
+  };
+  X00033da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "hwpfilter/source/solver.cxx";
+  };
+  X00033db = {
+   fileRef = X00033da;
+   isa = PBXBuildFile;
+  };
+  X00033dc = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00033a7;
+}

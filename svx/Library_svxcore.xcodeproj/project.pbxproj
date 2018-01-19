@@ -1,0 +1,3355 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00044c3 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00047a7;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00044c4;
+   productRefGroup = X00044c7;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00044c9;
+  };
+  X00044c4 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00044c5 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00044c8 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00044c9 = {
+   buildConfigurationList = X00047a8;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00044c6;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00044ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/core/coreservices.cxx";
+  };
+  X00044cb = {
+   fileRef = X00044ca;
+   isa = PBXBuildFile;
+  };
+  X00044cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/core/extedit.cxx";
+  };
+  X00044cd = {
+   fileRef = X00044cc;
+   isa = PBXBuildFile;
+  };
+  X00044ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/core/graphichelper.cxx";
+  };
+  X00044cf = {
+   fileRef = X00044ce;
+   isa = PBXBuildFile;
+  };
+  X00044d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/customshapes/EnhancedCustomShape2d.cxx";
+  };
+  X00044d1 = {
+   fileRef = X00044d0;
+   isa = PBXBuildFile;
+  };
+  X00044d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx";
+  };
+  X00044d3 = {
+   fileRef = X00044d2;
+   isa = PBXBuildFile;
+  };
+  X00044d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/customshapes/EnhancedCustomShapeGeometry.cxx";
+  };
+  X00044d5 = {
+   fileRef = X00044d4;
+   isa = PBXBuildFile;
+  };
+  X00044d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx";
+  };
+  X00044d7 = {
+   fileRef = X00044d6;
+   isa = PBXBuildFile;
+  };
+  X00044d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/checklbx.cxx";
+  };
+  X00044d9 = {
+   fileRef = X00044d8;
+   isa = PBXBuildFile;
+  };
+  X00044da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/dialmgr.cxx";
+  };
+  X00044db = {
+   fileRef = X00044da;
+   isa = PBXBuildFile;
+  };
+  X00044dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/dlgutil.cxx";
+  };
+  X00044dd = {
+   fileRef = X00044dc;
+   isa = PBXBuildFile;
+  };
+  X00044de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/hexcolorcontrol.cxx";
+  };
+  X00044df = {
+   fileRef = X00044de;
+   isa = PBXBuildFile;
+  };
+  X00044e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/framelink.cxx";
+  };
+  X00044e1 = {
+   fileRef = X00044e0;
+   isa = PBXBuildFile;
+  };
+  X00044e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/framelinkarray.cxx";
+  };
+  X00044e3 = {
+   fileRef = X00044e2;
+   isa = PBXBuildFile;
+  };
+  X00044e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/langbox.cxx";
+  };
+  X00044e5 = {
+   fileRef = X00044e4;
+   isa = PBXBuildFile;
+  };
+  X00044e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/pagenumberlistbox.cxx";
+  };
+  X00044e7 = {
+   fileRef = X00044e6;
+   isa = PBXBuildFile;
+  };
+  X00044e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/papersizelistbox.cxx";
+  };
+  X00044e9 = {
+   fileRef = X00044e8;
+   isa = PBXBuildFile;
+  };
+  X00044ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/samecontentlistbox.cxx";
+  };
+  X00044eb = {
+   fileRef = X00044ea;
+   isa = PBXBuildFile;
+  };
+  X00044ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/spacinglistbox.cxx";
+  };
+  X00044ed = {
+   fileRef = X00044ec;
+   isa = PBXBuildFile;
+  };
+  X00044ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/stddlg.cxx";
+  };
+  X00044ef = {
+   fileRef = X00044ee;
+   isa = PBXBuildFile;
+  };
+  X00044f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/svxdlg.cxx";
+  };
+  X00044f1 = {
+   fileRef = X00044f0;
+   isa = PBXBuildFile;
+  };
+  X00044f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/dialog/SvxNumOptionsTabPageHelper.cxx";
+  };
+  X00044f3 = {
+   fileRef = X00044f2;
+   isa = PBXBuildFile;
+  };
+  X00044f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/camera3d.cxx";
+  };
+  X00044f5 = {
+   fileRef = X00044f4;
+   isa = PBXBuildFile;
+  };
+  X00044f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/cube3d.cxx";
+  };
+  X00044f7 = {
+   fileRef = X00044f6;
+   isa = PBXBuildFile;
+  };
+  X00044f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/deflt3d.cxx";
+  };
+  X00044f9 = {
+   fileRef = X00044f8;
+   isa = PBXBuildFile;
+  };
+  X00044fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/dragmt3d.cxx";
+  };
+  X00044fb = {
+   fileRef = X00044fa;
+   isa = PBXBuildFile;
+  };
+  X00044fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/e3dsceneupdater.cxx";
+  };
+  X00044fd = {
+   fileRef = X00044fc;
+   isa = PBXBuildFile;
+  };
+  X00044fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/e3dundo.cxx";
+  };
+  X00044ff = {
+   fileRef = X00044fe;
+   isa = PBXBuildFile;
+  };
+  X0004500 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/extrud3d.cxx";
+  };
+  X0004501 = {
+   fileRef = X0004500;
+   isa = PBXBuildFile;
+  };
+  X0004502 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/helperhittest3d.cxx";
+  };
+  X0004503 = {
+   fileRef = X0004502;
+   isa = PBXBuildFile;
+  };
+  X0004504 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/helperminimaldepth3d.cxx";
+  };
+  X0004505 = {
+   fileRef = X0004504;
+   isa = PBXBuildFile;
+  };
+  X0004506 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/lathe3d.cxx";
+  };
+  X0004507 = {
+   fileRef = X0004506;
+   isa = PBXBuildFile;
+  };
+  X0004508 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/obj3d.cxx";
+  };
+  X0004509 = {
+   fileRef = X0004508;
+   isa = PBXBuildFile;
+  };
+  X000450a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/objfac3d.cxx";
+  };
+  X000450b = {
+   fileRef = X000450a;
+   isa = PBXBuildFile;
+  };
+  X000450c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/polygn3d.cxx";
+  };
+  X000450d = {
+   fileRef = X000450c;
+   isa = PBXBuildFile;
+  };
+  X000450e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/scene3d.cxx";
+  };
+  X000450f = {
+   fileRef = X000450e;
+   isa = PBXBuildFile;
+  };
+  X0004510 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/sphere3d.cxx";
+  };
+  X0004511 = {
+   fileRef = X0004510;
+   isa = PBXBuildFile;
+  };
+  X0004512 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/svx3ditems.cxx";
+  };
+  X0004513 = {
+   fileRef = X0004512;
+   isa = PBXBuildFile;
+  };
+  X0004514 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/view3d.cxx";
+  };
+  X0004515 = {
+   fileRef = X0004514;
+   isa = PBXBuildFile;
+  };
+  X0004516 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/view3d1.cxx";
+  };
+  X0004517 = {
+   fileRef = X0004516;
+   isa = PBXBuildFile;
+  };
+  X0004518 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/engine3d/viewpt3d2.cxx";
+  };
+  X0004519 = {
+   fileRef = X0004518;
+   isa = PBXBuildFile;
+  };
+  X000451a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/codec.cxx";
+  };
+  X000451b = {
+   fileRef = X000451a;
+   isa = PBXBuildFile;
+  };
+  X000451c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/galbrws1.cxx";
+  };
+  X000451d = {
+   fileRef = X000451c;
+   isa = PBXBuildFile;
+  };
+  X000451e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/galbrws2.cxx";
+  };
+  X000451f = {
+   fileRef = X000451e;
+   isa = PBXBuildFile;
+  };
+  X0004520 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/galctrl.cxx";
+  };
+  X0004521 = {
+   fileRef = X0004520;
+   isa = PBXBuildFile;
+  };
+  X0004522 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/galexpl.cxx";
+  };
+  X0004523 = {
+   fileRef = X0004522;
+   isa = PBXBuildFile;
+  };
+  X0004524 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/galini.cxx";
+  };
+  X0004525 = {
+   fileRef = X0004524;
+   isa = PBXBuildFile;
+  };
+  X0004526 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/gallery1.cxx";
+  };
+  X0004527 = {
+   fileRef = X0004526;
+   isa = PBXBuildFile;
+  };
+  X0004528 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/galmisc.cxx";
+  };
+  X0004529 = {
+   fileRef = X0004528;
+   isa = PBXBuildFile;
+  };
+  X000452a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/galobj.cxx";
+  };
+  X000452b = {
+   fileRef = X000452a;
+   isa = PBXBuildFile;
+  };
+  X000452c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/galtheme.cxx";
+  };
+  X000452d = {
+   fileRef = X000452c;
+   isa = PBXBuildFile;
+  };
+  X000452e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/GalleryControl.cxx";
+  };
+  X000452f = {
+   fileRef = X000452e;
+   isa = PBXBuildFile;
+  };
+  X0004530 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/gallery2/GallerySplitter.cxx";
+  };
+  X0004531 = {
+   fileRef = X0004530;
+   isa = PBXBuildFile;
+  };
+  X0004532 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/items/chrtitem.cxx";
+  };
+  X0004533 = {
+   fileRef = X0004532;
+   isa = PBXBuildFile;
+  };
+  X0004534 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/items/clipfmtitem.cxx";
+  };
+  X0004535 = {
+   fileRef = X0004534;
+   isa = PBXBuildFile;
+  };
+  X0004536 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/items/customshapeitem.cxx";
+  };
+  X0004537 = {
+   fileRef = X0004536;
+   isa = PBXBuildFile;
+  };
+  X0004538 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/items/drawitem.cxx";
+  };
+  X0004539 = {
+   fileRef = X0004538;
+   isa = PBXBuildFile;
+  };
+  X000453a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/items/e3ditem.cxx";
+  };
+  X000453b = {
+   fileRef = X000453a;
+   isa = PBXBuildFile;
+  };
+  X000453c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/items/galleryitem.cxx";
+  };
+  X000453d = {
+   fileRef = X000453c;
+   isa = PBXBuildFile;
+  };
+  X000453e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/items/grfitem.cxx";
+  };
+  X000453f = {
+   fileRef = X000453e;
+   isa = PBXBuildFile;
+  };
+  X0004540 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/animation/scheduler.cxx";
+  };
+  X0004541 = {
+   fileRef = X0004540;
+   isa = PBXBuildFile;
+  };
+  X0004542 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/animation/objectanimator.cxx";
+  };
+  X0004543 = {
+   fileRef = X0004542;
+   isa = PBXBuildFile;
+  };
+  X0004544 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/animation/animationstate.cxx";
+  };
+  X0004545 = {
+   fileRef = X0004544;
+   isa = PBXBuildFile;
+  };
+  X0004546 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/attribute/sdrallfillattributeshelper.cxx";
+  };
+  X0004547 = {
+   fileRef = X0004546;
+   isa = PBXBuildFile;
+  };
+  X0004548 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/attribute/sdrlinefillshadowtextattribute.cxx";
+  };
+  X0004549 = {
+   fileRef = X0004548;
+   isa = PBXBuildFile;
+  };
+  X000454a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/attribute/sdrfilltextattribute.cxx";
+  };
+  X000454b = {
+   fileRef = X000454a;
+   isa = PBXBuildFile;
+  };
+  X000454c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/attribute/sdrshadowtextattribute.cxx";
+  };
+  X000454d = {
+   fileRef = X000454c;
+   isa = PBXBuildFile;
+  };
+  X000454e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/attribute/sdrtextattribute.cxx";
+  };
+  X000454f = {
+   fileRef = X000454e;
+   isa = PBXBuildFile;
+  };
+  X0004550 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/attribute/sdrlineshadowtextattribute.cxx";
+  };
+  X0004551 = {
+   fileRef = X0004550;
+   isa = PBXBuildFile;
+  };
+  X0004552 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/attribute/sdrformtextattribute.cxx";
+  };
+  X0004553 = {
+   fileRef = X0004552;
+   isa = PBXBuildFile;
+  };
+  X0004554 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/attribute/sdrformtextoutlineattribute.cxx";
+  };
+  X0004555 = {
+   fileRef = X0004554;
+   isa = PBXBuildFile;
+  };
+  X0004556 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofgroup.cxx";
+  };
+  X0004557 = {
+   fileRef = X0004556;
+   isa = PBXBuildFile;
+  };
+  X0004558 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofsdrpage.cxx";
+  };
+  X0004559 = {
+   fileRef = X0004558;
+   isa = PBXBuildFile;
+  };
+  X000455a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofpageobj.cxx";
+  };
+  X000455b = {
+   fileRef = X000455a;
+   isa = PBXBuildFile;
+  };
+  X000455c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofe3d.cxx";
+  };
+  X000455d = {
+   fileRef = X000455c;
+   isa = PBXBuildFile;
+  };
+  X000455e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofe3dcube.cxx";
+  };
+  X000455f = {
+   fileRef = X000455e;
+   isa = PBXBuildFile;
+  };
+  X0004560 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrmediaobj.cxx";
+  };
+  X0004561 = {
+   fileRef = X0004560;
+   isa = PBXBuildFile;
+  };
+  X0004562 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofmasterpagedescriptor.cxx";
+  };
+  X0004563 = {
+   fileRef = X0004562;
+   isa = PBXBuildFile;
+  };
+  X0004564 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofpageobj.cxx";
+  };
+  X0004565 = {
+   fileRef = X0004564;
+   isa = PBXBuildFile;
+  };
+  X0004566 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofe3dscene.cxx";
+  };
+  X0004567 = {
+   fileRef = X0004566;
+   isa = PBXBuildFile;
+  };
+  X0004568 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofgraphic.cxx";
+  };
+  X0004569 = {
+   fileRef = X0004568;
+   isa = PBXBuildFile;
+  };
+  X000456a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactredirector.cxx";
+  };
+  X000456b = {
+   fileRef = X000456a;
+   isa = PBXBuildFile;
+  };
+  X000456c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrcircobj.cxx";
+  };
+  X000456d = {
+   fileRef = X000456c;
+   isa = PBXBuildFile;
+  };
+  X000456e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofgroup.cxx";
+  };
+  X000456f = {
+   fileRef = X000456e;
+   isa = PBXBuildFile;
+  };
+  X0004570 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofunocontrol.cxx";
+  };
+  X0004571 = {
+   fileRef = X0004570;
+   isa = PBXBuildFile;
+  };
+  X0004572 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx";
+  };
+  X0004573 = {
+   fileRef = X0004572;
+   isa = PBXBuildFile;
+  };
+  X0004574 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrobj.cxx";
+  };
+  X0004575 = {
+   fileRef = X0004574;
+   isa = PBXBuildFile;
+  };
+  X0004576 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/objectcontact.cxx";
+  };
+  X0004577 = {
+   fileRef = X0004576;
+   isa = PBXBuildFile;
+  };
+  X0004578 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactoftextobj.cxx";
+  };
+  X0004579 = {
+   fileRef = X0004578;
+   isa = PBXBuildFile;
+  };
+  X000457a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofe3dlathe.cxx";
+  };
+  X000457b = {
+   fileRef = X000457a;
+   isa = PBXBuildFile;
+  };
+  X000457c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrpage.cxx";
+  };
+  X000457d = {
+   fileRef = X000457c;
+   isa = PBXBuildFile;
+  };
+  X000457e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofe3dextrude.cxx";
+  };
+  X000457f = {
+   fileRef = X000457e;
+   isa = PBXBuildFile;
+  };
+  X0004580 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofmasterpagedescriptor.cxx";
+  };
+  X0004581 = {
+   fileRef = X0004580;
+   isa = PBXBuildFile;
+  };
+  X0004582 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontact.cxx";
+  };
+  X0004583 = {
+   fileRef = X0004582;
+   isa = PBXBuildFile;
+  };
+  X0004584 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrole2obj.cxx";
+  };
+  X0004585 = {
+   fileRef = X0004584;
+   isa = PBXBuildFile;
+  };
+  X0004586 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/displayinfo.cxx";
+  };
+  X0004587 = {
+   fileRef = X0004586;
+   isa = PBXBuildFile;
+  };
+  X0004588 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofe3dscene.cxx";
+  };
+  X0004589 = {
+   fileRef = X0004588;
+   isa = PBXBuildFile;
+  };
+  X000458a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrrectobj.cxx";
+  };
+  X000458b = {
+   fileRef = X000458a;
+   isa = PBXBuildFile;
+  };
+  X000458c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofsdrole2obj.cxx";
+  };
+  X000458d = {
+   fileRef = X000458c;
+   isa = PBXBuildFile;
+  };
+  X000458e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofunocontrol.cxx";
+  };
+  X000458f = {
+   fileRef = X000458e;
+   isa = PBXBuildFile;
+  };
+  X0004590 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofgraphic.cxx";
+  };
+  X0004591 = {
+   fileRef = X0004590;
+   isa = PBXBuildFile;
+  };
+  X0004592 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/sdrmediawindow.cxx";
+  };
+  X0004593 = {
+   fileRef = X0004592;
+   isa = PBXBuildFile;
+  };
+  X0004594 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofsdrmediaobj.cxx";
+  };
+  X0004595 = {
+   fileRef = X0004594;
+   isa = PBXBuildFile;
+  };
+  X0004596 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrcaptionobj.cxx";
+  };
+  X0004597 = {
+   fileRef = X0004596;
+   isa = PBXBuildFile;
+  };
+  X0004598 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofvirtobj.cxx";
+  };
+  X0004599 = {
+   fileRef = X0004598;
+   isa = PBXBuildFile;
+  };
+  X000459a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofe3dsphere.cxx";
+  };
+  X000459b = {
+   fileRef = X000459a;
+   isa = PBXBuildFile;
+  };
+  X000459c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofe3dpolygon.cxx";
+  };
+  X000459d = {
+   fileRef = X000459c;
+   isa = PBXBuildFile;
+  };
+  X000459e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdredgeobj.cxx";
+  };
+  X000459f = {
+   fileRef = X000459e;
+   isa = PBXBuildFile;
+  };
+  X00045a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontact.cxx";
+  };
+  X00045a1 = {
+   fileRef = X00045a0;
+   isa = PBXBuildFile;
+  };
+  X00045a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofsdrobj.cxx";
+  };
+  X00045a3 = {
+   fileRef = X00045a2;
+   isa = PBXBuildFile;
+  };
+  X00045a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/objectcontactofpageview.cxx";
+  };
+  X00045a5 = {
+   fileRef = X00045a4;
+   isa = PBXBuildFile;
+  };
+  X00045a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrpathobj.cxx";
+  };
+  X00045a7 = {
+   fileRef = X00045a6;
+   isa = PBXBuildFile;
+  };
+  X00045a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewcontactofsdrmeasureobj.cxx";
+  };
+  X00045a9 = {
+   fileRef = X00045a8;
+   isa = PBXBuildFile;
+  };
+  X00045aa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/objectcontactofobjlistpainter.cxx";
+  };
+  X00045ab = {
+   fileRef = X00045aa;
+   isa = PBXBuildFile;
+  };
+  X00045ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/contact/viewobjectcontactofe3d.cxx";
+  };
+  X00045ad = {
+   fileRef = X00045ac;
+   isa = PBXBuildFile;
+  };
+  X00045ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/event/eventhandler.cxx";
+  };
+  X00045af = {
+   fileRef = X00045ae;
+   isa = PBXBuildFile;
+  };
+  X00045b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayline.cxx";
+  };
+  X00045b1 = {
+   fileRef = X00045b0;
+   isa = PBXBuildFile;
+  };
+  X00045b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlaycrosshair.cxx";
+  };
+  X00045b3 = {
+   fileRef = X00045b2;
+   isa = PBXBuildFile;
+  };
+  X00045b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayrollingrectangle.cxx";
+  };
+  X00045b5 = {
+   fileRef = X00045b4;
+   isa = PBXBuildFile;
+  };
+  X00045b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlaytriangle.cxx";
+  };
+  X00045b7 = {
+   fileRef = X00045b6;
+   isa = PBXBuildFile;
+  };
+  X00045b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayselection.cxx";
+  };
+  X00045b9 = {
+   fileRef = X00045b8;
+   isa = PBXBuildFile;
+  };
+  X00045ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayrectangle.cxx";
+  };
+  X00045bb = {
+   fileRef = X00045ba;
+   isa = PBXBuildFile;
+  };
+  X00045bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlaybitmapex.cxx";
+  };
+  X00045bd = {
+   fileRef = X00045bc;
+   isa = PBXBuildFile;
+  };
+  X00045be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlaymanagerbuffered.cxx";
+  };
+  X00045bf = {
+   fileRef = X00045be;
+   isa = PBXBuildFile;
+  };
+  X00045c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayhelpline.cxx";
+  };
+  X00045c1 = {
+   fileRef = X00045c0;
+   isa = PBXBuildFile;
+  };
+  X00045c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayanimatedbitmapex.cxx";
+  };
+  X00045c3 = {
+   fileRef = X00045c2;
+   isa = PBXBuildFile;
+  };
+  X00045c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlaypolypolygon.cxx";
+  };
+  X00045c5 = {
+   fileRef = X00045c4;
+   isa = PBXBuildFile;
+  };
+  X00045c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayobjectcell.cxx";
+  };
+  X00045c7 = {
+   fileRef = X00045c6;
+   isa = PBXBuildFile;
+  };
+  X00045c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlaytools.cxx";
+  };
+  X00045c9 = {
+   fileRef = X00045c8;
+   isa = PBXBuildFile;
+  };
+  X00045ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayprimitive2dsequenceobject.cxx";
+  };
+  X00045cb = {
+   fileRef = X00045ca;
+   isa = PBXBuildFile;
+  };
+  X00045cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayobject.cxx";
+  };
+  X00045cd = {
+   fileRef = X00045cc;
+   isa = PBXBuildFile;
+  };
+  X00045ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlaymanager.cxx";
+  };
+  X00045cf = {
+   fileRef = X00045ce;
+   isa = PBXBuildFile;
+  };
+  X00045d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayobjectlist.cxx";
+  };
+  X00045d1 = {
+   fileRef = X00045d0;
+   isa = PBXBuildFile;
+  };
+  X00045d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/overlay/overlayhandle.cxx";
+  };
+  X00045d3 = {
+   fileRef = X00045d2;
+   isa = PBXBuildFile;
+  };
+  X00045d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrellipseprimitive2d.cxx";
+  };
+  X00045d5 = {
+   fileRef = X00045d4;
+   isa = PBXBuildFile;
+  };
+  X00045d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrprimitivetools.cxx";
+  };
+  X00045d7 = {
+   fileRef = X00045d6;
+   isa = PBXBuildFile;
+  };
+  X00045d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrtextprimitive2d.cxx";
+  };
+  X00045d9 = {
+   fileRef = X00045d8;
+   isa = PBXBuildFile;
+  };
+  X00045da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/primitivefactory2d.cxx";
+  };
+  X00045db = {
+   fileRef = X00045da;
+   isa = PBXBuildFile;
+  };
+  X00045dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrolecontentprimitive2d.cxx";
+  };
+  X00045dd = {
+   fileRef = X00045dc;
+   isa = PBXBuildFile;
+  };
+  X00045de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrcustomshapeprimitive2d.cxx";
+  };
+  X00045df = {
+   fileRef = X00045de;
+   isa = PBXBuildFile;
+  };
+  X00045e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrgrafprimitive2d.cxx";
+  };
+  X00045e1 = {
+   fileRef = X00045e0;
+   isa = PBXBuildFile;
+  };
+  X00045e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrole2primitive2d.cxx";
+  };
+  X00045e3 = {
+   fileRef = X00045e2;
+   isa = PBXBuildFile;
+  };
+  X00045e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrpathprimitive2d.cxx";
+  };
+  X00045e5 = {
+   fileRef = X00045e4;
+   isa = PBXBuildFile;
+  };
+  X00045e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrrectangleprimitive2d.cxx";
+  };
+  X00045e7 = {
+   fileRef = X00045e6;
+   isa = PBXBuildFile;
+  };
+  X00045e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrcaptionprimitive2d.cxx";
+  };
+  X00045e9 = {
+   fileRef = X00045e8;
+   isa = PBXBuildFile;
+  };
+  X00045ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrconnectorprimitive2d.cxx";
+  };
+  X00045eb = {
+   fileRef = X00045ea;
+   isa = PBXBuildFile;
+  };
+  X00045ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrmeasureprimitive2d.cxx";
+  };
+  X00045ed = {
+   fileRef = X00045ec;
+   isa = PBXBuildFile;
+  };
+  X00045ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrattributecreator.cxx";
+  };
+  X00045ef = {
+   fileRef = X00045ee;
+   isa = PBXBuildFile;
+  };
+  X00045f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive2d/sdrdecompositiontools.cxx";
+  };
+  X00045f1 = {
+   fileRef = X00045f0;
+   isa = PBXBuildFile;
+  };
+  X00045f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/primitive3d/sdrattributecreator3d.cxx";
+  };
+  X00045f3 = {
+   fileRef = X00045f2;
+   isa = PBXBuildFile;
+  };
+  X00045f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/pageproperties.cxx";
+  };
+  X00045f5 = {
+   fileRef = X00045f4;
+   isa = PBXBuildFile;
+  };
+  X00045f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/e3dsceneproperties.cxx";
+  };
+  X00045f7 = {
+   fileRef = X00045f6;
+   isa = PBXBuildFile;
+  };
+  X00045f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/itemsettools.cxx";
+  };
+  X00045f9 = {
+   fileRef = X00045f8;
+   isa = PBXBuildFile;
+  };
+  X00045fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/captionproperties.cxx";
+  };
+  X00045fb = {
+   fileRef = X00045fa;
+   isa = PBXBuildFile;
+  };
+  X00045fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/e3dextrudeproperties.cxx";
+  };
+  X00045fd = {
+   fileRef = X00045fc;
+   isa = PBXBuildFile;
+  };
+  X00045fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/e3dproperties.cxx";
+  };
+  X00045ff = {
+   fileRef = X00045fe;
+   isa = PBXBuildFile;
+  };
+  X0004600 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/measureproperties.cxx";
+  };
+  X0004601 = {
+   fileRef = X0004600;
+   isa = PBXBuildFile;
+  };
+  X0004602 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/customshapeproperties.cxx";
+  };
+  X0004603 = {
+   fileRef = X0004602;
+   isa = PBXBuildFile;
+  };
+  X0004604 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/rectangleproperties.cxx";
+  };
+  X0004605 = {
+   fileRef = X0004604;
+   isa = PBXBuildFile;
+  };
+  X0004606 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/groupproperties.cxx";
+  };
+  X0004607 = {
+   fileRef = X0004606;
+   isa = PBXBuildFile;
+  };
+  X0004608 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/properties.cxx";
+  };
+  X0004609 = {
+   fileRef = X0004608;
+   isa = PBXBuildFile;
+  };
+  X000460a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/e3dlatheproperties.cxx";
+  };
+  X000460b = {
+   fileRef = X000460a;
+   isa = PBXBuildFile;
+  };
+  X000460c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/graphicproperties.cxx";
+  };
+  X000460d = {
+   fileRef = X000460c;
+   isa = PBXBuildFile;
+  };
+  X000460e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/circleproperties.cxx";
+  };
+  X000460f = {
+   fileRef = X000460e;
+   isa = PBXBuildFile;
+  };
+  X0004610 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/emptyproperties.cxx";
+  };
+  X0004611 = {
+   fileRef = X0004610;
+   isa = PBXBuildFile;
+  };
+  X0004612 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/e3dsphereproperties.cxx";
+  };
+  X0004613 = {
+   fileRef = X0004612;
+   isa = PBXBuildFile;
+  };
+  X0004614 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/defaultproperties.cxx";
+  };
+  X0004615 = {
+   fileRef = X0004614;
+   isa = PBXBuildFile;
+  };
+  X0004616 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/textproperties.cxx";
+  };
+  X0004617 = {
+   fileRef = X0004616;
+   isa = PBXBuildFile;
+  };
+  X0004618 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/attributeproperties.cxx";
+  };
+  X0004619 = {
+   fileRef = X0004618;
+   isa = PBXBuildFile;
+  };
+  X000461a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/connectorproperties.cxx";
+  };
+  X000461b = {
+   fileRef = X000461a;
+   isa = PBXBuildFile;
+  };
+  X000461c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/e3dcompoundproperties.cxx";
+  };
+  X000461d = {
+   fileRef = X000461c;
+   isa = PBXBuildFile;
+  };
+  X000461e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/sdr/properties/oleproperties.cxx";
+  };
+  X000461f = {
+   fileRef = X000461e;
+   isa = PBXBuildFile;
+  };
+  X0004620 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/clonelist.cxx";
+  };
+  X0004621 = {
+   fileRef = X0004620;
+   isa = PBXBuildFile;
+  };
+  X0004622 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/charthelper.cxx";
+  };
+  X0004623 = {
+   fileRef = X0004622;
+   isa = PBXBuildFile;
+  };
+  X0004624 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/gradtrns.cxx";
+  };
+  X0004625 = {
+   fileRef = X0004624;
+   isa = PBXBuildFile;
+  };
+  X0004626 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/polypolygoneditor.cxx";
+  };
+  X0004627 = {
+   fileRef = X0004626;
+   isa = PBXBuildFile;
+  };
+  X0004628 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/sdrhittesthelper.cxx";
+  };
+  X0004629 = {
+   fileRef = X0004628;
+   isa = PBXBuildFile;
+  };
+  X000462a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/sdrmasterpagedescriptor.cxx";
+  };
+  X000462b = {
+   fileRef = X000462a;
+   isa = PBXBuildFile;
+  };
+  X000462c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/sdrpagewindow.cxx";
+  };
+  X000462d = {
+   fileRef = X000462c;
+   isa = PBXBuildFile;
+  };
+  X000462e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/sdrpaintwindow.cxx";
+  };
+  X000462f = {
+   fileRef = X000462e;
+   isa = PBXBuildFile;
+  };
+  X0004630 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/sdrundomanager.cxx";
+  };
+  X0004631 = {
+   fileRef = X0004630;
+   isa = PBXBuildFile;
+  };
+  X0004632 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/selectioncontroller.cxx";
+  };
+  X0004633 = {
+   fileRef = X0004632;
+   isa = PBXBuildFile;
+  };
+  X0004634 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdattr.cxx";
+  };
+  X0004635 = {
+   fileRef = X0004634;
+   isa = PBXBuildFile;
+  };
+  X0004636 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdcrtv.cxx";
+  };
+  X0004637 = {
+   fileRef = X0004636;
+   isa = PBXBuildFile;
+  };
+  X0004638 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svddrag.cxx";
+  };
+  X0004639 = {
+   fileRef = X0004638;
+   isa = PBXBuildFile;
+  };
+  X000463a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svddrgmt.cxx";
+  };
+  X000463b = {
+   fileRef = X000463a;
+   isa = PBXBuildFile;
+  };
+  X000463c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svddrgv.cxx";
+  };
+  X000463d = {
+   fileRef = X000463c;
+   isa = PBXBuildFile;
+  };
+  X000463e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdedtv.cxx";
+  };
+  X000463f = {
+   fileRef = X000463e;
+   isa = PBXBuildFile;
+  };
+  X0004640 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdedtv1.cxx";
+  };
+  X0004641 = {
+   fileRef = X0004640;
+   isa = PBXBuildFile;
+  };
+  X0004642 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdedtv2.cxx";
+  };
+  X0004643 = {
+   fileRef = X0004642;
+   isa = PBXBuildFile;
+  };
+  X0004644 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdedxv.cxx";
+  };
+  X0004645 = {
+   fileRef = X0004644;
+   isa = PBXBuildFile;
+  };
+  X0004646 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdetc.cxx";
+  };
+  X0004647 = {
+   fileRef = X0004646;
+   isa = PBXBuildFile;
+  };
+  X0004648 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdfmtf.cxx";
+  };
+  X0004649 = {
+   fileRef = X0004648;
+   isa = PBXBuildFile;
+  };
+  X000464a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdglev.cxx";
+  };
+  X000464b = {
+   fileRef = X000464a;
+   isa = PBXBuildFile;
+  };
+  X000464c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdglue.cxx";
+  };
+  X000464d = {
+   fileRef = X000464c;
+   isa = PBXBuildFile;
+  };
+  X000464e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdhdl.cxx";
+  };
+  X000464f = {
+   fileRef = X000464e;
+   isa = PBXBuildFile;
+  };
+  X0004650 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdhlpln.cxx";
+  };
+  X0004651 = {
+   fileRef = X0004650;
+   isa = PBXBuildFile;
+  };
+  X0004652 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdibrow.cxx";
+  };
+  X0004653 = {
+   fileRef = X0004652;
+   isa = PBXBuildFile;
+  };
+  X0004654 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svditer.cxx";
+  };
+  X0004655 = {
+   fileRef = X0004654;
+   isa = PBXBuildFile;
+  };
+  X0004656 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdlayer.cxx";
+  };
+  X0004657 = {
+   fileRef = X0004656;
+   isa = PBXBuildFile;
+  };
+  X0004658 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdmark.cxx";
+  };
+  X0004659 = {
+   fileRef = X0004658;
+   isa = PBXBuildFile;
+  };
+  X000465a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdmodel.cxx";
+  };
+  X000465b = {
+   fileRef = X000465a;
+   isa = PBXBuildFile;
+  };
+  X000465c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdmrkv.cxx";
+  };
+  X000465d = {
+   fileRef = X000465c;
+   isa = PBXBuildFile;
+  };
+  X000465e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdmrkv1.cxx";
+  };
+  X000465f = {
+   fileRef = X000465e;
+   isa = PBXBuildFile;
+  };
+  X0004660 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdoashp.cxx";
+  };
+  X0004661 = {
+   fileRef = X0004660;
+   isa = PBXBuildFile;
+  };
+  X0004662 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdoattr.cxx";
+  };
+  X0004663 = {
+   fileRef = X0004662;
+   isa = PBXBuildFile;
+  };
+  X0004664 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdobj.cxx";
+  };
+  X0004665 = {
+   fileRef = X0004664;
+   isa = PBXBuildFile;
+  };
+  X0004666 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdobjplusdata.cxx";
+  };
+  X0004667 = {
+   fileRef = X0004666;
+   isa = PBXBuildFile;
+  };
+  X0004668 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdobjuserdatalist.cxx";
+  };
+  X0004669 = {
+   fileRef = X0004668;
+   isa = PBXBuildFile;
+  };
+  X000466a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdocapt.cxx";
+  };
+  X000466b = {
+   fileRef = X000466a;
+   isa = PBXBuildFile;
+  };
+  X000466c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdocirc.cxx";
+  };
+  X000466d = {
+   fileRef = X000466c;
+   isa = PBXBuildFile;
+  };
+  X000466e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdoedge.cxx";
+  };
+  X000466f = {
+   fileRef = X000466e;
+   isa = PBXBuildFile;
+  };
+  X0004670 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdograf.cxx";
+  };
+  X0004671 = {
+   fileRef = X0004670;
+   isa = PBXBuildFile;
+  };
+  X0004672 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdogrp.cxx";
+  };
+  X0004673 = {
+   fileRef = X0004672;
+   isa = PBXBuildFile;
+  };
+  X0004674 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdomeas.cxx";
+  };
+  X0004675 = {
+   fileRef = X0004674;
+   isa = PBXBuildFile;
+  };
+  X0004676 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdomedia.cxx";
+  };
+  X0004677 = {
+   fileRef = X0004676;
+   isa = PBXBuildFile;
+  };
+  X0004678 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdoole2.cxx";
+  };
+  X0004679 = {
+   fileRef = X0004678;
+   isa = PBXBuildFile;
+  };
+  X000467a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdopage.cxx";
+  };
+  X000467b = {
+   fileRef = X000467a;
+   isa = PBXBuildFile;
+  };
+  X000467c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdopath.cxx";
+  };
+  X000467d = {
+   fileRef = X000467c;
+   isa = PBXBuildFile;
+  };
+  X000467e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdorect.cxx";
+  };
+  X000467f = {
+   fileRef = X000467e;
+   isa = PBXBuildFile;
+  };
+  X0004680 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotext.cxx";
+  };
+  X0004681 = {
+   fileRef = X0004680;
+   isa = PBXBuildFile;
+  };
+  X0004682 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotextdecomposition.cxx";
+  };
+  X0004683 = {
+   fileRef = X0004682;
+   isa = PBXBuildFile;
+  };
+  X0004684 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotextpathdecomposition.cxx";
+  };
+  X0004685 = {
+   fileRef = X0004684;
+   isa = PBXBuildFile;
+  };
+  X0004686 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotxat.cxx";
+  };
+  X0004687 = {
+   fileRef = X0004686;
+   isa = PBXBuildFile;
+  };
+  X0004688 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotxdr.cxx";
+  };
+  X0004689 = {
+   fileRef = X0004688;
+   isa = PBXBuildFile;
+  };
+  X000468a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotxed.cxx";
+  };
+  X000468b = {
+   fileRef = X000468a;
+   isa = PBXBuildFile;
+  };
+  X000468c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotxfl.cxx";
+  };
+  X000468d = {
+   fileRef = X000468c;
+   isa = PBXBuildFile;
+  };
+  X000468e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotxln.cxx";
+  };
+  X000468f = {
+   fileRef = X000468e;
+   isa = PBXBuildFile;
+  };
+  X0004690 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdotxtr.cxx";
+  };
+  X0004691 = {
+   fileRef = X0004690;
+   isa = PBXBuildFile;
+  };
+  X0004692 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdouno.cxx";
+  };
+  X0004693 = {
+   fileRef = X0004692;
+   isa = PBXBuildFile;
+  };
+  X0004694 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdoutl.cxx";
+  };
+  X0004695 = {
+   fileRef = X0004694;
+   isa = PBXBuildFile;
+  };
+  X0004696 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdoutlinercache.cxx";
+  };
+  X0004697 = {
+   fileRef = X0004696;
+   isa = PBXBuildFile;
+  };
+  X0004698 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdovirt.cxx";
+  };
+  X0004699 = {
+   fileRef = X0004698;
+   isa = PBXBuildFile;
+  };
+  X000469a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdpage.cxx";
+  };
+  X000469b = {
+   fileRef = X000469a;
+   isa = PBXBuildFile;
+  };
+  X000469c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdpagv.cxx";
+  };
+  X000469d = {
+   fileRef = X000469c;
+   isa = PBXBuildFile;
+  };
+  X000469e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdpntv.cxx";
+  };
+  X000469f = {
+   fileRef = X000469e;
+   isa = PBXBuildFile;
+  };
+  X00046a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdpoev.cxx";
+  };
+  X00046a1 = {
+   fileRef = X00046a0;
+   isa = PBXBuildFile;
+  };
+  X00046a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdsnpv.cxx";
+  };
+  X00046a3 = {
+   fileRef = X00046a2;
+   isa = PBXBuildFile;
+  };
+  X00046a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdtext.cxx";
+  };
+  X00046a5 = {
+   fileRef = X00046a4;
+   isa = PBXBuildFile;
+  };
+  X00046a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdtrans.cxx";
+  };
+  X00046a7 = {
+   fileRef = X00046a6;
+   isa = PBXBuildFile;
+  };
+  X00046a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdundo.cxx";
+  };
+  X00046a9 = {
+   fileRef = X00046a8;
+   isa = PBXBuildFile;
+  };
+  X00046aa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdview.cxx";
+  };
+  X00046ab = {
+   fileRef = X00046aa;
+   isa = PBXBuildFile;
+  };
+  X00046ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdviter.cxx";
+  };
+  X00046ad = {
+   fileRef = X00046ac;
+   isa = PBXBuildFile;
+  };
+  X00046ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/svdxcgv.cxx";
+  };
+  X00046af = {
+   fileRef = X00046ae;
+   isa = PBXBuildFile;
+  };
+  X00046b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/textchain.cxx";
+  };
+  X00046b1 = {
+   fileRef = X00046b0;
+   isa = PBXBuildFile;
+  };
+  X00046b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/textchainflow.cxx";
+  };
+  X00046b3 = {
+   fileRef = X00046b2;
+   isa = PBXBuildFile;
+  };
+  X00046b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/svdraw/textchaincursor.cxx";
+  };
+  X00046b5 = {
+   fileRef = X00046b4;
+   isa = PBXBuildFile;
+  };
+  X00046b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/styles/CommonStylePreviewRenderer.cxx";
+  };
+  X00046b7 = {
+   fileRef = X00046b6;
+   isa = PBXBuildFile;
+  };
+  X00046b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/styles/CommonStyleManager.cxx";
+  };
+  X00046b9 = {
+   fileRef = X00046b8;
+   isa = PBXBuildFile;
+  };
+  X00046ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/styles/ColorSets.cxx";
+  };
+  X00046bb = {
+   fileRef = X00046ba;
+   isa = PBXBuildFile;
+  };
+  X00046bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/cell.cxx";
+  };
+  X00046bd = {
+   fileRef = X00046bc;
+   isa = PBXBuildFile;
+  };
+  X00046be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/cellcursor.cxx";
+  };
+  X00046bf = {
+   fileRef = X00046be;
+   isa = PBXBuildFile;
+  };
+  X00046c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/cellrange.cxx";
+  };
+  X00046c1 = {
+   fileRef = X00046c0;
+   isa = PBXBuildFile;
+  };
+  X00046c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/propertyset.cxx";
+  };
+  X00046c3 = {
+   fileRef = X00046c2;
+   isa = PBXBuildFile;
+  };
+  X00046c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/svdotable.cxx";
+  };
+  X00046c5 = {
+   fileRef = X00046c4;
+   isa = PBXBuildFile;
+  };
+  X00046c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tablecolumn.cxx";
+  };
+  X00046c7 = {
+   fileRef = X00046c6;
+   isa = PBXBuildFile;
+  };
+  X00046c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tablecolumns.cxx";
+  };
+  X00046c9 = {
+   fileRef = X00046c8;
+   isa = PBXBuildFile;
+  };
+  X00046ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tablecontroller.cxx";
+  };
+  X00046cb = {
+   fileRef = X00046ca;
+   isa = PBXBuildFile;
+  };
+  X00046cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tablehandles.cxx";
+  };
+  X00046cd = {
+   fileRef = X00046cc;
+   isa = PBXBuildFile;
+  };
+  X00046ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tablelayouter.cxx";
+  };
+  X00046cf = {
+   fileRef = X00046ce;
+   isa = PBXBuildFile;
+  };
+  X00046d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tablemodel.cxx";
+  };
+  X00046d1 = {
+   fileRef = X00046d0;
+   isa = PBXBuildFile;
+  };
+  X00046d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tablerow.cxx";
+  };
+  X00046d3 = {
+   fileRef = X00046d2;
+   isa = PBXBuildFile;
+  };
+  X00046d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tablerows.cxx";
+  };
+  X00046d5 = {
+   fileRef = X00046d4;
+   isa = PBXBuildFile;
+  };
+  X00046d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/tableundo.cxx";
+  };
+  X00046d7 = {
+   fileRef = X00046d6;
+   isa = PBXBuildFile;
+  };
+  X00046d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/table/viewcontactoftableobj.cxx";
+  };
+  X00046d9 = {
+   fileRef = X00046d8;
+   isa = PBXBuildFile;
+  };
+  X00046da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/tbxctrls/extrusioncontrols.cxx";
+  };
+  X00046db = {
+   fileRef = X00046da;
+   isa = PBXBuildFile;
+  };
+  X00046dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/tbxctrls/fontworkgallery.cxx";
+  };
+  X00046dd = {
+   fileRef = X00046dc;
+   isa = PBXBuildFile;
+  };
+  X00046de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/tbxctrls/Palette.cxx";
+  };
+  X00046df = {
+   fileRef = X00046de;
+   isa = PBXBuildFile;
+  };
+  X00046e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/tbxctrls/PaletteManager.cxx";
+  };
+  X00046e1 = {
+   fileRef = X00046e0;
+   isa = PBXBuildFile;
+  };
+  X00046e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/tbxctrls/tbcontrl.cxx";
+  };
+  X00046e3 = {
+   fileRef = X00046e2;
+   isa = PBXBuildFile;
+  };
+  X00046e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/tbxctrls/tbxcolorupdate.cxx";
+  };
+  X00046e5 = {
+   fileRef = X00046e4;
+   isa = PBXBuildFile;
+  };
+  X00046e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/tbxctrls/SvxColorValueSet.cxx";
+  };
+  X00046e7 = {
+   fileRef = X00046e6;
+   isa = PBXBuildFile;
+  };
+  X00046e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/tbxctrls/SvxPresetListBox.cxx";
+  };
+  X00046e9 = {
+   fileRef = X00046e8;
+   isa = PBXBuildFile;
+  };
+  X00046ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/toolbars/extrusionbar.cxx";
+  };
+  X00046eb = {
+   fileRef = X00046ea;
+   isa = PBXBuildFile;
+  };
+  X00046ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/toolbars/fontworkbar.cxx";
+  };
+  X00046ed = {
+   fileRef = X00046ec;
+   isa = PBXBuildFile;
+  };
+  X00046ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/gluepts.cxx";
+  };
+  X00046ef = {
+   fileRef = X00046ee;
+   isa = PBXBuildFile;
+  };
+  X00046f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/shapepropertynotifier.cxx";
+  };
+  X00046f1 = {
+   fileRef = X00046f0;
+   isa = PBXBuildFile;
+  };
+  X00046f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/tableshape.cxx";
+  };
+  X00046f3 = {
+   fileRef = X00046f2;
+   isa = PBXBuildFile;
+  };
+  X00046f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unobrushitemhelper.cxx";
+  };
+  X00046f5 = {
+   fileRef = X00046f4;
+   isa = PBXBuildFile;
+  };
+  X00046f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unobtabl.cxx";
+  };
+  X00046f7 = {
+   fileRef = X00046f6;
+   isa = PBXBuildFile;
+  };
+  X00046f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unodtabl.cxx";
+  };
+  X00046f9 = {
+   fileRef = X00046f8;
+   isa = PBXBuildFile;
+  };
+  X00046fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/UnoGraphicExporter.cxx";
+  };
+  X00046fb = {
+   fileRef = X00046fa;
+   isa = PBXBuildFile;
+  };
+  X00046fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unogtabl.cxx";
+  };
+  X00046fd = {
+   fileRef = X00046fc;
+   isa = PBXBuildFile;
+  };
+  X00046fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unohtabl.cxx";
+  };
+  X00046ff = {
+   fileRef = X00046fe;
+   isa = PBXBuildFile;
+  };
+  X0004700 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unomlstr.cxx";
+  };
+  X0004701 = {
+   fileRef = X0004700;
+   isa = PBXBuildFile;
+  };
+  X0004702 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unomod.cxx";
+  };
+  X0004703 = {
+   fileRef = X0004702;
+   isa = PBXBuildFile;
+  };
+  X0004704 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unomtabl.cxx";
+  };
+  X0004705 = {
+   fileRef = X0004704;
+   isa = PBXBuildFile;
+  };
+  X0004706 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/UnoNameItemTable.cxx";
+  };
+  X0004707 = {
+   fileRef = X0004706;
+   isa = PBXBuildFile;
+  };
+  X0004708 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unopage.cxx";
+  };
+  X0004709 = {
+   fileRef = X0004708;
+   isa = PBXBuildFile;
+  };
+  X000470a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unoprov.cxx";
+  };
+  X000470b = {
+   fileRef = X000470a;
+   isa = PBXBuildFile;
+  };
+  X000470c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unoshap2.cxx";
+  };
+  X000470d = {
+   fileRef = X000470c;
+   isa = PBXBuildFile;
+  };
+  X000470e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unoshap3.cxx";
+  };
+  X000470f = {
+   fileRef = X000470e;
+   isa = PBXBuildFile;
+  };
+  X0004710 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unoshap4.cxx";
+  };
+  X0004711 = {
+   fileRef = X0004710;
+   isa = PBXBuildFile;
+  };
+  X0004712 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unoshape.cxx";
+  };
+  X0004713 = {
+   fileRef = X0004712;
+   isa = PBXBuildFile;
+  };
+  X0004714 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unoshtxt.cxx";
+  };
+  X0004715 = {
+   fileRef = X0004714;
+   isa = PBXBuildFile;
+  };
+  X0004716 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/unottabl.cxx";
+  };
+  X0004717 = {
+   fileRef = X0004716;
+   isa = PBXBuildFile;
+  };
+  X0004718 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/unodraw/XPropertyTable.cxx";
+  };
+  X0004719 = {
+   fileRef = X0004718;
+   isa = PBXBuildFile;
+  };
+  X000471a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xml/xmleohlp.cxx";
+  };
+  X000471b = {
+   fileRef = X000471a;
+   isa = PBXBuildFile;
+  };
+  X000471c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xml/xmlexport.cxx";
+  };
+  X000471d = {
+   fileRef = X000471c;
+   isa = PBXBuildFile;
+  };
+  X000471e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xml/xmlgrhlp.cxx";
+  };
+  X000471f = {
+   fileRef = X000471e;
+   isa = PBXBuildFile;
+  };
+  X0004720 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xml/xmlxtexp.cxx";
+  };
+  X0004721 = {
+   fileRef = X0004720;
+   isa = PBXBuildFile;
+  };
+  X0004722 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xml/xmlxtimp.cxx";
+  };
+  X0004723 = {
+   fileRef = X0004722;
+   isa = PBXBuildFile;
+  };
+  X0004724 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xattr.cxx";
+  };
+  X0004725 = {
+   fileRef = X0004724;
+   isa = PBXBuildFile;
+  };
+  X0004726 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xattr2.cxx";
+  };
+  X0004727 = {
+   fileRef = X0004726;
+   isa = PBXBuildFile;
+  };
+  X0004728 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xattrbmp.cxx";
+  };
+  X0004729 = {
+   fileRef = X0004728;
+   isa = PBXBuildFile;
+  };
+  X000472a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xexch.cxx";
+  };
+  X000472b = {
+   fileRef = X000472a;
+   isa = PBXBuildFile;
+  };
+  X000472c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/_xoutbmp.cxx";
+  };
+  X000472d = {
+   fileRef = X000472c;
+   isa = PBXBuildFile;
+  };
+  X000472e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/_xpoly.cxx";
+  };
+  X000472f = {
+   fileRef = X000472e;
+   isa = PBXBuildFile;
+  };
+  X0004730 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xpool.cxx";
+  };
+  X0004731 = {
+   fileRef = X0004730;
+   isa = PBXBuildFile;
+  };
+  X0004732 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xtabbtmp.cxx";
+  };
+  X0004733 = {
+   fileRef = X0004732;
+   isa = PBXBuildFile;
+  };
+  X0004734 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xtabcolr.cxx";
+  };
+  X0004735 = {
+   fileRef = X0004734;
+   isa = PBXBuildFile;
+  };
+  X0004736 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xtabdash.cxx";
+  };
+  X0004737 = {
+   fileRef = X0004736;
+   isa = PBXBuildFile;
+  };
+  X0004738 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xtabgrdt.cxx";
+  };
+  X0004739 = {
+   fileRef = X0004738;
+   isa = PBXBuildFile;
+  };
+  X000473a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xtabhtch.cxx";
+  };
+  X000473b = {
+   fileRef = X000473a;
+   isa = PBXBuildFile;
+  };
+  X000473c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xtable.cxx";
+  };
+  X000473d = {
+   fileRef = X000473c;
+   isa = PBXBuildFile;
+  };
+  X000473e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xtabptrn.cxx";
+  };
+  X000473f = {
+   fileRef = X000473e;
+   isa = PBXBuildFile;
+  };
+  X0004740 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/XPropertyEntry.cxx";
+  };
+  X0004741 = {
+   fileRef = X0004740;
+   isa = PBXBuildFile;
+  };
+  X0004742 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/xoutdev/xtablend.cxx";
+  };
+  X0004743 = {
+   fileRef = X0004742;
+   isa = PBXBuildFile;
+  };
+  X0004744 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/fmcomp/dbaexchange.cxx";
+  };
+  X0004745 = {
+   fileRef = X0004744;
+   isa = PBXBuildFile;
+  };
+  X0004746 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/fmcomp/fmgridcl.cxx";
+  };
+  X0004747 = {
+   fileRef = X0004746;
+   isa = PBXBuildFile;
+  };
+  X0004748 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/fmcomp/fmgridif.cxx";
+  };
+  X0004749 = {
+   fileRef = X0004748;
+   isa = PBXBuildFile;
+  };
+  X000474a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/fmcomp/gridcell.cxx";
+  };
+  X000474b = {
+   fileRef = X000474a;
+   isa = PBXBuildFile;
+  };
+  X000474c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/fmcomp/gridcols.cxx";
+  };
+  X000474d = {
+   fileRef = X000474c;
+   isa = PBXBuildFile;
+  };
+  X000474e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/fmcomp/gridctrl.cxx";
+  };
+  X000474f = {
+   fileRef = X000474e;
+   isa = PBXBuildFile;
+  };
+  X0004750 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/fmcomp/xmlexchg.cxx";
+  };
+  X0004751 = {
+   fileRef = X0004750;
+   isa = PBXBuildFile;
+  };
+  X0004752 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/dataaccessdescriptor.cxx";
+  };
+  X0004753 = {
+   fileRef = X0004752;
+   isa = PBXBuildFile;
+  };
+  X0004754 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/datalistener.cxx";
+  };
+  X0004755 = {
+   fileRef = X0004754;
+   isa = PBXBuildFile;
+  };
+  X0004756 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/datanavi.cxx";
+  };
+  X0004757 = {
+   fileRef = X0004756;
+   isa = PBXBuildFile;
+  };
+  X0004758 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/delayedevent.cxx";
+  };
+  X0004759 = {
+   fileRef = X0004758;
+   isa = PBXBuildFile;
+  };
+  X000475a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmcontrolbordermanager.cxx";
+  };
+  X000475b = {
+   fileRef = X000475a;
+   isa = PBXBuildFile;
+  };
+  X000475c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmcontrollayout.cxx";
+  };
+  X000475d = {
+   fileRef = X000475c;
+   isa = PBXBuildFile;
+  };
+  X000475e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmdmod.cxx";
+  };
+  X000475f = {
+   fileRef = X000475e;
+   isa = PBXBuildFile;
+  };
+  X0004760 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmdocumentclassification.cxx";
+  };
+  X0004761 = {
+   fileRef = X0004760;
+   isa = PBXBuildFile;
+  };
+  X0004762 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmdpage.cxx";
+  };
+  X0004763 = {
+   fileRef = X0004762;
+   isa = PBXBuildFile;
+  };
+  X0004764 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmexch.cxx";
+  };
+  X0004765 = {
+   fileRef = X0004764;
+   isa = PBXBuildFile;
+  };
+  X0004766 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmexpl.cxx";
+  };
+  X0004767 = {
+   fileRef = X0004766;
+   isa = PBXBuildFile;
+  };
+  X0004768 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmitems.cxx";
+  };
+  X0004769 = {
+   fileRef = X0004768;
+   isa = PBXBuildFile;
+  };
+  X000476a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmmodel.cxx";
+  };
+  X000476b = {
+   fileRef = X000476a;
+   isa = PBXBuildFile;
+  };
+  X000476c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmobj.cxx";
+  };
+  X000476d = {
+   fileRef = X000476c;
+   isa = PBXBuildFile;
+  };
+  X000476e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmpage.cxx";
+  };
+  X000476f = {
+   fileRef = X000476e;
+   isa = PBXBuildFile;
+  };
+  X0004770 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmpgeimp.cxx";
+  };
+  X0004771 = {
+   fileRef = X0004770;
+   isa = PBXBuildFile;
+  };
+  X0004772 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmscriptingenv.cxx";
+  };
+  X0004773 = {
+   fileRef = X0004772;
+   isa = PBXBuildFile;
+  };
+  X0004774 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmservs.cxx";
+  };
+  X0004775 = {
+   fileRef = X0004774;
+   isa = PBXBuildFile;
+  };
+  X0004776 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmshell.cxx";
+  };
+  X0004777 = {
+   fileRef = X0004776;
+   isa = PBXBuildFile;
+  };
+  X0004778 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmshimp.cxx";
+  };
+  X0004779 = {
+   fileRef = X0004778;
+   isa = PBXBuildFile;
+  };
+  X000477a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmtextcontroldialogs.cxx";
+  };
+  X000477b = {
+   fileRef = X000477a;
+   isa = PBXBuildFile;
+  };
+  X000477c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmtextcontrolfeature.cxx";
+  };
+  X000477d = {
+   fileRef = X000477c;
+   isa = PBXBuildFile;
+  };
+  X000477e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmtextcontrolshell.cxx";
+  };
+  X000477f = {
+   fileRef = X000477e;
+   isa = PBXBuildFile;
+  };
+  X0004780 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmtools.cxx";
+  };
+  X0004781 = {
+   fileRef = X0004780;
+   isa = PBXBuildFile;
+  };
+  X0004782 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmundo.cxx";
+  };
+  X0004783 = {
+   fileRef = X0004782;
+   isa = PBXBuildFile;
+  };
+  X0004784 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmview.cxx";
+  };
+  X0004785 = {
+   fileRef = X0004784;
+   isa = PBXBuildFile;
+  };
+  X0004786 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/fmvwimp.cxx";
+  };
+  X0004787 = {
+   fileRef = X0004786;
+   isa = PBXBuildFile;
+  };
+  X0004788 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/formcontrolfactory.cxx";
+  };
+  X0004789 = {
+   fileRef = X0004788;
+   isa = PBXBuildFile;
+  };
+  X000478a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/formcontroller.cxx";
+  };
+  X000478b = {
+   fileRef = X000478a;
+   isa = PBXBuildFile;
+  };
+  X000478c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/formcontrolling.cxx";
+  };
+  X000478d = {
+   fileRef = X000478c;
+   isa = PBXBuildFile;
+  };
+  X000478e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/formdispatchinterceptor.cxx";
+  };
+  X000478f = {
+   fileRef = X000478e;
+   isa = PBXBuildFile;
+  };
+  X0004790 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/formfeaturedispatcher.cxx";
+  };
+  X0004791 = {
+   fileRef = X0004790;
+   isa = PBXBuildFile;
+  };
+  X0004792 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/formtoolbars.cxx";
+  };
+  X0004793 = {
+   fileRef = X0004792;
+   isa = PBXBuildFile;
+  };
+  X0004794 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/legacyformcontroller.cxx";
+  };
+  X0004795 = {
+   fileRef = X0004794;
+   isa = PBXBuildFile;
+  };
+  X0004796 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/navigatortree.cxx";
+  };
+  X0004797 = {
+   fileRef = X0004796;
+   isa = PBXBuildFile;
+  };
+  X0004798 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/navigatortreemodel.cxx";
+  };
+  X0004799 = {
+   fileRef = X0004798;
+   isa = PBXBuildFile;
+  };
+  X000479a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/ParseContext.cxx";
+  };
+  X000479b = {
+   fileRef = X000479a;
+   isa = PBXBuildFile;
+  };
+  X000479c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/sdbdatacolumn.cxx";
+  };
+  X000479d = {
+   fileRef = X000479c;
+   isa = PBXBuildFile;
+  };
+  X000479e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/sqlparserclient.cxx";
+  };
+  X000479f = {
+   fileRef = X000479e;
+   isa = PBXBuildFile;
+  };
+  X00047a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/typemap.cxx";
+  };
+  X00047a1 = {
+   fileRef = X00047a0;
+   isa = PBXBuildFile;
+  };
+  X00047a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/form/xfm_addcondition.cxx";
+  };
+  X00047a3 = {
+   fileRef = X00047a2;
+   isa = PBXBuildFile;
+  };
+  X00047a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svx/source/uitest/sdrobject.cxx";
+  };
+  X00047a5 = {
+   fileRef = X00047a4;
+   isa = PBXBuildFile;
+  };
+  X00047a6 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00044c3;
+}

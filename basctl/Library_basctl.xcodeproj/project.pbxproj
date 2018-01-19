@@ -1,0 +1,475 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00016ff = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001763;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001700;
+   productRefGroup = X0001703;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001705;
+  };
+  X0001700 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001701 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001704 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001705 = {
+   buildConfigurationList = X0001764;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001702;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0001706 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/accessibility/accessibledialogcontrolshape.cxx";
+  };
+  X0001707 = {
+   fileRef = X0001706;
+   isa = PBXBuildFile;
+  };
+  X0001708 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/accessibility/accessibledialogwindow.cxx";
+  };
+  X0001709 = {
+   fileRef = X0001708;
+   isa = PBXBuildFile;
+  };
+  X000170a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basdoc.cxx";
+  };
+  X000170b = {
+   fileRef = X000170a;
+   isa = PBXBuildFile;
+  };
+  X000170c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basicbox.cxx";
+  };
+  X000170d = {
+   fileRef = X000170c;
+   isa = PBXBuildFile;
+  };
+  X000170e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basicrenderable.cxx";
+  };
+  X000170f = {
+   fileRef = X000170e;
+   isa = PBXBuildFile;
+  };
+  X0001710 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/baside2b.cxx";
+  };
+  X0001711 = {
+   fileRef = X0001710;
+   isa = PBXBuildFile;
+  };
+  X0001712 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/baside2.cxx";
+  };
+  X0001713 = {
+   fileRef = X0001712;
+   isa = PBXBuildFile;
+  };
+  X0001714 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/baside3.cxx";
+  };
+  X0001715 = {
+   fileRef = X0001714;
+   isa = PBXBuildFile;
+  };
+  X0001716 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basidectrlr.cxx";
+  };
+  X0001717 = {
+   fileRef = X0001716;
+   isa = PBXBuildFile;
+  };
+  X0001718 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basides1.cxx";
+  };
+  X0001719 = {
+   fileRef = X0001718;
+   isa = PBXBuildFile;
+  };
+  X000171a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basides2.cxx";
+  };
+  X000171b = {
+   fileRef = X000171a;
+   isa = PBXBuildFile;
+  };
+  X000171c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basides3.cxx";
+  };
+  X000171d = {
+   fileRef = X000171c;
+   isa = PBXBuildFile;
+  };
+  X000171e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basidesh.cxx";
+  };
+  X000171f = {
+   fileRef = X000171e;
+   isa = PBXBuildFile;
+  };
+  X0001720 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basobj2.cxx";
+  };
+  X0001721 = {
+   fileRef = X0001720;
+   isa = PBXBuildFile;
+  };
+  X0001722 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/basobj3.cxx";
+  };
+  X0001723 = {
+   fileRef = X0001722;
+   isa = PBXBuildFile;
+  };
+  X0001724 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/bastype2.cxx";
+  };
+  X0001725 = {
+   fileRef = X0001724;
+   isa = PBXBuildFile;
+  };
+  X0001726 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/bastype3.cxx";
+  };
+  X0001727 = {
+   fileRef = X0001726;
+   isa = PBXBuildFile;
+  };
+  X0001728 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/bastypes.cxx";
+  };
+  X0001729 = {
+   fileRef = X0001728;
+   isa = PBXBuildFile;
+  };
+  X000172a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/breakpoint.cxx";
+  };
+  X000172b = {
+   fileRef = X000172a;
+   isa = PBXBuildFile;
+  };
+  X000172c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/brkdlg.cxx";
+  };
+  X000172d = {
+   fileRef = X000172c;
+   isa = PBXBuildFile;
+  };
+  X000172e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/doceventnotifier.cxx";
+  };
+  X000172f = {
+   fileRef = X000172e;
+   isa = PBXBuildFile;
+  };
+  X0001730 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/docsignature.cxx";
+  };
+  X0001731 = {
+   fileRef = X0001730;
+   isa = PBXBuildFile;
+  };
+  X0001732 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/documentenumeration.cxx";
+  };
+  X0001733 = {
+   fileRef = X0001732;
+   isa = PBXBuildFile;
+  };
+  X0001734 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/iderdll.cxx";
+  };
+  X0001735 = {
+   fileRef = X0001734;
+   isa = PBXBuildFile;
+  };
+  X0001736 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/layout.cxx";
+  };
+  X0001737 = {
+   fileRef = X0001736;
+   isa = PBXBuildFile;
+  };
+  X0001738 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/linenumberwindow.cxx";
+  };
+  X0001739 = {
+   fileRef = X0001738;
+   isa = PBXBuildFile;
+  };
+  X000173a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/localizationmgr.cxx";
+  };
+  X000173b = {
+   fileRef = X000173a;
+   isa = PBXBuildFile;
+  };
+  X000173c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/macrodlg.cxx";
+  };
+  X000173d = {
+   fileRef = X000173c;
+   isa = PBXBuildFile;
+  };
+  X000173e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/moduldl2.cxx";
+  };
+  X000173f = {
+   fileRef = X000173e;
+   isa = PBXBuildFile;
+  };
+  X0001740 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/moduldlg.cxx";
+  };
+  X0001741 = {
+   fileRef = X0001740;
+   isa = PBXBuildFile;
+  };
+  X0001742 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/objdlg.cxx";
+  };
+  X0001743 = {
+   fileRef = X0001742;
+   isa = PBXBuildFile;
+  };
+  X0001744 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/register.cxx";
+  };
+  X0001745 = {
+   fileRef = X0001744;
+   isa = PBXBuildFile;
+  };
+  X0001746 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/sbxitem.cxx";
+  };
+  X0001747 = {
+   fileRef = X0001746;
+   isa = PBXBuildFile;
+  };
+  X0001748 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/scriptdocument.cxx";
+  };
+  X0001749 = {
+   fileRef = X0001748;
+   isa = PBXBuildFile;
+  };
+  X000174a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/basicide/unomodel.cxx";
+  };
+  X000174b = {
+   fileRef = X000174a;
+   isa = PBXBuildFile;
+  };
+  X000174c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlgedclip.cxx";
+  };
+  X000174d = {
+   fileRef = X000174c;
+   isa = PBXBuildFile;
+  };
+  X000174e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlged.cxx";
+  };
+  X000174f = {
+   fileRef = X000174e;
+   isa = PBXBuildFile;
+  };
+  X0001750 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlgedfac.cxx";
+  };
+  X0001751 = {
+   fileRef = X0001750;
+   isa = PBXBuildFile;
+  };
+  X0001752 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlgedfunc.cxx";
+  };
+  X0001753 = {
+   fileRef = X0001752;
+   isa = PBXBuildFile;
+  };
+  X0001754 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlgedlist.cxx";
+  };
+  X0001755 = {
+   fileRef = X0001754;
+   isa = PBXBuildFile;
+  };
+  X0001756 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlgedmod.cxx";
+  };
+  X0001757 = {
+   fileRef = X0001756;
+   isa = PBXBuildFile;
+  };
+  X0001758 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlgedobj.cxx";
+  };
+  X0001759 = {
+   fileRef = X0001758;
+   isa = PBXBuildFile;
+  };
+  X000175a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlgedpage.cxx";
+  };
+  X000175b = {
+   fileRef = X000175a;
+   isa = PBXBuildFile;
+  };
+  X000175c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/dlgedview.cxx";
+  };
+  X000175d = {
+   fileRef = X000175c;
+   isa = PBXBuildFile;
+  };
+  X000175e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/managelang.cxx";
+  };
+  X000175f = {
+   fileRef = X000175e;
+   isa = PBXBuildFile;
+  };
+  X0001760 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basctl/source/dlged/propbrw.cxx";
+  };
+  X0001761 = {
+   fileRef = X0001760;
+   isa = PBXBuildFile;
+  };
+  X0001762 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00016ff;
+}

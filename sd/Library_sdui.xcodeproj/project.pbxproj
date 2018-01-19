@@ -1,0 +1,313 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001cc7 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001d07;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001cc8;
+   productRefGroup = X0001ccb;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001ccd;
+  };
+  X0001cc8 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001cc9 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001ccc = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001ccd = {
+   buildConfigurationList = X0001d08;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001cca;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0001cce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/html/htmlattr.cxx";
+  };
+  X0001ccf = {
+   fileRef = X0001cce;
+   isa = PBXBuildFile;
+  };
+  X0001cd0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/html/pubdlg.cxx";
+  };
+  X0001cd1 = {
+   fileRef = X0001cd0;
+   isa = PBXBuildFile;
+  };
+  X0001cd2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/brkdlg.cxx";
+  };
+  X0001cd3 = {
+   fileRef = X0001cd2;
+   isa = PBXBuildFile;
+  };
+  X0001cd4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/copydlg.cxx";
+  };
+  X0001cd5 = {
+   fileRef = X0001cd4;
+   isa = PBXBuildFile;
+  };
+  X0001cd6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/custsdlg.cxx";
+  };
+  X0001cd7 = {
+   fileRef = X0001cd6;
+   isa = PBXBuildFile;
+  };
+  X0001cd8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/dlgchar.cxx";
+  };
+  X0001cd9 = {
+   fileRef = X0001cd8;
+   isa = PBXBuildFile;
+  };
+  X0001cda = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/dlgfield.cxx";
+  };
+  X0001cdb = {
+   fileRef = X0001cda;
+   isa = PBXBuildFile;
+  };
+  X0001cdc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/dlgolbul.cxx";
+  };
+  X0001cdd = {
+   fileRef = X0001cdc;
+   isa = PBXBuildFile;
+  };
+  X0001cde = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/dlgpage.cxx";
+  };
+  X0001cdf = {
+   fileRef = X0001cde;
+   isa = PBXBuildFile;
+  };
+  X0001ce0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/dlgsnap.cxx";
+  };
+  X0001ce1 = {
+   fileRef = X0001ce0;
+   isa = PBXBuildFile;
+  };
+  X0001ce2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/headerfooterdlg.cxx";
+  };
+  X0001ce3 = {
+   fileRef = X0001ce2;
+   isa = PBXBuildFile;
+  };
+  X0001ce4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/inspagob.cxx";
+  };
+  X0001ce5 = {
+   fileRef = X0001ce4;
+   isa = PBXBuildFile;
+  };
+  X0001ce6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/masterlayoutdlg.cxx";
+  };
+  X0001ce7 = {
+   fileRef = X0001ce6;
+   isa = PBXBuildFile;
+  };
+  X0001ce8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/morphdlg.cxx";
+  };
+  X0001ce9 = {
+   fileRef = X0001ce8;
+   isa = PBXBuildFile;
+  };
+  X0001cea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/paragr.cxx";
+  };
+  X0001ceb = {
+   fileRef = X0001cea;
+   isa = PBXBuildFile;
+  };
+  X0001cec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/present.cxx";
+  };
+  X0001ced = {
+   fileRef = X0001cec;
+   isa = PBXBuildFile;
+  };
+  X0001cee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/prltempl.cxx";
+  };
+  X0001cef = {
+   fileRef = X0001cee;
+   isa = PBXBuildFile;
+  };
+  X0001cf0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/prntopts.cxx";
+  };
+  X0001cf1 = {
+   fileRef = X0001cf0;
+   isa = PBXBuildFile;
+  };
+  X0001cf2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/RemoteDialog.cxx";
+  };
+  X0001cf3 = {
+   fileRef = X0001cf2;
+   isa = PBXBuildFile;
+  };
+  X0001cf4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/RemoteDialogClientBox.cxx";
+  };
+  X0001cf5 = {
+   fileRef = X0001cf4;
+   isa = PBXBuildFile;
+  };
+  X0001cf6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/sddlgfact.cxx";
+  };
+  X0001cf7 = {
+   fileRef = X0001cf6;
+   isa = PBXBuildFile;
+  };
+  X0001cf8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/sdpreslt.cxx";
+  };
+  X0001cf9 = {
+   fileRef = X0001cf8;
+   isa = PBXBuildFile;
+  };
+  X0001cfa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/sduiexp.cxx";
+  };
+  X0001cfb = {
+   fileRef = X0001cfa;
+   isa = PBXBuildFile;
+  };
+  X0001cfc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/tabtempl.cxx";
+  };
+  X0001cfd = {
+   fileRef = X0001cfc;
+   isa = PBXBuildFile;
+  };
+  X0001cfe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/tpaction.cxx";
+  };
+  X0001cff = {
+   fileRef = X0001cfe;
+   isa = PBXBuildFile;
+  };
+  X0001d00 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/tpoption.cxx";
+  };
+  X0001d01 = {
+   fileRef = X0001d00;
+   isa = PBXBuildFile;
+  };
+  X0001d02 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/vectdlg.cxx";
+  };
+  X0001d03 = {
+   fileRef = X0001d02;
+   isa = PBXBuildFile;
+  };
+  X0001d04 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/ui/dlg/PhotoAlbumDialog.cxx";
+  };
+  X0001d05 = {
+   fileRef = X0001d04;
+   isa = PBXBuildFile;
+  };
+  X0001d06 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001cc7;
+}

@@ -1,0 +1,196 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002f37 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002f5d;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002f38;
+   productRefGroup = X0002f3b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002f3d;
+  };
+  X0002f38 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002f39 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002f3c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002f3d = {
+   buildConfigurationList = X0002f5e;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002f3a;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002f3e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/misc/unoservices.cxx";
+  };
+  X0002f3f = {
+   fileRef = X0002f3e;
+   isa = PBXBuildFile;
+  };
+  X0002f40 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xml_helper/xml_byteseq.cxx";
+  };
+  X0002f41 = {
+   fileRef = X0002f40;
+   isa = PBXBuildFile;
+  };
+  X0002f42 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xml_helper/xml_element.cxx";
+  };
+  X0002f43 = {
+   fileRef = X0002f42;
+   isa = PBXBuildFile;
+  };
+  X0002f44 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xml_helper/xml_impctx.cxx";
+  };
+  X0002f45 = {
+   fileRef = X0002f44;
+   isa = PBXBuildFile;
+  };
+  X0002f46 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmldlg_imexp/xmldlg_addfunc.cxx";
+  };
+  X0002f47 = {
+   fileRef = X0002f46;
+   isa = PBXBuildFile;
+  };
+  X0002f48 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx";
+  };
+  X0002f49 = {
+   fileRef = X0002f48;
+   isa = PBXBuildFile;
+  };
+  X0002f4a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmldlg_imexp/xmldlg_export.cxx";
+  };
+  X0002f4b = {
+   fileRef = X0002f4a;
+   isa = PBXBuildFile;
+  };
+  X0002f4c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx";
+  };
+  X0002f4d = {
+   fileRef = X0002f4c;
+   isa = PBXBuildFile;
+  };
+  X0002f4e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmldlg_imexp/xmldlg_import.cxx";
+  };
+  X0002f4f = {
+   fileRef = X0002f4e;
+   isa = PBXBuildFile;
+  };
+  X0002f50 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmlflat_imexp/xmlbas_export.cxx";
+  };
+  X0002f51 = {
+   fileRef = X0002f50;
+   isa = PBXBuildFile;
+  };
+  X0002f52 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmlflat_imexp/xmlbas_import.cxx";
+  };
+  X0002f53 = {
+   fileRef = X0002f52;
+   isa = PBXBuildFile;
+  };
+  X0002f54 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmllib_imexp/xmllib_export.cxx";
+  };
+  X0002f55 = {
+   fileRef = X0002f54;
+   isa = PBXBuildFile;
+  };
+  X0002f56 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmllib_imexp/xmllib_import.cxx";
+  };
+  X0002f57 = {
+   fileRef = X0002f56;
+   isa = PBXBuildFile;
+  };
+  X0002f58 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmlmod_imexp/xmlmod_export.cxx";
+  };
+  X0002f59 = {
+   fileRef = X0002f58;
+   isa = PBXBuildFile;
+  };
+  X0002f5a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "xmlscript/source/xmlmod_imexp/xmlmod_import.cxx";
+  };
+  X0002f5b = {
+   fileRef = X0002f5a;
+   isa = PBXBuildFile;
+  };
+  X0002f5c = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002f37;
+}

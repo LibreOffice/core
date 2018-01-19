@@ -1,0 +1,124 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00018bd = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00018d3;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00018be;
+   productRefGroup = X00018c1;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00018c3;
+  };
+  X00018be = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00018bf = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00018c2 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00018c3 = {
+   buildConfigurationList = X00018d4;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00018c0;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00018c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/core/api/FormulaCompiler.cxx";
+  };
+  X00018c5 = {
+   fileRef = X00018c4;
+   isa = PBXBuildFile;
+  };
+  X00018c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/core/api/FormulaOpCodeMapperObj.cxx";
+  };
+  X00018c7 = {
+   fileRef = X00018c6;
+   isa = PBXBuildFile;
+  };
+  X00018c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/core/api/grammar.cxx";
+  };
+  X00018c9 = {
+   fileRef = X00018c8;
+   isa = PBXBuildFile;
+  };
+  X00018ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/core/api/services.cxx";
+  };
+  X00018cb = {
+   fileRef = X00018ca;
+   isa = PBXBuildFile;
+  };
+  X00018cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/core/api/token.cxx";
+  };
+  X00018cd = {
+   fileRef = X00018cc;
+   isa = PBXBuildFile;
+  };
+  X00018ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/core/api/vectortoken.cxx";
+  };
+  X00018cf = {
+   fileRef = X00018ce;
+   isa = PBXBuildFile;
+  };
+  X00018d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/core/resource/core_resource.cxx";
+  };
+  X00018d1 = {
+   fileRef = X00018d0;
+   isa = PBXBuildFile;
+  };
+  X00018d2 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00018bd;
+}

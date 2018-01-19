@@ -1,0 +1,1231 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0003027 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0003133;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0003028;
+   productRefGroup = X000302b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000302d;
+  };
+  X0003028 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0003029 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000302c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000302d = {
+   buildConfigurationList = X0003134;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000302a;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000302e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/animation/animationtiming.cxx";
+  };
+  X000302f = {
+   fileRef = X000302e;
+   isa = PBXBuildFile;
+  };
+  X0003030 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/fillgraphicattribute.cxx";
+  };
+  X0003031 = {
+   fileRef = X0003030;
+   isa = PBXBuildFile;
+  };
+  X0003032 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/fillgradientattribute.cxx";
+  };
+  X0003033 = {
+   fileRef = X0003032;
+   isa = PBXBuildFile;
+  };
+  X0003034 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/fillhatchattribute.cxx";
+  };
+  X0003035 = {
+   fileRef = X0003034;
+   isa = PBXBuildFile;
+  };
+  X0003036 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/fontattribute.cxx";
+  };
+  X0003037 = {
+   fileRef = X0003036;
+   isa = PBXBuildFile;
+  };
+  X0003038 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/lineattribute.cxx";
+  };
+  X0003039 = {
+   fileRef = X0003038;
+   isa = PBXBuildFile;
+  };
+  X000303a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/linestartendattribute.cxx";
+  };
+  X000303b = {
+   fileRef = X000303a;
+   isa = PBXBuildFile;
+  };
+  X000303c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/materialattribute3d.cxx";
+  };
+  X000303d = {
+   fileRef = X000303c;
+   isa = PBXBuildFile;
+  };
+  X000303e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrallattribute3d.cxx";
+  };
+  X000303f = {
+   fileRef = X000303e;
+   isa = PBXBuildFile;
+  };
+  X0003040 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrfillattribute.cxx";
+  };
+  X0003041 = {
+   fileRef = X0003040;
+   isa = PBXBuildFile;
+  };
+  X0003042 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrfillgraphicattribute.cxx";
+  };
+  X0003043 = {
+   fileRef = X0003042;
+   isa = PBXBuildFile;
+  };
+  X0003044 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrlightattribute3d.cxx";
+  };
+  X0003045 = {
+   fileRef = X0003044;
+   isa = PBXBuildFile;
+  };
+  X0003046 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrlightingattribute3d.cxx";
+  };
+  X0003047 = {
+   fileRef = X0003046;
+   isa = PBXBuildFile;
+  };
+  X0003048 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrlineattribute.cxx";
+  };
+  X0003049 = {
+   fileRef = X0003048;
+   isa = PBXBuildFile;
+  };
+  X000304a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrlinestartendattribute.cxx";
+  };
+  X000304b = {
+   fileRef = X000304a;
+   isa = PBXBuildFile;
+  };
+  X000304c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrobjectattribute3d.cxx";
+  };
+  X000304d = {
+   fileRef = X000304c;
+   isa = PBXBuildFile;
+  };
+  X000304e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrsceneattribute3d.cxx";
+  };
+  X000304f = {
+   fileRef = X000304e;
+   isa = PBXBuildFile;
+  };
+  X0003050 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/sdrshadowattribute.cxx";
+  };
+  X0003051 = {
+   fileRef = X0003050;
+   isa = PBXBuildFile;
+  };
+  X0003052 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/attribute/strokeattribute.cxx";
+  };
+  X0003053 = {
+   fileRef = X0003052;
+   isa = PBXBuildFile;
+  };
+  X0003054 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/geometry/viewinformation2d.cxx";
+  };
+  X0003055 = {
+   fileRef = X0003054;
+   isa = PBXBuildFile;
+  };
+  X0003056 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/geometry/viewinformation3d.cxx";
+  };
+  X0003057 = {
+   fileRef = X0003056;
+   isa = PBXBuildFile;
+  };
+  X0003058 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/animatedprimitive2d.cxx";
+  };
+  X0003059 = {
+   fileRef = X0003058;
+   isa = PBXBuildFile;
+  };
+  X000305a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/backgroundcolorprimitive2d.cxx";
+  };
+  X000305b = {
+   fileRef = X000305a;
+   isa = PBXBuildFile;
+  };
+  X000305c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/baseprimitive2d.cxx";
+  };
+  X000305d = {
+   fileRef = X000305c;
+   isa = PBXBuildFile;
+  };
+  X000305e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/bitmapprimitive2d.cxx";
+  };
+  X000305f = {
+   fileRef = X000305e;
+   isa = PBXBuildFile;
+  };
+  X0003060 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/borderlineprimitive2d.cxx";
+  };
+  X0003061 = {
+   fileRef = X0003060;
+   isa = PBXBuildFile;
+  };
+  X0003062 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/controlprimitive2d.cxx";
+  };
+  X0003063 = {
+   fileRef = X0003062;
+   isa = PBXBuildFile;
+  };
+  X0003064 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/cropprimitive2d.cxx";
+  };
+  X0003065 = {
+   fileRef = X0003064;
+   isa = PBXBuildFile;
+  };
+  X0003066 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/discretebitmapprimitive2d.cxx";
+  };
+  X0003067 = {
+   fileRef = X0003066;
+   isa = PBXBuildFile;
+  };
+  X0003068 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/discreteshadowprimitive2d.cxx";
+  };
+  X0003069 = {
+   fileRef = X0003068;
+   isa = PBXBuildFile;
+  };
+  X000306a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/embedded3dprimitive2d.cxx";
+  };
+  X000306b = {
+   fileRef = X000306a;
+   isa = PBXBuildFile;
+  };
+  X000306c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/epsprimitive2d.cxx";
+  };
+  X000306d = {
+   fileRef = X000306c;
+   isa = PBXBuildFile;
+  };
+  X000306e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/fillgraphicprimitive2d.cxx";
+  };
+  X000306f = {
+   fileRef = X000306e;
+   isa = PBXBuildFile;
+  };
+  X0003070 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/fillgradientprimitive2d.cxx";
+  };
+  X0003071 = {
+   fileRef = X0003070;
+   isa = PBXBuildFile;
+  };
+  X0003072 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/fillhatchprimitive2d.cxx";
+  };
+  X0003073 = {
+   fileRef = X0003072;
+   isa = PBXBuildFile;
+  };
+  X0003074 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/graphicprimitivehelper2d.cxx";
+  };
+  X0003075 = {
+   fileRef = X0003074;
+   isa = PBXBuildFile;
+  };
+  X0003076 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/graphicprimitive2d.cxx";
+  };
+  X0003077 = {
+   fileRef = X0003076;
+   isa = PBXBuildFile;
+  };
+  X0003078 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/gridprimitive2d.cxx";
+  };
+  X0003079 = {
+   fileRef = X0003078;
+   isa = PBXBuildFile;
+  };
+  X000307a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/groupprimitive2d.cxx";
+  };
+  X000307b = {
+   fileRef = X000307a;
+   isa = PBXBuildFile;
+  };
+  X000307c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/helplineprimitive2d.cxx";
+  };
+  X000307d = {
+   fileRef = X000307c;
+   isa = PBXBuildFile;
+  };
+  X000307e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/hiddengeometryprimitive2d.cxx";
+  };
+  X000307f = {
+   fileRef = X000307e;
+   isa = PBXBuildFile;
+  };
+  X0003080 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/invertprimitive2d.cxx";
+  };
+  X0003081 = {
+   fileRef = X0003080;
+   isa = PBXBuildFile;
+  };
+  X0003082 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/markerarrayprimitive2d.cxx";
+  };
+  X0003083 = {
+   fileRef = X0003082;
+   isa = PBXBuildFile;
+  };
+  X0003084 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/maskprimitive2d.cxx";
+  };
+  X0003085 = {
+   fileRef = X0003084;
+   isa = PBXBuildFile;
+  };
+  X0003086 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/mediaprimitive2d.cxx";
+  };
+  X0003087 = {
+   fileRef = X0003086;
+   isa = PBXBuildFile;
+  };
+  X0003088 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/metafileprimitive2d.cxx";
+  };
+  X0003089 = {
+   fileRef = X0003088;
+   isa = PBXBuildFile;
+  };
+  X000308a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/modifiedcolorprimitive2d.cxx";
+  };
+  X000308b = {
+   fileRef = X000308a;
+   isa = PBXBuildFile;
+  };
+  X000308c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/objectinfoprimitive2d.cxx";
+  };
+  X000308d = {
+   fileRef = X000308c;
+   isa = PBXBuildFile;
+  };
+  X000308e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/pagepreviewprimitive2d.cxx";
+  };
+  X000308f = {
+   fileRef = X000308e;
+   isa = PBXBuildFile;
+  };
+  X0003090 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/patternfillprimitive2d.cxx";
+  };
+  X0003091 = {
+   fileRef = X0003090;
+   isa = PBXBuildFile;
+  };
+  X0003092 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/pointarrayprimitive2d.cxx";
+  };
+  X0003093 = {
+   fileRef = X0003092;
+   isa = PBXBuildFile;
+  };
+  X0003094 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/polygonprimitive2d.cxx";
+  };
+  X0003095 = {
+   fileRef = X0003094;
+   isa = PBXBuildFile;
+  };
+  X0003096 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/polypolygonprimitive2d.cxx";
+  };
+  X0003097 = {
+   fileRef = X0003096;
+   isa = PBXBuildFile;
+  };
+  X0003098 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/primitivetools2d.cxx";
+  };
+  X0003099 = {
+   fileRef = X0003098;
+   isa = PBXBuildFile;
+  };
+  X000309a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/sceneprimitive2d.cxx";
+  };
+  X000309b = {
+   fileRef = X000309a;
+   isa = PBXBuildFile;
+  };
+  X000309c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/sdrdecompositiontools2d.cxx";
+  };
+  X000309d = {
+   fileRef = X000309c;
+   isa = PBXBuildFile;
+  };
+  X000309e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/shadowprimitive2d.cxx";
+  };
+  X000309f = {
+   fileRef = X000309e;
+   isa = PBXBuildFile;
+  };
+  X00030a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/structuretagprimitive2d.cxx";
+  };
+  X00030a1 = {
+   fileRef = X00030a0;
+   isa = PBXBuildFile;
+  };
+  X00030a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/svggradientprimitive2d.cxx";
+  };
+  X00030a3 = {
+   fileRef = X00030a2;
+   isa = PBXBuildFile;
+  };
+  X00030a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/textbreakuphelper.cxx";
+  };
+  X00030a5 = {
+   fileRef = X00030a4;
+   isa = PBXBuildFile;
+  };
+  X00030a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/textdecoratedprimitive2d.cxx";
+  };
+  X00030a7 = {
+   fileRef = X00030a6;
+   isa = PBXBuildFile;
+  };
+  X00030a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/texteffectprimitive2d.cxx";
+  };
+  X00030a9 = {
+   fileRef = X00030a8;
+   isa = PBXBuildFile;
+  };
+  X00030aa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/textenumsprimitive2d.cxx";
+  };
+  X00030ab = {
+   fileRef = X00030aa;
+   isa = PBXBuildFile;
+  };
+  X00030ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/texthierarchyprimitive2d.cxx";
+  };
+  X00030ad = {
+   fileRef = X00030ac;
+   isa = PBXBuildFile;
+  };
+  X00030ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/textlayoutdevice.cxx";
+  };
+  X00030af = {
+   fileRef = X00030ae;
+   isa = PBXBuildFile;
+  };
+  X00030b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/textlineprimitive2d.cxx";
+  };
+  X00030b1 = {
+   fileRef = X00030b0;
+   isa = PBXBuildFile;
+  };
+  X00030b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/textprimitive2d.cxx";
+  };
+  X00030b3 = {
+   fileRef = X00030b2;
+   isa = PBXBuildFile;
+  };
+  X00030b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/textstrikeoutprimitive2d.cxx";
+  };
+  X00030b5 = {
+   fileRef = X00030b4;
+   isa = PBXBuildFile;
+  };
+  X00030b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/transformprimitive2d.cxx";
+  };
+  X00030b7 = {
+   fileRef = X00030b6;
+   isa = PBXBuildFile;
+  };
+  X00030b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/transparenceprimitive2d.cxx";
+  };
+  X00030b9 = {
+   fileRef = X00030b8;
+   isa = PBXBuildFile;
+  };
+  X00030ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/unifiedtransparenceprimitive2d.cxx";
+  };
+  X00030bb = {
+   fileRef = X00030ba;
+   isa = PBXBuildFile;
+  };
+  X00030bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/wallpaperprimitive2d.cxx";
+  };
+  X00030bd = {
+   fileRef = X00030bc;
+   isa = PBXBuildFile;
+  };
+  X00030be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive2d/wrongspellprimitive2d.cxx";
+  };
+  X00030bf = {
+   fileRef = X00030be;
+   isa = PBXBuildFile;
+  };
+  X00030c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/baseprimitive3d.cxx";
+  };
+  X00030c1 = {
+   fileRef = X00030c0;
+   isa = PBXBuildFile;
+  };
+  X00030c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/groupprimitive3d.cxx";
+  };
+  X00030c3 = {
+   fileRef = X00030c2;
+   isa = PBXBuildFile;
+  };
+  X00030c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/hatchtextureprimitive3d.cxx";
+  };
+  X00030c5 = {
+   fileRef = X00030c4;
+   isa = PBXBuildFile;
+  };
+  X00030c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/hiddengeometryprimitive3d.cxx";
+  };
+  X00030c7 = {
+   fileRef = X00030c6;
+   isa = PBXBuildFile;
+  };
+  X00030c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/modifiedcolorprimitive3d.cxx";
+  };
+  X00030c9 = {
+   fileRef = X00030c8;
+   isa = PBXBuildFile;
+  };
+  X00030ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/polygonprimitive3d.cxx";
+  };
+  X00030cb = {
+   fileRef = X00030ca;
+   isa = PBXBuildFile;
+  };
+  X00030cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/polygontubeprimitive3d.cxx";
+  };
+  X00030cd = {
+   fileRef = X00030cc;
+   isa = PBXBuildFile;
+  };
+  X00030ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/polypolygonprimitive3d.cxx";
+  };
+  X00030cf = {
+   fileRef = X00030ce;
+   isa = PBXBuildFile;
+  };
+  X00030d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/sdrcubeprimitive3d.cxx";
+  };
+  X00030d1 = {
+   fileRef = X00030d0;
+   isa = PBXBuildFile;
+  };
+  X00030d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/sdrdecompositiontools3d.cxx";
+  };
+  X00030d3 = {
+   fileRef = X00030d2;
+   isa = PBXBuildFile;
+  };
+  X00030d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/sdrextrudelathetools3d.cxx";
+  };
+  X00030d5 = {
+   fileRef = X00030d4;
+   isa = PBXBuildFile;
+  };
+  X00030d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/sdrextrudeprimitive3d.cxx";
+  };
+  X00030d7 = {
+   fileRef = X00030d6;
+   isa = PBXBuildFile;
+  };
+  X00030d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/sdrlatheprimitive3d.cxx";
+  };
+  X00030d9 = {
+   fileRef = X00030d8;
+   isa = PBXBuildFile;
+  };
+  X00030da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/sdrpolypolygonprimitive3d.cxx";
+  };
+  X00030db = {
+   fileRef = X00030da;
+   isa = PBXBuildFile;
+  };
+  X00030dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/sdrprimitive3d.cxx";
+  };
+  X00030dd = {
+   fileRef = X00030dc;
+   isa = PBXBuildFile;
+  };
+  X00030de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/sdrsphereprimitive3d.cxx";
+  };
+  X00030df = {
+   fileRef = X00030de;
+   isa = PBXBuildFile;
+  };
+  X00030e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/shadowprimitive3d.cxx";
+  };
+  X00030e1 = {
+   fileRef = X00030e0;
+   isa = PBXBuildFile;
+  };
+  X00030e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/textureprimitive3d.cxx";
+  };
+  X00030e3 = {
+   fileRef = X00030e2;
+   isa = PBXBuildFile;
+  };
+  X00030e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/primitive3d/transformprimitive3d.cxx";
+  };
+  X00030e5 = {
+   fileRef = X00030e4;
+   isa = PBXBuildFile;
+  };
+  X00030e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/baseprocessor2d.cxx";
+  };
+  X00030e7 = {
+   fileRef = X00030e6;
+   isa = PBXBuildFile;
+  };
+  X00030e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/processor2dtools.cxx";
+  };
+  X00030e9 = {
+   fileRef = X00030e8;
+   isa = PBXBuildFile;
+  };
+  X00030ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/contourextractor2d.cxx";
+  };
+  X00030eb = {
+   fileRef = X00030ea;
+   isa = PBXBuildFile;
+  };
+  X00030ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/getdigitlanguage.cxx";
+  };
+  X00030ed = {
+   fileRef = X00030ec;
+   isa = PBXBuildFile;
+  };
+  X00030ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/helperwrongspellrenderer.cxx";
+  };
+  X00030ef = {
+   fileRef = X00030ee;
+   isa = PBXBuildFile;
+  };
+  X00030f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/hittestprocessor2d.cxx";
+  };
+  X00030f1 = {
+   fileRef = X00030f0;
+   isa = PBXBuildFile;
+  };
+  X00030f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/linegeometryextractor2d.cxx";
+  };
+  X00030f3 = {
+   fileRef = X00030f2;
+   isa = PBXBuildFile;
+  };
+  X00030f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/objectinfoextractor2d.cxx";
+  };
+  X00030f5 = {
+   fileRef = X00030f4;
+   isa = PBXBuildFile;
+  };
+  X00030f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/processorfromoutputdevice.cxx";
+  };
+  X00030f7 = {
+   fileRef = X00030f6;
+   isa = PBXBuildFile;
+  };
+  X00030f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/textaspolygonextractor2d.cxx";
+  };
+  X00030f9 = {
+   fileRef = X00030f8;
+   isa = PBXBuildFile;
+  };
+  X00030fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/vclhelperbufferdevice.cxx";
+  };
+  X00030fb = {
+   fileRef = X00030fa;
+   isa = PBXBuildFile;
+  };
+  X00030fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx";
+  };
+  X00030fd = {
+   fileRef = X00030fc;
+   isa = PBXBuildFile;
+  };
+  X00030fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx";
+  };
+  X00030ff = {
+   fileRef = X00030fe;
+   isa = PBXBuildFile;
+  };
+  X0003100 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor2d/vclprocessor2d.cxx";
+  };
+  X0003101 = {
+   fileRef = X0003100;
+   isa = PBXBuildFile;
+  };
+  X0003102 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor3d/baseprocessor3d.cxx";
+  };
+  X0003103 = {
+   fileRef = X0003102;
+   isa = PBXBuildFile;
+  };
+  X0003104 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor3d/cutfindprocessor3d.cxx";
+  };
+  X0003105 = {
+   fileRef = X0003104;
+   isa = PBXBuildFile;
+  };
+  X0003106 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor3d/defaultprocessor3d.cxx";
+  };
+  X0003107 = {
+   fileRef = X0003106;
+   isa = PBXBuildFile;
+  };
+  X0003108 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor3d/geometry2dextractor.cxx";
+  };
+  X0003109 = {
+   fileRef = X0003108;
+   isa = PBXBuildFile;
+  };
+  X000310a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor3d/shadow3dextractor.cxx";
+  };
+  X000310b = {
+   fileRef = X000310a;
+   isa = PBXBuildFile;
+  };
+  X000310c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/processor3d/zbufferprocessor3d.cxx";
+  };
+  X000310d = {
+   fileRef = X000310c;
+   isa = PBXBuildFile;
+  };
+  X000310e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/texture/texture3d.cxx";
+  };
+  X000310f = {
+   fileRef = X000310e;
+   isa = PBXBuildFile;
+  };
+  X0003110 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/converters.cxx";
+  };
+  X0003111 = {
+   fileRef = X0003110;
+   isa = PBXBuildFile;
+  };
+  X0003112 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfplushelper.cxx";
+  };
+  X0003113 = {
+   fileRef = X0003112;
+   isa = PBXBuildFile;
+  };
+  X0003114 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfphelperdata.cxx";
+  };
+  X0003115 = {
+   fileRef = X0003114;
+   isa = PBXBuildFile;
+  };
+  X0003116 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfpbrush.cxx";
+  };
+  X0003117 = {
+   fileRef = X0003116;
+   isa = PBXBuildFile;
+  };
+  X0003118 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfppath.cxx";
+  };
+  X0003119 = {
+   fileRef = X0003118;
+   isa = PBXBuildFile;
+  };
+  X000311a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfppen.cxx";
+  };
+  X000311b = {
+   fileRef = X000311a;
+   isa = PBXBuildFile;
+  };
+  X000311c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfpregion.cxx";
+  };
+  X000311d = {
+   fileRef = X000311c;
+   isa = PBXBuildFile;
+  };
+  X000311e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfpimage.cxx";
+  };
+  X000311f = {
+   fileRef = X000311e;
+   isa = PBXBuildFile;
+  };
+  X0003120 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfpfont.cxx";
+  };
+  X0003121 = {
+   fileRef = X0003120;
+   isa = PBXBuildFile;
+  };
+  X0003122 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfpstringformat.cxx";
+  };
+  X0003123 = {
+   fileRef = X0003122;
+   isa = PBXBuildFile;
+  };
+  X0003124 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/emfpcustomlinecap.cxx";
+  };
+  X0003125 = {
+   fileRef = X0003124;
+   isa = PBXBuildFile;
+  };
+  X0003126 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/tools/wmfemfhelper.cxx";
+  };
+  X0003127 = {
+   fileRef = X0003126;
+   isa = PBXBuildFile;
+  };
+  X0003128 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/drawinglayeruno/drawinglayeruno.cxx";
+  };
+  X0003129 = {
+   fileRef = X0003128;
+   isa = PBXBuildFile;
+  };
+  X000312a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx";
+  };
+  X000312b = {
+   fileRef = X000312a;
+   isa = PBXBuildFile;
+  };
+  X000312c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/texture/texture.cxx";
+  };
+  X000312d = {
+   fileRef = X000312c;
+   isa = PBXBuildFile;
+  };
+  X000312e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/dumper/XShapeDumper.cxx";
+  };
+  X000312f = {
+   fileRef = X000312e;
+   isa = PBXBuildFile;
+  };
+  X0003130 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "drawinglayer/source/dumper/EnhancedShapeDumper.cxx";
+  };
+  X0003131 = {
+   fileRef = X0003130;
+   isa = PBXBuildFile;
+  };
+  X0003132 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0003027;
+}

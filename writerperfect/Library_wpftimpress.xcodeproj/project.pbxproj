@@ -1,0 +1,88 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X000428f = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000429d;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004290;
+   productRefGroup = X0004293;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004295;
+  };
+  X0004290 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004291 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004294 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004295 = {
+   buildConfigurationList = X000429e;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004292;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004296 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/impress/KeynoteImportFilter.cxx";
+  };
+  X0004297 = {
+   fileRef = X0004296;
+   isa = PBXBuildFile;
+  };
+  X0004298 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/impress/MWAWPresentationImportFilter.cxx";
+  };
+  X0004299 = {
+   fileRef = X0004298;
+   isa = PBXBuildFile;
+  };
+  X000429a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/impress/StarOfficePresentationImportFilter.cxx";
+  };
+  X000429b = {
+   fileRef = X000429a;
+   isa = PBXBuildFile;
+  };
+  X000429c = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X000428f;
+}

@@ -1,0 +1,115 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002561 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002575;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002562;
+   productRefGroup = X0002565;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002567;
+  };
+  X0002562 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002563 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002566 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002567 = {
+   buildConfigurationList = X0002576;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002564;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002568 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/dispatch/systemexec.cxx";
+  };
+  X0002569 = {
+   fileRef = X0002568;
+   isa = PBXBuildFile;
+  };
+  X000256a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/jobs/helponstartup.cxx";
+  };
+  X000256b = {
+   fileRef = X000256a;
+   isa = PBXBuildFile;
+  };
+  X000256c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/jobs/shelljob.cxx";
+  };
+  X000256d = {
+   fileRef = X000256c;
+   isa = PBXBuildFile;
+  };
+  X000256e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/register/register3rdcomponents.cxx";
+  };
+  X000256f = {
+   fileRef = X000256e;
+   isa = PBXBuildFile;
+  };
+  X0002570 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/tabwin/tabwindow.cxx";
+  };
+  X0002571 = {
+   fileRef = X0002570;
+   isa = PBXBuildFile;
+  };
+  X0002572 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/tabwin/tabwinfactory.cxx";
+  };
+  X0002573 = {
+   fileRef = X0002572;
+   isa = PBXBuildFile;
+  };
+  X0002574 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002561;
+}

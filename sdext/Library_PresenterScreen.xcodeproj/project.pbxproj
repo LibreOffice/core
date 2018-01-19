@@ -1,0 +1,367 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001ef1 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001f3d;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001ef2;
+   productRefGroup = X0001ef5;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001ef7;
+  };
+  X0001ef2 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001ef3 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001ef6 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001ef7 = {
+   buildConfigurationList = X0001f3e;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001ef4;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0001ef8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterAccessibility.cxx";
+  };
+  X0001ef9 = {
+   fileRef = X0001ef8;
+   isa = PBXBuildFile;
+  };
+  X0001efa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterBitmapContainer.cxx";
+  };
+  X0001efb = {
+   fileRef = X0001efa;
+   isa = PBXBuildFile;
+  };
+  X0001efc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterButton.cxx";
+  };
+  X0001efd = {
+   fileRef = X0001efc;
+   isa = PBXBuildFile;
+  };
+  X0001efe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterCanvasHelper.cxx";
+  };
+  X0001eff = {
+   fileRef = X0001efe;
+   isa = PBXBuildFile;
+  };
+  X0001f00 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterComponent.cxx";
+  };
+  X0001f01 = {
+   fileRef = X0001f00;
+   isa = PBXBuildFile;
+  };
+  X0001f02 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterConfigurationAccess.cxx";
+  };
+  X0001f03 = {
+   fileRef = X0001f02;
+   isa = PBXBuildFile;
+  };
+  X0001f04 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterController.cxx";
+  };
+  X0001f05 = {
+   fileRef = X0001f04;
+   isa = PBXBuildFile;
+  };
+  X0001f06 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterCurrentSlideObserver.cxx";
+  };
+  X0001f07 = {
+   fileRef = X0001f06;
+   isa = PBXBuildFile;
+  };
+  X0001f08 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterFrameworkObserver.cxx";
+  };
+  X0001f09 = {
+   fileRef = X0001f08;
+   isa = PBXBuildFile;
+  };
+  X0001f0a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterGeometryHelper.cxx";
+  };
+  X0001f0b = {
+   fileRef = X0001f0a;
+   isa = PBXBuildFile;
+  };
+  X0001f0c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterHelpView.cxx";
+  };
+  X0001f0d = {
+   fileRef = X0001f0c;
+   isa = PBXBuildFile;
+  };
+  X0001f0e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterHelper.cxx";
+  };
+  X0001f0f = {
+   fileRef = X0001f0e;
+   isa = PBXBuildFile;
+  };
+  X0001f10 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterNotesView.cxx";
+  };
+  X0001f11 = {
+   fileRef = X0001f10;
+   isa = PBXBuildFile;
+  };
+  X0001f12 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterPaintManager.cxx";
+  };
+  X0001f13 = {
+   fileRef = X0001f12;
+   isa = PBXBuildFile;
+  };
+  X0001f14 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterPane.cxx";
+  };
+  X0001f15 = {
+   fileRef = X0001f14;
+   isa = PBXBuildFile;
+  };
+  X0001f16 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterPaneBase.cxx";
+  };
+  X0001f17 = {
+   fileRef = X0001f16;
+   isa = PBXBuildFile;
+  };
+  X0001f18 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterPaneBorderPainter.cxx";
+  };
+  X0001f19 = {
+   fileRef = X0001f18;
+   isa = PBXBuildFile;
+  };
+  X0001f1a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterPaneContainer.cxx";
+  };
+  X0001f1b = {
+   fileRef = X0001f1a;
+   isa = PBXBuildFile;
+  };
+  X0001f1c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterPaneFactory.cxx";
+  };
+  X0001f1d = {
+   fileRef = X0001f1c;
+   isa = PBXBuildFile;
+  };
+  X0001f1e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterProtocolHandler.cxx";
+  };
+  X0001f1f = {
+   fileRef = X0001f1e;
+   isa = PBXBuildFile;
+  };
+  X0001f20 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterScreen.cxx";
+  };
+  X0001f21 = {
+   fileRef = X0001f20;
+   isa = PBXBuildFile;
+  };
+  X0001f22 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterScrollBar.cxx";
+  };
+  X0001f23 = {
+   fileRef = X0001f22;
+   isa = PBXBuildFile;
+  };
+  X0001f24 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterSlidePreview.cxx";
+  };
+  X0001f25 = {
+   fileRef = X0001f24;
+   isa = PBXBuildFile;
+  };
+  X0001f26 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterSlideShowView.cxx";
+  };
+  X0001f27 = {
+   fileRef = X0001f26;
+   isa = PBXBuildFile;
+  };
+  X0001f28 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterSlideSorter.cxx";
+  };
+  X0001f29 = {
+   fileRef = X0001f28;
+   isa = PBXBuildFile;
+  };
+  X0001f2a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterSprite.cxx";
+  };
+  X0001f2b = {
+   fileRef = X0001f2a;
+   isa = PBXBuildFile;
+  };
+  X0001f2c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterSpritePane.cxx";
+  };
+  X0001f2d = {
+   fileRef = X0001f2c;
+   isa = PBXBuildFile;
+  };
+  X0001f2e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterTextView.cxx";
+  };
+  X0001f2f = {
+   fileRef = X0001f2e;
+   isa = PBXBuildFile;
+  };
+  X0001f30 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterTheme.cxx";
+  };
+  X0001f31 = {
+   fileRef = X0001f30;
+   isa = PBXBuildFile;
+  };
+  X0001f32 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterTimer.cxx";
+  };
+  X0001f33 = {
+   fileRef = X0001f32;
+   isa = PBXBuildFile;
+  };
+  X0001f34 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterToolBar.cxx";
+  };
+  X0001f35 = {
+   fileRef = X0001f34;
+   isa = PBXBuildFile;
+  };
+  X0001f36 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterUIPainter.cxx";
+  };
+  X0001f37 = {
+   fileRef = X0001f36;
+   isa = PBXBuildFile;
+  };
+  X0001f38 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterViewFactory.cxx";
+  };
+  X0001f39 = {
+   fileRef = X0001f38;
+   isa = PBXBuildFile;
+  };
+  X0001f3a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/presenter/PresenterWindowManager.cxx";
+  };
+  X0001f3b = {
+   fileRef = X0001f3a;
+   isa = PBXBuildFile;
+  };
+  X0001f3c = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001ef1;
+}

@@ -1,0 +1,115 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00018a7 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00018bb;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00018a8;
+   productRefGroup = X00018ab;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00018ad;
+  };
+  X00018a8 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00018a9 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00018ac = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00018ad = {
+   buildConfigurationList = X00018bc;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00018aa;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00018ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/ui/dlg/formula.cxx";
+  };
+  X00018af = {
+   fileRef = X00018ae;
+   isa = PBXBuildFile;
+  };
+  X00018b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/ui/dlg/FormulaHelper.cxx";
+  };
+  X00018b1 = {
+   fileRef = X00018b0;
+   isa = PBXBuildFile;
+  };
+  X00018b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/ui/dlg/funcpage.cxx";
+  };
+  X00018b3 = {
+   fileRef = X00018b2;
+   isa = PBXBuildFile;
+  };
+  X00018b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/ui/dlg/funcutl.cxx";
+  };
+  X00018b5 = {
+   fileRef = X00018b4;
+   isa = PBXBuildFile;
+  };
+  X00018b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/ui/dlg/parawin.cxx";
+  };
+  X00018b7 = {
+   fileRef = X00018b6;
+   isa = PBXBuildFile;
+  };
+  X00018b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "formula/source/ui/dlg/structpg.cxx";
+  };
+  X00018b9 = {
+   fileRef = X00018b8;
+   isa = PBXBuildFile;
+  };
+  X00018ba = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00018a7;
+}

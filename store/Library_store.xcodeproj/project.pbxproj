@@ -1,0 +1,160 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00032c7 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00032e5;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00032c8;
+   productRefGroup = X00032cb;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00032cd;
+  };
+  X00032c8 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00032c9 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00032cc = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00032cd = {
+   buildConfigurationList = X00032e6;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00032ca;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00032ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/object.cxx";
+  };
+  X00032cf = {
+   fileRef = X00032ce;
+   isa = PBXBuildFile;
+  };
+  X00032d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/lockbyte.cxx";
+  };
+  X00032d1 = {
+   fileRef = X00032d0;
+   isa = PBXBuildFile;
+  };
+  X00032d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/storbase.cxx";
+  };
+  X00032d3 = {
+   fileRef = X00032d2;
+   isa = PBXBuildFile;
+  };
+  X00032d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/storbios.cxx";
+  };
+  X00032d5 = {
+   fileRef = X00032d4;
+   isa = PBXBuildFile;
+  };
+  X00032d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/storcach.cxx";
+  };
+  X00032d7 = {
+   fileRef = X00032d6;
+   isa = PBXBuildFile;
+  };
+  X00032d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/stordata.cxx";
+  };
+  X00032d9 = {
+   fileRef = X00032d8;
+   isa = PBXBuildFile;
+  };
+  X00032da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/stordir.cxx";
+  };
+  X00032db = {
+   fileRef = X00032da;
+   isa = PBXBuildFile;
+  };
+  X00032dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/storlckb.cxx";
+  };
+  X00032dd = {
+   fileRef = X00032dc;
+   isa = PBXBuildFile;
+  };
+  X00032de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/stortree.cxx";
+  };
+  X00032df = {
+   fileRef = X00032de;
+   isa = PBXBuildFile;
+  };
+  X00032e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/storpage.cxx";
+  };
+  X00032e1 = {
+   fileRef = X00032e0;
+   isa = PBXBuildFile;
+  };
+  X00032e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "store/source/store.cxx";
+  };
+  X00032e3 = {
+   fileRef = X00032e2;
+   isa = PBXBuildFile;
+  };
+  X00032e4 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00032c7;
+}

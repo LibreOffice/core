@@ -1,0 +1,241 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00025b5 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00025e5;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00025b6;
+   productRefGroup = X00025b9;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00025bb;
+  };
+  X00025b6 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00025b7 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00025ba = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00025bb = {
+   buildConfigurationList = X00025e6;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00025b8;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00025bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/dispatch/mailtodispatcher.cxx";
+  };
+  X00025bd = {
+   fileRef = X00025bc;
+   isa = PBXBuildFile;
+  };
+  X00025be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/dispatch/oxt_handler.cxx";
+  };
+  X00025bf = {
+   fileRef = X00025be;
+   isa = PBXBuildFile;
+  };
+  X00025c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/dispatch/popupmenudispatcher.cxx";
+  };
+  X00025c1 = {
+   fileRef = X00025c0;
+   isa = PBXBuildFile;
+  };
+  X00025c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/dispatch/servicehandler.cxx";
+  };
+  X00025c3 = {
+   fileRef = X00025c2;
+   isa = PBXBuildFile;
+  };
+  X00025c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/recording/dispatchrecorder.cxx";
+  };
+  X00025c5 = {
+   fileRef = X00025c4;
+   isa = PBXBuildFile;
+  };
+  X00025c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/recording/dispatchrecordersupplier.cxx";
+  };
+  X00025c7 = {
+   fileRef = X00025c6;
+   isa = PBXBuildFile;
+  };
+  X00025c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/register/registertemp.cxx";
+  };
+  X00025c9 = {
+   fileRef = X00025c8;
+   isa = PBXBuildFile;
+  };
+  X00025ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/dispatch/dispatchdisabler.cxx";
+  };
+  X00025cb = {
+   fileRef = X00025ca;
+   isa = PBXBuildFile;
+  };
+  X00025cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/services/mediatypedetectionhelper.cxx";
+  };
+  X00025cd = {
+   fileRef = X00025cc;
+   isa = PBXBuildFile;
+  };
+  X00025ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/services/uriabbreviation.cxx";
+  };
+  X00025cf = {
+   fileRef = X00025ce;
+   isa = PBXBuildFile;
+  };
+  X00025d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/fontmenucontroller.cxx";
+  };
+  X00025d1 = {
+   fileRef = X00025d0;
+   isa = PBXBuildFile;
+  };
+  X00025d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/fontsizemenucontroller.cxx";
+  };
+  X00025d3 = {
+   fileRef = X00025d2;
+   isa = PBXBuildFile;
+  };
+  X00025d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/footermenucontroller.cxx";
+  };
+  X00025d5 = {
+   fileRef = X00025d4;
+   isa = PBXBuildFile;
+  };
+  X00025d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/headermenucontroller.cxx";
+  };
+  X00025d7 = {
+   fileRef = X00025d6;
+   isa = PBXBuildFile;
+  };
+  X00025d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/langselectionmenucontroller.cxx";
+  };
+  X00025d9 = {
+   fileRef = X00025d8;
+   isa = PBXBuildFile;
+  };
+  X00025da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/macrosmenucontroller.cxx";
+  };
+  X00025db = {
+   fileRef = X00025da;
+   isa = PBXBuildFile;
+  };
+  X00025dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/newmenucontroller.cxx";
+  };
+  X00025dd = {
+   fileRef = X00025dc;
+   isa = PBXBuildFile;
+  };
+  X00025de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/toolbarmodemenucontroller.cxx";
+  };
+  X00025df = {
+   fileRef = X00025de;
+   isa = PBXBuildFile;
+  };
+  X00025e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/toolbarsmenucontroller.cxx";
+  };
+  X00025e1 = {
+   fileRef = X00025e0;
+   isa = PBXBuildFile;
+  };
+  X00025e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/uielement/notebookbarmenucontroller.cxx";
+  };
+  X00025e3 = {
+   fileRef = X00025e2;
+   isa = PBXBuildFile;
+  };
+  X00025e4 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00025b5;
+}

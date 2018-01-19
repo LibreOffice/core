@@ -1,0 +1,142 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002299 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00022b3;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000229a;
+   productRefGroup = X000229d;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000229f;
+  };
+  X000229a = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000229b = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000229e = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000229f = {
+   buildConfigurationList = X00022b4;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000229c;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00022a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/dynamicresultset.cxx";
+  };
+  X00022a1 = {
+   fileRef = X00022a0;
+   isa = PBXBuildFile;
+  };
+  X00022a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/hierarchycontentcaps.cxx";
+  };
+  X00022a3 = {
+   fileRef = X00022a2;
+   isa = PBXBuildFile;
+  };
+  X00022a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/hierarchycontent.cxx";
+  };
+  X00022a5 = {
+   fileRef = X00022a4;
+   isa = PBXBuildFile;
+  };
+  X00022a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/hierarchydata.cxx";
+  };
+  X00022a7 = {
+   fileRef = X00022a6;
+   isa = PBXBuildFile;
+  };
+  X00022a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/hierarchydatasource.cxx";
+  };
+  X00022a9 = {
+   fileRef = X00022a8;
+   isa = PBXBuildFile;
+  };
+  X00022aa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/hierarchydatasupplier.cxx";
+  };
+  X00022ab = {
+   fileRef = X00022aa;
+   isa = PBXBuildFile;
+  };
+  X00022ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/hierarchyprovider.cxx";
+  };
+  X00022ad = {
+   fileRef = X00022ac;
+   isa = PBXBuildFile;
+  };
+  X00022ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/hierarchyservices.cxx";
+  };
+  X00022af = {
+   fileRef = X00022ae;
+   isa = PBXBuildFile;
+  };
+  X00022b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/hierarchy/hierarchyuri.cxx";
+  };
+  X00022b1 = {
+   fileRef = X00022b0;
+   isa = PBXBuildFile;
+  };
+  X00022b2 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002299;
+}

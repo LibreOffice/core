@@ -1,0 +1,169 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0000b17 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0000b37;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0000b18;
+   productRefGroup = X0000b1b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0000b1d;
+  };
+  X0000b18 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0000b19 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0000b1c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0000b1d = {
+   buildConfigurationList = X0000b38;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0000b1a;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0000b1e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/commonembedding/embedobj.cxx";
+  };
+  X0000b1f = {
+   fileRef = X0000b1e;
+   isa = PBXBuildFile;
+  };
+  X0000b20 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/commonembedding/inplaceobj.cxx";
+  };
+  X0000b21 = {
+   fileRef = X0000b20;
+   isa = PBXBuildFile;
+  };
+  X0000b22 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/commonembedding/miscobj.cxx";
+  };
+  X0000b23 = {
+   fileRef = X0000b22;
+   isa = PBXBuildFile;
+  };
+  X0000b24 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/commonembedding/persistence.cxx";
+  };
+  X0000b25 = {
+   fileRef = X0000b24;
+   isa = PBXBuildFile;
+  };
+  X0000b26 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/commonembedding/register.cxx";
+  };
+  X0000b27 = {
+   fileRef = X0000b26;
+   isa = PBXBuildFile;
+  };
+  X0000b28 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/commonembedding/specialobject.cxx";
+  };
+  X0000b29 = {
+   fileRef = X0000b28;
+   isa = PBXBuildFile;
+  };
+  X0000b2a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/commonembedding/visobj.cxx";
+  };
+  X0000b2b = {
+   fileRef = X0000b2a;
+   isa = PBXBuildFile;
+  };
+  X0000b2c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/commonembedding/xfactory.cxx";
+  };
+  X0000b2d = {
+   fileRef = X0000b2c;
+   isa = PBXBuildFile;
+  };
+  X0000b2e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/general/docholder.cxx";
+  };
+  X0000b2f = {
+   fileRef = X0000b2e;
+   isa = PBXBuildFile;
+  };
+  X0000b30 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/general/dummyobject.cxx";
+  };
+  X0000b31 = {
+   fileRef = X0000b30;
+   isa = PBXBuildFile;
+  };
+  X0000b32 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/general/intercept.cxx";
+  };
+  X0000b33 = {
+   fileRef = X0000b32;
+   isa = PBXBuildFile;
+  };
+  X0000b34 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "embeddedobj/source/general/xcreator.cxx";
+  };
+  X0000b35 = {
+   fileRef = X0000b34;
+   isa = PBXBuildFile;
+  };
+  X0000b36 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0000b17;
+}

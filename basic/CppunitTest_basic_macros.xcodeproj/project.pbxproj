@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004015 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004027;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004016;
+   productRefGroup = X0004019;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000401b;
+  };
+  X0004016 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004017 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000401a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000401b = {
+   buildConfigurationList = X0004028;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004018;
+   productType = ;
+  };
+  X000401c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basic/qa/cppunit/basictest.cxx";
+  };
+  X000401d = {
+   fileRef = X000401c;
+   isa = PBXBuildFile;
+  };
+  X000401e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basic/qa/cppunit/basic_coverage.cxx";
+  };
+  X000401f = {
+   fileRef = X000401e;
+   isa = PBXBuildFile;
+  };
+  X0004020 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basic/qa/cppunit/test_append.cxx";
+  };
+  X0004021 = {
+   fileRef = X0004020;
+   isa = PBXBuildFile;
+  };
+  X0004022 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basic/qa/cppunit/test_nested_struct.cxx";
+  };
+  X0004023 = {
+   fileRef = X0004022;
+   isa = PBXBuildFile;
+  };
+  X0004024 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basic/qa/cppunit/test_vba.cxx";
+  };
+  X0004025 = {
+   fileRef = X0004024;
+   isa = PBXBuildFile;
+  };
+  X0004026 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004015;
+}

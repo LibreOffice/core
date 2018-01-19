@@ -1,0 +1,367 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00049b1 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00049fd;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00049b2;
+   productRefGroup = X00049b5;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00049b7;
+  };
+  X00049b2 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00049b3 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00049b6 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00049b7 = {
+   buildConfigurationList = X00049fe;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00049b4;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00049b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgcharacternode.cxx";
+  };
+  X00049b9 = {
+   fileRef = X00049b8;
+   isa = PBXBuildFile;
+  };
+  X00049ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgcirclenode.cxx";
+  };
+  X00049bb = {
+   fileRef = X00049ba;
+   isa = PBXBuildFile;
+  };
+  X00049bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgclippathnode.cxx";
+  };
+  X00049bd = {
+   fileRef = X00049bc;
+   isa = PBXBuildFile;
+  };
+  X00049be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgdocument.cxx";
+  };
+  X00049bf = {
+   fileRef = X00049be;
+   isa = PBXBuildFile;
+  };
+  X00049c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgdocumenthandler.cxx";
+  };
+  X00049c1 = {
+   fileRef = X00049c0;
+   isa = PBXBuildFile;
+  };
+  X00049c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgellipsenode.cxx";
+  };
+  X00049c3 = {
+   fileRef = X00049c2;
+   isa = PBXBuildFile;
+  };
+  X00049c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svggnode.cxx";
+  };
+  X00049c5 = {
+   fileRef = X00049c4;
+   isa = PBXBuildFile;
+  };
+  X00049c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svganode.cxx";
+  };
+  X00049c7 = {
+   fileRef = X00049c6;
+   isa = PBXBuildFile;
+  };
+  X00049c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svggradientnode.cxx";
+  };
+  X00049c9 = {
+   fileRef = X00049c8;
+   isa = PBXBuildFile;
+  };
+  X00049ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svggradientstopnode.cxx";
+  };
+  X00049cb = {
+   fileRef = X00049ca;
+   isa = PBXBuildFile;
+  };
+  X00049cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgimagenode.cxx";
+  };
+  X00049cd = {
+   fileRef = X00049cc;
+   isa = PBXBuildFile;
+  };
+  X00049ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svglinenode.cxx";
+  };
+  X00049cf = {
+   fileRef = X00049ce;
+   isa = PBXBuildFile;
+  };
+  X00049d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgmarkernode.cxx";
+  };
+  X00049d1 = {
+   fileRef = X00049d0;
+   isa = PBXBuildFile;
+  };
+  X00049d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgmasknode.cxx";
+  };
+  X00049d3 = {
+   fileRef = X00049d2;
+   isa = PBXBuildFile;
+  };
+  X00049d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgnode.cxx";
+  };
+  X00049d5 = {
+   fileRef = X00049d4;
+   isa = PBXBuildFile;
+  };
+  X00049d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgpaint.cxx";
+  };
+  X00049d7 = {
+   fileRef = X00049d6;
+   isa = PBXBuildFile;
+  };
+  X00049d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgpathnode.cxx";
+  };
+  X00049d9 = {
+   fileRef = X00049d8;
+   isa = PBXBuildFile;
+  };
+  X00049da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgpatternnode.cxx";
+  };
+  X00049db = {
+   fileRef = X00049da;
+   isa = PBXBuildFile;
+  };
+  X00049dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgpolynode.cxx";
+  };
+  X00049dd = {
+   fileRef = X00049dc;
+   isa = PBXBuildFile;
+  };
+  X00049de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgrectnode.cxx";
+  };
+  X00049df = {
+   fileRef = X00049de;
+   isa = PBXBuildFile;
+  };
+  X00049e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgstyleattributes.cxx";
+  };
+  X00049e1 = {
+   fileRef = X00049e0;
+   isa = PBXBuildFile;
+  };
+  X00049e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgstylenode.cxx";
+  };
+  X00049e3 = {
+   fileRef = X00049e2;
+   isa = PBXBuildFile;
+  };
+  X00049e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgsvgnode.cxx";
+  };
+  X00049e5 = {
+   fileRef = X00049e4;
+   isa = PBXBuildFile;
+  };
+  X00049e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgsymbolnode.cxx";
+  };
+  X00049e7 = {
+   fileRef = X00049e6;
+   isa = PBXBuildFile;
+  };
+  X00049e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgtextnode.cxx";
+  };
+  X00049e9 = {
+   fileRef = X00049e8;
+   isa = PBXBuildFile;
+  };
+  X00049ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgtitledescnode.cxx";
+  };
+  X00049eb = {
+   fileRef = X00049ea;
+   isa = PBXBuildFile;
+  };
+  X00049ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgtoken.cxx";
+  };
+  X00049ed = {
+   fileRef = X00049ec;
+   isa = PBXBuildFile;
+  };
+  X00049ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgtrefnode.cxx";
+  };
+  X00049ef = {
+   fileRef = X00049ee;
+   isa = PBXBuildFile;
+  };
+  X00049f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgtools.cxx";
+  };
+  X00049f1 = {
+   fileRef = X00049f0;
+   isa = PBXBuildFile;
+  };
+  X00049f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgtextpathnode.cxx";
+  };
+  X00049f3 = {
+   fileRef = X00049f2;
+   isa = PBXBuildFile;
+  };
+  X00049f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgtspannode.cxx";
+  };
+  X00049f5 = {
+   fileRef = X00049f4;
+   isa = PBXBuildFile;
+  };
+  X00049f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svgreader/svgusenode.cxx";
+  };
+  X00049f7 = {
+   fileRef = X00049f6;
+   isa = PBXBuildFile;
+  };
+  X00049f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svguno/svguno.cxx";
+  };
+  X00049f9 = {
+   fileRef = X00049f8;
+   isa = PBXBuildFile;
+  };
+  X00049fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "svgio/source/svguno/xsvgparser.cxx";
+  };
+  X00049fb = {
+   fileRef = X00049fa;
+   isa = PBXBuildFile;
+  };
+  X00049fc = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00049b1;
+}

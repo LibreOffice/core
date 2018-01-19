@@ -1,0 +1,1411 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X000299d = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002ad1;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000299e;
+   productRefGroup = X00029a1;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00029a3;
+  };
+  X000299e = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000299f = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00029a2 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00029a3 = {
+   buildConfigurationList = X0002ad2;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00029a0;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00029a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/accessibility/AccessibleBase.cxx";
+  };
+  X00029a5 = {
+   fileRef = X00029a4;
+   isa = PBXBuildFile;
+  };
+  X00029a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/accessibility/AccessibleChartElement.cxx";
+  };
+  X00029a7 = {
+   fileRef = X00029a6;
+   isa = PBXBuildFile;
+  };
+  X00029a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/accessibility/AccessibleChartShape.cxx";
+  };
+  X00029a9 = {
+   fileRef = X00029a8;
+   isa = PBXBuildFile;
+  };
+  X00029aa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/accessibility/AccessibleChartView.cxx";
+  };
+  X00029ab = {
+   fileRef = X00029aa;
+   isa = PBXBuildFile;
+  };
+  X00029ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/accessibility/AccessibleTextHelper.cxx";
+  };
+  X00029ad = {
+   fileRef = X00029ac;
+   isa = PBXBuildFile;
+  };
+  X00029ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/accessibility/AccessibleViewForwarder.cxx";
+  };
+  X00029af = {
+   fileRef = X00029ae;
+   isa = PBXBuildFile;
+  };
+  X00029b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/accessibility/ChartElementFactory.cxx";
+  };
+  X00029b1 = {
+   fileRef = X00029b0;
+   isa = PBXBuildFile;
+  };
+  X00029b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/AreaWrapper.cxx";
+  };
+  X00029b3 = {
+   fileRef = X00029b2;
+   isa = PBXBuildFile;
+  };
+  X00029b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/AxisWrapper.cxx";
+  };
+  X00029b5 = {
+   fileRef = X00029b4;
+   isa = PBXBuildFile;
+  };
+  X00029b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/Chart2ModelContact.cxx";
+  };
+  X00029b7 = {
+   fileRef = X00029b6;
+   isa = PBXBuildFile;
+  };
+  X00029b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/ChartDataWrapper.cxx";
+  };
+  X00029b9 = {
+   fileRef = X00029b8;
+   isa = PBXBuildFile;
+  };
+  X00029ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/ChartDocumentWrapper.cxx";
+  };
+  X00029bb = {
+   fileRef = X00029ba;
+   isa = PBXBuildFile;
+  };
+  X00029bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx";
+  };
+  X00029bd = {
+   fileRef = X00029bc;
+   isa = PBXBuildFile;
+  };
+  X00029be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/DiagramWrapper.cxx";
+  };
+  X00029bf = {
+   fileRef = X00029be;
+   isa = PBXBuildFile;
+  };
+  X00029c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/GridWrapper.cxx";
+  };
+  X00029c1 = {
+   fileRef = X00029c0;
+   isa = PBXBuildFile;
+  };
+  X00029c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/LegendWrapper.cxx";
+  };
+  X00029c3 = {
+   fileRef = X00029c2;
+   isa = PBXBuildFile;
+  };
+  X00029c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/MinMaxLineWrapper.cxx";
+  };
+  X00029c5 = {
+   fileRef = X00029c4;
+   isa = PBXBuildFile;
+  };
+  X00029c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/TitleWrapper.cxx";
+  };
+  X00029c7 = {
+   fileRef = X00029c6;
+   isa = PBXBuildFile;
+  };
+  X00029c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/UpDownBarWrapper.cxx";
+  };
+  X00029c9 = {
+   fileRef = X00029c8;
+   isa = PBXBuildFile;
+  };
+  X00029ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WallFloorWrapper.cxx";
+  };
+  X00029cb = {
+   fileRef = X00029ca;
+   isa = PBXBuildFile;
+  };
+  X00029cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedAddInProperty.cxx";
+  };
+  X00029cd = {
+   fileRef = X00029cc;
+   isa = PBXBuildFile;
+  };
+  X00029ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedAutomaticPositionProperties.cxx";
+  };
+  X00029cf = {
+   fileRef = X00029ce;
+   isa = PBXBuildFile;
+  };
+  X00029d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedAxisAndGridExistenceProperties.cxx";
+  };
+  X00029d1 = {
+   fileRef = X00029d0;
+   isa = PBXBuildFile;
+  };
+  X00029d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedCharacterHeightProperty.cxx";
+  };
+  X00029d3 = {
+   fileRef = X00029d2;
+   isa = PBXBuildFile;
+  };
+  X00029d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedDataCaptionProperties.cxx";
+  };
+  X00029d5 = {
+   fileRef = X00029d4;
+   isa = PBXBuildFile;
+  };
+  X00029d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedGapwidthProperty.cxx";
+  };
+  X00029d7 = {
+   fileRef = X00029d6;
+   isa = PBXBuildFile;
+  };
+  X00029d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedGL3DProperties.cxx";
+  };
+  X00029d9 = {
+   fileRef = X00029d8;
+   isa = PBXBuildFile;
+  };
+  X00029da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedNumberFormatProperty.cxx";
+  };
+  X00029db = {
+   fileRef = X00029da;
+   isa = PBXBuildFile;
+  };
+  X00029dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedScaleProperty.cxx";
+  };
+  X00029dd = {
+   fileRef = X00029dc;
+   isa = PBXBuildFile;
+  };
+  X00029de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedScaleTextProperties.cxx";
+  };
+  X00029df = {
+   fileRef = X00029de;
+   isa = PBXBuildFile;
+  };
+  X00029e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedSceneProperty.cxx";
+  };
+  X00029e1 = {
+   fileRef = X00029e0;
+   isa = PBXBuildFile;
+  };
+  X00029e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedSeriesAreaOrLineProperty.cxx";
+  };
+  X00029e3 = {
+   fileRef = X00029e2;
+   isa = PBXBuildFile;
+  };
+  X00029e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedSplineProperties.cxx";
+  };
+  X00029e5 = {
+   fileRef = X00029e4;
+   isa = PBXBuildFile;
+  };
+  X00029e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedStatisticProperties.cxx";
+  };
+  X00029e7 = {
+   fileRef = X00029e6;
+   isa = PBXBuildFile;
+  };
+  X00029e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedStockProperties.cxx";
+  };
+  X00029e9 = {
+   fileRef = X00029e8;
+   isa = PBXBuildFile;
+  };
+  X00029ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedSymbolProperties.cxx";
+  };
+  X00029eb = {
+   fileRef = X00029ea;
+   isa = PBXBuildFile;
+  };
+  X00029ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/chartapiwrapper/WrappedTextRotationProperty.cxx";
+  };
+  X00029ed = {
+   fileRef = X00029ec;
+   isa = PBXBuildFile;
+  };
+  X00029ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/ChangingResource.cxx";
+  };
+  X00029ef = {
+   fileRef = X00029ee;
+   isa = PBXBuildFile;
+  };
+  X00029f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/ChartTypeDialogController.cxx";
+  };
+  X00029f1 = {
+   fileRef = X00029f0;
+   isa = PBXBuildFile;
+  };
+  X00029f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/GL3DBarChartDialogController.cxx";
+  };
+  X00029f3 = {
+   fileRef = X00029f2;
+   isa = PBXBuildFile;
+  };
+  X00029f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/DataBrowser.cxx";
+  };
+  X00029f5 = {
+   fileRef = X00029f4;
+   isa = PBXBuildFile;
+  };
+  X00029f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/DataBrowserModel.cxx";
+  };
+  X00029f7 = {
+   fileRef = X00029f6;
+   isa = PBXBuildFile;
+  };
+  X00029f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/DialogModel.cxx";
+  };
+  X00029f9 = {
+   fileRef = X00029f8;
+   isa = PBXBuildFile;
+  };
+  X00029fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_ChartType.cxx";
+  };
+  X00029fb = {
+   fileRef = X00029fa;
+   isa = PBXBuildFile;
+  };
+  X00029fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_ChartType_UNO.cxx";
+  };
+  X00029fd = {
+   fileRef = X00029fc;
+   isa = PBXBuildFile;
+  };
+  X00029fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_CreationWizard.cxx";
+  };
+  X00029ff = {
+   fileRef = X00029fe;
+   isa = PBXBuildFile;
+  };
+  X0002a00 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_CreationWizard_UNO.cxx";
+  };
+  X0002a01 = {
+   fileRef = X0002a00;
+   isa = PBXBuildFile;
+  };
+  X0002a02 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_DataEditor.cxx";
+  };
+  X0002a03 = {
+   fileRef = X0002a02;
+   isa = PBXBuildFile;
+  };
+  X0002a04 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_DataSource.cxx";
+  };
+  X0002a05 = {
+   fileRef = X0002a04;
+   isa = PBXBuildFile;
+  };
+  X0002a06 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_InsertAxis_Grid.cxx";
+  };
+  X0002a07 = {
+   fileRef = X0002a06;
+   isa = PBXBuildFile;
+  };
+  X0002a08 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_InsertDataLabel.cxx";
+  };
+  X0002a09 = {
+   fileRef = X0002a08;
+   isa = PBXBuildFile;
+  };
+  X0002a0a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_InsertErrorBars.cxx";
+  };
+  X0002a0b = {
+   fileRef = X0002a0a;
+   isa = PBXBuildFile;
+  };
+  X0002a0c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_InsertLegend.cxx";
+  };
+  X0002a0d = {
+   fileRef = X0002a0c;
+   isa = PBXBuildFile;
+  };
+  X0002a0e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_InsertTitle.cxx";
+  };
+  X0002a0f = {
+   fileRef = X0002a0e;
+   isa = PBXBuildFile;
+  };
+  X0002a10 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_NumberFormat.cxx";
+  };
+  X0002a11 = {
+   fileRef = X0002a10;
+   isa = PBXBuildFile;
+  };
+  X0002a12 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_ObjectProperties.cxx";
+  };
+  X0002a13 = {
+   fileRef = X0002a12;
+   isa = PBXBuildFile;
+  };
+  X0002a14 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_ShapeFont.cxx";
+  };
+  X0002a15 = {
+   fileRef = X0002a14;
+   isa = PBXBuildFile;
+  };
+  X0002a16 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_ShapeParagraph.cxx";
+  };
+  X0002a17 = {
+   fileRef = X0002a16;
+   isa = PBXBuildFile;
+  };
+  X0002a18 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/dlg_View3D.cxx";
+  };
+  X0002a19 = {
+   fileRef = X0002a18;
+   isa = PBXBuildFile;
+  };
+  X0002a1a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/ObjectNameProvider.cxx";
+  };
+  X0002a1b = {
+   fileRef = X0002a1a;
+   isa = PBXBuildFile;
+  };
+  X0002a1c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/RangeSelectionHelper.cxx";
+  };
+  X0002a1d = {
+   fileRef = X0002a1c;
+   isa = PBXBuildFile;
+  };
+  X0002a1e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/RangeSelectionListener.cxx";
+  };
+  X0002a1f = {
+   fileRef = X0002a1e;
+   isa = PBXBuildFile;
+  };
+  X0002a20 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/res_BarGeometry.cxx";
+  };
+  X0002a21 = {
+   fileRef = X0002a20;
+   isa = PBXBuildFile;
+  };
+  X0002a22 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/res_DataLabel.cxx";
+  };
+  X0002a23 = {
+   fileRef = X0002a22;
+   isa = PBXBuildFile;
+  };
+  X0002a24 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/res_ErrorBar.cxx";
+  };
+  X0002a25 = {
+   fileRef = X0002a24;
+   isa = PBXBuildFile;
+  };
+  X0002a26 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/res_LegendPosition.cxx";
+  };
+  X0002a27 = {
+   fileRef = X0002a26;
+   isa = PBXBuildFile;
+  };
+  X0002a28 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/res_Titles.cxx";
+  };
+  X0002a29 = {
+   fileRef = X0002a28;
+   isa = PBXBuildFile;
+  };
+  X0002a2a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/res_Trendline.cxx";
+  };
+  X0002a2b = {
+   fileRef = X0002a2a;
+   isa = PBXBuildFile;
+  };
+  X0002a2c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/TextDirectionListBox.cxx";
+  };
+  X0002a2d = {
+   fileRef = X0002a2c;
+   isa = PBXBuildFile;
+  };
+  X0002a2e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/TimerTriggeredControllerLock.cxx";
+  };
+  X0002a2f = {
+   fileRef = X0002a2e;
+   isa = PBXBuildFile;
+  };
+  X0002a30 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/TitleDialogData.cxx";
+  };
+  X0002a31 = {
+   fileRef = X0002a30;
+   isa = PBXBuildFile;
+  };
+  X0002a32 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_3D_SceneAppearance.cxx";
+  };
+  X0002a33 = {
+   fileRef = X0002a32;
+   isa = PBXBuildFile;
+  };
+  X0002a34 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_3D_SceneGeometry.cxx";
+  };
+  X0002a35 = {
+   fileRef = X0002a34;
+   isa = PBXBuildFile;
+  };
+  X0002a36 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_3D_SceneIllumination.cxx";
+  };
+  X0002a37 = {
+   fileRef = X0002a36;
+   isa = PBXBuildFile;
+  };
+  X0002a38 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_AxisLabel.cxx";
+  };
+  X0002a39 = {
+   fileRef = X0002a38;
+   isa = PBXBuildFile;
+  };
+  X0002a3a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_AxisPositions.cxx";
+  };
+  X0002a3b = {
+   fileRef = X0002a3a;
+   isa = PBXBuildFile;
+  };
+  X0002a3c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_ChartType.cxx";
+  };
+  X0002a3d = {
+   fileRef = X0002a3c;
+   isa = PBXBuildFile;
+  };
+  X0002a3e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_DataLabel.cxx";
+  };
+  X0002a3f = {
+   fileRef = X0002a3e;
+   isa = PBXBuildFile;
+  };
+  X0002a40 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_DataSourceControls.cxx";
+  };
+  X0002a41 = {
+   fileRef = X0002a40;
+   isa = PBXBuildFile;
+  };
+  X0002a42 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_DataSource.cxx";
+  };
+  X0002a43 = {
+   fileRef = X0002a42;
+   isa = PBXBuildFile;
+  };
+  X0002a44 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_ErrorBars.cxx";
+  };
+  X0002a45 = {
+   fileRef = X0002a44;
+   isa = PBXBuildFile;
+  };
+  X0002a46 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_LegendPosition.cxx";
+  };
+  X0002a47 = {
+   fileRef = X0002a46;
+   isa = PBXBuildFile;
+  };
+  X0002a48 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_PointGeometry.cxx";
+  };
+  X0002a49 = {
+   fileRef = X0002a48;
+   isa = PBXBuildFile;
+  };
+  X0002a4a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_PolarOptions.cxx";
+  };
+  X0002a4b = {
+   fileRef = X0002a4a;
+   isa = PBXBuildFile;
+  };
+  X0002a4c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_RangeChooser.cxx";
+  };
+  X0002a4d = {
+   fileRef = X0002a4c;
+   isa = PBXBuildFile;
+  };
+  X0002a4e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_Scale.cxx";
+  };
+  X0002a4f = {
+   fileRef = X0002a4e;
+   isa = PBXBuildFile;
+  };
+  X0002a50 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_SeriesToAxis.cxx";
+  };
+  X0002a51 = {
+   fileRef = X0002a50;
+   isa = PBXBuildFile;
+  };
+  X0002a52 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_TitleRotation.cxx";
+  };
+  X0002a53 = {
+   fileRef = X0002a52;
+   isa = PBXBuildFile;
+  };
+  X0002a54 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_Trendline.cxx";
+  };
+  X0002a55 = {
+   fileRef = X0002a54;
+   isa = PBXBuildFile;
+  };
+  X0002a56 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/dialogs/tp_Wizard_TitlesAndObjects.cxx";
+  };
+  X0002a57 = {
+   fileRef = X0002a56;
+   isa = PBXBuildFile;
+  };
+  X0002a58 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/drawinglayer/DrawViewWrapper.cxx";
+  };
+  X0002a59 = {
+   fileRef = X0002a58;
+   isa = PBXBuildFile;
+  };
+  X0002a5a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/drawinglayer/ViewElementListProvider.cxx";
+  };
+  X0002a5b = {
+   fileRef = X0002a5a;
+   isa = PBXBuildFile;
+  };
+  X0002a5c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/AxisItemConverter.cxx";
+  };
+  X0002a5d = {
+   fileRef = X0002a5c;
+   isa = PBXBuildFile;
+  };
+  X0002a5e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/CharacterPropertyItemConverter.cxx";
+  };
+  X0002a5f = {
+   fileRef = X0002a5e;
+   isa = PBXBuildFile;
+  };
+  X0002a60 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/DataPointItemConverter.cxx";
+  };
+  X0002a61 = {
+   fileRef = X0002a60;
+   isa = PBXBuildFile;
+  };
+  X0002a62 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/ErrorBarItemConverter.cxx";
+  };
+  X0002a63 = {
+   fileRef = X0002a62;
+   isa = PBXBuildFile;
+  };
+  X0002a64 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/GraphicPropertyItemConverter.cxx";
+  };
+  X0002a65 = {
+   fileRef = X0002a64;
+   isa = PBXBuildFile;
+  };
+  X0002a66 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/ItemConverter.cxx";
+  };
+  X0002a67 = {
+   fileRef = X0002a66;
+   isa = PBXBuildFile;
+  };
+  X0002a68 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/LegendItemConverter.cxx";
+  };
+  X0002a69 = {
+   fileRef = X0002a68;
+   isa = PBXBuildFile;
+  };
+  X0002a6a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/MultipleChartConverters.cxx";
+  };
+  X0002a6b = {
+   fileRef = X0002a6a;
+   isa = PBXBuildFile;
+  };
+  X0002a6c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/MultipleItemConverter.cxx";
+  };
+  X0002a6d = {
+   fileRef = X0002a6c;
+   isa = PBXBuildFile;
+  };
+  X0002a6e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/RegressionCurveItemConverter.cxx";
+  };
+  X0002a6f = {
+   fileRef = X0002a6e;
+   isa = PBXBuildFile;
+  };
+  X0002a70 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/RegressionEquationItemConverter.cxx";
+  };
+  X0002a71 = {
+   fileRef = X0002a70;
+   isa = PBXBuildFile;
+  };
+  X0002a72 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/SeriesOptionsItemConverter.cxx";
+  };
+  X0002a73 = {
+   fileRef = X0002a72;
+   isa = PBXBuildFile;
+  };
+  X0002a74 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/StatisticsItemConverter.cxx";
+  };
+  X0002a75 = {
+   fileRef = X0002a74;
+   isa = PBXBuildFile;
+  };
+  X0002a76 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/TextLabelItemConverter.cxx";
+  };
+  X0002a77 = {
+   fileRef = X0002a76;
+   isa = PBXBuildFile;
+  };
+  X0002a78 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/itemsetwrapper/TitleItemConverter.cxx";
+  };
+  X0002a79 = {
+   fileRef = X0002a78;
+   isa = PBXBuildFile;
+  };
+  X0002a7a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartController.cxx";
+  };
+  X0002a7b = {
+   fileRef = X0002a7a;
+   isa = PBXBuildFile;
+  };
+  X0002a7c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartController_EditData.cxx";
+  };
+  X0002a7d = {
+   fileRef = X0002a7c;
+   isa = PBXBuildFile;
+  };
+  X0002a7e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartController_Insert.cxx";
+  };
+  X0002a7f = {
+   fileRef = X0002a7e;
+   isa = PBXBuildFile;
+  };
+  X0002a80 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartController_Position.cxx";
+  };
+  X0002a81 = {
+   fileRef = X0002a80;
+   isa = PBXBuildFile;
+  };
+  X0002a82 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartController_Properties.cxx";
+  };
+  X0002a83 = {
+   fileRef = X0002a82;
+   isa = PBXBuildFile;
+  };
+  X0002a84 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartController_TextEdit.cxx";
+  };
+  X0002a85 = {
+   fileRef = X0002a84;
+   isa = PBXBuildFile;
+  };
+  X0002a86 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartController_Tools.cxx";
+  };
+  X0002a87 = {
+   fileRef = X0002a86;
+   isa = PBXBuildFile;
+  };
+  X0002a88 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartController_Window.cxx";
+  };
+  X0002a89 = {
+   fileRef = X0002a88;
+   isa = PBXBuildFile;
+  };
+  X0002a8a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartDropTargetHelper.cxx";
+  };
+  X0002a8b = {
+   fileRef = X0002a8a;
+   isa = PBXBuildFile;
+  };
+  X0002a8c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartFrameloader.cxx";
+  };
+  X0002a8d = {
+   fileRef = X0002a8c;
+   isa = PBXBuildFile;
+  };
+  X0002a8e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartModelClone.cxx";
+  };
+  X0002a8f = {
+   fileRef = X0002a8e;
+   isa = PBXBuildFile;
+  };
+  X0002a90 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartTransferable.cxx";
+  };
+  X0002a91 = {
+   fileRef = X0002a90;
+   isa = PBXBuildFile;
+  };
+  X0002a92 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ChartWindow.cxx";
+  };
+  X0002a93 = {
+   fileRef = X0002a92;
+   isa = PBXBuildFile;
+  };
+  X0002a94 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/CommandDispatchContainer.cxx";
+  };
+  X0002a95 = {
+   fileRef = X0002a94;
+   isa = PBXBuildFile;
+  };
+  X0002a96 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/CommandDispatch.cxx";
+  };
+  X0002a97 = {
+   fileRef = X0002a96;
+   isa = PBXBuildFile;
+  };
+  X0002a98 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ConfigurationAccess.cxx";
+  };
+  X0002a99 = {
+   fileRef = X0002a98;
+   isa = PBXBuildFile;
+  };
+  X0002a9a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ControllerCommandDispatch.cxx";
+  };
+  X0002a9b = {
+   fileRef = X0002a9a;
+   isa = PBXBuildFile;
+  };
+  X0002a9c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/DragMethod_Base.cxx";
+  };
+  X0002a9d = {
+   fileRef = X0002a9c;
+   isa = PBXBuildFile;
+  };
+  X0002a9e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/DragMethod_PieSegment.cxx";
+  };
+  X0002a9f = {
+   fileRef = X0002a9e;
+   isa = PBXBuildFile;
+  };
+  X0002aa0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/DragMethod_RotateDiagram.cxx";
+  };
+  X0002aa1 = {
+   fileRef = X0002aa0;
+   isa = PBXBuildFile;
+  };
+  X0002aa2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/DrawCommandDispatch.cxx";
+  };
+  X0002aa3 = {
+   fileRef = X0002aa2;
+   isa = PBXBuildFile;
+  };
+  X0002aa4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ElementSelector.cxx";
+  };
+  X0002aa5 = {
+   fileRef = X0002aa4;
+   isa = PBXBuildFile;
+  };
+  X0002aa6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/FeatureCommandDispatchBase.cxx";
+  };
+  X0002aa7 = {
+   fileRef = X0002aa6;
+   isa = PBXBuildFile;
+  };
+  X0002aa8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ObjectHierarchy.cxx";
+  };
+  X0002aa9 = {
+   fileRef = X0002aa8;
+   isa = PBXBuildFile;
+  };
+  X0002aaa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/PositionAndSizeHelper.cxx";
+  };
+  X0002aab = {
+   fileRef = X0002aaa;
+   isa = PBXBuildFile;
+  };
+  X0002aac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/SelectionHelper.cxx";
+  };
+  X0002aad = {
+   fileRef = X0002aac;
+   isa = PBXBuildFile;
+  };
+  X0002aae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ShapeController.cxx";
+  };
+  X0002aaf = {
+   fileRef = X0002aae;
+   isa = PBXBuildFile;
+  };
+  X0002ab0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/StatusBarCommandDispatch.cxx";
+  };
+  X0002ab1 = {
+   fileRef = X0002ab0;
+   isa = PBXBuildFile;
+  };
+  X0002ab2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/ToolbarController.cxx";
+  };
+  X0002ab3 = {
+   fileRef = X0002ab2;
+   isa = PBXBuildFile;
+  };
+  X0002ab4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/UndoActions.cxx";
+  };
+  X0002ab5 = {
+   fileRef = X0002ab4;
+   isa = PBXBuildFile;
+  };
+  X0002ab6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/UndoCommandDispatch.cxx";
+  };
+  X0002ab7 = {
+   fileRef = X0002ab6;
+   isa = PBXBuildFile;
+  };
+  X0002ab8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/main/UndoGuard.cxx";
+  };
+  X0002ab9 = {
+   fileRef = X0002ab8;
+   isa = PBXBuildFile;
+  };
+  X0002aba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/Chart2PanelFactory.cxx";
+  };
+  X0002abb = {
+   fileRef = X0002aba;
+   isa = PBXBuildFile;
+  };
+  X0002abc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartAreaPanel.cxx";
+  };
+  X0002abd = {
+   fileRef = X0002abc;
+   isa = PBXBuildFile;
+  };
+  X0002abe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartAxisPanel.cxx";
+  };
+  X0002abf = {
+   fileRef = X0002abe;
+   isa = PBXBuildFile;
+  };
+  X0002ac0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartColorWrapper.cxx";
+  };
+  X0002ac1 = {
+   fileRef = X0002ac0;
+   isa = PBXBuildFile;
+  };
+  X0002ac2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartElementsPanel.cxx";
+  };
+  X0002ac3 = {
+   fileRef = X0002ac2;
+   isa = PBXBuildFile;
+  };
+  X0002ac4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartErrorBarPanel.cxx";
+  };
+  X0002ac5 = {
+   fileRef = X0002ac4;
+   isa = PBXBuildFile;
+  };
+  X0002ac6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartLinePanel.cxx";
+  };
+  X0002ac7 = {
+   fileRef = X0002ac6;
+   isa = PBXBuildFile;
+  };
+  X0002ac8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartSeriesPanel.cxx";
+  };
+  X0002ac9 = {
+   fileRef = X0002ac8;
+   isa = PBXBuildFile;
+  };
+  X0002aca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartSidebarModifyListener.cxx";
+  };
+  X0002acb = {
+   fileRef = X0002aca;
+   isa = PBXBuildFile;
+  };
+  X0002acc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/sidebar/ChartSidebarSelectionListener.cxx";
+  };
+  X0002acd = {
+   fileRef = X0002acc;
+   isa = PBXBuildFile;
+  };
+  X0002ace = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/controller/uitest/uiobject.cxx";
+  };
+  X0002acf = {
+   fileRef = X0002ace;
+   isa = PBXBuildFile;
+  };
+  X0002ad0 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X000299d;
+}

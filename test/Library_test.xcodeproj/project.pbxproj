@@ -1,0 +1,133 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004e6f = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004e87;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004e70;
+   productRefGroup = X0004e73;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004e75;
+  };
+  X0004e70 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004e71 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004e74 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004e75 = {
+   buildConfigurationList = X0004e88;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004e72;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004e76 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "test/source/bootstrapfixture.cxx";
+  };
+  X0004e77 = {
+   fileRef = X0004e76;
+   isa = PBXBuildFile;
+  };
+  X0004e78 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "test/source/diff/diff.cxx";
+  };
+  X0004e79 = {
+   fileRef = X0004e78;
+   isa = PBXBuildFile;
+  };
+  X0004e7a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "test/source/callgrind.cxx";
+  };
+  X0004e7b = {
+   fileRef = X0004e7a;
+   isa = PBXBuildFile;
+  };
+  X0004e7c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "test/source/xmltesttools.cxx";
+  };
+  X0004e7d = {
+   fileRef = X0004e7c;
+   isa = PBXBuildFile;
+  };
+  X0004e7e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "test/source/htmltesttools.cxx";
+  };
+  X0004e7f = {
+   fileRef = X0004e7e;
+   isa = PBXBuildFile;
+  };
+  X0004e80 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "test/source/mtfxmldump.cxx";
+  };
+  X0004e81 = {
+   fileRef = X0004e80;
+   isa = PBXBuildFile;
+  };
+  X0004e82 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "test/source/primitive2dxmldump.cxx";
+  };
+  X0004e83 = {
+   fileRef = X0004e82;
+   isa = PBXBuildFile;
+  };
+  X0004e84 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "test/source/screenshot_test.cxx";
+  };
+  X0004e85 = {
+   fileRef = X0004e84;
+   isa = PBXBuildFile;
+  };
+  X0004e86 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004e6f;
+}

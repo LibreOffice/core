@@ -1,0 +1,160 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004b7b = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004b99;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004b7c;
+   productRefGroup = X0004b7f;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004b81;
+  };
+  X0004b7c = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004b7d = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004b80 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004b81 = {
+   buildConfigurationList = X0004b9a;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004b7e;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004b82 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_runtime.cxx";
+  };
+  X0004b83 = {
+   fileRef = X0004b82;
+   isa = PBXBuildFile;
+  };
+  X0004b84 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno.cxx";
+  };
+  X0004b85 = {
+   fileRef = X0004b84;
+   isa = PBXBuildFile;
+  };
+  X0004b86 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_struct.cxx";
+  };
+  X0004b87 = {
+   fileRef = X0004b86;
+   isa = PBXBuildFile;
+  };
+  X0004b88 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_callable.cxx";
+  };
+  X0004b89 = {
+   fileRef = X0004b88;
+   isa = PBXBuildFile;
+  };
+  X0004b8a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_module.cxx";
+  };
+  X0004b8b = {
+   fileRef = X0004b8a;
+   isa = PBXBuildFile;
+  };
+  X0004b8c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_type.cxx";
+  };
+  X0004b8d = {
+   fileRef = X0004b8c;
+   isa = PBXBuildFile;
+  };
+  X0004b8e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_util.cxx";
+  };
+  X0004b8f = {
+   fileRef = X0004b8e;
+   isa = PBXBuildFile;
+  };
+  X0004b90 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_except.cxx";
+  };
+  X0004b91 = {
+   fileRef = X0004b90;
+   isa = PBXBuildFile;
+  };
+  X0004b92 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_adapter.cxx";
+  };
+  X0004b93 = {
+   fileRef = X0004b92;
+   isa = PBXBuildFile;
+  };
+  X0004b94 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_gc.cxx";
+  };
+  X0004b95 = {
+   fileRef = X0004b94;
+   isa = PBXBuildFile;
+  };
+  X0004b96 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "pyuno/source/module/pyuno_iterator.cxx";
+  };
+  X0004b97 = {
+   fileRef = X0004b96;
+   isa = PBXBuildFile;
+  };
+  X0004b98 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004b7b;
+}

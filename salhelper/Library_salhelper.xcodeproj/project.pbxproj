@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002959 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000296b;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000295a;
+   productRefGroup = X000295d;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000295f;
+  };
+  X000295a = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000295b = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000295e = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000295f = {
+   buildConfigurationList = X000296c;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000295c;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002960 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "salhelper/source/condition.cxx";
+  };
+  X0002961 = {
+   fileRef = X0002960;
+   isa = PBXBuildFile;
+  };
+  X0002962 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "salhelper/source/dynload.cxx";
+  };
+  X0002963 = {
+   fileRef = X0002962;
+   isa = PBXBuildFile;
+  };
+  X0002964 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "salhelper/source/simplereferenceobject.cxx";
+  };
+  X0002965 = {
+   fileRef = X0002964;
+   isa = PBXBuildFile;
+  };
+  X0002966 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "salhelper/source/thread.cxx";
+  };
+  X0002967 = {
+   fileRef = X0002966;
+   isa = PBXBuildFile;
+  };
+  X0002968 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "salhelper/source/timer.cxx";
+  };
+  X0002969 = {
+   fileRef = X0002968;
+   isa = PBXBuildFile;
+  };
+  X000296a = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002959;
+}

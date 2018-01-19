@@ -1,0 +1,169 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X000487f = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000489f;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004880;
+   productRefGroup = X0004883;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004885;
+  };
+  X0004880 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004881 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004884 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004885 = {
+   buildConfigurationList = X00048a0;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004882;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004886 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/b2dellipse.cxx";
+  };
+  X0004887 = {
+   fileRef = X0004886;
+   isa = PBXBuildFile;
+  };
+  X0004888 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/impsvgdialog.cxx";
+  };
+  X0004889 = {
+   fileRef = X0004888;
+   isa = PBXBuildFile;
+  };
+  X000488a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/parserfragments.cxx";
+  };
+  X000488b = {
+   fileRef = X000488a;
+   isa = PBXBuildFile;
+  };
+  X000488c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/svgdialog.cxx";
+  };
+  X000488d = {
+   fileRef = X000488c;
+   isa = PBXBuildFile;
+  };
+  X000488e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/svgfilter.cxx";
+  };
+  X000488f = {
+   fileRef = X000488e;
+   isa = PBXBuildFile;
+  };
+  X0004890 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/svgimport.cxx";
+  };
+  X0004891 = {
+   fileRef = X0004890;
+   isa = PBXBuildFile;
+  };
+  X0004892 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/svgreader.cxx";
+  };
+  X0004893 = {
+   fileRef = X0004892;
+   isa = PBXBuildFile;
+  };
+  X0004894 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/tokenmap.cxx";
+  };
+  X0004895 = {
+   fileRef = X0004894;
+   isa = PBXBuildFile;
+  };
+  X0004896 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/units.cxx";
+  };
+  X0004897 = {
+   fileRef = X0004896;
+   isa = PBXBuildFile;
+  };
+  X0004898 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/svgexport.cxx";
+  };
+  X0004899 = {
+   fileRef = X0004898;
+   isa = PBXBuildFile;
+  };
+  X000489a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/svgfontexport.cxx";
+  };
+  X000489b = {
+   fileRef = X000489a;
+   isa = PBXBuildFile;
+  };
+  X000489c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/svg/svgwriter.cxx";
+  };
+  X000489d = {
+   fileRef = X000489c;
+   isa = PBXBuildFile;
+  };
+  X000489e = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X000487f;
+}

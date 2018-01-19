@@ -1,0 +1,232 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0003b75 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0003ba3;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0003b76;
+   productRefGroup = X0003b79;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0003b7b;
+  };
+  X0003b76 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0003b77 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0003b7a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0003b7b = {
+   buildConfigurationList = X0003ba4;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0003b78;
+   productType = "com.apple.product-type.something";
+  };
+  X0003b7c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/idlcmain.cxx";
+  };
+  X0003b7d = {
+   fileRef = X0003b7c;
+   isa = PBXBuildFile;
+  };
+  X0003b7e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/idlc.cxx";
+  };
+  X0003b7f = {
+   fileRef = X0003b7e;
+   isa = PBXBuildFile;
+  };
+  X0003b80 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/idlccompile.cxx";
+  };
+  X0003b81 = {
+   fileRef = X0003b80;
+   isa = PBXBuildFile;
+  };
+  X0003b82 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/idlcproduce.cxx";
+  };
+  X0003b83 = {
+   fileRef = X0003b82;
+   isa = PBXBuildFile;
+  };
+  X0003b84 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/errorhandler.cxx";
+  };
+  X0003b85 = {
+   fileRef = X0003b84;
+   isa = PBXBuildFile;
+  };
+  X0003b86 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/options.cxx";
+  };
+  X0003b87 = {
+   fileRef = X0003b86;
+   isa = PBXBuildFile;
+  };
+  X0003b88 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/fehelper.cxx";
+  };
+  X0003b89 = {
+   fileRef = X0003b88;
+   isa = PBXBuildFile;
+  };
+  X0003b8a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astdeclaration.cxx";
+  };
+  X0003b8b = {
+   fileRef = X0003b8a;
+   isa = PBXBuildFile;
+  };
+  X0003b8c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astscope.cxx";
+  };
+  X0003b8d = {
+   fileRef = X0003b8c;
+   isa = PBXBuildFile;
+  };
+  X0003b8e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/aststack.cxx";
+  };
+  X0003b8f = {
+   fileRef = X0003b8e;
+   isa = PBXBuildFile;
+  };
+  X0003b90 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astdump.cxx";
+  };
+  X0003b91 = {
+   fileRef = X0003b90;
+   isa = PBXBuildFile;
+  };
+  X0003b92 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astinterface.cxx";
+  };
+  X0003b93 = {
+   fileRef = X0003b92;
+   isa = PBXBuildFile;
+  };
+  X0003b94 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/aststruct.cxx";
+  };
+  X0003b95 = {
+   fileRef = X0003b94;
+   isa = PBXBuildFile;
+  };
+  X0003b96 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/aststructinstance.cxx";
+  };
+  X0003b97 = {
+   fileRef = X0003b96;
+   isa = PBXBuildFile;
+  };
+  X0003b98 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astoperation.cxx";
+  };
+  X0003b99 = {
+   fileRef = X0003b98;
+   isa = PBXBuildFile;
+  };
+  X0003b9a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astconstant.cxx";
+  };
+  X0003b9b = {
+   fileRef = X0003b9a;
+   isa = PBXBuildFile;
+  };
+  X0003b9c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astenum.cxx";
+  };
+  X0003b9d = {
+   fileRef = X0003b9c;
+   isa = PBXBuildFile;
+  };
+  X0003b9e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astexpression.cxx";
+  };
+  X0003b9f = {
+   fileRef = X0003b9e;
+   isa = PBXBuildFile;
+  };
+  X0003ba0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "idlc/source/astservice.cxx";
+  };
+  X0003ba1 = {
+   fileRef = X0003ba0;
+   isa = PBXBuildFile;
+  };
+  X0003ba2 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0003b75;
+}

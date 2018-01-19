@@ -1,0 +1,88 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X000426d = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000427b;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000426e;
+   productRefGroup = X0004271;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004273;
+  };
+  X000426e = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000426f = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004272 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004273 = {
+   buildConfigurationList = X000427c;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004270;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004274 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/qa/unit/WpftFilterFixture.cxx";
+  };
+  X0004275 = {
+   fileRef = X0004274;
+   isa = PBXBuildFile;
+  };
+  X0004276 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/qa/unit/WpftFilterTestBase.cxx";
+  };
+  X0004277 = {
+   fileRef = X0004276;
+   isa = PBXBuildFile;
+  };
+  X0004278 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/qa/unit/WpftLoader.cxx";
+  };
+  X0004279 = {
+   fileRef = X0004278;
+   isa = PBXBuildFile;
+  };
+  X000427a = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X000426d;
+}

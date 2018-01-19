@@ -1,0 +1,124 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004c9f = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004cb5;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004ca0;
+   productRefGroup = X0004ca3;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004ca5;
+  };
+  X0004ca0 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004ca1 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004ca4 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004ca5 = {
+   buildConfigurationList = X0004cb6;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004ca2;
+   productType = "com.apple.product-type.something";
+  };
+  X0004ca6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unodevtools/source/unodevtools/options.cxx";
+  };
+  X0004ca7 = {
+   fileRef = X0004ca6;
+   isa = PBXBuildFile;
+  };
+  X0004ca8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unodevtools/source/skeletonmaker/skeletonmaker.cxx";
+  };
+  X0004ca9 = {
+   fileRef = X0004ca8;
+   isa = PBXBuildFile;
+  };
+  X0004caa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unodevtools/source/skeletonmaker/skeletoncommon.cxx";
+  };
+  X0004cab = {
+   fileRef = X0004caa;
+   isa = PBXBuildFile;
+  };
+  X0004cac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unodevtools/source/skeletonmaker/javatypemaker.cxx";
+  };
+  X0004cad = {
+   fileRef = X0004cac;
+   isa = PBXBuildFile;
+  };
+  X0004cae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unodevtools/source/skeletonmaker/cpptypemaker.cxx";
+  };
+  X0004caf = {
+   fileRef = X0004cae;
+   isa = PBXBuildFile;
+  };
+  X0004cb0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unodevtools/source/skeletonmaker/javacompskeleton.cxx";
+  };
+  X0004cb1 = {
+   fileRef = X0004cb0;
+   isa = PBXBuildFile;
+  };
+  X0004cb2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unodevtools/source/skeletonmaker/cppcompskeleton.cxx";
+  };
+  X0004cb3 = {
+   fileRef = X0004cb2;
+   isa = PBXBuildFile;
+  };
+  X0004cb4 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004c9f;
+}

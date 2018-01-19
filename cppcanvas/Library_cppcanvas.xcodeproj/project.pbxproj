@@ -1,0 +1,331 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004e0d = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004e51;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004e0e;
+   productRefGroup = X0004e11;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004e13;
+  };
+  X0004e0e = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004e0f = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004e12 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004e13 = {
+   buildConfigurationList = X0004e52;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004e10;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004e14 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/bitmapaction.cxx";
+  };
+  X0004e15 = {
+   fileRef = X0004e14;
+   isa = PBXBuildFile;
+  };
+  X0004e16 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/cachedprimitivebase.cxx";
+  };
+  X0004e17 = {
+   fileRef = X0004e16;
+   isa = PBXBuildFile;
+  };
+  X0004e18 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfpbrush.cxx";
+  };
+  X0004e19 = {
+   fileRef = X0004e18;
+   isa = PBXBuildFile;
+  };
+  X0004e1a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfpcustomlinecap.cxx";
+  };
+  X0004e1b = {
+   fileRef = X0004e1a;
+   isa = PBXBuildFile;
+  };
+  X0004e1c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfpfont.cxx";
+  };
+  X0004e1d = {
+   fileRef = X0004e1c;
+   isa = PBXBuildFile;
+  };
+  X0004e1e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfpimage.cxx";
+  };
+  X0004e1f = {
+   fileRef = X0004e1e;
+   isa = PBXBuildFile;
+  };
+  X0004e20 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfplus.cxx";
+  };
+  X0004e21 = {
+   fileRef = X0004e20;
+   isa = PBXBuildFile;
+  };
+  X0004e22 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfppen.cxx";
+  };
+  X0004e23 = {
+   fileRef = X0004e22;
+   isa = PBXBuildFile;
+  };
+  X0004e24 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfppath.cxx";
+  };
+  X0004e25 = {
+   fileRef = X0004e24;
+   isa = PBXBuildFile;
+  };
+  X0004e26 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfpregion.cxx";
+  };
+  X0004e27 = {
+   fileRef = X0004e26;
+   isa = PBXBuildFile;
+  };
+  X0004e28 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/implrenderer.cxx";
+  };
+  X0004e29 = {
+   fileRef = X0004e28;
+   isa = PBXBuildFile;
+  };
+  X0004e2a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/lineaction.cxx";
+  };
+  X0004e2b = {
+   fileRef = X0004e2a;
+   isa = PBXBuildFile;
+  };
+  X0004e2c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/mtftools.cxx";
+  };
+  X0004e2d = {
+   fileRef = X0004e2c;
+   isa = PBXBuildFile;
+  };
+  X0004e2e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/pointaction.cxx";
+  };
+  X0004e2f = {
+   fileRef = X0004e2e;
+   isa = PBXBuildFile;
+  };
+  X0004e30 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/polypolyaction.cxx";
+  };
+  X0004e31 = {
+   fileRef = X0004e30;
+   isa = PBXBuildFile;
+  };
+  X0004e32 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/emfpstringformat.cxx";
+  };
+  X0004e33 = {
+   fileRef = X0004e32;
+   isa = PBXBuildFile;
+  };
+  X0004e34 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/textaction.cxx";
+  };
+  X0004e35 = {
+   fileRef = X0004e34;
+   isa = PBXBuildFile;
+  };
+  X0004e36 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/mtfrenderer/transparencygroupaction.cxx";
+  };
+  X0004e37 = {
+   fileRef = X0004e36;
+   isa = PBXBuildFile;
+  };
+  X0004e38 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/tools/canvasgraphichelper.cxx";
+  };
+  X0004e39 = {
+   fileRef = X0004e38;
+   isa = PBXBuildFile;
+  };
+  X0004e3a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/tools/tools.cxx";
+  };
+  X0004e3b = {
+   fileRef = X0004e3a;
+   isa = PBXBuildFile;
+  };
+  X0004e3c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/basegfxfactory.cxx";
+  };
+  X0004e3d = {
+   fileRef = X0004e3c;
+   isa = PBXBuildFile;
+  };
+  X0004e3e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/implbitmap.cxx";
+  };
+  X0004e3f = {
+   fileRef = X0004e3e;
+   isa = PBXBuildFile;
+  };
+  X0004e40 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/implbitmapcanvas.cxx";
+  };
+  X0004e41 = {
+   fileRef = X0004e40;
+   isa = PBXBuildFile;
+  };
+  X0004e42 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/implcanvas.cxx";
+  };
+  X0004e43 = {
+   fileRef = X0004e42;
+   isa = PBXBuildFile;
+  };
+  X0004e44 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/implcustomsprite.cxx";
+  };
+  X0004e45 = {
+   fileRef = X0004e44;
+   isa = PBXBuildFile;
+  };
+  X0004e46 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/implfont.cxx";
+  };
+  X0004e47 = {
+   fileRef = X0004e46;
+   isa = PBXBuildFile;
+  };
+  X0004e48 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/implpolypolygon.cxx";
+  };
+  X0004e49 = {
+   fileRef = X0004e48;
+   isa = PBXBuildFile;
+  };
+  X0004e4a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/implsprite.cxx";
+  };
+  X0004e4b = {
+   fileRef = X0004e4a;
+   isa = PBXBuildFile;
+  };
+  X0004e4c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/implspritecanvas.cxx";
+  };
+  X0004e4d = {
+   fileRef = X0004e4c;
+   isa = PBXBuildFile;
+  };
+  X0004e4e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "cppcanvas/source/wrapper/vclfactory.cxx";
+  };
+  X0004e4f = {
+   fileRef = X0004e4e;
+   isa = PBXBuildFile;
+  };
+  X0004e50 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004e0d;
+}

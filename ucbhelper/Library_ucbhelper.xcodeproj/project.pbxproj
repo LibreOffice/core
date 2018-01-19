@@ -1,0 +1,286 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004029 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004063;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000402a;
+   productRefGroup = X000402d;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000402f;
+  };
+  X000402a = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000402b = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000402e = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000402f = {
+   buildConfigurationList = X0004064;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000402c;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004030 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/client/activedatasink.cxx";
+  };
+  X0004031 = {
+   fileRef = X0004030;
+   isa = PBXBuildFile;
+  };
+  X0004032 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/client/activedatastreamer.cxx";
+  };
+  X0004033 = {
+   fileRef = X0004032;
+   isa = PBXBuildFile;
+  };
+  X0004034 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/client/commandenvironment.cxx";
+  };
+  X0004035 = {
+   fileRef = X0004034;
+   isa = PBXBuildFile;
+  };
+  X0004036 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/client/content.cxx";
+  };
+  X0004037 = {
+   fileRef = X0004036;
+   isa = PBXBuildFile;
+  };
+  X0004038 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/client/interceptedinteraction.cxx";
+  };
+  X0004039 = {
+   fileRef = X0004038;
+   isa = PBXBuildFile;
+  };
+  X000403a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/client/proxydecider.cxx";
+  };
+  X000403b = {
+   fileRef = X000403a;
+   isa = PBXBuildFile;
+  };
+  X000403c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/authenticationfallback.cxx";
+  };
+  X000403d = {
+   fileRef = X000403c;
+   isa = PBXBuildFile;
+  };
+  X000403e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/cancelcommandexecution.cxx";
+  };
+  X000403f = {
+   fileRef = X000403e;
+   isa = PBXBuildFile;
+  };
+  X0004040 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/contenthelper.cxx";
+  };
+  X0004041 = {
+   fileRef = X0004040;
+   isa = PBXBuildFile;
+  };
+  X0004042 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/contentidentifier.cxx";
+  };
+  X0004043 = {
+   fileRef = X0004042;
+   isa = PBXBuildFile;
+  };
+  X0004044 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/contentinfo.cxx";
+  };
+  X0004045 = {
+   fileRef = X0004044;
+   isa = PBXBuildFile;
+  };
+  X0004046 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/fd_inputstream.cxx";
+  };
+  X0004047 = {
+   fileRef = X0004046;
+   isa = PBXBuildFile;
+  };
+  X0004048 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/getcomponentcontext.cxx";
+  };
+  X0004049 = {
+   fileRef = X0004048;
+   isa = PBXBuildFile;
+  };
+  X000404a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/interactionrequest.cxx";
+  };
+  X000404b = {
+   fileRef = X000404a;
+   isa = PBXBuildFile;
+  };
+  X000404c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/propertyvalueset.cxx";
+  };
+  X000404d = {
+   fileRef = X000404c;
+   isa = PBXBuildFile;
+  };
+  X000404e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/providerhelper.cxx";
+  };
+  X000404f = {
+   fileRef = X000404e;
+   isa = PBXBuildFile;
+  };
+  X0004050 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/registerucb.cxx";
+  };
+  X0004051 = {
+   fileRef = X0004050;
+   isa = PBXBuildFile;
+  };
+  X0004052 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/resultset.cxx";
+  };
+  X0004053 = {
+   fileRef = X0004052;
+   isa = PBXBuildFile;
+  };
+  X0004054 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/resultsethelper.cxx";
+  };
+  X0004055 = {
+   fileRef = X0004054;
+   isa = PBXBuildFile;
+  };
+  X0004056 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/resultsetmetadata.cxx";
+  };
+  X0004057 = {
+   fileRef = X0004056;
+   isa = PBXBuildFile;
+  };
+  X0004058 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/simpleauthenticationrequest.cxx";
+  };
+  X0004059 = {
+   fileRef = X0004058;
+   isa = PBXBuildFile;
+  };
+  X000405a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/simplecertificatevalidationrequest.cxx";
+  };
+  X000405b = {
+   fileRef = X000405a;
+   isa = PBXBuildFile;
+  };
+  X000405c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/simpleinteractionrequest.cxx";
+  };
+  X000405d = {
+   fileRef = X000405c;
+   isa = PBXBuildFile;
+  };
+  X000405e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/simpleioerrorrequest.cxx";
+  };
+  X000405f = {
+   fileRef = X000405e;
+   isa = PBXBuildFile;
+  };
+  X0004060 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucbhelper/source/provider/simplenameclashresolverequest.cxx";
+  };
+  X0004061 = {
+   fileRef = X0004060;
+   isa = PBXBuildFile;
+  };
+  X0004062 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004029;
+}

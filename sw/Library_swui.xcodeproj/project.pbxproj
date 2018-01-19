@@ -1,0 +1,880 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001439 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00014f7;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000143a;
+   productRefGroup = X000143d;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000143f;
+  };
+  X000143a = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000143b = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000143e = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000143f = {
+   buildConfigurationList = X00014f8;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000143c;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0001440 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/chrdlg/break.cxx";
+  };
+  X0001441 = {
+   fileRef = X0001440;
+   isa = PBXBuildFile;
+  };
+  X0001442 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/chrdlg/chardlg.cxx";
+  };
+  X0001443 = {
+   fileRef = X0001442;
+   isa = PBXBuildFile;
+  };
+  X0001444 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/chrdlg/drpcps.cxx";
+  };
+  X0001445 = {
+   fileRef = X0001444;
+   isa = PBXBuildFile;
+  };
+  X0001446 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/chrdlg/numpara.cxx";
+  };
+  X0001447 = {
+   fileRef = X0001446;
+   isa = PBXBuildFile;
+  };
+  X0001448 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/chrdlg/pardlg.cxx";
+  };
+  X0001449 = {
+   fileRef = X0001448;
+   isa = PBXBuildFile;
+  };
+  X000144a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/chrdlg/swuiccoll.cxx";
+  };
+  X000144b = {
+   fileRef = X000144a;
+   isa = PBXBuildFile;
+  };
+  X000144c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/chrdlg/tblnumfm.cxx";
+  };
+  X000144d = {
+   fileRef = X000144c;
+   isa = PBXBuildFile;
+  };
+  X000144e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/config/mailconfigpage.cxx";
+  };
+  X000144f = {
+   fileRef = X000144e;
+   isa = PBXBuildFile;
+  };
+  X0001450 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/config/optcomp.cxx";
+  };
+  X0001451 = {
+   fileRef = X0001450;
+   isa = PBXBuildFile;
+  };
+  X0001452 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/config/optload.cxx";
+  };
+  X0001453 = {
+   fileRef = X0001452;
+   isa = PBXBuildFile;
+  };
+  X0001454 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/config/optpage.cxx";
+  };
+  X0001455 = {
+   fileRef = X0001454;
+   isa = PBXBuildFile;
+  };
+  X0001456 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/abstract.cxx";
+  };
+  X0001457 = {
+   fileRef = X0001456;
+   isa = PBXBuildFile;
+  };
+  X0001458 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/addrdlg.cxx";
+  };
+  X0001459 = {
+   fileRef = X0001458;
+   isa = PBXBuildFile;
+  };
+  X000145a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/ascfldlg.cxx";
+  };
+  X000145b = {
+   fileRef = X000145a;
+   isa = PBXBuildFile;
+  };
+  X000145c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/docstdlg.cxx";
+  };
+  X000145d = {
+   fileRef = X000145c;
+   isa = PBXBuildFile;
+  };
+  X000145e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/macassgn.cxx";
+  };
+  X000145f = {
+   fileRef = X000145e;
+   isa = PBXBuildFile;
+  };
+  X0001460 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/swdlgfact.cxx";
+  };
+  X0001461 = {
+   fileRef = X0001460;
+   isa = PBXBuildFile;
+  };
+  X0001462 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/swmessdialog.cxx";
+  };
+  X0001463 = {
+   fileRef = X0001462;
+   isa = PBXBuildFile;
+  };
+  X0001464 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/swuiexp.cxx";
+  };
+  X0001465 = {
+   fileRef = X0001464;
+   isa = PBXBuildFile;
+  };
+  X0001466 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/uiregionsw.cxx";
+  };
+  X0001467 = {
+   fileRef = X0001466;
+   isa = PBXBuildFile;
+  };
+  X0001468 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dialog/wordcountdialog.cxx";
+  };
+  X0001469 = {
+   fileRef = X0001468;
+   isa = PBXBuildFile;
+  };
+  X000146a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dochdl/selglos.cxx";
+  };
+  X000146b = {
+   fileRef = X000146a;
+   isa = PBXBuildFile;
+  };
+  X000146c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/envelp/envfmt.cxx";
+  };
+  X000146d = {
+   fileRef = X000146c;
+   isa = PBXBuildFile;
+  };
+  X000146e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/envelp/envlop1.cxx";
+  };
+  X000146f = {
+   fileRef = X000146e;
+   isa = PBXBuildFile;
+  };
+  X0001470 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/envelp/envprt.cxx";
+  };
+  X0001471 = {
+   fileRef = X0001470;
+   isa = PBXBuildFile;
+  };
+  X0001472 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/envelp/label1.cxx";
+  };
+  X0001473 = {
+   fileRef = X0001472;
+   isa = PBXBuildFile;
+  };
+  X0001474 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/envelp/labelexp.cxx";
+  };
+  X0001475 = {
+   fileRef = X0001474;
+   isa = PBXBuildFile;
+  };
+  X0001476 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/envelp/labfmt.cxx";
+  };
+  X0001477 = {
+   fileRef = X0001476;
+   isa = PBXBuildFile;
+  };
+  X0001478 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/envelp/labprt.cxx";
+  };
+  X0001479 = {
+   fileRef = X0001478;
+   isa = PBXBuildFile;
+  };
+  X000147a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/envelp/mailmrge.cxx";
+  };
+  X000147b = {
+   fileRef = X000147a;
+   isa = PBXBuildFile;
+  };
+  X000147c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/DropDownFieldDialog.cxx";
+  };
+  X000147d = {
+   fileRef = X000147c;
+   isa = PBXBuildFile;
+  };
+  X000147e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/FldRefTreeListBox.cxx";
+  };
+  X000147f = {
+   fileRef = X000147e;
+   isa = PBXBuildFile;
+  };
+  X0001480 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/changedb.cxx";
+  };
+  X0001481 = {
+   fileRef = X0001480;
+   isa = PBXBuildFile;
+  };
+  X0001482 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/flddb.cxx";
+  };
+  X0001483 = {
+   fileRef = X0001482;
+   isa = PBXBuildFile;
+  };
+  X0001484 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/flddinf.cxx";
+  };
+  X0001485 = {
+   fileRef = X0001484;
+   isa = PBXBuildFile;
+  };
+  X0001486 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/flddok.cxx";
+  };
+  X0001487 = {
+   fileRef = X0001486;
+   isa = PBXBuildFile;
+  };
+  X0001488 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/fldedt.cxx";
+  };
+  X0001489 = {
+   fileRef = X0001488;
+   isa = PBXBuildFile;
+  };
+  X000148a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/fldfunc.cxx";
+  };
+  X000148b = {
+   fileRef = X000148a;
+   isa = PBXBuildFile;
+  };
+  X000148c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/fldpage.cxx";
+  };
+  X000148d = {
+   fileRef = X000148c;
+   isa = PBXBuildFile;
+  };
+  X000148e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/fldref.cxx";
+  };
+  X000148f = {
+   fileRef = X000148e;
+   isa = PBXBuildFile;
+  };
+  X0001490 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/fldtdlg.cxx";
+  };
+  X0001491 = {
+   fileRef = X0001490;
+   isa = PBXBuildFile;
+  };
+  X0001492 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/fldvar.cxx";
+  };
+  X0001493 = {
+   fileRef = X0001492;
+   isa = PBXBuildFile;
+  };
+  X0001494 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/inpdlg.cxx";
+  };
+  X0001495 = {
+   fileRef = X0001494;
+   isa = PBXBuildFile;
+  };
+  X0001496 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fldui/javaedit.cxx";
+  };
+  X0001497 = {
+   fileRef = X0001496;
+   isa = PBXBuildFile;
+  };
+  X0001498 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/fmtui/tmpdlg.cxx";
+  };
+  X0001499 = {
+   fileRef = X0001498;
+   isa = PBXBuildFile;
+  };
+  X000149a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/frmdlg/column.cxx";
+  };
+  X000149b = {
+   fileRef = X000149a;
+   isa = PBXBuildFile;
+  };
+  X000149c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/frmdlg/cption.cxx";
+  };
+  X000149d = {
+   fileRef = X000149c;
+   isa = PBXBuildFile;
+  };
+  X000149e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/frmdlg/frmdlg.cxx";
+  };
+  X000149f = {
+   fileRef = X000149e;
+   isa = PBXBuildFile;
+  };
+  X00014a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/frmdlg/frmpage.cxx";
+  };
+  X00014a1 = {
+   fileRef = X00014a0;
+   isa = PBXBuildFile;
+  };
+  X00014a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/frmdlg/pattern.cxx";
+  };
+  X00014a3 = {
+   fileRef = X00014a2;
+   isa = PBXBuildFile;
+  };
+  X00014a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/frmdlg/uiborder.cxx";
+  };
+  X00014a5 = {
+   fileRef = X00014a4;
+   isa = PBXBuildFile;
+  };
+  X00014a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/frmdlg/wrap.cxx";
+  };
+  X00014a7 = {
+   fileRef = X00014a6;
+   isa = PBXBuildFile;
+  };
+  X00014a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/index/cntex.cxx";
+  };
+  X00014a9 = {
+   fileRef = X00014a8;
+   isa = PBXBuildFile;
+  };
+  X00014aa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/index/cnttab.cxx";
+  };
+  X00014ab = {
+   fileRef = X00014aa;
+   isa = PBXBuildFile;
+  };
+  X00014ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/index/multmrk.cxx";
+  };
+  X00014ad = {
+   fileRef = X00014ac;
+   isa = PBXBuildFile;
+  };
+  X00014ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/index/swuiidxmrk.cxx";
+  };
+  X00014af = {
+   fileRef = X00014ae;
+   isa = PBXBuildFile;
+  };
+  X00014b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/bookmark.cxx";
+  };
+  X00014b1 = {
+   fileRef = X00014b0;
+   isa = PBXBuildFile;
+  };
+  X00014b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/docfnote.cxx";
+  };
+  X00014b3 = {
+   fileRef = X00014b2;
+   isa = PBXBuildFile;
+  };
+  X00014b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/glosbib.cxx";
+  };
+  X00014b5 = {
+   fileRef = X00014b4;
+   isa = PBXBuildFile;
+  };
+  X00014b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/glossary.cxx";
+  };
+  X00014b7 = {
+   fileRef = X00014b6;
+   isa = PBXBuildFile;
+  };
+  X00014b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/insfnote.cxx";
+  };
+  X00014b9 = {
+   fileRef = X00014b8;
+   isa = PBXBuildFile;
+  };
+  X00014ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/linenum.cxx";
+  };
+  X00014bb = {
+   fileRef = X00014ba;
+   isa = PBXBuildFile;
+  };
+  X00014bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/num.cxx";
+  };
+  X00014bd = {
+   fileRef = X00014bc;
+   isa = PBXBuildFile;
+  };
+  X00014be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/outline.cxx";
+  };
+  X00014bf = {
+   fileRef = X00014be;
+   isa = PBXBuildFile;
+  };
+  X00014c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/pgfnote.cxx";
+  };
+  X00014c1 = {
+   fileRef = X00014c0;
+   isa = PBXBuildFile;
+  };
+  X00014c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/pggrid.cxx";
+  };
+  X00014c3 = {
+   fileRef = X00014c2;
+   isa = PBXBuildFile;
+  };
+  X00014c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/srtdlg.cxx";
+  };
+  X00014c5 = {
+   fileRef = X00014c4;
+   isa = PBXBuildFile;
+  };
+  X00014c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/swmodalredlineacceptdlg.cxx";
+  };
+  X00014c7 = {
+   fileRef = X00014c6;
+   isa = PBXBuildFile;
+  };
+  X00014c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/misc/titlepage.cxx";
+  };
+  X00014c9 = {
+   fileRef = X00014c8;
+   isa = PBXBuildFile;
+  };
+  X00014ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/table/colwd.cxx";
+  };
+  X00014cb = {
+   fileRef = X00014ca;
+   isa = PBXBuildFile;
+  };
+  X00014cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/table/convert.cxx";
+  };
+  X00014cd = {
+   fileRef = X00014cc;
+   isa = PBXBuildFile;
+  };
+  X00014ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/table/instable.cxx";
+  };
+  X00014cf = {
+   fileRef = X00014ce;
+   isa = PBXBuildFile;
+  };
+  X00014d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/table/mergetbl.cxx";
+  };
+  X00014d1 = {
+   fileRef = X00014d0;
+   isa = PBXBuildFile;
+  };
+  X00014d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/table/rowht.cxx";
+  };
+  X00014d3 = {
+   fileRef = X00014d2;
+   isa = PBXBuildFile;
+  };
+  X00014d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/table/splittbl.cxx";
+  };
+  X00014d5 = {
+   fileRef = X00014d4;
+   isa = PBXBuildFile;
+  };
+  X00014d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/table/tabledlg.cxx";
+  };
+  X00014d7 = {
+   fileRef = X00014d6;
+   isa = PBXBuildFile;
+  };
+  X00014d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/table/tautofmt.cxx";
+  };
+  X00014d9 = {
+   fileRef = X00014d8;
+   isa = PBXBuildFile;
+  };
+  X00014da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/utlui/swrenamexnameddlg.cxx";
+  };
+  X00014db = {
+   fileRef = X00014da;
+   isa = PBXBuildFile;
+  };
+  X00014dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/addresslistdialog.cxx";
+  };
+  X00014dd = {
+   fileRef = X00014dc;
+   isa = PBXBuildFile;
+  };
+  X00014de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/createaddresslistdialog.cxx";
+  };
+  X00014df = {
+   fileRef = X00014de;
+   isa = PBXBuildFile;
+  };
+  X00014e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/customizeaddresslistdialog.cxx";
+  };
+  X00014e1 = {
+   fileRef = X00014e0;
+   isa = PBXBuildFile;
+  };
+  X00014e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/dbinsdlg.cxx";
+  };
+  X00014e3 = {
+   fileRef = X00014e2;
+   isa = PBXBuildFile;
+  };
+  X00014e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/dbtablepreviewdialog.cxx";
+  };
+  X00014e5 = {
+   fileRef = X00014e4;
+   isa = PBXBuildFile;
+  };
+  X00014e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/mailmergewizard.cxx";
+  };
+  X00014e7 = {
+   fileRef = X00014e6;
+   isa = PBXBuildFile;
+  };
+  X00014e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/mmaddressblockpage.cxx";
+  };
+  X00014e9 = {
+   fileRef = X00014e8;
+   isa = PBXBuildFile;
+  };
+  X00014ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/mmdocselectpage.cxx";
+  };
+  X00014eb = {
+   fileRef = X00014ea;
+   isa = PBXBuildFile;
+  };
+  X00014ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/mmgreetingspage.cxx";
+  };
+  X00014ed = {
+   fileRef = X00014ec;
+   isa = PBXBuildFile;
+  };
+  X00014ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/mmlayoutpage.cxx";
+  };
+  X00014ef = {
+   fileRef = X00014ee;
+   isa = PBXBuildFile;
+  };
+  X00014f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/mmoutputtypepage.cxx";
+  };
+  X00014f1 = {
+   fileRef = X00014f0;
+   isa = PBXBuildFile;
+  };
+  X00014f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/mmresultdialogs.cxx";
+  };
+  X00014f3 = {
+   fileRef = X00014f2;
+   isa = PBXBuildFile;
+  };
+  X00014f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/source/ui/dbui/selectdbtabledialog.cxx";
+  };
+  X00014f5 = {
+   fileRef = X00014f4;
+   isa = PBXBuildFile;
+  };
+  X00014f6 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001439;
+}

@@ -1,0 +1,169 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002315 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002335;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002316;
+   productRefGroup = X0002319;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000231b;
+  };
+  X0002316 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002317 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000231a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000231b = {
+   buildConfigurationList = X0002336;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002318;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000231c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_contentcaps.cxx";
+  };
+  X000231d = {
+   fileRef = X000231c;
+   isa = PBXBuildFile;
+  };
+  X000231e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_content.cxx";
+  };
+  X000231f = {
+   fileRef = X000231e;
+   isa = PBXBuildFile;
+  };
+  X0002320 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_datasupplier.cxx";
+  };
+  X0002321 = {
+   fileRef = X0002320;
+   isa = PBXBuildFile;
+  };
+  X0002322 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_docmgr.cxx";
+  };
+  X0002323 = {
+   fileRef = X0002322;
+   isa = PBXBuildFile;
+  };
+  X0002324 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_documentcontentfactory.cxx";
+  };
+  X0002325 = {
+   fileRef = X0002324;
+   isa = PBXBuildFile;
+  };
+  X0002326 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_passwordrequest.cxx";
+  };
+  X0002327 = {
+   fileRef = X0002326;
+   isa = PBXBuildFile;
+  };
+  X0002328 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_provider.cxx";
+  };
+  X0002329 = {
+   fileRef = X0002328;
+   isa = PBXBuildFile;
+  };
+  X000232a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_resultset.cxx";
+  };
+  X000232b = {
+   fileRef = X000232a;
+   isa = PBXBuildFile;
+  };
+  X000232c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_services.cxx";
+  };
+  X000232d = {
+   fileRef = X000232c;
+   isa = PBXBuildFile;
+  };
+  X000232e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_stgelems.cxx";
+  };
+  X000232f = {
+   fileRef = X000232e;
+   isa = PBXBuildFile;
+  };
+  X0002330 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_storage.cxx";
+  };
+  X0002331 = {
+   fileRef = X0002330;
+   isa = PBXBuildFile;
+  };
+  X0002332 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/tdoc/tdoc_uri.cxx";
+  };
+  X0002333 = {
+   fileRef = X0002332;
+   isa = PBXBuildFile;
+  };
+  X0002334 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002315;
+}

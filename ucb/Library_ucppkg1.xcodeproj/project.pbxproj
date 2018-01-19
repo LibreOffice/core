@@ -1,0 +1,124 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00023e9 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00023ff;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00023ea;
+   productRefGroup = X00023ed;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00023ef;
+  };
+  X00023ea = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00023eb = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00023ee = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00023ef = {
+   buildConfigurationList = X0002400;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00023ec;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00023f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/package/pkgcontentcaps.cxx";
+  };
+  X00023f1 = {
+   fileRef = X00023f0;
+   isa = PBXBuildFile;
+  };
+  X00023f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/package/pkgcontent.cxx";
+  };
+  X00023f3 = {
+   fileRef = X00023f2;
+   isa = PBXBuildFile;
+  };
+  X00023f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/package/pkgdatasupplier.cxx";
+  };
+  X00023f5 = {
+   fileRef = X00023f4;
+   isa = PBXBuildFile;
+  };
+  X00023f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/package/pkgprovider.cxx";
+  };
+  X00023f7 = {
+   fileRef = X00023f6;
+   isa = PBXBuildFile;
+  };
+  X00023f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/package/pkgresultset.cxx";
+  };
+  X00023f9 = {
+   fileRef = X00023f8;
+   isa = PBXBuildFile;
+  };
+  X00023fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/package/pkgservices.cxx";
+  };
+  X00023fb = {
+   fileRef = X00023fa;
+   isa = PBXBuildFile;
+  };
+  X00023fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "ucb/source/ucp/package/pkguri.cxx";
+  };
+  X00023fd = {
+   fileRef = X00023fc;
+   isa = PBXBuildFile;
+  };
+  X00023fe = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00023e9;
+}

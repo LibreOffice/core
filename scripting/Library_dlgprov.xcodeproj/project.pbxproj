@@ -1,0 +1,88 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004ff5 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0005003;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004ff6;
+   productRefGroup = X0004ff9;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004ffb;
+  };
+  X0004ff6 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004ff7 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004ffa = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004ffb = {
+   buildConfigurationList = X0005004;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004ff8;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004ffc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "scripting/source/dlgprov/DialogModelProvider.cxx";
+  };
+  X0004ffd = {
+   fileRef = X0004ffc;
+   isa = PBXBuildFile;
+  };
+  X0004ffe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "scripting/source/dlgprov/dlgevtatt.cxx";
+  };
+  X0004fff = {
+   fileRef = X0004ffe;
+   isa = PBXBuildFile;
+  };
+  X0005000 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "scripting/source/dlgprov/dlgprov.cxx";
+  };
+  X0005001 = {
+   fileRef = X0005000;
+   isa = PBXBuildFile;
+  };
+  X0005002 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004ff5;
+}

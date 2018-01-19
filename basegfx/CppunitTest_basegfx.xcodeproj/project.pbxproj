@@ -1,0 +1,124 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001d71 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001d87;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001d72;
+   productRefGroup = X0001d75;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001d77;
+  };
+  X0001d72 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001d73 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001d76 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001d77 = {
+   buildConfigurationList = X0001d88;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001d74;
+   productType = ;
+  };
+  X0001d78 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basegfx/test/basegfx2d.cxx";
+  };
+  X0001d79 = {
+   fileRef = X0001d78;
+   isa = PBXBuildFile;
+  };
+  X0001d7a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basegfx/test/SvgPathImportExport.cxx";
+  };
+  X0001d7b = {
+   fileRef = X0001d7a;
+   isa = PBXBuildFile;
+  };
+  X0001d7c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basegfx/test/basegfx3d.cxx";
+  };
+  X0001d7d = {
+   fileRef = X0001d7c;
+   isa = PBXBuildFile;
+  };
+  X0001d7e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basegfx/test/boxclipper.cxx";
+  };
+  X0001d7f = {
+   fileRef = X0001d7e;
+   isa = PBXBuildFile;
+  };
+  X0001d80 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basegfx/test/basegfxtools.cxx";
+  };
+  X0001d81 = {
+   fileRef = X0001d80;
+   isa = PBXBuildFile;
+  };
+  X0001d82 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basegfx/test/clipstate.cxx";
+  };
+  X0001d83 = {
+   fileRef = X0001d82;
+   isa = PBXBuildFile;
+  };
+  X0001d84 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "basegfx/test/genericclipper.cxx";
+  };
+  X0001d85 = {
+   fileRef = X0001d84;
+   isa = PBXBuildFile;
+  };
+  X0001d86 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001d71;
+}

@@ -1,0 +1,151 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002e1b = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002e37;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002e1c;
+   productRefGroup = X0002e1f;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002e21;
+  };
+  X0002e1c = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002e1d = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002e20 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002e21 = {
+   buildConfigurationList = X0002e38;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002e1e;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002e22 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_bitmapcanvashelper.cxx";
+  };
+  X0002e23 = {
+   fileRef = X0002e22;
+   isa = PBXBuildFile;
+  };
+  X0002e24 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_canvasbitmap.cxx";
+  };
+  X0002e25 = {
+   fileRef = X0002e24;
+   isa = PBXBuildFile;
+  };
+  X0002e26 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_canvascustomsprite.cxx";
+  };
+  X0002e27 = {
+   fileRef = X0002e26;
+   isa = PBXBuildFile;
+  };
+  X0002e28 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_canvasfont.cxx";
+  };
+  X0002e29 = {
+   fileRef = X0002e28;
+   isa = PBXBuildFile;
+  };
+  X0002e2a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_canvashelper.cxx";
+  };
+  X0002e2b = {
+   fileRef = X0002e2a;
+   isa = PBXBuildFile;
+  };
+  X0002e2c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_canvastools.cxx";
+  };
+  X0002e2d = {
+   fileRef = X0002e2c;
+   isa = PBXBuildFile;
+  };
+  X0002e2e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_spritecanvas.cxx";
+  };
+  X0002e2f = {
+   fileRef = X0002e2e;
+   isa = PBXBuildFile;
+  };
+  X0002e30 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_spritedevicehelper.cxx";
+  };
+  X0002e31 = {
+   fileRef = X0002e30;
+   isa = PBXBuildFile;
+  };
+  X0002e32 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_textlayout.cxx";
+  };
+  X0002e33 = {
+   fileRef = X0002e32;
+   isa = PBXBuildFile;
+  };
+  X0002e34 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/opengl/ogl_texturecache.cxx";
+  };
+  X0002e35 = {
+   fileRef = X0002e34;
+   isa = PBXBuildFile;
+  };
+  X0002e36 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002e1b;
+}

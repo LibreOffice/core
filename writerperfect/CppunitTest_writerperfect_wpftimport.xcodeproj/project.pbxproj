@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X000431f = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004331;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004320;
+   productRefGroup = X0004323;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004325;
+  };
+  X0004320 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004321 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004324 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004325 = {
+   buildConfigurationList = X0004332;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004322;
+   productType = ;
+  };
+  X0004326 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/qa/unit/DrawingImportTest.cxx";
+  };
+  X0004327 = {
+   fileRef = X0004326;
+   isa = PBXBuildFile;
+  };
+  X0004328 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/qa/unit/PresentationImportTest.cxx";
+  };
+  X0004329 = {
+   fileRef = X0004328;
+   isa = PBXBuildFile;
+  };
+  X000432a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/qa/unit/SpreadsheetImportTest.cxx";
+  };
+  X000432b = {
+   fileRef = X000432a;
+   isa = PBXBuildFile;
+  };
+  X000432c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/qa/unit/TextImportTest.cxx";
+  };
+  X000432d = {
+   fileRef = X000432c;
+   isa = PBXBuildFile;
+  };
+  X000432e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/qa/unit/wpftimport.cxx";
+  };
+  X000432f = {
+   fileRef = X000432e;
+   isa = PBXBuildFile;
+  };
+  X0004330 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X000431f;
+}

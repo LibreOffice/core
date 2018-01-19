@@ -1,0 +1,646 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00007a5 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000082f;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00007a6;
+   productRefGroup = X00007a9;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00007ab;
+  };
+  X00007a6 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00007a7 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00007aa = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00007ab = {
+   buildConfigurationList = X0000830;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00007a8;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00007ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/excelvbahelper.cxx";
+  };
+  X00007ad = {
+   fileRef = X00007ac;
+   isa = PBXBuildFile;
+  };
+  X00007ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/service.cxx";
+  };
+  X00007af = {
+   fileRef = X00007ae;
+   isa = PBXBuildFile;
+  };
+  X00007b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaapplication.cxx";
+  };
+  X00007b1 = {
+   fileRef = X00007b0;
+   isa = PBXBuildFile;
+  };
+  X00007b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaassistant.cxx";
+  };
+  X00007b3 = {
+   fileRef = X00007b2;
+   isa = PBXBuildFile;
+  };
+  X00007b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaaxes.cxx";
+  };
+  X00007b5 = {
+   fileRef = X00007b4;
+   isa = PBXBuildFile;
+  };
+  X00007b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaaxis.cxx";
+  };
+  X00007b7 = {
+   fileRef = X00007b6;
+   isa = PBXBuildFile;
+  };
+  X00007b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaaxistitle.cxx";
+  };
+  X00007b9 = {
+   fileRef = X00007b8;
+   isa = PBXBuildFile;
+  };
+  X00007ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaborders.cxx";
+  };
+  X00007bb = {
+   fileRef = X00007ba;
+   isa = PBXBuildFile;
+  };
+  X00007bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbacharacters.cxx";
+  };
+  X00007bd = {
+   fileRef = X00007bc;
+   isa = PBXBuildFile;
+  };
+  X00007be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbachart.cxx";
+  };
+  X00007bf = {
+   fileRef = X00007be;
+   isa = PBXBuildFile;
+  };
+  X00007c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbachartobject.cxx";
+  };
+  X00007c1 = {
+   fileRef = X00007c0;
+   isa = PBXBuildFile;
+  };
+  X00007c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbachartobjects.cxx";
+  };
+  X00007c3 = {
+   fileRef = X00007c2;
+   isa = PBXBuildFile;
+  };
+  X00007c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbacharttitle.cxx";
+  };
+  X00007c5 = {
+   fileRef = X00007c4;
+   isa = PBXBuildFile;
+  };
+  X00007c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbacomment.cxx";
+  };
+  X00007c7 = {
+   fileRef = X00007c6;
+   isa = PBXBuildFile;
+  };
+  X00007c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbacomments.cxx";
+  };
+  X00007c9 = {
+   fileRef = X00007c8;
+   isa = PBXBuildFile;
+  };
+  X00007ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbacondition.cxx";
+  };
+  X00007cb = {
+   fileRef = X00007ca;
+   isa = PBXBuildFile;
+  };
+  X00007cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbadialog.cxx";
+  };
+  X00007cd = {
+   fileRef = X00007cc;
+   isa = PBXBuildFile;
+  };
+  X00007ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbadialogs.cxx";
+  };
+  X00007cf = {
+   fileRef = X00007ce;
+   isa = PBXBuildFile;
+  };
+  X00007d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaeventshelper.cxx";
+  };
+  X00007d1 = {
+   fileRef = X00007d0;
+   isa = PBXBuildFile;
+  };
+  X00007d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbafiledialog.cxx";
+  };
+  X00007d3 = {
+   fileRef = X00007d2;
+   isa = PBXBuildFile;
+  };
+  X00007d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbafiledialogitems.cxx";
+  };
+  X00007d5 = {
+   fileRef = X00007d4;
+   isa = PBXBuildFile;
+  };
+  X00007d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbafont.cxx";
+  };
+  X00007d7 = {
+   fileRef = X00007d6;
+   isa = PBXBuildFile;
+  };
+  X00007d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaformat.cxx";
+  };
+  X00007d9 = {
+   fileRef = X00007d8;
+   isa = PBXBuildFile;
+  };
+  X00007da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaformatcondition.cxx";
+  };
+  X00007db = {
+   fileRef = X00007da;
+   isa = PBXBuildFile;
+  };
+  X00007dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaformatconditions.cxx";
+  };
+  X00007dd = {
+   fileRef = X00007dc;
+   isa = PBXBuildFile;
+  };
+  X00007de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaglobals.cxx";
+  };
+  X00007df = {
+   fileRef = X00007de;
+   isa = PBXBuildFile;
+  };
+  X00007e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbahyperlink.cxx";
+  };
+  X00007e1 = {
+   fileRef = X00007e0;
+   isa = PBXBuildFile;
+  };
+  X00007e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbahyperlinks.cxx";
+  };
+  X00007e3 = {
+   fileRef = X00007e2;
+   isa = PBXBuildFile;
+  };
+  X00007e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbainterior.cxx";
+  };
+  X00007e5 = {
+   fileRef = X00007e4;
+   isa = PBXBuildFile;
+  };
+  X00007e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbalineshape.cxx";
+  };
+  X00007e7 = {
+   fileRef = X00007e6;
+   isa = PBXBuildFile;
+  };
+  X00007e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbamenubar.cxx";
+  };
+  X00007e9 = {
+   fileRef = X00007e8;
+   isa = PBXBuildFile;
+  };
+  X00007ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbamenubars.cxx";
+  };
+  X00007eb = {
+   fileRef = X00007ea;
+   isa = PBXBuildFile;
+  };
+  X00007ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbamenu.cxx";
+  };
+  X00007ed = {
+   fileRef = X00007ec;
+   isa = PBXBuildFile;
+  };
+  X00007ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbamenus.cxx";
+  };
+  X00007ef = {
+   fileRef = X00007ee;
+   isa = PBXBuildFile;
+  };
+  X00007f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbamenuitem.cxx";
+  };
+  X00007f1 = {
+   fileRef = X00007f0;
+   isa = PBXBuildFile;
+  };
+  X00007f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbamenuitems.cxx";
+  };
+  X00007f3 = {
+   fileRef = X00007f2;
+   isa = PBXBuildFile;
+  };
+  X00007f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaname.cxx";
+  };
+  X00007f5 = {
+   fileRef = X00007f4;
+   isa = PBXBuildFile;
+  };
+  X00007f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbanames.cxx";
+  };
+  X00007f7 = {
+   fileRef = X00007f6;
+   isa = PBXBuildFile;
+  };
+  X00007f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaoleobject.cxx";
+  };
+  X00007f9 = {
+   fileRef = X00007f8;
+   isa = PBXBuildFile;
+  };
+  X00007fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaoleobjects.cxx";
+  };
+  X00007fb = {
+   fileRef = X00007fa;
+   isa = PBXBuildFile;
+  };
+  X00007fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaoutline.cxx";
+  };
+  X00007fd = {
+   fileRef = X00007fc;
+   isa = PBXBuildFile;
+  };
+  X00007fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaovalshape.cxx";
+  };
+  X00007ff = {
+   fileRef = X00007fe;
+   isa = PBXBuildFile;
+  };
+  X0000800 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbapagebreak.cxx";
+  };
+  X0000801 = {
+   fileRef = X0000800;
+   isa = PBXBuildFile;
+  };
+  X0000802 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbapagebreaks.cxx";
+  };
+  X0000803 = {
+   fileRef = X0000802;
+   isa = PBXBuildFile;
+  };
+  X0000804 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbapagesetup.cxx";
+  };
+  X0000805 = {
+   fileRef = X0000804;
+   isa = PBXBuildFile;
+  };
+  X0000806 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbapalette.cxx";
+  };
+  X0000807 = {
+   fileRef = X0000806;
+   isa = PBXBuildFile;
+  };
+  X0000808 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbapane.cxx";
+  };
+  X0000809 = {
+   fileRef = X0000808;
+   isa = PBXBuildFile;
+  };
+  X000080a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbapivotcache.cxx";
+  };
+  X000080b = {
+   fileRef = X000080a;
+   isa = PBXBuildFile;
+  };
+  X000080c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbapivottable.cxx";
+  };
+  X000080d = {
+   fileRef = X000080c;
+   isa = PBXBuildFile;
+  };
+  X000080e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbapivottables.cxx";
+  };
+  X000080f = {
+   fileRef = X000080e;
+   isa = PBXBuildFile;
+  };
+  X0000810 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbarange.cxx";
+  };
+  X0000811 = {
+   fileRef = X0000810;
+   isa = PBXBuildFile;
+  };
+  X0000812 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbasheetobject.cxx";
+  };
+  X0000813 = {
+   fileRef = X0000812;
+   isa = PBXBuildFile;
+  };
+  X0000814 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbasheetobjects.cxx";
+  };
+  X0000815 = {
+   fileRef = X0000814;
+   isa = PBXBuildFile;
+  };
+  X0000816 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbastyle.cxx";
+  };
+  X0000817 = {
+   fileRef = X0000816;
+   isa = PBXBuildFile;
+  };
+  X0000818 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbastyles.cxx";
+  };
+  X0000819 = {
+   fileRef = X0000818;
+   isa = PBXBuildFile;
+  };
+  X000081a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbatextboxshape.cxx";
+  };
+  X000081b = {
+   fileRef = X000081a;
+   isa = PBXBuildFile;
+  };
+  X000081c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbatextframe.cxx";
+  };
+  X000081d = {
+   fileRef = X000081c;
+   isa = PBXBuildFile;
+  };
+  X000081e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbavalidation.cxx";
+  };
+  X000081f = {
+   fileRef = X000081e;
+   isa = PBXBuildFile;
+  };
+  X0000820 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbawindow.cxx";
+  };
+  X0000821 = {
+   fileRef = X0000820;
+   isa = PBXBuildFile;
+  };
+  X0000822 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbawindows.cxx";
+  };
+  X0000823 = {
+   fileRef = X0000822;
+   isa = PBXBuildFile;
+  };
+  X0000824 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaworkbook.cxx";
+  };
+  X0000825 = {
+   fileRef = X0000824;
+   isa = PBXBuildFile;
+  };
+  X0000826 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaworkbooks.cxx";
+  };
+  X0000827 = {
+   fileRef = X0000826;
+   isa = PBXBuildFile;
+  };
+  X0000828 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaworksheet.cxx";
+  };
+  X0000829 = {
+   fileRef = X0000828;
+   isa = PBXBuildFile;
+  };
+  X000082a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbaworksheets.cxx";
+  };
+  X000082b = {
+   fileRef = X000082a;
+   isa = PBXBuildFile;
+  };
+  X000082c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/source/ui/vba/vbawsfunction.cxx";
+  };
+  X000082d = {
+   fileRef = X000082c;
+   isa = PBXBuildFile;
+  };
+  X000082e = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00007a5;
+}

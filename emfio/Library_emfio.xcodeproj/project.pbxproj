@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001d5d = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001d6f;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001d5e;
+   productRefGroup = X0001d61;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001d63;
+  };
+  X0001d5e = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001d5f = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001d62 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001d63 = {
+   buildConfigurationList = X0001d70;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001d60;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0001d64 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "emfio/source/emfuno/emfuno.cxx";
+  };
+  X0001d65 = {
+   fileRef = X0001d64;
+   isa = PBXBuildFile;
+  };
+  X0001d66 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "emfio/source/emfuno/xemfparser.cxx";
+  };
+  X0001d67 = {
+   fileRef = X0001d66;
+   isa = PBXBuildFile;
+  };
+  X0001d68 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "emfio/source/reader/mtftools.cxx";
+  };
+  X0001d69 = {
+   fileRef = X0001d68;
+   isa = PBXBuildFile;
+  };
+  X0001d6a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "emfio/source/reader/wmfreader.cxx";
+  };
+  X0001d6b = {
+   fileRef = X0001d6a;
+   isa = PBXBuildFile;
+  };
+  X0001d6c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "emfio/source/reader/emfreader.cxx";
+  };
+  X0001d6d = {
+   fileRef = X0001d6c;
+   isa = PBXBuildFile;
+  };
+  X0001d6e = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001d5d;
+}

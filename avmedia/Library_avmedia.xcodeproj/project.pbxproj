@@ -1,0 +1,142 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002431 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000244b;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002432;
+   productRefGroup = X0002435;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002437;
+  };
+  X0002432 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002433 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002436 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002437 = {
+   buildConfigurationList = X000244c;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002434;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002438 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/framework/mediacontrol.cxx";
+  };
+  X0002439 = {
+   fileRef = X0002438;
+   isa = PBXBuildFile;
+  };
+  X000243a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/framework/MediaControlBase.cxx";
+  };
+  X000243b = {
+   fileRef = X000243a;
+   isa = PBXBuildFile;
+  };
+  X000243c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/framework/mediaitem.cxx";
+  };
+  X000243d = {
+   fileRef = X000243c;
+   isa = PBXBuildFile;
+  };
+  X000243e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/framework/mediaplayer.cxx";
+  };
+  X000243f = {
+   fileRef = X000243e;
+   isa = PBXBuildFile;
+  };
+  X0002440 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/framework/mediatoolbox.cxx";
+  };
+  X0002441 = {
+   fileRef = X0002440;
+   isa = PBXBuildFile;
+  };
+  X0002442 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/framework/soundhandler.cxx";
+  };
+  X0002443 = {
+   fileRef = X0002442;
+   isa = PBXBuildFile;
+  };
+  X0002444 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/viewer/mediaevent_impl.cxx";
+  };
+  X0002445 = {
+   fileRef = X0002444;
+   isa = PBXBuildFile;
+  };
+  X0002446 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/viewer/mediawindow.cxx";
+  };
+  X0002447 = {
+   fileRef = X0002446;
+   isa = PBXBuildFile;
+  };
+  X0002448 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "avmedia/source/viewer/mediawindow_impl.cxx";
+  };
+  X0002449 = {
+   fileRef = X0002448;
+   isa = PBXBuildFile;
+  };
+  X000244a = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002431;
+}

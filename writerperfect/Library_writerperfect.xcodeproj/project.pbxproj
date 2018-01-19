@@ -1,0 +1,97 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X000427d = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000428d;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000427e;
+   productRefGroup = X0004281;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004283;
+  };
+  X000427e = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000427f = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004282 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004283 = {
+   buildConfigurationList = X000428e;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004280;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004284 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/common/DirectoryStream.cxx";
+  };
+  X0004285 = {
+   fileRef = X0004284;
+   isa = PBXBuildFile;
+  };
+  X0004286 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/common/DocumentHandler.cxx";
+  };
+  X0004287 = {
+   fileRef = X0004286;
+   isa = PBXBuildFile;
+  };
+  X0004288 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/common/WPFTEncodingDialog.cxx";
+  };
+  X0004289 = {
+   fileRef = X0004288;
+   isa = PBXBuildFile;
+  };
+  X000428a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/common/WPXSvInputStream.cxx";
+  };
+  X000428b = {
+   fileRef = X000428a;
+   isa = PBXBuildFile;
+  };
+  X000428c = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X000427d;
+}

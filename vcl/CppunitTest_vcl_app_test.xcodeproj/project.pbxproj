@@ -1,0 +1,88 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00036e7 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00036f5;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00036e8;
+   productRefGroup = X00036eb;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00036ed;
+  };
+  X00036e8 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00036e9 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00036ec = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00036ed = {
+   buildConfigurationList = X00036f6;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00036ea;
+   productType = ;
+  };
+  X00036ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "vcl/qa/cppunit/app/test_IconThemeInfo.cxx";
+  };
+  X00036ef = {
+   fileRef = X00036ee;
+   isa = PBXBuildFile;
+  };
+  X00036f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "vcl/qa/cppunit/app/test_IconThemeScanner.cxx";
+  };
+  X00036f1 = {
+   fileRef = X00036f0;
+   isa = PBXBuildFile;
+  };
+  X00036f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "vcl/qa/cppunit/app/test_IconThemeSelector.cxx";
+  };
+  X00036f3 = {
+   fileRef = X00036f2;
+   isa = PBXBuildFile;
+  };
+  X00036f4 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00036e7;
+}

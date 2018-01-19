@@ -1,0 +1,349 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004b9b = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004be3;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004b9c;
+   productRefGroup = X0004b9f;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004ba1;
+  };
+  X0004b9c = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004b9d = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004ba0 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004ba1 = {
+   buildConfigurationList = X0004be4;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004b9e;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004ba2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/FixedLine.cxx";
+  };
+  X0004ba3 = {
+   fileRef = X0004ba2;
+   isa = PBXBuildFile;
+  };
+  X0004ba4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/FixedText.cxx";
+  };
+  X0004ba5 = {
+   fileRef = X0004ba4;
+   isa = PBXBuildFile;
+  };
+  X0004ba6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/FormatCondition.cxx";
+  };
+  X0004ba7 = {
+   fileRef = X0004ba6;
+   isa = PBXBuildFile;
+  };
+  X0004ba8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/FormattedField.cxx";
+  };
+  X0004ba9 = {
+   fileRef = X0004ba8;
+   isa = PBXBuildFile;
+  };
+  X0004baa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/Function.cxx";
+  };
+  X0004bab = {
+   fileRef = X0004baa;
+   isa = PBXBuildFile;
+  };
+  X0004bac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/Functions.cxx";
+  };
+  X0004bad = {
+   fileRef = X0004bac;
+   isa = PBXBuildFile;
+  };
+  X0004bae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/Group.cxx";
+  };
+  X0004baf = {
+   fileRef = X0004bae;
+   isa = PBXBuildFile;
+  };
+  X0004bb0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/Groups.cxx";
+  };
+  X0004bb1 = {
+   fileRef = X0004bb0;
+   isa = PBXBuildFile;
+  };
+  X0004bb2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/ImageControl.cxx";
+  };
+  X0004bb3 = {
+   fileRef = X0004bb2;
+   isa = PBXBuildFile;
+  };
+  X0004bb4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/ReportComponent.cxx";
+  };
+  X0004bb5 = {
+   fileRef = X0004bb4;
+   isa = PBXBuildFile;
+  };
+  X0004bb6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/ReportControlModel.cxx";
+  };
+  X0004bb7 = {
+   fileRef = X0004bb6;
+   isa = PBXBuildFile;
+  };
+  X0004bb8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/ReportDefinition.cxx";
+  };
+  X0004bb9 = {
+   fileRef = X0004bb8;
+   isa = PBXBuildFile;
+  };
+  X0004bba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/ReportEngineJFree.cxx";
+  };
+  X0004bbb = {
+   fileRef = X0004bba;
+   isa = PBXBuildFile;
+  };
+  X0004bbc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/ReportVisitor.cxx";
+  };
+  X0004bbd = {
+   fileRef = X0004bbc;
+   isa = PBXBuildFile;
+  };
+  X0004bbe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/Section.cxx";
+  };
+  X0004bbf = {
+   fileRef = X0004bbe;
+   isa = PBXBuildFile;
+  };
+  X0004bc0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/services.cxx";
+  };
+  X0004bc1 = {
+   fileRef = X0004bc0;
+   isa = PBXBuildFile;
+  };
+  X0004bc2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/Shape.cxx";
+  };
+  X0004bc3 = {
+   fileRef = X0004bc2;
+   isa = PBXBuildFile;
+  };
+  X0004bc4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/api/Tools.cxx";
+  };
+  X0004bc5 = {
+   fileRef = X0004bc4;
+   isa = PBXBuildFile;
+  };
+  X0004bc6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/misc/conditionalexpression.cxx";
+  };
+  X0004bc7 = {
+   fileRef = X0004bc6;
+   isa = PBXBuildFile;
+  };
+  X0004bc8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/misc/conditionupdater.cxx";
+  };
+  X0004bc9 = {
+   fileRef = X0004bc8;
+   isa = PBXBuildFile;
+  };
+  X0004bca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/misc/reportformula.cxx";
+  };
+  X0004bcb = {
+   fileRef = X0004bca;
+   isa = PBXBuildFile;
+  };
+  X0004bcc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/resource/core_resource.cxx";
+  };
+  X0004bcd = {
+   fileRef = X0004bcc;
+   isa = PBXBuildFile;
+  };
+  X0004bce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/formatnormalizer.cxx";
+  };
+  X0004bcf = {
+   fileRef = X0004bce;
+   isa = PBXBuildFile;
+  };
+  X0004bd0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/PropertyForward.cxx";
+  };
+  X0004bd1 = {
+   fileRef = X0004bd0;
+   isa = PBXBuildFile;
+  };
+  X0004bd2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/ReportDrawPage.cxx";
+  };
+  X0004bd3 = {
+   fileRef = X0004bd2;
+   isa = PBXBuildFile;
+  };
+  X0004bd4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/ReportUndoFactory.cxx";
+  };
+  X0004bd5 = {
+   fileRef = X0004bd4;
+   isa = PBXBuildFile;
+  };
+  X0004bd6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/RptModel.cxx";
+  };
+  X0004bd7 = {
+   fileRef = X0004bd6;
+   isa = PBXBuildFile;
+  };
+  X0004bd8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/RptObject.cxx";
+  };
+  X0004bd9 = {
+   fileRef = X0004bd8;
+   isa = PBXBuildFile;
+  };
+  X0004bda = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/RptObjectListener.cxx";
+  };
+  X0004bdb = {
+   fileRef = X0004bda;
+   isa = PBXBuildFile;
+  };
+  X0004bdc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/RptPage.cxx";
+  };
+  X0004bdd = {
+   fileRef = X0004bdc;
+   isa = PBXBuildFile;
+  };
+  X0004bde = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/UndoActions.cxx";
+  };
+  X0004bdf = {
+   fileRef = X0004bde;
+   isa = PBXBuildFile;
+  };
+  X0004be0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "reportdesign/source/core/sdr/UndoEnv.cxx";
+  };
+  X0004be1 = {
+   fileRef = X0004be0;
+   isa = PBXBuildFile;
+  };
+  X0004be2 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004b9b;
+}

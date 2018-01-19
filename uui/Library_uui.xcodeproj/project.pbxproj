@@ -1,0 +1,304 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002605 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002643;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002606;
+   productRefGroup = X0002609;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000260b;
+  };
+  X0002606 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002607 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000260a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000260b = {
+   buildConfigurationList = X0002644;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002608;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000260c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/alreadyopen.cxx";
+  };
+  X000260d = {
+   fileRef = X000260c;
+   isa = PBXBuildFile;
+  };
+  X000260e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/authfallbackdlg.cxx";
+  };
+  X000260f = {
+   fileRef = X000260e;
+   isa = PBXBuildFile;
+  };
+  X0002610 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/filechanged.cxx";
+  };
+  X0002611 = {
+   fileRef = X0002610;
+   isa = PBXBuildFile;
+  };
+  X0002612 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/fltdlg.cxx";
+  };
+  X0002613 = {
+   fileRef = X0002612;
+   isa = PBXBuildFile;
+  };
+  X0002614 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/iahndl.cxx";
+  };
+  X0002615 = {
+   fileRef = X0002614;
+   isa = PBXBuildFile;
+  };
+  X0002616 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/iahndl-authentication.cxx";
+  };
+  X0002617 = {
+   fileRef = X0002616;
+   isa = PBXBuildFile;
+  };
+  X0002618 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/iahndl-errorhandler.cxx";
+  };
+  X0002619 = {
+   fileRef = X0002618;
+   isa = PBXBuildFile;
+  };
+  X000261a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/iahndl-filter.cxx";
+  };
+  X000261b = {
+   fileRef = X000261a;
+   isa = PBXBuildFile;
+  };
+  X000261c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/iahndl-ioexceptions.cxx";
+  };
+  X000261d = {
+   fileRef = X000261c;
+   isa = PBXBuildFile;
+  };
+  X000261e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/iahndl-locking.cxx";
+  };
+  X000261f = {
+   fileRef = X000261e;
+   isa = PBXBuildFile;
+  };
+  X0002620 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/iahndl-ssl.cxx";
+  };
+  X0002621 = {
+   fileRef = X0002620;
+   isa = PBXBuildFile;
+  };
+  X0002622 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/interactionhandler.cxx";
+  };
+  X0002623 = {
+   fileRef = X0002622;
+   isa = PBXBuildFile;
+  };
+  X0002624 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/lockfailed.cxx";
+  };
+  X0002625 = {
+   fileRef = X0002624;
+   isa = PBXBuildFile;
+  };
+  X0002626 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/lockcorrupt.cxx";
+  };
+  X0002627 = {
+   fileRef = X0002626;
+   isa = PBXBuildFile;
+  };
+  X0002628 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/logindlg.cxx";
+  };
+  X0002629 = {
+   fileRef = X0002628;
+   isa = PBXBuildFile;
+  };
+  X000262a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/masterpasscrtdlg.cxx";
+  };
+  X000262b = {
+   fileRef = X000262a;
+   isa = PBXBuildFile;
+  };
+  X000262c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/masterpassworddlg.cxx";
+  };
+  X000262d = {
+   fileRef = X000262c;
+   isa = PBXBuildFile;
+  };
+  X000262e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/nameclashdlg.cxx";
+  };
+  X000262f = {
+   fileRef = X000262e;
+   isa = PBXBuildFile;
+  };
+  X0002630 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/openlocked.cxx";
+  };
+  X0002631 = {
+   fileRef = X0002630;
+   isa = PBXBuildFile;
+  };
+  X0002632 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/passwordcontainer.cxx";
+  };
+  X0002633 = {
+   fileRef = X0002632;
+   isa = PBXBuildFile;
+  };
+  X0002634 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/passworddlg.cxx";
+  };
+  X0002635 = {
+   fileRef = X0002634;
+   isa = PBXBuildFile;
+  };
+  X0002636 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/requeststringresolver.cxx";
+  };
+  X0002637 = {
+   fileRef = X0002636;
+   isa = PBXBuildFile;
+  };
+  X0002638 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/secmacrowarnings.cxx";
+  };
+  X0002639 = {
+   fileRef = X0002638;
+   isa = PBXBuildFile;
+  };
+  X000263a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/services.cxx";
+  };
+  X000263b = {
+   fileRef = X000263a;
+   isa = PBXBuildFile;
+  };
+  X000263c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/sslwarndlg.cxx";
+  };
+  X000263d = {
+   fileRef = X000263c;
+   isa = PBXBuildFile;
+  };
+  X000263e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/trylater.cxx";
+  };
+  X000263f = {
+   fileRef = X000263e;
+   isa = PBXBuildFile;
+  };
+  X0002640 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "uui/source/unknownauthdlg.cxx";
+  };
+  X0002641 = {
+   fileRef = X0002640;
+   isa = PBXBuildFile;
+  };
+  X0002642 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002605;
+}

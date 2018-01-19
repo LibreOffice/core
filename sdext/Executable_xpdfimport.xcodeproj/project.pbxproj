@@ -1,0 +1,88 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001f65 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001f73;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001f66;
+   productRefGroup = X0001f69;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001f6b;
+  };
+  X0001f66 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001f67 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001f6a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001f6b = {
+   buildConfigurationList = X0001f74;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001f68;
+   productType = "com.apple.product-type.something";
+  };
+  X0001f6c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx";
+  };
+  X0001f6d = {
+   fileRef = X0001f6c;
+   isa = PBXBuildFile;
+  };
+  X0001f6e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/pdfimport/xpdfwrapper/pnghelper.cxx";
+  };
+  X0001f6f = {
+   fileRef = X0001f6e;
+   isa = PBXBuildFile;
+  };
+  X0001f70 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx";
+  };
+  X0001f71 = {
+   fileRef = X0001f70;
+   isa = PBXBuildFile;
+  };
+  X0001f72 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001f65;
+}

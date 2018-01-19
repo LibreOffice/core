@@ -1,0 +1,97 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0000b05 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0000b15;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0000b06;
+   productRefGroup = X0000b09;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0000b0b;
+  };
+  X0000b06 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0000b07 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0000b0a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0000b0b = {
+   buildConfigurationList = X0000b16;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0000b08;
+   productType = "com.apple.product-type.something";
+  };
+  X0000b0c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/javamaker/classfile.cxx";
+  };
+  X0000b0d = {
+   fileRef = X0000b0c;
+   isa = PBXBuildFile;
+  };
+  X0000b0e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/javamaker/javamaker.cxx";
+  };
+  X0000b0f = {
+   fileRef = X0000b0e;
+   isa = PBXBuildFile;
+  };
+  X0000b10 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/javamaker/javaoptions.cxx";
+  };
+  X0000b11 = {
+   fileRef = X0000b10;
+   isa = PBXBuildFile;
+  };
+  X0000b12 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/javamaker/javatype.cxx";
+  };
+  X0000b13 = {
+   fileRef = X0000b12;
+   isa = PBXBuildFile;
+  };
+  X0000b14 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0000b05;
+}

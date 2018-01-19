@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002867 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002879;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002868;
+   productRefGroup = X000286b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000286d;
+  };
+  X0002868 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002869 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000286c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000286d = {
+   buildConfigurationList = X000287a;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000286a;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000286e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/hsqldb/hsqlimport.cxx";
+  };
+  X000286f = {
+   fileRef = X000286e;
+   isa = PBXBuildFile;
+  };
+  X0002870 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/hsqldb/parseschema.cxx";
+  };
+  X0002871 = {
+   fileRef = X0002870;
+   isa = PBXBuildFile;
+  };
+  X0002872 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/hsqldb/createparser.cxx";
+  };
+  X0002873 = {
+   fileRef = X0002872;
+   isa = PBXBuildFile;
+  };
+  X0002874 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/hsqldb/columndef.cxx";
+  };
+  X0002875 = {
+   fileRef = X0002874;
+   isa = PBXBuildFile;
+  };
+  X0002876 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/hsqldb/fbcreateparser.cxx";
+  };
+  X0002877 = {
+   fileRef = X0002876;
+   isa = PBXBuildFile;
+  };
+  X0002878 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002867;
+}

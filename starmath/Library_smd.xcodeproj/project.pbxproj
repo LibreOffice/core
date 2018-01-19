@@ -1,0 +1,88 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002289 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002297;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000228a;
+   productRefGroup = X000228d;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000228f;
+  };
+  X000228a = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000228b = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000228e = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000228f = {
+   buildConfigurationList = X0002298;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000228c;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002290 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/detreg.cxx";
+  };
+  X0002291 = {
+   fileRef = X0002290;
+   isa = PBXBuildFile;
+  };
+  X0002292 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/smdetect.cxx";
+  };
+  X0002293 = {
+   fileRef = X0002292;
+   isa = PBXBuildFile;
+  };
+  X0002294 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/eqnolefilehdr.cxx";
+  };
+  X0002295 = {
+   fileRef = X0002294;
+   isa = PBXBuildFile;
+  };
+  X0002296 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002289;
+}

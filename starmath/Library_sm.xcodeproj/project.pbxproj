@@ -1,0 +1,367 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002203 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000224f;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002204;
+   productRefGroup = X0002207;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002209;
+  };
+  X0002204 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002205 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002208 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002209 = {
+   buildConfigurationList = X0002250;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002206;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000220a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/ElementsDockingWindow.cxx";
+  };
+  X000220b = {
+   fileRef = X000220a;
+   isa = PBXBuildFile;
+  };
+  X000220c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/accessibility.cxx";
+  };
+  X000220d = {
+   fileRef = X000220c;
+   isa = PBXBuildFile;
+  };
+  X000220e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/action.cxx";
+  };
+  X000220f = {
+   fileRef = X000220e;
+   isa = PBXBuildFile;
+  };
+  X0002210 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/caret.cxx";
+  };
+  X0002211 = {
+   fileRef = X0002210;
+   isa = PBXBuildFile;
+  };
+  X0002212 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/cfgitem.cxx";
+  };
+  X0002213 = {
+   fileRef = X0002212;
+   isa = PBXBuildFile;
+  };
+  X0002214 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/cursor.cxx";
+  };
+  X0002215 = {
+   fileRef = X0002214;
+   isa = PBXBuildFile;
+  };
+  X0002216 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/dialog.cxx";
+  };
+  X0002217 = {
+   fileRef = X0002216;
+   isa = PBXBuildFile;
+  };
+  X0002218 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/document.cxx";
+  };
+  X0002219 = {
+   fileRef = X0002218;
+   isa = PBXBuildFile;
+  };
+  X000221a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/edit.cxx";
+  };
+  X000221b = {
+   fileRef = X000221a;
+   isa = PBXBuildFile;
+  };
+  X000221c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/format.cxx";
+  };
+  X000221d = {
+   fileRef = X000221c;
+   isa = PBXBuildFile;
+  };
+  X000221e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/mathmlattr.cxx";
+  };
+  X000221f = {
+   fileRef = X000221e;
+   isa = PBXBuildFile;
+  };
+  X0002220 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/mathmlexport.cxx";
+  };
+  X0002221 = {
+   fileRef = X0002220;
+   isa = PBXBuildFile;
+  };
+  X0002222 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/mathmlimport.cxx";
+  };
+  X0002223 = {
+   fileRef = X0002222;
+   isa = PBXBuildFile;
+  };
+  X0002224 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/mathtype.cxx";
+  };
+  X0002225 = {
+   fileRef = X0002224;
+   isa = PBXBuildFile;
+  };
+  X0002226 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/node.cxx";
+  };
+  X0002227 = {
+   fileRef = X0002226;
+   isa = PBXBuildFile;
+  };
+  X0002228 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/ooxmlexport.cxx";
+  };
+  X0002229 = {
+   fileRef = X0002228;
+   isa = PBXBuildFile;
+  };
+  X000222a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/ooxmlimport.cxx";
+  };
+  X000222b = {
+   fileRef = X000222a;
+   isa = PBXBuildFile;
+  };
+  X000222c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/rtfexport.cxx";
+  };
+  X000222d = {
+   fileRef = X000222c;
+   isa = PBXBuildFile;
+  };
+  X000222e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/parse.cxx";
+  };
+  X000222f = {
+   fileRef = X000222e;
+   isa = PBXBuildFile;
+  };
+  X0002230 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/rect.cxx";
+  };
+  X0002231 = {
+   fileRef = X0002230;
+   isa = PBXBuildFile;
+  };
+  X0002232 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/register.cxx";
+  };
+  X0002233 = {
+   fileRef = X0002232;
+   isa = PBXBuildFile;
+  };
+  X0002234 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/smdll.cxx";
+  };
+  X0002235 = {
+   fileRef = X0002234;
+   isa = PBXBuildFile;
+  };
+  X0002236 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/smmod.cxx";
+  };
+  X0002237 = {
+   fileRef = X0002236;
+   isa = PBXBuildFile;
+  };
+  X0002238 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/symbol.cxx";
+  };
+  X0002239 = {
+   fileRef = X0002238;
+   isa = PBXBuildFile;
+  };
+  X000223a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/tmpdevice.cxx";
+  };
+  X000223b = {
+   fileRef = X000223a;
+   isa = PBXBuildFile;
+  };
+  X000223c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/typemap.cxx";
+  };
+  X000223d = {
+   fileRef = X000223c;
+   isa = PBXBuildFile;
+  };
+  X000223e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/uiobject.cxx";
+  };
+  X000223f = {
+   fileRef = X000223e;
+   isa = PBXBuildFile;
+  };
+  X0002240 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/unodoc.cxx";
+  };
+  X0002241 = {
+   fileRef = X0002240;
+   isa = PBXBuildFile;
+  };
+  X0002242 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/unofilter.cxx";
+  };
+  X0002243 = {
+   fileRef = X0002242;
+   isa = PBXBuildFile;
+  };
+  X0002244 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/unomodel.cxx";
+  };
+  X0002245 = {
+   fileRef = X0002244;
+   isa = PBXBuildFile;
+  };
+  X0002246 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/utility.cxx";
+  };
+  X0002247 = {
+   fileRef = X0002246;
+   isa = PBXBuildFile;
+  };
+  X0002248 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/view.cxx";
+  };
+  X0002249 = {
+   fileRef = X0002248;
+   isa = PBXBuildFile;
+  };
+  X000224a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/visitors.cxx";
+  };
+  X000224b = {
+   fileRef = X000224a;
+   isa = PBXBuildFile;
+  };
+  X000224c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "starmath/source/wordexportbase.cxx";
+  };
+  X000224d = {
+   fileRef = X000224c;
+   isa = PBXBuildFile;
+  };
+  X000224e = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002203;
+}

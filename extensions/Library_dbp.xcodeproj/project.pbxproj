@@ -1,0 +1,151 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004a2d = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004a49;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004a2e;
+   productRefGroup = X0004a31;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004a33;
+  };
+  X0004a2e = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004a2f = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004a32 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004a33 = {
+   buildConfigurationList = X0004a4a;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004a30;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004a34 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/commonpagesdbp.cxx";
+  };
+  X0004a35 = {
+   fileRef = X0004a34;
+   isa = PBXBuildFile;
+  };
+  X0004a36 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/controlwizard.cxx";
+  };
+  X0004a37 = {
+   fileRef = X0004a36;
+   isa = PBXBuildFile;
+  };
+  X0004a38 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/dbpservices.cxx";
+  };
+  X0004a39 = {
+   fileRef = X0004a38;
+   isa = PBXBuildFile;
+  };
+  X0004a3a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/dbptools.cxx";
+  };
+  X0004a3b = {
+   fileRef = X0004a3a;
+   isa = PBXBuildFile;
+  };
+  X0004a3c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/gridwizard.cxx";
+  };
+  X0004a3d = {
+   fileRef = X0004a3c;
+   isa = PBXBuildFile;
+  };
+  X0004a3e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/groupboxwiz.cxx";
+  };
+  X0004a3f = {
+   fileRef = X0004a3e;
+   isa = PBXBuildFile;
+  };
+  X0004a40 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/listcombowizard.cxx";
+  };
+  X0004a41 = {
+   fileRef = X0004a40;
+   isa = PBXBuildFile;
+  };
+  X0004a42 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/moduledbp.cxx";
+  };
+  X0004a43 = {
+   fileRef = X0004a42;
+   isa = PBXBuildFile;
+  };
+  X0004a44 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/optiongrouplayouter.cxx";
+  };
+  X0004a45 = {
+   fileRef = X0004a44;
+   isa = PBXBuildFile;
+  };
+  X0004a46 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/dbpilots/wizardservices.cxx";
+  };
+  X0004a47 = {
+   fileRef = X0004a46;
+   isa = PBXBuildFile;
+  };
+  X0004a48 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004a2d;
+}

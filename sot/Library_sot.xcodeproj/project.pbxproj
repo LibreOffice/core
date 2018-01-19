@@ -1,0 +1,205 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00037dd = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0003805;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00037de;
+   productRefGroup = X00037e1;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00037e3;
+  };
+  X00037de = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00037df = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00037e2 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00037e3 = {
+   buildConfigurationList = X0003806;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00037e0;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00037e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/unoolestorage/xolesimplestorage.cxx";
+  };
+  X00037e5 = {
+   fileRef = X00037e4;
+   isa = PBXBuildFile;
+  };
+  X00037e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/base/formats.cxx";
+  };
+  X00037e7 = {
+   fileRef = X00037e6;
+   isa = PBXBuildFile;
+  };
+  X00037e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/base/object.cxx";
+  };
+  X00037e9 = {
+   fileRef = X00037e8;
+   isa = PBXBuildFile;
+  };
+  X00037ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/base/exchange.cxx";
+  };
+  X00037eb = {
+   fileRef = X00037ea;
+   isa = PBXBuildFile;
+  };
+  X00037ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/base/filelist.cxx";
+  };
+  X00037ed = {
+   fileRef = X00037ec;
+   isa = PBXBuildFile;
+  };
+  X00037ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/stg.cxx";
+  };
+  X00037ef = {
+   fileRef = X00037ee;
+   isa = PBXBuildFile;
+  };
+  X00037f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/stgavl.cxx";
+  };
+  X00037f1 = {
+   fileRef = X00037f0;
+   isa = PBXBuildFile;
+  };
+  X00037f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/stgcache.cxx";
+  };
+  X00037f3 = {
+   fileRef = X00037f2;
+   isa = PBXBuildFile;
+  };
+  X00037f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/stgdir.cxx";
+  };
+  X00037f5 = {
+   fileRef = X00037f4;
+   isa = PBXBuildFile;
+  };
+  X00037f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/stgelem.cxx";
+  };
+  X00037f7 = {
+   fileRef = X00037f6;
+   isa = PBXBuildFile;
+  };
+  X00037f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/stgio.cxx";
+  };
+  X00037f9 = {
+   fileRef = X00037f8;
+   isa = PBXBuildFile;
+  };
+  X00037fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/stgole.cxx";
+  };
+  X00037fb = {
+   fileRef = X00037fa;
+   isa = PBXBuildFile;
+  };
+  X00037fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/stgstrms.cxx";
+  };
+  X00037fd = {
+   fileRef = X00037fc;
+   isa = PBXBuildFile;
+  };
+  X00037fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/storage.cxx";
+  };
+  X00037ff = {
+   fileRef = X00037fe;
+   isa = PBXBuildFile;
+  };
+  X0003800 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/storinfo.cxx";
+  };
+  X0003801 = {
+   fileRef = X0003800;
+   isa = PBXBuildFile;
+  };
+  X0003802 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sot/source/sdstor/ucbstorage.cxx";
+  };
+  X0003803 = {
+   fileRef = X0003802;
+   isa = PBXBuildFile;
+  };
+  X0003804 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00037dd;
+}

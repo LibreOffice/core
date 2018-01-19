@@ -1,0 +1,646 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002d8f = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002e19;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002d90;
+   productRefGroup = X0002d93;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002d95;
+  };
+  X0002d90 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002d91 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002d94 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002d95 = {
+   buildConfigurationList = X0002e1a;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002d92;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002d96 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleBrowseBox.cxx";
+  };
+  X0002d97 = {
+   fileRef = X0002d96;
+   isa = PBXBuildFile;
+  };
+  X0002d98 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleBrowseBoxBase.cxx";
+  };
+  X0002d99 = {
+   fileRef = X0002d98;
+   isa = PBXBuildFile;
+  };
+  X0002d9a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleBrowseBoxCheckBoxCell.cxx";
+  };
+  X0002d9b = {
+   fileRef = X0002d9a;
+   isa = PBXBuildFile;
+  };
+  X0002d9c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleBrowseBoxHeaderBar.cxx";
+  };
+  X0002d9d = {
+   fileRef = X0002d9c;
+   isa = PBXBuildFile;
+  };
+  X0002d9e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleBrowseBoxHeaderCell.cxx";
+  };
+  X0002d9f = {
+   fileRef = X0002d9e;
+   isa = PBXBuildFile;
+  };
+  X0002da0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleBrowseBoxTable.cxx";
+  };
+  X0002da1 = {
+   fileRef = X0002da0;
+   isa = PBXBuildFile;
+  };
+  X0002da2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleBrowseBoxTableBase.cxx";
+  };
+  X0002da3 = {
+   fileRef = X0002da2;
+   isa = PBXBuildFile;
+  };
+  X0002da4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleBrowseBoxTableCell.cxx";
+  };
+  X0002da5 = {
+   fileRef = X0002da4;
+   isa = PBXBuildFile;
+  };
+  X0002da6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleGridControl.cxx";
+  };
+  X0002da7 = {
+   fileRef = X0002da6;
+   isa = PBXBuildFile;
+  };
+  X0002da8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleGridControlBase.cxx";
+  };
+  X0002da9 = {
+   fileRef = X0002da8;
+   isa = PBXBuildFile;
+  };
+  X0002daa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleGridControlHeader.cxx";
+  };
+  X0002dab = {
+   fileRef = X0002daa;
+   isa = PBXBuildFile;
+  };
+  X0002dac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleGridControlHeaderCell.cxx";
+  };
+  X0002dad = {
+   fileRef = X0002dac;
+   isa = PBXBuildFile;
+  };
+  X0002dae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleGridControlTable.cxx";
+  };
+  X0002daf = {
+   fileRef = X0002dae;
+   isa = PBXBuildFile;
+  };
+  X0002db0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleGridControlTableBase.cxx";
+  };
+  X0002db1 = {
+   fileRef = X0002db0;
+   isa = PBXBuildFile;
+  };
+  X0002db2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/AccessibleGridControlTableCell.cxx";
+  };
+  X0002db3 = {
+   fileRef = X0002db2;
+   isa = PBXBuildFile;
+  };
+  X0002db4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessiblebrowseboxcell.cxx";
+  };
+  X0002db5 = {
+   fileRef = X0002db4;
+   isa = PBXBuildFile;
+  };
+  X0002db6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibleeditbrowseboxcell.cxx";
+  };
+  X0002db7 = {
+   fileRef = X0002db6;
+   isa = PBXBuildFile;
+  };
+  X0002db8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibleiconchoicectrl.cxx";
+  };
+  X0002db9 = {
+   fileRef = X0002db8;
+   isa = PBXBuildFile;
+  };
+  X0002dba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibleiconchoicectrlentry.cxx";
+  };
+  X0002dbb = {
+   fileRef = X0002dba;
+   isa = PBXBuildFile;
+  };
+  X0002dbc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessiblelistbox.cxx";
+  };
+  X0002dbd = {
+   fileRef = X0002dbc;
+   isa = PBXBuildFile;
+  };
+  X0002dbe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessiblelistboxentry.cxx";
+  };
+  X0002dbf = {
+   fileRef = X0002dbe;
+   isa = PBXBuildFile;
+  };
+  X0002dc0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibletabbar.cxx";
+  };
+  X0002dc1 = {
+   fileRef = X0002dc0;
+   isa = PBXBuildFile;
+  };
+  X0002dc2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibletabbarbase.cxx";
+  };
+  X0002dc3 = {
+   fileRef = X0002dc2;
+   isa = PBXBuildFile;
+  };
+  X0002dc4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibletabbarpage.cxx";
+  };
+  X0002dc5 = {
+   fileRef = X0002dc4;
+   isa = PBXBuildFile;
+  };
+  X0002dc6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibletabbarpagelist.cxx";
+  };
+  X0002dc7 = {
+   fileRef = X0002dc6;
+   isa = PBXBuildFile;
+  };
+  X0002dc8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibletablistbox.cxx";
+  };
+  X0002dc9 = {
+   fileRef = X0002dc8;
+   isa = PBXBuildFile;
+  };
+  X0002dca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/accessibletablistboxtable.cxx";
+  };
+  X0002dcb = {
+   fileRef = X0002dca;
+   isa = PBXBuildFile;
+  };
+  X0002dcc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/listboxaccessible.cxx";
+  };
+  X0002dcd = {
+   fileRef = X0002dcc;
+   isa = PBXBuildFile;
+  };
+  X0002dce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/extended/textwindowaccessibility.cxx";
+  };
+  X0002dcf = {
+   fileRef = X0002dce;
+   isa = PBXBuildFile;
+  };
+  X0002dd0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/helper/acc_factory.cxx";
+  };
+  X0002dd1 = {
+   fileRef = X0002dd0;
+   isa = PBXBuildFile;
+  };
+  X0002dd2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/helper/accresmgr.cxx";
+  };
+  X0002dd3 = {
+   fileRef = X0002dd2;
+   isa = PBXBuildFile;
+  };
+  X0002dd4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/helper/characterattributeshelper.cxx";
+  };
+  X0002dd5 = {
+   fileRef = X0002dd4;
+   isa = PBXBuildFile;
+  };
+  X0002dd6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/helper/IComboListBoxHelper.cxx";
+  };
+  X0002dd7 = {
+   fileRef = X0002dd6;
+   isa = PBXBuildFile;
+  };
+  X0002dd8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/accessiblemenubasecomponent.cxx";
+  };
+  X0002dd9 = {
+   fileRef = X0002dd8;
+   isa = PBXBuildFile;
+  };
+  X0002dda = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/accessiblemenucomponent.cxx";
+  };
+  X0002ddb = {
+   fileRef = X0002dda;
+   isa = PBXBuildFile;
+  };
+  X0002ddc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/accessiblemenuitemcomponent.cxx";
+  };
+  X0002ddd = {
+   fileRef = X0002ddc;
+   isa = PBXBuildFile;
+  };
+  X0002dde = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/floatingwindowaccessible.cxx";
+  };
+  X0002ddf = {
+   fileRef = X0002dde;
+   isa = PBXBuildFile;
+  };
+  X0002de0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblebox.cxx";
+  };
+  X0002de1 = {
+   fileRef = X0002de0;
+   isa = PBXBuildFile;
+  };
+  X0002de2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblebutton.cxx";
+  };
+  X0002de3 = {
+   fileRef = X0002de2;
+   isa = PBXBuildFile;
+  };
+  X0002de4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblecheckbox.cxx";
+  };
+  X0002de5 = {
+   fileRef = X0002de4;
+   isa = PBXBuildFile;
+  };
+  X0002de6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblecombobox.cxx";
+  };
+  X0002de7 = {
+   fileRef = X0002de6;
+   isa = PBXBuildFile;
+  };
+  X0002de8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibledropdowncombobox.cxx";
+  };
+  X0002de9 = {
+   fileRef = X0002de8;
+   isa = PBXBuildFile;
+  };
+  X0002dea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibledropdownlistbox.cxx";
+  };
+  X0002deb = {
+   fileRef = X0002dea;
+   isa = PBXBuildFile;
+  };
+  X0002dec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibleedit.cxx";
+  };
+  X0002ded = {
+   fileRef = X0002dec;
+   isa = PBXBuildFile;
+  };
+  X0002dee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblefixedhyperlink.cxx";
+  };
+  X0002def = {
+   fileRef = X0002dee;
+   isa = PBXBuildFile;
+  };
+  X0002df0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblefixedtext.cxx";
+  };
+  X0002df1 = {
+   fileRef = X0002df0;
+   isa = PBXBuildFile;
+  };
+  X0002df2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblelist.cxx";
+  };
+  X0002df3 = {
+   fileRef = X0002df2;
+   isa = PBXBuildFile;
+  };
+  X0002df4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblelistbox.cxx";
+  };
+  X0002df5 = {
+   fileRef = X0002df4;
+   isa = PBXBuildFile;
+  };
+  X0002df6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblelistitem.cxx";
+  };
+  X0002df7 = {
+   fileRef = X0002df6;
+   isa = PBXBuildFile;
+  };
+  X0002df8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblemenu.cxx";
+  };
+  X0002df9 = {
+   fileRef = X0002df8;
+   isa = PBXBuildFile;
+  };
+  X0002dfa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblemenubar.cxx";
+  };
+  X0002dfb = {
+   fileRef = X0002dfa;
+   isa = PBXBuildFile;
+  };
+  X0002dfc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblemenuitem.cxx";
+  };
+  X0002dfd = {
+   fileRef = X0002dfc;
+   isa = PBXBuildFile;
+  };
+  X0002dfe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblemenuseparator.cxx";
+  };
+  X0002dff = {
+   fileRef = X0002dfe;
+   isa = PBXBuildFile;
+  };
+  X0002e00 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblepopupmenu.cxx";
+  };
+  X0002e01 = {
+   fileRef = X0002e00;
+   isa = PBXBuildFile;
+  };
+  X0002e02 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibleradiobutton.cxx";
+  };
+  X0002e03 = {
+   fileRef = X0002e02;
+   isa = PBXBuildFile;
+  };
+  X0002e04 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblescrollbar.cxx";
+  };
+  X0002e05 = {
+   fileRef = X0002e04;
+   isa = PBXBuildFile;
+  };
+  X0002e06 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblestatusbar.cxx";
+  };
+  X0002e07 = {
+   fileRef = X0002e06;
+   isa = PBXBuildFile;
+  };
+  X0002e08 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessiblestatusbaritem.cxx";
+  };
+  X0002e09 = {
+   fileRef = X0002e08;
+   isa = PBXBuildFile;
+  };
+  X0002e0a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibletabcontrol.cxx";
+  };
+  X0002e0b = {
+   fileRef = X0002e0a;
+   isa = PBXBuildFile;
+  };
+  X0002e0c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibletabpage.cxx";
+  };
+  X0002e0d = {
+   fileRef = X0002e0c;
+   isa = PBXBuildFile;
+  };
+  X0002e0e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibletabpagewindow.cxx";
+  };
+  X0002e0f = {
+   fileRef = X0002e0e;
+   isa = PBXBuildFile;
+  };
+  X0002e10 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibletextcomponent.cxx";
+  };
+  X0002e11 = {
+   fileRef = X0002e10;
+   isa = PBXBuildFile;
+  };
+  X0002e12 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibletextfield.cxx";
+  };
+  X0002e13 = {
+   fileRef = X0002e12;
+   isa = PBXBuildFile;
+  };
+  X0002e14 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibletoolbox.cxx";
+  };
+  X0002e15 = {
+   fileRef = X0002e14;
+   isa = PBXBuildFile;
+  };
+  X0002e16 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "accessibility/source/standard/vclxaccessibletoolboxitem.cxx";
+  };
+  X0002e17 = {
+   fileRef = X0002e16;
+   isa = PBXBuildFile;
+  };
+  X0002e18 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002d8f;
+}

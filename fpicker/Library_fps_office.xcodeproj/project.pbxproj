@@ -1,0 +1,169 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001915 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001935;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001916;
+   productRefGroup = X0001919;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000191b;
+  };
+  X0001916 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001917 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000191a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000191b = {
+   buildConfigurationList = X0001936;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001918;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000191c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/asyncfilepicker.cxx";
+  };
+  X000191d = {
+   fileRef = X000191c;
+   isa = PBXBuildFile;
+  };
+  X000191e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/commonpicker.cxx";
+  };
+  X000191f = {
+   fileRef = X000191e;
+   isa = PBXBuildFile;
+  };
+  X0001920 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/fpinteraction.cxx";
+  };
+  X0001921 = {
+   fileRef = X0001920;
+   isa = PBXBuildFile;
+  };
+  X0001922 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/fpsmartcontent.cxx";
+  };
+  X0001923 = {
+   fileRef = X0001922;
+   isa = PBXBuildFile;
+  };
+  X0001924 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/fps_office.cxx";
+  };
+  X0001925 = {
+   fileRef = X0001924;
+   isa = PBXBuildFile;
+  };
+  X0001926 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/iodlg.cxx";
+  };
+  X0001927 = {
+   fileRef = X0001926;
+   isa = PBXBuildFile;
+  };
+  X0001928 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/iodlgimp.cxx";
+  };
+  X0001929 = {
+   fileRef = X0001928;
+   isa = PBXBuildFile;
+  };
+  X000192a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/OfficeControlAccess.cxx";
+  };
+  X000192b = {
+   fileRef = X000192a;
+   isa = PBXBuildFile;
+  };
+  X000192c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/OfficeFilePicker.cxx";
+  };
+  X000192d = {
+   fileRef = X000192c;
+   isa = PBXBuildFile;
+  };
+  X000192e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/OfficeFolderPicker.cxx";
+  };
+  X000192f = {
+   fileRef = X000192e;
+   isa = PBXBuildFile;
+  };
+  X0001930 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/PlacesListBox.cxx";
+  };
+  X0001931 = {
+   fileRef = X0001930;
+   isa = PBXBuildFile;
+  };
+  X0001932 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "fpicker/source/office/RemoteFilesDialog.cxx";
+  };
+  X0001933 = {
+   fileRef = X0001932;
+   isa = PBXBuildFile;
+  };
+  X0001934 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001915;
+}

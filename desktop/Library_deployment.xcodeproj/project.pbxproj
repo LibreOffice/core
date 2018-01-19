@@ -1,0 +1,322 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00031f5 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0003237;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00031f6;
+   productRefGroup = X00031f9;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00031fb;
+  };
+  X00031f6 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00031f7 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00031fa = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00031fb = {
+   buildConfigurationList = X0003238;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00031f8;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00031fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/dp_log.cxx";
+  };
+  X00031fd = {
+   fileRef = X00031fc;
+   isa = PBXBuildFile;
+  };
+  X00031fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/dp_persmap.cxx";
+  };
+  X00031ff = {
+   fileRef = X00031fe;
+   isa = PBXBuildFile;
+  };
+  X0003200 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/dp_services.cxx";
+  };
+  X0003201 = {
+   fileRef = X0003200;
+   isa = PBXBuildFile;
+  };
+  X0003202 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/dp_xml.cxx";
+  };
+  X0003203 = {
+   fileRef = X0003202;
+   isa = PBXBuildFile;
+  };
+  X0003204 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/manager/dp_activepackages.cxx";
+  };
+  X0003205 = {
+   fileRef = X0003204;
+   isa = PBXBuildFile;
+  };
+  X0003206 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/manager/dp_commandenvironments.cxx";
+  };
+  X0003207 = {
+   fileRef = X0003206;
+   isa = PBXBuildFile;
+  };
+  X0003208 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/manager/dp_extensionmanager.cxx";
+  };
+  X0003209 = {
+   fileRef = X0003208;
+   isa = PBXBuildFile;
+  };
+  X000320a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/manager/dp_informationprovider.cxx";
+  };
+  X000320b = {
+   fileRef = X000320a;
+   isa = PBXBuildFile;
+  };
+  X000320c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/manager/dp_manager.cxx";
+  };
+  X000320d = {
+   fileRef = X000320c;
+   isa = PBXBuildFile;
+  };
+  X000320e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/manager/dp_managerfac.cxx";
+  };
+  X000320f = {
+   fileRef = X000320e;
+   isa = PBXBuildFile;
+  };
+  X0003210 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/manager/dp_properties.cxx";
+  };
+  X0003211 = {
+   fileRef = X0003210;
+   isa = PBXBuildFile;
+  };
+  X0003212 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/component/dp_compbackenddb.cxx";
+  };
+  X0003213 = {
+   fileRef = X0003212;
+   isa = PBXBuildFile;
+  };
+  X0003214 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/component/dp_component.cxx";
+  };
+  X0003215 = {
+   fileRef = X0003214;
+   isa = PBXBuildFile;
+  };
+  X0003216 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/configuration/dp_configuration.cxx";
+  };
+  X0003217 = {
+   fileRef = X0003216;
+   isa = PBXBuildFile;
+  };
+  X0003218 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/configuration/dp_configurationbackenddb.cxx";
+  };
+  X0003219 = {
+   fileRef = X0003218;
+   isa = PBXBuildFile;
+  };
+  X000321a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/dp_backend.cxx";
+  };
+  X000321b = {
+   fileRef = X000321a;
+   isa = PBXBuildFile;
+  };
+  X000321c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/dp_backenddb.cxx";
+  };
+  X000321d = {
+   fileRef = X000321c;
+   isa = PBXBuildFile;
+  };
+  X000321e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/dp_registry.cxx";
+  };
+  X000321f = {
+   fileRef = X000321e;
+   isa = PBXBuildFile;
+  };
+  X0003220 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/executable/dp_executable.cxx";
+  };
+  X0003221 = {
+   fileRef = X0003220;
+   isa = PBXBuildFile;
+  };
+  X0003222 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/executable/dp_executablebackenddb.cxx";
+  };
+  X0003223 = {
+   fileRef = X0003222;
+   isa = PBXBuildFile;
+  };
+  X0003224 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/help/dp_help.cxx";
+  };
+  X0003225 = {
+   fileRef = X0003224;
+   isa = PBXBuildFile;
+  };
+  X0003226 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/help/dp_helpbackenddb.cxx";
+  };
+  X0003227 = {
+   fileRef = X0003226;
+   isa = PBXBuildFile;
+  };
+  X0003228 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/package/dp_extbackenddb.cxx";
+  };
+  X0003229 = {
+   fileRef = X0003228;
+   isa = PBXBuildFile;
+  };
+  X000322a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/package/dp_package.cxx";
+  };
+  X000322b = {
+   fileRef = X000322a;
+   isa = PBXBuildFile;
+  };
+  X000322c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/script/dp_lib_container.cxx";
+  };
+  X000322d = {
+   fileRef = X000322c;
+   isa = PBXBuildFile;
+  };
+  X000322e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/script/dp_script.cxx";
+  };
+  X000322f = {
+   fileRef = X000322e;
+   isa = PBXBuildFile;
+  };
+  X0003230 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/script/dp_scriptbackenddb.cxx";
+  };
+  X0003231 = {
+   fileRef = X0003230;
+   isa = PBXBuildFile;
+  };
+  X0003232 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/sfwk/dp_parceldesc.cxx";
+  };
+  X0003233 = {
+   fileRef = X0003232;
+   isa = PBXBuildFile;
+  };
+  X0003234 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "desktop/source/deployment/registry/sfwk/dp_sfwk.cxx";
+  };
+  X0003235 = {
+   fileRef = X0003234;
+   isa = PBXBuildFile;
+  };
+  X0003236 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00031f5;
+}

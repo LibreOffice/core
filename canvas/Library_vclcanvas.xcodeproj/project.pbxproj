@@ -1,0 +1,232 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002e5d = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002e8b;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002e5e;
+   productRefGroup = X0002e61;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002e63;
+  };
+  X0002e5e = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002e5f = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002e62 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002e63 = {
+   buildConfigurationList = X0002e8c;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002e60;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002e64 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/backbuffer.cxx";
+  };
+  X0002e65 = {
+   fileRef = X0002e64;
+   isa = PBXBuildFile;
+  };
+  X0002e66 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/bitmapbackbuffer.cxx";
+  };
+  X0002e67 = {
+   fileRef = X0002e66;
+   isa = PBXBuildFile;
+  };
+  X0002e68 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/cachedbitmap.cxx";
+  };
+  X0002e69 = {
+   fileRef = X0002e68;
+   isa = PBXBuildFile;
+  };
+  X0002e6a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/canvas.cxx";
+  };
+  X0002e6b = {
+   fileRef = X0002e6a;
+   isa = PBXBuildFile;
+  };
+  X0002e6c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/canvasbitmap.cxx";
+  };
+  X0002e6d = {
+   fileRef = X0002e6c;
+   isa = PBXBuildFile;
+  };
+  X0002e6e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/canvasbitmaphelper.cxx";
+  };
+  X0002e6f = {
+   fileRef = X0002e6e;
+   isa = PBXBuildFile;
+  };
+  X0002e70 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/canvascustomsprite.cxx";
+  };
+  X0002e71 = {
+   fileRef = X0002e70;
+   isa = PBXBuildFile;
+  };
+  X0002e72 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/canvasfont.cxx";
+  };
+  X0002e73 = {
+   fileRef = X0002e72;
+   isa = PBXBuildFile;
+  };
+  X0002e74 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/canvashelper.cxx";
+  };
+  X0002e75 = {
+   fileRef = X0002e74;
+   isa = PBXBuildFile;
+  };
+  X0002e76 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/devicehelper.cxx";
+  };
+  X0002e77 = {
+   fileRef = X0002e76;
+   isa = PBXBuildFile;
+  };
+  X0002e78 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/impltools.cxx";
+  };
+  X0002e79 = {
+   fileRef = X0002e78;
+   isa = PBXBuildFile;
+  };
+  X0002e7a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/services.cxx";
+  };
+  X0002e7b = {
+   fileRef = X0002e7a;
+   isa = PBXBuildFile;
+  };
+  X0002e7c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/spritecanvas.cxx";
+  };
+  X0002e7d = {
+   fileRef = X0002e7c;
+   isa = PBXBuildFile;
+  };
+  X0002e7e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/spritecanvashelper.cxx";
+  };
+  X0002e7f = {
+   fileRef = X0002e7e;
+   isa = PBXBuildFile;
+  };
+  X0002e80 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/spritedevicehelper.cxx";
+  };
+  X0002e81 = {
+   fileRef = X0002e80;
+   isa = PBXBuildFile;
+  };
+  X0002e82 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/spritehelper.cxx";
+  };
+  X0002e83 = {
+   fileRef = X0002e82;
+   isa = PBXBuildFile;
+  };
+  X0002e84 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/textlayout.cxx";
+  };
+  X0002e85 = {
+   fileRef = X0002e84;
+   isa = PBXBuildFile;
+  };
+  X0002e86 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/canvashelper_texturefill.cxx";
+  };
+  X0002e87 = {
+   fileRef = X0002e86;
+   isa = PBXBuildFile;
+  };
+  X0002e88 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "canvas/source/vcl/windowoutdevholder.cxx";
+  };
+  X0002e89 = {
+   fileRef = X0002e88;
+   isa = PBXBuildFile;
+  };
+  X0002e8a = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002e5d;
+}

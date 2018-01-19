@@ -1,0 +1,115 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001597 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00015ab;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001598;
+   productRefGroup = X000159b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000159d;
+  };
+  X0001598 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001599 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000159c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000159d = {
+   buildConfigurationList = X00015ac;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000159a;
+   productType = ;
+  };
+  X000159e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/qa/core/uwriter.cxx";
+  };
+  X000159f = {
+   fileRef = X000159e;
+   isa = PBXBuildFile;
+  };
+  X00015a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/qa/core/Test-BigPtrArray.cxx";
+  };
+  X00015a1 = {
+   fileRef = X00015a0;
+   isa = PBXBuildFile;
+  };
+  X00015a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/qa/core/test_ToxWhitespaceStripper.cxx";
+  };
+  X00015a3 = {
+   fileRef = X00015a2;
+   isa = PBXBuildFile;
+  };
+  X00015a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/qa/core/test_ToxLinkProcessor.cxx";
+  };
+  X00015a5 = {
+   fileRef = X00015a4;
+   isa = PBXBuildFile;
+  };
+  X00015a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/qa/core/test_ToxTextGenerator.cxx";
+  };
+  X00015a7 = {
+   fileRef = X00015a6;
+   isa = PBXBuildFile;
+  };
+  X00015a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sw/qa/core/test_ToxMiscTest.cxx";
+  };
+  X00015a9 = {
+   fileRef = X00015a8;
+   isa = PBXBuildFile;
+  };
+  X00015aa = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001597;
+}

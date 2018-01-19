@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004fd5 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004fe7;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004fd6;
+   productRefGroup = X0004fd9;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004fdb;
+  };
+  X0004fd6 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004fd7 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004fda = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004fdb = {
+   buildConfigurationList = X0004fe8;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004fd8;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004fdc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "scripting/source/basprov/baslibnode.cxx";
+  };
+  X0004fdd = {
+   fileRef = X0004fdc;
+   isa = PBXBuildFile;
+  };
+  X0004fde = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "scripting/source/basprov/basmethnode.cxx";
+  };
+  X0004fdf = {
+   fileRef = X0004fde;
+   isa = PBXBuildFile;
+  };
+  X0004fe0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "scripting/source/basprov/basmodnode.cxx";
+  };
+  X0004fe1 = {
+   fileRef = X0004fe0;
+   isa = PBXBuildFile;
+  };
+  X0004fe2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "scripting/source/basprov/basprov.cxx";
+  };
+  X0004fe3 = {
+   fileRef = X0004fe2;
+   isa = PBXBuildFile;
+  };
+  X0004fe4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "scripting/source/basprov/basscript.cxx";
+  };
+  X0004fe5 = {
+   fileRef = X0004fe4;
+   isa = PBXBuildFile;
+  };
+  X0004fe6 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004fd5;
+}

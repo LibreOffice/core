@@ -1,0 +1,115 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0000aef = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0000b03;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0000af0;
+   productRefGroup = X0000af3;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0000af5;
+  };
+  X0000af0 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0000af1 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0000af4 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0000af5 = {
+   buildConfigurationList = X0000b04;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0000af2;
+   productType = "com.apple.product-type.something";
+  };
+  X0000af6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/cppumaker/cppumaker.cxx";
+  };
+  X0000af7 = {
+   fileRef = X0000af6;
+   isa = PBXBuildFile;
+  };
+  X0000af8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/cppumaker/cppuoptions.cxx";
+  };
+  X0000af9 = {
+   fileRef = X0000af8;
+   isa = PBXBuildFile;
+  };
+  X0000afa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/cppumaker/cpputype.cxx";
+  };
+  X0000afb = {
+   fileRef = X0000afa;
+   isa = PBXBuildFile;
+  };
+  X0000afc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/cppumaker/dependencies.cxx";
+  };
+  X0000afd = {
+   fileRef = X0000afc;
+   isa = PBXBuildFile;
+  };
+  X0000afe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/cppumaker/dumputils.cxx";
+  };
+  X0000aff = {
+   fileRef = X0000afe;
+   isa = PBXBuildFile;
+  };
+  X0000b00 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "codemaker/source/cppumaker/includes.cxx";
+  };
+  X0000b01 = {
+   fileRef = X0000b00;
+   isa = PBXBuildFile;
+  };
+  X0000b02 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0000aef;
+}

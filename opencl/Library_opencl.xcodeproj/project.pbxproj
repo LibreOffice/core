@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001937 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001949;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001938;
+   productRefGroup = X000193b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000193d;
+  };
+  X0001938 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001939 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000193c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000193d = {
+   buildConfigurationList = X000194a;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000193a;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000193e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "opencl/source/openclconfig.cxx";
+  };
+  X000193f = {
+   fileRef = X000193e;
+   isa = PBXBuildFile;
+  };
+  X0001940 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "opencl/source/openclwrapper.cxx";
+  };
+  X0001941 = {
+   fileRef = X0001940;
+   isa = PBXBuildFile;
+  };
+  X0001942 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "opencl/source/opencl_device.cxx";
+  };
+  X0001943 = {
+   fileRef = X0001942;
+   isa = PBXBuildFile;
+  };
+  X0001944 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "opencl/source/platforminfo.cxx";
+  };
+  X0001945 = {
+   fileRef = X0001944;
+   isa = PBXBuildFile;
+  };
+  X0001946 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "opencl/source/OpenCLZone.cxx";
+  };
+  X0001947 = {
+   fileRef = X0001946;
+   isa = PBXBuildFile;
+  };
+  X0001948 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001937;
+}

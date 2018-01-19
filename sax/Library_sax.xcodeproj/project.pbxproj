@@ -1,0 +1,97 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0003c15 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0003c25;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0003c16;
+   productRefGroup = X0003c19;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0003c1b;
+  };
+  X0003c16 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0003c17 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0003c1a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0003c1b = {
+   buildConfigurationList = X0003c26;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0003c18;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0003c1c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sax/source/tools/converter.cxx";
+  };
+  X0003c1d = {
+   fileRef = X0003c1c;
+   isa = PBXBuildFile;
+  };
+  X0003c1e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sax/source/tools/fastattribs.cxx";
+  };
+  X0003c1f = {
+   fileRef = X0003c1e;
+   isa = PBXBuildFile;
+  };
+  X0003c20 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sax/source/tools/fastserializer.cxx";
+  };
+  X0003c21 = {
+   fileRef = X0003c20;
+   isa = PBXBuildFile;
+  };
+  X0003c22 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sax/source/tools/fshelper.cxx";
+  };
+  X0003c23 = {
+   fileRef = X0003c22;
+   isa = PBXBuildFile;
+  };
+  X0003c24 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0003c15;
+}

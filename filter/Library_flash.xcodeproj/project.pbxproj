@@ -1,0 +1,133 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004961 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004979;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004962;
+   productRefGroup = X0004965;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004967;
+  };
+  X0004962 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004963 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004966 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004967 = {
+   buildConfigurationList = X000497a;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004964;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004968 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/flash/impswfdialog.cxx";
+  };
+  X0004969 = {
+   fileRef = X0004968;
+   isa = PBXBuildFile;
+  };
+  X000496a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/flash/swfdialog.cxx";
+  };
+  X000496b = {
+   fileRef = X000496a;
+   isa = PBXBuildFile;
+  };
+  X000496c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/flash/swfexporter.cxx";
+  };
+  X000496d = {
+   fileRef = X000496c;
+   isa = PBXBuildFile;
+  };
+  X000496e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/flash/swffilter.cxx";
+  };
+  X000496f = {
+   fileRef = X000496e;
+   isa = PBXBuildFile;
+  };
+  X0004970 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/flash/swfuno.cxx";
+  };
+  X0004971 = {
+   fileRef = X0004970;
+   isa = PBXBuildFile;
+  };
+  X0004972 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/flash/swfwriter.cxx";
+  };
+  X0004973 = {
+   fileRef = X0004972;
+   isa = PBXBuildFile;
+  };
+  X0004974 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/flash/swfwriter1.cxx";
+  };
+  X0004975 = {
+   fileRef = X0004974;
+   isa = PBXBuildFile;
+  };
+  X0004976 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/flash/swfwriter2.cxx";
+  };
+  X0004977 = {
+   fileRef = X0004976;
+   isa = PBXBuildFile;
+  };
+  X0004978 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004961;
+}

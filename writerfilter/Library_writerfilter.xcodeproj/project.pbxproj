@@ -1,0 +1,673 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001fa5 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002035;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001fa6;
+   productRefGroup = X0001fa9;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001fab;
+  };
+  X0001fa6 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001fa7 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001faa = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001fab = {
+   buildConfigurationList = X0002036;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001fa8;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0001fac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfcharsets.cxx";
+  };
+  X0001fad = {
+   fileRef = X0001fac;
+   isa = PBXBuildFile;
+  };
+  X0001fae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfcontrolwords.cxx";
+  };
+  X0001faf = {
+   fileRef = X0001fae;
+   isa = PBXBuildFile;
+  };
+  X0001fb0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfdispatchdestination.cxx";
+  };
+  X0001fb1 = {
+   fileRef = X0001fb0;
+   isa = PBXBuildFile;
+  };
+  X0001fb2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfdispatchflag.cxx";
+  };
+  X0001fb3 = {
+   fileRef = X0001fb2;
+   isa = PBXBuildFile;
+  };
+  X0001fb4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfdispatchsymbol.cxx";
+  };
+  X0001fb5 = {
+   fileRef = X0001fb4;
+   isa = PBXBuildFile;
+  };
+  X0001fb6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfdispatchvalue.cxx";
+  };
+  X0001fb7 = {
+   fileRef = X0001fb6;
+   isa = PBXBuildFile;
+  };
+  X0001fb8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfdocumentfactory.cxx";
+  };
+  X0001fb9 = {
+   fileRef = X0001fb8;
+   isa = PBXBuildFile;
+  };
+  X0001fba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfdocumentimpl.cxx";
+  };
+  X0001fbb = {
+   fileRef = X0001fba;
+   isa = PBXBuildFile;
+  };
+  X0001fbc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtflookahead.cxx";
+  };
+  X0001fbd = {
+   fileRef = X0001fbc;
+   isa = PBXBuildFile;
+  };
+  X0001fbe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfreferenceproperties.cxx";
+  };
+  X0001fbf = {
+   fileRef = X0001fbe;
+   isa = PBXBuildFile;
+  };
+  X0001fc0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfreferencetable.cxx";
+  };
+  X0001fc1 = {
+   fileRef = X0001fc0;
+   isa = PBXBuildFile;
+  };
+  X0001fc2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfsdrimport.cxx";
+  };
+  X0001fc3 = {
+   fileRef = X0001fc2;
+   isa = PBXBuildFile;
+  };
+  X0001fc4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfskipdestination.cxx";
+  };
+  X0001fc5 = {
+   fileRef = X0001fc4;
+   isa = PBXBuildFile;
+  };
+  X0001fc6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfsprm.cxx";
+  };
+  X0001fc7 = {
+   fileRef = X0001fc6;
+   isa = PBXBuildFile;
+  };
+  X0001fc8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtftokenizer.cxx";
+  };
+  X0001fc9 = {
+   fileRef = X0001fc8;
+   isa = PBXBuildFile;
+  };
+  X0001fca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/rtftok/rtfvalue.cxx";
+  };
+  X0001fcb = {
+   fileRef = X0001fca;
+   isa = PBXBuildFile;
+  };
+  X0001fcc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/BorderHandler.cxx";
+  };
+  X0001fcd = {
+   fileRef = X0001fcc;
+   isa = PBXBuildFile;
+  };
+  X0001fce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/CellColorHandler.cxx";
+  };
+  X0001fcf = {
+   fileRef = X0001fce;
+   isa = PBXBuildFile;
+  };
+  X0001fd0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/CellMarginHandler.cxx";
+  };
+  X0001fd1 = {
+   fileRef = X0001fd0;
+   isa = PBXBuildFile;
+  };
+  X0001fd2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/ConversionHelper.cxx";
+  };
+  X0001fd3 = {
+   fileRef = X0001fd2;
+   isa = PBXBuildFile;
+  };
+  X0001fd4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/DomainMapper.cxx";
+  };
+  X0001fd5 = {
+   fileRef = X0001fd4;
+   isa = PBXBuildFile;
+  };
+  X0001fd6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/DomainMapperTableHandler.cxx";
+  };
+  X0001fd7 = {
+   fileRef = X0001fd6;
+   isa = PBXBuildFile;
+  };
+  X0001fd8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/DomainMapperTableManager.cxx";
+  };
+  X0001fd9 = {
+   fileRef = X0001fd8;
+   isa = PBXBuildFile;
+  };
+  X0001fda = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/DomainMapper_Impl.cxx";
+  };
+  X0001fdb = {
+   fileRef = X0001fda;
+   isa = PBXBuildFile;
+  };
+  X0001fdc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/domainmapperfactory.cxx";
+  };
+  X0001fdd = {
+   fileRef = X0001fdc;
+   isa = PBXBuildFile;
+  };
+  X0001fde = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/FFDataHandler.cxx";
+  };
+  X0001fdf = {
+   fileRef = X0001fde;
+   isa = PBXBuildFile;
+  };
+  X0001fe0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/FontTable.cxx";
+  };
+  X0001fe1 = {
+   fileRef = X0001fe0;
+   isa = PBXBuildFile;
+  };
+  X0001fe2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/FormControlHelper.cxx";
+  };
+  X0001fe3 = {
+   fileRef = X0001fe2;
+   isa = PBXBuildFile;
+  };
+  X0001fe4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/GraphicHelpers.cxx";
+  };
+  X0001fe5 = {
+   fileRef = X0001fe4;
+   isa = PBXBuildFile;
+  };
+  X0001fe6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/GraphicImport.cxx";
+  };
+  X0001fe7 = {
+   fileRef = X0001fe6;
+   isa = PBXBuildFile;
+  };
+  X0001fe8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/LatentStyleHandler.cxx";
+  };
+  X0001fe9 = {
+   fileRef = X0001fe8;
+   isa = PBXBuildFile;
+  };
+  X0001fea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/LoggedResources.cxx";
+  };
+  X0001feb = {
+   fileRef = X0001fea;
+   isa = PBXBuildFile;
+  };
+  X0001fec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/MeasureHandler.cxx";
+  };
+  X0001fed = {
+   fileRef = X0001fec;
+   isa = PBXBuildFile;
+  };
+  X0001fee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/TrackChangesHandler.cxx";
+  };
+  X0001fef = {
+   fileRef = X0001fee;
+   isa = PBXBuildFile;
+  };
+  X0001ff0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/ModelEventListener.cxx";
+  };
+  X0001ff1 = {
+   fileRef = X0001ff0;
+   isa = PBXBuildFile;
+  };
+  X0001ff2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/NumberingManager.cxx";
+  };
+  X0001ff3 = {
+   fileRef = X0001ff2;
+   isa = PBXBuildFile;
+  };
+  X0001ff4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/OLEHandler.cxx";
+  };
+  X0001ff5 = {
+   fileRef = X0001ff4;
+   isa = PBXBuildFile;
+  };
+  X0001ff6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/PageBordersHandler.cxx";
+  };
+  X0001ff7 = {
+   fileRef = X0001ff6;
+   isa = PBXBuildFile;
+  };
+  X0001ff8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/PropertyIds.cxx";
+  };
+  X0001ff9 = {
+   fileRef = X0001ff8;
+   isa = PBXBuildFile;
+  };
+  X0001ffa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/PropertyMap.cxx";
+  };
+  X0001ffb = {
+   fileRef = X0001ffa;
+   isa = PBXBuildFile;
+  };
+  X0001ffc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/PropertyMapHelper.cxx";
+  };
+  X0001ffd = {
+   fileRef = X0001ffc;
+   isa = PBXBuildFile;
+  };
+  X0001ffe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/SdtHelper.cxx";
+  };
+  X0001fff = {
+   fileRef = X0001ffe;
+   isa = PBXBuildFile;
+  };
+  X0002000 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/SectionColumnHandler.cxx";
+  };
+  X0002001 = {
+   fileRef = X0002000;
+   isa = PBXBuildFile;
+  };
+  X0002002 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/SettingsTable.cxx";
+  };
+  X0002003 = {
+   fileRef = X0002002;
+   isa = PBXBuildFile;
+  };
+  X0002004 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/SmartTagHandler.cxx";
+  };
+  X0002005 = {
+   fileRef = X0002004;
+   isa = PBXBuildFile;
+  };
+  X0002006 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/StyleSheetTable.cxx";
+  };
+  X0002007 = {
+   fileRef = X0002006;
+   isa = PBXBuildFile;
+  };
+  X0002008 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/TDefTableHandler.cxx";
+  };
+  X0002009 = {
+   fileRef = X0002008;
+   isa = PBXBuildFile;
+  };
+  X000200a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/TableManager.cxx";
+  };
+  X000200b = {
+   fileRef = X000200a;
+   isa = PBXBuildFile;
+  };
+  X000200c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/TablePositionHandler.cxx";
+  };
+  X000200d = {
+   fileRef = X000200c;
+   isa = PBXBuildFile;
+  };
+  X000200e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/TablePropertiesHandler.cxx";
+  };
+  X000200f = {
+   fileRef = X000200e;
+   isa = PBXBuildFile;
+  };
+  X0002010 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/TagLogger.cxx";
+  };
+  X0002011 = {
+   fileRef = X0002010;
+   isa = PBXBuildFile;
+  };
+  X0002012 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/TextEffectsHandler.cxx";
+  };
+  X0002013 = {
+   fileRef = X0002012;
+   isa = PBXBuildFile;
+  };
+  X0002014 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/TblStylePrHandler.cxx";
+  };
+  X0002015 = {
+   fileRef = X0002014;
+   isa = PBXBuildFile;
+  };
+  X0002016 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/ThemeTable.cxx";
+  };
+  X0002017 = {
+   fileRef = X0002016;
+   isa = PBXBuildFile;
+  };
+  X0002018 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/WrapPolygonHandler.cxx";
+  };
+  X0002019 = {
+   fileRef = X0002018;
+   isa = PBXBuildFile;
+  };
+  X000201a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/dmapper/util.cxx";
+  };
+  X000201b = {
+   fileRef = X000201a;
+   isa = PBXBuildFile;
+  };
+  X000201c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/filter/RtfFilter.cxx";
+  };
+  X000201d = {
+   fileRef = X000201c;
+   isa = PBXBuildFile;
+  };
+  X000201e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/filter/WriterFilter.cxx";
+  };
+  X000201f = {
+   fileRef = X000201e;
+   isa = PBXBuildFile;
+  };
+  X0002020 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/Handler.cxx";
+  };
+  X0002021 = {
+   fileRef = X0002020;
+   isa = PBXBuildFile;
+  };
+  X0002022 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/OOXMLBinaryObjectReference.cxx";
+  };
+  X0002023 = {
+   fileRef = X0002022;
+   isa = PBXBuildFile;
+  };
+  X0002024 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/OOXMLDocumentImpl.cxx";
+  };
+  X0002025 = {
+   fileRef = X0002024;
+   isa = PBXBuildFile;
+  };
+  X0002026 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/OOXMLFactory.cxx";
+  };
+  X0002027 = {
+   fileRef = X0002026;
+   isa = PBXBuildFile;
+  };
+  X0002028 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/OOXMLFastContextHandler.cxx";
+  };
+  X0002029 = {
+   fileRef = X0002028;
+   isa = PBXBuildFile;
+  };
+  X000202a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/OOXMLFastDocumentHandler.cxx";
+  };
+  X000202b = {
+   fileRef = X000202a;
+   isa = PBXBuildFile;
+  };
+  X000202c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/OOXMLParserState.cxx";
+  };
+  X000202d = {
+   fileRef = X000202c;
+   isa = PBXBuildFile;
+  };
+  X000202e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/OOXMLPropertySet.cxx";
+  };
+  X000202f = {
+   fileRef = X000202e;
+   isa = PBXBuildFile;
+  };
+  X0002030 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/OOXMLStreamImpl.cxx";
+  };
+  X0002031 = {
+   fileRef = X0002030;
+   isa = PBXBuildFile;
+  };
+  X0002032 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerfilter/source/ooxml/qnametostrcore.cxx";
+  };
+  X0002033 = {
+   fileRef = X0002032;
+   isa = PBXBuildFile;
+  };
+  X0002034 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001fa5;
+}

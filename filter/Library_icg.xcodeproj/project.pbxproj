@@ -1,0 +1,187 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X000497b = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000499f;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X000497c;
+   productRefGroup = X000497f;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004981;
+  };
+  X000497c = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X000497d = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004980 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004981 = {
+   buildConfigurationList = X00049a0;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000497e;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004982 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/actimpr.cxx";
+  };
+  X0004983 = {
+   fileRef = X0004982;
+   isa = PBXBuildFile;
+  };
+  X0004984 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/bitmap.cxx";
+  };
+  X0004985 = {
+   fileRef = X0004984;
+   isa = PBXBuildFile;
+  };
+  X0004986 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/bundles.cxx";
+  };
+  X0004987 = {
+   fileRef = X0004986;
+   isa = PBXBuildFile;
+  };
+  X0004988 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/cgm.cxx";
+  };
+  X0004989 = {
+   fileRef = X0004988;
+   isa = PBXBuildFile;
+  };
+  X000498a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/chart.cxx";
+  };
+  X000498b = {
+   fileRef = X000498a;
+   isa = PBXBuildFile;
+  };
+  X000498c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/class0.cxx";
+  };
+  X000498d = {
+   fileRef = X000498c;
+   isa = PBXBuildFile;
+  };
+  X000498e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/class1.cxx";
+  };
+  X000498f = {
+   fileRef = X000498e;
+   isa = PBXBuildFile;
+  };
+  X0004990 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/class2.cxx";
+  };
+  X0004991 = {
+   fileRef = X0004990;
+   isa = PBXBuildFile;
+  };
+  X0004992 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/class3.cxx";
+  };
+  X0004993 = {
+   fileRef = X0004992;
+   isa = PBXBuildFile;
+  };
+  X0004994 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/class4.cxx";
+  };
+  X0004995 = {
+   fileRef = X0004994;
+   isa = PBXBuildFile;
+  };
+  X0004996 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/class5.cxx";
+  };
+  X0004997 = {
+   fileRef = X0004996;
+   isa = PBXBuildFile;
+  };
+  X0004998 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/class7.cxx";
+  };
+  X0004999 = {
+   fileRef = X0004998;
+   isa = PBXBuildFile;
+  };
+  X000499a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/classx.cxx";
+  };
+  X000499b = {
+   fileRef = X000499a;
+   isa = PBXBuildFile;
+  };
+  X000499c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/graphicfilter/icgm/elements.cxx";
+  };
+  X000499d = {
+   fileRef = X000499c;
+   isa = PBXBuildFile;
+  };
+  X000499e = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X000497b;
+}

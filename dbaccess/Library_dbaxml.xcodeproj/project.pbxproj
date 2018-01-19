@@ -1,0 +1,304 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00027f7 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002835;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00027f8;
+   productRefGroup = X00027fb;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00027fd;
+  };
+  X00027f8 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00027f9 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00027fc = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00027fd = {
+   buildConfigurationList = X0002836;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00027fa;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00027fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/dbloader2.cxx";
+  };
+  X00027ff = {
+   fileRef = X00027fe;
+   isa = PBXBuildFile;
+  };
+  X0002800 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlAutoStyle.cxx";
+  };
+  X0002801 = {
+   fileRef = X0002800;
+   isa = PBXBuildFile;
+  };
+  X0002802 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlColumn.cxx";
+  };
+  X0002803 = {
+   fileRef = X0002802;
+   isa = PBXBuildFile;
+  };
+  X0002804 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlComponent.cxx";
+  };
+  X0002805 = {
+   fileRef = X0002804;
+   isa = PBXBuildFile;
+  };
+  X0002806 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlConnectionData.cxx";
+  };
+  X0002807 = {
+   fileRef = X0002806;
+   isa = PBXBuildFile;
+  };
+  X0002808 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlConnectionResource.cxx";
+  };
+  X0002809 = {
+   fileRef = X0002808;
+   isa = PBXBuildFile;
+  };
+  X000280a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlDatabase.cxx";
+  };
+  X000280b = {
+   fileRef = X000280a;
+   isa = PBXBuildFile;
+  };
+  X000280c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlDatabaseDescription.cxx";
+  };
+  X000280d = {
+   fileRef = X000280c;
+   isa = PBXBuildFile;
+  };
+  X000280e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlDataSource.cxx";
+  };
+  X000280f = {
+   fileRef = X000280e;
+   isa = PBXBuildFile;
+  };
+  X0002810 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlDataSourceInfo.cxx";
+  };
+  X0002811 = {
+   fileRef = X0002810;
+   isa = PBXBuildFile;
+  };
+  X0002812 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlDataSourceSetting.cxx";
+  };
+  X0002813 = {
+   fileRef = X0002812;
+   isa = PBXBuildFile;
+  };
+  X0002814 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlDataSourceSettings.cxx";
+  };
+  X0002815 = {
+   fileRef = X0002814;
+   isa = PBXBuildFile;
+  };
+  X0002816 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlDocuments.cxx";
+  };
+  X0002817 = {
+   fileRef = X0002816;
+   isa = PBXBuildFile;
+  };
+  X0002818 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlExport.cxx";
+  };
+  X0002819 = {
+   fileRef = X0002818;
+   isa = PBXBuildFile;
+  };
+  X000281a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlFileBasedDatabase.cxx";
+  };
+  X000281b = {
+   fileRef = X000281a;
+   isa = PBXBuildFile;
+  };
+  X000281c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlfilter.cxx";
+  };
+  X000281d = {
+   fileRef = X000281c;
+   isa = PBXBuildFile;
+  };
+  X000281e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlHelper.cxx";
+  };
+  X000281f = {
+   fileRef = X000281e;
+   isa = PBXBuildFile;
+  };
+  X0002820 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlHierarchyCollection.cxx";
+  };
+  X0002821 = {
+   fileRef = X0002820;
+   isa = PBXBuildFile;
+  };
+  X0002822 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlLogin.cxx";
+  };
+  X0002823 = {
+   fileRef = X0002822;
+   isa = PBXBuildFile;
+  };
+  X0002824 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlQuery.cxx";
+  };
+  X0002825 = {
+   fileRef = X0002824;
+   isa = PBXBuildFile;
+  };
+  X0002826 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlServerDatabase.cxx";
+  };
+  X0002827 = {
+   fileRef = X0002826;
+   isa = PBXBuildFile;
+  };
+  X0002828 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlservices.cxx";
+  };
+  X0002829 = {
+   fileRef = X0002828;
+   isa = PBXBuildFile;
+  };
+  X000282a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlStyleImport.cxx";
+  };
+  X000282b = {
+   fileRef = X000282a;
+   isa = PBXBuildFile;
+  };
+  X000282c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlTable.cxx";
+  };
+  X000282d = {
+   fileRef = X000282c;
+   isa = PBXBuildFile;
+  };
+  X000282e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlTableFilterList.cxx";
+  };
+  X000282f = {
+   fileRef = X000282e;
+   isa = PBXBuildFile;
+  };
+  X0002830 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/filter/xml/xmlTableFilterPattern.cxx";
+  };
+  X0002831 = {
+   fileRef = X0002830;
+   isa = PBXBuildFile;
+  };
+  X0002832 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/shared/flt_reghelper.cxx";
+  };
+  X0002833 = {
+   fileRef = X0002832;
+   isa = PBXBuildFile;
+  };
+  X0002834 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00027f7;
+}

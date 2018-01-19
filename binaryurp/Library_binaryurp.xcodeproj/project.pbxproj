@@ -1,0 +1,169 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001e7d = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001e9d;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001e7e;
+   productRefGroup = X0001e81;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001e83;
+  };
+  X0001e7e = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001e7f = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001e82 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001e83 = {
+   buildConfigurationList = X0001e9e;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001e80;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0001e84 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/binaryany.cxx";
+  };
+  X0001e85 = {
+   fileRef = X0001e84;
+   isa = PBXBuildFile;
+  };
+  X0001e86 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/bridge.cxx";
+  };
+  X0001e87 = {
+   fileRef = X0001e86;
+   isa = PBXBuildFile;
+  };
+  X0001e88 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/bridgefactory.cxx";
+  };
+  X0001e89 = {
+   fileRef = X0001e88;
+   isa = PBXBuildFile;
+  };
+  X0001e8a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/currentcontext.cxx";
+  };
+  X0001e8b = {
+   fileRef = X0001e8a;
+   isa = PBXBuildFile;
+  };
+  X0001e8c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/incomingrequest.cxx";
+  };
+  X0001e8d = {
+   fileRef = X0001e8c;
+   isa = PBXBuildFile;
+  };
+  X0001e8e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/lessoperators.cxx";
+  };
+  X0001e8f = {
+   fileRef = X0001e8e;
+   isa = PBXBuildFile;
+  };
+  X0001e90 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/marshal.cxx";
+  };
+  X0001e91 = {
+   fileRef = X0001e90;
+   isa = PBXBuildFile;
+  };
+  X0001e92 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/outgoingrequests.cxx";
+  };
+  X0001e93 = {
+   fileRef = X0001e92;
+   isa = PBXBuildFile;
+  };
+  X0001e94 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/proxy.cxx";
+  };
+  X0001e95 = {
+   fileRef = X0001e94;
+   isa = PBXBuildFile;
+  };
+  X0001e96 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/reader.cxx";
+  };
+  X0001e97 = {
+   fileRef = X0001e96;
+   isa = PBXBuildFile;
+  };
+  X0001e98 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/unmarshal.cxx";
+  };
+  X0001e99 = {
+   fileRef = X0001e98;
+   isa = PBXBuildFile;
+  };
+  X0001e9a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "binaryurp/source/writer.cxx";
+  };
+  X0001e9b = {
+   fileRef = X0001e9a;
+   isa = PBXBuildFile;
+  };
+  X0001e9c = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001e7d;
+}

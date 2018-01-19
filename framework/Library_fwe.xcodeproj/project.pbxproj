@@ -1,0 +1,295 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002577 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00025b3;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002578;
+   productRefGroup = X000257b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000257d;
+  };
+  X0002578 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002579 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000257c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000257d = {
+   buildConfigurationList = X00025b4;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000257a;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000257e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/actiontriggercontainer.cxx";
+  };
+  X000257f = {
+   fileRef = X000257e;
+   isa = PBXBuildFile;
+  };
+  X0002580 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/actiontriggerpropertyset.cxx";
+  };
+  X0002581 = {
+   fileRef = X0002580;
+   isa = PBXBuildFile;
+  };
+  X0002582 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx";
+  };
+  X0002583 = {
+   fileRef = X0002582;
+   isa = PBXBuildFile;
+  };
+  X0002584 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/addonmenu.cxx";
+  };
+  X0002585 = {
+   fileRef = X0002584;
+   isa = PBXBuildFile;
+  };
+  X0002586 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/addonsoptions.cxx";
+  };
+  X0002587 = {
+   fileRef = X0002586;
+   isa = PBXBuildFile;
+  };
+  X0002588 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/framelistanalyzer.cxx";
+  };
+  X0002589 = {
+   fileRef = X0002588;
+   isa = PBXBuildFile;
+  };
+  X000258a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/fwkresid.cxx";
+  };
+  X000258b = {
+   fileRef = X000258a;
+   isa = PBXBuildFile;
+  };
+  X000258c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/imagewrapper.cxx";
+  };
+  X000258d = {
+   fileRef = X000258c;
+   isa = PBXBuildFile;
+  };
+  X000258e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/rootactiontriggercontainer.cxx";
+  };
+  X000258f = {
+   fileRef = X000258e;
+   isa = PBXBuildFile;
+  };
+  X0002590 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/classes/sfxhelperfunctions.cxx";
+  };
+  X0002591 = {
+   fileRef = X0002590;
+   isa = PBXBuildFile;
+  };
+  X0002592 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/dispatch/interaction.cxx";
+  };
+  X0002593 = {
+   fileRef = X0002592;
+   isa = PBXBuildFile;
+  };
+  X0002594 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/helper/actiontriggerhelper.cxx";
+  };
+  X0002595 = {
+   fileRef = X0002594;
+   isa = PBXBuildFile;
+  };
+  X0002596 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/helper/configimporter.cxx";
+  };
+  X0002597 = {
+   fileRef = X0002596;
+   isa = PBXBuildFile;
+  };
+  X0002598 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/helper/propertysetcontainer.cxx";
+  };
+  X0002599 = {
+   fileRef = X0002598;
+   isa = PBXBuildFile;
+  };
+  X000259a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/helper/titlehelper.cxx";
+  };
+  X000259b = {
+   fileRef = X000259a;
+   isa = PBXBuildFile;
+  };
+  X000259c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/helper/documentundoguard.cxx";
+  };
+  X000259d = {
+   fileRef = X000259c;
+   isa = PBXBuildFile;
+  };
+  X000259e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/helper/undomanagerhelper.cxx";
+  };
+  X000259f = {
+   fileRef = X000259e;
+   isa = PBXBuildFile;
+  };
+  X00025a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/xml/menuconfiguration.cxx";
+  };
+  X00025a1 = {
+   fileRef = X00025a0;
+   isa = PBXBuildFile;
+  };
+  X00025a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/xml/menudocumenthandler.cxx";
+  };
+  X00025a3 = {
+   fileRef = X00025a2;
+   isa = PBXBuildFile;
+  };
+  X00025a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/xml/saxnamespacefilter.cxx";
+  };
+  X00025a5 = {
+   fileRef = X00025a4;
+   isa = PBXBuildFile;
+  };
+  X00025a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/xml/statusbarconfiguration.cxx";
+  };
+  X00025a7 = {
+   fileRef = X00025a6;
+   isa = PBXBuildFile;
+  };
+  X00025a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/xml/statusbardocumenthandler.cxx";
+  };
+  X00025a9 = {
+   fileRef = X00025a8;
+   isa = PBXBuildFile;
+  };
+  X00025aa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/xml/toolboxconfiguration.cxx";
+  };
+  X00025ab = {
+   fileRef = X00025aa;
+   isa = PBXBuildFile;
+  };
+  X00025ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/xml/toolboxdocumenthandler.cxx";
+  };
+  X00025ad = {
+   fileRef = X00025ac;
+   isa = PBXBuildFile;
+  };
+  X00025ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/fwe/xml/xmlnamespaces.cxx";
+  };
+  X00025af = {
+   fileRef = X00025ae;
+   isa = PBXBuildFile;
+  };
+  X00025b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "framework/source/services/dispatchhelper.cxx";
+  };
+  X00025b1 = {
+   fileRef = X00025b0;
+   isa = PBXBuildFile;
+  };
+  X00025b2 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002577;
+}

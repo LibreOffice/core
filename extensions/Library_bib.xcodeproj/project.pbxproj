@@ -1,0 +1,169 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004b05 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004b25;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004b06;
+   productRefGroup = X0004b09;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004b0b;
+  };
+  X0004b06 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004b07 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004b0a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004b0b = {
+   buildConfigurationList = X0004b26;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004b08;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004b0c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/bibbeam.cxx";
+  };
+  X0004b0d = {
+   fileRef = X0004b0c;
+   isa = PBXBuildFile;
+  };
+  X0004b0e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/bibconfig.cxx";
+  };
+  X0004b0f = {
+   fileRef = X0004b0e;
+   isa = PBXBuildFile;
+  };
+  X0004b10 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/bibcont.cxx";
+  };
+  X0004b11 = {
+   fileRef = X0004b10;
+   isa = PBXBuildFile;
+  };
+  X0004b12 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/bibload.cxx";
+  };
+  X0004b13 = {
+   fileRef = X0004b12;
+   isa = PBXBuildFile;
+  };
+  X0004b14 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/bibmod.cxx";
+  };
+  X0004b15 = {
+   fileRef = X0004b14;
+   isa = PBXBuildFile;
+  };
+  X0004b16 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/bibview.cxx";
+  };
+  X0004b17 = {
+   fileRef = X0004b16;
+   isa = PBXBuildFile;
+  };
+  X0004b18 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/datman.cxx";
+  };
+  X0004b19 = {
+   fileRef = X0004b18;
+   isa = PBXBuildFile;
+  };
+  X0004b1a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/formcontrolcontainer.cxx";
+  };
+  X0004b1b = {
+   fileRef = X0004b1a;
+   isa = PBXBuildFile;
+  };
+  X0004b1c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/framectr.cxx";
+  };
+  X0004b1d = {
+   fileRef = X0004b1c;
+   isa = PBXBuildFile;
+  };
+  X0004b1e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/general.cxx";
+  };
+  X0004b1f = {
+   fileRef = X0004b1e;
+   isa = PBXBuildFile;
+  };
+  X0004b20 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/loadlisteneradapter.cxx";
+  };
+  X0004b21 = {
+   fileRef = X0004b20;
+   isa = PBXBuildFile;
+  };
+  X0004b22 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/bibliography/toolbar.cxx";
+  };
+  X0004b23 = {
+   fileRef = X0004b22;
+   isa = PBXBuildFile;
+  };
+  X0004b24 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004b05;
+}

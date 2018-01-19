@@ -1,0 +1,151 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004cb7 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004cd3;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004cb8;
+   productRefGroup = X0004cbb;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004cbd;
+  };
+  X0004cb8 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004cb9 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004cbc = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004cbd = {
+   buildConfigurationList = X0004cd4;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004cba;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004cbe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/disposelistener.cxx";
+  };
+  X0004cbf = {
+   fileRef = X0004cbe;
+   isa = PBXBuildFile;
+  };
+  X0004cc0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/ocompinstream.cxx";
+  };
+  X0004cc1 = {
+   fileRef = X0004cc0;
+   isa = PBXBuildFile;
+  };
+  X0004cc2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/ohierarchyholder.cxx";
+  };
+  X0004cc3 = {
+   fileRef = X0004cc2;
+   isa = PBXBuildFile;
+  };
+  X0004cc4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/oseekinstream.cxx";
+  };
+  X0004cc5 = {
+   fileRef = X0004cc4;
+   isa = PBXBuildFile;
+  };
+  X0004cc6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/owriteablestream.cxx";
+  };
+  X0004cc7 = {
+   fileRef = X0004cc6;
+   isa = PBXBuildFile;
+  };
+  X0004cc8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/register.cxx";
+  };
+  X0004cc9 = {
+   fileRef = X0004cc8;
+   isa = PBXBuildFile;
+  };
+  X0004cca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/selfterminatefilestream.cxx";
+  };
+  X0004ccb = {
+   fileRef = X0004cca;
+   isa = PBXBuildFile;
+  };
+  X0004ccc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/switchpersistencestream.cxx";
+  };
+  X0004ccd = {
+   fileRef = X0004ccc;
+   isa = PBXBuildFile;
+  };
+  X0004cce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/xfactory.cxx";
+  };
+  X0004ccf = {
+   fileRef = X0004cce;
+   isa = PBXBuildFile;
+  };
+  X0004cd0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "package/source/xstor/xstorage.cxx";
+  };
+  X0004cd1 = {
+   fileRef = X0004cd0;
+   isa = PBXBuildFile;
+  };
+  X0004cd2 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004cb7;
+}

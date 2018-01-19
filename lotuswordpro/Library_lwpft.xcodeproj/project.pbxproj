@@ -1,0 +1,1528 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0003807 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0003955;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0003808;
+   productRefGroup = X000380b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000380d;
+  };
+  X0003808 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0003809 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000380c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000380d = {
+   buildConfigurationList = X0003956;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000380a;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000380e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/bencont.cxx";
+  };
+  X000380f = {
+   fileRef = X000380e;
+   isa = PBXBuildFile;
+  };
+  X0003810 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/benlist.cxx";
+  };
+  X0003811 = {
+   fileRef = X0003810;
+   isa = PBXBuildFile;
+  };
+  X0003812 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/benname.cxx";
+  };
+  X0003813 = {
+   fileRef = X0003812;
+   isa = PBXBuildFile;
+  };
+  X0003814 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/benobj.cxx";
+  };
+  X0003815 = {
+   fileRef = X0003814;
+   isa = PBXBuildFile;
+  };
+  X0003816 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/benval.cxx";
+  };
+  X0003817 = {
+   fileRef = X0003816;
+   isa = PBXBuildFile;
+  };
+  X0003818 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/explode.cxx";
+  };
+  X0003819 = {
+   fileRef = X0003818;
+   isa = PBXBuildFile;
+  };
+  X000381a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/localtime.cxx";
+  };
+  X000381b = {
+   fileRef = X000381a;
+   isa = PBXBuildFile;
+  };
+  X000381c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/LotusWordProImportFilter.cxx";
+  };
+  X000381d = {
+   fileRef = X000381c;
+   isa = PBXBuildFile;
+  };
+  X000381e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwp9reader.cxx";
+  };
+  X000381f = {
+   fileRef = X000381e;
+   isa = PBXBuildFile;
+  };
+  X0003820 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpatomholder.cxx";
+  };
+  X0003821 = {
+   fileRef = X0003820;
+   isa = PBXBuildFile;
+  };
+  X0003822 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpbackgroundoverride.cxx";
+  };
+  X0003823 = {
+   fileRef = X0003822;
+   isa = PBXBuildFile;
+  };
+  X0003824 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpbackgroundstuff.cxx";
+  };
+  X0003825 = {
+   fileRef = X0003824;
+   isa = PBXBuildFile;
+  };
+  X0003826 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpbasetype.cxx";
+  };
+  X0003827 = {
+   fileRef = X0003826;
+   isa = PBXBuildFile;
+  };
+  X0003828 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpbookmarkmgr.cxx";
+  };
+  X0003829 = {
+   fileRef = X0003828;
+   isa = PBXBuildFile;
+  };
+  X000382a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpborderstuff.cxx";
+  };
+  X000382b = {
+   fileRef = X000382a;
+   isa = PBXBuildFile;
+  };
+  X000382c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpbreaksoverride.cxx";
+  };
+  X000382d = {
+   fileRef = X000382c;
+   isa = PBXBuildFile;
+  };
+  X000382e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpbulletstylemgr.cxx";
+  };
+  X000382f = {
+   fileRef = X000382e;
+   isa = PBXBuildFile;
+  };
+  X0003830 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpcelllayout.cxx";
+  };
+  X0003831 = {
+   fileRef = X0003830;
+   isa = PBXBuildFile;
+  };
+  X0003832 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpchangemgr.cxx";
+  };
+  X0003833 = {
+   fileRef = X0003832;
+   isa = PBXBuildFile;
+  };
+  X0003834 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpcharacterstyle.cxx";
+  };
+  X0003835 = {
+   fileRef = X0003834;
+   isa = PBXBuildFile;
+  };
+  X0003836 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpcharborderoverride.cxx";
+  };
+  X0003837 = {
+   fileRef = X0003836;
+   isa = PBXBuildFile;
+  };
+  X0003838 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpcharsetmgr.cxx";
+  };
+  X0003839 = {
+   fileRef = X0003838;
+   isa = PBXBuildFile;
+  };
+  X000383a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpcolor.cxx";
+  };
+  X000383b = {
+   fileRef = X000383a;
+   isa = PBXBuildFile;
+  };
+  X000383c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpcontent.cxx";
+  };
+  X000383d = {
+   fileRef = X000383c;
+   isa = PBXBuildFile;
+  };
+  X000383e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpdivinfo.cxx";
+  };
+  X000383f = {
+   fileRef = X000383e;
+   isa = PBXBuildFile;
+  };
+  X0003840 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpdivopts.cxx";
+  };
+  X0003841 = {
+   fileRef = X0003840;
+   isa = PBXBuildFile;
+  };
+  X0003842 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpdllist.cxx";
+  };
+  X0003843 = {
+   fileRef = X0003842;
+   isa = PBXBuildFile;
+  };
+  X0003844 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpdlvlist.cxx";
+  };
+  X0003845 = {
+   fileRef = X0003844;
+   isa = PBXBuildFile;
+  };
+  X0003846 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpdoc.cxx";
+  };
+  X0003847 = {
+   fileRef = X0003846;
+   isa = PBXBuildFile;
+  };
+  X0003848 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpdocdata.cxx";
+  };
+  X0003849 = {
+   fileRef = X0003848;
+   isa = PBXBuildFile;
+  };
+  X000384a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpdrawobj.cxx";
+  };
+  X000384b = {
+   fileRef = X000384a;
+   isa = PBXBuildFile;
+  };
+  X000384c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpdropcapmgr.cxx";
+  };
+  X000384d = {
+   fileRef = X000384c;
+   isa = PBXBuildFile;
+  };
+  X000384e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfilehdr.cxx";
+  };
+  X000384f = {
+   fileRef = X000384e;
+   isa = PBXBuildFile;
+  };
+  X0003850 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfilter.cxx";
+  };
+  X0003851 = {
+   fileRef = X0003850;
+   isa = PBXBuildFile;
+  };
+  X0003852 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfnlayout.cxx";
+  };
+  X0003853 = {
+   fileRef = X0003852;
+   isa = PBXBuildFile;
+  };
+  X0003854 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfont.cxx";
+  };
+  X0003855 = {
+   fileRef = X0003854;
+   isa = PBXBuildFile;
+  };
+  X0003856 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfootnote.cxx";
+  };
+  X0003857 = {
+   fileRef = X0003856;
+   isa = PBXBuildFile;
+  };
+  X0003858 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfoundry.cxx";
+  };
+  X0003859 = {
+   fileRef = X0003858;
+   isa = PBXBuildFile;
+  };
+  X000385a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpframelayout.cxx";
+  };
+  X000385b = {
+   fileRef = X000385a;
+   isa = PBXBuildFile;
+  };
+  X000385c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfribbreaks.cxx";
+  };
+  X000385d = {
+   fileRef = X000385c;
+   isa = PBXBuildFile;
+  };
+  X000385e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfrib.cxx";
+  };
+  X000385f = {
+   fileRef = X000385e;
+   isa = PBXBuildFile;
+  };
+  X0003860 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfribframe.cxx";
+  };
+  X0003861 = {
+   fileRef = X0003860;
+   isa = PBXBuildFile;
+  };
+  X0003862 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfribmark.cxx";
+  };
+  X0003863 = {
+   fileRef = X0003862;
+   isa = PBXBuildFile;
+  };
+  X0003864 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfribptr.cxx";
+  };
+  X0003865 = {
+   fileRef = X0003864;
+   isa = PBXBuildFile;
+  };
+  X0003866 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfribsection.cxx";
+  };
+  X0003867 = {
+   fileRef = X0003866;
+   isa = PBXBuildFile;
+  };
+  X0003868 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfribtable.cxx";
+  };
+  X0003869 = {
+   fileRef = X0003868;
+   isa = PBXBuildFile;
+  };
+  X000386a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpfribtext.cxx";
+  };
+  X000386b = {
+   fileRef = X000386a;
+   isa = PBXBuildFile;
+  };
+  X000386c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpglobalmgr.cxx";
+  };
+  X000386d = {
+   fileRef = X000386c;
+   isa = PBXBuildFile;
+  };
+  X000386e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpgrfobj.cxx";
+  };
+  X000386f = {
+   fileRef = X000386e;
+   isa = PBXBuildFile;
+  };
+  X0003870 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpholder.cxx";
+  };
+  X0003871 = {
+   fileRef = X0003870;
+   isa = PBXBuildFile;
+  };
+  X0003872 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwphyperlinkmgr.cxx";
+  };
+  X0003873 = {
+   fileRef = X0003872;
+   isa = PBXBuildFile;
+  };
+  X0003874 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpidxmgr.cxx";
+  };
+  X0003875 = {
+   fileRef = X0003874;
+   isa = PBXBuildFile;
+  };
+  X0003876 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwplayout.cxx";
+  };
+  X0003877 = {
+   fileRef = X0003876;
+   isa = PBXBuildFile;
+  };
+  X0003878 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwplaypiece.cxx";
+  };
+  X0003879 = {
+   fileRef = X0003878;
+   isa = PBXBuildFile;
+  };
+  X000387a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwplnopts.cxx";
+  };
+  X000387b = {
+   fileRef = X000387a;
+   isa = PBXBuildFile;
+  };
+  X000387c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpmarker.cxx";
+  };
+  X000387d = {
+   fileRef = X000387c;
+   isa = PBXBuildFile;
+  };
+  X000387e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpnotes.cxx";
+  };
+  X000387f = {
+   fileRef = X000387e;
+   isa = PBXBuildFile;
+  };
+  X0003880 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpnumberingoverride.cxx";
+  };
+  X0003881 = {
+   fileRef = X0003880;
+   isa = PBXBuildFile;
+  };
+  X0003882 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpnumericfmt.cxx";
+  };
+  X0003883 = {
+   fileRef = X0003882;
+   isa = PBXBuildFile;
+  };
+  X0003884 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpobj.cxx";
+  };
+  X0003885 = {
+   fileRef = X0003884;
+   isa = PBXBuildFile;
+  };
+  X0003886 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpobjfactory.cxx";
+  };
+  X0003887 = {
+   fileRef = X0003886;
+   isa = PBXBuildFile;
+  };
+  X0003888 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpobjhdr.cxx";
+  };
+  X0003889 = {
+   fileRef = X0003888;
+   isa = PBXBuildFile;
+  };
+  X000388a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpobjid.cxx";
+  };
+  X000388b = {
+   fileRef = X000388a;
+   isa = PBXBuildFile;
+  };
+  X000388c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpobjstrm.cxx";
+  };
+  X000388d = {
+   fileRef = X000388c;
+   isa = PBXBuildFile;
+  };
+  X000388e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpoleobject.cxx";
+  };
+  X000388f = {
+   fileRef = X000388e;
+   isa = PBXBuildFile;
+  };
+  X0003890 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpoverride.cxx";
+  };
+  X0003891 = {
+   fileRef = X0003890;
+   isa = PBXBuildFile;
+  };
+  X0003892 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwppagehint.cxx";
+  };
+  X0003893 = {
+   fileRef = X0003892;
+   isa = PBXBuildFile;
+  };
+  X0003894 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwppagelayout.cxx";
+  };
+  X0003895 = {
+   fileRef = X0003894;
+   isa = PBXBuildFile;
+  };
+  X0003896 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwppara1.cxx";
+  };
+  X0003897 = {
+   fileRef = X0003896;
+   isa = PBXBuildFile;
+  };
+  X0003898 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpparaborderoverride.cxx";
+  };
+  X0003899 = {
+   fileRef = X0003898;
+   isa = PBXBuildFile;
+  };
+  X000389a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwppara.cxx";
+  };
+  X000389b = {
+   fileRef = X000389a;
+   isa = PBXBuildFile;
+  };
+  X000389c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpparaproperty.cxx";
+  };
+  X000389d = {
+   fileRef = X000389c;
+   isa = PBXBuildFile;
+  };
+  X000389e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpparastyle.cxx";
+  };
+  X000389f = {
+   fileRef = X000389e;
+   isa = PBXBuildFile;
+  };
+  X00038a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpproplist.cxx";
+  };
+  X00038a1 = {
+   fileRef = X00038a0;
+   isa = PBXBuildFile;
+  };
+  X00038a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpprtinfo.cxx";
+  };
+  X00038a3 = {
+   fileRef = X00038a2;
+   isa = PBXBuildFile;
+  };
+  X00038a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwprowlayout.cxx";
+  };
+  X00038a5 = {
+   fileRef = X00038a4;
+   isa = PBXBuildFile;
+  };
+  X00038a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpsdwfileloader.cxx";
+  };
+  X00038a7 = {
+   fileRef = X00038a6;
+   isa = PBXBuildFile;
+  };
+  X00038a8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpsdwgrouploaderv0102.cxx";
+  };
+  X00038a9 = {
+   fileRef = X00038a8;
+   isa = PBXBuildFile;
+  };
+  X00038aa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpsdwrect.cxx";
+  };
+  X00038ab = {
+   fileRef = X00038aa;
+   isa = PBXBuildFile;
+  };
+  X00038ac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpsection.cxx";
+  };
+  X00038ad = {
+   fileRef = X00038ac;
+   isa = PBXBuildFile;
+  };
+  X00038ae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpsilverbullet.cxx";
+  };
+  X00038af = {
+   fileRef = X00038ae;
+   isa = PBXBuildFile;
+  };
+  X00038b0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpsortopt.cxx";
+  };
+  X00038b1 = {
+   fileRef = X00038b0;
+   isa = PBXBuildFile;
+  };
+  X00038b2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpstory.cxx";
+  };
+  X00038b3 = {
+   fileRef = X00038b2;
+   isa = PBXBuildFile;
+  };
+  X00038b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpsvstream.cxx";
+  };
+  X00038b5 = {
+   fileRef = X00038b4;
+   isa = PBXBuildFile;
+  };
+  X00038b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwptable.cxx";
+  };
+  X00038b7 = {
+   fileRef = X00038b6;
+   isa = PBXBuildFile;
+  };
+  X00038b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwptablelayout.cxx";
+  };
+  X00038b9 = {
+   fileRef = X00038b8;
+   isa = PBXBuildFile;
+  };
+  X00038ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwptaboverride.cxx";
+  };
+  X00038bb = {
+   fileRef = X00038ba;
+   isa = PBXBuildFile;
+  };
+  X00038bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwptabrack.cxx";
+  };
+  X00038bd = {
+   fileRef = X00038bc;
+   isa = PBXBuildFile;
+  };
+  X00038be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwptblcell.cxx";
+  };
+  X00038bf = {
+   fileRef = X00038be;
+   isa = PBXBuildFile;
+  };
+  X00038c0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwptblformula.cxx";
+  };
+  X00038c1 = {
+   fileRef = X00038c0;
+   isa = PBXBuildFile;
+  };
+  X00038c2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwptoc.cxx";
+  };
+  X00038c3 = {
+   fileRef = X00038c2;
+   isa = PBXBuildFile;
+  };
+  X00038c4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwptools.cxx";
+  };
+  X00038c5 = {
+   fileRef = X00038c4;
+   isa = PBXBuildFile;
+  };
+  X00038c6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpuidoc.cxx";
+  };
+  X00038c7 = {
+   fileRef = X00038c6;
+   isa = PBXBuildFile;
+  };
+  X00038c8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpusrdicts.cxx";
+  };
+  X00038c9 = {
+   fileRef = X00038c8;
+   isa = PBXBuildFile;
+  };
+  X00038ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpverdocument.cxx";
+  };
+  X00038cb = {
+   fileRef = X00038ca;
+   isa = PBXBuildFile;
+  };
+  X00038cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/lwpvpointer.cxx";
+  };
+  X00038cd = {
+   fileRef = X00038cc;
+   isa = PBXBuildFile;
+  };
+  X00038ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/tocread.cxx";
+  };
+  X00038cf = {
+   fileRef = X00038ce;
+   isa = PBXBuildFile;
+  };
+  X00038d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/utbenvs.cxx";
+  };
+  X00038d1 = {
+   fileRef = X00038d0;
+   isa = PBXBuildFile;
+  };
+  X00038d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/utlist.cxx";
+  };
+  X00038d3 = {
+   fileRef = X00038d2;
+   isa = PBXBuildFile;
+  };
+  X00038d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfbase64.cxx";
+  };
+  X00038d5 = {
+   fileRef = X00038d4;
+   isa = PBXBuildFile;
+  };
+  X00038d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfbgimage.cxx";
+  };
+  X00038d7 = {
+   fileRef = X00038d6;
+   isa = PBXBuildFile;
+  };
+  X00038d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfborders.cxx";
+  };
+  X00038d9 = {
+   fileRef = X00038d8;
+   isa = PBXBuildFile;
+  };
+  X00038da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfcell.cxx";
+  };
+  X00038db = {
+   fileRef = X00038da;
+   isa = PBXBuildFile;
+  };
+  X00038dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfcellstyle.cxx";
+  };
+  X00038dd = {
+   fileRef = X00038dc;
+   isa = PBXBuildFile;
+  };
+  X00038de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfchange.cxx";
+  };
+  X00038df = {
+   fileRef = X00038de;
+   isa = PBXBuildFile;
+  };
+  X00038e0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfcolor.cxx";
+  };
+  X00038e1 = {
+   fileRef = X00038e0;
+   isa = PBXBuildFile;
+  };
+  X00038e2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfcolstyle.cxx";
+  };
+  X00038e3 = {
+   fileRef = X00038e2;
+   isa = PBXBuildFile;
+  };
+  X00038e4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfcolumns.cxx";
+  };
+  X00038e5 = {
+   fileRef = X00038e4;
+   isa = PBXBuildFile;
+  };
+  X00038e6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfconfigmanager.cxx";
+  };
+  X00038e7 = {
+   fileRef = X00038e6;
+   isa = PBXBuildFile;
+  };
+  X00038e8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfcontentcontainer.cxx";
+  };
+  X00038e9 = {
+   fileRef = X00038e8;
+   isa = PBXBuildFile;
+  };
+  X00038ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfcrossref.cxx";
+  };
+  X00038eb = {
+   fileRef = X00038ea;
+   isa = PBXBuildFile;
+  };
+  X00038ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdate.cxx";
+  };
+  X00038ed = {
+   fileRef = X00038ec;
+   isa = PBXBuildFile;
+  };
+  X00038ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdatestyle.cxx";
+  };
+  X00038ef = {
+   fileRef = X00038ee;
+   isa = PBXBuildFile;
+  };
+  X00038f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdocfield.cxx";
+  };
+  X00038f1 = {
+   fileRef = X00038f0;
+   isa = PBXBuildFile;
+  };
+  X00038f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawareastyle.cxx";
+  };
+  X00038f3 = {
+   fileRef = X00038f2;
+   isa = PBXBuildFile;
+  };
+  X00038f4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawline.cxx";
+  };
+  X00038f5 = {
+   fileRef = X00038f4;
+   isa = PBXBuildFile;
+  };
+  X00038f6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawlinestyle.cxx";
+  };
+  X00038f7 = {
+   fileRef = X00038f6;
+   isa = PBXBuildFile;
+  };
+  X00038f8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawobj.cxx";
+  };
+  X00038f9 = {
+   fileRef = X00038f8;
+   isa = PBXBuildFile;
+  };
+  X00038fa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawpath.cxx";
+  };
+  X00038fb = {
+   fileRef = X00038fa;
+   isa = PBXBuildFile;
+  };
+  X00038fc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawpolygon.cxx";
+  };
+  X00038fd = {
+   fileRef = X00038fc;
+   isa = PBXBuildFile;
+  };
+  X00038fe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawpolyline.cxx";
+  };
+  X00038ff = {
+   fileRef = X00038fe;
+   isa = PBXBuildFile;
+  };
+  X0003900 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawrect.cxx";
+  };
+  X0003901 = {
+   fileRef = X0003900;
+   isa = PBXBuildFile;
+  };
+  X0003902 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfdrawstyle.cxx";
+  };
+  X0003903 = {
+   fileRef = X0003902;
+   isa = PBXBuildFile;
+  };
+  X0003904 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfentry.cxx";
+  };
+  X0003905 = {
+   fileRef = X0003904;
+   isa = PBXBuildFile;
+  };
+  X0003906 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xffloatframe.cxx";
+  };
+  X0003907 = {
+   fileRef = X0003906;
+   isa = PBXBuildFile;
+  };
+  X0003908 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xffont.cxx";
+  };
+  X0003909 = {
+   fileRef = X0003908;
+   isa = PBXBuildFile;
+  };
+  X000390a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xffontdecl.cxx";
+  };
+  X000390b = {
+   fileRef = X000390a;
+   isa = PBXBuildFile;
+  };
+  X000390c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xffontfactory.cxx";
+  };
+  X000390d = {
+   fileRef = X000390c;
+   isa = PBXBuildFile;
+  };
+  X000390e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfframe.cxx";
+  };
+  X000390f = {
+   fileRef = X000390e;
+   isa = PBXBuildFile;
+  };
+  X0003910 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfframestyle.cxx";
+  };
+  X0003911 = {
+   fileRef = X0003910;
+   isa = PBXBuildFile;
+  };
+  X0003912 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfglobal.cxx";
+  };
+  X0003913 = {
+   fileRef = X0003912;
+   isa = PBXBuildFile;
+  };
+  X0003914 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfheaderstyle.cxx";
+  };
+  X0003915 = {
+   fileRef = X0003914;
+   isa = PBXBuildFile;
+  };
+  X0003916 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfimage.cxx";
+  };
+  X0003917 = {
+   fileRef = X0003916;
+   isa = PBXBuildFile;
+  };
+  X0003918 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfimagestyle.cxx";
+  };
+  X0003919 = {
+   fileRef = X0003918;
+   isa = PBXBuildFile;
+  };
+  X000391a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfindex.cxx";
+  };
+  X000391b = {
+   fileRef = X000391a;
+   isa = PBXBuildFile;
+  };
+  X000391c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xflist.cxx";
+  };
+  X000391d = {
+   fileRef = X000391c;
+   isa = PBXBuildFile;
+  };
+  X000391e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfliststyle.cxx";
+  };
+  X000391f = {
+   fileRef = X000391e;
+   isa = PBXBuildFile;
+  };
+  X0003920 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfmargins.cxx";
+  };
+  X0003921 = {
+   fileRef = X0003920;
+   isa = PBXBuildFile;
+  };
+  X0003922 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfmasterpage.cxx";
+  };
+  X0003923 = {
+   fileRef = X0003922;
+   isa = PBXBuildFile;
+  };
+  X0003924 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfnumberstyle.cxx";
+  };
+  X0003925 = {
+   fileRef = X0003924;
+   isa = PBXBuildFile;
+  };
+  X0003926 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfofficemeta.cxx";
+  };
+  X0003927 = {
+   fileRef = X0003926;
+   isa = PBXBuildFile;
+  };
+  X0003928 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfpagemaster.cxx";
+  };
+  X0003929 = {
+   fileRef = X0003928;
+   isa = PBXBuildFile;
+  };
+  X000392a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfparagraph.cxx";
+  };
+  X000392b = {
+   fileRef = X000392a;
+   isa = PBXBuildFile;
+  };
+  X000392c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfparastyle.cxx";
+  };
+  X000392d = {
+   fileRef = X000392c;
+   isa = PBXBuildFile;
+  };
+  X000392e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfrow.cxx";
+  };
+  X000392f = {
+   fileRef = X000392e;
+   isa = PBXBuildFile;
+  };
+  X0003930 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfrowstyle.cxx";
+  };
+  X0003931 = {
+   fileRef = X0003930;
+   isa = PBXBuildFile;
+  };
+  X0003932 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfsaxattrlist.cxx";
+  };
+  X0003933 = {
+   fileRef = X0003932;
+   isa = PBXBuildFile;
+  };
+  X0003934 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfsaxstream.cxx";
+  };
+  X0003935 = {
+   fileRef = X0003934;
+   isa = PBXBuildFile;
+  };
+  X0003936 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfsection.cxx";
+  };
+  X0003937 = {
+   fileRef = X0003936;
+   isa = PBXBuildFile;
+  };
+  X0003938 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfsectionstyle.cxx";
+  };
+  X0003939 = {
+   fileRef = X0003938;
+   isa = PBXBuildFile;
+  };
+  X000393a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfshadow.cxx";
+  };
+  X000393b = {
+   fileRef = X000393a;
+   isa = PBXBuildFile;
+  };
+  X000393c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfstylecont.cxx";
+  };
+  X000393d = {
+   fileRef = X000393c;
+   isa = PBXBuildFile;
+  };
+  X000393e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfstyle.cxx";
+  };
+  X000393f = {
+   fileRef = X000393e;
+   isa = PBXBuildFile;
+  };
+  X0003940 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfstylemanager.cxx";
+  };
+  X0003941 = {
+   fileRef = X0003940;
+   isa = PBXBuildFile;
+  };
+  X0003942 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xftable.cxx";
+  };
+  X0003943 = {
+   fileRef = X0003942;
+   isa = PBXBuildFile;
+  };
+  X0003944 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xftablestyle.cxx";
+  };
+  X0003945 = {
+   fileRef = X0003944;
+   isa = PBXBuildFile;
+  };
+  X0003946 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xftabstyle.cxx";
+  };
+  X0003947 = {
+   fileRef = X0003946;
+   isa = PBXBuildFile;
+  };
+  X0003948 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xftextboxstyle.cxx";
+  };
+  X0003949 = {
+   fileRef = X0003948;
+   isa = PBXBuildFile;
+  };
+  X000394a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xftextcontent.cxx";
+  };
+  X000394b = {
+   fileRef = X000394a;
+   isa = PBXBuildFile;
+  };
+  X000394c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xftextspan.cxx";
+  };
+  X000394d = {
+   fileRef = X000394c;
+   isa = PBXBuildFile;
+  };
+  X000394e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xftextstyle.cxx";
+  };
+  X000394f = {
+   fileRef = X000394e;
+   isa = PBXBuildFile;
+  };
+  X0003950 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xftimestyle.cxx";
+  };
+  X0003951 = {
+   fileRef = X0003950;
+   isa = PBXBuildFile;
+  };
+  X0003952 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "lotuswordpro/source/filter/xfilter/xfutil.cxx";
+  };
+  X0003953 = {
+   fileRef = X0003952;
+   isa = PBXBuildFile;
+  };
+  X0003954 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0003807;
+}

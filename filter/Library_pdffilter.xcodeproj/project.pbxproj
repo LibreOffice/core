@@ -1,0 +1,115 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00048ad = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00048c1;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00048ae;
+   productRefGroup = X00048b1;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00048b3;
+  };
+  X00048ae = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00048af = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00048b2 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00048b3 = {
+   buildConfigurationList = X00048c2;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00048b0;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00048b4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/pdf/impdialog.cxx";
+  };
+  X00048b5 = {
+   fileRef = X00048b4;
+   isa = PBXBuildFile;
+  };
+  X00048b6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/pdf/pdfdialog.cxx";
+  };
+  X00048b7 = {
+   fileRef = X00048b6;
+   isa = PBXBuildFile;
+  };
+  X00048b8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/pdf/pdfexport.cxx";
+  };
+  X00048b9 = {
+   fileRef = X00048b8;
+   isa = PBXBuildFile;
+  };
+  X00048ba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/pdf/pdffilter.cxx";
+  };
+  X00048bb = {
+   fileRef = X00048ba;
+   isa = PBXBuildFile;
+  };
+  X00048bc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/pdf/pdfinteract.cxx";
+  };
+  X00048bd = {
+   fileRef = X00048bc;
+   isa = PBXBuildFile;
+  };
+  X00048be = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/pdf/pdfuno.cxx";
+  };
+  X00048bf = {
+   fileRef = X00048be;
+   isa = PBXBuildFile;
+  };
+  X00048c0 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00048ad;
+}

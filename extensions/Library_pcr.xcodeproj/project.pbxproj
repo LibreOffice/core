@@ -1,0 +1,538 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004a91 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0004b03;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004a92;
+   productRefGroup = X0004a95;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0004a97;
+  };
+  X0004a92 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004a93 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0004a96 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0004a97 = {
+   buildConfigurationList = X0004b04;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004a94;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0004a98 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/MasterDetailLinkDialog.cxx";
+  };
+  X0004a99 = {
+   fileRef = X0004a98;
+   isa = PBXBuildFile;
+  };
+  X0004a9a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/browserline.cxx";
+  };
+  X0004a9b = {
+   fileRef = X0004a9a;
+   isa = PBXBuildFile;
+  };
+  X0004a9c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/browserlistbox.cxx";
+  };
+  X0004a9d = {
+   fileRef = X0004a9c;
+   isa = PBXBuildFile;
+  };
+  X0004a9e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/browserpage.cxx";
+  };
+  X0004a9f = {
+   fileRef = X0004a9e;
+   isa = PBXBuildFile;
+  };
+  X0004aa0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/browserview.cxx";
+  };
+  X0004aa1 = {
+   fileRef = X0004aa0;
+   isa = PBXBuildFile;
+  };
+  X0004aa2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/buttonnavigationhandler.cxx";
+  };
+  X0004aa3 = {
+   fileRef = X0004aa2;
+   isa = PBXBuildFile;
+  };
+  X0004aa4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/cellbindinghandler.cxx";
+  };
+  X0004aa5 = {
+   fileRef = X0004aa4;
+   isa = PBXBuildFile;
+  };
+  X0004aa6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/cellbindinghelper.cxx";
+  };
+  X0004aa7 = {
+   fileRef = X0004aa6;
+   isa = PBXBuildFile;
+  };
+  X0004aa8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/commoncontrol.cxx";
+  };
+  X0004aa9 = {
+   fileRef = X0004aa8;
+   isa = PBXBuildFile;
+  };
+  X0004aaa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/composeduiupdate.cxx";
+  };
+  X0004aab = {
+   fileRef = X0004aaa;
+   isa = PBXBuildFile;
+  };
+  X0004aac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/controlfontdialog.cxx";
+  };
+  X0004aad = {
+   fileRef = X0004aac;
+   isa = PBXBuildFile;
+  };
+  X0004aae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/defaultforminspection.cxx";
+  };
+  X0004aaf = {
+   fileRef = X0004aae;
+   isa = PBXBuildFile;
+  };
+  X0004ab0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/defaulthelpprovider.cxx";
+  };
+  X0004ab1 = {
+   fileRef = X0004ab0;
+   isa = PBXBuildFile;
+  };
+  X0004ab2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/editpropertyhandler.cxx";
+  };
+  X0004ab3 = {
+   fileRef = X0004ab2;
+   isa = PBXBuildFile;
+  };
+  X0004ab4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/eformshelper.cxx";
+  };
+  X0004ab5 = {
+   fileRef = X0004ab4;
+   isa = PBXBuildFile;
+  };
+  X0004ab6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/eformspropertyhandler.cxx";
+  };
+  X0004ab7 = {
+   fileRef = X0004ab6;
+   isa = PBXBuildFile;
+  };
+  X0004ab8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/eventhandler.cxx";
+  };
+  X0004ab9 = {
+   fileRef = X0004ab8;
+   isa = PBXBuildFile;
+  };
+  X0004aba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/fontdialog.cxx";
+  };
+  X0004abb = {
+   fileRef = X0004aba;
+   isa = PBXBuildFile;
+  };
+  X0004abc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/formbrowsertools.cxx";
+  };
+  X0004abd = {
+   fileRef = X0004abc;
+   isa = PBXBuildFile;
+  };
+  X0004abe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/formcomponenthandler.cxx";
+  };
+  X0004abf = {
+   fileRef = X0004abe;
+   isa = PBXBuildFile;
+  };
+  X0004ac0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/formcontroller.cxx";
+  };
+  X0004ac1 = {
+   fileRef = X0004ac0;
+   isa = PBXBuildFile;
+  };
+  X0004ac2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/formgeometryhandler.cxx";
+  };
+  X0004ac3 = {
+   fileRef = X0004ac2;
+   isa = PBXBuildFile;
+  };
+  X0004ac4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/formlinkdialog.cxx";
+  };
+  X0004ac5 = {
+   fileRef = X0004ac4;
+   isa = PBXBuildFile;
+  };
+  X0004ac6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/formmetadata.cxx";
+  };
+  X0004ac7 = {
+   fileRef = X0004ac6;
+   isa = PBXBuildFile;
+  };
+  X0004ac8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/genericpropertyhandler.cxx";
+  };
+  X0004ac9 = {
+   fileRef = X0004ac8;
+   isa = PBXBuildFile;
+  };
+  X0004aca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/handlerhelper.cxx";
+  };
+  X0004acb = {
+   fileRef = X0004aca;
+   isa = PBXBuildFile;
+  };
+  X0004acc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/inspectorhelpwindow.cxx";
+  };
+  X0004acd = {
+   fileRef = X0004acc;
+   isa = PBXBuildFile;
+  };
+  X0004ace = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/inspectormodelbase.cxx";
+  };
+  X0004acf = {
+   fileRef = X0004ace;
+   isa = PBXBuildFile;
+  };
+  X0004ad0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/listselectiondlg.cxx";
+  };
+  X0004ad1 = {
+   fileRef = X0004ad0;
+   isa = PBXBuildFile;
+  };
+  X0004ad2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/modulepcr.cxx";
+  };
+  X0004ad3 = {
+   fileRef = X0004ad2;
+   isa = PBXBuildFile;
+  };
+  X0004ad4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/newdatatype.cxx";
+  };
+  X0004ad5 = {
+   fileRef = X0004ad4;
+   isa = PBXBuildFile;
+  };
+  X0004ad6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/objectinspectormodel.cxx";
+  };
+  X0004ad7 = {
+   fileRef = X0004ad6;
+   isa = PBXBuildFile;
+  };
+  X0004ad8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/pcrcommon.cxx";
+  };
+  X0004ad9 = {
+   fileRef = X0004ad8;
+   isa = PBXBuildFile;
+  };
+  X0004ada = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/pcrservices.cxx";
+  };
+  X0004adb = {
+   fileRef = X0004ada;
+   isa = PBXBuildFile;
+  };
+  X0004adc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/pcrunodialogs.cxx";
+  };
+  X0004add = {
+   fileRef = X0004adc;
+   isa = PBXBuildFile;
+  };
+  X0004ade = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/propcontroller.cxx";
+  };
+  X0004adf = {
+   fileRef = X0004ade;
+   isa = PBXBuildFile;
+  };
+  X0004ae0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/propertycomposer.cxx";
+  };
+  X0004ae1 = {
+   fileRef = X0004ae0;
+   isa = PBXBuildFile;
+  };
+  X0004ae2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/propertycontrolextender.cxx";
+  };
+  X0004ae3 = {
+   fileRef = X0004ae2;
+   isa = PBXBuildFile;
+  };
+  X0004ae4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/propertyeditor.cxx";
+  };
+  X0004ae5 = {
+   fileRef = X0004ae4;
+   isa = PBXBuildFile;
+  };
+  X0004ae6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/propertyhandler.cxx";
+  };
+  X0004ae7 = {
+   fileRef = X0004ae6;
+   isa = PBXBuildFile;
+  };
+  X0004ae8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/propeventtranslation.cxx";
+  };
+  X0004ae9 = {
+   fileRef = X0004ae8;
+   isa = PBXBuildFile;
+  };
+  X0004aea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/pushbuttonnavigation.cxx";
+  };
+  X0004aeb = {
+   fileRef = X0004aea;
+   isa = PBXBuildFile;
+  };
+  X0004aec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/selectlabeldialog.cxx";
+  };
+  X0004aed = {
+   fileRef = X0004aec;
+   isa = PBXBuildFile;
+  };
+  X0004aee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/sqlcommanddesign.cxx";
+  };
+  X0004aef = {
+   fileRef = X0004aee;
+   isa = PBXBuildFile;
+  };
+  X0004af0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/standardcontrol.cxx";
+  };
+  X0004af1 = {
+   fileRef = X0004af0;
+   isa = PBXBuildFile;
+  };
+  X0004af2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/stringrepresentation.cxx";
+  };
+  X0004af3 = {
+   fileRef = X0004af2;
+   isa = PBXBuildFile;
+  };
+  X0004af4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/submissionhandler.cxx";
+  };
+  X0004af5 = {
+   fileRef = X0004af4;
+   isa = PBXBuildFile;
+  };
+  X0004af6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/taborder.cxx";
+  };
+  X0004af7 = {
+   fileRef = X0004af6;
+   isa = PBXBuildFile;
+  };
+  X0004af8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/unourl.cxx";
+  };
+  X0004af9 = {
+   fileRef = X0004af8;
+   isa = PBXBuildFile;
+  };
+  X0004afa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/usercontrol.cxx";
+  };
+  X0004afb = {
+   fileRef = X0004afa;
+   isa = PBXBuildFile;
+  };
+  X0004afc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/xsddatatypes.cxx";
+  };
+  X0004afd = {
+   fileRef = X0004afc;
+   isa = PBXBuildFile;
+  };
+  X0004afe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/xsdvalidationhelper.cxx";
+  };
+  X0004aff = {
+   fileRef = X0004afe;
+   isa = PBXBuildFile;
+  };
+  X0004b00 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "extensions/source/propctrlr/xsdvalidationpropertyhandler.cxx";
+  };
+  X0004b01 = {
+   fileRef = X0004b00;
+   isa = PBXBuildFile;
+  };
+  X0004b02 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004a91;
+}

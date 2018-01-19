@@ -1,0 +1,88 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002ad3 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0002ae1;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002ad4;
+   productRefGroup = X0002ad7;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0002ad9;
+  };
+  X0002ad4 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002ad5 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0002ad8 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0002ad9 = {
+   buildConfigurationList = X0002ae2;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0002ad6;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0002ada = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/view/main/OpenglShapeFactory.cxx";
+  };
+  X0002adb = {
+   fileRef = X0002ada;
+   isa = PBXBuildFile;
+  };
+  X0002adc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/view/main/DummyXShape.cxx";
+  };
+  X0002add = {
+   fileRef = X0002adc;
+   isa = PBXBuildFile;
+  };
+  X0002ade = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "chart2/source/view/main/OpenGLRender.cxx";
+  };
+  X0002adf = {
+   fileRef = X0002ade;
+   isa = PBXBuildFile;
+  };
+  X0002ae0 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002ad3;
+}

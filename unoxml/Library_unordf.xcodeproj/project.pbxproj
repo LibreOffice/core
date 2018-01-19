@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0002097 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00020a9;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0002098;
+   productRefGroup = X000209b;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000209d;
+  };
+  X0002098 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0002099 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000209c = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000209d = {
+   buildConfigurationList = X00020aa;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X000209a;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000209e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unoxml/source/rdf/CBlankNode.cxx";
+  };
+  X000209f = {
+   fileRef = X000209e;
+   isa = PBXBuildFile;
+  };
+  X00020a0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unoxml/source/rdf/CURI.cxx";
+  };
+  X00020a1 = {
+   fileRef = X00020a0;
+   isa = PBXBuildFile;
+  };
+  X00020a2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unoxml/source/rdf/CLiteral.cxx";
+  };
+  X00020a3 = {
+   fileRef = X00020a2;
+   isa = PBXBuildFile;
+  };
+  X00020a4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unoxml/source/rdf/librdf_repository.cxx";
+  };
+  X00020a5 = {
+   fileRef = X00020a4;
+   isa = PBXBuildFile;
+  };
+  X00020a6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "unoxml/source/rdf/librdf_services.cxx";
+  };
+  X00020a7 = {
+   fileRef = X00020a6;
+   isa = PBXBuildFile;
+  };
+  X00020a8 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0002097;
+}

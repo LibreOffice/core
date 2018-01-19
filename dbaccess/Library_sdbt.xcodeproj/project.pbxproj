@@ -1,0 +1,106 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00027e3 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00027f5;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00027e4;
+   productRefGroup = X00027e7;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00027e9;
+  };
+  X00027e4 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00027e5 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00027e8 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00027e9 = {
+   buildConfigurationList = X00027f6;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00027e6;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00027ea = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/sdbtools/connection/connectiontools.cxx";
+  };
+  X00027eb = {
+   fileRef = X00027ea;
+   isa = PBXBuildFile;
+  };
+  X00027ec = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/sdbtools/connection/datasourcemetadata.cxx";
+  };
+  X00027ed = {
+   fileRef = X00027ec;
+   isa = PBXBuildFile;
+  };
+  X00027ee = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/sdbtools/connection/objectnames.cxx";
+  };
+  X00027ef = {
+   fileRef = X00027ee;
+   isa = PBXBuildFile;
+  };
+  X00027f0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/sdbtools/connection/tablename.cxx";
+  };
+  X00027f1 = {
+   fileRef = X00027f0;
+   isa = PBXBuildFile;
+  };
+  X00027f2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "dbaccess/source/sdbtools/misc/sdbt_services.cxx";
+  };
+  X00027f3 = {
+   fileRef = X00027f2;
+   isa = PBXBuildFile;
+  };
+  X00027f4 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00027e3;
+}

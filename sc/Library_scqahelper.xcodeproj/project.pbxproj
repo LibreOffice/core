@@ -1,0 +1,88 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0000a73 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0000a81;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0000a74;
+   productRefGroup = X0000a77;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0000a79;
+  };
+  X0000a74 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0000a75 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0000a78 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0000a79 = {
+   buildConfigurationList = X0000a82;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0000a76;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0000a7a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/qa/unit/helper/qahelper.cxx";
+  };
+  X0000a7b = {
+   fileRef = X0000a7a;
+   isa = PBXBuildFile;
+  };
+  X0000a7c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/qa/unit/helper/xpath.cxx";
+  };
+  X0000a7d = {
+   fileRef = X0000a7c;
+   isa = PBXBuildFile;
+  };
+  X0000a7e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sc/qa/unit/functions_test.cxx";
+  };
+  X0000a7f = {
+   fileRef = X0000a7e;
+   isa = PBXBuildFile;
+  };
+  X0000a80 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0000a73;
+}

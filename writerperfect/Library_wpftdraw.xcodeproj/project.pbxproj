@@ -1,0 +1,160 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X00042c3 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X00042e1;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X00042c4;
+   productRefGroup = X00042c7;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X00042c9;
+  };
+  X00042c4 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X00042c5 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X00042c8 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X00042c9 = {
+   buildConfigurationList = X00042e2;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X00042c6;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X00042ca = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/CDRImportFilter.cxx";
+  };
+  X00042cb = {
+   fileRef = X00042ca;
+   isa = PBXBuildFile;
+  };
+  X00042cc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/CMXImportFilter.cxx";
+  };
+  X00042cd = {
+   fileRef = X00042cc;
+   isa = PBXBuildFile;
+  };
+  X00042ce = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/FreehandImportFilter.cxx";
+  };
+  X00042cf = {
+   fileRef = X00042ce;
+   isa = PBXBuildFile;
+  };
+  X00042d0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/MSPUBImportFilter.cxx";
+  };
+  X00042d1 = {
+   fileRef = X00042d0;
+   isa = PBXBuildFile;
+  };
+  X00042d2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/MWAWDrawImportFilter.cxx";
+  };
+  X00042d3 = {
+   fileRef = X00042d2;
+   isa = PBXBuildFile;
+  };
+  X00042d4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/PageMakerImportFilter.cxx";
+  };
+  X00042d5 = {
+   fileRef = X00042d4;
+   isa = PBXBuildFile;
+  };
+  X00042d6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/QXPImportFilter.cxx";
+  };
+  X00042d7 = {
+   fileRef = X00042d6;
+   isa = PBXBuildFile;
+  };
+  X00042d8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/StarOfficeDrawImportFilter.cxx";
+  };
+  X00042d9 = {
+   fileRef = X00042d8;
+   isa = PBXBuildFile;
+  };
+  X00042da = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/VisioImportFilter.cxx";
+  };
+  X00042db = {
+   fileRef = X00042da;
+   isa = PBXBuildFile;
+  };
+  X00042dc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/WPGImportFilter.cxx";
+  };
+  X00042dd = {
+   fileRef = X00042dc;
+   isa = PBXBuildFile;
+  };
+  X00042de = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "writerperfect/source/draw/ZMFImportFilter.cxx";
+  };
+  X00042df = {
+   fileRef = X00042de;
+   isa = PBXBuildFile;
+  };
+  X00042e0 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X00042c3;
+}

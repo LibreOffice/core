@@ -1,0 +1,142 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0004945 = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X000495f;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0004946;
+   productRefGroup = X0004949;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X000494b;
+  };
+  X0004946 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0004947 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X000494a = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X000494b = {
+   buildConfigurationList = X0004960;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0004948;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X000494c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/typedetectionexport.cxx";
+  };
+  X000494d = {
+   fileRef = X000494c;
+   isa = PBXBuildFile;
+  };
+  X000494e = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/typedetectionimport.cxx";
+  };
+  X000494f = {
+   fileRef = X000494e;
+   isa = PBXBuildFile;
+  };
+  X0004950 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/xmlfilterdialogcomponent.cxx";
+  };
+  X0004951 = {
+   fileRef = X0004950;
+   isa = PBXBuildFile;
+  };
+  X0004952 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/xmlfilterjar.cxx";
+  };
+  X0004953 = {
+   fileRef = X0004952;
+   isa = PBXBuildFile;
+  };
+  X0004954 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/xmlfiltersettingsdialog.cxx";
+  };
+  X0004955 = {
+   fileRef = X0004954;
+   isa = PBXBuildFile;
+  };
+  X0004956 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/xmlfiltertabdialog.cxx";
+  };
+  X0004957 = {
+   fileRef = X0004956;
+   isa = PBXBuildFile;
+  };
+  X0004958 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/xmlfiltertabpagebasic.cxx";
+  };
+  X0004959 = {
+   fileRef = X0004958;
+   isa = PBXBuildFile;
+  };
+  X000495a = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/xmlfiltertabpagexslt.cxx";
+  };
+  X000495b = {
+   fileRef = X000495a;
+   isa = PBXBuildFile;
+  };
+  X000495c = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "filter/source/xsltdialog/xmlfiltertestdialog.cxx";
+  };
+  X000495d = {
+   fileRef = X000495c;
+   isa = PBXBuildFile;
+  };
+  X000495e = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0004945;
+}

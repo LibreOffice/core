@@ -1,0 +1,196 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {
+ };
+ objectVersion = 46;
+ objects = {
+  X0001c9f = {
+   attributes = {
+    LastUpgradeCheck = 0500;
+    ORGANIZATIONNAME = LibreOffice;
+   };
+   buildConfigurationList = X0001cc5;
+   compatibilityVersion = "Xcode 3.2";
+   hasScannedForEncodings = 0;
+   isa = PBXProject;
+   knownRegions = ;
+   mainGroup = X0001ca0;
+   productRefGroup = X0001ca3;
+   projectDirPath = ;
+   projectRoot = ;
+   targets = X0001ca5;
+  };
+  X0001ca0 = {
+   children = ;
+   isa = PBXGroup;
+   sourceTree = "<group>";
+  };
+  X0001ca1 = {
+   children = {
+   };
+   isa = PBXGroup;
+   path = ;
+   sourceTree = "<group>";
+  };
+  X0001ca4 = {
+   children = ;
+   isa = PBXGroup;
+   name = Products;
+   sourceTree = "<group>";
+  };
+  X0001ca5 = {
+   buildConfigurationList = X0001cc6;
+   buildPhases = ;
+   buildRules = ;
+   dependencies = ;
+   isa = PBXNativeTarget;
+   name = ;
+   productName = ;
+   productReference = X0001ca2;
+   productType = "com.apple.product-type.library.dynamic";
+  };
+  X0001ca6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/eppt.cxx";
+  };
+  X0001ca7 = {
+   fileRef = X0001ca6;
+   isa = PBXBuildFile;
+  };
+  X0001ca8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/epptso.cxx";
+  };
+  X0001ca9 = {
+   fileRef = X0001ca8;
+   isa = PBXBuildFile;
+  };
+  X0001caa = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/escherex.cxx";
+  };
+  X0001cab = {
+   fileRef = X0001caa;
+   isa = PBXBuildFile;
+  };
+  X0001cac = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/pptexanimations.cxx";
+  };
+  X0001cad = {
+   fileRef = X0001cac;
+   isa = PBXBuildFile;
+  };
+  X0001cae = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/pptexsoundcollection.cxx";
+  };
+  X0001caf = {
+   fileRef = X0001cae;
+   isa = PBXBuildFile;
+  };
+  X0001cb0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/pptx-epptbase.cxx";
+  };
+  X0001cb1 = {
+   fileRef = X0001cb0;
+   isa = PBXBuildFile;
+  };
+  X0001cb2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/pptx-epptooxml.cxx";
+  };
+  X0001cb3 = {
+   fileRef = X0001cb2;
+   isa = PBXBuildFile;
+  };
+  X0001cb4 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/pptx-grouptable.cxx";
+  };
+  X0001cb5 = {
+   fileRef = X0001cb4;
+   isa = PBXBuildFile;
+  };
+  X0001cb6 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/pptx-stylesheet.cxx";
+  };
+  X0001cb7 = {
+   fileRef = X0001cb6;
+   isa = PBXBuildFile;
+  };
+  X0001cb8 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/eppt/pptx-text.cxx";
+  };
+  X0001cb9 = {
+   fileRef = X0001cb8;
+   isa = PBXBuildFile;
+  };
+  X0001cba = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/ppt/ppt97animations.cxx";
+  };
+  X0001cbb = {
+   fileRef = X0001cba;
+   isa = PBXBuildFile;
+  };
+  X0001cbc = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/ppt/pptatom.cxx";
+  };
+  X0001cbd = {
+   fileRef = X0001cbc;
+   isa = PBXBuildFile;
+  };
+  X0001cbe = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/ppt/pptin.cxx";
+  };
+  X0001cbf = {
+   fileRef = X0001cbe;
+   isa = PBXBuildFile;
+  };
+  X0001cc0 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/ppt/pptinanimations.cxx";
+  };
+  X0001cc1 = {
+   fileRef = X0001cc0;
+   isa = PBXBuildFile;
+  };
+  X0001cc2 = {
+   isa = PBXFileReference;
+   lastKnownFileType = "sourcecode.cpp.cpp";
+   path = "sd/source/filter/ppt/propread.cxx";
+  };
+  X0001cc3 = {
+   fileRef = X0001cc2;
+   isa = PBXBuildFile;
+  };
+  X0001cc4 = {
+   buildActionMask = 2147483647;
+   files = ;
+   isa = PBXSourcesBuildPhase;
+   runOnlyForDeploymentPostprocessing = 0;
+  };
+ };
+ rootObject = X0001c9f;
+}
