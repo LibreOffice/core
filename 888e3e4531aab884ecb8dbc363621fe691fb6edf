@@ -19,6 +19,75 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_8e86c2b7",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T05:52:28Z",
+      "side": 1,
+      "message": "Here you leak Hunspell objects (since you don\u0027t delete them here, and the struct doesn\u0027t have its destructor, and Hunspell is included using naked ptr) - here\u0027s the place where I suppose that using unique_ptr is good (and mmeeks suggests using shared_ptr)",
+      "range": {
+        "startLine": 84,
+        "startChar": 12,
+        "endLine": 84,
+        "endChar": 34
+      },
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_6e898eca",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T05:52:28Z",
+      "side": 1,
+      "message": "this is unnecessary - vector will be destroyed shortly",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 86,
+        "endChar": 26
+      },
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_4ea4ca56",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T05:52:28Z",
+      "side": 1,
+      "message": "Here std::move is unnecessary - it is naked ptr (but this will change when you follow Michael\u0027s advise)",
+      "range": {
+        "startLine": 217,
+        "startChar": 46,
+        "endLine": 217,
+        "endChar": 69
+      },
+      "revId": "888e3e4531aab884ecb8dbc363621fe691fb6edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_ceeefaeb",
         "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
         "patchSetId": 2
