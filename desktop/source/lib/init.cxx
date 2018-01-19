@@ -274,6 +274,20 @@ static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
         aTree.put("value", OString::number(anyItem.get<sal_uInt32>()).getStr());
     else if (aType == "long")
         aTree.put("value", OString::number(anyItem.get<sal_Int32>()).getStr());
+    else if (aType == "[]any")
+    {
+        uno::Sequence<uno::Any> aSeq;
+        if (anyItem >>= aSeq)
+        {
+            boost::property_tree::ptree aSubTree;
+
+            for (auto i = 0; i < aSeq.getLength(); ++i)
+            {
+                aSubTree.add_child(OString::number(i).getStr(), unoAnyToPropertyTree(aSeq[i]));
+            }
+            aTree.add_child("value", aSubTree);
+        }
+    }
 
     // TODO: Add more as required
 
