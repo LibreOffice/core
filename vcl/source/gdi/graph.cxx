@@ -244,7 +244,7 @@ Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic
 
 void Graphic::ImplTestRefCount()
 {
-    if (!mxImpGraphic.unique())
+    if (mxImpGraphic.use_count() > 1)
     {
         mxImpGraphic.reset(new ImpGraphic(*mxImpGraphic));
     }

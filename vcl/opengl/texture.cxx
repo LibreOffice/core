@@ -321,7 +321,7 @@ OpenGLTexture::~OpenGLTexture()
 
 bool OpenGLTexture::IsUnique() const
 {
-    return !mpImpl || mpImpl.unique();
+    return !mpImpl || (mpImpl.use_count() == 1);
 }
 
 GLuint OpenGLTexture::Id() const
