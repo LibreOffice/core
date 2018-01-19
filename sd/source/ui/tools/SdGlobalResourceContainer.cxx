@@ -176,12 +176,12 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer()
          iSharedResource != mpImpl->maSharedResources.rend();
          ++iSharedResource)
     {
-        if ( ! iSharedResource->unique())
+        if (iSharedResource->use_count() > 1)
         {
             SdGlobalResource* pResource = iSharedResource->get();
             SAL_INFO(
                 "sd.tools", pResource << " " << iSharedResource->use_count());
-            DBG_ASSERT(iSharedResource->unique(),
+            DBG_ASSERT(iSharedResource->use_count() == 1,
                 "SdGlobalResource still held in ~SdGlobalResourceContainer");
         }
     }
