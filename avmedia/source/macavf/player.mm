@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 - (void)onNotification:(NSNotification*)pNotification
 {
-    NSString* pNoteName = (NSString*)[pNotification name];
+    NSString* pNoteName = [pNotification name];
     HandlersForObject::iterator it = maHandlersForObject.find( [pNotification object]);
     if( it != maHandlersForObject.end() )
         (*it).second->handleObservation( pNoteName );
