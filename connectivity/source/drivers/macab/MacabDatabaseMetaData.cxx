@@ -182,9 +182,6 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsNonNullableColumns(  )
 
 OUString SAL_CALL MacabDatabaseMetaData::getCatalogTerm(  )
 {
-    if (m_bUseCatalog)
-    {
-    }
     return OUString();
 }
 
@@ -206,9 +203,6 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDifferentTableCorrelationNames(
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::isCatalogAtStart(  )
 {
-    if (m_bUseCatalog)
-    {
-    }
     return false;
 }
 
