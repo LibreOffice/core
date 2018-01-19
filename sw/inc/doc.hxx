@@ -613,7 +613,6 @@ public:
                         bool bDrawAlso,
                         bool bAsCharAlso = false ) const;
 
-    // Because swrtf.cxx and define private public here now.
     SwFlyFrameFormat  *MakeFlyFrameFormat (const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
     SwDrawFrameFormat *MakeDrawFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
 
