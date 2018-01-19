@@ -2607,9 +2607,8 @@ void SbaXDataBrowserController::addColumnListeners(const Reference< css::awt::XC
     }
 }
 
-bool SbaXDataBrowserController::InitializeGridModel(const Reference< css::form::XFormComponent > & /*xGrid*/)
+void SbaXDataBrowserController::InitializeGridModel(const Reference< css::form::XFormComponent > & /*xGrid*/)
 {
-    return true;
 }
 
 }   // namespace dbaui

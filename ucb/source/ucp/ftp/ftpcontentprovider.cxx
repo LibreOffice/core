@@ -212,7 +212,7 @@ CURL* FTPContentProvider::handle()
 }
 
 
-bool FTPContentProvider::forHost( const OUString& host,
+void FTPContentProvider::forHost( const OUString& host,
                                   const OUString& port,
                                   const OUString& username,
                                   OUString& password,
@@ -226,10 +226,8 @@ bool FTPContentProvider::forHost( const OUString& host,
         {
             password = i.password;
             account = i.account;
-            return true;
+            return;
         }
-
-    return false;
 }
 
 bool  FTPContentProvider::setHost( const OUString& host,

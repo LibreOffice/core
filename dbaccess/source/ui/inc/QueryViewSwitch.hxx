@@ -72,7 +72,7 @@ namespace dbaui
         void     setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable);
         void     setNoneVisbleRow(sal_Int32 _nRows);
         void     SaveUIConfig();
-        bool     reset();
+        void     reset();
         void     GrabFocus();
 
         // returns the add table dialog from the design view

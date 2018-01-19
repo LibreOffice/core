@@ -56,7 +56,7 @@ public:
     void        setString(const OString& rStr) { m_aStr = rStr; }
     const OString& getString() const { return m_aStr; }
 
-    bool        ReadSvIdl( SvStringHashEntry const * pName, SvTokenStream & rInStm );
+    void        ReadSvIdl( SvStringHashEntry const * pName, SvTokenStream & rInStm );
     bool        IsSet() const
                 {
                     return !m_aStr.isEmpty() || nValue != 0;

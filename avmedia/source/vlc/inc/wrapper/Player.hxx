@@ -51,15 +51,12 @@ namespace wrapper
 
         void setWindow( intptr_t id );
 
-        bool takeSnapshot(const rtl::OUString& file);
+        void takeSnapshot(const rtl::OUString& file);
 
         bool hasVout() const;
 
         void setScale( float factor );
         void setVideoSize( unsigned width, unsigned height );
-
-        unsigned getWidth() const;
-        unsigned getHeight() const;
 
         operator libvlc_media_player_t*()
         {

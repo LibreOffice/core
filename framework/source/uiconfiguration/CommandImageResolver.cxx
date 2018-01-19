@@ -70,7 +70,7 @@ CommandImageResolver::~CommandImageResolver()
 {
 }
 
-bool CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence)
+void CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence)
 {
     sal_Int32 nSequenceSize = aCommandSequence.getLength();
 
@@ -109,7 +109,6 @@ bool CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence
         m_aImageNameVector[i] = aImageName;
         m_aCommandToImageNameMap[aCommandName] = aImageName;
     }
-    return true;
 }
 
 bool CommandImageResolver::hasImage(const OUString& rCommandURL)

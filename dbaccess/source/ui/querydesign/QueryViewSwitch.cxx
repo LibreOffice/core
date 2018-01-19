@@ -277,16 +277,13 @@ Reference< XComponentContext > const & OQueryViewSwitch::getORB() const
     return m_pDesignView->getORB();
 }
 
-bool OQueryViewSwitch::reset()
+void OQueryViewSwitch::reset()
 {
     m_pDesignView->reset();
     if ( !m_pDesignView->initByParseIterator( nullptr ) )
-        return false;
+        return;
 
-    if ( switchView( nullptr ) )
-        return false;
-
-    return true;
+    switchView( nullptr );
 }
 
 void OQueryViewSwitch::setNoneVisbleRow(sal_Int32 _nRows)

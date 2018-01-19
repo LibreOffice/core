@@ -18,11 +18,6 @@
 // <https://www.w3.org/TR/MathML/chapter2.html#id.2.1.5.1>
 // MathML 2: 2.4.4.2 Attributes with units
 // <https://www.w3.org/TR/MathML2/chapter2.html#fund.attval>
-
-sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction *pUN);
-
-sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction *pN);
-
 // MathML 3: 2.1.5.2 Length Valued Attributes
 // <https://www.w3.org/TR/MathML/chapter2.html#fund.units>
 

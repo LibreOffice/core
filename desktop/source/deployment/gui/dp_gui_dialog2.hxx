@@ -164,10 +164,10 @@ public:
     void            setGetExtensionsURL( const OUString &rURL );
     virtual void    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
                                       bool bLicenseMissing = false ) override;
-    bool enablePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage,
+    void enablePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage,
                         bool bEnable );
-    bool removePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
-    bool updatePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
+    void removePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
+    void updatePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
     bool acceptLicense(const css::uno::Reference< css::deployment::XPackage > &xPackage );
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }

@@ -368,7 +368,7 @@ sal_Int32 cclass_Unicode::getParseTokensType(sal_uInt32 const c, bool const isFi
     }
 }
 
-bool cclass_Unicode::setupInternational( const Locale& rLocale )
+void cclass_Unicode::setupInternational( const Locale& rLocale )
 {
     bool bChanged = (aParserLocale.Language != rLocale.Language
         || aParserLocale.Country != rLocale.Country
@@ -383,7 +383,6 @@ bool cclass_Unicode::setupInternational( const Locale& rLocale )
     {
         mxLocaleData.set( LocaleData2::create(m_xContext) );
     }
-    return bChanged;
 }
 
 

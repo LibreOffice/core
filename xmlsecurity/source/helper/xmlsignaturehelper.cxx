@@ -221,7 +221,7 @@ void XMLSignatureHelper::ExportOOXMLSignature(const uno::Reference<embed::XStora
     }
 }
 
-bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF )
+void XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF )
 {
     mbError = false;
 
@@ -229,8 +229,6 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
     {
         mbError = true;
     }
-
-    return !mbError;
 }
 
 bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css::io::XInputStream >& xInputStream )
@@ -538,7 +536,7 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
     uno::Reference<embed::XTransactedObject> xTransact(xStorage, uno::UNO_QUERY);
     xTransact->commit();
 }
-bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<embed::XStorage>& xSignatureStorage, int nSignatureIndex)
+void XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<embed::XStorage>& xSignatureStorage, int nSignatureIndex)
 {
     uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", embed::ElementModes::READWRITE), uno::UNO_QUERY);
     uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(mxCtx);
@@ -551,8 +549,6 @@ bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed
         mbError = true;
 
     xSaxWriter->endDocument();
-
-    return !mbError;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

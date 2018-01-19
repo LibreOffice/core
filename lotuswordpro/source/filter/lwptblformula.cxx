@@ -114,7 +114,7 @@ void LwpFormulaInfo::ReadText()
     m_aStack.push_back(new LwpFormulaText(aText));
 }
 
-bool LwpFormulaInfo::ReadCellID()
+void LwpFormulaInfo::ReadCellID()
 {
     LwpRowSpecifier RowSpecifier;
     LwpColumnSpecifier ColumnSpecifier;
@@ -124,7 +124,6 @@ bool LwpFormulaInfo::ReadCellID()
 
     m_aStack.push_back( new LwpFormulaCellAddr(ColumnSpecifier.ColumnID(cColumn),
                                                 RowSpecifier.RowID(m_nFormulaRow)) );
-    return true;
 }
 
 void LwpFormulaInfo::ReadCellRange()

@@ -199,7 +199,7 @@ public:
     void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr) override;
 private:
     void Read() override;
-    bool ReadCellID();
+    void ReadCellID();
     void ReadText();
     void ReadCellRange();
     void ReadExpression();

@@ -85,7 +85,7 @@ public:
     bool isRemoveable() const
         { return ((m_flags & AF_REMOVABLE) == AF_REMOVABLE); }
 
-    bool dumpBlob(
+    void dumpBlob(
         typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex) const;
 
 private:

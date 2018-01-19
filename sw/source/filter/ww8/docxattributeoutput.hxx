@@ -1010,8 +1010,6 @@ public:
     void SetAlternateContentChoiceOpen( bool bAltContentChoiceOpen ) { m_bAlternateContentChoiceOpen = bAltContentChoiceOpen; }
     bool IsAlternateContentChoiceOpen( ) { return m_bAlternateContentChoiceOpen; }
     void GetSdtEndBefore(const SdrObject* pSdrObj);
-    void SetStartedParaSdt(bool bStartedParaSdt);
-    bool IsStartedParaSdt();
     bool IsFirstParagraph() { return m_bIsFirstParagraph; }
 
     /// Stores the table export state to the passed context and resets own state.

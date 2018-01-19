@@ -1183,7 +1183,7 @@ namespace cppcanvas
             }
         }
 
-        bool ImplRenderer::createActions( GDIMetaFile&                   rMtf,
+        void ImplRenderer::createActions( GDIMetaFile&                   rMtf,
                                           const ActionFactoryParameters& rFactoryParms,
                                           bool                           bSubsettableActions )
         {
@@ -2594,8 +2594,6 @@ namespace cppcanvas
                 // correction for the unconditional increment here).
                 ++io_rCurrActionIndex;
             }
-
-            return true;
         }
 
 
