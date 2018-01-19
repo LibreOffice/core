@@ -16,6 +16,24 @@
       "revId": "95307f2ca73480176634e5cc46d96a19b735e87b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_04871162",
+        "filename": "test/source/sheet/spreadsheetviewsettings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-19T16:53:25Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/#/c/48215/\u003e \"Remove dubious test\"",
+      "parentUuid": "fa31d9ce_75db21ee",
+      "revId": "95307f2ca73480176634e5cc46d96a19b735e87b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
