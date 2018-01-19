@@ -220,9 +220,9 @@ public:
 
     /** Reads the next value from the value sequence. */
     template< typename Type >
-    bool                ReadValue( Type& rValue );
+    void                ReadValue( Type& rValue );
     /** Reads an Any from the value sequence. */
-    bool                ReadValue( css::uno::Any& rAny );
+    void                ReadValue( css::uno::Any& rAny );
     /** Reads a color value from the value sequence. */
     void                ReadValue( Color& rColor );
     /** Reads a C++ boolean value from the value sequence. */
@@ -259,10 +259,11 @@ private:
 };
 
 template< typename Type >
-bool ScfPropSetHelper::ReadValue( Type& rValue )
+void ScfPropSetHelper::ReadValue( Type& rValue )
 {
     css::uno::Any* pAny = GetNextAny();
-    return pAny && (*pAny >>= rValue);
+    if (pAny)
+        *pAny >>= rValue;
 }
 
 template< typename Type >

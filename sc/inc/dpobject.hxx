@@ -104,7 +104,7 @@ private:
     SAL_DLLPRIVATE void              CreateObjects();
     SAL_DLLPRIVATE void              CreateOutput();
     SAL_DLLPRIVATE void ClearSource();
-    SAL_DLLPRIVATE bool FillLabelDataForDimension(
+    SAL_DLLPRIVATE void FillLabelDataForDimension(
         const css::uno::Reference< css::container::XIndexAccess>& xDims,
         sal_Int32 nDim, ScDPLabelData& rLabelData);
 

@@ -141,7 +141,7 @@ public:
     void    SetManualDoc(const OUString& rName);
     bool    LoadFile(const OUString& rUrl);
     void    SelectDoc(const OUString& rName);
-    bool    SelectEntryByName(const ScContentId nRoot, const OUString& rName);
+    void    SelectEntryByName(const ScContentId nRoot, const OUString& rName);
 
     const OUString& GetHiddenTitle() const    { return aHiddenTitle; }
 

@@ -41,7 +41,7 @@ public:
      * Used to import just the styles from an xml file.
      */
 
-    virtual bool importODS_Styles(ScDocument& rDoc, OUString& aFileName) const = 0;
+    virtual void importODS_Styles(ScDocument& rDoc, OUString& aFileName) const = 0;
 
     /**
      * Create a context for XML file.  The context object stores session
