@@ -62,9 +62,6 @@ public:
 protected:
     explicit ChartType( const ChartType & rOther );
 
-    const css::uno::Reference< css::uno::XComponentContext >&
-        GetComponentContext() const { return m_xContext;}
-
     // ____ XChartType ____
     // still abstract ! implement !
     virtual OUString SAL_CALL getChartType() override = 0;

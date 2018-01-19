@@ -38,7 +38,7 @@ bool AstOperation::isVariadic() const {
         && static_cast< AstParameter const * >(*(--i))->isRest();
 }
 
-bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
+void AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 {
     sal_uInt16      nParam = getNodeCount(NT_parameter);
     sal_uInt16      nExcep = static_cast<sal_uInt16>(m_exceptions.size());
@@ -113,8 +113,6 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
             ++iter;
         }
     }
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

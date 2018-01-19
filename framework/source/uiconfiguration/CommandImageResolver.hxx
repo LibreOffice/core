@@ -43,7 +43,7 @@ public:
     CommandImageResolver();
     ~CommandImageResolver();
 
-    bool registerCommands(css::uno::Sequence<OUString>& aCommandSequence);
+    void registerCommands(css::uno::Sequence<OUString>& aCommandSequence);
     Image getImageFromCommandURL(ImageType nImageType, const OUString& rCommandURL);
 
     std::vector<OUString>& getCommandNames()

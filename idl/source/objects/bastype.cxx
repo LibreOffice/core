@@ -49,7 +49,7 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry const * pName, SvTokenStream & rInStm 
     return false;
 }
 
-bool SvIdentifier::ReadSvIdl( SvStringHashEntry const * pName, SvTokenStream & rInStm )
+void SvIdentifier::ReadSvIdl( SvStringHashEntry const * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken& rTok = rInStm.GetToken_Next();
@@ -70,10 +70,9 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry const * pName, SvTokenStream & r
                 bOk = rInStm.ReadIf( ')' );
         }
         if( bOk )
-            return true;
+            return;
     }
     rInStm.Seek( nTokPos );
-    return false;
 }
 
 void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,

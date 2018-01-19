@@ -180,20 +180,6 @@ namespace wrapper
         libvlc_video_set_scale( mPlayer, factor );
     }
 
-    unsigned Player::getWidth() const
-    {
-        unsigned width, height;
-        libvlc_video_get_size( mPlayer, 0, &width, &height );
-        return width;
-    }
-
-    unsigned Player::getHeight() const
-    {
-        unsigned width, height;
-        libvlc_video_get_size( mPlayer, 0, &width, &height );
-        return height;
-    }
-
     void Player::setMouseHandling(bool flag)
     {
         libvlc_video_set_mouse_input( mPlayer, flag );
@@ -243,11 +229,11 @@ namespace wrapper
 #endif
     }
 
-    bool Player::takeSnapshot( const rtl::OUString& file )
+    void Player::takeSnapshot( const rtl::OUString& file )
     {
         rtl::OString dest;
         file.convertToString( &dest, RTL_TEXTENCODING_UTF8, 0 );
-        return libvlc_video_take_snapshot( mPlayer, 0, dest.getStr(), 480, 360 ) == 0;
+        libvlc_video_take_snapshot( mPlayer, 0, dest.getStr(), 480, 360 );
     }
 
     bool Player::hasVout() const

@@ -80,7 +80,7 @@ namespace ftp
         /** host is in the form host:port.
          */
 
-        bool forHost(const OUString& host,
+        void forHost(const OUString& host,
                              const OUString& port,
                              const OUString& username,
                              OUString& password,

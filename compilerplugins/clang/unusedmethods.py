@@ -209,9 +209,6 @@ for d in definitionSet:
     # ignore methods with no return type, and constructors
     if d[0] == "void" or d[0] == "":
         continue
-    # ignore bool returns, provides important documentation in the code
-    if d[0] == "_Bool":
-        continue
     # ignore UNO constructor method entrypoints
     if "_get_implementation" in d[1] or "_getFactory" in d[1]:
         continue

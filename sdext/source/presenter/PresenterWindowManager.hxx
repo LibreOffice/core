@@ -173,7 +173,7 @@ private:
     LayoutListenerContainer maLayoutListeners;
     bool mbIsMouseClickPending;
 
-    bool PaintChildren (const css::awt::PaintEvent& rEvent) const;
+    void PaintChildren (const css::awt::PaintEvent& rEvent) const;
     void UpdateWindowSize (const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
     void PaintBackground (const css::awt::Rectangle& rUpdateBox);
     void ProvideBackgroundBitmap();

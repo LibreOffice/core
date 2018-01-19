@@ -576,7 +576,7 @@ void SbaTableQueryBrowser::initializePreviewMode()
     }
 }
 
-bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XFormComponent > & xGrid)
+void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XFormComponent > & xGrid)
 {
     try
     {
@@ -599,7 +599,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                 DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 OSL_ENSURE( pData->xObjectProperties.is(), "SbaTableQueryBrowser::InitializeGridModel: No table available!" );
                 if ( !pData->xObjectProperties.is() )
-                    return false;
+                    return;
 
                 OUString* pStringIter = aProperties.getArray();
                 Any* pValueIter = aValues.getArray();
@@ -803,10 +803,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
     catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
-        return false;
     }
-
-    return true;
 }
 
 Reference<XPropertySet> getColumnHelper(SvTreeListEntry const * _pCurrentlyDisplayed, const Reference<XPropertySet>& _rxSource)

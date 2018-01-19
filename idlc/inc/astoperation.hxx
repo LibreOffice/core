@@ -42,7 +42,7 @@ public:
 
     void setExceptions(DeclList const * pExceptions);
 
-    bool dumpBlob(typereg::Writer & rBlob, sal_uInt16 index);
+    void dumpBlob(typereg::Writer & rBlob, sal_uInt16 index);
 
 private:
     AstType const * m_pReturnType;

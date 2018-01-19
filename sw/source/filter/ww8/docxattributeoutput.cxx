@@ -9208,14 +9208,4 @@ void DocxAttributeOutput::AddToAttrList( rtl::Reference<sax_fastparser::FastAttr
     va_end( args );
 }
 
-void DocxAttributeOutput::SetStartedParaSdt(bool bStartedParaSdt)
-{
-    m_bStartedParaSdt = bStartedParaSdt;
-}
-
-bool DocxAttributeOutput::IsStartedParaSdt()
-{
-    return m_bStartedParaSdt;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

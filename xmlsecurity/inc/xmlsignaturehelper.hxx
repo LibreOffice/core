@@ -130,7 +130,7 @@ public:
     void SetDescription(sal_Int32 nSecurityId, const OUString& rDescription);
 
     void        AddForSigning( sal_Int32 securityId, const OUString& uri, bool bBinary, bool bXAdESCompliantIfODF );
-    bool        CreateAndWriteSignature( const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF );
+    void        CreateAndWriteSignature( const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF );
     bool        ReadAndVerifySignature( const css::uno::Reference< css::io::XInputStream >& xInputStream );
 
     // MT: ??? I think only for adding/removing, not for new signatures...
@@ -152,7 +152,7 @@ public:
     /// Given that xStorage is an OOXML _xmlsignatures storage, create origin.sigs and its relations.
     void ExportSignatureRelations(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount);
     /// Given that xSignatureStorage is an OOXML _xmlsignatures storage, create and write a new signature.
-    bool CreateAndWriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::embed::XStorage>& xSignatureStorage, int nSignatureIndex);
+    void CreateAndWriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::embed::XStorage>& xSignatureStorage, int nSignatureIndex);
     /// Similar to CreateAndWriteOOXMLSignature(), but used to write the signature to the persistent storage, not the temporary one.
     void ExportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::embed::XStorage>& xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex);
     /// Given that xStorage is an OOXML root storage, advertise signatures in its [Content_Types].xml stream.

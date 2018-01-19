@@ -509,7 +509,7 @@ void ImpOptimizer::DispatchStatus()
 }
 
 
-bool ImpOptimizer::Optimize()
+void ImpOptimizer::Optimize()
 {
 
     if ( !maCustomShowName.isEmpty() )
@@ -559,7 +559,6 @@ bool ImpOptimizer::Optimize()
     }
     SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 100 ) ) );
     DispatchStatus();
-    return true;
 }
 
 static void DispatchURL( const Reference< XComponentContext >& xContext, const OUString& sURL, const Reference< XFrame >& xFrame )

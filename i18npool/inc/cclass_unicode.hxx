@@ -173,7 +173,7 @@ private:
         sal_Int32 nTokenType = 0xffffffff );
 
     /// Setup International class, new'ed only if different from existing.
-    bool setupInternational( const css::lang::Locale& rLocale );
+    void setupInternational( const css::lang::Locale& rLocale );
 
     /// Implementation of getCharacterType() for one single character
     static sal_Int32 getCharType( const OUString& Text, sal_Int32 *nPos, sal_Int32 increment);

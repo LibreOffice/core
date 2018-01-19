@@ -318,7 +318,7 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
 }
 
 
-bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
+void PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 {
     // Call windowPaint on all children that lie in or touch the
     // update rectangle.
@@ -368,8 +368,6 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
             OSL_FAIL("paint children failed!");
         }
     }
-
-    return false;
 }
 
 void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)

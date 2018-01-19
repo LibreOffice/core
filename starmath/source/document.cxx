@@ -858,7 +858,7 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
     return bRet;
 }
 
-bool SmDocShell::writeFormulaOoxml(
+void SmDocShell::writeFormulaOoxml(
         ::sax_fastparser::FSHelperPtr const& pSerializer,
         oox::core::OoxmlVersion const version,
         oox::drawingml::DocumentType const documentType)
@@ -868,7 +868,7 @@ bool SmDocShell::writeFormulaOoxml(
     if( mpTree )
         ArrangeFormula();
     SmOoxmlExport aEquation(mpTree, version, documentType);
-    return aEquation.ConvertFromStarMath( pSerializer );
+    aEquation.ConvertFromStarMath( pSerializer );
 }
 
 void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)

@@ -499,7 +499,7 @@ bool SvIdlParser::ReadIfBoolAttribute( SvBOOL& rBool, SvStringHashEntry const * 
     return false;
 }
 
-bool SvIdlParser::ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntry const * pName )
+void SvIdlParser::ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntry const * pName )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken& rTok = rInStm.GetToken_Next();
@@ -514,10 +514,9 @@ bool SvIdlParser::ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntr
             rIdentifier.setString(rTok.GetString());
             rInStm.GetToken_Next();
         }
-        return true;
     }
-    rInStm.Seek( nTokPos );
-    return false;
+    else
+        rInStm.Seek( nTokPos );
 }
 
 void SvIdlParser::ReadDelimiter()

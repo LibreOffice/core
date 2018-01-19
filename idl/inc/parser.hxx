@@ -57,7 +57,7 @@ public:
     SvMetaType*  ReadKnownType();
     void         Read(char cChar);
     bool         ReadIfBoolAttribute( SvBOOL&, SvStringHashEntry const * pName);
-    bool         ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntry const * pName );
+    void         ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntry const * pName );
     bool         ReadIf(char cChar);
     void         ReadDelimiter();
     bool         ReadIfDelimiter();

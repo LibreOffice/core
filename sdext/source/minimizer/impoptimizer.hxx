@@ -56,7 +56,7 @@ private:
 
     css::uno::Reference< css::frame::XFrame > mxInformationDialog;
 
-    bool Optimize();
+    void Optimize();
 
 public:
 

@@ -602,53 +602,49 @@ bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
     return ( RET_OK == aInfo->Execute() );
 }
 
-bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
+void ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bEnable )
 {
     if ( !xPackage.is() )
-        return false;
+        return;
 
     if ( bEnable )
     {
         if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_ENABLE_SHARED_EXTENSION, m_bEnableWarning ) )
-            return false;
+            return;
     }
     else
     {
         if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_DISABLE_SHARED_EXTENSION, m_bDisableWarning ) )
-            return false;
+            return;
     }
 
     m_pManager->getCmdQueue()->enableExtension( xPackage, bEnable );
-
-    return true;
 }
 
 
-bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &xPackage )
+void ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( !xPackage.is() )
-        return false;
+        return;
 
     if ( !IsSharedPkgMgr( xPackage ) || m_bDeleteWarning )
     {
         if ( ! removeExtensionWarn( xPackage->getDisplayName() ) )
-            return false;
+            return;
     }
 
     if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
-        return false;
+        return;
 
     m_pManager->getCmdQueue()->removeExtension( xPackage );
-
-    return true;
 }
 
 
-bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &xPackage )
+void ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( !xPackage.is() )
-        return false;
+        return;
 
     // get the extension with highest version
     uno::Sequence<uno::Reference<deployment::XPackage> > seqExtensions =
@@ -661,8 +657,6 @@ bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
     vEntries.push_back(extension);
 
     m_pManager->getCmdQueue()->checkForUpdates( vEntries );
-
-    return true;
 }
 
 

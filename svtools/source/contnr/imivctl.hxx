@@ -309,7 +309,7 @@ public:
                         SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pView, WinBits nWinStyle );
                         ~SvxIconChoiceCtrl_Impl();
 
-    bool                SetChoiceWithCursor() { bool bOld = bChooseWithCursor; bChooseWithCursor = true; return bOld; }
+    void                SetChoiceWithCursor() { bChooseWithCursor = true; }
     void                Clear( bool bInCtor );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }

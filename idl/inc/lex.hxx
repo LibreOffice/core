@@ -187,16 +187,14 @@ public:
             return false;
     }
 
-    bool     ReadIfDelimiter()
+    void     ReadIfDelimiter()
     {
         if( GetToken().IsChar()
             && (';' == GetToken().GetChar()
                  || ',' == GetToken().GetChar()) )
         {
             GetToken_Next();
-            return true;
         }
-        return false;
     }
 
     sal_uInt32 Tell() const { return pCurToken-aTokList.begin(); }

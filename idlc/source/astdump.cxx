@@ -321,7 +321,7 @@ bool AstService::dump(RegistryKey& rKey)
     return true;
 }
 
-bool AstAttribute::dumpBlob(
+void AstAttribute::dumpBlob(
     typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex) const
 {
     RTFieldAccess accessMode = RTFieldAccess::INVALID;
@@ -377,8 +377,6 @@ bool AstAttribute::dumpBlob(
     dumpExceptions(
         rBlob, m_setDocumentation, m_setExceptions, RTMethodMode::ATTRIBUTE_SET,
         methodIndex);
-
-    return true;
 }
 
 void AstAttribute::dumpExceptions(

@@ -221,7 +221,7 @@ namespace cppcanvas
                 css::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
                                                           const vcl::Font&                rFont,
                                                           const ActionFactoryParameters&  rParms );
-            bool createActions( GDIMetaFile&                    rMtf,
+            void createActions( GDIMetaFile&                    rMtf,
                                 const ActionFactoryParameters&  rParms,
                                 bool                            bSubsettableActions );
             bool createFillAndStroke( const ::basegfx::B2DPolyPolygon& rPolyPoly,

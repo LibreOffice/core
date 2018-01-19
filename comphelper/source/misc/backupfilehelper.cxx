@@ -1433,7 +1433,7 @@ namespace
             }
         }
 
-        bool flush()
+        void flush()
         {
             bool bRetval(true);
 
@@ -1543,8 +1543,6 @@ namespace
                 // delete temp file (in all cases - it may be moved already)
                 osl::File::remove(aTempURL);
             }
-
-            return bRetval;
         }
 
         bool tryPush(FileSharedPtr const & rFileCandidate, bool bCompress)
