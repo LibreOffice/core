@@ -83,7 +83,7 @@ void SalAquaPicker::implInitialize()
 
         case NAVIGATIONSERVICES_SAVE:
             m_pDialog = [NSSavePanel savePanel];
-            [(NSSavePanel*)m_pDialog setCanSelectHiddenExtension:NO]; //changed for issue #102102
+            [m_pDialog setCanSelectHiddenExtension:NO]; //changed for issue #102102
             /* I would have loved to use
              * [(NSSavePanel*)m_pDialog setExtensionHidden:YES];
              * here but unfortunately this
