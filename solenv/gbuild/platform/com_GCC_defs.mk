@@ -84,6 +84,11 @@ gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
 gb_COMPILEROPTFLAGS := -O0
 endif
 
+# GCC 4.8, at least, is confused by boost 1.66 optional assignments
+ifeq ($(shell expr '$(GCC_VERSION)' '<' 490),1)
+gb_CXXFLAGS_COMMON += -Wno-maybe-uninitialized
+endif
+
 ifeq ($(shell expr '$(GCC_VERSION)' '>=' 600),1)
 gb_CFLAGS_COMMON += \
     -Wduplicated-cond \
