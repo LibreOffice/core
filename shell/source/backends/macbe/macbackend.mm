@@ -106,7 +106,7 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
     }
 
     if (result)
-        result = CFStringGetCString(hostStr, host, (CFIndex) hostSize, kCFStringEncodingASCII);
+        result = CFStringGetCString(hostStr, host, static_cast<CFIndex>(hostSize), kCFStringEncodingASCII);
 
     // Get proxy port
     if (result)
@@ -126,7 +126,7 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
         result = CFNumberGetValue(portNum, kCFNumberIntType, &portInt);
 
     if (result)
-        *port = (UInt16) portInt;
+        *port = static_cast<UInt16>(portInt);
 
     if (proxyDict)
         CFRelease(proxyDict);

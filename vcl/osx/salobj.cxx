@@ -67,8 +67,8 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData const * pWi
                 NSOpenGLPFAColorSize, 24,
                 NSOpenGLPFADepthSize, 24,
                 NSOpenGLPFAMultisample,
-                NSOpenGLPFASampleBuffers, (NSOpenGLPixelFormatAttribute)1,
-                NSOpenGLPFASamples, (NSOpenGLPixelFormatAttribute)4,
+                NSOpenGLPFASampleBuffers, NSOpenGLPixelFormatAttribute(1),
+                NSOpenGLPFASamples, NSOpenGLPixelFormatAttribute(4),
                 0
             };
             pixFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:aAttributes];
@@ -83,8 +83,8 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData const * pWi
                 NSOpenGLPFAColorSize, 24,
                 NSOpenGLPFADepthSize, 24,
                 NSOpenGLPFAMultisample,
-                NSOpenGLPFASampleBuffers, (NSOpenGLPixelFormatAttribute)1,
-                NSOpenGLPFASamples, (NSOpenGLPixelFormatAttribute)4,
+                NSOpenGLPFASampleBuffers, NSOpenGLPixelFormatAttribute(1),
+                NSOpenGLPFASamples, NSOpenGLPixelFormatAttribute(4),
                 0
             };
             pixFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:aAttributes];

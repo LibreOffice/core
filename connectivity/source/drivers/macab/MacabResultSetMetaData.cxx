@@ -189,7 +189,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getScale(sal_Int32)
 
 sal_Int32 SAL_CALL MacabResultSetMetaData::isNullable(sal_Int32)
 {
-    return (sal_Int32) true;
+    return sal_Int32(true);
 }
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isSearchable(sal_Int32)

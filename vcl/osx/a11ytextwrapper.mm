@@ -60,7 +60,7 @@ using namespace ::com::sun::star::uno;
 +(void)setSelectedTextAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
     if ( [ wrapper accessibleEditableText ] ) {
         NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
-        OUString newText = GetOUString ( (NSString *) value );
+        OUString newText = GetOUString ( static_cast<NSString *>(value) );
         NSRange selectedTextRange = [ [ AquaA11yTextWrapper selectedTextRangeAttributeForElement: wrapper ] rangeValue ];
         try {
             [ wrapper accessibleEditableText ] -> replaceText ( selectedTextRange.location, selectedTextRange.location + selectedTextRange.length, newText );
@@ -153,7 +153,7 @@ using namespace ::com::sun::star::uno;
 +(id)lineForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index {
     NSNumber * lineNumber = nil;
     try {
-        sal_Int32 line = [ wrapper accessibleMultiLineText ] -> getLineNumberAtIndex ( (sal_Int32) [ index intValue ] );
+        sal_Int32 line = [ wrapper accessibleMultiLineText ] -> getLineNumberAtIndex ( static_cast<sal_Int32>([ index intValue ]) );
         lineNumber = [ NSNumber numberWithInt: line ];
     } catch ( IndexOutOfBoundsException & e ) {
         // empty
@@ -267,7 +267,7 @@ using namespace ::com::sun::star::uno;
 
 +(id)rTFForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range {
     NSData * rtfData = nil;
-    NSAttributedString * attrString = (NSAttributedString *) [ AquaA11yTextWrapper attributedStringForRangeAttributeForElement: wrapper forParameter: range ];
+    NSAttributedString * attrString = static_cast<NSAttributedString *>([ AquaA11yTextWrapper attributedStringForRangeAttributeForElement: wrapper forParameter: range ]);
     if ( attrString != nil ) {
         @try {
             rtfData = [ attrString RTFFromRange: [ range rangeValue ] documentAttributes: @{NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType} ];

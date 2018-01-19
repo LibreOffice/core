@@ -36,9 +36,9 @@
         NSEnumerator * enumerator = [ elementChildren objectEnumerator ];
         id child;
         while ( ( child = [ enumerator nextObject ] ) ) {
-            AquaA11yWrapper * element = ( AquaA11yWrapper * ) child;
+            AquaA11yWrapper * element = static_cast<AquaA11yWrapper *>(child);
             if ( [ element isKindOfClass: [ AquaA11yWrapperScrollBar class ] ] ) { 
-                AquaA11yWrapperScrollBar * scrollBar = (AquaA11yWrapperScrollBar *) element;
+                AquaA11yWrapperScrollBar * scrollBar = static_cast<AquaA11yWrapperScrollBar *>(element);
                 if ( [ [ scrollBar orientationAttribute ] isEqualToString: orientation ] ) {
                     theScrollBar = scrollBar;
                     break;

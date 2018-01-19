@@ -132,7 +132,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory()
 
     NSArray *files = nil;
     if (m_nDialogType == NAVIGATIONSERVICES_DIRECTORY) {
-        files = [(NSOpenPanel*)m_pDialog URLs];
+        files = [static_cast<NSOpenPanel*>(m_pDialog) URLs];
     }
 
     long nFiles = [files count];

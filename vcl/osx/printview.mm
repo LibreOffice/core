@@ -47,7 +47,7 @@
 -(NSRect)rectForPage: (int)page
 {
     NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
-    int nWidth = (int)aPaperSize.width;
+    int nWidth = static_cast<int>(aPaperSize.width);
     // #i101108# sanity check
     if( nWidth < 1 )
         nWidth = 1;
@@ -68,7 +68,7 @@
     mpInfoPrinter->setStartPageOffset( static_cast<int>(rect.origin.x),
                                        static_cast<int>(rect.origin.y) );
     NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
-    int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
+    int nPage = static_cast<int>(aPaperSize.width * rect.origin.y + rect.origin.x);
     
     // page count is 1 based
     if( nPage - 1 < (mpInfoPrinter->getCurPageRangeStart() + mpInfoPrinter->getCurPageRangeCount() ) )

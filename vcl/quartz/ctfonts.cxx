@@ -65,7 +65,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     // handle font stretching if any
     if( (pReqFont->mnWidth != 0) && (pReqFont->mnWidth != pReqFont->mnHeight) )
     {
-        mfFontStretch = (float)pReqFont->mnWidth / pReqFont->mnHeight;
+        mfFontStretch = static_cast<float>(pReqFont->mnWidth) / pReqFont->mnHeight;
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMakeScale(mfFontStretch, 1.0F));
     }
 
@@ -294,7 +294,7 @@ int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResu
 
     CFRelease( pDataRef);
 
-    return (int)nByteLength;
+    return static_cast<int>(nByteLength);
 }
 
 FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFontEnabled )
@@ -398,7 +398,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
             nInt = WEIGHT_THIN;
         }
     }
-    rDFA.SetWeight( (FontWeight)nInt );
+    rDFA.SetWeight( static_cast<FontWeight>(nInt) );
 
     // get the font slant
     double fSlant = 0;
@@ -430,7 +430,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
             nInt = WIDTH_ULTRA_CONDENSED;
         }
     }
-    rDFA.SetWidthType( (FontWidth)nInt );
+    rDFA.SetWidthType( static_cast<FontWidth>(nInt) );
 
     // release the attribute dict that we had copied
     CFRelease( pAttrDict );

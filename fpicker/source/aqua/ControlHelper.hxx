@@ -115,7 +115,7 @@ public:
     }
 
     bool    isAutoExtensionEnabled() {
-        return ([((NSButton*) m_pToggles[AUTOEXTENSION]) state] == NSOnState);
+        return ([static_cast<NSButton*>(m_pToggles[AUTOEXTENSION]) state] == NSOnState);
     }
 
 private:

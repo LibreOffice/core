@@ -153,7 +153,7 @@ DragSource::DragSource():
 DragSource::~DragSource()
 {
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-        [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
+        [static_cast<id <MouseEventListener>>(mView) unregisterMouseEventListener: mDragSourceHelper];
     [mDragSourceHelper release];
 }
 
@@ -198,7 +198,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
                       static_cast<OWeakObject*>(this));
     }
 
-  [(id <MouseEventListener>)mView registerMouseEventListener: mDragSourceHelper];
+  [static_cast<id <MouseEventListener>>(mView) registerMouseEventListener: mDragSourceHelper];
 }
 
 sal_Bool SAL_CALL DragSource::isDragImageSupported(  )

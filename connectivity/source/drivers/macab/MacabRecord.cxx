@@ -214,7 +214,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
             result = kCFCompareEqualTo; // can't compare
     }
 
-    return (sal_Int32) result;
+    return static_cast<sal_Int32>(result);
 }
 
 
@@ -246,7 +246,7 @@ macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const
                     double nTime = DBTypeConversion::toDouble(aDateTime, DBTypeConversion::getStandardDate());
                     nTime -= kCFAbsoluteTimeIntervalSince1970;
                     newField = new macabfield;
-                    newField->value = CFDateCreate(nullptr, (CFAbsoluteTime) nTime);
+                    newField->value = CFDateCreate(nullptr, static_cast<CFAbsoluteTime>(nTime));
                     newField->type = _abType;
                 }
             }

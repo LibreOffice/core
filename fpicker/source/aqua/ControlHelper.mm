@@ -50,7 +50,7 @@ uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlA
         return aAny;
     }
 
-    NSPopUpButton *pButton = (NSPopUpButton*)pControl;
+    NSPopUpButton *pButton = static_cast<NSPopUpButton*>(pControl);
     NSMenu *rMenu = [pButton menu];
     if (nil == rMenu) {
         SAL_INFO("fpicker.aqua","button has no menu");
@@ -164,7 +164,7 @@ ControlHelper::~ControlHelper()
             [sLabelName release];
         }
         if ([pControl class] == [NSPopUpButton class]) {
-            NSTextField* pField = m_aMapListLabelFields[(NSPopUpButton*)pControl];
+            NSTextField* pField = m_aMapListLabelFields[static_cast<NSPopUpButton*>(pControl)];
             if (pField != nil) {
                 [pField release];
             }
@@ -330,7 +330,7 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
                 bool bChecked = false;
                 rValue >>= bChecked;
                 SAL_INFO("fpicker.aqua"," value is a bool: " << bChecked);
-                [(NSButton*)pControl setState:(bChecked ? NSOnState : NSOffState)];
+                [static_cast<NSButton*>(pControl) setState:(bChecked ? NSOnState : NSOffState)];
             } else
             {
                 SAL_INFO("fpicker.aqua","Can't set value on button / list " << nControlId << " " << nControlAction);
@@ -353,7 +353,7 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
             aRetval = HandleGetListValue(pControl, nControlAction);
         } else if( [pControl class] == [NSButton class] ) {
             //NSLog(@"control: %@", [[pControl cell] title]);
-            bool bValue = [(NSButton*)pControl state] == NSOnState;
+            bool bValue = [static_cast<NSButton*>(pControl) state] == NSOnState;
             aRetval <<= bValue;
             SAL_INFO("fpicker.aqua","value is a bool (checkbox): " << bValue);
         }
@@ -422,7 +422,7 @@ void ControlHelper::createUserPane()
 
             NSTextField *textField = createLabelWithString(label);
             [textField sizeToFit];
-            m_aMapListLabelFields[(NSPopUpButton*)pControl] = textField;
+            m_aMapListLabelFields[static_cast<NSPopUpButton*>(pControl)] = textField;
             [m_pUserPane addSubview:textField];
 
             NSRect tfRect = [textField frame];
@@ -578,7 +578,7 @@ void ControlHelper::createControls()
     NSControl *pPreviewBox = m_pToggles[PREVIEW];
     if (pPreviewBox != nil) {
         [pPreviewBox setEnabled:NO];
-        [(NSButton*)pPreviewBox setState:NSOnState];
+        [static_cast<NSButton*>(pPreviewBox) setState:NSOnState];
     }
 }
 
@@ -625,7 +625,7 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
         return;
     }
 
-    NSPopUpButton *pButton = (NSPopUpButton*)pControl;
+    NSPopUpButton *pButton = static_cast<NSPopUpButton*>(pControl);
     NSMenu *rMenu = [pButton menu];
     if (nil == rMenu) {
         SAL_INFO("fpicker.aqua","button has no menu");
@@ -780,7 +780,7 @@ void ControlHelper::layoutControls()
             if (nPopupMaxWidth < nControlWidth) {
                 nPopupMaxWidth = nControlWidth;
             }
-            NSTextField *label = m_aMapListLabelFields[(NSPopUpButton*)pControl];
+            NSTextField *label = m_aMapListLabelFields[static_cast<NSPopUpButton*>(pControl)];
             NSRect labelFrame = [label frame];
             int nLabelWidth = labelFrame.size.width;
             if (nPopupLabelMaxWidth < nLabelWidth) {
@@ -825,7 +825,7 @@ void ControlHelper::layoutControls()
             currenttop += kAquaSpacePopupMenuFrameBoundsDiffTop;//from top
 
             //get the corresponding popup label
-            NSTextField *label = m_aMapListLabelFields[(NSPopUpButton*)pControl];
+            NSTextField *label = m_aMapListLabelFields[static_cast<NSPopUpButton*>(pControl)];
             NSRect labelFrame = [label frame];
             int totalWidth = nPopupMaxWidth + labelFrame.size.width + kAquaSpaceBetweenControls - kAquaSpacePopupMenuFrameBoundsDiffLeft - kAquaSpaceLabelFrameBoundsDiffH;
             SAL_INFO("fpicker.aqua","totalWidth: " << totalWidth);

@@ -98,7 +98,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         NSWindow* pKeyWin = [NSApp keyWindow];
         if( pKeyWin && [pKeyWin isKindOfClass: [SalFrameWindow class]] )
         {
-            AquaSalFrame* pFrame = [(SalFrameWindow*)pKeyWin getSalFrame];
+            AquaSalFrame* pFrame = [static_cast<SalFrameWindow*>(pKeyWin) getSalFrame];
             // handle Cmd-W
             // FIXME: the correct solution would be to handle this in framework
             // in the menu code
@@ -113,7 +113,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 if( nModMask == NSCommandKeyMask
                     && [[pEvent charactersIgnoringModifiers] isEqualToString: @"w"] )
                 {
-                    [(SalFrameWindow*)pFrame->getNSWindow() windowShouldClose: nil];
+                    [static_cast<SalFrameWindow*>(pFrame->getNSWindow()) windowShouldClose: nil];
                     return;
                 }
             }

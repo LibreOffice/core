@@ -99,7 +99,7 @@ static bool enabled = false;
     } else {
         nKey = [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ];
     }
-    AquaA11yWrapper * aWrapper = (AquaA11yWrapper *) [ dAllWrapper objectForKey: nKey ];
+    AquaA11yWrapper * aWrapper = static_cast<AquaA11yWrapper *>([ dAllWrapper objectForKey: nKey ]);
     if ( aWrapper != nil ) {
         [ aWrapper retain ];
     } else if ( bCreate ) {
@@ -166,10 +166,10 @@ static bool enabled = false;
             if (parent) {
                 if ([parent isKindOfClass:[NSView class]]) {
                     // SAL_DEBUG("Wrapper INIT: " << [[aWrapper description] UTF8String] << " ==> " << [[parent description] UTF8String]);
-                    NSView *parentView = (NSView *)parent;
+                    NSView *parentView = static_cast<NSView *>(parent);
                     [parentView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
                 } else if ([parent isKindOfClass:NSClassFromString(@"SalFrameWindow")]) {
-                    NSWindow *window = (NSWindow *)parent;
+                    NSWindow *window = static_cast<NSWindow *>(parent);
                     NSView *salView = [window contentView];
                     // SAL_DEBUG("Wrapper INIT SAL: " << [[aWrapper description] UTF8String] << " ==> " << [[salView description] UTF8String]);
                     [salView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
@@ -204,13 +204,13 @@ static bool enabled = false;
 +(void)registerView: (NSView *) theView {
     if ( enabled && [ theView isKindOfClass: [ AquaA11yWrapper class ] ] ) {
         // insertIntoWrapperRepository gets called from SalFrameView itself to bootstrap the bridge initially
-        [ (AquaA11yWrapper *) theView accessibleContext ];
+        [ static_cast<AquaA11yWrapper *>(theView) accessibleContext ];
     }
 }
 
 +(void)revokeView: (NSView *) theView {
     if ( enabled && [ theView isKindOfClass: [ AquaA11yWrapper class ] ] ) {
-        [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) theView accessibleContext ] ];
+        [ AquaA11yFactory removeFromWrapperRepositoryFor: [ static_cast<AquaA11yWrapper *>(theView) accessibleContext ] ];
     }
 }
 

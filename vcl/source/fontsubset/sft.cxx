@@ -2296,7 +2296,7 @@ sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch)
             const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
             if( ttf->mapper == getGlyph0 && ( ch & 0xf000 ) == 0xf000 )
                 ch &= 0x00ff;
-            return (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, ch );
+            return static_cast<sal_uInt16>(ttf->mapper(ttf->cmap, nMaxCmapSize, ch ));
         }
 
         case CMAP_MS_Unicode:   break;
@@ -2308,7 +2308,7 @@ sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch)
         default:                return 0;
     }
     const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
-    ch = (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, ch);
+    ch = static_cast<sal_uInt16>(ttf->mapper(ttf->cmap, nMaxCmapSize, ch));
     return ch;
 }
 #endif

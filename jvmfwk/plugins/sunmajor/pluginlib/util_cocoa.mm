@@ -85,7 +85,7 @@ bool JvmfwkUtil_isLoadableJVM( OUString const & aURL )
                                     {
                                         if ( [pJVMCapabilities isKindOfClass:[NSMutableArray class]] )
                                         {
-                                            [(NSMutableArray *)pJVMCapabilities addObject:@"JNI"];
+                                            [static_cast<NSMutableArray *>(pJVMCapabilities) addObject:@"JNI"];
                                             bRet = true;
                                         }
                                         else if ( [pJavaVM isKindOfClass:[NSMutableDictionary class]] )
@@ -94,7 +94,7 @@ bool JvmfwkUtil_isLoadableJVM( OUString const & aURL )
                                             if ( pNewJVMCapabilities )
                                             {
                                                 [pNewJVMCapabilities addObject:@"JNI"];
-                                                [(NSMutableDictionary *)pJavaVM setObject:pNewJVMCapabilities forKey:@"JVMCapabilities"];
+                                                [static_cast<NSMutableDictionary *>(pJavaVM) setObject:pNewJVMCapabilities forKey:@"JVMCapabilities"];
                                                 bRet = true;
                                             }
                                         }

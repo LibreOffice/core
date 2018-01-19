@@ -260,7 +260,7 @@ sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield
         static_cast<CFStringRef>(_field2->value),
         0); // 0 = no options (like ignore case)
 
-    return (sal_Int32) result;
+    return static_cast<sal_Int32>(result);
 }
 
 
