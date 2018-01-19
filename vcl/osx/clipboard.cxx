@@ -292,7 +292,7 @@ void AquaClipboard::provideDataForType(NSPasteboard* sender, const NSString* typ
 
         if (dp.get() != nullptr)
         {
-            pBoardData = (NSData*)dp->getSystemData();
+            pBoardData = dp->getSystemData();
             [sender setData: pBoardData forType:const_cast<NSString*>(type)];
         }
     }
