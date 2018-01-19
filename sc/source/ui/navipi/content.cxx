@@ -1626,19 +1626,19 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in
     }
 }
 
-bool ScContentTree::SelectEntryByName(const ScContentId nRoot, const OUString& rName)
+void ScContentTree::SelectEntryByName(const ScContentId nRoot, const OUString& rName)
 {
     SvTreeListEntry* pParent = pRootNodes[ nRoot ];
 
     if( !pParent->HasChildren() )
-        return false;
+        return;
 
     SvTreeListEntry* pEntry = FirstChild( pParent );
     while( pEntry )
     {
         if( GetEntryText( pEntry ) == rName )
         {
-            bool bRet = SvTreeListBox::Select( pEntry );
+            SvTreeListBox::Select( pEntry );
 
             // Scroll to the selected item
             if( SvTreeListBox::GetVScroll()->IsVisible() )
@@ -1655,12 +1655,10 @@ bool ScContentTree::SelectEntryByName(const ScContentId nRoot, const OUString& r
                             + nBeforeCount );
             }
 
-            return bRet;
+            return;
         }
         pEntry = Next( pEntry );
     }
-
-    return false;
 }
 
 void ScContentTree::ApplyNavigatorSettings()

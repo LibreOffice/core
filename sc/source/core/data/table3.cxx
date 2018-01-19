@@ -3456,9 +3456,9 @@ void ScTable::GetFilteredFilterEntries(
     }
 }
 
-bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit)
+void ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit)
 {
-    return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
+    aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
 }
 
 sal_uLong ScTable::GetCellCount() const
