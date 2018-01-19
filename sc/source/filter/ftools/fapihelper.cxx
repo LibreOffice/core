@@ -312,12 +312,11 @@ void ScfPropSetHelper::ReadFromPropertySet( const ScfPropertySet& rPropSet )
     mnNextIdx = 0;
 }
 
-bool ScfPropSetHelper::ReadValue( Any& rAny )
+void ScfPropSetHelper::ReadValue( Any& rAny )
 {
     Any* pAny = GetNextAny();
     if( pAny )
         rAny = *pAny;
-    return pAny != nullptr;
 }
 
 void ScfPropSetHelper::ReadValue( Color& rColor )
