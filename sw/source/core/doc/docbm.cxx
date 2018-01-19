@@ -1002,7 +1002,7 @@ namespace sw { namespace mark
         for(iterator_t pBkmk = m_vAllMarks.begin();
             pBkmk != m_vAllMarks.end();
             ++pBkmk)
-            OSL_ENSURE( pBkmk->unique(),
+            OSL_ENSURE( pBkmk->use_count() == 1,
                         "<MarkManager::clearAllMarks(..)> - a Bookmark is still in use.");
 #endif
         m_vAllMarks.clear();

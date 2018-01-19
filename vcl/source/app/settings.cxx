@@ -490,7 +490,8 @@ MouseSettings::~MouseSettings()
 void MouseSettings::CopyData()
 {
     // copy if other references exist
-    if ( ! mxData.unique() ) {
+    if (mxData.use_count() > 1)
+    {
         mxData = std::make_shared<ImplMouseData>(*mxData);
     }
 }
@@ -2255,7 +2256,8 @@ Color StyleSettings::GetSeparatorColor() const
 void StyleSettings::CopyData()
 {
     // copy if other references exist
-    if ( ! mxData.unique() ) {
+    if (mxData.use_count() > 1)
+    {
         mxData = std::make_shared<ImplStyleData>(*mxData);
     }
 }
@@ -2565,7 +2567,8 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
 void MiscSettings::SetEnableLocalizedDecimalSep( bool bEnable )
 {
     // copy if other references exist
-    if ( ! mxData.unique() ) {
+    if (mxData.use_count() > 1)
+    {
         mxData = std::make_shared<ImplMiscData>(*mxData);
     }
     mxData->mbEnableLocalizedDecimalSep = bEnable;
@@ -2627,7 +2630,8 @@ void
 HelpSettings::SetTipTimeout( sal_uLong nTipTimeout )
 {
     // copy if other references exist
-    if ( ! mxData.unique() ) {
+    if (mxData.use_count() > 1)
+    {
         mxData = std::make_shared<ImplHelpData>(*mxData);
     }
     mxData->mnTipTimeout = nTipTimeout;
@@ -2709,7 +2713,8 @@ AllSettings::~AllSettings()
 void AllSettings::CopyData()
 {
     // copy if other references exist
-    if ( ! mxData.unique() ) {
+    if (mxData.use_count() > 1)
+    {
         mxData = std::make_shared<ImplAllSettingsData>(*mxData);
     }
 

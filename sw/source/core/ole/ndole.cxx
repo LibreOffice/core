@@ -1184,7 +1184,7 @@ void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
     }
     if (m_OleObjects.empty())
     {
-        if (g_pOLELRU_Cache.unique()) // test that we're not in InsertObj()
+        if (g_pOLELRU_Cache.use_count() == 1) // test that we're not in InsertObj()
         {
             g_pOLELRU_Cache.reset();
         }

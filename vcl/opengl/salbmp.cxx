@@ -741,7 +741,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
     }
 
     // mpUserBuffer must be unique when we are doing the write access
-    if (nMode == BitmapAccessMode::Write && mpUserBuffer && !mpUserBuffer.unique())
+    if (nMode == BitmapAccessMode::Write && mpUserBuffer && mpUserBuffer.use_count() > 1)
     {
         std::shared_ptr<sal_uInt8> aBuffer(mpUserBuffer);
 

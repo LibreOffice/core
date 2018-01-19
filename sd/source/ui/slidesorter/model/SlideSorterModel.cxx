@@ -324,7 +324,7 @@ void SlideSorterModel::ClearDescriptorList()
     {
         if (iDescriptor->get() != nullptr)
         {
-            if ( ! iDescriptor->unique())
+            if (iDescriptor->use_count() > 1)
             {
                 SAL_INFO(
                     "sd.sls",
