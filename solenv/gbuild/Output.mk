@@ -51,7 +51,10 @@ gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 # default to color output, if interactive
 ifeq ($(origin gb_COLOR),undefined)
 ifneq ($(MAKE_TERMOUT),)
+# Cygwin mintty has issues where gb_Output_error is swallowed
+ifneq ($(OS),WNT)
 gb_COLOR=$(true)
+endif
 endif
 endif
 
