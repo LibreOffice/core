@@ -155,10 +155,10 @@ private:
     @return return value of functor
 */
 template <typename FuncT>
-inline typename FuncT::result_type syncExecute( FuncT const& func )
+inline auto syncExecute(FuncT const& func) -> decltype(func())
 {
     return detail::GenericSolarThreadExecutor<
-        FuncT, typename FuncT::result_type>::exec(func);
+        FuncT, decltype(func())>::exec(func);
 }
 
 } // namespace solarthread
