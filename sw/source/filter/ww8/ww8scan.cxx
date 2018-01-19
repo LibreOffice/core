@@ -3228,7 +3228,7 @@ SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId)
     return aRes;
 }
 
-bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
+void WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
 {
     // const would be nicer, but for that, NewFkp() would need to be replaced or eliminated
     if (!pFkp)
@@ -3236,11 +3236,11 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
        OSL_FAIL( "+Motz: HasSprm: NewFkp needed ( no const possible )" );
        // happens in BugDoc 31722
        if( !NewFkp() )
-           return false;
+           return;
     }
 
     if (!pFkp)
-        return false;
+        return;
 
     pFkp->HasSprm(nId, rResult);
 
@@ -3262,7 +3262,6 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
             aIter.advance();
         };
     }
-    return !rResult.empty();
 }
 
 WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,

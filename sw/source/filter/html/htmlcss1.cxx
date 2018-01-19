@@ -2151,7 +2151,7 @@ std::unique_ptr<HTMLAttrContext> SwHTMLParser::PopContext( HtmlTokenId nToken )
     return xCntxt;
 }
 
-bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
+void SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
                                           sal_uInt16& nRight,
                                           short& nIndent,
                                           bool bIgnoreTopContext ) const
@@ -2160,7 +2160,7 @@ bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
     if( bIgnoreTopContext )
     {
         if( !nPos )
-            return false;
+            return;
         else
             nPos--;
     }
@@ -2171,11 +2171,9 @@ bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
         if( pCntxt->IsLRSpaceChanged() )
         {
             pCntxt->GetMargins( nLeft, nRight, nIndent );
-            return true;
+            return;
         }
     }
-
-    return false;
 }
 
 void SwHTMLParser::GetMarginsFromContextWithNumBul( sal_uInt16& nLeft,

@@ -627,7 +627,7 @@ public:
     virtual sal_uInt16 GetIstd() const override;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     SprmResult HasSprm(sal_uInt16 nId);
-    bool HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult);
+    void HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult);
     bool HasFkp() const { return (nullptr != pFkp); }
 };
 

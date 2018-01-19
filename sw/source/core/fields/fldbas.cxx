@@ -147,13 +147,11 @@ OUString SwFieldType::GetName() const
     return OUString();
 }
 
-bool SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
+void SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
 {
-    return false;
 }
-bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
+void SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 {
-    return false;
 }
 
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
