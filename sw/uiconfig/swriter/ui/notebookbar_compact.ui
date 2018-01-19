@@ -2380,6 +2380,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|fileb">_File</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -3142,6 +3143,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|menub">_Menu</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -4241,6 +4243,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|insertb">_Insert</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -4920,6 +4923,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|reviewb">Pag_e</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -5454,6 +5458,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|referenceb">Reference_s</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="relief">none</property>
@@ -6340,6 +6345,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|reviewR">_Review</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -6841,6 +6847,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|viewb">_View</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -6940,6 +6947,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|tableT">T_able</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="relief">none</property>
@@ -8028,6 +8036,7 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|wrapb">Wrap</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -8141,6 +8150,7 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|graphicB">A_lign</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
@@ -8422,6 +8432,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|graphicB">_Graphic</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="relief">none</property>
@@ -8858,6 +8869,7 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|wrapb">Wrap</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -8971,6 +8983,7 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|graphicB">A_lign</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
@@ -9198,6 +9211,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|drab">D_raw</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -9526,6 +9540,7 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|wrapb">Wrap</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
@@ -9639,6 +9654,7 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|graphicB">A_lign</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
@@ -9776,6 +9792,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|frame:MenuDraw">Object</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
@@ -9881,6 +9898,7 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|referenceb">_Tools</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
