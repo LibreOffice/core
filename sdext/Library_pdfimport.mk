@@ -35,6 +35,12 @@ $(eval $(call gb_Library_use_externals,pdfimport,\
     $(if $(filter-out WNT MACOSX,$(OS)),fontconfig) \
 ))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_defs,pdfimport, \
+    -D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING \
+))
+endif
+
 $(eval $(call gb_Library_add_defs,pdfimport, \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
     -DBOOST_ALL_NO_LIB \
