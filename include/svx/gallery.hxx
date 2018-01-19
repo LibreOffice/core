@@ -44,7 +44,7 @@
 //  * share/gallery (theme files are identified by id)
 //
 // Since galleries may be copied from older offices to newer, do *never* change
-// this IDs except adding new ones (and adapting GALLERY_THEME_LAST). The ID
+// these IDs except adding new ones (and adapting GALLERY_THEME_LAST). The ID
 // *is* written into the binary file *.thm (which is a gallery theme combined
 // of three files, *.thm, *.sdv and *.sdg)
 
