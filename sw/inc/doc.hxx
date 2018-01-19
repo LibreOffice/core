@@ -513,7 +513,7 @@ public:
     ::sw::DocumentContentOperationsManager & GetDocumentContentOperationsManager();
 
     bool UpdateParRsid( SwTextNode *pTextNode, sal_uInt32 nVal = 0 );
-    bool UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
+    void UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
 
     // IDocumentStylePoolAccess
     IDocumentStylePoolAccess const & getIDocumentStylePoolAccess() const;
@@ -1183,19 +1183,19 @@ public:
     bool TableToText( const SwTableNode* pTableNd, sal_Unicode cCh );
 
     // Create columns / rows in table.
-    bool InsertCol( const SwCursor& rCursor,
+    void InsertCol( const SwCursor& rCursor,
                     sal_uInt16 nCnt = 1, bool bBehind = true );
     bool InsertCol( const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt = 1, bool bBehind = true );
-    bool InsertRow( const SwCursor& rCursor,
+    void InsertRow( const SwCursor& rCursor,
                     sal_uInt16 nCnt = 1, bool bBehind = true );
     bool InsertRow( const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt = 1, bool bBehind = true );
 
     // Delete Columns/Rows in table.
     bool DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn = false );
-    bool DeleteRow( const SwCursor& rCursor );
-    bool DeleteCol( const SwCursor& rCursor );
+    void DeleteRow( const SwCursor& rCursor );
+    void DeleteCol( const SwCursor& rCursor );
 
     // Split / concatenate boxes in table.
     bool SplitTable( const SwSelBoxes& rBoxes, bool bVert,
@@ -1265,9 +1265,9 @@ public:
                         const SwTable* pCpyTable, bool bCpyName = false,
                         bool bCorrPos = false );
 
-    bool UnProtectCells( const OUString& rTableName );
+    void UnProtectCells( const OUString& rTableName );
     bool UnProtectCells( const SwSelBoxes& rBoxes );
-    bool UnProtectTables( const SwPaM& rPam );
+    void UnProtectTables( const SwPaM& rPam );
     bool HasTableAnyProtection( const SwPosition* pPos,
                               const OUString* pTableName,
                               bool* pFullTableProtection );
@@ -1390,7 +1390,7 @@ public:
     const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
 
     // Call into intransparent Basic; expect possible Return String.
-    bool ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
+    void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 
     // Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCallEvent,

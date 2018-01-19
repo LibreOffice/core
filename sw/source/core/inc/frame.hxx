@@ -1355,7 +1355,7 @@ public:
     long  BottomDist(const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnBottomDist) (nPos); }
     long  LeftDist   (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnLeftDist)    (nPos); }
     long  RightDist   (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnRightDist)    (nPos); }
-    bool  SetLimit (SwFrame& rFrame, long nNew) const { return (rFrame.*m_fnRect->fnSetLimit) (nNew); }
+    void  SetLimit (SwFrame& rFrame, long nNew) const { (rFrame.*m_fnRect->fnSetLimit) (nNew); }
     bool  OverStep  (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnOverStep)   (nPos); }
 
     void SetPos(SwRect& rRect, const Point& rNew) const { (rRect.*m_fnRect->fnSetPos)(rNew); }

@@ -1125,10 +1125,8 @@ bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 }
 
 // Reset attributes contained in the set.
-bool SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
+void SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
 {
-    bool bRet = false;
-
     SET_CURR_SHELL( this );
 
     SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
@@ -1150,11 +1148,9 @@ bool SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
             pItem = aIter.NextItem();
         }
 
-        bRet = true;
         EndAllActionAndCall();
         GetDoc()->getIDocumentState().SetModified();
     }
-    return bRet;
 }
 
 // Returns frame-format if frame, otherwise 0
@@ -1743,11 +1739,10 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection() const
     return eType;
 }
 
-bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
+void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
 {
     SET_CURR_SHELL( this );
 
-    bool bRet = false;
     const SdrMarkList *pMrkList;
     if( Imp()->HasDrawView() &&  1 ==
         ( pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList())->GetMarkCount() )
@@ -1794,9 +1789,7 @@ bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
 
         EndUndo();
         EndAllAction();
-        bRet = true;
     }
-    return bRet;
 }
 
 static sal_uInt16 SwFormatGetPageNum(const SwFlyFrameFormat * pFormat)

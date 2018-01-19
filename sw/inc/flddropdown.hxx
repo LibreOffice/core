@@ -211,11 +211,8 @@ public:
        rItem is not found the selection will be empty.
 
        @param rItem the item to be set
-
-       @retval true the selected item was successfully set
-       @retval false failure (empty selection)
     */
-    bool SetSelectedItem(const OUString & rItem);
+    void SetSelectedItem(const OUString & rItem);
 
     /**
        Sets the name of the field.

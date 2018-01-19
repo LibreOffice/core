@@ -254,7 +254,7 @@ public:
 
         DrawText() takes over the on optimization!
      */
-    bool DrawTextOpaque( SwDrawTextInfo &rInf );
+    void DrawTextOpaque( SwDrawTextInfo &rInf );
 
     /**
         Two subtleties needs to be mentioned:

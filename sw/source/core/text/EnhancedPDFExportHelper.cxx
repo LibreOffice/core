@@ -384,9 +384,8 @@ bool SwTaggedPDFHelper::CheckReopenTag()
     return bRet && !bContinue;
 }
 
-bool SwTaggedPDFHelper::CheckRestoreTag() const
+void SwTaggedPDFHelper::CheckRestoreTag() const
 {
-    bool bRet = false;
     if ( nRestoreCurrentTag != -1 )
     {
         const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nRestoreCurrentTag );
@@ -395,11 +394,7 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
 #if OSL_DEBUG_LEVEL > 1
         aStructStack.pop_back();
 #endif
-
-        bRet = true;
     }
-
-    return bRet;
 }
 
 void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUString& rString )
