@@ -121,15 +121,16 @@ struct ScInterpreterContext;
 class ScColumnsRange final
 {
  public:
-    class Iterator final : public std::iterator<
-                            std::input_iterator_tag,  // iterator_category
-                            SCCOL,                    // value_type
-                            SCCOL,                    // difference_type
-                            const SCCOL*,             // pointer
-                            SCCOL>                    // reference
+    class Iterator final
     {
         std::vector<ScColumn*>::const_iterator maColIter;
     public:
+        typedef std::input_iterator_tag iterator_category;
+        typedef SCCOL value_type;
+        typedef SCCOL difference_type;
+        typedef const SCCOL* pointer;
+        typedef SCCOL reference;
+
         explicit Iterator(std::vector<ScColumn*>::const_iterator colIter) : maColIter(colIter) {}
 
         Iterator& operator++() { maColIter++; return *this;}
@@ -137,7 +138,7 @@ class ScColumnsRange final
 
         bool operator==(Iterator other) const {return maColIter == other.maColIter;}
         bool operator!=(Iterator other) const {return !(*this == other);}
-        reference operator*() const {return (*maColIter)->GetCol();}
+        SCCOL operator*() const {return (*maColIter)->GetCol();}
     };
 
     ScColumnsRange(Iterator nBegin, Iterator nEnd) : maBegin(nBegin), maEnd(nEnd) {}
