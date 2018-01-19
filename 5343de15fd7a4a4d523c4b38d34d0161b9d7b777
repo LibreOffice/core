@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa31d9ce_09a64cc1",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T11:00:34Z",
+      "side": 1,
+      "message": "This (and below, in 210) is just to check below that we added as many as expected. We can now drop this, and just check that m_DictItems.size \u003d\u003d m_nNumDict",
+      "range": {
+        "startLine": 189,
+        "startChar": 12,
+        "endLine": 189,
+        "endChar": 18
+      },
+      "revId": "5343de15fd7a4a4d523c4b38d34d0161b9d7b777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_e95d78ed",
         "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
         "patchSetId": 4
