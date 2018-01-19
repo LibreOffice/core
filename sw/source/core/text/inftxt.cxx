@@ -1324,27 +1324,6 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
     }
 }
 
-void SwTextPaintInfo::NotifyURL_( const SwLinePortion &rPor ) const
-{
-    OSL_ENSURE( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
-
-    SwRect aIntersect;
-    CalcRect( rPor, nullptr, &aIntersect );
-
-    if( aIntersect.HasArea() )
-    {
-        SwTextNode *pNd = const_cast<SwTextNode*>(GetTextFrame()->GetTextNode());
-        SwTextAttr *const pAttr =
-            pNd->GetTextAttrAt(GetIdx(), RES_TXTATR_INETFMT);
-        if( pAttr )
-        {
-            const SwFormatINetFormat& rFormat = pAttr->GetINetFormat();
-            pNoteURL->InsertURLNote( rFormat.GetValue(), rFormat.GetTargetFrame(),
-                aIntersect );
-        }
-    }
-}
-
 static void lcl_InitHyphValues( PropertyValues &rVals,
             sal_Int16 nMinLeading, sal_Int16 nMinTrailing )
 {

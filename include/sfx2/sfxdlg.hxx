@@ -64,7 +64,6 @@ public:
       */
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
     virtual void                SetText( const OUString& rStr ) = 0;
-    virtual OUString            GetText() const = 0;
 };
 
 class SfxAbstractTabDialog : virtual public SfxAbstractDialog

@@ -171,10 +171,6 @@ void LwpStory::SetCurrentLayout(LwpPageLayout *pPageLayout)
     m_bPMModified = true;
 }
 
-void LwpStory::AddPageLayout(LwpPageLayout * pObject)
-{
-    m_LayoutList.push_back(pObject);
-}
 /**************************************************************************
  * @descr:   Get the next page layout relative to m_pCurrentLayout
 **************************************************************************/

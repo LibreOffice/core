@@ -111,11 +111,6 @@ void SdAbstractTabDialog_Impl::SetText( const OUString& rStr )
     pDlg->SetText( rStr );
 }
 
-OUString SdAbstractTabDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
-}
-
 void AbstractBulletDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetCurPageId( nId );
@@ -146,11 +141,6 @@ void AbstractBulletDialog_Impl::SetText( const OUString& rStr )
     static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetText( rStr );
 }
 
-OUString AbstractBulletDialog_Impl::GetText() const
-{
-    return static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->GetText();
-}
-
 void SdPresLayoutTemplateDlg_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
@@ -179,11 +169,6 @@ void SdPresLayoutTemplateDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
 void SdPresLayoutTemplateDlg_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
-}
-
-OUString SdPresLayoutTemplateDlg_Impl::GetText() const
-{
-    return pDlg->GetText();
 }
 
 SvxFieldData* AbstractSdModifyFieldDlg_Impl::GetField()
@@ -284,11 +269,6 @@ const SfxItemSet* SdAbstractSfxDialog_Impl::GetOutputItemSet() const
 void SdAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
-}
-
-OUString SdAbstractSfxDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
 }
 
 const GDIMetaFile& AbstractSdVectorizeDlg_Impl::GetGDIMetaFile() const

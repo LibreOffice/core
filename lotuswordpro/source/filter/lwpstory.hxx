@@ -121,7 +121,6 @@ public:
     inline void SetSectionName(const OUString& StyleName);
 
     void SetCurrentLayout(LwpPageLayout* pPageLayout);
-    void AddPageLayout(LwpPageLayout* pObject);
     LwpPageLayout* GetNextPageLayout();
     bool IsNeedSection();
     void SortPageLayout();

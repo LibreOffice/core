@@ -31,7 +31,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/prszitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/charsetcoloritem.hxx>
 #include <editeng/escapementitem.hxx>

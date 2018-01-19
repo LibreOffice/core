@@ -87,7 +87,6 @@ class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
     DECL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
@@ -126,7 +125,6 @@ class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
         //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class AbstractApplyTabDialog_Impl : public AbstractTabDialog_Impl, virtual public SfxAbstractApplyTabDialog
@@ -177,7 +175,6 @@ class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
         //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
     virtual const OUString& GetBusinessCardStr() const override;
     virtual Printer *GetPrt() override;
 };
@@ -206,7 +203,6 @@ class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
         //From class Window.
     virtual void                SetText( const OUString& rStr ) override;
-    virtual OUString            GetText() const override;
     virtual void                Start() override;  //this method from SfxTabDialog
     virtual void                ShowReferencePage() override;
     virtual void                Initialize(SfxChildWinInfo *pInfo) override;
