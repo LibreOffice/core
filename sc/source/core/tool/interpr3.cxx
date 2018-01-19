@@ -2704,13 +2704,14 @@ void ScInterpreter::ScTTest()
     }
     else if (fTyp == 2.0)
     {
-        CalculateTest(false,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
+        if (!CalculateTest(false,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF))
+            return;     // error was pushed
     }
     else if (fTyp == 3.0)
     {
-        CalculateTest(true,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
+        if (!CalculateTest(true,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF))
+            return;     // error was pushed
     }
-
     else
     {
         PushIllegalArgument();
