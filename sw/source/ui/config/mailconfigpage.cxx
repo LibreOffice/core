@@ -215,6 +215,8 @@ IMPL_LINK(SwMailConfigPage, ReplyToHdl, Button*, pBox, void)
 
 IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl, Button*, void)
 {
+    m_pConfigItem->SetMailAddress(m_pAddressED->GetText());
+
     ScopedVclPtrInstance< SwAuthenticationSettingsDialog > aDlg(this, *m_pConfigItem);
     aDlg->Execute();
 }
@@ -502,6 +504,16 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, Button*, vo
     bool bIsEnabled = m_pSeparateAuthenticationRB->IsEnabled();
     bool bNotSeparate = !bSeparate && bIsEnabled;
     bSeparate &= bIsEnabled;
+
+    if ( bSeparate && m_pUserNameED->GetText().isEmpty() )
+        m_pUserNameED->SetText( rConfigItem.GetMailAddress() );
+    else if ( m_pUserNameED->GetText() == rConfigItem.GetMailAddress() )
+        m_pUserNameED->SetText("");
+
+    if ( bNotSeparate && m_pInUsernameED->GetText().isEmpty() )
+        m_pInUsernameED->SetText( rConfigItem.GetMailAddress() );
+    else if ( m_pInUsernameED->GetText() == rConfigItem.GetMailAddress() )
+        m_pInUsernameED->SetText("");
 
     m_pOutgoingServerFT->Enable(bSeparate);
     m_pUserNameFT->Enable(bSeparate);
