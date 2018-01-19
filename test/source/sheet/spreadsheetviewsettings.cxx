@@ -230,8 +230,6 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     propName = "ZoomValue";
     sal_Int16 aZoomValue = 42;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aZoomValue);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue ZoomValue", sal_Int16(116),
-                                 aZoomValue);
 
     aNewValue <<= sal_Int16(1);
     xSpreadsheetViewSettings->setPropertyValue(propName, aNewValue);
