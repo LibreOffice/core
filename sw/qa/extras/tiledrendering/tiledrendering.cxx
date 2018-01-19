@@ -1953,7 +1953,7 @@ void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, 
     pListItem->GetStringList(aSeq);
     if (bValue)
     {
-        CPPUNIT_ASSERT_EQUAL(1, aSeq.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
         CPPUNIT_ASSERT_EQUAL(OUString("Default Style"), aSeq[0]);
     }
     else
