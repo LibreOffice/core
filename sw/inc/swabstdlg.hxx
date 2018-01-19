@@ -371,7 +371,7 @@ protected:
     virtual ~AbstractMailMergeWizard() override = default;
 public:
     virtual OUString            GetReloadDocument() const = 0;
-    virtual bool            ShowPage( sal_uInt16 nLevel ) = 0;
+    virtual void                ShowPage( sal_uInt16 nLevel ) = 0;
     virtual sal_uInt16          GetRestartPage() const = 0;
 };
 

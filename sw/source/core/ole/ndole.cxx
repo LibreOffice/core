@@ -155,7 +155,7 @@ public:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
-    bool            Connect() { return GetRealObject() != nullptr; }
+    void            Connect() { GetRealObject(); }
 };
 
 SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):

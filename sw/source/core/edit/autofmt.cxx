@@ -225,10 +225,9 @@ class SwAutoFormat
             SetRedlineText_( nId );
         return true;
     }
-    bool ClearRedlineText() {
+    void ClearRedlineText() {
         if( m_aFlags.bWithRedlining )
             m_pDoc->GetDocumentRedlineManager().SetAutoFormatRedlineComment(nullptr);
-        return true;
     }
 
 public:
