@@ -362,7 +362,7 @@ public:
     void SetRawString( SCROW nRow, const svl::SharedString& rStr );
     void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
     void SetValue( SCROW nRow, double fVal );
-    void SetValues( SCROW nRow, const std::vector<double>& rVals );
+    void SetValues( const SCROW nRow, const std::vector<double>& rVals );
     void SetValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast = true );
     void        SetError( SCROW nRow, const FormulaError nError);
 
