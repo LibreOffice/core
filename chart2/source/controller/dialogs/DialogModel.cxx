@@ -126,9 +126,9 @@ void lcl_createRoleIndexMap( lcl_tRoleIndexMap & rOutMap )
     rOutMap[ "values-size" ] =           ++nIndex;
 }
 
-struct lcl_DataSeriesContainerAppend : public
-    std::iterator< std::output_iterator_tag, Reference< XDataSeriesContainer > >
+struct lcl_DataSeriesContainerAppend
 {
+    typedef Reference< XDataSeriesContainer > value_type;
     typedef std::vector< ::chart::DialogModel::tSeriesWithChartTypeByName > tContainerType;
 
     explicit lcl_DataSeriesContainerAppend( tContainerType * rCnt )
@@ -174,9 +174,9 @@ private:
     tContainerType * m_rDestCnt;
 };
 
-struct lcl_RolesWithRangeAppend : public
-    std::iterator< std::output_iterator_tag, Reference< data::XLabeledDataSequence > >
+struct lcl_RolesWithRangeAppend
 {
+    typedef Reference< data::XLabeledDataSequence > value_type;
     typedef ::chart::DialogModel::tRolesWithRanges tContainerType;
 
     explicit lcl_RolesWithRangeAppend( tContainerType * rCnt,
@@ -233,6 +233,25 @@ private:
     tContainerType * m_rDestCnt;
     OUString m_aRoleForLabelSeq;
 };
+
+}
+
+namespace std
+{
+    template<> struct iterator_traits<lcl_DataSeriesContainerAppend>
+    {
+        typedef std::output_iterator_tag iterator_category;
+        typedef Reference< XDataSeriesContainer > value_type;
+    };
+
+    template<> struct iterator_traits<lcl_RolesWithRangeAppend>
+    {
+        typedef std::output_iterator_tag iterator_category;
+        typedef Reference< data::XLabeledDataSequence > value_type;
+    };
+}
+
+namespace {
 
 void lcl_SetSequenceRole(
     const Reference< data::XDataSequence > & xSeq,
