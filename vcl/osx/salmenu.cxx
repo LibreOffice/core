@@ -800,7 +800,7 @@ void AquaSalMenu::statusLayout()
     {
         NSView* pNSView = [GetSalData()->mpStatusItem view];
         if( [pNSView isMemberOfClass: [OOStatusItemView class]] ) // well of course it is
-            [(OOStatusItemView*)pNSView layout];
+            [static_cast<OOStatusItemView*>(pNSView) layout];
         else
             OSL_FAIL( "someone stole our status view" );
     }

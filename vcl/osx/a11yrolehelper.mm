@@ -142,7 +142,7 @@ using namespace ::com::sun::star::uno;
         } else if ( accessibleContext -> getAccessibleParent().is() ) {
             Reference < XAccessibleContext > rxParentContext = accessibleContext -> getAccessibleParent() -> getAccessibleContext();
             if ( rxParentContext.is() ) {
-                NSString * roleParent = (NSString *) [ AquaA11yRoleHelper simpleMapNativeRoleFrom: rxParentContext.get() ];
+                NSString * roleParent = static_cast<NSString *>([ AquaA11yRoleHelper simpleMapNativeRoleFrom: rxParentContext.get() ]);
                 if ( [ roleParent isEqualToString: NSAccessibilityOutlineRole ] ) {
                     [ nativeRole release ];
                     nativeRole = NSAccessibilityRowRole;

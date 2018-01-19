@@ -62,7 +62,7 @@ using namespace ::com::sun::star::uno;
     // TODO: Detect Type from NSNumber
     if ( [ value isKindOfClass: [ NSNumber class ] ] 
       && [ wrapper accessibleValue ] ) {
-        NSNumber * number = (NSNumber *) value;
+        NSNumber * number = static_cast<NSNumber *>(value);
         Any numberAny ( [ number longValue ] );
         [ wrapper accessibleValue ] -> setCurrentValue ( numberAny );
     }

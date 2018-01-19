@@ -63,7 +63,7 @@ AquaA11yEventListener::~AquaA11yEventListener()
 void SAL_CALL
 AquaA11yEventListener::disposing( const EventObject& )
 {
-    [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) m_wrapperObject accessibleContext ] ];
+    [ AquaA11yFactory removeFromWrapperRepositoryFor: [ static_cast<AquaA11yWrapper *>(m_wrapperObject) accessibleContext ] ];
 }
 
 void SAL_CALL

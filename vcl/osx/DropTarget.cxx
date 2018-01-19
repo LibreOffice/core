@@ -130,7 +130,7 @@ DropTarget::DropTarget() :
 DropTarget::~DropTarget()
 {
     if( AquaSalFrame::isAlive( mpFrame ) )
-        [(id <DraggingDestinationHandler>)mView unregisterDraggingDestinationHandler:mDropTargetHelper];
+        [static_cast<id <DraggingDestinationHandler>>(mView) unregisterDraggingDestinationHandler:mDropTargetHelper];
     [mDropTargetHelper release];
 }
 
@@ -361,11 +361,11 @@ void SAL_CALL DropTarget::initialize(const Sequence< Any >& aArguments)
     sal_uInt64 tmp = 0;
     pNSView >>= tmp;
     mView = reinterpret_cast<id>(tmp);
-    mpFrame = [(SalFrameView*)mView getSalFrame];
+    mpFrame = [static_cast<SalFrameView*>(mView) getSalFrame];
 
     mDropTargetHelper = [[DropTargetHelper alloc] initWithDropTarget: this];
 
-    [(id <DraggingDestinationHandler>)mView registerDraggingDestinationHandler:mDropTargetHelper];
+    [static_cast<id <DraggingDestinationHandler>>(mView) registerDraggingDestinationHandler:mDropTargetHelper];
     [mView registerForDraggedTypes: DataFlavorMapper::getAllSupportedPboardTypes()];
 
     id wnd = [mView window];

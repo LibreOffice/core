@@ -115,7 +115,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         //Test for existence of the dictionaries
         for (NSUInteger i = 0; i < [aLocales count]; i++)
         {
-            NSString* pLangStr = (NSString*)[aLocales objectAtIndex:i];
+            NSString* pLangStr = static_cast<NSString*>([aLocales objectAtIndex:i]);
             if( [[NSSpellChecker sharedSpellChecker] setLanguage:pLangStr ] )
             {
                 postspdict.push_back( pLangStr );
@@ -349,7 +349,7 @@ Reference< XSpellAlternatives >
                {
                   // if needed add: if (suglst[ii] == NULL) continue;
                   NSString* guess = [guesses objectAtIndex:ii];
-                  OUString cvtwrd(reinterpret_cast<const sal_Unicode*>([guess cStringUsingEncoding:NSUnicodeStringEncoding]), (sal_Int32)[guess length]);
+                  OUString cvtwrd(reinterpret_cast<const sal_Unicode*>([guess cStringUsingEncoding:NSUnicodeStringEncoding]), static_cast<sal_Int32>([guess length]));
                   pStr[ii] = cvtwrd;
                }
         }

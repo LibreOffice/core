@@ -179,8 +179,8 @@ static AquaSalFrame* getMouseContainerFrame()
     for(NSUInteger i = 0; i < [aWindows count] && ! pDispatchFrame; i++ )
     {
         NSWindow* pWin = [NSApp windowWithWindowNumber:[[aWindows objectAtIndex:i] integerValue]];
-        if( pWin && [pWin isMemberOfClass: [SalFrameWindow class]] && [(SalFrameWindow*)pWin containsMouse] )
-            pDispatchFrame = [(SalFrameWindow*)pWin getSalFrame];
+        if( pWin && [pWin isMemberOfClass: [SalFrameWindow class]] && [static_cast<SalFrameWindow*>(pWin) containsMouse] )
+            pDispatchFrame = [static_cast<SalFrameWindow*>(pWin) getSalFrame];
     }
     return pDispatchFrame;
 }
@@ -215,7 +215,7 @@ static AquaSalFrame* getMouseContainerFrame()
         [pNSWindow performSelector:setRestorable withObject:reinterpret_cast<id>(NO)];
     }
 
-    return (SalFrameWindow *)pNSWindow;
+    return static_cast<SalFrameWindow *>(pNSWindow);
 }
 
 -(AquaSalFrame*)getSalFrame

@@ -87,7 +87,7 @@
         return;
     }
     
-    NSPopUpButton *popup = (NSPopUpButton*)sender;
+    NSPopUpButton *popup = static_cast<NSPopUpButton*>(sender);
     unsigned int selectedIndex = [popup indexOfSelectedItem];
     
     filterHelper->SetFilterAtIndex(selectedIndex);
@@ -105,7 +105,7 @@
         return;
     }
     uno::Any aValue;
-    aValue <<= ([((NSButton*)sender) state] == NSOnState);
+    aValue <<= ([static_cast<NSButton*>(sender) state] == NSOnState);
     
     filePicker->setValue(css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 }

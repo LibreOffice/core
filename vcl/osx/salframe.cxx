@@ -376,12 +376,12 @@ void AquaSalFrame::initShow()
         if( mpParent ) // center relative to parent
         {
             // center on parent
-            long nNewX = mpParent->maGeometry.nX + ((long)mpParent->maGeometry.nWidth - (long)maGeometry.nWidth)/2;
+            long nNewX = mpParent->maGeometry.nX + (static_cast<long>(mpParent->maGeometry.nWidth) - static_cast<long>(maGeometry.nWidth))/2;
             if( nNewX < aScreenRect.Left() )
                 nNewX = aScreenRect.Left();
             if( long(nNewX + maGeometry.nWidth) > aScreenRect.Right() )
                 nNewX = aScreenRect.Right() - maGeometry.nWidth-1;
-            long nNewY = mpParent->maGeometry.nY + ((long)mpParent->maGeometry.nHeight - (long)maGeometry.nHeight)/2;
+            long nNewY = mpParent->maGeometry.nY + (static_cast<long>(mpParent->maGeometry.nHeight) - static_cast<long>(maGeometry.nHeight))/2;
             if( nNewY < aScreenRect.Top() )
                 nNewY = aScreenRect.Top();
             if( nNewY > aScreenRect.Bottom() )
@@ -707,7 +707,7 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         NSArray* pScreens = [NSScreen screens];
         if( pScreens )
         {
-            if( nDisplay >= 0 && (unsigned int)nDisplay < [pScreens count] )
+            if( nDisplay >= 0 && static_cast<unsigned int>(nDisplay) < [pScreens count] )
                 pScreen = [pScreens objectAtIndex: nDisplay];
             else
             {
@@ -1109,7 +1109,7 @@ static vcl::Font getFont( NSFont* pFont, long nDPIY, const vcl::Font& rDefault )
     if( pFont )
     {
         aResult.SetFamilyName( GetOUString( [pFont familyName] ) );
-        aResult.SetFontHeight( static_cast<int>(([pFont pointSize] * 72.0 / (float)nDPIY)+0.5) );
+        aResult.SetFontHeight( static_cast<int>(([pFont pointSize] * 72.0 / static_cast<float>(nDPIY))+0.5) );
         aResult.SetItalic( ([pFont italicAngle] != 0.0) ? ITALIC_NORMAL : ITALIC_NONE );
         // FIMXE: bold ?
     }
@@ -1392,7 +1392,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     if( bMouseEvent )
     {
-        unsigned int nMask = (unsigned int)[pCur modifierFlags];
+        unsigned int nMask = static_cast<unsigned int>([pCur modifierFlags]);
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
     // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
     // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12

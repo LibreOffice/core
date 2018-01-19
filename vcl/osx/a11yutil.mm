@@ -30,7 +30,7 @@ using namespace ::com::sun::star::awt;
 +(NSValue *)vclPointToNSPoint:(Point)vclPoint {
     // VCL coordinates are in upper-left-notation, Cocoa likes it the Cartesian way (lower-left)
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
-    NSPoint nsPoint = NSMakePoint ( (float) vclPoint.X, (float) ( screenRect.size.height - vclPoint.Y ) );
+    NSPoint nsPoint = NSMakePoint ( static_cast<float>(vclPoint.X), static_cast<float>( screenRect.size.height - vclPoint.Y ) );
     return [ NSValue valueWithPoint: nsPoint ];
 }
 

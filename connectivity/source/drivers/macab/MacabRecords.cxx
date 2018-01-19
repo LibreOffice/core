@@ -168,7 +168,7 @@ void MacabRecords::initialize()
 
     ABRecordRef record;
     sal_Int32 i;
-    recordsSize = (sal_Int32) CFArrayGetCount(allRecords);
+    recordsSize = static_cast<sal_Int32>(CFArrayGetCount(allRecords));
     records = new MacabRecord *[recordsSize];
 
     /* First, we create the header... */
@@ -361,8 +361,8 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
      */
     CFArrayRef allProperties = ABCopyArrayOfPropertiesForRecordType(addressBook, _recordType);
     CFStringRef *nonRequiredProperties;
-    sal_Int32 numRecords = (sal_Int32) CFArrayGetCount(_records);
-    sal_Int32 numProperties = (sal_Int32) CFArrayGetCount(allProperties);
+    sal_Int32 numRecords = static_cast<sal_Int32>(CFArrayGetCount(_records));
+    sal_Int32 numProperties = static_cast<sal_Int32>(CFArrayGetCount(allProperties));
     sal_Int32 numNonRequiredProperties = numProperties - requiredProperties.size();
 
     /* While searching through the properties for required properties, these
@@ -561,7 +561,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             OUString multiLabelString;
             OUString multiPropertyString;
             OUString headerNameString;
-            ABPropertyType multiType = (ABPropertyType) (ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
+            ABPropertyType multiType = static_cast<ABPropertyType>(ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
 
             length = multiLength;
             headerNames = new macabfield *[multiLength];
@@ -610,7 +610,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 OUString multiLabelString;
                 OUString multiPropertyString;
                 std::vector<std::unique_ptr<MacabHeader>> multiHeaders;
-                ABPropertyType multiType = (ABPropertyType) (ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
+                ABPropertyType multiType = static_cast<ABPropertyType>(ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
 
                 multiPropertyString = CFStringToOUString(_propertyName);
 
@@ -678,7 +678,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             if(_propertyValue != nullptr)
             {
             /* Assume all keys are strings */
-            sal_Int32 numRecords = (sal_Int32) CFDictionaryGetCount(static_cast<CFDictionaryRef>(_propertyValue));
+            sal_Int32 numRecords = static_cast<sal_Int32>(CFDictionaryGetCount(static_cast<CFDictionaryRef>(_propertyValue)));
 
             /* The only method for getting info out of a CFDictionary, of both
              * keys and values, is to all of them all at once, so these
@@ -758,7 +758,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
              */
             if(_propertyValue != nullptr)
             {
-                sal_Int32 arrLength = (sal_Int32) CFArrayGetCount(static_cast<CFArrayRef>(_propertyValue));
+                sal_Int32 arrLength = static_cast<sal_Int32>(CFArrayGetCount(static_cast<CFArrayRef>(_propertyValue)));
                 sal_Int32 i,j,k;
                 CFTypeRef arrValue;
                 ABPropertyType arrType;
@@ -845,7 +845,7 @@ MacabRecord *MacabRecords::createMacabRecord(const ABRecordRef _abrecord, const 
     MacabRecord *macabRecord = new MacabRecord(_header->getSize());
 
     CFArrayRef recordProperties = ABCopyArrayOfPropertiesForRecordType(addressBook, _recordType);
-    sal_Int32 numProperties = (sal_Int32) CFArrayGetCount(recordProperties);
+    sal_Int32 numProperties = static_cast<sal_Int32>(CFArrayGetCount(recordProperties));
 
     sal_Int32 i;
 
@@ -964,7 +964,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                  * is go through the array, and rerun this method recursively
                  * on each element.
                  */
-                sal_Int32 arrLength = (sal_Int32) CFArrayGetCount(static_cast<CFArrayRef>(_propertyValue));
+                sal_Int32 arrLength = static_cast<sal_Int32>(CFArrayGetCount(static_cast<CFArrayRef>(_propertyValue)));
                 sal_Int32 i;
                 OUString newPropertyName;
 
@@ -993,7 +993,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                  * we hit a scalar value.
                  */
 
-                sal_Int32 numRecords = (sal_Int32) CFDictionaryGetCount(static_cast<CFDictionaryRef>(_propertyValue));
+                sal_Int32 numRecords = static_cast<sal_Int32>(CFDictionaryGetCount(static_cast<CFDictionaryRef>(_propertyValue)));
                 OUString dictKeyString;
                 sal_Int32 i;
                 OUString newPropertyName;
@@ -1047,7 +1047,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                 CFStringRef multiLabel, localizedMultiLabel;
                 CFTypeRef multiValue;
                 OUString multiLabelString, newPropertyName;
-                ABPropertyType multiType = (ABPropertyType) (ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
+                ABPropertyType multiType = static_cast<ABPropertyType>(ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
 
                 /* Go through each element... */
                 for(i = 0; i < multiLength; i++)
@@ -1099,7 +1099,7 @@ ABPropertyType MacabRecords::getABTypeFromCFType(const CFTypeID cf_type ) const
         /* A match! */
         if(i.cf == cf_type)
         {
-            return (ABPropertyType) i.ab;
+            return static_cast<ABPropertyType>(i.ab);
         }
     }
     return kABErrorInProperty;

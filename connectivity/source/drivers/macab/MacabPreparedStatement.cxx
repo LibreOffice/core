@@ -42,7 +42,7 @@ void MacabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams)
     if (nParams < 1)
         ::dbtools::throwInvalidIndexException(*this);
 
-    if (nParams >= (sal_Int32) m_aParameterRow->get().size())
+    if (nParams >= static_cast<sal_Int32>(m_aParameterRow->get().size()))
         m_aParameterRow->get().resize(nParams);
 }
 
@@ -69,7 +69,7 @@ void MacabPreparedStatement::resetParameters() const
 
 void MacabPreparedStatement::getNextParameter(OUString &rParameter) const
 {
-    if (m_nParameterIndex >= (sal_Int32) m_aParameterRow->get().size())
+    if (m_nParameterIndex >= static_cast<sal_Int32>(m_aParameterRow->get().size()))
     {
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceString(

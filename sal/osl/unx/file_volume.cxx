@@ -124,7 +124,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #if defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || defined(DRAGONFLY)
 #   define OSL_detail_STATFS_STRUCT                  struct statfs
 #   define OSL_detail_STATFS(dir, sfs)               statfs((dir), (sfs))
-#   define OSL_detail_STATFS_BLKSIZ(a)               ((sal_uInt64)((a).f_bsize))
+#   define OSL_detail_STATFS_BLKSIZ(a)               (static_cast<sal_uInt64>((a).f_bsize))
 #   define OSL_detail_STATFS_TYPENAME(a)             ((a).f_fstypename)
 #if defined(OPENBSD)
 #   define OSL_detail_STATFS_ISREMOTE(a)             (rtl_str_compare((a).f_fstypename, "nfs") == 0)

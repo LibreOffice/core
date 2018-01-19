@@ -285,9 +285,9 @@ public:
             NSControl* pCtrl = nil;
             NSCell* pCell = nil;
             if( [pObj isKindOfClass: [NSControl class]] )
-                pCtrl = (NSControl*)pObj;
+                pCtrl = static_cast<NSControl*>(pObj);
             else if( [pObj isKindOfClass: [NSCell class]] )
-                pCell = (NSCell*)pObj;
+                pCell = static_cast<NSCell*>(pObj);
 
             int nTag = pCtrl ? [pCtrl tag] :
                        pCell ? [pCell tag] :
@@ -303,7 +303,7 @@ public:
                     [pCtrl setEnabled: bEnabled];
                     NSView* pOther = getPair( pCtrl );
                     if( pOther && [pOther isKindOfClass: [NSControl class]] )
-                        [(NSControl*)pOther setEnabled: bEnabled];
+                        [static_cast<NSControl*>(pOther) setEnabled: bEnabled];
                 }
                 else if( pCell )
                     [pCell setEnabled: bEnabled];
@@ -336,7 +336,7 @@ static OUString filterAccelerator( rtl::OUString const & rText )
 {
     if( [pSender isMemberOfClass: [NSPopUpButton class]] )
     {
-        NSPopUpButton* pBtn = (NSPopUpButton*)pSender;
+        NSPopUpButton* pBtn = static_cast<NSPopUpButton*>(pSender);
         NSMenuItem* pSelected = [pBtn selectedItem];
         if( pSelected )
         {
@@ -346,23 +346,23 @@ static OUString filterAccelerator( rtl::OUString const & rText )
     }
     else if( [pSender isMemberOfClass: [NSButton class]] )
     {
-        NSButton* pBtn = (NSButton*)pSender;
+        NSButton* pBtn = static_cast<NSButton*>(pSender);
         int nTag = [pBtn tag];
         mpController->changePropertyWithBoolValue( nTag, [pBtn state] == NSOnState );
     }
     else if( [pSender isMemberOfClass: [NSMatrix class]] )
     {
-        NSObject* pObj = [(NSMatrix*)pSender selectedCell];
+        NSObject* pObj = [static_cast<NSMatrix*>(pSender) selectedCell];
         if( [pObj isMemberOfClass: [NSButtonCell class]] )
         {
-            NSButtonCell* pCell = (NSButtonCell*)pObj;
+            NSButtonCell* pCell = static_cast<NSButtonCell*>(pObj);
             int nTag = [pCell tag];
             mpController->changePropertyWithIntValue( nTag );
         }
     }
     else if( [pSender isMemberOfClass: [NSTextField class]] )
     {
-        NSTextField* pField = (NSTextField*)pSender;
+        NSTextField* pField = static_cast<NSTextField*>(pSender);
         int nTag = [pField tag];
         rtl::OUString aValue = GetOUString( [pSender stringValue] );
         mpController->changePropertyWithStringValue( nTag, aValue );
@@ -379,25 +379,25 @@ static OUString filterAccelerator( rtl::OUString const & rText )
 {
     if( [pSender isMemberOfClass: [NSTextField class]] )
     {
-        NSTextField* pField = (NSTextField*)pSender;
+        NSTextField* pField = static_cast<NSTextField*>(pSender);
         int nTag = [pField tag];
         sal_Int64 nValue = [pField intValue];
         
         NSView* pOther = mpController->getPair( pField );
         if( pOther )
-            [(NSControl*)pOther setIntValue: nValue];
+            [static_cast<NSControl*>(pOther) setIntValue: nValue];
 
         mpController->changePropertyWithIntValue( nTag, nValue );
     }
     else if( [pSender isMemberOfClass: [NSStepper class]] )
     {
-        NSStepper* pStep = (NSStepper*)pSender;
+        NSStepper* pStep = static_cast<NSStepper*>(pSender);
         int nTag = [pStep tag];
         sal_Int64 nValue = [pStep intValue];
 
         NSView* pOther = mpController->getPair( pStep );
         if( pOther )
-            [(NSControl*)pOther setIntValue: nValue];
+            [static_cast<NSControl*>(pOther) setIntValue: nValue];
 
         mpController->changePropertyWithIntValue( nTag, nValue );
     }
@@ -546,7 +546,7 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
     int nViews = [pTabbedViews count];
     for( int i = 0; i < nViews; i++ )
     {
-        NSTabViewItem* pItem = (NSTabViewItem*)[pTabbedViews objectAtIndex: i];
+        NSTabViewItem* pItem = static_cast<NSTabViewItem*>([pTabbedViews objectAtIndex: i]);
         NSView* pNSView = [pItem view];
         if( pNSView )
         {
@@ -733,7 +733,7 @@ static void addRadio( NSView* pCurParent, long rCurX, long& rCurY, long nAttachO
     [pProto setButtonType: NSRadioButton];
     NSMatrix* pMatrix = [[NSMatrix alloc] initWithFrame: aRadioRect
                                           mode: NSRadioModeMatrix
-                                          prototype: (NSCell*)pProto
+                                          prototype: static_cast<NSCell*>(pProto)
                                           numberOfRows: rChoices.getLength()
                                           numberOfColumns: 1];
     // set individual titles

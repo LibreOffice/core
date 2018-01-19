@@ -450,7 +450,7 @@ sal_uInt64 tools::Time::GetMonotonicTicks()
     static mach_timebase_info_data_t info = { 0, 0 };
     if ( 0 == info.numer )
         mach_timebase_info( &info );
-    nMicroSeconds = mach_absolute_time() * (double) (info.numer / info.denom) / 1000;
+    nMicroSeconds = mach_absolute_time() * static_cast<double>(info.numer / info.denom) / 1000;
 #else
 #if defined(USE_CLOCK_GETTIME)
     struct timespec currentTime;

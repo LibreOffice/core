@@ -48,7 +48,7 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
     CFRelease(sGroupName);
 
     // The _group's_ records (remember MacabGroup inherits from MacabRecords)
-    recordsSize = (sal_Int32) CFArrayGetCount(xGroupMembers);
+    recordsSize = static_cast<sal_Int32>(CFArrayGetCount(xGroupMembers));
     records = new MacabRecord *[recordsSize];
     setHeader(_allRecords->getHeader());
 

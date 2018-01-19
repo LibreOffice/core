@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 
 +(id)sizeAttributeForElement:(AquaA11yWrapper *)wrapper {
     Size size = [ wrapper accessibleComponent ] -> getSize();
-    NSSize nsSize = NSMakeSize ( (float) size.Width, (float) size.Height );
+    NSSize nsSize = NSMakeSize ( static_cast<float>(size.Width), static_cast<float>(size.Height) );
     return [ NSValue valueWithSize: nsSize ];
 }
 
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
     Size size = [ wrapper accessibleComponent ] -> getSize();
     Point location = [ wrapper accessibleComponent ] -> getLocationOnScreen();
-    NSPoint nsPoint = NSMakePoint ( (float) location.X, (float) ( screenRect.size.height - size.Height - location.Y ) );
+    NSPoint nsPoint = NSMakePoint ( static_cast<float>(location.X), static_cast<float>( screenRect.size.height - size.Height - location.Y ) );
     return [ NSValue valueWithPoint: nsPoint ];
 }
 

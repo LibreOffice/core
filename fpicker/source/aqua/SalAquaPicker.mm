@@ -77,8 +77,8 @@ void SalAquaPicker::implInitialize()
     {
         case NAVIGATIONSERVICES_OPEN:
             m_pDialog = [NSOpenPanel openPanel];
-            [(NSOpenPanel*)m_pDialog setCanChooseDirectories:NO];
-            [(NSOpenPanel*)m_pDialog setCanChooseFiles:YES];
+            [static_cast<NSOpenPanel*>(m_pDialog) setCanChooseDirectories:NO];
+            [static_cast<NSOpenPanel*>(m_pDialog) setCanChooseFiles:YES];
             break;
 
         case NAVIGATIONSERVICES_SAVE:
@@ -104,8 +104,8 @@ void SalAquaPicker::implInitialize()
 
         case NAVIGATIONSERVICES_DIRECTORY:
             m_pDialog = [NSOpenPanel openPanel];
-            [(NSOpenPanel*)m_pDialog setCanChooseDirectories:YES];
-            [(NSOpenPanel*)m_pDialog setCanChooseFiles:NO];
+            [static_cast<NSOpenPanel*>(m_pDialog) setCanChooseDirectories:YES];
+            [static_cast<NSOpenPanel*>(m_pDialog) setCanChooseFiles:NO];
             break;
 
         default:
@@ -113,7 +113,7 @@ void SalAquaPicker::implInitialize()
     }
 
     if (m_pDialog != nil) {
-        [(NSOpenPanel*)m_pDialog setCanCreateDirectories:YES];
+        [static_cast<NSOpenPanel*>(m_pDialog) setCanCreateDirectories:YES];
         //Retain the dialog instance or it will go away immediately
         [m_pDialog retain];
     }
@@ -152,7 +152,7 @@ int SalAquaPicker::run()
         case NAVIGATIONSERVICES_DIRECTORY:
         case NAVIGATIONSERVICES_OPEN:
             [m_pDialog setDirectoryURL:startDirectory];
-            retVal = [(NSOpenPanel*)m_pDialog runModal];
+            retVal = [static_cast<NSOpenPanel*>(m_pDialog) runModal];
             break;
         case NAVIGATIONSERVICES_SAVE:
             [m_pDialog setDirectoryURL:startDirectory];

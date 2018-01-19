@@ -121,7 +121,7 @@ CoreTextFontFace::~CoreTextFontFace()
 
 sal_IntPtr CoreTextFontFace::GetFontId() const
 {
-    return (sal_IntPtr)mnFontId;
+    return static_cast<sal_IntPtr>(mnFontId);
 }
 
 const FontCharMapRef CoreTextFontFace::GetFontCharMap() const
@@ -553,15 +553,15 @@ static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
     //      not too important since the subsetter doesn't care currently
     //      for( pData+nOfs ... pData+nOfs+nLen )
     // write entry offset
-    rpDest[ 8] = (char)(nOfs >> 24);
-    rpDest[ 9] = (char)(nOfs >> 16);
-    rpDest[10] = (char)(nOfs >>  8);
-    rpDest[11] = (char)(nOfs >>  0);
+    rpDest[ 8] = static_cast<char>(nOfs >> 24);
+    rpDest[ 9] = static_cast<char>(nOfs >> 16);
+    rpDest[10] = static_cast<char>(nOfs >>  8);
+    rpDest[11] = static_cast<char>(nOfs >>  0);
     // write entry length
-    rpDest[12] = (char)(nLen >> 24);
-    rpDest[13] = (char)(nLen >> 16);
-    rpDest[14] = (char)(nLen >>  8);
-    rpDest[15] = (char)(nLen >>  0);
+    rpDest[12] = static_cast<char>(nLen >> 24);
+    rpDest[13] = static_cast<char>(nLen >> 16);
+    rpDest[14] = static_cast<char>(nLen >>  8);
+    rpDest[15] = static_cast<char>(nLen >>  0);
     // advance to next entry
     rpDest += 16;
 }

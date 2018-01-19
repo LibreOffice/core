@@ -124,11 +124,11 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
 
     const CGSize aLayerSize = CGLayerGetSize( xLayer );
     SAL_INFO("vcl.cg", "CGLayerGetSize(" << xLayer << ") = " << aLayerSize );
-    if( nWidth >= (int)aLayerSize.width - nX )
-        nWidth = (int)aLayerSize.width - nX;
+    if( nWidth >= static_cast<int>(aLayerSize.width) - nX )
+        nWidth = static_cast<int>(aLayerSize.width) - nX;
 
-    if( nHeight >= (int)aLayerSize.height - nY )
-        nHeight = (int)aLayerSize.height - nY;
+    if( nHeight >= static_cast<int>(aLayerSize.height) - nY )
+        nHeight = static_cast<int>(aLayerSize.height) - nY;
 
     if( (nWidth < 0) || (nHeight < 0) )
         nWidth = nHeight = 0;

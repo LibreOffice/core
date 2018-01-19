@@ -288,7 +288,7 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
     mach_port_deallocate(mach_task_self(), cclock);
 
     nSeconds = ( currentTime.tv_sec - startTime.tv_sec );
-    nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
+    nSeconds = ( nSeconds * 1000 ) + static_cast<long>(( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
 #else
     osl_time_t currentTime;
 

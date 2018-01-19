@@ -328,7 +328,7 @@ bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
         NSObject* pType = [pAttribs objectForKey: NSFileType];
         if( pType && [pType isKindOfClass: [NSString class]] )
         {
-            NSString* pT = (NSString*)pType;
+            NSString* pT = static_cast<NSString*>(pType);
             if( [pT isEqualToString: NSFileTypeDirectory]    ||
                 [pT isEqualToString: NSFileTypeSymbolicLink] )
                 return true;

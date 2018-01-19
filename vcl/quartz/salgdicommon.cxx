@@ -671,9 +671,9 @@ bool AquaSalGraphics::drawTransformedBitmap(
     const QuartzSalBitmap* pMaskSalBmp = static_cast<const QuartzSalBitmap*>(pAlphaBmp);
 
     if( !pMaskSalBmp)
-        xImage = rSrcSalBmp.CreateCroppedImage( 0, 0, (int)aSize.Width(), (int)aSize.Height() );
+        xImage = rSrcSalBmp.CreateCroppedImage( 0, 0, static_cast<int>(aSize.Width()), static_cast<int>(aSize.Height()) );
     else
-        xImage = rSrcSalBmp.CreateWithMask( *pMaskSalBmp, 0, 0, (int)aSize.Width(), (int)aSize.Height() );
+        xImage = rSrcSalBmp.CreateWithMask( *pMaskSalBmp, 0, 0, static_cast<int>(aSize.Width()), static_cast<int>(aSize.Height()) );
     if( !xImage )
     {
         DBG_DRAW_OPERATION_EXIT_EARLY("drawTransformedBitmap");
@@ -764,8 +764,8 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
     }
 
     const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
-    CGImageRef xImage = rBitmap.CreateCroppedImage( (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
-                                                    (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight );
+    CGImageRef xImage = rBitmap.CreateCroppedImage( static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
+                                                    static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight) );
     if( !xImage )
     {
         DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
@@ -820,7 +820,7 @@ bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
                                    void* pEpsData, sal_uLong nByteCount )
 {
     // convert the raw data to an NSImageRef
-    NSData* xNSData = [NSData dataWithBytes:pEpsData length:(int)nByteCount];
+    NSData* xNSData = [NSData dataWithBytes:pEpsData length:static_cast<int>(nByteCount)];
     NSImageRep* xEpsImage = [NSEPSImageRep imageRepWithData: xNSData];
     if( !xEpsImage )
     {
@@ -1613,7 +1613,7 @@ void AquaSalGraphics::initResolution( NSWindow* )
                 {
                     // FIXME: casting a long to CGDirectDisplayID is evil, but
                     // Apple suggest to do it this way
-                    const CGDirectDisplayID nDisplayID = (CGDirectDisplayID)[pVal longValue];
+                    const CGDirectDisplayID nDisplayID = static_cast<CGDirectDisplayID>([pVal longValue]);
                     const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
                     mnRealDPIX = static_cast<long>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
                     mnRealDPIY = static_cast<long>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
@@ -2175,8 +2175,8 @@ bool XorEmulation::UpdateTarget()
     {
         CGImageRef xXorImage = CGBitmapContextCreateImage( m_xTempContext );
         SAL_INFO( "vcl.cg", "CGBitmapContextCreateImage(" << m_xTempContext << ") = " << xXorImage );
-        const int nWidth  = (int)CGImageGetWidth( xXorImage );
-        const int nHeight = (int)CGImageGetHeight( xXorImage );
+        const int nWidth  = static_cast<int>(CGImageGetWidth( xXorImage ));
+        const int nHeight = static_cast<int>(CGImageGetHeight( xXorImage ));
         // TODO: update minimal changerect
         const CGRect aFullRect = CGRectMake(0, 0, nWidth, nHeight);
         SAL_INFO( "vcl.cg", "CGContextDrawImage(" << m_xTargetContext << "," << aFullRect << "," << xXorImage << ")" );

@@ -129,9 +129,9 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     nSQLRETURN = N3SQLDriverConnect(m_aConnectionHandle,
                       nullptr,
                       szConnStrIn,
-                      (SQLSMALLINT) std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()),
+                      static_cast<SQLSMALLINT>(std::min<sal_Int32>(sal_Int32(2048),aConStr.getLength())),
                       szConnStrOut,
-                      (SQLSMALLINT) sizeof szConnStrOut,
+                      SQLSMALLINT(sizeof szConnStrOut),
                       &cbConnStrOut,
                       nSilent);
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
