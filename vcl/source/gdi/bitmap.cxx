@@ -298,7 +298,7 @@ BitmapChecksum Bitmap::GetChecksum() const
 
 void Bitmap::ImplMakeUnique()
 {
-    if (mxImpBmp && !mxImpBmp.unique())
+    if (mxImpBmp && mxImpBmp.use_count() > 1)
     {
         std::shared_ptr<ImpBitmap> xOldImpBmp = mxImpBmp;
         mxImpBmp.reset(new ImpBitmap);

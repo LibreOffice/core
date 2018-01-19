@@ -122,7 +122,7 @@ void SAL_CALL BasicViewFactory::disposing()
     //    ViewShellContainer::const_iterator iView;
     for (iView=mpViewShellContainer->begin(); iView!=mpViewShellContainer->end(); ++iView)
     {
-        OSL_ASSERT((*iView)->mpViewShell.unique());
+        OSL_ASSERT((*iView)->mpViewShell.use_count() == 1);
     }
     mpViewShellContainer.reset();
 }

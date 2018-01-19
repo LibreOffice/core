@@ -198,7 +198,7 @@ void SlideSorterView::Dispose()
     // Deletion of the objects and the page will be done in SdrModel
     // destructor (as long as objects and pages are added)
 
-    OSL_ASSERT(mpLayeredDevice.unique());
+    OSL_ASSERT(mpLayeredDevice.use_count() == 1);
     mpLayeredDevice.reset();
 
     mbIsDisposed = true;
