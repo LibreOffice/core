@@ -49,9 +49,9 @@ class SystemWindow::ImplData
 {
 public:
     ImplData();
+    ~ImplData();
 
-    std::unique_ptr<TaskPaneList>
-                    mpTaskPaneList;
+    TaskPaneList*   mpTaskPaneList;
     Size            maMaxOutSize;
     OUString        maRepresentedURL;
     Link<SystemWindow&,void> maCloseHdl;
@@ -61,6 +61,11 @@ SystemWindow::ImplData::ImplData()
 {
     mpTaskPaneList = nullptr;
     maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
+}
+
+SystemWindow::ImplData::~ImplData()
+{
+    delete mpTaskPaneList;
 }
 
 SystemWindow::SystemWindow(WindowType nType)
@@ -90,7 +95,7 @@ void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStri
 {
     mbIsDefferedInit = true;
     mpDialogParent = pParent; //should be unset in doDeferredInit
-    m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
 }
 
 SystemWindow::~SystemWindow()
@@ -214,12 +219,12 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
         }
         else
         {
-            TaskPaneList *pTList = mpImplData->mpTaskPaneList.get();
+            TaskPaneList *pTList = mpImplData->mpTaskPaneList;
             if( !pTList && ( GetType() == WindowType::FLOATINGWINDOW ) )
             {
                 vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
                 if( pWin && pWin->IsSystemWindow() )
-                    pTList = static_cast<SystemWindow*>(pWin)->mpImplData->mpTaskPaneList.get();
+                    pTList = static_cast<SystemWindow*>(pWin)->mpImplData->mpTaskPaneList;
             }
             if( !pTList )
             {
@@ -232,7 +237,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
                     if( pWin && pWin->IsSystemWindow() )
                         pSysWin = static_cast<SystemWindow*>(pWin);
                 }
-                pTList = pSysWin->mpImplData->mpTaskPaneList.get();
+                pTList = pSysWin->mpImplData->mpTaskPaneList;
             }
             if( pTList && pTList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
                 return true;
@@ -246,10 +251,10 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
     if( !mpImplData )
         return nullptr;
     if( mpImplData->mpTaskPaneList )
-        return mpImplData->mpTaskPaneList.get();
+        return mpImplData->mpTaskPaneList ;
     else
     {
-        mpImplData->mpTaskPaneList.reset( new TaskPaneList );
+        mpImplData->mpTaskPaneList = new TaskPaneList();
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WindowType::FLOATINGWINDOW ) )
         {
@@ -259,7 +264,7 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
         }
         if( pMBar )
             mpImplData->mpTaskPaneList->AddWindow( pMBar->ImplGetWindow() );
-        return mpImplData->mpTaskPaneList.get();
+        return mpImplData->mpTaskPaneList;
     }
 }
 

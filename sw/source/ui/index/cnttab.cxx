@@ -2684,8 +2684,8 @@ SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
     , m_pActiveCtrl(nullptr)
     , m_pParent(nullptr)
 {
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(),
-        "modules/swriter/ui/tokenwidget.ui", "TokenWidget"));
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
+        "modules/swriter/ui/tokenwidget.ui", "TokenWidget");
     get(m_pLeftScrollWin, "left");
     get(m_pCtrlParentWin, "ctrl");
     m_pCtrlParentWin->set_height_request(Edit::GetMinimumEditSize().Height());

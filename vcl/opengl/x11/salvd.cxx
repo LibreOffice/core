@@ -69,6 +69,7 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
 
 X11OpenGLSalVirtualDevice::~X11OpenGLSalVirtualDevice()
 {
+    delete mpGraphics;
 }
 
 SalGraphics* X11OpenGLSalVirtualDevice::AcquireGraphics()
@@ -79,7 +80,7 @@ SalGraphics* X11OpenGLSalVirtualDevice::AcquireGraphics()
     if( mpGraphics )
         mbGraphics = true;
 
-    return mpGraphics.get();
+    return mpGraphics;
 }
 
 void X11OpenGLSalVirtualDevice::ReleaseGraphics( SalGraphics* )

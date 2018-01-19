@@ -640,7 +640,7 @@ void ListBox::Resize()
 
 void ListBox::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const ImplListBoxWindow* rMainWin = mpImplLB->GetMainWindow();
     if( mpFloatWin )
     {

@@ -180,7 +180,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 
 void GroupBox::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<GroupBox*>(this)->ImplDraw( const_cast<GroupBox*>(this), DrawFlags::NONE, Point(), GetOutputSizePixel(), true );
 }
 

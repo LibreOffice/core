@@ -574,7 +574,7 @@ void SpinField::FillLayoutData() const
 {
     if (mbSpin)
     {
-        mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+        mpControlData->mpLayoutData = new vcl::ControlLayoutData();
         AppendLayoutData(*GetSubEdit());
         GetSubEdit()->SetLayoutDataParent(this);
     }
