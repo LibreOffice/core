@@ -98,6 +98,11 @@ endif
 
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
+else
+# GCC 4.8, at least, is confused by boost 1.66 optional assignments
+ifeq ($(shell expr '$(GCC_VERSION)' '<' 490),1)
+gb_CXXFLAGS_COMMON += -Wno-maybe-uninitialized
+endif
 endif
 
 

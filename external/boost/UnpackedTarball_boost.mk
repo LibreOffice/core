@@ -20,8 +20,6 @@ boost_patches += boost.multi_array.C4510.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9903
 boost_patches += boost.utility.Wundef.warnings.patch
 
-boost_patches += boost.auto_link.patch
-
 boost_patches += boost.noiconv.patch
 
 boost_patches += ubsan.patch.0

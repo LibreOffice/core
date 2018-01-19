@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_custom_headers,svgfilter,filter/source/svg))
 $(eval $(call gb_Library_set_componentfile,svgfilter,filter/source/svg/svgfilter))
 
 $(eval $(call gb_Library_add_defs,svgfilter,\
+	-DBOOST_ALL_NO_LIB \
 	-DUSE_MODERN_SPIRIT \
 	-DFILTER_DLLIMPLEMENTATION \
 ))
