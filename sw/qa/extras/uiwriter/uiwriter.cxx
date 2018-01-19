@@ -5688,13 +5688,16 @@ void SwUiWriterTest::testTdf115013()
 {
    const OUString sColumnName("Name with spaces, \"quotes\" and \\backslashes");
 
+   utl::TempFile aTempDir(nullptr, true);
+   const OUString aWorkDir = aTempDir.GetURL();
+
    //create new writer document
     SwDoc* pDoc = createDoc();
 
     {
         // Load and register data source
         const OUString aDataSourceURI(m_directories.getURLFromSrc(DATA_DIRECTORY) + "datasource.ods");
-        OUString sDataSource = SwDBManager::LoadAndRegisterDataSource(aDataSourceURI, nullptr);
+        OUString sDataSource = SwDBManager::LoadAndRegisterDataSource(aDataSourceURI, &aWorkDir);
         CPPUNIT_ASSERT(!sDataSource.isEmpty());
 
         // Insert a new field type for the mailmerge field
@@ -5728,6 +5731,8 @@ void SwUiWriterTest::testTdf115013()
     OUString sColumn = static_cast<SwDBFieldType*>(pField->GetTyp())->GetColumnName();
     // The column name must come correct after round trip
     CPPUNIT_ASSERT_EQUAL(sColumnName, sColumn);
+
+    utl::removeTree(aWorkDir);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
