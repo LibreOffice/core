@@ -63,7 +63,7 @@ SwScriptIterator::SwScriptIterator(
                 m_rText, nStt, nCurScript);
 }
 
-bool SwScriptIterator::Next()
+void SwScriptIterator::Next()
 {
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
     bool bRet = false;
@@ -84,7 +84,6 @@ bool SwScriptIterator::Next()
                                             m_rText, m_nChgPos, nCurScript);
         bRet = true;
     }
-    return bRet;
 }
 
 SwLanguageIterator::SwLanguageIterator( const SwTextNode& rTNd,

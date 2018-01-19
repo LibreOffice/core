@@ -414,15 +414,15 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 }
 
 /// Set the rsid of the next nLen symbols of rRg to the current session number
-bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
+void SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
 {
     if (!SW_MOD()->GetModuleConfig()->IsStoreRsid())
-        return false;
+        return;
 
     SwTextNode *pTextNode = rRg.GetPoint()->nNode.GetNode().GetTextNode();
     if (!pTextNode)
     {
-        return false;
+        return;
     }
     const sal_Int32 nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
     SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
@@ -443,7 +443,6 @@ bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
             pUndoInsert->SetWithRsid();
         }
     }
-    return bRet;
 }
 
 bool SwDoc::UpdateParRsid( SwTextNode *pTextNode, sal_uInt32 nVal )

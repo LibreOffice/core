@@ -80,14 +80,14 @@ public:
 
     virtual SwFieldType* Copy()    const override;
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
     void                RemoveField(sal_IntPtr nHandle);
     sal_IntPtr          AddField(const OUString& rFieldContents);
-    bool            AddField(sal_IntPtr nHandle);
+    void                AddField(sal_IntPtr nHandle);
     void                DelSequenceArray()
                         {
                             m_SequArr.clear();
