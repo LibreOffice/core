@@ -74,14 +74,12 @@
 #include <editeng/autokernitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/contouritem.hxx>
-#include <editeng/prszitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/charsetcoloritem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/nlbkitem.hxx>
 #include <editeng/nhypitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
@@ -1597,32 +1595,6 @@ bool SvxContourItem::GetPresentation
     return true;
 }
 
-// class SvxPropSizeItem -------------------------------------------------
-
-SvxPropSizeItem::SvxPropSizeItem( const sal_uInt16 nPercent, const sal_uInt16 nId ) :
-    SfxUInt16Item( nId, nPercent )
-{
-}
-
-
-SfxPoolItem* SvxPropSizeItem::Clone( SfxItemPool * ) const
-{
-    return new SvxPropSizeItem( *this );
-}
-
-
-bool SvxPropSizeItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper& /*rIntl*/
-)   const
-{
-    rText.clear();
-    return false;
-}
-
 // class SvxBackgroundColorItem -----------------------------------------
 
 SvxBackgroundColorItem::SvxBackgroundColorItem( const sal_uInt16 nId ) :
@@ -2226,31 +2198,6 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
     }
     return true;
-}
-
-// class SvxNoLinebreakItem ----------------------------------------------
-SvxNoLinebreakItem::SvxNoLinebreakItem( const bool bBreak, const sal_uInt16 nId ) :
-      SfxBoolItem( nId, bBreak )
-{
-}
-
-
-SfxPoolItem* SvxNoLinebreakItem::Clone( SfxItemPool* ) const
-{
-    return new SvxNoLinebreakItem( *this );
-}
-
-
-bool SvxNoLinebreakItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper& /*rIntl*/
-)   const
-{
-    rText.clear();
-    return false;
 }
 
 // class SvxNoHyphenItem -------------------------------------------------

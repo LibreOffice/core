@@ -1,3 +1,17 @@
+canvas/source/cairo/cairo_canvashelper.hxx:214
+    _Bool cairocanvas::CanvasHelper::hasAlpha() const
+canvas/source/cairo/cairo_textlayout.hxx:85
+    _Bool cairocanvas::TextLayout::draw(const class std::shared_ptr<struct _cairo> &,class OutputDevice &,const class Point &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &) const
+canvas/source/opengl/ogl_buffercontext.hxx:25
+    _Bool oglcanvas::IBufferContext::startBufferRendering()
+canvas/source/opengl/ogl_buffercontext.hxx:28
+    _Bool oglcanvas::IBufferContext::endBufferRendering()
+canvas/source/opengl/ogl_spritecanvas.hxx:106
+    _Bool oglcanvas::SpriteCanvas::renderRecordedActions() const
+canvas/source/opengl/ogl_textlayout.hxx:64
+    _Bool oglcanvas::TextLayout::draw(const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> &) const
+canvas/source/tools/surface.hxx:137
+    _Bool canvas::Surface::refresh(struct canvas::IColorBuffer &) const
 chart2/source/view/main/OpenGLRender.hxx:69
     int OpenGLRender::InitOpenGL()
 chart2/source/view/main/OpenGLRender.hxx:70
@@ -28,14 +42,50 @@ chart2/source/view/main/OpenGLRender.hxx:104
     int OpenGLRender::RenderSymbol2DShape(float,float,int)
 chart2/source/view/main/OpenGLRender.hxx:121
     int OpenGLRender::Create2DCircle(int)
-connectivity/source/inc/java/lang/Object.hxx:118
+connectivity/source/drivers/evoab2/NResultSet.hxx:56
+    _Bool connectivity::evoab::OEvoabVersionHelper::executeQuery(void *,void *,class rtl::OString &)
+connectivity/source/drivers/mork/MResultSet.hxx:263
+    _Bool connectivity::mork::OResultSet::fillKeySet(int)
+connectivity/source/inc/dbase/DIndex.hxx:95
+    _Bool connectivity::dbase::ODbaseIndex::openIndexFile()
+connectivity/source/inc/file/FResultSet.hxx:261
+    _Bool connectivity::file::OResultSet::OpenImpl()
+connectivity/source/inc/java/lang/Object.hxx:117
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
-connectivity/source/inc/odbc/OConnection.hxx:83
+connectivity/source/inc/odbc/OConnection.hxx:82
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
+connectivity/source/inc/odbc/OStatement.hxx:116
+    _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
 cppcanvas/source/inc/canvasgraphichelper.hxx:59
     const class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> & cppcanvas::internal::CanvasGraphicHelper::getGraphicDevice() const
+extensions/source/scanner/sane.hxx:97
+    _Bool Sane::CheckConsistency(const char *,_Bool)
+extensions/source/scanner/sane.hxx:140
+    _Bool Sane::GetOptionValue(int,double *)
+extensions/source/scanner/sane.hxx:147
+    _Bool Sane::ActivateButtonOption(int)
+extensions/source/scanner/sane.hxx:153
+    _Bool Sane::Open(int)
+extensions/source/scanner/sanedlg.hxx:90
+    _Bool SaneDlg::LoadState()
+extensions/source/scanner/sanedlg.hxx:104
+    _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
+filter/source/flash/swffilter.cxx:159
+    _Bool swf::FlashExportFilter::ExportAsMultipleFiles(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
+filter/source/flash/swffilter.cxx:160
+    _Bool swf::FlashExportFilter::ExportAsSingleFile(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
+filter/source/storagefilterdetect/filterdetect.hxx:58
+    _Bool StorageFilterDetect_supportsService(const class rtl::OUString &)
+filter/source/textfilterdetect/filterdetect.hxx:59
+    _Bool PlainTextFilterDetect_supportsService(const class rtl::OUString &)
+hwpfilter/source/hwpfile.h:165
+    _Bool HWPFile::ReadParaList(class std::__debug::vector<class HWPPara *, class std::allocator<class HWPPara *> > &)
 i18nlangtag/source/languagetag/languagetag.cxx:275
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
+include/basegfx/matrix/b3dhommatrix.hxx:60
+    _Bool basegfx::B3DHomMatrix::invert()
+include/basegfx/matrix/b3dhommatrix.hxx:114
+    _Bool basegfx::B3DHomMatrix::decompose(class basegfx::B3DTuple &,class basegfx::B3DTuple &,class basegfx::B3DTuple &,class basegfx::B3DTuple &) const
 include/basegfx/vector/b2dvector.hxx:115
     class basegfx::B2DVector & basegfx::B2DVector::setLength(double)
 include/basegfx/vector/b2ivector.hxx:101
@@ -44,14 +94,30 @@ include/basegfx/vector/b3dvector.hxx:155
     class basegfx::B3DVector & basegfx::B3DVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:180
     class basegfx::B3DVector & basegfx::B3DVector::normalize()
-include/canvas/base/bufferedgraphicdevicebase.hxx:159
+include/canvas/base/bufferedgraphicdevicebase.hxx:158
     const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow2> & canvas::BufferedGraphicDeviceBase::getWindow() const
+include/canvas/base/canvascustomspritehelper.hxx:118
+    _Bool canvas::CanvasCustomSpriteHelper::hasAlphaChanged() const
+include/canvas/base/canvascustomspritehelper.hxx:121
+    _Bool canvas::CanvasCustomSpriteHelper::hasPositionChanged() const
+include/canvas/base/canvascustomspritehelper.hxx:127
+    _Bool canvas::CanvasCustomSpriteHelper::hasClipChanged() const
+include/canvas/base/canvascustomspritehelper.hxx:130
+    _Bool canvas::CanvasCustomSpriteHelper::hasPrioChanged() const
+include/canvas/base/canvascustomspritehelper.hxx:133
+    _Bool canvas::CanvasCustomSpriteHelper::hasVisibilityChanged() const
 include/canvas/rendering/icolorbuffer.hxx:49
     unsigned char * canvas::IColorBuffer::lock() const
 include/canvas/rendering/icolorbuffer.hxx:68
     unsigned int canvas::IColorBuffer::getStride() const
 include/canvas/rendering/icolorbuffer.hxx:72
     enum canvas::IColorBuffer::Format canvas::IColorBuffer::getFormat() const
+include/canvas/rendering/isurfaceproxy.hxx:55
+    _Bool canvas::ISurfaceProxy::draw(double,const class basegfx::B2DPoint &,const class basegfx::B2DHomMatrix &)
+include/canvas/rendering/isurfaceproxy.hxx:75
+    _Bool canvas::ISurfaceProxy::draw(double,const class basegfx::B2DPoint &,const class basegfx::B2DRange &,const class basegfx::B2DHomMatrix &)
+include/canvas/rendering/isurfaceproxy.hxx:95
+    _Bool canvas::ISurfaceProxy::draw(double,const class basegfx::B2DPoint &,const class basegfx::B2DPolyPolygon &,const class basegfx::B2DHomMatrix &)
 include/canvas/rendering/isurfaceproxymanager.hxx:58
     class std::shared_ptr<struct canvas::ISurfaceProxy> canvas::ISurfaceProxyManager::createSurfaceProxy(const class std::shared_ptr<struct canvas::IColorBuffer> &) const
 include/canvas/rendering/isurfaceproxymanager.hxx:64
@@ -60,58 +126,98 @@ include/canvas/vclwrapper.hxx:134
     type-parameter-?-? & canvas::vcltools::VCLObject::get()
 include/canvas/vclwrapper.hxx:135
     const type-parameter-?-? & canvas::vcltools::VCLObject::get() const
+include/comphelper/backupfilehelper.hxx:129
+    _Bool comphelper::BackupFileHelper::tryPush()
+include/comphelper/backupfilehelper.hxx:130
+    _Bool comphelper::BackupFileHelper::tryPushExtensionInfo()
+include/comphelper/backupfilehelper.hxx:152
+    _Bool comphelper::BackupFileHelper::tryPop()
+include/comphelper/backupfilehelper.hxx:153
+    _Bool comphelper::BackupFileHelper::tryPopExtensionInfo()
+include/comphelper/embeddedobjectcontainer.hxx:133
+    _Bool comphelper::EmbeddedObjectContainer::MoveEmbeddedObject(class comphelper::EmbeddedObjectContainer &,const class com::sun::star::uno::Reference<class com::sun::star::embed::XEmbeddedObject> &,class rtl::OUString &)
+include/comphelper/embeddedobjectcontainer.hxx:137
+    _Bool comphelper::EmbeddedObjectContainer::RemoveEmbeddedObject(const class rtl::OUString &,_Bool)
+include/comphelper/embeddedobjectcontainer.hxx:141
+    _Bool comphelper::EmbeddedObjectContainer::CloseEmbeddedObject(const class com::sun::star::uno::Reference<class com::sun::star::embed::XEmbeddedObject> &)
+include/comphelper/embeddedobjectcontainer.hxx:159
+    _Bool comphelper::EmbeddedObjectContainer::RemoveGraphicStream(const class rtl::OUString &)
+include/comphelper/listenernotification.hxx:189
+    _Bool comphelper::OSimpleListenerContainer::notify(const type-parameter-?-? &,void (type-parameter-?-?::*)(const type-parameter-?-? &))
+include/comphelper/namedvaluecollection.hxx:155
+    _Bool comphelper::NamedValueCollection::get_ensureType(const class rtl::OUString &,type-parameter-?-? &) const
+include/comphelper/propertycontainerhelper.hxx:152
+    _Bool comphelper::OPropertyContainerHelper::setFastPropertyValue(int,const class com::sun::star::uno::Any &)
+include/connectivity/parameters.hxx:390
+    _Bool dbtools::ParameterManager::getConnection(class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &)
+include/cppcanvas/bitmap.hxx:60
+    _Bool cppcanvas::Bitmap::drawAlphaModulated(double) const
+include/drawinglayer/primitive2d/textlayoutdevice.hxx:89
+    _Bool drawinglayer::primitive2d::TextLayouterDevice::getTextOutlines(class std::__debug::vector<class basegfx::B2DPolyPolygon, class std::allocator<class basegfx::B2DPolyPolygon> > &,const class rtl::OUString &,unsigned int,unsigned int,const class std::__debug::vector<double, class std::allocator<double> > &) const
 include/editeng/editview.hxx:220
     class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
+include/editeng/svxacorr.hxx:221
+    _Bool SvxAutoCorrectLanguageLists::PutText(const class rtl::OUString &,class SfxObjectShell &)
+include/editeng/svxacorr.hxx:379
+    _Bool SvxAutoCorrect::FnCapitalStartWord(class SvxAutoCorrDoc &,const class rtl::OUString &,int,int,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
+include/editeng/svxacorr.hxx:396
+    _Bool SvxAutoCorrect::FnCapitalStartSentence(class SvxAutoCorrDoc &,const class rtl::OUString &,_Bool,int,int,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
+include/i18nutil/paper.hxx:131
+    _Bool PaperInfo::doSloppyFit()
 include/LibreOfficeKit/LibreOfficeKit.hxx:63
     struct _LibreOfficeKitDocument * lok::Document::get()
-include/LibreOfficeKit/LibreOfficeKit.hxx:71
-    int lok::Document::getDocumentType()
 include/LibreOfficeKit/LibreOfficeKit.hxx:97
     char * lok::Document::getPartPageRectangles()
-include/LibreOfficeKit/LibreOfficeKit.hxx:103
-    int lok::Document::getPart()
 include/LibreOfficeKit/LibreOfficeKit.hxx:121
     char * lok::Document::getPartHash(int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:222
-    int lok::Document::getTileMode()
-include/LibreOfficeKit/LibreOfficeKit.hxx:387
+include/LibreOfficeKit/LibreOfficeKit.hxx:342
     char * lok::Document::getTextSelection(const char *,char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:430
+include/LibreOfficeKit/LibreOfficeKit.hxx:354
+    _Bool lok::Document::paste(const char *,const char *,unsigned long)
+include/LibreOfficeKit/LibreOfficeKit.hxx:385
     char * lok::Document::getCommandValues(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:472
+include/LibreOfficeKit/LibreOfficeKit.hxx:440
     int lok::Document::createView()
-include/LibreOfficeKit/LibreOfficeKit.hxx:499
+include/LibreOfficeKit/LibreOfficeKit.hxx:467
     int lok::Document::getView()
-include/LibreOfficeKit/LibreOfficeKit.hxx:507
+include/LibreOfficeKit/LibreOfficeKit.hxx:475
     int lok::Document::getViewsCount()
-include/LibreOfficeKit/LibreOfficeKit.hxx:516
+include/LibreOfficeKit/LibreOfficeKit.hxx:484
     unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:651
+include/LibreOfficeKit/LibreOfficeKit.hxx:523
+    _Bool lok::Document::getViewIds(int *,unsigned long)
+include/LibreOfficeKit/LibreOfficeKit.hxx:635
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:705
+include/LibreOfficeKit/LibreOfficeKit.hxx:689
     char * lok::Office::getVersionInfo()
+include/LibreOfficeKit/LibreOfficeKit.hxx:703
+    _Bool lok::Office::runMacro(const char *)
+include/oox/crypto/DocumentDecryption.hxx:60
+    _Bool oox::core::DocumentDecryption::decrypt(const class com::sun::star::uno::Reference<class com::sun::star::io::XStream> &)
 include/oox/dump/dumperbase.hxx:637
     long oox::dump::FlagsList::getIgnoreFlags() const
-include/oox/dump/dumperbase.hxx:1392
+include/oox/dump/dumperbase.hxx:1390
     type-parameter-?-? oox::dump::InputObjectBase::dumpName(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1398
+include/oox/dump/dumperbase.hxx:1396
     type-parameter-?-? oox::dump::InputObjectBase::dumpBin(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1400
+include/oox/dump/dumperbase.hxx:1398
     type-parameter-?-? oox::dump::InputObjectBase::dumpFix(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1404
+include/oox/dump/dumperbase.hxx:1402
     type-parameter-?-? oox::dump::InputObjectBase::dumpValue(const struct oox::dump::ItemFormat &)
-include/oox/dump/dumperbase.hxx:1407
+include/oox/dump/dumperbase.hxx:1405
     type-parameter-?-? oox::dump::InputObjectBase::dumpName(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1409
+include/oox/dump/dumperbase.hxx:1407
     type-parameter-?-? oox::dump::InputObjectBase::dumpDec(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1413
+include/oox/dump/dumperbase.hxx:1411
     type-parameter-?-? oox::dump::InputObjectBase::dumpBin(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1415
+include/oox/dump/dumperbase.hxx:1413
     type-parameter-?-? oox::dump::InputObjectBase::dumpFix(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1417
+include/oox/dump/dumperbase.hxx:1415
     type-parameter-?-? oox::dump::InputObjectBase::dumpBool(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1419
+include/oox/dump/dumperbase.hxx:1417
     type-parameter-?-? oox::dump::InputObjectBase::dumpValue(_Bool,const struct oox::dump::ItemFormat &)
+include/oox/dump/oledumper.hxx:311
+    _Bool oox::dump::AxPropertyObjectBase::dumpBoolProperty()
 include/oox/dump/oledumper.hxx:312
     int oox::dump::AxPropertyObjectBase::dumpHmmProperty()
 include/oox/dump/oledumper.hxx:313
@@ -144,18 +250,30 @@ include/oox/helper/binaryoutputstream.hxx:78
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
 include/oox/helper/binaryoutputstream.hxx:79
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteUInt16(unsigned short)
+include/oox/ole/olehelper.hxx:179
+    _Bool oox::ole::MSConvertOCXControls::importControlFromStream(class oox::BinaryInputStream &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const class rtl::OUString &)
+include/oox/ole/olehelper.hxx:190
+    _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const class tools::SvRef<class SotStorageStream> &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,int,int)
 include/sax/fshelper.hxx:206
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
 include/sax/fshelper.hxx:207
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
 include/sax/fshelper.hxx:210
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
+include/sfx2/linkmgr.hxx:103
+    _Bool sfx2::LinkManager::InsertFileLink(class sfx2::SvBaseLink &,unsigned short,const class rtl::OUString &,const class rtl::OUString *,const class rtl::OUString *)
+include/sfx2/templatelocalview.hxx:128
+    _Bool TemplateLocalView::moveTemplates(const class std::__debug::set<const class ThumbnailViewItem *, _Bool (*)(const class ThumbnailViewItem *, const class ThumbnailViewItem *), class std::allocator<const class ThumbnailViewItem *> > &,const unsigned short)
 include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
 include/svl/poolitem.hxx:173
     class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
 include/svx/framelink.hxx:204
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
+include/svx/galtheme.hxx:129
+    _Bool GalleryTheme::RemoveObject(unsigned int)
+include/svx/svdoole2.hxx:192
+    _Bool SdrEmbedObjectLink::Connect()
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/test/sheet/xsheetannotation.hxx:36
@@ -170,22 +288,140 @@ include/tools/color.hxx:140
     class SvStream & Color::Read(class SvStream &)
 include/tools/color.hxx:141
     class SvStream & Color::Write(class SvStream &) const
+include/tools/date.hxx:200
+    _Bool Date::Normalize()
+include/tools/multisel.hxx:95
+    _Bool StringRangeEnumerator::insertJoinedRanges(const class std::__debug::vector<int, class std::allocator<int> > &)
+include/vcl/alpha.hxx:60
+    _Bool AlphaMask::Erase(unsigned char)
+include/vcl/alpha.hxx:62
+    _Bool AlphaMask::Replace(unsigned char,unsigned char)
+include/vcl/animate.hxx:139
+    _Bool Animation::Convert(enum BmpConversion)
+include/vcl/animate.hxx:143
+    _Bool Animation::Mirror(enum BmpMirrorFlags)
+include/vcl/animate.hxx:144
+    _Bool Animation::Adjust(short,short,short,short,short,double,_Bool)
+include/vcl/bitmap.hxx:266
+    _Bool Bitmap::MakeMono(unsigned char)
+include/vcl/bitmap.hxx:596
+    _Bool Bitmap::Vectorize(class GDIMetaFile &,unsigned char,const class Link<long, void> *)
+include/vcl/bitmapex.hxx:155
+    _Bool BitmapEx::Expand(unsigned long,unsigned long,_Bool)
+include/vcl/bitmapex.hxx:270
+    _Bool BitmapEx::Replace(const class Color &,const class Color &)
+include/vcl/bitmapex.hxx:292
+    _Bool BitmapEx::Replace(const class Color *,const class Color *,unsigned long,const unsigned char *)
+include/vcl/builder.hxx:330
+    _Bool VclBuilder::extractGroup(const class rtl::OString &,class std::__debug::map<class rtl::OString, class rtl::OUString, struct std::less<class rtl::OString>, class std::allocator<struct std::pair<const class rtl::OString, class rtl::OUString> > > &)
+include/vcl/builder.hxx:331
+    _Bool VclBuilder::extractModel(const class rtl::OString &,class std::__debug::map<class rtl::OString, class rtl::OUString, struct std::less<class rtl::OString>, class std::allocator<struct std::pair<const class rtl::OString, class rtl::OUString> > > &)
+include/vcl/builder.hxx:332
+    _Bool VclBuilder::extractBuffer(const class rtl::OString &,class std::__debug::map<class rtl::OString, class rtl::OUString, struct std::less<class rtl::OString>, class std::allocator<struct std::pair<const class rtl::OString, class rtl::OUString> > > &)
+include/vcl/builder.hxx:334
+    _Bool VclBuilder::extractButtonImage(const class rtl::OString &,class std::__debug::map<class rtl::OString, class rtl::OUString, struct std::less<class rtl::OString>, class std::allocator<struct std::pair<const class rtl::OString, class rtl::OUString> > > &,_Bool)
+include/vcl/builder.hxx:335
+    _Bool VclBuilder::extractStock(const class rtl::OString &,class std::__debug::map<class rtl::OString, class rtl::OUString, struct std::less<class rtl::OString>, class std::allocator<struct std::pair<const class rtl::OString, class rtl::OUString> > > &)
+include/vcl/dockwin.hxx:122
+    _Bool ImplDockingWindowWrapper::ImplStartDocking(const class Point &)
+include/vcl/dockwin.hxx:273
+    _Bool DockingWindow::ImplStartDocking(const class Point &)
+include/vcl/fixed.hxx:177
+    _Bool FixedImage::SetModeImage(const class Image &)
 include/vcl/fontcharmap.hxx:48
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
-include/vcl/gdimtf.hxx:184
+include/vcl/gdimetafiletools.hxx:48
+    _Bool MetafileAccessor::accessMetafile(class GDIMetaFile &) const
+include/vcl/gdimtf.hxx:111
+    _Bool GDIMetaFile::Mirror(enum BmpMirrorFlags)
+include/vcl/gdimtf.hxx:183
     class SvStream & GDIMetaFile::Read(class SvStream &)
-include/vcl/graphicfilter.hxx:254
+include/vcl/graphicfilter.hxx:255
     class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
-lotuswordpro/inc/lwpsvstream.hxx:75
-    class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
+include/vcl/GraphicNativeTransform.hxx:37
+    _Bool GraphicNativeTransform::rotate(unsigned short)
+include/vcl/help.hxx:66
+    _Bool Help::SearchKeyword(const class rtl::OUString &)
+include/vcl/jobdata.hxx:71
+    _Bool psp::JobData::setPaper(int,int)
+include/vcl/jobdata.hxx:72
+    _Bool psp::JobData::setPaperBin(int)
+include/vcl/layout.hxx:610
+    _Bool VclSizeGroup::set_property(const class rtl::OString &,const class rtl::OUString &)
+include/vcl/menu.hxx:355
+    _Bool Menu::GetSystemMenuData(struct SystemMenuData *) const
+include/vcl/opengl/OpenGLContext.hxx:86
+    _Bool OpenGLContext::AcquireDefaultFramebuffer()
+include/vcl/opengl/OpenGLContext.hxx:156
+    _Bool OpenGLContext::initWindow()
+include/vcl/outdev.hxx:1155
+    _Bool OutputDevice::GetCaretPositions(const class rtl::OUString &,long *,int,int) const
+include/vcl/outdev.hxx:1515
+    _Bool OutputDevice::BlendBitmap(const struct SalTwoRect &,const class Bitmap &)
+include/vcl/pdfwriter.hxx:1112
+    _Bool vcl::PDFWriter::SetCurrentStructureElement(int)
+include/vcl/pdfwriter.hxx:1131
+    _Bool vcl::PDFWriter::SetStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
+include/vcl/pdfwriter.hxx:1149
+    _Bool vcl::PDFWriter::SetStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
+include/vcl/print.hxx:175
+    _Bool PrinterOptions::ReadFromConfig(_Bool)
+include/vcl/print.hxx:224
+    _Bool Printer::EndJob()
+include/vcl/print.hxx:311
+    _Bool Printer::SetDuplexMode(enum DuplexMode)
+include/vcl/print.hxx:315
+    _Bool Printer::SetPaper(enum Paper)
+include/vcl/print.hxx:340
+    _Bool Printer::SetCopyCount(unsigned short,_Bool)
+include/vcl/print.hxx:562
+    _Bool vcl::PrinterController::setupPrinter(class vcl::Window *)
+include/vcl/seleng.hxx:52
+    _Bool FunctionSet::SetCursorAtPoint(const class Point &,_Bool)
+include/vcl/texteng.hxx:288
+    _Bool TextEngine::Write(class SvStream &)
+include/vcl/textview.hxx:173
+    _Bool TextView::Read(class SvStream &)
+include/vcl/textview.hxx:227
+    _Bool TextView::MatchGroup()
+include/vcl/wrkwin.hxx:96
+    _Bool WorkWindow::SetPluginParent(struct SystemParentData *)
+include/xmloff/DashStyle.hxx:58
+    _Bool XMLDashStyleExport::exportXML(const class rtl::OUString &,const class com::sun::star::uno::Any &)
+include/xmloff/i18nmap.hxx:55
+    _Bool SvI18NMap::Add(unsigned short,const class rtl::OUString &,const class rtl::OUString &)
+include/xmloff/txtparae.hxx:520
+    _Bool XMLTextParagraphExport::collectTextAutoStylesOptimized(_Bool)
 lotuswordpro/inc/lwpsvstream.hxx:76
-    class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
+    class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/inc/lwpsvstream.hxx:77
+    class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
+lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
+sc/inc/dpobject.hxx:107
+    _Bool ScDPObject::FillLabelDataForDimension(const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexAccess> &,int,struct ScDPLabelData &)
+sc/inc/orcusfilters.hxx:44
+    _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
+sc/inc/postit.hxx:89
+    _Bool ScCaptionPtr::forget()
+sc/inc/segmenttree.hxx:44
+    _Bool ScFlatBoolRowSegments::ForwardIterator::getValue(int,_Bool &)
+sc/inc/table.hxx:936
+    _Bool ScTable::GetDataEntries(short,int,class std::__debug::set<class ScTypedStrData, struct std::less<class ScTypedStrData>, class std::allocator<class ScTypedStrData> > &,_Bool)
+sc/source/core/inc/interpre.hxx:834
+    _Bool ScInterpreter::CalculateTest(_Bool,const unsigned long,const unsigned long,const unsigned long,const unsigned long,const class boost::intrusive_ptr<class ScMatrix> &,const class boost::intrusive_ptr<class ScMatrix> &,double &,double &)
 sc/source/core/opencl/formulagroupcl.cxx:966
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
 sc/source/core/opencl/formulagroupcl.cxx:1408
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
+sc/source/filter/inc/fapihelper.hxx:230
+    _Bool ScfPropSetHelper::ReadValue(type-parameter-?-? &)
+sc/source/filter/inc/fapihelper.hxx:232
+    _Bool ScfPropSetHelper::ReadValue(class com::sun::star::uno::Any &)
+sc/source/filter/inc/workbookhelper.hxx:254
+    _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
+sc/source/ui/inc/content.hxx:144
+    _Bool ScContentTree::SelectEntryByName(const enum ScContentId,const class rtl::OUString &)
 sc/source/ui/vba/vbaformat.hxx:69
     class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
 sc/source/ui/vba/vbaformat.hxx:73
@@ -220,15 +456,247 @@ sc/source/ui/vba/vbaformat.hxx:151
     class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
 sd/source/filter/eppt/pptx-epptooxml.cxx:136
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
+sd/source/ui/inc/DrawDocShell.hxx:132
+    _Bool sd::DrawDocShell::GotoBookmark(const class rtl::OUString &)
 sd/source/ui/inc/OutlineViewShell.hxx:114
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
+sd/source/ui/view/drviews2.cxx:314
+    _Bool sd::ClassificationCollector::collect()
+slideshow/source/inc/eventmultiplexer.hxx:464
+    _Bool slideshow::internal::EventMultiplexer::notifyViewChanged(const class std::shared_ptr<class slideshow::internal::UnoView> &)
+starmath/source/ooxmlexport.hxx:27
+    _Bool SmOoxmlExport::ConvertFromStarMath(const class std::shared_ptr<class sax_fastparser::FastSerializerHelper> &)
+sw/inc/authfld.hxx:90
+    _Bool SwAuthorityFieldType::AddField(long)
 sw/inc/calc.hxx:112
     class SwSbxValue & SwSbxValue::MakeDouble()
+sw/inc/crsrsh.hxx:306
+    _Bool SwCursorShell::DestroyCursor()
+sw/inc/crsrsh.hxx:361
+    _Bool SwCursorShell::MoveColumn(class SwLayoutFrame *(*)(const class SwLayoutFrame *),class SwContentFrame *(*)(const class SwLayoutFrame *))
+sw/inc/crsrsh.hxx:521
+    _Bool SwCursorShell::GetCharRectAt(class SwRect &,const struct SwPosition *)
+sw/inc/crsrsh.hxx:596
+    _Bool SwCursorShell::GotoNextNum()
+sw/inc/crsrsh.hxx:597
+    _Bool SwCursorShell::GotoPrevNum()
+sw/inc/crsrsh.hxx:644
+    _Bool SwCursorShell::GotoFlyAnchor()
+sw/inc/crsrsh.hxx:655
+    _Bool SwCursorShell::GotoTOXMarkBase()
+sw/inc/crsrsh.hxx:717
+    _Bool SwCursorShell::ExpandToSentenceBorders()
+sw/inc/dbmgr.hxx:375
+    _Bool SwDBManager::ToNextRecord(const class rtl::OUString &,const class rtl::OUString &)
+sw/inc/doc.hxx:521
+    _Bool SwDoc::UpdateRsid(const class SwPaM &,int)
+sw/inc/doc.hxx:1192
+    _Bool SwDoc::InsertCol(const class SwCursor &,unsigned short,_Bool)
+sw/inc/doc.hxx:1196
+    _Bool SwDoc::InsertRow(const class SwCursor &,unsigned short,_Bool)
+sw/inc/doc.hxx:1203
+    _Bool SwDoc::DeleteRow(const class SwCursor &)
+sw/inc/doc.hxx:1204
+    _Bool SwDoc::DeleteCol(const class SwCursor &)
+sw/inc/doc.hxx:1274
+    _Bool SwDoc::UnProtectCells(const class rtl::OUString &)
+sw/inc/doc.hxx:1276
+    _Bool SwDoc::UnProtectTables(const class SwPaM &)
+sw/inc/doc.hxx:1399
+    _Bool SwDoc::ExecMacro(const class SvxMacro &,class rtl::OUString *,class SbxArray *)
+sw/inc/docary.hxx:343
+    _Bool SwRedlineTable::Remove(const class SwRangeRedline *)
+sw/inc/docary.hxx:386
+    _Bool SwExtraRedlineTable::Insert(class SwExtraRedline *)
+sw/inc/editsh.hxx:225
+    _Bool SwEditShell::DelINetAttrWithText()
+sw/inc/editsh.hxx:265
+    _Bool SwEditShell::GetCurParAttr(class SfxItemSet &) const
+sw/inc/editsh.hxx:526
+    _Bool SwEditShell::NoNum()
+sw/inc/editsh.hxx:531
+    _Bool SwEditShell::NumUpDown(_Bool)
+sw/inc/editsh.hxx:578
+    _Bool SwEditShell::ReplaceNumRule(const class rtl::OUString &,const class rtl::OUString &)
+sw/inc/editsh.hxx:615
+    _Bool SwEditShell::Undo(const unsigned short)
+sw/inc/editsh.hxx:616
+    _Bool SwEditShell::Redo(const unsigned short)
+sw/inc/editsh.hxx:617
+    _Bool SwEditShell::Repeat(const unsigned short)
 sw/inc/editsh.hxx:646
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
+sw/inc/editsh.hxx:753
+    _Bool SwEditShell::SplitTable(enum SplitTable_HeadlineOption)
+sw/inc/editsh.hxx:889
+    _Bool SwEditShell::DoSpecialInsert()
+sw/inc/editsh.hxx:914
+    _Bool SwEditShell::InsertGlobalDocContent(const class SwGlblDocContent &,class SwSectionData &)
+sw/inc/editsh.hxx:919
+    _Bool SwEditShell::DeleteGlobalDocContent(const class SwGlblDocContents &,unsigned long)
+sw/inc/editsh.hxx:924
+    _Bool SwEditShell::GotoGlobalDocContent(const class SwGlblDocContent &)
+sw/inc/EnhancedPDFExportHelper.hxx:160
+    _Bool SwTaggedPDFHelper::CheckRestoreTag() const
+sw/inc/fesh.hxx:258
+    _Bool SwFEShell::Copy(class SwDoc *,const class rtl::OUString *)
+sw/inc/fesh.hxx:262
+    _Bool SwFEShell::PastePages(class SwFEShell &,unsigned short,unsigned short)
+sw/inc/fesh.hxx:385
+    _Bool SwFEShell::ResetFlyFrameAttr(const class SfxItemSet *)
+sw/inc/fesh.hxx:497
+    _Bool SwFEShell::SetObjAttr(const class SfxItemSet &)
+sw/inc/fesh.hxx:582
+    _Bool SwFEShell::ReplaceSdrObj(const class rtl::OUString &,const class Graphic *)
+sw/inc/fesh.hxx:638
+    _Bool SwFEShell::InsertRow(unsigned short,_Bool)
+sw/inc/fesh.hxx:639
+    _Bool SwFEShell::InsertCol(unsigned short,_Bool)
+sw/inc/fesh.hxx:641
+    _Bool SwFEShell::DeleteTable()
+sw/inc/fesh.hxx:649
+    _Bool SwFEShell::SplitTab(_Bool,unsigned short,_Bool)
+sw/inc/fesh.hxx:736
+    _Bool SwFEShell::SetColRowWidthHeight(enum TableChgWidthHeightType,unsigned short)
+sw/inc/fesh.hxx:738
+    _Bool SwFEShell::GetAutoSum(class rtl::OUString &) const
+sw/inc/fldbas.hxx:260
+    _Bool SwFieldType::QueryValue(class com::sun::star::uno::Any &,unsigned short) const
+sw/inc/fldbas.hxx:261
+    _Bool SwFieldType::PutValue(const class com::sun::star::uno::Any &,unsigned short)
+sw/inc/flddropdown.hxx:218
+    _Bool SwDropDownField::SetSelectedItem(const class rtl::OUString &)
+sw/inc/fmtcol.hxx:220
+    _Bool SwConditionTextFormatColl::RemoveCondition(const class SwCollCondition &)
+sw/inc/hhcwrp.hxx:56
+    _Bool SwHHCWrapper::FindConvText_impl()
+sw/inc/IDocumentContentOperations.hxx:118
+    _Bool IDocumentContentOperations::DeleteRange(class SwPaM &)
+sw/inc/IDocumentContentOperations.hxx:217
+    _Bool IDocumentContentOperations::InsertItemSet(const class SwPaM &,const class SfxItemSet &,const enum SetAttrMode)
+sw/inc/IDocumentFieldsAccess.hxx:76
+    _Bool IDocumentFieldsAccess::PutValueToField(const struct SwPosition &,const class com::sun::star::uno::Any &,unsigned short)
+sw/inc/ndtxt.hxx:196
+    _Bool SwTextNode::TryCharSetExpandToNum(const class SfxItemSet &)
+sw/inc/pagepreviewlayout.hxx:186
+    _Bool SwPagePreviewLayout::CalcPreviewDataForPage(const class SwPageFrame &,const class Point &,struct PreviewPage *)
+sw/inc/pagepreviewlayout.hxx:272
+    _Bool SwPagePreviewLayout::Init(const unsigned short,const unsigned short,const class Size &)
+sw/inc/pagepreviewlayout.hxx:283
+    _Bool SwPagePreviewLayout::ReInit()
+sw/inc/pagepreviewlayout.hxx:433
+    _Bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(const short,const short,unsigned short &,unsigned short &,class Point &) const
+sw/inc/swabstdlg.hxx:374
+    _Bool AbstractMailMergeWizard::ShowPage(unsigned short)
+sw/inc/swbaslnk.hxx:52
+    _Bool SwBaseLink::Connect()
+sw/inc/swtable.hxx:292
+    _Bool SwTable::CopyHeadlineIntoTable(class SwTableNode &)
+sw/inc/tblafmt.hxx:191
+    _Bool SwBoxAutoFormat::SaveVersionNo(class SvStream &,unsigned short) const
+sw/inc/tblafmt.hxx:369
+    _Bool SwTableAutoFormatTable::Load()
+sw/inc/txatritr.hxx:44
+    _Bool SwScriptIterator::Next()
+sw/inc/unochart.hxx:324
+    _Bool SwChartDataSequence::ExtendTo(_Bool,int,int)
+sw/source/core/edit/autofmt.cxx:228
+    _Bool SwAutoFormat::ClearRedlineText()
+sw/source/core/inc/cntfrm.hxx:58
+    _Bool SwContentFrame::MakePrtArea(const class SwBorderAttrs &)
+sw/source/core/inc/frame.hxx:1358
+    _Bool SwRectFnSet::SetLimit(class SwFrame &,long) const
+sw/source/core/inc/layact.hxx:173
+    _Bool SwLayAction::FormatLayoutFly(class SwFlyFrame *)
+sw/source/core/inc/layact.hxx:175
+    _Bool SwLayAction::FormatFlyContent(const class SwFlyFrame *)
+sw/source/core/inc/laycache.hxx:64
+    _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
+sw/source/core/inc/scriptinfo.hxx:291
+    _Bool SwScriptInfo::MarkKashidasInvalid(int,const int *)
+sw/source/core/inc/sortedobjs.hxx:73
+    _Bool SwSortedObjs::Remove(class SwAnchoredObject &)
+sw/source/core/inc/sortedobjs.hxx:82
+    _Bool SwSortedObjs::Update(class SwAnchoredObject &)
+sw/source/core/inc/txtfly.hxx:257
+    _Bool SwTextFly::DrawTextOpaque(class SwDrawTextInfo &)
+sw/source/core/layout/dbg_lay.cxx:142
+    _Bool SwImplProtocol::InsertFrame(unsigned short)
+sw/source/core/layout/dbg_lay.cxx:143
+    _Bool SwImplProtocol::DeleteFrame(unsigned short)
+sw/source/core/layout/layhelp.hxx:168
+    _Bool SwLayCacheIoImpl::OpenRec(unsigned char)
+sw/source/core/layout/layhelp.hxx:172
+    _Bool SwLayCacheIoImpl::CloseRec()
+sw/source/core/ole/ndole.cxx:158
+    _Bool SwEmbedObjectLink::Connect()
+sw/source/core/unocore/unostyle.cxx:1121
+    _Bool SwStyleProperties_Impl::GetProperty(const class rtl::OUString &,const class com::sun::star::uno::Any *&)
+sw/source/filter/html/parcss1.hxx:234
+    _Bool CSS1Parser::ParseStyleOption(const class rtl::OUString &)
+sw/source/filter/html/swhtml.hxx:589
+    _Bool SwHTMLParser::GetMarginsFromContext(unsigned short &,unsigned short &,short &,_Bool) const
+sw/source/filter/ww8/ww8scan.hxx:630
+    _Bool WW8PLCFx_Fc_FKP::HasSprm(unsigned short,class std::__debug::vector<struct SprmResult, class std::allocator<struct SprmResult> > &)
+sw/source/filter/ww8/ww8toolbar.hxx:393
+    _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
 sw/source/uibase/inc/fldmgr.hxx:113
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
+sw/source/uibase/inc/wrtsh.hxx:404
+    _Bool SwWrtShell::GotoMark(const class sw::mark::IMark *const,_Bool)
+sw/source/uibase/inc/wrtsh.hxx:473
+    _Bool SwWrtShell::GotoFormatField(const class SwFormatField &)
+ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
+    _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
+ucb/source/ucp/webdav-neon/NeonSession.hxx:232
+    _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
+vcl/inc/fontsubset.hxx:53
+    _Bool FontSubsetInfo::LoadFont(enum FontType,const unsigned char *,int)
+vcl/inc/fontsubset.hxx:55
+    _Bool FontSubsetInfo::LoadFont(struct vcl::TrueTypeFont *)
+vcl/inc/headless/svpbmp.hxx:47
+    _Bool SvpSalBitmap::Create(struct BitmapBuffer *)
+vcl/inc/impbmp.hxx:56
+    _Bool ImpBitmap::ImplCreate(const class Size &,unsigned short,const class BitmapPalette &)
+vcl/inc/opengl/program.hxx:73
+    _Bool OpenGLProgram::Use()
+vcl/inc/opengl/program.hxx:105
+    _Bool OpenGLProgram::DrawTexture(const class OpenGLTexture &)
+vcl/inc/opengl/RenderList.hxx:153
+    _Bool RenderList::addDrawTextureWithMaskColor(const class OpenGLTexture &,unsigned int,const struct SalTwoRect &)
+vcl/inc/opengl/salbmp.hxx:104
+    _Bool OpenGLSalBitmap::ImplScale(const double &,const double &,enum BmpScaleFlag)
+vcl/inc/opengl/texture.hxx:55
+    _Bool ImplOpenGLTexture::InitializeSlotMechanism(int)
+vcl/inc/opengl/texture.hxx:79
+    _Bool OpenGLTexture::GetTextureRect(const struct SalTwoRect &,_Bool,float &,float &,float &,float &) const
+vcl/inc/opengl/texture.hxx:112
+    _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
+vcl/inc/openglgdiimpl.hxx:110
+    _Bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
+vcl/inc/openglgdiimpl.hxx:119
+    _Bool OpenGLSalGraphicsImpl::UseSolid()
+vcl/inc/openglgdiimpl.hxx:121
+    _Bool OpenGLSalGraphicsImpl::UseLine(float,_Bool)
+vcl/inc/openglgdiimpl.hxx:148
+    _Bool OpenGLSalGraphicsImpl::FlushLinesOrTriangles(enum DrawShaderType,const struct RenderParameters &)
+vcl/inc/salusereventlist.hxx:90
+    _Bool SalUserEventList::RemoveEvent(class SalFrame *,void *,enum SalEvent)
+vcl/inc/unx/cairotextrender.hxx:45
+    _Bool CairoTextRender::setFont(const class FontSelectPattern *,int)
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
+vcl/inc/unx/printerjob.hxx:122
+    _Bool psp::PrinterJob::EndPage()
+vcl/inc/unx/saldisp.hxx:294
+    _Bool SalDisplay::Dispatch(union _XEvent *)
+vcl/inc/unx/x11/x11gdiimpl.h:23
+    _Bool X11GraphicsImpl::FillPixmapFromScreen(class X11Pixmap *,int,int)
+vcl/opengl/x11/gdiimpl.cxx:42
+    _Bool X11OpenGLContext::init(struct _XDisplay *,unsigned long,int)
+vcl/source/gdi/pdfwriter_impl.hxx:1166
+    _Bool vcl::PDFWriterImpl::intersectClipRegion(const class basegfx::B2DPolyPolygon &)
+vcl/unx/generic/print/glyphset.hxx:54
+    _Bool psp::GlyphSet::GetGlyphID(unsigned int,unsigned char *,int *)

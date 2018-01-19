@@ -149,10 +149,6 @@ void ScAbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-OUString ScAbstractTabDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
-}
 
 void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
 {

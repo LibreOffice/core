@@ -374,22 +374,6 @@ void MultiSelection::Remove( sal_Int32 nIndex )
     aTotRange.Max() -= 1;
 }
 
-sal_Int32 MultiSelection::ImplFwdUnselected()
-{
-    if ( !bCurValid )
-        return SFX_ENDOFSELECTION;
-
-    if (  ( nCurSubSel < sal_Int32(aSels.size()) )
-       && ( aSels[ nCurSubSel ].Min() <= nCurIndex )
-    )
-        nCurIndex = aSels[ nCurSubSel++ ].Max() + 1;
-
-    if ( nCurIndex <= aTotRange.Max() )
-        return nCurIndex;
-    else
-        return SFX_ENDOFSELECTION;
-}
-
 sal_Int32 MultiSelection::FirstSelected()
 {
     nCurSubSel = 0;

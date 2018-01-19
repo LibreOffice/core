@@ -42,7 +42,6 @@ private:
     TOOLS_DLLPRIVATE void           ImplClear();
     TOOLS_DLLPRIVATE sal_Int32      ImplFindSubSelection( sal_Int32 nIndex ) const;
     TOOLS_DLLPRIVATE void           ImplMergeSubSelections( sal_Int32 nPos1, sal_Int32 nPos2 );
-    TOOLS_DLLPRIVATE sal_Int32      ImplFwdUnselected();
 
 public:
                     MultiSelection();

@@ -386,7 +386,6 @@ class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
         //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 //AbstractDialogFactory_Impl implementations

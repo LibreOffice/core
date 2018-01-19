@@ -206,10 +206,6 @@ void CuiAbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-OUString CuiAbstractTabDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
-}
 
 
 const SfxItemSet* CuiAbstractSfxDialog_Impl::GetOutputItemSet() const
@@ -220,11 +216,6 @@ const SfxItemSet* CuiAbstractSfxDialog_Impl::GetOutputItemSet() const
 void CuiAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
-}
-
-OUString CuiAbstractSfxDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
 }
 
 SvxDistributeHorizontal AbstractSvxDistributeDialog_Impl::GetDistributeHor()const
@@ -502,10 +493,6 @@ void AbstractSvxTransformTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-OUString AbstractSvxTransformTabDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
-}
 void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink )
 {
     pDlg->SetValidateFramePosLink( rLink );
@@ -540,10 +527,6 @@ void AbstractSvxCaptionDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 void AbstractSvxCaptionDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
-}
-OUString AbstractSvxCaptionDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
 }
 void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink )
 {
@@ -722,10 +705,6 @@ void AbstractSvxAreaTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 void AbstractSvxAreaTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
-}
-OUString AbstractSvxAreaTabDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
 }
 
 void AbstractSvxPostItDialog_Impl::SetText( const OUString& rStr )

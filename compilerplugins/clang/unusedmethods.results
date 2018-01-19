@@ -1,4 +1,4 @@
-basegfx/source/range/b2drangeclipper.cxx:693
+basegfx/source/range/b2drangeclipper.cxx:691
     type-parameter-?-? eraseFromList(type-parameter-?-? &,const type-parameter-?-? &)
 basic/source/inc/buffer.hxx:41
     void SbiBuffer::operator+=(signed char)
@@ -8,18 +8,34 @@ basic/source/inc/buffer.hxx:46
     void SbiBuffer::operator+=(int)
 connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:51
     class com::sun::star::uno::Reference<class com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
+connectivity/source/drivers/firebird/Driver.hxx:65
+    const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> & connectivity::firebird::FirebirdDriver::getContext() const
+connectivity/source/drivers/firebird/Util.hxx:61
+     connectivity::firebird::ColumnTypeInfo::ColumnTypeInfo(short,const class rtl::OUString &)
+connectivity/source/drivers/firebird/Util.hxx:66
+    short connectivity::firebird::ColumnTypeInfo::getType() const
+connectivity/source/drivers/firebird/Util.hxx:67
+    short connectivity::firebird::ColumnTypeInfo::getSubType() const
+connectivity/source/drivers/firebird/Util.hxx:68
+    short connectivity::firebird::ColumnTypeInfo::getScale() const
+connectivity/source/drivers/firebird/Util.hxx:69
+    const class rtl::OUString & connectivity::firebird::ColumnTypeInfo::getCharacterSet() const
+connectivity/source/drivers/mork/mork_helper.cxx:36
+    int main(int,char **)
 connectivity/source/inc/dbase/dindexnode.hxx:70
     _Bool connectivity::dbase::ONDXKey::operator<(const class connectivity::dbase::ONDXKey &) const
-connectivity/source/inc/OColumn.hxx:119
+connectivity/source/inc/java/sql/Connection.hxx:66
+    class rtl::OUString connectivity::java_sql_Connection::transFormPreparedStatement(const class rtl::OUString &)
+connectivity/source/inc/OColumn.hxx:112
     _Bool connectivity::OColumn::isReadOnly() const
-connectivity/source/inc/OColumn.hxx:120
+connectivity/source/inc/OColumn.hxx:113
     _Bool connectivity::OColumn::isWritable() const
-connectivity/source/inc/OColumn.hxx:121
+connectivity/source/inc/OColumn.hxx:114
     _Bool connectivity::OColumn::isDefinitelyWritable() const
-connectivity/source/inc/OColumn.hxx:131
-    const class rtl::OUString & connectivity::OColumn::getSchemaName() const
-connectivity/source/inc/OColumn.hxx:133
-    const class rtl::OUString & connectivity::OColumn::getCatalogName() const
+connectivity/source/inc/odbc/OConnection.hxx:127
+    class connectivity::odbc::ODBCDriver * connectivity::odbc::OConnection::getDriver() const
+connectivity/source/inc/odbc/ODriver.hxx:79
+    const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> & connectivity::odbc::ODBCDriver::getORB() const
 connectivity/source/inc/odbc/OPreparedStatement.hxx:73
     void connectivity::odbc::OPreparedStatement::setScalarParameter(int,int,unsigned long,const type-parameter-?-?)
 connectivity/source/inc/odbc/OPreparedStatement.hxx:74
@@ -80,10 +96,6 @@ hwpfilter/source/mzstring.h:101
     class MzString & MzString::operator<<(long)
 hwpfilter/source/mzstring.h:102
     class MzString & MzString::operator<<(short)
-i18npool/source/localedata/LocaleNode.hxx:103
-    void LocaleNode::print() const
-idl/source/prj/svidl.cxx:105
-    int main(int,char **)
 include/basegfx/color/bcolormodifier.hxx:76
     _Bool basegfx::BColorModifier::operator!=(const class basegfx::BColorModifier &) const
 include/basegfx/curve/b2dcubicbezier.hxx:52
@@ -278,7 +290,7 @@ include/comphelper/logging.hxx:438
     _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
 include/comphelper/logging.hxx:452
     _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/lok.hxx:44
+include/comphelper/lok.hxx:46
     _Bool isLocalRendering()
 include/comphelper/propagg.hxx:55
     _Bool comphelper::internal::OPropertyAccessor::operator==(const struct comphelper::internal::OPropertyAccessor &) const
@@ -290,7 +302,7 @@ include/comphelper/sequence.hxx:342
     type-parameter-?-? sequenceToContainer(const Sequence<type-parameter-?-?> &)
 include/comphelper/types.hxx:56
     _Bool getImplementation(type-parameter-?-? *&,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
-include/comphelper/unique_disposing_ptr.hxx:45
+include/comphelper/unique_disposing_ptr.hxx:46
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
 include/comphelper/unwrapargs.hxx:49
     void unwrapArgs(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
@@ -320,11 +332,13 @@ include/drawinglayer/primitive3d/baseprimitive3d.hxx:113
     _Bool drawinglayer::primitive3d::BasePrimitive3D::operator!=(const class drawinglayer::primitive3d::BasePrimitive3D &) const
 include/drawinglayer/texture/texture.hxx:44
     _Bool drawinglayer::texture::GeoTexSvx::operator!=(const class drawinglayer::texture::GeoTexSvx &) const
-include/editeng/svxrtf.hxx:64
-    class EditNodeIdx * EditNodeIdx::Clone() const
+include/editeng/nlbkitem.hxx:29
+     SvxNoLinebreakItem::SvxNoLinebreakItem(const _Bool,const unsigned short)
+include/editeng/prszitem.hxx:35
+     SvxPropSizeItem::SvxPropSizeItem(const unsigned short,const unsigned short)
 include/filter/msfilter/mstoolbar.hxx:98
      Indent::Indent(_Bool)
-include/formula/opcode.hxx:521
+include/formula/opcode.hxx:520
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > OpCodeEnumToString(enum OpCode)
 include/formula/tokenarray.hxx:178
     class formula::FormulaTokenArrayReferencesIterator formula::FormulaTokenArrayReferencesIterator::operator++(int)
@@ -352,8 +366,6 @@ include/o3tl/string_view.hxx:551
      o3tl::basic_string_view::basic_string_view<charT, traits>(const basic_string<type-parameter-?-?, type-parameter-?-?, allocator<type-parameter-?-?> > &)
 include/o3tl/string_view.hxx:693
     _Bool operator==(basic_string_view<type-parameter-?-?, type-parameter-?-?>,basic_string_view<type-parameter-?-?, type-parameter-?-?>)
-include/o3tl/string_view.hxx:698
-    _Bool operator==(basic_string_view<type-parameter-?-?, type-parameter-?-?>,typename decay<basic_string_view<type-parameter-?-?, type-parameter-?-?> >::type)
 include/o3tl/string_view.hxx:704
     _Bool operator==(typename decay<basic_string_view<type-parameter-?-?, type-parameter-?-?> >::type,basic_string_view<type-parameter-?-?, type-parameter-?-?>)
 include/o3tl/string_view.hxx:710
@@ -434,7 +446,7 @@ include/opencl/openclconfig.hxx:55
     _Bool OpenCLConfig::ImplMatcher::operator!=(const struct OpenCLConfig::ImplMatcher &) const
 include/opencl/OpenCLZone.hxx:42
     _Bool OpenCLZone::isInInitialTest()
-include/sfx2/docfile.hxx:205
+include/sfx2/docfile.hxx:207
     class rtl::OUString SfxMedium::GetConvertImagesFilter()
 include/sfx2/docfilt.hxx:81
     _Bool SfxFilter::GetGpgEncryption() const
@@ -442,6 +454,8 @@ include/sfx2/lokcharthelper.hxx:41
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
+include/sfx2/sfxdlg.hxx:67
+    class rtl::OUString SfxAbstractDialog::GetText() const
 include/sfx2/sidebar/Context.hxx:55
     _Bool sfx2::sidebar::Context::operator==(const class sfx2::sidebar::Context &) const
 include/svl/itempool.hxx:167
@@ -453,32 +467,30 @@ include/svx/ClassificationEditView.hxx:41
 include/svx/ClassificationEditView.hxx:47
     void svx::ClassificationEditView::SetNumType(enum SvxNumType)
 include/svx/ClassificationField.hxx:47
-    class rtl::OUString svx::ClassificationResult::getDisplayText() const
+    const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:52
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
-include/svx/framelink.hxx:209
-    _Bool svx::frame::Style::operator==(const class svx::frame::Style &) const
+include/svx/framelink.hxx:213
+    _Bool operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:250
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
 include/svx/svdlayer.hxx:72
     _Bool SdrLayer::operator==(const class SdrLayer &) const
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
-include/tools/bigint.hxx:94
-     BigInt::BigInt(unsigned short)
-include/tools/bigint.hxx:103
+include/tools/bigint.hxx:86
      BigInt::BigInt(unsigned int)
-include/tools/bigint.hxx:114
+include/tools/bigint.hxx:92
     unsigned short BigInt::operator unsigned short() const
-include/tools/bigint.hxx:115
-    unsigned long BigInt::operator unsigned long() const
-include/tools/bigint.hxx:137
+include/tools/bigint.hxx:94
+    unsigned int BigInt::operator unsigned int() const
+include/tools/bigint.hxx:117
     class BigInt operator-(const class BigInt &,const class BigInt &)
-include/tools/bigint.hxx:140
+include/tools/bigint.hxx:120
     class BigInt operator%(const class BigInt &,const class BigInt &)
-include/tools/bigint.hxx:143
+include/tools/bigint.hxx:123
     _Bool operator!=(const class BigInt &,const class BigInt &)
-include/tools/bigint.hxx:146
+include/tools/bigint.hxx:126
     _Bool operator<=(const class BigInt &,const class BigInt &)
 include/tools/date.hxx:83
     _Bool Date::IsEmpty() const
@@ -500,8 +512,6 @@ include/tools/fract.hxx:69
     class Fraction & Fraction::operator+=(double)
 include/tools/fract.hxx:70
     class Fraction & Fraction::operator-=(double)
-include/tools/fract.hxx:71
-    class Fraction & Fraction::operator*=(double)
 include/tools/fract.hxx:86
     _Bool operator>=(const class Fraction &,const class Fraction &)
 include/tools/fract.hxx:105
@@ -510,9 +520,11 @@ include/tools/fract.hxx:106
     class Fraction operator-(const class Fraction &,double)
 include/tools/fract.hxx:108
     class Fraction operator/(const class Fraction &,double)
-include/tools/poly.hxx:162
+include/tools/multisel.hxx:45
+    int MultiSelection::ImplFwdUnselected()
+include/tools/poly.hxx:164
     _Bool tools::Polygon::operator!=(const class tools::Polygon &) const
-include/tools/poly.hxx:249
+include/tools/poly.hxx:251
     _Bool tools::PolyPolygon::operator!=(const class tools::PolyPolygon &) const
 include/tools/ref.hxx:93
     _Bool tools::SvRef::operator bool() const
@@ -522,8 +534,6 @@ include/tools/weakbase.h:109
     _Bool tools::WeakReference::operator<(const WeakReference<reference_type> &) const
 include/tools/weakbase.h:112
     _Bool tools::WeakReference::operator>(const WeakReference<reference_type> &) const
-include/tools/XmlWriter.hxx:48
-    void tools::XmlWriter::attribute(const class rtl::OString &,int)
 include/unotest/assertion_traits.hxx:25
     _Bool CppUnit::assertion_traits::equal(signed char,signed char)
 include/unotest/assertion_traits.hxx:27
@@ -540,8 +550,10 @@ include/vcl/commandevent.hxx:250
      CommandMediaData::CommandMediaData(enum MediaCommand)
 include/vcl/commandevent.hxx:257
     _Bool CommandMediaData::GetPassThroughToOS() const
-include/vcl/cursor.hxx:94
+include/vcl/cursor.hxx:96
     _Bool vcl::Cursor::operator!=(const class vcl::Cursor &) const
+include/vcl/dialog.hxx:145
+    _Bool Dialog::StartExecuteAsync(const class std::function<void (int)> &,class VclPtr<class VclReferenceBase>)
 include/vcl/edit.hxx:227
     class rtl::OUString Edit::GetPlaceholderText() const
 include/vcl/EnumContext.hxx:133
@@ -554,7 +566,7 @@ include/vcl/errcode.hxx:83
     _Bool ErrCode::operator>(const class ErrCode &) const
 include/vcl/errcode.hxx:84
     _Bool ErrCode::operator>=(const class ErrCode &) const
-include/vcl/gdimtf.hxx:109
+include/vcl/gdimtf.hxx:108
     _Bool GDIMetaFile::operator!=(const class GDIMetaFile &) const
 include/vcl/gradient.hxx:104
     _Bool Gradient::operator!=(const class Gradient &) const
@@ -586,11 +598,11 @@ include/vcl/settings.hxx:480
     void StyleSettings::SetTitleHeight(long)
 include/vcl/settings.hxx:483
     void StyleSettings::SetFloatTitleHeight(long)
-include/vcl/settings.hxx:494
+include/vcl/settings.hxx:492
     void StyleSettings::SetSpinSize(long)
-include/vcl/settings.hxx:655
+include/vcl/settings.hxx:653
     _Bool HelpSettings::operator!=(const class HelpSettings &) const
-include/vcl/settings.hxx:711
+include/vcl/settings.hxx:709
     _Bool AllSettings::operator!=(const class AllSettings &) const
 include/vcl/svapp.hxx:169
      ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)
@@ -604,20 +616,24 @@ include/vcl/threadex.hxx:99
      vcl::solarthread::detail::GenericSolarThreadExecutor::GenericSolarThreadExecutor<type-parameter-?-?, void>(const type-parameter-?-? &)
 include/vcl/txtattr.hxx:57
     _Bool TextAttrib::operator!=(const class TextAttrib &) const
-include/vcl/uitest/uiobject.hxx:243
+include/vcl/uitest/uiobject.hxx:264
      TabPageUIObject::TabPageUIObject(const class VclPtr<class TabPage> &)
-include/vcl/uitest/uiobject.hxx:251
+include/vcl/uitest/uiobject.hxx:272
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > TabPageUIObject::create(class vcl::Window *)
-include/vcl/uitest/uiobject.hxx:312
+include/vcl/uitest/uiobject.hxx:333
      SpinUIObject::SpinUIObject(const class VclPtr<class SpinButton> &)
-include/vcl/uitest/uiobject.hxx:320
+include/vcl/uitest/uiobject.hxx:341
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > SpinUIObject::create(class vcl::Window *)
 include/vcl/wall.hxx:98
     _Bool Wallpaper::operator!=(const class Wallpaper &) const
-include/vcl/window.hxx:428
+include/vcl/window.hxx:429
     const char * ImplDbgCheckWindow(const void *)
-lotuswordpro/source/filter/lwpfribptr.hxx:87
-    void LwpFribPtr::FindLayouts()
+include/vcl/window.hxx:1226
+    class Size vcl::Window::PaintActiveFloatingWindow(class VirtualDevice &) const
+libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
+    void openLokDialog(struct _GtkWidget *,void *)
+lotuswordpro/source/filter/lwpstory.hxx:124
+    void LwpStory::AddPageLayout(class LwpPageLayout *)
 o3tl/qa/cow_wrapper_clients.hxx:140
     _Bool o3tltests::cow_wrapper_client4::operator==(const class o3tltests::cow_wrapper_client4 &) const
 o3tl/qa/cow_wrapper_clients.hxx:141
@@ -644,12 +660,14 @@ sc/inc/datamapper.hxx:86
     void sc::ExternalDataSource::setProvider(const class rtl::OUString &)
 sc/inc/dpfilteredcache.hxx:144
     void ScDPFilteredCache::dump() const
-sc/inc/formulacell.hxx:446
+sc/inc/formulacell.hxx:448
     void ScFormulaCell::Dump() const
 sc/inc/formulagroup.hxx:140
     void sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
 sc/inc/formulagroup.hxx:141
     void sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly()
+sc/inc/formulalogger.hxx:102
+    void sc::FormulaLogger::GroupScope::addRefMessage(const class ScAddress &,const class ScAddress &,unsigned long,const class std::__debug::vector<struct formula::VectorRefArray, class std::allocator<struct formula::VectorRefArray> > &)
 sc/inc/postit.hxx:47
      ScCaptionPtr::ScCaptionPtr(class SdrCaptionObj *)
 sc/inc/scdll.hxx:42
@@ -666,7 +684,7 @@ sc/inc/table.hxx:326
     _Bool ScTable::IsColRowTabValid(short,int,short) const
 sc/inc/userlist.hxx:86
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > *, class std::__cxx1998::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > >, class std::__debug::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > > ScUserList::begin() const
-sc/qa/unit/helper/qahelper.hxx:201
+sc/qa/unit/helper/qahelper.hxx:202
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > print(const class ScAddress &)
 sc/qa/unit/ucalc.hxx:141
     void Test::testFormulaHashAndTag()
@@ -678,13 +696,13 @@ sc/qa/unit/ucalc.hxx:367
     void Test::testCopyPasteSkipEmptyConditionalFormatting()
 sc/qa/unit/ucalc.hxx:394
     void Test::testSharedFormulaMoveBlock()
-sc/qa/unit/ucalc.hxx:503
-    void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:504
-    void Test::testCondFormatUpdateDeleteTab()
+    void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:505
-    void Test::testCondFormatUpdateInsertTab()
+    void Test::testCondFormatUpdateDeleteTab()
 sc/qa/unit/ucalc.hxx:506
+    void Test::testCondFormatUpdateInsertTab()
+sc/qa/unit/ucalc.hxx:507
     void Test::testCondFormatUpdateReference()
 sc/source/core/opencl/formulagroupcl.cxx:934
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction() const
@@ -722,15 +740,15 @@ sc/source/filter/inc/xestream.hxx:106
     class XclExpStream & XclExpStream::operator<<(float)
 sc/source/filter/inc/xiescher.hxx:159
     class Color XclImpDrawObjBase::GetSolidLineColor(const struct XclObjLineData &) const
-sc/source/ui/inc/dataprovider.hxx:72
+sc/source/ui/inc/dataprovider.hxx:68
     _Bool sc::CSVFetchThread::IsRequestedTerminate()
-sc/source/ui/inc/dataprovider.hxx:73
+sc/source/ui/inc/dataprovider.hxx:69
     void sc::CSVFetchThread::Terminate()
-sc/source/ui/inc/dataprovider.hxx:74
+sc/source/ui/inc/dataprovider.hxx:70
     void sc::CSVFetchThread::EndThread()
-sc/source/ui/inc/dataprovider.hxx:99
+sc/source/ui/inc/dataprovider.hxx:95
     const class rtl::OUString & sc::DataProvider::GetURL() const
-sc/source/ui/inc/dataprovider.hxx:101
+sc/source/ui/inc/dataprovider.hxx:97
     class std::__debug::map<class rtl::OUString, class rtl::OUString, struct std::less<class rtl::OUString>, class std::allocator<struct std::pair<const class rtl::OUString, class rtl::OUString> > > sc::DataProvider::getDataSourcesForURL(const class rtl::OUString &)
 sc/source/ui/inc/datatransformation.hxx:75
      sc::SortTransformation::SortTransformation(const struct ScSortParam &)
@@ -754,12 +772,6 @@ sd/source/ui/inc/optsitem.hxx:176
     _Bool SdOptionsContents::operator==(const class SdOptionsContents &) const
 sd/source/ui/inc/unomodel.hxx:139
     _Bool SdXImpressDocument::operator==(const class SdXImpressDocument &) const
-sd/source/ui/remotecontrol/ZeroconfService.hxx:39
-     sd::ZeroconfService::ZeroconfService(const class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &,unsigned int)
-sd/source/ui/remotecontrol/ZeroconfService.hxx:43
-    const class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > & sd::ZeroconfService::getName() const
-sd/source/ui/remotecontrol/ZeroconfService.hxx:44
-    void sd::ZeroconfService::setName(const char *)
 slideshow/source/engine/activities/activitiesfactory.cxx:173
     void slideshow::internal::(anonymous namespace)::FromToByActivity::startAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:241
@@ -796,9 +808,9 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:180
     void OGLTransitionImpl::finish(double,double,double,double,double)
 slideshow/source/inc/shapeattributelayer.hxx:391
     void slideshow::internal::ShapeAttributeLayer::setCharRotationAngle(const double &)
-svgio/inc/svgstyleattributes.hxx:352
+svgio/inc/svgstyleattributes.hxx:345
     class svgio::svgreader::SvgNumber svgio::svgreader::SvgStyleAttributes::getStrokeDashOffset() const
-svgio/inc/svgstyleattributes.hxx:376
+svgio/inc/svgstyleattributes.hxx:369
     enum svgio::svgreader::FontStretch svgio::svgreader::SvgStyleAttributes::getFontStretch() const
 sw/inc/dbgoutsw.hxx:53
     const char * dbg_out(const void *)
@@ -888,26 +900,30 @@ sw/inc/swatrset.hxx:227
     const class SvxNoHyphenItem & SwAttrSet::GetNoHyphenHere(_Bool) const
 sw/inc/swrect.hxx:105
     class SvStream & WriteSwRect(class SvStream &,const class SwRect &)
-sw/inc/swtable.hxx:198
-    unsigned short SwTable::GetRowsToRepeat_() const
-sw/qa/extras/inc/swmodeltestbase.hxx:543
+sw/inc/swrect.hxx:131
+    void SwRect::SetBottomAndHeight(long,long)
+sw/inc/swrect.hxx:134
+    void SwRect::SetLowerLeftCorner(const class Point &)
+sw/inc/swrect.hxx:147
+    _Bool SwRect::OverStepTop(long) const
+sw/qa/extras/inc/swmodeltestbase.hxx:544
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
-sw/qa/extras/uiwriter/uiwriter.cxx:5605
+sw/qa/extras/uiwriter/uiwriter.cxx:5836
     int main()
-sw/source/core/inc/frame.hxx:1334
+sw/source/core/inc/frame.hxx:1325
     class Size SwRectFnSet::GetSize(const class SwRect &) const
-sw/source/core/inc/frame.hxx:1365
+sw/source/core/inc/frame.hxx:1356
     long SwRectFnSet::LeftDist(const class SwRect &,long) const
-sw/source/core/inc/frame.hxx:1366
+sw/source/core/inc/frame.hxx:1357
     long SwRectFnSet::RightDist(const class SwRect &,long) const
-sw/source/core/inc/frame.hxx:1374
+sw/source/core/inc/frame.hxx:1365
     long SwRectFnSet::XInc(long,long) const
 sw/source/core/inc/mvsave.hxx:162
     _Bool ZSortFly::operator==(const class ZSortFly &) const
-sw/source/core/text/porlin.hxx:128
+sw/source/core/text/inftxt.hxx:372
+    void SwTextPaintInfo::NotifyURL_(const class SwLinePortion &) const
+sw/source/core/text/porlin.hxx:119
     _Bool SwLinePortion::IsTabRightPortion() const
-sw/source/core/text/porlin.hxx:182
-    class SvStream & SwLinePortion::operator<<(class SvStream &) const
 sw/source/core/text/txtpaint.hxx:73
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,unsigned int)
 sw/source/filter/ww8/ww8struc.hxx:241
@@ -952,10 +968,12 @@ vcl/inc/openglgdiimpl.hxx:141
     void OpenGLSalGraphicsImpl::DrawMask(class OpenGLTexture &,unsigned int,const struct SalTwoRect &)
 vcl/inc/openglgdiimpl.hxx:145
     void OpenGLSalGraphicsImpl::DeferredTextDraw(const class OpenGLTexture &,const unsigned int,const struct SalTwoRect &)
-vcl/inc/PhysicalFontFace.hxx:79
+vcl/inc/PhysicalFontFace.hxx:64
     int PhysicalFontFace::GetWidth() const
-vcl/inc/PhysicalFontFace.hxx:88
+vcl/inc/PhysicalFontFace.hxx:73
     void PhysicalFontFace::SetBitmapSize(int,int)
+vcl/inc/PhysicalFontFamily.hxx:58
+    const class rtl::OUString & PhysicalFontFamily::GetAliasNames() const
 vcl/inc/regionband.hxx:27
     const char * ImplDbgTestRegionBand(const void *)
 vcl/inc/salmenu.hxx:46
@@ -1002,12 +1020,12 @@ vcl/source/fontsubset/xlat.hxx:34
     unsigned short TranslateChar15(unsigned short)
 vcl/source/fontsubset/xlat.hxx:35
     unsigned short TranslateChar16(unsigned short)
-vcl/source/gdi/pdfwriter_impl.hxx:1279
+vcl/source/gdi/pdfwriter_impl.hxx:1270
     void vcl::PDFWriterImpl::setAutoAdvanceTime(unsigned int,int)
+workdir/LexTarget/l10ntools/source/cfglex.cxx:3736
+    void YYWarning(const char *)
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:730
     void YYWarning()
-workdir/LexTarget/l10ntools/source/xrmlex.cxx:2226
-    void YYWarning(const char *)
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:157
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:158

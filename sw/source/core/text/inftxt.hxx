@@ -369,7 +369,6 @@ class SwTextPaintInfo : public SwTextSizeInfo
                    const bool bGrammarCheck = false );
 
     SwTextPaintInfo &operator=(const SwTextPaintInfo&) = delete;
-    void NotifyURL_( const SwLinePortion &rPor ) const;
 
 protected:
     SwTextPaintInfo()

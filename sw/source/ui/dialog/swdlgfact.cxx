@@ -149,11 +149,6 @@ void AbstractTabDialog_Impl::SetText( const OUString& rStr )
     pDlg->SetText( rStr );
 }
 
-OUString AbstractTabDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
-}
-
 IMPL_LINK_NOARG(AbstractApplyTabDialog_Impl, ApplyHdl, Button*, void)
 {
     if (pDlg->Apply())
@@ -184,11 +179,6 @@ const SfxItemSet* SwAbstractSfxDialog_Impl::GetOutputItemSet() const
 void SwAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
-}
-
-OUString SwAbstractSfxDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
 }
 
 void AbstractSwAsciiFilterDlg_Impl::FillOptions( SwAsciiOptions& rOptions )
@@ -280,11 +270,6 @@ void AbstractSwLabDlg_Impl::SetText( const OUString& rStr )
     pDlg->SetText( rStr );
 }
 
-OUString AbstractSwLabDlg_Impl::GetText() const
-{
-    return pDlg->GetText();
-}
-
 const OUString& AbstractSwLabDlg_Impl::GetBusinessCardStr() const
 {
     return pDlg->GetBusinessCardStr();
@@ -343,11 +328,6 @@ void AbstractSwFieldDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
 void AbstractSwFieldDlg_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
-}
-
-OUString AbstractSwFieldDlg_Impl::GetText() const
-{
-    return pDlg->GetText();
 }
 
 void AbstractSwFieldDlg_Impl::Start()

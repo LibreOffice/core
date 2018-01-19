@@ -48,7 +48,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/nhypitem.hxx>
-#include <editeng/nlbkitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/paravertalignitem.hxx>
@@ -56,7 +55,6 @@
 #include <editeng/pgrditem.hxx>
 #include <editeng/prntitem.hxx>
 #include <editeng/protitem.hxx>
-#include <editeng/prszitem.hxx>
 #include <editeng/rsiditem.hxx>
 #include <svl/grabbagitem.hxx>
 #include <editeng/scriptspaceitem.hxx>

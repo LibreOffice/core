@@ -44,7 +44,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/escapementitem.hxx>
-#include <editeng/prszitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/kernitem.hxx>

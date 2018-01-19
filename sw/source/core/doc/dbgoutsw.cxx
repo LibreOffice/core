@@ -19,7 +19,6 @@
 
 #ifdef DBG_UTIL
 
-#include <editeng/nlbkitem.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemiter.hxx>

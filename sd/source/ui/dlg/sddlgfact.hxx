@@ -88,7 +88,6 @@ class SdAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
         //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
@@ -101,7 +100,6 @@ class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
         //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class SdPresLayoutTemplateDlg;
@@ -115,7 +113,6 @@ class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
         //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class SdModifyFieldDlg;
@@ -184,7 +181,6 @@ class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
     DECL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class SdVectorizeDlg;

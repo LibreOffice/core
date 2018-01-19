@@ -112,7 +112,6 @@ class CuiAbstractSfxDialog_Impl : public SfxAbstractDialog
 
         //From class Window.
     virtual void          SetText( const OUString& rStr ) override;
-    virtual OUString      GetText() const override ;
 };
 
 class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
@@ -125,7 +124,6 @@ class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
         //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class SvxDistributeDialog;
@@ -272,7 +270,6 @@ class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
@@ -285,7 +282,6 @@ class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class FmInputRecordNoDialog;
@@ -392,7 +388,6 @@ class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     // From class Window.
     virtual void        SetText( const OUString& rStr ) override;
-    virtual OUString    GetText() const override;
 };
 
 class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
