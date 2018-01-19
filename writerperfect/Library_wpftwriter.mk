@@ -32,8 +32,10 @@ $(eval $(call gb_Library_use_libraries,wpftwriter,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	i18nlangtag \
 	vcl \
 	sal \
+	sax \
 	sfx \
 	sot \
 	svt \

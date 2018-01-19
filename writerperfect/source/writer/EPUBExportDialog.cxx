@@ -16,6 +16,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/opengrf.hxx>
+#include <sax/tools/converter.hxx>
 
 #include "EPUBExportFilter.hxx"
 
@@ -136,8 +137,24 @@ EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsH
         m_pTitle->SetText(xDP->getTitle());
 
     get(m_pInitialCreator, "author");
+    if (xDP.is())
+        m_pInitialCreator->SetText(xDP->getAuthor());
+
     get(m_pLanguage, "language");
+    if (xDP.is())
+    {
+        OUString aLanguage(LanguageTag::convertToBcp47(xDP->getLanguage(), false));
+        m_pLanguage->SetText(aLanguage);
+    }
+
     get(m_pDate, "date");
+    if (xDP.is())
+    {
+        OUStringBuffer aBuffer;
+        util::DateTime aDate(xDP->getModificationDate());
+        sax::Converter::convertDateTime(aBuffer, aDate, nullptr, true);
+        m_pDate->SetText(aBuffer.makeStringAndClear());
+    }
 
     get(m_pOKButton, "ok");
     m_pOKButton->SetClickHdl(LINK(this, EPUBExportDialog, OKClickHdl));
