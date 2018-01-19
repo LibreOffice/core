@@ -845,7 +845,7 @@ define gb_ExternalProject__use_libxml2
 $(call gb_ExternalProject_use_package,$(1),libxml2)
 
 ifeq ($(COM),MSC)
-$(call gb_ExternalProject_use_external_project,$(1),icu)
+$(call gb_ExternalProject_use_packages,$(1),icu icu_ure)
 endif
 
 endef
