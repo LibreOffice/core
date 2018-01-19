@@ -306,7 +306,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     }
 }
 
-void ScColumn::SetValues( SCROW nRow, const std::vector<double>& rVals )
+void ScColumn::SetValues( const SCROW nRow, const std::vector<double>& rVals )
 {
     if (!ValidRow(nRow))
         return;
