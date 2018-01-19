@@ -29,6 +29,13 @@ $(eval $(call gb_Library_add_defs,svgfilter,\
 	-DFILTER_DLLIMPLEMENTATION \
 ))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_defs,svgfilter,\
+	-D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING \
+	-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING \
+))
+endif
+
 $(eval $(call gb_Library_set_include,svgfilter,\
     $$(INCLUDE) \
     -I$(SRCDIR)/filter/inc \

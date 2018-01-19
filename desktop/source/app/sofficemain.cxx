@@ -92,6 +92,9 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
     std::string ini_path = CrashReporter::getIniFileName();
     std::ofstream minidump_file(ini_path, std::ios_base::app);
     // TODO: moggi: can we avoid this conversion
+#ifdef _MSC_VER
+#pragma warning (disable: 4996)
+#endif
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
     std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id)) + ".dmp";
     minidump_file << "DumpFile=" << aPath << "\n";
