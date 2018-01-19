@@ -91,6 +91,29 @@
       "revId": "338c15e898d8b942aaab773f8c7c1c8b41352c83",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_097e4ce4",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T12:59:49Z",
+      "side": 1,
+      "message": "and this is unnecessary, too: this is only called if m_DictItems is empty (line 111) and nothing has been pushed to m_DictItems",
+      "range": {
+        "startLine": 220,
+        "startChar": 12,
+        "endLine": 220,
+        "endChar": 32
+      },
+      "revId": "338c15e898d8b942aaab773f8c7c1c8b41352c83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
