@@ -30,13 +30,7 @@ public:
     {
     }
 
-    virtual void run() override
-    {
-        StringRef fn(compiler.getSourceManager()
-                         .getFileEntryForID(compiler.getSourceManager().getMainFileID())
-                         ->getName());
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-    }
+    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitIfStmt(IfStmt const*);
 
