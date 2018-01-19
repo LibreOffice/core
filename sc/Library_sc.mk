@@ -29,6 +29,13 @@ $(eval $(call gb_Library_add_defs,sc,\
     -DSC_INFO_OSVERSION=\"$(OS)\" \
 ))
 
+# there is an odd case of this about std::function in dataproviderdlg.cxx that resists more localised suppression
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_cxxflags,sc,\
+	-wd4121 \
+))
+endif
+
 $(eval $(call gb_Library_use_custom_headers,sc,\
     officecfg/registry \
 ))
