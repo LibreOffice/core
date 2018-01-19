@@ -3934,6 +3934,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|menub">_Menu</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
@@ -3986,6 +3987,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|toolsb">_Tools</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
@@ -4040,6 +4042,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|helpb">_Help</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
@@ -4147,6 +4150,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|fileb">_File</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
@@ -4384,6 +4388,7 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|editb">_Edit</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
@@ -4580,6 +4585,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphstyleb">St_yles</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -4867,6 +4873,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|formatb">F_ormat</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -5218,6 +5225,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphb">_Paragraph</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -5457,6 +5465,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|insertb">_Insert</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -5685,6 +5694,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|referenceb">Referen_ce</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -5886,6 +5896,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|reviewb">_Review</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -6035,6 +6046,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewb">_View</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -6296,6 +6308,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|graphicB">_Graphic</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -6726,6 +6739,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|arrange">_Arrange</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -6902,6 +6916,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_full|colorb">C_olor</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -7156,6 +7171,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|GridB">_Grid</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -7333,6 +7349,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphstylet">St_yles</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -7620,6 +7637,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|formatt">F_ormat</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -7971,6 +7989,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragrapht">_Paragraph</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -8198,6 +8217,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|tabled">T_able</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -8396,6 +8416,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|rowscolumnst">R_ows</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -8597,6 +8618,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|merged">_Merge</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -8825,6 +8847,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|selectt">Sele_ct</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -9054,6 +9077,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|calculatet">_Calc</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -9282,6 +9306,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|referencet">Referen_ce</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -9418,6 +9443,7 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_full|languageb">_Language</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
@@ -9646,6 +9672,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|revieb">_Review</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -9858,6 +9885,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|commentsb">_Comments</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -10060,6 +10088,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|compareb">Com_pare</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -10209,6 +10238,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewa">_View</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -10654,6 +10684,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|drawb">D_raw</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -11024,6 +11055,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|editdrawb">_Edit</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -11254,6 +11286,7 @@
                                             <property name="label" translatable="yes" context="notebookbar_groupedbar_full|wrapb">Wrap</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
+                                            <property name="focus_on_click">False</property>
                                             <property name="receives_default">False</property>
                                             <property name="relief">none</property>
                                           </object>
@@ -11268,6 +11301,7 @@
                                             <property name="label" translatable="yes" context="notebookbar_groupedbar_full|alignb">Align</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
+                                            <property name="focus_on_click">False</property>
                                             <property name="receives_default">False</property>
                                             <property name="relief">none</property>
                                           </object>
@@ -11300,6 +11334,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|arrangedrawb">_Arrange</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -11467,6 +11502,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|GridDrawB">_Grid</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -11668,6 +11704,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewDrawb">Grou_p</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -11847,6 +11884,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|3Db">3_D</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -12158,6 +12196,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|formatd">F_ormat</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -12424,6 +12463,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphTextb">_Paragraph</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -12600,6 +12640,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewd">_View</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -12753,6 +12794,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|insertTextb">_Insert</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -13186,6 +13228,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|media">_Media</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -13423,6 +13466,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|oleB">F_rame</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -13853,6 +13897,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|arrageOLE">_Arrange</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -14019,6 +14064,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|OleGridB">_Grid</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
@@ -14168,6 +14214,7 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewf">_View</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
