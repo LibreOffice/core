@@ -640,11 +640,10 @@ bool Tcg::Read(SvStream &rS)
     return tcg->Read( rS );
 }
 
-bool Tcg::ImportCustomToolBar( SfxObjectShell& rDocSh )
+void Tcg::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
     if ( tcg.get() )
-        return tcg->ImportCustomToolBar( rDocSh );
-    return false;
+        tcg->ImportCustomToolBar( rDocSh );
 }
 
 Tcg255::Tcg255()

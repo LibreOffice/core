@@ -450,7 +450,7 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
     }
 }
 
-bool DocumentFieldsManager::PutValueToField(const SwPosition & rPos,
+void DocumentFieldsManager::PutValueToField(const SwPosition & rPos,
                             const Any& rVal, sal_uInt16 nWhich)
 {
     Any aOldVal;
@@ -463,7 +463,7 @@ bool DocumentFieldsManager::PutValueToField(const SwPosition & rPos,
         m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    return pField->PutValue(rVal, nWhich);
+    pField->PutValue(rVal, nWhich);
 }
 
 bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & rSrcField,

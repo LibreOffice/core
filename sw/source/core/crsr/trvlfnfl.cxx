@@ -301,7 +301,7 @@ bool SwCursorShell::GotoPrevFootnoteAnchor()
 }
 
 /// jump from border to anchor
-bool SwCursorShell::GotoFlyAnchor()
+void SwCursorShell::GotoFlyAnchor()
 {
     SET_CURR_SHELL( this );
     const SwFrame* pFrame = GetCurrFrame();
@@ -310,7 +310,7 @@ bool SwCursorShell::GotoFlyAnchor()
     } while( pFrame && !pFrame->IsFlyFrame() );
 
     if( !pFrame ) // no FlyFrame
-        return false;
+        return;
 
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
@@ -333,7 +333,6 @@ bool SwCursorShell::GotoFlyAnchor()
     if( bRet )
         UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
                     SwCursorShell::READONLY );
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -125,7 +125,7 @@ const SwNumRule* SwEditShell::GetOutlineNumRule() const
 // Works with old and new rules. Update only differences.
 
 // paragraphs without numbering, with indentations
-bool SwEditShell::NoNum()
+void SwEditShell::NoNum()
 {
     bool bRet = true;
     StartAllAction();
@@ -144,7 +144,6 @@ bool SwEditShell::NoNum()
         bRet = GetDoc()->NoNum( *pCursor );
 
     EndAllAction();
-    return bRet;
 }
 
 bool SwEditShell::SelectionHasNumber() const
@@ -301,7 +300,7 @@ void SwEditShell::DelNumRules()
 }
 
 // up- & downgrading
-bool SwEditShell::NumUpDown( bool bDown )
+void SwEditShell::NumUpDown( bool bDown )
 {
     StartAllAction();
 
@@ -327,7 +326,6 @@ bool SwEditShell::NumUpDown( bool bDown )
     CallChgLnk();
 
     EndAllAction();
-    return bRet;
 }
 
 bool SwEditShell::IsFirstOfNumRuleAtCursorPos() const
@@ -787,12 +785,11 @@ void SwEditShell::ChgNumRuleFormats( const SwNumRule& rRule )
     EndAllAction();
 }
 
-bool SwEditShell::ReplaceNumRule( const OUString& rOldRule, const OUString& rNewRule )
+void SwEditShell::ReplaceNumRule( const OUString& rOldRule, const OUString& rNewRule )
 {
     StartAllAction();
-    bool bRet = GetDoc()->ReplaceNumRule( *GetCursor()->GetPoint(), rOldRule, rNewRule );
+    GetDoc()->ReplaceNumRule( *GetCursor()->GetPoint(), rOldRule, rNewRule );
     EndAllAction();
-    return bRet;
 }
 
 void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )

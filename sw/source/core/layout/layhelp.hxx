@@ -165,11 +165,11 @@ public:
     SvStream& GetStream() const { return *pStream; }
 
     /// Open a record of type "nType"
-    bool OpenRec( sal_uInt8 nType );
+    void OpenRec( sal_uInt8 nType );
 
     /// Close a record. This skips any unread data that
     /// remains in the record.
-    bool CloseRec();
+    void CloseRec();
 
     /// Return the number of bytes contained in the current record that
     /// haven't been read by now.

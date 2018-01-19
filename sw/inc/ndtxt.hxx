@@ -193,7 +193,7 @@ public:
     SwGrammarMarkUp* GetGrammarCheck();
     void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetSmartTags();
-    bool TryCharSetExpandToNum(const SfxItemSet& pCharSet);
+    void TryCharSetExpandToNum(const SfxItemSet& pCharSet);
 
     /// End: Data collected during idle time
 
