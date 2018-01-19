@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_89231c05",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T12:54:14Z",
+      "side": 1,
+      "message": "heh, the k seems to be loosing its relevance... it is only required in lines 173-178, so let\u0027s move this to 173 (replace current 173)",
+      "range": {
+        "startLine": 145,
+        "startChar": 12,
+        "endLine": 145,
+        "endChar": 28
+      },
+      "revId": "338c15e898d8b942aaab773f8c7c1c8b41352c83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_09948c35",
         "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
         "patchSetId": 5
