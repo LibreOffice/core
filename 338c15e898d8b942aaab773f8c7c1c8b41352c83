@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_09bbacc5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T12:03:29Z",
+      "side": 1,
+      "message": "Generally, the review history should not appear in the commit message. The message should describe what has been done wrt baseline, not talk about individual changesets. When the patch will be pushed, it will be visible in git history as an atomic change, and looking at the commit message should make clear what it does.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "338c15e898d8b942aaab773f8c7c1c8b41352c83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_09948c35",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T12:03:29Z",
+      "side": 1,
+      "message": "nDictSize +\u003d dict.aLocaleNames.getLength();",
+      "range": {
+        "startLine": 187,
+        "startChar": 16,
+        "endLine": 187,
+        "endChar": 70
+      },
+      "revId": "338c15e898d8b942aaab773f8c7c1c8b41352c83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e98e5826",
+        "filename": "lingucomponent/source/spellcheck/spell/sspellimp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-19T12:03:29Z",
+      "side": 1,
+      "message": "I suppose you\u0027ve forgot to remove this?",
+      "range": {
+        "startLine": 211,
+        "startChar": 24,
+        "endLine": 211,
+        "endChar": 28
+      },
+      "revId": "338c15e898d8b942aaab773f8c7c1c8b41352c83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
