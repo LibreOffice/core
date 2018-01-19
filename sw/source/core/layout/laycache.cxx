@@ -1054,7 +1054,7 @@ SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
                 .ReadUInt16( nMinorVersion );
 }
 
-bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
+void SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 {
     bool bRes = true;
     sal_uInt32 nPos = pStream->Tell();
@@ -1082,11 +1082,10 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
             aRecords.emplace_back(cRecTyp, nPos+nSize );
         }
     }
-    return bRes;
 }
 
 // Close record
-bool SwLayCacheIoImpl::CloseRec()
+void SwLayCacheIoImpl::CloseRec()
 {
     bool bRes = true;
     OSL_ENSURE( !aRecords.empty(), "CloseRec: no levels" );
@@ -1122,8 +1121,6 @@ bool SwLayCacheIoImpl::CloseRec()
 
     if( !bRes )
         bError = true;
-
-    return bRes;
 }
 
 sal_uInt32 SwLayCacheIoImpl::BytesLeft()

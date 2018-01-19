@@ -133,11 +133,11 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     }
 }
 
-bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
+void SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         SwSectionData & rNew)
 {
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
-        return false;
+        return;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -170,8 +170,6 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         pMyDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     EndAllAction();
-
-    return true;
 }
 
 bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
@@ -237,11 +235,11 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
     return true;
 }
 
-bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
+void SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
                                             size_t nDelPos )
 {
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
-        return false;
+        return;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -299,7 +297,6 @@ bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
 
     EndUndo( SwUndoId::END );
     EndAllAction();
-    return true;
 }
 
 bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
@@ -339,10 +336,10 @@ bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
     return bRet;
 }
 
-bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
+void SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
 {
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
-        return false;
+        return;
 
     SET_CURR_SHELL( this );
     SttCursorMove();
@@ -362,7 +359,6 @@ bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     rCursorPos.nContent.Assign( pCNd, 0 );
 
     EndCursorMove();
-    return true;
 }
 
 SwGlblDocContent::SwGlblDocContent( sal_uLong nPos )

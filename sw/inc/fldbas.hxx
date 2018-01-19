@@ -257,8 +257,8 @@ public:
     /// Only in derived classes.
     virtual OUString        GetName() const;
     virtual SwFieldType*    Copy()    const = 0;
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );
 
     SwFieldIds              Which() const { return m_nWhich; }
 

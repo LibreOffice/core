@@ -100,7 +100,7 @@ void SwDBFieldType::ReleaseRef()
     }
 }
 
-bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+void SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -119,10 +119,9 @@ bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     default:
         assert(false);
     }
-    return true;
 }
 
-bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+void SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -162,7 +161,6 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     default:
         assert(false);
     }
-    return true;
 }
 
 // database field

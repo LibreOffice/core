@@ -649,7 +649,7 @@ bool SwHHCWrapper::ConvNext_impl( )
     return bGoOn;
 }
 
-bool SwHHCWrapper::FindConvText_impl()
+void SwHHCWrapper::FindConvText_impl()
 {
     //! modified version of SvxSpellWrapper::FindSpellError
 
@@ -672,7 +672,6 @@ bool SwHHCWrapper::FindConvText_impl()
         }
     }
     m_pWin->LeaveWait();
-    return bFound;
 }
 
 void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )

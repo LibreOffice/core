@@ -1153,10 +1153,10 @@ bool CSS1Parser::ParseStyleSheet( const OUString& rIn )
     return true;
 }
 
-bool CSS1Parser::ParseStyleOption( const OUString& rIn )
+void CSS1Parser::ParseStyleOption( const OUString& rIn )
 {
     if( rIn.isEmpty() )
-        return true;
+        return;
 
     InitRead( rIn );
 
@@ -1170,7 +1170,7 @@ bool CSS1Parser::ParseStyleOption( const OUString& rIn )
     CSS1Expression *pExpr = ParseDeclaration( aProperty );
     if( !pExpr )
     {
-        return false;
+        return;
     }
 
     // process expression
@@ -1196,8 +1196,6 @@ bool CSS1Parser::ParseStyleOption( const OUString& rIn )
             }
         }
     }
-
-    return true;
 }
 
 bool CSS1Parser::SelectorParsed( CSS1Selector* /* pSelector */, bool /*bFirst*/ )
