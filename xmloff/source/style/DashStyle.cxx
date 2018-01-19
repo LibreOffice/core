@@ -210,7 +210,7 @@ XMLDashStyleExport::~XMLDashStyleExport()
 {
 }
 
-bool XMLDashStyleExport::exportXML(
+void XMLDashStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
@@ -304,7 +304,6 @@ bool XMLDashStyleExport::exportXML(
                                       true, false );
         }
     }
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

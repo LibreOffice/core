@@ -52,7 +52,7 @@ class XMLOFF_DLLPUBLIC SvI18NMap
 
 public:
     // Add a name mapping
-    bool Add( sal_uInt16 nKind, const OUString& rName,
+    void Add( sal_uInt16 nKind, const OUString& rName,
               const OUString& rNewName );
 
     // Return a mapped name. If the name could not be found, return the

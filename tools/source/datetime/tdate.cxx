@@ -478,18 +478,16 @@ bool Date::IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
     return true;
 }
 
-bool Date::Normalize()
+void Date::Normalize()
 {
     sal_uInt16 nDay   = GetDay();
     sal_uInt16 nMonth = GetMonth();
     sal_Int16  nYear  = GetYear();
 
     if (!Normalize( nDay, nMonth, nYear))
-        return false;
+        return;
 
     setDateFromDMY( nDay, nMonth, nYear );
-
-    return true;
 }
 
 //static

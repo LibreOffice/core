@@ -194,10 +194,8 @@ public:
         This may be necessary after Date ctors or if the SetDate(), SetDay(),
         SetMonth(), SetYear() methods set individual non-matching values.
         Adding/subtracting to/from dates never produces invalid dates.
-
-        @returns TRUE if the date was normalized, i.e. not valid before.
      */
-    bool            Normalize();
+    void            Normalize();
 
     bool            IsBetween( const Date& rFrom, const Date& rTo ) const
                         { return ((mnDate >= rFrom.mnDate) &&

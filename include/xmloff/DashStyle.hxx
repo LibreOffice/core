@@ -55,7 +55,7 @@ public:
     XMLDashStyleExport( SvXMLExport& rExport );
     ~XMLDashStyleExport();
 
-    bool exportXML( const OUString& rStrName,
+    void exportXML( const OUString& rStrName,
                         const css::uno::Any& rValue );
 };
 

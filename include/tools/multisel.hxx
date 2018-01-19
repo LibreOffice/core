@@ -91,7 +91,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringRangeEnumerator
 
     bool setRange( const OUString& i_rNewRange );
     bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence );
-    bool insertJoinedRanges( const std::vector< sal_Int32 >& rNumbers );
+    void insertJoinedRanges( const std::vector< sal_Int32 >& rNumbers );
     bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 public:
     class TOOLS_DLLPUBLIC Iterator

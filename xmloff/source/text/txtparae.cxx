@@ -1429,7 +1429,7 @@ static const enum XMLTokenEnum lcl_XmlBookmarkElements[] = {
 
 // This function replaces the text portion iteration during auto style
 // collection.
-bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
+void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
 {
     GetExport().GetShapeExport(); // make sure the graphics styles family is added
 
@@ -1631,8 +1631,6 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             }
         }
     }
-
-    return true;
 }
 
 void XMLTextParagraphExport::exportText(

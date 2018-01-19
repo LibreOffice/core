@@ -55,8 +55,6 @@ public:
 
 OUString StorageFilterDetect_getImplementationName();
 
-bool StorageFilterDetect_supportsService(const OUString& ServiceName);
-
 css::uno::Sequence<OUString> StorageFilterDetect_getSupportedServiceNames();
 
 css::uno::Reference<css::uno::XInterface>

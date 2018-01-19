@@ -539,15 +539,18 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
     return bSuccess;
 }
 
-bool StringRangeEnumerator::insertJoinedRanges(
+void StringRangeEnumerator::insertJoinedRanges(
     const std::vector< sal_Int32 >& rNumbers )
 {
     size_t nCount = rNumbers.size();
     if( nCount == 0 )
-        return true;
+        return;
 
     if( nCount == 1 )
-        return insertRange( rNumbers[0], -1, false );
+    {
+        insertRange( rNumbers[0], -1, false );
+        return;
+    }
 
     for( size_t i = 0; i < nCount - 1; i++ )
     {
@@ -561,8 +564,6 @@ bool StringRangeEnumerator::insertJoinedRanges(
 
         insertRange( nFirst, nLast, nFirst != nLast );
     }
-
-    return true;
 }
 
 bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )

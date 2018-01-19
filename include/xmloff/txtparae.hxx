@@ -517,7 +517,7 @@ public:
 
     // It the model implements the xAutoStylesSupplier interface, the automatic
     // styles can exported without iterating over the text portions
-    bool collectTextAutoStylesOptimized( bool bIsProgress );
+    void collectTextAutoStylesOptimized( bool bIsProgress );
 
     // This method exports all automatic styles that have been collected.
     void exportTextAutoStyles();
