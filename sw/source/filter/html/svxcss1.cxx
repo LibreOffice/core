@@ -2979,8 +2979,11 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
             break;
 
         case CSS1_PIXLENGTH:
+        {
+            double fHeight = pExpr->GetNumber();
+            if (fHeight < SAL_MAX_INT32/2.0 && fHeight > SAL_MIN_INT32/2.0)
             {
-                long nPHeight = static_cast<long>(pExpr->GetNumber());
+                long nPHeight = static_cast<long>(fHeight);
                 long nPWidth = n==0 ? nPHeight : 0;
                 SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
                 rPropInfo.m_nHeight = nPHeight;
@@ -2989,7 +2992,7 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
                 rPropInfo.m_eSizeType = SVX_CSS1_STYPE_TWIP;
             }
             break;
-
+        }
         default:
             ;
         }
