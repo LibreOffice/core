@@ -392,8 +392,7 @@ enum class NupOrderType
 
 class VCL_DLLPUBLIC PrinterController
 {
-    std::unique_ptr<ImplPrinterControllerData>
-                                        mpImplData;
+    ImplPrinterControllerData*          mpImplData;
 protected:
                                         PrinterController( const VclPtr<Printer>& );
 public:

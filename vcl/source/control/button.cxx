@@ -1347,7 +1347,7 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
 
 void PushButton::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<PushButton*>(this)->Invalidate();
 }
 
@@ -2414,7 +2414,7 @@ void RadioButton::KeyUp( const KeyEvent& rKEvt )
 
 void RadioButton::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<RadioButton*>(this)->Invalidate();
 }
 
@@ -3291,7 +3291,7 @@ void CheckBox::KeyUp( const KeyEvent& rKEvt )
 
 void CheckBox::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<CheckBox*>(this)->Invalidate();
 }
 

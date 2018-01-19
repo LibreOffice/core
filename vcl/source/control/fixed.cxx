@@ -368,7 +368,7 @@ Size FixedText::GetOptimalSize() const
 
 void FixedText::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     ImplDraw(const_cast<FixedText*>(this), DrawFlags::NONE, Point(), GetOutputSizePixel(), true);
     //const_cast<FixedText*>(this)->Invalidate();
 }
@@ -573,7 +573,7 @@ FixedLine::FixedLine( vcl::Window* pParent, WinBits nStyle ) :
 
 void FixedLine::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<FixedLine*>(this)->Invalidate();
 }
 

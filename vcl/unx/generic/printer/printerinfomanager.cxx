@@ -111,7 +111,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_aSystemDefaultPaper( "A4" )
 {
     if( eType == Type::Default )
-        m_pQueueInfo.reset( new SystemQueueInfo );
+        m_pQueueInfo = new SystemQueueInfo();
 
     m_aSystemDefaultPaper = OStringToOUString(
         PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()),
@@ -120,6 +120,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
 
 PrinterInfoManager::~PrinterInfoManager()
 {
+    delete m_pQueueInfo;
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "PrinterInfoManager: destroyed Manager of type %d\n", getType() );
     #endif
@@ -502,7 +503,8 @@ void PrinterInfoManager::initialize()
     {
         m_aSystemPrintCommand = m_pQueueInfo->getCommand();
         m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
-        m_pQueueInfo.reset();
+        delete m_pQueueInfo;
+        m_pQueueInfo = nullptr;
     }
     for( ::std::list< SystemPrintQueue >::iterator it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
     {

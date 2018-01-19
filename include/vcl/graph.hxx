@@ -67,9 +67,9 @@ public:
 protected:
     OUString        maUpperName;
 
-                    GraphicReader();
+                    GraphicReader() : mpReaderData( nullptr ) {}
 private:
-    std::unique_ptr<ReaderData>   mpReaderData;
+    ReaderData*     mpReaderData;
 };
 
 class VCL_DLLPUBLIC GraphicConversionParameters

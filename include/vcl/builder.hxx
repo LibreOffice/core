@@ -487,7 +487,7 @@ public:
     }
 
 protected:
-    std::unique_ptr<VclBuilder> m_pUIBuilder;
+    VclBuilder *m_pUIBuilder;
 };
 
 /*

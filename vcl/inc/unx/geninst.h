@@ -75,7 +75,7 @@ class VCL_DLLPUBLIC SalGenericInstance : public SalInstance
 {
 protected:
     bool           mbPrinterInit;
-    std::unique_ptr<SalYieldMutex> mpSalYieldMutex;
+    SalYieldMutex *mpSalYieldMutex;
 
 public:
     SalGenericInstance( SalYieldMutex* pMutex )

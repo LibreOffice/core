@@ -24,8 +24,7 @@ class X11SalGraphics;
 class X11OpenGLSalVirtualDevice : public SalVirtualDevice
 {
     SalDisplay       *mpDisplay;
-    std::unique_ptr<X11SalGraphics>
-                      mpGraphics;
+    X11SalGraphics   *mpGraphics;
     bool              mbGraphics;         // is Graphics used
     SalX11Screen      mnXScreen;
     int               mnWidth;

@@ -758,6 +758,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
 
 PrinterController::~PrinterController()
 {
+    delete mpImplData;
 }
 
 css::view::PrintableState PrinterController::getJobState() const

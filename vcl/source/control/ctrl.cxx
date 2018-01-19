@@ -87,7 +87,7 @@ void Control::FillLayoutData() const
 void Control::CreateLayoutData() const
 {
     SAL_WARN_IF( mpControlData->mpLayoutData, "vcl", "Control::CreateLayoutData: should be called with non-existent layout data only!" );
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
 }
 
 bool Control::HasLayoutData() const
@@ -325,7 +325,11 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
 
 void Control::ImplClearLayoutData() const
 {
-    mpControlData->mpLayoutData.reset();
+    if (mpControlData)
+    {
+        delete mpControlData->mpLayoutData;
+        mpControlData->mpLayoutData = nullptr;
+    }
 }
 
 void Control::ImplDrawFrame( OutputDevice* pDev, tools::Rectangle& rRect )

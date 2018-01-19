@@ -268,8 +268,7 @@ private:
     Point           maStartPt;
     sal_uLong       mnArraySize;
     sal_uLong       mnCount;
-    std::unique_ptr<sal_uInt8[]>
-                    mpCodes;
+    sal_uInt8*      mpCodes;
 
     void            ImplGetSpace();
 
@@ -281,6 +280,7 @@ private:
 public:
 
                     ImplChain();
+                    ~ImplChain();
 
     void            ImplBeginAdd( const Point& rStartPt );
     inline void     ImplAdd( sal_uInt8 nCode );
@@ -293,7 +293,12 @@ ImplChain::ImplChain() :
     mnArraySize ( 1024UL ),
     mnCount     ( 0UL )
 {
-    mpCodes.reset( new sal_uInt8[ mnArraySize ] );
+    mpCodes = new sal_uInt8[ mnArraySize ];
+}
+
+ImplChain::~ImplChain()
+{
+    delete[] mpCodes;
 }
 
 void ImplChain::ImplGetSpace()
@@ -303,8 +308,9 @@ void ImplChain::ImplGetSpace()
 
     mnArraySize = mnArraySize << 1UL;
     pNewCodes = new sal_uInt8[ mnArraySize ];
-    memcpy( pNewCodes, mpCodes.get(), nOldArraySize );
-    mpCodes.reset( pNewCodes );
+    memcpy( pNewCodes, mpCodes, nOldArraySize );
+    delete[] mpCodes;
+    mpCodes = pNewCodes;
 }
 
 void ImplChain::ImplBeginAdd( const Point& rStartPt )

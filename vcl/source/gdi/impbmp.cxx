@@ -36,6 +36,7 @@ ImpBitmap::ImpBitmap(SalBitmap* pBitmap)
 
 ImpBitmap::~ImpBitmap()
 {
+    delete mpSalBitmap;
 }
 
 bool ImpBitmap::ImplIsEqual(const ImpBitmap& rBmp) const

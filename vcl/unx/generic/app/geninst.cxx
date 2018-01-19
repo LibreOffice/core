@@ -85,12 +85,12 @@ bool SalYieldMutex::tryToAcquire()
 
 comphelper::SolarMutex* SalGenericInstance::GetYieldMutex()
 {
-    return mpSalYieldMutex.get();
+    return mpSalYieldMutex;
 }
 
 sal_uLong SalGenericInstance::ReleaseYieldMutex()
 {
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex.get();
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
          osl::Thread::getCurrentIdentifier() )
     {
@@ -110,7 +110,7 @@ sal_uLong SalGenericInstance::ReleaseYieldMutex()
 
 void SalGenericInstance::AcquireYieldMutex( sal_uLong nCount )
 {
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex.get();
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     while ( nCount )
     {
         pYieldMutex->acquire();
@@ -122,7 +122,7 @@ bool SalGenericInstance::CheckYieldMutex()
 {
     bool bRet = true;
 
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex.get();
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier() )
     {
         SAL_WARN("vcl", "CheckYieldMutex: " << pYieldMutex->GetThreadId() << "!=" << osl::Thread::getCurrentIdentifier() );
@@ -134,6 +134,7 @@ bool SalGenericInstance::CheckYieldMutex()
 
 SalGenericInstance::~SalGenericInstance()
 {
+    delete mpSalYieldMutex;
 }
 
 OUString SalGenericInstance::getOSVersion()

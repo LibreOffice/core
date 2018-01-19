@@ -586,7 +586,7 @@ bool ComboBox::IsDropDownBox() const { return m_pImpl->m_pFloatWin != nullptr; }
 
 void ComboBox::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     AppendLayoutData( *m_pImpl->m_pSubEdit );
     m_pImpl->m_pSubEdit->SetLayoutDataParent( this );
     ImplListBoxWindow* rMainWindow = m_pImpl->m_pImplLB->GetMainWindow();

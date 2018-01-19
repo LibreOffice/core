@@ -30,20 +30,21 @@ static bool CompareStart( const std::unique_ptr<TextCharAttrib>& pFirst, const s
 
 TextCharAttrib::TextCharAttrib( const TextAttrib& rAttr, sal_Int32 nStart, sal_Int32 nEnd )
 {
-    mpAttr.reset( rAttr.Clone() );
+    mpAttr = rAttr.Clone();
     mnStart = nStart;
     mnEnd = nEnd;
 }
 
 TextCharAttrib::TextCharAttrib( const TextCharAttrib& rTextCharAttrib )
 {
-    mpAttr.reset( rTextCharAttrib.GetAttr().Clone() );
+    mpAttr = rTextCharAttrib.GetAttr().Clone();
     mnStart = rTextCharAttrib.mnStart;
     mnEnd = rTextCharAttrib.mnEnd;
 }
 
 TextCharAttrib::~TextCharAttrib()
 {
+    delete mpAttr;
 }
 
 TextCharAttribList::TextCharAttribList()

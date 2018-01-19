@@ -255,8 +255,7 @@ public:
     struct JPGEmit
     {
         BitmapID            m_aID;
-        std::unique_ptr<SvMemoryStream>
-                            m_pStream;
+        SvMemoryStream*     m_pStream;
         Bitmap              m_aMask;
         sal_Int32           m_nObject;
         bool                m_bTrueColor;
@@ -268,6 +267,7 @@ public:
             , m_bTrueColor(false)
         {
         }
+        ~JPGEmit() { delete m_pStream; }
     };
 
     struct GradientEmit
