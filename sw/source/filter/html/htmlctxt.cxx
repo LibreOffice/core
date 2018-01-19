@@ -384,6 +384,20 @@ void SwHTMLParser::ClearContext( HTMLAttrContext *pContext )
     OSL_ENSURE( !pContext->HasSaveDocContext(),
             "Frame can no longer be exited" );
 
+    // like RestoreDocContext reset enough of this to not catastropically
+    // fail if we still have a SaveDocContext here
+    if (HTMLAttrContext_SaveDoc *pSave = pContext->GetSaveDocContext())
+    {
+        if (SIZE_MAX != pSave->GetContextStMin())
+        {
+            m_nContextStMin = pSave->GetContextStMin();
+            if (SIZE_MAX != pSave->GetContextStAttrMin())
+                m_nContextStAttrMin = pSave->GetContextStAttrMin();
+        }
+
+        pContext->ClearSaveDocContext();
+    }
+
     // Restart PRE/LISTING/XMP environments
     if( pContext->IsFinishPREListingXMP() )
         FinishPREListingXMP();
