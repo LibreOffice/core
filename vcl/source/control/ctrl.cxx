@@ -328,7 +328,8 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
 
 void Control::ImplClearLayoutData() const
 {
-    mpControlData->mpLayoutData.reset();
+    if (mpControlData)
+        mpControlData->mpLayoutData.reset();
 }
 
 void Control::ImplDrawFrame( OutputDevice* pDev, tools::Rectangle& rRect )
