@@ -126,8 +126,8 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
   /usr/bin/lpr                          rmPUx,
   /usr/bin/paperconf                    rmix,
   /usr/bin/gpgconf                      rmix,
-  /usr/bin/gpg                          rmix,
-  /usr/bin/gpgsm                        rmix,
+  /usr/bin/gpg                          rmCx -> gpg,
+  /usr/bin/gpgsm                        rmCx -> gpg,
 
   /dev/tty                              rw,
 
@@ -171,5 +171,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
 
   owner @{HOME}/.mozilla/firefox/** r,
   # there is abstractions/gnupg but that's just for gpg1...
-  owner @{HOME}/.gnupg/* r,
+  profile gpg {
+    owner @{HOME}/.gnupg/* r,
+  }
 }
