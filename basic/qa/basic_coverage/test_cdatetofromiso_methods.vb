@@ -37,5 +37,5 @@ Function doUnitTest as Integer
     Else
         doUnitTest = 1
     End If
-    ' TODO: add some failure tests for misformed input, On Error whatever?
+    ' TODO: add some failure tests for malformed input, On Error whatever?
 End Function
