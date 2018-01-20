@@ -150,44 +150,44 @@ bool checkRect( tools::Rectangle&       io_rPrevRect,
     Add converted actions to this metafile
 */
 void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
-                                          const MetaAction&   rAct,
-                                          const OutputDevice& rStateOutDev,
-                                          Color               aBgColor )
+                                   const MetaAction&   rAct,
+                                   const OutputDevice& rStateOutDev,
+                                   Color               aBgColor )
 {
-    if( rAct.GetType() == MetaActionType::Transparent )
+    if (rAct.GetType() == MetaActionType::Transparent)
     {
         const MetaTransparentAction* pTransAct = static_cast<const MetaTransparentAction*>(&rAct);
-        sal_uInt16                       nTransparency( pTransAct->GetTransparence() );
+        sal_uInt16 nTransparency( pTransAct->GetTransparence() );
 
         // #i10613# Respect transparency for draw color
-        if( nTransparency )
+        if (nTransparency)
         {
-            o_rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR|PushFlags::FILLCOLOR ) );
+            o_rMtf.AddAction(new MetaPushAction(PushFlags::LINECOLOR|PushFlags::FILLCOLOR));
 
             // assume white background for alpha blending
-            Color aLineColor( rStateOutDev.GetLineColor() );
-            aLineColor.SetRed( static_cast<sal_uInt8>( (255*nTransparency + (100 - nTransparency)*aLineColor.GetRed()) / 100 ) );
-            aLineColor.SetGreen( static_cast<sal_uInt8>( (255*nTransparency + (100 - nTransparency)*aLineColor.GetGreen()) / 100 ) );
-            aLineColor.SetBlue( static_cast<sal_uInt8>( (255*nTransparency + (100 - nTransparency)*aLineColor.GetBlue()) / 100 ) );
-            o_rMtf.AddAction( new MetaLineColorAction(aLineColor, true) );
+            Color aLineColor(rStateOutDev.GetLineColor());
+            aLineColor.SetRed(static_cast<sal_uInt8>((255*nTransparency + (100 - nTransparency) * aLineColor.GetRed()) / 100));
+            aLineColor.SetGreen(static_cast<sal_uInt8>((255*nTransparency + (100 - nTransparency) * aLineColor.GetGreen()) / 100));
+            aLineColor.SetBlue(static_cast<sal_uInt8>((255*nTransparency + (100 - nTransparency) * aLineColor.GetBlue()) / 100));
+            o_rMtf.AddAction(new MetaLineColorAction(aLineColor, true));
 
-            Color aFillColor( rStateOutDev.GetFillColor() );
-            aFillColor.SetRed( static_cast<sal_uInt8>( (255*nTransparency + (100 - nTransparency)*aFillColor.GetRed()) / 100 ) );
-            aFillColor.SetGreen( static_cast<sal_uInt8>( (255*nTransparency + (100 - nTransparency)*aFillColor.GetGreen()) / 100 ) );
-            aFillColor.SetBlue( static_cast<sal_uInt8>( (255*nTransparency + (100 - nTransparency)*aFillColor.GetBlue()) / 100 ) );
-            o_rMtf.AddAction( new MetaFillColorAction(aFillColor, true) );
+            Color aFillColor(rStateOutDev.GetFillColor());
+            aFillColor.SetRed(static_cast<sal_uInt8>((255*nTransparency + (100 - nTransparency)*aFillColor.GetRed()) / 100));
+            aFillColor.SetGreen(static_cast<sal_uInt8>((255*nTransparency + (100 - nTransparency)*aFillColor.GetGreen()) / 100));
+            aFillColor.SetBlue(static_cast<sal_uInt8>((255*nTransparency + (100 - nTransparency)*aFillColor.GetBlue()) / 100));
+            o_rMtf.AddAction(new MetaFillColorAction(aFillColor, true));
         }
 
-        o_rMtf.AddAction( new MetaPolyPolygonAction(pTransAct->GetPolyPolygon()) );
+        o_rMtf.AddAction(new MetaPolyPolygonAction(pTransAct->GetPolyPolygon()));
 
-        if( nTransparency )
-            o_rMtf.AddAction( new MetaPopAction() );
+        if(nTransparency)
+            o_rMtf.AddAction(new MetaPopAction());
     }
     else
     {
         BitmapEx aBmpEx;
 
-        switch( rAct.GetType() )
+        switch (rAct.GetType())
         {
             case MetaActionType::BMPEX:
                 aBmpEx = static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx();
@@ -208,65 +208,65 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                 break;
         }
 
-        Bitmap aBmp( aBmpEx.GetBitmap() );
-        if( !aBmpEx.IsAlpha() )
+        Bitmap aBmp(aBmpEx.GetBitmap());
+        if (!aBmpEx.IsAlpha())
         {
             // blend with mask
             Bitmap::ScopedReadAccess pRA(aBmp);
 
-            if( !pRA )
+            if (!pRA)
                 return; // what else should I do?
 
-            Color aActualColor( aBgColor );
+            Color aActualColor(aBgColor);
 
-            if( pRA->HasPalette() )
-                aActualColor = pRA->GetBestPaletteColor( aBgColor ).operator Color();
+            if (pRA->HasPalette())
+                aActualColor = pRA->GetBestPaletteColor(aBgColor).GetColor();
 
             pRA.reset();
 
             // did we get true white?
-            if( aActualColor.GetColorError( aBgColor ) )
+            if (aActualColor.GetColorError(aBgColor))
             {
                 // no, create truecolor bitmap, then
-                aBmp.Convert( BmpConversion::N24Bit );
+                aBmp.Convert(BmpConversion::N24Bit);
 
                 // fill masked out areas white
-                aBmp.Replace( aBmpEx.GetMask(), aBgColor );
+                aBmp.Replace(aBmpEx.GetMask(), aBgColor);
             }
             else
             {
                 // fill masked out areas white
-                aBmp.Replace( aBmpEx.GetMask(), aActualColor );
+                aBmp.Replace(aBmpEx.GetMask(), aActualColor);
             }
         }
         else
         {
             // blend with alpha channel
-            aBmp.Convert( BmpConversion::N24Bit );
-            aBmp.Blend(aBmpEx.GetAlpha(),aBgColor);
+            aBmp.Convert(BmpConversion::N24Bit);
+            aBmp.Blend(aBmpEx.GetAlpha(), aBgColor);
         }
 
         // add corresponding action
-        switch( rAct.GetType() )
+        switch (rAct.GetType())
         {
             case MetaActionType::BMPEX:
-                o_rMtf.AddAction( new MetaBmpAction(
+                o_rMtf.AddAction(new MetaBmpAction(
                                        static_cast<const MetaBmpExAction&>(rAct).GetPoint(),
-                                       aBmp ));
+                                       aBmp));
                 break;
             case MetaActionType::BMPEXSCALE:
-                o_rMtf.AddAction( new MetaBmpScaleAction(
+                o_rMtf.AddAction(new MetaBmpScaleAction(
                                        static_cast<const MetaBmpExScaleAction&>(rAct).GetPoint(),
                                        static_cast<const MetaBmpExScaleAction&>(rAct).GetSize(),
-                                       aBmp ));
+                                       aBmp));
                 break;
             case MetaActionType::BMPEXSCALEPART:
-                o_rMtf.AddAction( new MetaBmpScalePartAction(
+                o_rMtf.AddAction(new MetaBmpScalePartAction(
                                        static_cast<const MetaBmpExScalePartAction&>(rAct).GetDestPoint(),
                                        static_cast<const MetaBmpExScalePartAction&>(rAct).GetDestSize(),
                                        static_cast<const MetaBmpExScalePartAction&>(rAct).GetSrcPoint(),
                                        static_cast<const MetaBmpExScalePartAction&>(rAct).GetSrcSize(),
-                                       aBmp ));
+                                       aBmp));
                 break;
             default:
                 OSL_FAIL("Unexpected case");

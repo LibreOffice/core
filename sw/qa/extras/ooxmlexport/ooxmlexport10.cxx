@@ -364,9 +364,9 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     CPPUNIT_ASSERT(pAccess);
     CPPUNIT_ASSERT_EQUAL(341L, pAccess->Width());
     CPPUNIT_ASSERT_EQUAL(181L, pAccess->Height());
-    Color aColor(pAccess->GetPixel(30, 120));
+    Color aColor(pAccess->GetPixel(30, 120).GetColor());
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xb1, 0xc8, 0xdd ));
-    aColor = pAccess->GetPixel(130, 260);
+    aColor = pAccess->GetPixel(130, 260).GetColor();
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xb1, 0xc8, 0xdd ));
 }
 
@@ -542,7 +542,7 @@ DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
     CPPUNIT_ASSERT(pAccess);
     CPPUNIT_ASSERT_EQUAL(58L, pAccess->Width());
     CPPUNIT_ASSERT_EQUAL(320L, pAccess->Height());
-    Color aColor(pAccess->GetPixel(30, 20));
+    Color aColor(pAccess->GetPixel(30, 20).GetColor());
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xce, 0xce, 0xce ));
 }
 

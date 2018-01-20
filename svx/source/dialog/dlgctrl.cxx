@@ -978,31 +978,27 @@ void SvxPixelCtl::LoseFocus()
     Control::LoseFocus();
 }
 
-void SvxPixelCtl::SetXBitmap( const BitmapEx& rBitmapEx )
+void SvxPixelCtl::SetXBitmap(const BitmapEx& rBitmapEx)
 {
     BitmapColor aBack;
     BitmapColor aFront;
 
-    if(isHistorical8x8(rBitmapEx, aBack, aFront))
+    if (isHistorical8x8(rBitmapEx, aBack, aFront))
     {
         Bitmap aBitmap(rBitmapEx.GetBitmap());
         Bitmap::ScopedReadAccess pRead(aBitmap);
 
-        aBackgroundColor = aBack;
-        aPixelColor = aFront;
+        aBackgroundColor = aBack.GetColor();
+        aPixelColor = aFront.GetColor();
 
         for(sal_uInt16 i(0); i < nSquares; i++)
         {
             const BitmapColor aColor(pRead->GetColor(i/8, i%8));
 
-            if(aColor == aBack)
-            {
-                *( pPixel + i ) = 0;
-            }
+            if (aColor == aBack)
+                *(pPixel + i) = 0;
             else
-            {
-                *( pPixel + i ) = 1;
-            }
+                *(pPixel + i) = 1;
         }
     }
 }
