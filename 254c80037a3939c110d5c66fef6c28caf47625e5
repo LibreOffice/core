@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_84ff8133",
+        "filename": "test/source/sheet/spreadsheetviewsettings.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-01-20T03:13:42Z",
+      "side": 0,
+      "message": "It would be better to change CPPUNIT_ASSERT to CPPUNIT_ASSERT_MESSAGE and use the message from the deleted line.",
+      "revId": "254c80037a3939c110d5c66fef6c28caf47625e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
