@@ -92,7 +92,17 @@ void SwMultiPortion::CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf )
         }
         else
             SetAscent( GetAscent() + pLay->GetAscent() );
-        Height( Height() + pLay->Height() );
+
+        // Increase the line height, except for ruby text on the right.
+        if ( !IsRuby() || !OnRight() || pLay == &GetRoot() )
+            Height( Height() + pLay->Height() );
+        else
+        {
+            // We already added the width after building the portion,
+            // so no need to add it twice.
+            break;
+        }
+
         if( Width() < pLay->Width() )
             Width( pLay->Width() );
         pLay = pLay->GetNext();
@@ -538,7 +548,7 @@ SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
     nAdjustment( rRuby.GetAdjustment() )
 {
     SetDirection( rRuby.GetDirection() );
-    SetTop( rRuby.OnTop() );
+    SetRubyPosition( rRuby.GetRubyPosition() );
     SetRuby();
 }
 
@@ -547,7 +557,7 @@ SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
 SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                               const IDocumentSettingAccess& rIDocumentSettingAccess,
                               sal_Int32 nEnd, sal_Int32 nOffs,
-                              const bool* pForceRubyPos )
+                              const SwTextSizeInfo &rInf )
      : SwMultiPortion( nEnd )
 {
     SetRuby();
@@ -557,11 +567,22 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     nAdjustment = rRuby.GetAdjustment();
     nRubyOffset = nOffs;
 
-    // in grid mode we force the ruby text to the upper or lower line
-    if ( pForceRubyPos )
-        SetTop( *pForceRubyPos );
-    else
-        SetTop( ! rRuby.GetPosition() );
+    const SwTextFrame *pFrame = rInf.GetTextFrame();
+    RubyPosition ePos = static_cast<RubyPosition>( rRuby.GetPosition() );
+
+    // RIGHT is designed for horizontal writing mode only.
+    if ( ePos == RubyPosition::RIGHT && pFrame->IsVertical() )
+        ePos = RubyPosition::ABOVE;
+
+    // In grid mode we force the ruby text to the upper or lower line
+    if ( rInf.SnapToGrid() )
+    {
+        SwTextGridItem const*const pGrid( GetGridItem(pFrame->FindPageFrame()) );
+        if ( pGrid )
+            ePos = pGrid->GetRubyTextBelow() ? RubyPosition::BELOW : RubyPosition::ABOVE;
+    }
+
+    SetRubyPosition( ePos );
 
     const SwCharFormat *const pFormat =
         static_txtattr_cast<SwTextRuby const*>(rCreate.pAttr)->GetCharFormat();
@@ -573,7 +594,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         pRubyFont->SetDiffFnt( &rSet, &rIDocumentSettingAccess );
 
         // we do not allow a vertical font for the ruby text
-        pRubyFont->SetVertical( rFnt.GetOrientation() );
+        pRubyFont->SetVertical( rFnt.GetOrientation() , OnRight() );
     }
     else
         pRubyFont = nullptr;
@@ -1393,6 +1414,9 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     OSL_ENSURE( nullptr == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
             " Only BiDi portions are allowed to use the common underlining font" );
 
+    if ( rMulti.IsRuby() )
+        GetInfo().SetRuby( rMulti.OnTop() );
+
     do
     {
         if ( bHasGrid && pGrid->IsSquaredMode() )
@@ -1430,6 +1454,13 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
                 GetInfo().X( nOfst - AdjustBaseLine( *pLay, pPor, 0, 0, true ) );
             else
                 GetInfo().X( nOfst + AdjustBaseLine( *pLay, pPor ) );
+        }
+        else if ( rMulti.IsRuby() && rMulti.OnRight() && GetInfo().IsRuby() )
+        {
+            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, 0 );
+            GetInfo().Y( nOfst + nLineDiff );
+            // Draw the ruby text on top of the preserved space.
+            GetInfo().X( GetInfo().X() - pPor->Height() );
         }
         else
             GetInfo().Y( nOfst + AdjustBaseLine( *pLay, pPor ) );
@@ -1535,6 +1566,11 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
                 {
                     nOfst += rMulti.GetRoot().Height();
                 }
+            }
+            else if ( rMulti.IsRuby() && rMulti.OnRight() )
+            {
+                GetInfo().SetDirection( DIR_TOP2BOTTOM );
+                GetInfo().SetRuby( true );
             } else
             {
                 GetInfo().X( nTmpX );
@@ -1839,6 +1875,15 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
                 aTmp.SetSnapToGrid( false );
 
             BuildPortions( aTmp );
+
+            if ( rMulti.OnRight() )
+            {
+                // The ruby text on the right is vertical.
+                // The width and the height are swapped.
+                SwTwips nHeight = rMulti.GetRoot().GetNext()->GetPortion()->Height();
+                // Keep room for the ruby text.
+                rMulti.GetRoot().FindLastPortion()->AddPrtWidth( nHeight );
+            }
 
             aTmp.SetSnapToGrid( bOldGridModeAllowed );
 
@@ -2191,24 +2236,10 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
             pTmp = new SwBidiPortion( nMultiPos, pCreate->nLevel );
         else if( pHelpMulti->IsRuby() )
         {
-            bool bRubyTop;
-            bool* pRubyPos = nullptr;
-
-            if ( GetInfo().SnapToGrid() )
-            {
-                SwTextGridItem const*const pGrid(
-                        GetGridItem(m_pFrame->FindPageFrame()));
-                if ( pGrid )
-                {
-                    bRubyTop = ! pGrid->GetRubyTextBelow();
-                    pRubyPos = &bRubyTop;
-                }
-            }
-
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
                                       *m_pFrame->GetTextNode()->getIDocumentSettingAccess(),
                                        nMultiPos, static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset(),
-                                       pRubyPos );
+                                       GetInfo() );
         }
         else if( pHelpMulti->HasRotation() )
             pTmp = new SwRotatedPortion( nMultiPos, pHelpMulti->GetDirection() );

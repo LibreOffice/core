@@ -43,6 +43,13 @@ enum class SwMultiCreatorId
     Double, Ruby, Rotate, Bidi
 };
 
+enum class RubyPosition : sal_uInt16
+{
+    ABOVE = 0,
+    BELOW = 1,
+    RIGHT = 2
+};
+
 struct SwMultiCreator
 {
     const SwTextAttr* pAttr;
@@ -80,10 +87,10 @@ class SwMultiPortion : public SwLinePortion
     bool bDouble    :1;     // Double line
     bool bRuby      :1;     // Phonetics
     bool bBidi      :1;
-    bool bTop       :1;     // Phonetic position
     bool bFormatted :1;     // Already formatted
     bool bFollowField :1;     // Field follow inside
     bool bFlyInContent:1;     // Fly as character inside
+    RubyPosition eRubyPosition;     // Phonetic position
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
 protected:
     explicit SwMultiPortion(sal_Int32 nEnd)
@@ -92,10 +99,10 @@ protected:
         , bDouble(false)
         , bRuby(false)
         , bBidi(false)
-        , bTop(false)
         , bFormatted(false)
         , bFollowField(false)
         , bFlyInContent(false)
+        , eRubyPosition( RubyPosition::ABOVE )
         , nDirection(0)
     {
         SetWhichPor(POR_MULTI);
@@ -104,7 +111,7 @@ protected:
     void SetDouble() { bDouble = true; }
     void SetRuby() { bRuby = true; }
     void SetBidi() { bBidi = true; }
-    void SetTop( bool bNew ) { bTop = bNew; }
+    void SetRubyPosition( RubyPosition eNew ) { eRubyPosition = eNew; }
     void SetTab1( bool bNew ) { bTab1 = bNew; }
     void SetTab2( bool bNew ) { bTab2 = bNew; }
     void SetDirection( sal_uInt8 nNew ) { nDirection = nNew; }
@@ -125,7 +132,9 @@ public:
     bool IsDouble() const { return bDouble; }
     bool IsRuby() const { return bRuby; }
     bool IsBidi() const { return bBidi; }
-    bool OnTop() const { return bTop; }
+    bool OnTop() const { return eRubyPosition == RubyPosition::ABOVE; }
+    bool OnRight() const { return eRubyPosition == RubyPosition::RIGHT; }
+    RubyPosition GetRubyPosition() const { return eRubyPosition; }
     void ActualizeTabulator();
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -188,7 +197,7 @@ public:
     SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                    const IDocumentSettingAccess& rIDocumentSettingAccess,
                    sal_Int32 nEnd, sal_Int32 nOffs,
-                   const bool* pForceRubyPos );
+                   const SwTextSizeInfo &rInf );
 
     void CalcRubyOffset();
     void Adjust( SwTextFormatInfo &rInf )

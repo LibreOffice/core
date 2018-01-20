@@ -1252,24 +1252,9 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                     pTmp = new SwBidiPortion( nEnd, pCreate->nLevel );
                 else if ( SwMultiCreatorId::Ruby == pCreate->nId )
                 {
-                    Seek( rInf.GetIdx() );
-                    bool bRubyTop = false;
-                    bool* pRubyPos = nullptr;
-
-                    if ( rInf.SnapToGrid() )
-                    {
-                        SwTextGridItem const*const pGrid(
-                                GetGridItem(GetTextFrame()->FindPageFrame()));
-                        if ( pGrid )
-                        {
-                            bRubyTop = ! pGrid->GetRubyTextBelow();
-                            pRubyPos = &bRubyTop;
-                        }
-                    }
-
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
                                               *GetTextFrame()->GetTextNode()->getIDocumentSettingAccess(),
-                                              nEnd, 0, pRubyPos );
+                                              nEnd, 0, rInf );
                 }
                 else if( SwMultiCreatorId::Rotate == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd,
