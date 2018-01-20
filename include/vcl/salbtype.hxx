@@ -119,7 +119,7 @@ public:
     inline sal_uInt8    GetIndex() const;
     inline void         SetIndex( sal_uInt8 cIndex );
 
-    operator            Color() const;
+    Color               GetColor() const;
 
     inline sal_uInt8    GetBlueOrIndex() const;
 
@@ -445,10 +445,10 @@ inline void BitmapColor::SetIndex( sal_uInt8 cIndex )
     mcBlueOrIndex = cIndex;
 }
 
-inline BitmapColor::operator Color() const
+inline Color BitmapColor::GetColor() const
 {
     assert( !mbIndex && "Pixel represents index into colortable" );
-    return Color( mcRed, mcGreen, mcBlueOrIndex );
+    return Color(mcRed, mcGreen, mcBlueOrIndex);
 }
 
 inline sal_uInt8 BitmapColor::GetBlueOrIndex() const

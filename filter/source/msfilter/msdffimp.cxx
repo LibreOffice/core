@@ -1382,9 +1382,9 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                                     {
                                         Color aReadColor;
                                         if (pRead->HasPalette())
-                                            aReadColor = pRead->GetPaletteColor(pRead->GetPixelIndex(y, x));
+                                            aReadColor = pRead->GetPaletteColor(pRead->GetPixelIndex(y, x)).GetColor();
                                         else
-                                            aReadColor = pRead->GetPixel(y, x);
+                                            aReadColor = pRead->GetPixel(y, x).GetColor();
 
                                         if (aReadColor.GetColor() == 0)
                                             pWrite->SetPixelOnData(pScanline, x, aCol2);
