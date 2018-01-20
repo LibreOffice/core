@@ -29,24 +29,28 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
         {
             for (long nX = 0; nX < aSize.Width(); ++nX)
             {
-                BitmapColor aColor = pRead->HasPalette() ?
+                BitmapColor aBmpColor = pRead->HasPalette() ?
                                         pRead->GetPaletteColor(pRead->GetPixelIndex(nY, nX)) :
                                         pRead->GetPixel(nY, nX);
-                basegfx::BColor aBColor(Color(aColor.Invert()).getBColor());
+                basegfx::BColor aBColor(Color(aBmpColor.Invert().GetColor()).getBColor());
                 aBColor = basegfx::utils::rgb2hsl(aBColor);
 
                 double fHue = aBColor.getRed();
                 fHue += 180.0;
+
                 while (fHue > 360.0)
+                {
                     fHue -= 360.0;
+                }
+
                 aBColor.setRed(fHue);
 
                 aBColor = basegfx::utils::hsl2rgb(aBColor);
-                aColor.SetRed((aBColor.getRed()   * 255.0) + 0.5);
-                aColor.SetGreen((aBColor.getGreen() * 255.0) + 0.5);
-                aColor.SetBlue((aBColor.getBlue()  * 255.0) + 0.5);
+                aBmpColor.SetRed((aBColor.getRed() * 255.0) + 0.5);
+                aBmpColor.SetGreen((aBColor.getGreen() * 255.0) + 0.5);
+                aBmpColor.SetBlue((aBColor.getBlue() * 255.0) + 0.5);
 
-                pWrite->SetPixel(nY, nX, aColor);
+                pWrite->SetPixel(nY, nX, aBmpColor);
             }
         }
     }
