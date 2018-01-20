@@ -842,44 +842,47 @@ void PNGReaderImpl::ImplGetGamma()
 
 void PNGReaderImpl::ImplGetBackground()
 {
-    switch ( mnColorType )
+    switch (mnColorType)
     {
-        case 3 :
+        case 3:
         {
-            if ( mnChunkLen == 1 )
+            if (mnChunkLen == 1)
             {
                 sal_uInt16 nCol = *maDataIter++;
-                if ( nCol < mxAcc->GetPaletteEntryCount() )
+
+                if (nCol < mxAcc->GetPaletteEntryCount())
                 {
-                    mxAcc->Erase( mxAcc->GetPaletteColor( static_cast<sal_uInt8>(nCol) ) );
+                    BitmapColor aBmpColor = mxAcc->GetPaletteColor(static_cast<sal_uInt8>(nCol));
+                    mxAcc->Erase(aBmpColor.GetColor());
                     break;
                 }
             }
         }
         break;
 
-        case 0 :
-        case 4 :
+        case 0:
+        case 4:
         {
-            if ( mnChunkLen == 2 )
+            if (mnChunkLen == 2)
             {
                 // the color type 0 and 4 is always greyscale,
                 // so the return value can be used as index
                 sal_uInt8 nIndex = ImplScaleColor();
-                mxAcc->Erase( mxAcc->GetPaletteColor( nIndex ) );
+                BitmapColor aBmpColor = mxAcc->GetPaletteColor(nIndex);
+                mxAcc->Erase(aBmpColor.GetColor());
             }
         }
         break;
 
-        case 2 :
-        case 6 :
+        case 2:
+        case 6:
         {
-            if ( mnChunkLen == 6 )
+            if (mnChunkLen == 6)
             {
                 sal_uInt8 nRed = ImplScaleColor();
                 sal_uInt8 nGreen = ImplScaleColor();
                 sal_uInt8 nBlue = ImplScaleColor();
-                mxAcc->Erase( Color( nRed, nGreen, nBlue ) );
+                mxAcc->Erase(Color(nRed, nGreen, nBlue));
             }
         }
         break;
