@@ -70,63 +70,69 @@ void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_uInt8 cIndexFrom, sal_Int
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
 {
-    const uno::Reference< uno::XInterface > xIFace( rxGraphic, uno::UNO_QUERY );
-    ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );
+    const uno::Reference< uno::XInterface > xIFace(rxGraphic, uno::UNO_QUERY);
+    ::Graphic aGraphic(*::unographic::Graphic::getImplementation(xIFace));
 
-    BitmapColor aColorFrom( static_cast< sal_uInt8 >( nColorFrom ), static_cast< sal_uInt8 >( nColorFrom >> 8 ), static_cast< sal_uInt8 >( nColorFrom >> 16 ) );
-    BitmapColor aColorTo( static_cast< sal_uInt8 >( nColorTo ), static_cast< sal_uInt8 >( nColorTo >> 8 ), static_cast< sal_uInt8 >( nColorTo  >> 16 ) );
-    const sal_uInt8 cIndexFrom = aColorFrom.GetBlueOrIndex();
+    BitmapColor aBmpColorFrom(static_cast< sal_uInt8 >(nColorFrom), static_cast< sal_uInt8 >(nColorFrom >> 8), static_cast< sal_uInt8 >(nColorFrom >> 16));
+    BitmapColor aBmpColorTo( static_cast< sal_uInt8 >(nColorTo), static_cast< sal_uInt8 >(nColorTo >> 8), static_cast< sal_uInt8 >(nColorTo  >> 16));
 
-    if ( aGraphic.GetType() == GraphicType::Bitmap || aGraphic.GetType() == GraphicType::GdiMetafile )
+    Color aColorFrom(aBmpColorFrom.GetColor());
+    Color aColorTo(aBmpColorTo.GetColor());
+
+    const sal_uInt8 cIndexFrom = aBmpColorFrom.GetBlueOrIndex();
+
+    if (aGraphic.GetType() == GraphicType::Bitmap || aGraphic.GetType() == GraphicType::GdiMetafile)
     {
-        BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
-        Bitmap      aBitmap( aBitmapEx.GetBitmap() );
+        BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+        Bitmap aBitmap(aBitmapEx.GetBitmap());
 
-        if ( aBitmapEx.IsAlpha() )
+        if (aBitmapEx.IsAlpha())
         {
-            AlphaMask aAlphaMask( aBitmapEx.GetAlpha() );
-            setAlpha( aBitmap, aAlphaMask, cIndexFrom, nAlphaTo );
-            aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
-            aGraphic = ::Graphic( BitmapEx( aBitmap, aAlphaMask ) );
+            AlphaMask aAlphaMask(aBitmapEx.GetAlpha());
+            setAlpha(aBitmap, aAlphaMask, cIndexFrom, nAlphaTo);
+            aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
+            aGraphic = ::Graphic(BitmapEx(aBitmap, aAlphaMask));
         }
-        else if ( aBitmapEx.IsTransparent() )
+        else if (aBitmapEx.IsTransparent())
         {
-            if ( nAlphaTo == sal::static_int_cast<sal_Int8>(0xff) )
+            if (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff))
             {
-                Bitmap aMask( aBitmapEx.GetMask() );
-                Bitmap aMask2( aBitmap.CreateMask( aColorFrom, nTolerance ) );
-                aMask.CombineSimple( aMask2, BmpCombine::Or );
-                aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
-                aGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
+                Bitmap aMask(aBitmapEx.GetMask());
+                Bitmap aMask2(aBitmap.CreateMask(aColorFrom, nTolerance));
+                aMask.CombineSimple(aMask2, BmpCombine::Or);
+                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
+                aGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
             }
             else
             {
-                AlphaMask aAlphaMask( aBitmapEx.GetMask() );
-                setAlpha( aBitmap, aAlphaMask, cIndexFrom, 0xff - nAlphaTo );
-                aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
-                aGraphic = ::Graphic( BitmapEx( aBitmap, aAlphaMask ) );
+                AlphaMask aAlphaMask(aBitmapEx.GetMask());
+                setAlpha(aBitmap, aAlphaMask, cIndexFrom, 0xff - nAlphaTo);
+                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
+                aGraphic = ::Graphic(BitmapEx(aBitmap, aAlphaMask));
             }
         }
         else
         {
-            if ( ( nAlphaTo == 0 ) || ( nAlphaTo == sal::static_int_cast<sal_Int8>(0xff) ) )
+            if ((nAlphaTo == 0) || (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff)))
             {
-                Bitmap aMask( aBitmap.CreateMask( aColorFrom, nTolerance ) );
-                    aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
-                aGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
+                Bitmap aMask(aBitmap.CreateMask(aColorFrom, nTolerance));
+                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
+                aGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
             }
             else
             {
-                AlphaMask aAlphaMask( aBitmapEx.GetSizePixel() );
-                setAlpha( aBitmap, aAlphaMask, cIndexFrom, nAlphaTo );
-                aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
-                aGraphic = ::Graphic( BitmapEx( aBitmap, aAlphaMask ) );
+                AlphaMask aAlphaMask(aBitmapEx.GetSizePixel());
+                setAlpha(aBitmap, aAlphaMask, cIndexFrom, nAlphaTo);
+                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
+                aGraphic = ::Graphic(BitmapEx(aBitmap, aAlphaMask));
             }
         }
     }
+
     ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic();
-    pUnoGraphic->init( aGraphic );
-    uno::Reference< graphic::XGraphic > xRet( pUnoGraphic );
+    pUnoGraphic->init(aGraphic);
+    uno::Reference< graphic::XGraphic > xRet(pUnoGraphic);
+
     return xRet;
 }
 
