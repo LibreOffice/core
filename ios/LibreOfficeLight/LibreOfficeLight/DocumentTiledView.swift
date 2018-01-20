@@ -18,9 +18,7 @@ class DocumentTiledLayer : CATiledLayer
     }
 }
 
-
-
-
+/// The main tiled view, which sits inside the scroll view
 public class DocumentTiledView: UIView
 {
     var myScale: CGFloat
@@ -33,15 +31,10 @@ public class DocumentTiledView: UIView
 
     var drawCount = 0
 
-
-
     // Create a new view with the desired frame and scale.
     public init(frame: CGRect, document: DocumentHolder, scale: CGFloat)
     {
-
-
         self.document = document
-
 
         myScale = scale
         initialSize = frame.size
@@ -67,17 +60,41 @@ public class DocumentTiledView: UIView
 
         if let tiledLayer = self.layer as? CATiledLayer
         {
+            // these are all tweakable parameters, that give different behaviour to the tiled view
             tiledLayer.levelsOfDetail = 4
             tiledLayer.levelsOfDetailBias = 7
             tiledLayer.tileSize = CGSize(width: 1024.0, height: 1024.0)
             //tiledLayer.tileSize = CGSize(width: 512.0, height: 512.0)
         }
 
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onTap) )
+        tap.numberOfTapsRequired = 1
+        self.addGestureRecognizer(tap)
+
+        if (document.isPresentation) // only for preso atm
+        {
+            // add swipe left/right gestures on a preso
+            let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(onSwipeRight))
+            swipeRight.direction = .right
+            self.addGestureRecognizer(swipeRight)
+
+            let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(onSwipeLeft))
+            swipeLeft.direction = .left
+            self.addGestureRecognizer(swipeLeft)
+        }
     }
 
     required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func incrementPart(amount: Int)
+    {
+        document?.incrementPart(amount: Int32(amount))
+        document?.async { _ in
+            runOnMain { self.setNeedsDisplay() }
+        }
     }
 
     public func twipsToPixels(rect: CGRect) -> CGRect
@@ -196,8 +213,32 @@ public class DocumentTiledView: UIView
     }
 
 
-//    override func pressesBegan
-//    {
-//
-//    }
+}
+
+/// Gesture handlers
+public extension DocumentTiledView
+{
+    @objc func onTap(_ sender: UITapGestureRecognizer)
+    {
+        if (document?.isPresentation ?? false)
+        {
+            incrementPart(amount: 1)
+        }
+    }
+
+    @objc func onSwipeRight(_ sender: UISwipeGestureRecognizer)
+    {
+        if (document?.isPresentation ?? false)
+        {
+            incrementPart(amount: -1)
+        }
+    }
+
+    @objc func onSwipeLeft(_ sender: UISwipeGestureRecognizer)
+    {
+        if (document?.isPresentation ?? false)
+        {
+            incrementPart(amount: 1)
+        }
+    }
 }

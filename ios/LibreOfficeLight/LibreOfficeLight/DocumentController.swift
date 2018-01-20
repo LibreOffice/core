@@ -61,8 +61,10 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
-        let res = Bundle.main.url(forResource: "example", withExtension: "odt")
+        //let res = Bundle.main.url(forResource: "example", withExtension: "odt")
         //let res = Bundle.main.url(forResource: "example2", withExtension: "docx")
+
+        let res = Bundle.main.url(forResource: "testdata/1", withExtension: "pptx")
 
         if let exampleDoc = res
         {
