@@ -267,12 +267,11 @@ sal_uInt64 GetSvStreamSize(SvStream * pStream)
 *   Find hazily according to object ID
 *   @param  pObjectname - format as "GrXX,XXXXXXXX" wherein XX is high part of object ID, and XXXXXXXX is low part
 */
-void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObjectName)
+SvMemoryStream* LtcBenContainer::CreateGraphicStream(const char *pObjectName)
 {
     if (!pObjectName)
     {
-        pStream = nullptr;
-        return;
+        return nullptr;
     }
     // construct the string of property name
     char sSName[64]="";
@@ -301,8 +300,7 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     // the 'D' stream is NULL or it has invalid length
     if (nLen <= 0)
     {
-        pStream = nullptr;
-        return;
+        return nullptr;
     }
 
     char * pBuf = new char[nLen];
@@ -310,13 +308,13 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     char * pPointer = pBuf;
     if (xD)
     {
-        auto nRead = xD->ReadBytes(pPointer, nDLen);
+        xD->ReadBytes(pPointer, nDLen);
         xD.reset();
     }
     pPointer += nDLen;
     if (xS)
     {
-        auto nRead = xS->ReadBytes(pPointer, nLen - nDLen);
+        xS->ReadBytes(pPointer, nLen - nDLen);
         xS.reset();
     }
 
@@ -324,7 +322,7 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     assert(pMemStream != nullptr);
     pMemStream->ObjectOwnsMemory(true);
 
-    pStream = pMemStream;
+    return pMemStream;
 }
 
 sal_uLong LtcBenContainer::remainingSize() const
