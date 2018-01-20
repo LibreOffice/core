@@ -221,7 +221,7 @@ public: // Internal methods
 
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
-    SvMemoryStream* CreateGraphicStream(const char *pObjectName);
+    std::vector<sal_uInt8> GetGraphicData(const char *pObjectName);
 
     sal_uLong GetSize() const { return m_ulLength; }
 private: // Data
