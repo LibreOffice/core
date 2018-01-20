@@ -2491,12 +2491,14 @@ void SmAttributNode::CreateTextFromNode(OUString &rText)
             case MS_BAR: // MACRON
                 rText += "overline ";
                 break;
+            case MS_COMBDOT: // COMBINING DOT ABOVE
             case MS_DOT: // DOT ABOVE
                 rText += "dot ";
                 break;
             case 0x2dc: // SMALL TILDE
                 rText += "widetilde ";
                 break;
+            case MS_COMBDDOT: // COMBINING DIARESIS
             case MS_DDOT: // DIAERESIS
                 rText += "ddot ";
                 break;
