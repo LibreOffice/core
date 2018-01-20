@@ -260,6 +260,13 @@ published service CharacterProperties
     [optional, property] short RubyAdjust;
 
 
+    /** This optional property determines the position of the ruby .
+        @see com::sun::star::text::RubyPosition
+        @see LibreOffice 6.1
+     */
+    [optional, property] short RubyPosition;
+
+
     /** This optional property contains the name of the character style that is
         applied to RubyText.
      */
@@ -268,6 +275,8 @@ published service CharacterProperties
 
     /** This optional property determines whether the ruby text is printed
         above/left or below/right of the text.
+       <p>This property is replaced by RubyPosition.</p>
+        @deprecated
      */
     [optional, property] boolean RubyIsAbove;
 

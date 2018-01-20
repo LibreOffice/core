@@ -2992,6 +2992,7 @@ module com {
      [property, optional] short CharRelief;
      [property, optional] string RubyText;
      [property, optional] short RubyAdjust;
+     [property, optional] short RubyPosition;
      [property, optional] string RubyCharStyleName;
      [property, optional] boolean RubyIsAbove;
      [property, optional] short CharRotation;
@@ -14739,6 +14740,11 @@ module com {
      RIGHT = 2,
      BLOCK = 3,
      INDENT_BLOCK = 4
+    };
+    published constants RubyPosition {
+     const short ABOVE = 0;
+     const short BELOW = 1;
+     const short INTER_CHARACTER = 2;
     };
     published struct SectionFileLink {
      string FileURL;
