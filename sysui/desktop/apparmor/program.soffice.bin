@@ -170,8 +170,13 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
   /usr/share/fonts-config/conf.avail/*.conf r,
 
   owner @{HOME}/.mozilla/firefox/** r,
-  # there is abstractions/gnupg but that's just for gpg1...
   profile gpg {
+    #include <abstractions/base>
+
+   /usr/bin/gpgconf rm,
+   /usr/bin/gpg rm,
+   /usr/bin/gpgsm rm,
+
     owner @{HOME}/.gnupg/* r,
   }
 }
