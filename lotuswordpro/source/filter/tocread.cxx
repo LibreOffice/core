@@ -256,7 +256,7 @@ CBenTOCReader::ReadTOC()
                         return BenErr_NamedObjectError;
 
                     BenContainerPos Pos;
-                    unsigned long Length;
+                    sal_uInt32 Length;
 
                     if ((Err = GetDWord(&Pos)) != BenErr_OK)
                         return Err;
@@ -393,7 +393,7 @@ CBenTOCReader::ReadSegment(CBenValue * pValue, BenByte * pLookAhead)
 
     bool Immediate = false;
     bool EightByteOffset = false;
-    unsigned long Offset(0), Length(0);
+    sal_uInt32 Offset(0), Length(0);
 
     switch (*pLookAhead)
     {

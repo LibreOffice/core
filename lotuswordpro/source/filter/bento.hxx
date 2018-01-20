@@ -128,13 +128,13 @@ class CBenValueSegment;
 class CBenNamedObject;
 class CBenPropertyName;
 
-typedef unsigned char BenByte;
-typedef unsigned short BenWord;
-typedef unsigned long BenDWord;
+typedef sal_uInt8 BenByte;
+typedef sal_uInt16 BenWord;
+typedef sal_uInt32 BenDWord;
 
-typedef unsigned long BenContainerPos;
-typedef unsigned long BenObjectID;
-typedef unsigned long BenGeneration;
+typedef sal_uInt32 BenContainerPos;
+typedef sal_uInt32 BenObjectID;
+typedef sal_uInt32 BenGeneration;
 
 sal_uLong BenOpenContainer(LwpSvStream * pStream, LtcBenContainer ** ppContainer);
 
@@ -187,10 +187,9 @@ protected: // Overridden methods
 
 private: // Data
     CBenValue * cpValue;
-    unsigned long cCurrentPosition;
+    size_t cCurrentPosition;
 
     sal_uLong m_ulValueLength;      // Added by , sum of length of all sub-valuesegments
-//  void    GetAmountLeft(sal_uLong * pAmtLeft);    useless in SODC
 };
 
 class LtcBenContainer
@@ -210,9 +209,9 @@ public: // Internal methods
     ~LtcBenContainer();
 
     sal_uLong remainingSize() const;
-    BenError Read(void * pBuffer, unsigned long MaxSize,
-      unsigned long * pAmtRead);
-    BenError ReadKnownSize(void * pBuffer, unsigned long Amt);
+    BenError Read(void * pBuffer, size_t MaxSize,
+      size_t* pAmtRead);
+    BenError ReadKnownSize(void * pBuffer, size_t Amt);
     BenError SeekToPosition(BenContainerPos Pos);
     BenError SeekFromEnd(long Offset);
 
@@ -253,9 +252,9 @@ private: // Data
 class CBenValue : public CBenIDListElmt
 {
 public:
-    unsigned long GetValueSize();
+    size_t GetValueSize();
     void ReadValueData(void * pBuffer,
-      unsigned long Offset, unsigned long MaxSize, unsigned long * pAmtRead);
+      size_t Offset, size_t MaxSize, size_t* pAmtRead);
 
     CBenProperty * BEN_EXPORT GetProperty() { return cpProperty; }
 
@@ -309,7 +308,7 @@ class CBenValueSegment : public CUtListElmt
 {
 public: // Internal methods
     CBenValueSegment(CBenValue * pValue, BenContainerPos Pos,
-      unsigned long Size) : CUtListElmt(&pValue->GetValueSegments())
+      size_t Size) : CUtListElmt(&pValue->GetValueSegments())
       { cpValue = pValue; cImmediate = false; cPos = Pos;
       cSize = Size; }
     CBenValueSegment(CBenValue * pValue, const void  * pImmData,
@@ -318,7 +317,7 @@ public: // Internal methods
       std::memcpy(cImmData, pImmData, Size); cSize = Size; }
     bool IsImmediate() { return cImmediate; }
     BenContainerPos GetPosition() { return cPos; }
-    unsigned long GetSize() { return cSize; }
+    size_t GetSize() { return cSize; }
     BenByte * GetImmediateData() { return cImmData; }
 
 private: // Data
@@ -329,7 +328,7 @@ private: // Data
         BenContainerPos cPos;
         BenByte cImmData[4];
     };
-    unsigned long cSize;
+    size_t cSize;
 };
 
 inline CBenValueSegment * CBenValue::GetNextValueSegment(CBenValueSegment const *
