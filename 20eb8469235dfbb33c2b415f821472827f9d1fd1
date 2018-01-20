@@ -1,0 +1,323 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_448829e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "This statement is useless as a commit message.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_646d2d32",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "\"trimmed with separators\"? what should that be?\nRather \"leading and trailing white space is trimmed\", isn\u0027t it?",
+      "range": {
+        "startLine": 1093,
+        "startChar": 42,
+        "endLine": 1093,
+        "endChar": 65
+      },
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_846a2119",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a4772501",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e4cf5db1",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "Please use the same order as in the ctor (member list order) which makes it easier to follow.",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_64c44d92",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "Please use \"Token 8\".",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a4be45fd",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "The default should be explicitly set in case the token is missing,\n\n bSaveAsShown \u003d true;",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_84c14183",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "Please use \"Token 9\".",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_c4bb390d",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "The default should be explicitly set in case the token is missing,\n\n bSaveFormulas \u003d false;",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e4367db3",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "The default should be explicitly set in case the token is missing,\n\n bRemoveSpace \u003d false;",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_043c7192",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "Actually it is not a separator (or delimiter) but the quote character.",
+      "range": {
+        "startLine": 231,
+        "startChar": 21,
+        "endLine": 231,
+        "endChar": 30
+      },
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_04d55142",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "This mix of \"Token #\" (0-based) and \"#th token\" (1-based) is confusing, please stick to the \"Token #\" notation.",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_44cf49b0",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "So this in fact is \"Token 10\" (the 11th token).",
+      "range": {
+        "startLine": 270,
+        "startChar": 6,
+        "endLine": 270,
+        "endChar": 14
+      },
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_24ca55a2",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "Instead of adding several +\u003d statements just continue to concatenate the string as the existing code does.",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_44466924",
+        "filename": "sc/source/ui/dbgui/imoptdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "A blank wouldn\u0027t hurt readability ;-)\n\n getToken(10, \u0027,\u0027)",
+      "range": {
+        "startLine": 75,
+        "startChar": 47,
+        "endLine": 75,
+        "endChar": 49
+      },
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e45f5d73",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "Why insert this here (and the enum above) instead of at the position where it is used later in the code below, i.e. after FixedWidth? Technically it doesn\u0027t matter, just asking.. it would be more consistent to the reader.",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_445f4972",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1569,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 1,
+      "message": "This will screw up if the field content consists only of blanks, in which case it will end up with ptrim_f \u003c ptrim_i",
+      "revId": "20eb8469235dfbb33c2b415f821472827f9d1fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

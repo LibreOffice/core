@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c47419ff",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-20T00:50:03Z",
+      "side": 0,
+      "message": "Please refrain from doing cosmetic changes in otherwise untouched code portions.",
+      "revId": "d6d9481a8dea2d88374f8293debb4b28c1c2e0d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
