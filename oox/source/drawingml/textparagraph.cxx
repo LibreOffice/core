@@ -93,6 +93,7 @@ void TextParagraph::insertAt(
         }
 
         sal_Int32 nCharHeight = 0;
+        sal_Int32 nCharHeightFirst = 0;
         if ( maRuns.empty() )
         {
             PropertySet aPropSet( xAt );
@@ -100,7 +101,7 @@ void TextParagraph::insertAt(
             TextCharacterProperties aTextCharacterProps( aTextCharacterStyle );
             aTextCharacterProps.assignUsed( maEndProperties );
             if ( aTextCharacterProps.moHeight.has() )
-                nCharHeight = aTextCharacterProps.moHeight.get();
+                nCharHeight = nCharHeightFirst = aTextCharacterProps.moHeight.get();
             aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
         }
         else
@@ -112,7 +113,10 @@ void TextParagraph::insertAt(
                 // This is currently applied to only empty runs
                 if( !nLen && ( ( aIt + 1 ) == aEnd ) )
                     (*aIt)->getTextCharacterProperties().assignUsed( maEndProperties );
-                nCharHeight = std::max< sal_Int32 >( nCharHeight, (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle, nDefaultCharHeight ) );
+                sal_Int32 nCharHeightCurrent = (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle, nDefaultCharHeight );
+                if(aIt == maRuns.begin())
+                    nCharHeightFirst = nCharHeightCurrent;
+                nCharHeight = std::max< sal_Int32 >( nCharHeight, nCharHeightCurrent);
                 nParagraphSize += nLen;
             }
         }
@@ -137,8 +141,7 @@ void TextParagraph::insertAt(
             if( !aioBulletList.hasProperty( PROP_GraphicSize ) && maRuns.size() > 0
                 && aParaProp.getBulletList().maGraphic.hasValue())
             {
-                float fFirstCharHeight = maRuns.front()->getTextCharacterProperties().getCharHeightPoints(12);
-                long nFirstCharHeightMm = TransformMetric(fFirstCharHeight * 100.f, FUNIT_POINT, FUNIT_MM);
+                long nFirstCharHeightMm = TransformMetric(nCharHeightFirst > 0 ? nCharHeightFirst : 1200, FUNIT_POINT, FUNIT_MM);
                 float fBulletSizeRel = 1.f;
                 if( aParaProp.getBulletList().mnSize.hasValue() )
                     fBulletSizeRel = aParaProp.getBulletList().mnSize.get<sal_Int16>() / 100.f;
