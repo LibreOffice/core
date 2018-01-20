@@ -97,9 +97,9 @@ public:
     SdrAlign     GetAlign() const                           { return nAlign; }
     void         SetAlign(SdrAlign nAlg)                    { nAlign=nAlg; }
     SdrAlign     GetHorzAlign() const                       { return nAlign & static_cast<SdrAlign>(0x00FF); }
-    void         SetHorzAlign(SdrAlign nAlg)                { assert((nAlg & static_cast<SdrAlign>(0xff)) == SdrAlign::NONE); nAlign = SdrAlign(nAlign & static_cast<SdrAlign>(0xFF00)) | (nAlg & static_cast<SdrAlign>(0x00FF)); }
+    void         SetHorzAlign(SdrAlign nAlg)                { assert((nAlg & static_cast<SdrAlign>(0xFF00)) == SdrAlign::NONE); nAlign = SdrAlign(nAlign & static_cast<SdrAlign>(0xFF00)) | (nAlg & static_cast<SdrAlign>(0x00FF)); }
     SdrAlign     GetVertAlign() const                       { return nAlign & static_cast<SdrAlign>(0xFF00); }
-    void         SetVertAlign(SdrAlign nAlg)                { assert((nAlg & static_cast<SdrAlign>(0xff00)) == SdrAlign::NONE); nAlign = SdrAlign(nAlign & static_cast<SdrAlign>(0x00FF)) | (nAlg & static_cast<SdrAlign>(0xFF00)); }
+    void         SetVertAlign(SdrAlign nAlg)                { assert((nAlg & static_cast<SdrAlign>(0x00FF)) == SdrAlign::NONE); nAlign = SdrAlign(nAlign & static_cast<SdrAlign>(0x00FF)) | (nAlg & static_cast<SdrAlign>(0xFF00)); }
     bool         IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
     void         Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     Point        GetAbsolutePos(const SdrObject& rObj) const;
