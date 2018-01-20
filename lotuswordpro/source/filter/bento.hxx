@@ -221,7 +221,7 @@ public: // Internal methods
 
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
-    void CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
+    SvMemoryStream* CreateGraphicStream(const char *pObjectName);
 
     sal_uLong GetSize() const { return m_ulLength; }
 private: // Data
