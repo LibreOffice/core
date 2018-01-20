@@ -204,14 +204,14 @@ void LwpFribPtr::XFConvert()
                 XFTabStop *pTab = new XFTabStop;
                 m_pXFPara->Add(pTab);
             }
-        }
             break;
+        }
         case FRIB_TAG_SECTION:
         {
             LwpFribSection* pSectionFrib = static_cast<LwpFribSection*>(pFrib);
             pSectionFrib->ParseSection();
+            break;
         }
-        break;
 
         case FRIB_TAG_PAGEBREAK:
         {
@@ -230,28 +230,28 @@ void LwpFribPtr::XFConvert()
                 else
                 {
                     //parse pagebreak
-                    XFParagraph *pPara = new XFParagraph();
-                    pPara->SetStyleName(pFrib->GetStyleName());
-                    SetXFPara(pPara);
-                    m_pPara->AddXFContent(pPara);
+                    rtl::Reference<XFParagraph> xPara(new XFParagraph);
+                    xPara->SetStyleName(pFrib->GetStyleName());
+                    SetXFPara(xPara.get());
+                    m_pPara->AddXFContent(xPara.get());
                 }
             }
-        }
             break;
+        }
         case FRIB_TAG_COLBREAK:
         {
             rtl::Reference<XFParagraph> xPara(new XFParagraph);
             xPara->SetStyleName(pFrib->GetStyleName());
             SetXFPara(xPara.get());
             m_pPara->AddXFContent(xPara.get());
-        }
             break;
+        }
         case FRIB_TAG_LINEBREAK:
         {
             XFLineBreak *pLineBreak = new XFLineBreak;
             m_pXFPara->Add(pLineBreak);
-        }
             break;
+        }
         case FRIB_TAG_UNICODE: //fall through
         case FRIB_TAG_UNICODE2: //fall through
         case FRIB_TAG_UNICODE3: //fall through
