@@ -305,15 +305,13 @@ void LwpGraphicObject::CreateDrawObjects()
     if (ulRet != OpenStormBento::BenErr_OK)
         return;
 
-    SvStream* pDrawObjStream = nullptr;
-
     // get graphic object's bento object name
     LwpObjectID& rMyID = GetObjectID();
     std::string aGrfObjName;
     GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
-    pBentoContainer->CreateGraphicStream(pDrawObjStream, aGrfObjName.c_str());
+    SvStream* pDrawObjStream = pBentoContainer->CreateGraphicStream(aGrfObjName.c_str());
     if (pDrawObjStream)
     {
         LwpSdwFileLoader fileLoader(pDrawObjStream, this);
@@ -357,17 +355,13 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
             return 0;
     }
 
-    SvStream* pGrafStream = nullptr;
-
     // get graphic object's bento object name
     LwpObjectID& rMyID = GetObjectID();
     std::string aGrfObjName;
     GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
-    pBentoContainer->CreateGraphicStream(pGrafStream, aGrfObjName.c_str());
-    SvMemoryStream* pMemGrafStream = static_cast<SvMemoryStream*>(pGrafStream);
-
+    SvMemoryStream* pMemGrafStream = pBentoContainer->CreateGraphicStream(aGrfObjName.c_str());
     if (pMemGrafStream)
     {
         // read image data
@@ -376,7 +370,6 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
         pMemGrafStream->ReadBytes(pGrafData, nDataLen);
 
         delete pMemGrafStream;
-        pMemGrafStream = nullptr;
 
         return nDataLen;
     }
