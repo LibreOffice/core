@@ -118,7 +118,7 @@ public:
     void CreateDrawObjects();
     void CreateGrafObject();
     static void GetBentoNamebyID(LwpObjectID const & rMyID, std::string& rName);
-    sal_uInt32 GetRawGrafData(sal_uInt8*& pGrafData);
+    std::vector<sal_uInt8> GetRawGrafData();
     sal_uInt32 GetGrafData(sal_uInt8*& pGrafData);
     void GetGrafOrgSize(long& rWidth, long& rHeight) { rWidth = m_Cache.Width; rHeight = m_Cache.Height; }
     void GetGrafOrgSize(double& rWidth, double& rHeight) override;
