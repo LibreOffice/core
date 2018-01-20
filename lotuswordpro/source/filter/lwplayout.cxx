@@ -1364,14 +1364,8 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
             }
             else
             {
-                sal_uInt8* pGrafData = nullptr;
-                sal_uInt32 nDataLen = pGrfObj->GetRawGrafData(pGrafData);
-                pXFBGImage->SetImageData(pGrafData, nDataLen);
-                if(pGrafData)
-                {
-                    delete[] pGrafData;
-                    pGrafData = nullptr;
-                }
+                std::vector<sal_uInt8> aGrafData = pGrfObj->GetRawGrafData();
+                pXFBGImage->SetImageData(aGrafData.data(), aGrafData.size());
             }
 
             //automatic, top left
