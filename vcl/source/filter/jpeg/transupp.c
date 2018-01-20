@@ -670,7 +670,7 @@ do_transverse (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
            JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
            jvirt_barray_ptr *src_coef_arrays,
            jvirt_barray_ptr *dst_coef_arrays)
-/* Transverse transpose is equivalent to
+/* Traverse transpose is equivalent to
  *   1. 180 degree rotation;
  *   2. Transposition;
  * or
