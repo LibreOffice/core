@@ -78,11 +78,13 @@ void FramePainter::AdaptColor (
     // Get the source color.
     if (maCenter.maBitmap.IsEmpty())
         return;
-    BitmapReadAccess* pReadAccess = maCenter.maBitmap.GetBitmap().AcquireReadAccess();
-    if (pReadAccess == nullptr)
+    Bitmap aBitmap = maCenter.maBitmap.GetBitmap();
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    if (!pReadAccess)
         return;
-    const Color aSourceColor = pReadAccess->GetColor(0,0);
-    Bitmap::ReleaseAccess(pReadAccess);
+    const BitmapColor aBmpSourceColor = pReadAccess->GetColor(0,0);
+    const Color aSourceColor = aBmpSourceColor.GetColor();
+    pReadAccess.reset();
 
     // Erase the center bitmap.
     maCenter.maBitmap.SetEmpty();

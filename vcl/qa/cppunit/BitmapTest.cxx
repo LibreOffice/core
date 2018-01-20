@@ -82,7 +82,7 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
 
         CPPUNIT_ASSERT(!pReadAccess->HasPalette());
-        Color aColor = pReadAccess->GetPixel(0, 0);
+        Color aColor = pReadAccess->GetPixel(0, 0).GetColor();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(aColor.GetRed()));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(aColor.GetGreen()));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(255), sal_Int32(aColor.GetBlue()));

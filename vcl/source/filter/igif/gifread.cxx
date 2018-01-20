@@ -157,10 +157,10 @@ void GIFReader::ClearImageExtensions()
     nTimer = 0;
 }
 
-void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
-                               bool bWatchForBackgroundColor )
+void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
+                              bool bWatchForBackgroundColor)
 {
-    const Size aSize( nWidth, nHeight );
+    const Size aSize(nWidth, nHeight);
 
 #if SAL_TYPES_SIZEOFPOINTER == 8
     // Don't bother allocating a bitmap of a size that would fail on a
@@ -176,34 +176,36 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     }
 #endif
 
-    if( bGCTransparent )
+    if (bGCTransparent)
     {
-        const Color aWhite( COL_WHITE );
+        const Color aWhite(COL_WHITE);
 
-        aBmp1 = Bitmap( aSize, 1 );
+        aBmp1 = Bitmap(aSize, 1);
 
-        if( !aAnimation.Count() )
-            aBmp1.Erase( aWhite );
+        if (!aAnimation.Count())
+            aBmp1.Erase(aWhite);
 
         pAcc1 = Bitmap::ScopedWriteAccess(aBmp1);
 
-        if( pAcc1 )
+        if (pAcc1)
         {
-            cTransIndex1 = (sal_uInt8) pAcc1->GetBestPaletteIndex( aWhite );
+            cTransIndex1 = static_cast<sal_uInt8>(pAcc1->GetBestPaletteIndex(aWhite));
             cNonTransIndex1 = cTransIndex1 ? 0 : 1;
         }
         else
+        {
             bStatus = false;
+        }
     }
 
-    if( bStatus )
+    if (bStatus)
     {
-        aBmp8 = Bitmap( aSize, 8, pPal );
+        aBmp8 = Bitmap(aSize, 8, pPal);
 
-        if( !!aBmp8 && bWatchForBackgroundColor && aAnimation.Count() )
-            aBmp8.Erase( (*pPal)[ nBackgroundColor ] );
+        if (!!aBmp8 && bWatchForBackgroundColor && aAnimation.Count())
+            aBmp8.Erase((*pPal)[nBackgroundColor].GetColor());
         else
-          aBmp8.Erase( Color( COL_WHITE ) );
+            aBmp8.Erase(Color(COL_WHITE));
 
         pAcc8 = Bitmap::ScopedWriteAccess(aBmp8);
         bStatus = ( pAcc8 != nullptr );
