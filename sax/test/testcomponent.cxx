@@ -153,7 +153,7 @@ int main (int argc, char **argv)
     // loop until all test are performed
     while( nHandle != -1 )
     {
-        // Instantiate serivce
+        // Instantiate service
         Reference< XInterface > x =
             xSMgr->createInstance( OStringToOUString( argv[1] , RTL_TEXTENCODING_ASCII_US ) );
         if( ! x.is() )

@@ -208,7 +208,7 @@ static OUString  HelpLocaleString()
             aLocaleStr = aEnglish;
         else
         {
-            // get fall-back langage (country)
+            // get fall-back language (country)
             OUString sLang = aLocaleStr ;
             sal_Int32 nSepPos = sLang.indexOf( '-' );
             if (nSepPos != -1)
