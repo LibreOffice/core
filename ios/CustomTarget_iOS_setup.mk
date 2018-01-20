@@ -58,7 +58,6 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	(echo '[Bootstrap]' \
 	&& echo 'URE_BOOTSTRAP=file://$$APP_DATA_DIR/fundamentalrc' \
 	&& echo 'HOME=$$SYSUSERHOME'  \
-	&& echo '[Bootstrap]' \
 	    ) > $(IOSRES)/rc
 
 	# Set up fundamentalrc, unorc, bootstraprc and versionrc.
