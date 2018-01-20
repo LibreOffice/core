@@ -66,7 +66,7 @@ LwpSvStream::LwpSvStream(SvStream* pStream, LwpSvStream * pCompressed)
 /**
  * @descr       read nBytesToRead bytes to buf
 */
-sal_Int32 LwpSvStream::Read(void* buf, sal_Int32 nBytesToRead)
+size_t LwpSvStream::Read(void* buf, size_t nBytesToRead)
 {
     return m_pStream->ReadBytes(buf, nBytesToRead);
 }

@@ -64,10 +64,10 @@
 namespace OpenStormBento
 {
 
-unsigned long
+size_t
 CBenValue::GetValueSize()
 {
-    unsigned long Size = 0;
+    size_t Size = 0;
     CBenValueSegment * pCurr = nullptr;
     while ((pCurr = GetNextValueSegment(pCurr)) != nullptr)
         Size += pCurr->GetSize();
@@ -75,11 +75,11 @@ CBenValue::GetValueSize()
 }
 
 void
-CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
-  unsigned long Amt, unsigned long * pAmtRead)
+CBenValue::ReadValueData(void * pReadBuffer, size_t Offset,
+  size_t Amt, size_t* pAmtRead)
 {
     BenError Err;
-    unsigned long SegOffset = 0;
+    size_t SegOffset = 0;
     *pAmtRead = 0;
     CBenValueSegment * pCurrSeg = nullptr;
     LtcBenContainer * pContainer = GetProperty()->GetContainer();
@@ -99,13 +99,13 @@ CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
 
         if (SegOffset <= Offset && Offset < SegOffset + pCurrSeg->GetSize()) /// begin at current segment
         {
-            unsigned long OffsetIntoSeg = Offset - SegOffset;  /// relative value in this value segment stream
+            size_t OffsetIntoSeg = Offset - SegOffset;  /// relative value in this value segment stream
 
-            unsigned long AmtThisSeg = std::min(Amt, pCurrSeg->GetSize() -
+            size_t AmtThisSeg = std::min(Amt, pCurrSeg->GetSize() -
                 OffsetIntoSeg);           /// size read in this segment, it's minimal value between Amt &
                                           /// remain part from OffsetIntoSeg to the end of this segment
 
-            unsigned long AmtReadThisSeg; /// actual read size in this segment
+            size_t AmtReadThisSeg; /// actual read size in this segment
             if (pCurrSeg->IsImmediate())
             {
                 std::memcpy(pBuffer, pCurrSeg->GetImmediateData() +
