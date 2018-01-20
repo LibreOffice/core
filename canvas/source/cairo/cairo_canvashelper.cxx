@@ -470,7 +470,7 @@ namespace cairocanvas
                             else
                                 nAlpha = data[ nOff + 3 ] = 255;
 #endif
-                            aColor = pBitmapReadAcc->GetPaletteColor( *pReadScan++ );
+                            aColor = pBitmapReadAcc->GetPaletteColor(*pReadScan++).GetColor();
 
 #ifdef OSL_BIGENDIAN
                             data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetRed() ) )/255 );

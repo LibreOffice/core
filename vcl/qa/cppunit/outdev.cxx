@@ -56,21 +56,21 @@ void VclOutdevTest::testVirtualDevice()
     }
 #endif
 
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0,0)).GetColor());
+    CPPUNIT_ASSERT(pVDev->GetPixel(Point(0,0)).GetColor() == COL_WHITE);
 #if defined LINUX //TODO: various failures on Mac and Windows tinderboxes
-    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pVDev->GetPixel(Point(1,2)).GetColor());
-    CPPUNIT_ASSERT_EQUAL(COL_RED, pVDev->GetPixel(Point(31,30)).GetColor());
+    CPPUNIT_ASSERT(pVDev->GetPixel(Point(1,2)).GetColor() == COL_BLUE);
+    CPPUNIT_ASSERT(pVDev->GetPixel(Point(31,30)).GetColor() == COL_RED);
 #endif
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(30,31)).GetColor());
+    CPPUNIT_ASSERT(pVDev->GetPixel(Point(30,31)).GetColor() == COL_WHITE);
 
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
     Bitmap::ScopedReadAccess pAcc(aBmp);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAcc->GetPixel(0,0)).GetColor());
+    CPPUNIT_ASSERT(pAcc->GetPixel(0,0).GetColor() == COL_WHITE);
 #if defined LINUX //TODO: various failures on Mac and Windows tinderboxes
-    CPPUNIT_ASSERT_EQUAL(COL_BLUE, Color(pAcc->GetPixel(2,1)).GetColor());
-    CPPUNIT_ASSERT_EQUAL(COL_RED, Color(pAcc->GetPixel(30,31)).GetColor());
+    CPPUNIT_ASSERT(pAcc->GetPixel(2,1).GetColor() == COL_BLUE);
+    CPPUNIT_ASSERT(pAcc->GetPixel(30,31).GetColor() == COL_RED);
 #endif
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAcc->GetPixel(31,30)).GetColor());
+    CPPUNIT_ASSERT(pAcc->GetPixel(31,30).GetColor() == COL_WHITE);
 
 #if 0
     VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );
