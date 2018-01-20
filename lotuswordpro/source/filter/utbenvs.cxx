@@ -65,11 +65,8 @@ namespace OpenStormBento
 */
 std::size_t LtcUtBenValueStream::GetData(void* pData, std::size_t nSize)
 {
-    //unsigned long AmtLeft;
-    unsigned long AmtRead;
-    //GetAmountLeft(&AmtLeft);
+    size_t AmtRead;
 
-    //unsigned long AmtShouldRead = UtMin(nSize, AmtLeft);
     /*BenError Err = */cpValue->ReadValueData(pData, cCurrentPosition, nSize,
       &AmtRead);
     cCurrentPosition += AmtRead;
