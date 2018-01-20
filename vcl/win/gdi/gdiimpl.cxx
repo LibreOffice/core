@@ -625,9 +625,9 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                     if (rPalette.GetEntryCount() == 2)
                     {
                         SalColor nCol;
-                        nCol = ImplColorToSal(rPalette[0]);
+                        nCol = ImplColorToSal(rPalette[0].GetColor());
                         nTextColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
-                        nCol = ImplColorToSal(rPalette[1]);
+                        nCol = ImplColorToSal(rPalette[1].GetColor());
                         nBkColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
                     }
                     const_cast<WinSalBitmap&>(rSalBitmap).ReleaseBuffer(pBitmapBuffer, BitmapAccessMode::Info);
