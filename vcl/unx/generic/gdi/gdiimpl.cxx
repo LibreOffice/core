@@ -110,10 +110,10 @@ namespace
             if (rPalette.GetEntryCount() == 2)
             {
                 const BitmapColor aWhite(rPalette[rPalette.GetBestIndex(Color(COL_WHITE))]);
-                rValues.foreground = rColMap.GetPixel(ImplColorToSal(aWhite));
+                rValues.foreground = rColMap.GetPixel(ImplColorToSal(aWhite.GetColor()));
 
                 const BitmapColor aBlack(rPalette[rPalette.GetBestIndex(Color(COL_BLACK))]);
-                rValues.background = rColMap.GetPixel(ImplColorToSal(aBlack));
+                rValues.background = rColMap.GetPixel(ImplColorToSal(aBlack.GetColor()));
             }
             rBitmap.ReleaseBuffer(pBitmapBuffer, BitmapAccessMode::Read);
         }
