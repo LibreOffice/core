@@ -154,4 +154,6 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   owner @{HOME}/.icons/*/cursors/*      r,
   /usr/share/*-fonts/conf.avail/*.conf  r,
   /usr/share/fonts-config/conf.avail/*.conf r,
+
+  owner @{HOME}/.mozilla/firefox/** r,
 }
