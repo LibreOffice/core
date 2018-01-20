@@ -1418,7 +1418,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
     vcl::Region oldClipRgn(rRenderContext.GetClipRegion());
 
     // for popups, don't draw part of the frame
-    if (pData->mnTitleType >= BorderWindowTitleType::Tearoff)
+    if (!(pData->mnTitleType & (BorderWindowTitleType::Normal | BorderWindowTitleType::Small)))
     {
         FloatingWindow* pWin = dynamic_cast<FloatingWindow*>(pData->mpBorderWindow->GetWindow(GetWindowType::Client));
         if (pWin)
@@ -1444,7 +1444,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
     --aInRect.Bottom();
 
     // restore
-    if (pData->mnTitleType >= BorderWindowTitleType::Tearoff)
+    if (!(pData->mnTitleType & (BorderWindowTitleType::Normal | BorderWindowTitleType::Small)))
         rRenderContext.SetClipRegion(oldClipRgn);
 
     // Draw Border
