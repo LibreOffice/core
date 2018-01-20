@@ -170,8 +170,8 @@ LtcBenContainer::LtcBenContainer(LwpSvStream * pStream)
 *   @param  number of bytes read
 *   @return BenError
 */
-BenError LtcBenContainer::Read(void * pBuffer, unsigned long MaxSize,
-  unsigned long * pAmtRead)
+BenError LtcBenContainer::Read(void * pBuffer, size_t MaxSize,
+  size_t* pAmtRead)
 {
     *pAmtRead = cpStream->Read(pBuffer, MaxSize);
     return BenErr_OK;
@@ -182,11 +182,10 @@ BenError LtcBenContainer::Read(void * pBuffer, unsigned long MaxSize,
 *   @param  number of bytes to be read
 *   @return BenError
 */
-BenError LtcBenContainer::ReadKnownSize(void * pBuffer, unsigned long Amt)
+BenError LtcBenContainer::ReadKnownSize(void * pBuffer, size_t Amt)
 {
-    sal_uLong ulLength;
-    ulLength = cpStream->Read(pBuffer, Amt);
-    if(ulLength == Amt)
+    size_t ulLength = cpStream->Read(pBuffer, Amt);
+    if (ulLength == Amt)
     {
         return BenErr_OK;
     }

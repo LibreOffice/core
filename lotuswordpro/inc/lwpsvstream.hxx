@@ -67,8 +67,8 @@ class LwpSvStream
 {
 public:
     LwpSvStream(SvStream* pStream, LwpSvStream * pCompressed = nullptr);
-    sal_Int32 Read( void* bytes, sal_Int32 nBytesToRead );
-    void SeekRel( sal_Int64 pos );
+    size_t Read(void* bytes, size_t nBytesToRead);
+    void SeekRel(sal_Int64 pos);
     sal_Int64 Tell();
     sal_Int64 Seek(sal_Int64 pos);
     bool CheckSeek(sal_Int64 pos);
