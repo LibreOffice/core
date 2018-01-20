@@ -267,11 +267,12 @@ sal_uInt64 GetSvStreamSize(SvStream * pStream)
 *   Find hazily according to object ID
 *   @param  pObjectname - format as "GrXX,XXXXXXXX" wherein XX is high part of object ID, and XXXXXXXX is low part
 */
-SvMemoryStream* LtcBenContainer::CreateGraphicStream(const char *pObjectName)
+std::vector<sal_uInt8> LtcBenContainer::GetGraphicData(const char *pObjectName)
 {
+    std::vector<sal_uInt8> aData;
     if (!pObjectName)
     {
-        return nullptr;
+        return aData;
     }
     // construct the string of property name
     char sSName[64]="";
@@ -300,12 +301,11 @@ SvMemoryStream* LtcBenContainer::CreateGraphicStream(const char *pObjectName)
     // the 'D' stream is NULL or it has invalid length
     if (nLen <= 0)
     {
-        return nullptr;
+        return aData;
     }
 
-    char * pBuf = new char[nLen];
-    assert(pBuf != nullptr);
-    char * pPointer = pBuf;
+    aData.resize(nLen);
+    sal_uInt8* pPointer = aData.data();
     if (xD)
     {
         xD->ReadBytes(pPointer, nDLen);
@@ -318,11 +318,7 @@ SvMemoryStream* LtcBenContainer::CreateGraphicStream(const char *pObjectName)
         xS.reset();
     }
 
-    SvMemoryStream* pMemStream = new SvMemoryStream(pBuf, nLen, StreamMode::READ);
-    assert(pMemStream != nullptr);
-    pMemStream->ObjectOwnsMemory(true);
-
-    return pMemStream;
+    return aData;
 }
 
 sal_uLong LtcBenContainer::remainingSize() const
