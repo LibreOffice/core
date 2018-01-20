@@ -1,0 +1,39 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_text_RubyPosition_idl__
+#define __com_sun_star_text_RubyPosition_idl__
+
+
+
+ module com {  module sun {  module star {  module text {
+
+
+/** These constants define the position of ruby text.
+    @since LibreOffice 6.1
+ */
+constants RubyPosition
+{
+    /** ruby text should be above or on the right side of base text.
+     */
+    const short ABOVE = 0;
+    /** ruby text should be below or on the left side of base text.
+     */
+    const short BELOW = 1;
+    /** Vertically aligned on right side of the base text in horizontal mode.
+        <P>This is the same as ABOVE in vertical writing mode.</P>
+     */
+    const short INTER_CHARACTER = 2;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
