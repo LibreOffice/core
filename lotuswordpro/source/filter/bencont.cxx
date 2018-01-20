@@ -253,11 +253,11 @@ LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const cha
     return FindNextValueStreamWithPropertyName(sPropertyName);
 }
 
-sal_uInt32 GetSvStreamSize(SvStream * pStream)
+sal_uInt64 GetSvStreamSize(SvStream * pStream)
 {
-    sal_uInt32 nCurPos = pStream->Tell();
+    sal_uInt64 nCurPos = pStream->Tell();
     pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt32 ulLength = pStream->Tell();
+    sal_uInt64 ulLength = pStream->Tell();
     pStream->Seek(nCurPos);
 
     return ulLength;
@@ -286,12 +286,12 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     std::unique_ptr<SvStream> xS(FindValueStreamWithPropertyName(sSName));
     std::unique_ptr<SvStream> xD(FindValueStreamWithPropertyName(sDName));
 
-    sal_uInt32 nDLen = 0;
+    sal_uInt64 nDLen = 0;
     if (xD)
     {
         nDLen = GetSvStreamSize(xD.get());
     }
-    sal_uInt32 nLen = nDLen;
+    sal_uInt64 nLen = nDLen;
     if (xS)
     {
         nLen += GetSvStreamSize(xS.get()) ;
@@ -310,13 +310,13 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     char * pPointer = pBuf;
     if (xD)
     {
-        xD->ReadBytes(pPointer, nDLen);
+        auto nRead = xD->ReadBytes(pPointer, nDLen);
         xD.reset();
     }
     pPointer += nDLen;
     if (xS)
     {
-        xS->ReadBytes(pPointer, nLen - nDLen);
+        auto nRead = xS->ReadBytes(pPointer, nLen - nDLen);
         xS.reset();
     }
 
