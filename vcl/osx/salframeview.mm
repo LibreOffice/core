@@ -816,9 +816,10 @@ private:
         if( aEvent.mnDelta == 0 )
             aEvent.mnDelta = aEvent.mnNotchDelta;
         aEvent.mbHorz = FALSE;
-        aEvent.mnScrollLines = nDeltaZ;
-        if( aEvent.mnScrollLines == 0 )
-            aEvent.mnScrollLines = 1;
+        sal_uInt32 nScrollLines = nDeltaZ;
+        if (nScrollLines == 0)
+            nScrollLines = 1;
+        aEvent.mnScrollLines = nScrollLines;
         mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
     }
 }
@@ -938,9 +939,10 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
-            aEvent.mnScrollLines = fabs(dX) / WHEEL_EVENT_FACTOR;
-            if( aEvent.mnScrollLines == 0 )
-                aEvent.mnScrollLines = 1;
+            sal_uInt32 nScrollLines = fabs(dX) / WHEEL_EVENT_FACTOR;
+            if (nScrollLines == 0)
+                nScrollLines = 1;
+            aEvent.mnScrollLines = nScrollLines;
 
             mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
         }
@@ -951,9 +953,10 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
-            aEvent.mnScrollLines = fabs(dY) / WHEEL_EVENT_FACTOR;
-            if( aEvent.mnScrollLines == 0 )
-                aEvent.mnScrollLines = 1;
+            sal_uInt32 nScrollLines = fabs(dY) / WHEEL_EVENT_FACTOR;
+            if (nScrollLines == 0)
+                nScrollLines = 1;
+            aEvent.mnScrollLines = nScrollLines;
 
             mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
         }
