@@ -811,19 +811,37 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     bool bRubyStretch = nBaseWidth >= nRubyWidth;
 
     long nCenter = aWinSize.Width() / 2;
-    long nLeftStart = nCenter - (bRubyStretch ? (nBaseWidth / 2) : (nRubyWidth / 2));
-    long nRightEnd = nCenter + (bRubyStretch ? (nBaseWidth / 2) : (nRubyWidth / 2));
+    long nHalfWidth = std::max( nBaseWidth, nRubyWidth ) /2;
+    long nLeftStart = nCenter - nHalfWidth;
+    long nRightEnd = nCenter + nHalfWidth;
 
+    // Deafult values for TOP or no selection
     long nYRuby = aWinSize.Height() / 4 - nTextHeight / 2;
     long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
 
-    //use above also if no selection is set
-    bool bAbove = m_pParentDlg->m_pPositionLB->GetSelectedEntryPos() == 0;
-    if (!bAbove)
+    sal_Int16 nRubyPos = m_pParentDlg->m_pPositionLB->GetSelectedEntryPos();
+    if ( nRubyPos == 1 )    // BOTTOM
     {
         long nTmp = nYRuby;
         nYRuby = nYBase;
         nYBase = nTmp;
+    }
+    else if ( nRubyPos == 2 ) // RIGHT ( vertically )
+    {
+        // Align the ruby text and base text to the vertical center.
+        nYBase =  ( aWinSize.Height() - nTextHeight ) / 2;
+        nYRuby = ( aWinSize.Height() - nRubyWidth ) / 2;
+
+        // Align the ruby text at the right side of the base text
+        nAdjust = RubyAdjust_RIGHT;
+        nHalfWidth = nBaseWidth / 2;
+        nLeftStart = nCenter - nHalfWidth;
+        nRightEnd = nCenter + nHalfWidth + nRubyWidth + nTextHeight;
+        // Render base text first, then render ruby text on the right.
+        bRubyStretch = true;
+
+        aRubyFont.SetVertical(true);
+        aRubyFont.SetOrientation(2700);
     }
 
     long nYOutput;
