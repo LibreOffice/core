@@ -80,6 +80,13 @@ void Desktop::InitApplicationServiceManager()
     sm.set(
         cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
         UNO_QUERY_THROW);
+#elif defined(IOS)
+    OUString uri( "$APP_DATA_DIR" );
+    rtl_bootstrap_expandMacros( &uri.pData );
+    OUString aUnoRc("file://" + uri  + "/unorc");
+    sm.set(
+           cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
+           UNO_QUERY_THROW);
 #else
     sm.set(
         cppu::defaultBootstrap_InitialComponentContext()->getServiceManager(),
