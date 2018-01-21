@@ -253,7 +253,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
         //  used when switching back from page preview: restore saved design mode state
         //  (otherwise, keep the default from the draw view ctor)
         if ( nForceDesignMode != TRISTATE_INDET )
-            pDrawView->SetDesignMode( nForceDesignMode );
+            pDrawView->SetDesignMode( nForceDesignMode != TRISTATE_FALSE );
 
         //  register at FormShell
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();

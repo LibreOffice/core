@@ -2894,7 +2894,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
         pThis->m_nKeyModifiers = ModKeyFlags::NONE;
 
     if( pThis->m_pIMHandler )
-        pThis->m_pIMHandler->focusChanged( pEvent->in );
+        pThis->m_pIMHandler->focusChanged( pEvent->in != 0 );
 
     // ask for changed printers like generic implementation
     if( pEvent->in && pSalInstance->isPrinterInit() )

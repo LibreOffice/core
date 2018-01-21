@@ -228,7 +228,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
 
     ReadColor( rStream, nBulletColor );
     rStream.ReadUInt16( nBulletRelSize );
-    rStream.ReadUInt16( nTmp16 ); SetShowSymbol( nTmp16 );
+    rStream.ReadUInt16( nTmp16 ); SetShowSymbol( nTmp16 != 0 );
 
     rStream.ReadUInt16( nTmp16 ); mePositionAndSpaceMode = static_cast<SvxNumPositionAndSpaceMode>(nTmp16);
     rStream.ReadUInt16( nTmp16 ); meLabelFollowedBy = static_cast<LabelFollowedBy>(nTmp16);
