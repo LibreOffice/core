@@ -118,8 +118,16 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // No suitable JRE found
             SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
-#ifdef MACOSX
+#if defined( MACOSX )
             ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND_MAC), VclMessageType::Warning);
+#elif defined( _WIN64 )
+            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND_WIN), VclMessageType::Warning);
+            OUString sPrimTex = aWarningBox->get_primary_text();
+            aWarningBox->set_primary_text(sPrimTex.replaceAll( "%BITNESS", "64-bit" ));
+#elif defined( _WIN32 )
+            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND_WIN), VclMessageType::Warning);
+            OUString sPrimTex = aWarningBox->get_primary_text();
+            aWarningBox->set_primary_text(sPrimTex.replaceAll( "%BITNESS", "32-bit" ));
 #else
             ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND), VclMessageType::Warning);
 #endif
