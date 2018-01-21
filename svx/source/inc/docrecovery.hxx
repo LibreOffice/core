@@ -43,6 +43,7 @@
 
 #define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          "/doEmergencySave"
 #define RECOVERY_CMDPART_DO_RECOVERY                "/doAutoRecovery"
+#define RECOVERY_CMDPART_DO_BRINGTOFRONT            "/doBringToFront"
 
 #define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      "vnd.sun.star.autorecovery:/doPrepareEmergencySave"
 #define RECOVERY_CMD_DO_EMERGENCY_SAVE              "vnd.sun.star.autorecovery:/doEmergencySave"
