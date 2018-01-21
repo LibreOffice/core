@@ -63,7 +63,7 @@
 #include <tunables/global>
 
 profile libreoffice-soffice INSTDIR-program/soffice.bin {
-  #include <abstractions/private-files-strict>
+  #include <abstractions/private-files>
 
   #include <abstractions/audio>
   #include <abstractions/bash>
@@ -165,6 +165,9 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /usr/share/*-fonts/conf.avail/*.conf  r,
   /usr/share/fonts-config/conf.avail/*.conf r,
 
+  owner @{HOME}/.mozilla/firefox/profiles.ini r,
+  owner @{HOME}/.mozilla/firefox/*/secmod.db r,
+  owner @{HOME}/.mozilla/firefox/*/cert8.db r,
   # there is abstractions/gnupg but that's just for gpg1...
   profile gpg {
     #include <abstractions/base>
