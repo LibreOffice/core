@@ -99,11 +99,11 @@ public:
 
 struct TEWritingDirectionInfo
 {
-    sal_uInt8    nType;
+    bool         bLeftToRight;
     sal_Int32    nStartPos;
     sal_Int32    nEndPos;
-    TEWritingDirectionInfo( sal_uInt8 Type, sal_Int32 Start, sal_Int32 End )
-        : nType {Type}
+    TEWritingDirectionInfo( bool LeftToRight, sal_Int32 Start, sal_Int32 End )
+        : bLeftToRight {LeftToRight}
         , nStartPos {Start}
         , nEndPos {End}
     {}
