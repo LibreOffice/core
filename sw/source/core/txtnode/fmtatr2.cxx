@@ -456,6 +456,11 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
             rVal <<= static_cast<bool>(!m_nPosition);
         }
         break;
+        case MID_RUBY_POSITION:
+        {
+            rVal <<= static_cast<sal_uInt16>(m_nPosition);
+        }
+        break;
         default:
             bRet = false;
     }
@@ -489,6 +494,16 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
                 bool bAbove = *o3tl::doAccess<bool>(rVal);
                 m_nPosition = bAbove ? 0 : 1;
             }
+        }
+        break;
+        case MID_RUBY_POSITION:
+        {
+            sal_Int16 nSet = 0;
+            rVal >>= nSet;
+            if(nSet >= sal_Int16(text::RubyAdjust_LEFT) && nSet <= sal_Int16(text::RubyAdjust_INDENT_BLOCK))
+                m_nPosition = nSet;
+            else
+                bRet = false;
         }
         break;
         case MID_RUBY_CHARSTYLE:
