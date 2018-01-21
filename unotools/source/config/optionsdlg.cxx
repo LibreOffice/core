@@ -43,7 +43,7 @@ static sal_Int32                    nRefCount = 0;
 class SvtOptionsDlgOptions_Impl : public utl::ConfigItem
 {
 private:
-    typedef std::unordered_map< OUString, sal_Bool > OptionNodeList;
+    typedef std::unordered_map< OUString, bool > OptionNodeList;
 
     OUString        m_sPathDelimiter;
     OptionNodeList  m_aOptionNodeList;

@@ -154,7 +154,7 @@ namespace dbaui
         };
         static DispatchType classifyDispatchURL( const css::util::URL& _rURL );
 
-        typedef std::map<DispatchType, sal_Bool> MapDispatchToBool;
+        typedef std::map<DispatchType, bool> MapDispatchToBool;
         MapDispatchToBool   m_aDispatchStates;
     };
 

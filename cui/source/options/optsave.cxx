@@ -54,10 +54,9 @@ using namespace comphelper;
 struct SvxSaveTabPage_Impl
 {
     Reference< XNameContainer > xFact;
-    Sequence< OUString >        aFilterArr[APP_COUNT];
-    Sequence< sal_Bool >        aAlienArr[APP_COUNT];
-    Sequence< sal_Bool >        aODFArr[APP_COUNT];
-    Sequence< OUString >        aUIFilterArr[APP_COUNT];
+    std::vector< OUString >     aFilterArr[APP_COUNT];
+    std::vector< bool >         aODFArr[APP_COUNT];
+    std::vector< OUString >     aUIFilterArr[APP_COUNT];
     OUString                    aDefaultArr[APP_COUNT];
     bool                    aDefaultReadonlyArr[APP_COUNT];
     bool                    bInitialized;
@@ -429,8 +428,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                     sCommand = sCommand.replaceFirst("%1", sReplace);
                     Reference< XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
                     std::vector< OUString > lList;
-                    std::vector< sal_Bool > lAlienList;
-                    std::vector< sal_Bool > lODFList;
+                    std::vector<bool> lAlienList;
+                    std::vector<bool> lODFList;
                     while(xList->hasMoreElements())
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
@@ -443,9 +442,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                             lODFList.push_back( isODFFormat( sFilter ) );
                         }
                     }
-                    pImpl->aFilterArr[nData] = comphelper::containerToSequence(lList);
-                    pImpl->aAlienArr[nData] = comphelper::containerToSequence(lAlienList);
-                    pImpl->aODFArr[nData] = comphelper::containerToSequence(lODFList);
+                    pImpl->aFilterArr[nData] = lList;
+                    pImpl->aODFArr[nData] = lODFList;
                 }
             }
             aDocTypeLB->SelectEntryPos(0);
@@ -571,36 +569,36 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
         if(aDocTypeLB == &rBox)
         {
             aSaveAsLB->Clear();
-            const OUString* pFilters = pImpl->aFilterArr[nData].getConstArray();
-            if(!pImpl->aUIFilterArr[nData].getLength())
+            auto & rFilters = pImpl->aFilterArr[nData];
+            if(!pImpl->aUIFilterArr[nData].size())
             {
-                pImpl->aUIFilterArr[nData].realloc(pImpl->aFilterArr[nData].getLength());
-                OUString* pUIFilters = pImpl->aUIFilterArr[nData].getArray();
-                for(int nFilter = 0; nFilter < pImpl->aFilterArr[nData].getLength(); nFilter++)
+                pImpl->aUIFilterArr[nData].resize(pImpl->aFilterArr[nData].size());
+                auto & rUIFilters = pImpl->aUIFilterArr[nData];
+                for(size_t nFilter = 0; nFilter < pImpl->aFilterArr[nData].size(); nFilter++)
                 {
-                    Any aProps = pImpl->xFact->getByName(pFilters[nFilter]);
+                    Any aProps = pImpl->xFact->getByName(rFilters[nFilter]);
                     // get the extension of the filter
                     OUString extension;
                     SfxFilterMatcher matcher;
-                    std::shared_ptr<const SfxFilter> pFilter = matcher.GetFilter4FilterName(pFilters[nFilter]);
+                    std::shared_ptr<const SfxFilter> pFilter = matcher.GetFilter4FilterName(rFilters[nFilter]);
                     if (pFilter)
                     {
                         extension = pFilter->GetWildcard().getGlob().getToken(0, ';');
                     }
                     Sequence<PropertyValue> aProperties;
                     aProps >>= aProperties;
-                    pUIFilters[nFilter] = lcl_ExtracUIName(aProperties, extension);
+                    rUIFilters[nFilter] = lcl_ExtracUIName(aProperties, extension);
                 }
             }
-            const OUString* pUIFilters = pImpl->aUIFilterArr[nData].getConstArray();
+            auto const & rUIFilters = pImpl->aUIFilterArr[nData];
             OUString sSelect;
-            for(int i = 0; i < pImpl->aUIFilterArr[nData].getLength(); i++)
+            for(size_t i = 0; i < pImpl->aUIFilterArr[nData].size(); i++)
             {
-                const sal_Int32 nEntryPos = aSaveAsLB->InsertEntry(pUIFilters[i]);
+                const sal_Int32 nEntryPos = aSaveAsLB->InsertEntry(rUIFilters[i]);
                 if ( pImpl->aODFArr[nData][i] )
                     aSaveAsLB->SetEntryData( nEntryPos, static_cast<void*>(pImpl.get()) );
-                if(pFilters[i] == pImpl->aDefaultArr[nData])
-                    sSelect = pUIFilters[i];
+                if(rFilters[i] == pImpl->aDefaultArr[nData])
+                    sSelect = rUIFilters[i];
             }
             if(!sSelect.isEmpty())
             {
@@ -613,12 +611,12 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
         else
         {
             OUString sSelect = rBox.GetSelectedEntry();
-            const OUString* pFilters = pImpl->aFilterArr[nData].getConstArray();
-            OUString* pUIFilters = pImpl->aUIFilterArr[nData].getArray();
-            for(int i = 0; i < pImpl->aUIFilterArr[nData].getLength(); i++)
-                if(pUIFilters[i] == sSelect)
+            auto const & rFilters = pImpl->aFilterArr[nData];
+            auto const & rUIFilters = pImpl->aUIFilterArr[nData];
+            for(size_t i = 0; i < pImpl->aUIFilterArr[nData].size(); i++)
+                if(rUIFilters[i] == sSelect)
                 {
-                    sSelect = pFilters[i];
+                    sSelect = rFilters[i];
                     break;
                 }
 

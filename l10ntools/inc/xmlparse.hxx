@@ -178,7 +178,7 @@ private:
     OString m_sFileName;
 
     /// Mapping XML tag names <-> have localizable strings
-    std::unordered_map<OString, sal_Bool> m_aNodes_localize;
+    std::unordered_map<OString, bool> m_aNodes_localize;
 
     std::unique_ptr<XMLHashMap> m_pXMLStrings;
 
