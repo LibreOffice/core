@@ -1088,9 +1088,14 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
 
     // Convert vector into a uno::Sequence
     // TODO/LATER: use Default entries in future
-    uno::Sequence< beans::StringPair > aDefaultsSequence;
-    uno::Sequence< beans::StringPair > aOverridesSequence( aManList.size() );
-    sal_Int32 nSeqLength = 0;
+    uno::Sequence< beans::StringPair > aDefaultsSequence(aManList.size());
+    // Add at least the application/xml default entry.
+    aDefaultsSequence[0].First = "xml";
+    aDefaultsSequence[0].Second= "application/xml";
+    sal_Int32 nDefSeqLength = 1;
+
+    uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());
+    sal_Int32 nOvrSeqLength = 0;
     for ( vector< uno::Sequence< beans::PropertyValue > >::const_iterator aIter = aManList.begin(),
             aEnd = aManList.end();
          aIter != aEnd;
@@ -1104,13 +1109,23 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
         if ( !aType.isEmpty() )
         {
             // only nonempty type makes sense here
-            nSeqLength++;
             ( *aIter )[PKG_MNFST_FULLPATH].Value >>= aPath;
-            aOverridesSequence[nSeqLength-1].First = "/" + aPath;
-            aOverridesSequence[nSeqLength-1].Second = aType;
+            if (/* DISABLES CODE */ (false)) //FIXME: For now we have no way of deferentiating defaults from others.
+            {
+                // ++nDefSeqLength;
+                // aDefaultsSequence[nDefSeqLength-1].First = "/" + aPath;
+                // aDefaultsSequence[nDefSeqLength-1].Second = aType;
+            }
+            else
+            {
+                ++nOvrSeqLength;
+                aOverridesSequence[nOvrSeqLength-1].First = "/" + aPath;
+                aOverridesSequence[nOvrSeqLength-1].Second = aType;
+            }
         }
     }
-    aOverridesSequence.realloc( nSeqLength );
+    aOverridesSequence.realloc(nOvrSeqLength);
+    aDefaultsSequence.realloc(nDefSeqLength);
 
     ::comphelper::OFOPXMLHelper::WriteContentSequence(
             xConTypeOutStream, aDefaultsSequence, aOverridesSequence, m_xContext );
@@ -1216,7 +1231,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Remove the old manifest.xml file as the
             // manifest will be re-generated and the
             // META-INF directory implicitly created if does not exist
-            const OUString sMeta ("META-INF");
+            static const OUString sMeta ("META-INF");
 
             if ( m_xRootFolder->hasByName( sMeta ) )
             {
@@ -1238,7 +1253,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Remove the old [Content_Types].xml file as the
             // file will be re-generated
 
-            const OUString aContentTypes("[Content_Types].xml");
+            static const OUString aContentTypes("[Content_Types].xml");
 
             if ( m_xRootFolder->hasByName( aContentTypes ) )
                 m_xRootFolder->removeByName( aContentTypes );
@@ -1247,9 +1262,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         // Create a vector to store data for the manifest.xml file
         vector < uno::Sequence < PropertyValue > > aManList;
 
-        const OUString sMediaType ("MediaType");
-        const OUString sVersion ("Version");
-        const OUString sFullPath ("FullPath");
+        static const OUString sMediaType("MediaType");
+        static const OUString sVersion("Version");
+        static const OUString sFullPath("FullPath");
         const bool bIsGpgEncrypt = m_aGpgProps.hasElements();
 
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
