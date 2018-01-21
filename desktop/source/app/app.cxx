@@ -1134,6 +1134,15 @@ void impl_checkRecoveryState(bool& bCrashed           ,
     bSessionDataExists = elements && session;
 }
 
+Reference< css::frame::XSynchronousDispatch > g_xRecoveryUI;
+
+template <class Ref>
+struct RefClearGuard
+{
+    Ref& m_Ref;
+    RefClearGuard(Ref& ref) : m_Ref(ref) {}
+    ~RefClearGuard() { m_Ref.clear(); }
+};
 
 /*  @short  start the recovery wizard.
 
@@ -1148,12 +1157,13 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-    Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
+    g_xRecoveryUI.set(
         xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.svx.RecoveryUI", xContext),
         css::uno::UNO_QUERY_THROW);
+    RefClearGuard<Reference< css::frame::XSynchronousDispatch >> refClearGuard(g_xRecoveryUI);
 
     Reference< css::util::XURLTransformer > xURLParser =
-        css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
+        css::util::URLTransformer::create(xContext);
 
     css::util::URL aURL;
     if (bEmergencySave)
@@ -1163,6 +1173,24 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
     else
         return false;
 
+    xURLParser->parseStrict(aURL);
+
+    css::uno::Any aRet = g_xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+    bool bRet = false;
+    aRet >>= bRet;
+    return bRet;
+}
+
+bool impl_bringToFrontRecoveryUI()
+{
+    Reference< css::frame::XSynchronousDispatch > xRecoveryUI(g_xRecoveryUI);
+    if (!xRecoveryUI.is())
+        return false;
+
+    css::util::URL aURL;
+    aURL.Complete = "vnd.sun.star.autorecovery:/doBringToFront";
+    Reference< css::util::XURLTransformer > xURLParser =
+        css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
     xURLParser->parseStrict(aURL);
 
     css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
@@ -2370,7 +2398,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         createAcceptor(rAppEvent.GetStringData());
         break;
     case ApplicationEvent::Type::Appear:
-        if ( !GetCommandLineArgs().IsInvisible() )
+        if ( !GetCommandLineArgs().IsInvisible() && !impl_bringToFrontRecoveryUI() )
         {
             Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
