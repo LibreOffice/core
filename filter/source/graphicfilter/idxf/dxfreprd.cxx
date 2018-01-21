@@ -454,7 +454,10 @@ namespace {
 
 OUString DXFRepresentation::ToOUString(const OString& s) const
 {
-    OUString result = OStringToOUString(s, getTextEncoding());
+    OUString result = OStringToOUString(s, getTextEncoding(),
+                                           RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                                         | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                                         | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
     result = result.replaceAll("%%o", "")                     // Overscore - simply remove
                    .replaceAll("%%u", "")                     // Underscore - simply remove
                    .replaceAll("%%d", OUStringLiteral1(0x00B0)) // Degrees symbol (°)
