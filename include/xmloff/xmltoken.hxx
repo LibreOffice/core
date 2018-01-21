@@ -1554,6 +1554,7 @@ namespace xmloff { namespace token {
         XML_RIGHT_OUTSIDE,
         XML_RIGHTARC,
         XML_RIGHTCIRCLE,
+        XML_RIGHT_VERTICAL,
         XML_RING,
         XML_ROLE,
         XML_ROLL_FROM_BOTTOM,

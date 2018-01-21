@@ -1473,6 +1473,7 @@ right
 right-outside
 right-arc
 right-circle
+right-vertical
 ring
 role
 roll-from-bottom
