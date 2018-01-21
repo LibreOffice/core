@@ -79,12 +79,12 @@ using namespace com::sun::star::uno;
 struct CpyTabFrame
 {
     union {
-        SwTableBoxFormat *pFrameFormat;     // for CopyCol
-        SwTwips nSize;              // for DelCol
+        SwFrameFormat* pFrameFormat; // for CopyCol
+        SwTwips nSize;               // for DelCol
     } Value;
     SwTableBoxFormat *pNewFrameFormat;
 
-    explicit CpyTabFrame( SwTableBoxFormat* pAktFrameFormat ) : pNewFrameFormat( nullptr )
+    explicit CpyTabFrame(SwFrameFormat* pAktFrameFormat) : pNewFrameFormat( nullptr )
     {   Value.pFrameFormat = pAktFrameFormat; }
 
     bool operator==( const CpyTabFrame& rCpyTabFrame ) const
@@ -279,7 +279,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
 {
     // Look up the Frame Format in the Frame Format Array
     SwTableBox* pBox = rFndBox.GetBox();
-    CpyTabFrame aFindFrame( static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat()) );
+    CpyTabFrame aFindFrame(pBox->GetFrameFormat());
 
     sal_uInt16 nFndPos;
     if( pCpyPara->nCpyCnt )
@@ -379,7 +379,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
                     ? rBoxItem.GetTop()
                     : rBoxItem.GetRight() )
             {
-                aFindFrame.Value.pFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
+                aFindFrame.Value.pFrameFormat = pBox->GetFrameFormat();
 
                 SvxBoxItem aNew( rBoxItem );
                 if( 8 > pCpyPara->nDelBorderFlag )
