@@ -62,7 +62,6 @@ namespace svl
 
 class TextLine;
 class TETextPortion;
-
 struct TEIMEInfos;
 class SvtCTLOptions;
 
@@ -195,7 +194,7 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     long                ImpGetPortionXOffset( sal_uInt32 nPara, TextLine const * pLine, std::size_t nTextPortion );
     long                ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
-    sal_uInt8           ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos );
+    bool                ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos );
     static void         ImpInitLayoutMode( OutputDevice* pOutDev );
     TxtAlign            ImpGetAlign() const;
 

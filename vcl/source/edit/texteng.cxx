@@ -2778,7 +2778,8 @@ void TextEngine::ImpInitWritingDirections( sal_uInt32 nPara )
         for ( long nIdx = 0; nIdx < nCount; ++nIdx )
         {
             ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-            rInfos.emplace_back( nCurrDir, nStart, nEnd );
+            // bit 0 of nCurrDir indicates direction
+            rInfos.emplace_back( /*bLeftToRight*/ nCurrDir % 2 == 0, nStart, nEnd );
             nStart = nEnd;
         }
 
@@ -2791,9 +2792,9 @@ void TextEngine::ImpInitWritingDirections( sal_uInt32 nPara )
 
 }
 
-sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos )
+bool TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos )
 {
-    sal_uInt8 nRightToLeft = 0;
+    bool bRightToLeft = false;
 
     TextNode* pNode = mpDoc->GetNodes()[ nPara ];
     if ( pNode && !pNode->GetText().isEmpty() )
@@ -2807,12 +2808,12 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos )
         {
             if ( rWritingDirectionInfo.nStartPos <= nPos && rWritingDirectionInfo.nEndPos >= nPos )
             {
-                nRightToLeft = rWritingDirectionInfo.nType;
+                bRightToLeft = !rWritingDirectionInfo.bLeftToRight;
                 break;
             }
         }
     }
-    return nRightToLeft;
+    return bRightToLeft;
 }
 
 long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine const * pLine, std::size_t nTextPortion )
