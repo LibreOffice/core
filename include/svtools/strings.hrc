@@ -282,6 +282,7 @@
 #define STR_SVT_DEFAULT_SERVICE_LABEL           NC_("STR_SVT_DEFAULT_SERVICE_LABEL", "$user$'s $service$")
 
 #define STR_WARNING_JAVANOTFOUND                NC_("STR_WARNING_JAVANOTFOUND", "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.")
+#define STR_WARNING_JAVANOTFOUND_WIN            NC_("STR_WARNING_JAVANOTFOUND_WIN", "%PRODUCTNAME requires a %BITNESS-bit Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.")
 #define STR_WARNING_JAVANOTFOUND_MAC            NC_("STR_WARNING_JAVANOTFOUND_MAC", "%PRODUCTNAME requires Oracle's Java Development Kit (JDK) on Mac OS X 10.10 or greater to perform this task. Please install them and restart %PRODUCTNAME.")
 #define STR_WARNING_INVALIDJAVASETTINGS_MAC     NC_("STR_WARNING_INVALIDJAVASETTINGS_MAC", "The %PRODUCTNAME configuration has been changed. Under %PRODUCTNAME - Preferences - %PRODUCTNAME - Advanced, select the Java runtime environment you want to have used by %PRODUCTNAME.")
 #define STR_WARNING_INVALIDJAVASETTINGS         NC_("STR_WARNING_INVALIDJAVASETTINGS", "The %PRODUCTNAME configuration has been changed. Under Tools - Options - %PRODUCTNAME - Advanced, select the Java runtime environment you want to have used by %PRODUCTNAME.")
