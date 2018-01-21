@@ -111,6 +111,7 @@ private:
     std::unique_ptr< css::uno::Any > m_pRubyStyle;
     std::unique_ptr< css::uno::Any > m_pRubyAdjust;
     std::unique_ptr< css::uno::Any > m_pRubyIsAbove;
+    std::unique_ptr< css::uno::Any > m_pRubyPosition;
     sw::UnoCursorPointer m_pUnoCursor;
 
     const SwDepend              m_FrameDepend;

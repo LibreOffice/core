@@ -106,6 +106,7 @@ SwXTextPortion::SwXTextPortion(
     , m_pRubyStyle  ( bIsEnd ? nullptr : new uno::Any )
     , m_pRubyAdjust ( bIsEnd ? nullptr : new uno::Any )
     , m_pRubyIsAbove( bIsEnd ? nullptr : new uno::Any )
+    , m_pRubyPosition( bIsEnd ? nullptr : new uno::Any )
     , m_FrameDepend(this, nullptr)
     , m_pFrameFormat(nullptr)
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
@@ -120,6 +121,7 @@ SwXTextPortion::SwXTextPortion(
         rItem.QueryValue(*m_pRubyStyle, MID_RUBY_CHARSTYLE);
         rItem.QueryValue(*m_pRubyAdjust, MID_RUBY_ADJUST);
         rItem.QueryValue(*m_pRubyIsAbove, MID_RUBY_ABOVE);
+        rItem.QueryValue(*m_pRubyPosition, MID_RUBY_POSITION);
     }
 }
 
@@ -343,6 +345,7 @@ void SwXTextPortion::GetPropertyValue(
                     case MID_RUBY_ADJUST :  pToSet = m_pRubyAdjust.get(); break;
                     case MID_RUBY_CHARSTYLE:pToSet = m_pRubyStyle.get();  break;
                     case MID_RUBY_ABOVE :   pToSet = m_pRubyIsAbove.get();break;
+                    case MID_RUBY_POSITION: pToSet = m_pRubyPosition.get();break;
                 }
                 if(pToSet)
                     rVal = *pToSet;
