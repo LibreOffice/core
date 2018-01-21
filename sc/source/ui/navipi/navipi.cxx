@@ -574,7 +574,7 @@ void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
         // When the navigator is displayed in the sidebar, or is otherwise
         // docked, it has the whole deck to fill. Therefore hide the button that
         // hides all controls below the top two rows of buttons.
-        aTbxCmd->ShowItem(nZoomId, SfxChildWindowContext::GetFloatingWindow(GetParent()));
+        aTbxCmd->ShowItem(nZoomId, SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
     }
 }
 

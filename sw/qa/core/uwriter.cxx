@@ -1929,7 +1929,7 @@ void SwDocTest::test64kPageDescs()
     rZeroDesc = m_pDoc->GetPageDesc( 0 );
     CPPUNIT_ASSERT_EQUAL( aZeroName, rZeroDesc.GetName() );
 
-    m_pDoc->DelPageDesc( aChanged, nPos );
+    m_pDoc->DelPageDesc( aChanged, /*bBroadcast*/true );
     pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
     // not there anymore
     CPPUNIT_ASSERT( !pDesc );

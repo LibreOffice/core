@@ -91,7 +91,7 @@ static OString encodeString( const OString& rStr)
             c += (c <= 0x09) ? '0' : 'A'-10;
         } else if( c == '%')
             aEncStr.append( '%');
-        aEncStr.append( c);
+        aEncStr.append( char(c) );
     }
 
     return aEncStr.makeStringAndClear();

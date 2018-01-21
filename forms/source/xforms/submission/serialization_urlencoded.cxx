@@ -80,7 +80,7 @@ void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStri
         if( *pString < 0x80 )
         {
             if ( is_unreserved(*pString) ) {
-                aBuffer.append(*pString);
+                aBuffer.append(char(*pString));
             } else if (*pString == 0x20) {
                 aBuffer.append('+');
             } else if (*pString == 0x0d && *(pString+1) == 0x0a) {

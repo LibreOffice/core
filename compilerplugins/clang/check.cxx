@@ -138,6 +138,15 @@ TypeCheck TypeCheck::NotSubstTemplateTypeParmType() const {
         ? *this : TypeCheck();
 }
 
+TypeCheck TypeCheck::SubstTemplateTypeParmType() const {
+    if (!type_.isNull()) {
+        if (auto const t = type_->getAs<clang::SubstTemplateTypeParmType>()) {
+            return TypeCheck(t->desugar());
+        }
+    }
+    return TypeCheck();
+}
+
 ContextCheck DeclCheck::Operator(clang::OverloadedOperatorKind op) const {
     assert(op != clang::OO_None);
     auto f = llvm::dyn_cast_or_null<clang::FunctionDecl>(decl_);

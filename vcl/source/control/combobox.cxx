@@ -853,7 +853,7 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
         ::std::set< sal_Int32 > aSelInText;
         lcl_GetSelectedEntries(aSelInText, m_pSubEdit->GetText(), m_cMultiSep, m_pImplLB->GetEntryList());
         for (sal_Int32 n = 0; n < m_pImplLB->GetEntryList()->GetEntryCount(); n++)
-            m_pImplLB->SelectEntry( n, aSelInText.count( n ) );
+            m_pImplLB->SelectEntry( n, aSelInText.count( n ) != 0 );
     }
     m_pImplLB->SetCallSelectionChangedHdl( true );
 }

@@ -382,7 +382,7 @@ void ImportExcel::ReadBoolErr()
             GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
 
         double fValue;
-        const ScTokenArray* pScTokArr = ErrorToFormula( nType, nValue, fValue );
+        const ScTokenArray* pScTokArr = ErrorToFormula( nType != EXC_BOOLERR_BOOL, nValue, fValue );
         ScFormulaCell* pCell = pScTokArr ? new ScFormulaCell(pD, aScPos, *pScTokArr) : new ScFormulaCell(pD, aScPos);
         pCell->SetHybridDouble( fValue );
         GetDocImport().setFormulaCell(aScPos, pCell);

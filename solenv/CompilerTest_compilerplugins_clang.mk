@@ -33,6 +33,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/oslendian-3 \
     compilerplugins/clang/test/passparamsbyref \
     compilerplugins/clang/test/passstuffbyref \
+    compilerplugins/clang/test/pointerbool \
     compilerplugins/clang/test/redundantcast \
     compilerplugins/clang/test/redundantcopy \
     compilerplugins/clang/test/redundantinline \

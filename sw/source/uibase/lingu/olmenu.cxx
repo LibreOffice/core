@@ -615,7 +615,7 @@ void SwSpellPopup::checkRedline()
             nId = m_nRedlineNextId;
         else if (nWhich == FN_REDLINE_PREV_CHANGE)
             nId = m_nRedlinePrevId;
-        m_xPopupMenu->EnableItem(nId, aSet.Get(nWhich).Which());
+        m_xPopupMenu->EnableItem(nId, aSet.Get(nWhich).Which() != 0);
     }
 }
 
