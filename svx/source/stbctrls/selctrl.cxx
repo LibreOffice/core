@@ -107,7 +107,7 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
     SelectionTypePopup aPop(mnState);
     StatusBar& rStatusbar = GetStatusBar();
 
-    if (aPop.Execute(&rStatusbar, rEvt.GetPosPixel()))
+    if (rEvt.IsMiddle() && aPop.Execute(&rStatusbar, rEvt.GetPosPixel()))
     {
         sal_uInt16 nNewState = aPop.GetState();
         if ( nNewState != mnState )
