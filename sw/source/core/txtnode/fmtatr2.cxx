@@ -37,6 +37,7 @@
 #include <unostyle.hxx>
 #include <unoevent.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
+#include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
@@ -456,6 +457,11 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
             rVal <<= static_cast<bool>(!m_nPosition);
         }
         break;
+        case MID_RUBY_POSITION:
+        {
+            rVal <<= static_cast<sal_uInt16>(m_nPosition);
+        }
+        break;
         default:
             bRet = false;
     }
@@ -489,6 +495,16 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
                 bool bAbove = *o3tl::doAccess<bool>(rVal);
                 m_nPosition = bAbove ? 0 : 1;
             }
+        }
+        break;
+        case MID_RUBY_POSITION:
+        {
+            sal_Int16 nSet = 0;
+            rVal >>= nSet;
+            if(nSet >= sal_Int16(text::RubyPosition::ABOVE) && nSet <= sal_Int16(text::RubyPosition::INTER_CHARACTER))
+                m_nPosition = nSet;
+            else
+                bRet = false;
         }
         break;
         case MID_RUBY_CHARSTYLE:

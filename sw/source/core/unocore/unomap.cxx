@@ -156,6 +156,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     { OUString(UNO_NAME_RUBY_ADJUST), RES_TXTATR_CJK_RUBY,  cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },
                     { OUString(UNO_NAME_RUBY_IS_ABOVE), RES_TXTATR_CJK_RUBY,    cppu::UnoType<bool>::get(),  PropertyAttribute::MAYBEVOID,     MID_RUBY_ABOVE },
+                    { OUString(UNO_NAME_RUBY_POSITION), RES_TXTATR_CJK_RUBY,    cppu::UnoType<sal_Int16>::get(),  PropertyAttribute::MAYBEVOID,     MID_RUBY_POSITION },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aAutoRubyStyleMap;

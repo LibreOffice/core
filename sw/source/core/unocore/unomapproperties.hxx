@@ -204,6 +204,7 @@
         { OUString(UNO_NAME_RUBY_TEXT),                           RES_TXTATR_CJK_RUBY,           cppu::UnoType<OUString>::get(),      PropertyAttribute::MAYBEVOID, MID_RUBY_TEXT                          }, \
         { OUString(UNO_NAME_RUBY_ADJUST),                         RES_TXTATR_CJK_RUBY,           cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_RUBY_ADJUST                        }, \
         { OUString(UNO_NAME_RUBY_CHAR_STYLE_NAME),                RES_TXTATR_CJK_RUBY,           cppu::UnoType<OUString>::get(),      PropertyAttribute::MAYBEVOID, MID_RUBY_CHARSTYLE                     }, \
+        { OUString(UNO_NAME_RUBY_POSITION),                       RES_TXTATR_CJK_RUBY,           cppu::UnoType<sal_Int16>::get(),       PropertyAttribute::MAYBEVOID, MID_RUBY_POSITION}, \
         { OUString(UNO_NAME_RUBY_IS_ABOVE),                       RES_TXTATR_CJK_RUBY,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_RUBY_ABOVE                         }, \
         { OUString(UNO_NAME_CHAR_RELIEF),                         RES_CHRATR_RELIEF,             cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_RELIEF                             }, \
         { OUString(UNO_NAME_SNAP_TO_GRID),                        RES_PARATR_SNAPTOGRID,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
