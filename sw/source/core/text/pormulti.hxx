@@ -62,15 +62,15 @@ struct SwMultiCreator
 // in this case the structure SwBracket will be used.
 struct SwBracket
 {
-    sal_Int32 nStart;      // Start of text attribute determins the font
+    sal_Int32 nStart;           // Start of text attribute determines the font
     sal_uInt16 nAscent;         // Ascent of the brackets
     sal_uInt16 nHeight;         // Height of them
     sal_uInt16 nPreWidth;       // Width of the opening bracket
     sal_uInt16 nPostWidth;      // Width of the closing bracket
-    sal_Unicode cPre;       // Initial character, e.g. '('
-    sal_Unicode cPost;      // Final character, e.g. ')'
-    SwFontScript nPreScript;       // Script of the initial character
-    SwFontScript nPostScript;       // Script of the final character
+    sal_Unicode cPre;           // Initial character, e.g. '('
+    sal_Unicode cPost;          // Final character, e.g. ')'
+    SwFontScript nPreScript;    // Script of the initial character
+    SwFontScript nPostScript;   // Script of the final character
 };
 
 // The SwMultiPortion is line portion inside a line portion,
