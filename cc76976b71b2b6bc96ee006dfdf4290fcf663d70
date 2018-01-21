@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_89e23902",
+        "filename": "android/source/src/java/org/libreoffice/LOKitThread.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-21T18:34:50Z",
+      "side": 1,
+      "message": "hmmm - ok as a stop-gap measure, but there should be events for that really, on the LOKit api?\n\nLOOL certainly does use that, perhaps that can inspire further improvemtns?",
+      "revId": "cc76976b71b2b6bc96ee006dfdf4290fcf663d70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_49d84154",
+        "filename": "android/source/src/java/org/libreoffice/LOKitThread.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-21T18:34:50Z",
+      "side": 1,
+      "message": "can you break that line?",
+      "revId": "cc76976b71b2b6bc96ee006dfdf4290fcf663d70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_69dd0542",
+        "filename": "android/source/src/java/org/libreoffice/LOKitTileProvider.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-21T18:34:50Z",
+      "side": 1,
+      "message": "is that useful? why not simply call resetDocumentSize() instead?",
+      "revId": "cc76976b71b2b6bc96ee006dfdf4290fcf663d70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
