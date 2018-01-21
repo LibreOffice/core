@@ -28,7 +28,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
     private boolean mFontNameSpinnerSet = false;
     private boolean mFontSizeSpinnerSet = false;
-    private Activity mActivity;
+    private LibreOfficeMainActivity mActivity;
     private List<String> mFontList = null;
     private List<String> mFontSizes = new ArrayList<String>();
     private Map<String, List<String>> mAllFontSizes = null;
@@ -36,12 +36,14 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     private String mCurrentFontSelected = null;
     private String mCurrentFontSizeSelected = null;
 
-    public FontController(Activity activity) {
+    public FontController(LibreOfficeMainActivity activity) {
         mActivity = activity;
     }
     private BottomSheetBehavior colorPickerBehavior;
+    private BottomSheetBehavior backColorPickerBehavior;
     private BottomSheetBehavior toolBarBottomBehavior;
     private ColorPickerAdapter colorPickerAdapter;
+    private ColorPickerAdapter backColorPickerAdapter;
 
     ColorPaletteListener colorPaletteListener = new ColorPaletteListener() {
         @Override
@@ -52,8 +54,22 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         @Override
         public void updateColorPickerPosition(int color) {
             if (null == colorPickerAdapter) return;
-            colorPickerAdapter.findSelectedTextColor(color);
-            changeFontColorBoxColor(color);
+            colorPickerAdapter.findSelectedTextColor(color + 0xFF000000);
+            changeFontColorBoxColor(color + 0xFF000000);
+        }
+    };
+
+    ColorPaletteListener backColorPaletteListener = new ColorPaletteListener() {
+        @Override
+        public void applyColor(int color) {
+            sendFontBackColorChange(color);
+        }
+
+        @Override
+        public void updateColorPickerPosition(int color) {
+            backColorPickerAdapter.findSelectedTextColor(color + 0xFF000000);
+            changeFontBackColorBoxColor(color + 0xFF000000);
+
         }
     };
 
@@ -67,11 +83,27 @@ public class FontController implements AdapterView.OnItemSelectedListener {
                     fontColorPickerButton.setBackgroundColor(Color.BLACK);
                 }else{
                     fontColorPickerButton.setBackgroundColor(color);
+                }
+            }
+        });
+    }
+
+    private void changeFontBackColorBoxColor(final int color){
+        final ImageButton fontBackColorPickerButton = mActivity.findViewById(R.id.font_back_color_picker_button);
+
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if(color == -1){ //Libreoffice recognizes -1 as black
+                    fontBackColorPickerButton.setBackgroundColor(Color.BLACK);
+                }else{
+                    fontBackColorPickerButton.setBackgroundColor(color);
 
                 }
             }
         });
     }
+
     private void sendFontChange(String fontName) {
         try {
             JSONObject json = new JSONObject();
@@ -107,11 +139,36 @@ public class FontController implements AdapterView.OnItemSelectedListener {
             JSONObject json = new JSONObject();
             JSONObject valueJson = new JSONObject();
             valueJson.put("type", "long");
-            valueJson.put("value", color);
+            valueJson.put("value", 0x00FFFFFF & color);
             json.put("Color", valueJson);
 
             LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Color", json.toString()));
             changeFontColorBoxColor(color);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * 0x00FFFFFF & color operation removes the alpha which is FF,
+     * if we dont remove it, the color value becomes negative which is not recognized by LOK
+     */
+    private void sendFontBackColorChange(int color){
+        try {
+            JSONObject json = new JSONObject();
+            JSONObject valueJson = new JSONObject();
+            valueJson.put("type", "long");
+            valueJson.put("value", 0x00FFFFFF & color);
+            if(mActivity.isSpreadsheet()){
+                json.put("BackgroundColor", valueJson);
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:BackgroundColor", json.toString()));
+            } else {
+                json.put("BackColor", valueJson);
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:BackColor", json.toString()));
+            }
+
+            changeFontBackColorBoxColor(color);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -172,6 +229,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
                 setupFontNameSpinner();
                 setupFontSizeSpinner();
                 setupColorPicker();
+                setupBackColorPicker();
             }
         });
     }
@@ -191,14 +249,16 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     }
 
     private void setupColorPicker(){
-        RecyclerView recyclerView = mActivity.findViewById(R.id.fontColorView);
+        LinearLayout colorPickerLayout = (LinearLayout)mActivity.findViewById(R.id.toolbar_color_picker);
+
+        RecyclerView recyclerView = colorPickerLayout.findViewById(R.id.fontColorView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 11, GridLayoutManager.VERTICAL, true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
 
 
 
-        RecyclerView recyclerView2 = mActivity.findViewById(R.id.fontColorViewSub);
+        RecyclerView recyclerView2 = colorPickerLayout.findViewById(R.id.fontColorViewSub);
         GridLayoutManager gridLayoutManager2 = new GridLayoutManager(mActivity,4);
         recyclerView2.setHasFixedSize(true);
         recyclerView2.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -228,17 +288,75 @@ public class FontController implements AdapterView.OnItemSelectedListener {
                 mActivity.findViewById(R.id.search_toolbar).setVisibility(View.GONE);
             }
         };
-        LinearLayout toolbarColorPicker = mActivity.findViewById(R.id.toolbar_color_picker);
         LinearLayout toolbarBottomLayout = mActivity.findViewById(R.id.toolbar_bottom);
-        colorPickerBehavior = BottomSheetBehavior.from(toolbarColorPicker);
+        colorPickerBehavior = BottomSheetBehavior.from(colorPickerLayout);
         toolBarBottomBehavior = BottomSheetBehavior.from(toolbarBottomLayout);
 
-        ImageButton pickerGoBackButton = mActivity.findViewById(R.id.button_go_back_color_picker);
+        ImageButton pickerGoBackButton = colorPickerLayout.findViewById(R.id.button_go_back_color_picker);
         pickerGoBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toolBarBottomBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 colorPickerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+
+        fontColorPicker.setOnClickListener(clickListener);
+        fontColorPickerButton.setOnClickListener(clickListener);
+
+    }
+
+    private void setupBackColorPicker(){
+        LinearLayout backColorPickerLayout = mActivity.findViewById(R.id.toolbar_back_color_picker);
+
+        RecyclerView recyclerView = backColorPickerLayout.findViewById(R.id.fontColorView);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 11, GridLayoutManager.VERTICAL, true);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+
+
+        RecyclerView recyclerView2 = backColorPickerLayout.findViewById(R.id.fontColorViewSub);
+        GridLayoutManager gridLayoutManager2 = new GridLayoutManager(mActivity,4);
+        recyclerView2.setHasFixedSize(true);
+        recyclerView2.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.bottom = 3;
+                outRect.top = 3;
+                outRect.left = 3;
+                outRect.right = 3;
+            }
+        });
+        recyclerView2.setLayoutManager(gridLayoutManager2);
+
+        ColorPaletteAdapter colorPaletteAdapter = new ColorPaletteAdapter(mActivity, backColorPaletteListener);
+        recyclerView2.setAdapter(colorPaletteAdapter);
+
+        this.backColorPickerAdapter = new ColorPickerAdapter(mActivity, colorPaletteAdapter, backColorPaletteListener);
+        recyclerView.setAdapter(backColorPickerAdapter);
+        RelativeLayout fontColorPicker = mActivity.findViewById(R.id.font_back_color_picker);
+        ImageButton fontColorPickerButton = mActivity.findViewById(R.id.font_back_color_picker_button);
+        View.OnClickListener clickListener = new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                toolBarBottomBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                backColorPickerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                mActivity.findViewById(R.id.search_toolbar).setVisibility(View.GONE);
+            }
+        };
+        LinearLayout toolbarBottomLayout = mActivity.findViewById(R.id.toolbar_bottom);
+        backColorPickerBehavior = BottomSheetBehavior.from(backColorPickerLayout);
+        toolBarBottomBehavior = BottomSheetBehavior.from(toolbarBottomLayout);
+
+        ImageButton pickerGoBackButton = backColorPickerLayout.findViewById(R.id.button_go_back_color_picker);
+        pickerGoBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toolBarBottomBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                backColorPickerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
 
