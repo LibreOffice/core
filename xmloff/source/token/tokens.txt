@@ -974,6 +974,7 @@ inside
 institution
 int
 intensity
+inter-character
 intersect
 interval
 interval-major

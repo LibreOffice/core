@@ -964,7 +964,8 @@ XMLPropertyMapEntry const aXMLSectionPropMap[] =
 XMLPropertyMapEntry const aXMLRubyPropMap[] =
 {
     MR_E( "RubyAdjust", STYLE, RUBY_ALIGN, XML_TYPE_TEXT_RUBY_ADJUST, 0 ),
-    MR_E( "RubyIsAbove",    STYLE, RUBY_POSITION, XML_TYPE_TEXT_RUBY_POSITION, 0 ),
+    MR_E( "RubyPosition",    STYLE, RUBY_POSITION, XML_TYPE_TEXT_RUBY_IS_ABOVE, 0 ),
+    MR_E( "RubyPosition",   LO_EXT, RUBY_POSITION, XML_TYPE_TEXT_RUBY_POSITION | MID_FLAG_MERGE_PROPERTY, 0 ),
     M_END()
 };
 
