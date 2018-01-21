@@ -3504,7 +3504,6 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     return true;
 }
 
-#ifndef IOS
 static void lo_startmain(void*)
 {
     osl_setThreadName("lo_startmain");
@@ -3516,7 +3515,6 @@ static void lo_startmain(void*)
 
     Application::ReleaseSolarMutex();
 }
-#endif
 
 static bool bInitialized = false;
 
@@ -3651,14 +3649,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             // CommandLineArgs):
             desktop::Desktop::GetCommandLineArgs().setHeadless();
 
-#ifdef IOS
-            // mpDefInst need to be initialized, which only happens in InitVCL(),
-            // there might be more elegant ways to get InitVCL() called, but
-            // this one works :-)
-            InitVCL();
-            SfxApplication::GetOrCreate();
-#endif
-
             if (eStage == PRE_INIT)
             {
                 std::cerr << "Init vcl\n";
@@ -3714,16 +3704,12 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         if (eStage != PRE_INIT)
         {
             SAL_INFO("lok", "Enabling RequestHandler");
-#ifdef IOS
-            RequestHandler::Enable(true);
-#else
             RequestHandler::Enable(false);
             SAL_INFO("lok", "Starting soffice_main");
             RequestHandler::SetReady(false);
             pLib->maThread = osl_createThread(lo_startmain, nullptr);
             SAL_INFO("lok", "Waiting for RequestHandler");
             RequestHandler::WaitForReady();
-#endif
             SAL_INFO("lok", "RequestHandler ready -- continuing");
         }
 
