@@ -1310,12 +1310,21 @@ static void AddConversionsToDispatchList(
     }
 }
 
+struct ConditionSetGuard
+{
+    osl::Condition* m_pCondition;
+    ConditionSetGuard(osl::Condition* pCondition) : m_pCondition(pCondition) {}
+    ~ConditionSetGuard() { if (m_pCondition) m_pCondition->set(); }
+};
 
 bool RequestHandler::ExecuteCmdLineRequests(
     ProcessDocumentsRequest& aRequest, bool noTerminate)
 {
     // protect the dispatch list
     osl::ClearableMutexGuard aGuard( GetMutex() );
+
+    // ensure that Processed flag (if exists) is signaled in any outcome
+    ConditionSetGuard(aRequest.pcProcessed);
 
     static std::vector<DispatchWatcher::DispatchRequest> aDispatchList;
 
@@ -1334,7 +1343,13 @@ bool RequestHandler::ExecuteCmdLineRequests(
     if ( pGlobal.is() )
     {
         if( ! pGlobal->AreRequestsEnabled() )
+        {
+            // Either starting, or downing - do not process the request, just try to bring Office to front
+            ApplicationEvent* pAppEvent =
+                new ApplicationEvent(ApplicationEvent::Type::Appear);
+            ImplPostForeignAppEvent(pAppEvent);
             return bShutdown;
+        }
 
         pGlobal->mnPendingRequests += aDispatchList.size();
         if ( !pGlobal->mpDispatchWatcher.is() )
@@ -1352,10 +1367,6 @@ bool RequestHandler::ExecuteCmdLineRequests(
 
         // Execute dispatch requests
         bShutdown = dispatchWatcher->executeDispatchRequests( aTempList, noTerminate);
-
-        // set processed flag
-        if (aRequest.pcProcessed != nullptr)
-            aRequest.pcProcessed->set();
     }
 
     return bShutdown;
