@@ -410,7 +410,8 @@ SmXMLImport::SmXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport(rContext, implementationName, nImportFlags),
-    bSuccess(false)
+    bSuccess(false),
+    nParseDepth(0)
 {
 }
 
@@ -536,7 +537,15 @@ class SmXMLImportContext: public SvXMLImportContext
 public:
     SmXMLImportContext( SmXMLImport &rImport, sal_uInt16 nPrfx,
         const OUString& rLName)
-        : SvXMLImportContext(rImport, nPrfx, rLName) {}
+        : SvXMLImportContext(rImport, nPrfx, rLName)
+    {
+        GetSmImport().IncParseDepth();
+    }
+
+    virtual ~SmXMLImportContext() override
+    {
+        GetSmImport().DecParseDepth();
+    }
 
     SmXMLImport& GetSmImport()
     {
@@ -546,6 +555,12 @@ public:
     virtual void TCharacters(const OUString & /*rChars*/);
     virtual void Characters(const OUString &rChars) override;
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/) override;
+    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& rAttrList) override
+    {
+        if (GetSmImport().TooDeep())
+            throw std::range_error("too deep");
+        SvXMLImportContext::StartElement(rAttrList);
+    }
 };
 
 void SmXMLImportContext::TCharacters(const OUString & /*rChars*/)
@@ -906,7 +921,9 @@ public:
     SmXMLRowContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLDocContext_Impl(rImport,nPrefix,rLName)
-        { nElementCount = GetSmImport().GetNodeStack().size(); }
+        , nElementCount(GetSmImport().GetNodeStack().size())
+    {
+    }
 
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 
@@ -915,7 +932,6 @@ public:
 
     void EndElement() override;
 };
-
 
 class SmXMLEncloseContext_Impl : public SmXMLRowContext_Impl
 {

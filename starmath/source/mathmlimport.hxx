@@ -80,6 +80,7 @@ class SmXMLImport : public SvXMLImport
 
         SmNodeStack aNodeStack;
         bool bSuccess;
+        int nParseDepth;
         OUString aText;
 
 public:
@@ -181,6 +182,10 @@ public:
 
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+
+    void IncParseDepth() { ++nParseDepth; }
+    bool TooDeep() const { return nParseDepth >= 2048; }
+    void DecParseDepth() { --nParseDepth; }
 };
 
 
