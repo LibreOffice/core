@@ -118,6 +118,10 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /usr/bin/gpgconf                      rmix,
   /usr/bin/gpg                          rmCx -> gpg,
   /usr/bin/gpgsm                        rmCx -> gpg,
+  /usr/bin/gpa                          rix,
+  /usr/bin/seahorse                     rix,
+  /usr/bin/kgpg                         rix,
+  /usr/bin/kleopatra                    rix,
 
   /dev/tty                              rw,
 
