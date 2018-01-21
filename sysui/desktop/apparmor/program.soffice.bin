@@ -170,6 +170,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
 
   #Likely moving to abstractions in the future
   owner @{HOME}/.icons/*/cursors/*      r,
+  /sys/devices/pci[0-9]*/**/{device,subsystem_device,subsystem_vendor,uevent,vendor} r, # for libdrm
   /usr/share/*-fonts/conf.avail/*.conf  r,
   /usr/share/fonts-config/conf.avail/*.conf r,
 
