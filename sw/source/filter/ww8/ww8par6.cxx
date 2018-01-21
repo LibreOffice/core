@@ -4368,7 +4368,7 @@ void SwWW8ImplReader::Read_ParaContextualSpacing( sal_uInt16, const sal_uInt8* p
         return;
     }
     SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(GetFormatAttr( RES_UL_SPACE )));
-    aUL.SetContextValue(*pData);
+    aUL.SetContextValue(*pData != 0);
     NewAttr( aUL );
 }
 

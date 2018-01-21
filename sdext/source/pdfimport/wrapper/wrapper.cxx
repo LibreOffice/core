@@ -768,7 +768,7 @@ void Parser::readMask()
     readInt32(nHeight);
     readInt32(nInvert);
 
-    m_pSink->drawMask( readImageImpl(), nInvert );
+    m_pSink->drawMask( readImageImpl(), nInvert != 0);
 }
 
 void Parser::readLink()

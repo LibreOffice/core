@@ -867,7 +867,7 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
         // the sidebar or is otherwise docked. While the navigator could change
         // its size, the sidebar can not, and the navigator would just waste
         // space. Therefore hide this button.
-        m_aContentToolBox->ShowItem(m_aContentToolBox->GetItemId("listbox"), SfxChildWindowContext::GetFloatingWindow(GetParent()));
+        m_aContentToolBox->ShowItem(m_aContentToolBox->GetItemId("listbox"), SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
     }
     else if (nStateChange == StateChangedType::ControlFocus)
     {

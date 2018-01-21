@@ -1299,18 +1299,18 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     }
 
     SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
-    sal_uInt8 nEnvDir = 0;
-    sal_uInt8 nThisDir = 0;
-    sal_uInt8 nFrameDir = 0;
+    bool bEnvDir = false;
+    bool bThisDir = false;
+    bool bFrameDir = false;
     if ( rMulti.IsBidi() )
     {
         // these values are needed for the calculation of the x coordinate
         // and the layout mode
         OSL_ENSURE( ! pEnvPor || pEnvPor->IsBidi(),
                 "Oh no, I expected a BidiPortion" );
-        nFrameDir = GetInfo().GetTextFrame()->IsRightToLeft() ? 1 : 0;
-        nEnvDir = pEnvPor ? static_cast<const SwBidiPortion*>(pEnvPor)->GetLevel() % 2 : nFrameDir;
-        nThisDir = static_cast<SwBidiPortion&>(rMulti).GetLevel() % 2;
+        bFrameDir = GetInfo().GetTextFrame()->IsRightToLeft();
+        bEnvDir = pEnvPor ? ((static_cast<const SwBidiPortion*>(pEnvPor)->GetLevel() % 2) != 0) : bFrameDir;
+        bThisDir = (static_cast<SwBidiPortion&>(rMulti).GetLevel() % 2) != 0;
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1388,13 +1388,13 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     {
         // does the current bidi portion has the same direction
         // as its environment?
-        if ( nEnvDir != nThisDir )
+        if ( bEnvDir != bThisDir )
         {
             // different directions, we have to adjust the x coordinate
             SwTwips nMultiWidth = rMulti.Width() +
                     rMulti.CalcSpacing( GetInfo().GetSpaceAdd(), GetInfo() );
 
-            if ( nFrameDir == nThisDir )
+            if ( bFrameDir == bThisDir )
                 GetInfo().X( GetInfo().X() - nMultiWidth );
             else
                 GetInfo().X( GetInfo().X() + nMultiWidth );
@@ -1403,7 +1403,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         nOfst = nOldY - rMulti.GetAscent();
 
         // set layout mode
-        aLayoutModeModifier.Modify( nThisDir );
+        aLayoutModeModifier.Modify( bThisDir );
     }
     else
         nOfst = nOldY - rMulti.GetAscent();

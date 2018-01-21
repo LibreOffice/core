@@ -3638,7 +3638,7 @@ void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
     if ( mbLongFormat != TRISTATE_INDET )
-        xField->setLongFormat( mbLongFormat );
+        xField->setLongFormat( mbLongFormat != TRISTATE_FALSE);
 }
 
 
