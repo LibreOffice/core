@@ -269,6 +269,8 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
             mContext.getFormattingController().onToggleStateChanged(Document.NUMBERED_LIST, pressed);
         } else if (parts[0].equals(".uno:Color")) {
             mContext.getFontController().colorPaletteListener.updateColorPickerPosition(Integer.parseInt(value));
+        } else if (parts[0].equals(".uno:BackColor")) {
+            mContext.getFontController().backColorPaletteListener.updateColorPickerPosition(Integer.parseInt(value));
         } else if (parts[0].equals(".uno:StatePageNumber")) {
             // get the total page number and compare to the current value and update accordingly
             String[] splitStrings = parts[1].split(" ");

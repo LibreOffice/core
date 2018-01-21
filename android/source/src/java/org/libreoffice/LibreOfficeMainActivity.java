@@ -89,6 +89,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     BottomSheetBehavior bottomToolbarSheetBehavior;
     BottomSheetBehavior toolbarColorPickerBottomSheetBehavior;
+    BottomSheetBehavior toolbarBackColorPickerBottomSheetBehavior;
     private FormattingController mFormattingController;
     private ToolbarController mToolbarController;
     private FontController mFontController;
@@ -237,10 +238,13 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         LinearLayout bottomToolbarLayout = findViewById(R.id.toolbar_bottom);
         LinearLayout toolbarColorPickerLayout = findViewById(R.id.toolbar_color_picker);
+        LinearLayout toolbarBackColorPickerLayout = findViewById(R.id.toolbar_back_color_picker);
         bottomToolbarSheetBehavior = BottomSheetBehavior.from(bottomToolbarLayout);
         toolbarColorPickerBottomSheetBehavior = BottomSheetBehavior.from(toolbarColorPickerLayout);
+        toolbarBackColorPickerBottomSheetBehavior = BottomSheetBehavior.from(toolbarBackColorPickerLayout);
         bottomToolbarSheetBehavior.setHideable(true);
         toolbarColorPickerBottomSheetBehavior.setHideable(true);
+        toolbarBackColorPickerBottomSheetBehavior.setHideable(true);
     }
 
     // Loads a new Document
@@ -568,6 +572,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             public void run() {
                 bottomToolbarSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 toolbarColorPickerBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                toolbarBackColorPickerBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 findViewById(R.id.search_toolbar).setVisibility(View.GONE);
                 isFormattingToolbarOpen=false;
                 isSearchToolbarOpen=false;
@@ -613,6 +618,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                     showBottomToolbar();
                     findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
                     toolbarColorPickerBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    toolbarBackColorPickerBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     findViewById(R.id.search_toolbar).setVisibility(View.VISIBLE);
                     hideSoftKeyboardDirect();
                     isFormattingToolbarOpen=false;

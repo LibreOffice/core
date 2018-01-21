@@ -197,6 +197,34 @@
                                         />
 
                                 </RelativeLayout>
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/font_back_color_picker"
+                                    android:padding="10dp">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Font Back Color"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:textSize="14sp"
+                                        android:gravity="center_vertical"
+                                        android:textColor="@color/fontBlack"
+                                        android:layout_alignParentLeft="true"
+
+                                        />
+                                    <ImageButton
+                                        android:id="@+id/font_back_color_picker_button"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:gravity="center_vertical"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:layout_alignParentRight="true"
+                                        />
+
+                                </RelativeLayout>
                             </LinearLayout>
                         </ScrollView>
 
