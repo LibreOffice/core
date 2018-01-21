@@ -263,6 +263,27 @@ sal_uInt64 GetSvStreamSize(SvStream * pStream)
     return ulLength;
 }
 
+namespace
+{
+    void readDataInBlocks(SvStream& rSt, sal_uInt64 nDLen, std::vector<sal_uInt8>& rData)
+    {
+        //read data in blocks as its more likely large values are simply broken
+        //and we'll run out of data before we need to realloc
+        for (sal_uInt64 i = 0; i < nDLen; i+= SAL_MAX_UINT16)
+        {
+           size_t nOldSize = rData.size();
+           size_t nBlock = std::min<size_t>(SAL_MAX_UINT16, nDLen - nOldSize);
+           rData.resize(nOldSize + nBlock);
+           size_t nReadBlock = rSt.ReadBytes(rData.data() + nOldSize, nBlock);
+           if (nBlock != nReadBlock)
+           {
+               rData.resize(nOldSize + nReadBlock);
+               break;
+           }
+        }
+    }
+}
+
 /**
 *   Find hazily according to object ID
 *   @param  pObjectname - format as "GrXX,XXXXXXXX" wherein XX is high part of object ID, and XXXXXXXX is low part
@@ -291,12 +312,13 @@ std::vector<sal_uInt8> LtcBenContainer::GetGraphicData(const char *pObjectName)
     {
         nDLen = GetSvStreamSize(xD.get());
     }
-    sal_uInt64 nLen = nDLen;
+    sal_uInt64 nSLen = 0;
     if (xS)
     {
-        nLen += GetSvStreamSize(xS.get()) ;
+        nSLen = GetSvStreamSize(xS.get()) ;
     }
 
+    sal_uInt64 nLen = nDLen + nSLen;
     OSL_ENSURE(nLen > 0, "expected a non-0 length");
     // the 'D' stream is NULL or it has invalid length
     if (nLen <= 0)
@@ -304,17 +326,14 @@ std::vector<sal_uInt8> LtcBenContainer::GetGraphicData(const char *pObjectName)
         return aData;
     }
 
-    aData.resize(nLen);
-    sal_uInt8* pPointer = aData.data();
     if (xD)
     {
-        xD->ReadBytes(pPointer, nDLen);
+        readDataInBlocks(*xD, nDLen, aData);
         xD.reset();
     }
-    pPointer += nDLen;
     if (xS)
     {
-        xS->ReadBytes(pPointer, nLen - nDLen);
+        readDataInBlocks(*xS, nSLen, aData);
         xS.reset();
     }
 
