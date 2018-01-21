@@ -678,6 +678,8 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     // *** create the Calc conditional formatting ***
 
+    const ScAddress aPos(rPos); //in case maRanges.Join invalidates it
+
     if( !mxScCondFmt.get() )
     {
         mxScCondFmt.reset( new ScConditionalFormat( 0/*nKey*/, &GetDocRef() ) );
@@ -686,7 +688,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         mxScCondFmt->SetRange(maRanges);
     }
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry( eMode, xTokArr1.get(), pTokArr2.get(), &GetDocRef(), rPos, aStyleName );
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eMode, xTokArr1.get(), pTokArr2.get(), &GetDocRef(), aPos, aStyleName);
     mxScCondFmt->AddEntry( pEntry );
     ++mnCondIndex;
 }
