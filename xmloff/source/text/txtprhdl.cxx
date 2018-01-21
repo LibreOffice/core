@@ -34,6 +34,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
+#include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <sax/tools/converter.hxx>
@@ -196,6 +197,21 @@ static SvXMLEnumMapEntry<RubyAdjust> const pXML_RubyAdjust_Enum[] =
     { XML_DISTRIBUTE_LETTER,    RubyAdjust_BLOCK },
     { XML_DISTRIBUTE_SPACE,     RubyAdjust_INDENT_BLOCK },
     { XML_TOKEN_INVALID,        RubyAdjust(0) }
+};
+
+static SvXMLEnumMapEntry<sal_Int16> const pXML_RubyPosition_Enum[] =
+{
+    { XML_ABOVE,                RubyPosition::ABOVE},
+    { XML_BELOW,                RubyPosition::BELOW},
+    { XML_INTER_CHARACTER,      RubyPosition::INTER_CHARACTER},
+    { XML_TOKEN_INVALID,        0 }
+};
+
+static SvXMLEnumMapEntry<sal_Int16> const pXML_RubyIsAbove_Enum[] =
+{
+    { XML_ABOVE,                RubyPosition::ABOVE},
+    { XML_BELOW,                RubyPosition::BELOW},
+    { XML_TOKEN_INVALID,        0 }
 };
 
 static SvXMLEnumMapEntry<sal_uInt16> const pXML_FontRelief_Enum[] =
@@ -1256,8 +1272,10 @@ static const XMLPropertyHandler *GetPropertyHandler
         pHdl = new XMLConstantsPropertyHandler( pXML_ParaVerticalAlign_Enum, XML_TOKEN_INVALID );
         break;
     case XML_TYPE_TEXT_RUBY_POSITION:
-        pHdl = new XMLNamedBoolPropertyHdl( ::xmloff::token::XML_ABOVE,
-                                            ::xmloff::token::XML_BELOW );
+        pHdl = new XMLConstantsPropertyHandler( pXML_RubyPosition_Enum, XML_TOKEN_INVALID );
+        break;
+    case XML_TYPE_TEXT_RUBY_IS_ABOVE:
+        pHdl = new XMLConstantsPropertyHandler( pXML_RubyIsAbove_Enum, XML_TOKEN_INVALID );
         break;
     // OD 2004-05-05 #i28701#
     case XML_TYPE_WRAP_INFLUENCE_ON_POSITION:

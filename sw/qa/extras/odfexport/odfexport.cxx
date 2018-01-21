@@ -1845,6 +1845,12 @@ DECLARE_ODFEXPORT_TEST(testTdf77961, "tdf77961.odt")
     CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, "GridPrint"));
 }
 
+DECLARE_ODFEXPORT_TEST(testRubyPosition, "ruby-position.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+        assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@loext:ruby-position='inter-character']", 1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

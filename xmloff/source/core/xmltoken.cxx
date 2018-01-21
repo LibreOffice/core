@@ -1055,6 +1055,7 @@ namespace xmloff { namespace token {
         TOKEN( "institution",                     XML_INSTITUTION ),
         TOKEN( "int",                             XML_INT ),
         TOKEN( "intensity",                       XML_INTENSITY ),
+        TOKEN( "inter-character",                 XML_INTER_CHARACTER ),
         TOKEN( "intersect",                       XML_INTERSECT ),
         TOKEN( "interval",                        XML_INTERVAL ),
         TOKEN( "interval-major",                  XML_INTERVAL_MAJOR ),
