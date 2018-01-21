@@ -209,7 +209,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
             (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] <<= aFormula.msToolTip;
 
             if(pCheckboxFm)
-                pCheckboxFm->SetChecked(aFormula.mnChecked);
+                pCheckboxFm->SetChecked(aFormula.mnChecked != 0);
             // set field data here...
         }
     }

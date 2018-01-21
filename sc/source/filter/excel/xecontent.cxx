@@ -658,7 +658,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
         // pattern
         mbPattUsed = ScfTools::CheckItem( rItemSet, ATTR_BACKGROUND, true );
         if( mbPattUsed )
-            maArea.FillFromItemSet( rItemSet, GetPalette(), GetBiff() );
+            maArea.FillFromItemSet( rItemSet, GetPalette(), true );
     }
 
     // *** mode and comparison operator ***

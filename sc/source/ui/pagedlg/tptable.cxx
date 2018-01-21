@@ -226,16 +226,16 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
         else
             m_pEdScalePageWidth->SetText(OUString());
 
-        m_pEdScalePageWidth->Enable(nWidth);
-        m_pCbScalePageWidth->Check(nWidth);
+        m_pEdScalePageWidth->Enable(nWidth != 0);
+        m_pCbScalePageWidth->Check(nWidth != 0);
 
         if(nHeight)
             m_pEdScalePageHeight->SetValue(nHeight);
         else
             m_pEdScalePageHeight->SetText(OUString());
 
-        m_pEdScalePageHeight->Enable(nHeight);
-        m_pCbScalePageHeight->Check(nHeight);
+        m_pEdScalePageHeight->Enable(nHeight != 0);
+        m_pCbScalePageHeight->Check(nHeight != 0);
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);

@@ -525,7 +525,7 @@ void CustomAnimationPane::updateControls()
     const int nSelectionCount = maListSelection.size();
 
     mpPBAddEffect->Enable( maViewSelection.hasValue() );
-    mpPBRemoveEffect->Enable(nSelectionCount);
+    mpPBRemoveEffect->Enable(nSelectionCount != 0);
     bool bIsSelected = (nSelectionCount == 1);
 
     if(bIsSelected)
