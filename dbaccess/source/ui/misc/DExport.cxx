@@ -180,7 +180,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     {
         ::connectivity::ORowSetValue aValue;
         std::vector<sal_Int32> aTypes;
-        std::vector<sal_Bool> aNullable;
+        std::vector<bool> aNullable;
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xSet,UNO_QUERY_THROW)->getMetaData();
         Reference<XRow> xRow(xSet,UNO_QUERY_THROW);
         while(xSet->next())

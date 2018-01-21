@@ -1432,7 +1432,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
     const OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
     const OUString sType     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
 
-    std::map<OSQLColumns::Vector::iterator,sal_Bool> aSelectIters;
+    std::map<OSQLColumns::Vector::iterator,bool> aSelectIters;
     OValueRefVector::Vector::const_iterator aRowIter = _rRow->get().begin()+1;
     for (sal_Int32 i=0; // the first column is the bookmark column
          aRowIter != _rRow->get().end();

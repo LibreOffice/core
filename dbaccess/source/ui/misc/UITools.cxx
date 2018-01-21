@@ -438,7 +438,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         std::vector<sal_Int32> aTypes;
-        std::vector<sal_Bool> aNullable;
+        std::vector<bool> aNullable;
         // Loop on the result set until we reach end of file
         while (xRs->next())
         {

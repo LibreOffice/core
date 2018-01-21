@@ -3035,7 +3035,7 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
     {
         const ::std::vector< Reference< runtime::XFormController > >& rControllerList = pAdapter->GetList();
         ::std::vector < OUString >   aOriginalFilters;
-        ::std::vector < sal_Bool >          aOriginalApplyFlags;
+        ::std::vector < bool >       aOriginalApplyFlags;
 
         if (bSave)
         {

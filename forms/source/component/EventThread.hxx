@@ -50,7 +50,7 @@ class OComponentEventThread
 {
     typedef std::vector<css::lang::EventObject*> ThreadEvents;
     typedef std::vector< css::uno::Reference< css::uno::XAdapter> > ThreadObjects;
-    typedef std::vector<sal_Bool> ThreadBools;
+    typedef std::vector<bool> ThreadBools;
 
     ::osl::Mutex                    m_aMutex;
     ::osl::Condition                m_aCond;            // Queue filled?
