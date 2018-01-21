@@ -801,6 +801,7 @@ void RadioButtonUIObject::execute(const OUString& rAction,
 StringMap RadioButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
+    aMap["Checked"] = OUString::boolean(mxRadioButton->IsChecked());
 
     return aMap;
 }
