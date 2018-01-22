@@ -1440,53 +1440,49 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
         Append( r );
         return ;
     }
-    const ScRange& r1 = r.GetRange(0);
-    const ScRange& r2 = r.GetRange(1);
-    SCCOL nCol1 = r1.aStart.Col();
-    SCROW nRow1 = r1.aStart.Row();
-    SCTAB nTab1 = r1.aStart.Tab();
-    SCCOL nCol2 = r1.aEnd.Col();
-    SCROW nRow2 = r1.aEnd.Row();
-    SCTAB nTab2 = r1.aEnd.Tab();
-    ScRangePair* pOver = const_cast<ScRangePair*>(&r);     // nasty but true when bInList
-    size_t nOldPos = 0;
-    if ( bIsInList )
-    {
-        // Find the current position of this range.
-        for ( size_t i = 0, nPairs = maPairs.size(); i < nPairs; ++i )
-        {
-            if ( maPairs[i] == pOver )
-            {
-                nOldPos = i;
-                break;
-            }
-        }
-    }
-    bool bJoinedInput = false;
 
-    for ( size_t i = 0; i < maPairs.size() && pOver; ++i )
+    bool bJoinedInput = false;
+    const ScRangePair* pOver = &r;
+
+Label_RangePair_Join:
+
+    assert(pOver);
+    const ScRange& r1 = pOver->GetRange(0);
+    const ScRange& r2 = pOver->GetRange(1);
+    const SCCOL nCol1 = r1.aStart.Col();
+    const SCROW nRow1 = r1.aStart.Row();
+    const SCTAB nTab1 = r1.aStart.Tab();
+    const SCCOL nCol2 = r1.aEnd.Col();
+    const SCROW nRow2 = r1.aEnd.Row();
+    const SCTAB nTab2 = r1.aEnd.Tab();
+
+    size_t nOverPos = std::numeric_limits<size_t>::max();
+    for (size_t i = 0; i < maPairs.size(); ++i)
     {
         ScRangePair* p = maPairs[ i ];
         if ( p == pOver )
+        {
+            nOverPos = i;
             continue;           // the same one, continue with the next
+        }
         bool bJoined = false;
         ScRange& rp1 = p->GetRange(0);
         ScRange& rp2 = p->GetRange(1);
         if ( rp2 == r2 )
         {   // only if Range2 is equal
             if ( rp1.In( r1 ) )
-            {   // RangePair r included in or identical to RangePair p
+            {   // RangePair pOver included in or identical to RangePair p
                 if ( bIsInList )
-                    bJoined = true;     // do away with RangePair r
+                    bJoined = true;     // do away with RangePair pOver
                 else
                 {   // that was all then
-                    bJoinedInput = true;    // don't attach
+                    bJoinedInput = true;    // don't append
                     break;  // for
                 }
             }
             else if ( r1.In( rp1 ) )
-            {   // RangePair p included in RangePair r, make r the new RangePair
-                *p = r;
+            {   // RangePair p included in RangePair pOver, make pOver the new RangePair
+                *p = *pOver;
                 bJoined = true;
             }
         }
@@ -1536,15 +1532,25 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
         if ( bJoined )
         {
             if ( bIsInList )
-            {   // delete RangePair within the list
-                Remove( nOldPos );
-                i--;
-                pOver = nullptr;
-                if ( nOldPos )
-                    nOldPos--;          // configure seek correctly
+            {   // delete RangePair pOver within the list
+                if (nOverPos != std::numeric_limits<size_t>::max())
+                    Remove(nOverPos);
+                else
+                {
+                    for (size_t nOver = 0, nPairs = maPairs.size(); nOver < nPairs; ++nOver)
+                    {
+                        if (maPairs[nOver] == pOver)
+                        {
+                            Remove(nOver);
+                            break;
+                        }
+                    }
+                }
             }
             bJoinedInput = true;
-            Join( *p, true );           // recursive!
+            pOver = p;
+            bIsInList = true;
+            goto Label_RangePair_Join;
         }
     }
     if ( !bIsInList && !bJoinedInput )
