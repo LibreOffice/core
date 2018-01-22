@@ -290,7 +290,7 @@ public:
     long                GetHeight() const;
 
     /** Returns the output range of the cell (nCol,nRow).
-        Returns total output range of merged ranges. */
+        Returns total output range of merged ranges, if bExpandMerged is true. */
     basegfx::B2DRange GetCellRange( size_t nCol, size_t nRow, bool bExpandMerged ) const;
 
     // mirroring --------------------------------------------------------------
