@@ -44,12 +44,12 @@ void sendIpcArg(std::ostream& stream, const QString& string)
     sendIpcStringArg(stream, utf8.size(), utf8.data());
 }
 
-void sendIpcArg(std::ostream& stream, const QList<QUrl>& urls)
+void sendIpcArg(std::ostream& stream, const QStringList& list)
 {
-    stream << static_cast<uint32_t>(urls.size()) << ' ';
-    for (const auto& url : urls)
+    stream << static_cast<uint32_t>(list.size()) << ' ';
+    for (const auto& entry : list)
     {
-        sendIpcArg(stream, url.toString());
+        sendIpcArg(stream, entry);
     }
 }
 
@@ -126,7 +126,24 @@ void FilePickerIpc::readCommand()
         }
         case Commands::GetSelectedFiles:
         {
-            sendIpcArgs(std::cout, messageId, m_filePicker->getSelectedFiles());
+            QStringList files;
+            for (auto url : m_filePicker->getSelectedFiles())
+            {
+                if (url.scheme() == QLatin1String("webdav")
+                    || url.scheme() == QLatin1String("webdavs"))
+                {
+                    // translate webdav and webdavs URLs into a format supported by LO
+                    url.setScheme(QLatin1String("vnd.sun.star.") + url.scheme());
+                }
+                else if (url.scheme() == QLatin1String("smb"))
+                {
+                    // clear the user name - the GIO backend does not support this apparently
+                    // when no username is available, it will ask for the password
+                    url.setUserName({});
+                }
+                files << url.toString();
+            }
+            sendIpcArgs(std::cout, messageId, files);
             return;
         }
         case Commands::AppendFilter:

@@ -32,17 +32,6 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QApplication>
 
-// The dialog should check whether LO also supports the protocol
-// provided by KIO, and KFileWidget::dirOperator() is only 4.3+ .
-// Moreover it's only in this somewhat internal KFileWidget class,
-// which may not necessarily be what QFileDialog::fileWidget() returns,
-// but that's hopefully not a problem in practice.
-//#if Qt_VERSION_MAJOR == 4 && Qt_VERSION_MINOR >= 2
-//#define ALLOW_REMOTE_URLS 1
-//#else
-#define ALLOW_REMOTE_URLS 0
-//#endif
-
 // KDE5FilePicker
 
 KDE5FilePicker::KDE5FilePicker(QObject* parent)
@@ -53,16 +42,15 @@ KDE5FilePicker::KDE5FilePicker(QObject* parent)
     , _winId(0)
     , allowRemoteUrls(false)
 {
-#if ALLOW_REMOTE_URLS
-    if (KFileWidget* fileWidget = dynamic_cast<KFileWidget*>(_dialog->fileWidget()))
-    {
-        allowRemoteUrls = true;
-        // Use finishedLoading signal rather than e.g. urlEntered, because if there's a problem
-        // such as the URL being mistyped, there's no way to prevent two message boxes about it,
-        // one from us and one from Qt code.
-        connect(fileWidget->dirOperator(), SIGNAL(finishedLoading()), SLOT(checkProtocol()));
-    }
-#endif
+    _dialog->setSupportedSchemes({
+        QStringLiteral("file"),
+        QStringLiteral("ftp"),
+        QStringLiteral("http"),
+        QStringLiteral("https"),
+        QStringLiteral("webdav"),
+        QStringLiteral("webdavs"),
+        QStringLiteral("smb"),
+    });
 
     setMultiSelectionMode(false);
 
@@ -243,21 +231,6 @@ void SAL_CALL KDE5FilePicker::initialize(bool saveDialog)
         _dialog->setConfirmOverwrite(true);
         _dialog->setFileMode(QFileDialog::AnyFile);
     }
-}
-
-void KDE5FilePicker::checkProtocol()
-{
-    // There's no libreoffice.desktop :(, so find a matching one.
-    /*
-    KService::List services = KServiceTypeTrader::self()->query( "Application", "Exec =~ 'libreoffice %U'" );
-    QStringList protocols;
-    if( !services.isEmpty())
-        protocols = services[ 0 ]->property( "X-Qt-Protocols" ).toStringList();
-    if( protocols.isEmpty()) // incorrect (developer?) installation ?
-        protocols << "file" << "http";
-    if( !protocols.contains( _dialog->baseUrl().protocol()) && !protocols.contains( "KIO" ))
-        KMessageBox::error( _dialog, KIO::buildErrorString( KIO::ERR_UNSUPPORTED_PROTOCOL, _dialog->baseUrl().protocol()));
-*/
 }
 
 void KDE5FilePicker::setWinId(sal_uIntPtr winId) { _winId = winId; }
