@@ -59,10 +59,10 @@ SAXEventKeeperImpl::~SAXEventKeeperImpl()
     if (m_pRootBufferNode != nullptr)
     {
         m_pRootBufferNode->freeAllChildren();
-        delete m_pRootBufferNode;
+        m_pRootBufferNode.reset();
     }
 
-    m_pRootBufferNode = m_pCurrentBufferNode = m_pCurrentBlockingBufferNode = nullptr;
+    m_pCurrentBufferNode = m_pCurrentBlockingBufferNode = nullptr;
 
     /*
      * delete all unfreed ElementMarks
@@ -95,7 +95,7 @@ void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
 {
     if (pBufferNode != m_pCurrentBufferNode)
     {
-        if ( m_pCurrentBufferNode == m_pRootBufferNode &&
+        if ( m_pCurrentBufferNode == m_pRootBufferNode.get() &&
              m_xSAXEventKeeperStatusChangeListener.is())
         {
             m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(true);
@@ -423,7 +423,7 @@ void SAXEventKeeperImpl::smashBufferNode(
         /*
          * delete the XML data
          */
-        if (pParent == m_pRootBufferNode)
+        if (pParent == m_pRootBufferNode.get())
         {
             bool bIsNotBlocking = (m_pCurrentBlockingBufferNode == nullptr);
             bool bIsBlockInside = false;
@@ -437,7 +437,7 @@ void SAXEventKeeperImpl::smashBufferNode(
             if (bClearRoot)
             {
                 cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
-                    aChildElements = collectChildWorkingElement(m_pRootBufferNode);
+                    aChildElements = collectChildWorkingElement(m_pRootBufferNode.get());
 
                 /*
                  * the clearUselessData only clearup the content in the
@@ -931,7 +931,7 @@ OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
         + OUString::number(m_vElementMarkBuffers.size())
         + "\nCurrentBufferNode: "
         + m_xXMLDocument->getNodeName(m_pCurrentBufferNode->getXMLElement())
-        + "\n" + printBufferNode(m_pRootBufferNode, 0);
+        + "\n" + printBufferNode(m_pRootBufferNode.get(), 0);
 
     return rc;
 }
@@ -1071,7 +1071,7 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
     }
 
     if ((m_pCurrentBlockingBufferNode != nullptr) ||
-        (m_pCurrentBufferNode != m_pRootBufferNode) ||
+        (m_pCurrentBufferNode != m_pRootBufferNode.get()) ||
         (!m_xXMLDocument->isCurrentElementEmpty()))
     {
         if (!m_bIsForwarding)
@@ -1084,14 +1084,14 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
         * the current buffer node is waiting for the current element,
         * then let it notify.
         */
-        if (bIsCurrent && (m_pCurrentBufferNode != m_pRootBufferNode))
+        if (bIsCurrent && (m_pCurrentBufferNode != m_pRootBufferNode.get()))
         {
             BufferNode* pOldCurrentBufferNode = m_pCurrentBufferNode;
             m_pCurrentBufferNode = const_cast<BufferNode*>(m_pCurrentBufferNode->getParent());
 
             pOldCurrentBufferNode->setReceivedAll();
 
-            if ((m_pCurrentBufferNode == m_pRootBufferNode) &&
+            if ((m_pCurrentBufferNode == m_pRootBufferNode.get()) &&
                 m_xSAXEventKeeperStatusChangeListener.is())
             {
                 m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(false);
@@ -1117,7 +1117,7 @@ void SAL_CALL SAXEventKeeperImpl::characters( const OUString& aChars )
         }
 
         if ((m_pCurrentBlockingBufferNode != nullptr) ||
-            (m_pCurrentBufferNode != m_pRootBufferNode))
+            (m_pCurrentBufferNode != m_pRootBufferNode.get()))
         {
             m_xCompressedDocumentHandler->compressedCharacters(aChars);
         }
@@ -1140,7 +1140,7 @@ void SAL_CALL SAXEventKeeperImpl::processingInstruction(
         }
 
         if ((m_pCurrentBlockingBufferNode != nullptr) ||
-            (m_pCurrentBufferNode != m_pRootBufferNode))
+            (m_pCurrentBufferNode != m_pRootBufferNode.get()))
         {
             m_xCompressedDocumentHandler->compressedProcessingInstruction(aTarget, aData);
         }
@@ -1160,8 +1160,8 @@ void SAL_CALL SAXEventKeeperImpl::initialize( const cssu::Sequence< cssu::Any >&
     m_xDocumentHandler.set( m_xXMLDocument, cssu::UNO_QUERY );
     m_xCompressedDocumentHandler.set( m_xXMLDocument, cssu::UNO_QUERY );
 
-    m_pRootBufferNode = new BufferNode(m_xXMLDocument->getCurrentElement());
-    m_pCurrentBufferNode = m_pRootBufferNode;
+    m_pRootBufferNode.reset( new BufferNode(m_xXMLDocument->getCurrentElement()) );
+    m_pCurrentBufferNode = m_pRootBufferNode.get();
 }
 
 OUString SAXEventKeeperImpl_getImplementationName ()
