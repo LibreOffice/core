@@ -1934,7 +1934,7 @@ static void
 lcl_CopyLineToDoc(const FndLine_& rFndLine, CpyPara *const pCpyPara)
 {
     // Find the Frame Format in the list of all Frame Formats
-    CpyTabFrame aFindFrame( static_cast<SwTableBoxFormat*>(rFndLine.GetLine()->GetFrameFormat()) );
+    CpyTabFrame aFindFrame( rFndLine.GetLine()->GetFrameFormat() );
     CpyTabFrames::const_iterator itFind = pCpyPara->rTabFrameArr.find( aFindFrame );
     if( itFind == pCpyPara->rTabFrameArr.end() )
     {
