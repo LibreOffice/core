@@ -754,6 +754,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             aSortParam.bCaseSens = false;
             aSortParam.bNaturalSort = false;
             aSortParam.bIncludeComments = false;
+            aSortParam.bIncludeGraphicObjects = true;
             aSortParam.bIncludePattern = true;
             aSortParam.bInplace = true;
             aSortParam.maKeyState[0].bDoSort = true;
