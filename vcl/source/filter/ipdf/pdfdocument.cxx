@@ -2015,11 +2015,20 @@ bool PDFLiteralStringElement::Read(SvStream& rStream)
     nPrevCh = ch;
     rStream.ReadChar(ch);
 
+    // Start with 1 nesting level as we read a '(' above already.
+    int nDepth = 1;
     OStringBuffer aBuf;
     while (!rStream.eof())
     {
+        if (ch == '(' && nPrevCh != '\\')
+            ++nDepth;
+
         if (ch == ')' && nPrevCh != '\\')
+            --nDepth;
+
+        if (nDepth == 0)
         {
+            // ')' of the outermost '(' is reached.
             m_aValue = aBuf.makeStringAndClear();
             SAL_INFO("vcl.filter", "PDFLiteralStringElement::Read: m_aValue is '" << m_aValue << "'");
             return true;
