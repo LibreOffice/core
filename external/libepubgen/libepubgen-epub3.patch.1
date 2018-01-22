@@ -355,3 +355,71 @@ index 8e88adb..38ddcdf 100644
 -- 
 2.13.6
 
+From b6081f659e3000d9f3d5851278d8abdd33448353 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Mon, 22 Jan 2018 15:54:43 +0100
+Subject: [PATCH] fixed layout: avoid Page <N> entries when chapter names are
+ provided
+
+---
+ src/lib/EPUBHTMLManager.cpp        | 31 ++++++++++++++++++-------------
+ src/test/EPUBTextGeneratorTest.cpp | 16 ++++++++++++++++
+ 2 files changed, 34 insertions(+), 13 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index d35bc3f..35d82e8 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -7,6 +7,7 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#include <algorithm>
+ #include <cassert>
+ #include <iomanip>
+ #include <sstream>
+@@ -91,24 +92,28 @@ void EPUBHTMLManager::writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int
+ {
+   if (version >= 30)
+   {
++    bool hasChapterNames = std::find_if(m_paths.begin(), m_paths.end(), [](const EPUBPath &path)
++    {
++      return !path.getChapters().empty();
++    }) != m_paths.end();
+     for (std::vector<EPUBPath>::size_type i = 0; m_paths.size() != i; ++i)
+     {
+       const std::vector<std::string> &chapters = m_paths[i].getChapters();
+-      if (!chapters.empty())
++      for (const auto &chapter : chapters)
+       {
+-        for (const auto &chapter : chapters)
+-        {
+-          sink.openElement("li");
+-          librevenge::RVNGPropertyList anchorAttrs;
+-          anchorAttrs.insert("href", m_paths[i].relativeTo(tocPath).str().c_str());
+-          sink.openElement("a", anchorAttrs);
+-          std::ostringstream label;
+-          sink.insertCharacters(chapter.c_str());
+-          sink.closeElement("a");
+-          sink.closeElement("li");
+-        }
+-        continue;
++        sink.openElement("li");
++        librevenge::RVNGPropertyList anchorAttrs;
++        anchorAttrs.insert("href", m_paths[i].relativeTo(tocPath).str().c_str());
++        sink.openElement("a", anchorAttrs);
++        std::ostringstream label;
++        sink.insertCharacters(chapter.c_str());
++        sink.closeElement("a");
++        sink.closeElement("li");
+       }
++      if (hasChapterNames)
++        // Chapter names are provided for this document, so never write Page
++        // <N> entries.
++        continue;
+ 
+       sink.openElement("li");
+       librevenge::RVNGPropertyList anchorAttrs;
+-- 
+2.13.6
+
