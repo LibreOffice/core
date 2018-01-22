@@ -18,11 +18,11 @@
  */
 
 #include <sal/log.hxx>
+#include <sal/types.h>
 
 #include <bitset.hxx>
 
 #include <string.h>
-#include <limits.h>
 
 // creates the asymmetric difference with another bitset
 
@@ -97,13 +97,13 @@ IndexBitSet::~IndexBitSet()
 
 sal_uInt16 IndexBitSet::GetFreeIndex()
 {
-  for(int i=0;i<USHRT_MAX;i++)
+  for(sal_uInt16 i=0;i<SAL_MAX_UINT16;i++)
     if(!Contains(i))
       {
         *this|=i;
         return i;
       }
-  SAL_WARN( "sfx", "IndexBitSet enthaelt mehr als USHRT_MAX Eintraege");
+  SAL_WARN( "sfx", "IndexBitSet enthaelt mehr als SAL_MAX_UINT16 Eintraege");
   return 0;
 }
 
