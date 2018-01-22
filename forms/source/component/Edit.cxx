@@ -576,7 +576,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
                 sal_Int32 nFieldLen = 0;
                 xField->getPropertyValue("Precision") >>= nFieldLen;
 
-                if (nFieldLen && nFieldLen <= USHRT_MAX)
+                if (nFieldLen > 0 && nFieldLen <= SAL_MAX_INT16)
                 {
                     Any aVal;
                     aVal <<= static_cast<sal_Int16>(nFieldLen);
