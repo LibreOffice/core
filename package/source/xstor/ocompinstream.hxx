@@ -31,6 +31,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <rtl/ref.hxx>
+#include <memory>
 
 
 struct OWriteStream_Impl;
@@ -44,7 +45,7 @@ protected:
     OWriteStream_Impl* m_pImpl;
     rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
     css::uno::Reference < css::io::XInputStream > m_xStream;
-    ::comphelper::OInterfaceContainerHelper2* m_pInterfaceContainer;
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pInterfaceContainer;
     css::uno::Sequence < css::beans::PropertyValue > m_aProperties;
     bool m_bDisposed;
     sal_Int32 m_nStorageType;
