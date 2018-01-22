@@ -49,10 +49,10 @@ public:
         bool isSet() { return !!maEndDialogFn; }
     };
 
-    bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn, VclPtr<VclReferenceBase> xOwner)
+    bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn)
     {
         AsyncContext aCtx;
-        aCtx.mxOwner = xOwner;
+        aCtx.mxOwner = this;
         aCtx.maEndDialogFn = rEndDialogFn;
         return StartExecuteAsync(aCtx);
     }

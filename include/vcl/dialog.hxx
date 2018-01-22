@@ -142,11 +142,10 @@ public:
 
     // FIXME: Need to remove old StartExecuteModal in favour of this one.
     /// Returns true of the dialog successfully starts
-    bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn,
-                           VclPtr<VclReferenceBase> xOwner = VclPtr<VclReferenceBase>())
+    bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn)
     {
         VclAbstractDialog::AsyncContext aCtx;
-        aCtx.mxOwner = xOwner;
+        aCtx.mxOwner = this;
         aCtx.maEndDialogFn = rEndDialogFn;
         return StartExecuteAsync(aCtx);
     }

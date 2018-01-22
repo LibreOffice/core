@@ -210,7 +210,7 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
             {
                 sw_CharDialogResult(pDlg->GetOutputItemSet(), rWrtSh, pCoreSet, bSel, bSelectionPut, pRequest.get());
             }
-        }, pDlg);
+        });
     }
     else if (pArgs)
     {
@@ -1125,7 +1125,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                         sw_ParagraphDialogResult(pSet, rWrtSh, *pRequest, pPaM);
                     }
-                }, pDlg);
+                });
             }
         }
         break;
