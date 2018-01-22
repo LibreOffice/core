@@ -450,6 +450,8 @@ void PDFSigningTest::testTokenize()
         // File that's intentionally smaller than 1024 bytes.
         "small.pdf",
         "tdf107149.pdf",
+        // Nested parentheses were not handled.
+        "tdf114460.pdf",
     };
 
     for (const auto& rName : aNames)
