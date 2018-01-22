@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_ec9f435d",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-01-22T12:14:31Z",
+      "side": 1,
+      "message": "We don\u0027t want to remove the behavior on double-click on the labels. So let\u0027s remove this line.",
+      "range": {
+        "startLine": 1183,
+        "startChar": 0,
+        "endLine": 1183,
+        "endChar": 54
+      },
+      "revId": "934721a993ac5f20a98451bd74725d531f63492d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
