@@ -492,6 +492,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     bool m_bBodySeen : 1;
     bool m_bReadingHeaderOrFooter : 1;
+    bool m_isInTableStructure;
 
     sal_Int32 m_nTableDepth;
 

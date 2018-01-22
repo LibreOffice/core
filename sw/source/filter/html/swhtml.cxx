@@ -300,6 +300,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bRemoveHidden( false ),
     m_bBodySeen( false ),
     m_bReadingHeaderOrFooter( false ),
+    m_isInTableStructure(false),
     m_nTableDepth( 0 ),
     m_pTempViewFrame(nullptr)
 {
@@ -1557,26 +1558,32 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     // divisions
     case HtmlTokenId::DIVISION_ON:
     case HtmlTokenId::CENTER_ON:
-        if( m_nOpenParaToken != HtmlTokenId::NONE )
+        if (!m_isInTableStructure)
         {
-            if( IsReadPRE() )
-                m_nOpenParaToken = HtmlTokenId::NONE;
-            else
-                EndPara();
+            if (m_nOpenParaToken != HtmlTokenId::NONE)
+            {
+                if (IsReadPRE())
+                    m_nOpenParaToken = HtmlTokenId::NONE;
+                else
+                    EndPara();
+            }
+            NewDivision( nToken );
         }
-        NewDivision( nToken );
         break;
 
     case HtmlTokenId::DIVISION_OFF:
     case HtmlTokenId::CENTER_OFF:
-        if( m_nOpenParaToken != HtmlTokenId::NONE )
+        if (!m_isInTableStructure)
         {
-            if( IsReadPRE() )
-                m_nOpenParaToken = HtmlTokenId::NONE;
-            else
-                EndPara();
+            if (m_nOpenParaToken != HtmlTokenId::NONE)
+            {
+                if (IsReadPRE())
+                    m_nOpenParaToken = HtmlTokenId::NONE;
+                else
+                    EndPara();
+            }
+            EndDivision();
         }
-        EndDivision();
         break;
 
     case HtmlTokenId::MULTICOL_ON:
