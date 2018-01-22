@@ -23,7 +23,7 @@ en-US = "LibreOffice Community"
 en-US = "http://www.libreoffice.org/get-help"
 
 [OOO_ARPHELPTELEPHONETEMPLATE]
-en-US = "x-xxx-xxx-xxx"
+en-US = ""
 
 [OOO_ARPURLINFOABOUTTEMPLATE]
 en-US = "http://www.documentfoundation.org"
