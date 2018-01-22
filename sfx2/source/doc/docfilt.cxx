@@ -67,33 +67,16 @@ SfxFilter::SfxFilter( const OUString &rName,
     lFormat(lFmt)
 {
     OUString aExts = GetWildcard().getGlob();
-    OUString aShort, aLong;
+    OUString glob;
     OUString aRet;
-    OUString aTest;
     sal_uInt16 nPos = 0;
     while (!(aRet = aExts.getToken(nPos++, ';')).isEmpty() )
     {
-        aTest = aRet;
-        aTest = aTest.replaceFirst( "*." , "" );
-        if( aTest.getLength() <= USHRT_MAX )
-        {
-            if (!aShort.isEmpty())
-                aShort += ";";
-            aShort += aRet;
-        }
-        else
-        {
-            if (!aLong.isEmpty())
-                aLong += ";";
-            aLong += aRet;
-        }
+        if (!glob.isEmpty())
+            glob += ";";
+        glob += aRet;
     }
-    if (!aShort.isEmpty() && !aLong.isEmpty())
-    {
-        aShort += ";";
-        aShort += aLong;
-    }
-    aWildCard.setGlob(aShort);
+    aWildCard.setGlob(glob);
 }
 
 SfxFilter::~SfxFilter()
