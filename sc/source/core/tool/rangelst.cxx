@@ -207,12 +207,6 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
         Append( r );
         return ;
     }
-    SCCOL nCol1 = r.aStart.Col();
-    SCROW nRow1 = r.aStart.Row();
-    SCTAB nTab1 = r.aStart.Tab();
-    SCCOL nCol2 = r.aEnd.Col();
-    SCROW nRow2 = r.aEnd.Row();
-    SCTAB nTab2 = r.aEnd.Tab();
 
     // One common usage is to join ranges that actually are top to bottom
     // appends but the caller doesn't exactly know about it, e.g. when invoked
@@ -225,6 +219,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
 
     if (!bIsInList)
     {
+        const SCROW nRow1 = r.aStart.Row();
         if (nRow1 > mnMaxRowUsed + 1)
         {
             Append( r );
@@ -235,9 +230,10 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
             // Check if we can simply enlarge the last range.
             ScRange* p = maRanges.back();
             if (p->aEnd.Row() + 1 == nRow1 &&
-                    p->aStart.Col() == nCol1 && p->aEnd.Col() == nCol2 &&
-                    p->aStart.Tab() == nTab1 && p->aEnd.Tab() == nTab2)
+                    p->aStart.Col() == r.aStart.Col() && p->aEnd.Col() == r.aEnd.Col() &&
+                    p->aStart.Tab() == r.aStart.Tab() && p->aEnd.Tab() == r.aEnd.Tab())
             {
+                const SCROW nRow2 = r.aEnd.Row();
                 p->aEnd.SetRow( nRow2 );
                 mnMaxRowUsed = nRow2;
                 return;
@@ -245,43 +241,45 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
         }
     }
 
-    ScRange* pOver = const_cast<ScRange*>(&r);     // nasty but true when bInList
-    size_t nOldPos = 0;
-    if ( bIsInList )
-    {
-        // Find the current position of this range.
-        for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
-        {
-            if ( maRanges[i] == pOver )
-            {
-                nOldPos = i;
-                break;
-            }
-        }
-    }
     bool bJoinedInput = false;
+    const ScRange* pOver = &r;
 
-    // We need to query the size of the container dynamically since its size
-    // may change during the loop.
-    for ( size_t i = 0; i < maRanges.size() && pOver; ++i )
+Label_Range_Join:
+
+    assert(pOver);
+    const SCCOL nCol1 = pOver->aStart.Col();
+    const SCROW nRow1 = pOver->aStart.Row();
+    const SCCOL nTab1 = pOver->aStart.Tab();
+    const SCCOL nCol2 = pOver->aEnd.Col();
+    const SCROW nRow2 = pOver->aEnd.Row();
+    const SCCOL nTab2 = pOver->aEnd.Tab();
+
+    size_t nOverPos = std::numeric_limits<size_t>::max();
+    for (size_t i = 0; i < maRanges.size(); ++i)
     {
         ScRange* p = maRanges[i];
         if ( p == pOver )
+        {
+            nOverPos = i;
             continue;           // the same one, continue with the next
+        }
         bool bJoined = false;
-        if ( p->In( r ) )
-        {   //range r included in or identical to range p
+        if ( p->In( *pOver ) )
+        {   // range pOver included in or identical to range p
+            // XXX if we never used Append() before Join() we could remove
+            // pOver and end processing, but it is not guranteed and there can
+            // be duplicates.
             if ( bIsInList )
-                bJoined = true;     // do away with range r
+                bJoined = true;     // do away with range pOver
             else
             {   // that was all then
-                bJoinedInput = true;    // don't attach
+                bJoinedInput = true;    // don't append
                 break;  // for
             }
         }
-        else if ( r.In( *p ) )
-        {   // range p included in range r, make r the new range
-            *p = r;
+        else if ( pOver->In( *p ) )
+        {   // range p included in range pOver, make pOver the new range
+            *p = *pOver;
             bJoined = true;
         }
         if ( !bJoined && p->aStart.Tab() == nTab1 && p->aEnd.Tab() == nTab2 )
@@ -320,15 +318,25 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
         if ( bJoined )
         {
             if ( bIsInList )
-            {   // delete range within the list
-                Remove(nOldPos);
-                i--;
-                pOver = nullptr;
-                if ( nOldPos )
-                    nOldPos--;          // configure seek correctly
+            {   // delete range pOver within the list
+                if (nOverPos != std::numeric_limits<size_t>::max())
+                    Remove(nOverPos);
+                else
+                {
+                    for (size_t nOver = 0, nRanges = maRanges.size(); nOver < nRanges; ++nOver)
+                    {
+                        if (maRanges[nOver] == pOver)
+                        {
+                            Remove(nOver);
+                            break;
+                        }
+                    }
+                }
             }
             bJoinedInput = true;
-            Join( *p, true );           // recursive!
+            pOver = p;
+            bIsInList = true;
+            goto Label_Range_Join;
         }
     }
     if (  !bIsInList && !bJoinedInput )
