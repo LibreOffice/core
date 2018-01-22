@@ -43,6 +43,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
+#include <uno/mapping.hxx>
 
 #include "loadsharedlibcomponentfactory.hxx"
 
@@ -1979,6 +1980,25 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         }
     }
     std::cerr << std::endl;
+
+    // Various rather important uno mappings.
+    struct {
+        const char *mpFrom;
+        const char *mpTo;
+        const char *mpPurpose;
+    } aMappingLoad[] = {
+        { "gcc3", "uno",  "" },
+        { "uno",  "gcc3", "" },
+    };
+
+    static std::vector<css::uno::Mapping> maMaps;
+    for (auto &it : aMappingLoad)
+    {
+        maMaps.push_back(css::uno::Mapping(
+                             OUString::createFromAscii(it.mpFrom),
+                             OUString::createFromAscii(it.mpTo),
+                             OUString::createFromAscii(it.mpPurpose)));
+    }
 #endif
 }
 
