@@ -132,10 +132,6 @@ void ContentResultSetWrapper::impl_init()
 ContentResultSetWrapper::~ContentResultSetWrapper()
 {
     //call impl_deinit() at start of destructor of derived class
-
-    delete m_pDisposeEventListeners;
-    delete m_pPropertyChangeListeners;
-    delete m_pVetoableChangeListeners;
 };
 
 void ContentResultSetWrapper::impl_deinit()
@@ -178,16 +174,16 @@ void ContentResultSetWrapper::impl_getPropertyChangeListenerContainer()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pPropertyChangeListeners )
-        m_pPropertyChangeListeners =
-            new PropertyChangeListenerContainer_Impl( m_aContainerMutex );
+        m_pPropertyChangeListeners.reset(
+            new PropertyChangeListenerContainer_Impl( m_aContainerMutex ) );
 }
 
 void ContentResultSetWrapper::impl_getVetoableChangeListenerContainer()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pVetoableChangeListeners )
-        m_pVetoableChangeListeners =
-            new PropertyChangeListenerContainer_Impl( m_aContainerMutex );
+        m_pVetoableChangeListeners.reset(
+            new PropertyChangeListenerContainer_Impl( m_aContainerMutex ) );
 }
 
 void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const PropertyChangeEvent& rEvt )
@@ -437,8 +433,8 @@ void SAL_CALL ContentResultSetWrapper::addEventListener( const Reference< XEvent
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners =
-                    new OInterfaceContainerHelper2( m_aContainerMutex );
+        m_pDisposeEventListeners.reset(
+                    new OInterfaceContainerHelper2( m_aContainerMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

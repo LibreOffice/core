@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <memory>
 
 
 class ContentResultSetWrapperListener;
@@ -87,11 +88,11 @@ private:
     bool                m_bDisposed; ///Dispose call ready.
     bool                m_bInDispose;///In dispose call
     osl::Mutex              m_aContainerMutex;
-    comphelper::OInterfaceContainerHelper2*
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2>
                             m_pDisposeEventListeners;
-    PropertyChangeListenerContainer_Impl*
+    std::unique_ptr<PropertyChangeListenerContainer_Impl>
                             m_pPropertyChangeListeners;
-    PropertyChangeListenerContainer_Impl*
+    std::unique_ptr<PropertyChangeListenerContainer_Impl>
                             m_pVetoableChangeListeners;
 
 
