@@ -2923,10 +2923,6 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     OString aId = aGraphicObject.GetUniqueID();
     if (!aId.isEmpty())
     {
-        tools::Rectangle aRect = rObj.GetLogicRect();
-        aRect.SetPos(Point(0,0));
-        aRect.Right() = DrawModelToEmu(aRect.Right());
-        aRect.Bottom() = DrawModelToEmu(aRect.Bottom());
         sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
             aId, pVisArea);    // SJ: the fourth parameter (VisArea) should be set..
         if (nBlibId)
