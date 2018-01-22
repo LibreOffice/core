@@ -87,7 +87,7 @@ public:
     inline bool isFrameAlive( const SalFrame* pFrame ) const;
 
     void PostEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );
-    bool RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );
+    void RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );
     inline bool HasUserEvents() const;
 
     bool DispatchUserEvents( bool bHandleAllCurrentEvents );

@@ -286,12 +286,12 @@ void ScViewFunctionSet::SetAnchorFlag( bool bSet )
     bAnchor = bSet;
 }
 
-bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDontSelectAtCursor */ )
+void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
         if ( rPointPixel == aSwitchPos )
-            return false;                   // don't scroll in wrong window
+            return;                   // don't scroll in wrong window
         else
             bDidSwitch = false;
     }
@@ -400,7 +400,7 @@ bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     }
 
     pViewData->ResetOldCursor();
-    return SetCursorAtCell( nPosX, nPosY, bScroll );
+    SetCursorAtCell( nPosX, nPosY, bScroll );
 }
 
 bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll )
@@ -810,13 +810,13 @@ void ScHeaderFunctionSet::DestroyAnchor()
     bAnchor = false;
 }
 
-bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDontSelectAtCursor */ )
+void ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
         // next valid position has to be originated from another window
         if ( rPointPixel == aSwitchPos )
-            return false;                   // don't scroll in the wrong window
+            return;                   // don't scroll in the wrong window
         else
             bDidSwitch = false;
     }
@@ -873,7 +873,7 @@ bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bD
     {
         aSwitchPos = rPointPixel;
         bDidSwitch = true;
-        return false;               // do not crunch with wrong positions
+        return;               // do not crunch with wrong positions
     }
 
     SCCOL  nPosX;
@@ -917,8 +917,6 @@ bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bD
 
     if (bHide)
         pView->ShowAllCursors();
-
-    return true;
 }
 
 bool ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )

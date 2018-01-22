@@ -101,7 +101,7 @@ private:
 
 public:
 
-    bool ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
+    void ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H

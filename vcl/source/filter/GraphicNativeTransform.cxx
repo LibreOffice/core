@@ -34,38 +34,37 @@ GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic) :
 GraphicNativeTransform::~GraphicNativeTransform()
 {}
 
-bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
+void GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
 {
     // Rotation can be between 0 and 3600
     sal_uInt16 aRotation = aInputRotation % 3600;
 
     if (aRotation == 0)
     {
-        return true; // No rotation is needed
+        return; // No rotation is needed
     }
     else if (aRotation != 900 && aRotation != 1800 && aRotation != 2700)
     {
-        return false;
+        return;
     }
 
     GfxLink aLink = mrGraphic.GetLink();
     if ( aLink.GetType() == GfxLinkType::NativeJpg )
     {
-        return rotateJPEG(aRotation);
+        rotateJPEG(aRotation);
     }
     else if ( aLink.GetType() == GfxLinkType::NativePng )
     {
-        return rotateGeneric(aRotation, "png");
+        rotateGeneric(aRotation, "png");
     }
     else if ( aLink.GetType() == GfxLinkType::NativeGif )
     {
-        return rotateGeneric(aRotation, "gif");
+        rotateGeneric(aRotation, "gif");
     }
     else if ( aLink.GetType() == GfxLinkType::NONE )
     {
-        return rotateBitmapOnly(aRotation);
+        rotateBitmapOnly(aRotation);
     }
-    return false;
 }
 
 bool GraphicNativeTransform::rotateBitmapOnly(sal_uInt16 aRotation)

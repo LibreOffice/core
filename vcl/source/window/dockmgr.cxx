@@ -486,10 +486,10 @@ ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
     }
 }
 
-bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
+void ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
 {
     if( !mbStartDockingEnabled )
-        return false;
+        return;
 
     maMouseOff      = rPos;
     maMouseStart    = maMouseOff;
@@ -536,7 +536,6 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     GetWindow()->ImplGetFrameWindow()->ImplUpdateAll();
 
     GetWindow()->StartTracking( StartTrackingFlags::KeyMod );
-    return true;
 }
 
 void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )

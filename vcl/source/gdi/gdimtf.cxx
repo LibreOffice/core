@@ -588,12 +588,11 @@ void GDIMetaFile::push_back( MetaAction* pAction )
     m_aList.push_back( pAction );
 }
 
-bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
+void GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 {
     const Size  aOldPrefSize( GetPrefSize() );
     long        nMoveX, nMoveY;
     double      fScaleX, fScaleY;
-    bool        bRet;
 
     if( nMirrorFlags & BmpMirrorFlags::Horizontal )
     {
@@ -622,12 +621,7 @@ bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
         Scale( fScaleX, fScaleY );
         Move( nMoveX, nMoveY );
         SetPrefSize( aOldPrefSize );
-        bRet = true;
     }
-    else
-        bRet = false;
-
-    return bRet;
 }
 
 void GDIMetaFile::Move( long nX, long nY )

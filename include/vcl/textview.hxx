@@ -170,7 +170,7 @@ public:
     void                Undo();
     void                Redo();
 
-    bool                Read( SvStream& rInput );
+    void                Read( SvStream& rInput );
 
     void                SetStartDocPos( const Point& rPos );
     const Point&        GetStartDocPos() const;
@@ -224,7 +224,7 @@ public:
      */
     sal_Int32           GetLineNumberOfCursorInSelection() const;
 
-    bool                MatchGroup();
+    void                MatchGroup();
 
     bool                Search( const i18nutil::SearchOptions& rSearchOptions, bool bForward );
     sal_uInt16          Replace( const i18nutil::SearchOptions& rSearchOptions, bool bAll, bool bForward );

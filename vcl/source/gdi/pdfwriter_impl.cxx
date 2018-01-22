@@ -10389,7 +10389,7 @@ void PDFWriterImpl::intersectClipRegion( const tools::Rectangle& rRect )
     intersectClipRegion( aRect );
 }
 
-bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
+void PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
     basegfx::B2DPolyPolygon aRegion( getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode ) );
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
@@ -10405,7 +10405,6 @@ bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
         m_aGraphicsStack.front().m_aClipRegion = aRegion;
         m_aGraphicsStack.front().m_bClipRegion = true;
     }
-    return true;
 }
 
 void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )

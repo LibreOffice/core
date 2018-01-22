@@ -43,7 +43,7 @@ class WinOpenGLContext : public OpenGLContext
 {
 public:
     bool init( HDC hDC, HWND hWnd );
-    virtual bool initWindow() override;
+    virtual void initWindow() override;
 private:
     GLWinWindow m_aGLWin;
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
@@ -133,7 +133,7 @@ bool WinOpenGLContext::init(HDC hDC, HWND hWnd)
     return ImplInit();
 }
 
-bool WinOpenGLContext::initWindow()
+void WinOpenGLContext::initWindow()
 {
     if( !m_pChildWindow )
     {
@@ -149,7 +149,6 @@ bool WinOpenGLContext::initWindow()
     }
 
     m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
-    return true;
 }
 
 void WinOpenGLContext::destroyCurrentContext()

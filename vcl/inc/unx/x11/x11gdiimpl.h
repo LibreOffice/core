@@ -20,7 +20,7 @@ class X11GraphicsImpl
 public:
     virtual ~X11GraphicsImpl() {};
 
-    virtual bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) = 0;
+    virtual void FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) = 0;
     virtual bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) = 0;
 
     virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY) = 0;

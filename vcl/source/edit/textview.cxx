@@ -1796,11 +1796,10 @@ void TextView::SetPaintSelection( bool bPaint )
     }
 }
 
-bool TextView::Read( SvStream& rInput )
+void TextView::Read( SvStream& rInput )
 {
-    bool bDone = mpImpl->mpTextEngine->Read( rInput, &mpImpl->maSelection );
+    mpImpl->mpTextEngine->Read( rInput, &mpImpl->maSelection );
     ShowCursor();
-    return bDone;
 }
 
 bool TextView::ImplTruncateNewText( OUString& rNewText ) const
@@ -2120,9 +2119,9 @@ void TextSelFunctionSet::CreateAnchor()
     mpView->ImpSetSelection( mpView->mpImpl->maSelection.GetEnd() );
 }
 
-bool TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool )
+void TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool )
 {
-    return mpView->SetCursorAtPoint( rPointPixel );
+    mpView->SetCursorAtPoint( rPointPixel );
 }
 
 bool TextSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
@@ -2171,21 +2170,19 @@ bool                TextView::IsInsertMode() const
 void                TextView::SupportProtectAttribute(bool bSupport)
 { mpImpl->mbSupportProtectAttribute = bSupport;}
 
-bool TextView::MatchGroup()
+void TextView::MatchGroup()
 {
     TextSelection aTmpSel( GetSelection() );
     aTmpSel.Justify();
     if ( ( aTmpSel.GetStart().GetPara() != aTmpSel.GetEnd().GetPara() ) ||
          ( ( aTmpSel.GetEnd().GetIndex() - aTmpSel.GetStart().GetIndex() ) > 1 ) )
     {
-        return false;
+        return;
     }
 
     TextSelection aMatchSel = static_cast<ExtTextEngine*>(GetTextEngine())->MatchGroup( aTmpSel.GetStart() );
     if ( aMatchSel.HasRange() )
         SetSelection( aMatchSel );
-
-    return aMatchSel.HasRange();
 }
 
 bool TextView::Search( const i18nutil::SearchOptions& rSearchOptions, bool bForward )

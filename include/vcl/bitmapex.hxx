@@ -147,12 +147,8 @@ public:
 
         @param bExpandTransparent
         Whether to expand the transparency color or not.
-
-        @return true, if padding was performed successfully. false is
-        not only returned when the operation failed, but also if
-        nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    bool                Expand(
+    void                Expand(
                             sal_uLong nDX, sal_uLong nDY,
                             bool bExpandTransparent = false );
 
@@ -264,10 +260,8 @@ public:
 
         @param rReplaceColor
         Color to be placed in all changed pixel
-
-        @return true, if the operation was completed successfully.
      */
-    bool                Replace(
+    void                Replace(
                             const Color& rSearchColor,
                             const Color& rReplaceColor );
 
@@ -286,10 +280,8 @@ public:
         Tolerance value. Specifies the maximal difference between
         pSearchColor colors and the individual pixel values, such that
         the corresponding pixel is still regarded a match.
-
-        @return true, if the operation was completed successfully.
      */
-    bool                Replace(
+    void                Replace(
                             const Color* pSearchColors,
                             const Color* pReplaceColors,
                             sal_uLong nColorCount,

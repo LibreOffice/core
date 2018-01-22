@@ -136,12 +136,12 @@ public:
 
 public:
 
-    bool            Convert( BmpConversion eConversion );
+    void            Convert( BmpConversion eConversion );
     bool            ReduceColors( sal_uInt16 nNewColorCount );
 
     bool            Invert();
-    bool            Mirror( BmpMirrorFlags nMirrorFlags );
-    bool            Adjust(
+    void            Mirror( BmpMirrorFlags nMirrorFlags );
+    void            Adjust(
                         short nLuminancePercent,
                         short nContrastPercent,
                         short nChannelRPercent,

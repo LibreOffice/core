@@ -106,7 +106,7 @@ PrinterOptions::~PrinterOptions()
 {
 }
 
-bool PrinterOptions::ReadFromConfig( bool i_bFile )
+void PrinterOptions::ReadFromConfig( bool i_bFile )
 {
     bool bSuccess = false;
     // save old state in case something goes wrong
@@ -180,7 +180,6 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
 
     if( ! bSuccess )
         *this = aOldValues;
-    return bSuccess;
 }
 
 bool Printer::DrawTransformBitmapExDirect(
@@ -1397,10 +1396,10 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
     }
 }
 
-bool Printer::SetPaper( Paper ePaper )
+void Printer::SetPaper( Paper ePaper )
 {
     if ( mbInPrintPage )
-        return false;
+        return;
 
     if ( maJobSetup.ImplGetConstData().GetPaperFormat() != ePaper )
     {
@@ -1419,7 +1418,7 @@ bool Printer::SetPaper( Paper ePaper )
         {
             mbNewJobSetup = true;
             maJobSetup = aJobSetup;
-            return true;
+            return;
         }
 
         ReleaseGraphics();
@@ -1432,13 +1431,8 @@ bool Printer::SetPaper( Paper ePaper )
             maJobSetup = aJobSetup;
             ImplUpdatePageData();
             ImplUpdateFontList();
-            return true;
         }
-        else
-            return false;
     }
-
-    return true;
 }
 
 bool Printer::SetPaperSizeUser( const Size& rSize )
@@ -1559,10 +1553,10 @@ const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
     return mpInfoPrinter->m_aPaperFormats[nPaper];
 }
 
-bool Printer::SetDuplexMode( DuplexMode eDuplex )
+void Printer::SetDuplexMode( DuplexMode eDuplex )
 {
     if ( mbInPrintPage )
-        return false;
+        return;
 
     if ( maJobSetup.ImplGetConstData().GetDuplexMode() != eDuplex )
     {
@@ -1575,7 +1569,7 @@ bool Printer::SetDuplexMode( DuplexMode eDuplex )
         {
             mbNewJobSetup = true;
             maJobSetup = aJobSetup;
-            return true;
+            return;
         }
 
         ReleaseGraphics();
@@ -1586,13 +1580,8 @@ bool Printer::SetDuplexMode( DuplexMode eDuplex )
             maJobSetup = aJobSetup;
             ImplUpdatePageData();
             ImplUpdateFontList();
-            return true;
         }
-        else
-            return false;
     }
-
-    return true;
 }
 
 Paper Printer::GetPaper() const
@@ -1619,11 +1608,10 @@ OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
         return OUString();
 }
 
-bool Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
+void Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
 {
     mnCopyCount = nCopy;
     mbCollateCopy = bCollate;
-    return true;
 }
 
 ErrCode Printer::ImplSalPrinterErrorCodeToVCL( SalPrinterError nError )
@@ -1645,11 +1633,10 @@ ErrCode Printer::ImplSalPrinterErrorCodeToVCL( SalPrinterError nError )
     return nVCLError;
 }
 
-bool Printer::EndJob()
+void Printer::EndJob()
 {
-    bool bRet = false;
     if ( !IsJobActive() )
-        return bRet;
+        return;
 
     SAL_WARN_IF( mbInPrintPage, "vcl.gdi", "Printer::EndJob() - StartPage() without EndPage() called" );
 
@@ -1663,15 +1650,13 @@ bool Printer::EndJob()
         maJobName.clear();
 
         mbDevOutput = false;
-        bRet = mpPrinter->EndJob();
+        mpPrinter->EndJob();
         // FIXME: Do not destroy the printer asynchronously as Win95
         // can't handle destroying a printer object and printing
         // at the same time
         ImplGetSVData()->mpDefInst->DestroyPrinter( mpPrinter );
         mpPrinter = nullptr;
     }
-
-    return bRet;
 }
 
 void Printer::ImplStartPage()

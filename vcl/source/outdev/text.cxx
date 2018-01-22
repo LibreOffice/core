@@ -1079,19 +1079,19 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 #endif /* VCL_FLOAT_DEVICE_PIXEL */
 }
 
-bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
+void OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
                                       sal_Int32 nIndex, sal_Int32 nLen ) const
 {
 
     if( nIndex >= rStr.getLength() )
-        return false;
+        return;
     if( nIndex+nLen >= rStr.getLength() )
         nLen = rStr.getLength() - nIndex;
 
     // layout complex text
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
     if( !pSalLayout )
-        return false;
+        return;
 
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
     pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
@@ -1130,8 +1130,6 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
         for( i = 0; i < 2*nLen; ++i )
             pCaretXArray[i] /= nWidthFactor;
     }
-
-    return true;
 }
 
 void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,

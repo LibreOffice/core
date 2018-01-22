@@ -57,15 +57,14 @@ void OpenGLProgram::Reuse()
     mbBlending = false;
 }
 
-bool OpenGLProgram::Use()
+void OpenGLProgram::Use()
 {
     if (!mnId)
-        return false;
+        return;
 
     glUseProgram(mnId);
     CHECK_GL_ERROR();
     Reuse();
-    return true;
 }
 
 bool OpenGLProgram::Clean()
@@ -362,10 +361,10 @@ void OpenGLProgram::SetBlendMode(GLenum nSFactor, GLenum nDFactor)
     mbBlending = true;
 }
 
-bool OpenGLProgram::DrawTexture( const OpenGLTexture& rTexture )
+void OpenGLProgram::DrawTexture( const OpenGLTexture& rTexture )
 {
     if (!rTexture)
-        return false;
+        return;
 
     float fWidth = rTexture.GetWidth();
     float fHeight = rTexture.GetHeight();
@@ -388,8 +387,6 @@ bool OpenGLProgram::DrawTexture( const OpenGLTexture& rTexture )
     ApplyMatrix(fWidth, fHeight);
     DrawArrays(GL_TRIANGLE_FAN, aPosition);
     CHECK_GL_ERROR();
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

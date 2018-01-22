@@ -108,7 +108,7 @@ public:
     bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
-    bool            Mirror( BmpMirrorFlags nMirrorFlags );
+    void            Mirror( BmpMirrorFlags nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MapUnit::MapPixel )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );

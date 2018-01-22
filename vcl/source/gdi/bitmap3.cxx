@@ -1976,9 +1976,9 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
     }
 }
 
-bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<long,void>* pProgress )
+void Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<long,void>* pProgress )
 {
-    return ImplVectorizer::ImplVectorize( *this, rMtf, cReduce, pProgress );
+    ImplVectorizer::ImplVectorize( *this, rMtf, cReduce, pProgress );
 }
 
 bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
