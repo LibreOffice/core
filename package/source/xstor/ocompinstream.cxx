@@ -71,8 +71,6 @@ OInputCompStream::~OInputCompStream()
         m_refCount++;
         dispose();
     }
-
-    delete m_pInterfaceContainer;
 }
 
 uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
@@ -248,7 +246,7 @@ void SAL_CALL OInputCompStream::addEventListener( const uno::Reference< lang::XE
     }
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::comphelper::OInterfaceContainerHelper2( m_xMutex->GetMutex() );
+        m_pInterfaceContainer.reset( new ::comphelper::OInterfaceContainerHelper2( m_xMutex->GetMutex() ) );
 
     m_pInterfaceContainer->addInterface( xListener );
 }
