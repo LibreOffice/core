@@ -815,7 +815,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     long nLeftStart = nCenter - nHalfWidth;
     long nRightEnd = nCenter + nHalfWidth;
 
-    // Deafult values for TOP or no selection
+    // Default values for TOP or no selection
     long nYRuby = aWinSize.Height() / 4 - nTextHeight / 2;
     long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
 
