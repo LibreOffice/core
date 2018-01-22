@@ -144,10 +144,16 @@ namespace svgio
 
         SvgDocHdl::~SvgDocHdl()
         {
-            if(mpTarget)
+            if (mpTarget)
             {
                 OSL_ENSURE(false, "SvgDocHdl destructed with active target (!)");
-                delete mpTarget;
+
+                while (mpTarget->getParent())
+                    mpTarget = const_cast< SvgNode* >(mpTarget->getParent());
+
+                const SvgNodeVector& rOwnedTopLevels = maDocument.getSvgNodeVector();
+                if (std::find(rOwnedTopLevels.begin(), rOwnedTopLevels.end(), mpTarget) == rOwnedTopLevels.end())
+                    delete mpTarget;
             }
             OSL_ENSURE(!maCssContents.size(), "SvgDocHdl destructed with active css style stack entry (!)");
         }
