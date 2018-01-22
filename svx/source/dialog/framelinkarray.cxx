@@ -840,24 +840,44 @@ long Array::GetHeight() const
 
 basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow, bool bExpandMerged ) const
 {
-    size_t nFirstCol = bExpandMerged ? mxImpl->GetMergedFirstCol( nCol, nRow ) : nCol;
-    size_t nFirstRow = bExpandMerged ? mxImpl->GetMergedFirstRow( nCol, nRow ) : nRow;
-    size_t nLastCol = bExpandMerged ? mxImpl->GetMergedLastCol( nCol, nRow ) : nCol;
-    size_t nLastRow = bExpandMerged ? mxImpl->GetMergedLastRow( nCol, nRow ) : nRow;
-    const Point aPoint( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
-    const Size aSize( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
-    tools::Rectangle aRect(aPoint, aSize);
-
-    // adjust rectangle for partly visible merged cells
-    const Cell& rCell = CELL( nCol, nRow );
-    if( rCell.IsMerged() )
+    if(bExpandMerged)
     {
-        aRect.Left() -= rCell.mnAddLeft;
-        aRect.Right() += rCell.mnAddRight;
-        aRect.Top() -= rCell.mnAddTop;
-        aRect.Bottom() += rCell.mnAddBottom;
+        // get the Range of the fully expanded cell (if merged)
+        const size_t nFirstCol(mxImpl->GetMergedFirstCol( nCol, nRow ));
+        const size_t nFirstRow(mxImpl->GetMergedFirstRow( nCol, nRow ));
+        const size_t nLastCol(mxImpl->GetMergedLastCol( nCol, nRow ));
+        const size_t nLastRow(mxImpl->GetMergedLastRow( nCol, nRow ));
+        const Point aPoint( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
+        const Size aSize( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
+        tools::Rectangle aRect(aPoint, aSize);
+
+        // adjust rectangle for partly visible merged cells
+        const Cell& rCell = CELL( nCol, nRow );
+
+        if( rCell.IsMerged() )
+        {
+            // not *sure* what exactly this is good for,
+            // it is just a hard set extension at merged cells,
+            // probably *should* be included in the above extended
+            // GetColPosition/GetColWidth already. This might be
+            // added due to GetColPosition/GetColWidth not working
+            // correcly over PageChanges (if used), but not sure.
+            aRect.Left() -= rCell.mnAddLeft;
+            aRect.Right() += rCell.mnAddRight;
+            aRect.Top() -= rCell.mnAddTop;
+            aRect.Bottom() += rCell.mnAddBottom;
+        }
+
+        return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
     }
-    return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+    else
+    {
+        const Point aPoint( GetColPosition( nCol ), GetRowPosition( nRow ) );
+        const Size aSize( GetColWidth( nCol, nCol ) + 1, GetRowHeight( nRow, nRow ) + 1 );
+        const tools::Rectangle aRect(aPoint, aSize);
+
+        return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+    }
 }
 
 // mirroring
@@ -1054,7 +1074,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     {
         for (size_t nCol = nFirstCol; nCol <= nLastCol; ++nCol)
         {
-            // get Cell and CoordinateSystem (*only* for this Cell), check if used (not empty)
+            // get Cell and CoordinateSystem (*only* for this Cell, do *not* expand for
+            // merged cells (!)), check if used (non-empty vectors)
             const Cell& rCell(CELL(nCol, nRow));
             basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this, nCol, nRow, false));
             basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
@@ -1153,9 +1174,6 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(bContinue)
                     {
-                        const size_t _nLastCol(mxImpl->GetMergedLastCol(nCol, nRow));
-                        const size_t _nLastRow(mxImpl->GetMergedLastRow(nCol, nRow));
-
                         if(rTLBR.IsUsed())
                         {
                             /// top-left and bottom-right Style Tables
