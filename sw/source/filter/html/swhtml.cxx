@@ -296,6 +296,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bInFootEndNoteSymbol( false ),
     m_bIgnoreHTMLComments( bNoHTMLComments ),
     m_bRemoveHidden( false ),
+    m_isInTableStructure(false),
     m_pTempViewFrame(nullptr)
 {
     m_nEventId = nullptr;
@@ -1543,26 +1544,32 @@ void SwHTMLParser::NextToken( int nToken )
     // divisions
     case HTML_DIVISION_ON:
     case HTML_CENTER_ON:
-        if( m_nOpenParaToken )
-        {
-            if( IsReadPRE() )
-                m_nOpenParaToken = 0;
-            else
-                EndPara();
+        if (!m_isInTableStructure)
+            {
+            if( m_nOpenParaToken )
+            {
+                if( IsReadPRE() )
+                    m_nOpenParaToken = 0;
+                else
+                    EndPara();
+            }
+            NewDivision( nToken );
         }
-        NewDivision( nToken );
         break;
 
     case HTML_DIVISION_OFF:
     case HTML_CENTER_OFF:
-        if( m_nOpenParaToken )
+        if (!m_isInTableStructure)
         {
-            if( IsReadPRE() )
-                m_nOpenParaToken = 0;
-            else
-                EndPara();
+            if( m_nOpenParaToken )
+            {
+                if( IsReadPRE() )
+                    m_nOpenParaToken = 0;
+                else
+                    EndPara();
+            }
+            EndDivision( nToken );
         }
-        EndDivision( nToken );
         break;
 
     case HTML_MULTICOL_ON:
