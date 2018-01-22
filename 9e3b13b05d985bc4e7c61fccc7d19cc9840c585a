@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_af729d7a",
+        "filename": "sfx2/source/bastyp/bitset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-01-22T18:49:40Z",
+      "side": 1,
+      "message": "since you\u0027re here, and you speak German, maybe translate this message? :-)",
+      "revId": "9e3b13b05d985bc4e7c61fccc7d19cc9840c585a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
