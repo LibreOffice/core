@@ -507,6 +507,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
     get(m_pBtnHeader, "header");
     get(m_pBtnFormats, "formats");
     get(m_pBtnNaturalSort, "naturalsort");
+    get(m_pBtnIncImages, "includeimages");
     get(m_pBtnCopyResult, "copyresult");
     get(m_pLbOutPos, "outarealb");
     get(m_pEdOutPos, "outareaed");
@@ -543,6 +544,7 @@ void ScTabPageSortOptions::dispose()
     m_pBtnHeader.clear();
     m_pBtnFormats.clear();
     m_pBtnNaturalSort.clear();
+    m_pBtnIncImages.clear();
     m_pBtnCopyResult.clear();
     m_pLbOutPos.clear();
     m_pEdOutPos.clear();
@@ -664,6 +666,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
     m_pBtnFormats->Check       ( aSortData.bIncludePattern );
     m_pBtnHeader->Check        ( aSortData.bHasHeader );
     m_pBtnNaturalSort->Check   ( aSortData.bNaturalSort );
+    m_pBtnIncImages->Check     ( aSortData.bIncludeGraphicObjects );
 
     if ( aSortData.bByRow )
     {
@@ -728,6 +731,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     aNewSortData.bHasHeader      = m_pBtnHeader->IsChecked();
     aNewSortData.bCaseSens       = m_pBtnCase->IsChecked();
     aNewSortData.bNaturalSort    = m_pBtnNaturalSort->IsChecked();
+    aNewSortData.bIncludeGraphicObjects = m_pBtnIncImages->IsChecked();
     aNewSortData.bIncludePattern = m_pBtnFormats->IsChecked();
     aNewSortData.bInplace        = !m_pBtnCopyResult->IsChecked();
     aNewSortData.nDestCol        = theOutPos.Col();

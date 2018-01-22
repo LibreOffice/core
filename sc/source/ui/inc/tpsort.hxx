@@ -145,6 +145,8 @@ private:
     VclPtr<RadioButton>        m_pBtnTopDown;
     VclPtr<RadioButton>        m_pBtnLeftRight;
 
+    VclPtr<CheckBox>           m_pBtnIncImages;
+
     OUString            aStrRowLabel;
     OUString            aStrColLabel;
     OUString            aStrUndefined;
