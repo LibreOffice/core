@@ -44,7 +44,7 @@ class SortedDynamicResultSet: public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XDynamicResultSet >
 {
-    comphelper::OInterfaceContainerHelper2 *mpDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2>  mpDisposeEventListeners;
 
     css::uno::Reference < css::ucb::XDynamicResultSetListener > mxListener;
 

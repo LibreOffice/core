@@ -73,7 +73,7 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
     mxOwnListener->impl_OwnerDies();
     mxOwnListener.clear();
 
-    delete mpDisposeEventListeners;
+    mpDisposeEventListeners.reset();
 
     mxOne.clear();
     mxTwo.clear();
@@ -123,8 +123,8 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpDisposeEventListeners )
-        mpDisposeEventListeners =
-                    new OInterfaceContainerHelper2( getContainerMutex() );
+        mpDisposeEventListeners.reset(
+                    new OInterfaceContainerHelper2( getContainerMutex() ) );
 
     mpDisposeEventListeners->addInterface( Listener );
 }
