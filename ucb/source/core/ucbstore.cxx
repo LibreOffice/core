@@ -1059,23 +1059,14 @@ struct PersistentPropertySet_Impl
     OUString                    m_aKey;
     OUString                    m_aFullKey;
     osl::Mutex                  m_aMutex;
-    OInterfaceContainerHelper2*  m_pDisposeEventListeners;
-    OInterfaceContainerHelper2*  m_pPropSetChangeListeners;
-    PropertyListeners_Impl*     m_pPropertyChangeListeners;
+    std::unique_ptr<OInterfaceContainerHelper2>  m_pDisposeEventListeners;
+    std::unique_ptr<OInterfaceContainerHelper2>  m_pPropSetChangeListeners;
+    std::unique_ptr<PropertyListeners_Impl>      m_pPropertyChangeListeners;
 
     PersistentPropertySet_Impl( PropertySetRegistry& rCreator,
                                 const OUString& rKey )
-    : m_pCreator( &rCreator ), m_pInfo( nullptr ), m_aKey( rKey ),
-      m_pDisposeEventListeners( nullptr ), m_pPropSetChangeListeners( nullptr ),
-      m_pPropertyChangeListeners( nullptr )
+    : m_pCreator( &rCreator ), m_pInfo( nullptr ), m_aKey( rKey )
     {
-    }
-
-    ~PersistentPropertySet_Impl()
-    {
-        delete m_pDisposeEventListeners;
-        delete m_pPropSetChangeListeners;
-        delete m_pPropertyChangeListeners;
     }
 };
 
@@ -1155,8 +1146,8 @@ void SAL_CALL PersistentPropertySet::addEventListener(
                             const Reference< XEventListener >& Listener )
 {
     if ( !m_pImpl->m_pDisposeEventListeners )
-        m_pImpl->m_pDisposeEventListeners =
-                    new OInterfaceContainerHelper2( m_pImpl->m_aMutex );
+        m_pImpl->m_pDisposeEventListeners.reset(
+                    new OInterfaceContainerHelper2( m_pImpl->m_aMutex ) );
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -1329,8 +1320,8 @@ void SAL_CALL PersistentPropertySet::addPropertyChangeListener(
 //  load();
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
-        m_pImpl->m_pPropertyChangeListeners =
-                    new PropertyListeners_Impl( m_pImpl->m_aMutex );
+        m_pImpl->m_pPropertyChangeListeners.reset(
+                    new PropertyListeners_Impl( m_pImpl->m_aMutex ) );
 
     m_pImpl->m_pPropertyChangeListeners->addInterface(
                                                 aPropertyName, xListener );
@@ -1724,8 +1715,8 @@ void SAL_CALL PersistentPropertySet::addPropertySetInfoChangeListener(
                 const Reference< XPropertySetInfoChangeListener >& Listener )
 {
     if ( !m_pImpl->m_pPropSetChangeListeners )
-        m_pImpl->m_pPropSetChangeListeners =
-                    new OInterfaceContainerHelper2( m_pImpl->m_aMutex );
+        m_pImpl->m_pPropSetChangeListeners.reset(
+                    new OInterfaceContainerHelper2( m_pImpl->m_aMutex ) );
 
     m_pImpl->m_pPropSetChangeListeners->addInterface( Listener );
 }
