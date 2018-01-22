@@ -2394,6 +2394,9 @@ public:
 
     SC_DLLPUBLIC ScColumnsRange GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
 
+    ScTable* FetchTable( SCTAB nTab );
+    const ScTable* FetchTable( SCTAB nTab ) const;
+
 private:
 
     /**
@@ -2410,9 +2413,6 @@ private:
     private:
         ScDocument* mpDoc;
     };
-
-    ScTable* FetchTable( SCTAB nTab );
-    const ScTable* FetchTable( SCTAB nTab ) const;
 
     void    MergeNumberFormatter(const ScDocument* pSrcDoc);
 

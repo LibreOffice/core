@@ -1067,6 +1067,9 @@ public:
 
     ScColumnsRange GetColumnsRange(SCCOL begin, SCCOL end) const;
 
+    ScColumn* FetchColumn( SCCOL nCol );
+    const ScColumn* FetchColumn( SCCOL nCol ) const;
+
 private:
 
     void FillFormulaVertical(
@@ -1212,9 +1215,6 @@ private:
 
     // Clipboard transpose for notes
     void TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2);
-
-    ScColumn* FetchColumn( SCCOL nCol );
-    const ScColumn* FetchColumn( SCCOL nCol ) const;
 
     void EndListeningIntersectedGroup(
         sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, std::vector<ScAddress>* pGroupPos );
