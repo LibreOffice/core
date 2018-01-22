@@ -3130,27 +3130,24 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         OUString aPrefix( aStdPrefix );
 
         bool bUnique = true;
-        sal_Int32 i = 0;
-        do
+
+        std::vector<OUString> aPageNames;
+        for (sal_Int32 nMaster = 1; nMaster < nMPageCount; ++nMaster)
         {
-            bUnique = true;
-            for( sal_Int32 nMaster = 1; nMaster < nMPageCount; nMaster++ )
-            {
-                SdPage* pPage = static_cast<SdPage*>(pDoc->GetMasterPage(static_cast<sal_uInt16>(nMaster)));
-                if( pPage && pPage->GetName() == aPrefix )
-                {
-                    bUnique = false;
-                    break;
-                }
-            }
+            const SdPage* pPage = static_cast<const SdPage*>(pDoc->GetMasterPage(static_cast<sal_uInt16>(nMaster)));
+            if (!pPage)
+                continue;
+            aPageNames.push_back(pPage->GetName());
+            if (aPageNames.back() == aPrefix)
+                bUnique = false;
+        }
 
-            if( !bUnique )
-            {
-                i++;
-                aPrefix = aStdPrefix + " " + OUString::number( i );
-            }
-
-        } while( !bUnique );
+        sal_Int32 i = 0;
+        while (!bUnique)
+        {
+            aPrefix = aStdPrefix + " " + OUString::number(++i);
+            bUnique = std::find(aPageNames.begin(), aPageNames.end(), aPrefix) == aPageNames.end();
+        }
 
         OUString aLayoutName( aPrefix );
         aLayoutName += SD_LT_SEPARATOR;
