@@ -131,10 +131,9 @@ namespace drawinglayer
         }
 
         // from MetafileAccessor
-        bool MetafilePrimitive2D::accessMetafile(GDIMetaFile& rTargetMetafile) const
+        void MetafilePrimitive2D::accessMetafile(GDIMetaFile& rTargetMetafile) const
         {
             rTargetMetafile = maMetaFile;
-            return true;
         }
 
         // provide unique ID

@@ -936,7 +936,7 @@ public:
     {
     }
 
-    virtual bool initWindow() override
+    virtual void initWindow() override
     {
         if( !m_pChildWindow )
         {
@@ -948,8 +948,6 @@ public:
         {
             InitChildWindow(m_pChildWindow.get());
         }
-
-        return true;
     }
 
 private:

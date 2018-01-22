@@ -327,12 +327,12 @@ private:
     void        connectTimeFormatterAdjustment(const OString &id, const OUString &rAdjustment);
     void        connectDateFormatterAdjustment(const OString &id, const OUString &rAdjustment);
 
-    bool        extractGroup(const OString &id, stringmap &rVec);
-    bool        extractModel(const OString &id, stringmap &rVec);
-    bool        extractBuffer(const OString &id, stringmap &rVec);
+    void        extractGroup(const OString &id, stringmap &rVec);
+    void        extractModel(const OString &id, stringmap &rVec);
+    void        extractBuffer(const OString &id, stringmap &rVec);
     static bool extractAdjustmentToMap(const OString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
-    bool        extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
-    bool        extractStock(const OString &id, stringmap &rMap);
+    void        extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
+    void        extractStock(const OString &id, stringmap &rMap);
     void        extractMnemonicWidget(const OString &id, stringmap &rMap);
 
     void        handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader);

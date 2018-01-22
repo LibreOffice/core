@@ -327,7 +327,7 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
     return true;
 }
 
-bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
+void OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
     VCL_GL_INFO( "::ImplScale" );
 
@@ -344,31 +344,30 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
 
     if( nScaleFlag == BmpScaleFlag::Fast )
     {
-        return ImplScaleFilter( xContext, rScaleX, rScaleY, GL_NEAREST );
+        ImplScaleFilter( xContext, rScaleX, rScaleY, GL_NEAREST );
     }
     if( nScaleFlag == BmpScaleFlag::BiLinear )
     {
-        return ImplScaleFilter( xContext, rScaleX, rScaleY, GL_LINEAR );
+        ImplScaleFilter( xContext, rScaleX, rScaleY, GL_LINEAR );
     }
     else if( nScaleFlag == BmpScaleFlag::Default )
     {
         const Lanczos3Kernel aKernel;
 
-        return ImplScaleConvolution( xContext, rScaleX, rScaleY, aKernel );
+        ImplScaleConvolution( xContext, rScaleX, rScaleY, aKernel );
     }
     else if( nScaleFlag == BmpScaleFlag::BestQuality && rScaleX <= 1 && rScaleY <= 1 )
     { // Use are scaling for best quality, but only if downscaling.
-        return ImplScaleArea( xContext, rScaleX, rScaleY );
+        ImplScaleArea( xContext, rScaleX, rScaleY );
     }
     else if( nScaleFlag == BmpScaleFlag::Lanczos || nScaleFlag == BmpScaleFlag::BestQuality  )
     {
         const Lanczos3Kernel aKernel;
 
-        return ImplScaleConvolution( xContext, rScaleX, rScaleY, aKernel );
+        ImplScaleConvolution( xContext, rScaleX, rScaleY, aKernel );
     }
-
-    SAL_WARN( "vcl.opengl", "Invalid flag for scaling operation" );
-    return false;
+    else
+        SAL_WARN( "vcl.opengl", "Invalid flag for scaling operation" );
 }
 
 bool OpenGLSalBitmap::ScalingSupported() const

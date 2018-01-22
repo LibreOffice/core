@@ -63,7 +63,7 @@ public:
     virtual             ~Help();
 
     virtual bool        Start( const OUString& rHelpId, const vcl::Window* pWindow );
-    virtual bool        SearchKeyword( const OUString& rKeyWord );
+    virtual void        SearchKeyword( const OUString& rKeyWord );
     virtual OUString    GetHelpText( const OUString& aHelpURL, const vcl::Window* pWindow );
 
     static void         EnableContextHelp();

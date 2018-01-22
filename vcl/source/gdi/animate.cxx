@@ -503,7 +503,7 @@ void Animation::ResetLoopCount()
     mbLoopTerminated = false;
 }
 
-bool Animation::Convert( BmpConversion eConversion )
+void Animation::Convert( BmpConversion eConversion )
 {
     SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
 
@@ -518,10 +518,6 @@ bool Animation::Convert( BmpConversion eConversion )
 
         maBitmapEx.Convert( eConversion );
     }
-    else
-        bRet = false;
-
-    return bRet;
 }
 
 bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
@@ -566,7 +562,7 @@ bool Animation::Invert()
     return bRet;
 }
 
-bool Animation::Mirror( BmpMirrorFlags nMirrorFlags )
+void Animation::Mirror( BmpMirrorFlags nMirrorFlags )
 {
     SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
 
@@ -595,13 +591,9 @@ bool Animation::Mirror( BmpMirrorFlags nMirrorFlags )
             maBitmapEx.Mirror( nMirrorFlags );
         }
     }
-    else
-        bRet = false;
-
-    return bRet;
 }
 
-bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
+void Animation::Adjust( short nLuminancePercent, short nContrastPercent,
              short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
              double fGamma, bool bInvert )
 {
@@ -628,10 +620,6 @@ bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
                            nChannelRPercent, nChannelGPercent, nChannelBPercent,
                            fGamma, bInvert );
     }
-    else
-        bRet = false;
-
-    return bRet;
 }
 
 bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )

@@ -788,7 +788,7 @@ void PrinterController::resetPrinterOptions( bool i_bFileOutput )
     mpImplData->mxPrinter->SetPrinterOptions( aOpt );
 }
 
-bool PrinterController::setupPrinter( vcl::Window* i_pParent )
+void PrinterController::setupPrinter( vcl::Window* i_pParent )
 {
     bool bRet = false;
 
@@ -854,7 +854,6 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         }
         xPrinter->Pop();
     }
-    return bRet;
 }
 
 PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )

@@ -348,10 +348,10 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
     }
 }
 
-bool RenderList::addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, SalColor nColor, const SalTwoRect& r2Rect)
+void RenderList::addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, SalColor nColor, const SalTwoRect& r2Rect)
 {
     if (!rTexture)
-        return false;
+        return;
 
     GLfloat fX1 = r2Rect.mnDestX;
     GLfloat fY1 = r2Rect.mnDestY;
@@ -369,8 +369,6 @@ bool RenderList::addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, Sal
 
     vcl::vertex::addRectangle<GL_TRIANGLES>(rTextureParameter.maVertices, fX1, fY1, fX2, fY2);
     vcl::vertex::addQuadColors<GL_TRIANGLES>(rTextureParameter.maColors, nColor, 0.0f);
-
-    return true;
 }
 
 void RenderList::addDrawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTransparency,

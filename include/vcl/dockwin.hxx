@@ -119,7 +119,7 @@ public:
     ~ImplDockingWindowWrapper();
 
     vcl::Window*    GetWindow()     { return mpDockingWindow; }
-    bool            ImplStartDocking( const Point& rPos );
+    void            ImplStartDocking( const Point& rPos );
 
     // those methods actually call the corresponding handlers
     void            StartDocking( const Point& rPos, tools::Rectangle const & rRect );
@@ -270,7 +270,7 @@ public:
     bool            isLayoutEnabled() const;
     void            setOptimalLayoutSize();
 
-    SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
+    SAL_DLLPRIVATE void    ImplStartDocking( const Point& rPos );
     SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDeferredInit; }
     virtual        void    doDeferredInit(WinBits nBits);
 protected:

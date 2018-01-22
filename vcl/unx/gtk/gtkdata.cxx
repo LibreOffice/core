@@ -205,7 +205,7 @@ GtkSalDisplay::initScreen( SalX11Screen nXScreen ) const
     return pSD;
 }
 
-bool GtkSalDisplay::Dispatch( XEvent* pEvent )
+void GtkSalDisplay::Dispatch( XEvent* pEvent )
 {
     if( GetDisplay() == pEvent->xany.display )
     {
@@ -214,11 +214,12 @@ bool GtkSalDisplay::Dispatch( XEvent* pEvent )
         for (auto pSalFrame : m_aFrames )
         {
             if (pSalFrame->GetSystemData()->aWindow == pEvent->xany.window)
-                return static_cast<GtkSalFrame*>( pSalFrame )->Dispatch( pEvent );
+            {
+                static_cast<GtkSalFrame*>( pSalFrame )->Dispatch( pEvent );
+                return;
+            }
         }
     }
-
-    return false;
 }
 
 GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,

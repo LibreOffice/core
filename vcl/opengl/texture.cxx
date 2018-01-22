@@ -211,13 +211,12 @@ bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, in
     return true;
 }
 
-bool ImplOpenGLTexture::InitializeSlotMechanism(int nInitialSlotSize)
+void ImplOpenGLTexture::InitializeSlotMechanism(int nInitialSlotSize)
 {
     if (mpSlotReferences)
-        return false;
+        return;
 
     mpSlotReferences.reset(new std::vector<int>(nInitialSlotSize, 0));
-    return true;
 }
 
 void ImplOpenGLTexture::IncreaseRefCount(int nSlotNumber)
@@ -380,7 +379,7 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
     }
 }
 
-bool OpenGLTexture::GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const
+void OpenGLTexture::GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const
 {
     if (IsValid())
     {
@@ -400,9 +399,7 @@ bool OpenGLTexture::GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GL
             y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / fTextureHeight;
             y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / fTextureHeight;
         }
-        return true;
     }
-    return false;
 }
 
 template <>

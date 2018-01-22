@@ -2307,16 +2307,13 @@ void Menu::ImplClearSalMenu()
     mpSalMenu = nullptr;
 }
 
-bool Menu::GetSystemMenuData( SystemMenuData* pData ) const
+void Menu::GetSystemMenuData( SystemMenuData* pData ) const
 {
     Menu* pMenu = const_cast<Menu*>(this);
     if( pData && pMenu->ImplGetSalMenu() )
     {
         pMenu->ImplGetSalMenu()->GetSystemMenuData( pData );
-        return true;
     }
-    else
-        return false;
 }
 
 bool Menu::IsHighlighted( sal_uInt16 nItemPos ) const

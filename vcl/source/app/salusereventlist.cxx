@@ -140,17 +140,15 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
     return bWasEvent;
 }
 
-bool SalUserEventList::RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
+void SalUserEventList::RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
     SalUserEvent aEvent( pFrame, pData, nEvent );
-    bool bResult = false;
 
     osl::MutexGuard aGuard( m_aUserEventsMutex );
     auto it = std::find( m_aUserEvents.begin(), m_aUserEvents.end(), aEvent );
     if ( it != m_aUserEvents.end() )
     {
         m_aUserEvents.erase( it );
-        bResult = true;
     }
     else
     {
@@ -158,7 +156,6 @@ bool SalUserEventList::RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEve
         if ( it != m_aProcessingUserEvents.end() )
         {
             m_aProcessingUserEvents.erase( it );
-            bResult = true;
         }
     }
 
@@ -167,8 +164,6 @@ bool SalUserEventList::RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEve
         m_bAllUserEventProcessedSignaled = true;
         TriggerAllUserEventsProcessed();
     }
-
-    return bResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

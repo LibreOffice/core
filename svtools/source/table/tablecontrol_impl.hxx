@@ -465,7 +465,7 @@ namespace svt { namespace table
         virtual void BeginDrag() override;
         virtual void CreateAnchor() override;
         virtual void DestroyAnchor() override;
-        virtual bool SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor = false) override;
+        virtual void SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor = false) override;
         virtual bool IsSelectionAtPoint( const Point& rPoint ) override;
         virtual void DeselectAtPoint( const Point& rPoint ) override;
         virtual void DeselectAll() override;

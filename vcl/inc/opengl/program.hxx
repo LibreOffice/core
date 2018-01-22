@@ -70,7 +70,7 @@ public:
 
     bool Load( const OUString& rVertexShader, const OUString& rFragmentShader,
                const rtl::OString& preamble, const rtl::OString& rDigest );
-    bool Use();
+    void Use();
     void Reuse();
     bool Clean();
 
@@ -102,7 +102,7 @@ public:
 
     void ApplyMatrix(float fWidth, float fHeight, float fPixelOffset = 0.0f);
 
-    bool DrawTexture( const OpenGLTexture& rTexture );
+    void DrawTexture( const OpenGLTexture& rTexture );
 
     void DrawArrays(GLenum aMode, std::vector<GLfloat>& aVertices);
     void DrawElements(GLenum aMode, GLuint nNumberOfVertices);

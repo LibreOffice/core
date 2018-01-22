@@ -607,7 +607,7 @@ public:
     {
         return m_eMode;
     }
-    bool set_property(const OString &rKey, const OUString &rValue);
+    void set_property(const OString &rKey, const OUString &rValue);
 };
 
 class VCL_DLLPUBLIC MessageDialog : public Dialog
