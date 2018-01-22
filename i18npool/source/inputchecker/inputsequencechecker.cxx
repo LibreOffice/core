@@ -43,11 +43,6 @@ InputSequenceCheckerImpl::InputSequenceCheckerImpl(const char *pServiceName)
 
 InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
 {
-    // Clear lookuptable
-    for (lookupTableItem* p : lookupTable)
-        delete p;
-
-    lookupTable.clear();
 }
 
 sal_Bool SAL_CALL
@@ -113,8 +108,8 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char const * rLanguage)
         return cachedItem->xISC;
     }
     else {
-        for (lookupTableItem* l : lookupTable) {
-            cachedItem = l;
+        for (auto& l : lookupTable) {
+            cachedItem = l.get();
             if (cachedItem->aLanguage == rLanguage)
                 return cachedItem->xISC;
         }
@@ -127,7 +122,8 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char const * rLanguage)
         if ( xI.is() ) {
             Reference< XExtendedInputSequenceChecker > xISC( xI, UNO_QUERY );
             if (xISC.is()) {
-                lookupTable.push_back(cachedItem = new lookupTableItem(rLanguage, xISC));
+                lookupTable.emplace_back(new lookupTableItem(rLanguage, xISC));
+                cachedItem = lookupTable.back().get();
                 return cachedItem->xISC;
             }
         }

@@ -95,7 +95,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    Transliteration_casemapping *trans;
+    std::unique_ptr<Transliteration_casemapping> trans;
 
 // --- parser specific (implemented in cclass_unicode_parser.cxx) ---
 
