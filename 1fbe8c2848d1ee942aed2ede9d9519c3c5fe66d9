@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_afd1bdfd",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1898,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-22T23:46:16Z",
+      "side": 1,
+      "message": "An assert would be good here that pObjects.size() is at least nRowEnd-nRowStart+1\n\nPlease do as a follow-up.",
+      "revId": "1fbe8c2848d1ee942aed2ede9d9519c3c5fe66d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0f4729bc",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-22T23:46:16Z",
+      "side": 1,
+      "message": "I assume all this should depend on another option (sort graphics or some such) at the end than on bPattern instead?",
+      "revId": "1fbe8c2848d1ee942aed2ede9d9519c3c5fe66d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_2f122db5",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-22T23:46:16Z",
+      "side": 1,
+      "message": "Iterating the entire draw page for each and every cell position looks like a possible bottle neck to me. It probably would be better to gather all affected cell positions in one go and return a vector of vectors. Something to keep an eye on and follow-up with.\n\nProbably a parametrized call is needed to cater also for the if(!pDrawLayer-\u003eGetObjectsAnchoredToCell(aCell).empty()) call from ScColumn::IsDrawObjectsEmptyBlock()that does not need all objects but only presence of one in the range.",
+      "revId": "1fbe8c2848d1ee942aed2ede9d9519c3c5fe66d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
