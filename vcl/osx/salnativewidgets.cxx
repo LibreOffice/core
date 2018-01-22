@@ -106,11 +106,11 @@ static ThemeButtonValue ImplGetButtonValue( ButtonValue aButtonValue )
             break;
 
         case ButtonValue::Off:
+        case ButtonValue::DontKnow:
             return kThemeButtonOff;
             break;
 
         case ButtonValue::Mixed:
-        case ButtonValue::DontKnow:
         default:
             return kThemeButtonMixed;
             break;
