@@ -16,6 +16,24 @@
       "revId": "6f4b9e30580f3cb91591b0e33f799da2a69b1ae4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ac3f0b24",
+        "filename": "android/source/src/java/org/libreoffice/LOKitTileProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1001306
+      },
+      "writtenOn": "2018-01-22T13:29:46Z",
+      "side": 1,
+      "message": "This function is not called when the shape is selected. It is called when theres a change on the shape to set the change.",
+      "parentUuid": "fa31d9ce_4713d65c",
+      "revId": "6f4b9e30580f3cb91591b0e33f799da2a69b1ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
