@@ -126,8 +126,7 @@ private:
     CTFontCollectionRef mpCTFontCollection;
     CFArrayRef mpCTFontArray;
 
-    typedef std::unordered_map<sal_IntPtr,CoreTextFontFace*> CTFontContainer;
-    CTFontContainer maFontContainer;
+    std::unordered_map<sal_IntPtr,CoreTextFontFace*> maFontContainer;
 };
 
 

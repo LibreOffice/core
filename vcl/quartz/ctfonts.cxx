@@ -441,7 +441,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     return rDFA;
 }
 
-static void CTFontEnumCallBack( const void* pValue, void* pContext )
+static void fontEnumCallBack( const void* pValue, void* pContext )
 {
     CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
 
@@ -464,8 +464,8 @@ SystemFontList::SystemFontList()
 
 SystemFontList::~SystemFontList()
 {
-    CTFontContainer::const_iterator it = maFontContainer.begin();
-    for(; it != maFontContainer.end(); ++it )
+    auto it = maFontContainer.cbegin();
+    for(; it != maFontContainer.cend(); ++it )
     {
         delete (*it).second;
     }
@@ -489,8 +489,8 @@ void SystemFontList::AddFont( CoreTextFontFace* pFontData )
 
 void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) const
 {
-    CTFontContainer::const_iterator it = maFontContainer.begin();
-    for(; it != maFontContainer.end(); ++it )
+    auto it = maFontContainer.cbegin();
+    for(; it != maFontContainer.cend(); ++it )
     {
         rFontCollection.Add( (*it).second->Clone() );
     }
@@ -498,7 +498,7 @@ void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) co
 
 CoreTextFontFace* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
 {
-    CTFontContainer::const_iterator it = maFontContainer.find( nFontId );
+    auto it = maFontContainer.find( nFontId );
     if( it == maFontContainer.end() )
     {
         return nullptr;
@@ -522,7 +522,7 @@ bool SystemFontList::Init()
 
     const int nFontCount = CFArrayGetCount( mpCTFontArray );
     const CFRange aFullRange = CFRangeMake( 0, nFontCount );
-    CFArrayApplyFunction( mpCTFontArray, aFullRange, CTFontEnumCallBack, this );
+    CFArrayApplyFunction( mpCTFontArray, aFullRange, fontEnumCallBack, this );
 
     return true;
 }
