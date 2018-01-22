@@ -245,20 +245,20 @@ public:
 // Document statistics
 class SwDocStatFieldType : public SwFieldType
 {
-    SwDoc*          pDoc;
-    SvxNumType      nNumberingType;
+    SwDoc*          m_pDoc;
+    SvxNumType      m_nNumberingType;
 
 public:
     SwDocStatFieldType(SwDoc*);
     OUString                Expand(sal_uInt16 nSubType, SvxNumType nFormat) const;
     virtual SwFieldType*    Copy() const override;
 
-    void             SetNumFormat( SvxNumType eFormat )  { nNumberingType = eFormat; }
+    void             SetNumFormat( SvxNumType eFormat )  { m_nNumberingType = eFormat; }
 };
 
 class SW_DLLPUBLIC SwDocStatField : public SwField
 {
-    sal_uInt16 nSubType;
+    sal_uInt16 m_nSubType;
 
 public:
     SwDocStatField( SwDocStatFieldType*,
@@ -506,9 +506,9 @@ public:
 
 class SW_DLLPUBLIC SwDocInfoField : public SwValueField
 {
-    sal_uInt16  nSubType;
-    OUString  aContent;
-    OUString  aName;
+    sal_uInt16  m_nSubType;
+    OUString  m_aContent;
+    OUString  m_aName;
 
     virtual OUString        Expand() const override;
     virtual SwField*        Copy() const override;
@@ -521,9 +521,9 @@ public:
     virtual sal_uInt16      GetSubType() const override;
     virtual void            SetLanguage(LanguageType nLng) override;
     virtual OUString        GetFieldName() const override;
-    const OUString&         GetName() const { return aName; }
-    void                    SetName( const OUString& rName ) { aName = rName; }
-    void             SetExpansion(const OUString& rStr) { aContent = rStr; }
+    const OUString&         GetName() const { return m_aName; }
+    void                    SetName( const OUString& rName ) { m_aName = rName; }
+    void             SetExpansion(const OUString& rStr) { m_aContent = rStr; }
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };

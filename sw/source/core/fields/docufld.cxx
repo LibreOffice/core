@@ -713,15 +713,15 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
-    : SwFieldType( SwFieldIds::DocStat ), nNumberingType( SVX_NUM_ARABIC )
+    : SwFieldType( SwFieldIds::DocStat ), m_nNumberingType( SVX_NUM_ARABIC )
 {
-    pDoc = pDocument;
+    m_pDoc = pDocument;
 }
 
 OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) const
 {
     sal_uInt32 nVal = 0;
-    const SwDocStat& rDStat = pDoc->getIDocumentStatistics().GetDocStat();
+    const SwDocStat& rDStat = m_pDoc->getIDocumentStatistics().GetDocStat();
     switch( nSubType )
     {
         case DS_TBL:  nVal = rDStat.nTable;   break;
@@ -731,11 +731,11 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) con
         case DS_WORD: nVal = rDStat.nWord;  break;
         case DS_CHAR: nVal = rDStat.nChar;  break;
         case DS_PAGE:
-            if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
-                const_cast<SwDocStat &>(rDStat).nPage = pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum();
+            if( m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
+                const_cast<SwDocStat &>(rDStat).nPage = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum();
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFormat )
-                nFormat = nNumberingType;
+                nFormat = m_nNumberingType;
             break;
         default:
             OSL_FAIL( "SwDocStatFieldType::Expand: unknown SubType" );
@@ -749,7 +749,7 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) con
 
 SwFieldType* SwDocStatFieldType::Copy() const
 {
-    SwDocStatFieldType *pTmp = new SwDocStatFieldType(pDoc);
+    SwDocStatFieldType *pTmp = new SwDocStatFieldType(m_pDoc);
     return pTmp;
 }
 
@@ -760,34 +760,34 @@ SwFieldType* SwDocStatFieldType::Copy() const
  */
 SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormat)
     : SwField(pTyp, nFormat),
-    nSubType(nSub)
+    m_nSubType(nSub)
 {}
 
 OUString SwDocStatField::Expand() const
 {
-    return static_cast<SwDocStatFieldType*>(GetTyp())->Expand(nSubType, static_cast<SvxNumType>(GetFormat()));
+    return static_cast<SwDocStatFieldType*>(GetTyp())->Expand(m_nSubType, static_cast<SvxNumType>(GetFormat()));
 }
 
 SwField* SwDocStatField::Copy() const
 {
     SwDocStatField *pTmp = new SwDocStatField(
-                    static_cast<SwDocStatFieldType*>(GetTyp()), nSubType, GetFormat() );
+                    static_cast<SwDocStatFieldType*>(GetTyp()), m_nSubType, GetFormat() );
     return pTmp;
 }
 
 sal_uInt16 SwDocStatField::GetSubType() const
 {
-    return nSubType;
+    return m_nSubType;
 }
 
 void SwDocStatField::SetSubType(sal_uInt16 nSub)
 {
-    nSubType = nSub;
+    m_nSubType = nSub;
 }
 
 void SwDocStatField::ChangeExpansion( const SwFrame* pFrame )
 {
-    if( DS_PAGE == nSubType && SVX_NUM_PAGEDESC == GetFormat() )
+    if( DS_PAGE == m_nSubType && SVX_NUM_PAGEDESC == GetFormat() )
         static_cast<SwDocStatFieldType*>(GetTyp())->SetNumFormat(
                 pFrame->FindPageFrame()->GetPageDesc()->GetNumType().GetNumberingType() );
 }
@@ -998,17 +998,17 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 // document info field
 
 SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, sal_uInt32 nFormat) :
-    SwValueField(pTyp, nFormat), nSubType(nSub)
+    SwValueField(pTyp, nFormat), m_nSubType(nSub)
 {
-    aName = rName;
-    aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(nSubType, nFormat, GetLanguage(), aName);
+    m_aName = rName;
+    m_aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(m_nSubType, nFormat, GetLanguage(), m_aName);
 }
 
 SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFormat) :
-    SwValueField(pTyp, nFormat), nSubType(nSub)
+    SwValueField(pTyp, nFormat), m_nSubType(nSub)
 {
-    aName = rName;
-    aContent = rValue;
+    m_aName = rName;
+    m_aContent = rValue;
 }
 
 template<class T>
@@ -1032,7 +1032,7 @@ static double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
 
 OUString SwDocInfoField::Expand() const
 {
-    if ( ( nSubType & 0xFF ) == DI_CUSTOM )
+    if ( ( m_nSubType & 0xFF ) == DI_CUSTOM )
     {
         // custom properties currently need special treatment
         // We don't have a secure way to detect "real" custom properties in Word import of text
@@ -1043,7 +1043,7 @@ OUString SwDocInfoField::Expand() const
         // "user fields" and simple text
         SwDocShell* pDocShell = GetDoc()->GetDocShell();
         if( !pDocShell )
-            return aContent;
+            return m_aContent;
         try
         {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW);
@@ -1052,8 +1052,8 @@ OUString SwDocInfoField::Expand() const
             uno::Reference < beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
 
             uno::Any aAny;
-            if( xSetInfo->hasPropertyByName( aName ) )
-                aAny = xSet->getPropertyValue( aName );
+            if( xSetInfo->hasPropertyByName( m_aName ) )
+                aAny = xSet->getPropertyValue( m_aName );
             if ( aAny.getValueType() != cppu::UnoType<void>::get() )
             {
                 // "void" type means that the property has not been inserted until now
@@ -1095,28 +1095,28 @@ OUString SwDocInfoField::Expand() const
                         uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
                         aNew >>= sVal;
                     }
-                    const_cast<SwDocInfoField*>(this)->aContent = sVal;
+                    const_cast<SwDocInfoField*>(this)->m_aContent = sVal;
                 }
             }
         }
         catch (uno::Exception&) {}
     }
     else if ( !IsFixed() )
-        const_cast<SwDocInfoField*>(this)->aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(nSubType, GetFormat(), GetLanguage(), aName);
+        const_cast<SwDocInfoField*>(this)->m_aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(m_nSubType, GetFormat(), GetLanguage(), m_aName);
 
-    return aContent;
+    return m_aContent;
 }
 
 OUString SwDocInfoField::GetFieldName() const
 {
     OUString aStr(SwFieldType::GetTypeStr(GetTypeId()) + ":");
 
-    sal_uInt16 const nSub = nSubType & 0xff;
+    sal_uInt16 const nSub = m_nSubType & 0xff;
 
     switch (nSub)
     {
         case DI_CUSTOM:
-            aStr += aName;
+            aStr += m_aName;
             break;
 
         default:
@@ -1133,21 +1133,21 @@ OUString SwDocInfoField::GetFieldName() const
 
 SwField* SwDocInfoField::Copy() const
 {
-    SwDocInfoField* pField = new SwDocInfoField(static_cast<SwDocInfoFieldType*>(GetTyp()), nSubType, aName, GetFormat());
+    SwDocInfoField* pField = new SwDocInfoField(static_cast<SwDocInfoFieldType*>(GetTyp()), m_nSubType, m_aName, GetFormat());
     pField->SetAutomaticLanguage(IsAutomaticLanguage());
-    pField->aContent = aContent;
+    pField->m_aContent = m_aContent;
 
     return pField;
 }
 
 sal_uInt16 SwDocInfoField::GetSubType() const
 {
-    return nSubType;
+    return m_nSubType;
 }
 
 void SwDocInfoField::SetSubType(sal_uInt16 nSub)
 {
-    nSubType = nSub;
+    m_nSubType = nSub;
 }
 
 void SwDocInfoField::SetLanguage(LanguageType nLng)
@@ -1163,19 +1163,19 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= aContent;
+        rAny <<= m_aContent;
         break;
 
     case FIELD_PROP_PAR4:
-        rAny <<= aName;
+        rAny <<= m_aName;
         break;
 
     case FIELD_PROP_USHORT1:
-        rAny  <<= static_cast<sal_Int16>(aContent.toInt32());
+        rAny  <<= static_cast<sal_Int16>(m_aContent.toInt32());
         break;
 
     case FIELD_PROP_BOOL1:
-        rAny <<= 0 != (nSubType & DI_SUB_FIXED);
+        rAny <<= 0 != (m_nSubType & DI_SUB_FIXED);
         break;
 
     case FIELD_PROP_FORMAT:
@@ -1193,7 +1193,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_BOOL2:
         {
-            sal_uInt16 nExtSub = (nSubType & 0xff00) & ~DI_SUB_FIXED;
+            sal_uInt16 nExtSub = (m_nSubType & 0xff00) & ~DI_SUB_FIXED;
             rAny <<= nExtSub == DI_SUB_DATE;
         }
         break;
@@ -1209,23 +1209,23 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        if( nSubType & DI_SUB_FIXED )
-            rAny >>= aContent;
+        if( m_nSubType & DI_SUB_FIXED )
+            rAny >>= m_aContent;
         break;
 
     case FIELD_PROP_USHORT1:
-        if( nSubType & DI_SUB_FIXED )
+        if( m_nSubType & DI_SUB_FIXED )
         {
             rAny >>= nValue;
-            aContent = OUString::number(nValue);
+            m_aContent = OUString::number(nValue);
         }
         break;
 
     case FIELD_PROP_BOOL1:
         if(*o3tl::doAccess<bool>(rAny))
-            nSubType |= DI_SUB_FIXED;
+            m_nSubType |= DI_SUB_FIXED;
         else
-            nSubType &= ~DI_SUB_FIXED;
+            m_nSubType &= ~DI_SUB_FIXED;
         break;
     case FIELD_PROP_FORMAT:
         {
@@ -1236,14 +1236,14 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
 
     case FIELD_PROP_PAR3:
-        rAny >>= aContent;
+        rAny >>= m_aContent;
         break;
     case FIELD_PROP_BOOL2:
-        nSubType &= 0xf0ff;
+        m_nSubType &= 0xf0ff;
         if(*o3tl::doAccess<bool>(rAny))
-            nSubType |= DI_SUB_DATE;
+            m_nSubType |= DI_SUB_DATE;
         else
-            nSubType |= DI_SUB_TIME;
+            m_nSubType |= DI_SUB_TIME;
         break;
     default:
         return SwField::PutValue(rAny, nWhichId);
