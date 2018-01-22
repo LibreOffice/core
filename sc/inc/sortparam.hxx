@@ -50,6 +50,7 @@ struct SC_DLLPUBLIC ScSortParam
     bool        bCaseSens;
     bool        bNaturalSort;
     bool        bIncludeComments;
+    bool        bIncludeGraphicObjects;
     bool        bUserDef;
     bool        bIncludePattern;
     bool        bInplace;

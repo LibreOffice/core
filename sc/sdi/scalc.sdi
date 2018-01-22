@@ -1094,7 +1094,7 @@ SfxVoidItem DataSelect SID_DATA_SELECT
 
 
 SfxVoidItem DataSort SID_SORT
-(SfxBoolItem ByRows SID_SORT_BYROW,SfxBoolItem HasHeader SID_SORT_HASHEADER,SfxBoolItem CaseSensitive SID_SORT_CASESENS,SfxBoolItem NaturalSort SID_SORT_NATURALSORT,SfxBoolItem IncludeAttribs SID_SORT_ATTRIBS,SfxUInt16Item UserDefIndex SID_SORT_USERDEF,SfxInt32Item Col1 FN_PARAM_1,SfxBoolItem Ascending1 FN_PARAM_2,SfxInt32Item Col2 FN_PARAM_3,SfxBoolItem Ascending2 FN_PARAM_4,SfxInt32Item Col3 FN_PARAM_5,SfxBoolItem Ascending3 FN_PARAM_6,SfxBoolItem IncludeComments SID_SORT_INCCOMMENTS)
+(SfxBoolItem ByRows SID_SORT_BYROW,SfxBoolItem HasHeader SID_SORT_HASHEADER,SfxBoolItem CaseSensitive SID_SORT_CASESENS,SfxBoolItem NaturalSort SID_SORT_NATURALSORT,SfxBoolItem IncludeAttribs SID_SORT_ATTRIBS,SfxUInt16Item UserDefIndex SID_SORT_USERDEF,SfxInt32Item Col1 FN_PARAM_1,SfxBoolItem Ascending1 FN_PARAM_2,SfxInt32Item Col2 FN_PARAM_3,SfxBoolItem Ascending2 FN_PARAM_4,SfxInt32Item Col3 FN_PARAM_5,SfxBoolItem Ascending3 FN_PARAM_6,SfxBoolItem IncludeComments SID_SORT_INCCOMMENTS, SfxBoolItem IncludeImages SID_SORT_INCIMAGES)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

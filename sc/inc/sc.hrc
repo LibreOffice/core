@@ -625,6 +625,7 @@
 #define SID_SORT_USERDEF        (SC_PARAM_START+4)
 #define SID_SORT_NATURALSORT    (SC_PARAM_START+5)
 #define SID_SORT_INCCOMMENTS    (SC_PARAM_START+6)
+#define SID_SORT_INCIMAGES      (SC_PARAM_START+7)
 
 // Sidebar -------------------------------------------------------------
 
