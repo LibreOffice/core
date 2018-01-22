@@ -645,7 +645,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
 
     // Fill pCode with D-Tor code
     GenerateDestructorTrampoline(pCode, pTD);
-    _pDtor = (sal_Int32)(reinterpret_cast<sal_uInt64>(pCode) - _codeBase);
+    _pDtor = static_cast<sal_Int32>(reinterpret_cast<sal_uInt64>(pCode) - _codeBase);
     pCodeOffset += codeSnippetSize;
 
     // Info count accompanied by type info ptrs: type, base type, base base type, ...

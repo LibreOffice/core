@@ -186,7 +186,7 @@ X509Certificate_MSCryptImpl::~X509Certificate_MSCryptImpl() {
 //Methods from XCertificate
 sal_Int16 SAL_CALL X509Certificate_MSCryptImpl::getVersion() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
-        return ( char )m_pCertContext->pCertInfo->dwVersion ;
+        return static_cast<char>(m_pCertContext->pCertInfo->dwVersion) ;
     } else {
         return -1 ;
     }

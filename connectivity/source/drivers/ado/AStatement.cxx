@@ -211,7 +211,7 @@ sal_Int32 OStatement_Base::getPrecision ( sal_Int32 sqlType)
 
     sal_Int32 prec = -1;
     OTypeInfo aInfo;
-    aInfo.nType = (sal_Int16)sqlType;
+    aInfo.nType = static_cast<sal_Int16>(sqlType);
     if (!m_aTypeInfo.empty())
     {
         std::vector<OTypeInfo>::const_iterator aIter = std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);

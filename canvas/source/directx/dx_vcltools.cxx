@@ -223,7 +223,7 @@ namespace dxcanvas
                                     // out notion of alpha is
                                     // different from the rest
                                     // of the world's
-                                    *pCurrOutput++ = 255 - (BYTE)*pAScan++;
+                                    *pCurrOutput++ = 255 - static_cast<BYTE>(*pAScan++);
                                 }
                             }
                             break;
@@ -243,7 +243,7 @@ namespace dxcanvas
                                     // out notion of alpha is
                                     // different from the rest
                                     // of the world's
-                                    *pCurrOutput++ = 255 - (BYTE)*pAScan++;
+                                    *pCurrOutput++ = 255 - static_cast<BYTE>(*pAScan++);
                                 }
                             }
                             break;
@@ -275,7 +275,7 @@ namespace dxcanvas
                                     // out notion of alpha is
                                     // different from the rest
                                     // of the world's
-                                    *pCurrOutput++ = 255 - (BYTE)*pAScan++;
+                                    *pCurrOutput++ = 255 - static_cast<BYTE>(*pAScan++);
                                 }
                             }
                             break;

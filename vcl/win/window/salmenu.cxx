@@ -189,7 +189,7 @@ void WinSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 void WinSalMenu::RemoveItem( unsigned nPos )
 {
     int num = ::GetMenuItemCount( mhMenu );
-    if( num != -1 && nPos < (unsigned)num )
+    if( num != -1 && nPos < static_cast<unsigned>(num) )
     {
         WinSalMenuItem *pSalMenuItem = nullptr;
 

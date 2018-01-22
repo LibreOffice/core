@@ -142,7 +142,7 @@ STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
     {
         return E_FAIL;
     }
-    *foreground = (long)GetXInterface()->getForeground();
+    *foreground = static_cast<long>(GetXInterface()->getForeground());
 
     return S_OK;
 
@@ -167,7 +167,7 @@ STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
     {
         return E_FAIL;
     }
-    *background = (long)GetXInterface()->getBackground();
+    *background = static_cast<long>(GetXInterface()->getBackground());
 
     return S_OK;
 

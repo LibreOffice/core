@@ -509,7 +509,7 @@ bool WinOpenGLContext::ImplInit()
         1,                              // Version Number
         PFD_SUPPORT_OPENGL,
         PFD_TYPE_RGBA,                  // Request An RGBA Format
-        (BYTE)32,                       // Select Our Color Depth
+        BYTE(32),                       // Select Our Color Depth
         0, 0, 0, 0, 0, 0,               // Color Bits Ignored
         0,                              // No Alpha Buffer
         0,                              // Shift Bit Ignored
@@ -547,8 +547,8 @@ bool WinOpenGLContext::ImplInit()
 #if OSL_DEBUG_LEVEL > 0
         PIXELFORMATDESCRIPTOR pfd;
         DescribePixelFormat(m_aGLWin.hDC, WindowPix, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
-        SAL_WARN("vcl.opengl", "Render Target: Window: " << (int) ((pfd.dwFlags & PFD_DRAW_TO_WINDOW) != 0) << ", Bitmap: " << (int) ((pfd.dwFlags & PFD_DRAW_TO_BITMAP) != 0));
-        SAL_WARN("vcl.opengl", "Supports OpenGL: " << (int) ((pfd.dwFlags & PFD_SUPPORT_OPENGL) != 0));
+        SAL_WARN("vcl.opengl", "Render Target: Window: " << static_cast<int>((pfd.dwFlags & PFD_DRAW_TO_WINDOW) != 0) << ", Bitmap: " << static_cast<int>((pfd.dwFlags & PFD_DRAW_TO_BITMAP) != 0));
+        SAL_WARN("vcl.opengl", "Supports OpenGL: " << static_cast<int>((pfd.dwFlags & PFD_SUPPORT_OPENGL) != 0));
 #endif
     }
 

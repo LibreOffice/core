@@ -103,7 +103,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
     SolarMutexGuard g;
 
     m_lCurrent += cElements;
-    if (m_lCurrent > (long)(m_lLBound+m_pXAccessibleSelection->getSelectedAccessibleChildCount()))
+    if (m_lCurrent > static_cast<long>(m_lLBound+m_pXAccessibleSelection->getSelectedAccessibleChildCount()))
     {
         m_lCurrent =  m_lLBound+m_pXAccessibleSelection->getSelectedAccessibleChildCount();
         return E_FAIL;

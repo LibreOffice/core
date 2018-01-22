@@ -86,7 +86,7 @@ namespace dxcanvas
             GraphicsSharedPtr pGraphics( mpTarget->getGraphics() );
 
             Gdiplus::Color aClearColor = hasAlpha() ?
-                Gdiplus::Color( 0,255,255,255 ) : Gdiplus::Color((Gdiplus::ARGB)Gdiplus::Color::White);
+                Gdiplus::Color( 0,255,255,255 ) : Gdiplus::Color(Gdiplus::ARGB(Gdiplus::Color::White));
 
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->SetCompositingMode(

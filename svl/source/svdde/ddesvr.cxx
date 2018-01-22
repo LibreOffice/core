@@ -530,14 +530,14 @@ bool DdeService::HasCbFormat( sal_uInt16 nFmt )
 
 bool DdeService::HasFormat(SotClipboardFormatId nFmt)
 {
-    return HasCbFormat( (sal_uInt16)DdeData::GetExternalFormat( nFmt ));
+    return HasCbFormat( static_cast<sal_uInt16>(DdeData::GetExternalFormat( nFmt )));
 }
 
 void DdeService::AddFormat(SotClipboardFormatId nFmt)
 {
     sal_uLong nExternalFmt = DdeData::GetExternalFormat( nFmt );
     for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
-        if ( (sal_uLong) aFormats[ i ] == nExternalFmt )
+        if ( static_cast<sal_uLong>(aFormats[ i ]) == nExternalFmt )
             return;
     aFormats.push_back( nExternalFmt );
 }
@@ -547,7 +547,7 @@ void DdeService::RemoveFormat(SotClipboardFormatId nFmt)
     sal_uLong nExternalFmt = DdeData::GetExternalFormat( nFmt );
     for ( DdeFormats::iterator it = aFormats.begin(); it != aFormats.end(); ++it )
     {
-        if ( (sal_uLong) *it == nExternalFmt )
+        if ( static_cast<sal_uLong>(*it) == nExternalFmt )
         {
             aFormats.erase( it );
             break;
@@ -876,7 +876,7 @@ OUString DdeService::Formats()
         if ( n )
             s += "\t";
 
-        switch( (sal_uInt16)f )
+        switch( static_cast<sal_uInt16>(f) )
         {
         case CF_TEXT:
             s += "TEXT";
@@ -887,7 +887,7 @@ OUString DdeService::Formats()
         default:
             {
                 WCHAR buf[128];
-                GetClipboardFormatNameW( (UINT)f, buf, SAL_N_ELEMENTS(buf) );
+                GetClipboardFormatNameW( static_cast<UINT>(f), buf, SAL_N_ELEMENTS(buf) );
                 s += o3tl::toU(buf);
             }
             break;

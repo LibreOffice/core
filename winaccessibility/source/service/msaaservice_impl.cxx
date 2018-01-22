@@ -216,7 +216,7 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
  */
 static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xAccMgr )
 {
-    sal_uInt16 nTopWindowCount = (sal_uInt16)Application::GetTopWindowCount();
+    sal_uInt16 nTopWindowCount = static_cast<sal_uInt16>(Application::GetTopWindowCount());
 
     for ( sal_uInt16 i = 0; i < nTopWindowCount; i++ )
     {

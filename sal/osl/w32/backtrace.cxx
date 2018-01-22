@@ -61,11 +61,11 @@ OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth)
     for( sal_uInt32 i = 0; i < nFrames; i++ )
     {
         SymFromAddr( hProcess, reinterpret_cast<DWORD64>(aStack[ i ]), nullptr, pSymbol );
-        aBuf.append( (sal_Int32)(nFrames - i - 1) );
+        aBuf.append( static_cast<sal_Int32>(nFrames - i - 1) );
         aBuf.append( ": " );
         aBuf.appendAscii( pSymbol->Name );
         aBuf.append( " - 0x" );
-        aBuf.append( (sal_Int64)pSymbol->Address, 16 );
+        aBuf.append( static_cast<sal_Int64>(pSymbol->Address), 16 );
         aBuf.append( "\n" );
     }
 
@@ -107,11 +107,11 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
     for( int i = 0; i < nFrames; i++ )
     {
         SymFromAddr( hProcess, reinterpret_cast<DWORD64>(backtraceState->buffer[ i ]), nullptr, pSymbol );
-        aBuf.append( (sal_Int32)(nFrames - i - 1) );
+        aBuf.append( static_cast<sal_Int32>(nFrames - i - 1) );
         aBuf.append( ": " );
         aBuf.appendAscii( pSymbol->Name );
         aBuf.append( " - 0x" );
-        aBuf.append( (sal_Int64)pSymbol->Address, 16 );
+        aBuf.append( static_cast<sal_Int64>(pSymbol->Address), 16 );
         aBuf.append( "\n" );
     }
 

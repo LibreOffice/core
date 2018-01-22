@@ -103,7 +103,7 @@ oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError)
     for (i = 0; i < n; ++i )
     {
         if (dwError == errtable[i].oscode)
-            return (oslFileError)(errtable[i].errnocode);
+            return static_cast<oslFileError>(errtable[i].errnocode);
     }
 
     /* The error code wasn't in the table.  We check for a range of

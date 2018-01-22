@@ -71,7 +71,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
 
         auto arrCertAltNameEntry = std::unique_ptr<CertAltNameEntry[]>(new CertAltNameEntry[subjectName->cAltEntry]);
 
-        for (unsigned int i = 0; i < (unsigned int)subjectName->cAltEntry; i++){
+        for (unsigned int i = 0; i < static_cast<unsigned int>(subjectName->cAltEntry); i++){
           PCERT_ALT_NAME_ENTRY pEntry = &subjectName->rgAltEntry[i];
 
           switch(pEntry->dwAltNameChoice) {
@@ -84,7 +84,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                     otherNameProp.Name = OUString::createFromAscii(pOtherName->pszObjId);
 
                     Sequence< sal_Int8 > otherName( pOtherName->Value.cbData ) ;
-                    for( unsigned int n = 0; n < (unsigned int) pOtherName->Value.cbData ; n ++ )
+                    for( unsigned int n = 0; n < static_cast<unsigned int>(pOtherName->Value.cbData) ; n ++ )
                         otherName[n] = *( pOtherName->Value.pbData + n ) ;
 
                     otherNameProp.Value <<= otherName;

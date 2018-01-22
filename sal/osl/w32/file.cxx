@@ -253,7 +253,7 @@ oslFileError FileHandle_Impl::setPos(sal_uInt64 uPos)
 
 sal_uInt64 FileHandle_Impl::getSize() const
 {
-    LONGLONG bufend = std::max((LONGLONG)0, m_bufptr) + m_buflen;
+    LONGLONG bufend = std::max(LONGLONG(0), m_bufptr) + m_buflen;
     return std::max(m_size, sal::static_int_cast< sal_uInt64 >(bufend));
 }
 
@@ -407,7 +407,7 @@ oslFileError FileHandle_Impl::readFileAt(
                 return osl_File_E_None;
             }
 
-            SIZE_T const bytes = std::min(m_buflen - bufpos, (SIZE_T) nBytesRequested);
+            SIZE_T const bytes = std::min(m_buflen - bufpos, static_cast<SIZE_T>(nBytesRequested));
             memcpy(&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
             nBytesRequested -= bytes;
             *pBytesRead += bytes;
@@ -482,7 +482,7 @@ oslFileError FileHandle_Impl::writeFileAt(
                 m_buflen = sal::static_int_cast< SIZE_T >(uDone);
             }
 
-            SIZE_T const bytes = std::min(m_bufsiz - bufpos, (SIZE_T) nBytesToWrite);
+            SIZE_T const bytes = std::min(m_bufsiz - bufpos, static_cast<SIZE_T>(nBytesToWrite));
             memcpy(&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
             nBytesToWrite -= bytes;
             *pBytesWritten += bytes;

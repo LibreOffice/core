@@ -175,7 +175,7 @@ enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
     long langid = strtol(language, nullptr, 16);
     if (langid > 0xFFFF)
         return TRUE;
-    add_ui_lang(langid_to_string((LANGID) langid));
+    add_ui_lang(langid_to_string(static_cast<LANGID>(langid)));
     if (num_ui_langs == SAL_N_ELEMENTS(ui_langs) )
         return FALSE;
     return TRUE;

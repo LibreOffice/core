@@ -138,13 +138,13 @@ bool SbxDecimal::isZero()
 SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight )
 {
     HRESULT hResult = VarDecCmp( const_cast<LPDECIMAL>(&rLeft.maDec), const_cast<LPDECIMAL>(&rRight.maDec) );
-    SbxDecimal::CmpResult eRes = (SbxDecimal::CmpResult)hResult;
+    SbxDecimal::CmpResult eRes = static_cast<SbxDecimal::CmpResult>(hResult);
     return eRes;
 }
 
 void SbxDecimal::setChar( sal_Unicode val )
 {
-    VarDecFromUI2( (sal_uInt16)val, &maDec );
+    VarDecFromUI2( static_cast<sal_uInt16>(val), &maDec );
 }
 
 void SbxDecimal::setByte( sal_uInt8 val )
@@ -154,12 +154,12 @@ void SbxDecimal::setByte( sal_uInt8 val )
 
 void SbxDecimal::setShort( sal_Int16 val )
 {
-    VarDecFromI2( (short)val, &maDec );
+    VarDecFromI2( static_cast<short>(val), &maDec );
 }
 
 void SbxDecimal::setLong( sal_Int32 val )
 {
-    VarDecFromI4( (long)val, &maDec );
+    VarDecFromI4( static_cast<long>(val), &maDec );
 }
 
 void SbxDecimal::setUShort( sal_uInt16 val )
@@ -186,12 +186,12 @@ bool SbxDecimal::setDouble( double val )
 
 void SbxDecimal::setInt( int val )
 {
-    setLong( (sal_Int32)val );
+    setLong( static_cast<sal_Int32>(val) );
 }
 
 void SbxDecimal::setUInt( unsigned int val )
 {
-    setULong( (sal_uInt32)val );
+    setULong( static_cast<sal_uInt32>(val) );
 }
 
 bool SbxDecimal::setString( OUString* pOUString )

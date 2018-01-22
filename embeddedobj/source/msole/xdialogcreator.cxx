@@ -237,11 +237,11 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             uno::Sequence< sal_Int8 > aMetafile( nBufSize + 22 );
             sal_Int8* pBuf = aMetafile.getArray();
             *reinterpret_cast<long*>( pBuf ) = 0x9ac6cdd7L;
-            *reinterpret_cast<short*>( pBuf+6 ) = ( SHORT ) 0;
-            *reinterpret_cast<short*>( pBuf+8 ) = ( SHORT ) 0;
-            *reinterpret_cast<short*>( pBuf+10 ) = ( SHORT ) pMF->xExt;
-            *reinterpret_cast<short*>( pBuf+12 ) = ( SHORT ) pMF->yExt;
-            *reinterpret_cast<short*>( pBuf+14 ) = ( USHORT ) 2540;
+            *reinterpret_cast<short*>( pBuf+6 ) = SHORT(0);
+            *reinterpret_cast<short*>( pBuf+8 ) = SHORT(0);
+            *reinterpret_cast<short*>( pBuf+10 ) = static_cast<SHORT>(pMF->xExt);
+            *reinterpret_cast<short*>( pBuf+12 ) = static_cast<SHORT>(pMF->yExt);
+            *reinterpret_cast<short*>( pBuf+14 ) = USHORT(2540);
 
             if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
             {

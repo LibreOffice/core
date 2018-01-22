@@ -313,21 +313,21 @@ void WinSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcG
          (rPosAry.mnSrcHeight == rPosAry.mnDestHeight) )
     {
         BitBlt( mrParent.getHDC(),
-                (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
-                (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
+                static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
+                static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
                 hSrcDC,
-                (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
+                static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
                 nRop );
     }
     else
     {
         int nOldStretchMode = SetStretchBltMode( mrParent.getHDC(), STRETCH_DELETESCANS );
         StretchBlt( mrParent.getHDC(),
-                    (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
-                    (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
+                    static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
+                    static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
                     hSrcDC,
-                    (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
-                    (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight,
+                    static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
+                    static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
                     nRop );
         SetStretchBltMode( mrParent.getHDC(), nOldStretchMode );
     }
@@ -398,10 +398,10 @@ void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
         HWND    hWnd;
 
         // restrict srcRect to this window (calc intersection)
-        aSrcRect.left   = (int)nSrcX;
-        aSrcRect.top    = (int)nSrcY;
-        aSrcRect.right  = aSrcRect.left+(int)nSrcWidth;
-        aSrcRect.bottom = aSrcRect.top+(int)nSrcHeight;
+        aSrcRect.left   = static_cast<int>(nSrcX);
+        aSrcRect.top    = static_cast<int>(nSrcY);
+        aSrcRect.right  = aSrcRect.left+static_cast<int>(nSrcWidth);
+        aSrcRect.bottom = aSrcRect.top+static_cast<int>(nSrcHeight);
         GetClientRect( mrParent.gethWnd(), &aClipRect );
         if ( IntersectRect( &aSrcRect, &aSrcRect, &aClipRect ) )
         {
@@ -507,8 +507,8 @@ void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
                 if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
                 {
                     // move the occluded parts to the destination pos
-                    int nOffX = (int)(nDestX-nSrcX);
-                    int nOffY = (int)(nDestY-nSrcY);
+                    int nOffX = static_cast<int>(nDestX-nSrcX);
+                    int nOffY = static_cast<int>(nDestY-nSrcY);
                     OffsetRgn( hInvalidateRgn, nOffX-aPt.x, nOffY-aPt.y );
 
                     // by excluding hInvalidateRgn from the system's clip region
@@ -525,10 +525,10 @@ void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
     }
 
     BitBlt( mrParent.getHDC(),
-            (int)nDestX, (int)nDestY,
-            (int)nSrcWidth, (int)nSrcHeight,
+            static_cast<int>(nDestX), static_cast<int>(nDestY),
+            static_cast<int>(nSrcWidth), static_cast<int>(nSrcHeight),
             mrParent.getHDC(),
-            (int)nSrcX, (int)nSrcY,
+            static_cast<int>(nSrcX), static_cast<int>(nSrcY),
             SRCCOPY );
 
     if( bRestoreClipRgn )
@@ -597,10 +597,10 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
             const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
             StretchDIBits( hDC,
-                           (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
-                           (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
-                           (int)rPosAry.mnSrcX, (int)(pBI->bmiHeader.biHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
-                           (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight,
+                           static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
+                           static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
+                           static_cast<int>(rPosAry.mnSrcX), static_cast<int>(pBI->bmiHeader.biHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
+                           static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
                            pBits, pBI, DIB_RGB_COLORS, nDrawMode );
 
             GlobalUnlock( hDrawDIB );
@@ -640,10 +640,10 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                  (rPosAry.mnSrcHeight == rPosAry.mnDestHeight) )
             {
                 BitBlt( hDC,
-                        (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
-                        (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
+                        static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
+                        static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
                         hBmpDC,
-                        (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
+                        static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
                         nDrawMode );
             }
             else
@@ -651,11 +651,11 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                 const int nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
                 StretchBlt( hDC,
-                            (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
-                            (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
+                            static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
+                            static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
                             hBmpDC,
-                            (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
-                            (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight,
+                            static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
+                            static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
                             nDrawMode );
 
                 SetStretchBltMode( hDC, nOldStretchMode );
@@ -726,10 +726,10 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     const WinSalBitmap& rTransparentBitmap = static_cast<const WinSalBitmap&>(rSTransparentBitmap);
 
     SalTwoRect  aPosAry = rPosAry;
-    int         nDstX = (int)aPosAry.mnDestX;
-    int         nDstY = (int)aPosAry.mnDestY;
-    int         nDstWidth = (int)aPosAry.mnDestWidth;
-    int         nDstHeight = (int)aPosAry.mnDestHeight;
+    int         nDstX = static_cast<int>(aPosAry.mnDestX);
+    int         nDstY = static_cast<int>(aPosAry.mnDestY);
+    int         nDstWidth = static_cast<int>(aPosAry.mnDestWidth);
+    int         nDstHeight = static_cast<int>(aPosAry.mnDestHeight);
     HDC         hDC = mrParent.getHDC();
     HBITMAP     hMemBitmap = nullptr;
     HBITMAP     hMaskBitmap = nullptr;
@@ -798,7 +798,7 @@ bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
         return false; // can only perform solid fills without XOR.
 
     HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1 );
-    SetPixel( hMemDC, (int)0, (int)0, mnBrushColor );
+    SetPixel( hMemDC, int(0), int(0), mnBrushColor );
 
     BLENDFUNCTION aFunc = {
         AC_SRC_OVER,
@@ -866,7 +866,7 @@ SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
     HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
     bool    bRet;
 
-    bRet = BitBlt( hBmpDC, 0, 0, (int) nDX, (int) nDY, hDC, (int) nX, (int) nY, SRCCOPY ) ? TRUE : FALSE;
+    bRet = BitBlt( hBmpDC, 0, 0, static_cast<int>(nDX), static_cast<int>(nDY), hDC, static_cast<int>(nX), static_cast<int>(nY), SRCCOPY ) ? TRUE : FALSE;
     ImplReleaseCachedDC( CACHED_HDC_1 );
 
     if( bRet )
@@ -890,7 +890,7 @@ SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
 
 SalColor WinSalGraphicsImpl::getPixel( long nX, long nY )
 {
-    COLORREF aWinCol = ::GetPixel( mrParent.getHDC(), (int) nX, (int) nY );
+    COLORREF aWinCol = ::GetPixel( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY) );
 
     if ( CLR_INVALID == aWinCol )
         return MAKE_SALCOLOR( 0, 0, 0 );
@@ -909,7 +909,7 @@ void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, Sa
         HBRUSH  hOldBrush = SelectBrush( mrParent.getHDC(), GetStockBrush( NULL_BRUSH ) );
         int     nOldROP = SetROP2( mrParent.getHDC(), R2_NOT );
 
-        Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+        Rectangle( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nX+nWidth), static_cast<int>(nY+nHeight) );
 
         SetROP2( mrParent.getHDC(), nOldROP );
         SelectPen( mrParent.getHDC(), hOldPen );
@@ -935,10 +935,10 @@ void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, Sa
     else
     {
          RECT aRect;
-         aRect.left      = (int)nX;
-         aRect.top       = (int)nY;
-         aRect.right     = (int)nX+nWidth;
-         aRect.bottom    = (int)nY+nHeight;
+         aRect.left      = static_cast<int>(nX);
+         aRect.top       = static_cast<int>(nY);
+         aRect.right     = static_cast<int>(nX)+nWidth;
+         aRect.bottom    = static_cast<int>(nY)+nHeight;
          ::InvertRect( mrParent.getHDC(), &aRect );
     }
 }
@@ -986,12 +986,12 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     // for Windows 95 and its maximum number of points
     if ( nSalFlags & SalInvert::TrackFrame )
     {
-        if ( !Polyline( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+        if ( !Polyline( mrParent.getHDC(), pWinPtAry, static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
             Polyline( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
     }
     else
     {
-        if ( !Polygon( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+        if ( !Polygon( mrParent.getHDC(), pWinPtAry, static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
             Polygon( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
     }
 
@@ -1009,7 +1009,7 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
 
 sal_uInt16 WinSalGraphicsImpl::GetBitCount() const
 {
-    return (sal_uInt16)GetDeviceCaps( mrParent.getHDC(), BITSPIXEL );
+    return static_cast<sal_uInt16>(GetDeviceCaps( mrParent.getHDC(), BITSPIXEL ));
 }
 
 long WinSalGraphicsImpl::GetGraphicsWidth() const
@@ -1250,29 +1250,29 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
                 {
                     if(aRectIter->Left() < pBoundRect->left)
                     {
-                        pBoundRect->left = (int)aRectIter->Left();
+                        pBoundRect->left = static_cast<int>(aRectIter->Left());
                     }
 
                     if(aRectIter->Top() < pBoundRect->top)
                     {
-                        pBoundRect->top = (int)aRectIter->Top();
+                        pBoundRect->top = static_cast<int>(aRectIter->Top());
                     }
 
                     if(nRight > pBoundRect->right)
                     {
-                        pBoundRect->right = (int)nRight;
+                        pBoundRect->right = static_cast<int>(nRight);
                     }
 
                     if(nBottom > pBoundRect->bottom)
                     {
-                        pBoundRect->bottom = (int)nBottom;
+                        pBoundRect->bottom = static_cast<int>(nBottom);
                     }
                 }
 
-                pNextClipRect->left = (int)aRectIter->Left();
-                pNextClipRect->top = (int)aRectIter->Top();
-                pNextClipRect->right = (int)nRight;
-                pNextClipRect->bottom = (int)nBottom;
+                pNextClipRect->left = static_cast<int>(aRectIter->Left());
+                pNextClipRect->top = static_cast<int>(aRectIter->Top());
+                pNextClipRect->right = static_cast<int>(nRight);
+                pNextClipRect->bottom = static_cast<int>(nBottom);
                 pNextClipRect++;
             }
             else
@@ -1569,12 +1569,12 @@ void WinSalGraphicsImpl::drawPixelImpl( long nX, long nY, COLORREF crColor )
     {
         HBRUSH hBrush = CreateSolidBrush( crColor );
         HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), hBrush );
-        PatBlt( mrParent.getHDC(), (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
+        PatBlt( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT );
         SelectBrush( mrParent.getHDC(), hOldBrush );
         DeleteBrush( hBrush );
     }
     else
-        SetPixel( mrParent.getHDC(), (int)nX, (int)nY, crColor );
+        SetPixel( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), crColor );
 }
 
 void WinSalGraphicsImpl::drawPixel( long nX, long nY )
@@ -1598,9 +1598,9 @@ void WinSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
 
 void WinSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    MoveToEx( mrParent.getHDC(), (int)nX1, (int)nY1, nullptr );
+    MoveToEx( mrParent.getHDC(), static_cast<int>(nX1), static_cast<int>(nY1), nullptr );
 
-    LineTo( mrParent.getHDC(), (int)nX2, (int)nY2 );
+    LineTo( mrParent.getHDC(), static_cast<int>(nX2), static_cast<int>(nY2) );
 
     // LineTo doesn't draw the last pixel
     if ( !mrParent.isPrinter() )
@@ -1613,7 +1613,7 @@ void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
     {
         if ( !mrParent.isPrinter() )
         {
-            PatBlt( mrParent.getHDC(), (int)nX, (int)nY, (int)nWidth, (int)nHeight,
+            PatBlt( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nWidth), static_cast<int>(nHeight),
                     mbXORMode ? PATINVERT : PATCOPY );
         }
         else
@@ -1627,7 +1627,7 @@ void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
         }
     }
     else
-        Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+        Rectangle( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nX+nWidth), static_cast<int>(nY+nHeight) );
 }
 
 void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -1638,7 +1638,7 @@ void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAr
     POINT const * pWinPtAry = reinterpret_cast<POINT const *>(pPtAry);
 
     // for Windows 95 and its maximum number of points
-    if ( !Polyline( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+    if ( !Polyline( mrParent.getHDC(), pWinPtAry, static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
         Polyline( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
 
     // Polyline seems to uses LineTo, which doesn't paint the last pixel (see 87eb8f8ee)
@@ -1653,7 +1653,7 @@ void WinSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry
 
     POINT const * pWinPtAry = reinterpret_cast<POINT const *>(pPtAry);
     // for Windows 95 and its maximum number of points
-    if ( !Polygon( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+    if ( !Polygon( mrParent.getHDC(), pWinPtAry, static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
         Polygon( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
 }
 
@@ -1671,9 +1671,9 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
     else
         pWinPointAry = new UINT[nPoly];
 
-    for ( i = 0; i < (UINT)nPoly; i++ )
+    for ( i = 0; i < static_cast<UINT>(nPoly); i++ )
     {
-        nPoints = (UINT)pPoints[i]+1;
+        nPoints = static_cast<UINT>(pPoints[i])+1;
         pWinPointAry[i] = nPoints;
         nPolyPolyPoints += nPoints;
     }
@@ -1687,7 +1687,7 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
     // for NT, we can handover the array directly
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
     UINT            n = 0;
-    for ( i = 0; i < (UINT)nPoly; i++ )
+    for ( i = 0; i < static_cast<UINT>(nPoly); i++ )
     {
         nPoints = pWinPointAry[i];
         const SalPoint* pPolyAry = pPtAry[i];
@@ -1696,20 +1696,20 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
         n += nPoints;
     }
 
-    if ( !PolyPolygon( mrParent.getHDC(), pWinPointAryAry, reinterpret_cast<int*>(pWinPointAry), (UINT)nPoly ) &&
+    if ( !PolyPolygon( mrParent.getHDC(), pWinPointAryAry, reinterpret_cast<int*>(pWinPointAry), static_cast<UINT>(nPoly) ) &&
          (nPolyPolyPoints > MAX_64KSALPOINTS) )
     {
         nPolyPolyPoints  = 0;
         nPoly = 0;
         do
         {
-            nPolyPolyPoints += pWinPointAry[(UINT)nPoly];
+            nPolyPolyPoints += pWinPointAry[static_cast<UINT>(nPoly)];
             nPoly++;
         }
         while ( nPolyPolyPoints < MAX_64KSALPOINTS );
         nPoly--;
-        if ( pWinPointAry[(UINT)nPoly] > MAX_64KSALPOINTS )
-            pWinPointAry[(UINT)nPoly] = MAX_64KSALPOINTS;
+        if ( pWinPointAry[static_cast<UINT>(nPoly)] > MAX_64KSALPOINTS )
+            pWinPointAry[static_cast<UINT>(nPoly)] = MAX_64KSALPOINTS;
         if ( nPoly == 1 )
             Polygon( mrParent.getHDC(), pWinPointAryAry, *pWinPointAry );
         else
@@ -1902,7 +1902,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPo
     if(mbBrush && nCount && (fTransparency >= 0.0 && fTransparency < 1.0))
     {
         Gdiplus::Graphics aGraphics(mrParent.getHDC());
-        const sal_uInt8 aTrans((sal_uInt8)255 - (sal_uInt8)basegfx::fround(fTransparency * 255.0));
+        const sal_uInt8 aTrans(sal_uInt8(255) - static_cast<sal_uInt8>(basegfx::fround(fTransparency * 255.0)));
         const Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maFillColor), SALCOLOR_GREEN(maFillColor), SALCOLOR_BLUE(maFillColor));
         const Gdiplus::SolidBrush aSolidBrush(aTestColor.GetValue());
         Gdiplus::GraphicsPath aGraphicsPath(Gdiplus::FillModeAlternate);
@@ -1968,7 +1968,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     if(mbPen && nCount)
     {
         Gdiplus::Graphics aGraphics(mrParent.getHDC());
-        const sal_uInt8 aTrans = (sal_uInt8)basegfx::fround( 255 * (1.0 - fTransparency) );
+        const sal_uInt8 aTrans = static_cast<sal_uInt8>(basegfx::fround( 255 * (1.0 - fTransparency) ));
         const Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maLineColor), SALCOLOR_GREEN(maLineColor), SALCOLOR_BLUE(maLineColor));
         Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(rLineWidths.getX()));
         Gdiplus::GraphicsPath aGraphicsPath(Gdiplus::FillModeAlternate);

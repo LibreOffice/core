@@ -1062,7 +1062,7 @@ void * rtl_machdep_alloc(
 #if defined(SAL_UNX)
     addr = mmap (nullptr, static_cast<size_t>(size), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 #elif defined(_WIN32)
-    addr = VirtualAlloc (nullptr, (SIZE_T)size, MEM_COMMIT, PAGE_READWRITE);
+    addr = VirtualAlloc (nullptr, static_cast<SIZE_T>(size), MEM_COMMIT, PAGE_READWRITE);
 #endif /* (SAL_UNX || _WIN32) */
 
     if (addr != MAP_FAILED)
@@ -1092,7 +1092,7 @@ void rtl_machdep_free(
 #if defined(SAL_UNX)
     (void) munmap(pAddr, nSize);
 #elif defined(_WIN32)
-    (void) VirtualFree (pAddr, (SIZE_T)0, MEM_RELEASE);
+    (void) VirtualFree (pAddr, SIZE_T(0), MEM_RELEASE);
 #endif /* (SAL_UNX || _WIN32) */
 }
 
@@ -1107,7 +1107,7 @@ sal_Size rtl_machdep_pagesize()
 #elif defined(_WIN32)
     SYSTEM_INFO info;
     GetSystemInfo (&info);
-    return (sal_Size)info.dwPageSize;
+    return static_cast<sal_Size>(info.dwPageSize);
 #endif /* (SAL_UNX || _WIN32) */
 }
 

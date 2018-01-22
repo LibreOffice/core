@@ -33,7 +33,7 @@ static int GenericMain()
 
     GetStartupInfoW( &aStartupInfo );
 
-    DWORD   dwExitCode = (DWORD)-1;
+    DWORD   dwExitCode = DWORD(-1);
 
     PROCESS_INFORMATION aProcessInfo;
 

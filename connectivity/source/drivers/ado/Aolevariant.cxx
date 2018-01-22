@@ -116,7 +116,7 @@ OLEVariant::OLEVariant(bool x)              {   VariantInit(this);  vt = VT_BOOL
 OLEVariant::OLEVariant(sal_Int8 n)              {   VariantInit(this);  vt = VT_I1;     bVal        = n;}
 OLEVariant::OLEVariant(sal_Int16 n)             {   VariantInit(this);  vt = VT_I2;     intVal      = n;}
 OLEVariant::OLEVariant(sal_Int32 n)             {   VariantInit(this);  vt = VT_I4;     lVal        = n;}
-OLEVariant::OLEVariant(sal_Int64 x)             {   VariantInit(this);  vt = VT_I4;     lVal        = (LONG)x;}
+OLEVariant::OLEVariant(sal_Int64 x)             {   VariantInit(this);  vt = VT_I4;     lVal        = static_cast<LONG>(x);}
 
 OLEVariant::OLEVariant(const OUString& us)
 {
@@ -312,7 +312,7 @@ void OLEVariant::setArray(SAFEARRAY* pSafeArray, VARTYPE vtType)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    vt = (VARTYPE)(VT_ARRAY|vtType);
+    vt = static_cast<VARTYPE>(VT_ARRAY|vtType);
     parray = pSafeArray;
 }
 
@@ -354,7 +354,7 @@ VARIANT_BOOL OLEVariant::VariantBool(bool bEinBoolean)
 
 void OLEVariant::CHS()
 {
-    cyVal.Lo  ^= (sal_uInt32)-1;
+    cyVal.Lo  ^= sal_uInt32(-1);
     cyVal.Hi ^= -1;
     cyVal.Lo++;
     if( !cyVal.Lo )
@@ -365,12 +365,12 @@ void OLEVariant::set(double n)
 {
     if( n >= 0 )
     {
-        cyVal.Hi = (sal_Int32)(n / 4294967296.0);
-        cyVal.Lo  = (sal_uInt32)(n - ((double)cyVal.Hi * 4294967296.0));
+        cyVal.Hi = static_cast<sal_Int32>(n / 4294967296.0);
+        cyVal.Lo  = static_cast<sal_uInt32>(n - (static_cast<double>(cyVal.Hi) * 4294967296.0));
     }
     else {
-        cyVal.Hi = (sal_Int32)(-n / 4294967296.0);
-        cyVal.Lo  = (sal_uInt32)(-n - ((double)cyVal.Hi * 4294967296.0));
+        cyVal.Hi = static_cast<sal_Int32>(-n / 4294967296.0);
+        cyVal.Lo  = static_cast<sal_uInt32>(-n - (static_cast<double>(cyVal.Hi) * 4294967296.0));
         CHS();
     }
 }

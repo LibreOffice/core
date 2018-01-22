@@ -329,21 +329,21 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 {
                     dwSidSize+=wsprintfW(o3tl::toW(Ident) + wcslen(o3tl::toW(Ident)),
                                 L"0x%02hx%02hx%02hx%02hx%02hx%02hx",
-                                (USHORT)psia->Value[0],
-                                (USHORT)psia->Value[1],
-                                (USHORT)psia->Value[2],
-                                (USHORT)psia->Value[3],
-                                (USHORT)psia->Value[4],
-                                (USHORT)psia->Value[5]);
+                                static_cast<USHORT>(psia->Value[0]),
+                                static_cast<USHORT>(psia->Value[1]),
+                                static_cast<USHORT>(psia->Value[2]),
+                                static_cast<USHORT>(psia->Value[3]),
+                                static_cast<USHORT>(psia->Value[4]),
+                                static_cast<USHORT>(psia->Value[5]));
                 }
                 else
                 {
                     dwSidSize+=wsprintfW(o3tl::toW(Ident) + wcslen(o3tl::toW(Ident)),
                                 L"%lu",
-                                (ULONG)(psia->Value[5]      )   +
-                                (ULONG)(psia->Value[4] <<  8)   +
-                                (ULONG)(psia->Value[3] << 16)   +
-                                (ULONG)(psia->Value[2] << 24)   );
+                                static_cast<ULONG>(psia->Value[5]      )   +
+                                static_cast<ULONG>(psia->Value[4] <<  8)   +
+                                static_cast<ULONG>(psia->Value[3] << 16)   +
+                                static_cast<ULONG>(psia->Value[2] << 24)   );
                 }
 
                 /* loop through SidSubAuthorities */

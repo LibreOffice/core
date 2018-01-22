@@ -480,7 +480,7 @@ void CMtaFolderPicker::onInitialized( )
         SendMessageW(
             m_hwnd,
             BFFM_SETSELECTION,
-            (WPARAM)false,
+            WPARAM(false),
             reinterpret_cast<LPARAM>(lpiidDisplayDir) );
 
         releaseItemIdList( lpiidDisplayDir );

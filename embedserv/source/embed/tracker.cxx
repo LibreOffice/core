@@ -89,7 +89,7 @@ HBRUSH HalftoneBrush()
     {
         WORD grayPattern[8];
         for (int i = 0; i < 8; i++)
-            grayPattern[i] = (WORD)(0x5555 << (i & 1));
+            grayPattern[i] = static_cast<WORD>(0x5555 << (i & 1));
         HBITMAP grayBitmap = CreateBitmap(8, 8, 1, 1, &grayPattern);
         if (grayBitmap != nullptr)
         {
@@ -292,7 +292,7 @@ int Tracker::HitTest(POINT point) const
     if (PtInRect(&rectTrue,point))
     {
         if ((m_nStyle & (resizeInside|resizeOutside)) != 0)
-            hitResult = (TrackerHit)HitTestHandles(point);
+            hitResult = static_cast<TrackerHit>(HitTestHandles(point));
         else
             hitResult = hitMiddle;
     }
@@ -325,7 +325,7 @@ BOOL Tracker::SetCursor(HWND pWnd, UINT nHitTest) const
     {
         // only for trackers with hatchedBorder (ie. in-place resizing)
         if (m_nStyle & hatchedBorder)
-            nHandle = (TrackerHit)9;
+            nHandle = TrackerHit(9);
     }
 
     ::SetCursor(afxCursors[nHandle]);
@@ -408,9 +408,9 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
             rectOld = m_rect;
             // handle resize cases (and part of move)
             if (px != nullptr)
-                *px = (int)(short)LOWORD(msg.lParam) - xDiff;
+                *px = static_cast<int>(static_cast<short>(LOWORD(msg.lParam))) - xDiff;
             if (py != nullptr)
-                *py = (int)(short)HIWORD(msg.lParam) - yDiff;
+                *py = static_cast<int>(static_cast<short>(HIWORD(msg.lParam))) - yDiff;
 
             // handle move case
             if (nHandle == hitMiddle)
@@ -639,7 +639,7 @@ void Tracker::Draw(HDC hDC) const
         {
             if (mask & (1<<i))
             {
-                GetHandleRect((TrackerHit)i, &rect);
+                GetHandleRect(static_cast<TrackerHit>(i), &rect);
                 // FillSolidRect(hDC,rect, RGB(0, 0, 0));
                 FillRect(hDC,&rect,hbrush);
             }
@@ -741,11 +741,11 @@ int Tracker::NormalizeHit(int nHandle) const
     const AFX_HANDLEINFO* pHandleInfo = &afxHandleInfo[nHandle];
     if (m_rect.right - m_rect.left < 0)
     {
-        nHandle = (TrackerHit)pHandleInfo->nInvertX;
+        nHandle = static_cast<TrackerHit>(pHandleInfo->nInvertX);
         pHandleInfo = &afxHandleInfo[nHandle];
     }
     if (m_rect.bottom - m_rect.top < 0)
-        nHandle = (TrackerHit)pHandleInfo->nInvertY;
+        nHandle = static_cast<TrackerHit>(pHandleInfo->nInvertY);
     return nHandle;
 }
 
@@ -765,9 +765,9 @@ int Tracker::HitTestHandles(POINT point) const
     {
         if (mask & (1<<i))
         {
-            GetHandleRect((TrackerHit)i, &rect);
+            GetHandleRect(static_cast<TrackerHit>(i), &rect);
             if (PtInRect(&rect,point))
-                return (TrackerHit)i;
+                return static_cast<TrackerHit>(i);
         }
     }
 

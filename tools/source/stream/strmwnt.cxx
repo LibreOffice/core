@@ -87,7 +87,7 @@ static ErrCode GetSvError( DWORD nWntError )
         { ERROR_WRITE_PROTECT,          SVSTREAM_ACCESS_DENIED },
         { ERROR_DISK_FULL,              SVSTREAM_DISK_FULL },
 
-        { (DWORD)0xFFFFFFFF, SVSTREAM_GENERALERROR }
+        { DWORD(0xFFFFFFFF), SVSTREAM_GENERALERROR }
     };
 
     ErrCode nRetVal = SVSTREAM_GENERALERROR;    // default error
@@ -100,7 +100,7 @@ static ErrCode GetSvError( DWORD nWntError )
             break;
         }
         i++;
-    } while( errArr[i].wnt != (DWORD)0xFFFFFFFF );
+    } while( errArr[i].wnt != DWORD(0xFFFFFFFF) );
     return nRetVal;
 }
 

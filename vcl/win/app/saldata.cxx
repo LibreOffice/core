@@ -62,7 +62,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
             c1 += 32;
         if ( (c2 >= 65) && (c2 <= 90) )
             c2 += 32;
-        nRet = ((sal_Int32)c1)-((sal_Int32)((unsigned char)c2));
+        nRet = static_cast<sal_Int32>(c1)- static_cast<sal_Int32>(static_cast<unsigned char>(c2));
         if ( nRet != 0 )
             break;
 

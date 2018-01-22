@@ -488,7 +488,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     psia=GetSidIdentifierAuthority(pSid);
 
     /* obtain sidsubauthority count */
-    dwSubAuthorities=std::min((int) *GetSidSubAuthorityCount(pSid), 5);
+    dwSubAuthorities=std::min(static_cast<int>(*GetSidSubAuthorityCount(pSid)), 5);
 
     /* buffer length: S-SID_REVISION- + identifierauthority- + subauthorities- + NULL */
     Ident=static_cast<wchar_t *>(malloc(88*sizeof(wchar_t)));
@@ -501,21 +501,21 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     {
         dwSidSize+=wsprintfW(Ident + wcslen(Ident),
                     L"0x%02hx%02hx%02hx%02hx%02hx%02hx",
-                    (sal_uInt16)psia->Value[0],
-                    (sal_uInt16)psia->Value[1],
-                    (sal_uInt16)psia->Value[2],
-                    (sal_uInt16)psia->Value[3],
-                    (sal_uInt16)psia->Value[4],
-                    (sal_uInt16)psia->Value[5]);
+                    static_cast<sal_uInt16>(psia->Value[0]),
+                    static_cast<sal_uInt16>(psia->Value[1]),
+                    static_cast<sal_uInt16>(psia->Value[2]),
+                    static_cast<sal_uInt16>(psia->Value[3]),
+                    static_cast<sal_uInt16>(psia->Value[4]),
+                    static_cast<sal_uInt16>(psia->Value[5]));
     }
     else
     {
         dwSidSize+=wsprintfW(Ident + wcslen(Ident),
                     L"%lu",
-                    (sal_uInt32)(psia->Value[5]      )   +
-                    (sal_uInt32)(psia->Value[4] <<  8)   +
-                    (sal_uInt32)(psia->Value[3] << 16)   +
-                    (sal_uInt32)(psia->Value[2] << 24)   );
+                    static_cast<sal_uInt32>(psia->Value[5]      )   +
+                    static_cast<sal_uInt32>(psia->Value[4] <<  8)   +
+                    static_cast<sal_uInt32>(psia->Value[3] << 16)   +
+                    static_cast<sal_uInt32>(psia->Value[2] << 24)   );
     }
 
     /* loop through SidSubAuthorities */

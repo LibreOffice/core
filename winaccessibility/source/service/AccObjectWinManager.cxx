@@ -1015,7 +1015,7 @@ void  AccObjectWinManager::SetRole( XAccessible* pXAcc, long Role )
 {
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
     if( pAccObj )
-        pAccObj->SetRole( (short)Role );
+        pAccObj->SetRole( static_cast<short>(Role) );
 }
 
 /**
