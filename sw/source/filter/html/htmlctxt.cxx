@@ -131,6 +131,9 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
         m_aParaAttrs.clear();
 
     const SwNodeIndex* pOldEndPara = &m_pPam->GetPoint()->nNode;
+#ifndef NDEBUG
+    auto const nOld(pOldEndPara->GetIndex());
+#endif
     sal_Int32 nOldEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
 
     const SwNodeIndex& rNewSttPara = rNewPos.nNode;
@@ -215,6 +218,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
     if( bMoveBack )
         m_pPam->Move( fnMoveForward );
 
+    assert(m_pPam->GetPoint()->nNode.GetIndex() == nOld);
 }
 
 void SwHTMLParser::SaveDocContext( HTMLAttrContext *pCntxt,
