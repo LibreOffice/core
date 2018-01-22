@@ -1177,6 +1177,9 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     //      .ui file to get rid of the extra VCLContainer, and all these manual
     //      sizing and widget creation tricks.
     m_pFunctions->set_width_request(aSize.Width() * 1.45);
+    m_pFunctions->SetNodeDefaultImages();
+    m_pFunctions->SetStyle( m_pFunctions->GetStyle() | WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+                            WB_HASLINES | WB_HASLINESATROOT | WB_CLIPCHILDREN | WB_HSCROLL );
 
     // Make the middle buttons bigger
     m_pAddCommandButton->set_height_request( m_pAddCommandButton->GetOptimalSize().Height() * 1.5 );
