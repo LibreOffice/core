@@ -3058,7 +3058,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     }
     aContents.append( "endbfchar\n"
                       "endcmap\n"
-                      "CMapName currentdict /CMap define resource pop\n"
+                      "CMapName currentdict /CMap defineresource pop\n"
                       "end\n"
                       "end\n" );
     SvMemoryStream aStream;
