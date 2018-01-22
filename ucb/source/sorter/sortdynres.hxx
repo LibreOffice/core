@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <memory>
 #include "sortresult.hxx"
 
 
@@ -44,7 +45,7 @@ class SortedDynamicResultSet: public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XDynamicResultSet >
 {
-    comphelper::OInterfaceContainerHelper2 *mpDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2>  mpDisposeEventListeners;
 
     css::uno::Reference < css::ucb::XDynamicResultSetListener > mxListener;
 
