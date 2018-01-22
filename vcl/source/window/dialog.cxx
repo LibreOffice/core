@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 
 #include <tools/debug.hxx>
@@ -870,12 +871,14 @@ bool Dialog::ImplStartExecuteModal()
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
 
-    Show();
+    css::uno::Reference< css::uno::XComponentContext > xContext(
+        comphelper::getProcessComponentContext());
+    bool bForceFocusAndToFront(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext));
+    ShowFlags showFlags = bForceFocusAndToFront ? ShowFlags::ForegroundTask : ShowFlags::NONE;
+    Show(true, showFlags);
 
     pSVData->maAppData.mnModalMode++;
 
-    css::uno::Reference< css::uno::XComponentContext > xContext(
-            comphelper::getProcessComponentContext() );
     css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogExecute";

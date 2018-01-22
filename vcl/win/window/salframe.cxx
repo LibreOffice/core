@@ -818,7 +818,30 @@ void SetForegroundWindow_Impl(HWND hwnd)
 {
     static bool bUseForegroundWindow = !std::getenv("VCL_HIDE_WINDOWS");
     if (bUseForegroundWindow)
+    {
+        // The ForegroundLockTimeout system setting (stored in registry - see
+        // https://technet.microsoft.com/en-us/library/cc957208; can be obtained
+        // and set using SystemParametersInfoW) may prevent window to be brought
+        // to foreground. So in case when our setting mandates that we must do it,
+        // we temporarily override the setting - assuming that user does want it,
+        // as the setting tells us.
+        bool bResetForegroundLockTimeout =
+            officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(
+                comphelper::getProcessComponentContext());
+        DWORD_PTR dwOldLockTimeout = 0;
+        if (bResetForegroundLockTimeout)
+        {
+            if (SystemParametersInfoW(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, &dwOldLockTimeout, 0))
+                SystemParametersInfoW(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, reinterpret_cast<PVOID>(0), 0);
+            else
+                bResetForegroundLockTimeout = false;
+        }
         SetForegroundWindow(hwnd);
+        if (bResetForegroundLockTimeout)
+        {
+            SystemParametersInfoW(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, reinterpret_cast<PVOID>(dwOldLockTimeout), 0);
+        }
+    }
 }
 
 }
