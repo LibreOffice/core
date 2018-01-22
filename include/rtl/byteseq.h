@@ -152,9 +152,10 @@ enum __ByteSequence_NoAcquire
     */
     BYTESEQ_NOACQUIRE =
 #if defined _MSC_VER
-        (int)
-#endif
+        int(0xcafebabe)
+#else
         0xcafebabe
+#endif
 };
 
 /** C++ class representing a SAL byte sequence.
