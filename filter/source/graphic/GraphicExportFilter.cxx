@@ -138,7 +138,7 @@ bool GraphicExportFilter::filterRenderDocument() const
     if (mnTargetWidth == 0 || mnTargetHeight == 0)
         aTargetSizePixel = aDocumentSizePixel;
 
-    Graphic aGraphic = aRenderer.renderToGraphic(nCurrentPage, aDocumentSizePixel, aTargetSizePixel, COL_WHITE);
+    Graphic aGraphic = aRenderer.renderToGraphic(nCurrentPage, aDocumentSizePixel, aTargetSizePixel, COL_WHITE, /*bExtOutDevData=*/false);
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 

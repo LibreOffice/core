@@ -238,7 +238,7 @@ public:
     rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/) override;
 
     // Handles metafile for a single page.
-    void HandleFixedLayoutPage(const uno::Sequence<sal_Int8> &rPage, const Size &rSize, bool bFirst);
+    void HandleFixedLayoutPage(const FixedLayoutPage &rPage, bool bFirst);
 };
 
 XMLOfficeDocContext::XMLOfficeDocContext(XMLImport &rImport)
@@ -266,7 +266,7 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
         bool bFirst = true;
         for (const auto &rPage : mrImport.GetPageMetafiles())
         {
-            HandleFixedLayoutPage(rPage.first, rPage.second, bFirst);
+            HandleFixedLayoutPage(rPage, bFirst);
             if (bFirst)
                 bFirst = false;
         }
@@ -274,7 +274,7 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
     return nullptr;
 }
 
-void XMLOfficeDocContext::HandleFixedLayoutPage(const uno::Sequence<sal_Int8> &rPage, const Size &rSize, bool bFirst)
+void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage &rPage, bool bFirst)
 {
     uno::Reference<uno::XComponentContext> xCtx = mrImport.GetComponentContext();
     uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(xCtx);
@@ -292,17 +292,31 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const uno::Sequence<sal_Int8> &r
     SvMemoryStream aMemoryStream;
     xSaxWriter->setOutputStream(new utl::OStreamWrapper(aMemoryStream));
 
-    xSVGWriter->write(xSaxWriter, rPage);
+    xSVGWriter->write(xSaxWriter, rPage.aMetafile);
 
-    // Have all the info, invoke libepubgen.
+    // Have all the info, invoke the generator.
     librevenge::RVNGPropertyList aPageProperties;
     // Pixel -> inch.
-    double fWidth = rSize.getWidth();
+    double fWidth = rPage.aCssPixels.getWidth();
     fWidth /= 96;
     aPageProperties.insert("fo:page-width", fWidth);
-    double fHeight = rSize.getHeight();
+    double fHeight = rPage.aCssPixels.getHeight();
     fHeight /= 96;
     aPageProperties.insert("fo:page-height", fHeight);
+
+    if (!rPage.aChapterNames.empty())
+    {
+        // Name of chapters starting on this page.
+        librevenge::RVNGPropertyListVector aChapterNames;
+        for (const auto &rName : rPage.aChapterNames)
+        {
+            librevenge::RVNGPropertyList aChapter;
+            aChapter.insert("librevenge:name", rName.toUtf8().getStr());
+            aChapterNames.append(aChapter);
+        }
+        aPageProperties.insert("librevenge:chapter-names", aChapterNames);
+    }
+
     mrImport.GetGenerator().openPageSpan(aPageProperties);
     librevenge::RVNGPropertyList aParagraphProperties;
     if (!bFirst)
@@ -320,7 +334,7 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const uno::Sequence<sal_Int8> &r
     mrImport.GetGenerator().closePageSpan();
 }
 
-XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor, const std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> &rPageMetafiles)
+XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor, const std::vector<FixedLayoutPage> &rPageMetafiles)
     : mrGenerator(rGenerator),
       mxContext(xContext),
       mrPageMetafiles(rPageMetafiles)
@@ -421,7 +435,7 @@ PopupState XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGProper
     return PopupState::Consumed;
 }
 
-const std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> &XMLImport::GetPageMetafiles() const
+const std::vector<FixedLayoutPage> &XMLImport::GetPageMetafiles() const
 {
     return mrPageMetafiles;
 }

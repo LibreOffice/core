@@ -22,6 +22,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 
 #include <tools/fract.hxx>
 
@@ -154,7 +155,8 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     sal_Int32 nCurrentPage,
     Size aDocumentSizePixel,
     Size aTargetSizePixel,
-    Color aPageColor)
+    Color aPageColor,
+    bool bExtOutDevData)
 
 {
     if (!mxModel.is() || !mxController.is() || !mxRenderable.is())
@@ -171,7 +173,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     double fScaleY = aTargetSizePixel.Height() / static_cast<double>(aDocumentSizePixel.Height());
 
     PropertyValues renderProps;
-    renderProps.realloc( 4 );
+    renderProps.realloc( 6 );
     renderProps[0].Name = "IsPrinter";
     renderProps[0].Value <<= true;
     renderProps[1].Name = "RenderDevice";
@@ -180,10 +182,22 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     renderProps[2].Value <<= mxController;
     renderProps[3].Name = "RenderToGraphic";
     renderProps[3].Value <<= true;
+    renderProps[4].Name = "HasPDFExtOutDevData";
+    renderProps[4].Value <<= bExtOutDevData;
+    renderProps[5].Name = "PageRange";
+    renderProps[5].Value <<= OUString::number(nCurrentPage);
 
     GDIMetaFile aMtf;
 
     OutputDevice* pOutputDev = VCLUnoHelper::GetOutputDevice( xDevice );
+
+    vcl::PDFExtOutDevData aPDFExtOutDevData(*pOutputDev);
+    if (bExtOutDevData)
+    {
+        aPDFExtOutDevData.SetIsExportBookmarks(true);
+        pOutputDev->SetExtOutDevData(&aPDFExtOutDevData);
+    }
+
     pOutputDev->SetAntialiasing(pOutputDev->GetAntialiasing() | AntialiasingFlags::EnableB2dDraw);
     MapMode mm = pOutputDev->GetMapMode();
     mm.SetScaleX( Fraction(fScaleX) );
@@ -205,7 +219,15 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     aMtf.WindStart();
     aMtf.SetPrefSize( aTargetSizePixel );
 
+    if (bExtOutDevData)
+        maChapterNames = aPDFExtOutDevData.GetChapterNames();
+
     return Graphic(aMtf);
+}
+
+const std::vector<OUString>& DocumentToGraphicRenderer::getChapterNames() const
+{
+    return maChapterNames;
 }
 
 sal_Int32 DocumentToGraphicRenderer::getCurrentPage()

@@ -94,7 +94,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     if (xSourceModel.is())
         aSourceURL = xSourceModel->getURL();
 
-    std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> aPageMetafiles;
+    std::vector<exp::FixedLayoutPage> aPageMetafiles;
     if (nLayoutMethod == libepubgen::EPUB_LAYOUT_METHOD_FIXED)
         CreateMetafiles(aPageMetafiles);
 
@@ -119,7 +119,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     return xFilter->filter(rDescriptor);
 }
 
-void EPUBExportFilter::CreateMetafiles(std::vector<std::pair<uno::Sequence<sal_Int8>, Size>> &rPageMetafiles)
+void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage> &rPageMetafiles)
 {
     DocumentToGraphicRenderer aRenderer(mxSourceDocument, /*bSelectionOnly=*/false);
     uno::Reference<frame::XModel> xModel(mxSourceDocument, uno::UNO_QUERY);
@@ -142,7 +142,7 @@ void EPUBExportFilter::CreateMetafiles(std::vector<std::pair<uno::Sequence<sal_I
         Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage);
         // Get the CSS pixel size of the page (mm100 -> pixel using 96 DPI, independent from system DPI).
         Size aCss(static_cast<double>(aLogic.getWidth()) / 26.4583, static_cast<double>(aLogic.getHeight()) / 26.4583);
-        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aCss, COL_WHITE);
+        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aCss, COL_WHITE, /*bExtOutDevData=*/true);
         auto &rGDIMetaFile = const_cast<GDIMetaFile &>(aGraphic.GetGDIMetaFile());
 
         // Set preferred map unit and size on the metafile, so the SVG size
@@ -156,7 +156,11 @@ void EPUBExportFilter::CreateMetafiles(std::vector<std::pair<uno::Sequence<sal_I
         rGDIMetaFile.Write(aMemoryStream);
         uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8 *>(aMemoryStream.GetData()), aMemoryStream.Tell());
 
-        rPageMetafiles.emplace_back(aSequence, aCss);
+        exp::FixedLayoutPage aPage;
+        aPage.aMetafile = aSequence;
+        aPage.aCssPixels = aCss;
+        aPage.aChapterNames = aRenderer.getChapterNames();
+        rPageMetafiles.push_back(aPage);
     }
 }
 

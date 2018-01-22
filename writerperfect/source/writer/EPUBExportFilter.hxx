@@ -19,7 +19,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-class Size;
+#include "exp/xmlimp.hxx"
 
 namespace writerperfect
 {
@@ -59,7 +59,7 @@ public:
 
 private:
     /// Create page metafiles in case of fixed layout.
-    void CreateMetafiles(std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &rPageMetafiles);
+    void CreateMetafiles(std::vector<exp::FixedLayoutPage> &rPageMetafiles);
 };
 
 } // namespace writerperfect

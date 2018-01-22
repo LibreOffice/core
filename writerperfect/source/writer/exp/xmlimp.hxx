@@ -23,8 +23,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-
-class Size;
+#include <tools/gen.hxx>
 
 namespace writerperfect
 {
@@ -32,6 +31,14 @@ namespace exp
 {
 
 class XMLImportContext;
+
+/// Contains info about a fixed-layout page.
+struct FixedLayoutPage
+{
+    css::uno::Sequence<sal_Int8> aMetafile;
+    Size aCssPixels;
+    std::vector<OUString> aChapterNames;
+};
 
 /// States describing the result of a link -> popup conversion.
 enum class PopupState
@@ -74,10 +81,10 @@ class XMLImport : public cppu::WeakImplHelper
     const css::uno::Reference<css::uno::XComponentContext> &mxContext;
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
     OUString maMediaDir;
-    const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &mrPageMetafiles;
+    const std::vector<FixedLayoutPage> &mrPageMetafiles;
 
 public:
-    XMLImport(const css::uno::Reference<css::uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor, const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &rPageMetafiles);
+    XMLImport(const css::uno::Reference<css::uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor, const std::vector<FixedLayoutPage> &rPageMetafiles);
 
     rtl::Reference<XMLImportContext> CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
 
@@ -99,7 +106,7 @@ public:
     const librevenge::RVNGPropertyListVector &GetCoverImages();
     const librevenge::RVNGPropertyList &GetMetaData();
     PopupState FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
-    const std::vector<std::pair<css::uno::Sequence<sal_Int8>, Size>> &GetPageMetafiles() const;
+    const std::vector<FixedLayoutPage> &GetPageMetafiles() const;
     const css::uno::Reference<css::uno::XComponentContext> &GetComponentContext() const;
 
     // XDocumentHandler

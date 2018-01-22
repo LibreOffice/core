@@ -92,6 +92,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     std::unique_ptr<GlobalSyncData> mpGlobalSyncData;
 
     std::vector< PDFExtOutDevBookmarkEntry > maBookmarks;
+    std::vector<OUString> maChapterNames;
 
 public:
 
@@ -143,6 +144,7 @@ public:
     void        SetDocumentLocale( const css::lang::Locale& rLoc );
 
     std::vector< PDFExtOutDevBookmarkEntry >& GetBookmarks() { return maBookmarks;}
+    const std::vector<OUString>& GetChapterNames() { return maChapterNames; }
 
     const Graphic& GetCurrentGraphic() const;
 

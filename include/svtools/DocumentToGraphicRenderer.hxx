@@ -21,6 +21,8 @@
 #ifndef INCLUDED_SVTOOLS_DOCUMENTTOGRAPHICRENDERER_HXX
 #define INCLUDED_SVTOOLS_DOCUMENTTOGRAPHICRENDERER_HXX
 
+#include <vector>
+
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
@@ -51,6 +53,7 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
     css::uno::Any                                   maSelection;
     bool                                            mbSelectionOnly;
     bool                                            mbIsWriter;
+    std::vector<OUString>                           maChapterNames;
 
     bool hasSelection() const;
 
@@ -66,13 +69,18 @@ public:
     ~DocumentToGraphicRenderer();
 
     sal_Int32 getCurrentPage();
+    /**
+     * Get list of chapter names for a page, current page is set by
+     * renderToGraphic().
+     */
+    const std::vector<OUString>& getChapterNames() const;
 
     Size getDocumentSizeInPixels( sal_Int32 nCurrentPage );
 
     Size getDocumentSizeIn100mm( sal_Int32 nCurrentPage );
 
     Graphic renderToGraphic( sal_Int32 nCurrentPage, Size aDocumentSizePixel,
-                            Size aTargetSizePixel, Color aPageColor);
+                            Size aTargetSizePixel, Color aPageColor, bool bExtOutDevData);
 
     /** Determine whether rxController has a css::view::XSelectionSupplier at
         which either a css::drawing::XShapes or css::drawing::XShape is

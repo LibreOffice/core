@@ -197,3 +197,161 @@ index bdf3bf0..cb4efee 100644
 -- 
 2.13.6
 
+From c081609849b18113340c39a73b6af432a103a102 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Mon, 22 Jan 2018 14:39:19 +0100
+Subject: [PATCH] fixed layout: allow defining chapter names
+
+Fixed layout normally just works with SVG images (one image / page), but
+readable navigation document is still expected, e.g. PDF provides it. So
+add a way to mention what chapters start on a given page.
+---
+ src/lib/EPUBHTMLManager.cpp        | 25 +++++++++++++++++++++++++
+ src/lib/EPUBHTMLManager.h          |  3 +++
+ src/lib/EPUBPath.cpp               | 11 +++++++++++
+ src/lib/EPUBPath.h                 |  4 ++++
+ src/lib/EPUBTextGenerator.cpp      | 15 +++++++++++++++
+ src/test/EPUBTextGeneratorTest.cpp | 37 +++++++++++++++++++++++++++++++++++++
+ 6 files changed, 95 insertions(+)
+
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index 5e96d1d..d35bc3f 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -93,6 +93,23 @@ void EPUBHTMLManager::writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int
+   {
+     for (std::vector<EPUBPath>::size_type i = 0; m_paths.size() != i; ++i)
+     {
++      const std::vector<std::string> &chapters = m_paths[i].getChapters();
++      if (!chapters.empty())
++      {
++        for (const auto &chapter : chapters)
++        {
++          sink.openElement("li");
++          librevenge::RVNGPropertyList anchorAttrs;
++          anchorAttrs.insert("href", m_paths[i].relativeTo(tocPath).str().c_str());
++          sink.openElement("a", anchorAttrs);
++          std::ostringstream label;
++          sink.insertCharacters(chapter.c_str());
++          sink.closeElement("a");
++          sink.closeElement("li");
++        }
++        continue;
++      }
++
+       sink.openElement("li");
+       librevenge::RVNGPropertyList anchorAttrs;
+       anchorAttrs.insert("href", m_paths[i].relativeTo(tocPath).str().c_str());
+@@ -140,6 +157,14 @@ void EPUBHTMLManager::insertHeadingText(const std::string &text)
+   m_paths.back().appendTitle(text);
+ }
+ 
++void EPUBHTMLManager::addChapterName(const std::string &text)
++{
++  if (m_paths.empty())
++    return;
++
++  m_paths.back().addChapter(text);
++}
++
+ bool EPUBHTMLManager::hasHeadingText() const
+ {
+   if (m_paths.empty())
+diff --git a/src/lib/EPUBHTMLManager.h b/src/lib/EPUBHTMLManager.h
+index 157896b..d48ddf2 100644
+--- a/src/lib/EPUBHTMLManager.h
++++ b/src/lib/EPUBHTMLManager.h
+@@ -51,6 +51,9 @@ public:
+   /// Appends text to the title of the current heading.
+   void insertHeadingText(const std::string &text);
+ 
++  /// Registers a chapter name for the current page (fixed layout case).
++  void addChapterName(const std::string &text);
++
+   /// If the current heading has a title.
+   bool hasHeadingText() const;
+ 
+diff --git a/src/lib/EPUBPath.cpp b/src/lib/EPUBPath.cpp
+index e1c05ed..be24de5 100644
+--- a/src/lib/EPUBPath.cpp
++++ b/src/lib/EPUBPath.cpp
+@@ -54,6 +54,7 @@ EPUBPath::Relative::Relative(const std::vector<std::string> &components)
+ EPUBPath::EPUBPath(const std::string &path)
+   : m_components()
+   , m_title()
++  , m_chapters()
+ {
+   const std::string trimmed(algorithm::trim_left_copy_if(path, algorithm::is_any_of("/")));
+   algorithm::split(m_components, trimmed, algorithm::is_any_of("/"), algorithm::token_compress_on);
+@@ -116,6 +117,16 @@ void EPUBPath::appendTitle(const std::string &title)
+   m_title += title;
+ }
+ 
++void EPUBPath::addChapter(const std::string &chapter)
++{
++  m_chapters.push_back(chapter);
++}
++
++const std::vector<std::string> &EPUBPath::getChapters() const
++{
++  return m_chapters;
++}
++
+ std::string EPUBPath::getTitle() const
+ {
+   return m_title;
+diff --git a/src/lib/EPUBPath.h b/src/lib/EPUBPath.h
+index 12b8f25..76f2d7b 100644
+--- a/src/lib/EPUBPath.h
++++ b/src/lib/EPUBPath.h
+@@ -51,9 +51,13 @@ public:
+   void appendTitle(const std::string &title);
+   std::string getTitle() const;
+ 
++  /// Adds chapter name (fixed layout).
++  void addChapter(const std::string &chapter);
++  const std::vector<std::string> &getChapters() const;
+ private:
+   std::vector<std::string> m_components;
+   std::string m_title;
++  std::vector<std::string> m_chapters;
+ };
+ 
+ bool operator==(const EPUBPath &left, const EPUBPath &right);
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 8e88adb..38ddcdf 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -270,7 +270,9 @@ void EPUBTextGenerator::openParagraph(const librevenge::RVNGPropertyList &propLi
+ {
+   const RVNGProperty *const breakBefore = propList["fo:break-before"];
+   if (isPageBreak(breakBefore) && m_impl->getSplitGuard().splitOnPageBreak())
++  {
+     m_impl->startNewHtmlFile();
++  }
+   const RVNGProperty *const breakAfter = propList["fo:break-after"];
+   m_impl->m_breakAfterPara = isPageBreak(breakAfter);
+   if (m_impl->getSplitGuard().splitOnSize())
+@@ -282,6 +284,19 @@ void EPUBTextGenerator::openParagraph(const librevenge::RVNGPropertyList &propLi
+     m_impl->startNewHtmlFile();
+   m_impl->getSplitGuard().setCurrentHeadingLevel(outlineLevel ? outlineLevel->getInt() : 0);
+ 
++  if (const librevenge::RVNGPropertyListVector *chapterNames = m_impl->m_pageSpanProps.child("librevenge:chapter-names"))
++  {
++    for (unsigned long i = 0; i < chapterNames->count(); i++)
++    {
++      RVNGPropertyList const &chapter=(*chapterNames)[i];
++      const RVNGProperty *const chapterName = chapter["librevenge:name"];
++      if (!chapterName)
++        continue;
++
++      m_impl->getHtmlManager().addChapterName(chapterName->getStr().cstr());
++    }
++  }
++
+   m_impl->getSplitGuard().openLevel();
+ 
+   if (m_impl->m_inHeader || m_impl->m_inFooter)
+-- 
+2.13.6
+
