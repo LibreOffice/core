@@ -106,7 +106,7 @@ char const * getEnvironmentVariable(const char* env) {
 
 bool getValueFromLoggingIniFile(const char* key, char* value) {
     char buffer[MAX_PATH];
-    GetModuleFileName(NULL, buffer, MAX_PATH);
+    GetModuleFileName(nullptr, buffer, MAX_PATH);
     std::string sProgramDirectory = std::string(buffer);
     std::string::size_type pos = sProgramDirectory.find_last_of( "\\/" );
     sProgramDirectory = sProgramDirectory.substr(0, pos+1);
