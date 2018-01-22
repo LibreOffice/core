@@ -565,7 +565,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
                 pRequest->Done(*pOutSet);
             }
-        }, pDlg);
+        });
 }
 
 bool ScTabViewShell::IsRefInputMode() const

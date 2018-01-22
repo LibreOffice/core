@@ -866,7 +866,7 @@ void SwDocShell::Edit(
 
             if (pRequest)
                 pRequest->Done();
-        }, pDlg);
+        });
     }
     else
     {

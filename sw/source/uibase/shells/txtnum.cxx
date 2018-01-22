@@ -233,7 +233,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             }
             else if (RET_USER == nResult)
                 GetShell().DelNumRules();
-        }, pDlg);
+        });
     }
     break;
 
