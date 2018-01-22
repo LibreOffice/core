@@ -684,6 +684,10 @@ void PDFExtOutDevData::SetScreenStream(sal_Int32 nScreenId, const OUString& rURL
 
 sal_Int32 PDFExtOutDevData::CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID )
 {
+    if (nParent == -1)
+        // Has no parent, it's a chapter / heading 1.
+        maChapterNames.push_back(rText);
+
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateOutlineItem );
     mpGlobalSyncData->mParaInts.push_back( nParent );
     mpGlobalSyncData->mParaOUStrings.push_back( rText );

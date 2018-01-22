@@ -2893,7 +2893,8 @@ void SAL_CALL SwXTextDocument::render(
     if (0 > nRenderer)
         throw IllegalArgumentException();
 
-    const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" );
+    const bool bHasPDFExtOutDevData = lcl_SeqHasProperty( rxOptions, "HasPDFExtOutDevData" );
+    const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" ) || bHasPDFExtOutDevData;
     bool bIsSwSrcView = false;
     SfxViewShell *pView = GetRenderView( bIsSwSrcView, rxOptions, bIsPDFExport );
 
@@ -2976,7 +2977,7 @@ void SAL_CALL SwXTextDocument::render(
                     SwPrintData const& rSwPrtOptions =
                         *m_pRenderData->GetSwPrtOptions();
 
-                    if (bIsPDFExport && bFirstPage && pWrtShell)
+                    if (bIsPDFExport && (bFirstPage || bHasPDFExtOutDevData) && pWrtShell)
                     {
                         SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, false, rSwPrtOptions );
                     }

@@ -434,7 +434,7 @@ void ExportDialog::GetGraphicStream()
                         aDocumentSizePixel );
 
                 Graphic aGraphic( aRenderer.renderToGraphic( nCurrentPage,
-                            aDocumentSizePixel, aTargetSizePixel, COL_WHITE));
+                            aDocumentSizePixel, aTargetSizePixel, COL_WHITE, /*bExtOutDevData=*/false));
                 xGraphic = aGraphic.GetXGraphic();
             }
 

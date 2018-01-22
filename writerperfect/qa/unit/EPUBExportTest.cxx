@@ -348,6 +348,13 @@ void EPUBExportTest::testEPUBFixedLayoutImplicitBreak()
     // This was missing, implicit page break (as calculated by the layout) was lost on export.
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0002.xhtml"));
     CPPUNIT_ASSERT(!mxZipFile->hasByName("OEBPS/sections/section0003.xhtml"));
+
+    // Make sure that fixed layout has chapter names in the navigation
+    // document.
+    mpXmlDoc = parseExport("OEBPS/toc.xhtml");
+    // This was 'Page 1' instead.
+    assertXPathContent(mpXmlDoc, "//xhtml:li[1]/xhtml:a", "First chapter");
+    assertXPathContent(mpXmlDoc, "//xhtml:li[2]/xhtml:a", "Second chapter");
 }
 
 void EPUBExportTest::testPageBreakSplit()
