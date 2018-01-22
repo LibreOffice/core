@@ -152,7 +152,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
         mpViewShell->Invalidate(SID_RULER_OBJECT);
         mpViewShell->Cancel();
-    }, pDlg);
+    });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

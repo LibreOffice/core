@@ -90,7 +90,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
 
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
-    }, pDlg);
+    });
 }
 
 void FuArea::Activate()

@@ -107,7 +107,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
         mpViewShell->Cancel();
-    }, pDlg);
+    });
 }
 
 void FuLine::Activate()
