@@ -38,7 +38,7 @@ AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, 
 
 void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, tools::Rectangle& rRect )
 {
-    DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
+    DBG_ASSERT(nIndex >= 0,
                "SvxAccessibleStringWrap::GetCharacterBounds: index value overflow");
 
     mrFont.SetPhysFont( &mrDev );
@@ -55,7 +55,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, tools::Rectangl
     else
     {
         long aXArray[2];
-        mrDev.GetCaretPositions( maText, aXArray, static_cast< sal_uInt16 >(nIndex), 1 );
+        mrDev.GetCaretPositions( maText, aXArray, nIndex, 1 );
         rRect.Left() = 0;
         rRect.Top() = 0;
         rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
