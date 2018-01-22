@@ -54,7 +54,7 @@ public:
     void        BeginDrag() override;
     void        CreateAnchor() override;
     void        DestroyAnchor() override;
-    bool        SetCursorAtPoint( const Point& rPoint,
+    void        SetCursorAtPoint( const Point& rPoint,
                     bool bDontSelectAtCursor=false ) override;
     bool        IsSelectionAtPoint( const Point& rPoint ) override;
     void        DeselectAtPoint( const Point& rPoint ) override;

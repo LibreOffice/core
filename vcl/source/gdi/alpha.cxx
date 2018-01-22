@@ -80,9 +80,9 @@ Bitmap const & AlphaMask::GetBitmap() const
     return ImplGetBitmap();
 }
 
-bool AlphaMask::Erase( sal_uInt8 cTransparency )
+void AlphaMask::Erase( sal_uInt8 cTransparency )
 {
-    return Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
+    Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
 bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
@@ -105,10 +105,9 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
     return false;
 }
 
-bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency )
+void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency )
 {
     AlphaMask::ScopedWriteAccess pAcc(*this);
-    bool                bRet = false;
 
     if( pAcc && pAcc->GetBitCount() == 8 )
     {
@@ -140,11 +139,7 @@ bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
                 }
             }
         }
-
-        bRet = true;
     }
-
-    return bRet;
 }
 
 void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )

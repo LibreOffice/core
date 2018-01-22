@@ -263,7 +263,7 @@ public:
 
 public:
 
-    bool                    MakeMono( sal_uInt8 cThreshold );
+    void                    MakeMono( sal_uInt8 cThreshold );
 
 
     /** Convert bitmap format
@@ -590,10 +590,8 @@ public:
 
         @param pProgress
         A callback for showing the progress of the vectorization
-
-        @return true, if the operation was completed successfully.
      */
-    bool                    Vectorize(
+    void                    Vectorize(
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce,
                                 const Link<long,void>* pProgress );

@@ -45,9 +45,9 @@ bool ImpBitmap::ImplIsEqual(const ImpBitmap& rBmp) const
         rBmp.ImplGetChecksum() == ImplGetChecksum());
 }
 
-bool ImpBitmap::ImplCreate(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
+void ImpBitmap::ImplCreate(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
-    return mpSalBitmap->Create( rSize, nBitCount, rPal );
+    mpSalBitmap->Create( rSize, nBitCount, rPal );
 }
 
 bool ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap )

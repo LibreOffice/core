@@ -408,19 +408,19 @@ void PDFWriter::EndStructureElement()
     xImplementation->endStructureElement();
 }
 
-bool PDFWriter::SetCurrentStructureElement( sal_Int32 nID )
+void PDFWriter::SetCurrentStructureElement( sal_Int32 nID )
 {
-    return xImplementation->setCurrentStructureElement( nID );
+    xImplementation->setCurrentStructureElement( nID );
 }
 
-bool PDFWriter::SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal )
+void PDFWriter::SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal )
 {
-    return xImplementation->setStructureAttribute( eAttr, eVal );
+    xImplementation->setStructureAttribute( eAttr, eVal );
 }
 
-bool PDFWriter::SetStructureAttributeNumerical( enum StructAttribute eAttr, sal_Int32 nValue )
+void PDFWriter::SetStructureAttributeNumerical( enum StructAttribute eAttr, sal_Int32 nValue )
 {
-    return xImplementation->setStructureAttributeNumerical( eAttr, nValue );
+    xImplementation->setStructureAttributeNumerical( eAttr, nValue );
 }
 
 void PDFWriter::SetStructureBoundingBox( const tools::Rectangle& rRect )

@@ -352,7 +352,7 @@ public:
 
     // returns the system's menu handle if native menus are supported
     // pData must point to a SystemMenuData structure
-    bool GetSystemMenuData( SystemMenuData* pData ) const;
+    void GetSystemMenuData( SystemMenuData* pData ) const;
 
     // accessibility helpers
 

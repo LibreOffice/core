@@ -220,10 +220,10 @@ bool ImplDockFloatWin::Close()
     return mpDockWin->Close();
 }
 
-bool DockingWindow::ImplStartDocking( const Point& rPos )
+void DockingWindow::ImplStartDocking( const Point& rPos )
 {
     if ( !mbDockable )
-        return false;
+        return;
 
     maMouseOff      = rPos;
     maMouseStart    = maMouseOff;
@@ -270,7 +270,6 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
     }
 
     StartTracking( StartTrackingFlags::KeyMod );
-    return true;
 }
 
 void DockingWindow::ImplInitDockingWindowData()

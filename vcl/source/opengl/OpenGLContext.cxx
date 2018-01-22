@@ -368,9 +368,8 @@ void OpenGLContext::InitChildWindow(SystemChildWindow *pChildWindow)
     pChildWindow->SetControlBackground();
 }
 
-bool OpenGLContext::initWindow()
+void OpenGLContext::initWindow()
 {
-    return false;
 }
 
 void OpenGLContext::destroyCurrentContext()
@@ -624,9 +623,9 @@ bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
     return true;
 }
 
-bool OpenGLContext::AcquireDefaultFramebuffer()
+void OpenGLContext::AcquireDefaultFramebuffer()
 {
-    return BindFramebuffer( nullptr );
+    BindFramebuffer( nullptr );
 }
 
 OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rTexture )

@@ -278,7 +278,7 @@ public:
     // implementation of X11GraphicsImpl
 
     void Init() override;
-    bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) override;
+    void FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) override;
     bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) override;
 
     virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey,

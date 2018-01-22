@@ -80,9 +80,8 @@ void JobData::setCollate( bool bCollate )
     }
 }
 
-bool JobData::setPaper( int i_nWidth, int i_nHeight )
+void JobData::setPaper( int i_nWidth, int i_nHeight )
 {
-    bool bSuccess = false;
     if( m_pParser )
     {
         OUString aPaper( m_pParser->matchPaper( i_nWidth, i_nHeight ) );
@@ -90,22 +89,21 @@ bool JobData::setPaper( int i_nWidth, int i_nHeight )
         const PPDKey*   pKey = m_pParser->getKey( OUString( "PageSize" ) );
         const PPDValue* pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : nullptr;
 
-        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue );
+        if (pKey && pValue)
+            m_aContext.setValue( pKey, pValue );
     }
-    return bSuccess;
 }
 
-bool JobData::setPaperBin( int i_nPaperBin )
+void JobData::setPaperBin( int i_nPaperBin )
 {
-    bool bSuccess = false;
     if( m_pParser )
     {
         const PPDKey*   pKey = m_pParser->getKey( OUString( "InputSlot" ) );
         const PPDValue* pValue = pKey ? pKey->getValue( i_nPaperBin ) : nullptr;
 
-        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue );
+        if (pKey && pValue)
+            m_aContext.setValue( pKey, pValue );
     }
-    return bSuccess;
 }
 
 bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )

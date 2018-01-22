@@ -40,7 +40,7 @@ public:
 
     virtual void Init() override;
 
-    bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) override;
+    void FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) override;
     bool RenderPixmapToScreen(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY) override;
 
     bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,

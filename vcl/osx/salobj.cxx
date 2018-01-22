@@ -243,7 +243,7 @@ const SystemEnvData* AquaSalObject::GetSystemData() const
 class AquaOpenGLContext : public OpenGLContext
 {
 public:
-    virtual bool initWindow() override;
+    virtual void initWindow() override;
 
 private:
     GLWindow m_aGLWin;
@@ -314,7 +314,7 @@ void AquaOpenGLContext::destroyCurrentContext()
     [NSOpenGLContext clearCurrentContext];
 }
 
-bool AquaOpenGLContext::initWindow()
+void AquaOpenGLContext::initWindow()
 {
     OSX_SALDATA_RUNINMAIN_UNION( initWindow(), boolean )
 
@@ -328,8 +328,6 @@ bool AquaOpenGLContext::initWindow()
     {
         InitChildWindow(m_pChildWindow.get());
     }
-
-    return true;
 }
 
 bool AquaOpenGLContext::ImplInit()

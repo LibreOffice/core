@@ -34,7 +34,7 @@ public:
     GraphicNativeTransform(Graphic& rGraphic);
     ~GraphicNativeTransform();
 
-    bool rotate(sal_uInt16 aRotation);
+    void rotate(sal_uInt16 aRotation);
 };
 
 #endif // INCLUDED_VCL_GRAPHICNATIVETRANSFORM_HXX

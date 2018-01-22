@@ -107,7 +107,7 @@ protected:
     void ImplInitClipRegion();
     void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
     void ImplDrawLineAA( double nX1, double nY1, double nX2, double nY2, bool edge );
-    bool CheckOffscreenTexture();
+    void CheckOffscreenTexture();
 
     void ApplyProgramMatrices(float fPixelOffset = 0.0);
 
@@ -116,9 +116,9 @@ public:
     bool UseSolid( SalColor nColor, sal_uInt8 nTransparency );
     bool UseSolid( SalColor nColor, double fTransparency );
     bool UseSolid( SalColor nColor );
-    bool UseSolid();
+    void UseSolid();
     bool UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA);
-    bool UseLine(GLfloat fLineWidth, bool bUseAA);
+    void UseLine(GLfloat fLineWidth, bool bUseAA);
     bool UseInvert50();
     bool UseInvert(SalInvert nFlags);
 
@@ -145,7 +145,7 @@ public:
     void DeferredTextDraw(OpenGLTexture const & rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
 
     void FlushDeferredDrawing();
-    bool FlushLinesOrTriangles(DrawShaderType eType, RenderParameters const & rParameters);
+    void FlushLinesOrTriangles(DrawShaderType eType, RenderParameters const & rParameters);
 
 public:
     // get the width of the device

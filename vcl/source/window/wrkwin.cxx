@@ -214,7 +214,7 @@ bool WorkWindow::IsMinimized() const
         return false;
 }
 
-bool WorkWindow::SetPluginParent( SystemParentData* pParent )
+void WorkWindow::SetPluginParent( SystemParentData* pParent )
 {
     SAL_WARN_IF( mbPresentationMode || mbFullScreenMode, "vcl", "SetPluginParent in fullscreen or presentation mode !" );
 
@@ -222,13 +222,11 @@ bool WorkWindow::SetPluginParent( SystemParentData* pParent )
 
     bool bShown = IsVisible();
     Show( false );
-    bool bRet = mpWindowImpl->mpFrame->SetPluginParent( pParent );
+    mpWindowImpl->mpFrame->SetPluginParent( pParent );
     Show( bShown );
 
     if( bWasDnd )
         Window::ImplStartDnd();
-
-    return bRet;
 }
 
 void WorkWindow::ImplSetFrameState( WindowStateState aFrameState )

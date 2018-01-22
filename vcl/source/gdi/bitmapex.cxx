@@ -470,7 +470,7 @@ bool BitmapEx::ReduceColors( sal_uInt16 nNewColorCount )
     return !!aBitmap && aBitmap.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
 }
 
-bool BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
+void BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
 {
     bool bRet = false;
 
@@ -489,8 +489,6 @@ bool BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
         SAL_WARN_IF( !!aMask && aBitmap.GetSizePixel() != aMask.GetSizePixel(), "vcl",
                     "BitmapEx::Expand(): size mismatch for bitmap and alpha mask." );
     }
-
-    return bRet;
 }
 
 bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc,
@@ -612,14 +610,16 @@ bool BitmapEx::Dither()
     return !!aBitmap && aBitmap.Dither();
 }
 
-bool BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor )
+void BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor )
 {
-    return !!aBitmap && aBitmap.Replace( rSearchColor, rReplaceColor );
+    if (!!aBitmap)
+        aBitmap.Replace( rSearchColor, rReplaceColor );
 }
 
-bool BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount, const sal_uInt8* pTols )
+void BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount, const sal_uInt8* pTols )
 {
-    return !!aBitmap && aBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, pTols );
+    if (!!aBitmap)
+        aBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, pTols );
 }
 
 bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,

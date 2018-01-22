@@ -623,14 +623,14 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     }
 }
 
-bool
+void
 PrinterJob::EndPage ()
 {
     osl::File* pPageHeader = maHeaderVector.back().get();
     osl::File* pPageBody   = maPageVector.back().get();
 
     if( ! (pPageBody && pPageHeader) )
-        return false;
+        return;
 
     // copy page to paper and write page trailer according to DSC
 
@@ -645,8 +645,6 @@ PrinterJob::EndPage ()
 
     pPageHeader->close();
     pPageBody->close();
-
-    return true;
 }
 
 struct less_ppd_key

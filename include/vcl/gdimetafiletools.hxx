@@ -45,7 +45,7 @@ bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource);
 class VCL_DLLPUBLIC MetafileAccessor
 {
 public:
-    virtual bool accessMetafile(GDIMetaFile& rTargetMetafile) const = 0;
+    virtual void accessMetafile(GDIMetaFile& rTargetMetafile) const = 0;
     virtual ~MetafileAccessor();
 };
 

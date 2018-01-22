@@ -940,7 +940,7 @@ namespace
     }
 }
 
-bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
+void VclBuilder::extractGroup(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("group"));
     if (aFind != rMap.end())
@@ -951,9 +951,7 @@ bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
             sID = sID.copy(0, nDelim);
         m_pParserState->m_aGroupMaps.emplace_back(id, sID.toUtf8());
         rMap.erase(aFind);
-        return true;
     }
-    return false;
 }
 
 void VclBuilder::connectNumericFormatterAdjustment(const OString &id, const OUString &rAdjustment)
@@ -1026,7 +1024,7 @@ namespace
     }
 }
 
-bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
+void VclBuilder::extractModel(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("model"));
     if (aFind != rMap.end())
@@ -1034,24 +1032,20 @@ bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
         m_pParserState->m_aModelMaps.emplace_back(id, aFind->second,
             extractActive(rMap));
         rMap.erase(aFind);
-        return true;
     }
-    return false;
 }
 
-bool VclBuilder::extractBuffer(const OString &id, stringmap &rMap)
+void VclBuilder::extractBuffer(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("buffer"));
     if (aFind != rMap.end())
     {
         m_pParserState->m_aTextBufferMaps.emplace_back(id, aFind->second);
         rMap.erase(aFind);
-        return true;
     }
-    return false;
 }
 
-bool VclBuilder::extractStock(const OString &id, stringmap &rMap)
+void VclBuilder::extractStock(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("stock"));
     if (aFind != rMap.end())
@@ -1066,21 +1060,17 @@ bool VclBuilder::extractStock(const OString &id, stringmap &rMap)
             rMap.erase(aFind);
         }
         m_pParserState->m_aStockMap[id] = aInfo;
-        return true;
     }
-    return false;
 }
 
-bool VclBuilder::extractButtonImage(const OString &id, stringmap &rMap, bool bRadio)
+void VclBuilder::extractButtonImage(const OString &id, stringmap &rMap, bool bRadio)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("image"));
     if (aFind != rMap.end())
     {
         m_pParserState->m_aButtonImageWidgetMaps.emplace_back(id, aFind->second, bRadio);
         rMap.erase(aFind);
-        return true;
     }
-    return false;
 }
 
 void VclBuilder::extractMnemonicWidget(const OString &rLabelID, stringmap &rMap)
