@@ -21,10 +21,13 @@
 #include <docfunc.hxx>
 #include <scitems.hxx>
 #include <editutil.hxx>
+#include <table.hxx>
 
 #include <sal/config.h>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
+#include <svx/svdocirc.hxx>
+#include <svx/svdpage.hxx>
 #include <test/bootstrapfixture.hxx>
 
 void Test::testSort()
@@ -1880,6 +1883,65 @@ void Test::testSortPartialFormulaGroup()
     CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(ScAddress(1,3,0)));
     CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(1,4,0)));
     CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(1,5,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSortImages()
+{
+    m_pDoc->InsertTab(0, "testSortImages");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+    ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+
+    ScRange aDataRange;
+    ScAddress aPos(0,0,0);
+    {
+        const char* aData[][1] = {
+            { "2" },
+            { "1" },
+        };
+
+        clearRange(m_pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
+        aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    }
+
+    // Insert graphic in cell B2.
+    const tools::Rectangle aOrigRect = tools::Rectangle(1000, 1000, 1200, 1200);
+    SdrCircObj* pObj = new SdrCircObj(OBJ_CIRC, aOrigRect);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    pPage->InsertObject(pObj);
+    // Anchor to cell
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+    // Move to cell B2
+    ScAddress aCellPos(1, 1, 0);
+    pDrawLayer->MoveObject(pObj, aCellPos);
+
+    std::vector<SdrObject*> pObjects = pDrawLayer->GetObjectsAnchoredToCell(aCellPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pObjects.size());
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 1;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 1;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+
+    m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
+
+    double nVal = m_pDoc->GetValue(0,0,0);
+    ASSERT_DOUBLES_EQUAL(nVal, 1.0);
+
+    // check that note is also moved after sorting
+    aCellPos = ScAddress(1, 0, 0);
+    pObjects = pDrawLayer->GetObjectsAnchoredToCell(aCellPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pObjects.size());
 
     m_pDoc->DeleteTab(0);
 }

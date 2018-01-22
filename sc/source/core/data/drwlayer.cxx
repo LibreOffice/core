@@ -2017,6 +2017,30 @@ std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCell(const ScAddress& r
     return pObjects;
 }
 
+void ScDrawLayer::MoveObject(SdrObject* pObject, ScAddress& rNewPosition)
+{
+    // Get anchor data
+    ScDrawObjData* pObjData = GetObjData(pObject, false);
+    if (!pObjData)
+        return;
+    const ScAddress aOldStart = pObjData->maStart;
+    const ScAddress aOldEnd = pObjData->maEnd;
+
+    // Set start address
+    pObjData->maStart = rNewPosition;
+
+    // Set end address
+    const SCCOL nObjectColSpan = aOldEnd.Col() - aOldStart.Col();
+    const SCROW nObjectRowSpan = aOldEnd.Row() - aOldStart.Row();
+    ScAddress aNewEnd = rNewPosition;
+    aNewEnd.IncRow(nObjectRowSpan);
+    aNewEnd.IncCol(nObjectColSpan);
+    pObjData->maEnd = aNewEnd;
+
+    // Update draw object according to new anchor
+    RecalcPos(pObject, *pObjData, false, false);
+}
+
 ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate )
 {
     sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;

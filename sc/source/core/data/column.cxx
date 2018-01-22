@@ -1912,29 +1912,12 @@ void ScColumn::UpdateDrawObjectsForRow( std::vector<SdrObject*>& pObjects, SCCOL
 {
     for (auto &pObject : pObjects)
     {
-        // Get anchor data
-        ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject, false);
-        if (!pObjData)
-            continue;
-        const ScAddress aOldStart = pObjData->maStart;
-        const ScAddress aOldEnd = pObjData->maEnd;
-
-        // Set start address
-        ScAddress aNewStart = ScAddress(nTargetCol, nTargetRow, nTab);
-        pObjData->maStart = aNewStart;
-
-        // Set end address
-        const SCCOL nObjectColSpan = aOldEnd.Col() - aOldStart.Col();
-        const SCROW nObjectRowSpan = aOldEnd.Row() - aOldStart.Row();
-        ScAddress aNewEnd = aNewStart;
-        aNewEnd.IncRow(nObjectRowSpan);
-        aNewEnd.IncCol(nObjectColSpan);
-        pObjData->maEnd = aNewEnd;
+        ScAddress aNewAddress = ScAddress(nTargetCol, nTargetRow, nTab);
 
         // Update draw object according to new anchor
         ScDrawLayer* pDrawLayer = GetDoc()->GetDrawLayer();
         if (pDrawLayer)
-            pDrawLayer->RecalcPos(pObject, *pObjData, false, false);
+            pDrawLayer->MoveObject(pObject, aNewAddress);
     }
 }
 
