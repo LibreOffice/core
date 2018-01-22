@@ -96,7 +96,7 @@ private:
      * it has the same structure with the document which maintains those
      * elements physically.
      */
-    BufferNode*  m_pRootBufferNode;
+    std::unique_ptr<BufferNode>  m_pRootBufferNode;
 
     /*
      * the current active BufferNode.
