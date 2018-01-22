@@ -1696,7 +1696,8 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
         uno::Reference< sdbcx::XColumnsSupplier> xColsSupp;
         bool bDisposeConnection = false;
         if(pImpl->pMergeData &&
-            pImpl->pMergeData->sDataSource == rDBName && pImpl->pMergeData->sCommand == rTableName)
+            ((pImpl->pMergeData->sDataSource == rDBName && pImpl->pMergeData->sCommand == rTableName) ||
+            (rDBName.isEmpty() && rTableName.isEmpty())))
         {
             xConnection = pImpl->pMergeData->xConnection;
             xSource = SwDBManager::getDataSourceAsParent(xConnection,rDBName);
@@ -2400,11 +2401,15 @@ sal_uInt32      SwDBManager::GetSelectedRecordId(
 {
     sal_uInt32 nRet = 0xffffffff;
     //check for merge data source first
-    if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource &&
-                    rTableOrQuery == pImpl->pMergeData->sCommand &&
-                    (nCommandType == -1 || nCommandType == pImpl->pMergeData->nCommandType) &&
-                    pImpl->pMergeData->xResultSet.is())
+    if(pImpl->pMergeData &&
+        ((rDataSource == pImpl->pMergeData->sDataSource &&
+        rTableOrQuery == pImpl->pMergeData->sCommand) ||
+        (rDataSource.isEmpty() && rTableOrQuery.isEmpty())) &&
+        (nCommandType == -1 || nCommandType == pImpl->pMergeData->nCommandType) &&
+        pImpl->pMergeData->xResultSet.is())
+    {
         nRet = GetSelectedRecordId();
+    }
     else
     {
         SwDBData aData;
@@ -2460,8 +2465,10 @@ void    SwDBManager::CloseAll(bool bIncludingMerge)
 SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
 {
     //prefer merge data if available
-    if(pImpl->pMergeData && rData.sDataSource == pImpl->pMergeData->sDataSource &&
-        rData.sCommand == pImpl->pMergeData->sCommand &&
+    if(pImpl->pMergeData &&
+        ((rData.sDataSource == pImpl->pMergeData->sDataSource &&
+        rData.sCommand == pImpl->pMergeData->sCommand) ||
+        (rData.sDataSource.isEmpty() && rData.sCommand.isEmpty())) &&
         (rData.nCommandType == -1 || rData.nCommandType == pImpl->pMergeData->nCommandType ||
         (bCreate && pImpl->pMergeData->nCommandType == -1)))
     {
