@@ -157,19 +157,7 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
 {
     const Size aSize( nWidth, nHeight );
 
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    // Don't bother allocating a bitmap of a size that would fail on a
-    // 32-bit system. We have at least one unit tests that is expected
-    // to fail (loading a 65535*65535 size GIF
-    // svtools/qa/cppunit/data/gif/fail/CVE-2008-5937-1.gif), but
-    // which doesn't fail on 64-bit Mac OS X at least. Why the loading
-    // fails on 64-bit Linux, no idea.
-    if (nWidth >= 64000 && nHeight >= 64000)
-    {
-        bStatus = false;
-        return;
-    }
-#endif
+    sal_uInt64 nCombinedPixSize = nWidth * nHeight;
 
     // "Overall data compression asymptotically approaches 3839 × 8 / 12 = 2559 1/3"
     // so assume compression of 1:2560 is possible
@@ -181,6 +169,7 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     {
         const Size& rSize = aAnimation.Get(i).aSizePix;
         nMinFileData += rSize.Width() * rSize.Height() / 2560;
+        nCombinedPixSize += rSize.Width() * rSize.Height();
     }
 
     if (nMaxStreamData < nMinFileData)
@@ -188,6 +177,18 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
         //there is nowhere near enough data in this stream to fill the claimed dimensions
         SAL_WARN("vcl.filter", "in gif frame index " << aAnimation.Count() << " gif claims dimensions " << nWidth << " x " << nHeight <<
                                " but filesize of " << nMaxStreamData << " is surely insufficiently large to fill all frame images");
+        bStatus = false;
+        return;
+    }
+
+    // Don't bother allocating a bitmap of a size that would fail on a
+    // 32-bit system. We have at least one unit tests that is expected
+    // to fail (loading a 65535*65535 size GIF
+    // svtools/qa/cppunit/data/gif/fail/CVE-2008-5937-1.gif), but
+    // which doesn't fail on 64-bit Mac OS X at least. Why the loading
+    // fails on 64-bit Linux, no idea.
+    if (nCombinedPixSize >= 64000U * 64000U)
+    {
         bStatus = false;
         return;
     }
