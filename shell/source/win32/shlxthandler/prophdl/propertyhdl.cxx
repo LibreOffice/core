@@ -285,7 +285,7 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
     OutputDebugStringFormatW( L"CPropertyHdl: LoadProperties\n" );
     PROPVARIANT propvarValues;
 
-    for ( UINT i = 0; i < (UINT)gPropertyMapTableSize; ++i )
+    for ( UINT i = 0; i < UINT(gPropertyMapTableSize); ++i )
     {
         PropVariantClear( &propvarValues );
         HRESULT hr = GetItemData( pMetaInfoReader, i, &propvarValues);

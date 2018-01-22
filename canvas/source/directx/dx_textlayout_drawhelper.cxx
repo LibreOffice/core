@@ -179,12 +179,12 @@ namespace dxcanvas
 
             // set world transform
             XFORM aXForm;
-            aXForm.eM11 = (FLOAT)aWorldTransform.get(0, 0);
-            aXForm.eM12 = (FLOAT)aWorldTransform.get(1, 0);
-            aXForm.eM21 = (FLOAT)aWorldTransform.get(0, 1);
-            aXForm.eM22 = (FLOAT)aWorldTransform.get(1, 1);
-            aXForm.eDx = (FLOAT)aWorldTransform.get(0, 2);
-            aXForm.eDy = (FLOAT)aWorldTransform.get(1, 2);
+            aXForm.eM11 = static_cast<FLOAT>(aWorldTransform.get(0, 0));
+            aXForm.eM12 = static_cast<FLOAT>(aWorldTransform.get(1, 0));
+            aXForm.eM21 = static_cast<FLOAT>(aWorldTransform.get(0, 1));
+            aXForm.eM22 = static_cast<FLOAT>(aWorldTransform.get(1, 1));
+            aXForm.eDx = static_cast<FLOAT>(aWorldTransform.get(0, 2));
+            aXForm.eDy = static_cast<FLOAT>(aWorldTransform.get(1, 2));
 
             // TODO(F3): This is NOT supported on 95/98/ME!
             SetGraphicsMode(hdc, GM_ADVANCED);

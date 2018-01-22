@@ -59,7 +59,7 @@ using namespace vcl;
 
 inline FIXED FixedFromDouble( double d )
 {
-    const long l = (long) ( d * 65536. );
+    const long l = static_cast<long>( d * 65536. );
     return *reinterpret_cast<FIXED const *>(&l);
 }
 
@@ -172,7 +172,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OU
         // construct a Size structure as the parameter of constructor of class FontSelectPattern
         const Size aSize( pFace->GetWidth(), pFace->GetHeight() );
         // create a FontSelectPattern object for getting s LOGFONT
-        const FontSelectPattern aFSD( *pFace, aSize, (float)aSize.Height(), 0, false );
+        const FontSelectPattern aFSD( *pFace, aSize, static_cast<float>(aSize.Height()), 0, false );
         // construct log font
         LOGFONTW aLogFont;
         ImplGetLogFontFromFontSelect( mhDC, &aFSD, aLogFont, true );
@@ -346,7 +346,7 @@ static rtl_TextEncoding ImplCharSetToSal( BYTE nCharSet )
 
     if ( nCharSet == OEM_CHARSET )
     {
-        UINT nCP = (sal_uInt16)GetOEMCP();
+        UINT nCP = static_cast<sal_uInt16>(GetOEMCP());
         switch ( nCP )
         {
             // It is unclear why these two (undefined?) code page numbers are
@@ -591,7 +591,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
         nFontHeight += nDPIY/2;
         nFontHeight /= nDPIY;
         rFont.SetFontSize( Size( 0, nFontHeight ) );
-        rFont.SetOrientation( (short)rLogFont.lfEscapement );
+        rFont.SetOrientation( static_cast<short>(rLogFont.lfEscapement) );
         if ( rLogFont.lfItalic )
             rFont.SetItalic( ITALIC_NORMAL );
         else
@@ -790,8 +790,8 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
 
     rLogFont.lfWeight          = ImplWeightToWin( pFont->GetWeight() );
-    rLogFont.lfHeight          = (LONG)-pFont->mnHeight;
-    rLogFont.lfWidth           = (LONG)pFont->mnWidth;
+    rLogFont.lfHeight          = static_cast<LONG>(-pFont->mnHeight);
+    rLogFont.lfWidth           = static_cast<LONG>(pFont->mnWidth);
     rLogFont.lfUnderline       = 0;
     rLogFont.lfStrikeOut       = 0;
     rLogFont.lfItalic          = BYTE(pFont->GetItalic() != ITALIC_NONE);

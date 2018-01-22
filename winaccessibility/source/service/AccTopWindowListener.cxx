@@ -77,7 +77,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
         AddAllListeners(pAccessible,nullptr,systemdata->hWnd);
 
         if( window->GetStyle() & WB_MOVEABLE )
-            accManagerAgent.IncreaseState( pAccessible, (unsigned short) -1 /* U_MOVEBLE */ );
+            accManagerAgent.IncreaseState( pAccessible, static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
 
         short role = pAccessibleContext->getAccessibleRole();
 

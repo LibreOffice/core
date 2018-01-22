@@ -65,18 +65,18 @@ static DWORD FamilyMap[]= {
 
 static oslAddrFamily osl_AddrFamilyFromNative(DWORD nativeType)
 {
-    oslAddrFamily i= (oslAddrFamily) 0;
+    oslAddrFamily i= oslAddrFamily(0);
     while(i != osl_Socket_FamilyInvalid)
     {
         if(FamilyMap[i] == nativeType)
             return i;
-        i = (oslAddrFamily) ( (int)i + 1);
+        i = static_cast<oslAddrFamily>( static_cast<int>(i) + 1);
     }
     return i;
 }
 
 #define FAMILY_FROM_NATIVE(y) osl_AddrFamilyFromNative(y)
-#define FAMILY_TO_NATIVE(x) (short)FamilyMap[x]
+#define FAMILY_TO_NATIVE(x) static_cast<short>(FamilyMap[x])
 
 static DWORD ProtocolMap[]= {
     0,                          /* osl_Socket_FamilyInet */
@@ -99,12 +99,12 @@ static DWORD TypeMap[]= {
 
 static oslSocketType osl_SocketTypeFromNative(DWORD nativeType)
 {
-    oslSocketType i= (oslSocketType)0;
+    oslSocketType i= oslSocketType(0);
     while(i != osl_Socket_TypeInvalid)
     {
         if(TypeMap[i] == nativeType)
             return i;
-        i = (oslSocketType)((int)i+1);
+        i = static_cast<oslSocketType>(static_cast<int>(i)+1);
     }
     return i;
 }
@@ -197,14 +197,14 @@ static int SocketError[]= {
 
 static oslSocketError osl_SocketErrorFromNative(int nativeType)
 {
-    oslSocketError i= (oslSocketError)0;
+    oslSocketError i= oslSocketError(0);
 
     while(i != osl_Socket_E_InvalidError)
     {
         if(SocketError[i] == nativeType)
             return i;
 
-        i = (oslSocketError)( (int) i + 1);
+        i = static_cast<oslSocketError>( static_cast<int>(i) + 1);
     }
     return i;
 }
@@ -263,7 +263,7 @@ static oslSocketAddr createSocketAddrWithFamily(
 
         pInetAddr->sin_family = FAMILY_TO_NATIVE(osl_Socket_FamilyInet);
         pInetAddr->sin_addr.s_addr = nAddr;
-        pInetAddr->sin_port = (sal_uInt16)(port&0xffff);
+        pInetAddr->sin_port = static_cast<sal_uInt16>(port&0xffff);
         break;
        }
     default:
@@ -394,7 +394,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
     }
 
     oslSocketAddr pAddr =
-        createSocketAddrWithFamily( osl_Socket_FamilyInet, htons( (sal_uInt16) Port), nAddr );
+        createSocketAddrWithFamily( osl_Socket_FamilyInet, htons( static_cast<sal_uInt16>(Port)), nAddr );
     return pAddr;
 }
 
@@ -411,7 +411,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     oslSocketAddr pAddr = nullptr;
     if(Addr != OSL_INADDR_NONE)
     {
-        pAddr = createSocketAddrWithFamily( osl_Socket_FamilyInet, htons( (sal_uInt16)Port), Addr );
+        pAddr = createSocketAddrWithFamily( osl_Socket_FamilyInet, htons( static_cast<sal_uInt16>(Port)), Addr );
     }
     return pAddr;
 }
@@ -723,7 +723,7 @@ sal_Bool SAL_CALL osl_setInetPortOfSocketAddr (
     if (pSystemInetAddr->sin_family != FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
         return false;
 
-    pSystemInetAddr->sin_port= htons((short)Port);
+    pSystemInetAddr->sin_port= htons(static_cast<short>(Port));
     return true;
 }
 

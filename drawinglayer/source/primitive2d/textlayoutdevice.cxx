@@ -417,8 +417,8 @@ namespace drawinglayer
 
                 if(aUnscaledFontMetric.GetAverageFontWidth() > 0)
                 {
-                    const double fScaleFactor((double)nWidth / (double)nHeight);
-                    const sal_uInt32 nScaledWidth(basegfx::fround((double)aUnscaledFontMetric.GetAverageFontWidth() * fScaleFactor));
+                    const double fScaleFactor(static_cast<double>(nWidth) / static_cast<double>(nHeight));
+                    const sal_uInt32 nScaledWidth(basegfx::fround(static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor));
                     aRetval.SetAverageFontWidth(nScaledWidth);
                 }
             }
@@ -470,7 +470,7 @@ namespace drawinglayer
 
                 if(aUnscaledFontMetric.GetAverageFontWidth() > 0)
                 {
-                    const double fScaleFactor((double)rFont.GetFontSize().getWidth() / (double)aUnscaledFontMetric.GetAverageFontWidth());
+                    const double fScaleFactor(static_cast<double>(rFont.GetFontSize().getWidth()) / static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()));
                     o_rSize.setX(fScaleFactor * o_rSize.getY());
                 }
             }

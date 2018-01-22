@@ -50,13 +50,13 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
     {
         std::string asDateTime = WStringToString( ws8601DateTime );
         SYSTEMTIME DateTime;
-        DateTime.wYear         = ( unsigned short )strtol( asDateTime.substr( 0, 4 ).c_str(), nullptr, 10 );
-        DateTime.wMonth        = ( unsigned short )strtol( asDateTime.substr( 5, 2 ).c_str(), nullptr, 10 );
+        DateTime.wYear         = static_cast<unsigned short>(strtol( asDateTime.substr( 0, 4 ).c_str(), nullptr, 10 ));
+        DateTime.wMonth        = static_cast<unsigned short>(strtol( asDateTime.substr( 5, 2 ).c_str(), nullptr, 10 ));
         DateTime.wDayOfWeek    =  0;
-        DateTime.wDay          = ( unsigned short )strtol( asDateTime.substr( 8, 2 ).c_str(), nullptr, 10 );
-        DateTime.wHour         = ( unsigned short )strtol( asDateTime.substr( 11,2 ).c_str(), nullptr, 10 );
-        DateTime.wMinute       = ( unsigned short )strtol( asDateTime.substr( 14,2 ).c_str(), nullptr, 10 );
-        DateTime.wSecond       = ( unsigned short )strtol( asDateTime.substr( 17,2 ).c_str(), nullptr, 10 );
+        DateTime.wDay          = static_cast<unsigned short>(strtol( asDateTime.substr( 8, 2 ).c_str(), nullptr, 10 ));
+        DateTime.wHour         = static_cast<unsigned short>(strtol( asDateTime.substr( 11,2 ).c_str(), nullptr, 10 ));
+        DateTime.wMinute       = static_cast<unsigned short>(strtol( asDateTime.substr( 14,2 ).c_str(), nullptr, 10 ));
+        DateTime.wSecond       = static_cast<unsigned short>(strtol( asDateTime.substr( 17,2 ).c_str(), nullptr, 10 ));
         DateTime.wMilliseconds =  0;
 
         //get Date info from structure

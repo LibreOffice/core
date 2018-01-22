@@ -149,7 +149,7 @@ BOOL CFullPropSpec::SetProperty( WCHAR const * wcsProperty )
         CoTaskMemFree( _psProperty.lpwstr );
     }
     _psProperty.ulKind = PRSPEC_LPWSTR;
-    int len = (int) ( (wcslen( wcsProperty ) + 1) * sizeof( WCHAR ) );
+    int len = static_cast<int>( (wcslen( wcsProperty ) + 1) * sizeof( WCHAR ) );
     _psProperty.lpwstr = static_cast<WCHAR *>(CoTaskMemAlloc( len ));
     if ( nullptr != _psProperty.lpwstr )
     {

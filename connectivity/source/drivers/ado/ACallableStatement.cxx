@@ -106,7 +106,7 @@ sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex )
 sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex )
 {
     GET_PARAM()
-    return (sal_Int64)m_aValue.getCurrency().int64;
+    return static_cast<sal_Int64>(m_aValue.getCurrency().int64);
 }
 
 
@@ -164,7 +164,7 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
     {
         pParam->put_Type(ADOS::MapJdbc2ADOType(sqlType,m_pConnection->getEngineType()));
         pParam->put_Direction(adParamOutput);
-        pParam->put_NumericScale((sal_Int8)scale);
+        pParam->put_NumericScale(static_cast<sal_Int8>(scale));
     }
 }
 

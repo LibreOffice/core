@@ -2938,7 +2938,7 @@ void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
                 {
                     nRealFlags = 0;
                 }
-                nFlags = (sal_Int16) nRealFlags;
+                nFlags = static_cast<sal_Int16>(nRealFlags);
             }
             else
             {

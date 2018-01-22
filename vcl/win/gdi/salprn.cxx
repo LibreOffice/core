@@ -328,7 +328,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
         if ( (pSetupData->GetSystem() == JOBSETUP_SYSTEM_WINDOWS) &&
              (pPrinter->maDriverName == pSetupData->GetDriver()) &&
              (pSetupData->GetDriverDataLen() > sizeof( SalDriverData )) &&
-             (long)(pSetupData->GetDriverDataLen() - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
+             static_cast<long>(pSetupData->GetDriverDataLen() - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
              pSetupDriverData->mnSysSignature == SAL_DRIVERDATA_SYSSIGN )
         {
             if( pDevModeW &&
@@ -474,7 +474,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
             {
                 if( pDevModeW->dmDefaultSource == pBins[ i ] )
                 {
-                    pSetupData->SetPaperBin( (sal_uInt16)i );
+                    pSetupData->SetPaperBin( static_cast<sal_uInt16>(i) );
                     break;
                 }
             }
@@ -960,8 +960,8 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const Imp
                 {
                     pDevModeW->dmFields       |= DM_PAPERLENGTH | DM_PAPERWIDTH;
                     pDevModeW->dmPaperSize     = DMPAPER_USER;
-                    pDevModeW->dmPaperWidth    = (short)(pSetupData->GetPaperWidth()/10);
-                    pDevModeW->dmPaperLength   = (short)(pSetupData->GetPaperHeight()/10);
+                    pDevModeW->dmPaperWidth    = static_cast<short>(pSetupData->GetPaperWidth()/10);
+                    pDevModeW->dmPaperLength   = static_cast<short>(pSetupData->GetPaperHeight()/10);
                 }
 
                 if ( pPapers )
@@ -1332,7 +1332,7 @@ static DEVMODEW const * ImplSalSetCopies( DEVMODEW const * pDevMode, sal_uLong n
         LPDEVMODEW pNewDevMode = static_cast<LPDEVMODEW>(rtl_allocateMemory( nDevSize ));
         memcpy( pNewDevMode, pDevMode, nDevSize );
         pNewDevMode->dmFields |= DM_COPIES;
-        pNewDevMode->dmCopies  = (short)(sal_uInt16)nCopies;
+        pNewDevMode->dmCopies  = static_cast<short>(static_cast<sal_uInt16>(nCopies));
         pNewDevMode->dmFields |= DM_COLLATE;
         if ( bCollate )
             pNewDevMode->dmCollate = DMCOLLATE_TRUE;

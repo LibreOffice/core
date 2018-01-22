@@ -513,7 +513,7 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
                 aToken[1] = *pSrc++;
                 aToken[2] = 0;
 
-                aChar = (sal_Char)strtoul( aToken, nullptr, 16 );
+                aChar = static_cast<sal_Char>(strtoul( aToken, nullptr, 16 ));
 
                 /* The chars are path delimiters and must not be encoded */
 
@@ -575,7 +575,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
         default:
             if (!( ( cCurrent >= 'a' && cCurrent <= 'z' ) || ( cCurrent >= 'A' && cCurrent <= 'Z' ) || ( cCurrent >= '0' && cCurrent <= '9' ) ) )
             {
-                sprintf( pURLDest, "%%%02X", (unsigned char)cCurrent );
+                sprintf( pURLDest, "%%%02X", static_cast<unsigned char>(cCurrent) );
                 pURLDest += 3;
                 break;
             }

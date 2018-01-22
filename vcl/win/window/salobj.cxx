@@ -348,7 +348,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             if ( hWndChild )
             {
                 SetWindowPos( hWndChild,
-                              nullptr, 0,  0, (int)LOWORD( lParam ), (int)HIWORD( lParam ),
+                              nullptr, 0,  0, static_cast<int>(LOWORD( lParam )), static_cast<int>(HIWORD( lParam )),
                               SWP_NOZORDER | SWP_NOACTIVATE );
             }
             }
@@ -430,10 +430,10 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
 
                     // transform coordinates
                     POINT pt;
-                    pt.x = (long) LOWORD( lParam );
-                    pt.y = (long) HIWORD( lParam );
+                    pt.x = static_cast<long>(LOWORD( lParam ));
+                    pt.y = static_cast<long>(HIWORD( lParam ));
                     MapWindowPoints( hWnd, hWndParent, &pt, 1 );
-                    lParam = MAKELPARAM( (WORD) pt.x, (WORD) pt.y );
+                    lParam = MAKELPARAM( static_cast<WORD>(pt.x), static_cast<WORD>(pt.y) );
 
                     nRet = SendMessageW( hWndParent, nMsg, wParam, lParam );
                     rDef = FALSE;
@@ -640,22 +640,22 @@ void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
     else
     {
         if ( nX < pBoundRect->left )
-            pBoundRect->left = (int)nX;
+            pBoundRect->left = static_cast<int>(nX);
 
         if ( nY < pBoundRect->top )
-            pBoundRect->top = (int)nY;
+            pBoundRect->top = static_cast<int>(nY);
 
         if ( nRight > pBoundRect->right )
-            pBoundRect->right = (int)nRight;
+            pBoundRect->right = static_cast<int>(nRight);
 
         if ( nBottom > pBoundRect->bottom )
-            pBoundRect->bottom = (int)nBottom;
+            pBoundRect->bottom = static_cast<int>(nBottom);
     }
 
-    pRect->left     = (int)nX;
-    pRect->top      = (int)nY;
-    pRect->right    = (int)nRight;
-    pRect->bottom   = (int)nBottom;
+    pRect->left     = static_cast<int>(nX);
+    pRect->top      = static_cast<int>(nY);
+    pRect->right    = static_cast<int>(nRight);
+    pRect->bottom   = static_cast<int>(nBottom);
     mpNextClipRect++;
 }
 
@@ -692,7 +692,7 @@ void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
         nStyle |= SWP_SHOWWINDOW;
     }
     SetWindowPos( mhWnd, nullptr,
-                  (int)nX, (int)nY, (int)nWidth, (int)nHeight,
+                  static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nWidth), static_cast<int>(nHeight),
                   SWP_NOZORDER | SWP_NOACTIVATE | nStyle );
 }
 

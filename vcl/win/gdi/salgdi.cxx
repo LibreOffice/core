@@ -174,10 +174,10 @@ void ImplInitSalGDI()
                 pSalData->mpDitherDiff[ n ] = n - ( n & 248L );
 
             for( n = 0; n < 256; n++ )
-                pSalData->mpDitherLow[ n ] = (BYTE) ( n & 248 );
+                pSalData->mpDitherLow[ n ] = static_cast<BYTE>( n & 248 );
 
             for( n = 0; n < 256; n++ )
-                pSalData->mpDitherHigh[ n ] = (BYTE) std::min( pSalData->mpDitherLow[ n ] + 8, 255 );
+                pSalData->mpDitherHigh[ n ] = static_cast<BYTE>(std::min( pSalData->mpDitherLow[ n ] + 8, 255 ));
         }
     }
     else if ( (nRasterCaps & RC_PALETTE) && (nBitCount == 8) )
@@ -192,7 +192,7 @@ void ImplInitSalGDI()
         // create logical palette
         pLogPal = reinterpret_cast<LOGPALETTE*>(new char[ sizeof( LOGPALETTE ) + ( nTotalCount * sizeof( PALETTEENTRY ) ) ]);
         pLogPal->palVersion = 0x0300;
-        pLogPal->palNumEntries = (sal_uInt16) nTotalCount;
+        pLogPal->palNumEntries = static_cast<sal_uInt16>(nTotalCount);
         pPalEntry = pLogPal->palPalEntry;
 
         // Standard colors
@@ -246,16 +246,16 @@ void ImplInitSalGDI()
             pBIH->biBitCount = 8;
 
             for( n = 0; n < nDitherPalCount; n++ )
-                pColors[ n ] = (short)( n + DITHER_MAX_SYSCOLOR );
+                pColors[ n ] = static_cast<short>( n + DITHER_MAX_SYSCOLOR );
 
             for( n = 0; n < 256; n++ )
                 pSalData->mpDitherDiff[ n ] = n % 51;
 
             for( n = 0; n < 256; n++ )
-                pSalData->mpDitherLow[ n ] = (BYTE) ( n / 51 );
+                pSalData->mpDitherLow[ n ] = static_cast<BYTE>( n / 51 );
 
             for( n = 0; n < 256; n++ )
-                pSalData->mpDitherHigh[ n ] = (BYTE)std::min( pSalData->mpDitherLow[ n ] + 1, 5 );
+                pSalData->mpDitherHigh[ n ] = static_cast<BYTE>(std::min( pSalData->mpDitherLow[ n ] + 1, 5 ));
         }
 
         // get system color entries
@@ -345,9 +345,9 @@ void ImplFreeSalGDI()
 int ImplIsSysColorEntry( SalColor nSalColor )
 {
     SysColorEntry*  pEntry = pFirstSysColor;
-    const DWORD     nTestRGB = (DWORD)RGB( SALCOLOR_RED( nSalColor ),
+    const DWORD     nTestRGB = static_cast<DWORD>(RGB( SALCOLOR_RED( nSalColor ),
                                            SALCOLOR_GREEN( nSalColor ),
-                                           SALCOLOR_BLUE( nSalColor ) );
+                                           SALCOLOR_BLUE( nSalColor ) ));
 
     while ( pEntry )
     {
@@ -984,7 +984,7 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
                 // #107797# Write out buffer
 
-                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = (sal_uInt16)( aBuf.getLength() - 2 );
+                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
                 Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
 
                 // #107797# Write out EPS transformation code
@@ -1003,7 +1003,7 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 aBuf.append( nY - ( dM22 * nBoundingBox[3] ) );
                 aBuf.append( "] concat\n"
                              "%%BeginDocument:\n" );
-                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = (sal_uInt16)( aBuf.getLength() - 2 );
+                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
                 Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
 
                 // #107797# Write out actual EPS content
@@ -1017,7 +1017,7 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                         nDoNow = POSTSCRIPT_BUFSIZE - 2;
                     // the following is based on the string buffer allocation
                     // of size POSTSCRIPT_BUFSIZE at construction time of aBuf
-                    *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = (sal_uInt16)nDoNow;
+                    *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>(nDoNow);
                     memcpy( const_cast<char *>(aBuf.getStr() + 2), static_cast<BYTE*>(pPtr) + nSize - nToDo, nDoNow );
                     sal_uLong nResult = Escape ( getHDC(), nEscape, nDoNow + 2, aBuf.getStr(), nullptr );
                     if (!nResult )
@@ -1033,7 +1033,7 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "count op_count_salWin sub {pop} repeat\n"
                              "countdictstack dict_count_salWin sub {end} repeat\n"
                              "b4_Inc_state_salWin restore\n\n" );
-                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = (sal_uInt16)( aBuf.getLength() - 2 );
+                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
                 Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
                 bRetValue = TRUE;
             }

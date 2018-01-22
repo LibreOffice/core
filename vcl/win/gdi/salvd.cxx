@@ -36,14 +36,14 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
 
      if ( nBitCount == 1 )
      {
-         hBitmap = CreateBitmap( (int)nDX, (int)nDY, 1, 1, nullptr );
+         hBitmap = CreateBitmap( static_cast<int>(nDX), static_cast<int>(nDY), 1, 1, nullptr );
          SAL_WARN_IF( !hBitmap, "vcl", "CreateBitmap failed: " << WindowsErrorString( GetLastError() ) );
          ppData = nullptr;
      }
      else
      {
          if (nBitCount == 0)
-             nBitCount = (WORD)GetDeviceCaps(hDC, BITSPIXEL);
+             nBitCount = static_cast<WORD>(GetDeviceCaps(hDC, BITSPIXEL));
 
         // #146839# Don't use CreateCompatibleBitmap() - there seem to
         // be build-in limits for those HBITMAPs, at least this fails

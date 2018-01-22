@@ -299,11 +299,11 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 
                 // TODO/LATER: the unit size must be calculated correctly
                 *reinterpret_cast<long*>( pBuf.get() ) = 0x9ac6cdd7L;
-                *reinterpret_cast<short*>( pBuf.get()+6 ) = ( SHORT ) 0;
-                *reinterpret_cast<short*>( pBuf.get()+8 ) = ( SHORT ) 0;
-                *reinterpret_cast<short*>( pBuf.get()+10 ) = ( SHORT ) pMF->xExt;
-                *reinterpret_cast<short*>( pBuf.get()+12 ) = ( SHORT ) pMF->yExt;
-                *reinterpret_cast<short*>( pBuf.get()+14 ) = ( USHORT ) 2540;
+                *reinterpret_cast<short*>( pBuf.get()+6 ) = SHORT(0);
+                *reinterpret_cast<short*>( pBuf.get()+8 ) = SHORT(0);
+                *reinterpret_cast<short*>( pBuf.get()+10 ) = static_cast<SHORT>(pMF->xExt);
+                *reinterpret_cast<short*>( pBuf.get()+12 ) = static_cast<SHORT>(pMF->yExt);
+                *reinterpret_cast<short*>( pBuf.get()+14 ) = USHORT(2540);
 
 
                 if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize - 22, pBuf.get() + 22 ) )
@@ -380,11 +380,11 @@ bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > const & aSeq, CLSID&
 {
     if ( aSeq.getLength() == 16 )
     {
-        aResult.Data1 = ( ( ( ( ( ( sal_uInt8 )aSeq[0] << 8 ) + ( sal_uInt8 )aSeq[1] ) << 8 ) + ( sal_uInt8 )aSeq[2] ) << 8 ) + ( sal_uInt8 )aSeq[3];
-        aResult.Data2 = ( ( sal_uInt8 )aSeq[4] << 8 ) + ( sal_uInt8 )aSeq[5];
-        aResult.Data3 = ( ( sal_uInt8 )aSeq[6] << 8 ) + ( sal_uInt8 )aSeq[7];
+        aResult.Data1 = ( ( ( ( ( static_cast<sal_uInt8>(aSeq[0]) << 8 ) + static_cast<sal_uInt8>(aSeq[1]) ) << 8 ) + static_cast<sal_uInt8>(aSeq[2]) ) << 8 ) + static_cast<sal_uInt8>(aSeq[3]);
+        aResult.Data2 = ( static_cast<sal_uInt8>(aSeq[4]) << 8 ) + static_cast<sal_uInt8>(aSeq[5]);
+        aResult.Data3 = ( static_cast<sal_uInt8>(aSeq[6]) << 8 ) + static_cast<sal_uInt8>(aSeq[7]);
         for( int nInd = 0; nInd < 8; nInd++ )
-            aResult.Data4[nInd] = ( sal_uInt8 )aSeq[nInd+8];
+            aResult.Data4[nInd] = static_cast<sal_uInt8>(aSeq[nInd+8]);
 
         return true;
     }
@@ -994,14 +994,14 @@ awt::Size OleComponent::CalculateWithFactor( const awt::Size& aSize,
 {
     awt::Size aResult;
 
-    sal_Int64 nWidth = (sal_Int64)aSize.Width * (sal_Int64)aMultiplier.Width / (sal_Int64)aDivisor.Width;
-    sal_Int64 nHeight = (sal_Int64)aSize.Height * (sal_Int64)aMultiplier.Height / (sal_Int64)aDivisor.Height;
+    sal_Int64 nWidth = static_cast<sal_Int64>(aSize.Width) * static_cast<sal_Int64>(aMultiplier.Width) / static_cast<sal_Int64>(aDivisor.Width);
+    sal_Int64 nHeight = static_cast<sal_Int64>(aSize.Height) * static_cast<sal_Int64>(aMultiplier.Height) / static_cast<sal_Int64>(aDivisor.Height);
     OSL_ENSURE( nWidth < SAL_MAX_INT32 && nWidth > SAL_MIN_INT32
              && nHeight < SAL_MAX_INT32 && nHeight > SAL_MIN_INT32,
              "Unacceptable result size!" );
 
-    aResult.Width = (sal_Int32)nWidth;
-    aResult.Height = (sal_Int32)nHeight;
+    aResult.Width = static_cast<sal_Int32>(nWidth);
+    aResult.Height = static_cast<sal_Int32>(nHeight);
 
     return aResult;
 }
@@ -1086,7 +1086,7 @@ void OleComponent::SetExtent( const awt::Size& aVisAreaSize, sal_Int64 nAspect )
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    DWORD nMSAspect = ( DWORD )nAspect; // first 32 bits are for MS aspects
+    DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
 
     SIZEL aSize = { aVisAreaSize.Width, aVisAreaSize.Height };
     HRESULT hr = m_pNativeImpl->m_pOleObject->SetExtent( nMSAspect, &aSize );
@@ -1108,7 +1108,7 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    DWORD nMSAspect = ( DWORD )nAspect; // first 32 bits are for MS aspects
+    DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
     awt::Size aSize;
     bool bGotSize = false;
 
@@ -1160,12 +1160,12 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
                             break;
                     }
 
-                    sal_Int64 nX = ( (sal_Int64)abs( pMF->xExt ) ) * nMult / nDiv;
-                    sal_Int64 nY = ( (sal_Int64)abs( pMF->yExt ) ) * nMult / nDiv;
+                    sal_Int64 nX = static_cast<sal_Int64>(abs( pMF->xExt )) * nMult / nDiv;
+                    sal_Int64 nY = static_cast<sal_Int64>(abs( pMF->yExt )) * nMult / nDiv;
                     if (  nX < SAL_MAX_INT32 && nY < SAL_MAX_INT32 )
                     {
-                        aSize.Width = ( sal_Int32 )nX;
-                        aSize.Height = ( sal_Int32 )nY;
+                        aSize.Width = static_cast<sal_Int32>(nX);
+                        aSize.Height = static_cast<sal_Int32>(nY);
                         bGotSize = true;
                     }
                     else
@@ -1190,7 +1190,7 @@ awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    DWORD nMSAspect = ( DWORD )nAspect; // first 32 bits are for MS aspects
+    DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
     SIZEL aSize;
 
     HRESULT hr = m_pNativeImpl->m_pViewObject2->GetExtent( nMSAspect, -1, nullptr, &aSize );
@@ -1216,7 +1216,7 @@ awt::Size OleComponent::GetRecommendedExtent( sal_Int64 nAspect )
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    DWORD nMSAspect = ( DWORD )nAspect; // first 32 bits are for MS aspects
+    DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
     SIZEL aSize;
     HRESULT hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
     if ( FAILED( hr ) )
@@ -1232,8 +1232,8 @@ sal_Int64 OleComponent::GetMiscStatus( sal_Int64 nAspect )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     DWORD nResult;
-    m_pNativeImpl->m_pOleObject->GetMiscStatus( ( DWORD )nAspect, &nResult );
-    return ( sal_Int64 )nResult; // first 32 bits are for MS flags
+    m_pNativeImpl->m_pOleObject->GetMiscStatus( static_cast<DWORD>(nAspect), &nResult );
+    return static_cast<sal_Int64>(nResult); // first 32 bits are for MS flags
 }
 
 

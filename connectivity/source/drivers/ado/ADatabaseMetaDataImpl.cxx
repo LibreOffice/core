@@ -378,7 +378,7 @@ RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
         if(_eNum & Privilege::DROP)
             nRight |= adRightDrop;
 
-    return (RightsEnum)nRight;
+    return static_cast<RightsEnum>(nRight);
 }
 
 void WpADOIndex::Create()

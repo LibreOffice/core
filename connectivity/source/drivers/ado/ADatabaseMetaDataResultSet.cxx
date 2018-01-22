@@ -211,9 +211,9 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex )
     if(m_aValue.isNull())
         return 0;
     if ( !m_aValueRange.empty() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (sal_Int8)(*m_aValueRangeIter).second[m_aValue.getInt32()];
+        return static_cast<sal_Int8>((*m_aValueRangeIter).second[m_aValue.getInt32()]);
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
-        return (sal_Int8)(*m_aStrValueRangeIter).second[m_aValue.getString()];
+        return static_cast<sal_Int8>((*m_aStrValueRangeIter).second[m_aValue.getString()]);
 
     return m_aValue.getInt8();
 }
@@ -342,9 +342,9 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         return 0;
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (sal_Int16)(*m_aValueRangeIter).second[m_aValue.getInt32()];
+        return static_cast<sal_Int16>((*m_aValueRangeIter).second[m_aValue.getInt32()]);
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
-        return (sal_Int16)(*m_aStrValueRangeIter).second[m_aValue.getString()];
+        return static_cast<sal_Int16>((*m_aStrValueRangeIter).second[m_aValue.getString()]);
 
     return m_aValue.getInt16();
 }

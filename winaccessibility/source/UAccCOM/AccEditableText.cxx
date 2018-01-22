@@ -295,7 +295,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
             ouName == "CharFontPitch" )
     {
         // Convert to short.
-        short nValue = (short)ouValue.toInt32();
+        short nValue = static_cast<short>(ouValue.toInt32());
         rAny.setValue(&nValue, cppu::UnoType<short>::get());
     }
     else if(ouName == "CharHeight" ||
@@ -313,7 +313,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
     else if(ouName == "CharPosture" )
     {
         // Convert to FontSlant.
-        css::awt::FontSlant fontSlant = (css::awt::FontSlant)ouValue.toInt32();
+        css::awt::FontSlant fontSlant = static_cast<css::awt::FontSlant>(ouValue.toInt32());
         rAny.setValue(&fontSlant, cppu::UnoType<css::awt::FontSlant>::get());
     }
     else if(ouName == "ParaTabStops" )
@@ -346,7 +346,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                         if(posComma != -1)
                         {
                             ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
-                            tabStop.Alignment = (css::style::TabAlign)ouSubValue.toInt32();
+                            tabStop.Alignment = static_cast<css::style::TabAlign>(ouSubValue.toInt32());
                             pos = posComma + 1;
 
                             // DecimalChar.
@@ -439,30 +439,30 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
             if(posComma != -1)
             {
                 ouSubValue = ouValue.copy(pos + 5, posComma - pos - 5);
-                lineSpacing.Mode = (sal_Int16)ouSubValue.toInt32();
+                lineSpacing.Mode = static_cast<sal_Int16>(ouSubValue.toInt32());
                 pos = posComma + 1;
 
                 pos = ouValue.indexOf("Height=", pos);
                 if(pos != -1)
                 {
                     ouSubValue = ouValue.copy(pos + 7);
-                    lineSpacing.Height = (sal_Int16)ouSubValue.toInt32();
+                    lineSpacing.Height = static_cast<sal_Int16>(ouSubValue.toInt32());
                 }
                 else
                 {
-                    lineSpacing.Height = (sal_Int16)100;    // Default height.
+                    lineSpacing.Height = sal_Int16(100);    // Default height.
                 }
             }
             else
             {
-                lineSpacing.Height = (sal_Int16)100;    // Default height.
+                lineSpacing.Height = sal_Int16(100);    // Default height.
             }
         }
         else
         {
             // Default Mode and Height.
-            lineSpacing.Mode = (sal_Int16)0;
-            lineSpacing.Height = (sal_Int16)100;    // Default height.
+            lineSpacing.Mode = sal_Int16(0);
+            lineSpacing.Height = sal_Int16(100);    // Default height.
         }
 
         // Convert to Any object.

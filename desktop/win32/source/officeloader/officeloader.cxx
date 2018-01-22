@@ -52,7 +52,7 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
     if ((aStartupInfo.dwFlags & STARTF_USESTDHANDLES) == 0)
         AttachConsole(ATTACH_PARENT_PROCESS);
 
-    DWORD   dwExitCode = (DWORD)-1;
+    DWORD   dwExitCode = DWORD(-1);
 
     BOOL    fSuccess = FALSE;
     LPWSTR  lpCommandLine = nullptr;
@@ -129,7 +129,7 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
             LocalFree(argv2);
         }
 
-        if ( _ltow( (long)GetCurrentProcessId(),szParentProcessId, 10 ) && bHeadlessMode )
+        if ( _ltow( static_cast<long>(GetCurrentProcessId()),szParentProcessId, 10 ) && bHeadlessMode )
             SetEnvironmentVariableW( L"ATTACHED_PARENT_PROCESSID", szParentProcessId );
 
         PROCESS_INFORMATION aProcessInfo;

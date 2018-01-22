@@ -253,11 +253,11 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
                 if (d.flags != 0)
                 {
                     m_MemberInfos.push_back(d);
-                    iter = m_nameToDispIdMap.emplace(exactName, (DISPID)m_MemberInfos.size()).first;
+                    iter = m_nameToDispIdMap.emplace(exactName, static_cast<DISPID>(m_MemberInfos.size())).first;
 
                     if (exactName != name)
                     {
-                        iter = m_nameToDispIdMap.emplace(name, (DISPID)m_MemberInfos.size()).first;
+                        iter = m_nameToDispIdMap.emplace(name, static_cast<DISPID>(m_MemberInfos.size())).first;
                     }
                 }
             }
@@ -798,7 +798,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
         if( bHandled)
             return ret;
 
-        if ((dispidMember > 0) && ((size_t)dispidMember <= m_MemberInfos.size()) && m_xInvocation.is())
+        if ((dispidMember > 0) && (static_cast<size_t>(dispidMember) <= m_MemberInfos.size()) && m_xInvocation.is())
         {
             MemberInfo d = m_MemberInfos[dispidMember - 1];
             DWORD flags = wFlags & d.flags;

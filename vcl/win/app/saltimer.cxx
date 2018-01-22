@@ -105,7 +105,7 @@ void WinSalTimer::Start( sal_uLong nMS )
     if ( pInst && !pInst->IsMainThread() )
     {
         BOOL const ret = PostMessageW(pInst->mhComWnd,
-            SAL_MSG_STARTTIMER, 0, (LPARAM) tools::Time::GetSystemTicks() + nMS);
+            SAL_MSG_STARTTIMER, 0, static_cast<LPARAM>(tools::Time::GetSystemTicks()) + nMS);
         SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else

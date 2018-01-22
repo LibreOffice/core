@@ -216,7 +216,7 @@ BOOL WINAPI DllMain( HINSTANCE, DWORD fdwReason, LPVOID )
             {
                 DWORD   dwThreadId = 0;
 
-                DWORD_PTR dwParentProcessId = (DWORD_PTR)_wtol( szBuffer );
+                DWORD_PTR dwParentProcessId = static_cast<DWORD_PTR>(_wtol( szBuffer ));
 
                 if ( dwParentProcessId && GetParentProcessId() == dwParentProcessId )
                 {

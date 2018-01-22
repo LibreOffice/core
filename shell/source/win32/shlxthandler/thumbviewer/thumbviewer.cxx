@@ -194,7 +194,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Read(void *pv, ULONG cb, ULONG *pcb
 
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *)
 {
-    __int64 size = (__int64) ref_zip_buffer_.size();
+    __int64 size = static_cast<__int64>(ref_zip_buffer_.size());
     __int64 p = 0;
 
     switch (dwOrigin)
@@ -202,7 +202,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD 
         case STREAM_SEEK_SET:
             break;
         case STREAM_SEEK_CUR:
-            p = (__int64) pos_;
+            p = static_cast<__int64>(pos_);
             break;
         case STREAM_SEEK_END:
             p = size - 1;
@@ -215,7 +215,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD 
 
    if ( ( p >= 0 ) && (p < size) )
    {
-        pos_ = (size_t) p;
+        pos_ = static_cast<size_t>(p);
         hr = S_OK;
    }
    return hr;

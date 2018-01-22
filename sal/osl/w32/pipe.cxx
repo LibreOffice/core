@@ -386,7 +386,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
             if (lastError == ERROR_PIPE_NOT_CONNECTED)
                 nBytes = 0;
             else
-                nBytes = (DWORD) -1;
+                nBytes = DWORD(-1);
 
             pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
         }
@@ -415,7 +415,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
         if (GetLastError() == ERROR_PIPE_NOT_CONNECTED)
             nBytes = 0;
         else
-            nBytes = (DWORD) -1;
+            nBytes = DWORD(-1);
 
          pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
     }

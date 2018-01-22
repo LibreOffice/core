@@ -249,7 +249,7 @@ public:
     virtual void doRequest(const RequestRef& rRequest) override
     {
         const ::sal_Int32 nEventID   = rRequest->getRequest();
-        const ::sal_Int16 nControlID = rRequest->getArgumentOrDefault(PROP_CONTROL_ID, (::sal_Int16)0);
+        const ::sal_Int16 nControlID = rRequest->getArgumentOrDefault(PROP_CONTROL_ID, ::sal_Int16(0));
         const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest->getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
 
         if ( ! xListener.is())
