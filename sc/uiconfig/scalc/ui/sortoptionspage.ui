@@ -86,7 +86,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="includenotes">
-                    <property name="label" translatable="yes" context="sortoptionspage|includenotes">Include comments-only boundary column(s)</property>
+                    <property name="label" translatable="yes" context="sortoptionspage|includenotes">Include boundary column(s) containing only comments</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
