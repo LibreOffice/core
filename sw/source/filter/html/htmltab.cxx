@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <hintids.hxx>
+#include <comphelper/flagguard.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <editeng/boxitem.hxx>
@@ -3133,6 +3134,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     if( !IsParserWorking() && !m_pPendStack )
         return;
 
+    ::comphelper::FlagRestorationGuard g(m_isInTableStructure, false);
     std::unique_ptr<CellSaveStruct> xSaveStruct;
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
@@ -4946,6 +4948,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
     if (!IsParserWorking() && !m_pPendStack)
         return std::shared_ptr<HTMLTable>();
 
+    ::comphelper::FlagRestorationGuard g(m_isInTableStructure, true);
     HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
     std::unique_ptr<TableSaveStruct> xSaveStruct;
