@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_6fb425f2",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-22T20:39:44Z",
+      "side": 1,
+      "message": "Certainly wrong (and apparently always was), might be that should be maArea.IsStyleXF() or even always true because we are collecting from a style sheet here and also the ScfTools::CheckItem() calls pass true for bStyle. Would make sense if GetBiff() always worked because it rarely ever was EXC_BIFF2 when writing.. so yes, use true.",
+      "range": {
+        "startLine": 662,
+        "startChar": 60,
+        "endLine": 662,
+        "endChar": 82
+      },
+      "revId": "16b4378266f599937151dedb20e9ca1795c6a55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
