@@ -6040,7 +6040,7 @@ void PDFWriterImpl::sortWidgets()
         {
             SAL_WARN( "vcl.pdfwriter", "wrong number of sorted annotations" );
             SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions "
-                     "on page nr " << static_cast<long int>(item.first) << ", " <<
+                     "on page nr " << item.first << ", " <<
                      static_cast<long int>(item.second.aSortedAnnots.size()) << " sorted and " <<
                      static_cast<long int>(nAnnots) << " unsorted");
         }
