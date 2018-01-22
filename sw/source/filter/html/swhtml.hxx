@@ -480,6 +480,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     bool m_bBodySeen : 1;
     bool m_bReadingHeaderOrFooter : 1;
+    bool m_isInTableStructure;
 
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
     OUString m_InfoNames[4];
