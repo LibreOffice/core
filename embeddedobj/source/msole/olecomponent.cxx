@@ -466,7 +466,7 @@ OleComponent::~OleComponent()
           aIter != m_pNativeImpl->m_aFormatsList.end();
           ++aIter )
     {
-        delete (*aIter);
+        delete *aIter;
         (*aIter) = nullptr;
     }
     m_pNativeImpl->m_aFormatsList.clear();
