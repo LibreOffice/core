@@ -40,10 +40,6 @@ CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) :
 
 CollatorImpl::~CollatorImpl()
 {
-    // Clear lookuptable
-    for (lookupTableItem* p : lookupTable)
-        delete p;
-    lookupTable.clear();
 }
 
 sal_Int32 SAL_CALL
@@ -144,9 +140,10 @@ bool
 CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& serviceName, const OUString& rSortAlgorithm)
 {
     for (size_t l = 0; l < lookupTable.size(); l++) {
-        cachedItem = lookupTable[l];
+        cachedItem = lookupTable[l].get();
         if (cachedItem->service == serviceName) {// cross locale sharing
-            lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
+            lookupTable.emplace_back(new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
+            cachedItem = lookupTable.back().get();
             return true;
         }
     }
@@ -157,7 +154,8 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
         Reference < XCollator > xC;
         xC.set( xI, UNO_QUERY );
         if (xC.is()) {
-            lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
+            lookupTable.emplace_back(new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
+            cachedItem = lookupTable.back().get();
             return true;
         }
     }
@@ -167,8 +165,8 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
 void
 CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
 {
-    for (lookupTableItem* i : lookupTable) {
-        cachedItem = i;
+    for (auto& i : lookupTable) {
+        cachedItem = i.get();
         if (cachedItem->equals(rLocale, rSortAlgorithm)) {
             return;
         }

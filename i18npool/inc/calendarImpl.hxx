@@ -100,7 +100,7 @@ private:
         OUString                                      uniqueID;
         css::uno::Reference < css::i18n::XCalendar4 > xCalendar;
     };
-    std::vector<lookupTableItem*>                       lookupTable;
+    std::vector<lookupTableItem>                        lookupTable;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     css::uno::Reference < css::i18n::XCalendar4 >       xCalendar;
 };

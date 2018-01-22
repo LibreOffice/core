@@ -41,10 +41,6 @@ BreakIteratorImpl::BreakIteratorImpl()
 
 BreakIteratorImpl::~BreakIteratorImpl()
 {
-    // Clear lookuptable
-    for (lookupTableItem* p : lookupTable)
-        delete p;
-    lookupTable.clear();
 }
 
 #define LBI getLocaleSpecificBreakIterator(rLocale)
@@ -530,9 +526,9 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 bool BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName)
 {
     // to share service between same Language but different Country code, like zh_CN and zh_TW
-    for (lookupTableItem* listItem : lookupTable) {
-        if (aLocaleName == listItem->aLocale.Language) {
-            xBI = listItem->xBI;
+    for (lookupTableItem& listItem : lookupTable) {
+        if (aLocaleName == listItem.aLocale.Language) {
+            xBI = listItem.xBI;
             return true;
         }
     }
@@ -560,7 +556,7 @@ bool BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocal
     if ( xI.is() ) {
         xBI.set(xI, UNO_QUERY);
         if (xBI.is()) {
-            lookupTable.push_back(new lookupTableItem(Locale(aLocaleName, aLocaleName, aLocaleName), xBI));
+            lookupTable.emplace_back(Locale(aLocaleName, aLocaleName, aLocaleName), xBI);
             return true;
         }
     }
@@ -575,9 +571,9 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
     else if (m_xContext.is()) {
         aLocale = rLocale;
 
-        for (lookupTableItem* listItem : lookupTable) {
-            if (rLocale == listItem->aLocale)
-                return xBI = listItem->xBI;
+        for (lookupTableItem& listItem : lookupTable) {
+            if (rLocale == listItem.aLocale)
+                return xBI = listItem.xBI;
         }
 
         sal_Unicode under = '_';
@@ -606,7 +602,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
                  createLocaleSpecificBreakIterator(rLocale.Language)) ||
                 // load default service with name <base>_Unicode
                 createLocaleSpecificBreakIterator("Unicode")) {
-            lookupTable.push_back( new lookupTableItem(aLocale, xBI) );
+            lookupTable.emplace_back( aLocale, xBI );
             return xBI;
         }
     }

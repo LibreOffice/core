@@ -116,7 +116,7 @@ private:
         css::lang::Locale aLocale;
         css::uno::Reference < XBreakIterator > xBI;
     };
-    std::vector<lookupTableItem*>                       lookupTable;
+    std::vector<lookupTableItem>                        lookupTable;
     css::lang::Locale                                   aLocale;
     css::uno::Reference < XBreakIterator >              xBI;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;

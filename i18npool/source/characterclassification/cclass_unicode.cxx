@@ -39,7 +39,9 @@ namespace i18npool {
 //  class cclass_Unicode
 //  ----------------------------------------------------;
 
-cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) : m_xContext( rxContext ),
+cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) :
+        trans( new Transliteration_casemapping() ),
+        m_xContext( rxContext ),
         pTable( nullptr ),
         pStart( nullptr ),
         pCont( nullptr ),
@@ -50,12 +52,10 @@ cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxCo
         cDecimalSep( '.' ),
         cDecimalSepAlt( 0 )
 {
-    trans = new Transliteration_casemapping();
 }
 
 cclass_Unicode::~cclass_Unicode() {
     destroyParserTable();
-    delete trans;
 }
 
 

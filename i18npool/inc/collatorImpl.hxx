@@ -88,7 +88,7 @@ private:
             algorithm == _algorithm;
         }
     };
-    std::vector<lookupTableItem*>                       lookupTable;
+    std::vector<std::unique_ptr<lookupTableItem>>       lookupTable;
     lookupTableItem *                                   cachedItem;
 
     // Service Factory
