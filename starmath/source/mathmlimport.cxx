@@ -3034,6 +3034,7 @@ SvXMLImportContext *SmXMLImport::CreateActionContext(sal_uInt16 nPrefix,
 
 SmXMLImport::~SmXMLImport() throw ()
 {
+    cleanup();
 }
 
 void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
