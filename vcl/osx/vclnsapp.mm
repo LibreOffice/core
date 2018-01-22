@@ -75,6 +75,11 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SAL_WNODEPRECATED_DECLARATIONS_POP
     assert( pEvent );
     [NSApp postEvent: pEvent atStart: NO];
+
+    if( [NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)] )
+    {
+        NSWindow.allowsAutomaticWindowTabbing = NO;
+    }
 }
 
 -(void)sendEvent:(NSEvent*)pEvent
