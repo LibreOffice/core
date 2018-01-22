@@ -551,7 +551,7 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     if ( !IsMainThread() )
     {
         bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD,
-                                 (WPARAM) false, (LPARAM) bHandleAllCurrentEvents );
+                                 WPARAM(false), static_cast<LPARAM>(bHandleAllCurrentEvents) );
         if ( !bDidWork && bWait )
         {
             maWaitingYieldCond.reset();
@@ -594,7 +594,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
     switch ( nMsg )
     {
         case SAL_MSG_THREADYIELD:
-            assert( !(bool)wParam );
+            assert( !static_cast<bool>(wParam) );
             nRet = static_cast<LRESULT>(ImplSalYield(
                 false, static_cast<bool>( lParam ) ));
             break;
@@ -883,7 +883,7 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
 SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, SalFrameStyleFlags nSalFrameStyle )
 {
     // to switch to Main-Thread
-    return reinterpret_cast<SalFrame*>((sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(pSystemParentData->hWnd) ));
+    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(pSystemParentData->hWnd) )));
 }
 
 SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
@@ -894,7 +894,7 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSa
         hWndParent = static_cast<WinSalFrame*>(pParent)->mhWnd;
     else
         hWndParent = nullptr;
-    return reinterpret_cast<SalFrame*>((sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(hWndParent) ));
+    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(hWndParent) )));
 }
 
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )
@@ -908,7 +908,7 @@ SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          bool /*bShow*/ )
 {
     // to switch to Main-Thread
-    return reinterpret_cast<SalObject*>((sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEOBJECT, 0, reinterpret_cast<LPARAM>(static_cast<WinSalFrame*>(pParent)) ));
+    return reinterpret_cast<SalObject*>(static_cast<sal_IntPtr>(SendMessageW( mhComWnd, SAL_MSG_CREATEOBJECT, 0, reinterpret_cast<LPARAM>(static_cast<WinSalFrame*>(pParent)) )));
 }
 
 void WinSalInstance::DestroyObject( SalObject* pObject )
@@ -1054,9 +1054,9 @@ OUString WinSalInstance::getOSVersion()
                         VS_FIXEDFILEINFO *vinfo = static_cast<VS_FIXEDFILEINFO *>(pBlock);
                         OUStringBuffer aVer;
                         aVer.append("Windows ");
-                        aVer.append((sal_Int32)HIWORD(vinfo->dwProductVersionMS));
+                        aVer.append(static_cast<sal_Int32>(HIWORD(vinfo->dwProductVersionMS)));
                         aVer.append(".");
-                        aVer.append((sal_Int32)LOWORD(vinfo->dwProductVersionMS));
+                        aVer.append(static_cast<sal_Int32>(LOWORD(vinfo->dwProductVersionMS)));
                         return aVer.makeStringAndClear();
                     }
                 }

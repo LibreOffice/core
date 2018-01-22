@@ -531,7 +531,7 @@ static void do_msvcr_magic(OUString const &jvm_dll)
     if (fread(dos_hdr, st.st_size, 1, f) != 1 ||
         memcmp(dos_hdr, "MZ", 2) != 0 ||
         dos_hdr->e_lfanew < 0 ||
-        dos_hdr->e_lfanew > (LONG) (st.st_size - sizeof(IMAGE_NT_HEADERS)))
+        dos_hdr->e_lfanew > static_cast<LONG>(st.st_size - sizeof(IMAGE_NT_HEADERS)))
     {
         SAL_WARN("jfw", "analyzing <" << Module << "> failed");
         free(dos_hdr);
@@ -570,7 +570,7 @@ static void do_msvcr_magic(OUString const &jvm_dll)
 
     while (imports <= reinterpret_cast<IMAGE_IMPORT_DESCRIPTOR *>(reinterpret_cast<char *>(dos_hdr) + st.st_size - sizeof (IMAGE_IMPORT_DESCRIPTOR)) &&
            imports->Name != 0 &&
-           imports->Name + VAtoPhys < (DWORD) st.st_size)
+           imports->Name + VAtoPhys < static_cast<DWORD>(st.st_size))
     {
         static OUStringLiteral msvcrts[] =
         {

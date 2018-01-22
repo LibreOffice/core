@@ -64,13 +64,13 @@ static const sal_Int64 SAL_INT64_MIN =
 
 /* MS Visual C++ no conversion from unsigned __int64 to double */
 #ifdef _MSC_VER
-static const double DOUBLE_SAL_UINT64_MAX = ((((double)SAL_INT64_MAX) * 2) + 1);
+static const double DOUBLE_SAL_UINT64_MAX = (((double(SAL_INT64_MAX)) * 2) + 1);
 
 static inline double unsigned_int64_to_double( sal_uInt64 n )
 {
     sal_uInt64 n2 = (n / 3);
     n -= (2 * n2);
-    return (((double)(sal_Int64)n2) * 2.0) + ((double)(sal_Int64)n);
+    return (static_cast<double>(static_cast<sal_Int64>(n2)) * 2.0) + static_cast<double>(static_cast<sal_Int64>(n));
 }
 #else
 static const double DOUBLE_SAL_UINT64_MAX =

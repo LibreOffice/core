@@ -58,8 +58,8 @@ using namespace ::com::sun::star;
 
 #define PFUNC                   (*pDSM)
 #define PTWAINMSG               MSG*
-#define FIXTODOUBLE( nFix )     ((double)nFix.Whole+(double)nFix.Frac/65536.)
-#define FIXTOLONG( nFix )       ((long)floor(FIXTODOUBLE(nFix)+0.5))
+#define FIXTODOUBLE( nFix )     (static_cast<double>(nFix.Whole)+static_cast<double>(nFix.Frac)/65536.)
+#define FIXTOLONG( nFix )       (static_cast<long>(floor(FIXTODOUBLE(nFix)+0.5)))
 #define TWAIN_FUNCNAME          "DSM_Entry"
 
 #if defined(TWH_64BIT)

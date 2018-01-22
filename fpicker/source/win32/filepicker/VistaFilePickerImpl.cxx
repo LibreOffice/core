@@ -426,8 +426,8 @@ void VistaFilePickerImpl::impl_sta_CreateOpenDialog(const RequestRef& rRequest)
 
     iDialog->SetOptions ( nFlags );
 
-    ::sal_Int32 nFeatures = rRequest->getArgumentOrDefault(PROP_FEATURES, (::sal_Int32)0);
-    ::sal_Int32 nTemplate = rRequest->getArgumentOrDefault(PROP_TEMPLATE_DESCR, (::sal_Int32)0);
+    ::sal_Int32 nFeatures = rRequest->getArgumentOrDefault(PROP_FEATURES, ::sal_Int32(0));
+    ::sal_Int32 nTemplate = rRequest->getArgumentOrDefault(PROP_TEMPLATE_DESCR, ::sal_Int32(0));
     impl_sta_enableFeatures(nFeatures, nTemplate);
 
     VistaFilePickerEventHandler* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
@@ -463,8 +463,8 @@ void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
 
     iDialog->SetOptions ( nFlags );
 
-    ::sal_Int32 nFeatures = rRequest->getArgumentOrDefault(PROP_FEATURES, (::sal_Int32)0);
-    ::sal_Int32 nTemplate = rRequest->getArgumentOrDefault(PROP_TEMPLATE_DESCR, (::sal_Int32)0);
+    ::sal_Int32 nFeatures = rRequest->getArgumentOrDefault(PROP_FEATURES, ::sal_Int32(0));
+    ::sal_Int32 nTemplate = rRequest->getArgumentOrDefault(PROP_TEMPLATE_DESCR, ::sal_Int32(0));
     css::uno::Reference<css::awt::XWindow> xWindow = rRequest->getArgumentOrDefault(PROP_PARENT_WINDOW, css::uno::Reference<css::awt::XWindow>());
     if(xWindow.is())
     {

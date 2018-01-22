@@ -368,7 +368,7 @@ Time tools::Time::GetUTCOffset()
         nTempTime += aTimeZone.StandardBias;
     else if ( nTimeZoneRet == TIME_ZONE_ID_DAYLIGHT )
         nTempTime += aTimeZone.DaylightBias;
-    tools::Time aTime( 0, (sal_uInt16)abs( nTempTime ) );
+    tools::Time aTime( 0, static_cast<sal_uInt16>(abs( nTempTime )) );
     if ( nTempTime > 0 )
         aTime = -aTime;
     return aTime;

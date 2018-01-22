@@ -554,15 +554,15 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
             throw CannotConvertException(
                 "[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
                 "Cannot convert the value of vartype :\"" +
-                OUString::number((sal_Int32) var.vt) +
+                OUString::number(static_cast<sal_Int32>(var.vt)) +
                 "\"  to the expected UNO type of type class: " +
-                OUString::number((sal_Int32) ptype.getTypeClass()),
+                OUString::number(static_cast<sal_Int32>(ptype.getTypeClass())),
                 nullptr, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);
 
         if (bFail)
             throw IllegalArgumentException(
                 "[automation bridge]UnoConversionUtilities<T>:variantToAny\n"
-                "The provided VARIANT of type\" " + OUString::number((sal_Int32) var.vt) +
+                "The provided VARIANT of type\" " + OUString::number(static_cast<sal_Int32>(var.vt)) +
                 "\" is unappropriate for conversion!", Reference<XInterface>(), -1);
     }
     catch (const CannotConvertException &)
@@ -630,14 +630,14 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny,
                         "Cannot convert the value of type :\"" +
                         rAny.getValueTypeName() +
                         "\"  to the expected Automation type of VARTYPE: " +
-                        OUString::number((sal_Int32)type),
+                        OUString::number(static_cast<sal_Int32>(type)),
                         nullptr, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);
 
                 throw BridgeRuntimeError(
                     "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
                     "Conversion of any with " +
                     rAny.getValueType().getTypeName() +
-                    " to VARIANT with type: " + OUString::number((sal_Int32) type) +
+                    " to VARIANT with type: " + OUString::number(static_cast<sal_Int32>(type)) +
                     " failed! Error code: " + OUString::number(hr));
 
             }

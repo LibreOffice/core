@@ -638,7 +638,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
         if( mhDIB )
         {
             PBITMAPINFO pBI = static_cast<PBITMAPINFO>(GlobalLock( mhDIB ));
-            const int   nLines = (int) rSalBmp.maSize.Height();
+            const int   nLines = static_cast<int>(rSalBmp.maSize.Height());
             HDC         hDC = GetDC( nullptr );
             PBYTE       pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
                                 ImplGetDIBColorCount( mhDIB ) * sizeof( RGBQUAD );
@@ -707,7 +707,7 @@ sal_uInt16 WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
             if( pBI->bmiHeader.biBitCount <= 8 )
             {
                 if ( pBI->bmiHeader.biClrUsed )
-                    nColors = (sal_uInt16) pBI->bmiHeader.biClrUsed;
+                    nColors = static_cast<sal_uInt16>(pBI->bmiHeader.biClrUsed);
                 else
                     nColors = 1 << pBI->bmiHeader.biBitCount;
             }
@@ -733,7 +733,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
     // calculate bitmap size in Bytes
     const sal_uLong nAlignedWidth4Bytes = AlignedWidth4Bytes( nBits * rSize.Width() );
     const sal_uLong nImageSize = nAlignedWidth4Bytes * rSize.Height();
-    bool bOverflow = (nImageSize / nAlignedWidth4Bytes) != (sal_uLong) rSize.Height();
+    bool bOverflow = (nImageSize / nAlignedWidth4Bytes) != static_cast<sal_uLong>(rSize.Height());
     if( bOverflow )
         return hDIB;
 
@@ -872,7 +872,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
                 pBuffer->mnWidth = maSize.Width();
                 pBuffer->mnHeight = maSize.Height();
                 pBuffer->mnScanlineSize = AlignedWidth4Bytes( maSize.Width() * pBIH->biBitCount );
-                pBuffer->mnBitCount = (sal_uInt16) pBIH->biBitCount;
+                pBuffer->mnBitCount = static_cast<sal_uInt16>(pBIH->biBitCount);
 
                 if( pBuffer->mnBitCount <= 8 )
                 {

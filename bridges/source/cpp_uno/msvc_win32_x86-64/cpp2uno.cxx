@@ -380,7 +380,7 @@ unsigned char * codeSnippet(
     sal_Int32 nFunctionIndex,
     sal_Int32 nVtableOffset )
 {
-    sal_uInt64 nOffsetAndIndex = ( ( (sal_uInt64) nVtableOffset ) << 32 ) | ( (sal_uInt64) nFunctionIndex );
+    sal_uInt64 nOffsetAndIndex = ( static_cast<sal_uInt64>(nVtableOffset) << 32 ) | static_cast<sal_uInt64>(nFunctionIndex);
     unsigned char *p = code;
 
     // Spill parameters

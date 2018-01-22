@@ -127,7 +127,7 @@ inline BOOL IsMaximized( HWND hWnd )
 
 inline void SetWindowFont( HWND hWnd, HFONT hFont, BOOL bRedraw )
 {
-    SendMessageW( hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(hFont), MAKELPARAM((UINT)bRedraw,0) );
+    SendMessageW( hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(hFont), MAKELPARAM(static_cast<UINT>(bRedraw),0) );
 }
 
 inline HFONT GetWindowFont( HWND hWnd )

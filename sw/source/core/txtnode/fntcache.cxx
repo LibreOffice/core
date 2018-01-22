@@ -549,7 +549,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
                 {
                     OSL_ENSURE( m_nPrtAscent < USHRT_MAX, "GuessLeading: PrtAscent-Fault" );
                     if ( m_nPrtAscent < USHRT_MAX )
-                        m_nPrtAscent = m_nPrtAscent + (sal_uInt16)(( 2 * nDiff ) / 5);
+                        m_nPrtAscent = m_nPrtAscent + static_cast<sal_uInt16>(( 2 * nDiff ) / 5);
                 }
             }
         }

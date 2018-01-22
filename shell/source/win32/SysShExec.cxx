@@ -143,7 +143,7 @@ namespace
         for ( i = 0; i < ERRTABLESIZE; ++i )
         {
             if ( dwError == errtable[i].oscode )
-                return (oslFileError)errtable[i].errnocode;
+                return static_cast<oslFileError>(errtable[i].errnocode);
         }
 
         /* The error code wasn't in the table.  We check for a range of */

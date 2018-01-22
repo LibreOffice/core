@@ -756,7 +756,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFrom
 
     OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
 
-    chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), ( int )oscert.getLength() ) ;
+    chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), static_cast<int>(oscert.getLength()) ) ;
 
     certSize = xmlSecBase64Decode( chCert, chCert, xmlStrlen( chCert ) ) ;
 

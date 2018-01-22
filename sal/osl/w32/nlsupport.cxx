@@ -56,7 +56,7 @@ struct EnumLocalesParams
     LCID  Locale;
 };
 
-static DWORD g_dwTLSLocaleEncId = (DWORD) -1;
+static DWORD g_dwTLSLocaleEncId = DWORD(-1);
 
 /*****************************************************************************
  * callback function test
@@ -148,14 +148,14 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     struct EnumLocalesParams params = { L"", L"", 0 };
 
     /* initialise global TLS id */
-    if( (DWORD) -1 == g_dwTLSLocaleEncId )
+    if( DWORD(-1) == g_dwTLSLocaleEncId )
     {
         oslMutex globalMutex = * osl_getGlobalMutex();
 
         /* initializing must be thread save */
         osl_acquireMutex( globalMutex );
 
-        if( (DWORD) -1 == g_dwTLSLocaleEncId )
+        if( DWORD(-1) == g_dwTLSLocaleEncId )
             g_dwTLSLocaleEncId = TlsAlloc();
 
         osl_releaseMutex( globalMutex );

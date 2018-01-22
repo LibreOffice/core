@@ -146,7 +146,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
                     if ( !m_IsCurrency )
-                        m_aColumn.put_NumericScale((sal_Int8)nVal);
+                        m_aColumn.put_NumericScale(static_cast<sal_Int8>(nVal));
                 }
                 break;
             case PROPERTY_ID_ISNULLABLE:

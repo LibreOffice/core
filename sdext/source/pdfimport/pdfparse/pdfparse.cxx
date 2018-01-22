@@ -555,7 +555,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
                                   aGrammar,
                                   boost::spirit::space_p );
 #if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop = " << aInfo.stop << " (buff=" << pBuffer << ", offset = " << aInfo.stop - pBuffer << "), hit = " << (aInfo.hit ? OUString("true") : OUString("false")) << ", full = " << (aInfo.full ? OUString("true") : OUString("false")) << ", length = " << (int)aInfo.length );
+        SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop = " << aInfo.stop << " (buff=" << pBuffer << ", offset = " << aInfo.stop - pBuffer << "), hit = " << (aInfo.hit ? OUString("true") : OUString("false")) << ", full = " << (aInfo.full ? OUString("true") : OUString("false")) << ", length = " << static_cast<int>(aInfo.length) );
 #endif
     }
     catch( const parser_error<const char*, const char*>& rError )
@@ -602,7 +602,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
     if( fp )
     {
         fseek( fp, 0, SEEK_END );
-        unsigned int nLen = (unsigned int)ftell( fp );
+        unsigned int nLen = static_cast<unsigned int>(ftell( fp ));
         fseek( fp, 0, SEEK_SET );
         char* pBuf = static_cast<char*>(rtl_allocateMemory( nLen ));
         if( pBuf )

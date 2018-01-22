@@ -1252,7 +1252,7 @@ static void rtl_cache_wsupdate_wait(unsigned int seconds)
     if (seconds > 0)
     {
         RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
-        WaitForSingleObject (g_cache_list.m_update_cond, (DWORD)(seconds * 1000));
+        WaitForSingleObject (g_cache_list.m_update_cond, static_cast<DWORD>(seconds * 1000));
         RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     }
 }

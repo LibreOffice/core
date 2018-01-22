@@ -5144,7 +5144,7 @@ void ToolBox::ImplDisableFlatButtons()
                         bValue = ((0 == wcsicmp(Data, L"1")) || (0 == wcsicmp(Data, L"true")));
                         break;
                     case REG_DWORD:
-                        bValue = (bool)(reinterpret_cast<DWORD *>(Data)[0]);
+                        bValue = static_cast<bool>(reinterpret_cast<DWORD *>(Data)[0]);
                         break;
                 }
             }

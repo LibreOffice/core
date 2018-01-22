@@ -2349,15 +2349,15 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                 if (rInformation.ouDateTime.isEmpty())
                 {
                     OUStringBuffer rBuffer;
-                    rBuffer.append((sal_Int32)aDateTime.GetYear());
+                    rBuffer.append(static_cast<sal_Int32>(aDateTime.GetYear()));
                     rBuffer.append('-');
                     if (aDateTime.GetMonth() < 10)
                         rBuffer.append('0');
-                    rBuffer.append((sal_Int32)aDateTime.GetMonth());
+                    rBuffer.append(static_cast<sal_Int32>(aDateTime.GetMonth()));
                     rBuffer.append('-');
                     if (aDateTime.GetDay() < 10)
                         rBuffer.append('0');
-                    rBuffer.append((sal_Int32)aDateTime.GetDay());
+                    rBuffer.append(static_cast<sal_Int32>(aDateTime.GetDay()));
                     rInformation.ouDateTime = rBuffer.makeStringAndClear();
                 }
                 break;

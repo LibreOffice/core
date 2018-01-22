@@ -211,7 +211,7 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryInterface( REFIID riid, void  **ppvOb
 ULONG STDMETHODCALLTYPE DragSource::AddRef()
 {
     acquire();
-    return (ULONG) m_refCount;
+    return static_cast<ULONG>(m_refCount);
 }
 
 ULONG STDMETHODCALLTYPE DragSource::Release()

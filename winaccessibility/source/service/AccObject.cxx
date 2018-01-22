@@ -367,7 +367,7 @@ void AccObject::UpdateDefaultAction( )
     case CHECK_BOX:
     case TREE_ITEM:
     case BUTTON_DROPDOWN:
-        m_pIMAcc->Put_ActionDescription( o3tl::toW(m_xAccActionRef->getAccessibleActionDescription((sal_Int32)0).getStr()) );
+        m_pIMAcc->Put_ActionDescription( o3tl::toW(m_xAccActionRef->getAccessibleActionDescription(sal_Int32(0)).getStr()) );
         return;
     }
 }

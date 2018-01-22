@@ -235,12 +235,12 @@ void Window::ImplLayoutVideoWindow()
         {
             if( aPrefSize.Width > 0 && aPrefSize.Height > 0 && nVideoW > 0 && nVideoH > 0 )
             {
-                double fPrefWH = (double) aPrefSize.Width / aPrefSize.Height;
+                double fPrefWH = static_cast<double>(aPrefSize.Width) / aPrefSize.Height;
 
-                if( fPrefWH < ( (double) nVideoW / nVideoH ) )
-                    nVideoW = (int)( nVideoH * fPrefWH );
+                if( fPrefWH < ( static_cast<double>(nVideoW) / nVideoH ) )
+                    nVideoW = static_cast<int>( nVideoH * fPrefWH );
                 else
-                    nVideoH = (int)( nVideoW / fPrefWH );
+                    nVideoH = static_cast<int>( nVideoW / fPrefWH );
 
                 nX = ( nW - nVideoW ) >> 1;
                 nY = ( nH - nVideoH ) >> 1;

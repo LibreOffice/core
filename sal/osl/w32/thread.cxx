@@ -134,9 +134,9 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
     if (pThreadImpl != nullptr)
-        return (oslThreadIdentifier)pThreadImpl->m_ThreadId;
+        return static_cast<oslThreadIdentifier>(pThreadImpl->m_ThreadId);
     else
-        return (oslThreadIdentifier)GetCurrentThreadId();
+        return static_cast<oslThreadIdentifier>(GetCurrentThreadId());
 }
 
 void SAL_CALL osl_destroyThread(oslThread Thread)
@@ -366,7 +366,7 @@ void SAL_CALL osl_setThreadName(char const * name) {
 #pragma pack(pop)
     info.dwType = 0x1000;
     info.szName = name;
-    info.dwThreadID = (DWORD) -1;
+    info.dwThreadID = DWORD(-1);
     info.dwFlags = 0;
     __try {
         RaiseException(
@@ -453,7 +453,7 @@ oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback
     if ( pTls )
     {
         pTls->pfnCallback = pCallback;
-        if ( (DWORD)-1 == (pTls->dwIndex = TlsAlloc()) )
+        if ( DWORD(-1) == (pTls->dwIndex = TlsAlloc()) )
         {
             rtl_freeMemory( pTls );
             pTls = nullptr;
@@ -511,7 +511,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     return false;
 }
 
-DWORD   g_dwTLSTextEncodingIndex = (DWORD)-1;
+DWORD   g_dwTLSTextEncodingIndex = DWORD(-1);
 
 rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
 {
@@ -519,7 +519,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
     rtl_TextEncoding    _encoding;
     BOOL                gotACP;
 
-    if ( (DWORD)-1 == g_dwTLSTextEncodingIndex )
+    if ( DWORD(-1) == g_dwTLSTextEncodingIndex )
         g_dwTLSTextEncodingIndex = TlsAlloc();
 
     dwEncoding = reinterpret_cast<DWORD_PTR>(TlsGetValue( g_dwTLSTextEncodingIndex ));
@@ -529,7 +529,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
     if ( !gotACP )
     {
         _encoding = rtl_getTextEncodingFromWindowsCodePage( GetACP() );
-        TlsSetValue( g_dwTLSTextEncodingIndex, reinterpret_cast<LPVOID>((DWORD_PTR)MAKELONG( _encoding, TRUE )) );
+        TlsSetValue( g_dwTLSTextEncodingIndex, reinterpret_cast<LPVOID>(static_cast<DWORD_PTR>(MAKELONG( _encoding, TRUE ))) );
     }
 
     return _encoding;
@@ -539,7 +539,7 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding( rtl_TextEncoding Encoding )
 {
     rtl_TextEncoding oldEncoding = osl_getThreadTextEncoding();
 
-    TlsSetValue( g_dwTLSTextEncodingIndex, reinterpret_cast<LPVOID>((DWORD_PTR)MAKELONG( Encoding, TRUE)) );
+    TlsSetValue( g_dwTLSTextEncodingIndex, reinterpret_cast<LPVOID>(static_cast<DWORD_PTR>(MAKELONG( Encoding, TRUE))) );
 
     return oldEncoding;
 }

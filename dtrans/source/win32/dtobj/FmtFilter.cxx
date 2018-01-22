@@ -423,7 +423,7 @@ Sequence< sal_Int8 > WinBITMAPToOOBMP( HBITMAP aHBMP )
         pBmp->biPlanes = 1;
         pBmp->biBitCount = 32;
         pBmp->biCompression = BI_RGB;
-        pBmp->biSizeImage = (DWORD)nDataBytes;
+        pBmp->biSizeImage = static_cast<DWORD>(nDataBytes);
         pBmp->biXPelsPerMeter = 1000;
         pBmp->biYPelsPerMeter = 1000;
         pBmp->biClrUsed = 0;

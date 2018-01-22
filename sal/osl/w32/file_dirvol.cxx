@@ -57,7 +57,7 @@ BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
     {
         __int64 timeValue;
 
-        __int64 localTime = cpTimeVal->Seconds*(__int64)10000000+cpTimeVal->Nanosec/100;
+        __int64 localTime = cpTimeVal->Seconds*__int64(10000000)+cpTimeVal->Nanosec/100;
         osl::detail::setFiletime(FTime, localTime);
         fSuccess = 0 <= (timeValue= osl::detail::getFiletime(BaseFileTime) + osl::detail::getFiletime(FTime));
         if (fSuccess)
@@ -89,8 +89,8 @@ BOOL FileTimeToTimeValue(const FILETIME *cpFTime, TimeValue *pTimeVal)
 
         if ( fSuccess )
         {
-            pTimeVal->Seconds  = (unsigned long) (Value / 10000000L);
-            pTimeVal->Nanosec  = (unsigned long)((Value % 10000000L) * 100);
+            pTimeVal->Seconds  = static_cast<unsigned long>(Value / 10000000L);
+            pTimeVal->Nanosec  = static_cast<unsigned long>((Value % 10000000L) * 100);
         }
     }
     return fSuccess;
@@ -1630,7 +1630,7 @@ oslFileError SAL_CALL osl_getFileStatus(
     pStatus->uAttributes = pItemImpl->FindData.dwFileAttributes;
     pStatus->uValidFields |= osl_FileStatus_Mask_Attributes;
 
-    pStatus->uFileSize = (sal_uInt64)pItemImpl->FindData.nFileSizeLow + ((sal_uInt64)pItemImpl->FindData.nFileSizeHigh << 32);
+    pStatus->uFileSize = static_cast<sal_uInt64>(pItemImpl->FindData.nFileSizeLow) + (static_cast<sal_uInt64>(pItemImpl->FindData.nFileSizeHigh) << 32);
     pStatus->uValidFields |= osl_FileStatus_Mask_FileSize;
 
     if ( uFieldMask & osl_FileStatus_Mask_LinkTargetURL )
@@ -1685,7 +1685,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
 
     dwFileAttributes = GetFileAttributesW( o3tl::toW(rtl_uString_getStr(ustrSysPath)) );
 
-    if ( (DWORD)-1 != dwFileAttributes )
+    if ( DWORD(-1) != dwFileAttributes )
     {
         dwFileAttributes &= ~(FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_HIDDEN);
 

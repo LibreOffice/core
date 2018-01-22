@@ -59,7 +59,7 @@ unsigned long BufferStream::sread (unsigned char *buf, unsigned long size)
     if (hr == S_OK)
         return newsize;
     else
-        return (unsigned long)0;
+        return static_cast<unsigned long>(0);
 }
 
 long BufferStream::stell ()
@@ -72,7 +72,7 @@ long BufferStream::stell ()
 
     hr = stream->Seek (Move, STREAM_SEEK_CUR, &NewPosition);
     if (hr == S_OK)
-        return (long) NewPosition.QuadPart;
+        return static_cast<long>(NewPosition.QuadPart);
     else
         return -1;
 }
@@ -82,7 +82,7 @@ long BufferStream::sseek (long offset, int origin)
     HRESULT hr;
     LARGE_INTEGER Move;
     DWORD dwOrigin;
-    Move.QuadPart = (__int64)offset;
+    Move.QuadPart = static_cast<__int64>(offset);
 
     switch (origin)
     {
