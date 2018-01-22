@@ -122,7 +122,7 @@ bool CntUInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
-        SAL_WARN_IF(nValue > USHRT_MAX, "svl.items", "Overflow in UInt16 value!");
+        SAL_WARN_IF(nValue < 0 || nValue > SAL_MAX_UINT16, "svl.items", "Overflow in UInt16 value!");
         m_nValue = static_cast<sal_uInt16>(nValue);
         return true;
     }
