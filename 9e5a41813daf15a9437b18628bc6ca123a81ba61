@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_8c1167af",
+        "filename": "offapi/com/sun/star/style/CharacterProperties.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-22T13:49:10Z",
+      "side": 1,
+      "message": "please add a\n\n  @since LibreOffice 6.1\n\ntag",
+      "revId": "9e5a41813daf15a9437b18628bc6ca123a81ba61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ec2023fa",
+        "filename": "offapi/com/sun/star/style/CharacterProperties.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-22T13:49:10Z",
+      "side": 1,
+      "message": "If the RubyPosition enum is unlikely to be expanded with further values in the future, then make this property be of that enum type (and drop the explicit @see).\n\nIf, on the other hand, there\u0027s likely to come more values in the future, keep this having an integer type (though \u0027long\u0027 is arguably better than \u0027short\u0027, even if the latter has traditionally been used a lot), and instead change RubyPosition from enum to constant group.  (As constant groups can be extended in a compatible way, while enums cannot be.)",
+      "revId": "9e5a41813daf15a9437b18628bc6ca123a81ba61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ac262b14",
+        "filename": "offapi/com/sun/star/style/CharacterProperties.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-22T13:49:10Z",
+      "side": 1,
+      "message": "mark as @deprecated?",
+      "revId": "9e5a41813daf15a9437b18628bc6ca123a81ba61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_8c8887e9",
+        "filename": "offapi/com/sun/star/text/RubyPosition.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-22T13:49:10Z",
+      "side": 1,
+      "message": "this appears to be entirely new code; it should use the appropriate license header/footer from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "9e5a41813daf15a9437b18628bc6ca123a81ba61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_6c8353cd",
+        "filename": "offapi/com/sun/star/text/RubyPosition.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-22T13:49:10Z",
+      "side": 1,
+      "message": "please add a\n\n  @since LibreOffice 6.1\n\ntag",
+      "revId": "9e5a41813daf15a9437b18628bc6ca123a81ba61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
