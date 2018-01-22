@@ -36,10 +36,6 @@ CharacterClassificationImpl::CharacterClassificationImpl(
 }
 
 CharacterClassificationImpl::~CharacterClassificationImpl() {
-        // Clear lookuptable
-        for (lookupTableItem* p : lookupTable)
-            delete p;
-        lookupTable.clear();
 }
 
 
@@ -128,9 +124,10 @@ bool CharacterClassificationImpl::createLocaleSpecificCharacterClassification(co
 {
     // to share service between same Language but different Country code, like zh_CN and zh_SG
     for (size_t l = 0; l < lookupTable.size(); l++) {
-        cachedItem = lookupTable[l];
+        cachedItem = lookupTable[l].get();
         if (serviceName == cachedItem->aName) {
-            lookupTable.push_back( cachedItem = new lookupTableItem(rLocale, serviceName, cachedItem->xCI) );
+            lookupTable.emplace_back( new lookupTableItem(rLocale, serviceName, cachedItem->xCI) );
+            cachedItem = lookupTable.back().get();
             return true;
         }
     }
@@ -142,7 +139,8 @@ bool CharacterClassificationImpl::createLocaleSpecificCharacterClassification(co
     if ( xI.is() ) {
         xCI.set( xI, UNO_QUERY );
         if (xCI.is()) {
-            lookupTable.push_back( cachedItem =  new lookupTableItem(rLocale, serviceName, xCI) );
+            lookupTable.emplace_back( new lookupTableItem(rLocale, serviceName, xCI) );
+            cachedItem = lookupTable.back().get();
             return true;
         }
     }
@@ -156,8 +154,8 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
     if (cachedItem && cachedItem->equals(rLocale))
         return cachedItem->xCI;
     else {
-        for (lookupTableItem* i : lookupTable) {
-            cachedItem = i;
+        for (auto & i : lookupTable) {
+            cachedItem = i.get();
             if (cachedItem->equals(rLocale))
                 return cachedItem->xCI;
         }
@@ -180,7 +178,8 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
             return cachedItem->xCI;
         else if (xUCI.is())
         {
-            lookupTable.push_back( cachedItem = new lookupTableItem( rLocale, "Unicode", xUCI));
+            lookupTable.emplace_back( new lookupTableItem(rLocale, "Unicode", xUCI) );
+            cachedItem = lookupTable.back().get();
             return cachedItem->xCI;
         }
     }

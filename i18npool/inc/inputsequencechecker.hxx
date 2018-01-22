@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 
 #include <vector>
+#include <memory>
 
 namespace i18npool {
 
@@ -63,7 +64,7 @@ private:
         const sal_Char* aLanguage;
         css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
     };
-    std::vector<lookupTableItem*> lookupTable;
+    std::vector<std::unique_ptr<lookupTableItem>> lookupTable;
     lookupTableItem *cachedItem;
 
     css::uno::Reference < css::uno::XComponentContext > m_xContext;

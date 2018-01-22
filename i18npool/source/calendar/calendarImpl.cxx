@@ -36,10 +36,6 @@ CalendarImpl::CalendarImpl(const Reference< XComponentContext > &rxContext) : m_
 
 CalendarImpl::~CalendarImpl()
 {
-    // Clear lookuptable
-    for (lookupTableItem* p : lookupTable)
-        delete p;
-    lookupTable.clear();
 }
 
 void SAL_CALL
@@ -62,9 +58,9 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale )
     sal_Int32 i;
 
     for (i = 0; i < sal::static_int_cast<sal_Int32>(lookupTable.size()); i++) {
-        lookupTableItem *listItem = lookupTable[i];
-        if (uniqueID == listItem->uniqueID) {
-            xCalendar = listItem->xCalendar;
+        lookupTableItem &listItem = lookupTable[i];
+        if (uniqueID == listItem.uniqueID) {
+            xCalendar = listItem.xCalendar;
             break;
         }
     }
@@ -88,7 +84,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale )
             throw ERROR;
         xCalendar.set(xI, UNO_QUERY);
 
-        lookupTable.push_back( new lookupTableItem(uniqueID, xCalendar) );
+        lookupTable.emplace_back( uniqueID, xCalendar );
     }
 
     if ( !xCalendar.is() )

@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <map>
+#include <memory>
 
 #include <unicode/regex.h>
 using namespace U_ICU_NAMESPACE;
@@ -64,8 +65,8 @@ class TextSearch: public cppu::WeakImplHelper
     FnSrch fnBackward;
 
     // Members and methods for the normal (Boyer-Moore) search
-    TextSearchJumpTable* pJumpTable;
-    TextSearchJumpTable* pJumpTable2;
+    std::unique_ptr<TextSearchJumpTable> pJumpTable;
+    std::unique_ptr<TextSearchJumpTable> pJumpTable2;
     bool bIsForwardTab;
     bool bUsePrimarySrchStr;
     void MakeForwardTab();
@@ -83,7 +84,7 @@ class TextSearch: public cppu::WeakImplHelper
                                 sal_Int32 startPos, sal_Int32 endPos );
 
     // Members and methods for the regular expression search
-    RegexMatcher* pRegexMatcher;
+    std::unique_ptr<RegexMatcher> pRegexMatcher;
     /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         RESrchFrwrd( const OUString& searchStr,
@@ -96,7 +97,7 @@ class TextSearch: public cppu::WeakImplHelper
 
     // Members and methods for the "Weight Levenshtein-Distance" search
     int nLimit;
-    WLevDistance* pWLD;
+    std::unique_ptr<WLevDistance> pWLD;
     css::uno::Reference < css::i18n::XBreakIterator > xBreak;
     /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL

@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
+#include <memory>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -80,7 +81,7 @@ private:
             aLocale.Variant == rLocale.Variant;
         };
     };
-    std::vector<lookupTableItem*> lookupTable;
+    std::vector<std::unique_ptr<lookupTableItem>> lookupTable;
     lookupTableItem *cachedItem;
 
     css::uno::Reference < css::uno::XComponentContext > m_xContext;

@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <vector>
+#include <memory>
 
 namespace i18npool {
 
@@ -88,7 +89,7 @@ private:
             algorithm == _algorithm;
         }
     };
-    std::vector<lookupTableItem*>                       lookupTable;
+    std::vector<std::unique_ptr<lookupTableItem>>       lookupTable;
     lookupTableItem *                                   cachedItem;
 
     // Service Factory
