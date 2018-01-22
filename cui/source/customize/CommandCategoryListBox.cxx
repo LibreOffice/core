@@ -354,9 +354,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                             continue;
                         }
 
-                        SvTreeListEntry* pMacroGroup = pFunctionListBox->InsertEntry(
-                                          sUIName,
-                                            Image( BitmapEx(RID_CUIBMP_EXPANDED) ), Image( BitmapEx(RID_CUIBMP_COLLAPSED) ) );
+                        SvTreeListEntry* pMacroGroup = pFunctionListBox->InsertEntry( sUIName );
                         m_aGroupInfo.push_back(
                             o3tl::make_unique<SfxGroupInfo_Impl>(
                                 SfxCfgKind::GROUP_SCRIPTCONTAINER, 0 ) );
@@ -393,9 +391,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                     continue;
                 }
 
-                SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(
-                    pIt.sLabel, // Name of the style family
-                    Image( BitmapEx(RID_CUIBMP_EXPANDED) ), Image( BitmapEx(RID_CUIBMP_COLLAPSED) ) );
+                SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry( pIt.sLabel ); // Name of the style family
 
                 m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0 ) );
                 SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
@@ -488,11 +484,6 @@ void CommandCategoryListBox::addChildren(
             m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
                                                                          0, static_cast<void *>( child.get())));
             pNewEntry->SetUserData( m_aGroupInfo.back().get() );
-
-
-
-            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, Image( BitmapEx(RID_CUIBMP_EXPANDED) ) );
-            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, Image( BitmapEx(RID_CUIBMP_COLLAPSED) ) );
             pNewEntry->EnableChildrenOnDemand();
 
             addChildren(pNewEntry, child, pFunctionListBox, filterTerm);

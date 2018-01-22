@@ -111,6 +111,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     nFlags |= LBoxFlags::Filling;
 
     bSubLstOpRet = bSubLstOpLR = bContextMenuHandling = bIsCellFocusEnabled = false;
+    bSubLstOpDblClick = true; // tdf#115105
 }
 
 SvImpLBox::~SvImpLBox()
