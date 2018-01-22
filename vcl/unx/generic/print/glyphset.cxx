@@ -58,15 +58,15 @@ GlyphSet::~GlyphSet ()
     /* FIXME delete the glyphlist ??? */
 }
 
-bool
+void
 GlyphSet::GetGlyphID (
                       sal_GlyphId nGlyph,
                       unsigned char* nOutGlyphID,
                       sal_Int32* nOutGlyphSetID
                      )
 {
-    return    LookupGlyphID (nGlyph, nOutGlyphID, nOutGlyphSetID)
-           || AddGlyphID    (nGlyph, nOutGlyphID, nOutGlyphSetID);
+    if (LookupGlyphID(nGlyph, nOutGlyphID, nOutGlyphSetID))
+           AddGlyphID(nGlyph, nOutGlyphID, nOutGlyphSetID);
 }
 
 bool

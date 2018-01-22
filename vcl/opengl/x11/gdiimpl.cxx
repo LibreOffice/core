@@ -39,8 +39,8 @@ static bool g_bAnyCurrent;
 class X11OpenGLContext : public OpenGLContext
 {
 public:
-    bool init(Display* dpy, Window win, int screen);
-    virtual bool initWindow() override;
+    void init(Display* dpy, Window win, int screen);
+    virtual void initWindow() override;
 private:
     GLX11Window m_aGLWin;
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
@@ -450,13 +450,13 @@ void X11OpenGLContext::destroyCurrentContext()
     }
 }
 
-bool X11OpenGLContext::init(Display* dpy, Window win, int screen)
+void X11OpenGLContext::init(Display* dpy, Window win, int screen)
 {
     if (isInitialized())
-        return true;
+        return;
 
     if (!dpy)
-        return false;
+        return;
 
     OpenGLZone aZone;
 
@@ -468,7 +468,7 @@ bool X11OpenGLContext::init(Display* dpy, Window win, int screen)
 
     initGLWindow(pVisual);
 
-    return ImplInit();
+    ImplInit();
 }
 
 void X11OpenGLContext::initGLWindow(Visual* pVisual)
@@ -498,7 +498,7 @@ void X11OpenGLContext::initGLWindow(Visual* pVisual)
     SAL_INFO("vcl.opengl", "available GLX extensions: " << m_aGLWin.GLXExtensions);
 }
 
-bool X11OpenGLContext::initWindow()
+void X11OpenGLContext::initWindow()
 {
     const SystemEnvData* pChildSysData = nullptr;
     SystemWindowData winData = generateWinData(mpWindow, false);
@@ -512,7 +512,7 @@ bool X11OpenGLContext::initWindow()
     }
 
     if (!m_pChildWindow || !pChildSysData)
-        return false;
+        return;
 
     InitChildWindow(m_pChildWindow.get());
 
@@ -522,8 +522,6 @@ bool X11OpenGLContext::initWindow()
 
     Visual* pVisual = static_cast<Visual*>(pChildSysData->pVisual);
     initGLWindow(pVisual);
-
-    return true;
 }
 
 GLX11Window::GLX11Window()
@@ -599,7 +597,7 @@ void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics*
     OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
 }
 
-bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
+void X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
 {
     Display* pDisplay = mrX11Parent.GetXDisplay();
     SalX11Screen nScreen = mrX11Parent.GetScreenNumber();
@@ -610,7 +608,7 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
     SAL_INFO( "vcl.opengl", "FillPixmapFromScreen" );
 
     if (!SalDisplay::BestOpenGLVisual(pDisplay, nScreen.getXScreen(), aVisualInfo))
-        return false;
+        return;
 
     // make sure everything is synced up before reading back
     mpContext->makeCurrent();
@@ -632,8 +630,6 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
                0, 0, 0, 0, pPixmap->GetWidth(), pPixmap->GetHeight() );
     XFreeGC( pDisplay, aGC );
     XDestroyImage( pImage );
-
-    return true;
 }
 
 typedef typename std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;

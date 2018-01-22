@@ -50,9 +50,9 @@ public:
     explicit    FontSubsetInfo();
                 ~FontSubsetInfo();
 
-    bool        LoadFont( FontType eInFontType,
+    void        LoadFont( FontType eInFontType,
                     const unsigned char* pFontBytes, int nByteLength );
-    bool        LoadFont( vcl::TrueTypeFont* pSftTrueTypeFont );
+    void        LoadFont( vcl::TrueTypeFont* pSftTrueTypeFont );
 
     bool        CreateFontSubset( FontType nOutFontTypeMask,
                     FILE* pOutFile, const char* pOutFontName,

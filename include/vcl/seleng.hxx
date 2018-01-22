@@ -49,7 +49,7 @@ public:
 
     // move cursor, at the same time match cursor position to the selection
     // starting at anchor. true == Ok
-    virtual bool    SetCursorAtPoint( const Point& rPointPixel,
+    virtual void    SetCursorAtPoint( const Point& rPointPixel,
                                           bool bDontSelectAtCursor = false ) = 0;
 
     virtual bool    IsSelectionAtPoint( const Point& rPointPixel ) = 0;

@@ -119,7 +119,7 @@ public:
     bool        EndJob ();
 
     void        StartPage (const JobData& rJobSetup);
-    bool        EndPage ();
+    void        EndPage ();
 };
 
 }  // namespace psp

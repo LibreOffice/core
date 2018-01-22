@@ -1380,11 +1380,11 @@ namespace
     }
 }
 
-bool OutputDevice::BlendBitmap(
+void OutputDevice::BlendBitmap(
             const SalTwoRect&   rPosAry,
             const Bitmap&       rBmp )
 {
-    return mpGraphics->BlendBitmap( rPosAry, *rBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
+    mpGraphics->BlendBitmap( rPosAry, *rBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
 }
 
 Bitmap OutputDevice::BlendBitmapWithAlpha(

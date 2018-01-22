@@ -2440,7 +2440,7 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
     return rInput.GetError() == ERRCODE_NONE;
 }
 
-bool TextEngine::Write( SvStream& rOutput )
+void TextEngine::Write( SvStream& rOutput )
 {
     TextSelection aSel;
     const sal_uInt32 nParas = static_cast<sal_uInt32>(mpDoc->GetNodes().size());
@@ -2460,8 +2460,6 @@ bool TextEngine::Write( SvStream& rOutput )
         const OUString aText = pNode->GetText().copy( nStartPos, nEndPos-nStartPos );
         rOutput.WriteLine(OUStringToOString(aText, rOutput.GetStreamCharSet()));
     }
-
-    return rOutput.GetError() == ERRCODE_NONE;
 }
 
 void TextEngine::RemoveAttribs( sal_uInt32 nPara )

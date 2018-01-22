@@ -2121,7 +2121,7 @@ void VclSizeGroup::set_mode(VclSizeGroupMode eMode)
 
 }
 
-bool VclSizeGroup::set_property(const OString &rKey, const OUString &rValue)
+void VclSizeGroup::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "ignore-hidden")
         set_ignore_hidden(toBool(rValue));
@@ -2145,9 +2145,7 @@ bool VclSizeGroup::set_property(const OString &rKey, const OUString &rValue)
     else
     {
         SAL_INFO("vcl.layout", "unhandled property: " << rKey);
-        return false;
     }
-    return true;
 }
 
 void MessageDialog::create_owned_areas()

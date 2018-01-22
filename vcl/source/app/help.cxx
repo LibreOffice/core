@@ -58,9 +58,8 @@ bool Help::Start( const OUString&, const vcl::Window* )
     return false;
 }
 
-bool Help::SearchKeyword( const OUString& )
+void Help::SearchKeyword( const OUString& )
 {
-    return false;
 }
 
 OUString Help::GetHelpText( const OUString&, const vcl::Window* )

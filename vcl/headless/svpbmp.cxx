@@ -166,11 +166,10 @@ BitmapBuffer* ImplCreateDIB(
     return pDIB;
 }
 
-bool SvpSalBitmap::Create(BitmapBuffer *pBuf)
+void SvpSalBitmap::Create(BitmapBuffer *pBuf)
 {
     Destroy();
     mpDIB = pBuf;
-    return mpDIB != nullptr;
 }
 
 bool SvpSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)

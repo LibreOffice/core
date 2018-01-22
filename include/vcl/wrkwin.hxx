@@ -93,7 +93,7 @@ public:
 
     bool            IsMinimized() const;
 
-    bool            SetPluginParent( SystemParentData* pParent );
+    void            SetPluginParent( SystemParentData* pParent );
 
     void            Minimize();
     void            Restore();

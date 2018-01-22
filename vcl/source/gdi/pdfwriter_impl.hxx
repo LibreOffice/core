@@ -1163,7 +1163,7 @@ public:
 
     void intersectClipRegion( const tools::Rectangle& rRect );
 
-    bool intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
+    void intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
     void setLayoutMode( ComplexTextLayoutFlags nLayoutMode )
     {

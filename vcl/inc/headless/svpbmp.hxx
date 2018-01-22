@@ -44,7 +44,7 @@ public:
     virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) override;
-    bool                    Create(BitmapBuffer *pBuf);
+    void                    Create(BitmapBuffer *pBuf);
     const BitmapBuffer*     GetBuffer() const
     {
         return mpDIB;

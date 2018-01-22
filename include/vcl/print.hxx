@@ -170,9 +170,8 @@ public:
 
         parameter decides whether the set for
         print "to printer" or "to file" should be read.
-        @return True if config was read, false if an error occurred
     */
-    bool                        ReadFromConfig( bool bFile );
+    void                        ReadFromConfig( bool bFile );
 };
 
 
@@ -221,7 +220,7 @@ private:
                                 ImplSalPrinterErrorCodeToVCL( SalPrinterError nError );
 
 private:
-    SAL_DLLPRIVATE bool         EndJob();
+    SAL_DLLPRIVATE void         EndJob();
                                 Printer( const Printer& rPrinter )    = delete;
     Printer&                    operator =( const Printer& rPrinter ) = delete;
 
@@ -308,11 +307,11 @@ public:
 
     bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
-    bool                        SetDuplexMode( DuplexMode );
+    void                        SetDuplexMode( DuplexMode );
 
     bool                        SetPaperBin( sal_uInt16 nPaperBin );
     sal_uInt16                  GetPaperBin() const;
-    bool                        SetPaper( Paper ePaper );
+    void                        SetPaper( Paper ePaper );
     bool                        SetPaperSizeUser( const Size& rSize );
     bool                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
     Paper                       GetPaper() const;
@@ -337,7 +336,7 @@ public:
     const Point&                GetPageOffsetPixel() const { return maPageOffset; }
     Point                       GetPageOffset() const { return PixelToLogic( maPageOffset ); }
 
-    bool                        SetCopyCount( sal_uInt16 nCopy, bool bCollate );
+    void                        SetCopyCount( sal_uInt16 nCopy, bool bCollate );
     sal_uInt16                  GetCopyCount() const { return mnCopyCount; }
     bool                        IsCollateCopy() const { return mbCollateCopy; }
 
@@ -559,7 +558,7 @@ public:
     SAL_DLLPRIVATE    void              pushPropertiesToPrinter();
     SAL_DLLPRIVATE    void              resetPaperToLastConfigured();
     VCL_PLUGIN_PUBLIC void              setJobState( css::view::PrintableState );
-    SAL_DLLPRIVATE    bool              setupPrinter( vcl::Window* i_pDlgParent );
+    SAL_DLLPRIVATE    void              setupPrinter( vcl::Window* i_pDlgParent );
 
     SAL_DLLPRIVATE    int               getPageCountProtected() const;
     SAL_DLLPRIVATE    css::uno::Sequence< css::beans::PropertyValue >

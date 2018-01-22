@@ -1809,9 +1809,9 @@ bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
     return bRet;
 }
 
-bool Bitmap::MakeMono( sal_uInt8 cThreshold )
+void Bitmap::MakeMono( sal_uInt8 cThreshold )
 {
-    return ImplMakeMono( cThreshold );
+    ImplMakeMono( cThreshold );
 }
 
 bool Bitmap::GetSystemData( BitmapSystemData& rData ) const

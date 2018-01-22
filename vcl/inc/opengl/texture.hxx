@@ -52,7 +52,7 @@ public:
     void IncreaseRefCount(int nSlotNumber);
     void DecreaseRefCount(int nSlotNumber);
 
-    bool InitializeSlotMechanism(int nInitialSlotSize);
+    void InitializeSlotMechanism(int nInitialSlotSize);
 
     void SetSlotDeallocateCallback(std::function<void(int)> aCallback)
     {
@@ -76,7 +76,7 @@ private:
     std::shared_ptr<ImplOpenGLTexture> mpImpl;
     int mnSlotNumber;
 
-    inline bool GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const;
+    inline void GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const;
 
     bool IsValid() const
     {
@@ -109,7 +109,7 @@ public:
     GLuint          AddStencil();
     GLuint          StencilId() const;
 
-    bool            CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData);
+    void            CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData);
 
     void            SaveToFile(const OUString& rFileName);
 

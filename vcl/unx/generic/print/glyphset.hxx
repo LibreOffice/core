@@ -51,7 +51,7 @@ private:
 
     OString     GetGlyphSetName (sal_Int32 nGlyphSetID);
 
-    bool        GetGlyphID (sal_GlyphId nGlyphId,
+    void        GetGlyphID (sal_GlyphId nGlyphId,
                                 unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
     bool        LookupGlyphID (sal_GlyphId nGlyphId,
                                    unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);

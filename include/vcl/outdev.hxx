@@ -1152,7 +1152,7 @@ public:
                                               vcl::TextLayoutCache const* = nullptr,
                                               SalLayout const*const pLayoutCache = nullptr) const;
 
-    bool                        GetCaretPositions( const OUString&, long* pCaretXArray,
+    void                        GetCaretPositions( const OUString&, long* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
@@ -1512,7 +1512,7 @@ private:
                                 Size& aOutSz, Point& aOutPt);
 
 
-    SAL_DLLPRIVATE bool         BlendBitmap(
+    SAL_DLLPRIVATE void         BlendBitmap(
                                     const SalTwoRect&   rPosAry,
                                     const Bitmap&       rBmp );
 

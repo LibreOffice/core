@@ -83,7 +83,7 @@ public:
     // use these methods right after setting a context to make sure drawing happens
     // in the right FBO (default one is for onscreen painting)
     bool               BindFramebuffer( OpenGLFramebuffer* pFramebuffer );
-    bool               AcquireDefaultFramebuffer();
+    void               AcquireDefaultFramebuffer();
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     static void        ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
     void UnbindTextureFromFramebuffers( GLuint nTexture );
@@ -153,7 +153,7 @@ public:
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 
 private:
-    virtual bool initWindow();
+    virtual void initWindow();
     virtual void destroyCurrentContext();
     virtual void adjustToNewSize();
 

@@ -623,9 +623,9 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
     return sHelpText;
 }
 
-bool SfxHelp::SearchKeyword( const OUString& rKeyword )
+void SfxHelp::SearchKeyword( const OUString& rKeyword )
 {
-    return Start_Impl( OUString(), nullptr, rKeyword );
+    Start_Impl( OUString(), nullptr, rKeyword );
 }
 
 bool SfxHelp::Start( const OUString& rURL, const vcl::Window* pWindow )

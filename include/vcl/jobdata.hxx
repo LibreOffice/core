@@ -68,8 +68,8 @@ struct VCL_DLLPUBLIC JobData
     JobData( const JobData& rData ) { *this = rData; }
 
     void setCollate( bool bCollate );
-    bool setPaper( int nWidth, int nHeight ); // dimensions in pt
-    bool setPaperBin( int nPaperBin );
+    void setPaper( int nWidth, int nHeight ); // dimensions in pt
+    void setPaperBin( int nPaperBin );
     void resolveDefaultBackend();
     void setDefaultBackend(bool bUsePDF);
 
