@@ -118,10 +118,10 @@ TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
 
 TextSearch::~TextSearch()
 {
-    delete pRegexMatcher;
-    delete pWLD;
-    delete pJumpTable;
-    delete pJumpTable2;
+    pRegexMatcher.reset();
+    pWLD.reset();
+    pJumpTable.reset();
+    pJumpTable2.reset();
 }
 
 void TextSearch::setOptions2( const SearchOptions2& rOptions )
@@ -130,14 +130,10 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
 
     aSrchPara = rOptions;
 
-    delete pRegexMatcher;
-    pRegexMatcher = nullptr;
-    delete pWLD;
-    pWLD = nullptr;
-    delete pJumpTable;
-    pJumpTable = nullptr;
-    delete pJumpTable2;
-    pJumpTable2 = nullptr;
+    pRegexMatcher.reset();
+    pWLD.reset();
+    pJumpTable.reset();
+    pJumpTable2.reset();
     maWildcardReversePattern.clear();
     maWildcardReversePattern2.clear();
     TransliterationFlags transliterateFlags = static_cast<TransliterationFlags>(aSrchPara.transliterateFlags);
@@ -232,9 +228,9 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
             fnForward = &TextSearch::ApproxSrchFrwrd;
             fnBackward = &TextSearch::ApproxSrchBkwrd;
 
-            pWLD = new WLevDistance( sSrchStr.getStr(), aSrchPara.changedChars,
+            pWLD.reset( new WLevDistance( sSrchStr.getStr(), aSrchPara.changedChars,
                     aSrchPara.insertedChars, aSrchPara.deletedChars,
-                    0 != (SearchFlags::LEV_RELAXED & aSrchPara.searchFlag ) );
+                    0 != (SearchFlags::LEV_RELAXED & aSrchPara.searchFlag ) ) );
 
             nLimit = pWLD->GetLimit();
             break;
@@ -556,16 +552,15 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
 void TextSearch::MakeForwardTab()
 {
     // create the jumptable for the search text
-    if( pJumpTable )
+
+    if( pJumpTable && bIsForwardTab )
     {
-        if( bIsForwardTab )
-            return ;                                        // the jumpTable is ok
-        delete pJumpTable;
+        return; // the jumpTable is ok
     }
     bIsForwardTab = true;
 
     sal_Int32 n, nLen = sSrchStr.getLength();
-    pJumpTable = new TextSearchJumpTable;
+    pJumpTable.reset( new TextSearchJumpTable );
 
     for( n = 0; n < nLen - 1; ++n )
     {
@@ -583,16 +578,14 @@ void TextSearch::MakeForwardTab()
 void TextSearch::MakeForwardTab2()
 {
     // create the jumptable for the search text
-    if( pJumpTable2 )
+    if( pJumpTable2 && bIsForwardTab )
     {
-        if( bIsForwardTab )
-            return ;                                        // the jumpTable is ok
-        delete pJumpTable2;
+        return;        // the jumpTable is ok
     }
     bIsForwardTab = true;
 
     sal_Int32 n, nLen = sSrchStr2.getLength();
-    pJumpTable2 = new TextSearchJumpTable;
+    pJumpTable2.reset( new TextSearchJumpTable );
 
     for( n = 0; n < nLen - 1; ++n )
     {
@@ -610,16 +603,14 @@ void TextSearch::MakeForwardTab2()
 void TextSearch::MakeBackwardTab()
 {
     // create the jumptable for the search text
-    if( pJumpTable )
+    if( pJumpTable && !bIsForwardTab)
     {
-        if( !bIsForwardTab )
-            return ;                                        // the jumpTable is ok
-        delete pJumpTable;
+        return;   // the jumpTable is ok
     }
     bIsForwardTab = false;
 
     sal_Int32 n, nLen = sSrchStr.getLength();
-    pJumpTable = new TextSearchJumpTable;
+    pJumpTable.reset( new TextSearchJumpTable );
 
     for( n = nLen-1; n > 0; --n )
     {
@@ -635,16 +626,14 @@ void TextSearch::MakeBackwardTab()
 void TextSearch::MakeBackwardTab2()
 {
     // create the jumptable for the search text
-    if( pJumpTable2 )
+    if( pJumpTable2 && !bIsForwardTab )
     {
-        if( !bIsForwardTab )
-            return ;                                        // the jumpTable is ok
-        delete pJumpTable2;
+        return;    // the jumpTable is ok
     }
     bIsForwardTab = false;
 
     sal_Int32 n, nLen = sSrchStr2.getLength();
-    pJumpTable2 = new TextSearchJumpTable;
+    pJumpTable2.reset( new TextSearchJumpTable );
 
     for( n = nLen-1; n > 0; --n )
     {
@@ -663,10 +652,10 @@ sal_Int32 TextSearch::GetDiff( const sal_Unicode cChr ) const
     OUString sSearchKey;
 
     if ( bUsePrimarySrchStr ) {
-        pJump = pJumpTable;
+        pJump = pJumpTable.get();
         sSearchKey = sSrchStr;
     } else {
-        pJump = pJumpTable2;
+        pJump = pJumpTable2.get();
         sSearchKey = sSrchStr2;
     }
 
@@ -868,12 +857,11 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
     aIcuSearchPatStr = aChevronMatcherE.replaceAll( aChevronReplaceE, nIcuErr);
     aChevronMatcherE.reset();
 #endif
-    pRegexMatcher = new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr);
+    pRegexMatcher.reset( new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr) );
     if (nIcuErr)
     {
         SAL_INFO( "i18npool", "TextSearch::RESrchPrepare UErrorCode " << nIcuErr);
-        delete pRegexMatcher;
-        pRegexMatcher = nullptr;
+        pRegexMatcher.reset();
     }
     else
     {
@@ -897,7 +885,7 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
 }
 
 
-static bool lcl_findRegex( RegexMatcher * pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
+static bool lcl_findRegex( std::unique_ptr<RegexMatcher>& pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
 {
     if (!pRegexMatcher->find( nStartPos, rIcuErr))
     {

@@ -210,6 +210,9 @@ void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, cons
     // painful linked list
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/basic/source/inc/runtime.hxx"))
         return;
+    // not sure how the node management is working here
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/i18npool/source/localedata/saxparser.cxx"))
+        return;
 
     report(
         DiagnosticsEngine::Warning,

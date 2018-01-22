@@ -48,8 +48,8 @@ Collator_Unicode::Collator_Unicode()
 
 Collator_Unicode::~Collator_Unicode()
 {
-    delete collator;
-    delete uca_base;
+    collator.reset();
+    uca_base.reset();
 #ifndef DISABLE_DYNLOADING
     if (hModule) osl_unloadModule(hModule);
 #endif
@@ -138,7 +138,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
         UErrorCode status = U_ZERO_ERROR;
         OUString rule = LocaleDataImpl::get()->getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
         if (!rule.isEmpty()) {
-            collator = new icu::RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);
+            collator.reset( new icu::RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status) );
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
         if (!collator && OUString(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
@@ -354,12 +354,12 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 // The default collator of the en-US locale would also fulfill
                 // the requirement. The collator of the actual locale or the
                 // NULL (default) locale does not.
-                uca_base = static_cast<icu::RuleBasedCollator*>(icu::Collator::createInstance(
-                            icu::Locale::getRoot(), status));
+                uca_base.reset( static_cast<icu::RuleBasedCollator*>(icu::Collator::createInstance(
+                            icu::Locale::getRoot(), status)) );
 #endif
                 if (! U_SUCCESS(status)) throw RuntimeException();
-                collator = new icu::RuleBasedCollator(
-                        reinterpret_cast<const uint8_t*>(ruleImage), ruleImageSize, uca_base, status);
+                collator.reset( new icu::RuleBasedCollator(
+                        reinterpret_cast<const uint8_t*>(ruleImage), ruleImageSize, uca_base.get(), status) );
                 if (! U_SUCCESS(status)) throw RuntimeException();
             }
         }
@@ -372,7 +372,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             */
             icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale), rAlgorithm));
             // load ICU collator
-            collator = static_cast<icu::RuleBasedCollator*>( icu::Collator::createInstance(icuLocale, status) );
+            collator.reset( static_cast<icu::RuleBasedCollator*>( icu::Collator::createInstance(icuLocale, status) ) );
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
     }

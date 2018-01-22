@@ -27,6 +27,7 @@
 
 #include "transliteration_body.hxx"
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -95,7 +96,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    Transliteration_casemapping *trans;
+    std::unique_ptr<Transliteration_casemapping> trans;
 
 // --- parser specific (implemented in cclass_unicode_parser.cxx) ---
 
