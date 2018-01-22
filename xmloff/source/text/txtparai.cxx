@@ -119,8 +119,8 @@ XMLCharContext::XMLCharContext(
                 sal_Int32 nTmp = xAttrList->getValueByIndex(i).toInt32();
                 if( nTmp > 0 )
                 {
-                    if( nTmp > USHRT_MAX )
-                        m_nCount = USHRT_MAX;
+                    if( nTmp > SAL_MAX_UINT16 )
+                        m_nCount = SAL_MAX_UINT16;
                     else
                         m_nCount = static_cast<sal_uInt16>(nTmp);
                 }
