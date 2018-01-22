@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_4cee8f23",
+        "filename": "shell/source/backends/kde5be/kde5backend.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001785
+      },
+      "writtenOn": "2018-01-22T12:27:48Z",
+      "side": 1,
+      "message": "cleaning it all up a bit differently",
+      "parentUuid": "fa31d9ce_b31db168",
+      "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_d31a256e",
         "filename": "shell/source/backends/kde5be/kde5backend.cxx",
         "patchSetId": 4
@@ -98,6 +116,24 @@
       "writtenOn": "2018-01-18T11:12:45Z",
       "side": 1,
       "message": "Is this leaking or did I miss the place where those arguments are freed?",
+      "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_2ce95b1b",
+        "filename": "shell/source/backends/kde5be/kde5backend.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1001785
+      },
+      "writtenOn": "2018-01-22T12:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa31d9ce_733a59cf",
       "revId": "f163e56cf0aafa82d1b004ee7ae299a179e4e851",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
