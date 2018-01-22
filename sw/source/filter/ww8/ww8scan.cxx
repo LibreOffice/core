@@ -1464,7 +1464,17 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             {
                 bIsUnicode = m_pWw8Fib->m_fExtChar;
             }
-            sal_Int32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
+
+            sal_Int32 nLen = nCpEnd - nCpStart;
+            if (bIsUnicode)
+            {
+                bool bFail = o3tl::checked_multiply<WW8_CP>(nLen, 2, nLen);
+                if (bFail)
+                {
+                    SAL_WARN("sw.ww8", "broken offset, ignoring");
+                    return WW8_CP_MAX;
+                }
+            }
 
             /*
             If this cp is inside this piece, or it's the last piece and we are
