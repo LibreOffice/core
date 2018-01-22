@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_49368104",
+        "filename": "sw/source/uibase/config/modcfg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-22T08:36:20Z",
+      "side": 1,
+      "message": "This looks bad. I suggest you better change lines 0-7 to look exactly like your line 8:\n\n  case 1 : pValues[nProp] \u003c\u003c\u003d aInsertAttr.m_nColor;   break;\n\nIf required (I didn\u0027t check), use static_cast\u003csal_Int32\u003e(aInsertAttr.m_nColor)\n\nThis will obsolete lines 305 and 318, and make it look solid and consistent.",
+      "range": {
+        "startLine": 318,
+        "startChar": 8,
+        "endLine": 318,
+        "endChar": 63
+      },
+      "revId": "5fc876921198fb6c7b2d4a03714b0306ce949de0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
