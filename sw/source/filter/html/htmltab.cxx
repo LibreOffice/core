@@ -468,7 +468,6 @@ class HTMLTable
     void FixFrameFormat( SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
                       sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                       bool bFirstPara=true, bool bLastPara=true ) const;
-    void FixFillerFrameFormat( SwTableBox *pBox, bool bRight ) const;
 
     // Create a table with the content (lines/boxes)
     void MakeTable_( SwTableBox *pUpper );
@@ -1456,39 +1455,6 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(pFrameFormat) );
     }
 
-}
-
-void HTMLTable::FixFillerFrameFormat( SwTableBox *pBox, bool bRight ) const
-{
-    SwFrameFormat *pFrameFormat = pBox->ClaimFrameFormat();
-
-    if( m_bFillerTopBorder || m_bFillerBottomBorder ||
-        (!bRight && m_bInheritedLeftBorder) || (bRight && m_bInheritedRightBorder) )
-    {
-        SvxBoxItem aBoxItem( RES_BOX );
-        if( m_bFillerTopBorder )
-            aBoxItem.SetLine( &m_aTopBorderLine, SvxBoxItemLine::TOP );
-        if( m_bFillerBottomBorder )
-            aBoxItem.SetLine( &m_aBottomBorderLine, SvxBoxItemLine::BOTTOM );
-        if( !bRight && m_bInheritedLeftBorder )
-            aBoxItem.SetLine( &m_aInheritedLeftBorderLine, SvxBoxItemLine::LEFT );
-        if( bRight && m_bInheritedRightBorder )
-            aBoxItem.SetLine( &m_aInheritedRightBorderLine, SvxBoxItemLine::RIGHT );
-        aBoxItem.SetAllDistances(MIN_BORDER_DIST);
-        pFrameFormat->SetFormatAttr( aBoxItem );
-    }
-    else
-    {
-        pFrameFormat->ResetFormatAttr( RES_BOX );
-    }
-
-    if( GetInhBGBrush() )
-        pFrameFormat->SetFormatAttr( *GetInhBGBrush() );
-    else
-        pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
-
-    pFrameFormat->ResetFormatAttr( RES_VERT_ORIENT );
-    pFrameFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
 }
 
 SwTableBox *HTMLTable::NewTableBox( const SwStartNode *pStNd,
