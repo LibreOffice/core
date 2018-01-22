@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_ecf2e399",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-22T13:16:37Z",
+      "side": 1,
+      "message": "These two look wrong to me because it does not advance the string counter / decrement the resulting string counter anymore and nPos at the end doesn\u0027t match what was actually processed.\n\nI\u0027ll dig into it..",
+      "revId": "bae6c1114914b33becd444da92933860e1a6f57f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
