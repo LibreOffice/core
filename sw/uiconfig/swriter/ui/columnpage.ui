@@ -17,18 +17,13 @@
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="upper">56</property>
-    <property name="step_increment">0.01</property>
-    <property name="page_increment">1</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment4">
     <property name="lower">0.25</property>
     <property name="upper">9</property>
     <property name="value">0.25</property>
     <property name="step_increment">0.25</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment5">
+  <object class="GtkAdjustment" id="adjustment4">
     <property name="lower">25</property>
     <property name="upper">100</property>
     <property name="value">100</property>
@@ -265,7 +260,7 @@
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
                         <property name="invisible_char">•</property>
-                        <property name="adjustment">adjustment3</property>
+                        <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
                         <accessibility>
                           <relation type="labelled-by" target="distft"/>
@@ -282,7 +277,7 @@
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
                         <property name="invisible_char">•</property>
-                        <property name="adjustment">adjustment3</property>
+                        <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
                         <accessibility>
                           <relation type="labelled-by" target="distft"/>
@@ -467,7 +462,6 @@
                 <child>
                   <object class="svtlo-LineListBox" id="linestylelb">
                     <property name="visible">True</property>
-                    <property name="dropdown">True</property>
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
@@ -495,7 +489,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="adjustment">adjustment5</property>
+                    <property name="adjustment">adjustment4</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -507,7 +501,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="adjustment">adjustment4</property>
+                    <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -518,7 +512,6 @@
                 <child>
                   <object class="svxcorelo-SvxColorListBox" id="colorlb">
                     <property name="visible">True</property>
-                    <property name="dropdown">True</property>
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
