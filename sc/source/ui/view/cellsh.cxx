@@ -1204,6 +1204,19 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
+            case SID_OPENDLG_CURRENTCONDFRMT:
+                {
+                    if ( pDoc )
+                    {
+                        const SfxPoolItem* pItem = pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_CONDITIONAL );
+                        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+                        if ( !pCondFormatItem->GetCondFormatData().size() )
+                            rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();
     } // while ( nWitch )
