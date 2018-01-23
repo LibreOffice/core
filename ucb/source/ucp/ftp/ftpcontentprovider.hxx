@@ -102,8 +102,8 @@ namespace ftp
         };
 
     private:
-        FTPLoaderThread *m_ftpLoaderThread;
-        ucbhelper::InternetProxyDecider *m_pProxyDecider;
+        std::unique_ptr<FTPLoaderThread> m_ftpLoaderThread;
+        std::unique_ptr<ucbhelper::InternetProxyDecider> m_pProxyDecider;
         std::vector<ServerInfo> m_ServerInfo;
 
         void init();

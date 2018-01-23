@@ -47,8 +47,8 @@ FTPContentProvider::FTPContentProvider( const Reference< XComponentContext >& rx
 // virtual
 FTPContentProvider::~FTPContentProvider()
 {
-    delete m_ftpLoaderThread;
-    delete m_pProxyDecider;
+    m_ftpLoaderThread.reset();
+    m_pProxyDecider.reset();
 }
 
 // XInterface methods.
@@ -201,8 +201,8 @@ Reference<XContent> SAL_CALL FTPContentProvider::queryContent(
 
 void FTPContentProvider::init()
 {
-    m_ftpLoaderThread = new FTPLoaderThread();
-    m_pProxyDecider = new ucbhelper::InternetProxyDecider( m_xContext );
+    m_ftpLoaderThread.reset( new FTPLoaderThread() );
+    m_pProxyDecider.reset( new ucbhelper::InternetProxyDecider( m_xContext ) );
 }
 
 CURL* FTPContentProvider::handle()
