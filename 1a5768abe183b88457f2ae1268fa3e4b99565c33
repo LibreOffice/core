@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_35743e9b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-01-23T14:36:53Z",
+      "side": 1,
+      "message": "change to \u0027Data ~Validation...\u0027",
+      "range": {
+        "startLine": 898,
+        "startChar": 34,
+        "endLine": 898,
+        "endChar": 46
+      },
+      "revId": "1a5768abe183b88457f2ae1268fa3e4b99565c33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
