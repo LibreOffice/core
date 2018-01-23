@@ -67,6 +67,8 @@
 #include <lwpobjfactory.hxx>
 #include "lwppagelayout.hxx"
 
+#include <set>
+
 
 LwpStory::LwpStory(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
@@ -100,15 +102,17 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     //process para list
     XFContentContainer* pParaCont = pCont;
     rtl::Reference<LwpPara> xPara(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
+    std::set<LwpPara*> aConverted;
     while (xPara.is())
     {
         xPara->SetFoundry(m_pFoundry);
         xPara->XFConvert(pParaCont);
+        aConverted.insert(xPara.get());
 
         //Get the xfcontainer for the next para
         pParaCont = xPara->GetXFContainer();
         rtl::Reference<LwpPara> xNext(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
-        if (xPara == xNext)
+        if (aConverted.find(xNext.get()) != aConverted.end())
             throw std::runtime_error("loop in conversion");
         xPara = xNext;
     }
