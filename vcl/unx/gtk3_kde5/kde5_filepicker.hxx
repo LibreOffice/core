@@ -59,31 +59,31 @@ protected:
 
 public:
     explicit KDE5FilePicker(QObject* parent = nullptr);
-    ~KDE5FilePicker();
+    ~KDE5FilePicker() override;
 
     void enableFolderMode();
 
     // XExecutableDialog functions
-    void SAL_CALL setTitle(const QString& rTitle);
-    bool SAL_CALL execute();
+    void setTitle(const QString& rTitle);
+    bool execute();
 
     // XFilePicker functions
-    void SAL_CALL setMultiSelectionMode(bool bMode);
-    void SAL_CALL setDefaultName(const QString& rName);
-    void SAL_CALL setDisplayDirectory(const QString& rDirectory);
-    QString SAL_CALL getDisplayDirectory() const;
+    void setMultiSelectionMode(bool bMode);
+    void setDefaultName(const QString& rName);
+    void setDisplayDirectory(const QString& rDirectory);
+    QString getDisplayDirectory() const;
 
     // XFilterManager functions
-    void SAL_CALL appendFilter(const QString& rTitle, const QString& rFilter);
-    void SAL_CALL setCurrentFilter(const QString& rTitle);
-    QString SAL_CALL getCurrentFilter() const;
+    void appendFilter(const QString& rTitle, const QString& rFilter);
+    void setCurrentFilter(const QString& rTitle);
+    QString getCurrentFilter() const;
 
     // XFilePickerControlAccess functions
-    void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction, bool rValue);
-    bool SAL_CALL getValue(sal_Int16 nControlId, sal_Int16 nControlAction) const;
-    void SAL_CALL enableControl(sal_Int16 nControlId, sal_Bool bEnable);
-    void SAL_CALL setLabel(sal_Int16 nControlId, const QString& rLabel);
-    QString SAL_CALL getLabel(sal_Int16 nControlId) const;
+    void setValue(sal_Int16 nControlId, sal_Int16 nControlAction, bool rValue);
+    bool getValue(sal_Int16 nControlId, sal_Int16 nControlAction) const;
+    void enableControl(sal_Int16 nControlId, bool bEnable);
+    void setLabel(sal_Int16 nControlId, const QString& rLabel);
+    QString getLabel(sal_Int16 nControlId) const;
 
     // XFilePicker2 functions
     QList<QUrl> getSelectedFiles() const;

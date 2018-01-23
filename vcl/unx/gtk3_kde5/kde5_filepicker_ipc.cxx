@@ -127,8 +127,9 @@ void FilePickerIpc::readCommand()
         case Commands::GetSelectedFiles:
         {
             QStringList files;
-            for (auto url : m_filePicker->getSelectedFiles())
+            for (auto const& url_ : m_filePicker->getSelectedFiles())
             {
+                auto url = url_;
                 if (url.scheme() == QLatin1String("webdav")
                     || url.scheme() == QLatin1String("webdavs"))
                 {
@@ -228,13 +229,13 @@ void FilePickerIpc::readCommand()
         }
         case Commands::Quit:
         {
-            qApp->quit();
+            QCoreApplication::quit();
             return;
         }
     }
     qWarning() << "unhandled command " << static_cast<uint16_t>(command);
 }
 
-#include "kde5_filepicker_ipc.moc"
+#include <kde5_filepicker_ipc.moc>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

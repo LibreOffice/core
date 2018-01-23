@@ -72,9 +72,9 @@ KDE5FilePicker::~KDE5FilePicker()
     delete _dialog;
 }
 
-void SAL_CALL KDE5FilePicker::setTitle(const QString& title) { _dialog->setWindowTitle(title); }
+void KDE5FilePicker::setTitle(const QString& title) { _dialog->setWindowTitle(title); }
 
-bool SAL_CALL KDE5FilePicker::execute()
+bool KDE5FilePicker::execute()
 {
     if (!_filters.isEmpty())
         _dialog->setNameFilters(_filters);
@@ -86,29 +86,20 @@ bool SAL_CALL KDE5FilePicker::execute()
     return _dialog->exec() == QFileDialog::Accepted;
 }
 
-void SAL_CALL KDE5FilePicker::setMultiSelectionMode(bool multiSelect)
+void KDE5FilePicker::setMultiSelectionMode(bool multiSelect)
 {
     _dialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles : QFileDialog::ExistingFile);
 }
 
-void SAL_CALL KDE5FilePicker::setDefaultName(const QString& name)
-{
-    _dialog->selectUrl(QUrl(name));
-}
+void KDE5FilePicker::setDefaultName(const QString& name) { _dialog->selectUrl(QUrl(name)); }
 
-void SAL_CALL KDE5FilePicker::setDisplayDirectory(const QString& dir)
-{
-    _dialog->selectUrl(QUrl(dir));
-}
+void KDE5FilePicker::setDisplayDirectory(const QString& dir) { _dialog->selectUrl(QUrl(dir)); }
 
-QString SAL_CALL KDE5FilePicker::getDisplayDirectory() const
-{
-    return _dialog->directoryUrl().url();
-}
+QString KDE5FilePicker::getDisplayDirectory() const { return _dialog->directoryUrl().url(); }
 
-QList<QUrl> SAL_CALL KDE5FilePicker::getSelectedFiles() const { return _dialog->selectedUrls(); }
+QList<QUrl> KDE5FilePicker::getSelectedFiles() const { return _dialog->selectedUrls(); }
 
-void SAL_CALL KDE5FilePicker::appendFilter(const QString& title, const QString& filter)
+void KDE5FilePicker::appendFilter(const QString& title, const QString& filter)
 {
     QString t = title;
     QString f = filter;
@@ -126,12 +117,12 @@ void SAL_CALL KDE5FilePicker::appendFilter(const QString& title, const QString& 
     _titleToFilters[t] = _filters.constLast();
 }
 
-void SAL_CALL KDE5FilePicker::setCurrentFilter(const QString& title)
+void KDE5FilePicker::setCurrentFilter(const QString& title)
 {
     _currentFilter = _titleToFilters.value(title);
 }
 
-QString SAL_CALL KDE5FilePicker::getCurrentFilter() const
+QString KDE5FilePicker::getCurrentFilter() const
 {
     QString filter = _titleToFilters.key(_dialog->selectedNameFilter());
 
@@ -142,8 +133,7 @@ QString SAL_CALL KDE5FilePicker::getCurrentFilter() const
     return filter;
 }
 
-void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/,
-                                       bool value)
+void KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/, bool value)
 {
     if (_customWidgets.contains(controlId))
     {
@@ -155,7 +145,7 @@ void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 /*nControl
         qWarning() << "set value on unknown control" << controlId;
 }
 
-bool SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/) const
+bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/) const
 {
     bool ret = false;
     if (_customWidgets.contains(controlId))
@@ -170,7 +160,7 @@ bool SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 /*nControl
     return ret;
 }
 
-void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
+void KDE5FilePicker::enableControl(sal_Int16 controlId, bool enable)
 {
     if (_customWidgets.contains(controlId))
         _customWidgets.value(controlId)->setEnabled(enable);
@@ -178,7 +168,7 @@ void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable
         qWarning() << "enable on unknown control" << controlId;
 }
 
-void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const QString& label)
+void KDE5FilePicker::setLabel(sal_Int16 controlId, const QString& label)
 {
     if (_customWidgets.contains(controlId))
     {
@@ -190,7 +180,7 @@ void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const QString& label
         qWarning() << "set label on unknown control" << controlId;
 }
 
-QString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId) const
+QString KDE5FilePicker::getLabel(sal_Int16 controlId) const
 {
     QString label;
     if (_customWidgets.contains(controlId))
@@ -218,7 +208,7 @@ void KDE5FilePicker::addCheckBox(sal_Int16 controlId, const QString& label, bool
     _customWidgets.insert(controlId, widget);
 }
 
-void SAL_CALL KDE5FilePicker::initialize(bool saveDialog)
+void KDE5FilePicker::initialize(bool saveDialog)
 {
     //default is opening
     QFileDialog::AcceptMode operationMode
@@ -251,6 +241,6 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
     return QObject::eventFilter(o, e);
 }
 
-#include "kde5_filepicker.moc"
+#include <kde5_filepicker.moc>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

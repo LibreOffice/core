@@ -28,12 +28,12 @@ int main(int argc, char** argv)
 {
     QApplication::setApplicationName(QStringLiteral("lo_kde5filepicker"));
     QApplication app(argc, argv);
-    app.setQuitOnLastWindowClosed(false);
+    QApplication::setQuitOnLastWindowClosed(false);
 
     KDE5FilePicker filePicker;
     FilePickerIpc ipc(&filePicker);
 
-    return app.exec();
+    return QApplication::exec();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
