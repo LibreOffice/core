@@ -436,7 +436,10 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
             {
                 m_SortKeyArr.clear();
                 const PropertyValues* pValues = aSeq.getConstArray();
-                for(sal_Int32 i = 0; i < aSeq.getLength() && i < USHRT_MAX / 4; i++)
+                //TODO: Limiting to the first SAL_MAX_UINT16 elements of aSeq so that size of
+                // m_SortKeyArr remains in range of sal_uInt16, as GetSortKeyCount and GetSortKey
+                // still expect m_SortKeyArr to be indexed by sal_uInt16:
+                for(sal_Int32 i = 0; i < aSeq.getLength() && i < SAL_MAX_UINT16; i++)
                 {
                     const PropertyValue* pValue = pValues[i].getConstArray();
                     SwTOXSortKey aSortKey;
