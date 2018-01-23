@@ -1665,7 +1665,6 @@ void WW8TabBandDesc::ReadShd(const sal_uInt8* pS )
     if( !pSHDs )
     {
         pSHDs = new WW8_SHD[nWwCols];
-        memset( pSHDs, 0, nWwCols * sizeof( WW8_SHD ) );
     }
 
     short nCount = nLen >> 1;
