@@ -892,6 +892,7 @@ public:
     */
     void processDeferredCharacterProperties();
 
+    sal_Int32 getNumberingProperty(const sal_Int32 nListId, sal_Int32 nListLevel, const OUString& aProp);
     /// Get a property of the current numbering style's current level.
     sal_Int32 getCurrentNumberingProperty(const OUString& aProp);
 

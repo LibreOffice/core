@@ -5631,6 +5631,48 @@ void DomainMapper_Impl::processDeferredCharacterProperties()
     }
 }
 
+sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_Int32 nNumberingLevel, const OUString& aProp)
+{
+    sal_Int32 nRet = 0;
+    if ( nListId < 0 )
+        return nRet;
+
+    try
+    {
+        if (nNumberingLevel < 0) // It seems it's valid to omit numbering level, and in that case it means zero.
+            nNumberingLevel = 0;
+
+        const OUString aListName = ListDef::GetStyleName(nListId);
+        const uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
+        const uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameAccess> xNumberingStyles;
+        xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
+        const uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
+        const uno::Reference<container::XIndexAccess> xNumberingRules(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        if (xNumberingRules.is())
+        {
+            uno::Sequence<beans::PropertyValue> aProps;
+            xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
+            for (int i = 0; i < aProps.getLength(); ++i)
+            {
+                const beans::PropertyValue& rProp = aProps[i];
+
+                if (rProp.Name == aProp)
+                {
+                    rProp.Value >>= nRet;
+                    break;
+                }
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        // This can happen when the doc contains some hand-crafted invalid list level.
+    }
+
+    return nRet;
+}
+
 sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
 {
     sal_Int32 nRet = 0;

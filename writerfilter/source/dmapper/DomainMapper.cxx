@@ -1175,40 +1175,6 @@ void DomainMapper::lcl_sprm(Sprm & rSprm)
         sprmWithProps(rSprm, m_pImpl->GetTopContext());
 }
 
-sal_Int32 lcl_getCurrentNumberingProperty(
-        uno::Reference<container::XIndexAccess> const& xNumberingRules,
-        sal_Int32 nNumberingLevel, const OUString& aProp)
-{
-    sal_Int32 nRet = 0;
-
-    try
-    {
-        if (nNumberingLevel < 0) // It seems it's valid to omit numbering level, and in that case it means zero.
-            nNumberingLevel = 0;
-        if (xNumberingRules.is())
-        {
-            uno::Sequence<beans::PropertyValue> aProps;
-            xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
-            for (int i = 0; i < aProps.getLength(); ++i)
-            {
-                const beans::PropertyValue& rProp = aProps[i];
-
-                if (rProp.Name == aProp)
-                {
-                    rProp.Value >>= nRet;
-                    break;
-                }
-            }
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        // This can happen when the doc contains some hand-crafted invalid list level.
-    }
-
-    return nRet;
-}
-
 // In rtl-paragraphs the meaning of left/right are to be exchanged
 static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl& rImpl)
 {
@@ -2215,6 +2181,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(
                             ListDef::GetStyleName( nListId ) ), false);
 
+                // Indent properties from the paragraph style have priority
+                // over the ones from the numbering styles in Word
+                // but in Writer numbering styles have priority,
+                // so insert directly into the paragraph properties to compensate.
+                boost::optional<PropertyMap::Property> oProperty;
+                if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT)) )
+                    rContext->Insert(PROP_PARA_FIRST_LINE_INDENT, oProperty->second, /*bOverwrite=*/false);
+                if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN)) )
+                    rContext->Insert(PROP_PARA_LEFT_MARGIN, oProperty->second, /*bOverwrite=*/false);
+
                 // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
                 sal_Int32 nParaRightMargin = 0;
                 if (!pEntry->sBaseStyleIdentifier.isEmpty())
@@ -2228,22 +2204,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 if (nParaRightMargin != 0)
                 {
                     // If we're setting the right margin, we should set the first / left margin as well from the numbering style.
-                    sal_Int32 nFirstLineIndent = lcl_getCurrentNumberingProperty(m_pImpl->GetCurrentNumberingRules(), pStyleSheetProperties->GetListLevel(), "FirstLineIndent");
-                    sal_Int32 nParaLeftMargin = lcl_getCurrentNumberingProperty(m_pImpl->GetCurrentNumberingRules(), pStyleSheetProperties->GetListLevel(), "IndentAt");
+                    const sal_Int32 nFirstLineIndent = m_pImpl->getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "FirstLineIndent");
+                    const sal_Int32 nParaLeftMargin  = m_pImpl->getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "IndentAt");
                     if (nFirstLineIndent != 0)
-                        rContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent));
+                        rContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
                     if (nParaLeftMargin != 0)
-                        rContext->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin));
+                        rContext->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin), /*bOverwrite=*/false);
 
-                    rContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin));
+                    rContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin), /*bOverwrite=*/false);
                 }
-
-                // Indent properties from the paragraph style have priority
-                // over the ones from the numbering styles in Word, not in
-                // Writer.
-                boost::optional<PropertyMap::Property> oProperty;
-                if (pStyleSheetProperties && (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT)))
-                    rContext->Insert(PROP_PARA_FIRST_LINE_INDENT, oProperty->second);
             }
 
             if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
