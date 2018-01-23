@@ -2322,7 +2322,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nTmp = 0;
             bRet = (rVal >>= nTmp);
             nTmp = convertMm100ToTwip( nTmp );
-            if( bRet && (nTmp >= 0) && ( nTmp <= USHRT_MAX) )
+            if( bRet && (nTmp >= 0) && ( nTmp <= SAL_MAX_UINT16) )
             {
                 // rhbz#1043551 round up to 5pt -- 0 causes divide-by-zero
                 // in layout; 1pt ties the painting code up in knots for
