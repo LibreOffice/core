@@ -128,7 +128,7 @@ public:
     long getWidth() const { return m_nPaperWidth; }
     long getHeight() const { return m_nPaperHeight; }
     bool sloppyEqual(const PaperInfo &rOther) const;
-    bool doSloppyFit();
+    void doSloppyFit();
 
     static PaperInfo getSystemDefaultPaper();
     static PaperInfo getDefaultPaperForLocale(const css::lang::Locale & rLocale);

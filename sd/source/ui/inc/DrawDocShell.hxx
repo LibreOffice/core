@@ -129,7 +129,7 @@ public:
     void                    Disconnect(sd::ViewShell const * pViewSh);
     void                    UpdateTablePointers();
 
-    bool                    GotoBookmark(const OUString& rBookmark);
+    void                    GotoBookmark(const OUString& rBookmark);
 
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage);
 

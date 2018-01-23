@@ -100,7 +100,7 @@ public:
     void        InsertDDELink( SvBaseLink* );
 
     // Connect the links to a pseudo-object and add to the list
-    bool InsertFileLink( sfx2::SvBaseLink&,
+    void InsertFileLink( sfx2::SvBaseLink&,
                         sal_uInt16 nFileType,
                         const OUString& rFileNm,
                         const OUString* pFilterNm = nullptr,

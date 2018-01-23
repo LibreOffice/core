@@ -86,7 +86,7 @@ namespace drawinglayer
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;
 
-            bool getTextOutlines(
+            void getTextOutlines(
                 basegfx::B2DPolyPolygonVector&,
                 const rtl::OUString& rText,
                 sal_uInt32 nIndex,

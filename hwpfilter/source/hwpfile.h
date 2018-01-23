@@ -162,7 +162,7 @@ class DLLEXPORT HWPFile
  * Reads main paragraph list
  */
         bool ReadParaList(std::vector<std::unique_ptr<HWPPara>> &aplist, unsigned char flag = 0);
-        bool ReadParaList(std::vector<HWPPara*> &aplist);
+        void ReadParaList(std::vector<HWPPara*> &aplist);
 /**
  * Sets if the stream is compressed
  */

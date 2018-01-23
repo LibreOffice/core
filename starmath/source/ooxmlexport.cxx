@@ -24,16 +24,15 @@ SmOoxmlExport::SmOoxmlExport(const SmNode *const pIn, OoxmlVersion const v,
 {
 }
 
-bool SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& serializer )
+void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& serializer )
 {
     if( m_pTree == nullptr )
-        return false;
+        return;
     m_pSerializer = serializer;
     m_pSerializer->startElementNS( XML_m, XML_oMath,
         FSNS( XML_xmlns, XML_m ), "http://schemas.openxmlformats.org/officeDocument/2006/math", FSEND );
     HandleNode( m_pTree, 0 );
     m_pSerializer->endElementNS( XML_m, XML_oMath );
-    return true;
 }
 
 // NOTE: This is still work in progress and unfinished, but it already covers a good

@@ -453,7 +453,7 @@ void GalleryTheme::ReleaseObject( SgaObject* pObject )
     delete pObject;
 }
 
-bool GalleryTheme::RemoveObject(sal_uInt32 nPos)
+void GalleryTheme::RemoveObject(sal_uInt32 nPos)
 {
     GalleryObject* pEntry = nullptr;
     if ( nPos < aObjectList.size() )
@@ -475,13 +475,10 @@ bool GalleryTheme::RemoveObject(sal_uInt32 nPos)
         Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), pEntry ) );
         Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), pEntry ) );
         delete pEntry;
-        pEntry = nullptr;
 
         ImplSetModified( true );
         ImplBroadcast( nPos );
     }
-
-    return( pEntry != nullptr );
 }
 
 bool GalleryTheme::ChangeObjectPos(sal_uInt32 nOldPos, sal_uInt32 nNewPos)

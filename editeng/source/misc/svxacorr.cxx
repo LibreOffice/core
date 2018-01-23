@@ -362,11 +362,10 @@ void SvxAutoCorrect::SetAutoCorrFlag( long nFlag, bool bOn )
 
 
     // Two capital letters at the beginning of word?
-bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {
-    bool bRet = false;
     CharClass& rCC = GetCharClass( eLang );
 
     // Delete all non alphanumeric. Test the characters at the beginning/end of
@@ -431,7 +430,7 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
                     Sequence< css::beans::PropertyValue > aEmptySeq;
                     if (xSpeller->isValid(sWord, static_cast<sal_uInt16>(eLang), aEmptySeq))
                     {
-                        return false;
+                        return;
                     }
                 }
                 sal_Unicode cSave = rTxt[ nSttPos ];
@@ -441,12 +440,10 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
                 {
                     if( SaveWordWrdSttLst & nFlags )
                         rDoc.SaveCpltSttWord( CapitalStartWord, nSttPos, sWord, cSave );
-                    bRet = true;
                 }
             }
         }
     }
-    return bRet;
 }
 
 
@@ -822,14 +819,14 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
 }
 
 
-bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
+void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
                                     const OUString& rTxt, bool bNormalPos,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {
 
     if( rTxt.isEmpty() || nEndPos <= nSttPos )
-        return false;
+        return;
 
     CharClass& rCC = GetCharClass( eLang );
     OUString aText( rTxt );
@@ -862,14 +859,14 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     } while( !bAtStart );
 
     if (!pWordStt)
-        return false;    // no character to be replaced
+        return;    // no character to be replaced
 
 
     if (rCC.isDigit(aText, pStr - pStart))
-        return false; // already ok
+        return; // already ok
 
     if (IsUpperLetter(rCC.getCharacterType(aText, pWordStt - pStart)))
-        return false; // already ok
+        return; // already ok
 
     //See if the text is the start of a protocol string, e.g. have text of
     //"http" see if it is the start of "http:" and if so leave it alone
@@ -878,15 +875,15 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     if (nIndex + nProtocolLen <= rTxt.getLength())
     {
         if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INetProtocol::NotValid)
-            return false; // already ok
+            return; // already ok
     }
 
     if (0x1 == *pWordStt || 0x2 == *pWordStt)
-        return false; // already ok
+        return; // already ok
 
     if( *pDelim && 2 >= pDelim - pWordStt &&
         lcl_IsInAsciiArr( ".-)>", *pDelim ) )
-        return false;
+        return;
 
     if( !bAtStart ) // Still no beginning of a paragraph?
     {
@@ -899,7 +896,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         // and full width question marks are treated as word delimiters
         else if ( 0x3002 != *pStr && 0xFF0E != *pStr && 0xFF01 != *pStr &&
                   0xFF1F != *pStr )
-            return false; // no valid separator -> no replacement
+            return; // no valid separator -> no replacement
     }
 
     if( bAtStart )  // at the beginning of a paragraph?
@@ -912,8 +909,9 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
             // valid separator -> replace
             OUString sChar( *pWordStt );
             sChar = rCC.titlecase(sChar); //see fdo#56740
-            return  !comphelper::string::equals(sChar, *pWordStt) &&
-                    rDoc.ReplaceRange( pWordStt - pStart, 1, sChar );
+            if (!comphelper::string::equals(sChar, *pWordStt))
+               rDoc.ReplaceRange( pWordStt - pStart, 1, sChar );
+            return;
         }
 
         aText = *pPrevPara;
@@ -929,7 +927,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         } while( !bAtStart );
 
         if( bAtStart )
-            return false;  // no valid separator -> no replacement
+            return;  // no valid separator -> no replacement
     }
 
     // Found [ \t]+[A-Z0-9]+ until here. Test now on the paragraph separator.
@@ -954,10 +952,10 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
                         //previous word is a .  So probably last word is an
                         //anagram that ends in . and not truly the end of a
                         //previous sentence, so don't autocapitalize this word
-                        return false;
+                        return;
                     }
                     if( nFlag & Flags::FullStop )
-                        return false;  // no valid separator -> no replacement
+                        return;  // no valid separator -> no replacement
                     nFlag |= Flags::FullStop;
                     pExceptStt = pStr;
                 }
@@ -966,7 +964,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
             case 0xFF01 :
                 {
                     if( nFlag & Flags::ExclamationMark )
-                        return false;   // no valid separator -> no replacement
+                        return;   // no valid separator -> no replacement
                     nFlag |= Flags::ExclamationMark;
                 }
                 break;
@@ -974,13 +972,13 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
             case 0xFF1F :
                 {
                     if( nFlag & Flags::QuestionMark)
-                        return false;   // no valid separator -> no replacement
+                        return;   // no valid separator -> no replacement
                     nFlag |= Flags::QuestionMark;
                 }
                 break;
             default:
                 if( nFlag == Flags::NONE )
-                    return false;       // no valid separator -> no replacement
+                    return;       // no valid separator -> no replacement
                 else
                     bContinue = false;
                 break;
@@ -988,7 +986,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
 
             if( bContinue && pStr-- == pStart )
             {
-                return false;       // no valid separator -> no replacement
+                return;       // no valid separator -> no replacement
             }
         } while( bContinue );
         if( Flags::FullStop != nFlag )
@@ -996,7 +994,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     }
 
     if( 2 > ( pStr - pStart ) )
-        return false;
+        return;
 
     if (!rCC.isLetterNumeric(aText, pStr-- - pStart))
     {
@@ -1029,7 +1027,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         }
 
         if( !bValid )
-            return false;       // no valid separator -> no replacement
+            return;       // no valid separator -> no replacement
     }
 
     bool bNumericOnly = '0' <= *(pStr+1) && *(pStr+1) <= '9';
@@ -1047,7 +1045,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     }
 
     if( bNumericOnly )      // consists of only numbers, then not
-        return false;
+        return;
 
     if (NonFieldWordDelim(*pStr))
         ++pStr;
@@ -1059,7 +1057,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     {
         sWord = OUString(pStr, pExceptStt - pStr + 1);
         if( FindInCplSttExceptList(eLang, sWord) )
-            return false;
+            return;
 
         // Delete all non alphanumeric. Test the characters at the
         // beginning/end of the word ( recognizes: "(min.", "/min.", and so on.)
@@ -1078,10 +1076,10 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
 
         if( !sTmp.isEmpty() && sTmp.getLength() != sWord.getLength() &&
             FindInCplSttExceptList(eLang, sTmp))
-            return false;
+            return;
 
         if(FindInCplSttExceptList(eLang, sWord, true))
-            return false;
+            return;
     }
 
     // Ok, then replace
@@ -1094,8 +1092,6 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     // Perhaps someone wants to have the word
     if( bRet && SaveWordCplSttLst & nFlags )
         rDoc.SaveCpltSttWord( CapitalStartSentence, nSttPos, sWord, cSave );
-
-    return bRet;
 }
 
 bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
@@ -2585,7 +2581,7 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
     return bRet;
 }
 
-bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
+void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
                                                SfxObjectShell& rShell )
 {
     // First get the current list!
@@ -2617,8 +2613,6 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
     catch ( const uno::Exception& )
     {
     }
-
-    return bRet;
 }
 
 // Keep the list sorted ...

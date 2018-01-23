@@ -573,11 +573,9 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
     return false;
 }
 
-bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, selection_cmp_fn> &rItems,
+void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, selection_cmp_fn> &rItems,
                                       const sal_uInt16 nTargetItem)
 {
-    bool ret = true;
-
     TemplateContainerItem *pTarget = nullptr;
     TemplateContainerItem *pSrc = nullptr;
 
@@ -623,12 +621,11 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                         sMsg = sMsg.replaceFirst("$1",getRegionName(nTargetRegion));
                         ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst( "$2",pViewItem->maTitle))->Execute();
 
-                        return false; //return if any single move operation fails
+                        return; //return if any single move operation fails
                     }
 
                     if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
                     {
-                        ret = false;
                         continue;
                     }
                 }
@@ -691,10 +688,6 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             Invalidate();
         }
     }
-    else
-        ret = false;
-
-    return ret;
 }
 
 bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &rPath)

@@ -218,7 +218,7 @@ public:
     //  - pure Text
     bool PutText( const OUString& rShort, const OUString& rLong );
     //  - Text with attribution (only the SWG - SWG format!)
-    bool PutText( const OUString& rShort, SfxObjectShell& );
+    void PutText( const OUString& rShort, SfxObjectShell& );
     //  - Make combined changes in one pass
     bool MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries, std::vector<SvxAutocorrWord>& aDeleteEntries );
 };
@@ -376,7 +376,7 @@ public:
                                     bool bAbbreviation = false);
 
     // Methods for the auto-correction
-    bool FnCapitalStartWord( SvxAutoCorrDoc&, const OUString&,
+    void FnCapitalStartWord( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnChgOrdinalNumber( SvxAutoCorrDoc&, const OUString&,
@@ -393,7 +393,7 @@ public:
                                 LanguageType eLang );
     bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nEndPos );
-    bool FnCapitalStartSentence( SvxAutoCorrDoc&, const OUString&, bool bNormalPos,
+    void FnCapitalStartSentence( SvxAutoCorrDoc&, const OUString&, bool bNormalPos,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang);
     bool FnCorrectCapsLock( SvxAutoCorrDoc&, const OUString&,

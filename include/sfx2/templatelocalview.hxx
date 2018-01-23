@@ -125,7 +125,7 @@ public:
     bool moveTemplate (const ThumbnailViewItem* pItem, const sal_uInt16 nSrcItem,
                        const sal_uInt16 nTargetItem);
 
-    bool moveTemplates (const std::set<const ThumbnailViewItem*,selection_cmp_fn> &rItems, const sal_uInt16 nTargetItem);
+    void moveTemplates (const std::set<const ThumbnailViewItem*,selection_cmp_fn> &rItems, const sal_uInt16 nTargetItem);
 
     bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
 
