@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "kde5access.hxx"
 
@@ -290,7 +290,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
     }
     else if (id == "ooInetProxyType")
     {
-        int nProxyType;
+        sal_Int32 nProxyType;
         switch (KProtocolManager::proxyType())
         {
             case KProtocolManager::ManualProxy: // Proxies are manually configured
@@ -303,7 +303,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             default: // No proxy is used
                 nProxyType = 0;
         }
-        return css::beans::Optional<css::uno::Any>(true, uno::makeAny((sal_Int32)nProxyType));
+        return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nProxyType));
     }
     else
     {

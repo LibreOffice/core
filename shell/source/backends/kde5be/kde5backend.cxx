@@ -56,12 +56,12 @@
 
 namespace
 {
-OUString SAL_CALL getServiceImplementationName()
+OUString getServiceImplementationName()
 {
     return OUString("com.sun.star.comp.configuration.backend.KDE5Backend");
 }
 
-css::uno::Sequence<OUString> SAL_CALL getServiceSupportedServiceNames()
+css::uno::Sequence<OUString> getServiceSupportedServiceNames()
 {
     OUString name("com.sun.star.configuration.backend.KDE5Backend");
     return css::uno::Sequence<OUString>(&name, 1);
@@ -74,7 +74,7 @@ public:
     Service();
 
 private:
-    virtual ~Service() {}
+    virtual ~Service() override {}
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -204,7 +204,7 @@ Service::Service()
 
 void Service::setPropertyValue(OUString const&, css::uno::Any const&)
 {
-    throw css::lang::IllegalArgumentException(OUString("setPropertyValue not supported"),
+    throw css::lang::IllegalArgumentException("setPropertyValue not supported",
                                               static_cast<cppu::OWeakObject*>(this), -1);
 }
 
@@ -231,7 +231,7 @@ css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
 }
 
 css::uno::Reference<css::uno::XInterface>
-    SAL_CALL createInstance(css::uno::Reference<css::uno::XComponentContext> const&)
+createInstance(css::uno::Reference<css::uno::XComponentContext> const&)
 {
     return static_cast<cppu::OWeakObject*>(new Service);
 }
@@ -242,9 +242,8 @@ static cppu::ImplementationEntry const services[]
         { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL kde5be1_component_getFactory(char const* pImplName,
-                                                                            void* pServiceManager,
-                                                                            void* pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void*
+kde5be1_component_getFactory(char const* pImplName, void* pServiceManager, void* pRegistryKey)
 {
     return cppu::component_getFactoryHelper(pImplName, pServiceManager, pRegistryKey, services);
 }
