@@ -96,6 +96,13 @@ gb_CXXFLAGS_COMMON += \
     -Wunused-const-variable=1
 endif
 
+# GCC 8 -Wcast-function-type (included in -Wextra) unhelpfully even warns on reinterpret_cast
+# between incompatible function types:
+ifeq ($(shell expr '$(GCC_VERSION)' '>=' 800),1)
+gb_CXXFLAGS_COMMON += \
+    -Wno-cast-function-type
+endif
+
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
 else
