@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include <pagepar.hxx>
 
 // struct ScPageTableParam:
@@ -59,9 +57,9 @@ void ScPageAreaParam::Reset()
 {
     bPrintArea = bRepeatRow = bRepeatCol = false;
 
-    memset( &aPrintArea, 0, sizeof(ScRange) );
-    memset( &aRepeatRow, 0, sizeof(ScRange) );
-    memset( &aRepeatCol, 0, sizeof(ScRange) );
+    aPrintArea = ScRange();
+    aRepeatRow = ScRange();
+    aRepeatCol = ScRange();
 }
 
 
