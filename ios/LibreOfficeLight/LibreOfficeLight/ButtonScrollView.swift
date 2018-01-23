@@ -50,7 +50,7 @@ open class ButtonScrollView: UIScrollView
     }
 }
 
-/// Horizontally layed out buttons, living within the owned scroll view
+/// Horizontally laid out buttons, living within the owned scroll view
 open class ButtonList: UIView
 {
     let labels: [String]
