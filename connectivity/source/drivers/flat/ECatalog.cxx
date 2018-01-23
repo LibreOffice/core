@@ -53,7 +53,7 @@ void OFlatCatalog::refreshTables()
     if(m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables = new OFlatTables(m_xMetaData,*this,m_aMutex,aVector);
+        m_pTables.reset( new OFlatTables(m_xMetaData,*this,m_aMutex,aVector) );
 }
 
 
