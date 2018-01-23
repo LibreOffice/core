@@ -6406,7 +6406,6 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
                             static_cast<sal_uInt16>(nOLEId & 0xFFFF)) )
             {
                 WW8PLCFxSaveAll aSave;
-                memset( &aSave, 0, sizeof( aSave ) );
                 rReader.m_xPlcxMan->SaveAllPLCFx( aSave );
 
                 nStartCp += rReader.m_nDrawCpO;
