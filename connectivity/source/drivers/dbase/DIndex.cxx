@@ -134,7 +134,7 @@ ONDXPagePtr const & ODbaseIndex::getRoot()
     return m_aRoot;
 }
 
-bool ODbaseIndex::openIndexFile()
+void ODbaseIndex::openIndexFile()
 {
     if(!m_pFileStream)
     {
@@ -160,8 +160,6 @@ bool ODbaseIndex::openIndexFile()
             ::dbtools::throwGenericSQLException( sError, *this );
         }
     }
-
-    return m_pFileStream != nullptr;
 }
 
 OIndexIterator* ODbaseIndex::createIterator()

@@ -292,10 +292,8 @@ namespace cairocanvas
    *
    * Note: some text effects are not rendered due to lacking generic canvas or cairo canvas
    *       implementation. See issues 92657, 92658, 92659, 92660, 97529
-   *
-   * @return true, if successful
    **/
-    bool TextLayout::draw( CairoSharedPtr const &        pSCairo,
+    void TextLayout::draw( CairoSharedPtr const &        pSCairo,
                            OutputDevice&                 rOutDev,
                            const Point&                  rOutpos,
                            const rendering::ViewState&   viewState,
@@ -360,19 +358,19 @@ namespace cairocanvas
                 rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets.get(),
                                        ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                        ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
-                return true;
+                return;
             }
             else                                               // VCL FALLBACK - without advances
             {
                 rOutDev.DrawText( rOutpos, maText.Text,
                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
-                return true;
+                return;
             }
         }
 
         if (aSysLayoutData.rGlyphData.empty())
-            return false; //??? false?
+            return; //??? false?
 
         /**
          * Setup platform independent glyph vector into cairo-based glyphs vector.
@@ -503,7 +501,6 @@ namespace cairocanvas
             cairo_font_face_destroy(font_face);
             cairo_font_options_destroy(options);
         }
-        return true;
     }
 
     namespace

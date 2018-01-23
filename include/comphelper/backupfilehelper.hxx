@@ -121,13 +121,10 @@ namespace comphelper
          *  Also may cleanup older backups when NumBackups given in the
          *  constructor has changed.
          *
-         *  @return bool
-         *          returns true if a new backup was actually created
-         *
          * tryPushExtensionInfo is the specialized version for ExtensionInfo
          */
-        bool tryPush();
-        bool tryPushExtensionInfo();
+        void tryPush();
+        void tryPushExtensionInfo();
 
         /** finds out if a restore is possible
          *
@@ -144,13 +141,10 @@ namespace comphelper
          *  Also may cleanup older backups when NumBackups given in the
          *  constructor has changed.
          *
-         *  @return bool
-         *          returns true if a restore was actually created
-         *
          * tryPopExtensionInfo is the specialized version for ExtensionInfo
          */
-        bool tryPop();
-        bool tryPopExtensionInfo();
+        void tryPop();
+        void tryPopExtensionInfo();
 
         /** tries to iterate the extensions and to disable all of them
         */

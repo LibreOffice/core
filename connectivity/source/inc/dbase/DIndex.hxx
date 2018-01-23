@@ -92,7 +92,7 @@ namespace connectivity
             ODbaseIndex(ODbaseTable* _pTable);
             ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const OUString& Name);
 
-            bool openIndexFile();
+            void openIndexFile();
             virtual void refreshColumns() override;
 
             // css::lang::XUnoTunnel

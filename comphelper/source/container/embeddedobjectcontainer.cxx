@@ -833,7 +833,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     return xResult;
 }
 
-bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
+void EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
 {
     // get the object name before(!) it is assigned to a new storage
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
@@ -891,18 +891,14 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc,
 
         // rSrc.RemoveGraphicStream( aName );
     }
-
-    return bRet;
 }
 
 // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
-bool EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool bKeepToTempStorage )
+void EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool bKeepToTempStorage )
 {
     uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( rName );
     if ( xObj.is() )
-        return RemoveEmbeddedObject( xObj, bKeepToTempStorage );
-    else
-        return false;
+        RemoveEmbeddedObject( xObj, bKeepToTempStorage );
 }
 
 bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, EmbeddedObjectContainer& rCnt )
@@ -1066,7 +1062,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
     return true;
 }
 
-bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj )
+void EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
     // disconnect the object from the container and close it if possible
 
@@ -1097,8 +1093,6 @@ bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
             // TODO/LATER: what if the object can not be closed?
         }
     }
-
-    return bFound;
 }
 
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const OUString& aName, OUString* pMediaType )
@@ -1200,7 +1194,7 @@ bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const css::uno::Refer
 }
 
 
-bool EmbeddedObjectContainer::RemoveGraphicStream( const OUString& rObjectName )
+void EmbeddedObjectContainer::RemoveGraphicStream( const OUString& rObjectName )
 {
     try
     {
@@ -1209,10 +1203,7 @@ bool EmbeddedObjectContainer::RemoveGraphicStream( const OUString& rObjectName )
     }
     catch (const uno::Exception&)
     {
-        return false;
     }
-
-    return true;
 }
 namespace {
     void InsertStreamIntoPicturesStorage_Impl( const uno::Reference< embed::XStorage >& xDocStor,

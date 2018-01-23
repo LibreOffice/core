@@ -54,10 +54,8 @@ namespace cppcanvas
             multiplied. For a normal, opaque bitmap, this will make
             the bitmap appear transparent with the given alpha value
             (value must be in the range [0,1]).
-
-            @return whether the rendering finished successfully.
          */
-        virtual bool                        drawAlphaModulated( double nAlphaModulation ) const = 0;
+        virtual void                        drawAlphaModulated( double nAlphaModulation ) const = 0;
 
         virtual BitmapCanvasSharedPtr       getBitmapCanvas() const = 0;
 

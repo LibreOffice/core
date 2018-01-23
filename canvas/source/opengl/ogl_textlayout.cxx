@@ -176,13 +176,11 @@ namespace oglcanvas
         return maText;
     }
 
-    bool TextLayout::draw( const rendering::ViewState&                          /*rViewState*/,
+    void TextLayout::draw( const rendering::ViewState&                          /*rViewState*/,
                            const rendering::RenderState&                        /*rRenderState*/,
                            const uno::Reference< rendering::XGraphicDevice >&   /*xGraphicDevice*/ ) const
     {
         // TODO
-
-        return true;
     }
 }
 

@@ -154,9 +154,9 @@ namespace oglcanvas
         maDeviceHelper.hide(xSprite);
     }
 
-    bool SpriteCanvas::renderRecordedActions() const
+    void SpriteCanvas::renderRecordedActions() const
     {
-        return maCanvasHelper.renderRecordedActions();
+        maCanvasHelper.renderRecordedActions();
     }
 
     static uno::Reference<uno::XInterface> initCanvas( SpriteCanvas* pCanvas )

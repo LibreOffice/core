@@ -130,15 +130,15 @@ public:
         const OUString& rSrcShellID, const OUString& rDestShellID );
 
     // move an embedded object from one container to another one
-    bool MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString& );
+    void MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString& );
 
     // remove an embedded object from the container and from the storage; if object can't be closed
     // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
-    bool            RemoveEmbeddedObject( const OUString& rName, bool bKeepToTempStorage = true);
+    void            RemoveEmbeddedObject( const OUString& rName, bool bKeepToTempStorage = true);
     bool            RemoveEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >&, bool bKeepToTempStorage = true);
 
     // close and remove an embedded object from the container without removing it from the storage
-    bool            CloseEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >& );
+    void            CloseEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >& );
 
     // move an embedded object to another container (keep the persistent name)
     bool            MoveEmbeddedObject( const OUString& rName, EmbeddedObjectContainer& );
@@ -156,7 +156,7 @@ public:
     bool            InsertGraphicStreamDirectly( const css::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType );
 
     // remove a graphical representation for an object
-    bool            RemoveGraphicStream( const OUString& rObjectName );
+    void            RemoveGraphicStream( const OUString& rObjectName );
 
     // copy the graphical representation from different container
     bool            TryToCopyGraphReplacement( EmbeddedObjectContainer& rSrc,

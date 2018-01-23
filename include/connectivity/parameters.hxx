@@ -387,7 +387,7 @@ namespace dbtools
 
         /** retrieves the active connection of the database component
         */
-        bool    getConnection(
+        void    getConnection(
                     css::uno::Reference< css::sdbc::XConnection >& /* [out] */ _rxConnection
                 );
 
