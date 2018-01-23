@@ -2604,11 +2604,10 @@ TaskManager::getv(
 // EventListener
 
 
-std::vector< ContentEventNotifier* >*
+std::vector< std::unique_ptr< ContentEventNotifier > >
 TaskManager::getContentEventListeners( const OUString& aName )
 {
-    std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
-    std::vector< ContentEventNotifier* >& listeners = *p;
+    std::vector< std::unique_ptr<ContentEventNotifier> > listeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
@@ -2617,21 +2616,20 @@ TaskManager::getContentEventListeners( const OUString& aName )
             std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
             for (auto const& pointer : listOfNotifiers)
             {
-                ContentEventNotifier* notifier = pointer->cCEL();
+                std::unique_ptr<ContentEventNotifier> notifier = pointer->cCEL();
                 if( notifier )
-                    listeners.push_back( notifier );
+                    listeners.push_back( std::move(notifier) );
             }
         }
     }
-    return p;
+    return listeners;
 }
 
 
-std::vector< ContentEventNotifier* >*
+std::vector< std::unique_ptr<ContentEventNotifier> >
 TaskManager::getContentDeletedEventListeners( const OUString& aName )
 {
-    std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
-    std::vector< ContentEventNotifier* >& listeners = *p;
+    std::vector< std::unique_ptr< ContentEventNotifier > > listeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
@@ -2640,64 +2638,51 @@ TaskManager::getContentDeletedEventListeners( const OUString& aName )
             std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
             for (auto const& pointer : listOfNotifiers)
             {
-                ContentEventNotifier* notifier = pointer->cDEL();
+                std::unique_ptr<ContentEventNotifier> notifier = pointer->cDEL();
                 if( notifier )
-                    listeners.push_back( notifier );
+                    listeners.push_back( std::move(notifier) );
             }
         }
     }
-    return p;
+    return listeners;
 }
 
 
 void
-TaskManager::notifyInsert( std::vector< ContentEventNotifier* >* listeners,const OUString& aChildName )
+TaskManager::notifyInsert( std::vector< std::unique_ptr<ContentEventNotifier> > listeners, const OUString& aChildName )
 {
-    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
-    while( it != listeners->end() )
+    for (const auto & l : listeners )
     {
-        (*it)->notifyChildInserted( aChildName );
-        delete *it;
-        ++it;
+        l->notifyChildInserted( aChildName );
     }
-    delete listeners;
 }
 
 
 void
-TaskManager::notifyContentDeleted( std::vector< ContentEventNotifier* >* listeners )
+TaskManager::notifyContentDeleted( std::vector< std::unique_ptr< ContentEventNotifier> > listeners )
 {
-    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
-    while( it != listeners->end() )
+    for( auto const & l : listeners )
     {
-        (*it)->notifyDeleted();
-        delete *it;
-        ++it;
+        l->notifyDeleted();
     }
-    delete listeners;
 }
 
 
 void
-TaskManager::notifyContentRemoved( std::vector< ContentEventNotifier* >* listeners,
+TaskManager::notifyContentRemoved( std::vector< std::unique_ptr<ContentEventNotifier> > listeners,
                              const OUString& aChildName )
 {
-    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
-    while( it != listeners->end() )
+    for( auto const & l : listeners )
     {
-        (*it)->notifyRemoved( aChildName );
-        delete *it;
-        ++it;
+        l->notifyRemoved( aChildName );
     }
-    delete listeners;
 }
 
 
-std::vector< PropertySetInfoChangeNotifier* >*
+std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > >
 TaskManager::getPropertySetListeners( const OUString& aName )
 {
-    std::vector< PropertySetInfoChangeNotifier* >* p = new std::vector< PropertySetInfoChangeNotifier* >;
-    std::vector< PropertySetInfoChangeNotifier* >& listeners = *p;
+    std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > > listeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
@@ -2706,55 +2691,44 @@ TaskManager::getPropertySetListeners( const OUString& aName )
             std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
             for (auto const& pointer : listOfNotifiers)
             {
-                PropertySetInfoChangeNotifier* notifier = pointer->cPSL();
+                std::unique_ptr<PropertySetInfoChangeNotifier> notifier = pointer->cPSL();
                 if( notifier )
-                    listeners.push_back( notifier );
+                    listeners.push_back( std::move(notifier) );
             }
         }
     }
-    return p;
+    return listeners;
 }
 
 
 void
-TaskManager::notifyPropertyAdded( std::vector< PropertySetInfoChangeNotifier* >* listeners,
+TaskManager::notifyPropertyAdded( std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > > listeners,
                             const OUString& aPropertyName )
 {
-    std::vector< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
-    while( it != listeners->end() )
+    for( auto const & l : listeners )
     {
-        (*it)->notifyPropertyAdded( aPropertyName );
-        delete *it;
-        ++it;
+        l->notifyPropertyAdded( aPropertyName );
     }
-    delete listeners;
 }
 
 
 void
-TaskManager::notifyPropertyRemoved( std::vector< PropertySetInfoChangeNotifier* >* listeners,
+TaskManager::notifyPropertyRemoved( std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > > listeners,
                               const OUString& aPropertyName )
 {
-    std::vector< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
-    while( it != listeners->end() )
+    for( auto const & l : listeners )
     {
-        (*it)->notifyPropertyRemoved( aPropertyName );
-        delete *it;
-        ++it;
+        l->notifyPropertyRemoved( aPropertyName );
     }
-    delete listeners;
 }
 
 
-std::vector< std::vector< ContentEventNotifier* >* >*
+std::vector< std::unique_ptr< ContentEventNotifier > >
 TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                                           const OUString& aNewPrefix,
                                           bool withChildren )
 {
-
-    std::vector< std::vector< ContentEventNotifier* >* >* aVectorOnHeap =
-        new std::vector< std::vector< ContentEventNotifier* >* >;
-    std::vector< std::vector< ContentEventNotifier* >* >&  aVector = *aVectorOnHeap;
+    std::vector< std::unique_ptr< ContentEventNotifier > > aVector;
 
     sal_Int32 count;
     OUString aOldName;
@@ -2785,9 +2759,6 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
         for( sal_Int32 j = 0; j < count; ++j )
         {
-            std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
-            std::vector< ContentEventNotifier* >& listeners = *p;
-
             if( withChildren )
             {
                 aOldName = oldChildList[j];
@@ -2817,9 +2788,9 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                     std::vector<Notifier*>& listOfNotifiers = *( itnew->second.notifier );
                     for (auto const& pointer : listOfNotifiers)
                     {
-                        ContentEventNotifier* notifier = pointer->cEXC( aNewName );
+                        std::unique_ptr<ContentEventNotifier> notifier = pointer->cEXC( aNewName );
                         if( notifier )
-                            listeners.push_back( notifier );
+                            aVector.push_back( std::move(notifier) );
                     }
                 }
 
@@ -2836,37 +2807,27 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                 }
                 delete copyList;
             }
-            aVector.push_back( p );
         }
     }
 
-    return aVectorOnHeap;
+    return aVector;
 }
 
 
 void
-TaskManager::notifyContentExchanged( std::vector< std::vector< ContentEventNotifier* >* >* listeners_vec )
+TaskManager::notifyContentExchanged( std::vector< std::unique_ptr< ContentEventNotifier > > listeners_vec )
 {
-    for( std::vector< ContentEventNotifier* >* listeners : *listeners_vec)
+    for( auto & l : listeners_vec)
     {
-        std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
-        while( it != listeners->end() )
-        {
-            (*it)->notifyExchanged();
-            delete *it;
-            ++it;
-        }
-        delete listeners;
+        l->notifyExchanged();
     }
-    delete listeners_vec;
 }
 
 
-std::vector< PropertyChangeNotifier* >*
+std::vector< std::unique_ptr<PropertyChangeNotifier> >
 TaskManager::getPropertyChangeNotifier( const OUString& aName )
 {
-    std::vector< PropertyChangeNotifier* >* p = new std::vector< PropertyChangeNotifier* >;
-    std::vector< PropertyChangeNotifier* >& listeners = *p;
+    std::vector< std::unique_ptr<PropertyChangeNotifier> > listeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
@@ -2875,27 +2836,23 @@ TaskManager::getPropertyChangeNotifier( const OUString& aName )
             std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
             for (auto const& pointer : listOfNotifiers)
             {
-                PropertyChangeNotifier* notifier = pointer->cPCL();
+                std::unique_ptr<PropertyChangeNotifier> notifier = pointer->cPCL();
                 if( notifier )
-                    listeners.push_back( notifier );
+                    listeners.push_back( std::move(notifier) );
             }
         }
     }
-    return p;
+    return listeners;
 }
 
 
-void TaskManager::notifyPropertyChanges( std::vector< PropertyChangeNotifier* >* listeners,
+void TaskManager::notifyPropertyChanges( std::vector< std::unique_ptr< PropertyChangeNotifier > > listeners,
                                             const uno::Sequence< beans::PropertyChangeEvent >& seqChanged )
 {
-    std::vector< PropertyChangeNotifier* >::iterator it = listeners->begin();
-    while( it != listeners->end() )
+    for( auto const & l : listeners )
     {
-        (*it)->notifyPropertyChanged( seqChanged );
-        delete *it;
-        ++it;
+        l->notifyPropertyChanged( seqChanged );
     }
-    delete listeners;
 }
 
 
