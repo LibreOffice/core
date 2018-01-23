@@ -1927,13 +1927,8 @@ bool ScColumn::IsDrawObjectsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
     if (!pDrawLayer)
         return true;
 
-    for (SCROW nCurrentRow = nStartRow; nCurrentRow <= nEndRow; nCurrentRow++)
-    {
-        ScAddress aCell(nCol, nCurrentRow, nTab);
-        if (!pDrawLayer->GetObjectsAnchoredToCell(aCell).empty())
-            return false;
-    }
-    return true;
+    ScRange aRange(nCol, nStartRow, nTab, nCol, nEndRow, nTab);
+    return !pDrawLayer->HasObjectsAnchoredInRange(aRange);
 }
 
 void ScColumn::SwapCol(ScColumn& rCol)
