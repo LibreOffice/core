@@ -134,7 +134,7 @@ XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
             return handleSkippedText(data, nsId);
         case Text::Raw:
             return handleRawText(data);
-        case Text::Normalized:
+        default: // Text::Normalized
             return handleNormalizedText(data);
         }
     case State::StartTag:
