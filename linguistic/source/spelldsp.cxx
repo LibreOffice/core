@@ -185,9 +185,6 @@ SpellCheckerDispatcher::SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr ) :
 
 SpellCheckerDispatcher::~SpellCheckerDispatcher()
 {
-    ClearSvcList();
-    delete m_pCache;
-    delete m_pCharClass;
 }
 
 
@@ -422,9 +419,9 @@ bool SpellCheckerDispatcher::isValid_Impl(
                 bRes = !xTmp->isNegative();
             } else {
                 setCharClass(LanguageTag(nLanguage));
-                CapType ct = capitalType(aChkWord, m_pCharClass);
+                CapType ct = capitalType(aChkWord, m_pCharClass.get());
                 if (ct == CapType::INITCAP || ct == CapType::ALLCAP) {
-                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_pCharClass), nLanguage ) );
+                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_pCharClass.get()), nLanguage ) );
                     if (xTmp2.is()) {
                         bRes = !xTmp2->isNegative();
                     }
@@ -663,10 +660,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             else
             {
                 setCharClass(LanguageTag(nLanguage));
-                CapType ct = capitalType(aChkWord, m_pCharClass);
+                CapType ct = capitalType(aChkWord, m_pCharClass.get());
                 if (ct == CapType::INITCAP || ct == CapType::ALLCAP)
                 {
-                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_pCharClass), nLanguage ) );
+                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_pCharClass.get()), nLanguage ) );
                     if (xTmp2.is())
                     {
                         if (xTmp2->isNegative())    // negative entry found
@@ -842,7 +839,7 @@ void SpellCheckerDispatcher::FlushSpellCache()
 void SpellCheckerDispatcher::setCharClass(const LanguageTag& rLanguageTag)
 {
     if (!m_pCharClass)
-        m_pCharClass = new CharClass(rLanguageTag);
+        m_pCharClass.reset( new CharClass(rLanguageTag) );
     m_pCharClass->setLanguageTag(rLanguageTag);
 }
 

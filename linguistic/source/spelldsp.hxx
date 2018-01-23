@@ -58,8 +58,8 @@ class SpellCheckerDispatcher :
     css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  m_xDicList;
 
     LngSvcMgr                       &m_rMgr;
-    mutable linguistic::SpellCache  *m_pCache; // Spell Cache (holds known words)
-    CharClass                       *m_pCharClass;
+    mutable std::unique_ptr<linguistic::SpellCache> m_pCache; // Spell Cache (holds known words)
+    std::unique_ptr<CharClass>       m_pCharClass;
 
     SpellCheckerDispatcher(const SpellCheckerDispatcher &) = delete;
     SpellCheckerDispatcher & operator = (const SpellCheckerDispatcher &) = delete;
@@ -120,7 +120,7 @@ private:
 inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 {
     if (!m_pCache)
-        m_pCache = new linguistic::SpellCache();
+        m_pCache.reset(new linguistic::SpellCache());
     return *m_pCache;
 }
 
