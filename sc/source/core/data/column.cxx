@@ -1896,6 +1896,8 @@ void ScColumn::UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 )
 
 void ScColumn::UpdateDrawObjects(std::vector<std::vector<SdrObject*>>& pObjects, SCROW nRowStart, SCROW nRowEnd)
 {
+    assert(static_cast<int>(pObjects.size()) >= nRowEnd - nRowStart + 1);
+
     int nObj = 0;
     for (SCROW nCurrentRow = nRowStart; nCurrentRow <= nRowEnd; nCurrentRow++, nObj++)
     {
