@@ -46,12 +46,14 @@ public:
     void testDivision();
     void testVLOOKUP();
     void testVLOOKUPSUM();
+    void testSingleRef();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
     CPPUNIT_TEST(testDivision);
     CPPUNIT_TEST(testVLOOKUP);
     CPPUNIT_TEST(testVLOOKUPSUM);
+    CPPUNIT_TEST(testSingleRef);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -292,6 +294,27 @@ void ScParallelismTest::testVLOOKUPSUM()
         OString aMsg = "At row " + OString::number(i);
         nArg = nNumRows - i - 1;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), 6*nArg + 101, static_cast<size_t>(m_pDoc->GetValue(3, i, 0)));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testSingleRef()
+{
+    m_pDoc->InsertTab(0, "1");
+
+    const size_t nNumRows = 200;
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        m_pDoc->SetValue(0, i, 0, static_cast<double>(i));
+        m_pDoc->SetFormula(ScAddress(1, i, 0), "=A" + OUString::number(i+1), formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        OString aMsg = "At row " + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), i, static_cast<size_t>(m_pDoc->GetValue(1, i, 0)));
     }
     m_pDoc->DeleteTab(0);
 }
