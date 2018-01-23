@@ -44,7 +44,7 @@ namespace connectivity
             ~OCatalog() override;
 
             OConnection*        getConnection()     const { return m_pConnection;   }
-            sdbcx::OCollection* getPrivateTables()  const { return m_pTables;       }
+            sdbcx::OCollection* getPrivateTables()  const { return m_pTables.get(); }
             WpADOCatalog        getCatalog()        const { return m_aCatalog;      }
         };
     }

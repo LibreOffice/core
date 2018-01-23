@@ -43,10 +43,10 @@ void Catalog::refreshTables()
     fillNames(xTables, aTableNames);
 
     if (!m_pTables)
-        m_pTables = new Tables(m_xConnection->getMetaData(),
+        m_pTables.reset( new Tables(m_xConnection->getMetaData(),
                                *this,
                                m_aMutex,
-                               aTableNames);
+                               aTableNames) );
     else
         m_pTables->reFill(aTableNames);
 
@@ -84,10 +84,10 @@ void Catalog::refreshUsers()
     }
 
     if (!m_pUsers)
-        m_pUsers = new Users(m_xConnection->getMetaData(),
+        m_pUsers.reset( new Users(m_xConnection->getMetaData(),
                              *this,
                              m_aMutex,
-                             aUserNames);
+                             aUserNames) );
     else
         m_pUsers->reFill(aUserNames);
 }
