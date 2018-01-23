@@ -141,9 +141,6 @@ SortedResultSet::~SortedResultSet()
     mpSortInfo = nullptr;
 
     mpPropSetInfo.clear();
-
-    delete mpPropChangeListeners;
-    delete mpVetoChangeListeners;
 }
 
 
@@ -823,8 +820,8 @@ void SAL_CALL SortedResultSet::addPropertyChangeListener(
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpPropChangeListeners )
-        mpPropChangeListeners =
-                    new PropertyChangeListeners_Impl();
+        mpPropChangeListeners.reset(
+                    new PropertyChangeListeners_Impl() );
 
     mpPropChangeListeners->addInterface( PropertyName, Listener );
 }
@@ -848,8 +845,8 @@ void SAL_CALL SortedResultSet::addVetoableChangeListener(
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpVetoChangeListeners )
-        mpVetoChangeListeners =
-                    new PropertyChangeListeners_Impl();
+        mpVetoChangeListeners.reset(
+                    new PropertyChangeListeners_Impl() );
 
     mpVetoChangeListeners->addInterface( PropertyName, Listener );
 }
