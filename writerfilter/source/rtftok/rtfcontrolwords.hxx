@@ -1997,6 +1997,7 @@ struct RTFSymbol
     const char* sKeyword;
     int nControlType;
     RTFKeyword nIndex;
+    int defValue=0;//For most of the ControlWords, default is 0. So in aRTFControlWords, only those different from 0 would be explicitly set
 
     bool operator<(const RTFSymbol& rOther) const;
 };

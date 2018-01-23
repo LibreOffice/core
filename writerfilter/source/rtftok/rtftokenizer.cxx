@@ -328,6 +328,13 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
                 if (ret != RTFError::OK)
                     return ret;
             }
+            else if( bParam==false)
+            {
+                ret = m_rImport.dispatchValue(s_aRTFControlWords[i].nIndex, s_aRTFControlWords[i].defValue);
+                if (ret != RTFError::OK)
+                    return ret;
+
+            }
             break;
     }
 
