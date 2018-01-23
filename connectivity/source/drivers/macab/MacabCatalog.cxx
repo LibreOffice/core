@@ -62,7 +62,7 @@ void MacabCatalog::refreshTables()
     if (m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables = new MacabTables(m_xMetaData,*this,m_aMutex,aVector);
+        m_pTables.reset( new MacabTables(m_xMetaData,*this,m_aMutex,aVector) );
 }
 
 void MacabCatalog::refreshViews()
@@ -105,7 +105,7 @@ Reference< XNameAccess > SAL_CALL MacabCatalog::getTables(  )
         // allowed
     }
 
-    return m_pTables;
+    return m_pTables.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

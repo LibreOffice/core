@@ -55,10 +55,6 @@ OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(
 
 OCatalog::~OCatalog()
 {
-    delete m_pTables;
-    delete m_pViews;
-    delete m_pGroups;
-    delete m_pUsers;
 }
 
 void SAL_CALL OCatalog::release() throw()
@@ -105,7 +101,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  )
         // allowed
     }
 
-    return m_pTables;
+    return m_pTables.get();
 }
 
 // XViewsSupplier
@@ -129,7 +125,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  )
         // allowed
     }
 
-    return m_pViews;
+    return m_pViews.get();
 }
 
 // XUsersSupplier
@@ -153,7 +149,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  )
         // allowed
     }
 
-    return m_pUsers;
+    return m_pUsers.get();
 }
 
 // XGroupsSupplier
@@ -177,7 +173,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  )
         // allowed
     }
 
-    return m_pGroups;
+    return m_pGroups.get();
 }
 
 OUString OCatalog::buildName(const Reference< XRow >& _xRow)

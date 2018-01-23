@@ -63,7 +63,7 @@ void OHCatalog::refreshTables()
     if ( m_pTables )
         m_pTables->reFill(aVector);
     else
-        m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
+        m_pTables.reset( new OTables(m_xMetaData,*this,m_aMutex,aVector) );
 }
 
 void OHCatalog::refreshViews()
@@ -94,7 +94,7 @@ void OHCatalog::refreshViews()
     if ( m_pViews )
         m_pViews->reFill(aVector);
     else
-        m_pViews = new HViews( m_xConnection, *this, m_aMutex, aVector );
+        m_pViews.reset( new HViews( m_xConnection, *this, m_aMutex, aVector ) );
 }
 
 void OHCatalog::refreshGroups()
@@ -118,7 +118,7 @@ void OHCatalog::refreshUsers()
     if(m_pUsers)
         m_pUsers->reFill(aVector);
     else
-        m_pUsers = new OUsers(*this,m_aMutex,aVector,m_xConnection,this);
+        m_pUsers.reset( new OUsers(*this,m_aMutex,aVector,m_xConnection,this) );
 }
 
 Any SAL_CALL OHCatalog::queryInterface( const Type & rType )

@@ -62,7 +62,7 @@ void OFileCatalog::refreshTables()
     if(m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
+        m_pTables.reset( new OTables(m_xMetaData,*this,m_aMutex,aVector) );
 }
 
 
