@@ -528,3 +528,5 @@ g_ImplementationHelper.addImplementation( \
 g_ImplementationHelper.addImplementation( \
 	PyMailMessage, g_messageImplName,
 		("com.sun.star.mail.MailMessage",),)
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
