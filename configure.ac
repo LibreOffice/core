@@ -5340,9 +5340,16 @@ the  Windows SDK are installed.])
         if ! test -e "$WINDOWS_SDK_WILANGID" ; then
             WINDOWS_SDK_WILANGID=$(cygpath -sm "C:/Program Files (x86)/Windows Kits/8.1/bin/$WINDOWS_SDK_ARCH/WiLangId.vbs")
         fi
-        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
-            AC_MSG_WARN([WiLangId.vbs not found - building translated packages will fail])
-            add_warning "WiLangId.vbs not found - building translated packages will fail"
+    fi
+    if test -n "$with_lang" -a "$with_lang" != "en-US"; then
+        if test -n "$with_package_format" -a "$with_package_format" != no; then
+            for i in "$with_package_format"; do
+                if test "$i" = "msi"; then
+                    if ! test -e "$WINDOWS_SDK_WILANGID" ; then
+                        AC_MSG_ERROR([WiLangId.vbs not found - building translated packages will fail])
+                    fi
+                fi
+            done
         fi
     fi
 fi
