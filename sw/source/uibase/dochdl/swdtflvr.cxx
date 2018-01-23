@@ -2148,7 +2148,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 sal_Int32 nCols = comphelper::string::getTokenCount(sTmp, '\t');
 
                 // don't try to insert tables that are too large for writer
-                if (nRows > USHRT_MAX || nCols > USHRT_MAX)
+                if (nRows > SAL_MAX_UINT16 || nCols > SAL_MAX_UINT16)
                 {
                     if( bMsg )
                         ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_TABLE_TOO_LARGE), VclMessageType::Info)->Execute();
