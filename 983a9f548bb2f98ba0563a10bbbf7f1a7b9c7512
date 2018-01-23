@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_75b4f6f1",
+        "filename": "starmath/source/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-23T16:50:51Z",
+      "side": 1,
+      "message": "why not merging the cases?\ncase MS_DOT:\ncase MS_COMBDOT:\n   acc \u003d \"dot\";\n   break;",
+      "range": {
+        "startLine": 213,
+        "startChar": 7,
+        "endLine": 215,
+        "endChar": 18
+      },
+      "revId": "983a9f548bb2f98ba0563a10bbbf7f1a7b9c7512",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_95b96aec",
+        "filename": "starmath/source/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-23T16:50:51Z",
+      "side": 1,
+      "message": "ideam",
+      "range": {
+        "startLine": 219,
+        "startChar": 7,
+        "endLine": 221,
+        "endChar": 18
+      },
+      "revId": "983a9f548bb2f98ba0563a10bbbf7f1a7b9c7512",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
