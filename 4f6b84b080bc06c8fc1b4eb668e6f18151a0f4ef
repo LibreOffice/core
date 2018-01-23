@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5a2ba182",
+        "filename": "offapi/com/sun/star/sheet/SheetCell.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-23T07:31:55Z",
+      "side": 1,
+      "message": "Instead of changing this published service incompatibly, and thus having to touch offapi/type_reference/offapi.idl (which should not normally be done), add the two new properties as optional ones at the very end of this service declaration.  And please add \"@since LibreOffice 6.1\" tags to the two new properties.",
+      "revId": "4f6b84b080bc06c8fc1b4eb668e6f18151a0f4ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
