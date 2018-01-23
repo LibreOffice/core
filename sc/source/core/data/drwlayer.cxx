@@ -2000,6 +2000,31 @@ std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCell(const ScAddress& r
     return pObjects;
 }
 
+bool ScDrawLayer::HasObjectsAnchoredInRange(ScRange& rRange) const
+{
+    // This only works for one table at a time
+    assert(rRange.aStart.Tab() == rRange.aEnd.Tab());
+
+    const SdrPage* pPage = GetPage(static_cast<sal_uInt16>(rRange.aStart.Tab()));
+    if (!pPage || pPage->GetObjCount() < 1)
+        return false;
+
+    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObject* pObject = aIter.Next();
+    ScDrawObjData* pObjData;
+    while (pObject)
+    {
+        if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
+        {
+            pObjData = GetObjData(pObject);
+            if (pObjData && rRange.In(pObjData->maStart)) // Object is in given range
+                return true;
+        }
+        pObject = aIter.Next();
+    }
+    return false;
+}
+
 void ScDrawLayer::MoveObject(SdrObject* pObject, ScAddress& rNewPosition)
 {
     // Get anchor data
