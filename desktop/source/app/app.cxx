@@ -473,11 +473,11 @@ void Desktop::Init()
     }
 
     // Check whether safe mode is enabled
-    CommandLineArgs& rCmdLine = GetCommandLineArgs();
+    const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
     // Check if we are restarting from safe mode - in that case we don't want to enter it again
     if (sfx2::SafeMode::hasRestartFlag())
         sfx2::SafeMode::removeRestartFlag();
-    else if (rCmdLine.IsSafeMode() || sfx2::SafeMode::hasFlag())
+    else if (rCmdLineArgs.IsSafeMode() || sfx2::SafeMode::hasFlag())
         Application::EnableSafeMode();
 
     // When we are in SafeMode we need to do changes before the configuration
@@ -514,8 +514,6 @@ void Desktop::Init()
 
     if ( true )
     {
-        const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
-
         // start ipc thread only for non-remote offices
         RequestHandler::Status aStatus = RequestHandler::Enable(true);
         if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
