@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <deque>
+#include <memory>
 
 namespace comphelper {
     class OInterfaceContainerHelper2;
@@ -99,8 +100,8 @@ class SortedResultSet: public cppu::WeakImplHelper <
     css::beans::XPropertySet >
 {
     comphelper::OInterfaceContainerHelper2 *mpDisposeEventListeners;
-    PropertyChangeListeners_Impl    *mpPropChangeListeners;
-    PropertyChangeListeners_Impl    *mpVetoChangeListeners;
+    std::unique_ptr<PropertyChangeListeners_Impl>    mpPropChangeListeners;
+    std::unique_ptr<PropertyChangeListeners_Impl>    mpVetoChangeListeners;
 
     css::uno::Reference < css::sdbc::XResultSet >            mxOriginal;
     css::uno::Reference < css::sdbc::XResultSet >            mxOther;
