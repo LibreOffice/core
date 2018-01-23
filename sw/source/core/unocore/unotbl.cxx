@@ -2038,7 +2038,7 @@ SwFrameFormat* SwXTextTable::GetFrameFormat()
 
 void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC)
 {
-    if (!m_pImpl->IsDescriptor() || nR <= 0 || nC <= 0 || nR >= USHRT_MAX || nC >= USHRT_MAX)
+    if (!m_pImpl->IsDescriptor() || nR <= 0 || nC <= 0 || nR >= SAL_MAX_UINT16 || nC >= SAL_MAX_UINT16)
         throw uno::RuntimeException();
     m_pImpl->m_nRows = static_cast<sal_uInt16>(nR);
     m_pImpl->m_nColumns = static_cast<sal_uInt16>(nC);
