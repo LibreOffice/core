@@ -1204,30 +1204,6 @@ static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl&
     return bExchangeLeftRight;
 }
 
-/// Check if the style or its parent has a list id, recursively.
-static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleSheetTablePtr& rStyleTable)
-{
-    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(rEntry->pProperties.get());
-    if (!pEntryProperties)
-        return -1;
-
-    sal_Int32 nListId = pEntryProperties->GetListId();
-    // The style itself has a list id.
-    if (nListId >= 0)
-        return nListId;
-
-    // The style has no parent.
-    if (rEntry->sBaseStyleIdentifier.isEmpty())
-        return -1;
-
-    const StyleSheetEntryPtr pParent = rStyleTable->FindStyleSheetByISTD(rEntry->sBaseStyleIdentifier);
-    // No such parent style or loop in the style hierarchy.
-    if (!pParent || pParent == rEntry)
-        return -1;
-
-    return lcl_getListId(pParent, rStyleTable);
-}
-
 void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 {
     // These SPRM's are not specific to any section, so it's expected that there is no context yet.
@@ -2166,57 +2142,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                                                          uno::makeAny(static_cast<sal_Int32>(0)));
                 }
             }
-        }
-        //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
-        //does not specify the numbering
-        if( !rContext->isSet(PROP_NUMBERING_RULES) ) // !contains
-        {
-            const StyleSheetEntryPtr pEntry = pStyleTable->FindStyleSheetByISTD(sStringValue);
-            OSL_ENSURE( pEntry.get(), "no style sheet found" );
-            const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
-
-            sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, pStyleTable) : -1;
-            if( pStyleSheetProperties && nListId >= 0 )
-            {
-                if ( !pEntry->bIsChapterNumbering )
-                    rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
-
-                // Indent properties from the paragraph style have priority
-                // over the ones from the numbering styles in Word
-                // but in Writer numbering styles have priority,
-                // so insert directly into the paragraph properties to compensate.
-                boost::optional<PropertyMap::Property> oProperty;
-                if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT)) )
-                    rContext->Insert(PROP_PARA_FIRST_LINE_INDENT, oProperty->second, /*bOverwrite=*/false);
-                if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN)) )
-                    rContext->Insert(PROP_PARA_LEFT_MARGIN, oProperty->second, /*bOverwrite=*/false);
-
-                // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
-                sal_Int32 nParaRightMargin = 0;
-                if (!pEntry->sBaseStyleIdentifier.isEmpty())
-                {
-                    const StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
-                    const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : nullptr);
-                    boost::optional<PropertyMap::Property> pPropMargin;
-                    if (pParentProperties && (pPropMargin = pParentProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) )
-                        nParaRightMargin = pPropMargin->second.get<sal_Int32>();
-                }
-                if (nParaRightMargin != 0)
-                {
-                    // If we're setting the right margin, we should set the first / left margin as well from the numbering style.
-                    const sal_Int32 nFirstLineIndent = m_pImpl->getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "FirstLineIndent");
-                    const sal_Int32 nParaLeftMargin  = m_pImpl->getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "IndentAt");
-                    if (nFirstLineIndent != 0)
-                        rContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
-                    if (nParaLeftMargin != 0)
-                        rContext->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin), /*bOverwrite=*/false);
-
-                    rContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin), /*bOverwrite=*/false);
-                }
-            }
-
-            if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
-                rContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
         }
     }
     break;
