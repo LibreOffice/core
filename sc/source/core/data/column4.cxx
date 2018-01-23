@@ -1087,6 +1087,23 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
     maCellNotes.swap(nRow1, nRow2, rOther.maCellNotes, nRow1);
     maBroadcasters.swap(nRow1, nRow2, rOther.maBroadcasters, nRow1);
 
+    // Update draw object anchors
+    ScDrawLayer* pDrawLayer = GetDoc()->GetDrawLayer();
+    if (pDrawLayer)
+    {
+        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        {
+            ScAddress aThisCellPos(GetCol(), nRow, GetTab());
+            ScAddress aOtherCellPos(rOther.GetCol(), nRow, GetTab());
+            std::vector<SdrObject*> pThisColObjects = pDrawLayer->GetObjectsAnchoredToCell(aThisCellPos);
+            std::vector<SdrObject*> pOtherColObjects = pDrawLayer->GetObjectsAnchoredToCell(aOtherCellPos);
+            if (!pThisColObjects.empty())
+                UpdateDrawObjectsForRow(pThisColObjects, rOther.GetCol(), nRow);
+            if (!pOtherColObjects.empty())
+                rOther.UpdateDrawObjectsForRow(pOtherColObjects, GetCol(), nRow);
+        }
+    }
+
     if (bPattern)
     {
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
@@ -1097,21 +1114,6 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
             {
                 SetPattern(nRow, *pPat2);
                 rOther.SetPattern(nRow, *pPat1);
-            }
-
-            // Update draw object anchors
-            ScDrawLayer* pDrawLayer = GetDoc()->GetDrawLayer();
-            if (pDrawLayer)
-            {
-                ScAddress aThisCellPos(GetCol(), nRow, GetTab());
-                ScAddress aOtherCellPos(rOther.GetCol(), nRow, GetTab());
-                std::vector<SdrObject*> pThisColObjects = pDrawLayer->GetObjectsAnchoredToCell(aThisCellPos);
-                std::vector<SdrObject*> pOtherColObjects = pDrawLayer->GetObjectsAnchoredToCell(aOtherCellPos);
-                if (!pThisColObjects.empty())
-                    UpdateDrawObjectsForRow(pThisColObjects, rOther.GetCol(), nRow);
-                if (!pOtherColObjects.empty())
-                    rOther.UpdateDrawObjectsForRow(pOtherColObjects, GetCol(), nRow);
-
             }
         }
     }
