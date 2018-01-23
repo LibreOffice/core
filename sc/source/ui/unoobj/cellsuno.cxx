@@ -442,6 +442,8 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {OUString(SC_UNONAME_DIAGONAL_TLBR2), ATTR_BORDER_TLBR, ::cppu::UnoType<table::BorderLine2>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_FORMLOC),  SC_WID_UNO_FORMLOC, cppu::UnoType<OUString>::get(),        0, 0 },
         {OUString(SC_UNONAME_FORMRT),   SC_WID_UNO_FORMRT,  cppu::UnoType<table::CellContentType>::get(), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_CELLCONTENTTYPE),   SC_WID_UNO_CELLCONTENTTYPE,  cppu::UnoType<table::CellContentType>::get(), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_FORMRT2),  SC_WID_UNO_FORMRT2, cppu::UnoType<sal_Int32>::get(), 0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   cppu::UnoType<table::CellHoriJustify>::get(), 0, MID_HORJUST_HORJUST },
         {OUString(SC_UNONAME_CELLHJUS_METHOD), ATTR_HOR_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    cppu::UnoType<bool>::get(),                  0, MID_GRAPHIC_TRANSPARENT },
@@ -6406,7 +6408,39 @@ table::CellContentType SAL_CALL ScCellObj::getType()
     return eRet;
 }
 
-table::CellContentType ScCellObj::GetResultType_Impl()
+sal_Int32 ScCellObj::GetResultType_Impl()
+{
+    SolarMutexGuard aGuard;
+    sal_Int32 eRet = sheet::FormulaResult::STRING;
+    ScDocShell* pDocSh = GetDocShell();
+    if (pDocSh)
+    {
+        if (pDocSh->GetDocument().GetCellType(aCellPos) == CELLTYPE_FORMULA)
+        {
+            ScFormulaCell* pFCell = pDocSh->GetDocument().GetFormulaCell(aCellPos);
+            if (pFCell->GetErrCode() != FormulaError::NONE )
+            {
+                eRet = sheet::FormulaResult::ERROR;
+            }
+            else if (pFCell->IsValue())
+            {
+                eRet = sheet::FormulaResult::VALUE;
+            }
+            else
+            {
+                eRet = sheet::FormulaResult::STRING;
+            }
+        }
+    }
+    else
+    {
+        OSL_FAIL("no DocShell");
+    }
+
+    return eRet;
+}
+
+table::CellContentType ScCellObj::GetContentType_Impl()
 {
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
@@ -6542,7 +6576,8 @@ void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, c
             OUString aString(aStrVal);
             SetString_Impl(aString, true, false);   // interpret locally
         }
-        else if ( pEntry->nWID == SC_WID_UNO_FORMRT )
+        else if ( pEntry->nWID == SC_WID_UNO_FORMRT || pEntry->nWID == SC_WID_UNO_FORMRT2
+                  || pEntry->nWID == SC_WID_UNO_CELLCONTENTTYPE )
         {
             //  Read-Only
             //! Exception or so...
@@ -6561,9 +6596,14 @@ void ScCellObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, u
             // sal_False = local
             rAny <<= GetInputString_Impl(false);
         }
-        else if ( pEntry->nWID == SC_WID_UNO_FORMRT )
+        else if ( pEntry->nWID == SC_WID_UNO_FORMRT2 )
         {
-            table::CellContentType eType = GetResultType_Impl();
+            sal_Int32 eType = GetResultType_Impl();
+            rAny <<= eType;
+        }
+        else if ( pEntry->nWID == SC_WID_UNO_CELLCONTENTTYPE || pEntry->nWID == SC_WID_UNO_FORMRT )
+        {
+            table::CellContentType eType = GetContentType_Impl();
             rAny <<= eType;
         }
         else

@@ -73,7 +73,9 @@
 #define SC_WID_UNO_TBLBORD2         ( SC_WID_UNO_START + 43 )
 #define SC_WID_UNO_CONDFORMAT       ( SC_WID_UNO_START + 44 )
 #define SC_WID_UNO_FORMATID         ( SC_WID_UNO_START + 45 )
-#define SC_WID_UNO_END              ( SC_WID_UNO_START + 45 )
+#define SC_WID_UNO_FORMRT2          ( SC_WID_UNO_START + 46 )
+#define SC_WID_UNO_CELLCONTENTTYPE  ( SC_WID_UNO_START + 47 )
+#define SC_WID_UNO_END              ( SC_WID_UNO_START + 47 )
 
 inline bool IsScUnoWid( sal_uInt16 nWid )
 {
