@@ -109,7 +109,6 @@ LwpPara::LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     , m_AllText("")
     , m_bHasBullet(false)
     , m_pSilverBullet(nullptr)
-    , m_pBullOver(nullptr)
     , m_bBullContinue(false)
     , m_SectionStyleName("")
     , m_bHasDropcap(false)
@@ -128,11 +127,6 @@ LwpPara::~LwpPara()
         m_pBreaks = nullptr;
     }
 
-    if (m_pBullOver)
-    {
-        delete m_pBullOver;
-        m_pBullOver = nullptr;
-    }
     delete m_pIndentOverride;
 
     LwpParaProperty* pNextProp;
@@ -531,9 +525,9 @@ void LwpPara::RegisterStyle()
                 {
                     m_aBulletStyleName = m_pSilverBullet->GetBulletStyleName();
                 }
-                else if (!m_pBullOver->IsEditable())
+                else if (!m_xBullOver->IsEditable())
                 {
-                    m_aBulletStyleName = pBulletStyleMgr->RegisterBulletStyle(this, m_pBullOver, m_pIndentOverride);
+                    m_aBulletStyleName = pBulletStyleMgr->RegisterBulletStyle(this, m_xBullOver.get(), m_pIndentOverride);
                 }
 
                 // test codes
@@ -618,7 +612,7 @@ void LwpPara::RegisterStyle()
                         }
 
                         // Don't bump the number if this bullet is skipped
-                        if (m_pBullOver->IsSkip())
+                        if (m_xBullOver->IsSkip())
                             ;
                         else if ( pParaSilverBullet
                             && pParaSilverBullet->GetObjectID() == m_pSilverBullet->GetObjectID()
@@ -690,13 +684,13 @@ void LwpPara::RegisterStyle()
                     LwpStory* pMyStory = GetStory();
                     if (pMyStory)
                     {
-                        if (pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, m_pParaNumbering->GetPosition()))
+                        if (pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, m_xParaNumbering->GetPosition()))
                         {
                             //m_bBullContinue = sal_True;
                         }
                         else
                         {
-                            pMyStory->AddBullStyleName2List(m_aBulletStyleName, m_pParaNumbering->GetPosition());
+                            pMyStory->AddBullStyleName2List(m_aBulletStyleName, m_xParaNumbering->GetPosition());
                         }
                     }
 
@@ -897,17 +891,17 @@ rtl::Reference<XFContentContainer> LwpPara::AddBulletList(XFContentContainer* pC
     }
     if (m_pSilverBullet->HasName())
     {
-        nLevel = m_pParaNumbering->GetPosition();
+        nLevel = m_xParaNumbering->GetPosition();
         m_nLevel = nLevel;//for get para level
     }
 
     return pBulletStyleMgr->AddBulletList(pCont, bOrdered, m_aBulletStyleName,
-            nLevel, m_pBullOver->IsSkip());
+            nLevel, m_xBullOver->IsSkip());
 }
 
 LwpNumberingOverride* LwpPara::GetParaNumbering()
 {
-    return m_pParaNumbering.get();
+    return m_xParaNumbering.get();
 }
 
 void LwpForked3NotifyList::Read(LwpObjectStream* pObjStrm)
