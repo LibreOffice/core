@@ -2306,7 +2306,7 @@ void WW8TabDesc::CalcDefaults()
         if( !pR->pTCs )
         {
             pR->pTCs = new WW8_TCell[ pR->nWwCols ];
-            memset( pR->pTCs, 0, pR->nWwCols * sizeof( WW8_TCell ) );
+            WW8TabBandDesc::setcelldefaults(pR->pTCs, pR->nWwCols);
         }
         for (int k = 0; k < pR->nWwCols; ++k)
         {
