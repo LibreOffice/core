@@ -46,13 +46,13 @@ RTFSymbol aRTFControlWords[] = {
     { "additive", CONTROL_FLAG, RTF_ADDITIVE },
     { "adeflang", CONTROL_VALUE, RTF_ADEFLANG },
     { "adjustright", CONTROL_FLAG, RTF_ADJUSTRIGHT },
-    { "adn", CONTROL_VALUE, RTF_ADN },
+    { "adn", CONTROL_VALUE, RTF_ADN, 6 },//default value different from 0
     { "aenddoc", CONTROL_FLAG, RTF_AENDDOC },
     { "aendnotes", CONTROL_FLAG, RTF_AENDNOTES },
     { "aexpnd", CONTROL_VALUE, RTF_AEXPND },
     { "af", CONTROL_VALUE, RTF_AF },
     { "afelev", CONTROL_FLAG, RTF_AFELEV },
-    { "afs", CONTROL_VALUE, RTF_AFS },
+    { "afs", CONTROL_VALUE, RTF_AFS, 24 },//default value different from 0
     { "aftnbj", CONTROL_FLAG, RTF_AFTNBJ },
     { "aftncn", CONTROL_DESTINATION, RTF_AFTNCN },
     { "aftnnalc", CONTROL_FLAG, RTF_AFTNNALC },
@@ -80,7 +80,7 @@ RTFSymbol aRTFControlWords[] = {
     { "aftnrstcont", CONTROL_FLAG, RTF_AFTNRSTCONT },
     { "aftnsep", CONTROL_DESTINATION, RTF_AFTNSEP },
     { "aftnsepc", CONTROL_DESTINATION, RTF_AFTNSEPC },
-    { "aftnstart", CONTROL_VALUE, RTF_AFTNSTART },
+    { "aftnstart", CONTROL_VALUE, RTF_AFTNSTART, 1 },//default value different from 0
     { "aftntj", CONTROL_FLAG, RTF_AFTNTJ },
     { "ai", CONTROL_TOGGLE, RTF_AI },
     { "alang", CONTROL_VALUE, RTF_ALANG },
@@ -115,10 +115,10 @@ RTFSymbol aRTFControlWords[] = {
     { "auldb", CONTROL_TOGGLE, RTF_AULDB },
     { "aulnone", CONTROL_TOGGLE, RTF_AULNONE },
     { "aulw", CONTROL_TOGGLE, RTF_AULW },
-    { "aup", CONTROL_VALUE, RTF_AUP },
+    { "aup", CONTROL_VALUE, RTF_AUP, 6 },//default value different from 0
     { "author", CONTROL_DESTINATION, RTF_AUTHOR },
     { "autofmtoverride", CONTROL_FLAG, RTF_AUTOFMTOVERRIDE },
-    { "b", CONTROL_TOGGLE, RTF_B },
+    { "b", CONTROL_TOGGLE, RTF_B, 1 },//default value different from 0
     { "background", CONTROL_DESTINATION, RTF_BACKGROUND },
     { "bdbfhdr", CONTROL_FLAG, RTF_BDBFHDR },
     { "bdrrlswsix", CONTROL_FLAG, RTF_BDRRLSWSIX },
@@ -218,7 +218,7 @@ RTFSymbol aRTFControlWords[] = {
     { "cfpat", CONTROL_VALUE, RTF_CFPAT },
     { "cgrid", CONTROL_VALUE, RTF_CGRID },
     { "charrsid", CONTROL_VALUE, RTF_CHARRSID },
-    { "charscalex", CONTROL_VALUE, RTF_CHARSCALEX },
+    { "charscalex", CONTROL_VALUE, RTF_CHARSCALEX, 100 },//default value different from 0
     { "chatn", CONTROL_SYMBOL, RTF_CHATN },
     { "chbgbdiag", CONTROL_FLAG, RTF_CHBGBDIAG },
     { "chbgcross", CONTROL_FLAG, RTF_CHBGCROSS },
@@ -324,9 +324,9 @@ RTFSymbol aRTFControlWords[] = {
     { "colno", CONTROL_VALUE, RTF_COLNO },
     { "colorschememapping", CONTROL_DESTINATION, RTF_COLORSCHEMEMAPPING },
     { "colortbl", CONTROL_DESTINATION, RTF_COLORTBL },
-    { "cols", CONTROL_VALUE, RTF_COLS },
+    { "cols", CONTROL_VALUE, RTF_COLS, 1 },//default value different from 0
     { "colsr", CONTROL_VALUE, RTF_COLSR },
-    { "colsx", CONTROL_VALUE, RTF_COLSX },
+    { "colsx", CONTROL_VALUE, RTF_COLSX, 720 },//default value different from 0
     { "column", CONTROL_SYMBOL, RTF_COLUMN },
     { "colw", CONTROL_VALUE, RTF_COLW },
     { "comment", CONTROL_DESTINATION, RTF_COMMENT },
@@ -358,7 +358,7 @@ RTFSymbol aRTFControlWords[] = {
     { "deflangfe", CONTROL_VALUE, RTF_DEFLANGFE },
     { "defpap", CONTROL_DESTINATION, RTF_DEFPAP },
     { "defshp", CONTROL_FLAG, RTF_DEFSHP },
-    { "deftab", CONTROL_VALUE, RTF_DEFTAB },
+    { "deftab", CONTROL_VALUE, RTF_DEFTAB, 720 },//default value different from 0
     { "deleted", CONTROL_TOGGLE, RTF_DELETED },
     { "delrsid", CONTROL_VALUE, RTF_DELRSID },
     { "dfrauth", CONTROL_VALUE, RTF_DFRAUTH },
@@ -368,17 +368,17 @@ RTFSymbol aRTFControlWords[] = {
     { "dfrstart", CONTROL_VALUE, RTF_DFRSTART },
     { "dfrstop", CONTROL_VALUE, RTF_DFRSTOP },
     { "dfrxst", CONTROL_VALUE, RTF_DFRXST },
-    { "dghorigin", CONTROL_VALUE, RTF_DGHORIGIN },
-    { "dghshow", CONTROL_VALUE, RTF_DGHSHOW },
-    { "dghspace", CONTROL_VALUE, RTF_DGHSPACE },
+    { "dghorigin", CONTROL_VALUE, RTF_DGHORIGIN, 1701 },//default value different from 0
+    { "dghshow", CONTROL_VALUE, RTF_DGHSHOW, 3 },//default value different from 0
+    { "dghspace", CONTROL_VALUE, RTF_DGHSPACE, 120 },//default value different from 0
     { "dgmargin", CONTROL_FLAG, RTF_DGMARGIN },
     { "dgsnap", CONTROL_FLAG, RTF_DGSNAP },
-    { "dgvorigin", CONTROL_VALUE, RTF_DGVORIGIN },
+    { "dgvorigin", CONTROL_VALUE, RTF_DGVORIGIN, 1984 },//default value different from 0
     { "dgvshow", CONTROL_VALUE, RTF_DGVSHOW },
-    { "dgvspace", CONTROL_VALUE, RTF_DGVSPACE },
+    { "dgvspace", CONTROL_VALUE, RTF_DGVSPACE, 120 },//default value different from 0
     { "dibitmap", CONTROL_VALUE, RTF_DIBITMAP },
     { "disabled", CONTROL_TOGGLE, RTF_DISABLED },
-    { "dn", CONTROL_VALUE, RTF_DN },
+    { "dn", CONTROL_VALUE, RTF_DN, 6 },//default value different from 0
     { "dntblnsbdb", CONTROL_FLAG, RTF_DNTBLNSBDB },
     { "do", CONTROL_DESTINATION, RTF_DO },
     { "dobxcolumn", CONTROL_FLAG, RTF_DOBXCOLUMN },
@@ -577,7 +577,7 @@ RTFSymbol aRTFControlWords[] = {
     { "footerf", CONTROL_DESTINATION, RTF_FOOTERF },
     { "footerl", CONTROL_DESTINATION, RTF_FOOTERL },
     { "footerr", CONTROL_DESTINATION, RTF_FOOTERR },
-    { "footery", CONTROL_VALUE, RTF_FOOTERY },
+    { "footery", CONTROL_VALUE, RTF_FOOTERY, 720 },//default value different from 0
     { "footnote", CONTROL_DESTINATION, RTF_FOOTNOTE },
     { "forceupgrade", CONTROL_FLAG, RTF_FORCEUPGRADE },
     { "formdisp", CONTROL_FLAG, RTF_FORMDISP },
@@ -596,7 +596,7 @@ RTFSymbol aRTFControlWords[] = {
     { "froman", CONTROL_FLAG, RTF_FROMAN },
     { "fromhtml", CONTROL_VALUE, RTF_FROMHTML },
     { "fromtext", CONTROL_FLAG, RTF_FROMTEXT },
-    { "fs", CONTROL_VALUE, RTF_FS },
+    { "fs", CONTROL_VALUE, RTF_FS, 24 },//default value different from 0
     { "fscript", CONTROL_FLAG, RTF_FSCRIPT },
     { "fswiss", CONTROL_FLAG, RTF_FSWISS },
     { "ftech", CONTROL_FLAG, RTF_FTECH },
@@ -631,7 +631,7 @@ RTFSymbol aRTFControlWords[] = {
     { "ftnrstpg", CONTROL_FLAG, RTF_FTNRSTPG },
     { "ftnsep", CONTROL_DESTINATION, RTF_FTNSEP },
     { "ftnsepc", CONTROL_DESTINATION, RTF_FTNSEPC },
-    { "ftnstart", CONTROL_VALUE, RTF_FTNSTART },
+    { "ftnstart", CONTROL_VALUE, RTF_FTNSTART, 1 },//default value different from 0
     { "ftntj", CONTROL_FLAG, RTF_FTNTJ },
     { "fttruetype", CONTROL_FLAG, RTF_FTTRUETYPE },
     { "fvaliddos", CONTROL_FLAG, RTF_FVALIDDOS },
@@ -651,7 +651,7 @@ RTFSymbol aRTFControlWords[] = {
     { "headerf", CONTROL_DESTINATION, RTF_HEADERF },
     { "headerl", CONTROL_DESTINATION, RTF_HEADERL },
     { "headerr", CONTROL_DESTINATION, RTF_HEADERR },
-    { "headery", CONTROL_VALUE, RTF_HEADERY },
+    { "headery", CONTROL_VALUE, RTF_HEADERY, 720 },//default value different from 0
     { "hich", CONTROL_FLAG, RTF_HICH },
     { "highlight", CONTROL_VALUE, RTF_HIGHLIGHT },
     { "hl", CONTROL_DESTINATION, RTF_HL },
@@ -690,7 +690,7 @@ RTFSymbol aRTFControlWords[] = {
     { "ipgp", CONTROL_VALUE, RTF_IPGP },
     { "irowband", CONTROL_VALUE, RTF_IROWBAND },
     { "irow", CONTROL_VALUE, RTF_IROW },
-    { "itap", CONTROL_VALUE, RTF_ITAP },
+    { "itap", CONTROL_VALUE, RTF_ITAP, 1 },//default value different from 0
     { "ixe", CONTROL_FLAG, RTF_IXE },
     { "jcompress", CONTROL_FLAG, RTF_JCOMPRESS },
     { "jexpand", CONTROL_FLAG, RTF_JEXPAND },
@@ -739,12 +739,12 @@ RTFSymbol aRTFControlWords[] = {
     { "line", CONTROL_SYMBOL, RTF_LINE },
     { "linebetcol", CONTROL_FLAG, RTF_LINEBETCOL },
     { "linecont", CONTROL_FLAG, RTF_LINECONT },
-    { "linemod", CONTROL_VALUE, RTF_LINEMOD },
+    { "linemod", CONTROL_VALUE, RTF_LINEMOD, 1 },//default value different from 0
     { "lineppage", CONTROL_FLAG, RTF_LINEPPAGE },
     { "linerestart", CONTROL_FLAG, RTF_LINERESTART },
-    { "linestart", CONTROL_VALUE, RTF_LINESTART },
-    { "linestarts", CONTROL_VALUE, RTF_LINESTARTS },
-    { "linex", CONTROL_VALUE, RTF_LINEX },
+    { "linestart", CONTROL_VALUE, RTF_LINESTART, 1 },//default value different from 0
+    { "linestarts", CONTROL_VALUE, RTF_LINESTARTS, 1 },//default value different from 0
+    { "linex", CONTROL_VALUE, RTF_LINEX, 360 },//default value different from 0
     { "linkself", CONTROL_FLAG, RTF_LINKSELF },
     { "linkstyles", CONTROL_FLAG, RTF_LINKSTYLES },
     { "linkval", CONTROL_DESTINATION, RTF_LINKVAL },
@@ -807,17 +807,17 @@ RTFSymbol aRTFControlWords[] = {
     { "maln", CONTROL_DESTINATION, RTF_MALN },
     { "malnScr", CONTROL_DESTINATION, RTF_MALNSCR },
     { "manager", CONTROL_DESTINATION, RTF_MANAGER },
-    { "margb", CONTROL_VALUE, RTF_MARGB },
+    { "margb", CONTROL_VALUE, RTF_MARGB, 1440 },//default value different from 0
     { "margbsxn", CONTROL_VALUE, RTF_MARGBSXN },
     { "margl", CONTROL_VALUE, RTF_MARGL },
     { "marglsxn", CONTROL_VALUE, RTF_MARGLSXN },
     { "margmirror", CONTROL_FLAG, RTF_MARGMIRROR },
     { "margmirsxn", CONTROL_FLAG, RTF_MARGMIRSXN },
     { "margPr", CONTROL_DESTINATION, RTF_MARGPR },
-    { "margr", CONTROL_VALUE, RTF_MARGR },
+    { "margr", CONTROL_VALUE, RTF_MARGR, 1800 },//default value different from 0
     { "margrsxn", CONTROL_VALUE, RTF_MARGRSXN },
     { "margSz", CONTROL_VALUE, RTF_MARGSZ },
-    { "margt", CONTROL_VALUE, RTF_MARGT },
+    { "margt", CONTROL_VALUE, RTF_MARGT, 1440 },//default value different from 0
     { "margtsxn", CONTROL_VALUE, RTF_MARGTSXN },
     { "mbar", CONTROL_DESTINATION, RTF_MBAR },
     { "mbarPr", CONTROL_DESTINATION, RTF_MBARPR },
@@ -843,7 +843,7 @@ RTFSymbol aRTFControlWords[] = {
     { "mden", CONTROL_DESTINATION, RTF_MDEN },
     { "mdiff", CONTROL_DESTINATION, RTF_MDIFF },
     { "mdiffSty", CONTROL_VALUE, RTF_MDIFFSTY },
-    { "mdispdef", CONTROL_VALUE, RTF_MDISPDEF },
+    { "mdispdef", CONTROL_VALUE, RTF_MDISPDEF, 1 },//default value different from 0
     { "mdPr", CONTROL_DESTINATION, RTF_MDPR },
     { "me", CONTROL_DESTINATION, RTF_ME },
     { "mendChr", CONTROL_DESTINATION, RTF_MENDCHR },
@@ -1009,7 +1009,7 @@ RTFSymbol aRTFControlWords[] = {
     { "mvt", CONTROL_FLAG, RTF_MVT },
     { "mvtof", CONTROL_DESTINATION, RTF_MVTOF },
     { "mvtol", CONTROL_DESTINATION, RTF_MVTOL },
-    { "mwrapIndent", CONTROL_VALUE, RTF_MWRAPINDENT },
+    { "mwrapIndent", CONTROL_VALUE, RTF_MWRAPINDENT, 1 },//default value different from 0
     { "mwrapRight", CONTROL_VALUE, RTF_MWRAPRIGHT },
     { "mzeroAsc", CONTROL_DESTINATION, RTF_MZEROASC },
     { "mzeroDesc", CONTROL_DESTINATION, RTF_MZERODESC },
@@ -1101,8 +1101,8 @@ RTFSymbol aRTFControlWords[] = {
     { "page", CONTROL_SYMBOL, RTF_PAGE },
     { "pagebb", CONTROL_FLAG, RTF_PAGEBB },
     { "panose", CONTROL_DESTINATION, RTF_PANOSE },
-    { "paperh", CONTROL_VALUE, RTF_PAPERH },
-    { "paperw", CONTROL_VALUE, RTF_PAPERW },
+    { "paperh", CONTROL_VALUE, RTF_PAPERH, 15840 },//default value different from 0
+    { "paperw", CONTROL_VALUE, RTF_PAPERW, 12240 },//default value different from 0
     { "par", CONTROL_SYMBOL, RTF_PAR },
     { "pararsid", CONTROL_VALUE, RTF_PARARSID },
     { "pard", CONTROL_FLAG, RTF_PARD },
@@ -1149,16 +1149,16 @@ RTFSymbol aRTFControlWords[] = {
     { "pgnlcltr", CONTROL_FLAG, RTF_PGNLCLTR },
     { "pgnlcrm", CONTROL_FLAG, RTF_PGNLCRM },
     { "pgnrestart", CONTROL_FLAG, RTF_PGNRESTART },
-    { "pgnstart", CONTROL_VALUE, RTF_PGNSTART },
-    { "pgnstarts", CONTROL_VALUE, RTF_PGNSTARTS },
+    { "pgnstart", CONTROL_VALUE, RTF_PGNSTART, 1 },//default value different from 0
+    { "pgnstarts", CONTROL_VALUE, RTF_PGNSTARTS, 1 },//default value different from 0
     { "pgnthaia", CONTROL_FLAG, RTF_PGNTHAIA },
     { "pgnthaib", CONTROL_FLAG, RTF_PGNTHAIB },
     { "pgnthaic", CONTROL_FLAG, RTF_PGNTHAIC },
     { "pgnucltr", CONTROL_FLAG, RTF_PGNUCLTR },
     { "pgnucrm", CONTROL_FLAG, RTF_PGNUCRM },
     { "pgnvieta", CONTROL_FLAG, RTF_PGNVIETA },
-    { "pgnx", CONTROL_VALUE, RTF_PGNX },
-    { "pgny", CONTROL_VALUE, RTF_PGNY },
+    { "pgnx", CONTROL_VALUE, RTF_PGNX, 720 },//default value different from 0
+    { "pgny", CONTROL_VALUE, RTF_PGNY, 720 },//default value different from 0
     { "pgnzodiac", CONTROL_FLAG, RTF_PGNZODIAC },
     { "pgnzodiacd", CONTROL_FLAG, RTF_PGNZODIACD },
     { "pgnzodiacl", CONTROL_FLAG, RTF_PGNZODIACL },
@@ -1179,8 +1179,8 @@ RTFSymbol aRTFControlWords[] = {
     { "pichGoal", CONTROL_VALUE, RTF_PICHGOAL },
     { "picprop", CONTROL_DESTINATION, RTF_PICPROP },
     { "picscaled", CONTROL_FLAG, RTF_PICSCALED },
-    { "picscalex", CONTROL_VALUE, RTF_PICSCALEX },
-    { "picscaley", CONTROL_VALUE, RTF_PICSCALEY },
+    { "picscalex", CONTROL_VALUE, RTF_PICSCALEX, 100 },//default value different from 0
+    { "picscaley", CONTROL_VALUE, RTF_PICSCALEY, 100 },//default value different from 0
     { "pict", CONTROL_DESTINATION, RTF_PICT },
     { "picw", CONTROL_VALUE, RTF_PICW },
     { "picwgoal", CONTROL_VALUE, RTF_PICWGOAL },
@@ -1345,12 +1345,12 @@ RTFSymbol aRTFControlWords[] = {
     { "result", CONTROL_DESTINATION, RTF_RESULT },
     { "revauth", CONTROL_VALUE, RTF_REVAUTH },
     { "revauthdel", CONTROL_VALUE, RTF_REVAUTHDEL },
-    { "revbar", CONTROL_VALUE, RTF_REVBAR },
+    { "revbar", CONTROL_VALUE, RTF_REVBAR, 3 },//default value different from 0
     { "revdttm", CONTROL_VALUE, RTF_REVDTTM },
     { "revdttmdel", CONTROL_VALUE, RTF_REVDTTMDEL },
     { "revised", CONTROL_TOGGLE, RTF_REVISED },
     { "revisions", CONTROL_FLAG, RTF_REVISIONS },
-    { "revprop", CONTROL_VALUE, RTF_REVPROP },
+    { "revprop", CONTROL_VALUE, RTF_REVPROP, 3 },//default value different from 0
     { "revprot", CONTROL_FLAG, RTF_REVPROT },
     { "revtbl", CONTROL_DESTINATION, RTF_REVTBL },
     { "revtim", CONTROL_DESTINATION, RTF_REVTIM },
@@ -1402,12 +1402,12 @@ RTFSymbol aRTFControlWords[] = {
     { "saftnnzodiacl", CONTROL_FLAG, RTF_SAFTNNZODIACL },
     { "saftnrestart", CONTROL_FLAG, RTF_SAFTNRESTART },
     { "saftnrstcont", CONTROL_FLAG, RTF_SAFTNRSTCONT },
-    { "saftnstart", CONTROL_VALUE, RTF_SAFTNSTART },
+    { "saftnstart", CONTROL_VALUE, RTF_SAFTNSTART, 1 },//default value different from 0
     { "sautoupd", CONTROL_FLAG, RTF_SAUTOUPD },
     { "saveinvalidxml", CONTROL_FLAG, RTF_SAVEINVALIDXML },
     { "saveprevpict", CONTROL_FLAG, RTF_SAVEPREVPICT },
     { "sb", CONTROL_VALUE, RTF_SB },
-    { "sbasedon", CONTROL_VALUE, RTF_SBASEDON },
+    { "sbasedon", CONTROL_VALUE, RTF_SBASEDON, 222 },//default value different from 0
     { "sbauto", CONTROL_TOGGLE, RTF_SBAUTO },
     { "sbkcol", CONTROL_FLAG, RTF_SBKCOL },
     { "sbkeven", CONTROL_FLAG, RTF_SBKEVEN },
@@ -1454,7 +1454,7 @@ RTFSymbol aRTFControlWords[] = {
     { "sftnrestart", CONTROL_FLAG, RTF_SFTNRESTART },
     { "sftnrstcont", CONTROL_FLAG, RTF_SFTNRSTCONT },
     { "sftnrstpg", CONTROL_FLAG, RTF_SFTNRSTPG },
-    { "sftnstart", CONTROL_VALUE, RTF_SFTNSTART },
+    { "sftnstart", CONTROL_VALUE, RTF_SFTNSTART, 1 },//default value different from 0
     { "sftntj", CONTROL_FLAG, RTF_SFTNTJ },
     { "shad", CONTROL_TOGGLE, RTF_SHAD },
     { "shading", CONTROL_VALUE, RTF_SHADING },
@@ -1502,7 +1502,7 @@ RTFSymbol aRTFControlWords[] = {
     { "spersonal", CONTROL_FLAG, RTF_SPERSONAL },
     { "spltpgpar", CONTROL_FLAG, RTF_SPLTPGPAR },
     { "splytwnine", CONTROL_FLAG, RTF_SPLYTWNINE },
-    { "spriority", CONTROL_VALUE, RTF_SPRIORITY },
+    { "spriority", CONTROL_VALUE, RTF_SPRIORITY, 99 },//default value different from 0
     { "sprsbsp", CONTROL_FLAG, RTF_SPRSBSP },
     { "sprslnsp", CONTROL_FLAG, RTF_SPRSLNSP },
     { "sprsspbf", CONTROL_FLAG, RTF_SPRSSPBF },
@@ -1559,7 +1559,7 @@ RTFSymbol aRTFControlWords[] = {
     { "tblrsid", CONTROL_VALUE, RTF_TBLRSID },
     { "tc", CONTROL_DESTINATION, RTF_TC },
     { "tcelld", CONTROL_FLAG, RTF_TCELLD },
-    { "tcf", CONTROL_VALUE, RTF_TCF },
+    { "tcf", CONTROL_VALUE, RTF_TCF, 67 },//default value different from 0
     { "tcl", CONTROL_VALUE, RTF_TCL },
     { "tcn", CONTROL_FLAG, RTF_TCN },
     { "tdfrmtxtBottom", CONTROL_VALUE, RTF_TDFRMTXTBOTTOM },
@@ -1747,7 +1747,7 @@ RTFSymbol aRTFControlWords[] = {
     { "txbxtwno", CONTROL_FLAG, RTF_TXBXTWNO },
     { "txe", CONTROL_DESTINATION, RTF_TXE },
     { "u", CONTROL_VALUE, RTF_U },
-    { "uc", CONTROL_VALUE, RTF_UC },
+    { "uc", CONTROL_VALUE, RTF_UC, 1 },//default value different from 0
     { "ud", CONTROL_DESTINATION, RTF_UD },
     { "ul", CONTROL_TOGGLE, RTF_UL },
     { "ulc", CONTROL_VALUE, RTF_ULC },
@@ -1769,7 +1769,7 @@ RTFSymbol aRTFControlWords[] = {
     { "ululdbwave", CONTROL_TOGGLE, RTF_ULULDBWAVE },
     { "ulw", CONTROL_FLAG, RTF_ULW },
     { "ulwave", CONTROL_TOGGLE, RTF_ULWAVE },
-    { "up", CONTROL_VALUE, RTF_UP },
+    { "up", CONTROL_VALUE, RTF_UP, 6 },//default value different from 0
     { "upr", CONTROL_DESTINATION, RTF_UPR },
     { "urtf", CONTROL_VALUE, RTF_URTF },
     { "useltbaln", CONTROL_FLAG, RTF_USELTBALN },
@@ -1791,10 +1791,10 @@ RTFSymbol aRTFControlWords[] = {
     { "viewbksp", CONTROL_VALUE, RTF_VIEWBKSP },
     { "viewkind", CONTROL_VALUE, RTF_VIEWKIND },
     { "viewnobound", CONTROL_FLAG, RTF_VIEWNOBOUND },
-    { "viewscale", CONTROL_VALUE, RTF_VIEWSCALE },
+    { "viewscale", CONTROL_VALUE, RTF_VIEWSCALE, 100 },//default value different from 0
     { "viewzk", CONTROL_VALUE, RTF_VIEWZK },
     { "wbitmap", CONTROL_VALUE, RTF_WBITMAP },
-    { "wbmbitspixel", CONTROL_VALUE, RTF_WBMBITSPIXEL },
+    { "wbmbitspixel", CONTROL_VALUE, RTF_WBMBITSPIXEL, 1 },//default value different from 0
     { "wbmplanes", CONTROL_VALUE, RTF_WBMPLANES },
     { "wbmwidthbyte", CONTROL_VALUE, RTF_WBMWIDTHBYTE },
     { "webhidden", CONTROL_FLAG, RTF_WEBHIDDEN },
@@ -1802,7 +1802,7 @@ RTFSymbol aRTFControlWords[] = {
     { "widctlpar", CONTROL_FLAG, RTF_WIDCTLPAR },
     { "widowctrl", CONTROL_FLAG, RTF_WIDOWCTRL },
     { "windowcaption", CONTROL_DESTINATION, RTF_WINDOWCAPTION },
-    { "wmetafile", CONTROL_VALUE, RTF_WMETAFILE },
+    { "wmetafile", CONTROL_VALUE, RTF_WMETAFILE, 1 },//default value different from 0
     { "wpeqn", CONTROL_FLAG, RTF_WPEQN },
     { "wpjst", CONTROL_FLAG, RTF_WPJST },
     { "wpsp", CONTROL_FLAG, RTF_WPSP },
