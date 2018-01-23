@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/sheetcell.hxx>
 #include <test/sheet/xcelladdressable.hxx>
 #include <test/sheet/xsheetannotationanchor.hxx>
 
@@ -26,9 +27,10 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 2
+#define NUMBER_OF_TESTS 3
 
-class ScCellObj : public CalcUnoApiTest, public apitest::XCellAddressable,
+class ScCellObj : public CalcUnoApiTest, public apitest::SheetCell,
+                                         public apitest::XCellAddressable,
                                          public apitest::XSheetAnnotationAnchor
 {
 public:
@@ -39,6 +41,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScCellObj);
+
+    // SheetCell
+    CPPUNIT_TEST(testSheetCellProperties);
 
     // XCellAddressable
     CPPUNIT_TEST(testGetCellAddress);

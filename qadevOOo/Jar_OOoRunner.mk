@@ -565,7 +565,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sdb/_XSQLErrorBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_FunctionDescription \
     qadevOOo/tests/java/ifc/sheet/_Shape \
-    qadevOOo/tests/java/ifc/sheet/_SheetCell \
     qadevOOo/tests/java/ifc/sheet/_SheetCellRange \
     qadevOOo/tests/java/ifc/sheet/_SheetCellRanges \
     qadevOOo/tests/java/ifc/sheet/_SheetFilterDescriptor \
