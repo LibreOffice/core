@@ -182,8 +182,8 @@ public:
     static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab );
     static void             UpdateCellAnchorFromPositionEnd( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true );
     static ScAnchorType     GetAnchorType( const SdrObject& );
-    std::vector<SdrObject*> GetObjectsAnchoredToCell(const ScAddress& rPos) const;
-    bool                    HasObjectsAnchoredInRange(ScRange& rRange) const;
+    std::map<SCROW, std::vector<SdrObject*>> GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, SCROW nEndRow) const;
+    bool HasObjectsAnchoredInRange(ScRange& rRange) const;
     void MoveObject(SdrObject* pObj, ScAddress& rNewPosition);
 
     // positions for detektive lines

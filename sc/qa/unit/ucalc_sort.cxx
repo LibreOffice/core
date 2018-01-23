@@ -1954,8 +1954,9 @@ void Test::testSortImages()
     ScAddress aCellPos(1, 1, 0);
     pDrawLayer->MoveObject(pObj, aCellPos);
 
-    std::vector<SdrObject*> pObjects = pDrawLayer->GetObjectsAnchoredToCell(aCellPos);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pObjects.size());
+    std::map<SCROW, std::vector<SdrObject*>> pRowObjects
+        = pDrawLayer->GetObjectsAnchoredToRange(aCellPos.Tab(), aCellPos.Col(), aCellPos.Row(), aCellPos.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pRowObjects[aCellPos.Row()].size());
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
@@ -1973,8 +1974,9 @@ void Test::testSortImages()
 
     // check that note is also moved after sorting
     aCellPos = ScAddress(1, 0, 0);
-    pObjects = pDrawLayer->GetObjectsAnchoredToCell(aCellPos);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pObjects.size());
+    pRowObjects
+        = pDrawLayer->GetObjectsAnchoredToRange(aCellPos.Tab(), aCellPos.Col(), aCellPos.Row(), aCellPos.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pRowObjects[aCellPos.Row()].size());
 
     m_pDoc->DeleteTab(0);
 }
