@@ -392,7 +392,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     }
     else if( fWeight < 0 )
     {
-        nInt = rint(WEIGHT_NORMAL + fWeight * ((WEIGHT_NORMAL - WEIGHT_THIN)/0.9));
+        nInt = rint(WEIGHT_NORMAL + fWeight * ((WEIGHT_NORMAL - WEIGHT_THIN)/0.8));
         if( nInt < WEIGHT_THIN )
         {
             nInt = WEIGHT_THIN;
