@@ -255,6 +255,11 @@ private:
     bool Clip( DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
                long nEngineHeight, bool bWrapFields);
 
+    // Check for and set cell rotations at OutputData to have it available
+    // in the svx tooling to render the borders. Moved to private section
+    // and the single call to end of constructor to be sure this always happens
+    void    SetCellRotations();
+
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                                     ScTableInfo& rTabInfo, ScDocument* pNewDoc,
@@ -308,8 +313,6 @@ public:
 
                     // with logic MapMode set!
     void    DrawEdit(bool bPixelToLogic);
-
-    void    SetCellRotations();
     void    DrawRotated(bool bPixelToLogic);        // logical
 
     void    DrawClear();
