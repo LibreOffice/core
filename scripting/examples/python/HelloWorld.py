@@ -34,3 +34,5 @@ def HelloWorldPython( ):
 #and set the string
     tRange.String = "Hello World (in Python)"
     return None
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

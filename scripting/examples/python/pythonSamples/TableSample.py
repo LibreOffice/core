@@ -112,3 +112,5 @@ def createTable():
     text.insertString( cursor, " That's all for now !!" , 0 )
 
 g_exportedScripts = createTable,
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
