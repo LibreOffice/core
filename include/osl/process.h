@@ -203,17 +203,17 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
     Pointer to a oslProcess variable, which receives the handle of the newly created process.
     This parameter must not be NULL.
 
-    @param[in] pChildInputWrite
+    @param[out] pChildInputWrite
     Pointer to a oslFileHandle variable that receives the handle which can be used to write
     to the child process standard input device. The returned handle is not random accessible.
     The handle has to be closed with osl_closeFile if no longer used. This parameter can be NULL.
 
-    @param[in] pChildOutputRead
+    @param[out] pChildOutputRead
     Pointer to a oslFileHandle variable that receives the handle which can be used to read from
     the child process standard output device. The returned handle is not random accessible.
     The Handle has to be closed with osl_closeFile if no longer used. This parameter can be NULL.
 
-    @param[in] pChildErrorRead
+    @param[out] pChildErrorRead
     Pointer to a oslFileHandle variable that receives the handle which can be used to read from
     the child process standard error device. The returned handle is not random accessible.
     The Handle has to be closed with osl_closeFile if no longer used. This parameter can be NULL.
