@@ -255,6 +255,11 @@ private:
     long SetEngineTextAndGetWidth( DrawEditParam& rParam, const OUString& rSetString,
                                    long& rNeededPixel, long nAddWidthPixels );
 
+    // Check for and set cell rotations at OutputData to have it available
+    // in the svx tooling to render the borders. Moved to private section
+    // and the single call to end of constructor to be sure this always happens
+    void    SetCellRotations();
+
 public:
     /**
      * @param nNewScrX: X-Offset in the output device for the table
@@ -311,8 +316,6 @@ public:
 
                     // with logic MapMode set!
     void    DrawEdit(bool bPixelToLogic);
-
-    void    SetCellRotations();
     void    DrawRotated(bool bPixelToLogic);        // logical
 
     void    DrawClear();
