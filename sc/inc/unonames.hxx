@@ -209,6 +209,8 @@
 #define SC_UNONAME_VALIXML          "ValidationXML"
 #define SC_UNONAME_FORMLOC          "FormulaLocal"
 #define SC_UNONAME_FORMRT           "FormulaResultType"
+#define SC_UNONAME_FORMRT2          "FormulaResultType2"
+#define SC_UNONAME_CELLCONTENTTYPE  "CellContentType"
 
 #define SC_UNONAME_USERDEF          "UserDefinedAttributes"
 #define SC_UNONAME_TEXTUSER         "TextUserDefinedAttributes"

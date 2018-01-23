@@ -43,6 +43,7 @@
 
 #include <com/sun/star/awt/Point.idl>
 #include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/table/CellContentType.idl>
 #include <com/sun/star/sheet/XSheetConditionalEntries.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
@@ -179,9 +180,11 @@ published service SheetCell
     [optional, property] string FormulaLocal;
 
 
-    /** contains the result type of a formula.
+    /** contains the content type of the cell.
 
-        @see com::sun::star::sheet::FormulaResult
+        <p>This property returns not com::sun::star::sheet::FormulaResult
+        but instead com::sun::star::table::CellContentType. Use FormulaResult2
+        if the correct property is needed.</p>
      */
     [readonly, property] long FormulaResultType;
 
@@ -233,6 +236,22 @@ published service SheetCell
     /** Returns the absolute address of the range as string, e.g. "$Sheet1.$B$2".
      */
     [optional, readonly, property] string AbsoluteName;
+
+
+    /** contains the content type of the cell.
+
+        @see com::sun::star::table::CellContentType
+        @since LibreOffice 6.1
+    */
+    [optional, readonly, property] com::sun::star::table::CellContentType CellContentType;
+
+
+    /** contains the result type of a formula.
+
+        @see com::sun::star::sheet::FormulaResult
+        @since LibreOffice 6.1
+     */
+    [optional, readonly, property] long FormulaResultType2;
 };
 
 
