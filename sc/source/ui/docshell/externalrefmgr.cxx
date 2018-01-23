@@ -2365,6 +2365,12 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
     if (!pFileName)
         return nullptr;
 
+    // Do not load document until it was allowed
+    if (ScDocShell::GetViewData() &&
+        ScDocShell::GetViewData()->GetDocShell() &&
+        !ScDocShell::GetViewData()->GetDocShell()->IsUpdateEnabled())
+        return nullptr;
+
     ScDocument* pSrcDoc = nullptr;
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
     while (pShell)
