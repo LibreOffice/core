@@ -24,6 +24,9 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <basic/sbxcore.hxx>
 #include <basic/basicdllapi.h>
+
+#include <cstddef>
+#include <cstring>
 #include <memory>
 
 
@@ -71,6 +74,15 @@ struct SbxValues
     SbxValues(): pData( nullptr ), eType(SbxEMPTY) {}
     SbxValues( SbxDataType e ): eType(e) {}
     SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
+
+    void clear(SbxDataType type) {
+        // A hacky way of zeroing the union value corresponding to the given type (even though the
+        // relevant zero value need not be represented by all-zero bits, in general) without evoking
+        // GCC 8 -Wclass-memaccess, and without having to turn the anonymous union into a non-
+        // anonymous one:
+        std::memset(static_cast<void *>(this), 0, offsetof(SbxValues, eType));
+        eType = type;
+    }
 };
 
 class BASIC_DLLPUBLIC SbxValue : public SbxBase

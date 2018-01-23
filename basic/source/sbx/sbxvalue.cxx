@@ -44,8 +44,7 @@ SbxValue::SbxValue( SbxDataType t ) : SbxBase()
         n = SbxEMPTY;
     else
         SetFlag( SbxFlagBits::Fixed );
-    memset( &aData, 0, sizeof( SbxValues ) );
-    aData.eType = SbxDataType( n );
+    aData.clear(SbxDataType( n ));
 }
 
 SbxValue::SbxValue( const SbxValue& r )
@@ -172,8 +171,7 @@ void SbxValue::Clear()
         default:
         {
             SbxValues aEmpty;
-            memset( &aEmpty, 0, sizeof( SbxValues ) );
-            aEmpty.eType = GetType();
+            aEmpty.clear(GetType());
             Put( aEmpty );
         }
     }
@@ -341,8 +339,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
         {
             // Object contained itself
             SbxDataType eTemp = rRes.eType;
-            memset( &rRes, 0, sizeof( SbxValues ) );
-            rRes.eType = eTemp;
+            rRes.clear(eTemp);
         }
     }
     if( !IsError() )
@@ -753,9 +750,7 @@ bool SbxValue::SetType( SbxDataType t )
                     break;
                 default: break;
             }
-            // This works always, because the Float representations are 0 as well.
-            memset( &aData, 0, sizeof( SbxValues ) );
-            aData.eType = t;
+            aData.clear(t);
         }
     }
     return true;
@@ -1502,9 +1497,8 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxWCHAR:
                 break;
             default:
-                memset (&aData,0,sizeof(aData));
+                aData.clear(SbxNULL);
                 ResetFlag(SbxFlagBits::Fixed);
-                aData.eType = SbxNULL;
                 SAL_WARN( "basic.sbx", "Loaded a non-supported data type" );
 
                 return false;
