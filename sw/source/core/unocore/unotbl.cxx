@@ -2218,7 +2218,7 @@ uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn,
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat(GetFrameFormat());
     // sheet is unimportant
-    if(nColumn >= 0 && nRow >= 0 && nColumn < USHRT_MAX && nRow < USHRT_MAX && pFormat)
+    if(nColumn >= 0 && nRow >= 0 && pFormat)
     {
         auto pXCell = lcl_CreateXCell(pFormat, nColumn, nRow);
         if(pXCell)
