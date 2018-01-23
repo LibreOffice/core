@@ -858,8 +858,8 @@ void SwXLineNumberingProperties::setPropertyValue(
             sal_Int32 nVal = 0;
             aValue >>= nVal;
             sal_Int32 nTmp = convertMm100ToTwip(nVal);
-            if (nTmp > USHRT_MAX)
-                nTmp = USHRT_MAX;
+            if (nTmp > SAL_MAX_UINT16)
+                nTmp = SAL_MAX_UINT16;
             aFontMetric.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
         }
         break;
