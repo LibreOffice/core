@@ -128,11 +128,6 @@ BaseContent::~BaseContent( )
         m_pMyShell->deregisterNotifier( m_aUncPath,this );
     }
     m_pMyShell->m_pProvider->release();
-
-    delete m_pDisposeEventListeners;
-    delete m_pContentEventListeners;
-    delete m_pPropertyListener;
-    delete m_pPropertySetInfoChangeListeners;
 }
 
 
@@ -182,8 +177,8 @@ BaseContent::addEventListener( const Reference< lang::XEventListener >& Listener
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( ! m_pDisposeEventListeners )
-        m_pDisposeEventListeners =
-            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex );
+        m_pDisposeEventListeners.reset(
+            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -203,27 +198,19 @@ void SAL_CALL
 BaseContent::dispose()
 {
     lang::EventObject aEvt;
-    comphelper::OInterfaceContainerHelper2* pDisposeEventListeners;
-    comphelper::OInterfaceContainerHelper2* pContentEventListeners;
-    comphelper::OInterfaceContainerHelper2* pPropertySetInfoChangeListeners;
-    PropertyListeners* pPropertyListener;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2> pDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2> pContentEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2> pPropertySetInfoChangeListeners;
+    std::unique_ptr<PropertyListeners> pPropertyListener;
 
     {
         osl::MutexGuard aGuard( m_aMutex );
         aEvt.Source = static_cast< XContent* >( this );
 
-
-        pDisposeEventListeners = m_pDisposeEventListeners;
-        m_pDisposeEventListeners = nullptr;
-
-        pContentEventListeners = m_pContentEventListeners;
-        m_pContentEventListeners = nullptr;
-
-        pPropertySetInfoChangeListeners = m_pPropertySetInfoChangeListeners;
-        m_pPropertySetInfoChangeListeners = nullptr;
-
-        pPropertyListener = m_pPropertyListener;
-        m_pPropertyListener = nullptr;
+        pDisposeEventListeners = std::move(m_pDisposeEventListeners);
+        pContentEventListeners = std::move(m_pContentEventListeners);
+        pPropertySetInfoChangeListeners = std::move(m_pPropertySetInfoChangeListeners);
+        pPropertyListener = std::move(m_pPropertyListener);
     }
 
     if ( pDisposeEventListeners && pDisposeEventListeners->getLength() )
@@ -237,11 +224,6 @@ BaseContent::dispose()
 
     if( pPropertySetInfoChangeListeners )
         pPropertySetInfoChangeListeners->disposeAndClear( aEvt );
-
-    delete pDisposeEventListeners;
-    delete pContentEventListeners;
-    delete pPropertyListener;
-    delete pPropertySetInfoChangeListeners;
 }
 
 //  XServiceInfo
@@ -422,7 +404,7 @@ BaseContent::addPropertiesChangeListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if( ! m_pPropertyListener )
-        m_pPropertyListener = new PropertyListeners( m_aEventListenerMutex );
+        m_pPropertyListener.reset( new PropertyListeners( m_aEventListenerMutex ) );
 
 
     if( PropertyNames.getLength() == 0 )
@@ -521,8 +503,8 @@ BaseContent::addContentEventListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( ! m_pContentEventListeners )
-        m_pContentEventListeners =
-            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex );
+        m_pContentEventListeners.reset(
+            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
 
 
     m_pContentEventListeners->addInterface( Listener );
@@ -646,7 +628,7 @@ BaseContent::addPropertySetInfoChangeListener(
 {
     osl::MutexGuard aGuard( m_aMutex );
     if( ! m_pPropertySetInfoChangeListeners )
-        m_pPropertySetInfoChangeListeners = new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex );
+        m_pPropertySetInfoChangeListeners.reset( new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
 
     m_pPropertySetInfoChangeListeners->addInterface( Listener );
 }

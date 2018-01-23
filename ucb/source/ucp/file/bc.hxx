@@ -232,10 +232,10 @@ namespace fileaccess {
         osl::Mutex                         m_aMutex;
 
         osl::Mutex                          m_aEventListenerMutex;
-        comphelper::OInterfaceContainerHelper2*   m_pDisposeEventListeners;
-        comphelper::OInterfaceContainerHelper2*   m_pContentEventListeners;
-        comphelper::OInterfaceContainerHelper2*   m_pPropertySetInfoChangeListeners;
-        PropertyListeners*                  m_pPropertyListener;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pDisposeEventListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pContentEventListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pPropertySetInfoChangeListeners;
+        std::unique_ptr<PropertyListeners>                  m_pPropertyListener;
 
 
         // Private Methods
