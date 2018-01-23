@@ -72,8 +72,6 @@ public:
 
     TypeCheck NotSubstTemplateTypeParmType() const;
 
-    TypeCheck SubstTemplateTypeParmType() const;
-
 private:
     TypeCheck() = default;
 
