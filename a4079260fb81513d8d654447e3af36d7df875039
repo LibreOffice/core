@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_da095133",
+        "filename": "starmath/inc/types.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-23T14:13:21Z",
+      "side": 1,
+      "message": "I think there\u0027s \"Dot above\" (see http://www.fileformat.info/info/unicode/char/02d9/index.htm) + \"COMBINING DOT ABOVE\"\nSo i\u0027d add an new const and wouldn\u0027t put extra \"0\"\nNow I\u0027m not an Unicode expert",
+      "range": {
+        "startLine": 145,
+        "startChar": 27,
+        "endLine": 145,
+        "endChar": 46
+      },
+      "revId": "a4079260fb81513d8d654447e3af36d7df875039",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_fa06151f",
+        "filename": "starmath/source/ooxmlimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-23T14:13:21Z",
+      "side": 1,
+      "message": "why putting \"dot\" as the default?",
+      "range": {
+        "startLine": 220,
+        "startChar": 19,
+        "endLine": 220,
+        "endChar": 22
+      },
+      "revId": "a4079260fb81513d8d654447e3af36d7df875039",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
