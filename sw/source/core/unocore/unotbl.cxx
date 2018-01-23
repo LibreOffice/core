@@ -230,7 +230,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
             {
                 sal_Int32 nRepeat = 0;
                 aValue >>= nRepeat;
-                if( nRepeat >= 0 && nRepeat < USHRT_MAX )
+                if( nRepeat >= 0 && nRepeat < SAL_MAX_UINT16 )
                     pFormat->GetDoc()->SetRowsToRepeat( *pTable, static_cast<sal_uInt16>(nRepeat) );
             }
         }
