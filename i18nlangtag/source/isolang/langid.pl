@@ -29,7 +29,7 @@ sub Usage()
     print STDERR
         "\n",
         "langid - a hackish utility to lookup lang.h language defines and LangIDs,\n",
-        "isolang.cxx ISO639/ISO3166 mapping, locale data files, langtab.src language\n",
+        "isolang.cxx ISO639/ISO3166 mapping, locale data files, langtab.hrc language\n",
         "listbox entries, langlist.mk, file_ooo.scp registry name, languages.pm and\n",
         "msi-encodinglist.txt\n\n",
 
@@ -41,7 +41,7 @@ sub Usage()
         "If the language string expression matches more than one define,\n",
         "e.g. as in 'german', all matching defines will be processed.\n",
         "If the language string does not match a define or an identifier in\n",
-        "langtab.src, a generic string match of the listbox entries will be tried.\n\n",
+        "langtab.hrc, a generic string match of the listbox entries will be tried.\n\n",
 
         "Numeric values of LangID,primarylanguage,sublanguage can be given\n",
         "decimal, hexadecimal (leading 0x), octal (leading 0) or binary (leading 0b).\n",
@@ -423,16 +423,17 @@ sub main()
             "$SRC_ROOT", "i18nlangtag", "source/isolang/mslangid.cxx", 1, ());
 
         my $module = "svtools";
-        my $name = "source/misc/langtab.src";
+        my $name = "inc/langtab.hrc";
+        #    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Afrikaans (South Africa)") , LANGUAGE_AFRIKAANS },
         #         < "Afrikaans" ; LANGUAGE_AFRIKAANS ; > ;
         # lookup define
         @resultlist = grepFile(
-            $modifier . '^\s*<\s*".*"\s*;\s*.*' . $grepdef . '.*\s*;\s*>\s*;',
+            $modifier . '^\s*\{\s*NC_\(\s*"[^"]*"\s*,\s*".*"\s*\)\s*,.*' . $grepdef . '.*\}',
             "$SRC_ROOT", $module, $name, 1, ());
         # lookup string
         if (!@resultlist) {
             grepFile(
-                $modifier . '^\s*<\s*".*' . $grepdef . '.*"\s*;\s*.*\s*;\s*>\s*;',
+                $modifier . '^\s*\{\s*NC_\(\s*"[^"]*"\s*,\s*".*' . $grepdef . '.*"\s*\)\s*,.*\}',
                 "$SRC_ROOT", $module, $name, 1, ()); }
 
         for my $langtag (@langtaggreplist)
