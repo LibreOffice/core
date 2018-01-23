@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_95732ab1",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-01-23T14:49:42Z",
+      "side": 1,
+      "message": "change to \u0027~Names Manager...\u0027",
+      "range": {
+        "startLine": 1289,
+        "startChar": 34,
+        "endLine": 1289,
+        "endChar": 47
+      },
+      "revId": "9bba23a1e4c46bdd66dece859eb5b02502487b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
