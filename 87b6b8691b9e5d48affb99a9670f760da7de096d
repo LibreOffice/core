@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3588be22",
+        "filename": "sw/source/filter/xml/xmlithlp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-23T17:01:08Z",
+      "side": 1,
+      "message": "\"misformed\" is ok.",
+      "range": {
+        "startLine": 128,
+        "startChar": 15,
+        "endLine": 128,
+        "endChar": 24
+      },
+      "revId": "87b6b8691b9e5d48affb99a9670f760da7de096d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_159d7a65",
+        "filename": "vcl/source/filter/jpeg/transupp.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-23T17:01:08Z",
+      "side": 1,
+      "message": "No, you should let \"Transverse transpose\", see https://linux.die.net/man/1/jpegtran",
+      "range": {
+        "startLine": 673,
+        "startChar": 3,
+        "endLine": 673,
+        "endChar": 11
+      },
+      "revId": "87b6b8691b9e5d48affb99a9670f760da7de096d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
