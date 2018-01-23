@@ -578,7 +578,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
-            std::unique_ptr<SwTableRep> pTableRep(::lcl_TableParamToItemSet( aCoreSet, rSh ));
+            std::shared_ptr<SwTableRep> pTableRep(::lcl_TableParamToItemSet(aCoreSet, rSh));
 
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTableAttr(aCoreSet);
@@ -589,37 +589,49 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
 
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg;
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
+
+            VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(GetView().GetWindow(), &aCoreSet, &rSh));
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
+
+            if (pDlg)
             {
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
-                pDlg.disposeAndReset(pFact->CreateSwTableTabDlg(GetView().GetWindow(), &aCoreSet, &rSh));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
-
                 if (pItem)
                     pDlg->SetCurPageId(OUStringToOString(static_cast<const SfxStringItem *>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8));
+
+                std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+                rReq.Ignore(); // the 'old' request is not relevant any more
+
+                pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh](sal_Int32 nResult){
+                    if (RET_OK == nResult)
+                    {
+                        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+
+                        //to record FN_INSERT_TABLE correctly
+                        pRequest->SetSlot(FN_FORMAT_TABLE_DLG);
+                        pRequest->Done(*pOutSet);
+
+                        ItemSetToTableParam(*pOutSet, rSh);
+                    }
+
+                    rBindings.Update(SID_RULER_BORDERS);
+                    rBindings.Update(SID_ATTR_TABSTOP);
+                    rBindings.Update(SID_RULER_BORDERS_VERTICAL);
+                    rBindings.Update(SID_ATTR_TABSTOP_VERTICAL);
+                });
             }
-
-
-            if ( (!pDlg && rReq.GetArgs()) || (pDlg && pDlg->Execute() == RET_OK) )
+            else
             {
-                const SfxItemSet* pOutSet = pDlg ? pDlg->GetOutputItemSet() : rReq.GetArgs();
-                if ( pDlg )
-                {
-                    //to record FN_INSERT_TABLE correctly
-                    rReq.SetSlot(FN_FORMAT_TABLE_DLG);
-                    rReq.Done( *pOutSet );
-                }
-                ItemSetToTableParam( *pOutSet, rSh );
+                if (rReq.GetArgs())
+                    ItemSetToTableParam(*rReq.GetArgs(), rSh);
+
+                rBindings.Update(SID_RULER_BORDERS);
+                rBindings.Update(SID_ATTR_TABSTOP);
+                rBindings.Update(SID_RULER_BORDERS_VERTICAL);
+                rBindings.Update(SID_ATTR_TABSTOP_VERTICAL);
             }
 
-            pDlg.disposeAndClear();
-            pTableRep.reset();
-            rBindings.Update(SID_RULER_BORDERS);
-            rBindings.Update(SID_ATTR_TABSTOP);
-            rBindings.Update(SID_RULER_BORDERS_VERTICAL);
-            rBindings.Update(SID_ATTR_TABSTOP_VERTICAL);
             break;
         }
         case SID_ATTR_BRUSH:
