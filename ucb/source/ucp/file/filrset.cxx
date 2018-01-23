@@ -88,10 +88,6 @@ XResultSet_impl::~XResultSet_impl()
 
     if( m_nIsOpen )
         m_aFolder.close();
-
-    delete m_pDisposeEventListeners;
-    delete m_pRowCountListeners;
-    delete m_pIsFinalListeners;
 }
 
 
@@ -109,8 +105,8 @@ XResultSet_impl::addEventListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( ! m_pDisposeEventListeners )
-        m_pDisposeEventListeners =
-            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex );
+        m_pDisposeEventListeners.reset(
+            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -681,8 +677,8 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
-            m_pIsFinalListeners =
-                new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex );
+            m_pIsFinalListeners.reset(
+                new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
 
         m_pIsFinalListeners->addInterface( xListener );
     }
@@ -690,8 +686,8 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
-            m_pRowCountListeners =
-                new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex );
+            m_pRowCountListeners.reset(
+                new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
         m_pRowCountListeners->addInterface( xListener );
     }
     else
