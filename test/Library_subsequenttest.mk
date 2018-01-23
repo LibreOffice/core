@@ -53,6 +53,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/scenario \
 	test/source/sheet/spreadsheetviewsettings \
 	test/source/sheet/subtotaldescriptor \
+	test/source/sheet/sheetcell \
 	test/source/sheet/tableautoformat \
 	test/source/sheet/tablevalidation \
 	test/source/sheet/xarealink \

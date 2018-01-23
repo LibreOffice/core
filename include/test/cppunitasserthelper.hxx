@@ -12,12 +12,48 @@
 
 #include <rtl/ustring.hxx>
 
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
 #include <cppunit/TestAssert.h>
 
 CPPUNIT_NS_BEGIN
+
+/** @brief Trait used by CPPUNIT_ASSERT* macros to compare com::sun::star:awt::Point.
+ *
+ * This specialization from @c struct @c assertion_traits<> helps to compare
+ * @see com::sun::star::awt::Point.
+ */
+template <> struct assertion_traits<css::awt::Point>
+{
+    static bool equal(const css::awt::Point& x, const css::awt::Point& y) { return x == y; }
+
+    static std::string toString(const css::awt::Point& x)
+    {
+        OStringStream ost;
+        ost << "Point: " << x.X << "." << x.Y << " (coordinate: X.Y)";
+        return ost.str();
+    }
+};
+
+/** @brief Trait used by CPPUNIT_ASSERT* macros to compare com::sun::star:awt::Size.
+ *
+ * This specialization from @c struct @c assertion_traits<> helps to compare
+ * @see com::sun::star::awt::Size.
+ */
+template <> struct assertion_traits<css::awt::Size>
+{
+    static bool equal(const css::awt::Size& x, const css::awt::Size& y) { return x == y; }
+
+    static std::string toString(const css::awt::Size& x)
+    {
+        OStringStream ost;
+        ost << "Size: " << x.Width << " x " << x.Height << " (Width x Height)";
+        return ost.str();
+    }
+};
 
 /** @brief Trait used by CPPUNIT_ASSERT* macros to compare com::sun::star::table::CellAddress.
  *
