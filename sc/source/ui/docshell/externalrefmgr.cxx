@@ -2365,6 +2365,15 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
     if (!pFileName)
         return nullptr;
 
+    // Do not load document until it was allowed
+    SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
+    if ( pDocShell )
+    {
+        const comphelper::EmbeddedObjectContainer& rContainer = pDocShell->GetEmbeddedObjectContainer();
+        if ( !rContainer.getUserAllowsLinkUpdate() )
+            return nullptr;
+    }
+
     ScDocument* pSrcDoc = nullptr;
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
     while (pShell)
