@@ -782,8 +782,8 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
         const sal_Int32 nBoxOffset = lcl_GetLongBoxNum( sGetName ) + nSttBox;
         const sal_Int32 nLineOffset = lcl_GetLongBoxNum( sGetName ) + nSttLine;
 
-        if( nBoxOffset < 0 || nBoxOffset >= USHRT_MAX ||
-            nLineOffset < 0 || nLineOffset >= USHRT_MAX )
+        if( nBoxOffset < 0 ||
+            nLineOffset < 0 )
             return nullptr;
 
         if( static_cast<size_t>(nLineOffset) >= pLines->size() )
