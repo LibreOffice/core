@@ -580,6 +580,8 @@ void XMLTableExport::exportTableTemplates()
 
         for( sal_Int32 nIndex = 0; nIndex < xTableFamily->getCount(); nIndex++ ) try
         {
+            SvtSaveOptions::ODFSaneDefaultVersion eVersion = mrExport.getSaneDefaultVersion();
+
             Reference< XStyle > xTableStyle( xTableFamily->getByIndex( nIndex ), UNO_QUERY_THROW );
             if( !xTableStyle->isInUse() )
                 continue;
@@ -606,7 +608,20 @@ void XMLTableExport::exportTableTemplates()
                 }
             }
             else
-                mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
+            {
+                // Below condition checks if any of the extended version of
+                // XML are set
+                if ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0)
+                {
+                    mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
+                }
+                else
+                {
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
+                }
+
+            }
 
              SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
 
@@ -631,7 +646,6 @@ void XMLTableExport::exportTableTemplates()
                 pElements++;
             }
 
-            SvtSaveOptions::ODFSaneDefaultVersion eVersion = mrExport.getSaneDefaultVersion();
             if (mbWriter && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0))
             {
                 pElements = getWriterSpecificTableStyleMap();
