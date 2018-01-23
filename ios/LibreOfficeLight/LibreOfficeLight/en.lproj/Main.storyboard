@@ -30,6 +30,11 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="mWv-AB-k2W"/>
                                 </connections>
                             </scrollView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8HF-MM-fd0" userLabel="ButtonBar" customClass="ButtonScrollView" customModule="LibreOfficeLight" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                             <view opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="URZ-zU-xtO" userLabel="Mask">
                                 <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -76,6 +81,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="buttonScrollView" destination="8HF-MM-fd0" id="Mlq-CV-p8N"/>
                         <outlet property="mask" destination="URZ-zU-xtO" id="pkw-v3-0gr"/>
                         <outlet property="progressBar" destination="hRJ-mR-Vnv" id="4lJ-kG-9SW"/>
                         <outlet property="scrollView" destination="cJ7-wO-9D1" id="U50-LO-plb"/>

@@ -26,16 +26,30 @@ public class DocumentHolder
     public let documentSize: CGSize
     public let views: Int32
     public let parts: Int32
+    public let partNames: [String]
 
     public private(set) var currentPart: Int32 = 0
 
     init(doc: Document)
     {
         self.doc = doc
+
+        // we go and get a bunch of document properties and store them in properties
+        // this allows easy access to these without threading issues
+        // when we get to editing they will have to be invalidated
+
         self.documentType = doc.getDocumentType()
         documentSize = doc.getDocumentSizeAsCGSize()
         views = doc.getViewsCount()
         parts = doc.getParts()
+
+        var partNames = [String]()
+        for i in 0..<parts
+        {
+            let n = doc.getPartName(nPart: i) ?? ""
+            partNames.append(n)
+        }
+        self.partNames = partNames
 
         doc.registerCallback() {
             [weak self] typ, payload in

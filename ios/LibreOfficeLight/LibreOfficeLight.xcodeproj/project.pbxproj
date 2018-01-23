@@ -35,6 +35,8 @@
 		39EF4E2F1FA500C9001914AC /* PropertiesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF4E2E1FA500C9001914AC /* PropertiesController.swift */; };
 		FC31D01E2012F65500E7F402 /* DocumentHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31D01D2012F65500E7F402 /* DocumentHolder.swift */; };
 		FC31D0202012F6D300E7F402 /* RenderCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31D01F2012F6D300E7F402 /* RenderCache.swift */; };
+		FC31D02B2013500E00E7F402 /* ButtonScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31D02A2013500E00E7F402 /* ButtonScrollView.swift */; };
+		FC31D02D2015DE1700E7F402 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31D02C2015DE1700E7F402 /* UIViewExtensions.swift */; };
 		FCAB1CB82009DB6900F1CC34 /* DocumentOverlaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAB1CB72009DB6900F1CC34 /* DocumentOverlaysView.swift */; };
 		FCC2E3FA2004A01500CEB504 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E3F62004A01400CEB504 /* Document.swift */; };
 		FCC2E3FC2004A01500CEB504 /* LibreOfficeKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E3F82004A01400CEB504 /* LibreOfficeKitWrapper.swift */; };
@@ -87,6 +89,8 @@
 		FC31D0132012EE4A00E7F402 /* LibreOfficeKitTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibreOfficeKitTypes.h; sourceTree = "<group>"; };
 		FC31D01D2012F65500E7F402 /* DocumentHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentHolder.swift; sourceTree = "<group>"; };
 		FC31D01F2012F6D300E7F402 /* RenderCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderCache.swift; sourceTree = "<group>"; };
+		FC31D02A2013500E00E7F402 /* ButtonScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonScrollView.swift; sourceTree = "<group>"; };
+		FC31D02C2015DE1700E7F402 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		FCAB1CB72009DB6900F1CC34 /* DocumentOverlaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentOverlaysView.swift; sourceTree = "<group>"; };
 		FCC2E3F62004A01400CEB504 /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		FCC2E3F82004A01400CEB504 /* LibreOfficeKitWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibreOfficeKitWrapper.swift; sourceTree = "<group>"; };
@@ -172,11 +176,13 @@
 				39EE81531FA644E800B73AB8 /* Info.plist */,
 				39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
+				FC31D02A2013500E00E7F402 /* ButtonScrollView.swift */,
 				3992D8591E5B762A00BEA987 /* DocumentController.swift */,
 				FCAB1CB72009DB6900F1CC34 /* DocumentOverlaysView.swift */,
 				FCC2E3FE2004B59B00CEB504 /* DocumentTiledView.swift */,
 				39284DB21FA5F207006F43E4 /* DocumentActions.swift */,
 				39EF4E2E1FA500C9001914AC /* PropertiesController.swift */,
+				FC31D02C2015DE1700E7F402 /* UIViewExtensions.swift */,
 				392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */,
 				399648461E5B87DC00E73E83 /* ViewProperties.swift */,
 				397E09011E597BD8001374E0 /* Main.storyboard */,
@@ -341,8 +347,10 @@
 				3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */,
 				FCC2E3FD2004A01500CEB504 /* LOKitThread.swift in Sources */,
 				397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */,
+				FC31D02B2013500E00E7F402 /* ButtonScrollView.swift in Sources */,
 				FCC2E3FA2004A01500CEB504 /* Document.swift in Sources */,
 				FCC2E3FF2004B59B00CEB504 /* DocumentTiledView.swift in Sources */,
+				FC31D02D2015DE1700E7F402 /* UIViewExtensions.swift in Sources */,
 				FCC2E4052004B74000CEB504 /* AsyncUtil.swift in Sources */,
 				39EF4E2F1FA500C9001914AC /* PropertiesController.swift in Sources */,
 			);
