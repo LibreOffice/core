@@ -218,7 +218,7 @@ void HWPFile::ParaListRead()
     ReadParaList(plist);
 }
 
-bool HWPFile::ReadParaList(std::vector < HWPPara* > &aplist)
+void HWPFile::ReadParaList(std::vector < HWPPara* > &aplist)
 {
     std::unique_ptr<HWPPara> spNode( new HWPPara );
     unsigned char tmp_etcflag;
@@ -249,8 +249,6 @@ bool HWPFile::ReadParaList(std::vector < HWPPara* > &aplist)
         aplist.push_back(spNode.release());
         spNode.reset( new HWPPara );
     }
-
-    return true;
 }
 
 bool HWPFile::ReadParaList(std::vector< std::unique_ptr<HWPPara> > &aplist, unsigned char flag)

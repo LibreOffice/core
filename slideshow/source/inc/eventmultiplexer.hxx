@@ -461,7 +461,7 @@ public:
         @param rView
         View that has changed
     */
-    bool notifyViewChanged( const UnoViewSharedPtr& rView );
+    void notifyViewChanged( const UnoViewSharedPtr& rView );
 
     /** View changed
 

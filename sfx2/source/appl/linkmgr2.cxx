@@ -434,12 +434,12 @@ void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer
     }
 }
 
-bool LinkManager::InsertFileLink(
+void LinkManager::InsertFileLink(
     sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const OUString& rFileNm,
     const OUString* pFilterNm, const OUString* pRange)
 {
     if (!(OBJECT_CLIENT_SO & rLink.GetObjType()))
-        return false;
+        return;
 
     OUStringBuffer aBuf;
     aBuf.append(rFileNm);
@@ -455,7 +455,7 @@ bool LinkManager::InsertFileLink(
     }
 
     OUString aCmd = aBuf.makeStringAndClear();
-    return InsertLink(&rLink, nFileType, SfxLinkUpdateMode::ONCALL, &aCmd);
+    InsertLink(&rLink, nFileType, SfxLinkUpdateMode::ONCALL, &aCmd);
 }
 
 // A transfer is aborted, so cancel all download media

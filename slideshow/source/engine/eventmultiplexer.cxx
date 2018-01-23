@@ -1127,9 +1127,9 @@ void EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
         { return pHandler.lock()->viewRemoved( rView ); } );
 }
 
-bool EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
+void EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
 {
-    return mpImpl->maViewHandlers.applyAll(
+    mpImpl->maViewHandlers.applyAll(
         [&rView]( const ViewEventHandlerWeakPtr& pHandler )
         { return pHandler.lock()->viewChanged( rView ); } );
 }

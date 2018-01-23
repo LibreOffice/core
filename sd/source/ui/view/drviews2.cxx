@@ -311,7 +311,7 @@ public:
         return m_aResults;
     }
 
-    bool collect()
+    void collect()
     {
         // Set to MASTER mode
         EditMode eOldMode = m_rDrawViewShell.GetEditMode();
@@ -345,13 +345,12 @@ public:
                         if (hasCustomPropertyField(aSections, m_aKeyCreator.makeCategoryNameKey()))
                         {
                             iterateSectionsAndCollect(aSections, rEditText);
-                            return true;
+                            return;
                         }
                     }
                 }
             }
         }
-        return false;
     }
 };
 

@@ -699,10 +699,8 @@ SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
     return mpDoc->GetStyleSheetPool();
 }
 
-bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
+void DrawDocShell::GotoBookmark(const OUString& rBookmark)
 {
-    bool bFound = false;
-
     if (mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
@@ -762,7 +760,6 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
         {
             // Jump to the bookmarked page.  This is done in three steps.
 
-            bFound = true;
             SdPage* pPage;
             if (bIsMasterPage)
                 pPage = static_cast<SdPage*>( mpDoc->GetMasterPage(nPageNumber) );
@@ -774,7 +771,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
             PageKind eNewPageKind = pPage->GetPageKind();
 
             if( (eNewPageKind != PageKind::Standard) && (mpDoc->GetDocumentType() == DocumentType::Draw) )
-                return false;
+                return;
 
             if (eNewPageKind != pDrawViewShell->GetPageKind())
             {
@@ -857,8 +854,6 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
         rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
-
-    return bFound;
 }
 
 /**

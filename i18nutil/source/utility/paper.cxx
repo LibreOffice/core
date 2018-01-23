@@ -157,10 +157,10 @@ static const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
 
 #define MAXSLOPPY 21
 
-bool PaperInfo::doSloppyFit()
+void PaperInfo::doSloppyFit()
 {
     if (m_eType != PAPER_USER)
-        return true;
+        return;
 
     for ( size_t i = 0; i < nTabSize; ++i )
     {
@@ -174,11 +174,9 @@ bool PaperInfo::doSloppyFit()
             m_nPaperWidth = aDinTab[i].m_nWidth;
             m_nPaperHeight = aDinTab[i].m_nHeight;
             m_eType = static_cast<Paper>(i);
-            return true;
+            return;
         }
     }
-
-    return false;
 }
 
 bool PaperInfo::sloppyEqual(const PaperInfo &rOther) const
