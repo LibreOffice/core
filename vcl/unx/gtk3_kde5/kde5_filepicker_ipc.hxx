@@ -30,7 +30,7 @@ class FilePickerIpc : public QObject
     Q_OBJECT
 public:
     explicit FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent = nullptr);
-    ~FilePickerIpc();
+    ~FilePickerIpc() override;
 
 private Q_SLOTS:
     void readCommands();
