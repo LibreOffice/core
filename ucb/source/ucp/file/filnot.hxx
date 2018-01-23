@@ -101,12 +101,12 @@ namespace fileaccess {
     {
     public:
         // Side effect of this function is the change of the name
-        virtual ContentEventNotifier*          cEXC( const OUString& aNewName ) = 0;
+        virtual std::unique_ptr<ContentEventNotifier> cEXC( const OUString& aNewName ) = 0;
         // Side effect is the change of the state of the object to "deleted".
-        virtual ContentEventNotifier*          cDEL() = 0;
-        virtual ContentEventNotifier*          cCEL() = 0;
-        virtual PropertySetInfoChangeNotifier* cPSL() = 0;
-        virtual PropertyChangeNotifier*        cPCL() = 0;
+        virtual std::unique_ptr<ContentEventNotifier> cDEL() = 0;
+        virtual std::unique_ptr<ContentEventNotifier> cCEL() = 0;
+        virtual std::unique_ptr<PropertySetInfoChangeNotifier> cPSL() = 0;
+        virtual std::unique_ptr<PropertyChangeNotifier> cPCL() = 0;
 
     protected:
         ~Notifier() {}

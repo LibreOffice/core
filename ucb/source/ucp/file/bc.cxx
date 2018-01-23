@@ -1174,29 +1174,27 @@ void BaseContent::endTask( sal_Int32 CommandId )
 }
 
 
-ContentEventNotifier*
+std::unique_ptr<ContentEventNotifier>
 BaseContent::cDEL()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     m_nState |= Deleted;
 
-    ContentEventNotifier* p;
+    std::unique_ptr<ContentEventNotifier> p;
     if( m_pContentEventListeners )
     {
-        p = new ContentEventNotifier( m_pMyShell,
+        p.reset( new ContentEventNotifier( m_pMyShell,
                                       this,
                                       m_xContentIdentifier,
-                                      m_pContentEventListeners->getElements() );
+                                      m_pContentEventListeners->getElements() ) );
     }
-    else
-        p = nullptr;
 
     return p;
 }
 
 
-ContentEventNotifier*
+std::unique_ptr<ContentEventNotifier>
 BaseContent::cEXC( const OUString& aNewName )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -1206,46 +1204,46 @@ BaseContent::cEXC( const OUString& aNewName )
     FileContentIdentifier* pp = new FileContentIdentifier( aNewName );
     m_xContentIdentifier.set( pp );
 
-    ContentEventNotifier* p = nullptr;
+    std::unique_ptr<ContentEventNotifier> p;
     if( m_pContentEventListeners )
-        p = new ContentEventNotifier( m_pMyShell,
+        p.reset( new ContentEventNotifier( m_pMyShell,
                                       this,
                                       m_xContentIdentifier,
                                       xOldRef,
-                                      m_pContentEventListeners->getElements() );
+                                      m_pContentEventListeners->getElements() ) );
 
     return p;
 }
 
 
-ContentEventNotifier*
+std::unique_ptr<ContentEventNotifier>
 BaseContent::cCEL()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    ContentEventNotifier* p = nullptr;
+    std::unique_ptr<ContentEventNotifier> p;
     if( m_pContentEventListeners )
-        p = new ContentEventNotifier( m_pMyShell,
+        p.reset( new ContentEventNotifier( m_pMyShell,
                                       this,
                                       m_xContentIdentifier,
-                                      m_pContentEventListeners->getElements() );
+                                      m_pContentEventListeners->getElements() ) );
 
     return p;
 }
 
-PropertySetInfoChangeNotifier*
+std::unique_ptr<PropertySetInfoChangeNotifier>
 BaseContent::cPSL()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    PropertySetInfoChangeNotifier* p = nullptr;
+    std::unique_ptr<PropertySetInfoChangeNotifier> p;
     if( m_pPropertySetInfoChangeListeners  )
-        p = new PropertySetInfoChangeNotifier( this,
-                                               m_pPropertySetInfoChangeListeners->getElements() );
+        p.reset( new PropertySetInfoChangeNotifier( this,
+                                               m_pPropertySetInfoChangeListeners->getElements() ) );
 
     return p;
 }
 
 
-PropertyChangeNotifier*
+std::unique_ptr<PropertyChangeNotifier>
 BaseContent::cPCL()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -1255,7 +1253,7 @@ BaseContent::cPCL()
 
     Sequence< OUString > seqNames = m_pPropertyListener->getContainedTypes();
 
-    PropertyChangeNotifier* p = nullptr;
+    std::unique_ptr<PropertyChangeNotifier> p;
 
     sal_Int32 length = seqNames.getLength();
 
@@ -1270,8 +1268,8 @@ BaseContent::cPCL()
             (*listener)[seqNames[i]] = pContainer->getElements();
         }
 
-        p = new PropertyChangeNotifier( this,
-                                        listener );
+        p.reset( new PropertyChangeNotifier( this,
+                                        listener ) );
     }
 
     return p;
