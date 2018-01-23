@@ -26,10 +26,13 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // holds known document types
     var KnownDocumentTypes : [String] = []
 
+    var zeroInsets: UIEdgeInsets = .zero
+
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var mask: UIView!
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var buttonScrollView: ButtonScrollView!
 
     deinit
     {
@@ -61,10 +64,12 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
-        //let res = Bundle.main.url(forResource: "example", withExtension: "odt")
-        //let res = Bundle.main.url(forResource: "example2", withExtension: "docx")
 
-        let res = Bundle.main.url(forResource: "testdata/1", withExtension: "pptx")
+        // Always load the 'welcome' file, as per the android app
+        let res = Bundle.main.url(forResource: "example", withExtension: "odt")
+
+        // uncomment for test data in resources until the doc picker works properly
+        //let res = Bundle.main.url(forResource: "testdata/2", withExtension: "xlsx")
 
         if let exampleDoc = res
         {
@@ -416,6 +421,30 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         docView.addSubview(overlay)
         self.documentOverlaysView = overlay
 
+        // button view - used for spreadsheet tabs
+        if doc.isSpeadsheet
+        {
+            buttonScrollView.isHidden = false
+            buttonScrollView.setButtonLabels(labels: doc.partNames)
+            buttonScrollView.buttonClickedCallback = {
+                [weak self] index in
+                self?.document?.async {
+                    $0.setPart(nPart: Int32(index))
+                    runOnMain {
+                        self?.documentView?.setNeedsDisplay()
+                    }
+                }
+            }
+            // make room for the scroll view
+            zeroInsets = UIEdgeInsets(top: 0, left: 0, bottom: buttonScrollView.height, right: 0)
+        }
+        else
+        {
+            zeroInsets = .zero
+            buttonScrollView.isHidden = true
+        }
+        scrollView.contentInset = zeroInsets
+
         // debugging view borders
         /*
         self.scrollView.layer.borderColor = UIColor.red.cgColor
@@ -563,7 +592,7 @@ extension DocumentController
     @objc func keyboardWillHide(notification: NSNotification)
     {
         print("keyboardWillHide")
-        scrollView.contentInset = .zero
-        scrollView.scrollIndicatorInsets = .zero
+        scrollView.contentInset = zeroInsets
+        scrollView.scrollIndicatorInsets = zeroInsets
     }
 }
