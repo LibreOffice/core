@@ -1083,9 +1083,9 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         pOuterSequence->realloc(2);
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
-        *pInnerSequence = awt::Point( mnX1 - aTopLeft.X, mnY1 - aTopLeft.Y);
+        *pInnerSequence = awt::Point(o3tl::saturating_add(mnX1, -aTopLeft.X), o3tl::saturating_add(mnY1, -aTopLeft.Y));
         pInnerSequence++;
-        *pInnerSequence = awt::Point( mnX2 - aTopLeft.X, mnY2 - aTopLeft.Y);
+        *pInnerSequence = awt::Point(o3tl::saturating_add(mnX2, -aTopLeft.X), o3tl::saturating_add(mnY2, -aTopLeft.Y));
 
         xPropSet->setPropertyValue("Geometry", Any(aPolyPoly));
     }
