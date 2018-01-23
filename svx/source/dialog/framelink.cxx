@@ -318,7 +318,7 @@ bool Style::operator<( const Style& rOther) const
     if( (Secn() && rOther.Secn()) && !rtl::math::approxEqual(Dist(), rOther.Dist()) ) return Dist() > rOther.Dist();
 
     // both lines single and 1 unit thick, only one is dotted -> this<rOther, if this is dotted
-    if( (nLW == 1) && (Type() != rOther.Type()) ) return Type() != SvxBorderLineStyle::SOLID;
+    if ((nLW == 1) && !Secn() && !rOther.Secn() && (Type() != rOther.Type())) return Type() > rOther.Type();
 
     // seem to be equal
     return false;
