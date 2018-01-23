@@ -2263,7 +2263,7 @@ uno::Reference<table::XCellRange>  SwXTextTable::getCellRangeByPosition(sal_Int3
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat(GetFrameFormat());
-    if(pFormat && nRight < USHRT_MAX && nBottom < USHRT_MAX &&
+    if(pFormat &&
             nLeft <= nRight && nTop <= nBottom &&
             nLeft >= 0 && nRight >= 0 && nTop >= 0 && nBottom >= 0 )
     {
