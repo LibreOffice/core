@@ -53,6 +53,11 @@ def main():
             'Math': ['../uitest/math_tests/'],
             'Draw': ['']}
 
+    print('{{TopMenu}}')
+    print('{{Menu}}')
+    print('{{Menu.Development}}')
+    print('{{OrigLang|}}')
+    print()
     print('Generated on ' + str(datetime.datetime.now()))
     for k,v in uitest_dirs.items():
         print('\n=== ' + k + ' ===')
@@ -66,6 +71,8 @@ def main():
                             linkFormat(class_name),uitest_file[3:]))
                         for m in method_names:
                             print('**' + linkFormat(m))
+    print()
+    print('[[Category:QA]][[Category:Development]]')
 
 if __name__ == '__main__':
     main()
