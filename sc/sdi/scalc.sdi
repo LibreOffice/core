@@ -701,6 +701,23 @@ SfxVoidItem ConditionalFormatDialog SID_OPENDLG_CONDFRMT
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem CurrentConditionalFormatDialog SID_OPENDLG_CURRENTCONDFRMT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
 
 SfxVoidItem ColorScaleFormatDialog SID_OPENDLG_COLORSCALE
 ()
@@ -775,6 +792,24 @@ SfxVoidItem CondDateFormatDialog SID_OPENDLG_CONDDATE
 
 
 SfxVoidItem ConditionalFormatManagerDialog SID_OPENDLG_CONDFRMT_MANAGER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
+SfxVoidItem CurrentConditionalFormatManagerDialog SID_OPENDLG_CURRENTCONDFRMT_MANAGER
 ()
 [
     AutoUpdate = FALSE,

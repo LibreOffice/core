@@ -198,6 +198,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             case SID_SPELL_DIALOG:
             case SID_HANGUL_HANJA_CONVERSION:
             case SID_OPENDLG_CONDFRMT:
+            case SID_OPENDLG_CURRENTCONDFRMT:
             case SID_OPENDLG_COLORSCALE:
             case SID_OPENDLG_DATABAR:
                 pScMod->InputEnterHandler();
@@ -1928,6 +1929,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_OPENDLG_CONDFRMT:
+        case SID_OPENDLG_CURRENTCONDFRMT:
         case SID_OPENDLG_COLORSCALE:
         case SID_OPENDLG_DATABAR:
         case SID_OPENDLG_ICONSET:
@@ -2046,6 +2048,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 switch(nSlot)
                 {
                     case SID_OPENDLG_CONDFRMT:
+                    case SID_OPENDLG_CURRENTCONDFRMT:
                         eType = condformat::dialog::CONDITION;
                         break;
                     case SID_OPENDLG_COLORSCALE:
@@ -2530,6 +2533,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_OPENDLG_CONDFRMT_MANAGER:
+        case SID_OPENDLG_CURRENTCONDFRMT_MANAGER:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 assert(pFact);

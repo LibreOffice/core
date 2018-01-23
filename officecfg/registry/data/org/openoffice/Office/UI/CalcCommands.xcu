@@ -503,7 +503,14 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Condition...</value>
         </prop>
-
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CurrentConditionalFormatDialog" oor:op="replace">
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Conditional Formatting...</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -555,6 +562,11 @@
       <node oor:name=".uno:ConditionalFormatManagerDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Manage...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CurrentConditionalFormatManagerDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Manage Conditional Formatting...</value>
         </prop>
       </node>
       <node oor:name=".uno:Deselect" oor:op="replace">
