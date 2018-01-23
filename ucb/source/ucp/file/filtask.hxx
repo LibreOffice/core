@@ -230,12 +230,11 @@ namespace fileaccess
         {
         public:
             UnqPathData();
+            UnqPathData(UnqPathData&&);
             ~UnqPathData();
-            UnqPathData( const UnqPathData& );
-            UnqPathData& operator=( UnqPathData& );
 
-            PropertySet*               properties;
-            NotifierList*              notifier;
+            std::unique_ptr<PropertySet> properties;
+            std::unique_ptr<NotifierList> notifier;
 
             // Three views on the PersistentPropertySet
             css::uno::Reference< css::ucb::XPersistentPropertySet >   xS;

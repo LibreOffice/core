@@ -71,46 +71,13 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-TaskManager::UnqPathData::UnqPathData()
-    : properties( nullptr ),
-      notifier( nullptr ),
-      xS( nullptr ),
-      xC( nullptr ),
-      xA( nullptr )
-{
-    // empty
-}
+TaskManager::UnqPathData::UnqPathData() = default;
 
+TaskManager::UnqPathData::UnqPathData(TaskManager::UnqPathData&&) = default;
 
-TaskManager::UnqPathData::UnqPathData( const UnqPathData& a )
-    : properties( a.properties ),
-      notifier( a.notifier ),
-      xS( a.xS ),
-      xC( a.xC ),
-      xA( a.xA )
-{
-}
-
-
-TaskManager::UnqPathData& TaskManager::UnqPathData::operator=( UnqPathData& a )
-{
-    properties = a.properties;
-    notifier = a.notifier;
-    xS = a.xS;
-    xC = a.xC;
-    xA = a.xA;
-    a.properties = nullptr;
-    a.notifier = nullptr;
-    a.xS = nullptr;
-    a.xC = nullptr;
-    a.xA = nullptr;
-    return *this;
-}
 
 TaskManager::UnqPathData::~UnqPathData()
 {
-    delete properties;
-    delete notifier;
 }
 
 TaskManager::MyProperty::MyProperty( const OUString&                         thePropertyName )
@@ -533,10 +500,10 @@ TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
     osl::MutexGuard aGuard( m_aMutex );
 
     ContentMap::iterator it =
-        m_aContent.emplace( aUnqPath,UnqPathData() ).first;
+        m_aContent.emplace( aUnqPath, UnqPathData() ).first;
 
     if( ! it->second.notifier )
-        it->second.notifier = new NotifierList;
+        it->second.notifier.reset( new NotifierList );
 
     std::vector< Notifier* >& nlist = *( it->second.notifier );
 
@@ -2245,7 +2212,7 @@ void
 TaskManager::load( const ContentMap::iterator& it, bool create )
 {
     if( ! it->second.properties )
-        it->second.properties = new PropertySet;
+        it->second.properties.reset( new PropertySet );
 
     if( ( ! it->second.xS.is() ||
           ! it->second.xC.is() ||
@@ -2772,14 +2739,11 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                     aNewName,UnqPathData() ).first;
 
                 // copy Ownership also
-                delete itnew->second.properties;
-                itnew->second.properties = itold->second.properties;
-                itold->second.properties = nullptr;
+                itnew->second.properties = std::move(itold->second.properties);
 
                 // copy existing list
-                std::vector< Notifier* >* copyList = itnew->second.notifier;
-                itnew->second.notifier = itold->second.notifier;
-                itold->second.notifier = nullptr;
+                std::unique_ptr<std::vector< Notifier* >> copyList = std::move(itnew->second.notifier);
+                itnew->second.notifier = std::move(itold->second.notifier);
 
                 m_aContent.erase( itold );
 
@@ -2805,7 +2769,6 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                         ++copyIt;
                     }
                 }
-                delete copyList;
             }
         }
     }
@@ -2903,8 +2866,7 @@ TaskManager::erasePersistentSet( const OUString& aUnqPath,
                 it->second.xC = nullptr;
                 it->second.xA = nullptr;
 
-                delete it->second.properties;
-                it->second.properties = nullptr;
+                it->second.properties.reset();
             }
         }
 
