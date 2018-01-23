@@ -260,7 +260,7 @@ protected:
             bool validRow( sal_uInt32 nRow );
             bool seekRow( eRowPosition pos, sal_Int32 nOffset = 0 );
             sal_Int32 deletedCount();
-            bool fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
+            void fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
             sal_Int32 getRowForCardNumber(sal_Int32 nCardNum);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException

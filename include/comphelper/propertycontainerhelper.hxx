@@ -149,7 +149,7 @@ protected:
                     const css::uno::Any& rValue
                 );
 
-    bool        setFastPropertyValue(
+    void        setFastPropertyValue(
                         sal_Int32 nHandle,
                         const css::uno::Any& rValue
                     );

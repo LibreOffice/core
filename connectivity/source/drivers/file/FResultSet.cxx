@@ -1166,7 +1166,7 @@ void OResultSet::sortRows()
 }
 
 
-bool OResultSet::OpenImpl()
+void OResultSet::OpenImpl()
 {
     OSL_ENSURE(m_pSQLAnalyzer,"No analyzer set with setSqlAnalyzer!");
     if(!m_pTable.is())
@@ -1383,7 +1383,7 @@ bool OResultSet::OpenImpl()
             if(!m_pTable->InsertRow(*m_aAssignValues, m_xColsIdx))
             {
                 m_nFilePos  = 0;
-                return false;
+                return;
             }
 
             m_nRowCountResult = 1;
@@ -1395,8 +1395,6 @@ bool OResultSet::OpenImpl()
 
     // reset FilePos
     m_nFilePos  = 0;
-
-    return true;
 }
 
 Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()

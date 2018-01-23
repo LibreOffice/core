@@ -1834,10 +1834,8 @@ namespace comphelper
         }
     }
 
-    bool BackupFileHelper::tryPush()
+    void BackupFileHelper::tryPush()
     {
-        bool bDidPush(false);
-
         // no push when SafeModeDir exists, it may be Office's exit after SafeMode
         // where SafeMode flag is already deleted, but SafeModeDir cleanup is not
         // done yet (is done at next startup)
@@ -1851,21 +1849,17 @@ namespace comphelper
             // process all files in question recursively
             if (!maDirs.empty() || !maFiles.empty())
             {
-                bDidPush = tryPush_Files(
+                tryPush_Files(
                     maDirs,
                     maFiles,
                     maUserConfigWorkURL,
                     aPackURL);
             }
         }
-
-        return bDidPush;
     }
 
-    bool BackupFileHelper::tryPushExtensionInfo()
+    void BackupFileHelper::tryPushExtensionInfo()
     {
-        bool bDidPush(false);
-
         // no push when SafeModeDir exists, it may be Office's exit after SafeMode
         // where SafeMode flag is already deleted, but SafeModeDir cleanup is not
         // done yet (is done at next startup)
@@ -1873,10 +1867,8 @@ namespace comphelper
         {
             const OUString aPackURL(getPackURL());
 
-            bDidPush = tryPush_extensionInfo(aPackURL);
+            tryPush_extensionInfo(aPackURL);
         }
-
-        return bDidPush;
     }
 
     bool BackupFileHelper::isPopPossible()
@@ -1904,7 +1896,7 @@ namespace comphelper
         return bPopPossible;
     }
 
-    bool BackupFileHelper::tryPop()
+    void BackupFileHelper::tryPop()
     {
         bool bDidPop(false);
 
@@ -1931,8 +1923,6 @@ namespace comphelper
                 osl::Directory::remove(aPackURL);
             }
         }
-
-        return bDidPop;
     }
 
     bool BackupFileHelper::isPopPossibleExtensionInfo() const
@@ -1949,7 +1939,7 @@ namespace comphelper
         return bPopPossible;
     }
 
-    bool BackupFileHelper::tryPopExtensionInfo()
+    void BackupFileHelper::tryPopExtensionInfo()
     {
         bool bDidPop(false);
 
@@ -1965,8 +1955,6 @@ namespace comphelper
                 osl::Directory::remove(aPackURL);
             }
         }
-
-        return bDidPop;
     }
 
     bool BackupFileHelper::isTryDisableAllExtensionsPossible()

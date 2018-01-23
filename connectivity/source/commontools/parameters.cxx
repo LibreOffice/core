@@ -770,11 +770,11 @@ namespace dbtools
     }
 
 
-    bool ParameterManager::getConnection( Reference< XConnection >& /* [out] */ _rxConnection )
+    void ParameterManager::getConnection( Reference< XConnection >& /* [out] */ _rxConnection )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::getConnection: not initialized, or already disposed!" );
         if ( !isAlive() )
-            return false;
+            return;
 
         _rxConnection.clear();
         try
@@ -788,7 +788,6 @@ namespace dbtools
         {
             SAL_WARN( "connectivity.commontools", "ParameterManager::getConnection: could not retrieve the connection of the !" );
         }
-        return _rxConnection.is();
     }
 
 

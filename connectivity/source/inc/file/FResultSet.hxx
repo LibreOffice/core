@@ -258,7 +258,7 @@ namespace connectivity
 
             // special methods
             inline sal_Int32 mapColumn(sal_Int32    column);
-            bool OpenImpl();
+            void OpenImpl();
             void doTableSpecials(const OSQLTable& _xTable);
 
             sal_Int32 getRowCountResult() const { return m_nRowCountResult; }

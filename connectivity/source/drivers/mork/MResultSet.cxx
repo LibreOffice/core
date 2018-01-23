@@ -1332,7 +1332,8 @@ bool OResultSet::validRow( sal_uInt32 nRow)
 
     return true;
 }
-bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
+
+void OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
 {
     impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
@@ -1345,7 +1346,6 @@ bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
             m_pKeySet->get().push_back( nKeyValue );
         m_CurrentRowCount = nMaxCardNumber;
     }
-    return true;
 }
 
 sal_Int32 OResultSet::deletedCount()

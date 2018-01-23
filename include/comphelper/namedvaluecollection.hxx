@@ -152,9 +152,9 @@ namespace comphelper
         }
 
         template < typename VALUE_TYPE >
-        bool    get_ensureType( const OUString& _rValueName, VALUE_TYPE& _out_rValue ) const
+        void    get_ensureType( const OUString& _rValueName, VALUE_TYPE& _out_rValue ) const
         {
-            return get_ensureType( _rValueName, &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
+            get_ensureType( _rValueName, &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
         }
 
         /** retrieves a value with a given name, or defaults it to a given value, if it's not present

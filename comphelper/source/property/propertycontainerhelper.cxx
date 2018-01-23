@@ -357,7 +357,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
 }
 
 
-bool OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const Any& _rValue)
+void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const Any& _rValue)
 {
     // get the property somebody is asking for
     PropertiesIterator aPos = searchHandle(_nHandle);
@@ -366,7 +366,7 @@ bool OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
         OSL_FAIL( "OPropertyContainerHelper::setFastPropertyValue: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
-        return false;
+        return;
     }
 
     bool bSuccess = true;
@@ -395,8 +395,6 @@ bool OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
 
             break;
     }
-
-    return bSuccess;
 }
 
 void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
