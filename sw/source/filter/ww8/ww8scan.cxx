@@ -2305,8 +2305,9 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 
     if (!failure)
     {
+        // Check arguments to ShortToSVBT16 in loop below will all be valid:
         sal_Int32 nResult;
-        failure = o3tl::checked_add(nPN, ncpN, nResult) || nResult > USHRT_MAX;
+        failure = o3tl::checked_add(nPN, ncpN, nResult) || nResult > SAL_MAX_UINT16;
     }
 
     if (!failure)
