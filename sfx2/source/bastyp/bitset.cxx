@@ -103,7 +103,7 @@ sal_uInt16 IndexBitSet::GetFreeIndex()
         *this|=i;
         return i;
       }
-  SAL_WARN( "sfx", "IndexBitSet enthaelt mehr als SAL_MAX_UINT16 Eintraege");
+  SAL_WARN( "sfx", "IndexBitSet contains more than SAL_MAX_UINT16 entries");
   return 0;
 }
 
