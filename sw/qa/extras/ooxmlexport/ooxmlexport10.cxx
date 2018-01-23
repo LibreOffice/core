@@ -907,6 +907,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92454, "tdf92454.docx")
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf95377, "tdf95377.docx")
+{
+    uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xParagraph, "ParaRightMargin"));
+
+    xParagraph.set(getParagraph(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-501), getProperty<sal_Int32>(xParagraph, "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2501), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
+
+    xParagraph.set(getParagraph(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-250), getProperty<sal_Int32>(xParagraph, "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf95376, "tdf95376.docx")
 {
     uno::Reference<beans::XPropertyState> xParagraph(getParagraph(2), uno::UNO_QUERY);
