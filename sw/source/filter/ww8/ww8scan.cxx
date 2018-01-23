@@ -4170,8 +4170,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             {
                 OSL_ENSURE(nLen2 == nLen,
                     "Fib length and read length are different");
-                if (nLen > USHRT_MAX)
-                    nLen = USHRT_MAX;
+                if (nLen > SAL_MAX_UINT16)
+                    nLen = SAL_MAX_UINT16;
                 else if (nLen < 2 )
                     nLen = 2;
                 nLen2 = static_cast<sal_uInt16>(nLen);
