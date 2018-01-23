@@ -401,10 +401,9 @@ namespace ftp {
                                             m_sProperty;
 
         osl::Mutex                          m_aMutex;
-        comphelper::OInterfaceContainerHelper2*   m_pDisposeEventListeners;
-
-        comphelper::OInterfaceContainerHelper2*   m_pRowCountListeners;
-        comphelper::OInterfaceContainerHelper2*   m_pIsFinalListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pDisposeEventListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pRowCountListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pIsFinalListeners;
     };
 
 
