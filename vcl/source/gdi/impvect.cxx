@@ -95,8 +95,8 @@ static const ChainMove aImplMoveOuter[ 8 ] =  {
 struct ImplColorSet
 {
     BitmapColor maColor;
-    sal_uInt16      mnIndex;
-    bool        mbSet;
+    sal_uInt16      mnIndex = 0;
+    bool        mbSet = false;
 };
 
 extern "C" int ImplColorSetCmpFnc( const void* p1, const void* p2 )
@@ -644,9 +644,8 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         const long          nHeight = pRAcc->Height();
         const sal_uInt16        nColorCount = pRAcc->GetPaletteEntryCount();
         sal_uInt16              n;
-        ImplColorSet*       pColorSet = reinterpret_cast<ImplColorSet*>(new sal_uInt8[ 256 * sizeof( ImplColorSet ) ]);
+        ImplColorSet*       pColorSet = new ImplColorSet[ 256 ];
 
-        memset( pColorSet, 0, 256 * sizeof( ImplColorSet ) );
         rMtf.Clear();
 
         // get used palette colors and sort them from light to dark colors
@@ -703,7 +702,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
         }
 
-        delete[] reinterpret_cast<sal_uInt8*>(pColorSet);
+        delete[] pColorSet;
 
         if( rMtf.GetActionSize() )
         {
