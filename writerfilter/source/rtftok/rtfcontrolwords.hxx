@@ -1998,6 +1998,8 @@ struct RTFSymbol
     int nControlType;
     RTFKeyword nIndex;
 
+    int nDefValue; //For most of the ControlWords, default is 0.
+
     bool operator<(const RTFSymbol& rOther) const;
 };
 
