@@ -1092,9 +1092,21 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 const bool bFirstRow(nRow == nFirstRow);
                 const bool bLastRow(nRow == nLastRow);
 
+                // handle rotation: If cell is rotated, handle lower/right edge inside
+                // this local geometry due to the created CoordinateSystem already representing
+                // the needed transformations.
+                const bool bRotated(rCell.IsRotated());
+
+                // Additionally avoid double-handling by supressing handling when self not roated,
+                // but above/left is rotated and thus already handled. Two directly connected
+                // rotated will paint/create both edges, they might be rotated differently.
+                const bool bSuppressAbove(!bRotated && nRow > nFirstRow && CELL(nCol, nRow - 1).IsRotated());
+                const bool bSupressLeft(!bRotated && nCol > nFirstCol && CELL(nCol - 1, nRow).IsRotated());
+
                 // create upper line for this Cell
-                if (!bOverlapY      // true for first line in merged cells or cells
-                    || bFirstRow)   // true for non_Calc usages of this tooling
+                if ((!bOverlapY         // true for first line in merged cells or cells
+                    || bFirstRow)       // true for non_Calc usages of this tooling
+                    && !bSuppressAbove) // true when above is not rotated, so edge is already handled (see bRotated)
                 {
                     // get CellStyle - method will take care to get the correct one, e.g.
                     // for merged cells (it uses ORIGCELL that works with topLeft's of these)
@@ -1107,7 +1119,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 }
 
                 // create lower line for this Cell
-                if (bLastRow)       // true for non_Calc usages of this tooling
+                if (bLastRow       // true for non_Calc usages of this tooling
+                    || bRotated)   // true if cell is rotated, handle lower edge in local geometry
                 {
                     const Style& rBottom(GetCellStyleBottom(nCol, nRow));
 
@@ -1118,8 +1131,9 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 }
 
                 // create left line for this Cell
-                if (!bOverlapX      // true for first column in merged cells or cells
-                    || bFirstCol)   // true for non_Calc usages of this tooling
+                if ((!bOverlapX         // true for first column in merged cells or cells
+                    || bFirstCol)       // true for non_Calc usages of this tooling
+                    && !bSupressLeft)   // true when left is not rotated, so edge is already handled (see bRotated)
                 {
                     const Style& rLeft(GetCellStyleLeft(nCol, nRow));
 
@@ -1130,7 +1144,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 }
 
                 // create right line for this Cell
-                if (bLastCol)       // true for non_Calc usages of this tooling
+                if (bLastCol        // true for non_Calc usages of this tooling
+                    || bRotated)    // true if cell is rotated, handle right edge in local geometry
                 {
                     const Style& rRight(GetCellStyleRight(nCol, nRow));
 

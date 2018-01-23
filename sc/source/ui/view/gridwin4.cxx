@@ -696,10 +696,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         pContentDev->SetMapMode(aCurrentMapMode);
     }
 
-    // check for and set cell rotations at OutputData to have it available
-    // in the svx tooling to render the borders
-    aOutputData.SetCellRotations();
-
     if ( rDoc.HasBackgroundDraw( nTab, aDrawingRectLogic ) )
     {
         pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
