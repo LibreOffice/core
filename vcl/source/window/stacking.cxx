@@ -46,9 +46,9 @@ using ::com::sun::star::awt::XTopWindow;
 
 struct ImplCalcToTopData
 {
-    ImplCalcToTopData*       mpNext;
-    VclPtr<vcl::Window>      mpWindow;
-    vcl::Region*             mpInvalidateRegion;
+    std::unique_ptr<ImplCalcToTopData> mpNext;
+    VclPtr<vcl::Window>                mpWindow;
+    std::unique_ptr<vcl::Region>       mpInvalidateRegion;
 };
 
 namespace vcl {
@@ -227,10 +227,9 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
             if ( !aInvalidateRegion.IsEmpty() )
             {
                 ImplCalcToTopData* pData    = new ImplCalcToTopData;
-                pPrevData->mpNext           = pData;
-                pData->mpNext               = nullptr;
+                pPrevData->mpNext.reset(pData);
                 pData->mpWindow             = this;
-                pData->mpInvalidateRegion   = new vcl::Region( aInvalidateRegion );
+                pData->mpInvalidateRegion.reset(new vcl::Region( aInvalidateRegion ));
             }
         }
     }
@@ -317,7 +316,6 @@ void Window::ImplStartToTop( ToTopFlags nFlags )
 {
     ImplCalcToTopData   aStartData;
     ImplCalcToTopData*  pCurData;
-    ImplCalcToTopData*  pNextData;
     vcl::Window* pOverlapWindow;
     if ( ImplIsOverlapWindow() )
         pOverlapWindow = this;
@@ -332,7 +330,7 @@ void Window::ImplStartToTop( ToTopFlags nFlags )
     {
         pTempOverlapWindow->ImplCalcToTop( pCurData );
         if ( pCurData->mpNext )
-            pCurData = pCurData->mpNext;
+            pCurData = pCurData->mpNext.get();
         pTempOverlapWindow = pTempOverlapWindow->mpWindowImpl->mpOverlapWindow;
     }
     while ( !pTempOverlapWindow->mpWindowImpl->mbFrame );
@@ -342,7 +340,7 @@ void Window::ImplStartToTop( ToTopFlags nFlags )
     {
         pTempOverlapWindow->ImplCalcToTop( pCurData );
         if ( pCurData->mpNext )
-            pCurData = pCurData->mpNext;
+            pCurData = pCurData->mpNext.get();
         pTempOverlapWindow = pTempOverlapWindow->mpWindowImpl->mpNext;
     }
 
@@ -355,14 +353,11 @@ void Window::ImplStartToTop( ToTopFlags nFlags )
     }
     while ( !pTempOverlapWindow->mpWindowImpl->mbFrame );
     // as last step invalidate the invalid areas
-    pCurData = aStartData.mpNext;
+    pCurData = aStartData.mpNext.get();
     while ( pCurData )
     {
-        pCurData->mpWindow->ImplInvalidateFrameRegion( pCurData->mpInvalidateRegion, InvalidateFlags::Children );
-        pNextData = pCurData->mpNext;
-        delete pCurData->mpInvalidateRegion;
-        delete pCurData;
-        pCurData = pNextData;
+        pCurData->mpWindow->ImplInvalidateFrameRegion( pCurData->mpInvalidateRegion.get(), InvalidateFlags::Children );
+        pCurData = pCurData->mpNext.get();
     }
 }
 
