@@ -177,6 +177,7 @@ public:
         ScTokenArray aCode2;
 
         ScInterpreterContext aContext(mrDoc, mpFormatter);
+        sal_uInt16 nNumNonOpenClose = mrCode.GetLen();
 
         for (SCROW i = mnIdx; i <= mnLastIdx; ++i, maBatchTopPos.IncRow())
         {
@@ -212,7 +213,7 @@ public:
                                 aCode2.AddString(rPool.intern(OUString(pStr)));
                             else
                             {
-                                if ( pTargetTok->GetType() == formula::svString )
+                                if ( ( pTargetTok->GetType() == formula::svString ) && ( nNumNonOpenClose > 1 ) )
                                     pTargetTok->SetString(rPool.intern(OUString(pStr)));
                                 else
                                 {
@@ -226,7 +227,7 @@ public:
                             // Value of NaN represents an empty cell.
                             if ( !pTargetTok )
                                 aCode2.AddToken(ScEmptyCellToken(false, false));
-                            else if ( pTargetTok->GetType() != formula::svEmptyCell )
+                            else if ( ( pTargetTok->GetType() != formula::svEmptyCell ) || ( nNumNonOpenClose == 1 ) )
                             {
                                 ScEmptyCellToken* pEmptyTok = new ScEmptyCellToken(false, false);
                                 aCode2.ReplaceToken(nTokIdx, pEmptyTok, formula::FormulaTokenArray::CODE_ONLY);
@@ -239,7 +240,7 @@ public:
                                 aCode2.AddDouble(fVal);
                             else
                             {
-                                if ( pTargetTok->GetType() == formula::svDouble )
+                                if ( ( pTargetTok->GetType() == formula::svDouble ) && ( nNumNonOpenClose > 1 ) )
                                     pTargetTok->GetDoubleAsReference() = fVal;
                                 else
                                 {
@@ -291,7 +292,16 @@ public:
                     break;
                     default:
                         if ( !pTargetTok )
+                        {
+                            if ( p->GetType() == formula::svSep )
+                            {
+                                OpCode eOp = p->GetOpCode();
+                                if ( eOp == ocOpen || eOp == ocClose )
+                                    --nNumNonOpenClose;
+                            }
+
                             aCode2.AddToken(*p);
+                        }
                 } // end of switch statement
             } // end of formula token for loop
 
