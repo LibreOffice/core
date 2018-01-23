@@ -25,6 +25,8 @@
   <menu:menuitem menu:id=".uno:ResetAttributes"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FormatCellDialog"/>
+  <menu:menuitem menu:id=".uno:CurrentConditionalFormatDialog"/>
+  <menu:menuitem menu:id=".uno:CurrentConditionalFormatManagerDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertCell"/>
   <menu:menuitem menu:id=".uno:DeleteCell"/>
