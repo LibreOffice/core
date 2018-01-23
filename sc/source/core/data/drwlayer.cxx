@@ -1994,27 +1994,28 @@ ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
     return ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj)) ? SCA_CELL : SCA_PAGE;
 }
 
-std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCell(const ScAddress& rCell)
+std::map<SCROW, std::vector<SdrObject*>>
+ScDrawLayer::GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, SCROW nEndRow)
 {
-    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(rCell.Tab()));
+    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
     if (!pPage || pPage->GetObjCount() < 1)
-        return std::vector<SdrObject*>();
+        return std::map<SCROW, std::vector<SdrObject*>>();
 
-    std::vector<SdrObject*> pObjects;
+    std::map<SCROW, std::vector<SdrObject*>> aRowObjects;
     SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
-    ScDrawObjData* pObjData;
+    ScRange aRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab);
     while (pObject)
     {
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
-            pObjData = GetObjData(pObject);
-            if (pObjData && pObjData->maStart == rCell) // Object is anchored to this cell
-                pObjects.push_back(pObject);
+            ScDrawObjData* pObjData = GetObjData(pObject);
+            if (pObjData && aRange.In(pObjData->maStart))
+                aRowObjects[pObjData->maStart.Row()].push_back(pObject);
         }
         pObject = aIter.Next();
     }
-    return pObjects;
+    return aRowObjects;
 }
 
 bool ScDrawLayer::HasObjectsAnchoredInRange(ScRange& rRange)

@@ -1091,16 +1091,18 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
     ScDrawLayer* pDrawLayer = GetDoc()->GetDrawLayer();
     if (pDrawLayer)
     {
+        std::map<SCROW, std::vector<SdrObject*>> aThisColRowDrawObjects
+            = pDrawLayer->GetObjectsAnchoredToRange(GetTab(), GetCol(), nRow1, nRow2);
+        std::map<SCROW, std::vector<SdrObject*>> aOtherColRowDrawObjects
+            = pDrawLayer->GetObjectsAnchoredToRange(GetTab(), rOther.GetCol(), nRow1, nRow2);
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
-            ScAddress aThisCellPos(GetCol(), nRow, GetTab());
-            ScAddress aOtherCellPos(rOther.GetCol(), nRow, GetTab());
-            std::vector<SdrObject*> pThisColObjects = pDrawLayer->GetObjectsAnchoredToCell(aThisCellPos);
-            std::vector<SdrObject*> pOtherColObjects = pDrawLayer->GetObjectsAnchoredToCell(aOtherCellPos);
-            if (!pThisColObjects.empty())
-                UpdateDrawObjectsForRow(pThisColObjects, rOther.GetCol(), nRow);
-            if (!pOtherColObjects.empty())
-                rOther.UpdateDrawObjectsForRow(pOtherColObjects, GetCol(), nRow);
+            std::vector<SdrObject*>& rThisCellDrawObjects = aThisColRowDrawObjects[nRow];
+            if (!rThisCellDrawObjects.empty())
+                UpdateDrawObjectsForRow(rThisCellDrawObjects, rOther.GetCol(), nRow);
+            std::vector<SdrObject*>& rOtherCellDrawObjects = aOtherColRowDrawObjects[nRow];
+            if (!rOtherCellDrawObjects.empty())
+                rOther.UpdateDrawObjectsForRow(rOtherCellDrawObjects, GetCol(), nRow);
         }
     }
 
