@@ -64,7 +64,7 @@ void OMySQLCatalog::refreshTables()
     if ( m_pTables )
         m_pTables->reFill(aVector);
     else
-        m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
+        m_pTables.reset( new OTables(m_xMetaData,*this,m_aMutex,aVector) );
 }
 
 void OMySQLCatalog::refreshViews()
@@ -81,7 +81,7 @@ void OMySQLCatalog::refreshViews()
     if ( m_pViews )
         m_pViews->reFill(aVector);
     else
-        m_pViews = new OViews(m_xMetaData,*this,m_aMutex,aVector);
+        m_pViews.reset( new OViews(m_xMetaData,*this,m_aMutex,aVector) );
 }
 
 void OMySQLCatalog::refreshGroups()
@@ -105,7 +105,7 @@ void OMySQLCatalog::refreshUsers()
     if(m_pUsers)
         m_pUsers->reFill(aVector);
     else
-        m_pUsers = new OUsers(*this,m_aMutex,aVector,m_xConnection,this);
+        m_pUsers.reset( new OUsers(*this,m_aMutex,aVector,m_xConnection,this) );
 }
 
 Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType )

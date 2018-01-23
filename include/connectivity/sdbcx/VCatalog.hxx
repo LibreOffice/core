@@ -33,6 +33,7 @@
 #include <connectivity/OSubComponent.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <memory>
 
 namespace connectivity
 {
@@ -64,10 +65,10 @@ namespace connectivity
 
             // this members are deleted when the dtor is called
             // they are hold weak
-            OCollection*        m_pTables;
-            OCollection*        m_pViews;
-            OCollection*        m_pGroups;
-            OCollection*        m_pUsers;
+            std::unique_ptr<OCollection> m_pTables;
+            std::unique_ptr<OCollection> m_pViews;
+            std::unique_ptr<OCollection> m_pGroups;
+            std::unique_ptr<OCollection> m_pUsers;
 
             css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 

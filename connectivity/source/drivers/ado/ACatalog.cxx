@@ -69,7 +69,7 @@ void OCatalog::refreshTables()
     if(m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables = new OTables(this,m_aMutex,aVector,aTables,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+        m_pTables.reset( new OTables(this,m_aMutex,aVector,aTables,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()) );
 }
 
 void OCatalog::refreshViews()
@@ -82,7 +82,7 @@ void OCatalog::refreshViews()
     if(m_pViews)
         m_pViews->reFill(aVector);
     else
-        m_pViews = new OViews(this,m_aMutex,aVector,aViews,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+        m_pViews.reset( new OViews(this,m_aMutex,aVector,aViews,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()) );
 }
 
 void OCatalog::refreshGroups()
@@ -95,7 +95,7 @@ void OCatalog::refreshGroups()
     if(m_pGroups)
         m_pGroups->reFill(aVector);
     else
-        m_pGroups = new OGroups(this,m_aMutex,aVector,aGroups,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+        m_pGroups.reset( new OGroups(this,m_aMutex,aVector,aGroups,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()) );
 }
 
 void OCatalog::refreshUsers()
@@ -108,7 +108,7 @@ void OCatalog::refreshUsers()
     if(m_pUsers)
         m_pUsers->reFill(aVector);
     else
-        m_pUsers = new OUsers(this,m_aMutex,aVector,aUsers,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+        m_pUsers.reset( new OUsers(this,m_aMutex,aVector,aUsers,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()) );
 }
 
 
