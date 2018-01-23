@@ -11,6 +11,7 @@
 #pragma GCC diagnostic ignored "-Winvalid-constexpr"
 #pragma GCC diagnostic ignored "-Wmicrosoft-unqualified-friend"
 #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+#pragma GCC diagnostic ignored "-Wparentheses"
 #pragma GCC diagnostic ignored "-Wplacement-new"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 #pragma GCC diagnostic ignored "-Wshadow"
