@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTSETTINGACCESS_HXX
 #define INCLUDED_SW_INC_IDOCUMENTSETTINGACCESS_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 #include "fldupde.hxx"
 #include <i18nlangtag/lang.h>
 #include <memory>

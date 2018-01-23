@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SW_INC_ENHANCEDPDFEXPORTHELPER_HXX
 #define INCLUDED_SW_INC_ENHANCEDPDFEXPORTHELPER_HXX
 
-#include <vcl/pdfextoutdevdata.hxx>
 #include <i18nlangtag/lang.h>
+#include <vcl/pdfwriter.hxx>
 #include "swrect.hxx"
 #include "swtypes.hxx"
 

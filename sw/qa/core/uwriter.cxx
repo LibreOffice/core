@@ -66,6 +66,8 @@
 
 #include <tblafmt.hxx>
 #include <unotbl.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <itabenum.hxx>
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 

@@ -21,6 +21,7 @@
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
 #include <doc.hxx>
+#include <pam.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>

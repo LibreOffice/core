@@ -20,15 +20,11 @@
 #ifndef INCLUDED_SW_INC_ANNOTATIONWIN_HXX
 #define INCLUDED_SW_INC_ANNOTATIONWIN_HXX
 
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <editeng/editstat.hxx>
 #include <tools/date.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/lineinfo.hxx>
 #include <vcl/window.hxx>
 
-#include "docufld.hxx"
 #include "postithelper.hxx"
 #include "swrect.hxx"
 #include "SidebarWindowsTypes.hxx"

@@ -54,6 +54,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <fldbas.hxx>

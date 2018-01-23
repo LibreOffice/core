@@ -38,6 +38,7 @@
 #include <calc.hxx>
 #include <hints.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <fieldhint.hxx>
 
 

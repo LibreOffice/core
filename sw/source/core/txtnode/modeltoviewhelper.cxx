@@ -30,6 +30,7 @@
 #include <txtfld.hxx>
 #include <txtftn.hxx>
 #include <scriptinfo.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <set>
 #include <vector>
 

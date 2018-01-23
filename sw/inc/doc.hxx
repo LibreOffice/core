@@ -20,19 +20,13 @@
 #define INCLUDED_SW_INC_DOC_HXX
 
 // SwDoc interfaces
-#include "IDocumentMarkAccess.hxx"
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <sal/macros.h>
 #include "swdllapi.h"
 #include "swtypes.hxx"
-#include "swatrset.hxx"
 #include "toxe.hxx"
 #include "flyenum.hxx"
 #include "flypos.hxx"
-#include "itabenum.hxx"
 #include "swdbdata.hxx"
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
@@ -47,8 +41,6 @@
 #include "docary.hxx"
 #include "pagedesc.hxx"
 #include "tblenum.hxx"
-
-#include <svtools/embedhlp.hxx>
 
 #include <memory>
 #include <set>
@@ -175,7 +167,9 @@ class IDocumentState;
 class IDocumentLayoutAccess;
 class IDocumentStylePoolAccess;
 class IDocumentExternalData;
+class IDocumentMarkAccess;
 class SetGetExpFields;
+struct SwInsertTableOptions;
 
 namespace sw { namespace mark {
     class MarkManager;

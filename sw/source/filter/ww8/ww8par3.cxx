@@ -48,6 +48,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <docsh.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>

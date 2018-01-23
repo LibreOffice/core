@@ -134,6 +134,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/saveopt.hxx>
 #include <swruler.hxx>
+#include <docufld.hxx>
 
 
 #include <EnhancedPDFExportHelper.hxx>

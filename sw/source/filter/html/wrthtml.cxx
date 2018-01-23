@@ -74,6 +74,7 @@
 #include <rtl/strbuf.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <xmloff/odffields.hxx>
 #include <tools/urlobj.hxx>
 

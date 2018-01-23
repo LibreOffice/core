@@ -57,6 +57,8 @@
 #include <unotools/charclass.hxx>
 #include <xmloff/odffields.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IMark.hxx>
+#include <IDocumentMarkAccess.hxx>
 
 #include <vector>
 

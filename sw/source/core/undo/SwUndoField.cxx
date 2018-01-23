@@ -29,6 +29,7 @@
 #include <fmtfld.hxx>
 #include <dbfld.hxx>
 #include <docsh.hxx>
+#include <pam.hxx>
 
 using namespace ::com::sun::star::uno;
 

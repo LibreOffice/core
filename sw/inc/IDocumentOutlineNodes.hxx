@@ -21,7 +21,6 @@
 #define INCLUDED_SW_INC_IDOCUMENTOUTLINENODES_HXX
 
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 #include <vector>
 
 class SwTextNode;

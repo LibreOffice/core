@@ -67,6 +67,7 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>

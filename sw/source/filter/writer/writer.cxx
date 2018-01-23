@@ -32,6 +32,7 @@
 #include <docary.hxx>
 #include <IMark.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <numrule.hxx>
 #include <swerror.h>
 

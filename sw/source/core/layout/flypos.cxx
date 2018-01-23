@@ -24,6 +24,7 @@
 #include <flyfrm.hxx>
 #include <dflyobj.hxx>
 #include <calbck.hxx>
+#include <pam.hxx>
 
 bool SwPosFlyFrameCmp::operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFramePtr& rB) const
 {

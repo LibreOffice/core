@@ -33,6 +33,8 @@
 #include <objectformatter.hxx>
 #include <viewopt.hxx>
 #include <calbck.hxx>
+#include <ndindex.hxx>
+#include <pam.hxx>
 
 #define ENDNOTE 0x80000000
 

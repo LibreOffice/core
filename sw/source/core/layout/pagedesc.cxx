@@ -30,6 +30,7 @@
 #include <swtable.hxx>
 #include <frmtool.hxx>
 #include <doc.hxx>
+#include <node.hxx>
 #include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>

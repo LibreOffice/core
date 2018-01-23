@@ -49,6 +49,7 @@
 #include <strings.hrc>
 #include <redline.hxx>
 #include <txatbase.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
 

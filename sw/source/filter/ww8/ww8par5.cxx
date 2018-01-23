@@ -50,6 +50,7 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentState.hxx>
 #include <charatr.hxx>
 #include <flddat.hxx>

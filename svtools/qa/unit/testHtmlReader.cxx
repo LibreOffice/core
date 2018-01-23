@@ -10,7 +10,6 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <svtools/parhtml.hxx>
 #include <tools/ref.hxx>
 #include <tools/stream.hxx>

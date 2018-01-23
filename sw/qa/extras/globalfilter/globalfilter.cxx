@@ -21,6 +21,8 @@
 #include <doc.hxx>
 #include <ndgrf.hxx>
 #include <drawdoc.hxx>
+#include <ndindex.hxx>
+#include <pam.hxx>
 #include <unotools/fltrcfg.hxx>
 
 class Test : public SwModelTestBase

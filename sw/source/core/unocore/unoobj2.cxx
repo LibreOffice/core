@@ -32,6 +32,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <textboxhelper.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>

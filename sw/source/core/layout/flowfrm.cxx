@@ -56,6 +56,7 @@
 #include <calbck.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <pam.hxx>
 #include <o3tl/make_unique.hxx>
 
 bool SwFlowFrame::m_bMoveBwdJump = false;
