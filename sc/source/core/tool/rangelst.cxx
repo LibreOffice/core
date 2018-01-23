@@ -267,7 +267,7 @@ Label_Range_Join:
         if ( p->In( *pOver ) )
         {   // range pOver included in or identical to range p
             // XXX if we never used Append() before Join() we could remove
-            // pOver and end processing, but it is not guranteed and there can
+            // pOver and end processing, but it is not guaranteed and there can
             // be duplicates.
             if ( bIsInList )
                 bJoined = true;     // do away with range pOver
