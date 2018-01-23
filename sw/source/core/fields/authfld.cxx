@@ -437,7 +437,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
             {
                 m_SortKeyArr.clear();
                 const PropertyValues* pValues = aSeq.getConstArray();
-                for(sal_Int32 i = 0; i < aSeq.getLength() && i < USHRT_MAX / 4; i++)
+                for(sal_Int32 i = 0; i < aSeq.getLength(); i++)
                 {
                     const PropertyValue* pValue = pValues[i].getConstArray();
                     SwTOXSortKey aSortKey;
