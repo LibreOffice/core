@@ -322,11 +322,12 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
             break;
         case CONTROL_VALUE:
             // Values require a parameter by definition, but Word doesn't respect this for \dibitmap.
-            if (bParam || s_aRTFControlWords[i].nIndex == RTF_DIBITMAP)
+            if (!bParam)
             {
+                nParam = s_aRTFControlWords[i].nDefValue;
                 ret = m_rImport.dispatchValue(s_aRTFControlWords[i].nIndex, nParam);
                 if (ret != RTFError::OK)
-                    return ret;
+                return ret;
             }
             break;
     }
