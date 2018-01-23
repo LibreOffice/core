@@ -1872,7 +1872,7 @@ uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
     if(!IsValid())
         throw uno::RuntimeException();
     uno::Reference< XTextContent >  xRef;
-    if(0 <= nIndex && nIndex < USHRT_MAX)
+    if(0 <= nIndex && nIndex < SAL_MAX_UINT16)
     {
         SwFormatRefMark *const pMark = const_cast<SwFormatRefMark*>(
                 GetDoc()->GetRefMark(static_cast<sal_uInt16>(nIndex)));
