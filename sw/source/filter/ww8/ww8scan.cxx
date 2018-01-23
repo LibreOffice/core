@@ -2050,9 +2050,6 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
         if (bFail)
             break;
 
-        if( nLen > USHRT_MAX - 1 )
-            nLen = USHRT_MAX - 1;
-
         if( 0 >= nLen )
             break;
 
