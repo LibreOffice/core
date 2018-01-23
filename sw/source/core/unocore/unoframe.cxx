@@ -1264,8 +1264,7 @@ SwXFrame::~SwXFrame()
     SolarMutexGuard aGuard;
     delete m_pCopySource;
     delete pProps;
-    if(GetRegisteredIn())
-        GetRegisteredIn()->Remove(this);
+    EndListeningAll();
 }
 
 template<class Interface, class NameLookupIsHard>

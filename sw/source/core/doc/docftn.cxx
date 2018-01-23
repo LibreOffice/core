@@ -41,24 +41,24 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
     if( rInfo.GetFootnoteTextColl() )
         rInfo.GetFootnoteTextColl()->Add(this);
-    else if ( GetRegisteredIn())
-        GetRegisteredInNonConst()->Remove(this);
+    else
+        EndListeningAll();
 
     if ( rInfo.aPageDescDep.GetRegisteredIn() )
         const_cast<SwModify*>(rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
-    else if ( aPageDescDep.GetRegisteredIn() )
-        aPageDescDep.GetRegisteredIn()->Remove( &aPageDescDep );
+    else
+        aPageDescDep.EndListeningAll();
 
     if ( rInfo.aCharFormatDep.GetRegisteredIn() )
         const_cast<SwModify*>(rInfo.aCharFormatDep.GetRegisteredIn())->Add( &aCharFormatDep );
-    else if ( aCharFormatDep.GetRegisteredIn() )
-        aCharFormatDep.GetRegisteredIn()->Remove( &aCharFormatDep );
+    else
+        aCharFormatDep.EndListeningAll();
 
     if ( rInfo.aAnchorCharFormatDep.GetRegisteredIn() )
         const_cast<SwModify*>(rInfo.aAnchorCharFormatDep.GetRegisteredIn())->Add(
                                                     &aAnchorCharFormatDep );
-    else if( aAnchorCharFormatDep.GetRegisteredIn() )
-        aAnchorCharFormatDep.GetRegisteredIn()->Remove( &aAnchorCharFormatDep );
+    else
+        aAnchorCharFormatDep.EndListeningAll();
 
     aFormat = rInfo.aFormat;
     nFootnoteOffset = rInfo.nFootnoteOffset;

@@ -923,7 +923,7 @@ void SwHTMLParser::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         if (pOld && static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject == GetRegisteredIn())
         {
             // then we kill ourself
-            GetRegisteredInNonConst()->Remove( this );
+            EndListeningAll();
             ReleaseRef();                   // otherwise we're done!
         }
         break;

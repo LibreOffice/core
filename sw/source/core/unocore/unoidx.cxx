@@ -1593,12 +1593,8 @@ void SwXDocumentIndexMark::Impl::Invalidate()
 {
     if (GetRegisteredIn())
     {
-        GetRegisteredIn()->Remove(this);
-        if (m_TypeDepend.GetRegisteredIn())
-        {
-            m_TypeDepend.GetRegisteredIn()->Remove(
-                &m_TypeDepend);
-        }
+        EndListeningAll();
+        m_TypeDepend.EndListeningAll();
     }
     if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
     {

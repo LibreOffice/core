@@ -132,6 +132,7 @@ public:
 
     const SwModify* GetRegisteredIn() const { return m_pRegisteredIn; }
     SwModify* GetRegisteredIn() { return m_pRegisteredIn; }
+    void EndListeningAll();
 
 
     // get information about attribute

@@ -997,8 +997,7 @@ SwXShape::~SwXShape()
         xShapeAgg->setDelegator(xRef);
     }
     delete pImpl;
-    if(GetRegisteredIn())
-        GetRegisteredIn()->Remove(this);
+    EndListeningAll();
 }
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )

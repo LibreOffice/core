@@ -4814,11 +4814,9 @@ namespace
     class FrameDeleteWatch : public SwClient
     {
         SwFrameFormat* m_pObjectFormat;
-        bool m_bDeleted;
     public:
         FrameDeleteWatch(SwFrameFormat* pObjectFormat)
             : m_pObjectFormat(pObjectFormat)
-            , m_bDeleted(false)
         {
             if (m_pObjectFormat)
                 m_pObjectFormat->Add(this);
@@ -4832,21 +4830,19 @@ namespace
             {
                 if (pDrawFrameFormatHint->m_eId == sw::DrawFrameFormatHintId::DYING)
                 {
-                    m_pObjectFormat->Remove(this);
-                    m_bDeleted = true;
+                    EndListeningAll();
                 }
             }
         }
 
         bool WasDeleted() const
         {
-            return m_bDeleted;
+            return !GetRegisteredIn();
         }
 
         virtual ~FrameDeleteWatch() override
         {
-            if (!m_bDeleted && m_pObjectFormat)
-                m_pObjectFormat->Remove(this);
+            EndListeningAll();
         }
     };
 

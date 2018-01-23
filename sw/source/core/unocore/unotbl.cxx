@@ -774,8 +774,7 @@ SwXCell::SwXCell(SwFrameFormat* pTableFormat, const SwStartNode& rStartNode) :
 SwXCell::~SwXCell()
 {
     SolarMutexGuard aGuard;
-    if(GetRegisteredIn())
-        GetRegisteredIn()->Remove(this);
+    EndListeningAll();
 }
 
 namespace
@@ -1276,8 +1275,7 @@ SwXTextTableRow::SwXTextTableRow(SwFrameFormat* pFormat, SwTableLine* pLn) :
 SwXTextTableRow::~SwXTextTableRow()
 {
     SolarMutexGuard aGuard;
-    if(GetRegisteredIn())
-        GetRegisteredIn()->Remove(this);
+    EndListeningAll();
 }
 
 uno::Reference< beans::XPropertySetInfo > SwXTextTableRow::getPropertySetInfo()
@@ -3100,7 +3098,7 @@ void SwXTextTable::Impl::Modify(
 {
     if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
         static_cast<void*>(GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
-            GetRegisteredIn()->Remove(this);
+            EndListeningAll();
     else
         ClientModify(this, pOld, pNew);
     uno::Reference<uno::XInterface> const xThis(m_wThis);

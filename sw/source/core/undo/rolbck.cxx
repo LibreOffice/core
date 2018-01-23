@@ -345,7 +345,7 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( SwTextTOXMark* pTextHt, sal_uLong nNod
     , m_nStart( pTextHt->GetStart() )
     , m_nEnd( *pTextHt->GetAnyEnd() )
 {
-    m_TOXMark.DeRegister();
+    m_TOXMark.EndListeningAll();
 }
 
 void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )

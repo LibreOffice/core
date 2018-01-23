@@ -701,7 +701,7 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
         rFormat.MakeFrames();
 
     if( pUndo )
-        pUndo->DeRegisterFromFormat( rFormat );
+        pUndo->EndListeningAll();
 
     getIDocumentState().SetModified();
 

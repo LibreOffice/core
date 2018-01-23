@@ -316,14 +316,14 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
     case RES_REMOVE_UNO_OBJECT:
     case RES_OBJECTDYING:
         if( static_cast<void*>(pClient->GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
-            pClient->GetRegisteredIn()->Remove(pClient);
+            pClient->EndListeningAll();
         break;
 
     case RES_FMT_CHG:
         // Is the move to the new one finished and will the old one be deleted?
         if( static_cast<const SwFormatChg*>(pNew)->pChangedFormat == pClient->GetRegisteredIn() &&
             static_cast<const SwFormatChg*>(pOld)->pChangedFormat->IsFormatInDTOR() )
-            pClient->GetRegisteredIn()->Remove(pClient);
+            pClient->EndListeningAll();
         break;
     }
 }
@@ -733,17 +733,15 @@ void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew
     {
         ClientModify(&m_ObjectDepend, pOld, pNew);
         // if the depend was removed then the range must be removed too
-        if (!m_ObjectDepend.GetRegisteredIn() && GetRegisteredIn())
+        if (!m_ObjectDepend.GetRegisteredIn())
         {
-            GetRegisteredIn()->Remove(this);
+            EndListeningAll();
         }
         // or if the range has been removed but the depend is still
         // connected then the depend must be removed
-        else if (bAlreadyRegistered && !GetRegisteredIn() &&
-                    m_ObjectDepend.GetRegisteredIn())
+        else if (bAlreadyRegistered && !GetRegisteredIn())
         {
-            m_ObjectDepend.GetRegisteredIn()
-                ->Remove(& m_ObjectDepend);
+            m_ObjectDepend.EndListeningAll();
         }
     }
     if (!GetRegisteredIn())

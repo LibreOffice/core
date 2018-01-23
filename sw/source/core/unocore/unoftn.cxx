@@ -94,10 +94,7 @@ protected:
 
 void SwXFootnote::Impl::Invalidate()
 {
-    if (GetRegisteredIn())
-    {
-        GetRegisteredIn()->Remove(this);
-    }
+    EndListeningAll();
     m_pFormatFootnote = nullptr;
     m_rThis.SetDoc(nullptr);
     uno::Reference<uno::XInterface> const xThis(m_wThis);
