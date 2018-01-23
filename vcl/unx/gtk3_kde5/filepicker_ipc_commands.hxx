@@ -80,13 +80,7 @@ inline void readIpcArg(std::istream& stream, Commands& value)
     value = static_cast<Commands>(v);
 }
 
-inline void readIpcArg(std::istream& stream, sal_Bool& value)
-{
-    bool v = false;
-    stream >> v;
-    value = v;
-    stream.ignore(); // skip space
-}
+void readIpcArg(std::istream&, sal_Bool) = delete;
 
 inline void readIpcArg(std::istream& stream, bool& value)
 {
@@ -133,10 +127,7 @@ inline void sendIpcArg(std::ostream& stream, Commands value)
     stream << static_cast<uint16_t>(value) << ' ';
 }
 
-inline void sendIpcArg(std::ostream& stream, sal_Bool value)
-{
-    stream << static_cast<bool>(value) << ' ';
-}
+void sendIpcArg(std::ostream&, sal_Bool) = delete;
 
 inline void sendIpcArg(std::ostream& stream, bool value) { stream << value << ' '; }
 

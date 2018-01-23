@@ -36,12 +36,6 @@
 #include <mutex>
 #include <thread>
 
-void readIpcArg(std::istream& stream, OUString& str);
-
-void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq);
-
-void sendIpcArg(std::ostream& stream, const OUString& string);
-
 OUString getResString(const char* pResId);
 
 class Gtk3KDE5FilePickerIpc
@@ -60,7 +54,7 @@ public:
     explicit Gtk3KDE5FilePickerIpc();
     ~Gtk3KDE5FilePickerIpc();
 
-    sal_Int16 SAL_CALL execute();
+    sal_Int16 execute();
 
     template <typename... Args> uint64_t sendCommand(Commands command, const Args&... args)
     {
@@ -101,9 +95,9 @@ public:
     }
 
 private:
-    std::function<void()> SAL_CALL blockMainWindow();
+    std::function<void()> blockMainWindow();
 
-    static void SAL_CALL await(const std::future<void>& future);
+    static void await(const std::future<void>& future);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

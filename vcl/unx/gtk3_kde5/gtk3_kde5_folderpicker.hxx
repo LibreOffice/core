@@ -38,7 +38,7 @@ public:
     // constructor
     explicit Gtk3KDE5FolderPicker(
         const css::uno::Reference<css::uno::XComponentContext>& xServiceMgr);
-    virtual ~Gtk3KDE5FolderPicker();
+    virtual ~Gtk3KDE5FolderPicker() override;
 
     // XExecutableDialog functions
     virtual void SAL_CALL setTitle(const OUString& aTitle) override;
