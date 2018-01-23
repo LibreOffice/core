@@ -538,7 +538,6 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 {
                     EscherExAtom aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
                     AnimationNode aAnim;
-                    memset( &aAnim, 0, sizeof( aAnim ) );
                     aAnim.mnGroupType = mso_Anim_GroupType_PAR;
                     aAnim.mnNodeType = 1;
                     // attribute Restart
@@ -784,7 +783,6 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
 {
     EscherExAtom    aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
     AnimationNode   aAnim;
-    memset( &aAnim, 0, sizeof( aAnim ) );
 
     // attribute Restart
     switch( xNode->getRestart() )
