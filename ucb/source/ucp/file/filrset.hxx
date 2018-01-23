@@ -439,10 +439,9 @@ class XResultSet_impl : public Notifier,
 
         osl::Mutex                          m_aMutex;
         osl::Mutex                          m_aEventListenerMutex;
-        comphelper::OInterfaceContainerHelper2*   m_pDisposeEventListeners;
-
-        comphelper::OInterfaceContainerHelper2*   m_pRowCountListeners;
-        comphelper::OInterfaceContainerHelper2*   m_pIsFinalListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pDisposeEventListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pRowCountListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pIsFinalListeners;
 
         css::uno::Reference< css::ucb::XDynamicResultSetListener >       m_xListener;
 
