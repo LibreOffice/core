@@ -433,6 +433,13 @@ void initDataRows(
 
         sc::ColumnBlockConstPosition aBlockPos;
         rCol.InitBlockPosition(aBlockPos);
+        std::map<SCROW, std::vector<SdrObject*>> aRowDrawObjects;
+        ScDrawLayer* pDrawLayer = rTab.GetDoc().GetDrawLayer();
+        if (pDrawLayer)
+            aRowDrawObjects = pDrawLayer->GetObjectsAnchoredToRange(rTab.GetTab(), nCol, nRow1, nRow2);
+        else
+            SAL_WARN("sc", "Could not retrieve anchored images, no DrawLayer available");
+
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
             ScSortInfoArray::Row& rRow = *rRows[nRow-nRow1];
@@ -440,17 +447,8 @@ void initDataRows(
             rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
             rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
             rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
-            ScDrawLayer* pDrawLayer = rTab.GetDoc().GetDrawLayer();
             if (pDrawLayer)
-            {
-                ScAddress aCellPos(nCol, nRow, rTab.GetTab());
-                std::vector<SdrObject*> pObjects = pDrawLayer->GetObjectsAnchoredToCell(aCellPos);
-                rCell.maDrawObjects = pObjects;
-            }
-            else
-            {
-                SAL_WARN("sc", "Could not retrieve anchored images, no DrawLayer available");
-            }
+                rCell.maDrawObjects = aRowDrawObjects[nRow];
 
             if (!bUniformPattern && bPattern)
                 rCell.mpPattern = rCol.GetPattern(nRow);
