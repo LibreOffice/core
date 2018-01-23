@@ -214,6 +214,9 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
 
     bTabProtected = mpDoc->IsTabProtected( nTab );
     bLayoutRTL = mpDoc->IsLayoutRTL( nTab );
+
+    // always needed, so call at the end of the constructor
+    SetCellRotations();
 }
 
 ScOutputData::~ScOutputData()
