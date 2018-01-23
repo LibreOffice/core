@@ -22,7 +22,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFrame>
 #include <QtGui/QClipboard>
-#include <QtWidgets/QFrame>
 #include <QtX11Extras/QX11Info>
 
 
