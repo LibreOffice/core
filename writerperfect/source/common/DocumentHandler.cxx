@@ -145,12 +145,12 @@ void DocumentHandler::startElement(const char *psName, const librevenge::RVNGPro
             for (int j=0; j<9; ++j)
             {
                 // list of the encoded attributes followed by their lengths
-                static char const *(listEncoded[9])=
+                static char const *listEncoded[9]=
                 {
                     "draw:name", "svg:font-family", "style:condition", "style:num-prefix", "style:num-suffix",
                     "table:formula", "text:bullet-char", "text:label", "xlink:href"
                 };
-                static size_t const(listEncodedLength[9])= {9,15,15,16,16,13,16,10,10};
+                static size_t const listEncodedLength[9]= {9,15,15,16,16,13,16,10,10};
                 if (keyLength==listEncodedLength[j] && strncmp(i.key(), listEncoded[j], keyLength)==0)
                 {
                     librevenge::RVNGString decodedValue("");
