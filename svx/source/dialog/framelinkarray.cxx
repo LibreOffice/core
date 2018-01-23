@@ -1061,18 +1061,39 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "CreateB2DPrimitiveRange" );
     DBG_FRAME_CHECK_COLROW( nLastCol, nLastRow, "CreateB2DPrimitiveRange" );
 
+    // It may be necessary to extend the loop ranges by one cell to the outside,
+    // when possible. This is needed e.g. when there is in Calc a Cell with an
+    // upper CellBorder using DoubleLine and that is right/left connected upwards
+    // to also DoubleLine. These upper DoubleLines will be extended to meet the
+    // lower of the upper CellBorder and thus have graphical parts that are
+    // displayed one cell below and right/left of the target cell - analog to
+    // other examples in all other directions.
+    // It would be possible to explicitely test this (if possible by indices at all)
+    // looping and testing the styles in the outer cells to detect this, but since
+    // for other usages (e.g. UI) usually nFirstRow==0 and nLastRow==GetRowCount()-1
+    // (and analog for Col) it is okay to just expand the range when available.
+    // Do *not* change nFirstRow/nLastRow due to these needed to the boolean tests
+    // below (!)
+    // Checked usages, this method is used in Calc EditView/Print/Export stuff and
+    // in UI (Dialog), not for Writer Tables and Draw/Impress tables. All usages
+    // seem okay with this change, so I will add it.
+    const size_t nStartRow(nFirstRow > 0 ? nFirstRow - 1 : nFirstRow);
+    const size_t nEndRow(nLastRow < GetRowCount() - 1 ? nLastRow + 1 : nLastRow);
+    const size_t nStartCol(nFirstCol > 0 ? nFirstCol - 1 : nFirstCol);
+    const size_t nEndCol(nLastCol < GetColCount() - 1 ? nLastCol + 1 : nLastCol);
+
     // various primitive sequences to collect the different border types
     drawinglayer::primitive2d::Primitive2DContainer aHorizontalSequence;
-    std::vector< drawinglayer::primitive2d::Primitive2DContainer > aVerticalSequences(nLastCol - nFirstCol + 1);
+    std::vector< drawinglayer::primitive2d::Primitive2DContainer > aVerticalSequences(nEndCol - nStartCol + 1);
     drawinglayer::primitive2d::Primitive2DContainer aCrossSequence;
 
     // remember for which merged cells crossed lines were already created. To
     // do so, hold the size_t cell index in a set for fast check
     std::set< size_t > aMergedCells;
 
-    for (size_t nRow = nFirstRow; nRow <= nLastRow; ++nRow)
+    for (size_t nRow(nStartRow); nRow <= nEndRow; ++nRow)
     {
-        for (size_t nCol = nFirstCol; nCol <= nLastCol; ++nCol)
+        for (size_t nCol(nStartCol); nCol <= nEndCol; ++nCol)
         {
             // get Cell and CoordinateSystem (*only* for this Cell, do *not* expand for
             // merged cells (!)), check if used (non-empty vectors)
@@ -1139,7 +1160,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rLeft.IsUsed())
                     {
-                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, aVerticalSequences[nCol - nFirstCol], true, pForceColor);
+                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, aVerticalSequences[nCol - nStartCol], true, pForceColor);
                     }
                 }
 
@@ -1151,7 +1172,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rRight.IsUsed())
                     {
-                        HelperCreateVerticalEntry(*this, rRight, nCol + 1, nRow, aOrigin, aX, aY, aVerticalSequences[nCol - nFirstCol], false, pForceColor);
+                        HelperCreateVerticalEntry(*this, rRight, nCol + 1, nRow, aOrigin, aX, aY, aVerticalSequences[nCol - nStartCol], false, pForceColor);
                     }
                 }
 
