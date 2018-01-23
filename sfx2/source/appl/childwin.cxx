@@ -193,8 +193,7 @@ void SfxChildWindow::ClearWorkwin()
 
 SfxChildWindow::~SfxChildWindow()
 {
-    delete pContext;
-    pContext = nullptr;
+    pContext.reset();
     ClearWorkwin();
     pWindow.disposeAndClear();
 }
@@ -495,8 +494,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
         return;
     }
 
-    delete pContext;
-    pContext = pCon;
+    pContext.reset(pCon);
     pContext->GetWindow()->SetSizePixel( pWindow->GetOutputSizePixel() );
     pContext->GetWindow()->Show();
 }
