@@ -127,8 +127,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
 
     if( GetRegisteredIn() != rFormat.GetRegisteredIn() )
     {
-        if( GetRegisteredIn() )
-            GetRegisteredInNonConst()->Remove(this);
+        EndListeningAll();
         if( rFormat.GetRegisteredIn() )
         {
             const_cast<SwFormat&>(rFormat).GetRegisteredInNonConst()->Add(this);
@@ -267,7 +266,7 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
                 else
                 {
                     // otherwise de-register at least from dying one
-                    GetRegisteredIn()->Remove( this );
+                    EndListeningAll();
                     m_aSet.SetParent( nullptr );
                 }
             }

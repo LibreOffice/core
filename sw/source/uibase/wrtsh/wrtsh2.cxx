@@ -226,11 +226,8 @@ class FieldDeletionModify : public SwModify
 
         virtual ~FieldDeletionModify() override
         {
-            if (mpFormatField)
-            {
-                // Dialog closed, remove modification listener
-                mpFormatField->Remove(this);
-            }
+            // Dialog closed, remove modification listener
+            EndListeningAll();
         }
 
         void Modify( const SfxPoolItem* pOld, const SfxPoolItem *) override

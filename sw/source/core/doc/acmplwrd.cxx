@@ -135,8 +135,8 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
     pDoc = rClient.pDoc;
     if(rClient.GetRegisteredIn())
         const_cast<SwModify*>(rClient.GetRegisteredIn())->Add(this);
-    else if(GetRegisteredIn())
-        GetRegisteredInNonConst()->Remove(this);
+    else
+        EndListeningAll();
     return *this;
 }
 
@@ -147,7 +147,7 @@ void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
     case RES_REMOVE_UNO_OBJECT:
     case RES_OBJECTDYING:
         if( static_cast<void*>(GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
-            GetRegisteredIn()->Remove(this);
+            EndListeningAll();
         pAutoCompleteWord->DocumentDying(*pDoc);
         break;
     }

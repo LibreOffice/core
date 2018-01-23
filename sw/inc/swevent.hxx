@@ -111,7 +111,7 @@ struct SwCallMouseEvent
                 // note: pFormat is not necessarily the same as
                 // GetRegisteredIn() here; see ~SwFormat()
                 assert(PTR.pFormat);
-                GetRegisteredInNonConst()->Remove(this);
+                EndListeningAll();
             }
             eType = EVENT_OBJECT_NONE; PTR.pFormat = nullptr; PTR.IMAP.pIMapObj = nullptr;
         }

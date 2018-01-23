@@ -2570,7 +2570,7 @@ void SwXTextField::Impl::Invalidate()
 {
     if (GetRegisteredIn())
     {
-        GetRegisteredInNonConst()->Remove(this);
+        EndListeningAll();
         m_pFormatField = nullptr;
         m_pDoc = nullptr;
         uno::Reference<uno::XInterface> const xThis(m_wThis);

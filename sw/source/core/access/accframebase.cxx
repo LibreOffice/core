@@ -244,14 +244,14 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     case RES_OBJECTDYING:
         // mba: it seems that this class intentionally does not call code in base class SwClient
         if( pOld && ( GetRegisteredIn() == static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) ) )
-            GetRegisteredInNonConst()->Remove( this );
+            EndListeningAll();
         break;
 
     case RES_FMT_CHG:
         if( pOld &&
             static_cast< const SwFormatChg * >(pNew)->pChangedFormat == GetRegisteredIn() &&
             static_cast< const SwFormatChg * >(pOld)->pChangedFormat->IsFormatInDTOR() )
-            GetRegisteredInNonConst()->Remove( this );
+            EndListeningAll();
         break;
 
     default:
@@ -263,10 +263,7 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 void SwAccessibleFrameBase::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     SolarMutexGuard aGuard;
-
-    if( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
-
+    EndListeningAll();
     SwAccessibleContext::Dispose(bRecursive, bCanSkipInvisible);
 }
 

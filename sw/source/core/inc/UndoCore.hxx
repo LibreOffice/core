@@ -209,7 +209,6 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     virtual SwRewriter GetRewriter() const override;
-    void DeRegisterFromFormat( SwFormat& );
 };
 
 class SwUndoOutlineLeftRight : public SwUndo, private SwUndRng
