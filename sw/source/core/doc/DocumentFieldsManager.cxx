@@ -48,6 +48,8 @@
 #include <ddefld.hxx>
 #include <authfld.hxx>
 #include <usrfld.hxx>
+#include <ndindex.hxx>
+#include <pam.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/uno/Any.hxx>
 

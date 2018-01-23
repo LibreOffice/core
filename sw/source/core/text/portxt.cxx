@@ -33,6 +33,7 @@
 #include <wrong.hxx>
 #include <viewsh.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <viewopt.hxx>
 #include <editeng/borderline.hxx>
 

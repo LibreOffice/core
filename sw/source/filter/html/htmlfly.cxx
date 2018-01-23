@@ -32,6 +32,8 @@
 
 #include <doc.hxx>
 #include <frmfmt.hxx>
+#include <ndindex.hxx>
+#include <pam.hxx>
 
 using namespace css;
 

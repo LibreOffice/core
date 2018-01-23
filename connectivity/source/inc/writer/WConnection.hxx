@@ -24,7 +24,6 @@
 #include <file/FConnection.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
 #include <unotools/closeveto.hxx>
 #include <o3tl/make_unique.hxx>
 

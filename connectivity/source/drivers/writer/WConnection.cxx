@@ -23,7 +23,6 @@
 #include <writer/WDriver.hxx>
 #include <resource/sharedresources.hxx>
 #include <strings.hrc>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <tools/urlobj.hxx>
@@ -32,7 +31,6 @@
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 

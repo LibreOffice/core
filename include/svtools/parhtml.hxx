@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_PARHTML_HXX
 #define INCLUDED_SVTOOLS_PARHTML_HXX
 
+#include <com/sun/star/uno/Reference.h>
 #include <svtools/svtdllapi.h>
 #include <svtools/svparser.hxx>
 

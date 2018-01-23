@@ -53,6 +53,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <docsh.hxx>

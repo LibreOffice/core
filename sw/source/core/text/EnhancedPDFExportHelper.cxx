@@ -23,6 +23,7 @@
 #include <hintids.hxx>
 
 #include <vcl/outdev.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <tools/multisel.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/lrspitem.hxx>

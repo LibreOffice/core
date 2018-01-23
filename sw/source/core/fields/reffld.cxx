@@ -26,6 +26,7 @@
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <pam.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>

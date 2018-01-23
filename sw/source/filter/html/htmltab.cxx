@@ -60,6 +60,7 @@
 #include "swcss1.hxx"
 #include <numrule.hxx>
 #include <txtftn.hxx>
+#include <itabenum.hxx>
 
 #define NETSCAPE_DFLT_BORDER 1
 #define NETSCAPE_DFLT_CELLSPACING 2

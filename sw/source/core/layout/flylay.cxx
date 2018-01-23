@@ -42,6 +42,8 @@
 #include <viewimp.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <pam.hxx>
+#include <ndindex.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 

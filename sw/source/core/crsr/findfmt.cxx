@@ -19,6 +19,7 @@
 
 #include <doc.hxx>
 #include <pamtyp.hxx>
+#include <pam.hxx>
 #include <memory>
 
 bool SwPaM::Find( const SwFormat& rFormat, SwMoveFnCollection const & fnMove,

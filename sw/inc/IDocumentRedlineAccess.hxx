@@ -25,11 +25,8 @@
 #include <cstddef>
 
 #include <sal/types.h>
-#include <tools/solar.h>
 
-#include <limits.h>
-
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Sequence.h>
 #include <o3tl/typed_flags_set.hxx>
 
 #include "docary.hxx"

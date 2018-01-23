@@ -23,6 +23,7 @@
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <docary.hxx>
 #include <cntfrm.hxx>
 #include <node.hxx>

@@ -24,6 +24,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>

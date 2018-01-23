@@ -48,6 +48,7 @@
 #include <frmtool.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <paratr.hxx>
 #include <rootfrm.hxx>
 #include "inftxt.hxx"

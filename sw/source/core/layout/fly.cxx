@@ -62,6 +62,8 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <textboxhelper.hxx>
 #include <txtfly.hxx>
+#include <ndindex.hxx>
+#include <pam.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 

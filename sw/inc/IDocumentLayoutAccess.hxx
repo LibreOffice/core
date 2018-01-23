@@ -20,14 +20,13 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTLAYOUTACCESS_HXX
 #define INCLUDED_SW_INC_IDOCUMENTLAYOUTACCESS_HXX
 
-#include "swtypes.hxx"
-
 class SwViewShell;
 class SwRootFrame;
 class SwFrameFormat;
 class SfxItemSet;
 class SwLayouter;
 class SwFormatAnchor;
+enum class RndStdIds;
 
 /** Provides access to the layout of a document.
 */

@@ -41,6 +41,8 @@
 #include <viewopt.hxx>
 #include <flyfrm.hxx>
 #include <sortedobjs.hxx>
+#include <ndindex.hxx>
+#include <node.hxx>
 
 #include <limits>
 #include <set>

@@ -41,6 +41,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <DocumentLayoutManager.hxx>
+#include <ndindex.hxx>
 
 SwLayVout     *SwRootFrame::s_pVout = nullptr;
 bool           SwRootFrame::s_isInPaint = false;

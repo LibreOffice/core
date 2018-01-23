@@ -69,6 +69,7 @@
 #include "ww8par2.hxx"
 
 #include <frmatr.hxx>
+#include <itabenum.hxx>
 
 #include <iostream>
 #include <memory>
