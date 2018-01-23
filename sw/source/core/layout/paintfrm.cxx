@@ -2439,11 +2439,33 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             {
                 aRepaintRect.Height( 2 * nRepaintRectSize );
                 aRepaintRect.Pos().Y() -= nRepaintRectSize;
+
+                // To decide on visibility it is also necessary to expand the RepaintRect
+                // to left/right according existing BorderLine overlap matchings, else there
+                // will be repaint errors when scrolling in e.t TripleLine BorderLines.
+                // aStyles[1] == aLFromT, aStyles[3] == aLFromB, aStyles[4] == aRFromT, aStyles[6] == aRFromB
+                if(aStyles[1].IsUsed() || aStyles[3].IsUsed() || aStyles[4].IsUsed() || aStyles[6].IsUsed())
+                {
+                    const double fLineWidthMaxLeft(std::max(aStyles[1].GetWidth(), aStyles[3].GetWidth()));
+                    const double fLineWidthMaxRight(std::max(aStyles[4].GetWidth(), aStyles[6].GetWidth()));
+                    aRepaintRect.Width(aRepaintRect.Width() + (fLineWidthMaxLeft + fLineWidthMaxRight));
+                    aRepaintRect.Pos().X() -= fLineWidthMaxLeft;
+                }
             }
             else
             {
                 aRepaintRect.Width( 2 * nRepaintRectSize );
                 aRepaintRect.Pos().X() -= nRepaintRectSize;
+
+                // Accordingly to horizontal case, but for top/bottom
+                // aStyles[3] == aTFromR, aStyles[1] == aTFromL, aStyles[6] == aBFromR, aStyles[4] == aBFromL
+                if(aStyles[3].IsUsed() || aStyles[1].IsUsed() || aStyles[6].IsUsed() || aStyles[4].IsUsed())
+                {
+                    const double fLineWidthMaxTop(std::max(aStyles[3].GetWidth(), aStyles[1].GetWidth()));
+                    const double fLineWidthMaxBottom(std::max(aStyles[6].GetWidth(), aStyles[4].GetWidth()));
+                    aRepaintRect.Height(aRepaintRect.Height() + (fLineWidthMaxTop + fLineWidthMaxBottom));
+                    aRepaintRect.Pos().Y() -= fLineWidthMaxTop;
+                }
             }
 
             if (!rRect.IsOver(aRepaintRect))
