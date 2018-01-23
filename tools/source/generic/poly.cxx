@@ -496,7 +496,6 @@ void ImplPolygon::ImplInitSize(sal_uInt16 nInitSize, bool bFlags)
     if (nInitSize)
     {
         mxPointAry.reset(new Point[nInitSize]);
-        memset(mxPointAry.get(), 0, nInitSize * sizeof(Point));
     }
 
     if (bFlags)
@@ -525,9 +524,8 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
             // Copy the old points
             if ( mnPoints < nNewSize )
             {
-                // New points initialized to zero
+                // New points are already implicitly initialized to zero
                 const std::size_t nOldSz(mnPoints * sizeof(Point));
-                memset(xNewAry.get() + mnPoints, 0, nNewSz - nOldSz);
                 if (mxPointAry)
                     memcpy(xNewAry.get(), mxPointAry.get(), nOldSz);
             }
@@ -606,8 +604,6 @@ bool ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon con
 
         if( pInitPoly )
             memcpy(xNewAry.get() + nPos, pInitPoly->mxPointAry.get(), nSpaceSize);
-        else
-            memset(xNewAry.get() + nPos, 0, nSpaceSize);
 
         memcpy(xNewAry.get() + nSecPos, mxPointAry.get() + nPos, nRest * sizeof(Point));
         mxPointAry = std::move(xNewAry);
