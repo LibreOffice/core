@@ -476,10 +476,7 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
 void SwXTextMarkup::Impl::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
 {
     DBG_TESTSOLARMUTEX();
-
-    if ( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
-
+    EndListeningAll();
     m_pTextNode = nullptr;
 }
 

@@ -2324,7 +2324,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             SwModify* pLclRegisteredIn = GetRegisteredInNonConst();
             if (pLclRegisteredIn && pLclRegisteredIn->HasWriterListeners())
             {
-                pLclRegisteredIn->Remove(this);
+                EndListeningAll();
                 m_pTableCursor.reset(nullptr);
             }
         }

@@ -2741,8 +2741,7 @@ SwCursorShell::~SwCursorShell()
 
     // #i54025# - do not give a HTML parser that might potentially hang as
     // a client at the cursor shell the chance to hang itself on a TextNode
-    if( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
+    EndListeningAll();
 }
 
 SwShellCursor* SwCursorShell::getShellCursor( bool bBlock )

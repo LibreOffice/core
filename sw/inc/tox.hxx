@@ -142,7 +142,6 @@ public:
             { return m_wXDocumentIndexMark; }
     SAL_DLLPRIVATE void SetXTOXMark(css::uno::Reference<css::text::XDocumentIndexMark> const& xMark)
             { m_wXDocumentIndexMark = xMark; }
-    void DeRegister() { GetRegisteredInNonConst()->Remove( this ); }
     void RegisterToTOXType( SwTOXType& rMark );
     static void InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType );
 };

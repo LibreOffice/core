@@ -560,8 +560,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
     delete m_pPortionData;
     delete m_pHyperTextData;
     delete mpParaChangeTrackInfo; // #i108125#
-    if(GetRegisteredIn())
-        GetRegisteredIn()->Remove(this);
+    EndListeningAll();
 }
 
 bool SwAccessibleParagraph::HasCursor()

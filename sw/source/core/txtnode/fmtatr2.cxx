@@ -642,9 +642,9 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
     {
         m_pTextNode->Add(this);
     }
-    else if (!m_pTextNode && GetRegisteredIn())
+    else if (!m_pTextNode)
     {
-        GetRegisteredInNonConst()->Remove(this);
+        EndListeningAll();
     }
     if (!pTextNode) // text node gone? invalidate UNO object!
     {

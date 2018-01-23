@@ -479,11 +479,6 @@ SwUndoSetFlyFormat::~SwUndoSetFlyFormat()
 {
 }
 
-void SwUndoSetFlyFormat::DeRegisterFromFormat( SwFormat& rFormat )
-{
-    rFormat.Remove(this);
-}
-
 void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
                                 sal_uLong nNode, sal_Int32 nContent )
 {

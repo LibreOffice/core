@@ -163,10 +163,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
 void SwAccessibleNoTextFrame::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     SolarMutexGuard aGuard;
-
-    if( m_aDepend.GetRegisteredIn() )
-        m_aDepend.GetRegisteredIn()->Remove( &m_aDepend );
-
+    m_aDepend.EndListeningAll();
     SwAccessibleFrameBase::Dispose(bRecursive, bCanSkipInvisible);
 }
 

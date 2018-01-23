@@ -738,7 +738,7 @@ void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
     case RES_OBJECTDYING:
         // mba: it seems that this class intentionally does not call code in base class SwClient
         if( pOld && ( GetRegisteredIn() == static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) ) )
-            GetRegisteredInNonConst()->Remove( this );
+            EndListeningAll();
         break;
 
     default:
@@ -1276,10 +1276,7 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
 void SwAccessibleTable::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     SolarMutexGuard aGuard;
-
-    if( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
-
+    EndListeningAll();
     SwAccessibleContext::Dispose(bRecursive, bCanSkipInvisible);
 }
 

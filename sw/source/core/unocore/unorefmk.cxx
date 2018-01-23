@@ -98,10 +98,7 @@ protected:
 
 void SwXReferenceMark::Impl::Invalidate()
 {
-    if (IsValid())
-    {
-        GetRegisteredIn()->Remove(this);
-    }
+    EndListeningAll();
     m_pDoc = nullptr;
     m_pMarkFormat = nullptr;
     uno::Reference<uno::XInterface> const xThis(m_wThis);
@@ -117,7 +114,7 @@ void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem 
 {
     ClientModify(this, pOld, pNew);
 
-    if (!GetRegisteredIn()) // removed => dispose
+    if (!IsValid()) // removed => dispose
     {
         Invalidate();
     }

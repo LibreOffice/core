@@ -106,7 +106,7 @@ void SwXBookmark::Impl::registerInMark(SwXBookmark & rThis,
     else if (m_pRegisteredBookmark)
     {
         m_sMarkName = m_pRegisteredBookmark->GetName();
-        m_pRegisteredBookmark->Remove(this);
+        EndListeningAll();
     }
     m_pRegisteredBookmark = pBkmk;
     // need a permanent Reference to initialize m_wThis
