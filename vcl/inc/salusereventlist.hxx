@@ -36,7 +36,7 @@ enum class SalEvent;
 struct SalFrameHash : public std::hash<sal_IntPtr>
 {
     size_t operator()(const SalFrame* frame) const
-        { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
+        { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<sal_IntPtr>(frame) ); }
 };
 
 typedef std::unordered_set< SalFrame*, SalFrameHash > SalFrameSet;
