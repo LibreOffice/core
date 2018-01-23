@@ -22,10 +22,10 @@ namespace oglcanvas
         virtual ~IBufferContext() {}
 
         /// start render to buffer. changes current framebuffer
-        virtual bool startBufferRendering() = 0;
+        virtual void startBufferRendering() = 0;
 
         /// end render to buffer. switches to default framebuffer
-        virtual bool endBufferRendering() = 0;
+        virtual void endBufferRendering() = 0;
 
         virtual GLuint getTextureId() = 0;
     };

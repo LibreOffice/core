@@ -61,7 +61,7 @@ namespace oglcanvas
         virtual css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL getFont(  ) override;
         virtual css::rendering::StringContext SAL_CALL getText(  ) override;
 
-        bool draw( const css::rendering::ViewState&         rViewState,
+        void draw( const css::rendering::ViewState&         rViewState,
                    const css::rendering::RenderState&       rRenderState,
                    const css::uno::Reference<
                          css::rendering::XGraphicDevice >&  xGraphicDevice ) const;

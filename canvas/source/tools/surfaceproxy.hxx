@@ -56,7 +56,7 @@ namespace canvas
             @param rTransform
             Output transformation (does not affect output position)
         */
-        virtual bool draw( double                         fAlpha,
+        virtual void draw( double                         fAlpha,
                            const ::basegfx::B2DPoint&     rPos,
                            const ::basegfx::B2DHomMatrix& rTransform ) override;
 
@@ -76,7 +76,7 @@ namespace canvas
             @param rTransform
             Output transformation (does not affect output position)
         */
-        virtual bool draw( double                         fAlpha,
+        virtual void draw( double                         fAlpha,
                            const ::basegfx::B2DPoint&     rPos,
                            const ::basegfx::B2DRange&     rArea,
                            const ::basegfx::B2DHomMatrix& rTransform ) override;
@@ -96,7 +96,7 @@ namespace canvas
             @param rTransform
             Output transformation (does not affect output position)
         */
-        virtual bool draw( double                           fAlpha,
+        virtual void draw( double                           fAlpha,
                            const ::basegfx::B2DPoint&       rPos,
                            const ::basegfx::B2DPolyPolygon& rClipPoly,
                            const ::basegfx::B2DHomMatrix&   rTransform ) override;

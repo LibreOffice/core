@@ -75,7 +75,7 @@ namespace cppcanvas
             return true;
         }
 
-        bool ImplBitmap::drawAlphaModulated( double nAlphaModulation ) const
+        void ImplBitmap::drawAlphaModulated( double nAlphaModulation ) const
         {
             CanvasSharedPtr pCanvas( getCanvas() );
 
@@ -86,7 +86,7 @@ namespace cppcanvas
             if( pCanvas.get() == nullptr ||
                 !pCanvas->getUNOCanvas().is() )
             {
-                return false;
+                return;
             }
 
             rendering::RenderState aLocalState( getRenderState() );
@@ -99,8 +99,6 @@ namespace cppcanvas
             pCanvas->getUNOCanvas()->drawBitmapModulated( mxBitmap,
                                                           pCanvas->getViewState(),
                                                           aLocalState );
-
-            return true;
         }
 
         BitmapCanvasSharedPtr ImplBitmap::getBitmapCanvas() const

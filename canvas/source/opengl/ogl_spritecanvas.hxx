@@ -103,7 +103,7 @@ namespace oglcanvas
 
         /** Write out recorded actions
          */
-        bool renderRecordedActions() const;
+        void renderRecordedActions() const;
 
     private:
         css::uno::Sequence< css::uno::Any >                maArguments;

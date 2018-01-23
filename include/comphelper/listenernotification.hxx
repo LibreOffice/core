@@ -186,7 +186,7 @@ namespace comphelper
         using OListenerContainer::createIterator;
 
         /// typed notification
-        inline bool    notify( const EventClass& _rEvent, NotificationMethod _pNotify );
+        inline void    notify( const EventClass& _rEvent, NotificationMethod _pNotify );
 
     protected:
         virtual bool    implNotify(
@@ -203,12 +203,11 @@ namespace comphelper
 
 
     template< class LISTENER, class EVENT >
-    inline bool OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify )
+    inline void OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify )
     {
         m_pNotificationMethod = _pNotify;
-        bool bRet = OListenerContainer::impl_notify( _rEvent );
+        OListenerContainer::impl_notify( _rEvent );
         m_pNotificationMethod = nullptr;
-        return bRet;
     }
 
     //= OListenerContainerBase

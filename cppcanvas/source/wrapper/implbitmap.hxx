@@ -47,7 +47,7 @@ namespace cppcanvas
 
             // CanvasGraphic implementation (that was not already implemented by CanvasGraphicHelper)
             virtual bool draw() const override;
-            virtual bool drawAlphaModulated( double nAlphaModulation ) const override;
+            virtual void drawAlphaModulated( double nAlphaModulation ) const override;
 
             virtual BitmapCanvasSharedPtr                       getBitmapCanvas() const override;
 

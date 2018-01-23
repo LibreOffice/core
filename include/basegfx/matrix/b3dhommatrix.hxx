@@ -57,7 +57,7 @@ namespace basegfx
         void identity();
 
         /// Invert the matrix (if possible)
-        bool invert();
+        void invert();
 
         /// Calc the matrix determinant
         double determinant() const;
@@ -111,7 +111,7 @@ namespace basegfx
         B3DHomMatrix& operator=(B3DHomMatrix&& rMat);
 
         // decomposition
-        bool decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const;
+        void decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const;
     };
 
     inline B3DHomMatrix operator*(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)

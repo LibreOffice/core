@@ -84,28 +84,24 @@ namespace canvas
             rSurfacePtr->setColorBufferDirty();
     }
 
-    bool SurfaceProxy::draw( double                         fAlpha,
+    void SurfaceProxy::draw( double                         fAlpha,
                              const ::basegfx::B2DPoint&     rPos,
                              const ::basegfx::B2DHomMatrix& rTransform )
     {
         for( const auto& rSurfacePtr : maSurfaceList )
             rSurfacePtr->draw( fAlpha, rPos, rTransform );
-
-        return true;
     }
 
-    bool SurfaceProxy::draw( double                         fAlpha,
+    void SurfaceProxy::draw( double                         fAlpha,
                              const ::basegfx::B2DPoint&     rPos,
                              const ::basegfx::B2DRange&     rArea,
                              const ::basegfx::B2DHomMatrix& rTransform )
     {
         for( const auto& rSurfacePtr : maSurfaceList )
             rSurfacePtr->drawRectangularArea( fAlpha, rPos, rArea, rTransform );
-
-        return true;
     }
 
-    bool SurfaceProxy::draw( double                           fAlpha,
+    void SurfaceProxy::draw( double                           fAlpha,
                              const ::basegfx::B2DPoint&       rPos,
                              const ::basegfx::B2DPolyPolygon& rClipPoly,
                              const ::basegfx::B2DHomMatrix&   rTransform )
@@ -119,8 +115,6 @@ namespace canvas
 
         for( const auto& rSurfacePtr : maSurfaceList )
             rSurfacePtr->drawWithClip( fAlpha, rPos, rTriangulatedPolygon, rTransform );
-
-        return true;
     }
 }
 

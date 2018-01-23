@@ -442,13 +442,12 @@ public:
         m_pContacts = nullptr;
     }
 
-    virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &/*rPassword*/) override
+    virtual void executeQuery (EBook* pBook, EBookQuery* pQuery, OString &/*rPassword*/) override
     {
         freeContacts();
         char *sexp = e_book_query_to_string( pQuery );
-        bool bSuccess = e_book_client_get_contacts_sync( pBook, sexp, &m_pContacts, nullptr, nullptr );
+        e_book_client_get_contacts_sync( pBook, sexp, &m_pContacts, nullptr, nullptr );
         g_free (sexp);
-        return bSuccess;
     }
 
     virtual EContact *getContact(sal_Int32 nIndex) override
@@ -568,12 +567,11 @@ public:
         m_pContacts = nullptr;
     }
 
-    virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword) override
+    virtual void executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword) override
     {
         freeContacts();
 
         ESource *pSource = e_book_get_source( pBook );
-        bool bSuccess = false;
         bool bAuthSuccess = true;
 
         if( isAuthRequired( pBook ) )
@@ -584,9 +582,7 @@ public:
         }
 
         if (bAuthSuccess)
-            bSuccess = e_book_get_contacts( pBook, pQuery, &m_pContacts, nullptr );
-
-        return bSuccess;
+            e_book_get_contacts( pBook, pQuery, &m_pContacts, nullptr );
     }
 
     virtual EContact *getContact(sal_Int32 nIndex) override

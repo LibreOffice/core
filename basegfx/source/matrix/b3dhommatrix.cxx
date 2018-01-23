@@ -85,7 +85,7 @@ namespace basegfx
         *mpImpl = Impl3DHomMatrix();
     }
 
-    bool B3DHomMatrix::invert()
+    void B3DHomMatrix::invert()
     {
         Impl3DHomMatrix aWork(*mpImpl);
         std::unique_ptr<sal_uInt16[]> pIndex( new sal_uInt16[Impl3DHomMatrix_Base::getEdgeLength()] );
@@ -94,10 +94,7 @@ namespace basegfx
         if(aWork.ludcmp(pIndex.get(), nParity))
         {
             mpImpl->doInvert(aWork, pIndex.get());
-            return true;
         }
-
-        return false;
     }
 
     double B3DHomMatrix::determinant() const
@@ -376,15 +373,15 @@ namespace basegfx
         mpImpl->doMulMatrix(aOrientationMat);
     }
 
-    bool B3DHomMatrix::decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const
+    void B3DHomMatrix::decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const
     {
         // when perspective is used, decompose is not made here
         if(!mpImpl->isLastLineDefault())
-            return false;
+            return;
 
         // If determinant is zero, decomposition is not possible
         if(determinant() == 0.0)
-            return false;
+            return;
 
         // isolate translation
         rTranslate.setX(mpImpl->get(0, 3));
@@ -536,8 +533,6 @@ namespace basegfx
             // correct rotate values
             rRotate.correctValues();
         }
-
-        return true;
     }
 } // end of namespace basegfx
 
