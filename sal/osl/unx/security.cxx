@@ -365,7 +365,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
         n = strlen(pszDirectory);
         if (n + sizeof(DOT_CONFIG) < nMax)
         {
-            strncpy(pszDirectory+n, DOT_CONFIG, sizeof(DOT_CONFIG));
+            strcpy(pszDirectory+n, DOT_CONFIG); // safe
 
             // try to create dir if not present
             bool dirOK = true;
