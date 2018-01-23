@@ -653,7 +653,8 @@ private:
     void        SetString_Impl(const OUString& rString, bool bInterpret, bool bEnglish);
     double      GetValue_Impl() const;
     void        SetValue_Impl(double fValue);
-    css::table::CellContentType GetResultType_Impl();
+    css::table::CellContentType GetContentType_Impl();
+    sal_Int32 GetResultType_Impl();
 
 protected:
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;

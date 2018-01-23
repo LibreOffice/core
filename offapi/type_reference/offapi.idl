@@ -12320,7 +12320,9 @@ module com {
      [property, readonly] ::com::sun::star::awt::Point Position;
      [property, readonly] ::com::sun::star::awt::Size Size;
      [property, optional] string FormulaLocal;
+     [property, readonly] ::com::sun::star::table::CellContentType CellContentType;
      [property, readonly] long FormulaResultType;
+     [property, readonly] long FormulaResultType2;
      [property] ::com::sun::star::sheet::XSheetConditionalEntries ConditionalFormat;
      [property, optional] ::com::sun::star::sheet::XSheetConditionalEntries ConditionalFormatLocal;
      [property] ::com::sun::star::beans::XPropertySet Validation;
