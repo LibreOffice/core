@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3a634d1c",
+        "filename": "svx/inc/numberingtype.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-23T13:37:41Z",
+      "side": 1,
+      "message": "I think that should be Farsi instead of Persian.\nAnd is the language distinction even necessary? The number characters are already different.",
+      "range": {
+        "startLine": 58,
+        "startChar": 59,
+        "endLine": 58,
+        "endChar": 66
+      },
+      "revId": "ec501582d3b1d6578707a6228a13d7b1cb85d2d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
