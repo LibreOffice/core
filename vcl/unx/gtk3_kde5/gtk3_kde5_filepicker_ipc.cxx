@@ -21,9 +21,9 @@
 
 #undef Region
 
-#include "unx/geninst.h"
+#include <unx/geninst.h>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <future>
 
@@ -125,12 +125,12 @@ Gtk3KDE5FilePickerIpc::~Gtk3KDE5FilePickerIpc()
         m_process.wait_for(std::chrono::milliseconds(100));
 }
 
-sal_Int16 SAL_CALL Gtk3KDE5FilePickerIpc::execute()
+sal_Int16 Gtk3KDE5FilePickerIpc::execute()
 {
     auto restoreMainWindow = blockMainWindow();
 
     auto id = sendCommand(Commands::Execute);
-    sal_Bool accepted = false;
+    bool accepted = false;
     readResponse(id, accepted);
 
     if (restoreMainWindow)
@@ -145,7 +145,7 @@ static gboolean ignoreDeleteEvent(GtkWidget* /*widget*/, GdkEvent* /*event*/,
     return true;
 }
 
-std::function<void()> SAL_CALL Gtk3KDE5FilePickerIpc::blockMainWindow()
+std::function<void()> Gtk3KDE5FilePickerIpc::blockMainWindow()
 {
     vcl::Window* pParentWin = Application::GetDefDialogParent();
     if (!pParentWin)
@@ -157,7 +157,7 @@ std::function<void()> SAL_CALL Gtk3KDE5FilePickerIpc::blockMainWindow()
 
     sendCommand(Commands::SetWinId, pSysData->aWindow);
 
-    auto* pMainWindow = reinterpret_cast<GtkWidget*>(pSysData->pWidget);
+    auto* pMainWindow = static_cast<GtkWidget*>(pSysData->pWidget);
     if (!pMainWindow)
         return {};
 
@@ -190,7 +190,7 @@ std::function<void()> SAL_CALL Gtk3KDE5FilePickerIpc::blockMainWindow()
     };
 }
 
-void SAL_CALL Gtk3KDE5FilePickerIpc::await(const std::future<void>& future)
+void Gtk3KDE5FilePickerIpc::await(const std::future<void>& future)
 {
     while (future.wait_for(std::chrono::milliseconds(1)) != std::future_status::ready)
     {

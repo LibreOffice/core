@@ -38,9 +38,9 @@
 
 #undef Region
 
-#include "unx/geninst.h"
+#include <unx/geninst.h>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <future>
 
@@ -64,7 +64,7 @@ namespace bf = boost::filesystem;
 
 namespace
 {
-uno::Sequence<OUString> SAL_CALL FilePicker_getSupportedServiceNames()
+uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(3);
     aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
@@ -107,7 +107,7 @@ sal_Int16 SAL_CALL Gtk3KDE5FilePicker::execute() { return m_ipc.execute(); }
 
 void SAL_CALL Gtk3KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
 {
-    m_ipc.sendCommand(Commands::SetMultiSelectionMode, multiSelect);
+    m_ipc.sendCommand(Commands::SetMultiSelectionMode, bool(multiSelect));
 }
 
 void SAL_CALL Gtk3KDE5FilePicker::setDefaultName(const OUString& name)
@@ -176,9 +176,9 @@ void SAL_CALL Gtk3KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitl
 void SAL_CALL Gtk3KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                            const uno::Any& value)
 {
-    if (value.has<sal_Bool>())
+    if (value.has<bool>())
     {
-        m_ipc.sendCommand(Commands::SetValue, controlId, nControlAction, value.get<sal_Bool>());
+        m_ipc.sendCommand(Commands::SetValue, controlId, nControlAction, value.get<bool>());
     }
     else
     {
@@ -198,7 +198,7 @@ uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nC
 
     auto id = m_ipc.sendCommand(Commands::GetValue, controlId, nControlAction);
 
-    sal_Bool value = false;
+    bool value = false;
     m_ipc.readResponse(id, value);
 
     return uno::Any(value);
@@ -206,7 +206,7 @@ uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nC
 
 void SAL_CALL Gtk3KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
 {
-    m_ipc.sendCommand(Commands::EnableControl, controlId, enable);
+    m_ipc.sendCommand(Commands::EnableControl, controlId, bool(enable));
 }
 
 void SAL_CALL Gtk3KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
@@ -284,7 +284,7 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         {
             // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
             // code, but the checkbox is hidden and ignored
-            sal_Bool hidden = controlId == CHECKBOX_AUTOEXTENSION;
+            bool hidden = controlId == CHECKBOX_AUTOEXTENSION;
 
             m_ipc.sendCommand(Commands::AddCheckBox, controlId, hidden, getResString(resId));
 
@@ -308,8 +308,7 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
     uno::Any arg;
     if (args.getLength() == 0)
     {
-        throw lang::IllegalArgumentException(OUString("no arguments"),
-                                             static_cast<XFilePicker2*>(this), 1);
+        throw lang::IllegalArgumentException("no arguments", static_cast<XFilePicker2*>(this), 1);
     }
 
     arg = args[0];
@@ -317,14 +316,14 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
     if ((arg.getValueType() != cppu::UnoType<sal_Int16>::get())
         && (arg.getValueType() != cppu::UnoType<sal_Int8>::get()))
     {
-        throw lang::IllegalArgumentException(OUString("invalid argument type"),
+        throw lang::IllegalArgumentException("invalid argument type",
                                              static_cast<XFilePicker2*>(this), 1);
     }
 
     sal_Int16 templateId = -1;
     arg >>= templateId;
 
-    sal_Bool saveDialog = false;
+    bool saveDialog = false;
     switch (templateId)
     {
         case FILEOPEN_SIMPLE:
@@ -411,7 +410,7 @@ void SAL_CALL Gtk3KDE5FilePicker::cancel()
     // TODO
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::disposing(const lang::EventObject& rEvent)
+void Gtk3KDE5FilePicker::disposing(const lang::EventObject& rEvent)
 {
     uno::Reference<XFilePickerListener> xFilePickerListener(rEvent.Source, uno::UNO_QUERY);
 

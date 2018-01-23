@@ -56,7 +56,7 @@ protected:
 
 public:
     explicit Gtk3KDE5FilePicker(const css::uno::Reference<css::uno::XComponentContext>&);
-    virtual ~Gtk3KDE5FilePicker();
+    virtual ~Gtk3KDE5FilePicker() override;
 
     // XFilePickerNotifier
     virtual void SAL_CALL addFilePickerListener(
@@ -115,7 +115,7 @@ public:
     virtual void SAL_CALL cancel() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent);
+    virtual void disposing(const css::lang::EventObject& rEvent);
     using cppu::WeakComponentImplHelperBase::disposing;
 
     // XServiceInfo
