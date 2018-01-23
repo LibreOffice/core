@@ -406,7 +406,7 @@ public:
     bool        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes ) const;
 
     bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
-                           ScSetStringParam* pParam = nullptr );
+                           const ScSetStringParam * pParam = nullptr );
 
     bool SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
     void SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
@@ -505,7 +505,7 @@ public:
         sc::CopyFromClipContext& rCxt, const ScTable& rClipTab, sc::ColumnSpanSet& rBroadcastSpans );
 
     void CopyOneCellFromClip(
-        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCROW nSrcRow, ScTable* pSrcTab );
+        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCROW nSrcRow, const ScTable* pSrcTab );
 
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -531,7 +531,7 @@ public:
         InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab );
 
     void        CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            SCCOL nDx, SCROW nDy, ScTable* pTable);
+                            SCCOL nDx, SCROW nDy, const ScTable* pTable);
     void        TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 ScTable* pTransClip, InsertDeleteFlags nFlags, bool bAsLink );
 
@@ -1077,11 +1077,11 @@ private:
 
     void FillSeriesSimple(
         const ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
-        SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress );
+        const SCCOLROW& rCol, const SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress );
 
     void FillAutoSimple(
         SCCOLROW nISrcStart, SCCOLROW nISrcEnd, SCCOLROW nIStart, SCCOLROW nIEnd,
-        SCCOLROW& rInner, SCCOLROW& rCol, SCCOLROW& rRow,
+        SCCOLROW& rInner, const SCCOLROW& rCol, const SCCOLROW& rRow,
         sal_uLong nActFormCnt, sal_uLong nMaxFormCnt,
         bool bHasFiltered, bool bVertical, bool bPositive,
         ScProgress* pProgress, sal_uLong& rProgress );

@@ -3217,7 +3217,7 @@ void SwHTMLParser::DeleteAttr( HTMLAttr* pAttr )
         *ppHead = pNext;
 }
 
-void SwHTMLParser::SaveAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab)
+void SwHTMLParser::SaveAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAttrTab)
 {
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!
@@ -3244,7 +3244,7 @@ void SwHTMLParser::SaveAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab)
     }
 }
 
-void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable>& rNewAttrTab,
+void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable> const & rNewAttrTab,
                                  bool bMoveEndBack )
 {
     // preliminary paragraph attributes are not allowed here, they could
@@ -3345,7 +3345,7 @@ void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable>& rNewAttrTab,
     }
 }
 
-void SwHTMLParser::RestoreAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab)
+void SwHTMLParser::RestoreAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAttrTab)
 {
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!

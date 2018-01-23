@@ -1268,7 +1268,7 @@ void ScTable::FillFormulaVertical(
 
 void ScTable::FillSeriesSimple(
     const ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
-    SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress )
+    const SCCOLROW& rCol, const SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress )
 {
     bool bHidden = false;
     SCCOLROW nHiddenLast = -1;
@@ -1348,7 +1348,7 @@ void ScTable::FillSeriesSimple(
 
 void ScTable::FillAutoSimple(
     SCCOLROW nISrcStart, SCCOLROW nISrcEnd, SCCOLROW nIStart, SCCOLROW nIEnd,
-    SCCOLROW& rInner, SCCOLROW& rCol, SCCOLROW& rRow, sal_uLong nActFormCnt,
+    SCCOLROW& rInner, const SCCOLROW& rCol, const SCCOLROW& rRow, sal_uLong nActFormCnt,
     sal_uLong nMaxFormCnt, bool bHasFiltered, bool bVertical, bool bPositive,
     ScProgress* pProgress, sal_uLong& rProgress )
 {

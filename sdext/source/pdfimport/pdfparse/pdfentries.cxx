@@ -1107,7 +1107,7 @@ static void pad_or_truncate_to_32( const OString& rStr, sal_Char* pBuffer )
 }
 
 // pass at least pData->m_nKeyLength bytes in
-static sal_uInt32 password_to_key( const OString& rPwd, sal_uInt8* pOutKey, PDFFileImplData* pData, bool bComputeO )
+static sal_uInt32 password_to_key( const OString& rPwd, sal_uInt8* pOutKey, PDFFileImplData const * pData, bool bComputeO )
 {
     // see PDF reference 1.4 Algorithm 3.2
     // encrypt pad string

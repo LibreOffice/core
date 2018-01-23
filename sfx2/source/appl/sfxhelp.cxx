@@ -130,7 +130,7 @@ OUString getHelpRootURL()
     return s_instURL;
 }
 
-bool impl_checkHelpLocalePath(OUString& rpPath)
+bool impl_checkHelpLocalePath(OUString const & rpPath)
 {
     osl::DirectoryItem directoryItem;
     bool bOK = false;

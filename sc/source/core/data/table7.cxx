@@ -118,7 +118,7 @@ void ScTable::DeleteBeforeCopyFromClip(
 }
 
 void ScTable::CopyOneCellFromClip(
-    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCROW nSrcRow, ScTable* pSrcTab )
+    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCROW nSrcRow, const ScTable* pSrcTab )
 {
     ScRange aSrcRange = rCxt.getClipDoc()->GetClipParam().getWholeRange();
     SCCOL nSrcColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
