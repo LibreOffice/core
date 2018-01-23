@@ -192,7 +192,6 @@ static SvxFileFormat setFileNameDisplayFormat( sal_Int16 nFormat )
 static util::DateTime getDate( sal_Int32 nDate )
 {
     util::DateTime aDate;
-    memset( &aDate, 0, sizeof( util::DateTime ) );
 
     Date aTempDate( nDate );
 
@@ -211,7 +210,6 @@ inline Date setDate( util::DateTime const & rDate )
 static util::DateTime getTime(sal_Int64 const nTime)
 {
     util::DateTime aTime;
-    memset( &aTime, 0, sizeof( util::DateTime ) );
 
     tools::Time aTempTime( nTime );
 
@@ -259,7 +257,14 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 {
     mpPropSet = ImplGetFieldItemPropertySet(mnServiceId);
 
-    memset( &(mpImpl->maDateTime), 0, sizeof( util::DateTime ) );
+    mpImpl->maDateTime.NanoSeconds = 0;
+    mpImpl->maDateTime.Seconds = 0;
+    mpImpl->maDateTime.Minutes = 0;
+    mpImpl->maDateTime.Hours = 0;
+    mpImpl->maDateTime.Day = 0;
+    mpImpl->maDateTime.Month = 0;
+    mpImpl->maDateTime.Year = 0;
+    mpImpl->maDateTime.IsUTC = false;
 
     switch( nServiceId )
     {
