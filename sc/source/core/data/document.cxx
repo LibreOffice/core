@@ -3360,7 +3360,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 }
 
 bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
-                            ScSetStringParam* pParam )
+                            const ScSetStringParam* pParam )
 {
     ScTable* pTab = FetchTable(nTab);
     if (!pTab)
@@ -3399,7 +3399,7 @@ bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& 
 }
 
 bool ScDocument::SetString(
-    const ScAddress& rPos, const OUString& rString, ScSetStringParam* pParam )
+    const ScAddress& rPos, const OUString& rString, const ScSetStringParam* pParam )
 {
     return SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rString, pParam);
 }

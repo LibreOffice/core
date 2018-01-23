@@ -566,7 +566,7 @@ void ScTable::CopyCellToDocument(SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, S
 }
 
 void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        SCCOL nDx, SCROW nDy, ScTable* pTable)
+        SCCOL nDx, SCROW nDy, const ScTable* pTable)
 {
     ScRange aOldRange( nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab);
     ScRange aNewRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
@@ -1386,7 +1386,7 @@ bool ScTable::TestCopyScenarioTo( const ScTable* pDestTab ) const
 }
 
 bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const OUString& rString,
-                         ScSetStringParam* pParam )
+                         const ScSetStringParam * pParam )
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].SetString(

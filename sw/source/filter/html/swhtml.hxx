@@ -535,10 +535,10 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void DeleteAttr( HTMLAttr* pAttr );
 
     void EndContextAttrs( HTMLAttrContext *pContext );
-    void SaveAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab);
+    void SaveAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAttrTab);
     void SplitAttrTab( const SwPosition& rNewPos );
-    void SplitAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab, bool bMoveEndBack);
-    void RestoreAttrTab(std::shared_ptr<HTMLAttrTable>& rNewAttrTab);
+    void SplitAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAttrTab, bool bMoveEndBack);
+    void RestoreAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAttrTab);
     void InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart );
     void InsertAttrs( HTMLAttrs& rAttrs );
 

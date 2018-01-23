@@ -42,7 +42,7 @@ class SVX_DLLPUBLIC E3dLatheObj final : public E3dCompoundObject
     void SetDefaultAttributes(E3dDefaultAttributes const & rDefault);
 
 public:
-    E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPoly2D);
+    E3dLatheObj(E3dDefaultAttributes const & rDefault, const basegfx::B2DPolyPolygon& rPoly2D);
     E3dLatheObj();
 
     // HorizontalSegments:

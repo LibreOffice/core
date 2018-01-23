@@ -1029,9 +1029,9 @@ public:
 
                     //  return TRUE = number format is set
     SC_DLLPUBLIC bool SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
-                                 ScSetStringParam* pParam = nullptr );
+                                 const ScSetStringParam * pParam = nullptr );
     SC_DLLPUBLIC bool SetString( const ScAddress& rPos, const OUString& rString,
-                                 ScSetStringParam* pParam = nullptr );
+                                 const ScSetStringParam* pParam = nullptr );
 
     /**
      * This method manages the lifecycle of the passed edit text object. When

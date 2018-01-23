@@ -98,7 +98,7 @@ public:
     OUString GetToken (UserOptToken nToken) const;
     void     SetToken (UserOptToken nToken, OUString const& rNewToken);
     bool     GetBoolValue (UserOptToken nToken) const;
-    void     SetBoolValue (UserOptToken nToken, bool& bNewValue);
+    void     SetBoolValue (UserOptToken nToken, bool bNewValue);
     void     Notify ();
 
 private:
@@ -207,7 +207,7 @@ bool SvtUserOptions::Impl::GetBoolValue (UserOptToken nToken) const
     return GetValue_Impl<bool>( nToken );
 }
 
-void SvtUserOptions::Impl::SetBoolValue (UserOptToken nToken, bool& bNewValue)
+void SvtUserOptions::Impl::SetBoolValue (UserOptToken nToken, bool bNewValue)
 {
     SetValue_Impl<bool>( nToken, bNewValue );
 }

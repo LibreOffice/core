@@ -44,7 +44,7 @@ private:
 
 public:
 
-    E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth);
+    E3dExtrudeObj(E3dDefaultAttributes const & rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth);
     E3dExtrudeObj();
 
     // PercentDiagonal: 0..100, before 0.0..0.5

@@ -209,6 +209,8 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
             || name == "Read_Footnote"
             || name == "Read_Field"
             || name == "Read_And"
+            // passed as a LINK<> to another method
+            || name == "GlobalBasicErrorHdl_Impl"
             )
             return false;
     }

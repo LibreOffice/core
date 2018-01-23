@@ -421,7 +421,7 @@ namespace {
 // Ensures that the indicator is reset after exiting OOXMLDocumentImpl::resolve
 class StatusIndicatorGuard{
 public:
-    explicit StatusIndicatorGuard(css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator)
+    explicit StatusIndicatorGuard(css::uno::Reference<css::task::XStatusIndicator> const & xStatusIndicator)
         :mxStatusIndicator(xStatusIndicator)
     {
     }

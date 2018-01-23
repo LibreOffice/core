@@ -55,7 +55,7 @@ sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 // Constructor creates a two cover surface tools::PolyPolygon and (point-count 1) side
 // surfaces rectangles from the passed PolyPolygon
 
-E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth)
+E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes const & rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth)
 :   E3dCompoundObject(),
     maExtrudePolygon(rPP)
 {

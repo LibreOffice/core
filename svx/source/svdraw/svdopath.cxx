@@ -519,7 +519,7 @@ public:
     bool BegCreate(SdrDragStat& rStat);
     bool MovCreate(SdrDragStat& rStat);
     bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    bool BckCreate(SdrDragStat& rStat);
+    bool BckCreate(SdrDragStat const & rStat);
     void BrkCreate(SdrDragStat& rStat);
     Pointer GetCreatePointer() const;
 
@@ -1504,7 +1504,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return bRet;
 }
 
-bool ImpPathForDragAndCreate::BckCreate(SdrDragStat& rStat)
+bool ImpPathForDragAndCreate::BckCreate(SdrDragStat const & rStat)
 {
     ImpPathCreateUser* pU=static_cast<ImpPathCreateUser*>(rStat.GetUser());
     if (aPathPolygon.Count()>0) {

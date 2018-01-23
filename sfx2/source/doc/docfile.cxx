@@ -3401,7 +3401,7 @@ bool SfxMedium::SetWritableForUserOnly( const OUString& aURL )
 namespace
 {
 /// Get the parent directory of a temporary file for output purposes.
-OUString GetLogicBase(std::unique_ptr<SfxMedium_Impl>& pImpl)
+OUString GetLogicBase(std::unique_ptr<SfxMedium_Impl> const & pImpl)
 {
     OUString aLogicBase;
 
