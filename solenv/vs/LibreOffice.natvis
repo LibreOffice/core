@@ -314,7 +314,7 @@
     <DisplayString>{{size={m_nCount,d}}}</DisplayString>
     <Expand>
       <CustomListItems>
-        <Variable Name='pCurItem' InitialValue='m_pItems'/>
+        <Variable Name='pCurItem' InitialValue='m_pItems._Mypair._Myval2'/>
         <Variable Name='pCurRange' InitialValue='m_pWhichRanges'/>
         <Variable Name='nCurWhich' InitialValue='0'/>
         <Loop Condition='*pCurRange'>
