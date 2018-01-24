@@ -43,6 +43,8 @@
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <boost/optional.hpp>
+
+#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -183,6 +185,8 @@ struct SwSrchChrAttr
     sal_Int32 nStt;
     sal_Int32 nEnd;
 
+    SwSrchChrAttr(): nWhich(0), nStt(0), nEnd(0) {}
+
     SwSrchChrAttr( const SfxPoolItem& rItem,
                     sal_Int32 nStart, sal_Int32 nAnyEnd )
         : nWhich( rItem.Which() ), nStt( nStart ), nEnd( nAnyEnd )
@@ -253,8 +257,8 @@ SwAttrCheckArr::~SwAttrCheckArr()
 
 void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
 {
-    memset( pFndArr, 0, nArrLen * sizeof(SwSrchChrAttr) );
-    memset( pStackArr, 0, nArrLen * sizeof(SwSrchChrAttr) );
+    std::fill(pFndArr, pFndArr + nArrLen, SwSrchChrAttr());
+    std::fill(pStackArr, pStackArr + nArrLen, SwSrchChrAttr());
     nFound = 0;
     nStackCnt = 0;
 
