@@ -556,7 +556,7 @@ public class AccessibilityWorkBench
     // XTerminateListener
     public void notifyTermination (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
     {
-        System.out.println ("Notifiy Termination Event : " + aEvent);
+        System.out.println ("Notify Termination Event : " + aEvent);
     }
 
 

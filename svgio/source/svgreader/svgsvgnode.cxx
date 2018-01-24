@@ -310,7 +310,7 @@ namespace svgio
                 if(getParent())
                 {
                     // #i122594# if width/height is not given, it's 100% (see 5.1.2 The 'svg' element in SVG1.1 spec).
-                    // If it is relative, the question is to what. The previous implementatin assumed relative to the
+                    // If it is relative, the question is to what. The previous implementation assumed relative to the
                     // local ViewBox which is implied by (4.2 Basic data types):
 
                     // "Note that the non-property <length> definition also allows a percentage unit identifier.

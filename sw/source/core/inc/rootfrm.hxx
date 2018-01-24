@@ -379,7 +379,7 @@ public:
     void RemoveAccessibleShell() { --mnAccessibleShells; }
 
     /**
-     * Get page frame by phyiscal page number
+     * Get page frame by physical page number
      * looping through the lowers, which are page frame, in order to find the
      * page frame with the given physical page number.
      * if no page frame is found, 0 is returned.

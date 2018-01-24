@@ -69,7 +69,7 @@ public class TextReplace {
             xReplaceable = UnoRuntime.queryInterface(
                 com.sun.star.util.XReplaceable.class, xTextDocument);
 
-            // You need a descriptor to set properies for Replace
+            // You need a descriptor to set properties for Replace
             xReplaceDescr = xReplaceable.createReplaceDescriptor();
 
             System.out.println("Change all occurrences of ...");

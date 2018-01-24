@@ -945,7 +945,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     {
         if ("OnTitleChanged".equals(_Event.EventName))
         // OnTitleChanged events are notified too often. This is known, and accepted.
-        // (the deeper reason is that it's difficult to determine, in the DatabaseDocument implementatin,
+        // (the deeper reason is that it's difficult to determine, in the DatabaseDocument implementation,
         // when the title actually changed. In particular, when we do a saveAsURL, and then ask for a
         // title *before* the TitleHelper got the document's OnSaveAsDone event, then the wrong (old)
         // title is obtained.

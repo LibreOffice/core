@@ -577,7 +577,7 @@ void
                 {
                     if (len + ntp->len + ntp->wslen > sizeof(tt))
                     {
-                        error(ERROR, "## string concatination buffer overrun");
+                        error(ERROR, "## string concatenation buffer overrun");
                         break;
                     }
 

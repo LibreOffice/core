@@ -312,7 +312,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                     // 'Target' is a relative Uri, so a 'Target=/path'
                     // with a base Uri of file://base/foo will resolve to
                     // file://base/word. We need something more than some
-                    // simple string concatination here to handle that.
+                    // simple string concatenation here to handle that.
                     uno::Reference<uri::XUriReference> xPart = xFac->parse(sMyTarget);
                     uno::Reference<uri::XUriReference> xAbs = xFac->makeAbsolute(xBase, xPart, true, uri::RelativeUriExcessParentSegments_RETAIN);
                     rDocumentTarget = xAbs->getPath();

@@ -142,7 +142,7 @@ typedef ::std::map< const formula::FormulaConstTokenRef, formula::FormulaConstTo
 
 class ScInterpreter
 {
-    // distibution function objects need the GetxxxDist methods
+    // distribution function objects need the GetxxxDist methods
     friend class ScGammaDistFunction;
     friend class ScBetaDistFunction;
     friend class ScTDistFunction;
