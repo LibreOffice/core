@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <osl/endian.h>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
@@ -67,10 +71,10 @@ ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
 
 ImpXPolygon::~ImpXPolygon()
 {
-    delete[] reinterpret_cast<char*>(pPointAry);
+    delete[] pPointAry;
     if ( bDeleteOldPoints )
     {
-        delete[] reinterpret_cast<char*>(pOldPointAry);
+        delete[] pOldPointAry;
         pOldPointAry = nullptr;
     }
 }
@@ -111,8 +115,7 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     }
     // create point array
     nSize     = nNewSize;
-    pPointAry = reinterpret_cast<Point*>(new char[ nSize*sizeof( Point ) ]);
-    memset( pPointAry, 0, nSize*sizeof( Point ) );
+    pPointAry = new Point[ nSize ];
 
     // create flag array
     pFlagAry.reset( new PolyFlags[ nSize ] );
@@ -137,7 +140,7 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
         }
         if ( bDeletePoints )
         {
-            delete[] reinterpret_cast<char*>(pOldPointAry);
+            delete[] pOldPointAry;
             pOldPointAry = nullptr;
         }
         else
@@ -165,7 +168,7 @@ void ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
                  nMove * sizeof(Point) );
         memmove( &pFlagAry[nPos+nCount], &pFlagAry[nPos], nMove );
     }
-    memset( &pPointAry[nPos], 0, nCount * sizeof( Point ) );
+    std::fill(pPointAry + nPos, pPointAry + nPos + nCount, Point());
     memset( &pFlagAry [nPos], 0, nCount );
 
     nPoints = nPoints + nCount;
@@ -185,7 +188,7 @@ void ImpXPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
                      nMove * sizeof(Point) );
             memmove( &pFlagAry[nPos], &pFlagAry[nPos+nCount], nMove );
         }
-        memset( &pPointAry[nPoints - nCount], 0, nCount * sizeof( Point ) );
+        std::fill(pPointAry + (nPoints - nCount), pPointAry + nPoints, Point());
         memset( &pFlagAry [nPoints - nCount], 0, nCount );
         nPoints = nPoints - nCount;
     }
@@ -195,7 +198,7 @@ void ImpXPolygon::CheckPointDelete() const
 {
     if ( bDeleteOldPoints )
     {
-        delete[] reinterpret_cast<char*>(pOldPointAry);
+        delete[] pOldPointAry;
         const_cast< ImpXPolygon* >(this)->pOldPointAry = nullptr;
         const_cast< ImpXPolygon* >(this)->bDeleteOldPoints = false;
     }
@@ -344,7 +347,8 @@ void XPolygon::SetPointCount( sal_uInt16 nPoints )
     if ( nPoints < pImpXPolygon->nPoints )
     {
         sal_uInt16 nSize = pImpXPolygon->nPoints - nPoints;
-        memset( &pImpXPolygon->pPointAry[nPoints], 0, nSize * sizeof( Point ) );
+        std::fill(
+            pImpXPolygon->pPointAry + nPoints, pImpXPolygon->pPointAry + nPoints + nSize, Point());
         memset( &pImpXPolygon->pFlagAry [nPoints], 0, nSize );
     }
     pImpXPolygon->nPoints = nPoints;
