@@ -13,7 +13,6 @@
 		39022C211EDC2D0800100066 /* icudt60l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39022C201EDC2D0800100066 /* icudt60l.dat */; };
 		39284DB31FA5F207006F43E4 /* DocumentActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39284DB21FA5F207006F43E4 /* DocumentActions.swift */; };
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
-		396C833F1FC9D89E008E662A /* libKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 396C833E1FC9D89D008E662A /* libKit.dylib */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
@@ -42,7 +41,23 @@
 		FCC2E4012004B65E00CEB504 /* example.odt in Resources */ = {isa = PBXBuildFile; fileRef = FCC2E4002004B65E00CEB504 /* example.odt */; };
 		FCC2E4032004B72700CEB504 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E4022004B72700CEB504 /* Util.swift */; };
 		FCC2E4052004B74000CEB504 /* AsyncUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E4042004B74000CEB504 /* AsyncUtil.swift */; };
+		FCC7651D201C7F8A007D190C /* libKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FCC7651C201C7F8A007D190C /* libKit.dylib */; };
+		FCC7651E201C80A5007D190C /* libKit.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = FCC7651C201C7F8A007D190C /* libKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FC148CE420187F7800C349CA /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FCC7651E201C80A5007D190C /* libKit.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		39022C1A1EDC2A0E00100066 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../generated/resources/program; sourceTree = "<group>"; };
@@ -52,7 +67,6 @@
 		39284DB21FA5F207006F43E4 /* DocumentActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActions.swift; sourceTree = "<group>"; };
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
 		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
-		396C833E1FC9D89D008E662A /* libKit.dylib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libKit.dylib; path = ../generated/simulator/libKit.dylib; sourceTree = "<group>"; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
 		397868D71E59A3EA007F9248 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -85,6 +99,7 @@
 		FCC2E4002004B65E00CEB504 /* example.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = example.odt; path = "../../android/default-document/example.odt"; sourceTree = "<group>"; };
 		FCC2E4022004B72700CEB504 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FCC2E4042004B74000CEB504 /* AsyncUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncUtil.swift; sourceTree = "<group>"; };
+		FCC7651C201C7F8A007D190C /* libKit.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libKit.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				396C833F1FC9D89E008E662A /* libKit.dylib in Frameworks */,
+				FCC7651D201C7F8A007D190C /* libKit.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,7 +137,7 @@
 		3972753A1E77D9F7006ACDCC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				396C833E1FC9D89D008E662A /* libKit.dylib */,
+				FCC7651C201C7F8A007D190C /* libKit.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -209,9 +224,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 397E09251E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLight" */;
 			buildPhases = (
+				FC148D13201C7A6600C349CA /* ShellScript */,
 				397E08F61E597BD8001374E0 /* Sources */,
 				397E08F71E597BD8001374E0 /* Frameworks */,
 				397E08F81E597BD8001374E0 /* Resources */,
+				FC148CE420187F7800C349CA /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -294,6 +311,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FC148D13201C7A6600C349CA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "echo hello\n\nGEN=$PROJECT_DIR/../generated\necho $arch\nif [ $arch = \"x86_64\" ]; then\nLIB=$GEN/simulator/libKit.dylib\nelse\nLIB=$GEN/release/libKit.dylib\nfi\necho $LIB\nln -sf $LIB $TARGET_BUILD_DIR/libKit.dylib\n\n\n\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		397E08F61E597BD8001374E0 /* Sources */ = {
@@ -395,7 +428,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = $PROJECT_DIR/../generated/;
+				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../generated/debug/**";
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -457,11 +490,11 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = $PROJECT_DIR/../generated/;
+				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../generated/release/**";
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = libKit_ARM64.a;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "lokit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -591,7 +624,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = $PROJECT_DIR/../generated/;
+				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../generated/simulator/**";
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
