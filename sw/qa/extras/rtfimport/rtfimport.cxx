@@ -699,6 +699,20 @@ DECLARE_RTFIMPORT_TEST(testGroupshapeRotation, "groupshape-rotation.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(315 * 100), getProperty<sal_Int32>(getShape(1), "RotateAngle"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf115153, "tdf115153.rtf")
+{
+    auto const xShape(getShape(1));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::NONE, getProperty<sal_Int16>(xShape, "HoriOrient"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME,
+                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2533), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
+    // VertOrient was wrong
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::NONE, getProperty<sal_Int16>(xShape, "VertOrient"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME,
+                         getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2131), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo68291, "fdo68291.odt")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

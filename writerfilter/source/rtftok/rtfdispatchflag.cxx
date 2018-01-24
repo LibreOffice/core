@@ -12,6 +12,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 
 #include <filter/msfilter/escherex.hxx>
 
@@ -965,12 +966,19 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     getModelFactory()->createInstance("com.sun.star.drawing.CustomShape"),
                     uno::UNO_QUERY);
             uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
+            m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape,
+                                                            uno::UNO_QUERY);
             if (xDrawSupplier.is())
             {
                 uno::Reference<drawing::XShapes> xShapes(xDrawSupplier->getDrawPage(),
                                                          uno::UNO_QUERY);
                 if (xShapes.is() && nKeyword != RTF_DPTXBX)
+                {
+                    // set default VertOrient before inserting
+                    m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue(
+                        "VertOrient", uno::makeAny(text::VertOrientation::NONE));
                     xShapes->add(m_aStates.top().aDrawingObject.xShape);
+                }
             }
             if (nType)
             {
@@ -978,8 +986,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
                 xDefaulter->createCustomShapeDefaults(OUString::number(nType));
             }
-            m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape,
-                                                            uno::UNO_QUERY);
             std::vector<beans::PropertyValue>& rPendingProperties
                 = m_aStates.top().aDrawingObject.aPendingProperties;
             for (auto& rPendingProperty : rPendingProperties)
