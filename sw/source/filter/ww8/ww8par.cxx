@@ -5302,6 +5302,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_pTableStream = nullptr;
 
     DeleteCtrlStack();
+    m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
     m_xRedlineStack->closeall(*m_pPaM->GetPoint());
     m_xRedlineStack.reset();
     DeleteAnchorStack();
@@ -5391,7 +5392,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     mpCursor.reset();
     m_pPaM = nullptr;
-    m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
 
     // remove extra paragraphs after attribute ctrl
     // stacks etc. are destroyed, and before fields
