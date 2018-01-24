@@ -24,7 +24,7 @@ package complex.loadAllDocuments;
 // __________ Implementation __________
 
 /**
- * Implemets a simple status indicator, which
+ * Implements a simple status indicator, which
  * provide information about state of a load request.
  * It can be used as an argument e.g. for loadComponentFromURL().
  */

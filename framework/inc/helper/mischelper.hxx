@@ -140,7 +140,7 @@ FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
 //owns the Broadcaster which "owns" the Listener.
 
 //The WeakContainerListener allows breaking this cycle and retrofitting
-//afflicted implentations fairly easily.
+//afflicted implementations fairly easily.
 
 //OriginalListener owns the Broadcaster which "owns" the WeakContainerListener
 //which forwards the events to the OriginalListener without taking ownership of
