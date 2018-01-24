@@ -504,7 +504,7 @@ bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
 /** helper class, which utilizes the layout cache information
  *  to distribute the document content to the right pages.
  * It's used by the InsertCnt_(..)-function.
- * If there's no layout cache, the distibution to the pages is more
+ * If there's no layout cache, the distribution to the pages is more
  * a guess, but a guess with statistical background.
  */
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,

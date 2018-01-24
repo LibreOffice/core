@@ -1529,7 +1529,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     return nUpper;
 }
 
-/** method to detemine the upper space amount, which is considered for
+/** method to determine the upper space amount, which is considered for
     the page grid
 
     OD 2004-03-12 #i11860#

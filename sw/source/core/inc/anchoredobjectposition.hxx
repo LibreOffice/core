@@ -374,7 +374,7 @@ namespace objectpositioning
                                                const bool _bEvenPage
                                              ) const;
 
-        /** detemine, if object has to draw aside given fly frame
+        /** determine, if object has to draw aside given fly frame
 
             method used by <AdjustHoriRelPosForDrawAside(..)>
 

@@ -96,14 +96,14 @@ class SwFlowFrame
     */
     const SwFrame* GetPrevFrameForUpperSpaceCalc_( const SwFrame* _pProposedPrevFrame = nullptr ) const;
 
-    /** method to detemine the upper space amount, which is considered for
+    /** method to determine the upper space amount, which is considered for
         the previous frame
 
         #i11860#
     */
     SwTwips GetUpperSpaceAmountConsideredForPrevFrame() const;
 
-    /** method to detemine the upper space amount, which is considered for
+    /** method to determine the upper space amount, which is considered for
         the page grid
 
         #i11860#

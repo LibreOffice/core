@@ -807,7 +807,7 @@
         <xsl:text>padding</xsl:text>
         <xsl:value-of select="substring-after(name(), 'fo:margin')"/>
         <xsl:text>:</xsl:text>
-        <!-- Map once erroneusly used inch shortage 'inch' to CSS shortage 'in' -->
+        <!-- Map once erroneously used inch shortage 'inch' to CSS shortage 'in' -->
         <xsl:choose>
             <xsl:when test="contains(., 'inch')">
                 <xsl:value-of select="substring-before(.,'ch')"/>
