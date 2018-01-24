@@ -27,6 +27,7 @@
 #include <strings.hrc>
 #include <ViewShell.hxx>
 #include <View.hxx>
+#include <Window.hxx>
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>
@@ -101,7 +102,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         if (!pFact)
             return;
 
-        pDlg.reset(pFact->CreateCaptionDialog(nullptr, mpView));
+        pDlg.reset(pFact->CreateCaptionDialog(mpViewShell->GetActiveWindow(), mpView));
 
         const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
         SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -115,7 +116,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         if (!pFact)
             return;
 
-        pDlg.reset(pFact->CreateSvxTransformTabDialog(nullptr, &aSet, mpView));
+        pDlg.reset(pFact->CreateSvxTransformTabDialog(mpViewShell->GetActiveWindow(), &aSet, mpView));
     }
 
     if (!pDlg)
