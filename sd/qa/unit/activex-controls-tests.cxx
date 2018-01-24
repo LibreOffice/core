@@ -299,7 +299,7 @@ void SdActiveXControlsTest::testTextBoxProperties()
     CPPUNIT_ASSERT_EQUAL(false, bVScroll);
 
     xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
-    CPPUNIT_ASSERT_EQUAL(false, bReadOnly); //Bugous, should be true (tdf#111417)
+    CPPUNIT_ASSERT_EQUAL(true, bReadOnly);
 
     // Third shape has some other custom properties
     xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -1226,3 +1226,4 @@ CPPUNIT_TEST_SUITE_REGISTRATION(SdActiveXControlsTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+
