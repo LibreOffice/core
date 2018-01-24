@@ -65,7 +65,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
     mpView->GetAttributes( aNewAttr );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog(nullptr, &aNewAttr, mpDoc, true) : nullptr);
+    VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog(mpViewShell->GetActiveWindow(), &aNewAttr, mpDoc, true) : nullptr);
     if (!pDlg)
     {
         mpViewShell->Cancel();
