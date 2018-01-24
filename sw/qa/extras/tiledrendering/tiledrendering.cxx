@@ -99,6 +99,7 @@ public:
     void testDocumentRepair();
     void testPageHeader();
     void testPageFooter();
+    void testTdf115088();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -148,6 +149,7 @@ public:
     CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testPageHeader);
     CPPUNIT_TEST(testPageFooter);
+    CPPUNIT_TEST(testTdf115088);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2018,6 +2020,41 @@ void SwTiledRenderingTest::testPageFooter()
     }
     // Check Footer State
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, false);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testTdf115088()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // We have three lines in the test document and we try to copy the second and third line
+    // To the beginning of the document
+    SwXTextDocument* pXTextDocument = createDoc("tdf115088.odt");
+
+    // Select and copy second and third line
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
+    Scheduler::ProcessEventsToIdle();
+    comphelper::dispatchCommand(".uno:Copy", uno::Sequence<beans::PropertyValue>());
+
+    // Move cursor to the begining of the first line and paste
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    comphelper::dispatchCommand(".uno:PasteUnformatted", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the resulting text in the document. (it was 1text\n1\1)
+    CPPUNIT_ASSERT_EQUAL(OUString("1\n1Text\n1\n1"), pXTextDocument->getText()->getString());
 
     mxComponent->dispose();
     mxComponent.clear();
