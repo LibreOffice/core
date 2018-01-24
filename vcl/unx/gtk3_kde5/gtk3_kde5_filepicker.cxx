@@ -42,13 +42,6 @@
 
 #include <strings.hrc>
 
-#include <future>
-
-#include <boost/filesystem/path.hpp>
-#include <boost/process/environment.hpp>
-#include <boost/process/search_path.hpp>
-#include <boost/process/io.hpp>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
@@ -57,8 +50,6 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-namespace bp = boost::process;
-namespace bf = boost::filesystem;
 
 // helper functions
 
