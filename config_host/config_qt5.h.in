@@ -1,0 +1,11 @@
+/*
+Settings for QT5 integration.
+*/
+
+#ifndef CONFIG_QT5_H
+#define CONFIG_QT5_H
+
+#define ENABLE_QT5 0
+#define QT5_HAVE_GLIB 0
+
+#endif
