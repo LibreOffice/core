@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_7be8677d",
+        "filename": "i18nutil/source/utility/widthfolding_data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-24T17:01:07Z",
+      "side": 1,
+      "message": "This does not look like the right fix. These are the exceptions of the rule\nfrom character  U+0021 \u003c\u003d c \u003c\u003d U+007e  to character  c - 0x0021 + 0xff01\n\nSee http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part2.html#JIS\n\nIf for that rule the input of 0x002d does not yield 0xff0d there\u0027s something else wrong.",
+      "revId": "152271d3055af1f3f3bd21f565b9b38d9fcde2a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
