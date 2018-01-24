@@ -342,12 +342,12 @@ void SelectionEngine::Reset()
 void SelectionEngine::Command( const CommandEvent& rCEvt )
 {
     // Timer aWTimer is active during enlarging a selection
-    if ( !pFunctionSet || !pWin || aWTimer.IsActive() || rCEvt.GetCommand() == CommandEventId::Swipe )
+    if ( !pFunctionSet || !pWin || aWTimer.IsActive() )
         return;
     aWTimer.Stop();
-    nFlags |= SelectionEngineFlags::CMDEVT;
     if ( rCEvt.GetCommand() == CommandEventId::StartDrag )
     {
+        nFlags |= SelectionEngineFlags::CMDEVT;
         if ( nFlags & SelectionEngineFlags::DRG_ENAB )
         {
             SAL_WARN_IF( !rCEvt.IsMouseEvent(), "vcl", "STARTDRAG: Not a MouseEvent" );
