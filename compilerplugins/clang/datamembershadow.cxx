@@ -90,8 +90,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/unx/generic/print/genpspgraphics.cxx"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/xmloff/source/draw/ximplink.hxx"))
-        return true;
 
     const CXXRecordDecl* parentCXXRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getDeclContext());
     if (!parentCXXRecordDecl) {

@@ -35,7 +35,6 @@ class SdXMLShapeLinkContext : public SvXMLShapeContext
 {
     // the parent shape group this link is placed in
     css::uno::Reference< css::drawing::XShapes > mxParent;
-    OUString msHyperlink;
 
 public:
 
