@@ -342,7 +342,7 @@ void SelectionEngine::Reset()
 void SelectionEngine::Command( const CommandEvent& rCEvt )
 {
     // Timer aWTimer is active during enlarging a selection
-    if ( !pFunctionSet || !pWin || aWTimer.IsActive() )
+    if ( !pFunctionSet || !pWin || aWTimer.IsActive() || rCEvt.GetCommand() == CommandEventId::Swipe )
         return;
     aWTimer.Stop();
     nFlags |= SelectionEngineFlags::CMDEVT;
