@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_bbc49f92",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 6556,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T13:37:13Z",
+      "side": 1,
+      "message": "I can make it bundled always; but I seem to misunderstand your suggestion from Jan 10:\n\n\u003e also you probably want to make this optional via BUILD_TYPE in configure",
+      "parentUuid": "fa31d9ce_3b4d0f73",
+      "revId": "cc24f5b2b35bd172406040e75d062fd7ec03a68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_5b2ba382",
         "filename": "extensions/Library_scn.mk",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_dbc15382",
+        "filename": "extensions/Library_scn.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T13:37:13Z",
+      "side": 1,
+      "message": "Will do",
+      "parentUuid": "fa31d9ce_5b2ba382",
+      "revId": "cc24f5b2b35bd172406040e75d062fd7ec03a68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_fb4b7757",
         "filename": "external/twain_dsm/TWAIN_DSM_VS2015.vcxproj.patch",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2018-01-24T12:24:29Z",
       "side": 1,
       "message": "why is /dynamicbase disabled? i hope it\u0027s possible to enable it?",
+      "revId": "cc24f5b2b35bd172406040e75d062fd7ec03a68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_3b37cfb1",
+        "filename": "external/twain_dsm/TWAIN_DSM_VS2015.vcxproj.patch",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T13:37:13Z",
+      "side": 1,
+      "message": "Actually, this is simply copy of their own project, that they failed to include into the tarball. I can try to modify this, and hope that it works, but I can\u0027t do thorough testing, so are these changes really needed?",
+      "parentUuid": "fa31d9ce_fb4b7757",
       "revId": "cc24f5b2b35bd172406040e75d062fd7ec03a68c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
