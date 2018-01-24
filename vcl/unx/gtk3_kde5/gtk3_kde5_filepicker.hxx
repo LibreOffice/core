@@ -32,9 +32,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/process/child.hpp>
-#include <boost/process/pipe.hpp>
-
 #include "gtk3_kde5_filepicker_ipc.hxx"
 
 #include <functional>

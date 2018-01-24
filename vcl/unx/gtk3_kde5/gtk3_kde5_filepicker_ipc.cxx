@@ -26,6 +26,7 @@
 #include <strings.hrc>
 
 #include <future>
+#include <system_error>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
@@ -41,38 +42,33 @@
 #include <unx/gtk/gtkdata.hxx>
 
 #include <boost/filesystem/path.hpp>
-#include <boost/process/environment.hpp>
-#include <boost/process/search_path.hpp>
-#include <boost/process/io.hpp>
 
 using namespace ::com::sun::star::ui::dialogs;
-
-namespace bp = boost::process;
-namespace bf = boost::filesystem;
 
 // helper functions
 
 namespace
 {
-bf::path applicationDirPath()
+OUString applicationDirPath()
 {
     OUString applicationFilePath;
     osl_getExecutableFile(&applicationFilePath.pData);
     OUString applicationSystemPath;
     osl_getSystemPathFromFileURL(applicationFilePath.pData, &applicationSystemPath.pData);
-    auto sysPath = applicationSystemPath.toUtf8();
-    auto ret = bf::path(sysPath.getStr(), sysPath.getStr() + sysPath.getLength());
+    const auto utf8Path = applicationSystemPath.toUtf8();
+    auto ret = boost::filesystem::path(utf8Path.getStr(), utf8Path.getStr() + utf8Path.getLength());
     ret.remove_filename();
-    return ret;
+    return OUString::fromUtf8(OString(ret.c_str(), ret.size()));
 }
 
-bf::path findPickerExecutable()
+OUString findPickerExecutable()
 {
-    auto paths = boost::this_process::path();
-    paths.insert(paths.begin(), applicationDirPath());
-    auto ret = bp::search_path("lo_kde5filepicker", paths);
-    if (ret.empty())
-        throw bp::process_error(std::make_error_code(std::errc::no_such_file_or_directory),
+    const auto path = applicationDirPath();
+    const OUString app("lo_kde5filepicker");
+    OUString ret;
+    osl_searchFileURL(app.pData, path.pData, &ret.pData);
+    if (ret.isEmpty())
+        throw std::system_error(std::make_error_code(std::errc::no_such_file_or_directory),
                                 "could not find lo_kde5filepicker executable");
     return ret;
 }
@@ -113,16 +109,34 @@ OUString getResString(const char* pResId)
 // Gtk3KDE5FilePicker
 
 Gtk3KDE5FilePickerIpc::Gtk3KDE5FilePickerIpc()
-    // workaround: specify some non-empty argument, otherwise the Qt app will see argc == 0
-    : m_process(findPickerExecutable(), "dummy", bp::std_out > m_stdout, bp::std_in < m_stdin)
 {
+    const auto exe = findPickerExecutable();
+    oslProcessError result;
+    oslSecurity pSecurity = osl_getCurrentSecurity();
+    result = osl_executeProcess_WithRedirectedIO(exe.pData, nullptr, 0, osl_Process_NORMAL,
+                                                 pSecurity, nullptr, nullptr, 0, &m_process,
+                                                 &m_inputWrite, &m_outputRead, nullptr);
+    osl_freeSecurityHandle(pSecurity);
+    if (result != osl_Process_E_None)
+        throw std::system_error(std::make_error_code(std::errc::no_such_process),
+                                "could not start lo_kde5filepicker executable");
 }
 
 Gtk3KDE5FilePickerIpc::~Gtk3KDE5FilePickerIpc()
 {
+    if (!m_process)
+        return;
+
     sendCommand(Commands::Quit);
-    if (m_process.running())
-        m_process.wait_for(std::chrono::milliseconds(100));
+    TimeValue timeValue(std::chrono::milliseconds(100));
+    if (osl_joinProcessWithTimeout(m_process, &timeValue) != osl_Process_E_None)
+        osl_terminateProcess(m_process);
+
+    if (m_inputWrite)
+        osl_closeFile(m_inputWrite);
+    if (m_outputRead)
+        osl_closeFile(m_outputRead);
+    osl_freeProcessHandle(m_process);
 }
 
 sal_Int16 Gtk3KDE5FilePickerIpc::execute()
@@ -196,6 +210,50 @@ void Gtk3KDE5FilePickerIpc::await(const std::future<void>& future)
     {
         GetGtkSalData()->Yield(false, true);
     }
+}
+
+void Gtk3KDE5FilePickerIpc::writeResponseLine(const std::string& line)
+{
+    sal_uInt64 bytesWritten = 0;
+    osl_writeFile(m_inputWrite, line.c_str(), line.size(), &bytesWritten);
+}
+
+std::string Gtk3KDE5FilePickerIpc::readResponseLine()
+{
+    if (!m_responseBuffer.empty()) // check whether we have a line in our buffer
+    {
+        auto it = m_responseBuffer.find('\n');
+        if (it != std::string::npos)
+        {
+            auto ret = m_responseBuffer.substr(0, it);
+            m_responseBuffer.erase(0, it);
+            return ret;
+        }
+    }
+
+    const sal_uInt64 BUF_SIZE = 1024;
+    char buffer[BUF_SIZE];
+    while (true)
+    {
+        sal_uInt64 bytesRead = 0;
+        auto err = osl_readFile(m_outputRead, buffer, BUF_SIZE, &bytesRead);
+        auto it = std::find(buffer, buffer + bytesRead, '\n');
+        if (it != buffer + bytesRead) // check whether the chunk we read contains an EOL
+        {
+            // if so, append that part to the buffer and return it
+            std::string ret = m_responseBuffer.append(buffer, it);
+            // but keep anything else we may have read in our buffer
+            ++it;
+            m_responseBuffer.assign(it, buffer + bytesRead);
+            return ret;
+        }
+        // otherwise append everything we read to the buffer and try again
+        m_responseBuffer.append(buffer, bytesRead);
+
+        if (err != osl_File_E_None && err != osl_File_E_AGAIN)
+            break;
+    }
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
