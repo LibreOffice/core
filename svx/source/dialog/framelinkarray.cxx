@@ -21,6 +21,7 @@
 
 #include <math.h>
 #include <vector>
+#include <set>
 #include <algorithm>
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
