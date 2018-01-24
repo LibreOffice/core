@@ -83,6 +83,8 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                         break;
 
                     // TODO There are some other unhandled values
+                    default:
+                        SAL_WARN("writerfilter", "unhandled case (" << nIntValue << ") in NS_ooxml::LN_CT_PosV_relativeFrom");
                 }
             }
             break;
@@ -116,6 +118,8 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                         break;
 
                     // TODO There are some other unhandled values
+                    default:
+                        SAL_WARN("writerfilter", "unhandled case (" << nIntValue << ") in NS_ooxml::LN_CT_PosH_relativeFrom");
                 }
             }
             break;
