@@ -353,7 +353,7 @@ BaseContent::execute( const Command& aCommand,
     }
     else if ( aCommand.Name == "delete" )
     {
-        if( ! aCommand.Argument.has< sal_Bool >() )
+        if( ! aCommand.Argument.has< bool >() )
             m_pMyShell->installError( CommandId,
                                       TASKHANDLING_WRONG_DELETE_ARGUMENT );
         else
