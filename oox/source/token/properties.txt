@@ -387,6 +387,7 @@ RangeXMaximum
 RangeXMinimum
 RangeYMaximum
 RangeYMinimum
+ReadOnly
 RefAngle
 RefR
 RefX
