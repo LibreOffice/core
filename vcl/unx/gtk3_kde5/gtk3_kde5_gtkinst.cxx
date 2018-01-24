@@ -22,7 +22,7 @@
 #include "gtk3_kde5_filepicker.hxx"
 #include "gtk3_kde5_folderpicker.hxx"
 
-#include <boost/process/exception.hpp>
+#include <system_error>
 
 uno::Reference<ui::dialogs::XFilePicker2>
 GtkInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& xMSF)
@@ -31,7 +31,7 @@ GtkInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& xMSF
     {
         return uno::Reference<ui::dialogs::XFilePicker2>(new Gtk3KDE5FilePicker(xMSF));
     }
-    catch (const boost::process::process_error& error)
+    catch (const std::system_error& error)
     {
         OSL_FAIL(error.what());
         return { nullptr };
@@ -45,7 +45,7 @@ GtkInstance::createFolderPicker(const uno::Reference<uno::XComponentContext>& xM
     {
         return uno::Reference<ui::dialogs::XFolderPicker2>(new Gtk3KDE5FolderPicker(xMSF));
     }
-    catch (const boost::process::process_error& error)
+    catch (const std::system_error& error)
     {
         OSL_FAIL(error.what());
         return { nullptr };
