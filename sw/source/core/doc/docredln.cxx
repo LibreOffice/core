@@ -57,6 +57,7 @@
 #include <strings.hrc>
 #include <unoport.hxx>
 #include <wrtsh.hxx>
+#include <txtfld.hxx>
 
 #include <flowfrm.hxx>
 
@@ -1789,9 +1790,18 @@ OUString SwRangeRedline::GetDescr()
         bDeletePaM = true;
     }
 
+    OUString sDescr = pPaM->GetText();
+    if (const SwTextNode *pTextNode = pPaM->GetNode().GetTextNode())
+    {
+        if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->nContent.GetIndex() - 1, true ))
+        {
+            sDescr = pTextAttr->GetFormatField().GetField()->GetFieldName();
+        }
+    }
+
     // replace $1 in description by description of the redlines text
     const OUString aTmpStr = SwResId(STR_START_QUOTE)
-        + ShortenString(pPaM->GetText(), nUndoStringLength, SwResId(STR_LDOTS))
+        + ShortenString(sDescr, nUndoStringLength, SwResId(STR_LDOTS))
         + SwResId(STR_END_QUOTE);
 
     SwRewriter aRewriter;
