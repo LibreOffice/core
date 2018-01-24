@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4012ceb5",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T07:58:10Z",
+      "side": 1,
+      "message": "It is not always zero. So we must initialize this value in control words table according to spec.",
+      "range": {
+        "startLine": 2000,
+        "startChar": 16,
+        "endLine": 2000,
+        "endChar": 18
+      },
+      "revId": "ef73bb351964836cc7d353f81d3367ae0d254b8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
