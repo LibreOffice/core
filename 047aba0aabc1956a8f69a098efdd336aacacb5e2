@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_fb5537c6",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T13:53:00Z",
+      "side": 1,
+      "message": "No need to include these obvious comments (you can do that, however, for the cases where it isn\u0027t obvious how the default was figured, with proper description).",
+      "range": {
+        "startLine": 49,
+        "startChar": 41,
+        "endLine": 49,
+        "endChar": 73
+      },
+      "revId": "047aba0aabc1956a8f69a098efdd336aacacb5e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_bb72df7a",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T13:53:00Z",
+      "side": 1,
+      "message": "For toggles, default is 1 (as specified in \"Control Word\" section of [RTF v.1.9.1]). So, as you did that for \\b, you should do that for other toggles, too.",
+      "range": {
+        "startLine": 207,
+        "startChar": 14,
+        "endLine": 207,
+        "endChar": 28
+      },
+      "revId": "047aba0aabc1956a8f69a098efdd336aacacb5e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_5b63a3b1",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T13:53:00Z",
+      "side": 1,
+      "message": "You may want to put a comment here, telling that for most of control words, the default is 0, so in aRTFControlWords, only those different from 0 would be explicitly set",
+      "revId": "047aba0aabc1956a8f69a098efdd336aacacb5e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
