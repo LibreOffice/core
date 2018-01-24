@@ -30,7 +30,6 @@ class SvNumberFormatter;
 struct ImpSvNumberformatInfo;
 
 
-const size_t NF_MAX_FORMAT_SYMBOLS   = 100;
 const size_t NF_MAX_DEFAULT_COLORS   = 10;
 
 // Hack: nThousand==1000 => "Default" occurs in format string

@@ -951,7 +951,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 break;
             case XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
-                    aNumInfo.nExpDigits = nAttrVal;
+                    aNumInfo.nExpDigits = std::min<sal_Int32>(nAttrVal, NF_MAX_FORMAT_SYMBOLS);
                 break;
             case XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
