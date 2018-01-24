@@ -19,6 +19,7 @@
 
 #include <futransf.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -61,34 +62,15 @@ void setUndo(::sd::View* pView, const SfxItemSet* pArgs)
     pView->EndUndo();
 }
 
-class ScopeCleanup
-{
-    ViewShell* mpViewShell;
-public:
-    ScopeCleanup(ViewShell* pViewShell) : mpViewShell(pViewShell)
-    {
-    }
-
-    ~ScopeCleanup()
-    {
-        if (mpViewShell)
-        {
-            mpViewShell->Invalidate(SID_RULER_OBJECT);
-            mpViewShell->Cancel();
-        }
-    }
-
-    void ignore()
-    {
-        mpViewShell = nullptr;
-    }
-};
-
 }
 
 void FuTransform::DoExecute( SfxRequest& rReq )
 {
-    ScopeCleanup aCleanup(mpViewShell);
+    comphelper::ScopeGuard guard([&]() {
+        // cleanup when leaving
+        mpViewShell->Invalidate(SID_RULER_OBJECT);
+        mpViewShell->Cancel();
+    });
 
     if (!mpView->AreObjectsMarked())
         return;
@@ -141,7 +123,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
     std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
     rReq.Ignore(); // the 'old' request is not relevant any more
-    aCleanup.ignore(); // the lambda does it
+    guard.dismiss(); // we'll invalidate explicitly after the dialog ends
 
     pDlg->StartExecuteAsync([=](sal_Int32 nResult){
         if (nResult == RET_OK)
