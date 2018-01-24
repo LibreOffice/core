@@ -246,7 +246,7 @@ namespace osl
 
     @param  ppustrAbsolutePath [out] the
             resulting path which is a
-            concatination of the base and
+            concatenation of the base and
             the relative path
             if base path is empty the
             resulting absolute path is the

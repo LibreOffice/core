@@ -1773,7 +1773,7 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox&, i_rBox, void )
 IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
 {
     // this handler gets called for all radiobuttons that get unchecked, too
-    // however we only want one notificaction for the new value (that is for
+    // however we only want one notification for the new value (that is for
     // the button that gets checked)
     if( i_rBtn.IsChecked() )
     {
