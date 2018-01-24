@@ -141,6 +141,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
 
   /usr/lib{,32,64}/jvm/                         r,
   /usr/lib{,32,64}/jvm/**                       r,
+  /usr/lib{,32,64}/jvm/**/jre/bin/java          mix,
   INSTDIR-**                        rw,
   INSTDIR-**.so                     m,
   INSTDIR-program/soffice.bin       mix,
