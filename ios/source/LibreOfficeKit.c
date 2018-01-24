@@ -31,15 +31,12 @@ static double twipsPerXtile, twipsPerYtile;
 
 // Bridge functions to LibreOfficeKit
 __attribute__((visibility("default")))
-int BridgeLOkit_Init(const char *path)
+int BridgeLOkit_Init(const char *appPath, const char *userPath)
 {
-    char bufUserPath[200];
-    strcpy(bufUserPath, path);
-    strcpy(bufUserPath + strlen(path), "/user");
 
     // Initialize LibreOfficeKit
     if (!kit) {
-        kit = lok_init_2(path, bufUserPath);
+        kit = lok_init_2(appPath, userPath);
         if (!kit)
             return 1;
     }
