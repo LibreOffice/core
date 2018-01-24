@@ -16,6 +16,24 @@
       "revId": "152271d3055af1f3f3bd21f565b9b38d9fcde2a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_1b7f6bab",
+        "filename": "i18nutil/source/utility/widthfolding_data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2018-01-24T18:04:13Z",
+      "side": 1,
+      "message": "Well, it was a bit of a gamble. I will investigate further with gdb to see what goes wrong.",
+      "parentUuid": "fa31d9ce_7be8677d",
+      "revId": "152271d3055af1f3f3bd21f565b9b38d9fcde2a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
