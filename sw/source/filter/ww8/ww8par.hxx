@@ -1338,7 +1338,6 @@ private:
 
     bool m_bBidi;
     bool m_bReadTable;
-    std::shared_ptr<SwPaM> m_pTableEndPaM;
     // Indicate that currently on loading a TOC, managed by Read_F_TOX() and End_Field()
     bool m_bLoadingTOXCache;
     int m_nEmbeddedTOXLevel;
