@@ -711,7 +711,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                     tv.tv_sec = 5;
                     tv.tv_usec = 0;
                     if( select( fd+1, &fdset, nullptr, nullptr, &tv ) == 0 )
-                        fprintf( stderr, "Timout on sane_read descriptor\n" );
+                        fprintf( stderr, "Timeout on sane_read descriptor\n" );
                 }
                 nLen = 0;
                 nStatus = p_read( maHandle, pBuffer, BYTE_BUFFER_SIZE, &nLen );
