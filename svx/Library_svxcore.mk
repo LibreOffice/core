@@ -116,6 +116,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/dialog/dialmgr \
     svx/source/dialog/dlgutil \
     svx/source/dialog/framelink \
+    svx/source/dialog/framelinkarray \
     svx/source/dialog/langbox \
     svx/source/dialog/stddlg \
     svx/source/dialog/svxdlg \
@@ -158,6 +159,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/items/e3ditem \
     svx/source/items/galleryitem \
     svx/source/items/grfitem \
+    svx/source/items/rotmodit \
     svx/source/sdr/animation/scheduler \
     svx/source/sdr/animation/objectanimator \
     svx/source/sdr/animation/animationstate \
