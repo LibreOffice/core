@@ -3637,19 +3637,32 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
-    // First: sit down and read all dictionaries: yum.
+    // preload all available dictionaries
     css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
         css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
     css::uno::Reference<linguistic2::XSpellChecker> xSpellChecker(xLngSvcMgr->getSpellChecker());
 
-    css::uno::Reference<linguistic2::XSupportedLocales> xLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
-    uno::Sequence< css::lang::Locale > aLocales = xLocales->getLocales();
+    css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
+    uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
     std::cerr << "Preloading dictionaries: ";
     for (auto &it : aLocales)
     {
         std::cerr << it.Language << "_" << it.Country << " ";
         css::beans::PropertyValues aNone;
         xSpellChecker->isValid("forcefed", it, aNone);
+    }
+    std::cerr << "\n";
+
+    // preload all available thesauri
+    css::uno::Reference<linguistic2::XThesaurus> xThesaurus(xLngSvcMgr->getThesaurus());
+    css::uno::Reference<linguistic2::XSupportedLocales> xThesLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
+    aLocales = xThesLocales->getLocales();
+    std::cerr << "Preloading thesauri: ";
+    for (auto &it : aLocales)
+    {
+        std::cerr << it.Language << "_" << it.Country << " ";
+        css::beans::PropertyValues aNone;
+        xThesaurus->queryMeanings("forcefed", it, aNone);
     }
     std::cerr << "\n";
 }
