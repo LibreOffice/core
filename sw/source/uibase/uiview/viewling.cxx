@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
@@ -546,8 +547,9 @@ void SwView::StartThesaurus()
     }
 
     SwViewOption* pVOpt = const_cast<SwViewOption*>(m_pWrtShell->GetViewOptions());
-    bool bOldIdle = pVOpt->IsIdle();
+    const bool bOldIdle = pVOpt->IsIdle();
     pVOpt->SetIdle( false );
+    comphelper::ScopeGuard guard([&]() { pVOpt->SetIdle(bOldIdle); }); // restore when leaving scope
 
     // get initial LookUp text
     const bool bSelection = static_cast<SwCursorShell*>(m_pWrtShell)->HasSelection();
@@ -559,20 +561,27 @@ void SwView::StartThesaurus()
         SpellError( eLang );
     else
     {
-        ScopedVclPtr<AbstractThesaurusDialog> pDlg;
+        VclPtr<AbstractThesaurusDialog> pDlg;
         // create dialog
         {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), true );
             // load library with dialog only on demand ...
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            pDlg.disposeAndReset(pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang ));
+            pDlg.reset(pFact->CreateThesaurusDialog(&GetEditWin(), xThes, aTmp, eLang));
         }
 
-        if ( pDlg->Execute()== RET_OK )
-            InsertThesaurusSynonym( pDlg->GetWord(), aTmp, bSelection );
-    }
+        if (pDlg)
+        {
+            guard.dismiss(); // ignore, we'll call SetIdle() explictly after the dialog ends
 
-    pVOpt->SetIdle( bOldIdle );
+            pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+                if (nResult == RET_OK )
+                    InsertThesaurusSynonym(pDlg->GetWord(), aTmp, bSelection);
+
+                pVOpt->SetIdle(bOldIdle);
+            });
+        }
+    }
 }
 
 // Offer online suggestions
