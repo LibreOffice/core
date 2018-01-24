@@ -5302,6 +5302,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_pTableStream = nullptr;
 
     DeleteCtrlStack();
+    DeleteAnchorStack();
+    DeleteRefStacks();
     m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
     // remove extra paragraphs after attribute ctrl
     // stacks etc. are destroyed, and before fields
@@ -5309,8 +5311,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_aExtraneousParas.delete_all_from_doc();
     m_xRedlineStack->closeall(*m_pPaM->GetPoint());
     m_xRedlineStack.reset();
-    DeleteAnchorStack();
-    DeleteRefStacks();
 
     // For i120928,achieve the graphics from the special bookmark with is for graphic bullet
     {
