@@ -23,11 +23,9 @@
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
+#include <osl/process.h>
 
 #include <rtl/ustrbuf.hxx>
-
-#include <boost/process/child.hpp>
-#include <boost/process/pipe.hpp>
 
 #include "filepicker_ipc_commands.hxx"
 
@@ -35,20 +33,23 @@
 #include <future>
 #include <mutex>
 #include <thread>
+#include <sstream>
 
 OUString getResString(const char* pResId);
 
 class Gtk3KDE5FilePickerIpc
 {
 protected:
-    boost::process::ipstream m_stdout;
-    boost::process::opstream m_stdin;
-    boost::process::child m_process;
+    oslProcess m_process;
+    oslFileHandle m_inputWrite;
+    oslFileHandle m_outputRead;
     // simple multiplexing: every command gets it's own ID that can be used to
     // read the corresponding response
     uint64_t m_msgId = 1;
     std::mutex m_mutex;
     uint64_t m_incomingResponse = 0;
+    std::string m_responseBuffer;
+    std::stringstream m_responseStream;
 
 public:
     explicit Gtk3KDE5FilePickerIpc();
@@ -56,13 +57,19 @@ public:
 
     sal_Int16 execute();
 
+    void writeResponseLine(const std::string& line);
+
     template <typename... Args> uint64_t sendCommand(Commands command, const Args&... args)
     {
         auto id = m_msgId;
         ++m_msgId;
-        sendIpcArgs(m_stdin, id, command, args...);
+        std::stringstream stream;
+        sendIpcArgs(stream, id, command, args...);
+        writeResponseLine(stream.str());
         return id;
     }
+
+    std::string readResponseLine();
 
     template <typename... Args> void readResponse(uint64_t id, Args&... args)
     {
@@ -76,12 +83,16 @@ public:
 
                 // check if we need to read (and potentially wait) a response ID
                 if (m_incomingResponse == 0)
-                    readIpcArgs(m_stdout, m_incomingResponse);
+                {
+                    m_responseStream.clear();
+                    m_responseStream.str(readResponseLine());
+                    readIpcArgs(m_responseStream, m_incomingResponse);
+                }
 
                 if (m_incomingResponse == id)
                 {
                     // the response we are waiting for came in
-                    readIpcArgs(m_stdout, args...);
+                    readIpcArgs(m_responseStream, args...);
                     m_incomingResponse = 0;
                     break;
                 }
