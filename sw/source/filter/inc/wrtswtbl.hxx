@@ -286,6 +286,7 @@ public:
 
     long GetAbsHeight(long nRawWidth, size_t nRow, sal_uInt16 nRowSpan) const;
 
+    double GetAbsWidthRatio() const { return m_nTabWidth == m_nBaseWidth ? 1.0 : double(m_nTabWidth) / m_nBaseWidth; }
 protected:
     long GetLineHeight( const SwTableLine *pLine );
     static long GetLineHeight( const SwTableBox *pBox );
