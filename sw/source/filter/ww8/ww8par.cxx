@@ -5303,6 +5303,10 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     DeleteCtrlStack();
     m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
+    // remove extra paragraphs after attribute ctrl
+    // stacks etc. are destroyed, and before fields
+    // are updated
+    m_aExtraneousParas.delete_all_from_doc();
     m_xRedlineStack->closeall(*m_pPaM->GetPoint());
     m_xRedlineStack.reset();
     DeleteAnchorStack();
@@ -5392,11 +5396,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     mpCursor.reset();
     m_pPaM = nullptr;
-
-    // remove extra paragraphs after attribute ctrl
-    // stacks etc. are destroyed, and before fields
-    // are updated
-    m_aExtraneousParas.delete_all_from_doc();
 
     UpdateFields();
 
