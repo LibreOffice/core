@@ -200,9 +200,9 @@ namespace calc
                         Reference< XPropertySet > xProp( xCell, UNO_QUERY);
                         if (xProp.is())
                         {
-                            CellContentType eResultType;
-                            if ((xProp->getPropertyValue("FormulaResultType") >>= eResultType) &&
-                                    eResultType == CellContentType_VALUE)
+                            CellContentType eContentType;
+                            if ((xProp->getPropertyValue("CellContentType") >>= eContentType) &&
+                                    eContentType == CellContentType_VALUE)
                                 *pAny <<= xCell->getValue();
                             else
                                 *pAny <<= sText;

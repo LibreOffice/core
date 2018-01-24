@@ -825,11 +825,11 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
             {
                 uno::Reference< beans::XPropertySet > xProp( xCell, uno::UNO_QUERY_THROW );
 
-                table::CellContentType eFormulaType = table::CellContentType_VALUE;
+                table::CellContentType eContentType = table::CellContentType_VALUE;
                 // some formulas give textual results
-                xProp->getPropertyValue( "FormulaResultType" ) >>= eFormulaType;
+                xProp->getPropertyValue( "CellContentType" ) >>= eContentType;
 
-                if ( eFormulaType == table::CellContentType_TEXT )
+                if ( eContentType == table::CellContentType_TEXT )
                 {
                     uno::Reference< text::XTextRange > xTextRange(xCell, ::uno::UNO_QUERY_THROW);
                     aValue <<= xTextRange->getString();

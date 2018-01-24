@@ -203,8 +203,8 @@ namespace calc
                         Reference<XPropertySet> xProp( m_xCell, UNO_QUERY );
                         if ( xProp.is() )
                         {
-                            CellContentType eResultType;
-                            if ( (xProp->getPropertyValue("FormulaResultType") >>= eResultType) && eResultType == CellContentType_VALUE )
+                            CellContentType eContentType;
+                            if ( (xProp->getPropertyValue("CellContentType") >>= eContentType) && eContentType == CellContentType_VALUE )
                                 bHasValue = true;
                         }
                     }
