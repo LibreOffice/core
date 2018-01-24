@@ -163,43 +163,43 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
         rFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL ;
     if ( aOpt.IsIgnoreKashida_CTL())
         rFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL ;
-    if ( m_bAsianOptions )
-    {
-        if ( aOpt.IsMatchHiraganaKatakana())
-            rFlags |= TransliterationFlags::IGNORE_KANA;
-        if ( aOpt.IsMatchContractions())
-            rFlags |= TransliterationFlags::ignoreSize_ja_JP;
-        if ( aOpt.IsMatchMinusDashChoon())
-            rFlags |= TransliterationFlags::ignoreMinusSign_ja_JP;
-        if ( aOpt.IsMatchRepeatCharMarks())
-            rFlags |= TransliterationFlags::ignoreIterationMark_ja_JP;
-        if ( aOpt.IsMatchVariantFormKanji())
-            rFlags |= TransliterationFlags::ignoreTraditionalKanji_ja_JP;
-        if ( aOpt.IsMatchOldKanaForms())
-            rFlags |= TransliterationFlags::ignoreTraditionalKana_ja_JP;
-        if ( aOpt.IsMatchDiziDuzu())
-            rFlags |= TransliterationFlags::ignoreZiZu_ja_JP;
-        if ( aOpt.IsMatchBavaHafa())
-            rFlags |= TransliterationFlags::ignoreBaFa_ja_JP;
-        if ( aOpt.IsMatchTsithichiDhizi())
-            rFlags |= TransliterationFlags::ignoreTiJi_ja_JP;
-        if ( aOpt.IsMatchHyuiyuByuvyu())
-            rFlags |= TransliterationFlags::ignoreHyuByu_ja_JP;
-        if ( aOpt.IsMatchSesheZeje())
-            rFlags |= TransliterationFlags::ignoreSeZe_ja_JP;
-        if ( aOpt.IsMatchIaiya())
-            rFlags |= TransliterationFlags::ignoreIandEfollowedByYa_ja_JP;
-        if ( aOpt.IsMatchKiku())
-            rFlags |= TransliterationFlags::ignoreKiKuFollowedBySa_ja_JP;
-        if ( aOpt.IsIgnorePunctuation())
-            rFlags |= TransliterationFlags::ignoreSeparator_ja_JP;
-        if ( aOpt.IsIgnoreWhitespace())
-            rFlags |= TransliterationFlags::ignoreSpace_ja_JP;
-        if ( aOpt.IsIgnoreProlongedSoundMark())
-            rFlags |= TransliterationFlags::ignoreProlongedSoundMark_ja_JP;
-        if ( aOpt.IsIgnoreMiddleDot())
-            rFlags |= TransliterationFlags::ignoreMiddleDot_ja_JP;
-    }
+    if ( !m_bAsianOptions )
+        return;
+
+    if ( aOpt.IsMatchHiraganaKatakana())
+        rFlags |= TransliterationFlags::IGNORE_KANA;
+    if ( aOpt.IsMatchContractions())
+        rFlags |= TransliterationFlags::ignoreSize_ja_JP;
+    if ( aOpt.IsMatchMinusDashChoon())
+        rFlags |= TransliterationFlags::ignoreMinusSign_ja_JP;
+    if ( aOpt.IsMatchRepeatCharMarks())
+        rFlags |= TransliterationFlags::ignoreIterationMark_ja_JP;
+    if ( aOpt.IsMatchVariantFormKanji())
+        rFlags |= TransliterationFlags::ignoreTraditionalKanji_ja_JP;
+    if ( aOpt.IsMatchOldKanaForms())
+        rFlags |= TransliterationFlags::ignoreTraditionalKana_ja_JP;
+    if ( aOpt.IsMatchDiziDuzu())
+        rFlags |= TransliterationFlags::ignoreZiZu_ja_JP;
+    if ( aOpt.IsMatchBavaHafa())
+        rFlags |= TransliterationFlags::ignoreBaFa_ja_JP;
+    if ( aOpt.IsMatchTsithichiDhizi())
+        rFlags |= TransliterationFlags::ignoreTiJi_ja_JP;
+    if ( aOpt.IsMatchHyuiyuByuvyu())
+        rFlags |= TransliterationFlags::ignoreHyuByu_ja_JP;
+    if ( aOpt.IsMatchSesheZeje())
+        rFlags |= TransliterationFlags::ignoreSeZe_ja_JP;
+    if ( aOpt.IsMatchIaiya())
+        rFlags |= TransliterationFlags::ignoreIandEfollowedByYa_ja_JP;
+    if ( aOpt.IsMatchKiku())
+        rFlags |= TransliterationFlags::ignoreKiKuFollowedBySa_ja_JP;
+    if ( aOpt.IsIgnorePunctuation())
+        rFlags |= TransliterationFlags::ignoreSeparator_ja_JP;
+    if ( aOpt.IsIgnoreWhitespace())
+        rFlags |= TransliterationFlags::ignoreSpace_ja_JP;
+    if ( aOpt.IsIgnoreProlongedSoundMark())
+        rFlags |= TransliterationFlags::ignoreProlongedSoundMark_ja_JP;
+    if ( aOpt.IsIgnoreMiddleDot())
+        rFlags |= TransliterationFlags::ignoreMiddleDot_ja_JP;
 }
 
 
