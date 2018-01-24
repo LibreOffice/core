@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_fb90d797",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-01-24T12:50:21Z",
+      "side": 1,
+      "message": "otherwise this loop can be used to exhaust mem/busy hang",
+      "revId": "be8ea959ab1ff9eb7f8f68ba5ae76a9b36b61905",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
