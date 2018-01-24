@@ -848,10 +848,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
         if ( SUCCEEDED( hr ) && pOleObject )
         {
             hr = pOleObject->DoVerb( iVerb, pMsg, pActiveSite, nLong, hWin, pRect );
-            if ( SUCCEEDED( hr ) )
-            {
-            }
-
             return hr;
         }
 

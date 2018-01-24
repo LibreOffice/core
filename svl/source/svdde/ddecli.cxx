@@ -125,11 +125,6 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( UINT nCode, UINT nCbType,
                 SAL_FALLTHROUGH;
 
             case XTYP_REQUEST:
-                if( !hData && XTYP_REQUEST == nCode )
-                {
-
-                }
-
                 DdeData d;
                 d.xImp->hData = hData;
                 d.xImp->nFmt  = DdeData::GetInternalFormat( nCbType );
