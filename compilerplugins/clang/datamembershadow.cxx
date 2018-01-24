@@ -19,6 +19,7 @@
  * Check for data member being shadowed.
  *
  * @TODO check for any members in superclass hierarchy with duplicate names,
+ *       regardless of their visibility,
  *       more specific names will make the code easier to read
  */
 namespace
@@ -84,11 +85,7 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
     if (loplugin::isSamePathname(aFileName, SRCDIR "/store/source/stortree.hxx")
         || loplugin::isSamePathname(aFileName, SRCDIR "/store/source/stordata.hxx"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/inc/cell.hxx"))
-        return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sw/source/uibase/inc/dbtree.hxx"))
-        return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/unx/generic/print/genpspgraphics.cxx"))
         return true;
 
     const CXXRecordDecl* parentCXXRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getDeclContext());

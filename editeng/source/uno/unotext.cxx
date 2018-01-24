@@ -208,7 +208,7 @@ void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) throw()
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextRangeBase );
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxItemPropertySet* _pSet)
-    : mpEditSource(nullptr) , mpPropSet(_pSet)
+    : mpPropSet(_pSet), mpEditSource(nullptr)
 {
 }
 
