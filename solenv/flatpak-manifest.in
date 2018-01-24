@@ -38,10 +38,10 @@
                     "type": "shell"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/pdfium-3235.tar.bz2",
-                    "sha256": "7dc0d33fc24b1612865f5e173d48800ba3f2db891c57e3f92b9d2ce56ffeb72f",
+                    "url": "https://dev-www.libreoffice.org/src/pdfium-3312.tar.bz2",
+                    "sha256": "baa103ab9b72cf3be5ae80106e7ca56110a150fc60a9a3d897e5b26631355b0f",
                     "type": "file",
-                    "dest-filename": "external/tarballs/pdfium-3235.tar.bz2"
+                    "dest-filename": "external/tarballs/pdfium-3312.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz",
