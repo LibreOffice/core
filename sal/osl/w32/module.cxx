@@ -230,7 +230,7 @@ static bool osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustrURL )
 {
     bool    bSuccess    = false;    /* Assume failure */
 
-    /*  IMAGEHELP.DLL has a bug that it recursivly scans subdirectories of
+    /*  IMAGEHELP.DLL has a bug that it recursively scans subdirectories of
         the root when calling SymInitialize(), so we prefer DBGHELP.DLL
         which exports the same symbols and is shipped with OOo */
 

@@ -47,7 +47,7 @@ static typelib_TypeClass cpp2uno_call(
     fprintf(stderr, "as far as cpp2uno_call\n");
 #endif
     int ng = 0; //number of gpr registers used
-    int nf = 0; //number of fpr regsiters used
+    int nf = 0; //number of fpr registers used
 
     // gpreg:  [ret *], this, [gpr params]
     // fpreg:  [fpr params]

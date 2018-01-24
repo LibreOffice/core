@@ -46,7 +46,7 @@ static typelib_TypeClass cpp2uno_call(
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
         int ng = 0; //number of gpr registers used
-        int nf = 0; //number of fpr regsiters used
+        int nf = 0; //number of fpr registers used
         void ** pCppStack; //temporary stack pointer
 
         // gpreg:  [ret *], this, [gpr params]
