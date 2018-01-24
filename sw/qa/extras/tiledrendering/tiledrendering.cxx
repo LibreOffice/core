@@ -38,6 +38,7 @@
 #include <redline.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <vcl/scheduler.hxx>
+#include <flddat.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
@@ -100,6 +101,7 @@ public:
     void testPageHeader();
     void testPageFooter();
     void testTdf115088();
+    void testRedlineField();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -150,6 +152,7 @@ public:
     CPPUNIT_TEST(testPageHeader);
     CPPUNIT_TEST(testPageFooter);
     CPPUNIT_TEST(testTdf115088);
+    CPPUNIT_TEST(testRedlineField);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2058,6 +2061,30 @@ void SwTiledRenderingTest::testTdf115088()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testRedlineField()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+
+    // Turn on track changes and type "x".
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+
+    SwDateTimeField aDate(static_cast<SwDateTimeFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::DateTime)));
+    //aDate->SetDateTime(::DateTime(::DateTime::SYSTEM));
+    pWrtShell->Insert(aDate);
+
+    // Get the redline just created
+    const SwRedlineTable& rTable = pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
+    SwRangeRedline* pRedline = rTable[0];
+    CPPUNIT_ASSERT(pRedline->GetDescr().indexOf(aDate.GetFieldName())!= -1);
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
