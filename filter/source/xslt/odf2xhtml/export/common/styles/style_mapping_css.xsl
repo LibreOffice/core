@@ -94,7 +94,7 @@
     <xsl:template match="@fo:letter-spacing | @fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">
         <xsl:value-of select="local-name(.)"/>
         <xsl:text>:</xsl:text>
-        <!-- Map once erroneusly used inch shortage 'inch' to CSS shortage 'in' -->
+        <!-- Map once erroneously used inch shortage 'inch' to CSS shortage 'in' -->
         <xsl:choose>
             <xsl:when test="contains(., 'inch')">
                 <xsl:value-of select="substring-before(.,'ch')"/>

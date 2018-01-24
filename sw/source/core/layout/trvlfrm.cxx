@@ -794,7 +794,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
 
     do
     {
-        //If I'm in the DocumentBody, I wan't to stay there.
+        //If I'm in the DocumentBody, I want to stay there.
         if ( pStart->IsInDocBody() )
         {
             while ( pCnt && (!pCnt->IsInDocBody() ||
@@ -1570,7 +1570,7 @@ Point SwRootFrame::GetPagePos( sal_uInt16 nPageNum ) const
     return pPage->getFrameArea().Pos();
 }
 
-/** get page frame by phyiscal page number
+/** get page frame by physical page number
  *
  * @return pointer to the page frame with the given physical page number
  */

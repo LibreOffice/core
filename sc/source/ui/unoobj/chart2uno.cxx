@@ -3113,7 +3113,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
     SCCOL nCols = func.getCols();
     SCROW nRows = func.getRows();
 
-    // Detemine whether this is column-major or row-major.
+    // Determine whether this is column-major or row-major.
     bool bColumn = true;
     if ((eOrigin == chart2::data::LabelOrigin_SHORT_SIDE) ||
         (eOrigin == chart2::data::LabelOrigin_LONG_SIDE))
