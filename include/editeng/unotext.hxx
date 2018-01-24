@@ -250,11 +250,11 @@ class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public css::text::XTextRange,
 {
     friend class SvxUnoTextRangeEnumeration;
     friend class ::accessibility::AccessibleEditableTextPara;
+    const SvxItemPropertySet* mpPropSet;
 
 protected:
     SvxEditSource*          mpEditSource;
     ESelection              maSelection;
-    const SvxItemPropertySet* mpPropSet;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
