@@ -114,6 +114,7 @@ class LOKitTileProvider implements TileProvider {
 
         if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION) {
             mContext.getToolbarController().disableMenuItem(R.id.action_presentation, false);
+            mContext.getToolbarController().disableMenuItem(R.id.action_add_slide, false);
         }
 
         // Writer documents always have one part, so hide the navigation drawer.
@@ -158,6 +159,19 @@ class LOKitTileProvider implements TileProvider {
                 }
             }
         });
+    }
+
+    public void addPart(){
+        int parts = mDocument.getParts();
+        LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:InsertPage"));
+        String partName = mDocument.getPartName(parts);
+        if (partName.isEmpty()) {
+            partName = getGenericPartName(parts);
+        }
+        mDocument.setPart(parts);
+        resetDocumentSize();
+        final DocumentPartView partView = new DocumentPartView(parts, partName);
+        mContext.getDocumentPartView().add(partView);
     }
 
     @Override
