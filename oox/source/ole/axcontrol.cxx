@@ -1770,6 +1770,7 @@ void AxTextBoxModel::convertProperties( PropertyMap& rPropMap, const ControlConv
 {
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_MULTILINE ) );
     rPropMap.setProperty( PROP_HideInactiveSelection, getFlag( mnFlags, AX_FLAGS_HIDESELECTION ) );
+    rPropMap.setProperty( PROP_ReadOnly, getFlag( mnFlags, AX_FLAGS_LOCKED ) );
     rPropMap.setProperty( mbAwtModel ? PROP_Text : PROP_DefaultText, maValue );
     rPropMap.setProperty( PROP_MaxTextLen, getLimitedValue< sal_Int16, sal_Int32 >( mnMaxLength, 0, SAL_MAX_INT16 ) );
     if( (0 < mnPasswordChar) && (mnPasswordChar <= SAL_MAX_INT16) )
@@ -1788,6 +1789,8 @@ void AxTextBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
     if ( rPropSet.getProperty( bRes,  PROP_HideInactiveSelection ) )
         setFlag( mnFlags, AX_FLAGS_HIDESELECTION, bRes );
+    if ( rPropSet.getProperty( bRes,  PROP_ReadOnly ) )
+        setFlag( mnFlags, AX_FLAGS_LOCKED, bRes );
     rPropSet.getProperty( maValue, ( mbAwtModel ? PROP_Text : PROP_DefaultText ) );
     if (maValue.isEmpty() && !mbAwtModel)
         // No default value? Then try exporting the current one.
