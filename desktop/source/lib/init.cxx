@@ -1762,6 +1762,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:OutlineBullet"),
         OUString(".uno:InsertIndexesEntry"),
         OUString(".uno:DocumentRepair"),
+        OUString(".uno:TransformDialog"),
         OUString(".uno:InsertPageHeader"),
         OUString(".uno:InsertPageFooter")
     };
