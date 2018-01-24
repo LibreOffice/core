@@ -884,8 +884,6 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
 //  SvXMLNumFmtElementContext
 
 
-const sal_Int32 MAX_SECOND_DIGITS = 20; // fdo#58539 & gnome#627420: limit number of digits during import
-
 SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext, sal_uInt16 nNewType,
@@ -919,7 +917,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
         {
             case XML_TOK_ELEM_ATTR_DECIMAL_PLACES:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
-                    aNumInfo.nDecimals = std::min<sal_Int32>(nAttrVal, MAX_SECOND_DIGITS);
+                {
+                    // fdo#58539 & gnome#627420: limit number of digits during import
+                    aNumInfo.nDecimals = std::min<sal_Int32>(nAttrVal, NF_MAX_FORMAT_SYMBOLS);
+                }
                 break;
             case XML_TOK_ELEM_ATTR_MIN_DECIMAL_PLACES:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
