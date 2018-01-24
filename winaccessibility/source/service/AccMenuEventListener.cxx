@@ -83,8 +83,6 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
             pAgent->InsertChildrenAccObj(pAcc);
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
         }
-        else
-        {}
     }
     else if (oldValue >>= xChild)
     {
@@ -98,8 +96,6 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
             //delete this child
             pAgent->DeleteAccObj( pAcc );
         }
-        else
-        {}
     }
 
 }

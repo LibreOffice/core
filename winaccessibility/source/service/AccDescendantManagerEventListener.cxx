@@ -96,8 +96,6 @@ void AccDescendantManagerEventListener::HandleChildChangedEvent(Any oldValue, An
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
 
         }
-        else
-        {}
     }
 
     if (oldValue >>= xChild)
@@ -110,8 +108,6 @@ void AccDescendantManagerEventListener::HandleChildChangedEvent(Any oldValue, An
             pAgent->DeleteChildrenAccObj( pAcc );
             pAgent->DeleteAccObj( pAcc );
         }
-        else
-        {}
     }
 
 }

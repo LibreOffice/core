@@ -137,8 +137,6 @@ void AccContainerEventListener::HandleChildChangedEvent(Any oldValue, Any newVal
                 pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
             }
         }
-        else
-        {}
     }
     else if (oldValue >>= xChild)
     {
@@ -153,8 +151,6 @@ void AccContainerEventListener::HandleChildChangedEvent(Any oldValue, Any newVal
             pAgent->DeleteAccObj( pAcc );
 
         }
-        else
-        {}
     }
 
 }

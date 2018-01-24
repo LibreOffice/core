@@ -163,9 +163,6 @@ extern "C" BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lp
     {
         g_hInstance = hInstance;
     }
-    else if (dwReason == DLL_PROCESS_DETACH)
-    {
-    }
 
     return TRUE;    // ok
 }
