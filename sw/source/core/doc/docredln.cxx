@@ -57,6 +57,7 @@
 #include <comcore.hrc>
 #include <unoport.hxx>
 #include <wrtsh.hxx>
+#include <txtfld.hxx>
 
 #include "flowfrm.hxx"
 
@@ -1777,9 +1778,18 @@ OUString SwRangeRedline::GetDescr()
         bDeletePaM = true;
     }
 
+    OUString sDescr = pPaM->GetText();
+    if (const SwTextNode *pTextNode = pPaM->GetNode().GetTextNode())
+    {
+        if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->nContent.GetIndex() - 1, true ))
+        {
+            sDescr = pTextAttr->GetFormatField().GetField()->GetFieldName();
+        }
+    }
+
     // replace $1 in description by description of the redlines text
     const OUString aTmpStr = SW_RESSTR(STR_START_QUOTE)
-        + ShortenString(pPaM->GetText(), nUndoStringLength, SW_RESSTR(STR_LDOTS))
+        + ShortenString(sDescr, nUndoStringLength, SW_RESSTR(STR_LDOTS))
         + SW_RESSTR(STR_END_QUOTE);
 
     SwRewriter aRewriter;
