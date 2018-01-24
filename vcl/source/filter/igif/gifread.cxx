@@ -158,6 +158,8 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     const Size aSize( nWidth, nHeight );
 
     sal_uInt64 nCombinedPixSize = nWidth * nHeight;
+    if (bGCTransparent)
+        nCombinedPixSize += (nCombinedPixSize/8);
 
     // "Overall data compression asymptotically approaches 3839 × 8 / 12 = 2559 1/3"
     // so assume compression of 1:2560 is possible
@@ -167,9 +169,10 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     sal_uInt64 nMinFileData = nWidth * nHeight / 2560;
     for (size_t i = 0; i < aAnimation.Count(); ++i)
     {
-        const Size& rSize = aAnimation.Get(i).aSizePix;
+        const AnimationBitmap& rBitmap = aAnimation.Get(i);
+        const Size& rSize = rBitmap.aSizePix;
         nMinFileData += rSize.Width() * rSize.Height() / 2560;
-        nCombinedPixSize += rSize.Width() * rSize.Height();
+        nCombinedPixSize += rBitmap.aBmpEx.GetSizeBytes();
     }
 
     if (nMaxStreamData < nMinFileData)
@@ -187,7 +190,7 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     // svtools/qa/cppunit/data/gif/fail/CVE-2008-5937-1.gif), but
     // which doesn't fail on 64-bit Mac OS X at least. Why the loading
     // fails on 64-bit Linux, no idea.
-    if (nCombinedPixSize >= 64000U * 64000U)
+    if (nCombinedPixSize >= SAL_MAX_INT32/3*2)
     {
         bStatus = false;
         return;
