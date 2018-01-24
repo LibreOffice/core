@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cdb99630",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T20:01:28Z",
+      "side": 1,
+      "message": "I suspect that you haven\u0027t mentioned what the failed linux_clang_dbgutil_64 build have reported. You most possibly ignore the warning that is issued to you when you are committing locally - that you need a module to check formatting. Then you post the malformed changes, which puts extra load to our overloaded CI infrastructure. Please pay due attention to warnings you see locally, and to output you get from CI, to not force it do useless work.\n\nBy the way, the other linux box has also failed - looks like it wasn\u0027t able to convert initializer list after your changes. I suppose it\u0027s because of the default value, which might mean you would need to also specify zeroes.",
+      "range": {
+        "startLine": 2000,
+        "startChar": 16,
+        "endLine": 2000,
+        "endChar": 140
+      },
+      "revId": "0d4aa2c72f6c83a94e7ae9b646362a7b99498a41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_edb65a3c",
+        "filename": "writerfilter/source/rtftok/rtftokenizer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T20:01:28Z",
+      "side": 1,
+      "message": "See comments below; actually, I\u0027d recommend to simplify the code by setting nParam to defValue when !bParam, and then do the common code.",
+      "range": {
+        "startLine": 324,
+        "startChar": 12,
+        "endLine": 324,
+        "endChar": 101
+      },
+      "revId": "0d4aa2c72f6c83a94e7ae9b646362a7b99498a41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ad6542e2",
+        "filename": "writerfilter/source/rtftok/rtftokenizer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T20:01:28Z",
+      "side": 1,
+      "message": "Does this old condition make sense anymore?",
+      "range": {
+        "startLine": 325,
+        "startChar": 26,
+        "endLine": 325,
+        "endChar": 70
+      },
+      "revId": "0d4aa2c72f6c83a94e7ae9b646362a7b99498a41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_8d687ebc",
+        "filename": "writerfilter/source/rtftok/rtftokenizer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-24T20:01:28Z",
+      "side": 1,
+      "message": "Can this condition be false here?",
+      "range": {
+        "startLine": 331,
+        "startChar": 17,
+        "endLine": 331,
+        "endChar": 35
+      },
+      "revId": "0d4aa2c72f6c83a94e7ae9b646362a7b99498a41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
