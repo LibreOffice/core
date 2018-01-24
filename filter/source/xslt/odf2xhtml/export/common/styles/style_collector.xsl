@@ -630,7 +630,7 @@
     </xsl:template>
 
     <!-- REASON FOR TEMPLATE:
-       The OpenOffice style properities gathered in the variable 'globalData' have to be mapped to the CSS style format
+       The OpenOffice style properties gathered in the variable 'globalData' have to be mapped to the CSS style format
     -->
     <xsl:template name="map-odf-properties">
         <xsl:param name="globalData" />

@@ -834,7 +834,7 @@
                                 <xsl:text>000</xsl:text>
                             </xsl:when>
                             <xsl:when test="@office:time-value">
-                            <!-- conatains date and time (time will be evaluated later -->
+                            <!-- contains date and time (time will be evaluated later -->
                                 <xsl:value-of select="@office:date-value" />
                                 <xsl:text>T</xsl:text>
                                 <xsl:choose>

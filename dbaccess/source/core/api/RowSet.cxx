@@ -526,7 +526,7 @@ void SAL_CALL ORowSet::disposing()
         xComponent->removeEventListener(xEvt);
     }
 
-    m_aActiveConnection = Any(); // the any conatains a reference too
+    m_aActiveConnection = Any(); // the any contains a reference too
     if(m_bOwnConnection)
         ::comphelper::disposeComponent(m_xActiveConnection);
     m_xActiveConnection = nullptr;

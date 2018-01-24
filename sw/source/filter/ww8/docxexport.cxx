@@ -1558,7 +1558,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_pSdrExport( nullptr ),
       m_bDocm(bDocm)
 {
-    // Write the document properies
+    // Write the document properties
     WriteProperties( );
 
     // relations for the document

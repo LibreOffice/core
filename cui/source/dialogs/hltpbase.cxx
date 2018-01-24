@@ -280,7 +280,7 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
 // Any action to do after apply-button is pressed
 void SvxHyperlinkTabPageBase::DoApply ()
 {
-    // default-implemtation : do nothing
+    // default-implementation : do nothing
 }
 
 // Ask page whether an insert is possible
@@ -293,7 +293,7 @@ bool SvxHyperlinkTabPageBase::AskApply ()
 // This method would be called from bookmark-window to set new mark-string
 void SvxHyperlinkTabPageBase::SetMarkStr ( const OUString& /*aStrMark*/ )
 {
-    // default-implemtation : do nothing
+    // default-implementation : do nothing
 }
 
 // Set initial focus

@@ -260,7 +260,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
         {
             case excel::XlDVAlertStyle::xlValidAlertStop:
                 // yes I know it's already defaulted but safer to assume
-                // someone propbably could change the code above
+                // someone probably could change the code above
                 eStyle = sheet::ValidationAlertStyle_STOP;
                 break;
             case excel::XlDVAlertStyle::xlValidAlertWarning:

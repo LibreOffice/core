@@ -97,7 +97,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                 {
                     try
                     {
-                        // TODO/LATER: Propbably the graphic should be copied here as well
+                        // TODO/LATER: Probably the graphic should be copied here as well
                         // currently it is handled by the applications
                         utl::TempFile aTmp;
                         aTmp.EnableKillingFile();

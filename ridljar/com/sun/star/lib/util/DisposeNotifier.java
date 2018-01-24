@@ -34,7 +34,7 @@ public interface DisposeNotifier {
      * <p>It is unspecified exactly when the <code>notifyDispose</code> callback
      * is fired: immediately before the notifier is disposed, while it is in the
      * process of disposing, or some time after it got disposed.  But even if
-     * adding a listener to an already disposed notifer, the listener must
+     * adding a listener to an already disposed notifier, the listener must
      * eventually receive a <code>notifyDispose</code> callback.</p>
      *
      * @param listener a dispose listener, to be notified when this object is
