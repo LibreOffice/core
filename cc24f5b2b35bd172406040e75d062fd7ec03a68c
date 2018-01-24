@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_fb0377b6",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 6556,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-24T14:06:34Z",
+      "side": 1,
+      "message": "the BUILD_TYPE is so that it isn\u0027t built in configurations that don\u0027t need it - which means, non-Windows here.\n\nalthough, this case is a bit special, you could just check $(OS) instead for the same effect... \n\nor interpret BUILD_TYPE containing TWAIN as that the DLL is required, and build the module (to get the headers) if OS is WNT, then you could get rid of the 2nd variable?\n\n... but that can also be replaced by a $(CPUNBAME) check?",
+      "parentUuid": "fa31d9ce_bbc49f92",
+      "revId": "cc24f5b2b35bd172406040e75d062fd7ec03a68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_5b2ba382",
         "filename": "extensions/Library_scn.mk",
         "patchSetId": 3
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Actually, this is simply copy of their own project, that they failed to include into the tarball. I can try to modify this, and hope that it works, but I can\u0027t do thorough testing, so are these changes really needed?",
       "parentUuid": "fa31d9ce_fb4b7757",
+      "revId": "cc24f5b2b35bd172406040e75d062fd7ec03a68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_7b5867fb",
+        "filename": "external/twain_dsm/TWAIN_DSM_VS2015.vcxproj.patch",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-24T14:06:34Z",
+      "side": 1,
+      "message": "i think if you don\u0027t use /dynamicbase then it will disable ASLR.\n\ndoes upstream have a bugtracker where you could report this?",
+      "parentUuid": "fa31d9ce_3b37cfb1",
       "revId": "cc24f5b2b35bd172406040e75d062fd7ec03a68c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
