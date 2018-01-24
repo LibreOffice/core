@@ -185,7 +185,7 @@ public:
     virtual void TriggerAllUserEventsProcessed() override;
 
 #if !GTK_CHECK_VERSION(3,0,0)
-    virtual void Dispatch( XEvent *pEvent ) override;
+    virtual bool Dispatch( XEvent *pEvent ) override;
 #endif
 #if GTK_CHECK_VERSION(3,0,0)
     void RefreshMenusUnity();
