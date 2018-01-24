@@ -356,7 +356,7 @@ namespace x11 {
                                     m_aIncrementals;
 
         // do not use X11 multithreading capabilities
-        // since this leads to deadlocks in different Xlib implentations
+        // since this leads to deadlocks in different Xlib implementations
         // (XFree as well as Xsun) use an own mutex instead
         ::osl::Mutex                m_aMutex;
         bool                        m_bShutDown;

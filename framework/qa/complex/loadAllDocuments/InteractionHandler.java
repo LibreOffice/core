@@ -22,7 +22,7 @@ import com.sun.star.uno.AnyConverter;
 
 
 /**
- * Implemets a simple interaction handler,
+ * Implements a simple interaction handler,
  * which can abort all incoming interactions only ... but make it possible to
  * log it. So it can be used for debug and test purposes.
  */
