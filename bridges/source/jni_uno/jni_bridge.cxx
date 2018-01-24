@@ -104,7 +104,7 @@ void Mapping_map_to_uno(
         {
             SAL_WARN(
                 "bridges",
-                "ingoring BridgeRuntimeError \"" << err.m_message << "\"");
+                "ignoring BridgeRuntimeError \"" << err.m_message << "\"");
         }
         catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
@@ -168,7 +168,7 @@ void Mapping_map_to_java(
     {
         SAL_WARN(
             "bridges",
-            "ingoring BridgeRuntimeError \"" << err.m_message << "\"");
+            "ignoring BridgeRuntimeError \"" << err.m_message << "\"");
     }
     catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {

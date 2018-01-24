@@ -46,7 +46,7 @@ using rtl::OString;
 
 SAL_IMPLEMENT_MAIN()
 {
-    // string concatination
+    // string concatenation
 
     sal_Int32 n = 42;
     double pi = 3.14159;
