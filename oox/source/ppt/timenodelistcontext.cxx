@@ -185,7 +185,7 @@ namespace oox { namespace ppt {
                         else if( aString == "false" )
                             maTo <<= false;
 
-                        if (!maTo.has<sal_Bool>())
+                        if (!maTo.has<bool>())
                         {
                             SAL_WARN("oox.ppt", "conversion failed");
                             maTo <<= false;
