@@ -11,7 +11,7 @@
 // The swift compiler uses this header to generate a needed interface
 // The functions (LibreOfficeKit.mm) calls functions directly in LibreOffice
 
-int BridgeLOkit_Init(const char *path);
+int BridgeLOkit_Init(const char *appPath, const char *userPath);
 int BridgeLOkit_Sizing(const int countXtiles, const int countYtiles,
                        const int pixelsXtile, const int pixelsYtile);
 int BridgeLOkit_open(const char *path);

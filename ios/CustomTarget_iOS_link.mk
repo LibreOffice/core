@@ -51,6 +51,7 @@ $(IOSKIT): $(IOSOBJ) $(IOSLIBS)
 	$(gb_CC) -dynamiclib \
 	    -Xlinker -rpath -Xlinker @executable_path/Frameworks \
 	    -Xlinker -rpath -Xlinker @loader_path/Frameworks \
+        -install_name @rpath/libKit.dylib \
 	    -dead_strip \
 	    -Xlinker -export_dynamic \
 	    -Xlinker -no_deduplicate \
