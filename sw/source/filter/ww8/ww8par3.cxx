@@ -1449,10 +1449,10 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                         if (aBits1 & 0x20)
                         {
                             aLFOLVL.bFormat = true;
-                            // falls bStartup true, hier den Startup-Level
-                            // durch den im LVL vermerkten ersetzen LVLF
-                            // einlesen
-                            bLVLOk = ReadLVL(aNumFormat, aItemSet[nLevel],
+                            // if bStartup is true, replace Startup-Level
+                            // with the LVLF that is saved in the LVL
+                            bLVLOk = nLevel < rLFOInfo.maParaSprms.size() &&
+                                ReadLVL(aNumFormat, aItemSet[nLevel],
                                 pParentListInfo->aIdSty[nLevel],
                                 aLFOLVL.bStartAt, aNotReallyThere, nLevel,
                                 rLFOInfo.maParaSprms[nLevel]);
