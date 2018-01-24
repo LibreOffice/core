@@ -646,6 +646,7 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_0_10=yes
     test_tde=yes
     test_kde4=yes
+    test_qt5=yes
     test_freetype=yes
     _os=Linux
     ;;
@@ -742,6 +743,7 @@ freebsd*)
     build_gstreamer_0_10=yes
     test_tde=yes
     test_kde4=yes
+    test_qt5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -771,6 +773,7 @@ freebsd*)
     build_gstreamer_0_10=yes
     test_tde=no
     test_kde4=yes
+    test_qt5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
@@ -798,6 +801,7 @@ dragonfly*)
     build_gstreamer_0_10=yes
     test_tde=yes
     test_kde4=yes
+    test_qt5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
@@ -822,6 +826,7 @@ linux-android*)
     test_gtk=no
     test_tde=no
     test_kde4=no
+    test_qt5=no
     test_randr=no
     test_xrender=no
     _os=Android
@@ -859,6 +864,7 @@ emscripten*)
     test_gtk=no
     test_tde=no
     test_kde4=no
+    test_qt5=no
     test_randr=no
     test_xrender=no
     _os=Emscripten
@@ -1263,6 +1269,12 @@ AC_ARG_ENABLE(kde4,
     AS_HELP_STRING([--enable-kde4],
         [Determines whether to use Qt4/KDE4 vclplug on platforms where Qt4 and
          KDE4 are available.]),
+,)
+
+AC_ARG_ENABLE(qt5,
+    AS_HELP_STRING([--enable-qt5],
+        [Determines whether to use Qt5 vclplug on platforms where Qt5 is
+         available.]),
 ,)
 
 AC_ARG_ENABLE(gui,
@@ -4773,6 +4785,7 @@ if test "$USING_X11" != TRUE; then
     build_gstreamer_0_10=no
     test_tde=no
     test_kde4=no
+    test_qt5=no
     enable_cairo_canvas=no
 fi
 
@@ -10111,6 +10124,13 @@ if test "x$enable_kde4" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE4)
 
+ENABLE_QT5=""
+if test "x$enable_qt5" = "xyes"; then
+    ENABLE_QT5="TRUE"
+    AC_DEFINE(ENABLE_QT5)
+    R="$R qt5"
+fi
+AC_SUBST(ENABLE_QT5)
 
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
@@ -11295,6 +11315,99 @@ AC_SUBST(MOC4)
 AC_SUBST(KDE_GLIB_CFLAGS)
 AC_SUBST(KDE_GLIB_LIBS)
 AC_SUBST(KDE_HAVE_GLIB)
+
+dnl ===================================================================
+dnl QT5 Integration
+dnl ===================================================================
+
+QT5_CFLAGS=""
+QT5_LIBS=""
+QMAKE5="qmake"
+MOC5="moc"
+QT5_GLIB_CFLAGS=""
+QT5_GLIB_LIBS=""
+QT5_HAVE_GLIB=""
+if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
+        \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \) -o \
+        \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
+then
+    qt5_incdirs="$QT5INC /usr/include/qt5 /usr/include $x_includes"
+    qt5_libdirs="$QT5LIB /usr/lib/qt5 /usr/lib $x_libraries"
+
+    if test -n "$supports_multilib"; then
+        qt5_libdirs="$qt5_libdirs /usr/lib64/qt5 /usr/lib64/qt /usr/lib64"
+    fi
+
+    qt5_test_include="QtWidgets/qapplication.h"
+    qt5_test_library="libQt5Widgets.so"
+
+    dnl Check for qmake5
+    AC_PATH_PROGS( QMAKE5, [qmake-qt5 qmake], no, [$QT5DIR/bin:$PATH] )
+    if test "$QMAKE5" = "no"; then
+        AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+    else
+        qmake5_test_ver="`$QMAKE5 -v 2>&1 | sed -n -e '/^Using Qt version 5\./p'`"
+        if test -z "$qmake5_test_ver"; then
+            AC_MSG_ERROR([Wrong qmake for Qt5 found. Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+        fi
+    fi
+
+    qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
+    qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
+
+    AC_MSG_CHECKING([for Qt5 headers])
+    qt5_incdir="no"
+    for inc_dir in $qt5_incdirs; do
+        if test -r "$inc_dir/$qt5_test_include"; then
+            qt5_incdir="$inc_dir"
+            break
+        fi
+    done
+    AC_MSG_RESULT([$qt5_incdir])
+    if test "x$qt5_incdir" = "xno"; then
+        AC_MSG_ERROR([Qt5 headers not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+    fi
+
+    AC_MSG_CHECKING([for Qt5 libraries])
+    qt5_libdir="no"
+    for lib_dir in $qt5_libdirs; do
+        if test -r "$lib_dir/$qt5_test_library"; then
+            qt5_libdir="$lib_dir"
+            break
+        fi
+    done
+    AC_MSG_RESULT([$qt5_libdir])
+    if test "x$qt5_libdir" = "xno"; then
+        AC_MSG_ERROR([Qt5 libraries not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+    fi
+
+    QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+    QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
+
+    dnl Check for Meta Object Compiler
+
+    AC_PATH_PROGS( MOC5, [moc-qt5 moc], no, [`dirname $qt5_libdir`/bin:$QT5DIR/bin:$PATH] )
+    if test "$MOC5" = "no"; then
+        AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
+the root of your Qt installation by exporting QT5DIR before running "configure".])
+    fi
+
+    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
+    # Sets also QT5_GLIB_CFLAGS/QT5_GLIB_LIBS if successful.
+    PKG_CHECK_MODULES(QT5_GLIB,[glib-2.0 >= 2.4],
+        [
+            QT5_HAVE_GLIB=1
+            AC_DEFINE(QT5_HAVE_GLIB,1)
+        ],
+        AC_MSG_WARN([[No Glib found, Qt5 support will not use native file pickers!]])
+    )
+fi
+AC_SUBST(QT5_CFLAGS)
+AC_SUBST(QT5_LIBS)
+AC_SUBST(MOC5)
+AC_SUBST(QT5_GLIB_CFLAGS)
+AC_SUBST(QT5_GLIB_LIBS)
+AC_SUBST(QT5_HAVE_GLIB)
 
 dnl ===================================================================
 dnl Test whether to include Evolution 2 support
@@ -12957,6 +13070,7 @@ AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
+AC_CONFIG_HEADERS([config_host/config_qt5.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_opengl.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
