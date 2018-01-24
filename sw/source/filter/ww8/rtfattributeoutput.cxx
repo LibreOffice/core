@@ -721,6 +721,7 @@ void RtfAttributeOutput::TableDefinition(
     }
 
     // The cell-dependent properties
+    const double fWidthRatio = m_pTableWrt->GetAbsWidthRatio();
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
     SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()];
     SwTwips nSz = 0;
@@ -740,7 +741,8 @@ void RtfAttributeOutput::TableDefinition(
         // value of nSz is needed.
         nSz += pCellFormat->GetFrameSize().GetWidth();
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CELLX);
-        m_aRowDefs.append(static_cast<sal_Int32>(pFormat->GetLRSpace().GetLeft() + nSz));
+        m_aRowDefs.append(static_cast<sal_Int32>(pFormat->GetLRSpace().GetLeft()
+                                                 + rtl::math::round(nSz * fWidthRatio)));
     }
 }
 
