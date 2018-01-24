@@ -867,38 +867,38 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
     ::osl::MutexGuard aGuard( mMutex );
 
     OUString aUrl( aURL );
-    if( !m_aContainer.empty() )
+    if( m_aContainer.empty() )
+        return;
+
+    PassMap::iterator aIter = m_aContainer.find( aUrl );
+
+    if( aIter == m_aContainer.end() )
     {
-        PassMap::iterator aIter = m_aContainer.find( aUrl );
+        if( aUrl.endsWith("/") )
+            aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
+        else
+            aUrl += "/";
 
-        if( aIter == m_aContainer.end() )
-        {
-            if( aUrl.endsWith("/") )
-                aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
-            else
-                aUrl += "/";
-
-            aIter = m_aContainer.find( aUrl );
-        }
-
-        if( aIter != m_aContainer.end() )
-        {
-            for( std::vector< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
-                if( aNPIter->GetUserName() == aName )
-                {
-                    if( aNPIter->HasPasswords( PERSISTENT_RECORD ) && m_pStorageFile )
-                        m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
-
-                    // the iterator will not be used any more so it can be removed directly
-                    aIter->second.erase( aNPIter );
-
-                    if( aIter->second.empty() )
-                        m_aContainer.erase( aIter );
-
-                    return;
-                }
-        }
+        aIter = m_aContainer.find( aUrl );
     }
+
+    if( aIter == m_aContainer.end() )
+        return;
+
+    for( std::vector< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
+        if( aNPIter->GetUserName() == aName )
+        {
+            if( aNPIter->HasPasswords( PERSISTENT_RECORD ) && m_pStorageFile )
+                m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
+
+            // the iterator will not be used any more so it can be removed directly
+            aIter->second.erase( aNPIter );
+
+            if( aIter->second.empty() )
+                m_aContainer.erase( aIter );
+
+            return;
+        }
 }
 
 
@@ -907,44 +907,44 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
     ::osl::MutexGuard aGuard( mMutex );
 
     OUString aUrl( aURL );
-    if( !m_aContainer.empty() )
+    if( m_aContainer.empty() )
+        return;
+
+    PassMap::iterator aIter = m_aContainer.find( aUrl );
+
+    if( aIter == m_aContainer.end() )
     {
-        PassMap::iterator aIter = m_aContainer.find( aUrl );
+        if( aUrl.endsWith("/") )
+            aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
+        else
+            aUrl += "/";
 
-        if( aIter == m_aContainer.end() )
-        {
-            if( aUrl.endsWith("/") )
-                aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
-            else
-                aUrl += "/";
-
-            aIter = m_aContainer.find( aUrl );
-        }
-
-        if( aIter != m_aContainer.end() )
-        {
-            for( std::vector< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
-                if( aNPIter->GetUserName() == aName )
-                {
-                    if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
-                    {
-                        // TODO/LATER: should the password be converted to MemoryPassword?
-                        aNPIter->RemovePasswords( PERSISTENT_RECORD );
-
-                        if ( m_pStorageFile )
-                            m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
-                    }
-
-                    if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
-                        aIter->second.erase( aNPIter );
-
-                    if( aIter->second.empty() )
-                        m_aContainer.erase( aIter );
-
-                    return;
-                }
-        }
+        aIter = m_aContainer.find( aUrl );
     }
+
+    if( aIter == m_aContainer.end() )
+        return;
+
+    for( std::vector< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
+        if( aNPIter->GetUserName() == aName )
+        {
+            if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
+            {
+                // TODO/LATER: should the password be converted to MemoryPassword?
+                aNPIter->RemovePasswords( PERSISTENT_RECORD );
+
+                if ( m_pStorageFile )
+                    m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
+            }
+
+            if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
+                aIter->second.erase( aNPIter );
+
+            if( aIter->second.empty() )
+                m_aContainer.erase( aIter );
+
+            return;
+        }
 }
 
 void SAL_CALL PasswordContainer::removeAllPersistent()

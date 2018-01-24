@@ -355,22 +355,22 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
 void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
 {
     DBG_ASSERT (m_pImpl, "PutUrl_Impl(): no Implementation");
-    if (m_pImpl)
+    if (!m_pImpl)
+        return;
+
+    INetURLObject aHistUrl (rUrl);
+    NormalizeUrl_Impl (aHistUrl);
+
+    m_pImpl->putUrl (aHistUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+    Broadcast (INetURLHistoryHint (&rUrl));
+
+    if (aHistUrl.HasMark())
     {
-        INetURLObject aHistUrl (rUrl);
-        NormalizeUrl_Impl (aHistUrl);
+        aHistUrl.SetURL (aHistUrl.GetURLNoMark(INetURLObject::DecodeMechanism::NONE),
+                         INetURLObject::EncodeMechanism::NotCanonical);
 
         m_pImpl->putUrl (aHistUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-        Broadcast (INetURLHistoryHint (&rUrl));
-
-        if (aHistUrl.HasMark())
-        {
-            aHistUrl.SetURL (aHistUrl.GetURLNoMark(INetURLObject::DecodeMechanism::NONE),
-                             INetURLObject::EncodeMechanism::NotCanonical);
-
-            m_pImpl->putUrl (aHistUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-            Broadcast (INetURLHistoryHint (&aHistUrl));
-        }
+        Broadcast (INetURLHistoryHint (&aHistUrl));
     }
 }
 

@@ -116,7 +116,7 @@ SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
 void    SvtCJKOptions_Impl::SetAll(bool bSet)
 {
     if (
-        !bROCJKFont          &&
+        !(!bROCJKFont          &&
         !bROVerticalText     &&
         !bROAsianTypography  &&
         !bROJapaneseFind     &&
@@ -124,23 +124,23 @@ void    SvtCJKOptions_Impl::SetAll(bool bSet)
         !bROChangeCaseMap    &&
         !bRODoubleLines      &&
         !bROEmphasisMarks    &&
-        !bROVerticalCallOut
+        !bROVerticalCallOut)
        )
-    {
-        bCJKFont=bSet;
-        bVerticalText=bSet;
-        bAsianTypography=bSet;
-        bJapaneseFind=bSet;
-        bRuby=bSet;
-        bChangeCaseMap=bSet;
-        bDoubleLines=bSet;
-        bEmphasisMarks=bSet;
-        bVerticalCallOut=bSet;
+        return;
 
-        SetModified();
-        Commit();
-        NotifyListeners(ConfigurationHints::NONE);
-    }
+    bCJKFont=bSet;
+    bVerticalText=bSet;
+    bAsianTypography=bSet;
+    bJapaneseFind=bSet;
+    bRuby=bSet;
+    bChangeCaseMap=bSet;
+    bDoubleLines=bSet;
+    bEmphasisMarks=bSet;
+    bVerticalCallOut=bSet;
+
+    SetModified();
+    Commit();
+    NotifyListeners(ConfigurationHints::NONE);
 }
 
 void SvtCJKOptions_Impl::Load()

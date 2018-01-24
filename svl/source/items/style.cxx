@@ -736,32 +736,32 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Next()
 
 void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 {
-    if( p )
-    {
-        // Reference to keep p alive until after Broadcast call!
-        rtl::Reference<SfxStyleSheetBase> xP(p);
-        bool bWasRemoved = pImpl->mxIndexedStyleSheets->RemoveStyleSheet(xP);
-        if( bWasRemoved )
-        {
-            // Adapt all styles which have this style as parant
-            ChangeParent( p->GetName(), p->GetParent() );
+    if( !p )
+        return;
 
-            // #120015# Do not dispose, the removed StyleSheet may still be used in
-            // existing SdrUndoAttrObj incarnations. Rely on refcounting for disposal,
-            // this works well under normal conditions (checked breaking and counting
-            // on SfxStyleSheetBase constructors and destructors)
+    // Reference to keep p alive until after Broadcast call!
+    rtl::Reference<SfxStyleSheetBase> xP(p);
+    bool bWasRemoved = pImpl->mxIndexedStyleSheets->RemoveStyleSheet(xP);
+    if( !bWasRemoved )
+        return;
 
-            // css::uno::Reference< css::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), css::uno::UNO_QUERY );
-            // if( xComp.is() ) try
-            // {
-            //  xComp->dispose();
-            // }
-            // catch( css::uno::Exception& )
-            // {
-            // }
-            Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetErased, *p ) );
-        }
-    }
+    // Adapt all styles which have this style as parant
+    ChangeParent( p->GetName(), p->GetParent() );
+
+    // #120015# Do not dispose, the removed StyleSheet may still be used in
+    // existing SdrUndoAttrObj incarnations. Rely on refcounting for disposal,
+    // this works well under normal conditions (checked breaking and counting
+    // on SfxStyleSheetBase constructors and destructors)
+
+    // css::uno::Reference< css::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), css::uno::UNO_QUERY );
+    // if( xComp.is() ) try
+    // {
+    //  xComp->dispose();
+    // }
+    // catch( css::uno::Exception& )
+    // {
+    // }
+    Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetErased, *p ) );
 }
 
 void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )

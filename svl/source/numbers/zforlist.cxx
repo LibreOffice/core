@@ -323,26 +323,26 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    if (ActLnge != eLnge)
-    {
-        ActLnge = eLnge;
+    if (ActLnge == eLnge)
+        return;
 
-        maLanguageTag.reset( eLnge );
-        pCharClass->setLanguageTag( maLanguageTag );
-        xLocaleData.changeLocale( maLanguageTag );
-        xCalendar.changeLocale( maLanguageTag.getLocale() );
-        xTransliteration.changeLocale( eLnge );
+    ActLnge = eLnge;
 
-        // cached locale data items, initialize BEFORE calling ChangeIntl below
-        const LocaleDataWrapper* pLoc = GetLocaleData();
-        aDecimalSep = pLoc->getNumDecimalSep();
-        aDecimalSepAlt = pLoc->getNumDecimalSepAlt();
-        aThousandSep = pLoc->getNumThousandSep();
-        aDateSep = pLoc->getDateSep();
+    maLanguageTag.reset( eLnge );
+    pCharClass->setLanguageTag( maLanguageTag );
+    xLocaleData.changeLocale( maLanguageTag );
+    xCalendar.changeLocale( maLanguageTag.getLocale() );
+    xTransliteration.changeLocale( eLnge );
 
-        pFormatScanner->ChangeIntl();
-        pStringScanner->ChangeIntl();
-    }
+    // cached locale data items, initialize BEFORE calling ChangeIntl below
+    const LocaleDataWrapper* pLoc = GetLocaleData();
+    aDecimalSep = pLoc->getNumDecimalSep();
+    aDecimalSepAlt = pLoc->getNumDecimalSepAlt();
+    aThousandSep = pLoc->getNumThousandSep();
+    aDateSep = pLoc->getDateSep();
+
+    pFormatScanner->ChangeIntl();
+    pStringScanner->ChangeIntl();
 }
 
 

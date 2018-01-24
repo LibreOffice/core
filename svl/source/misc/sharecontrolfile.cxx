@@ -123,25 +123,25 @@ void ShareControlFile::Close()
 {
     // if it is called outside of destructor the mutex must be locked
 
-    if ( m_xStream.is() )
-    {
-        try
-        {
-            if ( m_xInputStream.is() )
-                m_xInputStream->closeInput();
-            if ( m_xOutputStream.is() )
-                m_xOutputStream->closeOutput();
-        }
-        catch( uno::Exception& )
-        {}
+    if ( !m_xStream.is() )
+        return;
 
-        m_xStream.clear();
-        m_xInputStream.clear();
-        m_xOutputStream.clear();
-        m_xSeekable.clear();
-        m_xTruncate.clear();
-        m_aUsersData.clear();
+    try
+    {
+        if ( m_xInputStream.is() )
+            m_xInputStream->closeInput();
+        if ( m_xOutputStream.is() )
+            m_xOutputStream->closeOutput();
     }
+    catch( uno::Exception& )
+    {}
+
+    m_xStream.clear();
+    m_xInputStream.clear();
+    m_xOutputStream.clear();
+    m_xSeekable.clear();
+    m_xTruncate.clear();
+    m_aUsersData.clear();
 }
 
 

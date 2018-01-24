@@ -570,45 +570,47 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
         }
     }
 
-    if (nRemain > 0)
-        for (;;)
-        {
-            sal_uInt32 nBlock
-                = std::min(sal_uInt32(m_pWritePage->m_aBuffer + m_nPageSize
-                                          - m_pWritePage->m_pEnd),
-                           nRemain);
-            memcpy(m_pWritePage->m_pEnd, pBuffer, nBlock);
-            m_pWritePage->m_pEnd += nBlock;
-            pBuffer += nBlock;
-            nRemain -= nBlock;
+    if (nRemain <= 0)
+        return;
 
-            if (nRemain == 0)
+    for (;;)
+    {
+        sal_uInt32 nBlock
+            = std::min(sal_uInt32(m_pWritePage->m_aBuffer + m_nPageSize
+                                      - m_pWritePage->m_pEnd),
+                       nRemain);
+        memcpy(m_pWritePage->m_pEnd, pBuffer, nBlock);
+        m_pWritePage->m_pEnd += nBlock;
+        pBuffer += nBlock;
+        nRemain -= nBlock;
+
+        if (nRemain == 0)
+            break;
+
+        if (m_pWritePage->m_pNext == m_pFirstPage)
+        {
+            if (m_nPages == std::numeric_limits< sal_uInt32 >::max())
                 break;
 
-            if (m_pWritePage->m_pNext == m_pFirstPage)
-            {
-                if (m_nPages == std::numeric_limits< sal_uInt32 >::max())
-                    break;
+            Page * pNew
+                = static_cast< Page * >(rtl_allocateMemory(
+                                            sizeof (Page) + m_nPageSize
+                                                - 1));
+            pNew->m_pPrev = m_pWritePage;
+            pNew->m_pNext = m_pWritePage->m_pNext;
 
-                Page * pNew
-                    = static_cast< Page * >(rtl_allocateMemory(
-                                                sizeof (Page) + m_nPageSize
-                                                    - 1));
-                pNew->m_pPrev = m_pWritePage;
-                pNew->m_pNext = m_pWritePage->m_pNext;
-
-                m_pWritePage->m_pNext->m_pPrev = pNew;
-                m_pWritePage->m_pNext = pNew;
-                ++m_nPages;
-            }
-
-            m_pWritePage->m_pNext->m_nOffset = m_pWritePage->m_nOffset
-                                                   + m_nPageSize;
-            m_pWritePage = m_pWritePage->m_pNext;
-            m_pWritePage->m_pStart = m_pWritePage->m_aBuffer;
-            m_pWritePage->m_pRead = m_pWritePage->m_aBuffer;
-            m_pWritePage->m_pEnd = m_pWritePage->m_aBuffer;
+            m_pWritePage->m_pNext->m_pPrev = pNew;
+            m_pWritePage->m_pNext = pNew;
+            ++m_nPages;
         }
+
+        m_pWritePage->m_pNext->m_nOffset = m_pWritePage->m_nOffset
+                                               + m_nPageSize;
+        m_pWritePage = m_pWritePage->m_pNext;
+        m_pWritePage->m_pStart = m_pWritePage->m_aBuffer;
+        m_pWritePage->m_pRead = m_pWritePage->m_aBuffer;
+        m_pWritePage->m_pEnd = m_pWritePage->m_aBuffer;
+    }
 }
 
 SvDataPipe_Impl::SeekResult SvDataPipe_Impl::setReadPosition(sal_uInt32

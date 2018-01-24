@@ -3258,28 +3258,28 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
                                             double& fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
-    if ( rCal.getUniqueID() == GREGORIAN )
+    if ( rCal.getUniqueID() != GREGORIAN )
+        return;
+
+    using namespace ::com::sun::star::i18n;
+    css::uno::Sequence< OUString > xCals = rCal.getAllCalendars(
+            rLoc().getLanguageTag().getLocale() );
+    sal_Int32 nCnt = xCals.getLength();
+    if ( nCnt <= 1 )
+        return;
+
+    for ( sal_Int32 j=0; j < nCnt; j++ )
     {
-        using namespace ::com::sun::star::i18n;
-        css::uno::Sequence< OUString > xCals = rCal.getAllCalendars(
-                rLoc().getLanguageTag().getLocale() );
-        sal_Int32 nCnt = xCals.getLength();
-        if ( nCnt > 1 )
+        if ( xCals[j] != GREGORIAN )
         {
-            for ( sal_Int32 j=0; j < nCnt; j++ )
+            if ( !rOrgCalendar.getLength() )
             {
-                if ( xCals[j] != GREGORIAN )
-                {
-                    if ( !rOrgCalendar.getLength() )
-                    {
-                        rOrgCalendar = rCal.getUniqueID();
-                        fOrgDateTime = rCal.getDateTime();
-                    }
-                    rCal.loadCalendar( xCals[j], rLoc().getLanguageTag().getLocale() );
-                    rCal.setDateTime( fOrgDateTime );
-                    break;  // for
-                }
+                rOrgCalendar = rCal.getUniqueID();
+                fOrgDateTime = rCal.getDateTime();
             }
+            rCal.loadCalendar( xCals[j], rLoc().getLanguageTag().getLocale() );
+            rCal.setDateTime( fOrgDateTime );
+            break;  // for
         }
     }
 }
@@ -4881,37 +4881,37 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
                                                    SvNumberformatLimitOps eOp,
                                                    double fLimit, const OUString& rDecSep )
 {
-    if ( eOp != NUMBERFORMAT_OP_NO )
+    if ( eOp == NUMBERFORMAT_OP_NO )
+        return;
+
+    switch ( eOp )
     {
-        switch ( eOp )
-        {
-        case NUMBERFORMAT_OP_EQ :
-            rStr = "[=";
-            break;
-        case NUMBERFORMAT_OP_NE :
-            rStr = "[<>";
-            break;
-        case NUMBERFORMAT_OP_LT :
-            rStr = "[<";
-            break;
-        case NUMBERFORMAT_OP_LE :
-            rStr = "[<=";
-            break;
-        case NUMBERFORMAT_OP_GT :
-            rStr = "[>";
-            break;
-        case NUMBERFORMAT_OP_GE :
-            rStr = "[>=";
-            break;
-        default:
-            SAL_WARN( "svl.numbers", "unsupported number format" );
-            break;
-        }
-        rStr +=  ::rtl::math::doubleToUString( fLimit,
-                                               rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                               rDecSep[0], true);
-        rStr += "]";
+    case NUMBERFORMAT_OP_EQ :
+        rStr = "[=";
+        break;
+    case NUMBERFORMAT_OP_NE :
+        rStr = "[<>";
+        break;
+    case NUMBERFORMAT_OP_LT :
+        rStr = "[<";
+        break;
+    case NUMBERFORMAT_OP_LE :
+        rStr = "[<=";
+        break;
+    case NUMBERFORMAT_OP_GT :
+        rStr = "[>";
+        break;
+    case NUMBERFORMAT_OP_GE :
+        rStr = "[>=";
+        break;
+    default:
+        SAL_WARN( "svl.numbers", "unsupported number format" );
+        break;
     }
+    rStr +=  ::rtl::math::doubleToUString( fLimit,
+                                           rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                                           rDecSep[0], true);
+    rStr += "]";
 }
 
 void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPosInsertLCID )
