@@ -425,7 +425,6 @@ sub main()
         my $module = "svtools";
         my $name = "inc/langtab.hrc";
         #    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Afrikaans (South Africa)") , LANGUAGE_AFRIKAANS },
-        #         < "Afrikaans" ; LANGUAGE_AFRIKAANS ; > ;
         # lookup define
         @resultlist = grepFile(
             $modifier . '^\s*\{\s*NC_\(\s*"[^"]*"\s*,\s*".*"\s*\)\s*,.*' . $grepdef . '.*\}',
