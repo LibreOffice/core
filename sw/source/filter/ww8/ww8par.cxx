@@ -5389,8 +5389,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         m_xLstManager.reset();
     }
 
-    SAL_WARN_IF(m_pTableEndPaM, "sw.ww8", "document ended without table ending");
-    m_pTableEndPaM.reset();  //ensure this is deleted before pPaM
     mpCursor.reset();
     m_pPaM = nullptr;
     m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs

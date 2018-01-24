@@ -3603,7 +3603,6 @@ void SwWW8ImplReader::TabCellEnd()
 
     m_bFirstPara = true;    // We have come to the end of a cell so FirstPara flag
     m_bReadTable = false;
-    m_pTableEndPaM.reset();
 }
 
 void SwWW8ImplReader::Read_TabCellEnd( sal_uInt16, const sal_uInt8* pData, short nLen)
@@ -3649,11 +3648,6 @@ void SwWW8ImplReader::StopTable()
     PopTableDesc();
 
     m_bReadTable = true;
-    // #i101116# - Keep PaM on table end only for nested tables
-    if ( m_nInTable > 1 )
-    {
-        m_pTableEndPaM.reset(new SwPaM(*m_pPaM, m_pPaM));
-    }
 }
 
 bool SwWW8ImplReader::IsInvalidOrToBeMergedTabCell() const
