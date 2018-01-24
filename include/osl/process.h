@@ -62,7 +62,7 @@ typedef sal_uInt32 oslProcessExitCode;
 typedef enum {
     osl_Process_E_None,                 /* no error */
     osl_Process_E_NotFound,             /* image not found */
-    osl_Process_E_TimedOut,             /* timout occurred */
+    osl_Process_E_TimedOut,             /* timeout occurred */
     osl_Process_E_NoPermission,         /* permission denied */
     osl_Process_E_Unknown,              /* unknown error */
     osl_Process_E_InvalidError,         /* unmapped error */
