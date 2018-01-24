@@ -38,11 +38,21 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 		CPPFLAGS="$(curl_CPPFLAGS)" \
 		LDFLAGS=$(curl_LDFLAGS) \
 		./configure \
-			--with-nss$(if $(filter NO,$(SYSTEM_NSS)),="$(call gb_UnpackedTarball_get_dir,nss)/dist/out") \
-			--without-ssl \
-			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
-			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter IOS MACOSX,$(OS)),\
+				--with-darwinssl,\
+				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out"),--without-nss)) \
+			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
+			--enable-ftp --enable-http --enable-ipv6 \
+			--without-libidn2 --without-libpsl --without-librtmp \
+			--without-libssh2 --without-metalink --without-nghttp2 \
+			--without-libssh --without-brotli \
+			--disable-ares \
+			--disable-dict --disable-file --disable-gopher --disable-imap \
+			--disable-ldap --disable-ldaps --disable-manual --disable-pop3 \
+			--disable-rtsp --disable-smb --disable-smtp --disable-telnet  \
+			--disable-tftp  \
+			$(if $(filter LINUX,$(OS)),--without-ca-bundle --without-ca-path) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
 		&& cd lib \
