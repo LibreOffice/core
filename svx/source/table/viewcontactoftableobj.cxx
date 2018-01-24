@@ -341,13 +341,13 @@ namespace sdr
                                     {
                                         // get the neighbor cells' borders
                                         const svx::frame::Style aLeftFromTLine(impGetLineStyle(rTableLayouter, nX, nY - 1, false, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aLeftFromBLine(impGetLineStyle(rTableLayouter, nX, nYBottom + 1, false, nColCount, nRowCount, bIsRTL));
+                                        const svx::frame::Style aLeftFromBLine(impGetLineStyle(rTableLayouter, nX, nYBottom, false, nColCount, nRowCount, bIsRTL));
                                         const svx::frame::Style aRightFromTLine(impGetLineStyle(rTableLayouter, nXRight, nY - 1, false, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aRightFromBLine(impGetLineStyle(rTableLayouter, nXRight, nYBottom + 1, false, nColCount, nRowCount, bIsRTL));
+                                        const svx::frame::Style aRightFromBLine(impGetLineStyle(rTableLayouter, nXRight, nYBottom, false, nColCount, nRowCount, bIsRTL));
                                         const svx::frame::Style aTopFromLLine(impGetLineStyle(rTableLayouter, nX - 1, nY, true, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aTopFromRLine(impGetLineStyle(rTableLayouter, nXRight + 1, nY, true, nColCount, nRowCount, bIsRTL));
+                                        const svx::frame::Style aTopFromRLine(impGetLineStyle(rTableLayouter, nXRight, nY, true, nColCount, nRowCount, bIsRTL));
                                         const svx::frame::Style aBottomFromLLine(impGetLineStyle(rTableLayouter, nX - 1, nYBottom, true, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aBottomFromRLine(impGetLineStyle(rTableLayouter, nXRight + 1, nYBottom, true, nColCount, nRowCount, bIsRTL));
+                                        const svx::frame::Style aBottomFromRLine(impGetLineStyle(rTableLayouter, nXRight, nYBottom, true, nColCount, nRowCount, bIsRTL));
 
                                         // get cell coordinate system
                                         const basegfx::B2DPoint aOrigin(aCellMatrix * basegfx::B2DPoint(0.0, 0.0));
