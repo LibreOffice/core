@@ -36,8 +36,10 @@
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/framelink.hxx>
+#include <svx/framelinkarray.hxx>
 
 #include <cell.hxx>
 #include "tablelayouter.hxx"
@@ -196,42 +198,6 @@ namespace sdr
             return svx::frame::Style();
         }
 
-        void createForVector(bool bHor, drawinglayer::primitive2d::Primitive2DContainer& rContainer, const basegfx::B2DPoint& rOrigin, const basegfx::B2DVector& rX,
-            const svx::frame::Style& rLine,
-            const svx::frame::Style& rLeftA, const svx::frame::Style& rLeftB, const svx::frame::Style& rLeftC,
-            const svx::frame::Style& rRightA, const svx::frame::Style& rRightB, const svx::frame::Style& rRightC)
-        {
-            /// top-left and bottom-right Style Tables
-            const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(rX));
-
-            /// Fill top-left Style Table
-            svx::frame::StyleVectorTable aStart;
-
-            aStart.add(rLeftA, rX, -aY, bHor); // bHor ? true : false));
-            aStart.add(rLeftB, rX, -rX, true); // bHor ? true : true));
-            aStart.add(rLeftC, rX, aY, !bHor); // bHor ? false : true));
-            aStart.sort();
-
-            /// Fill bottom-right Style Table
-            svx::frame::StyleVectorTable aEnd;
-            const basegfx::B2DVector aAxis(-rX);
-
-            aEnd.add(rRightA, aAxis, -aY, bHor); // bHor ? true : false));
-            aEnd.add(rRightB, aAxis, rX, false); // bHor ? false : false));
-            aEnd.add(rRightC, aAxis, aY, !bHor); // bHor ? false : true));
-            aEnd.sort();
-
-            CreateBorderPrimitives(
-                rContainer,
-                rOrigin,
-                rX,
-                rLine,
-                aStart,
-                aEnd,
-                nullptr
-            );
-        }
-
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfTableObj::createViewIndependentPrimitive2DSequence() const
         {
             const sdr::table::SdrTableObj& rTableObj = static_cast<const sdr::table::SdrTableObj&>(GetSdrObject());
@@ -249,7 +215,7 @@ namespace sdr
 
                 if(nAllCount)
                 {
-                    const sdr::table::TableLayouter& rTableLayouter = rTableObj.getTableLayouter();
+                    const sdr::table::TableLayouter& rTableLayouter(rTableObj.getTableLayouter());
                     const bool bIsRTL(css::text::WritingMode_RL_TB == rTableObj.GetWritingMode());
                     sdr::table::CellPos aCellPos;
                     sdr::table::CellRef xCurrentCell;
@@ -258,18 +224,58 @@ namespace sdr
                     // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
                     // GetGeoRect() to not trigger any calculations. It's the unrotated geometry.
                     const tools::Rectangle& rObjectRectangle(rTableObj.GetGeoRect());
-                    const basegfx::B2DRange aObjectRange(rObjectRectangle.Left(), rObjectRectangle.Top(), rObjectRectangle.Right(), rObjectRectangle.Bottom());
+                    const basegfx::B2DRange aObjectRange(
+                        rObjectRectangle.Left(), rObjectRectangle.Top(),
+                        rObjectRectangle.Right(), rObjectRectangle.Bottom());
 
-                    // for each cell we need potentially a cell primitive and a border primitive
-                    // (e.g. single cell). Prepare sequences and input counters
-                    drawinglayer::primitive2d::Primitive2DContainer aBorderSequence;
+                    // To create the CellBorderPrimitives, use the tolling from svx::frame::Array
+                    // which is capable of creating the needed visualization. Fill it during the
+                    // anyways needed run over the table.
+                    svx::frame::Array aArray;
+
+                    // initialize CellBorderArray for primitive creation
+                    aArray.Initialize(nRowCount, nColCount);
 
                     // create single primitives per cell
                     for(aCellPos.mnRow = 0; aCellPos.mnRow < nRowCount; aCellPos.mnRow++)
                     {
+                        // add RowHeight to CellBorderArray for primitive creation
+                        aArray.SetRowHeight(aCellPos.mnRow, rTableLayouter.getRowHeight(aCellPos.mnRow));
+
                         for(aCellPos.mnCol = 0; aCellPos.mnCol < nColCount; aCellPos.mnCol++)
                         {
+                            // add ColWidth to CellBorderArray for primitive creation, only
+                            // needs to be done in the 1st run
+                            if(0 == aCellPos.mnRow)
+                            {
+                                aArray.SetColWidth(aCellPos.mnCol, rTableLayouter.getColumnWidth(aCellPos.mnCol));
+                            }
+
+                            // access the cell
                             xCurrentCell.set(dynamic_cast< sdr::table::Cell* >(xTable->getCellByPosition(aCellPos.mnCol, aCellPos.mnRow).get()));
+
+                            if(xCurrentCell.is())
+                            {
+                                // copy styles for current cell to CellBorderArray for primitive creation
+                                aArray.SetCellStyleLeft(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, false, nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleRight(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol + 1, aCellPos.mnRow, false, nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleTop(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, true, nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleBottom(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow + 1, true, nColCount, nRowCount, bIsRTL));
+
+                                // ignore merged cells (all except the top-left of a merged cell)
+                                if(!xCurrentCell->isMerged())
+                                {
+                                    // check if we are the top-left of a merged cell
+                                    const sal_Int32 nXSpan(xCurrentCell->getColumnSpan());
+                                    const sal_Int32 nYSpan(xCurrentCell->getRowSpan());
+
+                                    if(nXSpan > 1 || nYSpan > 1)
+                                    {
+                                        // if merged, set so at CellBorderArray for primitive creation
+                                        aArray.SetMergedRange(aCellPos.mnCol, aCellPos.mnRow, aCellPos.mnCol + nXSpan - 1, aCellPos.mnRow + nYSpan - 1);
+                                    }
+                                }
+                            }
 
                             if(xCurrentCell.is() && !xCurrentCell->isMerged())
                             {
@@ -318,77 +324,54 @@ namespace sdr
                                                 aCellMatrix, aAttribute));
                                         aRetval.append(xCellReference);
                                     }
-
-                                    // handle cell borders
-                                    const sal_Int32 nX(bIsRTL ? nColCount - aCellPos.mnCol : aCellPos.mnCol);
-                                    const sal_Int32 nY(aCellPos.mnRow);
-
-                                    // get access values for X,Y at the cell's end
-                                    const sal_Int32 nXSpan(xCurrentCell->getColumnSpan());
-                                    const sal_Int32 nYSpan(xCurrentCell->getRowSpan());
-                                    const sal_Int32 nXRight(bIsRTL ? nX - nXSpan : nX + nXSpan);
-                                    const sal_Int32 nYBottom(nY + nYSpan);
-
-                                    // get basic lines
-                                    const svx::frame::Style aLeftLine(impGetLineStyle(rTableLayouter, nX, nY, false, nColCount, nRowCount, bIsRTL));
-                                    //To resolve the bug fdo#59117
-                                    //In RTL table as BottomLine & TopLine are drawn from Left Side to Right, nX should be nX-1
-                                    const svx::frame::Style aBottomLine(impGetLineStyle(rTableLayouter, bIsRTL?nX-1:nX, nYBottom, true, nColCount, nRowCount, bIsRTL));
-                                    const svx::frame::Style aRightLine(impGetLineStyle(rTableLayouter, nXRight, nY, false, nColCount, nRowCount, bIsRTL));
-                                    const svx::frame::Style aTopLine(impGetLineStyle(rTableLayouter, bIsRTL?nX-1:nX, nY, true, nColCount, nRowCount, bIsRTL));
-
-                                    if(aLeftLine.IsUsed() || aBottomLine.IsUsed() || aRightLine.IsUsed() || aTopLine.IsUsed())
-                                    {
-                                        // get the neighbor cells' borders
-                                        const svx::frame::Style aLeftFromTLine(impGetLineStyle(rTableLayouter, nX, nY - 1, false, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aLeftFromBLine(impGetLineStyle(rTableLayouter, nX, nYBottom, false, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aRightFromTLine(impGetLineStyle(rTableLayouter, nXRight, nY - 1, false, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aRightFromBLine(impGetLineStyle(rTableLayouter, nXRight, nYBottom, false, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aTopFromLLine(impGetLineStyle(rTableLayouter, nX - 1, nY, true, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aTopFromRLine(impGetLineStyle(rTableLayouter, nXRight, nY, true, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aBottomFromLLine(impGetLineStyle(rTableLayouter, nX - 1, nYBottom, true, nColCount, nRowCount, bIsRTL));
-                                        const svx::frame::Style aBottomFromRLine(impGetLineStyle(rTableLayouter, nXRight, nYBottom, true, nColCount, nRowCount, bIsRTL));
-
-                                        // get cell coordinate system
-                                        const basegfx::B2DPoint aOrigin(aCellMatrix * basegfx::B2DPoint(0.0, 0.0));
-                                        const basegfx::B2DVector aX(aCellMatrix * basegfx::B2DVector(1.0, 0.0));
-                                        const basegfx::B2DVector aY(aCellMatrix * basegfx::B2DVector(0.0, 1.0));
-
-                                        if(aLeftLine.IsUsed())
-                                        {
-                                            createForVector(false, aBorderSequence, aOrigin, aY, aLeftLine,
-                                                aTopLine, aLeftFromTLine, aTopFromLLine,
-                                                aBottomLine, aLeftFromBLine, aBottomFromLLine);
-                                        }
-
-                                        if(aBottomLine.IsUsed())
-                                        {
-                                            createForVector(true, aBorderSequence, aOrigin + aY, aX, aBottomLine,
-                                                aLeftLine, aBottomFromLLine, aLeftFromBLine,
-                                                aRightLine, aBottomFromRLine, aRightFromBLine);
-                                        }
-
-                                        if(aRightLine.IsUsed())
-                                        {
-                                            createForVector(false, aBorderSequence, aOrigin + aX, aY, aRightLine,
-                                                aTopFromRLine, aRightFromTLine, aTopLine,
-                                                aBottomFromRLine, aRightFromBLine, aBottomLine);
-                                        }
-
-                                        if(aTopLine.IsUsed())
-                                        {
-                                            createForVector(true, aBorderSequence, aOrigin, aX, aTopLine,
-                                                aLeftFromTLine, aTopFromLLine, aLeftLine,
-                                                aRightFromTLine, aTopFromRLine, aRightLine);
-                                        }
-                                    }
                                 }
                             }
                         }
                     }
 
-                    // append Border info to target. We want fillings and text first
-                    aRetval.append(aBorderSequence);
+                    // now create all CellBorderPrimitives
+                    const drawinglayer::primitive2d::Primitive2DContainer aCellBorderPrimitives(aArray.CreateB2DPrimitiveArray());
+
+                    if(!aCellBorderPrimitives.empty())
+                    {
+                        // this is already scaled (due to Table in non-uniform coordinates), so
+                        // first transform removing scale
+                        basegfx::B2DHomMatrix aTransform(
+                            basegfx::utils::createScaleB2DHomMatrix(
+                                1.0 / aObjectRange.getWidth(),
+                                1.0 / aObjectRange.getHeight()));
+
+                        // If RTL, mirror the whole unified table in X and move right.
+                        // This is much easier than taking this into account for the whole
+                        // index calcualtions
+                        if(bIsRTL)
+                        {
+                            aTransform.scale(-1.0, 1.0);
+                            aTransform.translate(1.0, 0.0);
+                        }
+
+                        // create object matrix
+                        const GeoStat& rGeoStat(rTableObj.GetGeoStat());
+                        const double fShearX(rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0);
+                        const double fRotate(rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0);
+                        const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
+                            aObjectRange.getMinX(), aObjectRange.getMinY()));
+
+                        // add object matrix to transform. By doing so theoretically
+                        // CellBorders could be also rotated/sheared for the first time ever.
+                        // To completely make that work, the primitives already created in
+                        // aRetval would also have to be based on ObjectMatrix, not only on
+                        // ObjectRange as it currently is.
+                        aTransform *= aObjectMatrix;
+
+                        // create a transform primitive with this and embed CellBorders
+                        // and append to retval
+                        aRetval.append(
+                            new drawinglayer::primitive2d::TransformPrimitive2D(
+                                aTransform,
+                                aCellBorderPrimitives));
+                    }
                 }
 
                 if(!aRetval.empty())

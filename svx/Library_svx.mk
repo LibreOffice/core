@@ -128,7 +128,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/fntctrl \
     svx/source/dialog/fontlb \
     svx/source/dialog/fontwork \
-    svx/source/dialog/framelinkarray \
     svx/source/dialog/frmdirlbox \
     svx/source/dialog/frmsel \
     svx/source/dialog/graphctl \
