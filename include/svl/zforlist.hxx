@@ -56,6 +56,8 @@ namespace com { namespace sun { namespace star {
 #define SV_COUNTRY_LANGUAGE_OFFSET     10000  // Max count of formats per country/language
 #define SV_MAX_COUNT_STANDARD_FORMATS  100    // Max count of builtin default formats per CL
 
+constexpr size_t NF_MAX_FORMAT_SYMBOLS = 100;
+
 /// The built-in @ Text format, offset within a locale, key in the locale the
 /// number formatter was constructed with.
 constexpr sal_uInt32 NF_STANDARD_FORMAT_TEXT = SV_MAX_COUNT_STANDARD_FORMATS;
