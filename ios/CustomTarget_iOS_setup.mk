@@ -5,42 +5,54 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+
 #- Env ------------------------------------------------------------------------
-IOSGEN := $(SRCDIR)/ios/generated
-IOSRES := $(IOSGEN)/resources
+IOSGEN  = $(SRCDIR)/ios/generated
+IOSRES  = $(IOSGEN)/resources
+IOSDIRS = $(IOSGEN) \
+	       $(IOSGEN)/simulator \
+	       $(IOSGEN)/debug \
+	       $(IOSGEN)/release \
+	  $(IOSRES) \
+	       $(IOSRES)/services \
+               $(IOSRES)/program \
+	       $(IOSRES)/share \
+	       $(IOSRES)/share/config \
+               $(IOSRES)/share/filter \
+	  $(WORKDIR)/ios
 
 
 #- Top level  -----------------------------------------------------------------
 $(eval $(call gb_CustomTarget_CustomTarget,ios/iOS_setup))
 
-
-
 $(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSGEN)/native-code.h
 
 
-
-#- Generate dynamic files  ---------------------------------------------------
-$(IOSGEN) $(WORKDIR)/ios:
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),EN1,2)
-	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
-	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
-	         $(IOSGEN)/simulator \
-	         $(IOSGEN)/debug \
-	         $(IOSGEN)/release \
-	         $(WORKDIR)/ios;
+#- create directories  --------------------------------------------------------
+$(IOSDIRS):
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MKD,2)
+	mkdir -p $(IOSDIRS)
 
 
-
+#- Generate resources  --------------------------------------------------------
 $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
                          $(SRCDIR)/ios/CustomTarget_iOS_setup.mk \
 	                 $(SRCDIR)/solenv/bin/native-code.py \
-	                 $(IOSGEN) $(WORKDIR)/ios
+	                 $(IOSGEN) $(WORKDIR)/ios \
+	                 $(IOSDIRS)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),EN2,2)
+
+	# Secure LibreOffice.c get build if there are changes
+	rm -rf $(WORKDIR)/ios/*
+
+	# generate native-code.h (used by LibreOffice.c)
 	$(SRCDIR)/solenv/bin/native-code.py \
 	    -C -g core -g writer -g calc -g draw -g edit \
 	    > $(IOSGEN)/native-code.h
 
-	# generate resource files used to start/run LibreOffice
+	# copy resource files used to start/run LibreOffice
 	cp $(WORKDIR)/UnpackedTarball/icu/source/data/in/icudt60l.dat $(IOSRES)/icudt60l.dat
 	cp $(INSTDIR)/program/types.rdb             $(IOSRES)/udkapi.rdb
 	cp $(INSTDIR)/program/types/offapi.rdb      $(IOSRES)
@@ -54,13 +66,12 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/share/filter
 	cp -R $(INSTDIR)/share/registry $(IOSRES)/share
 
-	# Set up rc, the "inifile". See getIniFileName_Impl().
+	# Set up rc (the "inifile", fundamentalrc, unorc, bootstraprc and versionrc.
 	(echo '[Bootstrap]' \
 	&& echo 'URE_BOOTSTRAP=file://$$APP_DATA_DIR/fundamentalrc' \
 	&& echo 'HOME=$$SYSUSERHOME'  \
 	    ) > $(IOSRES)/rc
 
-	# Set up fundamentalrc, unorc, bootstraprc and versionrc.
 	(echo '[Bootstrap]' \
         && echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR' \
         && echo 'BRAND_INI_DIR=file:://$$APP_DATA_DIR' \
@@ -92,12 +103,10 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	    ) > $(IOSRES)/program/versionrc
 
 
-
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/iOS_setup):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
-	echo $(call gb_StaticLibrary_get_target,iOS_kitBridge)
-	rm -rf $(IOSRES) $(IOSGEN)/native-code.h $(IOSGEN)/build
+	rm -rf $(IOSRES)/* $(IOSGEN)/native-code.h $(IOSGEN)/build
 	rm -rf $(WORKDIR)/ios
 ifeq ($(ENABLE_DEBUG),TRUE)
 ifeq ($(CPUNAME),X86_64)
@@ -110,7 +119,5 @@ ifeq ($(CPUNAME),ARM64)
 	rm -f $(IOSGEN)/release/*
 endif
 endif
-
-
 
 # vim: set noet sw=4 ts=4:
