@@ -1333,6 +1333,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     SolarMutexGuard aGuard;
 
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    pLib->maLastExceptionMsg.clear();
 
     OUString aURL(getAbsoluteURL(pURL));
     if (aURL.isEmpty())
@@ -1436,6 +1437,7 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
     SolarMutexGuard aGuard;
 
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    pLib->maLastExceptionMsg.clear();
 
     OUString sURL( pURL, strlen(pURL), RTL_TEXTENCODING_UTF8 );
     if (sURL.isEmpty())
@@ -1526,6 +1528,7 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
     SolarMutexGuard aGuard;
 
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    pLib->maLastExceptionMsg.clear();
 
     pLib->mpCallback = pCallback;
     pLib->mpCallbackData = pData;
@@ -1534,6 +1537,8 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -1661,6 +1666,8 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 static void doc_iniUnoCommands ()
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     OUString sUnoCommands[] =
     {
@@ -1800,6 +1807,8 @@ static void doc_iniUnoCommands ()
 static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -1852,6 +1861,8 @@ static int doc_getParts (LibreOfficeKitDocument* pThis)
 static int doc_getPart (LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -1866,6 +1877,8 @@ static int doc_getPart (LibreOfficeKitDocument* pThis)
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -1880,6 +1893,8 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -1899,6 +1914,8 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -1918,6 +1935,8 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -1938,6 +1957,8 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
                             int nPartMode)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -1977,6 +1998,8 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nTileWidth, const int nTileHeight)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     SAL_INFO( "lok.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
@@ -2029,6 +2052,8 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               const int nTileWidth, const int nTileHeight)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
@@ -2112,6 +2137,8 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
 static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
     return LOK_TILEMODE_BGRA;
 }
 
@@ -2120,6 +2147,8 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pHeight)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
@@ -2138,6 +2167,8 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
@@ -2153,6 +2184,8 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                  void* pData)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -2206,6 +2239,8 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 /// Returns the JSON representation of all the comments in the document
 static char* getPostIts(LibreOfficeKitDocument* pThis)
 {
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2219,6 +2254,8 @@ static char* getPostIts(LibreOfficeKitDocument* pThis)
 /// Returns the JSON representation of the positions of all the comments in the document
 static char* getPostItsPos(LibreOfficeKitDocument* pThis)
 {
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2231,6 +2268,8 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
 
 static char* getRulerState(LibreOfficeKitDocument* pThis)
 {
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2244,6 +2283,8 @@ static char* getRulerState(LibreOfficeKitDocument* pThis)
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -2257,6 +2298,8 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
@@ -2326,6 +2369,8 @@ public:
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
@@ -2403,6 +2448,8 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -2436,6 +2483,8 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
 static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
@@ -2472,6 +2521,8 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
 static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -2486,6 +2537,8 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -2514,6 +2567,8 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
 static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -2549,6 +2604,8 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
 static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -2563,6 +2620,8 @@ static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, in
 static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -2942,6 +3001,8 @@ static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     OString aCommand(pCommand);
     static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
@@ -3109,6 +3170,8 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
         int nTileTwipWidth, int nTileTwipHeight)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -3123,6 +3186,8 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
 static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -3138,6 +3203,8 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
 static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -3152,6 +3219,8 @@ static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int
 static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     return SfxLokHelper::createView();
 }
@@ -3159,6 +3228,8 @@ static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/
 static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     SfxLokHelper::destroyView(nId);
 }
@@ -3166,6 +3237,8 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis
 static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     SfxLokHelper::setView(nId);
 }
@@ -3173,6 +3246,8 @@ static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, 
 static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     return SfxLokHelper::getView();
 }
@@ -3180,6 +3255,8 @@ static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     return SfxLokHelper::getViewsCount();
 }
@@ -3187,6 +3264,8 @@ static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThi
 static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int* pArray, size_t nSize)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     return SfxLokHelper::getViewIds(pArray, nSize);
 }
@@ -3194,6 +3273,8 @@ static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*
 static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const char* language)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     SfxLokHelper::setViewLanguage(nId, OStringToOUString(language, RTL_TEXTENCODING_UTF8));
 }
@@ -3205,6 +3286,8 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
                     int* pFontHeight)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     OString aSearchedFontName(pFontName);
     OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8));
@@ -3307,6 +3390,8 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
                             const int nWidth, const int nHeight)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
@@ -3332,6 +3417,8 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
 static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
@@ -3366,6 +3453,8 @@ static void lo_freeError(char* pFree)
 static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     LibLibreOffice_Impl* pImpl = static_cast<LibLibreOffice_Impl*>(pThis);
 
@@ -3404,6 +3493,8 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->mOptionalFeatures = features;
@@ -3419,6 +3510,8 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
         const char* pURL, const char* pPassword)
 {
     SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
 
     assert(pThis);
     assert(pURL);
@@ -3429,6 +3522,8 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
 
 static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
 {
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
     const OUString sVersionStrTemplate(
         "{ "
         "\"ProductName\": \"%PRODUCTNAME\", "
