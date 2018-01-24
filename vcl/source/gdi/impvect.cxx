@@ -18,6 +18,8 @@
  */
 
 #include <stdlib.h>
+
+#include <o3tl/make_unique.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <tools/poly.hxx>
 #include <vcl/gdimtf.hxx>
@@ -123,14 +125,13 @@ extern "C" int ImplColorSetCmpFnc( const void* p1, const void* p2 )
 
 class ImplPointArray
 {
-    Point* mpArray;
+    std::unique_ptr<Point[]> mpArray;
     sal_uLong mnSize;
     sal_uLong mnRealSize;
 
 public:
 
     ImplPointArray();
-   ~ImplPointArray();
 
     void ImplSetSize( sal_uLong nSize );
     sal_uLong ImplGetRealSize() const { return mnRealSize; }
@@ -143,17 +144,10 @@ public:
 };
 
 ImplPointArray::ImplPointArray() :
-    mpArray     ( nullptr ),
     mnSize      ( 0 ),
     mnRealSize  ( 0 )
 
 {
-}
-
-ImplPointArray::~ImplPointArray()
-{
-    if( mpArray )
-        rtl_freeMemory( mpArray );
 }
 
 void ImplPointArray::ImplSetSize( sal_uLong nSize )
@@ -163,11 +157,7 @@ void ImplPointArray::ImplSetSize( sal_uLong nSize )
     mnSize = nSize;
     mnRealSize = 0;
 
-    if( mpArray )
-        rtl_freeMemory( mpArray );
-
-    mpArray = static_cast<Point*>(rtl_allocateMemory( nTotal ));
-    memset( mpArray, 0, nTotal );
+    mpArray = o3tl::make_unique<Point[]>( nTotal );
 }
 
 inline Point& ImplPointArray::operator[]( sal_uLong nPos )
@@ -184,7 +174,7 @@ inline const Point& ImplPointArray::operator[]( sal_uLong nPos ) const
 
 void ImplPointArray::ImplCreatePoly( tools::Polygon& rPoly ) const
 {
-    rPoly = tools::Polygon( sal::static_int_cast<sal_uInt16>(mnRealSize), mpArray );
+    rPoly = tools::Polygon( sal::static_int_cast<sal_uInt16>(mnRealSize), mpArray.get() );
 }
 
 class ImplVectMap
