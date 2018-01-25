@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_23d5e142",
+        "filename": "svtools/source/control/toolbarmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-01-25T14:01:38Z",
+      "side": 1,
+      "message": "I see 2 potential problems here:\n1) ToolbarPopup::EndPopupMode is just a convenience method. We can\u0027t guarantee that future code won\u0027t use DockingManager::EndPopupMode, or even FloatingWindow::EndPopupMode directly.\n2) It\u0027s never called if the color picker is closed by clicking outside it (not by selecting a color).",
+      "revId": "995a1a65bba30b12337bc74ee87202f32bc2fe74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
