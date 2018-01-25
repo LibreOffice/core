@@ -1550,7 +1550,6 @@ void SwTOXBaseSection::UpdatePageNum()
         // Loop over all SourceNodes
         std::vector<sal_uInt16> aNums; // the PageNumber
         std::vector<SwPageDesc*> aDescs;        // The PageDescriptors matching the PageNumbers
-        std::vector<sal_uInt16> *pMainNums = nullptr; // contains page numbers of main entries
 
         // process run in lines
         SwTOXSortTabBases::size_type nRange = 0;
@@ -1573,6 +1572,7 @@ void SwTOXBaseSection::UpdatePageNum()
 
         for(SwTOXSortTabBases::size_type nRunInEntry = nCnt; nRunInEntry < nCnt + nRange; ++nRunInEntry)
         {
+            std::vector<sal_uInt16> aMainNums; // contains page numbers of main entries
             SwTOXSortTabBase* pSortBase = aSortArr[nRunInEntry];
             size_t nSize = pSortBase->aTOXSources.size();
             for (size_t j = 0; j < nSize; ++j)
@@ -1616,9 +1616,7 @@ void SwTOXBaseSection::UpdatePageNum()
                     if(TOX_SORT_INDEX == pSortBase->GetType() &&
                         rTOXSource.bMainEntry)
                     {
-                        if(!pMainNums)
-                            pMainNums = new std::vector<sal_uInt16>;
-                        pMainNums->push_back(nPage);
+                        aMainNums.push_back(nPage);
                     }
                 }
             }
@@ -1629,10 +1627,9 @@ void SwTOXBaseSection::UpdatePageNum()
                 const SwTextNode* pTextNd = pBase->pTOXNd->GetTextNode();
                 OSL_ENSURE( pTextNd, "no TextNode, wrong TOC" );
 
-                UpdatePageNum_( const_cast<SwTextNode*>(pTextNd), aNums, aDescs, pMainNums,
+                UpdatePageNum_( const_cast<SwTextNode*>(pTextNd), aNums, aDescs, &aMainNums,
                                 aIntl );
             }
-            DELETEZ(pMainNums);
             aNums.clear();
         }
     }
