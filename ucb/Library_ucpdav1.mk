@@ -21,6 +21,7 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	sal \
 	salhelper \
 	ucbhelper \
+	tl \
 	$(gb_UWINAPI) \
 ))
 
