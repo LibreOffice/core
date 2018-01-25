@@ -197,7 +197,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
                 5);
         }
 
-        CreateWindows(mxParentWindow, bIsWindowVisibleOnCreation);
+        CreateWindows(bIsWindowVisibleOnCreation);
 
         if (mxBorderWindow.is())
         {
@@ -205,7 +205,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             mxBorderWindow->addPaintListener(this);
         }
 
-        CreateCanvases(mxParentWindow, xParentCanvas);
+        CreateCanvases(xParentCanvas);
 
         // Raise new windows.
         ToTop();
@@ -265,14 +265,13 @@ void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
 
 
 void PresenterPaneBase::CreateWindows (
-    const Reference<awt::XWindow>& rxParentWindow,
     const bool bIsWindowVisibleOnCreation)
 {
-    if (mxPresenterHelper.is() && rxParentWindow.is())
+    if (mxPresenterHelper.is() && mxParentWindow.is())
     {
 
         mxBorderWindow = mxPresenterHelper->createWindow(
-            rxParentWindow,
+            mxParentWindow,
             false,
             bIsWindowVisibleOnCreation,
             false,

@@ -128,27 +128,26 @@ void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
 
 
 void PresenterPane::CreateCanvases (
-    const Reference<awt::XWindow>& rxParentWindow,
     const Reference<rendering::XSpriteCanvas>& rxParentCanvas)
 {
     if ( ! mxPresenterHelper.is())
         return;
-    if ( ! rxParentWindow.is())
+    if ( ! mxParentWindow.is())
         return;
     if ( ! rxParentCanvas.is())
         return;
 
     mxBorderCanvas = mxPresenterHelper->createSharedCanvas(
         rxParentCanvas,
-        rxParentWindow,
+        mxParentWindow,
         Reference<rendering::XCanvas>(rxParentCanvas, UNO_QUERY),
-        rxParentWindow,
+        mxParentWindow,
         mxBorderWindow);
     mxContentCanvas = mxPresenterHelper->createSharedCanvas(
         rxParentCanvas,
-        rxParentWindow,
+        mxParentWindow,
         Reference<rendering::XCanvas>(rxParentCanvas, UNO_QUERY),
-        rxParentWindow,
+        mxParentWindow,
         mxContentWindow);
 
     PaintBorder(mxBorderWindow->getPosSize());

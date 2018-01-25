@@ -76,7 +76,6 @@ private:
     css::awt::Rectangle maBoundingBox;
 
     virtual void CreateCanvases (
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas) override;
 
     void Invalidate (
