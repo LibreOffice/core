@@ -281,11 +281,13 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
        .ReadSChar( nTitlePlaceHoldersOmitted )
        .ReadSChar( nRightToLeft )
        .ReadSChar( nShowComments );
-    rAtom.aSlidesPageSize.Width() = nSlideX;
-    rAtom.aSlidesPageSize.Height() = nSlideY;
     // clamp dodgy data to avoid overflow in later calculations
-    rAtom.aNotesPageSize.Width() = std::min<sal_Int32>(nNoticeX, 65536);
-    rAtom.aNotesPageSize.Height() = std::min<sal_Int32>(nNoticeY, 65536);
+    const sal_Int32 nPageClamp = SAL_MAX_INT32/5;
+    rAtom.aSlidesPageSize.Width() = basegfx::clamp<sal_Int32>(nSlideX, -nPageClamp, nPageClamp);
+    rAtom.aSlidesPageSize.Height() = basegfx::clamp<sal_Int32>(nSlideY, -nPageClamp, nPageClamp);
+    const sal_Int32 nNoteClamp = 65536;
+    rAtom.aNotesPageSize.Width() = basegfx::clamp<sal_Int32>(nNoticeX, -nNoteClamp, nNoteClamp);
+    rAtom.aNotesPageSize.Height() = basegfx::clamp<sal_Int32>(nNoticeY, -nNoteClamp, nNoteClamp);
     rAtom.eSlidesPageFormat = static_cast<PptPageFormat>(nSlidePageFormat);
     rAtom.bEmbeddedTrueType = nEmbeddedTrueType;
     rAtom.bTitlePlaceholdersOmitted = nTitlePlaceHoldersOmitted;
