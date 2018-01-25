@@ -158,8 +158,8 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
 
     if ( pRet )
         pRet->Add( this );
-    else if ( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
+    else
+        EndListeningAll();
 
     return pRet;
 }
@@ -277,8 +277,8 @@ SwCharFormat* SwTextRuby::GetCharFormat()
 
     if( pRet )
         pRet->Add( this );
-    else if( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
+    else
+        EndListeningAll();
 
     return pRet;
 }

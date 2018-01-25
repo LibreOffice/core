@@ -84,8 +84,8 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
 {
     if ( rCpy.GetRegisteredIn() )
         const_cast<SwModify*>(rCpy.GetRegisteredIn())->Add( this );
-    else if ( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
+    else
+        EndListeningAll();
 
     aType = rCpy.GetNumType();
     aDivider = rCpy.GetDivider();

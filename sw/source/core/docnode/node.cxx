@@ -1042,7 +1042,7 @@ void SwContentNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNe
                 else
                 {
                     // Else register anyways when dying
-                    GetRegisteredIn()->Remove( this );
+                    EndListeningAll();
                     if ( GetpSwAttrSet() )
                         AttrSetHandleHelper::SetParent( mpAttrSet, *this, nullptr, nullptr );
                 }

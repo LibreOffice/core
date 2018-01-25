@@ -94,7 +94,7 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
                 getMyTextNode()->SetGrammarCheck( mpProxyList );
                 SwTextFrame::repaintTextFrames( *getMyTextNode() );
             }
-            GetRegisteredInNonConst()->Remove( this ); // good bye old paragraph
+            EndListeningAll();
             mpProxyList = nullptr;
         }
         if( pTextNode )
@@ -152,7 +152,7 @@ void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
     if( pDead->pObject == GetRegisteredIn() )
     {    // if my current paragraph dies, I throw the proxy list away
         aTimer.Stop();
-        GetRegisteredInNonConst()->Remove( this );
+        EndListeningAll();
         delete mpProxyList;
         mpProxyList = nullptr;
     }
