@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_10b665dc",
+        "filename": "sw/source/core/inc/DocumentRedlineManager.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-25T11:42:12Z",
+      "side": 1,
+      "message": "please note that in C++ variables must be explicitly initialized (valgrind just told me this one isn\u0027t)\n\nalso, all the other members are at the bottom of the class so this one should be there too.\n\n(fixed in commit 61e048808873c4edea983de0ab54366cd41e2082)",
+      "revId": "86e3f95cff4d3dad48d64e50e0c4b05034fa7064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
