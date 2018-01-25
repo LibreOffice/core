@@ -874,11 +874,13 @@ void CondFormatRule::finalizeImport()
         {
             pTokenArray2.reset(new ScTokenArray());
             ScTokenConversion::ConvertToTokenArray( rDoc, *pTokenArray2.get(), maModel.maFormulas[ 1 ] );
+            rDoc.CheckLinkFormulaNeedingCheck( *pTokenArray2.get());
         }
 
         ScTokenArray aTokenArray;
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, maModel.maFormulas[ 0 ] );
+        rDoc.CheckLinkFormulaNeedingCheck( aTokenArray);
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry(eOperator,
                                             &aTokenArray, pTokenArray2.get(), &rDoc, aPos, aStyleName);
         mpFormat->AddEntry(pNewEntry);
