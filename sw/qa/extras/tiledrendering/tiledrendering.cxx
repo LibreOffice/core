@@ -2053,7 +2053,7 @@ void SwTiledRenderingTest::testTdf115088()
     comphelper::dispatchCommand(".uno:PasteUnformatted", uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
-    // Check the resulting text in the document. (it was 1text\n1\1)
+    // Check the resulting text in the document. (it was 1Text\n1\n1\n1)
     CPPUNIT_ASSERT_EQUAL(OUString("1\n1Text\n1\n1"), pXTextDocument->getText()->getString());
 
     mxComponent->dispose();
