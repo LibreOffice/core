@@ -94,27 +94,50 @@ static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiProp
     return aNames;
 }
 
-
-class VclListenerLock
+namespace
 {
-private:
-    VCLXWindow*  m_pLockWindow;
+VCLXWindow* GetParentSystemWindow(vcl::Window* pWindow)
+{
+    while (pWindow)
+    {
+        if (pWindow->IsSystemWindow())
+            break;
 
-public:
-    explicit VclListenerLock( VCLXWindow* _pLockWindow )
-        : m_pLockWindow( _pLockWindow )
-    {
-        if ( m_pLockWindow )
-            m_pLockWindow->suspendVclEventListening( );
+        pWindow = pWindow->GetParent();
     }
-    ~VclListenerLock()
+
+    uno::Reference<awt::XWindow> xWindow = VCLUnoHelper::GetInterface(pWindow);
+    return VCLXWindow::GetImplementation(xWindow);
+}
+}
+
+VclListenerLock::VclListenerLock(VCLXWindow* _pLockWindow)
+    : m_pLockWindow(_pLockWindow)
+{
+    if (m_pLockWindow)
+        m_pLockWindow->suspendVclEventListening();
+}
+
+VclListenerLock::VclListenerLock(vcl::Window* pVclWindow, bool bSystemWindow)
+    : m_pLockWindow(nullptr)
+{
+    if (bSystemWindow)
+        m_pLockWindow = GetParentSystemWindow(pVclWindow);
+    else
     {
-        if ( m_pLockWindow )
-            m_pLockWindow->resumeVclEventListening( );
+        uno::Reference<awt::XWindow> xWindow = VCLUnoHelper::GetInterface(pVclWindow);
+        m_pLockWindow = VCLXWindow::GetImplementation(xWindow);
     }
-    VclListenerLock(const VclListenerLock&) = delete;
-    VclListenerLock& operator=(const VclListenerLock&) = delete;
-};
+
+    if (m_pLockWindow)
+        m_pLockWindow->suspendVclEventListening();
+}
+
+VclListenerLock::~VclListenerLock()
+{
+    if (m_pLockWindow)
+        m_pLockWindow->resumeVclEventListening();
+}
 
 typedef ::std::map< OUString, sal_Int32 >    MapString2Int;
 struct UnoControl_Data
