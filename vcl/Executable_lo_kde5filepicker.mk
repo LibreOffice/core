@@ -64,7 +64,6 @@ $(eval $(call gb_Executable_use_libraries,lo_kde5filepicker,\
 
 $(eval $(call gb_Executable_use_externals,lo_kde5filepicker,\
 	boost_headers \
-	epoxy \
 	kde5 \
 	dbus \
 ))

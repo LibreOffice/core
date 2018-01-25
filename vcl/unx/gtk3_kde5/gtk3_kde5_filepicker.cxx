@@ -32,15 +32,13 @@
 
 #include <osl/mutex.hxx>
 
-#include <fpicker/strings.hrc>
-
 #include "FPServiceInfo.hxx"
 
 #undef Region
 
 #include <unx/geninst.h>
 
-#include <strings.hrc>
+#include <svids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -76,42 +74,45 @@ Gtk3KDE5FilePicker::Gtk3KDE5FilePicker(const uno::Reference<uno::XComponentConte
 Gtk3KDE5FilePicker::~Gtk3KDE5FilePicker() = default;
 
 void SAL_CALL
-Gtk3KDE5FilePicker::addFilePickerListener(const uno::Reference<XFilePickerListener>& xListener)
+Gtk3KDE5FilePicker::addFilePickerListener(const uno::Reference<XFilePickerListener>& xListener) throw (::css::uno::RuntimeException, ::std::exception)
 {
     SolarMutexGuard aGuard;
     m_xListener = xListener;
 }
 
 void SAL_CALL
-Gtk3KDE5FilePicker::removeFilePickerListener(const uno::Reference<XFilePickerListener>&)
+Gtk3KDE5FilePicker::removeFilePickerListener(const uno::Reference<XFilePickerListener>&) throw (::css::uno::RuntimeException, ::std::exception)
 {
     SolarMutexGuard aGuard;
     m_xListener.clear();
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::setTitle(const OUString& title)
+void SAL_CALL Gtk3KDE5FilePicker::setTitle(const OUString& title) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::SetTitle, title);
 }
 
-sal_Int16 SAL_CALL Gtk3KDE5FilePicker::execute() { return m_ipc.execute(); }
+sal_Int16 SAL_CALL Gtk3KDE5FilePicker::execute() throw (::css::uno::RuntimeException, ::std::exception)
+{
+    return m_ipc.execute();
+}
 
-void SAL_CALL Gtk3KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
+void SAL_CALL Gtk3KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::SetMultiSelectionMode, bool(multiSelect));
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::setDefaultName(const OUString& name)
+void SAL_CALL Gtk3KDE5FilePicker::setDefaultName(const OUString& name) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::SetDefaultName, name);
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::setDisplayDirectory(const OUString& dir)
+void SAL_CALL Gtk3KDE5FilePicker::setDisplayDirectory(const OUString& dir) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::SetDisplayDirectory, dir);
 }
 
-OUString SAL_CALL Gtk3KDE5FilePicker::getDisplayDirectory()
+OUString SAL_CALL Gtk3KDE5FilePicker::getDisplayDirectory() throw (::css::uno::RuntimeException, ::std::exception)
 {
     auto id = m_ipc.sendCommand(Commands::GetDisplayDirectory);
     OUString dir;
@@ -119,7 +120,7 @@ OUString SAL_CALL Gtk3KDE5FilePicker::getDisplayDirectory()
     return dir;
 }
 
-uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getFiles()
+uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getFiles() throw (::css::uno::RuntimeException, ::std::exception)
 {
     uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
@@ -127,7 +128,7 @@ uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getFiles()
     return seq;
 }
 
-uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSelectedFiles()
+uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSelectedFiles() throw (::css::uno::RuntimeException, ::std::exception)
 {
     auto id = m_ipc.sendCommand(Commands::GetSelectedFiles);
     uno::Sequence<OUString> seq;
@@ -135,17 +136,17 @@ uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSelectedFiles()
     return seq;
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::appendFilter(const OUString& title, const OUString& filter)
+void SAL_CALL Gtk3KDE5FilePicker::appendFilter(const OUString& title, const OUString& filter) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::AppendFilter, title, filter);
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::setCurrentFilter(const OUString& title)
+void SAL_CALL Gtk3KDE5FilePicker::setCurrentFilter(const OUString& title) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::SetCurrentFilter, title);
 }
 
-OUString SAL_CALL Gtk3KDE5FilePicker::getCurrentFilter()
+OUString SAL_CALL Gtk3KDE5FilePicker::getCurrentFilter() throw (::css::uno::RuntimeException, ::std::exception)
 {
     auto id = m_ipc.sendCommand(Commands::GetCurrentFilter);
     OUString filter;
@@ -154,7 +155,7 @@ OUString SAL_CALL Gtk3KDE5FilePicker::getCurrentFilter()
 }
 
 void SAL_CALL Gtk3KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitle*/,
-                                                    const uno::Sequence<beans::StringPair>& filters)
+                                                    const uno::Sequence<beans::StringPair>& filters) throw (::css::uno::RuntimeException, ::std::exception)
 {
     const sal_uInt16 length = filters.getLength();
     for (sal_uInt16 i = 0; i < length; ++i)
@@ -165,7 +166,7 @@ void SAL_CALL Gtk3KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitl
 }
 
 void SAL_CALL Gtk3KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
-                                           const uno::Any& value)
+                                           const uno::Any& value) throw (::css::uno::RuntimeException, ::std::exception)
 {
     if (value.has<bool>())
     {
@@ -177,7 +178,7 @@ void SAL_CALL Gtk3KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nContr
     }
 }
 
-uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
+uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) throw (::css::uno::RuntimeException, ::std::exception)
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the function.
@@ -195,17 +196,17 @@ uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nC
     return uno::Any(value);
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
+void SAL_CALL Gtk3KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::EnableControl, controlId, bool(enable));
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
+void SAL_CALL Gtk3KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::SetLabel, controlId, label);
 }
 
-OUString SAL_CALL Gtk3KDE5FilePicker::getLabel(sal_Int16 controlId)
+OUString SAL_CALL Gtk3KDE5FilePicker::getLabel(sal_Int16 controlId) throw (::css::uno::RuntimeException, ::std::exception)
 {
     auto id = m_ipc.sendCommand(Commands::GetLabel, controlId);
     OUString label;
@@ -215,7 +216,7 @@ OUString SAL_CALL Gtk3KDE5FilePicker::getLabel(sal_Int16 controlId)
 
 void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 {
-    const char* resId = nullptr;
+    sal_Int32 resId = -1;
 
     switch (controlId)
     {
@@ -239,9 +240,6 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
             break;
         case CHECKBOX_SELECTION:
             resId = STR_FPICKER_SELECTION;
-            break;
-        case CHECKBOX_GPGENCRYPTION:
-            resId = STR_FPICKER_GPGENCRYPT;
             break;
         case PUSHBUTTON_PLAY:
             resId = STR_FPICKER_PLAY;
@@ -271,7 +269,6 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_LINK:
         case CHECKBOX_PREVIEW:
         case CHECKBOX_SELECTION:
-        case CHECKBOX_GPGENCRYPTION:
         {
             // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
             // code, but the checkbox is hidden and ignored
@@ -293,7 +290,7 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
     }
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
+void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args) throw (::css::uno::Exception, ::css::uno::RuntimeException, ::std::exception)
 {
     // parameter checking
     uno::Any arg;
@@ -333,7 +330,6 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
         {
             saveDialog = true;
             addCustomControl(CHECKBOX_PASSWORD);
-            addCustomControl(CHECKBOX_GPGENCRYPTION);
             break;
         }
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
@@ -341,7 +337,6 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
             saveDialog = true;
             addCustomControl(CHECKBOX_AUTOEXTENSION);
             addCustomControl(CHECKBOX_PASSWORD);
-            addCustomControl(CHECKBOX_GPGENCRYPTION);
             addCustomControl(CHECKBOX_FILTEROPTIONS);
             break;
         }
@@ -367,11 +362,6 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
             addCustomControl(PUSHBUTTON_PLAY);
             break;
 
-        case FILEOPEN_LINK_PLAY:
-            addCustomControl(CHECKBOX_LINK);
-            addCustomControl(PUSHBUTTON_PLAY);
-            break;
-
         case FILEOPEN_READONLY_VERSION:
             addCustomControl(CHECKBOX_READONLY);
             addCustomControl(LISTBOX_VERSION);
@@ -379,10 +369,6 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
 
         case FILEOPEN_LINK_PREVIEW:
             addCustomControl(CHECKBOX_LINK);
-            addCustomControl(CHECKBOX_PREVIEW);
-            break;
-
-        case FILEOPEN_PREVIEW:
             addCustomControl(CHECKBOX_PREVIEW);
             break;
 
@@ -396,7 +382,7 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
     m_ipc.sendCommand(Commands::Initialize, saveDialog);
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::cancel()
+void SAL_CALL Gtk3KDE5FilePicker::cancel() throw (::css::uno::RuntimeException, ::std::exception)
 {
     // TODO
 }
@@ -411,17 +397,17 @@ void Gtk3KDE5FilePicker::disposing(const lang::EventObject& rEvent)
     }
 }
 
-OUString SAL_CALL Gtk3KDE5FilePicker::getImplementationName()
+OUString SAL_CALL Gtk3KDE5FilePicker::getImplementationName() throw (::css::uno::RuntimeException, ::std::exception)
 {
     return OUString(FILE_PICKER_IMPL_NAME);
 }
 
-sal_Bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceName)
+sal_Bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceName) throw (::css::uno::RuntimeException, ::std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSupportedServiceNames() throw (::css::uno::RuntimeException, ::std::exception)
 {
     return FilePicker_getSupportedServiceNames();
 }
