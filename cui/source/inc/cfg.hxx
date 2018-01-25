@@ -418,6 +418,7 @@ protected:
 
     DECL_LINK( MoveHdl, Button *, void );
     DECL_LINK( SelectFunctionHdl, SvTreeListBox *, void );
+    DECL_LINK( FunctionDoubleClickHdl, SvTreeListBox *, bool );
 
     virtual SaveInData* CreateSaveInData(
         const css::uno::Reference< css::ui::XUIConfigurationManager >&,
