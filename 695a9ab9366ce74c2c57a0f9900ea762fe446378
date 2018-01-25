@@ -22,6 +22,30 @@
       "revId": "695a9ab9366ce74c2c57a0f9900ea762fe446378",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_50e7fde3",
+        "filename": "xmloff/source/style/bordrhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-01-25T11:28:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa31d9ce_cd58b659",
+      "range": {
+        "startLine": 219,
+        "startChar": 15,
+        "endLine": 219,
+        "endChar": 24
+      },
+      "revId": "695a9ab9366ce74c2c57a0f9900ea762fe446378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
