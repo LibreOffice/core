@@ -288,6 +288,7 @@ public:
     void testTdf99689TableOfTables();
     void testTdf113790();
     void testTdf114306();
+    void testTdf114306_2();
     void testTdf114536();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -458,6 +459,7 @@ public:
     CPPUNIT_TEST(testTdf99689TableOfTables);
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testTdf114306);
+    CPPUNIT_TEST(testTdf114306_2);
     CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST_SUITE_END();
 
@@ -5255,6 +5257,16 @@ void SwUiWriterTest::testTdf114306()
     // page 1 and 1 paragraph on page 2.
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt", 2);
     assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt", 1);
+}
+
+void SwUiWriterTest::testTdf114306_2()
+{
+    // tdf#114306 fix unexpected page break in row-spanned table
+    // load regression document without writer crash
+    load(DATA_DIRECTORY, "fdo114306_2.odt");
+
+    // correct number of pages
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
 }
 
 void SwUiWriterTest::testTdf108524()
