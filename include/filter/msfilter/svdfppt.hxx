@@ -195,9 +195,8 @@ struct MSFILTER_DLLPUBLIC PptDocumentAtom
 
 public:
 
-    static const Size& GetPageSize( const Size& rSiz );
-    Size        GetSlidesPageSize() const { return GetPageSize( aSlidesPageSize ); }
-    Size        GetNotesPageSize() const { return GetPageSize( aNotesPageSize ); }
+    Size        GetSlidesPageSize() const { return aSlidesPageSize; }
+    Size        GetNotesPageSize() const { return aNotesPageSize; }
 
     friend SvStream& ReadPptDocumentAtom( SvStream& rIn, PptDocumentAtom& rAtom );
 };

@@ -248,11 +248,6 @@ SvStream& ReadPptExOleObjAtom( SvStream& rIn, PptExOleObjAtom& rAtom )
     return rIn;
 }
 
-const Size& PptDocumentAtom::GetPageSize(const Size& rSiz)
-{
-    return rSiz;
-}
-
 SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
 {
 // Actual format:
