@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_b01d9911",
+        "filename": "writerfilter/source/rtftok/rtftokenizer.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T09:43:28Z",
+      "side": 1,
+      "message": "Did you read my comments at https://gerrit.libreoffice.org/#/c/48375/5/writerfilter/source/rtftok/rtftokenizer.cxx@324 and below? Did you understand them? Do I need to waste more my time at trying to help you, when I clearly see that you don\u0027t try to read and understand?",
+      "range": {
+        "startLine": 324,
+        "startChar": 12,
+        "endLine": 331,
+        "endChar": 13
+      },
+      "revId": "b7ee620b940fed7e2be21a6053a46277d3cfd1fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
