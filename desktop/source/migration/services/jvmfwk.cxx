@@ -152,8 +152,7 @@ OUString jvmfwk_getImplementationName()
 
 css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames()
 {
-    OUString str_name = SERVICE_NAME;
-    return css::uno::Sequence< OUString >( &str_name, 1 );
+    return { SERVICE_NAME };
 }
 
 // XServiceInfo
