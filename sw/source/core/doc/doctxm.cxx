@@ -1548,8 +1548,6 @@ void SwTOXBaseSection::UpdatePageNum()
     for( SwTOXSortTabBases::size_type nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
     {
         // Loop over all SourceNodes
-        std::vector<sal_uInt16> aNums; // the PageNumber
-        std::vector<SwPageDesc*> aDescs;        // The PageDescriptors matching the PageNumbers
 
         // process run in lines
         SwTOXSortTabBases::size_type nRange = 0;
@@ -1572,6 +1570,8 @@ void SwTOXBaseSection::UpdatePageNum()
 
         for(SwTOXSortTabBases::size_type nRunInEntry = nCnt; nRunInEntry < nCnt + nRange; ++nRunInEntry)
         {
+            std::vector<sal_uInt16> aNums; // the PageNumber
+            std::vector<SwPageDesc*> aDescs; // The PageDescriptors matching the PageNumbers
             std::vector<sal_uInt16> aMainNums; // contains page numbers of main entries
             SwTOXSortTabBase* pSortBase = aSortArr[nRunInEntry];
             size_t nSize = pSortBase->aTOXSources.size();
@@ -1630,7 +1630,6 @@ void SwTOXBaseSection::UpdatePageNum()
                 UpdatePageNum_( const_cast<SwTextNode*>(pTextNd), aNums, aDescs, &aMainNums,
                                 aIntl );
             }
-            aNums.clear();
         }
     }
     // Delete the mapping array after setting the right PageNumber
