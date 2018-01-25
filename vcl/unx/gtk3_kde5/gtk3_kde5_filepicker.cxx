@@ -32,15 +32,13 @@
 
 #include <osl/mutex.hxx>
 
-#include <fpicker/strings.hrc>
-
 #include "FPServiceInfo.hxx"
 
 #undef Region
 
 #include <unx/geninst.h>
 
-#include <strings.hrc>
+#include <svids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -218,7 +216,7 @@ OUString SAL_CALL Gtk3KDE5FilePicker::getLabel(sal_Int16 controlId) throw (::css
 
 void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 {
-    const char* resId = nullptr;
+    sal_Int32 resId = -1;
 
     switch (controlId)
     {
