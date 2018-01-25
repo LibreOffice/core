@@ -590,7 +590,7 @@ ErrCode call(
         //TODO
         break;
     case SbxBOOL:
-        result.PutBool(iRetVal);
+        result.PutBool(bool(iRetVal));
         break;
     case SbxBYTE:
         result.PutByte(static_cast< sal_uInt8 >(iRetVal));
