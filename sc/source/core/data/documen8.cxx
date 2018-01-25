@@ -1164,8 +1164,21 @@ void ScDocument::CheckLinkFormulaNeedingCheck( const ScTokenArray& rCode )
     if (HasLinkFormulaNeedingCheck())
         return;
 
-    if (rCode.HasOpCodeRPN(ocDde) || rCode.HasOpCodeRPN(ocWebservice))
-        SetLinkFormulaNeedingCheck(true);
+    // Prefer RPN over tokenized formula if available.
+    if (rCode.GetCodeLen())
+    {
+        if (rCode.HasOpCodeRPN(ocDde) || rCode.HasOpCodeRPN(ocWebservice))
+            SetLinkFormulaNeedingCheck(true);
+    }
+    else if (rCode.GetLen())
+    {
+        if (rCode.HasOpCode(ocDde) || rCode.HasOpCode(ocWebservice))
+            SetLinkFormulaNeedingCheck(true);
+    }
+    else
+    {
+        assert(!"called with empty ScTokenArray");
+    }
 }
 
 // TimerDelays etc.

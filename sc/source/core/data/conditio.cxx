@@ -471,6 +471,12 @@ void ScConditionEntry::CompileXML()
     Compile( GetExpression(aSrcPos, 0, 0, eTempGrammar1),
              GetExpression(aSrcPos, 1, 0, eTempGrammar2),
              aStrNmsp1, aStrNmsp2, eTempGrammar1, eTempGrammar2, true );
+
+    // Importing ocDde/ocWebservice?
+    if (pFormula1)
+        mpDoc->CheckLinkFormulaNeedingCheck(*pFormula1);
+    if (pFormula2)
+        mpDoc->CheckLinkFormulaNeedingCheck(*pFormula2);
 }
 
 void ScConditionEntry::SetSrcString( const OUString& rNew )
