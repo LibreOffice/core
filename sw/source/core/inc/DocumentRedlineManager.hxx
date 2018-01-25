@@ -30,8 +30,6 @@ namespace sw
 
 class DocumentRedlineManager : public IDocumentRedlineAccess
 {
-    bool bHideInlineTooltips : 1;
-
 public:
     DocumentRedlineManager( SwDoc& i_rSwdoc );
 
@@ -144,6 +142,7 @@ private:
     sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.
                                          by the UI. Managed by SwAutoFormat! */
     css::uno::Sequence <sal_Int8 > maRedlinePasswd;
+    bool m_bHideInlineTooltips : 1;
 };
 
 }

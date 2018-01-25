@@ -606,14 +606,16 @@ namespace
 namespace sw
 {
 
-DocumentRedlineManager::DocumentRedlineManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
-                                                                    meRedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete),
-                                                                    mpRedlineTable( new SwRedlineTable ),
-                                                                    mpExtraRedlineTable ( new SwExtraRedlineTable ),
-                                                                    mpAutoFormatRedlnComment( nullptr ),
-                                                                    mbIsRedlineMove(false),
-                                                                    mbReadlineChecked(false),
-                                                                    mnAutoFormatRedlnCommentNo( 0 )
+DocumentRedlineManager::DocumentRedlineManager(SwDoc& i_rSwdoc)
+    : m_rDoc(i_rSwdoc)
+    , meRedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete)
+    , mpRedlineTable(new SwRedlineTable)
+    , mpExtraRedlineTable(new SwExtraRedlineTable)
+    , mpAutoFormatRedlnComment(nullptr)
+    , mbIsRedlineMove(false)
+    , mbReadlineChecked(false)
+    , mnAutoFormatRedlnCommentNo(0)
+    , m_bHideInlineTooltips(false)
 {
 }
 
@@ -2719,12 +2721,12 @@ void DocumentRedlineManager::checkRedlining(RedlineFlags& _rReadlineMode)
 
 bool DocumentRedlineManager::IsHideInlineTooltips()
 {
-    return bHideInlineTooltips;
+    return m_bHideInlineTooltips;
 }
 
 void DocumentRedlineManager::SetHideInlineTooltips(bool bSet)
 {
-    bHideInlineTooltips = bSet;
+    m_bHideInlineTooltips = bSet;
 }
 
 DocumentRedlineManager::~DocumentRedlineManager()
