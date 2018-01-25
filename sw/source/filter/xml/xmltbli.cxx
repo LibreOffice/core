@@ -27,6 +27,7 @@
 #include <svl/itemset.hxx>
 #include <svl/zformat.hxx>
 #include <sax/tools/converter.hxx>
+#include <unotools/configmgr.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -471,12 +472,27 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_TOK_TABLE_NUM_COLS_SPANNED:
             nColSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
+            if (nColSpan > 256)
+            {
+                SAL_INFO("sw.xml", "ignoring huge table:number-columns-spanned " << nColSpan);
+                nColSpan = 1;
+            }
             break;
         case XML_TOK_TABLE_NUM_ROWS_SPANNED:
             nRowSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
+            if (nRowSpan > 8192 || (nRowSpan > 256 && utl::ConfigManager::IsFuzzing()))
+            {
+                SAL_INFO("sw.xml", "ignoring huge table:number-rows-spanned " << nRowSpan);
+                nRowSpan = 1;
+            }
             break;
         case XML_TOK_TABLE_NUM_COLS_REPEATED:
             nColRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
+            if (nColRepeat > 256)
+            {
+                SAL_INFO("sw.xml", "ignoring huge table:number-columns-repeated " << nColRepeat);
+                nColRepeat = 1;
+            }
             break;
         case XML_TOK_TABLE_FORMULA:
             {
@@ -751,7 +767,14 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
             if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 aStyleName = rValue;
             else if( IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
+            {
                 nColRep = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
+                if (nColRep > 256)
+                {
+                    SAL_INFO("sw.xml", "ignoring huge table:number-columns-repeated " << nColRep);
+                    nColRep = 1;
+                }
+            }
             else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
                 aDfltCellStyleName = rValue;
         }
@@ -892,6 +915,11 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
             else if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
             {
                 nRowRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
+                if (nRowRepeat > 8192 || (nRowRepeat > 256 && utl::ConfigManager::IsFuzzing()))
+                {
+                    SAL_INFO("sw.xml", "ignoring huge table:number-rows-repeated " << nRowRepeat);
+                    nRowRepeat = 1;
+                }
             }
             else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
             {
