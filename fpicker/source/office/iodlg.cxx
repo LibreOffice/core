@@ -68,6 +68,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/interaction.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
@@ -1692,7 +1693,8 @@ short SvtFileDialog::Execute()
 
 void SvtFileDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
-    PrepareExecute();
+    if (!PrepareExecute())
+        return;
 
     // start of the dialog
     ModalDialog::StartExecuteModal( rEndDialogHdl );
@@ -1807,6 +1809,9 @@ void SvtFileDialog::EnableControl( Control* _pControl, bool _bEnable )
 
 short SvtFileDialog::PrepareExecute()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return 0;
+
     OUString aEnvValue;
     if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) && aEnvValue == "1" )
     {
