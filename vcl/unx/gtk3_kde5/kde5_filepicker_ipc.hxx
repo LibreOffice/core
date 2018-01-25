@@ -36,7 +36,7 @@ private Q_SLOTS:
     void readCommands();
 
 private:
-    void readCommand();
+    bool readCommand();
 
     KDE5FilePicker* m_filePicker = nullptr;
     QSocketNotifier* m_stdinNotifier = nullptr;
