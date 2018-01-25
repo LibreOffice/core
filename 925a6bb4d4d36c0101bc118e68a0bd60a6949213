@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_8d54fe54",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T06:19:49Z",
+      "side": 1,
+      "message": "This must be accidental? :)",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 4
+      },
+      "revId": "925a6bb4d4d36c0101bc118e68a0bd60a6949213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
