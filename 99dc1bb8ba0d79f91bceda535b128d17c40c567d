@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_100585c1",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T09:23:27Z",
+      "side": 1,
+      "message": "What\u0027s this?",
+      "range": {
+        "startLine": 1750,
+        "startChar": 35,
+        "endLine": 1750,
+        "endChar": 39
+      },
+      "revId": "99dc1bb8ba0d79f91bceda535b128d17c40c567d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_701401f5",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T09:23:27Z",
+      "side": 1,
+      "message": ".. and this?",
+      "range": {
+        "startLine": 1752,
+        "startChar": 36,
+        "endLine": 1752,
+        "endChar": 40
+      },
+      "revId": "99dc1bb8ba0d79f91bceda535b128d17c40c567d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
