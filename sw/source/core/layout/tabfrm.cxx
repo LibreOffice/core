@@ -1589,7 +1589,32 @@ static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom )
         {
             // #115759# - force another format of the
             // lowers, if at least one of it was invalid.
+
+            // tdf#114306 writer may crash because rRow points to a deleted SwRowFrame
+            SwRowFrame* pRow = &rRow;
+            OSL_ENSURE(pRow->GetUpper() && pRow->GetUpper()->IsTabFrame(), "No table");
+            SwTabFrame* pTab = static_cast<SwTabFrame*>(pRow->GetUpper());
+
             bCheck = SwContentFrame::CalcLowers( &rRow, rRow.GetUpper(), nBottom, true );
+
+            bool bRowStillExists = false;
+            SwFrame* pTestRow = pTab->Lower();
+
+            while (pTestRow)
+            {
+                if (pTestRow == pRow)
+                {
+                    bRowStillExists = true;
+                    break;
+                }
+                pTestRow = pTestRow->GetNext();
+            }
+
+            if (!bRowStillExists)
+            {
+                SAL_WARN("sw.layout", "no row anymore at " << pRow);
+                return;
+            }
 
             // NEW TABLES
             // First we calculate the cells with row span of < 1, afterwards

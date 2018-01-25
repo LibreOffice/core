@@ -294,6 +294,7 @@ public:
     void testTdf113790();
     void testTdf108048();
     void testTdf114306();
+    void testTdf114306_2();
     void testTdf113481();
     void testTdf115013();
     void testTdf114536();
@@ -471,6 +472,7 @@ public:
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testTdf108048);
     CPPUNIT_TEST(testTdf114306);
+    CPPUNIT_TEST(testTdf114306_2);
     CPPUNIT_TEST(testTdf113481);
     CPPUNIT_TEST(testTdf115013);
     CPPUNIT_TEST(testTdf114536);
@@ -5289,6 +5291,17 @@ void SwUiWriterTest::testTdf114306()
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt", 2);
     assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt", 1);
 }
+
+void SwUiWriterTest::testTdf114306_2()
+{
+    // tdf#114306 fix unexpected page break in row-spanned table
+    // load regression document without writer crash
+    load(DATA_DIRECTORY, "fdo114306_2.odt");
+
+    // correct number of pages
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+}
+
 
 // During insert of the document with list inside into the main document inside the list
 // we should merge both lists into one, when they have the same list properties
