@@ -16,6 +16,24 @@
       "revId": "995a1a65bba30b12337bc74ee87202f32bc2fe74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_430f35e1",
+        "filename": "svtools/source/control/toolbarmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-01-25T15:15:42Z",
+      "side": 1,
+      "message": "1) Oh yes, if I pull in your change, that\u0027s one more place which breaks UNO API compatibility. But that looks a bit more complicated, suppressing UNO callbacks there means even framework doesn\u0027t get callbacks and the UI is not working properly. Need to address that at some stage. :-(\n\n2) Moving the suppress down to FloatingWindow is a good idea, I think we have the same problem with non-gtk3 menus as well, and having the suppress in FloatingWindow would address that as well.",
+      "parentUuid": "fa31d9ce_23d5e142",
+      "revId": "995a1a65bba30b12337bc74ee87202f32bc2fe74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
