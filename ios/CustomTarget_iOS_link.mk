@@ -5,60 +5,50 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
 #- Env ------------------------------------------------------------------------
-IOSLIB = ''
-IOSLD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
-IOSCLANG = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
-IOSOBJ = $(WORKDIR)/CObject/ios/Kit.o
+IOSGEN   = $(SRCDIR)/ios/generated
+IOSLIBS := $(shell \
+        (export INSTDIR=$(INSTDIR);export OS=$(OS); \
+         export WORKDIR=$(WORKDIR);export LIBO_LIB_FOLDER=$(LIBO_LIB_FOLDER); \
+         $(SRCDIR)/bin/lo-all-static-libs))
+IOSOBJ = $(WORKDIR)/ios/Kit.o
+IOSSRC = $(SRCDIR)/ios/source/LibreOfficeKit.c
 
 ifeq ($(ENABLE_DEBUG),TRUE)
 ifeq ($(CPUNAME),X86_64)
-IOSKIT = $(IOSGEN)/simulator/libKit
+IOSKIT = $(IOSGEN)/simulator/libKit.dylib
 else
-IOSKIT = $(IOSGEN)/debug/libKit
+IOSKIT = $(IOSGEN)/debug/libKit.dylib
 endif
 else
 ifeq ($(CPUNAME),ARM64)
-IOSKIT = $(IOSGEN)/release/libKit
+IOSKIT = $(IOSGEN)/release/libKit.dylib
 endif
 endif
 
 
 
 #- Top level  -----------------------------------------------------------------
-$(eval $(call gb_CustomTarget_CustomTarget,ios/iOS_prelink))
+$(eval $(call gb_CustomTarget_CustomTarget,ios/iOS_link))
 
-$(call gb_CustomTarget_get_target,ios/iOS_prelink): $(IOSKIT).dylib
-
+$(call gb_CustomTarget_get_target,ios/iOS_link): $(IOSKIT)
 
 
 #- build  ---------------------------------------------------------------------
-.PHONY: FORCE
-FORCE:
+$(IOSOBJ): $(IOSSRC) $(call gb_CustomTarget_get_target,ios/iOS_setup)
+	$(call gb_Output_announce,iOS compile interface,$(true),C,2)
+	$(gb_CC) $(gb_COMPILERDEFS) $(gb_OSDEFS) $(gb_CFLAGS) \
+		-DDISABLE_DYNLOADING -DLIBO_INTERNAL_ONLY \
+		-fvisibility=hidden -Werror -O0 -fstrict-overflow \
+		$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS) -g) \
+		-c $(IOSSRC) -o $(IOSOBJ) \
+		-I$(SRCDIR)/include -I$(BUILDDIR)/config_host \
 
-
-IOSPREBUILD: FORCE
-	$(eval IOSLIBS = `$(SRCDIR)/bin/lo-all-static-libs`)
-
-
-
-$(IOSKIT).a: IOSPREBUILD $(WORKDIR)/ios $(call gb_StaticLibrary_get_target,iOS_kitBridge) \
-	    $(IOSLIBS)
-	$(call gb_Output_announce,iOS prelink object,$(true),LNK,2)
-	$(IOSLD) -r -ios_version_min $(IOS_DEPLOYMENT_VERSION) \
-	    -syslibroot $(MACOSX_SDK_PATH) \
-	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
-	    -o $(IOSOBJ) \
-	    $(WORKDIR)/CObject/ios/source/LibreOfficeKit.o \
-	    $(IOSLIBS)
-	$(AR) -r $(IOSKIT).a $(IOSOBJ)
-
-
-$(IOSKIT).dylib: $(IOSKIT).a
+$(IOSKIT): $(IOSOBJ) $(IOSLIBS)
 	$(call gb_Output_announce,iOS dylib,$(true),LNK,2)
-	$(IOSCLANG) -dynamiclib -mios-simulator-version-min=$(IOS_DEPLOYMENT_VERSION) \
-	    -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'` \
-	    -isysroot $(MACOSX_SDK_PATH) \
+	$(gb_CC) -dynamiclib \
 	    -Xlinker -rpath -Xlinker @executable_path/Frameworks \
 	    -Xlinker -rpath -Xlinker @loader_path/Frameworks \
 	    -dead_strip \
@@ -76,22 +66,21 @@ $(IOSKIT).dylib: $(IOSKIT).a
 	    -single_module \
 	    -compatibility_version 1 \
 	    -current_version 1 \
+	    $(IOSLIBS) \
 	    $(IOSOBJ) \
-	    -o $(IOSKIT).dylib
+	    -o $(IOSKIT)
 ifeq ($(origin IOS_CODEID),undefined)
 	@echo "please define environment variable IOS_CODEID as\n" \
 	      "export IOS_CODEID=<your apple code identifier>"
 	@exit -1
 else
-	codesign -s "$(IOS_CODEID)" $(IOSKIT).dylib
+	codesign -s "$(IOS_CODEID)" $(IOSKIT)
 endif
 
 
-
-
 #- clean ios  -----------------------------------------------------------------
-$(call gb_CustomTarget_get_clean_target,ios/iOS_prelink):
-	rm -f $(IOSKIT).a $(IOSKIT).dylib
+$(call gb_CustomTarget_get_clean_target,ios/iOS_link):
+	rm -f $(IOSKIT).dylib
 
 
 

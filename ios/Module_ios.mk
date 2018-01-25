@@ -12,9 +12,10 @@ ifeq ($(OS),IOS)
 
 $(eval $(call gb_Module_add_targets,ios,\
 	CustomTarget_iOS_setup \
-	StaticLibrary_iOSkit \
-	CustomTarget_iOS_prelink \
+	CustomTarget_iOS_link \
 ))
+
+
 
 
 endif
