@@ -39,7 +39,7 @@ const sal_uInt16 NON_USER_DEFINED_GLUE_POINTS = 4;
 class SvxUnoGluePointAccess : public WeakImplHelper< container::XIndexContainer, container::XIdentifierContainer >
 {
 private:
-    SdrObjectWeakRef    mpObject;
+    tools::WeakReference<SdrObject>    mpObject;
 
 public:
     explicit SvxUnoGluePointAccess( SdrObject* pObject ) throw();

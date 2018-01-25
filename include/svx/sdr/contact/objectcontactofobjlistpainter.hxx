@@ -90,7 +90,7 @@ protected:
     ObjectContact&                                  mrOriginalObjectContact;
 
     // Set StartPoint for next run, also given in constructor
-    SdrPageWeakRef                                  mxStartPage;
+    tools::WeakReference<SdrPage>                   mxStartPage;
 
     // Hierarchy access methods
     virtual sal_uInt32 GetPaintObjectCount() const override;

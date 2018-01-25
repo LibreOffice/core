@@ -172,7 +172,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
 }
 
 Iterator OutlinerContainer::CreateSelectionIterator (
-    const ::std::vector<SdrObjectWeakRef>& rObjectList,
+    const ::std::vector<::tools::WeakReference<SdrObject>>& rObjectList,
     SdDrawDocument* pDocument,
     const std::shared_ptr<ViewShell>& rpViewShell,
     bool bDirectionIsForward,
@@ -416,7 +416,7 @@ void IteratorImplBase::Reverse()
 //===== SelectionIteratorImpl ===========================================
 
 SelectionIteratorImpl::SelectionIteratorImpl (
-    const ::std::vector<SdrObjectWeakRef>& rObjectList,
+    const ::std::vector<::tools::WeakReference<SdrObject>>& rObjectList,
     sal_Int32 nObjectIndex,
     SdDrawDocument* pDocument,
     const std::weak_ptr<ViewShell>& rpViewShellWeak,
@@ -682,7 +682,7 @@ void ViewIteratorImpl::Reverse()
         mpObjectIterator = nullptr;
 
     // Move iterator to the current object.
-    SdrObjectWeakRef xObject = maPosition.mxObject;
+    ::tools::WeakReference<SdrObject> xObject = maPosition.mxObject;
     maPosition.mxObject.reset(nullptr);
 
     if (!mpObjectIterator)

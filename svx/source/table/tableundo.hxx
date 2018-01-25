@@ -42,7 +42,7 @@ namespace sdr { namespace table {
 class CellUndo : public SdrUndoAction, public sdr::ObjectUser
 {
 public:
-    CellUndo( const SdrObjectWeakRef& xObjRef, const CellRef& xCell );
+    CellUndo( const tools::WeakReference<SdrObject>& xObjRef, const CellRef& xCell );
     virtual ~CellUndo() override;
 
     virtual void            Undo() override;
@@ -80,7 +80,7 @@ private:
     void setDataToCell( const Data& rData );
     void getDataFromCell( Data& rData );
 
-    SdrObjectWeakRef mxObjRef;
+    tools::WeakReference<SdrObject> mxObjRef;
     CellRef mxCell;
     Data maUndoData;
     Data maRedoData;
@@ -237,7 +237,7 @@ public:
     virtual void            Redo() override;
 
 private:
-    SdrObjectWeakRef mxObjRef;
+    tools::WeakReference<SdrObject> mxObjRef;
 
     struct Data
     {

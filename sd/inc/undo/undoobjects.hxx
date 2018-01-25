@@ -56,7 +56,7 @@ public:
     virtual void Redo() override;
 
 private:
-    SdrObjectWeakRef mxSdrObject;
+    ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
 class UndoDeleteObject : public SdrUndoDelObj, public UndoRemovePresObjectImpl
@@ -68,7 +68,7 @@ public:
     virtual void Redo() override;
 
 private:
-    SdrObjectWeakRef mxSdrObject;
+    ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
 class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
@@ -80,7 +80,7 @@ public:
     virtual void Redo() override;
 
 private:
-    SdrObjectWeakRef mxSdrObject;
+    ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
 class UndoObjectSetText : public SdrUndoObjSetText
@@ -95,7 +95,7 @@ public:
 private:
     std::unique_ptr<SfxUndoAction> mpUndoAnimation;
     bool            mbNewEmptyPresObj;
-    SdrObjectWeakRef mxSdrObject;
+    ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
 // Undo for SdrObject::SetUserCall()
@@ -111,7 +111,7 @@ public:
 private:
     SdrObjUserCall* mpOldUserCall;
     SdrObjUserCall* mpNewUserCall;
-    SdrObjectWeakRef mxSdrObject;
+    ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
@@ -127,8 +127,8 @@ public:
 private:
     PresObjKind meOldKind;
     PresObjKind meNewKind;
-    SdrPageWeakRef mxPage;
-    SdrObjectWeakRef mxSdrObject;
+    ::tools::WeakReference<SdrPage> mxPage;
+    ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
 // Restores correct position and size for presentation shapes with user call
@@ -143,7 +143,7 @@ public:
     virtual void Redo() override;
 
 private:
-    SdrPageWeakRef mxPage;
+    ::tools::WeakReference<SdrPage> mxPage;
 };
 
 class UndoGeoObject final : public SdrUndoGeoObj
@@ -155,8 +155,8 @@ public:
     virtual void Redo() override;
 
 private:
-    SdrPageWeakRef mxPage;
-    SdrObjectWeakRef mxSdrObject;
+    ::tools::WeakReference<SdrPage> mxPage;
+    ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
 class UndoAttrObject final : public SdrUndoAttrObj
@@ -168,8 +168,8 @@ public:
     virtual void Redo() override;
 
 private:
-    SdrPageWeakRef mxPage;
-    SdrObjectWeakRef mxSdrObject;
+    ::tools::WeakReference<SdrPage> mxPage;
+    ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
 } // namespace sd

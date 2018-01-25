@@ -179,7 +179,7 @@ void ObjectContactOfPagePainter::SetStartPage(const SdrPage* pPage)
 {
     if(pPage != GetStartPage())
     {
-        mxStartPage.reset(const_cast< SdrPage* >(pPage)); // no SdrPageWeakRef available to hold a const SdrPage*
+        mxStartPage.reset(const_cast< SdrPage* >(pPage)); // no tools::WeakReference<SdrPage> available to hold a const SdrPage*
     }
 }
 
