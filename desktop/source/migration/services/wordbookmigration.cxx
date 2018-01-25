@@ -40,7 +40,7 @@ namespace migration
 
     Sequence< OUString > WordbookMigration_getSupportedServiceNames()
     {
-        return Sequence< OUString > { "com.sun.star.migration.Wordbooks" };
+        return { "com.sun.star.migration.Wordbooks" };
     }
 
 

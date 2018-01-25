@@ -63,7 +63,7 @@ OUString OO3ExtensionMigration_getImplementationName()
 
 Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
 {
-    return Sequence< OUString > { "com.sun.star.migration.Extensions" };
+    return { "com.sun.star.migration.Extensions" };
 }
 
 
