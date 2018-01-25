@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_a3cb9171",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 6556,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T15:56:52Z",
+      "side": 1,
+      "message": "So I guess, I better do it in Makefile.fetch et al just using OS\u0026CPU variables, without appending stuff to BUILD_TYPE? ~as I did initially.",
+      "parentUuid": "fa31d9ce_fb0377b6",
+      "revId": "cc24f5b2b35bd172406040e75d062fd7ec03a68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_5b2ba382",
         "filename": "extensions/Library_scn.mk",
         "patchSetId": 3
