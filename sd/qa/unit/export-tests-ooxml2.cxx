@@ -126,6 +126,7 @@ public:
     void testTdf114848();
     void testTdf68759();
     void testTdf90626();
+    void testTdf107608();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -177,6 +178,7 @@ public:
     CPPUNIT_TEST(testTdf114848);
     CPPUNIT_TEST(testTdf68759);
     CPPUNIT_TEST(testTdf90626);
+    CPPUNIT_TEST(testTdf107608);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1351,6 +1353,30 @@ void SdOOXMLExportTest2::testTdf90626()
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[2]/a:pPr/a:buSzPct", "val", "150568");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[3]/a:pPr/a:buSzPct", "val", "100000");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[4]/a:pPr/a:buSzPct", "val", "150568");
+}
+
+void SdOOXMLExportTest2::testTdf107608()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf107608.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
+
+    drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
+    xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, aFillStyle);
+
+    bool bBackgroundFill = false;
+    xPropSet->getPropertyValue("FillBackground") >>= bBackgroundFill;
+    CPPUNIT_ASSERT(bBackgroundFill);
+
+    sal_Int32 nBackgroundColor;
+    xPropSet->getPropertyValue("FillColor") >>= nBackgroundColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x92D050), nBackgroundColor);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);

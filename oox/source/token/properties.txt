@@ -158,6 +158,7 @@ ExternalLinks
 ExtrapolateBackward
 ExtrapolateForward
 FileFormat
+FillBackground
 FillBitmapMode
 FillBitmapName
 FillBitmapPositionOffsetX
