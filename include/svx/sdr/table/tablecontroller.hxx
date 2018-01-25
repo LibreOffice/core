@@ -116,7 +116,7 @@ public:
     bool isColumnSelected( sal_Int32 nColumn );
     bool isRowHeader();
     bool isColumnHeader();
-    sdr::table::SdrTableObj* GetTableObj() { return dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() ); }
+    sdr::table::SdrTableObj* GetTableObj() { return mxTableObj.get(); }
 private:
     SvxTableController(SvxTableController &) = delete;
     void operator =(SvxTableController &) = delete;
@@ -176,7 +176,7 @@ private:
     sdr::overlay::OverlayObjectList*  mpSelectionOverlay;
 
     SdrView* mpView;
-    tools::WeakReference<SdrObject> mxTableObj;
+    tools::WeakReference<SdrTableObj> mxTableObj;
     SdrModel* mpModel;
 
     css::uno::Reference< css::util::XModifyListener > mxModifyListener;

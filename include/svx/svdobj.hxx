@@ -268,7 +268,7 @@ public:
 /// Abstract DrawObject
 
 class SvxShape;
-class SVX_DLLPUBLIC SdrObject: public SfxListener, public tools::WeakBase< SdrObject >
+class SVX_DLLPUBLIC SdrObject: public SfxListener, public virtual tools::WeakBase
 {
     friend class                SdrObjListIter;
     friend class                SdrVirtObj;

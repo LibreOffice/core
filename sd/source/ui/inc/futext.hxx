@@ -54,7 +54,7 @@ public:
 
     void    SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag);
     void    DeleteDefaultText();
-    SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
+    SdrTextObj* GetTextObj() { return mxTextObj.get(); }
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
@@ -81,7 +81,7 @@ protected:
 private:
     virtual void disposing() override;
 
-    ::tools::WeakReference<SdrObject>
+    ::tools::WeakReference<SdrTextObj>
                         mxTextObj;
     bool                bFirstObjCreated;
     bool                bJustEndedEdit;
