@@ -2568,11 +2568,11 @@ void Content::transfer(
         // Check source's and target's URL scheme
 
         OUString aScheme = sourceURI.GetScheme().toAsciiLowerCase();
-        if ( aScheme == WEBDAV_URL_SCHEME )
+        if ( aScheme == VNDSUNSTARWEBDAV_URL_SCHEME)
         {
             sourceURI.SetScheme( HTTP_URL_SCHEME );
         }
-        else if ( aScheme == WEBDAVS_URL_SCHEME )
+        else if ( aScheme == VNDSUNSTARWEBDAVS_URL_SCHEME)
         {
             sourceURI.SetScheme( HTTPS_URL_SCHEME );
         }
@@ -2583,6 +2583,14 @@ void Content::transfer(
         else if ( aScheme == DAVS_URL_SCHEME )
         {
             sourceURI.SetScheme( HTTPS_URL_SCHEME );
+        }
+        else if (aScheme == WEBDAV_URL_SCHEME)
+        {
+            sourceURI.SetScheme(HTTP_URL_SCHEME);
+        }
+        else if (aScheme == WEBDAVS_URL_SCHEME)
+        {
+            sourceURI.SetScheme(HTTPS_URL_SCHEME);
         }
         else
         {
@@ -2599,14 +2607,18 @@ void Content::transfer(
         }
 
         aScheme = targetURI.GetScheme().toAsciiLowerCase();
-        if ( aScheme == WEBDAV_URL_SCHEME )
+        if ( aScheme == VNDSUNSTARWEBDAV_URL_SCHEME)
             targetURI.SetScheme( HTTP_URL_SCHEME );
-        else if ( aScheme == WEBDAVS_URL_SCHEME )
+        else if ( aScheme == VNDSUNSTARWEBDAVS_URL_SCHEME)
             targetURI.SetScheme( HTTPS_URL_SCHEME );
         else if ( aScheme == DAV_URL_SCHEME )
             targetURI.SetScheme( HTTP_URL_SCHEME );
         else if ( aScheme == DAVS_URL_SCHEME )
             targetURI.SetScheme( HTTPS_URL_SCHEME );
+        else if (aScheme == WEBDAV_URL_SCHEME)
+            targetURI.SetScheme(HTTP_URL_SCHEME);
+        else if (aScheme == WEBDAVS_URL_SCHEME)
+            targetURI.SetScheme(HTTPS_URL_SCHEME);
 
         // @@@ This implementation of 'transfer' only works
         //     if the source and target are located at same host.

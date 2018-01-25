@@ -332,6 +332,15 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             "vnd.sun.star.webdav", "vnd.sun.star.webdav://", true, false,
             false, false, true, true, true, true},
         SchemeInfo{
+            "vnd.sun.star.webdavs", "vnd.sun.star.webdavs://", true, false,
+            false, false, true, true, true, true},
+        SchemeInfo{
+            "webdav", "webdav://", true, false, false, false, true, true,
+            true, true},
+        SchemeInfo{
+            "webdavs", "webdavs://", true, false, false, false, true, true,
+            true, true},
+        SchemeInfo{
             "private", "private:", false, false, false, false, false, false,
             false, true},
         SchemeInfo{
@@ -1468,7 +1477,11 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
 void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
     OUString aTmpStr=m_aAbsURIRef.makeStringAndClear();
-    int oldSchemeLen=strlen(getSchemeInfo().m_pScheme);
+    int oldSchemeLen = 0;
+    if (m_eScheme == INetProtocol::Generic)
+        oldSchemeLen = m_aScheme.getLength();
+    else
+        oldSchemeLen = strlen(getSchemeInfo().m_pScheme);
     m_eScheme=eTargetScheme;
     int newSchemeLen=strlen(getSchemeInfo().m_pScheme);
     m_aAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
@@ -2167,8 +2180,15 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "vnd.sun.star.tdoc:", nullptr, INetProtocol::VndSunStarTdoc,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", nullptr, INetProtocol::VndSunStarWebdav,
-              PrefixInfo::OFFICIAL } };
-    /* This list needs to be sorted, or you'll introduce serious bugs */
+              PrefixInfo::OFFICIAL },
+            { "vnd.sun.star.webdavs:", nullptr, INetProtocol::VndSunStarWebdavs,
+              PrefixInfo::OFFICIAL },
+            { "webdav:", nullptr, INetProtocol::Webdav,
+              PrefixInfo::OFFICIAL },
+            { "webdavs:", nullptr, INetProtocol::Webdavs,
+              PrefixInfo::OFFICIAL }
+        };
+/* This list needs to be sorted, or you'll introduce serious bugs */
 
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
@@ -2916,6 +2936,9 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INetProtocol::Http:
         case INetProtocol::VndSunStarWebdav:
+        case INetProtocol::VndSunStarWebdavs:
+        case INetProtocol::Webdav:
+        case INetProtocol::Webdavs:
         case INetProtocol::Https:
         case INetProtocol::Smb:
         case INetProtocol::Cmis:
@@ -3879,7 +3902,9 @@ bool INetURLObject::isAnyKnownWebDAVScheme() const {
     return ( isSchemeEqualTo( INetProtocol::Http ) ||
              isSchemeEqualTo( INetProtocol::Https ) ||
              isSchemeEqualTo( INetProtocol::VndSunStarWebdav ) ||
-             isSchemeEqualTo( "vnd.sun.star.webdavs" ) );
+             isSchemeEqualTo( INetProtocol::VndSunStarWebdavs ) ||
+             isSchemeEqualTo( INetProtocol::Webdav ) ||
+             isSchemeEqualTo( INetProtocol::Webdavs ));
 }
 
 // static

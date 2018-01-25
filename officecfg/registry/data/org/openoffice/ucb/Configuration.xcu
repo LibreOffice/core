@@ -67,6 +67,17 @@
                 <value/>
               </prop>
             </node>
+            <node oor:name="Provider4a" oor:op="replace" install:module="webdav">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.WebDAVContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>webdav</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
             <node oor:name="Provider5" oor:op="replace">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.help.XMLHelp</value>
@@ -152,6 +163,18 @@
               </prop>
               <prop oor:name="URLTemplate">
                 <value>vnd.sun.star.webdavs</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
+            <node oor:name="Provider12b" oor:op="replace"
+                install:module="webdav">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.WebDAVContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>webdavs</value>
               </prop>
               <prop oor:name="Arguments">
                 <value/>
