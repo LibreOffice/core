@@ -1468,7 +1468,11 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
 void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
     OUString aTmpStr=m_aAbsURIRef.makeStringAndClear();
-    int oldSchemeLen=strlen(getSchemeInfo().m_pScheme);
+    int oldSchemeLen = 0;
+    if (m_eScheme == INetProtocol::Generic)
+        oldSchemeLen = m_aScheme.getLength();
+    else
+        oldSchemeLen = strlen(getSchemeInfo().m_pScheme);
     m_eScheme=eTargetScheme;
     int newSchemeLen=strlen(getSchemeInfo().m_pScheme);
     m_aAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
@@ -3879,7 +3883,9 @@ bool INetURLObject::isAnyKnownWebDAVScheme() const {
     return ( isSchemeEqualTo( INetProtocol::Http ) ||
              isSchemeEqualTo( INetProtocol::Https ) ||
              isSchemeEqualTo( INetProtocol::VndSunStarWebdav ) ||
-             isSchemeEqualTo( "vnd.sun.star.webdavs" ) );
+             isSchemeEqualTo( "vnd.sun.star.webdavs" ) ||
+             isSchemeEqualTo( "webdav" ) ||
+             isSchemeEqualTo( "webdavs" ));
 }
 
 // static
