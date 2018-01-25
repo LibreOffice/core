@@ -36,14 +36,14 @@ struct TKeyValueFunc
     bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)   const
     {
         const std::vector<OKeyType>& aKeyType = pIndex->getKeyType();
-        std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();
-        for (std::vector<sal_Int16>::size_type i=0;aIter != aKeyType.end(); ++aIter,++i)
+        size_t i = 0;
+        for (auto const& elem : aKeyType)
         {
             const bool bGreater = pIndex->getAscending(i) != TAscendingOrder::ASC;
             const bool bLess = !bGreater;
 
             // compare depending for type
-            switch (*aIter)
+            switch (elem)
             {
                 case OKeyType::String:
                 {
@@ -68,6 +68,7 @@ struct TKeyValueFunc
                 case OKeyType::NONE:
                     break;
             }
+            ++i;
         }
 
         // know we know that the values are equal
@@ -122,11 +123,10 @@ void OSortIndex::Freeze()
         // we will sort ourself when the first keyType say so
         std::sort(m_aKeyValues.begin(),m_aKeyValues.end(),TKeyValueFunc(this));
 
-    TIntValuePairVector::iterator aIter = m_aKeyValues.begin();
-    for(;aIter != m_aKeyValues.end();++aIter)
+    for (auto & keyValue : m_aKeyValues)
     {
-        delete aIter->second;
-        aIter->second = nullptr;
+        delete keyValue.second;
+        keyValue.second = nullptr;
     }
 
     m_bFrozen = true;

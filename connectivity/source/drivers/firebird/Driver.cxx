@@ -118,9 +118,9 @@ void FirebirdDriver::disposing()
 {
     MutexGuard aGuard(m_aMutex);
 
-    for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+    for (auto const& elem : m_xConnections)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(elem.get(), UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }

@@ -942,9 +942,9 @@ void Connection::disposing()
 void Connection::disposeStatements()
 {
     MutexGuard aGuard(m_aMutex);
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
+    for (auto const& statement : m_aStatements)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(statement.get(), UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }
