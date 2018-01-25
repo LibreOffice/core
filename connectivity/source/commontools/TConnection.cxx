@@ -41,11 +41,11 @@ void OMetaConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xMetaData = WeakReference< XDatabaseMetaData>();
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
+    for (auto const& statement : m_aStatements)
     {
         try
         {
-            Reference< XInterface > xStatement( i->get() );
+            Reference< XInterface > xStatement( statement.get() );
             ::comphelper::disposeComponent( xStatement );
         }
         catch (const DisposedException&)

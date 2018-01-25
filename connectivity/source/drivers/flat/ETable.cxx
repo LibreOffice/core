@@ -498,8 +498,8 @@ void OFlatTable::refreshColumns()
     ::std::vector< OUString> aVector;
     aVector.reserve(m_aColumns->get().size());
 
-    for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != m_aColumns->get().end();++aIter)
-        aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
+    for (auto const& column : m_aColumns->get())
+        aVector.push_back(Reference< XNamed>(column,UNO_QUERY)->getName());
 
     if(m_pColumns)
         m_pColumns->reFill(aVector);

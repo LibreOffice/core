@@ -163,12 +163,9 @@ namespace dbtools
         // strip previous index information
         if ( _bSecondRun )
         {
-            for ( ParameterInformation::iterator aParamInfo = m_aParameterInformation.begin();
-                  aParamInfo != m_aParameterInformation.end();
-                  ++aParamInfo
-                )
+            for (auto & paramInfo : m_aParameterInformation)
             {
-                aParamInfo->second.aInnerIndexes.clear();
+                paramInfo.second.aInnerIndexes.clear();
             }
         }
 
@@ -394,16 +391,13 @@ namespace dbtools
             {
                 // build a conjunction of all the filter components
                 OUStringBuffer sAdditionalFilter;
-                for (   std::vector< OUString >::const_iterator aComponent = aAdditionalFilterComponents.begin();
-                        aComponent != aAdditionalFilterComponents.end();
-                        ++aComponent
-                    )
+                for (auto const& elem : aAdditionalFilterComponents)
                 {
                     if ( !sAdditionalFilter.isEmpty() )
                         sAdditionalFilter.append(" AND ");
 
                     sAdditionalFilter.append("( ");
-                    sAdditionalFilter.append(*aComponent);
+                    sAdditionalFilter.append(elem);
                     sAdditionalFilter.append(" )");
                 }
 
@@ -417,16 +411,13 @@ namespace dbtools
             {
                 // build a conjunction of all the filter components
                 OUStringBuffer sAdditionalHaving;
-                for (   std::vector< OUString >::const_iterator aComponent = aAdditionalHavingComponents.begin();
-                        aComponent != aAdditionalHavingComponents.end();
-                        ++aComponent
-                    )
+                for (auto const& elem : aAdditionalHavingComponents)
                 {
                     if ( !sAdditionalHaving.isEmpty() )
                         sAdditionalHaving.append(" AND ");
 
                     sAdditionalHaving.append("( ");
-                    sAdditionalHaving.append(*aComponent);
+                    sAdditionalHaving.append(elem);
                     sAdditionalHaving.append(" )");
                 }
 
@@ -456,49 +447,43 @@ namespace dbtools
         sal_Int32 nSmallestIndexLinkedByColumnName = -1;
         sal_Int32 nLargestIndexNotLinkedByColumnName = -1;
 #endif
-        for ( ParameterInformation::iterator aParam = m_aParameterInformation.begin();
-              aParam != m_aParameterInformation.end();
-              ++aParam
-            )
+        for (auto & aParam : m_aParameterInformation)
         {
 #if OSL_DEBUG_LEVEL > 0
-            if ( aParam->second.aInnerIndexes.size() )
+            if ( aParam.second.aInnerIndexes.size() )
             {
-                if ( aParam->second.eType == ParameterClassification::LinkedByColumnName )
+                if ( aParam.second.eType == ParameterClassification::LinkedByColumnName )
                 {
                     if ( nSmallestIndexLinkedByColumnName == -1 )
-                        nSmallestIndexLinkedByColumnName = aParam->second.aInnerIndexes[ 0 ];
+                        nSmallestIndexLinkedByColumnName = aParam.second.aInnerIndexes[ 0 ];
                 }
                 else
                 {
-                    nLargestIndexNotLinkedByColumnName = aParam->second.aInnerIndexes[ aParam->second.aInnerIndexes.size() - 1 ];
+                    nLargestIndexNotLinkedByColumnName = aParam.second.aInnerIndexes[ aParam.second.aInnerIndexes.size() - 1 ];
                 }
             }
 #endif
-            if ( aParam->second.eType != ParameterClassification::FilledExternally )
+            if ( aParam.second.eType != ParameterClassification::FilledExternally )
                 continue;
 
             // check which of the parameters have already been visited (e.g. filled via XParameters)
             size_t nAlreadyVisited = 0;
-            for (   std::vector< sal_Int32 >::iterator aIndex = aParam->second.aInnerIndexes.begin();
-                    aIndex != aParam->second.aInnerIndexes.end();
-                    ++aIndex
-                )
+            for (auto & aIndex : aParam.second.aInnerIndexes)
             {
-                if ( ( m_aParametersVisited.size() > static_cast<size_t>(*aIndex) ) && m_aParametersVisited[ *aIndex ] )
+                if ( ( m_aParametersVisited.size() > static_cast<size_t>(aIndex) ) && m_aParametersVisited[ aIndex ] )
                 {   // exclude this index
-                    *aIndex = -1;
+                    aIndex = -1;
                     ++nAlreadyVisited;
                 }
             }
-            if ( nAlreadyVisited == aParam->second.aInnerIndexes.size() )
+            if ( nAlreadyVisited == aParam.second.aInnerIndexes.size() )
                 continue;
 
             // need a wrapper for this .... the "inner parameters" as supplied by a result set don't have a "Value"
             // property, but the parameter listeners expect such a property. So we need an object "aggregating"
             // xParam and supplying an additional property ("Value")
             // (it's no real aggregation of course ...)
-            m_pOuterParameters->push_back( new param::ParameterWrapper( aParam->second.xComposerColumn, m_xInnerParamUpdate, aParam->second.aInnerIndexes ) );
+            m_pOuterParameters->push_back( new param::ParameterWrapper( aParam.second.xComposerColumn, m_xInnerParamUpdate, aParam.second.aInnerIndexes ) );
         }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -613,13 +598,10 @@ namespace dbtools
                 Reference< XPropertySet >  xMasterField(_rxParentColumns->getByName( *pMasterFields ),UNO_QUERY);
 
                 // the positions where we have to fill in values for the current parameter name
-                for ( std::vector< sal_Int32 >::const_iterator aPosition = aParamInfo->second.aInnerIndexes.begin();
-                      aPosition != aParamInfo->second.aInnerIndexes.end();
-                      ++aPosition
-                    )
+                for (auto const& aPosition : aParamInfo->second.aInnerIndexes)
                 {
                     // the concrete detail field
-                    Reference< XPropertySet >  xDetailField(m_xInnerParamColumns->getByIndex( *aPosition ),UNO_QUERY);
+                    Reference< XPropertySet >  xDetailField(m_xInnerParamColumns->getByIndex(aPosition),UNO_QUERY);
                     OSL_ENSURE( xDetailField.is(), "ParameterManager::fillLinkedParameters: invalid detail field!" );
                     if ( !xDetailField.is() )
                         continue;
@@ -636,7 +618,7 @@ namespace dbtools
                     try
                     {
                         m_xInnerParamUpdate->setObjectWithInfo(
-                            *aPosition + 1,                     // parameters are based at 1
+                            aPosition + 1,                     // parameters are based at 1
                             xMasterField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_VALUE) ),
                             nParamType,
                             nScale
@@ -646,7 +628,7 @@ namespace dbtools
                     {
                         DBG_UNHANDLED_EXCEPTION();
                         SAL_WARN( "connectivity.commontools", "ParameterManager::fillLinkedParameters: master-detail parameter number " <<
-                                  sal_Int32( *aPosition + 1 ) << " could not be filled!" );
+                                  sal_Int32( aPosition + 1 ) << " could not be filled!" );
                     }
                 }
             }
@@ -940,13 +922,10 @@ namespace dbtools
                 if ( !xMasterField.is() )
                     continue;
 
-                for ( std::vector< sal_Int32 >::const_iterator aPosition = aParamInfo->second.aInnerIndexes.begin();
-                      aPosition != aParamInfo->second.aInnerIndexes.end();
-                      ++aPosition
-                    )
+                for (auto const& aPosition : aParamInfo->second.aInnerIndexes)
                 {
                     Reference< XPropertySet > xInnerParameter;
-                    m_xInnerParamColumns->getByIndex( *aPosition ) >>= xInnerParameter;
+                    m_xInnerParamColumns->getByIndex(aPosition) >>= xInnerParameter;
                     if ( !xInnerParameter.is() )
                         continue;
 
