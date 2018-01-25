@@ -138,7 +138,7 @@ sal_Int16 Index::getIndexWeight(const OUString& rIndexEntry)
                 return mkeys[i];
         }
     }
-    sal_Unicode code = rIndexEntry[startPos];
+    sal_Unicode code = startPos < rIndexEntry.getLength() ? rIndexEntry[startPos] : 0;
     for (sal_Int16 i = 0; i < table_count; i++) {
         if (tables[i].start <= code && code <= tables[i].end)
             return tables[i].table[code-tables[i].start];
