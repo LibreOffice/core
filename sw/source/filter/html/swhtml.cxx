@@ -674,14 +674,21 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 EndNumBulList();
 
             OSL_ENSURE( !m_nContextStMin, "There are protected contexts" );
-            m_nContextStMin = 0;
-            while( m_aContexts.size() )
+            // try this twice, first normally to let m_nContextStMin decrease
+            // naturally and get contexts popped in desired order, and if that
+            // fails force it
+            for (int i = 0; i < 2; ++i)
             {
-                std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
-                if (xCntxt)
+                while (m_aContexts.size() > m_nContextStMin)
                 {
-                    EndContext(xCntxt.get());
+                    std::unique_ptr<HTMLAttrContext> xCntxt(PopContext());
+                    if (xCntxt)
+                        EndContext(xCntxt.get());
                 }
+                if (!m_nContextStMin)
+                    break;
+                OSL_ENSURE(!m_nContextStMin, "There are still protected contexts");
+                m_nContextStMin = 0;
             }
 
             if( !m_aParaAttrs.empty() )
