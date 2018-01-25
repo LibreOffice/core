@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_d0e76d3e",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T08:58:36Z",
+      "side": 1,
+      "message": "By the way: use the prefixes as established in the project. This must be nDefValue.",
+      "range": {
+        "startLine": 2000,
+        "startChar": 8,
+        "endLine": 2000,
+        "endChar": 16
+      },
+      "revId": "63f8f725a0104b0308957ebd5992058b50c655fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
