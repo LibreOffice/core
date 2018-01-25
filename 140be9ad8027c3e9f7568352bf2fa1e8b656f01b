@@ -45,6 +45,30 @@
       "revId": "140be9ad8027c3e9f7568352bf2fa1e8b656f01b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a36ab118",
+        "filename": "filter/source/xslt/export/uof/odf2uof_spreadsheet.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 2363,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-25T17:57:31Z",
+      "side": 1,
+      "message": "I have absolutely no idea of this xslt stuff.\nBut it looks wrong and looks like it should be similar to the other two places above. I suggest to omit this file from the commit and do the changes in a separate commit that could be easily identified and corrected in case something goes wrong.",
+      "parentUuid": "fa31d9ce_0d63ae1b",
+      "range": {
+        "startLine": 2362,
+        "startChar": 36,
+        "endLine": 2363,
+        "endChar": 63
+      },
+      "revId": "140be9ad8027c3e9f7568352bf2fa1e8b656f01b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
