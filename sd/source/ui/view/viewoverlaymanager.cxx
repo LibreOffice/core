@@ -151,7 +151,7 @@ public:
     static void HideTip();
 
 private:
-    rtl::Reference< ChangePlaceholderTag > mxTag;
+    rtl::Reference< ChangePlaceholderTag > mxChangePlaceholderTag;
 
     int mnHighlightId;
     Size maImageSize;
@@ -159,7 +159,7 @@ private:
 
 ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
 : SmartHdl( xTag, rPnt, SdrHdlKind::SmartTag )
-, mxTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
+, mxChangePlaceholderTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
 , mnHighlightId( -1 )
 , maImageSize( 42, 42 )
 {
@@ -222,7 +222,7 @@ void ImageButtonHdl::CreateB2dIAObject()
     const Point aTagPos( GetPos() );
     basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
 
-    BitmapEx aBitmapEx( mxTag->createOverlayImage( mnHighlightId ) ); // maImageMO.GetBitmapEx() : maImage.GetBitmapEx() );
+    BitmapEx aBitmapEx( mxChangePlaceholderTag->createOverlayImage( mnHighlightId ) ); // maImageMO.GetBitmapEx() : maImage.GetBitmapEx() );
     maImageSize = aBitmapEx.GetSizePixel();
     maImageSize.Width() >>= 1;
     maImageSize.Height() >>= 1;
