@@ -66,7 +66,6 @@ bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
 SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     : SwFieldType( SwFieldIds::TableOfAuthorities ),
     m_pDoc(pDoc),
-    m_SortKeyArr(3),
     m_cPrefix('['),
     m_cSuffix(']'),
     m_bIsSequence(false),
