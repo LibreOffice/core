@@ -23,7 +23,7 @@
 
 #include <unx/geninst.h>
 
-#include <strings.hrc>
+#include <svids.hrc>
 
 #include <future>
 #include <system_error>
@@ -98,12 +98,12 @@ void sendIpcArg(std::ostream& stream, const OUString& string)
     sendIpcStringArg(stream, utf8.getLength(), utf8.getStr());
 }
 
-OUString getResString(const char* pResId)
+OUString getResString(sal_Int32 aResId)
 {
-    if (pResId == nullptr)
+    if (aResId == -1)
         return {};
 
-    return VclResId(pResId);
+    return ResId(aResId, *ImplGetResMgr()).toString();
 }
 
 // Gtk3KDE5FilePicker
@@ -169,7 +169,7 @@ std::function<void()> Gtk3KDE5FilePickerIpc::blockMainWindow()
     if (!pSysData)
         return {};
 
-    sendCommand(Commands::SetWinId, pSysData->aWindow);
+    sendCommand(Commands::SetWinId, static_cast<sal_uIntPtr>(pSysData->aWindow));
 
     auto* pMainWindow = static_cast<GtkWidget*>(pSysData->pWidget);
     if (!pMainWindow)

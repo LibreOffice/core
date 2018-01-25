@@ -28,7 +28,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <vcl/svapp.hxx>
 
-#include <strings.hrc>
+#include <svids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -46,12 +46,12 @@ Gtk3KDE5FolderPicker::Gtk3KDE5FolderPicker(
 
 Gtk3KDE5FolderPicker::~Gtk3KDE5FolderPicker() = default;
 
-void SAL_CALL Gtk3KDE5FolderPicker::setDisplayDirectory(const OUString& aDirectory)
+void SAL_CALL Gtk3KDE5FolderPicker::setDisplayDirectory(const OUString& aDirectory) throw (::css::lang::IllegalArgumentException, ::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::SetDisplayDirectory, aDirectory);
 }
 
-OUString SAL_CALL Gtk3KDE5FolderPicker::getDisplayDirectory()
+OUString SAL_CALL Gtk3KDE5FolderPicker::getDisplayDirectory() throw (::css::uno::RuntimeException, ::std::exception)
 {
     auto id = m_ipc.sendCommand(Commands::GetDisplayDirectory);
     OUString ret;
@@ -59,7 +59,7 @@ OUString SAL_CALL Gtk3KDE5FolderPicker::getDisplayDirectory()
     return ret;
 }
 
-OUString SAL_CALL Gtk3KDE5FolderPicker::getDirectory()
+OUString SAL_CALL Gtk3KDE5FolderPicker::getDirectory() throw (::css::uno::RuntimeException, ::std::exception)
 {
     auto id = m_ipc.sendCommand(Commands::GetSelectedFiles);
     uno::Sequence<OUString> seq;
@@ -67,20 +67,20 @@ OUString SAL_CALL Gtk3KDE5FolderPicker::getDirectory()
     return seq.hasElements() ? seq[0] : OUString();
 }
 
-void SAL_CALL Gtk3KDE5FolderPicker::setDescription(const OUString& /*rDescription*/) {}
+void SAL_CALL Gtk3KDE5FolderPicker::setDescription(const OUString& /*rDescription*/) throw (::css::uno::RuntimeException, ::std::exception) {}
 
 // XExecutableDialog functions
 
-void SAL_CALL Gtk3KDE5FolderPicker::setTitle(const OUString& aTitle)
+void SAL_CALL Gtk3KDE5FolderPicker::setTitle(const OUString& aTitle) throw (::css::uno::RuntimeException, ::std::exception)
 {
     m_ipc.sendCommand(Commands::SetTitle, aTitle);
 }
 
-sal_Int16 SAL_CALL Gtk3KDE5FolderPicker::execute() { return m_ipc.execute(); }
+sal_Int16 SAL_CALL Gtk3KDE5FolderPicker::execute() throw (::css::uno::RuntimeException, ::std::exception) { return m_ipc.execute(); }
 
 // XCancellable
 
-void SAL_CALL Gtk3KDE5FolderPicker::cancel()
+void SAL_CALL Gtk3KDE5FolderPicker::cancel() throw (::css::uno::RuntimeException, ::std::exception)
 {
     // TODO
 }
