@@ -47,9 +47,9 @@ void OFileDriver::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
 
 
-    for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+    for (auto const& connection : m_xConnections)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(connection.get(), UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }
@@ -194,9 +194,9 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     {
         OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelImplementationId()) );
         OConnection* pConnection = nullptr;
-        for (OWeakRefArray::const_iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+        for (auto const& elem : m_xConnections)
         {
-            if (static_cast<OConnection*>( Reference< XConnection >::query(i->get().get()).get() ) == pSearchConnection)
+            if (static_cast<OConnection*>( Reference< XConnection >::query(elem.get().get()).get() ) == pSearchConnection)
             {
                 pConnection = pSearchConnection;
                 break;

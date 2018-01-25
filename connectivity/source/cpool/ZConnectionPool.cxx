@@ -247,9 +247,7 @@ void OConnectionPool::invalidatePooledConnections()
             }
             if(aActIter == m_aActiveConnections.end())
             {// he isn't so we can delete him
-                TConnectionMap::iterator aDeleteIter = aIter;
-                ++aIter;
-                m_aPool.erase(aDeleteIter);
+                aIter = m_aPool.erase(aIter);
             }
             else
                 ++aIter;
