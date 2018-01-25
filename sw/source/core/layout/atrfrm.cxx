@@ -2055,16 +2055,16 @@ void SwFormatChain::SetPrev( SwFlyFrameFormat *pFormat )
 {
     if ( pFormat )
         pFormat->Add( &aPrev );
-    else if ( aPrev.GetRegisteredIn() )
-        aPrev.GetRegisteredIn()->Remove( &aPrev );
+    else
+        aPrev.EndListeningAll();
 }
 
 void SwFormatChain::SetNext( SwFlyFrameFormat *pFormat )
 {
     if ( pFormat )
         pFormat->Add( &aNext );
-    else if ( aNext.GetRegisteredIn() )
-        aNext.GetRegisteredIn()->Remove( &aNext );
+    else
+        aNext.EndListeningAll();
 }
 
 bool SwFormatChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
