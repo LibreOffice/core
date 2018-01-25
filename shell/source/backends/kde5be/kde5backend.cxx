@@ -76,47 +76,47 @@ public:
 private:
     virtual ~Service() {}
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString SAL_CALL getImplementationName() throw (::css::uno::RuntimeException, ::std::exception) override
     {
         return getServiceImplementationName();
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) throw (com::sun::star::uno::RuntimeException, std::exception) override
     {
         return ServiceName == getSupportedServiceNames()[0];
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (::css::uno::RuntimeException, ::std::exception) override
     {
         return getServiceSupportedServiceNames();
     }
 
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw (com::sun::star::uno::RuntimeException, std::exception) override
     {
         return css::uno::Reference<css::beans::XPropertySetInfo>();
     }
 
-    virtual void SAL_CALL setPropertyValue(OUString const&, css::uno::Any const&) override;
+    virtual void SAL_CALL setPropertyValue(OUString const&, css::uno::Any const&) throw (::css::beans::UnknownPropertyException, ::css::beans::PropertyVetoException, ::css::lang::IllegalArgumentException, ::css::lang::WrappedTargetException, ::css::uno::RuntimeException, ::std::exception) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(OUString const& PropertyName) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue(OUString const& PropertyName) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
-        OUString const&, css::uno::Reference<css::beans::XPropertyChangeListener> const&) override
+        OUString const&, css::uno::Reference<css::beans::XPropertyChangeListener> const&) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException, std::exception) override
     {
     }
 
     virtual void SAL_CALL removePropertyChangeListener(
-        OUString const&, css::uno::Reference<css::beans::XPropertyChangeListener> const&) override
+        OUString const&, css::uno::Reference<css::beans::XPropertyChangeListener> const&) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException, std::exception) override
     {
     }
 
     virtual void SAL_CALL addVetoableChangeListener(
-        OUString const&, css::uno::Reference<css::beans::XVetoableChangeListener> const&) override
+        OUString const&, css::uno::Reference<css::beans::XVetoableChangeListener> const&) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException, std::exception) override
     {
     }
 
     virtual void SAL_CALL removeVetoableChangeListener(
-        OUString const&, css::uno::Reference<css::beans::XVetoableChangeListener> const&) override
+        OUString const&, css::uno::Reference<css::beans::XVetoableChangeListener> const&) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException, std::exception) override
     {
     }
 
@@ -202,13 +202,13 @@ Service::Service()
     }
 }
 
-void Service::setPropertyValue(OUString const&, css::uno::Any const&)
+void Service::setPropertyValue(OUString const&, css::uno::Any const&) throw (::css::beans::UnknownPropertyException, ::css::beans::PropertyVetoException, ::css::lang::IllegalArgumentException, ::css::lang::WrappedTargetException, ::css::uno::RuntimeException, ::std::exception)
 {
     throw css::lang::IllegalArgumentException(OUString("setPropertyValue not supported"),
                                               static_cast<cppu::OWeakObject*>(this), -1);
 }
 
-css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
+css::uno::Any Service::getPropertyValue(OUString const& PropertyName) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException, std::exception)
 {
     if (PropertyName == "EnableATToolSupport" || PropertyName == "ExternalMailer"
         || PropertyName == "SourceViewFontHeight" || PropertyName == "SourceViewFontName"
