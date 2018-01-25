@@ -190,7 +190,7 @@ void SvxMenuConfigPage::Init()
         comphelper::getProcessComponentContext(),
         m_xFrame,
         vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions );
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions, OUString(), GetSaveInData() );
 }
 
 void SvxMenuConfigPage::dispose()
@@ -337,7 +337,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectCategory, ListBox&, void )
 {
     OUString aSearchTerm( m_pSearchEdit->GetText() );
 
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm );
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm, GetSaveInData() );
 }
 
 IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, Button *, void )
