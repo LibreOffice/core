@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_104d8572",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T08:51:09Z",
+      "side": 1,
+      "message": "Again: you could see in https://ci.libreoffice.org/job/lo_gerrit/26322/Config\u003dlinux_clang_dbgutil_64/console and https://ci.libreoffice.org/job/lo_gerrit/26349/Config\u003dlinux_clang_dbgutil_64/console, that formatter insists on a space before the //!",
+      "revId": "b204e6222ce797fb82ad10d51d4223d7f193b00b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_30528914",
+        "filename": "writerfilter/source/rtftok/rtftokenizer.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T08:51:09Z",
+      "side": 1,
+      "message": "Obsolete comment... sigh!",
+      "range": {
+        "startLine": 324,
+        "startChar": 12,
+        "endLine": 324,
+        "endChar": 101
+      },
+      "revId": "b204e6222ce797fb82ad10d51d4223d7f193b00b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_705c0126",
+        "filename": "writerfilter/source/rtftok/rtftokenizer.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T08:51:09Z",
+      "side": 1,
+      "message": "I asked to simplify the processing.\n\nOk: here is what *you* should have done: the code (replacing everything in lines 325-337) must look like that:\n\n  if (!bParam)\n    nParam\u003ds_aRTFControlWords[i].defValue;\n  ret \u003d m_rImport.dispatchValue(s_aRTFControlWords[i].nIndex, nParam);\n  if (ret !\u003d RTFError::OK)\n    return ret;",
+      "range": {
+        "startLine": 331,
+        "startChar": 12,
+        "endLine": 337,
+        "endChar": 13
+      },
+      "revId": "b204e6222ce797fb82ad10d51d4223d7f193b00b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
