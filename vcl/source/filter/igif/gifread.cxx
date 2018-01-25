@@ -50,6 +50,8 @@ class SvStream;
 class GIFReader : public GraphicReader
 {
     Animation           aAnimation;
+    sal_uInt64          nAnimationByteSize;
+    sal_uInt64          nAnimationMinFileData;
     Bitmap              aBmp8;
     Bitmap              aBmp1;
     BitmapPalette       aGPalette;
@@ -109,7 +111,9 @@ public:
 };
 
 GIFReader::GIFReader( SvStream& rStm )
-    : aGPalette ( 256 )
+    : nAnimationByteSize(0)
+    , nAnimationMinFileData(0)
+    , aGPalette ( 256 )
     , aLPalette ( 256 )
     , rIStm ( rStm )
     , nYAcc ( 0 )
@@ -167,13 +171,8 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     // 1:1472.88 [184.11 x 8] is more realistic)
 
     sal_uInt64 nMinFileData = nWidth * nHeight / 2560;
-    for (size_t i = 0; i < aAnimation.Count(); ++i)
-    {
-        const AnimationBitmap& rBitmap = aAnimation.Get(i);
-        const Size& rSize = rBitmap.aSizePix;
-        nMinFileData += rSize.Width() * rSize.Height() / 2560;
-        nCombinedPixSize += rBitmap.aBmpEx.GetSizeBytes();
-    }
+    nMinFileData += nAnimationMinFileData;
+    nCombinedPixSize += nAnimationByteSize;
 
     if (nMaxStreamData < nMinFileData)
     {
@@ -662,6 +661,8 @@ void GIFReader::CreateNewBitmaps()
     else
         aAnimBmp.eDisposal = Disposal::Not;
 
+    nAnimationByteSize += aAnimBmp.aBmpEx.GetSizeBytes();
+    nAnimationMinFileData += nImageWidth * nImageHeight / 2560;
     aAnimation.Insert( aAnimBmp );
 
     if( aAnimation.Count() == 1 )
