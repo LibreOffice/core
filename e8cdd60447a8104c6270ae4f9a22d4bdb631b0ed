@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_70bb2173",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T13:10:50Z",
+      "side": 1,
+      "message": "1800",
+      "range": {
+        "startLine": 812,
+        "startChar": 41,
+        "endLine": 812,
+        "endChar": 42
+      },
+      "revId": "e8cdd60447a8104c6270ae4f9a22d4bdb631b0ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_90b0958d",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T13:10:50Z",
+      "side": 1,
+      "message": "1440",
+      "range": {
+        "startLine": 1012,
+        "startChar": 53,
+        "endLine": 1012,
+        "endChar": 54
+      },
+      "revId": "e8cdd60447a8104c6270ae4f9a22d4bdb631b0ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_9077b5d3",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1505,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T13:10:50Z",
+      "side": 1,
+      "message": "? lsdprioritydef setting affects this; but this doesn\u0027t mean that it has default as 99; rather, its default is variable, so just keep it 0 for now, and it might need preprocessing (should be added in a later commit).",
+      "range": {
+        "startLine": 1505,
+        "startChar": 49,
+        "endLine": 1505,
+        "endChar": 51
+      },
+      "revId": "e8cdd60447a8104c6270ae4f9a22d4bdb631b0ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_f07e31ad",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T13:10:50Z",
+      "side": 1,
+      "message": "1",
+      "range": {
+        "startLine": 1531,
+        "startChar": 61,
+        "endLine": 1531,
+        "endChar": 62
+      },
+      "revId": "e8cdd60447a8104c6270ae4f9a22d4bdb631b0ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_104ae583",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T13:10:50Z",
+      "side": 1,
+      "message": "1",
+      "range": {
+        "startLine": 1750,
+        "startChar": 35,
+        "endLine": 1750,
+        "endChar": 36
+      },
+      "revId": "e8cdd60447a8104c6270ae4f9a22d4bdb631b0ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_50445d73",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T13:10:50Z",
+      "side": 1,
+      "message": "1",
+      "range": {
+        "startLine": 1752,
+        "startChar": 36,
+        "endLine": 1752,
+        "endChar": 37
+      },
+      "revId": "e8cdd60447a8104c6270ae4f9a22d4bdb631b0ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_905ed543",
+        "filename": "writerfilter/source/rtftok/rtfcontrolwords.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-25T13:10:50Z",
+      "side": 1,
+      "message": "Please add a space here, too - it reads better",
+      "revId": "e8cdd60447a8104c6270ae4f9a22d4bdb631b0ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
