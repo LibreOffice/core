@@ -1003,8 +1003,6 @@ private:
     SdrObjFactory() = delete;
 };
 
-typedef tools::WeakReference< SdrObject > SdrObjectWeakRef;
-
 template< typename T > T* SdrObject::CloneHelper() const
 {
     OSL_ASSERT( typeid( T ) == typeid( *this ));

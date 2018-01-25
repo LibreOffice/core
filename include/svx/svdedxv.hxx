@@ -74,7 +74,8 @@ class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView, public EditViewCallb
 
 protected:
     // TextEdit
-    SdrObjectWeakRef            mxTextEditObj;         // current object in TextEdit
+    tools::WeakReference<SdrObject>
+                                mxTextEditObj;         // current object in TextEdit
     SdrPageView*                pTextEditPV;
     SdrOutliner*                pTextEditOutliner;     // outliner for the TextEdit
     OutlinerView*               pTextEditOutlinerView; // current view of the outliners

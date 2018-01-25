@@ -49,7 +49,7 @@ typedef std::map< OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 
 struct SdStyleFamilyImpl
 {
-    SdrPageWeakRef mxMasterPage;
+    tools::WeakReference<SdrPage> mxMasterPage;
     OUString maLayoutName;
 
     PresStyleMap& getStyleSheets();

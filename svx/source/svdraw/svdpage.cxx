@@ -59,11 +59,11 @@
 using namespace ::com::sun::star;
 
 class SdrObjList::WeakSdrObjectContainerType
-    : public ::std::vector<SdrObjectWeakRef>
+    : public ::std::vector<tools::WeakReference<SdrObject>>
 {
 public:
     explicit WeakSdrObjectContainerType (const sal_Int32 nInitialSize)
-        : ::std::vector<SdrObjectWeakRef>(nInitialSize) {};
+        : ::std::vector<tools::WeakReference<SdrObject>>(nInitialSize) {};
 };
 
 
@@ -758,7 +758,7 @@ void SdrObjList::SetObjectNavigationPosition (
     OSL_ASSERT(mxNavigationOrder.get()!=nullptr);
     OSL_ASSERT( mxNavigationOrder->size() == maList.size());
 
-    SdrObjectWeakRef aReference (&rObject);
+    tools::WeakReference<SdrObject> aReference (&rObject);
 
     // Look up the object whose navigation position is to be changed.
     WeakSdrObjectContainerType::iterator iObject (::std::find(
@@ -919,7 +919,7 @@ void SdrObjList::ReplaceObjectInContainer (
         // not transferred to the new object so erase the former and append
         // the later object from/to the navigation order.
         OSL_ASSERT(nObjectPosition < maList.size());
-        SdrObjectWeakRef aReference (maList[nObjectPosition]);
+        tools::WeakReference<SdrObject> aReference (maList[nObjectPosition]);
         WeakSdrObjectContainerType::iterator iObject (::std::find(
             mxNavigationOrder->begin(),
             mxNavigationOrder->end(),
@@ -949,7 +949,7 @@ void SdrObjList::RemoveObjectFromContainer (
     // Update the navigation positions.
     if (HasObjectNavigationOrder())
     {
-        SdrObjectWeakRef aReference (maList[nObjectPosition]);
+        tools::WeakReference<SdrObject> aReference (maList[nObjectPosition]);
         WeakSdrObjectContainerType::iterator iObject (::std::find(
             mxNavigationOrder->begin(),
             mxNavigationOrder->end(),

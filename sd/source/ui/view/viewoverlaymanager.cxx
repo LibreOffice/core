@@ -130,7 +130,7 @@ protected:
     virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;
 
 private:
-    SdrObjectWeakRef    mxPlaceholderObj;
+    ::tools::WeakReference<SdrObject>    mxPlaceholderObj;
 };
 
 class ImageButtonHdl : public SmartHdl

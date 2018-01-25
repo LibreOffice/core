@@ -761,7 +761,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 {
     maMasterViewFilter.End();
 
-    SdrObjectWeakRef xObj( GetTextEditObject() );
+    ::tools::WeakReference<SdrObject> xObj( GetTextEditObject() );
 
     bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
 

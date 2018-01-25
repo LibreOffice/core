@@ -81,7 +81,8 @@ protected:
 private:
     virtual void disposing() override;
 
-    SdrObjectWeakRef    mxTextObj;
+    ::tools::WeakReference<SdrObject>
+                        mxTextObj;
     bool                bFirstObjCreated;
     bool                bJustEndedEdit;
 
