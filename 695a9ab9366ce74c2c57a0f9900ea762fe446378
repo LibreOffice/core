@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cd58b659",
+        "filename": "xmloff/source/style/bordrhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-25T07:48:47Z",
+      "side": 1,
+      "message": "Why changing \"misformed\" to \"malformed\"?",
+      "range": {
+        "startLine": 219,
+        "startChar": 15,
+        "endLine": 219,
+        "endChar": 24
+      },
+      "revId": "695a9ab9366ce74c2c57a0f9900ea762fe446378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
