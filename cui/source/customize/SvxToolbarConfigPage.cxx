@@ -318,7 +318,7 @@ void SvxToolbarConfigPage::Init()
         comphelper::getProcessComponentContext(),
         m_xFrame,
         vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions );
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions, OUString(), GetSaveInData() );
 }
 
 SaveInData* SvxToolbarConfigPage::CreateSaveInData(
@@ -413,7 +413,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectCategory, ListBox&, void )
 {
     OUString aSearchTerm( m_pSearchEdit->GetText() );
 
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm );
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm, GetSaveInData() );
 }
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandHdl, Button *, void )
