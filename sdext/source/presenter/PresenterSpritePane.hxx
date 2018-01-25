@@ -80,12 +80,10 @@ public:
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent) override;
 
 private:
-    css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxParentCanvas;
     std::shared_ptr<PresenterSprite> mpSprite;
 
     virtual void CreateCanvases (
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas) override;
     void UpdateCanvases();
 };

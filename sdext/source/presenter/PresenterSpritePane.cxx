@@ -33,7 +33,6 @@ namespace sdext { namespace presenter {
 PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterPaneBase(rxContext, rpPresenterController),
-      mxParentWindow(),
       mxParentCanvas(),
       mpSprite(new PresenterSprite())
 {
@@ -53,7 +52,6 @@ PresenterSpritePane::~PresenterSpritePane()
 void PresenterSpritePane::disposing()
 {
     mpSprite->SetFactory(nullptr);
-    mxParentWindow = nullptr;
     mxParentCanvas = nullptr;
     PresenterPaneBase::disposing();
 }
@@ -165,12 +163,9 @@ void PresenterSpritePane::UpdateCanvases()
 }
 
 void PresenterSpritePane::CreateCanvases (
-    const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
     const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas)
 {
-    OSL_ASSERT(!mxParentWindow.is() || mxParentWindow==rxParentWindow);
     OSL_ASSERT(!mxParentCanvas.is() || mxParentCanvas==rxParentCanvas);
-    mxParentWindow = rxParentWindow;
     mxParentCanvas = rxParentCanvas;
 
     mpSprite->SetFactory(mxParentCanvas);

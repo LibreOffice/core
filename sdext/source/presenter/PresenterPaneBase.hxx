@@ -114,11 +114,9 @@ protected:
     SharedBitmapDescriptor mpViewBackground;
 
     virtual void CreateCanvases (
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas) = 0;
 
     void CreateWindows (
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const bool bIsWindowVisibleOnCreation);
     void PaintBorder (const css::awt::Rectangle& rUpdateRectangle);
     void ToTop();
