@@ -48,20 +48,11 @@ namespace webdav_ucp {
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
 #define WEBDAV_URL_SCHEME           "vnd.sun.star.webdav"
-#define WEBDAV_URL_SCHEME_LENGTH    19
-
 #define WEBDAVS_URL_SCHEME "vnd.sun.star.webdavs"
-#define WEBDAVS_URL_SCHEME_LENGTH 20
-
 #define HTTP_URL_SCHEME         "http"
-
 #define HTTPS_URL_SCHEME        "https"
-
 #define DAV_URL_SCHEME          "dav"
-#define DAV_URL_SCHEME_LENGTH   3
-
 #define DAVS_URL_SCHEME         "davs"
-#define DAVS_URL_SCHEME_LENGTH  4
 
 #define FTP_URL_SCHEME "ftp"
 

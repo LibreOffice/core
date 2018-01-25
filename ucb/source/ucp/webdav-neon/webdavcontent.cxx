@@ -2798,6 +2798,16 @@ void Content::transfer(
             sourceURI.SetScheme(
                 HTTPS_URL_SCHEME );
         }
+        else if ( aScheme == "webdav" )
+        {
+            sourceURI.SetScheme(
+                HTTP_URL_SCHEME );
+        }
+        else if ( aScheme == "webdavs" )
+        {
+            sourceURI.SetScheme(
+                HTTPS_URL_SCHEME );
+        }
         else
         {
             if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME )
@@ -2823,6 +2833,12 @@ void Content::transfer(
             targetURI.SetScheme(
                 HTTP_URL_SCHEME );
         else if ( aScheme == DAVS_URL_SCHEME )
+            targetURI.SetScheme(
+                HTTPS_URL_SCHEME );
+        else if ( aScheme == "webdav" )
+            targetURI.SetScheme(
+                HTTP_URL_SCHEME );
+        else if ( aScheme == "webdavs" )
             targetURI.SetScheme(
                 HTTPS_URL_SCHEME );
 
