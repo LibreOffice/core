@@ -127,7 +127,7 @@ public:
 private:
     PresObjKind meOldKind;
     PresObjKind meNewKind;
-    ::tools::WeakReference<SdrPage> mxPage;
+    ::tools::WeakReference<SdPage> mxPage;
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
@@ -143,7 +143,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdrPage> mxPage;
+    ::tools::WeakReference<SdPage> mxPage;
 };
 
 class UndoGeoObject final : public SdrUndoGeoObj
@@ -155,7 +155,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdrPage> mxPage;
+    ::tools::WeakReference<SdPage> mxPage;
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
@@ -168,7 +168,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdrPage> mxPage;
+    ::tools::WeakReference<SdPage> mxPage;
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 

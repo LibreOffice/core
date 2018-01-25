@@ -18,9 +18,16 @@
  */
 
 #include <tools/ref.hxx>
+#include <tools/weakbase.hxx>
 
 SvRefBase::~SvRefBase() COVERITY_NOEXCEPT_FALSE
 {
+}
+
+tools::WeakBase::~WeakBase()
+{
+    if( mpWeakConnection.is() )
+        mpWeakConnection->mpReference = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

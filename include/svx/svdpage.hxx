@@ -350,7 +350,7 @@ public:
   Also it's possible to request and directly set the order number (ZOrder)
   of SdrObjects.
 */
-class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage >
+class SVX_DLLPUBLIC SdrPage : public SdrObjList, public virtual tools::WeakBase
 {
     // #i9076#
     friend class SdrModel;

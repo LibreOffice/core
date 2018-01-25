@@ -84,7 +84,7 @@ namespace drawinglayer
                 const OutlinerParaObject& rOutlinerParaObjectPtr);
 
             // get data
-            const SdrText* getSdrText() const { return mrSdrText.get(); }
+            const SdrText* getSdrText() const;
             const OutlinerParaObject& getOutlinerParaObject() const { return maOutlinerParaObject; }
 
             // compare operator

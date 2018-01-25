@@ -49,7 +49,7 @@ typedef std::map< OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 
 struct SdStyleFamilyImpl
 {
-    tools::WeakReference<SdrPage> mxMasterPage;
+    tools::WeakReference<SdPage> mxMasterPage;
     OUString maLayoutName;
 
     PresStyleMap& getStyleSheets();
@@ -185,7 +185,7 @@ OUString SAL_CALL SdStyleFamily::getName()
 {
     if( mnFamily == SfxStyleFamily::Page )
     {
-        SdPage* pPage = static_cast< SdPage* >( mpImpl->mxMasterPage.get() );
+        SdPage* pPage = mpImpl->mxMasterPage.get();
         if( pPage == nullptr )
             throw DisposedException();
 

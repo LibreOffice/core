@@ -137,7 +137,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
     {
         SfxStyleSheetBasePool* pStShPool = mrDoc.GetStyleSheetPool();
         SdPage& rPage = *mpDrawViewShell->getCurrentPage();
-        SdrTextObj* pEditObject = static_cast< SdrTextObj* >( GetTextEditObject() );
+        SdrTextObj* pEditObject = GetTextEditObject();
 
         if (pEditObject)
         {

@@ -1132,7 +1132,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                     }
                     else
                     {
-                        mpView->RestoreDefaultText(dynamic_cast< SdrTextObj* >( mxTextObj.get() ));
+                        mpView->RestoreDefaultText( mxTextObj.get() );
                     }
                 }
             }
@@ -1244,7 +1244,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
         {
             // are we currently editing?
             if(!bTestText)
-                mxTextObj.reset( dynamic_cast< SdrTextObj* >( mpView->GetTextEditObject() ) );
+                mxTextObj.reset( mpView->GetTextEditObject() );
 
             if (!mxTextObj.is())
             {

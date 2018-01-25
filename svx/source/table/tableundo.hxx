@@ -237,7 +237,7 @@ public:
     virtual void            Redo() override;
 
 private:
-    tools::WeakReference<SdrObject> mxObjRef;
+    tools::WeakReference<SdrTableObj> mxObjRef;
 
     struct Data
     {

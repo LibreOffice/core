@@ -40,11 +40,11 @@ namespace sdr { namespace properties {
 */
 
 class SfxStyleSheet;
-class SVX_DLLPUBLIC SdrText : public tools::WeakBase< SdrText >
+class SVX_DLLPUBLIC SdrText : public virtual tools::WeakBase
 {
 public:
     SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject = nullptr );
-    virtual ~SdrText();
+    virtual ~SdrText() override;
 
     virtual void SetModel(SdrModel* pNewModel);
     void ForceOutlinerParaObject( OutlinerMode nOutlMode );
