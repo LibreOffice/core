@@ -1684,7 +1684,8 @@ short SvtFileDialog::Execute()
 
 void SvtFileDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
-    PrepareExecute();
+    if (!PrepareExecute())
+        return;
 
     // start of the dialog
     ModalDialog::StartExecuteModal( rEndDialogHdl );
