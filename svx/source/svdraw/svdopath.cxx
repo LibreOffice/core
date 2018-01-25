@@ -2425,13 +2425,13 @@ void SdrPathObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     tools::Rectangle aOld(GetSnapRect());
 
-    // Take RECT_EMPTY into account when calculating scale factors
-    long nMulX = (RECT_EMPTY == rRect.Right()) ? 0 : rRect.Right()  - rRect.Left();
+    // Take empty into account when calculating scale factors
+    long nMulX = rRect.IsWidthEmpty() ? 0 : rRect.Right()  - rRect.Left();
 
     long nDivX = aOld.Right()   - aOld.Left();
 
-    // Take RECT_EMPTY into account when calculating scale factors
-    long nMulY = (RECT_EMPTY == rRect.Bottom()) ? 0 : rRect.Bottom() - rRect.Top();
+    // Take empty into account when calculating scale factors
+    long nMulY = rRect.IsHeightEmpty() ? 0 : rRect.Bottom() - rRect.Top();
 
     long nDivY = aOld.Bottom()  - aOld.Top();
     if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }

@@ -29,10 +29,8 @@
 SwRect::SwRect( const tools::Rectangle &rRect ) :
     m_Point( rRect.Left(), rRect.Top() )
 {
-    m_Size.setWidth(rRect.Right() == RECT_EMPTY ? 0 :
-                            rRect.Right()  - rRect.Left() +1);
-    m_Size.setHeight(rRect.Bottom() == RECT_EMPTY ? 0 :
-                            rRect.Bottom() - rRect.Top() + 1);
+    m_Size.setWidth( rRect.IsWidthEmpty() ? 0 : rRect.Right()  - rRect.Left() + 1);
+    m_Size.setHeight(rRect.IsHeightEmpty() ? 0 : rRect.Bottom() - rRect.Top()  + 1);
 }
 
 Point SwRect::Center() const

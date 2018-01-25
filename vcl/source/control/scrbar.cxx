@@ -131,11 +131,11 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
             maThumbRect.Left()      = maTrackRect.Left()+mnThumbPixPos;
             maThumbRect.Right()     = maThumbRect.Left()+mnThumbPixSize-1;
             if ( !mnThumbPixPos )
-                maPage1Rect.Right()     = RECT_EMPTY;
+                maPage1Rect.SetWidthEmpty();
             else
                 maPage1Rect.Right()     = maThumbRect.Left()-1;
             if ( mnThumbPixPos >= (mnThumbPixRange-mnThumbPixSize) )
-                maPage2Rect.Right()     = RECT_EMPTY;
+                maPage2Rect.SetWidthEmpty();
             else
             {
                 maPage2Rect.Left()      = maThumbRect.Right()+1;
@@ -147,11 +147,11 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
             maThumbRect.Top()       = maTrackRect.Top()+mnThumbPixPos;
             maThumbRect.Bottom()    = maThumbRect.Top()+mnThumbPixSize-1;
             if ( !mnThumbPixPos )
-                maPage1Rect.Bottom()    = RECT_EMPTY;
+                maPage1Rect.SetHeightEmpty();
             else
                 maPage1Rect.Bottom()    = maThumbRect.Top()-1;
             if ( mnThumbPixPos >= (mnThumbPixRange-mnThumbPixSize) )
-                maPage2Rect.Bottom()    = RECT_EMPTY;
+                maPage2Rect.SetHeightEmpty();
             else
             {
                 maPage2Rect.Top()       = maThumbRect.Bottom()+1;
