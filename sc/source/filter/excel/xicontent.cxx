@@ -662,7 +662,10 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
+        {
             xTokArr1.reset( pTokArr->Clone() );
+            GetDocRef().CheckLinkFormulaNeedingCheck( *xTokArr1);
+        }
     }
 
     ::std::unique_ptr< ScTokenArray > pTokArr2;
@@ -673,7 +676,10 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
+        {
             pTokArr2.reset( pTokArr->Clone() );
+            GetDocRef().CheckLinkFormulaNeedingCheck( *pTokArr2);
+        }
     }
 
     // *** create the Calc conditional formatting ***
