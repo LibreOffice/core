@@ -146,7 +146,7 @@ static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell
         Reference<XPropertySet> xProp( xCell, UNO_QUERY );
         try
         {
-            xProp->getPropertyValue( "CellContentType" ) >>= eCellType;      // type of formula result
+            xProp->getPropertyValue( "CellContentType" ) >>= eCellType;      // type of cell content
         }
         catch (UnknownPropertyException&)
         {
