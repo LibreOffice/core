@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_neon_opts, \
 	salhelper \
 	test \
 	ucbhelper \
+	tl \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,ucb_webdav_neon_opts, \

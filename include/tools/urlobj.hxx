@@ -54,6 +54,9 @@ enum class INetProtocol
     File,
     Mailto,
     VndSunStarWebdav,
+    VndSunStarWebdavs,
+    Webdav,
+    Webdavs,
     PrivSoffice,
     VndSunStarHelp,
     Https,
@@ -943,6 +946,7 @@ public:
 
     static bool IsCaseSensitive() { return true; }
 
+    void changeScheme(INetProtocol eTargetScheme);
 
 private:
     // General Structure:
@@ -1145,9 +1149,6 @@ private:
 
     TOOLS_DLLPRIVATE static bool scanIPv6reference(
         sal_Unicode const *& rBegin, sal_Unicode const * pEnd);
-
-private:
-    void changeScheme(INetProtocol eTargetScheme);
 };
 
 // static

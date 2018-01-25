@@ -35,6 +35,7 @@
 #include "webdavcontent.hxx"
 
 #include <osl/mutex.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
@@ -127,76 +128,34 @@ ContentProvider::queryContent(
                     ucb::XContentIdentifier >& Identifier )
 {
     // Check URL scheme...
+    INetURLObject aURL( Identifier->getContentIdentifier() );
 
-    const OUString aScheme
-        = Identifier->getContentProviderScheme().toAsciiLowerCase();
-    if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME
-         && aScheme != WEBDAV_URL_SCHEME && aScheme != WEBDAVS_URL_SCHEME
-      && aScheme != DAV_URL_SCHEME && aScheme != DAVS_URL_SCHEME && aScheme != FTP_URL_SCHEME )
+    if ( aURL.isSchemeEqualTo( INetProtocol::NotValid ) )
         throw ucb::IllegalIdentifierException();
 
-    // Normalize URL and create new Id, if nessacary.
-    OUString aURL = Identifier->getContentIdentifier();
-
-    // At least: <scheme> + "://"
-    if ( aURL.getLength() < ( aScheme.getLength() + 3 ) )
-        throw ucb::IllegalIdentifierException();
-
-    if ( !aURL.match("://", aScheme.getLength()) )
+    if ( !aURL.isAnyKnownWebDAVScheme() )
         throw ucb::IllegalIdentifierException();
 
     uno::Reference< ucb::XContentIdentifier > xCanonicId;
 
-    bool bNewId = false;
-    if ( aScheme == WEBDAV_URL_SCHEME )
+    if (aURL.isSchemeEqualTo( INetProtocol::VndSunStarWebdav ) ||
+        aURL.isSchemeEqualTo(DAV_URL_SCHEME) ||
+        aURL.isSchemeEqualTo( INetProtocol::Webdav ) )
     {
-        aURL = aURL.replaceAt( 0,
-                               WEBDAV_URL_SCHEME_LENGTH,
-                               HTTP_URL_SCHEME );
-        bNewId = true;
+        aURL.changeScheme( INetProtocol::Http );
+        xCanonicId = new ::ucbhelper::ContentIdentifier( aURL.getExternalURL() );
     }
-    else if ( aScheme == WEBDAVS_URL_SCHEME )
+    else if ( aURL.isSchemeEqualTo( INetProtocol::VndSunStarWebdavs ) ||
+        aURL.isSchemeEqualTo( DAVS_URL_SCHEME ) ||
+        aURL.isSchemeEqualTo( INetProtocol::Webdavs ))
     {
-        aURL = aURL.replaceAt( 0,
-                               WEBDAVS_URL_SCHEME_LENGTH,
-                               HTTPS_URL_SCHEME );
-        bNewId = true;
+        aURL.changeScheme( INetProtocol::Https );
+        xCanonicId = new ::ucbhelper::ContentIdentifier( aURL.getExternalURL() );
     }
-    else if ( aScheme == DAV_URL_SCHEME )
-    {
-        aURL = aURL.replaceAt( 0,
-                               DAV_URL_SCHEME_LENGTH,
-                               HTTP_URL_SCHEME );
-        bNewId = true;
-    }
-    else if ( aScheme == DAVS_URL_SCHEME )
-    {
-        aURL = aURL.replaceAt( 0,
-                               DAVS_URL_SCHEME_LENGTH,
-                               HTTPS_URL_SCHEME );
-        bNewId = true;
-    }
-
-    sal_Int32 nPos = aURL.lastIndexOf( '/' );
-    if ( nPos != aURL.getLength() - 1 )
-    {
-        // Find second slash in URL.
-        nPos = aURL.indexOf( '/', aURL.indexOf( '/' ) + 1 );
-        if ( nPos == -1 )
-            throw ucb::IllegalIdentifierException();
-
-        nPos = aURL.indexOf( '/', nPos + 1 );
-        if ( nPos == -1 )
-        {
-            aURL += "/";
-            bNewId = true;
-        }
-    }
-
-    if ( bNewId )
-        xCanonicId = new ::ucbhelper::ContentIdentifier( aURL );
     else
+    {
         xCanonicId = Identifier;
+    }
 
     osl::MutexGuard aGuard( m_aMutex );
 
