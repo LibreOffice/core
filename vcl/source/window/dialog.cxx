@@ -886,10 +886,9 @@ bool Dialog::ImplStartExecuteModal()
     {
         if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
-            const Size aSize = GetOptimalSize();
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("type", "dialog");
-            aItems.emplace_back("size", aSize.toString());
+            aItems.emplace_back("size", GetSizePixel().toString());
             if (!GetText().isEmpty())
                 aItems.emplace_back("title", GetText().toUtf8());
             pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
@@ -1256,7 +1255,7 @@ void Dialog::Resize()
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
         std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("size", GetOptimalSize().toString());
+        aItems.emplace_back("size", GetSizePixel().toString());
         pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
     }
 }
