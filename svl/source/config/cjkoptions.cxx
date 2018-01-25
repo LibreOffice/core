@@ -116,15 +116,15 @@ SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
 void    SvtCJKOptions_Impl::SetAll(bool bSet)
 {
     if (
-        !(!bROCJKFont          &&
-        !bROVerticalText     &&
-        !bROAsianTypography  &&
-        !bROJapaneseFind     &&
-        !bRORuby             &&
-        !bROChangeCaseMap    &&
-        !bRODoubleLines      &&
-        !bROEmphasisMarks    &&
-        !bROVerticalCallOut)
+        bROCJKFont          ||
+        bROVerticalText     ||
+        bROAsianTypography  ||
+        bROJapaneseFind     ||
+        bRORuby             ||
+        bROChangeCaseMap    ||
+        bRODoubleLines      ||
+        bROEmphasisMarks    ||
+        bROVerticalCallOut
        )
         return;
 
