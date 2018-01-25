@@ -512,8 +512,6 @@ private:
     void impl_setModelForLayerAdmin(SdrModel* pNewModel);
 };
 
-typedef tools::WeakReference< SdrPage > SdrPageWeakRef;
-
 
 #endif // INCLUDED_SVX_SVDPAGE_HXX
 

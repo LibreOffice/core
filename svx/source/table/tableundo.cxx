@@ -34,7 +34,7 @@ using namespace ::com::sun::star::table;
 
 namespace sdr { namespace table {
 
-CellUndo::CellUndo( const SdrObjectWeakRef& xObjRef, const CellRef& xCell )
+CellUndo::CellUndo( const tools::WeakReference<SdrObject>& xObjRef, const CellRef& xCell )
     : SdrUndoAction( *xCell->GetModel() )
     , mxObjRef( xObjRef )
     , mxCell( xCell )

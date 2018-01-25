@@ -30,7 +30,7 @@ class SdrPage;
 class SVX_DLLPUBLIC SdrOutliner : public Outliner
 {
 protected:
-    SdrObjectWeakRef mpTextObj;
+    tools::WeakReference<SdrObject> mpTextObj;
     const SdrPage* mpVisualizedPage;
 
 public:

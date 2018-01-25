@@ -176,7 +176,7 @@ private:
     sdr::overlay::OverlayObjectList*  mpSelectionOverlay;
 
     SdrView* mpView;
-    SdrObjectWeakRef mxTableObj;
+    tools::WeakReference<SdrObject> mxTableObj;
     SdrModel* mpModel;
 
     css::uno::Reference< css::util::XModifyListener > mxModifyListener;
