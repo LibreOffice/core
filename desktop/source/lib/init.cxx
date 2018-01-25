@@ -15,6 +15,8 @@
 
 #include <algorithm>
 #include <memory>
+#include <condition_variable>
+#include <mutex>
 #include <iostream>
 #include <boost/property_tree/json_parser.hpp>
 
@@ -1248,11 +1250,34 @@ void CallbackFlushHandler::removeViewStates(int viewId)
     m_viewStates.erase(viewId);
 }
 
+/// Used to wait for async .uno commands before executing
+/// sync commands that might depend on the results of the
+/// in-flight .uno command.
+/// Ex. .uno:SelectAll followed by getTextSelection would
+/// not return the full text if SelectAll is not complete.
+static std::mutex gUnoMutex;
+static std::condition_variable gUnoCondVar;
+static std::atomic_bool gUnoInProgress(false);
+
+/**
+ * Called to ensure any in-flight .uno commands are
+ * completed before executing a new command.
+ */
+static void waitForUnoCommandCompletion(const size_t timeoutMs = 500)
+{
+    std::unique_lock<std::mutex> lock(gUnoMutex);
+    if (gUnoInProgress)
+    {
+        // .uno in progress, wait.
+        gUnoCondVar.wait_for(lock, std::chrono::milliseconds(timeoutMs), [](){ return !gUnoInProgress; });
+    }
+}
 
 static void doc_destroy(LibreOfficeKitDocument *pThis)
 {
     SolarMutexGuard aGuard;
 
+    waitForUnoCommandCompletion();
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
     delete pDocument;
 }
@@ -1334,6 +1359,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 {
     SolarMutexGuard aGuard;
 
+    waitForUnoCommandCompletion();
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
@@ -1438,6 +1464,7 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 {
     SolarMutexGuard aGuard;
 
+    waitForUnoCommandCompletion();
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
@@ -1542,6 +1569,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     OUString sFormat = getUString(pFormat);
@@ -1851,6 +1879,7 @@ static int doc_getParts (LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1867,6 +1896,7 @@ static int doc_getPart (LibreOfficeKitDocument* pThis)
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1883,6 +1913,7 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1899,6 +1930,7 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1920,6 +1952,7 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1932,7 +1965,6 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
     strcpy(pMemory, aString.getStr());
     return pMemory;
-
 }
 
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
@@ -1941,6 +1973,7 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -1963,6 +1996,7 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2004,6 +2038,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     SAL_INFO( "lok.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
               nCanvasWidth << "x" << nCanvasHeight << "]px" );
@@ -2058,6 +2093,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
@@ -2153,6 +2189,7 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
     {
@@ -2289,6 +2326,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2304,6 +2342,7 @@ static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned n
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
@@ -2344,26 +2383,36 @@ public:
         : maCommand(pCommand)
         , mpCallback(pCallback)
     {
-        assert(mpCallback);
+        std::unique_lock<std::mutex> lock(gUnoMutex);
+        gUnoInProgress = true;
+        lock.unlock();
     }
 
     virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
     {
-        boost::property_tree::ptree aTree;
-        aTree.put("commandName", maCommand.getStr());
-
-        if (rEvent.State != frame::DispatchResultState::DONTKNOW)
+        if (mpCallback)
         {
-            bool bSuccess = (rEvent.State == frame::DispatchResultState::SUCCESS);
-            aTree.put("success", bSuccess);
+            boost::property_tree::ptree aTree;
+            aTree.put("commandName", maCommand.getStr());
+
+            if (rEvent.State != frame::DispatchResultState::DONTKNOW)
+            {
+                const bool bSuccess = (rEvent.State == frame::DispatchResultState::SUCCESS);
+                aTree.put("success", bSuccess);
+            }
+
+            aTree.add_child("result", unoAnyToPropertyTree(rEvent.Result));
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            const OString aPayload = aStream.str().c_str();
+            mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
         }
 
-        aTree.add_child("result", unoAnyToPropertyTree(rEvent.Result));
-
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        OString aPayload = aStream.str().c_str();
-        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
+        // The uno command is done, release the lock.
+        std::unique_lock<std::mutex> lock(gUnoMutex);
+        gUnoInProgress = false;
+        gUnoCondVar.notify_all();
     }
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
@@ -2375,6 +2424,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -2386,7 +2436,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     aSynchronMode.Value <<= false;
     aPropertyValuesVector.push_back(aSynchronMode);
 
-    int nView = SfxLokHelper::getView();
+    const int nView = SfxLokHelper::getView();
     if (nView < 0)
         return;
 
@@ -2433,18 +2483,19 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         }
     }
 
-    bool bResult = false;
-    if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers[nView])
-    {
-        bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
-                new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandlers[nView]));
-    }
-    else
-        bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
-
+    // We always need a listener to set gUnoInProgress = false;
+    auto pDispatchResultListener = new DispatchResultListener(pCommand,
+                                        bNotifyWhenFinished ? pDocument->mpCallbackFlushHandlers[nView] : nullptr);
+    const bool bResult = comphelper::dispatchCommand(aCommand,
+                                                     comphelper::containerToSequence(aPropertyValuesVector),
+                                                     pDispatchResultListener);
     if (!bResult)
     {
         gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
+
+        std::unique_lock<std::mutex> lock(gUnoMutex);
+        gUnoInProgress = false;
+        gUnoCondVar.notify_all();
     }
 }
 
@@ -2454,6 +2505,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2489,6 +2541,7 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
@@ -2527,6 +2580,7 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2543,6 +2597,7 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2573,6 +2628,7 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2610,6 +2666,7 @@ static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, in
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -2626,6 +2683,7 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -3007,6 +3065,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     OString aCommand(pCommand);
     static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
     static const OString aCellCursor(".uno:CellCursor");
@@ -3176,6 +3235,7 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -3192,6 +3252,7 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -3209,6 +3270,7 @@ static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
@@ -3396,6 +3458,7 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
@@ -3423,6 +3486,7 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
 
+    waitForUnoCommandCompletion();
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
