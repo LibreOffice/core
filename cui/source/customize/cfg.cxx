@@ -1193,6 +1193,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     m_pSearchEdit->SetUpdateDataHdl ( LINK( this, SvxConfigPage, SearchUpdateHdl ));
     m_pSearchEdit->EnableUpdateData();
 
+    m_pFunctions->SetDoubleClickHdl( LINK( this, SvxConfigPage, FunctionDoubleClickHdl ) );
     m_pFunctions->SetSelectHdl(
         LINK( this, SvxConfigPage, SelectFunctionHdl ) );
 }
@@ -1781,6 +1782,13 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
 IMPL_LINK( SvxConfigPage, MoveHdl, Button *, pButton, void )
 {
     MoveEntry(pButton == m_pMoveUpButton);
+}
+
+IMPL_LINK_NOARG( SvxConfigPage, FunctionDoubleClickHdl, SvTreeListBox *, bool )
+{
+    if ( m_pAddCommandButton->IsEnabled() )
+        m_pAddCommandButton->Click();
+    return false;
 }
 
 IMPL_LINK_NOARG( SvxConfigPage, SelectFunctionHdl, SvTreeListBox *, void )
