@@ -350,14 +350,14 @@ void SmartTagSet::CheckPossibilities()
 
 SmartHdl::SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind /*=SdrHdlKind::Move*/ )
 : SdrHdl( rPnt, eNewKind )
-, mxTag( xTag )
+, mxSmartTag( xTag )
 {
     SetObj( pObject );
 }
 
 SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind /*=SdrHdlKind::Move*/ )
 : SdrHdl( rPnt, eNewKind )
-, mxTag( xTag )
+, mxSmartTag( xTag )
 {
 }
 
